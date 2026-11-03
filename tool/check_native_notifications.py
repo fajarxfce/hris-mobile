@@ -183,9 +183,14 @@ def input_recovery(adb, output):
               f"{PACKAGE}/.MatrixProofInstrumentation", timeout=150)
     (output / "notification-input-verify.log").write_text(log)
     status = read("instrumentation")
+    recovery = read("reply-recovery")
+    if recovery is not None:
+        (output / "reply-recovery.json").write_text(json.dumps(recovery, indent=2) + "\n")
     assert status and status.get("complete") is True, status
     verified = read("reply-verified")
     assert verified and verified.get("complete") is True and verified.get("cleanedUp") is True
+    assert recovery and recovery.get("turns") == verified.get("recoveryTurns")
+    validate_input_recovery_turns(verified["recoveryTurns"])
     assert verified["protectedRowsBeforeRecovery"] == verified["reviewRowsAfterRecovery"] == 1
     assert verified["wrongAccountPreservedInput"] and verified["oldFamilyRequiresReview"]
     assert verified["httpCalls"] == 0 and verified["commandRetained"] is False
@@ -194,6 +199,18 @@ def input_recovery(adb, output):
             "processIds": [staged["pid"], first["pid"], second["pid"], verified["pid"]],
             "seconds": round(time.monotonic() - began, 3),
             "scope": "Real Android callback, Keystore/Room/app recovery; fictional account; no HTTP/Matrix send or production host activation"}
+
+
+def validate_input_recovery_turns(turns):
+    assert isinstance(turns, list) and 1 <= len(turns) <= 4, "Missing or unbounded recovery turns"
+    for index, turn in enumerate(turns, 1):
+        assert isinstance(turn, dict) and turn.get("turn") == index
+        expected = "Complete" if index == len(turns) else "Retry"
+        assert turn.get("result") == expected, "Recovery is still pending or blocked"
+        counts = [turn.get("protectedRows"), turn.get("reviewRows")]
+        assert all(type(value) is int and 0 <= value <= 1 for value in counts)
+        assert sum(counts) >= 1, "Captured input disappeared before its reviewed copy"
+    assert turns[-1]["protectedRows"] == 0 and turns[-1]["reviewRows"] == 1
 
 
 def aapt_path(args):

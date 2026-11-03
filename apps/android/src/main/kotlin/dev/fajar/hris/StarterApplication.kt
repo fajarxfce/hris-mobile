@@ -1,11 +1,13 @@
 package dev.fajar.hris
 
 import android.app.Application
+import android.content.ComponentName
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.navigation.AppLinkChannel
+import dev.fajar.starter.app.notifications.AndroidCollaborationActionReceiver
 import dev.fajar.starter.collaboration.data.di.androidCollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
 import dev.fajar.starter.common.config.AppEnvironment
@@ -19,6 +21,7 @@ import dev.fajar.starter.identity.data.firebase.datasources.AndroidFirebaseClien
 import dev.fajar.starter.identity.data.firebase.datasources.AndroidGoogleCredentialSource
 import dev.fajar.starter.identity.data.sso.datasources.AndroidBrowserAuthorizationSource
 import dev.fajar.starter.location.data.datasources.AndroidLocationDataSource
+import dev.fajar.starter.notifications.data.datasources.AndroidActionNotificationIntents
 import dev.fajar.starter.observability.*
 import dev.fajar.starter.securestorage.AndroidCredentialStore
 import dev.fajar.starter.security.data.lock.datasources.AndroidDeviceAuthenticationSource
@@ -28,6 +31,14 @@ import dev.fajar.starter.worker.SyncWorkerFactory
 
 class StarterApplication : Application(), Configuration.Provider {
     val links = AppLinkChannel()
+    val notificationIntents by lazy {
+        AndroidActionNotificationIntents(
+            this,
+            "chat",
+            ComponentName(this, MainActivity::class.java),
+            ComponentName(this, AndroidCollaborationActionReceiver::class.java),
+        )
+    }
     val environment = AppEnvironment.entries.single { it.id == BuildConfig.APP_ENVIRONMENT }
     override val workManagerConfiguration: Configuration
         get() =

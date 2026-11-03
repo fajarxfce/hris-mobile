@@ -1012,4 +1012,6 @@
     <string name="chat_reply_already_processing_en">This message has already started sending. Open the chat to check its status.</string>
     <string name="chat_reply_discard_unconfirmed_en">Could not confirm removal. Refresh or try again.</string>
     <string name="chat_reply_needs_review_en">Needs review</string>
+    <string name="native_chat_open_unavailable_en">Could not open this conversation. Try again.</string>
+    <string name="native_chat_open_verification_en">Verify your account and choose a company, then try again.</string>
 </resources>

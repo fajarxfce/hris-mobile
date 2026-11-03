@@ -61,27 +61,11 @@ class CollaborationNotificationActions(
     private suspend fun apply(
         input: ActionNotificationInput
     ): AppResult<CollaborationNotificationActionOutcome> {
-        val token = CollaborationNotificationActionToken(input.envelope)
-        val opened = open(token)
+        val opened = resolveNotificationInput(input, open)
         if (opened is AppResult.Failed) return opened
         val invocation = (opened as AppResult.Success).value
         val action = invocation.action
         val target = action.target
-        val matchesKind =
-            when (input.kind) {
-                ActionNotificationKind.Open -> action is CollaborationNotificationAction.Reply
-                ActionNotificationKind.MarkRead ->
-                    action is CollaborationNotificationAction.MarkRead
-                ActionNotificationKind.Mute -> action is CollaborationNotificationAction.Mute
-                ActionNotificationKind.Dismiss -> action is CollaborationNotificationAction.Dismiss
-                ActionNotificationKind.Reply -> false
-            }
-        if (
-            !matchesKind ||
-                input.reference !=
-                    ActionNotificationReference(target.notificationId, target.renderId)
-        )
-            return surfaceFailure(FailureKind.Validation)
         // A tap is navigation only. Route admission and actual visible-message coverage decide
         // later reads. An older render may still open its currently admitted conversation.
         if (input.kind == ActionNotificationKind.Open)
@@ -111,7 +95,7 @@ class CollaborationNotificationActions(
             )
                 return@withOwner AppResult.Success(CollaborationNotificationActionOutcome.Obsolete)
             var reference = original
-            val applied = commands(token)
+            val applied = commands(CollaborationNotificationActionToken(input.envelope))
             if (applied is AppResult.Failed) return@withOwner applied
             if ((applied as AppResult.Success).value.invocation != invocation)
                 return@withOwner surfaceFailure(FailureKind.Conflict)

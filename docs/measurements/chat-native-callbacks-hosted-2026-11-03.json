@@ -473,8 +473,9 @@
   "nextRun": {
     "id": 41628358557,
     "source": "ee2699c3b967803670a1aa761976bdabb690d531",
-    "status": "in_progress",
-    "note": "Automatic newer source; no duplicate rerun. Native input proof sources unchanged."
+    "status": "rejected",
+    "note": "Automatic newer source; no duplicate rerun. Native input proof sources unchanged.",
+    "measurement": "chat-native-selection-hosted-2026-11-03.json"
   },
   "phoneTouched": false
 }

@@ -1,5 +1,6 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.starter.app.navigation.NativeNotificationNavigation
 import dev.fajar.starter.app.notifications.CollaborationNotificationActionCallbacks
 import dev.fajar.starter.app.notifications.CollaborationNotificationActions
 import dev.fajar.starter.app.notifications.CollaborationNotificationCommands
@@ -12,10 +13,13 @@ import dev.fajar.starter.app.notifications.CollaborationNotificationReconciler
 import dev.fajar.starter.app.notifications.CollaborationNotificationReplies
 import dev.fajar.starter.app.notifications.CollaborationNotificationReplyCallbacks
 import dev.fajar.starter.app.notifications.CollaborationNotificationSurfaceOwner
+import dev.fajar.starter.app.notifications.resolveNotificationInput
 import dev.fajar.starter.app.work.CollaborationNotificationInputRecoveryWorker
 import dev.fajar.starter.app.work.CollaborationNotificationReplyRecoveryWorker
 import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationNotificationChanges
+import dev.fajar.starter.collaboration.domain.usecases.OpenCollaborationNotificationAction
 import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationNotificationPublications
+import dev.fajar.starter.workspace.domain.usecases.SelectWorkspace
 import kotlinx.coroutines.flow.combine
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
@@ -23,6 +27,14 @@ import org.koin.dsl.onClose
 
 /** Lazy application bindings. A platform host explicitly owns and starts the process lifetime. */
 fun applicationNotificationModule() = module {
+    factory {
+        val open = get<OpenCollaborationNotificationAction>()
+        val select = get<SelectWorkspace>()
+        NativeNotificationNavigation(
+            open = { resolveNotificationInput(it, open) },
+            select = { session, company, origin -> select(session, company, origin) },
+        )
+    }
     single { CollaborationNotificationFocus() }.onClose { it?.close() }
     single { CollaborationNotificationDelivery() }.onClose { it?.close() }
     // A host supplies its already-started surface owner. No native delivery is started here.

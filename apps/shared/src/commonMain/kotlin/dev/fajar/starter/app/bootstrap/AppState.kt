@@ -12,4 +12,6 @@ data class AppState(
     val refreshingWorkspace: Boolean = false,
     val changingWorkspace: Boolean = false,
     val workspaceRefreshFailure: Failure? = null,
+    val openingNotification: Boolean = false,
+    val notificationOpenFailure: Failure? = null,
 )

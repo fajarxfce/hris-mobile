@@ -3,6 +3,7 @@ package dev.fajar.starter.app.navigation
 import dev.fajar.starter.identity.domain.entities.CompanyMembership
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.entities.WorkspaceAdmission
+import dev.fajar.starter.workspace.domain.entities.WorkspaceSelectionOwner
 import kotlin.test.*
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Instant
@@ -58,5 +59,41 @@ class PendingAppLinkTest {
             val preselection = requireNotNull(PendingAppLink(target).inContext("session", null))
             assertNull(preselection.inContext("session", workspace))
         }
+    }
+
+    @Test
+    fun aNativeChatLinkNeedsTheActualFourPartOwnerAndExactCompanySelection() {
+        val owner = WorkspaceSelectionOwner("session", workspace.audience, "account", "family")
+        val link =
+            PendingAppLink(
+                AppLink.ChatThread(owner, "company", "conversation"),
+                "session",
+                "workspace",
+            )
+        assertEquals(link, link.inContext("session", workspace, owner))
+        assertNull(link.inContext("session", workspace))
+        for (wrong in
+            listOf(
+                owner.copy(sessionId = "replacement"),
+                owner.copy(audience = "https://other.invalid/"),
+                owner.copy(accountId = "other"),
+                owner.copy(familyId = "other"),
+            )) assertNull(link.inContext("session", workspace, wrong))
+        assertNull(
+            link.inContext(
+                "session",
+                workspace.copy(company = workspace.company.copy(id = "other")),
+                owner,
+            )
+        )
+        assertNull(link.inContext("session", workspace.copy(id = "replacement"), owner))
+        assertNull(
+            link.inContext(
+                "session",
+                workspace.copy(admission = workspace.admission.copy(familyId = "other")),
+                owner,
+            )
+        )
+        assertNull(link.inContext(null, null, owner))
     }
 }

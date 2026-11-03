@@ -1012,4 +1012,6 @@
     <string name="chat_reply_already_processing_id">Pesan ini sudah mulai dikirim. Buka chat untuk memeriksa statusnya.</string>
     <string name="chat_reply_discard_unconfirmed_id">Penghapusan belum dapat dikonfirmasi. Muat ulang atau coba lagi.</string>
     <string name="chat_reply_needs_review_id">Perlu ditinjau</string>
+    <string name="native_chat_open_unavailable_id">Percakapan belum dapat dibuka. Coba lagi.</string>
+    <string name="native_chat_open_verification_id">Verifikasi akun dan pilih perusahaan, lalu coba lagi.</string>
 </resources>

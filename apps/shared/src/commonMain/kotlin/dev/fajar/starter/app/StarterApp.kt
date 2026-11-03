@@ -19,7 +19,8 @@ import org.koin.core.KoinApplication
 @Composable
 fun StarterApp(
     container: KoinApplication,
-    incomingLinks: kotlinx.coroutines.flow.Flow<String> = kotlinx.coroutines.flow.emptyFlow(),
+    incomingLinks: kotlinx.coroutines.flow.Flow<dev.fajar.starter.app.navigation.AppIncomingLink> =
+        kotlinx.coroutines.flow.emptyFlow(),
 ) {
     KoinIsolatedContext(context = container) {
         AppViewModelOwner {

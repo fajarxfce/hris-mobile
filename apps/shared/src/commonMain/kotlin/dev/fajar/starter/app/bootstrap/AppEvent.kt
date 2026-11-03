@@ -5,6 +5,14 @@ sealed interface AppEvent {
 
     data class LinkHandled(val link: dev.fajar.starter.app.navigation.PendingAppLink) : AppEvent
 
+    data class NativeLinkReceived(
+        val input: dev.fajar.starter.notifications.data.dto.ActionNotificationInput
+    ) : AppEvent
+
+    data object NativeLinkRetry : AppEvent
+
+    data object NativeLinkDismiss : AppEvent
+
     data object BootstrapRequested : AppEvent
 
     data object ForegroundEntered : AppEvent

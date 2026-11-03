@@ -195,11 +195,13 @@ class NotificationInputProcessOwnershipTest(unittest.TestCase):
             return ''
         if command[:3] == ('shell', 'am', 'instrument'):
             self.files['instrumentation'] = {'complete': True}
+            turns = [{'turn': 1, 'result': 'Complete', 'protectedRows': 0, 'reviewRows': 1}]
+            self.files['reply-recovery'] = {'turns': turns}
             self.files['reply-verified'] = {'complete': True, 'cleanedUp': True,
                 'pid': self.process(), 'protectedRowsBeforeRecovery': 1,
                 'reviewRowsAfterRecovery': 1, 'wrongAccountPreservedInput': True,
                 'oldFamilyRequiresReview': not self.bad_review, 'httpCalls': 0,
-                'commandRetained': False}
+                'commandRetained': False, 'recoveryTurns': turns}
             return 'INSTRUMENTATION_CODE: 0'
         if command[:4] == ('shell', 'run-as', proof.PACKAGE, 'cat'):
             if command[-1].startswith('/proc/'):
@@ -244,6 +246,33 @@ class NotificationInputProcessOwnershipTest(unittest.TestCase):
             proof.input_recovery(self.adb, Path(self.temp.name))
 
 
+
+
+class NotificationRecoveryTurnsTest(unittest.TestCase):
+    def turn(self, number, result='Retry', protected=1, reviewed=0):
+        return dict(turn=number, result=result, protectedRows=protected, reviewRows=reviewed)
+
+    def test_subsequent_finite_turn_can_finish_the_exact_copy(self):
+        proof.validate_input_recovery_turns([
+            self.turn(1), self.turn(2, protected=1, reviewed=1),
+            self.turn(3, 'Complete', protected=0, reviewed=1)])
+
+    def test_loss_or_duplicate_copies_cannot_pass(self):
+        for first in [self.turn(1, protected=0), self.turn(1, reviewed=2)]:
+            with self.subTest(first=first), self.assertRaises(AssertionError):
+                proof.validate_input_recovery_turns([first, self.turn(2, 'Complete', 0, 1)])
+
+    def test_pending_blocked_and_unbounded_attempts_cannot_pass(self):
+        for turns in [[], [self.turn(1)], [self.turn(1, 'Blocked')],
+                      [self.turn(n) for n in range(1, 5)] + [self.turn(5, 'Complete', 0, 1)]]:
+            with self.subTest(turns=turns), self.assertRaises(AssertionError):
+                proof.validate_input_recovery_turns(turns)
+
+    def test_false_completion_or_missing_turn_cannot_pass(self):
+        for turns in [[self.turn(1, 'Complete')], [self.turn(2, 'Complete', 0, 1)],
+                      [self.turn(1, 'Complete', 0, 1), self.turn(2, 'Complete', 0, 1)]]:
+            with self.subTest(turns=turns), self.assertRaises(AssertionError):
+                proof.validate_input_recovery_turns(turns)
 
 
 class NotificationActionDriverTest(unittest.TestCase):

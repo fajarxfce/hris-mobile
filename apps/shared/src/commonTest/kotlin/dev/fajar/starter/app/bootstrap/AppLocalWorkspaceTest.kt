@@ -42,7 +42,10 @@ class AppLocalWorkspaceTest {
         try {
             runCurrent()
             assertEquals(0, f.calls)
-            assertEquals(AppStage.SignedIn(f.session.id, f.selected), f.vm.state.value.stage)
+            assertEquals(
+                AppStage.SignedIn(f.session.id, f.selected, selectionOwner(f.session)),
+                f.vm.state.value.stage,
+            )
             assertNotNull(f.vm.state.value.companyPolicy)
             f.vm.onEvent(AppEvent.ForegroundEntered)
             runCurrent()
@@ -105,7 +108,10 @@ class AppLocalWorkspaceTest {
             advanceTimeBy(1.hours)
             runCurrent()
             assertEquals(2, f.calls)
-            assertEquals(AppStage.SignedIn(f.session.id, f.selected), f.vm.state.value.stage)
+            assertEquals(
+                AppStage.SignedIn(f.session.id, f.selected, selectionOwner(f.session)),
+                f.vm.state.value.stage,
+            )
             advanceTimeBy(72.hours)
             runCurrent()
             assertEquals(2, f.calls)
@@ -195,10 +201,22 @@ class AppLocalWorkspaceTest {
             runCurrent()
             f.sessions.value.value = AppResult.Success(f.session.copy(id = "replacement"))
             runCurrent()
-            assertEquals(AppStage.SignedIn("replacement"), f.vm.state.value.stage)
+            assertEquals(
+                AppStage.SignedIn(
+                    "replacement",
+                    owner = selectionOwner(f.session.copy(id = "replacement")),
+                ),
+                f.vm.state.value.stage,
+            )
             release.complete(Unit)
             runCurrent()
-            assertEquals(AppStage.SignedIn("replacement"), f.vm.state.value.stage)
+            assertEquals(
+                AppStage.SignedIn(
+                    "replacement",
+                    owner = selectionOwner(f.session.copy(id = "replacement")),
+                ),
+                f.vm.state.value.stage,
+            )
             assertEquals(1, f.calls)
             assertEquals(AppResult.Success(f.selected), f.workspaces.current(f.session.id))
         } finally {
@@ -215,7 +233,10 @@ class AppLocalWorkspaceTest {
             runCurrent()
             f.vm.onEvent(AppEvent.CompanyChangeRequested)
             runCurrent()
-            assertEquals(AppStage.SignedIn(f.session.id), f.vm.state.value.stage)
+            assertEquals(
+                AppStage.SignedIn(f.session.id, owner = selectionOwner(f.session)),
+                f.vm.state.value.stage,
+            )
             assertEquals(AppResult.Success(null), f.workspaces.current(f.session.id))
             assertFalse(f.vm.state.value.changingWorkspace)
             assertEquals(1, f.calls)

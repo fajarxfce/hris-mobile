@@ -4793,7 +4793,9 @@ class AppFlowTest {
         fileOutputs: FileOutputSource = UnavailableFileOutputSource(),
         lifecycleState: MutableState<Lifecycle.State> = mutableStateOf(Lifecycle.State.RESUMED),
         fontScale: Float = 1f,
-        incomingLinks: kotlinx.coroutines.flow.Flow<String> = kotlinx.coroutines.flow.emptyFlow(),
+        incomingLinks:
+            kotlinx.coroutines.flow.Flow<dev.fajar.starter.app.navigation.AppIncomingLink> =
+            kotlinx.coroutines.flow.emptyFlow(),
         test: (Koin) -> Unit,
     ) {
         val directory = Files.createTempDirectory("hris-ui").toFile()

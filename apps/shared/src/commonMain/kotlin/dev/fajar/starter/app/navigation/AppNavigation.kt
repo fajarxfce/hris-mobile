@@ -1,10 +1,13 @@
 package dev.fajar.starter.app.navigation
 
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -41,7 +44,7 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>) {
+fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppIncomingLink>) {
     val controller = navigation.controller
     val notificationFocus = koinInject<CollaborationNotificationFocus>()
     val onThreadFocus = remember(notificationFocus) { notificationFocus::register }
@@ -70,7 +73,14 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
     }
     LaunchedEffect(incomingLinks, lifecycle) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            incomingLinks.collect { viewModel.onEvent(AppEvent.LinkReceived(it)) }
+            incomingLinks.collect { input ->
+                when (input) {
+                    is AppIncomingLink.ExternalUri ->
+                        viewModel.onEvent(AppEvent.LinkReceived(input.uri))
+                    is AppIncomingLink.Notification ->
+                        viewModel.onEvent(AppEvent.NativeLinkReceived(input.input))
+                }
+            }
         }
     }
     if (stage == AppStage.Loading || stage is AppStage.Failed) {
@@ -119,7 +129,9 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                         admitted.sessionId == link.sessionId &&
                         admitted.workspace?.id == link.workspaceId &&
                         current.accessFailure == null &&
-                        current.companyPolicy?.availability == CompanyAvailability.Available
+                        current.companyPolicy?.availability == CompanyAvailability.Available &&
+                        link.inContext(admitted.sessionId, admitted.workspace, admitted.owner) ==
+                            link
                 ) {
                     controller.openAppLink(link.target)
                     viewModel.onEvent(AppEvent.LinkHandled(link))
@@ -127,389 +139,425 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
             }
         }
     }
-    ScopedNavHost(navigation, scope = scope, startDestination = destination) {
-        composable<BootstrapRoute> {
-            BootstrapPage(bootstrapStage.value) { viewModel.onEvent(AppEvent.BootstrapRequested) }
-        }
-        onboardingRoutes({ viewModel.onEvent(AppEvent.BootstrapRequested) })
-        authRoutes()
-        if (stage is AppStage.SignedIn) {
-            if (stage.workspace == null) {
-                verificationRoutes(stage.sessionId) {
-                    controller.navigate(WorkspaceRoute) {
-                        popUpTo<VerificationRoute> { inclusive = true }
-                        launchSingleTop = true
-                    }
+    Column(Modifier.fillMaxSize()) {
+        NativeLinkStatus(
+            state.openingNotification,
+            state.notificationOpenFailure,
+            (state.stage as? AppStage.SignedIn)?.workspace != null,
+            onRetry = { viewModel.onEvent(AppEvent.NativeLinkRetry) },
+            onDismiss = { viewModel.onEvent(AppEvent.NativeLinkDismiss) },
+            onChooseCompany = { viewModel.onEvent(AppEvent.CompanyChangeRequested) },
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+        )
+        ScopedNavHost(
+            navigation,
+            scope = scope,
+            startDestination = destination,
+            modifier = Modifier.weight(1f),
+        ) {
+            composable<BootstrapRoute> {
+                BootstrapPage(bootstrapStage.value) {
+                    viewModel.onEvent(AppEvent.BootstrapRequested)
                 }
-                workspaceRoutes(stage.sessionId) {
-                    controller.navigate(VerificationRoute) {
-                        popUpTo<WorkspaceRoute> { inclusive = true }
-                        launchSingleTop = true
-                    }
-                }
-            } else {
-                companyPolicyRoutes(companyPolicyState) { event ->
-                    when (event) {
-                        CompanyPolicyEvent.RefreshRequested ->
-                            viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
-                        CompanyPolicyEvent.CompanyChangeRequested ->
-                            viewModel.onEvent(AppEvent.CompanyChangeRequested)
-                    }
-                }
-                if (!companyBlocked) {
-                    val openService: (HomeService) -> Unit = { service ->
-                        when (service) {
-                            HomeService.Chat ->
-                                controller.navigate(ChatInboxRoute) { launchSingleTop = true }
-                            HomeService.Attendance ->
-                                controller.navigate(AttendanceRoute) { launchSingleTop = true }
-                            HomeService.Calendar ->
-                                controller.navigate(WorkCalendarRoute) { launchSingleTop = true }
-                            HomeService.Leave ->
-                                controller.navigate(LeaveRoute) { launchSingleTop = true }
-                            HomeService.Overtime ->
-                                controller.navigate(OvertimeRoute) { launchSingleTop = true }
-                            HomeService.Documents ->
-                                controller.navigate(DocumentsRoute) { launchSingleTop = true }
-                            HomeService.Expenses ->
-                                controller.navigate(ExpensesRoute) { launchSingleTop = true }
-                            HomeService.Payslips ->
-                                controller.navigate(PayslipsRoute) { launchSingleTop = true }
-                            HomeService.Profile ->
-                                controller.navigate(ProfileRoute) { launchSingleTop = true }
+            }
+            onboardingRoutes({ viewModel.onEvent(AppEvent.BootstrapRequested) })
+            authRoutes()
+            if (stage is AppStage.SignedIn) {
+                if (stage.workspace == null) {
+                    verificationRoutes(stage.sessionId) {
+                        controller.navigate(WorkspaceRoute) {
+                            popUpTo<VerificationRoute> { inclusive = true }
+                            launchSingleTop = true
                         }
                     }
-                    homeRoutes(
-                        stage.workspace,
-                        onService = openService,
-                        onAllServices = {
-                            controller.navigate(ServicesRoute) { launchSingleTop = true }
-                        },
-                        onDataSync = {
-                            controller.navigate(DataSyncRoute) { launchSingleTop = true }
-                        },
-                        onPendingActions = {
-                            controller.navigate(PendingActionsRoute) { launchSingleTop = true }
-                        },
-                        onSessions = {
-                            controller.navigate(SessionsRoute) { launchSingleTop = true }
-                        },
-                        attendance = {
-                            AttendanceHomeContent(stage.workspace.id) { effect ->
-                                when (effect) {
-                                    AttendanceEffect.VerifyAccount ->
+                    workspaceRoutes(stage.sessionId) {
+                        controller.navigate(VerificationRoute) {
+                            popUpTo<WorkspaceRoute> { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    }
+                } else {
+                    companyPolicyRoutes(companyPolicyState) { event ->
+                        when (event) {
+                            CompanyPolicyEvent.RefreshRequested ->
+                                viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                            CompanyPolicyEvent.CompanyChangeRequested ->
+                                viewModel.onEvent(AppEvent.CompanyChangeRequested)
+                        }
+                    }
+                    if (!companyBlocked) {
+                        val openService: (HomeService) -> Unit = { service ->
+                            when (service) {
+                                HomeService.Chat ->
+                                    controller.navigate(ChatInboxRoute) { launchSingleTop = true }
+                                HomeService.Attendance ->
+                                    controller.navigate(AttendanceRoute) { launchSingleTop = true }
+                                HomeService.Calendar ->
+                                    controller.navigate(WorkCalendarRoute) {
+                                        launchSingleTop = true
+                                    }
+                                HomeService.Leave ->
+                                    controller.navigate(LeaveRoute) { launchSingleTop = true }
+                                HomeService.Overtime ->
+                                    controller.navigate(OvertimeRoute) { launchSingleTop = true }
+                                HomeService.Documents ->
+                                    controller.navigate(DocumentsRoute) { launchSingleTop = true }
+                                HomeService.Expenses ->
+                                    controller.navigate(ExpensesRoute) { launchSingleTop = true }
+                                HomeService.Payslips ->
+                                    controller.navigate(PayslipsRoute) { launchSingleTop = true }
+                                HomeService.Profile ->
+                                    controller.navigate(ProfileRoute) { launchSingleTop = true }
+                            }
+                        }
+                        homeRoutes(
+                            stage.workspace,
+                            onService = openService,
+                            onAllServices = {
+                                controller.navigate(ServicesRoute) { launchSingleTop = true }
+                            },
+                            onDataSync = {
+                                controller.navigate(DataSyncRoute) { launchSingleTop = true }
+                            },
+                            onPendingActions = {
+                                controller.navigate(PendingActionsRoute) { launchSingleTop = true }
+                            },
+                            onSessions = {
+                                controller.navigate(SessionsRoute) { launchSingleTop = true }
+                            },
+                            attendance = {
+                                AttendanceHomeContent(stage.workspace.id) { effect ->
+                                    when (effect) {
+                                        AttendanceEffect.VerifyAccount ->
+                                            controller.navigate(VerificationRoute) {
+                                                launchSingleTop = true
+                                            }
+                                        AttendanceEffect.RecheckWorkspace ->
+                                            viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                                    }
+                                }
+                            },
+                            inbox = {
+                                InboxContent(
+                                    stage.workspace.id,
+                                    onItem = {
+                                        controller.navigate(InboxItemRoute(it)) {
+                                            launchSingleTop = true
+                                        }
+                                    },
+                                    onVerify = {
                                         controller.navigate(VerificationRoute) {
                                             launchSingleTop = true
                                         }
-                                    AttendanceEffect.RecheckWorkspace ->
-                                        viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
-                                }
-                            }
-                        },
-                        inbox = {
-                            InboxContent(
-                                stage.workspace.id,
-                                onItem = {
-                                    controller.navigate(InboxItemRoute(it)) {
-                                        launchSingleTop = true
-                                    }
-                                },
-                                onVerify = {
-                                    controller.navigate(VerificationRoute) {
-                                        launchSingleTop = true
-                                    }
-                                },
-                            )
-                        },
-                        inboxBadge = { InboxBadgeContent(stage.workspace.id) },
-                        employees = {
-                            EmployeesContent(
-                                stage.workspace.id,
-                                onSearch = {
-                                    controller.navigate(EmployeeSearchRoute) {
-                                        launchSingleTop = true
-                                    }
-                                },
-                                onVerify = {
-                                    controller.navigate(VerificationRoute) {
-                                        launchSingleTop = true
-                                    }
-                                },
-                            )
-                        },
-                    ) {
-                        controller.navigate(SettingsRoute) { launchSingleTop = true }
-                    }
-                    collaborationRoutes(
-                        stage.workspace.id,
-                        onSavedReplies = {
-                            controller.navigate(ChatSavedRepliesRoute) { launchSingleTop = true }
-                        },
-                        onSavedReply = {
-                            controller.navigate(ChatSavedReplyRoute(it)) { launchSingleTop = true }
-                        },
-                        onThreadFocus = onThreadFocus,
-                        onNewChat = {
-                            controller.navigate(ChatParticipantsRoute) { launchSingleTop = true }
-                        },
-                        onConversation = {
-                            controller.navigate(ChatThreadRoute(it)) { launchSingleTop = true }
-                        },
-                        onSelectedConversation = {
-                            controller.navigate(ChatThreadRoute(it)) {
-                                popUpTo<ChatParticipantsRoute> { inclusive = true }
-                                launchSingleTop = true
-                            }
-                        },
-                        onSetup = {
-                            controller.navigate(ChatSetupRoute) { launchSingleTop = true }
-                        },
-                        onBack = { controller.popBackStack() },
-                    )
-                    servicesRoutes(stage.workspace.id, onService = openService) {
-                        controller.popBackStack()
-                    }
-                    dataSyncRoutes(
-                        stage.workspace,
-                        onVerify = {
-                            controller.navigate(VerificationRoute) { launchSingleTop = true }
-                        },
-                        onBack = { controller.popBackStack() },
-                    )
-                    pendingActionsRoutes(
-                        stage.workspace,
-                        onOpen = { group ->
-                            when (group) {
-                                PendingActionGroup.Inbox ->
-                                    controller.navigate(InboxRoute) { launchSingleTop = true }
-                                PendingActionGroup.Attendance ->
-                                    controller.navigate(HomeRoute(HomeTab.Home.name)) {
-                                        launchSingleTop = true
-                                    }
-                                PendingActionGroup.Overtime ->
-                                    controller.navigate(OvertimeRoute) { launchSingleTop = true }
-                                PendingActionGroup.Leave ->
-                                    controller.navigate(LeaveRoute) { launchSingleTop = true }
-                                PendingActionGroup.Expenses ->
-                                    controller.navigate(ExpensesRoute) { launchSingleTop = true }
-                                PendingActionGroup.Documents ->
-                                    controller.navigate(DocumentFilesRoute) {
-                                        launchSingleTop = true
-                                    }
-                                PendingActionGroup.DocumentCorrections ->
-                                    controller.navigate(DocumentMetadataChangesRoute) {
-                                        launchSingleTop = true
-                                    }
-                            }
-                        },
-                        onVerify = {
-                            controller.navigate(VerificationRoute) { launchSingleTop = true }
-                        },
-                        onBack = { controller.popBackStack() },
-                    )
-                    peopleRoutes(
-                        stage.workspace.id,
-                        onVerify = {
-                            controller.navigate(VerificationRoute) { launchSingleTop = true }
-                        },
-                    ) {
-                        controller.popBackStack()
-                    }
-                    employeesRoutes(
-                        stage.workspace.id,
-                        onSearch = {
-                            controller.navigate(EmployeeSearchRoute) { launchSingleTop = true }
-                        },
-                        onVerify = {
-                            controller.navigate(VerificationRoute) { launchSingleTop = true }
-                        },
-                    ) {
-                        controller.popBackStack()
-                    }
-                    inboxRoutes(
-                        stage.workspace.id,
-                        onItem = {
-                            controller.navigate(InboxItemRoute(it)) { launchSingleTop = true }
-                        },
-                        onVerify = {
-                            controller.navigate(VerificationRoute) { launchSingleTop = true }
-                        },
-                        onBack = { controller.popBackStack() },
-                    )
-                    verificationRoutes(stage.sessionId) { controller.popBackStack() }
-                    workforceRoutes(
-                        stage.workspace.id,
-                        onVerify = {
-                            controller.navigate(VerificationRoute) { launchSingleTop = true }
-                        },
-                        onRecheckWorkspace = {
-                            viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
-                        },
-                        onBack = { controller.popBackStack() },
-                    )
-                    sessionRoutes(stage.sessionId) { controller.popBackStack() }
-                    overtimeRoutes(
-                        stage.workspace.id,
-                        onAction = { selection, kind ->
-                            controller.navigate(
-                                OvertimeActionRoute(
-                                    selection.requestId,
-                                    selection.employeeId,
-                                    kind,
-                                    selection.employmentAfter,
+                                    },
                                 )
-                            ) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onPlan = {
-                            controller.navigate(
-                                OvertimePlanRoute(
-                                    it.employeeId,
-                                    it.workDate.toString(),
-                                    it.employmentAfter,
+                            },
+                            inboxBadge = { InboxBadgeContent(stage.workspace.id) },
+                            employees = {
+                                EmployeesContent(
+                                    stage.workspace.id,
+                                    onSearch = {
+                                        controller.navigate(EmployeeSearchRoute) {
+                                            launchSingleTop = true
+                                        }
+                                    },
+                                    onVerify = {
+                                        controller.navigate(VerificationRoute) {
+                                            launchSingleTop = true
+                                        }
+                                    },
                                 )
-                            ) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onPlannedRequest = {
-                            controller.navigate(
-                                OvertimeRequestRoute(
-                                    it.requestId,
-                                    it.employeeId,
-                                    it.employmentAfter,
-                                )
-                            ) {
-                                popUpTo<OvertimePlanRoute> { inclusive = true }
-                                launchSingleTop = true
-                            }
-                        },
-                        onRequest = {
-                            controller.navigate(
-                                OvertimeRequestRoute(
-                                    it.requestId,
-                                    it.employeeId,
-                                    it.employmentAfter,
-                                )
-                            ) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onVerify = {
-                            controller.navigate(VerificationRoute) { launchSingleTop = true }
-                        },
-                        onRecheckWorkspace = {
-                            viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
-                        },
-                        onBack = { controller.popBackStack() },
-                    )
-                    expenseRoutes(
-                        stage.workspace.id,
-                        onAction = { controller.navigate(it) { launchSingleTop = true } },
-                        onActionClaim = {
-                            controller.navigate(it) {
-                                popUpTo<ExpenseActionRoute> { inclusive = true }
-                                launchSingleTop = true
-                            }
-                        },
-                        onActionDraft = {
-                            controller.navigate(it) {
-                                popUpTo<ExpenseActionRoute> { inclusive = true }
-                                launchSingleTop = true
-                            }
-                        },
-                        onDraft = { controller.navigate(it) { launchSingleTop = true } },
-                        onSavedClaim = {
-                            controller.navigate(it) {
-                                popUpTo<ExpenseDraftRoute> { inclusive = true }
-                                launchSingleTop = true
-                            }
-                        },
-                        onClaim = { controller.navigate(it) { launchSingleTop = true } },
-                        onVerify = {
-                            controller.navigate(VerificationRoute) { launchSingleTop = true }
-                        },
-                        onRecheckWorkspace = {
-                            viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
-                        },
-                        onBack = { controller.popBackStack() },
-                    )
-                    payrollRoutes(
-                        stage.workspace.id,
-                        onPayslip = {
-                            controller.navigate(PayslipRoute(it)) { launchSingleTop = true }
-                        },
-                        onVerify = {
-                            controller.navigate(VerificationRoute) { launchSingleTop = true }
-                        },
-                        onRecheckWorkspace = {
-                            viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
-                        },
-                        onBack = { controller.popBackStack() },
-                    )
-                    leaveRoutes(
-                        stage.workspace.id,
-                        onRequest = {
-                            controller.navigate(LeaveRequestRoute(it)) { launchSingleTop = true }
-                        },
-                        onCreate = { employeeId, asOf ->
-                            controller.navigate(LeaveCreateRoute(employeeId, asOf)) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onCreatedRequest = {
-                            controller.navigate(LeaveRequestRoute(it)) {
-                                popUpTo<LeaveCreateRoute> { inclusive = true }
-                                launchSingleTop = true
-                            }
-                        },
-                        onVerify = {
-                            controller.navigate(VerificationRoute) { launchSingleTop = true }
-                        },
-                        onRecheckWorkspace = {
-                            viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
-                        },
-                        onBack = { controller.popBackStack() },
-                    )
-                    documentRoutes(
-                        stage.workspace.id,
-                        onFile = { id ->
-                            controller.navigate(DocumentFileRoute(id)) { launchSingleTop = true }
-                        },
-                        onFiles = {
-                            controller.navigate(DocumentFilesRoute) { launchSingleTop = true }
-                        },
-                        onDownload = { id, start ->
-                            controller.navigate(DocumentDownloadRoute(id, start)) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onDetails = { id ->
-                            controller.navigate(DocumentRecordRoute(id)) { launchSingleTop = true }
-                        },
-                        onMetadataEdit = { id ->
-                            controller.navigate(DocumentMetadataEditorRoute(id)) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onMetadataChanges = {
-                            controller.navigate(DocumentMetadataChangesRoute) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onVerify = {
-                            controller.navigate(VerificationRoute) { launchSingleTop = true }
-                        },
-                        onBack = { controller.popBackStack() },
-                    )
-                    settingsRoutes(
-                        securitySettings = {
-                            AppLockSettings()
-                            NativePushSettings()
+                            },
+                        ) {
+                            controller.navigate(SettingsRoute) { launchSingleTop = true }
                         }
-                    ) {
-                        controller.popBackStack()
+                        collaborationRoutes(
+                            stage.workspace.id,
+                            onSavedReplies = {
+                                controller.navigate(ChatSavedRepliesRoute) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onSavedReply = {
+                                controller.navigate(ChatSavedReplyRoute(it)) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onThreadFocus = onThreadFocus,
+                            onNewChat = {
+                                controller.navigate(ChatParticipantsRoute) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onConversation = {
+                                controller.navigate(ChatThreadRoute(it)) { launchSingleTop = true }
+                            },
+                            onSelectedConversation = {
+                                controller.navigate(ChatThreadRoute(it)) {
+                                    popUpTo<ChatParticipantsRoute> { inclusive = true }
+                                    launchSingleTop = true
+                                }
+                            },
+                            onSetup = {
+                                controller.navigate(ChatSetupRoute) { launchSingleTop = true }
+                            },
+                            onBack = { controller.popBackStack() },
+                        )
+                        servicesRoutes(stage.workspace.id, onService = openService) {
+                            controller.popBackStack()
+                        }
+                        dataSyncRoutes(
+                            stage.workspace,
+                            onVerify = {
+                                controller.navigate(VerificationRoute) { launchSingleTop = true }
+                            },
+                            onBack = { controller.popBackStack() },
+                        )
+                        pendingActionsRoutes(
+                            stage.workspace,
+                            onOpen = { group ->
+                                when (group) {
+                                    PendingActionGroup.Inbox ->
+                                        controller.navigate(InboxRoute) { launchSingleTop = true }
+                                    PendingActionGroup.Attendance ->
+                                        controller.navigate(HomeRoute(HomeTab.Home.name)) {
+                                            launchSingleTop = true
+                                        }
+                                    PendingActionGroup.Overtime ->
+                                        controller.navigate(OvertimeRoute) {
+                                            launchSingleTop = true
+                                        }
+                                    PendingActionGroup.Leave ->
+                                        controller.navigate(LeaveRoute) { launchSingleTop = true }
+                                    PendingActionGroup.Expenses ->
+                                        controller.navigate(ExpensesRoute) {
+                                            launchSingleTop = true
+                                        }
+                                    PendingActionGroup.Documents ->
+                                        controller.navigate(DocumentFilesRoute) {
+                                            launchSingleTop = true
+                                        }
+                                    PendingActionGroup.DocumentCorrections ->
+                                        controller.navigate(DocumentMetadataChangesRoute) {
+                                            launchSingleTop = true
+                                        }
+                                }
+                            },
+                            onVerify = {
+                                controller.navigate(VerificationRoute) { launchSingleTop = true }
+                            },
+                            onBack = { controller.popBackStack() },
+                        )
+                        peopleRoutes(
+                            stage.workspace.id,
+                            onVerify = {
+                                controller.navigate(VerificationRoute) { launchSingleTop = true }
+                            },
+                        ) {
+                            controller.popBackStack()
+                        }
+                        employeesRoutes(
+                            stage.workspace.id,
+                            onSearch = {
+                                controller.navigate(EmployeeSearchRoute) { launchSingleTop = true }
+                            },
+                            onVerify = {
+                                controller.navigate(VerificationRoute) { launchSingleTop = true }
+                            },
+                        ) {
+                            controller.popBackStack()
+                        }
+                        inboxRoutes(
+                            stage.workspace.id,
+                            onItem = {
+                                controller.navigate(InboxItemRoute(it)) { launchSingleTop = true }
+                            },
+                            onVerify = {
+                                controller.navigate(VerificationRoute) { launchSingleTop = true }
+                            },
+                            onBack = { controller.popBackStack() },
+                        )
+                        verificationRoutes(stage.sessionId) { controller.popBackStack() }
+                        workforceRoutes(
+                            stage.workspace.id,
+                            onVerify = {
+                                controller.navigate(VerificationRoute) { launchSingleTop = true }
+                            },
+                            onRecheckWorkspace = {
+                                viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                            },
+                            onBack = { controller.popBackStack() },
+                        )
+                        sessionRoutes(stage.sessionId) { controller.popBackStack() }
+                        overtimeRoutes(
+                            stage.workspace.id,
+                            onAction = { selection, kind ->
+                                controller.navigate(
+                                    OvertimeActionRoute(
+                                        selection.requestId,
+                                        selection.employeeId,
+                                        kind,
+                                        selection.employmentAfter,
+                                    )
+                                ) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onPlan = {
+                                controller.navigate(
+                                    OvertimePlanRoute(
+                                        it.employeeId,
+                                        it.workDate.toString(),
+                                        it.employmentAfter,
+                                    )
+                                ) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onPlannedRequest = {
+                                controller.navigate(
+                                    OvertimeRequestRoute(
+                                        it.requestId,
+                                        it.employeeId,
+                                        it.employmentAfter,
+                                    )
+                                ) {
+                                    popUpTo<OvertimePlanRoute> { inclusive = true }
+                                    launchSingleTop = true
+                                }
+                            },
+                            onRequest = {
+                                controller.navigate(
+                                    OvertimeRequestRoute(
+                                        it.requestId,
+                                        it.employeeId,
+                                        it.employmentAfter,
+                                    )
+                                ) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onVerify = {
+                                controller.navigate(VerificationRoute) { launchSingleTop = true }
+                            },
+                            onRecheckWorkspace = {
+                                viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                            },
+                            onBack = { controller.popBackStack() },
+                        )
+                        expenseRoutes(
+                            stage.workspace.id,
+                            onAction = { controller.navigate(it) { launchSingleTop = true } },
+                            onActionClaim = {
+                                controller.navigate(it) {
+                                    popUpTo<ExpenseActionRoute> { inclusive = true }
+                                    launchSingleTop = true
+                                }
+                            },
+                            onActionDraft = {
+                                controller.navigate(it) {
+                                    popUpTo<ExpenseActionRoute> { inclusive = true }
+                                    launchSingleTop = true
+                                }
+                            },
+                            onDraft = { controller.navigate(it) { launchSingleTop = true } },
+                            onSavedClaim = {
+                                controller.navigate(it) {
+                                    popUpTo<ExpenseDraftRoute> { inclusive = true }
+                                    launchSingleTop = true
+                                }
+                            },
+                            onClaim = { controller.navigate(it) { launchSingleTop = true } },
+                            onVerify = {
+                                controller.navigate(VerificationRoute) { launchSingleTop = true }
+                            },
+                            onRecheckWorkspace = {
+                                viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                            },
+                            onBack = { controller.popBackStack() },
+                        )
+                        payrollRoutes(
+                            stage.workspace.id,
+                            onPayslip = {
+                                controller.navigate(PayslipRoute(it)) { launchSingleTop = true }
+                            },
+                            onVerify = {
+                                controller.navigate(VerificationRoute) { launchSingleTop = true }
+                            },
+                            onRecheckWorkspace = {
+                                viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                            },
+                            onBack = { controller.popBackStack() },
+                        )
+                        leaveRoutes(
+                            stage.workspace.id,
+                            onRequest = {
+                                controller.navigate(LeaveRequestRoute(it)) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onCreate = { employeeId, asOf ->
+                                controller.navigate(LeaveCreateRoute(employeeId, asOf)) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onCreatedRequest = {
+                                controller.navigate(LeaveRequestRoute(it)) {
+                                    popUpTo<LeaveCreateRoute> { inclusive = true }
+                                    launchSingleTop = true
+                                }
+                            },
+                            onVerify = {
+                                controller.navigate(VerificationRoute) { launchSingleTop = true }
+                            },
+                            onRecheckWorkspace = {
+                                viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                            },
+                            onBack = { controller.popBackStack() },
+                        )
+                        documentRoutes(
+                            stage.workspace.id,
+                            onFile = { id ->
+                                controller.navigate(DocumentFileRoute(id)) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onFiles = {
+                                controller.navigate(DocumentFilesRoute) { launchSingleTop = true }
+                            },
+                            onDownload = { id, start ->
+                                controller.navigate(DocumentDownloadRoute(id, start)) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onDetails = { id ->
+                                controller.navigate(DocumentRecordRoute(id)) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onMetadataEdit = { id ->
+                                controller.navigate(DocumentMetadataEditorRoute(id)) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onMetadataChanges = {
+                                controller.navigate(DocumentMetadataChangesRoute) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            onVerify = {
+                                controller.navigate(VerificationRoute) { launchSingleTop = true }
+                            },
+                            onBack = { controller.popBackStack() },
+                        )
+                        settingsRoutes(
+                            securitySettings = {
+                                AppLockSettings()
+                                NativePushSettings()
+                            }
+                        ) {
+                            controller.popBackStack()
+                        }
                     }
                 }
             }

@@ -164,6 +164,7 @@ class AppViewModelTest {
                             TestWorkspaces(),
                         ),
                         LeaveWorkspace(identity, TestWorkspaces()),
+                        unavailableNativeNavigation(),
                     )
                 owner.put("app", vm)
                 vm.onEvent(AppEvent.LinkReceived("hrismobile-dev://app/inbox"))
@@ -177,12 +178,21 @@ class AppViewModelTest {
                 assertEquals(PendingAppLink(AppLink.Inbox), vm.state.value.pendingLink)
                 identity.value.value = AppResult.Success(testSession())
                 runCurrent()
-                assertEquals(AppStage.SignedIn("session-a"), vm.state.value.stage)
+                assertEquals(
+                    AppStage.SignedIn("session-a", owner = selectionOwner(testSession())),
+                    vm.state.value.stage,
+                )
                 val first = requireNotNull(vm.state.value.pendingLink)
                 assertEquals("session-a", first.sessionId)
                 identity.value.value = AppResult.Success(testSession().copy(id = "session-b"))
                 runCurrent()
-                assertEquals(AppStage.SignedIn("session-b"), vm.state.value.stage)
+                assertEquals(
+                    AppStage.SignedIn(
+                        "session-b",
+                        owner = selectionOwner(testSession().copy(id = "session-b")),
+                    ),
+                    vm.state.value.stage,
+                )
                 assertNull(vm.state.value.pendingLink)
                 vm.onEvent(AppEvent.LinkReceived("hrismobile-dev://app/data-sync"))
                 vm.onEvent(AppEvent.LinkHandled(first))
@@ -282,6 +292,7 @@ internal fun bootstrapViewModel(
     workspaces: WorkspaceRepository,
     accounts: AccountRepository,
     clock: Clock = Clock.System,
+    nativeNavigation: NativeNotificationNavigation = unavailableNativeNavigation(),
 ) =
     AppViewModel(
         LoadOnboarding(
@@ -299,6 +310,7 @@ internal fun bootstrapViewModel(
         ResolveAppLink(AppEnvironment.Dev),
         RefreshWorkspace(identity, accounts, workspaces, clock),
         LeaveWorkspace(identity, workspaces),
+        nativeNavigation,
     )
 
 private val fixtureBuild = AppBuild(AppPlatform.Android, 1, "1.0.0", null)
@@ -315,3 +327,17 @@ private fun fixturePolicy(now: kotlin.time.Instant = Clock.System.now()) =
             it + 60.seconds,
         )
     }
+
+internal fun selectionOwner(session: Session) =
+    WorkspaceSelectionOwner(
+        session.id,
+        session.binding.audience,
+        session.user.id,
+        session.binding.serverId,
+    )
+
+internal fun unavailableNativeNavigation() =
+    NativeNotificationNavigation(
+        open = { error("This fixture has no native notification input") },
+        select = { _, _, _ -> error("This fixture has no native company selection") },
+    )

@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Context
 import android.os.Process
+import android.os.SystemClock
 import android.util.AtomicFile
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.notifications.*
@@ -34,6 +35,7 @@ import kotlin.io.encoding.Base64
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import org.json.JSONObject
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -203,10 +205,7 @@ internal class NotificationInputProof(private val context: Context) {
         check(value(inputs.get(reference)) == original)
         val restored = login(ACCOUNT)
         val parent = CollaborationNativeParent(restored.id, AUDIENCE, ACCOUNT, NATIVE)
-        check(
-            container.koin.get<CollaborationNotificationInputRecoveryWorker>()(parent) ==
-                SyncResult.Complete
-        )
+        val turns = recoverInputs(parent, original)
         check(value(inputs.page()).isEmpty())
         val access = CollaborationRecoveryAccess(restored.id, AUDIENCE, ACCOUNT)
         val copied =
@@ -247,10 +246,69 @@ internal class NotificationInputProof(private val context: Context) {
                 .put("reviewRowsAfterRecovery", 1)
                 .put("wrongAccountPreservedInput", true)
                 .put("oldFamilyRequiresReview", true)
+                .put("recoveryTurns", turns)
                 .put("httpCalls", httpCalls)
                 .put("commandRetained", false)
                 .put("cleanedUp", true),
         )
+    }
+
+    private suspend fun recoverInputs(
+        parent: CollaborationNativeParent,
+        original: CollaborationNotificationInput,
+    ): JSONArray {
+        val turns = JSONArray()
+        val worker = container.koin.get<CollaborationNotificationInputRecoveryWorker>()
+        val replies = container.koin.get<CollaborationNotificationReplyRepository>()
+        val access =
+            CollaborationRecoveryAccess(parent.sessionId, parent.audience, parent.accountId)
+        // A finite worker may request a subsequent scheduler turn. This fixture drives at most
+        // four such invocations; the production one-second/four-second deadlines stay unchanged.
+        repeat(4) { index ->
+            val began = SystemClock.elapsedRealtime()
+            val result = worker(parent)
+            val elapsed = SystemClock.elapsedRealtime() - began
+            val protected = value(inputs.get(original.reference))
+            val saved = value(replies.page(access, pendingOnly = false)).inputs
+            val failure =
+                when (result) {
+                    SyncResult.Complete -> null
+                    is SyncResult.Retry -> result.failure
+                    is SyncResult.Blocked -> result.failure
+                }
+            turns.put(
+                JSONObject()
+                    .put("turn", index + 1)
+                    .put(
+                        "result",
+                        when (result) {
+                            SyncResult.Complete -> "Complete"
+                            is SyncResult.Retry -> "Retry"
+                            is SyncResult.Blocked -> "Blocked"
+                        },
+                    )
+                    .put("failureKind", failure?.kind?.name ?: JSONObject.NULL)
+                    .put("failureCode", failure?.code ?: JSONObject.NULL)
+                    .put("milliseconds", elapsed)
+                    .put("protectedRows", if (protected == null) 0 else 1)
+                    .put("reviewRows", saved.size)
+            )
+            write("reply-recovery", JSONObject().put("turns", turns))
+            // Every observed boundary retains the exact original or its one reviewed copy.
+            check(protected == null || protected == original)
+            check(saved.size <= 1)
+            check(
+                saved.all {
+                    it.candidate.text == original.reply.text &&
+                        it.candidate.token == original.reply.token &&
+                        it.review == CollaborationNotificationReplyReview.SessionChanged
+                }
+            )
+            check(protected != null || saved.size == 1)
+            if (result == SyncResult.Complete) return turns
+            check(result is SyncResult.Retry)
+        }
+        error("Bounded notification recovery did not complete")
     }
 
     private suspend fun login(account: String): Session {

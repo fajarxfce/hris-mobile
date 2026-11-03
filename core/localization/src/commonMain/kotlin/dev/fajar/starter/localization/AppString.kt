@@ -158,6 +158,14 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.chat_participants_empty_id,
     ),
     ChatOpening(Res.string.chat_opening_en, Res.string.chat_opening_id),
+    NativeChatOpenUnavailable(
+        Res.string.native_chat_open_unavailable_en,
+        Res.string.native_chat_open_unavailable_id,
+    ),
+    NativeChatOpenVerification(
+        Res.string.native_chat_open_verification_en,
+        Res.string.native_chat_open_verification_id,
+    ),
     ExpenseSaveReceipt(Res.string.expense_save_receipt_en, Res.string.expense_save_receipt_id),
     ExpenseReceiptSaved(Res.string.expense_receipt_saved_en, Res.string.expense_receipt_saved_id),
     ExpenseExportTimeout(

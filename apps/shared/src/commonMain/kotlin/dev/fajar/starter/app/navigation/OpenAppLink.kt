@@ -3,6 +3,8 @@ package dev.fajar.starter.app.navigation
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
+import dev.fajar.starter.collaboration.presentation.navigation.ChatInboxRoute
+import dev.fajar.starter.collaboration.presentation.navigation.ChatThreadRoute
 import dev.fajar.starter.home.presentation.home.HomeTab
 import dev.fajar.starter.home.presentation.navigation.*
 import dev.fajar.starter.inbox.presentation.navigation.InboxItemRoute
@@ -36,6 +38,13 @@ internal fun NavHostController.openAppLink(link: AppLink) {
                 popUpTo<HomeRoute>()
                 launchSingleTop = true
             }
+        is AppLink.ChatThread -> {
+            navigate(ChatInboxRoute) {
+                popUpTo<HomeRoute>()
+                launchSingleTop = true
+            }
+            navigate(ChatThreadRoute(link.conversationId)) { launchSingleTop = true }
+        }
         is AppLink.InboxItem -> {
             navigate(InboxRoute) {
                 popUpTo<HomeRoute>()

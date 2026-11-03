@@ -1,5 +1,74 @@
 # Agent continuation — HRIS Mobile
 
+## Native chat routing accepted locally — 3 November 2026
+
+[Contract](collaboration-native-chat-navigation.md) /
+[evidence](measurements/chat-native-routing-2026-11-03.json). All36 current source,
+resource, manifest, fixture/driver and workflow inputs are accepted locally.
+Focused5:47 fresh tests/ten suites in80.024s, zero failures/errors/skips.
+Full6:558.836s,3,956 desktop/561 suites,230 Android host/37,15 proof/four,ten logic/two;
+zero failures/errors/skips,1,039 fresh cases/157 suites. Root quality, Wasm compilation,
+Android dev/proof assembly and lint pass; product lint zero issues, proof47 warnings/
+zero errors. All source and report digests audited. No local heavy job remains.
+
+Native1 passes110.2s on owned API35 emulator5562. Raw16 groups; three ordinary process
+kills/four callbacks retain exactly one protected input then one reviewed copy;
+wrong account cannot consume it, old family requires review, HTTP/messages zero.
+The recovery worker completes locally in one178ms turn. Five actions Open/Read/
+Dismiss/Reply/Mute pass; real SystemUI reply editor/card retirement passes. All three
+native PNGs and both narrow/large-text EN/ID status PNGs ACTUALLY INSPECTED. APK SHA256
+cf4a8d72fcca67ed48bc66a840b36aac0ade622492aaeb6cbb6ed68950173eb3. Fixture uninstalled;
+owned emulator PID1153410 stopped, transport absent. No phone action. Work and
+runner/audits retained in .work/chat-native-routing-2026-11-03.
+
+Typed Activity cold/new intents authenticate Open independently of display readiness,
+then select with captured actual identity/workspace origin. The ViewModel joins
+superseded native/public requests; explicit company change also joins native cleanup.
+The final route rechecks identity, workspace, policy and RESUMED lifecycle. Actual
+Koin/SQLite plus full StarterApp Compose flow proves waiting before RESUMED and back
+to Chat. MFA has the existing verification/company-selection path and explicit retry.
+Five focused runs preserve failures: initial missing token; incomplete UI fixture plus
+bad fixture disposal (exact test process terminated after snapshot); missing platform
+notification bindings; incorrect single-row assertion for a retained three-row list;
+then all47 pass. No production admission/cancellation guard weakened.
+
+Both hosted Native f38441624916023 and ee269941628358557 are REJECTED at input proof
+line206: the first bounded worker turn did not report Complete, but its actual result
+was not recorded. Artifacts/source hashes verified;245 host/proof and raw16 pass,
+five actions and five providers unexecuted. The updated proof records redacted results
+and retained row counts, drives at most four independent worker invocations when
+Retry requests a later scheduling turn, and still requires final exact single copy,
+no loss/HTTP/commands. Production1s/4s deadlines unchanged.25 Python driver cases pass.
+Fresh hosted Native on this source MUST pass; do not accept either rejected run or
+claim that local one-turn success establishes the hosted failure cause.
+
+Apple f38441624960880 is ACCEPTED:1,045 simulator/119 suites,340 verified sources,
+compile609s/tests79s/full Xcode1247s,artifact13228012431 SHA256
+ede6633618f385af15a46ad63c4fefbdd56a559158813ca4608358ff1307eaa8. It excludes new routing
+and six workspace files. CI now explicitly runs core:workspace:domain simulator tests.
+NEXT push this increment and dispatch ONE full updated Apple, prepare source/report
+manifests; collect the automatic Native run. No Apple is currently running.
+Starter9959c1d remains clean and fully accepted (112 Apple cases/full Xcode); this
+routing/HRIS policy is not a Starter port. Platform304/schema116 remains unchanged.
+
+NEXT implementation: bind the product Android application notification runtime.
+ApplicationCollaborationLifetime.state -> recoveryParent must own its SurfaceOwner;
+never derive parent from Activity/selected workspace. Use one explicit application
+scope, real native display/private receiver, actual Koin Process/Delivery, and actual
+Reply/ActionCallbacks. Application implements AndroidCollaborationActionHost and
+starts once after collaboration lifetime; disposal closes and joins owned work.
+Resolve labels using app/device language. Prefer a typed immutable-copy supplier
+sampled once per publish/reconcile so language can change without rebuilding process;
+constant suppliers preserve existing fixture behavior. Test parent replacement,
+held native cleanup, start-once/close-before-start and actual graph/native wiring.
+Details/alternatives reviewed in .work/chat-native-routing-2026-11-03/host-next.txt.
+Production display is STILL UNBOUND and chat push OFF. After real host acceptance,
+prepare meaningful release24, validate minified cold startup, notify before installing
+with explicit10.77.77.3:5555 --install-only. Never launch/drive phone UI;23 is installed.
+Then continue edited reviewed-send and remaining communications. All54 groups remain
+OPEN; chat UI exists, voice/video/meeting UI does not. Continue long run, not a final.
+
+
 ## Native app routing in progress; hosted callback failure traced — 3 November 2026
 
 31 application/localization source and test files are now APPLIED but UNVALIDATED.

@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.FragmentActivity
 import dev.fajar.starter.app.StarterApp
 import dev.fajar.starter.notifications.data.datasources.AndroidNotificationPermissionSource
+import dev.fajar.starter.notifications.data.dto.ActionNotificationKind
 import dev.fajar.starter.security.data.lock.datasources.*
 
 class MainActivity : FragmentActivity() {
@@ -26,12 +27,7 @@ class MainActivity : FragmentActivity() {
         app.location.attach(this)
         app.fileInputs.attach(this)
         app.fileOutputs.attach(this)
-        if (savedInstanceState == null)
-            (intent.dataString
-                    ?: intent.getStringExtra("destination")?.let {
-                        "${app.environment.linkScheme}://app/$it"
-                    })
-                ?.let(app.links::receive)
+        if (savedInstanceState == null) receiveLink(app, intent)
         setContent { StarterApp(container, app.links.links) }
     }
 
@@ -39,6 +35,22 @@ class MainActivity : FragmentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         val app = application as StarterApplication
+        receiveLink(app, intent)
+    }
+
+    private fun receiveLink(app: StarterApplication, intent: Intent) {
+        val native =
+            try {
+                app.notificationIntents.input(intent)
+            } catch (_: RuntimeException) {
+                null
+            }
+        if (native != null) {
+            if (native.kind == ActionNotificationKind.Open && native.replyText == null)
+                app.links.receive(native)
+            return
+        }
+        if (intent.data?.scheme == "owned-notification") return
         (intent.dataString
                 ?: intent.getStringExtra("destination")?.let {
                     "${app.environment.linkScheme}://app/$it"
