@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Native app routing in progress; hosted callback failure traced — 3 November 2026
+
+31 application/localization source and test files are now APPLIED but UNVALIDATED.
+Read .work/chat-native-routing-2026-11-03/inputs.json and resolver-decision.txt;
+the older eight draft files are historical and must not overwrite current source.
+Typed Activity ingress, exact sealed Open authentication independent of display
+readiness, captured-owner company selection, collectLatest cancellation/join,
+RESUMED final navigation fence and compact EN/ID retry/verification UI are present.
+Unit/MVI, actual Koin+encrypted SQLite and narrow/large-text layout tests are written.
+Focused check1 is running; no other local heavy job or owned emulator. Keep inputs
+frozen until it finishes. manual-selection-followup.txt records an additional review
+fix: explicit company change must cancel/join active native navigation before leave.
+Screenshots are not yet generated or inspected; application routing is not accepted.
+The production display host remains unbound, and chat push remains OFF.
+
+[Native41624916023](measurements/chat-native-callbacks-hosted-2026-11-03.json) is
+REJECTED at f3843601. Downloaded archive/source/report digests verified. 230 host/37,
+15 proof/four and raw16 API35 cases pass; input recovery then fails at
+NotificationInputProof.kt:206 because the FIRST bounded worker turn does not report
+Complete. Its result category was not recorded, so timeout is not yet proven.
+Five native actions/SystemUI and all five provider scenarios did not run. Fixture
+uninstall/data cleanup is verified. Do not mark this run accepted or merely weaken
+the assertion. New automatic Native41628358557 is in progress at ee2699c3, with
+unchanged input proof code; no duplicate rerun. Callback local native5 remains valid.
+
+Mobile Apple41624960880 still runs at f384; wait before dispatching another Apple.
+Starter Apple41626260198 is now ACCEPTED:112 simulator/30, compile571s/tests154s/
+full Xcode664s,32 verified sources,artifact13228195169; Starter docs9959c1d pushed.
+Platform304/schema116 unchanged. Phone23 remains installed; next meaningful validated
+product24+, notify before install-only and never drive phone UI. All54 groups open.
+Continue routing and actual host integration, then reviewed-send and remaining PRD.
+
+
 ## Guarded company selection accepted locally — 3 November 2026
 
 [Contract](collaboration-native-link-ownership.md) /
