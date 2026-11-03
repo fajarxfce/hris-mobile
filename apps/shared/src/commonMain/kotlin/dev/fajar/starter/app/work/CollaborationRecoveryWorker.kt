@@ -24,6 +24,7 @@ class CollaborationRecoveryWorker(
     private val updateProgress: UpdateCollaborationRecoveryProgress,
     private val devices: LoadCollaborationDevicePage,
     private val admit: AcquireCollaborationBackgroundAdmission,
+    private val recoverInputs: suspend (CollaborationNativeParent) -> SyncResult,
     private val recoverReplies: suspend (CollaborationNativeParent) -> SyncResult,
     private val recoverPriority: suspend (CollaborationNativeParent) -> SyncResult,
     private val build: AppBuild,
@@ -71,6 +72,10 @@ class CollaborationRecoveryWorker(
     private suspend fun process(parent: CollaborationNativeParent): SyncResult {
         val wake = ensureWake()
         if (wake is AppResult.Failed) return retry(wake)
+        val inputs =
+            withTimeoutOrNull(4.seconds) { recoverInputs(parent) }
+                ?: SyncResult.Retry(failure("input_timeout", FailureKind.Timeout))
+        currentCoroutineContext().ensureActive()
         val replies =
             withTimeoutOrNull(8.seconds) { recoverReplies(parent) }
                 ?: SyncResult.Retry(failure("reply_timeout", FailureKind.Timeout))
@@ -80,7 +85,11 @@ class CollaborationRecoveryWorker(
             withTimeoutOrNull(20.seconds) { recoverPriority(parent) }
                 ?: SyncResult.Retry(failure("priority_timeout", FailureKind.Timeout))
         currentCoroutineContext().ensureActive()
-        return companies(parent, (wake as AppResult.Success).value, independent(replies, priority))
+        return companies(
+            parent,
+            (wake as AppResult.Success).value,
+            independent(inputs, replies, priority),
+        )
     }
 
     private suspend fun companies(

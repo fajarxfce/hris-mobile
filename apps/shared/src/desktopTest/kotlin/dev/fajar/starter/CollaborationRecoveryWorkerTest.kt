@@ -14,6 +14,86 @@ import kotlinx.coroutines.test.*
 
 class CollaborationRecoveryWorkerTest {
     @Test
+    fun inputAndOtherIndependentDeadlinesStillLeaveTheCompanyTurnAvailable() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 1)
+        val joined = mutableListOf<String>()
+        f.onInputs = {
+            try {
+                awaitCancellation()
+            } finally {
+                joined += "input"
+            }
+        }
+        f.onReplies = {
+            assertEquals(listOf("input"), joined)
+            try {
+                awaitCancellation()
+            } finally {
+                joined += "reply"
+            }
+        }
+        f.onPriority = {
+            assertEquals(listOf("input", "reply"), joined)
+            try {
+                awaitCancellation()
+            } finally {
+                joined += "priority"
+            }
+        }
+        f.onCompany = {
+            assertEquals(listOf("input", "reply", "priority"), joined)
+            delay(49_000)
+            SyncResult.Complete
+        }
+        val result = assertIs<SyncResult.Retry>(f.worker()())
+        assertEquals("client.collaboration_recovery_input_timeout", result.failure?.code)
+        assertEquals(81_000L, testScheduler.currentTime)
+        assertEquals(listOf(recoveryId(1)), f.attempted)
+        assertNotNull(f.wake)
+        assertEquals(0, f.acknowledgments)
+    }
+
+    @Test
+    fun parentReplacementJoinsInputRecoveryBeforeReplyPriorityOrCompany() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 1)
+        val entered = CompletableDeferred<Unit>()
+        var joined = false
+        f.onInputs = {
+            try {
+                entered.complete(Unit)
+                awaitCancellation()
+            } finally {
+                joined = true
+            }
+        }
+        f.onReplies = { error("Replaced parent must not run reply recovery") }
+        f.onPriority = { error("Replaced parent must not run priority recovery") }
+        val job = async { f.worker()() }
+        entered.await()
+        f.states.value = f.publication(null)
+        assertIs<SyncResult.Blocked>(job.await())
+        assertTrue(joined)
+        assertTrue(f.attempted.isEmpty())
+        assertNotNull(f.wake)
+        assertEquals(0, f.acknowledgments)
+        assertEquals(0, f.states.subscriptionCount.value)
+    }
+
+    @Test
+    fun unfinishedInputSnapshotRetainsWakeUntilItsLaterCompletedTurn() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 1)
+        f.onInputs = { SyncResult.Retry() }
+        assertEquals(SyncResult.Complete, f.worker()())
+        assertNotNull(f.wake)
+        assertEquals(0, f.acknowledgments)
+        assertEquals(listOf(CollaborationRecoveryWake.WORK_KEY), f.scheduled)
+        f.onInputs = { SyncResult.Complete }
+        assertEquals(SyncResult.Complete, f.worker()())
+        assertNull(f.wake)
+        assertEquals(1, f.acknowledgments)
+    }
+
+    @Test
     fun failedReplyRetainsWakeDespiteHealthyContinuationsAndStillReservesOtherLanes() = runTest {
         val f = RecoveryWorkerFixture(testScheduler, 2)
         val unavailable = Failure(FailureKind.Network, "Fictional reply failure")

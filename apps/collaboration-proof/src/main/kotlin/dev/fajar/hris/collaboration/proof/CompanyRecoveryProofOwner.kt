@@ -171,6 +171,7 @@ internal class CompanyRecoveryProofOwner(context: Context) {
                 clock,
             ),
             // This isolated company-sweep fixture has no reply inputs or push hints.
+            recoverInputs = { SyncResult.Complete },
             recoverReplies = { SyncResult.Complete },
             // Native priority is
             // exercised separately through the actual application container and Matrix SDK.

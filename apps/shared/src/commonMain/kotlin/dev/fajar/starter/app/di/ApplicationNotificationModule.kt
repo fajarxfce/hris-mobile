@@ -9,6 +9,7 @@ import dev.fajar.starter.app.notifications.CollaborationNotificationPublisher
 import dev.fajar.starter.app.notifications.CollaborationNotificationReconciler
 import dev.fajar.starter.app.notifications.CollaborationNotificationReplies
 import dev.fajar.starter.app.notifications.CollaborationNotificationSurfaceOwner
+import dev.fajar.starter.app.work.CollaborationNotificationInputRecoveryWorker
 import dev.fajar.starter.app.work.CollaborationNotificationReplyRecoveryWorker
 import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationNotificationChanges
 import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationNotificationPublications
@@ -54,6 +55,7 @@ fun applicationNotificationModule() = module {
     single {
         CollaborationNotificationReplies(get(), get(), get(), get(), get(), get(), get(), get())
     }
+    single { CollaborationNotificationInputRecoveryWorker(get(), get(), get()) }
     single {
         CollaborationNotificationReplyRecoveryWorker(get(), get(), get(), get(), get(), get())
     }

@@ -8,6 +8,7 @@ import dev.fajar.starter.app.work.CollaborationDeliveryWorker
 import dev.fajar.starter.app.work.CollaborationDraftRecovery
 import dev.fajar.starter.app.work.CollaborationIncomingHistoryRecovery
 import dev.fajar.starter.app.work.CollaborationIncomingRecovery
+import dev.fajar.starter.app.work.CollaborationNotificationInputRecoveryWorker
 import dev.fajar.starter.app.work.CollaborationNotificationReplyRecoveryWorker
 import dev.fajar.starter.app.work.CollaborationPriorityRecovery
 import dev.fajar.starter.app.work.CollaborationRecoveryWorker
@@ -68,6 +69,7 @@ fun applicationWorkerModule() = module {
         val company = inject<CollaborationCompanyRecovery>()
         val priority = inject<CollaborationPriorityRecovery>()
         val replies = inject<CollaborationNotificationReplyRecoveryWorker>()
+        val inputs = inject<CollaborationNotificationInputRecoveryWorker>()
         CollaborationRecoveryWorker(
             states = lazy { parent.value.state },
             ensureWake = get(),
@@ -79,6 +81,7 @@ fun applicationWorkerModule() = module {
             devices = get(),
             admit = get(),
             build = get(),
+            recoverInputs = { inputs.value(it) },
             recoverReplies = { replies.value(it) },
             recoverPriority = { priority.value(it) },
             recoverCompany = { company.value(it) },

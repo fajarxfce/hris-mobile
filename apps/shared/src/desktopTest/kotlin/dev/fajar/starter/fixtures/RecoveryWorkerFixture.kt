@@ -247,6 +247,8 @@ internal class RecoveryWorkerFixture(val scheduler: TestCoroutineScheduler, coun
             ) = error("No implicit read reopening")
         }
 
+    var onInputs: suspend (CollaborationNativeParent) -> SyncResult = { SyncResult.Complete }
+
     var onReplies: suspend (CollaborationNativeParent) -> SyncResult = { SyncResult.Complete }
 
     var onPriority: suspend (CollaborationNativeParent) -> SyncResult = { SyncResult.Complete }
@@ -270,6 +272,7 @@ internal class RecoveryWorkerFixture(val scheduler: TestCoroutineScheduler, coun
                 clock,
                 scheduler.timeSource,
             ),
+            { onInputs(it) },
             { onReplies(it) },
             { onPriority(it) },
             build.copy(platform = platform),

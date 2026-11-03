@@ -67,6 +67,8 @@ internal class HrisWorkerProofContainer(
                     AndroidCredentialStore(context, "worker-proof-receipt-content-key"),
                 collaborationHistoryCredentials =
                     AndroidCredentialStore(context, "worker-proof-history-content-key"),
+                collaborationNotificationInputCredentials =
+                    AndroidCredentialStore(context, "worker-proof-notification-input-key"),
                 workScheduler =
                     platformScheduler
                         ?: object : WorkScheduler {

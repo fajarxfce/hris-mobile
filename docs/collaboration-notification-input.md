@@ -89,10 +89,12 @@ An uncertain transfer does not start command processing. The account queue can l
 recover an independently retained copy, and repeated capture reproduces its original
 operation rather than a new send.
 
-These application methods and use cases are bound in the actual container. Native
-callbacks and the device-input discovery worker do not invoke them yet. Startup and
-periodic discovery of protected device rows, durable scan fairness, callback ownership,
-input review UI and notification-input OS-death tests remain separate work. Explicit
+These application methods and use cases are bound in the actual container. The
+[input recovery worker](collaboration-notification-input-recovery.md) discovers a
+finite snapshot of protected device rows and resumes them before ordinary account
+replies. Startup and registered periodic tasks can recover an interrupted enqueue.
+Native callback ownership, input review UI and notification-input OS-death tests
+remain separate work. Explicit
 discard must coordinate with account transfer and retained commands; deleting a
 device row alone cannot cancel an already-copied reply.
 
@@ -110,4 +112,7 @@ physical process death remain separate acceptance gates.
 [Application-flow validation](measurements/chat-notification-input-flow-2026-11-03.json)
 adds actual-container capture/wake/reopen, shared-mutex exclusion through cleanup,
 independent capture, cancelled recovery, scheduling failure/deadline and response-loss
-checks. It does not prove native callback delivery or automatic discovery of device rows.
+checks. [Worker validation](measurements/chat-notification-input-recovery-2026-11-03.json)
+adds finite discovery, cancellation, failed-prefix fairness, arrivals and account
+restoration with actual Koin and encrypted SQLite. Native callback delivery and
+notification-specific OS-death recovery remain unproven.

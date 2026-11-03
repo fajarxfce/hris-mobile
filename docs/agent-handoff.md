@@ -1,69 +1,66 @@
 # Agent continuation — HRIS Mobile
 
-## Finite input recovery in progress; Starter port and native gate updated
+## Finite input recovery accepted locally; native callback integration next
 
-Mobile application capture/recovery is COMMITTED/PUSHED at
-5bc5a7a31d17aff8fab4e7bb3e4cac32d37bf198. The next finite device-input recovery
-implementation is APPLIED/UNCOMMITTED with23 frozen Kotlin files. Focused1 is RUNNING
-in .work/chat-notification-input-recovery-2026-11-03; it owns the only local heavy slot.
-Do not mutate these inputs or launch another local Gradle/emulator until completion.
-No new product APK or phone install. Phone21 remains installed.
+The 23 Kotlin inputs in [input recovery](collaboration-notification-input-recovery.md)
+are ACCEPTED locally; [evidence](measurements/chat-notification-input-recovery-2026-11-03.json).
+Focused1 passed 229.149s with 83 fresh cases/10 suites. Full2 passed 361.759s:
+3,861 desktop/545 suites, 230 Android host/37, eight fresh actual browser/one,
+15 proof host/four and ten build-logic/two; 2,265 fresh cases/274 suites, zero
+failures/errors/skips, all 23 source hashes unchanged. Root quality, proof assembly
+and shared Wasm pass. Audit/record complete in
+.work/chat-notification-input-recovery-2026-11-03. No local heavy job remains.
 
-New domain/data code retains an account-encrypted snapshot of at most64 opaque input
-references using the existing history key (never creates one), random cycle/generation,
-nextIndex, inFlight, sticky retry, continuation and finished. Prepare collects at most
-four metadata pages; exact CAS advances before each attempt. Finish rereads current
-references to detect arrival/replacement before the prior seek. No private text/token
-is in the cursor. SQLite/browser contracts and domain transition tests are added.
-The actual app worker is wired as a four-second phase before existing reply/priority/
-company work, with at most two1s resumeProtected attempts. The90s overall turn remains;
-new virtual-time test reserves49s company work even after4+8+20s independent timeouts.
-An actual Koin/SQLite fixture tests64 inputs, failed prefix,32 container reopens,
-cancellation, arrivals and old-family review. These tests are NOT yet accepted.
-HrisWorkerProofContainer now owns an explicit Android notification-input credential
-store; the isolated company fixture explicitly has no input phase. No native callback
-activation, notification-input OS-death proof or review UI is claimed.
+The account-encrypted cursor snapshots at most 64 opaque references in four pages,
+advances exact CAS before attempts and retains interrupted/failed retry across later
+healthy entries and process reopen. Finish detects arrivals and replacement generations.
+Actual application worker wiring adds a four-second phase and at most two one-second
+attempts before existing reply/priority/company phases; overall 90s remains unchanged.
+Koin/SQLite tests exercise 64 inputs, failed prefix, 32 container reopens, cancellation,
+arrivals and old-family review. The provider proof container now supplies its own
+persistent Android input credential store. These are application/storage proofs;
+native callbacks and notification-input ordinary OS-death replay remain open.
 
-After focused1, inspect fresh results and preserve any failures; fix actual defects,
-then run full root, eight real browser storage cases (selector with trailing wildcard),
-proof host/assembly and shared Wasm, freeze source hashes, record, commit and push.
-Next add native capture callback ownership and actual OS-death replay. Do not keep
-splitting storage foundations once this integration is validated; application hosts
-and callback/review behavior are the remaining notification work.
+NEXT implement native capture callback ownership AND actual OS-death proof together.
+Capture and request a wake inside the bounded receiver; never restore Matrix there.
+Handle cancellation before coroutine entry and finish goAsync exactly once; give
+explicit generic feedback on failed capture. Keep Open navigation-only. Add retained
+input review before production host activation. Do not split more standalone storage
+foundations. Source-grounded notes are in
+.work/chat-notification-input-recovery-2026-11-03/next-native-callback.txt.
+Production native notification hosts stay unbound and chat push OFF.
 
-Hosted native41592216948 at81c7 is now ACCEPTED:
-[evidence](measurements/chat-notification-input-native-2026-11-03.json).
-273 exact source hashes; five provider cases/three suites,230 Android-host/37,
-11 proof-host/three, zero failures/errors/skips. Raw notification16 groups/two scenarios
-passed30.988s with verified uninstall. SDK three encrypted sends/seven receipt POST200;
-three worker states each176 originals/11 passes/11 container reopens, priority one pass;
-ordinary WorkManager death/automatic restart/network restoration pass. Artifact13212856645
-GitHub SHA256 `4070579f16fb483ebafb452f09be9fe9d4c5fe080213c2035f2181538d3893ff`.
-Proof APK `6a0b0b0b851cf9a3b0c89c29580930c4445c03447b0cd9176ed725edf9a7e088`.
-Build1021s/Platform322s/native1115s. Audit complete in
-.work/chat-notification-input-native-2026-11-03; do not repeat. It excludes89dd transfer,
-bf69 receipt barrier and5bc application flow/new worker. Success with the old barrier
-does not remove the separately reproduced de69 fixture race.
+Native 41595695537 at 5bc5a7a31d17aff8fab4e7bb3e4cac32d37bf198 is RUNNING;
+no duplicate/cancellation. Audit scripts and 282 frozen sources are READY in
+.work/chat-notification-input-flow-native-2026-11-03. It includes capture/transfer
+and the corrected own-receipt barrier, excludes the current input worker. Earlier
+89dd and bf69 queued runs were superseded automatically. Latest ACCEPTED native
+41592216948 at 81c7 has five provider cases, raw16 groups/two with verified uninstall,
+230 Android host and11 proof host, zero; artifact13212856645/source273. Its
+[evidence](measurements/chat-notification-input-native-2026-11-03.json) is already audited.
+Do not redo. That success with the old receipt barrier does not negate the separately
+reproduced de69 fixture race.
 
-Native41595695537 at5bc is RUNNING and includes the corrected receipt barrier/15 host
-proof tests. The queued89dd41594372624 andbf6941594812123 were superseded automatically;
-no manual cancellation. Do not duplicate/cancel. Its audit preparation remains next;
-freeze the previous273 sources plus transfer10/barrier2/flow5 against committed5bc.
-This still excludes the current uncommitted worker/callback work.
+Latest ACCEPTED Mobile Apple 41592237356 at 81c7 has 997 simulator cases/111 suites
+and full Xcode, excludes 89dd transfer, 5bc flow and this worker. Dispatch ONE full
+Mobile Apple after this accepted worker is committed/pushed, requiring the new
+Protect/Transfer/Recovery domain cases plus eight Apple raw storage cases. No physical
+iPhone is required. Record exact sources, all report/artifact digests and Xcode result.
 
-Starter raw storage is COMMITTED/PUSHED16f4b23718c98e49cc69970dcf71e96ec8cceb2a;
-current docs headc37bff9. Its independent root/database-browser/Android dev/lint/Web
-PASSED325.503s:365 desktop/120,51 fresh browser/eight,six build-logic/one;
-217 fresh/63,16 exact Mobile sources/schema, zero failures/errors/skips. Lint0 errors/
-44 existing warnings. No APK installed. ONE full Starter Apple41596469348 dispatched
-07:27:45Z at16f4b237; pending/running. Auditor ready in Starter
-.work/device-records-apple-2026-11-03,16 frozen sources, require eight Apple storage cases
-and full Xcode plus actual report/artifact/source digests. Do not repeat local tests.
+Starter raw DeviceRecordStore is COMMITTED/PUSHED at16f4b237 (docs c37bff9), with
+independent root/browser/Android/lint/Web PASS325.503s:365 desktop,51 fresh browser,
+six logic,16 identical Mobile inputs/schema. Lint0 errors/44 existing warnings.
+Full Starter Apple41596469348 remains RUNNING, dispatched once07:27:45Z; audit script
+ready in Starter .work/device-records-apple-2026-11-03. Do not repeat local tests.
+Generic notification primitive port waits for integrated Mobile proof.
 
-Latest accepted Mobile Apple41592237356 at81c7 has997 cases/111 suites and full Xcode,
-but excludes89dd+5bc+new worker. Consolidate the new accepted application/worker code
-in a later full Mobile Apple; no duplicate active run. Platform304/schema116 unchanged,
-chat push OFF/native hosts unbound/all54 groups open. Continue long run.
+Phone release21 from de69 remains installed; no new product build/install this
+increment. Notify before the next validated build's install-only delivery to
+10.77.77.3:5555; preserve signer/data/session and never drive the phone UI.
+Platform304/schema116 and Google mapping remain unchanged. All54 PRD groups remain
+open; voice/video/meeting UI absent. Continue long run.
+
+## Earlier checkpoints (historical; current state above takes precedence)
 
 
 ## Application capture and protected-input recovery accepted locally
