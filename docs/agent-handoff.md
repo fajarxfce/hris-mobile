@@ -1,5 +1,51 @@
 # Agent continuation — HRIS Mobile
 
+## Release28 installed; complete c770 native/Apple evidence — 3 November2026
+
+[Phone28](measurements/chat-empty-history-phone-2026-11-03.json) is installed and
+pullback-verified on10.77.77.3:5555. Source8273ae8d, normal minified devRelease1.0.0,
+code28;516.789s build, lint0,88,058,600bytes, SHA
+806e23a770b52f71218e614d8a87af161af322c92d5852b0311929378d655374.
+Same development signer;16KiB alignment/Firebase dev config/private API/no fixture
+endpoints/18 compiled backup exclusions verified. Owned emulator boot28.391s,
+two cold starts stable12s each/no crash;61.242s smoke, both PNGs viewed, PID3811836
+stopped/transport absent. Physical install19:27:03.203491UTC takes46.348s including
+pullback; appId10962 and firstInstall2026-10-29 15:48:23 retained. Device lastUpdate
+2026-11-04 02:27:21. No uninstall/data clear/UI launch. DO NOT reinstall28.
+
+[c770 native41691878601](measurements/chat-history-local-reuse-hosted-2026-11-03.json)
+now PASS:5 actual API/PostgreSQL/Synapse/Android cases,230 Android host/18 proof host,
+zero failures/errors/skips,432 verified source hashes. Artifact13263452546 SHA
+306f78dcd4fe371deec24365ca7d0f694b069b02c16847b2a7018cfe28cf1d99.
+All three worker draft/cancellation/queued scenarios now pass alongside SDK and
+WorkManager. Raw SystemUI notification/editor/retirement PNGs inspected and tracked.
+This raw proof is separate from actual product FCM run16; native CI pins Platform304.
+The failed older537 andbd399 artifacts remain rejected as previously documented.
+
+[c770 control41691878650](measurements/chat-history-local-reuse-control-2026-11-03.json)
+also PASS:3109 reported portable cases/316 suites,1215 Apple simulator cases/124,
+no failures/errors/skips; pager and locale suites present in both.432 source hashes,
+full Xcode997s. This does not implement/accept actual Apple Matrix/APNs/CallKit.
+New8273 UI native41701412608/control41701412602 have started/queued; inspect status.
+No repeated c770 proof or phone reinstall is needed without a new failure/change.
+
+Platform898d0cf1 records all14 accepted8b40 CI jobs and exact packages. Accepted
+images now staged (API08df88ff, worker276c545e), existing build/libs/services preserved.
+Main .work/chat-push-rollout-2026-11-03/checkpoint.py is RUNNING session57292 after
+maintenance notice. It stops known HRIS writers/provider, creates coordinated HRIS
+and nonempty Matrix checkpoints, restores them in isolated containers, and restarts
+source services in its cleanup. Check result/health promptly; do not start another
+local heavy job. Recovery uses an immutable8b40 tool/config snapshot plus the exact
+accepted API JAR under recovery-verifier; the prior local API JAR differed and was
+preserved. deploy.py has NOT run; flags remain OFF until confirmed activation.
+After checkpoint PASS, run reviewed deploy/denial/health checks and record result.
+
+The communication-space worktree has pushed5debc632 plus seven uncommitted bounded
+repository/datasource/entity/test files; formatted/architecture-checked, no Gradle
+run yet. run-data.py is prepared for3 focused tests; execute after rollout/cleanup.
+No DI/API/group runtime migration yet. Keep schema117 out of the current116 release.
+Continue full PRD, push every commit and keep user updates; no stop at this milestone.
+
 ## Empty-history presentation checked; release28 preparation — 3 November2026
 
 The thread now distinguishes no locally saved messages from confirmed empty history.

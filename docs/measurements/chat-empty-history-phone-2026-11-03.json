@@ -1,0 +1,137 @@
+{
+  "recordedAt": "2026-11-03T19:29:25.099197+00:00",
+  "status": "installed",
+  "source": {
+    "commit": "8273ae8db9b1e6a8fabf20feec577d78e67c5934",
+    "cleanBeforeBuild": true,
+    "cleanAfterBuild": true
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":apps:android:assembleDevRelease",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=28",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-03-build28/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m"
+    ],
+    "startedAt": "2026-11-03T19:14:50.069909+00:00",
+    "elapsedSeconds": 516.789,
+    "exitCode": 0
+  },
+  "artifact": {
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-03-build28/hris-mobile-dev-release-1.0.0-28-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 28,
+    "versionName": "1.0.0",
+    "bytes": 88058600,
+    "sha256": "806e23a770b52f71218e614d8a87af161af322c92d5852b0311929378d655374",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "sameInstalledSigner": true
+  },
+  "lint": {
+    "report": "apps/android/build/reports/lint-results-devRelease.xml",
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+    "issues": 0,
+    "bySeverity": {}
+  },
+  "emulator": {
+    "complete": true,
+    "serial": "emulator-5562",
+    "phoneTouched": false,
+    "source": "8273ae8db9b1e6a8fabf20feec577d78e67c5934",
+    "sha256": "806e23a770b52f71218e614d8a87af161af322c92d5852b0311929378d655374",
+    "versionCode": 28,
+    "debuggable": false,
+    "primaryEmulatorAbi": "x86_64",
+    "nativeBridge": "libndk_translation.so",
+    "coldStarts": [
+      {
+        "coldStart": 1,
+        "pid": 2651,
+        "stableSeconds": 12,
+        "readableUiNodeCount": 7,
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 17.454,
+        "screenshotSha256": "2ebd05ddeb793371df11417dd7d8bd5f1a93022c8fc0d48e49bd962c3545b9f2"
+      },
+      {
+        "coldStart": 2,
+        "pid": 3304,
+        "stableSeconds": 12,
+        "readableUiNodeCount": 7,
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 16.962,
+        "screenshotSha256": "83f70456d3c0bf1af4f4de077544222780c67376fc9ad5e02a3d8d99f246cabd"
+      }
+    ],
+    "elapsedSeconds": 61.242,
+    "apkUnchanged": true
+  },
+  "emulatorCleanup": {
+    "pid": 3811836,
+    "serial": "emulator-5562",
+    "stopped": true,
+    "signalSent": true,
+    "transportAbsent": true,
+    "seconds": 1.206
+  },
+  "installation": {
+    "confirmed": true,
+    "startedAt": "2026-11-03T19:27:03.203491+00:00",
+    "elapsedSecondsIncludingVerification": 46.348,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 28,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "806e23a770b52f71218e614d8a87af161af322c92d5852b0311929378d655374",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-04 02:27:21",
+      "versionCode": "28 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    }
+  },
+  "startupScreenshotsVisuallyInspected": true,
+  "scope": "Private devRelease28 in-place update. Empty-history presentation from8273ae8d; history/runtime c770. No uninstall, app-data clear or physical phone UI action. Minified onboarding cold-start smoke only; actual Matrix/FCM acceptance is separate."
+}

@@ -1,0 +1,223 @@
+{
+  "source": "c770a83fc08a59f75273e2260ef58047c0876c18",
+  "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41691878650",
+  "status": "passed",
+  "steps": [
+    {
+      "job": "portable",
+      "name": "Set up job",
+      "seconds": 2.0
+    },
+    {
+      "job": "portable",
+      "name": "Run actions/checkout@v4",
+      "seconds": 3.0
+    },
+    {
+      "job": "portable",
+      "name": "Run actions/setup-java@v4",
+      "seconds": 1.0
+    },
+    {
+      "job": "portable",
+      "name": "Run gradle/actions/setup-gradle@v4",
+      "seconds": 3.0
+    },
+    {
+      "job": "portable",
+      "name": "Run android-actions/setup-android@v3",
+      "seconds": 9.0
+    },
+    {
+      "job": "portable",
+      "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+      "seconds": 2.0
+    },
+    {
+      "job": "portable",
+      "name": "Run actions/setup-node@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Check setup transport and ownership",
+      "seconds": 856.0
+    },
+    {
+      "job": "portable",
+      "name": "Check application bindings and platform compilation",
+      "seconds": 594.0
+    },
+    {
+      "job": "portable",
+      "name": "Run actions/upload-artifact@v4",
+      "seconds": 4.0
+    },
+    {
+      "job": "portable",
+      "name": "Post Run actions/setup-node@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Post Run gradle/actions/setup-gradle@v4",
+      "seconds": 1.0
+    },
+    {
+      "job": "portable",
+      "name": "Post Run actions/setup-java@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Post Run actions/checkout@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Complete job",
+      "seconds": 0.0
+    },
+    {
+      "job": "apple",
+      "name": "Set up job",
+      "seconds": 3.0
+    },
+    {
+      "job": "apple",
+      "name": "Run actions/checkout@v4",
+      "seconds": 4.0
+    },
+    {
+      "job": "apple",
+      "name": "Select Xcode 26.3",
+      "seconds": 0.0
+    },
+    {
+      "job": "apple",
+      "name": "Run actions/setup-java@v4",
+      "seconds": 1.0
+    },
+    {
+      "job": "apple",
+      "name": "Run gradle/actions/setup-gradle@v4",
+      "seconds": 2.0
+    },
+    {
+      "job": "apple",
+      "name": "Prepare public app-link test registrations",
+      "seconds": 1.0
+    },
+    {
+      "job": "apple",
+      "name": "Check Apple setup adapter",
+      "seconds": 2040.0
+    },
+    {
+      "job": "apple",
+      "name": "Build iOS application host",
+      "seconds": 997.0
+    },
+    {
+      "job": "apple",
+      "name": "Run actions/upload-artifact@v4",
+      "seconds": 3.0
+    },
+    {
+      "job": "apple",
+      "name": "Post Run gradle/actions/setup-gradle@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "apple",
+      "name": "Post Run actions/setup-java@v4",
+      "seconds": 1.0
+    },
+    {
+      "job": "apple",
+      "name": "Post Run actions/checkout@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "apple",
+      "name": "Complete job",
+      "seconds": 4.0
+    }
+  ],
+  "limits": [
+    "Apple simulator exercises common policy/data/presentation adapters and Xcode compilation; actual Apple Matrix runtime, APNs and CallKit remain unimplemented or unaccepted.",
+    "Actual Android provider/process-death and product FCM are separately evidenced. Physical iPhone testing was waived."
+  ],
+  "sourceFingerprintCount": 432,
+  "sourceFingerprintEvidence": "docs/measurements/chat-history-local-reuse-hosted-2026-11-03.json",
+  "artifacts": [
+    {
+      "name": "collaboration-control-portable",
+      "artifactId": 13262925331,
+      "archiveSha256": "9ec241fcbede1c1de273e5d6f83dc0dea7f09b49fc1b5330d0e3f9ac512346aa",
+      "githubDigestVerified": true,
+      "counts": {
+        "tests": 3109,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "pagerAndLocaleSuites": {
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatMessageTimeTest.xml": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadWindowTest.xml": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatMessageTimeTest.xml": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatThreadWindowTest.xml": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "suites": 316,
+      "reportManifestSha256": "47062d4522325efbf8c45222313c2fedf33b3e87a884fd14ad55384a7fc75d1e"
+    },
+    {
+      "name": "collaboration-control-apple",
+      "artifactId": 13262534163,
+      "archiveSha256": "407343d38b108add7c3c328167c78edb208c970fe8bed53fd4f4a662de058b8f",
+      "githubDigestVerified": true,
+      "counts": {
+        "tests": 1215,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "pagerAndLocaleSuites": {
+        "presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatMessageTimeTest.xml": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatThreadWindowTest.xml": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "suites": 124,
+      "reportManifestSha256": "ce5a86724d1de18b72035e386fed3717bc986b483cf60203ef96524e9fb165be"
+    }
+  ]
+}
