@@ -1,6 +1,64 @@
 # Agent continuation — HRIS Mobile
 
-## Durable mute disposition accepted; deliver release20, then continue native input/focus
+## Release20 installed; continue authenticated notification input recovery
+
+Release20 devRelease1.0.0 from **543c61b9f821c6f63f404970c8b015a7c4ea9013** is INSTALLED
+on10.77.77.3:5555 with explicit install-only; do not reinstall it. APK87,806,596 bytes,
+SHA256 `12d378a322b806d2711e7d718862671fcaea6dff964497d802875896a5261d0b`.
+Same signer, package/dev API/Firebase app/arm64/16KiB alignment and18 backup exclusions
+verified. Lint zero issues. Initial build FAILED496.399s at ApkFlinger heap exhaustion
+after compilation; logged before retry. Only local Gradle heap changed1536MiB->2560MiB;
+unchanged clean source then PASSED build+lint71.115s. No failed APK installed.
+[Evidence](measurements/android-release-phone-2026-11-03-build20.json).
+
+Owned emulator3003329/5562 boot28.560s; two stable12s cold starts/no crash, readable7
+nodes each, total55.289s through x86_64 libndk_translation. Screenshot inspected as
+readable onboarding with no observed clipping; this is not all-page/authenticated-chat
+acceptance. Emulator stopped/transport absent2.005s. Phone update+pulled-APK verification
+67.228s starting04:52:32.103844Z; UID10962 and first-install2026-10-29 15:48:23 preserved.
+Phone-reported last update2026-11-03 11:52:52. No uninstall/data clear/phone UI launch,
+real-account messages or sign-in resets. Local scripts/evidence in
+.work/release-phone-2026-11-03-build20. No local heavy job or owned emulator remains.
+
+ONE new full Apple [41579492354](measurements/chat-muted-notification-apple-2026-11-03.json)
+was dispatched04:40:33Z at exact release20 source543c61b9 with227 frozen source hashes.
+It is PENDING; do not redispatch. .work/chat-muted-notification-apple-2026-11-03/audit.py
+is ready; run only after completion, with exclusive extraction directories. Latest
+accepted Apple41575891048 at76d004e5 is970 cases/109 suites/full Xcode and excludes mute.
+Native41575838871 at76d004e5 is still running; its new priority proof uses a FAKE display,
+not activated HRIS OS notifications. Do not duplicate native runs. Older identity run
+41574010908 failed only at emulator-image download before execution; recorded below.
+
+NEXT implement authenticated action v2 and old-family reply-input retention; the concrete
+source map is in .work/chat-muted-notification-2026-11-03/next-actions.txt, DESIGN ONLY.
+Existing data ActionRepository and ActionCodec currently emit flat v1 envelopes with
+issuing parent only in AAD. Add a v2 envelope carrying authenticated original parent+
+action under actual account/audience AAD. Strict open must still require exact current
+parent for normal Send/Read/Mute/Dismiss. Separate recovery decode may return original
+parent for retaining same-account old-family typed input; reject unrelated account/API
+audience. RetainReply guards actual current parent around decode/storage and stores the
+authenticated issuing parent. Existing ReviewReply already produces SessionChanged for
+an unsent old-parent input, while Complete recognizes an existing exact command. Verify
+actual app flow never auto-sends across families and retains review across reopen.
+
+Preserve bounds/canonical Base64/existing-only history key and safe raw I/O callbacks.
+Native HRIS v1 callbacks never activated; no mandatory legacy migration. Strict legacy
+read for already retained local envelopes may remain, without recovering an unknown
+old parent. Only two domain fake ActionRepository implementations: IssuanceFixture and
+InvocationFixture. Real data tests use CollaborationNotificationActionContract on both
+SQLite and IndexedDB; use *BrowserCollaborationNotificationActionTest* and verify a
+nonempty report. Add pending/cancel/changed-parent/key-failure and actual Koin/reopen
+regressions, then root/proof/Wasm/browser checks, atomic commit/push, full Apple snapshot.
+
+Focused-route ownership/disposition and device-encrypted pre-retention input quarantine,
+review UI, real native callbacks, permission wakeups, baselines and notification-input
+OS-death proof remain open. Production native notification hosts are unbound; chat push
+OFF. Voice/video/meeting UI absent; all54 PRD groups open. Continue the long run after
+installation. Live304/schema116 and Starter unchanged; generic port waits for integrated
+Mobile proof. Next actual product release must be >20, same signer/data, phone notice
+then install-only. Physical iPhone waived; full Xcode remains required.
+
+## Durable mute disposition accepted
 
 Muted originals now receive a guarded inactive Cancelled watermark before priority
 hint acknowledgment. Prepare carries metadata and the exact prior journal reference;
@@ -22,14 +80,9 @@ failed attempt. No local heavy job or owned emulator remains at this checkpoint.
 .work/chat-muted-notification-2026-11-03/audit.py and record.py completed; do not rerun
 full checks without a new reason. No storage schema/browser migration was introduced.
 
-NEXT release20 scripts PREPARED in .work/release-phone-2026-11-03-build20. After this
-commit is pushed and source is clean: build+lint, verify actual APK/signature/18 backup
-exclusions/16KiB/arm64; short owned emulator startup, stop it and inspect screenshot;
-notify immediately before explicit10.77.77.3:5555 install-only. Phone19 remains installed
-and connected. Preserve data/signer/UID/first-install; no phone UI automation. One heavy
-local job at a time. Keep Git HEAD and worktree clean throughout the release build;
-collect new CI evidence in .work until it finishes. Record installation in Git, push,
-and CONTINUE. The user requested each next mobile build on the phone.
+Release20 delivery is complete; see the current checkpoint above. Keep its source and
+installed artifact distinct from subsequent implementation commits. Do not repeat the
+accepted mute checks unless new changes or failures require them.
 
 Continue authenticated action v2 and old-family typed-input retention for explicit
 review, then actual-parent/account/company/conversation focused-route suppression.

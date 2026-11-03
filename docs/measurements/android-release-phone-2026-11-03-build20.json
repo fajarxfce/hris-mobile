@@ -1,0 +1,227 @@
+{
+  "date": "2026-11-03",
+  "source": {
+    "commit": "543c61b9f821c6f63f404970c8b015a7c4ea9013",
+    "cleanBeforeBuild": true,
+    "cleanAfterBuild": true
+  },
+  "buildAttempt1": {
+    "result": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":apps:android:assembleDevRelease",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        ":apps:android:lintDevRelease",
+        "-PrequireSigning=true",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=20",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--init-script",
+        "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-03-build20/phone-arm64.init.gradle",
+        "--stacktrace",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "startedAt": "2026-11-03T04:40:13.191316+00:00",
+      "elapsedSeconds": 496.399,
+      "exitCode": 1
+    },
+    "source": {
+      "commit": "543c61b9f821c6f63f404970c8b015a7c4ea9013",
+      "cleanBeforeBuild": true,
+      "cleanAfterBuild": true
+    },
+    "logSha256": "cbdaa1147e5a99b98509464bc128679aaad4bcda481d63d9b2131a2ac3d4f085",
+    "failure": "Gradle JVM heap exhausted in ApkFlinger/Zipflinger while packaging. Compilation completed; no artifact accepted or installed.",
+    "correction": "Raise only this local Gradle JVM heap from1536MiB to2560MiB and repeat build/lint on unchanged source."
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":apps:android:assembleDevRelease",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=20",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-03-build20/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m"
+    ],
+    "startedAt": "2026-11-03T04:48:56.613338+00:00",
+    "elapsedSeconds": 71.115,
+    "exitCode": 0
+  },
+  "artifact": {
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-03-build20/hris-mobile-dev-release-1.0.0-20-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 20,
+    "versionName": "1.0.0",
+    "bytes": 87806596,
+    "sha256": "12d378a322b806d2711e7d718862671fcaea6dff964497d802875896a5261d0b",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "sameInstalledSigner": true
+  },
+  "lint": {
+    "report": "apps/android/build/reports/lint-results-devRelease.xml",
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+    "issues": 0,
+    "bySeverity": {}
+  },
+  "emulatorBoot": {
+    "pid": 3003329,
+    "serial": "emulator-5562",
+    "command": [
+      "/home/fajar/Android/Sdk/emulator/emulator",
+      "-avd",
+      "hris-mobile-dev",
+      "-port",
+      "5562",
+      "-data",
+      "/home/fajar/hris/hris-mobile/.work/startup-fix-2026-11-01/clean-userdata.img",
+      "-no-window",
+      "-no-snapshot",
+      "-no-audio",
+      "-no-boot-anim",
+      "-gpu",
+      "swiftshader_indirect",
+      "-memory",
+      "1536",
+      "-cores",
+      "2",
+      "-feature",
+      "-Vulkan"
+    ],
+    "startTicks": "135812944",
+    "bootSeconds": 28.56
+  },
+  "emulatorStartup": {
+    "complete": true,
+    "serial": "emulator-5562",
+    "phoneTouched": false,
+    "source": "543c61b9f821c6f63f404970c8b015a7c4ea9013",
+    "sha256": "12d378a322b806d2711e7d718862671fcaea6dff964497d802875896a5261d0b",
+    "versionCode": 20,
+    "debuggable": false,
+    "primaryEmulatorAbi": "x86_64",
+    "nativeBridge": "libndk_translation.so",
+    "coldStarts": [
+      {
+        "coldStart": 1,
+        "pid": 2519,
+        "stableSeconds": 12,
+        "readableUiNodeCount": 7,
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 17.717,
+        "screenshotSha256": "13f03411facf746002c7a662ecebcdb280219a06c0f61aa442b305544378aae1"
+      },
+      {
+        "coldStart": 2,
+        "pid": 3279,
+        "stableSeconds": 12,
+        "readableUiNodeCount": 7,
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 15.994,
+        "screenshotSha256": "da0ddc31fa6f208554879115df3fb1ee4174c2172ce78ea49a20d678541d8c2b"
+      }
+    ],
+    "elapsedSeconds": 55.289,
+    "apkUnchanged": true
+  },
+  "visualInspection": {
+    "image": "emulator-startup-2.png",
+    "sha256": "da0ddc31fa6f208554879115df3fb1ee4174c2172ce78ea49a20d678541d8c2b",
+    "inspected": true,
+    "observation": "Onboarding Employee services screen shows readable title, body, illustration, Skip/Continue controls and page indicator with no observed clipping. Startup evidence only; not acceptance of all pages or authenticated chat UI."
+  },
+  "emulatorStop": {
+    "pid": 3003329,
+    "serial": "emulator-5562",
+    "stopped": true,
+    "signalSent": true,
+    "transportAbsent": true,
+    "seconds": 2.005
+  },
+  "installation": {
+    "confirmed": true,
+    "startedAt": "2026-11-03T04:52:32.103844+00:00",
+    "elapsedSecondsIncludingVerification": 67.228,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 20,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "12d378a322b806d2711e7d718862671fcaea6dff964497d802875896a5261d0b",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-03 11:52:52",
+      "versionCode": "20 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    }
+  },
+  "validation": "chat-muted-notification-2026-11-03.json",
+  "compatibleServer": {
+    "source": "304be02700cf07e496421c17e90f5a471b4bd68c",
+    "schema": 116,
+    "runtimeChangedByThisRelease": false
+  },
+  "apple": {
+    "dispatchedOnce": {
+      "createdAt": "2026-11-03T04:40:33Z",
+      "databaseId": 41579492354,
+      "headSha": "543c61b9f821c6f63f404970c8b015a7c4ea9013",
+      "status": "queued",
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41579492354"
+    },
+    "verifiedSourceFiles": 227,
+    "acceptance": "Pending completion and artifact audit; latest accepted41575891048 at76d004e5 predates mute changes."
+  },
+  "limits": [
+    "First build failed496.399s at APK packaging with Java heap exhaustion after compilation. Original log/source/result retained. Only local JVM heap increased1536MiB to2560MiB; source unchanged; no failed artifact installed.",
+    "Private devRelease update signed with the existing development key. Actual APK package/dev API/Firebase app/signature/arm64/16KiB alignment and eighteen backup exclusions verified.",
+    "Two cold starts on the dedicated owned emulator, twelve-second stable windows each; arm64 APK uses libndk_translation on x86_64. Screenshot is startup evidence, not acceptance of all screens. No user-phone launch/UI automation.",
+    "Actual phone install-only update and pulled installed APK checksum match. Existing UID/first-install preserved; no app-data clear/uninstall, user messages or sign-in reset.",
+    "Includes background identity acquisition, notification priority handoff, exact source reconciliation and durable mute disposition since release19. Production HRIS notification hosts remain unbound and chat push OFF. No native notification input/callback acceptance or voice/video/meeting UI.",
+    "No Platform/Starter runtime change. All54 PRD groups remain open. Continue authenticated action/input review, focus disposition and actual native hosts after installation."
+  ]
+}
