@@ -1,10 +1,12 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.navigation.NativeNotificationNavigation
+import dev.fajar.starter.app.notifications.ApplicationNotificationHost
 import dev.fajar.starter.app.notifications.CollaborationNotificationActionCallbacks
 import dev.fajar.starter.app.notifications.CollaborationNotificationActions
 import dev.fajar.starter.app.notifications.CollaborationNotificationCommands
-import dev.fajar.starter.app.notifications.CollaborationNotificationCopy
+import dev.fajar.starter.app.notifications.CollaborationNotificationCopySource
 import dev.fajar.starter.app.notifications.CollaborationNotificationDelivery
 import dev.fajar.starter.app.notifications.CollaborationNotificationFocus
 import dev.fajar.starter.app.notifications.CollaborationNotificationProcess
@@ -19,6 +21,7 @@ import dev.fajar.starter.app.work.CollaborationNotificationReplyRecoveryWorker
 import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationNotificationChanges
 import dev.fajar.starter.collaboration.domain.usecases.OpenCollaborationNotificationAction
 import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationNotificationPublications
+import dev.fajar.starter.notifications.data.datasources.ActionNotificationDisplaySource
 import dev.fajar.starter.workspace.domain.usecases.SelectWorkspace
 import kotlinx.coroutines.flow.combine
 import org.koin.core.parameter.parametersOf
@@ -27,6 +30,19 @@ import org.koin.dsl.onClose
 
 /** Lazy application bindings. A platform host explicitly owns and starts the process lifetime. */
 fun applicationNotificationModule() = module {
+    factory { (source: ActionNotificationDisplaySource, copy: CollaborationNotificationCopySource)
+        ->
+        val state = get<ApplicationCollaborationLifetime>().state
+        val delivery = get<CollaborationNotificationDelivery>()
+        ApplicationNotificationHost(
+            state,
+            delivery,
+            create = { parents ->
+                val owner = CollaborationNotificationSurfaceOwner(parents, source)
+                get<CollaborationNotificationProcess> { parametersOf(owner, copy) }
+            },
+        )
+    }
     factory {
         val open = get<OpenCollaborationNotificationAction>()
         val select = get<SelectWorkspace>()
@@ -44,7 +60,8 @@ fun applicationNotificationModule() = module {
     factory { (owner: CollaborationNotificationSurfaceOwner) ->
         CollaborationNotificationReconciler(owner, get { parametersOf(owner) }, get())
     }
-    factory { (owner: CollaborationNotificationSurfaceOwner, copy: CollaborationNotificationCopy) ->
+    factory {
+        (owner: CollaborationNotificationSurfaceOwner, copy: CollaborationNotificationCopySource) ->
         val publisher = get<CollaborationNotificationPublisher> { parametersOf(owner) }
         val read = get<ReadCollaborationNotificationPublications>()
         val observe = get<ObserveCollaborationNotificationChanges>()
@@ -59,10 +76,10 @@ fun applicationNotificationModule() = module {
                 }
             },
             publishCandidate = { parent, candidate, alert ->
-                publisher.publish(parent, candidate, copy, alert)
+                publisher.publish(parent, candidate, copy.current(), alert)
             },
             reconcile = { parent, reference, failure ->
-                reconcile.reconcile(parent, reference, copy, failure)
+                reconcile.reconcile(parent, reference, copy.current(), failure)
             },
             actions = get<CollaborationNotificationActions> { parametersOf(owner) },
         )

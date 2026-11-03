@@ -40,7 +40,8 @@ class CollaborationNotificationSurfaceOwner(
                             captured,
                             revision,
                         )
-                    captured is Phase.Blocked -> CollaborationNotificationSurfaceState.Blocked
+                    captured is Phase.Blocked && captured.parent == parent ->
+                        CollaborationNotificationSurfaceState.Blocked
                     else -> CollaborationNotificationSurfaceState.Pending
                 }
             }

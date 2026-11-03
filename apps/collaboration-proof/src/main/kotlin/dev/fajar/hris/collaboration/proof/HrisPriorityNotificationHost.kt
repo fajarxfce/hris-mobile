@@ -53,7 +53,12 @@ internal class HrisPriorityNotificationHost(
         val owner = CollaborationNotificationSurfaceOwner(MutableStateFlow(parent), display)
         val process =
             koin.get<CollaborationNotificationProcess> {
-                parametersOf(owner, CollaborationNotificationCopy("HRIS proof", "New message"))
+                parametersOf(
+                    owner,
+                    CollaborationNotificationCopySource {
+                        CollaborationNotificationCopy("HRIS proof", "New message")
+                    },
+                )
             }
         if (!koin.get<CollaborationNotificationDelivery>().start(process)) {
             process.close()

@@ -5,7 +5,8 @@ status collector, a conflated wake channel, registered finite work and at most 6
 publication references with their source subscriptions. A platform host must own one
 instance for its native namespace. App DI composes the real discovery, observation and
 reconciliation use cases through the included `applicationNotificationModule`; construction
-is lazy and does not start a native host.
+is lazy and does not start a native host. The [Android application runtime](collaboration-android-notification-runtime.md)
+now explicitly starts that host from the actual application collaboration lifetime.
 
 Complete discovery reads pages of four within an eight-second cooperative budget, checking
 ownership, active state, shape, ordering, continuation and capacity before changing the

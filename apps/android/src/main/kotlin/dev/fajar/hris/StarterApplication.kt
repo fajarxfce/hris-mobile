@@ -7,7 +7,7 @@ import androidx.work.WorkManager
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.navigation.AppLinkChannel
-import dev.fajar.starter.app.notifications.AndroidCollaborationActionReceiver
+import dev.fajar.starter.app.notifications.*
 import dev.fajar.starter.collaboration.data.di.androidCollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
 import dev.fajar.starter.common.config.AppEnvironment
@@ -28,8 +28,9 @@ import dev.fajar.starter.security.data.lock.datasources.AndroidDeviceAuthenticat
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.worker.AndroidWorkScheduler
 import dev.fajar.starter.worker.SyncWorkerFactory
+import org.koin.core.parameter.parametersOf
 
-class StarterApplication : Application(), Configuration.Provider {
+class StarterApplication : Application(), Configuration.Provider, AndroidCollaborationActionHost {
     val links = AppLinkChannel()
     val notificationIntents by lazy {
         AndroidActionNotificationIntents(
@@ -40,6 +41,22 @@ class StarterApplication : Application(), Configuration.Provider {
         )
     }
     val environment = AppEnvironment.entries.single { it.id == BuildConfig.APP_ENVIRONMENT }
+    private val notificationRuntime = lazy {
+        val koin = container.koin
+        AndroidCollaborationNotificationRuntime(
+            this,
+            "chat",
+            R.drawable.ic_notification,
+            notificationIntents,
+            koin.get(),
+            createHost = { source, copy -> koin.get { parametersOf(source, copy) } },
+            replyCallbacks = koin.get(),
+            actionCallbacks = koin.get(),
+        )
+    }
+    override val notificationActions
+        get() = notificationRuntime.value.actions
+
     override val workManagerConfiguration: Configuration
         get() =
             Configuration.Builder()
@@ -130,5 +147,12 @@ class StarterApplication : Application(), Configuration.Provider {
         PerformanceMonitoring.install(AndroidPerformanceSink(this, enabled = !BuildConfig.DEBUG))
         scheduler.installPeriodic(container.koin.getAll<SyncTask>().map { it.key }.toSet())
         container.koin.get<ApplicationCollaborationLifetime>().start()
+        notificationRuntime.value.start()
+    }
+
+    override fun onTerminate() {
+        if (notificationRuntime.isInitialized()) notificationRuntime.value.close()
+        container.close()
+        super.onTerminate()
     }
 }

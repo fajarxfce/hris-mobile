@@ -368,7 +368,12 @@ class CollaborationNotificationProcessIntegrationTest {
             f.native.onRemove = { removed.send(it) }
             val current =
                 f.app.koin.get<CollaborationNotificationProcess> {
-                    parametersOf(f.owner, CollaborationNotificationCopy("HRIS", "New message"))
+                    parametersOf(
+                        f.owner,
+                        CollaborationNotificationCopySource {
+                            CollaborationNotificationCopy("HRIS", "New message")
+                        },
+                    )
                 }
             process = current
             block(f, current, shown, removed)

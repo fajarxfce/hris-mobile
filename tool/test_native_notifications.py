@@ -68,7 +68,7 @@ class NotificationDriverOwnershipTest(unittest.TestCase):
                 if c[-1].endswith('/instrumentation.json'):
                     output = json.dumps({'complete': True})
                 else:
-                    count = 1 if self.scenario.endswith('denied') else 15
+                    count = 4 if self.scenario == 'notification-runtime' else (1 if self.scenario.endswith('denied') else 15)
                     output = json.dumps({'complete': True, 'cleanedUp': True, 'cases': list(range(count))})
             elif c[:2] == ['shell', 'pm'] and c[2] in ('grant', 'revoke'):
                 output = ''
@@ -95,6 +95,7 @@ class NotificationDriverOwnershipTest(unittest.TestCase):
         self.assertTrue(result['fixtureUninstalled'])
         self.assertTrue(result['fixtureDataCleared'])
         self.assertEqual(16, sum(len(s['cases']) for s in result['scenarios']))
+        self.assertEqual(4, len(result['runtimeComposition']['cases']))
         self.assertFalse(self.present)
         # A sequential run must acquire an absent package again, never replace existing data.
         self.args.output = self.root/'second'

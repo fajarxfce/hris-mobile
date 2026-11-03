@@ -1,5 +1,25 @@
 # Validation
 
+## Android application notification runtime — 3 November 2026
+
+[Contract](collaboration-android-notification-runtime.md) /
+[evidence](measurements/chat-native-host-2026-11-03.json). Full3 passes324.458s:
+3,968 desktop/563 suites,230 Android host/37,15 proof/four,ten logic/two; zero
+failures/errors/skips,613 fresh cases/98 suites. Root quality, Wasm compilation,
+Android dev/proof assembly and lint pass. Product lint zero issues; proof47 warnings.
+Focused2 passes112 desktop/eight plus15 proof/four, including actual Koin/encrypted
+SQLite cold MarkRead before restored session observation. Focused1 retains an Android
+classpath failure after39 passing tests; explicit settings-domain dependency fixes it.
+
+Two fixture-only identifier/assertion corrections after full3 pass proof4 in107.52s;
+all product hashes remain identical. Native1 passes105.401s on owned API35: four real
+runtime/resource/cleanup cases, raw16 groups, three ordinary process deaths/four
+callbacks, one201ms recovery turn, exact single reviewed input and zero HTTP/messages.
+Five callbacks and real SystemUI reply editor/retirement pass; three PNGs ACTUALLY
+INSPECTED. Fixture is uninstalled and owned emulator1367732 stopped. No phone touched.
+Updated hosted checks and minified release24 remain pending. Server chat push OFF.
+
+
 ## Focused-route notification disposition — 3 November 2026
 
 [Owned focus and inactive settlement](collaboration-notification-focus.md) pass107

@@ -25,7 +25,12 @@ internal fun CollaborationWorkerFixture.startPriorityNotifications(
     val owner = CollaborationNotificationSurfaceOwner(parents, display)
     val process =
         koin.get<CollaborationNotificationProcess> {
-            parametersOf(owner, CollaborationNotificationCopy("HRIS", "New message"))
+            parametersOf(
+                owner,
+                CollaborationNotificationCopySource {
+                    CollaborationNotificationCopy("HRIS", "New message")
+                },
+            )
         }
     assertTrue(koin.get<CollaborationNotificationDelivery>().start(process))
 }

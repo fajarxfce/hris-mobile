@@ -3,8 +3,9 @@
 Android callbacks now use the authenticated application actions and protected reply
 capture. [Local evidence](measurements/chat-native-callbacks-2026-11-03.json) covers
 the actual Android receiver, Activity PendingIntent, RemoteInput editor, Keystore,
-Room and notification shade. Production hosts remain unbound until guarded product
-navigation is integrated; chat push remains disabled.
+Room and notification shade. The [Android application runtime](collaboration-android-notification-runtime.md)
+now owns delivery and guarded navigation is integrated. Chat push remains disabled;
+provider send from a reviewed native reply is still separate work.
 
 ## Ownership and durable results
 

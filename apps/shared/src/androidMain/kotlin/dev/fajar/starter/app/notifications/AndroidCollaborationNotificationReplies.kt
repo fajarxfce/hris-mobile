@@ -21,6 +21,7 @@ class AndroidCollaborationNotificationReplies(
     context: Context,
     private val intents: AndroidActionNotificationIntents,
     private val callbacks: CollaborationNotificationReplyCallbacks,
+    private val text: (Int) -> String = { context.applicationContext.getString(it) },
     private val observed: (CollaborationReplyCaptureOutcome) -> Unit = {},
 ) {
     private val context = context.applicationContext
@@ -51,7 +52,7 @@ class AndroidCollaborationNotificationReplies(
                 val message =
                     if (outcome == CollaborationReplyCaptureOutcome.Saved) R.string.chat_reply_saved
                     else R.string.chat_reply_not_saved
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, text(message), Toast.LENGTH_LONG).show()
             }
             observed(outcome)
         } finally {

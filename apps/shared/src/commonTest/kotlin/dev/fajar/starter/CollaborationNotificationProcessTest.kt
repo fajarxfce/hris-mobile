@@ -15,6 +15,94 @@ import kotlinx.coroutines.test.*
 /** Real mechanical owner, virtual time, fake journal/policy/OS ports; not provider acceptance. */
 class CollaborationNotificationProcessTest {
     @Test
+    fun deliveryWaitsForItsOwnReadinessAndCancellingOneCallerDoesNotCancelAnother() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            val ready = MutableStateFlow(false)
+            val delivery = CollaborationNotificationDelivery()
+            assertTrue(delivery.start(f.process, ready))
+            try {
+                val cancelled = async { delivery.publish(f.parent, f.candidate()) }
+                val pending = async { delivery.publish(f.parent, f.candidate()) }
+                runCurrent()
+                assertFalse(pending.isCompleted)
+                assertEquals(0, f.candidateCalls)
+                cancelled.cancelAndJoin()
+                ready.value = true
+                assertIs<AppResult.Success<*>>(pending.await())
+                assertEquals(1, f.candidateCalls)
+            } finally {
+                delivery.closeAndJoin()
+            }
+        }
+    }
+
+    @Test
+    fun readinessAndPendingSourceShareOneEightSecondDeadline() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.signals.resetReplayCache()
+            val ready = MutableStateFlow(false)
+            val delivery = CollaborationNotificationDelivery()
+            assertTrue(delivery.start(f.process, ready))
+            try {
+                val started = testScheduler.currentTime
+                val pending = async { delivery.publish(f.parent, f.candidate()) }
+                runCurrent()
+                advanceTimeBy(7_000)
+                ready.value = true
+                runCurrent()
+                assertFalse(pending.isCompleted)
+                advanceTimeBy(1_000)
+                runCurrent()
+                assertEquals(
+                    FailureKind.Timeout,
+                    assertIs<AppResult.Failed>(pending.await()).failure.kind,
+                )
+                assertEquals(8_000, testScheduler.currentTime - started)
+                assertEquals(0, f.candidateCalls)
+            } finally {
+                delivery.closeAndJoin()
+            }
+        }
+    }
+
+    @Test
+    fun closingUnreadyDeliveryReleasesEveryEntryPointAndLateReadinessCannotRebind() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            val ready = MutableStateFlow(false)
+            val delivery = CollaborationNotificationDelivery()
+            assertTrue(delivery.start(f.process, ready))
+            val waits =
+                listOf(
+                    async { delivery.publish(f.parent, f.candidate()) },
+                    async { delivery.retry() },
+                    async {
+                        delivery.acknowledgeReply(CollaborationNotificationActionToken("opaque"))
+                    },
+                    async {
+                        delivery.act(
+                            ActionNotificationInput(
+                                ActionNotificationReference("card", "render"),
+                                ActionNotificationKind.MarkRead,
+                                "opaque",
+                            )
+                        )
+                    },
+                )
+            runCurrent()
+            assertTrue(waits.none { it.isCompleted })
+            delivery.closeAndJoin()
+            waits.forEach { assertIs<AppResult.Failed>(it.await()) }
+            ready.value = true
+            assertFalse(delivery.start(f.process, ready))
+            assertIs<AppResult.Failed>(delivery.retry())
+            assertEquals(0, f.candidateCalls)
+        }
+    }
+
+    @Test
     fun deliveryCannotSucceedWithoutAHostAndAcceptsOnlyOneOwnedProcess() = runTest {
         fixture { f ->
             f.references = emptyList()

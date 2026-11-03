@@ -35,14 +35,14 @@ owners; no in-memory mutex is treated as the durable cancellation decision.
 This increment does not send edited review text or reauthorize an old notification
 token. Those actions require a durable reviewed submission tied to a fresh operation,
 with explicit recovery of uncertain submissions. A different-body operation conflict
-stays reviewable; it is not silently cancelled. Production notification hosts remain
-unbound and chat push remains off pending complete action/status/review acceptance.
+stays reviewable; it is not silently cancelled. The [Android application runtime](collaboration-android-notification-runtime.md) now
+owns notification delivery; chat push remains off and edited review sending is pending.
 Physical iPhone testing is waived; full hosted Apple build and simulator coverage
-remain required. Generic archive creation still needs the proven Starter port.
+remain required. Generic archive creation is ported to Starter aa58a21b with full Apple acceptance.
 
 Local acceptance is recorded in [the measurement](measurements/chat-saved-replies-2026-11-03.json):
 3,898 desktop,230 Android host and34 actual browser cases, zero failures; root
 quality/shared Wasm/Android assembly and lint passed. The three controlled Compose
 screenshots were actually inspected, including Indonesian at twice the font scale.
-Full hosted Apple and the next phone release remain pending. See the current agent
-handoff for the next native action and reviewed-send work.
+Full hosted Apple for this saved-reply increment and phone23 are accepted in the
+current agent handoff. See that checkpoint for subsequent native runtime and reviewed-send work.

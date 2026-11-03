@@ -21,6 +21,7 @@ class AndroidCollaborationNotificationActions(
     private val intents: AndroidActionNotificationIntents,
     private val replies: AndroidCollaborationNotificationReplies,
     private val callbacks: CollaborationNotificationActionCallbacks,
+    private val text: (Int) -> String = { context.applicationContext.getString(it) },
     private val observed: (CollaborationActionCallbackOutcome) -> Unit = {},
 ) {
     private val context = context.applicationContext
@@ -46,7 +47,11 @@ class AndroidCollaborationNotificationActions(
         try {
             if (outcome == CollaborationActionCallbackOutcome.NotConfirmed) {
                 main.post {
-                    Toast.makeText(context, R.string.chat_action_not_confirmed, Toast.LENGTH_LONG)
+                    Toast.makeText(
+                            context,
+                            text(R.string.chat_action_not_confirmed),
+                            Toast.LENGTH_LONG,
+                        )
                         .show()
                 }
             }

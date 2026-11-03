@@ -280,6 +280,16 @@ def run(args):
             assert proof.get("complete") is True and proof.get("cleanedUp") is True
             assert len(proof["cases"]) == expected and len(set(proof["cases"])) == expected
             result["scenarios"].append({"name": scenario, "seconds": round(time.monotonic()-began, 3), **proof})
+        began = time.monotonic()
+        output = adb("shell", "am", "instrument", "-w", "-e", "scenario", "notification-runtime",
+                     f"{PACKAGE}/.MatrixProofInstrumentation", timeout=60)
+        (args.output / "notification-runtime.log").write_text(output)
+        status = json.loads(adb("shell", "run-as", PACKAGE, "cat", "files/protocol-proof/instrumentation.json"))
+        assert status.get("complete") is True, status
+        runtime = json.loads(adb("shell", "run-as", PACKAGE, "cat", "files/protocol-proof/notification-runtime.json"))
+        assert runtime.get("complete") is True and runtime.get("cleanedUp") is True
+        assert len(runtime["cases"]) == 4 and len(set(runtime["cases"])) == 4
+        result["runtimeComposition"] = {"seconds": round(time.monotonic()-began, 3), **runtime}
         result["inputRecovery"] = input_recovery(adb, args.output)
         result["actionCallbacks"] = action_callbacks(adb, args.output, getattr(args, "reply_system_ui", False))
         assert hashlib.sha256(args.apk.read_bytes()).hexdigest() == digest

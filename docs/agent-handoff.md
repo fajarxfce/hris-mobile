@@ -1,5 +1,51 @@
 # Agent continuation — HRIS Mobile
 
+## Product Android notification host accepted locally — 3 November 2026
+
+[Contract](collaboration-android-notification-runtime.md) /
+[evidence](measurements/chat-native-host-2026-11-03.json). All24 source/resource/build/
+fixture/driver inputs are locally accepted. Full3 passes324.458s:3,968 desktop/563,
+230 Android host/37,15 proof/four,ten logic/two; zero failures/errors/skips. Root
+quality/Wasm/Android dev and proof assembly/lint pass,613 fresh/98. Product lint0;
+proof47 warnings/0 errors. Focused2 passes127 fresh (112 desktop+15 proof). Cold sealed
+MarkRead waits for the real restored session and retires exact journal/private read.
+
+Native fixture IDs were corrected by review after full3, before native execution;
+ONLY NotificationRuntimeProbe and its driver success assertion differ from full3.
+Proof4 passes107.52s/15 tests/quality/lint. All production digests remain unchanged.
+Native1 passes105.401s: four Android runtime/resource/lifetime cases with explicitly
+fake admission/settings, raw16, three ordinary process kills/four callbacks,
+protected1->review1 in one201ms turn, wrong-account/old-family guards, HTTP/messages0.
+Five real actions and SystemUI reply editor/retirement pass47.078s; ALL THREE PNGs
+ACTUALLY INSPECTED. APK cee98ba169db8d6aeca131e9c3c505e6afbda0a37f1198782b49a50f930d051d.
+Fixture uninstalled/data removed; owned5562 PID1367732 stopped/transport absent.
+No local heavy job or owned emulator remains. Work/audits in .work/chat-native-host-2026-11-03.
+
+Android Application now starts one actual Koin host and implements the private native
+action host. Application lifetime owns the parent independently of selected company.
+Ready gating shares one8s budget with each operation; close releases callers and
+stale Blocked parent phases become Pending, without relaxing current-parent cleanup.
+Copy/labels follow observed EN/ID/System settings. Readiness/cancellation/held cleanup,
+start-once/rejected second host/late state and real Koin/SQLite integration pass.
+Live server chat push remains OFF; edited reviewed-send is not implemented.
+
+NEXT commit/push accepted host source/docs, then clean release24 build, artifact/lint
+verification and minified emulator cold starts. Scripts are PREPARED, NOT RUN in
+.work/release-phone-2026-11-03-build24; preflight expects installed23 and unchanged
+signer. Notify immediately before explicit10.77.77.3:5555 --install-only. Never drive
+phone UI. Phone23 is installed, no24 built/installed yet. Continue long run afterward.
+
+Hosted routing Apple41634596520 and Native41634550829 still run at ff3b3246; they
+exclude this host. Audit templates for next host Apple/Native are prepared under
+.work/chat-native-host-apple-2026-11-03 and ...-hosted-... with placeholders; fill
+source manifests/commit/run IDs after push. Do not dispatch another Apple until old
+run finishes. New automatic Native will queue behind the existing run. Both earlier
+Native failures remain rejected. Starter9959c1d unchanged/accepted; this is HRIS
+application policy, no Starter port. Platform72447fb8 runtime304/schema116 unchanged.
+All54 PRD groups remain open; chat UI exists, voice/video/meeting UI absent. Proceed
+with edited reviewed-send and remaining communications after release24/hosted audits.
+
+
 ## Product notification runtime in progress — 3 November 2026
 
 24 host, Android composition/resource, readiness, fixture and driver inputs are WIP

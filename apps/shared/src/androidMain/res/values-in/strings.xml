@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="chat_notification_title">HRIS</string>
+    <string name="chat_notification_new_message">Pesan baru</string>
+    <string name="chat_notification_channel">Pesan chat</string>
+    <string name="chat_notification_reply">Balas</string>
+    <string name="chat_notification_read">Tandai dibaca</string>
+    <string name="chat_notification_mute">Bisukan</string>
     <string name="chat_action_not_confirmed">Tindakan belum terkonfirmasi. Buka chat untuk memeriksa.</string>
     <string name="chat_reply_saved">Balasan tersimpan. HRIS akan memprosesnya saat akun tersedia.</string>
     <string name="chat_reply_not_saved">Balasan belum terkonfirmasi. Buka HRIS untuk melanjutkan.</string>

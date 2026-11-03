@@ -50,6 +50,8 @@ class MatrixProofInstrumentation : Instrumentation() {
                         }
                         "native-notification" ->
                             NativeNotificationProbe(targetContext, directory).run(denied = false)
+                        "notification-runtime" ->
+                            NotificationRuntimeProbe(targetContext, directory).run()
                         "native-notification-denied" ->
                             NativeNotificationProbe(targetContext, directory).run(denied = true)
                         "company-recovery" -> CompanyRecoveryProbe(targetContext, directory).run()

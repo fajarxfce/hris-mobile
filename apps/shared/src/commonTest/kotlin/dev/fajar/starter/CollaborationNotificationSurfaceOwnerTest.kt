@@ -15,6 +15,36 @@ import kotlinx.coroutines.test.*
 /** Mechanical lifetime tests, with virtual time and a fake OS surface; not HRIS/OS integration. */
 class CollaborationNotificationSurfaceOwnerTest {
     @Test
+    fun blockedOldParentIsPendingBeforeItsReplacementCollectorRuns() = runTest {
+        // Separate dispatchers deliberately hold the native owner between parent epochs.
+        val ownerScheduler = TestCoroutineScheduler()
+        val parents = MutableStateFlow<CollaborationNativeParent?>(null)
+        val source = Source()
+        val owner =
+            CollaborationNotificationSurfaceOwner(
+                parents,
+                source,
+                StandardTestDispatcher(ownerScheduler),
+            )
+        owner.start()
+        ownerScheduler.runCurrent()
+        try {
+            assertEquals(CollaborationNotificationSurfaceState.Blocked, owner.states.first())
+            parents.value =
+                CollaborationNativeParent("local", "https://example.test/", "account", "family")
+            assertEquals(CollaborationNotificationSurfaceState.Pending, owner.states.first())
+            ownerScheduler.runCurrent()
+            assertIs<CollaborationNotificationSurfaceState.Ready>(owner.states.first())
+            assertIs<AppResult.Success<*>>(owner.pause(parents.value!!))
+            assertEquals(CollaborationNotificationSurfaceState.Blocked, owner.states.first())
+        } finally {
+            owner.close()
+            ownerScheduler.runCurrent()
+            owner.closeAndJoin()
+        }
+    }
+
+    @Test
     fun coldStateClosesForLateCollectorsAndAfterCloseBeforeStart() = runTest {
         withFixture { f ->
             assertEquals(CollaborationNotificationSurfaceState.Pending, f.owner.states.first())

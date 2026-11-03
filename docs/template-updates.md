@@ -1,5 +1,13 @@
 # Template updates
 
+## HRIS Android notification runtime
+
+The [application runtime](collaboration-android-notification-runtime.md) binds HRIS
+session/company policy, localized chat copy and application callbacks. It has no
+Starter port. Generic raw notification sources and tests remain unchanged from the
+already accepted Starter cb36373/9959c1d port; no new framework module is introduced.
+
+
 ## Native action notification primitives — ported and locally validated
 
 [Mobile f3843601 evidence](measurements/chat-native-callbacks-2026-11-03.json)
