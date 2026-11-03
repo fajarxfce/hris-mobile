@@ -38,6 +38,16 @@ class MatrixProofInstrumentation : Instrumentation() {
                     else 120_000
                 ) {
                     when (scenario) {
+                        "notification-input-verify" -> {
+                            val owner =
+                                (targetContext.applicationContext as HrisScheduledProofApplication)
+                                    .inputProof
+                            try {
+                                owner.verifyRecovery()
+                            } finally {
+                                owner.close()
+                            }
+                        }
                         "native-notification" ->
                             NativeNotificationProbe(targetContext, directory).run(denied = false)
                         "native-notification-denied" ->

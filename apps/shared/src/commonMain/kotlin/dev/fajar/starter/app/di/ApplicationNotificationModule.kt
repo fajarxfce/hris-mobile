@@ -8,6 +8,7 @@ import dev.fajar.starter.app.notifications.CollaborationNotificationProcess
 import dev.fajar.starter.app.notifications.CollaborationNotificationPublisher
 import dev.fajar.starter.app.notifications.CollaborationNotificationReconciler
 import dev.fajar.starter.app.notifications.CollaborationNotificationReplies
+import dev.fajar.starter.app.notifications.CollaborationNotificationReplyCallbacks
 import dev.fajar.starter.app.notifications.CollaborationNotificationSurfaceOwner
 import dev.fajar.starter.app.work.CollaborationNotificationInputRecoveryWorker
 import dev.fajar.starter.app.work.CollaborationNotificationReplyRecoveryWorker
@@ -56,6 +57,11 @@ fun applicationNotificationModule() = module {
         CollaborationNotificationReplies(get(), get(), get(), get(), get(), get(), get(), get())
     }
     single { CollaborationNotificationInputRecoveryWorker(get(), get(), get()) }
+    single {
+            val replies = get<CollaborationNotificationReplies>()
+            CollaborationNotificationReplyCallbacks(replies::capture)
+        }
+        .onClose { it?.close() }
     single {
         CollaborationNotificationReplyRecoveryWorker(get(), get(), get(), get(), get(), get())
     }

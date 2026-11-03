@@ -53,7 +53,9 @@ later retry, new arrivals, cancellation and old-family review with fictional tra
 The Android provider fixture now supplies its own persistent input credential adapter;
 its existing scenarios do not inject notification reply callbacks.
 
-Native receiver lifetime, failed-capture feedback, review UI and notification-specific
-OS-death replay remain the next acceptance work. Production notification hosts remain
+The [Android callback proof](collaboration-notification-callbacks.md) now exercises
+native receiver ownership, generic capture feedback and retained input across three
+ordinary process deaths. Review UI, SystemUI reply status and complete native action
+routing remain next. Production notification hosts remain
 unbound and chat push stays disabled until those flows are usable. No user-phone
 interaction or physical iPhone execution is implied by these checks.

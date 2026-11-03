@@ -2,6 +2,7 @@
 
 plugins {
     id("starter.compose")
+    id("starter.android.resources")
     id("starter.serialization")
     id("starter.di")
     id("starter.firebase.web")

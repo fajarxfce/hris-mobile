@@ -2,6 +2,7 @@ package dev.fajar.hris.collaboration.proof
 
 import android.app.Application
 import androidx.work.Configuration
+import dev.fajar.starter.app.notifications.AndroidCollaborationNotificationHost
 import dev.fajar.starter.worker.SyncWorkerFactory
 import java.io.File
 import kotlinx.coroutines.Dispatchers
@@ -9,7 +10,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 
 /** Only the dedicated, separately installed debug proof application uses seeded login inputs. */
-class HrisScheduledProofApplication : Application(), Configuration.Provider {
+class HrisScheduledProofApplication :
+    Application(), Configuration.Provider, AndroidCollaborationNotificationHost {
+    internal val inputProof by lazy { NotificationInputProof(this) }
+    override val notificationReplies
+        get() = inputProof.native
+
     internal var proof: HrisScheduledWorkerProbe? = null
         private set
 
@@ -21,6 +27,7 @@ class HrisScheduledProofApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+        if (android.os.Build.VERSION.SDK_INT >= 28 && getProcessName() != packageName) return
         val directory = File(filesDir, "protocol-proof")
         if (!File(directory, "workmanager-enabled.json").isFile) return
         check(

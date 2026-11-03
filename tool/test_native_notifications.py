@@ -43,6 +43,8 @@ class NotificationDriverOwnershipTest(unittest.TestCase):
                 self.assertFalse(self.present)
                 self.assertNotIn('-r', c)
                 self.assertNotIn('-d', c)
+                if self.failure == 'install-rejected':
+                    raise subprocess.CalledProcessError(1, command, output='', stderr='INSTALL_PARSE_FAILED')
                 self.present = True
                 if self.failure == 'install-response':
                     raise subprocess.TimeoutExpired(command, 180)
@@ -75,7 +77,8 @@ class NotificationDriverOwnershipTest(unittest.TestCase):
         return subprocess.CompletedProcess(command, 0, output, '')
 
     def execute(self):
-        with patch.object(proof.subprocess, 'run', side_effect=self.command):
+        with patch.object(proof.subprocess, 'run', side_effect=self.command), \
+                patch.object(proof, 'input_recovery', return_value={'complete': True}):
             return proof.run(self.args)
 
     def result(self):
@@ -130,6 +133,16 @@ class NotificationDriverOwnershipTest(unittest.TestCase):
         self.assertFalse(self.present)
         self.assertTrue(self.result()['fixtureUninstalled'])
 
+    def test_rejected_install_keeps_original_failure_and_verifies_absence(self):
+        self.failure = 'install-rejected'
+        with self.assertRaises(subprocess.CalledProcessError):
+            self.execute()
+        result = self.result()
+        self.assertTrue(result['fixtureAbsent'])
+        self.assertFalse(result['fixtureUninstalled'])
+        self.assertNotIn('cleanupFailureCategory', result)
+        self.assertEqual('INSTALL_PARSE_FAILED', (self.args.output/'install-error.log').read_text())
+
     def test_force_stop_failure_does_not_skip_uninstall_or_claim_success(self):
         self.failure = 'force-stop'
         with self.assertRaises(RuntimeError): self.execute()
@@ -144,6 +157,90 @@ class NotificationDriverOwnershipTest(unittest.TestCase):
         self.assertFalse(self.result()['complete'])
         self.assertNotEqual(True, self.result().get('fixtureUninstalled'))
         self.assertIn('cleanupFailureCategory', self.result())
+
+
+class NotificationInputProcessOwnershipTest(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.files = {}
+        self.live = set()
+        self.next_pid = 100
+        self.main_pid = None
+        self.commands = []
+        self.killed = []
+        self.wrong_process = False
+        self.bad_capture = False
+        self.bad_review = False
+
+    def process(self):
+        if self.main_pid not in self.live:
+            self.next_pid += 1
+            self.main_pid = self.next_pid
+            self.live.add(self.main_pid)
+        return self.main_pid
+
+    def adb(self, *command, **kwargs):
+        self.commands.append(command)
+        if command[:4] == ('shell', 'am', 'start', '-W'):
+            if command[5].endswith('NotificationInputProofActivity'):
+                self.files['reply-staged'] = {'pid': self.process(), 'complete': True}
+            else:
+                mode = command[-1]
+                count = self.files.get('reply-callback', {}).get('count', 0) + 1
+                self.files['reply-callback'] = {'pid': self.process(), 'count': count,
+                    'saved': mode == 'reply' and not self.bad_capture}
+                self.files['reply-sent'] = {'pid': 900, 'mode': mode}
+            return ''
+        if command[:3] == ('shell', 'am', 'instrument'):
+            self.files['instrumentation'] = {'complete': True}
+            self.files['reply-verified'] = {'complete': True, 'cleanedUp': True,
+                'pid': self.process(), 'protectedRowsBeforeRecovery': 1,
+                'reviewRowsAfterRecovery': 1, 'wrongAccountPreservedInput': True,
+                'oldFamilyRequiresReview': not self.bad_review, 'httpCalls': 0,
+                'commandRetained': False}
+            return 'INSTRUMENTATION_CODE: 0'
+        if command[:4] == ('shell', 'run-as', proof.PACKAGE, 'cat'):
+            if command[-1].startswith('/proc/'):
+                return ('foreign.process' if self.wrong_process else proof.PACKAGE) + '\x00'
+            name = Path(command[-1]).stem
+            if name not in self.files:
+                raise subprocess.CalledProcessError(1, command)
+            return json.dumps(self.files[name])
+        if command[:5] == ('shell', 'run-as', proof.PACKAGE, 'kill', '-9'):
+            pid = int(command[-1])
+            self.assertIn(pid, self.live)
+            self.live.remove(pid)
+            self.killed.append(pid)
+            return ''
+        if command[:3] == ('shell', 'ps', '-A'):
+            return 'PID NAME\n' + '\n'.join(f'{p} {proof.PACKAGE}' for p in self.live)
+        self.fail('Unexpected process-proof command: ' + repr(command))
+
+    def test_verified_receiver_processes_are_killed_without_force_stopping_package(self):
+        result = proof.input_recovery(self.adb, Path(self.temp.name))
+        self.assertEqual(3, result['ordinaryProcessKills'])
+        self.assertEqual(3, len(set(self.killed)))
+        self.assertEqual(4, len(set(result['processIds'])))
+        self.assertFalse(any('force-stop' in c for c in self.commands))
+        self.assertTrue(result['oldFamilyRequiresReview'])
+
+    def test_reused_pid_for_different_process_is_not_signalled(self):
+        self.wrong_process = True
+        with self.assertRaisesRegex(AssertionError, 'different process'):
+            proof.input_recovery(self.adb, Path(self.temp.name))
+        self.assertEqual([], self.killed)
+
+    def test_failed_capture_is_not_accepted_as_persisted_input(self):
+        self.bad_capture = True
+        with self.assertRaises(AssertionError):
+            proof.input_recovery(self.adb, Path(self.temp.name))
+        self.assertEqual(1, len(self.killed))
+
+    def test_missing_old_family_review_is_not_accepted(self):
+        self.bad_review = True
+        with self.assertRaises(AssertionError):
+            proof.input_recovery(self.adb, Path(self.temp.name))
 
 
 if __name__ == '__main__':

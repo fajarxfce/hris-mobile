@@ -93,8 +93,9 @@ These application methods and use cases are bound in the actual container. The
 [input recovery worker](collaboration-notification-input-recovery.md) discovers a
 finite snapshot of protected device rows and resumes them before ordinary account
 replies. Startup and registered periodic tasks can recover an interrupted enqueue.
-Native callback ownership, input review UI and notification-input OS-death tests
-remain separate work. Explicit
+[Android callback ownership and ordinary process-death recovery](collaboration-notification-callbacks.md)
+now have isolated native proof. Input review UI and complete native action/status
+handling remain before production activation. Explicit
 discard must coordinate with account transfer and retained commands; deleting a
 device row alone cannot cancel an already-copied reply.
 
@@ -106,13 +107,14 @@ Local and hosted validation are recorded separately in `docs/measurements`.
 
 [Transfer validation](measurements/chat-notification-input-transfer-2026-11-03.json)
 covers bounded capture, account replacement, cancellation, exact cleanup, response loss
-and actual encrypted SQLite/Koin reopen with fictional transport. Native callbacks and
-physical process death remain separate acceptance gates.
+and actual encrypted SQLite/Koin reopen with fictional transport. Native callbacks
+and process death have a separate isolated
+[acceptance record](measurements/chat-notification-callback-2026-11-03.json).
 
 [Application-flow validation](measurements/chat-notification-input-flow-2026-11-03.json)
 adds actual-container capture/wake/reopen, shared-mutex exclusion through cleanup,
 independent capture, cancelled recovery, scheduling failure/deadline and response-loss
 checks. [Worker validation](measurements/chat-notification-input-recovery-2026-11-03.json)
 adds finite discovery, cancellation, failed-prefix fairness, arrivals and account
-restoration with actual Koin and encrypted SQLite. Native callback delivery and
-notification-specific OS-death recovery remain unproven.
+restoration with actual Koin and encrypted SQLite. The isolated Android callback
+proof covers subsequent native delivery and ordinary process-death recovery.

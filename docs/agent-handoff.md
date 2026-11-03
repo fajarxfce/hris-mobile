@@ -1,57 +1,65 @@
 # Agent continuation — HRIS Mobile
 
-## Callback native proof active; earlier provider gate accepted
+## Android reply callbacks accepted locally with real process-death proof
 
-Finite input workeradc0a486 is COMMITTED/PUSHED. Current callback integration remains
-APPLIED/UNCOMMITTED in15 frozen inputs. Focused1 PASS165.884s,22 fresh/six; full2
-PASS279.701s,543 fresh/84; final full3 after explicit HTTP cleanup PASS103.175s,15 fresh/
-four proof suites and product reports reused. Full totals3,866 desktop/546,230 Android
-host/37,15 proof/four,ten logic/two, zero failures/errors/skips. All final15 hashes
-unchanged. Lint0 errors/same47 existing warnings;13 Python driver cases pass.
+[Callback contract](collaboration-notification-callbacks.md) /
+[acceptance](measurements/chat-notification-callback-2026-11-03.json).
+Fifteen inputs are ACCEPTED: focused1 PASS165.884s/22 fresh/six; full2 PASS279.701s/
+543 fresh/84; final full3 after explicit HTTP cleanup PASS103.175s/15 fresh proof cases.
+Full totals3,866 desktop/546,230 Android host/37,15 proof/four,ten logic/two, zero.
+Fifteen final source hashes unchanged; lint0 errors/same47 existing warnings;
+13 Python driver cases pass. Work/audits/record complete in
+.work/chat-notification-callback-2026-11-03. No local heavy job or owned emulator remains.
 
-Common callback owner bounds8 captures/8s and completes even on cancellation before
-coroutine entry. Android private Reply-only receiver finishes goAsync once and uses
-localized saved/unconfirmed feedback. Actual debug fixture uses Koin, Room and
-Android Keystore; a separate sender invokes OS-owned PendingIntent after ordinary
-receiver-process death. Cold reopen checks one input from duplicate callbacks,
-wrong-account refusal and old-family review through the actual input worker.
-No HTTP/Matrix send is asserted. Mock HTTP client is explicitly cancelled/closed.
-Product Application does NOT bind this host or declare the receiver yet.
+Native2 PASS28.597s: raw16 groups/two plus actual input recovery14.624s. Three ordinary
+exact-PID receiver deaths, separate sender PendingIntent/RemoteInput, two duplicates
+leave one protected row, missing/nonreply callbacks unconfirmed, wrong account cannot
+remove input, restored account/new local family retains one SessionChanged review.
+Four receiver process IDs3220/3454/3562/3675. HTTP0/no command send. Actual Koin/Room/
+Android Keystore and app worker; fictional identity/history key and no Matrix transport.
+APK SHA256 `98a1ffcb2c1e8c371c816c4fda116628851739006b3c2f7c6f013a8e6abd71a5`.
+Fixture uninstalled/absence verified; owned5562/PID3977137 stopped/absent1.607s.
+Native1 was rejected before execution by invalid :reply-sender process name; corrected
+:reply_sender installs. Original APK/log/audit retained. Driver now preserves rejected
+installer diagnostics and verifies absence instead of masking rejection with uninstall.
 
-Native1 was rejected BEFORE execution by invalid :reply-sender process name. Changed
-to :reply_sender; cleanup now verifies absence after rejected installation and retains
-installer diagnostics. Original artifact/log/audit preserved. Native2 is NOW RUNNING
-in .work/chat-notification-callback-2026-11-03 with ownedemulator5562/PID3977137 and the
-final APK. This owns the only local heavy slot; no Gradle until driver finishes and
-ownedemulator stops. Do not restart or duplicate. Unrelated5580/5584 untouched.
-After native2, inspect actual result, fix real failures, archive all checks/native
-metadata, run record.py when its assertions hold, commit/push accepted code. Then
-continue native reply status acknowledgement, Open/read/mute/dismiss and input-review
-UI before production notification host activation. A Toast does not prove SystemUI
-reply-spinner behavior. All54 PRD groups remain open; chat push OFF.
+Application-owned callback scope admits8/eight seconds; job completion releases native
+callback even before coroutine entry. Private Android Reply-only receiver finishes
+goAsync once and gives localized saved/unconfirmed feedback. Actual production
+Application does NOT bind host/receiver. Current proof does not automate SystemUI
+reply keyboard or verify its spinner; it does not send an encrypted notification reply.
+NEXT continue native reply status acknowledgement, Open/read/mute/dismiss and retained
+input review UI, then bind production notification hosts and perform full owned device
+acceptance. Keep chat push OFF until those flows are usable. Do not call the full PRD
+done; all54 groups remain open, voice/video/meeting UI absent.
 
-Native41595695537 at5bc5a7a31d17aff8fab4e7bb3e4cac32d37bf198 is now ACCEPTED:
+Native41595695537 at5bc is ACCEPTED and audited:
 [evidence](measurements/chat-notification-input-flow-native-2026-11-03.json).
-Five provider cases/three suites,230 Android host/37,15 proof/four; raw16 groups/two
-and verified uninstall. Three encrypted SDK sends/seven receipt POST200, all three
-worker states176 messages with retained history/reopens, WorkManager ordinary death/
-automatic restart/network restoration. All282 source hashes and GitHub artifact13214446060
-verified; ZIP SHA256 `cef2497479e927b2c47d925f654f5e7691e04121279e4f2991694f980a38abe5`.
-Audit complete in .work/chat-notification-input-flow-native-2026-11-03; do not redo.
-Includes corrected own-receipt barrier and capture/resume; EXCLUDESadc0 input worker
-and current native callbacks. The next automatic native run includes later committed
-source; do not manually duplicate or cancel it.
+Five provider/three suites,230 host/37,15 proof/four, raw16 and verified uninstall;
+SDK3 encrypted sends/seven receipt POST200. Three worker states176 originals/11 passes/
+11 reopens/priority1. WorkManager ordinary death/restart/network restoration.
+All282 sources and artifact13214446060 verified, ZIP SHA256
+`cef2497479e927b2c47d925f654f5e7691e04121279e4f2991694f980a38abe5`.
+APK `9b8f6a31695bb73bc219f9bba9c1acda4678d4371d79663b6dcaecf640f945fd`;
+raw31.799s/build858s/Platform307s/native1108s. Includes corrected receipt barrier,
+excludesadc0 input worker/current callbacks. Audit complete; do not repeat.
+Automatic native41599045402 atadc0 is RUNNING, excludes these callbacks. No duplicate
+or cancellation. The callback commit must receive its own later hosted native gate,
+whose raw driver now additionally requires inputRecovery and three ordinary kills.
 
 ONE full Mobile Apple41599066906 atadc0a486 remains running;290 frozen sources,
-[auditor checkpoint](measurements/chat-notification-input-recovery-apple-2026-11-03.json)
-in .work/chat-notification-input-recovery-apple-2026-11-03. Require Protect4/Transfer11/
-Recovery9 simulator cases, eight Apple storage cases, full Xcode and all digests.
-It excludes the current callbacks; a later consolidated Apple gate must compile them.
+[checkpoint](measurements/chat-notification-input-recovery-apple-2026-11-03.json),
+auditor ready in .work/chat-notification-input-recovery-apple-2026-11-03. Require
+Protect4/Transfer11/Recovery9 simulator cases, Apple storage8 and full Xcode/digests.
+It excludes current callbacks; consolidate them into a later full Apple after this
+active run completes. Do not duplicate. Physical iPhone waived.
 
 Starter935d07d records independent Apple41596469348 acceptance:100 simulator/27,
-all eight storage cases/full Xcode758s/16 sources/artifact13213137388 verified. This raw
-storage port is complete. Phone21 unchanged; no product release APK built this increment.
-Notify before future install-only delivery; no phone UI. Platform304/schema116 unchanged.
+all eight storage cases/full Xcode758s/16 sources/artifact13213137388 verified. Generic
+raw storage port complete; generic notification port waits for integrated product proof.
+Phone21 fromde69 remains installed; next validated product build must be>21, preserve
+signer/data/session, notify first and install-only at10.77.77.3:5555. No user-phone UI
+or real-account messages. Platform304/schema116 and Google mapping unchanged.
 
 
 ## Finite input recovery accepted locally; native callback integration next

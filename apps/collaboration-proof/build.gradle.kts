@@ -32,4 +32,5 @@ dependencies {
     implementation(projects.core.workspace.domain)
     implementation(libs.ktor.core)
     implementation(libs.ktor.okhttp)
+    implementation(libs.ktor.mock)
 }
