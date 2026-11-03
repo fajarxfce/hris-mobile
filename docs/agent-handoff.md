@@ -48,13 +48,13 @@ notification-input process-death proof. Production HRIS callbacks are not yet li
 real compatibility needs before designing legacy-v1 migration. Source primitives and finite
 reconciler are not a started notification host. All54 PRD groups still open; chat push OFF.
 
-Consolidated full Apple manifest202 paths and dispatch/audit helpers are ready under
-.work/chat-notification-reconciliation-apple-2026-11-03, NOT dispatched yet. Dispatch ONCE
-after this commit/push on clean branch, record resulting run, then audit only after full
-Xcode succeeds. Last audited Apple11cba615/41554262782 (936/105, Xcode1399s) and corrected
-native7a0ab3d3/41554674578 (16 raw groups plus five SDK/WorkManager scenarios) precede
-current source changes. Do not redispatch completed runs or repeat local provider hangs.
-Physical iPhone waived, full hosted Xcode required.
+Full Apple dispatched ONCE: [41564138207](https://github.com/fajarxfce/hris-mobile/actions/runs/41564138207) at c69bd898,
+202 source hashes. [Pending record](measurements/chat-notification-reconciliation-apple-2026-11-03.json).
+Do not redispatch. Audit using .work/chat-notification-reconciliation-apple-2026-11-03/audit.py
+after full Xcode succeeds; pending is not acceptance. Later changes need separate evidence.
+Last audited Apple11cba615/41554262782 (936/105, Xcode1399s) and corrected native7a0ab3d3/
+41554674578 precede this source. Do not repeat local provider emulator hangs. Physical
+iPhone waived; full hosted Xcode required.
 
 Phone19/sourcec0 remains installed. Next meaningful product release>19: notify then
 explicit10.77.77.3:5555 install-only, preserve signer/data, never drive UI. Live304/schema116
