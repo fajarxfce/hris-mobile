@@ -1,5 +1,16 @@
 # Validation
 
+## Application notification surface lifetime — 2 November 2026
+
+The [mechanical owner](collaboration-notification-surface-owner.md) passes17 common
+cases on desktop and browser, including logout, joined late native work, failed cleanup
+and stale reconciliation. Full checks pass3587 desktop/517 suites,230 Android-host/37,
+six proof-host/one, ten build-logic/two and17 browser/one; zero failures/errors/skips.
+[Evidence](measurements/chat-notification-surface-owner-2026-11-02.json) preserves the
+corrected test-only generic inference failure and420 fresh cases/72 suites. These tests
+use virtual time and a fake native surface; HRIS/native binding and queued-OS cleanup
+coverage remain pending.
+
 ## Raw Android notification actions — 2 November 2026
 
 [Actual Android IPC proof](native-notification-actions.md) passes11 behavior groups in

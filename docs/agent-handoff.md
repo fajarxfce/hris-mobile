@@ -1,5 +1,58 @@
 # Agent continuation — HRIS Mobile
 
+## Mechanical surface owner accepted; continue queued OS cleanup and HRIS integration
+
+CollaborationNotificationSurfaceOwner/Lease now implement closed startup/parent epochs,
+nonwaiting finite requests, registered child cancellation and joined cleanup. The lease
+checks epoch/latest supplied parent/context/completion and keeps only four opaque attempted
+references. Failed compensation blocks new native requests until explicit reconciliation;
+phase CAS prevents a pending retry reopening a replaced parent. No Activity/private
+preview/payload queue is retained. This class is NOT bound into HRIS delivery yet and
+is not company/source admission. [Contract](collaboration-notification-surface-owner.md),
+[evidence](measurements/chat-notification-surface-owner-2026-11-02.json).
+
+Focused1 failed compilation54.270s:10 intentionally throwing test callbacks needed
+explicit generic<Unit>; production compiled, no tests ran. Test-only annotations fixed
+that inference failure. Focused2 passed78.288s,16 fresh cases/one suite with quality/
+architecture74/detekt. Added logout/no-parent coverage and guaranteed release of the
+non-cancellable test barrier; production hashes stayed unchanged. Full3 passed311.019s:
+3587 desktop/517 suites,230 Android-host/37, six proof-host/one, ten build-logic/two,
+17 browser/one.420 fresh cases/72 suites, zero failures/errors/skips, three frozen inputs.
+Actual browser runtime, virtual-time/fake native surface; no new native/DI acceptance.
+No local heavy job or owned emulator remains at this checkpoint.
+
+NEXT resolve queued native-submission cleanup before activating the coordinator. Raw
+Android notify acknowledges a queued OS request, but current clear enumerates active
+cards and remove returns Absent without cancellation. Add explicit queued/restart proof;
+a durable opaque pending-ID registry under native no-backup storage may be required for
+namespace cleanup without old account decryption. Do not equate joined app work with
+an OS/database transaction. Current raw proof covers active cards, not that uncertainty.
+
+Then bind the owner to actual processed native state and coordinate Prepare/Issue/
+Validate/Finish with localized policy-limited payloads. Retained company denial, source/
+settings/read changes and focused thread suppression remain separate. Existing
+OpenCollaborationNotificationAction gates company access, so denied-card dismissal still
+needs opaque authenticated retirement. Issuance.Ready currently carries only the render;
+new-source versus reused/source-stamp-only alert policy must be explicit. Open/navigation
+must never send/mark read merely from a raw routing hint. Old-family/pre-retention replies
+need encrypted explicit review before activation. Continue the expanded
+[integration plan](collaboration-notification-publication-plan.md#integrating-the-tested-android-transport).
+Supplemental .work/chat-notification-native-next-2026-11-02/application-owner-after-raw.txt
+now has extra boundary notes. Its earlier statement that no owner code exists is obsolete;
+the owner described above is implemented/tested. Other proposed integration is not.
+
+Full Apple41547382869 atdb74e22d/175 source hashes is still RUNNING (last full Xcode app
+build); follow .work/chat-native-notification-apple-2026-11-02/audit.py after success,
+never cancel/redispatch. It excludes this new owner. Native HRIS41547370301 atdb74 was
+pending behind eac/41544727565; inspect actual status and both raw11-group plus five-case
+interop artifacts before acceptance. No repeat of long local provider emulator hangs.
+
+Phone19/sourcec0 remains installed; no product release/install here. Next meaningful
+release>19: notify immediately, use explicit10.77.77.3:5555 install-only, preserve signer/
+data and do not launch/drive its UI. Live304/schema116/chat push OFF, all54 PRD groups
+open. Continue long run; push every atomic commit and keep evidence in Git. Generic
+Starter port still waits for integrated Mobile proof. Older sections are historical.
+
 ## Raw Android actions proved; continue HRIS publication ownership
 
 The core notification data module now has a separate raw actionable surface. Actual

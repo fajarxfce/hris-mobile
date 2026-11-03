@@ -61,7 +61,9 @@ PendingIntent/RemoteInput/NotificationManager behavior without an HRIS account, 
 separate from application admission and durable input recovery. Keep these boundaries
 visible in acceptance evidence.
 
-The application owner must close its epoch on startup, parent change or observer failure,
+[The mechanical application owner](collaboration-notification-surface-owner.md) now
+closes its epoch on startup, parent change or observer failure. It is not yet bound to
+HRIS delivery. Its required behavior is to
 cancel and join pending native work, and clear its namespace before admitting another
 parent. Failed cleanup keeps that gate closed until an explicit finite reconciliation.
 Register an active request before a second epoch check so invalidation cannot miss work
@@ -94,3 +96,10 @@ bounded opaque discovery and exact retirement/reconciliation that cannot revive 
 previously dismissed source. Raw active pages are four records and omit inactive
 watermarks. Keep acquired priority hints until publication uncertainty is recoverable;
 ordinary missed-hint recovery and initial-sync/backfill suppression need explicit rules.
+
+
+Before wiring, verify cleanup of notifications accepted into the OS queue but not yet
+reported active, including process restart. The raw source currently clears active
+entries only and treats an absent exact render as no-op. Durable opaque pending IDs
+independent of account decryption may be necessary; no private text/tokens belong there.
+Do not claim this coverage from the existing active-card raw proof or fake owner tests.
