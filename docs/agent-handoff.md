@@ -1,5 +1,37 @@
 # Agent continuation — HRIS Mobile
 
+## Full Apple process validation accepted; background identity acquisition in progress
+
+[Run41568117750 at93f8a185](measurements/chat-notification-process-apple-2026-11-03.json)
+is ACCEPTED:962 simulator cases/108 suites, zero failures/errors/skips,207 verified
+source hashes. Full Xcode1,126s, test compilation595s/tests88s. Artifact13201895179
+SHA25603d28b4fac2535cc12618fa06ea9e0c43bc0a8a44e3f796812445948b00d90d4 matches GitHub.
+Scope covers the process gate/coordinator. Shared app tests do not run in this simulator
+task; app composition compiles in Xcode. Candidate commit52876f16 and subsequent work
+are outside this snapshot. No native callback/input/APNs/CallKit acceptance. Do not repeat.
+
+Candidate commit52876f16 is pushed and its previous full validation remains accepted.
+Tracing incoming delivery found a prerequisite: ReadCollaborationIdentity.acquire only
+accepted selected workspace, and incoming recovery did not acquire self identity. That
+could leave notification preparation pending when chat had never been opened. Current
+UNCOMMITTED work in .work/chat-incoming-identity-2026-11-03 generalizes that explicit
+acquisition to finite background admission/device without selection, and acquires metadata
+inside the existing runtime with a2-second sub-budget. Missing/transient identity retains
+retry while original acquisition still progresses. Confirmed denial/parent cancellation
+remain gated. Actual notification fixture now obtains identity through incoming recovery,
+without direct repository seeding. Seven Kotlin inputs; focused1 currently running.
+Do not commit before observing results and required root/full checks.
+
+Next continue opaque candidate handoff AFTER transport/timeline close and BEFORE hint ACK,
+inside priority20s rather than incoming12s. Worker must use the one actual process owner;
+no absent-host success path. Handle initial/backfill/dropped hints and native focus/permission
+wakeups, authenticate callbacks and retain/review encrypted input, then actual notification-input
+OS-death proof. The existing native priority proof expects hint completion: explicitly adapt
+its host/delivery assertions if changing that contract; never silently fake publication.
+Chat push OFF, all54 PRD groups open. Phone19 remains installed; next meaningful release>19
+requires notice and10.77.77.3:5555 install-only. No phone UI automation. Live304/schema116
+unchanged. One local heavy job at a time; continue long run and push each atomic commit.
+
 ## Notification candidate API accepted; connect incoming delivery and native ownership next
 
 Process.publish now queues max 20 opaque candidates/caller-owned completions. The caller

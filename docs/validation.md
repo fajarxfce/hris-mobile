@@ -17,7 +17,8 @@ passes 962 simulator cases/108 suites and full Xcode in 1,245s, with 202 source 
 a verified GitHub artifact digest. It predates the process gate/coordinator. Shared app
 integration tests do not execute in that simulator task. The consolidated successor
 [41568117750 at93f8a185](measurements/chat-notification-process-apple-2026-11-03.json)
-is pending with207 source hashes; it is not yet acceptance. Native HRIS notification
+is now accepted with207 source hashes:962 simulator cases/108 suites, zero failures/errors/
+skips, and full Xcode1,126s. Artifact13201895179 digest verified. It excludes candidate52876f16. Native HRIS notification
 host/callbacks and notification-specific OS-death proof remain separate work.
 
 ## Process-owned native reconciliation — 3 November 2026
