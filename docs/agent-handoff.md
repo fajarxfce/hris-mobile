@@ -1,5 +1,26 @@
 # Agent continuation — HRIS Mobile
 
+## Protected input committed; hosted Apple/native queued
+
+Protected input is COMMITTED/PUSHED at
+**81c7a35c2739e709be0e5105f169d167fed33b6a**. ONE consolidated full Apple
+[41592237356](measurements/chat-notification-input-apple-2026-11-03.json) dispatched
+06:48:39Z at this source,268 frozen paths including raw schema13 and input Swift wiring.
+Audit script ready in .work/chat-notification-input-apple-2026-11-03; after successful
+completion require eight AppleDeviceRecordStoreTest cases, full reports, complete
+Xcode and source/archive hashes. Do not duplicate or cancel. This is the Mobile gate
+needed before porting raw DeviceRecordStore to Starter.
+
+Automatic native41592216948 at81c7 is PENDING behind running41587502684 atde69.
+GitHub superseded queued41590342856 at76bd after the newer push; no manual cancellation.
+Raw storage is included in81c7. New native fetch/audit scripts prepared in
+.work/chat-notification-input-native-2026-11-03 with273 frozen source paths. Audit de69
+first after completion, then81c7; existing five provider scenarios do not prove native
+notification-input replay and callbacks. No local heavy job remains.
+
+Continue capture and actual-account transfer/cleanup; next-transfer.txt explains the
+existing reply mutex and proof requirements. No new product APK; phone21 installed.
+
 ## Protected pre-session notification input accepted locally
 
 The [encrypted input repository](collaboration-notification-input.md) is locally
