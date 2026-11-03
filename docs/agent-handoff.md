@@ -1,5 +1,59 @@
 # Agent continuation — HRIS Mobile
 
+## Admitted publisher accepted; fix sequential native fixture cleanup, then host integration
+
+The parameterized Koin publisher factory now coordinates Prepare/Issue/Validate/native
+show/Validate/Finish/Validate inside a started surface owner. Inputs are opaque candidate
+IDs, processed parent and generic localized copy; output is an enum. Preview/envelopes
+come from retained admitted originals. Failures after submission trigger joined exact
+owner compensation while preserving journal uncertainty. Issuance marks newly retained
+originals; caller opt-in plus that flag are both required for an alert. Replay, default
+recovery and same-source privacy/native-family rerenders are silent. Open aliases the
+authenticated Reply target for navigation only; host callback routing is still pending.
+[Contract](collaboration-notification-publisher.md),
+[evidence](measurements/chat-notification-publisher-2026-11-03.json).
+
+Focused1 passed159.874s:27 fresh cases/two suites (17 domain, ten actual Koin/SQLite app
+cases). Full2 passed352.401s:3603 desktop/519 suites,230 Android-host/37, six proof-host/
+one, ten build-logic/two and17 browser/one;2031 fresh cases/251 suites, zero failures/
+errors/skips, eight frozen Kotlin inputs. Root quality/architecture74/detekt, proof
+assembly and shared Wasm compile passed. No failed local attempt. App tests deliberately
+use a fake OS with fictional HTTP/simulated SDK acquisition. No native host activated.
+
+NEXT first repair native test composition: hosted41550122006 at7cf6bd72 failed all five
+SDK/WorkManager cases before instrumentation or gateway traffic. Its raw notification
+probe PASSED11 groups/two scenarios in15.788s, then only pm-cleared the proof package.
+The following Platform NativeDevice.prepare explicitly refuses an already installed
+package, causing a deterministic ownership conflict. Do not weaken that refusal. The
+raw driver must verify the dedicated AVD/debug proof APK and absence before installation,
+own uncertain installation, and uninstall/verify absence in finally even when force-stop
+fails. Add bounded driver ownership/cleanup tests and actual short native rerun, then
+audit subsequent hosted raw+five-case run. No need to repeat the known long local
+provider-emulator hang experiments. Failure artifact13193192595 was downloaded and its
+GitHub digest verified under .work/chat-native-notification-ci-failure-2026-11-03.
+Proposed driver/tests under .work/chat-native-notification-ci-cleanup-2026-11-03 are
+UNAPPLIED .txt drafts; no Python fix committed yet. Publisher .txt drafts are APPLIED/
+STALE; do not reapply. There is currently no local heavy job or owned emulator.
+
+Consolidated Apple manifest184 paths and dispatch/audit helpers are prepared under
+.work/chat-notification-publisher-apple-2026-11-03, NOT dispatched yet. Dispatch once
+after commit/push; full Xcode required, physical iPhone waived. Last audited full Apple
+isdb74/41547382869 (930/104, Xcode1336s), excluding this publisher and later inventory.
+
+Then continue ongoing all-company/read/settings/history invalidation, focused-thread
+scope, opaque denied-card retirement, old-family/pre-retention encrypted reply review,
+Android/iOS host callbacks and notification-specific OS-death proof. The publisher's
+Suppressed/Pending/Unchanged result intentionally does not clear a different active card;
+the host must own that invalidation before activation. Supplementary follow-through.txt
+and the [integration plan](collaboration-notification-publication-plan.md) record the
+boundaries. Native chat notifications and call/video/meeting UI remain unactivated.
+
+Phone19/sourcec0 remains installed; no product build/install here. Next meaningful
+release>19: notify immediately before explicit10.77.77.3:5555 install-only, preserve
+signer/data, never drive its UI. Live304/schema116/chat push OFF and all54 PRD groups
+open. Keep long run going; push every atomic commit. Starter port waits for integrated
+Mobile proof. Older entries below are historical.
+
 ## Opaque native pending inventory accepted; continue admitted publisher
 
 Android records the latest opaque card/render ID in a bounded canonical no-backup

@@ -10,6 +10,29 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationNotificationIssuanceTest {
     @Test
+    fun onlyANewlyRetainedOriginalAllowsAnAlertWhileReplayAndFamilyRerenderStaySilent() = runTest {
+        val f = CollaborationNotificationIssuanceFixture()
+        suspend fun newOriginal() =
+            assertIs<CollaborationNotificationIssuance.Ready>(
+                    assertIs<AppResult.Success<CollaborationNotificationIssuance>>(f.issue()).value
+                )
+                .newOriginal
+        assertTrue(newOriginal())
+        assertFalse(newOriginal())
+        f.replaceFamily()
+        assertFalse(newOriginal())
+        val original = f.projection.original!!
+        f.projection.original =
+            original.copy(
+                primaryEventId = "\$fresh-original",
+                eventIds = listOf("\$fresh-original"),
+                timestamp = original.timestamp + 1,
+            )
+        assertTrue(newOriginal())
+        assertFalse(newOriginal())
+    }
+
+    @Test
     fun exactActiveReplayKeepsNativeIdRenderAndAuthenticatedEnvelopesOffline() = runTest {
         val f = CollaborationNotificationIssuanceFixture()
         f.local.setup.now += 365.days

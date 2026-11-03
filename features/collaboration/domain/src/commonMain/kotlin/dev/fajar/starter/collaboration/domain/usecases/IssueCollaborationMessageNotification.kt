@@ -140,7 +140,12 @@ class IssueCollaborationMessageNotification(
                 )
                     return notificationPublicationFailure(FailureKind.Conflict)
                 confirm(parent, message, original).let { if (it is AppResult.Failed) return it }
-                AppResult.Success(CollaborationNotificationIssuance.Ready(stored))
+                AppResult.Success(
+                    CollaborationNotificationIssuance.Ready(
+                        stored,
+                        newOriginal = previous?.body?.target?.eventId != message.eventId,
+                    )
+                )
             }
         }
     }
@@ -161,7 +166,10 @@ class IssueCollaborationMessageNotification(
         if (current is AppResult.Failed) return current
         if ((current as AppResult.Success).value != previous)
             return notificationPublicationFailure(FailureKind.Conflict)
-        return AppResult.Success(CollaborationNotificationIssuance.Ready(previous))
+        // After uncertain storage/OS delivery, absence is not proof that no alert occurred.
+        return AppResult.Success(
+            CollaborationNotificationIssuance.Ready(previous, newOriginal = false)
+        )
     }
 
     private suspend fun confirm(

@@ -4,8 +4,11 @@ package dev.fajar.starter.collaboration.domain.entities
  * Owned local issuance outcome; the native publisher still requires current validation and lease.
  */
 sealed interface CollaborationNotificationIssuance {
-    data class Ready(val publication: CollaborationNotificationPublication) :
-        CollaborationNotificationIssuance {
+    /** A new original may alert only if the caller also admits incremental presentation. */
+    data class Ready(
+        val publication: CollaborationNotificationPublication,
+        val newOriginal: Boolean,
+    ) : CollaborationNotificationIssuance {
         override fun toString() = "CollaborationNotificationIssuance.Ready([redacted])"
     }
 

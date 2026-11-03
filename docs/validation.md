@@ -1,5 +1,20 @@
 # Validation
 
+## Admitted application notification publisher — 3 November 2026
+
+The [publisher](collaboration-notification-publisher.md) passes27 focused cases, including
+ten actual Koin/encrypted-SQLite integration cases with a fake native surface. Root checks
+pass3603 desktop/519 suites,230 Android-host/37, six proof-host/one, ten build-logic/two
+and17 browser/one; zero failures/errors/skips. Proof assembly and shared Wasm compile
+pass. [Evidence](measurements/chat-notification-publisher-2026-11-03.json) records eight
+frozen inputs and2031 fresh cases/251 suites. No native-host activation or phone install.
+
+Separately, hosted native41550122006 at earlier7cf6bd72 passes its11-group raw probe,
+then fails the five SDK/WorkManager preflights because the raw fixture leaves its package
+installed. The next driver's refusal to replace unowned data is correct. Cleanup repair
+and subsequent native acceptance are pending; do not count that failed run as end-to-end
+acceptance. Current [handoff](agent-handoff.md) identifies the exact continuation.
+
 ## Android pending notification inventory — 3 November 2026
 
 [Opaque no-backup inventory](native-notification-actions.md) passes16 actual API35

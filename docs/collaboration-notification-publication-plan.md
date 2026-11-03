@@ -4,8 +4,10 @@ The [raw journal](collaboration-notification-publications.md) and
 [admitted issuance](collaboration-notification-issuance.md) now have separate contracts
 and recorded validation. [Exact validation and settlement](collaboration-notification-publication-lifecycle.md)
 are also implemented. [Raw Android transport](native-notification-actions.md) is
-separately exercised with actual notification IPC in the isolated fixture. HRIS has not
-wired it into delivery yet. Continue through serialized publication/cleanup, callbacks
+separately exercised with actual notification IPC in the isolated fixture. The
+[admitted application publisher](collaboration-notification-publisher.md) now coordinates
+preparation through settlement inside the surface owner; native delivery is not started.
+Continue through ongoing invalidation/cleanup, callbacks
 and retained-input review; keep chat push off
 until that flow is usable.
 
@@ -79,10 +81,17 @@ from every company. Current settings/read repositories lack change observation; 
 narrow owned signal and cancellation/denial tests instead of indefinite polling or UI
 state in repositories. Foreground thread registration belongs app/navigation lifecycle.
 
-The raw transport has five routing hints, including Open. The HRIS journal currently
-has four authenticated actions. Choose and test explicit navigation-only envelope
-handling; an outer Open hint must never trigger a send or mark-read command. The Activity
-must receive notification content directly, without a background notification trampoline.
+The raw transport has five routing hints, including Open. The HRIS journal has four
+authenticated actions. The publisher maps Open to the authenticated Reply target envelope
+as a navigation-only alias, preserving the existing journal. Actual host routing must
+authenticate/match that target and must never execute send or mark-read for an outer Open
+hint. The Activity must receive content directly, without a notification trampoline.
+
+Issuance now distinguishes a newly retained original from replay or same-source rerender.
+The publisher defaults silent, and can alert only when the caller also admits incremental
+presentation. This does not yet classify initial sync/backfill or guarantee exactly-once
+sound. Permission/channel/capacity preserve Prepared; failure after native submission
+invokes exact owner compensation and retains journal uncertainty for explicit recovery.
 
 Old-family/pre-retention reply failures still need encrypted explicit review. Existing
 Replies.submit handles current-family durable input, and does not by itself retain an

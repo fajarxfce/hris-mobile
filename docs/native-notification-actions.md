@@ -9,9 +9,9 @@ admitted publication journal, application lifetime or durable reply flow.
 bounded title/body, opaque action envelopes and a silent flag. The application supplies
 localized labels. Five transport entry points are Open, Reply, MarkRead, Mute and
 Dismiss. These names are untrusted routing hints, never authenticated domain actions.
-The current HRIS journal has four authenticated actions; an Open/navigation mapping
-must be decided explicitly during integration and must never invoke a send/read command
-merely because a notification was tapped.
+The HRIS journal has four authenticated actions. Its application publisher maps Open to
+the authenticated Reply target as a navigation-only alias. Actual host routing remains
+pending and must never invoke a send/read command merely because a card was tapped.
 
 ## Android behavior
 
@@ -82,8 +82,10 @@ those tests, or prove notification-specific retained-input process death. See
 The [inventory increment](measurements/native-notification-pending-2026-11-03.json)
 records16 native behavior groups across two scenarios, including the five new groups.
 
-Next, connect the HRIS journal and an application-owned serialized lease with parent,
-company, source/settings/read and foreground-thread invalidation. Add bounded private
+The [application publisher](collaboration-notification-publisher.md) now coordinates the
+journal and a serialized lease, tested with actual encrypted storage and a fake OS.
+Next, bind the host with parent, company, source/settings/read and foreground-thread
+invalidation. Add bounded private
 receiver completion, explicit review after failed retention/old-family input, routing,
 and notification-specific process-death proof. Implement the iOS host surface separately
 and verify full Xcode. Chat push remains off and the user's installed release19 is
