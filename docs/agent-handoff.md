@@ -2,6 +2,20 @@
 
 ## Native proof observation repaired; continue focused-route notifications
 
+UNACCEPTED working-tree focus increment:18 Kotlin paths are frozen by
+.work/chat-notification-focus-2026-11-03/check-1 (focused run currently active; inspect
+result/log before another heavy task). [Draft contract](collaboration-notification-focus.md).
+New app focus holder and current revision guards; actual thread owner exposed to
+route lifecycle/window registration; process observes focus; Issue.Ready carries the
+exact previous cleanup reference; publisher removes it before Cancelled settlement;
+Validate.afterCancellation rechecks the original source and inactive write. No new
+storage schema. New common ownership, domain provenance/retired-source, Compose
+lifecycle, Koin SQLite and process invalidation regressions are in the working tree.
+Run focused/root/proof/Wasm checks and preserve failures before acceptance/commit.
+This source is newer than hosted a90dc3f6; do not claim that pending Apple/native
+covers focus. Phone20 unchanged. No owned emulator is running.
+
+
 Release20 devRelease1.0.0 from **543c61b9f821c6f63f404970c8b015a7c4ea9013** is INSTALLED
 on10.77.77.3:5555 with explicit install-only; do not reinstall it. APK87,806,596 bytes,
 SHA256 `12d378a322b806d2711e7d718862671fcaea6dff964497d802875896a5261d0b`.
