@@ -47,19 +47,41 @@ Automatic native41599045402 atadc0 is RUNNING, excludes these callbacks. No dupl
 or cancellation. The callback commit must receive its own later hosted native gate,
 whose raw driver now additionally requires inputRecovery and three ordinary kills.
 
-ONE full Mobile Apple41599066906 atadc0a486 remains running;290 frozen sources,
-[checkpoint](measurements/chat-notification-input-recovery-apple-2026-11-03.json),
-auditor ready in .work/chat-notification-input-recovery-apple-2026-11-03. Require
-Protect4/Transfer11/Recovery9 simulator cases, Apple storage8 and full Xcode/digests.
-It excludes current callbacks; consolidate them into a later full Apple after this
-active run completes. Do not duplicate. Physical iPhone waived.
+Full Mobile Apple41599066906 atadc0a486 is ACCEPTED and audited:
+[evidence](measurements/chat-notification-input-recovery-apple-2026-11-03.json).
+1,021 simulator cases/114 suites, zero;290 exact sources, Protect4/Transfer11/Recovery9
+and Apple raw storage8 included. Compile720s/tests96s/full Xcode1122s;
+artifact13215930181 and GitHub digest verified. No repeat audit. Physical iPhone waived.
+ONE callback Apple41603224301 at6976d49c is RUNNING, dispatched08:25:56Z;
+[checkpoint](measurements/chat-notification-callback-apple-2026-11-03.json),
+300 frozen sources/audit.py ready in .work/chat-notification-callback-apple-2026-11-03.
+Native callback41601851260 at6976 is pending behind input worker41599045402 atadc0.
+Both native fetch/audit scripts are ready in .work/chat-notification-input-recovery-native-
+2026-11-03 and .work/chat-notification-callback-native-2026-11-03, respectively.
+Require callback inputRecovery/three ordinary deaths for6976; do not duplicate/cancel.
 
 Starter935d07d records independent Apple41596469348 acceptance:100 simulator/27,
 all eight storage cases/full Xcode758s/16 sources/artifact13213137388 verified. Generic
 raw storage port complete; generic notification port waits for integrated product proof.
-Phone21 fromde69 remains installed; next validated product build must be>21, preserve
-signer/data/session, notify first and install-only at10.77.77.3:5555. No user-phone UI
-or real-account messages. Platform304/schema116 and Google mapping unchanged.
+Phone release22 from6976d49c is now INSTALLED:
+[evidence](measurements/android-release-phone-2026-11-03-build22.json).
+DevRelease1.0.0/code22, arm64, existing signer, nondebuggable. Build/lint PASS478.822s,
+lint0 issues; clean source before/after build. APK87,873,208B, SHA256
+`d838e46dc106db00fac3d2de57daea7dd632f5a7d30af29ce2990d58d0e2c883`.
+Owned emulator smoke PASS41.207s/two12-second cold starts, no crashes; second startup
+screenshot actually inspected. Emulator stopped/transport absent. User reenabled
+WireGuard/ADB after timeout. After notice, install-only completed85.838s from08:28:02Z
+at10.77.77.3:5555; pulled installed APK matches, UID10962/first-install preserved.
+No app-data clear, uninstall, phone UI launch or real-account messages. Next validated
+update must use code>22 and notify before install-only. Platform304/schema116 and
+Google mapping unchanged.
+
+NEXT retained-input review list/detail and safe discard/edited send, native reply status
+and Open/read/mute/dismiss, then production hosts. Review must fence duplicate callbacks
+before deleting input; never insert a temporary Queued command then cancel. Concrete
+source-grounded design notes in .work/chat-notification-review-2026-11-03/design.txt;
+no review UI implementation yet. Deliver a real consumer with any needed raw storage
+addition, not another standalone foundation. Continue long run.
 
 
 ## Finite input recovery accepted locally; native callback integration next
