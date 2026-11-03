@@ -1,0 +1,256 @@
+{
+  "date": "2026-11-03",
+  "sourceBase": "a59d3cd2ac9441e179d9b3e26d0e6a3d0b50d442",
+  "sourceSha256": {
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadHistoryPager.kt": "e96d25ff651c1511b5353ef1ef2123727d78884249a0c4e09ce236e2376eb0cd",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModelTest.kt": "dccc74f9a1a7f99486f147bb49c7ad0a60fb2de398367d3000ef0ebad813478f"
+  },
+  "trigger": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41677393348",
+    "attempt": 2,
+    "source": "bd399317a7cee5eedcb85befbf0326c305f72542",
+    "accepted": false,
+    "reason": "Two actual worker recovery scenarios reach the foreground with all176 originals retained, then fail with HistoryFocusCapacity while paging. Native SDK, cancelled-draft and WorkManager scenarios pass; the overall gate remains rejected.",
+    "artifactId": 13255771715,
+    "artifactSha256": "5fa6964f87b96508ab695ab25083b6c1459ec4714480f287ef9b2727334ba8bf",
+    "githubArchiveDigestVerified": true,
+    "verifiedSourceFiles": 421,
+    "sourceManifestSha256": "da5dea9633cfee77c6477a7f7faf981dd5fdbd4cca679b5c10bbcc6cce2471fd",
+    "counts": {
+      "proofHost": {
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "androidHost": {
+        "tests": 230,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "provider": {
+        "tests": 5,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "failedTests": [
+      "actualApplicationWorkerRestoresQueuedIntentAfterProcessDeathAndSendsOnce()",
+      "actualApplicationWorkerRecoversFrozenOnlyDraftAfterProcessDeathAndSendsOnce()"
+    ],
+    "scenarios": [
+      {
+        "path": "platform/.work/collaboration-worker/231a1d6db8cd4771b85dba5ba8ba1dcc/result.json",
+        "passed": true,
+        "cleanup": true,
+        "failureCategory": null,
+        "incomingCheckpoint": {
+          "incomingWithoutOutbox": true,
+          "incomingWithoutSelection": true,
+          "incomingFreshNativeAdmission": true,
+          "incomingOriginalAfterOfflineSeed": true,
+          "incomingHistoryRetainedAfterReopen": true,
+          "incomingRuntimeReleased": true,
+          "incomingAllOriginalsRecovered": true,
+          "incomingTraversalRetainedAfterReopen": true,
+          "incomingBrowseUnchanged": true,
+          "incomingPasses": 11,
+          "incomingSavedOriginals": 176,
+          "incomingContainerReopens": 11
+        },
+        "sha256": "f95222c05da7fa94b941f639721510db9d6047dc0833e6adb245a9f55080a5f6"
+      },
+      {
+        "path": "platform/.work/collaboration-worker/686248742354422c919a918e559bb80b/result.json",
+        "passed": false,
+        "cleanup": true,
+        "failureCategory": "HrisProof_Unavailable_HistoryFocusCapacity",
+        "incomingCheckpoint": {
+          "incomingWithoutOutbox": true,
+          "incomingWithoutSelection": true,
+          "incomingFreshNativeAdmission": true,
+          "incomingOriginalAfterOfflineSeed": true,
+          "incomingHistoryRetainedAfterReopen": true,
+          "incomingRuntimeReleased": true,
+          "incomingAllOriginalsRecovered": true,
+          "incomingTraversalRetainedAfterReopen": true,
+          "incomingBrowseUnchanged": true,
+          "incomingPasses": 11,
+          "incomingSavedOriginals": 176,
+          "incomingContainerReopens": 11
+        },
+        "sha256": "2d91d077b58cdea22be7232677d6fc6bfa1ce7c30db0be5005444f7e8e0538e2"
+      },
+      {
+        "path": "platform/.work/collaboration-worker/98c9537df271406b806f4b164913b23d/result.json",
+        "passed": true,
+        "cleanup": true,
+        "failureCategory": null,
+        "incomingCheckpoint": null,
+        "sha256": "3179717d910989e996590792dfa5124e5f580a062d2a1098100a7baebb83dff0"
+      },
+      {
+        "path": "platform/.work/collaboration-worker/cf401469f8734fe89e72c4566969e785/result.json",
+        "passed": false,
+        "cleanup": true,
+        "failureCategory": "HrisProof_Unavailable_HistoryFocusCapacity",
+        "incomingCheckpoint": {
+          "incomingWithoutOutbox": true,
+          "incomingWithoutSelection": true,
+          "incomingFreshNativeAdmission": true,
+          "incomingOriginalAfterOfflineSeed": true,
+          "incomingHistoryRetainedAfterReopen": true,
+          "incomingRuntimeReleased": true,
+          "incomingAllOriginalsRecovered": true,
+          "incomingTraversalRetainedAfterReopen": true,
+          "incomingBrowseUnchanged": true,
+          "incomingPasses": 11,
+          "incomingSavedOriginals": 176,
+          "incomingContainerReopens": 11
+        },
+        "sha256": "47b50061abea2135224812cfe140dd89dc6032e6bb75799ebb47d6e7ea997283"
+      },
+      {
+        "path": "platform/.work/collaboration/69f4d422de744b41ac7029d723c8596c/result.json",
+        "passed": true,
+        "cleanup": true,
+        "failureCategory": null,
+        "incomingCheckpoint": null,
+        "sha256": "3864d1522b1222fee1ae86f84b9f65693e7a316c934dd1dd3f4259ce9671e552"
+      }
+    ],
+    "rawNotificationsComplete": true,
+    "rawNotificationsFixtureUninstalled": true,
+    "rawNotificationResultSha256": "3ee08e0dc0eaff43588547db26dd8c4df9d8e014172319d5070d02c640c61bf9",
+    "imagesVisuallyAccepted": false,
+    "failedLogSha256": "0ced381bdd249f14f5df244bdf7f7eb65ca86a9d03258a62758073e60cc0aa2a"
+  },
+  "change": "Reconcile newly loaded provider references against retained event facts before selecting native decryption anchors. Filter missing candidates within the original bounded page, preserving its cursor when resolved rows disappear and expose the next page. The existing final reconciliation/progress check still controls exhaustion and concurrent-growth recovery. Keep the SDK lifetime focus limit16 unchanged.",
+  "localCheck": {
+    "startedAt": "2026-11-03T18:04:51.859581+00:00",
+    "exitCode": 0,
+    "wallSeconds": 215.692,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:presentation:desktopTest",
+      ":features:collaboration:presentation:wasmJsBrowserTest",
+      ":apps:shared:compileKotlinWasmJs",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/product-chat-fcm-2026-11-03/x86.init.gradle",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "freshCounts": {
+    "desktopTest": {
+      "suites": 21,
+      "tests": 163,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "suites": 11,
+      "tests": 128,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "freshReportSha256": {
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatCancellationNarrowLayoutTest.xml": "0d9b0f0e96050fd55f154cbc2d36e9831c149e03ee498f143825ce4df9e071d1",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatInboxLayoutTest.xml": "ae688113c2f53b5d7724f0ce81434b2322505b1fb50718edcda68b2f1f62297d",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatInboxPreviewLayoutTest.xml": "4bfdca8265a6babf18b2d6aa2f147a399651e005833b782eda084616abb3adc0",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatParticipantsLayoutTest.xml": "881e14a2a2a5bdd85910f76b74771bbaf8322f8bdb28bb764c48403bba653b21",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatSetupLayoutTest.xml": "9eddf099b26cc3a0c12b132a2c1802732d4d3d84f0cff261db744078ee9dc7c3",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatThreadFocusTest.xml": "8059d31405f4a5258366fcaad9f0a459b06375c6210cea4482b3419e329afe39",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatThreadLayoutTest.xml": "b9bcb264ef7532b1ffae65461df66beb4c8e54cda86e621d469524b56b035c18",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatThreadViewportTest.xml": "7a745608ec18c1e7a445ef8b84984e50e778052e21d81a5314028ee3c31844f9",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.SavedRepliesLayoutTest.xml": "b833d2b2acc9d0bd74c7b128e00dbe857fc004e0358cb566cab13d828e7f446f",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.inbox.ChatInboxViewModelTest.xml": "c64fb4607be29ce06323239c2b7d8edebab8d96e5a1c7957c24032578a2b45d4",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.participants.ChatParticipantsViewModelTest.xml": "71ece77b6bfd6cb445e03341f5cd2fbd07e4ae9916bef5c7adf51f01bddad269",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.replies.SavedRepliesViewModelTest.xml": "66e1dfaeab402450f20f33cc8acb3bb4a2dbaa99dd34166c8b4624944a6036ac",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.setup.ChatSetupViewModelTest.xml": "fb565d0c5c22ee86f095d61c70f947a0efde1e63f04088658580e28a5ee28e46",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatMessageTimeTest.xml": "99c5748884fc71126b3fb3122f22cd105a0f4e12f0cb5ab6bff15e5c9135eb9b",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadCancellationTest.xml": "6edff6a6f43f6019bc3f5cb3809e5455601bb6bd7624f8d74891418160d60866",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadDraftTest.xml": "de109eef6aac5a1aa3213bde25d971a42fca113c3a65ee1758867adc1cac055f",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadProjectionTest.xml": "51700e917ce0de7c7baa69b6c8cfffd9aef863fda39635d691b919aaa0b42a77",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadReadTest.xml": "18e7325b7625afb0de75943744bf46a2e3ab410f6f03125f184457cd9ff18ccb",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": "19e7a4aa058f4d9ceb2266fdcb5da94514cde9b9066d6d6bfdd164b9364fa7c7",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadWindowTest.xml": "bf4326df5511cf21efbac47d123c35f9e30cdcac3b5f4af4422e2b35fbd37fc1",
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatBubbleLayoutTest.xml": "6d0b4c68109e6a5390583c6b6061c82f777c95f04d2defed401d55fbcd0ba442",
+    "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBro-G54J1QIQ9NB1K.dev.fajar.starter.collaboration.presentation.participants.ChatParticipantsViewModelTest.xml": "f352c135a2c81dd1955761571f50593401e27e12f0a9ff0153e051eb114c696a",
+    "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.replies.SavedRepliesViewModelTest.xml": "dd7e6b028d9b78bd3bdc363386845e9ae1b188e80b1d069a2f22c44aa7399348",
+    "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.setup.ChatSetupViewModelTest.xml": "6b30ef9f990bb22a9dbfd2b67d87e0dfb8b1fa2464a3d8180cbbceda30258644",
+    "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatMessageTimeTest.xml": "193e61f170b1acf5fab30d63fd0f63a17dfef67f6da333b1e057e47bac604f44",
+    "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatThreadCancellationTest.xml": "24e1704c07eb99df729d94d65f7e1529aff6a7af98a2da96b9a2efec88e7b2a4",
+    "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatThreadDraftTest.xml": "4f11a9b6b92af06bd7c9e3482f510d24fa15c06fbf99761dd0f5eb6a7e718e91",
+    "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatThreadProjectionTest.xml": "565825439ed52aed38927a384869ccb8479e6de76fa37d3b489e864250f7d808",
+    "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatThreadReadTest.xml": "7fe684d02955afcdf166aebf957ea6d16b7e3ec8531041582b7522293223dfe9",
+    "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": "b690dc89087c720274e92201d2db453826a5306a820523ba4dee513597f6fdd4",
+    "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatThreadWindowTest.xml": "42a55962f8ef3fc3d9f5a118f588fdc88c1d40e68ba37520949b995c86298847",
+    "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.inbox.ChatInboxViewModelTest.xml": "975f74464a6067f78aa281f5fc466caa9625b7cf4b3b9ee87a397e6c1b201e75"
+  },
+  "logSha256": "bd2ba81c7005cd135a70fe1700e1f88e17cc7edd50136130f61f14b81f2ed42e",
+  "regressions": [
+    "175 durable originals across nine provider pages require zero native original windows, even when every new window would fail. Twenty older actions stop at nine provider requests and retain exhaustion.",
+    "A mixed page whose first/last originals are already retained opens only the genuinely missing middle message."
+  ],
+  "cancelledUninstalledBuild27": {
+    "reason": {
+      "pid": 3214634,
+      "pgid": 3214634,
+      "startTicks": "140528201",
+      "cancelledAt": "2026-11-03T18:03:08.902417+00:00",
+      "reason": "Superseded before distribution: actual native CI exposed redundant foreground history decryption exhausting SDK focus capacity. Rebuild candidate27 after that regression is corrected and validated.",
+      "phoneTouched": false
+    },
+    "build": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":apps:android:assembleDevRelease",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        ":apps:android:lintDevRelease",
+        "-PrequireSigning=true",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=27",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--init-script",
+        "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-03-build27/phone-arm64.init.gradle",
+        "--stacktrace",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m"
+      ],
+      "startedAt": "2026-11-03T17:56:29.363215+00:00",
+      "elapsedSeconds": 399.62,
+      "exitCode": -15
+    },
+    "source": {
+      "commit": "a59d3cd2ac9441e179d9b3e26d0e6a3d0b50d442",
+      "cleanBeforeBuild": true,
+      "cleanAfterBuild": true
+    }
+  },
+  "limits": [
+    "Actual SDK rerun of the two failing QUEUED/FROZEN_DRAFT recovery cases is still required; no repaired native acceptance is claimed yet.",
+    "Build and verify immutable artifact6 after this commit, then run current-source product FCM. Successful product run15 used Mobile1136 and remains separate.",
+    "Candidate27 was stopped before distribution; phone stays26. Build normal27 again after regression validation, smoke and notify before install-only.",
+    "No generic Starter change or recipient-read/cross-company/calls acceptance."
+  ]
+}

@@ -1,5 +1,60 @@
 # Agent continuation — HRIS Mobile
 
+## Native history regression repaired locally; verify before phone27 — 3 November 2026
+
+[Evidence](measurements/chat-history-local-reuse-2026-11-03.json). bd399 Native
+41677393348 attempt2 FAILED (not infrastructure): artifact13255771715 SHA
+5fa6964f87b96508ab695ab25083b6c1459ec4714480f287ef9b2727334ba8bf.
+421 source hashes verified;230 Android host/18 proof-host pass; five provider cases
+execute with two failures. QUEUED and FROZEN_DRAFT both retain176 originals across
+11 incoming passes, then hit HistoryFocusCapacity during foreground paging.
+Cancelled-draft, native SDK and WorkManager cases pass; all owned cleanup true.
+Raw notification proof completes but its PNGs were not accepted/inspected in this
+failed gate. Never mark it passed. Attempt1 SDK archive failure stays separately
+retained. Fetch script now selects artifacts created after the current attempt's
+job start, since GitHub retains both same-name attempt artifacts.
+
+Foreground paging opened anchors from fresh provider references without first
+reconciling their already durable originals. It now checks those local facts,
+selects only unresolved candidates in the original bounded page, and preserves
+that page's cursor when resolution exposes the next local page. Final progress/
+generation checks and SDK lifetime limit16 remain. Two new VM regressions prove
+175 saved messages/nine provider pages/20 older actions use zero native windows,
+and a mixed page opens only its missing middle message. Focused desktop/browser/
+app-Wasm/format/architecture/detekt PASS215.692s, unchanged source:291 fresh cases
+(163 desktop,128 browser)/32 suites; no failures/errors/skips; architecture74,
+detekt0. Actual SDK acceptance still requires the two failed scenarios rerun.
+
+Candidate normal release27 at a59d3cd2 was intentionally stopped before distribution
+when the real native failure arrived. Owned process group3214634/Java3214937 only,
+399.62s, exit-15; no device operation. Evidence/helper retained in.work/release-phone-2026-11-03-build27/attempt1-cancelled. The root helper is ready for a fresh27 attempt;
+no artifact27 has been verified or installed. Phone remains26, do not reinstall26.
+After this commit/push, build/verify immutable product6 and peer6 using prepared
+Mobile.work/product-chat-fcm-2026-11-03/build6.py and verify6.py. Run the two actual
+NativeCollaborationWorkerInteropTest QUEUED/FROZEN methods with peer6 and an owned
+emulator, then current-source actual FCM with both6 APKs. One heavy local job only.
+Normal27 build/smoke/images/notice/install-only follows these gates; preserve data,
+signer and Google identity and never drive the user's phone UI.
+
+Platform d00ac5f5 is pushed and clean; actual product FCM run15 PASS266.651s with
+Mobile1136 product/peer5, real Firebase restart/notification/encrypted SystemUI reply,
+all five PNGs viewed and cleanup true. New worker JAR430620d7e64614db7524de60f0edbe09914e71917ab640542265457ade960b1c.
+Do not reuse old APK5 for the new pager/UI acceptance. Platform ProductFcmDevice can
+own a copied image on emulator5562; NativeDevice explicitly supports5562 too.
+Native tests accept HRIS_COLLAB_NATIVE_SERIAL=emulator-5562. Keep API source immutable
+during either provider run and require fresh JUnit, APK/source hashes and cleanup.
+
+New537 Native41685363689 is running with the unfixed pager; a59 Native41688998875
+is pending and may be superseded by this commit. Likewise control53741685363392
+predates the timezone harness fix; a59 control41688998638 is pending. Audit exact
+replacement runs after this commit, not old pending IDs. Root Apple53741685480887
+continues and does not include this new pager. A matching control Apple run includes
+presentation simulator tests and full Xcode; evaluate its actual evidence. Prior
+bd399 Apple41677479513 is accepted. Runtime304/schema116/push OFF; Starter9959c1d.
+Continue all54 groups, keep the user updated and push every commit. Cross-company
+ownership/actual delivered-read ACKs, rich chat, backups and voice/video/meet remain.
+
+
 ## Browser dates passed; next clean build27 and current-source FCM — 3 November 2026
 
 [Browser evidence](measurements/chat-browser-timezones-2026-11-03.json). Actual bd399

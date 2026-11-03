@@ -71,9 +71,21 @@ internal class ChatThreadHistoryPager(
             if (loaded is AppResult.Failed) return loaded
             page = (loaded as AppResult.Success).value
         }
-        // Endpoints cover a bounded provider slice without one native focus per reference.
-        // Originals may still be unavailable: only reconciliation can acknowledge references.
-        val candidates = page.events.filter(::potentialMessage)
+        // Newly acquired references can already have durable originals from incoming recovery.
+        // Reconcile the bounded page before spending a native focus. Keep this page's cursor:
+        // removing resolved rows can expose the next local page in the subsequent read.
+        val stored = reconcileReferences(workspaceId, key, position.after)
+        currentCoroutineContext().ensureActive()
+        if (stored is AppResult.Failed) return stored
+        val outstanding = readReferences(workspaceId, key, position.after)
+        currentCoroutineContext().ensureActive()
+        if (outstanding is AppResult.Failed) return outstanding
+        val outstandingIds =
+            (outstanding as AppResult.Success).value.events.map { it.event.eventId }.toSet()
+        // Endpoints cover only missing originals in this bounded slice. A provider reference
+        // alone does not establish that another decryption window is necessary.
+        val candidates =
+            page.events.filter { potentialMessage(it) && it.event.eventId in outstandingIds }
         val anchors =
             listOfNotNull(candidates.lastOrNull(), candidates.firstOrNull())
                 .map { it.event.eventId }

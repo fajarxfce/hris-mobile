@@ -54,3 +54,22 @@ and the rest of the communications PRD remain active; this increment does not
 accept any whole feature group. Full root/Wasm/Android/proof checks pass530.774s; see the
 [measurement](measurements/chat-experience-2026-11-03.json). Release26 and its
 minified smoke/install are the next step.
+
+## Reuse incoming history before native decryption
+
+The SDK keeps a bounded set of focused history caches for its client lifetime.
+Native CI at bd399 found two long-history recovery scenarios spending that budget
+again even though incoming recovery had already retained all 176 originals. The
+foreground pager reconciled old references before fetching the next provider page,
+then opened native anchors from the newly fetched page without checking those
+originals against local storage.
+
+The pager now reconciles the loaded page first and selects anchors only from its
+remaining unknown event IDs. It preserves that original page's cursor when resolved
+rows disappear and the next local page becomes visible. Final reconciliation and
+progress/generation checks still govern exhaustion; the SDK cache limit is unchanged.
+Tests cover 175 retained originals over nine provider pages without another native
+window, and a mixed page that opens only its missing middle message. All 291 desktop
+and browser presentation cases pass with application Wasm/format/architecture/detekt.
+Actual Android SDK revalidation remains pending; see
+[measurement](measurements/chat-history-local-reuse-2026-11-03.json).

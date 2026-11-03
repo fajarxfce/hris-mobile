@@ -628,6 +628,66 @@ class ChatThreadViewModelTest {
     }
 
     @Test
+    fun incomingOriginalsAcrossManyProviderPagesNeverSpendAnotherNativeFocus() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            val events = (1..175).map { f.past.event(it) }
+            for (event in events) {
+                f.past.facts[event.eventId] =
+                    CollaborationHistoryEventFact(
+                        event.eventId,
+                        event.sender,
+                        event.timestamp,
+                        false,
+                    )
+            }
+            f.past.pages.addAll(events.chunked(20))
+            // Every original is durable, including ones outside the currently visible window.
+            // Any new native focus would fail, as it does after exhausting the real SDK budget.
+            f.past.originalFailure = f.base.network
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            repeat(20) {
+                vm.onEvent(ChatThreadEvent.OlderRequested)
+                advanceUntilIdle()
+                assertNull(vm.state.value.historyFailure)
+            }
+            assertEquals(9, f.past.requestedPositions.size)
+            assertTrue(f.past.anchors.isEmpty())
+            assertEquals(175, f.past.references.count { it.resolved })
+            assertFalse(vm.state.value.hasOlder)
+            assertFalse(vm.state.value.historyIncomplete)
+        }
+    }
+
+    @Test
+    fun mixedProviderPageFocusesOnlyTheMissingOriginalBetweenRetainedNeighbors() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            val events = (1..3).map { f.past.event(it) }
+            for (event in listOf(events.first(), events.last())) {
+                f.past.facts[event.eventId] =
+                    CollaborationHistoryEventFact(
+                        event.eventId,
+                        event.sender,
+                        event.timestamp,
+                        false,
+                    )
+            }
+            f.past.pages += events
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertEquals(listOf(events[1].eventId), f.past.anchors)
+            assertEquals(1, f.past.requestedPositions.size)
+            assertTrue(f.past.references.all { it.resolved })
+            assertNull(vm.state.value.historyFailure)
+            assertFalse(vm.state.value.hasOlder)
+        }
+    }
+
+    @Test
     fun olderCapacityFailureReopensTheFailedAnchorAndKeepsCommittedProviderProgress() = runTest {
         withModel { f, vm, _, _ ->
             f.online()
