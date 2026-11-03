@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Release 28 source native gate accepted; group migration continues — 3 November 2026
+
+Native run41701412608 at8273ae8d passed. Downloaded artifact13266761084 has verified
+SHA3bb2406976bc4e15e34ffae6a313e1d0629f2afa8d0f6a659890ea2cde0d3b86;
+5 actual native cases,230 Android host and18 proof host pass with0 failures/errors/
+skips and432 source hashes checked. All three worker scenarios retain176 originals
+in11 incoming passes/reopens; SDK and WorkManager acceptance pass. Raw16 notification
+groups,4 runtime cases,3 input-recovery process deaths and5 actual application actions
+pass with cleanup. All3 final SystemUI PNGs were viewed and retained.
+[Evidence](measurements/chat-empty-history-native-2026-11-03.json) distinguishes the
+proof APK from actual product FCM and physical-phone acceptance. Normal release28
+is already installed; do not reinstall. Control41701412602 portable passed, Apple is
+still running. Its retargeted audit is prepared under.work/chat-empty-history-control-2026-11-03.
+
+Platform main1545dba5 records live8b40/schema116 push activation: all3 chat push flags
+ON, SMTP OFF, coordinated restore and TLS ingress/data-preservation checks passed.
+No real-user message or phone notification was sent during rollout. The first
+switch rolled back on an IP collision; static API/worker IPs and provider-first
+startup passed. See Platform's private-push-operations runbook before any deployment.
+
+Group migration is separate in /home/fajar/hris/.worktrees/communication-space,
+branch feat/communication-space atba6adf0a. V117 directory, bounded native contact
+policy, V118 owned legacy metadata and compound inventory paging are tested and
+pushed; no group endpoint/device/room grant or Mobile ownership change is wired yet.
+V119 immutable provider identity selection is WIP there: focused PostgreSQL3 cases
+PASS91.61s,3599 unchanged source hashes; full core database check now runs. Do not
+edit its fingerprinted inputs. Preserve existing SDK stores, original provider
+identities and history; never substitute spaceId into the old company/native-parent
+storage owner. All remaining communications work continues.
+
+
 ## Release28 installed; complete c770 native/Apple evidence — 3 November2026
 
 [Phone28](measurements/chat-empty-history-phone-2026-11-03.json) is installed and
