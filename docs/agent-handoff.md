@@ -1,5 +1,47 @@
 # Agent continuation — HRIS Mobile
 
+## Callback native proof accepted — 3 November 2026
+
+[41601851260](measurements/chat-notification-callback-native-2026-11-03.json) at
+6976d49ca0befc9c4bf391ee2755da69fbc7c11f is ACCEPTED and audited. Five provider/three
+suites,230 Android host/37,15 proof/four, zero failures/errors/skips. All306 exact
+sources and GitHub artifact13218014959 verified; ZIP digest
+`e60be6dde0b3a9cbd75b00499cdf15b0732953aaa4d7767574e4483ed5e6ac1e`.
+Raw16/two with verified fixture uninstall; actual RemoteInput/PendingIntent recovery
+across three ordinary process deaths, four callback PIDs3520/3712/3965/4237,
+one protected input -> one review input, wrong-account preservation, no HTTP/message
+command in that isolated capture proof. Input recovery24.077s. SDK encrypted sends,
+seven receipt POST200 and WorkManager death/network recovery also passed separately.
+No repeated fetch/audit; complete in .work/chat-notification-callback-native-2026-11-03.
+Excludes saved-reply UI8b5f8750 and current uncommitted actions. Production host remains
+unbound and chat push OFF. Phone23 already installed; no new phone action.
+
+## Current native action implementation under validation
+
+Sixteen source inputs are APPLIED, UNCOMMITTED in
+.work/chat-notification-actions-2026-11-03. Focused1 (PTY59769) is the ONLY local
+heavy job; freeze these inputs until completion. The implementation authenticates
+native kind plus full reference before dispatch. Open returns captured navigation
+only; read/mute/dismiss use the native owner and exact journal/native cleanup.
+No Android nonreply receiver or Activity navigation wiring yet; production unbound.
+
+Dismiss now persists Dismissing before native removal, strips preview/actions and
+keeps the encrypted journal index discoverable. It cannot republish that original.
+Reconciler handles this state as metadata-only cleanup and finishes Dismissed,
+including after company content denial or native-family replacement. Pending cleanup
+retains bounded capacity. Read/mute retain their existing durable command semantics.
+Domain/actual SQLite/application regression fixtures are included; not accepted yet.
+Focused runner includes point read, dismissal intent, publication lifecycle/storage,
+application actions/commands/bindings and quality. Full browser/root/Android/Wasm
+and native callback consumer still required. No phone install of this WIP.
+
+Starter aa58a21 port PASSED253.982s:367 desktop/121,53 browser/nine,six logic/one,
+221 fresh/65, zero;lint0 errors/44 existing warnings. Port and docs c5ca7c3 pushed.
+Independent Starter Apple41612522666 onaa58a21 is running,24 frozen sources/audit ready.
+Mobile saved-reply Apple41610059249 at8b5f8750 is building the full Xcode application.
+Callback native41601851260 at6976 completed successfully and its artifact audit is
+now running; do not duplicate it. Phone23 already installed, do not reinstall.
+
 ## Release 23 installed; native actions in progress
 
 Release23 from8b5f87501d618ac40fdcaccc94d4d97b85270e00 is INSTALLED:
