@@ -1,13 +1,41 @@
 # Agent continuation — HRIS Mobile
 
-## Consolidated Apple queued at the accepted priority handoff
+## Consolidated Apple accepted; mute disposition currently under local validation
 
-Priority handoff76d004e5 is pushed. Full Apple [41575891048](measurements/chat-priority-notification-delivery-apple-2026-11-03.json)
-was dispatched ONCE at04:04:04Z with221 source hashes (old207 union candidate/identity/priority).
-It is PENDING; do not redispatch. Audit .work/chat-priority-notification-delivery-apple-2026-11-03/audit.py
-only after completion; extraction directories are intentionally exclusive. Candidate/focus changes
-after76d004e5 are outside that snapshot. No local heavy job or owned emulator remains.
-Continue next implementation below; no product release installed by these foundation changes.
+Full Apple [41575891048](measurements/chat-priority-notification-delivery-apple-2026-11-03.json)
+at76d004e5 is ACCEPTED:970 simulator cases/109 suites, zero failures/errors/skips,
+221 verified source hashes, full Xcode application build1,142s; test compile609s/test64s.
+Artifact13204977615 has verified GitHub ZIP digest
+`9abea12c79fc9ed86669b8c08b014a146c8d27a320aa06f669b5cb78b0902a6f`.
+Audit .work/chat-priority-notification-delivery-apple-2026-11-03 completed; do not rerun
+its exclusive extraction or redispatch this source. It includes candidate queue,
+background identity and priority handoff, but EXCLUDES the current mute increment.
+Shared app integration tests execute on desktop; Apple compiles their production app
+counterparts. No APNs/CallKit/native HRIS notification callbacks are accepted.
+
+Current UNCOMMITTED mute work uses two guarded domain operations and existing journal:
+prepare actual metadata/previous ref, remove exact active native render, commit inactive
+Cancelled watermark without preview/actions.17 Kotlin paths in
+.work/chat-muted-notification-2026-11-03. Focused1 passed245.152s/125fresh and focused2
+passed123.563s/123fresh (six additional proof cases explicitly reused). Full3 is still
+running; do not change its frozen Kotlin inputs. Fourteen domain cases/six new Koin
+SQLite mute cases plus an interrupted-hint-ACK/reopen/unmute integration case. Commit
+and push only after full3 passes and its audit/measurement are recorded.
+
+Release20 scripts are PREPARED in .work/release-phone-2026-11-03-build20; no product
+build/install started. After mute acceptance and a clean pushed source, build+lint,
+verify APK/signature/18 backup exclusions/16KiB/arm64, run short owned emulator startup,
+stop it, inspect screenshot, then notify and install-only on10.77.77.3:5555. Phone19
+remains installed; device was connected. Preserve app data/signer/UID/first-install;
+never drive phone UI. One heavy local job at a time. Continue implementation afterward.
+
+Automatic native41574010908 at56d3d6a6 FAILED before emulator/application execution:
+Android system-image download reported `Error on ZipFile unknown archive`; TCP5560
+was unavailable. Build and Platform fixture compile succeeded. Latest run41575838871
+at76d004e5 is already running; do not manually duplicate it. Local failure record is
+.work/chat-muted-notification-2026-11-03/identity-native-infrastructure-failure.json.
+Production native notification hosts remain unbound, chat push OFF, all54 PRD groups
+open and voice/video/meeting UI absent. Live304/schema116 and Starter are unchanged.
 
 ## Priority-to-notification handoff accepted; native focus/callbacks and durable disposition next
 
