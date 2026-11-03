@@ -1,5 +1,56 @@
 # Agent continuation — HRIS Mobile
 
+## Phone24 installed; routing hosted gates accepted — 3 November 2026
+
+**PHONE24 IS INSTALLED. Do not reinstall it; next meaningful product25+.**
+[Release record](measurements/android-release-phone-2026-11-03-build24.json).
+Clean source418c7ef6009c7bcc28bd28175f1e16c827228107, devRelease1.0.0/code24,
+arm64/nondebuggable,87,959,188 bytes, SHA256
+296ac1d255d2dede0de4ad3f865782de7263e2d9320ee315eea55182fe89f0e1.
+Build/lint486.413s; lint0. Existing signer, dev API/Firebase app, Git textproto,
+16KiB alignment and18 backup exclusions verified. Two12s minified cold starts pass
+59.3s; both onboarding PNGs ACTUALLY INSPECTED. Owned5562 PID1438468 stopped/absent.
+Install-only13:03:15Z confirmed49.973s, pulled bytes match. AppId10962 and first install
+2026-10-29 15:48:23 preserved, no data clear/uninstall/phone UI. User notified before
+and after installation. Work .work/release-phone-2026-11-03-build24. No local heavy
+job or owned emulator remains. Preserve signer/data/Google mapping; never drive phone UI.
+
+Routing ff3b3246 hosted gates are ACCEPTED:
+- [Apple41634596520](measurements/chat-native-routing-apple-2026-11-03.json):
+  1,079 simulator/122 suites,372 verified sources; compile663s/tests123s/full Xcode1050s.
+  Artifact13231372692 SHA256 c7c248b6fe8c3954168d085f5507b9ccd99aacb3587ef866e96db576812af367.
+- [Native41634550829](measurements/chat-native-routing-hosted-2026-11-03.json):
+  five provider/three suites,230 host/37,15 proof/four;378 verified sources; all pass.
+  Artifact13233140670/248228 bytes SHA256
+  0024d1c0674f423ae86a6bcf01f3fee39d73b010d27b78a13526f0ae98313f63.
+  Raw16/103.09s,3 process deaths,1->1 exact input,one1162ms Complete turn,HTTP/messages0;
+  five actions/SystemUI35.954s and ALL THREE hosted PNGs ACTUALLY INSPECTED. Fixture
+  cleanup verified. Build940s/332s/native1142s. This one-turn pass does not exercise
+  Retry or establish why the two older unrecorded-result first-turn assertions failed;
+  those failures remain rejected. APK eaf482880080c172c093b87eab3d0000247ebb446b1c2f2d97fe57d49daa762d.
+
+New host418c7ef6 [Apple41639434001](measurements/chat-native-host-apple-2026-11-03.json)
+and [Native41639264778](measurements/chat-native-host-hosted-2026-11-03.json) are RUNNING.
+Audits/source manifests ready in .work/chat-native-host-apple-2026-11-03 (376files)
+and ...-hosted-... (385files). Native now additionally requires four runtime composition/
+resource/cleanup cases. Collect artifacts, check exact hashes, inspect native PNGs.
+Do not dispatch another same-branch Apple before current finishes. Automatic protocol
+41639264850/control41639264755 also belong to418c7ef6. No success inferred from dispatch.
+
+NEXT continue edited reviewed-send. A grounded plan and identified race/codec bounds
+are in .work/chat-reviewed-send-2026-11-03/design.txt (NOT implemented). Durable edited
+resolution must precede original operation fence, keep its fresh stable ID/body across
+retries/reapproval, and be handled before original Complete. Preserve started/conflicting
+original/new commands. Settle explicit discard-of-unsent-edit behavior when original
+has already started; never claim original cancellation. Use actual Koin/Room/IndexedDB,
+MVI/lifecycle and compact EN/ID UI; no standalone storage-only detour. Source is free
+for new edits now. Keep all accepted work/pending checks in Git and push each commit.
+
+Starter9959c1d remains clean/accepted; this host is HRIS policy, no Starter port.
+Platform72447fb8/runtime304/schema116 unchanged, chat push OFF. All54 PRD groups OPEN;
+voice/video/meeting UI absent. Continue the long run; do not finalize at this milestone.
+
+
 ## Product Android notification host accepted locally — 3 November 2026
 
 [Contract](collaboration-android-notification-runtime.md) /

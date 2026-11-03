@@ -1,5 +1,22 @@
 # Validation
 
+## Release24 and routing hosted acceptance — 3 November 2026
+
+[Release24](measurements/android-release-phone-2026-11-03-build24.json) from clean
+418c7ef6 passes486.413s build/lint, signature/config/arm64/backup checks and two stable
+minified emulator cold starts; both screenshots inspected. Explicit phone install-only
+is confirmed with identical pulled APK hash and preserved appId/first-install/data.
+No phone UI was launched. Server runtime remains304/schema116 and chat push OFF.
+
+Routing ff3b3246 [Apple](measurements/chat-native-routing-apple-2026-11-03.json) passes
+1,079 simulator/122 suites and full Xcode;372 source hashes audited. [Native](measurements/chat-native-routing-hosted-2026-11-03.json)
+passes five provider scenarios,230 host,15 proof,raw16,three process deaths and five
+actions/SystemUI. All378 source hashes/archive/report digests checked, three hosted
+PNGs actually inspected. Recovery completes in one1162ms turn; no Retry branch or
+cause of the two older rejected runs is claimed. New host Apple41639434001 and
+Native41639264778 remain running at418c7ef6, separately from this accepted routing source.
+
+
 ## Android application notification runtime — 3 November 2026
 
 [Contract](collaboration-android-notification-runtime.md) /

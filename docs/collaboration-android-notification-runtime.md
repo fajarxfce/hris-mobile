@@ -47,8 +47,9 @@ Local acceptance: [measurement](measurements/chat-native-host-2026-11-03.json) r
 logic cases with zero failures/errors/skips. Root quality/Wasm/Android assembly and
 lint pass. Proof4 validates corrected fixture IDs before native1 passes105.401s; four
 runtime cases, raw16, three process kills and five callbacks/SystemUI pass. All three
-SystemUI screenshots were actually inspected. Product release24 and updated hosted
-Apple/Native remain pending; this source has not been installed on the phone.
+SystemUI screenshots were actually inspected. [Release24](measurements/android-release-phone-2026-11-03-build24.json) is installed
+on the authorized phone after minified emulator startup checks. Updated hosted
+Apple/Native checks of this host source remain running.
 Chat push remains disabled on the live server. This application/session policy has
 no Starter port; the previously accepted generic notification sources remain shared.
 Voice/video/meeting behavior and physical iOS/APNs/CallKit are not established here.
