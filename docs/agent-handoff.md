@@ -1,5 +1,22 @@
 # Agent continuation — HRIS Mobile
 
+## Release 28 source control/Apple gate also accepted — 3 November 2026
+
+Control41701412602 at8273ae8d now passes both jobs. Downloaded digest-verified
+portable13264263598 and Apple13267227537 reports contain3110 and1215 cases, all with
+zero failures/errors/skips;432 source hashes verified. Full iOS host build passes.
+[Evidence](measurements/chat-empty-history-control-2026-11-03.json) retains exact
+artifact hashes, suite counts and job/step timing. Native41701412608 is separately
+accepted below. This completes matching hosted gates for the already-installed
+normal release28; no new build or reinstall is needed. Actual Apple Matrix runtime,
+APNs/CallKit and the remaining collaboration requirements remain open.
+
+Continue the Platform group migration; its V119 full database check is running in
+/home/fajar/hris/.worktrees/communication-space. Mobile source is unchanged. Main
+live8b40/schema116 pushON and all prior phone28 evidence remain current. Keep the
+long run, frequent user updates and every commit pushed.
+
+
 ## Release 28 source native gate accepted; group migration continues — 3 November 2026
 
 Native run41701412608 at8273ae8d passed. Downloaded artifact13266761084 has verified

@@ -1,0 +1,225 @@
+{
+  "source": "8273ae8db9b1e6a8fabf20feec577d78e67c5934",
+  "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41701412602",
+  "status": "passed",
+  "steps": [
+    {
+      "job": "apple",
+      "name": "Set up job",
+      "seconds": 4.0
+    },
+    {
+      "job": "apple",
+      "name": "Run actions/checkout@v4",
+      "seconds": 4.0
+    },
+    {
+      "job": "apple",
+      "name": "Select Xcode 26.3",
+      "seconds": 0.0
+    },
+    {
+      "job": "apple",
+      "name": "Run actions/setup-java@v4",
+      "seconds": 1.0
+    },
+    {
+      "job": "apple",
+      "name": "Run gradle/actions/setup-gradle@v4",
+      "seconds": 2.0
+    },
+    {
+      "job": "apple",
+      "name": "Prepare public app-link test registrations",
+      "seconds": 0.0
+    },
+    {
+      "job": "apple",
+      "name": "Check Apple setup adapter",
+      "seconds": 1828.0
+    },
+    {
+      "job": "apple",
+      "name": "Build iOS application host",
+      "seconds": 822.0
+    },
+    {
+      "job": "apple",
+      "name": "Run actions/upload-artifact@v4",
+      "seconds": 3.0
+    },
+    {
+      "job": "apple",
+      "name": "Post Run gradle/actions/setup-gradle@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "apple",
+      "name": "Post Run actions/setup-java@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "apple",
+      "name": "Post Run actions/checkout@v4",
+      "seconds": 1.0
+    },
+    {
+      "job": "apple",
+      "name": "Complete job",
+      "seconds": 2.0
+    },
+    {
+      "job": "portable",
+      "name": "Set up job",
+      "seconds": 2.0
+    },
+    {
+      "job": "portable",
+      "name": "Run actions/checkout@v4",
+      "seconds": 15.0
+    },
+    {
+      "job": "portable",
+      "name": "Run actions/setup-java@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Run gradle/actions/setup-gradle@v4",
+      "seconds": 2.0
+    },
+    {
+      "job": "portable",
+      "name": "Run android-actions/setup-android@v3",
+      "seconds": 7.0
+    },
+    {
+      "job": "portable",
+      "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+      "seconds": 2.0
+    },
+    {
+      "job": "portable",
+      "name": "Run actions/setup-node@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Check setup transport and ownership",
+      "seconds": 885.0
+    },
+    {
+      "job": "portable",
+      "name": "Check application bindings and platform compilation",
+      "seconds": 569.0
+    },
+    {
+      "job": "portable",
+      "name": "Run actions/upload-artifact@v4",
+      "seconds": 3.0
+    },
+    {
+      "job": "portable",
+      "name": "Post Run actions/setup-node@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Post Run gradle/actions/setup-gradle@v4",
+      "seconds": 1.0
+    },
+    {
+      "job": "portable",
+      "name": "Post Run actions/setup-java@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Post Run actions/checkout@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Complete job",
+      "seconds": 0.0
+    }
+  ],
+  "limits": [
+    "Apple simulator exercises common policy/data/presentation adapters and Xcode compilation; actual Apple Matrix runtime, APNs and CallKit remain unimplemented or unaccepted.",
+    "Actual Android provider/process-death and product FCM are separately evidenced. Physical iPhone testing was waived.",
+    "The normal source8273 release28 is already installed. No additional physical-phone or iPhone acceptance occurred. All communications groups remain open."
+  ],
+  "artifacts": [
+    {
+      "name": "collaboration-control-portable",
+      "artifactId": 13264263598,
+      "archiveSha256": "3ffb4e582b9d85d28cc6e8700a92d46bc2c23e39996f52f88554b7a323788bbd",
+      "githubDigestVerified": true,
+      "counts": {
+        "tests": 3110,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "pagerAndLocaleSuites": {
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatMessageTimeTest.xml": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadWindowTest.xml": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatMessageTimeTest.xml": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatThreadWindowTest.xml": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportCount": 316
+    },
+    {
+      "name": "collaboration-control-apple",
+      "artifactId": 13267227537,
+      "archiveSha256": "91f8823473c55d2612e242ecec08935f4d96a1a77520ba6366d7a6bf933ee73a",
+      "githubDigestVerified": true,
+      "counts": {
+        "tests": 1215,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "pagerAndLocaleSuites": {
+        "presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatMessageTimeTest.xml": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "presentation/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.presentation.thread.ChatThreadWindowTest.xml": {
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportCount": 124
+    }
+  ],
+  "verifiedSourceFiles": 432,
+  "fullAuditSha256": "92fa22e350a2d3315dcef85d31bd6aa197195107d64bd185f2e9ef3c584a0b06",
+  "nativeEvidence": "chat-empty-history-native-2026-11-03.json",
+  "phoneEvidence": "chat-empty-history-phone-2026-11-03.json",
+  "phoneReinstalled": false
+}
