@@ -1,0 +1,190 @@
+{
+  "date": "2026-11-03",
+  "source": {
+    "commit": "a3f39be7390874cf04b807b9abad365393530852",
+    "cleanBeforeBuild": true,
+    "cleanAfterBuild": true
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":apps:android:assembleDevRelease",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=25",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-03-build25/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m"
+    ],
+    "startedAt": "2026-11-03T14:10:20.012364+00:00",
+    "elapsedSeconds": 538.577,
+    "exitCode": 0
+  },
+  "artifact": {
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-03-build25/hris-mobile-dev-release-1.0.0-25-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 25,
+    "versionName": "1.0.0",
+    "bytes": 88009188,
+    "sha256": "c377886820f8a8ddf7d17de8a6971ee17cae93ed67ba7f2ed00066186f491075",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "sameInstalledSigner": true
+  },
+  "lint": {
+    "report": "apps/android/build/reports/lint-results-devRelease.xml",
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+    "issues": 0,
+    "bySeverity": {}
+  },
+  "emulatorBoot": {
+    "pid": 1937890,
+    "serial": "emulator-5562",
+    "command": [
+      "/home/fajar/Android/Sdk/emulator/emulator",
+      "-avd",
+      "hris-mobile-dev",
+      "-port",
+      "5562",
+      "-data",
+      "/home/fajar/hris/hris-mobile/.work/startup-fix-2026-11-01/clean-userdata.img",
+      "-no-window",
+      "-no-snapshot",
+      "-no-audio",
+      "-no-boot-anim",
+      "-gpu",
+      "swiftshader_indirect",
+      "-memory",
+      "1536",
+      "-cores",
+      "2",
+      "-feature",
+      "-Vulkan"
+    ],
+    "startTicks": "139244444",
+    "bootSeconds": 30.602
+  },
+  "emulatorStartup": {
+    "complete": true,
+    "serial": "emulator-5562",
+    "phoneTouched": false,
+    "source": "a3f39be7390874cf04b807b9abad365393530852",
+    "sha256": "c377886820f8a8ddf7d17de8a6971ee17cae93ed67ba7f2ed00066186f491075",
+    "versionCode": 25,
+    "debuggable": false,
+    "primaryEmulatorAbi": "x86_64",
+    "nativeBridge": "libndk_translation.so",
+    "coldStarts": [
+      {
+        "coldStart": 1,
+        "pid": 2478,
+        "stableSeconds": 12,
+        "readableUiNodeCount": 7,
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 18.952,
+        "screenshotSha256": "77559a7b88e98ff9b005e31637aea68b43d968666f82828d1dc49df7930e89c1"
+      },
+      {
+        "coldStart": 2,
+        "pid": 3294,
+        "stableSeconds": 12,
+        "readableUiNodeCount": 7,
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 16.98,
+        "screenshotSha256": "72743feaa7e75e0416fc187cd0edf5005c892a5d6e6d146aed9d1c7426809904"
+      }
+    ],
+    "elapsedSeconds": 62.449,
+    "apkUnchanged": true,
+    "screenshotsVisuallyInspected": true,
+    "inspection": "Both cold starts show readable HRIS onboarding with no crash/error dialog; two distinct stable processes. Owned emulator only; no physical phone UI was driven."
+  },
+  "emulatorStop": {
+    "pid": 1937890,
+    "serial": "emulator-5562",
+    "stopped": true,
+    "signalSent": true,
+    "transportAbsent": true,
+    "seconds": 1.607
+  },
+  "installation": {
+    "confirmed": true,
+    "startedAt": "2026-11-03T14:24:21.684446+00:00",
+    "elapsedSecondsIncludingVerification": 110.885,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 25,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "c377886820f8a8ddf7d17de8a6971ee17cae93ed67ba7f2ed00066186f491075",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-03 21:25:45",
+      "versionCode": "25 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    }
+  },
+  "validation": [
+    "chat-reviewed-send-2026-11-03.json",
+    "chat-native-host-2026-11-03.json"
+  ],
+  "compatibleServer": {
+    "source": "304be02700cf07e496421c17e90f5a471b4bd68c",
+    "schema": 116,
+    "runtimeChangedByThisRelease": false
+  },
+  "hosted": {
+    "source": "a3f39be7390874cf04b807b9abad365393530852",
+    "apple": {
+      "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41651053921",
+      "statusAtInstallation": "in_progress"
+    },
+    "native": {
+      "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41650906105",
+      "statusAtInstallation": "in_progress"
+    }
+  },
+  "limits": [
+    "Private devRelease signed with existing development key for in-place private-device updates; production publication/signing is separate.",
+    "Two 12-second minified cold starts with arm64 translation and inspected screenshots; this proves startup, not every authenticated page.",
+    "Installed APK pulled back and hash verified; same appId/first-install, no uninstall/data clear/sign-in reset or phone UI launch.",
+    "Reviewed replies retain encrypted mutable drafts and immutable explicit confirmation; original cancellation and new command reproduction precede input removal. Provider delivery and live FCM are separate acceptance.",
+    "Platform runtime unchanged, chat push OFF; all 54 PRD groups open and voice/video/meeting UI absent. Full hosted Apple/Native source gates still running at installation."
+  ]
+}

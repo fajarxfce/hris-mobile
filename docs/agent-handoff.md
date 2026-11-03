@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Current: release 25 installed; actual chat FCM acceptance next — 3 November 2026
+
+Source **a3f39be7390874cf04b807b9abad365393530852** is committed, pushed and locally
+accepted. Earlier entries saying reviewed-send is uncommitted are historical.
+[Release evidence](measurements/android-release-phone-2026-11-03-build25.json): clean
+release build/lint538.577s; APK88,009,188 bytes, SHA256
+c377886820f8a8ddf7d17de8a6971ee17cae93ed67ba7f2ed00066186f491075.
+Same signer, arm64/16KiB/private API/Firebase/backup exclusions verified, lint0.
+Two minified12-second cold starts PASS62.449s; both PNGs actually viewed, owned
+emulator1937890 stopped/transport absent. In-place phone25 install verified by
+pull-back hash, appId10962 and original first-install preserved. User notified;
+no phone UI launch/data clear/sign-in reset. **Do not reinstall25. Next build26+.**
+
+Full Apple41651053921 and Native41650906105 run at exact a3f source; still running
+at installation. Prepared audits in .work/chat-reviewed-send-apple-2026-11-03 and
+...-hosted-... pin384/393 committed source hashes. Require full Xcode/simulator
+(14 reviewed,7 observation cases) and Native five providers/raw16/runtime4/three
+input deaths/five actions; inspect all three hosted PNGs before accepting. Do not
+reuse418 evidence as proof of a3f. No heavy local build/emulator remains active.
+
+NEXT: actual product-app chat FCM acceptance with fictional owned API/PostgreSQL/
+Synapse accounts and an owned emulator. Existing native FCM inbox fixture and
+MatrixPushProviderFixture can be reused; plan is not implemented yet. Native password
+login is selected when isolated API disables Firebase Email, so no new Firebase user
+or real employee test message is needed. Use existing private service-account path
+without logging/copying secrets into Git or GitHub. Prepare backend/APK before booting
+emulator; keep the scenario short, as known long local provider runs hang. Hosted
+five-provider suite remains the long-run gate. Do not repeat emulator-flag experiments.
+
+Platform72447fb8/runtime304/schema116 and Starter9959c1d unchanged. Chat push OFF;
+all54 PRD groups OPEN, voice/video/meeting UI absent. Continue full communications
+work after FCM; no completion claim here. Push each atomic commit. HRIS-specific
+reviewed-send requires no generic Starter port.
+
 ## Reviewed-send accepted locally; next source commit and release25 — 3 November 2026
 
 [Contract](collaboration-reviewed-replies.md) / [evidence](measurements/chat-reviewed-send-2026-11-03.json).
