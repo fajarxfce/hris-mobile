@@ -1,4 +1,5 @@
 <resources>
+    <string name="chat_draft_label_en">Draft</string>
     <string name="chat_cancel_send_en">Cancel send</string>
     <string name="chat_cancel_title_en">Cancel this message?</string>
     <string name="chat_cancel_explanation_en">Only a message that has not started sending can be cancelled.</string>

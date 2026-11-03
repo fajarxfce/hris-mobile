@@ -1237,6 +1237,27 @@ class CollaborationDataModule {
     ) = ObserveCollaborationList(replicas, sessions, workspaces, server, build, Clock.System)
 
     @Factory
+    fun observeInbox(
+        replicas: CollaborationListRepository,
+        history: CollaborationHistoryRepository,
+        drafts: CollaborationDraftRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ObserveCollaborationInbox(
+            replicas,
+            history,
+            drafts,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun readThreadContext(
         conversations: CollaborationListRepository,
         identities: CollaborationIdentityRepository,

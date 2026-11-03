@@ -1,5 +1,6 @@
 package dev.fajar.starter.collaboration.presentation.inbox
 
+import dev.fajar.starter.collaboration.domain.entities.CollaborationInboxPreview
 import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalList
 import dev.fajar.starter.common.result.Failure
 
@@ -12,6 +13,8 @@ data class ChatInboxState(
     val refreshing: Boolean = false,
     val failure: Failure? = null,
     val refreshFailure: Failure? = null,
+    val previews: Map<String, CollaborationInboxPreview> = emptyMap(),
+    val previewFailure: Failure? = null,
 ) {
     val hasMore: Boolean
         get() = page?.nextCursor != null || remoteNext != null

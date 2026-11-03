@@ -406,6 +406,7 @@ class CollaborationBindingsTest {
                     container.koin.get<QueueCollaborationText>(),
                 )
                 assertNotNull(container.koin.get<ObserveCollaborationList>())
+                assertNotNull(container.koin.get<ObserveCollaborationInbox>())
                 assertNotNull(container.koin.get<ObserveCollaborationAccess>())
                 assertNotNull(container.koin.get<ObserveCollaborationSavedReplies>())
                 assertNotNull(container.koin.get<DiscardCollaborationNotificationReply>())

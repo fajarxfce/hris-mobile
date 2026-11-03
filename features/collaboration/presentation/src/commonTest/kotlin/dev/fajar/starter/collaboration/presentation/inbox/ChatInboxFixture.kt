@@ -14,6 +14,7 @@ import kotlin.time.Duration.Companion.hours
 import kotlinx.coroutines.flow.*
 
 internal class ChatInboxFixture {
+    val content = ChatInboxContentFixture()
     var now = Instant.parse("2026-11-01T00:00:00Z")
     val clock =
         object : Clock {
@@ -257,7 +258,16 @@ internal class ChatInboxFixture {
     fun model() =
         ChatInboxViewModel(
             "selection",
-            ObserveCollaborationList(local, sessions, workspaces, server, build, clock),
+            ObserveCollaborationInbox(
+                local,
+                content.history,
+                content.drafts,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+            ),
             RefreshCollaborationList(local, remote, sessions, workspaces, server, build, clock),
         )
 }

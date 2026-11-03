@@ -13,6 +13,97 @@ import kotlinx.coroutines.test.*
 
 class ChatInboxViewModelTest {
     @Test
+    fun explicitRetryReopensFailedLocalContentEvenWhenTheNetworkRemainsOffline() = runTest {
+        withModel { f, vm, _ ->
+            val id = f.item(1).conversation.id
+            f.records.value = listOf(f.item(1))
+            f.readSummaries = { AppResult.Failed(f.network) }
+            f.content.historyFailureOnOpen = Failure(FailureKind.Storage, "Fixture unavailable")
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            assertNotNull(vm.state.value.previewFailure)
+            assertTrue(vm.state.value.previews.isEmpty())
+            f.content.historyFailureOnOpen = null
+            vm.onEvent(ChatInboxEvent.RefreshRequested)
+            runCurrent()
+            assertNull(vm.state.value.previewFailure)
+            assertTrue(id in vm.state.value.previews)
+            assertEquals(f.network, vm.state.value.refreshFailure)
+            assertEquals(2, f.calls.size)
+        }
+    }
+
+    @Test
+    fun savedPreviewsUpdateOfflineAndStopWhenHiddenWhileAdmissionRemainsObserved() = runTest {
+        withModel { f, vm, owner ->
+            val item = f.item(1)
+            val id = item.conversation.id
+            val message =
+                CollaborationHistoryMessage(
+                    "@peer:example.test",
+                    null,
+                    "\$latest",
+                    1,
+                    "a".repeat(64),
+                    "Saved local message",
+                    listOf("\$latest"),
+                    false,
+                )
+            val draft = CollaborationDraft(id, chatId(9000), "Unsent reply", f.now)
+            f.records.value = listOf(item)
+            f.content.messages.value = mapOf(id to message)
+            f.content.slots.value = mapOf(id to draft)
+            f.now += 365.days
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            assertEquals(CollaborationInboxPreview(message, draft), vm.state.value.previews[id])
+            assertEquals(0, f.calls.size)
+            assertEquals(1, f.content.historyObservers)
+            assertEquals(1, f.content.draftObservers)
+            f.content.slots.value = emptyMap()
+            runCurrent()
+            assertNull(vm.state.value.previews[id]!!.draft)
+            vm.onEvent(ChatInboxEvent.Stopped)
+            runCurrent()
+            assertEquals(0, f.content.historyObservers)
+            assertEquals(0, f.content.draftObservers)
+            assertEquals(1, f.observers)
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            assertEquals(message, vm.state.value.previews[id]!!.message)
+            owner.clear()
+            runCurrent()
+            assertEquals(0, f.content.historyObservers)
+            assertEquals(0, f.content.draftObservers)
+        }
+    }
+
+    @Test
+    fun detailObserversBelongOnlyToTheCurrentPageAndCloseOnConfirmedDenial() = runTest {
+        withModel { f, vm, _ ->
+            f.records.value = (1..45).map(f::item)
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            assertEquals(30, f.content.historyObservers)
+            assertEquals(30, f.content.draftObservers)
+            vm.onEvent(ChatInboxEvent.NextRequested)
+            runCurrent()
+            assertEquals(15, f.content.historyObservers)
+            assertEquals(15, f.content.draftObservers)
+            assertEquals(
+                (31..45).map { f.item(it).conversation.id }.toSet(),
+                vm.state.value.previews.keys,
+            )
+            f.gate.value = CollaborationListAdmission("denied", f.denied)
+            runCurrent()
+            assertNull(vm.state.value.page)
+            assertTrue(vm.state.value.previews.isEmpty())
+            assertEquals(0, f.content.historyObservers)
+            assertEquals(0, f.content.draftObservers)
+        }
+    }
+
+    @Test
     fun duplicateEntryLoadsOnceAndStoppingKeepsOwnedLocalObservation() = runTest {
         withModel { f, vm, owner ->
             f.records.value = listOf(f.item(1), f.item(2))

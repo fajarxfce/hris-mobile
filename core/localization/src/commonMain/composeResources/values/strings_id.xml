@@ -1,4 +1,5 @@
 <resources>
+    <string name="chat_draft_label_id">Draf</string>
     <string name="chat_cancel_send_id">Batalkan kirim</string>
     <string name="chat_cancel_title_id">Batalkan pesan ini?</string>
     <string name="chat_cancel_explanation_id">Hanya pesan yang belum mulai dikirim yang dapat dibatalkan.</string>

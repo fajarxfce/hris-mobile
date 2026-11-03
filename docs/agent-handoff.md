@@ -1,5 +1,52 @@
 # Agent continuation — HRIS Mobile
 
+## Offline inbox preview accepted locally; keep updating the user — 3 November 2026
+
+The user explicitly requests continued progress updates, every commit pushed,
+reviewable Git handoffs and each validated new mobile build installed on the phone.
+Complaints steer the communications PRD; do not stop at a partial milestone.
+
+[Contract](chat-inbox-previews.md) / [evidence](measurements/chat-inbox-previews-2026-11-03.json).
+Owned local names publish before optional message/draft previews. Visible-page
+observers are bounded to 50 conversations (UI 30), cancel on page/visibility change,
+and clear on confirmed admission/owner loss. Timestamp labels and draft prefix are
+localized. Explicit retry reopens failed local observation without requiring the
+network to recover. Large text moves timestamps under the full-width name.
+
+Full root/Wasm/product+proof build/lint PASS 672.455s, unchanged inputs: 4,037
+desktop/571 suites, 230 Android host/37, 18 proof-host/five, ten logic/two (including
+reused); 1,805 cases/259 suites fresh. Product lint zero; proof 47 existing warnings,
+zero errors. Seven new domain, three VM and three screenshot cases pass. All three
+final PNGs actually inspected; original large-text collision fixed before this run.
+No generic Starter port needed. Recipient delivery/read ACKs, pending-outbox preview,
+unread counts/recent ordering and cross-company migration remain required.
+
+Previous bd399317 [Apple gate](measurements/chat-experience-apple-2026-11-03.json)
+ACCEPTED: run41677479513, artifact13254086231, SHA
+4c9b320004cce82fed6cd2132aa0ecb8d9ef289d5cd37f364a01e1670e103847;
+410 source hashes, 1,097 simulator cases/123 suites, full Xcode1258s. It excludes
+this newer preview source. Native41677393348 attempt1 failed SDK emulator archive
+installation before native execution; retained under.work/chat-ux-hosted-2026-11-03/
+attempt1. Exact-source attempt2 is running. Audit rather than requesting another run.
+After this preview commit/push, dispatch its own Apple scope and audit automatically
+triggered Native gate. Expected simulator count grows by seven to1,104; verify it.
+
+Phone still release26: installed and verified, do not reinstall. Release27 helpers
+prepared in.work/release-phone-2026-11-03-build27, not yet run. Build only from clean
+source after the one heavy Platform job finishes. Verify source/signing/endpoints,
+emulator cold starts and images, then notify immediately before install-only.
+Preserve signer/UID/data/Google identity; never drive the user's phone UI.
+
+Platform admission-check-1 is active (session96067): actual product FCM run14 proved
+callbacks200/expected encrypted room/native+pusher1 but no retained hints. The
+policy incorrectly required authentication to occur after native-session creation;
+legitimate issuance retains earlier authentication. WIP fix plus domain/PostgreSQL
+regressions is being checked with fresh worker JAR before product run15. Run13 was
+a diagnostic nullable-map compile failure, fixed in14. Do not enable live push or
+claim product FCM acceptance until real notification and encrypted inline reply pass.
+Runtime304/schema116/push OFF; Starter9959c1d unchanged. Continue the full PRD.
+
+
 ## Release26 installed; source UI gates and remaining communications continue — 3 November 2026
 
 [Phone evidence](measurements/chat-experience-phone-2026-11-03.json): clean bd399317

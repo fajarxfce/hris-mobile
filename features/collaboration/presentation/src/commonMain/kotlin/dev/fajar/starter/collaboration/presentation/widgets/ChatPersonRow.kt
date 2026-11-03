@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.semantics
@@ -23,6 +24,8 @@ fun ChatPersonRow(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    supporting: (@Composable () -> Unit)? = null,
+    trailing: (@Composable () -> Unit)? = null,
 ) {
     Row(
         modifier
@@ -48,12 +51,35 @@ fun ChatPersonRow(
         ) {
             AppText(initials, style = FluentTheme.typography.bodyStrong, color = AppColors.accent)
         }
-        AppText(
-            name,
-            Modifier.weight(1f),
-            style = FluentTheme.typography.bodyStrong,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-        )
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            BoxWithConstraints(Modifier.fillMaxWidth()) {
+                if (trailing != null && maxWidth < 180.dp * LocalDensity.current.fontScale) {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        PersonName(name)
+                        trailing()
+                    }
+                } else {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        PersonName(name, Modifier.weight(1f))
+                        trailing?.invoke()
+                    }
+                }
+            }
+            supporting?.invoke()
+        }
     }
+}
+
+@Composable
+private fun PersonName(name: String, modifier: Modifier = Modifier) {
+    AppText(
+        name,
+        modifier,
+        style = FluentTheme.typography.bodyStrong,
+        maxLines = 2,
+        overflow = TextOverflow.Ellipsis,
+    )
 }

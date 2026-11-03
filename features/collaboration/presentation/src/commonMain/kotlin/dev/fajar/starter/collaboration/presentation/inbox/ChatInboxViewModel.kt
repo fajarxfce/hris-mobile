@@ -1,9 +1,8 @@
 package dev.fajar.starter.collaboration.presentation.inbox
 
 import androidx.lifecycle.viewModelScope
-import dev.fajar.starter.collaboration.domain.entities.CollaborationListCheckpoint
-import dev.fajar.starter.collaboration.domain.entities.CollaborationListSelection
-import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationList
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationInbox
 import dev.fajar.starter.collaboration.domain.usecases.RefreshCollaborationList
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.presentation.mvi.MviViewModel
@@ -15,12 +14,13 @@ import org.koin.core.annotation.InjectedParam
 @KoinViewModel
 class ChatInboxViewModel(
     @InjectedParam private val workspaceId: String,
-    private val observe: ObserveCollaborationList,
+    private val observe: ObserveCollaborationInbox,
     private val refresh: RefreshCollaborationList,
 ) : MviViewModel<ChatInboxState, ChatInboxEvent, ChatInboxEffect>(ChatInboxState()) {
     private var observation: Job? = null
     private var acquisition: Job? = null
     private var visible = false
+    private val previewsVisible = MutableStateFlow(false)
     private var refreshRequired = true
     private var advanceAfterAcquisition = false
     private var advanceFrom: CollaborationListCheckpoint? = null
@@ -40,6 +40,7 @@ class ChatInboxViewModel(
     private fun onEntered(event: ChatInboxEvent.Entered) {
         if (visible) return
         visible = true
+        previewsVisible.value = true
         if (observation?.isActive != true) startObservation()
         if (refreshRequired) acquire(null)
     }
@@ -50,7 +51,14 @@ class ChatInboxViewModel(
             viewModelScope.launch {
                 observe(
                         workspaceId,
-                        state.map { CollaborationListSelection(it.after) }.distinctUntilChanged(),
+                        combine(
+                            state
+                                .map { CollaborationListSelection(it.after) }
+                                .distinctUntilChanged(),
+                            previewsVisible,
+                        ) { list, details ->
+                            CollaborationInboxSelection(list, details)
+                        },
                     )
                     .collect { result ->
                         ensureActive()
@@ -67,16 +75,22 @@ class ChatInboxViewModel(
                             }
                             is AppResult.Success -> {
                                 updateState {
-                                    it.copy(page = result.value, loading = false, failure = null)
+                                    it.copy(
+                                        page = result.value.list,
+                                        previews = result.value.previews,
+                                        previewFailure = result.value.previewFailure,
+                                        loading = false,
+                                        failure = null,
+                                    )
                                 }
                                 if (
                                     visible &&
                                         !state.value.refreshing &&
                                         advanceAfterAcquisition &&
-                                        result.value.checkpoint != advanceFrom
+                                        result.value.list.checkpoint != advanceFrom
                                 ) {
                                     advanceAfterAcquisition = false
-                                    result.value.nextCursor?.let(::nextPage)
+                                    result.value.list.nextCursor?.let(::nextPage)
                                 }
                             }
                         }
@@ -86,6 +100,7 @@ class ChatInboxViewModel(
 
     private fun onStopped(event: ChatInboxEvent.Stopped) {
         visible = false
+        previewsVisible.value = false
         acquisition?.cancel()
         acquisition = null
         advanceAfterAcquisition = false
@@ -100,6 +115,8 @@ class ChatInboxViewModel(
             if (it.after == null) it.copy(previous = emptyList())
             else it.copy(after = null, previous = emptyList(), page = null, loading = true)
         }
+        // Retry a completed local content read even when remote refresh remains unavailable.
+        startObservation()
         acquire(null)
     }
 
