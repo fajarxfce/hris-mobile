@@ -5,4 +5,5 @@ data class WorkspaceContext(
     val sessionId: String,
     val workspace: Workspace?,
     val policy: CompanyPolicyStatus?,
+    val owner: WorkspaceSelectionOwner? = null,
 )

@@ -13,9 +13,16 @@ fun workspaceContext(
     build: AppBuild,
     now: Instant,
 ): WorkspaceContext {
-    if (workspace == null) return WorkspaceContext(session.id, null, null)
+    val owner =
+        WorkspaceSelectionOwner(
+            session.id,
+            session.binding.audience,
+            session.user.id,
+            session.binding.serverId,
+        )
+    if (workspace == null) return WorkspaceContext(session.id, null, null, owner)
     val admission = validateLocalWorkspaceOwnership(workspace.id, workspace, session)
-    if (admission is AppResult.Failed) return WorkspaceContext(session.id, null, null)
+    if (admission is AppResult.Failed) return WorkspaceContext(session.id, null, null, owner)
     return WorkspaceContext(
         session.id,
         workspace,
@@ -24,5 +31,6 @@ fun workspaceContext(
             companyAvailability(workspace.policy, build, now),
             !companyPolicyIsFresh(workspace.policy, now),
         ),
+        owner,
     )
 }

@@ -2,11 +2,15 @@
 
 package dev.fajar.starter.workspace.domain
 
+import dev.fajar.starter.common.config.AppBuild
+import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.*
 import dev.fajar.starter.identity.domain.repositories.*
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.entities.WorkspaceAdmission
+import dev.fajar.starter.workspace.domain.entities.WorkspaceSelectionOrigin
+import dev.fajar.starter.workspace.domain.entities.WorkspaceSelectionOwner
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import dev.fajar.starter.workspace.domain.usecases.*
 import kotlin.test.*
@@ -64,8 +68,13 @@ class WorkspaceSelectionTest {
     }
 
     private class Workspaces : WorkspaceRepository {
-        override suspend fun clientPolicy(sessionId: String, companyId: String) =
-            AppResult.Success(testCompanyPolicy())
+        override suspend fun clientPolicy(
+            sessionId: String,
+            companyId: String,
+        ): AppResult<dev.fajar.starter.workspace.domain.entities.CompanyPolicy> {
+            beforePolicy()
+            return AppResult.Success(testCompanyPolicy())
+        }
 
         val selected = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(null))
         var readAccess: suspend (String) -> AppResult<Set<String>> = {
@@ -74,10 +83,17 @@ class WorkspaceSelectionTest {
         var requests = 0
         var changes = 0
         var beforeChange: suspend () -> Unit = {}
+        var beforeCurrent: suspend () -> Unit = {}
+        var beforePolicy: suspend () -> Unit = {}
+        var currentReads = 0
 
         override fun observe(sessionId: String) = selected
 
-        override suspend fun current(sessionId: String) = selected.value
+        override suspend fun current(sessionId: String): AppResult<Workspace?> {
+            currentReads++
+            beforeCurrent()
+            return selected.value
+        }
 
         override suspend fun compareAndSet(
             sessionId: String,
@@ -101,7 +117,14 @@ class WorkspaceSelectionTest {
     }
 
     private class Accounts(var value: AccountSnapshot) : AccountRepository {
-        override suspend fun load(sessionId: String) = AppResult.Success(value)
+        var requests = 0
+        var beforeLoad: suspend () -> Unit = {}
+
+        override suspend fun load(sessionId: String): AppResult<AccountSnapshot> {
+            requests++
+            beforeLoad()
+            return AppResult.Success(value)
+        }
     }
 
     @Test
@@ -276,5 +299,214 @@ class WorkspaceSelectionTest {
                 session.copy(binding = session.binding.copy(audience = "https://other.invalid/"))
             )
         assertEquals(AppResult.Success(null), observe().first())
+    }
+
+    private fun owner() =
+        WorkspaceSelectionOwner(
+            session.id,
+            session.binding.audience,
+            session.user.id,
+            session.binding.serverId,
+        )
+
+    @Test
+    fun capturedOwnerRejectsEveryIdentityMismatchBeforeCompanyOrAccountIo() = runTest {
+        for (wrong in
+            listOf(
+                owner().copy(sessionId = "other"),
+                owner().copy(audience = "https://other.invalid/"),
+                owner().copy(accountId = "other"),
+                owner().copy(familyId = "other"),
+            )) {
+            val workspaces = Workspaces()
+            val accounts = Accounts(account())
+            val result =
+                SelectWorkspace(Sessions(session), accounts, workspaces)(
+                    session.id,
+                    "one",
+                    WorkspaceSelectionOrigin(wrong, null),
+                )
+            assertEquals("client.session_changed", assertIs<AppResult.Failed>(result).failure.code)
+            assertEquals(0, workspaces.currentReads)
+            assertEquals(0, workspaces.requests)
+            assertEquals(0, workspaces.changes)
+            assertEquals(0, accounts.requests)
+        }
+    }
+
+    @Test
+    fun matchingOwnerAllowsTokenRenewalWithoutChangingSelectionIdentity() = runTest {
+        val sessions = Sessions(session)
+        val accounts = Accounts(account())
+        accounts.beforeLoad = {
+            sessions.record.value =
+                AppResult.Success(
+                    session.copy(tokens = session.tokens.copy(accessToken = "renewed"))
+                )
+        }
+        val workspaces = Workspaces()
+        val result =
+            SelectWorkspace(sessions, accounts, workspaces)(
+                session.id,
+                "two",
+                WorkspaceSelectionOrigin(owner(), null),
+            )
+        val selected = assertIs<AppResult.Success<Workspace>>(result).value
+        assertEquals("two", selected.company.id)
+        assertEquals(session.binding.serverId, selected.admission.familyId)
+        assertEquals(AppResult.Success(selected), workspaces.selected.value)
+    }
+
+    @Test
+    fun identityReplacementAfterEachLookupCannotReachSelectionCommit() = runTest {
+        for (phase in listOf("previous", "account", "permissions", "policy")) {
+            for (replacement in
+                listOf(
+                    session.copy(user = session.user.copy(id = "replacement")),
+                    session.copy(binding = session.binding.copy(serverId = "replacement")),
+                )) {
+                val sessions = Sessions(session)
+                val accounts = Accounts(account())
+                val workspaces = Workspaces()
+                val release = CompletableDeferred<Unit>()
+                val held: suspend () -> Unit = { withContext(NonCancellable) { release.await() } }
+                when (phase) {
+                    "previous" -> workspaces.beforeCurrent = held
+                    "account" -> accounts.beforeLoad = held
+                    "permissions" -> workspaces.readAccess = {
+                            held()
+                            AppResult.Success(emptySet())
+                        }
+                    "policy" -> workspaces.beforePolicy = held
+                }
+                val pending = async {
+                    SelectWorkspace(sessions, accounts, workspaces)(
+                        session.id,
+                        "one",
+                        WorkspaceSelectionOrigin(owner(), null),
+                    )
+                }
+                runCurrent()
+                assertFalse(pending.isCompleted)
+                sessions.record.value = AppResult.Success(replacement)
+                release.complete(Unit)
+                assertEquals(
+                    "client.session_changed",
+                    assertIs<AppResult.Failed>(pending.await()).failure.code,
+                )
+                assertEquals(0, workspaces.changes)
+                assertEquals(AppResult.Success(null), workspaces.selected.value)
+            }
+        }
+    }
+
+    @Test
+    fun lateSelectionCommitCannotReportSuccessToAReplacementOwner() = runTest {
+        for (cancel in listOf(false, true)) {
+            val sessions = Sessions(session)
+            val workspaces = Workspaces()
+            val release = CompletableDeferred<Unit>()
+            workspaces.beforeChange = { withContext(NonCancellable) { release.await() } }
+            val pending = async {
+                SelectWorkspace(sessions, Accounts(account()), workspaces)(
+                    session.id,
+                    "one",
+                    WorkspaceSelectionOrigin(owner(), null),
+                )
+            }
+            runCurrent()
+            if (cancel) pending.cancel()
+            else
+                sessions.record.value =
+                    AppResult.Success(
+                        session.copy(binding = session.binding.copy(serverId = "new-family"))
+                    )
+            release.complete(Unit)
+            if (cancel) assertFailsWith<CancellationException> { pending.await() }
+            else
+                assertEquals(
+                    "client.session_changed",
+                    assertIs<AppResult.Failed>(pending.await()).failure.code,
+                )
+            // The already committed fact retains its original owner; no compensation can erase
+            // another selection. A caller must never navigate from this failed acknowledgment.
+            val committed = assertIs<AppResult.Success<Workspace?>>(workspaces.selected.value).value
+            assertNotNull(committed)
+            assertEquals(session.binding.serverId, committed.admission.familyId)
+            assertEquals(1, workspaces.changes)
+        }
+    }
+
+    @Test
+    fun explicitOriginCannotOverwriteAChoiceMadeBeforeItsLookupStarted() = runTest {
+        val workspaces = Workspaces()
+        val accounts = Accounts(account())
+        val select = SelectWorkspace(Sessions(session), accounts, workspaces)
+        val original = WorkspaceSelectionOrigin(owner(), null)
+        val manual = assertIs<AppResult.Success<Workspace>>(select(session.id, "one")).value
+        accounts.requests = 0
+        workspaces.requests = 0
+        val stale = select(session.id, "two", original)
+        assertEquals("client.workspace_changed", assertIs<AppResult.Failed>(stale).failure.code)
+        assertEquals(0, accounts.requests)
+        assertEquals(0, workspaces.requests)
+        assertEquals(AppResult.Success(manual), workspaces.selected.value)
+        val selected =
+            assertIs<AppResult.Success<Workspace>>(
+                    select(session.id, "two", original.copy(workspaceId = manual.id))
+                )
+                .value
+        assertEquals("two", selected.company.id)
+        assertEquals(AppResult.Success(selected), workspaces.selected.value)
+        workspaces.selected.value = AppResult.Success(null)
+        assertEquals(
+            "client.workspace_changed",
+            assertIs<AppResult.Failed>(
+                    select(session.id, "one", original.copy(workspaceId = selected.id))
+                )
+                .failure
+                .code,
+        )
+        assertEquals(AppResult.Success(null), workspaces.selected.value)
+    }
+
+    @Test
+    fun observedContextCarriesTheActualFamilyWithoutAdmittingAPreviousFamilySelection() = runTest {
+        val sessions = Sessions(session)
+        val workspaces = Workspaces()
+        val observe =
+            ObserveWorkspaceContext(
+                sessions,
+                workspaces,
+                AppBuild(AppPlatform.Android, 1, "1.0.0", null),
+            )
+        val empty =
+            assertIs<
+                    AppResult.Success<dev.fajar.starter.workspace.domain.entities.WorkspaceContext?>
+                >(
+                    observe().first()
+                )
+                .value
+        assertEquals(owner(), assertNotNull(empty).owner)
+        assertNull(empty.workspace)
+        val selected =
+            assertIs<AppResult.Success<Workspace>>(
+                    SelectWorkspace(sessions, Accounts(account()), workspaces)(session.id, "one")
+                )
+                .value
+        sessions.record.value =
+            AppResult.Success(
+                session.copy(binding = session.binding.copy(serverId = "renewed-family"))
+            )
+        val current =
+            assertIs<
+                    AppResult.Success<dev.fajar.starter.workspace.domain.entities.WorkspaceContext?>
+                >(
+                    observe().first()
+                )
+                .value
+        assertEquals(owner().copy(familyId = "renewed-family"), assertNotNull(current).owner)
+        assertNull(current.workspace)
+        assertEquals(AppResult.Success(selected), workspaces.selected.value)
     }
 }
