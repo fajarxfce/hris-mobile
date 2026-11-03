@@ -20,35 +20,42 @@ Phone-reported last update2026-11-03 11:52:52. No uninstall/data clear/phone UI 
 real-account messages or sign-in resets. Local scripts/evidence in
 .work/release-phone-2026-11-03-build20. No local heavy job or owned emulator remains.
 
-ONE new full Apple [41579492354](measurements/chat-muted-notification-apple-2026-11-03.json)
-was dispatched04:40:33Z at exact release20 source543c61b9 with227 frozen source hashes.
-It is PENDING; do not redispatch. .work/chat-muted-notification-apple-2026-11-03/audit.py
-is ready; run only after completion, with exclusive extraction directories. Latest
-accepted Apple41575891048 at76d004e5 is970 cases/109 suites/full Xcode and excludes mute.
-Native41575838871 at76d004e5 is still running; its new priority proof uses a FAKE display,
-not activated HRIS OS notifications. Do not duplicate native runs. Older identity run
-41574010908 failed only at emulator-image download before execution; recorded below.
+Full Apple [41579492354](measurements/chat-muted-notification-apple-2026-11-03.json)
+at release20 source543c61b9 is ACCEPTED:984 cases/110 suites, zero failures/errors/skips;
+227 source hashes, full Xcode900s, test compilation520s and execution75s. Artifact
+13205878217 SHA256 `6e61f4319ea5a6bbec6831216dde6a4f38c73942ab0e1a4c0b6104801d77f883`
+verified against GitHub. Audit complete; do not redispatch or extract again. This
+excludes the in-progress authenticated-action v2 changes.
 
-NEXT implement authenticated action v2 and old-family reply-input retention; the concrete
-source map is in .work/chat-muted-notification-2026-11-03/next-actions.txt, DESIGN ONLY.
-Existing data ActionRepository and ActionCodec currently emit flat v1 envelopes with
-issuing parent only in AAD. Add a v2 envelope carrying authenticated original parent+
-action under actual account/audience AAD. Strict open must still require exact current
-parent for normal Send/Read/Mute/Dismiss. Separate recovery decode may return original
-parent for retaining same-account old-family typed input; reject unrelated account/API
-audience. RetainReply guards actual current parent around decode/storage and stores the
-authenticated issuing parent. Existing ReviewReply already produces SessionChanged for
-an unsent old-parent input, while Complete recognizes an existing exact command. Verify
-actual app flow never auto-sends across families and retains review across reopen.
+Native [41575838871](measurements/chat-priority-notification-native-failure-2026-11-03.json)
+at76d004e5 FAILED: raw OS notification16 groups/two scenarios passed with fixture
+uninstall verified; SDK and scheduled scenarios passed, but all three worker scenarios
+failed in priority processing after175 seeded messages. Reported category was
+HrisProof_Unavailable_Unclassified. Host230/37 and proof6/1 passed; full native
+acceptance is withheld. Artifact13206336258 SHA256
+`aab64315f53494a2cb518e1e02a470e8d562f8bf92d9528fb750ddfce335fa4` verified.
+Current automatic native41579417140 at543c61b9 is still running; do not duplicate.
 
-Preserve bounds/canonical Base64/existing-only history key and safe raw I/O callbacks.
-Native HRIS v1 callbacks never activated; no mandatory legacy migration. Strict legacy
-read for already retained local envelopes may remain, without recovering an unknown
-old parent. Only two domain fake ActionRepository implementations: IssuanceFixture and
-InvocationFixture. Real data tests use CollaborationNotificationActionContract on both
-SQLite and IndexedDB; use *BrowserCollaborationNotificationActionTest* and verify a
-nonempty report. Add pending/cancel/changed-parent/key-failure and actual Koin/reopen
-regressions, then root/proof/Wasm/browser checks, atomic commit/push, full Apple snapshot.
+Confirmed fixture contract defect: HrisProofApplicationAccess.sessions.observe uses
+flowOf, completing immediately after its seeded snapshot; production notification
+observation correctly treats source completion as unavailable. NEXT after v2 acceptance:
+keep proof session/workspace observation alive until caller cancellation, preserve
+backgroundOnly workspace-read prohibition, add host regression for initial snapshot and
+joined cancellation, and allowlisted failure categories. Do not weaken production source
+completion guards. Corrected hosted native execution must establish whether other
+failures remain. Do not repeat known hanging long local provider/emulator runs.
+
+Authenticated action v2 is IMPLEMENTED BUT UNACCEPTED in the working tree,16 Kotlin
+paths plus docs/collaboration-notification-action-recovery.md. Work directory
+.work/chat-notification-action-recovery-2026-11-03. Strict open preserves exact parent;
+separate account/audience-authenticated recover returns issuing metadata for private
+retention. Existing complete/review flow must retain SessionChanged rather than send.
+Focused attempts1/2 failed stale unsupported-v2 examples,3 was interrupted after a stale
+open interception blocked the retention test barrier (now uses recover and a child
+completion guard),4 failed two new app cases. Attempt5 adds controlled kind/code
+assertion diagnostics and is currently running; inspect its result before another heavy
+job. No v2 acceptance or phone delivery claimed. Finish diagnosis/focused/root/proof/
+Wasm/nonempty browser checks, atomic commit+push; then fix the native proof observation.
 
 Focused-route ownership/disposition and device-encrypted pre-retention input quarantine,
 review UI, real native callbacks, permission wakeups, baselines and notification-input
@@ -59,6 +66,9 @@ Mobile proof. Next actual product release must be >20, same signer/data, phone n
 then install-only. Physical iPhone waived; full Xcode remains required.
 
 ## Durable mute disposition accepted
+
+Historical checkpoint below: Apple/native pending instructions are superseded by the
+accepted Apple and failed-native evidence at the top of this file.
 
 Muted originals now receive a guarded inactive Cancelled watermark before priority
 hint acknowledgment. Prepare carries metadata and the exact prior journal reference;

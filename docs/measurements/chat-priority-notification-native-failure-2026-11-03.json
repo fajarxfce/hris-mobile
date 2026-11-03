@@ -1,0 +1,187 @@
+{
+  "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41575838871",
+  "source": "76d004e5d2c2281c868442a61b931944f711d3fe",
+  "status": "failed",
+  "artifactId": 13206336258,
+  "artifactSha256": "aab64315f53494a2cb518e1e02a470e8d562f8bfd92d9528fb750ddfce335fa4",
+  "githubArchiveDigestVerified": true,
+  "reports": {
+    "proofHost": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 1
+    },
+    "androidHost": {
+      "tests": 230,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 37
+    },
+    "native": {
+      "tests": 5,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 3
+    }
+  },
+  "reportSha256": {
+    "mobile/apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": "b263d4a47c80e69c257983cbcc904ceec1ca3ece317a573f53fd69f89d5d370e",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationBackgroundRuntimeTest.xml": "4bf81e399c86e6084894a5e93cb1a237b217b271f1b0d2b15782bf272582b99f",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationHistoryReadsTest.xml": "d5e79e318a6e0b92c7a0c65b0cb906cad1a7b008934c35ce5426bec55f4aabc0",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationHistorySourceTest.xml": "426212c27b170ff26a24408655e7d5f5134286579a28df798281de2a45a08e38",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationIdentityTest.xml": "3ffb3cdfff50e7047c6363678209071368474a6f063bee3219d099d9da3640ab",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationPusherTest.xml": "0ffbce90f3d2e5fe894e10501f88635e79137e724ac1fd7deca4d86f60bbe059",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationQueueDeliveryTest.xml": "94dd296c35ebaa912e8ca288d446f6a13b87e8a18e7579dc6985e1449d1b4e72",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationQueueSourceTest.xml": "f209690203382510782c6b2a3a3ad2e67f8b122166cd25f149ae1e56c06b431e",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationReadReceiptsTest.xml": "d3590b879560fa331ec5112a0e7ee674daf6e7d0f32927e0bc32bac141bca328",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationRuntimePublicationTest.xml": "65bb0242d97c69acef2ac0a58372de0edde3ff42ea310f70662b65b86393497a",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationWriterExclusionTest.xml": "67a1fa54466b4bccbe7885d40fa58c448bcde11fd026238069559b0887fa274e",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationCommandCodecTest.xml": "51058f587e096d8c3b1f37a5695871e60c156880c3ae546295ec5680e740a367",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationTransportTest.xml": "584ac6e7f9c334f253772c116b1f3a751efa571902bb737e9cc1fa35882c8d9f",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationValidationTest.xml": "1b776d6fc4e07b451b706f17e886dcfca739f4065f0318f9c922e1c152be8b62",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationGatewayConfigurationTest.xml": "b5a908bbd919a404b420eaaca16d6a27e549e7029198abc49af8eed02dc0d8bb",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationHistoryHeadTest.xml": "8c902e56ea8b57157a2f43d87cce1513dda1ae5dc734fe61db99dbb7b5212fe2",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationProviderPageTest.xml": "739b869cbe6578bfef01587014500e2f6f6fae681da168eb5230af8ab705b292",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRecoveryTransportTest.xml": "8a15fd9741273e2d040cbb2491d2f0a7aac913bdc76c4e7f19429b4b0f1d33c0",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRecoveryWakeRepositoryTest.xml": "85b27ef132c4378bfdf184c6d8532dc2c88f7504bf8578ed7aef4632fd97c401",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRoomLookupTransportTest.xml": "9ca4983b1023e9e3819d4a4f93482c2bead16a8cd6d7813503feb72a9978e93c",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkFailureMapperTest.xml": "e26d0165d03898d80177dbe64c70f928f2de1dc8b449af993fa1a111ae70f608",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkHistoryMapperTest.xml": "759c2e97b44028caa9c1fc40c12bad09f1cf25d512e62c2a3541c85b99a4170a",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkLogicalIdTest.xml": "818a3ed395a44ac3d002fd502009cbdc20f4f59bce149dd4a92bfc3d105d2496",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkRecordTest.xml": "ad72f6985b1eeca6e56abdad4d115a740bd3e3d86bc81aa55955bd4d7291c2fc",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml": "ff7ee54b8b069b5a2da079df5edce41b7e7b4c7815d7a4cb45aca5e94f43fabc",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml": "c784106730df5f960e4c3caf2fdeb44b7443dfd5a369fcdc35700ae3a0affb83",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSummaryTransportTest.xml": "10d9654af8eb54b30e15faeca6f7b65b8c710efc7f4beebfc3e90b5714786f90",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationTextContentTest.xml": "4fc91f1a25dc7c7b7927b61c5a7fe5507946dbabb5efe520d065b8652f3ced77",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkChildResourcesTest.xml": "0b031cdd4a8c5df883112854f2a135779af153ccd97496f3192dff46e900489b",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkHistoryFocusesTest.xml": "f6cc5c305de9a7453cb8e28dec730fb7fc6f6c4c60cb446a740a08848bc3e2ef",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkQueueDeliveryTest.xml": "1ce27a47f5a4a3eaaa8d9485beb190127c49820f01aa39c056a56eb66483d414",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkQueueOperationsTest.xml": "0dd0660fe247e36b3c77d5f1b41af2e49e92f599aa8f271d9db7155dcbebdc25",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkRuntimeRegistryTest.xml": "e88d5af404ede53823b78f1bf544c1b86353ec45a42d3223646d135df61292af",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkSessionPersistenceTest.xml": "c321149c866f0f9ae085daa2d9a2083eba2a8bd3041505166de24b05381360cd",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkStoreShutdownTest.xml": "b049e6fa40696097505532accba70361819d2a81f8318d8550ba83c3160bf9a0",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkSyncLifecycleTest.xml": "566fad4b02d82fc2736361daf4d9c82e3e54fa06bd671da8e747bedbd8ae24d5",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkSyncPumpTest.xml": "6bd89b0eec89cb64972f39fbe5bae49a74d3301c4831f2e6056e1b6f079db088",
+    "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkTimelineDeltaTest.xml": "0bc4c056a23455b989030b837f662bdaa4758112cfa0a5a41a6dbdecfb557fa2",
+    "platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationScheduledInteropTest.xml": "2855d7f6497b15c1f04bb1af910d2f3fd14c3ded123c20a770bef3f261b6826d",
+    "platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "5b431f148eb480284cde28911e41bea5c3598d21818fa1d1c3acd01e90eb7515",
+    "platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationWorkerInteropTest.xml": "1fe0263dbcfa4e0da9f84ba57073e8b105092faf8846e8ca32ec80e14494760d"
+  },
+  "rawNotification": {
+    "serial": "emulator-5560",
+    "scenarios": [
+      {
+        "name": "native-notification-denied",
+        "seconds": 7.657,
+        "complete": true,
+        "sdk": 35,
+        "cases": [
+          "permission-denial-does-not-submit"
+        ],
+        "cleanedUp": true,
+        "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+      },
+      {
+        "name": "native-notification",
+        "seconds": 9.097,
+        "complete": true,
+        "sdk": 35,
+        "cases": [
+          "actual-private-display-and-immutable-public-version",
+          "same-render-replay-updates-stable-card",
+          "stale-removal-preserves-new-render-and-new-render-may-alert",
+          "same-render-reissue-keeps-original-immutable-envelope",
+          "real-remote-input-and-old-render-envelope-remain-distinct",
+          "immutable-actions-ignore-injected-remote-input",
+          "colliding-java-hashes-cannot-retarget-pending-intents",
+          "missing-oversized-or-cross-component-input-is-rejected",
+          "namespace-cleanup-preserves-unrelated-application-notifications",
+          "disabled-channel-is-distinct-from-submitted",
+          "newer-inventory-fences-stale-removal-while-os-card-is-absent",
+          "opaque-no-backup-inventory-reopens-and-clears-without-account-data",
+          "latest-owned-inventory-can-cancel-its-older-visible-predecessor",
+          "full-opaque-inventory-does-not-evict-or-submit",
+          "corrupt-inventory-withholds-new-posts-and-cleans-visible-cards"
+        ],
+        "cleanedUp": true,
+        "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+      }
+    ],
+    "sdk": 35,
+    "apkSha256": "2a4e7b4679c431d4a1eeb3b8ed3ac7699f42bd731c4cf440b8b0d8b8a608ef93",
+    "complete": true,
+    "fixtureUninstalled": true,
+    "fixtureDataCleared": true,
+    "seconds": 35.23
+  },
+  "workerFailures": [
+    {
+      "path": "platform/.work/collaboration-worker/3ec52e20e7b94218b92769b3272e9f80/result.json",
+      "phase": {
+        "phase": "priority",
+        "seeded": 175,
+        "elapsedMillis": 96894
+      },
+      "diagnostic": {
+        "replyComplete": false,
+        "resultComplete": false,
+        "instrumentationComplete": false,
+        "failureCategory": "HrisProof_Unavailable_Unclassified",
+        "failureFrames": [
+          "dev.fajar.hris.collaboration.proof.HrisPriorityHistoryProbe.run:87",
+          "dev.fajar.hris.collaboration.proof.HrisPriorityHistoryProbe$run$1.invokeSuspend:15"
+        ]
+      },
+      "cleanup": true
+    },
+    {
+      "path": "platform/.work/collaboration-worker/61fc985f3a364838bd5f92d7df0806ef/result.json",
+      "phase": {
+        "phase": "priority",
+        "seeded": 175,
+        "elapsedMillis": 95609
+      },
+      "diagnostic": {
+        "replyComplete": false,
+        "resultComplete": false,
+        "instrumentationComplete": false,
+        "failureCategory": "HrisProof_Unavailable_Unclassified",
+        "failureFrames": [
+          "dev.fajar.hris.collaboration.proof.HrisPriorityHistoryProbe.run:87",
+          "dev.fajar.hris.collaboration.proof.HrisPriorityHistoryProbe$run$1.invokeSuspend:15"
+        ]
+      },
+      "cleanup": true
+    },
+    {
+      "path": "platform/.work/collaboration-worker/8f94c8ce83334bc6a6832fcad12d3ece/result.json",
+      "phase": {
+        "phase": "priority",
+        "seeded": 175,
+        "elapsedMillis": 95123
+      },
+      "diagnostic": {
+        "replyComplete": false,
+        "resultComplete": false,
+        "instrumentationComplete": false,
+        "failureCategory": "HrisProof_Unavailable_Unclassified",
+        "failureFrames": [
+          "dev.fajar.hris.collaboration.proof.HrisPriorityHistoryProbe.run:87",
+          "dev.fajar.hris.collaboration.proof.HrisPriorityHistoryProbe$run$1.invokeSuspend:15"
+        ]
+      },
+      "cleanup": true
+    }
+  ],
+  "confirmedFixtureDefect": {
+    "source": "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProofApplicationAccess.kt",
+    "sha256": "7772d3c9d7ba85f39afe7b1300f311c008c4df23b60eb157e3d4f376d501ee8d",
+    "finding": "The seeded SessionRepository.observe completes after flowOf emits. Production notification source policy deliberately converts upstream completion to Unavailable. This fixture violates the continuous observation contract.",
+    "limits": "Worker diagnostics identify Unavailable_Unclassified at third priority retry. Corrected fixture/provider run is still required before claiming this is the only failure cause. Do not weaken production source-completion handling."
+  },
+  "phoneTouched": false
+}
