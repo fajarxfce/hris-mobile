@@ -29,7 +29,8 @@ class MatrixProofInstrumentation : Instrumentation() {
             )
             runBlocking {
                 withTimeout(
-                    if (scenario == "hris-worker-resume") 420_000
+                    if (scenario == "hris-product-peer") 300_000
+                    else if (scenario == "hris-worker-resume") 420_000
                     else if (
                         scenario.startsWith("hris-worker-") ||
                             scenario.startsWith("company-recovery")
@@ -38,6 +39,8 @@ class MatrixProofInstrumentation : Instrumentation() {
                     else 120_000
                 ) {
                     when (scenario) {
+                        "hris-product-peer" ->
+                            HrisProductNotificationPeer(targetContext, directory).run()
                         "notification-input-verify" -> {
                             val owner =
                                 (targetContext.applicationContext as HrisScheduledProofApplication)

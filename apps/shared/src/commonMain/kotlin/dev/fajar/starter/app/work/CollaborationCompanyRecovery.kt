@@ -10,6 +10,7 @@ import kotlinx.coroutines.*
 class CollaborationCompanyRecovery(
     private val incoming: suspend (CollaborationBackgroundAdmission) -> SyncResult,
     private val outgoing: suspend (CollaborationBackgroundAdmission) -> SyncResult,
+    private val push: suspend (CollaborationBackgroundAdmission) -> SyncResult,
 ) {
     suspend operator fun invoke(admission: CollaborationBackgroundAdmission): SyncResult {
         currentCoroutineContext().ensureActive()
@@ -17,7 +18,12 @@ class CollaborationCompanyRecovery(
         currentCoroutineContext().ensureActive()
         val sent = turn("outgoing") { outgoing(admission) }
         currentCoroutineContext().ensureActive()
-        return combineCollaborationRecovery(received, sent)
+        val registered = turn("push_registration") { push(admission) }
+        currentCoroutineContext().ensureActive()
+        return combineCollaborationRecovery(
+            combineCollaborationRecovery(received, sent),
+            registered,
+        )
     }
 
     private suspend fun turn(lane: String, action: suspend () -> SyncResult): SyncResult =

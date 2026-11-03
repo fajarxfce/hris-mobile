@@ -56,7 +56,21 @@ class CollaborationWorkerFixture {
         createAppContainer(
             createUserPreferences(directory),
             createAppDatabase(directory),
-            module {},
+            module {
+                single<
+                    dev.fajar.starter.notifications.data.datasources.NotificationPermissionSource
+                > {
+                    object :
+                        dev.fajar.starter.notifications.data.datasources.NotificationPermissionSource {
+                        override suspend fun check() =
+                            dev.fajar.starter.notifications.data.dto.NotificationPermission.Denied
+
+                        override suspend fun request():
+                            dev.fajar.starter.notifications.data.dto.NotificationPermission =
+                            error("No implicit notification permission request")
+                    }
+                }
+            },
             credentials = sessionCredentials,
             workspaceCredentials = workspaceCredentials,
             commandCredentials = commands,

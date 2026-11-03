@@ -9,6 +9,8 @@ import dev.fajar.starter.identity.domain.entities.IdentityServer
 import kotlin.test.*
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TestTimeSource
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 
@@ -178,12 +180,110 @@ class ActivateCollaborationPusherTest {
         assertEquals(AppResult.Success(Unit), f.activate())
     }
 
+    @Test
+    fun backgroundActivationUsesItsAdmittedCompanyWithoutSelectingAWorkspace() = runTest {
+        val f = Fixture()
+        val scope = f.background()
+        assertEquals(AppResult.Success(Unit), f.useCase(scope, f.device))
+        assertNull(f.setup.workspace)
+        assertEquals(1, f.calls)
+    }
+
+    @Test
+    fun backgroundDeviceAndObservedVersionCannotBeReplaced() = runTest {
+        val f = Fixture()
+        val scope = f.background()
+        assertIs<AppResult.Failed>(f.useCase(scope, "a0000000-0000-4000-8000-000000000002"))
+        assertEquals(0, f.setup.calls)
+        val newer =
+            scope.copy(
+                admission =
+                    scope.admission.copy(
+                        observation =
+                            scope.admission.observation.copy(
+                                deviceVersion = f.registered.version + 1
+                            )
+                    )
+            )
+        assertIs<AppResult.Failed>(f.useCase(newer, f.device))
+        assertEquals(0, f.calls)
+    }
+
+    @Test
+    fun backgroundExpiryOrNativeReplacementDuringIoCannotPublishSuccess() = runTest {
+        for (afterSend in listOf(false, true)) {
+            val f = Fixture()
+            val scope = f.background()
+            if (afterSend)
+                f.onActivate = {
+                    f.setup.session =
+                        f.setup.session!!.copy(
+                            binding = f.setup.session!!.binding.copy(serverId = "replaced")
+                        )
+                    AppResult.Success(Unit)
+                }
+            else
+                f.setup.onRead = {
+                    f.setup.now += 61.seconds
+                    AppResult.Success(f.registered)
+                }
+            assertIs<AppResult.Failed>(f.useCase(scope, f.device))
+            assertEquals(if (afterSend) 1 else 0, f.calls)
+        }
+    }
+
     private class Fixture {
         val setup = CollaborationSetupFixture()
         val device = "a0000000-0000-4000-8000-000000000001"
         val registered = setup.device.copy(id = device)
         val denied = Failure(FailureKind.AccessDenied, "Denied", code = "permission_denied")
         val storage = Failure(FailureKind.Storage, "Unavailable", code = "fixture.storage")
+        var expectedOwner =
+            CollaborationOwner(
+                setup.initial.id,
+                setup.initial.binding.audience,
+                setup.initial.user.id,
+                setup.selected.company.id,
+                setup.initial.binding.serverId,
+            )
+
+        fun background(): CollaborationOperationScope.Background {
+            val session =
+                setup.initial.copy(
+                    user = setup.initial.user.copy(id = "a1000000-0000-4000-8000-000000000001"),
+                    binding =
+                        setup.initial.binding.copy(
+                            serverId = "a1000000-0000-4000-8000-000000000002"
+                        ),
+                )
+            setup.session = session
+            setup.workspace = null
+            expectedOwner =
+                CollaborationOwner(
+                    session.id,
+                    session.binding.audience,
+                    session.user.id,
+                    "a1000000-0000-4000-8000-000000000003",
+                    session.binding.serverId,
+                )
+            return CollaborationOperationScope.Background(
+                CollaborationBackgroundAdmission(
+                    CollaborationAdmissionObservation(
+                        expectedOwner,
+                        device,
+                        registered.version,
+                        0,
+                        0,
+                        setup.now,
+                        setup.now + 60.seconds,
+                    ),
+                    setup.now,
+                    setup.now + 60.seconds,
+                    TestTimeSource().markNow() + 60.seconds,
+                )
+            )
+        }
+
         var calls = 0
         var onActivate: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) }
 
@@ -211,16 +311,7 @@ class ActivateCollaborationPusherTest {
                     deviceId: String,
                 ): AppResult<Unit> {
                     assertEquals(device, deviceId)
-                    assertEquals(
-                        CollaborationOwner(
-                            setup.initial.id,
-                            setup.initial.binding.audience,
-                            setup.initial.user.id,
-                            setup.selected.company.id,
-                            setup.initial.binding.serverId,
-                        ),
-                        owner,
-                    )
+                    assertEquals(expectedOwner, owner)
                     calls++
                     return onActivate()
                 }

@@ -1,5 +1,43 @@
 # Agent continuation — HRIS Mobile
 
+## Product push activation implemented; full local checks accepted — 3 November 2026
+
+[Contract](collaboration-push-registration.md) / [evidence](measurements/chat-push-activation-2026-11-03.json).
+ActivateCollaborationPusher now has production application callers through a bounded,
+scoped third company recovery turn. Chat setup and confirmed native push registration
+request existing durable recovery work. Registration borrows an installed admitted
+runtime, rechecks native status and releases it on every path. No implicit enrollment
+or notification permission request. Original incoming/outgoing turns retain their budgets.
+
+Full xvfb root/Wasm/Android product+proof/lint PASS495.015s with unchanged source.
+4,015 desktop/566 suites,230 Android host/37,18 proof-host/five,ten logic/two all pass,
+including reused reports;2,421 cases/298 suites execute fresh. Product lint0, proof47
+existing warnings/0 errors. Earlier fixture/expectation/detekt failures are retained.
+The separate hris-product-peer scenario is compiled, not yet executed. HRIS-specific
+admission and proof code require no generic Starter port.
+
+NEXT: push this atomic source increment; dispatch matching CI scope=apple (full Xcode)
+and retain automatic Native provider gate. Native41662285409 still runs for the earlier
+0a452 checkpoint; audit its artifact and actually view all three PNGs independently.
+Old41650906105 remains rejected. The new application common source needs new Apple
+coverage; old a3f Apple41651053921 is not acceptance for this change.
+
+Build fresh isolated product5.apk/peer5.apk using .work/product-chat-fcm-2026-11-03/
+build5.py, then verify5.py. Product uses loopback18084; NEVER install it on a phone.
+Platform .work/product-chat-fcm-2026-11-03/run7.py now fingerprints committed fixture
+source and uses artifacts5.json; run only after fresh artifacts exist. Actual FCM is
+still UNACCEPTED after six historical attempts. Run7 must prove normal UI setup,
+managed pusher, actual Firebase-caused process start, SystemUI reply and encrypted
+peer receipt with owned cleanup. Inspect captured PNGs and preserve failure frames.
+
+Normal release26 preparation is in .work/release-phone-2026-11-03-build26, not built
+or installed. Require clean committed source, matching validation, normal private API,
+minified emulator smoke and notice before install-only to10.77.77.3:5555. Phone25 is
+already installed; do not reinstall25 or drive the phone UI. Preserve signer/UID/data.
+Platform be345fe7/runtime304/schema116/chat push OFF and Starter9959c1d are unchanged.
+No employee account/message or live service changed. Continue all54 groups; voice,
+video and meeting UI remain absent. Push every atomic commit and continue long run.
+
 ## Native checkpoint correction accepted locally — 3 November 2026
 
 The checkpoint fixture/host driver now record and validate intermediate review states.

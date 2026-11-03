@@ -1,0 +1,148 @@
+{
+  "date": "2026-11-03",
+  "status": "Local source checks accepted; actual product FCM and new-source Apple/native gates pending.",
+  "baseCommit": "0a452afb3566dfdf0f2e1642d2c489c5c3ce2bcf",
+  "sourceSha256": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProductNotificationPeer.kt": "360af5ee96b4089b3f7a25a6931ad5fc31866921c7df0db992d7fda316855473",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofContainer.kt": "754d2110642af309bcb852671c58cbfe655ba53994240a5077f2856928c6105e",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "4de755aae301955675a96b5ffa6192a5926fcb756a34e4cd3d0bd6ab5aa3996c",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/bootstrap/ApplicationCollaborationLifetime.kt": "3607f5a72eb15736cbeb67b75fdca5b581c3d04aa3de631f5e3fc3e050e92517",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/bootstrap/CollaborationPushRegistrationWake.kt": "2c7c0b1b218186be6dbf2f23da6bd85a6f559f4d6bffb3ff95a9c7b06a84de4d",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationModule.kt": "014d4c1dc24d3ba0da9687a03e1b0d0f481b856d1b59af33465ca13d67d4d925",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt": "3dd2eac774cef7280de8a52a4e42596f4cb953560bc4af6718ad0eec2c76a05f",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationCompanyRecovery.kt": "6e3715ea33600c127a9ab6b9be13c6f64c0ed997ed6537dfd7ec3d8888569caa",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationPushRegistration.kt": "caef998974cea14c6c855b2343670cabd8fa3421cd3668462f5ce39cf62c1b2c",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/ApplicationCollaborationLifetimeTest.kt": "10934b3c1f6f1175815ca033e9758170ba9796690ac6d48c2b08509876cff058",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationPushRegistrationWakeTest.kt": "0ad194ac0031543f64eadb9e5d80dead98989829cceba0fcc2c1813916c3f308",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/app/work/CollaborationCompanyRecoveryTest.kt": "002acfd45d8ef893c77df507ae7252abd85851a80e0ff9e38ae617e312d56b17",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/app/work/CollaborationPushRegistrationTest.kt": "bde349656f0f27618ebcfb079d46648db01ee4e25df915a8b96f76f5396da621",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/CollaborationWorkerFixture.kt": "cbb692e1162c9e7602e584287bc3d832b4da96995240ccaf0edeb8156fcf8db9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ActivateCollaborationPusher.kt": "4da58f1f9d5a92d1fc9dab43ff710a4faaf1a5713e9320cb5daeecb3be7b90db",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ActivateCollaborationPusherTest.kt": "c40bef91f812d3f3cca04542e75ff6b1142aa178e0252376cbdb9bac769660ef",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupViewModel.kt": "15ccb4f0e06d33cabdbb43a5237a3fb6dea7b301c6140eb91d6eeeded8b3fcaf",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupFixture.kt": "78788d70cbaa99626afa9e4c13e32d1660c1bd300144347a30a9e2b24634c4fd",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupViewModelTest.kt": "d26ba9578fc0db26a9b0c063d1af92a66aa2442ec4062d3f908506b58906b9bc"
+  },
+  "fullBuildInputs": {
+    "count": 3829,
+    "sha256": "3534f472add2e8d69cd344cf839bae5c7fbfe3b3abac19b283ec8fa3c998ba05"
+  },
+  "quality": {
+    "wallSeconds": 495.015,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":apps:shared:compileKotlinWasmJs",
+      ":apps:android:assembleDevDebug",
+      ":apps:android:lintDevDebug",
+      ":apps:collaboration-proof:assembleDebug",
+      ":apps:collaboration-proof:testDebugUnitTest",
+      ":apps:collaboration-proof:lintDebug",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/product-chat-fcm-2026-11-03/x86.init.gradle",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ],
+    "countsIncludingReusedReports": {
+      "desktop": {
+        "tests": 4015,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 566
+      },
+      "proofHost": {
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 5
+      },
+      "androidHost": {
+        "tests": 230,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 37
+      },
+      "buildLogic": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 2
+      }
+    },
+    "freshCounts": {
+      "suites": 298,
+      "tests": 2421,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lint": {
+      "product": {
+        "issues": 0,
+        "errors": 0,
+        "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+      },
+      "proof": {
+        "issues": 47,
+        "errors": 0,
+        "sha256": "cda4e6113bf69b4a10c8078ea9667f7a60e4d562b2db58cb220f002884c29016"
+      }
+    },
+    "reportInventorySha256": "b026cacb7689cf5fa79b4f8e365bd604b088fade44c0b4cce6628523f6b69373"
+  },
+  "rejectedAttempts": [
+    {
+      "attempt": 1,
+      "exitCode": 1,
+      "wallSeconds": 169.26,
+      "inputsUnchanged": true,
+      "freshCounts": {
+        "suites": 7,
+        "tests": 52,
+        "failures": 9,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "Nine fixture failures: eight minimal application containers omitted the notification-permission source after eager status resolution; one close-failure test expected Retry but existing storage policy returns Blocked. Production bindings use lazy status resolution; isolated worker fixtures explicitly deny notification permission. Expected classification corrected.",
+      "resultSha256": "df907415540d36c2f1432bd7f43e7547fd52c388443e9ff6bd4bd2916fc7a2a4"
+    },
+    {
+      "attempt": 2,
+      "exitCode": 1,
+      "wallSeconds": 106.902,
+      "inputsUnchanged": true,
+      "freshCounts": {
+        "suites": 6,
+        "tests": 42,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "All selected behavioral tests passed; detekt rejected applicationWorkerModule at105 lines (limit100). Extracted a private Koin Scope factory without changing its registration graph.",
+      "resultSha256": "3e588b3d53500f7889b3365430bd91416da10107254cb28243284d94b93cdf43"
+    }
+  ],
+  "actualProductFcm": {
+    "accepted": false,
+    "priorAttempts": 6,
+    "next": "Build fresh loopback product and encrypted-peer APKs from committed source, then execute Platform ProductChatFcmInteropTest. Never install these fixture APKs on the phone."
+  },
+  "limits": [
+    "Adds an application caller for managed Matrix push registration. Native FCM registration alone was previously insufficient.",
+    "Background scope uses the original admitted company/device, native registration gating, bounded cancellation and resource release. A third recovery turn cannot prevent message turns.",
+    "Current integration is local source behavior, Android/proof builds and lint; no new actual FCM delivery claim. The separate hris-product-peer scenario is compiled but not yet executed.",
+    "Common code requires matching hosted full Xcode/simulator and Android provider gates. Physical iPhone remains waived.",
+    "No changes to live Platform304/schema116/chat push flags, employee accounts, phone25 or Starter9959c1d. Next normal phone build26+ after validation, notice and install-only.",
+    "All54 PRD groups remain open; voice/video/meeting UI remains absent."
+  ]
+}

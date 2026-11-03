@@ -25,8 +25,18 @@ class ActivateCollaborationPusher(
 ) {
     private val execution = Mutex()
 
-    suspend operator fun invoke(workspaceId: String, deviceId: String): AppResult<Unit> {
-        if (!validCollaborationMessageId(deviceId))
+    suspend operator fun invoke(workspaceId: String, deviceId: String): AppResult<Unit> =
+        invoke(CollaborationOperationScope.Selected(workspaceId), deviceId)
+
+    suspend operator fun invoke(
+        scope: CollaborationOperationScope,
+        deviceId: String,
+    ): AppResult<Unit> {
+        if (
+            !validCollaborationMessageId(deviceId) ||
+                (scope is CollaborationOperationScope.Background &&
+                    scope.admission.observation.deviceId != deviceId)
+        )
             return collaborationSetupFailure(
                 "client.collaboration_invalid_request",
                 FailureKind.Validation,
@@ -34,7 +44,7 @@ class ActivateCollaborationPusher(
         if (!execution.tryLock())
             return collaborationSetupFailure("client.collaboration_pusher_busy")
         try {
-            return withTimeoutOrNull(15_000) { activate(workspaceId, deviceId) }
+            return withTimeoutOrNull(15_000) { activate(scope, deviceId) }
                 ?: collaborationSetupFailure(
                     "client.collaboration_pusher_timeout",
                     FailureKind.Timeout,
@@ -44,34 +54,39 @@ class ActivateCollaborationPusher(
         }
     }
 
-    private suspend fun activate(workspaceId: String, deviceId: String): AppResult<Unit> {
-        val initial = capture(workspaceId)
+    private suspend fun activate(
+        scope: CollaborationOperationScope,
+        deviceId: String,
+    ): AppResult<Unit> {
+        val initial = capture(scope)
         if (initial is AppResult.Failed) return initial
         val owner = (initial as AppResult.Success).value
-        continuation(workspaceId, owner, AppResult.Success(Unit)).let {
+        continuation(scope, owner, AppResult.Success(Unit)).let {
             if (it is AppResult.Failed) return it
         }
         val registered = setup.read(owner)
-        continuation(workspaceId, owner, registered).let { if (it is AppResult.Failed) return it }
+        continuation(scope, owner, registered).let { if (it is AppResult.Failed) return it }
         if (registered is AppResult.Failed) return registered
         val device = (registered as AppResult.Success).value
         if (
             device == null ||
                 device.id != deviceId ||
                 device.state != CollaborationDeviceState.ACTIVE ||
-                device.platform.name != build.platform.name.uppercase()
+                device.platform.name != build.platform.name.uppercase() ||
+                (scope is CollaborationOperationScope.Background &&
+                    device.version < scope.admission.observation.deviceVersion)
         )
             return collaborationSetupFailure("client.collaboration_device_unavailable")
         val result = runtimes.activatePusher(owner, deviceId)
-        continuation(workspaceId, owner, result).let { if (it is AppResult.Failed) return it }
+        continuation(scope, owner, result).let { if (it is AppResult.Failed) return it }
         return result
     }
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureCollaborationOwner(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationOperationScope) =
+        sessions.captureCollaborationOwner(scope, workspaces, server, build, clock)
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         received: AppResult<*>,
     ): AppResult<Unit> {
@@ -82,7 +97,7 @@ class ActivateCollaborationPusher(
             }
         currentCoroutineContext().ensureActive()
         val gate = lists.admission(owner.localListAccess())
-        val current = capture(workspaceId)
+        val current = capture(scope)
         currentCoroutineContext().ensureActive()
         if (rejected != null && collaborationContentResponseClosesRead(rejected))
             return AppResult.Failed(rejected)

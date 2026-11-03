@@ -74,3 +74,8 @@ are retained in the measurement. No live rollout or employee APK was performed.
 
 Incoming history now has [independent traversal ownership](collaboration-incoming-history.md).
 The worker still uses a latest original window until durable catchup is integrated.
+
+Application push registration now follows the incoming and outgoing turns under the
+same background admission, with its own finite budget. See [push registration](collaboration-push-registration.md).
+Registration failure does not block either message turn; it remains part of the
+combined recovery outcome. Actual product FCM acceptance is tracked separately.

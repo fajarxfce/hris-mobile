@@ -13,11 +13,58 @@ import kotlinx.coroutines.test.*
 
 class CollaborationCompanyRecoveryTest {
     @Test
+    fun pushTimeoutCannotPreventEitherMessageLaneAndKeepsTheOriginalAdmission() = runTest {
+        val grant = admission()
+        val events = mutableListOf<String>()
+        val worker =
+            company(
+                {
+                    assertSame(grant, it)
+                    events += "incoming"
+                    SyncResult.Complete
+                },
+                {
+                    assertSame(grant, it)
+                    events += "outgoing"
+                    SyncResult.Complete
+                },
+                {
+                    assertSame(grant, it)
+                    events += "push"
+                    awaitCancellation()
+                },
+            )
+        assertEquals(
+            "client.collaboration_push_registration_timeout",
+            assertIs<SyncResult.Retry>(worker(grant)).failure?.code,
+        )
+        assertEquals(listOf("incoming", "outgoing", "push"), events)
+        assertEquals(15_000L, testScheduler.currentTime)
+    }
+
+    @Test
+    fun failedMessageLanesStillAllowRegistrationButItsSuccessCannotEraseFailure() = runTest {
+        val failure = SyncResult.Retry(Failure(FailureKind.Network, "Fictional network failure"))
+        var registrations = 0
+        val worker =
+            company(
+                { failure },
+                { SyncResult.Retry() },
+                {
+                    registrations++
+                    SyncResult.Complete
+                },
+            )
+        assertEquals(failure, worker(admission()))
+        assertEquals(1, registrations)
+    }
+
+    @Test
     fun eachLaneKeepsTheExactOriginalAdmissionEvenIfTheOtherHasRemainingWork() = runTest {
         val grant = admission()
         val seen = mutableListOf<CollaborationBackgroundAdmission>()
         val worker =
-            CollaborationCompanyRecovery(
+            company(
                 {
                     seen += it
                     delay(10.seconds)
@@ -40,7 +87,7 @@ class CollaborationCompanyRecoveryTest {
         for (result in listOf(SyncResult.Retry(failed), SyncResult.Blocked(failed))) {
             var sent = false
             val worker =
-                CollaborationCompanyRecovery(
+                company(
                     { result },
                     {
                         sent = true
@@ -56,7 +103,7 @@ class CollaborationCompanyRecoveryTest {
     fun incomingTimeoutIsJoinedBeforeOutgoingGetsItsOwnBudget() = runTest {
         val events = mutableListOf<String>()
         val worker =
-            CollaborationCompanyRecovery(
+            company(
                 {
                     try {
                         awaitCancellation()
@@ -81,7 +128,7 @@ class CollaborationCompanyRecoveryTest {
 
     @Test
     fun outgoingTimeoutCannotTurnSuccessfulIncomingIntoComplete() = runTest {
-        val worker = CollaborationCompanyRecovery({ SyncResult.Complete }, { awaitCancellation() })
+        val worker = company({ SyncResult.Complete }, { awaitCancellation() })
         val result = assertIs<SyncResult.Retry>(worker(admission()))
         assertEquals("client.collaboration_outgoing_timeout", result.failure?.code)
         assertEquals(15_000L, testScheduler.currentTime)
@@ -93,7 +140,7 @@ class CollaborationCompanyRecoveryTest {
         var closed = false
         var sent = false
         val worker =
-            CollaborationCompanyRecovery(
+            company(
                 {
                     try {
                         entered.complete(Unit)
@@ -120,8 +167,7 @@ class CollaborationCompanyRecoveryTest {
 
     @Test
     fun alreadyCancelledEntryInvokesNeitherLane() = runTest {
-        val worker =
-            CollaborationCompanyRecovery({ error("No incoming") }, { error("No outgoing") })
+        val worker = company({ error("No incoming") }, { error("No outgoing") })
         val cancelled = Job().apply { cancel() }
         assertFailsWith<CancellationException> { withContext(cancelled) { worker(admission()) } }
     }
@@ -143,6 +189,12 @@ class CollaborationCompanyRecoveryTest {
                 Triple(SyncResult.Complete, SyncResult.Complete, SyncResult.Complete),
             )) assertEquals(expected, combineCollaborationRecovery(a, b))
     }
+
+    private fun company(
+        incoming: suspend (CollaborationBackgroundAdmission) -> SyncResult,
+        outgoing: suspend (CollaborationBackgroundAdmission) -> SyncResult,
+        push: suspend (CollaborationBackgroundAdmission) -> SyncResult = { SyncResult.Complete },
+    ) = CollaborationCompanyRecovery(incoming, outgoing, push)
 
     private fun admission(): CollaborationBackgroundAdmission {
         val now = Clock.System.now()

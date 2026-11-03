@@ -324,6 +324,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, selected: Wor
             schedules,
             RequestCollaborationRecovery(recoveryWakes, schedules),
             app.koin.get(),
+            { kotlinx.coroutines.flow.emptyFlow() },
             StandardTestDispatcher(scheduler),
         )
 

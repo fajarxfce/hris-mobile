@@ -23,6 +23,7 @@ class ChatSetupViewModel(
     private val install: InstallCollaborationRuntime,
     private val ensureRuntime: EnsureCollaborationRuntime,
     private val build: AppBuild,
+    private val requestRecovery: RequestCollaborationRecovery,
 ) : MviViewModel<ChatSetupState, ChatSetupEvent, ChatSetupEffect>(ChatSetupState()) {
     private var observation: Job? = null
     private var work: Job? = null
@@ -262,7 +263,7 @@ class ChatSetupViewModel(
             }
     }
 
-    private fun ready(deviceId: String) {
+    private suspend fun ready(deviceId: String) {
         updateState {
             it.copy(
                 phase = ChatSetupPhase.READY,
@@ -273,6 +274,9 @@ class ChatSetupViewModel(
                 failure = null,
             )
         }
+        // Persist a wake after installation/restoration; provider activation runs in the app
+        // worker.
+        withTimeoutOrNull(1_500) { requestRecovery() }
     }
 
     private fun onOpenChatRequested(event: ChatSetupEvent.OpenChatRequested) {

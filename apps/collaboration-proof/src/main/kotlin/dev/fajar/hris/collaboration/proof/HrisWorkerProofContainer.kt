@@ -57,7 +57,22 @@ internal class HrisWorkerProofContainer(
         createAppContainer(
                 createUserPreferences(context),
                 database,
-                module {},
+                module {
+                    single<
+                        dev.fajar.starter.notifications.data.datasources.NotificationPermissionSource
+                    > {
+                        object :
+                            dev.fajar.starter.notifications.data.datasources.NotificationPermissionSource {
+                            override suspend fun check() =
+                                dev.fajar.starter.notifications.data.dto.NotificationPermission
+                                    .Denied
+
+                            override suspend fun request():
+                                dev.fajar.starter.notifications.data.dto.NotificationPermission =
+                                error("No implicit notification permission request")
+                        }
+                    }
+                },
                 platform = AppPlatform.Android,
                 commandCredentials =
                     AndroidCredentialStore(context, "worker-proof-command-content-key"),

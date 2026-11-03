@@ -7,6 +7,7 @@ import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationText
 import dev.fajar.starter.collaboration.domain.usecases.RequestCollaborationRecovery
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.identity.domain.push.entities.NativePushStatus
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -17,6 +18,7 @@ class ApplicationCollaborationLifetime(
     private val schedules: SyncScheduleRepository,
     private val requestRecovery: RequestCollaborationRecovery,
     private val build: AppBuild,
+    private val observePush: (String) -> Flow<AppResult<NativePushStatus>>,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : AutoCloseable {
     private val lifetime = SupervisorJob()
@@ -28,6 +30,16 @@ class ApplicationCollaborationLifetime(
 
     fun start() {
         if (!started.compareAndSet(false, true)) return
+        scope.launch {
+            if (build.platform !in setOf(AppPlatform.Android, AppPlatform.Ios)) return@launch
+            try {
+                wakeCollaborationOnPushRegistration(state, observePush) { requestRecovery() }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                // Failed observation cannot keep an old registration active or start a retry loop.
+            }
+        }
         scope.launch {
             var lastParent: CollaborationNativeParent? = null
             try {

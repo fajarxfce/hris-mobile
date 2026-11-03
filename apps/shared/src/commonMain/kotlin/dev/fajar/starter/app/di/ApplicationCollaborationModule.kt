@@ -3,6 +3,7 @@ package dev.fajar.starter.app.di
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
 import dev.fajar.starter.identity.domain.entities.IdentityServer
+import dev.fajar.starter.identity.domain.push.usecases.ObserveNativePushStatus
 import dev.fajar.starter.securestorage.AtomicCredentialStore
 import io.ktor.client.HttpClient
 import org.koin.core.qualifier.named
@@ -20,7 +21,11 @@ internal fun applicationCollaborationModule(
     single<CollaborationRuntimeRepository> {
         runtime(get(), get(named(dev.fajar.starter.network.HttpClients.Public)))
     }
-    single { ApplicationCollaborationLifetime(get(), get(), get(), get()) }.onClose { it?.close() }
+    single {
+            val push = inject<ObserveNativePushStatus>()
+            ApplicationCollaborationLifetime(get(), get(), get(), get(), { push.value(it) })
+        }
+        .onClose { it?.close() }
     single<AtomicCredentialStore>(named("collaboration-list-content-key")) { listCredentials }
         .onClose { it?.close() }
     single<AtomicCredentialStore>(named("collaboration-receipt-content-key")) { receiptCredentials }

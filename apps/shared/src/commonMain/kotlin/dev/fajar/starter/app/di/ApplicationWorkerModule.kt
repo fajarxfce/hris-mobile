@@ -11,13 +11,20 @@ import dev.fajar.starter.app.work.CollaborationIncomingRecovery
 import dev.fajar.starter.app.work.CollaborationNotificationInputRecoveryWorker
 import dev.fajar.starter.app.work.CollaborationNotificationReplyRecoveryWorker
 import dev.fajar.starter.app.work.CollaborationPriorityRecovery
+import dev.fajar.starter.app.work.CollaborationPushRegistration
 import dev.fajar.starter.app.work.CollaborationRecoveryWorker
 import dev.fajar.starter.app.work.InboxPushWorker
 import dev.fajar.starter.app.work.NativePushWorker
+import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalScope
+import dev.fajar.starter.collaboration.domain.usecases.AcquireCollaborationBackgroundRuntime
+import dev.fajar.starter.collaboration.domain.usecases.ActivateCollaborationPusher
+import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationAccess
 import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationPushSignal
+import dev.fajar.starter.identity.domain.push.usecases.ObserveNativePushStatus
 import dev.fajar.starter.inbox.domain.push.usecases.QueueInboxPushSignal
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.worker.runSyncTask
+import org.koin.core.scope.Scope
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -59,10 +66,16 @@ fun applicationWorkerModule() = module {
         )
     }
     single { CollaborationPriorityRecovery(get(), get(), get(), get(), get()) }
+    single { collaborationPushRegistration() }
     single {
         val incoming = inject<CollaborationIncomingRecovery>()
         val outgoing = inject<CollaborationDeliveryWorker>()
-        CollaborationCompanyRecovery({ incoming.value(it) }, { outgoing.value(it) })
+        val push = inject<CollaborationPushRegistration>()
+        CollaborationCompanyRecovery(
+            { incoming.value(it) },
+            { outgoing.value(it) },
+            { push.value(it) },
+        )
     }
     single {
         val parent = inject<ApplicationCollaborationLifetime>()
@@ -112,4 +125,17 @@ fun applicationWorkerModule() = module {
             acquireBackground = get(),
         )
     } bind SyncTask::class
+}
+
+private fun Scope.collaborationPushRegistration(): CollaborationPushRegistration {
+    val status = inject<ObserveNativePushStatus>()
+    val acquire = get<AcquireCollaborationBackgroundRuntime>()
+    val access = get<ObserveCollaborationAccess>()
+    val activate = get<ActivateCollaborationPusher>()
+    return CollaborationPushRegistration(
+        { status.value(it) },
+        acquire::invoke,
+        { access(CollaborationLocalScope.Captured(it)) },
+        activate::invoke,
+    )
 }

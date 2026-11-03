@@ -159,6 +159,8 @@ class ChatSetupViewModelTest {
             assertNull(f.record)
             assertEquals(ChatSetupPhase.READY, vm.state.value.phase)
             assertEquals(f.active.id, vm.state.value.readyDeviceId)
+            assertNotNull(f.recoveryWake)
+            assertEquals(listOf(CollaborationRecoveryWake.WORK_KEY), f.scheduled)
             assertTrue(effects.isEmpty())
             vm.onEvent(ChatSetupEvent.OpenChatRequested)
             vm.onEvent(ChatSetupEvent.OpenChatRequested)
@@ -296,6 +298,25 @@ class ChatSetupViewModelTest {
             store.clear()
             runCurrent()
             assertEquals(0, f.base.session.subscriptionCount.value)
+        }
+    }
+
+    @Test
+    fun failedOrStalledWakeKeepsReadyAndTheDurableRecoveryHint() = runTest {
+        for (stalled in listOf(false, true)) withModel { f, vm, _, _ ->
+            f.device = f.active
+            f.opened = true
+            f.schedule = { if (stalled) awaitCancellation() else AppResult.Failed(f.base.network) }
+            vm.onEvent(ChatSetupEvent.Entered)
+            runCurrent()
+            assertEquals(ChatSetupPhase.READY, vm.state.value.phase)
+            assertNotNull(f.recoveryWake)
+            advanceTimeBy(1_501)
+            runCurrent()
+            assertEquals(ChatSetupPhase.READY, vm.state.value.phase)
+            assertNull(vm.state.value.failure)
+            assertEquals(listOf(CollaborationRecoveryWake.WORK_KEY), f.scheduled)
+            assertEquals(0, f.installations)
         }
     }
 

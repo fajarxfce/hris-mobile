@@ -37,6 +37,31 @@ internal class ChatSetupFixture {
     var retired = 0
     var closes = 0
     var opened = false
+    var recoveryWake: CollaborationRecoveryWake? = null
+    val scheduled = mutableListOf<String>()
+    var schedule: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) }
+    val recovery =
+        RequestCollaborationRecovery(
+            object : CollaborationRecoveryWakeRepository {
+                override suspend fun pending() = AppResult.Success(recoveryWake)
+
+                override suspend fun request(): AppResult<CollaborationRecoveryWake> {
+                    val wake = CollaborationRecoveryWake("fixture-${scheduled.size}")
+                    recoveryWake = wake
+                    return AppResult.Success(wake)
+                }
+
+                override suspend fun acknowledge(wake: CollaborationRecoveryWake) =
+                    error("No setup acknowledgment")
+            },
+            object : dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository {
+                override suspend fun request(key: String): AppResult<Unit> {
+                    check(recoveryWake != null)
+                    scheduled += key
+                    return schedule()
+                }
+            },
+        )
     var beforeLocal: suspend () -> Unit = {}
     var read: suspend () -> AppResult<CollaborationDeviceSetup?> = { AppResult.Success(device) }
     var register: suspend (CollaborationRegistration) -> AppResult<CollaborationSetupReceipt> = {
@@ -374,5 +399,6 @@ internal class ChatSetupFixture {
                 base.clock,
             ),
             base.build,
+            recovery,
         )
 }
