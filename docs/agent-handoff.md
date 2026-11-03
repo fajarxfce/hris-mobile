@@ -1,5 +1,41 @@
 # Agent continuation — HRIS Mobile
 
+## Host native gate accepted; reviewed-send validation underway — 3 November 2026
+
+Native418c7ef6 / run41639264778 ACCEPTED. Artifact13234703425 /249017 bytes,
+SHA256 f4f3846f6995b1777b4c475fbc428b3a348f26cb8bfb371d8977d4bbc95b6825;
+385 source digests verified; five provider/three suites,230 Android host/37,
+15 proof/four, all zero failures/errors/skips. Raw16, four runtime composition
+cases2.883s, three ordinary kills/four callbacks, one368ms Complete turn,1 protected
+input->1 review, HTTP/messages0. Five actions/SystemUI31.605s, ALL THREE hosted PNGs
+ACTUALLY VIEWED: native card/actions, real Gboard reply editor, acknowledged card/editor/
+private text gone with unrelated System notification retained. Fixture uninstalled.
+Build797s/278s/native1110s. APK9df962051e0dfeb02abacca587f44474df83bd4ef8c6e1fb7e31a9302d89142c.
+[Measurement](measurements/chat-native-host-hosted-2026-11-03.json). Apple418 already
+accepted; phone24 installed. These gates exclude the current reviewed-send WIP.
+
+Reviewed-send source is UNCOMMITTED/NOT ACCEPTED; [contract](collaboration-reviewed-replies.md).
+All domain/storage/page/DI/app recovery code exists, including mutable encrypted draft,
+immutable explicit confirmation, two operation fences, actual observed parent, explicit
+saved-edit-only discard, full autosave predecessor join, and protection against duplicate
+callbacks erasing even an empty draft. Validation .work/chat-reviewed-send-2026-11-03:
+- focused1 failed39.252s before tests: missing policy import, fixed.
+- focused2 failed98.437s:924 domain/86 suites PASS, data smart-cast compile error fixed.
+- focused3 failed180.209s:956 fresh/88 suites PASS, including12 new reviewed-reply
+  cases and19 encrypted reply-storage cases (four new SQLite compatibility/CAS/bounds).
+  Presentation BackHandler dependency missing, fixed.
+- focused4 failed76.436s:926 domain/86 PASS (new actual native-parent observation case).
+  BackHandler additionally needs ExperimentalComposeUiApi opt-in; NEXT fix and rerun.
+  Additional keyboard/read-only/edit-only screenshots and MVI native-parent/typing tests
+  exist but have NOT executed. Actual-Koin edited recovery tests added, NOT executed.
+37 source inputs currently manifested. No local heavy job active at this checkpoint.
+No reviewed-send screenshots inspected, full root/Android/Wasm/browser/Apple pending.
+No release25 build/install. Keep next release25+, preserve phone24 data/signer/session,
+notify before install-only, never drive phone UI. Continue long run; all54 groups open,
+voice/video/meeting UI absent. Starter9959c1d and Platform72447fb8/runtime304/schema116
+unchanged; chat push OFF. No generic Starter port is needed for these HRIS policies.
+
+
 ## Reviewed-send implementation in progress; host Apple accepted — 3 November 2026
 
 PHONE24 remains installed, source418c7ef6; next meaningful build25+. Do not reinstall24
