@@ -44,3 +44,10 @@ changes, and handle Busy/Contended outcomes without dropping work or retrying in
 loop. Callback authentication and retained-input review remain required before enabling
 chat push. See [recorded checks](measurements/chat-notification-reconciliation-2026-11-03.json)
 and the [remaining host plan](collaboration-notification-publication-plan.md).
+
+
+[The bounded process coordinator](collaboration-notification-process.md) now owns active
+journal/source reconciliation and exact cleanup of obsolete references. It retains dirty
+work through contention without repeating its own ACK, and pauses on uncertain discovery.
+Candidate delivery, owned foreground focus, authenticated callbacks and encrypted input
+review still precede native HRIS activation. No chat push is enabled by this binding.

@@ -1,5 +1,70 @@
 # Agent continuation — HRIS Mobile
 
+## Bounded notification process accepted; connect candidate delivery next
+
+The process now owns surface startup/close, cold readiness collection, one conflated wake,
+max 64 opaque publication/source slots and joined finite work. Full scans and snapshot
+application each have an eight-second cooperative budget. Old references receive exact
+native removal before their source is forgotten; newer renders survive. Failed discovery/
+uncertain cleanup pauses the namespace and requires explicit recovery. Source failure never
+grants publication; completion/exception does not auto-restart. Parent/source/request
+callbacks cancel only obsolete registered work and never join the actor from a callback.
+[Contract](collaboration-notification-process.md),
+[evidence](measurements/chat-notification-process-2026-11-03.json).
+
+Own ACK/version changes retain the observer and handled source, avoiding feedback loops.
+Contended references retry only after a different exact reference is discovered. A distinct
+surface-busy code propagates through the reconciler without semantic cleanup. Dirty work
+waits for idle plus a completion revision different from the captured attempt, including
+already-observed completion. Generic storage failures cannot retry on their own completion.
+Notification bindings now live in applicationNotificationModule, included by worker DI.
+
+Focused1 FAILED 73.928s: 14 of 55 cases failed because the new fake references used non-UUID
+IDs; domain validation correctly rejected them. Corrected the fixture. Focused2 ran 60
+passing cases but FAILED detekt at 95.951s: worker-module length 108 exceeded 100. Extracted
+notification bindings, refined registration/cancellation races, added real Koin process
+coverage. Focused3 PASSED 97.502s: 63 cases/four suites and root quality. A final post-copy
+capacity guard is covered by Full4 PASSED 264.707s: 3,693 desktop/528 suites, 230 Android-
+host/37, six proof-host/one, ten build-logic/two, proof assembly/shared Wasm/root quality;
+465 fresh cases/77 suites, ten final source hashes, zero failures/errors/skips. The 63
+focused cases comprise 20 process, 30 owner, ten reconciliation and three actual Koin/
+SQLite process cases (privacy, mute/private-read, company denial; fake HTTP/SDK/OS).
+Audit helper now inventories archived as well as live paths so later narrower filters
+cannot erase old run counts. Failed attempts remain rejected in the measurement.
+
+NEXT new-candidate requests through THIS actor, not a competing worker Publisher. Current
+process handles discovered active journal only; no native entry point starts it. Bound
+opaque candidate queue and caller wait, retain durable priority hints through uncertainty,
+register source readiness before publication and join caller/parent/source/focus invalidation.
+Review company/conversation source keys and provisional watches because a new candidate has
+no journal reference. Preserve observer state when its committed publication is discovered.
+.work/chat-notification-process-2026-11-03/candidates-next.txt contains design notes, not code.
+Previous process-gate process.txt is APPLIED/STALE; current .kt is source of truth.
+
+Tracing found priority recovery already acquires and reads the exact original/tombstone
+before ACK, but incoming recovery has a 15-second/room 12-second budget and priority has
+20 seconds. Do not add an unbounded nested publisher wait. Ordinary history acquisition
+returns counts, not candidate IDs; dropped-hint delivery and initial/backfill baseline need
+explicit design before promising every missed notification. Add app/navigation-owned focus
+with actual parent/account and disposal, independent of visible-read timing. Native host
+also needs explicit permission/channel/capacity recovery wakeups. Full rescan per outcome
+and max 64x5 source streams are not device performance acceptance; measure realistic loads.
+
+Then authenticated native callbacks, old-parent action v2 and encrypted review for old-family/
+pre-retention input, actual notification-input OS-death proof. Existing HRIS callbacks were
+never activated; do not invent mandatory legacy-v1 migration. Chat push OFF, all 54 PRD
+groups open; voice/video/meeting UI absent. Generic Starter port awaits integrated Mobile
+proof. Physical iPhone waived; full hosted Xcode mandatory.
+
+Apple41564138207 at c69bd898 is in progress, now building the iOS simulator app after its
+test step. It covers 202 earlier inputs and EXCLUDES process-gate/actor changes. Do not
+redispatch it; audit .work/chat-notification-reconciliation-apple-2026-11-03/audit.py after
+completion. Schedule later changes as a separate consolidated Apple run after this one.
+Do not repeat diagnosed local provider emulator hangs. No local heavy job or owned emulator
+remains after Full4. Phone19/sourcec0 remains installed; next meaningful release above19:
+notify then explicit10.77.77.3:5555 install-only, preserve signer/data, never drive phone UI.
+Live304/schema116 unchanged. Continue long run and push every atomic commit.
+
 ## Process gate accepted; implement the bounded notification coordinator
 
 The surface owner now exposes cold Pending/Ready/Blocked/Closed coordination states.

@@ -16,6 +16,39 @@ import org.koin.dsl.module
 /** Real Koin/encrypted SQLite with fictional acquisition and a fake native surface. */
 class CollaborationNotificationReconciliationIntegrationTest {
     @Test
+    fun aCompetingNativeTurnReturnsBusyWithoutSemanticCleanup() = runBlocking {
+        withFixture { f ->
+            assertIs<AppResult.Success<*>>(f.publish())
+            val before = reference(f)
+            val journal = f.publication()
+            val card = f.native.cards.values.single()
+            val entered = CompletableDeferred<Unit>()
+            val release = CompletableDeferred<Unit>()
+            val work = launch {
+                f.owner.withOwner(f.parent) {
+                    entered.complete(Unit)
+                    release.await()
+                    AppResult.Success(Unit)
+                }
+            }
+            try {
+                withTimeout(2_000) { entered.await() }
+                val attempts = f.native.attempts
+                val removals = f.native.removed.size
+                val result = assertIs<AppResult.Failed>(reconcile(f, before))
+                assertEquals(NOTIFICATION_SURFACE_BUSY, result.failure.code)
+                assertEquals(attempts, f.native.attempts)
+                assertEquals(removals, f.native.removed.size)
+                assertEquals(journal, f.publication())
+                assertEquals(card, f.native.cards.values.single())
+            } finally {
+                release.complete(Unit)
+                withContext(NonCancellable) { work.cancelAndJoin() }
+            }
+        }
+    }
+
+    @Test
     fun privacyChangeSilentlyReplacesTheExactCurrentRender() = runBlocking {
         withFixture { f ->
             f.preferences(CollaborationNotificationPreview.Message)

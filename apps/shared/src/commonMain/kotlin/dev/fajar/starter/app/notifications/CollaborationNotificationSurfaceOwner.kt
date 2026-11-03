@@ -72,7 +72,8 @@ class CollaborationNotificationSurfaceOwner(
         val ready = phase.value as? Phase.Ready ?: return surfaceFailure(FailureKind.Unavailable)
         if (ready.parent != parent || !current(ready))
             return surfaceFailure(FailureKind.Unauthorized)
-        if (!tryExecution()) return surfaceFailure(FailureKind.Unavailable)
+        if (!tryExecution())
+            return surfaceFailure(FailureKind.Unavailable, NOTIFICATION_SURFACE_BUSY)
         return try {
             if (!current(ready)) return surfaceFailure(FailureKind.Unauthorized)
             request(ready, operation)

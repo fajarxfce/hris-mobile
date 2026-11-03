@@ -31,3 +31,10 @@ This is a process coordination primitive. The bounded journal/source coordinator
 candidate delivery, focused-thread suppression, authenticated native callbacks and
 retained-input review remain integration work. No HRIS native host or chat push is
 activated here, and no new product APK is installed.
+
+
+[The bounded process coordinator](collaboration-notification-process.md) now owns active
+journal/source reconciliation and exact cleanup of obsolete references. It retains dirty
+work through contention without repeating its own ACK, and pauses on uncertain discovery.
+Candidate delivery, owned foreground focus, authenticated callbacks and encrypted input
+review still precede native HRIS activation. No chat push is enabled by this binding.

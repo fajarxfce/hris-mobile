@@ -87,11 +87,9 @@ internal class NotificationSurfaceExecution(val lease: CollaborationNotification
     companion object : CoroutineContext.Key<NotificationSurfaceExecution>
 }
 
-internal fun surfaceFailure(kind: FailureKind) =
-    AppResult.Failed(
-        Failure(
-            kind,
-            "The chat notification is unavailable.",
-            code = "client.collaboration_notification_surface_unavailable",
-        )
-    )
+internal const val NOTIFICATION_SURFACE_BUSY = "client.collaboration_notification_surface_busy"
+
+internal fun surfaceFailure(
+    kind: FailureKind,
+    code: String = "client.collaboration_notification_surface_unavailable",
+) = AppResult.Failed(Failure(kind, "The chat notification is unavailable.", code = code))

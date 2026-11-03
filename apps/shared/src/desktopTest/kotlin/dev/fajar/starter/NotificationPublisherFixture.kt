@@ -144,6 +144,7 @@ internal class PublisherDisplaySource : ActionNotificationDisplaySource {
     val removed = mutableListOf<ActionNotificationReference>()
     var submission = ActionNotificationSubmission.Submitted
     var onShow: suspend (ActionNotificationPayload) -> Unit = {}
+    var onRemove: suspend (ActionNotificationReference) -> Unit = {}
     var attempts = 0
 
     override suspend fun show(payload: ActionNotificationPayload): ActionNotificationSubmission {
@@ -162,6 +163,7 @@ internal class PublisherDisplaySource : ActionNotificationDisplaySource {
         val current = cards[expected.id] ?: return ActionNotificationRemoval.Absent
         if (current.reference != expected) return ActionNotificationRemoval.Replaced
         cards.remove(expected.id)
+        onRemove(expected)
         return ActionNotificationRemoval.Removed
     }
 

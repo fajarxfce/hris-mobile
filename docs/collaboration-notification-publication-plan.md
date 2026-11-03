@@ -157,3 +157,10 @@ are now implemented. A failed owned journal scan can hide the namespace without 
 keys and keep publication blocked until explicit recovery. Ready's opaque epoch, idle
 flag and completion revision coordinate work but do not replace actual execution or
 content admission. The bounded process actor and native callback integration remain next.
+
+
+[The bounded process coordinator](collaboration-notification-process.md) now owns active
+journal/source reconciliation and exact cleanup of obsolete references. It retains dirty
+work through contention without repeating its own ACK, and pauses on uncertain discovery.
+Candidate delivery, owned foreground focus, authenticated callbacks and encrypted input
+review still precede native HRIS activation. No chat push is enabled by this binding.

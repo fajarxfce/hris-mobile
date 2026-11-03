@@ -1,11 +1,6 @@
 package dev.fajar.starter.app.di
 
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
-import dev.fajar.starter.app.notifications.CollaborationNotificationCommands
-import dev.fajar.starter.app.notifications.CollaborationNotificationPublisher
-import dev.fajar.starter.app.notifications.CollaborationNotificationReconciler
-import dev.fajar.starter.app.notifications.CollaborationNotificationReplies
-import dev.fajar.starter.app.notifications.CollaborationNotificationSurfaceOwner
 import dev.fajar.starter.app.work.ApplicationPush
 import dev.fajar.starter.app.work.ApplicationPushReceiver
 import dev.fajar.starter.app.work.CollaborationCompanyRecovery
@@ -22,24 +17,12 @@ import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationPushSig
 import dev.fajar.starter.inbox.domain.push.usecases.QueueInboxPushSignal
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.worker.runSyncTask
-import org.koin.core.parameter.parametersOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 /** App entry points share one instance with the scheduler; feature use cases keep their own DI. */
 fun applicationWorkerModule() = module {
-    // A host supplies its already-started surface owner. No native delivery is started here.
-    factory { (owner: CollaborationNotificationSurfaceOwner) ->
-        CollaborationNotificationPublisher(owner, get(), get(), get(), get())
-    }
-    factory { (owner: CollaborationNotificationSurfaceOwner) ->
-        CollaborationNotificationReconciler(owner, get { parametersOf(owner) }, get())
-    }
-    single { CollaborationNotificationCommands(get(), get(), get(), get(), get()) }
-    single { CollaborationNotificationReplies(get(), get(), get(), get(), get(), get()) }
-    single {
-        CollaborationNotificationReplyRecoveryWorker(get(), get(), get(), get(), get(), get())
-    }
+    includes(applicationNotificationModule())
     single {
         val inbox = inject<InboxPushWorker>()
         val chat = inject<CollaborationRecoveryWorker>()

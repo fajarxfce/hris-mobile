@@ -43,6 +43,8 @@ class CollaborationNotificationReconciler(
                     allowAlert = false,
                     expected = reference,
                 )
+        if (result is AppResult.Failed && result.failure.code == NOTIFICATION_SURFACE_BUSY)
+            return result
         if (result == AppResult.Success(CollaborationNotificationPublicationResult.Submitted))
             return AppResult.Success(CollaborationNotificationReconciliationResult.Submitted)
         if (result == AppResult.Success(CollaborationNotificationPublicationResult.Unchanged))

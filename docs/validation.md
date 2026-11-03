@@ -1,5 +1,15 @@
 # Validation
 
+## Process-owned native reconciliation — 3 November 2026
+
+[The bounded process](collaboration-notification-process.md) passes 63 focused cases,
+including three actual Koin/encrypted SQLite process cases with a fake OS. Full validation
+passes 3,693 desktop/528 suites, 230 Android-host/37, six proof-host/one and ten build-logic/
+two, plus proof assembly, shared Wasm and root quality. [Evidence](measurements/chat-notification-process-2026-11-03.json)
+records ten source hashes, 465 fresh full-run cases/77 suites, zero failures/errors/skips,
+and the earlier invalid-fixture and module-length failures. Candidate delivery, native
+host activation and notification-input process-death acceptance remain integration work.
+
 ## Native process gate and explicit namespace pause — 3 November 2026
 
 [Process coordination](collaboration-notification-process-gate.md) adds eight cases to the
