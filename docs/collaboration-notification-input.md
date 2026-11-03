@@ -51,16 +51,44 @@ Ordered paging returns at most20 opaque references without opening the key; it n
 exposes unverified text to a notification or screen. A scan after concurrent insertion
 must eventually restart from the beginning.
 
-This repository is the storage boundary. Authenticated transfer and completion use
-cases, callback ownership, worker scheduling, input review UI and native notification
-input process-death tests remain separate work. In particular, transferring must first
-prove account-owned durable retention before deleting the device copy. Session changes,
-unverified account ownership and uncertain responses cannot be interpreted as a send.
+`ProtectCollaborationNotificationReply` provides a finite eight-second capture turn,
+with at most eight concurrent admissions and no session dependency. Invalid input,
+capacity exhaustion, contention and uncertain storage remain distinct failures.
+Cancellation joins storage work and releases the admission slot. A failed result can
+still leave a durable record if the response was lost after a committed write.
+
+`TransferCollaborationNotificationInput` captures the actual account/session parent,
+authenticates the original descriptor and retains its original issuing parent in the
+account's encrypted reply queue. It rereads the exact account-owned copy before
+removing the exact device generation. Parent guards follow each pending boundary.
+No caller-supplied receipt substitutes for the stored copy. Replacement, missing copy,
+uncertain cleanup and cancellation cannot claim completed transfer. The operation
+has an eight-second deadline and refuses a second concurrent turn.
+
+Transfer returns an opaque retained reply ID only after exact cleanup succeeds.
+`Absent` means the requested device generation is absent; it is not evidence that a
+reply was sent or transferred. Lost copy responses leave both copies recoverable.
+Lost cleanup responses can leave only the account copy, which the existing reply
+worker can recover independently. Replayed input reproduces the original command.
 Current v2 action recovery supports an issuing family that differs from the current
 family for the same account; v1 still needs its original family for authentication.
+An old family is retained for the existing explicit review path, without a new send.
+
+These use cases are bound in the actual application container. They do not yet run
+from native callbacks or the device-input worker. Application integration must share
+the existing reply execution mutex across transfer, cleanup and processing, so another
+local recovery cannot retire the account copy while transfer still needs it. Callback
+ownership, durable scan fairness, input review UI and notification-input OS-death tests
+remain separate work. Explicit discard must coordinate with account transfer and
+retained commands; deleting a device row alone cannot cancel an already-copied reply.
 
 Production chat notification hosts remain unbound and chat push is disabled. This is
 not the planned Drive/iCloud backup format or acceptance of an OS reply callback.
 Local and hosted validation are recorded separately in `docs/measurements`.
 
 [Local validation](measurements/chat-notification-input-2026-11-03.json) includes real SQLite/browser storage, Koin ownership, full root/proof/Wasm, and the preserved empty-browser-filter correction. Hosted Apple for this increment remains a separate gate.
+
+[Transfer validation](measurements/chat-notification-input-transfer-2026-11-03.json)
+covers bounded capture, account replacement, cancellation, exact cleanup, response loss
+and actual encrypted SQLite/Koin reopen with fictional transport. Native callbacks and
+physical process death remain separate acceptance gates.

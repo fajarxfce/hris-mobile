@@ -13,6 +13,20 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
+    @Single
+    fun protectNotificationReply(inputs: CollaborationNotificationInputRepository) =
+        ProtectCollaborationNotificationReply(inputs)
+
+    @Single
+    fun transferNotificationInput(
+        inputs: CollaborationNotificationInputRepository,
+        actions: CollaborationNotificationActionRepository,
+        replies: CollaborationNotificationReplyRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = TransferCollaborationNotificationInput(inputs, actions, replies, sessions, server, build)
+
     @Factory
     fun observeNotificationChanges(
         changes: CollaborationNotificationChangeRepository,

@@ -1,25 +1,52 @@
 # Agent continuation — HRIS Mobile
 
-## Protected input committed; hosted Apple/native queued
+## Authenticated device-input transfer accepted locally
 
-Protected input is COMMITTED/PUSHED at
-**81c7a35c2739e709be0e5105f169d167fed33b6a**. ONE consolidated full Apple
-[41592237356](measurements/chat-notification-input-apple-2026-11-03.json) dispatched
-06:48:39Z at this source,268 frozen paths including raw schema13 and input Swift wiring.
-Audit script ready in .work/chat-notification-input-apple-2026-11-03; after successful
-completion require eight AppleDeviceRecordStoreTest cases, full reports, complete
-Xcode and source/archive hashes. Do not duplicate or cancel. This is the Mobile gate
-needed before porting raw DeviceRecordStore to Starter.
+[Capture and transfer](collaboration-notification-input.md) is locally ACCEPTED;
+[evidence](measurements/chat-notification-input-transfer-2026-11-03.json). Capture is
+session-independent, bounded to eight callbacks/eight seconds. Transfer authenticates
+the actual account, preserves the issuing family, rereads exact account-owned retention,
+then removes the exact protected device generation. It does not schedule, admit company
+access or send. Uncertain copy/cleanup and parent changes preserve recoverable facts.
+A missing device input is not proof of transfer. Old-family input remains for review.
 
-Automatic native41592216948 at81c7 is PENDING behind running41587502684 atde69.
-GitHub superseded queued41590342856 at76bd after the newer push; no manual cancellation.
-Raw storage is included in81c7. New native fetch/audit scripts prepared in
-.work/chat-notification-input-native-2026-11-03 with273 frozen source paths. Audit de69
-first after completion, then81c7; existing five provider scenarios do not prove native
-notification-input replay and callbacks. No local heavy job remains.
+Focused1 PASSED209.282s:54 desktop/seven suites and11 proof-host/three,65 fresh/ten.
+Full2 PASSED336.423s:3,829 desktop/542,230 Android-host/37,11 proof-host/three,ten
+build-logic/two;2,225 fresh/270. Root quality, proof assembly and shared Wasm passed;
+ten Kotlin input hashes unchanged, zero failures/errors/skips. Fifteen new domain
+cases and five actual Koin/encrypted SQLite integration cases cover no-session capture,
+account replacement, exact readback, response loss, cancellation and reopen. Existing
+reply flow is still invoked separately in tests. Work/audit/record complete in
+.work/chat-notification-input-transfer-2026-11-03; no repeat checks absent changes.
 
-Continue capture and actual-account transfer/cleanup; next-transfer.txt explains the
-existing reply mutex and proof requirements. No new product APK; phone21 installed.
+NEXT integrate capture plus durable wake and protected-input recovery with the existing
+CollaborationNotificationReplies execution mutex. Transfer, exact cleanup and process
+must share that mutex. Native callbacks only protect and request a wake, not open Matrix.
+The worker needs bounded persistent scan fairness across mixed-account input. Explicit
+discard must coordinate with transfer/account commands. Review UI, native callback and
+notification-input OS-death proof remain open; do not expose unverified text in account UI.
+
+Hosted native41587502684 atde69 FAILED one SDK receipt fixture assertion at
+HrisReadReceiptProof.exchange:62. Sender receipt sync is not a recipient-local barrier.
+Raw16 groups/two scenarios and the other four provider scenarios passed, with cleanup;
+239 sources and GitHub archive verified. Audit is complete in
+.work/chat-notification-focus-native-2026-11-03/failure-audit.json. The bounded-own-store
+barrier fix and four regression cases are UNAPPLIED .txt drafts in
+.work/chat-read-receipt-barrier-2026-11-03. Apply/check/commit this correction next; never
+remove receipt assertions or claim whole native acceptance. Automatic81c7 run41592216948
+is already running and contains the old barrier; do not duplicate or cancel it.
+
+Full Apple41592237356 at81c7 remains in progress with268 frozen paths. Simulator tests
+passed; full Xcode still pending. Audit once complete using prepared script; require
+all eight AppleDeviceRecordStoreTest cases and the full app build. This includes raw
+schema13/protected input/Swift keys but EXCLUDES the new capture/transfer use cases.
+Do not dispatch a replacement until it completes. After acceptance port only generic
+DeviceRecordStore and its tests/schema to Starter; then run Starter's own gates.
+
+Phone21 is already installed; no new product APK in this increment. Notify before the
+next validated phone install, explicit10.77.77.3:5555, --install-only. Live304/schema116
+and Starter0d4432e unchanged. No local heavy job remains. Chat push OFF/native hosts
+unbound/voice-video-meeting UI absent/all54 PRD groups still open. Continue long run.
 
 ## Protected pre-session notification input accepted locally
 

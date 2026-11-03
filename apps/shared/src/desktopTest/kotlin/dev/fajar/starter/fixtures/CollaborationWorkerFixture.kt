@@ -37,6 +37,7 @@ class CollaborationWorkerFixture {
     private val lists = MemoryCredentialStore()
     private val receipts = MemoryCredentialStore()
     private val history = MemoryCredentialStore()
+    private val notificationInputs = MemoryCredentialStore()
     var container = open()
         private set
 
@@ -62,6 +63,7 @@ class CollaborationWorkerFixture {
             collaborationListCredentials = lists,
             collaborationReceiptCredentials = receipts,
             collaborationHistoryCredentials = history,
+            collaborationNotificationInputCredentials = notificationInputs,
             workScheduler =
                 object : WorkScheduler {
                     override suspend fun enqueue(key: String) {
