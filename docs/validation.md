@@ -1,5 +1,17 @@
 # Validation
 
+## Opaque notification discovery and cancellation — 3 November 2026
+
+[Cleanup operations](collaboration-notification-retirement.md) pass15 focused cases,
+including three actual Koin/encrypted-SQLite integration cases with a fake native
+surface. Final root checks pass3618 desktop/521 suites,230 Android-host/37, six
+proof-host/one, ten build-logic/two and12 browser/one; zero failures/errors/skips.
+Proof assembly, shared Wasm compile and root quality pass.
+[Evidence](measurements/chat-notification-retirement-2026-11-03.json) preserves seven
+source hashes,2041 fresh cases/253 suites and the pre-copy-bound/foreign-page review.
+No native-host activation, OS removal or notification-input process-death proof is
+claimed; no product APK release or user-phone installation occurred in this increment.
+
 ## Sequential native fixture cleanup — 3 November 2026
 
 The raw Android driver passes8 ownership/cleanup tests and16 actual API35 notification

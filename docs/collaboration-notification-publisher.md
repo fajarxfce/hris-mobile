@@ -50,6 +50,8 @@ Ongoing active-card invalidation must independently handle company denial, read/
 redaction, changed privacy and focused threads. In particular, merely publishing another
 suppressed candidate is insufficient to clear a previously displayed card. Opaque
 discovery/retirement must preserve exact watermarks without exposing denied preview data.
+The [domain discovery and cancellation operations](collaboration-notification-retirement.md)
+now provide that cleanup boundary; they still require explicit native-owner integration.
 
 Ten application integration tests resolve the actual Koin factory and feature use cases,
 use encrypted SQLite across container reopen, and acquire fictional originals through

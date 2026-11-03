@@ -150,6 +150,22 @@ class CollaborationDataModule {
         )
 
     @Single
+    fun cancelNotificationPublication(
+        journal: CollaborationNotificationPublicationRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = CancelCollaborationNotificationPublication(journal, sessions, server, build)
+
+    @Factory
+    fun readNotificationPublications(
+        journal: CollaborationNotificationPublicationRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = ReadCollaborationNotificationPublications(journal, sessions, server, build)
+
+    @Single
     fun finishNotificationPublication(
         journal: CollaborationNotificationPublicationRepository,
         sessions: SessionRepository,

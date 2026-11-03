@@ -1,5 +1,57 @@
 # Agent continuation — HRIS Mobile
 
+## Opaque discovery and cancellation accepted; continue source observation and native host
+
+ReadCollaborationNotificationPublications returns one-to-four ordered opaque cleanup
+references under the actual expected native parent. It decrypts internally but returns
+no preview/original/action content. CancelCollaborationNotificationPublication is a
+singleton/nonwaiting8s exact-reference CAS that strips preview/actions, preserves the
+original watermark and returns opaque settlement metadata. Same-account older family
+cleanup works under retained company denial. Neither operation performs OS removal or
+authenticates a callback. [Contract](collaboration-notification-retirement.md),
+[evidence](measurements/chat-notification-retirement-2026-11-03.json).
+
+Focused1 passed150.536s:15 fresh cases/two suites (12 domain, three actual Koin/SQLite).
+Review then added a pre-copy output bound and stronger shape-valid foreign-account/
+audience plus oversized lazy-list cases inside the existing test. Full2 passed390.283s:
+3618 desktop/521 suites,230 Android-host/37, six proof-host/one, ten build-logic/two and
+12 browser/one;2041 fresh cases/253 suites, zero failures/errors/skips, seven frozen
+Kotlin inputs. Root quality/architecture74/detekt, proof assembly and shared Wasm compile
+pass. No failed attempt, schema/key change, or local heavy job/owned emulator remains.
+Application integration uses fictional HTTP/simulated SDK and a fake OS; it proves
+denied cleanup across actual encrypted reopen, stale privacy-render exclusion and lost
+committed cancellation. The latter cannot reissue the same original after reopen.
+
+NEXT add narrow owned source observations and their application lifetime: company
+admission including buffered denials, settings/read/history/list/identity changes and
+focused navigation. Exclude publication-ACK writes from source invalidation. Initial
+subscription must revalidate so changes between publication and registration are not
+missed. Keep bounded opaque work when the nonwaiting owner is busy; no private payload
+queue, hot retry loop or selected-workspace-only gate. Source-stamp/privacy changes may
+need a silent rerender; read/mute/redaction/denial requires exact current retirement.
+A different suppressed candidate must never clear another current card. Use the new
+discovery/cancellation boundary within the native owner, then callbacks, old-family/
+pre-retention encrypted review and notification-specific OS-death proof. See
+[integration plan](collaboration-notification-publication-plan.md). Supplementary
+.work/chat-notification-source-observation-2026-11-03/plan.txt is DESIGN ONLY; no source
+observation code exists yet. Retirement review-notes.txt is APPLIED/STALE.
+
+Corrected native CI41554674578 at7a0ab3d3 is running, last Android fixture build. Follow
+actual raw16-group and five SDK/WorkManager artifacts separately. Earlier e4/41552877271
+was manually cancelled after fixed source was queued because its known raw fixture
+cleanup would block all subsequent SDK preflights; pending11c/41554252506 was superseded.
+The failed7cf/41550122006 evidence remains preserved. No repeat of long local provider
+emulator hangs. Full Apple41554262782 at11cba615/184 source paths is running, last
+simulator tests. Do not cancel/redispatch; audit existing helper after full Xcode success.
+It excludes this retirement increment. Physical iPhone waived, full Xcode required.
+
+Phone19/sourcec0 remains installed; no product release/install here. Next meaningful
+release>19: notify immediately before explicit10.77.77.3:5555 install-only, preserve
+signer/data and never drive its UI. Live304/schema116/chat push OFF and all54 PRD groups
+open. Publisher/raw transport remain unactivated by native hosts; call/video/meeting UI
+is still absent. Continue long run and push every atomic commit. Generic Starter port
+waits for integrated Mobile proof. Older entries below are historical.
+
 ## Native fixture ownership repair accepted locally; continue host invalidation and CI audit
 
 The raw notification driver now verifies dedicated AVD/qemu/boot/API, debug proof APK
@@ -23,9 +75,11 @@ The preceding failed hosted7cf/41550122006 is preserved: raw11 groups pass15.788
 then all five native preflights fail. Artifact13193192595 ZIP
 85bc739ca0fc77d2b7c47c2405d5b63ff2b90fa44122dfa35069a411b31b4bd5
 matches GitHub digest. No instrumentation/gateway execution occurred in those five cases.
-Follow the corrected hosted run after push. Older e4/41552877271 and pending
-11c/41554252506 still contain the diagnosed driver bug; if cancelled/superseded, record
-that reason explicitly. Do not repeat long local provider-emulator hang experiments.
+Corrected hosted41554674578 at7a0ab3d3 is now running. Older e4/41552877271 was manually
+cancelled after that repair was pushed/queued because its known pm-clear-only driver
+would block every following SDK preflight. Pending11c/41554252506 was superseded by the
+workflow. Neither is acceptance evidence. Do not repeat long local provider-emulator
+hang experiments.
 
 Full Apple41554262782 was dispatched ONCE at2026-11-03T00:38:10Z for
 11cba6157151ca6a837f452e94d090e61d730351,184 verified source paths. It is running, not

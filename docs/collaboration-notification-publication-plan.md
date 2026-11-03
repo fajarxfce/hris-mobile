@@ -100,10 +100,12 @@ for authentication; never trust a parent copied from intent extras. Bound native
 completion and finish exactly once after joined work. A denied company must not require
 returning decrypted preview solely to find an opaque cancellation target.
 
-Startup namespace cleanup does not settle every retained old journal watermark. Add
-bounded opaque discovery and exact retirement/reconciliation that cannot revive a
-previously dismissed source. Raw active pages are four records and omit inactive
-watermarks. Keep acquired priority hints until publication uncertainty is recoverable;
+Startup namespace cleanup does not settle every retained old journal watermark.
+[Opaque discovery and exact cancellation](collaboration-notification-retirement.md)
+now return cleanup references without denied preview/action content and preserve inactive
+watermarks. They still need application/native integration. Active pages are four records
+and omit inactive watermarks; cancellation is not OS removal or callback authentication.
+Keep acquired priority hints until publication uncertainty is recoverable;
 ordinary missed-hint recovery and initial-sync/backfill suppression need explicit rules.
 
 
