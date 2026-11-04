@@ -1,0 +1,200 @@
+{
+  "recordedAt": "2026-11-04T21:58:57.813964+00:00",
+  "baseCommit": "0369be05b667538677b29e3c969196af8d4e9c21",
+  "scope": "Typed native organization discovery and bounded directory transport; no product UI or runtime cutover",
+  "gates": {
+    "check1": {
+      "startedAt": "2026-11-04T21:47:33.827862+00:00",
+      "elapsedSeconds": 398.202,
+      "exitCode": 0,
+      "sourceFiles": 3899,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2463,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshTargets": {
+        "apps/shared/desktopTest": {
+          "tests": 615,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/desktopTest": {
+          "tests": 164,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/desktopTest": {
+          "tests": 491,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/testAndroidHostTest": {
+          "tests": 247,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/desktopTest": {
+          "tests": 946,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "6ea07935e04857e10acf9a4b322330ed5cbb1d77e5f344cfd2fde42e6929d734",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceTransportTest.xml": {
+          "sha256": "e8bad6b26840d99fbd10cdcce9f17a35dc0eee101d0c4d72021aed5bedac33b2",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceTransportTest.xml": {
+          "sha256": "f8b88fa2aa3bc0e51f6a1b82037141f11da3a12f9095464d78d87355521c03db",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceObservationTest.xml": {
+          "sha256": "28bdf7617bea0a96fcc0424522f82f987e1b2fa13eb1ee42c6debc4e32be0f86",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceReadTest.xml": {
+          "sha256": "de2d29b0c01e1afe64f82f57f9d0196ca37090ba967f8560b4acdeed917e5b72",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportManifestSha256": "7c53de4e081d13133287457ada189e6fe1bafc3a9af4eed7a984a6d74cf8ed16"
+    },
+    "check2": {
+      "startedAt": "2026-11-04T21:55:03.775827+00:00",
+      "elapsedSeconds": 106.324,
+      "exitCode": 0,
+      "sourceFiles": 3899,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 946,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshTargets": {
+        "features/collaboration/domain/desktopTest": {
+          "tests": 946,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "selectedReports": {
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceObservationTest.xml": {
+          "sha256": "049a68df6a70f1125e725c016a43e7babcfbacd794c38a7ecf43077940dd611a",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceReadTest.xml": {
+          "sha256": "c8f44335e9d7b6282f4ead3d66e9c0cfae50864ddeb50b4acee8be598b43638a",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportManifestSha256": "4ae23cc4a7420fc88293a92bf1d6e28954705d69fb2c30559874c43e7cc65871"
+    },
+    "bindings1": {
+      "startedAt": "2026-11-04T21:57:39.196818+00:00",
+      "elapsedSeconds": 69.803,
+      "exitCode": 0,
+      "sourceFiles": 3899,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshTargets": {
+        "apps/shared/desktopTest": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "6a9f385b248d83f52b089f2ef832cdfca87b41fde31fc047bf1b3690f71c1e22",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportManifestSha256": "b31d66bae060de18b2a46cd3077a3c8c30210b987a3aebafe02fecc7578ec619"
+    }
+  },
+  "sourceHashes": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/api/CollaborationSpaceApi.kt": "43112db587570b4a89213b2eda6c45b6b58cade33ec03471f29850cd2412fc8d",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/ApiCollaborationSpaceRemoteSource.kt": "38b0fb2a1bfb0a165bb7a8bc7c86e4cdecf3ab0bc300fd15f0ec705e97a0432a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationSpaceRemoteSource.kt": "923b29b9e79b4d2ae3518e055b9fb01776fe00d7098873b439c4f4ede9221d30",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationSpaceDto.kt": "bd4796200e8819e472e2c7f718a1085042cd4a08a73fa349d26f758b9ee73e26",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationSpaceMapper.kt": "806ed49be3d07cb0600f7e71ca5fe9fac723189197fe8d81238a14073520cdbe",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/RemoteCollaborationSpaceRepository.kt": "fe663ddcdbd7170b0510d3eb99a00c3b4a9d024ab092c951d1a60557de32c2c0",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceTransportTest.kt": "4e3d5f1978abebafbf78b7104a26f1fd15d5735ed23b8eb8e5b5b0dfa6b683b3",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpace.kt": "60b9fefd9d5198dc6c971ff172fc13643746a79848c8b15fbf46faa45f8e570c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpacePolicy.kt": "f907442d0a13e86d2bb3fa2d94f2e706e5b3cf1d686772636e1c879ac829ade1",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceRepository.kt": "e83fede08cb7ac4003140fd8ba0ad5127d4c8bf150591d71e903619edd99338c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationSpaceOwner.kt": "3c6ec021313dbad0bbd5047edeec5a8d09bc5cc1b0da8b865a51a152512096b3",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/DiscoverCollaborationSpace.kt": "f60a387eac6a402c87796be8c64122e70bd47e3e696eaca36a0938a39f16e8bf",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceContacts.kt": "ca7e4b8e13c7cf13092c04deabaccb8b2471b61d3d6ff6eb057db04e761fbb4b",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceFixture.kt": "0e2bd24b6b544bce65953b2d42d54d8cbb41805bed0df49e2ad15ef2a0e2af58",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceObservationTest.kt": "c4451c207acb3364a0beaa894e956fe78e2d7848e035501e89640b0c2ef130b2",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceReadTest.kt": "adfe2d2baa3fd27c207996923b57567270c99d219045e523d87c53e35e4a96fc",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "10791067de0d895aa56ea079c2833b97613cd589cb2e7a524e169e3a37f448d4",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "b9cf5255c73c7b632c832eb9281f01327f9ef16fff13ecede9ddbf5b252efd6c"
+  },
+  "productionUnchangedAcrossGates": true,
+  "betweenGates": {
+    "check1ToCheck2": {
+      "files": [
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceReadTest.kt"
+      ],
+      "reason": "Add required ExperimentalCoroutinesApi opt-in to the new test only."
+    },
+    "check2ToBindings": {
+      "files": [
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt"
+      ],
+      "reason": "Resolve new repository and both use cases through the real application container."
+    }
+  },
+  "backendContractCommit": "5f9896f72bb047759ca2378247995eac9b1a533a",
+  "limits": [
+    "HTTP tests use MockEngine; this increment does not claim new provider/native end-to-end acceptance.",
+    "No local directory replica, product UI, device commands, SDK runtime adoption, FCM, Apple provider or live/phone change.",
+    "Original company owner and physical SDK store remain unchanged. Group labels grant no HR-company access."
+  ]
+}

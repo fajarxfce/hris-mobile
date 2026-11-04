@@ -201,6 +201,9 @@ class CollaborationBindingsTest {
                 assertSame(container.koin.get<IdentityServer>(), suppliedServer)
                 assertSame(container.koin.get<HttpClient>(named(HttpClients.Public)), suppliedHttp)
                 assertNotNull(container.koin.get<CollaborationSetupRepository>())
+                assertNotNull(container.koin.get<CollaborationSpaceRepository>())
+                assertNotNull(container.koin.get<DiscoverCollaborationSpace>())
+                assertNotNull(container.koin.get<ReadCollaborationSpaceContacts>())
                 assertNotNull(container.koin.get<CollaborationSetupCommandRepository>())
                 assertNotNull(container.koin.get<LoadCollaborationSetup>())
                 assertSame(

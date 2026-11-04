@@ -1,5 +1,10 @@
 # Architecture
 
+[Native group discovery](collaboration-space-discovery.md) uses a distinct
+organization owner over the current native parent, separate from selected HR
+company and retained physical SDK ownership. Its finite metadata/contact reads
+have no device, content, local-cache or product-runtime authority.
+
 ## Ownership
 
 | Layer | Responsibility |

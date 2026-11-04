@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Native group discovery and directory transport — 4 November 2026
+
+A distinct CollaborationSpaceOwner now drives native discovery and bounded contact
+pages independently of selected HR company. Initial/current native ownership,
+15-second execution limits, conservative monotonic parent deadlines and strict
+response/cursor validation reject stale/foreign results. No auto paging, enrollment,
+SDK acquisition or local-read reopening. Company labels grant no HR access.
+[Contract](collaboration-space-discovery.md),
+[evidence](measurements/collaboration-space-discovery-2026-11-04.json).
+
+Root :check + Android-host pass398.202s/3,899 same inputs/2,463 fresh cases;14 unique
+new cases (six data cases also on Android-host). Only a new-test opt-in annotation
+changes before the second root pass106.324s/946 fresh domain. Three container-test
+assertions then verify the actual new dependency graph:2 focused passes69.803s plus
+format/architecture/detekt. Production is identical across all gates. Sessions closed.
+MockEngine HTTP is not new backend/provider, Apple or product acceptance.
+
+NEXT: encrypted local group-directory ownership/denial retention, durable native
+identity/device commands, SDK store adoption and hard-parent recovery, product UI
+and group push/background/reply integration. The current UI still uses company chat;
+no group rollout or phone install. Actual original queued-key proof5f9896f7/36c60208
+remains accepted separately (strict shields Red, not verified sender trust).
+Live8b40/schema116, phone28, product/hosted0b804cb2 and Starter9959c1d unchanged.
+All54 PRD groups remain open. Continue long run, updates, atomic pushes and validated
+product installs.
+
 ## Original queued SDK keys recovered through group completion — 4 November 2026
 
 Backend [5f9896f7](https://github.com/fajarxfce/hris-platform/commit/5f9896f72bb047759ca2378247995eac9b1a533a) is pushed.
