@@ -3,7 +3,8 @@
 [Encrypted organization directory](collaboration-space-directory-storage.md) keeps
 account-owned facts, cursor progress and access admission separate from native
 credential lifetime and selected HR company. Its repository exposes encrypted
-storage; owning use cases must coordinate publication and finite acquisition.
+storage; [owning use cases](collaboration-space-directory-usecases.md) coordinate
+read admission, publication and finite explicit acquisition.
 
 [Native group discovery](collaboration-space-discovery.md) uses a distinct
 organization owner over the current native parent, separate from selected HR

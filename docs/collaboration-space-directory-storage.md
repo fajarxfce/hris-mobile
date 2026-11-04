@@ -78,7 +78,10 @@ a boundary-injection regression covers both final clear paths. No gate result is
 used to claim platform or product behavior beyond its actual scope.
 See [measurement](measurements/collaboration-space-directory-storage-2026-11-04.json).
 
-Remaining: owning local-read and refresh use cases, durable native identity/device
-commands, SDK store adoption and hard-parent recovery, organization UI, and typed
-group push/background/reply integration. This change does not establish product,
+The [owning local-read and refresh use cases](collaboration-space-directory-usecases.md)
+now apply these contracts independently of selected HR company.
+
+Remaining: durable native identity/device commands, SDK store adoption and
+hard-parent recovery, organization UI, and typed group push/background/reply
+integration. This change does not establish product,
 FCM, Apple runtime, Matrix trust or performance acceptance.

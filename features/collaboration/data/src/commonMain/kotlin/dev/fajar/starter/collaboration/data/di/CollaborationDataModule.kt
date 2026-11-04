@@ -14,6 +14,22 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Factory
+    fun observeSpaceDirectory(
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceDirectory(directory, sessions, server)
+
+    @Single
+    fun refreshSpaceDirectory(
+        directory: CollaborationSpaceDirectoryRepository,
+        spaces: CollaborationSpaceRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = RefreshCollaborationSpaceDirectory(directory, spaces, sessions, server, build, Clock.System)
+
+    @Factory
     fun discoverSpace(
         spaces: CollaborationSpaceRepository,
         sessions: SessionRepository,
