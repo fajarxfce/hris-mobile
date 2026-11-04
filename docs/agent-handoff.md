@@ -1,5 +1,30 @@
 # Agent continuation — HRIS Mobile
 
+## V124 atomic retained completion accepted — 4 November 2026
+
+Group branch `feat/communication-space` is pushed at `a22816d0`. V124 retains an
+immutable completion mapping and a restricted worker-only function that retires the
+original device/provider/optional gateway in the same transaction as group
+credential/ACTIVE device/SUCCEEDED queue publication. Current proof, exact versions
+and zero live original slots are checked with DB time after blocking guards.
+PUBLIC/API execution is denied; the non-login owner cannot read credential secrets.
+
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/a22816d0/docs/measurements/collaboration-legacy-runtime-completion-2026-11-04.json):
+six actual migration cases PASS128.582s/8273 unchanged inputs;133 broad database,
+domain/storage/native cases PASS603.054s/8275 inputs;15 recovery-tool cases pass.
+Format/architecture pass. Tests cover caller rollback/cancellation/interruption,
+actual lease and blocked native expiry, immutable owned mapping after parent purge
+and archive restore. No failed run. Recovery now supports124.
+
+Completion repository work is now uncommitted in the group worktree; follow its
+current handoff and source checks. V124 has no application/worker/HTTP/client caller
+yet. Synthetic database key/credential metadata is not provider or SDK acceptance.
+Next typed port, admitted retained worker with existing exact key readback and
+completed replay, then durable Mobile gate/store/inbox/outbox/read/push handover.
+Mobile code3d85d569/hosted gates, normal phone28, live8b40/schema116 pushON/SMTP OFF
+and Starter9959c1d remain current. All54 groups and actual Apple runtime remain open.
+Continue the long run, user updates, Git evidence and immediate commit pushes.
+
 ## Native freeze and drain accepted — 4 November 2026
 
 Group branch `feat/communication-space` is pushed through `9d3c8a99`, following
