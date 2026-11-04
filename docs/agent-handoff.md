@@ -1,5 +1,37 @@
 # Agent continuation — HRIS Mobile
 
+## Organization push callback and worker integrated — 4 November 2026
+
+Backend [d0478388](https://github.com/fajarxfce/hris-platform/commit/d0478388ba1a84154cbd42f0f1f4b20b45356178) is pushed.
+
+Mixed private callbacks preserve separate company/group types within one total input
+bound and original deadline. The group worker reacquires current ownership before and
+after outside-transaction FCM delivery. Exact token disable/readback and captured-revision
+ACK commit together; changed tokens defer, and newer callbacks survive old outcomes.
+Separate bounded company/group pools share the tested lifecycle implementation.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/d0478388ba1a84154cbd42f0f1f4b20b45356178/docs/collaboration/space-push-delivery.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/d0478388ba1a84154cbd42f0f1f4b20b45356178/docs/measurements/collaboration-space-push-delivery-2026-11-04.json).
+
+Focused:191 pass (272.574 s:147 domain,21 callback,23 data).
+Initial API:153/154 pass (233.639 s); the new preservation test
+compares PostgreSQL array objects by identity. Only its two SELECT statements change to
+compare every column/array value as JSON. Full58 HTTP cases then pass
+(139.405 s), alongside the96 configuration/contract cases above.
+FULL worker:138 cases,1 existing opt-in report-retention skip
+(394.54 s). Format/architecture pass. All four gates retain
+8,505 inputs; production sources are unchanged and only that HTTP test changes.
+All sessions closed. Actual shared API/worker DI is validated. Cloud transport in new
+group delivery tests is injected, not real FCM.
+
+NEXT: typed Mobile group push/background/reply routing and runtime store adoption,
+actual SDK original queued-key decryption, native hard-parent recovery and actual FCM
+one-visible-notification handover while old/company and group pushers coexist. Current
+Mobile product ignores new group envelopes; no group rollout or phone install yet.
+
+Base `f6777bfe` pushed. All 54 PRD groups open. Live8b40/schema116 (push on,
+SMTP off), phone28, Mobile product/hosted0b804cb2 and Starter9959c1d unchanged.
+Continue long run, regular updates, atomic pushes and validated product installs.
+
+
 ## Organization callback admission accepted — 4 November 2026
 
 Backend [f6777bfe](https://github.com/fajarxfce/hris-platform/commit/f6777bfe67350cc1de7b9761a2f680e6fb02e507) is pushed.
