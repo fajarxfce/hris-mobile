@@ -1,5 +1,26 @@
 # Agent continuation — HRIS Mobile
 
+## Group public-key storage accepted — 4 November 2026
+
+Backend [88f5fc20](https://github.com/fajarxfce/hris-platform/commit/88f5fc20) retains
+immutable group public-key identity with exact original native/Matrix provenance,
+uncertain reservation recovery and one acknowledgement transition. Current write
+scope and completed retained fingerprints are enforced. [Evidence](https://github.com/fajarxfce/hris-platform/blob/88f5fc20/docs/measurements/collaboration-space-key-storage-2026-11-04.json):
+82 database plus 6 data/retained-provider cases PASS 792.520s on 8,350 unchanged inputs,
+format/architecture and 18 recovery cases. A missing isolated fixture table-write grant
+was corrected after the first focused gate; production code stayed unchanged. Actual
+concurrency, expiry after a row wait, rollback, archive restore and signed retained
+Synapse keys across restart pass. Main peer fe0f3c5f records acceptance.
+
+NEXT backend signed key upload under exact gateway/request ownership, recipient
+pre-ack/room authority, then Mobile atomic group adoption preserving original SDK
+namespace/passphrase, local history and uncertain sends. Offline receiving must not
+require the receiver's short native/provider credentials. Native hard-parent replacement
+still needs explicit recovery. Storage enables no group endpoint or Mobile caller.
+Product code/hosted proof remain0b804cb2; phone28/live8b40/schema116 push ON/SMTP OFF
+and Starter9959c1d unchanged. All 54 groups remain open. Continue full long run,
+frequent updates, immediate pushes and validated feature installs; no proof APKs.
+
 ## Group gateway self access accepted — 4 November 2026
 
 Backend [941fa2f5](https://github.com/fajarxfce/hris-platform/commit/941fa2f5) admits fixed
