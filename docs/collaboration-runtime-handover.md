@@ -47,7 +47,7 @@ Do not substitute a space ID into the original SDK company namespace.
 
 [Local validation](measurements/collaboration-runtime-handover-2026-11-04.json) passes
 the root/Android/proof gates,463 browser cases and actual67.337s emulator recovery.
-Hosted results are tracked in the current [handoff](agent-handoff.md). Record and registry
+[Hosted regression](measurements/collaboration-runtime-handover-hosted-2026-11-04.json) also passes: 3,118 portable, 1,219 Apple-simulator, 241 Android-host, 18 proof-host and 5 native-HRIS cases, plus both Android/web protocol modes. iOS host compilation passes; actual Apple Matrix/APNs/CallKit remain unfinished. Record and registry
 checks cover immutable replay, strict schema, late constructors, replacement-client
 races, gates, borrower interruption and ownership limits. Android metadata tests
 cover expiry, local login replacement, cancellation and old-path rejection. The

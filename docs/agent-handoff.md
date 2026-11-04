@@ -1,5 +1,27 @@
 # Agent continuation — HRIS Mobile
 
+## Hosted handover regression accepted — 4 November 2026
+
+All three hosted workflows on exact Mobile `0b804cb2` passed and their artifacts,
+GitHub archive digests and 3,881 source hashes are verified. [Evidence](measurements/collaboration-runtime-handover-hosted-2026-11-04.json):
+control41775492328 has 3,118 portable and 1,219 Apple-simulator tests, Android builds/lint,
+application bindings and Xcode host compilation. New durable-record cases run on
+desktop/browser/Apple. Native-HRIS41775492365 has 5 actual API/PostgreSQL/Synapse/emulator
+scenarios, 241 Android-host and 18 proof-host cases, plus notification process-recovery
+and SystemUI reply callbacks. All three notification images were visually inspected.
+Protocol41775492415 passed both sync modes (59.527s native, 89.279s classic), including
+offline invitee E2EE, refresh key continuity and browser restart/media; 2 browser cases
+per mode, with owned cleanup. These are regressions; the new local stage/resume proof
+remains the separately accepted 67.337s local run.
+
+Actual Apple Matrix/APNs/CallKit, group runtime/room adoption and all 54 communications
+acceptance groups remain open. Next finish group gateway admission/room authority and
+Mobile provider-key preflight/handover orchestration without changing original SDK
+namespaces. Group V126 typed gateway storage has 19 focused cases passing and its
+broader regression is currently running. Normal phone release 28/live 8b40/schema 116 pushON/
+SMTPOFF and Starter 9959c1d unchanged. Continue long run, updates and atomic pushed
+commits; install only a validated new product feature build on the phone.
+
 ## Durable Android SDK intent accepted locally — 4 November 2026
 
 Mobile now implements owned handover intent read/stage, immutable schema2 target,
