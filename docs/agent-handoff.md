@@ -1,5 +1,34 @@
 # Agent continuation — HRIS Mobile
 
+## Scoped recipient query and claim accepted — 4 November 2026
+
+Backend [dd789d0f](https://github.com/fajarxfce/hris-platform/commit/dd789d0f8b7c0da9b018137edf84f7a32d0a3a15) is pushed.
+[Fixed group key query and claim](https://github.com/fajarxfce/hris-platform/blob/dd789d0f8b7c0da9b018137edf84f7a32d0a3a15/docs/collaboration/space-recipient-key-exchange.md)
+preserve original Matrix identities and enforce current caller, recipient and request
+admission around every provider outcome. Queries include pending publication; claims
+verify confirmed signed identities before consuming one-time or fallback keys. Current
+native hard authority permits offline receiving despite short access/provider expiry.
+Changed observations return HTTP 503 for retry. Company key policy remains intact.
+
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/dd789d0f8b7c0da9b018137edf84f7a32d0a3a15/docs/measurements/collaboration-space-recipient-key-exchange-2026-11-04.json):
+121 policy tests passed (44.187 s), 29 gateway tests passed (384.642 s), 32 retained
+device tests passed (263.747 s), 137 actual API tests passed (203.967 s), and the full
+worker suite passed (138 tests, 386.225 s; one existing optional skip). Quality checks
+pass. Final API/worker gates share 8,429 identical unchanged inputs. Two initial HTTP
+test setup failures were corrected without production changes and are recorded.
+Cross-company PostgreSQL, offline receiving, races, original LEGACY IDs, actual
+Synapse key exchange/restart, cancellation and strict HTTP behavior are covered.
+
+NEXT: group to-device transport, room content/sync/push and full Mobile SDK adoption,
+including original store/passphrase/keys/history and native hard-parent replacement.
+Preserve original transaction IDs; provider restart can replay a to-device envelope,
+so SDK uncertain-send and duplicate handling remain required. See the
+[backend handoff](https://github.com/fajarxfce/hris-platform/blob/dd789d0f8b7c0da9b018137edf84f7a32d0a3a15/docs/agent-handoff.md). To-device drafts are unapplied.
+Group rollout stays disabled and all 54 PRD acceptance groups remain open. Live
+`8b40` / schema 116 (push on, SMTP off), normal phone release 28, Mobile product and
+hosted checks `0b804cb2`, and Starter `9959c1d` remain unchanged. Continue the long run,
+regular updates, atomic pushes and validated product feature installs.
+
 ## Scoped offline receiving keys accepted — 4 November 2026
 
 Backend [6fd2819f](https://github.com/fajarxfce/hris-platform/commit/6fd2819ff8a2f9b228e47616a4e2868bd3615f15) is pushed.
