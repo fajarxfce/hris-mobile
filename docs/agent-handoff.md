@@ -1,5 +1,23 @@
 # Agent continuation — HRIS Mobile
 
+## Group request ownership accepted — 4 November 2026
+
+Backend [88d20851](https://github.com/fajarxfce/hris-platform/commit/88d20851) adds V127
+and typed storage for seven ordinary group gateway requests plus a reserved provider
+renewal slot. Exact release and expired cleanup preserve successors and device/key
+provenance. [Evidence](https://github.com/fajarxfce/hris-platform/blob/88d20851/docs/measurements/collaboration-space-request-storage-2026-11-04.json):
+focused6 PASS92.446s, then all76 database plus data5 PASS679.944s on8,333 unchanged
+inputs; format/architecture and17 recovery cases pass. One test-only nullability
+compile correction is recorded. Main peer ef586d83 records the accepted storage.
+
+Next explicit native provider renewal, current gateway exchange and request/replay
+maintenance, followed by rooms and Mobile group handover/adoption. Storage grants
+no current authority and enables no new caller. Preserve original SDK namespaces,
+keys, local history and uncertain sends. Gateway replay expiry alone never deletes
+owned local facts. Product code/hosted acceptance remain0b804cb2, phone release28,
+live8b40/schema116 pushON/SMTPOFF and Starter9959c1d unchanged. All54 groups remain
+open; continue the full long run, updates, atomic pushes and validated feature installs.
+
 ## Native group gateway transport accepted — 4 November 2026
 
 Backend [272b66b5](https://github.com/fajarxfce/hris-platform/commit/272b66b5) now returns
