@@ -1,5 +1,25 @@
 # Agent continuation — HRIS Mobile
 
+## Native group gateway transport accepted — 4 November 2026
+
+Backend [272b66b5](https://github.com/fajarxfce/hris-platform/commit/272b66b5) now returns
+original Matrix identity atomically with native group bootstrap credentials, exposes
+safe gateway revision/deadline status and dispatches the distinct group refresh prefix.
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/272b66b5/docs/measurements/collaboration-space-gateway-http-2026-11-04.json):
+93 domain/33 actual data pass;92 API/OpenAPI PASS158.550s; full worker127 PASS356.150s
+(126 active/one existing retention skip),8,324 final inputs unchanged and quality checks.
+Real elapsed replay/cooldown recovery and both refresh families pass. Preliminary
+failures and test-only fixes are retained. Main peer277aa0fe records this acceptance.
+
+Next backend bounded group requests, native provider renewal after expiry, replay
+maintenance and room authority; then Mobile preflight/handover/group ownership across
+history/outbox/drafts/read/push/deep links. Gateway-replay-specific401 does not revoke
+the native parent or authorize deleting local history/keys; reacquire status before
+fresh bootstrap. Keep original SDK namespaces and uncertain sends. No group Mobile
+caller, deployment or new product APK is enabled. Product code/hosted acceptance stays
+0b804cb2, phone28/live8b40/schema116 and Starter9959c1d unchanged. All54 groups remain
+open; continue long run, updates, atomic immediate pushes and validated feature installs.
+
 ## Group gateway issuance accepted — 4 November 2026
 
 Group backend [6b92246a](https://github.com/fajarxfce/hris-platform/commit/6b92246a)
