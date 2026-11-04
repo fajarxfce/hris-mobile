@@ -1,5 +1,23 @@
 # Agent continuation — HRIS Mobile
 
+## Group gateway issuance accepted — 4 November 2026
+
+Group backend [6b92246a](https://github.com/fajarxfce/hris-platform/commit/6b92246a)
+adds current native/group/device/provider admission and atomic bootstrap/refresh,
+including exact completed retained-device provenance, bounded lost-response replay
+and rollback after late denial or cancellation. Final broader gate passes 154 cases
+in 343.118s on 8,321 unchanged inputs; focused 14 passes in 167.690s. Main peer
+`d4e2a771` records this acceptance. See the backend issuance measurement for evidence.
+No HTTP/DI or Mobile group caller is enabled by this increment.
+
+Next expose an atomic bootstrap identity envelope, safe gateway revision/deadline
+status and native bootstrap/standard Matrix refresh dispatch; verify API and full
+worker contexts. Then complete provider/room authority and Mobile group adoption
+while preserving original SDK namespaces and keys. All 54 communications groups
+remain open. Mobile product code/hosted acceptance remain `0b804cb2`; phone release
+28, live 8b40/schema 116 and Starter 9959c1d unchanged. Continue long run, frequent
+updates, immediate pushes and validated product feature installation only.
+
 ## Hosted handover regression accepted — 4 November 2026
 
 All three hosted workflows on exact Mobile `0b804cb2` passed and their artifacts,
