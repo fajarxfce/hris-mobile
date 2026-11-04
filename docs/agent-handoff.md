@@ -1,5 +1,34 @@
 # Agent continuation — HRIS Mobile
 
+## Organization callback admission accepted — 4 November 2026
+
+Backend [f6777bfe](https://github.com/fajarxfce/hris-platform/commit/f6777bfe67350cc1de7b9761a2f680e6fb02e507) is pushed.
+
+Typed group callbacks reacquire current root account/native/device/gateway/identity,
+provider metadata, group eligibility and registration. Short access/MFA/provider expiry
+permits only opaque wake. Exact LEGACY completion provenance is separate from the
+unchanged interactive admission wrapper. No provider/native token is acquired.
+Owned original/published room metadata survives peer offboarding; failed/foreign reads
+cannot grant access or retire valid keys. Final current checks roll back late append.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/f6777bfe67350cc1de7b9761a2f680e6fb02e507/docs/collaboration/space-push-admission.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/f6777bfe67350cc1de7b9761a2f680e6fb02e507/docs/measurements/collaboration-space-push-admission-2026-11-04.json).
+
+144 domain cases pass (26.148 s). Initial data compilation rejects
+one test-double parameter name under -Werror; only that test name is fixed. All25 data
+cases pass (274.722 s):10 new callback cases,1 new completed LEGACY
+original-room case,12 native pusher cases and2 retained pusher/gateway regressions.
+Format/architecture pass on 8,500 unchanged final inputs. All sessions closed.
+No shared DI/HTTP/worker wiring yet. No live or phone installation for this backend step.
+
+NEXT: bounded group worker delivery/token-rotation fencing and mixed company/group
+callback adapter, then shared API + FULL worker context gates. Mobile background/reply
+owner handover, actual FCM single notification, original SDK queued-key decryption and
+native hard-parent recovery remain required. Queue ACK is not a delivered/read receipt.
+
+Base `187a0174` pushed. All54 PRD groups open; rollout disabled. Live8b40/schema116
+(push on,SMTP off), phone28, Mobile product/hosted0b804cb2 and Starter9959c1d unchanged.
+Continue long run, updates, atomic pushes and validated product installs.
+
+
 ## Organization push wake storage accepted — 4 November 2026
 
 Backend [187a0174](https://github.com/fajarxfce/hris-platform/commit/187a01744775f8e514f8770a66c1a097998bb560) is pushed.
