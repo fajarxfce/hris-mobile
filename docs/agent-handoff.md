@@ -1,5 +1,25 @@
 # Agent continuation — HRIS Mobile
 
+## Provider peer recovery accepted — 4 November 2026
+
+Backend [5493a8e1](https://github.com/fajarxfce/hris-platform/commit/5493a8e1) is pushed.
+Typed join requires exact room readback; recovered SPACE state retains its actual
+canonical creator and requires the current caller to be joined. Only the actual
+creator can repair missing initial state. [Evidence](https://github.com/fajarxfce/hris-platform/blob/5493a8e1/docs/measurements/collaboration-space-peer-provider-2026-11-04.json):
+105 domain, five repository and four actual Synapse cases pass in 83.55 seconds with
+quality checks on 8,398 unchanged inputs. First-creator/second-recoverer lost-response
+recovery keeps the same alias, actual creator and both original signed keys after
+restart. All sessions closed; no new DI, room worker or SDK-message claim.
+
+NEXT explicit room-preparation request kind sharing V127 slots 1..7. Current GATEWAY
+kind requires real gateway coordinates; slot zero is reserved for provider renewal.
+Do not fabricate either. Preserve same-owner expired replacement, new token/exact
+release, admission/RLS and finite cleanup; then bounded claim/advance/settle worker.
+Recipient keys/content/sync/push and full Mobile adoption preserving SDK store and
+history remain unfinished. Group disabled, all 54 PRD groups open. Live 8b40/schema
+116 push ON/SMTP OFF, phone 28, product/hosted 0b804cb2 and Starter 9959c1d unchanged.
+Continue long run, regular updates, atomic pushes and validated product APK installs.
+
 ## Peer room recovery and native API accepted — 4 November 2026
 
 Backend [a0653dcf](https://github.com/fajarxfce/hris-platform/commit/a0653dcf) is pushed.
