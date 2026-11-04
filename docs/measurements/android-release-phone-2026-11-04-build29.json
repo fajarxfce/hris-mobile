@@ -1,0 +1,383 @@
+{
+  "recordedAt": "2026-11-04T23:10:48.036352+00:00",
+  "source": {
+    "commit": "084662c5bc9277ae8fd56d103a0acda89c3ee5ee",
+    "cleanBeforeBuild": true,
+    "cleanAfterBuild": true
+  },
+  "artifact": {
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-04-build29/hris-mobile-dev-release-1.0.0-29-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 29,
+    "versionName": "1.0.0",
+    "bytes": 88107752,
+    "sha256": "e17f1681dcc5cacce43fb126b53da261e5b89423e65c3ab3737d29186c46dca1",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":apps:android:assembleDevRelease",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":apps:android:lintDevRelease",
+      ":apps:collaboration-proof:testDebugUnitTest",
+      ":apps:collaboration-proof:assembleDebug",
+      ":apps:collaboration-proof:lintDebug",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=29",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-04-build29/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m"
+    ],
+    "startedAt": "2026-11-04T22:54:55.555023+00:00",
+    "elapsedSeconds": 548.56,
+    "exitCode": 0
+  },
+  "proofUnitTests": {
+    "counts": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofFailureTest.xml": {
+        "sha256": "1b6d31e796ec6a9c4c1c5e57dc1cfa3afcd430cc17c8daa7aa345050c88e606d",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofObservationTest.xml": {
+        "sha256": "8b3687f1bccec998b811dc2d639c79130b4c229f9b525d8432f3eace9c11239c",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisReadReceiptBarrierTest.xml": {
+        "sha256": "673bd5e2484680bb383b13a45204ff585ab1ff992552bd8a61a80caca31eb43b",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.NotificationInputCheckpointTest.xml": {
+        "sha256": "31dd6349152c47af5fed47f04ef02f290c6c9df61c5ef3c1631ba0628eb903e7",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": {
+        "sha256": "21df2657a5c7a7e0c2cff703e5c0cc94a5466e12edb3cfe04006d1b21a8a4e6d",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "lint": {
+    "report": "apps/android/build/reports/lint-results-devRelease.xml",
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+    "issues": 0,
+    "bySeverity": {}
+  },
+  "verification": {
+    "startedAt": "2026-11-04T23:04:25.718450+00:00",
+    "steps": [
+      {
+        "name": "verify-artifact",
+        "exitCode": 0,
+        "seconds": 1.216
+      },
+      {
+        "name": "verify-lint",
+        "exitCode": 0,
+        "seconds": 0.032
+      },
+      {
+        "name": "start-emulator",
+        "exitCode": 0,
+        "seconds": 32.718
+      },
+      {
+        "name": "native-notifications",
+        "exitCode": 0,
+        "seconds": 108.143
+      },
+      {
+        "name": "release-smoke",
+        "exitCode": 0,
+        "seconds": 39.852
+      },
+      {
+        "name": "stop-emulator",
+        "exitCode": 0,
+        "seconds": 1.269
+      }
+    ],
+    "complete": true,
+    "phoneTouched": false,
+    "proofApkSha256": "bd2416f4884cce332f5a4fd1c2fe46f74d992b1922cbb9ac1c901567d2c792d8",
+    "elapsedSeconds": 184.265
+  },
+  "nativeNotifications": {
+    "serial": "emulator-5562",
+    "scenarios": [
+      {
+        "name": "native-notification-denied",
+        "seconds": 4.018,
+        "complete": true,
+        "sdk": 35,
+        "cases": [
+          "permission-denial-does-not-submit"
+        ],
+        "cleanedUp": true,
+        "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+      },
+      {
+        "name": "native-notification",
+        "seconds": 5.584,
+        "complete": true,
+        "sdk": 35,
+        "cases": [
+          "actual-private-display-and-immutable-public-version",
+          "same-render-replay-updates-stable-card",
+          "stale-removal-preserves-new-render-and-new-render-may-alert",
+          "same-render-reissue-keeps-original-immutable-envelope",
+          "real-remote-input-and-old-render-envelope-remain-distinct",
+          "immutable-actions-ignore-injected-remote-input",
+          "colliding-java-hashes-cannot-retarget-pending-intents",
+          "missing-oversized-or-cross-component-input-is-rejected",
+          "namespace-cleanup-preserves-unrelated-application-notifications",
+          "disabled-channel-is-distinct-from-submitted",
+          "newer-inventory-fences-stale-removal-while-os-card-is-absent",
+          "opaque-no-backup-inventory-reopens-and-clears-without-account-data",
+          "latest-owned-inventory-can-cancel-its-older-visible-predecessor",
+          "full-opaque-inventory-does-not-evict-or-submit",
+          "corrupt-inventory-withholds-new-posts-and-cleans-visible-cards"
+        ],
+        "cleanedUp": true,
+        "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+      }
+    ],
+    "sdk": 35,
+    "apkSha256": "bd2416f4884cce332f5a4fd1c2fe46f74d992b1922cbb9ac1c901567d2c792d8",
+    "runtimeComposition": {
+      "seconds": 1.821,
+      "complete": true,
+      "cleanedUp": true,
+      "cases": [
+        "english-copy-and-native-actions",
+        "language-change-without-host-replacement",
+        "system-language-resource-resolution",
+        "one-application-host-and-joined-native-cleanup"
+      ],
+      "scope": "Android runtime composition and OS resources; fake admission/settings storage, no provider/account/actions"
+    },
+    "inputRecovery": {
+      "complete": true,
+      "pid": 3683,
+      "protectedRowsBeforeRecovery": 1,
+      "reviewRowsAfterRecovery": 1,
+      "wrongAccountPreservedInput": true,
+      "oldFamilyRequiresReview": true,
+      "recoveryTurns": [
+        {
+          "turn": 1,
+          "result": "Complete",
+          "failureKind": null,
+          "failureCode": null,
+          "milliseconds": 195,
+          "protectedRows": 0,
+          "reviewRows": 1,
+          "reviewStates": [
+            "SessionChanged"
+          ]
+        }
+      ],
+      "httpCalls": 0,
+      "commandRetained": false,
+      "cleanedUp": true,
+      "ordinaryProcessKills": 3,
+      "callbackCount": 4,
+      "processIds": [
+        3324,
+        3430,
+        3556,
+        3683
+      ],
+      "seconds": 16.148,
+      "scope": "Real Android callback, Keystore/Room/app recovery; fictional account; no HTTP/Matrix send or production host activation"
+    },
+    "actionCallbacks": {
+      "complete": true,
+      "cases": [
+        {
+          "complete": true,
+          "mode": "Open",
+          "pid": 3719,
+          "state": "Published",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 1,
+          "callbackCount": 1
+        },
+        {
+          "complete": true,
+          "mode": "MarkRead",
+          "pid": 3719,
+          "state": "Cancelled",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 0,
+          "callbackCount": 2
+        },
+        {
+          "complete": true,
+          "mode": "Dismiss",
+          "pid": 3719,
+          "state": "Dismissed",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 0,
+          "callbackCount": 3
+        },
+        {
+          "complete": true,
+          "mode": "Reply",
+          "pid": 3719,
+          "state": "Dismissed",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 0,
+          "callbackCount": 4
+        },
+        {
+          "complete": true,
+          "mode": "Mute",
+          "pid": 3719,
+          "state": "Cancelled",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 0,
+          "callbackCount": 5
+        }
+      ],
+      "systemUiReply": true,
+      "seconds": 44.163,
+      "scope": "Actual Android application callbacks, encrypted Room/Keystore and native cards; seeded fictional session/conversation/history; no discovery actor, provider send or product activation"
+    },
+    "complete": true,
+    "fixtureAbsent": true,
+    "fixtureUninstalled": true,
+    "fixtureDataCleared": true,
+    "seconds": 107.955
+  },
+  "releaseSmoke": {
+    "complete": true,
+    "serial": "emulator-5562",
+    "phoneTouched": false,
+    "source": "084662c5bc9277ae8fd56d103a0acda89c3ee5ee",
+    "sha256": "e17f1681dcc5cacce43fb126b53da261e5b89423e65c3ab3737d29186c46dca1",
+    "versionCode": 29,
+    "debuggable": false,
+    "primaryEmulatorAbi": "x86_64",
+    "nativeBridge": "libndk_translation.so",
+    "coldStarts": [
+      {
+        "coldStart": 1,
+        "pid": 4522,
+        "stableSeconds": 12,
+        "readableUiNodeCount": 7,
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 17.214,
+        "screenshotSha256": "508ac7aef2288a837c274a0805f1ef25694f7ba9b077664eb011bb938ae0203b"
+      },
+      {
+        "coldStart": 2,
+        "pid": 4672,
+        "stableSeconds": 12,
+        "readableUiNodeCount": 7,
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 16.963,
+        "screenshotSha256": "508ac7aef2288a837c274a0805f1ef25694f7ba9b077664eb011bb938ae0203b"
+      }
+    ],
+    "elapsedSeconds": 39.157,
+    "apkUnchanged": true
+  },
+  "ownedEmulatorStop": {
+    "pid": 3415480,
+    "serial": "emulator-5562",
+    "stopped": true,
+    "signalSent": true,
+    "transportAbsent": true,
+    "seconds": 1.205
+  },
+  "screenshots": {
+    "docs/screenshots/release-29-2026-11-04/onboarding.png": {
+      "sha256": "508ac7aef2288a837c274a0805f1ef25694f7ba9b077664eb011bb938ae0203b",
+      "reviewed": true,
+      "scope": "Owned emulator; fictional notification fixtures and product onboarding only"
+    },
+    "docs/screenshots/release-29-2026-11-04/reply-notification.png": {
+      "sha256": "fcc19c09b349d8df4c08fadcbeb0d2bcf9cf684f59fd88854fd1eca82c78cf80",
+      "reviewed": true,
+      "scope": "Owned emulator; fictional notification fixtures and product onboarding only"
+    },
+    "docs/screenshots/release-29-2026-11-04/reply-editor.png": {
+      "sha256": "f99f0998b8c09fe8db441dd130b52a722e60d21e7c137408283bf8493f799c38",
+      "reviewed": true,
+      "scope": "Owned emulator; fictional notification fixtures and product onboarding only"
+    },
+    "docs/screenshots/release-29-2026-11-04/reply-acknowledged.png": {
+      "sha256": "080f311659b875c1ccbd904104ab147b621cc9401d0678fb9172c63aab46e2cd",
+      "reviewed": true,
+      "scope": "Owned emulator; fictional notification fixtures and product onboarding only"
+    }
+  },
+  "phoneDelivery": {
+    "confirmed": false,
+    "installationAttempted": false,
+    "serial": "10.77.77.3:5555",
+    "currentKnownVersion": 28,
+    "reason": "Two bounded 15-second WireGuard ADB connection attempts timed out; async availability question remains pending.",
+    "uiLaunched": false,
+    "appDataCleared": false
+  },
+  "limits": [
+    "Exact ARM64 release artifact cold-started twice on an x86_64 emulator with libndk_translation.so; this is startup/onboarding evidence, not native ARM hardware or authenticated workflow acceptance.",
+    "Notification proof uses a separate debug fixture APK built from the same clean source. Real Android callbacks/Room/Keystore and SystemUI reply, three process deaths; fictional account, zero HTTP/Matrix sends.",
+    "No new FCM, voice/video/meeting, Apple runtime, group UI/runtime cutover or performance acceptance. All 54 communications groups remain open.",
+    "Phone remains on release28 until an explicitly targeted in-place install succeeds and pull-back bytes match."
+  ]
+}

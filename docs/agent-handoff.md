@@ -1,5 +1,33 @@
 # Agent continuation — HRIS Mobile
 
+## Product release 29 verified; phone connection pending — 4 November 2026
+
+Product source [084662c5](https://github.com/fajarxfce/hris-mobile/commit/084662c5bc9277ae8fd56d103a0acda89c3ee5ee) is clean, committed and pushed. The signed devRelease29 APK is
+88,107,752 bytes, SHA-256 `e17f1681dcc5cacce43fb126b53da261e5b89423e65c3ab3737d29186c46dca1`.
+Package, existing development signer, Firebase dev app, private API, release flags,
+16 KiB alignment and backup exclusions are verified; lint has zero issues.
+Build/lint plus 18 proof unit tests pass in 548.560 s. The exact ARM64 release APK
+opens twice on the dedicated emulator through its native bridge, with 12 stable
+seconds per start. Onboarding screenshot is reviewed. The separate proof APK
+passes real Android notification/callback/Room/Keystore, three process deaths and
+SystemUI reply checks (zero HTTP/Matrix sends). Editor/removal screenshots reviewed.
+Owned proof package and emulator are cleaned up. [Evidence](measurements/android-release-phone-2026-11-04-build29.json).
+
+Phone `10.77.77.3:5555` remains unreachable after two 15-second connection attempts.
+No installation or phone UI action was performed; release 28 remains the last
+confirmed install. The availability question is pending. Retained APK and guarded
+verification/install scripts are in `.work/release-phone-2026-11-04-build29/`.
+When the device returns: verify current 28/same signer, notify the user immediately
+before `install.py --install-only`, then confirm UID/first install and pull-back SHA.
+Never install the proof APK on the phone, clear its data or drive its UI.
+
+NEXT: continue organization-directory local-read/refresh use cases, durable native
+identity/device commands, SDK adoption/hard-parent recovery, organization UI and
+push/background/replies while phone delivery waits. Product still uses company
+chat. All 54 PRD groups remain open; this is neither group rollout nor new provider/
+FCM/Apple/voice/meeting acceptance. Live backend 8b40/schema 116 is unchanged.
+Continue long run, updates, atomic pushes and validated product installs.
+
 ## Atomic company-chat admission cleanup — 4 November 2026
 
 A newer access denial can arrive just before an earlier completion clears its
