@@ -1,5 +1,27 @@
 # Agent continuation — HRIS Mobile
 
+## Original room creator metadata accepted — 4 November 2026
+
+Backend [6c22caba](https://github.com/fajarxfce/hris-platform/commit/6c22caba) adds V130
+and exposes room.createdBy from the original binding, independently of conversation
+creator. [Evidence](https://github.com/fajarxfce/hris-platform/blob/6c22caba/docs/measurements/collaboration-original-room-creator-2026-11-04.json):
+database 4/data 12/API 97 PASS 363.765s with quality checks and 8,372 unchanged inputs.
+Actual upgrade, archive restore, parent purge, malformed tuples and both participants
+through HTTP pass. One stale recovery future-schema sentinel was corrected afterward;
+all 19 cases pass in 0.011s. Original encryption projection and source rooms unchanged.
+Main peer 2ab63fd8 records this; backend push succeeded after transient GitHub failures.
+
+NEXT group room preparation/adoption with actual original creator, exact canonical
+members, current admission and bounded uncertainty recovery. Exact original-pair
+lookup and old-room peer join/key-retention/restart follow-up is currently being tested
+in the group worktree; do not treat it as accepted yet. Then recipient key/content/
+sync/push and full Mobile adoption preserving original SDK namespace/passphrase, keys,
+history and uncertain sends. Other legacy producers, unbound old rooms, offline keys
+and native hard-parent replacement still require integration. Group disabled/all 54
+groups open. No Mobile code or APK changed; product/hosted 0b804cb2, normal phone 28,
+live 8b40/schema 116 push ON/SMTP OFF and Starter 9959c1d unchanged. Continue long run,
+frequent updates, atomic pushes and validated product feature installs only.
+
 ## Group room provider accepted — 4 November 2026
 
 Backend [0a6ad2b2](https://github.com/fajarxfce/hris-platform/commit/0a6ad2b2) adds explicit
