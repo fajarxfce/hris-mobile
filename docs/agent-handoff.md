@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## Original/group history fence accepted — 4 November 2026
+
+Backend [08827578](https://github.com/fajarxfce/hris-platform/commit/08827578) is pushed.
+V132 reserves one immutable unique route for same-original-company canonical pairs,
+closing the late-original conversation race. Both inserts arbitrate the same key;
+rollback frees it and conflicting preexisting histories abort upgrade. Existing
+original bound adoption keeps its LEGACY route. [Evidence](https://github.com/fajarxfce/hris-platform/blob/08827578/docs/measurements/collaboration-original-pair-routing-2026-11-04.json):
+focused5 PASS99.972s, full database98/API25 PASS967.86s plus format/architecture on
+8,387 unchanged inputs; recovery19 passes (MAX132/unknown133). Both winner orders,
+commit/rollback, fixed snapshots, RLS, native purge and actual restore pass. Initial
+backfill/DDL ordering failure is resolved. After the gate only one redundant trailing
+blank line was removed; both SQL hashes are recorded. No new DI/endpoint/worker claim.
+
+Current backend WIP now applies native room policy, request/status and safe view,
+plus shared original pair guard and pure/actual PostgreSQL tests. First gate running;
+no native room acceptance yet. Group-room-lifecycle/native-room draft files are now
+APPLIED/STALE; use actual source. More retained original-device and opposite initialized
+requester coverage, actual HTTP/FULL-worker DI, bounded room worker reconciliation,
+recipient keys/content/sync/push and full Mobile adoption remain required. Preserve
+SDK namespace/passphrase, keys, history and uncertain sends. Group disabled/all54
+PRD groups open. Product/hosted0b804cb2, phone28, live8b40/schema116 pushON/SMTPOFF and
+Starter9959c1d unchanged. Continue long run, updates, atomic pushes and validated
+PRODUCT feature installs only.
+
 ## Organization room storage accepted — 4 November 2026
 
 Backend [4320caca](https://github.com/fajarxfce/hris-platform/commit/4320caca) is pushed.
