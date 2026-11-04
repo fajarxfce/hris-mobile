@@ -1,5 +1,32 @@
 # Agent continuation — HRIS Mobile
 
+## Original queued SDK keys recovered through group completion — 4 November 2026
+
+Backend [5f9896f7](https://github.com/fajarxfce/hris-platform/commit/5f9896f72bb047759ca2378247995eac9b1a533a) is pushed.
+
+Actual Android SDK26.10.23 messages survive native legacy completion, an interrupted
+queued-key response and two process deaths. Both unknown/known-peer variants decrypt
+the exact original encrypted event with the same original keys and store. The
+unmigrated peer and original room need no new-send eligibility expansion. The next
+process reads one local event before sync; its subsequent cursor acknowledgment
+clears the retained provider queue. Strict SDK shields are Red, not verified trust.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/5f9896f72bb047759ca2378247995eac9b1a533a/docs/collaboration/space-sdk-history.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/5f9896f72bb047759ca2378247995eac9b1a533a/docs/measurements/collaboration-space-sdk-history-2026-11-04.json).
+
+Two actual API/PostgreSQL/Synapse/emulator cases pass in109.162s, with12,388 unchanged
+combined inputs and the same APK. Mobile root :check, Android-host, proof unit/build/
+lint pass in133.464s (3,883 unchanged inputs;18 fresh proof cases, unaffected tasks
+reused). Earlier failed attempts and fixture corrections are recorded. All sessions
+and owned emulator resources closed. Mobile proof commit [36c60208](https://github.com/fajarxfce/hris-mobile/commit/36c6020892fe6c7f0a2b2f28772f9a8a31d538a6) is pushed.
+
+NEXT: product group runtime/store adoption, typed group push/background/reply
+routing, native hard-parent recovery and actual FCM single-notification handover.
+This fixture is not product adoption, worker-role isolation, verified sender trust,
+Apple/web or load acceptance. Current Mobile product still ignores group push.
+Live8b40/schema116, phone28, product/hosted0b804cb2 and Starter9959c1d unchanged.
+All54 PRD groups remain open. Continue long run, updates, atomic pushes and validated
+product installs.
+
+
 ## Original queued SDK keys recovered — 4 November 2026
 
 The actual Android SDK preserves original keys and decrypts queued messages after
