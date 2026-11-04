@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## Group room provider accepted — 4 November 2026
+
+Backend [0a6ad2b2](https://github.com/fajarxfce/hris-platform/commit/0a6ad2b2) adds explicit
+canonical users, separate group room aliases/markers and strict provider state checks.
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/0a6ad2b2/docs/measurements/collaboration-space-room-provider-2026-11-04.json):
+96 domain cases passed; six final data cases passed in 50.407s with quality checks.
+Actual Synapse covers retained cross-company identities/keys, first peer login/join,
+restart, lost create responses and foreign-member rejection. Four initial failures
+were corrected test fixtures only. This is room protocol evidence, not SDK messaging.
+The first push failed with GitHub 500; HTTPS retry through existing gh authentication
+succeeded. Main peer bc24e5e2 records the implementation and next work.
+
+NEXT group room request/queue/publication and original room adoption. V129 inventory
+must first expose the original room binding account_id: conversation.createdBy can be
+a different participant and must never stand in for the actual Matrix room creator.
+Keep original company/conversation/room/user coordinates explicit; verify canonical
+participants and current authority before immutable publication. Generic background
+jobs remain company-scoped. Then recipient keys/content/sync/push and full Mobile
+preflight/stage/freeze/completion/adoption preserving SDK namespace/passphrase, keys,
+history and uncertain sends. Offline receiving and hard-parent replacement remain open.
+Group disabled; no Mobile caller or APK. Product/hosted 0b804cb2, normal phone 28,
+live 8b40/schema 116 push ON/SMTP OFF and Starter 9959c1d unchanged. All 54 groups remain
+open. Continue long run, updates, atomic pushes and validated feature installs only.
+
 ## Native group conversation API accepted — 4 November 2026
 
 Backend [b478f776](https://github.com/fajarxfce/hris-platform/commit/b478f776) now exposes
