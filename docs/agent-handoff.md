@@ -1,5 +1,27 @@
 # Agent continuation — HRIS Mobile
 
+## Signed group key upload accepted — 4 November 2026
+
+Backend [a65a8170](https://github.com/fajarxfce/hris-platform/commit/a65a8170) now admits
+fixed group own-key upload with immutable input/reservation, signed continuity and
+current exact request authority before acknowledgement. Counts do not acknowledge
+pending keys; lost responses preserve recovery, and retained keys survive restart.
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/a65a8170/docs/measurements/collaboration-space-key-exchange-2026-11-04.json):
+focused18 PASS268.626s, data20/API132 PASS455.786s and full worker128 PASS343.980s
+(one existing retention skip), 8,351 identical final inputs and quality gates. Strict
+HTTP, same-identity races, caller mutation, late revocation, generation changes and
+actual group/retained Synapse restart pass. Main peer e090e7e3 records acceptance.
+
+NEXT backend group room/member/original-room authority before recipient key query/
+claim/to-device and content, then Mobile group preflight/stage/freeze/completion/atomic
+adoption. Preserve original SDK namespace/passphrase, history and uncertain sends.
+Group recipients need version0 pre-ack confirmation semantics and offline receiving
+independent of short native/provider credentials. Hard-parent replacement remains
+explicit recovery work. Group availability remains disabled; no Mobile caller or APK.
+Product code/hosted evidence0b804cb2, phone28/live8b40/schema116 push ON/SMTP OFF and
+Starter9959c1d unchanged. All54 groups stay open. Continue full long run, frequent
+updates, immediate pushes and validated product feature installs only.
+
 ## Group public-key storage accepted — 4 November 2026
 
 Backend [88f5fc20](https://github.com/fajarxfce/hris-platform/commit/88f5fc20) retains
