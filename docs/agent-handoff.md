@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Original history protocol accepted — 4 November 2026
+
+Backend [beccbea1](https://github.com/fajarxfce/hris-platform/commit/beccbea1d5f2ecee41ce48d93cafeeb3f962e91f) is pushed.
+
+The group history port now reads explicit original room metadata before a published
+group binding exists. Shared bounded projection retains actual original creator and
+ciphertext. Original and adopted metadata use the same seven-coordinate group cursor;
+only the exact retained device may bridge an old company cursor. Fresh devices remain
+isolated. Missing crypto keys, cancellation and interruption retain their classification.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/beccbea1d5f2ecee41ce48d93cafeeb3f962e91f/docs/collaboration/space-original-history-protocol.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/beccbea1d5f2ecee41ce48d93cafeeb3f962e91f/docs/measurements/collaboration-space-original-history-protocol-2026-11-04.json).
+
+Initial gate: 163 of 164 passed in 164.863 s, including all 133 domain,
+27 existing data/provider/native and three new protocol cases. One new fixture used
+version10/federated defaults instead of the existing version12/nonfederated contract.
+The four corrected protocol cases pass in 30.813 s; quality checks
+pass on 8,455 unchanged inputs. Only that fixture changed; production and all
+other tests remained unchanged. Actual Synapse alternates original/adopted history
+after restart and checks fresh original-device reads. All sessions closed. No SDK
+Megolm decryption or connected native original fallback is claimed.
+
+NEXT: connect original-room lookup only after successful absent group binding, with
+current native admission and exact metadata revalidation around both provider outcomes.
+Validate actual API and FULL worker contexts for DI changes. Then complete group sync,
+historical peer-key authentication/decryption, metadata/push, Mobile SDK ownership
+transition and native hard-parent recovery without replacing original stores/keys.
+
+Base `4c6b9dbd` pushed. Group rollout disabled; all 54 PRD acceptance groups open.
+Live8b40/schema116 (push on, SMTP off), normal phone28, Mobile product/hosted0b804cb2
+and Starter9959c1d unchanged. Continue long run, updates, atomic pushes and product installs.
+
+
 ## Original and published room read scope accepted — 4 November 2026
 
 Backend [4c6b9dbd](https://github.com/fajarxfce/hris-platform/commit/4c6b9dbd103b41ffdf2b242649aac446c6b2fe2b) is pushed.
