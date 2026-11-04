@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Organization owned-room sync scope accepted — 4 November 2026
+
+Backend [b8e84bba](https://github.com/fajarxfce/hris-platform/commit/b8e84bba57f767e80f45a5b17f8b6dc1a3408126) is pushed.
+
+Existing V131 storage now provides bounded participant-owned room inventory without
+joining current peer eligibility. Typed mapping verifies bounds, ordering, ownership
+and original metadata. A distinct pure DIRECT scope preserves original Matrix users,
+actual creator and LEGACY provenance, rejects duplicate/foreign/future or conflicting
+metadata and produces a deterministic digest. A 10,001-row overfetch rejects capacity
+above 10,000 without returning a truncated scope. No schema or DI graph changed.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/b8e84bba57f767e80f45a5b17f8b6dc1a3408126/docs/collaboration/space-room-sync-scope.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/b8e84bba57f767e80f45a5b17f8b6dc1a3408126/docs/measurements/collaboration-space-room-sync-scope-2026-11-04.json).
+
+All 130 tests pass in 78.157 s: 127 domain (five new scope cases)
+and three expanded PostgreSQL/repository cases. Format/architecture checks pass on
+8,451 unchanged inputs. Actual RLS covers root participants, wrong account/
+company/space/server, unbound rooms and offboarded peers. Typed acquisition covers
+bounds/order/duplicates, cancellation and interruption. Existing exact lookup passes.
+All sessions closed. Applied scope drafts are stale; committed source is authoritative.
+
+NEXT: combine separately proven original owned-room inventory for completed LEGACY
+owners or establish complete original-room adoption BEFORE provider sync advances.
+Otherwise filtering only newly bound group rooms could omit queued original to-device
+keys. V129/V130 retain original room/creator metadata; do not fabricate group binding,
+lease or publication fields. This scope includes published group bindings only.
+Then implement distinct group sync cursor/filter/projection with current admission,
+metadata/push, retained-history fallback, full Mobile SDK adoption and native hard-parent
+recovery. Preserve original store/passphrase/keys/history and uncertain sends.
+
+Base `96e5053b` is pushed. Group rollout remains disabled and all 54 PRD acceptance
+groups remain open. Live `8b40` / schema116 (push on, SMTP off), normal phone release28,
+Mobile product/hosted `0b804cb2` and Starter `9959c1d` remain unchanged. Continue the long
+run, updates, atomic pushes and validated product installs.
+
+
 ## Current group room-history access accepted — 4 November 2026
 
 Backend [96e5053b](https://github.com/fajarxfce/hris-platform/commit/96e5053b8693410895664c8cf8d1a5b47e8249b5) is pushed.
