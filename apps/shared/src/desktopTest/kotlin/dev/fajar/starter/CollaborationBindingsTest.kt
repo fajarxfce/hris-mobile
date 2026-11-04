@@ -286,6 +286,11 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<CollaborationConversationRepository>())
                 assertNotNull(container.koin.get<ReadCollaborationConversations>())
                 assertNotNull(container.koin.get<CollaborationListRepository>())
+                assertNotNull(
+                    container.koin.get<
+                        dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceDirectoryRepository
+                    >()
+                )
                 assertNotNull(container.koin.get<CollaborationMessageRepository>())
                 assertNotNull(container.koin.get<CollaborationReceiptRepository>())
                 assertNotNull(container.koin.get<RetireCollaborationMessages>())

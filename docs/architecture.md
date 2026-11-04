@@ -1,5 +1,10 @@
 # Architecture
 
+[Encrypted organization directory](collaboration-space-directory-storage.md) keeps
+account-owned facts, cursor progress and access admission separate from native
+credential lifetime and selected HR company. Its repository exposes encrypted
+storage; owning use cases must coordinate publication and finite acquisition.
+
 [Native group discovery](collaboration-space-discovery.md) uses a distinct
 organization owner over the current native parent, separate from selected HR
 company and retained physical SDK ownership. Its finite metadata/contact reads

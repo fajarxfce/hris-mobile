@@ -1,5 +1,33 @@
 # Agent continuation — HRIS Mobile
 
+## Encrypted organization directory storage — 4 November 2026
+
+Account/space-owned directory facts now survive reauthentication, interrupted paging
+and replacement refreshes. Names and company labels remain encrypted; old published
+facts stay visible until a replacement completes. Durable terminal cursors and
+bounded local reads avoid extra end-page reads. Access denials survive failed or
+rejected persistence; exact durable revision plus atomic pending-buffer clear protect
+newer denials. Every real host supplies a separate protected content key.
+[Contract](collaboration-space-directory-storage.md),
+[evidence](measurements/collaboration-space-directory-storage-2026-11-04.json).
+
+Final root :check, Android-host and Android dev compilation pass 346.21 s /
+1,370 fresh cases; browser pass 96.303 s / 486 cases. Both keep
+3,910 identical source inputs. Seventeen shared cases run on real SQLite/IndexedDB
+with AES-GCM; real application DI resolves the new repository. Earlier attempts,
+review correction and their validation limits are recorded. All sessions closed.
+
+NEXT: apply the same atomic pending-buffer clear to the existing company-chat list
+(the current-then-clear window remains there), then owning local-read/refresh use
+cases, durable native identity/device commands, SDK adoption/hard-parent recovery,
+organization UI and typed group push/background/replies. This storage adapter alone
+does not apply local read admission or perform native acquisition. Product routes
+still use company chat. No new product/provider/Apple/FCM or performance acceptance.
+Live backend 8b40/schema 116, phone release 28, product/hosted 0b804cb2 and Starter
+9959c1d are unchanged.
+All 54 PRD groups remain open. Continue long run, updates, atomic pushes and validated
+product installs.
+
 ## Native group discovery and directory transport — 4 November 2026
 
 A distinct CollaborationSpaceOwner now drives native discovery and bounded contact

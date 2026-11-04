@@ -52,6 +52,11 @@ fun main() {
                 BrowserProtectedCredentialStore(namespace, "directory-replica-content-key"),
             collaborationListCredentials =
                 BrowserProtectedCredentialStore(namespace, "collaboration-list-content-key"),
+            collaborationSpaceDirectoryCredentials =
+                BrowserProtectedCredentialStore(
+                    namespace,
+                    "collaboration-space-directory-content-key",
+                ),
             collaborationReceiptCredentials =
                 BrowserProtectedCredentialStore(namespace, "collaboration-receipt-content-key"),
             collaborationHistoryCredentials =

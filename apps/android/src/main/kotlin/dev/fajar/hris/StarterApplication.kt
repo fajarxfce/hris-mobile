@@ -95,6 +95,8 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
                 AndroidCredentialStore(this, "directory-replica-content-key"),
             collaborationListCredentials =
                 AndroidCredentialStore(this, "collaboration-list-content-key"),
+            collaborationSpaceDirectoryCredentials =
+                AndroidCredentialStore(this, "collaboration-space-directory-content-key"),
             collaborationReceiptCredentials =
                 AndroidCredentialStore(this, "collaboration-receipt-content-key"),
             collaborationHistoryCredentials =

@@ -45,6 +45,7 @@ class AppleAppHost(
     expenseReplicaCredentials: AppleCredentialClient,
     directoryReplicaCredentials: AppleCredentialClient,
     collaborationListCredentials: AppleCredentialClient,
+    collaborationSpaceDirectoryCredentials: AppleCredentialClient,
     collaborationReceiptCredentials: AppleCredentialClient,
     collaborationHistoryCredentials: AppleCredentialClient,
     collaborationNotificationInputCredentials: AppleCredentialClient,
@@ -88,6 +89,8 @@ class AppleAppHost(
             expenseReplicaCredentials = AppleCredentialStore(expenseReplicaCredentials),
             directoryReplicaCredentials = AppleCredentialStore(directoryReplicaCredentials),
             collaborationListCredentials = AppleCredentialStore(collaborationListCredentials),
+            collaborationSpaceDirectoryCredentials =
+                AppleCredentialStore(collaborationSpaceDirectoryCredentials),
             collaborationReceiptCredentials = AppleCredentialStore(collaborationReceiptCredentials),
             collaborationHistoryCredentials = AppleCredentialStore(collaborationHistoryCredentials),
             collaborationNotificationInputCredentials =

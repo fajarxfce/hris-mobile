@@ -14,6 +14,7 @@ import org.koin.dsl.onClose
 internal fun applicationCollaborationModule(
     runtime: (IdentityServer, HttpClient) -> CollaborationRuntimeRepository,
     listCredentials: AtomicCredentialStore,
+    spaceDirectoryCredentials: AtomicCredentialStore,
     receiptCredentials: AtomicCredentialStore,
     historyCredentials: AtomicCredentialStore,
     notificationInputCredentials: AtomicCredentialStore,
@@ -27,6 +28,10 @@ internal fun applicationCollaborationModule(
         }
         .onClose { it?.close() }
     single<AtomicCredentialStore>(named("collaboration-list-content-key")) { listCredentials }
+        .onClose { it?.close() }
+    single<AtomicCredentialStore>(named("collaboration-space-directory-content-key")) {
+            spaceDirectoryCredentials
+        }
         .onClose { it?.close() }
     single<AtomicCredentialStore>(named("collaboration-receipt-content-key")) { receiptCredentials }
         .onClose { it?.close() }

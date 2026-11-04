@@ -91,6 +91,7 @@ fun createAppContainer(
     expenseReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     directoryReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     collaborationListCredentials: AtomicCredentialStore = MemoryCredentialStore(),
+    collaborationSpaceDirectoryCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     collaborationReceiptCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     collaborationHistoryCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     collaborationNotificationInputCredentials: AtomicCredentialStore = MemoryCredentialStore(),
@@ -125,6 +126,7 @@ fun createAppContainer(
         applicationCollaborationModule(
             collaborationRuntime,
             collaborationListCredentials,
+            collaborationSpaceDirectoryCredentials,
             collaborationReceiptCredentials,
             collaborationHistoryCredentials,
             collaborationNotificationInputCredentials,

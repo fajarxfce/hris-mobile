@@ -1,0 +1,315 @@
+{
+  "recordedAt": "2026-11-04T22:44:11.795585+00:00",
+  "baseCommit": "1da6b5d00f906e220d6d7b472164d11487541616",
+  "scope": "Encrypted organization directory and admission storage; product acquisition/UI integration pending",
+  "gates": {
+    "focused1": {
+      "startedAt": "2026-11-04T22:21:46.897151+00:00",
+      "elapsedSeconds": 83.532,
+      "exitCode": 1,
+      "sourceFiles": 3910,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshTargets": {},
+      "selectedReports": {},
+      "reportManifestSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    "focused2": {
+      "startedAt": "2026-11-04T22:23:40.083681+00:00",
+      "elapsedSeconds": 45.557,
+      "exitCode": 1,
+      "sourceFiles": 3910,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshTargets": {},
+      "selectedReports": {},
+      "reportManifestSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    "focused3": {
+      "startedAt": "2026-11-04T22:24:43.186574+00:00",
+      "elapsedSeconds": 76.688,
+      "exitCode": 0,
+      "sourceFiles": 3910,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshTargets": {
+        "features/collaboration/data/desktopTest": {
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "selectedReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SpaceDirectoryStorageTest.xml": {
+          "sha256": "2c3393fa546c1efb7b300c677b4e1539115ad2e06abe9f36ef726b0e73f312a7",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SpaceDirectoryAdmissionStorageTest.xml": {
+          "sha256": "653d220e86f2d95e9eab90d5ed7d7c44018a9f171ceddc32785ab62f218f811e",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportManifestSha256": "fa09889e2650c7199a214b610c3ab0f70f94867a8179376f99c0fd51ab5d85cc"
+    },
+    "check1": {
+      "startedAt": "2026-11-04T22:26:44.950836+00:00",
+      "elapsedSeconds": 381.233,
+      "exitCode": 0,
+      "sourceFiles": 3910,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2479,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshTargets": {
+        "apps/shared/desktopTest": {
+          "tests": 615,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/desktopTest": {
+          "tests": 164,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/desktopTest": {
+          "tests": 507,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/testAndroidHostTest": {
+          "tests": 247,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/desktopTest": {
+          "tests": 946,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "fcc185096cebbf4b25e56fa1edc56137cd6523922c69f11568f2f2a7705f02a2",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SpaceDirectoryAdmissionStorageTest.xml": {
+          "sha256": "e1657042b38e4d98dc3717d1a01ee73aab64cc4215d653344331d9dd62e3feac",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SpaceDirectoryStorageTest.xml": {
+          "sha256": "7109b9bb40d6f93bbc6be420d22c664cebdfc3e211c2d1cecc5945934c10e826",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportManifestSha256": "ba8775938abd2e4cbad424cc5fbc1cc108ab580fa5e793fa21397c923a67b53c"
+    },
+    "browser1": {
+      "startedAt": "2026-11-04T22:33:10.854224+00:00",
+      "elapsedSeconds": 102.588,
+      "exitCode": 0,
+      "sourceFiles": 3910,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 485,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshTargets": {
+        "features/collaboration/data/wasmJsBrowserTest": {
+          "tests": 485,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "selectedReports": {
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SpaceDirectoryStorageTest.xml": {
+          "sha256": "7f1e2479748f7a56d75361fb2b3d6c41cd634da2ebefb526cacfa46d8073c16b",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SpaceDirectoryAdmissionStorageTest.xml": {
+          "sha256": "ffb5382f6f102567d5ec71f45f27f6a6c0fee8b638728458ea4f253bc7b62c74",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportManifestSha256": "c1d585b18fdddf39fbe93ef8a52b04b7bb6e3c859ef3e1b0782a2602f51531f2"
+    },
+    "check2": {
+      "startedAt": "2026-11-04T22:36:08.953161+00:00",
+      "elapsedSeconds": 346.21,
+      "exitCode": 0,
+      "sourceFiles": 3910,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1370,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshTargets": {
+        "apps/shared/desktopTest": {
+          "tests": 615,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/desktopTest": {
+          "tests": 508,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/testAndroidHostTest": {
+          "tests": 247,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "80b18e9968e6dcded7789949eec9507d0d31114998460946f661f9f1fb50976f",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SpaceDirectoryAdmissionStorageTest.xml": {
+          "sha256": "e5c8f79c7f759d41faea074f37da8dd2b20fe92a12f5d4f8056e6c7c7ae0dacf",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SpaceDirectoryStorageTest.xml": {
+          "sha256": "8076f9ef16b46b7ece03880508880b422838958b61272a2e093378cddca0fe11",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportManifestSha256": "799d5249ef455c9763a917433e028e50a07a5696c30747c43379c00bf73abd6a"
+    },
+    "browser2": {
+      "startedAt": "2026-11-04T22:42:04.857961+00:00",
+      "elapsedSeconds": 96.303,
+      "exitCode": 0,
+      "sourceFiles": 3910,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 486,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshTargets": {
+        "features/collaboration/data/wasmJsBrowserTest": {
+          "tests": 486,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "selectedReports": {
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SpaceDirectoryStorageTest.xml": {
+          "sha256": "9c025926435c31780930affee7eaab532cdcce8842ccca43c59f4625a9179e9b",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SpaceDirectoryAdmissionStorageTest.xml": {
+          "sha256": "a3f9606c63960ea16357c7070a19699dc72986eb02f8a98b04c83dc1e85bf42a",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportManifestSha256": "009bd30e6af31f21d87184c832b954dd1f7036a8089e201dfd46ec5092fb4685"
+    }
+  },
+  "sourceHashes": {
+    "apps/android/src/main/kotlin/dev/fajar/hris/StarterApplication.kt": "e5ff34d1b82c2500a793c53b23681443623d2ca5cac1f71c221cc485eb8a0b99",
+    "apps/ios/AppDelegate.swift": "ede45c530a1d233c1bb29c2615c043aa48dfcc31c0e2d40171b9a7466fbb8f57",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/AppContainer.kt": "479353ac4522e5b2699db668f22e38e4bc8ddc3d35dbf87ae34216ad379cf756",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationModule.kt": "65d79c620b5c931791de526dd1133c281d7c317abae1d75ee70e9ede7c0c1855",
+    "apps/shared/src/desktopMain/kotlin/dev/fajar/starter/Main.kt": "4e0cfd9cf28533817a9e49042f9358ab1350ba1a6d9a72466722e4665000ce5e",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "5c52a935037db91156a0ad39977104532c4ecacf24329dfcc9c2e8bd5bd5ccfe",
+    "apps/shared/src/iosMain/kotlin/dev/fajar/starter/MainViewController.kt": "18390b9decf79e1baebd9f4b5f73f6cec6242360a292812ef77c4bf9d3544d48",
+    "apps/shared/src/wasmJsMain/kotlin/dev/fajar/starter/Main.kt": "5be04a8379a5930bff93023c33ed1d2787cb9966cb42db691cf636706ceeddd6",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationSpaceDirectoryAdmissionSource.kt": "41e4e2f6724507697f705f6c3e51fa89ac30fbc55ac952a6944743f829a1d372",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/replica/CollaborationSpaceDirectoryCodec.kt": "e8ad57870ba556bfe65aef0023e4c722516aff10d41d6001989805d9ca0a69cf",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceDirectoryRepository.kt": "f071e857c041a639e4fcc681c2938329b0d3d2dab0c9e81601f79cac271f2623",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/SpaceDirectoryAdmissionStorageContract.kt": "b71e227f025c2ecaeba7b4b34d6c47b48216cd2919f45807b16b0c64e18a5fdd",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/SpaceDirectoryStorageContract.kt": "a49fa072457e2144a041bb797d45a147c074b997daf43227c95645284b133067",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/SpaceDirectoryStorageFixture.kt": "9cd61d188c4a82d1b441a4d6521c3a351b60851908ebf1f3517a51f74fc91d97",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/SpaceDirectoryStorageTest.kt": "613e6886ada1698bbe15fab8f11bf06bc6f7eb7e2abc89cda27bcb23358b136a",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/SpaceDirectoryStorageTest.kt": "e30f07ece1403b5b5f806750c23aee70ca6504d6dc00e773223d9bfb0a2e0b54",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceDirectory.kt": "7715206ae6acb1af1bfe59b5c83422a8f5d2fb48b1a7225689fc37c71cf2e713",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceDirectoryPolicy.kt": "41aa38844dfcd42eea44bf3afebaeae662332d30fb196339813d54401f5ac49f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpacePolicy.kt": "7c7420ba15462dd143f74c14a06318ce9cb31beafe03b5832eef9fc87dc5c4c6",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceDirectoryRepository.kt": "2e2122c2780874c034906ef4c9400e939cd02410cba1f760b84c4d2be44d0957"
+  },
+  "finalGateSourcesIdentical": true,
+  "attempts": [
+    "focused1: production compiles; six new-test cross-module nullable property smart casts fail compilation.",
+    "focused2: only test changes; first scripted edit missed formatted indentation, leaving three compile errors.",
+    "focused3: explicit test fix; 15 SQLite cases, format, architecture and detekt pass.",
+    "Before check1: add bounded audience/admission-key validation inside safe storage flow and one malformed-owner case. Initial root/Android and browser gates pass with identical inputs.",
+    "Before check2: review found a non-atomic current-then-clear window in the process buffer. Add a single CAS clear in the datasource, use it for both final gate clears, and inject a newer denial at that exact boundary in a 17th shared test. check2/browser2 are the final identical-source gates."
+  ],
+  "limits": [
+    "Repository exposes owned facts and admission separately; owning local-read/refresh use cases and product integration remain required.",
+    "SQLite/IndexedDB with actual AES-GCM; no new native API/provider/FCM, Matrix trust, Apple runtime or performance acceptance.",
+    "Pending denial survives failed/rejected persistence within the process; cross-process retention requires a successful durable write.",
+    "No product APK, phone or live server change. Current product still uses company chat."
+  ]
+}

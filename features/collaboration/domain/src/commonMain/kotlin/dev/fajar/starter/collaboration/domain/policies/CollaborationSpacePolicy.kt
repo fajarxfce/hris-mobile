@@ -36,20 +36,25 @@ fun validCollaborationSpaceContactPage(
         page.owner == owner &&
         page.items.size <= limit &&
         page.items.all { contact ->
-            validCollaborationMessageId(contact.accountId) &&
-                contact.accountId != owner.parent.accountId &&
-                (after == null || contact.accountId > after) &&
-                contact.displayName.isNotBlank() &&
-                contact.displayName.length <= 200 &&
-                contact.companies.size in 1..8 &&
-                (!contact.hasMoreCompanies || contact.companies.size == 8) &&
-                contact.companies.all {
-                    validCollaborationMessageId(it.id) &&
-                        it.name.isNotBlank() &&
-                        it.name.length <= 200
-                } &&
-                contact.companies.map { it.id }.distinct().size == contact.companies.size
+            validCollaborationSpaceContact(contact, owner.parent.accountId) &&
+                (after == null || contact.accountId > after)
         } &&
         page.items.zipWithNext().all { (a, b) -> a.accountId < b.accountId } &&
         (page.nextCursor == null ||
             (page.items.size == limit && page.nextCursor == page.items.last().accountId))
+
+/** Public labels only; shared by remote pages and the account-owned encrypted directory. */
+fun validCollaborationSpaceContact(
+    contact: CollaborationSpaceContact,
+    excludedAccountId: String,
+): Boolean =
+    validCollaborationMessageId(contact.accountId) &&
+        contact.accountId != excludedAccountId &&
+        contact.displayName.isNotBlank() &&
+        contact.displayName.length <= 200 &&
+        contact.companies.size in 1..8 &&
+        (!contact.hasMoreCompanies || contact.companies.size == 8) &&
+        contact.companies.all {
+            validCollaborationMessageId(it.id) && it.name.isNotBlank() && it.name.length <= 200
+        } &&
+        contact.companies.map { it.id }.distinct().size == contact.companies.size
