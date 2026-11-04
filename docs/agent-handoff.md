@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Fresh-device history on original users fixed — 4 November 2026
+
+Backend [28a1559c](https://github.com/fajarxfce/hris-platform/commit/28a1559c3481f40b061b88659001d369feaa1ec3) is pushed.
+
+Fresh HRISG_ devices can now read owned history on an already selected original Matrix
+user. The exact canonical room member remains mandatory; device origin no longer
+incorrectly forces a new group user. Retained devices still require their original
+HRIS_ tuple. Fresh devices cannot use old company/group cursors; their own cursors
+remain isolated. No keys, SDK store or provider identity are replaced.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/28a1559c3481f40b061b88659001d369feaa1ec3/docs/collaboration/space-history-device-identity.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/28a1559c3481f40b061b88659001d369feaa1ec3/docs/measurements/collaboration-space-fresh-history-device-2026-11-04.json).
+
+All 127 domain cases passed in the initial gate (23.031 s), which
+then stopped on a new test override parameter warning under -Werror. Corrected data/
+provider/native selection: all 27 pass (169.466 s), with quality checks
+on 8,451 unchanged inputs. Only two test fixtures changed after the initial
+run; production is unchanged. Native registration/activation/bootstrap and admitted
+history exercise both canonical-user origins. Actual Synapse exercises fresh devices
+after restart, original event content and cross-device cursor isolation while old
+access remains usable. No fresh-device SDK decryption is claimed. All sessions closed.
+
+NEXT: combine published group and separately proven original owned read metadata.
+Allow both fresh devices on original canonical users and completed retained devices;
+only the exact retained device may bridge its old cursor. Preserve per-room peer
+aliases and queued original key frames, and prove actual SDK peer-key lookup/decryption.
+Then group sync cursor/filter/projection, history fallback, metadata/push, full Mobile
+adoption and native hard-parent recovery without replacing original stores/keys.
+
+Base `3681619d` is pushed. Group rollout remains disabled and all 54 PRD acceptance
+groups remain open. Live8b40/schema116 (push on, SMTP off), normal phone28, Mobile
+product/hosted0b804cb2 and Starter9959c1d remain unchanged. Continue the long run,
+updates, atomic pushes and validated product installs.
+
+
 ## Original room read inventory accepted — 4 November 2026
 
 Backend [3681619d](https://github.com/fajarxfce/hris-platform/commit/3681619df313d6e27d4d276e1e841bc7e01c0637) is pushed.
