@@ -1,5 +1,32 @@
 # Agent continuation — HRIS Mobile
 
+## Completed native recovery accepted; group HTTP continues — 4 November 2026
+
+Group branch is pushed through `631a2d3d`. Current native registration/retry/freeze/
+drain now validate exact immutable completion for an ACTIVE retained target. Original
+identity/key/retirement and successful queue provenance remain pinned; current native/
+group/client/MFA admission is mandatory. Ordinary native refresh can recover receipts
+without a new device, queue request or freeze. Fresh retry of successful work stays
+denied and drain observes actual retained server slots.
+
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/631a2d3d/docs/measurements/collaboration-completed-native-replay-2026-11-04.json):
+27 actual PostgreSQL cases PASS124.865s, API47 PASS168.496s, full worker127
+PASS370.67s (126 active/one existing opt-in retention skip), same8291 unchanged inputs
+and quality checks. Initial expired-enqueue fixture failure and its test-only fix
+are recorded. No group HTTP/Mobile caller or deployment is enabled by this commit.
+
+Next group HTTP discovery/contacts/selection/device/status/retry/freeze/drain and
+actual HTTP/OpenAPI/API/worker validation, then rooms/gateway and durable Mobile
+handover. Mobile record/persistence review has started without source changes:
+closeOtherOwners retires only present entries, so a durable exact-target gate must
+also prevent future foreground/background/process-restart SDK acquisition and drain
+pending reservations. Confirm old key publication/readback before permanent freeze;
+keep the original encrypted store namespace/passphrase and uncertain sends.
+
+Normal phone28, live8b40/schema116 pushON/SMTP OFF, Mobile3d85d569/hosted gates and
+Starter9959c1d remain current. All54 groups and actual Apple runtime remain open.
+Continue full long run, frequent updates, atomic Git handoffs and immediate pushes.
+
 ## Retained worker activation accepted; completed native replay continues — 4 November 2026
 
 Group branch is pushed through `5b66e661`. Retained activation now observes current
