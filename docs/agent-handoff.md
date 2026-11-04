@@ -20,15 +20,24 @@ communications acceptance groups remain open. Phone28 stays installed; never
 install a debug fixture APK. Live8b40/schema116 pushON/SMTP OFF and Starter9959c1d
 are unchanged. No reusable Starter fix is introduced by the HRIS identity protocol.
 
-Platform group branch feat/communication-space is at8787a0fa: V123 runtime storage,
-typed ports and pure admission/lease policy are committed and pushed. Its first
-AccessNativeCollaborationMatrixDevice integration is WIP in three files (use case,
-shared DI and NativeCollaborationRegistrationTest); runtime-gateway3 is running.
-Do not edit its frozen source while checks run. Positive renewal tests now use
-bounded real-time waits instead of future fake-clock claims. Remaining fences:
-provisioning/direct-room workers and bootstrap/refresh, then atomic retirement and
-Mobile SDK stop/alias/room/push/read handover. See the group worktree's handoff.
-Continue the full long run, user updates, Git evidence and push every commit.
+Platform group branch feat/communication-space now has accepted/pushed gateway
+runtime fencing at0bf751e5. It claims one original-runtime slot, checks current
+admission and exact runtime/lease around provider I/O/publication, and preserves
+keys/winning credentials through freeze, cancellation and cleanup failures. Full
+native data160/API47/full worker126 active plus one existing skip/current SDK5 pass.
+The five current-source Android cases passed1047.184s with all three176-message
+worker recovery states and owned emulator cleanup. Earlier setup/verifier failures
+are recorded; the post-driver ciphertext verifier now obtains fresh same-identity
+credentials through ordinary HTTP without extending production token lifetimes.
+[Gateway evidence](https://github.com/fajarxfce/hris-platform/blob/0bf751e5/docs/measurements/collaboration-legacy-runtime-gateway-2026-11-04.json).
+
+Next group work: fence bootstrap/refresh and provisioning/direct-room workers,
+then admitted atomic legacy retirement/group publication and Mobile durable SDK
+drain/alias/room/push/read handover. Six-file drafts and18 focused tests are ready
+for review/application in that worktree; they are not accepted yet. No public group
+transfer, new product APK or Starter port comes from this server increment. See
+the group's handoff for current checks. Continue the full long run, frequent user
+updates, Git evidence and immediate push of every atomic commit.
 
 ## Local SDK increment: hosted raw protocol regression accepted — 3 November 2026
 
