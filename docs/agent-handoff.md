@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Group encrypted to-device transport accepted — 4 November 2026
+
+Backend [302a43ac](https://github.com/fajarxfce/hris-platform/commit/302a43ac6392ec652e4fa5f7f9b329ac6c3843eb) is pushed.
+The [fixed group route](https://github.com/fajarxfce/hris-platform/blob/302a43ac6392ec652e4fa5f7f9b329ac6c3843eb/docs/collaboration/space-to-device.md) preserves original
+transaction IDs, device IDs, ciphertext and message IDs. Every recipient must be
+confirmed and current. Detached signed sender/recipient identities must match both
+envelope curve keys; native/gateway/request access and pinned observations are checked
+around every provider outcome. Short receiving credentials can expire without blocking
+an otherwise eligible offline device. Whole-request rejection prevents partial sends.
+
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/302a43ac6392ec652e4fa5f7f9b329ac6c3843eb/docs/measurements/collaboration-space-to-device-2026-11-04.json):
+124 policy tests passed (48.001 s), 38 gateway tests passed
+(487.809 s), 32 retained-device tests passed
+(281.174 s), 139 actual API tests passed
+(202.139 s), and the full worker suite passed (138 tests,
+387.685 s; one existing optional skip). Quality checks pass.
+Final retained/API/worker gates share 8,431 identical unchanged inputs. The initial API
+run had 13 HTTP timeouts during observed host memory/I/O pressure; the full retry
+passed without changing source or timeouts. Both outcomes are recorded.
+
+Actual Synapse retains an unread original-device frame through LEGACY completion and
+restart. In-process retries deduplicate; restart may replay the same to-device frame.
+Preserve SDK uncertain sends and duplicate handling. Opaque transport evidence does
+not prove valid Olm decryption or delivered/read receipts, and late denial cannot undo
+prior remote acceptance.
+
+NEXT: group room content/sync/push and full Mobile SDK adoption with original
+store/passphrase/keys/history and native hard-parent recovery. See the
+[backend handoff](https://github.com/fajarxfce/hris-platform/blob/302a43ac6392ec652e4fa5f7f9b329ac6c3843eb/docs/agent-handoff.md). Room-content drafts are unapplied; existing
+V131 ownership can support bounded exact room lookup without inventing a migration.
+Group rollout stays disabled and all 54 PRD acceptance groups remain open. Live
+`8b40` / schema 116 (push on, SMTP off), normal phone release 28, Mobile product/hosted
+`0b804cb2` and Starter `9959c1d` remain unchanged. Continue the long run, regular updates,
+atomic pushes and validated product feature installs.
+
 ## Scoped recipient query and claim accepted — 4 November 2026
 
 Backend [dd789d0f](https://github.com/fajarxfce/hris-platform/commit/dd789d0f8b7c0da9b018137edf84f7a32d0a3a15) is pushed.
