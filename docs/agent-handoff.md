@@ -17,8 +17,7 @@ remains the separately accepted 67.337s local run.
 Actual Apple Matrix/APNs/CallKit, group runtime/room adoption and all 54 communications
 acceptance groups remain open. Next finish group gateway admission/room authority and
 Mobile provider-key preflight/handover orchestration without changing original SDK
-namespaces. Group V126 typed gateway storage has 19 focused cases passing and its
-broader regression is currently running. Normal phone release 28/live 8b40/schema 116 pushON/
+namespaces. Group V126 typed gateway storage is pushed as [338915f5](https://github.com/fajarxfce/hris-platform/commit/338915f5): 19 focused and 181 broader cases pass on identical inputs, with 16 recovery-tool checks. Main peer 2a0b9d74 records both accepted increments. Normal phone release 28/live 8b40/schema 116 pushON/
 SMTPOFF and Starter 9959c1d unchanged. Continue long run, updates and atomic pushed
 commits; install only a validated new product feature build on the phone.
 
