@@ -1,5 +1,42 @@
 # Agent continuation — HRIS Mobile
 
+## Group encrypted room-message send accepted — 4 November 2026
+
+Backend [6b9e5d22](https://github.com/fajarxfce/hris-platform/commit/6b9e5d228b4ad7312d26804aee4fe7239ccb397b) is pushed.
+The [fixed group room-message route](https://github.com/fajarxfce/hris-platform/blob/6b9e5d228b4ad7312d26804aee4fe7239ccb397b/docs/collaboration/space-room-messages.md)
+uses exact immutable owned rooms, confirmed current recipients and original signed
+sender identity. Original Matrix room/device/ciphertext/session/transaction IDs stay
+intact. Provider I/O is outside SQL and current admission is checked around either
+outcome. Offline short receiving credentials work; offboarding blocks new sends while
+owned room metadata remains for separately authorized history.
+
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/6b9e5d228b4ad7312d26804aee4fe7239ccb397b/docs/measurements/collaboration-space-room-messages-2026-11-04.json):
+125 policy/repository tests passed (75.939 s), room gateway
+8 passed (146.529 s), retained-device 32 passed
+(260.625 s), actual API 141 passed
+(220.003 s), and full worker 138 passed
+(397.325 s; one existing optional skip). All 38 prior
+self/key/to-device regressions passed in the initial gateway run. Initial compile,
+room and HTTP fixture failures plus their corrections are recorded. Production source
+did not change after policy acceptance; only the HTTP fixture differs between final
+API/worker and the earlier passed room/retained gates. Quality checks pass.
+
+Actual Synapse returns one room event ID through retry and restart, with one original
+ciphertext/session/sender event in peer history. Completed LEGACY devices preserve
+original keys and HRIS_ identities in both old and new cross-company rooms. These are
+transport/storage proofs, not SDK Megolm decryption or delivered/read receipts. Late
+response denial cannot undo remote acceptance.
+
+NEXT: group history/sync/metadata/push and full Mobile SDK adoption with original
+store/passphrase/keys/history/uncertain sends and native hard-parent recovery. See the
+[backend handoff](https://github.com/fajarxfce/hris-platform/blob/6b9e5d228b4ad7312d26804aee4fe7239ccb397b/docs/agent-handoff.md). History reads must retain owned room scope
+independently of peer receiving eligibility. Distinct group owner/cursor types and
+an exact admitted LEGACY bridge are required; never clear the SDK store to bypass
+recovery. Group rollout remains disabled and all 54 PRD acceptance groups remain open.
+Live `8b40` / schema 116 (push on, SMTP off), normal phone release 28, Mobile product/
+hosted `0b804cb2` and Starter `9959c1d` remain unchanged. Continue the long run, updates,
+atomic pushes and validated product feature installs.
+
 ## Group encrypted to-device transport accepted — 4 November 2026
 
 Backend [302a43ac](https://github.com/fajarxfce/hris-platform/commit/302a43ac6392ec652e4fa5f7f9b329ac6c3843eb) is pushed.
