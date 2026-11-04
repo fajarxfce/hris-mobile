@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Native organization managed pusher accepted — 4 November 2026
+
+Backend [7b81b8e8](https://github.com/fajarxfce/hris-platform/commit/7b81b8e8562417298872040be60c6f23ab2fc72f) is pushed.
+
+The empty-body managed pusher route now accepts current group gateway ownership.
+A separate stable capability is reserved before Matrix I/O; native registration and
+current admission are rechecked around both outcomes. Exact publication, audit and
+outbox commit together. Rotation, expiry, revocation, failed readback or journal cannot
+produce successful acknowledgement. Original Matrix identity survives completed
+handover. No native FCM/APNs token is acquired by the pusher operation.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/7b81b8e8562417298872040be60c6f23ab2fc72f/docs/collaboration/space-pusher-access.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/7b81b8e8562417298872040be60c6f23ab2fc72f/docs/measurements/collaboration-space-pusher-access-2026-11-04.json).
+
+Native/domain gate: 167 pass (391.391 s), including 12 new native
+PostgreSQL cases, one retained migration case, 18 gateway/key regressions and 136 domain.
+Initial API: 152/153 pass (233.24 s); the new preservation test
+incorrectly assumed an empty original company namespace for a shared fixture account.
+Only that test changes to compare exact original rows before/after registration.
+All 57 HTTP class cases then pass (138.375 s), alongside the 96
+configuration/contract cases already passing. FULL worker: 138 cases
+(382.078 s), 137 passing and one existing opt-in skip.
+Format/architecture checks pass on 8,485 unchanged inputs. Production stays
+unchanged across all gates; corrected HTTP/FULL worker fingerprints match. All sessions closed.
+
+NEXT: typed group callback admission/queue/worker, mixed original/group callback handling
+and Mobile background/reply ownership. Prove one visible notification across ownership
+handover using actual FCM; provider registration alone does not prove delivery. Actual
+SDK original queued-key decryption, store transition and native hard-parent recovery
+remain required. Continue the remaining chat/call/meeting PRD.
+
+Base `172b559c` pushed. All 54 PRD groups open; rollout disabled. Live8b40/schema116
+(push on, SMTP off), normal phone28, Mobile product/hosted0b804cb2 and Starter9959c1d unchanged.
+Continue long run, updates, atomic pushes and validated product installs.
+
+
 ## Organization Matrix pusher protocol accepted — 4 November 2026
 
 Backend [172b559c](https://github.com/fajarxfce/hris-platform/commit/172b559c1cc3719ef660d8b71e7eac1f2fd9bbfd) is pushed.
