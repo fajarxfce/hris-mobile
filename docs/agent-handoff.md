@@ -1,5 +1,33 @@
 # Agent continuation — HRIS Mobile
 
+## Original and group sync protocol accepted — 4 November 2026
+
+Backend [a0dc8a31](https://github.com/fajarxfce/hris-platform/commit/a0dc8a31f8b6173bbbe4964c9b76757ffe1948ed) is pushed.
+
+Group sync now has a bounded provider adapter for the complete original/published room
+union and a separate six-coordinate encrypted position. Exact original cursors may
+initialize a new scope only for retained devices; fresh devices remain isolated.
+Original peer aliases and queued encrypted frames survive room adoption. Both HRIS_
+and HRISG_ devices retain finite connection ownership.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/a0dc8a31f8b6173bbbe4964c9b76757ffe1948ed/docs/collaboration/space-sync-protocol.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/a0dc8a31f8b6173bbbe4964c9b76757ffe1948ed/docs/measurements/collaboration-space-sync-protocol-2026-11-04.json).
+
+Initial gate: 153 of 155 pass (94.718 s), including all 133 domain,
+actual group/company Synapse sync, cursor and transport cases plus native regressions.
+Two new assertions called Jackson's whole-node map instead of mapping array elements;
+only that test file changed. All three corrected projection cases pass
+(30.791 s), with format/architecture checks on 8,463 unchanged
+inputs. Production stayed unchanged. All sessions closed. SDK decryption remains unproven.
+
+NEXT: connect group sync with current native admission, complete inventory checks around
+both provider outcomes and after cursor sealing. Validate API and FULL worker contexts.
+Then historical peer-key proof, metadata/push, Mobile ownership and hard-parent recovery.
+Ignored native sync/HTTP drafts remain unaccepted.
+
+Base `68087090` pushed. All 54 PRD groups open; group rollout disabled. Live8b40/schema116
+(push on, SMTP off), normal phone28, Mobile product/hosted0b804cb2 and Starter9959c1d unchanged.
+Continue long run, updates, atomic pushes and validated product installs.
+
+
 ## Current native original history access accepted — 4 November 2026
 
 Backend [68087090](https://github.com/fajarxfce/hris-platform/commit/68087090d7f20ced6a552a3a13f133bf9ed76e3e) is pushed.
