@@ -1,5 +1,28 @@
 # Agent continuation — HRIS Mobile
 
+## Original room peer verification accepted — 4 November 2026
+
+Backend [6415de9c](https://github.com/fajarxfce/hris-platform/commit/6415de9c) adds exact
+original-pair lookup and strict original canonical-user/creator/state verification.
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/6415de9c/docs/measurements/collaboration-space-legacy-room-policy-2026-11-04.json):
+99 domain/8 PostgreSQL/3 actual Synapse cases PASS 144.409s with quality checks and
+8,374 unchanged inputs. The original peer joins with its own retained user/device;
+room identity, actual creator and signed keys survive restart. No key replacement,
+creator impersonation, new group alias, provider logout or SDK-message claim. Backend
+push succeeded. Main 1ee06e79 records this checkpoint and the next storage increment.
+
+Current uncommitted backend V131 room lifecycle storage is under test. Initial four
+PostgreSQL race/expiry/atomic publication/restore cases passed 94.602s after fixing
+a nullable test helper; additional original-room and bounded retry cases are pending.
+No V131 acceptance, native/worker room command, group product caller or new APK yet.
+Continue backend request/publication authority and original-producer fencing, then
+recipient keys/content/sync/push and Mobile preflight/stage/freeze/completion/adoption.
+Preserve original SDK namespace/passphrase, keys, history and uncertain sends. Offline
+receiving and native hard-parent replacement remain explicit work. Group disabled;
+all 54 groups open. Product/hosted 0b804cb2, normal phone 28, live 8b40/schema 116 push
+ON/SMTP OFF and Starter 9959c1d unchanged. Continue long run, updates, immediate atomic
+pushes and validated product feature installs only.
+
 ## Original room creator metadata accepted — 4 November 2026
 
 Backend [6c22caba](https://github.com/fajarxfce/hris-platform/commit/6c22caba) adds V130
