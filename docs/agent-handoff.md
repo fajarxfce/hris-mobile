@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Scoped offline receiving keys accepted — 4 November 2026
+
+Backend [6fd2819f](https://github.com/fajarxfce/hris-platform/commit/6fd2819ff8a2f9b228e47616a4e2868bd3615f15) is pushed.
+[V135 protocol](https://github.com/fajarxfce/hris-platform/blob/6fd2819ff8a2f9b228e47616a4e2868bd3615f15/docs/collaboration/space-key-recipients.md) supplies a minimal
+read-only public-key projection for current eligible members and exact verified room
+pairs. Short native access/provider expiry permits offline receiving; native hard
+expiry, revocation or purge removes eligibility without deleting original provenance.
+Completed LEGACY devices retain their exact original Matrix IDs and fingerprint.
+
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/6fd2819ff8a2f9b228e47616a4e2868bd3615f15/docs/measurements/collaboration-space-key-recipients-2026-11-04.json):
+full database115 PASS1091.125s; focused13 PASS118.536s and quality checks. Both gates
+have 8,423 unchanged inputs; only two recovery tools differ. Typed7 carries on
+identical source; recovery19 passes at schema135/unknown136. Ordinary-role scope and
+column privileges, exact cross-company room binding, pending keys, actual LEGACY
+completion, offline expiry, purge/restore, bounds and cancellation are exercised.
+No shared DI change; previous API96/FULLworker138 remain the last graph acceptance.
+
+NEXT fixed group key query/claim, to-device/content/sync/push and full Mobile adoption,
+including original SDK store/passphrase/keys/history, uncertain sends and native
+hard-parent replacement. Query/claim drafts remain uncompiled/unapplied; see the
+[current backend handoff](https://github.com/fajarxfce/hris-platform/blob/6fd2819ff8a2f9b228e47616a4e2868bd3615f15/docs/agent-handoff.md). Actual API/FULLworker validation
+is required after DI. This storage checkpoint is not an SDK/product acceptance.
+Group disabled; all54 PRD groups open. Live8b40/schema116 pushON/SMTPOFF, normal phone28,
+Mobileproduct/hosted0b804cb2 and Starter9959c1d unchanged. Continue long run, updates,
+atomic pushes and validated product feature APK installs only.
+
 ## Admitted room worker accepted — 4 November 2026
 
 Backend [3284aaf7](https://github.com/fajarxfce/hris-platform/commit/3284aaf7135c3f51df8c8fa72bfcd11bc01e6e35) is pushed.
