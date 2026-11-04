@@ -1,5 +1,32 @@
 # Agent continuation — HRIS Mobile
 
+## Peer room recovery and native API accepted — 4 November 2026
+
+Backend [a0653dcf](https://github.com/fajarxfce/hris-platform/commit/a0653dcf) is pushed.
+V133 gives each exact participant a private preparation head while allowing only one
+active request per conversation. Terminal recovery uses the caller's own proof and
+the observed public account plus revision. The immutable binding records the actual
+canonical Matrix creator separately from requester and publisher; LEGACY remains
+pinned to its original room and creator. Native GET/POST room setup/status is wired.
+
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/a0653dcf/docs/measurements/collaboration-space-room-peer-recovery-2026-11-04.json):
+full database 103 and actual API 96 cases pass in 1120.114 seconds; full worker suite
+has 127 passed and one existing opt-in skip in 375.998 seconds, with 8,397 identical
+unchanged inputs and passing quality checks. Retained publication 31 cases pass in
+265.182 seconds. Earlier domain 103 and typed/native 5 each pass with recorded source
+continuity. Recovery 19 passes, maximum schema 133 and unknown 134 rejected. Initial
+compile/fixture failures are resolved. All test sessions closed.
+
+NEXT provider same-alias recovery using the peer's own credentials, strict actual
+creator/state verification and bounded room worker. Provider/pure-policy/join drafts
+remain unapplied; HTTP/DI drafts are now applied and stale. Then recipient keys,
+content/sync/push, offline keys/native hard-parent replacement and full Mobile adoption
+preserving SDK namespace/passphrase, keys/history and uncertain sends. Shared DI
+changes require actual API and full worker context checks. Group remains disabled;
+all 54 PRD groups remain open. Live 8b40/schema 116 push ON/SMTP OFF, normal phone 28,
+Mobile product/hosted 0b804cb2 and Starter 9959c1d unchanged. Continue long run, regular
+updates, atomic pushes and validated product feature APK installs only.
+
 ## Native room admission checkpoint — 4 November 2026
 
 Backend [95353885](https://github.com/fajarxfce/hris-platform/commit/95353885) is pushed.
