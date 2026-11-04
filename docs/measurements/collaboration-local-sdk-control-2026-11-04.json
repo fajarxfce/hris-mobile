@@ -1,0 +1,204 @@
+{
+  "source": "3d85d569412f8eb5ed735403362a4cdb175aef70",
+  "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41741297181",
+  "status": "passed",
+  "artifacts": [
+    {
+      "name": "collaboration-control-portable",
+      "artifactId": 13282103170,
+      "archiveSha256": "b436c13df87081b6ca39f280952fb43089bfba94ec3ac9a1ffc81b7f4f0ffee5",
+      "githubDigestVerified": true,
+      "counts": {
+        "tests": 3114,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "localIdentityMapperSuites": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkIdentityMapperTest.xml": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSdkIdentityMapperTest.xml": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportSuiteCount": 318
+    },
+    {
+      "name": "collaboration-control-apple",
+      "artifactId": 13283726751,
+      "archiveSha256": "e29d3a36c8d8b68e96947afae920e31284fc8b5a08ea9957b653fc8b0f778dec",
+      "githubDigestVerified": true,
+      "counts": {
+        "tests": 1217,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "localIdentityMapperSuites": {
+        "data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSdkIdentityMapperTest.xml": {
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportSuiteCount": 125
+    }
+  ],
+  "steps": [
+    {
+      "job": "apple",
+      "name": "Set up job",
+      "seconds": 2.0
+    },
+    {
+      "job": "apple",
+      "name": "Run actions/checkout@v4",
+      "seconds": 4.0
+    },
+    {
+      "job": "apple",
+      "name": "Select Xcode 26.3",
+      "seconds": 0.0
+    },
+    {
+      "job": "apple",
+      "name": "Run actions/setup-java@v4",
+      "seconds": 1.0
+    },
+    {
+      "job": "apple",
+      "name": "Run gradle/actions/setup-gradle@v4",
+      "seconds": 2.0
+    },
+    {
+      "job": "apple",
+      "name": "Prepare public app-link test registrations",
+      "seconds": 0.0
+    },
+    {
+      "job": "apple",
+      "name": "Check Apple setup adapter",
+      "seconds": 1492.0
+    },
+    {
+      "job": "apple",
+      "name": "Build iOS application host",
+      "seconds": 864.0
+    },
+    {
+      "job": "apple",
+      "name": "Run actions/upload-artifact@v4",
+      "seconds": 3.0
+    },
+    {
+      "job": "apple",
+      "name": "Post Run gradle/actions/setup-gradle@v4",
+      "seconds": 1.0
+    },
+    {
+      "job": "apple",
+      "name": "Post Run actions/setup-java@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "apple",
+      "name": "Post Run actions/checkout@v4",
+      "seconds": 1.0
+    },
+    {
+      "job": "apple",
+      "name": "Complete job",
+      "seconds": 4.0
+    },
+    {
+      "job": "portable",
+      "name": "Set up job",
+      "seconds": 2.0
+    },
+    {
+      "job": "portable",
+      "name": "Run actions/checkout@v4",
+      "seconds": 3.0
+    },
+    {
+      "job": "portable",
+      "name": "Run actions/setup-java@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Run gradle/actions/setup-gradle@v4",
+      "seconds": 2.0
+    },
+    {
+      "job": "portable",
+      "name": "Run android-actions/setup-android@v3",
+      "seconds": 9.0
+    },
+    {
+      "job": "portable",
+      "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+      "seconds": 2.0
+    },
+    {
+      "job": "portable",
+      "name": "Run actions/setup-node@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Check setup transport and ownership",
+      "seconds": 713.0
+    },
+    {
+      "job": "portable",
+      "name": "Check application bindings and platform compilation",
+      "seconds": 456.0
+    },
+    {
+      "job": "portable",
+      "name": "Run actions/upload-artifact@v4",
+      "seconds": 3.0
+    },
+    {
+      "job": "portable",
+      "name": "Post Run actions/setup-node@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Post Run gradle/actions/setup-gradle@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Post Run actions/setup-java@v4",
+      "seconds": 0.0
+    },
+    {
+      "job": "portable",
+      "name": "Post Run actions/checkout@v4",
+      "seconds": 1.0
+    },
+    {
+      "job": "portable",
+      "name": "Complete job",
+      "seconds": 0.0
+    }
+  ],
+  "limits": [
+    "Apple simulator exercises common policy/data/presentation adapters and Xcode compilation; actual Apple Matrix runtime, APNs and CallKit remain unimplemented or unaccepted.",
+    "Actual Android provider/process-death and product FCM are separately evidenced. Physical iPhone testing was waived."
+  ],
+  "verifiedSourceFileCount": 3877,
+  "sourceManifestSha256": "54ff68afaa9edbefd46bc231a5ab16da47cdd7f20377fcd4465aa3b4fb3e7e4e",
+  "fullAuditSha256": "e6b2d8a7a80e2f9e861d50dee942739212f4f6d48f224aa73621edd2fc45eba5"
+}

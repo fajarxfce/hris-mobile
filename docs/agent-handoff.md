@@ -1,5 +1,35 @@
 # Agent continuation — HRIS Mobile
 
+## Local SDK source hosted control and native gates accepted — 4 November 2026
+
+Source 3d85d569 now passes all three hosted gates. Control41741297181: portable
+3114 and Apple1217 tests, all zero failures/errors/skips, plus full Xcode iOS host
+build. Artifact digests and 3877 source hashes verified. See
+[control evidence](measurements/collaboration-local-sdk-control-2026-11-04.json).
+Native41741297183: 232 Android-host,18 proof-host and5 actual native cases pass;
+three worker states retain176 original messages each, SDK/WorkManager and
+notification/reply recovery pass with owned cleanup. Artifact13283198269 SHA
+32b77e9048af2929c4a9b832c7efb66e33c6de3d0f091262ed07f4723f40896a,
+3877 inputs plus pinned workflow verified. Three SystemUI images were viewed and
+retained. See [native evidence](measurements/collaboration-local-sdk-native-2026-11-04.json).
+Raw protocol41741297195 is separately accepted below. No hosted job remains pending.
+
+These gates validate the local-identity increment and existing runtime behavior;
+retained group ownership transfer, actual Apple Matrix/APNs/CallKit and all54
+communications acceptance groups remain open. Phone28 stays installed; never
+install a debug fixture APK. Live8b40/schema116 pushON/SMTP OFF and Starter9959c1d
+are unchanged. No reusable Starter fix is introduced by the HRIS identity protocol.
+
+Platform group branch feat/communication-space is at8787a0fa: V123 runtime storage,
+typed ports and pure admission/lease policy are committed and pushed. Its first
+AccessNativeCollaborationMatrixDevice integration is WIP in three files (use case,
+shared DI and NativeCollaborationRegistrationTest); runtime-gateway3 is running.
+Do not edit its frozen source while checks run. Positive renewal tests now use
+bounded real-time waits instead of future fake-clock claims. Remaining fences:
+provisioning/direct-room workers and bootstrap/refresh, then atomic retirement and
+Mobile SDK stop/alias/room/push/read handover. See the group worktree's handoff.
+Continue the full long run, user updates, Git evidence and push every commit.
+
 ## Local SDK increment: hosted raw protocol regression accepted — 3 November 2026
 
 Mobile source 3d85d569 is pushed. Protocol CI41741297195 passed both native and

@@ -1,0 +1,498 @@
+{
+  "date": "2026-11-04",
+  "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41741297183",
+  "sourceCommit": "3d85d569412f8eb5ed735403362a4cdb175aef70",
+  "platformSource": "304be02700cf07e496421c17e90f5a471b4bd68c",
+  "artifactId": 13283198269,
+  "artifactSha256": "32b77e9048af2929c4a9b832c7efb66e33c6de3d0f091262ed07f4723f40896a",
+  "githubArchiveDigestVerified": true,
+  "proofApkSha256ReportedByAllFiveDrivers": "bef40f2b8ff6fe0d0a5185927f0f0b35002863dd17a0013b0b56aa0d20590ccd",
+  "reports": {
+    "proofHost": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 5
+    },
+    "androidHost": {
+      "tests": 232,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 38
+    },
+    "native": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 3
+    }
+  },
+  "rawNotificationScenarios": {
+    "serial": "emulator-5560",
+    "scenarios": [
+      {
+        "name": "native-notification-denied",
+        "seconds": 4.842,
+        "complete": true,
+        "sdk": 35,
+        "cases": [
+          "permission-denial-does-not-submit"
+        ],
+        "cleanedUp": true,
+        "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+      },
+      {
+        "name": "native-notification",
+        "seconds": 7.662,
+        "complete": true,
+        "sdk": 35,
+        "cases": [
+          "actual-private-display-and-immutable-public-version",
+          "same-render-replay-updates-stable-card",
+          "stale-removal-preserves-new-render-and-new-render-may-alert",
+          "same-render-reissue-keeps-original-immutable-envelope",
+          "real-remote-input-and-old-render-envelope-remain-distinct",
+          "immutable-actions-ignore-injected-remote-input",
+          "colliding-java-hashes-cannot-retarget-pending-intents",
+          "missing-oversized-or-cross-component-input-is-rejected",
+          "namespace-cleanup-preserves-unrelated-application-notifications",
+          "disabled-channel-is-distinct-from-submitted",
+          "newer-inventory-fences-stale-removal-while-os-card-is-absent",
+          "opaque-no-backup-inventory-reopens-and-clears-without-account-data",
+          "latest-owned-inventory-can-cancel-its-older-visible-predecessor",
+          "full-opaque-inventory-does-not-evict-or-submit",
+          "corrupt-inventory-withholds-new-posts-and-cleans-visible-cards"
+        ],
+        "cleanedUp": true,
+        "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+      }
+    ],
+    "sdk": 35,
+    "apkSha256": "bef40f2b8ff6fe0d0a5185927f0f0b35002863dd17a0013b0b56aa0d20590ccd",
+    "runtimeComposition": {
+      "seconds": 2.423,
+      "complete": true,
+      "cleanedUp": true,
+      "cases": [
+        "english-copy-and-native-actions",
+        "language-change-without-host-replacement",
+        "system-language-resource-resolution",
+        "one-application-host-and-joined-native-cleanup"
+      ],
+      "scope": "Android runtime composition and OS resources; fake admission/settings storage, no provider/account/actions"
+    },
+    "inputRecovery": {
+      "complete": true,
+      "pid": 4333,
+      "protectedRowsBeforeRecovery": 1,
+      "reviewRowsAfterRecovery": 1,
+      "wrongAccountPreservedInput": true,
+      "oldFamilyRequiresReview": true,
+      "recoveryTurns": [
+        {
+          "turn": 1,
+          "result": "Complete",
+          "failureKind": null,
+          "failureCode": null,
+          "milliseconds": 846,
+          "protectedRows": 0,
+          "reviewRows": 1,
+          "reviewStates": [
+            "SessionChanged"
+          ]
+        }
+      ],
+      "httpCalls": 0,
+      "commandRetained": false,
+      "cleanedUp": true,
+      "ordinaryProcessKills": 3,
+      "callbackCount": 4,
+      "processIds": [
+        3611,
+        3874,
+        4021,
+        4333
+      ],
+      "seconds": 26.682,
+      "scope": "Real Android callback, Keystore/Room/app recovery; fictional account; no HTTP/Matrix send or production host activation"
+    },
+    "actionCallbacks": {
+      "complete": true,
+      "cases": [
+        {
+          "complete": true,
+          "mode": "Open",
+          "pid": 4407,
+          "state": "Published",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 1,
+          "callbackCount": 1
+        },
+        {
+          "complete": true,
+          "mode": "MarkRead",
+          "pid": 4407,
+          "state": "Cancelled",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 0,
+          "callbackCount": 2
+        },
+        {
+          "complete": true,
+          "mode": "Dismiss",
+          "pid": 4407,
+          "state": "Dismissed",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 0,
+          "callbackCount": 3
+        },
+        {
+          "complete": true,
+          "mode": "Reply",
+          "pid": 4407,
+          "state": "Dismissed",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 0,
+          "callbackCount": 4
+        },
+        {
+          "complete": true,
+          "mode": "Mute",
+          "pid": 4407,
+          "state": "Cancelled",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 0,
+          "callbackCount": 5
+        }
+      ],
+      "systemUiReply": true,
+      "seconds": 39.173,
+      "scope": "Actual Android application callbacks, encrypted Room/Keystore and native cards; seeded fictional session/conversation/history; no discovery actor, provider send or product activation"
+    },
+    "complete": true,
+    "fixtureAbsent": true,
+    "fixtureUninstalled": true,
+    "fixtureDataCleared": true,
+    "seconds": 96.642
+  },
+  "scenarios": [
+    {
+      "directory": "platform/.work/collaboration/64fe3168fd044ca3827cc73e6b5f62d9",
+      "passed": true,
+      "cleanup": true,
+      "kind": "nativeSdk",
+      "encryptedSends": 3,
+      "receiptPosts": 7,
+      "verifiedClaims": {
+        "passed": true,
+        "encryptedBothDirections": true,
+        "logicalIdsPreserved": true,
+        "cleanup": true,
+        "protectedStoreReopened": true,
+        "missingRecordPreserved": true,
+        "wrongPassphrasePreserved": true,
+        "exclusiveOwner": true,
+        "processRestarted": true,
+        "queueRestored": true,
+        "transactionReused": true,
+        "identityAfterRestart": true,
+        "messageIntentRestored": true,
+        "queueMappingRecovered": true,
+        "queueWriterExclusive": true,
+        "perRoomDeliveryIsolated": true,
+        "heldQueueRestored": true,
+        "nativeDeliveryOwned": true,
+        "commonSenderOwned": true,
+        "receiptJournalRecovered": true,
+        "projectionInterrupted": true,
+        "originalHistoryWindowOwned": true,
+        "historyBodiesRestored": true,
+        "nativeReadReceiptsExchanged": true,
+        "nativePrivateReceiptIsolated": true,
+        "nativeReadReceiptStoreRestored": true,
+        "nativeLocalReadIntentPrepared": true,
+        "nativeLocalReadIntentStoreRestored": true,
+        "nativeReadReceiptReplayAdmitted": true,
+        "nativeReadReceiptAckUncertaintyRecovered": true,
+        "commonHistoryAcquisitionOwned": true,
+        "latestHistoryHeadOwned": true,
+        "admittedHistoryHeads": true,
+        "providerHistoryPageOwned": true,
+        "commonProviderHistoryAcquisitionOwned": true,
+        "providerHistoryReferencesRestored": true,
+        "providerHistoryReferencesReconciled": true,
+        "providerHistoryRestartPreserved": true,
+        "historyRuntimeReopened": true,
+        "ackBeforeJournalRecovered": true,
+        "processRestartedAfterAck": true,
+        "completionCleanupRecovered": true,
+        "processRestartedAfterCompletion": true,
+        "admittedProviderPages": true,
+        "applicationAdmittedBeforeSend": true,
+        "applicationAdmittedAroundHistory": true,
+        "heldRoomNeverSent": true,
+        "pausedAcrossRestart": true,
+        "syncInterruptedAfterRestart": true,
+        "syncRetriedWithRetainedCursor": true
+      },
+      "applicationAdmissions": {
+        "device": 26,
+        "conversation": 26,
+        "room": 26,
+        "failures": 0
+      },
+      "evidenceSha256": {
+        "gateway-trace.json": "9bb5792b1ebc8ef65bc43b2d16421fea446d93566eb94bdb881649e479a21550",
+        "result.json": "9ac71a36ed84d7b6bcae06ad33eb5953db3b80904794313ee01f54e3d68cde38",
+        "verified.json": "2d044bb36e276922d4c7dd6fab97df628996a5d5e743d41ee6762edd52b39754"
+      }
+    },
+    {
+      "directory": "platform/.work/collaboration-worker/64bbb9febc9f43e8a815bfad405fc9c8",
+      "passed": true,
+      "cleanup": true,
+      "kind": "applicationWorker",
+      "initialState": "CANCELLED_DRAFT",
+      "encryptedSends": 176,
+      "seededPeerEncryptedSends": 175,
+      "forcedProcessDeaths": 1,
+      "incoming": {
+        "incomingWithoutOutbox": true,
+        "incomingWithoutSelection": true,
+        "incomingFreshNativeAdmission": true,
+        "incomingOriginalAfterOfflineSeed": true,
+        "incomingHistoryRetainedAfterReopen": true,
+        "incomingRuntimeReleased": true,
+        "incomingAllOriginalsRecovered": true,
+        "incomingTraversalRetainedAfterReopen": true,
+        "incomingBrowseUnchanged": true,
+        "incomingPasses": 11,
+        "incomingSavedOriginals": 176,
+        "incomingContainerReopens": 11
+      },
+      "priority": {
+        "priorityWithoutOutbox": true,
+        "priorityWithoutSelection": true,
+        "priorityQueueRetainedAfterReopen": true,
+        "priorityOriginalRetainedAfterReopen": true,
+        "priorityOldestOfflineEventRecovered": true,
+        "priorityRuntimeReleased": true,
+        "priorityTraversalUnchanged": true,
+        "priorityGlobalWakeRetained": true,
+        "priorityHintCompleted": true,
+        "priorityPasses": 1,
+        "prioritySavedOriginals": 12
+      },
+      "evidenceSha256": {
+        "acceptance.json": "52a641b24725516b424ab8928a50edfff9f78ac32bef132dbc6e6f806db58c7c",
+        "gateway-observations.json": "9ba65d8ecc2789d3a0f80ca55bc789735114edc0f09604ec5815d565120ca079",
+        "gateway-trace.json": "9533a358995554768abbc6a751f23bca96d35da17e34758eef7cda45d53cf4e4",
+        "native-worker-queued.json": "b51feeeea515574074194bb22c77592836e07357bd49f43a146ceeec5c5bc1d0",
+        "native-worker-restored.json": "64543b3a25e43e7efa6efb3950786c5692808181c437bf7b80c9a3acadeae089",
+        "result.json": "27ddb3a00cc81a5c770979028b3c259b2edaf645cc6fef60553d822822b20832"
+      }
+    },
+    {
+      "directory": "platform/.work/collaboration-worker/69c9abe255254d8aa82bc4aa3960e8ba",
+      "passed": true,
+      "cleanup": true,
+      "kind": "androidWorkManager",
+      "ordinaryProcessDeaths": 1,
+      "automaticJobStart": true,
+      "networkRestored": true,
+      "evidenceSha256": {
+        "acceptance.json": "fd6744f49f591189b565f87aff4e3455ec6d4b94b8934187626a497e37227aac",
+        "gateway-observations.json": "623279f474e7b2e192c0fe40dbb3d44e6d40e482ec1aeddfd58caebdedd0c296",
+        "gateway-trace.json": "2b715880983b2bc62829bb50889ae2c65690a0e1af797f7ef1fd02618e2a2ffb",
+        "network-before.json": "79dfab35e5f4104e398aa74de7c3d6e56dda0a96ac31d2fcb699ac1df093c6ad",
+        "result.json": "08e7f85eb09166136a0b48256ce66b4ba03c75a319c752e7442bd14e60f61b48",
+        "started.json": "9b97990d08f62d86b70a24e94a1575bce650e6e9d6449d716f9b8fbb4bec9297",
+        "stopped.json": "b5d28aa8b56aa03ffb7bd65acd1aa1717a10aeebb26c48f8a25156800832c4c2"
+      }
+    },
+    {
+      "directory": "platform/.work/collaboration-worker/87b3b88d95b443b89354d03e54cf6bce",
+      "passed": true,
+      "cleanup": true,
+      "kind": "applicationWorker",
+      "initialState": "QUEUED",
+      "encryptedSends": 176,
+      "seededPeerEncryptedSends": 175,
+      "forcedProcessDeaths": 1,
+      "incoming": {
+        "incomingWithoutOutbox": true,
+        "incomingWithoutSelection": true,
+        "incomingFreshNativeAdmission": true,
+        "incomingOriginalAfterOfflineSeed": true,
+        "incomingHistoryRetainedAfterReopen": true,
+        "incomingRuntimeReleased": true,
+        "incomingAllOriginalsRecovered": true,
+        "incomingTraversalRetainedAfterReopen": true,
+        "incomingBrowseUnchanged": true,
+        "incomingPasses": 11,
+        "incomingSavedOriginals": 176,
+        "incomingContainerReopens": 11
+      },
+      "priority": {
+        "priorityWithoutOutbox": true,
+        "priorityWithoutSelection": true,
+        "priorityQueueRetainedAfterReopen": true,
+        "priorityOriginalRetainedAfterReopen": true,
+        "priorityOldestOfflineEventRecovered": true,
+        "priorityRuntimeReleased": true,
+        "priorityTraversalUnchanged": true,
+        "priorityGlobalWakeRetained": true,
+        "priorityHintCompleted": true,
+        "priorityPasses": 1,
+        "prioritySavedOriginals": 12
+      },
+      "evidenceSha256": {
+        "acceptance.json": "244b2237001118c398b14c5649ccc7160db59249a2fa8d333837a0072ec3fe29",
+        "gateway-observations.json": "7632cb1ccb85c136cbbde52de6b4813c20872f05711e92e8cb6858e5155e9bf2",
+        "gateway-trace.json": "a6362d055071009b3e53015f651019a95b40ea3719eb538c0b9488336f6f4f17",
+        "native-worker-queued.json": "52daa035f0305c612bf1f1213210c3034dc8e8f424a7bc2a6d6cb225987c5350",
+        "native-worker-restored.json": "a9e655cace45e5af58e95c3e33ffb23a428a05d398e0b46d9899a08df5f5ca09",
+        "result.json": "966009246a0d6eec44a8db08b99253b52ae1bc5e3a63e7216089c1089d465114"
+      }
+    },
+    {
+      "directory": "platform/.work/collaboration-worker/da7fa10b4446432cb03ba614748a5dab",
+      "passed": true,
+      "cleanup": true,
+      "kind": "applicationWorker",
+      "initialState": "FROZEN_DRAFT",
+      "encryptedSends": 176,
+      "seededPeerEncryptedSends": 175,
+      "forcedProcessDeaths": 1,
+      "incoming": {
+        "incomingWithoutOutbox": true,
+        "incomingWithoutSelection": true,
+        "incomingFreshNativeAdmission": true,
+        "incomingOriginalAfterOfflineSeed": true,
+        "incomingHistoryRetainedAfterReopen": true,
+        "incomingRuntimeReleased": true,
+        "incomingAllOriginalsRecovered": true,
+        "incomingTraversalRetainedAfterReopen": true,
+        "incomingBrowseUnchanged": true,
+        "incomingPasses": 11,
+        "incomingSavedOriginals": 176,
+        "incomingContainerReopens": 11
+      },
+      "priority": {
+        "priorityWithoutOutbox": true,
+        "priorityWithoutSelection": true,
+        "priorityQueueRetainedAfterReopen": true,
+        "priorityOriginalRetainedAfterReopen": true,
+        "priorityOldestOfflineEventRecovered": true,
+        "priorityRuntimeReleased": true,
+        "priorityTraversalUnchanged": true,
+        "priorityGlobalWakeRetained": true,
+        "priorityHintCompleted": true,
+        "priorityPasses": 1,
+        "prioritySavedOriginals": 12
+      },
+      "evidenceSha256": {
+        "acceptance.json": "98894a4fb691fafdb2a4ddfab57e4088e7edf1bdec9e4ad9d124df15040dcc3b",
+        "gateway-observations.json": "74e978cf4082debd1a0d34feafa0764ab53937d277e3c06124bccf42a8b1f807",
+        "gateway-trace.json": "18a3fb7e347599b09eb8d7a76008bc12084eebcba3bc0562c6a2bff181c6eebf",
+        "native-worker-queued.json": "c8c4f95dbb862885153e70cc2847085c10faba778b1aec8dd036a51ddf4dcfc7",
+        "native-worker-restored.json": "60ce2864c3c926767d19ea5b61034f3a1ce8ee396b66182ecc17cb27d3f355da",
+        "result.json": "f458fff887f31fad01d4bcbbbae8cece12c70be3816048969a89e9ac99e1286d"
+      }
+    }
+  ],
+  "steps": [
+    {
+      "name": "Set up job",
+      "seconds": 3.0
+    },
+    {
+      "name": "Run actions/checkout@v4",
+      "seconds": 2.0
+    },
+    {
+      "name": "Run actions/checkout@v4",
+      "seconds": 3.0
+    },
+    {
+      "name": "Run actions/setup-java@v4",
+      "seconds": 0.0
+    },
+    {
+      "name": "Run gradle/actions/setup-gradle@v4",
+      "seconds": 4.0
+    },
+    {
+      "name": "Run android-actions/setup-android@v3",
+      "seconds": 8.0
+    },
+    {
+      "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+      "seconds": 2.0
+    },
+    {
+      "name": "Build isolated Android SDK fixture before starting the emulator",
+      "seconds": 1122.0
+    },
+    {
+      "name": "Compile HRIS fixture and verify driver cleanup",
+      "seconds": 345.0
+    },
+    {
+      "name": "Enable KVM for the owned runner emulator",
+      "seconds": 0.0
+    },
+    {
+      "name": "Run reactivecircus/android-emulator-runner@v2",
+      "seconds": 1161.0
+    },
+    {
+      "name": "Run actions/upload-artifact@v4",
+      "seconds": 2.0
+    },
+    {
+      "name": "Post Run gradle/actions/setup-gradle@v4",
+      "seconds": 0.0
+    },
+    {
+      "name": "Post Run actions/setup-java@v4",
+      "seconds": 1.0
+    },
+    {
+      "name": "Post Run actions/checkout@v4",
+      "seconds": 0.0
+    },
+    {
+      "name": "Post Run actions/checkout@v4",
+      "seconds": 0.0
+    },
+    {
+      "name": "Complete job",
+      "seconds": 0.0
+    }
+  ],
+  "phoneTouched": false,
+  "limits": [
+    "Actual isolated API/PostgreSQL/Synapse and owned API35 emulator. No real employee messages or phone UI.",
+    "Five existing provider/worker scenarios are regression evidence; the new local identity stage/resume proof runs separately on the local emulator.",
+    "Raw notification callbacks use fixture ports; they are not new HRIS message sends. Product FCM is separately evidenced.",
+    "Actual Apple Matrix SDK and all54 communications acceptance groups remain open. No group runtime/transfer is enabled."
+  ],
+  "verifiedSourceFileCount": 3878,
+  "sourceManifestSha256": "54ff68afaa9edbefd46bc231a5ab16da47cdd7f20377fcd4465aa3b4fb3e7e4e",
+  "fullAuditSha256": "84aceec9ced5fc4a05421bfff51969e420d8210f0e10bdcd4819dc594908fc8d",
+  "systemUiImagesVisuallyInspected": true,
+  "systemUiImages": {
+    "docs/images/collaboration-local-sdk-native-proof/reply-notification.png": "23bc939af9d771bd151ff122f4632bb5e0466c156c6c52cb36745939ea8f0765",
+    "docs/images/collaboration-local-sdk-native-proof/reply-editor.png": "503c299c6a739f432f02ff133fd909e5666f758a8f0b13fbea4234c5236e9f8d",
+    "docs/images/collaboration-local-sdk-native-proof/reply-acknowledged.png": "850f9cd05c99277fa07a3fd47cbf6d13f6f6495c0024a567c0aa6062aef15588"
+  }
+}
