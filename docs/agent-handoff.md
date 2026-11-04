@@ -1,5 +1,27 @@
 # Agent continuation — HRIS Mobile
 
+## Group gateway self access accepted — 4 November 2026
+
+Backend [941fa2f5](https://github.com/fajarxfce/hris-platform/commit/941fa2f5) admits fixed
+identity/capabilities with current group/native/device/provider ownership and bounded
+request slots. Exact lease release and current admission preserve retained identity
+across restart, cancellation, competing requests and revocation during I/O.
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/941fa2f5/docs/measurements/collaboration-space-gateway-access-2026-11-04.json):
+focused 7 PASS 114.736s, data 9/API 130 PASS 331.029s, full worker 128 PASS 347.237s
+(127 active/one existing retention skip), 8,340 unchanged inputs and quality checks.
+Native HTTP expiry/renewal/bootstrap/self access and actual retained Synapse keys
+remain covered. Main peer 9b4fa5ca records this acceptance.
+
+NEXT backend immutable key reservation/publication, recipient and room/member authority,
+then Mobile preflight/stage/freeze/completion/atomic adoption preserving original SDK
+namespaces, passphrases, history and uncertain sends across all local projections.
+Offline recipient key availability must not require a live short native/provider token;
+native hard-parent replacement still needs explicit recovery. Group remains disabled
+with no product caller or new APK. Product code/hosted evidence remain 0b804cb2; phone
+28/live 8b40/schema 116 push ON/SMTP OFF and Starter 9959c1d unchanged. All 54 groups remain
+open. Continue full long run, frequent updates, immediate pushes and validated product
+feature installation only; never install proof APKs on the user phone.
+
 ## Native provider renewal and group maintenance accepted — 4 November 2026
 
 Backend [b2dee963](https://github.com/fajarxfce/hris-platform/commit/b2dee963) now recovers
