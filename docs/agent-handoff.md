@@ -1,5 +1,35 @@
 # Agent continuation — HRIS Mobile
 
+## Current native group sync accepted — 4 November 2026
+
+Backend [93022a1e](https://github.com/fajarxfce/hris-platform/commit/93022a1e48706e544df4604d60cc873a4dac0576) is pushed.
+
+Group sync now admits the complete original/published room inventory under current
+native/device/provider authority. Same-scope positions resume; changed scopes restart;
+only exact retained devices may initialize from an authenticated company cursor. Both
+provider outcomes and final cursor sealing recheck current authority and the full scope.
+Strict Matrix sync HTTP dispatch and shared API/worker DI are connected.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/93022a1e48706e544df4604d60cc873a4dac0576/docs/collaboration/space-sync-access.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/93022a1e48706e544df4604d60cc873a4dac0576/docs/measurements/collaboration-space-sync-access-2026-11-04.json).
+
+Initial native gate: 183 of 184 pass (460.111 s). One combined crypto test
+reused a fixed fixture company code in its second scenario; only that test changed to
+use separate test databases. Both affected cases pass (56.138 s).
+All 133 domain, 34 publication/original migration and eight history cases also pass.
+Actual API: 146 pass (228.547 s).
+FULL worker: 138 cases (391.017 s), 137 passing plus one existing opt-in
+skip. Format/architecture checks pass on 8,465 unchanged final inputs. Only the
+native fixture isolation and subsequent API tests changed; all production stayed unchanged.
+All sessions closed. Actual SDK queued-key decryption remains unproven.
+
+NEXT: connect room metadata/direct hints/join/read receipts and group push; prove actual
+SDK queued original key authentication/decryption, then Mobile SDK ownership transition
+and native hard-parent recovery. Ignored room-access protocol drafts are unaccepted.
+
+Base `a0dc8a31` pushed. All 54 PRD groups open; group rollout disabled. Live8b40/schema116
+(push on, SMTP off), normal phone28, Mobile product/hosted0b804cb2 and Starter9959c1d unchanged.
+Continue long run, updates, atomic pushes and validated product installs.
+
+
 ## Original and group sync protocol accepted — 4 November 2026
 
 Backend [a0dc8a31](https://github.com/fajarxfce/hris-platform/commit/a0dc8a31f8b6173bbbe4964c9b76757ffe1948ed) is pushed.
