@@ -1,5 +1,30 @@
 # Agent continuation — HRIS Mobile
 
+## Bounded room-control capacity accepted — 4 November 2026
+
+Backend [12020f6b](https://github.com/fajarxfce/hris-platform/commit/12020f6b) is pushed.
+V134 ROOM_PREPARATION shares ordinary slots 1–7 with gateway requests, uses current
+own native/device coordinates without a gateway, and preserves renewal slot zero.
+Expired purpose changes retain the owner and require a new token; exact release and
+post-lock deadline checks prevent stale work affecting a successor. [Evidence](https://github.com/fajarxfce/hris-platform/blob/12020f6b/docs/measurements/collaboration-space-room-request-slots-2026-11-04.json):
+all 109 database cases pass in 1012.632 seconds; focused six database/eight typed
+cases pass in 236.801 seconds, with quality checks and 8,400 identical unchanged
+inputs. Recovery 19 passes, maximum schema 134/unknown 135. Upgrade, mixed concurrent
+capacity, exact cleanup after purge, malformed readback/cancellation rollback, actual
+archive restore and lock-wait expiry pass. Initial unnamed-constraint selection
+error is fixed; the original lifetime constraint is preserved. All sessions closed.
+
+NEXT six worker-review drafts (claim/advance/settle/outcome policy, three pure tests,
+eleven actual-PG cases) are formatted/parser-checked but UNAPPLIED/UNCOMPILED. Apply
+only after this checkpoint. Actual-PG draft uses typed JCE provider rotation and an
+explicit worker-capability fixture; do not claim ordinary RLS from it. More real
+retained LEGACY/Synapse coverage, scheduler and actual API/FULLworker DI gates remain.
+Then recipient keys/content/sync/push, offline keys/native hard-parent replacement
+and full Mobile adoption preserving SDK store/passphrase/keys/history. Group disabled;
+all 54 PRD groups open. Live8b40/schema116 push ON/SMTP OFF, phone28, Mobileproduct/
+hosted0b804cb2 and Starter9959c1d unchanged. Continue long run, updates, atomic pushes
+and validated product feature installs only.
+
 ## Provider peer recovery accepted — 4 November 2026
 
 Backend [5493a8e1](https://github.com/fajarxfce/hris-platform/commit/5493a8e1) is pushed.
