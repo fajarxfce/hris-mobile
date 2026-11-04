@@ -1,5 +1,26 @@
 # Agent continuation — HRIS Mobile
 
+## Original queued SDK keys recovered — 4 November 2026
+
+The actual Android SDK preserves original keys and decrypts queued messages after
+native organization completion, lost-response replay and two process deaths. Both
+known/unknown-peer cases pass (109.162s,12,388 unchanged combined inputs). Local
+history is read before sync and contains exactly one logical event. Strict shields
+are Red: this is decryption evidence, not verified/cross-signed device trust.
+[Contract](collaboration-space-sdk-history.md),
+[evidence](measurements/collaboration-space-sdk-history-2026-11-04.json).
+
+Root :check, Android-host and proof unit/assemble/lint pass (133.464s,3,883 unchanged
+inputs;18 fresh proof cases, unaffected tasks reused). Earlier failing attempts and
+fixture corrections are recorded. All sessions and owned emulator resources closed.
+Companion backend test/driver publication follows this Mobile proof commit.
+
+NEXT: product group runtime/store adoption, typed group push/background/reply
+routing, native hard-parent recovery and actual FCM single-notification handover.
+This is proof-only; current product still ignores group push envelopes. Live8b40/
+schema116, phone28, product/hosted0b804cb2 and Starter9959c1d unchanged. All54 groups
+remain open. Continue long run, updates, atomic pushes and validated product installs.
+
 ## Organization push callback and worker integrated — 4 November 2026
 
 Backend [d0478388](https://github.com/fajarxfce/hris-platform/commit/d0478388ba1a84154cbd42f0f1f4b20b45356178) is pushed.

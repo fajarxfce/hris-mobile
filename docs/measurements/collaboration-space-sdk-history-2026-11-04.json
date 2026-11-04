@@ -1,0 +1,341 @@
+{
+  "recordedAt": "2026-11-04T21:36:54.807853+00:00",
+  "scope": "Actual original queued SDK keys after native organization completion; proof-only, not product owner adoption",
+  "backendBase": "d0478388ba1a84154cbd42f0f1f4b20b45356178",
+  "mobileBase": "1c2b293138fcd9dbcf6ea90569dfea70418643e9",
+  "mobileGate": {
+    "startedAt": "2026-11-04T21:31:14.058774+00:00",
+    "elapsedSeconds": 133.464,
+    "exitCode": 0,
+    "sourceFiles": 3883,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": {
+        "sha256": "4936edc78f85daaf6dc42fefa049931acf141eff96297a37a888ae64c9fe9cbb",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofFailureTest.xml": {
+        "sha256": "730f416b88eb1ffd3bc65218d070094da29b40a1dd1d9ec6f475d7ab62751f95",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofObservationTest.xml": {
+        "sha256": "22a7b994fe656c2a4952ce2453e65319a7d5db36beb234149cf2d22f1bfe4cbf",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisReadReceiptBarrierTest.xml": {
+        "sha256": "cc0a7a3336c82f17ecc59aad3f87b39789bb7987c9ded50d9a64e95a81542a24",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.NotificationInputCheckpointTest.xml": {
+        "sha256": "1287bbf560763d83e9993e3a79b20a3e91f24ff184198a78e9fa5298bed2aeb2",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "nativeGate": {
+    "startedAt": "2026-11-04T21:33:55.062011+00:00",
+    "elapsedSeconds": 109.162,
+    "exitCode": 0,
+    "sourceFiles": 12388,
+    "sourcesUnchanged": true,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "TEST-dev.fajar.hris.NativeCollaborationSpaceSdkInteropTest.xml": {
+        "sha256": "4cd716859420bb1236069400def0ee80b6ee4e3dc97bcd61d75e07a39276088c",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "apkSha256": "bf38d91abd18f62ae4bc3fbd83a0407b0f446d779bba80fea94ac09be863515d",
+    "apkUnchanged": true
+  },
+  "sourceHashes": {
+    "mobile": {
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "0b219b725a59e7da59d87ebba33b3c073c010546a323e29b4d86d97dfcb7fa77",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceHistoryProbe.kt": "fcfc09d2776353db052fd455cc3fd3f93dc5c220885c3b1d98aca2eb592924b1",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/SpaceHistoryProofClient.kt": "810c6176351df96d2d8be8ea54e682a2ad542fdfad9dfc23706fce3da51579bb",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/SpaceHistoryEventListener.kt": "0d10d1771a1d5caffa852aba6c7ee36cb00a1c8615bc5d0c712a294ddb97f236"
+    },
+    "backend": {
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeSdkMatrixServer.kt": "a0a8a82c80839b8e3162a58158169bd5f81777767bb08a12b70f38c033dac7f0",
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeSpaceSdkTrace.kt": "2bc614fd70ec56cbbe726a7e8cb124e1fea1c962009ca3d9ee1da4c06cb92267",
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationSpaceSdkInteropTest.kt": "1a7ebbfd385bfb0cc98adab11930370177a7862163e3b164250bb90bd01cd91a",
+      "tool/collaboration_space_sdk.py": "dfc06514f437ffdb768ec684e6fd4919e4cded5458905cd35df9cb97ea9f6740"
+    }
+  },
+  "sourceManifestHashes": {
+    "mobile": "7008262fa6bfd53d47de64a5297979a32b11a2f33841c409f8ebba08a046313d",
+    "combined": "85ab948cab393fdd18fd78c9be425ea2125e9e47c7220376b83eb68ce3dab68b"
+  },
+  "accepted": [
+    {
+      "knownPeer": false,
+      "driver": {
+        "passed": true,
+        "cleanup": true,
+        "artifact": {
+          "apkSha256": "bf38d91abd18f62ae4bc3fbd83a0407b0f446d779bba80fea94ac09be863515d",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35"
+        },
+        "proof": {
+          "sameOriginalKeys": true,
+          "decryptedAfterLostResponse": true,
+          "localHistoryBeforeSync": true,
+          "singleLogicalEvent": true,
+          "eventId": "$cP84EX9x_Swo9gFM5vOErt2DeLFKLPsZWvySP98Ye6Y",
+          "knownPeer": false,
+          "processId": 9093
+        },
+        "actualProcessDeaths": 2
+      },
+      "queueHashes": [
+        "277a9708a8209aadcc7d875b9308aa48375c8ac75efbfc8fc467c39d791df5e4"
+      ],
+      "originalProviderFramesRetained": true,
+      "nativeCompletion": true,
+      "sameOriginalKeyFingerprint": true,
+      "actualQueuedKeyReplay": true,
+      "targetEncryptedOnWire": true,
+      "syncsAtLoss": 2,
+      "unmigratedPeer": true,
+      "originalUnadoptedRoom": true,
+      "strictShield": "Red",
+      "productAdoption": false
+    },
+    {
+      "knownPeer": true,
+      "driver": {
+        "passed": true,
+        "cleanup": true,
+        "artifact": {
+          "apkSha256": "bf38d91abd18f62ae4bc3fbd83a0407b0f446d779bba80fea94ac09be863515d",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35"
+        },
+        "proof": {
+          "sameOriginalKeys": true,
+          "decryptedAfterLostResponse": true,
+          "localHistoryBeforeSync": true,
+          "singleLogicalEvent": true,
+          "eventId": "$jzfyQyPQtiUIevXZC_YaRS3-pLI4XALfRZHGyl6g6fw",
+          "knownPeer": true,
+          "processId": 9804
+        },
+        "actualProcessDeaths": 2
+      },
+      "queueHashes": [
+        "7575cfe08201dfc2b5647f5bcf55ea92873cbe3a61ace9722bcd0b411138ea03"
+      ],
+      "originalProviderFramesRetained": true,
+      "nativeCompletion": true,
+      "sameOriginalKeyFingerprint": true,
+      "actualQueuedKeyReplay": true,
+      "targetEncryptedOnWire": true,
+      "syncsAtLoss": 3,
+      "unmigratedPeer": true,
+      "originalUnadoptedRoom": true,
+      "strictShield": "Red",
+      "productAdoption": false
+    }
+  ],
+  "previousNativeAttempts": [
+    {
+      "startedAt": "2026-11-04T21:05:43.728339+00:00",
+      "elapsedSeconds": 57.701,
+      "exitCode": 1,
+      "sourceFiles": 12387,
+      "sourcesUnchanged": true,
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apkSha256": "98bbd8795568b85cbf7847df712c4f1a7343956bbce752f3f9532c228a03ab2f",
+      "apkUnchanged": true,
+      "reason": "Preexisting owned proof APK refused; removed only after exact prior artifact SHA match."
+    },
+    {
+      "startedAt": "2026-11-04T21:09:01.268928+00:00",
+      "elapsedSeconds": 58.889,
+      "exitCode": 1,
+      "sourceFiles": 12387,
+      "sourcesUnchanged": true,
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apkSha256": "98bbd8795568b85cbf7847df712c4f1a7343956bbce752f3f9532c228a03ab2f",
+      "apkUnchanged": true,
+      "reason": "Pinned Synapse login burst exceeded during group provisioning."
+    },
+    {
+      "startedAt": "2026-11-04T21:11:56.607897+00:00",
+      "elapsedSeconds": 67.319,
+      "exitCode": 1,
+      "sourceFiles": 12387,
+      "sourcesUnchanged": true,
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apkSha256": "98bbd8795568b85cbf7847df712c4f1a7343956bbce752f3f9532c228a03ab2f",
+      "apkUnchanged": true,
+      "reason": "Safe failure classification confirmed HTTP429 provider_busy."
+    },
+    {
+      "startedAt": "2026-11-04T21:14:09.874914+00:00",
+      "elapsedSeconds": 126.081,
+      "exitCode": 1,
+      "sourceFiles": 12387,
+      "sourcesUnchanged": true,
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apkSha256": "98bbd8795568b85cbf7847df712c4f1a7343956bbce752f3f9532c228a03ab2f",
+      "apkUnchanged": true,
+      "reason": "Invalid assumption that first group sync carries encrypted frames; known-peer raw event callback timed out."
+    },
+    {
+      "startedAt": "2026-11-04T21:18:44.382340+00:00",
+      "elapsedSeconds": 122.812,
+      "exitCode": 1,
+      "sourceFiles": 12387,
+      "sourcesUnchanged": true,
+      "counts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apkSha256": "98bbd8795568b85cbf7847df712c4f1a7343956bbce752f3f9532c228a03ab2f",
+      "apkUnchanged": true,
+      "reason": "Safe trace confirmed correct group authority but empty first response; known-peer raw callback still timed out."
+    }
+  ],
+  "emulatorCleanup": {
+    "pid": 2620255,
+    "serial": "emulator-5562",
+    "stopped": true,
+    "signalSent": true,
+    "transportAbsent": true,
+    "seconds": 1.204
+  },
+  "limits": [
+    "Raw fixture-only protected SDK owner; production same client construction but product runtime adoption remains incomplete.",
+    "Temporary worker-role grant and explicit room publication are fixture setup, not API worker isolation or room-worker acceptance.",
+    "Both strict SDK shields are Red; decryption is not cross-signed/verified device trust.",
+    "No live, phone, FCM, Apple, web or capacity acceptance.",
+    "Only this multi-session fixture uses finite Synapse login burst32; default fixtures and live configuration are unchanged."
+  ],
+  "previousMobileAttempts": [
+    {
+      "startedAt": "2026-11-04T20:55:23.961943+00:00",
+      "elapsedSeconds": 45.934,
+      "exitCode": 1,
+      "sourceFiles": 3882,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "Proof dispatch exceeded detekt function length; split scenario dispatch."
+    },
+    {
+      "startedAt": "2026-11-04T20:56:45.463809+00:00",
+      "elapsedSeconds": 51.556,
+      "exitCode": 1,
+      "sourceFiles": 3882,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "Ignored .kt draft was scanned by formatting; renamed .kt.draft with no source change."
+    },
+    {
+      "startedAt": "2026-11-04T20:58:46.524277+00:00",
+      "elapsedSeconds": 73.499,
+      "exitCode": 1,
+      "sourceFiles": 3882,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "Kotlin required explicit Nothing return types for intentionally non-returning phases."
+    },
+    {
+      "startedAt": "2026-11-04T21:02:03.184347+00:00",
+      "elapsedSeconds": 117.255,
+      "exitCode": 0,
+      "sourceFiles": 3882,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "Build passed; subsequent native experiment exposed fixture assumptions."
+    },
+    {
+      "startedAt": "2026-11-04T21:24:16.180893+00:00",
+      "elapsedSeconds": 130.222,
+      "exitCode": 0,
+      "sourceFiles": 3882,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reason": "Build passed; subsequent review replaced raw event callback and single-sync assumption."
+    }
+  ]
+}

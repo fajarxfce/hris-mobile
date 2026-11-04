@@ -90,7 +90,10 @@ class MatrixProofInstrumentation : Instrumentation() {
                             HrisNativeMatrixProbe(targetContext, directory).runAckRecovery()
                         "hris-completion-recover" ->
                             HrisNativeMatrixProbe(targetContext, directory).runCompletionRecovery()
-                        else -> error("Unknown owned protocol scenario")
+                        else -> {
+                            check(scenario.startsWith("space-history-"))
+                            HrisSpaceHistoryProbe(targetContext, directory).run(scenario)
+                        }
                     }
                 }
             }

@@ -1,5 +1,9 @@
 # Durable Android runtime handover
 
+[Actual original queued-key continuity](collaboration-space-sdk-history.md) now
+passes with the retained SDK store across native server completion and two process
+deaths. Its fixture owner does not adopt this product runtime or integrate push.
+
 This local mechanism stages an exact transfer intent. It does not call the group
 HTTP API, publish provider keys, freeze the server, adopt a group runtime or enable
 cross-company chat. Those application workflows remain to be integrated.
