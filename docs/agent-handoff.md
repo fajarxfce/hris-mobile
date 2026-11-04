@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Original room read inventory accepted — 4 November 2026
+
+Backend [3681619d](https://github.com/fajarxfce/hris-platform/commit/3681619df313d6e27d4d276e1e841bc7e01c0637) is pushed.
+
+Existing V129/V130 metadata now supplies bounded original company/server room inventory
+and exact room-ID lookup. Original participants, binding creator and room identity
+remain explicit before group adoption. Typed mapping validates every row, finite
+limits, deterministic ordering and exact ownership; malformed or partial acquisition
+cannot advance a scope. Peer offboarding and selected HR company do not erase original
+owned metadata. No schema, DI graph, public provider route or device admission changed.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/3681619df313d6e27d4d276e1e841bc7e01c0637/docs/collaboration/space-original-room-inventory.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/3681619df313d6e27d4d276e1e841bc7e01c0637/docs/measurements/collaboration-space-original-room-inventory-2026-11-04.json).
+
+All 137 tests pass in 139.193 s: 127 domain and ten PostgreSQL/repository
+cases. Format/architecture checks pass on 8,451 unchanged inputs. Real V130
+fixtures cover multiple rooms/two companies, both original participants, spoofed actors,
+wrong namespace, unbound rooms, limits/order, HR selection, peer offboarding and parent
+purge. Typed malformed/duplicate/partial readback, invalid requests, acquisition failures,
+cancellation and interruption are covered. All sessions closed.
+
+NEXT: merge separately proven original and published group read metadata under current
+completed LEGACY owner admission. Exact overlaps must preserve original company, room,
+conversation, members and actual creator; never fabricate group lease/publication rows.
+A peer may have different original/current aliases in different rooms. Preserve queued
+original to-device keys before sync advances and prove actual SDK peer-key lookup and
+decryption. Historical read scope does not grant new sends or OTK claims to obsolete
+devices. Then group sync cursors/filter/projection, history fallback, metadata/push,
+full Mobile SDK adoption and native hard-parent recovery with original stores/keys.
+
+Base `b8e84bba` is pushed. Group rollout remains disabled; all 54 PRD acceptance groups
+remain open. Live `8b40` / schema116 (push on, SMTP off), normal phone release28, Mobile
+product/hosted `0b804cb2` and Starter `9959c1d` remain unchanged. Continue the long run,
+updates, atomic pushes and validated product installs.
+
+
 ## Organization owned-room sync scope accepted — 4 November 2026
 
 Backend [b8e84bba](https://github.com/fajarxfce/hris-platform/commit/b8e84bba57f767e80f45a5b17f8b6dc1a3408126) is pushed.
