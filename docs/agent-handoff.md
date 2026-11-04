@@ -1,5 +1,27 @@
 # Agent continuation — HRIS Mobile
 
+## Typed completion port accepted; gateway observation continues — 4 November 2026
+
+Group branch is pushed through `60b58d3d`, on accepted V124 `a22816d0`. The typed
+completion repository validates exact owned mapping and successor versions after
+the atomic retirement function. Missing/foreign/unreadable readback rolls the caller
+transaction back; interruption skips another SQL read and preserves its flag.
+
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/60b58d3d/docs/measurements/collaboration-legacy-runtime-completion-ports-2026-11-04.json):
+12 mapping/actual storage cases PASS111.923s with8280 unchanged inputs and passing
+format/architecture. Actual wrong-owner/stale-version, nullable gateway, readback
+failure rollback and API capability denial pass. Earlier compilation errors and
+Java jOOQ/nullable-version fixes are recorded. No DI/worker/client caller yet.
+
+Current group WIP is V125 narrow owned original-gateway metadata plus typed read
+port, needed to observe its exact version before completion without exposing hashes
+or encrypted replay. Follow that worktree's handoff for active checks. Then continue
+admitted retained worker using existing provider key readback, completed replay and
+durable Mobile runtime/store/inbox/outbox/read/push ownership. Live8b40/schema116,
+normal phone28, Mobile code3d85d569/hosted gates and Starter9959c1d remain current.
+All54 groups and actual Apple runtime remain open. Continue full long run, frequent
+user updates, Git evidence and immediate pushes.
+
 ## V124 atomic retained completion accepted — 4 November 2026
 
 Group branch `feat/communication-space` is pushed at `a22816d0`. V124 retains an
