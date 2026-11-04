@@ -1,5 +1,57 @@
 # Agent continuation — HRIS Mobile
 
+## Current group room-history access accepted — 4 November 2026
+
+Backend [96e5053b](https://github.com/fajarxfce/hris-platform/commit/96e5053b8693410895664c8cf8d1a5b47e8249b5) is pushed.
+
+Messages/context/event routes now admit the current group native/device/gateway and
+exact owned room. Completed LEGACY proof precedes original cursor-owner construction.
+Reads retain owned history after peer offboarding and require no new own-key query;
+new-message sending keeps its separate confirmed receiving-device requirement.
+Provider I/O stays outside SQL and current authority/owned metadata are rechecked
+around both outcomes. Original finite deadline and exact cleanup remain unchanged.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/96e5053b8693410895664c8cf8d1a5b47e8249b5/docs/collaboration/space-room-history-access.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/96e5053b8693410895664c8cf8d1a5b47e8249b5/docs/measurements/collaboration-space-room-history-access-2026-11-04.json).
+
+Initial domain/runtime gate: 137 passed out of 138 (218.055 s),
+including all 122 domain and eight room-message cases with actual Synapse history.
+Only a deadline fixture failed. The corrected focused case passes
+(42.329 s); both fixture failures and the existing
+group error contract are recorded. No production source changed after the initial
+gate. Retained-device 32 passes (267.985 s), actual API
+143 passes (224.739 s), and full worker
+covers 138 cases (393.873 s; 137 passed, one existing optional skip). Quality checks
+pass; final retained/worker use 8,448 identical unchanged inputs. API source
+differs only in the later retained-device test setup correction: both send and history
+assertions now reuse one gateway bootstrap. Its initial 32-test run had one failure
+(246.231 s); evidence retains that failure and the correction.
+All sessions closed.
+
+Actual Synapse retains original message/context/event reads after restart and peer
+offboarding. Completed LEGACY tests carry an old company cursor through group
+continuation and a terminal page in the original room, while new SPACE rooms retain
+old Matrix identities. HTTP tests cover distinct employees, original encrypted content,
+strict bounds/credentials, cursor replay, unrelated rooms and late native revocation.
+Opaque fixtures remain transport/storage evidence, not valid SDK Megolm decryption.
+
+NEXT: group sync, metadata and push, then full Mobile SDK adoption and native hard-parent
+recovery with original SDK store/passphrase/keys/history/uncertain sends. Group sync
+needs its own room-set/filter/cursor semantics; do not blindly reuse a room-history
+bridge or substitute a group UUID for a company. Before advancing provider sync,
+include separately proven original owned rooms or require complete original-room
+adoption: filtering only newly bound group rooms could discard pending original
+to-device keys while advancing the cursor. V129/V130 retain original inventory and
+actual creator metadata; do not fabricate group bindings for those rows. The current
+history routes admit published group bindings only. All applied history-admission drafts
+are stale; committed source is authoritative. Shared DI changes require actual API
+and full worker gates.
+
+Base `39e85812`, Main `5e1237bf` and Mobile `7f7ef335` are pushed. Group rollout remains
+disabled and all 54 PRD acceptance groups remain open. Live `8b40` / schema 116 (push
+on, SMTP off), normal phone release 28, Mobile product/hosted `0b804cb2` and Starter
+`9959c1d` remain unchanged. Continue the long run, updates, atomic pushes and validated
+product feature installs.
+
+
 ## Group room-history protocol accepted — 4 November 2026
 
 Backend [39e85812](https://github.com/fajarxfce/hris-platform/commit/39e8581252b8eecabfd87314bbb7742fe3ec2ca6) is pushed.
