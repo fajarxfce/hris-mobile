@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## Organization room storage accepted — 4 November 2026
+
+Backend [4320caca](https://github.com/fajarxfce/hris-platform/commit/4320caca) is pushed.
+V131 and strict typed storage preserve immutable canonical/original room intent,
+first requester versus actual creator, bounded queue and peer-safe status. Exact
+binding and request success commit together; bad readback and cancellation roll back
+actual PostgreSQL writes. [Contract](https://github.com/fajarxfce/hris-platform/blob/4320caca/docs/collaboration/space-room-lifecycle.md)
+and [evidence](https://github.com/fajarxfce/hris-platform/blob/4320caca/docs/measurements/collaboration-space-room-storage-2026-11-04.json):
+all93 database cases PASS797.756s, five typed cases PASS106.634s, format/architecture
+and19 recovery cases pass. Shared8,376 inputs match; final typed run adds nine files.
+Initial compilation errors are resolved and recorded. All test sessions closed.
+No shared DI, room use case/endpoint/worker adapter or Mobile product caller changed.
+
+NEXT shared original/group creation fence. Snapshot-only absence cannot prevent a
+later old conversation; immutable old conversations precede every old room producer.
+Use an exact unique persistent pair route and test both insert orders, rollback,
+repeatable-read concurrency and scoped metadata. Then admitted native room lifecycle,
+bounded worker provider reconciliation, recipient keys/content/sync/push and Mobile
+preflight/stage/freeze/completion/adoption. Preserve original SDK namespace/passphrase,
+keys, history and uncertain sends. Offline receiving and native hard-parent replacement
+remain required. Group disabled/all54 groups open. Product/hosted0b804cb2, normal phone28,
+live8b40/schema116 pushON/SMTPOFF and Starter9959c1d unchanged. Continue long run, updates,
+atomic pushes and validated PRODUCT feature installs only.
+
 ## Original room peer verification accepted — 4 November 2026
 
 Backend [6415de9c](https://github.com/fajarxfce/hris-platform/commit/6415de9c) adds exact
