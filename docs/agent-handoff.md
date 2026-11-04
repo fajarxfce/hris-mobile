@@ -1,5 +1,27 @@
 # Agent continuation — HRIS Mobile
 
+## Owned gateway metadata accepted; retained activation underway — 4 November 2026
+
+Group branch is pushed through `612d8279`. V125 exposes exact owned original gateway
+metadata through a restricted non-login view; no hashes/replay/token columns. The
+typed port distinguishes absent, wrong-parent and retired heads. Current admission
+still governs use; the metadata increment has no product caller.
+
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/612d8279/docs/measurements/collaboration-legacy-gateway-metadata-2026-11-04.json):
+18 focused cases PASS186.803s;151 broad database/domain/storage/native cases
+PASS728.592s, same8290 unchanged inputs, format/architecture PASS. Actual role
+isolation, retirement/parent purge/archive restore, strict mapping and failure/
+cancellation/interruption pass. Recovery125/future126 rejection passes15 tests.
+No failed run; all owned resources closed.
+
+Current group WIP applies admitted retained-worker activation, provider key readback,
+atomic old/new publication, bounded busy retry, DI and actual database/Synapse tests.
+It is unaccepted; follow the group worktree's handoff and gates. Next explicit
+completed native replay and durable Mobile SDK/store/inbox/outbox/read/push ownership.
+Normal phone28, live8b40/schema116 pushON/SMTP OFF, Mobile3d85d569/hosted gates and
+Starter9959c1d remain current. All54 groups and actual Apple runtime remain open.
+Continue full long run, frequent user updates, atomic Git evidence and immediate pushes.
+
 ## Typed completion port accepted; gateway observation continues — 4 November 2026
 
 Group branch is pushed through `60b58d3d`, on accepted V124 `a22816d0`. The typed
