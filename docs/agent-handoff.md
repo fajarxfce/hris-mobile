@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Group room-history protocol accepted — 4 November 2026
+
+Backend [39e85812](https://github.com/fajarxfce/hris-platform/commit/39e8581252b8eecabfd87314bbb7742fe3ec2ca6) is pushed.
+
+Distinct group owner/cursor contracts retain original Matrix user/device/room IDs.
+New cursors use a separate group purpose; only an exact LEGACY room/device tuple can
+bridge the original company history cursor. Shared company/group projection preserves
+bounded pagination, event framing and stable exhaustion. Missing crypto keys and
+cancellation retain their classification without fallback or SDK store deletion.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/39e8581252b8eecabfd87314bbb7742fe3ec2ca6/docs/collaboration/space-room-history-protocol.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/39e8581252b8eecabfd87314bbb7742fe3ec2ca6/docs/measurements/collaboration-space-room-history-protocol-2026-11-04.json).
+
+All 139 tests pass in 76.378 s (122 domain, 17 provider/cursor/mapping),
+with format/architecture checks on 8,446 unchanged inputs. Actual Synapse
+covers SPACE and original LEGACY pagination through restart, no duplicate event IDs,
+original content/users/devices/creator, context and event reads. The LEGACY case begins
+with an actual old company cursor. Existing company protocol regressions pass.
+No DI graph, schema or public group history dispatch changed. All sessions closed.
+
+NEXT: wire fixed group messages/context/event reads under current caller admission
+and immutable owned room checks around every provider outcome. The admitted device
+must prove completed LEGACY transfer before constructing bridge metadata. Owned
+history does not require a currently receiving peer. Keep caller guards and current
+provider/gateway/request bounds; shared DI changes require actual API and full worker.
+Then finish group sync/metadata/push and full Mobile SDK adoption with original store,
+passphrase, keys, history, uncertain sends and native hard-parent recovery. Group sync
+cursor/filter migration is separate from this room-history bridge. Applied history
+protocol drafts are stale; committed source is authoritative. No valid SDK Megolm
+decryption or product rollout is claimed by opaque transport fixtures.
+
+Base `6b9e5d22`, Main `653ae30c` and Mobile `6ebc8677` are pushed. Group rollout remains
+disabled and all 54 PRD acceptance groups remain open. Live `8b40` / schema 116 (push
+on, SMTP off), normal phone release 28, Mobile product/hosted `0b804cb2` and Starter
+`9959c1d` remain unchanged. Continue the long run, updates, atomic pushes and validated
+product feature installs.
+
 ## Group encrypted room-message send accepted — 4 November 2026
 
 Backend [6b9e5d22](https://github.com/fajarxfce/hris-platform/commit/6b9e5d228b4ad7312d26804aee4fe7239ccb397b) is pushed.
