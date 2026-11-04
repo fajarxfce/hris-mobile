@@ -52,8 +52,14 @@ Received denial recording has a bounded two-second non-cancellable window, with 
 immediate process buffer retained when the durable write times out. A recipient or
 single conversation command rejection must not be fed into this company-wide gate.
 
-Observation belongs to its collector. Selection, owner and admission changes cancel
-the previous subscription; disposal cancels all local collection. Refresh does not
+Observation belongs to its collector. Guarded access and local page selection are
+resolved before one final cancellable row subscription. A page change or access
+denial cancels that row emitter itself, including an old result waiting for a slow
+consumer. Zero-capacity flow boundaries prevent buffered old rows from appearing
+after the replacement. Disposal cancels all local collection. A regression first
+reproduced three deliveries where only the initial and replacement result were
+valid; the fixed observer passes both page-change and denial variants on JVM and
+browser. [Validation](measurements/collaboration-list-observation-2026-11-04.json). Refresh does not
 retry, enroll a device, provision a room or start the native SDK. A failed source
 subscription must be reopened explicitly by its presentation owner after recovery.
 

@@ -60,16 +60,33 @@ class ObserveCollaborationList(
                 when (access) {
                     is AppResult.Failed -> flowOf(access)
                     is AppResult.Success ->
-                        replicas.observeAdmission(access.value).flatMapLatest { admission ->
+                        replicas.observeAdmission(access.value).map { admission ->
                             when (admission) {
-                                is AppResult.Failed -> flowOf(admission)
+                                is AppResult.Failed -> admission
                                 is AppResult.Success ->
-                                    admission.value.denial?.let { flowOf(AppResult.Failed(it)) }
-                                        ?: selection.distinctUntilChanged().flatMapLatest {
-                                            replicas.observe(access.value, it)
-                                        }
+                                    admission.value.denial?.let { AppResult.Failed(it) } ?: access
                             }
                         }
+                }
+            }
+            .buffer(0)
+            .distinctUntilChanged()
+            .flatMapLatest { access ->
+                when (access) {
+                    is AppResult.Failed -> flowOf(access)
+                    is AppResult.Success ->
+                        selection.distinctUntilChanged().map {
+                            AppResult.Success(access.value to it)
+                        }
+                }
+            }
+            .buffer(0)
+            .distinctUntilChanged()
+            .flatMapLatest { request ->
+                when (request) {
+                    is AppResult.Failed -> flowOf(request)
+                    is AppResult.Success ->
+                        replicas.observe(request.value.first, request.value.second)
                 }
             }
             .buffer(0)

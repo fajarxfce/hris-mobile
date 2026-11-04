@@ -1,0 +1,132 @@
+{
+  "date": "2026-11-04",
+  "scope": "Current company-chat list observation under slow consumers and access/page replacement",
+  "parentCommit": "243bdcc070fb1fe24782ad671d208769ce36ba4f",
+  "sources": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationList.kt": "4f5ea1305b370999daaf43fb0bbb4495f9247efcd8b8fb0af53fe3f787973ece",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationListObservationBoundaryTest.kt": "71cde310643efe742bf0b3b2f0a5caf9feca2a68b5c9b263042104b4859d7953"
+  },
+  "gates": {
+    "focused1": {
+      "startedAt": "2026-11-04T23:36:00.800789+00:00",
+      "elapsedSeconds": 52.252,
+      "exitCode": 1,
+      "sourceFiles": 3918,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "26abeb37f0a33ecedfc01668dfd1a3de947b32fc9dfaf25759444c9f9f47e080",
+      "regressionReports": {
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationListObservationBoundaryTest.xml": {
+          "sha256": "e274adf1ce98ae5c36e2a1eeeaeae34bdbd79051ae5e3647756a612dcffb2812",
+          "tests": 1,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "c73c4285fa198294804712bff5f674b52e84c38d3dea31326ec95aa262825a48",
+      "stderrSha256": "31e8bbad73f89879908a51b9b99573d46293be2bc9bc635f99b620af3852c221"
+    },
+    "focused2": {
+      "startedAt": "2026-11-04T23:37:13.030273+00:00",
+      "elapsedSeconds": 71.043,
+      "exitCode": 0,
+      "sourceFiles": 3918,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "79ec550e86555adf9b6765743a9e130ea51b51a2fd5f3c8ee63e5178b9f03192",
+      "regressionReports": {
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationListObservationBoundaryTest.xml": {
+          "sha256": "6122a4b6b3d01522b7c82de29d4a6edda5179bf0acdac04ce7475f25afd263b6",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "7bc11c6566d4c0d2f794c369d77ff704d2f9f33fb47c87d45cce2bad1951de03",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "check1": {
+      "startedAt": "2026-11-04T23:39:03.103580+00:00",
+      "elapsedSeconds": 335.456,
+      "exitCode": 0,
+      "sourceFiles": 3918,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2504,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "79ec550e86555adf9b6765743a9e130ea51b51a2fd5f3c8ee63e5178b9f03192",
+      "regressionReports": {
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationListObservationBoundaryTest.xml": {
+          "sha256": "6cfcd7de37f9a1ec98ecd4c20e814a871c71adc48c31591d51c1558a9bff74a0",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "fc606458a5e5599cd85c3413ed2b46a52fb1612289aa74886d8211e8478a9061",
+      "stderrSha256": "56f0fe38dc52639dffaf611ef9be664686a35853c203e75df9c6afcc9fd00631"
+    },
+    "browser1": {
+      "startedAt": "2026-11-04T23:44:57.622364+00:00",
+      "elapsedSeconds": 78.347,
+      "exitCode": 0,
+      "sourceFiles": 3918,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 969,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "79ec550e86555adf9b6765743a9e130ea51b51a2fd5f3c8ee63e5178b9f03192",
+      "regressionReports": {
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationListObservationBoundaryTest.xml": {
+          "sha256": "2bc76a7d5619ff655ccdafbe12eb66a79437a8d135c419a6fdaadecfd2bda146",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "6dc3bc67bbe1621f5f1e728337def56a420cdd62a97c6694445c3bf4e547eee7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "finalGateSourcesIdentical": true,
+  "baselineFailure": [
+    {
+      "case": "accessDenialOrSelectionChangeDiscardsPendingOldRowsBeforeConsumerResumes[desktop]",
+      "message": "java.lang.AssertionError: deny=false must discard queued old facts expected:<2> but was:<3>"
+    }
+  ],
+  "fix": "Resolve guarded access and page selection before one final cancellable facts subscription. Zero-capacity boundaries discard old pending emissions instead of transferring them into an emitter unaffected by denial or page cancellation.",
+  "coverage": [
+    "Actual existing observer reproduced3events instead of2 after page replacement",
+    "Same regression now covers page replacement and access denial, with a suspended final collector",
+    "Old local observation is disposed, no network acquisition occurs",
+    "Existing company/account/age/admission policies remain unchanged",
+    "Full root, real application DI, Android host/dev compilation and browser domain checks"
+  ],
+  "limits": [
+    "No new native/provider/FCM/Apple/device acceptance",
+    "No UI group cutover; all54 PRD groups remain open",
+    "Phone release29 remains verified but uninstalled; previous confirmed install28",
+    "Live backend8b40/schema116 unchanged"
+  ]
+}

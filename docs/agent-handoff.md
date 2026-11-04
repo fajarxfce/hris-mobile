@@ -1,5 +1,37 @@
 # Agent continuation — HRIS Mobile
 
+## Current company-chat list cancels queued old results — 4 November 2026
+
+A slow consumer could receive an old page result after page selection or read
+admission changed. The existing product observer now resolves guarded access and
+selection before one final cancellable row subscription. Both page and denial
+replacement discard the old pending row; disposal leaves no local collectors,
+and selection still starts no network request. Company/account/age policies stay
+intact. [Contract](collaboration-local-list.md),
+[evidence](measurements/collaboration-list-observation-2026-11-04.json).
+
+The unchanged product observer failed the regression with three deliveries instead
+of two. The corrected observer passes both replacement variants. Focused tests,
+format/architecture/detekt pass. Root :check, Android-host and Android dev compilation
+pass 335.456 s / 2,504 fresh cases; browser domain
+pass 78.347 s / 969 cases. Final inputs identical
+across all gates (3,918 files). All sessions closed. No new native/provider/FCM/
+Apple or physical-device acceptance.
+
+NEXT: durable group identity/device setup commands, SDK store adoption and explicit
+hard-parent recovery, organization UI and typed group push/background/replies.
+A durable account-root discovery record is also needed for startup to open the
+organization directory offline; never infer it from arbitrary cached partitions.
+Mobile transport trace is in `.work/space-directory-usecases-2026-11-04/next-device-transport.md`
+and `.work/space-device-2026-11-04/CURRENT.md`.
+New native sign-ins create a fresh local session ID; token refresh requires the same
+account and exact native binding. Preserve that transport fence and the original
+SDK identity during group adoption. This increment improves current company chat;
+all 54 PRD groups remain open. Live backend 8b40/schema 116 is unchanged.
+Release 29 remains a validated artifact pending phone connection; no install or
+phone UI action occurred, release 28 is the last confirmed install. Continue long
+run, updates, atomic pushes and validated install-only product delivery.
+
 ## Organization directory local reads and finite refresh — 4 November 2026
 
 Local observation now keeps owned directory facts readable through ordinary credential
