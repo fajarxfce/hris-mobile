@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Admitted room worker accepted — 4 November 2026
+
+Backend [3284aaf7](https://github.com/fajarxfce/hris-platform/commit/3284aaf7135c3f51df8c8fa72bfcd11bc01e6e35) is pushed.
+The [room worker](https://github.com/fajarxfce/hris-platform/blob/3284aaf7135c3f51df8c8fa72bfcd11bc01e6e35/docs/collaboration/space-room-worker.md)
+reconciles one immutable SPACE alias or retained LEGACY room with the current
+participant's own credentials. Actual creator and publisher remain distinct;
+current native/device/provider/peer/request admission surrounds provider outcomes.
+Binding, successful head and journal commit atomically. Bounded workers have no
+waiting executor queue; deadlines, physical capacity after cancellation and owned
+shutdown preserve finite operation. The new room-worker flag defaults to false.
+
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/3284aaf7135c3f51df8c8fa72bfcd11bc01e6e35/docs/measurements/collaboration-space-room-worker-2026-11-04.json):
+108 domain plus initial 11 PostgreSQL cases pass in 155.778 seconds; final 43
+PostgreSQL/Synapse/retained cases pass in 394.504 seconds. Full worker suite has
+137 passed/one existing optional skip in 402.151 seconds; actual API 96 passes in
+149.641 seconds. Quality checks pass with 8,413 identical unchanged final API/worker
+inputs. The scheduled test's wrong cleanup table name is corrected; its initial
+failure and exact source continuity are recorded. All test sessions are closed.
+Actual scheduled native/room workers connect two fictional companies to one encrypted
+Synapse room; both native views/replays preserve it. Retained-room/current-peer
+recovery and original signed device keys survive the exercised provider restart.
+
+NEXT recipient projection/query/claim/to-device, content/sync/push and full Mobile
+adoption. Preserve offline receiving, original SDK namespace/passphrase/keys/history,
+uncertain sends and native hard-parent recovery. The ignored V135 SQL and five-case
+recipient test drafts are uncompiled/unapplied; LEGACY/bounded typed mapping coverage
+remains. They are not accepted implementation. Current source and exact continuation:
+[backend handoff](https://github.com/fajarxfce/hris-platform/blob/3284aaf7135c3f51df8c8fa72bfcd11bc01e6e35/docs/agent-handoff.md).
+No cross-company SDK conversation or product APK is claimed by this worker checkpoint.
+Group disabled; all 54 PRD groups open. Live 8b40/schema 116 push ON/SMTP OFF, phone 28,
+Mobile product/hosted 0b804cb2 and Starter 9959c1d unchanged. Continue the long run,
+updates, atomic pushes and validated product feature installs only.
+
 ## Bounded room-control capacity accepted — 4 November 2026
 
 Backend [12020f6b](https://github.com/fajarxfce/hris-platform/commit/12020f6b) is pushed.
