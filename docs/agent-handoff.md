@@ -1,5 +1,35 @@
 # Agent continuation — HRIS Mobile
 
+## Current native original history access accepted — 4 November 2026
+
+Backend [68087090](https://github.com/fajarxfce/hris-platform/commit/68087090d7f20ced6a552a3a13f133bf9ed76e3e) is pushed.
+
+The existing history routes now read separately proven original rooms when their exact
+group binding is absent. Canonical original company/server/account metadata and current
+native/device/provider admission remain mandatory. Both provider outcomes recheck the
+exact original or published tuple. Peer offboarding does not remove owned history;
+new sends still require current recipients and published group room authority.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/68087090d7f20ced6a552a3a13f133bf9ed76e3e/docs/collaboration/space-original-history-access.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/68087090d7f20ced6a552a3a13f133bf9ed76e3e/docs/measurements/collaboration-space-original-history-access-2026-11-04.json).
+
+Initial gate: 173 of 175 pass (353.045 s), including 133 domain, eight
+native history and 32 existing publication cases. Two new cases collided on the fixture's
+fixed provider room ID; only that fixture was corrected to use unique IDs. All three
+affected cases then pass (121.123 s). Actual API: 143 pass
+(223.329 s). FULL worker: 138 cases (396.093 s), with
+137 passing and the one existing opt-in skip. Quality checks pass on 8,455
+unchanged final inputs. Production is unchanged after the initial gate. All sessions closed.
+
+NEXT: complete group sync using the original/published union, distinct sync cursor and
+shared bounded provider projection. Prove actual SDK queued-key authentication/decryption
+while preserving original store/user/device; embedded sender keys and retained peer data
+matter, but source inspection is not acceptance. Then metadata/push, Mobile SDK ownership
+transition and native hard-parent recovery. Ignored future sync drafts remain unaccepted.
+
+Base `beccbea1` pushed. All 54 PRD acceptance groups remain open; group rollout disabled.
+Live8b40/schema116 (push on, SMTP off), normal phone28, Mobile product/hosted0b804cb2 and
+Starter9959c1d unchanged. Continue long run, updates, atomic pushes and product installs.
+
+
 ## Original history protocol accepted — 4 November 2026
 
 Backend [beccbea1](https://github.com/fajarxfce/hris-platform/commit/beccbea1d5f2ecee41ce48d93cafeeb3f962e91f) is pushed.
