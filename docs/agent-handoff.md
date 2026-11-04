@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Native group room metadata and receipts accepted — 4 November 2026
+
+Backend [7b767bbf](https://github.com/fajarxfce/hris-platform/commit/7b767bbfdc6ec59b978d9696ab159084c8727cb3) is pushed.
+
+Group gateway routes now expose managed direct hints, room join/state/membership and
+public/private read receipts over exact original/published room ownership. Current
+native admission and immutable metadata are rechecked around both provider outcomes.
+Receipts require mapped event proof before writing. Historical membership authenticates
+group positions; original company positions require fresh group sync. Shared bounded
+provider projection preserves original creators and distinct peer aliases.
+[Protocol](https://github.com/fajarxfce/hris-platform/blob/7b767bbfdc6ec59b978d9696ab159084c8727cb3/docs/collaboration/space-metadata-access.md), [evidence](https://github.com/fajarxfce/hris-platform/blob/7b767bbfdc6ec59b978d9696ab159084c8727cb3/docs/measurements/collaboration-space-metadata-access-2026-11-04.json).
+
+All 134 domain cases pass initially (27.806 s); data compilation then
+failed on one missing test import. That import alone changed. The 72-case data gate passes 70 cases
+(558.887 s); two new restart tests retained the old mapped provider
+endpoint. Only that fixture changed. Both actual Synapse cases then pass
+(50.269 s), including post-restart metadata and receipt projection.
+Actual API: 149 pass (237.891 s). FULL worker: 138 cases
+(394.062 s), 137 passing plus one existing opt-in skip.
+Format/architecture checks pass on 8,473 unchanged final inputs. Production
+remained unchanged across all gates; corrected interop/API/worker fingerprints match.
+All sessions closed. Actual SDK queued-key decryption remains unproven.
+
+NEXT: group push admission/delivery, actual SDK original queued-key authentication and
+decryption, Mobile SDK store ownership transition and native hard-parent recovery.
+Preserve original crypto identities and current group authority; do not reuse old
+company push ownership for a group device. Continue the remaining communications PRD.
+
+Base `93022a1e` pushed. All 54 PRD groups open; group rollout disabled. Live8b40/schema116
+(push on, SMTP off), normal phone28, Mobile product/hosted0b804cb2 and Starter9959c1d unchanged.
+Continue long run, updates, atomic pushes and validated product installs.
+
+
 ## Current native group sync accepted — 4 November 2026
 
 Backend [93022a1e](https://github.com/fajarxfce/hris-platform/commit/93022a1e48706e544df4604d60cc873a4dac0576) is pushed.
