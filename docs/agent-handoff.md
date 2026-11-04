@@ -1,5 +1,28 @@
 # Agent continuation — HRIS Mobile
 
+## Native provider renewal and group maintenance accepted — 4 November 2026
+
+Backend [b2dee963](https://github.com/fajarxfce/hris-platform/commit/b2dee963) now recovers
+expired provider heads through a native versioned/idempotent command, slot0, current
+admission and retained signed-key continuity. Provider generation/receipt/journal
+writes are atomic. Native HTTP returns only deviceId/providerGeneration. Group replay
+and request cleanup share the owned worker timer with bounded atomic batches.
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/b2dee963/docs/measurements/collaboration-space-provider-renewal-2026-11-04.json):
+focused8 PASS150.027s (actual retained provider/restart35.204s); final coverage domain93,
+data41, API94, full worker128 (one existing retention skip). Final data6/API94 passes
+226.232s and worker352.928s on identical8,338 inputs with quality gates. Preliminary
+test-only corrections and reproduction commands are recorded. Main peer c8d65e82.
+
+NEXT current group gateway exchange and key/room/member authority before Mobile
+preflight/stage/freeze/completion/atomic bootstrap adoption. Mobile recovery must
+orchestrate native refresh, explicit provider renewal, then status/bootstrap/refresh;
+expired replay alone never deletes owned history/keys. Preserve original SDK namespaces,
+passphrases and uncertain sends through history/outbox/drafts/read/push/deep links.
+No group caller, product APK or live rollout is enabled yet. Product code/hosted proof
+remain0b804cb2; phone28/live8b40/schema116 pushON/SMTPOFF and Starter9959c1d unchanged.
+All54 groups remain open. Continue full long run, frequent updates, atomic immediate
+pushes and validated product feature installs; never install proof APKs on the phone.
+
 ## Group request ownership accepted — 4 November 2026
 
 Backend [88d20851](https://github.com/fajarxfce/hris-platform/commit/88d20851) adds V127
