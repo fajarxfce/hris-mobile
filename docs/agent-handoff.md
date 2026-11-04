@@ -1,5 +1,25 @@
 # Agent continuation — HRIS Mobile
 
+## Native group conversation API accepted — 4 November 2026
+
+Backend [b478f776](https://github.com/fajarxfce/hris-platform/commit/b478f776) now exposes
+native group open/list/detail and original-company metadata inventory with current
+caller/peer authority and atomic receipts/journal. [Evidence](https://github.com/fajarxfce/hris-platform/blob/b478f776/docs/measurements/collaboration-space-conversation-native-2026-11-04.json):
+data5/API97 PASS222.896s, full worker128 PASS348.067s (127 active/one existing
+retention skip), 8,364 identical inputs and quality checks. Opposite company employees
+converge on one intent; replay, revoked peer, native expiry, cancellation/rollback,
+finite cursors and native transport pass. Main peer1fb7fe77 records acceptance.
+
+NEXT group Matrix room provisioning/adoption and canonical participant verification
+before recipient keys/content/sync/push and Mobile runtime adoption. This metadata API
+does not grant room content or imply a deliverable message. Preserve original SDK
+namespace/passphrase, keys, local history and uncertain sends through full preflight/
+stage/freeze/completion/adoption. Offline keys cannot require short native/provider
+tokens; hard-parent replacement remains explicit recovery. Group disabled, no product
+caller/APK or rollout. Product/hosted0b804cb2, normal phone28/live8b40/schema116 push ON/
+SMTP OFF and Starter9959c1d unchanged; all54 groups remain open. Continue long run,
+updates, atomic pushes and validated product feature installs only.
+
 ## Group conversation storage accepted — 4 November 2026
 
 Backend [4dd2fa96](https://github.com/fajarxfce/hris-platform/commit/4dd2fa96) retains
