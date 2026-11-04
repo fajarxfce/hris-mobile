@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Native room admission checkpoint — 4 November 2026
+
+Backend [95353885](https://github.com/fajarxfce/hris-platform/commit/95353885) is pushed.
+Current root native/group/client/device/provider admission now wraps room request and
+safe status. Intent, private request, receipt and journal are atomic. Original pair
+guards precede account/native/device guards. Actual retained-device transfers and
+opposite completed requesters keep original identities and actual room creator.
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/95353885/docs/measurements/collaboration-native-space-room-2026-11-04.json):
+data41 PASS316.012s with format/architecture on8,393 unchanged inputs; domain103 pass
+in an earlier mixed run with all production/domain inputs verified identical. Initial
+compile, fixture-clock and replay-assertion failures are resolved and recorded.
+All test sessions closed. No HTTP/shared DI/room worker or product caller yet.
+
+NEXT fix peer recovery: V131 first-requester retry strands an uncertain room while
+that requester is offline. The other current participant must recover the SAME alias
+using its own private proof. Preserve actual canonical SPACE creator or exact LEGACY
+creator; never expose/reuse another native session. Per-participant bounded queues
+are under review, not accepted. Then actual native HTTP/FULL-worker DI, bounded room
+worker, recipient keys/content/sync/push and full Mobile adoption preserving original
+SDK namespace/passphrase, keys/history and uncertain sends. Offline keys/hard-parent
+replacement remain required. Native source/test drafts are APPLIED/STALE; HTTP/DTO/DI
+remain unapplied. Group disabled/all54 groups open. Live8b40/schema116 pushON/SMTPOFF,
+normal phone28, product/hosted0b804cb2 and Starter9959c1d unchanged. Continue long run,
+updates, atomic pushes and validated PRODUCT feature installs only. StarterPR2 is a
+stale Draft targeting the old foundation branch; all commits are already in main.
+
 ## Original/group history fence accepted — 4 November 2026
 
 Backend [08827578](https://github.com/fajarxfce/hris-platform/commit/08827578) is pushed.
