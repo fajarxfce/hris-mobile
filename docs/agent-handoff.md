@@ -1,5 +1,32 @@
 # Agent continuation — HRIS Mobile
 
+## Retained worker activation accepted; completed native replay continues — 4 November 2026
+
+Group branch is pushed through `5b66e661`. Retained activation now observes current
+native/group/client/MFA proof, exact source/key/gateway metadata, frozen target and
+zero live old slots; it reads signed provider keys outside SQL and atomically retires
+the original device/provider/gateway with group publication and journal. Busy work
+uses bounded existing retry/deadline budgets. The old SPACE path remains covered.
+
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/5b66e661/docs/measurements/collaboration-retained-worker-activation-2026-11-04.json):
+focused23 PASS133.163s, API47 PASS156.651s, full worker127 PASS365.38s (126 active and
+one existing opt-in retention skip), same8290 unchanged inputs and quality checks.
+Actual PostgreSQL verifies competing workers, every write-boundary rollback and
+current/late revocation; actual Synapse readback/restart retains user/device/keys.
+Three failed initial runs and their fixture-only fixes are recorded. Owned resources
+are closed. No new phone/live deployment or product HTTP/Mobile caller is enabled.
+
+Current group WIP implements explicit completed native registration/retry/freeze/drain
+replay with a pure continuity policy and actual regression cases; follow its current
+handoff/gates. Then durable Mobile key-publication preflight, future SDK-acquisition
+gate and exact original store/inbox/outbox/read/push ownership, plus group HTTP/rooms/
+gateway and cross-company end-to-end acceptance. Public fingerprint alone is not
+private-key proof or confirmation of provider publication.
+
+Normal phone28, live8b40/schema116 pushON/SMTP OFF, Mobile3d85d569/hosted gates and
+Starter9959c1d remain current. All54 groups and actual Apple runtime remain open.
+Continue full long run, frequent updates, atomic Git handoffs and immediate pushes.
+
 ## Owned gateway metadata accepted; retained activation underway — 4 November 2026
 
 Group branch is pushed through `612d8279`. V125 exposes exact owned original gateway
