@@ -1,5 +1,30 @@
 # Agent continuation — HRIS Mobile
 
+## Native freeze and drain accepted — 4 November 2026
+
+Group branch `feat/communication-space` is pushed through `9d3c8a99`, following
+`57b2bee3` and `53a86f48`. Current native freeze atomically records one exact retained
+target with receipt/journal and preserves replay through refresh. Drain reads at
+most eight original server slots under current admission, reports active count and
+latest expiry, and never mutates runtime/queue state. No DI/HTTP is exposed yet.
+
+[Freeze](https://github.com/fajarxfce/hris-platform/blob/57b2bee3/docs/measurements/collaboration-legacy-runtime-freeze-2026-11-04.json)
+passes18 cases/64.356s/8268 unchanged inputs; [drain](https://github.com/fajarxfce/hris-platform/blob/9d3c8a99/docs/measurements/collaboration-legacy-runtime-drain-2026-11-04.json)
+passes23/69.9s/8271, both with format/architecture. Actual database cases cover root
+initialization, competing calls, every write-stage rollback, current/late denial,
+cancellation/interruption, real lease expiry and concurrent cleanup. All owned
+resources are closed. No failure in either first run.
+
+Next atomic group publication/old device-provider-gateway retirement and immutable
+completed mapping, then durable Mobile SDK/store/inbox/outbox/read/push handover.
+Zero server slots is not SDK shutdown or remote rollback. Existing Matrix key
+repository already supports exact device readback and pure signature/fingerprint
+validation; reuse it. Group handoff/transfer contract contain the current review.
+Mobile code3d85d569 and hosted gates, normal phone28, live8b40/schema116 pushON/
+SMTP OFF and Starter9959c1d remain current. All54 communications groups and actual
+Apple runtime remain open. Continue the full long run, frequent updates, immediate
+commit pushes and installation of validated product builds.
+
 ## All legacy runtime consumers fenced — 4 November 2026
 
 Group implementation in `/home/fajar/hris/.worktrees/communication-space` is now
