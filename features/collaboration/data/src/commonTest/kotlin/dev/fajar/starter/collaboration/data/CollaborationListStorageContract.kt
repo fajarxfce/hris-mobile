@@ -20,6 +20,32 @@ abstract class CollaborationListStorageContract {
     protected abstract fun databaseOwner(): CollaborationListDatabaseOwner
 
     @Test
+    fun newerDenialAtTheFinalClearCannotBeErasedByEitherOlderCompletion() = withDatabase { f ->
+        for (admitting in listOf(false, true)) {
+            assertEquals(AppResult.Success(true), f.repository.restrict(f.access, f.denied))
+            val before = f.admission()
+            val newer = CollaborationListAdmissionDto(listId(7777), "AccessDenied", "mfa_required")
+            val pending =
+                object : CollaborationListAdmissionDataSource by f.admissions {
+                    override fun clearIfCurrent(
+                        key: String,
+                        expected: CollaborationListAdmissionDto?,
+                    ): Boolean {
+                        f.admissions.write(key, newer)
+                        return f.admissions.clearIfCurrent(key, expected)
+                    }
+                }
+            val repository = f.repository(pending = pending)
+            if (admitting)
+                assertEquals(AppResult.Success(false), repository.admit(f.access, before.revision))
+            else assertEquals(AppResult.Success(true), repository.restrict(f.access, f.denied))
+            assertEquals(newer.code, f.admission().denial!!.code)
+            assertEquals(newer.revision, f.admission().revision)
+            assertEquals(AppResult.Success(true), f.repository.admit(f.access, newer.revision))
+        }
+    }
+
+    @Test
     fun exactRetainedConversationLookupSharesOwnedCheckpointAndSurvivesReopen() =
         withDatabase { f ->
             assertEquals(
@@ -362,8 +388,10 @@ private class CollaborationListFixture(private val databaseOwner: CollaborationL
     var admissions = MemoryCollaborationListAdmissionDataSource()
     var repository = repository()
 
-    fun repository(store: ReplicaStore = database.replicas) =
-        EncryptedCollaborationListRepository(store, cipher, keys, admissions)
+    fun repository(
+        store: ReplicaStore = database.replicas,
+        pending: CollaborationListAdmissionDataSource = admissions,
+    ) = EncryptedCollaborationListRepository(store, cipher, keys, pending)
 
     suspend fun activate(owner: CollaborationLocalAccess = access) =
         database.accounts.activate(owner.sessionId, listScope(owner).accountKey)

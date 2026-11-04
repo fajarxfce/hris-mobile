@@ -1,0 +1,100 @@
+{
+  "recordedAt": "2026-11-04T22:54:24.925411+00:00",
+  "baseCommit": "e97d5e0a9db021034bb6999b468dd97065959f71",
+  "scope": "Atomic final process-buffer clear for existing company-chat access admission",
+  "gates": {
+    "check1": {
+      "startedAt": "2026-11-04T22:45:49.280506+00:00",
+      "elapsedSeconds": 344.93,
+      "exitCode": 0,
+      "sourceFiles": 3910,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1371,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshTargets": {
+        "apps/shared/desktopTest": {
+          "tests": 615,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/desktopTest": {
+          "tests": 509,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/testAndroidHostTest": {
+          "tests": 247,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "1f62d628e061d64ad61222c469754df9c5cc1752334f861c3a0214e575d4b229",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationListStorageTest.xml": {
+          "sha256": "a0e659f74cc75d2f2ea807e5f0dffcba327ad5e0900196b9395ac9deee089730",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportManifestSha256": "5e1ef66ada0ac692a5623dfc59b5e81df817e1be906a69bb1f8255943cdf14c4"
+    },
+    "browser1": {
+      "startedAt": "2026-11-04T22:52:03.463347+00:00",
+      "elapsedSeconds": 92.87,
+      "exitCode": 0,
+      "sourceFiles": 3910,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 487,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshTargets": {
+        "features/collaboration/data/wasmJsBrowserTest": {
+          "tests": 487,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "selectedReports": {
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationListStorageTest.xml": {
+          "sha256": "a47398161ed0ca859001432dc173406d07dd6ef6920b7cf3cca91bbe4b6f6568",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "reportManifestSha256": "336bd97cf4fef6caf572febf6bdde4f63f1d1b815f2093afe14835a3d4277798"
+    }
+  },
+  "sourceHashes": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationListAdmissionDataSource.kt": "40fed52ae8948089885e25c4dced99ce6247be7a59b20fddc2e80465e7dd1d3e",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationListRepository.kt": "d27609200d1bd17f229ba0e04b9d68d8b391cf26e833db9100c8fd226ec1fbf2",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationListStorageContract.kt": "645446098e4d0604c1e1b9c05fe4314aa64d7377f49e5eb348ecefa49e1b0e98"
+  },
+  "finalGateSourcesIdentical": true,
+  "regression": "New denial injected at the last buffer-clear boundary wins over both durable restriction completion and admission completion; real SQLite and IndexedDB with AES-GCM.",
+  "limits": [
+    "One new shared regression case, two completion paths. This is not a timing/load benchmark.",
+    "Pending denials remain process-local if every durable write fails; persisted records survive process recreation.",
+    "No new product APK, provider, FCM or Apple runtime acceptance. Group directory use cases/runtime/UI remain incomplete."
+  ]
+}

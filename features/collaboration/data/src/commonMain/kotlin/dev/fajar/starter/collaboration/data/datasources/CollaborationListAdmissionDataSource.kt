@@ -11,6 +11,9 @@ interface CollaborationListAdmissionDataSource {
     fun current(key: String): CollaborationListAdmissionDto?
 
     fun write(key: String, value: CollaborationListAdmissionDto?)
+
+    /** A competing buffer mutation rejects the clear; newer denials remain retained. */
+    fun clearIfCurrent(key: String, expected: CollaborationListAdmissionDto?): Boolean
 }
 
 @Single
@@ -46,5 +49,12 @@ class MemoryCollaborationListAdmissionDataSource : CollaborationListAdmissionDat
         }
         // Fail closed on exhausted pending-write capacity until this process is replaced.
         check(!buffer.value.overflow)
+    }
+
+    override fun clearIfCurrent(key: String, expected: CollaborationListAdmissionDto?): Boolean {
+        val previous = buffer.value
+        check(!previous.overflow)
+        if (previous.records[key] != expected) return false
+        return buffer.compareAndSet(previous, previous.copy(records = previous.records - key))
     }
 }

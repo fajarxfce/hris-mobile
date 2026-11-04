@@ -211,8 +211,7 @@ class EncryptedCollaborationListRepository(
                             previous,
                             ReplicaSnapshot(dto.revision, sealed, emptyList()),
                         )
-                    if (saved && admissions.current(bufferKey) == dto)
-                        admissions.write(bufferKey, null)
+                    if (saved) admissions.clearIfCurrent(bufferKey, dto)
                     saved
                 }
             }
@@ -232,9 +231,7 @@ class EncryptedCollaborationListRepository(
                 previous?.let { withKey(access) { codec -> codec.admission(it) } }
                 currentCoroutineContext().ensureActive()
                 if (!replicas.replace(scope, partition, previous, null)) return@withLock false
-                if (admissions.current(bufferKey) != pending) return@withLock false
-                admissions.write(bufferKey, null)
-                true
+                admissions.clearIfCurrent(bufferKey, pending)
             }
         }
 

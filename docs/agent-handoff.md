@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## Atomic company-chat admission cleanup — 4 November 2026
+
+A newer access denial can arrive just before an earlier completion clears its
+process buffer. Both completion paths now clear only their captured value with a
+single atomic compare-and-set. The newer denial remains observable, including
+when its durable write is pending. This fixes the existing company-chat cache;
+organization directory storage already uses the same mechanism at e97d5e0a.
+[Contract](collaboration-local-list.md),
+[evidence](measurements/collaboration-admission-atomic-2026-11-04.json).
+
+Root :check, Android-host and Android dev compilation pass in 344.93 s
+(1,371 fresh cases); browser data suite passes in 92.87 s
+(487 cases). Both keep 3,910 identical source inputs. The new shared
+regression injects a denial at each final-clear boundary on real SQLite/IndexedDB
+with AES-GCM. Format, architecture, detekt and application DI tests pass. All
+sessions closed. No new provider, FCM, Apple runtime or product APK acceptance.
+
+NEXT: prepare a validated product update for the authorized phone, then owning
+organization-directory local-read/refresh use cases, durable native identity/device
+commands, SDK adoption/hard-parent recovery, organization UI and typed group push/
+background/replies. No selected HR company may stand in for organization ownership.
+All 54 PRD groups remain open. Live backend 8b40/schema 116 and phone release 28
+are unchanged. Continue long run, updates, atomic pushes and validated installs.
+
 ## Encrypted organization directory storage — 4 November 2026
 
 Account/space-owned directory facts now survive reauthentication, interrupted paging

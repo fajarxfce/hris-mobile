@@ -42,6 +42,12 @@ including through same-account reauthentication. The buffer has 128 pending scop
 exhaustion closes its reads until process replacement rather than evicting a denial.
 Each rejection receives a revision. A complete successful page acquisition can clear
 only the revision observed before starting; a newer rejection defeats that attempt.
+The final process-buffer clear is also atomic: both durable denial completion and
+successful admission clear only the captured buffer value with one compare-and-set.
+A newer denial arriving at that exact boundary remains observable. A competing
+buffer mutation can reject the clear without retrying or erasing another scope.
+A boundary-injection regression exercises both completion paths on real SQLite
+and IndexedDB. [Validation](measurements/collaboration-admission-atomic-2026-11-04.json).
 Received denial recording has a bounded two-second non-cancellable window, with the
 immediate process buffer retained when the durable write times out. A recipient or
 single conversation command rejection must not be fed into this company-wide gate.
@@ -54,5 +60,5 @@ subscription must be reopened explicitly by its presentation owner after recover
 Common domain tests exercise expiry, owner replacement, denial, cancellation,
 serialized requests and collector disposal. The same storage contract runs against
 real SQLite and IndexedDB with authenticated encryption, database reopen, key loss,
-late writes and failed admission persistence. App entry and chat history remain
-separate implementation work; this cache does not accept the full chat requirement.
+late writes and failed admission persistence. Provider runtime, conversation entry and history have separate acceptance; this
+cache does not by itself accept the full chat requirement.
