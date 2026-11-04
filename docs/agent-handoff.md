@@ -1,5 +1,47 @@
 # Agent continuation — HRIS Mobile
 
+## Durable Android SDK intent accepted locally — 4 November 2026
+
+Mobile now implements owned handover intent read/stage, immutable schema2 target,
+exact observed-client pinning, bounded registry exclusion and complete SDK shutdown
+before an exclusive protected write. Legacy restore/install/session conversion and
+credential updates reject staged records. Expired credentials and local login
+replacement do not hide retained intent. No product caller or server freeze is enabled.
+Read [the contract](collaboration-runtime-handover.md).
+
+[Evidence](measurements/collaboration-runtime-handover-2026-11-04.json): final root/
+Android/proof gate PASS160.404s on3880 unchanged inputs:4044 desktop,241 Android-host,
+18 proof and10 build-logic cases (18 fresh on final run;1958 fresh on the preceding
+run). Browser463 PASS98.262s. Format/architecture/Detekt and proof assembly/lint pass.
+Initial focused725 PASS151.499s preceded exact-client pinning. One ignored-draft
+format failure and one omitted older proof-interface adapter are recorded and fixed;
+no failed test assertion. Only the proof adapter changed after the1958-case run.
+
+Actual encrypted Android SDK/Keystore stage and separate-process recovery PASS67.337s.
+Wrong fingerprint, foreground/background exclusion, borrower interruption, write
+failure, cancellation before/after commit, same-target replay, foreign-target denial,
+legacy restore/install rejection and original key preservation pass. Fixture-only raw
+SDK reopening verifies retained files; it does not adopt a product group runtime.
+Proof app cleared; owned emulator3731489/serial5562 stopped. No phone interaction.
+APK is debug-only,293169624 bytes, SHA db8c856d0c69ba21861071cca9a127ba0306a78c903b0bb1da6010e7308f2861;
+never install it on the user phone. See measurement for exact bytes and report hashes.
+
+Group backend is pushed as c9bf7762:137 domain/API/OpenAPI PASS188.105s and full
+worker/context127 PASS377.895s (126 active/one existing retention skip), same8299
+inputs. Main peer805c181f records that acceptance. Group discovery/contact/identity/
+device/retry/freeze/drain is native-only and disabled by default. No live rollout.
+
+NEXT group gateway and room authority; provider publication/readback preflight before
+local staging/server freeze; full Mobile group ownership for the original SDK store,
+inbox/outbox/drafts/receipts/history/push/deep links and cross-company end-to-end proof.
+The local key observation is not provider publication or an access grant. Do not
+substitute a space ID into an old company namespace. Actual old-APK downgrade has not
+been tested. Hosted control/native/protocol checks will run on this code push; collect
+their results and exact source hashes. All54 groups and actual Apple runtime stay open.
+Normal phone28/live8b40/schema116 pushON/SMTP OFF and Starter9959c1d unchanged.
+Continue full authorized long run, frequent updates, atomic commits and immediate pushes.
+Ignored .work/runtime-handover-2026-11-04 drafts are superseded by tracked sources.
+
 ## Completed native recovery accepted; group HTTP continues — 4 November 2026
 
 Group branch is pushed through `631a2d3d`. Current native registration/retry/freeze/

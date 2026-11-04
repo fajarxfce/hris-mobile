@@ -79,6 +79,10 @@ message-queue restart acceptance. The preceding setup commit `fb1b1c13` now has 
 complete successful hosted control run `41235576905`: desktop 38, browser 30 and
 Apple simulator 30 cases, all steps passed and all 39 source hashes verified.
 
+The [durable handover mechanism](collaboration-runtime-handover.md) adds immutable
+schema2 intent metadata and excludes legacy acquisition after staging. Its local
+intent does not authorize server freeze or complete group runtime adoption.
+
 ## Android runtime composition
 
 `androidCollaborationRuntimeRepository` supplies the platform Keystore adapter and

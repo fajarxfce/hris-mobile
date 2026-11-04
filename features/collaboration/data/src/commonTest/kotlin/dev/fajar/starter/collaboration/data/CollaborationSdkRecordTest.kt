@@ -12,6 +12,80 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 
 class CollaborationSdkRecordTest {
+    private val handover =
+        CollaborationRuntimeHandoverIntent(
+            "a0000000-0000-0000-0000-000000000001",
+            "a0000000-0000-0000-0000-000000000002",
+            "a0000000-0000-0000-0000-000000000003",
+            0,
+            "a".repeat(64),
+        )
+
+    @Test
+    fun durableHandoverPreservesOriginalStoreAndRejectsRefreshOrRetargeting() = runTest {
+        val originalScope = scope()
+        val codec = CollaborationSdkRecordCodec(originalScope)
+        val original = codec.initialized(codec.create(command, gateway, passphrase))
+        assertFalse(codec.encode(original).contains("handover"))
+        val staged = codec.stageHandover(original, handover)
+        assertEquals(2, staged.schema)
+        assertEquals(original.credentialRevision + 1, staged.credentialRevision)
+        assertEquals(original.storeId, staged.storeId)
+        assertEquals(original.companyId, staged.companyId)
+        assertEquals(original.nativeSessionId, staged.nativeSessionId)
+        assertEquals(original.passphrase, staged.passphrase)
+        assertEquals(original.accessToken, staged.accessToken)
+        assertEquals(staged, codec.stageHandover(staged, handover))
+        val restored = CollaborationSdkRecordCodec(scope(setupOwner.copy(sessionId = "restored")))
+        val value = restored.decode(codec.encode(staged))
+        assertEquals(handover, restored.handoverIntent(value))
+        for (changed in
+            listOf(
+                handover.copy(operationId = SETUP_OPERATION),
+                handover.copy(spaceId = SETUP_OPERATION),
+                handover.copy(deviceId = SETUP_DEVICE),
+                handover.copy(expectedDeviceVersion = 1),
+                handover.copy(fingerprint = "b".repeat(64)),
+            )) assertFailsWith<IllegalArgumentException> { codec.stageHandover(staged, changed) }
+        assertFailsWith<IllegalArgumentException> { codec.initialized(staged) }
+        assertFailsWith<IllegalArgumentException> {
+            codec.withTokens(staged, staged.accessToken, staged.refreshToken)
+        }
+        assertEquals(handover, codec.handoverIntent(codec.decode(codec.encode(staged))))
+    }
+
+    @Test
+    fun incompleteOrMalformedHandoverCannotBecomeAValidProtectedRecord() = runTest {
+        val codec = CollaborationSdkRecordCodec(scope())
+        val empty = codec.create(command, gateway, passphrase)
+        assertFailsWith<IllegalArgumentException> { codec.stageHandover(empty, handover) }
+        val original = codec.initialized(empty)
+        for (invalid in
+            listOf(
+                handover.copy(operationId = "invalid"),
+                handover.copy(spaceId = handover.spaceId.uppercase()),
+                handover.copy(expectedDeviceVersion = -1),
+                handover.copy(expectedDeviceVersion = 999_999),
+                handover.copy(fingerprint = "A".repeat(64)),
+            )) assertFailsWith<IllegalArgumentException> { codec.stageHandover(original, invalid) }
+        assertFailsWith<IllegalArgumentException> {
+            codec.stageHandover(
+                original.copy(credentialRevision = 9_007_199_254_740_991L),
+                handover,
+            )
+        }
+        val staged = codec.stageHandover(original, handover)
+        for (invalid in
+            listOf(
+                staged.copy(schema = 1),
+                staged.copy(handover = null),
+                staged.copy(initialized = false),
+                staged.copy(credentialRevision = 0),
+            )) assertFailsWith<IllegalArgumentException> {
+            codec.decode(Json.encodeToString(invalid))
+        }
+    }
+
     private val endpoint = CollaborationSdkEndpoint("https://hris.example.test/")
     private val server = IdentityServer(SETUP_BASE, "Fictional phone")
     private val command =

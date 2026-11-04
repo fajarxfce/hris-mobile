@@ -9,6 +9,17 @@ import dev.fajar.starter.common.result.*
 /** Borrows the already protected fixture runtime. Its outer owner still owns full shutdown. */
 internal class HrisProofRuntimeAccess(private val runtime: AndroidCollaborationRuntimeLease) :
     CollaborationRuntimeRepository {
+    override suspend fun handoverIntent(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationRuntimeHandoverIntent?> = error("No implicit handover read")
+
+    override suspend fun stageHandover(
+        owner: CollaborationOwner,
+        deviceId: String,
+        intent: CollaborationRuntimeHandoverIntent,
+    ): AppResult<CollaborationRuntimeHandoverIntent> = error("Outer proof owns SDK handover")
+
     var historyHead: String? = null
         private set
 

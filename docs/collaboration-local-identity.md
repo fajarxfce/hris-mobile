@@ -15,7 +15,9 @@ missing/malformed identity fails mapping. Public-key order is fixed. The server
 still validates provider signatures and current native/device admission separately.
 A local fingerprint is neither a server grant nor remote private-key attestation.
 
-The operation has no production caller yet. Before adopting a retained device,
+The [local handover adapter](collaboration-runtime-handover.md) now holds a child
+lease while reading this identity and pins the observed client before retiring it.
+No product workflow invokes handover yet. Before adopting a retained device,
 compare the observed identity with the server's admitted original user/device/key
 mapping. Keep the original encrypted directory, protected passphrase and store
 scope. Substituting a group space ID into the legacy company/native hash opens a

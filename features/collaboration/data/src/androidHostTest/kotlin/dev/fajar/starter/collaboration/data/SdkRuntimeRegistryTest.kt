@@ -10,6 +10,116 @@ import kotlin.test.*
 
 class SdkRuntimeRegistryTest {
     @Test
+    fun anIdentityObservationCannotRetireAReplacementClientOrAnAlreadyStoppedOwner() {
+        val f = RegistryFixture()
+        f.select()
+        val old = f.foreground()
+        val observed = RegistryResource(ready = true)
+        f.registry.attach(old, observed)
+        f.registry.closeOtherOwners(null)
+        assertIs<AppResult.Failed>(f.registry.beginHandover("store", f.owner, "device", observed))
+        f.registry.released(old)
+        val replacement = RegistryResource(ready = true)
+        f.registry.attach(f.foreground(), replacement)
+        assertIs<AppResult.Failed>(f.registry.beginHandover("store", f.owner, "device", observed))
+        assertIs<AppResult.Failed>(f.registry.beginHandover("store", f.owner, "device", null))
+        assertEquals(0, replacement.stops)
+        assertSame(replacement, f.registry.find(f.owner, "device"))
+        val gate =
+            assertIs<AppResult.Success<SdkRuntimeHandoverGate>>(
+                    f.registry.beginHandover("store", f.owner, "device", replacement)
+                )
+                .value
+        assertEquals(1, replacement.stops)
+        f.registry.endHandover(gate)
+    }
+
+    @Test
+    fun handoverExcludesFutureOwnersUntilPendingConstructionHasFullyDrained() {
+        val f = RegistryFixture()
+        f.select()
+        val original = f.foreground()
+        val gate =
+            assertIs<AppResult.Success<SdkRuntimeHandoverGate>>(
+                    f.registry.beginHandover("store", f.owner, "device", null)
+                )
+                .value
+        assertFalse(f.registry.handoverDrained(gate))
+        assertNull(f.registry.handoverResource(gate))
+        assertIs<AppResult.Failed>(f.registry.reserveForeground("store", f.owner, "device"))
+        assertIs<AppResult.Failed>(f.registry.reserveBackground("store", f.owner, "device"))
+        val late = RegistryResource(ready = true)
+        assertFalse(f.registry.attach(original, late))
+        assertEquals(1, late.stops)
+        assertSame(late, f.registry.handoverResource(gate))
+        assertFalse(f.registry.handoverDrained(gate))
+        f.registry.released(original)
+        assertTrue(f.registry.handoverDrained(gate))
+        assertIs<AppResult.Failed>(f.registry.reserveForeground("store", f.owner, "device"))
+        f.registry.endHandover(gate)
+        assertIs<AppResult.Success<*>>(f.registry.reserveForeground("store", f.owner, "device"))
+    }
+
+    @Test
+    fun handoverStopsBorrowersAndALateGateReleaseCannotUnblockANewerAttempt() {
+        val f = RegistryFixture()
+        f.select()
+        val entry = f.foreground()
+        val resource = RegistryResource(ready = true)
+        f.registry.attach(entry, resource)
+        val borrow = f.background()
+        assertIs<AppResult.Failed>(
+            f.registry.beginHandover(
+                "store",
+                f.owner.copy(sessionId = "foreign"),
+                "device",
+                resource,
+            )
+        )
+        assertEquals(0, resource.stops)
+        val first =
+            assertIs<AppResult.Success<SdkRuntimeHandoverGate>>(
+                    f.registry.beginHandover("store", f.owner, "device", resource)
+                )
+                .value
+        assertNotNull(borrow.failures.value)
+        assertEquals(1, resource.stops)
+        assertIs<AppResult.Failed>(f.registry.beginHandover("store", f.owner, "device", resource))
+        f.registry.endHandover(first)
+        f.registry.released(entry)
+        val second =
+            assertIs<AppResult.Success<SdkRuntimeHandoverGate>>(
+                    f.registry.beginHandover("store", f.owner, "device", null)
+                )
+                .value
+        f.registry.endHandover(first)
+        f.registry.released(entry)
+        assertTrue(f.registry.handoverDrained(second))
+        assertIs<AppResult.Failed>(f.registry.reserveForeground("store", f.owner, "device"))
+        f.registry.endHandover(second)
+        assertIs<AppResult.Success<*>>(f.registry.reserveForeground("store", f.owner, "device"))
+    }
+
+    @Test
+    fun abandonedGateCapacityIsBoundedAndParentReplacementDoesNotAuthorizeAnotherGate() {
+        val f = RegistryFixture()
+        f.select()
+        val gates =
+            (1..5).map {
+                assertIs<AppResult.Success<SdkRuntimeHandoverGate>>(
+                        f.registry.beginHandover("store-$it", f.owner, "device", null)
+                    )
+                    .value
+            }
+        assertIs<AppResult.Failed>(f.registry.beginHandover("extra", f.owner, "device", null))
+        f.registry.endHandover(gates.first())
+        assertIs<AppResult.Success<*>>(f.registry.beginHandover("extra", f.owner, "device", null))
+        gates.drop(1).forEach(f.registry::endHandover)
+        f.registry.update(CollaborationRuntimeRetention(null, null))
+        assertIs<AppResult.Failed>(f.registry.beginHandover("new", f.owner, "device", null))
+    }
+
+    @Test
     fun historyReopeningAndBorrowingExcludeEachOtherUntilTheirHolderFinishes() {
         val f = RegistryFixture()
         f.select()

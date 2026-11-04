@@ -71,6 +71,10 @@ class MatrixProofInstrumentation : Instrumentation() {
                             CollapsedSchedulingProbe(targetContext, directory).stage()
                         "work-wake-resume" ->
                             CollapsedSchedulingProbe(targetContext, directory).run(resuming = true)
+                        "local-handover-stage" ->
+                            LocalRuntimeHandoverProbe(targetContext, directory).stage()
+                        "local-handover-resume" ->
+                            LocalRuntimeHandoverProbe(targetContext, directory).resume()
                         "local-identity-stage" -> LocalSdkIdentityProbe(directory).stage()
                         "local-identity-resume" -> LocalSdkIdentityProbe(directory).resume()
                         "provider" -> NativeMatrixProbe(directory).run()

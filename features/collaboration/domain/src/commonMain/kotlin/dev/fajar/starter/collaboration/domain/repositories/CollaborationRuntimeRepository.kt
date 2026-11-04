@@ -6,6 +6,23 @@ import kotlinx.coroutines.flow.StateFlow
 
 /** Store I/O and SDK ownership only. Use cases admit installation and live delivery separately. */
 interface CollaborationRuntimeRepository {
+    /** Owned protected metadata only; never opens an SDK client or acquires server authority. */
+    suspend fun handoverIntent(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationRuntimeHandoverIntent?>
+
+    /**
+     * Gates and drains the exact old store, then persists an immutable local target. The caller
+     * must verify provider key publication beforehand and current server admission afterward. A
+     * failed/cancelled stage cannot authorize server freeze; retry reads the same durable intent.
+     */
+    suspend fun stageHandover(
+        owner: CollaborationOwner,
+        deviceId: String,
+        intent: CollaborationRuntimeHandoverIntent,
+    ): AppResult<CollaborationRuntimeHandoverIntent>
+
     /** Retain current parent and foreground resources; invalidate obsolete pending acquisitions. */
     suspend fun updateRetention(retention: CollaborationRuntimeRetention): AppResult<Unit>
 

@@ -58,8 +58,9 @@ internal class AndroidSdkSessionDelegate(private val persistence: SdkSessionPers
     }
 }
 
-internal fun CollaborationSdkRecord.toNativeSession() =
-    Session(
+internal fun CollaborationSdkRecord.toNativeSession(): Session {
+    check(schema == 1 && handover == null) { "SDK ownership is being transferred." }
+    return Session(
         accessToken,
         refreshToken,
         matrixUserId,
@@ -68,3 +69,4 @@ internal fun CollaborationSdkRecord.toNativeSession() =
         null,
         SlidingSyncVersion.NONE,
     )
+}

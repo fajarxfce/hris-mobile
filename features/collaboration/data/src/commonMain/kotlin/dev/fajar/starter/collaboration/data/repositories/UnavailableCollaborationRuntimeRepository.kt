@@ -6,6 +6,21 @@ import dev.fajar.starter.common.result.*
 
 /** Hosts without a native binding cannot create a substitute store or claim SDK readiness. */
 class UnavailableCollaborationRuntimeRepository : CollaborationRuntimeRepository {
+    override suspend fun handoverIntent(
+        owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
+        deviceId: String,
+    ): AppResult<
+        dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeHandoverIntent?
+    > = unavailable()
+
+    override suspend fun stageHandover(
+        owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
+        deviceId: String,
+        intent: dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeHandoverIntent,
+    ): AppResult<
+        dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeHandoverIntent
+    > = unavailable()
+
     override suspend fun updateRetention(
         retention: CollaborationRuntimeRetention
     ): AppResult<Unit> = AppResult.Success(Unit)

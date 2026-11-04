@@ -19,6 +19,114 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 
 class AndroidCollaborationIdentityTest {
+    private val handover =
+        CollaborationRuntimeHandoverIntent(
+            "a0000000-0000-0000-0000-000000000001",
+            "a0000000-0000-0000-0000-000000000002",
+            "a0000000-0000-0000-0000-000000000003",
+            0,
+            "a".repeat(64),
+        )
+
+    @Test
+    fun retainedHandoverReplaysAfterLocalRestartWithoutOpeningOrWritingTheSdk() = runTest {
+        val f = Fixture()
+        try {
+            f.store(expired = true, handover = handover)
+            val saved = f.values.toMap()
+            val restored = setupOwner.copy(sessionId = "restored-local")
+            assertEquals(
+                AppResult.Success(handover),
+                f.runtime.handoverIntent(restored, SETUP_DEVICE),
+            )
+            assertEquals(
+                AppResult.Success(handover),
+                f.runtime.stageHandover(restored, SETUP_DEVICE, handover),
+            )
+            val changed =
+                assertIs<AppResult.Failed>(
+                    f.runtime.stageHandover(
+                        restored,
+                        SETUP_DEVICE,
+                        handover.copy(expectedDeviceVersion = 1),
+                    )
+                )
+            assertEquals("client.collaboration_handover_changed", changed.failure.code)
+            assertEquals(
+                AppResult.Success(CollaborationSelfIdentity(f.gateway.matrixUserId)),
+                f.runtime.selfIdentity(restored, SETUP_DEVICE),
+            )
+            assertEquals(saved, f.values)
+            assertEquals(0, f.writes)
+            assertEquals(0, f.directories)
+            assertEquals(4, f.closes)
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
+    fun aDurableIntentRejectsForegroundAndBackgroundLegacyRestoreBeforeSdkConstruction() = runTest {
+        val f = Fixture()
+        try {
+            f.store(handover = handover)
+            f.allowDirectory = true
+            val saved = f.values.toMap()
+            assertIs<AppResult.Failed>(f.runtime.restore(setupOwner, SETUP_DEVICE))
+            val parent =
+                CollaborationNativeParent(
+                    setupOwner.sessionId,
+                    setupOwner.audience,
+                    setupOwner.accountId,
+                    setupOwner.nativeSessionId,
+                )
+            assertEquals(
+                AppResult.Success(Unit),
+                f.runtime.updateRetention(CollaborationRuntimeRetention(parent, setupOwner)),
+            )
+            assertIs<AppResult.Failed>(f.runtime.acquireBackground(setupOwner, SETUP_DEVICE, 5_000))
+            assertEquals(2, f.directories)
+            assertEquals(2, f.directoryCloses)
+            assertEquals(2, f.closes)
+            assertEquals(0, f.writes)
+            assertEquals(saved, f.values)
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
+    fun missingRuntimeAndCancelledIntentReadsCannotFabricateAStagedHandover() = runTest {
+        val f = Fixture()
+        try {
+            f.store()
+            val saved = f.values.toMap()
+            assertEquals(
+                AppResult.Success(null),
+                f.runtime.handoverIntent(setupOwner, SETUP_DEVICE),
+            )
+            val absent =
+                assertIs<AppResult.Failed>(
+                    f.runtime.stageHandover(setupOwner, SETUP_DEVICE, handover)
+                )
+            assertEquals("client.collaboration_handover_pending", absent.failure.code)
+            val entered = CompletableDeferred<Unit>()
+            f.beforeRead = {
+                entered.complete(Unit)
+                awaitCancellation()
+            }
+            val waiting = async { f.runtime.stageHandover(setupOwner, SETUP_DEVICE, handover) }
+            entered.await()
+            waiting.cancelAndJoin()
+            assertEquals(3, f.closes)
+            assertEquals(0, f.directories)
+            assertEquals(0, f.writes)
+            assertEquals(saved, f.values)
+        } finally {
+            f.close()
+        }
+    }
+
     @Test
     fun absentOrUninitializedRecordDoesNotOpenAClientOrCreateAnything() = runTest {
         val f = Fixture()
@@ -132,14 +240,29 @@ class AndroidCollaborationIdentityTest {
         var reads = 0
         var writes = 0
         var closes = 0
+        var allowDirectory = false
+        var directories = 0
+        var directoryCloses = 0
         var beforeRead: suspend () -> Unit = {}
         private val http =
             createHttpClient(MockEngine { error("No identity network request") }, endpoint.baseUrl)
         val runtime =
             AndroidCollaborationRuntimeRepository(
                 object : CollaborationSdkStoreSource {
-                    override suspend fun acquire(storeId: String): CollaborationSdkStoreLease =
-                        error("No identity directory acquisition")
+                    override suspend fun acquire(storeId: String): CollaborationSdkStoreLease {
+                        check(allowDirectory) { "No identity directory acquisition" }
+                        directories++
+                        return object : CollaborationSdkStoreLease {
+                            override val storeId = storeId
+                            override val initiallyOccupied = true
+                            override val databasePath = "must-not-open-sdk/database"
+                            override val cachePath = "must-not-open-sdk/cache"
+
+                            override fun close() {
+                                directoryCloses++
+                            }
+                        }
+                    }
                 },
                 { name ->
                     object : AtomicCredentialStore {
@@ -174,7 +297,11 @@ class AndroidCollaborationIdentityTest {
                 http,
             )
 
-        suspend fun store(initialized: Boolean = true, expired: Boolean = false) {
+        suspend fun store(
+            initialized: Boolean = true,
+            expired: Boolean = false,
+            handover: CollaborationRuntimeHandoverIntent? = null,
+        ) {
             val scope = collaborationSdkScope(setupOwner, SETUP_DEVICE, server, endpoint)
             val codec = CollaborationSdkRecordCodec(scope)
             var record =
@@ -187,6 +314,7 @@ class AndroidCollaborationIdentityTest {
                         initialAccessExpiresAt = "2026-01-01T00:00:00Z",
                         expiresAt = "2026-01-02T00:00:00Z",
                     )
+            if (handover != null) record = codec.stageHandover(record, handover)
             values[scope.credentialRecordName] = codec.encode(record)
         }
 

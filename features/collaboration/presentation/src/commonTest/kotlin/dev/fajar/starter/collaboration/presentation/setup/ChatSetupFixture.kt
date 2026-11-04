@@ -182,6 +182,22 @@ internal class ChatSetupFixture {
     private var installedOperation: String? = null
     val runtimes =
         object : CollaborationRuntimeRepository {
+            override suspend fun handoverIntent(
+                owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
+                deviceId: String,
+            ): AppResult<
+                dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeHandoverIntent?
+            > = error("Unexpected SDK handover in this fixture")
+
+            override suspend fun stageHandover(
+                owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
+                deviceId: String,
+                intent:
+                    dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeHandoverIntent,
+            ): AppResult<
+                dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeHandoverIntent
+            > = error("Unexpected SDK handover in this fixture")
+
             override suspend fun isOpen(owner: CollaborationOwner, deviceId: String) =
                 AppResult.Success(opened)
 

@@ -17,6 +17,9 @@ internal class SdkRuntimeRegistry<T : Any>(
     private val monitor = Any()
     private val entries = mutableMapOf<String, SdkRuntimeReservation<T>>()
     private val borrowers = mutableSetOf<SdkRuntimeBorrow<T>>()
+    private val handovers = mutableMapOf<String, SdkRuntimeHandoverGate>()
+    private val changes = MutableStateFlow(0L)
+    val handoverChanges = changes.asStateFlow()
     private var retention: CollaborationRuntimeRetention? = null
 
     fun reserveForeground(
@@ -25,6 +28,7 @@ internal class SdkRuntimeRegistry<T : Any>(
         deviceId: String,
     ): AppResult<SdkRuntimeReservation<T>> =
         synchronized(monitor) {
+            if (storeId in handovers) return@synchronized handoverPending()
             val decision = retention
             if (decision != null && (!retainsParent(owner) || decision.foreground != owner))
                 return@synchronized stopped()
@@ -44,6 +48,7 @@ internal class SdkRuntimeRegistry<T : Any>(
         deviceId: String,
     ): AppResult<SdkRuntimeBorrow<T>> =
         synchronized(monitor) {
+            if (storeId in handovers) return@synchronized handoverPending()
             if (retention == null || !retainsParent(owner)) return@synchronized stopped()
             if (borrowers.size >= BORROW_LIMIT) return@synchronized capacity()
             val existing = entries[storeId]
@@ -74,6 +79,7 @@ internal class SdkRuntimeRegistry<T : Any>(
             check(entries[reservation.storeId] === reservation && reservation.resource == null)
             reservation.resource = resource
             if (reservation.retired) requestStop(resource)
+            changed()
             !reservation.retired
         }
 
@@ -162,6 +168,54 @@ internal class SdkRuntimeRegistry<T : Any>(
             closingResources()
         }
 
+    /** A temporary exact-store exclusion; its owner persists the durable gate after full drain. */
+    fun beginHandover(
+        storeId: String,
+        owner: CollaborationOwner,
+        deviceId: String,
+        expectedResource: T?,
+    ): AppResult<SdkRuntimeHandoverGate> =
+        synchronized(monitor) {
+            if (storeId in handovers) return@synchronized handoverPending()
+            if (handovers.size >= CLIENT_LIMIT) return@synchronized capacity()
+            if (retention != null && !retainsParent(owner)) return@synchronized stopped()
+            val entry = entries[storeId]
+            if (entry != null && (entry.owner != owner || entry.deviceId != deviceId))
+                return@synchronized busy()
+            // A key observation from a replaced client cannot stage a newer client's store.
+            if (entry?.resource !== expectedResource) return@synchronized busy()
+            if (
+                expectedResource != null &&
+                    (entry?.retired != false || !available(expectedResource))
+            )
+                return@synchronized busy()
+            val gate = SdkRuntimeHandoverGate(storeId)
+            handovers[storeId] = gate
+            entry?.let(::retire)
+            changed()
+            AppResult.Success(gate)
+        }
+
+    fun handoverResource(gate: SdkRuntimeHandoverGate): T? =
+        synchronized(monitor) {
+            check(handovers[gate.storeId] === gate)
+            entries[gate.storeId]?.resource
+        }
+
+    fun handoverDrained(gate: SdkRuntimeHandoverGate): Boolean =
+        synchronized(monitor) {
+            check(handovers[gate.storeId] === gate)
+            gate.storeId !in entries
+        }
+
+    fun endHandover(gate: SdkRuntimeHandoverGate) =
+        synchronized(monitor) {
+            if (handovers[gate.storeId] === gate) {
+                handovers.remove(gate.storeId)
+                changed()
+            }
+        }
+
     /** Expiry/caller cancellation releases only this reference; foreground ownership survives. */
     fun releaseBorrow(borrow: SdkRuntimeBorrow<T>, failure: Failure): T? =
         synchronized(monitor) {
@@ -181,7 +235,12 @@ internal class SdkRuntimeRegistry<T : Any>(
             borrowers
                 .filter { it.reservation === reservation }
                 .forEach { it.failure.compareAndSet(null, stopped().failure) }
+            changed()
         }
+
+    private fun changed() {
+        changes.value = if (changes.value == Long.MAX_VALUE) 0 else changes.value + 1
+    }
 
     private fun findEntry(owner: CollaborationOwner, deviceId: String) =
         entries.values.singleOrNull { it.owner == owner && it.deviceId == deviceId && !it.retired }
@@ -216,6 +275,8 @@ internal class SdkRuntimeRegistry<T : Any>(
 
     private fun busy() = registryFailure("client.collaboration_runtime_opening")
 
+    private fun handoverPending() = registryFailure("client.collaboration_handover_pending")
+
     private fun capacity() = registryFailure("client.collaboration_runtime_capacity")
 
     private fun registryFailure(code: String) =
@@ -227,6 +288,10 @@ internal class SdkRuntimeRegistry<T : Any>(
         const val CLIENT_LIMIT = 5
         const val BORROW_LIMIT = 2
     }
+}
+
+internal class SdkRuntimeHandoverGate internal constructor(val storeId: String) {
+    override fun toString() = "SdkRuntimeHandoverGate([redacted])"
 }
 
 internal class SdkRuntimeReservation<T : Any>(

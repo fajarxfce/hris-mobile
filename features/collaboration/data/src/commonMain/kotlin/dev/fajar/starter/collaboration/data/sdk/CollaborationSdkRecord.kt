@@ -26,6 +26,19 @@ internal data class CollaborationSdkRecord(
     val refreshToken: String,
     val initialized: Boolean,
     val credentialRevision: Long,
+    val handover: CollaborationSdkHandover? = null,
 ) {
     override fun toString() = "CollaborationSdkRecord([redacted])"
+}
+
+/** Stored inside the same protected record as its original immutable SDK namespace. */
+@Serializable
+internal data class CollaborationSdkHandover(
+    val operationId: String,
+    val spaceId: String,
+    val deviceId: String,
+    val expectedDeviceVersion: Long,
+    val fingerprint: String,
+) {
+    override fun toString() = "CollaborationSdkHandover([redacted])"
 }

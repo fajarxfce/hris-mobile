@@ -709,6 +709,22 @@ private class OwnershipFixture(private val scheduler: TestCoroutineScheduler) {
         }
     private val runtimes =
         object : CollaborationRuntimeRepository {
+            override suspend fun handoverIntent(
+                owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
+                deviceId: String,
+            ): AppResult<
+                dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeHandoverIntent?
+            > = error("Unexpected SDK handover in this fixture")
+
+            override suspend fun stageHandover(
+                owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
+                deviceId: String,
+                intent:
+                    dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeHandoverIntent,
+            ): AppResult<
+                dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeHandoverIntent
+            > = error("Unexpected SDK handover in this fixture")
+
             override suspend fun updateRetention(
                 retention:
                     dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeRetention

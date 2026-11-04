@@ -12,6 +12,21 @@ import kotlinx.coroutines.flow.MutableStateFlow
  * Owns simulated provider facts independently of application containers; not a native SDK proof.
  */
 class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRuntimeRepository {
+    override suspend fun handoverIntent(
+        owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
+        deviceId: String,
+    ): AppResult<
+        dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeHandoverIntent?
+    > = error("Unexpected SDK handover in this fixture")
+
+    override suspend fun stageHandover(
+        owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
+        deviceId: String,
+        intent: dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeHandoverIntent,
+    ): AppResult<
+        dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeHandoverIntent
+    > = error("Unexpected SDK handover in this fixture")
+
     private var owner: CollaborationOwner? = null
     private val originals = mutableMapOf<String, MutableList<CollaborationHistoryChange.Text>>()
     private val queued = mutableMapOf<String, MutableMap<String, CollaborationHistoryChange.Text>>()

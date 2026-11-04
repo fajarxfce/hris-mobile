@@ -2,11 +2,14 @@ package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.api.CollaborationPusherApi
+import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationSdkClientSource
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationTimelineSource
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLease
 import dev.fajar.starter.collaboration.data.datasources.createAndroidCollaborationSync
 import dev.fajar.starter.collaboration.data.mappers.collaborationSdkAcquisitionFailure
+import dev.fajar.starter.collaboration.data.mappers.toLocalDeviceIdentity
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkRecord
+import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalDeviceIdentity
 import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageDevice
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwnReadReceipts
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
@@ -357,6 +360,42 @@ internal constructor(
 
     override suspend fun retryCredentialWrite() = persistence.retryPending()
 
+    /** The child owner prevents client destruction while the local FFI observation is pending. */
+    internal suspend fun localDeviceIdentity(
+        source: AndroidCollaborationSdkClientSource
+    ): AppResult<CollaborationLocalDeviceIdentity> {
+        if (!availableForEntry) return syncStopped()
+        credentialFailures.value?.let {
+            return AppResult.Failed(it)
+        }
+        val observation = LocalIdentityObservation()
+        val acquired =
+            children.acquire(
+                observation,
+                { target ->
+                    safeStorageCall {
+                        target.value = source.identity(nativeClient).toLocalDeviceIdentity()
+                    }
+                },
+                {},
+            )
+        if (acquired is AppResult.Failed) return acquired
+        val child = (acquired as AppResult.Success).value
+        val closed: AppResult<Unit>
+        val result =
+            try {
+                safeStorageCall { requireNotNull(observation.value) }
+            } finally {
+                closed = child.close()
+            }
+        if (closed is AppResult.Failed) return closed
+        if (!availableForEntry) return syncStopped()
+        credentialFailures.value?.let {
+            return AppResult.Failed(it)
+        }
+        return result
+    }
+
     override suspend fun close(): AppResult<Unit> {
         stopRequested.set(true)
         return shutdown.close()
@@ -397,4 +436,8 @@ internal constructor(
     }
 
     override fun toString() = "AndroidCollaborationRuntimeLease([redacted])"
+}
+
+private class LocalIdentityObservation {
+    var value: CollaborationLocalDeviceIdentity? = null
 }

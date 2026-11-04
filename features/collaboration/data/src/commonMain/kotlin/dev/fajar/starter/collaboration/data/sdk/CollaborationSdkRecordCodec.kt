@@ -59,6 +59,7 @@ internal class CollaborationSdkRecordCodec(private val scope: CollaborationSdkSc
         refreshToken: String,
     ): CollaborationSdkRecord {
         validate(previous)
+        require(previous.handover == null) { "SDK ownership is being transferred." }
         if (previous.accessToken == accessToken && previous.refreshToken == refreshToken)
             return previous
         return previous
@@ -72,15 +73,80 @@ internal class CollaborationSdkRecordCodec(private val scope: CollaborationSdkSc
 
     fun initialized(previous: CollaborationSdkRecord): CollaborationSdkRecord {
         validate(previous)
+        require(previous.handover == null) { "SDK ownership is being transferred." }
         if (previous.initialized) return previous
         return previous
             .copy(initialized = true, credentialRevision = previous.credentialRevision + 1)
             .also(::validate)
     }
 
+    fun stageHandover(
+        previous: CollaborationSdkRecord,
+        intent: CollaborationRuntimeHandoverIntent,
+    ): CollaborationSdkRecord {
+        validate(previous)
+        val target =
+            CollaborationSdkHandover(
+                intent.operationId,
+                intent.spaceId,
+                intent.deviceId,
+                intent.expectedDeviceVersion,
+                intent.fingerprint,
+            )
+        validateHandover(target)
+        require(previous.initialized)
+        previous.handover?.let {
+            require(it == target) { "SDK handover target changed." }
+            return previous
+        }
+        return previous
+            .copy(
+                schema = 2,
+                credentialRevision = previous.credentialRevision + 1,
+                handover = target,
+            )
+            .also(::validate)
+    }
+
+    fun validateHandoverIntent(value: CollaborationRuntimeHandoverIntent) {
+        validateHandover(
+            CollaborationSdkHandover(
+                value.operationId,
+                value.spaceId,
+                value.deviceId,
+                value.expectedDeviceVersion,
+                value.fingerprint,
+            )
+        )
+    }
+
+    fun handoverIntent(record: CollaborationSdkRecord): CollaborationRuntimeHandoverIntent? {
+        validate(record)
+        return record.handover?.let {
+            CollaborationRuntimeHandoverIntent(
+                it.operationId,
+                it.spaceId,
+                it.deviceId,
+                it.expectedDeviceVersion,
+                it.fingerprint,
+            )
+        }
+    }
+
+    private fun validateHandover(value: CollaborationSdkHandover) {
+        listOf(value.operationId, value.spaceId, value.deviceId).forEach(::collaborationId)
+        require(value.expectedDeviceVersion in 0..999_998)
+        require(value.fingerprint.matches(Regex("[a-f0-9]{64}")))
+    }
+
     private fun validate(record: CollaborationSdkRecord) {
         val owner = scope.owner
-        require(record.schema == 1 && record.storeId == scope.storeId)
+        require(record.schema in 1..2 && record.storeId == scope.storeId)
+        require((record.schema == 2) == (record.handover != null))
+        record.handover?.let {
+            require(record.initialized && record.credentialRevision > 0)
+            validateHandover(it)
+        }
         require(
             record.audience == owner.audience &&
                 record.accountId == owner.accountId &&

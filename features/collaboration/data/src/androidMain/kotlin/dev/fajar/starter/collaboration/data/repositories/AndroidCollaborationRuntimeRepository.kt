@@ -18,6 +18,7 @@ import kotlin.io.encoding.Base64
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.TimeSource
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import org.matrix.rustcomponents.sdk.Client
 
 /**
@@ -39,6 +40,123 @@ class AndroidCollaborationRuntimeRepository(
         )
     private val leases
         get() = registry.resources()
+
+    override suspend fun handoverIntent(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationRuntimeHandoverIntent?> {
+        val scoped = safeStorageCall { collaborationSdkScope(owner, deviceId, server, endpoint) }
+        if (scoped is AppResult.Failed) return scoped
+        return handoverIntent((scoped as AppResult.Success).value)
+    }
+
+    private suspend fun handoverIntent(
+        scope: CollaborationSdkScope
+    ): AppResult<CollaborationRuntimeHandoverIntent?> = safeStorageCall {
+        val credentials = credentialFactory(scope.credentialRecordName)
+        try {
+            check(credentials.persistent) { "SDK handover requires protected persistent storage." }
+            val codec = CollaborationSdkRecordCodec(scope)
+            credentials.read()?.let(codec::decode)?.let(codec::handoverIntent)
+        } finally {
+            withContext(NonCancellable) { credentials.close() }
+        }
+    }
+
+    override suspend fun stageHandover(
+        owner: CollaborationOwner,
+        deviceId: String,
+        intent: CollaborationRuntimeHandoverIntent,
+    ): AppResult<CollaborationRuntimeHandoverIntent> {
+        val prepared = safeStorageCall {
+            collaborationSdkScope(owner, deviceId, server, endpoint).also {
+                CollaborationSdkRecordCodec(it).validateHandoverIntent(intent)
+            }
+        }
+        if (prepared is AppResult.Failed) return prepared
+        val scope = (prepared as AppResult.Success).value
+        val recorded = handoverIntent(scope)
+        if (recorded is AppResult.Failed) return recorded
+        (recorded as AppResult.Success).value?.let {
+            return if (it == intent) AppResult.Success(it) else handoverChanged()
+        }
+        val runtime = registry.find(owner, deviceId) ?: return handoverPending()
+        val observed = runtime.localDeviceIdentity(clients)
+        if (observed is AppResult.Failed) return observed
+        val identity = (observed as AppResult.Success).value
+        if (identity.fingerprint != intent.fingerprint) return handoverChanged()
+        val reserved = registry.beginHandover(scope.storeId, owner, deviceId, runtime)
+        if (reserved is AppResult.Failed) return reserved
+        val gate = (reserved as AppResult.Success).value
+        return try {
+            val drained = drainHandover(gate)
+            if (drained is AppResult.Failed) return drained
+            safeStorageCall {
+                var directory: CollaborationSdkStoreLease? = null
+                var credentials: AtomicCredentialStore? = null
+                try {
+                    directory = stores.acquire(scope.storeId)
+                    credentials = credentialFactory(scope.credentialRecordName)
+                    check(credentials.persistent) {
+                        "SDK handover requires protected persistent storage."
+                    }
+                    val codec = CollaborationSdkRecordCodec(scope)
+                    val current = codec.decode(requireNotNull(credentials.read()))
+                    require(
+                        current.matrixUserId == identity.matrixUserId &&
+                            current.matrixDeviceId == identity.matrixDeviceId
+                    )
+                    val staged = codec.stageHandover(current, intent)
+                    if (staged != current) credentials.write(codec.encode(staged))
+                    requireNotNull(codec.handoverIntent(staged))
+                } finally {
+                    withContext(NonCancellable) {
+                        try {
+                            credentials?.close()
+                        } finally {
+                            directory?.close()
+                        }
+                    }
+                }
+            }
+        } finally {
+            registry.endHandover(gate)
+        }
+    }
+
+    private suspend fun drainHandover(gate: SdkRuntimeHandoverGate): AppResult<Unit> {
+        val reached =
+            withTimeoutOrNull(5_000) {
+                registry.handoverChanges.first {
+                    registry.handoverDrained(gate) || registry.handoverResource(gate) != null
+                }
+                true
+            } ?: false
+        if (!reached) return handoverPending()
+        registry.handoverResource(gate)?.let {
+            val closed = it.close()
+            if (closed is AppResult.Failed) return closed
+        }
+        return if (registry.handoverDrained(gate)) AppResult.Success(Unit) else handoverPending()
+    }
+
+    private fun handoverPending() =
+        AppResult.Failed(
+            Failure(
+                FailureKind.Unavailable,
+                "Chat ownership is being transferred.",
+                code = "client.collaboration_handover_pending",
+            )
+        )
+
+    private fun handoverChanged() =
+        AppResult.Failed(
+            Failure(
+                FailureKind.Conflict,
+                "Chat ownership changed.",
+                code = "client.collaboration_handover_changed",
+            )
+        )
 
     override suspend fun updateRetention(
         retention: CollaborationRuntimeRetention
@@ -503,6 +621,7 @@ class AndroidCollaborationRuntimeRepository(
         installation: Pair<CollaborationSetupCommand, CollaborationGateway>?,
     ): CollaborationSdkRecord? {
         val stored = credentials.read()?.let(codec::decode)
+        check(stored?.handover == null) { "SDK ownership is being transferred." }
         if (stored == null) {
             check(!directory.initiallyOccupied) { "SDK store key is unavailable." }
             if (installation == null) return null
