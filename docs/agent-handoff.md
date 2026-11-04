@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## All legacy runtime consumers fenced — 4 November 2026
+
+Group implementation in `/home/fajar/hris/.worktrees/communication-space` is now
+accepted and pushed at `53a86f48`. Bootstrap/refresh retain original runtime guards;
+provisioning/direct-room workers hold bounded slots around provider I/O and reject
+late results after a freeze. Together with `0bf751e5`, all fixed legacy consumers
+are fenced. Current admission, cancellation/interruption and original keys remain
+protected. Gateway refresh requires no provider slot.
+
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/53a86f48/docs/measurements/collaboration-legacy-runtime-consumers-2026-11-04.json):
+19 focused, 166 full native data, 47 API, 126 active worker plus one existing opt-in
+skip, and five actual Android SDK cases pass. All five runs use identical 8264-input
+snapshots and pass format/architecture. Android took 1035.238s; the three recovery
+states each retain 176 originals, with SDK receipt and automatic WorkManager
+recovery. All owned fixtures and the exact emulator are stopped. Earlier failures
+and corrected fixture clocks remain recorded; production deadlines are unchanged.
+
+Next: admitted native freeze/replay and bounded drain status, then atomic retained
+group publication/old credential retirement and completed-mapping replay continuity.
+Formatted uncompiled drafts are in the group worktree's ignored runtime-freeze-next;
+actual database tests remain. Existing V121 already reserves terminal device revision
+1000000 for revocation; no new boundary migration is needed. Mobile needs durable
+SDK gating, original namespace/passphrase retention and coherent room/read/push
+handover. No public group transfer or new product build is enabled by this increment.
+
+Mobile implementation `3d85d569` and all three hosted gates remain accepted. Normal
+phone release 28, live `8b40`/schema 116 with push ON and SMTP OFF, and Starter
+`9959c1d` stay current. Actual Apple Matrix/APNs/CallKit and all 54 communications
+groups remain open. Continue the authorized long run, frequent user updates, Git
+handoffs, immediate push of each commit and installation of validated product builds.
+
 ## Local SDK source hosted control and native gates accepted — 4 November 2026
 
 Source 3d85d569 now passes all three hosted gates. Control41741297181: portable
