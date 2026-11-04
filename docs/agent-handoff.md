@@ -1,5 +1,25 @@
 # Agent continuation — HRIS Mobile
 
+## Group conversation storage accepted — 4 November 2026
+
+Backend [4dd2fa96](https://github.com/fajarxfce/hris-platform/commit/4dd2fa96) retains
+separate immutable group pairs, public current members and owned original-company
+conversation/room inventory. [Evidence](https://github.com/fajarxfce/hris-platform/blob/4dd2fa96/docs/measurements/collaboration-space-conversation-storage-2026-11-04.json):
+86 database plus6 typed PostgreSQL cases PASS838.663s on 8,360 unchanged inputs,
+format/architecture and19 recovery cases. Opposite openers converge; failed readback,
+cancellation and non-progressing pages fail safely. Original bound rooms and restricted
+RLS/views survive parent purge and actual archive restoration. Main d4df8767 records it.
+
+NEXT backend native group conversation endpoints with actual API/FULL worker checks,
+then explicit room adoption/provisioning, recipient keys/content/push and Mobile group
+preflight/stage/freeze/completion/adoption. Keep original SDK namespace/passphrase,
+keys, history and uncertain sends. Metadata is not provider room authority; offline
+receiving must not need short native/provider tokens, and hard-parent replacement
+still requires explicit recovery. Group disabled, no Mobile caller or new APK.
+Product/hosted0b804cb2, normal phone28/live8b40/schema116 push ON/SMTP OFF and
+Starter9959c1d unchanged. All54 groups stay open. Continue long run, updates, atomic
+pushes and validated product feature installs; never proof APKs or unchanged28.
+
 ## Signed group key upload accepted — 4 November 2026
 
 Backend [a65a8170](https://github.com/fajarxfce/hris-platform/commit/a65a8170) now admits
