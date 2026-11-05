@@ -1,5 +1,6 @@
 package dev.fajar.starter.collaboration.data.di
 
+import dev.fajar.starter.collaboration.data.repositories.UnavailableCollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.config.AppBuild
@@ -13,6 +14,13 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
+    @Single
+    fun localDeviceIdentity(
+        runtime: CollaborationRuntimeRepository
+    ): CollaborationLocalDeviceIdentityRepository =
+        runtime as? CollaborationLocalDeviceIdentityRepository
+            ?: UnavailableCollaborationRuntimeRepository()
+
     @Factory
     fun observeSpaceIdentityCommand(
         commands: CollaborationSpaceIdentityCommandRepository,

@@ -32,7 +32,7 @@ class AndroidCollaborationRuntimeRepository(
     private val server: IdentityServer,
     private val endpoint: CollaborationSdkEndpoint,
     private val http: HttpClient,
-) : CollaborationRuntimeRepository {
+) : CollaborationRuntimeRepository, CollaborationLocalDeviceIdentityRepository {
     private val registry =
         SdkRuntimeRegistry<AndroidCollaborationRuntimeLease>(
             { it.availableForEntry && it.credentialFailures.value == null },
@@ -40,6 +40,37 @@ class AndroidCollaborationRuntimeRepository(
         )
     private val leases
         get() = registry.resources()
+
+    override suspend fun readLocalIdentity(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationLocalDeviceIdentity> {
+        currentCoroutineContext().ensureActive()
+        val runtime =
+            registry.find(owner, deviceId)
+                ?: return AppResult.Failed(
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Chat runtime is not open.",
+                        code = "client.collaboration_runtime_not_open",
+                    )
+                )
+        val result = runtime.localDeviceIdentity(clients)
+        currentCoroutineContext().ensureActive()
+        runtime.credentialFailures.value?.let {
+            return AppResult.Failed(it)
+        }
+        if (result is AppResult.Failed) return result
+        if (registry.find(owner, deviceId) !== runtime || !runtime.availableForEntry)
+            return AppResult.Failed(
+                Failure(
+                    FailureKind.Unavailable,
+                    "Chat runtime has stopped.",
+                    code = "client.collaboration_sync_stopped",
+                )
+            )
+        return result
+    }
 
     override suspend fun handoverIntent(
         owner: CollaborationOwner,

@@ -19,6 +19,30 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 
 class AndroidCollaborationIdentityTest {
+    @Test
+    fun missingOpenClientDoesNotReadCredentialsOpenSdkOrInventAnEmptyStore() = runTest {
+        val f = Fixture()
+        try {
+            f.store()
+            val before = f.values.toMap()
+            val result =
+                assertIs<AppResult.Failed>(f.runtime.readLocalIdentity(setupOwner, SETUP_DEVICE))
+            assertEquals("client.collaboration_runtime_not_open", result.failure.code)
+            assertEquals(before, f.values)
+            assertEquals(0, f.reads)
+            assertEquals(0, f.writes)
+            assertEquals(0, f.directories)
+            val cancelled = async {
+                currentCoroutineContext().cancel()
+                f.runtime.readLocalIdentity(setupOwner, SETUP_DEVICE)
+            }
+            cancelled.join()
+            assertTrue(cancelled.isCancelled)
+        } finally {
+            f.close()
+        }
+    }
+
     private val handover =
         CollaborationRuntimeHandoverIntent(
             "a0000000-0000-0000-0000-000000000001",

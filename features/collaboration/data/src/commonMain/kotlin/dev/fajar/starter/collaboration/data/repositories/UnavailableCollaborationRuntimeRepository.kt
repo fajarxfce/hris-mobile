@@ -3,9 +3,20 @@ package dev.fajar.starter.collaboration.data.repositories
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.common.result.*
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 
 /** Hosts without a native binding cannot create a substitute store or claim SDK readiness. */
-class UnavailableCollaborationRuntimeRepository : CollaborationRuntimeRepository {
+class UnavailableCollaborationRuntimeRepository :
+    CollaborationRuntimeRepository, CollaborationLocalDeviceIdentityRepository {
+    override suspend fun readLocalIdentity(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationLocalDeviceIdentity> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
     override suspend fun handoverIntent(
         owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
         deviceId: String,

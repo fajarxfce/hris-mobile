@@ -1,5 +1,9 @@
 # Architecture
 
+[Local SDK identity observation](collaboration-local-sdk-identity.md) borrows the
+existing Android runtime without opening another store, enrolling or granting
+current migration authority.
+
 [Native organization device status](collaboration-space-device-status.md) observes
 current-parent metadata without enrollment, SDK acquisition or reopening directory
 reads. A missing device never authorizes replacement of retained keys.

@@ -1,5 +1,44 @@
 # Agent continuation — HRIS Mobile
 
+## Local SDK identity observation — 5 November 2026
+
+A narrow local-identity port now aliases the existing application Android runtime.
+It borrows child ownership to read public SDK user/device/key identity, and preserves
+cancellation, directory lifetime and late credential failures. An absent open client
+performs no credential/store/network I/O and cannot imply an empty retained-store
+inventory. Unsupported hosts remain explicitly unavailable. No implicit restore,
+registration, private-key export, handover or physical namespace change occurs.
+[Contract](collaboration-local-sdk-identity.md).
+
+Five new Android-host cases cover absent-runtime I/O, owned public-key observation,
+invalid/failed clients, pending cancellation/resource release and concurrent credential
+failure. Existing Android handover, background and publication regressions also pass.
+These use inert FFI handles, not JNI/provider proof. Real AppContainer resolves the
+port to the same runtime instance without starting observation. Final root :check,
+Android-host and Android dev compilation pass 350.063 s / 2,589 fresh
+cases; browser data/domain pass 134.092 s / 1,523 cases. Both retain
+identical 3,964 source inputs; format, architecture and detekt pass. All
+gate sessions are closed. [Evidence](measurements/collaboration-local-sdk-identity-2026-11-05.json).
+
+NEXT: expose/read already selected provider-user intent through a bounded native
+metadata endpoint, without selecting or enrolling on GET. Current selection receipt
+only identifies account/version; selected provider user may come from another HR
+company. Match actual local SDK Matrix user, not merely current workspace or the
+identity preference's original device ID (multiple devices may share that user).
+Then use this port inside the owning durable group registration preparation,
+retaining exact original company/device/user/key provenance after finite current
+account/native admission checks. The port itself does not grant that admission or
+prove private-key possession. Retain original physical owner, whose namespace
+includes original native family; keep current authority separate. Closed-store
+inspection, hard-parent recovery, new-SPACE retained-store inventory and group SDK
+adoption still need explicit owners. Continue native registration/retry/bootstrap,
+global UI and typed group push/background/replies. No companyId/spaceId substitution.
+
+Current product remains company chat, all54 PRD groups open. Live backend8b40/schema116
+and installed phone release29/source084662c5 are unchanged. No new phone installation,
+UI interaction or provider/FCM operation. Continue long run, atomic pushes and
+validated install-only product updates with advance notice.
+
 ## Native organization device status — 5 November 2026
 
 One explicit group native-device GET now maps bounded public status separately

@@ -67,9 +67,18 @@ internal class RuntimeLeaseFixture(
 ) {
     val calls: MutableList<String> = Collections.synchronizedList(mutableListOf())
     var beforePause: suspend () -> Unit = {}
+    var beforeIdentity: () -> Unit = {}
+    var signingKey: String? = Base64.encode(ByteArray(32) { it.toByte() })
     private val http = HttpClient(MockEngine { error("Publication never sends HTTP requests") })
     private val sdk =
         object : Client(NoHandle) {
+            override fun userId(): String {
+                beforeIdentity()
+                return "@native:proof.invalid"
+            }
+
+            override fun deviceId(): String = "PROOF_NATIVE"
+
             override suspend fun enableAllSendQueues(enable: Boolean) {
                 check(!enable)
                 calls += "queues.disable"
@@ -77,6 +86,11 @@ internal class RuntimeLeaseFixture(
 
             override fun encryption(): Encryption =
                 object : Encryption(NoHandle) {
+                    override suspend fun ed25519Key(): String? = signingKey
+
+                    override suspend fun curve25519Key(): String =
+                        Base64.encode(ByteArray(32) { (it + 32).toByte() })
+
                     override suspend fun waitForE2eeInitializationTasks() {
                         calls += "encryption.drain"
                     }

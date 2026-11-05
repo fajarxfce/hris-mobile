@@ -41,7 +41,15 @@ class CollaborationBindingsTest {
             var suppliedServer: IdentityServer? = null
             var suppliedHttp: HttpClient? = null
             val runtime =
-                object : CollaborationRuntimeRepository {
+                object :
+                    CollaborationRuntimeRepository, CollaborationLocalDeviceIdentityRepository {
+                    override suspend fun readLocalIdentity(
+                        owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
+                        deviceId: String,
+                    ): AppResult<
+                        dev.fajar.starter.collaboration.domain.entities.CollaborationLocalDeviceIdentity
+                    > = error("No implicit local key observation")
+
                     override suspend fun handoverIntent(
                         owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
                         deviceId: String,
@@ -196,6 +204,10 @@ class CollaborationBindingsTest {
             val lifetime = container.koin.get<ApplicationCollaborationLifetime>()
             try {
                 assertSame(runtime, container.koin.get<CollaborationRuntimeRepository>())
+                assertSame(
+                    runtime,
+                    container.koin.get<CollaborationLocalDeviceIdentityRepository>(),
+                )
                 assertSame(runtime, container.koin.get<CollaborationRuntimeRepository>())
                 assertEquals(1, factoryCount.get())
                 assertSame(container.koin.get<IdentityServer>(), suppliedServer)
