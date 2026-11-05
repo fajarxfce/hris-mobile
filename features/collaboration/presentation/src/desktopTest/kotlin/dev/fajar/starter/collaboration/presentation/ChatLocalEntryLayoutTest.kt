@@ -86,7 +86,7 @@ class ChatLocalEntryLayoutTest {
                 }
             }
             onNodeWithText("Bima Santoso").assertIsDisplayed()
-            onNodeWithText("Menunggu koneksi").assertIsDisplayed()
+            onNodeWithText("Menunggu koneksi").assertDoesNotExist()
             onNodeWithContentDescription("Muat ulang").assertDoesNotExist()
             onNodeWithText("Something went wrong. Try again.").assertDoesNotExist()
             onNodeWithText("Coba lagi").assertDoesNotExist()
@@ -125,7 +125,7 @@ class ChatLocalEntryLayoutTest {
                 )
             setContent { AppTheme { ChatThreadPage(state, rememberLazyListState(), {}) } }
             onNodeWithText("Write your first message.").assertDoesNotExist()
-            onNodeWithText("Waiting for connection").assertIsDisplayed()
+            onNodeWithText("Waiting for connection").assertDoesNotExist()
             runOnIdle { state = state.copy(connection = ChatThreadConnection.CONNECTED) }
             onNodeWithText("Write your first message.").assertDoesNotExist()
             runOnIdle { state = state.copy(failure = null, syncing = true) }

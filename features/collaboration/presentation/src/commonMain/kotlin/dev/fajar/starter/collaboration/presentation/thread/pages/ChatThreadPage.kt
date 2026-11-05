@@ -20,7 +20,6 @@ import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
-import io.github.composefluent.icons.regular.Checkmark
 import kotlin.time.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -47,40 +46,12 @@ fun ChatThreadPage(
             else
                 AppTopBar(
                     title = state.title ?: appString(AppString.ChatTitle),
-                    subtitle =
-                        if (
-                            state.connection == ChatThreadConnection.CONNECTED &&
-                                state.failure == null
-                        )
-                            null
-                        else
-                            appString(
-                                when (state.connection) {
-                                    ChatThreadConnection.OFFLINE -> AppString.ChatOffline
-                                    ChatThreadConnection.CONNECTING -> AppString.ChatConnecting
-                                    ChatThreadConnection.SETUP_REQUIRED ->
-                                        if (chatRequiresReconnect(state.failure))
-                                            AppString.ChatReconnectTitle
-                                        else AppString.ChatSetupActivate
-                                    ChatThreadConnection.WAITING -> AppString.ChatRoomWaiting
-                                    ChatThreadConnection.CONNECTED -> AppString.ChatConnected
-                                }
-                            ),
                     navigation = {
                         AppIconButton(
                             Icons.Regular.ArrowLeft,
                             appString(AppString.Back),
                             { onEvent(ChatThreadEvent.BackRequested) },
                         )
-                    },
-                    actions = {
-                        if (state.rows.isNotEmpty())
-                            AppIconButton(
-                                Icons.Regular.Checkmark,
-                                appString(AppString.ChatSelectMessage),
-                                { onEvent(ChatThreadEvent.SelectionStarted) },
-                                enabled = state.localFailure == null && !state.leaving,
-                            )
                     },
                 )
             if (state.selectionLimitReached) AppFeedback(appString(AppString.ChatSelectionLimit))

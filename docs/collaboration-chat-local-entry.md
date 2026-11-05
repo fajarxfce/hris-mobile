@@ -23,9 +23,9 @@ older-history work retains its explicit recovery path and exhausted cursors.
 
 The inbox keeps cached rows and reconnects after transient acquisition failures with
 the same foreground backoff. Routine refresh buttons are removed from inbox/thread.
-Transient connection failures use a compact waiting-for-connection subtitle; local
-storage, known denial and explicit recovery failures remain actionable. The ordinary
-connected subtitle is omitted so it is not mistaken for another employee's presence.
+The [thread header](collaboration-chat-header.md) contains the name and Back only.
+Connection state remains internal; local storage, known denial and explicit recovery
+failures retain their contextual actions.
 
 Held notification replies appear as their own unsent bubble in the original
 conversation, with the preserved original/edited text and a tap-to-review action.

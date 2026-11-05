@@ -1,5 +1,25 @@
 # Agent continuation — HRIS Mobile
 
+## Chat header correction — 5 November 2026
+
+The thread header now shows the conversation name and Back only. Removed every
+connection subtitle and the permanent checkmark selection button. Long-press selects
+the first message; normal taps do not start selection. Contextual count/copy/delete
+and accessible bubble selection remain. The empty-selection event/handler is removed.
+[Contract](collaboration-chat-header.md), [evidence](measurements/chat-header-2026-11-05.json).
+
+Focused18 / 89.943s and root/Android812 / 286.239s pass on 4,050 unchanged inputs. Reviewed screenshots include compact, landscape and 200% text.
+User confirms immediate release31 Bima history on reopening. Physical internet-off
+behavior is not yet tested on that phone; closed release31 Generic timeline/sync
+errors still lack attribution. Native original-store recovery proof remains bound
+to unchanged data source in8fdbe89b/Main0c62f0d7.
+
+NEXT: clean-source release32 build/lint/owned-emulator startup, announce phone install
+and use --install-only. Then inspect closed operation diagnostics, continue delivered
+edit/reply/forward/delete-for-all, original-bootstrap resolution/adoption, group UI,
+calls and meetings. All54 groups open; live8b40/schema116 unchanged. Push each commit
+and continue the authorized long run. This HRIS feature does not need a Starter port.
+
 ## Original chat connection recovery — 5 November 2026
 
 Rejected SDK authentication is now typed and terminal for live transport. Owned local history stays readable, and the thread offers one compact reconnect action. Confirmed newer bootstrap credentials replace only the original provider identity/gateway after exact native/store drain; no key or account reset. Late callbacks, borrowers, owner changes, cancellation and failing cleanup remain owned. Initial setup checks progress quietly at most six times while visible; routine refresh controls and technical recovery copy are removed.

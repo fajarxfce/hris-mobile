@@ -1,8 +1,8 @@
 # Chat selection and deletion on this device
 
 Long-press a bubble to select it, then tap more bubbles. The contextual toolbar
-shows the count, copy and eligible deletion/cancellation actions. The normal toolbar
-also provides selection entry, and every bubble exposes an accessible select action.
+shows the count, copy and eligible deletion/cancellation actions. The normal toolbar has no selection button; every bubble exposes an accessible
+select action. See [header correction](collaboration-chat-header.md).
 Back dismisses an open confirmation before clearing selection, then uses the existing
 draft-aware route departure. Selecting messages hides the keyboard and disables the
 composer without discarding its durable draft. Up to 50 message snapshots survive

@@ -45,8 +45,6 @@ sealed interface ChatThreadEvent {
         override fun toString() = "MessageSelected([redacted])"
     }
 
-    data object SelectionStarted : ChatThreadEvent
-
     data object SelectionCleared : ChatThreadEvent
 
     data object CopySelected : ChatThreadEvent

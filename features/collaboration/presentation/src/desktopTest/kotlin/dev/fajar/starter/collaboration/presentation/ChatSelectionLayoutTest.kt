@@ -97,6 +97,17 @@ class ChatSelectionLayoutTest {
                     }
                 }
             }
+            onNodeWithText("Nadia Pratama").assertIsDisplayed()
+            onNodeWithContentDescription("Pilih pesan").assertDoesNotExist()
+            onNodeWithContentDescription("Salin").assertDoesNotExist()
+            onNodeWithContentDescription("Hapus pesan").assertDoesNotExist()
+            onNodeWithTag("chat-message-one").performClick().assertIsNotSelected()
+            runOnIdle { assertTrue(events.isEmpty()) }
+            screenshot(
+                onNodeWithTag("selection-frame"),
+                if (landscape) "header-landscape"
+                else if (dark) "header-dark-large-text" else "header-light",
+            )
             onNodeWithTag("chat-message-one").performTouchInput { longClick() }
             onNodeWithTag("chat-message-one").assertIsSelected()
             onNodeWithTag("chat-message-two").performClick().assertIsSelected()

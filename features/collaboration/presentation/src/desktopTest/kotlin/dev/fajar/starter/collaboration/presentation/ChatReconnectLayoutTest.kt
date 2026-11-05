@@ -70,6 +70,9 @@ class ChatReconnectLayoutTest {
                 }
             }
             onNodeWithText("Please check my transport claim.").assertIsDisplayed()
+            onNodeWithText("Bima Santoso").assertIsDisplayed()
+            onNodeWithText("Reconnect chat").assertDoesNotExist()
+            onNodeWithContentDescription("Select message").assertDoesNotExist()
             onAllNodesWithText("Reconnect").assertCountEquals(1)
             onNodeWithText("Retry").assertDoesNotExist()
             onNodeWithText("Refresh").assertDoesNotExist()

@@ -141,15 +141,6 @@ class ChatThreadViewModel(
         on<ChatThreadEvent.CancellationConfirmed>(::onCancellationConfirmed)
         on<ChatThreadEvent.CancellationDismissed>(::onCancellationDismissed)
         on<ChatThreadEvent.MessageSelected>(::onMessageSelected)
-        on<ChatThreadEvent.SelectionStarted> {
-            if (
-                visible &&
-                    !state.value.leaving &&
-                    state.value.localFailure == null &&
-                    state.value.rows.isNotEmpty()
-            )
-                updateState { it.copy(selecting = true) }
-        }
         on<ChatThreadEvent.SelectionCleared> { clearSelection() }
         on<ChatThreadEvent.CopySelected>(::onCopySelected)
         on<ChatThreadEvent.DeleteSelected>(::onDeleteSelected)
