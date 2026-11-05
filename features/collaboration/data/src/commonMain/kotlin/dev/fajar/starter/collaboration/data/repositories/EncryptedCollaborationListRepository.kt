@@ -7,6 +7,7 @@ import dev.fajar.starter.collaboration.data.mappers.collaborationId
 import dev.fajar.starter.collaboration.data.replica.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationListRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationListSyncReplicaRepository
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
@@ -26,7 +27,8 @@ class EncryptedCollaborationListRepository(
     private val cipher: ContentCipher,
     @Named("collaboration-list-content-key") private val credentials: AtomicCredentialStore,
     private val admissions: CollaborationListAdmissionDataSource,
-) : CollaborationListRepository {
+) : CollaborationListRepository, CollaborationListSyncReplicaRepository {
+    private val publication = Mutex()
     private val keyCreation = Mutex()
     private val admissionWrites = Mutex()
 
@@ -102,8 +104,101 @@ class EncryptedCollaborationListRepository(
             .flowOn(Dispatchers.Default)
 
     override suspend fun checkpoint(access: CollaborationLocalAccess) = safeStorageCall {
-        val raw = replicas.checkpoint(listScope(access), listPartition(access))
+        val raw =
+            replicas.observePublishedCheckpoint(listScope(access), listPartition(access)).first()
         raw?.let { withKey(access) { codec -> codec.checkpoint(it) } }
+    }
+
+    override suspend fun syncWindow(access: CollaborationLocalAccess, ids: List<String>) =
+        safeStorageCall {
+            val retained = ids.toList()
+            require(retained.size <= 50)
+            retained.forEach(::collaborationId)
+            val raw = replicas.workingDocuments(listScope(access), listPartition(access), retained)
+            if (raw.checkpoint == null) {
+                require(raw.documents.isEmpty())
+                CollaborationListSyncWindow(null, emptyList())
+            } else
+                withKey(access) { codec ->
+                    val checkpoint = codec.syncCheckpoint(requireNotNull(raw.checkpoint))
+                    require(
+                        raw.documents.size <= retained.size &&
+                            raw.documents.size <= checkpoint.local.count
+                    )
+                    require(raw.documents.all { it.id in retained })
+                    CollaborationListSyncWindow(
+                        checkpoint,
+                        raw.documents.map { codec.storedFact(checkpoint.local, it) },
+                    )
+                }
+        }
+
+    override suspend fun beginSync(
+        access: CollaborationLocalAccess,
+        expected: CollaborationListSyncCheckpoint?,
+        initial: CollaborationListSyncCheckpoint,
+    ) = safeStorageCall {
+        publication.withLock {
+            require(
+                !initial.published &&
+                    initial.local.format == 2 &&
+                    initial.local.revision == 0L &&
+                    initial.local.count == 0
+            )
+            val initialState = requireNotNull(initial.sync)
+            require(
+                initialState.phase == CollaborationListSyncPhase.BOOTSTRAP &&
+                    initialState.cursor == null
+            )
+            val scope = listScope(access)
+            val partition = listPartition(access)
+            val raw = replicas.checkpoint(scope, partition)
+            withKey(access, create = raw == null) { codec ->
+                if (raw?.let { codec.syncCheckpoint(it) } != expected) return@withKey false
+                val sealed = codec.syncCheckpoint(initial)
+                currentCoroutineContext().ensureActive()
+                replicas.begin(
+                    scope,
+                    partition,
+                    initial.local.generation,
+                    sealed,
+                    raw?.handle?.generation,
+                )
+            }
+        }
+    }
+
+    override suspend fun commitSync(
+        access: CollaborationLocalAccess,
+        expected: CollaborationListSyncCheckpoint,
+        next: CollaborationListSyncCheckpoint,
+        changed: List<CollaborationSummaryFact>,
+    ) = safeStorageCall {
+        val batch = changed.toList()
+        require(batch.size <= 50 && batch.map { it.conversationId }.distinct().size == batch.size)
+        require(
+            expected.local.format == 2 &&
+                next.local.format == 2 &&
+                expected.local.generation == next.local.generation
+        )
+        require(
+            next.local.revision == expected.local.revision + 1 &&
+                next.local.count >= expected.local.count
+        )
+        require(!expected.published || next.published)
+        require(expected.sync?.nativeSessionId == next.sync?.nativeSessionId && next.sync != null)
+        publication.withLock {
+            val raw =
+                replicas.checkpoint(listScope(access), listPartition(access))
+                    ?: return@withLock false
+            withKey(access) { codec ->
+                if (codec.syncCheckpoint(raw) != expected) return@withKey false
+                val documents = batch.map { codec.fact(next.local, it) }
+                val sealed = codec.syncCheckpoint(next)
+                currentCoroutineContext().ensureActive()
+                replicas.commit(raw.handle, raw.revision, sealed, documents, next.published)
+            }
+        }
     }
 
     override suspend fun merge(
@@ -118,50 +213,71 @@ class EncryptedCollaborationListRepository(
                 batch.map { it.conversation.id }.distinct().size == batch.size &&
                 acquiredAt.toEpochMilliseconds() >= 0
         )
-        val scope = listScope(access)
-        val partition = listPartition(access)
-        val raw = replicas.checkpoint(scope, partition)
-        withKey(access, create = raw == null) { codec ->
-            val previous = raw?.let { codec.checkpoint(it) }
-            if (previous != expected) return@withKey false
-            var added = 0
-            val changed = mutableListOf<CollaborationDirectSummary>()
-            for (item in batch) {
-                val old = replicas.document(scope, partition, collaborationId(item.conversation.id))
-                if (old == null) {
-                    added++
-                    changed.add(item)
-                } else {
-                    requireNotNull(previous)
-                    val retained = codec.document(previous, old)
-                    require(retained.conversation == item.conversation)
-                    if (retained != item) changed.add(item)
+        publication.withLock {
+            val scope = listScope(access)
+            val partition = listPartition(access)
+            var raw = replicas.checkpoint(scope, partition)
+            withKey(access, create = raw == null) { codec ->
+                if (raw?.published == false) {
+                    codec.syncCheckpoint(requireNotNull(raw))
+                    if (!replicas.discardStaging(scope, partition, requireNotNull(raw)))
+                        return@withKey false
+                    raw = replicas.checkpoint(scope, partition)
                 }
+                val sync = raw?.let { codec.syncCheckpoint(it) }
+                val previous = sync?.local
+                if (previous != expected) return@withKey false
+                val ids = batch.map { collaborationId(it.conversation.id) }
+                val working = replicas.workingDocuments(scope, partition, ids)
+                if (working.checkpoint != raw) return@withKey false
+                val oldById = working.documents.associateBy { it.id }
+                var added = 0
+                val changed = mutableListOf<CollaborationDirectSummary>()
+                for (item in batch) {
+                    val old = oldById[item.conversation.id]
+                    if (old == null) {
+                        added++
+                        changed.add(item)
+                    } else {
+                        val retained = codec.storedFact(requireNotNull(previous), old)
+                        retained.summary?.let { require(it.conversation == item.conversation) }
+                        // The dedicated feed owns tracked metadata revisions and deletion state.
+                        if (retained.revision == null && retained.summary != item) changed.add(item)
+                    }
+                }
+                if (previous != null && changed.isEmpty())
+                    return@withKey raw == replicas.checkpoint(scope, partition)
+                val count = (previous?.count ?: 0) + added
+                require(count <= COLLABORATION_LIST_CAPACITY)
+                val next =
+                    CollaborationListCheckpoint(
+                        previous?.generation ?: Uuid.random().toString(),
+                        previous?.revision?.plus(1) ?: 0,
+                        count,
+                        acquiredAt,
+                        previous?.format ?: 1,
+                    )
+                val documents = changed.map { codec.document(next, it) }
+                val sealed =
+                    if (next.format == 1) codec.checkpoint(next)
+                    else codec.syncCheckpoint(requireNotNull(sync).copy(local = next))
+                currentCoroutineContext().ensureActive()
+                if (raw == null)
+                    replicas.replace(
+                        scope,
+                        partition,
+                        null,
+                        ReplicaSnapshot(next.generation, sealed, documents),
+                    )
+                else
+                    replicas.commit(
+                        requireNotNull(raw).handle,
+                        requireNotNull(raw).revision,
+                        sealed,
+                        documents,
+                        true,
+                    )
             }
-            // A second scoped read linearizes a no-op after all examined documents. A changed
-            // checkpoint/session is a retryable conflict, not permission to publish stale data.
-            if (previous != null && changed.isEmpty())
-                return@withKey raw == replicas.checkpoint(scope, partition)
-            val count = (previous?.count ?: 0) + added
-            require(count <= COLLABORATION_LIST_CAPACITY)
-            val next =
-                CollaborationListCheckpoint(
-                    previous?.generation ?: Uuid.random().toString(),
-                    previous?.revision?.plus(1) ?: 0,
-                    count,
-                    acquiredAt,
-                )
-            val documents = changed.map { codec.document(next, it) }
-            val sealed = codec.checkpoint(next)
-            currentCoroutineContext().ensureActive()
-            if (raw == null)
-                replicas.replace(
-                    scope,
-                    partition,
-                    null,
-                    ReplicaSnapshot(next.generation, sealed, documents),
-                )
-            else replicas.commit(raw.handle, raw.revision, sealed, documents, true)
         }
     }
 

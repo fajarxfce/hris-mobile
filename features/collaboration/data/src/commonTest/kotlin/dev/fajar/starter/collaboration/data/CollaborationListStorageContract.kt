@@ -432,7 +432,7 @@ abstract class CollaborationListStorageContract {
 
 class CollaborationListDatabaseOwner(val open: () -> AppDatabase, val dispose: () -> Unit = {})
 
-private class CollaborationListFixture(private val databaseOwner: CollaborationListDatabaseOwner) {
+internal class CollaborationListFixture(private val databaseOwner: CollaborationListDatabaseOwner) {
     var database = databaseOwner.open()
     val access =
         CollaborationLocalAccess("local", "https://hris.example.test/", listId(9000), listId(9001))
@@ -488,9 +488,9 @@ private class CollaborationListFixture(private val databaseOwner: CollaborationL
     }
 }
 
-private fun listId(index: Int) = "a1000000-0000-4000-8000-${index.toString().padStart(12, '0')}"
+internal fun listId(index: Int) = "a1000000-0000-4000-8000-${index.toString().padStart(12, '0')}"
 
-private fun listSummary(index: Int) =
+internal fun listSummary(index: Int) =
     CollaborationDirectSummary(
         CollaborationDirectConversation(
             listId(index),

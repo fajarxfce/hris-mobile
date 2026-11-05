@@ -1,5 +1,45 @@
 # Agent continuation — HRIS Mobile
 
+## Encrypted metadata cache accepted; Sync use case/UI next — 5 November 2026
+
+Nine list domain/data/test files add encrypted format2, sync window/begin/commit,
+V1 compatibility, tracked revisions/tombstones and immediate interactive staging
+preemption. [Contract](collaboration-summary-sync.md),
+[evidence](measurements/collaboration-summary-cache-2026-11-05.json).
+consumer-storage1 passes640 cases239.255s; added pending-cancellation/owner/race
+scenarios produce consumer-storage2 PASS644 cases168.482s (21 desktop+623 browser),
+zero failures/errors/skips. Android compilation, format and architecture pass on
+4,125 unchanged inputs. All local check wrappers/children have drained. These are
+scoped cache gates; the earlier4,070-case root gate belongs to raw storage5f0eacdd.
+No remote Sync use case or new ChatInbox acquisition is active yet; phone stays39.
+
+NEXT: .work/chat-summary-sync-2026-11-05/sync-policy-draft/CollaborationListSyncPolicy.kt.draft
+contains an uncompiled phase/folding policy draft. Review/apply, add domain cases,
+then implement bounded SyncCollaborationList with owner/admission capture around
+all remote and local operations. Wire ChatInbox to local pagination and owned delta
+continuation, retaining existing local previews and detail streams. Do NOT recopy
+older consumer-draft or rerun prepare-consumer-*.py over current source: their test
+copies predate the two added cancellation/race cases. Actual source is authoritative.
+consumer-design.md remains supplementary. Check contradictory equal revisions,
+old tombstones/restore, count bounds, finite/pending rounds, cursor expiry/new-parent
+reset and late/denied acquisition. Whole-app/native acceptance remains required.
+
+Apple-only CI42094694741 runs exact raw-storage5f0eacdd (started19:31:28UTC), recorded
+in .work/chat-summary-sync-2026-11-05/apple-dispatch.json. Do not duplicate/cancel;
+five new AppleReplicaStagingTest cases plus transport are included, not this newer
+format2 increment. Starter UI port fbe5ea8/e501d4da is fully accepted. New raw storage
+port waits for Mobile consumer/native proof. Phone39 already accepted/installed;
+announce each later install-only and do not drive its UI. Preserve both stashes
+and all emulator data/keys; Bima receiver5562 remains owned (verify start record).
+
+Platform a5dbe2ff records control42090785206 accepted on productd03fb472:706 cases,
+seven existing opt-in skips. Full CI42091460931 has all8backend+4dashboard jobs passed;
+dashboard-integration and recovery-integration are running. No deploy. Live11a98115/
+schema116/chat pushOFF. Prepared artifact/image scripts require final all14-job
+acceptance;116.1 migration still needs a retained backup/restore rollout. Continue
+all54 open communications PRD groups after metadata; preserve group117–137 ordering.
+
+
 ## Raw staging operations accepted; encrypted consumer starts next — 5 November 2026
 
 Nine generic database/contract files are accepted on a931a09d. Exact unpublished

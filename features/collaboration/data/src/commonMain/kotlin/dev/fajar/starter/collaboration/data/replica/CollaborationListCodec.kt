@@ -17,6 +17,7 @@ import kotlinx.serialization.json.Json
 internal const val COLLABORATION_LIST_PREFIX = "collaboration-list/"
 internal const val COLLABORATION_LIST_ACCESS_PREFIX = "collaboration-list-access/"
 internal const val COLLABORATION_LIST_CAPACITY = 10_000
+internal const val MAX_LIST_METADATA_REVISION = 9_007_199_254_740_991L
 
 internal fun listScope(access: CollaborationLocalAccess) =
     ReplicaScope(access.sessionId, accountStorageKey(access.audience, access.accountId))
@@ -35,6 +36,23 @@ internal data class CollaborationListCheckpointDto(
     val count: Int,
     val acquiredAt: String,
     val schema: Int = 1,
+    val sync: CollaborationListSyncStateDto? = null,
+)
+
+@Serializable
+internal data class CollaborationListSyncStateDto(
+    val nativeSessionId: String,
+    val phase: String,
+    val cursor: String?,
+    val lastPosition: Long,
+    val afterConversationId: String?,
+    val bootstrapPages: Int,
+)
+
+@Serializable
+internal data class CollaborationListFactDto(
+    val summary: CollaborationDirectSummaryDto,
+    val trackedRevision: Long?,
 )
 
 @Serializable
@@ -76,57 +94,148 @@ internal class CollaborationListCodec(
     private val access: CollaborationLocalAccess,
 ) {
     suspend fun checkpoint(raw: ReplicaCheckpoint): CollaborationListCheckpoint {
+        require(raw.published)
+        return syncCheckpoint(raw).local
+    }
+
+    suspend fun syncCheckpoint(raw: ReplicaCheckpoint): CollaborationListSyncCheckpoint {
         require(
-            raw.handle.scope == listScope(access) &&
-                raw.handle.partition == listPartition(access) &&
-                raw.published
+            raw.handle.scope == listScope(access) && raw.handle.partition == listPartition(access)
         )
         collaborationId(raw.handle.generation)
-        require(raw.revision in 0..9_007_199_254_740_991L)
+        require(raw.revision in 0..MAX_LIST_METADATA_REVISION)
         val dto =
             Json.decodeFromString<CollaborationListCheckpointDto>(
                 open(raw.handle.generation, "checkpoint", raw.revision, "", raw.payload)
             )
-        require(dto.schema == 1 && dto.count in 0..COLLABORATION_LIST_CAPACITY)
+        require(dto.schema in 1..2 && dto.count in 0..COLLABORATION_LIST_CAPACITY)
+        require((dto.schema == 1) == (dto.sync == null))
         val acquired = Instant.parse(dto.acquiredAt)
         require(acquired.toEpochMilliseconds() >= 0)
-        return CollaborationListCheckpoint(raw.handle.generation, raw.revision, dto.count, acquired)
+        val state =
+            dto.sync?.let {
+                CollaborationListSyncState(
+                        it.nativeSessionId,
+                        CollaborationListSyncPhase.valueOf(it.phase),
+                        it.cursor,
+                        it.lastPosition,
+                        it.afterConversationId,
+                        it.bootstrapPages,
+                    )
+                    .also(::validateSyncState)
+            }
+        require(dto.schema == 2 || raw.published)
+        require(
+            !raw.published || state == null || state.phase == CollaborationListSyncPhase.CHANGES
+        )
+        require(raw.published || state?.phase != CollaborationListSyncPhase.CHANGES)
+        return CollaborationListSyncCheckpoint(
+            CollaborationListCheckpoint(
+                raw.handle.generation,
+                raw.revision,
+                dto.count,
+                acquired,
+                dto.schema,
+            ),
+            raw.published,
+            state,
+        )
     }
 
-    suspend fun checkpoint(value: CollaborationListCheckpoint) =
-        seal(
-            value.generation,
+    suspend fun checkpoint(value: CollaborationListCheckpoint): String {
+        require(value.format == 1)
+        return syncCheckpoint(CollaborationListSyncCheckpoint(value, true, null))
+    }
+
+    suspend fun syncCheckpoint(value: CollaborationListSyncCheckpoint): String {
+        val local = value.local
+        collaborationId(local.generation)
+        require(
+            local.revision in 0..MAX_LIST_METADATA_REVISION &&
+                local.count in 0..COLLABORATION_LIST_CAPACITY
+        )
+        require(local.acquiredAt.toEpochMilliseconds() >= 0 && local.format in 1..2)
+        val state = value.sync
+        require((local.format == 1) == (state == null))
+        require(local.format == 2 || value.published)
+        require(
+            !value.published || state == null || state.phase == CollaborationListSyncPhase.CHANGES
+        )
+        require(value.published || state?.phase != CollaborationListSyncPhase.CHANGES)
+        val dto =
+            state?.also(::validateSyncState)?.let {
+                CollaborationListSyncStateDto(
+                    it.nativeSessionId,
+                    it.phase.name,
+                    it.cursor,
+                    it.lastPosition,
+                    it.afterConversationId,
+                    it.bootstrapPages,
+                )
+            }
+        return seal(
+            local.generation,
             "checkpoint",
-            value.revision,
+            local.revision,
             "",
             Json.encodeToString(
-                CollaborationListCheckpointDto(value.count, value.acquiredAt.toString())
+                CollaborationListCheckpointDto(
+                    local.count,
+                    local.acquiredAt.toString(),
+                    local.format,
+                    dto,
+                )
             ),
         )
+    }
 
     suspend fun document(
         checkpoint: CollaborationListCheckpoint,
         raw: ReplicaDocument,
-    ): CollaborationDirectSummary {
+    ): CollaborationDirectSummary = requireNotNull(storedFact(checkpoint, raw).summary)
+
+    suspend fun storedFact(
+        checkpoint: CollaborationListCheckpoint,
+        raw: ReplicaDocument,
+    ): CollaborationListStoredFact {
         collaborationId(raw.id)
         require(
-            raw.sortKey == raw.id && raw.tags.isEmpty() && raw.version in 0..checkpoint.revision
+            raw.sortKey == raw.id &&
+                raw.tags.isEmpty() &&
+                raw.version in 0..MAX_LIST_METADATA_REVISION
         )
-        val dto =
-            Json.decodeFromString<CollaborationDirectSummaryDto>(
-                open(
-                    checkpoint.generation,
-                    raw.id,
-                    raw.version,
-                    raw.sortKey,
-                    requireNotNull(raw.payload),
+        if (checkpoint.format == 1) {
+            require(raw.version <= checkpoint.revision)
+            val dto =
+                Json.decodeFromString<CollaborationDirectSummaryDto>(
+                    open(
+                        checkpoint.generation,
+                        raw.id,
+                        raw.version,
+                        raw.sortKey,
+                        requireNotNull(raw.payload),
+                    )
                 )
-            )
-        return dto.toSummary(access.accountId, access.companyId).also {
-            require(it.conversation.id == raw.id)
+            val summary = dto.toSummary(access.accountId, access.companyId)
+            require(summary.conversation.id == raw.id)
+            return CollaborationListStoredFact(raw.id, null, summary)
         }
+        require(checkpoint.format == 2)
+        val payload = raw.payload ?: return CollaborationListStoredFact(raw.id, raw.version, null)
+        val dto =
+            Json.decodeFromString<CollaborationListFactDto>(
+                open(checkpoint.generation, raw.id, raw.version, raw.sortKey, payload)
+            )
+        require(
+            if (dto.trackedRevision == null) raw.version == 0L
+            else dto.trackedRevision == raw.version
+        )
+        val summary = dto.summary.toSummary(access.accountId, access.companyId)
+        require(summary.conversation.id == raw.id)
+        return CollaborationListStoredFact(raw.id, dto.trackedRevision, summary)
     }
 
+    /** Interactive fallback before this identity has a tracked server projection. */
     suspend fun document(
         checkpoint: CollaborationListCheckpoint,
         summary: CollaborationDirectSummary,
@@ -134,12 +243,54 @@ internal class CollaborationListCodec(
         val dto = summary.toListDto()
         require(dto.toSummary(access.accountId, access.companyId) == summary)
         val id = summary.conversation.id
-        return ReplicaDocument(
-            id,
-            checkpoint.revision,
-            id,
-            seal(checkpoint.generation, id, checkpoint.revision, id, Json.encodeToString(dto)),
-        )
+        require(checkpoint.format in 1..2)
+        val version = if (checkpoint.format == 1) checkpoint.revision else 0L
+        val body =
+            if (checkpoint.format == 1) Json.encodeToString(dto)
+            else Json.encodeToString(CollaborationListFactDto(dto, null))
+        return ReplicaDocument(id, version, id, seal(checkpoint.generation, id, version, id, body))
+    }
+
+    suspend fun fact(
+        checkpoint: CollaborationListCheckpoint,
+        fact: CollaborationSummaryFact,
+    ): ReplicaDocument {
+        require(checkpoint.format == 2 && fact.revision in 0..MAX_LIST_METADATA_REVISION)
+        val id = collaborationId(fact.conversationId)
+        val body =
+            fact.summary?.let { summary ->
+                val dto = summary.toListDto()
+                require(
+                    summary.conversation.id == id &&
+                        dto.toSummary(access.accountId, access.companyId) == summary
+                )
+                seal(
+                    checkpoint.generation,
+                    id,
+                    fact.revision,
+                    id,
+                    Json.encodeToString(CollaborationListFactDto(dto, fact.revision)),
+                )
+            }
+        return ReplicaDocument(id, fact.revision, id, body)
+    }
+
+    private fun validateSyncState(state: CollaborationListSyncState) {
+        collaborationId(state.nativeSessionId)
+        state.cursor?.let { require(it.length in 1..2048 && it.all { ch -> ch in '!'..'~' }) }
+        require(state.lastPosition >= 0 && state.bootstrapPages in 0..1000)
+        state.afterConversationId?.let(::collaborationId)
+        if (state.phase == CollaborationListSyncPhase.BOOTSTRAP) {
+            require(state.lastPosition == 0L)
+            require((state.bootstrapPages == 0) == (state.cursor == null))
+            require((state.bootstrapPages == 0) == (state.afterConversationId == null))
+        } else {
+            require(
+                state.cursor != null &&
+                    state.afterConversationId == null &&
+                    state.bootstrapPages == 0
+            )
+        }
     }
 
     suspend fun admission(raw: ReplicaCheckpoint): CollaborationListAdmissionDto {

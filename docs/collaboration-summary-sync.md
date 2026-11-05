@@ -1,9 +1,9 @@
 # Incremental conversation metadata
 
-The native HTTP adapter and validated response mapping are implemented. The Chat
-list still uses the existing acquisition path; no delta consumer is active yet.
-Platform source d03fb472 serves dedicated admitted bootstrap/changes metadata and
-is not deployed. Message synchronization remains owned by Matrix.
+The native HTTP adapter, response mapping and encrypted format2 list storage are
+implemented and locally accepted. The Chat list still uses its previous acquisition
+path; the Sync use case and screen activation are next. Platform d03fb472 is not
+yet deployed. Matrix continues to own message synchronization.
 
 Bootstrap and changes use the native authenticated client, exact session/company
 scope and a 128KiB response limit. Opaque cursors are escaped as query parameters,
@@ -21,24 +21,54 @@ format and architecture pass on4,116 unchanged inputs. The initial format failur
 from temporary drafts and empty browser selection are recorded without treating
 them as successful browser validation. No phone or iOS execution for this adapter.
 
-## Next consumer work
+## Accepted encrypted cache
 
-Keep the active encrypted generation visible during bootstrap and catch-up. Publish
-the replacement only after changes reach a finite boundary with pending=false.
-Store metadata revisions independently of local publication revision and canonical
-conversation version. Retain tombstones and compare only changed identities in a
-bounded transaction; facts and opaque cursor commit together. Cursor reset/expiry
-must not clear the owned view or confirmed admission gate.
+Format1 facts retain their original key and authenticated indexes while format2
+stages. Format2 separates server metadata revisions from local publication and
+canonical conversation versions. Its encrypted checkpoint retains native parent,
+phase, opaque cursor and progress. Raw versions are bounded to exact IndexedDB
+integers; unsupported revisions fail without a write. Hidden tombstones retain
+identity and revision. Interactive metadata may insert an unversioned fallback at
+version0; a tracked fact or tombstone cannot be overwritten by that fallback.
 
-Opening a new conversation must preempt an incomplete replacement without erasing
-its active snapshot. The proposed database additions discard only an exact staging
-checkpoint and read a bounded set of working-generation records including tombstones.
-Late responses then lose their original generation CAS. These primitives are still
-unaccepted drafts. Individual metadata may fill an absent/unversioned record, but
-must not overwrite a higher tracked revision or resurrect a tombstone.
+A shared repository owns both list and sync contracts and serializes local writes.
+Working reads include a bounded set of tombstones and their checkpoint. Changed
+facts and the next cursor commit atomically against the observed generation and
+revision. Empty changes can advance the cursor without rewriting document bytes.
+Visible list/detail reads continue using the published generation only.
 
-Version1 list data and encryption keys must remain readable while version2 is
-staged. A new native parent restarts the remote cursor; ordinary access rotation
-does not. Confirmed denial stays gated through failed cleanup/retry, and only an
-admitted acquisition may reopen it. The consumer, presentation acquisition loop,
-real offline/device evidence and validated Starter storage port remain required.
+Interactive merge discards an exact incomplete stage, matches its observed active
+checkpoint and stores the new conversation immediately. A late background response
+then loses its generation. If background publication wins first, the interactive
+caller can retry against the new checkpoint without losing either identity.
+Neither staging nor publication clears the independent admission gate.
+
+[Cache evidence](measurements/collaboration-summary-cache-2026-11-05.json):
+21 focused desktop and623 browser cases pass168.482s, zero failures/errors/skips;
+Android compilation, format and architecture pass on4,125 unchanged inputs. Six
+new shared SQLite/IndexedDB scenarios cover old-format/key retention, reopen,
+preemption, tracked deletion/fallback, cancellation during encryption, replacement
+sessions, concurrent publication and no-op cursor progress. Whole-app/native checks
+for the activated consumer are still required. Apple42094694741 targets the earlier
+raw storage foundation only; phone39 is unchanged.
+
+## Next activation work
+
+The use case must enforce ordered bounded phases and monotone metadata facts,
+catch up after bootstrap and publish replacement only at a completed changes
+boundary with pending=false. Expired/scope-reset cursors start staging while the
+owned view stays visible. Native access rotation retains a stable parent; a new
+parent starts a new remote continuation. Duplicate references must fold safely;
+older/equal contradictory revisions cannot replace newer facts or inflate counts.
+
+Scope and confirmed admission must be checked around every remote/storage step.
+Denied access stays gated through cancellation, failed cleanup and retry; only an
+admitted completed acquisition may reopen its observed gate. Execution, retries,
+network waits and lifecycle observations must remain bounded and owned.
+
+ChatInbox must consume local pagination and bounded sync progress, keeping remote
+opaque cursors out of UI UUID selection. Preserve same-owner previews and existing
+detail observers on unchanged content. Add use-case/ViewModel/AppFlow coverage,
+full app and Apple gates, deployed-server/native offline proof, and a later
+validated phone release. The generic raw-storage Starter port follows that Mobile
+acceptance; format2, metadata transport and HRIS admission remain in Mobile.

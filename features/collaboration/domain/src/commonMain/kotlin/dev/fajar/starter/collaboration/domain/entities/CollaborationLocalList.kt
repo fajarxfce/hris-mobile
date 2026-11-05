@@ -19,6 +19,7 @@ data class CollaborationListCheckpoint(
     val revision: Long,
     val count: Int,
     val acquiredAt: Instant,
+    val format: Int = 1,
 )
 
 data class CollaborationLocalList(
