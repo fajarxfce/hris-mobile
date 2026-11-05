@@ -1,5 +1,32 @@
 # Agent continuation — HRIS Mobile
 
+## All four fictional receivers ready; forwarding resumes — 5 November 2026
+
+Phone release36 is installed from Mobilea26a1248 (delivery docsa5bc4190),
+SHA256`6a3729ab16af62090b08cc1e210f7643344a3e22ad65fc9bd2baf8c06a7313c6`.
+Sample1 publishes its first key without a provider room/message and survives cold
+restart; retained Bima passes all four history/restart checks with eight rows and
+no Older/decryption/history error. Samples3/4 now complete normal product login,
+registration/bootstrap and Open chat on the same release36. Read-only DB confirms
+all four fictional accounts each have one ACTIVE device and one confirmed key
+publication. No message was sent to force setup. This is recipient setup evidence,
+not a new message-exchange test between every pair.
+
+Sample1/3/4 images are cleanly stopped. Bima runs on owned emulator5562/PID958042
+(verify the current start record), release36; retain each userdata.img AND sidecars,
+private SDK keys and native parents. Do not reset or copy stores between accounts.
+Apple CI42036083914 passed simulator tests and is building the app for sourcea26a;
+full job acceptance is still pending. Backend11a98115/schema116 unchanged.
+
+Next forwarding work: Mobile restored ONLY the ten core/database batch files from
+protected stashbfdef2ce into its worktree after exact baseline comparison. Forward
+metadata stays stashed, and the stash itself is retained. Earlier batch118 focused
+passed before stashing; add disk close/reopen plus session-replacement coverage,
+then validate this current raw API and the actual Forward consumer. Do not claim
+new source tests or copy HRIS metadata to Starter. Generic Starter port follows
+Mobile validation. Continue edit/delete/groups/calls/meet; all54 PRD groups open.
+Push each commit; announce EACH phone install and use --install-only.
+
 ## Product release36 installed; first-device publication proved — 5 November 2026
 
 Source [a26a1248](https://github.com/fajarxfce/hris-mobile/commit/a26a124837637831655d19cc9dc89c1929e65e02)
