@@ -1,5 +1,43 @@
 # Agent continuation — HRIS Mobile
 
+## Native selected provider-user metadata — 5 November 2026
+
+Group [316cd708](https://github.com/fajarxfce/hris-platform/commit/316cd7083bc154e2e28b9425349ed63d40d6425f) is pushed.
+
+GET `/api/v1/collaboration/spaces/{spaceId}/identity` now returns only the already
+retained account/space provider-user intent. Missing selection stays null even
+when an eligible legacy preference exists. No selection/device/provisioning,
+receipt/audit/outbox or provider/credential operation is triggered. The private,
+no-store projection contains eight metadata fields and omits the preferred device,
+keys and tokens. [Contract](https://github.com/fajarxfce/hris-platform/blob/316cd7083bc154e2e28b9425349ed63d40d6425f/docs/collaboration/space-identity-read.md).
+
+Shared account guard, exact native parent, current group/client/security admission,
+original30s wall budget, existing transaction/query timeouts and interruption
+checks fence the read. Admission is rechecked after either snapshot outcome;
+committed offboarding or a new MFA requirement cannot publish old metadata.
+Five new PostgreSQL cases and one new HTTP case pass, with the existing native
+transport guard extended to GET identity. Focused domain/PG: 16 cases /
+55.207 s; actual API context: 18 cases / 105.251 s.
+Full worker: 137 passed, 1 existing opt-in elapsed-retention skip /
+375.238 s. All final gates preserve the same 8,506 Git-enumerated
+build/application inputs; format and architecture pass. All sessions closed.
+[Evidence](https://github.com/fajarxfce/hris-platform/blob/316cd7083bc154e2e28b9425349ed63d40d6425f/docs/measurements/collaboration-space-identity-read-2026-11-05.json).
+
+NEXT: Mobile finite native transport/use case for this endpoint, then durable
+group registration/retry/bootstrap retaining actual old SDK provenance. Match the
+selected Matrix USER to the actual local SDK user; a preferred DEVICE may belong
+to another phone using that same user. Existing Mobile5860290e provides the local
+SDK identity port. Current workspace alone cannot choose the correct original user.
+No spaceId/companyId substitution, implicit new SPACE store, frozen-runtime reopen
+or native-family substitution in the old physical SDK hash. Closed-store inventory,
+hard-parent recovery, current group SDK ownership, global UI and typed push/replies
+remain separate unfinished work.
+
+No SQL schema/role change or live deployment. Current product remains company chat;
+all54 PRD groups open. Live backend8b40/schema116 and installed phone29/source084662c5
+are unchanged. No new provider/FCM, phone, Apple runtime or performance acceptance.
+Continue long run, atomic pushes and validated install-only product delivery.
+
 ## Local SDK identity observation — 5 November 2026
 
 A narrow local-identity port now aliases the existing application Android runtime.
