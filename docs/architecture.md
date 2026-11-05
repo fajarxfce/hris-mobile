@@ -1,5 +1,7 @@
 # Architecture
 
+[Older-history end restoration](collaboration-chat-history-end.md) retains room metadata without advertising it as pending messages after reopening.
+
 [Quoted conversation replies](collaboration-chat-quoted-replies.md) retain original
 event references and observe admitted local targets through replica checkpoints.
 

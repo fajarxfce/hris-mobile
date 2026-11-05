@@ -36,16 +36,28 @@ internal class ChatThreadHistoryPager(
         workspaceId: String,
         key: CollaborationHistoryTraversal,
     ): AppResult<Boolean> {
-        val result = readReferences(workspaceId, key)
-        currentCoroutineContext().ensureActive()
-        return when (result) {
-            is AppResult.Failed -> result
-            is AppResult.Success ->
-                AppResult.Success(
-                    result.value.progress?.exhausted == true &&
-                        result.value.events.isEmpty() &&
-                        result.value.after == null
-                )
+        var after: String? = null
+        var snapshot: CollaborationHistoryProgress? = null
+        var previousSequence = -1L
+        while (true) {
+            val result = readReferences(workspaceId, key, after)
+            currentCoroutineContext().ensureActive()
+            if (result is AppResult.Failed) return result
+            val page = (result as AppResult.Success).value
+            val progress = page.progress ?: return AppResult.Success(false)
+            if (!progress.exhausted) return AppResult.Success(false)
+            if (snapshot == null) snapshot = progress
+            else if (!sameTraversal(snapshot, progress)) return AppResult.Success(false)
+            // Room state has no canonical message original to acknowledge. Keep those references,
+            // but do not advertise them as older messages. Walk only this finite local snapshot;
+            // an unattempted message on a later page must still keep history available.
+            if (page.events.any(::potentialMessage)) return AppResult.Success(false)
+            if (page.events.isNotEmpty()) {
+                if (page.events.first().sequence <= previousSequence)
+                    return AppResult.Success(false)
+                previousSequence = page.events.last().sequence
+            }
+            after = page.after ?: return AppResult.Success(true)
         }
     }
 
@@ -111,10 +123,7 @@ internal class ChatThreadHistoryPager(
             page.events.any { it.event.eventId in unresolvedIds && potentialMessage(it) }
         // Reconciliation can change revision. A concurrently replaced/extended provider traversal
         // must instead restart the local scan, without treating an old snapshot as its end.
-        val stable =
-            page.progress?.generation == remaining.progress?.generation &&
-                page.progress?.references == remaining.progress?.references &&
-                page.progress?.next == remaining.progress?.next
+        val stable = sameTraversal(page.progress, remaining.progress)
         return AppResult.Success(
             ChatThreadHistoryBatch(
                 if (stable)
@@ -128,4 +137,7 @@ internal class ChatThreadHistoryPager(
 
     private fun potentialMessage(reference: CollaborationHistoryReference) =
         reference.event.type in setOf("m.room.encrypted", "m.room.message", "m.sticker")
+
+    private fun sameTraversal(a: CollaborationHistoryProgress?, b: CollaborationHistoryProgress?) =
+        a?.generation == b?.generation && a?.references == b?.references && a?.next == b?.next
 }

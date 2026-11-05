@@ -5,7 +5,7 @@ import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.presentation.inbox.chatId
 import dev.fajar.starter.common.result.*
 import kotlin.test.*
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flow
 
 internal class ChatThreadHistoryFixture(private val thread: ChatThreadFixture) {
     val pages = ArrayDeque<List<CollaborationProviderHistoryEvent>>()
@@ -17,6 +17,7 @@ internal class ChatThreadHistoryFixture(private val thread: ChatThreadFixture) {
     val anchors = mutableListOf<String>()
     var beforeProvider: suspend () -> Unit = {}
     var beforeOriginal: suspend () -> Unit = {}
+    var beforeReferences: suspend () -> Unit = {}
     var providerFailure: Failure? = null
     var originalFailure: Failure? = null
     var stageFailure: Failure? = null
@@ -41,13 +42,14 @@ internal class ChatThreadHistoryFixture(private val thread: ChatThreadFixture) {
                 traversal: CollaborationHistoryTraversal,
                 after: String?,
                 limit: Int,
-            ): kotlinx.coroutines.flow.Flow<AppResult<CollaborationHistoryReferences>> {
+            ): kotlinx.coroutines.flow.Flow<AppResult<CollaborationHistoryReferences>> = flow {
+                beforeReferences()
                 val pending =
                     references.filter {
                         !it.resolved &&
                             (after == null || it.sequence > after.removePrefix("after-").toLong())
                     }
-                return flowOf(
+                emit(
                     AppResult.Success(
                         CollaborationHistoryReferences(
                             progress,

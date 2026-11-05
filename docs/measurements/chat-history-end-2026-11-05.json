@@ -1,0 +1,94 @@
+{
+  "recordedAt": "2026-11-05T12:24:41.222599+00:00",
+  "productBase": "745e5a0256904453992e5e864bdd59e373de9513",
+  "regression": {
+    "recordedAt": "2026-11-05T12:17:19.470743+00:00",
+    "release": 34,
+    "ownedEmulatorOnly": true,
+    "endControlHiddenBeforeClose": true,
+    "olderControlReappearedAfterReopen": true,
+    "messageBodiesRetained": false,
+    "phoneTouched": false
+  },
+  "baseline": {
+    "startedAt": "2026-11-05T12:10:59.887453+00:00",
+    "elapsedSeconds": 59.204,
+    "exitCode": 1,
+    "sourceFiles": 4071,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 6,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "480dff27a95101486ae7372e7315b3200f66e267b179329b2da6806d81c2026d",
+    "freshReportFiles": 1
+  },
+  "firstFixAttempt": {
+    "startedAt": "2026-11-05T12:12:30.753919+00:00",
+    "elapsedSeconds": 52.335,
+    "exitCode": 1,
+    "sourceFiles": 4071,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 6,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "88a55d1baa171e061a42ef9876c85066240838bc672458af0858185d9eb252dc",
+    "freshReportFiles": 1
+  },
+  "focused": {
+    "startedAt": "2026-11-05T12:14:02.589854+00:00",
+    "elapsedSeconds": 48.561,
+    "exitCode": 0,
+    "sourceFiles": 4071,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "d49c83aed025d8acd9129624755affd039f39528130596d3d9ad3bd209e9317c",
+    "freshReportFiles": 1
+  },
+  "final": {
+    "startedAt": "2026-11-05T12:15:05.303608+00:00",
+    "elapsedSeconds": 506.364,
+    "exitCode": 0,
+    "sourceFiles": 4071,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 1064,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apkSha256": "0822f02359ffe35f53d5e1e132bb3d1a8f85d7c40af4119676cab2400b05f5e9",
+    "sourceManifestSha256": "d49c83aed025d8acd9129624755affd039f39528130596d3d9ad3bd209e9317c",
+    "freshReportFiles": 162
+  },
+  "covered": [
+    "Retained room creation/membership references across multiple local pages and repeated room recreation.",
+    "Empty room containing only metadata.",
+    "Pending encrypted message behind metadata remains available without provider reads on entry.",
+    "Concurrent provider growth and traversal replacement do not publish a stale end.",
+    "Cancellation releases the timeline and does not acquire provider history or decrypt originals."
+  ],
+  "earlierAttemptNote": "Initial multi-page fixture used four Older requests before its end assertion; five were needed. Its bounded allowance was corrected to eight and asserts exactly three provider acquisitions. The state-only regression and actual release34 receiver independently reproduced the reported close/reopen bug.",
+  "retainedReferencesUnchanged": true,
+  "newProviderOrDecryptionWorkOnRestore": false,
+  "schemaMigrationRequired": false,
+  "starterPortRequired": false,
+  "phoneVersion": 34,
+  "deliveryPending": true,
+  "limits": [
+    "Actual fixed-APK receiver reopen and release35 startup/install are still pending.",
+    "Full gate reports only fresh JUnit results; cached reports were not counted as newly run.",
+    "Forwarding batch work is stashed and excluded from this validation.",
+    "Apple CI42017858911 passed prior product745e, not this candidate."
+  ]
+}

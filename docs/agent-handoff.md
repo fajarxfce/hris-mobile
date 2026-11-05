@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Older-history end regression fixed and validated — 5 November 2026
+
+Closing/reopening an exhausted room used to revive Older messages because retained
+room-state references have no message originals to resolve. The screen pager now
+walks the finite owned local snapshot, ignoring metadata for message availability
+while retaining it. Actual pending messages, canonical local paging, concurrent
+growth/replacement and cancellation remain covered. No migration/provider read/
+decryption replay on restoration. [Contract](collaboration-chat-history-end.md),
+[evidence](measurements/chat-history-end-2026-11-05.json).
+
+Actual release34 Bima receiver reproduces the hidden-then-returning control after
+room recreation. Six focused cases pass48.561s. Full :check/Android/browser/proof
+pass506.364s,1,064 fresh cases/zero failures/errors/skips,4,071 unchanged inputs.
+Baseline/first-fix failures are retained; one multi-page fixture precondition was
+corrected before the final pass. All wrappers/children drained. No new-source
+fixed APK acceptance yet. NEXT: clean release35 build/lint, actual retained Bima
+reopen proof, exact startup smoke, announce EACH phone install, install-only.
+
+User confirmed Bima old pending messages sent at12:02:36. Receiver has eight message
+rows and no decryption placeholder; content was not logged. Bima persistent
+userdata.img AND sidecars remain under .work/demo-chat-device-2026-11-05/bima;
+its emulator was stopped cleanly, native parent/keys retained. Other three samples
+now have Firebase/HRIS identity links. Sample1 owned emulator5562/PID324683 is
+signed in and opening New chat; its SDK device setup is still pending. Samples3/4
+still need product sign-in/device setup. Preserve all published receiver data.
+
+Apple-only CI42017858911 completed successfully on745e (simulator tests/app build).
+Phone34/live11a98115/schema116 unchanged. Forwarding WIP remains protected in
+stash bfdef2ce9641173e0ff68528f8982c5bab15bf72, basef6a26a1c. Core batch focused118
+passed; metadata incomplete. Resume after history delivery, finish forward and
+root/native checks, return generic storage changes to Starter. All54 groups open;
+continue long run and push every commit. Staged release35 scripts are not yet run.
+
 ## Product release 34 installed — 5 November 2026
 
 Product source [745e5a02](https://github.com/fajarxfce/hris-mobile/commit/745e5a0256904453992e5e864bdd59e373de9513)
