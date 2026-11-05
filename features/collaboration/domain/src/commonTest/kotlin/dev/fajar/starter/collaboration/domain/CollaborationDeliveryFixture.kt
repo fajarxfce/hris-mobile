@@ -276,6 +276,7 @@ internal class CollaborationDeliveryFixture {
                             logicalId: String,
                             text: String,
                             replyToEventId: String?,
+                            forwarded: Boolean,
                         ): AppResult<CollaborationMessageOrigin> =
                             error("Delivery never prepares content")
 
@@ -284,6 +285,7 @@ internal class CollaborationDeliveryFixture {
                             text: String,
                             origin: CollaborationMessageOrigin,
                             replyToEventId: String?,
+                            forwarded: Boolean,
                         ): AppResult<Unit> = error("Delivery never replaces native work")
 
                         override suspend fun resume(

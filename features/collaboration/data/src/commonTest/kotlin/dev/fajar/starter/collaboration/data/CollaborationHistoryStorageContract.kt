@@ -14,6 +14,27 @@ abstract class CollaborationHistoryStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
     @Test
+    fun forwardedHistorySurvivesReopenAliasReplayAndRetainedRedaction() = withDatabase { f ->
+        val event = f.event().copy(forwarded = true)
+        val alias = event.copy(eventId = "\$forward-alias", timestamp = event.timestamp + 1)
+        f.merge(event, alias)
+        val original = assertNotNull(f.lookup(event.eventId))
+        assertTrue(original.forwarded)
+        val key = f.keys.read()
+        f.reopen()
+        assertEquals(original, f.lookup(alias.eventId))
+        f.merge(alias)
+        assertEquals(original, f.lookup(event.eventId))
+        f.merge(CollaborationHistoryChange.Redacted(alias.eventId, alias.sender))
+        f.reopen()
+        val redacted = assertNotNull(f.lookup(event.eventId))
+        assertTrue(redacted.redacted)
+        assertTrue(redacted.forwarded)
+        assertNull(redacted.text)
+        assertEquals(key, f.keys.read())
+    }
+
+    @Test
     fun indexedQuotesObserveOffscreenDeletionAcrossAliasesAndRestart() = withDatabase { f ->
         for ((index, redact) in listOf(1 to false, 3 to true)) {
             val target = f.event(index)

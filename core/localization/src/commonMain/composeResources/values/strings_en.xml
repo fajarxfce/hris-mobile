@@ -1067,4 +1067,14 @@
     <string name="chat_remove_reply_en">Cancel reply</string>
     <string name="chat_quote_unavailable_en">Message unavailable</string>
     <string name="chat_you_en">You</string>
+    <string name="chat_forward_en">Forward</string>
+    <string name="chat_forwarded_en">Forwarded</string>
+    <string name="chat_forward_to_en">Forward to</string>
+    <string name="chat_more_actions_en">More actions</string>
+    <string name="chat_forward_target_limit_en">Choose up to %1$s chats</string>
+    <string name="chat_forward_empty_en">Your chats will appear here.</string>
+    <string name="chat_forward_no_matches_en">No matching chats</string>
+    <string name="chat_forward_changed_en">Some selected messages or chats are no longer available. Go back and select them again.</string>
+    <string name="chat_forward_targets_failed_en">Could not open your chats. Try again.</string>
+    <string name="chat_forward_failed_en">Could not save these messages. Try again.</string>
 </resources>

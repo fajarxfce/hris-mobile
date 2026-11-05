@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data
 
 import dev.fajar.starter.collaboration.data.dto.*
+import dev.fajar.starter.collaboration.data.mappers.collaborationSdkMessageMetadata
 import dev.fajar.starter.collaboration.data.mappers.toOriginalHistory
 import dev.fajar.starter.collaboration.data.messages.*
 import dev.fajar.starter.collaboration.domain.entities.CollaborationHistoryChange
@@ -11,6 +12,53 @@ import kotlinx.serialization.json.*
 class CollaborationTextContentTest {
     private val id = "00000000-0000-4000-8000-000000000001"
     private val sender = "@fictional:example.test"
+
+    @Test
+    fun forwardedContentIsBoundToTheOriginWithoutOriginalAuthorOrRoomMetadata() = runTest {
+        val content = collaborationTextContent(id, "Forwarded text", forwarded = true)
+        assertEquals(
+            setOf("body", "msgtype", "m.mentions", "org.hris.message_id", "org.hris.forwarded"),
+            content.keys,
+        )
+        assertEquals(JsonPrimitive(true), content["org.hris.forwarded"])
+        val origin = collaborationTextOrigin(sender, id, "Forwarded text", forwarded = true)
+        val original = decode(content)
+        assertTrue(original.forwarded)
+        assertEquals(origin.contentHash, original.contentHash)
+        val legacy = collaborationTextContent(id, "Forwarded text")
+        assertFalse("org.hris.forwarded" in legacy)
+        assertFalse(decode(legacy).forwarded)
+        assertNotEquals(origin.contentHash, decode(legacy).contentHash)
+        val metadata =
+            collaborationSdkMessageMetadata(buildJsonObject { put("content", content) }.toString())
+        assertEquals(id, metadata?.logicalId)
+        assertEquals(true, metadata?.forwarded)
+    }
+
+    @Test
+    fun onlyAnActualBooleanTrueMarksIncomingContentAsForwarded() = runTest {
+        val original = collaborationTextContent(id, "Text")
+        for (flag in
+            listOf(
+                JsonPrimitive(false),
+                JsonPrimitive("true"),
+                JsonPrimitive(1),
+                JsonNull,
+                buildJsonObject {},
+            )) {
+            val content = JsonObject(original + ("org.hris.forwarded" to flag))
+            assertFalse(decode(content).forwarded)
+            assertEquals(
+                false,
+                collaborationSdkMessageMetadata(
+                        buildJsonObject { put("content", content) }.toString()
+                    )
+                    ?.forwarded,
+            )
+        }
+        assertNull(collaborationSdkMessageMetadata("[".repeat(40) + "0" + "]".repeat(40)))
+        assertNull(collaborationSdkMessageMetadata("{"))
+    }
 
     @Test
     fun preparedPlaintextAndDecodedOriginalHaveTheSameCompleteFingerprint() = runTest {

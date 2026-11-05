@@ -41,7 +41,16 @@ internal suspend fun CollaborationSdkHistoryEventDto.toOriginalHistory():
         ((content["m.relates_to"] as? JsonObject)?.get("m.in_reply_to") as? JsonObject)
             ?.text("event_id")
             ?.takeIf(::validCollaborationEventId)
-    return CollaborationHistoryChange.Text(eventId, sender, logical, timestamp, text, hash, replyTo)
+    return CollaborationHistoryChange.Text(
+        eventId,
+        sender,
+        logical,
+        timestamp,
+        text,
+        hash,
+        replyTo,
+        collaborationForwarded(content),
+    )
 }
 
 /** Shared by original acquisition and the exact pre-enqueue plaintext encoder. */

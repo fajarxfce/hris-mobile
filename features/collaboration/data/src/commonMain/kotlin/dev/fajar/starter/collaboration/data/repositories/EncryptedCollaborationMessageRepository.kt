@@ -22,6 +22,7 @@ class EncryptedCollaborationMessageRepository(
     @Named("command-content-key") private val credentials: AtomicCredentialStore,
 ) :
     CollaborationMessageRepository,
+    CollaborationMessageBatchRepository,
     CollaborationMessageCompletionRepository,
     CollaborationMessageCancellationRepository,
     CollaborationMessagePreventionRepository {
@@ -66,7 +67,9 @@ class EncryptedCollaborationMessageRepository(
             record.intent.id == intent.id &&
             record.intent.owner == intent.owner &&
             record.intent.conversationId == intent.conversationId &&
-            record.intent.text == intent.text
+            record.intent.text == intent.text &&
+            record.intent.replyToEventId == intent.replyToEventId &&
+            record.intent.forwarded == intent.forwarded
 
     override fun observe(
         access: CollaborationLocalAccess,
@@ -232,6 +235,87 @@ class EncryptedCollaborationMessageRepository(
                 }
             }
         }
+    }
+
+    override suspend fun insertBatch(
+        access: CollaborationLocalAccess,
+        intents: List<CollaborationMessageIntent>,
+    ) = safeStorageCall {
+        require(intents.size in 1..128)
+        val detached = intents.toList()
+        detached.forEach { it.toDto(access) }
+        require(detached.map { it.id }.distinct().size == detached.size)
+        val scope = messageScope(access)
+        val partition = messagePartition(access)
+        insertions.withLock {
+            val retained = detached.map { existing(scope, partition, it.id) }
+            withKey(access, create = retained.all { it.first == null && it.second == null }) { codec
+                ->
+                val records =
+                    detached.zip(retained).map { (intent, stored) ->
+                        val (active, archived) = stored
+                        if (active != null || archived != null) {
+                            require(
+                                requireNotNull(decode(codec, active, archived)).intent == intent
+                            )
+                            active ?: requireNotNull(archived).record
+                        } else {
+                            CommandRecord(
+                                partition,
+                                intent.id,
+                                intent.id,
+                                intent.orderKey(),
+                                codec.request(intent),
+                                codec.state(intent.id, 0, CollaborationMessageState.Queued.toDto()),
+                            )
+                        }
+                    }
+                currentCoroutineContext().ensureActive()
+                var insertionFailure: Exception? = null
+                val inserted =
+                    safeStorageCall(onException = { insertionFailure = it }) {
+                        commands.insertBatch(scope, records)
+                    }
+                val result =
+                    when (inserted) {
+                        is AppResult.Success -> inserted.value
+                        is AppResult.Failed -> {
+                            // The storage boundary also classifies Wasm Promise rejections, while
+                            // preserving cancellation and fatal errors. A competing writer may
+                            // have used another nonce or lost its reply after committing.
+                            currentCoroutineContext().ensureActive()
+                            if (!batchMatches(scope, partition, codec, detached))
+                                throw checkNotNull(insertionFailure)
+                            CommandInsertResult.AlreadyStored
+                        }
+                    }
+                when (result) {
+                    CommandInsertResult.Stored,
+                    CommandInsertResult.AlreadyStored -> {
+                        check(batchMatches(scope, partition, codec, detached))
+                        CollaborationMessageInsertion.STORED
+                    }
+                    CommandInsertResult.ScopeChanged -> CollaborationMessageInsertion.SCOPE_CHANGED
+                    CommandInsertResult.CapacityExceeded ->
+                        CollaborationMessageInsertion.CAPACITY_EXCEEDED
+                    CommandInsertResult.ResourceOccupied ->
+                        error("Message resource identity mismatch")
+                }
+            }
+        }
+    }
+
+    private suspend fun batchMatches(
+        scope: CommandScope,
+        partition: String,
+        codec: CollaborationMessageCodec,
+        intents: List<CollaborationMessageIntent>,
+    ): Boolean {
+        for (intent in intents) {
+            val (active, archived) = existing(scope, partition, intent.id)
+            if (decode(codec, active, archived)?.intent != intent) return false
+        }
+        return true
     }
 
     override suspend fun update(

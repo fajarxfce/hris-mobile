@@ -34,6 +34,10 @@ fun ChatThreadPage(
     today: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
     composerInputModifier: Modifier = Modifier,
 ) {
+    state.forwarding?.let {
+        ChatForwardPage(it, onEvent, modifier)
+        return
+    }
     Box(
         modifier
             .fillMaxSize()

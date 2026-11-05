@@ -30,6 +30,7 @@ internal class AndroidCollaborationMessageQueueLease(
         logicalId: String,
         text: String,
         replyToEventId: String?,
+        forwarded: Boolean,
     ): AppResult<CollaborationMessageOrigin> {
         if (
             !validCollaborationMessageId(logicalId) ||
@@ -45,7 +46,7 @@ internal class AndroidCollaborationMessageQueueLease(
                 return@execute AppResult.Failed(it)
             }
             safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueOrigin) {
-                collaborationTextOrigin(matrixSender, logicalId, text, replyToEventId)
+                collaborationTextOrigin(matrixSender, logicalId, text, replyToEventId, forwarded)
             }
         }
     }
@@ -55,6 +56,7 @@ internal class AndroidCollaborationMessageQueueLease(
         text: String,
         origin: CollaborationMessageOrigin,
         replyToEventId: String?,
+        forwarded: Boolean,
     ): AppResult<Unit> {
         if (
             !validCollaborationMessageId(logicalId) ||
@@ -71,7 +73,13 @@ internal class AndroidCollaborationMessageQueueLease(
             }
             val expected =
                 safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueMatch) {
-                    collaborationTextOrigin(matrixSender, logicalId, text, replyToEventId)
+                    collaborationTextOrigin(
+                        matrixSender,
+                        logicalId,
+                        text,
+                        replyToEventId,
+                        forwarded,
+                    )
                 }
             if (expected is AppResult.Failed) return@execute expected
             if ((expected as AppResult.Success).value != origin)
@@ -79,7 +87,7 @@ internal class AndroidCollaborationMessageQueueLease(
                     "client.collaboration_message_content_changed"
                 )
             safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueEnqueue) {
-                source.enqueue(logicalId, text, replyToEventId)
+                source.enqueue(logicalId, text, replyToEventId, forwarded)
             }
         }
     }

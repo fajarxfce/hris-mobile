@@ -20,6 +20,17 @@ internal val ChatThreadState.canCopySelection: Boolean
 internal val ChatThreadState.canDeleteSelection: Boolean
     get() = selectedMessages.isNotEmpty() && selectedMessages.all { it.reference != null }
 
+internal val ChatThreadState.canForwardSelection: Boolean
+    get() =
+        selectedMessages.isNotEmpty() &&
+            selectedMessages.all {
+                it.reference != null &&
+                    it.kind == CollaborationMessageKind.TEXT &&
+                    it.text != null &&
+                    it.delivery == CollaborationMessageDelivery.SENT &&
+                    !it.edited
+            }
+
 internal data class ChatVisibilityProjection(
     val access: CollaborationLocalAccess,
     val roomId: String?,

@@ -47,11 +47,31 @@ sealed interface ChatThreadEvent {
 
     data object SelectionCleared : ChatThreadEvent
 
+    data object SelectionMenuOpened : ChatThreadEvent
+
+    data object SelectionMenuDismissed : ChatThreadEvent
+
     data object ReplySelected : ChatThreadEvent
 
     data object ReplyCleared : ChatThreadEvent
 
     data object CopySelected : ChatThreadEvent
+
+    data object ForwardSelected : ChatThreadEvent
+
+    data object ForwardDismissed : ChatThreadEvent
+
+    data object ForwardConfirmed : ChatThreadEvent
+
+    data object ForwardTargetsRetryRequested : ChatThreadEvent
+
+    data class ForwardSearchChanged(val query: String) : ChatThreadEvent {
+        override fun toString() = "ForwardSearchChanged([redacted])"
+    }
+
+    data class ForwardTargetSelected(val id: String) : ChatThreadEvent {
+        override fun toString() = "ForwardTargetSelected([redacted])"
+    }
 
     data object DeleteSelected : ChatThreadEvent
 

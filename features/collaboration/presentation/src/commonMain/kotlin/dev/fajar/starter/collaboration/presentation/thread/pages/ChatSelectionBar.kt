@@ -37,27 +37,13 @@ internal fun ChatSelectionBar(
                     appString(AppString.ChatReplyMessage),
                     { onEvent(ChatThreadEvent.ReplySelected) },
                 )
-            AppIconButton(
-                Icons.Regular.Copy,
-                appString(AppString.ChatCopyMessages),
-                { onEvent(ChatThreadEvent.CopySelected) },
-                enabled = state.canCopySelection,
-            )
-            val queued =
-                state.selectedMessages.singleOrNull()?.takeIf { it.canCancel && it.localId != null }
-            if (queued != null)
+            if (state.canForwardSelection)
                 AppIconButton(
-                    Icons.Regular.Dismiss,
-                    appString(AppString.ChatCancelSend),
-                    { onEvent(ChatThreadEvent.CancelRequested(requireNotNull(queued.localId))) },
+                    Icons.Regular.ArrowForward,
+                    appString(AppString.ChatForward),
+                    { onEvent(ChatThreadEvent.ForwardSelected) },
                 )
-            else
-                AppIconButton(
-                    Icons.Regular.Delete,
-                    appString(AppString.ChatDeleteMessages),
-                    { onEvent(ChatThreadEvent.DeleteSelected) },
-                    enabled = state.canDeleteSelection,
-                )
+            ChatSelectionMenu(state, onEvent)
         },
     )
 }

@@ -199,6 +199,7 @@ class StageCollaborationText(
                                 pending.intent.text,
                                 origin,
                                 pending.intent.replyToEventId,
+                                pending.intent.forwarded,
                             )
                         }
                     if (sent is AppResult.Failed) return sent
@@ -245,6 +246,7 @@ class StageCollaborationText(
                             original.intent.id,
                             original.intent.text,
                             original.intent.replyToEventId,
+                            original.intent.forwarded,
                         )
                     }
                 if (prepared is AppResult.Failed) return prepared

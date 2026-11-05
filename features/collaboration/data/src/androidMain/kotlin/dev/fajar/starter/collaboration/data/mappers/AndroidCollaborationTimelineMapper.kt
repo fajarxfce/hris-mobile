@@ -22,14 +22,16 @@ internal fun TimelineItem.toCollaborationTimelineItem(): CollaborationSdkTimelin
         require(event.timestamp <= Long.MAX_VALUE.toULong())
         val key = uniqueId().id.also { require(it.length in 1..512) }
         val sender = event.sender.also { require(it.startsWith('@') && it.length in 2..255) }
+        val metadata =
+            if (kind == SdkMessageKind.TEXT)
+                collaborationSdkMessageMetadata(event.lazyProvider.latestJson())
+            else null
         return CollaborationSdkTimelineItemDto(
             key = key,
             eventId = (id as? EventOrTransactionId.EventId)?.eventId,
             transactionId = (id as? EventOrTransactionId.TransactionId)?.transactionId,
-            logicalId =
-                if (kind == SdkMessageKind.TEXT)
-                    collaborationSdkLogicalId(event.lazyProvider.latestJson())
-                else null,
+            logicalId = metadata?.logicalId,
+            forwarded = metadata?.forwarded == true,
             sender = sender,
             timestamp = event.timestamp.toLong(),
             own = event.isOwn,

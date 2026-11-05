@@ -135,6 +135,25 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     ),
     ChatSelectMessage(Res.string.chat_select_message_en, Res.string.chat_select_message_id),
     ChatClearSelection(Res.string.chat_clear_selection_en, Res.string.chat_clear_selection_id),
+    ChatForward(Res.string.chat_forward_en, Res.string.chat_forward_id),
+    ChatForwarded(Res.string.chat_forwarded_en, Res.string.chat_forwarded_id),
+    ChatForwardTo(Res.string.chat_forward_to_en, Res.string.chat_forward_to_id),
+    ChatMoreActions(Res.string.chat_more_actions_en, Res.string.chat_more_actions_id),
+    ChatForwardTargetLimit(
+        Res.string.chat_forward_target_limit_en,
+        Res.string.chat_forward_target_limit_id,
+    ),
+    ChatForwardEmpty(Res.string.chat_forward_empty_en, Res.string.chat_forward_empty_id),
+    ChatForwardNoMatches(
+        Res.string.chat_forward_no_matches_en,
+        Res.string.chat_forward_no_matches_id,
+    ),
+    ChatForwardChanged(Res.string.chat_forward_changed_en, Res.string.chat_forward_changed_id),
+    ChatForwardTargetsFailed(
+        Res.string.chat_forward_targets_failed_en,
+        Res.string.chat_forward_targets_failed_id,
+    ),
+    ChatForwardFailed(Res.string.chat_forward_failed_en, Res.string.chat_forward_failed_id),
     ChatReplyMessage(Res.string.chat_reply_message_en, Res.string.chat_reply_message_id),
     ChatRemoveReply(Res.string.chat_remove_reply_en, Res.string.chat_remove_reply_id),
     ChatQuoteUnavailable(

@@ -31,8 +31,10 @@ data class ChatThreadState(
     val draftDialog: ChatDraftDialog? = null,
     val cancellationDialog: ChatCancellationDialog? = null,
     val selecting: Boolean = false,
+    val selectionMenuOpen: Boolean = false,
     val selectedMessages: List<ChatMessageRow> = emptyList(),
     val deletionDialog: ChatDeletionDialog? = null,
+    val forwarding: ChatForwardState? = null,
     val selectionLimitReached: Boolean = false,
     val leaving: Boolean = false,
     val submissionPending: Boolean = false,
@@ -59,6 +61,7 @@ data class ChatThreadState(
                 !leaving &&
                 cancellationDialog == null &&
                 !selecting &&
+                forwarding == null &&
                 deletionDialog == null &&
                 draftDialog == null
 
@@ -70,6 +73,7 @@ data class ChatThreadState(
                 draftDialog == null &&
                 cancellationDialog == null &&
                 !selecting &&
+                forwarding == null &&
                 deletionDialog == null &&
                 localFailure == null &&
                 !saving &&

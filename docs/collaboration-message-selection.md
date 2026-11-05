@@ -1,7 +1,8 @@
 # Chat selection and deletion on this device
 
 Long-press a bubble to select it, then tap more bubbles. The contextual toolbar
-shows the count, copy and eligible deletion/cancellation actions. The normal toolbar has no selection button; every bubble exposes an accessible
+shows the count and eligible Reply/Forward actions; Copy and deletion/cancellation
+actions live in its More menu. The normal toolbar has no selection button; every bubble exposes an accessible
 select action. See [header correction](collaboration-chat-header.md).
 Back dismisses an open confirmation before clearing selection, then uses the existing
 draft-aware route departure. Selecting messages hides the keyboard and disables the
@@ -49,13 +50,16 @@ Plain Compose state tests cover long-press/tap, selected semantics, copy/delete
 callbacks, 48dp controls and large-text dialog escape. Review generated light/dark,
 375px/landscape/large-text screenshots; do not infer visual acceptance from test pass.
 
-Remaining: durable delivered-message editing, quoted reply, forwarding with recipient
-selection, delete for everyone and their operation-specific offline reconciliation.
+[Quoted replies](collaboration-chat-quoted-replies.md) and
+[forwarding with recipient selection](collaboration-chat-forwarding.md) have their
+own contracts and acceptance records. Remaining: durable delivered-message editing,
+delete for everyone and their operation-specific offline reconciliation.
 Existing original history intentionally rejects m.replace as an original; durable
 edits must add an authenticated replacement projection without overwriting original
 send evidence. This slice does not claim full WhatsApp/Telegram, group migration,
 voice/video/meeting, notifications or Apple runtime acceptance. All 54 PRD groups
-remain open. Product delivery needs the next validated APK; release30 predates this UI.
+remain open. Release36 includes selection and local deletion; Forward delivery
+is recorded separately in its own contract.
 
 ## Accepted checks
 

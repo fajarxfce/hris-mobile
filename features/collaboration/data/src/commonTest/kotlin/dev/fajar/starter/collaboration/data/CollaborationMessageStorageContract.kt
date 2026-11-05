@@ -17,6 +17,226 @@ abstract class CollaborationMessageStorageContract {
     protected abstract fun databaseOwner(): CollaborationListDatabaseOwner
 
     @Test
+    fun encryptedBatchReplayRetainsCiphertextAndTerminalOutcomesAcrossReopen() = withDatabase { f ->
+        val intents =
+            (1..3).map {
+                f.intent.copy(
+                    id = messageTestId(100 + it),
+                    conversationId = messageTestId(10 + it),
+                    forwarded = true,
+                )
+            }
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.STORED),
+            f.repo.insertBatch(f.access, intents),
+        )
+        val scope = messageScope(f.access)
+        val partition = messagePartition(f.access)
+        val first = f.rows().first()
+        assertEquals(AppResult.Success(true), f.repo.cancel(f.access, first))
+        val second = f.rows().first()
+        assertEquals(
+            AppResult.Success(true),
+            f.repo.update(f.access, second, CollaborationMessageState.Staging(f.device, emptySet())),
+        )
+        val pending = f.rows()
+        val raw = f.database.commands.observeAll(scope, partition).first()
+        val archived = f.database.commands.archived(scope, partition, first.intent.id)
+        for (record in raw) {
+            assertFalse(record.request.contains(f.intent.text))
+            assertFalse(record.request.contains("forwarded"))
+        }
+        f.reopen(f.access.copy(sessionId = "renewed-batch-login"))
+        val replay =
+            f.repository(
+                cipher =
+                    object : ContentCipher by AesGcmContentCipher() {
+                        override suspend fun encrypt(
+                            key: ByteArray,
+                            associatedData: ByteArray,
+                            plaintext: ByteArray,
+                        ): ByteArray = error("Exact replay must reuse its original ciphertext")
+                    }
+            )
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.STORED),
+            replay.insertBatch(f.access, intents),
+        )
+        assertEquals(pending, f.rows())
+        assertEquals(raw, f.database.commands.observeAll(messageScope(f.access), partition).first())
+        assertEquals(
+            archived,
+            f.database.commands.archived(messageScope(f.access), partition, first.intent.id),
+        )
+        assertEquals(
+            CollaborationMessageState.Cancelled,
+            assertIs<AppResult.Success<CollaborationMessageRecord?>>(
+                    replay.get(f.access, first.intent.id)
+                )
+                .value
+                ?.state,
+        )
+    }
+
+    @Test
+    fun batchIdentityAndCapacityConflictsCannotPublishItsOtherMessages() = withDatabase { f ->
+        f.insert()
+        val fresh = f.intent.copy(id = messageTestId(101), forwarded = true)
+        for (changed in listOf(f.intent.copy(forwarded = true), f.intent.copy(text = "Changed"))) {
+            assertIs<AppResult.Failed>(f.repo.insertBatch(f.access, listOf(fresh, changed)))
+            assertEquals(listOf(f.read()), f.rows())
+        }
+        assertIs<AppResult.Failed>(f.repo.insertBatch(f.access, listOf(fresh, fresh)))
+        assertIs<AppResult.Failed>(f.repo.insertBatch(f.access, emptyList()))
+        val fill = (1..126).map { f.intent.copy(id = messageTestId(1000 + it)) }
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.STORED),
+            f.repo.insertBatch(f.access, fill),
+        )
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.CAPACITY_EXCEEDED),
+            f.repo.insertBatch(f.access, listOf(fresh, fresh.copy(id = messageTestId(102)))),
+        )
+        assertEquals(127, f.rows().size)
+        assertEquals(AppResult.Success(null), f.repo.get(f.access, fresh.id))
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.STORED),
+            f.repo.insertBatch(f.access, listOf(f.intent, fresh)),
+        )
+        assertEquals(128, f.rows().size)
+    }
+
+    @Test
+    fun concurrentEncryptedBatchWritersRecoverTheSameLogicalIntents() = withDatabase { f ->
+        val entered = CompletableDeferred<Unit>()
+        var encryptionCalls = 0
+        val cipher =
+            object : ContentCipher by AesGcmContentCipher() {
+                override suspend fun encrypt(
+                    key: ByteArray,
+                    associatedData: ByteArray,
+                    plaintext: ByteArray,
+                ): ByteArray {
+                    if (++encryptionCalls == 2) entered.complete(Unit)
+                    entered.await()
+                    return AesGcmContentCipher().encrypt(key, associatedData, plaintext)
+                }
+            }
+        val first = f.repository(cipher = cipher)
+        val second = f.repository(cipher = cipher)
+        val intents = (1..3).map { f.intent.copy(id = messageTestId(200 + it), forwarded = true) }
+        coroutineScope {
+            val writes =
+                listOf(
+                        async { first.insertBatch(f.access, intents) },
+                        async { second.insertBatch(f.access, intents) },
+                    )
+                    .awaitAll()
+            assertEquals(
+                List(2) { AppResult.Success(CollaborationMessageInsertion.STORED) },
+                writes,
+            )
+        }
+        assertEquals(intents, f.rows().map { it.intent })
+    }
+
+    @Test
+    fun fatalStorageErrorsAreNotConvertedToSuccessfulBatchRecovery() = withDatabase { f ->
+        val fatal = AssertionError("Fictional fatal storage failure")
+        val store =
+            object : CommandStore by f.database.commands {
+                override suspend fun insertBatch(
+                    scope: CommandScope,
+                    records: List<CommandRecord>,
+                ): CommandInsertResult {
+                    f.database.commands.insertBatch(scope, records)
+                    throw fatal
+                }
+            }
+        assertSame(
+            fatal,
+            assertFailsWith<AssertionError> {
+                f.repository(store).insertBatch(f.access, listOf(f.intent))
+            },
+        )
+        assertEquals(listOf(f.intent), f.rows().map { it.intent })
+    }
+
+    @Test
+    fun committedBatchSurvivesLostReplyAndCancellationWithoutNewIdentities() = withDatabase { f ->
+        val intents = (1..3).map { f.intent.copy(id = messageTestId(300 + it), forwarded = true) }
+        val lost =
+            object : CommandStore by f.database.commands {
+                override suspend fun insertBatch(
+                    scope: CommandScope,
+                    records: List<CommandRecord>,
+                ): CommandInsertResult {
+                    f.database.commands.insertBatch(scope, records)
+                    error("Fictional local reply loss")
+                }
+            }
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.STORED),
+            f.repository(lost).insertBatch(f.access, intents),
+        )
+        val committed = CompletableDeferred<Unit>()
+        val cancelled =
+            object : CommandStore by f.database.commands {
+                override suspend fun insertBatch(
+                    scope: CommandScope,
+                    records: List<CommandRecord>,
+                ): CommandInsertResult {
+                    f.database.commands.insertBatch(scope, records)
+                    committed.complete(Unit)
+                    awaitCancellation()
+                }
+            }
+        val next = intents.map { it.copy(id = messageTestId(400 + intents.indexOf(it))) }
+        coroutineScope {
+            val writer = launch { f.repository(cancelled).insertBatch(f.access, next) }
+            committed.await()
+            writer.cancelAndJoin()
+        }
+        f.reopen(f.access)
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.STORED),
+            f.repo.insertBatch(f.access, next),
+        )
+        assertEquals(intents + next, f.rows().map { it.intent })
+    }
+
+    @Test
+    fun cancelledEncryptionOrReplacedOwnerCannotPublishAnyBatchMember() = withDatabase { f ->
+        val intents = (1..3).map { f.intent.copy(id = messageTestId(500 + it), forwarded = true) }
+        val entered = CompletableDeferred<Unit>()
+        val suspended =
+            object : ContentCipher by AesGcmContentCipher() {
+                override suspend fun encrypt(
+                    key: ByteArray,
+                    associatedData: ByteArray,
+                    plaintext: ByteArray,
+                ): ByteArray {
+                    entered.complete(Unit)
+                    awaitCancellation()
+                }
+            }
+        coroutineScope {
+            val writer = launch { f.repository(cipher = suspended).insertBatch(f.access, intents) }
+            entered.await()
+            writer.cancelAndJoin()
+        }
+        assertTrue(f.rows().isEmpty())
+        val original = f.access
+        f.activate(original.copy(accountId = messageTestId(900)))
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.SCOPE_CHANGED),
+            f.repo.insertBatch(original, intents),
+        )
+        f.activate(original)
+        assertTrue(f.rows().isEmpty())
+    }
+
+    @Test
     fun originalSenderAndContentIdentitySurviveEveryPhaseAndCannotBeRetargeted() =
         withDatabase { f ->
             f.insert()

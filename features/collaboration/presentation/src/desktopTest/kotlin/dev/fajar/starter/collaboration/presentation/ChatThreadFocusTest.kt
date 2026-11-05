@@ -1,13 +1,19 @@
 package dev.fajar.starter.collaboration.presentation
 
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.WindowInfo
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.*
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.presentation.navigation.ChatThreadFocusObserver
+import dev.fajar.starter.collaboration.presentation.navigation.ChatThreadViewportObserver
 import dev.fajar.starter.collaboration.presentation.thread.*
 import kotlin.test.*
 import org.junit.Rule
@@ -72,6 +78,14 @@ class ChatThreadFocusTest {
         }
         compose.runOnIdle {
             assertEquals(listOf(owner), active)
+            state = state.copy(forwarding = ChatForwardState(2, 5))
+        }
+        compose.runOnIdle {
+            assertTrue(active.isEmpty())
+            state = state.copy(forwarding = null)
+        }
+        compose.runOnIdle {
+            assertEquals(listOf(owner), active)
             lifecycle.registry.currentState = Lifecycle.State.STARTED
         }
         compose.runOnIdle {
@@ -98,6 +112,48 @@ class ChatThreadFocusTest {
         compose.runOnIdle {
             assertTrue(active.isEmpty())
             assertEquals(opened, closed)
+        }
+    }
+
+    @Test
+    fun forwardPickerClearsRetainedViewportUntilConversationIsVisibleAgain() {
+        val lifecycle = FocusLifecycle()
+        lifecycle.registry.currentState = Lifecycle.State.RESUMED
+        val window = FocusWindow()
+        var state by mutableStateOf(ChatThreadState(readViewportToken = "viewport"))
+        var observing by mutableStateOf(true)
+        val events = mutableListOf<ChatThreadEvent.ViewportChanged>()
+        compose.setContent {
+            val list = rememberLazyListState()
+            CompositionLocalProvider(
+                LocalLifecycleOwner provides lifecycle,
+                LocalWindowInfo provides window,
+            ) {
+                if (state.forwarding == null)
+                    LazyColumn(Modifier.size(375.dp, 500.dp), state = list) {
+                        item("message") { Box(Modifier.fillMaxWidth().height(64.dp)) }
+                    }
+                if (observing)
+                    ChatThreadViewportObserver(state, list) { event ->
+                        if (event is ChatThreadEvent.ViewportChanged) events += event
+                    }
+            }
+        }
+        compose.runOnIdle {
+            assertEquals(listOf("message"), events.last().rowKeys)
+            state = state.copy(forwarding = ChatForwardState(2, 5))
+        }
+        compose.runOnIdle {
+            assertTrue(events.last().rowKeys.isEmpty())
+            state = state.copy(forwarding = null)
+        }
+        compose.runOnIdle {
+            assertEquals(listOf("message"), events.last().rowKeys)
+            observing = false
+        }
+        compose.runOnIdle {
+            assertTrue(events.last().rowKeys.isEmpty())
+            assertTrue(events.all { it.token == "viewport" })
         }
     }
 

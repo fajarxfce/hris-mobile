@@ -57,7 +57,21 @@ class ChatThreadViewModel(
     private val deleteForMe: DeleteCollaborationMessagesForMe,
     private val observeReplies: ObserveCollaborationSavedReplies,
     private val observeQuotes: ObserveCollaborationQuotes,
+    forwardTargets: ReadCollaborationForwardTargets,
+    prepareForward: PrepareCollaborationForward,
+    queueForward: QueueCollaborationForward,
 ) : MviViewModel<ChatThreadState, ChatThreadEvent, ChatThreadEffect>(ChatThreadState()) {
+    private val forwarding =
+        ChatThreadForwardController(
+            viewModelScope,
+            workspaceId,
+            forwardTargets,
+            prepareForward,
+            queueForward,
+            onState = { value -> updateState { it.copy(forwarding = value) } },
+            onRestricted = ::restrict,
+            onForwarded = { clearSelection() },
+        )
     private val projection = MutableStateFlow<ChatVisibilityProjection?>(null)
     private val quoteRequests = MutableStateFlow<ChatQuoteRequest?>(null)
     private var deletionSelection: ChatDeletionSelection? = null
@@ -144,7 +158,19 @@ class ChatThreadViewModel(
         on<ChatThreadEvent.CancellationDismissed>(::onCancellationDismissed)
         on<ChatThreadEvent.MessageSelected>(::onMessageSelected)
         on<ChatThreadEvent.SelectionCleared> { clearSelection() }
+        on<ChatThreadEvent.SelectionMenuOpened> {
+            if (visible && state.value.selecting) updateState { it.copy(selectionMenuOpen = true) }
+        }
+        on<ChatThreadEvent.SelectionMenuDismissed> {
+            updateState { it.copy(selectionMenuOpen = false) }
+        }
         on<ChatThreadEvent.CopySelected>(::onCopySelected)
+        on<ChatThreadEvent.ForwardSelected> { openForwarding() }
+        on<ChatThreadEvent.ForwardDismissed> { forwarding.close() }
+        on<ChatThreadEvent.ForwardConfirmed> { if (visible) forwarding.confirm() }
+        on<ChatThreadEvent.ForwardTargetsRetryRequested> { if (visible) forwarding.load() }
+        on<ChatThreadEvent.ForwardSearchChanged> { forwarding.search(it.query) }
+        on<ChatThreadEvent.ForwardTargetSelected> { if (visible) forwarding.select(it.id) }
         on<ChatThreadEvent.ReplySelected>(::onReplySelected)
         on<ChatThreadEvent.ReplyCleared>(::onReplyCleared)
         on<ChatThreadEvent.DeleteSelected>(::onDeleteSelected)
@@ -155,6 +181,7 @@ class ChatThreadViewModel(
     private fun onEntered(event: ChatThreadEvent.Entered) {
         if (visible) return
         visible = true
+        forwarding.resume()
         reconnectAttempt = 0
         if (observation?.isActive != true) observeLocal() else if (context != null) connect()
     }
@@ -287,6 +314,8 @@ class ChatThreadViewModel(
     }
 
     private fun clearScope() {
+        updateState { it.copy(selectionMenuOpen = false) }
+        forwarding.close()
         projection.value = null
         quoteRequests.value = null
         dismissDeletion()
@@ -500,6 +529,7 @@ class ChatThreadViewModel(
     }
 
     private fun clearSelection() {
+        updateState { it.copy(selectionMenuOpen = false) }
         updateState {
             it.copy(
                 selectedMessages = emptyList(),
@@ -605,6 +635,33 @@ class ChatThreadViewModel(
         clearSelection()
     }
 
+    private fun openForwarding() {
+        val current = state.value
+        val owned = access ?: return
+        val room = historyRoomId ?: source?.roomId ?: return
+        if (
+            !visible ||
+                current.leaving ||
+                current.localFailure != null ||
+                current.deletionDialog != null ||
+                current.forwarding != null ||
+                !current.canForwardSelection
+        )
+            return
+        val messages =
+            current.selectedMessages
+                .sortedWith(compareBy<ChatMessageRow> { it.timestamp }.thenBy { it.key })
+                .map {
+                    CollaborationForwardSource(
+                        requireNotNull(it.reference),
+                        requireNotNull(it.text),
+                    )
+                }
+        viewportKeys = emptyList()
+        readTracker.clear()
+        forwarding.open(owned, conversationId, room, messages)
+    }
+
     /** The route checks fresh ownership immediately before writing to the platform clipboard. */
     suspend fun confirmCopy(effect: ChatThreadEffect.CopyMessages): Boolean {
         if (!visible || effect.owner != access || effect.token != state.value.readViewportToken)
@@ -704,6 +761,7 @@ class ChatThreadViewModel(
                 room != null &&
                 current.localFailure == null &&
                 !current.leaving &&
+                current.forwarding == null &&
                 current.draftDialog == null &&
                 current.cancellationDialog == null
         val selected =
@@ -730,6 +788,7 @@ class ChatThreadViewModel(
     }
 
     private fun onStopped(event: ChatThreadEvent.Stopped) {
+        forwarding.pause()
         visible = false
         viewportKeys = emptyList()
         readTracker.update(null)
@@ -758,6 +817,10 @@ class ChatThreadViewModel(
     }
 
     private fun onBackRequested(event: ChatThreadEvent.BackRequested) {
+        if (state.value.forwarding != null) {
+            forwarding.close()
+            return
+        }
         if (state.value.deletionDialog != null) {
             dismissDeletion()
             return
@@ -867,6 +930,7 @@ class ChatThreadViewModel(
     }
 
     override fun onCleared() {
+        forwarding.close()
         readTracker.clear()
         dismissCancellation()
         super.onCleared()

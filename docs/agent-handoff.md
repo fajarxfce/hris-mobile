@@ -1,5 +1,52 @@
 # Agent continuation — HRIS Mobile
 
+## Offline Forward locally validated; native delivery next — 5 November 2026
+
+Forward now publishes complete encrypted text batches from long-press selection,
+with multiple recipients, original IDs across uncertain retries, retained composer
+drafts and forwarded metadata. The picker releases notification focus and retained
+viewport observation. [Contract](collaboration-chat-forwarding.md) describes the
+bounds: acquired, unedited text to existing direct chats; at most 50 messages,
+five targets and 128 total intents. All 54 PRD groups remain open.
+
+Final full6 passes 1,034 fresh test cases / 374.333 s,
+zero failures/errors/skips, 4,099 unchanged source inputs. Includes root
+check, Android host/compile, browser data/presentation and native proof build/tests.
+All three actual Compose focus/viewport lifecycle cases pass. Focused recovery626
+passed174.569s; prior full5 passed1,779/447.069s. [Evidence](measurements/chat-forward-2026-11-05.json)
+records corrected failures, report hashes and source fingerprints. In particular,
+Wasm Promise failures now use safeStorageCall classification before authenticating
+the complete retained batch; cancellation/fatal errors still propagate.
+All local gate wrappers and children are drained. Three generated picker captures
+were opened/reviewed (compact, dark 200% text, landscape), not pixel-baseline tests.
+
+Phone remains installed release36. No release37 build/install or native Forward
+acceptance exists yet. Backend11a98115/schema116 is unchanged. Apple source e3c1e326
+passes CI42042685222:1,262 tests including six command batch cases and full simulator
+app/associations. That run predates Forward; dispatch new Apple CI after this commit.
+[Batch Apple evidence](measurements/command-batch-apple-2026-11-05.json).
+
+All owned emulator images are stopped; preserve userdata.img AND sidecars/keys.
+Rani/sample1 on release36 has two synthetic sent messages to Nadia/sample3, a
+Dimas/sample4 chat and retained source/destination drafts. Setup105.135s is recorded
+in .work/chat-forward-2026-11-05/native-setup.json; do not resend fixture texts.
+Prepared release37 scripts live under .work/release-phone-2026-11-05-build37.
+NEXT: commit/push, build/lint CLEAN ARM64 devRelease37, verify the artifact; start
+sample1 and install-owned-sample.py 1. Run phased prove-native.py under
+.work/chat-forward-2026-11-05: picker/publish/reconnect 1, receive 3 and receive 4
+(after each retained receiver update). The harness switches ONLY the owned emulator
+offline and uses synthetic messages. Inspect screenshots and phase records; never
+repeat an uncertain publication blindly. Also run retained Bima's four history/
+restart checks on the same APK, then restore Bima as persistent receiver.
+Announce EACH phone install, explicit10.77.77.3:5555, --install-only; no phone UI.
+
+Protected stashbfdef2ce is retained; do not reapply it. Starter baseline9959c1d was
+read-only audited: all four existing batch files match Mobile's pre-e3c baseline;
+six new files are absent. Exact audit .work/chat-forward-2026-11-05/starter-batch-baseline.json.
+After Mobile consumer/native acceptance, port only generic core/database source
+e3c1e326 with independent checks. Continue edit/delete/groups/calls/meet. Main,
+group worktree and Starter have no new code changes in this increment.
+
 ## Release36 Apple accepted; Forward metadata under test — 5 November 2026
 
 Full AppleCI42036083914 passes sourcea26a1248: downloaded1,256 cases/146 suites,

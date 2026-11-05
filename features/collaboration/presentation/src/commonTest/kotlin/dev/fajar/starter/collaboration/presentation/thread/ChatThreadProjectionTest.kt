@@ -8,6 +8,51 @@ import kotlin.time.Instant
 
 class ChatThreadProjectionTest {
     @Test
+    fun forwardIndicatorFollowsPendingLiveAndStoredContentButNotDeletedRows() {
+        val forwarded = intent.copy(forwarded = true)
+        assertTrue(
+            rows(
+                    pending =
+                        listOf(
+                            CollaborationMessageRecord(
+                                forwarded,
+                                0,
+                                CollaborationMessageState.Queued,
+                            )
+                        )
+                )
+                .single()
+                .forwarded
+        )
+        assertTrue(rows(timeline = listOf(native.copy(forwarded = true))).single().forwarded)
+        assertTrue(rows(history = listOf(original.copy(forwarded = true))).single().forwarded)
+        assertTrue(
+            rows(history = listOf(original), pending = listOf(staged.copy(intent = forwarded)))
+                .single()
+                .forwarded
+        )
+        assertFalse(
+            rows(history = listOf(original.copy(forwarded = true, redacted = true, text = null)))
+                .single()
+                .forwarded
+        )
+        assertFalse(
+            rows(
+                    timeline =
+                        listOf(
+                            native.copy(
+                                forwarded = true,
+                                kind = CollaborationMessageKind.REDACTED,
+                                body = null,
+                            )
+                        )
+                )
+                .single()
+                .forwarded
+        )
+    }
+
+    @Test
     fun cancellationIsAvailableOnlyForAnUnmatchedOriginalQueuedRow() {
         val queued = CollaborationMessageRecord(intent, 0, CollaborationMessageState.Queued)
         assertTrue(rows(pending = listOf(queued)).single().canCancel)

@@ -1308,6 +1308,59 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun forwardTargets(
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = ReadCollaborationForwardTargets(lists, sessions, workspaces, server, build, Clock.System)
+
+    @Factory
+    fun prepareForward(
+        quotes: CollaborationQuoteRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        PrepareCollaborationForward(
+            quotes,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
+    fun queueForward(
+        batches: CollaborationMessageBatchRepository,
+        messages: CollaborationMessageRepository,
+        quotes: CollaborationQuoteRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        schedules: SyncScheduleRepository,
+    ) =
+        QueueCollaborationForward(
+            batches,
+            messages,
+            quotes,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+            schedules,
+        )
+
+    @Factory
     fun observeQuotes(
         quotes: CollaborationQuoteRepository,
         lists: CollaborationListRepository,

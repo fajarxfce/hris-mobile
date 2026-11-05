@@ -81,6 +81,9 @@ internal fun chatThreadRows(
                         message.logicalId,
                     ),
                 visibilityKnown = true,
+                forwarded =
+                    kind == CollaborationMessageKind.TEXT &&
+                        (message.forwarded || matching?.intent?.forwarded == true),
                 replyToEventId =
                     if (kind == CollaborationMessageKind.TEXT)
                         (message.replyToEventId ?: matching?.intent?.replyToEventId)
@@ -162,6 +165,7 @@ private fun nativeRow(
         item.delivery,
         item.edited,
         reference = CollaborationMessageReference(item.sender, eventId, item.logicalId),
+        forwarded = item.kind == CollaborationMessageKind.TEXT && item.forwarded,
         replyToEventId =
             if (item.kind == CollaborationMessageKind.TEXT) item.replyToEventId else null,
     )
@@ -183,6 +187,7 @@ private fun pendingRow(
         else native?.delivery ?: CollaborationMessageDelivery.PENDING,
         canCancel = !sent && native == null && validCollaborationCancellation(record),
         replyToEventId = record.intent.replyToEventId,
+        forwarded = record.intent.forwarded,
         reference =
             if (sent) {
                 val sender = record.state.origin?.sender

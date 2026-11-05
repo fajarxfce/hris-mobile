@@ -31,6 +31,7 @@ internal fun ChatThreadViewportObserver(
                             window.isWindowFocused &&
                                 !current.leaving &&
                                 current.localFailure == null &&
+                                current.forwarding == null &&
                                 current.draftDialog == null &&
                                 current.cancellationDialog == null &&
                                 height > 0

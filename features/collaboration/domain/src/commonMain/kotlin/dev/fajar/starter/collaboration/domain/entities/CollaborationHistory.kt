@@ -26,6 +26,7 @@ sealed interface CollaborationHistoryChange {
          */
         val contentHash: String,
         val replyToEventId: String? = null,
+        val forwarded: Boolean = false,
     ) : CollaborationHistoryChange {
         override fun toString() = "HistoryText([redacted])"
     }
@@ -50,6 +51,7 @@ data class CollaborationHistoryMessage(
     /** Local presentation choice, independent of original evidence and provider redaction. */
     val locallyHidden: Boolean = false,
     val replyToEventId: String? = null,
+    val forwarded: Boolean = false,
 ) {
     override fun toString() = "CollaborationHistoryMessage([redacted])"
 }

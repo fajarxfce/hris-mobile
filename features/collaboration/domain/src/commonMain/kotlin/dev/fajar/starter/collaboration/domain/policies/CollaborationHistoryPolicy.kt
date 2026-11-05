@@ -39,6 +39,7 @@ fun mergeCollaborationHistoryText(
             listOf(event.eventId),
             false,
             replyToEventId = event.replyToEventId,
+            forwarded = event.forwarded,
         )
     if (!validCollaborationHistoryMessage(fresh)) return null
     if (
@@ -47,6 +48,7 @@ fun mergeCollaborationHistoryText(
                 previous.sender != event.sender ||
                 previous.logicalId != event.logicalId ||
                 previous.contentHash != event.contentHash ||
+                (previous.forwarded && !event.forwarded) ||
                 (previous.replyToEventId != null &&
                     previous.replyToEventId != event.replyToEventId) ||
                 (!previous.redacted && previous.text != event.text) ||
@@ -62,6 +64,7 @@ fun mergeCollaborationHistoryText(
             redacted = deleted,
             // An older reader may have retained the complete content hash before exposing replies.
             replyToEventId = original.replyToEventId ?: event.replyToEventId,
+            forwarded = original.forwarded || event.forwarded,
         )
         .takeIf(::validCollaborationHistoryMessage)
 }

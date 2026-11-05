@@ -1,5 +1,7 @@
 # Architecture
 
+[Offline text forwarding](collaboration-chat-forwarding.md) publishes complete encrypted batches without changing composer drafts.
+
 [Device sync before the first room](collaboration-device-sync.md) uses owned background references and preserves server key-publication guards.
 
 [Older-history end restoration](collaboration-chat-history-end.md) retains room metadata without advertising it as pending messages after reopening.

@@ -10,6 +10,7 @@ internal fun collaborationTextContent(
     logicalId: String,
     text: String,
     replyToEventId: String? = null,
+    forwarded: Boolean = false,
 ): JsonObject {
     require(validCollaborationMessageId(logicalId) && validCollaborationText(text))
     require(replyToEventId == null || validCollaborationReplyEventId(replyToEventId))
@@ -18,6 +19,7 @@ internal fun collaborationTextContent(
         put("msgtype", "m.text")
         put("m.mentions", buildJsonObject {})
         put("org.hris.message_id", logicalId)
+        if (forwarded) put("org.hris.forwarded", true)
         if (replyToEventId != null)
             put(
                 "m.relates_to",
@@ -33,10 +35,13 @@ internal suspend fun collaborationTextOrigin(
     logicalId: String,
     text: String,
     replyToEventId: String? = null,
+    forwarded: Boolean = false,
 ): CollaborationMessageOrigin {
     require(validCollaborationHistorySender(sender))
     return CollaborationMessageOrigin(
         sender,
-        collaborationHistoryContentHash(collaborationTextContent(logicalId, text, replyToEventId)),
+        collaborationHistoryContentHash(
+            collaborationTextContent(logicalId, text, replyToEventId, forwarded)
+        ),
     )
 }

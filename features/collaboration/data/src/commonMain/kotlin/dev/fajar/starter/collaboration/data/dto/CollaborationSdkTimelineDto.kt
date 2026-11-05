@@ -50,6 +50,7 @@ internal data class CollaborationSdkTimelineItemDto(
     val edited: Boolean,
     val delivery: SdkMessageDelivery,
     val replyToEventId: String? = null,
+    val forwarded: Boolean = false,
     val sendFailure: SdkSendFailure? = null,
 ) {
     override fun toString() = "CollaborationSdkTimelineItemDto([redacted])"

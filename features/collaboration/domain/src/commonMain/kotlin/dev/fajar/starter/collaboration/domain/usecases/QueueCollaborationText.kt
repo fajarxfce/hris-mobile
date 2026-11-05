@@ -167,7 +167,8 @@ class QueueCollaborationText(
                 record.intent.conversationId == conversationId &&
                 record.intent.id == id &&
                 record.intent.text == text &&
-                record.intent.replyToEventId == replyToEventId
+                record.intent.replyToEventId == replyToEventId &&
+                !record.intent.forwarded
         )
             AppResult.Success(record)
         else collaborationSetupFailure("client.collaboration_message_changed")

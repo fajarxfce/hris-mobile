@@ -227,7 +227,13 @@ internal class ChatThreadFixture {
     val messages =
         object : CollaborationMessageRepository {
             override fun observe(access: CollaborationLocalAccess, conversationId: String?) =
-                records.map { AppResult.Success(it) }
+                records.map { rows ->
+                    AppResult.Success(
+                        rows.filter {
+                            conversationId == null || it.intent.conversationId == conversationId
+                        }
+                    )
+                }
 
             override suspend fun get(access: CollaborationLocalAccess, id: String) =
                 AppResult.Success(records.value.find { it.intent.id == id } ?: cancelled[id])
@@ -256,6 +262,22 @@ internal class ChatThreadFixture {
                         else it
                     }
                 return AppResult.Success(true)
+            }
+        }
+    val forwardBatches =
+        object : CollaborationMessageBatchRepository {
+            override suspend fun insertBatch(
+                access: CollaborationLocalAccess,
+                intents: List<CollaborationMessageIntent>,
+            ): AppResult<CollaborationMessageInsertion> {
+                beforeInsert()
+                insertions += intents
+                records.value +=
+                    intents.map {
+                        CollaborationMessageRecord(it, 0, CollaborationMessageState.Queued)
+                    }
+                afterInsert()
+                return insertResult
             }
         }
     val cancellationRepository =
@@ -506,6 +528,7 @@ internal class ChatThreadFixture {
                             logicalId: String,
                             text: String,
                             replyToEventId: String?,
+                            forwarded: Boolean,
                         ) =
                             AppResult.Success(
                                 CollaborationMessageOrigin(self.matrixUserId, "a".repeat(64))
@@ -516,6 +539,7 @@ internal class ChatThreadFixture {
                             text: String,
                             origin: CollaborationMessageOrigin,
                             replyToEventId: String?,
+                            forwarded: Boolean,
                         ): AppResult<Unit> {
                             transactions[logicalId] = "tx-$logicalId"
                             return AppResult.Success(Unit)
@@ -660,6 +684,35 @@ internal class ChatThreadFixture {
                     build,
                     clock,
                 ),
+                createReadCollaborationForwardTargets(),
+                createPrepareCollaborationForward(),
+                createQueueCollaborationForward(),
+            )
+        }
+
+    private fun createReadCollaborationForwardTargets() =
+        with(base) {
+            ReadCollaborationForwardTargets(local, sessions, workspaces, server, build, clock)
+        }
+
+    private fun createPrepareCollaborationForward() =
+        with(base) {
+            PrepareCollaborationForward(quotes, local, sessions, workspaces, server, build, clock)
+        }
+
+    private fun createQueueCollaborationForward() =
+        with(base) {
+            QueueCollaborationForward(
+                forwardBatches,
+                messages,
+                quotes,
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+                schedules,
             )
         }
 

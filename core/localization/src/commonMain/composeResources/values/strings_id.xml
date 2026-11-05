@@ -1067,4 +1067,14 @@
     <string name="chat_remove_reply_id">Batalkan balasan</string>
     <string name="chat_quote_unavailable_id">Pesan tidak tersedia</string>
     <string name="chat_you_id">Anda</string>
+    <string name="chat_forward_id">Teruskan</string>
+    <string name="chat_forwarded_id">Diteruskan</string>
+    <string name="chat_forward_to_id">Teruskan ke</string>
+    <string name="chat_more_actions_id">Tindakan lainnya</string>
+    <string name="chat_forward_target_limit_id">Pilih maksimal %1$s obrolan</string>
+    <string name="chat_forward_empty_id">Obrolanmu akan muncul di sini.</string>
+    <string name="chat_forward_no_matches_id">Obrolan tidak ditemukan</string>
+    <string name="chat_forward_changed_id">Sebagian pesan atau obrolan tidak lagi tersedia. Kembali dan pilih ulang.</string>
+    <string name="chat_forward_targets_failed_id">Obrolan belum bisa dibuka. Coba lagi.</string>
+    <string name="chat_forward_failed_id">Pesan belum bisa disimpan. Coba lagi.</string>
 </resources>

@@ -37,8 +37,10 @@ was drained. Both that recovery and the subsequent normal final gate are recorde
 [large text](images/chat-quoted-replies/chat-quoted-reply-dark-large-text.png),
 [landscape](images/chat-quoted-replies/chat-quoted-reply-landscape.png).
 
-Actual pinned SDK encrypted reply/decryption and cold process recovery are the
-next acceptance step. Main's committed reply envelope needs deployment before a
-product release containing this UI. Phone release 32 is unchanged; the user's
-old and new Bima messages remain pending and their delivery is being investigated.
-This increment does not claim that send failure is fixed. It is HRIS-specific.
+The actual pinned SDK encrypted reply/decryption and cold-process proof passed two
+native cases in 159.069 seconds; [native evidence](measurements/chat-quoted-native-2026-11-05.json)
+records the exact source and artifacts. Backend11a98115/schema116 is deployed.
+Phone release36 includes this behavior and the subsequent first-device key-publication
+fix; [delivery](measurements/android-release-phone-2026-11-05-build36.json) records
+its in-place installation. The user confirmed the older Bima messages were sent.
+This work is HRIS-specific; Forward has separate native acceptance.

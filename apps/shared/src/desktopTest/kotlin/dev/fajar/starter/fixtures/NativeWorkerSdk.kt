@@ -387,13 +387,17 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
                     logicalId: String,
                     text: String,
                     replyToEventId: String?,
+                    forwarded: Boolean,
                 ) =
                     AppResult.Success(
                         CollaborationMessageOrigin(
                             sender,
                             hash(
-                                if (replyToEventId == null) text
-                                else text + "\u0000" + replyToEventId
+                                buildString {
+                                    append(text)
+                                    if (replyToEventId != null) append("\u0000" + replyToEventId)
+                                    if (forwarded) append("\u0000forwarded")
+                                }
                             ),
                         )
                     )
@@ -403,6 +407,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
                     text: String,
                     origin: CollaborationMessageOrigin,
                     replyToEventId: String?,
+                    forwarded: Boolean,
                 ): AppResult<Unit> {
                     enqueued += logicalId
                     enqueuedReplies[logicalId] = replyToEventId
@@ -417,6 +422,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
                             text,
                             origin.contentHash,
                             replyToEventId,
+                            forwarded,
                         )
                     return AppResult.Success(Unit)
                 }

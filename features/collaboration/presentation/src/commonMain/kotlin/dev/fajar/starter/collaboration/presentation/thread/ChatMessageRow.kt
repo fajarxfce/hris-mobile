@@ -24,6 +24,7 @@ data class ChatMessageRow(
     /** Already filtered by the authenticated indexed local history query. */
     val visibilityKnown: Boolean = false,
     val replyToEventId: String? = null,
+    val forwarded: Boolean = false,
 ) {
     override fun toString() = "ChatMessageRow([redacted])"
 }

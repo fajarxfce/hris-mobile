@@ -81,6 +81,7 @@ class ChatThreadLayoutTest {
     @Test
     fun queuedMessageCancelActionRemainsReachableAtNarrowLargeText() {
         val events = mutableListOf<ChatThreadEvent>()
+        var menuOpen by mutableStateOf(false)
         val queued =
             row("queued", "Pesan ini masih menunggu koneksi.", ChatMessageOwnership.SELF)
                 .copy(
@@ -105,16 +106,23 @@ class ChatThreadLayoutTest {
                                 selectedMessages = listOf(queued),
                                 loading = false,
                                 draftReady = true,
+                                selectionMenuOpen = menuOpen,
                             ),
                             rememberLazyListState(),
-                            events::add,
+                            { event ->
+                                events += event
+                                if (event == ChatThreadEvent.SelectionMenuOpened) menuOpen = true
+                                if (event == ChatThreadEvent.SelectionMenuDismissed)
+                                    menuOpen = false
+                            },
                         )
                     }
                 }
             }
         }
+        compose.onNodeWithContentDescription("Tindakan lainnya").performClick()
         compose
-            .onNodeWithContentDescription("Batalkan kirim")
+            .onNodeWithText("Batalkan kirim")
             .assertIsDisplayed()
             .assertWidthIsAtLeast(48.dp)
             .assertHeightIsAtLeast(48.dp)
@@ -122,7 +130,14 @@ class ChatThreadLayoutTest {
         compose.onNodeWithContentDescription("Batal pilih").assertIsDisplayed()
         compose.onNodeWithContentDescription("Pesan").assertIsDisplayed()
         compose.runOnIdle {
-            assertEquals(listOf<ChatThreadEvent>(ChatThreadEvent.CancelRequested("queued")), events)
+            assertEquals(
+                listOf<ChatThreadEvent>(
+                    ChatThreadEvent.SelectionMenuOpened,
+                    ChatThreadEvent.SelectionMenuDismissed,
+                    ChatThreadEvent.CancelRequested("queued"),
+                ),
+                events,
+            )
         }
         screenshot("chat-cancel-queued-large-text")
     }

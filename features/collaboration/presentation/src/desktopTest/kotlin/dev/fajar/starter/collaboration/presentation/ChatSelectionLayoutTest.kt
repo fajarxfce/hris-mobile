@@ -87,6 +87,10 @@ class ChatSelectionLayoutTest {
                                                         selecting = false,
                                                         selectedMessages = emptyList(),
                                                     )
+                                            ChatThreadEvent.SelectionMenuOpened ->
+                                                state = state.copy(selectionMenuOpen = true)
+                                            ChatThreadEvent.SelectionMenuDismissed ->
+                                                state = state.copy(selectionMenuOpen = false)
                                             else -> Unit
                                         }
                                     },
@@ -112,12 +116,22 @@ class ChatSelectionLayoutTest {
             onNodeWithTag("chat-message-one").assertIsSelected()
             onNodeWithTag("chat-message-two").performClick().assertIsSelected()
             onNodeWithText("2 dipilih").assertIsDisplayed()
-            onNodeWithContentDescription("Salin")
+            onNodeWithContentDescription("Teruskan")
+                .assertIsDisplayed()
+                .assertHeightIsAtLeast(48.dp)
+            onNodeWithContentDescription("Tindakan lainnya").performClick()
+            onNodeWithText("Salin")
                 .assertIsDisplayed()
                 .assertWidthIsAtLeast(48.dp)
                 .assertHeightIsAtLeast(48.dp)
                 .performClick()
-            onNodeWithContentDescription("Hapus pesan")
+            onNodeWithContentDescription("Tindakan lainnya").performClick()
+            screenshot(
+                onNode(isPopup()),
+                if (landscape) "menu-landscape"
+                else if (dark) "menu-dark-large-text" else "menu-light",
+            )
+            onNodeWithText("Hapus pesan")
                 .assertIsDisplayed()
                 .assertHeightIsAtLeast(48.dp)
                 .performClick()

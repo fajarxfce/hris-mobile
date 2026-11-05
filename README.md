@@ -34,8 +34,8 @@ delivery. Attendance opens monthly metrics and daily history with a date filter;
 clock-in/out and pending-command recovery stay on Home. Pending review stays
 distinct from accepted time. Workforce availability
 is independent of the personal-profile module. Home places the employee's name
-and company above today's clock-in/out card and service grid. The four tabs are
-Home, Inbox, Employees and Account. Inbox shows the account's total unread count.
+and company above today's clock-in/out card and service grid. The five tabs are
+Home, Chat, Inbox, Employees and Account. Inbox shows the account's total unread count.
 Employees synchronizes an account-owned encrypted coworker directory. Name/number
 search, paging and department filters query acquired records locally, including
 after restart or reauthentication. Search opens a dedicated page and preserves
@@ -131,6 +131,8 @@ their original body and operation ID until their outcome is reconciled.
 
 Chat is available directly from the primary bottom navigation. Its compact thread
 groups messages by day and restores saved history exhaustion when reopened.
+Long-press supports quoted replies, multi-selection, copy, delete for me and
+[offline text forwarding](docs/collaboration-chat-forwarding.md) to acquired chats.
 The chat module includes colleague selection, direct conversations, a durable local
 text queue and [review of retained notification replies](docs/collaboration-reviewed-replies.md).
 Held replies support encrypted working drafts, explicit sending and guarded discard.

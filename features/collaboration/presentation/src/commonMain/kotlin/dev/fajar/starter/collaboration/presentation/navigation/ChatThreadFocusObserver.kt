@@ -27,6 +27,7 @@ internal fun ChatThreadFocusObserver(
                         window.isWindowFocused &&
                             !current.leaving &&
                             current.localFailure == null &&
+                            current.forwarding == null &&
                             current.draftDialog == null &&
                             current.cancellationDialog == null
                     }

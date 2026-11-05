@@ -93,6 +93,12 @@ internal fun ChatMessageBubble(
                     color = AppColors.muted,
                 )
             if (row.kind == CollaborationMessageKind.TEXT) quoteContent?.invoke()
+            if (row.forwarded && row.kind == CollaborationMessageKind.TEXT)
+                AppText(
+                    appString(AppString.ChatForwarded),
+                    style = FluentTheme.typography.caption,
+                    color = AppColors.muted,
+                )
             val body =
                 when (row.kind) {
                     CollaborationMessageKind.TEXT -> row.text.orEmpty()

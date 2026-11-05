@@ -1,0 +1,23 @@
+{
+  "runId": 42042685222,
+  "source": "e3c1e3262e8a306ea587f73de8bfa974dd54188c",
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42042685222",
+  "conclusion": "success",
+  "completedAt": "2026-11-05T14:46:04Z",
+  "counts": {
+    "tests": 1262,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": 147,
+  "batchReports": [
+    {
+      "report": "batch-apple-reports/core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleCommandBatchTest.xml",
+      "tests": 6,
+      "sha256": "27c3777d289c7319fca9ce4bdded5c58e4d34e1e02635ab742b9f2e18f5d1983"
+    }
+  ],
+  "simulatorAppBuildPassed": true,
+  "physicalIPhoneTested": false
+}
