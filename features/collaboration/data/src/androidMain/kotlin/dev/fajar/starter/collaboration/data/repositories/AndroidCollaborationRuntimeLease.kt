@@ -228,12 +228,17 @@ internal constructor(
     }
 
     /** Platform data entry point; the owning operation must hold current HRIS admission. */
-    suspend fun startSync(): AppResult<Unit> {
+    suspend fun startSync(): AppResult<Unit> = syncOperation { sync.start() }
+
+    /** No room join or queue resume; completion belongs to the current owned SDK sync. */
+    suspend fun synchronizeDevice(): AppResult<Unit> = syncOperation { sync.awaitFirstSync() }
+
+    private suspend fun syncOperation(operation: suspend () -> AppResult<Unit>): AppResult<Unit> {
         if (stopRequested.get()) return syncStopped()
         credentialFailures.value?.let {
             return AppResult.Failed(it)
         }
-        val result = sync.start()
+        val result = operation()
         currentCoroutineContext().ensureActive()
         if (stopRequested.get())
             return AppResult.Failed(

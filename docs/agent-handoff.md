@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Initial device sync implemented and source-validated — 5 November 2026
+
+An enrolled device now starts owned SDK sync without a provider room or outgoing
+message. Device sync and incoming acquisition are joined concurrent children;
+existing 50-second company/15-second turn budgets and current admission stay intact.
+Sync completion is not proof of key upload: the server recipient guard still
+requires confirmed publication. [Contract](collaboration-device-sync.md),
+[validation](measurements/chat-device-sync-2026-11-05.json).
+
+Full :check, Android host/compile, browser data/presentation and proof build/tests
+passed 521.721s: 3,664 fresh cases, no failures/errors/skips, 4,077 unchanged inputs.
+Earlier combined focused81 passed. Subsequent worker32/one failure was a new test
+expecting Complete although the fixture has a second room; final gate covers the
+corrected healthy-continuation assertion. All gate wrappers/children are drained.
+No candidate APK/native key-publication acceptance or phone36 delivery yet.
+
+NEXT: build/lint clean ARM64 devRelease36 using staged .work/release-phone-2026-11-05-build36
+scripts; verify artifact; install-owned-sample.py 1 then prove-device-sync.py.
+These scripts require the actual retained sample1 image and never drive the phone.
+Sample1 currently runs on owned emulator5562 (PID680459; verify current start record),
+release34/Home, one ACTIVE device and zero confirmed publications, no provider-room
+request/binding. Preserve its userdata.img AND sidecars. Bima is cleanly stopped,
+keys/messages retained; release35 history and Apple acceptance remain valid.
+Samples3/4 have Firebase/HRIS links but no product devices. Do not send a message to
+force setup, reset private stores, weaken recipient guards or clone native keys.
+
+After native proof, finish other fictional receivers, announce EACH phone install
+and use --install-only for10.77.77.3:5555. User phone remains validated35. Run Apple
+CI on this source. Backend11a98115/schema116 unchanged. Forwarding stashbfdef2ce
+remains protected (batch118 focused passed, forward metadata incomplete); restore
+and resume after this fix, then port generic database work to Starter. All54 PRD
+groups remain open; continue forward/edit/delete/groups/calls/meet. Push each commit.
+
 ## Product release 35 installed — 5 November 2026
 
 Product source [157a257d](https://github.com/fajarxfce/hris-mobile/commit/157a257d568c10f32e7159722d8fdd7f579b09e4)

@@ -240,6 +240,7 @@ class SdkSyncLifecycleTest {
 }
 
 private class Connection : CollaborationSdkSyncConnection {
+    override val completedFirstSync = MutableStateFlow(false)
     override val problems = MutableStateFlow<SdkSyncProblem?>(null)
 
     override suspend fun start(): SdkSyncProblem? = problems.value?.takeIf { it.terminal }

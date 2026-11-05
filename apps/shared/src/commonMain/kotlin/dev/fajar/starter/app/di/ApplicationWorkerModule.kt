@@ -67,11 +67,14 @@ fun applicationWorkerModule() = module {
     }
     single { CollaborationPriorityRecovery(get(), get(), get(), get(), get()) }
     single { collaborationPushRegistration() }
+    single { dev.fajar.starter.app.work.CollaborationDeviceRecovery(get(), get(), get()) }
     single {
+        val device = inject<dev.fajar.starter.app.work.CollaborationDeviceRecovery>()
         val incoming = inject<CollaborationIncomingRecovery>()
         val outgoing = inject<CollaborationDeliveryWorker>()
         val push = inject<CollaborationPushRegistration>()
         CollaborationCompanyRecovery(
+            { device.value(it) },
             { incoming.value(it) },
             { outgoing.value(it) },
             { push.value(it) },

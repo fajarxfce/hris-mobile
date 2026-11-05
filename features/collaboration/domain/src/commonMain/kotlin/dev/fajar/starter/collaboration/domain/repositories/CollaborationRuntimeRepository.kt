@@ -56,6 +56,14 @@ interface CollaborationRuntimeRepository {
     /** Uses an installed SDK bearer and the fixed managed endpoint. Never opens or enrolls. */
     suspend fun activatePusher(owner: CollaborationOwner, deviceId: String): AppResult<Unit>
 
+    /**
+     * Ensures the installed, owned SDK has completed a sync without opening a room or resuming
+     * message delivery. Success acknowledges the sync response, not device-key publication; the
+     * server still verifies recipient readiness. The caller owns current admission and the
+     * background/foreground lifetime.
+     */
+    suspend fun synchronizeDevice(owner: CollaborationOwner, deviceId: String): AppResult<Unit>
+
     /** Reads only the protected scoped record. No SDK client, store lease, sync or network. */
     suspend fun selfIdentity(
         owner: CollaborationOwner,

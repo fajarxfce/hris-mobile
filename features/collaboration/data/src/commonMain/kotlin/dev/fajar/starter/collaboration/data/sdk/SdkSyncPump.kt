@@ -25,6 +25,8 @@ internal class SdkSyncPump(
     private var retryNotBefore = 0L
     private val mutableProblems = MutableStateFlow<SdkSyncProblem?>(null)
     override val problems = mutableProblems.asStateFlow()
+    private val mutableCompletedFirstSync = MutableStateFlow(false)
+    override val completedFirstSync = mutableCompletedFirstSync.asStateFlow()
 
     override suspend fun start(): SdkSyncProblem? =
         mutation.withLock {
@@ -56,6 +58,7 @@ internal class SdkSyncPump(
             }
             mutableProblems.value = problem
             if (problem == null) {
+                mutableCompletedFirstSync.value = true
                 failures = 0
                 mutation.withLock { retryNotBefore = 0 }
                 if (!pause((1_000 - (nowMillis() - began).coerceAtLeast(0)).coerceAtLeast(0)))

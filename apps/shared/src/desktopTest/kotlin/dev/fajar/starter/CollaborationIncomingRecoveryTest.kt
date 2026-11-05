@@ -21,6 +21,126 @@ import org.koin.dsl.module
 
 class CollaborationIncomingRecoveryTest {
     @Test
+    fun emptyCompanyStillInitializesItsDeviceWithoutOpeningRoomsOrSendingMessages() = runBlocking {
+        withFixture { f ->
+            f.server.collaboration.listedIds = emptyList()
+            f.withoutIncomingSelection()
+            f.sdk.backgroundEnabled = true
+            assertEquals(
+                SyncResult.Complete,
+                f.koin.get<dev.fajar.starter.app.work.CollaborationCompanyRecovery>()(
+                    f.incomingGrant()
+                ),
+            )
+            assertEquals(1, f.sdk.deviceSyncs)
+            assertEquals(1, f.sdk.backgroundAcquisitions)
+            assertTrue(f.sdk.attemptedRooms.isEmpty())
+            assertTrue(f.server.collaboration.roomRequests.isEmpty())
+            assertTrue(f.sdk.enqueued.isEmpty())
+            assertEquals(0, f.sdk.deliveries)
+            assertReleased(f)
+        }
+    }
+
+    @Test
+    fun anUnprovisionedDirectDoesNotPreventDeviceActivationOrCreateARoom() = runBlocking {
+        withFixture { f ->
+            f.server.collaboration.listedIds = listOf(f.first)
+            f.server.collaboration.rooms[f.first] = "NOT_REQUESTED"
+            f.withoutIncomingSelection()
+            f.sdk.backgroundEnabled = true
+            assertEquals(
+                SyncResult.Complete,
+                f.koin.get<dev.fajar.starter.app.work.CollaborationCompanyRecovery>()(
+                    f.incomingGrant()
+                ),
+            )
+            assertEquals(1, f.sdk.deviceSyncs)
+            assertEquals(1, f.sdk.backgroundAcquisitions)
+            assertTrue(f.sdk.attemptedRooms.isEmpty())
+            assertTrue(f.server.collaboration.roomRequests.isEmpty())
+            assertTrue(f.sdk.enqueued.isEmpty())
+            assertReleased(f)
+        }
+    }
+
+    @Test
+    fun cancellingInitialSyncReleasesTheBackgroundReferenceForTheNextAttempt() = runBlocking {
+        withFixture { f ->
+            f.withoutIncomingSelection()
+            f.sdk.backgroundEnabled = true
+            val entered = CompletableDeferred<Unit>()
+            f.sdk.beforeDeviceSync = {
+                entered.complete(Unit)
+                awaitCancellation()
+            }
+            val worker = f.koin.get<dev.fajar.starter.app.work.CollaborationDeviceRecovery>()
+            val attempt = async { worker(f.incomingGrant()) }
+            withTimeout(5_000) { entered.await() }
+            attempt.cancelAndJoin()
+            assertEquals(1, f.sdk.backgroundAcquisitions)
+            assertReleased(f)
+            f.sdk.beforeDeviceSync = {}
+            assertEquals(SyncResult.Complete, worker(f.incomingGrant()))
+            assertEquals(2, f.sdk.deviceSyncs)
+            assertReleased(f)
+            assertTrue(f.sdk.enqueued.isEmpty())
+        }
+    }
+
+    @Test
+    fun rejectedInitialSyncCannotBeRetriedThroughRetainedDeniedAccess() = runBlocking {
+        withFixture { f ->
+            f.withoutIncomingSelection()
+            f.sdk.backgroundEnabled = true
+            f.sdk.deviceSyncFailure = denied()
+            val grant = f.incomingGrant()
+            val worker = f.koin.get<dev.fajar.starter.app.work.CollaborationDeviceRecovery>()
+            assertIs<SyncResult.Blocked>(worker(grant))
+            f.sdk.deviceSyncFailure = null
+            assertIs<SyncResult.Blocked>(worker(grant))
+            assertEquals(1, f.sdk.deviceSyncs)
+            assertEquals(1, f.sdk.backgroundAcquisitions)
+            assertReleased(f)
+        }
+    }
+
+    @Test
+    fun incomingHistoryProgressesWhileInitialSyncHoldsItsOwnBackgroundReference() = runBlocking {
+        withFixture { f ->
+            val incoming = f.sdk.incoming(f.first, "Fictional concurrent incoming")
+            f.withoutIncomingSelection()
+            f.sdk.backgroundEnabled = true
+            val entered = CompletableDeferred<Unit>()
+            val release = CompletableDeferred<Unit>()
+            f.sdk.beforeDeviceSync = {
+                entered.complete(Unit)
+                release.await()
+            }
+            val grant = f.incomingGrant()
+            val attempt = async {
+                f.koin.get<dev.fajar.starter.app.work.CollaborationCompanyRecovery>()(grant)
+            }
+            try {
+                withTimeout(5_000) {
+                    entered.await()
+                    while (f.incomingOriginal(incoming) == null) delay(10)
+                }
+                assertFalse(attempt.isCompleted)
+                assertEquals(1, f.sdk.deviceSyncs)
+                assertTrue(f.sdk.enqueued.isEmpty())
+                release.complete(Unit)
+                // The fixture has a second room; healthy continuation remains pending.
+                assertEquals(SyncResult.Retry(), withTimeout(5_000) { attempt.await() })
+                assertReleased(f)
+            } finally {
+                release.complete(Unit)
+                attempt.cancelAndJoin()
+            }
+        }
+    }
+
+    @Test
     fun actualCompanyBindingAcquiresIncomingAndDeliversOutgoingInTheSameTurn() = runBlocking {
         withFixture { f ->
             val incoming = f.sdk.incoming(f.first, "Fictional incoming before send")
@@ -36,7 +156,7 @@ class CollaborationIncomingRecoveryTest {
             assertEquals(incoming.text, f.incomingOriginal(incoming)?.text)
             assertEquals(listOf(outgoing.intent.id), f.sdk.enqueued)
             assertEquals(1, f.sdk.deliveries)
-            assertEquals(2, f.sdk.backgroundAcquisitions)
+            assertEquals(3, f.sdk.backgroundAcquisitions)
             assertReleased(f)
         }
     }

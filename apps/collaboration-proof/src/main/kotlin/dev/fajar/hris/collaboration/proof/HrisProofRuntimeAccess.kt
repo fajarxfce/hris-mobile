@@ -65,6 +65,14 @@ internal class HrisProofRuntimeAccess(private val runtime: AndroidCollaborationR
         return runtime.sendReadReceipt(matrixRoomId, eventId, visibility)
     }
 
+    override suspend fun synchronizeDevice(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<Unit> {
+        check(owner == runtime.owner && deviceId == runtime.deviceId)
+        return runtime.synchronizeDevice()
+    }
+
     override suspend fun activatePusher(
         owner: CollaborationOwner,
         deviceId: String,

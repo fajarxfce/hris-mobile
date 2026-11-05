@@ -503,6 +503,11 @@ internal class StageFixture {
                     dev.fajar.starter.collaboration.domain.entities.CollaborationReadReceiptVisibility,
             ): AppResult<Unit> = error("No implicit read receipt delivery")
 
+            override suspend fun synchronizeDevice(
+                owner: CollaborationOwner,
+                deviceId: String,
+            ): AppResult<Unit> = error("No implicit encryption activation")
+
             override suspend fun activatePusher(
                 owner: CollaborationOwner,
                 deviceId: String,

@@ -295,6 +295,24 @@ class AndroidCollaborationRuntimeRepository(
         return runtime.sendReadReceipt(matrixRoomId, eventId, visibility)
     }
 
+    override suspend fun synchronizeDevice(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<Unit> {
+        val runtime =
+            leases.singleOrNull {
+                it.owner == owner && it.deviceId == deviceId && it.availableForEntry
+            }
+                ?: return AppResult.Failed(
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Chat runtime is not open.",
+                        code = "client.collaboration_runtime_not_open",
+                    )
+                )
+        return runtime.synchronizeDevice()
+    }
+
     override suspend fun activatePusher(
         owner: CollaborationOwner,
         deviceId: String,

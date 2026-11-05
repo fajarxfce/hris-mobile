@@ -1,0 +1,206 @@
+{
+  "recordedAt": "2026-11-05T13:28:20.754799+00:00",
+  "change": "Start owned enrolled-device sync independently of room or outgoing message availability.",
+  "sourceFingerprintSha256": "2136aa34ce35d597ab1c9f70aa05c5e97ec4eca8bfed5d085b5769bb249f69ea",
+  "sourceFiles": 4077,
+  "validation": [
+    {
+      "run": "sync1",
+      "note": "Early SDK-loop checks before the operation was named device sync.",
+      "startedAt": "2026-11-05T12:50:51.731506+00:00",
+      "elapsedSeconds": 101.073,
+      "exitCode": 0,
+      "sourceFiles": 4072,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "worker1",
+      "note": "Early sequential worker; superseded by bounded concurrent first phase.",
+      "startedAt": "2026-11-05T13:00:23.152206+00:00",
+      "elapsedSeconds": 254.535,
+      "exitCode": 0,
+      "sourceFiles": 4076,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 47,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "focused2",
+      "note": "Combined runtime/domain/worker checks before the final concurrent company phase.",
+      "startedAt": "2026-11-05T13:09:48.620920+00:00",
+      "elapsedSeconds": 238.251,
+      "exitCode": 0,
+      "sourceFiles": 4077,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 81,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "worker3",
+      "note": "One new fixture expected Complete although its second room correctly required healthy continuation; corrected the assertion.",
+      "startedAt": "2026-11-05T13:15:25.034345+00:00",
+      "elapsedSeconds": 74.381,
+      "exitCode": 1,
+      "sourceFiles": 4077,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 32,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "final1",
+      "note": "Final complete source gate, including the corrected assertion and concurrent first phase.",
+      "startedAt": "2026-11-05T13:17:42.639073+00:00",
+      "elapsedSeconds": 521.721,
+      "exitCode": 0,
+      "sourceFiles": 4077,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3664,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "finalTasks": [
+    ":check",
+    ":features:collaboration:data:testAndroidHostTest",
+    ":apps:android:compileDevDebugKotlin",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:presentation:wasmJsBrowserTest",
+    ":apps:collaboration-proof:assembleDebug",
+    ":apps:collaboration-proof:testDebugUnitTest"
+  ],
+  "selectedFreshReports": {
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.work.CollaborationCompanyRecoveryTest.xml": {
+      "sha256": "2d48b7b6457030b39a0f48659de5dd2048cd20b6b7a4f6a9cf4027eb7597a253",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationIncomingRecoveryTest.xml": {
+      "sha256": "5c454d93469c865c095a6a4c54bbad02650b2ee31fc3e501a665cf02e836cb36",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkFirstSyncTest.xml": {
+      "sha256": "b3a92738b0c36580d767616c1f4c048dade97159f884aae9811126a89a09046f",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkSyncLifecycleTest.xml": {
+      "sha256": "74544b33e7197dc67abd8ca43aaa43f649a623ce40115e3a5e99f4ea7d89223a",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkSyncPumpTest.xml": {
+      "sha256": "cf2f5cca417a8946fd1c46eac8bc3b85c7e2434932daf486ddf17b1b30f54f44",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkFirstSyncTest.xml": {
+      "sha256": "1b6a1c2c12366073eb56bcd7cd706546670d2709e57eebeb36d363ad3090f7af",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkSyncLifecycleTest.xml": {
+      "sha256": "8de60f9bc1c9fbdf613dc4f4fb1da168c98fe8ed0fbe60e93e81ce8810d6478a",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkSyncPumpTest.xml": {
+      "sha256": "2ed7df2853f4516265a224344c5dca8e758fd2a36d8ac7b27735ea370aeeb13e",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationDeviceSyncTest.xml": {
+      "sha256": "ec3b35c61cbc8c9a4926ff87318c28d2902d34392510c13a7811ad029b06d922",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkFirstSyncTest.xml": {
+      "sha256": "5e5502d0bb09373d73c6439199ab858cef156fb21c84ab6e80981f2b6a3ae4b2",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkSyncLifecycleTest.xml": {
+      "sha256": "4abf7e1c2f038c0e98c1b7afb8560a0aa03fc1e056389b3025a832f9f88e49dc",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkSyncPumpTest.xml": {
+      "sha256": "4ba08994d6a02aee6dc1dc3c300ec3f8faea6d5ea6161d7987eeca435e7f3928",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SynchronizeCollaborationDeviceTest.xml": {
+      "sha256": "5a7d2d02b9011df8ce6406a9d146915f890829c76165a0878b7739f52f6a9abc",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "baseline": {
+    "activeDevices": 1,
+    "confirmedKeyPublications": 0,
+    "directConversations": 1,
+    "requestedProviderRooms": 0,
+    "boundProviderRooms": 0,
+    "deviceIdentitySha256": "2aaf0fdea20f5e691e10c667c7f22bfaf8a75d35cab9d1d9324eff3569cd9da0",
+    "publicationIdentitySha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "sample": 1,
+    "readAt": "2026-11-05T13:15:39.988204+00:00",
+    "readOnly": true,
+    "fictionalAccountOnly": true
+  },
+  "nativeAcceptance": "Pending release APK on the retained fictional sample1 device. Inert Android FFI cases do not prove native publication.",
+  "firstSyncAcknowledgesKeyPublication": false,
+  "recipientReadinessGuardUnchanged": true,
+  "providerRoomOrMessageRequired": false,
+  "newPhoneReleaseInstalled": false,
+  "phoneRemainsVersion": 35,
+  "backendUnchanged": "11a98115 / schema116",
+  "genericStarterPortRequired": false
+}

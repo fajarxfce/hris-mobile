@@ -18,7 +18,7 @@ holds no account grant or native resource. Admission beyond two returns Retry.
 Waiting count is separate from admitted count so a finishing call cannot be mistaken
 for future processing. Wait plus execution is bounded to 180 seconds; processing
 is bounded to 90 seconds, initial parent observation to five seconds and each
-company attempt to 50 seconds, including fresh admission and both recovery lanes. Current native admission keeps its own original
+company attempt to 50 seconds, including fresh admission and bounded recovery work. Current native admission keeps its own original
 monotonic deadline, including its transport time. Parent replacement, logout or a
 stopped source cancels and joins the owned processing job and monitor. Foreground
 company changes alone do not replace the native parent.
@@ -46,14 +46,15 @@ are at most three scheduling attempts with 100ms gaps; each request has the exis
 also leaves durable work for later startup/periodic recovery. Urgent FCM latency and
 Doze behavior require separate integration and measurement.
 
-The application supplies `CollaborationCompanyRecovery`: incoming acquisition runs
-first, then outgoing delivery, each with a separate15-second turn and the exact
-same original admission. Timeout or retained work in one lane does not skip the
-other. External cancellation drains the active lane before returning and does not
-start the next. Neither lane renews the admission deadline. Real Retry failures
-win over healthy continuation; blocked work stays retained for its required action.
-One company per quantum leaves room for admission and both lanes within the
-90-second processor budget. Structured cleanup is joined rather than abandoned.
+The application supplies `CollaborationCompanyRecovery`. [Device sync](collaboration-device-sync.md)
+and incoming acquisition run as joined children, each with a 15-second turn.
+Outgoing delivery and push registration follow, each with its existing 15-second
+turn and the exact same original admission. The critical path remains 45 seconds
+inside the 50-second company budget. Failure in one turn does not skip the others;
+external cancellation joins both initial children and does not start later work.
+None renews admission. Real Retry failures win over healthy continuation, while
+blocked work retains the required user action. One company per quantum stays
+within the 90-second processor budget; structured cleanup remains owned.
 
 [Incoming recovery](collaboration-incoming-recovery.md) now discovers/acquires
 originals independently of the outbox. The existing captured delivery worker's

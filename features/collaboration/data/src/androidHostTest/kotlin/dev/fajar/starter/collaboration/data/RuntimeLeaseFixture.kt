@@ -21,6 +21,9 @@ import kotlinx.serialization.json.Json
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.Encryption
 import org.matrix.rustcomponents.sdk.NoHandle
+import org.matrix.rustcomponents.sdk.SyncResponseRoomsV2
+import org.matrix.rustcomponents.sdk.SyncResponseV2
+import org.matrix.rustcomponents.sdk.SyncSettingsV2
 
 internal suspend fun runtimeLeaseFixture(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
@@ -68,6 +71,8 @@ internal class RuntimeLeaseFixture(
     val calls: MutableList<String> = Collections.synchronizedList(mutableListOf())
     var beforePause: suspend () -> Unit = {}
     var beforeIdentity: () -> Unit = {}
+    var beforeSync: suspend () -> Unit = {}
+    var syncRequests = 0
     var signingKey: String? = Base64.encode(ByteArray(32) { it.toByte() })
     private val http = HttpClient(MockEngine { error("Publication never sends HTTP requests") })
     private val sdk =
@@ -78,6 +83,17 @@ internal class RuntimeLeaseFixture(
             }
 
             override fun deviceId(): String = "PROOF_NATIVE"
+
+            override suspend fun syncOnceV2(settings: SyncSettingsV2): SyncResponseV2 {
+                assertEquals(10_000uL, settings.timeoutMs)
+                assertFalse(settings.fullState)
+                syncRequests++
+                beforeSync()
+                return SyncResponseV2(
+                    "fixture-next",
+                    SyncResponseRoomsV2(emptyList(), emptyList(), emptyList(), emptyList()),
+                )
+            }
 
             override suspend fun enableAllSendQueues(enable: Boolean) {
                 check(!enable)

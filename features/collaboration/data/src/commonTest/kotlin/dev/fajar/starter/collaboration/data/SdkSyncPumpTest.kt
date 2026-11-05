@@ -9,6 +9,48 @@ import kotlinx.coroutines.test.*
 @OptIn(ExperimentalCoroutinesApi::class)
 class SdkSyncPumpTest {
     @Test
+    fun startingAndFailedRequestsDoNotClaimThatTheFirstSyncCompleted() = runTest {
+        val response = CompletableDeferred<Unit>()
+        var calls = 0
+        val pump = pump {
+            if (++calls == 1) SdkSyncProblem(null)
+            else {
+                response.await()
+                null
+            }
+        }
+        pump.start()
+        runCurrent()
+        assertFalse(pump.completedFirstSync.value)
+        advanceTimeBy(1_000)
+        runCurrent()
+        assertEquals(2, calls)
+        assertFalse(pump.completedFirstSync.value)
+        response.complete(Unit)
+        runCurrent()
+        assertTrue(pump.completedFirstSync.value)
+        pump.stop()
+        assertEquals(2, calls)
+    }
+
+    @Test
+    fun stoppingBeforeTheFirstResponseDrainsItWithoutPublishingReadiness() = runTest {
+        val response = CompletableDeferred<Unit>()
+        val pump = pump {
+            response.await()
+            null
+        }
+        pump.start()
+        runCurrent()
+        val stopping = async { pump.stop() }
+        runCurrent()
+        assertFalse(stopping.isCompleted)
+        response.complete(Unit)
+        stopping.await()
+        assertFalse(pump.completedFirstSync.value)
+    }
+
+    @Test
     fun denialReceivedWhileStoppingIsRetainedWithoutStartingAnotherRequest() = runTest {
         val response = CompletableDeferred<Unit>()
         val denied = SdkSyncProblem("M_FORBIDDEN", terminal = true)

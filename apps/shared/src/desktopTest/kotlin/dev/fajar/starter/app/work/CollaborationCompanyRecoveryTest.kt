@@ -13,6 +13,126 @@ import kotlinx.coroutines.test.*
 
 class CollaborationCompanyRecoveryTest {
     @Test
+    fun deviceSyncAndIncomingWorkUseTheSameAdmissionBeforeOutgoingDelivery() = runTest {
+        val grant = admission()
+        val calls = mutableListOf<String>()
+        val worker =
+            CollaborationCompanyRecovery(
+                {
+                    assertSame(grant, it)
+                    calls += "device"
+                    SyncResult.Complete
+                },
+                {
+                    assertSame(grant, it)
+                    calls += "incoming"
+                    SyncResult.Complete
+                },
+                {
+                    assertSame(grant, it)
+                    calls += "outgoing"
+                    SyncResult.Complete
+                },
+                {
+                    assertSame(grant, it)
+                    calls += "push"
+                    SyncResult.Complete
+                },
+            )
+        assertEquals(SyncResult.Complete, worker(grant))
+        assertEquals(listOf("device", "incoming", "outgoing", "push"), calls)
+    }
+
+    @Test
+    fun aTimedOutInitialSyncKeepsTheOtherTurnsAndRemainsPending() = runTest {
+        val calls = mutableListOf<String>()
+        val worker =
+            CollaborationCompanyRecovery(
+                {
+                    calls += "device"
+                    awaitCancellation()
+                },
+                {
+                    calls += "incoming"
+                    SyncResult.Complete
+                },
+                {
+                    calls += "outgoing"
+                    SyncResult.Complete
+                },
+                {
+                    calls += "push"
+                    SyncResult.Complete
+                },
+            )
+        assertEquals(
+            "client.collaboration_device_sync_timeout",
+            assertIs<SyncResult.Retry>(worker(admission())).failure?.code,
+        )
+        assertEquals(listOf("device", "incoming", "outgoing", "push"), calls)
+        assertEquals(15_000L, testScheduler.currentTime)
+    }
+
+    @Test
+    fun slowDeviceSyncDoesNotDelayIncomingAndEveryTurnFitsTheExistingCompanyBudget() = runTest {
+        val calls = mutableListOf<String>()
+        val incomingComplete = CompletableDeferred<Unit>()
+        val worker =
+            CollaborationCompanyRecovery(
+                {
+                    incomingComplete.await()
+                    awaitCancellation()
+                },
+                {
+                    calls += "incoming"
+                    incomingComplete.complete(Unit)
+                    awaitCancellation()
+                },
+                {
+                    calls += "outgoing"
+                    awaitCancellation()
+                },
+                {
+                    calls += "push"
+                    awaitCancellation()
+                },
+            )
+        val result = withTimeout(50_000) { worker(admission()) }
+        assertIs<SyncResult.Retry>(result)
+        assertEquals(listOf("incoming", "outgoing", "push"), calls)
+        assertEquals(45_000L, testScheduler.currentTime)
+    }
+
+    @Test
+    fun cancellationDrainsBothInitialChildrenBeforeReturningWithoutStartingOutgoing() = runTest {
+        val started = mutableSetOf<String>()
+        val closed = mutableSetOf<String>()
+        suspend fun hold(name: String): SyncResult {
+            started += name
+            try {
+                awaitCancellation()
+            } finally {
+                withContext(NonCancellable) {
+                    delay(50)
+                    closed += name
+                }
+            }
+        }
+        val worker =
+            CollaborationCompanyRecovery(
+                { hold("device") },
+                { hold("incoming") },
+                { error("No outgoing after cancellation") },
+                { error("No push after cancellation") },
+            )
+        val running = launch { worker(admission()) }
+        runCurrent()
+        assertEquals(setOf("device", "incoming"), started)
+        running.cancelAndJoin()
+        assertEquals(started, closed)
+    }
+
+    @Test
     fun pushTimeoutCannotPreventEitherMessageLaneAndKeepsTheOriginalAdmission() = runTest {
         val grant = admission()
         val events = mutableListOf<String>()
@@ -194,7 +314,7 @@ class CollaborationCompanyRecoveryTest {
         incoming: suspend (CollaborationBackgroundAdmission) -> SyncResult,
         outgoing: suspend (CollaborationBackgroundAdmission) -> SyncResult,
         push: suspend (CollaborationBackgroundAdmission) -> SyncResult = { SyncResult.Complete },
-    ) = CollaborationCompanyRecovery(incoming, outgoing, push)
+    ) = CollaborationCompanyRecovery({ SyncResult.Complete }, incoming, outgoing, push)
 
     private fun admission(): CollaborationBackgroundAdmission {
         val now = Clock.System.now()

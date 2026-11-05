@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.StateFlow
 internal interface CollaborationSdkSyncConnection {
     val problems: StateFlow<SdkSyncProblem?>
 
+    /** This connection has completed a successful SDK sync; starting the loop is not completion. */
+    val completedFirstSync: StateFlow<Boolean>
+
     /** Idempotent while running; explicit retry may resume an exhausted transient interruption. */
     suspend fun start(): SdkSyncProblem?
 

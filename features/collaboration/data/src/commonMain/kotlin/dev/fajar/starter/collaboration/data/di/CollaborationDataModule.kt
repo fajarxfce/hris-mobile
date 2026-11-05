@@ -919,6 +919,27 @@ class CollaborationDataModule {
         )
 
     @Single
+    fun synchronizeDevice(
+        runtimes: CollaborationRuntimeRepository,
+        setup: CollaborationSetupRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        SynchronizeCollaborationDevice(
+            runtimes,
+            setup,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
     fun activatePusher(
         runtimes: CollaborationRuntimeRepository,
         setup: CollaborationSetupRepository,

@@ -28,6 +28,8 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
     > = error("Unexpected SDK handover in this fixture")
 
     private var owner: CollaborationOwner? = null
+    private val backgroundOwners = mutableMapOf<CollaborationOwner, Int>()
+    private var backgroundForeground: CollaborationOwner? = null
     private val originals = mutableMapOf<String, MutableList<CollaborationHistoryChange.Text>>()
     private val queued = mutableMapOf<String, MutableMap<String, CollaborationHistoryChange.Text>>()
     val enqueued = mutableListOf<String>()
@@ -38,6 +40,9 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
     var childOpens = 0
     var queueCloses = 0
     var restores = 0
+    var deviceSyncs = 0
+    var beforeDeviceSync: suspend () -> Unit = {}
+    var deviceSyncFailure: Failure? = null
     var backgroundEnabled = false
     var backgroundAcquisitions = 0
     var backgroundPublications = 0
@@ -139,7 +144,6 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
         check(backgroundEnabled) { "No implicit background runtime" }
         check(deviceId == wire.deviceId && lifetimeMillis in 1..60_000)
         backgroundAcquisitions++
-        val foreground = this.owner
         val lease =
             object : CollaborationBackgroundRuntimeLease {
                 override val owner = owner
@@ -154,6 +158,9 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
                     if (!published) {
                         published = true
                         backgroundPublications++
+                        if (backgroundOwners.isEmpty())
+                            backgroundForeground = this@NativeWorkerSdk.owner
+                        backgroundOwners[owner] = (backgroundOwners[owner] ?: 0) + 1
                         this@NativeWorkerSdk.owner = owner
                     }
                     return AppResult.Success(Unit)
@@ -163,8 +170,16 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
                     if (!closed) {
                         closed = true
                         backgroundCloses++
-                        if (published && this@NativeWorkerSdk.owner == owner)
-                            this@NativeWorkerSdk.owner = foreground
+                        if (published) {
+                            val remaining = requireNotNull(backgroundOwners[owner]) - 1
+                            if (remaining == 0) backgroundOwners.remove(owner)
+                            else backgroundOwners[owner] = remaining
+                            if (backgroundOwners.isEmpty()) {
+                                if (this@NativeWorkerSdk.owner == owner)
+                                    this@NativeWorkerSdk.owner = backgroundForeground
+                                backgroundForeground = null
+                            }
+                        }
                     }
                     return AppResult.Success(Unit)
                 }
@@ -204,6 +219,16 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
         } finally {
             activeReadReceipts--
         }
+    }
+
+    override suspend fun synchronizeDevice(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<Unit> {
+        check(this.owner == owner && deviceId == wire.deviceId)
+        deviceSyncs++
+        beforeDeviceSync()
+        return deviceSyncFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(Unit)
     }
 
     override suspend fun activatePusher(

@@ -9,13 +9,20 @@ import kotlinx.coroutines.*
 
 /** Each lane receives a finite turn even if the other fails or retains a long queue. */
 class CollaborationCompanyRecovery(
+    private val synchronizeDevice: suspend (CollaborationBackgroundAdmission) -> SyncResult,
     private val incoming: suspend (CollaborationBackgroundAdmission) -> SyncResult,
     private val outgoing: suspend (CollaborationBackgroundAdmission) -> SyncResult,
     private val push: suspend (CollaborationBackgroundAdmission) -> SyncResult,
 ) {
     suspend operator fun invoke(admission: CollaborationBackgroundAdmission): SyncResult {
         currentCoroutineContext().ensureActive()
-        val received = turn("incoming") { incoming(admission) }
+        // Both borrow the same owned SDK. Keep the existing 15 + 15 + 15 second
+        // critical path inside the company's 50-second admission/work budget.
+        val received = coroutineScope {
+            val device = async { turn("device_sync") { synchronizeDevice(admission) } }
+            val messages = async { turn("incoming") { incoming(admission) } }
+            combineCollaborationRecovery(device.await(), messages.await())
+        }
         currentCoroutineContext().ensureActive()
         val sent = turn("outgoing") { outgoing(admission) }
         currentCoroutineContext().ensureActive()

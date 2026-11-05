@@ -2,22 +2,18 @@ package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
-import dev.fajar.starter.collaboration.domain.usecases.ActivateCollaborationPusher
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
-import dev.fajar.starter.identity.domain.entities.IdentityServer
 import kotlin.test.*
-import kotlin.time.Clock
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.TestTimeSource
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 
 class ActivateCollaborationPusherTest {
     @Test
     fun repeatedActivationUsesOnlyTheCurrentOwnedDeviceWithoutRestoringOrEnrolling() = runTest {
-        val f = Fixture()
+        val f = CollaborationDeviceOperationFixture()
         repeat(2) { assertEquals(AppResult.Success(Unit), f.activate()) }
         assertEquals(2, f.calls)
         assertEquals(2, f.setup.calls)
@@ -27,7 +23,7 @@ class ActivateCollaborationPusherTest {
 
     @Test
     fun invalidInputAndUnavailableDeviceCannotActivate() = runTest {
-        val f = Fixture()
+        val f = CollaborationDeviceOperationFixture()
         for (invalid in listOf("", "device", f.device.uppercase(), f.device + "/")) {
             assertEquals(
                 FailureKind.Validation,
@@ -51,7 +47,7 @@ class ActivateCollaborationPusherTest {
     @Test
     fun expiredOrDeniedWorkspaceAndRetainedReadDenialStopBeforeRemoteWork() = runTest {
         for (mode in 0..3) {
-            val f = Fixture()
+            val f = CollaborationDeviceOperationFixture()
             when (mode) {
                 0 -> f.setup.now += 3.hours
                 1 -> f.setup.workspace = f.setup.selected.copy(permissions = emptySet())
@@ -68,7 +64,7 @@ class ActivateCollaborationPusherTest {
     fun lateOwnerReplacementCannotPublishSuccessOrStartAfterDeviceLookup() = runTest {
         for (duringActivation in listOf(false, true)) {
             for (replacement in 0..3) {
-                val f = Fixture()
+                val f = CollaborationDeviceOperationFixture()
                 val replace: suspend () -> Unit = {
                     when (replacement) {
                         0 -> f.setup.session = f.setup.initial.copy(id = "replacement")
@@ -102,7 +98,7 @@ class ActivateCollaborationPusherTest {
     fun currentDenialWinsOverLateSuccessOrTransportFailureAndIsNeverClearedByActivation() =
         runTest {
             for (remoteDenied in listOf(false, true)) {
-                val f = Fixture()
+                val f = CollaborationDeviceOperationFixture()
                 f.setup.admission.restrictFailure = f.storage
                 f.onActivate = {
                     if (remoteDenied) {
@@ -120,7 +116,7 @@ class ActivateCollaborationPusherTest {
 
     @Test
     fun sdkTokenExpiryStopsActivationWithoutClosingOwnedLocalChatFacts() = runTest {
-        val f = Fixture()
+        val f = CollaborationDeviceOperationFixture()
         val expired =
             Failure(
                 FailureKind.Unauthorized,
@@ -135,7 +131,7 @@ class ActivateCollaborationPusherTest {
 
     @Test
     fun pendingActivationHasNoWaitingCallQueueAndCancellationAllowsAnExplicitRetry() = runTest {
-        val f = Fixture()
+        val f = CollaborationDeviceOperationFixture()
         val entered = CompletableDeferred<Unit>()
         val stopped = CompletableDeferred<Unit>()
         f.onActivate = {
@@ -162,7 +158,7 @@ class ActivateCollaborationPusherTest {
 
     @Test
     fun wholeOperationBudgetCancelsPendingWorkWithoutImplicitRetry() = runTest {
-        val f = Fixture()
+        val f = CollaborationDeviceOperationFixture()
         var stopped = false
         f.onActivate = {
             try {
@@ -182,7 +178,7 @@ class ActivateCollaborationPusherTest {
 
     @Test
     fun backgroundActivationUsesItsAdmittedCompanyWithoutSelectingAWorkspace() = runTest {
-        val f = Fixture()
+        val f = CollaborationDeviceOperationFixture()
         val scope = f.background()
         assertEquals(AppResult.Success(Unit), f.useCase(scope, f.device))
         assertNull(f.setup.workspace)
@@ -191,7 +187,7 @@ class ActivateCollaborationPusherTest {
 
     @Test
     fun backgroundDeviceAndObservedVersionCannotBeReplaced() = runTest {
-        val f = Fixture()
+        val f = CollaborationDeviceOperationFixture()
         val scope = f.background()
         assertIs<AppResult.Failed>(f.useCase(scope, "a0000000-0000-4000-8000-000000000002"))
         assertEquals(0, f.setup.calls)
@@ -212,7 +208,7 @@ class ActivateCollaborationPusherTest {
     @Test
     fun backgroundExpiryOrNativeReplacementDuringIoCannotPublishSuccess() = runTest {
         for (afterSend in listOf(false, true)) {
-            val f = Fixture()
+            val f = CollaborationDeviceOperationFixture()
             val scope = f.background()
             if (afterSend)
                 f.onActivate = {
@@ -230,106 +226,5 @@ class ActivateCollaborationPusherTest {
             assertIs<AppResult.Failed>(f.useCase(scope, f.device))
             assertEquals(if (afterSend) 1 else 0, f.calls)
         }
-    }
-
-    private class Fixture {
-        val setup = CollaborationSetupFixture()
-        val device = "a0000000-0000-4000-8000-000000000001"
-        val registered = setup.device.copy(id = device)
-        val denied = Failure(FailureKind.AccessDenied, "Denied", code = "permission_denied")
-        val storage = Failure(FailureKind.Storage, "Unavailable", code = "fixture.storage")
-        var expectedOwner =
-            CollaborationOwner(
-                setup.initial.id,
-                setup.initial.binding.audience,
-                setup.initial.user.id,
-                setup.selected.company.id,
-                setup.initial.binding.serverId,
-            )
-
-        fun background(): CollaborationOperationScope.Background {
-            val session =
-                setup.initial.copy(
-                    user = setup.initial.user.copy(id = "a1000000-0000-4000-8000-000000000001"),
-                    binding =
-                        setup.initial.binding.copy(
-                            serverId = "a1000000-0000-4000-8000-000000000002"
-                        ),
-                )
-            setup.session = session
-            setup.workspace = null
-            expectedOwner =
-                CollaborationOwner(
-                    session.id,
-                    session.binding.audience,
-                    session.user.id,
-                    "a1000000-0000-4000-8000-000000000003",
-                    session.binding.serverId,
-                )
-            return CollaborationOperationScope.Background(
-                CollaborationBackgroundAdmission(
-                    CollaborationAdmissionObservation(
-                        expectedOwner,
-                        device,
-                        registered.version,
-                        0,
-                        0,
-                        setup.now,
-                        setup.now + 60.seconds,
-                    ),
-                    setup.now,
-                    setup.now + 60.seconds,
-                    TestTimeSource().markNow() + 60.seconds,
-                )
-            )
-        }
-
-        var calls = 0
-        var onActivate: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) }
-
-        init {
-            setup.onRead = { AppResult.Success(registered) }
-        }
-
-        val runtime =
-            object : CollaborationRuntimeRepository by CollaborationDeliveryFixture().runtimes {
-                override suspend fun updateRetention(
-                    retention:
-                        dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeRetention
-                ): AppResult<Unit> = closeOtherOwners(retention.foreground)
-
-                override suspend fun acquireBackground(
-                    owner: CollaborationOwner,
-                    deviceId: String,
-                    lifetimeMillis: Long,
-                ): AppResult<
-                    dev.fajar.starter.collaboration.domain.repositories.CollaborationBackgroundRuntimeLease?
-                > = error("No implicit background runtime")
-
-                override suspend fun activatePusher(
-                    owner: CollaborationOwner,
-                    deviceId: String,
-                ): AppResult<Unit> {
-                    assertEquals(device, deviceId)
-                    assertEquals(expectedOwner, owner)
-                    calls++
-                    return onActivate()
-                }
-            }
-        val useCase =
-            ActivateCollaborationPusher(
-                runtime,
-                setup.remote,
-                setup.admission.repository,
-                setup.sessions,
-                setup.workspaces,
-                IdentityServer(setup.initial.binding.audience, "Fictional Android"),
-                AppBuild(AppPlatform.Android, 5, "test", null),
-                object : Clock {
-                    override fun now() = setup.now
-                },
-            )
-
-        suspend fun activate() = useCase("selection", device)
     }
 }

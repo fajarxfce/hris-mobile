@@ -19,7 +19,7 @@ internal class SdkSyncLifecycle(
 ) {
     private val mutation = Mutex()
     private val stopping = Mutex()
-    private var stopped = false
+    private val stopped = MutableStateFlow(false)
     private var observation: Job? = null
     private val mutableFailures = MutableStateFlow<Failure?>(null)
     val failures = mutableFailures.asStateFlow()
@@ -28,7 +28,7 @@ internal class SdkSyncLifecycle(
     suspend fun start(): AppResult<Unit> {
         val pending =
             mutation.withLock {
-                if (stopped) return unavailable("client.collaboration_sync_stopped")
+                if (stopped.value) return unavailable("client.collaboration_sync_stopped")
                 val existing = opening
                 // Only a new explicit call retries a completed failed acquisition.
                 if (
@@ -55,7 +55,7 @@ internal class SdkSyncLifecycle(
                 ?: return unavailable("client.collaboration_sync_pending")
         currentCoroutineContext().ensureActive()
         return mutation.withLock {
-            if (stopped) unavailable("client.collaboration_sync_stopped")
+            if (stopped.value) unavailable("client.collaboration_sync_stopped")
             else
                 when (result) {
                     is AppResult.Failed -> result
@@ -70,12 +70,48 @@ internal class SdkSyncLifecycle(
         }
     }
 
+    /** Bounded observation of the owned loop; caller cancellation never abandons its producer. */
+    suspend fun awaitFirstSync(): AppResult<Unit> {
+        val started = start()
+        if (started is AppResult.Failed) return started
+        val acquired =
+            mutation.withLock {
+                if (stopped.value) return unavailable("client.collaboration_sync_stopped")
+                requireNotNull(opening).await()
+            }
+        if (acquired is AppResult.Failed) return acquired
+        val connection = (acquired as AppResult.Success).value
+        val observed =
+            withTimeoutOrNull(10_000) {
+                combine(connection.completedFirstSync, connection.problems, stopped) {
+                        synced,
+                        problem,
+                        closed ->
+                        synced || problem?.terminal == true || closed
+                    }
+                    .first { it }
+            }
+        currentCoroutineContext().ensureActive()
+        return mutation.withLock {
+            connection.problems.value
+                ?.takeIf { it.terminal }
+                ?.let {
+                    return@withLock AppResult.Failed(it.toFailure())
+                }
+            when {
+                stopped.value -> unavailable("client.collaboration_sync_stopped")
+                observed == true && connection.completedFirstSync.value -> AppResult.Success(Unit)
+                else -> unavailable("client.collaboration_sync_pending")
+            }
+        }
+    }
+
     /** Called by the lease-owned shutdown producer before native database draining. */
     suspend fun stop(): AppResult<Unit> =
         stopping.withLock {
             val pending =
                 mutation.withLock {
-                    stopped = true
+                    stopped.value = true
                     opening
                 } ?: return@withLock AppResult.Success(Unit)
             val result =

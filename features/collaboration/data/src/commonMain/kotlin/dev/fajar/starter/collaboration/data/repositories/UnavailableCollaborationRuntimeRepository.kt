@@ -58,6 +58,11 @@ class UnavailableCollaborationRuntimeRepository :
             dev.fajar.starter.collaboration.domain.entities.CollaborationReadReceiptVisibility,
     ): AppResult<Unit> = unavailable()
 
+    override suspend fun synchronizeDevice(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<Unit> = unavailable()
+
     override suspend fun activatePusher(
         owner: CollaborationOwner,
         deviceId: String,
