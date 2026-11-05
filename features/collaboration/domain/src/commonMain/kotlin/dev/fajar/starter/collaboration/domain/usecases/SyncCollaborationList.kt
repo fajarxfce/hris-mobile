@@ -47,10 +47,7 @@ class SyncCollaborationList(
                 is AppResult.Success -> captured.value
             }
         val access = owner.localListAccess()
-        val retainedAdmission = reads.admission(access)
-        currentCoroutineContext().ensureActive()
-        val admissionOwner = requireCollaborationOwner(capture(scope), owner, retainedAdmission)
-        if (admissionOwner is AppResult.Failed) return admissionOwner
+        val retainedAdmission = admission(scope, owner)
         val admission =
             when (retainedAdmission) {
                 is AppResult.Failed -> return retainedAdmission
@@ -142,30 +139,7 @@ class SyncCollaborationList(
                 }
                 return failed(response.failure)
             }
-            val page = (response as AppResult.Success).value
-            val identities =
-                when (page) {
-                    is SummaryResponse.Bootstrap -> page.value.items.map { it.conversationId }
-                    is SummaryResponse.Changes -> page.value.items.map { it.fact.conversationId }
-                }.distinct()
-            val window = cache.syncWindow(access, identities)
-            val windowOwner = verify(window)
-            if (windowOwner is AppResult.Failed) return failed(windowOwner.failure)
-            if (window is AppResult.Failed) return failed(window.failure)
-            val retained = (window as AppResult.Success).value
-            if (retained.checkpoint != current) return failed(collaborationListConflict().failure)
-            val planned =
-                when (page) {
-                    is SummaryResponse.Bootstrap ->
-                        planCollaborationSummaryBootstrap(
-                            current,
-                            page.value,
-                            retained,
-                            clock.now(),
-                        )
-                    is SummaryResponse.Changes ->
-                        planCollaborationSummaryChanges(current, page.value, retained, clock.now())
-                }
+            val planned = plan(scope, owner, current, (response as AppResult.Success).value)
             if (planned is AppResult.Failed) return failed(planned.failure)
             val write = (planned as AppResult.Success).value
             val committed = cache.commitSync(access, current, write.checkpoint, write.facts)
@@ -178,20 +152,8 @@ class SyncCollaborationList(
             }
             checkpoint = write.checkpoint
             if (write.caughtUp) {
-                val reopened = reads.admit(access, admission.revision)
-                val admittedOwner = verify(reopened)
-                if (admittedOwner is AppResult.Failed) return failed(admittedOwner.failure)
+                val reopened = admit(scope, owner, admission.revision)
                 if (reopened is AppResult.Failed) return failed(reopened.failure)
-                if (!(reopened as AppResult.Success).value) {
-                    val latest = reads.admission(access)
-                    val latestOwner = verify(latest)
-                    if (latestOwner is AppResult.Failed) return failed(latestOwner.failure)
-                    if (latest is AppResult.Failed) return failed(latest.failure)
-                    return failed(
-                        (latest as AppResult.Success).value.denial
-                            ?: collaborationListConflict().failure
-                    )
-                }
                 return AppResult.Success(CollaborationListSyncOutcome(true, 0))
             }
             if (write.retryAfterSeconds > 0)
@@ -200,6 +162,60 @@ class SyncCollaborationList(
                 )
         }
         return AppResult.Success(CollaborationListSyncOutcome(false, 1))
+    }
+
+    private suspend fun plan(
+        scope: CollaborationOperationScope,
+        owner: CollaborationOwner,
+        expected: CollaborationListSyncCheckpoint,
+        page: SummaryResponse,
+    ): AppResult<CollaborationListSyncWrite> {
+        val identities =
+            when (page) {
+                is SummaryResponse.Bootstrap -> page.value.items.map { it.conversationId }
+                is SummaryResponse.Changes -> page.value.items.map { it.fact.conversationId }
+            }.distinct()
+        val window = cache.syncWindow(owner.localListAccess(), identities)
+        currentCoroutineContext().ensureActive()
+        val current = requireCollaborationOwner(capture(scope), owner, window)
+        if (current is AppResult.Failed) return current
+        if (window is AppResult.Failed) return window
+        val retained = (window as AppResult.Success).value
+        if (retained.checkpoint != expected) return collaborationListConflict()
+        return when (page) {
+            is SummaryResponse.Bootstrap ->
+                planCollaborationSummaryBootstrap(expected, page.value, retained, clock.now())
+            is SummaryResponse.Changes ->
+                planCollaborationSummaryChanges(expected, page.value, retained, clock.now())
+        }
+    }
+
+    private suspend fun admission(
+        scope: CollaborationOperationScope,
+        owner: CollaborationOwner,
+    ): AppResult<CollaborationListAdmission> {
+        val result = reads.admission(owner.localListAccess())
+        currentCoroutineContext().ensureActive()
+        val current = requireCollaborationOwner(capture(scope), owner, result)
+        return if (current is AppResult.Failed) current else result
+    }
+
+    private suspend fun admit(
+        scope: CollaborationOperationScope,
+        owner: CollaborationOwner,
+        revision: String?,
+    ): AppResult<Unit> {
+        val reopened = reads.admit(owner.localListAccess(), revision)
+        currentCoroutineContext().ensureActive()
+        val current = requireCollaborationOwner(capture(scope), owner, reopened)
+        if (current is AppResult.Failed) return current
+        if (reopened is AppResult.Failed) return reopened
+        if ((reopened as AppResult.Success).value) return AppResult.Success(Unit)
+        val latest = admission(scope, owner)
+        if (latest is AppResult.Failed) return latest
+        return AppResult.Failed(
+            (latest as AppResult.Success).value.denial ?: collaborationListConflict().failure
+        )
     }
 
     private suspend fun acquire(

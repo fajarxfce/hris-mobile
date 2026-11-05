@@ -44,22 +44,7 @@ class ObserveCollaborationInbox(
                                         ?: selection.distinctUntilChanged().flatMapLatest { selected
                                             ->
                                             if (selected.list.limit !in 1..50) flowOf(invalid())
-                                            else
-                                                lists
-                                                    .observe(access.value, selected.list)
-                                                    .distinctUntilChanged()
-                                                    .flatMapLatest { page ->
-                                                        when (page) {
-                                                            is AppResult.Failed -> flowOf(page)
-                                                            is AppResult.Success ->
-                                                                project(
-                                                                    workspaceId,
-                                                                    access.value,
-                                                                    selected,
-                                                                    page.value,
-                                                                )
-                                                        }
-                                                    }
+                                            else observePage(workspaceId, access.value, selected)
                                         }
                             }
                         }
@@ -68,55 +53,95 @@ class ObserveCollaborationInbox(
             .buffer(0)
             .distinctUntilChanged()
 
-    private fun project(
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observePage(
         workspaceId: String,
         access: CollaborationLocalAccess,
         selection: CollaborationInboxSelection,
-        page: CollaborationLocalList,
     ): Flow<AppResult<CollaborationInboxPage>> = flow {
-        val items = page.items.toList()
-        if (
-            items.size > selection.list.limit ||
-                items.map { it.conversation.id }.distinct().size != items.size ||
-                items.any { !ownsDraftConversation(access, it.conversation.id, it) }
-        ) {
-            emit(invalid())
-            return@flow
-        }
-        val guard = continuation(workspaceId, access)
-        if (guard is AppResult.Failed) {
-            emit(guard)
-            return@flow
-        }
-        val snapshot = page.copy(items = items)
-        // Slow/corrupt optional content never blocks navigation through saved conversation names.
-        emit(AppResult.Success(CollaborationInboxPage(snapshot, access)))
-        if (!selection.includePreviews || items.isEmpty()) return@flow
-        emitAll(
-            combine(items.map { preview(access, it.conversation.id) }) { rows ->
-                val current = continuation(workspaceId, access)
-                if (current is AppResult.Failed) current
-                else {
-                    val failure =
-                        rows.firstNotNullOfOrNull { (it.second as? AppResult.Failed)?.failure }
-                    if (failure != null)
-                        AppResult.Success(
-                            CollaborationInboxPage(snapshot, access, previewFailure = failure)
-                        )
-                    else
-                        AppResult.Success(
-                            CollaborationInboxPage(
-                                snapshot,
-                                access,
-                                rows.associate {
-                                    it.first to (it.second as AppResult.Success).value
-                                },
-                                previewsLoaded = true,
-                            )
-                        )
+        coroutineScope {
+            // Both projections share one owned local subscription. Cursor/checkpoint changes
+            // update the page without reopening history and draft streams for unchanged IDs.
+            val pages =
+                lists
+                    .observe(access, selection.list)
+                    .map { result ->
+                        when (result) {
+                            is AppResult.Failed -> result
+                            is AppResult.Success -> {
+                                val items = result.value.items.toList()
+                                if (
+                                    items.size > selection.list.limit ||
+                                        items.map { it.conversation.id }.distinct().size !=
+                                            items.size ||
+                                        items.any {
+                                            !ownsDraftConversation(access, it.conversation.id, it)
+                                        }
+                                )
+                                    invalid()
+                                else AppResult.Success(result.value.copy(items = items))
+                            }
+                        }
+                    }
+                    .distinctUntilChanged()
+                    .shareIn(this, SharingStarted.Lazily, replay = 1)
+            val details =
+                pages
+                    .map { result ->
+                        if (selection.includePreviews)
+                            (result as? AppResult.Success)?.value?.items.orEmpty().map {
+                                it.conversation.id
+                            }
+                        else emptyList()
+                    }
+                    .distinctUntilChanged()
+                    .flatMapLatest { ids ->
+                        val pending = InboxDetails(ids)
+                        if (ids.isEmpty()) flowOf(pending)
+                        else
+                            combine(ids.map { preview(access, it) }) { rows ->
+                                    val failure =
+                                        rows.firstNotNullOfOrNull {
+                                            (it.second as? AppResult.Failed)?.failure
+                                        }
+                                    if (failure != null) InboxDetails(ids, failure = failure)
+                                    else
+                                        InboxDetails(
+                                            ids,
+                                            rows.associate {
+                                                it.first to (it.second as AppResult.Success).value
+                                            },
+                                            loaded = true,
+                                        )
+                                }
+                                .onStart { emit(pending) }
+                    }
+            emitAll(
+                combine(pages, details) { result, detail ->
+                    when (result) {
+                        is AppResult.Failed -> result
+                        is AppResult.Success -> {
+                            val guard = continuation(workspaceId, access)
+                            if (guard is AppResult.Failed) guard
+                            else {
+                                val page = result.value
+                                val ids = page.items.map { it.conversation.id }
+                                val current = selection.includePreviews && detail.ids == ids
+                                AppResult.Success(
+                                    CollaborationInboxPage(
+                                        page,
+                                        access,
+                                        if (current) detail.previews else emptyMap(),
+                                        previewsLoaded = current && detail.loaded,
+                                        previewFailure = detail.failure.takeIf { current },
+                                    )
+                                )
+                            }
+                        }
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 
     private fun preview(access: CollaborationLocalAccess, conversationId: String) =
@@ -160,3 +185,10 @@ class ObserveCollaborationInbox(
     private fun invalid() =
         collaborationSetupFailure("client.collaboration_history_changed", FailureKind.Storage)
 }
+
+private data class InboxDetails(
+    val ids: List<String>,
+    val previews: Map<String, CollaborationInboxPreview> = emptyMap(),
+    val loaded: Boolean = false,
+    val failure: Failure? = null,
+)

@@ -9,7 +9,6 @@ data class ChatInboxState(
     val page: CollaborationLocalList? = null,
     val after: String? = null,
     val previous: List<String?> = emptyList(),
-    val remoteNext: String? = null,
     val loading: Boolean = true,
     val refreshing: Boolean = false,
     val failure: Failure? = null,
@@ -21,7 +20,7 @@ data class ChatInboxState(
     val owner: CollaborationLocalAccess? = null,
 ) {
     val hasMore: Boolean
-        get() = page?.nextCursor != null || remoteNext != null
+        get() = page?.nextCursor != null
 
     val restricted: Boolean
         get() = failure != null

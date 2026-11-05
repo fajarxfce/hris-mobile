@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.*
 internal class ChatInboxContentFixture {
     val messages = MutableStateFlow<Map<String, CollaborationHistoryMessage>>(emptyMap())
     val slots = MutableStateFlow<Map<String, CollaborationDraft>>(emptyMap())
+    var historyStarts = 0
     var historyObservers = 0
     var draftObservers = 0
     var historyFailureOnOpen: Failure? = null
@@ -31,6 +32,7 @@ internal class ChatInboxContentFixture {
                     assertNull(after)
                     assertNull(before)
                     assertEquals(0, overlap)
+                    historyStarts++
                     historyObservers++
                     try {
                         historyReadGate?.await()

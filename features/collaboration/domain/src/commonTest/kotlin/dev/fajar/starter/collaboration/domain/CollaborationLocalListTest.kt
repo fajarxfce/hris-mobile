@@ -418,6 +418,8 @@ internal class LocalListFixture {
     var mergeResult: AppResult<Boolean> = AppResult.Success(true)
     var beforeRemoteReturn: suspend () -> Unit = {}
     var beforeMerge: suspend () -> Unit = {}
+    var beforeCheckpoint: suspend () -> Unit = {}
+    var checkpointReads = 0
     var remoteCalls = 0
     var localReads = 0
     var localCollectors = 0
@@ -446,8 +448,13 @@ internal class LocalListFixture {
                 }
             }
 
-            override suspend fun checkpoint(access: CollaborationLocalAccess) =
-                AppResult.Success(null)
+            override suspend fun checkpoint(
+                access: CollaborationLocalAccess
+            ): AppResult<CollaborationListCheckpoint?> {
+                checkpointReads++
+                beforeCheckpoint()
+                return AppResult.Success(null)
+            }
 
             override suspend fun merge(
                 access: CollaborationLocalAccess,

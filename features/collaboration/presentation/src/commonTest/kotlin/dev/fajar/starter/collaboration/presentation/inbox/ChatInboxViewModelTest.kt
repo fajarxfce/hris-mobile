@@ -77,7 +77,7 @@ class ChatInboxViewModelTest {
         withModel { f, vm, _ ->
             val id = f.item(1).conversation.id
             f.records.value = listOf(f.item(1))
-            f.readSummaries = { AppResult.Failed(f.network) }
+            f.sync.failure = f.network
             f.content.historyFailureOnOpen = Failure(FailureKind.Storage, "Fixture unavailable")
             vm.onEvent(ChatInboxEvent.Entered)
             runCurrent()
@@ -167,7 +167,7 @@ class ChatInboxViewModelTest {
     fun duplicateEntryLoadsOnceAndStoppingKeepsOwnedLocalObservation() = runTest {
         withModel { f, vm, owner ->
             f.records.value = listOf(f.item(1), f.item(2))
-            f.readSummaries = { AppResult.Failed(f.network) }
+            f.sync.failure = f.network
             vm.onEvent(ChatInboxEvent.Entered)
             vm.onEvent(ChatInboxEvent.Entered)
             runCurrent()
@@ -194,7 +194,7 @@ class ChatInboxViewModelTest {
             f.records.value = listOf(f.item(1))
             vm.onEvent(ChatInboxEvent.Entered)
             runCurrent()
-            f.readSummaries = { AppResult.Failed(f.network) }
+            f.sync.failure = f.network
             vm.onEvent(ChatInboxEvent.RefreshRequested)
             runCurrent()
             assertEquals(listOf(f.item(1)), vm.state.value.page!!.items)
@@ -203,7 +203,7 @@ class ChatInboxViewModelTest {
             assertEquals(f.network, vm.state.value.refreshFailure)
             vm.onEvent(ChatInboxEvent.RefreshRequested)
             runCurrent()
-            assertEquals(3, f.calls.size)
+            assertEquals(4, f.calls.size)
         }
     }
 
@@ -226,11 +226,21 @@ class ChatInboxViewModelTest {
             val entered = CompletableDeferred<Unit>()
             val release = CompletableDeferred<Unit>()
             f.records.value = listOf(f.item(1))
-            f.readSummaries = {
+            f.sync.bootstrapRead = {
                 withContext(NonCancellable) {
                     entered.complete(Unit)
                     release.await()
-                    AppResult.Success(CollaborationPage(listOf(f.item(2)), "late"))
+                    AppResult.Success(
+                        CollaborationSummaryBootstrap(
+                            listOf(
+                                CollaborationSummaryFact(f.item(2).conversation.id, 1, f.item(2))
+                            ),
+                            null,
+                            "changes-late",
+                            false,
+                            f.now,
+                        )
+                    )
                 }
             }
             vm.onEvent(ChatInboxEvent.Entered)
@@ -241,7 +251,7 @@ class ChatInboxViewModelTest {
             assertFalse(vm.state.value.refreshing)
             release.complete(Unit)
             runCurrent()
-            assertNull(vm.state.value.remoteNext)
+            assertFalse(vm.state.value.hasMore)
             assertEquals(listOf(f.item(1)), vm.state.value.page!!.items)
         }
     }
@@ -277,57 +287,125 @@ class ChatInboxViewModelTest {
     }
 
     @Test
-    fun emptyNextAcquisitionCannotMoveThePageWhenUnrelatedLocalRowsArriveLater() = runTest {
+    fun noLocalNextNeverAcquiresOrAdvancesWhenUnrelatedRowsArriveLater() = runTest {
         withModel { f, vm, _ ->
-            f.readSummaries = { after ->
-                if (after == null)
-                    AppResult.Success(CollaborationPage((1..30).map(f::item), "remote-next"))
-                else AppResult.Success(CollaborationPage(emptyList(), null))
-            }
+            f.records.value = (1..30).map(f::item)
             vm.onEvent(ChatInboxEvent.Entered)
             runCurrent()
             val original = f.checkpoint.value
+            val calls = f.calls.toList()
             vm.onEvent(ChatInboxEvent.NextRequested)
             runCurrent()
             assertEquals(original, f.checkpoint.value)
             assertFalse(vm.state.value.hasMore)
             assertNull(vm.state.value.after)
-            // Incoming discovery is independent of the completed, empty Next request.
             f.records.value += (31..60).map(f::item)
             f.checkpoint.value = original!!.copy(revision = original.revision + 1, count = 60)
             runCurrent()
             assertNull(vm.state.value.after)
             assertEquals((1..30).map(f::item), vm.state.value.page!!.items)
-            assertTrue(vm.state.value.hasMore)
             vm.onEvent(ChatInboxEvent.NextRequested)
             runCurrent()
-            assertEquals("30", vm.state.value.after)
             assertEquals((31..60).map(f::item), vm.state.value.page!!.items)
-            assertEquals(listOf(null, "remote-next"), f.calls)
+            assertEquals(calls, f.calls)
         }
     }
 
     @Test
-    fun nextAcquisitionAdvancesAfterItsLocalPublicationWithoutAnotherClick() = runTest {
+    fun localPagingRemainsAvailableDuringPendingNetworkAndNeverUsesRemoteCursor() = runTest {
         withModel { f, vm, _ ->
-            f.readSummaries = { after ->
-                if (after == null)
-                    AppResult.Success(CollaborationPage((1..30).map(f::item), "remote-next"))
-                else AppResult.Success(CollaborationPage((31..60).map(f::item), null))
-            }
+            f.records.value = (1..60).map(f::item)
+            f.sync.bootstrapRead = { awaitCancellation() }
             vm.onEvent(ChatInboxEvent.Entered)
             runCurrent()
-            assertEquals("remote-next", vm.state.value.remoteNext)
-            assertNull(vm.state.value.page!!.nextCursor)
+            assertTrue(vm.state.value.refreshing)
+            assertTrue(vm.state.value.hasMore)
             vm.onEvent(ChatInboxEvent.NextRequested)
             runCurrent()
-            assertEquals(listOf(null, "remote-next"), f.calls)
             assertEquals((31..60).map(f::item), vm.state.value.page!!.items)
             assertEquals("30", vm.state.value.after)
-            assertFalse(vm.state.value.hasMore)
-            vm.onEvent(ChatInboxEvent.NextRequested)
+            vm.onEvent(ChatInboxEvent.PreviousRequested)
+            runCurrent()
+            assertNull(vm.state.value.after)
+            assertEquals((1..30).map(f::item), vm.state.value.page!!.items)
+            assertEquals(listOf<String?>(null), f.calls)
+        }
+    }
+
+    @Test
+    fun unchangedDeltaKeepsDetailStreamsAndReentryUsesRetainedCursor() = runTest {
+        withModel { f, vm, _ ->
+            f.records.value = listOf(f.item(1))
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            assertEquals(listOf(null, "changes-0"), f.calls)
+            val starts = f.content.historyStarts
+            val previews = vm.state.value.previews
+            advanceTimeBy(30_000)
+            runCurrent()
+            assertEquals(listOf(null, "changes-0", "changes-0"), f.calls)
+            assertEquals(starts, f.content.historyStarts)
+            assertEquals(previews, vm.state.value.previews)
+            vm.onEvent(ChatInboxEvent.Stopped)
+            runCurrent()
+            advanceTimeBy(120_000)
+            runCurrent()
+            assertEquals(3, f.calls.size)
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            assertEquals(listOf(null, "changes-0", "changes-0", "changes-0"), f.calls)
+            assertEquals(listOf(f.item(1)), vm.state.value.page!!.items)
+        }
+    }
+
+    @Test
+    fun pendingPublicationContinuesAfterDelayAndHideCancelsThatContinuation() = runTest {
+        withModel { f, vm, _ ->
+            f.records.value = listOf(f.item(1))
+            f.sync.pending = true
+            vm.onEvent(ChatInboxEvent.Entered)
             runCurrent()
             assertEquals(2, f.calls.size)
+            assertNull(f.checkpoint.value)
+            assertEquals(listOf(f.item(1)), vm.state.value.page!!.items)
+            advanceTimeBy(4_999)
+            runCurrent()
+            assertEquals(2, f.calls.size)
+            f.sync.pending = false
+            advanceTimeBy(1)
+            runCurrent()
+            assertNotNull(f.checkpoint.value)
+            assertEquals(listOf(null, "changes-0", "changes-0"), f.calls)
+            vm.onEvent(ChatInboxEvent.Stopped)
+            runCurrent()
+            advanceTimeBy(120_000)
+            runCurrent()
+            assertEquals(3, f.calls.size)
+        }
+    }
+
+    @Test
+    fun interactivePreemptionRetriesQuietlyAndDisposalCancelsFurtherWork() = runTest {
+        withModel { f, vm, owner ->
+            f.records.value = listOf(f.item(1))
+            f.sync.commitWins = false
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            assertEquals(1, f.calls.size)
+            assertNull(vm.state.value.refreshFailure)
+            assertFalse(vm.state.value.loading)
+            assertEquals(listOf(f.item(1)), vm.state.value.page!!.items)
+            f.sync.commitWins = true
+            advanceTimeBy(2_000)
+            runCurrent()
+            assertNotNull(f.checkpoint.value)
+            assertEquals(3, f.calls.size)
+            owner.clear()
+            runCurrent()
+            advanceTimeBy(120_000)
+            runCurrent()
+            assertEquals(3, f.calls.size)
+            assertEquals(0, f.observers)
         }
     }
 
@@ -335,7 +413,7 @@ class ChatInboxViewModelTest {
     fun receivedCompanyDenialClearsTheListAndBlocksNavigation() = runTest {
         withModel { f, vm, _ ->
             f.records.value = listOf(f.item(1))
-            f.readSummaries = { AppResult.Failed(f.denied) }
+            f.sync.failure = f.denied
             val effects = mutableListOf<ChatInboxEffect>()
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 vm.effects.collect(effects::add)
@@ -355,13 +433,14 @@ class ChatInboxViewModelTest {
     fun admittedRefreshReopensCompletedStorageSubscription() = runTest {
         withModel { f, vm, _ ->
             f.completeObservation = true
-            f.readSummaries = { AppResult.Failed(f.network) }
+            f.sync.failure = f.network
             vm.onEvent(ChatInboxEvent.Entered)
             runCurrent()
             assertEquals(f.network, vm.state.value.failure)
             assertEquals(0, f.observers)
             f.completeObservation = false
-            f.readSummaries = { AppResult.Success(CollaborationPage(listOf(f.item(1)), null)) }
+            f.sync.failure = null
+            f.records.value = listOf(f.item(1))
             vm.onEvent(ChatInboxEvent.RefreshRequested)
             runCurrent()
             assertNull(vm.state.value.failure)
@@ -377,7 +456,7 @@ class ChatInboxViewModelTest {
     fun cachedInboxReconnectsWithoutManualRefreshAndStopsWithTheScreen() = runTest {
         withModel { f, vm, _ ->
             f.records.value = listOf(f.item(1))
-            f.readSummaries = { AppResult.Failed(f.network) }
+            f.sync.failure = f.network
             vm.onEvent(ChatInboxEvent.Entered)
             runCurrent()
             assertEquals(listOf(f.item(1)), vm.state.value.page!!.items)
@@ -385,16 +464,17 @@ class ChatInboxViewModelTest {
             advanceTimeBy(1_999)
             runCurrent()
             assertEquals(1, f.calls.size)
-            f.readSummaries = { AppResult.Success(CollaborationPage(listOf(f.item(1)), null)) }
+            f.sync.failure = null
+            f.records.value = listOf(f.item(1))
             advanceTimeBy(1)
             runCurrent()
-            assertEquals(2, f.calls.size)
+            assertEquals(3, f.calls.size)
             assertNull(vm.state.value.refreshFailure)
             vm.onEvent(ChatInboxEvent.Stopped)
             runCurrent()
             advanceTimeBy(120_000)
             runCurrent()
-            assertEquals(2, f.calls.size)
+            assertEquals(3, f.calls.size)
         }
     }
 

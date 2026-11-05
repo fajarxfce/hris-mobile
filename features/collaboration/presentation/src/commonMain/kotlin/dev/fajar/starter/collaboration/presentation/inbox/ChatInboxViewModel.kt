@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationInbox
 import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationSavedReplies
-import dev.fajar.starter.collaboration.domain.usecases.RefreshCollaborationList
+import dev.fajar.starter.collaboration.domain.usecases.SyncCollaborationList
 import dev.fajar.starter.collaboration.presentation.replies.needsAttention
 import dev.fajar.starter.collaboration.presentation.thread.chatCanReconnect
 import dev.fajar.starter.collaboration.presentation.thread.chatReconnectDelay
@@ -19,7 +19,7 @@ import org.koin.core.annotation.InjectedParam
 class ChatInboxViewModel(
     @InjectedParam private val workspaceId: String,
     private val observe: ObserveCollaborationInbox,
-    private val refresh: RefreshCollaborationList,
+    private val synchronize: SyncCollaborationList,
     private val observeReplies: ObserveCollaborationSavedReplies,
 ) : MviViewModel<ChatInboxState, ChatInboxEvent, ChatInboxEffect>(ChatInboxState()) {
     private var observation: Job? = null
@@ -29,8 +29,6 @@ class ChatInboxViewModel(
     private var reconnectAttempt = 0
     private var visible = false
     private val previewsVisible = MutableStateFlow(false)
-    private var refreshRequired = true
-    private var advanceAfterAcquisition = false
 
     init {
         on<ChatInboxEvent.Entered>(::onEntered)
@@ -51,7 +49,7 @@ class ChatInboxViewModel(
         previewsVisible.value = true
         if (observation?.isActive != true) startObservation()
         if (replies?.isActive != true) observeUnsentReplies()
-        if (refreshRequired) acquire(null)
+        acquire()
     }
 
     private fun observeUnsentReplies() {
@@ -98,7 +96,6 @@ class ChatInboxViewModel(
                         ensureActive()
                         when (result) {
                             is AppResult.Failed -> {
-                                advanceAfterAcquisition = false
                                 updateState {
                                     ChatInboxState(
                                         loading = false,
@@ -109,10 +106,6 @@ class ChatInboxViewModel(
                             }
                             is AppResult.Success -> {
                                 updateState { it.withPage(result.value) }
-                                if (visible && !state.value.refreshing && advanceAfterAcquisition) {
-                                    advanceAfterAcquisition = false
-                                    result.value.list.nextCursor?.let(::nextPage)
-                                }
                             }
                         }
                     }
@@ -126,85 +119,82 @@ class ChatInboxViewModel(
         reconnection = null
         acquisition?.cancel()
         acquisition = null
-        advanceAfterAcquisition = false
         // Keep the owned local observer so a hidden destination clears on scope/denial changes.
         updateState { it.copy(loading = false, refreshing = false) }
     }
 
     private fun onRefreshRequested(event: ChatInboxEvent.RefreshRequested) {
         if (!visible || acquisition?.isActive == true) return
-        advanceAfterAcquisition = false
         updateState {
             if (it.after == null) it.copy(previous = emptyList())
             else it.copy(after = null, previous = emptyList(), page = null, loading = true)
         }
         // Retry a completed local content read even when remote refresh remains unavailable.
         startObservation()
-        acquire(null)
+        acquire()
     }
 
-    private fun acquire(after: String?) {
+    private fun acquire() {
         if (!visible || acquisition?.isActive == true) return
         reconnection?.cancel()
         reconnection = null
-        refreshRequired = true
         updateState { it.copy(refreshing = true, refreshFailure = null) }
         acquisition =
             viewModelScope.launch {
-                val result =
-                    withTimeoutOrNull(30_000) { refresh(workspaceId, after) }
-                        ?: AppResult.Failed(Failure(FailureKind.Timeout, "Chat update timed out."))
+                val result = synchronize(workspaceId)
                 ensureActive()
                 when (result) {
                     is AppResult.Failed -> {
-                        advanceAfterAcquisition = false
-                        updateState { it.copy(refreshing = false, refreshFailure = result.failure) }
-                        scheduleReconnect(after, result.failure)
-                    }
-                    is AppResult.Success -> {
-                        reconnectAttempt = 0
-                        refreshRequired = false
+                        // Another owned metadata write can preempt this round. Resume from its
+                        // durable checkpoint without exposing a manual refresh instruction.
+                        val preempted = result.failure.code == "client.collaboration_list_changed"
                         updateState {
                             it.copy(
                                 refreshing = false,
-                                remoteNext = result.value.value.nextCursor,
-                                refreshFailure = null,
+                                refreshFailure = result.failure.takeUnless { preempted },
                             )
                         }
-                        // Read the committed page even for a no-op acquisition. Its first local
-                        // result resolves this Next request; a later unrelated write must not.
-                        startObservation()
+                        if (preempted || chatCanReconnect(result.failure)) {
+                            val wait = chatReconnectDelay(reconnectAttempt, result.failure)
+                            reconnectAttempt = (reconnectAttempt + 1).coerceAtMost(5)
+                            scheduleSync(wait)
+                        }
+                    }
+                    is AppResult.Success -> {
+                        reconnectAttempt = 0
+                        updateState { it.copy(refreshing = false, refreshFailure = null) }
+                        // Healthy local streams stay attached, including pending preview reads.
+                        if (
+                            observation?.isActive != true ||
+                                state.value.failure != null ||
+                                state.value.previewFailure != null
+                        )
+                            startObservation()
+                        val wait =
+                            if (result.value.caughtUp) 30_000L
+                            else result.value.retryAfterSeconds.coerceIn(1, 60) * 1_000L
+                        scheduleSync(wait)
                     }
                 }
             }
     }
 
-    private fun scheduleReconnect(after: String?, failure: Failure) {
-        if (!visible || !chatCanReconnect(failure)) return
+    private fun scheduleSync(delayMillis: Long) {
+        if (!visible) return
         val previous = acquisition
-        val delayMillis = chatReconnectDelay(reconnectAttempt, failure)
-        reconnectAttempt = (reconnectAttempt + 1).coerceAtMost(5)
         reconnection =
             viewModelScope.launch {
                 delay(delayMillis)
                 previous?.join()
                 ensureActive()
                 reconnection = null
-                if (visible && !state.value.restricted) acquire(after)
+                if (visible) acquire()
             }
     }
 
     private fun onNextRequested(event: ChatInboxEvent.NextRequested) {
-        if (!visible || state.value.restricted || state.value.loading || state.value.refreshing)
-            return
-        val page = state.value.page ?: return
-        val cursor = page.nextCursor
-        if (cursor != null) nextPage(cursor)
-        else
-            state.value.remoteNext?.let {
-                advanceAfterAcquisition = true
-                acquire(it)
-            }
+        if (!visible || state.value.restricted || state.value.loading) return
+        state.value.page?.nextCursor?.let(::nextPage)
     }
 
     private fun nextPage(after: String) {
@@ -222,15 +212,7 @@ class ChatInboxViewModel(
 
     private fun onPreviousRequested(event: ChatInboxEvent.PreviousRequested) {
         val previous = state.value.previous
-        if (
-            !visible ||
-                state.value.restricted ||
-                state.value.loading ||
-                state.value.refreshing ||
-                previous.isEmpty()
-        )
-            return
-        advanceAfterAcquisition = false
+        if (!visible || state.value.restricted || state.value.loading || previous.isEmpty()) return
         updateState {
             it.copy(
                 after = previous.last(),

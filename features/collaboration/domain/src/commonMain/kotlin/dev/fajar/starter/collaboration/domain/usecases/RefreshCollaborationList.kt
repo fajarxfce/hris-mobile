@@ -137,7 +137,26 @@ class RefreshCollaborationList(
             if (admitted is AppResult.Failed) return@withLock failed(admitted.failure)
             if (received is AppResult.Failed) return@withLock failed(received.failure)
             val page = (received as AppResult.Success).value
-            val merged = replicas.merge(access, checkpoint, items(page), clock.now())
+            var merged = replicas.merge(access, checkpoint, items(page), clock.now())
+            currentCoroutineContext().ensureActive()
+            val firstWriteOwner = requireCollaborationOwner(capture(scope), owner, merged)
+            if (firstWriteOwner is AppResult.Failed) return@withLock failed(firstWriteOwner.failure)
+            if (merged is AppResult.Success && !merged.value) {
+                // A background delta may publish while this point read is in flight. Reuse the
+                // admitted response for one bounded local CAS retry; tracked facts win in storage.
+                val latest = replicas.checkpoint(access)
+                currentCoroutineContext().ensureActive()
+                val retryOwner = requireCollaborationOwner(capture(scope), owner, latest)
+                if (retryOwner is AppResult.Failed) return@withLock failed(retryOwner.failure)
+                if (latest is AppResult.Failed) return@withLock failed(latest.failure)
+                merged =
+                    replicas.merge(
+                        access,
+                        (latest as AppResult.Success).value,
+                        items(page),
+                        clock.now(),
+                    )
+            }
             currentCoroutineContext().ensureActive()
             val afterWrite = requireCollaborationOwner(capture(scope), owner, merged)
             if (afterWrite is AppResult.Failed) return@withLock failed(afterWrite.failure)

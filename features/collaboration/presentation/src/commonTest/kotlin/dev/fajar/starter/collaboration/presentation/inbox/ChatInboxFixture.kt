@@ -42,7 +42,7 @@ internal class ChatInboxFixture {
                 WorkspaceAdmission(initial.user.id, initial.binding.serverId, now, now + 1.hours),
                 CompanyPolicySnapshot(
                     CompanyPolicy(
-                        1,
+                        0,
                         setOf(CompanyModule.COLLABORATION),
                         CompanyMinimumBuilds(0, 0, 0),
                         null,
@@ -62,11 +62,6 @@ internal class ChatInboxFixture {
     val calls = mutableListOf<String?>()
     var observers = 0
     var completeObservation = false
-    var readSummaries:
-        suspend (String?) -> AppResult<CollaborationPage<CollaborationDirectSummary>> =
-        {
-            AppResult.Success(CollaborationPage(records.value.take(30), null))
-        }
 
     fun item(index: Int) =
         CollaborationDirectSummary(
@@ -77,7 +72,7 @@ internal class ChatInboxFixture {
                 chatId(1000 + index),
                 initial.user.id,
                 index.toLong(),
-                1,
+                0,
             ),
             CollaborationParticipant(chatId(1000 + index), "Colleague $index"),
         )
@@ -215,7 +210,7 @@ internal class ChatInboxFixture {
                 limit: Int,
             ): AppResult<CollaborationPage<CollaborationDirectSummary>> {
                 calls += after
-                return readSummaries(after)
+                return AppResult.Success(CollaborationPage(records.value.take(limit), null))
             }
 
             override suspend fun participants(
@@ -259,6 +254,8 @@ internal class ChatInboxFixture {
             ): AppResult<CollaborationSetupReceipt> = error("No room provisioning")
         }
 
+    val sync = ChatInboxSyncFixture(this)
+
     fun model() =
         ChatInboxViewModel(
             "selection",
@@ -272,7 +269,16 @@ internal class ChatInboxFixture {
                 build,
                 clock,
             ),
-            RefreshCollaborationList(local, remote, sessions, workspaces, server, build, clock),
+            SyncCollaborationList(
+                sync.remote,
+                sync.cache,
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+            ),
             replies.observer(this),
         )
 }

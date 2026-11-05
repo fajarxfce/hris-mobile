@@ -1,9 +1,9 @@
 # Incremental conversation metadata
 
-The native HTTP adapter, encrypted format2 list storage and bounded Sync use case
-are implemented and locally accepted. The Chat list still uses its previous
-acquisition path; screen activation is next. Platform d03fb472 is not
-yet deployed. Matrix continues to own message synchronization.
+The Chat list now uses the native incremental feed and encrypted format2 replica.
+Local content and pagination remain available independently of remote progress.
+The implementation passes local whole-app gates; deployed/native and release
+acceptance remain pending. Platform productd03fb472/workflow54b10ce8 is not deployed. Matrix continues to own message synchronization.
 
 Bootstrap and changes use the native authenticated client, exact session/company
 scope and a 128KiB response limit. Opaque cursors are escaped as query parameters,
@@ -69,25 +69,38 @@ independent of its network lock, and checks owner/admission around remote and lo
 operations. Replacement publishes only after catch-up reaches a non-pending end.
 Confirmed denial remains closed through failed cleanup/cancellation and can reopen
 only against its observed revision. Cursor reset is limited to one per round and
-the named server reset codes. This use case is bound in DI but not called by UI yet.
+the named server reset codes. ChatInbox now invokes this use case while its destination is visible.
 
-## Next activation work
+## Local inbox activation
 
-The use case must enforce ordered bounded phases and monotone metadata facts,
-catch up after bootstrap and publish replacement only at a completed changes
-boundary with pending=false. Expired/scope-reset cursors start staging while the
-owned view stays visible. Native access rotation retains a stable parent; a new
-parent starts a new remote continuation. Duplicate references must fold safely;
-older/equal contradictory revisions cannot replace newer facts or inflate counts.
+ChatInbox observes saved rows first and uses only local UUID cursors for navigation.
+Remote opaque continuation stays encrypted in the replica. A visible destination
+owns each bounded round and delayed continuation: thirty seconds after catch-up,
+server-pending yield or bounded retry after transient failures. Hiding/disposal
+cancels acquisition and timers, while owned local admission remains observed.
+Paging saved rows stays enabled during network work. A competing metadata write
+resumes quietly from durable progress instead of exposing a refresh instruction.
 
-Scope and confirmed admission must be checked around every remote/storage step.
-Denied access stays gated through cancellation, failed cleanup and retry; only an
-admitted completed acquisition may reopen its observed gate. Execution, retries,
-network waits and lifecycle observations must remain bounded and owned.
+The inbox shares one owned local page stream. History/draft subscriptions depend
+on visible conversation identities, so name/checkpoint changes update the page
+without restarting healthy previews. Changed IDs, scope and admission still close
+obsolete streams. Explicit local-content retry can reopen a failed subscription.
+Point/by-room metadata acquisition retries at most one local CAS after background
+publication, preserving owner/denial checks and avoiding another HTTP request.
 
-ChatInbox must consume local pagination and bounded sync progress, keeping remote
-opaque cursors out of UI UUID selection. Preserve same-owner previews and existing
-detail observers on unchanged content. Add use-case/ViewModel/AppFlow coverage,
-full app and Apple gates, deployed-server/native offline proof, and a later
-validated phone release. The generic raw-storage Starter port follows that Mobile
-acceptance; format2, metadata transport and HRIS admission remain in Mobile.
+[Activation evidence](measurements/collaboration-summary-inbox-2026-11-05.json)
+records focused ViewModel/UI, real Room/HTTP/DI cold-reopen/offline/name/delete/restore
+integration, pure policies, scoped cancellation/denial races, browser and root gates.
+Initial fixture/clock/lint failures are retained with their corrections. Native
+Android and final-source Apple acceptance are still separate outstanding gates.
+
+## Remaining delivery
+
+Wait for Platform full CI42102966162 on54b10ce8, stage verified artifacts/images,
+complete runtime compatibility and retained-data migration rollout, then exercise
+release40 with retained Android identities while online/offline and after restart.
+Install on the authorized phone only after validation and announcement; do not
+operate its UI. Port the nine generic raw-store files/tests to Starter after Mobile
+native acceptance. HRIS metadata codecs, transport and admission stay in Mobile.
+Matrix continues to own messages. Edit/delete-for-everyone, media, groups, backups,
+calls and meetings remain open communications work.

@@ -77,7 +77,22 @@ class ObserveCollaborationInboxTest {
             changedMessage,
             (values.last() as AppResult.Success).value.previews[f.id]!!.message,
         )
-        assertEquals(2, f.historyStarts)
+        assertEquals(1, f.historyStarts)
+        val checkpoint =
+            CollaborationListCheckpoint(
+                "10000000-0000-4000-8000-000000000001",
+                1,
+                1,
+                f.owner.setup.now,
+                2,
+            )
+        f.checkpoint.value = checkpoint
+        runCurrent()
+        val latest = (values.last() as AppResult.Success).value
+        assertEquals(checkpoint, latest.list.checkpoint)
+        assertEquals(changedMessage, latest.previews[f.id]!!.message)
+        assertEquals(1, f.historyStarts)
+        assertEquals(1, f.draft.observers)
         job.cancelAndJoin()
         assertEquals(0, f.activeHistory)
         assertEquals(0, f.draft.observers)
@@ -215,6 +230,7 @@ private class InboxPreviewFixture {
     val rows = MutableStateFlow(listOf(owner.summary!!))
     val selection = MutableStateFlow(CollaborationInboxSelection())
     val listInvalidation = MutableStateFlow(0)
+    val checkpoint = MutableStateFlow<CollaborationListCheckpoint?>(null)
     val message =
         CollaborationHistoryMessage(
             "@peer:example.test",
@@ -238,8 +254,8 @@ private class InboxPreviewFixture {
                 access: CollaborationLocalAccess,
                 selection: CollaborationListSelection,
             ) =
-                combine(rows, listInvalidation) { items, _ ->
-                    AppResult.Success(CollaborationLocalList(null, items, null))
+                combine(rows, listInvalidation, checkpoint) { items, _, point ->
+                    AppResult.Success(CollaborationLocalList(point, items, null))
                 }
         }
     val history =

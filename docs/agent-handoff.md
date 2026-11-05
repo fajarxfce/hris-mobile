@@ -1,5 +1,44 @@
 # Agent continuation — HRIS Mobile
 
+## Incremental inbox consumer passes full local gates — 5 November 2026
+
+[Contract](collaboration-summary-sync.md),
+[evidence](measurements/collaboration-summary-inbox-2026-11-05.json).
+consumer-full3 PASS4895 fresh cases686.04s, zero failures/errors/skips; root,
+browser, Android devDebug assembly/lint on4,133 unchanged inputs. Focused49 domain
+and28 UI/VM cases plus4 app/DI cases accepted. Earlier failures and owned full2
+cancellation are recorded; every wrapper/child is drained before this record.
+
+ChatInbox uses bounded durable Sync and local-only pagination; healthy preview
+streams persist through name/checkpoint changes. Point metadata gets one local
+CAS retry if sync publishes first. All source is current; do not recopy .work
+drafts or rerun fix-lengths.py (already applied then further refined).
+
+NEXT: commit/push this product increment and dispatch one Apple-only CI on its
+exact source (previous raw5f0eacdd is fully accepted, not this activation). Build40
+scripts are prepared under .work/release-phone-2026-11-05-build40 and require this
+full gate plus clean committed source. No release40 build/install yet. Complete
+Platform CI42102966162/workflow54b10ce8 and live116.1 migration before real retained
+Android online/offline/cold-reopen acceptance. Stage scripts reference that new run.
+Old42091460931 reached20min budget twice; all test steps remain under the35min job.
+No live API/worker/provider changes yet; current11a98115/schema116; push/callback/delivery flagsON and worker FCMON, SMTP OFF.
+Read-only running-container inspection corrects earlier stale pushOFF summaries.
+
+Phone39 remains accepted/installed. Announce each later install-only; never drive
+phone UI. Preserve all emulator data/keys and both protected stashes. Bima receiver
+5562 remains owned/running (verify start record); Rani stopped with retained data.
+Starter fbe5ea8 UI port accepted. Raw-store preflight finds five exact previous
+files and four absent new files, no divergence; port follows native acceptance.
+Continue all54 PRD groups after metadata, including edit/delete/groups/media/backup/
+voice/video/meetings. Forward native publications are already accepted; don't repeat.
+
+Next edit review: stash a34a7b2 contains one tracked mapper change and four untracked
+drafts (git stash show -u); preserve both stashes. Android history deliberately
+keeps debugInfo.originalJson and discards latestEditJson. Confirm the native edit
+envelope/identity before wiring the draft decoder. Preserve original send/receipt
+facts and bounded native ownership. Supplement: .work/chat-editing-review-2026-11-05/continuation.md.
+
+
 ## Raw staging Apple accepted; activated consumer under full local gates — 5 November 2026
 
 [Apple evidence](measurements/replica-staging-apple-2026-11-05.json):42094694741 on

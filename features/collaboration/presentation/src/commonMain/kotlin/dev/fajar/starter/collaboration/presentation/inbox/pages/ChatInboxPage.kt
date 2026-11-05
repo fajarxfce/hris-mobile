@@ -161,13 +161,13 @@ fun ChatInboxPage(
                         AppTextButton(
                             appString(AppString.ChatPrevious),
                             { onEvent(ChatInboxEvent.PreviousRequested) },
-                            enabled = !state.loading && !state.refreshing,
+                            enabled = !state.loading,
                         )
                     if (state.hasMore)
                         AppTextButton(
                             appString(AppString.ChatNext),
                             { onEvent(ChatInboxEvent.NextRequested) },
-                            enabled = !state.loading && !state.refreshing,
+                            enabled = !state.loading,
                         )
                 }
             }

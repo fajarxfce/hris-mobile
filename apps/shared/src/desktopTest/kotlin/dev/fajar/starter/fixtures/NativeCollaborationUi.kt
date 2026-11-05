@@ -24,6 +24,7 @@ class NativeCollaborationUi {
     val versions = mutableMapOf<String, Long>()
     val ids = (1..3).map { "aaaaaaaa-0000-0000-0000-" + it.toString().padStart(12, '0') }
     var listedIds = ids
+    val summaryUpdates = mutableListOf<CollaborationSummaryChangeDto>()
     val deviceId = "bbbbbbbb-0000-0000-0000-000000000001"
     val bootstrapId = "bbbbbbbb-0000-0000-0000-000000000002"
     val accountId = "11111111-1111-4111-8111-111111111111"
@@ -76,6 +77,9 @@ class NativeCollaborationUi {
         }
         val base =
             "/api/v1/companies/${NativeUiServer.COMPANY_ONE}/collaboration/direct-conversations"
+        summarySync(request, base)?.let {
+            return it
+        }
         if (path == "$base/summary-by-room") {
             check(request.method == HttpMethod.Get)
             val id =
@@ -123,6 +127,45 @@ class NativeCollaborationUi {
         }
     }
 
+    private fun summarySync(request: HttpRequestData, base: String): Pair<String, HttpStatusCode>? {
+        val path = request.url.encodedPath
+        if (path == "$base/summary-sync/bootstrap") {
+            check(request.method == HttpMethod.Get)
+            check(request.url.parameters["limit"] == "50")
+            check(request.url.parameters["cursor"] == null)
+            return wire(
+                CollaborationSummaryBootstrapDto(
+                    listedIds.sorted().map { id ->
+                        summaryUpdates.lastOrNull { it.fact.conversationId == id }?.fact
+                            ?: summaryFact(id, 1)
+                    },
+                    null,
+                    "fixture-changes-${summaryUpdates.lastOrNull()?.position ?: 0}",
+                    false,
+                    createdAt,
+                )
+            )
+        }
+        if (path == "$base/summary-sync/changes") {
+            check(request.method == HttpMethod.Get)
+            check(request.url.parameters["limit"] == "50")
+            val cursor = checkNotNull(request.url.parameters["cursor"])
+            check(cursor.startsWith("fixture-changes-"))
+            val position = cursor.removePrefix("fixture-changes-").toLong()
+            val changes = summaryUpdates.filter { it.position > position }.take(50)
+            return wire(
+                CollaborationSummaryChangesDto(
+                    changes,
+                    "fixture-changes-${changes.lastOrNull()?.position ?: position}",
+                    summaryUpdates.count { it.position > position } > 50,
+                    false,
+                    createdAt,
+                )
+            )
+        }
+        return null
+    }
+
     private fun direct(id: String) =
         CollaborationDirectDto(
             id,
@@ -132,6 +175,13 @@ class NativeCollaborationUi {
             accountId,
             createdAt,
             0,
+        )
+
+    fun summaryFact(id: String, revision: Long, displayName: String = "Fictional colleague") =
+        CollaborationSummaryFactDto(
+            id,
+            revision,
+            summary(id).copy(peer = CollaborationParticipantDto(peerId, displayName)),
         )
 
     private fun summary(id: String) =
