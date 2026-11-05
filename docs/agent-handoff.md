@@ -1,5 +1,37 @@
 # Agent continuation — HRIS Mobile
 
+## Product release 30 installed — 5 November 2026
+
+Latest validated product source [3e1cee4c](https://github.com/fajarxfce/hris-mobile/commit/3e1cee4c1c78d99d19c11dcd515cc7cfb69bf044) is built as ARM64 devRelease 30
+and installed in place on `10.77.77.3:5555`. Package `dev.fajar.hris.mobile.dev`,
+version 1.0.0/code 30, non-debuggable. APK 88,255,208 bytes;
+SHA-256 `1fe1d23793d1e6c3ac2d28f5280ea5811a5e1ac23960109242574b8da00f759b`. Existing development signer, app ID and first-install
+time are preserved; pulled-back installed bytes match the verified artifact.
+Installation was explicitly requested and announced; no phone UI launch, uninstall
+or data clearing. [Evidence](measurements/android-release-phone-2026-11-05-build30.json).
+
+Release assembly and lint pass in 534.843 s, with zero lint issues.
+Signature, package/version, ARM64-only libraries, 16 KiB alignment, Firebase dev app,
+WireGuard API and compiled backup exclusions are checked. Exact APK opens twice on
+the owned emulator through its native bridge, with 12 stable seconds per start and
+reviewed screenshots. The emulator is stopped. These are startup/install checks;
+no new notification/SystemUI reply/FCM or full authenticated workflow proof is claimed.
+Source owning setup flow already passed focused 76, root/Android 2,726 and browser
+1,634 cases on identical 4,018 inputs. No source changes occurred during release build.
+
+The release includes the accepted local observation and native organization setup
+foundations since release 29; organization runtime/UI activation remains unfinished.
+NEXT (latest user priority): WhatsApp/Telegram-style chat-room selection/actions,
+including long-press, contextual toolbar, multi-select/delete and real edit/reply/
+forward flows with offline retention and clear per-item outcomes. These UI changes
+are not included in release30. Audit: `.work/chat-message-actions-2026-11-05/CURRENT.md`.
+Then continue bootstrap operation resolution, private-store inventory, hard-parent
+recovery, freeze/drain/handover and original SDK adoption, group UI/runtime and typed
+push/background replies. Read-only protocol audit remains in group
+`.work/space-bootstrap-resolution-2026-11-05/AUDIT.md`; no backend implementation or
+live migration has started. All 54 PRD groups remain open; live
+backend 8b40/schema 116 is unchanged. Continue long run and atomic pushes.
+
 ## Native organization setup owning flow — 5 November 2026
 
 The actual feature DI graph now owns finite explicit provisioning retry/bootstrap
