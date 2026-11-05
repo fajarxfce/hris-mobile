@@ -53,6 +53,8 @@ internal class CollaborationDeliveryFixture {
     var closes = 0
     val events = mutableListOf<String>()
     var knownTransactions = emptySet<String>()
+    var retainedTransactions = setOf("original")
+    var snapshotFailure: Failure? = null
     var afterAcquire: suspend () -> Unit = {}
     var afterResume: suspend () -> Unit = {}
     var beforeAppend: suspend () -> Unit = {}
@@ -262,7 +264,8 @@ internal class CollaborationDeliveryFixture {
                         override val device = this@CollaborationDeliveryFixture.device
 
                         override suspend fun snapshot(): AppResult<Set<String>> =
-                            error("Native resume validates its own complete snapshot")
+                            snapshotFailure?.let { AppResult.Failed(it) }
+                                ?: AppResult.Success(retainedTransactions)
 
                         override suspend fun prepareText(
                             logicalId: String,

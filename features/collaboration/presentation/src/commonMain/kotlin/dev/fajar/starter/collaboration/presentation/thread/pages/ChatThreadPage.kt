@@ -79,9 +79,6 @@ fun ChatThreadPage(
                         state.unsentReplies.isEmpty() &&
                         failure == null &&
                         !state.historyIncomplete
-                val historyAction =
-                    if (state.rows.isEmpty()) AppString.ChatLoadMessages
-                    else AppString.ChatOlderMessages
                 if (
                     failure != null ||
                         state.submissionPending ||
@@ -155,20 +152,20 @@ fun ChatThreadPage(
                         )
                     }
                 }
-                if (state.loadingOlder)
+                if (state.loadingOlder && state.rows.isNotEmpty())
                     item("loading") {
                         Box(
                             Modifier.fillMaxWidth().padding(8.dp),
                             contentAlignment = Alignment.Center,
                         ) {
-                            AppProgressRing(appString(historyAction))
+                            AppProgressRing(appString(AppString.ChatOlderMessages))
                         }
                     }
-                if (state.hasOlder && !emptyHistory)
+                if (state.hasOlder && state.rows.isNotEmpty())
                     item("older") {
                         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                             AppTextButton(
-                                appString(historyAction),
+                                appString(AppString.ChatOlderMessages),
                                 { onEvent(ChatThreadEvent.OlderRequested) },
                                 enabled = !state.loading && !state.loadingOlder,
                             )
@@ -193,11 +190,6 @@ fun ChatThreadPage(
                                 color = AppColors.muted,
                                 textAlign = TextAlign.Center,
                             )
-                            if (state.hasOlder)
-                                AppTextButton(
-                                    appString(AppString.ChatLoadMessages),
-                                    { onEvent(ChatThreadEvent.OlderRequested) },
-                                )
                         }
                     }
             }

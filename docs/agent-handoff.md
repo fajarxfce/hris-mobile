@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Original queue recovery verified; release34 next — 5 November 2026
+
+The candidate preserves the original SDK queue operation across credential
+replacement and recovers legacy Staged/Sent aliases only by exact retained
+transaction within the same native family/device/room. Bounded retry releases
+original API/auth failures; trust and identity failures remain excluded. Empty chat
+keeps the composer without manual network controls. [Contract](collaboration-chat-queue-recovery.md),
+[evidence](measurements/chat-queue-recovery-2026-11-05.json).
+
+Actual native165.743s/two suites/zero skips/12,281 unchanged inputs/unchanged
+APK02269c9531c519579d334e25af2ea1caa58fb2cfa81f3e6a1ac284fb3961bb6e: old rejected and
+new messages both decrypt at the peer with original transaction/receipt bindings,
+keys/device/gateway preserved. Legacy record recovery and stable new queue binding
+both checked. Existing quotes/process death/cold offline history remain passing.
+Driver31 pass; emulator stopped1.604s. Root :check/Android/browser pass1,241 fresh;
+only packaging failed, then identical4,070 inputs packaged/proof-tested55.536s/18
+fresh. Earlier failures retained; three current renders reviewed. No code change
+was needed for the package retry. Focused54 fresh pass380.779s/domain43 earlier.
+
+NEXT: commit/push, clean signed release34 build/lint/exact emulator validation,
+announce EACH install before install-only to10.77.77.3:5555. Release34 scripts are
+STAGED ONLY; review before running. Phone remains33, Bima physical acceptance still
+pending. Live API/worker11a98115/schema116 unchanged; no backend runtime deployment.
+Four .work proof drafts were APPLIED then refined: never reapply. Apple CI42009694285
+passed prior36e78206/release33 only. All54 PRD groups open; continue long run.
+
 ## Product release 33 installed — 5 November 2026
 
 Product source [36e78206](https://github.com/fajarxfce/hris-mobile/commit/36e78206d792ac68a38585b80e17234d0e691b22)

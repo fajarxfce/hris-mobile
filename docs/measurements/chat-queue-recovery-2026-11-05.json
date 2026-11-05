@@ -1,0 +1,244 @@
+{
+  "recordedAt": "2026-11-05T11:15:47.148795+00:00",
+  "phoneObservation": {
+    "release": 33,
+    "readAt": "2026-11-05T10:31:04.499134+00:00",
+    "retainedRejected": 4,
+    "deliveryQueueUnresolved": 2,
+    "http200": 93,
+    "crashMarker": false,
+    "contentCollected": false
+  },
+  "focused": {
+    "startedAt": "2026-11-05T10:49:28.189285+00:00",
+    "elapsedSeconds": 380.779,
+    "exitCode": 0,
+    "sourceFiles": 4068,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 54,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "rootAndroidBrowser": {
+    "startedAt": "2026-11-05T11:03:17.932322+00:00",
+    "elapsedSeconds": 306.839,
+    "exitCode": 1,
+    "sourceFiles": 4070,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 1241,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apkSha256": null
+  },
+  "rootCheckAndAndroidBrowserTasksPassed": true,
+  "final2ExitExplained": "Only packageDebug failed; no test failures. The same unchanged sources packaged successfully in a fresh Gradle invocation without code changes.",
+  "packageRecovery": {
+    "startedAt": "2026-11-05T11:09:02.206072+00:00",
+    "elapsedSeconds": 55.536,
+    "exitCode": 0,
+    "sourceFiles": 4070,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apkSha256": "02269c9531c519579d334e25af2ea1caa58fb2cfa81f3e6a1ac284fb3961bb6e",
+    "gitBaseCommit": "ae6872a22462905e6897f4b41c696291e1a140ea",
+    "workingTreeChangesIncluded": true
+  },
+  "rootAndPackageInputsIdentical": true,
+  "native": {
+    "startedAt": "2026-11-05T11:11:20.341042+00:00",
+    "elapsedSeconds": 165.743,
+    "exitCode": 0,
+    "sourceFiles": 12281,
+    "sourcesUnchanged": true,
+    "apkSha256": "02269c9531c519579d334e25af2ea1caa58fb2cfa81f3e6a1ac284fb3961bb6e",
+    "apkUnchanged": true,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "authFlags": {
+    "actualSdkAuthRejected": true,
+    "actualSdkAuthRecovered": true,
+    "sameGatewayRotatedOnce": true,
+    "hrisParentStillActive": true,
+    "originalDeviceStillActive": true,
+    "oneKeyPublication": true
+  },
+  "authNativeFlags": {
+    "passed": true,
+    "cleanup": true,
+    "typedAuthRejection": true,
+    "liveSyncRejected": true,
+    "runtimeEntryRejected": true,
+    "localReadPolicyPreserved": true,
+    "originalKeysPreserved": true,
+    "ownedRuntimeDrained": true,
+    "sameStoreCredentialsReplaced": true,
+    "actualSdkSyncRestored": true,
+    "queueOperationPreserved": true,
+    "legacyQueueRecovered": true,
+    "oldAndNewEncrypted": true,
+    "retainedApiFailureRetried": true
+  },
+  "assertedServerCounts": {
+    "acceptedEncryptedSends": 2,
+    "oneShotRejectedEncryptedSends": 1,
+    "earlyEncryptedSends": 0,
+    "source": "Passing NativeCollaborationSdkAuthInteropTest assertions"
+  },
+  "priorNativeCoverage": {
+    "passed": true,
+    "encryptedBothDirections": true,
+    "sdkAccessRenewed": true,
+    "sameGatewayAfterRenewal": true,
+    "verificationUsedRefreshReplay": true,
+    "logicalIdsPreserved": true,
+    "cleanup": true,
+    "protectedStoreReopened": true,
+    "missingRecordPreserved": true,
+    "wrongPassphrasePreserved": true,
+    "exclusiveOwner": true,
+    "processRestarted": true,
+    "queueRestored": true,
+    "transactionReused": true,
+    "identityAfterRestart": true,
+    "messageIntentRestored": true,
+    "queueMappingRecovered": true,
+    "queueWriterExclusive": true,
+    "perRoomDeliveryIsolated": true,
+    "heldQueueRestored": true,
+    "nativeDeliveryOwned": true,
+    "commonSenderOwned": true,
+    "receiptJournalRecovered": true,
+    "projectionInterrupted": true,
+    "originalHistoryWindowOwned": true,
+    "historyBodiesRestored": true,
+    "nativeReadReceiptsExchanged": true,
+    "nativePrivateReceiptIsolated": true,
+    "nativeReadReceiptStoreRestored": true,
+    "nativeLocalReadIntentPrepared": true,
+    "nativeLocalReadIntentStoreRestored": true,
+    "nativeReadReceiptReplayAdmitted": true,
+    "nativeReadReceiptAckUncertaintyRecovered": true,
+    "commonHistoryAcquisitionOwned": true,
+    "latestHistoryHeadOwned": true,
+    "admittedHistoryHeads": true,
+    "providerHistoryPageOwned": true,
+    "commonProviderHistoryAcquisitionOwned": true,
+    "providerHistoryReferencesRestored": true,
+    "providerHistoryReferencesReconciled": true,
+    "providerHistoryRestartPreserved": true,
+    "historyRuntimeReopened": true,
+    "ackBeforeJournalRecovered": true,
+    "processRestartedAfterAck": true,
+    "completionCleanupRecovered": true,
+    "coldHistoryRecoveredOffline": true,
+    "gatewayUnavailableAfterProcessDeath": true,
+    "quotedReplyDecrypted": true,
+    "quotedReplyRecovered": true,
+    "quotedReplyRecoveredOffline": true,
+    "processRestartedAfterCompletion": true,
+    "encryptedSendCount": 3,
+    "admittedProviderPages": true,
+    "applicationAdmittedBeforeSend": true,
+    "applicationAdmittedAroundHistory": true,
+    "heldRoomNeverSent": true,
+    "pausedAcrossRestart": true,
+    "syncInterruptedAfterRestart": true,
+    "syncRetriedWithRetainedCursor": true
+  },
+  "driverUnitTests": {
+    "passed": 31,
+    "seconds": 0.13
+  },
+  "ownedEmulatorStop": {
+    "pid": 4064800,
+    "serial": "emulator-5562",
+    "stopped": true,
+    "signalSent": true,
+    "transportAbsent": true,
+    "seconds": 1.604
+  },
+  "reviewedImages": {
+    "docs/images/chat-queue-recovery-2026-11-05/chat-uncached-history.png": {
+      "sha256": "d656e67d9ac861e8e97bbe4e1a3982665d2e5932165cee48c328761018b3ec22",
+      "reviewed": true,
+      "freshFor": "final2"
+    },
+    "docs/images/chat-queue-recovery-2026-11-05/chat-uncached-history-large-text.png": {
+      "sha256": "7c21256c95019587bf743dde551973967e8394941364744fcc661619504f220b",
+      "reviewed": true,
+      "freshFor": "final2"
+    },
+    "docs/images/chat-queue-recovery-2026-11-05/chat-confirmed-empty-large-text.png": {
+      "sha256": "c336ed200796c65f46f9e93480c2d0c3d60322454425e281e2079be7eccccdee",
+      "reviewed": true,
+      "freshFor": "final2"
+    }
+  },
+  "earlierAttempts": {
+    "focused1": {
+      "startedAt": "2026-11-05T10:44:36.784190+00:00",
+      "elapsedSeconds": 135.933,
+      "exitCode": 1,
+      "sourceFiles": 4068,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 63,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "focused2": {
+      "startedAt": "2026-11-05T10:47:48.890075+00:00",
+      "elapsedSeconds": 52.205,
+      "exitCode": 1,
+      "sourceFiles": 4068,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 20,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "final1": {
+      "startedAt": "2026-11-05T10:56:32.632817+00:00",
+      "elapsedSeconds": 317.744,
+      "exitCode": 1,
+      "sourceFiles": 4070,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2859,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apkSha256": null
+    }
+  },
+  "limits": [
+    "Physical phone still release33; Bima old/new send acceptance awaits validated release34 delivery.",
+    "No production backend change or new Firebase-provider acceptance in this gate.",
+    "Apple CI42009694285 passed previous Mobile36e78206 only.",
+    "All54 communications PRD groups remain open."
+  ],
+  "mobileSourcesSha256": "b779298e6e3c39af98325b5effbc545b2fee63fb2ca68dbffbb4689d4914ab8c",
+  "combinedNativeSourcesSha256": "e4e7f66dc6c44ca86918f65d42b041fd0687d5f75a4d4c44f70b82b62b22a4cc",
+  "reviewedImagesRepository": "hris-mobile"
+}

@@ -135,6 +135,50 @@ class ChatLocalEntryLayoutTest {
         }
 
     @Test
+    fun emptyConversationKeepsTypingAvailableWithoutManualNetworkControls() =
+        runDesktopComposeUiTest(width = 375, height = 780) {
+            var state by
+                mutableStateOf(
+                    ChatThreadState(
+                        title = "Bima Santoso",
+                        loading = false,
+                        draftReady = true,
+                        hasOlder = true,
+                        connection = ChatThreadConnection.CONNECTED,
+                    )
+                )
+            val events = mutableListOf<ChatThreadEvent>()
+            setContent { AppTheme { ChatThreadPage(state, rememberLazyListState(), events::add) } }
+            onNodeWithText("Messages will appear here.").assertIsDisplayed()
+            onNodeWithText("Write your first message.").assertDoesNotExist()
+            onNodeWithText("Load messages").assertDoesNotExist()
+            onNode(hasSetTextAction()).performTextInput("Hello")
+            runOnIdle {
+                assertEquals(listOf<ChatThreadEvent>(ChatThreadEvent.DraftChanged("Hello")), events)
+                state = state.copy(loadingOlder = true, syncing = true)
+            }
+            onNodeWithText("Load messages").assertDoesNotExist()
+            onNode(
+                    SemanticsMatcher.keyIsDefined(
+                        androidx.compose.ui.semantics.SemanticsProperties.ProgressBarRangeInfo
+                    )
+                )
+                .assertDoesNotExist()
+            runOnIdle {
+                state =
+                    state.copy(
+                        loadingOlder = false,
+                        syncing = false,
+                        connection = ChatThreadConnection.OFFLINE,
+                        failure = Failure(FailureKind.Network, "Offline"),
+                    )
+            }
+            onNodeWithText("Load messages").assertDoesNotExist()
+            onNode(hasSetTextAction()).assertIsEnabled()
+            onNodeWithText("Write your first message.").assertDoesNotExist()
+        }
+
+    @Test
     fun openingLocalStorageDoesNotShowANetworkLoadingSpinner() =
         runDesktopComposeUiTest(width = 375, height = 780) {
             setContent {

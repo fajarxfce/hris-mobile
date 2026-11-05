@@ -41,6 +41,7 @@ internal constructor(
 ) : CollaborationRuntimeLease {
     override val deviceId = record.deviceId
     override val installedOperationId = record.bootstrapOperationId
+    private val messageOperationId = record.messageOperationId
     private val installedGateway = SdkInstalledGateway(record)
 
     internal fun acceptsReplacement(
@@ -111,7 +112,7 @@ internal constructor(
         AndroidCollaborationMessageQueues(
             owner,
             deviceId,
-            installedOperationId,
+            messageOperationId,
             record.matrixUserId,
             nativeClient,
             lifetime,
@@ -350,7 +351,7 @@ internal constructor(
                                 CollaborationMessageDevice(
                                     owner.nativeSessionId,
                                     deviceId,
-                                    installedOperationId,
+                                    messageOperationId,
                                     roomId,
                                 ),
                                 result.value,

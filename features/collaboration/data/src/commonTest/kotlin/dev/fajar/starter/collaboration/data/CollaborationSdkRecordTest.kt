@@ -13,6 +13,76 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 
 class CollaborationSdkRecordTest {
+    @Test
+    fun credentialReplacementKeepsQueueNamespaceWhileAdmissionUsesTheNewOperation() = runTest {
+        val codec = CollaborationSdkRecordCodec(scope())
+        for (legacy in listOf(false, true)) {
+            val original =
+                codec.initialized(codec.create(command, gateway, passphrase)).let {
+                    if (legacy) it.copy(queueOperationId = null) else it
+                }
+            val replaced =
+                codec.replaceCredentials(
+                    codec.decode(codec.encode(original)),
+                    command.copy(
+                        id = SETUP_JOB,
+                        action =
+                            CollaborationSetupAction.Bootstrap(SETUP_DEVICE, 1, gateway.version),
+                    ),
+                    renewedGateway(),
+                )
+            assertEquals(SETUP_OPERATION, replaced.messageOperationId)
+            assertEquals(SETUP_JOB, replaced.bootstrapOperationId)
+            assertEquals(original.passphrase, replaced.passphrase)
+            assertEquals(original.storeId, replaced.storeId)
+            assertEquals(original.matrixDeviceId, replaced.matrixDeviceId)
+            assertEquals(original.credentialRevision + 1, replaced.credentialRevision)
+            assertFalse(replaced.initialized)
+            assertEquals(replaced, codec.decode(codec.encode(replaced)))
+            val again =
+                codec.replaceCredentials(
+                    replaced,
+                    command.copy(
+                        action =
+                            CollaborationSetupAction.Bootstrap(SETUP_DEVICE, 1, gateway.version + 1)
+                    ),
+                    renewedGateway(version = gateway.version + 2),
+                )
+            assertEquals(SETUP_OPERATION, again.messageOperationId)
+        }
+    }
+
+    @Test
+    fun replacementRejectsForeignOrStaleStoreIdentityAndMalformedQueueAnchors() = runTest {
+        val codec = CollaborationSdkRecordCodec(scope())
+        val original = codec.create(command, gateway, passphrase)
+        for (changed in
+            listOf(
+                gateway,
+                renewedGateway(sessionId = SETUP_JOB),
+                renewedGateway(matrixDeviceId = "FOREIGN"),
+                renewedGateway(matrixUserId = "@foreign:fixture.test"),
+            )) {
+            assertFailsWith<IllegalArgumentException> {
+                codec.replaceCredentials(
+                    original,
+                    command.copy(
+                        id = SETUP_JOB,
+                        action =
+                            CollaborationSetupAction.Bootstrap(SETUP_DEVICE, 1, gateway.version),
+                    ),
+                    changed,
+                )
+            }
+        }
+        assertFailsWith<IllegalArgumentException> {
+            codec.encode(original.copy(queueOperationId = "bad"))
+        }
+        assertFailsWith<IllegalArgumentException> {
+            codec.replaceCredentials(original, command, renewedGateway())
+        }
+    }
+
     private val handover =
         CollaborationRuntimeHandoverIntent(
             "a0000000-0000-0000-0000-000000000001",
@@ -157,8 +227,8 @@ class CollaborationSdkRecordTest {
             version,
             matrixUserId,
             matrixDeviceId,
-            "fixture-replacement-access",
-            "fixture-replacement-refresh",
+            "hris_mx_a_" + "e".repeat(43),
+            "hris_mx_r_" + "f".repeat(43),
             gateway.accessExpiresAtEpochMillis,
             gateway.expiresAtEpochMillis,
         )

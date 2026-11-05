@@ -27,7 +27,7 @@ class ChatThreadLayoutTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
-    fun uncachedHistoryOffersOneClearActionBeforeShowingAnEmptyConversation() {
+    fun uncachedHistoryKeepsComposerAvailableDuringSyncAndAtLargeText() {
         val events = mutableListOf<ChatThreadEvent>()
         var fontScale by mutableStateOf(1f)
         var state by
@@ -55,22 +55,23 @@ class ChatThreadLayoutTest {
         }
         screenshot("chat-uncached-history")
         compose.runOnIdle { fontScale = 2f }
-        compose.onNodeWithText("Belum ada pesan tersimpan di perangkat ini.").assertIsDisplayed()
+        compose.onNodeWithText("Pesan akan muncul di sini.").assertIsDisplayed()
         compose.onNodeWithText("Tulis pesan pertama.").assertDoesNotExist()
         compose.onNodeWithText("Pesan sebelumnya").assertDoesNotExist()
-        compose.onAllNodesWithText("Muat pesan").assertCountEquals(1)
-        compose.onNodeWithText("Muat pesan").assertIsDisplayed().assertHeightIsAtLeast(48.dp)
-
-        screenshot("chat-uncached-history-large-text")
-        compose.onNodeWithText("Muat pesan").performClick()
+        compose.onNodeWithText("Muat pesan").assertDoesNotExist()
         compose.onNodeWithContentDescription("Pesan").assertIsDisplayed().assertIsEnabled()
+        screenshot("chat-uncached-history-large-text")
+        compose.onNodeWithContentDescription("Pesan").performTextInput("Halo")
         compose.runOnIdle {
-            assertEquals(listOf<ChatThreadEvent>(ChatThreadEvent.OlderRequested), events)
-            state = state.copy(loadingOlder = true)
+            assertEquals(listOf<ChatThreadEvent>(ChatThreadEvent.DraftChanged("Halo")), events)
+            state = state.copy(loadingOlder = true, syncing = true)
         }
-        compose.onNode(hasText("Muat pesan") and hasClickAction()).assertIsNotEnabled()
+        compose.onNodeWithText("Muat pesan").assertDoesNotExist()
+        compose.onNodeWithContentDescription("Pesan").assertIsEnabled()
         compose.onNodeWithText("Tulis pesan pertama.").assertDoesNotExist()
-        compose.runOnIdle { state = state.copy(loadingOlder = false, hasOlder = false) }
+        compose.runOnIdle {
+            state = state.copy(loadingOlder = false, syncing = false, hasOlder = false)
+        }
         compose.onNodeWithText("Muat pesan").assertDoesNotExist()
         compose.onNodeWithText("Tulis pesan pertama.").assertIsDisplayed()
         compose.onNodeWithContentDescription("Pesan").assertIsEnabled()

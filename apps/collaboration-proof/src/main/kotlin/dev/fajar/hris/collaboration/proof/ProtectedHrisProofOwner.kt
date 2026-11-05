@@ -134,6 +134,22 @@ internal class ProtectedHrisProofOwner(
         }
     }
 
+    /** Reproduce the pre-fix credential record only after this fictional SDK has drained. */
+    suspend fun restoreLegacyQueueBinding(): AndroidCollaborationRuntimeLease {
+        check(!success(runtime.isOpen(owner, deviceId)))
+        val (file, original) = retainedRecord()
+        val credentials = AndroidCredentialStore(context, file.name.removeSuffix(".enc"))
+        try {
+            val value = JSONObject(original)
+            check(value.getString("queueOperationId") != value.getString("bootstrapOperationId"))
+            value.remove("queueOperationId")
+            credentials.write(value.toString())
+        } finally {
+            credentials.close()
+        }
+        return restoreStored()
+    }
+
     suspend fun installAndReopen(): AndroidCollaborationRuntimeLease {
         var owned: AndroidCollaborationRuntimeLease? = null
         try {

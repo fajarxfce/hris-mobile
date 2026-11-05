@@ -742,10 +742,7 @@ class AndroidCollaborationRuntimeRepository(
             gateway.sessionId == stored.bootstrapGatewayId &&
                 gateway.version > stored.bootstrapGatewayVersion
         )
-        val replacement =
-            codec
-                .create(installation.first, gateway, stored.passphrase)
-                .copy(credentialRevision = stored.credentialRevision + 1)
+        val replacement = codec.replaceCredentials(stored, installation.first, gateway)
         credentials.write(codec.encode(replacement))
         return replacement
     }

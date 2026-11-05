@@ -11,6 +11,7 @@ internal class QueueRoom(
 ) : Room(NoHandle) {
     val calls = mutableListOf<String>()
     val task = QueueTask(calls)
+    val timeline = QueueTimeline(calls)
     private var initialized = false
     var enabled = false
         private set
@@ -33,7 +34,7 @@ internal class QueueRoom(
         beforeTimeline()
         check(!timelineFailure)
         initialized = true
-        return QueueTimeline(calls)
+        return timeline
     }
 
     override fun enableSendQueue(enable: Boolean) {
@@ -59,6 +60,38 @@ internal class QueueRoom(
 }
 
 internal class QueueTimeline(private val calls: MutableList<String>) : Timeline(NoHandle) {
+    var initial: () -> List<TimelineDiff> = { listOf(TimelineDiff.Reset(emptyList())) }
+    var beforeListenerReturns: suspend () -> Unit = {}
+    var beforeRetry: suspend () -> Unit = {}
+    val retried = mutableListOf<String>()
+    var listener: TimelineListener? = null
+    var finished = true
+
+    override suspend fun addListener(listener: TimelineListener): TaskHandle {
+        calls += "retry.listener.open"
+        this.listener = listener
+        listener.onUpdate(initial())
+        beforeListenerReturns()
+        return object : TaskHandle(NoHandle) {
+            override fun cancel() {
+                calls += "retry.listener.cancel"
+            }
+
+            override fun isFinished() = finished
+
+            override fun close() {
+                calls += "retry.listener.close"
+            }
+        }
+    }
+
+    override suspend fun retrySend(itemId: EventOrTransactionId, target: SendTarget): Boolean {
+        check(target == SendTarget.Event)
+        beforeRetry()
+        retried += (itemId as EventOrTransactionId.TransactionId).transactionId
+        return true
+    }
+
     override fun close() {
         calls += "timeline.close"
     }

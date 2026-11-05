@@ -9,6 +9,68 @@ import kotlinx.coroutines.test.runTest
 
 class DeliverCollaborationMessagesTest {
     @Test
+    fun legacyBootstrapReplacementUsesRetainedTransactionAndJournalsOriginalDevice() = runTest {
+        val f = CollaborationDeliveryFixture()
+        f.prepare()
+        val original = f.device.copy(bootstrapOperationId = deliveryId(999))
+        f.base.records.value =
+            f.records.map {
+                it.copy(state = CollaborationMessageState.Staged(original, "original"))
+            }
+        val result = assertIs<AppResult.Success<CollaborationDeliveryReport>>(f.deliver()).value
+        assertTrue(result.unresolved.isEmpty())
+        assertEquals(setOf("original"), f.knownTransactions)
+        assertEquals(original, f.journal.single().device)
+        assertEquals(
+            original,
+            assertIs<CollaborationMessageState.Sent>(f.records.single().state).device,
+        )
+        assertEquals(1, f.windows)
+    }
+
+    @Test
+    fun missingOrFailedSnapshotNeverAuthorizesALegacyBootstrapAlias() = runTest {
+        for (failed in listOf(false, true)) {
+            val f = CollaborationDeliveryFixture()
+            f.prepare()
+            f.base.records.value =
+                f.records.map {
+                    it.copy(
+                        state =
+                            CollaborationMessageState.Staged(
+                                f.device.copy(bootstrapOperationId = deliveryId(999)),
+                                "original",
+                            )
+                    )
+                }
+            if (failed) f.snapshotFailure = f.base.storage else f.retainedTransactions = emptySet()
+            assertIs<AppResult.Failed>(f.deliver())
+            assertEquals(0, f.windows)
+            assertTrue(f.journal.isEmpty())
+        }
+    }
+
+    @Test
+    fun evenAnExactRetainedTransactionCannotCrossNativeDeviceOrRoomBoundaries() = runTest {
+        for (boundary in 0..2) {
+            val f = CollaborationDeliveryFixture()
+            f.prepare()
+            val original =
+                when (boundary) {
+                    0 -> f.device.copy(nativeSessionId = deliveryId(999))
+                    1 -> f.device.copy(deviceId = deliveryId(999))
+                    else -> f.device.copy(roomId = "!foreign:example.test")
+                }
+            f.base.records.value =
+                f.records.map {
+                    it.copy(state = CollaborationMessageState.Staged(original, "original"))
+                }
+            assertIs<AppResult.Failed>(f.deliver())
+            assertEquals(0, f.windows)
+        }
+    }
+
+    @Test
     fun onlyOriginalMappingsResumeAndEveryAliasIsJournaledBeforeSent() = runTest {
         val f = CollaborationDeliveryFixture()
         f.prepare()

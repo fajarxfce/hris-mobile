@@ -97,12 +97,16 @@ class DeliverCollaborationMessages(
         val projected = project(scope, owner, conversationId)
         if (projected is AppResult.Failed) return projected
         val records = (projected as AppResult.Success).value
+        val captured = checked(scope, owner) { queue.snapshot() }
+        if (captured is AppResult.Failed) return captured
+        val snapshot = (captured as AppResult.Success).value.toSet()
         val mapped =
             collaborationDeliveryMappings(
                 records,
                 owner.localListAccess(),
                 conversationId,
                 queue.device,
+                snapshot,
             ) ?: return failed("client.collaboration_queue_unresolved")
         if (mapped.isEmpty()) return AppResult.Success(collaborationDeliveryReport(records, null))
         val admitted = admitRoom(scope, owner, queue.device.deviceId, conversationId)
@@ -115,7 +119,7 @@ class DeliverCollaborationMessages(
             return if (current is AppResult.Failed) current else delivered
         }
         val outcome = (delivered as AppResult.Success).value
-        val observed = collaborationDeliveryReceipts(outcome, mapped, queue.device)
+        val observed = collaborationDeliveryReceipts(outcome, mapped, queue.device, snapshot)
         val saved =
             if (observed == null) failed("client.collaboration_receipt_unresolved")
             else retainObserved(owner.localListAccess(), conversationId, observed)

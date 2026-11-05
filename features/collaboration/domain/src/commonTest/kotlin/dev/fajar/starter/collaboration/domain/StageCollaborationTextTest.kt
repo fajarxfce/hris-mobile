@@ -11,6 +11,33 @@ import kotlinx.coroutines.test.runTest
 
 class StageCollaborationTextTest {
     @Test
+    fun oldRetainedTransactionDoesNotBlockANewMessageAfterLegacyCredentialReplacement() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        val old =
+            f.record.copy(
+                intent = f.record.intent.copy(id = stageId(999), text = "Older message"),
+                revision = 2,
+                state =
+                    CollaborationMessageState.Staged(
+                        f.device.copy(bootstrapOperationId = stageId(998)),
+                        "older",
+                        f.origin,
+                    ),
+            )
+        f.base.records.value += old
+        f.nativeIds += "older"
+        assertIs<AppResult.Success<*>>(f.stage())
+        assertEquals(setOf("older", "original"), f.nativeIds)
+        assertEquals(1, f.enqueues)
+        assertEquals(old, f.base.records.value.last())
+        assertEquals(
+            "original",
+            assertIs<CollaborationMessageState.Staged>(f.record.state).transactionId,
+        )
+    }
+
+    @Test
     fun cancelledOriginalNeverAcquiresTheNativeQueue() = runTest {
         val f = StageFixture()
         f.prepare()

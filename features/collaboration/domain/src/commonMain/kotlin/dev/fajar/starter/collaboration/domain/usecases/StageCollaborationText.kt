@@ -172,23 +172,15 @@ class StageCollaborationText(
         val others = records.filter { it.intent.id != original.intent.id }
         if (others.any { it.state is CollaborationMessageState.Staging })
             return failed("client.collaboration_queue_unresolved")
-        val mapped =
-            others
-                .mapNotNull { record ->
-                    when (val state = record.state) {
-                        is CollaborationMessageState.Staged ->
-                            state.transactionId.takeIf { state.device == queue.device }
-                        is CollaborationMessageState.Sent ->
-                            state.transactionId.takeIf { state.device == queue.device }
-                        else -> null
-                    }
-                }
-                .toSet()
         val current = checked(scope, owner) { queue.snapshot() }
         if (current is AppResult.Failed) return current
         val snapshot = (current as AppResult.Success).value.toSet()
         if (snapshot.size > 128 || !snapshot.all(::validCollaborationTransactionId))
             return failed("client.collaboration_queue_unresolved")
+        val mapped =
+            others
+                .mapNotNull { collaborationRetainedTransaction(it, queue.device, snapshot) }
+                .toSet()
         val retained = retainAttempt(scope, owner, original, queue, mapped, snapshot)
         if (retained is AppResult.Failed) return retained
         val pending = (retained as AppResult.Success).value

@@ -36,6 +36,7 @@ internal class HrisSdkAuthProbe(private val context: Context, private val direct
                     HttpClientSettings(home.toString(), allowCleartext = true),
                 )
             var lease: AndroidCollaborationRuntimeLease? = null
+            var queueSession: HrisAuthQueueSession? = null
             var primary: Exception? = null
             try {
                 val owner =
@@ -44,6 +45,11 @@ internal class HrisSdkAuthProbe(private val context: Context, private val direct
                 lease = active
                 val originalKeys = active.proofKeyFingerprint()
                 check(active.startSync() is AppResult.Success)
+                val queues =
+                    if (fixture.has("roomId")) HrisAuthQueueSession(context, fixture, home, http)
+                    else null
+                queueSession = queues
+                queues?.prepare(owner, active)
                 write("auth-ready", JSONObject().put("ready", true))
                 val rejected =
                     withTimeout(60_000) { active.credentialFailures.first { it != null } }!!
@@ -75,31 +81,62 @@ internal class HrisSdkAuthProbe(private val context: Context, private val direct
                     SyncSettingsV2(timeoutMs = 1_000uL, fullState = false)
                 )
                 check(restored.credentialFailures.value == null)
-                restored.closeProofRuntime()
+                lease =
+                    if (queues == null) restored
+                    else recoverLegacyQueue(owner, restored, queues, originalKeys)
+                lease.closeProofRuntime()
                 lease = null
-                write(
-                    "auth-result",
-                    JSONObject()
-                        .put("complete", true)
-                        .put("typedAuthRejection", true)
-                        .put("liveSyncRejected", true)
-                        .put("runtimeEntryRejected", true)
-                        .put("localReadPolicyPreserved", true)
-                        .put("originalKeysPreserved", true)
-                        .put("ownedRuntimeDrained", true)
-                        .put("sameStoreCredentialsReplaced", true)
-                        .put("actualSdkSyncRestored", true),
-                )
+                write("auth-result", result(queues != null))
             } catch (failure: Exception) {
                 primary = failure
                 throw failure
             } finally {
                 closeHrisProofResources(
                     primary,
-                    listOf({ lease?.closeProofRuntime() }, { http.close() }),
+                    listOf(
+                        { queueSession?.close() },
+                        { lease?.closeProofRuntime() },
+                        { http.close() },
+                    ),
                 )
             }
         }
+
+    private fun result(queueRecovered: Boolean) =
+        JSONObject()
+            .put("complete", true)
+            .put("typedAuthRejection", true)
+            .put("liveSyncRejected", true)
+            .put("runtimeEntryRejected", true)
+            .put("localReadPolicyPreserved", true)
+            .put("originalKeysPreserved", true)
+            .put("ownedRuntimeDrained", true)
+            .put("sameStoreCredentialsReplaced", true)
+            .put("actualSdkSyncRestored", true)
+            .put("queueOperationPreserved", queueRecovered)
+            .put("legacyQueueRecovered", queueRecovered)
+            .put("oldAndNewEncrypted", queueRecovered)
+            .put("retainedApiFailureRetried", queueRecovered)
+
+    private suspend fun recoverLegacyQueue(
+        owner: ProtectedHrisProofOwner,
+        restored: AndroidCollaborationRuntimeLease,
+        queues: HrisAuthQueueSession,
+        originalKeys: String,
+    ): AndroidCollaborationRuntimeLease {
+        queues.checkStableQueue(restored)
+        restored.closeProofRuntime()
+        val legacy = owner.restoreLegacyQueueBinding()
+        try {
+            check(legacy.proofKeyFingerprint() == originalKeys)
+            check(legacy.startSync() is AppResult.Success)
+            queues.recoverLegacy(legacy)
+            return legacy
+        } catch (failure: Exception) {
+            closeHrisProofResources(failure, listOf({ legacy.closeProofRuntime() }))
+            throw failure
+        }
+    }
 
     private fun write(name: String, value: JSONObject) {
         val file = AtomicFile(File(directory, "$name.json"))

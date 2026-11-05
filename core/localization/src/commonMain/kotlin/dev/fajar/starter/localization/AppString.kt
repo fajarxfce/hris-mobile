@@ -210,7 +210,6 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     ChatRoomWaiting(Res.string.chat_room_waiting_en, Res.string.chat_room_waiting_id),
     ChatStartMessage(Res.string.chat_start_message_en, Res.string.chat_start_message_id),
     ChatNoSavedMessages(Res.string.chat_no_saved_messages_en, Res.string.chat_no_saved_messages_id),
-    ChatLoadMessages(Res.string.chat_load_messages_en, Res.string.chat_load_messages_id),
     ChatHistoryIncomplete(
         Res.string.chat_history_incomplete_en,
         Res.string.chat_history_incomplete_id,

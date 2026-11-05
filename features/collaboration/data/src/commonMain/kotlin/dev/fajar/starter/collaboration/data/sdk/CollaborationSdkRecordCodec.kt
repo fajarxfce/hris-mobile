@@ -49,6 +49,28 @@ internal class CollaborationSdkRecordCodec(private val scope: CollaborationSdkSc
                 gateway.refreshToken,
                 false,
                 0,
+                queueOperationId = command.id,
+            )
+            .also(::validate)
+    }
+
+    /** Credential replacement keeps the original encrypted SDK store and its queue identity. */
+    fun replaceCredentials(
+        previous: CollaborationSdkRecord,
+        command: CollaborationSetupCommand,
+        gateway: CollaborationGateway,
+    ): CollaborationSdkRecord {
+        validate(previous)
+        require(previous.handover == null)
+        require(command.id != previous.bootstrapOperationId)
+        require(gateway.sessionId == previous.bootstrapGatewayId)
+        require(gateway.version > previous.bootstrapGatewayVersion)
+        require(gateway.matrixUserId == previous.matrixUserId)
+        require(gateway.matrixDeviceId == previous.matrixDeviceId)
+        return create(command, gateway, previous.passphrase)
+            .copy(
+                credentialRevision = previous.credentialRevision + 1,
+                queueOperationId = previous.messageOperationId,
             )
             .also(::validate)
     }
@@ -158,6 +180,7 @@ internal class CollaborationSdkRecordCodec(private val scope: CollaborationSdkSc
         require(record.credentialRevision in 0..9_007_199_254_740_991L)
         require(record.bootstrapClientBuild in 1..Int.MAX_VALUE)
         collaborationId(record.bootstrapOperationId)
+        record.queueOperationId?.let(::collaborationId)
         require(record.bootstrapGatewayVersion in 0..999_999)
         val key = Base64.decode(record.passphrase)
         try {

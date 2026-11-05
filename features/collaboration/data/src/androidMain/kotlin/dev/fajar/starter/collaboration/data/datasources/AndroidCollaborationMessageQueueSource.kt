@@ -13,6 +13,7 @@ import org.matrix.rustcomponents.sdk.*
 internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: suspend () -> Room) {
     private var room: Room? = null
     private var timeline: Timeline? = null
+    private var retries: AndroidCollaborationQueueRetries? = null
     private var listener: TaskHandle? = null
     private var queueInitialized = false
     private val controls = Any()
@@ -26,6 +27,7 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
         // The parent's default is paused. First queue access can spawn Rust tasks;
         // initialize it inside the async FFI runtime before synchronous room controls.
         timeline = traceSdkAcquisition(SdkAcquisitionStage.QueueBuild) { acquired.timeline() }
+        retries = AndroidCollaborationQueueRetries(requireNotNull(timeline))
         queueInitialized = true
         acquired.enableSendQueue(false)
     }
@@ -107,6 +109,17 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
                             receive(observation, update)
                     }
                 )
+            val retained =
+                synchronized(controls) {
+                    if (!stopping && observation.queue.ready())
+                        observation.queue.result(CollaborationQueueDeliveryReason.TIMED_OUT).pending
+                    else null
+                }
+            if (retained != null) {
+                requireNotNull(retries).retry(retained) {
+                    synchronized(controls) { !stopping && !observation.queue.ended }
+                }
+            }
             val enabled =
                 synchronized(controls) {
                     if (stopping || !observation.queue.ready()) false
@@ -203,6 +216,8 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
     suspend fun stop() {
         requestStop()
         stopListener()
+        retries?.stop()
+        retries = null
         timeline?.close()
         timeline = null
         queueInitialized = false
