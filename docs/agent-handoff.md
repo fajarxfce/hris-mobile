@@ -1,5 +1,46 @@
 # Agent continuation — HRIS Mobile
 
+## Native original-device registration flow — 5 November 2026
+
+The owning feature now binds account-owned registration observation, finite explicit
+LEGACY preparation and serialized replay. Preparation reads selected identity and
+native-device metadata and borrows the already open original SDK; it retains exact
+provider/company/device/fingerprint/physical parent before any registration HTTP.
+No selected HR workspace is required. Missing metadata/SDK never permits SPACE
+fallback or a rewritten physical namespace. [Contract](collaboration-space-registration-flow.md).
+
+Pending replay checks actual original SDK identity, stores Unconfirmed before HTTP,
+and reuses the immutable native operation/body after uncertain completion without
+reopening a possibly frozen SDK. Actual current platform/build headers are sent;
+register permits a build upgrade in the same native family. A fresh native parent
+cannot replay the old device operation. The fixed 15 s budget includes mutex/local
+work; original hard expiry, wall rollback, monotonic expiry and ownership are checked
+after suspension. Confirmed and concurrent directory denials survive failed retries
+and cancellation. A retained Registered receipt is an account-owned fact, never SDK
+or directory authority. Old-account observer emissions are cancelled on replacement.
+
+Twenty-eight new cases cover preparation (8), replay (10), local observation (3)
+and native transport (7), including cancellation, late results, loss after commit,
+account/parent replacement, concurrent denial, original SDK provenance and exact
+request replay. Actual AppContainer resolves the observer/preparer and replay
+singleton. Focused: 62 cases / 132.36 s. Root :check,
+Android-host and dev compilation: 2,659 fresh cases / 331.944 s.
+Browser data/domain: 1,579 cases / 136.27 s. All final gates
+preserve identical 3,989 build/application inputs; format, architecture
+and detekt pass. All gate sessions closed.
+[Evidence](measurements/collaboration-space-registration-flow-2026-11-05.json).
+
+NEXT: native provisioning retry/bootstrap using original registration anchors and
+current metadata, then retained private-store inventory, explicit hard-parent recovery,
+original-store handover/drain/adoption, group runtime/UI and typed push/background
+replies. SPACE live replay remains unavailable until inventory/recovery establishes
+eligibility. No new caller/product route has been activated by this DI-bound slice.
+
+All 54 PRD groups remain open. No new APK/phone, live deployment, provider/FCM,
+JNI/private-key proof, Apple runtime or performance acceptance. Live backend
+8b40/schema 116 and phone release 29/source 084662c5 unchanged. Continue long run,
+atomic pushes and validated install-only product delivery with advance notice.
+
 ## Durable organization device registration — 5 November 2026
 
 Encrypted registration storage now retains original operation/native binding,

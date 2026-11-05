@@ -1,5 +1,9 @@
 # Architecture
 
+[Native original-device registration](collaboration-space-registration-flow.md)
+adds account-owned observation, finite explicit preparation and durable replay
+using the exact original operation, SDK identity and native parent.
+
 [Durable organization device registration](collaboration-space-registration-storage.md)
 retains encrypted original intent and SDK provenance across login replacement, with
 a bounded account inventory over native parents and explicit uncertain outcomes.

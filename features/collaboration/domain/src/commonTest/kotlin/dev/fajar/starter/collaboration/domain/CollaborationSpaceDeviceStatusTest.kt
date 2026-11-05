@@ -305,6 +305,12 @@ class CollaborationSpaceDeviceStatusTest {
         }
         val repository =
             object : CollaborationSpaceDeviceRepository {
+                override suspend fun register(
+                    owner: CollaborationSpaceOwner,
+                    command: CollaborationSpaceRegistrationCommand,
+                ): AppResult<CollaborationSetupReceipt> =
+                    error("Status reads must not register devices")
+
                 override suspend fun status(
                     owner: CollaborationSpaceOwner
                 ): AppResult<CollaborationSpaceDeviceObservation> {

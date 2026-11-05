@@ -15,6 +15,57 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Factory
+    fun observeSpaceRegistrations(
+        commands: CollaborationSpaceRegistrationCommandRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceRegistrations(commands, sessions, server)
+
+    @Factory
+    fun prepareSpaceRegistration(
+        commands: CollaborationSpaceRegistrationCommandRepository,
+        identities: CollaborationSpaceIdentityRepository,
+        devices: CollaborationSpaceDeviceRepository,
+        local: CollaborationLocalDeviceIdentityRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        PrepareCollaborationSpaceRegistration(
+            commands,
+            identities,
+            devices,
+            local,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
+    fun replaySpaceRegistration(
+        commands: CollaborationSpaceRegistrationCommandRepository,
+        devices: CollaborationSpaceDeviceRepository,
+        local: CollaborationLocalDeviceIdentityRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReplayCollaborationSpaceRegistration(
+            commands,
+            devices,
+            local,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun readSpaceIdentity(
         identities: CollaborationSpaceIdentityRepository,
         directory: CollaborationSpaceDirectoryRepository,
