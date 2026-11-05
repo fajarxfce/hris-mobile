@@ -58,6 +58,26 @@ internal class RoomCommandStore(private val database: StarterDatabase) : Command
         )
     }
 
+    override suspend fun insertBatch(
+        scope: CommandScope,
+        records: List<CommandRecord>,
+    ): CommandInsertResult =
+        dao.insertBatch(
+            scope.sessionId,
+            commandBatch(scope, records).map {
+                CommandEntity(
+                    scope.accountKey,
+                    it.partition,
+                    it.id,
+                    it.resourceId,
+                    it.sortKey,
+                    it.request,
+                    it.state,
+                    it.revision,
+                )
+            },
+        )
+
     override suspend fun update(
         scope: CommandScope,
         partition: String,

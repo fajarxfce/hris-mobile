@@ -138,6 +138,40 @@ abstract class CommandDao {
     }
 
     @Transaction
+    open suspend fun insertBatch(
+        session: String,
+        entries: List<CommandEntity>,
+    ): CommandInsertResult {
+        val account = entries.first().accountKey
+        require(entries.size in 1..128 && entries.all { it.accountKey == account })
+        if (!admitted(session, account)) return CommandInsertResult.ScopeChanged
+        val missing = mutableListOf<CommandEntity>()
+        for (entry in entries) {
+            val previous = record(account, entry.partition, entry.id)
+            val archived = completed(account, entry.partition, entry.id)
+            require(previous == null || archived == null)
+            if (previous != null || archived != null) {
+                require(
+                    (previous?.request ?: archived?.request) == entry.request &&
+                        (previous?.resourceId ?: archived?.resourceId) == entry.resourceId &&
+                        (previous?.sortKey ?: archived?.sortKey) == entry.sortKey
+                ) {
+                    "Command identity cannot change."
+                }
+            } else {
+                if (occupied(account, entry.partition, entry.resourceId))
+                    return CommandInsertResult.ResourceOccupied
+                missing.add(entry)
+            }
+        }
+        if (missing.isEmpty()) return CommandInsertResult.AlreadyStored
+        if (countAll() + missing.size > 512 || countAccount(account) + missing.size > 128)
+            return CommandInsertResult.CapacityExceeded
+        for (entry in missing) create(entry)
+        return CommandInsertResult.Stored
+    }
+
+    @Transaction
     open suspend fun update(
         session: String,
         account: String,

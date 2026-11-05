@@ -1,0 +1,2949 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "712c815f",
+  "scope": "Atomic raw command batches; no Forward UI or feature acceptance yet",
+  "sources": {
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandStore.kt": "a1d4a6ea13f087e45aa9cd98928b516e955408c7a0a1f81946410d5c5cf86e87",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/RoomCommandStore.kt": "61490f87ce74c0d58f248f8b7c076aa491648ea48cfb23979861236b11027fba",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/dao/CommandDao.kt": "d28066b223ac6289628ae900fc72259755ae5c0cc4f9e2245a77962969b43148",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbCommandStore.kt": "48519af6573f1cab4a9c1df5be025da1622012f7929a457f103035e87c9b5cca",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandBatch.kt": "cbed76a00c9a19e5308dcebf69ea5123a6f86e2a28bd8e55ba0af4d9ffd1f3bc",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/CommandBatchContract.kt": "0ad527b29f537207bad96c26b1e59f70a878370ddb3d66a324153875a631dd22",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/CommandBatchTest.kt": "9d952b9cb947b94fe004598e0353f529e3c944734c07817cbe479ce4448b2c36",
+    "core/database/src/iosTest/kotlin/dev/fajar/starter/database/AppleCommandBatchTest.kt": "38512778d7b2357d36cdeb0a34010cc2af925dcae55f3b89a6b936b54485c67c",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbCommandBatch.kt": "c9a1e025afd55df75672903171dd4ba95fab940c0c804c7f25c449e1f5ae5bb3",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserCommandBatchTest.kt": "e81fe95b47567e265de5b93352247f1bc51e9ad891584eca7686b22586c83fa8"
+  },
+  "focused": {
+    "startedAt": "2026-11-05T13:56:51.841329+00:00",
+    "elapsedSeconds": 78.843,
+    "exitCode": 0,
+    "sourceFiles": 4083,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 120,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.BlobStoreTest.xml": {
+        "sha256": "cef04a108f6b62c1a7a47d876deae6e9fd80a2b4af50afedd7ebca916de24b68",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.CommandArchiveMigrationTest.xml": {
+        "sha256": "eb153ae39c52a34b3904ac128f5f5776324dd544209b1704e09a6e0828b3814e",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.CommandBatchTest.xml": {
+        "sha256": "c2f9f3b5a16715ac1dcea3e34de8d4cd0682832f034c6625c3e6e4976f6a1f21",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.CommandPreventionTest.xml": {
+        "sha256": "177495f4b68420a7a807c2c15901f2331824a092b19da1d90f87faa943c49bf5",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.CommandStoreTest.xml": {
+        "sha256": "2333a73525345488a92e679c8965d96024a4dbbe6379216afa07fb12e722219b",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.DashboardStoreTest.xml": {
+        "sha256": "aba90a45579a963a6685b7dd1beb8f68b361ef3fe038370907612da558990109",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.DeviceRecordMigrationTest.xml": {
+        "sha256": "c0d8e23afdf814ab5f957d28a9765045a161a057e5cf210b2767ff199f59d457",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.DeviceRecordStoreTest.xml": {
+        "sha256": "8f18a77301fdfbd222d042c7fc0ea33bc70c7c38d46a825dab0d4df8c1a58640",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.InboxStoreTest.xml": {
+        "sha256": "7e741138003c1dd7314128bb106e5908a4e072a1603e872bd860a0f06d54e067",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.ReplicaIndexMigrationTest.xml": {
+        "sha256": "4018615bad1b5a8dc69c6dd1942c6f9d1d7ba3d003c2198b9fb4f52d707b4283",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.ReplicaOwnershipMigrationTest.xml": {
+        "sha256": "4a5f3c837d9f40bd761f023ab9438229481c108cfdc30ed5897b9e3fbc168e1d",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.ReplicaStoreTest.xml": {
+        "sha256": "06ee8cb16daa9d02b3e4eccccf18b976d7a359e953a193e9a7f9f39dfa36d62a",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.TransferStoreTest.xml": {
+        "sha256": "723695298e797062aa632200193b2b11de7c55060ff9cd9f59c30fdd234f59c0",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.WorkWakeMigrationTest.xml": {
+        "sha256": "71a6e27a515a93e5f5c007e0020040bad8622cc90ba39ebf20a6941acd64376d",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.WorkWakeStoreTest.xml": {
+        "sha256": "499ade6eeb7fc03c17d023c51db45698e015bb99444e44fc5460977a1fa4e4a9",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.BlobMigrationTest.xml": {
+        "sha256": "75c0771bf5126101ba8797b37e89f5dac10b13e924942727cd484041d97525ba",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.database.BrowserBlobStoreTest.xml": {
+        "sha256": "ebffcb25dd8330baaa0859cf94cf87082cc38a06aac1026ea9c60203cabe588e",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.database.BrowserCommandBatchTest.xml": {
+        "sha256": "a6ffcbd56a13fbc23b20560aa897b1899aff392503115d94b38b23209721c843",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.database.BrowserCommandPreventionTest.xml": {
+        "sha256": "8d73eb6daed096db22c45ac65a902c51ccf0381774c21586faf1a94f85aa69ce",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.database.BrowserCommandStoreTest.xml": {
+        "sha256": "329df2ce24e028048d846415abf6b355fd40dc8b2431cfee126b9f40af3ebb66",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.database.BrowserDashboardStoreTest.xml": {
+        "sha256": "ca3e2093fd543c2c2ac7de87febacc10a009f311dd9d3ac7cd7f5124334e7344",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.database.BrowserDeviceRecordStoreTest.xml": {
+        "sha256": "1155af3b29f5a336dc2127d1b98980e53baa54cea89f372e4152c60bc1703f48",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.database.BrowserReplicaStoreTest.xml": {
+        "sha256": "4098919c03de9414cee96c40b67e028baff1649755b951a7794a4c142778d60e",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.database.BrowserTransferStoreTest.xml": {
+        "sha256": "c76bc9259b332af7e97ffed5492635effc6a2ae4f1b37ec188bbdc04e49b12cc",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.database.BrowserWorkWakeStoreTest.xml": {
+        "sha256": "a3c0605f0a6f4fb86aa6e570f4723322f3da3c53fc74c9dfe9860b6e16956996",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.database.BrowserCommandArchiveTest.xml": {
+        "sha256": "3ceb368aec5dfa1b67d8b1ae487378cae0fde8465521211faa9aa4400416d591",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "full": {
+    "startedAt": "2026-11-05T13:59:10.126399+00:00",
+    "elapsedSeconds": 589.63,
+    "exitCode": 0,
+    "sourceFiles": 4083,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 2707,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofFailureTest.xml": {
+        "sha256": "2de69112f3881a2b05abc9e8529154bdf83b628fbc5c8e23393430ce470e97eb",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofObservationTest.xml": {
+        "sha256": "e49c55ca11c8fbf1f4b150ed5913fd6a4763027803d8cf65d0f2905e8c4d7452",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisReadReceiptBarrierTest.xml": {
+        "sha256": "3456536df8114c0cf32b6dfe0e3773898d55c040fb9e300e8d413f4ed4a5c33b",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.NotificationInputCheckpointTest.xml": {
+        "sha256": "1619c6d3aead892fc3bf6aad8612488be492d36bebd6dfc166063f9384745cfa",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": {
+        "sha256": "304d77c50b1b36236a27dca72c66c55c741342def4d177adf32e8245aa0cd512",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml": {
+        "sha256": "d911d6bcf2d96efc5ba67b22711223aff32e35a6304984d4b425bc9ce8e2db54",
+        "tests": 90,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ApplicationCollaborationLifetimeTest.xml": {
+        "sha256": "0acd4b2ee86a1ecfacafb99d798663a5a9772a5cc4e3fb2bff09b850c857594f",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ApplicationNotificationHostIntegrationTest.xml": {
+        "sha256": "63f659864953f35d96adadd0ad0f1f5d085977b30c3b13c894122214c9c22a58",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ApplicationNotificationHostTest.xml": {
+        "sha256": "0861914da1c79117b2e58950ba89786d318a4619131440d277a65bf8a22ebd7e",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ApplicationPushIntegrationTest.xml": {
+        "sha256": "f02cc21ec94e44551ba3e495c784a3115b69bbb2d2d02ad46122c40ea146164b",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ApplicationPushReceiverTest.xml": {
+        "sha256": "4b522e3b942313655411f586955d832121cfbd228d4bac26e1f38da035022ff1",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AttendanceCaptureLayoutTest.xml": {
+        "sha256": "8a41fa088a7e5e8888e5e1f371325c790ff5841a6478de2ff05ad58e408bf72f",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.BootstrapRecoveryTest.xml": {
+        "sha256": "85f12f2f268c9573ab4406e088177bcb1065a5970c474252a619a8a57c270f2c",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ChatBottomNavigationTest.xml": {
+        "sha256": "f3d8fd2371414fad07f4b19e5a8b7dede73d4cbcb9f9bc338df4a8318c1f0d57",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBackgroundDeliveryWorkerTest.xml": {
+        "sha256": "67253947161423aece13f91bc9e1684b0267620c80b94a2dd0791f3a6930c6bf",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+        "sha256": "b8aa536a928158ccd1ea719efccb805d4acb976e004ea8831b7247b68aca61d1",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationCancellationWorkerTest.xml": {
+        "sha256": "c22e04d7598bc719a0a6d5dde481a87d87b99c6e23cd4c7b9fce8615751af9b2",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryDiagnosticsTest.xml": {
+        "sha256": "96a7770e8f7f0013507dedbf100ecea2b725216ab35e41692b5e828aa9b02240",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+        "sha256": "536a61397744c4fcbb9d2a64dd8c743e4c6f3f3c1949128d81a6467a5ae668bd",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDraftWorkerTest.xml": {
+        "sha256": "bf31de27d28e00aca7b07a0e57b016cad4d07d970138c3d48aa00ba7080a9d56",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationIncomingHistoryRecoveryTest.xml": {
+        "sha256": "5f0d58390d91dd2f1a47bdfaf0d0276d80e5a126cb1f48197607adfe81abdd38",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationIncomingIdentityTest.xml": {
+        "sha256": "7a0e617a71b4ad98d6e57703f1fa45bbf35846868feb7ada06d8ffeef9d97c86",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationIncomingRecoveryTest.xml": {
+        "sha256": "b4859d9023b7fe7c884006643835e245173c34c8150115268591603dc81ea8f2",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationMutedNotificationIntegrationTest.xml": {
+        "sha256": "b0f8b7b6dcb0ceee4affce8ed55a51cae423a63143c12164d406b8bda5d6ec1f",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationActionCallbacksTest.xml": {
+        "sha256": "cabbe0937c889ef626937fb651ad0748e51082d1706516a5210895ae3b855e17",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationActionsTest.xml": {
+        "sha256": "c7d1f357a1c3b93d16f955ab2bf97ea4bdeec3880950d61f6a73d73e5570f8e0",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationChangesIntegrationTest.xml": {
+        "sha256": "b3113fceee80298a8fb62b325aa500dfd40f094bb29c8273d80d95bdd426985c",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationCommandsTest.xml": {
+        "sha256": "a0583b18b9bf3f83d02c1438c56b5f91ce18551d12ce4cb015d7dc639ea3043b",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationFocusIntegrationTest.xml": {
+        "sha256": "806d88205add01ace596534b1789d8fceb937a1793a3f5336103a2c65b7c1f75",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationFocusTest.xml": {
+        "sha256": "602a969bb8845588ca5219515b3ad5527af05413c73fd3ed3be9741cab9aa9b8",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationInputBindingsTest.xml": {
+        "sha256": "187a57140e9a3e20b321a8ee3e163922eb41acb08b823a4bec13c62bf784f242",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationInputRecoveryWorkerTest.xml": {
+        "sha256": "741e9d7b1d426698e41cc5b3af34080cc9189648affe23c993d6cffe009608fc",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationInputTransferIntegrationTest.xml": {
+        "sha256": "4fe6e862ec90257eac59b35d628787d78cc65e76b123dd8f6032aecc2f67bfc8",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationIssuanceIntegrationTest.xml": {
+        "sha256": "20bb1189890f3d6b15700a8692bb7cc4e5c31b63dae276ebeb3920167172ea6d",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationProcessIntegrationTest.xml": {
+        "sha256": "7f48fdddeacba186cf0040c01255aad784e6e47bc0320864228b8902d1ef5e85",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationProcessTest.xml": {
+        "sha256": "321e9223768620d05d2bdad8f9a5bc8a14f4872e6da619627adc28ea91264df4",
+        "tests": 41,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationPublicationLifecycleIntegrationTest.xml": {
+        "sha256": "cb0d0219f185781ca2c62d9936d3bad0fa1ab57f0d8ca45d3ab22a4aa189831b",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationPublisherIntegrationTest.xml": {
+        "sha256": "a7b7650552c01a68a354b8a74a4a96b991779397977058aff38b00a4be678d04",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationReconciliationIntegrationTest.xml": {
+        "sha256": "54fa291b529f196544d91a8d8a1b17182752c421a63a65f86d02474c76bb04ec",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationRepliesTest.xml": {
+        "sha256": "ac75854028cb87aa304767dfa0c27ffa2fa2a868d9fc8c7be598f14a95b0ae37",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationReplyCallbacksTest.xml": {
+        "sha256": "70128c3bd14901ca5e2446c21f042f5c12d50f654bc73d1313aa36867226bf8a",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationReplyRecoveryWorkerTest.xml": {
+        "sha256": "813902ce66c42d2764a58a02e2b40e1d35fc24e3d952fbb82ec720de689d8b73",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationRetirementIntegrationTest.xml": {
+        "sha256": "f729f32c9c67b9aaa2eb899a528f82fbd97db07fd59f24c2ca4678c970d5a9b4",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationSurfaceOwnerTest.xml": {
+        "sha256": "6fe453769918c47d1be1e373879870f44d677675fcc56ee1e35d95bab80bda6c",
+        "tests": 31,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationPriorityRecoveryTest.xml": {
+        "sha256": "b8e3f6344322d10ba8f157865c09f70e3e1ad96e84372be78a92978bf8d1d92e",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationPushRegistrationWakeTest.xml": {
+        "sha256": "6cbac1edddf8360ec3bdb8a1632decb2b65603281baab1b1e6923227b9e8f41a",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationReadReceiptRecoveryTest.xml": {
+        "sha256": "5aab5cd1cb0658e7b4c334e7847da0e23fd66bde6812f680ca4a5491309c2338",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationRecoveryWorkerTest.xml": {
+        "sha256": "886be8e5f5419ae5dcb8f6fbf3c3403ab95c1ea7c93337cc3f6ca65dbf027a11",
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationRoomLookupIntegrationTest.xml": {
+        "sha256": "2587a3c7ffcbe198db93b0fcfe686bd6cea45629130a279ffaa859c2eb7fac9f",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationSavedReplyIntegrationTest.xml": {
+        "sha256": "7f294bea0c19d7b2e6ca398822e5ce2956ff79730783a2987d56827821aadb62",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CompactFiltersLayoutTest.xml": {
+        "sha256": "2cdc4514dc7e5cdd82071f5855a0ce80979df8060be0ff76a39ebed80044ddf4",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CompanyDataBindingsTest.xml": {
+        "sha256": "dc2eade62e01b1b0251499a13b34ff1e28914eeb1af9a599f0c90e9609a4c886",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ContentTabsUiTest.xml": {
+        "sha256": "cd2329eb9e3509dde60dde423af3d859c161463489b22bb67dcfca0735c26994",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.DataSyncLayoutTest.xml": {
+        "sha256": "bcbf0062bcc743521664538075eeab18e2477aa0405bc16b101c180cb65e916c",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.DatePickerUiTest.xml": {
+        "sha256": "a40df71f3df032507bda93b71fadc361d44e082b30475c4b9c622b9bd97e7e0c",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.DocumentLayoutTest.xml": {
+        "sha256": "57cc7d331f0a76cf74046244d94dbffbcce8774a3a9090a2a5cb1935b1c34eba",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.EmployeeSearchLayoutTest.xml": {
+        "sha256": "e639590d7a54cfd320016b08cc5ed8605b43d28ac19585ffd5908d510b7d3b0a",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ExpenseBindingsTest.xml": {
+        "sha256": "991db6ce645530f74dfbc7eb7efff11bac6e90791569c1d910eb48d0c97ab20c",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ExpenseEditorLayoutTest.xml": {
+        "sha256": "ad7c1d51d3b959a568a3281707e9418de83e683ea7a23d7523be3453af0b46fb",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ExpenseReceiptLayoutTest.xml": {
+        "sha256": "4c673393f7457d79df53591237de6e6a5867d5676478fe99240cd7433eb16cf5",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.FilterChipLabelUiTest.xml": {
+        "sha256": "bd18baf9b7741ebbe912b5e745196a7dfea5913cdb4ddbf3289515f1d54319ef",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.FirebaseLoginBindingsTest.xml": {
+        "sha256": "eb69b2d3a9d9fc27c6ba7440a6f0e379e700706fe3856fe459b3eac6ab965d01",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.FormChoiceLayoutTest.xml": {
+        "sha256": "0f272a961badb74873983833329e6155451e23cb76bb4340c21d3902f77e1cb6",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.InboxPushIntegrationTest.xml": {
+        "sha256": "191c9d588ee01efa54c27c07bd7e082a38d2cbf39c55cbb9381b98eb6f7e2d0c",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.LeaveBindingsTest.xml": {
+        "sha256": "04a76a95d84391bf955c367deacd0bc994befb1a78682368c2539d9698f51b4b",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.LeaveCreateLayoutTest.xml": {
+        "sha256": "79b2e7bc15eb2cf82bc9ae99a50ddb9f14ad24766a5ed944868eebb0737d6a09",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.LeaveLayoutTest.xml": {
+        "sha256": "b8440eb4c5a228f3fd6700056ec46937696ad3265f764592a4ac3fb0f6a9b556",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.LeaveRequestLayoutTest.xml": {
+        "sha256": "8be280b10324fbc1a56c52101e152e18580177d5b28c690cac9920374d127604",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.LoadingUiTest.xml": {
+        "sha256": "ce08f084d81f5841c2e2650c878b908534dcc3d5dc70072cc467377acd103457",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.MonthPickerUiTest.xml": {
+        "sha256": "a8f19ad49d2f050ccd2ad798dccac81ac647dce90b89419c0ecb996008f2f6a2",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.MotionUiTest.xml": {
+        "sha256": "11324f961e7d2124ffc9b67331fbaf683d2b958c58db493ecc373d2d1d4d6a13",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativeLinkAppFlowTest.xml": {
+        "sha256": "c84eccfdb5a72c8c56146ab898b4b71887bd5245c02e5b3211db7b9b6dc9ca74",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativeLinkStatusLayoutTest.xml": {
+        "sha256": "7640137e94ec7fe8f2d9fe292fb8a3f52c4badad51d387cebcd8bbe3c3f1379b",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativeNotificationNavigationIntegrationTest.xml": {
+        "sha256": "a3961fa50d7cb1a81cd3ed4dd165a86b2b51d706dbd90d912579d00f01a28f96",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativePushBindingsTest.xml": {
+        "sha256": "f1f261c447e883051d9784feff4452fbe60a5036dd067d10204d77e59c23e767",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativePushSettingsTest.xml": {
+        "sha256": "2dc69424c42e11d88dc90809447bb49a2d862340d219aa2fa2a28d224958694a",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativePushWorkerTest.xml": {
+        "sha256": "ba5d6e4e698f1d71c6ba723f8f995be0f0a1f9a3957e91d9c04548a841c90234",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NavigationBadgeUiTest.xml": {
+        "sha256": "3f94bf79151a8c0da00e8e4e831339ead1c02ede974fb6e8e5938710fba48307",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NavigationOwnershipTest.xml": {
+        "sha256": "1cb44b6e8484cafe0c686f3d52a954bb763481d9751a34d653df33473716ac24",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NavigationRestorationTest.xml": {
+        "sha256": "82ecb78f9839966f643814868518d837c56395db8d2e26d1ecab908b966d0ed5",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.OvertimeActionLayoutTest.xml": {
+        "sha256": "55f9329fec04a0c92c41d545b883f36ca4de86a4ee91084da26960631b450b3c",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.OvertimeBindingsTest.xml": {
+        "sha256": "8821ca96dba44ffb38d17a075d1ee3c3022726be7c698063fb11160122e2b009",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.OvertimeLayoutTest.xml": {
+        "sha256": "6add501e72d580fa031c782720362db414e6b075da9c2f9f19f87cff81d28f1a",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.OvertimePlanLayoutTest.xml": {
+        "sha256": "a1352e8366ff5b125abba7d0d1541edf4072a593249c8b0f7ed0906695a71be5",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.PageActionUiTest.xml": {
+        "sha256": "dab8c7e4a94a868385eee04df39e6cb0174fd6ba20e4c5ce36b044dc841c933a",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.PageLayoutTest.xml": {
+        "sha256": "eb3029565bb574ff284931145620fb43bd54bedff5be796b68bd03bf951a73b3",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.PayrollBindingsTest.xml": {
+        "sha256": "001cc6b41805c07c889a47d74a7fd95ae72614837c06b0ef9db977800c6e0deb",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.PendingActionsLayoutTest.xml": {
+        "sha256": "d03f358760370d5b28a6ac23db666f99859e61b61d12330c5664488d71323053",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.SearchAndFiltersUiTest.xml": {
+        "sha256": "1224debe54049e80dea4d68f1408e0565abaaeae95082398b731779f7b18b5ed",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.TextFieldLayoutTest.xml": {
+        "sha256": "585098f1591d93eb53d39cac429bc52c92dfd5b79e7985d0d441bf5aef4ae091",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.WorkforceBindingsTest.xml": {
+        "sha256": "e18c155272c407bdaadf1deb724e4b22fee5b44bca6dca7a5be5b58ef5bfefa7",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.WorkspaceLayoutTest.xml": {
+        "sha256": "73460a60e99bfb6c331209ce05085db8d0efd05143a1d2bf6a988632f8513b9a",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.WorkspaceOfflineStartupTest.xml": {
+        "sha256": "a53e280fa35140846d7a6c3e23924c64cbfb670aaa10989f93255fe8ff2f0733",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.bootstrap.AppLocalWorkspaceTest.xml": {
+        "sha256": "ff93d9e21362f7a2908b04d7eec76b8e0f3dd87e658e37133d4a7cb9ea89c227",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.bootstrap.AppViewModelTest.xml": {
+        "sha256": "1568e30f231900da719fa75e4e1d54b0cb5ece203d4882890fa306f75bd46319",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.bootstrap.NativeAppLinkTest.xml": {
+        "sha256": "b58a5b2f32b93506a162839ff9d1148bafdcbc445cf3a6d4f3d066b39a3da1ba",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.navigation.NativeNotificationNavigationTest.xml": {
+        "sha256": "2b83eacb6316a393878b824d38034372c6135063b4e010c9dc23d125beb25b7f",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.navigation.PendingAppLinkTest.xml": {
+        "sha256": "3d27f1ee57293c4581832a9f50ad5b26dd556ccc7dd2a26cd86a484c120fda2e",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.navigation.ResolveAppLinkTest.xml": {
+        "sha256": "d06f635072abe6fa577b4726832ad49fd3ce4e8ba4ee5125e4c976f434e4c557",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.work.CollaborationBackgroundDeliveryMonitorTest.xml": {
+        "sha256": "9f6a91ca597f1d67569e5d08f169e9e0d4727aac557217b641b8c825e796aa9c",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.work.CollaborationCompanyRecoveryTest.xml": {
+        "sha256": "3c25953f1e844d378c2554ecea62fb096b77988ed8d66a80cd98ac13f827b335",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.work.CollaborationPushRegistrationTest.xml": {
+        "sha256": "75a64c098b4700ef082054a2987b95caecfd1b3b0c5644298999ddbc8aeac3c8",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AdaptiveUiTest.xml": {
+        "sha256": "5d354bc7eb7a521b52f8406f7cfa975884c849550515eccac14b336d9095e7b4",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/demo/build/test-results/desktopTest/TEST-dev.fajar.starter.demo.DemoIdempotencyTest.xml": {
+        "sha256": "322d56646a72899cda85f8372bd4f4d720432aebd381b15eb30613d52606cd1d",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationCompletionStorageTest.xml": {
+        "sha256": "7e82af743182e8237f994bbb25286d04025a845eb80eea0867adf13399ccf0e3",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationCommandCodecTest.xml": {
+        "sha256": "3c01cec32abdcf7f99a010df97e6c045f38a8801c8d4c6e9bd2cb171690bb535",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationTransportTest.xml": {
+        "sha256": "55a5d9541cd6d5519694683dd1f76546276f8f604559cb18bcded6fb9f202600",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationValidationTest.xml": {
+        "sha256": "dc23f404c3cf24ba24c313c7e360018aae0b14dee34628309300538f15f81563",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDeliveryCursorStorageTest.xml": {
+        "sha256": "3be0f7dbd3de1d843328c96ce644ff6be24ffe2d99c85d413ccefbf02b7b85c8",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDraftStorageTest.xml": {
+        "sha256": "5389c51a031d2a811d6670a17c52ed54571a832cf9154d29b80f3fdd4e2864d8",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationGatewayConfigurationTest.xml": {
+        "sha256": "0718c9abafede8095d17556c8032f2c2a93d40446cdc6188be0815d955a094d6",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationHistoryHeadTest.xml": {
+        "sha256": "02d5b63e3632b3ed36c82d0001e8b16ece78e9e55308e01a74e8c4749b8a3e95",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationHistoryPurposeStorageTest.xml": {
+        "sha256": "f8f7dc9972c38bfa607cd051f2426fd5d93d3dcb70367e1c5de3e69dc2b8a0a4",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationHistoryReferenceResolutionTest.xml": {
+        "sha256": "ac8de53e107d8bc679ee863502e212924930d9e9a512f4358a500655b9aeb111",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationHistoryStorageTest.xml": {
+        "sha256": "3f96ab38cb52e61c826f3a852a31d252aaf1edb1675a2a18a6c6f26248b0ca37",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationHistoryTraversalRestartTest.xml": {
+        "sha256": "66b5abb96659354fbf18bc669426e25e11c88ca382a234a8f931c373c1755f50",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationHistoryTraversalStorageTest.xml": {
+        "sha256": "429c9bf2493507bc427125df93648711edeb60805d36ca896f021fdaa6633526",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationIdentityStorageTest.xml": {
+        "sha256": "b9cf54a7f048e67c098e1e4ce3d319dedccf3382b5a6336bf6052d8271e2b853",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationIncomingHistoryStorageTest.xml": {
+        "sha256": "4c2ecf8649a3405448e59104ca70236cc2035e633935ede9548a75f90cee3b5f",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationIncomingHistoryWaveStorageTest.xml": {
+        "sha256": "18fbb818cb350a0fa9dce00ac62c28297d939565ac94a7346ee2e1ea1fcd70f5",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationListStorageTest.xml": {
+        "sha256": "80508fa5a68da36ac6ae65cd73f263b8f8a5fcc6f54e07c4e68ca74be67c3535",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageTest.xml": {
+        "sha256": "97542aa4f45fb8d312bb9cd73863a442819f0fada4eacb7199fd5fb73355709a",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationMessageStorageTest.xml": {
+        "sha256": "a649f0dda27bb4022035a95f0b038f4ee2f093c88a8110fcef0259005125e46c",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationNotificationActionTest.xml": {
+        "sha256": "d4c37c00161cf3406d72510b957c92f62edf51f3274211edca97c3a96b0ca3a6",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationNotificationChangeStorageTest.xml": {
+        "sha256": "13659d34e1f21c9a41cd5684a585c2ca3601d08d4576590398d3a2cdfe14c50d",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationNotificationInputRecoveryStorageTest.xml": {
+        "sha256": "c053823f8575cbf4315df0e79df45188c28fde3f5a4895ed4dcafc031c3ae386",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationNotificationInputStorageTest.xml": {
+        "sha256": "ffab3d1d77974efe9e041989310726963e993e598e11eaea0e38ca968a1fb953",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationNotificationPublicationStorageTest.xml": {
+        "sha256": "cba2bf6983787e2c8f537919ec71e7660e15682f64a83d36f65bf79eefe7ed47",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationNotificationReplyRecoveryStorageTest.xml": {
+        "sha256": "3235f7e674b8547d1dfeb33fd84f5b65f072e8562958467dfc52fdfdd3bc9bd8",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationNotificationReplyStorageTest.xml": {
+        "sha256": "1ab0c89deea331b82b85c083968d2e58383f43fad1c8af28522bd5e304d30cc6",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationNotificationSettingsStorageTest.xml": {
+        "sha256": "15dd757247a0ae43b27f66f934fb97ceebabeb855e3a1ca7ca53144d46ba1a61",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationProviderPageTest.xml": {
+        "sha256": "3a9f8d987ca83c15707e0353d7d4060e269297b3b742d9a45d9051ccddb3defa",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationPushPriorityStorageTest.xml": {
+        "sha256": "ae0ef07010edba9f24e9e88b2442b334537fe44ec7f331cba6ad3e5283a80b5d",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationReadStateStorageTest.xml": {
+        "sha256": "dee097ddd7fd1a3c122fb6ef3d0b2033b9d7d736166d087dd94067209739406a",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationReceiptStorageTest.xml": {
+        "sha256": "3a6eded32b35cc0a48394a17dc2899b753acae0dbbb2e97d48a86987a08dea1b",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRecoveryProgressStorageTest.xml": {
+        "sha256": "6852ebc66b2e01d22563297b9e4655bc239dfba60f0ce536538ca130add64f18",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRecoveryTransportTest.xml": {
+        "sha256": "a4e18628baebf690a5fdbdf376eeed5222323d16bff0bf855fece2fb842a9d2d",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRecoveryWakeRepositoryTest.xml": {
+        "sha256": "ed5a3b9aa25aaed38452799247210d5567807de27db8b1676728fdf36ad24da3",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRoomLookupTransportTest.xml": {
+        "sha256": "cc085d899a121532552a1fb162855ef23ba5b386e5b98de81902c9539620d190",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRoomRecoveryStorageTest.xml": {
+        "sha256": "bdc4d7d3be386e41ca39636034067e715311d4a065b6b4a018243f8e8bfae824",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkFailureMapperTest.xml": {
+        "sha256": "c299515a36f80244e3ac81729eb12db490197034c481292dbc1b3f3357a07a5c",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkHistoryMapperTest.xml": {
+        "sha256": "8e1f4f9e8d6490bfb1b491251a6058996d9cfcc2562389afc6abf67411ac0ff0",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkIdentityMapperTest.xml": {
+        "sha256": "1a36c05f6e8750538896bcfe33260948e1f18ae04b75cc25be6010dcaf6e4eab",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkLogicalIdTest.xml": {
+        "sha256": "ddfe7ce4e71e1f43556fce6e2e1b7bc8d37adbc0c2540f75aab864fb54351c3e",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkRecordTest.xml": {
+        "sha256": "529c478cfb9d7be8e72983bfaf97a25f535145f899255fb1b65255785b1dfc00",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml": {
+        "sha256": "629dc5c216cdc69643d3aa944fe8038cc5bb6f5cb8bdb8754225ade1f314d9d2",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml": {
+        "sha256": "9036457d13b030defb9f2e74c16d9b5ca8940d49173ed529639ab31bbc52c443",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceDeviceTransportTest.xml": {
+        "sha256": "8ecfc0d3a879289a7de1c904d3d4d41571f755df5de1f57ceb575118731e01eb",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityCommandStorageTest.xml": {
+        "sha256": "05b19d1b2a560c876f6ab8ee55deb7efbe338f8471ef90f0296e8fc5f34d5f8d",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityReadTransportTest.xml": {
+        "sha256": "b2cf35ba85575ae29abc5b7cf6de293bbbbd8182b140e4081ce809907301510a",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+        "sha256": "43b48a423e88f630e8ac98ab8f83adcb8d544dab79a933f992f6a7fed076a487",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRegistrationCommandStorageTest.xml": {
+        "sha256": "8f19b9be886e42d9d833638aa1486a236d8356d382edea84e6b77d7caa8bccc9",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRegistrationTransportTest.xml": {
+        "sha256": "12fbf1d314853368b153b614475483fd37e252b26e20c8dc4012e270aadc87e8",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRootStorageTest.xml": {
+        "sha256": "0c7e993fba0339e7675621d27e21a51b709833f1ea909c64b13bc889377b3374",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceSetupCommandStorageTest.xml": {
+        "sha256": "9b698668e999b6713bb3c4866b8b64c237c4d9b36721e6dd5a2fb53261122c27",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceSetupTransportTest.xml": {
+        "sha256": "76f1c4bff1ac64b583d966890e9c2706f188aeda9ad9795ebd98b9c869ecf1dd",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceTransportTest.xml": {
+        "sha256": "583c78c50c139b271e73bf0e4eae0897b989ad4d057457bfd9446cb629c2f7e6",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSummaryTransportTest.xml": {
+        "sha256": "c24a8af229855699f5dea3f549c95ca17d7dcdf3015810f062f7b0b29b5fd6c7",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationTextContentTest.xml": {
+        "sha256": "06f5f3470d49d7419dcda88530f60932d98827d0f0d88bd950b099e359cdc6c7",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.EncryptedCollaborationConversationCommandTest.xml": {
+        "sha256": "fd0c1e400a6f19ad954add9e1118e2288ff5cdb9123423092c355bea62251a1b",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.EncryptedCollaborationSetupCommandTest.xml": {
+        "sha256": "579b79fd8b1b541b9380d5bfc7befe927e472fa34e563fd36d3ef13ebc6a384c",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.FileCollaborationSdkStoreTest.xml": {
+        "sha256": "cfaf6deba0f74307c7d41bdf5b94896334f5287d207fedba6bbdd171c0733a0a",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkChildResourcesTest.xml": {
+        "sha256": "cf7eb2ef7ea3db2a69e223d36cc4a7eb44135a5ad8f3fed6a340c20613a7419e",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkFirstSyncTest.xml": {
+        "sha256": "e3e9f700bec837ef8612fe3ec75d555ddf3f256790dec43335d188c25c947a79",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkHistoryFocusesTest.xml": {
+        "sha256": "d8ca3a4edac1a9345e7af95e27b4d8e9c4a52c7fd9f55bebddd2b7f9318af064",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkQueueDeliveryTest.xml": {
+        "sha256": "825ece007fbb69d77f23d73cd6b73cc70b0bc46b176b7190cd7c8a49be3d69d3",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkQueueOperationsTest.xml": {
+        "sha256": "0242b4f2c74d11dbabb5e629354acc771139abb93f91935d8285e86d58adaeb6",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkSessionPersistenceTest.xml": {
+        "sha256": "9a0de956a3fec5e7b256a796e3bf134f0ea07b278f42eb4e9c9dd7e45fd68bf5",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkStoreShutdownTest.xml": {
+        "sha256": "870e7a4f87ebacc59285ffb7cd20f863bbfbe02e616d5494a15d42753ecbe818",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkSyncLifecycleTest.xml": {
+        "sha256": "5db2c5773898050bb78c363d923362477165fa3f40f42db658fbbf2418abd507",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkSyncPumpTest.xml": {
+        "sha256": "97ef388c5655034e3d0283477369e497c511b19634fca28226f59f11a991d077",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkTimelineDeltaTest.xml": {
+        "sha256": "d44e110326d2e37dddacfd984ed255044c313a52f696f23f4ccf4ac26d39ae5a",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SpaceDirectoryAdmissionStorageTest.xml": {
+        "sha256": "5200000a3dd7adf2d4b8386bcb25a38a504fef800379604eeaeda65808987689",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SpaceDirectoryStorageTest.xml": {
+        "sha256": "8b2e1301884fe229ece29e2d67a65513006d752939671776066e71fcae95b982",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationCancellationStorageTest.xml": {
+        "sha256": "9cb5a8d1d65d86951f19736be57eab6726530e99d216907657f5916e6d9f4c71",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationConversationTransportTest.xml": {
+        "sha256": "21791d8d4c23758804a87860a73834147fd1d934ecf3383d8235ebcfd0c7fdbd",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationConversationValidationTest.xml": {
+        "sha256": "6d41ee7bd338ad24a89ba348d1d945fb8f0fb12f521ca2264c8b7c7e12c288b6",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationGatewayConfigurationTest.xml": {
+        "sha256": "66afd3a867dcab6142452b23e37e77e6db0db30a34e258d63839a9f2d7ec860e",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationHistoryHeadTest.xml": {
+        "sha256": "36915270155fdc3d40e04d0c6d3f190f7986c421bf1be3de9c00fe95ac098b7a",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationProviderPageTest.xml": {
+        "sha256": "06f913a3250b20068d39df903c023802ce255926462a6b4ae8b09707905bb9db",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationRecoveryTransportTest.xml": {
+        "sha256": "7e13f3e62ae877bc305628b424756901cd88ed85770b8df0b08f1da7f74852e0",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationRecoveryWakeRepositoryTest.xml": {
+        "sha256": "0d75f9619dc736c36f7ee5692adca07cf6ab4f5be1629b7b026939afb8ac3bd2",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationRoomLookupTransportTest.xml": {
+        "sha256": "919e75a5b872c961d2cc3f59e7bbe9caf3923636cac3e8f17328ebd62784616f",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSdkFailureMapperTest.xml": {
+        "sha256": "b9f63bf1f32533b332e727ee6407d2972fe1ead884389345c878117fc5ee08e9",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSdkHistoryMapperTest.xml": {
+        "sha256": "bb600ec0ab99e4b9652463d29238bb1691a289b671b25c1f35d76bb1239ef82f",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSdkIdentityMapperTest.xml": {
+        "sha256": "a289240c283898e43c4914b67c16ec6b9e294fa9ed800872f690f860dc891138",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSdkLogicalIdTest.xml": {
+        "sha256": "118d8b97fc2a0394aa1bbad1fcc9956629a3a8f66d1140c7d417d6faa6ebbb99",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSdkRecordTest.xml": {
+        "sha256": "be2d501ef51601d674b15f1b4ead1b9a1fcb76a0eea40954fc8d7ab6d9d42c88",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml": {
+        "sha256": "6f9d96bb878ff2ef48c8678f43d74d6286a55b0e88094f3236e8afc98e834612",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml": {
+        "sha256": "e6043465ab3819c48f078a4c69890133e0d372432f3a71d845b0f39ae4695b20",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSpaceDeviceTransportTest.xml": {
+        "sha256": "cebf357cba4119bdfe7d5b66d43347156742ed507482f17bfd5bdeb8c75aaf21",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTes-CM6JHU6GRHDMO.dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityReadTransportTest.xml": {
+        "sha256": "310e792ef984481c1093ad98f6b70ee7024ca93c12439f3541fb108a50f4f423",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+        "sha256": "87fcc161631fe4fb3a57403e6491949923c6edcc20510d4ead3dc5d0a73395d5",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTes-188SH9RH7D7AC.dev.fajar.starter.collaboration.data.CollaborationSpaceRegistrationTransportTest.xml": {
+        "sha256": "88b58e7e6b61330137b3e4cde312a057660e38e0aa4bece0b5ea0bd03f0ef809",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSpaceSetupTransportTest.xml": {
+        "sha256": "22e968955fa3d6d4869cf1c2cdcde51269e19dd7a7707b10522f58df83e1406b",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSpaceTransportTest.xml": {
+        "sha256": "17941861e28f9bdbf55e687bb0cf20a04e13268b16fa1a53eec70a76437225ef",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSummaryTransportTest.xml": {
+        "sha256": "37bb2a4e4041994af447f13df283cbe7bba6623151ca47065e84932eb48cad8e",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationTextContentTest.xml": {
+        "sha256": "455f01c46483fa186ca14e464ee3b53b76e49a97966159fd617a6c0148d962d2",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkChildResourcesTest.xml": {
+        "sha256": "d644bb013c07b2f27739266bd21b6bb6071e27678bdffa4fee3a8668693f7a40",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkFirstSyncTest.xml": {
+        "sha256": "c154f899ba93d6c51f5dfe89efd0a79776c71f69f36678585e914af1a6fb1a20",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkHistoryFocusesTest.xml": {
+        "sha256": "02b4528351827bf56235b89d64180e00aed600539e4183f4d4eed5c6720056a6",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkQueueDeliveryTest.xml": {
+        "sha256": "2eb7e496b1430ed8b217d28ccb8e2b1d92d41b5798b7e57f1050ee725116f467",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkQueueOperationsTest.xml": {
+        "sha256": "1e32834f12e8c5867cf83b0366dd02b61f2d7ce7943a1577d0b5de5869ff85fe",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkSessionPersistenceTest.xml": {
+        "sha256": "0ed9462264b3da392ca46d7972d66b9b43e2cd279a1ece5b155b36a4b23828cf",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkStoreShutdownTest.xml": {
+        "sha256": "1514d6ae33bccf179b0740b1e3bd6003374d6816feff26b23e06a8b54c14a009",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkSyncLifecycleTest.xml": {
+        "sha256": "607ac9870c9d819245d8126ae144b842c21824a1fac04a7eace300b7a9fd9ca5",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkSyncPumpTest.xml": {
+        "sha256": "aa0353f3cf6973174486f3b56b972a8f3d92ec1dea78ed86ab9f023c2ba7ae6b",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkTimelineDeltaTest.xml": {
+        "sha256": "9f10f11c07f3a00b12720f248964fe358bb13b6c9516a4b5ef84aee55edbd94b",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTes-NQTOP65CQFBS8.dev.fajar.starter.collaboration.data.BrowserCollaborationCancellationStorageTest.xml": {
+        "sha256": "979babb718833d39bd90e1e9b5cd8d56343af45f70e5d81e30818c452b827ef5",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationCompletionStorageTest.xml": {
+        "sha256": "9cecf48106ac63cf9e5af1a4d7cf1fe8868f193bdadf7c5d9e17f8b53820ebcf",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserT-4D9EDJT3KPN48.dev.fajar.starter.collaboration.data.BrowserCollaborationDeliveryCursorStorageTest.xml": {
+        "sha256": "4a28165492d3f30c63d715bbbd49e21da1d4484a5a323ebc6d9d9afbd45672e1",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationDraftStorageTest.xml": {
+        "sha256": "aa2aa9a58bbdfef1f9208b81c40cb5255d27d2a12e155d292c72f305200d8aa8",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserT-TV6KJBCMSIBPI.dev.fajar.starter.collaboration.data.BrowserCollaborationHistoryPurposeStorageTest.xml": {
+        "sha256": "76df89488d04c055fc505b2b0df965aca8469c5baa6e4daaa259f41331fdbe66",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBro-373UNUVPJ1IG0.dev.fajar.starter.collaboration.data.BrowserCollaborationHistoryReferenceResolutionTest.xml": {
+        "sha256": "8db8db0bbd6e964f7d3bef8157e7ed7bc417f6ad5c57f650e20a1e6af353c9d0",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationHistoryStorageTest.xml": {
+        "sha256": "e7bc351cc6ed7fae97614cfe64b83196ae13c4c8acec3348359c1e781db2470e",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowse-DG1G577IGV6EM.dev.fajar.starter.collaboration.data.BrowserCollaborationHistoryTraversalRestartTest.xml": {
+        "sha256": "306d96955568a00da8a0294b442dcfe51e2c692d2d42a503750d37f21e89dce8",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowse-4NK1VLP0KPJ5M.dev.fajar.starter.collaboration.data.BrowserCollaborationHistoryTraversalStorageTest.xml": {
+        "sha256": "4b5ebe0e779540316e11f5947951288c9288b7fcae97fc8ef3d84f8b75c0f0ab",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationIdentityStorageTest.xml": {
+        "sha256": "3f6f9878057181914127cdcf7360261c9d34918ad8cc77a68e320427e8a5dca8",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowser-C9THFT3QRV9U0.dev.fajar.starter.collaboration.data.BrowserCollaborationIncomingHistoryStorageTest.xml": {
+        "sha256": "0a9f49a11450c1b0f0229e68948fd561674ea95ec1ab3623bcacd29ba08f0d85",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBro-EJBNMN789TQ6U.dev.fajar.starter.collaboration.data.BrowserCollaborationIncomingHistoryWaveStorageTest.xml": {
+        "sha256": "be5858d789bd9ae50aeef8d776c2d772e650c4b813146c9bae35901c00e98c15",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationListStorageTest.xml": {
+        "sha256": "c44ea6bb85f1d653517eaf1d634ed78bbd8c161200dfe64be23497b9c03988c0",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowser-J9TSF6A1JLRUA.dev.fajar.starter.collaboration.data.BrowserCollaborationLocalVisibilityStorageTest.xml": {
+        "sha256": "2deac6a789f2294666dafa616c5a564aaeb2f6694bc6203c7651123fe5bcd1f0",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationMessageStorageTest.xml": {
+        "sha256": "6823011a5b2ce43e47895dc8d69b89a3fec5fc100dfd9dac658495f3a4dc2d04",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationNotificationActionTest.xml": {
+        "sha256": "1c45bd7fac4bef2fbe638d27a6e7b69572a8a46b48b7673e869a2bf0418a6922",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrow-UQS0V2U3D00EO.dev.fajar.starter.collaboration.data.BrowserCollaborationNotificationChangeStorageTest.xml": {
+        "sha256": "82c2eeb6f95b898c36e134b91852bfe905dcb7da5ee2d9c9d594ca7f3e3c5005",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-was-2USHNH3RV07UU.dev.fajar.starter.collaboration.data.BrowserCollaborationNotificationInputRecoveryStorageTest.xml": {
+        "sha256": "b2a8cd26043fe6078627f2f509fd6f12213753fcb772c04630beae67b690522c",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrows-7790EOB2V3FUQ.dev.fajar.starter.collaboration.data.BrowserCollaborationNotificationInputStorageTest.xml": {
+        "sha256": "d1a9cd696abc1e2f46ac881c628c5d5136084fb1faff7909cf34c6d34ac7aca7",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJ-310DMHE6CMR7G.dev.fajar.starter.collaboration.data.BrowserCollaborationNotificationPublicationStorageTest.xml": {
+        "sha256": "748cf48ab0a6d4797b2ab8949f267f13108d80e3bdeddecc0ed306e1a3b93b34",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-was-KJB8DCOSENL4Q.dev.fajar.starter.collaboration.data.BrowserCollaborationNotificationReplyRecoveryStorageTest.xml": {
+        "sha256": "e834366f2eedff3b06bf24a7f75e879af542fd87c906df7dd26fbaaee09af3bd",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrows-UB0MOP9QAJRLU.dev.fajar.starter.collaboration.data.BrowserCollaborationNotificationReplyStorageTest.xml": {
+        "sha256": "287b7f9be6400c7a81146276856c7531d108b35789db682b4923e239f864367d",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBr-522IMBNLIP9IM.dev.fajar.starter.collaboration.data.BrowserCollaborationNotificationSettingsStorageTest.xml": {
+        "sha256": "3b1b78d86fbb2073d6679b9367dc42edacf3e029642aafa6ac1334ff40dd3dd2",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTes-LC9TSHL46BTPI.dev.fajar.starter.collaboration.data.BrowserCollaborationPushPriorityStorageTest.xml": {
+        "sha256": "83c58625814695d2e989203887cb371a42043eb37b5410b794991d8fb8370b64",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationReadStateStorageTest.xml": {
+        "sha256": "c31262c4b69d0c8150ba4aba590be3a5040f20322a723827e5bc799b849bd0f3",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationReceiptStorageTest.xml": {
+        "sha256": "baeae7ffeb83a0bf702ee3a0fb2cdf69c496538d1ba08e430237c87479570640",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowse-J9ANPVPOJV1V8.dev.fajar.starter.collaboration.data.BrowserCollaborationRecoveryProgressStorageTest.xml": {
+        "sha256": "6b4a742494aeab6203b26e124aa740eb9988024ca16f17a7dd9243895590758e",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTes-UQ2QQFQ48KAIS.dev.fajar.starter.collaboration.data.BrowserCollaborationRoomRecoveryStorageTest.xml": {
+        "sha256": "70dc2944ec06c80d9a08d5deb5ecf09f384ef6ed4a8beda254c194bc36a3aa14",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBr-7LKSBAFLC79HS.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceIdentityCommandStorageTest.xml": {
+        "sha256": "0934bdb649c294ba27bd9be06740767634f1c96773be551882566888703b740d",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasm-R71G7KGU04LMQ.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceRegistrationCommandStorageTest.xml": {
+        "sha256": "f9d1ca20fc342c22c3292f1a8028239536f9a2bec501496f84e8beebef0b21e1",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceRootStorageTest.xml": {
+        "sha256": "73d112e92b291ae1023013c17da5774026aea28f7deda4dfd752557c7e0a039d",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrows-716GGSE1C1LS6.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceSetupCommandStorageTest.xml": {
+        "sha256": "7773a6308cd16e15cea14b8a3b51fd5a0bb6c00d4e7b49df14f2592fa60eb2ce",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SpaceDirectoryStorageTest.xml": {
+        "sha256": "790a6c5d10ac872cacfdfc04136ae4d0951e8b1e35961f0c8f14a51d4379a73c",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SpaceDirectoryAdmissionStorageTest.xml": {
+        "sha256": "9dde7e637cf5251e278b7aadc001cf895c94b06328396305ca27d2cb6f2f63b9",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationConversationCommandCodecTest.xml": {
+        "sha256": "2c2150145ec7ae0b41650bb98b7d02ce0f0ceca4895fb12be45254cc6a9c0ae1",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationDeliveryDiagnosticsTest.xml": {
+        "sha256": "2ed24f4a1bb516c8962d4e6ddae435fa86cc40633b43b8d40eac335c84e224f0",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationDeviceSyncTest.xml": {
+        "sha256": "2aaabae37d4a76c43c3df4baf6bdf08290d9562e50e8ac508c557c1b0806e256",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationDiagnosticsTest.xml": {
+        "sha256": "95fc72777187337ca1e4d220ff7c21731bccd7fc4256a27f90a537c381d029ba",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationHistoryReadsTest.xml": {
+        "sha256": "b2b0fd8ffb2785571bd1d1e82fcbca22b3d854ebdaedb07e866d10844517ba0d",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationHistorySourceTest.xml": {
+        "sha256": "0f8186beff09bad299885e1e1cdf9d7083c40ae59d5342ee8fcba8c4dee89eac",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationIdentityTest.xml": {
+        "sha256": "339a3d883dc6d19a58b103210e8f6534d4cdcb226ea609e666330ac0026e9e51",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationLocalDeviceIdentityTest.xml": {
+        "sha256": "976b70163f2328121351deec1bc5ee102a23a4b3a7121d7f39d644dd5d560425",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationPusherTest.xml": {
+        "sha256": "14f7087e243f4b0a6e81ec8cba31af06aba05db5ea2dbd24f1a921721fba804e",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationQueueDeliveryTest.xml": {
+        "sha256": "7c15aa6ccc6166be11afee2c4d192c442b9e84ff55f3f1fda33b9274ba22c3c2",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationQueueRetryTest.xml": {
+        "sha256": "0e70ca344df2ddd8aa13f395a2c938c30e851867d8cc2ddaaa357008ed3a19db",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationQueueSourceTest.xml": {
+        "sha256": "1536cb0e62557f6c85a295bce768e9af3d03142a9fef9d74954331caa58673a4",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationReadReceiptsTest.xml": {
+        "sha256": "2523b1e587fc10325ed8cfa43398cb0a35922e438f602545799be636d21dae7d",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationRuntimePublicationTest.xml": {
+        "sha256": "f0b26c2c689cce8afaed34f1855c7c9578d924003026281458ba4bb1dcb489c5",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationWriterExclusionTest.xml": {
+        "sha256": "0f87f37487c97d432c59844a77441af2da704e9766210e405b4ee8ea194bd609",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidSdkAuthDelegateTest.xml": {
+        "sha256": "57e208ae8e4d5e5f70eab50fd875695459eb93110371874207a18610d2623108",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidSdkRuntimeHandoverTest.xml": {
+        "sha256": "a45b7f85dc011d5d9736cacf0aa3ade5b735ee1c3f9adc965b5cd0fd99bf6e08",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationCommandCodecTest.xml": {
+        "sha256": "004dbd3966a578df279d44fa9cedc15407707c5f450206383948c5b9759a33bf",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationTransportTest.xml": {
+        "sha256": "1e5b99117b72ddeaa80976beaff902923cf12b4cc74704934e4c20598c2e8da3",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationValidationTest.xml": {
+        "sha256": "3fd242f3230145aefb0747829d76ccc64ac486573ae9bd60e92c75330e38597b",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationGatewayConfigurationTest.xml": {
+        "sha256": "0ef85676105aa812f34009b3f5cbfed849bbc74f36c651f2242173b217f3b7f0",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationHistoryHeadTest.xml": {
+        "sha256": "92cac8c78b7273325bec8c3443618b1309b5c47ba8af68131bc9e5ccbe32ffe5",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationProviderPageTest.xml": {
+        "sha256": "3963f2ca9beef5283745ae695ea05362dd00be9f2ef60186798ee10d33d74e18",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRecoveryTransportTest.xml": {
+        "sha256": "187c04be09748e8c858eb7a05efad531dad248f803342048f824a0824f78754b",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRecoveryWakeRepositoryTest.xml": {
+        "sha256": "78a728c357cff1b2fb8c155d8830314d4bff024ac23f71638edfda9e756b2bf1",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRoomLookupTransportTest.xml": {
+        "sha256": "88a830315233ec25cc4c192065e328dda21b252208743c15907c2c6b8db5f792",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkFailureMapperTest.xml": {
+        "sha256": "f3da1a35fa7fb0967e620e0a2f1a32a0555b151e20b55f24386915486cbaa107",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkHistoryMapperTest.xml": {
+        "sha256": "7c858ed8d3925dd23b1165dc532a4e8d79c8d97455c728cccd5f312bea6ac342",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkIdentityMapperTest.xml": {
+        "sha256": "effb95f374c141a989be1951251adbd0fe1969cc9707e79ccdf09c25d769236d",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkLogicalIdTest.xml": {
+        "sha256": "1f0e040cb5e3970f3af6e2f74734680c28341f9fe36050475ec09b171b873d33",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkRecordTest.xml": {
+        "sha256": "d9d209049f7d4cbc64ffab1de43d771fc739c6bb7cf3b73af51a8a0189df5f82",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml": {
+        "sha256": "1bb6ffefbb95cce04d907b85dd7553dc3aa88da6e7e5f08efc91349b3bd95d7f",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml": {
+        "sha256": "d3f2ecc83c0adde05763b3983aba57801a164ad8e95abb8c9b206f09034838a3",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceDeviceTransportTest.xml": {
+        "sha256": "7f43da7bf8fa5e78751eb38e9fa320249ca7e10726c2250ce40bc360cf8d25ae",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityReadTransportTest.xml": {
+        "sha256": "7e34bf4bbeff2fc30f785b8fa34528ec43c33b1c806944f459ec2cb7e7d96717",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+        "sha256": "44c92313459a96b149a99015084cf9406b31a6054eaf8117378713f38c50dc8d",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRegistrationTransportTest.xml": {
+        "sha256": "74d7ad164914bcdeb7d8cf302e41584f385068215cebac49d812a39be1afb6d4",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceSetupTransportTest.xml": {
+        "sha256": "be2b9af1d53219aabc9cbc34f1251d90af31a90ba3b0f7945d21834aaab91cef",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceTransportTest.xml": {
+        "sha256": "5de28b70e15f685fd64693d0051bcd8fd50c80b7f7df8835359f3d671cb5df6f",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSummaryTransportTest.xml": {
+        "sha256": "ea7781a5f74d30b9afc1a17a8a0aacc867116647389840bafa095a69a952c708",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationTextContentTest.xml": {
+        "sha256": "d5069141fe031cdf4d96a5611543f70338827535f941cd58307076554b2e8af6",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkChildResourcesTest.xml": {
+        "sha256": "6a417905b3da2def40fb50e66fdad5a43bd16082b8512bc057bd0095050d4bfb",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkCredentialReplacementTest.xml": {
+        "sha256": "3a7020076c0dc04cedc1768f8ae7961ea93f76929928cbe61aa9dd9edd8b1ddf",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkFirstSyncTest.xml": {
+        "sha256": "578f870d24ae36e0a2bbe56103ebeb6fba816edb75e0fec16438fe4f868b026e",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkHistoryFocusesTest.xml": {
+        "sha256": "a872de0088bed823506a736b9b62eadb081a5efd6e32cc5336b3515458c5063e",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkQueueDeliveryTest.xml": {
+        "sha256": "a3ee4392fc9946327dd125db173d095b7894ae761a4e27756fc83fccab03fe73",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkQueueOperationsTest.xml": {
+        "sha256": "7dfe0b7e6f472229a677dac90f996e61f114bc63ad92f65e872ff965b036cfc9",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkRuntimeRegistryTest.xml": {
+        "sha256": "f36a0d96cca2854391d03b389196212378ff8da6be1aa1f91ffd524bb3c55084",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkSessionPersistenceTest.xml": {
+        "sha256": "8efb5986f79dd8599c5641c2a76a1d690ddf19fb33bad666e91e92b8c0cb7052",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkStoreShutdownTest.xml": {
+        "sha256": "19f907218766bb9c2d2919336bba2e35c44c26ae897fbeb9f5e612386068c5e4",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkSyncLifecycleTest.xml": {
+        "sha256": "1ac3071222b6f7db39eef3128d41fae9289de61359cec65e99f96339b71d07e3",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkSyncPumpTest.xml": {
+        "sha256": "203b74aa0f623e136dda6656ad78ca4045a1c3fa51c19089e4fd6173add77121",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkTimelineDeltaTest.xml": {
+        "sha256": "cdac2d5028eb13b7f54591335dc6845567e7d1ca3456bac3c065bf38b1ff340f",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationBackgroundRuntimeTest.xml": {
+        "sha256": "c1bb0223d52485677960ee69a34d8a54a9309efac436d1c29788d5b3e60748cd",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.WorkforceRepositoryTest.xml": {
+        "sha256": "0a27387072d454f5ce96efd71239c694a36c67b3cb7d1b1e89b9a5c364521e4f",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.attendance.AttendanceHistoryStorageTest.xml": {
+        "sha256": "3663760a8e81c4c79159b8f3f004001556b5c98835672eb56f51b8821ade4ddf",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.attendance.AttendanceStorageTest.xml": {
+        "sha256": "0e73d8f501047355a6a1f54be5828d22ba8ef1cae958eefd63e6028c395acc54",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.EncryptedOvertimeCommandTest.xml": {
+        "sha256": "bcbf45dc29b641cc79a78feb02422e8167ae877cc56dbfdde71f4f33b02f00d6",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimeActionWorkingCopyTest.xml": {
+        "sha256": "9ee4f69867f91f2eb628c3e2d18d1a409333acaa0d8ff5be2830e11446054920",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimeCacheTest.xml": {
+        "sha256": "ca69cbba53e541e7d26f2f9e3f106def87ffa8ae73a3d2750ad0443e419292df",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimeCommandTransportTest.xml": {
+        "sha256": "08ce03aaa95689bc7f029b0ef1d2327bf8a92bfb05a147f1901373c64e7be1a0",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimePlanWorkingCopyTest.xml": {
+        "sha256": "ced3cf64ff16e8b09adfec1d9c65013bf8f24ae07615b4cd2c36ca111aef34cb",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimePlanningRepositoryTest.xml": {
+        "sha256": "68b97c3d32d267ff62a901b783d02c06501f7027e0c115132c696b458c9a920c",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimeReplicaTest.xml": {
+        "sha256": "1acf860754c3ba39eddbb5bc21a42166488588c0375abfbfeca29b6f8d3f492b",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimeRepositoryTest.xml": {
+        "sha256": "c36ba25c1028268dae238cc8ba5d5f0c18bc08210cb05d95220617e909ec0d0d",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.replica.WorkforceReplicaTest.xml": {
+        "sha256": "97c82044131b808a36982b9eec2305bf8d1f330964ca492ed7710878e1166ce5",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.WorkCalendarCacheTest.xml": {
+        "sha256": "2d332054736cd023d7b3ee6c6cbaa4557180e39d4c5c6991946646621254c61f",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/people/data/build/test-results/desktopTest/TEST-dev.fajar.starter.people.data.CompanyDirectoryRepositoryTest.xml": {
+        "sha256": "4b0bbadae3a59c9db009c45c35d051b01780755c8d0be4fd3ed3a79d97a03646",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/people/data/build/test-results/desktopTest/TEST-dev.fajar.starter.people.data.profile.SelfProfileRecordRepositoryTest.xml": {
+        "sha256": "4953f548a438a50721c82f0c8f3cfaec08280c31d40bc5973f8fe6bc9f592763",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/people/data/build/test-results/desktopTest/TEST-dev.fajar.starter.people.data.profile.SelfProfileReplicaTest.xml": {
+        "sha256": "d929389c8b9b7a092570ff76305ca0e09328328a80abe17735dd112a9ac5b605",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/people/data/build/test-results/desktopTest/TEST-dev.fajar.starter.people.data.replica.DirectoryRecordRepositoryTest.xml": {
+        "sha256": "2c46d9bfb6af1994b6716e8d70f5293acd243846329546bbbffc1c53999127a6",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/people/data/build/test-results/desktopTest/TEST-dev.fajar.starter.people.data.replica.DirectoryReplicaTest.xml": {
+        "sha256": "a1790e5ef3b4db07fdd7922ea286381b5577df4ae1a00d4d6ba23a04f1459b1c",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/people/data/build/test-results/desktopTest/TEST-dev.fajar.starter.people.data.PeopleRepositoryTest.xml": {
+        "sha256": "b14dbe84acf883b3b8ffb3450887a0b7c329d2a83753d1e1d92e0246b8efb38e",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/payroll/data/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.data.PayslipMappingTest.xml": {
+        "sha256": "c02d72b26ec47c7adde27e413a149d26e952941ab163481809a3352703d06ffc",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/payroll/data/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.data.PayslipPdfTest.xml": {
+        "sha256": "a151d095570ac7a0e130dd5f23e6c71f8a2f543b7cad4fceecba25aedab46d8a",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/payroll/data/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.data.PayslipSettlementTest.xml": {
+        "sha256": "9aff8a3a87f16a1d1e405a91583da6e606e07bdd8a00dc4587e22326caec1066",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/payroll/data/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.data.PayslipTransportTest.xml": {
+        "sha256": "fc64c9a9f8d94ccb9c62e2830da3efff8f11d3405298861cf994e7f3f1db6b71",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/payroll/data/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.data.replica.PayrollReplicaTest.xml": {
+        "sha256": "86a6176ed7def17e022863344114a4c8183cf3bef991f2c1e6c468ef8d45c246",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/payroll/data/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.data.PayslipCacheTest.xml": {
+        "sha256": "4294323febe09baa545d1c3d2d438e0322ccb775fa7989114f9f2bd9e55e9e8e",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.EncryptedLeaveReplicaTest.xml": {
+        "sha256": "5df76c15fd939a5dfd7e5c139428640679a5c3336259afb50f3550a5af108f8a",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.EncryptedLeaveSubmissionTest.xml": {
+        "sha256": "80d7807b542da180a0cf0170e36613772de146c3a0ac6db3600d272c869bd0c5",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveCacheTest.xml": {
+        "sha256": "28551ec00960c4bc733a345ac7ff2f00ff551ac5adeaeac65314eb2150e2db03",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveCarryBalanceRepositoryTest.xml": {
+        "sha256": "2c937c3d9c8930dbe6299dfe7f1ffbf9dfb837ae9bb13d60075ca943da7528e4",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveCommandTransportTest.xml": {
+        "sha256": "e292e24679f03c400e90965a4005afcff2f4fbabab62a91d4164c29be4c527f7",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeavePreparationRepositoryTest.xml": {
+        "sha256": "7d1a85ed99c7b6af78925b8ce73dd6a7eb26a0776169ef5b07862459bcfe7774",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveRecordRepositoryTest.xml": {
+        "sha256": "85daed32e852cf5d51427fa478386893d23f6101fad0b7d91073dc89384b9294",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveRepositoryTest.xml": {
+        "sha256": "2e7816cfa05c944412afa50cdaf32826c93a6512174298acd050763775373a80",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveRequestReplicaMigrationTest.xml": {
+        "sha256": "d75bb63c84f45578c5b5058c2853972cfff173e882f5a975497885fd026fb0e4",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveRequestReplicaTest.xml": {
+        "sha256": "24fdbecfe8102a44e9cbd89ea16f058e5cee80b86fd3eb4805cefec9952bf67d",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveRequestRepositoryTest.xml": {
+        "sha256": "eb97be5c1ec44f547efb0a19af1bba633d417ec3f294b0d39a1457425ece54cf",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveSubmissionTransportTest.xml": {
+        "sha256": "230b16310a859e0019d86ee56727b5b28cce83d528ec045b169f76ae4ae671f4",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveWorkingCopyTest.xml": {
+        "sha256": "da6c986c871c84ce1ae4b0f238d94ebb49d6e96df0b9b9732280d13ac061dfb2",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.EncryptedLeaveCommandTest.xml": {
+        "sha256": "ed87cb5157e582c214e1295c5c6a04b2f0d455e8588e9a2816d094a8ca3445fe",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/inbox/data/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.data.EncryptedInboxCommandTest.xml": {
+        "sha256": "5a547ca9e4aaa0f9c2172c8140bf992d256cb89f3de29d0a3f2f6dd738b2e286",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/inbox/data/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.data.InboxCommandTransportTest.xml": {
+        "sha256": "8e2441a26c3edb9dbe33938720c26e4c3718f57c221c23e1b16f43e78b7aac66",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/inbox/data/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.data.InboxPushStorageTest.xml": {
+        "sha256": "4999ecc5e50967ef82f371a8739be6b65797dbf2c3c56a516c9c8beae7a8365b",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/inbox/data/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.data.InboxReadAdmissionTest.xml": {
+        "sha256": "922aba8590e50db7998af6a3df5bcd4e677495a300c16eeb2cbe20b325adb3f1",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/inbox/data/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.data.InboxUnreadTransportTest.xml": {
+        "sha256": "5a2a9ec79c12a9536c7c286670db351732000f0e23a29d02878727d68abe61b5",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/inbox/data/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.data.EncryptedInboxCacheTest.xml": {
+        "sha256": "e4581a5607ec3e594ec9b2ababb890b504c2796e9e6fed52cb8f467c5b2d1d56",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseCacheTest.xml": {
+        "sha256": "62ca8e11b8cf424e9bdf4c4f90fcfdbcb8019eaae7b586ae10fe56b995ae7f68",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseCommandTransportTest.xml": {
+        "sha256": "39051910a71e3cb9bb9ce91565beea13aba99f12307e11a942c2ced8417f5c2a",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseMappingTest.xml": {
+        "sha256": "5cafd78e225b1f9da4316dbbcf0bca5777f7e345d1ad053cdb80d7f4158db727",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpensePreparationMappingTest.xml": {
+        "sha256": "b74d8691fd04ce029d011eb6f47e64ff5f7bb9d83a26be7a35ecf46583ac71eb",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpensePreparationTransportTest.xml": {
+        "sha256": "cae5d1f1930a46d329b45af7d6024fb94e434430190a56709787f1e9cbecef02",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseReceiptDataTest.xml": {
+        "sha256": "378074d3927e4d641ae9fb9d0160c6f7946a9608610265a3d17c6d846bec0062",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseReceiptTransportTest.xml": {
+        "sha256": "255bbb74980d80efd5a0b86bff155bb7ece765803a8abb213f8f12119b36a469",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseReferenceTest.xml": {
+        "sha256": "f50da318415e93f6920f9ba8c14356259fa394509472a34f6d88ff854edd2e07",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseTransportTest.xml": {
+        "sha256": "4f454ffd9135f9c27207cba363bf83311226aeabdde0f9f1be698eab29e57ed0",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.replica.ExpenseReplicaTest.xml": {
+        "sha256": "1e7f40346e6b5e9ee7347fdb98b85758200fb67b9d146c33489f4bc770979c59",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.working.ExpenseWorkingCopyTest.xml": {
+        "sha256": "cb1451f768cf462f5e41c3e5fa3f3bc34f3deb9de0846adce5b34c192f593c01",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.EncryptedExpenseCommandTest.xml": {
+        "sha256": "ceaeb832744b529f50d5bbf7ef06b0d5c1a8a17e9cab7ce4a42a5af90cc96d6f",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/dashboard/data/build/test-results/desktopTest/TEST-dev.fajar.starter.dashboard.data.LocalFirstDashboardRepositoryTest.xml": {
+        "sha256": "d8227c24fe7a185a99f350eeca40b32dda623b7996384a82d9e7f7e31f8fdd38",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/workspace/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.data.CompanyPolicyMappingTest.xml": {
+        "sha256": "35981ecad589d84b05887916785d04caf1d63ccfb322a8788fee2fbae6a4c41e",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/workspace/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.data.EncryptedWorkspaceTest.xml": {
+        "sha256": "673c0278246475eb35967795bf2f6f0d851675e60829ad47f62fbccbf84415ad",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/transfers/data/build/test-results/desktopTest/TEST-dev.fajar.starter.transfers.data.TransferProtocolTest.xml": {
+        "sha256": "38cb68f3511e7bf8a6573e4bddc378aa27087f543679c0d451b463bb286795a4",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/notifications/data/build/test-results/desktopTest/TEST-dev.fajar.starter.notifications.data.ActionNotificationShapeTest.xml": {
+        "sha256": "55380c8587e4e26599fe8e8563c756ea06d29ec4f1907a1cc7a4124854207db2",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/notifications/data/build/test-results/desktopTest/TEST-dev.fajar.starter.notifications.data.NotificationDestinationTest.xml": {
+        "sha256": "c5d42bbbec4aabf36607f581bc31269a2cafd7661368a8194bb3fcd18a30b539",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/notifications/data/build/test-results/desktopTest/TEST-dev.fajar.starter.notifications.data.PushTokenLifecycleTest.xml": {
+        "sha256": "99f2226488bf6e9b78c72a204e42469c6428b1ebbe6a14fa0713316b61e09267",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/notifications/data/build/test-results/desktopTest/TEST-dev.fajar.starter.notifications.data.SafeNotificationCallTest.xml": {
+        "sha256": "02bc80dd3a21f0e99c300da6f85058d4ea159219e6a626de77642a6b43535583",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/notifications/data/build/test-results/desktopTest/TEST-dev.fajar.starter.notifications.data.ActionNotificationPendingIndexTest.xml": {
+        "sha256": "401d6ca87d55a9667c8de955697ca91c17464708fb1a66a89d0cd12dbf5b1a37",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.FirebaseProviderTransportTest.xml": {
+        "sha256": "4bbb3adec42ee2a4964fa4b3cffd71ae00b78cb87431897242db77e045372725",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.GoogleAuthorizationExchangeTest.xml": {
+        "sha256": "4295c176e6e4f046a5d2732686b522faff4f5f1cb10abd4a3eeb222e17ce1131",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.GoogleAuthorizationProtocolTest.xml": {
+        "sha256": "601f1c92e0231c1e0d815c804c8fe6ba5b996129fd7d775379e7485b17f7d036",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.GoogleCodeTransportTest.xml": {
+        "sha256": "27b0568df8b7d10cefe01a2c3069260423599806179b48e85f4e3ac5bb4e6bb5",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.GoogleCredentialSessionTest.xml": {
+        "sha256": "9b0b8633509da58fc9efac59219c9cbb88331cee6e2c2b9ed8da12f36f06280e",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.IdentityRepositoryTest.xml": {
+        "sha256": "3eeeccb0e5fa40b790c19d19882504d0a3fadb36b53dc698786c487ddd35d389",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.InstalledFirebaseAuthenticationTest.xml": {
+        "sha256": "cdfb907a9d5813c62b099264fe4aecc7c63c5d0e9cf982997e90c814986e946d",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.NativeFirebaseTransportTest.xml": {
+        "sha256": "7b1bbccbf06e6477b06bc1b74057bf45aaafa28be927ad2888fbe434a5a50386",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.NativePushStateTest.xml": {
+        "sha256": "b557ad2e95659e19803f864f700afb08d55c728b5ea5f361afe8cae1abd016a3",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.NativePushTransportTest.xml": {
+        "sha256": "ec8111228337dc46a711daaaff4db09dd6f13a03496a3961d84a24faf6102d73",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.RefreshTransportTest.xml": {
+        "sha256": "99d37f789763bfb7d1d9b0c663480d6f26f6f89531ca07e46748ba6b659b2f2c",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.StoredSessionRepositoryTest.xml": {
+        "sha256": "33afba04100c8251d8ccc372516aa52a7f3eb392fc081ac30c3f9cdc79507868",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.sso.BrowserSsoRepositoryTest.xml": {
+        "sha256": "e5ed9414fe69b70c2f94a0229d674a5642d58e20442df6b84ff153db2b0c160c",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.sso.DesktopAuthorizationTest.xml": {
+        "sha256": "016e7de6985e534ceba5367eeadbc9f27a0a0110b17b86e64ca315534ab28e5e",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.DeviceSessionTransportTest.xml": {
+        "sha256": "f34d33886cf6b1b478e4c034627ce8f7b606e31366ea1e123474b38f5299153d",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.DocumentFileStorageTest.xml": {
+        "sha256": "b42b9d77fc6e1c360b82cc25fd2b382c4ce6d8f701631358c90e810f1a67662c",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.DocumentMetadataTransportTest.xml": {
+        "sha256": "4589c92053a3f92166a9bfdf52f086cbae09a2649a8e9641fcb83b07c58fc6a3",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.DocumentRecordTransportTest.xml": {
+        "sha256": "9bd2bf2d313146dbece44f9a43896dbb26ff575e71419d7f8f513d70ab99136f",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.DocumentRepositoryTest.xml": {
+        "sha256": "a15f72de9aeafd72983cfbe2fb9e4b5378e659c8437064c418c9f99f8301fe46",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.DocumentUploadTransportTest.xml": {
+        "sha256": "0ce3cb126c12cd0b5fe399367467571dfc79f67407f8f9ae00fff90c26b725a4",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.metadata.DocumentMetadataRemoteTest.xml": {
+        "sha256": "93f08b45476151ae93253ab336db60bfc20b4d4c56413f70de5325848cbf84f2",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.metadata.DocumentMetadataStorageTest.xml": {
+        "sha256": "9a381800b6d8a355dd7476f6df1609c231d8e57d4e0e2c284f90d468e10d22f0",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.metadata.commands.DocumentMetadataCommandStorageTest.xml": {
+        "sha256": "5a67cf1315cc3ebf94b1507b58cb0f41057473f3ba594cafb2466c44bec493b1",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.metadata.working.DocumentMetadataWorkingStorageTest.xml": {
+        "sha256": "e95f683e5d344c42077a1df4b5c0f0283ffb129645bdf2cc684f658ffa2a64e2",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.replica.DocumentCatalogReplicaTest.xml": {
+        "sha256": "f66174a6470c0c356c7ae1686760a45b7c0475a8687ea89a393694553f451edb",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.DocumentDownloadTransportTest.xml": {
+        "sha256": "a821ac0e2334e673015bd09447f8b360bcc4caa02a9b1dd842aa4de8a36abfeb",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "cachedTestTasks": [],
+  "apple": "New six-case wrapper not yet executed; running CI42036083914 is older a26a source",
+  "starter": "Port pending Mobile feature validation",
+  "delivery": "Phone remains release36/a26a; this storage-only change is not installed"
+}

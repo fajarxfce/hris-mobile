@@ -93,6 +93,30 @@ internal class IndexedDbCommandStore(
         }
     }
 
+    override suspend fun insertBatch(
+        scope: CommandScope,
+        records: List<CommandRecord>,
+    ): CommandInsertResult {
+        val detached = commandBatch(scope, records)
+        val db = database()
+        currentCoroutineContext().ensureActive()
+        return withContext(NonCancellable) {
+            val outcome =
+                CommandInsertResult.valueOf(
+                    insertCommandBatch(
+                            db,
+                            scope.sessionId,
+                            scope.accountKey,
+                            codec.encodeToString(detached),
+                        )
+                        .await<JsString>()
+                        .toString()
+                )
+            if (outcome == CommandInsertResult.Stored) changes.tryEmit(Unit)
+            outcome
+        }
+    }
+
     override suspend fun update(
         scope: CommandScope,
         partition: String,

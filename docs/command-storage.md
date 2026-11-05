@@ -83,3 +83,26 @@ projection, local deletion and retention are separate feature policies; no sched
 or automatic cleanup is introduced by these methods. Executed validation and the
 Starter port are recorded in the [measurement](measurements/command-archive-2026-11-01.json)
 and Git handoff. Both repositories pass their full local checks.
+
+## Atomic insertion batches
+
+`insertBatch` publishes 1–128 detached records in one SQLite or IndexedDB
+transaction, using the same ownership and account/global pending limits. Every
+immutable existing identity must match, including archived completions. Replay
+retains the original request, later outcome and archive; only missing records
+consume pending capacity. `Stored` means at least one new row committed, while
+`AlreadyStored` means every identity was already retained.
+
+Scope, capacity or occupied-resource outcomes insert nothing. An identity or
+unique-index conflict rolls back the complete batch, including preceding writes.
+Cancellation may leave the complete commit or no commit; it cannot leave a partial
+batch. The caller must retain operation IDs and validate encrypted logical intents
+when replaying. Randomly encrypting the same plaintext again produces a different
+raw request and must not be used to replace a retained ciphertext.
+
+No schema migration, encryption policy, scheduler or feature consumer is added.
+Six shared cases exercise replay/archives, rollback, ownership/bounds, capacity,
+competing writers/cancellation, and full close/reopen with login replacement.
+Actual SQLite and browser checks pass; the new Apple wrapper and Starter port
+remain pending. [Evidence](measurements/command-batch-2026-11-05.json) records the
+120-case focused and 2,707-case full checks, with unchanged source fingerprints.

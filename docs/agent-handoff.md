@@ -1,5 +1,32 @@
 # Agent continuation — HRIS Mobile
 
+## Atomic command batches validated; Forward consumer next — 5 November 2026
+
+Ten core/database files now provide transactional insertBatch with immutable
+active/archive replay, full rollback and existing 128/account, 512/global limits.
+No migration. Six cases per native/browser/Apple wrapper include real close/reopen
+and session replacement. Focused SQLite/Chrome120 pass78.843s; full root check,
+Android host/compile, collaboration browser data/presentation and proof build/tests
+pass589.63s:2,707 fresh cases/zero failures/errors/skips,4,083 unchanged inputs.
+No test task restored from Gradle cache. [Evidence](measurements/command-batch-2026-11-05.json).
+All local wrappers/children drained. New Apple wrapper is not covered by the still
+running older a26a CI42036083914; wait before starting another same-branch Apple run.
+
+Phone remains installed release36/a26a. All four fictional receivers have one
+ACTIVE device and one confirmed key publication. Retained Bima runs on owned
+emulator5562/PID958042; verify its start record before mutation. Backend
+11a98115/schema116 unchanged. No Forward feature, UI or native acceptance yet.
+
+NEXT: restore only the feature metadata patch from protected stashbfdef2ce (keep
+stash; preserve synchronizeDevice fake methods), implement encrypted batch intent
+insertion and offline Forward preparation/selection/recipient UI. Retain operation
+IDs across uncertain replies; authenticate existing logical intents and reuse their
+ciphertext; preserve destination composer drafts. Revalidate source visibility and
+current local ownership before confirmation, without requiring online credentials.
+Native encrypted metadata/history proof remains required. Port generic core batch
+to Starter after Mobile consumer validation. Continue edit/delete/groups/calls/meet;
+all54 PRD groups open. Push each commit; announce EACH phone install, install-only.
+
 ## All four fictional receivers ready; forwarding resumes — 5 November 2026
 
 Phone release36 is installed from Mobilea26a1248 (delivery docsa5bc4190),

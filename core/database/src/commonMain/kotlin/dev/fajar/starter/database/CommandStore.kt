@@ -23,6 +23,13 @@ interface CommandStore {
     /** One retained command per resource; identical insertion can recover a local response loss. */
     suspend fun insert(scope: CommandScope, record: CommandRecord): CommandInsertResult
 
+    /**
+     * Publishes a bounded batch atomically. Existing active or archived identities are retained;
+     * any scope, resource, capacity or identity conflict leaves every new record absent. Stored
+     * means at least one new record committed; AlreadyStored means all were retained.
+     */
+    suspend fun insertBatch(scope: CommandScope, records: List<CommandRecord>): CommandInsertResult
+
     suspend fun update(
         scope: CommandScope,
         partition: String,
