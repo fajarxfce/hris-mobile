@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Native metadata transport accepted; storage consumer next — 5 November 2026
+
+Eight transport/domain/DTO/test files are accepted against Platform d03fb472.
+[Contract and next work](collaboration-summary-sync.md),
+[evidence](measurements/collaboration-summary-transport-2026-11-05.json).
+Ten desktop cases pass; corrected transport2 passes617 browser cases75.003s,
+zero failures/errors/skips. Android compilation, format and architecture pass on
+4,116 unchanged inputs. transport1 format read temporary .work drafts and failed;
+its class-only browser filter selected no cases. Drafts now end .kt.draft and the
+entire collaboration browser suite runs. Both wrappers and children are drained.
+No consumer/routing/phone behavior change yet; release39 remains installed.
+
+NEXT: implement/test atomic staging discard and bounded working-record reads in
+core/database. Nine prepared files under .work/chat-summary-sync-2026-11-05/storage-draft
+are not yet applied or accepted: five product files plus common/Desktop/Browser/
+Apple contracts. They retain active data, include tombstones, enforce exact CAS,
+exercise late writes/competing continuation/publication, cancellation, scope and
+reopen. Apply after this transport commit, format, run real SQLite/IndexedDB gates,
+then implement the encrypted version2 consumer described in the contract. No
+application source is currently frozen. Do not expose a consumer before deployment.
+
+Platform d03fb472 is pushed and native feed passes full worker/API139 cases432.482s
+with one existing opt-in skip. Full CI42091460931 now runs exactd03fb472 alongside
+Collaboration control42090785206; do not dispatch duplicates. Live remains11a98115/
+schema116/chat pushOFF. Starter Apple42088401280 exacte501d4da has simulator tests
+passed and full app building; audit final artifact when complete. Mobile39 Apple
+fully accepted. Preserve all sample data/keys and both Mobile protected stashes.
+Continue long run;54 PRD groups remain open, including group117–137 integration,
+edit/delete/media/backup/calls/meetings. Announce every later install-only delivery.
+
+
 ## Release 39 Apple accepted; metadata delta work continues — 5 November 2026
 
 Apple42081732094 PASSES exact source2539c6585f77c4f6898ff28426604c3583927fa4:
