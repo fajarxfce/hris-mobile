@@ -1,5 +1,47 @@
 # Agent continuation — HRIS Mobile
 
+## Durable organization identity selection — 5 November 2026
+
+Native group identity selection now retains an encrypted account/space command
+before HTTP, preserves its exact operation across response loss and process/login
+recovery, and stores a confirmed account/version receipt. Local command facts stay
+readable offline; queued old-account emissions are cancelled. Explicit attempts
+persist Unconfirmed before transport, serialize finite work and keep received
+access denials gated even at cancellation or failed storage. Selection success
+never clears directory admission. [Contract](collaboration-space-identity-command.md),
+[evidence](measurements/collaboration-space-identity-command-2026-11-05.json).
+
+Review confirmed the server operation fingerprint is account/space/provider realm,
+without the first native family or build. An explicit retry therefore uses its
+freshly supplied native owner and actual client headers while retaining immutable
+original provenance. A real new login has a new local session ID; stale supplied
+owners and changes during an attempt still fail. This selection rule does not
+change device registration/bootstrap or authorize retained SDK-store adoption.
+
+Nine shared SQLite/IndexedDB, six HTTP and fourteen domain cases pass; nine root
+lifetime regressions remain green. Actual app DI resolves repositories/use cases
+and singleton replay. Final root :check, Android-host and Android dev compilation
+pass 124.829 s / 1,156 fresh cases; browser data/domain pass
+150.292 s / 1,503 cases. Final 3,950 inputs are identical;
+format, architecture and detekt pass. All gate sessions closed. Earlier compilation
+fixes and the replay-contract review remain recorded separately.
+
+NEXT: native group device status and durable registration/retry/bootstrap commands,
+original SDK-store adoption and explicit native hard-parent recovery, group UI and
+typed push/background/replies. Selection receipt identifies only account/version;
+verify actual original Matrix user/device/key continuity before adopting a store.
+Never substitute a space UUID for companyId, silently register a replacement SPACE
+device when old keys exist, or reopen the frozen old runtime. Device/bootstrap
+idempotency and immutable physical provenance need their own server-contract review;
+do not copy selection's broader retry rule into them. No user/SDK/device is created
+by observing the saved receipt.
+
+Product still uses company chat and all 54 PRD groups remain open. Live backend
+8b40/schema 116 is unchanged. Phone release 29 is installed-only and byte/signer/UID
+verified from earlier product source 084662c5; this identity increment is not in
+that artifact. No phone UI was opened and no data was cleared. Continue long run,
+updates, atomic pushes and validated install-only product delivery.
+
 ## Product release 29 installed on the authorized phone — 5 November 2026
 
 WireGuard ADB became reachable. Existing release 28 and the development signer

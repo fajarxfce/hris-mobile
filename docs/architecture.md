@@ -1,5 +1,9 @@
 # Architecture
 
+[Durable organization identity selection](collaboration-space-identity-command.md)
+keeps immutable operation provenance separate from the fresh native owner of each
+explicit attempt. Its account/space receipt grants no device, SDK or directory access.
+
 [Known organization root](collaboration-space-root.md) locates an account-owned
 directory cache after restart or reauthentication. It grants no live authority;
 explicit directory admission and device/SDK ownership remain separate.

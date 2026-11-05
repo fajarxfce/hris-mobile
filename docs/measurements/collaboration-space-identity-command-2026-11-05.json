@@ -1,0 +1,469 @@
+{
+  "date": "2026-11-05",
+  "scope": "Durable native organization identity selection; no product runtime activation",
+  "parentCommit": "e068244bb2dfd606425281122e04b4966c6f9193",
+  "codeBaseline": "c4f791492971113bcb12f5047cc639a3b51f58c4",
+  "sources": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "663e243b3275f218bbb82affaeeefc74686fad0ea3475a5b7ad1cb452018f04b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/api/CollaborationSpaceIdentityApi.kt": "5e4babb0bec95dc7fa5c21fbfff68427ee40c794435f1f89f7d96e571f59130e",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/ApiCollaborationSpaceIdentityRemoteSource.kt": "af97bfac5dd274b565c5ced58563abc7eadd4205396b4fc2a49ddb9e23658d84",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationSpaceIdentityRemoteSource.kt": "a0322be0f04cd935c6625c48c0aed8b102efafe05ba4802f894526d089c96466",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "46dca496c523ffb9032b8c8b120aaf82fc76b4c7f3fc3b07b7d1b1540e4ed452",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/identity/CollaborationSpaceCommandKeys.kt": "aa143fec175bbeb827eca883d986bf5902c3ba4408b79fa0a0c684e55367cf86",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/identity/CollaborationSpaceIdentityCommandCodec.kt": "3644a03f63c042ded8845c39b91f7254450696a03d02bab1762936b2bc2a7842",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceIdentityCommandRepository.kt": "2b307b75769d8acaa38435bed64035776bcd9b4955b2728aeba700dfe1f4c31d",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/RemoteCollaborationSpaceIdentityRepository.kt": "1eb39e18ef11da0b70624b40eaf97696aaf2d04b071804b5d4039ccf6ffefd2f",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceIdentityCommandStorageContract.kt": "06cea78a87ad39c4ee3ce437f697ee88419260d28f92fa154ddde01290fb0585",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceIdentityTransportTest.kt": "b6deebb421cfec327d849d42a97d52f0f563aedc26e85d3b5d4282ab71e3a224",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceIdentityCommandStorageTest.kt": "e294b42eadaf7cced0aecdcd7962e4c574947d305f7f56b01f3b16e1b372e8fe",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceIdentityCommandStorageTest.kt": "57c9519092190ab02c7ec8d523541bcb37991cf44cd6fa9c48891922f32c6c66",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceIdentityCommand.kt": "94d44d501af8bf8047787796c8bc1de3c1115bd4aea2141aaaf570cf2e58bbd9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceIdentityCommandPolicy.kt": "7f11cd2c1b0b7afc4d06a33ec716cac479dbd6495aa1cb8f008dea72ef6c5142",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceIdentityCommandRepository.kt": "0124f9cafb7f2f1c5ea4ba9fac5ea79f0f7f2ee341931db9a2b4d18ba96ca86d",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceIdentityRepository.kt": "e33c7a94883a27952bebf6140849a81886342c206c7aa38371fd1e674ed17568",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationSpaceDiscoveryLifetime.kt": "80a4a6280858a7c8cf2a99ae1625fa34e5b696f92b1887a6cb88e4bbf0b77bca",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceIdentityCommand.kt": "a9344e2e551e7b40c02d17793b734583a56401dd6bf126fcfed5998e9d3e436e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationSpaceIdentity.kt": "4e347513f790097d960f5fdbec39c7158f2737af18879d3fd5e42f990f21a83c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PublishKnownCollaborationSpace.kt": "cc98e81e2ad5f6ca9017f746013c430c3af040a044f7e55bf4ee12fa6117b3bf",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReplayCollaborationSpaceIdentity.kt": "2beff3249bcbefe8fbe61b0783099f29cbc6d10161d3cdc1042c4c2ef5633d63",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceIdentityCommandTest.kt": "b30ca9f0b339558ec313ab3c3e2a310e5899cea16a1595a0e13873ad5cda5c1d",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceIdentityCommandFixture.kt": "67a9b975e3123a7cc80a821c3c8aaf8ce79f9ad4191d9a7e96a6098c1b3f08da"
+  },
+  "gates": {
+    "focused1": {
+      "startedAt": "2026-11-05T00:30:07.886092+00:00",
+      "elapsedSeconds": 90.967,
+      "exitCode": 1,
+      "sourceFiles": 3950,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "de6af5eaccd893a5e26d87df46afe6f0be17a481386f969184f3a375cc75ee4d",
+      "reports": {},
+      "preexistingReports": {
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "27f9b1ff7a4e3c4d74bcb637e4510111f384fa595a65a5ce37fce808c4a284f6",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "0bb019ed2d200047a0a02d250bfccb50a3a24f343c8dcb4c6548c3a7c44bfe9b",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "98cc778869fb850a79fbb179ebd1a201985a39afb415752260f9c0509141205c",
+      "stderrSha256": "7565a3404061655148fde52a5d070a47348cf452f79f3c9675662e489649e907"
+    },
+    "focused2": {
+      "startedAt": "2026-11-05T00:32:25.545791+00:00",
+      "elapsedSeconds": 72.247,
+      "exitCode": 1,
+      "sourceFiles": 3950,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "a053462ba7b2b30cd12eab7e3fbc6ea4b49e2645eb63cbb7831eb18f04dfe5c0",
+      "reports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+          "sha256": "9259e15dee293207626efb2293f8fad81a7c3bc62e71ebe97e0250003d15e760",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityCommandStorageTest.xml": {
+          "sha256": "a4b7163c8927a0e6ed89795df523771d9a97263804b3c1a74eea4641129e2cb1",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "27f9b1ff7a4e3c4d74bcb637e4510111f384fa595a65a5ce37fce808c4a284f6",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "0bb019ed2d200047a0a02d250bfccb50a3a24f343c8dcb4c6548c3a7c44bfe9b",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "38c6b907b142743289f210094425cb643402e03433ca3691bb9fd89e212ab9db",
+      "stderrSha256": "ed2b3091822d6eb3c2311a83e02abb14898f2f3ea3c3b16b639b12385d978e2f"
+    },
+    "focused3": {
+      "startedAt": "2026-11-05T00:34:49.008967+00:00",
+      "elapsedSeconds": 92.787,
+      "exitCode": 0,
+      "sourceFiles": 3950,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "fd2ad5f7ba16234c26d6f68728fb8e21ca24b246f795e393261c392ef66b1a8d",
+      "reports": {
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceIdentityCommandTest.xml": {
+          "sha256": "c39a5e37c8578ff9f7834bca6c5ad2e0a62fad188dade843ac3cd8075a33ed26",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "5b35dc3066af5e3632ba2d06ef6e5335d8f308da827ef0a71d4c00591e651239",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+          "sha256": "9259e15dee293207626efb2293f8fad81a7c3bc62e71ebe97e0250003d15e760",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityCommandStorageTest.xml": {
+          "sha256": "a4b7163c8927a0e6ed89795df523771d9a97263804b3c1a74eea4641129e2cb1",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "0bb019ed2d200047a0a02d250bfccb50a3a24f343c8dcb4c6548c3a7c44bfe9b",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "1f3afea14da8060cc6bbdc19c57c0a486a1af3e2548b44ff6a508523943cdad1",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "check1": {
+      "startedAt": "2026-11-05T00:38:02.768171+00:00",
+      "elapsedSeconds": 367.674,
+      "exitCode": 0,
+      "sourceFiles": 3950,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2555,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "520ab35d0500d620bce1b0ce0ccddd97cacee4313565a0b4bb46b486b25503ff",
+      "reports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityCommandStorageTest.xml": {
+          "sha256": "f8c408699f10ac53510cb7a91c8f41f21eaba8961a5f57bb1a563113662d5086",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+          "sha256": "5102528ecf02e72678aeb01efdcfc3c85b1fa16a44b12230c06371158097f09e",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+          "sha256": "860c2c258fd9b5d769a023bb8e81412c7cc82e1011f2bbbdb46c0bf830046eed",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceIdentityCommandTest.xml": {
+          "sha256": "b16922dc63e837858a1aa9ef69bca4976c4a9e2db689506565393c608da2cda4",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "5a160dd129ccd530000cf17dab8e5b710d357eb0b0ff90686807c17551359102",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "0bb019ed2d200047a0a02d250bfccb50a3a24f343c8dcb4c6548c3a7c44bfe9b",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "ffc9612165516efbd6c12d520e87da970e26911dd9af2fedf4e7c292184d1ac5",
+      "stderrSha256": "f5aaa1893c8f491fe3d9345b486346753c9f5476c9e06e79a6dc4f7d7b325ce3"
+    },
+    "check2": {
+      "startedAt": "2026-11-05T00:45:27.466221+00:00",
+      "elapsedSeconds": 382.133,
+      "exitCode": 1,
+      "sourceFiles": 3950,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2393,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "e6eb720afb04a1d8d00ad6a9cfd15ea6c7d3853e3892cf77f183cedb212b1ba8",
+      "reports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityCommandStorageTest.xml": {
+          "sha256": "9cb57c38314a800f2dfec1d744d57a4c016daf60e24a26237e32bf272bf24da3",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+          "sha256": "019aa41718f57b0973a3e5052c29316d8a498936da702e3e86dc9fa7f0bcb975",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+          "sha256": "1364bac0a5cd9c8e2eaef89e86d212737ce88d8144cfce1986e8d1cae26ed18c",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceIdentityCommandTest.xml": {
+          "sha256": "a04b7935582d40b34b605e0a7c964bfb39f25ecbbfe8698cc468b0b68580455c",
+          "tests": 14,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "6d21eef731f697a5c024a19f7f1cba5865f27ab66270f2376c29d12920899f15",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "0bb019ed2d200047a0a02d250bfccb50a3a24f343c8dcb4c6548c3a7c44bfe9b",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "178d860cc217ea586d7879857ee1611f6c0bdef4ec8ea0998252c784221567f4",
+      "stderrSha256": "66c4f1a8a789f2f7d3fbf575652815c530ef97aef9211c1b42f4d26bf75409c0"
+    },
+    "check3": {
+      "startedAt": "2026-11-05T00:53:11.196957+00:00",
+      "elapsedSeconds": 124.829,
+      "exitCode": 0,
+      "sourceFiles": 3950,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1156,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "dd477fa592282042911d67f84aae32fcee06e115e381af454c837e774b79448d",
+      "reports": {
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "e363a3e8638f2a0e2c3a7bb41153e372b666d51b576d67e193843bf1e3712a76",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceIdentityCommandTest.xml": {
+          "sha256": "072555831fa0c8c24c56c7469c759bfc012ab64de430367aa0af39170ba9cdc9",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityCommandStorageTest.xml": {
+          "sha256": "9cb57c38314a800f2dfec1d744d57a4c016daf60e24a26237e32bf272bf24da3",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+          "sha256": "019aa41718f57b0973a3e5052c29316d8a498936da702e3e86dc9fa7f0bcb975",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+          "sha256": "1364bac0a5cd9c8e2eaef89e86d212737ce88d8144cfce1986e8d1cae26ed18c",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "0bb019ed2d200047a0a02d250bfccb50a3a24f343c8dcb4c6548c3a7c44bfe9b",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "32988dd51f8b909767fae9f2e7852c16d98afb2b01f7e057a10af615f753e167",
+      "stderrSha256": "f0e12fb145e53a41869daa29b4412a6af394c8d1c4d0735339f9a6adf6818410"
+    },
+    "browser1": {
+      "startedAt": "2026-11-05T00:57:08.951377+00:00",
+      "elapsedSeconds": 150.292,
+      "exitCode": 0,
+      "sourceFiles": 3950,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1503,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "dd477fa592282042911d67f84aae32fcee06e115e381af454c837e774b79448d",
+      "reports": {
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+          "sha256": "fe75ddb6f83bcce1484cd01d4290302fa57d5b00753787970626c9ed046547f8",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBr-7LKSBAFLC79HS.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceIdentityCommandStorageTest.xml": {
+          "sha256": "a769ab1c74550be3fab781ec41d3dc181402576ac45fdf616351607fb6958b55",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSpaceIdentityCommandTest.xml": {
+          "sha256": "57e57ef6dc36dee347d1fb27de22942d691317a14edc013bc6a8d06d56e28017",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "cab27db62c6470afb44d127078b62d9dc6728a877d613171b5b3d0746f4dd8cb",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityCommandStorageTest.xml": {
+          "sha256": "9cb57c38314a800f2dfec1d744d57a4c016daf60e24a26237e32bf272bf24da3",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+          "sha256": "019aa41718f57b0973a3e5052c29316d8a498936da702e3e86dc9fa7f0bcb975",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceIdentityTransportTest.xml": {
+          "sha256": "1364bac0a5cd9c8e2eaef89e86d212737ce88d8144cfce1986e8d1cae26ed18c",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "e363a3e8638f2a0e2c3a7bb41153e372b666d51b576d67e193843bf1e3712a76",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceIdentityCommandTest.xml": {
+          "sha256": "072555831fa0c8c24c56c7469c759bfc012ab64de430367aa0af39170ba9cdc9",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "67705a3a6e71738f98f517702ba63fdafe0c418251709c7734046d6d62c0dd4a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "finalGates": [
+    "check3",
+    "browser1"
+  ],
+  "finalGateSourcesIdentical": true,
+  "earlierAttempts": [
+    "focused1 copied root-only filters and stopped before any tests at a storage fixture helper name collision (member read/raw shadowed extensions); test helpers were renamed.",
+    "focused2 executed 14 SQLite/HTTP tests successfully, then stopped on a nullable domain assertion type inference error; the test now narrows the receipt with assertNotNull.",
+    "focused3 passed 21 fresh domain cases (12 identity and nine original root regressions), reusing the 14 data cases. Two additional cancellation regressions were added before final full/browser gates.",
+    "Phone delivery e068244b was committed during the gate work; it changed documentation only and no source fingerprint.",
+    "check1 passed before review corrected overly broad device/bootstrap replay restrictions: identity selection server idempotency is account/space/provider realm, so explicit retry after fresh login/build is valid while stored provenance remains unchanged. check2 reached one new fixture failure: AppBuild(0) throws before the intended API-boundary assertion. The test now uses a positive build above the native API cap. Final check3/browser1 validate corrected replay semantics and that fixture."
+  ],
+  "coverage": {
+    "newSharedStorageCases": 9,
+    "newTransportCases": 6,
+    "newDomainCases": 14,
+    "existingRootLifetimeRegressions": 9,
+    "storage": "Actual SQLite and IndexedDB with AES-GCM, reopen/new local login, account/server/space isolation, insert/state contention, response loss, key loss across inactive accounts, malformed records and account replacement.",
+    "transport": "Exact bodyless native path, unchanged operation/platform/build through a single 401 replay, second-401 termination, response identity/version/size validation and cancellation.",
+    "application": "Local offline receipts, immutable original provenance and fresh explicit retry owner, pre-HTTP uncertainty, finite preparation/lock waits, original hard/wall/monotonic lifetime, failed persistence and denied retry, cancellation at denial/insert/transport, concurrent requests and obsolete pending observations.",
+    "di": "Real AppContainer resolves both repositories and all owning use cases; replay has one application-owned instance."
+  },
+  "limits": [
+    "Identity receipt identifies account/version0; it is not a provider user, registered device, SDK store or live grant.",
+    "No new group UI, SDK adoption, native hard-parent recovery, FCM, Apple runtime, voice/video/meeting or performance acceptance.",
+    "Selection never clears directory admission; received denial retention has its own bounded 2-second cancellation path.",
+    "Cooperative attempt budget is 15 seconds including mutex wait; non-cooperative dependencies may delay cancellation completion but cannot publish late success.",
+    "Phone release 29 is installed and verified from product source 084662c5; this new identity work is not included in that artifact.",
+    "All 54 PRD groups remain open; live backend 8b40/schema 116 unchanged."
+  ]
+}
