@@ -20,6 +20,9 @@ data class ChatMessageRow(
     val delivery: CollaborationMessageDelivery,
     val edited: Boolean = false,
     val canCancel: Boolean = false,
+    val reference: CollaborationMessageReference? = null,
+    /** Already filtered by the authenticated indexed local history query. */
+    val visibilityKnown: Boolean = false,
 ) {
     override fun toString() = "ChatMessageRow([redacted])"
 }

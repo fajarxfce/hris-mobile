@@ -24,6 +24,10 @@ data class ChatThreadState(
     val draftFailure: Failure? = null,
     val draftDialog: ChatDraftDialog? = null,
     val cancellationDialog: ChatCancellationDialog? = null,
+    val selecting: Boolean = false,
+    val selectedMessages: List<ChatMessageRow> = emptyList(),
+    val deletionDialog: ChatDeletionDialog? = null,
+    val selectionLimitReached: Boolean = false,
     val leaving: Boolean = false,
     val submissionPending: Boolean = false,
     val saving: Boolean = false,
@@ -48,6 +52,8 @@ data class ChatThreadState(
                 !saving &&
                 !leaving &&
                 cancellationDialog == null &&
+                !selecting &&
+                deletionDialog == null &&
                 draftDialog == null
 
     val canSend: Boolean
@@ -57,12 +63,20 @@ data class ChatThreadState(
                 !leaving &&
                 draftDialog == null &&
                 cancellationDialog == null &&
+                !selecting &&
+                deletionDialog == null &&
                 localFailure == null &&
                 !saving &&
                 (submissionPending || draft.isNotBlank())
 
     override fun toString() = "ChatThreadState([redacted])"
 }
+
+data class ChatDeletionDialog(
+    val count: Int,
+    val busy: Boolean = false,
+    val failure: Failure? = null,
+)
 
 data class ChatCancellationDialog(
     val text: String,

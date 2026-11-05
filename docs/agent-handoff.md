@@ -1,5 +1,47 @@
 # Agent continuation — HRIS Mobile
 
+## Chat selection and local deletion — 5 November 2026
+
+Long-press selects a message; tapping adds more, with a contextual count/copy/delete
+bar and Back-to-clear. Up to 50 selections survive local paging. Selection dismisses
+the keyboard while preserving the durable composer draft. Single queued sends keep
+their explicit cancellation; delete for me is a separate local choice. Clipboard
+publication rechecks the original local owner and route generation.
+[Contract](collaboration-message-selection.md).
+
+Confirmed deletion atomically persists encrypted sender/event/logical visibility
+rules alongside retained originals. Local queries omit hidden messages; later SDK
+replay, history imports and aliases respect the choice. Original send evidence remains
+available for reconciliation. Lost storage responses retry the same captured batch;
+ordinary credential age does not hide owned facts, and account/access changes cancel
+obsolete work. Ten SQLite plus ten IndexedDB, ten domain, eight ViewModel and four
+Compose cases exercise these behaviors, plus the actual owning DI graph.
+
+Focused 112 cases / 99.232 s; root :check, Android-host and dev compilation 3,058 fresh cases / 384.05 s; browser data/domain 1,654 fresh cases / 168.16 s. All pass on identical 4,033 build/application inputs; format, architecture and detekt pass. Four generated screenshots were opened and reviewed, including 200% text and a 320px confirmation. [Evidence](measurements/chat-message-selection-2026-11-05.json).
+
+NEXT — newest user complaint takes priority before the next product APK: repeated
+loading on reopening chat, generic failure in the Bima Santoso conversation, manual
+refresh controls and technical Saved replies UX. Local canonical history observers
+are network-independent, but acquisition/runtime failures still surface generic
+retry UI and the foreground connection currently has no autonomous reconnect loop.
+Notification Saved replies retains inline-reply recovery, not canned snippets;
+move unresolved replies into their conversation context without losing original
+text or uncertain-send evidence. Diagnose the actual error, not just hide it.
+
+Read-only evidence on 5 November: installed app emitted Generic network/sync failure;
+its WireGuard request to Matrix versions returned HTTP 200. Server services are
+healthy. Linked Karyawan Demo gateway/device/native parent remain unrevoked and
+active, while the short-lived gateway access is expired. That alone does not prove
+a refresh defect. No credentials, SDK/private keys or account data were reset.
+
+Then continue real delivered edit/quoted reply/forward/delete for everyone and the
+existing organization bootstrap resolution, private-store inventory, hard-parent
+recovery, freeze/adoption, group runtime/UI, typed push and calls/meetings work.
+All 54 PRD groups remain open. Phone remains release30/source3e1cee4c and live backend
+8b40/schema116; this slice is not installed yet. No JNI/provider/FCM/Apple runtime or
+performance acceptance is claimed. Continue long run, atomic pushes and validated
+install-only delivery with advance notice.
+
 ## Product release 30 installed — 5 November 2026
 
 Latest validated product source [3e1cee4c](https://github.com/fajarxfce/hris-mobile/commit/3e1cee4c1c78d99d19c11dcd515cc7cfb69bf044) is built as ARM64 devRelease 30

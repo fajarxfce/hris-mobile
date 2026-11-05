@@ -1,18 +1,22 @@
 package dev.fajar.starter.collaboration.presentation.thread.pages
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.presentation.thread.*
 import dev.fajar.starter.designsystem.components.AppIcon
-import dev.fajar.starter.designsystem.components.AppIconButton
 import dev.fajar.starter.designsystem.components.AppText
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.localization.*
@@ -20,7 +24,6 @@ import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.Checkmark
 import io.github.composefluent.icons.regular.Clock
-import io.github.composefluent.icons.regular.Dismiss
 import io.github.composefluent.icons.regular.ErrorCircle
 import kotlinx.datetime.TimeZone
 
@@ -28,15 +31,47 @@ import kotlinx.datetime.TimeZone
 internal fun ChatMessageBubble(
     row: ChatMessageRow,
     modifier: Modifier = Modifier,
-    onCancel: (() -> Unit)? = null,
+    selected: Boolean = false,
+    selecting: Boolean = false,
+    enabled: Boolean = true,
+    onSelect: () -> Unit,
 ) {
     val own = row.ownership == ChatMessageOwnership.SELF
+    val selectLabel = appString(AppString.ChatSelectMessage)
     BoxWithConstraints(
-        modifier.fillMaxWidth(),
+        modifier
+            .fillMaxWidth()
+            .heightIn(min = 48.dp)
+            .testTag("chat-message-${row.key}")
+            .background(if (selected) AppColors.accent.copy(alpha = 0.13f) else Color.Transparent)
+            .combinedClickable(
+                enabled = enabled,
+                onLongClickLabel = selectLabel,
+                onLongClick = onSelect,
+                onClick = { if (selecting) onSelect() },
+            )
+            .semantics(mergeDescendants = true) {
+                this.selected = selected
+                if (enabled)
+                    customActions =
+                        listOf(
+                            CustomAccessibilityAction(selectLabel) {
+                                onSelect()
+                                true
+                            }
+                        )
+            },
         contentAlignment = if (own) Alignment.CenterEnd else Alignment.CenterStart,
     ) {
+        if (selected)
+            AppIcon(
+                Icons.Regular.Checkmark,
+                null,
+                Modifier.align(Alignment.CenterStart).size(24.dp),
+            )
         Column(
-            Modifier.widthIn(max = minOf(maxWidth * 0.86f, 480.dp))
+            Modifier.padding(start = if (selecting && !own) 32.dp else 0.dp)
+                .widthIn(max = minOf(maxWidth * 0.86f, 480.dp))
                 .background(
                     if (own) AppColors.tint else AppColors.surface,
                     RoundedCornerShape(
@@ -64,7 +99,7 @@ internal fun ChatMessageBubble(
                         appString(AppString.ChatEncryptedUnavailable)
                     CollaborationMessageKind.UNSUPPORTED -> appString(AppString.ChatUnsupported)
                 }
-            SelectionContainer { AppText(body) }
+            AppText(body)
             val time = chatMessageTime(row.timestamp, TimeZone.currentSystemDefault())
             Row(
                 Modifier.align(Alignment.End),
@@ -97,12 +132,6 @@ internal fun ChatMessageBubble(
                             else AppColors.muted,
                     )
                 }
-                if (onCancel != null)
-                    AppIconButton(
-                        Icons.Regular.Dismiss,
-                        appString(AppString.ChatCancelSend),
-                        onCancel,
-                    )
             }
         }
     }

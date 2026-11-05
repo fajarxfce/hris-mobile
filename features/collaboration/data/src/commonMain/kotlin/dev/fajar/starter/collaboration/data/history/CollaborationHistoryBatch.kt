@@ -45,8 +45,22 @@ internal class CollaborationHistoryBatch(
         require(alias?.timestamp == null || alias.timestamp == change.timestamp)
         val old = message(id)
         require(alias?.messageId == null || old?.eventIds?.contains(change.eventId) == true)
-        val next =
+        val merged =
             requireNotNull(mergeCollaborationHistoryText(old, change, alias?.redacted == true))
+        val hidden =
+            merged.locallyHidden ||
+                (previous != null &&
+                    hiddenInHistory(
+                        replicas,
+                        previous,
+                        codec,
+                        CollaborationMessageReference(
+                            change.sender,
+                            change.eventId,
+                            change.logicalId,
+                        ),
+                    ))
+        val next = merged.copy(locallyHidden = hidden)
         if (old == null) added++
         messages[id] = next
         aliases[aliasId] =

@@ -4,7 +4,12 @@ import dev.fajar.starter.collaboration.domain.entities.CollaborationHistoryMessa
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class HistoryCheckpointDto(val roomId: String, val count: Long, val schema: Int = 1)
+internal data class HistoryCheckpointDto(
+    val roomId: String,
+    val count: Long,
+    val schema: Int = 1,
+    val hiddenRules: Long = 0,
+)
 
 @Serializable
 internal data class HistoryMessageDto(
@@ -16,6 +21,7 @@ internal data class HistoryMessageDto(
     val text: String?,
     val eventIds: List<String>,
     val redacted: Boolean,
+    val locallyHidden: Boolean = false,
 ) {
     fun toDomain() =
         CollaborationHistoryMessage(
@@ -27,6 +33,7 @@ internal data class HistoryMessageDto(
             text,
             eventIds,
             redacted,
+            locallyHidden,
         )
 
     override fun toString() = "HistoryMessageDto([redacted])"
@@ -42,6 +49,7 @@ internal fun CollaborationHistoryMessage.toHistoryDto() =
         text,
         eventIds,
         redacted,
+        locallyHidden,
     )
 
 @Serializable

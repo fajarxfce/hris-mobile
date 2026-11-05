@@ -1,5 +1,8 @@
 # Owned message thread
 
+[Contextual message selection and durable local deletion](collaboration-message-selection.md)
+adds multi-select/copy/delete-for-me while retaining original message evidence.
+
 The Chat service opens the inbox under the selected company's collaboration module
 and `collaboration.chat` permission. Inbox, participant selection, setup and thread
 routes own their ViewModels and lifecycle effects. Selecting a participant replaces

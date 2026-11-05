@@ -119,6 +119,25 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.chat_reply_discard_unconfirmed_en,
         Res.string.chat_reply_discard_unconfirmed_id,
     ),
+    ChatSelectPendingAlone(
+        Res.string.chat_select_pending_alone_en,
+        Res.string.chat_select_pending_alone_id,
+    ),
+    ChatSelectMessage(Res.string.chat_select_message_en, Res.string.chat_select_message_id),
+    ChatClearSelection(Res.string.chat_clear_selection_en, Res.string.chat_clear_selection_id),
+    ChatSelectedCount(Res.string.chat_selected_count_en, Res.string.chat_selected_count_id),
+    ChatCopyMessages(Res.string.chat_copy_messages_en, Res.string.chat_copy_messages_id),
+    ChatDeleteMessages(Res.string.chat_delete_messages_en, Res.string.chat_delete_messages_id),
+    ChatDeleteForMe(Res.string.chat_delete_for_me_en, Res.string.chat_delete_for_me_id),
+    ChatDeleteLocalExplanation(
+        Res.string.chat_delete_local_explanation_en,
+        Res.string.chat_delete_local_explanation_id,
+    ),
+    ChatDeleteLocalPending(
+        Res.string.chat_delete_local_pending_en,
+        Res.string.chat_delete_local_pending_id,
+    ),
+    ChatSelectionLimit(Res.string.chat_selection_limit_en, Res.string.chat_selection_limit_id),
     ChatCancelSend(Res.string.chat_cancel_send_en, Res.string.chat_cancel_send_id),
     ChatCancelTitle(Res.string.chat_cancel_title_en, Res.string.chat_cancel_title_id),
     ChatCancelExplanation(

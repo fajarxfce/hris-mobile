@@ -4,7 +4,9 @@ package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationMessageReference
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationHistoryRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationLocalVisibilityRepository
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
@@ -18,8 +20,91 @@ class EncryptedCollaborationHistoryRepository(
     private val replicas: ReplicaStore,
     private val cipher: ContentCipher,
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
-) : CollaborationHistoryRepository {
+) : CollaborationHistoryRepository, CollaborationLocalVisibilityRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
+
+    override fun observeHidden(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        messages: List<CollaborationMessageReference>,
+    ) =
+        safeStorageFlow(
+                flow {
+                    validateHistoryRoom(roomId)
+                    require(
+                        messages.size <= COLLABORATION_VISIBILITY_READ_LIMIT &&
+                            messages.distinct().size == messages.size
+                    )
+                    require(messages.all(::validCollaborationMessageReference))
+                    val selected = messages.toList()
+                    emitAll(
+                        replicas
+                            .observeCheckpoint(
+                                historyScope(access),
+                                historyPartition(access, conversationId),
+                            )
+                            .map { selected to it }
+                    )
+                },
+                mapValue = { (selected, raw) ->
+                    if (raw == null) emptySet()
+                    else
+                        withKey(access, conversationId, roomId) { codec ->
+                            codec.checkpoint(raw)
+                            val hidden = linkedSetOf<CollaborationMessageReference>()
+                            for (reference in selected) {
+                                if (hiddenInHistory(replicas, raw, codec, reference))
+                                    hidden += reference
+                            }
+                            require(
+                                replicas.checkpoint(raw.handle.scope, raw.handle.partition) == raw
+                            )
+                            hidden.toSet()
+                        }
+                },
+            )
+            .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
+            .buffer(0)
+
+    override suspend fun hide(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        messages: List<CollaborationMessageReference>,
+    ) = safeStorageCall {
+        require(
+            messages.size in 1..COLLABORATION_LOCAL_DELETE_LIMIT &&
+                messages.distinct().size == messages.size
+        )
+        require(messages.all(::validCollaborationMessageReference))
+        val selected = messages.toList()
+        val scope = historyScope(access)
+        val partition = historyPartition(access, conversationId)
+        val raw = replicas.checkpoint(scope, partition)
+        withKey(access, conversationId, roomId, create = raw == null) { codec ->
+            val previous = raw?.let { codec.checkpoint(it) }
+            val batch = CollaborationHistoryHideBatch(replicas, scope, partition, raw, codec)
+            batch.apply(selected)
+            if (!batch.changed) return@withKey replicas.checkpoint(scope, partition) == raw
+            val generation = raw?.handle?.generation ?: Uuid.random().toString()
+            val revision = raw?.revision?.plus(1) ?: 0
+            val hiddenRules = (previous?.hiddenRules ?: 0) + batch.addedRules
+            require(hiddenRules in 1..9_007_199_254_740_991L)
+            val payload = codec.checkpoint(generation, revision, previous?.count ?: 0, hiddenRules)
+            val documents = batch.documents(generation, revision)
+            currentCoroutineContext().ensureActive()
+            if (raw == null)
+                replicas.replace(
+                    scope,
+                    partition,
+                    null,
+                    ReplicaSnapshot(generation, payload, documents),
+                )
+            else replicas.commit(raw.handle, raw.revision, payload, documents, true)
+        }
+    }
 
     override fun observe(
         access: CollaborationLocalAccess,
@@ -71,6 +156,7 @@ class EncryptedCollaborationHistoryRepository(
                             )
                             // Authenticate the lookahead as well as the visible messages.
                             val decoded = documents.map { codec.message(raw, it) }
+                            require(decoded.none { it.locallyHidden })
                             val selected =
                                 documents.take(limit).let {
                                     if (before == null) it else it.reversed()
@@ -175,7 +261,8 @@ class EncryptedCollaborationHistoryRepository(
             val count = (previous?.count ?: 0) + mutation.added
             require(count in 0..9_007_199_254_740_991L)
             val documents = mutation.documents(generation, revision)
-            val checkpoint = codec.checkpoint(generation, revision, count)
+            val checkpoint =
+                codec.checkpoint(generation, revision, count, previous?.hiddenRules ?: 0)
             currentCoroutineContext().ensureActive()
             if (raw == null)
                 replicas.replace(

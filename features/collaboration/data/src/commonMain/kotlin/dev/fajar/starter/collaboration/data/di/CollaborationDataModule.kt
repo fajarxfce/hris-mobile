@@ -1305,6 +1305,44 @@ class CollaborationDataModule {
             Clock.System,
         )
 
+    @Factory
+    fun observeHiddenMessages(
+        visibility: CollaborationLocalVisibilityRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ObserveCollaborationHiddenMessages(
+            visibility,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
+    fun deleteMessagesForMe(
+        visibility: CollaborationLocalVisibilityRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        DeleteCollaborationMessagesForMe(
+            visibility,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
     @Single
     fun deliverMessages(
         completions: CollaborationMessageCompletionRepository,

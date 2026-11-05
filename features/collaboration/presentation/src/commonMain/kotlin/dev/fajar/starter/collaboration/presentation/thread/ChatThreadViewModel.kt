@@ -51,7 +51,12 @@ class ChatThreadViewModel(
     readState: ReadCollaborationReadState,
     markRead: MarkCollaborationMessagesRead,
     requestRecovery: RequestCollaborationRecovery,
+    private val observeHidden: ObserveCollaborationHiddenMessages,
+    private val deleteForMe: DeleteCollaborationMessagesForMe,
 ) : MviViewModel<ChatThreadState, ChatThreadEvent, ChatThreadEffect>(ChatThreadState()) {
+    private val projection = MutableStateFlow<ChatVisibilityProjection?>(null)
+    private var deletionSelection: ChatDeletionSelection? = null
+    private var deletionJob: Job? = null
     private var observation: Job? = null
     private var connection: Job? = null
     private var submission: Job? = null
@@ -119,6 +124,21 @@ class ChatThreadViewModel(
         on<ChatThreadEvent.CancelRequested>(::onCancelRequested)
         on<ChatThreadEvent.CancellationConfirmed>(::onCancellationConfirmed)
         on<ChatThreadEvent.CancellationDismissed>(::onCancellationDismissed)
+        on<ChatThreadEvent.MessageSelected>(::onMessageSelected)
+        on<ChatThreadEvent.SelectionStarted> {
+            if (
+                visible &&
+                    !state.value.leaving &&
+                    state.value.localFailure == null &&
+                    state.value.rows.isNotEmpty()
+            )
+                updateState { it.copy(selecting = true) }
+        }
+        on<ChatThreadEvent.SelectionCleared> { clearSelection() }
+        on<ChatThreadEvent.CopySelected>(::onCopySelected)
+        on<ChatThreadEvent.DeleteSelected>(::onDeleteSelected)
+        on<ChatThreadEvent.DeletionConfirmed>(::onDeletionConfirmed)
+        on<ChatThreadEvent.DeletionDismissed> { dismissDeletion() }
     }
 
     private fun onEntered(event: ChatThreadEvent.Entered) {
@@ -163,6 +183,7 @@ class ChatThreadViewModel(
                     if (visible) connect()
                     coroutineScope {
                         launch { observeComposer(owned) }
+                        launch { observeVisibleRows(owned) }
                         observePages(owned)
                     }
                 }
@@ -223,6 +244,8 @@ class ChatThreadViewModel(
     }
 
     private fun clearScope() {
+        projection.value = null
+        dismissDeletion()
         readTracker.clear()
         viewportKeys = emptyList()
         historyRoomId = null
@@ -293,23 +316,249 @@ class ChatThreadViewModel(
                 )
         ) {
             is AppResult.Failed -> {
+                projection.value = null
                 updateState {
                     it.copy(rows = emptyList(), loading = false, localFailure = rows.failure)
                 }
             }
-            is AppResult.Success ->
-                updateState {
-                    it.copy(
-                        rows = rows.value,
-                        loading = historyLoading,
-                        hasOlder = next != null || (source != null && !olderScanned),
-                        hasNewer = previous != null,
-                        browsingHistory = !displayedWindow.latest,
-                        localFailure = null,
+            is AppResult.Success -> {
+                val candidate =
+                    ChatVisibilityProjection(
+                        owned,
+                        historyRoomId
+                            ?: source?.roomId
+                            ?: pending
+                                .mapNotNull {
+                                    (it.state as? CollaborationMessageState.Sent)?.device?.roomId
+                                }
+                                .distinct()
+                                .singleOrNull(),
+                        rows.value,
+                        historyLoading,
+                        next != null || (source != null && !olderScanned),
+                        previous != null,
+                        !displayedWindow.latest,
                     )
-                }
+                projection.value = candidate
+                if (candidate.rows.none { !it.visibilityKnown && it.reference != null })
+                    publishRows(candidate, emptySet())
+            }
         }
         updateReadViewport()
+    }
+
+    private suspend fun observeVisibleRows(owned: CollaborationLocalAccess) {
+        projection
+            .flatMapLatest { candidate ->
+                if (candidate == null) return@flatMapLatest emptyFlow()
+                val references =
+                    candidate.rows
+                        .filter { !it.visibilityKnown }
+                        .mapNotNull { it.reference }
+                        .distinct()
+                when {
+                    candidate.access != owned || references.isEmpty() -> emptyFlow()
+                    candidate.roomId == null ->
+                        flowOf(candidate to AppResult.Failed(changedThread()))
+                    else ->
+                        observeHidden(
+                                workspaceId,
+                                owned,
+                                conversationId,
+                                candidate.roomId,
+                                references,
+                            )
+                            .map { candidate to it }
+                }
+            }
+            .buffer(0)
+            .collect { (candidate, result) ->
+                currentCoroutineContext().ensureActive()
+                if (access != owned || projection.value != candidate) return@collect
+                when (result) {
+                    is AppResult.Success -> publishRows(candidate, result.value)
+                    is AppResult.Failed -> {
+                        if (collaborationContentResponseClosesRead(result.failure))
+                            restrict(result.failure)
+                        else
+                            updateState {
+                                it.copy(
+                                    rows = emptyList(),
+                                    loading = false,
+                                    localFailure = result.failure,
+                                )
+                            }
+                    }
+                }
+            }
+    }
+
+    private fun publishRows(
+        candidate: ChatVisibilityProjection,
+        hidden: Set<CollaborationMessageReference>,
+    ) {
+        if (access != candidate.access || projection.value != candidate) return
+        val rows = candidate.rows.filter { it.reference !in hidden }
+        updateState { current ->
+            val selected =
+                current.selectedMessages
+                    .map { old -> rows.firstOrNull { sameChatMessage(old, it) } ?: old }
+                    .distinctBy { it.key }
+            current.copy(
+                rows = rows,
+                loading = candidate.loading,
+                hasOlder = candidate.hasOlder,
+                hasNewer = candidate.hasNewer,
+                browsingHistory = candidate.browsingHistory,
+                localFailure = null,
+                selectedMessages = selected,
+            )
+        }
+        updateReadViewport()
+    }
+
+    private fun onMessageSelected(event: ChatThreadEvent.MessageSelected) {
+        val current = state.value
+        if (
+            !visible ||
+                current.leaving ||
+                current.localFailure != null ||
+                current.deletionDialog != null ||
+                current.cancellationDialog != null ||
+                current.draftDialog != null
+        )
+            return
+        val row = current.rows.singleOrNull { it.key == event.key } ?: return
+        val old = current.selectedMessages
+        val existing = old.firstOrNull { sameChatMessage(it, row) }
+        if (existing != null)
+            updateState {
+                it.copy(
+                    selectedMessages = old - existing,
+                    selecting = old.size > 1,
+                    selectionLimitReached = false,
+                )
+            }
+        else if (old.size < COLLABORATION_LOCAL_DELETE_LIMIT)
+            updateState {
+                it.copy(
+                    selectedMessages = old + row,
+                    selecting = true,
+                    selectionLimitReached = false,
+                )
+            }
+        else updateState { it.copy(selectionLimitReached = true) }
+    }
+
+    private fun clearSelection() {
+        updateState {
+            it.copy(
+                selectedMessages = emptyList(),
+                selecting = false,
+                selectionLimitReached = false,
+            )
+        }
+    }
+
+    private fun onCopySelected(event: ChatThreadEvent.CopySelected) {
+        val current = state.value
+        val owned = access ?: return
+        val token = current.readViewportToken ?: return
+        if (
+            !visible ||
+                current.localFailure != null ||
+                !current.canCopySelection ||
+                current.deletionDialog != null
+        )
+            return
+        val text =
+            current.selectedMessages
+                .sortedWith(compareBy<ChatMessageRow> { it.timestamp }.thenBy { it.key })
+                .joinToString("\n\n") { it.text.orEmpty() }
+        viewModelScope.launch { emitEffect(ChatThreadEffect.CopyMessages(owned, token, text)) }
+        clearSelection()
+    }
+
+    /** The route checks fresh ownership immediately before writing to the platform clipboard. */
+    suspend fun confirmCopy(effect: ChatThreadEffect.CopyMessages): Boolean {
+        if (!visible || effect.owner != access || effect.token != state.value.readViewportToken)
+            return false
+        val result = withTimeoutOrNull(5_000) { readContext(workspaceId, conversationId) }
+        currentCoroutineContext().ensureActive()
+        return result is AppResult.Success &&
+            result.value.owner.localListAccess() == effect.owner &&
+            visible &&
+            access == effect.owner &&
+            state.value.readViewportToken == effect.token &&
+            state.value.localFailure == null
+    }
+
+    private fun onDeleteSelected(event: ChatThreadEvent.DeleteSelected) {
+        val owned = access ?: return
+        val room = projection.value?.roomId ?: return
+        val current = state.value
+        if (
+            !visible ||
+                current.leaving ||
+                current.localFailure != null ||
+                current.deletionDialog != null ||
+                !current.canDeleteSelection
+        )
+            return
+        val references = current.selectedMessages.mapNotNull { it.reference }.distinct()
+        deletionSelection = ChatDeletionSelection(owned, room, references)
+        updateState { it.copy(deletionDialog = ChatDeletionDialog(references.size)) }
+    }
+
+    private fun onDeletionConfirmed(event: ChatThreadEvent.DeletionConfirmed) {
+        val selected = deletionSelection ?: return
+        val dialog = state.value.deletionDialog ?: return
+        if (
+            !visible || dialog.busy || access != selected.access || state.value.localFailure != null
+        )
+            return
+        updateState { it.copy(deletionDialog = dialog.copy(busy = true, failure = null)) }
+        deletionJob =
+            viewModelScope.launch {
+                val result =
+                    deleteForMe(
+                        workspaceId,
+                        selected.access,
+                        conversationId,
+                        selected.roomId,
+                        selected.messages,
+                    )
+                ensureActive()
+                if (selected !== deletionSelection || access != selected.access) return@launch
+                deletionJob = null
+                when (result) {
+                    is AppResult.Success -> {
+                        deletionSelection = null
+                        updateState {
+                            it.copy(
+                                deletionDialog = null,
+                                selectedMessages = emptyList(),
+                                selecting = false,
+                                selectionLimitReached = false,
+                            )
+                        }
+                    }
+                    is AppResult.Failed ->
+                        if (collaborationContentResponseClosesRead(result.failure))
+                            restrict(result.failure)
+                        else
+                            updateState {
+                                it.copy(deletionDialog = dialog.copy(failure = result.failure))
+                            }
+                }
+            }
+    }
+
+    private fun dismissDeletion() {
+        deletionJob?.cancel()
+        deletionJob = null
+        deletionSelection = null
+        updateState { it.copy(deletionDialog = null) }
     }
 
     private fun onViewportChanged(event: ChatThreadEvent.ViewportChanged) {
@@ -379,14 +628,24 @@ class ChatThreadViewModel(
     }
 
     private fun onBackRequested(event: ChatThreadEvent.BackRequested) {
+        if (state.value.deletionDialog != null) {
+            dismissDeletion()
+            return
+        }
         if (state.value.cancellationDialog != null) {
             dismissCancellation()
+            return
+        }
+        if (state.value.selecting) {
+            clearSelection()
             return
         }
         leaveThread(ChatThreadEffect.Back)
     }
 
     private fun onSetupRequested(event: ChatThreadEvent.SetupRequested) {
+        dismissDeletion()
+        clearSelection()
         dismissCancellation()
         leaveThread(ChatThreadEffect.Setup)
     }
@@ -442,6 +701,7 @@ class ChatThreadViewModel(
                 when (result) {
                     is AppResult.Success -> {
                         cancellationSelection = null
+                        clearSelection()
                         updateState { it.copy(cancellationDialog = null) }
                     }
                     is AppResult.Failed -> {

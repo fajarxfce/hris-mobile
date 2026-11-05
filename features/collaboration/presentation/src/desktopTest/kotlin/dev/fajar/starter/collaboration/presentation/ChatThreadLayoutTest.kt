@@ -99,6 +99,8 @@ class ChatThreadLayoutTest {
                             ChatThreadState(
                                 title = "Dewi Kartika",
                                 rows = listOf(queued),
+                                selecting = true,
+                                selectedMessages = listOf(queued),
                                 loading = false,
                                 draftReady = true,
                             ),
@@ -115,7 +117,7 @@ class ChatThreadLayoutTest {
             .assertWidthIsAtLeast(48.dp)
             .assertHeightIsAtLeast(48.dp)
             .performClick()
-        compose.onNodeWithContentDescription("Kembali").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Batal pilih").assertIsDisplayed()
         compose.onNodeWithContentDescription("Pesan").assertIsDisplayed()
         compose.runOnIdle {
             assertEquals(listOf<ChatThreadEvent>(ChatThreadEvent.CancelRequested("queued")), events)

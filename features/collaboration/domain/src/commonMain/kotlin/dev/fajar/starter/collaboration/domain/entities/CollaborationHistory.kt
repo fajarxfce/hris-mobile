@@ -46,6 +46,8 @@ data class CollaborationHistoryMessage(
     val text: String?,
     val eventIds: List<String>,
     val redacted: Boolean,
+    /** Local presentation choice, independent of original evidence and provider redaction. */
+    val locallyHidden: Boolean = false,
 ) {
     override fun toString() = "CollaborationHistoryMessage([redacted])"
 }

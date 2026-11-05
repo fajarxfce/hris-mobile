@@ -1047,4 +1047,14 @@
     <string name="chat_friday_en">Friday</string>
     <string name="chat_saturday_en">Saturday</string>
     <string name="chat_sunday_en">Sunday</string>
+    <string name="chat_select_message_en">Select message</string>
+    <string name="chat_clear_selection_en">Clear selection</string>
+    <string name="chat_selected_count_en">%1$s selected</string>
+    <string name="chat_copy_messages_en">Copy</string>
+    <string name="chat_delete_messages_en">Delete messages</string>
+    <string name="chat_delete_for_me_en">Delete for me</string>
+    <string name="chat_delete_local_explanation_en">Delete %1$s selected messages from this device? They will remain visible to other participants.</string>
+    <string name="chat_delete_local_pending_en">Deletion could not be confirmed. Retry to finish deleting the same messages.</string>
+    <string name="chat_selection_limit_en">Select up to 50 messages at a time.</string>
+    <string name="chat_select_pending_alone_en">To cancel a message that has not been sent, select it on its own.</string>
 </resources>

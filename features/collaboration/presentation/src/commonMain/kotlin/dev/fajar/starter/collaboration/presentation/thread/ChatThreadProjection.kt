@@ -74,6 +74,13 @@ internal fun chatThreadRows(
                         ?: message.text,
                 CollaborationMessageDelivery.SENT,
                 live?.edited == true,
+                reference =
+                    CollaborationMessageReference(
+                        message.sender,
+                        message.primaryEventId,
+                        message.logicalId,
+                    ),
+                visibilityKnown = true,
             )
     }
     for (record in pending) {
@@ -83,19 +90,7 @@ internal fun chatThreadRows(
         val sent =
             record.state is CollaborationMessageState.Sent ||
                 native?.delivery == CollaborationMessageDelivery.SENT
-        rows +=
-            ChatMessageRow(
-                "outgoing:${record.intent.id}",
-                (record.state as? CollaborationMessageState.Sent)?.eventId ?: native?.eventId,
-                record.intent.id,
-                record.intent.createdAt.toEpochMilliseconds(),
-                ChatMessageOwnership.SELF,
-                CollaborationMessageKind.TEXT,
-                record.intent.text,
-                if (sent) CollaborationMessageDelivery.SENT
-                else native?.delivery ?: CollaborationMessageDelivery.PENDING,
-                canCancel = !sent && native == null && validCollaborationCancellation(record),
-            )
+        rows += pendingRow(record, native, sent)
     }
     for (item in timeline) {
         val eventId = item.eventId ?: continue // Durable owned commands supply local echoes.
@@ -162,4 +157,32 @@ private fun nativeRow(
         item.body,
         item.delivery,
         item.edited,
+        reference = CollaborationMessageReference(item.sender, eventId, item.logicalId),
+    )
+
+private fun pendingRow(
+    record: CollaborationMessageRecord,
+    native: CollaborationTimelineItem?,
+    sent: Boolean,
+) =
+    ChatMessageRow(
+        "outgoing:${record.intent.id}",
+        (record.state as? CollaborationMessageState.Sent)?.eventId ?: native?.eventId,
+        record.intent.id,
+        record.intent.createdAt.toEpochMilliseconds(),
+        ChatMessageOwnership.SELF,
+        CollaborationMessageKind.TEXT,
+        record.intent.text,
+        if (sent) CollaborationMessageDelivery.SENT
+        else native?.delivery ?: CollaborationMessageDelivery.PENDING,
+        canCancel = !sent && native == null && validCollaborationCancellation(record),
+        reference =
+            if (sent) {
+                val sender = record.state.origin?.sender
+                val event =
+                    (record.state as? CollaborationMessageState.Sent)?.eventId ?: native?.eventId
+                if (sender != null && event != null)
+                    CollaborationMessageReference(sender, event, record.intent.id)
+                else null
+            } else null,
     )

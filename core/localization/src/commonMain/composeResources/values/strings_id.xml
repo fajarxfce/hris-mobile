@@ -1047,4 +1047,14 @@
     <string name="chat_friday_id">Jumat</string>
     <string name="chat_saturday_id">Sabtu</string>
     <string name="chat_sunday_id">Minggu</string>
+    <string name="chat_select_message_id">Pilih pesan</string>
+    <string name="chat_clear_selection_id">Batal pilih</string>
+    <string name="chat_selected_count_id">%1$s dipilih</string>
+    <string name="chat_copy_messages_id">Salin</string>
+    <string name="chat_delete_messages_id">Hapus pesan</string>
+    <string name="chat_delete_for_me_id">Hapus untuk saya</string>
+    <string name="chat_delete_local_explanation_id">Hapus %1$s pesan terpilih dari perangkat ini? Pesan tetap terlihat oleh peserta lain.</string>
+    <string name="chat_delete_local_pending_id">Penghapusan belum terkonfirmasi. Coba lagi untuk menyelesaikan penghapusan pesan yang sama.</string>
+    <string name="chat_selection_limit_id">Pilih maksimal 50 pesan sekaligus.</string>
+    <string name="chat_select_pending_alone_id">Untuk membatalkan pesan yang belum terkirim, pilih pesan itu saja.</string>
 </resources>

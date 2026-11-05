@@ -19,6 +19,7 @@ import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
+import io.github.composefluent.icons.regular.Checkmark
 import kotlin.time.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -41,37 +42,53 @@ fun ChatThreadPage(
         contentAlignment = Alignment.TopCenter,
     ) {
         Column(Modifier.widthIn(max = 720.dp).fillMaxSize()) {
-            AppTopBar(
-                title = state.title ?: appString(AppString.ChatTitle),
-                subtitle =
-                    appString(
-                        when (state.connection) {
-                            ChatThreadConnection.OFFLINE -> AppString.ChatOffline
-                            ChatThreadConnection.CONNECTING -> AppString.ChatConnecting
-                            ChatThreadConnection.SETUP_REQUIRED -> AppString.ChatSetupActivate
-                            ChatThreadConnection.WAITING -> AppString.ChatRoomWaiting
-                            ChatThreadConnection.CONNECTED -> AppString.ChatConnected
-                        }
-                    ),
-                navigation = {
-                    AppIconButton(
-                        Icons.Regular.ArrowLeft,
-                        appString(AppString.Back),
-                        { onEvent(ChatThreadEvent.BackRequested) },
-                    )
-                },
-                actions = {
-                    AppIconButton(
-                        Icons.Regular.ArrowSync,
-                        appString(AppString.Refresh),
-                        { onEvent(ChatThreadEvent.RefreshRequested) },
-                        enabled =
-                            state.connection != ChatThreadConnection.CONNECTING &&
-                                !state.syncing &&
-                                !state.loadingOlder,
-                    )
-                },
-            )
+            if (state.selecting) ChatSelectionBar(state, onEvent)
+            else
+                AppTopBar(
+                    title = state.title ?: appString(AppString.ChatTitle),
+                    subtitle =
+                        appString(
+                            when (state.connection) {
+                                ChatThreadConnection.OFFLINE -> AppString.ChatOffline
+                                ChatThreadConnection.CONNECTING -> AppString.ChatConnecting
+                                ChatThreadConnection.SETUP_REQUIRED -> AppString.ChatSetupActivate
+                                ChatThreadConnection.WAITING -> AppString.ChatRoomWaiting
+                                ChatThreadConnection.CONNECTED -> AppString.ChatConnected
+                            }
+                        ),
+                    navigation = {
+                        AppIconButton(
+                            Icons.Regular.ArrowLeft,
+                            appString(AppString.Back),
+                            { onEvent(ChatThreadEvent.BackRequested) },
+                        )
+                    },
+                    actions = {
+                        if (state.rows.isNotEmpty())
+                            AppIconButton(
+                                Icons.Regular.Checkmark,
+                                appString(AppString.ChatSelectMessage),
+                                { onEvent(ChatThreadEvent.SelectionStarted) },
+                                enabled = state.localFailure == null && !state.leaving,
+                            )
+                        AppIconButton(
+                            Icons.Regular.ArrowSync,
+                            appString(AppString.Refresh),
+                            { onEvent(ChatThreadEvent.RefreshRequested) },
+                            enabled =
+                                state.connection != ChatThreadConnection.CONNECTING &&
+                                    !state.syncing &&
+                                    !state.loadingOlder,
+                        )
+                    },
+                )
+            if (state.selectionLimitReached) AppFeedback(appString(AppString.ChatSelectionLimit))
+            if (state.selecting && state.selectedMessages.size > 1 && !state.canDeleteSelection)
+                AppText(
+                    appString(AppString.ChatSelectPendingAlone),
+                    Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    color = AppColors.muted,
+                )
             LazyColumn(
                 state = listState,
                 reverseLayout = true,
@@ -108,7 +125,6 @@ fun ChatThreadPage(
                     key = { _, row -> row.key },
                     contentType = { _, _ -> "message" },
                 ) { index, row ->
-                    val id = row.localId
                     val date = chatMessageDate(row.timestamp, TimeZone.currentSystemDefault())
                     val older = state.rows.getOrNull(index + 1)
                     Column(
@@ -123,15 +139,14 @@ fun ChatThreadPage(
                             ChatDayDivider(date, today)
                         ChatMessageBubble(
                             row,
-                            onCancel =
-                                if (
-                                    row.canCancel &&
-                                        id != null &&
-                                        state.localFailure == null &&
-                                        !state.leaving
-                                )
-                                    ({ onEvent(ChatThreadEvent.CancelRequested(id)) })
-                                else null,
+                            selected = state.selectedMessages.any { sameChatMessage(it, row) },
+                            selecting = state.selecting,
+                            enabled =
+                                state.localFailure == null &&
+                                    !state.leaving &&
+                                    state.deletionDialog == null &&
+                                    state.cancellationDialog == null,
+                            onSelect = { onEvent(ChatThreadEvent.MessageSelected(row.key)) },
                         )
                     }
                 }
@@ -219,6 +234,7 @@ fun ChatThreadPage(
         }
     }
     state.cancellationDialog?.let { ChatCancellationDialog(it, onEvent) }
+    state.deletionDialog?.let { ChatLocalDeletionDialog(it, onEvent) }
 }
 
 @Composable

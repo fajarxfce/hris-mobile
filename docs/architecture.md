@@ -1,5 +1,8 @@
 # Architecture
 
+[Contextual message selection and durable local deletion](collaboration-message-selection.md)
+adds multi-select/copy/delete-for-me while retaining original message evidence.
+
 [Native organization setup owning flow](collaboration-space-native-setup-flow.md)
 coordinates finite original retry/bootstrap preparation and replay, exact retry
 receipt reconciliation and account-owned queue summaries without credential exposure.

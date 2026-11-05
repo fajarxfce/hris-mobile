@@ -16,6 +16,11 @@ internal const val HISTORY_MESSAGES = "messages"
 internal val historyMessageId = Regex("m-[0-9a-f]{64}")
 internal val historyCursor = Regex("[0-9]{16}/m-[0-9a-f]{64}")
 
+internal fun validateHistoryRoom(value: String) {
+    require(value.startsWith('!') && value.length in 2..255)
+    require(value.none { it.isWhitespace() || it.isISOControl() })
+}
+
 internal fun historyScope(access: CollaborationLocalAccess) =
     messageScope(access).let { ReplicaScope(it.sessionId, it.accountKey) }
 
@@ -36,7 +41,7 @@ internal class CollaborationHistoryCodec(
     init {
         historyScope(access)
         historyPartition(access, conversationId)
-        roomId?.let(::validateRoom)
+        roomId?.let(::validateHistoryRoom)
     }
 
     suspend fun aliasId(eventId: String): String {
@@ -70,27 +75,30 @@ internal class CollaborationHistoryCodec(
                 require(
                     it.schema == 1 &&
                         (roomId == null || it.roomId == roomId) &&
-                        it.count in 0..9_007_199_254_740_991L
+                        it.count in 0..9_007_199_254_740_991L &&
+                        it.hiddenRules in 0..9_007_199_254_740_991L
                 )
-                validateRoom(it.roomId)
+                validateHistoryRoom(it.roomId)
                 roomId = it.roomId
             }
     }
 
-    suspend fun checkpoint(generation: String, revision: Long, count: Long) =
+    suspend fun checkpoint(generation: String, revision: Long, count: Long, hiddenRules: Long = 0) =
         seal(
             generation,
             "checkpoint",
             revision,
             "",
-            Json.encodeToString(HistoryCheckpointDto(requireNotNull(roomId), count)),
+            Json.encodeToString(
+                HistoryCheckpointDto(requireNotNull(roomId), count, hiddenRules = hiddenRules)
+            ),
         )
 
     suspend fun message(
         checkpoint: ReplicaCheckpoint,
         raw: ReplicaDocument,
     ): CollaborationHistoryMessage {
-        require(raw.version in 0..checkpoint.revision && raw.tags == setOf(HISTORY_MESSAGES))
+        require(raw.version in 0..checkpoint.revision)
         require(historyMessageId.matches(raw.id) && historyCursor.matches(raw.sortKey))
         val message =
             Json.decodeFromString<HistoryMessageDto>(
@@ -104,6 +112,10 @@ internal class CollaborationHistoryCodec(
                 )
                 .toDomain()
         require(validCollaborationHistoryMessage(message))
+        require(
+            raw.tags ==
+                setOf(if (message.locallyHidden) HISTORY_HIDDEN_MESSAGES else HISTORY_MESSAGES)
+        )
         require(raw.id == messageId(message.sender, message.logicalId, message.primaryEventId))
         require(raw.sortKey == sort(message, raw.id))
         return message
@@ -122,7 +134,50 @@ internal class CollaborationHistoryCodec(
             revision,
             sort,
             seal(generation, id, revision, sort, Json.encodeToString(message.toHistoryDto())),
-            setOf(HISTORY_MESSAGES),
+            setOf(if (message.locallyHidden) HISTORY_HIDDEN_MESSAGES else HISTORY_MESSAGES),
+        )
+    }
+
+    suspend fun hiddenId(rule: HiddenHistoryRule): String {
+        require(rule.valid())
+        return "h-" +
+            index(
+                listOf(
+                    "local-hidden-v1",
+                    rule.sender,
+                    if (rule.logicalId == null) "event" else "logical",
+                    rule.logicalId ?: requireNotNull(rule.eventId),
+                )
+            )
+    }
+
+    suspend fun hidden(checkpoint: ReplicaCheckpoint, raw: ReplicaDocument): HiddenHistoryRule {
+        require(raw.version in 0..checkpoint.revision && raw.tags == setOf(HISTORY_HIDDEN_RULES))
+        require(raw.id.matches(Regex("h-[0-9a-f]{64}")) && raw.sortKey == raw.id)
+        return Json.decodeFromString<HiddenHistoryRule>(
+                open(
+                    checkpoint.handle.generation,
+                    raw.id,
+                    raw.version,
+                    raw.sortKey,
+                    requireNotNull(raw.payload),
+                )
+            )
+            .also { require(it.valid() && hiddenId(it) == raw.id) }
+    }
+
+    suspend fun hidden(
+        generation: String,
+        revision: Long,
+        rule: HiddenHistoryRule,
+    ): ReplicaDocument {
+        val id = hiddenId(rule)
+        return ReplicaDocument(
+            id,
+            revision,
+            id,
+            seal(generation, id, revision, id, Json.encodeToString(rule)),
+            setOf(HISTORY_HIDDEN_RULES),
         )
     }
 
@@ -247,11 +302,6 @@ internal class CollaborationHistoryCodec(
         } finally {
             bytes.fill(0)
         }
-    }
-
-    private fun validateRoom(value: String) {
-        require(value.startsWith('!') && value.length in 2..255)
-        require(value.none { it.isWhitespace() || it.isISOControl() })
     }
 
     private fun limit(id: String) = if (id == "checkpoint") 32_768 else 131_072

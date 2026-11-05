@@ -1,0 +1,450 @@
+{
+  "date": "2026-11-05",
+  "scope": "Contextual message selection, copy and encrypted durable delete for me",
+  "parentCommit": "ef9692b98b4437c30f2e2658537230b6648ce430",
+  "sources": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "2f4898d53f0898af57c857b9963aeb75b2d852528cec3a81fdd8d98f6b6e4e2d",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "2bd266b952fe26b964e2c5ddcc3ef5e3cba949c8d9392cdab5d62baf2ab7613c",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "67162e730b4ca36396dadc0c75947bef787133602a0d9fb01c38814131731dca",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "15ca1a2dc857aea8118f07f48a53105daf34b5620f8c53d61813442b82eab018",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "3a196bccacf743b26c356e1370c0e7148edfded4825f6db738acd889ab43569a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHiddenHistory.kt": "a52d622ee737f9d06882c6e2508ce7d3700a5d5d81e8097befd1b47f5d4d4d29",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHistoryBatch.kt": "24b0a0373b96fcfc69cd4198d436ed0bbc8c88bb86f4625b47be175ea1d0df65",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHistoryCodec.kt": "054ccd11cf9b1dbf992144cdf0044283124f3a710c2e7b8ff86572ca0f99c87a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHistoryDtos.kt": "7a73c0799d32d82a59f8827204b30d4d43b4b83ebd4a27f8a01f2c45b493e99b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHistoryHideBatch.kt": "41358f1876f0ff5a021c946ea95bd6db42ce6c368dce49066bbcc5a7615a1dd3",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationHistoryRepository.kt": "99f70db2a546522cfe4c196a6fb750be3dfce469d94664a84f92ccdf4d272455",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationLocalVisibilityStorageContract.kt": "9bf2190e89aacd4d8da64e0d6ab618279bd10895ebbc88edd49806c1f541b443",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationLocalVisibilityStorageTest.kt": "38f16770dcc6fc3afde3a409029ec31f675e67d507233539b6dc3f65fef6aead",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationLocalVisibilityStorageTest.kt": "f246e610ec7e492e7325059666fa88c8e793186ec6ae30ca2e866139f2eb948a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationHistory.kt": "c7fe8161aca7a0aff963e5b3d28501c9ccf71afaaa3de33cf5a3c788616f5b64",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationLocalVisibility.kt": "d0ec9bfbae6e73778a58221349c69f696f9c123ac77d5323aec9314a22a9b030",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationLocalVisibilityPolicy.kt": "9054575dc89ae5df38944524f0b849cdf3384add9cbfa4246497433319ad3776",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationLocalVisibilityRepository.kt": "6ca277faec55a5c352acfa875ac3b22472bae6ef5d001b8d57eb317ce803c874",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/DeleteCollaborationMessagesForMe.kt": "f086369fdd3692f84cb664d08551d9b88fc73a7ae6dd2e8b1a259a5bc9080d8f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationHiddenMessages.kt": "546154a1769def86bd0e3ed01a192dbd00ad1ba227c42252de7286c421c466ce",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationLocalVisibilityTest.kt": "08f1f0bb916c627ffa0e29d6f69b4755c893ad70b7e2f94c566d3ac080e8a8d1",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/CollaborationNavigation.kt": "1f9d52adffd19d399ceeb6e0c297359a680a3ba01e1291fa2587dbafee43b79b",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatMessageRow.kt": "ab71e4f25b684ecc0016dbcd6b5169ec296d6bf165a3ee6e9203eeab2fac0797",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatMessageSelection.kt": "5c7e2bdac56a85e101b302aed305273f17cd3be171f1791a295db87982e5fbee",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadEffect.kt": "507554309ba6ea4ef9f386f528e0d4b1714f0ee7d2f96147d8a149892b98ff0b",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadEvent.kt": "fb03dc24d3e90f7929e0624994ccc632dea179178c6cdc3dde1c86bcdc73f2ce",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadProjection.kt": "eb4764a79a689cb14f40600f6e0b864009914632260d2e767317cd79690e4fc5",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadState.kt": "aa3d78072d017d1f270046e049350fd4dc2ebfdc712c9fffeddf006075bfd251",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModel.kt": "ba38c39aeab4bd955216380f0faf6718dbd1958230a492cd14f7da524999f4f7",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatMessageBubble.kt": "6b35f8eee67066a4190953ae862f5adce8d7a96478ea4f55252c5d7751e6a482",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatSelectionBar.kt": "570c47a8e085c18520f50ac2eed4f3e00742f6683a62d8164ccd6a71b3c2c087",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatThreadPage.kt": "8c48dabbbe2ac9c2df7b91d129eb34e5e9621758bd054edd8b451c7809049810",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "0d17a37ec8a789d3ab4e8d7c3fecfcaf40f23ca924d4e3867bf7bc3e607105b3",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadSelectionTest.kt": "28c992fe4dc207d3ac7360b4e334b9758f502f69e9d4eb39f6e0cc1b46d71d9a",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatSelectionLayoutTest.kt": "f659d885fcbf594dd976bfeff455827678050c8a92a044f354f61f613f184ea7",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatThreadLayoutTest.kt": "ddbee0a9ad72ebd8e49a172dc20ebdcb3e9bf222229ac4498d645131573114a0"
+  },
+  "gates": {
+    "browser1": {
+      "startedAt": "2026-11-05T05:04:04.855013+00:00",
+      "elapsedSeconds": 168.16,
+      "exitCode": 0,
+      "sourceFiles": 4033,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1654,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "cf0ef2c59a8eb2ed4e98467362af1ffbd1fa65f9541f580506f1ac51fc175c60",
+      "reports": {
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowser-J9TSF6A1JLRUA.dev.fajar.starter.collaboration.data.BrowserCollaborationLocalVisibilityStorageTest.xml": {
+          "sha256": "339c447ade3570cebe27551f9a804e47912cc88f1bb0504a068ab5ed96662965",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationLocalVisibilityTest.xml": {
+          "sha256": "7df2f2d38c97493027d6e8cb22aa873aae27371406573445276a16101812cd3d",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "3aaf9e7b5747aa251a6f59ae38ea58d76ee2dc9bafaee5ce7b4ce30b9a6a8034",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatSelectionLayoutTest.xml": {
+          "sha256": "a25addd0617f919d9d2eb1ccb1d3b84d929ded2bfff5bc34c30cdc19eb6cbbd0",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadSelectionTest.xml": {
+          "sha256": "761761999e4c18ba2ffc6f502d187975effb3091d3539087dc0e32a540b47bff",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageTest.xml": {
+          "sha256": "92ce20f8978045148070f53e1418ec6fb0cb92cd09b8d7b35465cb555829eabf",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationLocalVisibilityTest.xml": {
+          "sha256": "ccf2a01f9c18a693e53e1de83432cf865fdd47b21c0e3a36d5772a1949fd3d61",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "0d0d6761ced23d9a27154e78c06394f392d70e78a6ba93a7403eb90f8cb23e7f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "check1": {
+      "startedAt": "2026-11-05T04:53:45.131772+00:00",
+      "elapsedSeconds": 384.05,
+      "exitCode": 0,
+      "sourceFiles": 4033,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3058,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "cf0ef2c59a8eb2ed4e98467362af1ffbd1fa65f9541f580506f1ac51fc175c60",
+      "reports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "3aaf9e7b5747aa251a6f59ae38ea58d76ee2dc9bafaee5ce7b4ce30b9a6a8034",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatSelectionLayoutTest.xml": {
+          "sha256": "a25addd0617f919d9d2eb1ccb1d3b84d929ded2bfff5bc34c30cdc19eb6cbbd0",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadSelectionTest.xml": {
+          "sha256": "761761999e4c18ba2ffc6f502d187975effb3091d3539087dc0e32a540b47bff",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageTest.xml": {
+          "sha256": "92ce20f8978045148070f53e1418ec6fb0cb92cd09b8d7b35465cb555829eabf",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationLocalVisibilityTest.xml": {
+          "sha256": "ccf2a01f9c18a693e53e1de83432cf865fdd47b21c0e3a36d5772a1949fd3d61",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {},
+      "stdoutSha256": "dd482b9b9c92635962a8e839d957931a4dfdfa1b5814003d311dfdb871e6375e",
+      "stderrSha256": "32b679ae61a3a90d26bb177c19fc0166bbe14a293805a2f198ef5fdd7bddae73"
+    },
+    "focused1": {
+      "startedAt": "2026-11-05T04:38:36.248939+00:00",
+      "elapsedSeconds": 169.615,
+      "exitCode": 1,
+      "sourceFiles": 4033,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 36,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "0cbe184b833231bbd5dba89b7b6082831e3a7a2c8779ca6f9b61051b224be7a7",
+      "reports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageTest.xml": {
+          "sha256": "5eaf85f7599132b56bf9e6ea69e9776a7302b22dbe9522a8214382bce5b30595",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationLocalVisibilityTest.xml": {
+          "sha256": "421751e49d83205bfcae5f506ac29ead9bc522f13d07f753a0d8cc0364bd6c1a",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "254fa5fa08203cfe7bbc826306ab5015ad4d5a14ee2e99af44f97c0c9d7a1870",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "35ac1cb3a0fce759b11d3d8a1d9dbe21954b08e3f4acdb35a45823951ff9fbbc",
+      "stderrSha256": "0f2c0f4859fd1a27f4d45730f088cece7741b7f10abfdad3f29586d2fc535d57"
+    },
+    "focused2": {
+      "startedAt": "2026-11-05T04:42:53.392637+00:00",
+      "elapsedSeconds": 315.22,
+      "exitCode": 1,
+      "sourceFiles": 4033,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 112,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "dd33c63978c54e11ed8c127dc93d7cd709439e008045437428b2eca975bc0a86",
+      "reports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "be65e16bfe3d6cb444a963d0657fbd4b232cd010162bf5711c30b3230cff98e1",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatSelectionLayoutTest.xml": {
+          "sha256": "0fcf6eba4f53365cefd461dd9db9f0b62a253cd6f959276b1108faa1d66472bb",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadSelectionTest.xml": {
+          "sha256": "9644b47581a4abe1420c83db401fd747a92b19e6f963da540e24798b6ac039cc",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageTest.xml": {
+          "sha256": "5eaf85f7599132b56bf9e6ea69e9776a7302b22dbe9522a8214382bce5b30595",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationLocalVisibilityTest.xml": {
+          "sha256": "421751e49d83205bfcae5f506ac29ead9bc522f13d07f753a0d8cc0364bd6c1a",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "a4e23ed9a458d7022692a327193c34e9c75c3412709820c5fdbc651855af665c",
+      "stderrSha256": "4b96739c6dd7da0d7f32421d809f5497c17de462e16786afaa0fdd568382b420"
+    },
+    "focused3": {
+      "startedAt": "2026-11-05T04:49:29.592872+00:00",
+      "elapsedSeconds": 104.666,
+      "exitCode": 1,
+      "sourceFiles": 4033,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 112,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "8a7380937e7841c0730877b651a7d61fd7300bcb1e722f2a39cdb25462142e44",
+      "reports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "292203896dfa69f65db3cc8c4bf99ee0c46eaad016cfcc010fbc18dd516b0f66",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatSelectionLayoutTest.xml": {
+          "sha256": "7faf81b180ca540a7df34e3a4461077adc0c00b7c8e50ca372cd013ba8cbc85d",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadSelectionTest.xml": {
+          "sha256": "ded5bd3ddf282c573a69b695721d1d11bcd5d9a67ce7fca88051e5860d05c56c",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageTest.xml": {
+          "sha256": "5eaf85f7599132b56bf9e6ea69e9776a7302b22dbe9522a8214382bce5b30595",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationLocalVisibilityTest.xml": {
+          "sha256": "421751e49d83205bfcae5f506ac29ead9bc522f13d07f753a0d8cc0364bd6c1a",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "5398a467d260eba5d7deed87ed476574c0acc8f2a890959ea30663bffd01133f",
+      "stderrSha256": "2607c0f22f37f99b742a5e6372eedc97dbad63292fcc067c2f6bc470001ec08f"
+    },
+    "focused4": {
+      "startedAt": "2026-11-05T04:51:48.879193+00:00",
+      "elapsedSeconds": 99.232,
+      "exitCode": 0,
+      "sourceFiles": 4033,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 112,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "cf0ef2c59a8eb2ed4e98467362af1ffbd1fa65f9541f580506f1ac51fc175c60",
+      "reports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "7dbf04221f9856fa767e8a4e2c7d1ee1a236c1b02afe1d7520d1b9e4fc4f0db7",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatSelectionLayoutTest.xml": {
+          "sha256": "3d0570c2a9770b643131b3ed53dd92cc46fc104a87155a4e246d759e97afd532",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadSelectionTest.xml": {
+          "sha256": "d2252670ff7b7c9abba60afbbf532d3f32a19179f463f69a9344a574e50529fd",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageTest.xml": {
+          "sha256": "5eaf85f7599132b56bf9e6ea69e9776a7302b22dbe9522a8214382bce5b30595",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationLocalVisibilityTest.xml": {
+          "sha256": "421751e49d83205bfcae5f506ac29ead9bc522f13d07f753a0d8cc0364bd6c1a",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "ecb0a5625246d7f831235774891f88f0d6bbb4ae7a5e7efea8b528553f99565c",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "storage1": {
+      "startedAt": "2026-11-05T04:29:15.154709+00:00",
+      "elapsedSeconds": 123.873,
+      "exitCode": 0,
+      "sourceFiles": 4026,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "a590a7018a2be5b4e9cc36854bfb759083a55a765a6300bd0a9235f9a8ae4915",
+      "reports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationLocalVisibilityStorageTest.xml": {
+          "sha256": "5a6a6934c1f31c4295054dfc8392100816bb4dc144bbaa6851a6b0f0d3567433",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "254fa5fa08203cfe7bbc826306ab5015ad4d5a14ee2e99af44f97c0c9d7a1870",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "3d2fc656275b908668414ffab1f165e7ff76bd3825b186bfa9a70d3648f1906e",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "finalGates": [
+    "focused4",
+    "check1",
+    "browser1"
+  ],
+  "finalGateSourcesIdentical": true,
+  "screenshots": {
+    "docs/images/chat-selection/chat-selection-light.png": {
+      "sha256": "bba62fd7992a7b31854d90fbfebfe555baa1694a0cef61f7dc11c19bda6e061c",
+      "reviewed": true
+    },
+    "docs/images/chat-selection/chat-selection-dark-large-text.png": {
+      "sha256": "91a9ad95b2e1379dfc8299144286d1492243d0879e8625edb10a34e5cd0fa3b2",
+      "reviewed": true
+    },
+    "docs/images/chat-selection/chat-selection-landscape.png": {
+      "sha256": "8f09ab956554ba12b800b7371758deb8a9d19b40867f7146e41638d1accdfefa",
+      "reviewed": true
+    },
+    "docs/images/chat-selection/chat-selection-delete-large-text.png": {
+      "sha256": "3d4c8f915acb57704f9d5ad762a2bba08984d37dea52b745e169b1af946287f3",
+      "reviewed": true
+    }
+  },
+  "coverage": {
+    "newStorageCasesPerPlatform": 10,
+    "newDomainCases": 10,
+    "newViewModelCases": 8,
+    "newComposeCases": 4,
+    "cases": "SQLite and IndexedDB reopen, sender/logical aliases and later imports, retained original evidence, atomic 50-message batch, lost commit response, CAS retry, key loss/tamper, offline ownership, cancellation and late account/denial changes. Stable multi-selection across paging, chronological clipboard, exact retry and offline sent echo before history checkpoint. Actual application DI and plain Compose selection, 48dp targets, large text and cancellation."
+  },
+  "failedAttempts": {
+    "focused1": "UI compilation: suspend handler shape and unavailable core icon; fixed with owned effect coroutine and existing Checkmark. 36 executed tests passed.",
+    "focused2": "112 cases passed; architecture rejected page-owned focus effect. Moved keyboard/focus ownership to navigation route.",
+    "focused3": "112 cases passed; detekt found oversized row projection. Extracted pending-row mapper."
+  },
+  "limits": [
+    "No delivered-message edit, quoted reply, forward or delete for everyone yet.",
+    "Newest priority: repeated thread loading, Bima generic sync failure, automatic reconnection and contextual unsent notification replies. Those issues remain open in this commit.",
+    "No APK installed for this slice; phone remains release30/source3e1cee4c.",
+    "No live deployment, actual JNI/FCM/SystemUI, Apple runtime or performance acceptance. All 54 PRD groups remain open."
+  ]
+}

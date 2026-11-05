@@ -42,7 +42,35 @@ internal class ChatThreadFixture {
     var afterCancel: suspend () -> Unit = {}
     var cancelFailure: Failure? = null
     var rejectCancel = false
+    var retainedHistoryRoom = true
     val historyRows = MutableStateFlow<List<CollaborationHistoryMessage>>(emptyList())
+    val hiddenMessages = MutableStateFlow(emptySet<CollaborationMessageReference>())
+    var beforeHide: suspend () -> Unit = {}
+    var afterHide: suspend () -> Unit = {}
+    var hideFailure: Failure? = null
+    val hiddenBatches = mutableListOf<List<CollaborationMessageReference>>()
+    val visibility =
+        object : CollaborationLocalVisibilityRepository {
+            override fun observeHidden(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+                roomId: String,
+                messages: List<CollaborationMessageReference>,
+            ) = hiddenMessages.map { AppResult.Success(it.intersect(messages.toSet())) }
+
+            override suspend fun hide(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+                roomId: String,
+                messages: List<CollaborationMessageReference>,
+            ): AppResult<Boolean> {
+                hiddenBatches += messages
+                beforeHide()
+                hiddenMessages.value += messages
+                afterHide()
+                return hideFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(true)
+            }
+        }
     val updates =
         MutableStateFlow<AppResult<List<CollaborationTimelineItem>>>(AppResult.Success(emptyList()))
     val receiptRows = mutableListOf<CollaborationMessageReceipt>()
@@ -221,13 +249,20 @@ internal class ChatThreadFixture {
                         beforePage(after, before)
                         currentCoroutineContext().ensureActive()
                         emitAll(
-                            historyRows.map {
+                            combine(historyRows, hiddenMessages) { rows, hidden ->
                                 historyPages[after to before]
                                     ?: AppResult.Success(
                                         CollaborationHistoryPage(
-                                            it,
+                                            rows.filter { row ->
+                                                CollaborationMessageReference(
+                                                    row.sender,
+                                                    row.primaryEventId,
+                                                    row.logicalId,
+                                                ) !in hidden
+                                            },
                                             if (after == null) pageNext else null,
-                                            roomId = source.roomId,
+                                            roomId =
+                                                if (retainedHistoryRoom) source.roomId else null,
                                         )
                                     )
                             }
@@ -544,6 +579,24 @@ internal class ChatThreadFixture {
                 readState.reader,
                 readState.marker,
                 readState.recovery,
+                ObserveCollaborationHiddenMessages(
+                    visibility,
+                    local,
+                    sessions,
+                    workspaces,
+                    server,
+                    build,
+                    clock,
+                ),
+                DeleteCollaborationMessagesForMe(
+                    visibility,
+                    local,
+                    sessions,
+                    workspaces,
+                    server,
+                    build,
+                    clock,
+                ),
             )
         }
 

@@ -4,8 +4,14 @@ package dev.fajar.starter.collaboration.presentation.navigation
 
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.backhandler.BackHandler
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -22,6 +28,7 @@ import dev.fajar.starter.collaboration.presentation.setup.pages.ChatSetupPage
 import dev.fajar.starter.collaboration.presentation.thread.*
 import dev.fajar.starter.collaboration.presentation.thread.pages.ChatThreadPage
 import dev.fajar.starter.presentation.mvi.CollectEffects
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -152,6 +159,7 @@ private fun ChatSetupEntry(workspaceId: String, onBack: () -> Unit) {
     ChatSetupPage(state, vm::onEvent)
 }
 
+@Suppress("DEPRECATION")
 @Composable
 private fun ChatThreadEntry(
     workspaceId: String,
@@ -169,6 +177,16 @@ private fun ChatThreadEntry(
         )
     val state by vm.state.collectAsStateWithLifecycle()
     val list = rememberLazyListState()
+    val clipboard = LocalClipboardManager.current
+    val effectsScope = rememberCoroutineScope()
+    val focus = LocalFocusManager.current
+    val keyboard = LocalSoftwareKeyboardController.current
+    LaunchedEffect(state.selecting) {
+        if (state.selecting) {
+            focus.clearFocus()
+            keyboard?.hide()
+        }
+    }
     LifecycleStartEffect(vm) {
         vm.onEvent(ChatThreadEvent.Entered)
         onStopOrDispose { vm.onEvent(ChatThreadEvent.Stopped) }
@@ -178,8 +196,13 @@ private fun ChatThreadEntry(
             ChatThreadEffect.Back -> onBack()
             ChatThreadEffect.Setup -> onSetup()
             ChatThreadEffect.ScrollToNewest -> list.requestScrollToItem(0)
+            is ChatThreadEffect.CopyMessages ->
+                effectsScope.launch {
+                    if (vm.confirmCopy(it)) clipboard.setText(AnnotatedString(it.text))
+                }
         }
     }
+    BackHandler { vm.onEvent(ChatThreadEvent.BackRequested) }
     ChatThreadFocusObserver(state, conversationId, onThreadFocus)
     ChatThreadViewportObserver(state, list, vm::onEvent)
     ChatThreadPage(state, list, vm::onEvent)
