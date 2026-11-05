@@ -236,6 +236,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
     suspend fun runCompletionRecovery() =
         withContext(Dispatchers.IO) {
             val (fixture, home) = readFixture(resuming = true, afterAck = true)
+            requireHrisProofGatewayUnavailable(home)
             val checkpoint = read("gateway-completed", 4096)
             val result = read("gateway-precompletion-result", 8192)
             check(
@@ -286,6 +287,15 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                     sent.eventId == result.getString("ackSenderEventId") &&
                         sent.transactionId == transaction
                 )
+                proof.verifyColdOfflineHistory(
+                    listOf(
+                        result.getString("senderEventId") to body(fixture, "body"),
+                        result.getString("recipientEventId") to body(fixture, "reply"),
+                    )
+                )
+                requireHrisProofGatewayUnavailable(home)
+                result.put("coldHistoryRecoveredOffline", true)
+                result.put("gatewayUnavailableAfterProcessDeath", true)
                 write(
                     "gateway-result",
                     result.put("processId", Process.myPid()).put("completionCleanupRecovered", true),

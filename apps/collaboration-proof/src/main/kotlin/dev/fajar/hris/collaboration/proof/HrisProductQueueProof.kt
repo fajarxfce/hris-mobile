@@ -327,6 +327,22 @@ internal class HrisProductQueueProof(
     suspend fun recoverCompletion(logicalId: String, transaction: String) =
         retirementProof(prepareAckApplication()).recover(logicalId, transaction)
 
+    suspend fun verifyColdOfflineHistory(expected: List<Pair<String, String>>) {
+        check(application != null && writer == null && expected.size == 2)
+        val history =
+            EncryptedCollaborationHistoryRepository(
+                database.replicas,
+                AesGcmContentCipher(),
+                historyKey,
+            )
+        val saved = success(history.observe(access, conversationId, roomId).first())
+        for ((eventId, body) in expected) {
+            val original = saved.messages.single { eventId in it.eventIds }
+            check(original.text == body)
+            check(success(history.getByEvent(access, conversationId, roomId, eventId)) == original)
+        }
+    }
+
     private fun retirementProof(app: HrisProofApplicationAccess) =
         HrisProofMessageRetirement(
             access,

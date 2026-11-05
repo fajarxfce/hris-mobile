@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## Cold offline history verified — 5 November 2026
+
+Actual encrypted canonical history remains readable after the third owned process
+is killed, its gateway mapping removed, and a fourth process opens the original
+store. Refused TCP connects before/after the read prove the server is unavailable.
+Both earlier messages/event aliases match privately. No fourth encrypted send occurs.
+This is native/repository evidence; full product UI and physical-phone internet-off
+behavior are not newly claimed. [Contract](collaboration-chat-offline-restart.md),
+[evidence](measurements/chat-offline-restart-2026-11-05.json).
+
+Both actual SDK suites pass /155.541s/2 cases/12,261 unchanged inputs,
+including original-key renewal/auth recovery, encrypted exchange, history, receipts
+and process death. Mobile root/proof build passes /168.453s/18 fresh/4,051
+unchanged inputs. Driver30 pass; initial mock-mapping failure retained. Owned emulator
+is stopped. Only proof/test/driver source changes; phone32 remains installed from
+Mobile64c9432f (deliverye347b0cb). Last sampled release32 process yielded no closed SDK
+diagnostics; do not infer that the earlier Generic Bima transport error is solved.
+
+NEXT: continue delivered edit/reply/forward/delete-for-all, original-bootstrap
+resolution/adoption and group UI, calls and meetings. User's optional send-result
+question is pending; preserve private keys and inspect closed diagnostics after
+ordinary use. All54groups open, live8b40/schema116 unchanged. Push each commit and
+continue long run. Port Main native fixture changes to Group only with its own gate.
+
 ## Product release 32 installed — 5 November 2026
 
 Latest validated product source [64c9432f](https://github.com/fajarxfce/hris-mobile/commit/64c9432f6538070f6adf750dd3920481efa7c032) is built as ARM64 devRelease 32

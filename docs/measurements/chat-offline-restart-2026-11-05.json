@@ -1,0 +1,220 @@
+{
+  "recordedAt": "2026-11-05T08:01:44.818236+00:00",
+  "baseCommits": {
+    "hris-mobile": "e347b0cbccec91f0ede7a82d230c484803558463",
+    "hris-platform": "ca94f84a8708be3b5e4fccbb0abf03beca9c20ef"
+  },
+  "changedSourceSha256": {
+    "mobile/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProofGatewayUnavailable.kt": "bf764b9b75277bf62ea7b36dcc047fe14f2383d24cecc01121292adb6efc9771",
+    "mobile/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProductQueueProof.kt": "4005be75ffa733334752a58b28b436ffc964630cfb96a62bf3f3b063272b3bd7",
+    "mobile/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisNativeMatrixProbe.kt": "a44e91b53e726640c3ab97fdc2d2ae3fc6341fd9be1113cf570604fa9223b85b",
+    "backend/tool/collaboration_hris_native.py": "eaaaf6fe938c50d5e3f75d4389bab6866338178cb7e5b49b47c5459384a52ac3",
+    "backend/tool/test_collaboration_hris_native.py": "232b2f1ef407b9dd2a7d6ad0a9e010cfb143dc59e7c3d1f4b7c9369eba34dfb9",
+    "backend/apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationSdkInteropTest.kt": "92e14337d949b18b2dde199958569ab63162b8e73331bb1b9235e16a5d314fae"
+  },
+  "mobileGate": {
+    "startedAt": "2026-11-05T07:53:10.164175+00:00",
+    "elapsedSeconds": 168.453,
+    "exitCode": 0,
+    "sourceFiles": 4051,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofFailureTest.xml": {
+        "sha256": "1d5a410abb59412f52cf28e68813a0e53f7e9b9ddbe816a9d04f2ce3fa4b766c",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofObservationTest.xml": {
+        "sha256": "24fa77b04f6b2ce5dc0f72263cd92a25780cd38438505569466a768be877e84e",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisReadReceiptBarrierTest.xml": {
+        "sha256": "df74e3c2f24b144f6b3e69536ca006b7049093c0339321d7c28b8761603fb4b3",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.NotificationInputCheckpointTest.xml": {
+        "sha256": "b8da544f73ad272850b0a367220513d5a872ba24d639d0643f451d7ecc8c4713",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": {
+        "sha256": "26f878e833ef996f9977b7929eeee7278fc9933d687fc9b874d624e1413ffec2",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "apkSha256": "6f1160faa91e8bccc370174c2480f7234a1aa2342e8607355e686143689492f6",
+    "commit": "e347b0cbccec91f0ede7a82d230c484803558463"
+  },
+  "nativeGate": {
+    "startedAt": "2026-11-05T07:57:30.797422+00:00",
+    "elapsedSeconds": 155.541,
+    "exitCode": 0,
+    "sourceFiles": 12261,
+    "sourcesUnchanged": true,
+    "apkSha256": "6f1160faa91e8bccc370174c2480f7234a1aa2342e8607355e686143689492f6",
+    "apkUnchanged": true,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": {
+        "sha256": "da53141d4cea034f557847bee28410d752e9c7606eca2ce5bcbc6d2e1fc9e195",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "TEST-dev.fajar.hris.NativeCollaborationSdkAuthInteropTest.xml": {
+        "sha256": "d16b600e4309e9e09a40af43ee1907bc98c53d3eab94cf3e20023c8fc1082ebc",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "proofs": {
+      "normal": {
+        "passed": true,
+        "encryptedBothDirections": true,
+        "sdkAccessRenewed": true,
+        "sameGatewayAfterRenewal": true,
+        "verificationUsedRefreshReplay": true,
+        "logicalIdsPreserved": true,
+        "cleanup": true,
+        "protectedStoreReopened": true,
+        "missingRecordPreserved": true,
+        "wrongPassphrasePreserved": true,
+        "exclusiveOwner": true,
+        "processRestarted": true,
+        "queueRestored": true,
+        "transactionReused": true,
+        "identityAfterRestart": true,
+        "messageIntentRestored": true,
+        "queueMappingRecovered": true,
+        "queueWriterExclusive": true,
+        "perRoomDeliveryIsolated": true,
+        "heldQueueRestored": true,
+        "nativeDeliveryOwned": true,
+        "commonSenderOwned": true,
+        "receiptJournalRecovered": true,
+        "projectionInterrupted": true,
+        "originalHistoryWindowOwned": true,
+        "historyBodiesRestored": true,
+        "nativeReadReceiptsExchanged": true,
+        "nativePrivateReceiptIsolated": true,
+        "nativeReadReceiptStoreRestored": true,
+        "nativeLocalReadIntentPrepared": true,
+        "nativeLocalReadIntentStoreRestored": true,
+        "nativeReadReceiptReplayAdmitted": true,
+        "nativeReadReceiptAckUncertaintyRecovered": true,
+        "commonHistoryAcquisitionOwned": true,
+        "latestHistoryHeadOwned": true,
+        "admittedHistoryHeads": true,
+        "providerHistoryPageOwned": true,
+        "commonProviderHistoryAcquisitionOwned": true,
+        "providerHistoryReferencesRestored": true,
+        "providerHistoryReferencesReconciled": true,
+        "providerHistoryRestartPreserved": true,
+        "historyRuntimeReopened": true,
+        "ackBeforeJournalRecovered": true,
+        "processRestartedAfterAck": true,
+        "completionCleanupRecovered": true,
+        "coldHistoryRecoveredOffline": true,
+        "gatewayUnavailableAfterProcessDeath": true,
+        "processRestartedAfterCompletion": true,
+        "encryptedSendCount": 3,
+        "admittedProviderPages": true,
+        "applicationAdmittedBeforeSend": true,
+        "applicationAdmittedAroundHistory": true,
+        "heldRoomNeverSent": true,
+        "pausedAcrossRestart": true,
+        "syncInterruptedAfterRestart": true,
+        "syncRetriedWithRetainedCursor": true
+      },
+      "auth": {
+        "actualSdkAuthRejected": true,
+        "actualSdkAuthRecovered": true,
+        "sameGatewayRotatedOnce": true,
+        "hrisParentStillActive": true,
+        "originalDeviceStillActive": true,
+        "oneKeyPublication": true
+      },
+      "authCleanup": true
+    }
+  },
+  "driverTests": {
+    "observedAt": "2026-11-05T07:54:00.774212+00:00",
+    "command": [
+      "python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tool",
+      "-p",
+      "test_collaboration_hris_native.py"
+    ],
+    "final": {
+      "tests": 30,
+      "failures": 0,
+      "errors": 0,
+      "testSeconds": 0.112
+    },
+    "initial": {
+      "tests": 30,
+      "failures": 2,
+      "errors": 3,
+      "testSeconds": 0.102,
+      "cause": "Existing full-handshake mock lacked an owned port and reverse-mapping state; updated the fixture to model disconnect. Production driver unchanged after first run."
+    },
+    "sources": {
+      "tool/collaboration_hris_native.py": "eaaaf6fe938c50d5e3f75d4389bab6866338178cb7e5b49b47c5459384a52ac3",
+      "tool/test_collaboration_hris_native.py": "232b2f1ef407b9dd2a7d6ad0a9e010cfb143dc59e7c3d1f4b7c9369eba34dfb9"
+    }
+  },
+  "emulatorStop": {
+    "pid": 2763381,
+    "serial": "emulator-5562",
+    "stopped": true,
+    "signalSent": true,
+    "transportAbsent": true,
+    "seconds": 1.404
+  },
+  "phone32DiagnosticRead": {
+    "readAt": "2026-11-05T07:56:02.738652+00:00",
+    "release": 32,
+    "source": "Last observed application process after install; timestamp filtered from install start",
+    "uiDriven": false,
+    "networkChanged": false,
+    "recordCount": 0,
+    "counts": {},
+    "recent": []
+  },
+  "limits": [
+    "Actual owned emulator/native SDK/encrypted repository recovery with refused loopback TCP connection before and after the read. No physical-phone network changes or full product UI claim.",
+    "Existing product release32 remains installed. Only dedicated proof and backend test/driver files change.",
+    "All54 PRD groups remain open; live backend8b40/schema116 unchanged. No accepted group runtime from this Main fixture."
+  ]
+}

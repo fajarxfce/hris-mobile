@@ -1,5 +1,7 @@
 # Architecture
 
+[Cold offline history](collaboration-chat-offline-restart.md) verifies actual protected-store recovery and canonical reads after process death with the gateway unavailable.
+
 [Chat header and selection](collaboration-chat-header.md) keeps transport state out of the name header and starts contextual actions from a selected bubble.
 
 [Original chat connection recovery](collaboration-chat-reconnect.md) preserves the private store through typed SDK rejection and exclusive credential replacement, with compact contextual recovery actions.
