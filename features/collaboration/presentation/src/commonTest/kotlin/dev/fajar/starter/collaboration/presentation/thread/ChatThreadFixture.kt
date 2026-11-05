@@ -858,6 +858,23 @@ internal class ChatThreadFixture {
             )
         }
 
+    private fun emptyEditHistory() =
+        object : CollaborationMessageEditRepository {
+            override suspend fun getReplacementFact(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+                roomId: String,
+                eventId: String,
+            ): AppResult<CollaborationReplacementEventFact?> = AppResult.Success(null)
+
+            override suspend fun mergeEdits(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+                roomId: String,
+                edits: List<CollaborationMessageEdit>,
+            ): AppResult<Boolean> = error("This fixture has no replacement events")
+        }
+
     private fun createAcquireCollaborationHistory() =
         with(base) {
             AcquireCollaborationHistory(
@@ -871,14 +888,7 @@ internal class ChatThreadFixture {
                 server,
                 build,
                 clock,
-                object : CollaborationMessageEditRepository {
-                    override suspend fun mergeEdits(
-                        access: CollaborationLocalAccess,
-                        conversationId: String,
-                        roomId: String,
-                        edits: List<CollaborationMessageEdit>,
-                    ): AppResult<Boolean> = error("This fixture has no replacement events")
-                },
+                emptyEditHistory(),
             )
         }
 
@@ -937,6 +947,7 @@ internal class ChatThreadFixture {
                 server,
                 build,
                 clock,
+                emptyEditHistory(),
             )
         }
 }

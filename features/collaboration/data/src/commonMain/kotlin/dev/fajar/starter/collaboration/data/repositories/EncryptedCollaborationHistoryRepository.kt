@@ -283,6 +283,72 @@ class EncryptedCollaborationHistoryRepository(
         }
     }
 
+    override suspend fun getReplacementFact(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        eventId: String,
+    ) = safeStorageCall {
+        val scope = historyScope(access)
+        val partition = historyPartition(access, conversationId)
+        val raw = replicas.checkpoint(scope, partition) ?: return@safeStorageCall null
+        withKey(access, conversationId, roomId) { codec ->
+            codec.checkpoint(raw)
+            val aliasId = codec.aliasId(eventId)
+            val alias =
+                replicas.document(scope, partition, aliasId)?.let {
+                    require(it.id == aliasId)
+                    codec.alias(raw, it)
+                }
+            val fact =
+                alias
+                    ?.takeIf { it.replacement }
+                    ?.let {
+                        val id = requireNotNull(it.messageId)
+                        val original =
+                            codec.message(
+                                raw,
+                                requireNotNull(replicas.document(scope, partition, id)).also { found
+                                    ->
+                                    require(found.id == id)
+                                },
+                            )
+                        require(
+                            original.sender == it.sender &&
+                                it.replacementTarget in original.eventIds
+                        )
+                        if (!it.redacted) {
+                            val revisionId = codec.revisionId(eventId)
+                            val revision =
+                                codec.revision(
+                                    raw,
+                                    requireNotNull(replicas.document(scope, partition, revisionId))
+                                        .also { found -> require(found.id == revisionId) },
+                                )
+                            require(revision.messageId == id)
+                            val edit = revision.revision.toDomain().edit
+                            require(
+                                edit.eventId == eventId &&
+                                    edit.sender == it.sender &&
+                                    edit.timestamp == it.timestamp
+                            )
+                            require(
+                                edit.contentHash == it.replacementHash &&
+                                    edit.targetEventId == it.replacementTarget
+                            )
+                        }
+                        CollaborationReplacementEventFact(
+                            it.eventId,
+                            it.sender,
+                            requireNotNull(it.timestamp),
+                            it.redacted || original.redacted,
+                        )
+                    }
+            require(replicas.checkpoint(scope, partition) == raw)
+            fact
+        }
+    }
+
     private suspend fun readEvent(
         access: CollaborationLocalAccess,
         conversationId: String,

@@ -70,11 +70,22 @@ in 88.562 seconds, executing all 175 presentation browser cases while successful
 checks remained up-to-date. Earlier storage checks and the corrected earliest-
 alias admission case are recorded separately in the measurement.
 
-Before releasing authoring, provider traversal must explicitly acknowledge
-retained replacement events. Its existing original-only fact reader deliberately
-excludes them, so edits currently remain unresolved references. Add a separate
-replacement-fact read for traversal without treating it as an original message,
-read receipt or send acknowledgement. No edit authoring release is claimed here.
+Provider traversal now resolves retained replacements through a separate
+`getReplacementFact` read when its original-only reader has no match. The read
+checks encrypted alias/revision/original identity under one checkpoint, including
+redacted revisions. Reconciliation matches exact event ID, sender and server time,
+then rechecks ownership and local denial before publishing. Already resolved
+references stay resolved across offline reads; original send/read receipt and
+quote APIs still exclude replacements. Unknown older edits remain unresolved until
+acquired; this does not claim complete raw history recovery.
+
+[Reference validation](measurements/collaboration-edit-references-2026-11-05.json):
+122 focused cases pass in135.577s; full root/browser/Android/host/proof compile
+checks pass in588.776s with4,981 fresh cases, zero failures/errors/skips and zero
+Android lint issues. Tests cover offline age, repeated reads, exact identity,
+redaction/restart, owner/denial/checkpoint races, cancellation and storage failures.
+The new test's initial compile failure and stopped correction attempt are recorded.
+No new device acceptance or edit authoring release is claimed here.
 
 This increment is not delivered edit authoring or an edit outbox. Organization-wide
 background acquisition, long-press editing with preserved ordinary drafts,

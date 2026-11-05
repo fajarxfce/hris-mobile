@@ -1,5 +1,43 @@
 # Agent continuation — HRIS Mobile
 
+## Replacement references accepted locally; continue edit transport evidence — 5 November 2026
+
+[Contract](collaboration-message-edits.md),
+[evidence](measurements/collaboration-edit-references-2026-11-05.json). Eleven Kotlin
+files add owned replacement facts and explicit provider-reference reconciliation,
+including exact sender/event/time, redacted edits, final checkpoint and owner gates.
+Original ACK/read/quote facts stay separate. Focused references2 PASS122 fresh in
+135.577s. Full references-full2 PASS4,981 fresh in588.776s on4,152 unchanged inputs;
+zero failures/errors/skips and Android lint0. Root/browser/Android host/proof compile,
+format/architecture/static analysis passed. All wrappers drained. Initial test-scope
+compile failure and intentionally stopped full attempt are retained in evidence.
+No edit APK or native edit exchange yet; phone40 remains installed.
+
+NEXT: commit/push this increment, then retain separate replacement transport evidence
+before durable edit outbox/recovery/retirement and long-press authoring. A provider-
+accepted edit arriving after15minutes must settle without displaying an invalid edit
+or remaining pending indefinitely. .work/chat-editing-review-2026-11-05 contains
+edit-evidence-design.md and UNAPPLIED .kt.draft entity/repository/DTO/codec/reader
+pieces. Review/integrate transactional proof recording, original-event collision
+and read guards, immutable input fingerprints, redaction, bounded operation lookup,
+then actual SQLite/IndexedDB tests. Earlier3 authoring drafts remain unapplied.
+The pinned SDK raw cold-revision limitation remains; do not use typed reconstructed
+content or notification filtering as complete history evidence. All54 PRD groups
+remain open. Keep the authorized long run going after this commit.
+
+Apple42123588891 exactd47554f8 is still building the full app. Prepared local
+.audit-apple-storage.py has NOT run;39-file source diff corrected to include proof
+bridge. Do not duplicate dispatch. Its result will not cover this new11-file change.
+Platform472abcc9 image pin is pushed, docs83d9b26c pushed; full CI42126384926 exact472
+runs after old029c failed two Havana repeated-midnight cases. Separate actual PG SQL
+proved old10a5→05UTC, new80df→04UTC; pin matches live/Java. Image/architecture and61
+Python tests passed; full CI owns new JVM/database acceptance. No local Platform
+heavy gate. Audit CI/artifacts before edit-envelope rollout. Live54b10ce8/schema116.1
+push/callback/delivery/worker FCM ON, SMTP OFF; no deployment or database changes.
+Starter bce2012 is complete/clean; no generic port from this HRIS-specific increment.
+Both emulators stopped with data/keys intact; both Mobile stashes preserved. Never
+repeat accepted Forward publications or reinstall40.
+
 ## Edit-history Apple gate running — 5 November 2026
 
 Product d47554f8778f435a6f8b953b0c8eea7530735871 is committed/pushed. Apple-only CI

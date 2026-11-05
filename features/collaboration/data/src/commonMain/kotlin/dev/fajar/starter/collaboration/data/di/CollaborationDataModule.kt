@@ -1207,6 +1207,7 @@ class CollaborationDataModule {
         workspaces: WorkspaceRepository,
         server: IdentityServer,
         build: AppBuild,
+        edits: CollaborationMessageEditRepository,
     ) =
         ReconcileCollaborationHistoryReferences(
             traversal,
@@ -1217,6 +1218,7 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            edits,
         )
 
     @Factory

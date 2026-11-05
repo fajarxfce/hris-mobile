@@ -577,6 +577,11 @@ internal class HrisProductQueueProof(
                 app.server,
                 app.build,
                 app.clock,
+                EncryptedCollaborationHistoryRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                ),
             )
         return success(
             reconcile(

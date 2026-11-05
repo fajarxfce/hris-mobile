@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-/** Offline projection acknowledgement from retained originals/tombstones; no SDK or retry. */
+/** Offline traversal acknowledgement from retained event identities; no SDK or retry. */
 class ReconcileCollaborationHistoryReferences(
     private val traversal: CollaborationHistoryTraversalRepository,
     private val history: CollaborationHistoryRepository,
@@ -24,6 +24,7 @@ class ReconcileCollaborationHistoryReferences(
     private val server: IdentityServer,
     private val build: AppBuild,
     private val clock: Clock,
+    private val edits: CollaborationMessageEditRepository,
 ) {
     private val execution = Mutex()
 
@@ -75,8 +76,30 @@ class ReconcileCollaborationHistoryReferences(
                     )
                 continuation(scope, access).let { if (it is AppResult.Failed) return@withLock it }
                 if (found is AppResult.Failed) return@withLock found
-                val fact = (found as AppResult.Success).value ?: continue
+                val fact = (found as AppResult.Success).value
                 val event = reference.event
+                if (fact == null) {
+                    val replacement =
+                        edits.getReplacementFact(
+                            access,
+                            key.conversationId,
+                            key.roomId,
+                            event.eventId,
+                        )
+                    continuation(scope, access).let {
+                        if (it is AppResult.Failed) return@withLock it
+                    }
+                    if (replacement is AppResult.Failed) return@withLock replacement
+                    val retained = (replacement as AppResult.Success).value ?: continue
+                    if (
+                        retained.eventId != event.eventId ||
+                            retained.sender != event.sender ||
+                            retained.timestamp != event.timestamp
+                    )
+                        return@withLock failed()
+                    resolved += reference
+                    continue
+                }
                 val timestamp = fact.timestamp
                 if (
                     fact.eventId != event.eventId ||

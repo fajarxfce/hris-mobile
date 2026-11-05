@@ -15,6 +15,118 @@ abstract class CollaborationMessageEditStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
     @Test
+    fun replacementFactsRetainTheirOwnIdentityAcrossRestartAndRedactionWithoutCreatingMissingKeys() =
+        withDatabase { f ->
+            val original = f.event()
+            val revision = edit(original)
+            assertNull(f.keys.read())
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.getReplacementFact(f.access, f.conversation, f.room, revision.eventId),
+            )
+            assertNull(f.keys.read())
+            f.merge(original)
+            f.edits(revision)
+            val fact =
+                CollaborationReplacementEventFact(
+                    revision.eventId,
+                    revision.sender,
+                    revision.timestamp,
+                    false,
+                )
+            val checkpoint = f.raw()
+            assertEquals(
+                AppResult.Success(fact),
+                f.repository.getReplacementFact(f.access, f.conversation, f.room, revision.eventId),
+            )
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.getReplacementFact(f.access, f.conversation, f.room, original.eventId),
+            )
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.getEventFact(f.access, f.conversation, f.room, revision.eventId),
+            )
+            assertEquals(checkpoint, f.raw())
+            f.reopen()
+            assertEquals(
+                AppResult.Success(fact),
+                f.repository.getReplacementFact(f.access, f.conversation, f.room, revision.eventId),
+            )
+            assertIs<AppResult.Failed>(
+                f.repository.getReplacementFact(
+                    f.access,
+                    f.conversation,
+                    "!other:test",
+                    revision.eventId,
+                )
+            )
+            f.merge(CollaborationHistoryChange.Redacted(revision.eventId, revision.sender))
+            f.reopen()
+            assertEquals(
+                AppResult.Success(fact.copy(redacted = true)),
+                f.repository.getReplacementFact(f.access, f.conversation, f.room, revision.eventId),
+            )
+        }
+
+    @Test
+    fun replacementFactReadCannotMixCheckpointsOrPublishAfterLogoutOrCancellation() =
+        withDatabase { f ->
+            val original = f.event()
+            val revision = edit(original)
+            f.merge(original)
+            f.edits(revision)
+            val entered = CompletableDeferred<Unit>()
+            val waiting =
+                object : ReplicaStore by f.database.replicas {
+                    override suspend fun document(
+                        scope: ReplicaScope,
+                        partition: String,
+                        id: String,
+                    ): ReplicaDocument? {
+                        entered.complete(Unit)
+                        awaitCancellation()
+                    }
+                }
+            coroutineScope {
+                val job = async {
+                    f.repository(waiting)
+                        .getReplacementFact(f.access, f.conversation, f.room, revision.eventId)
+                }
+                entered.await()
+                job.cancelAndJoin()
+            }
+            for (logout in listOf(false, true)) {
+                var reads = 0
+                val changed =
+                    object : ReplicaStore by f.database.replicas {
+                        override suspend fun checkpoint(
+                            scope: ReplicaScope,
+                            partition: String,
+                        ): ReplicaCheckpoint? {
+                            if (++reads == 2) {
+                                if (logout)
+                                    f.activate(
+                                        f.access.copy(
+                                            sessionId = "replaced",
+                                            accountId = historyId(888),
+                                        )
+                                    )
+                                else f.merge(f.event(3))
+                            }
+                            return f.database.replicas.checkpoint(scope, partition)
+                        }
+                    }
+                assertIs<AppResult.Failed>(
+                    f.repository(changed)
+                        .getReplacementFact(f.access, f.conversation, f.room, revision.eventId)
+                )
+                f.activate()
+            }
+            assertNotNull(f.lookup())
+        }
+
+    @Test
     fun revisionsSurviveRestartWithoutChangingOriginalReceiptIdentityOrOrdering() =
         withDatabase { f ->
             val original = f.event().copy(replyToEventId = "\$quoted", forwarded = true)

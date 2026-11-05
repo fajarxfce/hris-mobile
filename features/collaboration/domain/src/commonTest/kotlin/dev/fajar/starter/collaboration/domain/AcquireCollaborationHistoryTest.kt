@@ -383,6 +383,14 @@ internal class HistoryAcquisitionFixture {
 
     private val edits =
         object : CollaborationMessageEditRepository {
+            override suspend fun getReplacementFact(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+                roomId: String,
+                eventId: String,
+            ): AppResult<CollaborationReplacementEventFact?> =
+                error("No replacement-fact reads during acquisition")
+
             override suspend fun mergeEdits(
                 access: CollaborationLocalAccess,
                 conversationId: String,

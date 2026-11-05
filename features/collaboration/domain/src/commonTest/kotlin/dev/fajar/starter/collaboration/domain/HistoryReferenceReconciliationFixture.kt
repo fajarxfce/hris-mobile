@@ -55,6 +55,36 @@ internal class HistoryReferenceReconciliationFixture(
     var afterRead: suspend () -> Unit = {}
     var afterFact: suspend () -> Unit = {}
     var afterWrite: suspend () -> Unit = {}
+    val replacementFacts = mutableMapOf<String, CollaborationReplacementEventFact>()
+    var replacementReads = 0
+    var replacementFailure: Failure? = null
+    var afterReplacement: suspend () -> Unit = {}
+
+    private val edits =
+        object : CollaborationMessageEditRepository {
+            override suspend fun getReplacementFact(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+                roomId: String,
+                eventId: String,
+            ): AppResult<CollaborationReplacementEventFact?> {
+                accessed += access
+                assertEquals(key.conversationId, conversationId)
+                assertEquals(key.roomId, roomId)
+                replacementReads++
+                val captured = replacementFacts[eventId]
+                afterReplacement()
+                return replacementFailure?.let { AppResult.Failed(it) }
+                    ?: AppResult.Success(captured)
+            }
+
+            override suspend fun mergeEdits(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+                roomId: String,
+                edits: List<CollaborationMessageEdit>,
+            ): AppResult<Boolean> = error("No invented replacements")
+        }
 
     private val traversal =
         object : CollaborationHistoryTraversalRepository {
@@ -195,6 +225,7 @@ internal class HistoryReferenceReconciliationFixture(
             local.server,
             local.build,
             local.clock,
+            edits,
         )
 
     val eventReader =
