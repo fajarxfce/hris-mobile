@@ -96,4 +96,7 @@ made to recover that harness attempt.
 
 The ARM64 devRelease APK passed build/lint and signing/backup/endpoint verification.
 Phone release 36 was updated in place to 37, installed bytes matched, and phone UI
-was not driven. Full Apple acceptance for this Forward source is tracked separately.
+was not driven. [Apple CI 42054097304](measurements/chat-forward-apple-2026-11-05.json)
+passes the same source: 1,273 simulator cases in 148 suites, including all 11 Forward
+and six raw batch cases, zero failures/errors/skips. The complete simulator app and
+generated associations also pass. No physical iPhone execution is claimed.

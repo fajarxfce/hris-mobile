@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Forward Apple accepted; generic batch port validated — 5 November 2026
+
+Full [Apple CI 42054097304](measurements/chat-forward-apple-2026-11-05.json) passes
+exact source 5a8d4524: 1,273 cases/148 suites, zero failures/errors/skips, including
+11 Forward and six raw batch cases. Complete simulator app and associations pass.
+Downloaded reports are audited; no physical iPhone claim or additional Mobile CI
+dispatch is required for the unchanged application source.
+
+Phone remains installed release 37, accepted native delivery and four retained
+history checks are recorded below and in cf054b46. Do not reinstall that artifact.
+Bima remains owned receiver 5562; no local Mobile job is running.
+
+Starter port 0fa8e09 is committed/pushed: ten exact raw batch files, independent
+root/database-browser/Android/lint/Web pass 803.314 s on 1,010 unchanged inputs,
+383 desktop/59 browser/six build-logic cases with 243 freshly executed. Lint zero
+errors and 44 existing warnings. All wrappers drained. Independent Starter Apple
+dispatch is being reconciled after a GitHub HTTP 502; query recent runs before
+retrying so an accepted uncertain dispatch is not cancelled.
+
+Next product work is delivered-message editing and its durable replacement
+projection, then delete for everyone, groups, calls and meetings. Original history
+must retain send evidence; m.replace must never establish an original message.
+The PRD edit window is 15 minutes from server acceptance. No edit implementation
+or UI acceptance is claimed yet; preserve that boundary while adding revisions.
+All 54 PRD groups remain open. Backend and phone stay as recorded below.
+
 ## Release 37 installed; native Forward and retained history accepted — 5 November 2026
 
 Source `5a8d45240e1e21f0b2c7a3fca6629be1ecf65159` is installed on the authorized
