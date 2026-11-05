@@ -1,0 +1,61 @@
+{
+  "status": "passed",
+  "date": "2026-11-05",
+  "scope": "Closed diagnostics for SDK acquisition, retained send failure and app-owned delivery stages. No delivery policy change.",
+  "rootGate": {
+    "startedAt": "2026-11-05T09:42:57.985944+00:00",
+    "elapsedSeconds": 417.551,
+    "exitCode": 0,
+    "sourceFiles": 4066,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 2155,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apkSha256": "5c33de85a5b67c8153808355df9be86a929a5b2c0c4a94ebaecc565d58515c2e",
+    "reportsManifestSha256": "604d078239394611b0c4fa8f957ff238162cb3382b0aaaeb4e0a2c91f63342d9",
+    "preexistingReportsManifestSha256": "e5b24732958720dff68ed2e7b20925854012a78e305e8c5f985dea63d7de9a2b",
+    "recordSha256": "74ce2d2b67fc9ed54384c6235e413c972f77446e4e1fd4c6afbaf442c492871f"
+  },
+  "focusedGate": {
+    "startedAt": "2026-11-05T09:35:03.466064+00:00",
+    "elapsedSeconds": 183.233,
+    "exitCode": 0,
+    "sourceFiles": 4066,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reportsManifestSha256": "ce1d6c0d11d5f887bc9c3d532d4c7ba2fc364684ceb7b329e126536a9062f6c5",
+    "preexistingReportsManifestSha256": "8aefd5959a12c8692e1c5314a5802a10efa7f9f03b59e6d73f23b899b75f4f13",
+    "recordSha256": "ecf9cbb52c5ace1f706737fd4ec771a89fef064493bf2ef6da0a1eb7f0c9d17d"
+  },
+  "previousAttempt": {
+    "startedAt": "2026-11-05T09:39:40.693659+00:00",
+    "elapsedSeconds": 43.858,
+    "exitCode": 1,
+    "sourceFiles": 4066,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apkSha256": null,
+    "reportsManifestSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "preexistingReportsManifestSha256": "81664a8deaf66df47de44c1a2b3a1cddc0186a02cc6544ec860df3d457e6cd43",
+    "recordSha256": "9dac3f88b1fd370fde3ad0e795578e5d44ae2bc971b86908b2c667869ec654d6"
+  },
+  "remaining": "Live release32 pending-send cause remains undiagnosed. New diagnostics have not yet been delivered.",
+  "privacy": [
+    "No message, room, account, transaction, token or provider detail strings in added markers.",
+    "Exact bounded Rust variant prefix recognition labels diagnostics only.",
+    "Cancellation and original I/O exceptions remain unchanged."
+  ]
+}

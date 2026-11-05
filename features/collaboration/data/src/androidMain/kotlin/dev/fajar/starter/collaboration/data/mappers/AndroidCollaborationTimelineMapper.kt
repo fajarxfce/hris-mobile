@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data.mappers
 
 import dev.fajar.starter.collaboration.data.dto.*
+import dev.fajar.starter.collaboration.data.sdk.closedSendFailure
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationEventId
 import org.matrix.rustcomponents.sdk.*
 
@@ -37,6 +38,10 @@ internal fun TimelineItem.toCollaborationTimelineItem(): CollaborationSdkTimelin
             edited = message?.isEdited == true,
             replyToEventId =
                 content.content.inReplyTo?.eventId()?.takeIf(::validCollaborationEventId),
+            sendFailure =
+                (event.localSendState as? EventSendState.SendingFailed)?.let {
+                    it.error.closedSendFailure(it.isRecoverable)
+                },
             delivery =
                 when (event.localSendState) {
                     is EventSendState.SendingFailed -> SdkMessageDelivery.FAILED

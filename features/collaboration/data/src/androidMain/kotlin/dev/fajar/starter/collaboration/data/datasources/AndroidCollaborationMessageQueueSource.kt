@@ -1,9 +1,10 @@
 package dev.fajar.starter.collaboration.data.datasources
 
 import dev.fajar.starter.collaboration.data.messages.collaborationTextContent
-import dev.fajar.starter.collaboration.data.sdk.SdkQueueDelivery
+import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationTransactionId
+import dev.fajar.starter.observability.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.matrix.rustcomponents.sdk.*
@@ -19,12 +20,12 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
     private var delivery: DeliveryObservation? = null
 
     suspend fun open() {
-        val acquired = acquireRoom()
+        val acquired = traceSdkAcquisition(SdkAcquisitionStage.QueueRoom) { acquireRoom() }
         room = acquired
         require(acquired.isEncrypted())
         // The parent's default is paused. First queue access can spawn Rust tasks;
         // initialize it inside the async FFI runtime before synchronous room controls.
-        timeline = acquired.timeline()
+        timeline = traceSdkAcquisition(SdkAcquisitionStage.QueueBuild) { acquired.timeline() }
         queueInitialized = true
         acquired.enableSendQueue(false)
     }
@@ -150,8 +151,16 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
                         observation.queue.local(update.transactionId)
                     is RoomSendQueueUpdate.SentEvent ->
                         observation.queue.sent(update.transactionId, update.eventId)
-                    is RoomSendQueueUpdate.SendError ->
+                    is RoomSendQueueUpdate.SendError -> {
+                        Diagnostics.record(
+                            Diagnostic(
+                                DiagnosticArea.Network,
+                                DiagnosticKind.OperationFailed,
+                                "ChatQueueSend_${update.error.closedSendFailure(update.isRecoverable)}",
+                            )
+                        )
                         observation.queue.failed(update.transactionId)
+                    }
                     is RoomSendQueueUpdate.RetryEvent ->
                         observation.queue.retry(update.transactionId)
                     else -> observation.queue.unresolved()

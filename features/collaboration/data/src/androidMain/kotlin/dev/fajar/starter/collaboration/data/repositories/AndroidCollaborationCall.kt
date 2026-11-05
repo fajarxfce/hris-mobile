@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.mappers.collaborationSdkFailure
+import dev.fajar.starter.collaboration.data.sdk.sdkExceptionCategory
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.network.RequestFailureException
 import dev.fajar.starter.network.safeApiCall
@@ -33,7 +34,7 @@ internal suspend fun <T> safeAndroidCollaborationCall(
                 Diagnostic(
                     DiagnosticArea.Network,
                     DiagnosticKind.OperationFailed,
-                    "Chat${stage.name}_${(exception as? RequestFailureException)?.failure?.kind?.name ?: exception::class.simpleName}",
+                    "Chat${stage.name}_${(exception as? RequestFailureException)?.failure?.kind?.name ?: sdkExceptionCategory(exception)}",
                 )
             )
         }

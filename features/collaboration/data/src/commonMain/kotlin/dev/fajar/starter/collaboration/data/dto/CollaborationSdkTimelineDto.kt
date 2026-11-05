@@ -19,6 +19,17 @@ internal enum class SdkMessageDelivery {
     SENT,
 }
 
+internal enum class SdkSendFailure {
+    InsecureDevices,
+    IdentityChanged,
+    VerificationRequired,
+    ExpiredAccessToken,
+    MissingMedia,
+    InvalidMediaType,
+    Retryable,
+    Rejected,
+}
+
 internal data class CollaborationSdkTimelineDto(
     val items: List<CollaborationSdkTimelineItemDto>,
     val status: SdkTimelineStatus = SdkTimelineStatus.READY,
@@ -39,6 +50,7 @@ internal data class CollaborationSdkTimelineItemDto(
     val edited: Boolean,
     val delivery: SdkMessageDelivery,
     val replyToEventId: String? = null,
+    val sendFailure: SdkSendFailure? = null,
 ) {
     override fun toString() = "CollaborationSdkTimelineItemDto([redacted])"
 }

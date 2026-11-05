@@ -1,5 +1,24 @@
 # Agent continuation — HRIS Mobile
 
+## Pending-send diagnostics validated — 5 November 2026
+
+New closed SDK acquisition/retained queue and app delivery-stage markers preserve
+all admission, retry, cancellation and encryption behavior. No private payload or
+identifier is logged. [Contract](collaboration-chat-send-diagnostics.md),
+[evidence](measurements/chat-send-diagnostics-2026-11-05.json).
+
+Focused30 and final root/Android/browser/proof/format/architecture pass: 2,155 fresh,
+zero failures/errors/skips, 417.551s, 4,066 unchanged inputs. Earlier proof long-method
+failure retained and fixed. Actual native quoted-reply proof is running separately;
+do not claim its result from this gate. Phone32/live8b40/schema116 unchanged.
+
+ACTIVE: old AND new Bima sends remain pending/failed. Complete native proof, validated
+Main envelope rollout and release33/build/lint/emulator; announce before install-only
+to10.77.77.3:5555. Read the new closed markers from ordinary phone use to fix the real
+cause while preserving keys/transactions. No question pending. All54 PRD groups open;
+continue the long run and push every commit. Source-bound scripts in .work are
+supplementary; no Starter port for these HRIS communications diagnostics.
+
 ## Quoted reply UI and current send investigation — 5 November 2026
 
 Quoted history, checkpoint-driven local previews, long-press Reply, composer strip

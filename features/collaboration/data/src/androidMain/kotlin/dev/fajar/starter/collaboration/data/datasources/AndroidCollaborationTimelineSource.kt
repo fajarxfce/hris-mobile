@@ -3,6 +3,7 @@ package dev.fajar.starter.collaboration.data.datasources
 import dev.fajar.starter.collaboration.data.dto.*
 import dev.fajar.starter.collaboration.data.mappers.toCollaborationTimelineItem
 import dev.fajar.starter.collaboration.data.sdk.*
+import dev.fajar.starter.observability.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.matrix.rustcomponents.sdk.*
@@ -20,18 +21,23 @@ internal class AndroidCollaborationTimelineSource(private val acquireRoom: suspe
     val updates = mutableUpdates.asStateFlow()
 
     suspend fun open() {
-        val acquiredRoom = acquireRoom()
+        val acquiredRoom = traceSdkAcquisition(SdkAcquisitionStage.TimelineRoom) { acquireRoom() }
         room = acquiredRoom
-        require(acquiredRoom.isEncrypted())
-        val acquiredTimeline = acquiredRoom.timeline()
+        traceSdkAcquisition(SdkAcquisitionStage.TimelineEncryption) {
+            require(acquiredRoom.isEncrypted())
+        }
+        val acquiredTimeline =
+            traceSdkAcquisition(SdkAcquisitionStage.TimelineBuild) { acquiredRoom.timeline() }
         timeline = acquiredTimeline
         // The initial RESET arrives synchronously before addListener returns its handle.
         listener =
-            acquiredTimeline.addListener(
-                object : TimelineListener {
-                    override fun onUpdate(diff: List<TimelineDiff>) = receive(diff)
-                }
-            )
+            traceSdkAcquisition(SdkAcquisitionStage.TimelineListener) {
+                acquiredTimeline.addListener(
+                    object : TimelineListener {
+                        override fun onUpdate(diff: List<TimelineDiff>) = receive(diff)
+                    }
+                )
+            }
         synchronized(projectionLock) { check(!failed) }
     }
 
@@ -54,6 +60,18 @@ internal class AndroidCollaborationTimelineSource(private val acquireRoom: suspe
                     val messages = next.filterNotNull()
                     require(messages.sumOf { it.body?.length ?: 0 } <= 1_048_576)
                     require(messages.map { it.key }.distinct().size == messages.size)
+                    val previous = items.filterNotNull().associate { it.key to it.sendFailure }
+                    messages
+                        .filter { it.sendFailure != null && previous[it.key] != it.sendFailure }
+                        .forEach {
+                            Diagnostics.record(
+                                Diagnostic(
+                                    DiagnosticArea.Network,
+                                    DiagnosticKind.OperationFailed,
+                                    "ChatQueueRetained_${it.sendFailure}",
+                                )
+                            )
+                        }
                     items = next
                     mutableUpdates.value = CollaborationSdkTimelineDto(messages)
                 } catch (_: Exception) {

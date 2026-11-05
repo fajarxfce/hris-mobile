@@ -2,6 +2,7 @@ package dev.fajar.starter.collaboration.data.datasources
 
 import dev.fajar.starter.collaboration.data.dto.SdkSyncProblem
 import dev.fajar.starter.collaboration.data.sdk.SdkSyncPump
+import dev.fajar.starter.collaboration.data.sdk.sdkExceptionCategory
 import dev.fajar.starter.observability.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -52,11 +53,11 @@ internal fun createAndroidCollaborationSync(
                     Diagnostic(
                         DiagnosticArea.Network,
                         DiagnosticKind.OperationFailed,
-                        "ChatSync_${failure::class.simpleName}",
+                        "ChatSync_${sdkExceptionCategory(failure)}",
                     )
                 )
                 // FFI generic errors do not reliably distinguish transport from decoding failures.
-                // Retry is finite; no exception description is parsed or retained.
+                // Retry is finite. Closed diagnostics never alter this transport policy.
                 SdkSyncProblem(null)
             }
         },
