@@ -76,7 +76,24 @@ physical iPhone acceptance or full communications PRD completion from these test
 [large text](images/chat-forwarding/chat-forward-dark-large-text.png),
 [landscape](images/chat-forwarding/chat-forward-landscape.png).
 
-Native Forward acceptance and phone delivery are pending. The previous quoted-reply
-SDK acceptance and installed release36 remain separate evidence.
+[Local validation](measurements/chat-forward-2026-11-05.json): final full6 passes
+1,034 fresh cases in 374.333 seconds, zero failures/errors/skips, 4,099 unchanged
+source inputs. All three focus/viewport lifecycle cases pass.
 
-[Local validation](measurements/chat-forward-2026-11-05.json): final full6 passes 1,034 fresh cases in 374.333 seconds, zero failures/errors/skips, 4,099 unchanged source inputs. All three focus/viewport lifecycle cases pass. Native Forward acceptance remains pending.
+[Release 37 native acceptance and phone delivery](measurements/android-release-phone-2026-11-05-build37.json)
+binds source `5a8d4524` to the installed APK. Two synthetic messages were forwarded
+once to two acquired chats while offline. All four queued messages and both composer
+drafts survived a cold process restart. After reconnect all four were sent without
+duplicate copies; each actual Android receiver decrypted its forwarded messages and
+retained them after a cold offline restart. The five native captures were reviewed.
+
+The retained Bima fixture separately passed four known-end history checks, including
+room reopen and process restart: eight rows remained visible with no Older control,
+decryption placeholder or history error. A fresh fixture without a previous Browse
+request was not accepted as evidence of retained exhaustion; the initial harness
+mistake and resumed verification are recorded. No second Forward publication was
+made to recover that harness attempt.
+
+The ARM64 devRelease APK passed build/lint and signing/backup/endpoint verification.
+Phone release 36 was updated in place to 37, installed bytes matched, and phone UI
+was not driven. Full Apple acceptance for this Forward source is tracked separately.

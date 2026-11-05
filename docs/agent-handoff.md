@@ -1,5 +1,44 @@
 # Agent continuation — HRIS Mobile
 
+## Release 37 installed; native Forward and retained history accepted — 5 November 2026
+
+Source `5a8d45240e1e21f0b2c7a3fca6629be1ecf65159` is installed on the authorized
+phone as non-debuggable ARM64 devRelease 37/1.0.0. APK SHA256
+`724f4be58de4ff27e3fbedac367e8edb0239180271442db5a09b0d3f848af738`, 88,403,624 bytes.
+Announced install-only update 36→37 took 46.563 s including verification; original
+app ID, signer and first-install identity preserved. No phone UI driven or data cleared.
+[Delivery and native evidence](measurements/android-release-phone-2026-11-05-build37.json).
+
+All five native Forward phases pass on the same APK: offline picker, one atomic
+four-message publication, cold offline sender restart with both drafts preserved,
+reconnect without duplicates, and decrypted receipt/cold offline restart on Nadia
+and Dimas. Five captures were opened and reviewed. Receiver `sent:false` means no
+sender-side delivery icon; it does not mean receipt failed. Do not rerun setup or
+Forward: the original synthetic batch has already been sent once.
+
+Retained Bima passes all four history checks in 110.465 s: eight visible rows,
+no Older control, decryption placeholder or history error across update, two room
+reopens and a cold restart. The fresh Rani test lacked a known exhausted Browse
+precondition; its failed first harness and zero-click follow-up remain documented,
+not counted as saved-end acceptance. No application source changed during these tests.
+
+All install/proof wrappers are drained. Bima remains the owned receiver on emulator
+5562, PID 1754180, startTicks 157069109; verify its current start record before any
+mutation. Samples 1/3/4 are stopped with data, sidecars and keys retained; all four
+are now release 37. Backend 11a98115/schema116 unchanged; chat push rollout remains off.
+
+Apple CI 42054097304 runs exact 5a8d; simulator tests passed, complete app still
+building. Do not cancel with another same-branch Apple dispatch. Download/count
+reports and verify the whole job before accepting Apple. No physical iPhone claim.
+
+Starter now contains the exact ten generic core/database batch files from e3c1e326
+after Mobile native consumer acceptance and repeat baseline comparison. Its independent
+root/database-browser/Android/lint/Web gate is running under
+.work/command-batch-port-2026-11-05; no HRIS Forward policy or configuration copied.
+Next: finish that gate, document/commit/push and dispatch its own Apple CI. Continue
+delivered-message editing, delete for everyone, groups, calls and meetings. All 54
+PRD groups remain open. Protected stash bfdef2ce remains retained; do not reapply it.
+
 ## Release37 built; native sender accepted, receivers next — 5 November 2026
 
 Source5a8d45240e1e21f0b2c7a3fca6629be1ecf65159 is committed/pushed. Clean ARM64
