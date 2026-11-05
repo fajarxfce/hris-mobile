@@ -282,6 +282,53 @@ class ChatInboxViewModelTest {
         }
     }
 
+    @Test
+    fun cachedInboxReconnectsWithoutManualRefreshAndStopsWithTheScreen() = runTest {
+        withModel { f, vm, _ ->
+            f.records.value = listOf(f.item(1))
+            f.readSummaries = { AppResult.Failed(f.network) }
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            assertEquals(listOf(f.item(1)), vm.state.value.page!!.items)
+            assertEquals(1, f.calls.size)
+            advanceTimeBy(1_999)
+            runCurrent()
+            assertEquals(1, f.calls.size)
+            f.readSummaries = { AppResult.Success(CollaborationPage(listOf(f.item(1)), null)) }
+            advanceTimeBy(1)
+            runCurrent()
+            assertEquals(2, f.calls.size)
+            assertNull(vm.state.value.refreshFailure)
+            vm.onEvent(ChatInboxEvent.Stopped)
+            runCurrent()
+            advanceTimeBy(120_000)
+            runCurrent()
+            assertEquals(2, f.calls.size)
+        }
+    }
+
+    @Test
+    fun heldRepliesAreCountedByConversationAndOnlyOrphansNeedASeparateEntry() = runTest {
+        withModel { f, vm, store ->
+            f.records.value = listOf(f.item(1))
+            val known = f.replies.input(f)
+            val orphan = f.replies.input(f, 2, f.item(2).conversation.id)
+            val queued = f.replies.input(f, 3).copy(review = null)
+            f.replies.inputs.value = listOf(known, orphan, queued)
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            assertEquals(1, vm.state.value.unsentCounts[f.item(1).conversation.id])
+            assertEquals(1, vm.state.value.orphanedUnsentCount)
+            f.replies.inputs.value = listOf(queued)
+            runCurrent()
+            assertTrue(vm.state.value.unsentCounts.isEmpty())
+            assertEquals(0, vm.state.value.orphanedUnsentCount)
+            store.clear()
+            runCurrent()
+            assertEquals(0, f.replies.inputs.subscriptionCount.value)
+        }
+    }
+
     private suspend fun TestScope.withModel(
         block: suspend TestScope.(ChatInboxFixture, ChatInboxViewModel, ViewModelStore) -> Unit
     ) {

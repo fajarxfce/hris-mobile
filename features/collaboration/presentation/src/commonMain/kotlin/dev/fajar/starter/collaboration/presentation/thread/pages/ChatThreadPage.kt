@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -18,7 +19,6 @@ import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
-import io.github.composefluent.icons.regular.ArrowSync
 import io.github.composefluent.icons.regular.Checkmark
 import kotlin.time.Clock
 import kotlinx.datetime.LocalDate
@@ -47,15 +47,22 @@ fun ChatThreadPage(
                 AppTopBar(
                     title = state.title ?: appString(AppString.ChatTitle),
                     subtitle =
-                        appString(
-                            when (state.connection) {
-                                ChatThreadConnection.OFFLINE -> AppString.ChatOffline
-                                ChatThreadConnection.CONNECTING -> AppString.ChatConnecting
-                                ChatThreadConnection.SETUP_REQUIRED -> AppString.ChatSetupActivate
-                                ChatThreadConnection.WAITING -> AppString.ChatRoomWaiting
-                                ChatThreadConnection.CONNECTED -> AppString.ChatConnected
-                            }
-                        ),
+                        if (
+                            state.connection == ChatThreadConnection.CONNECTED &&
+                                state.failure == null
+                        )
+                            null
+                        else
+                            appString(
+                                when (state.connection) {
+                                    ChatThreadConnection.OFFLINE -> AppString.ChatOffline
+                                    ChatThreadConnection.CONNECTING -> AppString.ChatConnecting
+                                    ChatThreadConnection.SETUP_REQUIRED ->
+                                        AppString.ChatSetupActivate
+                                    ChatThreadConnection.WAITING -> AppString.ChatRoomWaiting
+                                    ChatThreadConnection.CONNECTED -> AppString.ChatConnected
+                                }
+                            ),
                     navigation = {
                         AppIconButton(
                             Icons.Regular.ArrowLeft,
@@ -71,15 +78,6 @@ fun ChatThreadPage(
                                 { onEvent(ChatThreadEvent.SelectionStarted) },
                                 enabled = state.localFailure == null && !state.leaving,
                             )
-                        AppIconButton(
-                            Icons.Regular.ArrowSync,
-                            appString(AppString.Refresh),
-                            { onEvent(ChatThreadEvent.RefreshRequested) },
-                            enabled =
-                                state.connection != ChatThreadConnection.CONNECTING &&
-                                    !state.syncing &&
-                                    !state.loadingOlder,
-                        )
                     },
                 )
             if (state.selectionLimitReached) AppFeedback(appString(AppString.ChatSelectionLimit))
@@ -100,7 +98,10 @@ fun ChatThreadPage(
                 val emptyHistory =
                     !state.loading &&
                         !state.loadingOlder &&
+                        !state.syncing &&
+                        state.connection == ChatThreadConnection.CONNECTED &&
                         state.rows.isEmpty() &&
+                        state.unsentReplies.isEmpty() &&
                         failure == null &&
                         !state.historyIncomplete
                 val historyAction =
@@ -112,6 +113,24 @@ fun ChatThreadPage(
                         state.connection == ChatThreadConnection.SETUP_REQUIRED
                 )
                     item("status") { ChatThreadStatus(state, onEvent) }
+                items(
+                    state.unsentReplies,
+                    key = { "unsent-${it.id}" },
+                    contentType = { "unsent" },
+                ) { reply ->
+                    ChatUnsentReplyBubble(
+                        reply,
+                        { onEvent(ChatThreadEvent.UnsentReplySelected(reply.id)) },
+                        enabled = !state.selecting && !state.leaving && state.localFailure == null,
+                    )
+                }
+                if (state.unsentFailure != null)
+                    item("unsent-error") {
+                        AppTextButton(
+                            appString(AppString.ChatUnsentUnavailable),
+                            { onEvent(ChatThreadEvent.LocalReadRetryRequested) },
+                        )
+                    }
                 if (state.hasNewer)
                     item("newer") {
                         AppTextButton(
@@ -150,7 +169,7 @@ fun ChatThreadPage(
                         )
                     }
                 }
-                if ((state.loading && state.rows.isEmpty()) || state.loadingOlder)
+                if (state.loadingOlder)
                     item("loading") {
                         Box(
                             Modifier.fillMaxWidth().padding(8.dp),
@@ -255,9 +274,16 @@ private fun ChatDayDivider(date: LocalDate, today: LocalDate) {
 @Composable
 private fun ChatThreadStatus(state: ChatThreadState, onEvent: (ChatThreadEvent) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        (state.localFailure ?: state.historyFailure ?: state.failure)?.let {
-            AppFeedback(failureText(it))
-        }
+        (state.localFailure
+                ?: state.historyFailure
+                ?: state.failure?.takeUnless(::chatCanReconnect))
+            ?.let {
+                AppFeedback(
+                    if (state.localFailure == null && chatCanReconnect(it))
+                        appString(AppString.ChatEarlierUnavailable)
+                    else failureText(it)
+                )
+            }
         if (state.submissionPending)
             AppText(appString(AppString.ChatSaveUnconfirmed), color = AppColors.muted)
         if (state.connection == ChatThreadConnection.SETUP_REQUIRED)
@@ -266,7 +292,9 @@ private fun ChatThreadStatus(state: ChatThreadState, onEvent: (ChatThreadEvent) 
                 { onEvent(ChatThreadEvent.SetupRequested) },
             )
         else if (
-            state.localFailure != null || state.historyFailure != null || state.failure != null
+            state.localFailure != null ||
+                state.historyFailure != null ||
+                state.failure?.let { !chatCanReconnect(it) } == true
         )
             AppTextButton(
                 appString(AppString.Retry),

@@ -21,7 +21,9 @@ internal class AndroidCollaborationMessageQueueLease(
             failure()?.let {
                 return@execute AppResult.Failed(it)
             }
-            safeAndroidCollaborationCall { source.snapshot() }
+            safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueSnapshot) {
+                source.snapshot()
+            }
         }
 
     override suspend fun prepareText(
@@ -37,7 +39,9 @@ internal class AndroidCollaborationMessageQueueLease(
             failure()?.let {
                 return@execute AppResult.Failed(it)
             }
-            safeAndroidCollaborationCall { collaborationTextOrigin(matrixSender, logicalId, text) }
+            safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueOrigin) {
+                collaborationTextOrigin(matrixSender, logicalId, text)
+            }
         }
     }
 
@@ -55,15 +59,18 @@ internal class AndroidCollaborationMessageQueueLease(
             failure()?.let {
                 return@execute AppResult.Failed(it)
             }
-            val expected = safeAndroidCollaborationCall {
-                collaborationTextOrigin(matrixSender, logicalId, text)
-            }
+            val expected =
+                safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueMatch) {
+                    collaborationTextOrigin(matrixSender, logicalId, text)
+                }
             if (expected is AppResult.Failed) return@execute expected
             if ((expected as AppResult.Success).value != origin)
                 return@execute collaborationSetupFailure(
                     "client.collaboration_message_content_changed"
                 )
-            safeAndroidCollaborationCall { source.enqueue(logicalId, text) }
+            safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueEnqueue) {
+                source.enqueue(logicalId, text)
+            }
         }
     }
 
@@ -80,7 +87,9 @@ internal class AndroidCollaborationMessageQueueLease(
             failure()?.let {
                 return@execute AppResult.Failed(it)
             }
-            safeAndroidCollaborationCall { source.resume(mapped) }
+            safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueResume) {
+                source.resume(mapped)
+            }
         }
     }
 

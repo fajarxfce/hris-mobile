@@ -314,7 +314,15 @@ internal constructor(
             return AppResult.Failed(Failure(FailureKind.Validation, "Invalid chat room."))
         val source = AndroidCollaborationTimelineSource(acquireRoom)
         val result =
-            children.acquire(source, { safeAndroidCollaborationCall { it.open() } }, { it.stop() })
+            children.acquire(
+                source,
+                {
+                    safeAndroidCollaborationCall(AndroidCollaborationOperation.Timeline) {
+                        it.open()
+                    }
+                },
+                { it.stop() },
+            )
         var handedOver = false
         try {
             currentCoroutineContext().ensureActive()

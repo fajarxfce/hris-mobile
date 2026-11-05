@@ -71,11 +71,11 @@ class SavedRepliesLayoutTest {
                 }
             }
         }
-        compose.onNodeWithText("Saved reply").assertIsDisplayed()
+        compose.onNodeWithText("Unsent message").assertIsDisplayed()
         compose.onNodeWithText("Your reply").assertIsDisplayed()
         compose.onNodeWithText(row.input.candidate.text).assertIsDisplayed()
         compose.onNodeWithText("Open chat").assertIsDisplayed()
-        compose.onNodeWithText("Discard saved reply").assertIsDisplayed()
+        compose.onNodeWithText("Delete message").assertIsDisplayed()
         compose.onNodeWithText("Send reply").assertIsDisplayed()
         screenshot("chat-saved-reply")
     }
@@ -107,16 +107,12 @@ class SavedRepliesLayoutTest {
             .assertHeightIsAtLeast(48.dp)
         compose.onNodeWithText("Balasan Anda").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText(row.input.candidate.text).performScrollTo().assertIsDisplayed()
-        compose
-            .onNodeWithText("Buang balasan tersimpan")
-            .performScrollTo()
-            .assertIsDisplayed()
-            .performClick()
+        compose.onNodeWithText("Hapus pesan").performScrollTo().assertIsDisplayed().performClick()
         compose.runOnIdle {
             assertEquals(listOf<SavedRepliesEvent>(SavedRepliesEvent.DiscardRequested), events)
         }
         compose.onNodeWithTag("frame").performTouchInput { swipeUp() }
-        compose.onNodeWithText("Buang balasan tersimpan").assertIsDisplayed()
+        compose.onNodeWithText("Hapus pesan").assertIsDisplayed()
         screenshot("chat-saved-reply-indonesian-large-text")
     }
 
@@ -151,7 +147,7 @@ class SavedRepliesLayoutTest {
                     outcome = CollaborationReplyDiscard.Discarded,
                 )
         }
-        compose.onNodeWithText("Saved reply discarded.").assertIsDisplayed()
+        compose.onNodeWithText("Message deleted.").assertIsDisplayed()
         compose.onNodeWithText("Sent").assertDoesNotExist()
     }
 
@@ -257,7 +253,7 @@ class SavedRepliesLayoutTest {
             }
         }
         compose.onNodeWithText("Continue sending").assertIsNotEnabled()
-        compose.onNodeWithText("Discard saved reply").assertDoesNotExist()
+        compose.onNodeWithText("Delete message").assertDoesNotExist()
         compose.onNodeWithText("Discard saved edit").performScrollTo().performClick()
         compose.runOnIdle {
             assertEquals(listOf<SavedRepliesEvent>(SavedRepliesEvent.DiscardEditRequested), events)

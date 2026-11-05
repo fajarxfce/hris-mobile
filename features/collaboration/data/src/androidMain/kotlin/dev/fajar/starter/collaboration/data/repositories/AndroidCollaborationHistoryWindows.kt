@@ -59,7 +59,7 @@ internal class AndroidCollaborationHistoryWindows(
             children.acquire(
                 source,
                 {
-                    safeAndroidCollaborationCall {
+                    safeAndroidCollaborationCall(AndroidCollaborationOperation.HistoryWindow) {
                         if (!focuses.reserve(roomId, anchorEventId))
                             throw RequestFailureException(
                                 Failure(

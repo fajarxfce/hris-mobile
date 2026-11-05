@@ -104,7 +104,7 @@ class ChatInboxLayoutTest {
     }
 
     @Test
-    fun failedRefreshRetainsClickableSavedRowsAndSingleRetry() {
+    fun offlineInboxKeepsRowsClickableWithoutRefreshControls() {
         val fixture = ChatInboxFixture()
         val events = mutableListOf<ChatInboxEvent>()
         var state by
@@ -122,17 +122,15 @@ class ChatInboxLayoutTest {
                 }
             }
         }
-        compose.onNodeWithText("Showing conversations saved on this device.").assertIsDisplayed()
+        compose.onNodeWithText("Waiting for connection").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Refresh").assertDoesNotExist()
+        compose.onNodeWithText("Retry").assertDoesNotExist()
+        compose.onNodeWithText("Saved replies").assertDoesNotExist()
         compose.onNodeWithText("Colleague 1").performClick()
-        val retry = compose.onNode(hasText("Retry") and hasClickAction())
-        retry.performClick()
-        compose.runOnIdle { state = state.copy(refreshing = true) }
-        retry.assertIsNotEnabled().performClick()
         compose.runOnIdle {
             assertEquals(
-                listOf(
-                    ChatInboxEvent.ConversationSelected(fixture.item(1).conversation.id),
-                    ChatInboxEvent.RefreshRequested,
+                listOf<ChatInboxEvent>(
+                    ChatInboxEvent.ConversationSelected(fixture.item(1).conversation.id)
                 ),
                 events,
             )
@@ -159,7 +157,7 @@ class ChatInboxLayoutTest {
         }
         compose.onNodeWithText("No conversations yet").assertDoesNotExist()
         compose.onNodeWithText("Loading").assertIsDisplayed()
-        compose.onNodeWithContentDescription("Refresh").assertIsNotEnabled()
+        compose.onNodeWithContentDescription("Refresh").assertDoesNotExist()
     }
 
     @Test

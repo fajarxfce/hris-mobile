@@ -1,6 +1,10 @@
 package dev.fajar.starter.collaboration.presentation.thread
 
 sealed interface ChatThreadEvent {
+    data class UnsentReplySelected(val id: String) : ChatThreadEvent
+
+    data object LocalReadRetryRequested : ChatThreadEvent
+
     data object Entered : ChatThreadEvent
 
     data object Stopped : ChatThreadEvent

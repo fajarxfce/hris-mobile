@@ -14,7 +14,10 @@ listOf("androidMain", "desktopMain").forEach {
 }
 
 kotlin.sourceSets {
-    getByName("androidMain").dependencies { implementation(libs.matrix.sdk.android) }
+    getByName("androidMain").dependencies {
+        implementation(libs.matrix.sdk.android)
+        implementation(projects.core.observability)
+    }
     getByName("commonMain").dependencies {
         api(projects.features.collaboration.domain)
         implementation(projects.core.network)

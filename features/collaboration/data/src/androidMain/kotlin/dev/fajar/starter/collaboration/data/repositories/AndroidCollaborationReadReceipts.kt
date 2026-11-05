@@ -74,7 +74,15 @@ internal class AndroidCollaborationReadReceipts(
                 requireNotNull(client.getRoom(roomId))
             }
         val acquired =
-            children.acquire(source, { safeAndroidCollaborationCall { it.open() } }, { it.stop() })
+            children.acquire(
+                source,
+                {
+                    safeAndroidCollaborationCall(AndroidCollaborationOperation.ReadReceipt) {
+                        it.open()
+                    }
+                },
+                { it.stop() },
+            )
         if (acquired is AppResult.Failed) return acquired
         val child = (acquired as AppResult.Success).value
         val disposed: AppResult<Unit>
@@ -84,7 +92,9 @@ internal class AndroidCollaborationReadReceipts(
                 failure()?.let {
                     return AppResult.Failed(it)
                 }
-                safeAndroidCollaborationCall { value(source.execute()) }
+                safeAndroidCollaborationCall(AndroidCollaborationOperation.ReadReceipt) {
+                    value(source.execute())
+                }
             } catch (cancelled: CancellationException) {
                 currentCoroutineContext().ensureActive()
                 AppResult.Failed(

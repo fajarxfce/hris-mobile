@@ -119,6 +119,16 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.chat_reply_discard_unconfirmed_en,
         Res.string.chat_reply_discard_unconfirmed_id,
     ),
+    ChatEarlierUnavailable(
+        Res.string.chat_earlier_unavailable_en,
+        Res.string.chat_earlier_unavailable_id,
+    ),
+    ChatUnsentReview(Res.string.chat_unsent_review_en, Res.string.chat_unsent_review_id),
+    ChatUnsentUnavailable(
+        Res.string.chat_unsent_unavailable_en,
+        Res.string.chat_unsent_unavailable_id,
+    ),
+    ChatUnsentCount(Res.string.chat_unsent_count_en, Res.string.chat_unsent_count_id),
     ChatSelectPendingAlone(
         Res.string.chat_select_pending_alone_en,
         Res.string.chat_select_pending_alone_id,

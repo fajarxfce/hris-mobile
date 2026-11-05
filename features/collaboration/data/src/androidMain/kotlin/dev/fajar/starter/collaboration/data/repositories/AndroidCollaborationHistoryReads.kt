@@ -57,7 +57,7 @@ internal class AndroidCollaborationHistoryReads(
             children.acquire(
                 source,
                 { resource ->
-                    safeAndroidCollaborationCall {
+                    safeAndroidCollaborationCall(AndroidCollaborationOperation.HistorySession) {
                         val session = client.session()
                         check(
                             session.userId == expectedUserId &&

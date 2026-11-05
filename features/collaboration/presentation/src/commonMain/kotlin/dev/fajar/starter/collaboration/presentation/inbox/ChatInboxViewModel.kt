@@ -3,7 +3,11 @@ package dev.fajar.starter.collaboration.presentation.inbox
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationInbox
+import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationSavedReplies
 import dev.fajar.starter.collaboration.domain.usecases.RefreshCollaborationList
+import dev.fajar.starter.collaboration.presentation.replies.needsAttention
+import dev.fajar.starter.collaboration.presentation.thread.chatCanReconnect
+import dev.fajar.starter.collaboration.presentation.thread.chatReconnectDelay
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import kotlinx.coroutines.*
@@ -16,9 +20,13 @@ class ChatInboxViewModel(
     @InjectedParam private val workspaceId: String,
     private val observe: ObserveCollaborationInbox,
     private val refresh: RefreshCollaborationList,
+    private val observeReplies: ObserveCollaborationSavedReplies,
 ) : MviViewModel<ChatInboxState, ChatInboxEvent, ChatInboxEffect>(ChatInboxState()) {
     private var observation: Job? = null
+    private var replies: Job? = null
     private var acquisition: Job? = null
+    private var reconnection: Job? = null
+    private var reconnectAttempt = 0
     private var visible = false
     private val previewsVisible = MutableStateFlow(false)
     private var refreshRequired = true
@@ -40,9 +48,36 @@ class ChatInboxViewModel(
     private fun onEntered(event: ChatInboxEvent.Entered) {
         if (visible) return
         visible = true
+        reconnectAttempt = 0
         previewsVisible.value = true
         if (observation?.isActive != true) startObservation()
+        if (replies?.isActive != true) observeUnsentReplies()
         if (refreshRequired) acquire(null)
+    }
+
+    private fun observeUnsentReplies() {
+        replies =
+            viewModelScope.launch {
+                observeReplies(workspaceId).collect { result ->
+                    ensureActive()
+                    val items =
+                        (result as? AppResult.Success)?.value?.items.orEmpty().filter {
+                            it.needsAttention
+                        }
+                    updateState {
+                        it.copy(
+                            unsentCounts =
+                                items
+                                    .groupingBy { row ->
+                                        row.input.candidate.action.target.conversationId
+                                    }
+                                    .eachCount(),
+                            orphanedUnsentCount =
+                                items.count { row -> row.conversationName == null },
+                        )
+                    }
+                }
+            }
     }
 
     private fun startObservation() {
@@ -101,6 +136,8 @@ class ChatInboxViewModel(
     private fun onStopped(event: ChatInboxEvent.Stopped) {
         visible = false
         previewsVisible.value = false
+        reconnection?.cancel()
+        reconnection = null
         acquisition?.cancel()
         acquisition = null
         advanceAfterAcquisition = false
@@ -122,18 +159,24 @@ class ChatInboxViewModel(
 
     private fun acquire(after: String?) {
         if (!visible || acquisition?.isActive == true) return
+        reconnection?.cancel()
+        reconnection = null
         refreshRequired = true
         updateState { it.copy(refreshing = true, refreshFailure = null) }
         acquisition =
             viewModelScope.launch {
-                val result = refresh(workspaceId, after)
+                val result =
+                    withTimeoutOrNull(30_000) { refresh(workspaceId, after) }
+                        ?: AppResult.Failed(Failure(FailureKind.Timeout, "Chat update timed out."))
                 ensureActive()
                 when (result) {
                     is AppResult.Failed -> {
                         advanceAfterAcquisition = false
                         updateState { it.copy(refreshing = false, refreshFailure = result.failure) }
+                        scheduleReconnect(after, result.failure)
                     }
                     is AppResult.Success -> {
+                        reconnectAttempt = 0
                         refreshRequired = false
                         startObservation()
                         updateState {
@@ -151,6 +194,21 @@ class ChatInboxViewModel(
                         }
                     }
                 }
+            }
+    }
+
+    private fun scheduleReconnect(after: String?, failure: Failure) {
+        if (!visible || !chatCanReconnect(failure)) return
+        val previous = acquisition
+        val delayMillis = chatReconnectDelay(reconnectAttempt, failure)
+        reconnectAttempt = (reconnectAttempt + 1).coerceAtMost(5)
+        reconnection =
+            viewModelScope.launch {
+                delay(delayMillis)
+                previous?.join()
+                ensureActive()
+                reconnection = null
+                if (visible && !state.value.restricted) acquire(after)
             }
     }
 

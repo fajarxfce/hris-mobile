@@ -95,7 +95,14 @@ class NativeLinkAppFlowTest {
             waitFor("Fictional original for notification")
             compose.onNodeWithText("Fictional colleague").assertIsDisplayed()
             compose.onNodeWithContentDescription("Back").performClick()
-            waitFor("Saved replies")
+            compose.waitUntil(15_000) {
+                compose
+                    .onAllNodesWithContentDescription("New chat")
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            compose.onNodeWithContentDescription("New chat").assertIsDisplayed()
+            compose.onNodeWithText("Saved replies").assertDoesNotExist()
             compose
                 .onAllNodesWithText("Fictional colleague")
                 .assertCountEquals(f.app.server.collaboration.ids.size)

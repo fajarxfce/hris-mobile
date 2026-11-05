@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.*
 internal class ChatThreadFixture {
     val setup = ChatSetupFixture()
     val base = setup.base
+    val replies = base.replies
     val controls = ChatParticipantsFixture()
     val summary = base.item(1)
     val conversationId = summary.conversation.id
@@ -597,6 +598,7 @@ internal class ChatThreadFixture {
                     build,
                     clock,
                 ),
+                replies.observer(base),
             )
         }
 

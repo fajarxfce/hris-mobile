@@ -88,6 +88,7 @@ fun NavGraphBuilder.collaborationRoutes(
             onSetup,
             onBack,
             onThreadFocus,
+            onSavedReply,
         )
     }
 }
@@ -170,6 +171,7 @@ private fun ChatThreadEntry(
         (
             dev.fajar.starter.collaboration.domain.entities.CollaborationOwner, String,
         ) -> AutoCloseable?,
+    onSavedReply: (String) -> Unit,
 ) {
     val vm =
         koinViewModel<ChatThreadViewModel>(
@@ -195,6 +197,7 @@ private fun ChatThreadEntry(
         when (it) {
             ChatThreadEffect.Back -> onBack()
             ChatThreadEffect.Setup -> onSetup()
+            is ChatThreadEffect.OpenReply -> onSavedReply(it.id)
             ChatThreadEffect.ScrollToNewest -> list.requestScrollToItem(0)
             is ChatThreadEffect.CopyMessages ->
                 effectsScope.launch {

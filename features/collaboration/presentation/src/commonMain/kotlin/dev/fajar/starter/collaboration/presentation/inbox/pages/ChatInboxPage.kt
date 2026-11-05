@@ -18,7 +18,6 @@ import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.Add
 import io.github.composefluent.icons.regular.ArrowLeft
-import io.github.composefluent.icons.regular.ArrowSync
 import kotlin.time.Clock
 import kotlinx.datetime.*
 
@@ -41,6 +40,10 @@ fun ChatInboxPage(
         topBar = {
             AppTopBar(
                 title = appString(AppString.ChatTitle),
+                subtitle =
+                    if (state.refreshFailure?.let(::chatCanReconnect) == true)
+                        appString(AppString.ChatOffline)
+                    else null,
                 navigation =
                     if (onBack == null) null
                     else {
@@ -54,12 +57,6 @@ fun ChatInboxPage(
                     },
                 actions = {
                     AppIconButton(
-                        Icons.Regular.ArrowSync,
-                        appString(AppString.Refresh),
-                        { onEvent(ChatInboxEvent.RefreshRequested) },
-                        enabled = !state.refreshing,
-                    )
-                    AppIconButton(
                         Icons.Regular.Add,
                         appString(AppString.ChatNew),
                         { onEvent(ChatInboxEvent.NewChatRequested) },
@@ -69,21 +66,25 @@ fun ChatInboxPage(
             )
         },
     ) {
-        item("saved-replies") {
-            AppTextButton(
-                appString(AppString.ChatSavedReplies),
-                { onEvent(ChatInboxEvent.SavedRepliesRequested) },
-                modifier = Modifier.padding(horizontal = 8.dp),
-                enabled = !state.restricted,
-            )
-        }
+        if (state.orphanedUnsentCount > 0)
+            item("saved-replies") {
+                AppTextButton(
+                    appString(AppString.ChatUnsentCount, state.orphanedUnsentCount.toString()),
+                    { onEvent(ChatInboxEvent.SavedRepliesRequested) },
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    enabled = !state.restricted,
+                )
+            }
         val initialAcquisition = state.refreshing && state.page?.checkpoint == null
         if (
             (state.loading && state.page == null) ||
                 (state.page?.items?.isEmpty() == true && initialAcquisition)
         )
             item("loading") { AppLoading() }
-        val failure = state.failure ?: state.refreshFailure ?: state.previewFailure
+        val failure =
+            state.failure
+                ?: state.previewFailure
+                ?: state.refreshFailure?.takeUnless(::chatCanReconnect)
         if (failure != null)
             item("failure") {
                 Column(
@@ -131,7 +132,17 @@ fun ChatInboxPage(
                 item.peer.displayName,
                 { onEvent(ChatInboxEvent.ConversationSelected(item.conversation.id)) },
                 enabled = !state.restricted,
-                supporting = preview?.let { { InboxPreviewText(it) } },
+                supporting = {
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        val count = state.unsentCounts[item.conversation.id] ?: 0
+                        if (count > 0)
+                            AppText(
+                                appString(AppString.ChatUnsentCount, count.toString()),
+                                color = AppColors.error,
+                            )
+                        else preview?.let { InboxPreviewText(it) }
+                    }
+                },
                 trailing = timestamp?.let { { InboxTimestamp(it, today, zone) } },
             )
         }

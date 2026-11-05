@@ -2,6 +2,7 @@ package dev.fajar.starter.collaboration.data.datasources
 
 import dev.fajar.starter.collaboration.data.dto.SdkSyncProblem
 import dev.fajar.starter.collaboration.data.sdk.SdkSyncPump
+import dev.fajar.starter.observability.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import org.matrix.rustcomponents.sdk.Client
@@ -46,7 +47,14 @@ internal fun createAndroidCollaborationSync(
                                 "M_UNRECOGNIZED",
                             ),
                 )
-            } catch (_: Exception) {
+            } catch (failure: Exception) {
+                Diagnostics.record(
+                    Diagnostic(
+                        DiagnosticArea.Network,
+                        DiagnosticKind.OperationFailed,
+                        "ChatSync_${failure::class.simpleName}",
+                    )
+                )
                 // FFI generic errors do not reliably distinguish transport from decoding failures.
                 // Retry is finite; no exception description is parsed or retained.
                 SdkSyncProblem(null)

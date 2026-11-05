@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.presentation.thread
 
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
+import dev.fajar.starter.collaboration.presentation.replies.ChatUnsentReply
 import dev.fajar.starter.common.result.Failure
 
 enum class ChatThreadConnection {
@@ -18,6 +19,8 @@ data class ChatThreadState(
     /** Ephemeral owner generation for viewport callbacks; never a credential. */
     val readViewportToken: String? = null,
     val rows: List<ChatMessageRow> = emptyList(),
+    val unsentReplies: List<ChatUnsentReply> = emptyList(),
+    val unsentFailure: Failure? = null,
     val draft: String = "",
     val draftReady: Boolean = false,
     val draftSaving: Boolean = false,

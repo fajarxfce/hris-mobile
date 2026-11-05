@@ -3,6 +3,8 @@ package dev.fajar.starter.collaboration.presentation.thread
 import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalAccess
 
 sealed interface ChatThreadEffect {
+    data class OpenReply(val id: String) : ChatThreadEffect
+
     data object Back : ChatThreadEffect
 
     data object Setup : ChatThreadEffect

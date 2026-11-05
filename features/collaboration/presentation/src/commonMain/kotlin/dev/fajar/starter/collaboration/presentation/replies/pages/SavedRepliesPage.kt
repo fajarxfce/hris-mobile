@@ -21,7 +21,6 @@ import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
-import io.github.composefluent.icons.regular.ArrowSync
 
 @Composable
 fun SavedRepliesPage(
@@ -48,14 +47,24 @@ fun SavedRepliesPage(
             }
             if (state.loading) item("loading") { AppLoading() }
             state.failure?.let { failure ->
-                item("failure") { AppFeedback(failureText(failure), Modifier.padding(16.dp)) }
+                item("failure") {
+                    AppTextButton(
+                        appString(AppString.ChatUnsentUnavailable),
+                        { onEvent(SavedRepliesEvent.RefreshRequested) },
+                        Modifier.padding(16.dp),
+                    )
+                }
             }
-            if (!state.loading && state.failure == null && state.snapshot?.items?.isEmpty() == true)
+            if (
+                !state.loading &&
+                    state.failure == null &&
+                    state.snapshot?.items?.none { it.needsAttention } == true
+            )
                 item("empty") {
                     AppText(appString(AppString.ChatSavedRepliesEmpty), Modifier.padding(16.dp))
                 }
             items(
-                state.snapshot?.items.orEmpty(),
+                state.snapshot?.items.orEmpty().filter { it.needsAttention },
                 key = { it.input.id },
                 contentType = { "saved-reply" },
             ) { row ->
@@ -100,7 +109,11 @@ fun SavedRepliesPage(
             topBar = { SavedRepliesBar(state, onEvent) },
         ) {
             if (state.loading) AppLoading()
-            state.failure?.let { AppFeedback(failureText(it)) }
+            if (state.failure != null)
+                AppTextButton(
+                    appString(AppString.ChatUnsentUnavailable),
+                    { onEvent(SavedRepliesEvent.RefreshRequested) },
+                )
             state.outcome?.let { AppFeedback(appString(discardOutcome(it))) }
             state.sendOutcome
                 ?.takeUnless {
@@ -133,18 +146,20 @@ fun SavedRepliesPage(
                         enabled = state.editable,
                         maxLines = 8,
                     )
-                    AppText(
-                        appString(
-                            when {
-                                state.savingDraft -> AppString.ChatReplySavingDraft
-                                state.draftFailure != null -> AppString.ChatReplyDraftSaveFailed
-                                else -> AppString.ChatReplyDraftSaved
-                            }
-                        ),
-                        color =
-                            if (state.draftFailure != null) AppColors.error else AppColors.muted,
-                        style = FluentTheme.typography.caption,
-                    )
+                    if (state.savingDraft || state.draftFailure != null)
+                        AppText(
+                            appString(
+                                when {
+                                    state.savingDraft -> AppString.ChatReplySavingDraft
+                                    state.draftFailure != null -> AppString.ChatReplyDraftSaveFailed
+                                    else -> AppString.ChatReplyDraftSaved
+                                }
+                            ),
+                            color =
+                                if (state.draftFailure != null) AppColors.error
+                                else AppColors.muted,
+                            style = FluentTheme.typography.caption,
+                        )
                     if (state.draftFailure != null)
                         AppTextButton(
                             appString(AppString.ChatReplySaveDraft),
@@ -187,12 +202,6 @@ fun SavedRepliesPage(
                                     .isBlank(),
                         loading = state.busy && state.pendingSendId != null,
                     )
-                    if (selected.input.resolution == null)
-                        AppText(
-                            appString(AppString.ChatReplySendHint),
-                            color = AppColors.muted,
-                            style = FluentTheme.typography.caption,
-                        )
                 }
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -296,14 +305,6 @@ private fun SavedRepliesBar(state: SavedRepliesState, onEvent: (SavedRepliesEven
                 Icons.Regular.ArrowLeft,
                 appString(AppString.Back),
                 { onEvent(SavedRepliesEvent.BackRequested) },
-            )
-        },
-        actions = {
-            AppIconButton(
-                Icons.Regular.ArrowSync,
-                appString(AppString.Refresh),
-                { onEvent(SavedRepliesEvent.RefreshRequested) },
-                enabled = !state.loading && !state.busy && !state.unsavedDraft,
             )
         },
     )

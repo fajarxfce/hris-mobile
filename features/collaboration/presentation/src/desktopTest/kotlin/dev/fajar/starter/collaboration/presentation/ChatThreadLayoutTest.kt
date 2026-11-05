@@ -34,6 +34,7 @@ class ChatThreadLayoutTest {
             mutableStateOf(
                 ChatThreadState(
                     title = "Dewi Kartika",
+                    connection = ChatThreadConnection.CONNECTED,
                     loading = false,
                     draftReady = true,
                     hasOlder = true,
@@ -416,11 +417,9 @@ class ChatThreadLayoutTest {
             .performClick()
         compose
             .onNode(hasScrollToIndexAction())
-            .performScrollToNode(
-                hasText("Sebagian riwayat lama belum tersedia. Segarkan untuk mencoba lagi.")
-            )
+            .performScrollToNode(hasText("Sebagian pesan sebelumnya belum tersedia."))
         compose
-            .onNodeWithText("Sebagian riwayat lama belum tersedia. Segarkan untuk mencoba lagi.")
+            .onNodeWithText("Sebagian pesan sebelumnya belum tersedia.")
             .performScrollTo()
             .assertIsDisplayed()
         screenshot("chat-thread-history-large-text")

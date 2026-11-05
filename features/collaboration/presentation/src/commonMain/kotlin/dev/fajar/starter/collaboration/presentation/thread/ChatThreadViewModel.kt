@@ -12,6 +12,7 @@ import dev.fajar.starter.collaboration.domain.policies.localListAccess
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationCancellation
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationText
 import dev.fajar.starter.collaboration.domain.usecases.*
+import dev.fajar.starter.collaboration.presentation.replies.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import kotlin.uuid.Uuid
@@ -53,12 +54,15 @@ class ChatThreadViewModel(
     requestRecovery: RequestCollaborationRecovery,
     private val observeHidden: ObserveCollaborationHiddenMessages,
     private val deleteForMe: DeleteCollaborationMessagesForMe,
+    private val observeReplies: ObserveCollaborationSavedReplies,
 ) : MviViewModel<ChatThreadState, ChatThreadEvent, ChatThreadEffect>(ChatThreadState()) {
     private val projection = MutableStateFlow<ChatVisibilityProjection?>(null)
     private var deletionSelection: ChatDeletionSelection? = null
     private var deletionJob: Job? = null
     private var observation: Job? = null
     private var connection: Job? = null
+    private var reconnection: Job? = null
+    private var reconnectAttempt = 0
     private var submission: Job? = null
     private var cancellationJob: Job? = null
     private var cancellationSelection: ChatCancellationSelection? = null
@@ -107,6 +111,17 @@ class ChatThreadViewModel(
         )
 
     init {
+        on<ChatThreadEvent.UnsentReplySelected> {
+            if (
+                visible &&
+                    !state.value.selecting &&
+                    state.value.localFailure == null &&
+                    state.value.unsentReplies.any { reply -> reply.id == it.id }
+            ) {
+                leaveThread(ChatThreadEffect.OpenReply(it.id))
+            }
+        }
+        on<ChatThreadEvent.LocalReadRetryRequested> { if (visible) observeLocal() }
         on<ChatThreadEvent.Entered>(::onEntered)
         on<ChatThreadEvent.Stopped>(::onStopped)
         on<ChatThreadEvent.ViewportChanged>(::onViewportChanged)
@@ -144,6 +159,7 @@ class ChatThreadViewModel(
     private fun onEntered(event: ChatThreadEvent.Entered) {
         if (visible) return
         visible = true
+        reconnectAttempt = 0
         if (observation?.isActive != true) observeLocal() else if (context != null) connect()
     }
 
@@ -180,14 +196,43 @@ class ChatThreadViewModel(
                             readViewportToken = it.readViewportToken ?: Uuid.random().toString(),
                         )
                     }
-                    if (visible) connect()
                     coroutineScope {
                         launch { observeComposer(owned) }
+                        launch { observeUnsentReplies(owned) }
                         launch { observeVisibleRows(owned) }
                         observePages(owned)
                     }
                 }
             }
+    }
+
+    private suspend fun observeUnsentReplies(owned: CollaborationLocalAccess) {
+        observeReplies(workspaceId).collect { result ->
+            currentCoroutineContext().ensureActive()
+            if (access != owned) return@collect
+            when (result) {
+                is AppResult.Failed ->
+                    updateState {
+                        it.copy(unsentReplies = emptyList(), unsentFailure = result.failure)
+                    }
+                is AppResult.Success ->
+                    if (result.value.access == owned)
+                        updateState {
+                            it.copy(
+                                unsentReplies =
+                                    result.value.items
+                                        .filter { reply ->
+                                            reply.needsAttention &&
+                                                reply.input.candidate.action.target
+                                                    .conversationId == conversationId
+                                        }
+                                        .sortedByDescending { reply -> reply.input.sequence }
+                                        .map { reply -> reply.unsentDisplay() },
+                                unsentFailure = null,
+                            )
+                        }
+            }
+        }
     }
 
     private suspend fun observePages(owned: CollaborationLocalAccess) {
@@ -236,6 +281,7 @@ class ChatThreadViewModel(
                 displayedWindow = selected
                 historyLoading = false
                 project()
+                if (visible && connection == null && reconnection?.isActive != true) connect()
                 if (scrollToLatest && selected.latest) {
                     scrollToLatest = false
                     emitEffect(ChatThreadEffect.ScrollToNewest)
@@ -250,6 +296,9 @@ class ChatThreadViewModel(
         viewportKeys = emptyList()
         historyRoomId = null
         dismissCancellation()
+        reconnection?.cancel()
+        reconnection = null
+        reconnectAttempt = 0
         connection?.cancel()
         connection = null
         submission?.cancel()
@@ -607,6 +656,9 @@ class ChatThreadViewModel(
         viewportKeys = emptyList()
         readTracker.update(null)
         dismissCancellation()
+        reconnection?.cancel()
+        reconnection = null
+        reconnectAttempt = 0
         connection?.cancel()
         connection = null
         submission?.cancel()
@@ -751,6 +803,11 @@ class ChatThreadViewModel(
                 state.value.loadingOlder
         )
             return
+        val localFailure = state.value.localFailure
+        if (localFailure != null && !collaborationContentResponseClosesRead(localFailure)) {
+            observeLocal()
+            return
+        }
         if (access == null || context == null) {
             connection?.cancel()
             connection =
@@ -1134,52 +1191,83 @@ class ChatThreadViewModel(
     private fun connect(retryRoom: Boolean = false, recoverHistory: Boolean = false) {
         if (!visible || context == null || connection?.isActive == true) return
         val owned = access ?: return
-        updateState { it.copy(connection = ChatThreadConnection.CONNECTING, failure = null) }
+        reconnection?.cancel()
+        reconnection = null
+        updateState { it.copy(connection = ChatThreadConnection.CONNECTING) }
         connection =
             viewModelScope.launch {
-                val setup = loadSetup(workspaceId)
+                var deviceId: String? = null
+                val prepared =
+                    withTimeoutOrNull(30_000) {
+                        deviceId = prepareConnection(owned, retryRoom, recoverHistory)
+                        true
+                    }
                 ensureActive()
-                if (access != owned) return@launch
-                if (setup is AppResult.Failed) {
-                    connectionFailed(setup.failure)
-                    return@launch
-                }
-                val device = (setup as AppResult.Success).value.device
-                if (device == null || device.state != CollaborationDeviceState.ACTIVE) {
-                    updateState { it.copy(connection = ChatThreadConnection.SETUP_REQUIRED) }
-                    return@launch
-                }
-                val restored = ensureRuntime(workspaceId, device.id)
-                ensureActive()
-                if (restored is AppResult.Failed) {
-                    connectionFailed(restored.failure)
-                    return@launch
-                }
-                if (!(restored as AppResult.Success).value.value) {
-                    updateState { it.copy(connection = ChatThreadConnection.SETUP_REQUIRED) }
-                    return@launch
-                }
-                val self = identity.acquire(workspaceId, device.id)
-                ensureActive()
-                if (self is AppResult.Failed) {
-                    connectionFailed(self.failure)
-                    return@launch
-                }
-                context =
-                    context?.copy(self = (self as AppResult.Success).value.value ?: context?.self)
-                project()
-                val ready = prepareRoom(device, retryRoom)
-                ensureActive()
-                when (ready) {
-                    is AppResult.Failed -> connectionFailed(ready.failure)
-                    is AppResult.Success ->
-                        if (ready.value) {
-                            if (recoverHistory && !restoreHistory(device.id)) return@launch
-                            ensureActive()
-                            if (access == owned) observeTimeline(owned, device.id)
-                        } else updateState { it.copy(connection = ChatThreadConnection.WAITING) }
+                if (prepared == null)
+                    connectionFailed(
+                        Failure(
+                            FailureKind.Timeout,
+                            "Chat connection timed out.",
+                            code = "client.collaboration_connection_timeout",
+                        )
+                    )
+                else if (state.value.connection == ChatThreadConnection.CONNECTING) {
+                    val ready = deviceId ?: return@launch
+                    if (access == owned) observeTimeline(owned, ready)
                 }
             }
+    }
+
+    private suspend fun prepareConnection(
+        owned: CollaborationLocalAccess,
+        retryRoom: Boolean,
+        recoverHistory: Boolean,
+    ): String? {
+        val setup = loadSetup(workspaceId)
+        currentCoroutineContext().ensureActive()
+        if (access != owned) return null
+        if (setup is AppResult.Failed) {
+            connectionFailed(setup.failure)
+            return null
+        }
+        val device = (setup as AppResult.Success).value.device
+        if (device == null || device.state != CollaborationDeviceState.ACTIVE) {
+            updateState { it.copy(connection = ChatThreadConnection.SETUP_REQUIRED) }
+            return null
+        }
+        val restored = ensureRuntime(workspaceId, device.id)
+        currentCoroutineContext().ensureActive()
+        if (restored is AppResult.Failed) {
+            connectionFailed(restored.failure)
+            return null
+        }
+        if (!(restored as AppResult.Success).value.value) {
+            updateState { it.copy(connection = ChatThreadConnection.SETUP_REQUIRED) }
+            return null
+        }
+        val self = identity.acquire(workspaceId, device.id)
+        currentCoroutineContext().ensureActive()
+        if (self is AppResult.Failed) {
+            connectionFailed(self.failure)
+            return null
+        }
+        context = context?.copy(self = (self as AppResult.Success).value.value ?: context?.self)
+        project()
+        val ready = prepareRoom(device, retryRoom)
+        currentCoroutineContext().ensureActive()
+        when (ready) {
+            is AppResult.Failed -> connectionFailed(ready.failure)
+            is AppResult.Success ->
+                if (ready.value) {
+                    if (recoverHistory && !restoreHistory(device.id)) return null
+                    currentCoroutineContext().ensureActive()
+                    if (access == owned) {
+                        updateState { it.copy(connection = ChatThreadConnection.CONNECTING) }
+                        return device.id
+                    }
+                } else updateState { it.copy(connection = ChatThreadConnection.WAITING) }
+        }
+        return null
     }
 
     private suspend fun restoreHistory(deviceId: String): Boolean {
@@ -1273,7 +1361,15 @@ class ChatThreadViewModel(
     }
 
     private suspend fun observeTimeline(owned: CollaborationLocalAccess, deviceId: String) {
-        val acquired = enter(workspaceId, deviceId, conversationId)
+        val acquired =
+            withTimeoutOrNull(30_000) { enter(workspaceId, deviceId, conversationId) }
+                ?: AppResult.Failed(
+                    Failure(
+                        FailureKind.Timeout,
+                        "Chat connection timed out.",
+                        code = "client.collaboration_connection_timeout",
+                    )
+                )
         val child = (acquired as? AppResult.Success)?.value
         try {
             currentCoroutineContext().ensureActive()
@@ -1310,7 +1406,9 @@ class ChatThreadViewModel(
                     }
                 }
             }
-            updateState { it.copy(connection = ChatThreadConnection.CONNECTED) }
+            updateState {
+                it.copy(connection = ChatThreadConnection.CONNECTED, failure = null, syncing = true)
+            }
             project()
             coroutineScope {
                 val signals = Channel<Unit>(Channel.CONFLATED)
@@ -1386,6 +1484,14 @@ class ChatThreadViewModel(
                     )
             }
             project()
+            if (!older) {
+                if (result is AppResult.Failed) scheduleReconnect(result.failure, syncOnly = true)
+                else {
+                    reconnectAttempt = 0
+                    reconnection?.cancel()
+                    reconnection = null
+                }
+            }
         }
     }
 
@@ -1416,8 +1522,8 @@ class ChatThreadViewModel(
     }
 
     private fun connectionFailed(failure: Failure) {
-        timeline = emptyList()
-        source = null
+        reconnection?.cancel()
+        reconnection = null
         updateState {
             it.copy(
                 connection = ChatThreadConnection.OFFLINE,
@@ -1427,6 +1533,33 @@ class ChatThreadViewModel(
             )
         }
         project()
+        scheduleReconnect(failure)
+    }
+
+    private fun scheduleReconnect(failure: Failure, syncOnly: Boolean = false) {
+        if (!visible || !chatCanReconnect(failure)) {
+            reconnection?.cancel()
+            reconnection = null
+            return
+        }
+        if (reconnection?.isActive == true) return
+        val owned = access ?: return
+        val delayMillis = chatReconnectDelay(reconnectAttempt, failure)
+        reconnectAttempt = (reconnectAttempt + 1).coerceAtMost(5)
+        val previous = connection
+        reconnection =
+            viewModelScope.launch {
+                delay(delayMillis)
+                if (!syncOnly) previous?.join()
+                ensureActive()
+                if (!visible || access != owned || state.value.localFailure != null) return@launch
+                reconnection = null
+                if (syncOnly && pulse != null) requestSync(wake = false)
+                else {
+                    connection = null
+                    connect()
+                }
+            }
     }
 
     private fun changedThread() =

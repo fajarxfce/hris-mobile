@@ -57,7 +57,11 @@ internal class AndroidCollaborationMessageQueues(
                     else {
                         ownsWriter = true
                         failure()?.let { reason -> AppResult.Failed(reason) }
-                            ?: safeAndroidCollaborationCall { it.open() }
+                            ?: safeAndroidCollaborationCall(
+                                AndroidCollaborationOperation.QueueOpen
+                            ) {
+                                it.open()
+                            }
                     }
                 },
                 release = {

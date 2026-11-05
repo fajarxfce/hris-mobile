@@ -48,7 +48,7 @@ internal class AndroidCollaborationPusher(
             children.acquire(
                 source,
                 { resource ->
-                    safeAndroidCollaborationCall {
+                    safeAndroidCollaborationCall(AndroidCollaborationOperation.PusherSession) {
                         val session = client.session()
                         check(
                             session.userId == expectedUserId &&

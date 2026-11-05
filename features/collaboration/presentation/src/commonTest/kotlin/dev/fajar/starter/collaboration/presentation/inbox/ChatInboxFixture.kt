@@ -14,6 +14,7 @@ import kotlin.time.Duration.Companion.hours
 import kotlinx.coroutines.flow.*
 
 internal class ChatInboxFixture {
+    val replies = dev.fajar.starter.collaboration.presentation.replies.ChatUnsentReplyFixture()
     val content = ChatInboxContentFixture()
     var now = Instant.parse("2026-11-01T00:00:00Z")
     val clock =
@@ -269,6 +270,7 @@ internal class ChatInboxFixture {
                 clock,
             ),
             RefreshCollaborationList(local, remote, sessions, workspaces, server, build, clock),
+            replies.observer(this),
         )
 }
 

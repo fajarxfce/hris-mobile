@@ -1,5 +1,8 @@
 # Owned message thread
 
+[Local chat entry and foreground recovery](collaboration-chat-local-entry.md)
+keeps cached messages independent of transport and places held replies in context.
+
 [Contextual message selection and durable local deletion](collaboration-message-selection.md)
 adds multi-select/copy/delete-for-me while retaining original message evidence.
 

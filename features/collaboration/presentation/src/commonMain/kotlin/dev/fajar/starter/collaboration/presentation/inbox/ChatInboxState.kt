@@ -15,6 +15,8 @@ data class ChatInboxState(
     val refreshFailure: Failure? = null,
     val previews: Map<String, CollaborationInboxPreview> = emptyMap(),
     val previewFailure: Failure? = null,
+    val unsentCounts: Map<String, Int> = emptyMap(),
+    val orphanedUnsentCount: Int = 0,
 ) {
     val hasMore: Boolean
         get() = page?.nextCursor != null || remoteNext != null
