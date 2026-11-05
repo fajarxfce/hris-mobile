@@ -14,19 +14,32 @@ internal class CollaborationHistoryEditBatch(private val batch: CollaborationHis
         require(validCollaborationMessageEdit(edit))
         val existing = batch.alias(edit.eventId)
         require(existing == null || existing.sender == edit.sender)
-        // A confirmed redaction can arrive before either the original or its replacement.
-        if (existing?.redacted == true && existing.messageId == null) return
-        require(existing == null || existing.replacement)
+        require(
+            existing == null ||
+                existing.replacement ||
+                (existing.redacted && existing.messageId == null)
+        )
         val target = requireNotNull(batch.alias(edit.targetEventId))
         require(!target.replacement)
         val id = requireNotNull(target.messageId)
         val original = resolveOriginal(id, requireNotNull(batch.message(id)))
-        if (existing != null) {
+        if (existing?.messageId != null) {
             require(existing.messageId == id && existing.timestamp == edit.timestamp)
             require(existing.replacementHash == edit.contentHash)
             require(existing.replacementTarget == edit.targetEventId)
-            if (existing.redacted) return
         }
+        val fact =
+            CollaborationHistoryEventFact(
+                target.eventId,
+                target.sender,
+                target.timestamp,
+                target.redacted,
+            )
+        val eligible =
+            existing?.redacted != true && acceptsCollaborationMessageEdit(original, fact, edit)
+        retainEvidence(id, edit, eligible)
+        // Retain body-free transport proof even when a redaction arrived before the replacement.
+        if (existing?.redacted == true) return
         val revision = CollaborationMessageRevision(edit, requireNotNull(target.timestamp))
         val revisionId = codec.revisionId(edit.eventId)
         val retained =
@@ -37,14 +50,7 @@ internal class CollaborationHistoryEditBatch(private val batch: CollaborationHis
             require(existing != null)
             return
         }
-        val fact =
-            CollaborationHistoryEventFact(
-                target.eventId,
-                target.sender,
-                target.timestamp,
-                target.redacted,
-            )
-        if (!acceptsCollaborationMessageEdit(original, fact, edit)) return
+        if (!eligible) return
         require(existing == null && revisionId !in batch.removedRevisions)
         batch.revisions[revisionId] = HistoryRevisionDto(id, revision.toHistoryEditDto())
         batch.aliases[codec.aliasId(edit.eventId)] =
@@ -60,6 +66,28 @@ internal class CollaborationHistoryEditBatch(private val batch: CollaborationHis
             )
         if (supersedesCollaborationMessageEdit(original.latestEdit?.edit, edit))
             batch.messages[id] = original.copy(latestEdit = revision)
+    }
+
+    private suspend fun retainEvidence(
+        id: String,
+        edit: CollaborationMessageEdit,
+        eligible: Boolean,
+    ) {
+        val value =
+            HistoryEditEvidenceDto(
+                id,
+                edit.eventId,
+                edit.sender,
+                edit.targetEventId,
+                edit.timestamp,
+                edit.contentHash,
+                edit.operationId,
+                codec.editInputFingerprint(edit),
+                eligible,
+            )
+        val previous = batch.editEvidence(edit.eventId)
+        if (previous == null) batch.editEvidence[codec.editEvidenceId(edit.eventId)] = value
+        else require(value.copy(initiallyEligible = previous.initiallyEligible) == previous)
     }
 
     suspend fun redact(

@@ -183,13 +183,14 @@ abstract class CollaborationMessageEditStorageContract {
             val newest = edit(original, 3)
             f.edits(newest, edit(original, 1), edit(original, 2))
             assertEquals(newest, f.lookup()?.latestEdit?.edit)
-            val raw = f.raw()
+            val displayed = f.lookup()
             f.edits(
                 edit(original, 4)
                     .copy(timestamp = original.timestamp + CollaborationMessageEditWindowMillis),
                 edit(original, 5).copy(sender = "@other:example.test"),
             )
-            assertEquals(raw, f.raw())
+            assertEquals(displayed, f.lookup())
+            val raw = f.raw()
             assertIs<AppResult.Failed>(
                 f.repository.mergeEdits(
                     f.access,

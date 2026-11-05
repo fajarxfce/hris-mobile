@@ -1,0 +1,88 @@
+{
+  "date": "2026-11-05",
+  "scope": "Encrypted replacement transport evidence; authoring/outbox consumers and native edit exchange remain pending.",
+  "sourceSha256": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationEditEvidenceReader.kt": "7a84dbbdaaea7e7cc1a0a5dd199b2fdc06c3780137533e8ba15f06c67a0679a2",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHistoryBatch.kt": "7b8ebc224ef75aca5bf6c8c3cda63755a3baac143ba74b2dae6e4d6844b6d175",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHistoryCodec.kt": "75cd559c47c75139c6686424342195dad9439278efcf4fe8e7685accd9c82180",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationHistoryEditBatch.kt": "6b6f54f1d65eef4023c8e4b3fc00b40019de19d990738482b4b082b7d0cbbeaa",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/HistoryEditEvidenceDto.kt": "12e72a17e566cd741b7807e13d9cd3b3b5fcf8384912431493e9aec5ae5240e0",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationHistoryRepository.kt": "990f8d55a3084a99ca40d0210e876756e76e11f436f2387a0d7a8b87c8dda4fd",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationEditEvidenceStorageContract.kt": "0b6af9aea3ea27cc7d75da3f04d8ec341c695de0fe3b9504f081c57da5d41b67",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationMessageEditStorageContract.kt": "91f17f6ad2fc7ce9e0e387b19ee796f4143bdf9bd1c836d749aa9c99c887072e",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationEditEvidenceStorageTest.kt": "d2c9996f1401e2594bbf64be62cdfb12bdb91195840b9c7ee9fe23d91731f240",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationEditEvidenceStorageTest.kt": "696930c727b393584e453b36945cb8e904058c3dbe67f090292ee65a7414a92a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationEditEvidence.kt": "2bc666d33415295494fae849afb340209dbf308991f46bc7e8ed5dde000342d2",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationEditEvidenceRepository.kt": "2a93a2235061e44f5ccc0b21c23169cf9c9f8bc01e52bf56116001683bb832d8"
+  },
+  "checks": {
+    "evidence1": {
+      "startedAt": "2026-11-05T23:15:23.262172+00:00",
+      "elapsedSeconds": 262.393,
+      "exitCode": -15,
+      "sourceFiles": 4159,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 97,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "newStorageSuites": {}
+    },
+    "evidence2": {
+      "startedAt": "2026-11-05T23:26:21.511057+00:00",
+      "elapsedSeconds": 155.626,
+      "exitCode": 0,
+      "sourceFiles": 4159,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 78,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "newStorageSuites": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationEditEvidenceStorageTest.xml": {
+          "sha256": "6a7ae8870466d2ea15f3cb441563b86aa7cdff37aca181a6bf7e0dd71314c6cd",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "evidence-full1": {
+      "startedAt": "2026-11-05T23:29:49.732134+00:00",
+      "elapsedSeconds": 543.649,
+      "exitCode": 0,
+      "sourceFiles": 4159,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 4995,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "newStorageSuites": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationEditEvidenceStorageTest.xml": {
+          "sha256": "84adf3cbc325001702c0c5d533d933cd46e86f5b4302622307fa258d38bfac78",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTes-EEV8OIJCFMBLG.dev.fajar.starter.collaboration.data.BrowserCollaborationEditEvidenceStorageTest.xml": {
+          "sha256": "da557e988083af5b786a56ace068c0759b1cf25e1762322c33c92d76f2d836aa",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "androidLintErrors": 0,
+  "initialAttempt": "evidence1 stopped after a nullable test-value compilation error; owned process groups drained before fix. No failed assertions.",
+  "acceptance": "Focused78 and full4995 fresh cases passed with no failures/errors/skips. Full root, SQLite/IndexedDB, Android host/proof compile and debug lint/build passed. Apple d475 acceptance excludes this increment."
+}

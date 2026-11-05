@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Edit transport evidence accepted; continue authoring — 5 November 2026
+
+Twelve Kotlin files now retain encrypted body-free replacement evidence, including
+late/ineligible edits, without granting original send/read identity. Separate
+operation indexes are bounded at128 with an authenticated lookahead rejection.
+Canonical/input fingerprints, redaction and checkpoint/account checks preserve
+recovery evidence independently of display admission.
+[Contract](collaboration-edit-evidence.md),
+[measurement](measurements/collaboration-edit-evidence-2026-11-05.json).
+Focused evidence2 PASS78 fresh/155.626s. Full evidence-full1 PASS4,995 fresh/543.649s,
+zero failures/errors/skips, Android lint0;4,159 source inputs unchanged. All wrappers
+including72042 drained. Initial evidence1 nullable test compile failure was fixed
+after stopping/draining its owned processes; seven shared storage cases now pass
+on actual SQLite and IndexedDB. Sources may be edited after committing/pushing.
+
+NEXT: immutable edit target read from owned history (including legacy earliest
+alias time and local visibility), existing encrypted command queue extension,
+paused SDK staging/recovery/retirement and durable non-applied outcomes, then
+long-press composer with ordinary drafts preserved and pending edits on the same
+bubble. Retained identity repository supplies the sender without SDK/network.
+The3 authoring .kt.draft files are still UNAPPLIED; review them (add room binding,
+legacy normalization) before use. Raw complete cold revisions and native proof
+remain open; all54 PRD groups remain open. Continue after this commit.
+
+Platform49ec23e0 normalized Testcontainers digest passed24 real local cases,
+including both repeated-midnight schedules. Docs8f89a25f pushed; fullCI42129516710
+on exact49ec is still running (four dashboard jobs passed). Audit all14 jobs and
+exact API/worker artifact digests before rollout. Do not rerun old failed42126384926
+or live54b deployment scripts. Live54b/schema116.1 and flags remain unchanged.
+Apple d47542123588891 already accepted1,310 cases and full app; excludes later
+reference/evidence work. Starter bce2012 complete. Phone40 stays installed, retained
+emulators stopped/data intact, both stashes preserved; never repeat Forward sends.
+
 ## Edit storage Apple acceptance; transport evidence in progress — 5 November 2026
 
 [Apple evidence](measurements/collaboration-message-edits-apple-2026-11-05.json):

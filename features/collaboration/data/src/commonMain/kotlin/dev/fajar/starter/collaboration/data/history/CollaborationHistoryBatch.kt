@@ -14,6 +14,7 @@ internal class CollaborationHistoryBatch(
 ) {
     internal val messages = mutableMapOf<String, CollaborationHistoryMessage>()
     internal val aliases = mutableMapOf<String, HistoryAliasDto>()
+    internal val editEvidence = mutableMapOf<String, HistoryEditEvidenceDto>()
     internal val revisions = mutableMapOf<String, HistoryRevisionDto>()
     internal val removedRevisions = mutableMapOf<String, String>()
     var added: Long = 0
@@ -37,6 +38,7 @@ internal class CollaborationHistoryBatch(
         messages.values.map { codec.message(generation, revision, it) } +
             aliases.values.map { codec.alias(generation, revision, it) } +
             revisions.values.map { codec.revision(generation, revision, it) } +
+            editEvidence.values.map { codec.editEvidence(generation, revision, it) } +
             removedRevisions.map { (id, sort) -> ReplicaDocument(id, revision, sort, null) }
 
     suspend fun applyEdits(edits: List<CollaborationMessageEdit>) {
@@ -54,6 +56,7 @@ internal class CollaborationHistoryBatch(
         aliasId: String,
         alias: HistoryAliasDto?,
     ) {
+        require(editEvidence(change.eventId) == null)
         require(alias?.replacement != true)
         val id = codec.messageId(change.sender, change.logicalId, change.eventId)
         require(alias?.messageId == null || alias.messageId == id)
@@ -98,6 +101,7 @@ internal class CollaborationHistoryBatch(
         aliasId: String,
         alias: HistoryAliasDto?,
     ) {
+        editEvidence(change.eventId)?.let { require(it.sender == change.sender) }
         if (alias?.replacement == true) {
             CollaborationHistoryEditBatch(this).redact(change, aliasId, alias)
             return
@@ -110,6 +114,11 @@ internal class CollaborationHistoryBatch(
         aliases[aliasId] =
             alias?.copy(redacted = true)
                 ?: HistoryAliasDto(change.eventId, change.sender, null, null, true)
+    }
+
+    internal suspend fun editEvidence(eventId: String): HistoryEditEvidenceDto? {
+        val id = codec.editEvidenceId(eventId)
+        return editEvidence[id] ?: raw(id)?.let { codec.editEvidence(requireNotNull(previous), it) }
     }
 
     internal suspend fun message(id: String) =

@@ -4,8 +4,8 @@ package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.collaboration.domain.policies.validCollaborationMessageReference
-import dev.fajar.starter.collaboration.domain.policies.validCollaborationQuoteQuery
+import dev.fajar.starter.collaboration.domain.policies.*
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationEditEvidenceRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationHistoryRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationLocalVisibilityRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageEditRepository
@@ -26,6 +26,7 @@ class EncryptedCollaborationHistoryRepository(
 ) :
     CollaborationHistoryRepository,
     CollaborationMessageEditRepository,
+    CollaborationEditEvidenceRepository,
     CollaborationLocalVisibilityRepository,
     CollaborationQuoteRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
@@ -283,6 +284,44 @@ class EncryptedCollaborationHistoryRepository(
         }
     }
 
+    override suspend fun getEditEvidence(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        eventId: String,
+    ) = safeStorageCall {
+        require(validCollaborationEventId(eventId))
+        val scope = historyScope(access)
+        val partition = historyPartition(access, conversationId)
+        val raw = replicas.checkpoint(scope, partition) ?: return@safeStorageCall null
+        withKey(access, conversationId, roomId) { codec ->
+            codec.checkpoint(raw)
+            val value = CollaborationEditEvidenceReader(replicas, raw, codec).get(eventId)
+            require(replicas.checkpoint(scope, partition) == raw)
+            value
+        }
+    }
+
+    override suspend fun getEditOperationEvidence(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        sender: String,
+        operationId: String,
+    ) = safeStorageCall {
+        require(validCollaborationHistorySender(sender) && validCollaborationMessageId(operationId))
+        val scope = historyScope(access)
+        val partition = historyPartition(access, conversationId)
+        val raw = replicas.checkpoint(scope, partition) ?: return@safeStorageCall emptyList()
+        withKey(access, conversationId, roomId) { codec ->
+            codec.checkpoint(raw)
+            val values =
+                CollaborationEditEvidenceReader(replicas, raw, codec).operation(sender, operationId)
+            require(replicas.checkpoint(scope, partition) == raw)
+            values
+        }
+    }
+
     override suspend fun getReplacementFact(
         access: CollaborationLocalAccess,
         conversationId: String,
@@ -294,6 +333,15 @@ class EncryptedCollaborationHistoryRepository(
         val raw = replicas.checkpoint(scope, partition) ?: return@safeStorageCall null
         withKey(access, conversationId, roomId) { codec ->
             codec.checkpoint(raw)
+            CollaborationEditEvidenceReader(replicas, raw, codec).get(eventId)?.let { value ->
+                require(replicas.checkpoint(scope, partition) == raw)
+                return@withKey CollaborationReplacementEventFact(
+                    value.eventId,
+                    value.sender,
+                    value.timestamp,
+                    value.redacted,
+                )
+            }
             val aliasId = codec.aliasId(eventId)
             val alias =
                 replicas.document(scope, partition, aliasId)?.let {
@@ -361,6 +409,13 @@ class EncryptedCollaborationHistoryRepository(
         val raw = replicas.checkpoint(scope, partition) ?: return null
         return withKey(access, conversationId, roomId) { codec ->
             codec.checkpoint(raw)
+            val proofId = codec.editEvidenceId(eventId)
+            replicas.document(scope, partition, proofId)?.let {
+                require(it.id == proofId)
+                codec.editEvidence(raw, it)
+                require(replicas.checkpoint(scope, partition) == raw)
+                return@withKey null
+            }
             val aliasId = codec.aliasId(eventId)
             val alias =
                 replicas.document(scope, partition, aliasId)?.let {

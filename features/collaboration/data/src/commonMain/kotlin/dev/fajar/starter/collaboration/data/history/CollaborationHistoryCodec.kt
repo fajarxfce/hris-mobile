@@ -96,6 +96,95 @@ internal class CollaborationHistoryCodec(
         )
     }
 
+    suspend fun editEvidenceId(eventId: String) = "p-" + aliasId(eventId).removePrefix("e-")
+
+    suspend fun editOperationTag(sender: String, operationId: String): String {
+        require(validCollaborationHistorySender(sender) && validCollaborationMessageId(operationId))
+        return "edit-operation-" + index(listOf("edit-operation", sender, operationId))
+    }
+
+    suspend fun editInputFingerprint(edit: CollaborationMessageEdit): String {
+        require(validCollaborationMessageEdit(edit))
+        return index(
+            listOf(
+                "edit-evidence-input-v1",
+                edit.eventId,
+                edit.sender,
+                edit.targetEventId,
+                edit.timestamp.toString(),
+                edit.text,
+                edit.contentHash,
+                edit.operationId.orEmpty(),
+                edit.originalLogicalId.orEmpty(),
+                edit.replyToEventId.orEmpty(),
+                edit.forwarded.toString(),
+            )
+        )
+    }
+
+    suspend fun editEvidence(
+        checkpoint: ReplicaCheckpoint,
+        raw: ReplicaDocument,
+    ): HistoryEditEvidenceDto {
+        require(raw.version in 0..checkpoint.revision)
+        val value =
+            Json.decodeFromString<HistoryEditEvidenceDto>(
+                open(
+                    checkpoint.handle.generation,
+                    raw.id,
+                    raw.version,
+                    raw.sortKey,
+                    requireNotNull(raw.payload),
+                )
+            )
+        validateEditEvidence(value)
+        require(raw.id == editEvidenceId(value.eventId))
+        require(raw.sortKey == editEvidenceSort(value, raw.id))
+        require(raw.tags == editEvidenceTags(value))
+        return value
+    }
+
+    suspend fun editEvidence(
+        generation: String,
+        revision: Long,
+        value: HistoryEditEvidenceDto,
+    ): ReplicaDocument {
+        validateEditEvidence(value)
+        val id = editEvidenceId(value.eventId)
+        val sort = editEvidenceSort(value, id)
+        return ReplicaDocument(
+            id,
+            revision,
+            sort,
+            seal(generation, id, revision, sort, Json.encodeToString(value)),
+            editEvidenceTags(value),
+        )
+    }
+
+    private fun validateEditEvidence(value: HistoryEditEvidenceDto) {
+        require(historyMessageId.matches(value.messageId))
+        require(
+            validCollaborationEventId(value.eventId) &&
+                validCollaborationEventId(value.targetEventId)
+        )
+        require(
+            value.eventId != value.targetEventId && value.timestamp in 0..9_007_199_254_740_991L
+        )
+        require(
+            validCollaborationMessageOrigin(
+                CollaborationMessageOrigin(value.sender, value.contentHash)
+            )
+        )
+        require(value.operationId == null || validCollaborationMessageId(value.operationId))
+        require(value.inputFingerprint.matches(Regex("[0-9a-f]{64}")))
+    }
+
+    private fun editEvidenceSort(value: HistoryEditEvidenceDto, id: String) =
+        (9_007_199_254_740_991L - value.timestamp).toString().padStart(16, '0') + "/" + id
+
+    private suspend fun editEvidenceTags(value: HistoryEditEvidenceDto) =
+        value.operationId?.let { setOf(editOperationTag(value.sender, it)) } ?: emptySet()
+
     private fun revisionSort(revision: CollaborationMessageRevision, id: String) =
         (9_007_199_254_740_991L - revision.edit.timestamp).toString().padStart(16, '0') + "/" + id
 
