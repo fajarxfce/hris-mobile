@@ -1,5 +1,45 @@
 # Agent continuation — HRIS Mobile
 
+## Release 39 installed; compact swipe hub accepted — 5 November 2026
+
+Product source `2539c6585f77c4f6898ff28426604c3583927fa4` is pushed and installed as
+non-debuggable ARM64 devRelease39/1.0.0 on the authorized phone.
+[Delivery](measurements/android-release-phone-2026-11-05-build39.json).
+88,420,084 bytes; SHA256 `75ff35899b84bcc972bb9cd7e775707d30bd4473d8185aa2ffe45695f6973a1d`.
+Clean build/lint494.972s, zero lint. Announced install-only38→39 took46.422s with
+device-byte verification. App identity, signer, data and first-install time retained;
+no phone UI launched or driven. Do not reinstall this artifact.
+
+Actual Rani Android acceptance passes156.226s: filter icons/dialogs in Contacts and
+search, swipes both directions, fixed tabs, scroll-responsive FAB, return from New
+chat, both drafts and cold offline reopen. Independent HTTP probes confirm outage
+and recovery. Six final captures opened/reviewed. The first attempt expected scroll
+on a non-scrollable five-contact fixture; the final driver temporarily uses a
+1080x1400 viewport for that gesture and restores it in finally, density unchanged.
+No APK/product change, new messages, permission grants, reset or key replacement.
+Bima passes four retained-history checks109.519s: eight visible rows with no Older,
+decryption or manual-history error after update, reopens and cold process restart.
+All native/build/install wrappers and children are drained. Rani is stopped;
+Bima receiver is emulator5562/PID2720994/startTicks158001625; verify its current
+start record before operating it. Samples1/2 now39, samples3/4 remain37. Preserve
+all userdata images, sidecars and original SDK keys; no Forward publication repeat.
+
+Apple42081732094 runs exact2539c658: simulator tests passed18:23UTC, full app still
+building at18:32. Audit complete job/downloaded reports before acceptance; do not
+dispatch another same-branch run. No physical iPhone claim. Previous38 Apple accepted.
+
+NEXT: continue the long run. Six exact generic component/color/UI-test files are
+copied into Starter as uncommitted work after native acceptance; independent Starter
+root/Android/lint/Web and Apple gates remain. No HRIS routes or lifecycle copied.
+Platform bounded projection worker is WIP on66d18b2d. Its first focused gate compiled
+but failed three account-queue reads; the datasource now excludes the unused
+PostgreSQL infinite due timestamp. projection2 is running with frozen product inputs.
+Full worker/API context gate remains required. Live stays11a98115/schema116/chat
+pushOFF. Dedicated metadata delta HTTP and atomic Mobile cursor consumer, then
+editing/delete/groups/media/calls/meetings remain; all54 PRD groups open. Preserve
+both protected stashes and push every commit. Current UI corrections do not cancel
+broader work.
+
 ## Compact swipe Chat hub locally accepted; release 39 next — 5 November 2026
 
 Chat now has no title app bar/actions. Fixed Conversations/Contacts support taps

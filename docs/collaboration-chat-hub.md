@@ -72,9 +72,18 @@ Seven generic cases cover interrupted selection/gestures, disabled/reduced-motio
 behavior, draft retention, accessible filter state, exiting-action input and scroll
 visibility reset. Seven current captures were opened/reviewed at compact, dark200%
 text and landscape sizes. [Evidence](measurements/chat-hub-controls-2026-11-05.json)
-retains the initial selector/architecture failures and passing correction. Release39
-native acceptance and phone delivery are pending; release38 evidence below covers
-the earlier hub and offline persistence behavior.
+retains the initial selector/architecture failures and passing correction.
+
+Release39 is installed in place on the authorized phone, with exact artifact bytes
+verified and existing identity/data retained. Its actual Android proof passes in
+156.226s: both filter surfaces, swipes, fixed tabs, floating-action scroll behavior,
+retained drafts and cold offline reopening. Six native captures were reviewed.
+Bima retains eight visible rows through four update/reopen/restart checks109.519s.
+The first native attempt expected scrolling where all five contacts fit; the final
+driver temporarily narrows only the owned emulator viewport and restores it after
+the gesture. Product source and APK are unchanged. No phone UI was driven.
+[Release39 evidence](measurements/android-release-phone-2026-11-05-build39.json).
+Release38 evidence below records the earlier hub acceptance.
 
 Focused navigation, persistence and preview recovery passed 51 cases/136.104s with
 4,103 unchanged source inputs. Six generated desktop captures were opened and
