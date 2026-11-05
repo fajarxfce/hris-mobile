@@ -6,14 +6,16 @@ import dev.fajar.starter.database.*
 
 /** Bounded read/merge plan; the repository commits every changed record and alias atomically. */
 internal class CollaborationHistoryBatch(
-    private val replicas: ReplicaStore,
-    private val scope: ReplicaScope,
-    private val partition: String,
-    private val previous: ReplicaCheckpoint?,
-    private val codec: CollaborationHistoryCodec,
+    internal val replicas: ReplicaStore,
+    internal val scope: ReplicaScope,
+    internal val partition: String,
+    internal val previous: ReplicaCheckpoint?,
+    internal val codec: CollaborationHistoryCodec,
 ) {
-    private val messages = mutableMapOf<String, CollaborationHistoryMessage>()
-    private val aliases = mutableMapOf<String, HistoryAliasDto>()
+    internal val messages = mutableMapOf<String, CollaborationHistoryMessage>()
+    internal val aliases = mutableMapOf<String, HistoryAliasDto>()
+    internal val revisions = mutableMapOf<String, HistoryRevisionDto>()
+    internal val removedRevisions = mutableMapOf<String, String>()
     var added: Long = 0
         private set
 
@@ -33,17 +35,30 @@ internal class CollaborationHistoryBatch(
 
     suspend fun documents(generation: String, revision: Long): List<ReplicaDocument> =
         messages.values.map { codec.message(generation, revision, it) } +
-            aliases.values.map { codec.alias(generation, revision, it) }
+            aliases.values.map { codec.alias(generation, revision, it) } +
+            revisions.values.map { codec.revision(generation, revision, it) } +
+            removedRevisions.map { (id, sort) -> ReplicaDocument(id, revision, sort, null) }
+
+    suspend fun applyEdits(edits: List<CollaborationMessageEdit>) {
+        val batch = CollaborationHistoryEditBatch(this)
+        for (edit in edits) batch.apply(edit)
+    }
+
+    internal suspend fun alias(eventId: String): HistoryAliasDto? {
+        val id = codec.aliasId(eventId)
+        return aliases[id] ?: raw(id)?.let { codec.alias(requireNotNull(previous), it) }
+    }
 
     private suspend fun original(
         change: CollaborationHistoryChange.Text,
         aliasId: String,
         alias: HistoryAliasDto?,
     ) {
+        require(alias?.replacement != true)
         val id = codec.messageId(change.sender, change.logicalId, change.eventId)
         require(alias?.messageId == null || alias.messageId == id)
         require(alias?.timestamp == null || alias.timestamp == change.timestamp)
-        val old = message(id)
+        val old = message(id)?.let { CollaborationHistoryEditBatch(this).resolveOriginal(id, it) }
         require(alias?.messageId == null || old?.eventIds?.contains(change.eventId) == true)
         val merged =
             requireNotNull(mergeCollaborationHistoryText(old, change, alias?.redacted == true))
@@ -60,7 +75,12 @@ internal class CollaborationHistoryBatch(
                             change.logicalId,
                         ),
                     ))
-        val next = merged.copy(locallyHidden = hidden)
+        val next =
+            merged.copy(locallyHidden = hidden).let { value ->
+                if (old?.latestEdit != null && value.latestEdit == null && !value.redacted)
+                    value.copy(latestEdit = CollaborationHistoryEditBatch(this).latest(id, value))
+                else value
+            }
         if (old == null) added++
         messages[id] = next
         aliases[aliasId] =
@@ -78,20 +98,24 @@ internal class CollaborationHistoryBatch(
         aliasId: String,
         alias: HistoryAliasDto?,
     ) {
+        if (alias?.replacement == true) {
+            CollaborationHistoryEditBatch(this).redact(change, aliasId, alias)
+            return
+        }
         alias?.messageId?.let { id ->
             val old = requireNotNull(message(id))
             require(old.sender == change.sender && change.eventId in old.eventIds)
-            messages[id] = old.copy(text = null, redacted = true)
+            messages[id] = old.copy(text = null, redacted = true, latestEdit = null)
         }
         aliases[aliasId] =
             alias?.copy(redacted = true)
                 ?: HistoryAliasDto(change.eventId, change.sender, null, null, true)
     }
 
-    private suspend fun message(id: String) =
+    internal suspend fun message(id: String) =
         messages[id] ?: raw(id)?.let { codec.message(requireNotNull(previous), it) }
 
-    private suspend fun raw(id: String) =
+    internal suspend fun raw(id: String) =
         replicas.document(scope, partition, id).also {
             require(
                 it == null || (previous != null && it.id == id && it.version <= previous.revision)

@@ -871,6 +871,14 @@ internal class ChatThreadFixture {
                 server,
                 build,
                 clock,
+                object : CollaborationMessageEditRepository {
+                    override suspend fun mergeEdits(
+                        access: CollaborationLocalAccess,
+                        conversationId: String,
+                        roomId: String,
+                        edits: List<CollaborationMessageEdit>,
+                    ): AppResult<Boolean> = error("This fixture has no replacement events")
+                },
             )
         }
 

@@ -181,7 +181,7 @@ private fun InboxPreviewText(preview: CollaborationInboxPreview) {
         when {
             draft != null -> "${appString(AppString.ChatDraftLabel)}: ${draft.text}"
             preview.message?.redacted == true -> appString(AppString.ChatDeleted)
-            else -> preview.message?.text
+            else -> preview.message?.let { it.latestEdit?.edit?.text ?: it.text }
         }
     if (text != null)
         AppText(

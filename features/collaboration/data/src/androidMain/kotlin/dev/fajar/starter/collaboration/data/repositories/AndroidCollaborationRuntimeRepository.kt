@@ -453,6 +453,7 @@ class AndroidCollaborationRuntimeRepository(
                 anchorEventId,
                 window.originals.toList(),
                 window.unavailableEventIds.toList(),
+                window.edits.toList(),
             )
         )
     }

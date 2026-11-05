@@ -69,11 +69,9 @@ internal fun chatThreadRows(
                 else ChatMessageOwnership.COLLEAGUE,
                 kind,
                 if (kind == CollaborationMessageKind.REDACTED) null
-                else
-                    live?.takeIf { it.edited && it.kind == CollaborationMessageKind.TEXT }?.body
-                        ?: message.text,
+                else message.latestEdit?.edit?.text ?: message.text,
                 CollaborationMessageDelivery.SENT,
-                live?.edited == true,
+                kind == CollaborationMessageKind.TEXT && message.latestEdit != null,
                 reference =
                     CollaborationMessageReference(
                         message.sender,
@@ -101,7 +99,7 @@ internal fun chatThreadRows(
     }
     for (item in timeline) {
         val eventId = item.eventId ?: continue // Durable owned commands supply local echoes.
-        if (!includeUnmatched || eventId in events) continue
+        if (!includeUnmatched || eventId in events || item.edited) continue
         rows += nativeRow(eventId, item, self)
         events += eventId
     }

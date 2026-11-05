@@ -1,8 +1,10 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationHistorySource
+import dev.fajar.starter.collaboration.data.mappers.toMessageEdit
 import dev.fajar.starter.collaboration.data.mappers.toOriginalHistory
 import dev.fajar.starter.collaboration.domain.entities.CollaborationHistoryChange
+import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageEdit
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationEventId
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.network.RequestFailureException
@@ -22,6 +24,8 @@ internal constructor(
     val extractionNanos: Long,
     val modelCharacters: Long,
     val originalCharacters: Long,
+    val edits: List<CollaborationMessageEdit> = emptyList(),
+    val replacementCharacters: Long = 0L,
 ) {
     override fun toString() = "AndroidCollaborationHistoryWindow([redacted])"
 }
@@ -92,12 +96,33 @@ internal class AndroidCollaborationHistoryWindows(
                             if (original == null) unavailable += event.eventId
                             else originals += original
                         }
+                        val targets =
+                            originals
+                                .filterIsInstance<CollaborationHistoryChange.Text>()
+                                .map { it.eventId }
+                                .toSet()
+                        val edits =
+                            snapshot.replacements.mapNotNull { replacement ->
+                                if (replacement.targetEventId !in targets) null
+                                else
+                                    try {
+                                        replacement.toMessageEdit()
+                                    } catch (_: IllegalArgumentException) {
+                                        // Unsupported/malformed replacement content must not
+                                        // suppress a
+                                        // valid original. Cancellation and storage/crypto faults
+                                        // propagate.
+                                        null
+                                    }
+                            }
                         AndroidCollaborationHistoryWindow(
                             originals.toList(),
                             unavailable.toList(),
                             snapshot.extractionNanos,
                             snapshot.modelCharacters,
                             snapshot.originalCharacters,
+                            edits,
+                            snapshot.replacementCharacters,
                         )
                     }
                 }

@@ -19,6 +19,8 @@ internal class AndroidCollaborationHistorySource(
     private var captured = false
     private var failed = false
     private var events = emptyList<CollaborationSdkHistoryEventDto>()
+    private var replacements = emptyList<CollaborationSdkReplacementDto>()
+    private var replacementCharacters = 0L
     private var extractionNanos = 0L
     private var modelCharacters = 0L
     private var originalCharacters = 0L
@@ -62,6 +64,8 @@ internal class AndroidCollaborationHistorySource(
                 extractionNanos,
                 modelCharacters,
                 originalCharacters,
+                replacements.toList(),
+                replacementCharacters,
             )
         }
 
@@ -74,13 +78,16 @@ internal class AndroidCollaborationHistorySource(
                     // Pinned SDK addListener guarantees exactly one initial Reset, synchronously.
                     val initial = changes.single() as TimelineDiff.Reset
                     require(initial.values.size <= 128)
-                    val copied = initial.values.mapNotNull { copyEvent(it) }
+                    val copiedReplacements = mutableListOf<CollaborationSdkReplacementDto>()
+                    val copied = initial.values.mapNotNull { copyEvent(it, copiedReplacements) }
                     require(copied.map { it.eventId }.distinct().size == copied.size)
+                    replacements = copiedReplacements.toList()
                     events = copied
                     captured = true
                 } catch (_: Exception) {
                     failed = true
                     events = emptyList()
+                    replacements = emptyList()
                 } finally {
                     extractionNanos = System.nanoTime() - started
                 }
@@ -92,12 +99,16 @@ internal class AndroidCollaborationHistorySource(
                 synchronized(lock) {
                     failed = true
                     events = emptyList()
+                    replacements = emptyList()
                 }
             }
         }
     }
 
-    private fun copyEvent(item: TimelineItem): CollaborationSdkHistoryEventDto? {
+    private fun copyEvent(
+        item: TimelineItem,
+        edits: MutableList<CollaborationSdkReplacementDto>,
+    ): CollaborationSdkHistoryEventDto? {
         val event = item.asEvent() ?: return null
         try {
             val id =
@@ -123,6 +134,12 @@ internal class AndroidCollaborationHistorySource(
                     try {
                         modelCharacters += info.model.length
                         originalCharacters += info.originalJson?.length ?: 0
+                        info.latestEditJson?.let { json ->
+                            require(json.length <= 96_000)
+                            replacementCharacters += json.length
+                            edits += CollaborationSdkReplacementDto(id, event.sender, json)
+                        }
+                        require(originalCharacters + replacementCharacters <= 4_194_304L)
                         require(modelCharacters <= 4_194_304L && originalCharacters <= 4_194_304L)
                         info.originalJson?.also { require(it.length <= 96_000) }
                     } finally {
@@ -147,6 +164,7 @@ internal class AndroidCollaborationHistorySource(
         synchronized(lock) {
             closed = true
             events = emptyList()
+            replacements = emptyList()
         }
         listener?.let { task ->
             task.cancel()
@@ -171,6 +189,8 @@ internal data class AndroidHistoryRawSnapshot(
     val extractionNanos: Long,
     val modelCharacters: Long,
     val originalCharacters: Long,
+    val replacements: List<CollaborationSdkReplacementDto> = emptyList(),
+    val replacementCharacters: Long = 0L,
 ) {
     override fun toString() = "AndroidHistoryRawSnapshot([redacted])"
 }

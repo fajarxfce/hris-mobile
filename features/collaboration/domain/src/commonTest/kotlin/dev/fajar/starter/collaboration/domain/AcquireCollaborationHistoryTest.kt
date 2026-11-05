@@ -338,6 +338,27 @@ internal class HistoryAcquisitionFixture {
             emptyList(),
         )
     var headReads = 0
+
+    fun includeEdits() {
+        window =
+            window.copy(
+                edits =
+                    window.changes.filterIsInstance<CollaborationHistoryChange.Text>().mapIndexed {
+                        index,
+                        original ->
+                        CollaborationMessageEdit(
+                            "\$edit-" + index,
+                            original.sender,
+                            original.eventId,
+                            original.timestamp + 10,
+                            "Edited " + index,
+                            "b".repeat(64),
+                            originalLogicalId = original.logicalId,
+                        )
+                    }
+            )
+    }
+
     var head =
         CollaborationHistoryHead(
             delivery.owner,
@@ -356,6 +377,28 @@ internal class HistoryAcquisitionFixture {
     var afterMerge: suspend () -> Unit = {}
     val batches = mutableListOf<List<CollaborationHistoryChange>>()
     val retained = mutableListOf<CollaborationHistoryChange>()
+    val editBatches = mutableListOf<List<CollaborationMessageEdit>>()
+    var afterEditMerge: suspend () -> Unit = {}
+    var rejectEditBatch = 0
+
+    private val edits =
+        object : CollaborationMessageEditRepository {
+            override suspend fun mergeEdits(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+                roomId: String,
+                edits: List<CollaborationMessageEdit>,
+            ): AppResult<Boolean> {
+                assertEquals(delivery.owner.localListAccess(), access)
+                assertEquals(delivery.conversation, conversationId)
+                assertEquals(delivery.device.roomId, roomId)
+                assertTrue(edits.size in 1..16)
+                assertTrue(edits.all { edit -> retained.any { it.eventId == edit.targetEventId } })
+                editBatches += edits.toList()
+                afterEditMerge()
+                return AppResult.Success(editBatches.size != rejectEditBatch)
+            }
+        }
 
     init {
         delivery.control.beforeRemote = { admissions += it }
@@ -487,6 +530,7 @@ internal class HistoryAcquisitionFixture {
             local.server,
             local.build,
             local.clock,
+            edits,
         )
 
     suspend fun latest() = useCase("selection", delivery.device.deviceId, delivery.conversation)

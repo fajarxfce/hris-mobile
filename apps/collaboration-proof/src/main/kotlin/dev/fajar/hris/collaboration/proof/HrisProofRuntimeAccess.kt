@@ -141,6 +141,7 @@ internal class HrisProofRuntimeAccess(private val runtime: AndroidCollaborationR
                 anchorEventId,
                 window.originals,
                 window.unavailableEventIds,
+                window.edits,
             )
         )
     }

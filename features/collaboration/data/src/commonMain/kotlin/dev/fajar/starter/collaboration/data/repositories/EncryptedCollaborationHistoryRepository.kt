@@ -8,6 +8,7 @@ import dev.fajar.starter.collaboration.domain.policies.validCollaborationMessage
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationQuoteQuery
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationHistoryRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationLocalVisibilityRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageEditRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationQuoteRepository
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
@@ -24,6 +25,7 @@ class EncryptedCollaborationHistoryRepository(
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
 ) :
     CollaborationHistoryRepository,
+    CollaborationMessageEditRepository,
     CollaborationLocalVisibilityRepository,
     CollaborationQuoteRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
@@ -78,6 +80,7 @@ class EncryptedCollaborationHistoryRepository(
                 codec.alias(raw, it)
             } ?: return null
         val messageId = alias.messageId ?: return null
+        if (alias.replacement) return null
         val message =
             requireNotNull(replicas.document(scope, partition, messageId)).let {
                 require(it.id == messageId)
@@ -88,7 +91,11 @@ class EncryptedCollaborationHistoryRepository(
         if (message.redacted || message.locallyHidden) return null
         val reference = CollaborationMessageReference(message.sender, eventId, message.logicalId)
         if (hiddenInHistory(replicas, raw, codec, reference)) return null
-        return CollaborationQuotedMessage(eventId, message.sender, requireNotNull(message.text))
+        return CollaborationQuotedMessage(
+            eventId,
+            message.sender,
+            message.latestEdit?.edit?.text ?: requireNotNull(message.text),
+        )
     }
 
     override fun observeHidden(
@@ -295,17 +302,20 @@ class EncryptedCollaborationHistoryRepository(
                     codec.alias(raw, it)
                 }
             val message =
-                alias?.messageId?.let { id ->
-                    val document = requireNotNull(replicas.document(scope, partition, id))
-                    require(document.id == id)
-                    codec.message(raw, document).also {
-                        require(it.sender == alias.sender && eventId in it.eventIds)
-                        require(!alias.redacted || it.redacted)
+                alias
+                    ?.takeUnless { it.replacement }
+                    ?.messageId
+                    ?.let { id ->
+                        val document = requireNotNull(replicas.document(scope, partition, id))
+                        require(document.id == id)
+                        codec.message(raw, document).also {
+                            require(it.sender == alias.sender && eventId in it.eventIds)
+                            require(!alias.redacted || it.redacted)
+                        }
                     }
-                }
             // Do not combine different generations/revisions or publish through a late logout.
             require(replicas.checkpoint(scope, partition) == raw)
-            alias?.let { it to message }
+            alias?.takeUnless { it.replacement }?.let { it to message }
         }
     }
 
@@ -363,6 +373,41 @@ class EncryptedCollaborationHistoryRepository(
                 }
             require(replicas.checkpoint(scope, partition) == raw)
             message
+        }
+    }
+
+    override suspend fun mergeEdits(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        edits: List<CollaborationMessageEdit>,
+    ) = safeStorageCall {
+        require(edits.size in 1..16)
+        val selected = edits.toList()
+        val scope = historyScope(access)
+        val partition = historyPartition(access, conversationId)
+        val raw = requireNotNull(replicas.checkpoint(scope, partition))
+        withKey(access, conversationId, roomId) { codec ->
+            val previous = codec.checkpoint(raw)
+            val batch = CollaborationHistoryBatch(replicas, scope, partition, raw, codec)
+            batch.applyEdits(selected)
+            val revision = raw.revision + 1
+            val documents = batch.documents(raw.handle.generation, revision)
+            currentCoroutineContext().ensureActive()
+            if (documents.isEmpty()) replicas.checkpoint(scope, partition) == raw
+            else
+                replicas.commit(
+                    raw.handle,
+                    raw.revision,
+                    codec.checkpoint(
+                        raw.handle.generation,
+                        revision,
+                        previous.count,
+                        previous.hiddenRules,
+                    ),
+                    documents,
+                    true,
+                )
         }
     }
 

@@ -157,7 +157,7 @@ class ChatThreadProjectionTest {
             .value
 
     @Test
-    fun historicalWindowAppliesMatchingLiveEditsButExcludesUnrelatedNewRows() {
+    fun historicalWindowKeepsOriginalTextUntilARevisionIsAdmittedAndExcludesUnrelatedNewRows() {
         val extra = staged.copy(intent = intent.copy(id = chatId(80), text = "New pending"))
         val live = native.copy(eventId = "new-event", sender = "@peer:test", body = "New incoming")
         val projected =
@@ -168,9 +168,9 @@ class ChatThreadProjectionTest {
                 includeUnmatched = false,
             )
         assertEquals(1, projected.size)
-        assertEquals("Edited original", projected.single().text)
+        assertEquals("Original text", projected.single().text)
         assertEquals("outgoing:${intent.id}", projected.single().key)
-        assertTrue(projected.single().edited)
+        assertFalse(projected.single().edited)
     }
 
     @Test
@@ -271,15 +271,37 @@ class ChatThreadProjectionTest {
     @Test
     fun canonicalAliasesSuppressDuplicateProviderEventsAndVerifiedEditsOnlyAffectDisplay() {
         val edit = native.copy(eventId = "\$retry", body = "Edited text", edited = true)
-        val result = rows(listOf(original), timeline = listOf(edit)).single()
+        val stored =
+            original.copy(
+                latestEdit =
+                    CollaborationMessageRevision(
+                        CollaborationMessageEdit(
+                            "\$revision",
+                            sender,
+                            "\$retry",
+                            20,
+                            "Edited text",
+                            "b".repeat(64),
+                            originalLogicalId = intent.id,
+                        ),
+                        12,
+                    )
+            )
+        val result = rows(listOf(stored), timeline = listOf(edit)).single()
         assertEquals("Edited text", result.text)
         assertTrue(result.edited)
         assertEquals("Original text", original.text)
+        assertEquals(result, rows(listOf(stored)).single())
+        val withPending = rows(listOf(stored), listOf(staged), listOf(edit)).single()
+        assertEquals("outgoing:" + intent.id, withPending.key)
+        assertEquals(result.text, withPending.text)
+        assertEquals(original.timestamp, withPending.timestamp)
         val spoof = edit.copy(sender = "@other:example.test")
         assertEquals(
             "Original text",
             rows(listOf(original), timeline = listOf(spoof)).single().text,
         )
+        assertTrue(rows(timeline = listOf(edit)).isEmpty())
     }
 
     @Test

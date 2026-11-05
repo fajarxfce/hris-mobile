@@ -48,17 +48,17 @@ internal class HistoryItem(
     val json =
         """{"type":"m.room.message","event_id":"$eventId","sender":"@fictional:example.test","origin_server_ts":1,"content":{"msgtype":"m.text","body":"Original text","org.hris.message_id":"a1000000-0000-4000-8000-000000000001"}}"""
     var model = "diagnostic model"
+    var replacementJson: String? = "latest edit must not become original"
+    var lastDebugInfo: EventTimelineItemDebugInfo? = null
     var disposed = 0
     var copied = 0
     val provider =
         object : LazyTimelineItemProvider(NoHandle) {
             override fun debugInfo(): EventTimelineItemDebugInfo {
                 calls += "original.read"
-                return EventTimelineItemDebugInfo(
-                    model,
-                    json,
-                    "latest edit must not become original",
-                )
+                return EventTimelineItemDebugInfo(model, json, replacementJson).also {
+                    lastDebugInfo = it
+                }
             }
 
             override fun latestJson(): String = error("History must never read latest edited JSON")

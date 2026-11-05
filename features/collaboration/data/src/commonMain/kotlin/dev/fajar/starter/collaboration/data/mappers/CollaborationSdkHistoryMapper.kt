@@ -14,19 +14,7 @@ internal suspend fun CollaborationSdkHistoryEventDto.toOriginalHistory():
     require(timestamp in 0..9_007_199_254_740_991L)
     if (kind == SdkMessageKind.REDACTED) return CollaborationHistoryChange.Redacted(eventId, sender)
     if (kind != SdkMessageKind.TEXT || originalJson == null) return null
-    val json = originalJson
-    require(json.length in 1..96_000)
-    validateHistoryJsonDepth(json)
-    val bytes = json.encodeToByteArray(throwOnInvalidSequence = true)
-    try {
-        require(bytes.size <= 96_000)
-    } finally {
-        bytes.fill(0)
-    }
-    val event = Json.parseToJsonElement(json).jsonObject
-    require(event.text("event_id") == eventId && event.text("sender") == sender)
-    val originalTimestamp = event["origin_server_ts"]?.jsonPrimitive
-    require(originalTimestamp?.isString == false && originalTimestamp.longOrNull == timestamp)
+    val event = collaborationHistoryJson(this)
     if (event.text("type") != "m.room.message") return null
     val content = event["content"]?.jsonObject ?: return null
     if (content.text("msgtype") != "m.text") return null

@@ -10,6 +10,8 @@ data class CollaborationOriginalWindow(
     val anchorEventId: String,
     val changes: List<CollaborationHistoryChange>,
     val unresolvedEventIds: List<String>,
+    /** Separately detached replacements; never original send/receipt evidence. */
+    val edits: List<CollaborationMessageEdit> = emptyList(),
 ) {
     override fun toString() = "CollaborationOriginalWindow([redacted])"
 }

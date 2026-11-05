@@ -290,6 +290,11 @@ internal class HrisProductQueueProof(
                 app.server,
                 app.build,
                 app.clock,
+                EncryptedCollaborationHistoryRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                ),
             )
         check(
             success(acquire(app.workspaceId, runtime.deviceId, conversationId)).acquiredEvents >= 1
@@ -449,6 +454,11 @@ internal class HrisProductQueueProof(
                 app.server,
                 app.build,
                 app.clock,
+                EncryptedCollaborationHistoryRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                ),
             )
         val acquired = success(acquire(app.workspaceId, runtime.deviceId, conversationId))
         check(runtimeAccess.historyHead == replyEventId)

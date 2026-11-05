@@ -1285,6 +1285,7 @@ class CollaborationDataModule {
     @Factory
     fun acquireHistory(
         history: CollaborationHistoryRepository,
+        edits: CollaborationMessageEditRepository,
         lists: CollaborationListRepository,
         conversations: CollaborationConversationRepository,
         setup: CollaborationSetupRepository,
@@ -1305,6 +1306,7 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            edits,
         )
 
     @Factory

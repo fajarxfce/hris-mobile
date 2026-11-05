@@ -1,5 +1,49 @@
 # Agent continuation — HRIS Mobile
 
+## Persisted message edits accepted locally; authoring continues — 5 November 2026
+
+[Contract](collaboration-message-edits.md),
+[evidence](measurements/collaboration-message-edits-2026-11-05.json).39 Kotlin files
+retain encrypted replacement events separately from original send/receipt fields,
+including earliest-alias timing, transactional revisions/redaction fallback,
+bounded Android raw acquisition and persisted room/list projection. Focused149
+cases PASS358.931s. Updated full root/browser/Android gate PASS on unchanged4,150
+inputs: first attempt4,859 fresh cases had no assertion failures but presentation
+Chrome disconnected; retry88.562s passes175 complete presentation browser cases.
+Accepted full-report union4,967 cases, no failures/errors/skips; Android lint0.
+All local wrappers drained. No native edit publication or phone release yet.
+
+NEXT priority before authoring release: ReconcileCollaborationHistoryReferences
+must read explicit replacement facts because original-only getEventFact excludes
+edit aliases; otherwise retained edits stay unresolved/Older available. Do not
+expose replacements as original ACK/read/notification facts. Broader raw cold
+revision acquisition is still needed when a later invalid edit masks an earlier
+valid one. Then implement durable edit outbox/recovery/retirement, long-press UI
+with ordinary draft preserved, native exchange/cold offline proof and release.
+.work/chat-editing-review-2026-11-05 has edit-outbox-design.md, edit-ui-design.md,
+and3 UNVALIDATED authoring .kt.draft files (not applied). Pinned SDK typed fields
+win over sendWithExtraContent; typed body must equal bounded fallback to retain
+canonical hashes and60,000-character gateway ciphertext budget. Late provider-
+accepted edits need retained transport proof even when they cannot display.
+Dispatch one Apple-only CI on this product commit; old927 Apple is already done.
+
+Platform029c5828 replacement envelope is pushed, with166 accepted local cases;
+docs31928a36 records CI42120370137. That full run has backend7 failure in unrelated
+OnboardingScheduleHttpTest's repeated-midnight fixture (HTTP409/SQLState23514).
+Investigation found mutable postgres:18.6-alpine digest changed between prior
+passing CI20:26UTC (8a334ab9…) and this run22:20UTC (80df0884…); local live image
+is older10a5c69a… and resolves Havana midnight to05:00UTC. This is a lead, not
+proven cause. Exact failing XML/logs and artifact digest are in Platform .work.
+Do not blindly rerun/deploy. Other CI jobs still running. Live remains54b10ce8/
+schema116.1, push/callback/delivery/worker FCM ON, SMTP OFF. No live changes.
+
+Phone40 remains installed; both Rani/Bima emulators stopped with data/keys intact.
+Starter bce2012 is clean/pushed and fully accepted including Apple42113508947;
+no remaining Starter action. Current edit work is HRIS-specific, no generic port.
+Preserve both stashes and never repeat accepted Forward publications. All54 PRD
+acceptance groups remain open; keep the authorized long run going after this commit.
+
+
 ## Release40 Apple acceptance; edit work started — 5 November 2026
 
 [Apple evidence](measurements/collaboration-summary-inbox-apple-2026-11-05.json):

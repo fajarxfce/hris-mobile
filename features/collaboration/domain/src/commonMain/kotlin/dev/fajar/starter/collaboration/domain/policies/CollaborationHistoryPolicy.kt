@@ -13,14 +13,27 @@ fun validCollaborationHistoryMessage(value: CollaborationHistoryMessage): Boolea
         (value.logicalId == null || validCollaborationMessageId(value.logicalId)) &&
         validCollaborationEventId(value.primaryEventId) &&
         value.timestamp in 0..9_007_199_254_740_991L &&
+        (value.firstAcceptedAt == null || value.firstAcceptedAt in 0..value.timestamp) &&
         historyHash.matches(value.contentHash) &&
         (value.replyToEventId == null || validCollaborationEventId(value.replyToEventId)) &&
         value.eventIds.size in 1..128 &&
         value.eventIds.first() == value.primaryEventId &&
         value.eventIds.all(::validCollaborationEventId) &&
         value.eventIds.distinct().size == value.eventIds.size &&
-        if (value.redacted) value.text == null
-        else value.text?.let(::validCollaborationText) == true
+        (if (value.redacted) value.text == null && value.latestEdit == null
+        else value.text?.let(::validCollaborationText) == true) &&
+        (value.latestEdit?.let { revision ->
+            acceptsCollaborationMessageEdit(
+                value.copy(latestEdit = null),
+                CollaborationHistoryEventFact(
+                    revision.edit.targetEventId,
+                    value.sender,
+                    revision.targetAcceptedAt,
+                    false,
+                ),
+                revision.edit,
+            )
+        } ?: true)
 
 /** Reject conflicting ID reuse; neither another sender nor different content can be coalesced. */
 fun mergeCollaborationHistoryText(
@@ -62,10 +75,30 @@ fun mergeCollaborationHistoryText(
             text = if (deleted) null else original.text,
             eventIds = (original.eventIds + event.eventId).distinct(),
             redacted = deleted,
+            latestEdit = null,
+            firstAcceptedAt =
+                minOf(original.firstAcceptedAt ?: original.timestamp, event.timestamp),
             // An older reader may have retained the complete content hash before exposing replies.
             replyToEventId = original.replyToEventId ?: event.replyToEventId,
             forwarded = original.forwarded || event.forwarded,
         )
+        .let { updated ->
+            updated.copy(
+                latestEdit =
+                    original.latestEdit?.takeIf { revision ->
+                        acceptsCollaborationMessageEdit(
+                            updated,
+                            CollaborationHistoryEventFact(
+                                revision.edit.targetEventId,
+                                updated.sender,
+                                revision.targetAcceptedAt,
+                                false,
+                            ),
+                            revision.edit,
+                        )
+                    }
+            )
+        }
         .takeIf(::validCollaborationHistoryMessage)
 }
 

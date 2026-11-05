@@ -49,6 +49,56 @@ internal class CollaborationHistoryCodec(
         return "e-" + index(listOf("event", eventId))
     }
 
+    suspend fun revisionId(eventId: String) = "r-" + aliasId(eventId).removePrefix("e-")
+
+    fun revisionTag(messageId: String): String {
+        require(historyMessageId.matches(messageId))
+        return "revisions-" + messageId
+    }
+
+    suspend fun revision(checkpoint: ReplicaCheckpoint, raw: ReplicaDocument): HistoryRevisionDto {
+        require(raw.version in 0..checkpoint.revision)
+        val value =
+            Json.decodeFromString<HistoryRevisionDto>(
+                open(
+                    checkpoint.handle.generation,
+                    raw.id,
+                    raw.version,
+                    raw.sortKey,
+                    requireNotNull(raw.payload),
+                )
+            )
+        val revision = value.revision.toDomain()
+        require(validCollaborationMessageEdit(revision.edit))
+        require(revision.targetAcceptedAt in 0..revision.edit.timestamp)
+        require(raw.id == revisionId(revision.edit.eventId))
+        require(raw.sortKey == revisionSort(revision, raw.id))
+        require(raw.tags == setOf(revisionTag(value.messageId)))
+        return value
+    }
+
+    suspend fun revision(
+        generation: String,
+        version: Long,
+        value: HistoryRevisionDto,
+    ): ReplicaDocument {
+        val revision = value.revision.toDomain()
+        require(validCollaborationMessageEdit(revision.edit))
+        require(revision.targetAcceptedAt in 0..revision.edit.timestamp)
+        val id = revisionId(revision.edit.eventId)
+        val sort = revisionSort(revision, id)
+        return ReplicaDocument(
+            id,
+            version,
+            sort,
+            seal(generation, id, version, sort, Json.encodeToString(value)),
+            setOf(revisionTag(value.messageId)),
+        )
+    }
+
+    private fun revisionSort(revision: CollaborationMessageRevision, id: String) =
+        (9_007_199_254_740_991L - revision.edit.timestamp).toString().padStart(16, '0') + "/" + id
+
     suspend fun messageId(sender: String, logicalId: String?, eventId: String?): String {
         require(validCollaborationHistorySender(sender))
         require(logicalId == null || validCollaborationMessageId(logicalId))
@@ -222,6 +272,11 @@ internal class CollaborationHistoryCodec(
             if (alias.messageId == null) alias.redacted && alias.timestamp == null
             else alias.timestamp != null
         )
+        if (alias.replacement) {
+            require(alias.messageId != null && alias.timestamp != null)
+            require(alias.replacementHash?.matches(Regex("[0-9a-f]{64}")) == true)
+            require(alias.replacementTarget?.let(::validCollaborationEventId) == true)
+        } else require(alias.replacementHash == null && alias.replacementTarget == null)
     }
 
     private fun sort(message: CollaborationHistoryMessage, id: String) =

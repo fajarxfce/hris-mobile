@@ -52,6 +52,11 @@ data class CollaborationHistoryMessage(
     val locallyHidden: Boolean = false,
     val replyToEventId: String? = null,
     val forwarded: Boolean = false,
+    val latestEdit: CollaborationMessageRevision? = null,
+    /**
+     * Earliest retained original alias; null denotes a legacy record awaiting indexed migration.
+     */
+    val firstAcceptedAt: Long? = null,
 ) {
     override fun toString() = "CollaborationHistoryMessage([redacted])"
 }

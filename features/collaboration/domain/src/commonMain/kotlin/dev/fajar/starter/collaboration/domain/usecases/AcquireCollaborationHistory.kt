@@ -23,6 +23,7 @@ class AcquireCollaborationHistory(
     private val server: IdentityServer,
     private val build: AppBuild,
     private val clock: Clock,
+    private val edits: CollaborationMessageEditRepository,
 ) {
     suspend operator fun invoke(
         workspaceId: String,
@@ -87,11 +88,15 @@ class AcquireCollaborationHistory(
         // Detach bounded input before another repository can suspend or mutate its source.
         val snapshot =
             (received as? AppResult.Success)?.value?.let {
-                if (it.changes.size > 128 || it.unresolvedEventIds.size > 128) null
+                if (
+                    it.changes.size > 128 || it.unresolvedEventIds.size > 128 || it.edits.size > 128
+                )
+                    null
                 else
                     it.copy(
                         changes = it.changes.toList(),
                         unresolvedEventIds = it.unresolvedEventIds.toList(),
+                        edits = it.edits.toList(),
                     )
             }
         continuation(scope, owner, received).let { if (it is AppResult.Failed) return it }
@@ -105,6 +110,20 @@ class AcquireCollaborationHistory(
         if (readmitted is AppResult.Failed) return readmitted
         if ((readmitted as AppResult.Success).value != roomId)
             return failed("client.collaboration_conversation_mismatch", FailureKind.AccessDenied)
+        val retained = persistWindow(scope, owner, conversationId, roomId, snapshot)
+        if (retained is AppResult.Failed) return retained
+        return AppResult.Success(
+            CollaborationHistoryAcquisition(snapshot.changes.size, snapshot.unresolvedEventIds.size)
+        )
+    }
+
+    private suspend fun persistWindow(
+        scope: CollaborationOperationScope,
+        owner: CollaborationOwner,
+        conversationId: String,
+        roomId: String,
+        snapshot: CollaborationOriginalWindow,
+    ): AppResult<Unit> {
         for (batch in snapshot.changes.chunked(16)) {
             val merged = history.merge(owner.localListAccess(), conversationId, roomId, batch)
             continuation(scope, owner, merged).let { if (it is AppResult.Failed) return it }
@@ -112,9 +131,14 @@ class AcquireCollaborationHistory(
             if (!(merged as AppResult.Success).value)
                 return failed("client.collaboration_history_changed")
         }
-        return AppResult.Success(
-            CollaborationHistoryAcquisition(snapshot.changes.size, snapshot.unresolvedEventIds.size)
-        )
+        for (batch in snapshot.edits.chunked(16)) {
+            val merged = edits.mergeEdits(owner.localListAccess(), conversationId, roomId, batch)
+            continuation(scope, owner, merged).let { if (it is AppResult.Failed) return it }
+            if (merged is AppResult.Failed) return merged
+            if (!(merged as AppResult.Success).value)
+                return failed("client.collaboration_history_changed")
+        }
+        return AppResult.Success(Unit)
     }
 
     private suspend fun admitRoom(
