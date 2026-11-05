@@ -1,5 +1,45 @@
 # Agent continuation — HRIS Mobile
 
+## Native organization retry/bootstrap transport — 5 November 2026
+
+Native setup now has typed retry/bootstrap requests, a redacted group gateway result,
+raw HTTP/source adapters and a mapping repository in the actual owning DI graph.
+Both endpoints use exact native session/operation and no company/cookie transport.
+Retry validates the exact device and provisioning revision + 1 receipt. Bootstrap
+requires original account/space/device/native parent, expected provider USER/DEVICE,
+gateway version, group-only token namespace and supported dates. Current default
+headers remain intact: retry permits build changes while bootstrap requires its
+original actual build/platform. [Contract](collaboration-space-native-setup.md).
+
+User and device origins stay independent; typed SPACE transport is not enrollment
+eligibility. No endpoint is derived from provider metadata. Expired gateway metadata
+remains typed; current usability/native hard expiry and durable credential storage
+belong to the owning use case. Pending and late cancelled responses cannot publish.
+
+Twelve new common transport cases cover original native/body/operation identity,
+actual Android/iOS headers, bootstrap build binding, independently selected user and
+device origins, bounded/malformed responses, group token namespace, classified denial,
+pending cancellation and noncooperative late response disposal. Actual AppContainer
+resolves the new native setup repository. Focused: 26 cases /
+96.609 s. Root :check, Android-host and dev compilation: 2,683
+fresh cases / 343.862 s. Browser data/domain: 1,591 fresh cases /
+136.713 s. Final gates preserve identical 3,998 build/application
+inputs; format, architecture and detekt pass. All gate sessions closed.
+[Evidence](measurements/collaboration-space-native-setup-2026-11-05.json).
+
+NEXT: durable encrypted account/space retry/bootstrap commands and finite explicit
+preparation/replay using the original registered anchor, durable uncertainty before
+HTTP and received credentials before publication. Preserve confirmed denials through
+failed persistence/cancellation. Old-build uncertain bootstrap needs explicit current
+metadata reconciliation, never forged headers or an edited operation. Then retained
+private-store inventory, hard-parent recovery, freeze/drain/handover/adoption of the
+original SDK store, current group runtime/UI and typed push/background replies.
+
+No durable lifecycle command or product route is activated in this transport slice.
+All 54 groups remain open. No new APK/phone, live deployment, provider/FCM, JNI/private
+key proof, Apple runtime or performance acceptance. Backend 8b40/schema 116 and phone
+release 29/source 084662c5 unchanged. Continue long run and atomic pushes.
+
 ## Native original-device registration flow — 5 November 2026
 
 The owning feature now binds account-owned registration observation, finite explicit

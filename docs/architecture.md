@@ -1,5 +1,9 @@
 # Architecture
 
+[Native organization setup transport](collaboration-space-native-setup.md)
+adds exact original provisioning retry and bounded group gateway bootstrap, with
+actual-build wire binding and separate provider/device identity.
+
 [Native original-device registration](collaboration-space-registration-flow.md)
 adds account-owned observation, finite explicit preparation and durable replay
 using the exact original operation, SDK identity and native parent.
