@@ -1,5 +1,9 @@
 # Architecture
 
+[Quoted conversation replies](collaboration-chat-quoted-replies.md) retain original
+event references and observe admitted local targets through replica checkpoints.
+
+
 [Cold offline history](collaboration-chat-offline-restart.md) verifies actual protected-store recovery and canonical reads after process death with the gateway unavailable.
 
 [Chat header and selection](collaboration-chat-header.md) keeps transport state out of the name header and starts contextual actions from a selected bubble.

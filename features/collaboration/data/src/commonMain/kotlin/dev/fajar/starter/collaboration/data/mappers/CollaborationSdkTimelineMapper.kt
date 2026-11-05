@@ -21,6 +21,7 @@ internal fun CollaborationSdkTimelineItemDto.toDomain() =
             },
         body = body,
         edited = edited,
+        replyToEventId = replyToEventId,
         delivery =
             when (delivery) {
                 SdkMessageDelivery.PENDING -> CollaborationMessageDelivery.PENDING

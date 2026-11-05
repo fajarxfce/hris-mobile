@@ -32,6 +32,7 @@ fun ChatThreadPage(
     onEvent: (ChatThreadEvent) -> Unit,
     modifier: Modifier = Modifier,
     today: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+    composerInputModifier: Modifier = Modifier,
 ) {
     Box(
         modifier
@@ -134,6 +135,17 @@ fun ChatThreadPage(
                             row,
                             selected = state.selectedMessages.any { sameChatMessage(it, row) },
                             selecting = state.selecting,
+                            quoteContent =
+                                if (row.replyToEventId == null) null
+                                else {
+                                    {
+                                        ChatQuotePreview(
+                                            state.quote(requireNotNull(row.replyToEventId)),
+                                            state.selfSender,
+                                            state.title,
+                                        )
+                                    }
+                                },
                             enabled =
                                 state.localFailure == null &&
                                     !state.leaving &&
@@ -196,7 +208,7 @@ fun ChatThreadPage(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     enabled = state.localFailure == null,
                 )
-            ChatComposer(state, onEvent)
+            ChatComposer(state, onEvent, inputModifier = composerInputModifier)
         }
     }
     state.draftDialog?.let { dialog ->

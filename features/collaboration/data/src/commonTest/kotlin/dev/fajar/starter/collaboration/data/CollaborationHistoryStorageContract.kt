@@ -14,6 +14,124 @@ abstract class CollaborationHistoryStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
     @Test
+    fun indexedQuotesObserveOffscreenDeletionAcrossAliasesAndRestart() = withDatabase { f ->
+        for ((index, redact) in listOf(1 to false, 3 to true)) {
+            val target = f.event(index)
+            val alias =
+                target.copy(eventId = "\$quote-alias-$index", timestamp = target.timestamp + 10)
+            val reply = f.event(index + 1).copy(replyToEventId = alias.eventId)
+            f.merge(target, alias, reply)
+            assertEquals(
+                listOf(reply.eventId),
+                f.read(limit = 1).messages.map { it.primaryEventId },
+            )
+            val ids = listOf(target.eventId, alias.eventId)
+            val key = f.keys.read()
+            val values = mutableListOf<List<CollaborationQuotedMessage>>()
+            coroutineScope {
+                val ready = CompletableDeferred<Unit>()
+                val collection = launch {
+                    f.repository
+                        .observeQuotes(f.access, f.conversation, f.room, ids)
+                        .take(2)
+                        .collect {
+                            values +=
+                                assertIs<AppResult.Success<List<CollaborationQuotedMessage>>>(it)
+                                    .value
+                            ready.complete(Unit)
+                        }
+                }
+                ready.await()
+                assertEquals(ids, values.single().map { it.eventId })
+                assertTrue(
+                    values.single().all { it.text == target.text && it.sender == target.sender }
+                )
+                if (redact)
+                    f.merge(CollaborationHistoryChange.Redacted(alias.eventId, alias.sender))
+                else
+                    assertEquals(
+                        AppResult.Success(true),
+                        f.repository.hide(
+                            f.access,
+                            f.conversation,
+                            f.room,
+                            listOf(
+                                CollaborationMessageReference(
+                                    target.sender,
+                                    target.eventId,
+                                    target.logicalId,
+                                )
+                            ),
+                        ),
+                    )
+                collection.join()
+            }
+            assertTrue(values.last().isEmpty())
+            f.reopen()
+            assertEquals(reply.replyToEventId, f.lookup(reply.eventId)?.replyToEventId)
+            assertEquals(
+                AppResult.Success(emptyList()),
+                f.repository.observeQuotes(f.access, f.conversation, f.room, ids).first(),
+            )
+            assertEquals(key, f.keys.read())
+        }
+    }
+
+    @Test
+    fun absentQuotesNeverCreateKeysAndWrongRoomOrSubstitutedAliasesCannotPublishText() =
+        withDatabase { f ->
+            val target = f.event()
+            assertEquals(
+                AppResult.Success(emptyList()),
+                f.repository
+                    .observeQuotes(f.access, f.conversation, f.room, listOf(target.eventId))
+                    .first(),
+            )
+            assertNull(f.keys.read())
+            f.merge(target, f.event(2))
+            assertIs<AppResult.Failed>(
+                f.repository
+                    .observeQuotes(
+                        f.access,
+                        f.conversation,
+                        "!foreign:example.test",
+                        listOf(target.eventId),
+                    )
+                    .first()
+            )
+            val key = f.keys.read()
+            val aliases = f.raw().documents.filter { it.id.startsWith("e-") }
+            val substitute =
+                object : ReplicaStore by f.database.replicas {
+                    override suspend fun document(
+                        scope: ReplicaScope,
+                        partition: String,
+                        id: String,
+                    ): ReplicaDocument? =
+                        if (id.startsWith("e-")) aliases.first { it.id != id }
+                        else f.database.replicas.document(scope, partition, id)
+                }
+            assertIs<AppResult.Failed>(
+                f.repository(substitute)
+                    .observeQuotes(f.access, f.conversation, f.room, listOf(target.eventId))
+                    .first()
+            )
+            val replaced =
+                object : ReplicaStore by f.database.replicas {
+                    override suspend fun checkpoint(
+                        scope: ReplicaScope,
+                        partition: String,
+                    ): ReplicaCheckpoint? = null
+                }
+            assertIs<AppResult.Failed>(
+                f.repository(replaced)
+                    .observeQuotes(f.access, f.conversation, f.room, listOf(target.eventId))
+                    .first()
+            )
+            assertEquals(key, f.keys.read())
+        }
+
+    @Test
     fun eventFactsKeepAliasTimestampsAndTombstonesAcrossReopen() = withDatabase { f ->
         val first = f.event()
         val retry = first.copy(eventId = "\$retry-fact", timestamp = first.timestamp + 86_400_001)

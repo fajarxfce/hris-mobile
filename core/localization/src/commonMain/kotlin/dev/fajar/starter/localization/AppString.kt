@@ -135,6 +135,13 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     ),
     ChatSelectMessage(Res.string.chat_select_message_en, Res.string.chat_select_message_id),
     ChatClearSelection(Res.string.chat_clear_selection_en, Res.string.chat_clear_selection_id),
+    ChatReplyMessage(Res.string.chat_reply_message_en, Res.string.chat_reply_message_id),
+    ChatRemoveReply(Res.string.chat_remove_reply_en, Res.string.chat_remove_reply_id),
+    ChatQuoteUnavailable(
+        Res.string.chat_quote_unavailable_en,
+        Res.string.chat_quote_unavailable_id,
+    ),
+    ChatYou(Res.string.chat_you_en, Res.string.chat_you_id),
     ChatSelectedCount(Res.string.chat_selected_count_en, Res.string.chat_selected_count_id),
     ChatCopyMessages(Res.string.chat_copy_messages_en, Res.string.chat_copy_messages_id),
     ChatDeleteMessages(Res.string.chat_delete_messages_en, Res.string.chat_delete_messages_id),

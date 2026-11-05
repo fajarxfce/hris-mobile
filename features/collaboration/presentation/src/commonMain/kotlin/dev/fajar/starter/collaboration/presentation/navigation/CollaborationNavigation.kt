@@ -6,8 +6,13 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.withFrameNanos
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -183,6 +188,7 @@ private fun ChatThreadEntry(
     val effectsScope = rememberCoroutineScope()
     val focus = LocalFocusManager.current
     val keyboard = LocalSoftwareKeyboardController.current
+    val composerFocus = remember { FocusRequester() }
     LaunchedEffect(state.selecting) {
         if (state.selecting) {
             focus.clearFocus()
@@ -199,6 +205,14 @@ private fun ChatThreadEntry(
             ChatThreadEffect.Setup -> onSetup()
             is ChatThreadEffect.OpenReply -> onSavedReply(it.id)
             ChatThreadEffect.ScrollToNewest -> list.requestScrollToItem(0)
+            ChatThreadEffect.FocusComposer ->
+                effectsScope.launch {
+                    withFrameNanos {}
+                    if (vm.state.value.canCompose) {
+                        composerFocus.requestFocus()
+                        keyboard?.show()
+                    }
+                }
             is ChatThreadEffect.CopyMessages ->
                 effectsScope.launch {
                     if (vm.confirmCopy(it)) clipboard.setText(AnnotatedString(it.text))
@@ -208,7 +222,12 @@ private fun ChatThreadEntry(
     BackHandler { vm.onEvent(ChatThreadEvent.BackRequested) }
     ChatThreadFocusObserver(state, conversationId, onThreadFocus)
     ChatThreadViewportObserver(state, list, vm::onEvent)
-    ChatThreadPage(state, list, vm::onEvent)
+    ChatThreadPage(
+        state,
+        list,
+        vm::onEvent,
+        composerInputModifier = Modifier.focusRequester(composerFocus),
+    )
 }
 
 @Composable

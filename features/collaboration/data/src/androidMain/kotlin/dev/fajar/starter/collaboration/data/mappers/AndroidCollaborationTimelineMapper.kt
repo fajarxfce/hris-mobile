@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data.mappers
 
 import dev.fajar.starter.collaboration.data.dto.*
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationEventId
 import org.matrix.rustcomponents.sdk.*
 
 /** Copies primitive values only. The caller disposes the native timeline item/diff. */
@@ -34,6 +35,8 @@ internal fun TimelineItem.toCollaborationTimelineItem(): CollaborationSdkTimelin
             kind = kind,
             body = text?.body,
             edited = message?.isEdited == true,
+            replyToEventId =
+                content.content.inReplyTo?.eventId()?.takeIf(::validCollaborationEventId),
             delivery =
                 when (event.localSendState) {
                     is EventSendState.SendingFailed -> SdkMessageDelivery.FAILED

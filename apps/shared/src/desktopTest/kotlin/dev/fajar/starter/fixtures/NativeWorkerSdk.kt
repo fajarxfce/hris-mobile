@@ -391,6 +391,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
                             Clock.System.now().toEpochMilliseconds(),
                             text,
                             origin.contentHash,
+                            replyToEventId,
                         )
                     return AppResult.Success(Unit)
                 }

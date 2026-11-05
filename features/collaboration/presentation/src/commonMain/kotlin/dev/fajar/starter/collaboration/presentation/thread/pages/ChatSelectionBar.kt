@@ -31,6 +31,12 @@ internal fun ChatSelectionBar(
             )
         },
         actions = {
+            if (state.canReplySelection)
+                AppIconButton(
+                    Icons.Regular.ArrowReply,
+                    appString(AppString.ChatReplyMessage),
+                    { onEvent(ChatThreadEvent.ReplySelected) },
+                )
             AppIconButton(
                 Icons.Regular.Copy,
                 appString(AppString.ChatCopyMessages),

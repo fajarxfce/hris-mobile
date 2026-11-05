@@ -23,6 +23,7 @@ import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
+import io.github.composefluent.icons.regular.Dismiss
 import io.github.composefluent.icons.regular.Send
 
 @Composable
@@ -30,10 +31,30 @@ internal fun ChatComposer(
     state: ChatThreadState,
     onEvent: (ChatThreadEvent) -> Unit,
     modifier: Modifier = Modifier,
+    inputModifier: Modifier = Modifier,
 ) {
     val label = appString(AppString.ChatMessage)
     val savingLabel = appString(AppString.ChatDraftSaving)
     Column(modifier.fillMaxWidth().background(AppColors.canvas)) {
+        state.draftReplyToEventId?.let { target ->
+            Row(
+                Modifier.fillMaxWidth().padding(start = 12.dp, end = 4.dp, top = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                ChatQuotePreview(
+                    state.quote(target),
+                    state.selfSender,
+                    state.title,
+                    Modifier.weight(1f),
+                )
+                AppIconButton(
+                    Icons.Regular.Dismiss,
+                    appString(AppString.ChatRemoveReply),
+                    { onEvent(ChatThreadEvent.ReplyCleared) },
+                    enabled = state.canCompose,
+                )
+            }
+        }
         Row(
             Modifier.fillMaxWidth().padding(8.dp),
             verticalAlignment = Alignment.Bottom,
@@ -43,7 +64,7 @@ internal fun ChatComposer(
                 value = state.draft,
                 onValueChange = { onEvent(ChatThreadEvent.DraftChanged(it)) },
                 modifier =
-                    Modifier.weight(1f).heightIn(min = 48.dp).semantics {
+                    inputModifier.weight(1f).heightIn(min = 48.dp).semantics {
                         contentDescription = label
                         if (state.draftSaving) stateDescription = savingLabel
                     },
@@ -75,7 +96,6 @@ internal fun ChatComposer(
                 { onEvent(ChatThreadEvent.SendRequested) },
                 modifier = Modifier.background(AppColors.tint, CircleShape),
                 enabled = state.canSend,
-                loading = state.saving,
             )
         }
 

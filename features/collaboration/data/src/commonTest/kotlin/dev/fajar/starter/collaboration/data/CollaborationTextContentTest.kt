@@ -40,6 +40,7 @@ class CollaborationTextContentTest {
         )
         val expected = collaborationTextOrigin(sender, id, "Reply", target)
         assertEquals(expected.contentHash, decode(content).contentHash)
+        assertEquals(target, decode(content).replyToEventId)
         assertEquals("Reply", decode(content).text)
         assertNotEquals(
             expected.contentHash,

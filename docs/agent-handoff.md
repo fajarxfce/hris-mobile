@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Quoted reply UI and current send investigation — 5 November 2026
+
+Quoted history, checkpoint-driven local previews, long-press Reply, composer strip
+and bubble quotes are implemented. Closing the quote retains draft text. Send has
+no spinner; a held connection does not block accepting a message or the next draft.
+[Contract](collaboration-chat-quoted-replies.md),
+[evidence](measurements/chat-quoted-replies-2026-11-05.json).
+
+Final root/Android/browser data + presentation/format/architecture: 3,872 fresh
+passed, zero failures/errors/skips, 537.919s, 4,062 unchanged source inputs.
+Focused42 passed. The original ui3 wrapper exited143 while its child stayed alive;
+that same child completed successfully and was drained, then the normal final
+root gate passed. Earlier compile/test failures and reviewed image hashes remain
+recorded. History-stage drafts have now been APPLIED; do not reapply them.
+
+ACTIVE PRIORITY: user confirms OLD AND NEW messages to Bima remain pending/failed
+on release32. WireGuard/ADB are reachable. Read-only server metadata confirms the
+original device/key publication and parent active; gateway52 was bootstrapped08:58
+and normal five-minute refreshes reach55 at09:13. A phone buffer contained typed
+ChatAuthSoftLogout, but later successful refreshes mean it is not sufficient to
+attribute all current failures. Passive response classification confirms history,
+sync and joins200; optional m.secret_storage.default_key reads403. This is NOT yet
+a demonstrated root cause. No private payloads, tokens or paths were persisted.
+Investigate retained SDK queue errors/wedged messages and the application delivery
+worker; SDK room enablement alone does not release an unrecoverably wedged request.
+Do not reset keys, drafts, commands, account or device. Diagnostic notes are in
+.work/chat-send-diagnosis-2026-11-05. The user answer is received; no question pending.
+
+NEXT: resolve delivery, complete actual SDK quoted reply/decryption and cold process
+proof, deploy validated Main envelope, then build/lint/owned emulator checks and
+announce EACH install before install-only to10.77.77.3:5555. Phone32/live8b40/schema116
+are unchanged. Continue delivered edit/forward/delete-for-all, bootstrap resolution,
+group adoption/UI, calls and meetings. All54 PRD groups remain open. Push every commit
+and continue the authorized long run. No Starter port for this HRIS feature.
+
 ## Quoted draft/outbox pipeline — 5 November 2026
 
 Reply references are persisted with encrypted drafts/intents and carried through

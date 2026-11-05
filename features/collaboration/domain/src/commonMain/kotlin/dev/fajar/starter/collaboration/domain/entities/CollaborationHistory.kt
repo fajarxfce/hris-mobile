@@ -25,6 +25,7 @@ sealed interface CollaborationHistoryChange {
          * SHA-256 of the adapter's canonical original content, including unknown content fields.
          */
         val contentHash: String,
+        val replyToEventId: String? = null,
     ) : CollaborationHistoryChange {
         override fun toString() = "HistoryText([redacted])"
     }
@@ -48,6 +49,7 @@ data class CollaborationHistoryMessage(
     val redacted: Boolean,
     /** Local presentation choice, independent of original evidence and provider redaction. */
     val locallyHidden: Boolean = false,
+    val replyToEventId: String? = null,
 ) {
     override fun toString() = "CollaborationHistoryMessage([redacted])"
 }

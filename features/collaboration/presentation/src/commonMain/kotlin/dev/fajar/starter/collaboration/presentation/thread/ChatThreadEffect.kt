@@ -11,6 +11,8 @@ sealed interface ChatThreadEffect {
 
     data object ScrollToNewest : ChatThreadEffect
 
+    data object FocusComposer : ChatThreadEffect
+
     data class CopyMessages(
         val owner: CollaborationLocalAccess,
         val token: String,

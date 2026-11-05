@@ -1,6 +1,6 @@
 package dev.fajar.starter.collaboration.presentation.thread
 
-import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
+import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.presentation.replies.ChatUnsentReply
 import dev.fajar.starter.common.result.Failure
 
@@ -22,6 +22,9 @@ data class ChatThreadState(
     val unsentReplies: List<ChatUnsentReply> = emptyList(),
     val unsentFailure: Failure? = null,
     val draft: String = "",
+    val draftReplyToEventId: String? = null,
+    val quotes: List<CollaborationQuotedMessage> = emptyList(),
+    val selfSender: String? = null,
     val draftReady: Boolean = false,
     val draftSaving: Boolean = false,
     val draftFailure: Failure? = null,

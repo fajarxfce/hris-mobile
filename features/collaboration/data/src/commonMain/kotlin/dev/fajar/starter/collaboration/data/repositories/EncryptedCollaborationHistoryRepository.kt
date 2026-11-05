@@ -5,8 +5,10 @@ package dev.fajar.starter.collaboration.data.repositories
 import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationMessageReference
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationQuoteQuery
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationHistoryRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationLocalVisibilityRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationQuoteRepository
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
@@ -20,8 +22,74 @@ class EncryptedCollaborationHistoryRepository(
     private val replicas: ReplicaStore,
     private val cipher: ContentCipher,
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
-) : CollaborationHistoryRepository, CollaborationLocalVisibilityRepository {
+) :
+    CollaborationHistoryRepository,
+    CollaborationLocalVisibilityRepository,
+    CollaborationQuoteRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
+
+    override fun observeQuotes(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        eventIds: List<String>,
+    ) =
+        safeStorageFlow(
+                flow {
+                    require(validCollaborationQuoteQuery(conversationId, roomId, eventIds))
+                    val selected = eventIds.toList()
+                    emitAll(
+                        replicas
+                            .observeCheckpoint(
+                                historyScope(access),
+                                historyPartition(access, conversationId),
+                            )
+                            .map { selected to it }
+                    )
+                },
+                mapValue = { (selected, raw) ->
+                    if (raw == null || selected.isEmpty()) emptyList()
+                    else
+                        withKey(access, conversationId, roomId) { codec ->
+                            codec.checkpoint(raw)
+                            val result = selected.mapNotNull { quote(raw, codec, it) }
+                            require(
+                                replicas.checkpoint(raw.handle.scope, raw.handle.partition) == raw
+                            )
+                            result
+                        }
+                },
+            )
+            .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
+            .buffer(0)
+
+    private suspend fun quote(
+        raw: ReplicaCheckpoint,
+        codec: CollaborationHistoryCodec,
+        eventId: String,
+    ): CollaborationQuotedMessage? {
+        val scope = raw.handle.scope
+        val partition = raw.handle.partition
+        val aliasId = codec.aliasId(eventId)
+        val alias =
+            replicas.document(scope, partition, aliasId)?.let {
+                require(it.id == aliasId)
+                codec.alias(raw, it)
+            } ?: return null
+        val messageId = alias.messageId ?: return null
+        val message =
+            requireNotNull(replicas.document(scope, partition, messageId)).let {
+                require(it.id == messageId)
+                codec.message(raw, it)
+            }
+        require(message.sender == alias.sender && eventId in message.eventIds)
+        require(!alias.redacted || message.redacted)
+        if (message.redacted || message.locallyHidden) return null
+        val reference = CollaborationMessageReference(message.sender, eventId, message.logicalId)
+        if (hiddenInHistory(replicas, raw, codec, reference)) return null
+        return CollaborationQuotedMessage(eventId, message.sender, requireNotNull(message.text))
+    }
 
     override fun observeHidden(
         access: CollaborationLocalAccess,

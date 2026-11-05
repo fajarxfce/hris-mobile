@@ -26,6 +26,7 @@ data class CollaborationTimelineItem(
     val body: String?,
     val edited: Boolean,
     val delivery: CollaborationMessageDelivery,
+    val replyToEventId: String? = null,
 ) {
     override fun toString() = "CollaborationTimelineItem([redacted])"
 }

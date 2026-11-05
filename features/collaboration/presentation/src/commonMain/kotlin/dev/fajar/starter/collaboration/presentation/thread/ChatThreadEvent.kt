@@ -47,6 +47,10 @@ sealed interface ChatThreadEvent {
 
     data object SelectionCleared : ChatThreadEvent
 
+    data object ReplySelected : ChatThreadEvent
+
+    data object ReplyCleared : ChatThreadEvent
+
     data object CopySelected : ChatThreadEvent
 
     data object DeleteSelected : ChatThreadEvent

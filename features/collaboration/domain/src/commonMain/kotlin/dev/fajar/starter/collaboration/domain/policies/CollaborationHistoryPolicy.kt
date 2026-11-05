@@ -14,6 +14,7 @@ fun validCollaborationHistoryMessage(value: CollaborationHistoryMessage): Boolea
         validCollaborationEventId(value.primaryEventId) &&
         value.timestamp in 0..9_007_199_254_740_991L &&
         historyHash.matches(value.contentHash) &&
+        (value.replyToEventId == null || validCollaborationEventId(value.replyToEventId)) &&
         value.eventIds.size in 1..128 &&
         value.eventIds.first() == value.primaryEventId &&
         value.eventIds.all(::validCollaborationEventId) &&
@@ -37,6 +38,7 @@ fun mergeCollaborationHistoryText(
             event.text,
             listOf(event.eventId),
             false,
+            replyToEventId = event.replyToEventId,
         )
     if (!validCollaborationHistoryMessage(fresh)) return null
     if (
@@ -45,6 +47,8 @@ fun mergeCollaborationHistoryText(
                 previous.sender != event.sender ||
                 previous.logicalId != event.logicalId ||
                 previous.contentHash != event.contentHash ||
+                (previous.replyToEventId != null &&
+                    previous.replyToEventId != event.replyToEventId) ||
                 (!previous.redacted && previous.text != event.text) ||
                 (event.logicalId == null && previous.primaryEventId != event.eventId))
     )
@@ -56,6 +60,8 @@ fun mergeCollaborationHistoryText(
             text = if (deleted) null else original.text,
             eventIds = (original.eventIds + event.eventId).distinct(),
             redacted = deleted,
+            // An older reader may have retained the complete content hash before exposing replies.
+            replyToEventId = original.replyToEventId ?: event.replyToEventId,
         )
         .takeIf(::validCollaborationHistoryMessage)
 }

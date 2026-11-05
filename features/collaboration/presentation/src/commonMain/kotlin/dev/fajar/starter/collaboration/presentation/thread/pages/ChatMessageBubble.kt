@@ -34,6 +34,7 @@ internal fun ChatMessageBubble(
     selected: Boolean = false,
     selecting: Boolean = false,
     enabled: Boolean = true,
+    quoteContent: (@Composable () -> Unit)? = null,
     onSelect: () -> Unit,
 ) {
     val own = row.ownership == ChatMessageOwnership.SELF
@@ -91,6 +92,7 @@ internal fun ChatMessageBubble(
                     style = FluentTheme.typography.caption,
                     color = AppColors.muted,
                 )
+            if (row.kind == CollaborationMessageKind.TEXT) quoteContent?.invoke()
             val body =
                 when (row.kind) {
                     CollaborationMessageKind.TEXT -> row.text.orEmpty()

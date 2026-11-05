@@ -22,6 +22,7 @@ internal data class HistoryMessageDto(
     val eventIds: List<String>,
     val redacted: Boolean,
     val locallyHidden: Boolean = false,
+    val replyToEventId: String? = null,
 ) {
     fun toDomain() =
         CollaborationHistoryMessage(
@@ -34,6 +35,7 @@ internal data class HistoryMessageDto(
             eventIds,
             redacted,
             locallyHidden,
+            replyToEventId,
         )
 
     override fun toString() = "HistoryMessageDto([redacted])"
@@ -50,6 +52,7 @@ internal fun CollaborationHistoryMessage.toHistoryDto() =
         eventIds,
         redacted,
         locallyHidden,
+        replyToEventId,
     )
 
 @Serializable

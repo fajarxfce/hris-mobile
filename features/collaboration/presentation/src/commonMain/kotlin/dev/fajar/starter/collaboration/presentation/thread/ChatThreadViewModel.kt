@@ -56,8 +56,10 @@ class ChatThreadViewModel(
     private val observeHidden: ObserveCollaborationHiddenMessages,
     private val deleteForMe: DeleteCollaborationMessagesForMe,
     private val observeReplies: ObserveCollaborationSavedReplies,
+    private val observeQuotes: ObserveCollaborationQuotes,
 ) : MviViewModel<ChatThreadState, ChatThreadEvent, ChatThreadEffect>(ChatThreadState()) {
     private val projection = MutableStateFlow<ChatVisibilityProjection?>(null)
+    private val quoteRequests = MutableStateFlow<ChatQuoteRequest?>(null)
     private var deletionSelection: ChatDeletionSelection? = null
     private var deletionJob: Job? = null
     private var observation: Job? = null
@@ -143,6 +145,8 @@ class ChatThreadViewModel(
         on<ChatThreadEvent.MessageSelected>(::onMessageSelected)
         on<ChatThreadEvent.SelectionCleared> { clearSelection() }
         on<ChatThreadEvent.CopySelected>(::onCopySelected)
+        on<ChatThreadEvent.ReplySelected>(::onReplySelected)
+        on<ChatThreadEvent.ReplyCleared>(::onReplyCleared)
         on<ChatThreadEvent.DeleteSelected>(::onDeleteSelected)
         on<ChatThreadEvent.DeletionConfirmed>(::onDeletionConfirmed)
         on<ChatThreadEvent.DeletionDismissed> { dismissDeletion() }
@@ -192,6 +196,7 @@ class ChatThreadViewModel(
                         launch { observeComposer(owned) }
                         launch { observeUnsentReplies(owned) }
                         launch { observeVisibleRows(owned) }
+                        launch { observeQuotePreviews(owned) }
                         observePages(owned)
                     }
                 }
@@ -283,6 +288,7 @@ class ChatThreadViewModel(
 
     private fun clearScope() {
         projection.value = null
+        quoteRequests.value = null
         dismissDeletion()
         readTracker.clear()
         viewportKeys = emptyList()
@@ -447,6 +453,7 @@ class ChatThreadViewModel(
                     .distinctBy { it.key }
             current.copy(
                 rows = rows,
+                selfSender = context?.self?.matrixUserId,
                 loading = candidate.loading,
                 hasOlder = candidate.hasOlder,
                 hasNewer = candidate.hasNewer,
@@ -456,6 +463,7 @@ class ChatThreadViewModel(
             )
         }
         updateReadViewport()
+        requestQuotePreviews()
     }
 
     private fun onMessageSelected(event: ChatThreadEvent.MessageSelected) {
@@ -499,6 +507,83 @@ class ChatThreadViewModel(
                 selectionLimitReached = false,
             )
         }
+    }
+
+    private fun onReplySelected(event: ChatThreadEvent.ReplySelected) {
+        val current = state.value
+        if (!visible || !current.canReplySelection) return
+        val target = current.selectedMessages.single().reference?.eventId ?: return
+        updateState {
+            it.copy(
+                draftReplyToEventId = target,
+                selecting = false,
+                selectedMessages = emptyList(),
+                selectionLimitReached = false,
+            )
+        }
+        requestQuotePreviews()
+        persistDraft(immediate = true)
+        viewModelScope.launch { emitEffect(ChatThreadEffect.FocusComposer) }
+    }
+
+    private fun onReplyCleared(event: ChatThreadEvent.ReplyCleared) {
+        if (!visible || !state.value.canCompose) return
+        updateState { it.copy(draftReplyToEventId = null) }
+        requestQuotePreviews()
+        persistDraft(immediate = true)
+    }
+
+    private fun requestQuotePreviews() {
+        val current = state.value
+        val owned = access
+        val room = projection.value?.roomId ?: historyRoomId
+        if (owned == null || room == null || current.localFailure != null) {
+            quoteRequests.value = null
+            updateState { it.copy(quotes = emptyList()) }
+            return
+        }
+        val rows =
+            if (viewportKeys.isEmpty()) current.rows.take(20)
+            else current.rows.filter { it.key in viewportKeys }
+        val targets =
+            (listOfNotNull(current.draftReplyToEventId) + rows.mapNotNull { it.replyToEventId })
+                .distinct()
+                .take(128)
+        if (targets.isEmpty()) {
+            quoteRequests.value = null
+            updateState { it.copy(quotes = emptyList()) }
+        } else {
+            quoteRequests.value = ChatQuoteRequest(owned, room, targets)
+            updateState { it.copy(quotes = it.quotes.filter { quote -> quote.eventId in targets }) }
+        }
+    }
+
+    private suspend fun observeQuotePreviews(owned: CollaborationLocalAccess) {
+        quoteRequests
+            .flatMapLatest { request ->
+                if (request == null || request.access != owned) emptyFlow()
+                else
+                    observeQuotes(
+                            workspaceId,
+                            owned,
+                            conversationId,
+                            request.roomId,
+                            request.eventIds,
+                        )
+                        .map { request to it }
+            }
+            .buffer(0)
+            .collect { (request, result) ->
+                currentCoroutineContext().ensureActive()
+                if (access != owned || quoteRequests.value != request) return@collect
+                when (result) {
+                    is AppResult.Success -> updateState { it.copy(quotes = result.value) }
+                    is AppResult.Failed ->
+                        if (collaborationContentResponseClosesRead(result.failure))
+                            restrict(result.failure)
+                        else updateState { it.copy(quotes = emptyList()) }
+                }
+            }
     }
 
     private fun onCopySelected(event: ChatThreadEvent.CopySelected) {
@@ -606,6 +691,7 @@ class ChatThreadViewModel(
         if (event.token == null || event.token != state.value.readViewportToken) return
         viewportKeys = if (event.rowKeys.size <= 128) event.rowKeys.toList() else emptyList()
         updateReadViewport()
+        requestQuotePreviews()
     }
 
     private fun updateReadViewport(retry: Boolean = false) {
@@ -890,12 +976,14 @@ class ChatThreadViewModel(
                             it.copy(
                                 draftReady = true,
                                 draft = result.value?.text.orEmpty(),
+                                draftReplyToEventId = result.value?.replyToEventId,
                                 submissionPending = result.value?.submissionId != null,
                                 draftFailure = null,
                             )
                         }
                     }
             }
+            requestQuotePreviews()
             // Subsequent values are invalidations, not editor replacements. Only acknowledged
             // CAS results or an explicit reload replace text; delayed emissions cannot undo input.
         }
@@ -940,7 +1028,11 @@ class ChatThreadViewModel(
                 while (isActive && access == owned) {
                     if (state.value.localFailure != null || state.value.draftFailure != null)
                         return@launch
-                    if (draftWrite == null && state.value.draft == localDraft?.text.orEmpty())
+                    if (
+                        draftWrite == null &&
+                            (state.value.draft == localDraft?.text.orEmpty() &&
+                                state.value.draftReplyToEventId == localDraft?.replyToEventId)
+                    )
                         return@launch
                     val mutation =
                         draftWrite
@@ -948,6 +1040,7 @@ class ChatThreadViewModel(
                                 localDraft,
                                 Uuid.random().toString(),
                                 state.value.draft,
+                                state.value.draftReplyToEventId,
                             )
                     draftWrite = mutation
                     updateState { it.copy(draftSaving = true) }
@@ -959,6 +1052,7 @@ class ChatThreadViewModel(
                             mutation.revision,
                             mutation.text,
                             owned,
+                            mutation.replyToEventId,
                         )
                     ensureActive()
                     if (access != owned) return@launch
@@ -985,7 +1079,8 @@ class ChatThreadViewModel(
             state.value.localFailure == null &&
             state.value.draftFailure == null &&
             draftWrite == null &&
-            state.value.draft == localDraft?.text.orEmpty()
+            (state.value.draft == localDraft?.text.orEmpty() &&
+                state.value.draftReplyToEventId == localDraft?.replyToEventId)
     }
 
     private fun reportDraftFailure(failure: Failure) {
@@ -1050,6 +1145,7 @@ class ChatThreadViewModel(
                                 updateState {
                                     it.copy(
                                         draft = read.value?.text.orEmpty(),
+                                        draftReplyToEventId = read.value?.replyToEventId,
                                         draftReady = true,
                                         submissionPending = read.value?.submissionId != null,
                                         saving = false,
@@ -1057,6 +1153,7 @@ class ChatThreadViewModel(
                                         draftFailure = null,
                                     )
                                 }
+                                requestQuotePreviews()
                             }
                         }
                     }
@@ -1164,11 +1261,13 @@ class ChatThreadViewModel(
                         updateState {
                             it.copy(
                                 draft = confirmed.value?.text.orEmpty(),
+                                draftReplyToEventId = confirmed.value?.replyToEventId,
                                 submissionPending = confirmed.value?.submissionId != null,
                                 saving = false,
                                 draftFailure = null,
                             )
                         }
+                        requestQuotePreviews()
                         showLatest()
                         if (pulse != null) requestSync(wake = false) else connect()
                     }
@@ -1582,6 +1681,7 @@ private data class ChatDraftWrite(
     val expected: CollaborationDraft?,
     val revision: String,
     val text: String,
+    val replyToEventId: String?,
 ) {
     override fun toString() = "ChatDraftWrite([redacted])"
 }

@@ -46,6 +46,53 @@ internal class ChatThreadFixture {
     var retainedHistoryRoom = true
     val historyRows = MutableStateFlow<List<CollaborationHistoryMessage>>(emptyList())
     val hiddenMessages = MutableStateFlow(emptySet<CollaborationMessageReference>())
+    val olderQuoteRows = MutableStateFlow<List<CollaborationHistoryMessage>>(emptyList())
+    var beforeQuote: suspend () -> Unit = {}
+    var activeQuotes = 0
+    var quoteReads = 0
+    val quotes =
+        object : CollaborationQuoteRepository {
+            override fun observeQuotes(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+                roomId: String,
+                eventIds: List<String>,
+            ): Flow<AppResult<List<CollaborationQuotedMessage>>> = flow {
+                activeQuotes++
+                try {
+                    combine(historyRows, olderQuoteRows, hiddenMessages) { current, older, hidden ->
+                            eventIds.mapNotNull { eventId ->
+                                (current + older)
+                                    .firstOrNull { eventId in it.eventIds }
+                                    ?.takeIf { message ->
+                                        !message.redacted &&
+                                            !message.locallyHidden &&
+                                            hidden.none {
+                                                it.sender == message.sender &&
+                                                    (it.eventId in message.eventIds ||
+                                                        (it.logicalId != null &&
+                                                            it.logicalId == message.logicalId))
+                                            }
+                                    }
+                                    ?.let {
+                                        CollaborationQuotedMessage(
+                                            eventId,
+                                            it.sender,
+                                            requireNotNull(it.text),
+                                        )
+                                    }
+                            }
+                        }
+                        .collect {
+                            quoteReads++
+                            beforeQuote()
+                            emit(AppResult.Success(it))
+                        }
+                } finally {
+                    activeQuotes--
+                }
+            }
+        }
     var beforeHide: suspend () -> Unit = {}
     var afterHide: suspend () -> Unit = {}
     var hideFailure: Failure? = null
@@ -604,6 +651,15 @@ internal class ChatThreadFixture {
                     clock,
                 ),
                 replies.observer(base),
+                ObserveCollaborationQuotes(
+                    quotes,
+                    local,
+                    sessions,
+                    workspaces,
+                    server,
+                    build,
+                    clock,
+                ),
             )
         }
 

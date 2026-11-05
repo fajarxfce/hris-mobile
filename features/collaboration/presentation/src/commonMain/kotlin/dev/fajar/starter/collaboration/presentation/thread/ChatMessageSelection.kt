@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.presentation.thread
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationReplyEventId
 
 internal fun sameChatMessage(a: ChatMessageRow, b: ChatMessageRow): Boolean {
     if (a.key == b.key) return true
@@ -37,4 +38,21 @@ internal data class ChatDeletionSelection(
     val messages: List<CollaborationMessageReference>,
 ) {
     override fun toString() = "ChatDeletionSelection([redacted])"
+}
+
+internal val ChatThreadState.canReplySelection: Boolean
+    get() =
+        selectedMessages.singleOrNull()?.let {
+            it.reference?.eventId?.let(::validCollaborationReplyEventId) == true &&
+                it.kind == CollaborationMessageKind.TEXT &&
+                it.text != null &&
+                it.delivery == CollaborationMessageDelivery.SENT
+        } == true && copy(selecting = false).canCompose
+
+internal data class ChatQuoteRequest(
+    val access: CollaborationLocalAccess,
+    val roomId: String,
+    val eventIds: List<String>,
+) {
+    override fun toString() = "ChatQuoteRequest([redacted])"
 }

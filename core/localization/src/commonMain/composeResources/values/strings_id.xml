@@ -1064,4 +1064,8 @@
     <string name="chat_reconnect_title_id">Sambungkan chat kembali</string>
     <string name="chat_reconnect_hint_id">Sambungkan kembali untuk mengirim dan menerima pesan.</string>
     <string name="chat_reconnect_action_id">Sambungkan kembali</string>
+    <string name="chat_reply_message_id">Balas</string>
+    <string name="chat_remove_reply_id">Batalkan balasan</string>
+    <string name="chat_quote_unavailable_id">Pesan tidak tersedia</string>
+    <string name="chat_you_id">Anda</string>
 </resources>
