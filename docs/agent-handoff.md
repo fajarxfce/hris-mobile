@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Release 39 Apple accepted; metadata delta work continues — 5 November 2026
+
+Apple42081732094 PASSES exact source2539c6585f77c4f6898ff28426604c3583927fa4:
+1,274 simulator cases/148 suites, zero failures/errors/skips. Complete Xcode simulator
+app, native push-envelope extraction and generated associations pass. Downloaded
+JUnit/artifact identity audited in [Apple evidence](measurements/chat-hub-controls-apple-2026-11-05.json).
+No physical iPhone test. Release39 stays installed on the phone; no new APK needed
+for this documentation. Six native captures and delivery4a60e9e6 remain accepted.
+
+Starter generic UI porte501d4d is committed/pushed after independent root/Android/
+lint/Web acceptance327.311s:390 desktop and six build-logic cases, zero failures/
+errors/skips. Its Apple42088401280 is in progress on exacte501d4d; no duplicate run.
+HRIS routes, policy and feature lifecycle remain in Mobile. Platform projection
+worker31fa5067 is committed/pushed after full worker graph123 cases378.467s with
+one existing opt-in skip. No backend deploy: live11a98115/schema116/chat pushOFF.
+
+Platform native summary bootstrap/delta endpoint is now uncommitted implementation
+with codec/policy/HTTP/RLS tests. First feed gate compiled but four fixture cases
+failed on native-session cap, refresh interval and Jackson array iteration. Those
+fixtures are corrected without loosening production limits; feed2 is running on
+frozen sources. Pending account/pair/journal reconciliation and independent metadata
+revisions are included. Full worker/API gate and atomic Mobile consumer still remain.
+Continue long run through deltas, edit/delete/groups/media/calls/meetings;54 PRD
+groups remain open. Preserve both Mobile stashes and all fixture SDK keys/images.
+
+
 ## Release 39 installed; compact swipe hub accepted — 5 November 2026
 
 Product source `2539c6585f77c4f6898ff28426604c3583927fa4` is pushed and installed as
