@@ -1,5 +1,42 @@
 # Agent continuation — HRIS Mobile
 
+## Product release 31 installed — 5 November 2026
+
+Latest validated product source [9d5ca633](https://github.com/fajarxfce/hris-mobile/commit/9d5ca633709f23588fd3fc9b29a88002bd4d3b4d) is built as ARM64 devRelease 31
+and installed in place on `10.77.77.3:5555`. Package `dev.fajar.hris.mobile.dev`,
+version 1.0.0/code 31, non-debuggable. APK 88,304,868 bytes;
+SHA-256 `fec690c1031313b3353b73980e390477125c773d51fc103e3900e6c4b5f4f691`. Existing development signer, app ID and first-install
+time are preserved; pulled-back installed bytes match the verified artifact.
+Installation was explicitly requested and announced; no phone UI launch, uninstall
+or data clearing. [Evidence](measurements/android-release-phone-2026-11-05-build31.json).
+
+Release assembly and lint pass in 494.758 s, with zero lint issues.
+Signature, package/version, ARM64-only libraries, 16 KiB alignment, Firebase dev app,
+WireGuard API and compiled backup exclusions are checked. Exact APK opens twice on
+the owned emulator through its native bridge, with 12 stable seconds per start and
+reviewed screenshots. The emulator is stopped. These are startup/install checks;
+no new notification/SystemUI reply/FCM or full authenticated workflow proof is claimed.
+Source local-entry flow passed focused 193 fresh cases
+and root/Android 805 fresh cases on identical
+4,040 inputs. Earlier unchanged cases remain bound by report hashes.
+No source changes occurred during release build.
+
+The release includes local history before network setup, automatic foreground
+reconnect, contextual unsent notification replies and shorter EN/ID copy. Routine
+refresh and global Saved replies controls are removed. Long-press selection,
+multiselect/copy and durable delete-for-me are also included since release30.
+[Local-entry contract](collaboration-chat-local-entry.md) and
+[selection contract](collaboration-message-selection.md).
+
+NEXT: inspect operation-only Android diagnostics to resolve the actual Bima failure;
+this delivery does not prove that provider/session problem fixed. Preserve original
+private SDK keys and account data. Prove canonical-history recovery and SDK token
+refresh on the isolated native fixture, then original-gateway recovery if evidence
+requires it. Continue delivered edit/quoted reply/forward/delete-for-all, organization
+bootstrap resolution, private-store inventory, hard-parent recovery and adoption,
+group runtime/UI, typed push, calls and meetings. All54PRD groups remain open; live
+backend8b40/schema116 unchanged. Continue long run, atomic pushes and validated delivery.
+
 ## Local chat entry, reconnect and unsent messages — 5 November 2026
 
 Chat now projects owned local history/outgoing messages before network preparation.
