@@ -1,5 +1,32 @@
 # Agent continuation — HRIS Mobile
 
+## Product release 33 installed — 5 November 2026
+
+Product source [36e78206](https://github.com/fajarxfce/hris-mobile/commit/36e78206d792ac68a38585b80e17234d0e691b22)
+is installed in place as ARM64 devRelease33 on10.77.77.3:5555. Package
+`dev.fajar.hris.mobile.dev`, version1.0.0, non-debuggable. APK88,337,740 bytes,
+SHA256`e97aceff5053638741209951c511af2a129637d6a24d4f08fbdad8fbfc494338`. Existing signer/app ID/first-install time preserved; exact
+installed bytes pulled back and matched. Installation announced; install-only.
+[Evidence](measurements/android-release-phone-2026-11-05-build33.json).
+
+Build/lint pass522.126s, zero lint issues. ARM64/16KiB alignment,
+Firebase/WireGuard config, compiled backup exclusions and new diagnostic markers
+verified. Exact APK starts twice on owned emulator,12 stable seconds each, both
+images reviewed; emulator stopped. No physical-phone UI driving or data reset.
+
+This delivers long-press Reply, composer/bubble quotes, offline quoted history and
+Send without spinner, plus closed SDK/queue/delivery diagnostics. Actual quoted
+SDK exchange and cold offline recovery pass separately. [Current-source product FCM](https://github.com/fajarxfce/hris-platform/blob/fe38da505292c30c9c1f16f2c0d7b5cc7daa2f7f/docs/measurements/product-chat-fcm-current-2026-11-05.json)
+also passes241.839s/one actual case: Firebase restart/SystemUI encrypted reply, five
+reviewed images, cleanup verified. Live API/worker now11a98115/schema116 after all14
+CI jobs passed; Matrix/TLS/data preserved. Apple-only CI42009694285 is running.
+Optional request to open Bima once is pending; post-install phone is connected but
+no application process was running yet. Empty-room Load messages remains a UX issue. Pending OLD AND NEW Bima
+sends are NOT yet accepted as fixed. Read new closed stage/failure markers from
+ordinary phone use, preserve keys/transactions and fix the demonstrated cause.
+Continue full communications long run, edit/forward/delete for all, group adoption/UI,
+voice/video/meet. All54 groups open. Push every commit and announce EACH next install.
+
 ## Actual encrypted quoted replies verified — 5 November 2026
 
 The actual recipient decrypts the third message with its exact first-event quote.
