@@ -87,8 +87,7 @@
   "deliveryPending": false,
   "limits": [
     "Full gate reports only fresh JUnit results; cached reports were not counted as newly run.",
-    "Forwarding batch work is stashed and excluded from this validation.",
-    "Apple CI42017858911 passed prior product745e, not this candidate."
+    "Forwarding batch work is stashed and excluded from this validation."
   ],
   "fixedApkAcceptance": {
     "startedAt": "2026-11-05T12:36:45.359159+00:00",
@@ -131,5 +130,17 @@
     "complete": true,
     "elapsedSeconds": 108.748
   },
-  "phoneDeliveryEvidence": "android-release-phone-2026-11-05-build35.json"
+  "phoneDeliveryEvidence": "android-release-phone-2026-11-05-build35.json",
+  "appleValidation": {
+    "runId": 42026950708,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42026950708",
+    "source": "157a257d568c10f32e7159722d8fdd7f579b09e4",
+    "scope": "apple",
+    "conclusion": "success",
+    "startedAt": "2026-11-05T12:25:12Z",
+    "completedAt": "2026-11-05T12:51:49Z",
+    "simulatorTests": "success",
+    "simulatorAppBuild": "success",
+    "physicalIphoneTest": false
+  }
 }

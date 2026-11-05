@@ -171,7 +171,18 @@
     "In-place install-only; device SHA-256 matches the validated APK. installed.apk is a local copy, not a pull-back. No phone UI or network changes.",
     "Actual retained Bima account on an owned x86_64 emulator with ARM64 translation; covers in-place update, two room recreations and cold process restart. Separate fresh-install startup smoke was not repeated.",
     "Review screenshot masks message rows. Raw screenshot remains private and ignored; no message body is committed.",
-    "Bima persistent SDK/OS data and native parent are retained; receiver emulator remains running.",
-    "Apple CI42026950708 on this source is separate and still requires final result. All54 PRD groups remain open."
-  ]
+    "Bima persistent SDK/OS data and native parent are retained; receiver emulator remains running."
+  ],
+  "appleValidation": {
+    "runId": 42026950708,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42026950708",
+    "source": "157a257d568c10f32e7159722d8fdd7f579b09e4",
+    "scope": "apple",
+    "conclusion": "success",
+    "startedAt": "2026-11-05T12:25:12Z",
+    "completedAt": "2026-11-05T12:51:49Z",
+    "simulatorTests": "success",
+    "simulatorAppBuild": "success",
+    "physicalIphoneTest": false
+  }
 }

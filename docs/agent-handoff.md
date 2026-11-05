@@ -24,7 +24,8 @@ Trace initial background runtime/key publication before any first message; do no
 weaken recipient guard or send a message to force setup. Sample1 persistent data
 retained, emulator stopped. Samples3/4 have Firebase/HRIS links but no SDK devices.
 
-Apple CI42026950708 is running on157a; prior42017858911 passed745e. Backend
+Apple-only CI42026950708 passed157a: iOS simulator tests and app build. Pending
+device-activation changes are not included in that acceptance. Backend
 11a98115/schema116 unchanged. Forwarding WIP remains in stashbfdef2ce (core batch
 focused118 passed, metadata incomplete). Next: initial receiver activation gap,
 finish demo readiness, resume forward/edit/delete/groups/calls/meet; return generic
