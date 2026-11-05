@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Release40 Apple acceptance; edit work started — 5 November 2026
+
+[Apple evidence](measurements/collaboration-summary-inbox-apple-2026-11-05.json):
+CI42106835639 on exact927407ad PASS1,298 cases/152 suites, zero failures/errors/
+skips, full Xcode app, native push envelope and associations. Artifact13454797609
+digest18d75c2a… and29 changed source hashes verified. Domain/raw database tests
+execute; collaboration data/presentation compile in the app but their tests are not
+in this Apple workflow. Physical iPhone waived. This excludes current edit WIP.
+All Apple audit wrappers are drained; do not dispatch another927407ad run.
+
+Phone release40 stays installed and accepted; no reinstall. cf3f53e6 records actual
+179.105s offline/HTTP native proof and Bima110.606s retained8-row history proof.
+Rani and Bima are now both stopped cleanly with userdata/keys retained. Bima was
+stopped after acceptance before Starter compilation to reduce host memory pressure.
+Do not reuse the earlier handoff statement that its receiver is still running.
+
+Starter nine-file raw-store port is copied and check-full1/session36694 is running
+under frozen Starter inputs. Finish/audit, commit/push and dispatch one Apple-only
+run on that port. Platform remains live54b10ce8/schema116.1; push/FCM ON, SMTP OFF.
+
+Mobile now has seven UNVALIDATED edit files: the retained a34a7b2 draft was applied
+without dropping either stash, plus five policy and six decoder tests. Policy uses
+the earlier retained primary/target timestamp so a later retry cannot extend the
+15-minute edit window; original fields/receipt evidence remain separate. Decoder
+rejects malformed known nested-relation types and retains complete-content hashes.
+Only formatted, not compiled yet. .work/chat-editing-review-2026-11-05/check-decoder.py
+is prepared for focused Desktop/Android/format/architecture checks after Starter
+finishes. No edit UI, durable edit storage or native edit publication is accepted.
+Continue the full edit path and remaining54 chat/call/meeting PRD groups.
+
+
 ## Release40 installed; continue the communications PRD — 5 November 2026
 
 [Delivery evidence](measurements/android-release-phone-2026-11-05-build40.json),

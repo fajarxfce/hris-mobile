@@ -115,7 +115,9 @@ APK change was needed. These unsuccessful checks are recorded separately.
 
 ## Continuing work
 
-Audit Apple42106835639 on exact927407ad; physical iPhone remains waived. The nine
+[Apple42106835639](measurements/collaboration-summary-inbox-apple-2026-11-05.json)
+accepts exact927407ad:1,298 simulator cases and the full Xcode app. The workflow
+does not execute collaboration data/presentation tests. Physical iPhone remains waived. The nine
 generic raw-store files/tests now match Mobile in Starter, with independent local
 and Apple checks still pending. HRIS codecs, transport and admission remain here.
 Matrix owns message content. Continue edit/delete-for-everyone, media, groups,
