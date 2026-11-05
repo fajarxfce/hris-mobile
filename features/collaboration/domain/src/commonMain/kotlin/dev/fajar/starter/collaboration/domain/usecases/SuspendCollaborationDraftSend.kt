@@ -58,7 +58,8 @@ class SuspendCollaborationDraftSend(
                 intent.owner == access.messageOwner() &&
                 intent.id == expected.submissionId &&
                 intent.conversationId == expected.conversationId &&
-                intent.text == expected.text
+                intent.text == expected.text &&
+                intent.replyToEventId == expected.replyToEventId
         )
             return AppResult.Success(null)
         if (intent == null) {

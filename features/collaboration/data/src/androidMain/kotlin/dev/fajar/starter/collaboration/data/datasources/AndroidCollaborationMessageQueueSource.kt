@@ -77,12 +77,15 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
         }
     }
 
-    suspend fun enqueue(logicalId: String, text: String) {
+    suspend fun enqueue(logicalId: String, text: String, replyToEventId: String?) {
         check(listener == null && !stopping)
         check(!requireNotNull(room).isSendQueueEnabled())
         messageEventContentNew(MessageType.Text(TextMessageContent(text, null))).use { content ->
             requireNotNull(timeline)
-                .sendWithExtraContent(content, collaborationTextContent(logicalId, text).toString())
+                .sendWithExtraContent(
+                    content,
+                    collaborationTextContent(logicalId, text, replyToEventId).toString(),
+                )
                 .close()
         }
     }

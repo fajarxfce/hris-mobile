@@ -31,6 +31,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
     private val originals = mutableMapOf<String, MutableList<CollaborationHistoryChange.Text>>()
     private val queued = mutableMapOf<String, MutableMap<String, CollaborationHistoryChange.Text>>()
     val enqueued = mutableListOf<String>()
+    val enqueuedReplies = mutableMapOf<String, String?>()
     val attemptedRooms = mutableListOf<String>()
     var deliveries = 0
     var childCloses = 0
@@ -357,15 +358,29 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
 
                 override suspend fun snapshot() = AppResult.Success(pending.keys.toSet())
 
-                override suspend fun prepareText(logicalId: String, text: String) =
-                    AppResult.Success(CollaborationMessageOrigin(sender, hash(text)))
+                override suspend fun prepareText(
+                    logicalId: String,
+                    text: String,
+                    replyToEventId: String?,
+                ) =
+                    AppResult.Success(
+                        CollaborationMessageOrigin(
+                            sender,
+                            hash(
+                                if (replyToEventId == null) text
+                                else text + "\u0000" + replyToEventId
+                            ),
+                        )
+                    )
 
                 override suspend fun enqueue(
                     logicalId: String,
                     text: String,
                     origin: CollaborationMessageOrigin,
+                    replyToEventId: String?,
                 ): AppResult<Unit> {
                     enqueued += logicalId
+                    enqueuedReplies[logicalId] = replyToEventId
                     val transaction = "tx-$logicalId"
                     check(transaction !in pending)
                     pending[transaction] =

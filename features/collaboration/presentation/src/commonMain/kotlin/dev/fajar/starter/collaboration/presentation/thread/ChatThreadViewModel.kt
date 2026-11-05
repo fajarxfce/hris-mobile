@@ -1143,6 +1143,7 @@ class ChatThreadViewModel(
                         requireNotNull(draft.submissionId),
                         draft.text,
                         owned,
+                        draft.replyToEventId,
                     )
                 ensureActive()
                 if (access != owned) return@launch

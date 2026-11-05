@@ -5,16 +5,26 @@ import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageOrigi
 import dev.fajar.starter.collaboration.domain.policies.*
 import kotlinx.serialization.json.*
 
-/**
- * Explicit plain text and empty mentions; formatting/reply content needs its own exact identity.
- */
-internal fun collaborationTextContent(logicalId: String, text: String): JsonObject {
+/** Explicit plain text and empty mentions. A reply reference participates in the exact identity. */
+internal fun collaborationTextContent(
+    logicalId: String,
+    text: String,
+    replyToEventId: String? = null,
+): JsonObject {
     require(validCollaborationMessageId(logicalId) && validCollaborationText(text))
+    require(replyToEventId == null || validCollaborationReplyEventId(replyToEventId))
     return buildJsonObject {
         put("body", text)
         put("msgtype", "m.text")
         put("m.mentions", buildJsonObject {})
         put("org.hris.message_id", logicalId)
+        if (replyToEventId != null)
+            put(
+                "m.relates_to",
+                buildJsonObject {
+                    put("m.in_reply_to", buildJsonObject { put("event_id", replyToEventId) })
+                },
+            )
     }
 }
 
@@ -22,10 +32,11 @@ internal suspend fun collaborationTextOrigin(
     sender: String,
     logicalId: String,
     text: String,
+    replyToEventId: String? = null,
 ): CollaborationMessageOrigin {
     require(validCollaborationHistorySender(sender))
     return CollaborationMessageOrigin(
         sender,
-        collaborationHistoryContentHash(collaborationTextContent(logicalId, text)),
+        collaborationHistoryContentHash(collaborationTextContent(logicalId, text, replyToEventId)),
     )
 }

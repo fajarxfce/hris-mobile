@@ -39,6 +39,7 @@ class CollaborationDraftRecovery(
                     requireNotNull(draft.submissionId),
                     draft.text,
                     work.access,
+                    draft.replyToEventId,
                 )
             currentCoroutineContext().ensureActive()
             var failed = (queued as? AppResult.Failed)?.failure

@@ -1,5 +1,30 @@
 # Agent continuation — HRIS Mobile
 
+## Quoted draft/outbox pipeline — 5 November 2026
+
+Reply references are persisted with encrypted drafts/intents and carried through
+background recovery, exact retry/confirmation and the existing paused native queue.
+The relation participates in the original content hash. Outgoing bounds now match
+Main gatewayd4f34140 without changing historical ID validation. Quoted body snapshots
+are not added. [Contract](collaboration-chat-quoted-draft.md),
+[evidence](measurements/chat-quoted-draft-2026-11-05.json).
+
+Final gate501.591s/3,401 fresh/zero failures/errors/skips/4,052 unchanged inputs:
+root, Android product compile, browser data, format and architecture. Earlier nullable
+compile failure and successful pre-alignment gate remain recorded. Worker proof here
+uses its simulated SDK; actual quoted-message encryption/decryption remains pending.
+
+NEXT: integrate the source-bound drafts in `.work/chat-quoted-reply-2026-11-05/history-stage`
+after reviewing their manifest. They are NOT yet applied or validated: history reply
+metadata, checkpoint-driven indexed quote observation (including offscreen deletion),
+long-press Reply/composer/bubble UI and initial tests. Complete admission/storage/UI
+interaction and screenshot coverage, then actual native quoted reply plus offline
+process recovery before a product release. Current phone32/header correction and
+live8b40/schema116 remain unchanged. Main envelope is committed but not deployed.
+Bima Generic transport error is still unattributed; optional user send-result question
+remains pending. All54groups open. Push each commit and continue long run; no Starter
+port for this HRIS feature.
+
 ## Cold offline history verified — 5 November 2026
 
 Actual encrypted canonical history remains readable after the third owned process

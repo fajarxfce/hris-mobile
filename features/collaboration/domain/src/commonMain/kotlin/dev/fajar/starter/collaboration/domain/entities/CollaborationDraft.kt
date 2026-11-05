@@ -11,6 +11,8 @@ data class CollaborationDraft(
     /** Non-null freezes this exact body and ID until its local command is reconciled. */
     val submissionId: String? = null,
     val reviewRequired: Boolean = false,
+    /** Resolve the preview only within this draft's conversation and local owner. */
+    val replyToEventId: String? = null,
 ) {
     override fun toString() = "CollaborationDraft([redacted])"
 }

@@ -66,6 +66,7 @@ internal class CollaborationDraftCodec(
                 Instant.parse(dto.savedAt),
                 dto.submissionId,
                 dto.reviewRequired,
+                dto.replyToEventId,
             )
         require(validCollaborationDraft(draft))
         require(
@@ -90,6 +91,7 @@ internal class CollaborationDraftCodec(
                     savedAt = draft.savedAt.toString(),
                     submissionId = draft.submissionId,
                     reviewRequired = draft.reviewRequired,
+                    replyToEventId = draft.replyToEventId,
                 )
             )
         return ReplicaDocument(
@@ -172,6 +174,7 @@ private data class DraftDto(
     val savedAt: String,
     val submissionId: String? = null,
     val reviewRequired: Boolean = false,
+    val replyToEventId: String? = null,
 ) {
     override fun toString() = "DraftDto([redacted])"
 }

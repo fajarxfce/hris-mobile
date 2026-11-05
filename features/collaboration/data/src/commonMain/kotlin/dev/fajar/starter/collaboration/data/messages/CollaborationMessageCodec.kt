@@ -36,6 +36,7 @@ internal data class MessageIntentDto(
     val conversationId: String,
     val createdAt: String,
     val text: String,
+    val replyToEventId: String? = null,
 ) {
     override fun toString() = "MessageIntentDto([redacted])"
 }
@@ -63,6 +64,7 @@ internal fun CollaborationMessageIntent.toDto(access: CollaborationLocalAccess):
         createdAt.toEpochMilliseconds() in 0 until 253_402_300_800_000L &&
             validCollaborationText(text)
     )
+    require(replyToEventId?.let(::validCollaborationReplyEventId) != false)
     return MessageIntentDto(
         id,
         owner.audience,
@@ -71,6 +73,7 @@ internal fun CollaborationMessageIntent.toDto(access: CollaborationLocalAccess):
         conversationId,
         createdAt.toString(),
         text,
+        replyToEventId,
     )
 }
 
@@ -81,6 +84,7 @@ internal fun MessageIntentDto.toIntent(access: CollaborationLocalAccess) =
             conversationId,
             Instant.parse(createdAt),
             text,
+            replyToEventId,
         )
         .also { require(it.toDto(access) == this) }
 

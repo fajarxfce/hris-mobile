@@ -22,11 +22,14 @@ abstract class CollaborationDraftStorageContract {
         var repository = f.drafts()
         assertEquals(AppResult.Success(null), repository.get(f.access, f.conversation))
         assertNull(f.keys.read())
-        val draft = f.draft(text = "  review\nplease 😀  ")
+        val draft =
+            f.draft(text = "  review\nplease 😀  ")
+                .copy(replyToEventId = "\$quoted-private-original")
         assertEquals(AppResult.Success(true), repository.replace(f.access, null, draft))
         val key = f.keys.read()
         val raw = f.draftPage()
         assertFalse(raw.toString().contains(draft.text))
+        assertFalse(raw.toString().contains(draft.replyToEventId!!))
         assertTrue(requireNotNull(raw.checkpoint).payload.length <= 32_768)
         f.reopen()
         repository = f.drafts()
@@ -141,6 +144,7 @@ abstract class CollaborationDraftStorageContract {
                 good.copy(text = "\u0000"),
                 good.copy(text = "€".repeat(16_384)),
                 good.copy(revision = "invalid"),
+                good.copy(replyToEventId = "invalid"),
                 good.copy(savedAt = Instant.fromEpochMilliseconds(-1)),
                 good.copy(text = "", submissionId = historyId(1003)),
             )) {

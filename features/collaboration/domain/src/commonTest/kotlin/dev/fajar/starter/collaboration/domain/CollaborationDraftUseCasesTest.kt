@@ -342,7 +342,8 @@ internal class DraftIntentFixture {
         expected: CollaborationDraft? = null,
         revision: String = draftId(7),
         text: String = "  Draft\n🙂  ",
-    ) = editor("selection", conversation, expected, revision, text)
+        replyToEventId: String? = expected?.replyToEventId,
+    ) = editor("selection", conversation, expected, revision, text, replyToEventId = replyToEventId)
 
     suspend fun prepare(expected: CollaborationDraft) = preparer("selection", expected)
 
@@ -354,7 +355,14 @@ internal class DraftIntentFixture {
     suspend fun queue(
         expected: CollaborationDraft,
         scope: CollaborationLocalScope = CollaborationLocalScope.Selected("selection"),
-    ) = queue(scope, conversation, expected.submissionId!!, expected.text)
+    ) =
+        queue(
+            scope,
+            conversation,
+            expected.submissionId!!,
+            expected.text,
+            replyToEventId = expected.replyToEventId,
+        )
 
     fun observe() = observer("selection", conversation)
 

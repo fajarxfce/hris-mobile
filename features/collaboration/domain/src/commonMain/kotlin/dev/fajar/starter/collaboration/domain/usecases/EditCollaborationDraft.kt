@@ -29,11 +29,13 @@ class EditCollaborationDraft(
         operationRevision: String,
         text: String,
         expectedAccess: CollaborationLocalAccess? = null,
+        replyToEventId: String? = expected?.replyToEventId,
     ): AppResult<CollaborationDraft> {
         if (
             !validCollaborationMessageId(conversationId) ||
                 !validCollaborationMessageId(operationRevision) ||
                 !validCollaborationDraftText(text) ||
+                (replyToEventId != null && !validCollaborationReplyEventId(replyToEventId)) ||
                 (expected != null &&
                     (!validCollaborationDraft(expected) ||
                         expected.conversationId != conversationId ||
@@ -60,11 +62,22 @@ class EditCollaborationDraft(
         if (read is AppResult.Failed) return read
         val current = (read as AppResult.Success).value
         if (current?.revision == operationRevision)
-            return if (current.text == text && current.submissionId == null)
+            return if (
+                current.text == text &&
+                    current.replyToEventId == replyToEventId &&
+                    current.submissionId == null
+            )
                 AppResult.Success(current)
             else changedDraft()
         if (current != expected) return changedDraft()
-        val replacement = CollaborationDraft(conversationId, operationRevision, text, clock.now())
+        val replacement =
+            CollaborationDraft(
+                conversationId,
+                operationRevision,
+                text,
+                clock.now(),
+                replyToEventId = replyToEventId,
+            )
         currentCoroutineContext().ensureActive()
         val written = drafts.replace(access, current, replacement)
         guard(workspaceId, access).let { if (it is AppResult.Failed) return it }

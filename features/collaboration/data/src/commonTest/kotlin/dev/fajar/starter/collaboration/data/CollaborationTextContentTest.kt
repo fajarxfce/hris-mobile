@@ -27,6 +27,37 @@ class CollaborationTextContentTest {
     }
 
     @Test
+    fun quoteReferenceIsExactAndParticipatesInTheOriginalFingerprint() = runTest {
+        val target = "\$quoted-original"
+        val content = collaborationTextContent(id, "Reply", target)
+        assertEquals(
+            setOf("body", "msgtype", "m.mentions", "org.hris.message_id", "m.relates_to"),
+            content.keys,
+        )
+        assertEquals(
+            buildJsonObject { put("m.in_reply_to", buildJsonObject { put("event_id", target) }) },
+            content["m.relates_to"],
+        )
+        val expected = collaborationTextOrigin(sender, id, "Reply", target)
+        assertEquals(expected.contentHash, decode(content).contentHash)
+        assertEquals("Reply", decode(content).text)
+        assertNotEquals(
+            expected.contentHash,
+            collaborationTextOrigin(sender, id, "Reply").contentHash,
+        )
+        assertNotEquals(
+            expected.contentHash,
+            collaborationTextOrigin(sender, id, "Reply", "\$other").contentHash,
+        )
+        for (invalid in
+            listOf("", "invalid", "\$", "\$bad id", "\$é", "\$\uD800", "\$" + "x".repeat(255))) {
+            assertFailsWith<IllegalArgumentException> {
+                collaborationTextOrigin(sender, id, "Reply", invalid)
+            }
+        }
+    }
+
+    @Test
     fun logicalIdWhitespaceMentionsFormattingAndUnknownFieldsChangeTheFingerprint() = runTest {
         val expected = collaborationTextOrigin(sender, id, " text ")
         assertNotEquals(

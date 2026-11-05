@@ -18,6 +18,7 @@ data class CollaborationMessageIntent(
     val conversationId: String,
     val createdAt: Instant,
     val text: String,
+    val replyToEventId: String? = null,
 ) {
     override fun toString() = "CollaborationMessageIntent([redacted])"
 }

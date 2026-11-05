@@ -14,13 +14,18 @@ interface CollaborationMessageQueueLease {
     /**
      * Describes exact outgoing content under this owned SDK identity, without enqueue or delivery.
      */
-    suspend fun prepareText(logicalId: String, text: String): AppResult<CollaborationMessageOrigin>
+    suspend fun prepareText(
+        logicalId: String,
+        text: String,
+        replyToEventId: String? = null,
+    ): AppResult<CollaborationMessageOrigin>
 
     /** The caller durably records Staging first; cancellation can leave this enqueue committed. */
     suspend fun enqueue(
         logicalId: String,
         text: String,
         origin: CollaborationMessageOrigin,
+        replyToEventId: String? = null,
     ): AppResult<Unit>
 
     /**

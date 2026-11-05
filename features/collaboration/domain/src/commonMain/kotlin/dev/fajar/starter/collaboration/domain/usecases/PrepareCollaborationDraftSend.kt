@@ -60,7 +60,8 @@ class PrepareCollaborationDraftSend(
         if (
             expected.submissionId == null &&
                 current?.submissionId == expected.revision &&
-                current.text == expected.text
+                current.text == expected.text &&
+                current.replyToEventId == expected.replyToEventId
         )
             return wake(workspaceId, access, current)
         if (current != expected || current.submissionId != null) return changedDraft()

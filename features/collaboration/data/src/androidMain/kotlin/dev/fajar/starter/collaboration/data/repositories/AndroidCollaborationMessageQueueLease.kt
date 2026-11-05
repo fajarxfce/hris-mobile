@@ -29,8 +29,13 @@ internal class AndroidCollaborationMessageQueueLease(
     override suspend fun prepareText(
         logicalId: String,
         text: String,
+        replyToEventId: String?,
     ): AppResult<CollaborationMessageOrigin> {
-        if (!validCollaborationMessageId(logicalId) || !validCollaborationText(text))
+        if (
+            !validCollaborationMessageId(logicalId) ||
+                !validCollaborationText(text) ||
+                (replyToEventId != null && !validCollaborationReplyEventId(replyToEventId))
+        )
             return collaborationSetupFailure(
                 "client.collaboration_invalid_message",
                 FailureKind.Validation,
@@ -40,7 +45,7 @@ internal class AndroidCollaborationMessageQueueLease(
                 return@execute AppResult.Failed(it)
             }
             safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueOrigin) {
-                collaborationTextOrigin(matrixSender, logicalId, text)
+                collaborationTextOrigin(matrixSender, logicalId, text, replyToEventId)
             }
         }
     }
@@ -49,8 +54,13 @@ internal class AndroidCollaborationMessageQueueLease(
         logicalId: String,
         text: String,
         origin: CollaborationMessageOrigin,
+        replyToEventId: String?,
     ): AppResult<Unit> {
-        if (!validCollaborationMessageId(logicalId) || !validCollaborationText(text))
+        if (
+            !validCollaborationMessageId(logicalId) ||
+                !validCollaborationText(text) ||
+                (replyToEventId != null && !validCollaborationReplyEventId(replyToEventId))
+        )
             return collaborationSetupFailure(
                 "client.collaboration_invalid_message",
                 FailureKind.Validation,
@@ -61,7 +71,7 @@ internal class AndroidCollaborationMessageQueueLease(
             }
             val expected =
                 safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueMatch) {
-                    collaborationTextOrigin(matrixSender, logicalId, text)
+                    collaborationTextOrigin(matrixSender, logicalId, text, replyToEventId)
                 }
             if (expected is AppResult.Failed) return@execute expected
             if ((expected as AppResult.Success).value != origin)
@@ -69,7 +79,7 @@ internal class AndroidCollaborationMessageQueueLease(
                     "client.collaboration_message_content_changed"
                 )
             safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueEnqueue) {
-                source.enqueue(logicalId, text)
+                source.enqueue(logicalId, text, replyToEventId)
             }
         }
     }

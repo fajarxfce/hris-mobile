@@ -202,7 +202,12 @@ class StageCollaborationText(
                         attempt.origin ?: return failed("client.collaboration_queue_unresolved")
                     val sent =
                         checked(scope, owner) {
-                            queue.enqueue(pending.intent.id, pending.intent.text, origin)
+                            queue.enqueue(
+                                pending.intent.id,
+                                pending.intent.text,
+                                origin,
+                                pending.intent.replyToEventId,
+                            )
                         }
                     if (sent is AppResult.Failed) return sent
                     val after = checked(scope, owner) { queue.snapshot() }
@@ -244,7 +249,11 @@ class StageCollaborationText(
                     return failed("client.command_queue_full", FailureKind.Storage)
                 val prepared =
                     checked(scope, owner) {
-                        queue.prepareText(original.intent.id, original.intent.text)
+                        queue.prepareText(
+                            original.intent.id,
+                            original.intent.text,
+                            original.intent.replyToEventId,
+                        )
                     }
                 if (prepared is AppResult.Failed) return prepared
                 val origin = (prepared as AppResult.Success).value

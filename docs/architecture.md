@@ -448,3 +448,11 @@ The architecture script checks module direction, cycles, dependency declarations
 forbidden imports, and presentation I/O/state ownership. It is a source-level guardrail,
 not a full Kotlin semantic analyzer. Review constructor dependencies and orchestration
 when introducing new code. Compiler, behavioral tests, and UI smoke tests complement it.
+
+## Durable quoted-reply pipeline
+
+[Quoted draft/outbox identity](collaboration-chat-quoted-draft.md) adds an optional
+original event reference to encrypted local intent and exact native content identity.
+Background recovery carries the same reference. It does not fetch the target or
+store quoted body snapshots. Quote UI/history and actual native acceptance remain
+pending; final pipeline checks are recorded in the linked evidence.

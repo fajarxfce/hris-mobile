@@ -119,7 +119,8 @@ abstract class CollaborationMessageStorageContract {
     @Test
     fun uncertainIntentAndOriginalTransactionSurviveReopenAndReauthentication() =
         withDatabase { f ->
-            f.insert()
+            val intent = f.intent.copy(replyToEventId = "\$quoted-private-original")
+            f.insert(intent)
             val original = f.read()
             val pending = CollaborationMessageState.Staging(f.device, setOf("older-transaction"))
             assertEquals(AppResult.Success(true), f.repo.update(f.access, original, pending))
@@ -129,7 +130,7 @@ abstract class CollaborationMessageStorageContract {
             assertEquals(AppResult.Success(true), f.repo.update(f.access, f.read(), transaction))
             f.reopen(f.access.copy(sessionId = "another-login"))
             val restored = f.read()
-            assertEquals(f.intent, restored.intent)
+            assertEquals(intent, restored.intent)
             assertEquals(transaction, restored.state)
             assertEquals(2, restored.revision)
             assertEquals(
@@ -160,6 +161,7 @@ abstract class CollaborationMessageStorageContract {
         for (different in
             listOf(
                 f.intent.copy(text = "Different message"),
+                f.intent.copy(replyToEventId = "\$different-original"),
                 f.intent.copy(conversationId = messageTestId(12)),
                 f.intent.copy(createdAt = Instant.fromEpochMilliseconds(1)),
             )) assertIs<AppResult.Failed>(f.repo.insert(f.access, different))

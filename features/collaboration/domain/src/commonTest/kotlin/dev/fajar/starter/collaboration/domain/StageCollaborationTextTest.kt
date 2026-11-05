@@ -46,6 +46,17 @@ class StageCollaborationTextTest {
     }
 
     @Test
+    fun quotedIntentReachesPreparationAndEnqueueExactlyOnceAfterMappingRecovery() = runTest {
+        val f = StageFixture()
+        f.prepare(replyToEventId = "\$quoted-original")
+        assertIs<AppResult.Success<*>>(f.stage())
+        assertEquals("\$quoted-original", f.record.intent.replyToEventId)
+        assertIs<AppResult.Success<*>>(f.stage())
+        assertEquals(1, f.preparations)
+        assertEquals(1, f.enqueues)
+    }
+
+    @Test
     fun invalidOrFailedPreparationNeverWritesAnAttemptOrEnqueues() = runTest {
         for (scenario in 0..2) {
             val f = StageFixture()
@@ -524,9 +535,11 @@ internal class StageFixture {
                         override suspend fun prepareText(
                             logicalId: String,
                             text: String,
+                            replyToEventId: String?,
                         ): AppResult<CollaborationMessageOrigin> {
                             assertEquals(record.intent.id, logicalId)
                             assertEquals(record.intent.text, text)
+                            assertEquals(record.intent.replyToEventId, replyToEventId)
                             preparations++
                             afterPrepare()
                             return prepareFailure?.let { AppResult.Failed(it) }
@@ -537,6 +550,7 @@ internal class StageFixture {
                             logicalId: String,
                             text: String,
                             origin: CollaborationMessageOrigin,
+                            replyToEventId: String?,
                         ): AppResult<Unit> {
                             assertEquals(
                                 origin,
@@ -544,6 +558,7 @@ internal class StageFixture {
                             )
                             assertEquals(record.intent.id, logicalId)
                             assertEquals(record.intent.text, text)
+                            assertEquals(record.intent.replyToEventId, replyToEventId)
                             enqueues++
                             events += "enqueue"
                             nativeIds += "original"
@@ -605,8 +620,8 @@ internal class StageFixture {
             base.clock,
         )
 
-    suspend fun prepare() {
-        assertIs<AppResult.Success<*>>(base.queue())
+    suspend fun prepare(replyToEventId: String? = null) {
+        assertIs<AppResult.Success<*>>(base.queue(replyToEventId = replyToEventId))
     }
 
     suspend fun stage(

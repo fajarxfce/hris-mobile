@@ -20,7 +20,7 @@ class CollaborationDraftWorkerTest {
     fun capturedFrozenRecoveryUsesEncryptedOriginalAfterRestartWithNoWorkspaceAccess() =
         runBlocking {
             withFixture { f ->
-                val frozen = f.freeze("Captured frozen original")
+                val frozen = f.freeze("Captured frozen original", "\$captured-original")
                 val scope = CollaborationLocalScope.Captured(f.access())
                 f.reopen()
                 val selected = f.koin.get<WorkspaceRepository>()
@@ -44,6 +44,7 @@ class CollaborationDraftWorkerTest {
                         )
                         .value!!
                 assertEquals(frozen.text, queued.intent.text)
+                assertEquals(frozen.replyToEventId, queued.intent.replyToEventId)
                 assertEquals(frozen.submissionId, queued.intent.id)
                 assertEquals(CollaborationMessageState.Queued, queued.state)
                 val cleared =
@@ -133,16 +134,19 @@ class CollaborationDraftWorkerTest {
     @Test
     fun frozenOnlyIntentRestoresAndDeliversAfterContainerRestartWithoutOpeningChat() = runBlocking {
         withFixture { f ->
-            val frozen = f.freeze("  prepared before process death\n  ")
+            val frozen =
+                f.freeze("  prepared before process death\n  ", "\$original-before-restart")
             assertEquals(listOf(QueueCollaborationText.DELIVERY_KEY), f.scheduled)
             assertEquals(0, f.sdk.deliveries)
             assertTrue(f.pending().isEmpty())
             f.reopen()
             assertEquals(SyncResult.Complete, f.worker())
             assertEquals(listOf(frozen.submissionId), f.sdk.enqueued)
+            assertEquals(frozen.replyToEventId, f.sdk.enqueuedReplies[frozen.submissionId])
             assertEquals(1, f.sdk.deliveries)
             assertEquals("", f.draft()?.text)
             assertNull(f.draft()?.submissionId)
+            assertNull(f.draft()?.replyToEventId)
             assertEquals(SyncResult.Complete, f.worker())
             assertEquals(1, f.sdk.deliveries)
         }
@@ -287,7 +291,10 @@ class CollaborationDraftWorkerTest {
         }
     }
 
-    private suspend fun CollaborationWorkerFixture.freeze(text: String): CollaborationDraft {
+    private suspend fun CollaborationWorkerFixture.freeze(
+        text: String,
+        replyToEventId: String? = null,
+    ): CollaborationDraft {
         val owned = access()
         val edited =
             assertIs<AppResult.Success<CollaborationDraft>>(
@@ -298,6 +305,7 @@ class CollaborationDraftWorkerTest {
                         UUID.randomUUID().toString(),
                         text,
                         owned,
+                        replyToEventId,
                     )
                 )
                 .value

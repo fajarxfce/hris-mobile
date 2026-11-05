@@ -20,6 +20,10 @@ fun validCollaborationEventId(value: String) =
         value.length in 2..255 &&
         value.none { it.isWhitespace() || it.isISOControl() }
 
+/** Outgoing reply metadata must satisfy the native gateway's bounded opaque ASCII envelope. */
+fun validCollaborationReplyEventId(value: String) =
+    validCollaborationEventId(value) && value.all { it.code in 33..126 }
+
 fun validCollaborationMessageDevice(device: CollaborationMessageDevice) =
     listOf(device.nativeSessionId, device.deviceId, device.bootstrapOperationId)
         .all(::validCollaborationMessageId) &&

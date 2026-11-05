@@ -455,7 +455,11 @@ internal class ChatThreadFixture {
                         override suspend fun snapshot() =
                             AppResult.Success(transactions.values.toSet())
 
-                        override suspend fun prepareText(logicalId: String, text: String) =
+                        override suspend fun prepareText(
+                            logicalId: String,
+                            text: String,
+                            replyToEventId: String?,
+                        ) =
                             AppResult.Success(
                                 CollaborationMessageOrigin(self.matrixUserId, "a".repeat(64))
                             )
@@ -464,6 +468,7 @@ internal class ChatThreadFixture {
                             logicalId: String,
                             text: String,
                             origin: CollaborationMessageOrigin,
+                            replyToEventId: String?,
                         ): AppResult<Unit> {
                             transactions[logicalId] = "tx-$logicalId"
                             return AppResult.Success(Unit)

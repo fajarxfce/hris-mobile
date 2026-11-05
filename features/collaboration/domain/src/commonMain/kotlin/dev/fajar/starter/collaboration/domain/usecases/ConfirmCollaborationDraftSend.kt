@@ -57,7 +57,8 @@ class ConfirmCollaborationDraftSend(
             intent?.id != expected.submissionId ||
                 intent.owner != access.messageOwner() ||
                 intent.conversationId != conversationId ||
-                intent.text != expected.text
+                intent.text != expected.text ||
+                intent.replyToEventId != expected.replyToEventId
         )
             return collaborationSetupFailure(
                 "client.collaboration_message_changed",
@@ -68,7 +69,11 @@ class ConfirmCollaborationDraftSend(
         if (read is AppResult.Failed) return read
         val current = (read as AppResult.Success).value
         // A previous acknowledgement or a concurrent editor owns the new slot; preserve it.
-        if (current?.submissionId != expected.submissionId || current.text != expected.text)
+        if (
+            current?.submissionId != expected.submissionId ||
+                current.text != expected.text ||
+                current.replyToEventId != expected.replyToEventId
+        )
             return AppResult.Success(current)
         val replacement =
             current.copy(
@@ -77,6 +82,7 @@ class ConfirmCollaborationDraftSend(
                 savedAt = clock.now(),
                 submissionId = null,
                 reviewRequired = false,
+                replyToEventId = null,
             )
         currentCoroutineContext().ensureActive()
         val written = drafts.replace(access, current, replacement)
