@@ -165,7 +165,10 @@ internal class ChatInboxFixture {
             ): AppResult<Boolean> {
                 if (checkpoint.value != expected || session.value?.id != access.sessionId)
                     return AppResult.Success(false)
-                records.value = (records.value + items).distinctBy { it.conversation.id }
+                val merged =
+                    (records.value + items).associateBy { it.conversation.id }.values.toList()
+                if (expected != null && merged == records.value) return AppResult.Success(true)
+                records.value = merged
                 checkpoint.value =
                     CollaborationListCheckpoint(
                         chatId(4),

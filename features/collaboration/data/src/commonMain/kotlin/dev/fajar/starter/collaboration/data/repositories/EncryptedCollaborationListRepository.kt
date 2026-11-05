@@ -125,14 +125,23 @@ class EncryptedCollaborationListRepository(
             val previous = raw?.let { codec.checkpoint(it) }
             if (previous != expected) return@withKey false
             var added = 0
+            val changed = mutableListOf<CollaborationDirectSummary>()
             for (item in batch) {
                 val old = replicas.document(scope, partition, collaborationId(item.conversation.id))
-                if (old == null) added++
-                else {
+                if (old == null) {
+                    added++
+                    changed.add(item)
+                } else {
                     requireNotNull(previous)
-                    require(codec.document(previous, old).conversation == item.conversation)
+                    val retained = codec.document(previous, old)
+                    require(retained.conversation == item.conversation)
+                    if (retained != item) changed.add(item)
                 }
             }
+            // A second scoped read linearizes a no-op after all examined documents. A changed
+            // checkpoint/session is a retryable conflict, not permission to publish stale data.
+            if (previous != null && changed.isEmpty())
+                return@withKey raw == replicas.checkpoint(scope, partition)
             val count = (previous?.count ?: 0) + added
             require(count <= COLLABORATION_LIST_CAPACITY)
             val next =
@@ -142,7 +151,7 @@ class EncryptedCollaborationListRepository(
                     count,
                     acquiredAt,
                 )
-            val documents = batch.map { codec.document(next, it) }
+            val documents = changed.map { codec.document(next, it) }
             val sealed = codec.checkpoint(next)
             currentCoroutineContext().ensureActive()
             if (raw == null)

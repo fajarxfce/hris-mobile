@@ -34,8 +34,9 @@ delivery. Attendance opens monthly metrics and daily history with a date filter;
 clock-in/out and pending-command recovery stay on Home. Pending review stays
 distinct from accepted time. Workforce availability
 is independent of the personal-profile module. Home places the employee's name
-and company above today's clock-in/out card and service grid. The five tabs are
-Home, Chat, Inbox, Employees and Account. Inbox shows the account's total unread count.
+and company above today's clock-in/out card and service grid. The four tabs are
+Home, Chat, Inbox and Account. [Chat](docs/collaboration-chat-hub.md) groups Conversations
+and Contacts, with the employee directory in Contacts. Inbox shows the account's total unread count.
 Employees synchronizes an account-owned encrypted coworker directory. Name/number
 search, paging and department filters query acquired records locally, including
 after restart or reauthentication. Search opens a dedicated page and preserves

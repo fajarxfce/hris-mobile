@@ -13,6 +13,66 @@ import kotlinx.coroutines.test.*
 
 class ChatInboxViewModelTest {
     @Test
+    fun reopeningAndUnchangedRefreshNeverPublishBlankPreviewsWhileLocalReadsArePending() = runTest {
+        withModel { f, vm, _ ->
+            val id = f.item(1).conversation.id
+            val draft = CollaborationDraft(id, chatId(9000), "Retained draft", f.now)
+            f.records.value = listOf(f.item(1))
+            f.content.slots.value = mapOf(id to draft)
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            val expected = vm.state.value.previews[id]
+            assertEquals(draft, expected!!.draft)
+            val published = mutableListOf<CollaborationInboxPreview?>()
+            val observation =
+                backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                    vm.state.collect { published.add(it.previews[id]) }
+                }
+            f.content.historyReadGate = CompletableDeferred()
+            vm.onEvent(ChatInboxEvent.Stopped)
+            runCurrent()
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            assertEquals(expected, vm.state.value.previews[id])
+            vm.onEvent(ChatInboxEvent.RefreshRequested)
+            runCurrent()
+            assertEquals(expected, vm.state.value.previews[id])
+            f.content.historyReadGate!!.complete(Unit)
+            runCurrent()
+            assertTrue(published.isNotEmpty() && published.all { it == expected })
+            f.content.slots.value = emptyMap()
+            runCurrent()
+            assertNull(vm.state.value.previews[id]!!.draft)
+            observation.cancel()
+        }
+    }
+
+    @Test
+    fun denialDuringPendingPreviewReopenClearsRetainedPrivateContentImmediately() = runTest {
+        withModel { f, vm, _ ->
+            val id = f.item(1).conversation.id
+            f.records.value = listOf(f.item(1))
+            f.content.slots.value =
+                mapOf(id to CollaborationDraft(id, chatId(9000), "Private", f.now))
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            assertNotNull(vm.state.value.previews[id])
+            f.content.historyReadGate = CompletableDeferred()
+            vm.onEvent(ChatInboxEvent.Stopped)
+            runCurrent()
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            f.gate.value = CollaborationListAdmission("denied", f.denied)
+            runCurrent()
+            assertTrue(vm.state.value.previews.isEmpty())
+            assertNull(vm.state.value.page)
+            f.content.historyReadGate!!.complete(Unit)
+            runCurrent()
+            assertTrue(vm.state.value.previews.isEmpty())
+        }
+    }
+
+    @Test
     fun explicitRetryReopensFailedLocalContentEvenWhenTheNetworkRemainsOffline() = runTest {
         withModel { f, vm, _ ->
             val id = f.item(1).conversation.id
@@ -213,6 +273,37 @@ class ChatInboxViewModelTest {
                 ChatInboxEffect.OpenConversation(f.item(1).conversation.id),
                 effects.last(),
             )
+        }
+    }
+
+    @Test
+    fun emptyNextAcquisitionCannotMoveThePageWhenUnrelatedLocalRowsArriveLater() = runTest {
+        withModel { f, vm, _ ->
+            f.readSummaries = { after ->
+                if (after == null)
+                    AppResult.Success(CollaborationPage((1..30).map(f::item), "remote-next"))
+                else AppResult.Success(CollaborationPage(emptyList(), null))
+            }
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            val original = f.checkpoint.value
+            vm.onEvent(ChatInboxEvent.NextRequested)
+            runCurrent()
+            assertEquals(original, f.checkpoint.value)
+            assertFalse(vm.state.value.hasMore)
+            assertNull(vm.state.value.after)
+            // Incoming discovery is independent of the completed, empty Next request.
+            f.records.value += (31..60).map(f::item)
+            f.checkpoint.value = original!!.copy(revision = original.revision + 1, count = 60)
+            runCurrent()
+            assertNull(vm.state.value.after)
+            assertEquals((1..30).map(f::item), vm.state.value.page!!.items)
+            assertTrue(vm.state.value.hasMore)
+            vm.onEvent(ChatInboxEvent.NextRequested)
+            runCurrent()
+            assertEquals("30", vm.state.value.after)
+            assertEquals((31..60).map(f::item), vm.state.value.page!!.items)
+            assertEquals(listOf(null, "remote-next"), f.calls)
         }
     }
 

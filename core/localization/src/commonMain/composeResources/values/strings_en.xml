@@ -953,6 +953,8 @@
     <string name="document_valid_until_label_en">Valid until</string>
     <string name="document_history_by_other_en">Recorded by another account</string>
     <string name="chat_title_en">Chat</string>
+    <string name="chat_conversations_en">Conversations</string>
+    <string name="chat_contacts_en">Contacts</string>
     <string name="chat_summary_en">Messages with your colleagues</string>
     <string name="chat_new_en">New chat</string>
     <string name="chat_empty_en">No conversations yet</string>

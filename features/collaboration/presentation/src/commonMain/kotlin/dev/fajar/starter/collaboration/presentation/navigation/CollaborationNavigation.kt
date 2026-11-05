@@ -105,6 +105,7 @@ fun ChatInboxContent(
     onSavedReplies: () -> Unit,
     onConversation: (String) -> Unit,
     onBack: (() -> Unit)? = null,
+    topBar: (@Composable () -> Unit)? = null,
 ) {
     val vm = koinViewModel<ChatInboxViewModel>(parameters = { parametersOf(workspaceId) })
     val state by vm.state.collectAsStateWithLifecycle()
@@ -122,7 +123,7 @@ fun ChatInboxContent(
             is ChatInboxEffect.OpenConversation -> onConversation(it.id)
         }
     }
-    ChatInboxPage(state, list, vm::onEvent, onBack = onBack)
+    ChatInboxPage(state, list, vm::onEvent, onBack = onBack, topBar = topBar)
 }
 
 @Composable

@@ -1,5 +1,8 @@
 # Architecture
 
+[Chat and contacts](collaboration-chat-hub.md) share one root destination and retain
+same-owner local previews across partial list emissions.
+
 [Offline text forwarding](collaboration-chat-forwarding.md) publishes complete encrypted batches without changing composer drafts.
 
 [Device sync before the first room](collaboration-device-sync.md) uses owned background references and preserves server key-publication guards.
@@ -385,7 +388,7 @@ route contract and requires a compatible restoration policy.
 Features own their serializable route and NavGraphBuilder registration. The app composes
 their entries and reacts to onboarding/session state. Authentication transitions replace
 the root stack, so sign-out removes protected screens. Home owns its
-Home/Inbox/Employees/Account tab state; changing tabs does not create independent
+Home/Chat/Inbox/Account tab state; changing tabs does not create independent
 navigation histories. All services is a separate feature-owned route. Back pops
 an inner route first, then returns a nondefault root tab to Home. Home leaves the
 next Back action to the platform. Cancelling a back gesture does not change tabs.
@@ -412,7 +415,7 @@ Home capture and monthly history have separate ViewModels and encrypted cache
 windows. History observes attendance and refreshes a selected month; it owns no
 permission, location or capture actions. Inbox and Employees also have separate standalone
 routes with owners distinct from the tab entries. The service catalog contains
-business workflows; Inbox and Employees are reached through their tabs. Personal
+business workflows; Inbox has its own tab and Employees is reached through Chat/Contacts. Personal
 profile access belongs to Account and has its own admission, separate from menu
 visibility.
 

@@ -223,6 +223,11 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppInco
                             onSessions = {
                                 controller.navigate(SessionsRoute) { launchSingleTop = true }
                             },
+                            onNewChat = {
+                                controller.navigate(ChatParticipantsRoute) {
+                                    launchSingleTop = true
+                                }
+                            },
                             attendance = {
                                 AttendanceHomeContent(stage.workspace.id) { effect ->
                                     when (effect) {
@@ -251,9 +256,10 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppInco
                                 )
                             },
                             inboxBadge = { InboxBadgeContent(stage.workspace.id) },
-                            chat = {
+                            chat = { header ->
                                 ChatInboxContent(
                                     workspaceId = stage.workspace.id,
+                                    topBar = header,
                                     onNewChat = {
                                         controller.navigate(ChatParticipantsRoute) {
                                             launchSingleTop = true
@@ -271,9 +277,10 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppInco
                                     },
                                 )
                             },
-                            employees = {
+                            employees = { header ->
                                 EmployeesContent(
                                     stage.workspace.id,
+                                    topBar = header,
                                     onSearch = {
                                         controller.navigate(EmployeeSearchRoute) {
                                             launchSingleTop = true

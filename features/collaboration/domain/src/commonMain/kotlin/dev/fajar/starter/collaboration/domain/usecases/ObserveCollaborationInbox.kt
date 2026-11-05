@@ -47,6 +47,7 @@ class ObserveCollaborationInbox(
                                             else
                                                 lists
                                                     .observe(access.value, selected.list)
+                                                    .distinctUntilChanged()
                                                     .flatMapLatest { page ->
                                                         when (page) {
                                                             is AppResult.Failed -> flowOf(page)
@@ -89,7 +90,7 @@ class ObserveCollaborationInbox(
         }
         val snapshot = page.copy(items = items)
         // Slow/corrupt optional content never blocks navigation through saved conversation names.
-        emit(AppResult.Success(CollaborationInboxPage(snapshot)))
+        emit(AppResult.Success(CollaborationInboxPage(snapshot, access)))
         if (!selection.includePreviews || items.isEmpty()) return@flow
         emitAll(
             combine(items.map { preview(access, it.conversation.id) }) { rows ->
@@ -100,15 +101,17 @@ class ObserveCollaborationInbox(
                         rows.firstNotNullOfOrNull { (it.second as? AppResult.Failed)?.failure }
                     if (failure != null)
                         AppResult.Success(
-                            CollaborationInboxPage(snapshot, previewFailure = failure)
+                            CollaborationInboxPage(snapshot, access, previewFailure = failure)
                         )
                     else
                         AppResult.Success(
                             CollaborationInboxPage(
                                 snapshot,
+                                access,
                                 rows.associate {
                                     it.first to (it.second as AppResult.Success).value
                                 },
+                                previewsLoaded = true,
                             )
                         )
                 }

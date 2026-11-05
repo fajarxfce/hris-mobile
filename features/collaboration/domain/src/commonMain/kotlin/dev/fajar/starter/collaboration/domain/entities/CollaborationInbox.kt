@@ -12,8 +12,11 @@ data class CollaborationInboxPreview(
 
 data class CollaborationInboxPage(
     val list: CollaborationLocalList,
+    val access: CollaborationLocalAccess,
     val previews: Map<String, CollaborationInboxPreview> = emptyMap(),
     val previewFailure: Failure? = null,
+    /** False is a names-only emission, not an authoritative empty preview collection. */
+    val previewsLoaded: Boolean = false,
 ) {
     override fun toString() = "CollaborationInboxPage([redacted])"
 }

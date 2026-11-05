@@ -36,9 +36,10 @@ fun EmployeesContent(
     onVerify: () -> Unit,
     onSearch: () -> Unit,
     onBack: (() -> Unit)? = null,
+    topBar: (@Composable () -> Unit)? = null,
 ) {
     EmployeeDirectoryEntry(workspaceId, onVerify, onSearch, onBack) { state, list, onEvent ->
-        EmployeesPage(state, list, showBack = onBack != null, onEvent)
+        EmployeesPage(state, list, showBack = onBack != null, onEvent, topBar = topBar)
     }
 }
 

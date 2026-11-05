@@ -14,4 +14,6 @@ sealed interface HomeEffect {
     data object OpenPendingActions : HomeEffect
 
     data object OpenSessions : HomeEffect
+
+    data object OpenNewChat : HomeEffect
 }

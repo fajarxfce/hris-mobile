@@ -43,17 +43,30 @@ class ChatBottomNavigationTest {
                     Box(Modifier.size(375.dp, 720.dp)) {
                         HomePage(
                             state,
-                            { if (it is HomeEvent.TabSelected) state = state.copy(tab = it.tab) },
+                            {
+                                when (it) {
+                                    is HomeEvent.TabSelected -> state = state.copy(tab = it.tab)
+                                    is HomeEvent.ChatSectionSelected ->
+                                        state = state.copy(chatSection = it.section)
+                                    else -> Unit
+                                }
+                            },
                             attendance = {},
                             inbox = { AppText("Pemberitahuan perusahaan") },
-                            employees = { AppText("Direktori karyawan") },
+                            employees = { header ->
+                                Column {
+                                    header()
+                                    AppText("Direktori karyawan")
+                                }
+                            },
                             inboxBadge = {},
-                            chat = {
+                            chat = { header ->
                                 ChatInboxPage(
                                     ChatInboxState(loading = false),
                                     rememberLazyListState(),
                                     {},
                                     onBack = null,
+                                    topBar = header,
                                 )
                             },
                         )
@@ -67,8 +80,11 @@ class ChatBottomNavigationTest {
             .assertHeightIsAtLeast(48.dp)
         compose.onNodeWithContentDescription("Kembali").assertDoesNotExist()
         compose.onNodeWithContentDescription("Chat baru").assertIsDisplayed()
-        compose.onNode(hasText("Karyawan") and isSelectable()).performClick()
+        compose.onNode(hasText("Karyawan") and isSelectable()).assertDoesNotExist()
+        compose.onNode(hasText("Kontak") and isSelectable()).performClick().assertIsSelected()
         compose.onNodeWithText("Direktori karyawan").assertIsDisplayed()
+        compose.onNode(hasText("Chat") and isSelectable()).assertIsSelected()
+        compose.onNode(hasText("Obrolan") and isSelectable()).performClick().assertIsSelected()
         compose.onNode(hasText("Chat") and isSelectable()).performClick().assertIsSelected()
         compose.onNodeWithContentDescription("Chat baru").assertIsDisplayed()
     }

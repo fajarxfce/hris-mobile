@@ -41,6 +41,49 @@ class ObserveCollaborationInboxTest {
     }
 
     @Test
+    fun identicalListInvalidationsKeepDetailsSubscribedWhileRealUpdatesStillPublish() = runTest {
+        val f = InboxPreviewFixture()
+        val values = mutableListOf<AppResult<CollaborationInboxPage>>()
+        val job =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                f.observe().collect(values::add)
+            }
+        runCurrent()
+        val published = values.size
+        assertEquals(1, f.historyStarts)
+        repeat(3) {
+            f.listInvalidation.value++
+            runCurrent()
+            assertEquals(published, values.size)
+            assertEquals(1, f.historyStarts)
+            assertEquals(1, f.activeHistory)
+        }
+        val changedMessage = f.message.copy(text = "Updated local message")
+        f.historyPage.value = AppResult.Success(f.saved.copy(messages = listOf(changedMessage)))
+        runCurrent()
+        assertEquals(
+            changedMessage,
+            (values.last() as AppResult.Success).value.previews[f.id]!!.message,
+        )
+        assertEquals(1, f.historyStarts)
+        f.rows.value =
+            f.rows.value.map { it.copy(peer = it.peer.copy(displayName = "Updated name")) }
+        runCurrent()
+        assertEquals(
+            "Updated name",
+            (values.last() as AppResult.Success).value.list.items.single().peer.displayName,
+        )
+        assertEquals(
+            changedMessage,
+            (values.last() as AppResult.Success).value.previews[f.id]!!.message,
+        )
+        assertEquals(2, f.historyStarts)
+        job.cancelAndJoin()
+        assertEquals(0, f.activeHistory)
+        assertEquals(0, f.draft.observers)
+    }
+
+    @Test
     fun hiddenSelectionAndConfirmedDenialCloseChildrenAndFreshAdmissionReopens() = runTest {
         val f = InboxPreviewFixture()
         val values = mutableListOf<AppResult<CollaborationInboxPage>>()
@@ -171,6 +214,7 @@ private class InboxPreviewFixture {
     val id = owner.summary!!.conversation.id
     val rows = MutableStateFlow(listOf(owner.summary!!))
     val selection = MutableStateFlow(CollaborationInboxSelection())
+    val listInvalidation = MutableStateFlow(0)
     val message =
         CollaborationHistoryMessage(
             "@peer:example.test",
@@ -193,7 +237,10 @@ private class InboxPreviewFixture {
             override fun observe(
                 access: CollaborationLocalAccess,
                 selection: CollaborationListSelection,
-            ) = rows.map { AppResult.Success(CollaborationLocalList(null, it, null)) }
+            ) =
+                combine(rows, listInvalidation) { items, _ ->
+                    AppResult.Success(CollaborationLocalList(null, items, null))
+                }
         }
     val history =
         object : CollaborationHistoryRepository {

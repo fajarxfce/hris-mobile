@@ -31,7 +31,6 @@ class ChatInboxViewModel(
     private val previewsVisible = MutableStateFlow(false)
     private var refreshRequired = true
     private var advanceAfterAcquisition = false
-    private var advanceFrom: CollaborationListCheckpoint? = null
 
     init {
         on<ChatInboxEvent.Entered>(::onEntered)
@@ -109,21 +108,8 @@ class ChatInboxViewModel(
                                 }
                             }
                             is AppResult.Success -> {
-                                updateState {
-                                    it.copy(
-                                        page = result.value.list,
-                                        previews = result.value.previews,
-                                        previewFailure = result.value.previewFailure,
-                                        loading = false,
-                                        failure = null,
-                                    )
-                                }
-                                if (
-                                    visible &&
-                                        !state.value.refreshing &&
-                                        advanceAfterAcquisition &&
-                                        result.value.list.checkpoint != advanceFrom
-                                ) {
+                                updateState { it.withPage(result.value) }
+                                if (visible && !state.value.refreshing && advanceAfterAcquisition) {
                                     advanceAfterAcquisition = false
                                     result.value.list.nextCursor?.let(::nextPage)
                                 }
@@ -178,7 +164,6 @@ class ChatInboxViewModel(
                     is AppResult.Success -> {
                         reconnectAttempt = 0
                         refreshRequired = false
-                        startObservation()
                         updateState {
                             it.copy(
                                 refreshing = false,
@@ -186,12 +171,9 @@ class ChatInboxViewModel(
                                 refreshFailure = null,
                             )
                         }
-                        if (
-                            advanceAfterAcquisition && state.value.page?.checkpoint != advanceFrom
-                        ) {
-                            advanceAfterAcquisition = false
-                            state.value.page?.nextCursor?.let(::nextPage)
-                        }
+                        // Read the committed page even for a no-op acquisition. Its first local
+                        // result resolves this Next request; a later unrelated write must not.
+                        startObservation()
                     }
                 }
             }
@@ -220,7 +202,6 @@ class ChatInboxViewModel(
         if (cursor != null) nextPage(cursor)
         else
             state.value.remoteNext?.let {
-                advanceFrom = page.checkpoint
                 advanceAfterAcquisition = true
                 acquire(it)
             }

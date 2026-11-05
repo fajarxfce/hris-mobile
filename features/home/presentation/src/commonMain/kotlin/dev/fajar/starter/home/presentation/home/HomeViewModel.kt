@@ -23,10 +23,19 @@ class HomeViewModel(
     private val observeWorkspace: ObserveWorkspace,
 ) :
     MviViewModel<HomeState, HomeEvent, HomeEffect>(
-        HomeState(workspace, tab = initialTab, services = homeServices(workspace))
+        HomeState(
+            workspace,
+            tab = if (initialTab == HomeTab.Employees) HomeTab.Chat else initialTab,
+            services = homeServices(workspace),
+            chatSection =
+                if (initialTab == HomeTab.Employees) ChatSection.Contacts
+                else ChatSection.Conversations,
+        )
     ) {
     init {
         on<HomeEvent.TabSelected>(::onTabSelected)
+        on<HomeEvent.ChatSectionSelected>(::onChatSectionSelected)
+        on<HomeEvent.NewChatRequested>(::onNewChatRequested)
         on<HomeEvent.BackRequested>(::onBackRequested)
         on<HomeEvent.AllServicesRequested>(::onAllServicesRequested)
         on<HomeEvent.CompanyChangeRequested>(::onCompanyChangeRequested)
@@ -67,7 +76,21 @@ class HomeViewModel(
 
     private fun onTabSelected(event: HomeEvent.TabSelected) {
         if (state.value.working) return
-        updateState { it.copy(tab = event.tab) }
+        updateState {
+            if (event.tab == HomeTab.Employees)
+                it.copy(tab = HomeTab.Chat, chatSection = ChatSection.Contacts)
+            else it.copy(tab = event.tab)
+        }
+    }
+
+    private fun onChatSectionSelected(event: HomeEvent.ChatSectionSelected) {
+        if (state.value.working || state.value.tab != HomeTab.Chat) return
+        updateState { it.copy(chatSection = event.section) }
+    }
+
+    private fun onNewChatRequested(event: HomeEvent.NewChatRequested) {
+        if (state.value.working || state.value.tab != HomeTab.Chat) return
+        viewModelScope.launch { emitEffect(HomeEffect.OpenNewChat) }
     }
 
     private fun onBackRequested(event: HomeEvent.BackRequested) {

@@ -24,11 +24,12 @@ fun NavGraphBuilder.homeRoutes(
     onDataSync: () -> Unit,
     onPendingActions: () -> Unit,
     onSessions: () -> Unit,
+    onNewChat: () -> Unit,
     attendance: @Composable () -> Unit,
     inbox: @Composable () -> Unit,
-    employees: @Composable () -> Unit,
+    employees: @Composable (@Composable () -> Unit) -> Unit,
     inboxBadge: @Composable () -> Unit,
-    chat: @Composable () -> Unit,
+    chat: @Composable (@Composable () -> Unit) -> Unit,
     onSettings: () -> Unit,
 ) {
     composable<HomeRoute> { entry ->
@@ -48,6 +49,7 @@ fun NavGraphBuilder.homeRoutes(
                 HomeEffect.OpenPendingActions -> onPendingActions()
                 is HomeEffect.OpenService -> onService(effect.service)
                 HomeEffect.OpenSessions -> onSessions()
+                HomeEffect.OpenNewChat -> onNewChat()
             }
         }
         HomePage(state, viewModel::onEvent, attendance, inbox, employees, inboxBadge, chat)

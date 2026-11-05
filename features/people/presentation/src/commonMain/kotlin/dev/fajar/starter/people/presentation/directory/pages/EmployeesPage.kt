@@ -20,36 +20,39 @@ fun EmployeesPage(
     listState: LazyListState,
     showBack: Boolean,
     onEvent: (EmployeesEvent) -> Unit,
+    topBar: (@Composable () -> Unit)? = null,
 ) {
     AppLazyPage(
         state = listState,
         spacing = 0.dp,
         maxWidth = 720.dp,
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-        topBar = {
-            AppTopBar(
-                title = appString(AppString.Employees),
-                navigation =
-                    if (showBack) {
-                        {
+        topBar =
+            topBar
+                ?: {
+                    AppTopBar(
+                        title = appString(AppString.Employees),
+                        navigation =
+                            if (showBack) {
+                                {
+                                    AppIconButton(
+                                        Icons.Regular.ArrowLeft,
+                                        appString(AppString.Back),
+                                        { onEvent(EmployeesEvent.BackRequested) },
+                                    )
+                                }
+                            } else null,
+                        actions = {
                             AppIconButton(
-                                Icons.Regular.ArrowLeft,
-                                appString(AppString.Back),
-                                { onEvent(EmployeesEvent.BackRequested) },
+                                Icons.Regular.ArrowSync,
+                                appString(AppString.Refresh),
+                                { onEvent(EmployeesEvent.RefreshRequested) },
+                                enabled = !state.syncing,
+                                loading = state.syncing,
                             )
-                        }
-                    } else null,
-                actions = {
-                    AppIconButton(
-                        Icons.Regular.ArrowSync,
-                        appString(AppString.Refresh),
-                        { onEvent(EmployeesEvent.RefreshRequested) },
-                        enabled = !state.syncing,
-                        loading = state.syncing,
+                        },
                     )
                 },
-            )
-        },
     ) {
         item(key = "search") {
             Column(

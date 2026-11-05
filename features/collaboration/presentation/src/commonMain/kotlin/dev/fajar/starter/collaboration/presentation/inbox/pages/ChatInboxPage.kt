@@ -30,6 +30,7 @@ fun ChatInboxPage(
     onBack: (() -> Unit)? = { onEvent(ChatInboxEvent.BackRequested) },
     zone: TimeZone = TimeZone.currentSystemDefault(),
     today: LocalDate = Clock.System.now().toLocalDateTime(zone).date,
+    topBar: (@Composable () -> Unit)? = null,
 ) {
     AppLazyPage(
         modifier = modifier,
@@ -37,34 +38,36 @@ fun ChatInboxPage(
         spacing = 0.dp,
         maxWidth = 720.dp,
         contentPadding = PaddingValues(vertical = 8.dp),
-        topBar = {
-            AppTopBar(
-                title = appString(AppString.ChatTitle),
-                subtitle =
-                    if (state.refreshFailure?.let(::chatCanReconnect) == true)
-                        appString(AppString.ChatOffline)
-                    else null,
-                navigation =
-                    if (onBack == null) null
-                    else {
-                        {
+        topBar =
+            topBar
+                ?: {
+                    AppTopBar(
+                        title = appString(AppString.ChatTitle),
+                        subtitle =
+                            if (state.refreshFailure?.let(::chatCanReconnect) == true)
+                                appString(AppString.ChatOffline)
+                            else null,
+                        navigation =
+                            if (onBack == null) null
+                            else {
+                                {
+                                    AppIconButton(
+                                        Icons.Regular.ArrowLeft,
+                                        appString(AppString.Back),
+                                        onBack,
+                                    )
+                                }
+                            },
+                        actions = {
                             AppIconButton(
-                                Icons.Regular.ArrowLeft,
-                                appString(AppString.Back),
-                                onBack,
+                                Icons.Regular.Add,
+                                appString(AppString.ChatNew),
+                                { onEvent(ChatInboxEvent.NewChatRequested) },
+                                enabled = !state.restricted,
                             )
-                        }
-                    },
-                actions = {
-                    AppIconButton(
-                        Icons.Regular.Add,
-                        appString(AppString.ChatNew),
-                        { onEvent(ChatInboxEvent.NewChatRequested) },
-                        enabled = !state.restricted,
+                        },
                     )
                 },
-            )
-        },
     ) {
         if (state.orphanedUnsentCount > 0)
             item("saved-replies") {

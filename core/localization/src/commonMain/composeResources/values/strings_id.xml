@@ -953,6 +953,8 @@
     <string name="document_valid_until_label_id">Berlaku sampai</string>
     <string name="document_history_by_other_id">Dicatat oleh akun lain</string>
     <string name="chat_title_id">Chat</string>
+    <string name="chat_conversations_id">Obrolan</string>
+    <string name="chat_contacts_id">Kontak</string>
     <string name="chat_summary_id">Pesan dengan rekan kerja</string>
     <string name="chat_new_id">Chat baru</string>
     <string name="chat_empty_id">Belum ada percakapan</string>

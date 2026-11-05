@@ -4,6 +4,7 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.common.result.*
 import kotlin.test.*
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.*
 
 internal class ChatInboxContentFixture {
@@ -12,6 +13,7 @@ internal class ChatInboxContentFixture {
     var historyObservers = 0
     var draftObservers = 0
     var historyFailureOnOpen: Failure? = null
+    var historyReadGate: CompletableDeferred<Unit>? = null
 
     val history =
         object : CollaborationHistoryRepository {
@@ -31,6 +33,7 @@ internal class ChatInboxContentFixture {
                     assertEquals(0, overlap)
                     historyObservers++
                     try {
+                        historyReadGate?.await()
                         historyFailureOnOpen?.let {
                             emit(AppResult.Failed(it))
                             return@flow

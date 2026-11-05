@@ -20,6 +20,61 @@ abstract class CollaborationListStorageContract {
     protected abstract fun databaseOwner(): CollaborationListDatabaseOwner
 
     @Test
+    fun identicalSummaryPagesDoNotPublishOrReencryptUnchangedRecords() = withDatabase { f ->
+        f.merge(listOf(listSummary(1), listSummary(2)))
+        val before = f.raw()
+        val checkpoint = f.checkpoint()
+        assertEquals(
+            AppResult.Success(true),
+            f.repository.merge(
+                f.access,
+                checkpoint,
+                listOf(listSummary(1)),
+                Instant.fromEpochMilliseconds(1000),
+            ),
+        )
+        assertEquals(before, f.raw())
+        assertEquals(checkpoint, f.checkpoint())
+        val renamed = listSummary(1).copy(peer = listSummary(1).peer.copy(displayName = "New name"))
+        f.merge(listOf(renamed, listSummary(2)))
+        val after = f.raw()
+        assertEquals(
+            before.documents.single { it.id == listId(2) },
+            after.documents.single { it.id == listId(2) },
+        )
+        assertNotEquals(
+            before.documents.single { it.id == listId(1) },
+            after.documents.single { it.id == listId(1) },
+        )
+        assertEquals(listOf(renamed, listSummary(2)), f.page().items)
+    }
+
+    @Test
+    fun noOpStillRejectsAnAccountReplacementAtItsFinalCheckpointRead() = withDatabase { f ->
+        f.merge(listOf(listSummary(1)))
+        val before = f.checkpoint()
+        var reads = 0
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun checkpoint(
+                    scope: ReplicaScope,
+                    partition: String,
+                ): ReplicaCheckpoint? {
+                    reads++
+                    if (reads == 2) f.activate(f.access.copy(sessionId = "replacement"))
+                    return f.database.replicas.checkpoint(scope, partition)
+                }
+            }
+        assertEquals(
+            AppResult.Success(false),
+            f.repository(store).merge(f.access, before, listOf(listSummary(1)), f.now),
+        )
+        assertEquals(2, reads)
+        f.activate()
+        assertEquals(before, f.checkpoint())
+    }
+
+    @Test
     fun newerDenialAtTheFinalClearCannotBeErasedByEitherOlderCompletion() = withDatabase { f ->
         for (admitting in listOf(false, true)) {
             assertEquals(AppResult.Success(true), f.repository.restrict(f.access, f.denied))

@@ -7,6 +7,10 @@ sealed interface HomeEvent {
 
     data class TabSelected(val tab: HomeTab) : HomeEvent
 
+    data class ChatSectionSelected(val section: ChatSection) : HomeEvent
+
+    data object NewChatRequested : HomeEvent
+
     data object BackRequested : HomeEvent
 
     data object AllServicesRequested : HomeEvent

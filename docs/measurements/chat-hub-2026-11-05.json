@@ -1,0 +1,233 @@
+{
+  "recordedAt": "2026-11-05T16:57:34.950815+00:00",
+  "scope": "Single Chat destination, Contacts directory, retained local previews, no-op metadata writes and completed empty pagination.",
+  "runs": {
+    "focused1": {
+      "startedAt": "2026-11-05T16:21:42.297540+00:00",
+      "elapsedSeconds": 463.277,
+      "exitCode": 1,
+      "sourceFiles": 4102,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 47,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "manifestSha256": "7cf3944d5946edbfb91778735bc1955375967e5720738241b8bacc194527548e",
+      "freshReportCount": 6,
+      "freshReportsSha256": "3b8728cdb53d662dbe654bb9c77d2907eae11c20367881bd66057328752a1774"
+    },
+    "focused2": {
+      "startedAt": "2026-11-05T16:30:20.842990+00:00",
+      "elapsedSeconds": 136.104,
+      "exitCode": 0,
+      "sourceFiles": 4103,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 51,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "manifestSha256": "3bbd4744c820a6c983bb721732ac6473b9763fc1d72fb3d25bee9d7d9e55a190",
+      "freshReportCount": 7,
+      "freshReportsSha256": "d2a459e9b538edce31213f227850353b193c0a7c66ffd0e1602a2e3b4eaf3490"
+    },
+    "full1": {
+      "startedAt": "2026-11-05T16:33:32.739070+00:00",
+      "elapsedSeconds": 946.818,
+      "exitCode": 1,
+      "sourceFiles": 4103,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 4025,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "manifestSha256": "0382a50de2a8a10d7c0f041863150e175df4b8fca0cff5bf27615866476ade14",
+      "freshReportCount": 498,
+      "freshReportsSha256": "4d4545a9014d8586efc3207230c32dd7ee4e83a9a623ae3b24ce9e6824b5a707"
+    },
+    "full2": {
+      "startedAt": "2026-11-05T16:50:02.351455+00:00",
+      "elapsedSeconds": 399.451,
+      "exitCode": 0,
+      "sourceFiles": 4103,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1045,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "manifestSha256": "f579b249a4b0fe77e932d6ffb8e18c9afd5f72b623c7b246fc60c441ca5132e3",
+      "freshReportCount": 153,
+      "freshReportsSha256": "87c7b223c5723be1de070c589c11711790c39bb96922fc3799313ed444c98c12"
+    }
+  },
+  "finalTasks": {
+    ":architectureCheck": "EXECUTED",
+    ":detekt": "EXECUTED",
+    ":formatCheck": "EXECUTED",
+    ":apps:demo:desktopTest": "UP-TO-DATE",
+    ":apps:shared:desktopTest": "EXECUTED",
+    ":core:common:desktopTest": "UP-TO-DATE",
+    ":core:database:desktopTest": "UP-TO-DATE",
+    ":core:datastore:desktopTest": "UP-TO-DATE",
+    ":core:designsystem:desktopTest": "NO-SOURCE",
+    ":core:fileio:desktopTest": "UP-TO-DATE",
+    ":core:localization:desktopTest": "UP-TO-DATE",
+    ":core:network:desktopTest": "UP-TO-DATE",
+    ":core:observability:desktopTest": "UP-TO-DATE",
+    ":core:presentation:desktopTest": "UP-TO-DATE",
+    ":core:securestorage:desktopTest": "UP-TO-DATE",
+    ":core:storage:desktopTest": "UP-TO-DATE",
+    ":core:worker:desktopTest": "UP-TO-DATE",
+    ":core:availability:data:desktopTest": "UP-TO-DATE",
+    ":core:availability:domain:desktopTest": "UP-TO-DATE",
+    ":core:documents:data:desktopTest": "UP-TO-DATE",
+    ":core:documents:domain:desktopTest": "UP-TO-DATE",
+    ":core:featureflags:data:desktopTest": "UP-TO-DATE",
+    ":core:featureflags:domain:desktopTest": "UP-TO-DATE",
+    ":core:identity:data:desktopTest": "UP-TO-DATE",
+    ":core:identity:domain:desktopTest": "UP-TO-DATE",
+    ":core:location:data:desktopTest": "UP-TO-DATE",
+    ":core:location:domain:desktopTest": "NO-SOURCE",
+    ":core:notifications:data:desktopTest": "UP-TO-DATE",
+    ":core:notifications:domain:desktopTest": "UP-TO-DATE",
+    ":core:security:data:desktopTest": "UP-TO-DATE",
+    ":core:security:domain:desktopTest": "UP-TO-DATE",
+    ":core:settings:data:desktopTest": "UP-TO-DATE",
+    ":core:settings:domain:desktopTest": "NO-SOURCE",
+    ":core:sync:data:desktopTest": "UP-TO-DATE",
+    ":core:sync:domain:desktopTest": "NO-SOURCE",
+    ":core:transfers:data:desktopTest": "UP-TO-DATE",
+    ":core:transfers:domain:desktopTest": "UP-TO-DATE",
+    ":core:workspace:data:desktopTest": "UP-TO-DATE",
+    ":core:workspace:domain:desktopTest": "UP-TO-DATE",
+    ":features:auth:presentation:desktopTest": "UP-TO-DATE",
+    ":features:availability:presentation:desktopTest": "NO-SOURCE",
+    ":features:collaboration:data:desktopTest": "UP-TO-DATE",
+    ":features:collaboration:data:testAndroidHostTest": "UP-TO-DATE",
+    ":features:collaboration:domain:desktopTest": "UP-TO-DATE",
+    ":features:collaboration:presentation:desktopTest": "EXECUTED",
+    ":features:dashboard:data:desktopTest": "UP-TO-DATE",
+    ":features:dashboard:domain:desktopTest": "UP-TO-DATE",
+    ":features:dashboard:presentation:desktopTest": "UP-TO-DATE",
+    ":features:documents:presentation:desktopTest": "UP-TO-DATE",
+    ":features:expenses:data:desktopTest": "UP-TO-DATE",
+    ":features:expenses:domain:desktopTest": "UP-TO-DATE",
+    ":features:expenses:presentation:desktopTest": "UP-TO-DATE",
+    ":features:files:presentation:desktopTest": "UP-TO-DATE",
+    ":features:home:presentation:desktopTest": "UP-TO-DATE",
+    ":features:inbox:data:desktopTest": "UP-TO-DATE",
+    ":features:inbox:domain:desktopTest": "UP-TO-DATE",
+    ":features:inbox:presentation:desktopTest": "NO-SOURCE",
+    ":features:leave:data:desktopTest": "UP-TO-DATE",
+    ":features:leave:domain:desktopTest": "UP-TO-DATE",
+    ":features:leave:presentation:desktopTest": "UP-TO-DATE",
+    ":features:notifications:presentation:desktopTest": "UP-TO-DATE",
+    ":features:onboarding:data:desktopTest": "UP-TO-DATE",
+    ":features:onboarding:domain:desktopTest": "NO-SOURCE",
+    ":features:onboarding:presentation:desktopTest": "UP-TO-DATE",
+    ":features:payroll:data:desktopTest": "UP-TO-DATE",
+    ":features:payroll:domain:desktopTest": "UP-TO-DATE",
+    ":features:payroll:presentation:desktopTest": "UP-TO-DATE",
+    ":features:people:data:desktopTest": "UP-TO-DATE",
+    ":features:people:domain:desktopTest": "UP-TO-DATE",
+    ":features:people:presentation:desktopTest": "UP-TO-DATE",
+    ":features:security:presentation:desktopTest": "UP-TO-DATE",
+    ":features:settings:presentation:desktopTest": "UP-TO-DATE",
+    ":features:workforce:data:desktopTest": "UP-TO-DATE",
+    ":features:workforce:domain:desktopTest": "UP-TO-DATE",
+    ":features:workforce:presentation:desktopTest": "UP-TO-DATE",
+    ":features:workspace:presentation:desktopTest": "NO-SOURCE",
+    ":check": "EXECUTED",
+    ":core:database:wasmJsBrowserTest": "UP-TO-DATE",
+    ":apps:android:compileDevDebugKotlin": "UP-TO-DATE",
+    ":features:collaboration:data:wasmJsBrowserTest": "UP-TO-DATE",
+    ":features:collaboration:presentation:wasmJsBrowserTest": "EXECUTED",
+    ":apps:collaboration-proof:assembleDebug": "EXECUTED",
+    ":apps:collaboration-proof:testDebugUnitTest": "EXECUTED"
+  },
+  "selectedReports": {
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml": {
+      "tests": 90,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "8817b93c9370f1b1947f3a0604a697d565e38fd52ebb08732639f8a877cafdf6"
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ChatHubLayoutTest.xml": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "1854dd38e7fd425cd1c1abc7f945d44c3c0250d2e4b1871e5e2569a83103e845"
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ChatBottomNavigationTest.xml": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "28e0a56916489f0484c2c2959335c49d18aec80d40b56ca54cbe28cf5766730e"
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.inbox.ChatInboxViewModelTest.xml": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f528fd6845f665adac8b856cace18b72ecafbc9f184b812011b3701ea2bd6ee5"
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.inbox.ChatInboxProjectionTest.xml": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "5ceb4ca5efdcbc74d8591d7dfacd517554ecc014a66bef734e7ec3d5ba37306d"
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ObserveCollaborationInboxTest.xml": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ee74075bf717919d1ba0dae8157f5c690361395ca60830b7371d4ab082097c21"
+    },
+    "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationListStorageTest.xml": {
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "58abd0134b1213096c1b0bd1f53eb4f00a81a1584af7898b25ce1b228126e131"
+    }
+  },
+  "visualReview": {
+    "syntheticFixtures": true,
+    "openedAndReviewed": true,
+    "pixelBaselineComparison": false,
+    "variants": [
+      "375px light",
+      "375px dark 200% text",
+      "760px landscape"
+    ],
+    "reducedMotion": true,
+    "images": {
+      "docs/images/chat-hub/chat-hub-conversations-compact.png": "bcc448765300ba1d51fd2acd5169897798454dbbdce2cdd427cc568af2c3e686",
+      "docs/images/chat-hub/chat-hub-contacts-compact.png": "bfe0ab6dc1809cee951a54042daad1e0d46d3d56677ac1feeada6686fc55608b",
+      "docs/images/chat-hub/chat-hub-conversations-dark-large-text.png": "612fbe77cae977931afed123e669f91af03d39e7f15d73025bf50c2f6fc742ba",
+      "docs/images/chat-hub/chat-hub-contacts-dark-large-text.png": "0cc75b97220740f3607dd10a65fdd2575df924bcae4b554fad7419f54172fa59",
+      "docs/images/chat-hub/chat-hub-conversations-landscape.png": "3a2a7cf82778264613e818d953964fbaff1c492a9f10eb91663a5d75d93482c5",
+      "docs/images/chat-hub/chat-hub-contacts-landscape.png": "c512618633c0d8bf269c758b7886dac743a17bf8807ed23fa276e3a7cb700740"
+    }
+  },
+  "priorFailures": [
+    "focused1: unfinished .work Kotlin screenshot fixture failed formatCheck; 47 behavioral tests passed.",
+    "full1: login UI timed out before the overtime flow; 4025 cases executed, one failure. Emulator also exited under host load. No timeout inflation or login product fix."
+  ],
+  "nativeAcceptance": "Pending release38 exact APK on owned emulator.",
+  "phoneDelivery": "Pending release38; installed phone remains37.",
+  "transportDeltaImplemented": false,
+  "starterPort": "No generic source changed in this hub patch. Separate command-batch Apple acceptance is f99650d."
+}

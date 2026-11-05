@@ -1,5 +1,52 @@
 # Agent continuation — HRIS Mobile
 
+## Chat/Contacts hub locally validated; release 38 next — 5 November 2026
+
+User's active priority: combine Employees and Chat in one bottom destination, keep
+future calls there, and fix list blinking from identical data. [Hub contract](collaboration-chat-hub.md)
+now implements four root destinations and Conversations/Contacts; legacy Employees
+routes normalize to Chat/Contacts. Contacts retains the company directory; New chat
+opens the cross-company participant picker. Employee rows are not yet account-linked
+chat actions. No inactive Calls tab or calls acceptance claim.
+
+Same-owner previews survive names-only emissions and hidden-section reentry. Duplicate
+list emissions keep preview subscriptions, and unchanged metadata preserves ciphertext
+and checkpoint. Empty Next acquisition no longer leaves a latent navigation intent.
+Complete empty content, storage failure, owner replacement and admission denial still
+clear protected previews. HRIS summary HTTP remains paged acquisition, not a delta feed;
+Matrix messages already synchronize incrementally. Backend metadata deltas/tombstones
+are still real required work, followed by editing/delete/groups/calls/meet.
+
+[Final full2](measurements/chat-hub-2026-11-05.json) PASSES root check, Android host/
+compile, actual browser and proof build/tests: 1,045 fresh cases/399.451s, zero failures/
+errors/skips, 4,103 unchanged inputs. Earlier focused2 passed51/136.104s. Full1 executed
+4,025 with one login UI timeout before overtime started; full2 passes all90 AppFlow
+cases without changing login code/timeouts. Six synthetic desktop captures opened/
+reviewed:375px, dark200%text, landscape; reduced motion and48dp semantics. No pixel
+baseline comparison. All gate wrappers and children have drained.
+
+NEXT: commit/push this source, dispatch ONE Mobile Apple run, build/lint CLEAN ARM64
+release38 with .work/release-phone-2026-11-05-build38/build-arm64.py, verify both artifact
+scripts. No38 APK or installation exists yet. Phone remains37 and was reachable at
+16:44UTC. After build start retained sample1/Rani, install-owned-sample.py1 and run
+.work/chat-hub-2026-11-05/prove-native.py; verify fixture employee legal-name label
+before running (may differ from account display name). It tests hub/Newchat return,
+reopen, cold offline previews and existing synthetic room history without sending.
+All emulator images are stopped: sample1 QEMU exited under host load while full1 ran;
+its last start record PID1962273 is stale. Preserve userdata AND sidecars/keys. Run
+native tests separately from heavy builds. Restore Bima/sample2 as receiver afterward.
+Announce EACH phone installation; explicit10.77.77.3:5555, --install-only, no phone UI.
+
+Starter batch Apple42061944252 is accepted at source0fa8e09:118cases/31suites, six
+batch cases and full simulator app/associations. Docs f99650d pushed; no Starter job
+or port acceptance remains. Prior Mobile Forward Apple42054097304 passes1273cases.
+Backend11a98115/schema116 unchanged; group V117–137 remain unshipped; chat push OFF.
+Protected Mobile edit WIP stasha34a7b2261f4ea35df0bad44412cfc40ef9e5f20 contains five
+unvalidated decoder/policy files. Preserve it and original stashbfdef2ce; do not apply
+during source freeze. Editing window15minutes; immutable original evidence must stay
+separate from replacements. No generic source changed in the hub patch; no Starter
+UI/policy port. All54 PRD groups remain open; this user feedback does not cancel them.
+
 ## Forward Apple accepted; generic batch port validated — 5 November 2026
 
 Full [Apple CI 42054097304](measurements/chat-forward-apple-2026-11-05.json) passes

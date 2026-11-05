@@ -9,8 +9,14 @@ enum class HomeTab {
     Home,
     Chat,
     Inbox,
+    /** Compatibility with previously saved HomeRoute values; opens Chat / Contacts. */
     Employees,
     Account,
+}
+
+enum class ChatSection {
+    Conversations,
+    Contacts,
 }
 
 data class HomeState(
@@ -20,6 +26,8 @@ data class HomeState(
     val operation: HomeOperation? = null,
     val failure: Failure? = null,
     val services: HomeServiceCatalog = HomeServiceCatalog(),
+    val chatSection: ChatSection =
+        if (tab == HomeTab.Employees) ChatSection.Contacts else ChatSection.Conversations,
 ) {
     val working: Boolean
         get() = operation != null
