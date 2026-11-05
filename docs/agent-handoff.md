@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Edit storage Apple acceptance; transport evidence in progress — 5 November 2026
+
+[Apple evidence](measurements/collaboration-message-edits-apple-2026-11-05.json):
+42123588891 exactd47554f8 PASS1,310 cases/154 suites, zero failures/errors/skips,
+full Xcode app1188s, simulator compilation720s/tests79s, push envelope and
+associations. Artifact13460739856 SHA2565ba983a7… matches GitHub;39 product source
+hashes verified. Data/presentation tests are not part of this Apple job; full app
+compilation includes them. Physical iPhone waived. Audit driver12479 drained.
+Do not rerun. This acceptance excludes later reference/evidence changes.
+
+Replacement-reference product fb52611d is pushed and locally accepted: full4,981
+fresh cases/588.776s, focused122/135.577s, lint0. Twelve Kotlin files now add separate
+body-free encrypted edit transport evidence; focused evidence1 is RUNNING under
+frozen sources. Draft entity/repository/DTO/codec/reader pieces have been applied,
+with transactional proof/replay/collision guards and6 shared storage cases on new
+SQLite/IndexedDB adapters. Do not reapply .work/apply-evidence.py. Earlier3 authoring
+drafts remain unapplied. Finish focused/full gates and fixes before committing this
+increment, then durable edit outbox/recovery/retirement and long-press editor with
+normal drafts preserved. Raw cold-revision acquisition and native proof still open.
+
+Platform fullCI42126384926 on472abcc9 FAILED all8 backend jobs before DB cases:
+Testcontainers2.0.5 misparses combined tag@digest as a different repository. Four
+dashboard jobs PASS;2 dependent integrations skipped. Source inspection confirms
+this parser limitation. Convention WIP now validates the catalog and uses identical
+digest-only spelling for JVM tests, retaining standard compatibility checks. Run
+prepared check-pin-smoke.py after the active Mobile gate drains: real isolation,
+onboarding/offboarding midnight and worker context, then new full CI after push.
+Do not rerun old472 or infer DB acceptance from the prior SQL probe. No live change.
+
+Phone40 remains; both retained emulators stopped/data preserved. Starter bce2012
+complete. Preserve both stashes and accepted Forward publications. Continue all54
+PRD groups; no feature group closure, edit APK or new device acceptance yet.
+
 ## Replacement references accepted locally; continue edit transport evidence — 5 November 2026
 
 [Contract](collaboration-message-edits.md),

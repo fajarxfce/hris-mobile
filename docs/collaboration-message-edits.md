@@ -87,6 +87,14 @@ redaction/restart, owner/denial/checkpoint races, cancellation and storage failu
 The new test's initial compile failure and stopped correction attempt are recorded.
 No new device acceptance or edit authoring release is claimed here.
 
+[Apple storage acceptance](measurements/collaboration-message-edits-apple-2026-11-05.json)
+for d47554f8 passes1,310 cases/154 suites, full Xcode application, native push
+extraction and associations. GitHub artifact digest and39 product source hashes
+are verified. The workflow runs domain/raw database tests; collaboration data and
+presentation compile in the app but their tests do not execute in this Apple job.
+This result predates the11-file replacement-reference increment and the following
+transport-evidence work. Physical iPhone testing remains waived.
+
 This increment is not delivered edit authoring or an edit outbox. Organization-wide
 background acquisition, long-press editing with preserved ordinary drafts,
 optimistic pending edits, native send/receipt recovery, and device proof remain.
