@@ -1,5 +1,27 @@
 # Agent continuation — HRIS Mobile
 
+## Release36 Apple accepted; Forward metadata under test — 5 November 2026
+
+Full AppleCI42036083914 passes sourcea26a1248: downloaded1,256 cases/146 suites,
+zero failures/errors/skips, including seven SynchronizeCollaborationDevice tests;
+complete simulator app/associations pass. [Evidence](measurements/chat-device-sync-apple-2026-11-05.json).
+Phone remains installed36; Bima owned emulator5562 remains active, backend unchanged.
+
+Generic batch sourcee3c1e326 is committed/pushed and separately running Apple-only
+CI42042685222. Do not cancel it with another same-branch dispatch. Local raw API
+120-focused/2,707-full acceptance remains valid. Forward feature metadata patch was
+restored without losing synchronizeDevice fake methods; protected stashbfdef2ce
+is retained. Current uncommitted work adds encrypted atomic message insertion,
+authenticated exact replay and forwarded metadata across queue/original history/live
+projection. It has no recipient UI/use case or native acceptance yet. Focused gate
+metadata1 selected an absent jvmTest task (zero tests); corrected metadata2 selects
+desktopTest and is running. Do not edit source until its wrapper/child drains.
+
+Next: inspect focused result, finish offline source/target preparation and long-press
+Forward picker preserving drafts and original IDs, validate actual encrypted native
+roundtrip and restart, then deliver reviewed release and port generic batch to Starter.
+All54 PRD groups remain open; continue broader edit/delete/groups/calls/meet.
+
 ## Atomic command batches validated; Forward consumer next — 5 November 2026
 
 Ten core/database files now provide transactional insertBatch with immutable

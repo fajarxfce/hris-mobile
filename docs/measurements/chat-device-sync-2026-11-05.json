@@ -294,10 +294,18 @@
   "phoneVersionCode": 36,
   "deliveryMeasurement": "android-release-phone-2026-11-05-build36.json",
   "appleCi": {
-    "id": 42036083914,
-    "source": "a26a124837637831655d19cc9dc89c1929e65e02",
-    "status": "in_progress",
-    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42036083914"
+    "run": 42036083914,
+    "headSha": "a26a124837637831655d19cc9dc89c1929e65e02",
+    "status": "completed",
+    "conclusion": "success",
+    "counts": {
+      "tests": 1256,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suiteCount": 146,
+    "evidence": "chat-device-sync-apple-2026-11-05.json"
   },
   "allFictionalReceiversReady": {
     "readAt": "2026-11-05T13:52:43.627505+00:00",

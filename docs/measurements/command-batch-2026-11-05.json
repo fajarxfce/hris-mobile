@@ -2943,7 +2943,15 @@
     }
   },
   "cachedTestTasks": [],
-  "apple": "New six-case wrapper not yet executed; running CI42036083914 is older a26a source",
+  "apple": {
+    "run": 42042685222,
+    "headSha": "e3c1e3262e8a306ea587f73de8bfa974dd54188c",
+    "status": "in_progress",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42042685222",
+    "previousRelease36Run": 42036083914,
+    "previousRelease36Status": "success",
+    "newWrapperAccepted": false
+  },
   "starter": "Port pending Mobile feature validation",
   "delivery": "Phone remains release36/a26a; this storage-only change is not installed"
 }

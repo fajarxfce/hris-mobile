@@ -61,3 +61,9 @@ history-error control. Proof102.333s. Closed diagnostics recorded76 HTTP200 resu
 and three unavailable worker retries at startup; zero-crash evidence does not claim
 zero retries. Source/build/lint pass; phone install-only delivery is confirmed with
 matching device SHA256 and retained app identity. [Full evidence](measurements/android-release-phone-2026-11-05-build36.json).
+
+Apple CI [42036083914](https://github.com/fajarxfce/hris-mobile/actions/runs/42036083914)
+fully passes source a26a1248. Downloaded simulator reports contain 1,256 cases in
+146 suites, zero failures/errors/skips, including seven device-sync policy cases.
+The simulator app and generated associations also pass. This does not establish
+physical iPhone push/call behavior. [Apple evidence](measurements/chat-device-sync-apple-2026-11-05.json).
