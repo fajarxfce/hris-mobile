@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Product release 32 installed — 5 November 2026
+
+Latest validated product source [64c9432f](https://github.com/fajarxfce/hris-mobile/commit/64c9432f6538070f6adf750dd3920481efa7c032) is built as ARM64 devRelease 32
+and installed in place on `10.77.77.3:5555`. Package `dev.fajar.hris.mobile.dev`,
+version 1.0.0/code 32, non-debuggable. APK 88,304,880 bytes;
+SHA-256 `104793ff434b71f7bd8b5c4c7ff313a8415d4be916474e72d8ca55d74139dcf5`. Existing development signer, app ID and first-install
+time are preserved; pulled-back installed bytes match the verified artifact.
+Installation was explicitly requested and announced; no phone UI launch, uninstall
+or data clearing. [Evidence](measurements/android-release-phone-2026-11-05-build32.json).
+
+Release assembly and lint pass in 500.117 s, with zero lint issues.
+Signature, package/version, ARM64-only libraries, 16 KiB alignment, Firebase dev app,
+WireGuard API and compiled backup exclusions are checked. Exact APK opens twice on
+the owned emulator through its native bridge, with 12 stable seconds per start and
+reviewed screenshots. The emulator is stopped. These are startup/install checks;
+no new notification/SystemUI reply/FCM or full authenticated workflow proof is claimed.
+Source header correction passed focused 18 fresh cases
+and root/Android 812 fresh cases on identical
+4,050 inputs. Earlier unchanged cases remain bound by report hashes.
+No source changes occurred during release build.
+
+The release removes connection status below the conversation name and the permanent
+checkmark selection button. Long-press selects messages and reveals contextual
+copy/delete actions. Original SDK authentication recovery retains local history and
+replaces confirmed credentials in the original protected store without resetting keys.
+[Header contract](collaboration-chat-header.md), [recovery contract](collaboration-chat-reconnect.md).
+
+NEXT: observe closed operation diagnostics after ordinary phone use; earlier generic
+Bima transport failures remain unattributed. User confirmed immediate history on
+release31 reopening, but a physical internet-off test is not claimed. Preserve
+original private SDK keys/account data. Continue delivered edit/reply/forward/delete
+for everyone, original-bootstrap resolution/adoption, group runtime/UI, calls and
+meetings. All54 groups open; live8b40/schema116 unchanged. Continue long run,
+atomic pushes and validated delivery.
+
 ## Chat header correction — 5 November 2026
 
 The thread header now shows the conversation name and Back only. Removed every
