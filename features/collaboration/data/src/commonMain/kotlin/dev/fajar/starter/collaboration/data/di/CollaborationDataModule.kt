@@ -15,6 +15,82 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Factory
+    fun observeSpaceSetup(
+        commands: CollaborationSpaceSetupCommandRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceSetup(commands, sessions, server)
+
+    @Factory
+    fun prepareSpaceSetup(
+        commands: CollaborationSpaceSetupCommandRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        identities: CollaborationSpaceIdentityRepository,
+        devices: CollaborationSpaceDeviceRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        PrepareCollaborationSpaceSetup(
+            commands,
+            registrations,
+            identities,
+            devices,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
+    fun replaySpaceSetup(
+        commands: CollaborationSpaceSetupCommandRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        identities: CollaborationSpaceIdentityRepository,
+        devices: CollaborationSpaceDeviceRepository,
+        setup: CollaborationSpaceSetupRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReplayCollaborationSpaceSetup(
+            commands,
+            registrations,
+            identities,
+            devices,
+            setup,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
+    fun reconcileSpaceRetry(
+        commands: CollaborationSpaceSetupCommandRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        devices: CollaborationSpaceDeviceRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReconcileCollaborationSpaceRetry(
+            commands,
+            registrations,
+            devices,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun observeSpaceRegistrations(
         commands: CollaborationSpaceRegistrationCommandRepository,
         sessions: SessionRepository,

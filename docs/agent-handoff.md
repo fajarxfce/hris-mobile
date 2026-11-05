@@ -1,5 +1,52 @@
 # Agent continuation — HRIS Mobile
 
+## Native organization setup owning flow — 5 November 2026
+
+The actual feature DI graph now owns finite explicit provisioning retry/bootstrap
+preparation and replay, metadata-based retry reconciliation and credential-free local
+queue observation. Original Registered LEGACY provenance/current selected identity
+and native device anchor setup; no selected HR company or SDK reopening is required.
+A missing SDK never authorizes SPACE fallback. [Contract](collaboration-space-native-setup-flow.md).
+
+Pending validates exact current resources and durably stores Unconfirmed before HTTP.
+Uncertain retry retains the original operation/body/native parent without re-preparing
+or reopening a frozen SDK. Bootstrap requires its original actual build; retry permits
+same-family build upgrades. Original hard/wall/monotonic and mutex budgets are finite;
+confirmed/concurrent denials survive failed storage and cancellation. Received gateway
+credentials are encrypted before publication, including an access-expiry recheck after
+storage. Completed credentials/receipts remain owned local facts across age/login/
+parent replacement, never a live SDK/directory grant. The bounded local summary omits
+tokens and drops queued old-account emissions on replacement/disposal.
+
+Only a confirmed retry whose exact native device metadata has reached its recorded
+provisioning revision can be archived. Lost archive responses recover the immutable
+original receipt; another operation can then use the active slot. Pending/Unconfirmed/
+Bootstrapped cannot be retired by this use case. No automatic retry is introduced.
+
+Twenty-eight new common domain cases cover preparation (8), replay (13), retry
+reconciliation (4) and local observation (3), including cancellation/late results,
+original command recovery, concurrent denial, unchanged native/SDK provenance and
+old-account emission disposal. Existing registration flows and setup transport/storage
+are included as regressions. Actual AppContainer resolves the owning use cases and
+single replay instance. Focused: 76 cases / 131.109 s.
+Root :check, Android-host and dev compilation: 2,726 fresh cases /
+340.396 s. Browser data/domain: 1,634 fresh cases /
+141.395 s. Final gates preserve identical 4,018 build/application
+inputs; format, architecture and detekt pass. All gate sessions closed.
+[Evidence](measurements/collaboration-space-native-setup-flow-2026-11-05.json).
+
+NEXT: explicit bootstrap operation recovery beyond 30 s, actual-build changes or an
+advanced gateway head. Null gateway metadata cannot exclude a late original request;
+preserve original/replacement intent through crashes, never forge headers or discard
+uncertainty. Then retained private-store inventory, explicit hard-parent recovery,
+old-runtime freeze/drain/handover and original-store adoption, group runtime/UI and
+typed push/background replies. No product route was enabled by this DI-bound slice.
+
+All 54 PRD groups remain open. No new APK/phone, live deployment, provider/FCM,
+JNI/private-key proof, Apple runtime or performance acceptance. Live backend
+8b40/schema 116 and phone release 29/source 084662c5 unchanged. Continue long run,
+atomic pushes and validated install-only product delivery with advance notice.
+
 ## Durable native organization setup storage — 5 November 2026
 
 Native retry/bootstrap intent now retains the original registration reference,

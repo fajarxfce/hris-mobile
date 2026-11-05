@@ -1,5 +1,9 @@
 # Architecture
 
+[Native organization setup owning flow](collaboration-space-native-setup-flow.md)
+coordinates finite original retry/bootstrap preparation and replay, exact retry
+receipt reconciliation and account-owned queue summaries without credential exposure.
+
 [Durable native organization setup](collaboration-space-native-setup-storage.md)
 retains encrypted original retry/bootstrap commands and gateway outcomes, with
 exact immutable retry archives and account-owned recovery after login replacement.
