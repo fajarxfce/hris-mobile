@@ -1,5 +1,12 @@
 # Agent continuation — HRIS Mobile
 
+## Edit-history Apple gate running — 5 November 2026
+
+Product d47554f8778f435a6f8b953b0c8eea7530735871 is committed/pushed. Apple-only CI
+[42123588891](https://github.com/fajarxfce/hris-mobile/actions/runs/42123588891)
+runs that exact source; do not duplicate dispatch. Local accepted tests and next
+provider-reference/authoring work are below. No edit APK/native proof yet.
+
 ## Persisted message edits accepted locally; authoring continues — 5 November 2026
 
 [Contract](collaboration-message-edits.md),
