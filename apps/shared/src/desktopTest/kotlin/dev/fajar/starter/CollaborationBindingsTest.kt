@@ -218,6 +218,7 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<ReadCollaborationSpaceContacts>())
                 assertNotNull(container.koin.get<CollaborationSpaceDeviceRepository>())
                 assertNotNull(container.koin.get<CollaborationSpaceSetupRepository>())
+                assertNotNull(container.koin.get<CollaborationSpaceSetupCommandRepository>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceDeviceStatus>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceIdentity>())
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceDirectory>())

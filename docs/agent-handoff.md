@@ -1,5 +1,48 @@
 # Agent continuation — HRIS Mobile
 
+## Durable native organization setup storage — 5 November 2026
+
+Native retry/bootstrap intent now retains the original registration reference,
+operation/native parent, platform/build and exact request in encrypted account/space
+storage. Local login/company replacement and ordinary age do not hide owned work.
+Unconfirmed precedes HTTP; terminal Retried or Bootstrapped preserves the exact device,
+provisioning/gateway version and original provider identity. Received group gateway
+tokens are encrypted and redacted. [Contract](collaboration-space-native-setup-storage.md).
+
+One active resource per original native parent has bounded account observation and
+exact CAS. Shared-key loss cannot regenerate over active/inactive/archive records.
+After the owning caller reconciles a confirmed retry against current metadata,
+archiveRetried preserves its exact request/outcome as immutable evidence and releases
+the active slot. Lost archive responses and same-operation insertion recover the
+original completion without publishing pending work. Exact-ID archive/evidence checks
+reject substitutions. Bootstrap retirement/adoption remains a separate owning flow.
+
+Fifteen common storage cases pass on actual SQLite and IndexedDB, covering encrypted
+gateway restart/new login, original intent, lost commit responses, contention/CAS,
+terminal outcomes, native/account isolation, wrong provider/token/bounds, inactive
+archived key loss, immutable archives, retained denial and bounded observation.
+Actual AppContainer resolves the owning repository. Focused: 41 cases /
+119.196 s. Root :check, Android-host and dev compilation: 2,698
+fresh cases / 339.227 s. Browser data/domain: 1,606 fresh cases /
+138.797 s. Final gates preserve identical 4,006 build/application
+inputs; format, architecture and detekt pass. All gate sessions closed.
+[Evidence](measurements/collaboration-space-native-setup-storage-2026-11-05.json).
+
+NEXT: finite explicit preparation/replay and retry receipt reconciliation, using the
+original Registered anchor/current identity/status, durable uncertainty before HTTP
+and gateway storage before publication. Enforce current admission and original hard,
+wall and monotonic deadlines. Preserve confirmed denial through failed storage and
+cancellation. Parent/build replacement cannot rewrite uncertain bootstrap. Null gateway
+metadata cannot disprove a late old operation; explicit server operation recovery or
+supersession must preserve old and replacement intent beyond the 30 s replay window. Then
+retained private-store inventory, explicit hard-parent recovery, old-runtime freeze/
+drain/handover and original-store adoption, group runtime/UI and typed push/replies.
+
+No owning lifecycle flow or product route is activated by storage alone. All 54 PRD
+groups remain open. No new APK/phone, live deployment, provider/FCM, JNI/private-key
+proof, Apple runtime or performance acceptance. Backend 8b40/schema 116 and phone
+release 29/source 084662c5 unchanged. Continue long run and atomic pushes.
+
 ## Native organization retry/bootstrap transport — 5 November 2026
 
 Native setup now has typed retry/bootstrap requests, a redacted group gateway result,

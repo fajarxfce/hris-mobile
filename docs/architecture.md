@@ -1,5 +1,9 @@
 # Architecture
 
+[Durable native organization setup](collaboration-space-native-setup-storage.md)
+retains encrypted original retry/bootstrap commands and gateway outcomes, with
+exact immutable retry archives and account-owned recovery after login replacement.
+
 [Native organization setup transport](collaboration-space-native-setup.md)
 adds exact original provisioning retry and bounded group gateway bootstrap, with
 actual-build wire binding and separate provider/device identity.

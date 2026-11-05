@@ -4,27 +4,27 @@ package dev.fajar.starter.collaboration.domain.entities
  * Original native request identity. Retry receipts carry provisioning revision, not device version.
  */
 data class CollaborationSpaceProvisioningRetry(
-    val operationId: String,
-    val binding: CollaborationSpaceDeviceBinding,
-    val deviceId: String,
-    val deviceVersion: Long,
+    override val operationId: String,
+    override val binding: CollaborationSpaceDeviceBinding,
+    override val deviceId: String,
+    override val deviceVersion: Long,
     val provisioningRevision: Long,
-) {
+) : CollaborationSpaceSetupRequest {
     override fun toString() = "CollaborationSpaceProvisioningRetry([redacted])"
 }
 
 /** Bootstrap idempotency binds the actual client build as well as the original native parent. */
 data class CollaborationSpaceBootstrap(
-    val operationId: String,
-    val binding: CollaborationSpaceDeviceBinding,
+    override val operationId: String,
+    override val binding: CollaborationSpaceDeviceBinding,
     val platform: CollaborationNativePlatform,
     val clientBuild: Long,
-    val deviceId: String,
-    val deviceVersion: Long,
+    override val deviceId: String,
+    override val deviceVersion: Long,
     val gatewayVersion: Long?,
     val provider: CollaborationSpaceIdentity,
     val matrixDeviceId: String,
-) {
+) : CollaborationSpaceSetupRequest {
     override fun toString() = "CollaborationSpaceBootstrap([redacted])"
 }
 
