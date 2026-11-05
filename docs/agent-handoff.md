@@ -1,5 +1,45 @@
 # Agent continuation — HRIS Mobile
 
+## Product release 34 installed — 5 November 2026
+
+Product source [745e5a02](https://github.com/fajarxfce/hris-mobile/commit/745e5a0256904453992e5e864bdd59e373de9513)
+is installed in place as ARM64 devRelease34 on10.77.77.3:5555. Package
+`dev.fajar.hris.mobile.dev`, version1.0.0, non-debuggable. APK88,337,720 bytes,
+SHA256`eded7799bb9b643c1bcd5184581e2875444a4f74bda4bdf8b90336d876cdb699`. Existing signer/app ID/first-install time preserved; exact
+device-computed APK SHA256 matched the validated local artifact. No pull-back was needed. Installation announced; install-only.
+[Evidence](measurements/android-release-phone-2026-11-05-build34.json).
+
+Build/lint pass505.825s, zero lint issues. ARM64/16KiB alignment,
+Firebase/WireGuard config, compiled backup exclusions and new diagnostic markers
+verified. Exact APK starts twice on owned emulator,12 stable seconds each, both
+images reviewed; emulator stopped. No physical-phone UI driving or data reset.
+
+This delivers original queue recovery after credential replacement: old retained
+messages and newly queued messages use the original encrypted SDK store and
+transactions. Exact paused-queue recovery handles previously affected legacy
+records. Only bounded API/auth failures are retried; trust checks remain intact.
+The empty-room manual Load messages control is removed; the composer stays usable.
+Actual native original/new recipient decryption and process/offline recovery pass
+separately. Physical Bima acceptance still requires ordinary phone use. Preserve
+keys, drafts and original pending transactions while observing closed diagnostics.
+Apple-only CI42017858911 on this product source is running; prior Apple pass is for
+36e78206 only. Live API/worker11a98115/schema116 remain unchanged.
+The install attempt before this one stopped at package-identity timeout before
+upload. Reconnecting the host ADB transport recovered it. Successful update took
+465.301s including on-device hash verification. No physical UI was driven. Optional
+old/new Bima result question is pending; the first closed log read found no result.
+
+WIP AFTER artifact build (not in release34): atomic CommandStore.insertBatch across
+SQLite/IndexedDB plus five shared cases passes118 fresh/86.668s/4,076 unchanged
+inputs. Forwarded-message metadata plumbing has just started and is UNVALIDATED.
+Finish forwarding as one durable action, local recipient picker, indicator and
+native/offline proof. Root gate and Starter port for generic batch remain required;
+do not claim a delivered Forward feature from the storage-only check. Supplementary
+work .work/command-batch-2026-11-05; no local heavy gate is running.
+
+Continue full communications long run, edit/forward/delete for all, group adoption/UI,
+voice/video/meet. All54 groups open. Push every commit and announce EACH next install.
+
 ## Original queue recovery verified; release34 next — 5 November 2026
 
 The candidate preserves the original SDK queue operation across credential
