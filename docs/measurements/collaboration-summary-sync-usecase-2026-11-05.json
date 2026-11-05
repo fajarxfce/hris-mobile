@@ -1,0 +1,43 @@
+{
+  "startedAt": "2026-11-05T19:55:17.239552+00:00",
+  "elapsedSeconds": 91.246,
+  "exitCode": 0,
+  "sourceFiles": 4130,
+  "sourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 38,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reports": {
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationLocalListTest.xml": {
+      "sha256": "e7114aae6e7dd99ee35505bd880d05292888ba2daeb003e671b683f66a6028ed",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SyncCollaborationListTest.xml": {
+      "sha256": "24a31ee3e7d43b175b812eb21ec81382d47d3ecd8d6f89d7bfd407ac6e03b315",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationListSyncPolicyTest.xml": {
+      "sha256": "a269543187ef4c609f3b96742b50d534f520ba8e690528413d01d69fbb3f4115",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "scope": "Pure phase/folding policy, bounded Sync use case, existing local list cases; Desktop tests and data Desktop/Android compilation, format and architecture. UI not activated yet.",
+  "initialAttempt": "sync1 failed test compilation at an untyped listOf(null); corrected to listOf<String?>(null). Product source compiled; no cases executed in sync1.",
+  "remaining": [
+    "ChatInbox lifecycle/local pagination integration",
+    "Whole-app/browser/native and final Apple acceptance",
+    "Server migration/deployment and later phone release"
+  ]
+}

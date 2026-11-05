@@ -1692,6 +1692,27 @@ class CollaborationDataModule {
     ) = ObserveCollaborationAccess(replicas, sessions, workspaces, server, build, Clock.System)
 
     @Single
+    fun syncList(
+        remote: CollaborationSummarySyncRepository,
+        cache: CollaborationListSyncReplicaRepository,
+        reads: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        SyncCollaborationList(
+            remote,
+            cache,
+            reads,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
     fun refreshList(
         replicas: CollaborationListRepository,
         conversations: CollaborationConversationRepository,

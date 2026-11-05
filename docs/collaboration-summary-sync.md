@@ -1,8 +1,8 @@
 # Incremental conversation metadata
 
-The native HTTP adapter, response mapping and encrypted format2 list storage are
-implemented and locally accepted. The Chat list still uses its previous acquisition
-path; the Sync use case and screen activation are next. Platform d03fb472 is not
+The native HTTP adapter, encrypted format2 list storage and bounded Sync use case
+are implemented and locally accepted. The Chat list still uses its previous
+acquisition path; screen activation is next. Platform d03fb472 is not
 yet deployed. Matrix continues to own message synchronization.
 
 Bootstrap and changes use the native authenticated client, exact session/company
@@ -51,6 +51,25 @@ preemption, tracked deletion/fallback, cancellation during encryption, replaceme
 sessions, concurrent publication and no-op cursor progress. Whole-app/native checks
 for the activated consumer are still required. Apple42094694741 targets the earlier
 raw storage foundation only; phone39 is unchanged.
+
+## Accepted synchronization use case
+
+[Use-case evidence](measurements/collaboration-summary-sync-usecase-2026-11-05.json):
+38 desktop cases pass91.246s, zero failures/errors/skips, with data Desktop/Android
+compilation, format and architecture on4,130 unchanged inputs. Seven new pure-policy
+cases and nine use-case scenarios cover staged catch-up, bounded pending rounds,
+revision contradictions, tombstones/restores, late/cancelled responses, received
+denial, lost commit acknowledgements, cursor reset, new native parent, ten-page
+yield and thirty-second timeout. The first attempt had one test type-inference
+error, corrected without changing policy or expectations.
+
+SyncCollaborationList owns a thirty-second, ten-page acquisition round. It persists
+opaque cursor progress after each atomic page, keeps interactive metadata writes
+independent of its network lock, and checks owner/admission around remote and local
+operations. Replacement publishes only after catch-up reaches a non-pending end.
+Confirmed denial remains closed through failed cleanup/cancellation and can reopen
+only against its observed revision. Cursor reset is limited to one per round and
+the named server reset codes. This use case is bound in DI but not called by UI yet.
 
 ## Next activation work
 

@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Bounded metadata Sync accepted; activate ChatInbox next — 5 November 2026
+
+Six source/test/DI files add pure bootstrap/change folding and SyncCollaborationList.
+[Contract](collaboration-summary-sync.md),
+[evidence](measurements/collaboration-summary-sync-usecase-2026-11-05.json).
+sync2 PASS38 desktop cases91.246s, zero failures/errors/skips; data Desktop/Android
+compilation, format and architecture pass on4,130 unchanged inputs. sync1 had one
+untyped listOf(null) test compile error, corrected; product compiled. Both local
+wrappers drained. Existing encrypted storage0e0fc53f remains accepted.
+
+NEXT: replace ChatInbox Refresh acquisition with bounded Sync and local-only paging;
+retain preview/detail subscriptions for unchanged content, cancel owned continuation
+on hide/scope changes, retry transient CAS conflicts without technical UI copy. Add
+ViewModel and AppFlow fixtures/gates, full/browser/native proof, migration rollout
+and release40. Current ChatInbox still uses the old acquisition; phone39 unchanged.
+Do not recopy stale .work drafts. Physical phone install-only after announcement.
+
+Remote Apple42094694741 exact5f0eacdd has passed simulator tests and is building the
+full app; audit final job/artifact. It excludes newer format2/Sync. Platform full
+CI42091460931 exactd03fb472 has13jobs passed; dashboard-integration still running.
+No duplicate dispatch/deploy. Live11a98115/schema116/chat pushOFF; V116.1 requires
+backup/clone/migration rollout after CI. Starter generic UI port accepted; raw store
+port waits Mobile/native consumer acceptance. Continue all54 PRD groups afterward.
+Preserve both stashes and all emulator sidecars/keys; owned Bima receiver5562 running.
+
+
 ## Encrypted metadata cache accepted; Sync use case/UI next — 5 November 2026
 
 Nine list domain/data/test files add encrypted format2, sync window/begin/commit,
