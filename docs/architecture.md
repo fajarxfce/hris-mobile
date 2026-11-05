@@ -1,5 +1,9 @@
 # Architecture
 
+[Native organization device status](collaboration-space-device-status.md) observes
+current-parent metadata without enrollment, SDK acquisition or reopening directory
+reads. A missing device never authorizes replacement of retained keys.
+
 [Durable organization identity selection](collaboration-space-identity-command.md)
 keeps immutable operation provenance separate from the fresh native owner of each
 explicit attempt. Its account/space receipt grants no device, SDK or directory access.

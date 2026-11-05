@@ -1,5 +1,44 @@
 # Agent continuation — HRIS Mobile
 
+## Native organization device status — 5 November 2026
+
+One explicit group native-device GET now maps bounded public status separately
+from device/SDK authority. It validates origin, versions, provisioning/outcome
+consistency and gateway timestamps; expired metadata remains metadata. Fresh
+login may return null while old keys still exist. No enrollment, polling, SDK
+acquisition, credential bootstrap or directory admission clearing is triggered.
+[Contract](collaboration-space-device-status.md).
+
+The owning use case checks exact current native/local ownership across pending
+boundaries, clips the original hard/wall/monotonic lifetime, retains received
+access/build denial through cancellation or failed storage, and rejects a newer
+concurrent directory denial. Successful recovery metadata cannot reopen the gate.
+Seven native HTTP and thirteen domain lifecycle cases pass. Actual AppContainer
+resolves the repository and owning use case. Final root :check, Android-host and
+Android dev compilation pass 342.801 s / 2,584 fresh cases; browser
+data/domain pass 136.437 s / 1,523 cases. Both preserve identical
+3,962 source inputs; format, architecture and detekt pass. All gate sessions
+are closed. [Evidence](measurements/collaboration-space-device-status-2026-11-05.json).
+
+NEXT: durable native group registration/retry/bootstrap commands and recovery,
+original SDK-store adoption/current authority, explicit native hard-parent recovery,
+global UI and typed push/background/replies. Server registration/retry fingerprints
+include original native parent but not client build; bootstrap includes native
+parent, versions and actual build. Preserve original provenance and actual client
+headers; neither copy account-wide identity replay into device operations nor
+apply bootstrap build restrictions to every command. Null status is not permission
+to create a replacement SPACE device. Retained original Matrix user/device/private
+keys still require explicit continuity verification; public fingerprints alone
+are not proof. The physical SDK namespace includes original native family; changing
+it selects another store. Keep immutable physical owner separate from current
+admission, and establish retained-store inventory before enabling new SPACE enrollment.
+No backend behavior was changed by this status increment.
+
+Current product remains company chat; all 54 PRD groups stay open. Live backend
+8b40/schema116 unchanged. Phone release29 remains installed from source084662c5,
+without this increment. No new phone installation/UI interaction. Continue long
+run, atomic pushes and validated install-only product delivery with advance notice.
+
 ## Durable organization identity selection — 5 November 2026
 
 Native group identity selection now retains an encrypted account/space command

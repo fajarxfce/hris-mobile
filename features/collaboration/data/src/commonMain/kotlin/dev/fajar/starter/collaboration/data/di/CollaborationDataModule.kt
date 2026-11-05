@@ -95,6 +95,23 @@ class CollaborationDataModule {
     ) = ReadCollaborationSpaceContacts(spaces, sessions, server, build, Clock.System)
 
     @Factory
+    fun readSpaceDeviceStatus(
+        devices: CollaborationSpaceDeviceRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReadCollaborationSpaceDeviceStatus(
+            devices,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun saveReplyDraft(
         inputs: CollaborationNotificationReplyRepository,
         resolutions: CollaborationNotificationReplyResolutionRepository,
