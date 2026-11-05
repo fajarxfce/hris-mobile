@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Release37 built; native sender accepted, receivers next — 5 November 2026
+
+Source5a8d45240e1e21f0b2c7a3fca6629be1ecf65159 is committed/pushed. Clean ARM64
+release37 build/lint passes505.406s/zero lint; all artifact/signing/backup/endpoint
+checks pass. APK88,403,624 bytes, SHA256`724f4be58de4ff27e3fbedac367e8edb0239180271442db5a09b0d3f848af738`.
+Artifact and scripts: .work/release-phone-2026-11-05-build37. Phone remains36;
+WireGuard/ADB10.77.77.3:5555 is unreachable, one user question is pending.
+Do not drive phone UI; announce each eventual --install-only installation.
+
+Rani/sample1 updated36→37 in place. Actual Android picker works offline with two
+selected targets. Four forwarded intents were committed ONCE. After cold app
+restart offline, all four remain queued and source/destination drafts survive.
+After reconnect all four are Sent with no duplicate copies. Captures were opened
+and reviewed. .work/chat-forward-2026-11-05/native-picker-1.json,
+native-publish-1.json and native-reconnect-1.json contain exact evidence.
+DO NOT repeat Forward or setup messages: existing publication was resumed, not
+replayed. The first publish harness wrongly required an already exhausted Browse
+position in a fresh chat that had never browsed; its failed record remains as
+native-publish-1-first-attempt.json. The corrected proof records initial history
+controls separately. A further Rani Browse test waited for a control that was
+already absent after reopen (zero clicks); native-rani-history.json is NOT a
+passed saved-end acceptance. Retained Bima's four checks remain required.
+
+Rani is cleanly stopped, data/keys/sidecars retained. Sample3/Nadia is starting on
+owned emulator5562. NEXT: drain its start, install-owned-sample.py 3, then
+prove-native.py receive 3. Repeat for retained sample4/Dimas. Verify actual received
+Forwarded metadata and cold offline history on both; sender Sent alone is not full
+native acceptance. Then update retained Bima36→37 and check-bima-history.py; restore
+Bima as receiver. Only then run phone preflight and announced install-only delivery.
+
+AppleCI42054097304 runs exact5a8d; simulator tests passed, full app build is still
+running. Do not cancel with another same-branch Apple dispatch. Backend11a98115/
+schema116 unchanged. No product source changed during native checks. Starter port
+is still pending Mobile receiver acceptance; all54 PRD groups remain open.
+
 ## Offline Forward locally validated; native delivery next — 5 November 2026
 
 Forward now publishes complete encrypted text batches from long-press selection,
