@@ -114,6 +114,26 @@ internal class ProtectedHrisProofOwner(
         check(success(runtime.isOpen(lease.owner, deviceId)))
     }
 
+    suspend fun installInitial(): AndroidCollaborationRuntimeLease = installConfirmed(fixture)
+
+    suspend fun installConfirmed(fixture: JSONObject): AndroidCollaborationRuntimeLease {
+        check(
+            fixture.getString("accountId") == owner.accountId &&
+                fixture.getString("companyId") == owner.companyId &&
+                fixture.getString("nativeSessionId") == owner.nativeSessionId &&
+                fixture.getString("hrisDeviceId") == deviceId
+        )
+        val lease =
+            success(runtime.install(owner, command(fixture))) as AndroidCollaborationRuntimeLease
+        try {
+            publishFixture(lease)
+            return lease
+        } catch (failure: Exception) {
+            closeHrisProofResources(failure, listOf({ lease.closeProofRuntime() }))
+            throw failure
+        }
+    }
+
     suspend fun installAndReopen(): AndroidCollaborationRuntimeLease {
         var owned: AndroidCollaborationRuntimeLease? = null
         try {
@@ -211,7 +231,7 @@ internal class ProtectedHrisProofOwner(
             requireNotNull(it.ed25519Key()) to requireNotNull(it.curve25519Key())
         }
 
-    private fun command(): CollaborationSetupCommandRecord {
+    private fun command(fixture: JSONObject = this.fixture): CollaborationSetupCommandRecord {
         val gateway =
             CollaborationGateway(
                 owner,
@@ -232,7 +252,11 @@ internal class ProtectedHrisProofOwner(
                 CollaborationNativePlatform.ANDROID,
                 fixture.getLong("clientBuild"),
                 Instant.fromEpochMilliseconds(gateway.accessExpiresAtEpochMillis - 300_000),
-                CollaborationSetupAction.Bootstrap(deviceId, 1, null),
+                CollaborationSetupAction.Bootstrap(
+                    deviceId,
+                    1,
+                    (gateway.version - 1).takeIf { it >= 0 },
+                ),
             )
         return CollaborationSetupCommandRecord(
             command,

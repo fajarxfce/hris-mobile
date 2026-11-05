@@ -3,6 +3,7 @@ package dev.fajar.starter.collaboration.presentation.setup
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.usecases.*
+import dev.fajar.starter.collaboration.presentation.chatRequiresReconnect
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.presentation.mvi.MviViewModel
@@ -29,6 +30,8 @@ class ChatSetupViewModel(
     private var work: Job? = null
     private var visible = false
     private var accessObserved = false
+    private var statusCheck: Job? = null
+    private var statusAttempts = 0
 
     init {
         on<ChatSetupEvent.Entered>(::onEntered)
@@ -57,6 +60,8 @@ class ChatSetupViewModel(
                     accessObserved = true
                     when (result) {
                         is AppResult.Failed -> {
+                            statusCheck?.cancel()
+                            statusCheck = null
                             work?.cancel()
                             work = null
                             updateState {
@@ -79,6 +84,8 @@ class ChatSetupViewModel(
 
     private fun onStopped(event: ChatSetupEvent.Stopped) {
         visible = false
+        statusCheck?.cancel()
+        statusCheck = null
         work?.cancel()
         work = null
         updateState { it.copy(loading = false, working = false) }
@@ -95,11 +102,14 @@ class ChatSetupViewModel(
         refresh()
     }
 
-    private fun refresh() {
+    private fun refresh(quiet: Boolean = false) {
         if (!visible) return
+        statusCheck?.cancel()
+        statusCheck = null
+        if (!quiet) statusAttempts = 0
         work?.cancel()
         updateState {
-            it.copy(loading = true, working = false, failure = null, readyDeviceId = null)
+            it.copy(loading = !quiet, working = false, failure = null, readyDeviceId = null)
         }
         work =
             viewModelScope.launch {
@@ -152,6 +162,23 @@ class ChatSetupViewModel(
             updateState { it.copy(loading = false, working = false) }
         }
         observe(acquireOnFirst = false)
+        scheduleStatusCheck()
+    }
+
+    /** Bounded read-only checks while initial account preparation is visible. */
+    private fun scheduleStatusCheck() {
+        if (!visible || state.value.phase != ChatSetupPhase.WAITING || statusAttempts >= 6) return
+        val wait = (2_000L shl statusAttempts++).coerceAtMost(30_000)
+        statusCheck =
+            viewModelScope.launch {
+                delay(wait)
+                if (
+                    visible && state.value.phase == ChatSetupPhase.WAITING && work?.isActive != true
+                ) {
+                    statusCheck = null
+                    refresh(quiet = true)
+                }
+            }
     }
 
     private fun showRetained(record: CollaborationSetupCommandRecord?) {
@@ -188,6 +215,7 @@ class ChatSetupViewModel(
                     ChatSetupPhase.REGISTER,
                     ChatSetupPhase.RETRY_PROVISIONING,
                     ChatSetupPhase.BOOTSTRAP,
+                    ChatSetupPhase.RECONNECT,
                     ChatSetupPhase.RESUME,
                 )
         )
@@ -217,7 +245,8 @@ class ChatSetupViewModel(
                                     provisioning.version,
                                 )
                             }
-                            ChatSetupPhase.BOOTSTRAP -> {
+                            ChatSetupPhase.BOOTSTRAP,
+                            ChatSetupPhase.RECONNECT -> {
                                 if (device == null) return@launch failed(changed())
                                 CollaborationSetupAction.Bootstrap(
                                     device.id,
@@ -298,7 +327,12 @@ class ChatSetupViewModel(
         updateState {
             it.copy(
                 phase =
-                    if (it.phase == ChatSetupPhase.READY) ChatSetupPhase.UNAVAILABLE else it.phase,
+                    when {
+                        chatRequiresReconnect(failure) && it.phase == ChatSetupPhase.BOOTSTRAP ->
+                            ChatSetupPhase.RECONNECT
+                        it.phase == ChatSetupPhase.READY -> ChatSetupPhase.UNAVAILABLE
+                        else -> it.phase
+                    },
                 loading = false,
                 working = false,
                 readyDeviceId = null,

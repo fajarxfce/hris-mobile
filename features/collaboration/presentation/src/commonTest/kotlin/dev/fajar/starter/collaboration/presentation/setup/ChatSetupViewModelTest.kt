@@ -13,6 +13,92 @@ import kotlinx.coroutines.test.*
 
 class ChatSetupViewModelTest {
     @Test
+    fun sdkRejectionOffersOriginalDeviceReconnectWithoutAutomaticBootstrap() = runTest {
+        withModel { f, vm, _, _ ->
+            f.device = f.active
+            val rejected =
+                Failure(
+                    FailureKind.Unauthorized,
+                    "Rejected",
+                    code = "client.collaboration_sdk_unauthorized",
+                )
+            f.restore = { AppResult.Failed(rejected) }
+            vm.onEvent(ChatSetupEvent.Entered)
+            runCurrent()
+            assertEquals(ChatSetupPhase.RECONNECT, vm.state.value.phase)
+            assertNull(vm.state.value.localFailure)
+            assertEquals(f.active.id, vm.state.value.device?.id)
+            advanceTimeBy(60_000)
+            runCurrent()
+            assertTrue(f.sends.isEmpty())
+            assertEquals(1, f.reads)
+            vm.onEvent(ChatSetupEvent.ContinueRequested)
+            runCurrent()
+            assertEquals(ChatSetupPhase.READY, vm.state.value.phase)
+            assertEquals(f.active.id, vm.state.value.readyDeviceId)
+            assertEquals(1, f.installations)
+            assertEquals(1, f.sends.size)
+            assertNull(f.record)
+        }
+    }
+
+    @Test
+    fun preparingAccountChecksQuietlyAndStopsCheckingWhenTheScreenLeaves() = runTest {
+        withModel { f, vm, _, _ ->
+            f.device = f.active.copy(state = CollaborationDeviceState.PROVISIONING)
+            vm.onEvent(ChatSetupEvent.Entered)
+            runCurrent()
+            assertEquals(ChatSetupPhase.WAITING, vm.state.value.phase)
+            assertFalse(vm.state.value.loading)
+            assertEquals(1, f.reads)
+            advanceTimeBy(2_000)
+            runCurrent()
+            assertEquals(2, f.reads)
+            assertFalse(vm.state.value.loading)
+            assertTrue(f.sends.isEmpty())
+            vm.onEvent(ChatSetupEvent.Stopped)
+            advanceTimeBy(120_000)
+            runCurrent()
+            assertEquals(2, f.reads)
+        }
+    }
+
+    @Test
+    fun accountPreparationChecksAreFiniteAndNeverCreateProvisioningCommands() = runTest {
+        withModel { f, vm, _, _ ->
+            f.device = f.active.copy(state = CollaborationDeviceState.PROVISIONING)
+            vm.onEvent(ChatSetupEvent.Entered)
+            advanceUntilIdle()
+            assertEquals(7, f.reads)
+            assertEquals(ChatSetupPhase.WAITING, vm.state.value.phase)
+            assertFalse(vm.state.value.loading)
+            assertTrue(f.sends.isEmpty())
+            advanceTimeBy(600_000)
+            runCurrent()
+            assertEquals(7, f.reads)
+        }
+    }
+
+    @Test
+    fun accountPreparationContinuesWhenOriginalDeviceBecomesReady() = runTest {
+        withModel { f, vm, _, _ ->
+            f.device = f.active.copy(state = CollaborationDeviceState.PROVISIONING)
+            vm.onEvent(ChatSetupEvent.Entered)
+            runCurrent()
+            f.device = f.active
+            f.opened = true
+            advanceTimeBy(2_000)
+            runCurrent()
+            assertEquals(ChatSetupPhase.READY, vm.state.value.phase)
+            assertEquals(f.active.id, vm.state.value.readyDeviceId)
+            advanceTimeBy(120_000)
+            runCurrent()
+            assertEquals(2, f.reads)
+            assertTrue(f.sends.isEmpty())
+        }
+    }
+
+    @Test
     fun entryReadsOnceWithoutEnrollingAndDisposalReleasesOnlyObservation() = runTest {
         withModel { f, vm, store, _ ->
             assertEquals(0, f.reads)

@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.fajar.starter.collaboration.presentation.chatRequiresReconnect
 import dev.fajar.starter.collaboration.presentation.thread.*
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
@@ -58,7 +59,9 @@ fun ChatThreadPage(
                                     ChatThreadConnection.OFFLINE -> AppString.ChatOffline
                                     ChatThreadConnection.CONNECTING -> AppString.ChatConnecting
                                     ChatThreadConnection.SETUP_REQUIRED ->
-                                        AppString.ChatSetupActivate
+                                        if (chatRequiresReconnect(state.failure))
+                                            AppString.ChatReconnectTitle
+                                        else AppString.ChatSetupActivate
                                     ChatThreadConnection.WAITING -> AppString.ChatRoomWaiting
                                     ChatThreadConnection.CONNECTED -> AppString.ChatConnected
                                 }
@@ -277,6 +280,11 @@ private fun ChatThreadStatus(state: ChatThreadState, onEvent: (ChatThreadEvent) 
         (state.localFailure
                 ?: state.historyFailure
                 ?: state.failure?.takeUnless(::chatCanReconnect))
+            ?.takeUnless {
+                state.localFailure == null &&
+                    state.connection == ChatThreadConnection.SETUP_REQUIRED &&
+                    chatRequiresReconnect(it)
+            }
             ?.let {
                 AppFeedback(
                     if (state.localFailure == null && chatCanReconnect(it))
@@ -288,7 +296,10 @@ private fun ChatThreadStatus(state: ChatThreadState, onEvent: (ChatThreadEvent) 
             AppText(appString(AppString.ChatSaveUnconfirmed), color = AppColors.muted)
         if (state.connection == ChatThreadConnection.SETUP_REQUIRED)
             AppTextButton(
-                appString(AppString.ChatSetupActivate),
+                appString(
+                    if (chatRequiresReconnect(state.failure)) AppString.ChatReconnectAction
+                    else AppString.ChatSetupActivate
+                ),
                 { onEvent(ChatThreadEvent.SetupRequested) },
             )
         else if (

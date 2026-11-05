@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.fajar.starter.collaboration.presentation.chatRequiresReconnect
 import dev.fajar.starter.collaboration.presentation.setup.*
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
@@ -41,6 +42,7 @@ fun ChatSetupPage(
             AppText(
                 appString(
                     when (state.phase) {
+                        ChatSetupPhase.RECONNECT -> AppString.ChatReconnectTitle
                         ChatSetupPhase.CHECKING -> AppString.ChatSetupChecking
                         ChatSetupPhase.REGISTER,
                         ChatSetupPhase.BOOTSTRAP -> AppString.ChatSetupActivate
@@ -58,6 +60,7 @@ fun ChatSetupPage(
                 AppText(
                     appString(
                         when (state.phase) {
+                            ChatSetupPhase.RECONNECT -> AppString.ChatReconnectHint
                             ChatSetupPhase.REGISTER,
                             ChatSetupPhase.BOOTSTRAP -> AppString.ChatSetupActivateHint
                             ChatSetupPhase.WAITING -> AppString.ChatSetupWaitingHint
@@ -72,17 +75,26 @@ fun ChatSetupPage(
                 )
             if (state.loading || state.working) AppLoading()
             val failure = state.localFailure ?: state.failure
-            if (failure != null) AppFeedback(failureText(failure))
+            if (
+                failure != null &&
+                    !(state.localFailure == null &&
+                        state.phase == ChatSetupPhase.RECONNECT &&
+                        chatRequiresReconnect(failure))
+            )
+                AppFeedback(failureText(failure))
             val idle = !state.loading && !state.working
             if (state.localFailure == null) {
                 when (state.phase) {
                     ChatSetupPhase.REGISTER,
                     ChatSetupPhase.BOOTSTRAP,
+                    ChatSetupPhase.RECONNECT,
                     ChatSetupPhase.RESUME,
                     ChatSetupPhase.RETRY_PROVISIONING ->
                         AppButton(
                             appString(
-                                if (
+                                if (state.phase == ChatSetupPhase.RECONNECT)
+                                    AppString.ChatReconnectAction
+                                else if (
                                     state.phase == ChatSetupPhase.REGISTER ||
                                         state.phase == ChatSetupPhase.BOOTSTRAP
                                 )
@@ -101,9 +113,18 @@ fun ChatSetupPage(
                     else -> Unit
                 }
             }
-            if (state.phase != ChatSetupPhase.READY || failure != null)
+            if (
+                failure != null &&
+                    (state.localFailure != null ||
+                        state.phase in
+                            setOf(
+                                ChatSetupPhase.UNAVAILABLE,
+                                ChatSetupPhase.CHECKING,
+                                ChatSetupPhase.WAITING,
+                            ))
+            )
                 AppTextButton(
-                    appString(AppString.Refresh),
+                    appString(AppString.Retry),
                     { onEvent(ChatSetupEvent.RefreshRequested) },
                     enabled = idle,
                 )

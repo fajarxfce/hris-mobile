@@ -175,25 +175,80 @@ internal class SdkRuntimeRegistry<T : Any>(
         deviceId: String,
         expectedResource: T?,
     ): AppResult<SdkRuntimeHandoverGate> =
+        beginExclusiveHandover(
+            storeId,
+            owner,
+            deviceId,
+            expectedResource,
+            replacingCredentials = false,
+        )
+
+    /** The repository validates the confirmed newer bootstrap before retiring this exact client. */
+    fun beginCredentialReplacement(
+        storeId: String,
+        owner: CollaborationOwner,
+        deviceId: String,
+        expectedResource: T,
+    ): AppResult<SdkRuntimeHandoverGate> =
+        beginExclusiveHandover(
+            storeId,
+            owner,
+            deviceId,
+            expectedResource,
+            replacingCredentials = true,
+        )
+
+    private fun beginExclusiveHandover(
+        storeId: String,
+        owner: CollaborationOwner,
+        deviceId: String,
+        expectedResource: T?,
+        replacingCredentials: Boolean,
+    ): AppResult<SdkRuntimeHandoverGate> =
         synchronized(monitor) {
             if (storeId in handovers) return@synchronized handoverPending()
             if (handovers.size >= CLIENT_LIMIT) return@synchronized capacity()
             if (retention != null && !retainsParent(owner)) return@synchronized stopped()
+            if (replacingCredentials && retention != null && retention?.foreground != owner)
+                return@synchronized stopped()
             val entry = entries[storeId]
             if (entry != null && (entry.owner != owner || entry.deviceId != deviceId))
                 return@synchronized busy()
-            // A key observation from a replaced client cannot stage a newer client's store.
             if (entry?.resource !== expectedResource) return@synchronized busy()
             if (
                 expectedResource != null &&
-                    (entry?.retired != false || !available(expectedResource))
+                    (entry?.retired != false ||
+                        (!replacingCredentials && !available(expectedResource)))
             )
                 return@synchronized busy()
-            val gate = SdkRuntimeHandoverGate(storeId)
+            val gate = SdkRuntimeHandoverGate(storeId, owner, deviceId, replacingCredentials)
             handovers[storeId] = gate
             entry?.let(::retire)
             changed()
             AppResult.Success(gate)
+        }
+
+    /** No background opener can slip between full native drain and replacement reservation. */
+    fun reserveCredentialReplacement(
+        gate: SdkRuntimeHandoverGate
+    ): AppResult<SdkRuntimeReservation<T>> =
+        synchronized(monitor) {
+            if (handovers[gate.storeId] !== gate || !gate.replacingCredentials)
+                return@synchronized handoverPending()
+            val decision = retention
+            if (
+                decision != null &&
+                    (!retainsParent(gate.owner) || decision.foreground != gate.owner)
+            )
+                return@synchronized stopped()
+            if (gate.storeId in entries) return@synchronized busy()
+            if (entries.size >= CLIENT_LIMIT) return@synchronized capacity()
+            val next =
+                SdkRuntimeReservation<T>(gate.storeId, gate.owner, gate.deviceId, foreground = true)
+            entries[gate.storeId] = next
+            handovers.remove(gate.storeId)
+            changed()
+            AppResult.Success(next)
         }
 
     fun handoverResource(gate: SdkRuntimeHandoverGate): T? =
@@ -290,7 +345,13 @@ internal class SdkRuntimeRegistry<T : Any>(
     }
 }
 
-internal class SdkRuntimeHandoverGate internal constructor(val storeId: String) {
+internal class SdkRuntimeHandoverGate
+internal constructor(
+    val storeId: String,
+    internal val owner: CollaborationOwner,
+    internal val deviceId: String,
+    internal val replacingCredentials: Boolean,
+) {
     override fun toString() = "SdkRuntimeHandoverGate([redacted])"
 }
 

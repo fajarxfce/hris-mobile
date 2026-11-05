@@ -5,7 +5,7 @@
     <string name="chat_cancel_explanation_id">Hanya pesan yang belum mulai dikirim yang dapat dibatalkan.</string>
     <string name="chat_cancellation_pending_id">Pembatalan belum terkonfirmasi. Coba lagi untuk memeriksa pesan ini.</string>
     <string name="chat_cancellation_unavailable_id">Pesan sudah berubah atau mulai dikirim sehingga tidak dapat dibatalkan.</string>
-    <string name="chat_setup_title_id">Siapkan chat</string>
+    <string name="chat_setup_title_id">Chat</string>
     <string name="chat_setup_checking_id">Memeriksa kesiapan chat</string>
     <string name="chat_setup_activate_id">Chat di perangkat ini</string>
     <string name="chat_setup_waiting_id">Menyiapkan akun chat</string>
@@ -14,10 +14,10 @@
     <string name="chat_setup_ready_id">Chat sudah siap</string>
     <string name="chat_setup_revoked_id">Akses chat telah dicabut</string>
     <string name="chat_setup_unavailable_id">Penyiapan chat belum tersedia</string>
-    <string name="chat_setup_activate_hint_id">Aktifkan perangkat ini untuk mengobrol dengan aman bersama rekan perusahaan.</string>
-    <string name="chat_setup_waiting_hint_id">Proses ini mungkin memerlukan waktu. Segarkan untuk memeriksa perkembangannya.</string>
-    <string name="chat_setup_retry_hint_id">Lanjutkan untuk mencoba kembali permintaan penyiapan yang tersimpan.</string>
-    <string name="chat_setup_resume_hint_id">Permintaan sebelumnya sudah tersimpan. Lanjutkan proses yang tertunda.</string>
+    <string name="chat_setup_activate_hint_id">Sambungkan untuk mengobrol dengan rekan kerja.</string>
+    <string name="chat_setup_waiting_hint_id">Chat akan dilanjutkan setelah akun Anda siap.</string>
+    <string name="chat_setup_retry_hint_id">Coba sambungkan perangkat ini kembali.</string>
+    <string name="chat_setup_resume_hint_id">Lanjutkan proses sebelumnya.</string>
     <string name="chat_setup_ready_hint_id">Sekarang Anda dapat membuka percakapan.</string>
     <string name="chat_setup_revoked_hint_id">Hubungi administrator untuk memulihkan akses di perangkat ini.</string>
     <string name="chat_setup_check_hint_id">Hubungkan ke internet untuk memeriksa perangkat dan melanjutkan penyiapan.</string>
@@ -1061,4 +1061,7 @@
     <string name="chat_unsent_review_id">Belum terkirim · Ketuk untuk periksa</string>
     <string name="chat_unsent_unavailable_id">Pesan belum terkirim tidak dapat dibuka. Coba lagi</string>
     <string name="chat_unsent_count_id">%1$s pesan belum terkirim</string>
+    <string name="chat_reconnect_title_id">Sambungkan chat kembali</string>
+    <string name="chat_reconnect_hint_id">Sambungkan kembali untuk mengirim dan menerima pesan.</string>
+    <string name="chat_reconnect_action_id">Sambungkan kembali</string>
 </resources>

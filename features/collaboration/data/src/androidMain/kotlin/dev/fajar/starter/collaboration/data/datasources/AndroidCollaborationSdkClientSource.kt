@@ -4,17 +4,23 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
+import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.ClientSessionDelegate
 import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
 import org.matrix.rustcomponents.sdk.SqliteStoreBuilder
+import org.matrix.rustcomponents.sdk.TaskHandle
 
 /**
  * Raw SDK construction. Its caller owns admission, protected credentials and the directory lease.
  */
 class AndroidCollaborationSdkClientSource {
+    /** Install once, before restoring a session. The caller owns and cancels the handle. */
+    fun observeAuthentication(client: Client, delegate: ClientDelegate): TaskHandle? =
+        client.setDelegate(delegate)
+
     suspend fun create(
         directory: CollaborationSdkStoreLease,
         passphrase: String,

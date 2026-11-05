@@ -196,6 +196,67 @@ class SdkSessionPersistenceTest {
         assertEquals(1, retained.credentialRevision)
     }
 
+    @Test
+    fun rejectedAuthenticationPreservesLocalOwnershipAndCannotBeClearedByStorageRetry() = runTest {
+        val f = fixture()
+        val writer = SdkSessionPersistence(f.store, f.codec, f.initial)
+        writer.reportAuthenticationFailure()
+        val rejected = assertNotNull(writer.failures.value)
+        assertEquals(FailureKind.Unauthorized, rejected.kind)
+        assertEquals("client.collaboration_sdk_unauthorized", rejected.code)
+        assertFalse(
+            dev.fajar.starter.collaboration.domain.policies.collaborationContentResponseClosesRead(
+                rejected
+            )
+        )
+        assertEquals(AppResult.Failed(rejected), writer.snapshot())
+        assertEquals(AppResult.Failed(rejected), writer.retryPending())
+        assertEquals(AppResult.Failed(rejected), writer.markInitialized())
+        assertEquals(AppResult.Failed(rejected), save(writer, f.initial))
+        assertEquals(f.initial, f.codec.decode(f.store.read()!!))
+    }
+
+    @Test
+    fun knownAuthenticationRejectionSurvivesAnEarlierOrLaterStorageCallbackFailure() = runTest {
+        val f = fixture()
+        val writer = SdkSessionPersistence(f.store, f.codec, f.initial)
+        writer.reportCallbackFailure()
+        assertEquals(FailureKind.Storage, writer.failures.value?.kind)
+        writer.reportAuthenticationFailure()
+        val rejected = assertNotNull(writer.failures.value)
+        writer.reportCallbackFailure()
+        assertEquals(rejected, writer.failures.value)
+        assertEquals(AppResult.Failed(rejected), writer.retryPending())
+        assertEquals("client.collaboration_sdk_unauthorized", rejected.code)
+        assertEquals(f.initial, f.codec.decode(f.store.read()!!))
+    }
+
+    @Test
+    fun lateCredentialWriteSuccessCannotReopenRejectedAuthentication() = runTest {
+        val f = fixture()
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        val store =
+            object : CredentialStore by f.store {
+                override suspend fun write(value: String?) {
+                    entered.complete(Unit)
+                    release.await()
+                    f.store.write(value)
+                }
+            }
+        val writer = SdkSessionPersistence(store, f.codec, f.initial)
+        val saving = async { save(writer, f.initial) }
+        entered.await()
+        writer.reportAuthenticationFailure()
+        val rejected = assertNotNull(writer.failures.value)
+        release.complete(Unit)
+        assertEquals(AppResult.Failed(rejected), saving.await())
+        assertEquals(newAccess, f.codec.decode(f.store.read()!!).accessToken)
+        assertEquals(AppResult.Failed(rejected), writer.snapshot())
+        assertEquals(AppResult.Failed(rejected), writer.retryPending())
+        assertEquals(rejected, writer.failures.value)
+    }
+
     private suspend fun save(writer: SdkSessionPersistence, initial: CollaborationSdkRecord) =
         writer.saveTokens(
             initial.matrixUserId,

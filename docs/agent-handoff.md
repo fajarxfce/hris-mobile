@@ -1,5 +1,13 @@
 # Agent continuation — HRIS Mobile
 
+## Original chat connection recovery — 5 November 2026
+
+Rejected SDK authentication is now typed and terminal for live transport. Owned local history stays readable, and the thread offers one compact reconnect action. Confirmed newer bootstrap credentials replace only the original provider identity/gateway after exact native/store drain; no key or account reset. Late callbacks, borrowers, owner changes, cancellation and failing cleanup remain owned. Initial setup checks progress quietly at most six times while visible; routine refresh controls and technical recovery copy are removed.
+
+Combined root/Android/browser/proof gate 2479 fresh passed / 531.299s / 4,050 unchanged inputs; final data334/146.405s and UI59/293.259s also pass. Both actual native suites pass / 145.221s, including same-store recovery after actual rejected refresh and unchanged normal renewal/encrypted/history/process-death assertions. Reviewed 320px200% and compact-thread screenshots. [Contract](collaboration-chat-reconnect.md), [measurements](measurements/chat-reconnect-2026-11-05.json).
+
+NEXT: release32 build/startup/install-only with notice; phone31 remains until separately recorded. User confirms release31 Bima messages appear immediately on reopening. Earlier generic connection cause remains unproven; inspect operation-only diagnostics while preserving private keys. Continue delivered edit/reply/forward/delete-for-all, original-bootstrap resolution/adoption, group runtime/UI, calls and meetings. All54 groups remain open; live8b40/schema116 unchanged. Continue long run, push each atomic commit, maintain Git handoffs. HRIS-specific; no Starter port.
+
 ## Original Android SDK access renewal verified — 5 November 2026
 
 Main Platform [de987b13](https://github.com/fajarxfce/hris-platform/commit/de987b13eec8d9d0a7f7a082ba432e2222a89509) is pushed.

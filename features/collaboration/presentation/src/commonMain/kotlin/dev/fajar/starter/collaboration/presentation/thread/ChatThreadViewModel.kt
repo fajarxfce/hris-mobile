@@ -12,6 +12,7 @@ import dev.fajar.starter.collaboration.domain.policies.localListAccess
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationCancellation
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationText
 import dev.fajar.starter.collaboration.domain.usecases.*
+import dev.fajar.starter.collaboration.presentation.chatRequiresReconnect
 import dev.fajar.starter.collaboration.presentation.replies.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.presentation.mvi.MviViewModel
@@ -1484,6 +1485,10 @@ class ChatThreadViewModel(
                     )
             }
             project()
+            if (result is AppResult.Failed && chatRequiresReconnect(result.failure)) {
+                connectionFailed(result.failure)
+                return
+            }
             if (!older) {
                 if (result is AppResult.Failed) scheduleReconnect(result.failure, syncOnly = true)
                 else {
@@ -1526,7 +1531,9 @@ class ChatThreadViewModel(
         reconnection = null
         updateState {
             it.copy(
-                connection = ChatThreadConnection.OFFLINE,
+                connection =
+                    if (chatRequiresReconnect(failure)) ChatThreadConnection.SETUP_REQUIRED
+                    else ChatThreadConnection.OFFLINE,
                 syncing = false,
                 loadingOlder = false,
                 failure = failure,

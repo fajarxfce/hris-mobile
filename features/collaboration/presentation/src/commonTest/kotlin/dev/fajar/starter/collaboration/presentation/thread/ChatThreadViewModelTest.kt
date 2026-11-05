@@ -13,6 +13,39 @@ import kotlinx.coroutines.test.*
 
 class ChatThreadViewModelTest {
     @Test
+    fun rejectedSdkKeepsLocalHistoryAndOffersSetupWithoutRepeatedConnectionAttempts() = runTest {
+        withModel { f, vm, _, effects ->
+            f.online()
+            f.setup.opened = false
+            f.setup.restore = {
+                AppResult.Failed(
+                    Failure(
+                        FailureKind.Unauthorized,
+                        "Rejected",
+                        code = "client.collaboration_sdk_unauthorized",
+                    )
+                )
+            }
+            f.historyRows.value = listOf(f.original())
+            vm.onEvent(ChatThreadEvent.Entered)
+            runCurrent()
+            assertEquals("Saved conversation", vm.state.value.rows.single().text)
+            assertFalse(vm.state.value.loading)
+            assertNull(vm.state.value.localFailure)
+            assertEquals(ChatThreadConnection.SETUP_REQUIRED, vm.state.value.connection)
+            assertEquals(1, f.setup.restores)
+            advanceTimeBy(120_000)
+            runCurrent()
+            assertEquals(1, f.setup.restores)
+            assertEquals(0, f.timelineOpens)
+            assertEquals("Saved conversation", vm.state.value.rows.single().text)
+            vm.onEvent(ChatThreadEvent.SetupRequested)
+            runCurrent()
+            assertTrue(effects.contains(ChatThreadEffect.Setup))
+        }
+    }
+
+    @Test
     fun reopeningAnExhaustedRoomRestoresItsEndWithoutAnotherOlderRequest() = runTest {
         withModel { f, vm, store, _ ->
             f.online()

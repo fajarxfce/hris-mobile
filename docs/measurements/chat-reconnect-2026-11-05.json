@@ -1,0 +1,215 @@
+{
+  "recordedAt": "2026-11-05T07:22:05.718108+00:00",
+  "parentCommit": "7e3332f04daec8d12054e6272a2c6d4f2fa510ff",
+  "finalValidation": {
+    "startedAt": "2026-11-05T07:08:16.123510+00:00",
+    "elapsedSeconds": 531.299,
+    "exitCode": 0,
+    "sourceFiles": 4050,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 2479,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apkSha256": "ab255d5b991727ab1ef29fae990cc9f82e218e1e67ce847639977c26008a6ed6",
+    "resultSha256": "685c813734e5b49d5cc6c98aeb6f9fb1fe70f18f9c7108fb064ac5a4af60bd13",
+    "sourceManifestSha256": "912620b5da80d1ff0e856d486632702ee098ea130a6865d39ee6dd5a109ea31a"
+  },
+  "priorGates": {
+    "focused1": {
+      "startedAt": "2026-11-05T06:31:00.522286+00:00",
+      "elapsedSeconds": 88.35,
+      "exitCode": 1,
+      "sourceFiles": 4045,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "9d4689c27d9c4089b283fcd52f665facf514406d0762ab755de231944eebfdb2",
+      "sourceManifestSha256": "6907d4e83f3a5840bec08619e0af4b88f4ba513d668ae60341a57e4504b4b7a2"
+    },
+    "focused2": {
+      "startedAt": "2026-11-05T06:34:26.288318+00:00",
+      "elapsedSeconds": 74.472,
+      "exitCode": 1,
+      "sourceFiles": 4045,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 302,
+        "failures": 64,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "1a969ef81f7b5fb14341bf4685961e252d4e8b01447f518175cc09876b3a9dba",
+      "sourceManifestSha256": "a46c22ed89647bea5570b01ab149a447aa3f760f9f9c682e9909bb5d56a35884"
+    },
+    "focused3": {
+      "startedAt": "2026-11-05T06:37:10.121837+00:00",
+      "elapsedSeconds": 90.417,
+      "exitCode": 1,
+      "sourceFiles": 4045,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 304,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "e918aa93324cee79d0ce0e5e63374dec2e9342b992228ebe9bdec01fd7ec15ba",
+      "sourceManifestSha256": "a49097665c0917a4fb6fddaa04f2b4ed8c6e95f8f1d8fa149aedb6edbb47ba59"
+    },
+    "focused4": {
+      "startedAt": "2026-11-05T06:42:41.161826+00:00",
+      "elapsedSeconds": 95.861,
+      "exitCode": 0,
+      "sourceFiles": 4045,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 302,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "4b32fe244dc5d517c0d72f70130b289a50fdd013621096b84caea85422448b42",
+      "sourceManifestSha256": "7d0298a986f6554e783bed8a00b18f8444e35c4cf71b6e1a359cbf6e15fa00c1"
+    },
+    "focused5": {
+      "startedAt": "2026-11-05T06:52:55.792166+00:00",
+      "elapsedSeconds": 73.725,
+      "exitCode": 1,
+      "sourceFiles": 4048,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "b7bf2fc4312b7dd533a2450997c1211045872c53cf6f3ca9b594b918a70f719f",
+      "sourceManifestSha256": "ecad7843b723e5f916afda65a50f6626da6a3df9982dbd624a5f51fba3a1373d"
+    },
+    "focused6": {
+      "startedAt": "2026-11-05T06:54:44.119779+00:00",
+      "elapsedSeconds": 146.405,
+      "exitCode": 0,
+      "sourceFiles": 4048,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 334,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "d633280077cacf8f81aee377a1e989517560ae309bde82c9a0bab0a6c89a613a",
+      "sourceManifestSha256": "2b4117677df0a840aea8ba227d9a99d0501b27b05fa574aee67e1958a6f37ef4"
+    },
+    "build1": {
+      "startedAt": "2026-11-05T06:45:59.946097+00:00",
+      "elapsedSeconds": 87.229,
+      "exitCode": 0,
+      "sourceFiles": 4046,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apkSha256": "8d5e7b2757016e6749961e46541a7bd81df37f3054c4f92a5bdb8f0dc891bae5",
+      "commit": "7e3332f04daec8d12054e6272a2c6d4f2fa510ff",
+      "resultSha256": "dd7d249425fe59baa5dc492cadfc1480a49656a35089a36bfc6d22d2ef88d3af",
+      "sourceManifestSha256": "84107f613a6373f902dedb74958ae812be7c688d81e5985ff77b05f5491d68c0"
+    },
+    "build2": {
+      "startedAt": "2026-11-05T06:57:37.731767+00:00",
+      "elapsedSeconds": 88.37,
+      "exitCode": 0,
+      "sourceFiles": 4048,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apkSha256": "5490e6cc9c631a449a4a9c8e59b761e0018f2e8edbb769b5f3748984550e6de0",
+      "commit": "7e3332f04daec8d12054e6272a2c6d4f2fa510ff",
+      "resultSha256": "26bd6c5c03bc6c32b20ae8c289c6082bd587b86a43e6ab5c4f3549d3c7dc5cce",
+      "sourceManifestSha256": "dbfced2b23e69da3a4a48a75021065b38df2f2da1598afd078bf99f85187418b"
+    },
+    "ui-focused1": {
+      "startedAt": "2026-11-05T07:02:14.379403+00:00",
+      "elapsedSeconds": 293.259,
+      "exitCode": 0,
+      "sourceFiles": 4050,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 59,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "80d30ba984e8bdb26a43ee69aea64c3e3dd34de5cec9368db1e34ae83535173b",
+      "sourceManifestSha256": "1731ce8b6d1960525c2346a7449d38566307d902d4f607f54f406687e671df1a"
+    }
+  },
+  "priorFailureExplanations": {
+    "focused1": "SDK delegate subscription is nullable; failure mapper requires an existing result. Corrected before focused2.",
+    "focused2": "New host fixtures used a real dispatcher with virtual time. Failing cleanup then leaked a diagnostic assertion sink, causing 64 cascading failures. Fixtures now share the test dispatcher and reset diagnostics before cleanup.",
+    "focused3": "All 304 fresh tests passed; detekt rejected deeply nested acquisition cleanup. Cleanup extracted with unchanged release order.",
+    "focused5": "Two new metadata tests incorrectly copied a deliberately opaque credential gateway. Replaced by explicit fixture construction."
+  },
+  "nativeFinal": {
+    "startedAt": "2026-11-05T07:18:26.671010+00:00",
+    "elapsedSeconds": 145.221,
+    "exitCode": 0,
+    "sourceFiles": 12260,
+    "sourcesUnchanged": true,
+    "apkSha256": "ab255d5b991727ab1ef29fae990cc9f82e218e1e67ce847639977c26008a6ed6",
+    "apkUnchanged": true,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "resultSha256": "ada1380520b58b45b61d65d1b8ae6f639f113301f738a0f626d8877add3595c8",
+    "sourceManifestSha256": "c42d43fb2f075f6fb8fba1cb466ab1cab84ae6f9441987f686206aa3a500793d"
+  },
+  "screenshots": [
+    {
+      "path": "docs/images/chat-reconnect/chat-reconnect-local-history.png",
+      "sha256": "ae51b14c5a6f1360ec1ea9c837640620dfe45931aeff2c635edcf0be9d5a9a17",
+      "reviewed": true,
+      "fictionalContent": true
+    },
+    {
+      "path": "docs/images/chat-reconnect/chat-reconnect-indonesian-large.png",
+      "sha256": "51b9d6def0b8b2598091aeb8c98af14c676c234e8b3dd8b5b701bc0b9c431408",
+      "reviewed": true,
+      "fictionalContent": true
+    }
+  ],
+  "userConfirmation": {
+    "release": 31,
+    "reply": "Pesan langsung terlihat",
+    "scope": "Bima messages appear immediately when reopening; no physical offline or complete provider-error acceptance implied."
+  },
+  "newCases": {
+    "data": 19,
+    "viewModel": 5,
+    "compose": 2,
+    "actualNativeRecovery": 1
+  },
+  "limits": [
+    "The user confirmed that release31 shows Bima messages immediately on reopening. The earlier generic connection failure is still not attributed by isolated fixtures; no account, private keys or phone data reset.",
+    "The rejected-refresh local-read flag checks policy; actual encrypted history/queue/process-death behavior remains separately required by the normal native suite.",
+    "Rejected-auth fixture advances isolated server time by 11 seconds beyond the real ten-second rotation guard. Normal-renewal fixture freezes server time after access expiry and uses only the existing bounded replay window; neither proves late-replay or clock-skew recovery.",
+    "No new live FCM/SystemUI, physical phone UI, Apple, organization adoption, call or meeting acceptance. All 54 communications PRD groups remain open."
+  ]
+}

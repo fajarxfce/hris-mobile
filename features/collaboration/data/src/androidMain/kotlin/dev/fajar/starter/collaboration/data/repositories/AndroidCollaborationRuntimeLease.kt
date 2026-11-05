@@ -36,10 +36,18 @@ internal constructor(
     historyApi: CollaborationHistoryApi,
     pusherApi: CollaborationPusherApi,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val authentication: AndroidSdkAuthRegistration? = null,
     private val released: (AndroidCollaborationRuntimeLease) -> Unit,
 ) : CollaborationRuntimeLease {
     override val deviceId = record.deviceId
     override val installedOperationId = record.bootstrapOperationId
+    private val installedGateway = SdkInstalledGateway(record)
+
+    internal fun acceptsReplacement(
+        command: dev.fajar.starter.collaboration.domain.entities.CollaborationSetupCommand,
+        gateway: dev.fajar.starter.collaboration.domain.entities.CollaborationGateway,
+    ): Boolean = installedGateway.acceptsReplacement(command, gateway)
+
     override val credentialFailures = persistence.failures
     private val lifetimeJob = SupervisorJob()
     private val lifetime = CoroutineScope(lifetimeJob + dispatcher)
@@ -412,6 +420,7 @@ internal constructor(
     private suspend fun releaseResources(): SdkShutdownAttempt {
         // Never pause/destroy the client or unlock its directory while restore still uses it.
         acquisitionFinished.await()
+        authentication?.deactivate()
         val credentialResult = persistence.close()
         credentialWatcher.cancelAndJoin()
         syncWatcher.cancelAndJoin()
@@ -430,7 +439,11 @@ internal constructor(
         if (drained is AppResult.Failed) return SdkShutdownAttempt(drained, released = false)
         val result = safeStorageCall {
             try {
-                nativeClient.close()
+                try {
+                    authentication?.close()
+                } finally {
+                    nativeClient.close()
+                }
             } finally {
                 directory.close()
             }

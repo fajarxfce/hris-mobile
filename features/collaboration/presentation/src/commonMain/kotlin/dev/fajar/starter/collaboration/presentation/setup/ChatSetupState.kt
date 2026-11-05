@@ -9,6 +9,7 @@ enum class ChatSetupPhase {
     WAITING,
     RETRY_PROVISIONING,
     BOOTSTRAP,
+    RECONNECT,
     RESUME,
     READY,
     REVOKED,

@@ -2,6 +2,7 @@ package dev.fajar.starter.collaboration.data
 
 import dev.fajar.starter.collaboration.data.dto.CollaborationGatewayDto
 import dev.fajar.starter.collaboration.data.mappers.toGateway
+import dev.fajar.starter.collaboration.data.repositories.SdkInstalledGateway
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
@@ -101,6 +102,66 @@ class CollaborationSdkRecordTest {
         Json.decodeFromString<CollaborationGatewayDto>(setupGatewayJson)
             .toGateway(setupOwner, setupBootstrap)
     private val passphrase = Base64.encode(ByteArray(32) { it.toByte() })
+
+    @Test
+    fun replacementRequiresANewerBootstrapOnTheOriginalProviderDeviceAndGateway() = runTest {
+        val installed =
+            SdkInstalledGateway(
+                CollaborationSdkRecordCodec(scope()).create(command, gateway, passphrase)
+            )
+        val next = command.copy(id = SETUP_JOB)
+        val renewed = renewedGateway()
+        assertTrue(installed.acceptsReplacement(next, renewed))
+        assertFalse(installed.acceptsReplacement(command, renewed))
+        for (other in
+            listOf(
+                gateway,
+                renewedGateway(sessionId = SETUP_JOB),
+                renewedGateway(matrixUserId = "@foreign:fixture.test"),
+                renewedGateway(matrixDeviceId = "FOREIGN"),
+            )) assertFalse(installed.acceptsReplacement(next, other))
+    }
+
+    @Test
+    fun refreshedTokenPersistenceDoesNotChangeOriginalBootstrapIdentity() = runTest {
+        val codec = CollaborationSdkRecordCodec(scope())
+        val restored =
+            codec
+                .create(command, gateway, passphrase)
+                .copy(
+                    accessToken = "fixture-refreshed-access",
+                    refreshToken = "fixture-refreshed-refresh",
+                    initialized = true,
+                    credentialRevision = 7,
+                )
+        val installed = SdkInstalledGateway(restored)
+        assertTrue(
+            installed.acceptsReplacement(
+                command.copy(id = SETUP_JOB),
+                renewedGateway(version = gateway.version + 8),
+            )
+        )
+        assertFalse(installed.acceptsReplacement(command.copy(id = SETUP_JOB), gateway))
+    }
+
+    private fun renewedGateway(
+        version: Long = gateway.version + 1,
+        sessionId: String = gateway.sessionId,
+        matrixUserId: String = gateway.matrixUserId,
+        matrixDeviceId: String = gateway.matrixDeviceId,
+    ) =
+        CollaborationGateway(
+            gateway.owner,
+            gateway.deviceId,
+            sessionId,
+            version,
+            matrixUserId,
+            matrixDeviceId,
+            "fixture-replacement-access",
+            "fixture-replacement-refresh",
+            gateway.accessExpiresAtEpochMillis,
+            gateway.expiresAtEpochMillis,
+        )
 
     @Test
     fun stableStoreIdentityExcludesLocalSessionAndSeparatesAllPermanentOwners() = runTest {

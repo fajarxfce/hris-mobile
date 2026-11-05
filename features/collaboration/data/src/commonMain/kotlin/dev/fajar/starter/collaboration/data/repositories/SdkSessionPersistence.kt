@@ -1,5 +1,6 @@
 package dev.fajar.starter.collaboration.data.repositories
 
+import dev.fajar.starter.collaboration.data.mappers.collaborationSdkFailure
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkRecord
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkRecordCodec
 import dev.fajar.starter.common.result.*
@@ -120,6 +121,17 @@ internal class SdkSessionPersistence(
                 code = "client.collaboration_callback_failed",
             ),
         )
+        failure.value = terminalFailure.value
+    }
+
+    /** A rejected SDK refresh closes live credentials, not ownership of local chat history. */
+    fun reportAuthenticationFailure() {
+        val rejected = collaborationSdkFailure("M_UNKNOWN_TOKEN", null)
+        terminalFailure.update { previous ->
+            previous?.takeIf {
+                it.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied)
+            } ?: rejected
+        }
         failure.value = terminalFailure.value
     }
 

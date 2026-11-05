@@ -1,5 +1,7 @@
 # Architecture
 
+[Original chat connection recovery](collaboration-chat-reconnect.md) preserves the private store through typed SDK rejection and exclusive credential replacement, with compact contextual recovery actions.
+
 [Local chat entry and foreground recovery](collaboration-chat-local-entry.md)
 keeps cached messages independent of transport and places held replies in context.
 
