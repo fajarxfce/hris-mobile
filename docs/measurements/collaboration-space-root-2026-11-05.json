@@ -1,0 +1,193 @@
+{
+  "date": "2026-11-05",
+  "scope": "Account-owned encrypted organization cache locator and local owning use cases",
+  "parentCommit": "0519e0d071a835438854929de1930a59dfc3c368",
+  "sources": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "fb31ae1370636b9179a3867c10f36730c79c47fc4661850971bffa39d92f4409",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "4b30ab8efc4db3cb90309b3e2e9bad29f61d34ee7acd1f14efa8224eef036492",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/identity/CollaborationSpaceRootCodec.kt": "24acf1d27ace862f936ac9a41a3d829f2b7eafcbfccc7b4d979a11e610c913ad",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceRootRepository.kt": "22cd30cd63fffad0ee404015abff313831349cd073d623fb7742a84b4977cdb0",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRootStorageContract.kt": "376c8d82847d1c959079653fe7e33d886d594226f2d7ec047a896c51601b0292",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRootStorageTest.kt": "4872accb416ef7486f5a404d91d2f4b13b610db1af0b511f91ee9002ed312bf0",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceRootStorageTest.kt": "4afab1b7ebeecd6db6485e57bfb37dd71e7bcf4df8603bef6291472f414d7d29",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceRoot.kt": "529f8729fc2e8ffe13a687e0141fa33bfe3220995b7a6e7f89fb5e3a056c5446",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceAccountOwnership.kt": "97ea3759bcd243470443fc820ab0f5d2f0931c3c1dfc51766ca3865ff01d2e72",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceRootRepository.kt": "78bc3aaef1016e3d7b7e411b3ae39922d140d5102239dae6c00223b1882707af",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveKnownCollaborationSpace.kt": "737bd78891287652232bc71f7b8f33be809a6dfb3120cc67cf07a952172f6285",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PublishKnownCollaborationSpace.kt": "ab1cd10fdc0ca7183b167e4fb648e9968398f89a22a0bfc24fb76281c0cc634b",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceRootUseCaseTest.kt": "db5d820f9c2886caf3c91de12283e8b638a21830ff121775f48675878732270b"
+  },
+  "gates": {
+    "focused1": {
+      "startedAt": "2026-11-04T23:56:13.787250+00:00",
+      "elapsedSeconds": 72.475,
+      "exitCode": 1,
+      "sourceFiles": 3929,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "a2763dc060259011fc6042ba88c555639be7635919b7a4191b853bce28ad41f8",
+      "rootReports": {},
+      "stdoutSha256": "73ea58272f1ff74c576e5b2b89e46755d15e6be3e90f8a0706c8c5d73874b725",
+      "stderrSha256": "c18c1708c06cf0cf8c47ea4cbfcab904ce2574995bbe5ee889e2c4683eeb790e"
+    },
+    "focused2": {
+      "startedAt": "2026-11-04T23:57:57.067404+00:00",
+      "elapsedSeconds": 118.855,
+      "exitCode": 0,
+      "sourceFiles": 3929,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "96e833ecedc66ea70b8d9db3ef58a4e67abaabf235045861c12129758f32150d",
+      "rootReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRootStorageTest.xml": {
+          "sha256": "9a00cc91a3b474147d5f83a86c30e16ba654ae6619ac9d4052f8f77aa9d8647c",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "b16f63a0003ba66d6fd2cd5f01182b03e6960bd8c05306ef294bcd29ae7b9066",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "0abc01a12ce5e7c5e7f508c1626f710176bd473b2d9a234b1cab812796fe80f7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "check1": {
+      "startedAt": "2026-11-05T00:00:07.556069+00:00",
+      "elapsedSeconds": 344.774,
+      "exitCode": 0,
+      "sourceFiles": 3929,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2521,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "96e833ecedc66ea70b8d9db3ef58a4e67abaabf235045861c12129758f32150d",
+      "rootReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRootStorageTest.xml": {
+          "sha256": "2326517178cd0a12ccf797d93797f9abb73b2cf6f44a49ba0c514de31ee01cf3",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "af1c6442421a981825e80c015c327f0510f30fbb18ad63a9a385bdc49ad7bca2",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "12d088da213cccbb3018b36e69b23f2e2928ce7d5d8680e9a792c9f2a263106c",
+      "stderrSha256": "6b8cf32f41e7fd7395380d5646f17a7418fd059bead8db4d88faa02d8b53aa47"
+    },
+    "check2": {
+      "startedAt": "2026-11-05T00:09:52.207252+00:00",
+      "elapsedSeconds": 404.541,
+      "exitCode": 0,
+      "sourceFiles": 3929,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2522,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "34a87f46090a533691dab626e4bacb68c7bf3cb4cb75310bef69b9f4efbcee0d",
+      "rootReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRootStorageTest.xml": {
+          "sha256": "4cff06f062bbf8c0b44a6cc53eea1bdb620025454181d5b5f0fa89261910583b",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "27f9b1ff7a4e3c4d74bcb637e4510111f384fa595a65a5ce37fce808c4a284f6",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "e912991e4707c698ad351c7a49286092cc830f2cdecc42da159a147edabc4ecb",
+      "stderrSha256": "4cf05afa0509e906bd8e27f1e42ecbf49db79447a053c40ef5b7720b8ae24db1"
+    },
+    "browser1": {
+      "startedAt": "2026-11-05T00:16:57.791634+00:00",
+      "elapsedSeconds": 148.906,
+      "exitCode": 0,
+      "sourceFiles": 3929,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1474,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "34a87f46090a533691dab626e4bacb68c7bf3cb4cb75310bef69b9f4efbcee0d",
+      "rootReports": {
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceRootStorageTest.xml": {
+          "sha256": "755b40c1911685af4d8fc76f9046709bcbce88d58dcbd7b1f95fb01589373d70",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSpaceRootUseCaseTest.xml": {
+          "sha256": "0bb019ed2d200047a0a02d250bfccb50a3a24f343c8dcb4c6548c3a7c44bfe9b",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "5da6c644d40a9713dfc26b7c5c2cb1096fd6d1a821ae8711d4072ad2a2aec94a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "finalGateSourcesIdentical": true,
+  "finalGates": [
+    "check2",
+    "browser1"
+  ],
+  "earlierAttempt": "focused1 stopped before tests because the new codec lacked the explicit identity-policy accountStorageKey import; focused2 includes that correction. check1 passed before review distinguished a rejected empty root from an actual foreign root. check2/browser1 include the refusal reconciliation and ninth domain case; earlier gates are not final-source acceptance.",
+  "coverage": [
+    "Nine shared storage cases on real SQLite and IndexedDB with AES-GCM",
+    "Empty reads allocate no key; exact replay preserves original ciphertext across restart and new local session",
+    "Account/server isolation without a company or native-session encryption namespace",
+    "Competing first writes and account replacement cannot substitute another root",
+    "Lost commit response can be replayed; root-only ciphertext fences lost shared keys across inactive accounts",
+    "Malformed owner, checkpoint and ciphertext fail safely, including flow input acquisition",
+    "Nine domain cases for local age/rotation, queued old-owner cancellation, terminated-source reobservation",
+    "Finite 2-second publication of an already admitted discovery checks native owner and original wall/monotonic lifetime",
+    "Refused publication distinguishes absent root, an already committed identical root, a real foreign root and storage failure",
+    "Real application container resolves the new repository and both owning use cases"
+  ],
+  "limits": [
+    "Root is a cache locator only; consumers separately apply directory/command/runtime admission",
+    "No directory denial is cleared, no network call, provider identity, device, SDK store or message is created by publication",
+    "Different existing roots require explicit migration; no automatic overwrite",
+    "No new product/FCM/provider/Apple hardware/runtime acceptance",
+    "All 54 PRD groups remain open; live backend 8b40/schema 116 unchanged",
+    "Phone release 29 remains a verified artifact pending connection; last confirmed install 28"
+  ]
+}

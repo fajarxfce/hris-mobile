@@ -1,5 +1,9 @@
 # Architecture
 
+[Known organization root](collaboration-space-root.md) locates an account-owned
+directory cache after restart or reauthentication. It grants no live authority;
+explicit directory admission and device/SDK ownership remain separate.
+
 [Encrypted organization directory](collaboration-space-directory-storage.md) keeps
 account-owned facts, cursor progress and access admission separate from native
 credential lifetime and selected HR company. Its repository exposes encrypted

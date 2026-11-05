@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Account-owned organization cache root — 5 November 2026
+
+The organization cache locator now survives restart and reauthentication for the
+same account without depending on an HR company or native credential age. Its
+first publication is encrypted and atomic; replay retains the same ciphertext,
+and a different organization cannot replace it silently. A refused write is
+reconciled against actual storage before claiming migration. Root-only ciphertext
+also fences lost-key replacement. [Contract](collaboration-space-root.md),
+[evidence](measurements/collaboration-space-root-2026-11-05.json).
+
+Nine shared SQLite/IndexedDB storage cases and nine domain cases pass. Real
+application DI resolves the repository and both owning use cases. Final root
+:check, Android-host and Android dev compile pass 404.541 s /
+2,522 fresh cases; browser data/domain pass 148.906 s /
+1,474 cases. Both preserve the same 3,929 source inputs;
+format, architecture and detekt pass. All gate sessions closed. The initial import
+failure and later refused-write review correction remain in the evidence.
+
+NEXT: durable native group identity/device setup commands, SDK-store adoption and
+explicit hard-parent recovery, organization UI and typed group push/background/
+replies. Identity selection must precede device registration. Its receipt identifies
+the account/version, not the selected Matrix user: verify original provider user,
+device and key fingerprint before adopting any retained SDK store. Stable operation
+identity, build/platform and uncertainty must survive interrupted delivery. Never
+substitute spaceId for companyId or open old runtime after freeze. New sign-ins
+create a fresh local session ID; token refresh keeps the exact native binding.
+
+The locator alone activates no group UI, network mutation or provider/device runtime.
+Product still uses company chat; all 54 PRD groups remain open. Live backend
+8b40/schema 116 is unchanged. Release 29 remains verified but uninstalled; four
+15-second phone connection attempts timed out and the availability question is
+pending. Release 28 is the last confirmed phone install. Continue long run, updates,
+atomic pushes and validated install-only product delivery without driving phone UI.
+
 ## Current company-chat list cancels queued old results — 4 November 2026
 
 A slow consumer could receive an old page result after page selection or read
