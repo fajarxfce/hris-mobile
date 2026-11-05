@@ -1,5 +1,26 @@
 # Replication storage
 
+`discardStaging` removes only the exact unpublished checkpoint supplied by the
+caller. Ownership, generation, revision and encrypted payload must still match.
+The active generation, its checkpoint, documents and tags remain intact. A competing
+continuation, publication or owner replacement makes discard return false; late
+writes against the removed generation also fail. Removing an initial generation
+without a published predecessor leaves the partition absent. Feature use cases
+choose when an interactive operation should preempt background replacement.
+
+`workingDocuments` reads at most200 distinct identities from the current staging
+generation, or active generation when no staging exists, ordered by identity. It
+includes tombstones and returns their checkpoint in the same owned transaction.
+Visible projections continue to use published read methods. This supports bounded
+version/count comparisons without scanning or exposing a partial replacement.
+
+[Staging verification](measurements/replica-staging-2026-11-05.json) covers actual
+SQLite/IndexedDB, competing writes, cancellation and reopen. The first SQLite test
+caught work starting after cancellation; an explicit admission check corrects it.
+The full app gate passes4,070 fresh cases755.207s, zero failures/errors/skips,
+Android assembly and zero lint issues. Five Apple cases await their own CI run.
+
+
 Single-record observers return the active checkpoint and the requested document
 from one read transaction. A replacement generation remains invisible until
 publication. This lets a repository decrypt a detail record against the same

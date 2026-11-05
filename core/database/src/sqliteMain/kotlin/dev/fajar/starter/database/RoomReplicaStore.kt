@@ -1,5 +1,7 @@
 package dev.fajar.starter.database
 
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -71,6 +73,28 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
         validateReplicaGeneration(generation)
         validateReplicaCheckpoint(checkpoint)
         return dao.begin(scope, partition, generation, checkpoint, expectedGeneration)
+    }
+
+    override suspend fun discardStaging(
+        scope: ReplicaScope,
+        partition: String,
+        expected: ReplicaCheckpoint,
+    ): Boolean {
+        validateReplicaReplacement(scope, partition, expected, null)
+        currentCoroutineContext().ensureActive()
+        return dao.discardStaging(scope, partition, expected)
+    }
+
+    override suspend fun workingDocuments(
+        scope: ReplicaScope,
+        partition: String,
+        ids: List<String>,
+    ): ReplicaPage {
+        val retained = ids.toList()
+        validateReplicaKey(scope, partition)
+        validateReplicaDocumentIds(retained)
+        currentCoroutineContext().ensureActive()
+        return dao.workingDocuments(scope, partition, retained)
     }
 
     override suspend fun commit(

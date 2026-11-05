@@ -122,6 +122,49 @@ internal class IndexedDbReplicaStore(
         }
     }
 
+    override suspend fun discardStaging(
+        scope: ReplicaScope,
+        partition: String,
+        expected: ReplicaCheckpoint,
+    ): Boolean {
+        validateReplicaReplacement(scope, partition, expected, null)
+        val db = database()
+        currentCoroutineContext().ensureActive()
+        return withContext(NonCancellable) {
+            val changed =
+                discardStagedReplica(
+                        db,
+                        Json.encodeToString(scope),
+                        partition,
+                        Json.encodeToString(expected),
+                    )
+                    .await<JsBoolean>()
+                    .toBoolean()
+            if (changed) changes.tryEmit(Unit)
+            changed
+        }
+    }
+
+    override suspend fun workingDocuments(
+        scope: ReplicaScope,
+        partition: String,
+        ids: List<String>,
+    ): ReplicaPage {
+        val retained = ids.toList()
+        validateReplicaKey(scope, partition)
+        validateReplicaDocumentIds(retained)
+        return Json.decodeFromString(
+            workingReplicaDocuments(
+                    database(),
+                    Json.encodeToString(scope),
+                    partition,
+                    Json.encodeToString(retained),
+                )
+                .await<JsString>()
+                .toString()
+        )
+    }
+
     override suspend fun commit(
         handle: ReplicaHandle,
         expectedRevision: Long,
@@ -578,3 +621,84 @@ private external fun replicaDocument(
 })"""
 )
 private external fun clearReplica(db: JsAny, scope: String, partition: String): Promise<JsBoolean>
+
+@JsFun(
+    """(db, scopeJson, partition, expectedJson) => new Promise((resolve, reject) => {
+    const scope = JSON.parse(scopeJson), expected = JSON.parse(expectedJson);
+    const {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
+    const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents'], 'readwrite');
+    const heads = tx.objectStore('replica_heads'), generations = tx.objectStore('replica_generations');
+    let changed = false;
+    const owner = tx.objectStore('account_scope').get('current');
+    const account = tx.objectStore('account_scope').get('command-account');
+    account.onsuccess = () => {
+        if (expected.published || owner.result !== sessionId || (accountKey != null && account.result !== accountKey)) return;
+        const head = heads.get([ownerKey, partition]);
+        head.onsuccess = () => {
+            const current = head.result, generation = expected.handle.generation;
+            if (current?.stagingGeneration !== generation) return;
+            const row = generations.get([ownerKey, partition, generation]);
+            row.onsuccess = () => {
+                if (!row.result || row.result.revision !== expected.revision || row.result.checkpoint !== expected.payload) return;
+                generations.delete([ownerKey, partition, generation]);
+                tx.objectStore('replica_documents').delete(IDBKeyRange.bound([ownerKey, partition, generation, ''], [ownerKey, partition, generation, '\uffff']));
+                if (current.activeGeneration == null) heads.delete([ownerKey, partition]);
+                else heads.put({...current, stagingGeneration:null});
+                changed = true;
+            };
+        };
+    };
+    tx.oncomplete = () => resolve(changed);
+    tx.onabort = () => reject(tx.error || new Error('Staged replica discard failed.'));
+})"""
+)
+private external fun discardStagedReplica(
+    db: JsAny,
+    scope: String,
+    partition: String,
+    expected: String,
+): Promise<JsBoolean>
+
+@JsFun(
+    """(db, scopeJson, partition, idsJson) => new Promise((resolve, reject) => {
+    const scope = JSON.parse(scopeJson), ids = JSON.parse(idsJson);
+    const {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
+    const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents'], 'readonly');
+    const value = {checkpoint:null, documents:[]};
+    const owner = tx.objectStore('account_scope').get('current');
+    const account = tx.objectStore('account_scope').get('command-account');
+    account.onsuccess = () => {
+        if (owner.result !== sessionId || (accountKey != null && account.result !== accountKey)) return;
+        const head = tx.objectStore('replica_heads').get([ownerKey, partition]);
+        head.onsuccess = () => {
+            const current = head.result, generation = current?.stagingGeneration ?? current?.activeGeneration;
+            if (generation == null) return;
+            const row = tx.objectStore('replica_generations').get([ownerKey, partition, generation]);
+            row.onsuccess = () => {
+                if (!row.result) return;
+                value.checkpoint = {handle:{scope, partition, generation}, revision:row.result.revision,
+                    payload:row.result.checkpoint, published:current.activeGeneration === generation};
+                for (const id of ids) {
+                    const record = tx.objectStore('replica_documents').get([ownerKey, partition, generation, id]);
+                    record.onsuccess = () => {
+                        if (!record.result) return;
+                        const {id, version, sortKey, payload = null, tags = []} = record.result;
+                        value.documents.push({id, version, sortKey, payload, tags});
+                    };
+                }
+            };
+        };
+    };
+    tx.oncomplete = () => {
+        value.documents.sort((a,b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+        resolve(JSON.stringify(value));
+    };
+    tx.onabort = () => reject(tx.error || new Error('Working replica read failed.'));
+})"""
+)
+private external fun workingReplicaDocuments(
+    db: JsAny,
+    scope: String,
+    partition: String,
+    ids: String,
+): Promise<JsString>

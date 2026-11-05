@@ -262,6 +262,61 @@ abstract class ReplicaDao {
     }
 
     @Transaction
+    open suspend fun discardStaging(
+        scope: ReplicaScope,
+        partition: String,
+        expected: ReplicaCheckpoint,
+    ): Boolean {
+        if (expected.published || !owns(scope.sessionId, scope.accountKey)) return false
+        val ownerKey = scope.accountKey.orEmpty()
+        val current = head(ownerKey, partition) ?: return false
+        if (current.stagingGeneration != expected.handle.generation) return false
+        val staged = generation(ownerKey, partition, expected.handle.generation) ?: return false
+        if (staged.revision != expected.revision || staged.checkpoint != expected.payload)
+            return false
+        deleteGeneration(ownerKey, partition, staged.generation)
+        if (current.activeGeneration == null) deleteHead(ownerKey, partition)
+        else write(current.copy(stagingGeneration = null))
+        return true
+    }
+
+    @Query(
+        "SELECT * FROM replica_documents WHERE ownerKey = :ownerKey AND partition = :partition AND generation = :generation AND id IN (:ids) ORDER BY id"
+    )
+    protected abstract suspend fun selectedRecords(
+        ownerKey: String,
+        partition: String,
+        generation: String,
+        ids: List<String>,
+    ): List<ReplicaDocumentEntity>
+
+    @Transaction
+    open suspend fun workingDocuments(
+        scope: ReplicaScope,
+        partition: String,
+        ids: List<String>,
+    ): ReplicaPage {
+        if (!owns(scope.sessionId, scope.accountKey)) return ReplicaPage(null, emptyList())
+        val ownerKey = scope.accountKey.orEmpty()
+        val current = head(ownerKey, partition) ?: return ReplicaPage(null, emptyList())
+        val selected =
+            current.stagingGeneration
+                ?: current.activeGeneration
+                ?: return ReplicaPage(null, emptyList())
+        val row = generation(ownerKey, partition, selected) ?: return ReplicaPage(null, emptyList())
+        return ReplicaPage(
+            ReplicaCheckpoint(
+                ReplicaHandle(scope, partition, selected),
+                row.revision,
+                row.checkpoint,
+                current.activeGeneration == selected,
+            ),
+            if (ids.isEmpty()) emptyList()
+            else selectedRecords(ownerKey, partition, selected, ids).map { it.toReplicaDocument() },
+        )
+    }
+
+    @Transaction
     open suspend fun commit(
         handle: ReplicaHandle,
         expectedRevision: Long,

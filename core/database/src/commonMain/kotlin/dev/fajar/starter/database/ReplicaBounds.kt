@@ -51,6 +51,11 @@ fun validateReplicaBatch(expectedRevision: Long, documents: List<ReplicaDocument
     }
 }
 
+fun validateReplicaDocumentIds(ids: List<String>) {
+    require(ids.size <= 200 && ids.distinct().size == ids.size)
+    ids.forEach(::validateReplicaGeneration)
+}
+
 fun validateReplicaTag(tag: String) {
     require(tag.length in 1..128 && tag.all { it in '!'..'~' })
 }

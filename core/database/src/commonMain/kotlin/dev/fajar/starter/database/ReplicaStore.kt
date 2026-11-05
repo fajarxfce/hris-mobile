@@ -51,6 +51,27 @@ interface ReplicaStore {
     ): Boolean
 
     /**
+     * Removes only an exact unpublished generation. The active snapshot remains intact; a competing
+     * continuation/publication or owner replacement makes this return false.
+     */
+    suspend fun discardStaging(
+        scope: ReplicaScope,
+        partition: String,
+        expected: ReplicaCheckpoint,
+    ): Boolean
+
+    /**
+     * Reads up to 200 distinct identities from the working generation (staging, else active),
+     * including tombstones, with its checkpoint in one owned transaction. Ordered by id. This is an
+     * acquisition aid; visible projections must use the published read methods.
+     */
+    suspend fun workingDocuments(
+        scope: ReplicaScope,
+        partition: String,
+        ids: List<String>,
+    ): ReplicaPage
+
+    /**
      * Documents and the next checkpoint commit together, conditional on the observed generation.
      */
     suspend fun commit(

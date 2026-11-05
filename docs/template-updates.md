@@ -1,15 +1,24 @@
 # Template updates
 
-## Compact filter, swipe tabs and scroll-responsive action — native validation next
+## Replica staging operations — Mobile consumer proof remains
 
-The reusable foundation candidates are AppSwipeTabContent, AppFilterButton,
-AppFloatingActionButton, AppFloatingActionLayout and the semantic onAccent color.
-Seven generic UI tests cover selection/gesture interruption, reduced motion, retained
-drafts, inactive-page semantics and disabling an exiting action. Port after Mobile
-native validation, with independent Starter checks. The full local gate passed
-3,088 fresh cases; see [evidence](measurements/chat-hub-controls-2026-11-05.json).
-Home sections, HRIS directory filters,
-route lifecycle policy, localization and application wiring remain in Mobile.
+Nine generic storage/contract files add exact staging discard and bounded working
+reads including tombstones. SQLite/IndexedDB and the full Mobile root/Android/lint
+checks pass; Apple and use by the actual metadata consumer remain pending. Keep
+these changes in Mobile until that acceptance, then copy the generic files and
+regression tests with independent Starter validation. HRIS metadata DTOs, cursor
+policy, encrypted list format and admission remain in Mobile.
+[Evidence](measurements/replica-staging-2026-11-05.json).
+
+## Compact filter, swipe tabs and scroll-responsive action — port complete
+
+The six exact generic files from Mobile2539c658 are in Startere501d4da: four
+components, onAccent color and seven UI tests. Actual Mobile39 Android acceptance
+and independent Starter root/Android/lint/Web checks pass. Starter Apple42088401280
+passes118 cases/31 suites and the full Xcode simulator app/associations; artifact
+and source identity audited in Starterfbe5ea8. No repeat port or physical iPhone
+claim. Home sections, HRIS filters, route lifecycle, localization and app wiring
+remain in Mobile. [Mobile UI evidence](measurements/chat-hub-controls-2026-11-05.json).
 
 ## HRIS Android notification runtime
 

@@ -1,5 +1,44 @@
 # Agent continuation — HRIS Mobile
 
+## Raw staging operations accepted; encrypted consumer starts next — 5 November 2026
+
+Nine generic database/contract files are accepted on a931a09d. Exact unpublished
+staging discard preserves active data/cursor/tags, and bounded working reads include
+tombstones with their checkpoint. SQLite/IndexedDB exercise late writes, competing
+continuation/publication, coherent reads, cancellation, scopes and cold reopen.
+[Contract](replica-storage.md), [evidence](measurements/replica-staging-2026-11-05.json).
+Focused storage1 found one real SQLite pre-cancellation bug; explicit ensureActive
+before I/O fixes it. storage2 passes66 desktop cases68.197s;64 browser cases passed
+in storage1 unchanged. Full storage-full1 PASSES4,070 fresh cases755.207s, zero
+failures/errors/skips, root/UI checks, Android assembly and zero lint issues;
+4,120 unchanged inputs. All local build wrappers/children are drained.
+
+NEXT: push this increment and dispatch one Apple-only CI on its exact source;
+five new AppleReplicaStagingTest cases are prepared, not yet executed. Then apply
+and test the encrypted metadata consumer drafts under .work/chat-summary-sync-2026-11-05/
+consumer-draft (*.kt.draft). They are NOT compiled or accepted. Current drafts add
+format2/checkpoint state, encrypted codec, list repository sync methods and staging
+preemption, and four common storage scenarios with Desktop/Browser wrappers.
+consumer-design.md describes next use-case/presentation work and remaining race/
+denial/cancellation tests. Preserve original V1 keys/facts, enforce tracked revision
+and tombstone ordering, catch up pending publication before replacement, and never
+put remote opaque cursors into UI UUID pagination. No SyncCollaborationList use case
+or ChatInbox wiring exists yet. Prepare/run focused storage gates before activation.
+
+Phone39 remains installed; do not reinstall. Starter UI port is fully accepted:
+fbe5ea8 audits Apple42088401280,118 cases/full Xcode app/associations. New raw storage
+port waits for Mobile consumer/native acceptance. Both protected stashes and all
+retained emulator userdata/sidecars/SDK keys remain untouched; Bima receiver5562
+is still owned by PID2720994/startTicks158001625 (verify before use).
+
+Platform d03fb472 native feed/control CI42090785206 PASSES706 cases/113 suites,
+zero failures/errors and seven existing opt-in skips (six native interops plus
+elapsed-retention). Artifact identity audited; full CI42091460931 remains running.
+Prepared artifact/image staging scripts are not run. No deployment; live11a98115/
+schema116/chat pushOFF. Continue metadata delivery then54 open PRD groups including
+edit/delete/groups/media/backup/calls/meetings. Announce each future install-only.
+
+
 ## Native metadata transport accepted; storage consumer next — 5 November 2026
 
 Eight transport/domain/DTO/test files are accepted against Platform d03fb472.
