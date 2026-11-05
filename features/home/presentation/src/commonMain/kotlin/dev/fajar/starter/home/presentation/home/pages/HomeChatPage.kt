@@ -1,34 +1,31 @@
 package dev.fajar.starter.home.presentation.home.pages
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.home.presentation.home.*
 import dev.fajar.starter.localization.*
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.Add
 
-/** One communication destination; feature entries retain their own route-scoped state. */
+/** Fixed category tabs, independently owned pages and one interruptible primary action. */
 @Composable
 internal fun HomeChatPage(
     state: HomeState,
     onEvent: (HomeEvent) -> Unit,
-    conversations: @Composable (@Composable () -> Unit) -> Unit,
-    contacts: @Composable (@Composable () -> Unit) -> Unit,
+    conversations: @Composable (Boolean, Dp) -> Unit,
+    contacts: @Composable (Boolean, Dp) -> Unit,
 ) {
-    val header: @Composable () -> Unit = {
-        Column {
-            AppTopBar(
-                title = appString(AppString.ChatTitle),
-                actions = {
-                    AppIconButton(
-                        Icons.Regular.Add,
-                        appString(AppString.ChatNew),
-                        { onEvent(HomeEvent.NewChatRequested) },
-                        enabled = !state.working,
-                    )
-                },
-            )
+    Box(
+        Modifier.fillMaxSize()
+            .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)),
+        contentAlignment = Alignment.TopCenter,
+    ) {
+        Column(Modifier.widthIn(max = 720.dp).fillMaxSize()) {
             AppTabs(
                 listOf(
                     AppTabItem(ChatSection.Conversations, appString(AppString.ChatConversations)),
@@ -38,12 +35,34 @@ internal fun HomeChatPage(
                 { onEvent(HomeEvent.ChatSectionSelected(it)) },
                 enabled = !state.working,
             )
-        }
-    }
-    AppTabContent(state.chatSection, stateKey = { it.name }) { section ->
-        when (section) {
-            ChatSection.Conversations -> conversations(header)
-            ChatSection.Contacts -> contacts(header)
+            AppFloatingActionLayout(
+                modifier = Modifier.weight(1f).fillMaxWidth(),
+                stateKey = state.chatSection,
+                action = { visible ->
+                    AppFloatingActionButton(
+                        Icons.Regular.Add,
+                        appString(AppString.ChatNew),
+                        { onEvent(HomeEvent.NewChatRequested) },
+                        modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+                        visible = visible,
+                        enabled = !state.working,
+                    )
+                },
+            ) {
+                AppSwipeTabContent(
+                    items = ChatSection.entries,
+                    selected = state.chatSection,
+                    onSelected = { onEvent(HomeEvent.ChatSectionSelected(it)) },
+                    stateKey = { it.name },
+                    modifier = Modifier.fillMaxSize(),
+                    enabled = !state.working,
+                ) { section, active ->
+                    when (section) {
+                        ChatSection.Conversations -> conversations(active, 88.dp)
+                        ChatSection.Contacts -> contacts(active, 88.dp)
+                    }
+                }
+            }
         }
     }
 }

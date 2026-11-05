@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.collaboration.domain.entities.CollaborationInboxPreview
 import dev.fajar.starter.collaboration.presentation.inbox.*
@@ -31,13 +32,14 @@ fun ChatInboxPage(
     zone: TimeZone = TimeZone.currentSystemDefault(),
     today: LocalDate = Clock.System.now().toLocalDateTime(zone).date,
     topBar: (@Composable () -> Unit)? = null,
+    bottomPadding: Dp = 8.dp,
 ) {
     AppLazyPage(
         modifier = modifier,
         state = listState,
         spacing = 0.dp,
         maxWidth = 720.dp,
-        contentPadding = PaddingValues(vertical = 8.dp),
+        contentPadding = PaddingValues(top = 8.dp, bottom = bottomPadding),
         topBar =
             topBar
                 ?: {

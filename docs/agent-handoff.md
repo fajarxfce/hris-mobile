@@ -1,5 +1,42 @@
 # Agent continuation — HRIS Mobile
 
+## Compact swipe Chat hub locally accepted; release 39 next — 5 November 2026
+
+Chat now has no title app bar/actions. Fixed Conversations/Contacts support taps
+and horizontal gestures. The 56dp New chat FAB hides on downward consumed scroll,
+returns upward, honors reduced motion and cannot be clicked while exiting. Both
+Contacts and EmployeeSearch have a 48dp filter icon to the right of search, without
+a separate filter row. Only the settled page acquires/consumes effects; drafts,
+directory position and admitted local previews remain retained. Offscreen settled
+pages are excluded from accessibility. [Contract](collaboration-chat-hub.md).
+
+Full root/Android/browser/proof gate PASSES3,088 fresh cases453.069s, zero failures/
+errors/skips,4,108 unchanged inputs. All90 AppFlow cases and seven generic UI cases
+pass. Seven synthetic Compose captures were opened/reviewed. Earlier focused1
+failures were six ambiguous vertical-list selectors and the architecture rule
+against page-owned mutable state; selectors now specify a vertical axis and the
+scroll rendering state belongs in the slotted generic AppFloatingActionLayout.
+Focused2 passed38 fresh cases222.596s. [Evidence](measurements/chat-hub-controls-2026-11-05.json).
+All check/formatter wrappers and children are drained.
+
+NEXT: clean ARM64 devRelease39 build/lint/artifact verification, own Apple run on
+the new committed source, retained Rani native filter/swipe/FAB/offline proof and
+Bima history checks. Only then announce and install-only39 on10.77.77.3:5555.
+Phone still38; no39 build/install acceptance yet. Bima was cleanly stopped after
+identity verification to free build resources. All four sample images, sidecars
+and device keys remain retained. Start sample1 only after build load ends;
+restore Bima as receiver afterward. No new messages or fixture grants are needed.
+
+Port four generic components, onAccent color and seven reusable UI cases to Starter
+after Mobile native acceptance; HRIS navigation/filters/lifecycle stay in Mobile.
+Platform now has uncommitted bounded projection worker/repository/policy/DI/tests
+on top of66d18b2d; they are NOT compiled or tested yet. Prepared focused and full
+worker/API gates live under .work/chat-summary-delta-2026-11-05. Run both, including
+the complete apps:worker:test graph, before committing that capability. Live stays
+11a98115/schema116/chat pushOFF. Dedicated native delta HTTP and atomic Mobile
+cursor consumer remain next, then edit/delete/groups/calls/meet; all54 PRD groups
+remain open. Preserve both protected stashes. Continue the long run after UI delivery.
+
 ## Release 38 Apple accepted; compact swipe hub in progress — 5 November 2026
 
 Apple run42069899173 PASSES exact source34e68b128bd9fa80ccc817d8e008caf850920d96:

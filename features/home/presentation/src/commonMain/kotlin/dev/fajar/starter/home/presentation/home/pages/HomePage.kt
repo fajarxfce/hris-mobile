@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.home.presentation.home.*
@@ -24,9 +25,9 @@ fun HomePage(
     onEvent: (HomeEvent) -> Unit,
     attendance: @Composable () -> Unit,
     inbox: @Composable () -> Unit,
-    employees: @Composable (@Composable () -> Unit) -> Unit,
+    employees: @Composable (Boolean, Dp) -> Unit,
     inboxBadge: @Composable () -> Unit,
-    chat: @Composable (@Composable () -> Unit) -> Unit,
+    chat: @Composable (Boolean, Dp) -> Unit,
 ) {
     Column(Modifier.fillMaxSize().background(AppColors.canvas)) {
         AppNavigationScaffold(

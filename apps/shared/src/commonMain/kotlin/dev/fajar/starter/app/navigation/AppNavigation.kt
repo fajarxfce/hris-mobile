@@ -256,10 +256,12 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppInco
                                 )
                             },
                             inboxBadge = { InboxBadgeContent(stage.workspace.id) },
-                            chat = { header ->
+                            chat = { active, bottomPadding ->
                                 ChatInboxContent(
                                     workspaceId = stage.workspace.id,
-                                    topBar = header,
+                                    topBar = {},
+                                    active = active,
+                                    bottomPadding = bottomPadding,
                                     onNewChat = {
                                         controller.navigate(ChatParticipantsRoute) {
                                             launchSingleTop = true
@@ -277,10 +279,12 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppInco
                                     },
                                 )
                             },
-                            employees = { header ->
+                            employees = { active, bottomPadding ->
                                 EmployeesContent(
                                     stage.workspace.id,
-                                    topBar = header,
+                                    topBar = {},
+                                    active = active,
+                                    bottomPadding = bottomPadding,
                                     onSearch = {
                                         controller.navigate(EmployeeSearchRoute) {
                                             launchSingleTop = true

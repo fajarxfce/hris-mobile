@@ -3,7 +3,9 @@ package dev.fajar.starter.people.presentation.directory.pages
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.localization.*
@@ -21,12 +23,14 @@ fun EmployeesPage(
     showBack: Boolean,
     onEvent: (EmployeesEvent) -> Unit,
     topBar: (@Composable () -> Unit)? = null,
+    bottomPadding: Dp = 12.dp,
 ) {
     AppLazyPage(
         state = listState,
         spacing = 0.dp,
         maxWidth = 720.dp,
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        contentPadding =
+            PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = bottomPadding),
         topBar =
             topBar
                 ?: {
@@ -55,17 +59,21 @@ fun EmployeesPage(
                 },
     ) {
         item(key = "search") {
-            Column(
+            Row(
                 Modifier.padding(bottom = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 AppSearchEntry(
                     appString(AppString.EmployeeSearch),
                     { onEvent(EmployeesEvent.SearchRequested) },
+                    Modifier.weight(1f),
                 )
-                AppFilterChip(
-                    state.department?.name ?: appString(AppString.AllDepartments),
+                AppFilterButton(
+                    appString(AppString.DepartmentFilter),
                     selected = state.department != null,
+                    valueDescription =
+                        state.department?.name ?: appString(AppString.AllDepartments),
                     onClick = { onEvent(EmployeesEvent.FilterRequested) },
                 )
             }

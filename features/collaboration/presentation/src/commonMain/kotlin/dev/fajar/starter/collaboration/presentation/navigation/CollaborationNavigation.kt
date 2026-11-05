@@ -17,6 +17,8 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -106,24 +108,35 @@ fun ChatInboxContent(
     onConversation: (String) -> Unit,
     onBack: (() -> Unit)? = null,
     topBar: (@Composable () -> Unit)? = null,
+    active: Boolean = true,
+    bottomPadding: Dp = 8.dp,
 ) {
     val vm = koinViewModel<ChatInboxViewModel>(parameters = { parametersOf(workspaceId) })
     val state by vm.state.collectAsStateWithLifecycle()
     val list = rememberLazyListState()
-    LifecycleStartEffect(vm) {
-        vm.onEvent(ChatInboxEvent.Entered)
-        onStopOrDispose { vm.onEvent(ChatInboxEvent.Stopped) }
-    }
-    CollectEffects(vm.effects) {
-        when (it) {
-            ChatInboxEffect.Back -> onBack?.invoke()
-            ChatInboxEffect.NewChat -> onNewChat()
-            ChatInboxEffect.SavedReplies -> onSavedReplies()
-            ChatInboxEffect.ScrollToStart -> list.requestScrollToItem(0)
-            is ChatInboxEffect.OpenConversation -> onConversation(it.id)
+    if (active) {
+        LifecycleStartEffect(vm) {
+            vm.onEvent(ChatInboxEvent.Entered)
+            onStopOrDispose { vm.onEvent(ChatInboxEvent.Stopped) }
+        }
+        CollectEffects(vm.effects) {
+            when (it) {
+                ChatInboxEffect.Back -> onBack?.invoke()
+                ChatInboxEffect.NewChat -> onNewChat()
+                ChatInboxEffect.SavedReplies -> onSavedReplies()
+                ChatInboxEffect.ScrollToStart -> list.requestScrollToItem(0)
+                is ChatInboxEffect.OpenConversation -> onConversation(it.id)
+            }
         }
     }
-    ChatInboxPage(state, list, vm::onEvent, onBack = onBack, topBar = topBar)
+    ChatInboxPage(
+        state,
+        list,
+        vm::onEvent,
+        onBack = onBack,
+        topBar = topBar,
+        bottomPadding = bottomPadding,
+    )
 }
 
 @Composable

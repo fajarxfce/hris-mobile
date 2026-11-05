@@ -2978,12 +2978,29 @@ class AppFlowTest {
                     .isNotEmpty()
             }
             val attendanceRequests = server.workforce.syncReads.get()
-            openContactsTab()
+            compose.onNode(hasText("Chat") and isSelectable()).performClick()
+            compose.onNode(hasText("Contacts") and isSelectable()).assertIsDisplayed()
+            compose.runOnIdle {
+                assertEquals(0, server.directory.queries.size, "Prefetched Contacts must not fetch")
+            }
+            compose.onNode(hasText("Contacts") and isSelectable()).performClick()
             waitFor("Sam Wilson")
             waitFor("Colleague 03")
-            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Colleague 15"))
+            compose
+                .onNode(
+                    hasScrollToIndexAction() and
+                        SemanticsMatcher.keyIsDefined(SemanticsProperties.VerticalScrollAxisRange)
+                )
+                .performScrollToNode(hasText("Colleague 15"))
             val row = compose.onNodeWithText("Colleague 15").fetchSemanticsNode().boundsInRoot
             val directoryRequests = server.directory.queries.size
+            repeat(3) {
+                compose.onNode(hasText("Conversations") and isSelectable()).performClick()
+                compose.onNodeWithContentDescription("Search employees").assertDoesNotExist()
+                compose.onNode(hasText("Contacts") and isSelectable()).performClick()
+                compose.onNodeWithText("Colleague 15").assertIsDisplayed()
+                compose.runOnIdle { assertEquals(directoryRequests, server.directory.queries.size) }
+            }
             repeat(3) {
                 compose.onNode(hasText("Home") and isSelectable()).performClick()
                 compose.onNode(hasText("Clock in") and hasClickAction()).assertIsEnabled()
@@ -3000,7 +3017,12 @@ class AppFlowTest {
                     assertEquals(directoryRequests, server.directory.queries.size)
                 }
             }
-            compose.onNode(hasScrollToIndexAction()).performScrollToIndex(0)
+            compose
+                .onNode(
+                    hasScrollToIndexAction() and
+                        SemanticsMatcher.keyIsDefined(SemanticsProperties.VerticalScrollAxisRange)
+                )
+                .performScrollToIndex(0)
             compose
                 .onNodeWithContentDescription("Search employees")
                 .assert(hasSetTextAction().not())
@@ -3167,10 +3189,24 @@ class AppFlowTest {
                 compose.onNodeWithContentDescription("Back").assertDoesNotExist()
                 compose.onNodeWithText("HR Specialist").assertExists()
                 capture("employees")
-                compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Next page"))
+                compose
+                    .onNode(
+                        hasScrollToIndexAction() and
+                            SemanticsMatcher.keyIsDefined(
+                                SemanticsProperties.VerticalScrollAxisRange
+                            )
+                    )
+                    .performScrollToNode(hasText("Next page"))
                 compose.onNodeWithText("Next page").performClick()
                 waitFor("Colleague 21")
-                compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("First page"))
+                compose
+                    .onNode(
+                        hasScrollToIndexAction() and
+                            SemanticsMatcher.keyIsDefined(
+                                SemanticsProperties.VerticalScrollAxisRange
+                            )
+                    )
+                    .performScrollToNode(hasText("First page"))
                 compose.onNodeWithText("First page").performClick()
                 waitFor("Sam Wilson")
                 openEmployeeSearch()
@@ -3260,7 +3296,7 @@ class AppFlowTest {
             waitFor("Welcome")
             openContactsTab()
             waitFor("Sam Wilson")
-            compose.onNodeWithText("All departments").performClick()
+            compose.onNodeWithContentDescription("Filter departments").performClick()
             waitFor("Search departments")
             compose.waitUntil {
                 compose
@@ -3272,12 +3308,30 @@ class AppFlowTest {
             waitFor("Alex Morgan")
             compose.onNodeWithText("Sam Wilson").assertDoesNotExist()
             capture("employees-department")
-            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Next page"))
+            compose
+                .onNode(
+                    hasScrollToIndexAction() and
+                        SemanticsMatcher.keyIsDefined(SemanticsProperties.VerticalScrollAxisRange)
+                )
+                .performScrollToNode(hasText("Next page"))
             compose.onNodeWithText("Next page").performClick()
             waitFor("Colleague 22")
-            compose.onNode(hasScrollToIndexAction()).performScrollToIndex(0)
+            compose
+                .onNode(
+                    hasScrollToIndexAction() and
+                        SemanticsMatcher.keyIsDefined(SemanticsProperties.VerticalScrollAxisRange)
+                )
+                .performScrollToIndex(0)
             openEmployeeSearch()
-            compose.onNodeWithText("All departments").assertExists()
+            compose
+                .onNodeWithContentDescription("Filter departments")
+                .assert(
+                    SemanticsMatcher.expectValue(
+                        SemanticsProperties.StateDescription,
+                        "All departments",
+                    )
+                )
+                .assertIsNotSelected()
             compose
                 .onNodeWithContentDescription("Search employees")
                 .performTextReplacement("Colleague 25")
@@ -3291,7 +3345,7 @@ class AppFlowTest {
             compose.onNode(hasText("Account") and isSelectable()).performClick()
             openContactsTab()
             waitFor("Colleague 22")
-            compose.onNode(hasText("Engineering") and hasClickAction()).performClick()
+            compose.onNodeWithContentDescription("Filter departments").performClick()
             compose.onNodeWithText("All departments").performClick()
             waitFor("Sam Wilson")
         }
@@ -3309,7 +3363,7 @@ class AppFlowTest {
             waitFor("Sam Wilson")
             val requests = server.directory.queries.size
             server.directory.offline = true
-            compose.onNodeWithText("All departments").performClick()
+            compose.onNodeWithContentDescription("Filter departments").performClick()
             waitFor("Search departments")
             compose
                 .onNodeWithContentDescription("Search departments")
@@ -3317,7 +3371,7 @@ class AppFlowTest {
             compose.onNodeWithContentDescription("Close").performClick()
             compose.onNodeWithContentDescription("Search departments").assertDoesNotExist()
             compose.onNodeWithText("Sam Wilson").assertExists()
-            compose.onNodeWithText("All departments").performClick()
+            compose.onNodeWithContentDescription("Filter departments").performClick()
             waitFor("Search departments")
             compose.waitUntil {
                 compose

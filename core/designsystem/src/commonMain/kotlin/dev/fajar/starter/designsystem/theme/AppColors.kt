@@ -32,6 +32,9 @@ object AppColors {
         @Composable
         get() = if (FluentTheme.colors.darkMode) Color(0xFF17354D) else Color(0xFFEAF3FC)
 
+    val onAccent: Color
+        @Composable get() = if (FluentTheme.colors.darkMode) Color(0xFF14171C) else Color.White
+
     val error: Color
         @Composable
         get() = if (FluentTheme.colors.darkMode) Color(0xFFFFB4AB) else Color(0xFFB3261E)

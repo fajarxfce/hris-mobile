@@ -1,0 +1,232 @@
+{
+  "recordedAt": "2026-11-05T18:10:10.468450+00:00",
+  "scope": "Compact swipeable Chat hub with a scrolling FAB and search-adjacent filter icons; inactive tab acquisition remains stopped.",
+  "runs": {
+    "focused1": {
+      "startedAt": "2026-11-05T17:50:15.326155+00:00",
+      "elapsedSeconds": 337.526,
+      "exitCode": 1,
+      "sourceFiles": 4107,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 61,
+        "failures": 6,
+        "errors": 0,
+        "skipped": 0
+      },
+      "manifestSha256": "610da62852f8d0a168cbdefcab8747b78bd24fac090bbbd6c9db56d0f7971c39",
+      "freshReportCount": 9,
+      "freshReportsSha256": "67d902752b0a407c664f0d860cefcbe6df7cebc74af52b696073f5f943080cc2"
+    },
+    "focused2": {
+      "startedAt": "2026-11-05T17:57:06.738156+00:00",
+      "elapsedSeconds": 222.596,
+      "exitCode": 0,
+      "sourceFiles": 4108,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 38,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "manifestSha256": "6372ea7037b1beaed99ce13896f31744212e5926804bef86b5c4a597d0d7f1fd",
+      "freshReportCount": 7,
+      "freshReportsSha256": "f137724a9c3f0c3f492095523ed95871dbaceee197d4de1055aa367bbd088381"
+    },
+    "full1": {
+      "startedAt": "2026-11-05T18:01:44.059782+00:00",
+      "elapsedSeconds": 453.069,
+      "exitCode": 0,
+      "sourceFiles": 4108,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3088,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "manifestSha256": "09af40daa1b2b9db3db6d49d392c59d74bf505ab0267c392a7993173a778817d",
+      "freshReportCount": 378,
+      "freshReportsSha256": "31c5f681f90f56fea7178a04cac73aaa35df4dc34cd8351ce4a992cb8f9abf08"
+    }
+  },
+  "finalTasks": {
+    ":architectureCheck": "EXECUTED",
+    ":detekt": "EXECUTED",
+    ":formatCheck": "EXECUTED",
+    ":apps:demo:desktopTest": "UP-TO-DATE",
+    ":apps:shared:desktopTest": "EXECUTED",
+    ":core:common:desktopTest": "UP-TO-DATE",
+    ":core:database:desktopTest": "UP-TO-DATE",
+    ":core:datastore:desktopTest": "UP-TO-DATE",
+    ":core:designsystem:desktopTest": "NO-SOURCE",
+    ":core:fileio:desktopTest": "UP-TO-DATE",
+    ":core:localization:desktopTest": "EXECUTED",
+    ":core:network:desktopTest": "UP-TO-DATE",
+    ":core:observability:desktopTest": "UP-TO-DATE",
+    ":core:presentation:desktopTest": "UP-TO-DATE",
+    ":core:securestorage:desktopTest": "UP-TO-DATE",
+    ":core:storage:desktopTest": "UP-TO-DATE",
+    ":core:worker:desktopTest": "UP-TO-DATE",
+    ":core:availability:data:desktopTest": "UP-TO-DATE",
+    ":core:availability:domain:desktopTest": "UP-TO-DATE",
+    ":core:documents:data:desktopTest": "UP-TO-DATE",
+    ":core:documents:domain:desktopTest": "UP-TO-DATE",
+    ":core:featureflags:data:desktopTest": "UP-TO-DATE",
+    ":core:featureflags:domain:desktopTest": "UP-TO-DATE",
+    ":core:identity:data:desktopTest": "UP-TO-DATE",
+    ":core:identity:domain:desktopTest": "UP-TO-DATE",
+    ":core:location:data:desktopTest": "UP-TO-DATE",
+    ":core:location:domain:desktopTest": "NO-SOURCE",
+    ":core:notifications:data:desktopTest": "UP-TO-DATE",
+    ":core:notifications:domain:desktopTest": "UP-TO-DATE",
+    ":core:security:data:desktopTest": "UP-TO-DATE",
+    ":core:security:domain:desktopTest": "UP-TO-DATE",
+    ":core:settings:data:desktopTest": "UP-TO-DATE",
+    ":core:settings:domain:desktopTest": "NO-SOURCE",
+    ":core:sync:data:desktopTest": "UP-TO-DATE",
+    ":core:sync:domain:desktopTest": "NO-SOURCE",
+    ":core:transfers:data:desktopTest": "UP-TO-DATE",
+    ":core:transfers:domain:desktopTest": "UP-TO-DATE",
+    ":core:workspace:data:desktopTest": "UP-TO-DATE",
+    ":core:workspace:domain:desktopTest": "UP-TO-DATE",
+    ":features:auth:presentation:desktopTest": "EXECUTED",
+    ":features:availability:presentation:desktopTest": "NO-SOURCE",
+    ":features:collaboration:data:desktopTest": "FROM-CACHE",
+    ":features:collaboration:data:testAndroidHostTest": "UP-TO-DATE",
+    ":features:collaboration:domain:desktopTest": "FROM-CACHE",
+    ":features:collaboration:presentation:desktopTest": "EXECUTED",
+    ":features:dashboard:data:desktopTest": "UP-TO-DATE",
+    ":features:dashboard:domain:desktopTest": "UP-TO-DATE",
+    ":features:dashboard:presentation:desktopTest": "EXECUTED",
+    ":features:documents:presentation:desktopTest": "EXECUTED",
+    ":features:expenses:data:desktopTest": "UP-TO-DATE",
+    ":features:expenses:domain:desktopTest": "UP-TO-DATE",
+    ":features:expenses:presentation:desktopTest": "EXECUTED",
+    ":features:files:presentation:desktopTest": "EXECUTED",
+    ":features:home:presentation:desktopTest": "EXECUTED",
+    ":features:inbox:data:desktopTest": "UP-TO-DATE",
+    ":features:inbox:domain:desktopTest": "UP-TO-DATE",
+    ":features:inbox:presentation:desktopTest": "NO-SOURCE",
+    ":features:leave:data:desktopTest": "UP-TO-DATE",
+    ":features:leave:domain:desktopTest": "UP-TO-DATE",
+    ":features:leave:presentation:desktopTest": "EXECUTED",
+    ":features:notifications:presentation:desktopTest": "EXECUTED",
+    ":features:onboarding:data:desktopTest": "UP-TO-DATE",
+    ":features:onboarding:domain:desktopTest": "NO-SOURCE",
+    ":features:onboarding:presentation:desktopTest": "EXECUTED",
+    ":features:payroll:data:desktopTest": "UP-TO-DATE",
+    ":features:payroll:domain:desktopTest": "UP-TO-DATE",
+    ":features:payroll:presentation:desktopTest": "EXECUTED",
+    ":features:people:data:desktopTest": "UP-TO-DATE",
+    ":features:people:domain:desktopTest": "UP-TO-DATE",
+    ":features:people:presentation:desktopTest": "EXECUTED",
+    ":features:security:presentation:desktopTest": "EXECUTED",
+    ":features:settings:presentation:desktopTest": "EXECUTED",
+    ":features:workforce:data:desktopTest": "UP-TO-DATE",
+    ":features:workforce:domain:desktopTest": "UP-TO-DATE",
+    ":features:workforce:presentation:desktopTest": "EXECUTED",
+    ":features:workspace:presentation:desktopTest": "NO-SOURCE",
+    ":check": "EXECUTED",
+    ":core:database:wasmJsBrowserTest": "UP-TO-DATE",
+    ":apps:android:compileDevDebugKotlin": "UP-TO-DATE",
+    ":features:collaboration:data:wasmJsBrowserTest": "UP-TO-DATE",
+    ":features:collaboration:presentation:wasmJsBrowserTest": "EXECUTED",
+    ":apps:collaboration-proof:assembleDebug": "EXECUTED",
+    ":apps:collaboration-proof:testDebugUnitTest": "EXECUTED"
+  },
+  "selectedReports": {
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml": {
+      "tests": 90,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "87f29363ad26c1126072719524ebf1d8260aab1ae233d28e531ee33fdd0b3659"
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ChatHubLayoutTest.xml": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "17968e96f6442b35fb9b8be52f84d1faa96452eaad4a78929760f295ea7b8c4c"
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ChatBottomNavigationTest.xml": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "519b313116dbf03329b4c8930fa207c7da113f151f6c387be936ae234e98afdf"
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.SwipeTabsUiTest.xml": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "9e9d68514d88b2054ec335d1b88fed525147bed728a96e2632eae029db07fa6a"
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.EmployeeSearchLayoutTest.xml": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "2ccf2f2f4f03692ac4b86eaca073bf84d813e0423dc6a55c9ec7a9753088a058"
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.inbox.ChatInboxViewModelTest.xml": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "73599c2c229570fc35c6f35fd408d7bffca0dab42ba0fb8c3f434609adcd14df"
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.inbox.ChatInboxProjectionTest.xml": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f83b2d499702e31c5751146b4d4f48f933ab9c2390a9a68324055e106229781d"
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ObserveCollaborationInboxTest.xml": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ee74075bf717919d1ba0dae8157f5c690361395ca60830b7371d4ab082097c21"
+    },
+    "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationListStorageTest.xml": {
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "58abd0134b1213096c1b0bd1f53eb4f00a81a1584af7898b25ce1b228126e131"
+    }
+  },
+  "visualReview": {
+    "syntheticFixtures": true,
+    "openedAndReviewed": true,
+    "pixelBaselineComparison": false,
+    "variants": [
+      "375px light",
+      "375px dark 200% text",
+      "760px landscape"
+    ],
+    "reducedMotion": true,
+    "interruptedAnimationTested": true,
+    "images": {
+      "docs/images/chat-hub-controls/chat-hub-conversations-compact.png": "1ef65f39768becf8d0d6ab046895545b17c8ce041e7b0f6bb47fe581415f6a9e",
+      "docs/images/chat-hub-controls/chat-hub-contacts-compact.png": "095f415a9675d182d1609aa71fddbbe97219c6f87b46db4ed3f7c1850fdb13ac",
+      "docs/images/chat-hub-controls/chat-hub-conversations-dark-large-text.png": "20ec3294f9c0a8468b95278792fc06167e8e49eb7d007cb5c6d3ca8aa78ab62e",
+      "docs/images/chat-hub-controls/chat-hub-contacts-dark-large-text.png": "0a1e546def92729d3ff629850377b528a627201949e46317329217fd4331ea22",
+      "docs/images/chat-hub-controls/chat-hub-conversations-landscape.png": "b5b6ba2e6a4b64614a51e6ed1405fcc890f0013f35982b5b74c7fbcff40c9b00",
+      "docs/images/chat-hub-controls/chat-hub-contacts-landscape.png": "475c68e896f0af623de97a939f414d8e14f3634e50225f661f9ba29eeca2fd44",
+      "docs/images/chat-hub-controls/chat-hub-floating-action-hidden.png": "90c9ebbeeb9bc102f20a2e6c438440f8a217c7878d5d401b56edc8c568ffb2d0"
+    }
+  },
+  "priorFailures": [
+    "focused1: six tests used an ambiguous ScrollToIndex selector after the horizontal pager was added; selectors now require a vertical axis. Architecture check rejected page-owned mutable animation state; that rendering mechanic moved to the generic slotted AppFloatingActionLayout component."
+  ],
+  "nativeAcceptance": "Pending release39 exact APK on owned emulator.",
+  "phoneDelivery": "Pending release39; installed phone remains38.",
+  "transportDeltaImplemented": false,
+  "starterPort": "Pending Mobile native validation; four generic components, onAccent color and reusable UI coverage."
+}

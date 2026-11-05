@@ -8,9 +8,26 @@ local name/number search and department selection. Employee rows are directory
 records, not yet account-resolved direct-chat actions. Call history will share this
 hub when the call workflow is implemented; no inactive Calls tab is shown.
 
-Home owns the selected communication section. App composition provides the two
-feature entries and a shared whole-header slot; Home never imports their ViewModels.
-The entries retain separate route-owned state, list positions and lifecycle work.
+Home owns the selected communication section. The hub has no title app bar or
+header actions: fixed Conversations/Contacts tabs sit directly above its pages.
+The New chat action is a 56dp floating button at the lower right. Consumed vertical
+scroll hides it after 12dp downward travel and restores it on upward travel;
+horizontal gestures do not toggle it. Its short fade/slide is interruptible, honors
+reduced motion and disables clicks immediately when hiding. List bottom padding
+allows the last row to scroll clear of the button.
+
+Tabs support both taps and horizontal swipes. App composition provides the two
+feature entries; Home never imports their ViewModels. The entries retain separate
+route-owned state and list positions. Only the settled page starts acquisition and
+consumes navigation effects; prefetched neighbours remain idle. Existing local
+access observers still clear denied content while hidden. Explicit tab selection
+can interrupt a gesture, and a new gesture can interrupt the tab animation.
+Inactive settled pages are excluded from the accessibility tree.
+
+Contacts and its dedicated search page place a 48dp department-filter icon directly
+to the right of the search field. A selected filter changes the icon treatment and
+accessible state description; its full name remains in the filter dialog. There is
+no separate filter row. Dedicated search keeps its own Back action and query owner.
 Legacy saved HomeTab.Employees values normalize to Chat/Contacts. System Back from
 the root hub returns Home; inner search and conversation routes return to their
 retained parent. Account/company changes dispose the old owners.
@@ -45,6 +62,19 @@ intent that later reacts to an unrelated incoming row. Newly acquired next pages
 still open without requiring a second tap.
 
 ## Validation
+
+The compact swipe/FAB/filter increment passes root checks, Android compilation and
+host tests, browser data/presentation tests and the native proof application's
+build/tests:3,088 fresh cases453.069s, zero failures/errors/skips,4,108 unchanged
+inputs. All90 application-navigation cases pass, including inactive Contacts
+prefetch without acquisition and repeated section returns without duplicate reads.
+Seven generic cases cover interrupted selection/gestures, disabled/reduced-motion
+behavior, draft retention, accessible filter state, exiting-action input and scroll
+visibility reset. Seven current captures were opened/reviewed at compact, dark200%
+text and landscape sizes. [Evidence](measurements/chat-hub-controls-2026-11-05.json)
+retains the initial selector/architecture failures and passing correction. Release39
+native acceptance and phone delivery are pending; release38 evidence below covers
+the earlier hub and offline persistence behavior.
 
 Focused navigation, persistence and preview recovery passed 51 cases/136.104s with
 4,103 unchanged source inputs. Six generated desktop captures were opened and

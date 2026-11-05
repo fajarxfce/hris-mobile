@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.backhandler.BackHandler
+import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -27,9 +28,9 @@ fun NavGraphBuilder.homeRoutes(
     onNewChat: () -> Unit,
     attendance: @Composable () -> Unit,
     inbox: @Composable () -> Unit,
-    employees: @Composable (@Composable () -> Unit) -> Unit,
+    employees: @Composable (Boolean, Dp) -> Unit,
     inboxBadge: @Composable () -> Unit,
-    chat: @Composable (@Composable () -> Unit) -> Unit,
+    chat: @Composable (Boolean, Dp) -> Unit,
     onSettings: () -> Unit,
 ) {
     composable<HomeRoute> { entry ->

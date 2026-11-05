@@ -39,7 +39,8 @@ state so paging can reset its position without rebuilding the route owner.
 Home shows a compact welcome card with the employee's name and company. Company
 switching belongs in Account. Today's clock-in and clock-out appear before the
 service grid. All services opens a separate page of admitted destinations grouped
-by purpose. The four stable tabs are Home, Inbox, Employees and Account. Each
+by purpose. The four stable tabs are Home, Chat, Inbox and Account. Chat contains
+Conversations and Contacts. Each
 feature owns its state and actions; Home receives its entries through app
 composition and does not acquire another feature's data or ViewModel. Long bottom
 navigation labels use a single ellipsized line while retaining their complete
@@ -111,12 +112,22 @@ selected container. Labels wrap at large text sizes, each target remains at leas
 48 dp, and disabled tabs cannot dispatch selection. Features own selection and
 the corresponding data request.
 
+The Chat hub omits a title app bar. Fixed category tabs support horizontal swipes
+through `AppSwipeTabContent`; the caller controls selection and owns the active
+page's acquisition/effects. Prefetching a neighbour must not start its acquisition.
+`AppFloatingActionLayout` owns scroll direction and visibility only, with a slotted
+action. `AppFloatingActionButton` supplies a labelled 56dp target and an interruptible
+fade/slide; exiting actions cannot receive clicks. Reserve bottom content space so
+the final row can clear it. Respect reduced motion and retained page state.
+
 Use `AppSearchEntry` to open a dedicated search page from a browsing list. It is
 one accessible action and does not create an editor or open the keyboard itself.
 The search page keeps Back and `AppSearchField` above the scrolling results.
 Initial focus belongs to the field's composition; query changes do not steal
 focus after the user dismisses it. Keep the accessible label and explicit clear
-action. `AppTextField` remains for labelled forms. `AppFilterChip` opens an
+action. Contacts and its search page put an `AppFilterButton` immediately to the
+right of search, retaining a 48dp target and accessible current value without a
+separate filter row. `AppTextField` remains for labelled forms. `AppFilterChip` opens an
 owned filter surface; `AppDialog` delegates focus, dismissal and window lifetime
 to the platform. Feature MVI owns visibility, selection and pending data work.
 Department search and coworker search use independent cancellable requests;

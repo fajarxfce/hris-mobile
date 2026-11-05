@@ -4,6 +4,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -37,9 +39,19 @@ fun EmployeesContent(
     onSearch: () -> Unit,
     onBack: (() -> Unit)? = null,
     topBar: (@Composable () -> Unit)? = null,
+    active: Boolean = true,
+    bottomPadding: Dp = 12.dp,
 ) {
-    EmployeeDirectoryEntry(workspaceId, onVerify, onSearch, onBack) { state, list, onEvent ->
-        EmployeesPage(state, list, showBack = onBack != null, onEvent, topBar = topBar)
+    EmployeeDirectoryEntry(workspaceId, onVerify, onSearch, onBack, active) { state, list, onEvent
+        ->
+        EmployeesPage(
+            state,
+            list,
+            showBack = onBack != null,
+            onEvent,
+            topBar = topBar,
+            bottomPadding = bottomPadding,
+        )
     }
 }
 
@@ -50,21 +62,24 @@ private fun EmployeeDirectoryEntry(
     onVerify: () -> Unit,
     onSearch: () -> Unit,
     onBack: (() -> Unit)?,
+    active: Boolean = true,
     content: @Composable (EmployeesState, LazyListState, (EmployeesEvent) -> Unit) -> Unit,
 ) {
     val viewModel = koinViewModel<EmployeesViewModel>(parameters = { parametersOf(workspaceId) })
     val state by viewModel.state.collectAsStateWithLifecycle()
     val list = rememberLazyListState()
-    LifecycleStartEffect(viewModel) {
-        viewModel.onEvent(EmployeesEvent.Entered)
-        onStopOrDispose { viewModel.onEvent(EmployeesEvent.Stopped) }
-    }
-    CollectEffects(viewModel.effects) { effect ->
-        when (effect) {
-            EmployeesEffect.OpenSearch -> onSearch()
-            EmployeesEffect.Back -> onBack?.invoke()
-            EmployeesEffect.ScrollToStart -> list.requestScrollToItem(0)
-            EmployeesEffect.VerifyAccount -> onVerify()
+    if (active) {
+        LifecycleStartEffect(viewModel) {
+            viewModel.onEvent(EmployeesEvent.Entered)
+            onStopOrDispose { viewModel.onEvent(EmployeesEvent.Stopped) }
+        }
+        CollectEffects(viewModel.effects) { effect ->
+            when (effect) {
+                EmployeesEffect.OpenSearch -> onSearch()
+                EmployeesEffect.Back -> onBack?.invoke()
+                EmployeesEffect.ScrollToStart -> list.requestScrollToItem(0)
+                EmployeesEffect.VerifyAccount -> onVerify()
+            }
         }
     }
     content(state, list, viewModel::onEvent)

@@ -1,5 +1,16 @@
 # Template updates
 
+## Compact filter, swipe tabs and scroll-responsive action — native validation next
+
+The reusable foundation candidates are AppSwipeTabContent, AppFilterButton,
+AppFloatingActionButton, AppFloatingActionLayout and the semantic onAccent color.
+Seven generic UI tests cover selection/gesture interruption, reduced motion, retained
+drafts, inactive-page semantics and disabling an exiting action. Port after Mobile
+native validation, with independent Starter checks. The full local gate passed
+3,088 fresh cases; see [evidence](measurements/chat-hub-controls-2026-11-05.json).
+Home sections, HRIS directory filters,
+route lifecycle policy, localization and application wiring remain in Mobile.
+
 ## HRIS Android notification runtime
 
 The [application runtime](collaboration-android-notification-runtime.md) binds HRIS

@@ -71,13 +71,25 @@ class EmployeeSearchLayoutTest {
         search.performImeAction()
         val searchBounds = search.fetchSemanticsNode().boundsInRoot
         val backBounds = back.assertIsDisplayed().fetchSemanticsNode().boundsInRoot
+        val filter = compose.onNodeWithContentDescription("Filter departemen")
+        val filterBounds =
+            filter
+                .assertIsDisplayed()
+                .assertWidthIsAtLeast(48.dp)
+                .assertHeightIsAtLeast(48.dp)
+                .fetchSemanticsNode()
+                .boundsInRoot
         val frame = compose.onNodeWithTag("frame").fetchSemanticsNode().boundsInRoot
         assertTrue(searchBounds.left >= frame.left && searchBounds.right <= frame.right)
         assertTrue(backBounds.right <= searchBounds.left)
+        assertTrue(searchBounds.right <= filterBounds.left && filterBounds.right <= frame.right)
+        assertEquals(searchBounds.center.y, filterBounds.center.y, .5f)
+        compose.onNodeWithText("Semua departemen").assertDoesNotExist()
         compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Karyawan 40"))
         compose.onNodeWithText("Karyawan 40").assertIsDisplayed()
         assertEquals(searchBounds, search.assertIsDisplayed().fetchSemanticsNode().boundsInRoot)
         assertEquals(backBounds, back.assertIsDisplayed().fetchSemanticsNode().boundsInRoot)
+        assertEquals(filterBounds, filter.assertIsDisplayed().fetchSemanticsNode().boundsInRoot)
         search.assertIsNotFocused()
         back.performClick()
         compose.runOnIdle {

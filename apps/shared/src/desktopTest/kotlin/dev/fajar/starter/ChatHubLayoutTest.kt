@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.Density
@@ -46,6 +47,44 @@ class ChatHubLayoutTest {
 
     @Test fun landscapeKeepsHeadersOutsideBothScrollingLists() = exercise(false, true)
 
+    @Test
+    fun gesturesSwitchTabsAndHideTheFloatingActionWithoutMovingHeaders() {
+        val events = mutableListOf<HomeEvent>()
+        renderHub(false, false, events, reduceMotion = false)
+        compose.onNodeWithTag("hub-frame").performTouchInput {
+            swipe(Offset(width * .85f, height * .35f), Offset(width * .15f, height * .35f), 350)
+        }
+        compose.onNode(hasText("Kontak") and isSelectable()).assertIsSelected()
+        compose.onNodeWithContentDescription("Filter departemen").assertIsDisplayed()
+        val tabs =
+            compose.onNode(hasText("Kontak") and isSelectable()).fetchSemanticsNode().boundsInRoot
+        compose.onNodeWithContentDescription("Chat baru").assertIsDisplayed()
+        compose.onNodeWithTag("hub-frame").performTouchInput {
+            swipe(Offset(width * .5f, height * .75f), Offset(width * .5f, height * .3f), 450)
+        }
+        compose.onNodeWithContentDescription("Chat baru").assertDoesNotExist()
+        assertEquals(
+            tabs,
+            compose.onNode(hasText("Kontak") and isSelectable()).fetchSemanticsNode().boundsInRoot,
+        )
+        capture("chat-hub-floating-action-hidden")
+        compose.onNodeWithTag("hub-frame").performTouchInput {
+            swipe(Offset(width * .5f, height * .35f), Offset(width * .5f, height * .75f), 450)
+        }
+        compose.onNodeWithContentDescription("Chat baru").assertIsDisplayed()
+        compose.onNodeWithTag("hub-frame").performTouchInput {
+            swipe(Offset(width * .15f, height * .35f), Offset(width * .85f, height * .35f), 350)
+        }
+        compose.onNode(hasText("Obrolan") and isSelectable()).assertIsSelected()
+        compose.onNodeWithText("Nadia Putri").assertIsDisplayed()
+        compose.runOnIdle {
+            assertEquals(
+                listOf(ChatSection.Contacts, ChatSection.Conversations),
+                events.filterIsInstance<HomeEvent.ChatSectionSelected>().map { it.section },
+            )
+        }
+    }
+
     private fun exercise(dark: Boolean, landscape: Boolean) {
         val events = mutableListOf<HomeEvent>()
         renderHub(dark, landscape, events)
@@ -55,6 +94,7 @@ class ChatHubLayoutTest {
             .assertHeightIsAtLeast(48.dp)
         compose.onNode(hasText("Obrolan") and isSelectable()).assertIsSelected()
         compose.onNode(hasText("Karyawan") and isSelectable()).assertDoesNotExist()
+        compose.onAllNodesWithText("Chat").assertCountEquals(1)
         compose.onNodeWithText("Nadia Putri").assertIsDisplayed()
         val suffix = if (landscape) "landscape" else if (dark) "dark-large-text" else "compact"
         capture("chat-hub-conversations-$suffix")
@@ -69,10 +109,27 @@ class ChatHubLayoutTest {
             .assertHeightIsAtLeast(48.dp)
         compose.onNodeWithContentDescription("Kembali").assertDoesNotExist()
         compose.onNodeWithContentDescription("Refresh").assertDoesNotExist()
+        val search =
+            compose.onNodeWithContentDescription("Cari karyawan").fetchSemanticsNode().boundsInRoot
+        val filter =
+            compose
+                .onNodeWithContentDescription("Filter departemen")
+                .assertHeightIsAtLeast(48.dp)
+                .assertWidthIsAtLeast(48.dp)
+                .fetchSemanticsNode()
+                .boundsInRoot
+        assertTrue(filter.left >= search.right)
+        assertEquals(search.center.y, filter.center.y, .5f)
+        compose.onNodeWithText("Semua departemen").assertDoesNotExist()
         capture("chat-hub-contacts-$suffix")
         val headerBounds =
             compose.onNode(hasText("Kontak") and isSelectable()).fetchSemanticsNode().boundsInRoot
-        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Rekan 20"))
+        compose
+            .onNode(
+                hasScrollToIndexAction() and
+                    SemanticsMatcher.keyIsDefined(SemanticsProperties.VerticalScrollAxisRange)
+            )
+            .performScrollToNode(hasText("Rekan 20"))
         compose.onNodeWithText("Rekan 20").assertIsDisplayed()
         assertEquals(
             headerBounds,
@@ -89,7 +146,12 @@ class ChatHubLayoutTest {
         compose.runOnIdle { assertTrue(HomeEvent.NewChatRequested in events) }
     }
 
-    private fun renderHub(dark: Boolean, landscape: Boolean, events: MutableList<HomeEvent>) {
+    private fun renderHub(
+        dark: Boolean,
+        landscape: Boolean,
+        events: MutableList<HomeEvent>,
+        reduceMotion: Boolean = true,
+    ) {
         val directoryEvents = mutableListOf<EmployeesEvent>()
         var state by mutableStateOf(HomeState(hubWorkspace(), tab = HomeTab.Chat))
         compose.setContent {
@@ -98,7 +160,7 @@ class ChatHubLayoutTest {
                 LocalDensity provides Density(density.density, if (dark) 2f else 1f),
                 LocalAppLanguage provides AppLanguage.Indonesian,
             ) {
-                AppTheme(reduceMotion = true) {
+                AppTheme(reduceMotion = reduceMotion) {
                     FluentTheme(
                         colors = Colors(generateShades(Color(0xFF0078D4)), darkMode = dark)
                     ) {
@@ -123,17 +185,18 @@ class ChatHubLayoutTest {
                                 },
                                 attendance = {},
                                 inbox = { AppText("Pemberitahuan") },
-                                employees = { header ->
+                                employees = { _, bottomPadding ->
                                     EmployeesPage(
                                         hubContacts(),
                                         rememberLazyListState(),
                                         false,
                                         directoryEvents::add,
-                                        topBar = header,
+                                        topBar = {},
+                                        bottomPadding = bottomPadding,
                                     )
                                 },
                                 inboxBadge = {},
-                                chat = { header ->
+                                chat = { _, bottomPadding ->
                                     ChatInboxPage(
                                         hubInbox(),
                                         rememberLazyListState(),
@@ -141,7 +204,8 @@ class ChatHubLayoutTest {
                                         onBack = null,
                                         zone = TimeZone.UTC,
                                         today = LocalDate(2026, 11, 5),
-                                        topBar = header,
+                                        topBar = {},
+                                        bottomPadding = bottomPadding,
                                     )
                                 },
                             )

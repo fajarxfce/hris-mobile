@@ -43,21 +43,19 @@ fun EmployeeSearchPage(
                     { onEvent(EmployeesEvent.QueryChanged(it)) },
                     appString(AppString.EmployeeSearch),
                     appString(AppString.ClearSearch),
-                    Modifier.weight(1f).padding(end = 8.dp),
+                    Modifier.weight(1f),
                     autoFocus = true,
+                )
+                AppFilterButton(
+                    appString(AppString.DepartmentFilter),
+                    selected = state.department != null,
+                    valueDescription =
+                        state.department?.name ?: appString(AppString.AllDepartments),
+                    onClick = { onEvent(EmployeesEvent.FilterRequested) },
                 )
             }
         },
     ) {
-        item(key = "filter") {
-            Box(Modifier.padding(bottom = 16.dp)) {
-                AppFilterChip(
-                    state.department?.name ?: appString(AppString.AllDepartments),
-                    selected = state.department != null,
-                    onClick = { onEvent(EmployeesEvent.FilterRequested) },
-                )
-            }
-        }
         employeeDirectoryItems(state, onEvent)
     }
     if (state.filter != null) DepartmentFilterDialog(state.filter, state.department?.id, onEvent)

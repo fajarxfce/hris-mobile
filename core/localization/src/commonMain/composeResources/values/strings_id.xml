@@ -652,6 +652,7 @@
     <string name="directory_saved_id">Menampilkan halaman terakhir yang dimuat.</string>
     <string name="clear_search_id">Hapus pencarian</string>
     <string name="all_departments_id">Semua departemen</string>
+    <string name="department_filter_id">Filter departemen</string>
     <string name="department_search_id">Cari departemen</string>
     <string name="departments_empty_id">Departemen tidak ditemukan.</string>
     <string name="refine_department_search_id">Persempit pencarian untuk menemukan departemen lainnya.</string>

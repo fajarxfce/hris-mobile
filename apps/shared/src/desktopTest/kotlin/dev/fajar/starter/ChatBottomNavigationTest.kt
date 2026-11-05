@@ -53,20 +53,16 @@ class ChatBottomNavigationTest {
                             },
                             attendance = {},
                             inbox = { AppText("Pemberitahuan perusahaan") },
-                            employees = { header ->
-                                Column {
-                                    header()
-                                    AppText("Direktori karyawan")
-                                }
-                            },
+                            employees = { _, _ -> Column { AppText("Direktori karyawan") } },
                             inboxBadge = {},
-                            chat = { header ->
+                            chat = { _, bottomPadding ->
                                 ChatInboxPage(
                                     ChatInboxState(loading = false),
                                     rememberLazyListState(),
                                     {},
                                     onBack = null,
-                                    topBar = header,
+                                    topBar = {},
+                                    bottomPadding = bottomPadding,
                                 )
                             },
                         )

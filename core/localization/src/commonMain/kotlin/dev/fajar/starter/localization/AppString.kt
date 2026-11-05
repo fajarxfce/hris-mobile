@@ -1692,6 +1692,7 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     Close(Res.string.close_en, Res.string.close_id),
     ClearSearch(Res.string.clear_search_en, Res.string.clear_search_id),
     AllDepartments(Res.string.all_departments_en, Res.string.all_departments_id),
+    DepartmentFilter(Res.string.department_filter_en, Res.string.department_filter_id),
     DepartmentSearch(Res.string.department_search_en, Res.string.department_search_id),
     DepartmentsEmpty(Res.string.departments_empty_en, Res.string.departments_empty_id),
     RefineDepartmentSearch(

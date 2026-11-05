@@ -652,6 +652,7 @@
     <string name="directory_saved_en">Showing the last loaded page.</string>
     <string name="clear_search_en">Clear search</string>
     <string name="all_departments_en">All departments</string>
+    <string name="department_filter_en">Filter departments</string>
     <string name="department_search_en">Search departments</string>
     <string name="departments_empty_en">No departments found.</string>
     <string name="refine_department_search_en">Refine your search to find more departments.</string>
