@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## Release 38 Apple accepted; compact swipe hub in progress — 5 November 2026
+
+Apple run42069899173 PASSES exact source34e68b128bd9fa80ccc817d8e008caf850920d96:
+1,274 cases/148 suites, zero failures/errors/skips. Full simulator app, push-envelope
+extraction and generated associations pass. Downloaded JUnit reports and artifact
+identity are audited in [Apple evidence](measurements/chat-hub-apple-2026-11-05.json).
+No physical iPhone test. Release38 remains the installed phone build.
+
+Current uncommitted Mobile work removes the Chat app bar, adds a scroll-responsive
+New chat FAB, makes Conversations/Contacts swipeable and places department filters
+as icon disclosures beside the directory and search fields. Generic pager/filter/FAB
+components are candidates for Starter only after Mobile validation. The focused
+gate is running under .work/chat-hub-controls-2026-11-05/focused1; do not edit frozen
+application sources until its wrapper and children finish. No release39 validation,
+build or installation is claimed yet.
+
+Platform66d18b2d is pushed: bounded raw direct-summary change capture, Flyway116.1,
+version-ordering/recovery support and 64 passing database/sync/recovery cases.
+It is not deployed; live remains11a98115/schema116. Next backend work is the bounded
+projection worker and owner-scoped native delta feed, followed by atomic client
+consumption. Current UI changes are not delta acceptance. Group117–137 and the
+protected edit stashes remain unshipped. The user explicitly reiterated that after
+these UI fixes the broader chat/call/meeting long run must continue.
+
 ## Release 38 installed; Chat/Contacts native offline proof accepted — 5 November 2026
 
 Mobile source `34e68b128bd9fa80ccc817d8e008caf850920d96` is committed/pushed and
