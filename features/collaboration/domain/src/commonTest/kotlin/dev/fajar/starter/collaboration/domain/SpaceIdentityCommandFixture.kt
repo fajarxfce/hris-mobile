@@ -100,6 +100,11 @@ internal class SpaceIdentityCommandFixture {
         }
     val identities =
         object : CollaborationSpaceIdentityRepository {
+            override suspend fun read(
+                owner: CollaborationSpaceOwner
+            ): AppResult<CollaborationSpaceIdentityObservation> =
+                error("Selection commands must not read or auto-select identities")
+
             override suspend fun select(
                 owner: CollaborationSpaceOwner,
                 command: CollaborationSpaceIdentityCommand,

@@ -14,6 +14,15 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
+    @Factory
+    fun readSpaceIdentity(
+        identities: CollaborationSpaceIdentityRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = ReadCollaborationSpaceIdentity(identities, directory, sessions, server, build, Clock.System)
+
     @Single
     fun localDeviceIdentity(
         runtime: CollaborationRuntimeRepository

@@ -1,5 +1,46 @@
 # Agent continuation — HRIS Mobile
 
+## Selected organization identity on native clients — 5 November 2026
+
+Bodyless native GET now reads the already selected account/space provider user.
+The typed 4 KiB projection validates canonical legacy/new identity, original company
+provenance and immutable version, while all HTTP stays on the configured HRIS
+endpoint. Raw port 0 is rejected before URL-library normalization. Null remains an
+absent selection and never runs POST selection or implies an empty original store.
+The actual owning feature DI graph resolves this read path.
+[Contract](collaboration-space-identity-observation.md).
+
+Identity and device status now share an internal finite read policy function, not
+use-case calls. The original native hard deadline and 15 s wall/monotonic budget
+cover local admission and HTTP. Current ownership is checked before/after acquisition
+and final admission; cancelled/late/replaced-account results cannot publish.
+Confirmed denial survives cancellation and failed restriction persistence; metadata
+success never clears a denied directory, and a newer concurrent denial wins.
+Seven new common HTTP cases and seven new domain cases pass, alongside 13 device
+lifetime and 20 identity-selection regressions. Actual AppContainer resolves the new
+reader. Final focused gate: 47 fresh cases / 126.165 s.
+Root :check, Android-host and dev compilation: 2,610 fresh cases /
+327.498 s. Browser data/domain: 1,537 cases / 133.924 s.
+All final gates preserve identical 3,972 build/application inputs;
+format, architecture and detekt pass. All gate sessions closed.
+[Evidence](measurements/collaboration-space-identity-observation-2026-11-05.json).
+
+NEXT: durable native device registration/retry/bootstrap, using the selected Matrix
+USER and actual retained SDK identity from Mobile 5860290e. Preferred legacy DEVICE
+is not necessarily this phone. Retain immutable operation, native-parent, platform,
+realm, original physical owner/user/device/fingerprint. Registration/retry bind the
+original native parent but not old client build; bootstrap binds actual build too.
+Identity-selection retry rules therefore cannot be copied unchanged. User/device
+origins are independent: a new device may use an existing legacy provider user.
+Missing current native-device status is not proof that no older SDK exists. Retained-store inventory,
+hard-parent recovery, group runtime ownership/UI and typed push/background replies
+remain unfinished. No spaceId/companyId or old-store native-family substitution.
+
+Backend 316cd708 has the matching endpoint. No product UI change or new APK installation,
+live deployment, provider/FCM, Apple runtime or performance acceptance. All 54 PRD groups
+remain open. Live backend 8b40/schema 116 and installed phone 29/source 084662c5 unchanged.
+Continue long run, atomic pushes and validated install-only product delivery.
+
 ## Native selected provider-user metadata — 5 November 2026
 
 Group [316cd708](https://github.com/fajarxfce/hris-platform/commit/316cd7083bc154e2e28b9425349ed63d40d6425f) is pushed.

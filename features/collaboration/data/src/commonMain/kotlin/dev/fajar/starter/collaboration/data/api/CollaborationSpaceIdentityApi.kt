@@ -3,6 +3,7 @@
 package dev.fajar.starter.collaboration.data.api
 
 import dev.fajar.starter.collaboration.data.dto.CollaborationReceiptDto
+import dev.fajar.starter.collaboration.data.dto.CollaborationSpaceIdentityResponseDto
 import dev.fajar.starter.network.*
 import io.ktor.client.HttpClient
 import io.ktor.client.request.header
@@ -14,6 +15,14 @@ import org.koin.core.annotation.*
 class CollaborationSpaceIdentityApi(
     @Named(HttpClients.Authenticated) private val client: HttpClient
 ) {
+    suspend fun read(sessionId: String, spaceId: String): CollaborationSpaceIdentityResponseDto =
+        client.requestJson(
+            "collaboration/spaces/${Uuid.parse(spaceId)}/identity",
+            maximumBytes = 4096,
+        ) {
+            forSession(sessionId)
+        }
+
     suspend fun select(
         sessionId: String,
         spaceId: String,

@@ -1,5 +1,9 @@
 # Architecture
 
+[Selected organization identity](collaboration-space-identity-observation.md) reads
+retained provider-user metadata through the current native parent, without selecting,
+enrolling or granting directory/SDK authority.
+
 [Local SDK identity observation](collaboration-local-sdk-identity.md) borrows the
 existing Android runtime without opening another store, enrolling or granting
 current migration authority.

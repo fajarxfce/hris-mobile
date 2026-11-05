@@ -6,6 +6,8 @@ import org.koin.core.annotation.Single
 @Single
 class ApiCollaborationSpaceIdentityRemoteSource(private val api: CollaborationSpaceIdentityApi) :
     CollaborationSpaceIdentityRemoteSource {
+    override suspend fun read(sessionId: String, spaceId: String) = api.read(sessionId, spaceId)
+
     override suspend fun select(sessionId: String, spaceId: String, operation: String) =
         api.select(sessionId, spaceId, operation)
 }
