@@ -27,7 +27,8 @@
     "fixtureEndpointsAbsent": true,
     "firebaseDevAppMatches": true,
     "compiledBackupExclusionsVerified": true,
-    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "sameInstalledSigner": true
   },
   "build": {
     "command": [
@@ -366,18 +367,41 @@
     }
   },
   "phoneDelivery": {
-    "confirmed": false,
-    "installationAttempted": false,
+    "confirmed": true,
+    "startedAt": "2026-11-05T00:33:14.833582+00:00",
+    "elapsedSecondsIncludingVerification": 81.256,
     "serial": "10.77.77.3:5555",
-    "currentKnownVersion": 28,
-    "reason": "Two bounded 15-second WireGuard ADB connection attempts timed out; async availability question remains pending.",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 29,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "e17f1681dcc5cacce43fb126b53da261e5b89423e65c3ab3737d29186c46dca1",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
     "uiLaunched": false,
-    "appDataCleared": false
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-05 07:33:35",
+      "versionCode": "29 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    },
+    "installationAttempted": true,
+    "recordedAt": "2026-11-05T00:36:05.645581+00:00",
+    "preflightSameSigner": true,
+    "previousVersionCode": 28,
+    "previousConnectionAttempts": "Four earlier bounded 15-second ADB connection attempts timed out; the fifth connection succeeded on 5 November. Availability is resolved."
   },
   "limits": [
     "Exact ARM64 release artifact cold-started twice on an x86_64 emulator with libndk_translation.so; this is startup/onboarding evidence, not native ARM hardware or authenticated workflow acceptance.",
     "Notification proof uses a separate debug fixture APK built from the same clean source. Real Android callbacks/Room/Keystore and SystemUI reply, three process deaths; fictional account, zero HTTP/Matrix sends.",
     "No new FCM, voice/video/meeting, Apple runtime, group UI/runtime cutover or performance acceptance. All 54 communications groups remain open.",
-    "Phone remains on release28 until an explicitly targeted in-place install succeeds and pull-back bytes match."
+    "Release 29 installed in place on the authorized ARM64 phone; pull-back bytes, signer, UID and first install identity match. No phone UI was launched or driven; installation is not new authenticated-workflow or group-runtime acceptance."
   ]
 }

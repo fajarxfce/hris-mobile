@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Product release 29 installed on the authorized phone — 5 November 2026
+
+WireGuard ADB became reachable. Existing release 28 and the development signer
+were verified before an explicit install-only update to release 29. Pulled-back
+APK bytes match SHA-256 `e17f1681dcc5cacce43fb126b53da261e5b89423e65c3ab3737d29186c46dca1`;
+package `dev.fajar.hris.mobile.dev`, version 1.0.0/29, non-debuggable. UID 10962
+and original first-install identity are preserved. No uninstall, data clearing,
+phone UI launch or interaction occurred. Installation and verification completed
+in 81.256 seconds. [Evidence](measurements/android-release-phone-2026-11-04-build29.json).
+
+This delivers the previously verified product artifact from 084662c5; its emulator
+startup/notification evidence remains as recorded. Later organization-root and
+identity-command work is separate. No new FCM, group runtime, Apple, call/meeting
+or authenticated phone workflow acceptance. All 54 PRD groups remain open.
+
+NEXT: continue durable native organization identity/device commands, original SDK
+adoption/hard-parent recovery, group UI and typed push/background/replies. Current
+identity-command work is uncommitted: 24 Kotlin files, encrypted account/space
+CommandStore state, explicit prepare/replay, original native/build binding and
+shared denial retention. Nine SQLite cases and five HTTP cases passed; domain
+assertion compilation was corrected and focused3 is running. Full/browser gates
+and source review remain required; do not call this identity acceptance. State
+and gate ownership are in `.work/space-identity-2026-11-05/CURRENT.md`. Preserve
+that source work while recording this independent phone-delivery checkpoint.
+Continue long run, updates, atomic pushes and validated install-only updates.
+
 ## Account-owned organization cache root — 5 November 2026
 
 The organization cache locator now survives restart and reauthentication for the
