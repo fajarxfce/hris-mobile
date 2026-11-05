@@ -57,7 +57,23 @@ and native proof build/tests: 1,045 fresh cases/399.451s, zero failures/errors/s
 and 4,103 unchanged inputs. All 90 application navigation cases pass, including the
 previous login timeout. The new empty-Next regression passes on desktop/browser.
 [Evidence](measurements/chat-hub-2026-11-05.json) records both failures and recovery.
-Native acceptance and release 38 delivery remain pending.
+Non-debuggable ARM64 devRelease 38 from source `34e68b12` is installed on the
+authorized phone. Its bytes match the validated artifact; the update preserves
+the app identity, data and first-install time. No phone UI was operated.
+
+The same APK passed the owned Android hub proof in 98.877 seconds: section
+navigation, return from New chat, both retained draft previews, room history,
+offline reopening and a cold offline process restart. An independent HTTP probe
+confirmed the server was unreachable during the offline assertions. Contacts
+also remained available after that restart. Four actual Android captures were
+opened and reviewed. This proves retained local behavior, not completion of the
+metadata delta endpoint. [Native and delivery evidence](measurements/android-release-phone-2026-11-05-build38.json).
+
+The fictional Rani fixture now has `people.directory.read` alongside
+`collaboration.chat`, granted through the ordinary administrative API. The normal
+company selector refreshed its workspace permissions before acquisition. Its
+native account/device, keys, drafts and messages were preserved; other memberships
+were unchanged. A previous access denial was not bypassed for the proof.
 
 Test coverage includes delayed detail reads through stop/reopen and identical
 refresh, denial during a pending read, exact-owner isolation, authoritative empty
