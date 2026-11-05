@@ -1,5 +1,9 @@
 # Architecture
 
+[Durable organization device registration](collaboration-space-registration-storage.md)
+retains encrypted original intent and SDK provenance across login replacement, with
+a bounded account inventory over native parents and explicit uncertain outcomes.
+
 [Selected organization identity](collaboration-space-identity-observation.md) reads
 retained provider-user metadata through the current native parent, without selecting,
 enrolling or granting directory/SDK authority.

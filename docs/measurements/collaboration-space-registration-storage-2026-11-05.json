@@ -1,0 +1,145 @@
+{
+  "date": "2026-11-05",
+  "scope": "Encrypted organization device registration intent and all-parent account inventory",
+  "parentCommit": "c79ca4532e42ff4c8d2c1856ddd077c91b75d539",
+  "sources": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "497b0eb7a64154e906935c5f54f2aee6f3f1a072abda0691dbe53241be63741b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/identity/CollaborationSpaceRegistrationCommandCodec.kt": "e4b31e42cae3a140935b369af54a9a1f489ad74acb9df38d4a9d8839915554ea",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceRegistrationCommandRepository.kt": "9b23891a06b1aec8cbf549177383ee16feaa1900ef7f1f5c4cc6bf1a7e2346be",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRegistrationCommandStorageContract.kt": "f53ebf8ea68bb1eee424b75b949290d600920cd3862d1bc144118590c51f1a42",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRegistrationCommandStorageTest.kt": "96b3e4a97bbf1397662dff7b27967a4b150ceff9a91ae8b3b1678208e1d159fb",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceRegistrationCommandStorageTest.kt": "0df299d7dac64469ae1931bdbe3b3eccef1e0be762b3df297dbb99f43c907933",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceRegistrationCommand.kt": "55d16114b72c16f1e0c652e2a114347a21144cbdad870cb82fc53b28ff9bf284",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceRegistrationPolicy.kt": "180f82354611e66192e1c057419191d0d448fd1fd7186bd7ab3cef78c43e2de8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceRegistrationCommandRepository.kt": "2983b86e8627830f39dbfbf26df31480004de947377b6d847f1a00980e94bb1c"
+  },
+  "gates": {
+    "browser1": {
+      "startedAt": "2026-11-05T02:23:01.396133+00:00",
+      "elapsedSeconds": 135.925,
+      "exitCode": 0,
+      "sourceFiles": 3980,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1551,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "bc178013effb57a41a93e04f1662052f258322237f8772a1b4e8b5c183f530ed",
+      "reports": {
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasm-R71G7KGU04LMQ.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceRegistrationCommandStorageTest.xml": {
+          "sha256": "2b0f642529c2013374deaf1b06bf616b49f91a9bd8ce40eb6df8607e211baf09",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "7ffa1abb4b0e222681dfd1b7bf1f4cf223a755933f8f19c19505280810d7ff69",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRegistrationCommandStorageTest.xml": {
+          "sha256": "fff42e2c943b97b8ac3a5d20bc0ced49a5b9705fbfd321ea732035d3bb08818a",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "23e462124e1d44cb1965895ad4eb5974846c44ce927a3bf9a1fe5215222adde8",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "check1": {
+      "startedAt": "2026-11-05T02:16:18.071860+00:00",
+      "elapsedSeconds": 350.224,
+      "exitCode": 0,
+      "sourceFiles": 3980,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2624,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "bc178013effb57a41a93e04f1662052f258322237f8772a1b4e8b5c183f530ed",
+      "reports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "7ffa1abb4b0e222681dfd1b7bf1f4cf223a755933f8f19c19505280810d7ff69",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRegistrationCommandStorageTest.xml": {
+          "sha256": "fff42e2c943b97b8ac3a5d20bc0ced49a5b9705fbfd321ea732035d3bb08818a",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {},
+      "stdoutSha256": "83268d85b1cb2ea81b5126f4b5a99f0feefeb5c8f60b9d70e68591d8b188d661",
+      "stderrSha256": "5acbe97e5edb676a92585bfdad6a37e10861a1a5b6554c1258079e44764e8339"
+    },
+    "focused1": {
+      "startedAt": "2026-11-05T02:13:42.737997+00:00",
+      "elapsedSeconds": 118.582,
+      "exitCode": 0,
+      "sourceFiles": 3980,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceManifestSha256": "bc178013effb57a41a93e04f1662052f258322237f8772a1b4e8b5c183f530ed",
+      "reports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRegistrationCommandStorageTest.xml": {
+          "sha256": "46469cb5d574f54f41ab74fe88ed338e82238a6118a9aa7033307c73baf7cdbf",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "0c7dbe80f69d5ade15dcd5524b287c45b6632d5c181220f7d2a7ee3985643878",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stdoutSha256": "3857372521a089bf38694d0861e9b617c1c575403b309ccd0019c638453099b3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "finalGates": [
+    "focused1",
+    "check1",
+    "browser1"
+  ],
+  "finalGateSourcesIdentical": true,
+  "coverage": {
+    "commonStorageCases": 14,
+    "database": "Actual SQLite and IndexedDB: empty read/no key, exact original request/ciphertext after restart and new login/company, retained receipt, account/server/space separation, cancelled committed state write, competing insertion/CAS, terminal outcome, active/inactive shared-key loss, corrupt resource/AAD/request/state/size, input validation, account replacement during insertion, immutable original SDK user/device/fingerprint/physical family, native-resource separation, independent user/device origins, retained denial and bounded all-parent inventory.",
+    "di": "Actual AppContainer resolves registration repository from owning feature component scan."
+  },
+  "limits": [
+    "Storage represents provenance only; public fingerprint never proves private-key possession or current admission.",
+    "Original physical SDK family and current registration native parent are stored separately; no server hard-parent recovery is implemented here.",
+    "No registration HTTP, automatic SPACE enrollment, polling, SDK construction or namespace rewrite.",
+    "Finite local observer/preparation/replay, retained-store inventory, device retry/bootstrap, hard-parent recovery and group runtime/UI/push remain unfinished.",
+    "Completed anchors stay retained; explicit later archival/recovery must preserve the original registration before enabling unbounded fresh-parent creation.",
+    "No new phone/APK, live deployment, provider/FCM, Apple runtime or performance acceptance. All54 PRD groups stay open; backend8b40/schema116 and phone29/source084662c5 unchanged."
+  ]
+}
