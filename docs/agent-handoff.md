@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Product release36 installed; first-device publication proved — 5 November 2026
+
+Source [a26a1248](https://github.com/fajarxfce/hris-mobile/commit/a26a124837637831655d19cc9dc89c1929e65e02)
+is installed in place on10.77.77.3:5555 as non-debuggable ARM64 devRelease36/1.0.0.
+APK88,354,104 bytes, SHA256`6a3729ab16af62090b08cc1e210f7643344a3e22ad65fc9bd2baf8c06a7313c6`.
+Original signer/app ID/first install retained; device hash matched. Announced each
+installation, install-only, no phone UI driving. Install58.564s including verification.
+[Delivery and native evidence](measurements/android-release-phone-2026-11-05-build36.json).
+
+Build/lint541.941s/zero lint; full source gate3,664 fresh/zero failed cases521.721s,
+4,077 unchanged inputs. Actual retained sample1 update34→36 publishes its first
+server-verified key on Home without a provider room/message. Same enrolled device
+and server-published identity survive cold restart;24.456s proof. Retained Bima
+update35→36 passes four room/restart checks102.333s, eight rows/no Older or decryption
+error. Closed startup diagnostics contain three unavailable worker retries and76
+HTTP200, no crash; do not claim all startup operations succeeded on their first try.
+
+Sample1 and Bima are now cleanly stopped, private data/keys/messages retained.
+Sample3 runs on owned emulator5562/PID901378 (verify start record), release36 fresh
+install complete; normal product login/device setup is running. Sample4 has only
+its Firebase/HRIS link. NEXT: finish samples3/4 through normal UI; confirm one ACTIVE
+device/one publication per fictional account; preserve all userdata AND sidecars.
+Do not send a message to force activation or weaken recipient checks. Restore Bima
+as the persistent receiver afterward. Apple-only CI42036083914 is still running on
+a26a; previous42026950708 passed157a/release35. No new Apple acceptance yet.
+
+Backend11a98115/schema116 unchanged. All build/gate/install/proof wrappers drained;
+current local work is sample3 setup, not a pending phone update. Protected stash
+bfdef2ce remains (batch118 focused, forward metadata incomplete); local forward
+continuation notes .work/chat-forward-next-2026-11-05.md. Resume forwarding, then
+edit/delete/groups/calls/meet and port validated generic storage to Starter. All54
+PRD groups remain open. Keep pushing commits and announcing EACH phone install.
+
 ## Initial device sync implemented and source-validated — 5 November 2026
 
 An enrolled device now starts owned SDK sync without a provider room or outgoing

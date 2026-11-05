@@ -195,12 +195,108 @@
     "readOnly": true,
     "fictionalAccountOnly": true
   },
-  "nativeAcceptance": "Pending release APK on the retained fictional sample1 device. Inert Android FFI cases do not prove native publication.",
+  "nativeAcceptance": {
+    "release": 36,
+    "source": "a26a124837637831655d19cc9dc89c1929e65e02",
+    "apkSha256": "6a3729ab16af62090b08cc1e210f7643344a3e22ad65fc9bd2baf8c06a7313c6",
+    "newDevice": {
+      "startedAt": "2026-11-05T13:38:42.086140+00:00",
+      "ownedEmulatorOnly": true,
+      "versionCode": 36,
+      "sha256": "6a3729ab16af62090b08cc1e210f7643344a3e22ad65fc9bd2baf8c06a7313c6",
+      "source": "a26a124837637831655d19cc9dc89c1929e65e02",
+      "noMessageSent": true,
+      "phoneTouched": false,
+      "complete": true,
+      "publicationObservedSecondsSinceProbeStart": 5.516,
+      "afterInitialSync": {
+        "activeDevices": 1,
+        "confirmedKeyPublications": 1,
+        "directConversations": 1,
+        "requestedProviderRooms": 0,
+        "boundProviderRooms": 0,
+        "deviceIdentitySha256": "2aaf0fdea20f5e691e10c667c7f22bfaf8a75d35cab9d1d9324eff3569cd9da0",
+        "publicationIdentitySha256": "636132864ed9ca9499e4fe1458858f97f1a4d0ffaa3f35b4903704885bcce17e",
+        "sample": 1,
+        "readAt": "2026-11-05T13:38:47.596207+00:00",
+        "readOnly": true,
+        "fictionalAccountOnly": true
+      },
+      "afterRestart": {
+        "activeDevices": 1,
+        "confirmedKeyPublications": 1,
+        "directConversations": 1,
+        "requestedProviderRooms": 0,
+        "boundProviderRooms": 0,
+        "deviceIdentitySha256": "2aaf0fdea20f5e691e10c667c7f22bfaf8a75d35cab9d1d9324eff3569cd9da0",
+        "publicationIdentitySha256": "636132864ed9ca9499e4fe1458858f97f1a4d0ffaa3f35b4903704885bcce17e",
+        "sample": 1,
+        "readAt": "2026-11-05T13:39:06.536854+00:00",
+        "readOnly": true,
+        "fictionalAccountOnly": true
+      },
+      "sameDeviceAndKeysAfterRestart": true,
+      "noProviderRoomRequested": true,
+      "confirmedKeyPublications": 1,
+      "coldProductStartupPassed": true,
+      "installedBytesMatched": true,
+      "elapsedSeconds": 24.456
+    },
+    "existingBimaRoom": {
+      "startedAt": "2026-11-05T13:41:27.857070+00:00",
+      "ownedBimaEmulatorOnly": true,
+      "versionCode": 36,
+      "source": "a26a124837637831655d19cc9dc89c1929e65e02",
+      "sha256": "6a3729ab16af62090b08cc1e210f7643344a3e22ad65fc9bd2baf8c06a7313c6",
+      "messageBodiesRetained": false,
+      "phoneTouched": false,
+      "checks": [
+        {
+          "kind": "in-place update and retained end",
+          "visibleMessageRows": 8,
+          "olderVisible": false,
+          "decryptionPlaceholder": false,
+          "manualHistoryFailure": false
+        },
+        {
+          "kind": "room reopen 1",
+          "visibleMessageRows": 8,
+          "olderVisible": false,
+          "decryptionPlaceholder": false,
+          "manualHistoryFailure": false
+        },
+        {
+          "kind": "room reopen 2",
+          "visibleMessageRows": 8,
+          "olderVisible": false,
+          "decryptionPlaceholder": false,
+          "manualHistoryFailure": false
+        },
+        {
+          "kind": "cold process restart",
+          "visibleMessageRows": 8,
+          "olderVisible": false,
+          "decryptionPlaceholder": false,
+          "manualHistoryFailure": false
+        }
+      ],
+      "complete": true,
+      "elapsedSeconds": 102.333
+    },
+    "deviceUpdatesPreservedData": true
+  },
   "firstSyncAcknowledgesKeyPublication": false,
   "recipientReadinessGuardUnchanged": true,
   "providerRoomOrMessageRequired": false,
-  "newPhoneReleaseInstalled": false,
-  "phoneRemainsVersion": 35,
+  "newPhoneReleaseInstalled": true,
   "backendUnchanged": "11a98115 / schema116",
-  "genericStarterPortRequired": false
+  "genericStarterPortRequired": false,
+  "phoneVersionCode": 36,
+  "deliveryMeasurement": "android-release-phone-2026-11-05-build36.json",
+  "appleCi": {
+    "id": 42036083914,
+    "source": "a26a124837637831655d19cc9dc89c1929e65e02",
+    "status": "in_progress",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42036083914"
+  }
 }

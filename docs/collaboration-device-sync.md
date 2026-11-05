@@ -42,4 +42,22 @@ This HRIS/Matrix integration does not belong in the generic Starter.
 [Validation record](measurements/chat-device-sync-2026-11-05.json): final source gate
 passes 3,664 fresh cases, zero failures/errors/skips, in 521.721 seconds. All 4,077
 inputs stayed unchanged. The earlier failed fixture expectation is recorded. Native
-release acceptance remains pending at this source checkpoint.
+release acceptance is recorded below.
+
+
+## Actual release36 acceptance
+
+The exact non-debuggable ARM64 APK updates the retained sample1 installation.
+Immediately before update: one ACTIVE device, zero confirmed publications and no
+provider-room request/binding. After normal Home startup: one confirmed server
+publication, same device, still no provider room or sent message. Cold restart
+preserves that server-published identity; the app returns to Home. This is actual
+product/SDK/server execution, not the inert FFI host fixture. Probe24.456s;
+observation timing is not an upload-latency measurement.
+
+The same APK on retained Bima passes in-place update, two room recreations and cold
+restart: eight original rows, no Older messages, undecryptable placeholder or
+history-error control. Proof102.333s. Closed diagnostics recorded76 HTTP200 results
+and three unavailable worker retries at startup; zero-crash evidence does not claim
+zero retries. Source/build/lint pass; phone install-only delivery is confirmed with
+matching device SHA256 and retained app identity. [Full evidence](measurements/android-release-phone-2026-11-05-build36.json).
