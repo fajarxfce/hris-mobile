@@ -154,3 +154,11 @@ rows and equal-version tombstones from the preceding database schema.
 Validation: the workspace `:check`, Android dev debug build, and database
 `wasmJsBrowserTest` passed on Linux. This does not establish device performance
 or complete a feature's encryption and synchronization integration.
+
+## Apple staging acceptance — 5 November 2026
+
+[Evidence](measurements/replica-staging-apple-2026-11-05.json): exact5f0eacdd passes
+1,279 simulator cases/149 suites with zero failures/errors/skips, including all five
+new staging contract cases. Full Xcode application, push-envelope extraction and
+association checks pass. Source/artifact digests are verified. This is raw-storage
+acceptance; the later encrypted metadata consumer/UI requires its own final gates.

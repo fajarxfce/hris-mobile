@@ -1,5 +1,42 @@
 # Agent continuation — HRIS Mobile
 
+## Raw staging Apple accepted; activated consumer under full local gates — 5 November 2026
+
+[Apple evidence](measurements/replica-staging-apple-2026-11-05.json):42094694741 on
+exact5f0eacdd PASSED1,279 cases/149 suites, zero failures/errors/skips, full Xcode app,
+push-envelope and associations. Artifact13448518222 archive digest verified. Nine
+raw-store source hashes verified; all five new AppleReplicaStagingTest cases run.
+Compile860s, simulator141s, full app1,483s. Transport compiles in the app; its data
+tests are not included by the Apple workflow. This excludes newer format2/Sync/UI.
+No duplicate or rerun needed. All Apple audit wrappers drained. Phone stays39.
+
+CURRENT UNCOMMITTED: ChatInbox uses bounded Sync with local-only paging and owned
+continuation; unchanged metadata keeps preview streams. Point metadata merge retries
+one local CAS when a background publication wins. inbox2 passes28 focused UI/VM
+cases134.292s. app1 passes41 domain cases, but two new real-Room integration tests
+had virtual-time deadline interference. app2 uses Dispatchers.Default for that
+integration body and passes all4 app cases59.807s, retaining the41 exact passing
+domain XML reports. app2 wrapper had an incorrect six-fresh-case minimum; explicit
+app2/acceptance.json audits four fresh plus41 retained. Assertions/deadline unchanged.
+
+consumer-full1 is RUNNING (session37627), source inputs frozen. Full root, domain/
+data/presentation browser tests, Android assembly/lint. It already found two detekt
+LongMethod violations (Sync.synchronize128 and NativeCollaborationUi.response124).
+Allow tests/children to drain before edits. .work/chat-summary-sync-2026-11-05/
+fix-lengths.py is PREPARED, NOT applied: extracts admission completion and fixture
+summary endpoint handling. Apply/review/format after drain, then complete full gates
+before committing product/UI. Do not recopy earlier .work drafts. No installation.
+
+Platform6fbfe4eb records retained-database migration rehearsal:116→116.1,200 existing
+tables and prior migration history unchanged, seven pairs queued, restricted roles,
+all temporary resources removed. No live changes. Full CI42091460931 attempt2 reruns
+only the cancelled dashboard-integration job after slow Ubuntu font downloads;
+13 other jobs passed. Wait/audit before staging/deploying. Next: runtime compatibility,
+final rollout, native/offline release40 proof and announced phone install-only, then
+raw Starter port and remaining54 communications PRD groups. Preserve all emulator
+userdata/keys and both protected stashes. Bima receiver5562 remains owned/running.
+
+
 ## Bounded metadata Sync accepted; activate ChatInbox next — 5 November 2026
 
 Six source/test/DI files add pure bootstrap/change folding and SyncCollaborationList.
