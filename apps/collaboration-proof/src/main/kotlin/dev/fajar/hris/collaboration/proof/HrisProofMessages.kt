@@ -8,8 +8,13 @@ import org.matrix.rustcomponents.sdk.RoomMessageLikeEvent
 import org.matrix.rustcomponents.sdk.RoomMessageLikeEventsListener
 import uniffi.ruma_events.MessageLikeEventType
 
-internal class HrisProofMessages(room: Room, body: String, logicalId: String) : AutoCloseable {
-    private val received = CompletableDeferred<RoomMessageLikeEvent>()
+internal class HrisProofMessages(
+    room: Room,
+    body: String,
+    logicalId: String,
+    replyToEventId: String? = null,
+) : AutoCloseable {
+    private val received = CompletableDeferred<String>()
     private val listener =
         room.subscribeToMessageLikeEvents(
             MessageLikeEventType.RoomMessage,
@@ -19,14 +24,18 @@ internal class HrisProofMessages(room: Room, body: String, logicalId: String) : 
                     if (
                         content?.optString("body") == body &&
                             content.optString("org.hris.message_id") == logicalId &&
-                            event.encryptionInfo != null
+                            event.encryptionInfo != null &&
+                            content
+                                .optJSONObject("m.relates_to")
+                                ?.optJSONObject("m.in_reply_to")
+                                ?.optString("event_id") == replyToEventId
                     )
-                        received.complete(event)
+                        received.complete(event.eventId)
                 }
             },
         )
 
-    suspend fun eventId(): String = withTimeout(30_000) { received.await().eventId }
+    suspend fun eventId(): String = withTimeout(30_000) { received.await() }
 
     override fun close() {
         listener.cancel()

@@ -1,5 +1,25 @@
 # Agent continuation — HRIS Mobile
 
+## Actual encrypted quoted replies verified — 5 November 2026
+
+The actual recipient decrypts the third message with its exact first-event quote.
+Kill-before-journal recovery retains the original transaction/reply intent; a later
+cold process reads all three messages and the quote with the gateway unreachable.
+Exactly three encrypted sends and all prior ownership/auth/history guards remain.
+[Contract](collaboration-chat-quoted-native.md), [evidence](measurements/chat-quoted-native-2026-11-05.json).
+
+Both native suites pass /159.069s/two cases/zero skips/12,277 unchanged inputs and
+unchanged APK5c33de85. Driver31 pass. Mobile root/Android/browser/proof gate passes
+2,155 fresh/417.551s/4,066 unchanged inputs. Owned emulator stopped. Applied native
+stage drafts are NOT reusable. Mobile closed diagnostic markers are in6753b7a1.
+
+NEXT: full CI42004588608 on Main11a98115 (production matches current test-only WIP),
+validated API/worker-only envelope rollout retaining Matrix/TLS/data, clean release33
+build/lint/emulator review and EACH install announced before install-only. Phone32
+and live8b40/schema116 unchanged. Old AND new Bima sends still pending: read new closed
+markers after delivery and fix the demonstrated cause; preserve keys/intents. No
+question pending. All54 groups open; continue long run and push every commit.
+
 ## Pending-send diagnostics validated — 5 November 2026
 
 New closed SDK acquisition/retained queue and app delivery-stage markers preserve

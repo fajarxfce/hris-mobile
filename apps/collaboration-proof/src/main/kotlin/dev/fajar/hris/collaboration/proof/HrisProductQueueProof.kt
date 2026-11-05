@@ -177,7 +177,8 @@ internal class HrisProductQueueProof(
     suspend fun crashAfterAcknowledgement(
         logicalId: String,
         text: String,
-        acknowledged: suspend (String) -> Unit,
+        replyToEventId: String,
+        acknowledged: suspend (String, String) -> Unit,
     ) {
         val app = prepareAckApplication()
         val intent =
@@ -187,6 +188,7 @@ internal class HrisProductQueueProof(
                 conversationId,
                 Clock.System.now(),
                 text,
+                replyToEventId,
             )
         check(success(messages.insert(access, intent)) == CollaborationMessageInsertion.STORED)
         val stage =
@@ -226,7 +228,7 @@ internal class HrisProductQueueProof(
                     // No ACK event ID or body is written to the checkpoint. The driver kills this
                     // process while this receipt write is suspended under the sender's bounded
                     // wait.
-                    acknowledged(state.transactionId)
+                    acknowledged(state.transactionId, receipt.eventIds.single())
                     awaitCancellation()
                 }
             }
@@ -254,6 +256,7 @@ internal class HrisProductQueueProof(
         logicalId: String,
         text: String,
         expectedTransaction: String,
+        replyToEventId: String,
     ): ProofQueuedMessageResult {
         val app = prepareAckApplication()
         val original = requireNotNull(success(messages.get(access, logicalId)))
@@ -261,7 +264,8 @@ internal class HrisProductQueueProof(
         check(
             staged.transactionId == expectedTransaction &&
                 staged.origin != null &&
-                original.intent.text == text
+                original.intent.text == text &&
+                original.intent.replyToEventId == replyToEventId
         )
         check(success(receipts.read(access, conversationId)).none { it.intent.id == logicalId })
         val queue = success(runtime.acquireMessageQueue(roomId))
@@ -327,8 +331,12 @@ internal class HrisProductQueueProof(
     suspend fun recoverCompletion(logicalId: String, transaction: String) =
         retirementProof(prepareAckApplication()).recover(logicalId, transaction)
 
-    suspend fun verifyColdOfflineHistory(expected: List<Pair<String, String>>) {
-        check(application != null && writer == null && expected.size == 2)
+    suspend fun verifyColdOfflineHistory(
+        expected: List<Pair<String, String>>,
+        quotedEventId: String,
+        replyToEventId: String,
+    ) {
+        check(application != null && writer == null && expected.size == 3)
         val history =
             EncryptedCollaborationHistoryRepository(
                 database.replicas,
@@ -336,6 +344,9 @@ internal class HrisProductQueueProof(
                 historyKey,
             )
         val saved = success(history.observe(access, conversationId, roomId).first())
+        check(
+            saved.messages.single { quotedEventId in it.eventIds }.replyToEventId == replyToEventId
+        )
         for ((eventId, body) in expected) {
             val original = saved.messages.single { eventId in it.eventIds }
             check(original.text == body)

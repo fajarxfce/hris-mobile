@@ -1,0 +1,153 @@
+{
+  "startedAt": "2026-11-05T09:50:59.819255+00:00",
+  "elapsedSeconds": 159.069,
+  "exitCode": 0,
+  "sourceFiles": 12277,
+  "sourcesUnchanged": true,
+  "apkSha256": "5c33de85a5b67c8153808355df9be86a929a5b2c0c4a94ebaecc565d58515c2e",
+  "apkUnchanged": true,
+  "counts": {
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reports": {
+    "TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": {
+      "sha256": "af887ebdf9655172bc14a33144a7e085a9a8a75ac947b2b8c5c77f7d7eb32821",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "TEST-dev.fajar.hris.NativeCollaborationSdkAuthInteropTest.xml": {
+      "sha256": "2c95f4ce58de42ffd8c97998f9d2ff0a736086c7afdae63508af4ac017694413",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "accepted": [
+    {
+      "actualSdkAuthRejected": true,
+      "actualSdkAuthRecovered": true,
+      "sameGatewayRotatedOnce": true,
+      "hrisParentStillActive": true,
+      "originalDeviceStillActive": true,
+      "oneKeyPublication": true,
+      "native": {
+        "passed": true,
+        "cleanup": true,
+        "artifact": {
+          "apkSha256": "5c33de85a5b67c8153808355df9be86a929a5b2c0c4a94ebaecc565d58515c2e",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35"
+        },
+        "diagnostic": {
+          "replyComplete": false,
+          "resultComplete": false,
+          "instrumentationComplete": true,
+          "failureFrames": []
+        },
+        "typedAuthRejection": true,
+        "liveSyncRejected": true,
+        "runtimeEntryRejected": true,
+        "localReadPolicyPreserved": true,
+        "originalKeysPreserved": true,
+        "ownedRuntimeDrained": true,
+        "sameStoreCredentialsReplaced": true,
+        "actualSdkSyncRestored": true
+      }
+    },
+    {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "sdkAccessRenewed": true,
+      "sameGatewayAfterRenewal": true,
+      "verificationUsedRefreshReplay": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "messageIntentRestored": true,
+      "queueMappingRecovered": true,
+      "queueWriterExclusive": true,
+      "perRoomDeliveryIsolated": true,
+      "heldQueueRestored": true,
+      "nativeDeliveryOwned": true,
+      "commonSenderOwned": true,
+      "receiptJournalRecovered": true,
+      "projectionInterrupted": true,
+      "originalHistoryWindowOwned": true,
+      "historyBodiesRestored": true,
+      "nativeReadReceiptsExchanged": true,
+      "nativePrivateReceiptIsolated": true,
+      "nativeReadReceiptStoreRestored": true,
+      "nativeLocalReadIntentPrepared": true,
+      "nativeLocalReadIntentStoreRestored": true,
+      "nativeReadReceiptReplayAdmitted": true,
+      "nativeReadReceiptAckUncertaintyRecovered": true,
+      "commonHistoryAcquisitionOwned": true,
+      "latestHistoryHeadOwned": true,
+      "admittedHistoryHeads": true,
+      "providerHistoryPageOwned": true,
+      "commonProviderHistoryAcquisitionOwned": true,
+      "providerHistoryReferencesRestored": true,
+      "providerHistoryReferencesReconciled": true,
+      "providerHistoryRestartPreserved": true,
+      "historyRuntimeReopened": true,
+      "ackBeforeJournalRecovered": true,
+      "processRestartedAfterAck": true,
+      "completionCleanupRecovered": true,
+      "coldHistoryRecoveredOffline": true,
+      "gatewayUnavailableAfterProcessDeath": true,
+      "quotedReplyDecrypted": true,
+      "quotedReplyRecovered": true,
+      "quotedReplyRecoveredOffline": true,
+      "processRestartedAfterCompletion": true,
+      "encryptedSendCount": 3,
+      "admittedProviderPages": true,
+      "historyWindow": {
+        "originals": 2,
+        "unavailable": 9,
+        "extractionNanos": 8328376,
+        "modelCharacters": 4732,
+        "originalCharacters": 953
+      },
+      "applicationAdmittedBeforeSend": true,
+      "applicationAdmittedAroundHistory": true,
+      "applicationAdmissions": {
+        "device": 26,
+        "conversation": 26,
+        "room": 26,
+        "failures": 0
+      },
+      "heldRoomNeverSent": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "5c33de85a5b67c8153808355df9be86a929a5b2c0c4a94ebaecc565d58515c2e",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    }
+  ],
+  "sourceManifestSha256": "981338ca35eb9285a1f45721eaad64b37569b6203e2b823821d9ae722926a62b",
+  "driverTests": {
+    "tests": 31,
+    "failures": 0,
+    "elapsedSeconds": 0.109
+  },
+  "physicalPhoneUpdated": false,
+  "liveBackendUpdated": false
+}

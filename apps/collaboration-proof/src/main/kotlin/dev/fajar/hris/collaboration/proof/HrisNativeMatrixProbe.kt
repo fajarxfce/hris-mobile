@@ -92,17 +92,16 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                     senderRoom.close()
                     senderRoom = null
                     check(senderTimeline.close() is AppResult.Success)
-                    productQueue.reopenHistory(
-                        senderOwner.repository,
-                        result.getString("senderEventId"),
-                        body(fixture, "body"),
-                        fixture.getString("heldRoomId"),
-                        held.transaction,
-                    )
+                    reopenOriginalHistory(productQueue, senderOwner, result, fixture, held)
                     write("gateway-preack-result", result.put("historyRuntimeReopened", true))
                     productQueue.close()
                     productQueue = null
-                    crashAfterAck(fixture, senderOwner)
+                    crashAfterAck(
+                        fixture,
+                        senderOwner,
+                        requireNotNull(recipientRoom),
+                        result.getString("senderEventId"),
+                    )
                 } else stage(fixture, sender, recipient, pending, productQueue, held)
             } finally {
                 closeProofOwners(
@@ -120,7 +119,28 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
             verifyClosedTimelines(listOfNotNull(senderTimeline, recipientTimeline))
         }
 
-    private suspend fun crashAfterAck(fixture: JSONObject, owner: ProtectedHrisProofOwner) {
+    private suspend fun reopenOriginalHistory(
+        proof: HrisProductQueueProof,
+        owner: ProtectedHrisProofOwner,
+        result: JSONObject,
+        fixture: JSONObject,
+        held: HrisProofHeldQueue,
+    ) {
+        proof.reopenHistory(
+            owner.repository,
+            result.getString("senderEventId"),
+            body(fixture, "body"),
+            fixture.getString("heldRoomId"),
+            held.transaction,
+        )
+    }
+
+    private suspend fun crashAfterAck(
+        fixture: JSONObject,
+        owner: ProtectedHrisProofOwner,
+        recipientRoom: Room,
+        replyToEventId: String,
+    ) {
         val runtime = owner.restoreStored()
         var proof: HrisProductQueueProof? = null
         try {
@@ -133,19 +153,30 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                     fixture.getString("conversationId"),
                     fixture.getJSONObject("sender").getString("hrisAccessToken"),
                 )
-            proof.crashAfterAcknowledgement(
-                logicalId(fixture, "ackLogicalId"),
-                body(fixture, "ackBody"),
-            ) { transaction ->
-                write(
-                    "gateway-acknowledged",
-                    JSONObject()
-                        .put("processId", Process.myPid())
-                        .put("transactionId", transaction)
-                        .put("ackObserved", true)
-                        .put("receiptAbsent", true),
+            HrisProofMessages(
+                    recipientRoom,
+                    body(fixture, "ackBody"),
+                    logicalId(fixture, "ackLogicalId"),
+                    replyToEventId,
                 )
-            }
+                .use { incoming ->
+                    proof.crashAfterAcknowledgement(
+                        logicalId(fixture, "ackLogicalId"),
+                        body(fixture, "ackBody"),
+                        replyToEventId,
+                    ) { transaction, eventId ->
+                        check(incoming.eventId() == eventId)
+                        write(
+                            "gateway-acknowledged",
+                            JSONObject()
+                                .put("processId", Process.myPid())
+                                .put("transactionId", transaction)
+                                .put("ackObserved", true)
+                                .put("receiptAbsent", true)
+                                .put("quotedReplyDecrypted", true),
+                        )
+                    }
+                }
         } finally {
             closeProofOwners(listOf({ proof?.close() }, { runtime.closeProofRuntime() }))
         }
@@ -156,7 +187,12 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
             val (fixture, home) = readFixture(resuming = true, afterAck = true)
             val checkpoint = read("gateway-acknowledged", 4096)
             val result = read("gateway-preack-result", 8192)
-            check(checkpoint.get("ackObserved") == true && checkpoint.get("receiptAbsent") == true)
+            check(
+                checkpoint.get("ackObserved") == true &&
+                    checkpoint.get("receiptAbsent") == true &&
+                    checkpoint.get("quotedReplyDecrypted") == true
+            )
+            result.put("quotedReplyDecrypted", true)
             check(
                 checkpoint.getInt("processId") == result.getInt("processId") &&
                     checkpoint.getInt("processId") != Process.myPid()
@@ -201,6 +237,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                         logicalId(fixture, "ackLogicalId"),
                         body(fixture, "ackBody"),
                         transaction,
+                        result.getString("senderEventId"),
                     )
                 proof.recoverReadState(result)
                 write(
@@ -208,6 +245,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                     result
                         .put("processId", Process.myPid())
                         .put("ackBeforeJournalRecovered", true)
+                        .put("quotedReplyRecovered", true)
                         .put("ackSenderEventId", sent.eventId)
                         .put("ackTransaction", sent.transactionId),
                 )
@@ -291,10 +329,14 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                     listOf(
                         result.getString("senderEventId") to body(fixture, "body"),
                         result.getString("recipientEventId") to body(fixture, "reply"),
-                    )
+                        result.getString("ackSenderEventId") to body(fixture, "ackBody"),
+                    ),
+                    quotedEventId = result.getString("ackSenderEventId"),
+                    replyToEventId = result.getString("senderEventId"),
                 )
                 requireHrisProofGatewayUnavailable(home)
                 result.put("coldHistoryRecoveredOffline", true)
+                result.put("quotedReplyRecoveredOffline", true)
                 result.put("gatewayUnavailableAfterProcessDeath", true)
                 write(
                     "gateway-result",
