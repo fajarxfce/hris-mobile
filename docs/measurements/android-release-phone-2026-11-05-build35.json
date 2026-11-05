@@ -1,0 +1,177 @@
+{
+  "recordedAt": "2026-11-05T12:44:45.711552+00:00",
+  "source": {
+    "commit": "157a257d568c10f32e7159722d8fdd7f579b09e4",
+    "cleanBeforeBuild": true,
+    "cleanAfterBuild": true
+  },
+  "artifact": {
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-05-build35/hris-mobile-dev-release-1.0.0-35-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 35,
+    "versionName": "1.0.0",
+    "bytes": 88337720,
+    "sha256": "c227ba97083c3bccff4a42f113eb8ce8517411b3d97f2779ba646f266f575175",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "sameInstalledSigner": true
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":apps:android:assembleDevRelease",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=35",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-05-build35/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m"
+    ],
+    "startedAt": "2026-11-05T12:25:05.573076+00:00",
+    "elapsedSeconds": 596.23,
+    "exitCode": 0
+  },
+  "lint": {
+    "report": "apps/android/build/reports/lint-results-devRelease.xml",
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+    "issues": 0,
+    "bySeverity": {}
+  },
+  "compiledChatMarkers": {
+    "retainedQueueDiagnostic": true,
+    "sendQueueDiagnostic": true,
+    "deliveryStageDiagnostic": true,
+    "replyRelation": true,
+    "typedAuthRejection": true,
+    "stableQueueNamespace": true,
+    "retainedQueueRetry": true
+  },
+  "retainedAccountUpdate": {
+    "source": "157a257d568c10f32e7159722d8fdd7f579b09e4",
+    "sha256": "c227ba97083c3bccff4a42f113eb8ce8517411b3d97f2779ba646f266f575175",
+    "versionCode": 35,
+    "ownedBimaEmulatorOnly": true,
+    "inPlace": true,
+    "identityPreserved": true,
+    "dataCleared": false,
+    "seconds": 4.439
+  },
+  "actualHistoryAcceptance": {
+    "startedAt": "2026-11-05T12:36:45.359159+00:00",
+    "ownedBimaEmulatorOnly": true,
+    "versionCode": 35,
+    "source": "157a257d568c10f32e7159722d8fdd7f579b09e4",
+    "sha256": "c227ba97083c3bccff4a42f113eb8ce8517411b3d97f2779ba646f266f575175",
+    "messageBodiesRetained": false,
+    "phoneTouched": false,
+    "checks": [
+      {
+        "kind": "in-place update and retained end",
+        "visibleMessageRows": 8,
+        "olderVisible": false,
+        "decryptionPlaceholder": false,
+        "manualHistoryFailure": false
+      },
+      {
+        "kind": "room reopen 1",
+        "visibleMessageRows": 8,
+        "olderVisible": false,
+        "decryptionPlaceholder": false,
+        "manualHistoryFailure": false
+      },
+      {
+        "kind": "room reopen 2",
+        "visibleMessageRows": 8,
+        "olderVisible": false,
+        "decryptionPlaceholder": false,
+        "manualHistoryFailure": false
+      },
+      {
+        "kind": "cold process restart",
+        "visibleMessageRows": 8,
+        "olderVisible": false,
+        "decryptionPlaceholder": false,
+        "manualHistoryFailure": false
+      }
+    ],
+    "complete": true,
+    "elapsedSeconds": 108.748
+  },
+  "screenshot": {
+    "path": "docs/screenshots/release-35-2026-11-05/bima-history-redacted.png",
+    "sha256": "5ccab5bb0044b95a20f1a61fd410933c5e196a3c6b700ad5d2bc27da30b986f3",
+    "reviewed": true,
+    "redactedMessageRows": 8,
+    "messageBodiesIncluded": false
+  },
+  "phoneDelivery": {
+    "confirmed": true,
+    "startedAt": "2026-11-05T12:42:16.618926+00:00",
+    "elapsedSecondsIncludingVerification": 32.829,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 35,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "c227ba97083c3bccff4a42f113eb8ce8517411b3d97f2779ba646f266f575175",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-05 19:42:46",
+      "versionCode": "35 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    },
+    "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+  },
+  "priorPhoneVersion": 34,
+  "sourceValidation": [
+    "chat-history-end-2026-11-05.json"
+  ],
+  "phonePreflight": {
+    "method": "Device SHA-256 equals previously verified installed release34 APK; its signer verified locally.",
+    "previousSha256": "eded7799bb9b643c1bcd5184581e2875444a4f74bda4bdf8b90336d876cdb699",
+    "remoteSha256Matches": true,
+    "sameInstalledSigner": true,
+    "previousArtifactVerifiedOnDevice": true
+  },
+  "limits": [
+    "In-place install-only; device SHA-256 matches the validated APK. installed.apk is a local copy, not a pull-back. No phone UI or network changes.",
+    "Actual retained Bima account on an owned x86_64 emulator with ARM64 translation; covers in-place update, two room recreations and cold process restart. Separate fresh-install startup smoke was not repeated.",
+    "Review screenshot masks message rows. Raw screenshot remains private and ignored; no message body is committed.",
+    "Bima persistent SDK/OS data and native parent are retained; receiver emulator remains running.",
+    "Apple CI42026950708 on this source is separate and still requires final result. All54 PRD groups remain open."
+  ]
+}

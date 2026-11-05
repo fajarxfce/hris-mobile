@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Product release 35 installed — 5 November 2026
+
+Product source [157a257d](https://github.com/fajarxfce/hris-mobile/commit/157a257d568c10f32e7159722d8fdd7f579b09e4)
+is installed in place as ARM64 devRelease35 on10.77.77.3:5555. Package
+`dev.fajar.hris.mobile.dev`, version1.0.0, non-debuggable. APK88,337,720 bytes,
+SHA256`c227ba97083c3bccff4a42f113eb8ce8517411b3d97f2779ba646f266f575175`. Device-computed hash matched; existing signer/app ID/first
+install time preserved. Installation announced, install-only, no phone UI driving.
+[Delivery evidence](measurements/android-release-phone-2026-11-05-build35.json).
+
+This fixes Older messages returning after an exhausted room is closed/reopened.
+Exact release APK on the retained Bima account passes allfour checks: in-place
+update, two room recreations and cold process restart; eight original messages
+remain visible, no older control/decryption placeholder/history failure. Actual
+proof108.748s. Redacted screenshot reviewed; message bodies are
+not committed. Build/lint596.23s/zero lint issues; source gate
+1,064 fresh cases/zero failures, focused6. No redundant fresh-install smoke run.
+
+Bima persistent receiver remains running on owned emulator5562; retain its userdata
+and sidecars/native parent. Sample1 has completed product registration/bootstrap,
+but zero key publications: its empty direct has no provider-room request/binding.
+Trace initial background runtime/key publication before any first message; do not
+weaken recipient guard or send a message to force setup. Sample1 persistent data
+retained, emulator stopped. Samples3/4 have Firebase/HRIS links but no SDK devices.
+
+Apple CI42026950708 is running on157a; prior42017858911 passed745e. Backend
+11a98115/schema116 unchanged. Forwarding WIP remains in stashbfdef2ce (core batch
+focused118 passed, metadata incomplete). Next: initial receiver activation gap,
+finish demo readiness, resume forward/edit/delete/groups/calls/meet; return generic
+storage to Starter after validation. All54 groups open. Push each commit and
+announce EACH phone installation. Local record.py has been applied; do not rerun.
+
 ## Older-history end regression fixed and validated — 5 November 2026
 
 Closing/reopening an exhausted room used to revive Older messages because retained

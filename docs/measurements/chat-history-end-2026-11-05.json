@@ -83,12 +83,53 @@
   "newProviderOrDecryptionWorkOnRestore": false,
   "schemaMigrationRequired": false,
   "starterPortRequired": false,
-  "phoneVersion": 34,
-  "deliveryPending": true,
+  "phoneVersion": 35,
+  "deliveryPending": false,
   "limits": [
-    "Actual fixed-APK receiver reopen and release35 startup/install are still pending.",
     "Full gate reports only fresh JUnit results; cached reports were not counted as newly run.",
     "Forwarding batch work is stashed and excluded from this validation.",
     "Apple CI42017858911 passed prior product745e, not this candidate."
-  ]
+  ],
+  "fixedApkAcceptance": {
+    "startedAt": "2026-11-05T12:36:45.359159+00:00",
+    "ownedBimaEmulatorOnly": true,
+    "versionCode": 35,
+    "source": "157a257d568c10f32e7159722d8fdd7f579b09e4",
+    "sha256": "c227ba97083c3bccff4a42f113eb8ce8517411b3d97f2779ba646f266f575175",
+    "messageBodiesRetained": false,
+    "phoneTouched": false,
+    "checks": [
+      {
+        "kind": "in-place update and retained end",
+        "visibleMessageRows": 8,
+        "olderVisible": false,
+        "decryptionPlaceholder": false,
+        "manualHistoryFailure": false
+      },
+      {
+        "kind": "room reopen 1",
+        "visibleMessageRows": 8,
+        "olderVisible": false,
+        "decryptionPlaceholder": false,
+        "manualHistoryFailure": false
+      },
+      {
+        "kind": "room reopen 2",
+        "visibleMessageRows": 8,
+        "olderVisible": false,
+        "decryptionPlaceholder": false,
+        "manualHistoryFailure": false
+      },
+      {
+        "kind": "cold process restart",
+        "visibleMessageRows": 8,
+        "olderVisible": false,
+        "decryptionPlaceholder": false,
+        "manualHistoryFailure": false
+      }
+    ],
+    "complete": true,
+    "elapsedSeconds": 108.748
+  },
+  "phoneDeliveryEvidence": "android-release-phone-2026-11-05-build35.json"
 }
