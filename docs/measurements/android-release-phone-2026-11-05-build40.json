@@ -1,0 +1,343 @@
+{
+  "recordedAt": "2026-11-05T21:23:14.646915+00:00",
+  "source": {
+    "commit": "927407ad185400f16cd5b91ab47208141183bbba",
+    "cleanBeforeBuild": true,
+    "cleanAfterBuild": true
+  },
+  "artifact": {
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-05-build40/hris-mobile-dev-release-1.0.0-40-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 40,
+    "versionName": "1.0.0",
+    "bytes": 88469236,
+    "sha256": "6d7821859987a8cc235d69dc36013b595680b229c76541f7651ef16f4cf2dc01",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "sameInstalledSigner": true
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":apps:android:assembleDevRelease",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=40",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-05-build40/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m"
+    ],
+    "startedAt": "2026-11-05T20:48:42.173245+00:00",
+    "elapsedSeconds": 626.219,
+    "exitCode": 0
+  },
+  "lint": {
+    "report": "apps/android/build/reports/lint-results-devRelease.xml",
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+    "issues": 0,
+    "bySeverity": {}
+  },
+  "compiledChatMarkers": {
+    "forwardedWireFlag": true,
+    "deviceSyncTurn": true,
+    "retainedQueueDiagnostic": true,
+    "sendQueueDiagnostic": true,
+    "deliveryStageDiagnostic": true,
+    "replyRelation": true,
+    "typedAuthRejection": true,
+    "stableQueueNamespace": true,
+    "retainedQueueRetry": true,
+    "summaryPath": true,
+    "summaryBootstrapSuffix": true,
+    "summaryChangesSuffix": true,
+    "summaryApiClass": true,
+    "boundedSummaryValidation": true
+  },
+  "compiledHubMarkers": {
+    "HomeChatPageKt": true,
+    "ChatSection": true,
+    "ChatInboxProjectionKt": true,
+    "previewsLoaded": true,
+    "ChatConversations": true,
+    "ChatContacts": true,
+    "AppSwipeTabContentKt": true,
+    "AppFloatingActionButtonKt": true,
+    "AppFloatingActionLayoutKt": true,
+    "AppFilterButtonKt": true,
+    "DepartmentFilter": true
+  },
+  "nativeAndroid": {
+    "startedAt": "2026-11-05T21:13:41.439125+00:00",
+    "ownedEmulatorOnly": true,
+    "sample": 1,
+    "versionCode": 40,
+    "sha256": "6d7821859987a8cc235d69dc36013b595680b229c76541f7651ef16f4cf2dc01",
+    "source": "927407ad185400f16cd5b91ab47208141183bbba",
+    "phoneTouched": false,
+    "newMessagesSent": 0,
+    "complete": true,
+    "onlineNetwork": {
+      "httpReachable": true,
+      "probeExitCode": 0
+    },
+    "initial": {
+      "visiblePeers": 2,
+      "retainedDraftPreviews": 2,
+      "contactsTab": true,
+      "employeesRootAbsent": true
+    },
+    "nativeSummarySync": {
+      "successfulBootstrapRequests": 0,
+      "successfulChangesRequests": 1,
+      "previewsRetainedDuringAcquisition": true,
+      "packetContentsPersisted": false
+    },
+    "screenshots": [
+      "native-chat-hub-conversations.png",
+      "native-chat-hub-action-hidden.png",
+      "native-chat-hub-contacts.png",
+      "native-chat-hub-search.png",
+      "native-chat-hub-cold-offline.png",
+      "native-chat-hub-contacts-offline.png"
+    ],
+    "contacts": {
+      "fixtureEmployeeVisible": true,
+      "searchVisible": true,
+      "refreshAbsent": true
+    },
+    "controls": {
+      "filterRightOfSearch": true,
+      "filterLabelRowAbsent": true,
+      "searchPage": false
+    },
+    "gestureViewportRestored": true,
+    "gestures": {
+      "swipeBothDirections": true,
+      "fixedTabs": true,
+      "actionHidesDownAndReturnsUp": true,
+      "compactViewport": "1080x1400",
+      "displayDensityUnchanged": true
+    },
+    "searchControls": {
+      "filterRightOfSearch": true,
+      "filterLabelRowAbsent": true,
+      "searchPage": true
+    },
+    "filterDialogsWork": true,
+    "newChatReturnsToContacts": true,
+    "offlineNetwork": {
+      "httpReachable": false,
+      "probeExitCode": 0
+    },
+    "offlineReopen": true,
+    "offlineRoomRows": 4,
+    "coldOfflineReopen": true,
+    "contactsRetained": true,
+    "restoredNetwork": {
+      "httpReachable": true,
+      "probeExitCode": 0
+    },
+    "elapsedSeconds": 179.105
+  },
+  "bimaHistory": {
+    "startedAt": "2026-11-05T21:20:12.001615+00:00",
+    "ownedBimaEmulatorOnly": true,
+    "versionCode": 40,
+    "source": "927407ad185400f16cd5b91ab47208141183bbba",
+    "sha256": "6d7821859987a8cc235d69dc36013b595680b229c76541f7651ef16f4cf2dc01",
+    "messageBodiesRetained": false,
+    "phoneTouched": false,
+    "checks": [
+      {
+        "kind": "in-place update and retained end",
+        "visibleMessageRows": 8,
+        "olderVisible": false,
+        "decryptionPlaceholder": false,
+        "manualHistoryFailure": false
+      },
+      {
+        "kind": "room reopen 1",
+        "visibleMessageRows": 8,
+        "olderVisible": false,
+        "decryptionPlaceholder": false,
+        "manualHistoryFailure": false
+      },
+      {
+        "kind": "room reopen 2",
+        "visibleMessageRows": 8,
+        "olderVisible": false,
+        "decryptionPlaceholder": false,
+        "manualHistoryFailure": false
+      },
+      {
+        "kind": "cold process restart",
+        "visibleMessageRows": 8,
+        "olderVisible": false,
+        "decryptionPlaceholder": false,
+        "manualHistoryFailure": false
+      }
+    ],
+    "complete": true,
+    "elapsedSeconds": 110.606
+  },
+  "installation": {
+    "confirmed": true,
+    "startedAt": "2026-11-05T21:17:59.337618+00:00",
+    "elapsedSecondsIncludingVerification": 45.276,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 40,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "6d7821859987a8cc235d69dc36013b595680b229c76541f7651ef16f4cf2dc01",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-06 04:18:39",
+      "versionCode": "40 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    },
+    "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+  },
+  "visualReview": {
+    "versionCode": 40,
+    "reviewed": {
+      "native-chat-hub-conversations.png": "b9009aa888ea1135db188e6895c333a94d16594de8be94656f27d2ae8fd3b66f",
+      "native-chat-hub-contacts.png": "d32ae71daa283901aea287325eb9cbfb12c6590e62ef3ee4e867dab337fd5b1e",
+      "native-chat-hub-cold-offline.png": "6799aff0c118a16f44d7c288f7f495be5809625414d82f295f3a7ea4b8d24dc0",
+      "native-chat-hub-search.png": "c38ab09976ed2b24c0a0fdea7b9ac4c78e45fecb6765c790c77205a257d116cb"
+    },
+    "result": "Tabs remain at the top without a Chat app bar; filter icon sits to the right of search on both destinations. Conversation/draft labels remain visible after cold offline restart. No refresh/error/loading replacement visible.",
+    "currentProcessCrashAbsent": true
+  },
+  "observedNativeHttp": {
+    "startedAt": "2026-11-05T21:13:40.323142+00:00",
+    "elapsedSeconds": 246.207,
+    "complete": true,
+    "interface": "br-3b9b9ff77286",
+    "remotePhoneTrafficExcluded": true,
+    "packetBodiesPersisted": false,
+    "headersOrTokensPersisted": false,
+    "matchedRequests": [
+      {
+        "kind": "changes",
+        "atSeconds": 30.076,
+        "status": null
+      },
+      {
+        "kind": "changes",
+        "atSeconds": 30.078,
+        "status": 200
+      },
+      {
+        "kind": "changes",
+        "atSeconds": 53.986,
+        "status": 200
+      },
+      {
+        "kind": "changes",
+        "atSeconds": 118.47,
+        "status": 200
+      },
+      {
+        "kind": "changes",
+        "atSeconds": 126.576,
+        "status": 200
+      }
+    ],
+    "matchedHttpPackets": 9,
+    "scope": "Positive sample of native changes requests reaching the deployed API with HTTP200. One observed request lacks a matched response; this is not an exhaustive request/performance trace. Only route kinds, statuses and timings were retained."
+  },
+  "earlierAttempts": {
+    "apkMarkers": {
+      "accepted": false,
+      "reason": "Verifier incorrectly expected two complete URI literals in DEX. Source constructs the shared summary-sync path plus bootstrap/changes suffixes; compiled literal checks now mirror that construction. Native HTTP acceptance remains required.",
+      "productSourceChanged": false,
+      "apkRebuilt": false
+    },
+    "nativeUi": {
+      "startedAt": "2026-11-05T21:10:58.269122+00:00",
+      "ownedEmulatorOnly": true,
+      "sample": 1,
+      "versionCode": 40,
+      "sha256": "6d7821859987a8cc235d69dc36013b595680b229c76541f7651ef16f4cf2dc01",
+      "source": "927407ad185400f16cd5b91ab47208141183bbba",
+      "phoneTouched": false,
+      "newMessagesSent": 0,
+      "complete": false,
+      "onlineNetwork": {
+        "httpReachable": true,
+        "probeExitCode": 0
+      },
+      "initial": {
+        "visiblePeers": 2,
+        "retainedDraftPreviews": 2,
+        "contactsTab": true,
+        "employeesRootAbsent": true
+      },
+      "restoredNetwork": {
+        "httpReachable": true,
+        "probeExitCode": 0
+      },
+      "elapsedSeconds": 94.374
+    },
+    "observerCorrection": {
+      "initialNativeAcceptance": false,
+      "reason": "The passive observer used ETH_P_IP, which did not receive outgoing request frames on the bridge. A bounded ETH_P_ALL diagnostic observed both request and response frames for a deliberate unauthenticated401 probe.",
+      "correction": "Use ETH_P_ALL and retain existing strict IPv4/TCP/address/route filters, sequence deduplication and request/status-only output.",
+      "productSourceChanged": false,
+      "apkChanged": false,
+      "newMessagesSent": 0,
+      "phoneTouched": false
+    }
+  },
+  "platform": {
+    "source": "54b10ce8a687294e8f39e609078830e2f1ec08d6",
+    "schema": "116.1",
+    "ci": "https://github.com/fajarxfce/hris-platform/actions/runs/42102966162",
+    "allJobsPassed": 14,
+    "livePushEnabled": true
+  },
+  "scope": "Android private devRelease40 delivery on exact927407ad. No new messages, Forward publications, identity resets, phone UI automation or physical iPhone tests. Latest-source Apple CI42106835639 remains separate.",
+  "screenshots": {
+    "docs/measurements/chat-summary-native-2026-11-05/native-chat-hub-conversations.png": "b9009aa888ea1135db188e6895c333a94d16594de8be94656f27d2ae8fd3b66f",
+    "docs/measurements/chat-summary-native-2026-11-05/native-chat-hub-action-hidden.png": "39be7f47ea3a33447c3fb61742dea1dfefbaac3448763ce1232b02681254ffb8",
+    "docs/measurements/chat-summary-native-2026-11-05/native-chat-hub-contacts.png": "d32ae71daa283901aea287325eb9cbfb12c6590e62ef3ee4e867dab337fd5b1e",
+    "docs/measurements/chat-summary-native-2026-11-05/native-chat-hub-search.png": "c38ab09976ed2b24c0a0fdea7b9ac4c78e45fecb6765c790c77205a257d116cb",
+    "docs/measurements/chat-summary-native-2026-11-05/native-chat-hub-cold-offline.png": "6799aff0c118a16f44d7c288f7f495be5809625414d82f295f3a7ea4b8d24dc0",
+    "docs/measurements/chat-summary-native-2026-11-05/native-chat-hub-contacts-offline.png": "a92ce339a6a2e3f8651d0cdab05e8fe35776ff0c1c98b916503a03cefc912bdd"
+  }
+}

@@ -1,5 +1,48 @@
 # Agent continuation — HRIS Mobile
 
+## Release40 installed; continue the communications PRD — 5 November 2026
+
+[Delivery evidence](measurements/android-release-phone-2026-11-05-build40.json),
+[contract](collaboration-summary-sync.md). Product927407ad185400f16cd5b91ab47208141183bbba
+passes consumer-full3 (4,895 fresh cases, zero failures/errors/skips), Android
+release build626.219s/lint0 and retained Rani native179.105s. APK88,469,236 bytes,
+SHA2566d7821859987a8cc235d69dc36013b595680b229c76541f7651ef16f4cf2dc01,
+nondebuggable ARM64 devRelease40/1.0.0, same development signer.
+
+Phone10.77.77.3:5555 install-only39→40 confirmed21:17:59UTC/45.276s including
+verification. Device APK hash matches, appId10962 and original first-install time
+retained. No launch/clear/uninstall. Do not reinstall40. Rani proof observes actual
+changes HTTP200, stable draft previews, offline4 room rows and cold offline restart,
+contacts retained, filters/swipes/FAB; network/viewport restored. First observer
+protocol-filter failure and compiled-marker assumption are corrected/documented.
+Passive observer is stopped/drained. Rani is stopped with unchanged userdata/keys.
+Bima updated39→40, retained history proof passes110.606s; owned
+receiver remains running on5562 (verify emulator-start.json, not old PID records).
+No new messages or Forward publications. Four screenshots reviewed; six in Git.
+
+Platform7883d117 docs record live54b10ce8/schema116.1. CI42102966162 all14jobs pass;
+200 business-table contents and original migration history preserved.7 pairs→14
+summary records/published changes. Old11a98115 runtime compatibility is tested on
+an isolated migrated copy; final backup and old images retained. Live push/callback/
+delivery plus worker FCM ON; SMTP OFF. Do not repeat rollout or restore old data.
+
+NEXT: finish Starter nine-file raw-store port under .work/replica-staging-port-
+2026-11-05 (files copied, checks pending), commit/push then one Apple-only CI.
+Audit Mobile Apple42106835639 exact927407ad, currently running full Xcode app; no
+duplicate dispatch. Previous raw-store Apple5f0eacdd is already accepted. All local
+Mobile build/native/install/observer wrappers drained before this record.
+
+Then continue edit/delete/groups/media/backups/calls/meetings; all54 PRD groups
+remain open. Do not stop at metadata. Preserve stashes a34a7b2 (one tracked + four
+untracked edit drafts, use git stash show -u) and bfdef2ce (old Forward work).
+Next edit review at .work/chat-editing-review-2026-11-05/continuation.md confirms
+five pinned SDK files by Git blob hash: debugInfo separates originalJson/latestEditJson;
+replacement events aggregate into originals. RoomMessageLikeEvent exposes live raw
+contentJson; loadOrFetchEventWithRelations exposes typed events without raw JSON.
+A latest invalid/out-of-window edit can hide an earlier admissible one during cold
+recovery; resolve that deliberately. Keep original send/receipt evidence distinct.
+
+
 ## Incremental inbox consumer passes full local gates — 5 November 2026
 
 [Contract](collaboration-summary-sync.md),

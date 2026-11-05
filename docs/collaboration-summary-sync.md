@@ -2,8 +2,9 @@
 
 The Chat list now uses the native incremental feed and encrypted format2 replica.
 Local content and pagination remain available independently of remote progress.
-The implementation passes local whole-app gates; deployed/native and release
-acceptance remain pending. Platform productd03fb472/workflow54b10ce8 is not deployed. Matrix continues to own message synchronization.
+The implementation passes whole-app local and retained Android acceptance.
+Release40 is installed on the authorized phone; Platform54b10ce8/schema116.1 is
+live with its original push settings preserved. Matrix continues to own message synchronization.
 
 Bootstrap and changes use the native authenticated client, exact session/company
 scope and a 128KiB response limit. Opaque cursors are escaped as query parameters,
@@ -94,13 +95,28 @@ integration, pure policies, scoped cancellation/denial races, browser and root g
 Initial fixture/clock/lint failures are retained with their corrections. Native
 Android and final-source Apple acceptance are still separate outstanding gates.
 
-## Remaining delivery
+## Android delivery
 
-Wait for Platform full CI42102966162 on54b10ce8, stage verified artifacts/images,
-complete runtime compatibility and retained-data migration rollout, then exercise
-release40 with retained Android identities while online/offline and after restart.
-Install on the authorized phone only after validation and announcement; do not
-operate its UI. Port the nine generic raw-store files/tests to Starter after Mobile
-native acceptance. HRIS metadata codecs, transport and admission stay in Mobile.
-Matrix continues to own messages. Edit/delete-for-everyone, media, groups, backups,
-calls and meetings remain open communications work.
+[Release40 evidence](measurements/android-release-phone-2026-11-05-build40.json)
+records root/browser/Android acceptance, the verified nondebuggable ARM64 APK and
+its install-only update on the authorized phone. Retained Rani native tests pass
+179.105s: observed HTTP200 changes acquisition while draft previews persist,
+compact filters, tab swipes, scroll/FAB transition, offline room/history and cold
+offline reopen with contacts retained. Network and temporary viewport were restored.
+No new messages, grants or Forward publications were needed. Retained Bima history
+also survives in-place update, two room reopens and a cold process restart.
+
+Four screenshots were visually reviewed; six captured states are retained. The
+first passive observer missed outgoing request frames due to its protocol filter;
+ETH_P_ALL plus strict IPv4/TCP/address/route filters corrected the harness. No
+packet bodies or headers were persisted. The APK verifier initially expected joined
+URI literals although the code concatenates shared path and suffix; no source or
+APK change was needed. These unsuccessful checks are recorded separately.
+
+## Continuing work
+
+Audit Apple42106835639 on exact927407ad; physical iPhone remains waived. The nine
+generic raw-store files/tests now match Mobile in Starter, with independent local
+and Apple checks still pending. HRIS codecs, transport and admission remain here.
+Matrix owns message content. Continue edit/delete-for-everyone, media, groups,
+backups, voice/video and meetings under the open communications PRD.
