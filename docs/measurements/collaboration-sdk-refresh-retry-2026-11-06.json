@@ -1,6 +1,6 @@
 {
   "date": "2026-11-06",
-  "status": "host_tests_passed_android_build_in_progress",
+  "status": "arm64_verified_x86_64_build_in_progress",
   "phoneVersion": 48,
   "phonePending": "Open; one optional request to open Bima after update is pending.",
   "sourceBase": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
@@ -49,7 +49,7 @@
     "Real authentication/access denials stay classified as denials; no token reset, ownership relaxation or original-send replacement."
   ],
   "remaining": [
-    "Build and verify all native ABI/binding pairs before candidate packaging.",
+    "Finish local x86_64 and inspect the first ARMv7/x86 CI builds; verify all native ABI/binding pairs before candidate packaging.",
     "Prove actual HRIS token-boundary recovery and nondebuggable release retained-store acceptance before next phone update.",
     "Publish only a new immutable SDK version after validation; SDK 1 and 2 assets remain unchanged."
   ],
@@ -101,5 +101,69 @@
     "failures": 0,
     "sourcesUnchanged": true,
     "logSha256": "63f061c1054f0e933ba31a70680038cb2b14da713dc471e8ea1ed405dcb528f4"
+  },
+  "sourceCommit": "411b323c6c0e1bb3e1594970bc5abbea7e62b979",
+  "androidArm64": {
+    "at": "2026-11-06T15:32:46.061930+00:00",
+    "passed": true,
+    "abi": "arm64-v8a",
+    "candidateOnly": true,
+    "native": {
+      "nativeSha256": "bafdc75b68ffa0a5f00036b51b13d695eaa901bd4794531d278335e502c26b7e",
+      "nativeBytes": 138709480,
+      "elfClass": "ELF64",
+      "requiredElfAlignment": 16384,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "requiredSymbolsPresent": true
+    },
+    "generatedKotlinCount": 9,
+    "generatedKotlinMatchesManifest": true,
+    "sourceSha256": {
+      "Cargo.lock": "e3f28c9f54076bb320270aea995fc1f124c7ed727968dad338f544fe764df7f0",
+      "crates/matrix-sdk/src/send_queue/mod.rs": "91d2ff7784fc4cd3c484e184dfe31c65766dfaa508f6e089a403aa9cfb8ba50e",
+      "crates/matrix-sdk/src/send_queue/confirmed_event_tests.rs": "308e0bc9ecb650c55f66040cf3a76dbb34a3a38040ae5899436567dadbc8323c",
+      "bindings/matrix-sdk-ffi/src/room/mod.rs": "d38b0bc50f9da0365c14717e0821ae2eac9f498f34501211aa66c2ed29febfec",
+      "bindings/matrix-sdk-ffi/src/room/queued_events.rs": "ae6efcba570bbe83ece6e8529b6f6e1dcae7735eec5622586a45a7c4defa1b3f",
+      "bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs": "4dc9c6774802d43c090c8836471f7860809de490cc0317103e262e2848893c58",
+      "Cargo.toml": "cc436eb2188bc6af76078cae40c649a71752a9ef4aa7e832afdd0f3e40853b43",
+      ".cargo/config.toml": "531ceda5e3e8a7ba878c0e475434ca67651242843d6dab928877a8e31b90d5e4",
+      "xtask/src/kotlin.rs": "f52edba777e389a1efb34797e93d55dc67fb1c4460b1c539da439860004ae52a",
+      "crates/matrix-sdk/src/error.rs": "0941cc1e145a3b55878d500438a2eaf4790a755a890833a67694c41bc8a3d627",
+      "crates/matrix-sdk/tests/integration/refresh_token.rs": "b8261042d822721b4ab7230f7c263fb9ac80e8c1533a4c4dfc2653d0995b7e5b",
+      "bindings/matrix-sdk-ffi/src/error.rs": "02eabd46e009a478e5325d2c74cc3d38d46f344f0d67bac3b41057b8960424dd"
+    },
+    "buildSeconds": 505.0
+  },
+  "remoteBuilds": {
+    "at": "2026-11-06T15:32:06.072557+00:00",
+    "source": "411b323c6c0e1bb3e1594970bc5abbea7e62b979",
+    "builds": [
+      {
+        "run": 42242739402,
+        "abi": "arm64-v8a",
+        "status": "in_progress",
+        "conclusion": null,
+        "event": "push"
+      },
+      {
+        "run": 42243119369,
+        "abi": "armeabi-v7a",
+        "status": "in_progress",
+        "conclusion": null,
+        "event": "workflow_dispatch"
+      },
+      {
+        "run": 42243123291,
+        "abi": "x86",
+        "status": "in_progress",
+        "conclusion": null,
+        "event": "workflow_dispatch"
+      }
+    ]
   }
 }

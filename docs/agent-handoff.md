@@ -24,16 +24,31 @@ Clean upstream reconstruction matches all12. Rust unit red:2intended failures,
 integration cases pass59.487s; FFI2pass77.780s. Python build-driver3pass0.122s.
 [Evidence](measurements/collaboration-sdk-refresh-retry-2026-11-06.json).
 
-Only heavy local job is the **ARM64 SDK rebuild** in
-.work/chat-refresh-boundary-2026-11-06/android-arm64. Its12manifest inputs in
-/home/fajar/hris/.worktrees/matrix-sdk-raw-event are FROZEN. Check result.json before
-another build. No emulator is active:2837625/startTicks165453502 stopped15:13:23UTC,
-with original Bima data/keys retained. Next build/verify x86_64, ARMv7 andx86;
-compare all nine Kotlin files; package a new immutable SDK revision only after
-native/retained-store acceptance. Never publish overSDK2 or install rejected44.
-Use .work/chat-refresh-boundary-2026-11-06/build-android.py with distinct ABI outputs.
-Then validate actual token-boundary recovery and the normal release before49phone.
-Current release variants do not enableR8; do not call them minified.
+The ARM64 rebuild 25579 is drained and PASSED in **505.000s** on 12 unchanged
+source inputs. Its 138,709,480-byte native SHA is
+**bafdc75b68ffa0a5f00036b51b13d695eaa901bd4794531d278335e502c26b7e**.
+ABI, entry points and four 16 KiB LOAD segments verify; all nine generated Kotlin
+files match the manifest. This is structural/build acceptance, not a runtime proof.
+
+Only heavy local job is **x86_64 SDK build 66205**, in
+.work/chat-refresh-boundary-2026-11-06/android-x86_64. The 12 manifest inputs in
+/home/fajar/hris/.worktrees/matrix-sdk-raw-event remain FROZEN. No emulator is active.
+Original Bima data/keys remain after stop at 15:13:23 UTC. Prepared packaging wrapper:
+/home/fajar/hris/.worktrees/matrix-kotlin-refresh-2026-11-06, pinned c1664f71; native
+outputs have not been copied. Inspect results before another heavy local build.
+
+First new SDK-source 411b323c CI builds are running: automatic ARM64 **42242739402**,
+explicit ARMv7 **42243119369**, explicit x86 **42243123291**. These are first builds
+for the new patch, not redispatches of accepted SDK 2 runs. Do not dispatch them
+again. Verify downloaded artifact digest, result/manifest, native and nine Kotlin
+hashes before combining outputs. Never substitute a differing remote ARM64 binary
+for the locally accepted one. All native libraries change for this patch; none may
+be reused from SDK 2. Public assets for SDK 1/2 stay immutable.
+
+Next finish native builds, package a new candidate, prove actual HRIS token-boundary
+recovery and retained original-queue behavior, then normal release acceptance before
+the next phone update. Current release variants do not enable R8; do not call them
+minified. Phone remains 48, with one optional Bima-open request pending.
 
 Sourcecf28 automatic native/control CI still runs; portable job passed, Apple was
 still active on last inspection. No manual redispatch. Platform live10485916/
