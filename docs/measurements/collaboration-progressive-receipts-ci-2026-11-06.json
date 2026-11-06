@@ -1,0 +1,126 @@
+{
+  "source": "cf28a7c4dac0a523df6d47fa82e115be340ea1e5",
+  "auditedAt": "2026-11-06T15:36:31.111093+00:00",
+  "accepted": false,
+  "runs": [
+    {
+      "id": 42236786643,
+      "conclusion": "failure",
+      "jobs": [
+        {
+          "name": "Android HRIS (arm64-v8a)",
+          "status": "completed",
+          "conclusion": "failure",
+          "startedAt": "2026-11-06T14:52:51Z",
+          "completedAt": "2026-11-06T15:30:14Z"
+        },
+        {
+          "name": "Android HRIS (x86_64)",
+          "status": "completed",
+          "conclusion": "failure",
+          "startedAt": "2026-11-06T14:52:51Z",
+          "completedAt": "2026-11-06T15:36:03Z"
+        }
+      ],
+      "artifacts": [
+        {
+          "artifactId": 13516668934,
+          "name": "native-hris-evidence",
+          "sha256": "df373eca226e99e6249871747ece44f1ae15e7c24593686044762ee6502f858c",
+          "bytes": 281370,
+          "suites": 67,
+          "counts": {
+            "tests": 389,
+            "failures": 2,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": {
+            "abi": "x86_64",
+            "apkSha256": "42645839bb1a7e34ab2d434486b409e102e207c4cfe8e4cec6fb1e3a95859b2d"
+          }
+        },
+        {
+          "artifactId": 13515758253,
+          "name": "native-hris-arm64-evidence",
+          "sha256": "ae6a84b8260299351ef1f7f193ca61049e45ce08af7cb812d7f0f15f026c0c99",
+          "bytes": 279371,
+          "suites": 67,
+          "counts": {
+            "tests": 389,
+            "failures": 2,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": {
+            "abi": "arm64-v8a",
+            "apkSha256": "47873504af2e6815a886249c625f1bc6b53749818e85db3ed16d23353aae2d94"
+          }
+        }
+      ]
+    },
+    {
+      "id": 42236786667,
+      "conclusion": "success",
+      "jobs": [
+        {
+          "name": "apple",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-06T14:45:41Z",
+          "completedAt": "2026-11-06T15:35:51Z"
+        },
+        {
+          "name": "portable",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-06T14:45:39Z",
+          "completedAt": "2026-11-06T15:09:22Z"
+        }
+      ],
+      "artifacts": [
+        {
+          "artifactId": 13516879172,
+          "name": "collaboration-control-apple",
+          "sha256": "593adc435f76726201cc32a87cafc0c4af7586965b9484d8574f83ffe0a0f67e",
+          "bytes": 299538,
+          "suites": 182,
+          "counts": {
+            "tests": 1671,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": null
+        },
+        {
+          "artifactId": 13514577057,
+          "name": "collaboration-control-portable",
+          "sha256": "0b62baf178e089dc3aed56ede68df205bd53aeba5559f32c127460c39459f527",
+          "bytes": 2278215,
+          "suites": 463,
+          "counts": {
+            "tests": 4299,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": null
+        }
+      ]
+    }
+  ],
+  "failure": {
+    "suite": "NativeCollaborationSdkInteropTest",
+    "cases": [
+      "actualAndroidSdkRenewsAccessAndExchangesEncryptedMessagesThroughCurrentHrisGatewayAdmission",
+      "confirmedNativeOriginalIsSettledOfflineAfterProcessDeathWithoutAnotherSend"
+    ],
+    "assertion": "applicationAdmittedAroundHistory",
+    "affectedAbis": [
+      "arm64-v8a",
+      "x86_64"
+    ],
+    "diagnosis": "Trace required a network event-context request. Latest-head ACK recovery adds a third admitted head read; the SDK can satisfy its focused window from its cache. The trace must prove admission around this current recovery read, including all three heads. Runtime revalidation is pending."
+  }
+}

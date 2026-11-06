@@ -165,5 +165,82 @@
         "event": "workflow_dispatch"
       }
     ]
+  },
+  "androidX8664": {
+    "at": "2026-11-06T15:40:57.524167+00:00",
+    "passed": true,
+    "abi": "x86_64",
+    "candidateOnly": true,
+    "native": {
+      "nativeSha256": "4c1ec503a869ffd7dc4c1c947b5f2875f8d4ed7b1e4edba05e152176048b739e",
+      "nativeBytes": 142885048,
+      "elfClass": "ELF64",
+      "requiredElfAlignment": 16384,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "requiredSymbolsPresent": true
+    },
+    "generatedKotlinCount": 9,
+    "generatedKotlinMatchesManifest": true,
+    "sourceSha256": {
+      "Cargo.lock": "e3f28c9f54076bb320270aea995fc1f124c7ed727968dad338f544fe764df7f0",
+      "crates/matrix-sdk/src/send_queue/mod.rs": "91d2ff7784fc4cd3c484e184dfe31c65766dfaa508f6e089a403aa9cfb8ba50e",
+      "crates/matrix-sdk/src/send_queue/confirmed_event_tests.rs": "308e0bc9ecb650c55f66040cf3a76dbb34a3a38040ae5899436567dadbc8323c",
+      "bindings/matrix-sdk-ffi/src/room/mod.rs": "d38b0bc50f9da0365c14717e0821ae2eac9f498f34501211aa66c2ed29febfec",
+      "bindings/matrix-sdk-ffi/src/room/queued_events.rs": "ae6efcba570bbe83ece6e8529b6f6e1dcae7735eec5622586a45a7c4defa1b3f",
+      "bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs": "4dc9c6774802d43c090c8836471f7860809de490cc0317103e262e2848893c58",
+      "Cargo.toml": "cc436eb2188bc6af76078cae40c649a71752a9ef4aa7e832afdd0f3e40853b43",
+      ".cargo/config.toml": "531ceda5e3e8a7ba878c0e475434ca67651242843d6dab928877a8e31b90d5e4",
+      "xtask/src/kotlin.rs": "f52edba777e389a1efb34797e93d55dc67fb1c4460b1c539da439860004ae52a",
+      "crates/matrix-sdk/src/error.rs": "0941cc1e145a3b55878d500438a2eaf4790a755a890833a67694c41bc8a3d627",
+      "crates/matrix-sdk/tests/integration/refresh_token.rs": "b8261042d822721b4ab7230f7c263fb9ac80e8c1533a4c4dfc2653d0995b7e5b",
+      "bindings/matrix-sdk-ffi/src/error.rs": "02eabd46e009a478e5325d2c74cc3d38d46f344f0d67bac3b41057b8960424dd"
+    },
+    "buildSeconds": 464.836
+  },
+  "androidArmv7": {
+    "at": "2026-11-06T15:44:41.604821+00:00",
+    "passed": true,
+    "abi": "armeabi-v7a",
+    "run": 42243119369,
+    "head": "411b323c6c0e1bb3e1594970bc5abbea7e62b979",
+    "artifactId": 13517714070,
+    "artifactSha256": "f9d134aaeff6b6b456459ab2bd2d4a9b3b22176d98c277ba94e639c52236498c",
+    "artifactBytes": 41668205,
+    "native": {
+      "nativeSha256": "0a4e9ed57cf44ec0b67e98038aa86e4f5d39a3fce0caf9501f51ffcd19ee25dd",
+      "nativeBytes": 98457432,
+      "elfClass": "ELF32",
+      "requiredElfAlignment": 4096,
+      "loadAlignments": [
+        4096,
+        4096,
+        4096,
+        4096
+      ],
+      "requiredSymbolsPresent": true
+    },
+    "sourceSha256": {
+      "Cargo.lock": "e3f28c9f54076bb320270aea995fc1f124c7ed727968dad338f544fe764df7f0",
+      "crates/matrix-sdk/src/send_queue/mod.rs": "91d2ff7784fc4cd3c484e184dfe31c65766dfaa508f6e089a403aa9cfb8ba50e",
+      "crates/matrix-sdk/src/send_queue/confirmed_event_tests.rs": "308e0bc9ecb650c55f66040cf3a76dbb34a3a38040ae5899436567dadbc8323c",
+      "bindings/matrix-sdk-ffi/src/room/mod.rs": "d38b0bc50f9da0365c14717e0821ae2eac9f498f34501211aa66c2ed29febfec",
+      "bindings/matrix-sdk-ffi/src/room/queued_events.rs": "ae6efcba570bbe83ece6e8529b6f6e1dcae7735eec5622586a45a7c4defa1b3f",
+      "bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs": "4dc9c6774802d43c090c8836471f7860809de490cc0317103e262e2848893c58",
+      "Cargo.toml": "cc436eb2188bc6af76078cae40c649a71752a9ef4aa7e832afdd0f3e40853b43",
+      ".cargo/config.toml": "531ceda5e3e8a7ba878c0e475434ca67651242843d6dab928877a8e31b90d5e4",
+      "xtask/src/kotlin.rs": "f52edba777e389a1efb34797e93d55dc67fb1c4460b1c539da439860004ae52a",
+      "crates/matrix-sdk/src/error.rs": "0941cc1e145a3b55878d500438a2eaf4790a755a890833a67694c41bc8a3d627",
+      "crates/matrix-sdk/tests/integration/refresh_token.rs": "b8261042d822721b4ab7230f7c263fb9ac80e8c1533a4c4dfc2653d0995b7e5b",
+      "bindings/matrix-sdk-ffi/src/error.rs": "02eabd46e009a478e5325d2c74cc3d38d46f344f0d67bac3b41057b8960424dd"
+    },
+    "generatedKotlinMatchesManifest": true,
+    "generatedKotlinCount": 9,
+    "buildSeconds": 956.948,
+    "published": false
   }
 }

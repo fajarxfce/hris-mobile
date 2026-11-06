@@ -30,28 +30,45 @@ source inputs. Its 138,709,480-byte native SHA is
 ABI, entry points and four 16 KiB LOAD segments verify; all nine generated Kotlin
 files match the manifest. This is structural/build acceptance, not a runtime proof.
 
-Only heavy local job is **x86_64 SDK build 66205**, in
-.work/chat-refresh-boundary-2026-11-06/android-x86_64. The 12 manifest inputs in
-/home/fajar/hris/.worktrees/matrix-sdk-raw-event remain FROZEN. No emulator is active.
-Original Bima data/keys remain after stop at 15:13:23 UTC. Prepared packaging wrapper:
-/home/fajar/hris/.worktrees/matrix-kotlin-refresh-2026-11-06, pinned c1664f71; native
-outputs have not been copied. Inspect results before another heavy local build.
+ARM64 and x86_64 local builds are drained and structurally verified. x86_64 took
+464.836s on 12 unchanged inputs; its native SHA is
+4c1ec503a869ffd7dc4c1c947b5f2875f8d4ed7b1e4edba05e152176048b739e,
+142,885,048 bytes. Remote ARMv7 42243119369 passed956.948s; artifact13517714070
+SHAf9d134aaeff6b6b456459ab2bd2d4a9b3b22176d98c277ba94e639c52236498c
+was downloaded, digest/source/binding/native verified. Remote x86 42243123291
+still runs; first automatic ARM64 42242739402 passed. Do not redispatch or replace
+the locally accepted ARM64 binary with the independently built remote one.
+All four binaries must use the new patch. No published SDK asset changes.
 
-First new SDK-source 411b323c CI builds are running: automatic ARM64 **42242739402**,
-explicit ARMv7 **42243119369**, explicit x86 **42243123291**. These are first builds
-for the new patch, not redispatches of accepted SDK 2 runs. Do not dispatch them
-again. Verify downloaded artifact digest, result/manifest, native and nine Kotlin
-hashes before combining outputs. Never substitute a differing remote ARM64 binary
-for the locally accepted one. All native libraries change for this patch; none may
-be reused from SDK 2. Public assets for SDK 1/2 stay immutable.
+Only heavy local job is **29817**, current-source normal SDK2 proof APK build,
+.work/chat-refresh-boundary-2026-11-06/proof-sdk2. No emulator is active.
+Original Bima data/keys remain after stop15:13:23UTC. The new packaging wrapper
+/home/fajar/hris/.worktrees/matrix-kotlin-refresh-2026-11-06 remains pinned c1664f71.
+Remote fetch/verification script is .work/chat-refresh-boundary-2026-11-06/fetch-remote.py.
+Generated remote files stay outside this repo, under .worktrees.
 
 Next finish native builds, package a new candidate, prove actual HRIS token-boundary
 recovery and retained original-queue behavior, then normal release acceptance before
 the next phone update. Current release variants do not enable R8; do not call them
 minified. Phone remains 48, with one optional Bima-open request pending.
 
-Sourcecf28 automatic native/control CI still runs; portable job passed, Apple was
-still active on last inspection. No manual redispatch. Platform live10485916/
+Exact sourcecf28 CI is audited: portable4,299/463 and Apple1,671/182 pass.
+Native42236786643 FAILED BOTH ABIs, each389cases/67suites with2failures. Both
+NativeCollaborationSdkInteropTest scenarios fail applicationAdmittedAroundHistory;
+the driver passes encrypted exchange/cleanup/3sends/zero redactions before that
+assertion. The old trace waits for /context, but latest-head recovery now performs
+a third head read and can serve its focused window from cache. The native suite
+is NOT accepted. [Failed CI evidence](measurements/collaboration-progressive-receipts-ci-2026-11-06.json).
+
+Platform has an uncommitted test-only correction proving three admitted head reads
+and admission after the recovery read, without requiring network context I/O.
+Four positive/negative trace cases plus format/architecture pass37.147s on12,459
+unchanged inputs; actual native validation remains. Its script/evidence are
+Platform .work/sdk-refresh-history-2026-11-06. Do not weaken admission assertions.
+After acceptance commit/push Platform and pin its new revision in collaboration-hris.yml.
+
+Phone remains48, app not running at15:41UTC, one Bima-open question pending. Never
+ask the answered47 question again or drive phone UI. Platform live10485916/
 schema116.1 and Starter578d97a unchanged. Continue all54PRD groups and push each
 commit. No accepted Forward send, live rollout, or SDK publication may replay.
 
