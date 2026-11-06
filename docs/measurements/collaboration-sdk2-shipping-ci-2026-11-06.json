@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-06T14:07:48.321297+00:00",
+  "at": "2026-11-06T14:17:55.190762+00:00",
   "headSha": "00a51e14d8919a152aae810017528f1947ef37e6",
   "runs": [
     {
@@ -274,15 +274,15 @@
     },
     {
       "id": 42224141378,
-      "status": "in_progress",
-      "conclusion": null,
+      "status": "completed",
+      "conclusion": "success",
       "jobs": [
         {
           "name": "apple",
-          "status": "in_progress",
-          "conclusion": null,
+          "status": "completed",
+          "conclusion": "success",
           "startedAt": "2026-11-06T13:16:18Z",
-          "completedAt": null
+          "completedAt": "2026-11-06T14:08:09Z"
         },
         {
           "name": "portable",
@@ -293,6 +293,21 @@
         }
       ],
       "artifacts": [
+        {
+          "artifactId": 13508661584,
+          "name": "collaboration-control-apple",
+          "sha256": "ae74b5f4b0aec11105f9b2719a13eb05b51f57d8e40d97e7777ea4822be78faf",
+          "bytes": 297336,
+          "suites": 181,
+          "counts": {
+            "tests": 1646,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": null,
+          "proof": {}
+        },
         {
           "artifactId": 13506177782,
           "name": "collaboration-control-portable",
@@ -311,5 +326,6 @@
       ]
     }
   ],
-  "scope": "Exact release 46 source and normal public SDK 2. Native integration verified separately on x86_64 and ARM64; protocol fixtures are not product or capacity acceptance. Apple job remains pending at this capture. Physical phone send delay is still open."
+  "appleHostBuildPassed": true,
+  "scope": "Exact release 46 source and normal public SDK 2. Native integration verified separately on x86_64 and ARM64; both protocol modes pass 14 checks with cleanup. Portable 4249/461 and Apple 1646/181 pass; iOS host build passes. Fixtures are not full product or capacity acceptance; phone send delay remains open."
 }

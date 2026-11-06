@@ -184,5 +184,22 @@
     "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
   },
   "buildTimeCandidateLabels": "Candidate labels describe the original pre-acceptance build step. Exact APK acceptance and confirmed phone installation above supersede them.",
-  "phoneDeliveryAcceptance": "Open. One optional feedback question asks whether retained pending messages now get their acknowledgement on release 47."
+  "phoneDeliveryAcceptance": "FAILED user acceptance: pending messages still take a long time on release 47. The anchored-history regression is fixed, but does not resolve the phone issue.",
+  "userFeedback": {
+    "pendingDelayStillReported": true,
+    "answer": "Masih pending lama"
+  },
+  "closedPhoneDiagnostics": {
+    "at": "2026-11-06T14:16:12.906614+00:00",
+    "failures": [
+      {
+        "at": "11-06 21:15:32.553",
+        "category": "ChatDelivery_DeliverMessages_QueueUnresolved"
+      },
+      {
+        "at": "11-06 21:16:10.459",
+        "category": "ChatSync_Generic"
+      }
+    ]
+  }
 }

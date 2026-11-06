@@ -25,6 +25,34 @@ owner capture **after** the gate read. Confirmed company denial remains authorit
 through failed storage/session reads. A late owner/denial prevents publication;
 already committed facts remain durable. Reconciliation never clears the gate.
 
+## Receipt observation during delivery
+
+The queue lease reports cumulative observations within its existing bounded native
+window. The Android datasource delivers immutable SDK snapshots on the owning
+coroutine, outside the native callback lock. Its repository preserves a failed
+observer as a typed failure; the window pauses and disposes its listener. No new
+send, independent retry, or unbounded receipt collector is introduced.
+
+`DeliverCollaborationMessages` authenticates each observed transaction/event pair
+against its captured mapping, appends the receipt journal, then projects through
+the original invocation's context and admission checks. The first acknowledged
+message can become `Sent` while another message in that window is still pending.
+Repeated cumulative observations keep an existing primary event and revision.
+The final window result remains a recovery path for observations not delivered
+before stop, timeout, or synchronous completion.
+
+Native work belongs to the SDK parent and can outlive cancellation of its waiter.
+An already observed late receipt uses bounded noncancellable journal retention
+under the captured account fence. Its projection runs only in the original active
+invocation; cancellation cannot move publication into the native parent's lifetime.
+A replacement account cannot receive the old receipt. Closing a lease drains the
+owned operation and observer before releasing the exclusive writer.
+
+[Increment evidence](measurements/collaboration-progressive-receipts-2026-11-06.json)
+tracks the failing-then-passing first-receipt regression and subsequent validation.
+The user still reports long pending on release 47; this contract is not yet a
+physical-phone resolution claim.
+
 ## Storage bounds and ownership
 
 The adapter uses existing SQLite/IndexedDB `ReplicaStore` transactions. Each owned

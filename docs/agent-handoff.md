@@ -7,9 +7,11 @@ on **10.77.77.3:5555**, install-only/no UI after advance notice. Exact device AP
 **3e9c265984ba902d751aaa95966e054e86f97301610958b1a47f8dc1be2adcbe**, 121,090,044 bytes,
 nondebuggable devRelease 47/1.0.0, same dev signer and normal public SDK 2. App/data/
 first-install time retained. Install started 14:13:15 UTC, 59.807s including verification.
-Do not reinstall or repeat availability requests. One optional release-47 feedback
-question is pending; the user's release-46 answer confirmed ordering but long pending.
-Physical-phone delivery latency is still OPEN.
+Do not reinstall or repeat availability requests. The release-47 feedback was answered: pending is STILL LONG. Do not repeat that
+question or claim phone resolution. New app-only logs show DeliverMessages QueueUnresolved
+at 14:15:32 UTC (phone log clock 21:15:32), followed by ChatSync_Generic. More precise
+closed mapping failure classifications are needed in the next build. Physical-phone
+delivery latency is still OPEN.
 [Release evidence](measurements/collaboration-release47-2026-11-06.json).
 
 Build 46814 passed 102.699s, lint zero. Its source matched the accepted 5,283-case
@@ -17,30 +19,47 @@ full gate. Retained Bima store passed two offline and two online openings, with
 messages present and no interrupted-save/older/reconnect prompts, zero new sends,
 and the same process after 30s online. Both original screenshots were inspected.
 Emulator 2427400/startTicks165089163 stopped 14:13:03 UTC; original data and keys
-remain, now with 47. No emulator or heavy local job is active at this checkpoint.
+remain, now with 47. No emulator is active. The current full gate is listed below.
 Private drivers/artifacts: .work/release-phone-2026-11-06-build47.
 
-Current UNCOMMITTED work is the next progressive-ACK increment. Seven Kotlin files
-add a queue observation callback contract, adapt implementing signatures, and add
-a domain regression/fixture for a first acknowledgement before the window ends.
-There is no working progressive implementation yet. Red-1/40903 completed 67.371s:
-1 case/1 expected assertion failure, zero errors/skips, 4,216 stable source inputs.
-The exact assertion proves the first acknowledgement is not yet durable while the
-second send is outstanding. This is a simulated queue/domain reproduction.
-[Evidence](measurements/collaboration-progressive-receipts-2026-11-06.json).
-NEXT implement cumulative receipt observation in the raw SDK datasource, adapt it
-through the repository, and have the delivery use case retain verified facts and
-project while its original invocation remains admitted and active. Bounded native
-operations may outlive a cancelled waiter; late facts must retain the captured
-account fence and never project into a cancelled/replacement invocation. Test
-partial progress, cancellation, denial, account replacement, failed storage, and
-listener cleanup. Then full checks, commit/push, and validated release 48 delivery.
-No release 48 APK exists. Do not loosen mappings or resend originals.
+Current UNCOMMITTED work is the progressive-ACK increment (13 Kotlin files).
+The queue contract adds a serialized observation callback; Android emits cumulative
+receipt snapshots inside its existing window, the repository preserves typed
+observer failures, and the delivery use case journals exact mapped facts before
+projecting in the original invocation's context. A cancelled waiter cannot transfer
+projection into the SDK parent's lifetime. Domain mapping now returns closed failure
+codes, distinguishing unfinished staging, native family/device/room mismatch, absent
+legacy/current receipts, malformed ownership/bounds and duplicate transactions.
+No identity/content check is relaxed and no original send is replaced.
 
-Exact release-46 native CI is now accepted on ARM64 and x86_64, each 386 cases/67
-suites; both protocol modes pass 14 checks with cleanup. Portable passes 4,249/461.
-Apple still runs. Artifact digests/ABI/closed fixture results are recorded in
+Red-1/40903 failed its intended first-receipt durability assertion in 67.371s;
+green-1/41182 passed in 65.113s, both one case and 4,216 stable source inputs.
+Focused-1/33229 completed 511.750s: 44 fresh cases, one failure, no errors/skips,
+source unchanged, format/architecture pass. Domain 29 and app diagnostics 3 pass;
+Android 11/12 pass. Its sole failure compared exception object identity across
+coroutine stack recovery. The test now verifies type/message/original cause and
+retains its queue-pause/listener-close assertions. Two more domain tests exercise
+actual separate parent/caller coroutine lifetimes: late ACK after waiter cancellation
+(including account replacement), and cancellation during multi-row projection.
+
+ONLY heavy local job: full required gate **91409**, driver
+.work/chat-progressive-ack-2026-11-06/check-full.py full-1. Its 4,216 source inputs are
+FROZEN until completion. No emulator is running. Inspect all required tests/format/
+architecture/Android lint results; do not infer success from an early subset.
+[Reproduction evidence](measurements/collaboration-progressive-receipts-2026-11-06.json).
+NEXT accept full-1, commit/push implementation and evidence, then build/verify/smoke
+release 48. Prepared scripts in .work/release-phone-2026-11-06-build48 require that
+full gate and a pushed HEAD, retain normal SDK 2, and accept only the known previous
+47 on emulator/phone. There is no 48 APK or acceptance yet. Announce each install,
+install-only/no phone UI. After installation, inspect closed mapping diagnostics
+before claiming the old pending messages resolved; do not ask the 47 question again.
+
+Exact release-46/source 00a51e14 CI is COMPLETE and accepted: ARM64 and x86_64 each
+386 cases/67 suites; both protocol modes 14 checks with cleanup; portable 4,249/461;
+Apple 1,646/181 plus iOS host build. Artifact digests and ABI assertions are verified.
 [SDK 2 shipping CI](measurements/collaboration-sdk2-shipping-ci-2026-11-06.json).
+Newer automatic source-47 CI: native 42231135711 pending behind be86d478 native
+42228820195, control 42231135714 running (last inspection). No manual redispatch.
 Do not redispatch accepted runs or republish SDK assets. All 54 PRD groups remain.
 Starter stays 578d97a; this HRIS-specific queue policy does not belong there.
 Platform live remains 10485916ee02850cf913793398f7ef3dd1e09afb/schema116.1; never

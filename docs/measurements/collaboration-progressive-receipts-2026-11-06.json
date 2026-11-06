@@ -22,5 +22,61 @@
     "accepted": false,
     "sourceBaseCommit": "074087d7f78fa721a1cbcc6a4dd3e99a6ff06ce9"
   },
-  "implementation": "In progress; no release 48 build or acceptance."
+  "implementation": "Full gate 91409 active on final 13-file progressive-observation and closed-mapping candidate, including two separate-parent/caller cancellation regressions. Release 48 not built.",
+  "green": {
+    "startedAt": "2026-11-06T14:16:59.467438+00:00",
+    "elapsedSeconds": 65.113,
+    "exitCode": 0,
+    "sourcesUnchanged": true,
+    "sourceFiles": 4216,
+    "report": {
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sha256": "84a77b18a9a5b95488bb9774edad0b2f5b88ad8c089715420b672bc86d5e2d8a",
+      "testNames": [
+        "anAcknowledgedMessageIsDurableAndVisibleBeforeTheNextMessageFinishes[desktop]"
+      ]
+    }
+  },
+  "focusedInitial": {
+    "startedAt": "2026-11-06T14:20:00.760068+00:00",
+    "elapsedSeconds": 511.75,
+    "exitCode": 1,
+    "sourceFiles": 4216,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 44,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryDiagnosticsTest.xml": {
+        "sha256": "f65caf12b6fa95d5ab641f7029d0a2dec470953f7c451dc19122342f2cd75c37",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationQueueDeliveryTest.xml": {
+        "sha256": "d3ac40dbc5fdcd2a891f53ce8f2e900c9eede0af0e4e3046c9de206af562d42d",
+        "tests": 12,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.DeliverCollaborationMessagesTest.xml": {
+        "sha256": "c3500cd95b13674d17682197f54eb067bb8f8c31775619a2ecb9063167030d8c",
+        "tests": 29,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "failure": "Android test asserted exception object identity across coroutine stack recovery; now checks preserved type/message/original cause before the unchanged pause/cleanup assertions."
+  }
 }
