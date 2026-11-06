@@ -49,6 +49,16 @@ class ReadCollaborationEditOutcomes(
                 }
         )
             return unavailable()
+        currentCoroutineContext().ensureActive()
+        // An empty query grants no read authority and returns no stored content.
+        if (
+            commands.none {
+                it.intent.editTarget != null &&
+                    it.state != CollaborationMessageState.Cancelled &&
+                    it.intent.editTarget.roomId == roomId
+            }
+        )
+            return AppResult.Success(emptyList())
         guard(workspaceId, expected).let { if (it is AppResult.Failed) return it }
         val outcomes = mutableListOf<CollaborationEditOutcome>()
         val completed = mutableMapOf<String, CollaborationMessageCompletion?>()

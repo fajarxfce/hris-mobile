@@ -1,5 +1,65 @@
 # Agent continuation — HRIS Mobile
 
+## Cached room entry accepted; first process opening next — 6 November 2026
+
+The first-frame increment is validated and ready for its atomic commit/push after
+CI-only dcfea4f3 (already pushed). Do not reapply any local drafts. Final source has
+4,202 inputs, and final first-frame-full2 PASS2,280 fresh/368.759s, zero failures,
+errors or skips; Android debug/lint and browser/root/architecture checks passed.
+Initial first-frame-full1 PASS6,938 fresh/804.331s. Both lint reports have zero issues.
+All local drivers and owned emulators are drained/stopped; data/keys retained.
+
+[Current behavior and evidence](collaboration-chat-first-frame.md): the account/
+company graph keeps three idle, established latest-window room ViewModels with
+independent active entry owners. Reentry shows existing bubbles during transition.
+No SDK/Activity is retained. RouteReleased clears transient actions and cancels
+pending departure while the independent draft writer can finish. The late-departure
+regression failed before correction (one case/52.213s), then final focused gate
+retained-room4 passed197/98.875s. No expectation was relaxed.
+
+Candidate4 Android recordings used nine messages throughout, with no sends or
+hierarchy inspection during videos. All eight adjacent frames were inspected.
+Three repeated opens show bubbles during transition offline/online; first room
+after app process restart still shows233ms blank after the full header. Candidate4
+APK41 SHA569653c31d21cb2d5054b6f7d6ba91a43a799f496eabb8b9c45a2189519f0645
+built/linted270.160s and passed artifact checks. It predates only the final departure
+cancellation/test; no final release or phone delivery claimed. Phone remains40.
+Emulator2584551/startTicks161491526 stopped04:13:12 with data/keys retained.
+
+NEXT after committing this increment: run prepared Starter check at.work/mvi-effect-
+retirement-2026-11-06/check.py (currently UNEXECUTED). Its two exact core MVI files
+and common regression are already APPLIED, UNCOMMITTED; Apple CI now includes
+core:presentation compile/tests. Port only this primitive, not HRIS rooms/policy.
+One heavy local task at a time; Mobile edits can proceed while Starter is checking.
+
+First-opening approach is PLANNED, UNAPPLIED: AppStage.SignedIn already carries
+WorkspaceSelectionOwner and selected company. Pass an optional local access hint
+through collaboration navigation to a data-class ChatThreadEvent.Entered. Seed
+observeLocal's ownership flow with that hint using onStart + distinctUntilChanged,
+so private thread reads overlap the initial workspace observation. The existing
+ObserveCollaborationThread must retain session capture and fresh selected-workspace/
+admission checks before every publication. The hint is not authority. Keep an
+ordinary no-hint fallback; test delayed workspace observation with valid point reads,
+identical actual owner without reopening history, wrong-account hint, missing current
+workspace, held denial and later owner loss. Then measure actual Android first
+entry again. Do not claim the proposed optimization works before tests/recordings.
+
+Native CI42162194348 is IN PROGRESS automatically on dcfea4f3, using already-live
+Platform10485916. Last step: isolated Android SDK fixture build. Do not dispatch a
+duplicate or replay Platform deployment/accepted Forward sends. Earlier native runs
+failed against304be with only a generic RuntimeError; no exact diagnosis claimed.
+ControlCI3a42150575846 and feaf42145472209 passed portable+Apple.
+
+SDK raw-event nine Rust cases are APPLIED but UNCOMPILED in the isolated8de215a0
+worktree, including crypto/missing-key/cold-cache recovery. Old seven-test evidence
+is not current. NDK absent; no native artifact/version changed. Finish this and
+actual encrypted edit/ciphertext size before phone release, then continue all54
+communications PRD groups. ChatThreadHistoryPager business policy in presentation
+remains flagged in the layer review. Always announce phone installs and use install-
+only; never drive the phone UI. Do not rerun diagnostic instrumentation/restoration.
+
+All checkpoints below are historical context, not instructions to repeat work.
+
 ## Room preparation accepted; first-frame correction next — 6 November 2026
 
 The local room workflow and failed-edit copy are now validated. Read the updated

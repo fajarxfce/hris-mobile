@@ -50,6 +50,13 @@ abstract class MviViewModel<State : Any, Event : Any, Effect : Any>(initialState
         effectChannel.send(effect)
     }
 
+    /** A retained screen may retire effects belonging to a permanently removed route. */
+    protected fun discardPendingEffects() {
+        while (effectChannel.tryReceive().isSuccess) {
+            // Durable outcomes live in state/storage; only queued transient effects are retired.
+        }
+    }
+
     override fun onCleared() {
         effectChannel.cancel()
     }

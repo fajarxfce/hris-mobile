@@ -1,0 +1,135 @@
+{
+  "recordedAt": "2026-11-06T04:11:24.308352+00:00",
+  "status": "Repeated-room Android transition accepted; final focused and full root/browser/Android debug/lint gates passed. First opening after process start and native encrypted edit release proof remain open.",
+  "sourceBase": "3a013e1fedaab6fb7bf68965745d6d5d7bf64367",
+  "artifact": {
+    "sha256": "569653c31d21cb2d5054b6f7d6ba91a43a799f496eabb8b9c45a2189519f0645",
+    "bytes": 88584188,
+    "versionCode": 41,
+    "variant": "devRelease",
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "debuggable": false,
+    "diagnosticMarkersAbsent": true
+  },
+  "focusedGate": {
+    "startedAt": "2026-11-06T04:01:32.767721+00:00",
+    "elapsedSeconds": 67.716,
+    "exitCode": 0,
+    "freshCounts": {
+      "tests": 163,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceFiles": 4202,
+    "sourcesUnchanged": true
+  },
+  "capture": {
+    "complete": true,
+    "settingsRestored": true,
+    "newMessagesSent": 0,
+    "phoneTouched": false,
+    "hierarchyInspectedOnlyAfterVideo": true,
+    "freshAppProcess": true
+  },
+  "method": "Fixed video regions at 30 fps; threshold crossings are approximate, not tap latency. Adjacent frame images visually inspected; very faint bubbles can precede detection.",
+  "trials": [
+    {
+      "name": "offline-1",
+      "roomOpenSinceProcessStart": 1,
+      "networkReachable": false,
+      "visibleMessageRows": 9,
+      "videoSha256": "f0eee5540ab55c161ce459b1f60bd6963dec90f00b7984afef884c1c6de1b4fa",
+      "blankAfterArrowMillis": 233.333,
+      "bubbleAfterFullArrowMillis": 233.333
+    },
+    {
+      "name": "offline-2",
+      "roomOpenSinceProcessStart": 2,
+      "networkReachable": false,
+      "visibleMessageRows": 9,
+      "videoSha256": "791e9144a00cbddef787f3b69abf94714e3ba3307238f8a1e5f40d4da94c2fb6",
+      "blankAfterArrowMillis": -33.333,
+      "bubbleAfterFullArrowMillis": -133.333
+    },
+    {
+      "name": "online-1",
+      "roomOpenSinceProcessStart": 3,
+      "networkReachable": true,
+      "visibleMessageRows": 9,
+      "videoSha256": "f042cfdcc1c0adfc505496aad24484a8c72e828bace9ec756bb5409e37cef978",
+      "blankAfterArrowMillis": -33.333,
+      "bubbleAfterFullArrowMillis": -33.333
+    },
+    {
+      "name": "online-2",
+      "roomOpenSinceProcessStart": 4,
+      "networkReachable": true,
+      "visibleMessageRows": 9,
+      "videoSha256": "4660f3b316d530d9a02d280bc4631da2e59e512abf55661aab8d548d6b659df0",
+      "blankAfterArrowMillis": 0.0,
+      "bubbleAfterFullArrowMillis": -33.333
+    }
+  ],
+  "visualReviewSha256": "a5618ae42c5dcc7da9950e5c8a05138fec0d2c3719311239b71ce6cfb457441d",
+  "phoneVersionCode": 40,
+  "firstOpeningAfterProcessStartAccepted": false,
+  "repeatedRoomTransitionAccepted": true,
+  "firstFullGate": {
+    "startedAt": "2026-11-06T04:14:02.274118+00:00",
+    "elapsedSeconds": 804.331,
+    "exitCode": 0,
+    "freshCounts": {
+      "tests": 6938,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceFiles": 4202,
+    "sourcesUnchanged": true
+  },
+  "departureRegressionBeforeFix": {
+    "startedAt": "2026-11-06T04:27:57.463183+00:00",
+    "elapsedSeconds": 52.213,
+    "exitCode": 1,
+    "freshCounts": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceFiles": 4202,
+    "sourcesUnchanged": true
+  },
+  "finalFocusedGate": {
+    "startedAt": "2026-11-06T04:29:37.421943+00:00",
+    "elapsedSeconds": 98.875,
+    "exitCode": 0,
+    "freshCounts": {
+      "tests": 197,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceFiles": 4202,
+    "sourcesUnchanged": true
+  },
+  "finalFullGate": {
+    "startedAt": "2026-11-06T04:31:32.887168+00:00",
+    "elapsedSeconds": 368.759,
+    "exitCode": 0,
+    "freshCounts": {
+      "tests": 2280,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceFiles": 4202,
+    "sourcesUnchanged": true
+  },
+  "finalSourceManifestSha256": "857448a333779b5678fd4258d5accc05a021e24486eb61e1ee78fbb4c7916d4e",
+  "recordedApkPrecedesFinalDepartureCorrection": true,
+  "recordingSourceDifference": "The recorded release candidate precedes cancellation of a pending route departure and its regression test; entry/read/render code is unchanged. No final release APK or phone delivery is claimed."
+}

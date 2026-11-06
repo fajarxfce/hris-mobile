@@ -10,6 +10,8 @@ import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import kotlinx.serialization.json.Json
 
+internal val workspacePermissionPattern = Regex("[a-z][a-z0-9_.:-]{0,99}")
+
 fun WorkspaceRecord.toWorkspace(): Workspace {
     listOf(id, sessionId, companyId, accountId, familyId).forEach {
         require(Uuid.parse(it).toString() == it)
@@ -18,7 +20,7 @@ fun WorkspaceRecord.toWorkspace(): Workspace {
         audience.length in 1..2048 && companyName.length in 1..200 && companyCode.length in 1..40
     )
     require(timezone.length in 1..100 && permissions.size <= 1000)
-    require(permissions.all { it.matches(Regex("[a-z][a-z0-9_.:-]{0,99}")) })
+    require(permissions.all { it.matches(workspacePermissionPattern) })
     val checked = Instant.parse(checkedAt)
     val expires = Instant.parse(expiresAt)
     require(checked < expires)

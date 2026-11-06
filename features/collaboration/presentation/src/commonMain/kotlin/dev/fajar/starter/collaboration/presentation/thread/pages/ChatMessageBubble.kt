@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
@@ -25,6 +26,7 @@ import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.Checkmark
 import io.github.composefluent.icons.regular.Clock
 import io.github.composefluent.icons.regular.ErrorCircle
+import kotlin.math.roundToInt
 import kotlinx.datetime.TimeZone
 
 @Composable
@@ -35,11 +37,12 @@ internal fun ChatMessageBubble(
     selecting: Boolean = false,
     enabled: Boolean = true,
     quoteContent: (@Composable () -> Unit)? = null,
+    timeZone: TimeZone = TimeZone.currentSystemDefault(),
     onSelect: () -> Unit,
 ) {
     val own = row.ownership == ChatMessageOwnership.SELF
     val selectLabel = appString(AppString.ChatSelectMessage)
-    BoxWithConstraints(
+    Box(
         modifier
             .fillMaxWidth()
             .heightIn(min = 48.dp)
@@ -71,8 +74,23 @@ internal fun ChatMessageBubble(
                 Modifier.align(Alignment.CenterStart).size(24.dp),
             )
         Column(
-            Modifier.padding(start = if (selecting && !own) 32.dp else 0.dp)
-                .widthIn(max = minOf(maxWidth * 0.86f, 480.dp))
+            Modifier.layout { measurable, constraints ->
+                    val inset = if (selecting && !own) 32.dp.roundToPx() else 0
+                    val bubbleWidth =
+                        if (constraints.hasBoundedWidth)
+                            minOf((constraints.maxWidth * 0.86f).roundToInt(), 480.dp.roundToPx())
+                        else 480.dp.roundToPx()
+                    val width = minOf(constraints.maxWidth, bubbleWidth + inset)
+                    val placeable =
+                        measurable.measure(
+                            constraints.copy(
+                                minWidth = minOf(constraints.minWidth, width),
+                                maxWidth = width,
+                            )
+                        )
+                    layout(placeable.width, placeable.height) { placeable.placeRelative(0, 0) }
+                }
+                .padding(start = if (selecting && !own) 32.dp else 0.dp)
                 .background(
                     if (own) AppColors.tint else AppColors.surface,
                     RoundedCornerShape(
@@ -114,7 +132,7 @@ internal fun ChatMessageBubble(
                     style = FluentTheme.typography.caption,
                     color = AppColors.error,
                 )
-            val time = chatMessageTime(row.timestamp, TimeZone.currentSystemDefault())
+            val time = chatMessageTime(row.timestamp, timeZone)
             Row(
                 Modifier.align(Alignment.End),
                 verticalAlignment = Alignment.CenterVertically,

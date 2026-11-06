@@ -1,5 +1,9 @@
 # Architecture
 
+[Cached room entry](collaboration-chat-first-frame.md) retains bounded screen state
+under the account/company navigation graph and keeps guarded local thread reads
+in the domain use case.
+
 [Chat and contacts](collaboration-chat-hub.md) share one root destination and retain
 same-owner local previews across partial list emissions.
 

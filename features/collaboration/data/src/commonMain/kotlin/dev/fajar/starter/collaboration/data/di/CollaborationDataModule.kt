@@ -1381,6 +1381,29 @@ class CollaborationDataModule {
     ) = ObserveCollaborationQuotes(quotes, lists, sessions, workspaces, server, build, Clock.System)
 
     @Factory
+    fun observeThread(
+        history: CollaborationHistoryRepository,
+        messages: CollaborationMessageRepository,
+        lists: CollaborationListRepository,
+        identities: CollaborationIdentityRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ObserveCollaborationThread(
+            history,
+            messages,
+            lists,
+            identities,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun observeHistory(
         history: CollaborationHistoryRepository,
         lists: CollaborationListRepository,

@@ -123,7 +123,7 @@ class ObserveCollaborationHistoryTest {
     }
 }
 
-private class HistoryObserverFixture {
+internal class HistoryObserverFixture {
     val owner = MessageIntentFixture()
     val conversation = owner.summary!!.conversation.id
     val page =

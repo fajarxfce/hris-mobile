@@ -98,7 +98,7 @@ class EncryptedWorkspaceRepository(
         Uuid.parse(companyId)
         val response = remote.permissions(sessionId, companyId)
         require(response.companyId == companyId && response.permissions.size <= 1000)
-        require(response.permissions.all { it.matches(Regex("[a-z][a-z0-9_.:-]{0,99}")) })
+        require(response.permissions.all { it.matches(workspacePermissionPattern) })
         response.permissions.toSet()
     }
 

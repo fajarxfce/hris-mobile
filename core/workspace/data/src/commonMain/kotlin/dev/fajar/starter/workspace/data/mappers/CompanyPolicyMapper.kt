@@ -6,10 +6,12 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 
+private val companyModulePattern = Regex("[A-Z][A-Z_]{0,63}")
+
 fun CompanyPolicyDto.toPolicy(): CompanyPolicy {
     require(schemaVersion == 1 && (version == null || version in 0..9999))
     require(enabledModules.size <= 128 && enabledModules.distinct().size == enabledModules.size)
-    require(enabledModules.all { it.matches(Regex("[A-Z][A-Z_]{0,63}")) })
+    require(enabledModules.all { it.matches(companyModulePattern) })
     require(
         listOf(minimumBuilds.android, minimumBuilds.ios, minimumBuilds.web).all {
             it in 0..999_999_999

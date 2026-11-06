@@ -13,6 +13,27 @@ import kotlinx.coroutines.test.*
 
 class ChatThreadViewModelTest {
     @Test
+    fun cachedMessagesRenderBeforePendingDraftReadAndWithoutAConnection() = runTest {
+        withModel { f, vm, _, _ ->
+            f.base.now += 365.days
+            f.historyRows.value = listOf(f.original())
+            val entered = CompletableDeferred<Unit>()
+            f.beforeDraft = {
+                assertEquals("Saved conversation", vm.state.value.rows.single().text)
+                assertFalse(vm.state.value.loading)
+                entered.complete(Unit)
+                awaitCancellation()
+            }
+            vm.onEvent(ChatThreadEvent.Entered)
+            runCurrent()
+            assertTrue(entered.isCompleted)
+            assertEquals("Saved conversation", vm.state.value.rows.single().text)
+            assertFalse(vm.state.value.draftReady)
+            assertEquals(0, f.timelineOpens)
+        }
+    }
+
+    @Test
     fun rejectedSdkKeepsLocalHistoryAndOffersSetupWithoutRepeatedConnectionAttempts() = runTest {
         withModel { f, vm, _, effects ->
             f.online()

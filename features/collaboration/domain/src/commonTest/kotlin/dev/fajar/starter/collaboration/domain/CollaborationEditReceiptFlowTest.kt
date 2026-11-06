@@ -13,6 +13,16 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationEditReceiptFlowTest {
     @Test
+    fun emptyEditQueryDoesNotAcquireStorageOrGrantContentAuthority() = runTest {
+        val f = EditReceiptFixture()
+        f.prepare()
+        f.owner.records.value = emptyList()
+        f.owner.setup.beforeWorkspace = { error("No stored content requested") }
+        f.afterEvidence = { error("No edit evidence requested") }
+        assertEquals(AppResult.Success(emptyList()), f.readOutcomes())
+    }
+
+    @Test
     fun rejectedProviderAcceptanceRecoversItsReceiptWithoutReadingAnOriginalAcknowledgement() =
         runTest {
             val f = EditReceiptFixture()

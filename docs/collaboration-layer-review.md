@@ -39,10 +39,13 @@ keeps ordinary drafts and never retires failed commands. Focused copy gate passe
 131 tests; the full gate above includes this increment. Three layout/callback
 cases passed; no new copy-menu screenshot was recorded.
 
-[First-frame investigation](collaboration-chat-first-frame.md) reproduced a367–533ms
-header-to-bubble interval in release40, including offline. Proposed combined local
-thread acquisition is still UNAPPLIED/UNCOMPILED .kt.draft work. Apply/review/test,
-then measure the resulting Android build before claiming any speed improvement.
+[First-frame rendering](collaboration-chat-first-frame.md) now retains three idle
+room ViewModels under the account/company navigation graph. The domain use case
+owns combined local context/history/command publication with fresh access checks.
+Android repeated-entry recordings show bubbles during transition, including offline;
+first entry after process start still has233ms of blank body. Final root validation
+passed2,280 fresh tests/368.759s after6,938 in the initial full gate; lint has zero issues. Navigation owns cache lifetime; no SDK/Activity or business retry policy
+was added to that cache. The history-pager ownership finding above remains open.
 
 The SDK raw point patch is isolated at
 .worktrees/matrix-sdk-raw-event, pinned to upstream8de215a0aa0026afa5754ae5f05a6d168d1a1d60.

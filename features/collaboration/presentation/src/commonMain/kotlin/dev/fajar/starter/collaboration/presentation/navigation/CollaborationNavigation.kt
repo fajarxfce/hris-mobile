@@ -19,8 +19,10 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
@@ -61,6 +63,7 @@ fun NavGraphBuilder.collaborationRoutes(
     onSelectedConversation: (String) -> Unit,
     onSetup: () -> Unit,
     onBack: () -> Unit,
+    threadGraphOwner: () -> ViewModelStoreOwner,
     onThreadFocus:
         (
             dev.fajar.starter.collaboration.domain.entities.CollaborationOwner, String,
@@ -89,9 +92,14 @@ fun NavGraphBuilder.collaborationRoutes(
     }
     composable<ChatSetupRoute> { ChatSetupEntry(workspaceId, onBack) }
     composable<ChatThreadRoute> { entry ->
+        val graphOwner = remember(entry) { threadGraphOwner() }
+        val stores = viewModel(viewModelStoreOwner = graphOwner) { ChatThreadViewModelStores() }
+        val conversationId = entry.toRoute<ChatThreadRoute>().conversationId
+        val owner = viewModel(viewModelStoreOwner = entry) { stores.open(conversationId) }
         ChatThreadEntry(
             workspaceId,
-            entry.toRoute<ChatThreadRoute>().conversationId,
+            conversationId,
+            owner,
             onSetup,
             onBack,
             onThreadFocus,
@@ -184,6 +192,7 @@ private fun ChatSetupEntry(workspaceId: String, onBack: () -> Unit) {
 private fun ChatThreadEntry(
     workspaceId: String,
     conversationId: String,
+    owner: ChatThreadViewModelOwner,
     onSetup: () -> Unit,
     onBack: () -> Unit,
     onThreadFocus:
@@ -194,8 +203,10 @@ private fun ChatThreadEntry(
 ) {
     val vm =
         koinViewModel<ChatThreadViewModel>(
-            parameters = { parametersOf(workspaceId, conversationId) }
+            viewModelStoreOwner = owner,
+            parameters = { parametersOf(workspaceId, conversationId) },
         )
+    owner.bind(vm)
     val state by vm.state.collectAsStateWithLifecycle()
     val list = rememberLazyListState()
     val clipboard = LocalClipboardManager.current

@@ -30,8 +30,7 @@ class ChatThreadViewModel(
     @InjectedParam private val conversationId: String,
     private val observeAccess: ObserveCollaborationAccess,
     private val readContext: ReadCollaborationThreadContext,
-    private val observeHistory: ObserveCollaborationHistory,
-    private val observeMessages: ObserveCollaborationMessages,
+    private val observeThread: ObserveCollaborationThread,
     private val queue: QueueCollaborationText,
     private val requestDelivery: RequestCollaborationDelivery,
     private val loadSetup: LoadCollaborationSetup,
@@ -129,6 +128,10 @@ class ChatThreadViewModel(
     private var previous: String? = null
     private val window = MutableStateFlow(ChatThreadLocalWindow())
     private var displayedWindow = ChatThreadLocalWindow()
+
+    internal val canRetainAfterNavigation: Boolean
+        get() = context != null && window.value.latest && displayedWindow.latest
+
     private var historyLoading = true
     private var scrollToLatest = false
     private var localDraft: CollaborationDraft? = null
@@ -166,6 +169,19 @@ class ChatThreadViewModel(
         on<ChatThreadEvent.LocalReadRetryRequested> { if (visible) observeLocal() }
         on<ChatThreadEvent.Entered>(::onEntered)
         on<ChatThreadEvent.Stopped>(::onStopped)
+        on<ChatThreadEvent.RouteReleased> {
+            onStopped(ChatThreadEvent.Stopped)
+            departure?.cancel()
+            departure = null
+            departureEffect = null
+            editing.close()
+            forwarding.close()
+            clearSelection()
+            dismissDeletion()
+            scrollToLatest = false
+            discardPendingEffects()
+            updateState { it.copy(draftDialog = null, leaving = false) }
+        }
         on<ChatThreadEvent.ViewportChanged>(::onViewportChanged)
         on<ChatThreadEvent.BackRequested>(::onBackRequested)
         on<ChatThreadEvent.SetupRequested>(::onSetupRequested)
@@ -236,32 +252,19 @@ class ChatThreadViewModel(
                     val owned = (result as AppResult.Success).value
                     if (access != owned) clearScope()
                     access = owned
-                    val loaded = readContext(workspaceId, conversationId)
-                    ensureActive()
-                    if (loaded is AppResult.Failed) {
-                        restrict(loaded.failure)
-                        return@collectLatest
-                    }
-                    val value = (loaded as AppResult.Success).value
-                    if (value.owner.localListAccess() != owned) {
-                        restrict(changedThread())
-                        return@collectLatest
-                    }
-                    context = value.value
-                    updateState {
-                        it.copy(
-                            title = value.value.summary.peer.displayName,
-                            notificationOwner = value.owner,
-                            localFailure = null,
-                            readViewportToken = it.readViewportToken ?: Uuid.random().toString(),
-                        )
-                    }
                     coroutineScope {
-                        launch { observeComposer(owned) }
-                        launch { observeUnsentReplies(owned) }
+                        val firstPage = CompletableDeferred<Unit>()
+                        launch {
+                            firstPage.await()
+                            observeComposer(owned)
+                        }
+                        launch {
+                            firstPage.await()
+                            observeUnsentReplies(owned)
+                        }
                         launch { observeVisibleRows(owned) }
                         launch { observeQuotePreviews(owned) }
-                        observePages(owned)
+                        observePages(owned, firstPage)
                     }
                 }
             }
@@ -296,33 +299,35 @@ class ChatThreadViewModel(
         }
     }
 
-    private suspend fun observePages(owned: CollaborationLocalAccess) {
-        val pages =
-            window
-                .flatMapLatest { selected ->
-                    observeHistory(
-                            workspaceId,
-                            conversationId,
-                            selected.after,
-                            150,
-                            selected.before,
-                            50,
-                        )
-                        .map { selected to it }
-                }
-                .buffer(0)
-        combine(pages, observeMessages(workspaceId, conversationId)) { loaded, messages ->
-                Triple(loaded.first, loaded.second, messages)
+    private suspend fun observePages(
+        owned: CollaborationLocalAccess,
+        firstPage: CompletableDeferred<Unit>,
+    ) {
+        window
+            .flatMapLatest { selected ->
+                observeThread(
+                        workspaceId,
+                        owned,
+                        conversationId,
+                        CollaborationHistoryWindow(selected.after, selected.before, 150, 50),
+                    )
+                    .map { selected to it }
             }
-            .collectLatest { (selected, loaded, messages) ->
+            .buffer(0)
+            .collectLatest { (selected, loaded) ->
                 currentCoroutineContext().ensureActive()
                 if (access != owned || selected != window.value) return@collectLatest
-                val failed = loaded as? AppResult.Failed ?: messages as? AppResult.Failed
-                if (failed != null) {
-                    restrict(failed.failure)
+                if (loaded is AppResult.Failed) {
+                    restrict(loaded.failure)
                     return@collectLatest
                 }
-                val page = (loaded as AppResult.Success).value
+                val value = (loaded as AppResult.Success).value
+                if (value.owner.localListAccess() != owned) {
+                    restrict(changedThread())
+                    return@collectLatest
+                }
+                val snapshot = value.value
+                val page = snapshot.history
                 // Once reverse traversal reaches the head, observe the live head instead of keeping
                 // a historical upper boundary. Empty windows after replacement recover the same
                 // way.
@@ -333,7 +338,7 @@ class ChatThreadViewModel(
                     selectWindow(ChatThreadLocalWindow())
                     return@collectLatest
                 }
-                val commands = (messages as AppResult.Success).value
+                val commands = snapshot.commands
                 val outcomes =
                     readEditOutcomes(
                         workspaceId,
@@ -352,6 +357,15 @@ class ChatThreadViewModel(
                     restrict(outcomes.failure)
                     return@collectLatest
                 }
+                context = snapshot.context.copy(self = context?.self ?: snapshot.context.self)
+                updateState {
+                    it.copy(
+                        title = snapshot.context.summary.peer.displayName,
+                        notificationOwner = value.owner,
+                        localFailure = null,
+                        readViewportToken = it.readViewportToken ?: Uuid.random().toString(),
+                    )
+                }
                 editOutcomes = (outcomes as? AppResult.Success)?.value.orEmpty()
                 if (outcomes is AppResult.Failed)
                     updateState { it.copy(editFailure = outcomes.failure) }
@@ -364,6 +378,7 @@ class ChatThreadViewModel(
                 displayedWindow = selected
                 historyLoading = false
                 project()
+                firstPage.complete(Unit)
                 if (visible && connection == null && reconnection?.isActive != true) connect()
                 if (scrollToLatest && selected.latest) {
                     scrollToLatest = false

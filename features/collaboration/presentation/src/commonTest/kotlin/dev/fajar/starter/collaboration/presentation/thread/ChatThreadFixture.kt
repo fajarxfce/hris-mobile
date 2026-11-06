@@ -602,8 +602,7 @@ internal class ChatThreadFixture {
                 conversationId,
                 createObserveCollaborationAccess(),
                 createReadCollaborationThreadContext(),
-                createObserveCollaborationHistory(),
-                createObserveCollaborationMessages(),
+                createObserveCollaborationThread(),
                 createQueueCollaborationText(),
                 createRequestCollaborationDelivery(),
                 createLoadCollaborationSetup(),
@@ -798,16 +797,13 @@ internal class ChatThreadFixture {
             )
         }
 
-    private fun createObserveCollaborationHistory() =
+    private fun createObserveCollaborationThread() =
         with(base) {
-            ObserveCollaborationHistory(history, local, sessions, workspaces, server, build, clock)
-        }
-
-    private fun createObserveCollaborationMessages() =
-        with(base) {
-            ObserveCollaborationMessages(
+            ObserveCollaborationThread(
+                history,
                 messages,
                 local,
+                identities,
                 sessions,
                 workspaces,
                 server,

@@ -53,12 +53,33 @@ class MviViewModelTest {
         assertEquals(0, viewModel.state.value)
     }
 
+    @Test
+    fun retiringARouteDropsQueuedEffectsAndBlockedSendersButKeepsStateAndFutureEffects() = runTest {
+        val viewModel = SampleViewModel()
+        store.put("sample", viewModel)
+        viewModel.onEvent(Event.Increment)
+        repeat(130) { viewModel.onEvent(Event.Notify) }
+        runCurrent()
+        viewModel.onEvent(Event.RetireRoute)
+        runCurrent()
+        assertEquals(1, viewModel.state.value)
+        val next = backgroundScope.async { viewModel.effects.first() }
+        runCurrent()
+        assertFalse(next.isCompleted)
+        viewModel.onEvent(Event.Increment)
+        viewModel.onEvent(Event.Notify)
+        runCurrent()
+        assertEquals(2, next.await())
+    }
+
     private sealed interface Event {
         data object Increment : Event
 
         data object Notify : Event
 
         data object Wait : Event
+
+        data object RetireRoute : Event
     }
 
     private class SampleViewModel : MviViewModel<Int, Event, Int>(0) {
@@ -66,6 +87,7 @@ class MviViewModelTest {
 
         init {
             on<Event.Increment> { updateState { it + 1 } }
+            on<Event.RetireRoute> { discardPendingEffects() }
             on<Event.Notify> { viewModelScope.launch { emitEffect(state.value) } }
             on<Event.Wait> {
                 viewModelScope.launch {

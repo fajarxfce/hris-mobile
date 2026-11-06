@@ -31,7 +31,8 @@ fun ChatThreadPage(
     listState: LazyListState,
     onEvent: (ChatThreadEvent) -> Unit,
     modifier: Modifier = Modifier,
-    today: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+    timeZone: TimeZone = TimeZone.currentSystemDefault(),
+    today: LocalDate = Clock.System.now().toLocalDateTime(timeZone).date,
     composerInputModifier: Modifier = Modifier,
 ) {
     state.forwarding?.let {
@@ -120,20 +121,17 @@ fun ChatThreadPage(
                     key = { _, row -> row.key },
                     contentType = { _, _ -> "message" },
                 ) { index, row ->
-                    val date = chatMessageDate(row.timestamp, TimeZone.currentSystemDefault())
+                    val date = chatMessageDate(row.timestamp, timeZone)
                     val older = state.rows.getOrNull(index + 1)
                     Column(
                         Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
-                        if (
-                            older == null ||
-                                chatMessageDate(older.timestamp, TimeZone.currentSystemDefault()) !=
-                                    date
-                        )
+                        if (older == null || chatMessageDate(older.timestamp, timeZone) != date)
                             ChatDayDivider(date, today)
                         ChatMessageBubble(
                             row,
+                            timeZone = timeZone,
                             selected = state.selectedMessages.any { sameChatMessage(it, row) },
                             selecting = state.selecting,
                             quoteContent =

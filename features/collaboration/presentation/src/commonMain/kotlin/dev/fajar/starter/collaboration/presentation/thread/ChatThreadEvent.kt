@@ -9,6 +9,8 @@ sealed interface ChatThreadEvent {
 
     data object Stopped : ChatThreadEvent
 
+    data object RouteReleased : ChatThreadEvent
+
     data class ViewportChanged(val token: String?, val rowKeys: List<String>) : ChatThreadEvent {
         override fun toString() = "ViewportChanged([redacted])"
     }

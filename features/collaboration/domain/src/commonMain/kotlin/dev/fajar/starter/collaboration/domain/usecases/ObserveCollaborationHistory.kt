@@ -33,11 +33,9 @@ class ObserveCollaborationHistory(
     ): Flow<AppResult<CollaborationHistoryPage>> {
         if (
             !validCollaborationMessageId(conversationId) ||
-                limit !in 1..150 ||
-                overlap !in 0..50 ||
-                overlap >= limit ||
-                (after != null && before != null) ||
-                listOfNotNull(after, before).any { !Regex("[0-9]{16}/m-[0-9a-f]{64}").matches(it) }
+                !validCollaborationHistoryWindow(
+                    CollaborationHistoryWindow(after, before, limit, overlap)
+                )
         )
             return flowOf(
                 collaborationSetupFailure(

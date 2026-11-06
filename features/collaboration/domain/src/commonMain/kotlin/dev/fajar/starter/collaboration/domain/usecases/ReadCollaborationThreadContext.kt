@@ -33,30 +33,24 @@ class ReadCollaborationThreadContext(
         val stored = conversations.get(owner.localListAccess(), conversationId)
         continuation(workspaceId, owner).let { if (it is AppResult.Failed) return it }
         if (stored is AppResult.Failed) return stored
-        val summary = (stored as AppResult.Success).value ?: return failed()
-        val direct = summary.conversation
-        val peer =
-            when (owner.accountId) {
-                direct.firstAccountId -> direct.secondAccountId
-                direct.secondAccountId -> direct.firstAccountId
-                else -> null
-            }
-        if (
-            direct.id != conversationId ||
-                direct.companyId != owner.companyId ||
-                peer == null ||
-                peer == owner.accountId ||
-                summary.peer.accountId != peer
-        )
-            return failed()
+        val summary = (stored as AppResult.Success).value
+        val context = collaborationThreadContext(owner, conversationId, summary, null)
+        if (context is AppResult.Failed) return context
         val known = identities.current(owner.localListAccess())
         continuation(workspaceId, owner).let { if (it is AppResult.Failed) return it }
         if (known is AppResult.Failed) return known
-        val self = (known as AppResult.Success).value
-        if (self != null && !validCollaborationHistorySender(self.matrixUserId)) return failed()
-        return AppResult.Success(
-            CollaborationRead(owner, CollaborationThreadContext(summary, self))
-        )
+        return when (
+            val value =
+                collaborationThreadContext(
+                    owner,
+                    conversationId,
+                    summary,
+                    (known as AppResult.Success).value,
+                )
+        ) {
+            is AppResult.Failed -> value
+            is AppResult.Success -> AppResult.Success(CollaborationRead(owner, value.value))
+        }
     }
 
     private suspend fun capture(workspaceId: String) =
