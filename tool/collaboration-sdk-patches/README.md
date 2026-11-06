@@ -44,3 +44,27 @@ It has not been published or consumed. Before consumption, build the required
 remaining ABIs and Swift/XCFramework pair and prove the native HRIS edit exchange
 under existing owner/admission checks. Android 26.10.23 and Apple 26.10.27 remain
 unchanged. Local history never waits for a point fetch.
+
+## Prepared Android consumer probe
+
+`raw-event-android-consumer.patch` applies to HRIS Mobile
+`270efd56d0f8e39a45143954c46210bb4653f833` in an isolated checkout. It extends the
+existing emulator-only native provider fixture with two direct calls to the new
+binding. Each call checks SDK decryption classification, exact event/sender/time,
+the original body and custom logical identity, within the 96,000-byte bound.
+The existing provider fixture independently checks encrypted wire content, SDK
+credential renewal and durable queue behavior. No raw body or key is added to logs.
+
+The patch is prepared and formatted, **not compiled or executed yet**. It cannot
+compile against the shipping SDK. Use only the paired candidate AAR, with an
+isolated local Maven coordinate and exact artifact/POM verification hashes; keep
+shipping dependency verification enabled. Run the existing provider driver with
+`--android-sync-mode classic` on the explicitly owned emulator. Passing this
+probe alone will not accept HRIS edit recovery, cold-cache completeness, remaining
+ABIs, Apple integration or minified application packaging.
+
+The production upstream AAR contains four ABIs: arm64-v8a, armeabi-v7a, x86 and
+x86_64. The in-progress x86_64 build and existing arm64 candidate cover the phone
+and emulator proof targets; both 32-bit targets are still required before replacing
+the complete shipping artifact. Keep generated Kotlin/JNI pairs together for every
+ABI and compare all nine generated Kotlin files before combining native libraries.

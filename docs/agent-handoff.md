@@ -38,7 +38,19 @@ another local build/emulator. Verify native ELF, raw API symbol and all nine Kot
 hashes against arm64, then package the paired candidate and native consumer proof.
 Shipping upstream AAR includes arm64-v8a, armeabi-v7a, x86 and x86_64; remaining
 32-bit builds and Swift/XCFramework are still required before replacement shipping.
-Arm64 AAR970ea462 remains candidate-only, no app dependency/publication. Continue
+Arm64 AAR970ea462 remains candidate-only, no app dependency/publication.
+Prepared consumer patch is tracked in tool/collaboration-sdk-patches; it is NOT
+compiled/executed. Isolated Mobile worktree .worktrees/hris-mobile-raw-event-consumer
+is based on270efd56 and has only NativeMatrixProbe changed. The patch verifies two
+raw decrypted original reads through JNI; it does not prove edit recovery.
+Private drivers prepare-x86-aar.py, verify-android-aar-paired.py, prepare-consumer.py
+and build-consumer.py are syntax-checked but UNEXECUTED. After x86 verification,
+prepare-x86-aar.py adds its exact JNI to the wrapper, package-android-aar.py
+package-android-aar-2 builds the two-ABI candidate, then verify/prepare/build.
+The consumer uses a private Maven coordinate with artifact/POM hashes added only
+to its isolated verification metadata; do not disable dependency verification.
+Run existing Platform provider proof with --docker-sudo, explicit owned emulator
+and --android-sync-mode classic. No emulator is currently active. Continue
 history-pager domain ownership and all54 PRD groups. Platform remains
 LIVE10485916/schema116.1. Never replay rollout or accepted Forward publications.
 

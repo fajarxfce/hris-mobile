@@ -1,0 +1,46 @@
+diff --git a/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NativeMatrixProbe.kt b/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NativeMatrixProbe.kt
+index 1ab9728d..1d8fea73 100644
+--- a/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NativeMatrixProbe.kt
++++ b/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NativeMatrixProbe.kt
+@@ -14,6 +14,7 @@ import kotlinx.coroutines.withTimeout
+ import org.json.JSONObject
+ import org.matrix.rustcomponents.sdk.Client
+ import org.matrix.rustcomponents.sdk.ClientBuilder
++import org.matrix.rustcomponents.sdk.RawEventEncryption
+ import org.matrix.rustcomponents.sdk.Room
+ import org.matrix.rustcomponents.sdk.RoomMessageLikeEvent
+ import org.matrix.rustcomponents.sdk.RoomMessageLikeEventsListener
+@@ -97,6 +98,25 @@ internal class NativeMatrixProbe(private val directory: File) {
+                         key
+                     }
+                 val incoming = withTimeout(45_000) { received.await() }
++                // Candidate binding proof: exact decrypted event content through the paired JNI.
++                // The existing fixture separately verifies ciphertext on the provider wire.
++                repeat(2) {
++                    val raw = joined.loadOrFetchRawEvent(incoming.eventId)
++                    try {
++                        check(raw.encryption == RawEventEncryption.DECRYPTED)
++                        check(raw.json.toByteArray(Charsets.UTF_8).size <= 96_000)
++                        val event = JSONObject(raw.json)
++                        check(event.getString("event_id") == incoming.eventId)
++                        check(event.getString("sender") == incoming.sender)
++                        check(event.getLong("origin_server_ts").toULong() == incoming.timestamp)
++                        check(event.getString("type") == "m.room.message")
++                        val content = event.getJSONObject("content")
++                        check(content.getString("body") == expectedBody)
++                        check(content.getString("org.hris.message_id") == expectedLogicalId)
++                    } finally {
++                        raw.json = ""
++                    }
++                }
+                 // Cross the provider's four-second lifetime while retaining the same client,
+                 // crypto store, key and room. The SDK owns the refresh request and token update.
+                 delay(6_000)
+@@ -171,6 +191,7 @@ internal class NativeMatrixProbe(private val directory: File) {
+             .writeText(
+                 JSONObject()
+                     .put("receivedEncrypted", true)
++                    .put("rawEventPointReadsVerified", 2)
+                     .put("receivedEventId", incoming.eventId)
+                     .put("sentEventId", outgoing.eventId)
+                     .put("queueTransactionId", outgoing.transactionId)
