@@ -32,9 +32,13 @@ keeps cached messages independent of transport and places held replies in contex
 [Contextual message selection and durable local deletion](collaboration-message-selection.md)
 adds multi-select/copy/delete-for-me while retaining original message evidence.
 
+[Atomic organization bootstrap handoff](collaboration-space-bootstrap-handoff.md)
+retains the original uncertainty and authenticated successor before explicit replacement
+replay; the use case owns recovery and the repository maps one raw database transaction.
+
 [Explicit organization bootstrap replacement transport](collaboration-space-bootstrap-replacement.md)
 binds the complete original effect descriptor to a current-build replacement response;
-durable local handoff and owning recovery remain separate work.
+durable local handoff and owning recovery are described above.
 
 [Native organization setup owning flow](collaboration-space-native-setup-flow.md)
 coordinates finite original retry/bootstrap preparation and replay, exact retry

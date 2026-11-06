@@ -1,0 +1,444 @@
+{
+  "recordedAt": "2026-11-06T19:46:18.296451+00:00",
+  "baseCommit": "3d666135f09cc35718c500bd117072b9e81cb5b1",
+  "backendContractCommit": "344211f83ed85e381f0002519c727a544efa7d8b",
+  "gates": [
+    {
+      "name": "focused-1",
+      "startedAt": "2026-11-06T19:16:01.946896+00:00",
+      "seconds": 85.95,
+      "exitCode": 0,
+      "stableInputs": true,
+      "sourceFiles": 4223,
+      "freshCounts": {
+        "tests": 95,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "tasks": {
+        "core/database:desktopTest": {
+          "suites": 2,
+          "tests": 22,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/database:wasmJsBrowserTest": {
+          "suites": 12,
+          "tests": 73,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "sourceManifestSha256": "4f94b51ae13e39511205cd7b7ecefe0ff3a11c26464f7f9eef6ddfdfa9f220fd",
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":core:database:desktopTest",
+        "--rerun",
+        "--tests",
+        "*CommandHandoffTest",
+        "--tests",
+        "*CommandStoreTest",
+        ":core:database:wasmJsBrowserTest",
+        "--rerun",
+        ":formatCheck",
+        ":architectureCheck",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=50",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ]
+    },
+    {
+      "name": "consumer-1",
+      "startedAt": "2026-11-06T19:27:59.297794+00:00",
+      "seconds": 138.142,
+      "exitCode": 1,
+      "stableInputs": true,
+      "sourceFiles": 4226,
+      "freshCounts": {
+        "tests": 38,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "tasks": {
+        "features/collaboration/data:desktopTest": {
+          "suites": 2,
+          "tests": 38,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "sourceManifestSha256": "fe52dcc4775b00bf44fcd3844d330da78d77b1e99b031e1879450b5158d4022c",
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":features:collaboration:domain:desktopTest",
+        "--rerun",
+        "--tests",
+        "*CollaborationSpaceBootstrapReplacementTest",
+        "--tests",
+        "*ReplayCollaborationSpaceSetupTest",
+        "--tests",
+        "*PrepareCollaborationSpaceSetupTest",
+        "--tests",
+        "*ObserveCollaborationSpaceSetupTest",
+        ":features:collaboration:data:desktopTest",
+        "--rerun",
+        "--tests",
+        "*CollaborationSpaceSetupCommandStorageTest",
+        "--tests",
+        "*CollaborationSpaceSetupTransportTest",
+        ":formatCheck",
+        ":architectureCheck",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=50",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ]
+    },
+    {
+      "name": "consumer-2",
+      "startedAt": "2026-11-06T19:30:39.691308+00:00",
+      "seconds": 106.766,
+      "exitCode": 0,
+      "stableInputs": true,
+      "sourceFiles": 4226,
+      "freshCounts": {
+        "tests": 72,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "tasks": {
+        "features/collaboration/data:desktopTest": {
+          "suites": 2,
+          "tests": 38,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain:desktopTest": {
+          "suites": 4,
+          "tests": 34,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "sourceManifestSha256": "d77e7ea1ecb23f74fbefd3070f1386545ee13a8fb17885ecfe012c552917878f",
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":features:collaboration:domain:desktopTest",
+        "--rerun",
+        "--tests",
+        "*CollaborationSpaceBootstrapReplacementTest",
+        "--tests",
+        "*ReplayCollaborationSpaceSetupTest",
+        "--tests",
+        "*PrepareCollaborationSpaceSetupTest",
+        "--tests",
+        "*ObserveCollaborationSpaceSetupTest",
+        ":features:collaboration:data:desktopTest",
+        "--rerun",
+        "--tests",
+        "*CollaborationSpaceSetupCommandStorageTest",
+        "--tests",
+        "*CollaborationSpaceSetupTransportTest",
+        ":formatCheck",
+        ":architectureCheck",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=50",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ]
+    },
+    {
+      "name": "full-1",
+      "startedAt": "2026-11-06T19:33:32.410571+00:00",
+      "seconds": 723.803,
+      "exitCode": 0,
+      "stableInputs": true,
+      "sourceFiles": 4228,
+      "freshCounts": {
+        "tests": 5941,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "tasks": {
+        "apps/shared:desktopTest": {
+          "suites": 101,
+          "tests": 645,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/demo:desktopTest": {
+          "suites": 1,
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation:desktopTest": {
+          "suites": 40,
+          "tests": 271,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation:wasmJsBrowserTest": {
+          "suites": 21,
+          "tests": 208,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data:desktopTest": {
+          "suites": 79,
+          "tests": 704,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data:wasmJsBrowserTest": {
+          "suites": 76,
+          "tests": 682,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data:testAndroidHostTest": {
+          "suites": 59,
+          "tests": 371,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain:desktopTest": {
+          "suites": 124,
+          "tests": 1239,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain:wasmJsBrowserTest": {
+          "suites": 124,
+          "tests": 1239,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/workforce/data:desktopTest": {
+          "suites": 13,
+          "tests": 78,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/people/data:desktopTest": {
+          "suites": 6,
+          "tests": 40,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/payroll/data:desktopTest": {
+          "suites": 6,
+          "tests": 42,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/leave/data:desktopTest": {
+          "suites": 14,
+          "tests": 76,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/inbox/data:desktopTest": {
+          "suites": 6,
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/expenses/data:desktopTest": {
+          "suites": 12,
+          "tests": 66,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/dashboard/data:desktopTest": {
+          "suites": 1,
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/workspace/data:desktopTest": {
+          "suites": 2,
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/transfers/data:desktopTest": {
+          "suites": 1,
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/notifications/data:desktopTest": {
+          "suites": 5,
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/identity/data:desktopTest": {
+          "suites": 15,
+          "tests": 65,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/documents/data:desktopTest": {
+          "suites": 11,
+          "tests": 75,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/database:desktopTest": {
+          "suites": 18,
+          "tests": 75,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "sourceManifestSha256": "9ad8d42536f3ca7d40797eee5efe19e2a30e4b66ab03cab2c29c98863cb77806",
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":check",
+        ":features:collaboration:data:testAndroidHostTest",
+        ":apps:collaboration-proof:compileDebugKotlin",
+        ":core:database:wasmJsBrowserTest",
+        ":features:collaboration:data:wasmJsBrowserTest",
+        ":features:collaboration:domain:wasmJsBrowserTest",
+        ":features:collaboration:presentation:wasmJsBrowserTest",
+        ":apps:android:assembleDevDebug",
+        ":apps:android:lintDevDebug",
+        ":formatCheck",
+        ":architectureCheck",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=50",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ]
+    }
+  ],
+  "changedSources": {
+    ".github/workflows/collaboration-control.yml": "8a66aa7271ca9dc6fab814f710409c5695368a4e924de75cf219d3ce66d55b1a",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "38fe354cc427784eeb0e933cbbf11d0c2fbba6cccd61195e5f4478e0ca881364",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandArchive.kt": "550102c245ae0bed6c5dd96358ad35db9354510a70b2056f8ac73651c826e83f",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandBounds.kt": "eae77d5a5df70131fb191a2187ffb9b60791571c6c7647fa044d0069e4f53b11",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandStore.kt": "fb9e44d7f65cd489b31363dd30364e62206ef13e6e008f10ab988723153ae965",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/CommandHandoffContract.kt": "9b24bfb8eee57be4c6b011d7e8ed06329e9610ccbc6f33f402cb1d93e4f760d6",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/CommandHandoffTest.kt": "ad8f369510eefd20e713ef41f58d35870768f1102370da128afea7fec5d7c589",
+    "core/database/src/iosTest/kotlin/dev/fajar/starter/database/AppleCommandHandoffTest.kt": "b816da399785d82f79dde6f214f27428b665de4515e2959c852f353525d4e4fb",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/RoomCommandStore.kt": "9b93802598fe9a33d4020680269af872367fb48f5b96dcf6712b774b7ba5b526",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/dao/CommandDao.kt": "9d9d9e312281bf9b1a9dd9e63801c82069078aed81d5ff8faeba15fc37cfa895",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbCommandHandoff.kt": "947600ab1c10d5dc8b84b93a4d925387f37e7d5a65e3214475f12d5c4bee741d",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbCommandStore.kt": "3783bb96482e5f96d00c53516633a6578cd2df040db0e110f15f39f3f805dcb6",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserCommandHandoffTest.kt": "b7619bad6743b671bd90b352f48a53ffca3e3141fbafcde894fe4f290e13473a",
+    "features/collaboration/data/build.gradle.kts": "572a18bb2a1521ed8180aaa0cae420963cafa8b9f5463cb0e1651bc614775f2c",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "4a214b5decae40501a4862b6673529513cf21f8532d1723aa6c3baf52207fa34",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/identity/CollaborationSpaceSetupCommandCodec.kt": "1fc758b580cb0212925762ef7bfd4c1d7c83cc5500c8963ae538373b0250ae6d",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceSetupCommandRepository.kt": "bf8f7f2fc6f7abdf89ac2befe6770c77fc61d4c9734496f558c787b12e2d6041",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceSetupCommandStorageContract.kt": "a9f863adc437a4008ea06a3dae2bc0aa5fe86fb4a8d013c5e01c817bbe82bc00",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceSetupCommandStorageTest.kt": "ae22a15e0df1ce46ad4726ef1ae77daae1c65bda2a22a24d3ba02b35eb6a27fd",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceBootstrapReplacement.kt": "2efe61f2e9198ab2e12832d5856badf6779cc64fe68505e99f052a71c924d462",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceSetupCommand.kt": "c2bf129db2849b5697fb8f7b09487c681af435754959249672f218b963718205",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceBootstrapReplacementPolicy.kt": "be83dbc86cea5067cedd5902633567eec7e3b89d17a121f7d3983135de5b2713",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceSetupCommandPolicy.kt": "c8966effdc0db378576e9abb4dede8bf06acbf08366be927196b1ffee8c7dc5f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceSetupCommandRepository.kt": "d014fb7ec9d4fc0bdf674883e911a1c1ddb54eb7ab8876bef99f181f68079ec0",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceSetup.kt": "e74c59cb338746c6cfc6ff640df912b7dd4074a485482fa04699595e7e4d689d",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationSpaceBootstrapReplacement.kt": "d0c6681ab6d8e1c7f2f4542068e1560db0f01def5c9a47ca5a4ff38a70e8312c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReplayCollaborationSpaceSetup.kt": "4eb3d50bace5e7f1714fd113147134285a7d1d420503398ebd35b7fbc6bddee6",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceBootstrapReplacementTest.kt": "38274b1714dc6254c4f1833173ef4effa3e1f3482530cc5da158af690b6ad597",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/PrepareCollaborationSpaceSetupTest.kt": "636f05fc23a7b3f930188c0838676f77b426b4ddfd446d44a69d635ec926b0cf",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceSetupFixture.kt": "b55b0cda81f20ba92d751ab2a13e68c315d078c4907b456f23e85e4af6c73902"
+  },
+  "firstConsumerFailure": "Domain test compilation: missing replacement branch and nullable assertion; storage/transport38 passed. Run remains failed.",
+  "acceptance": {
+    "localRawAndEncryptedHandoff": true,
+    "domainRecovery": true,
+    "rootCheck": true,
+    "browser": true,
+    "androidAssemblyAndLint": true,
+    "physicalPhoneSendResolved": false,
+    "newPhoneInstall": false,
+    "appleOnThisSource": false,
+    "sdkStoreAdoption": false,
+    "organizationActivation": false,
+    "starterPort": false
+  },
+  "phone": {
+    "versionCode": 50,
+    "latestPassiveAudit": "2026-11-06T19:29:27.767731+00:00",
+    "retainedChatDiagnosticsAfterInstall": 0,
+    "uiDriven": false,
+    "sendIssue": "open"
+  },
+  "notes": [
+    "Raw handoff preserves exact original uncertainty and encrypted local link, never a remote receipt.",
+    "Repeat returns false; owning recovery reads the retained link and never recreates missing successor work.",
+    "The real encrypted consumer is validated before the generic Starter port.",
+    "Apple raw database and encrypted repository simulator cases are added to first source CI; acceptance pending."
+  ],
+  "androidLint": {
+    "errors": 0,
+    "warnings": 0
+  }
+}

@@ -28,6 +28,7 @@ kotlin.sourceSets {
         implementation(libs.cryptography.optimal)
     }
     getByName("androidHostTest").dependencies { implementation(libs.junit) }
+    getByName("iosTest").dependencies { implementation(libs.room.runtime) }
     getByName("commonTest").dependencies {
         implementation(libs.coroutines.test)
         implementation(libs.ktor.mock)

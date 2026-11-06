@@ -40,6 +40,11 @@ sealed interface CollaborationSpaceSetupOutcome {
         CollaborationSpaceSetupOutcome {
         override fun toString() = "Bootstrapped([redacted])"
     }
+
+    data class BootstrapReplaced(val receipt: CollaborationSpaceBootstrapReplacementReceipt) :
+        CollaborationSpaceSetupOutcome {
+        override fun toString() = "BootstrapReplaced([redacted])"
+    }
 }
 
 data class CollaborationSpaceSetupRecord(
@@ -47,6 +52,8 @@ data class CollaborationSpaceSetupRecord(
     val revision: Long,
     val attempts: Int,
     val outcome: CollaborationSpaceSetupOutcome,
+    /** Authenticated local handoff only; the original remote outcome remains unchanged. */
+    val successorId: String? = null,
 ) {
     override fun toString() =
         "CollaborationSpaceSetupRecord(revision=$revision, attempts=$attempts)"

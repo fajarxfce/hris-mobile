@@ -100,6 +100,7 @@ jobs:
       - name: Check Apple setup adapter
         run: >-
           ./gradlew --no-daemon --no-parallel --max-workers=2
+          :core:database:iosSimulatorArm64Test
           :features:collaboration:domain:iosSimulatorArm64Test
           :features:collaboration:data:iosSimulatorArm64Test
           :features:collaboration:presentation:iosSimulatorArm64Test
@@ -119,4 +120,6 @@ jobs:
         if: always()
         with:
           name: collaboration-control-apple
-          path: features/collaboration/**/build/test-results/
+          path: |
+            features/collaboration/**/build/test-results/
+            core/database/build/test-results/

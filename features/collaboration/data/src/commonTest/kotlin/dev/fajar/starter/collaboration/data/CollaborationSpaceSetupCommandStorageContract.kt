@@ -3,6 +3,7 @@ package dev.fajar.starter.collaboration.data
 import dev.fajar.starter.collaboration.data.identity.*
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationSpaceSetupCommandRepository
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
 import kotlin.test.*
@@ -660,6 +661,322 @@ abstract class CollaborationSpaceSetupCommandStorageContract {
         }
         assertEquals(AppResult.Success(saved), f.repo().find(f.scope(), operation))
         assertEquals(AppResult.Success(null), f.repo().current(f.scope(), parent))
+    }
+
+    private fun replacement(
+        previous: CollaborationSpaceSetupRecord,
+        id: String = historyId(9840),
+    ): CollaborationSpaceSetupCommand {
+        val old = requireNotNull(previous.command.request.bootstrapEffect())
+        return previous.command.copy(
+            clientBuild = old.clientBuild + 1,
+            request =
+                CollaborationSpaceBootstrapReplacement(
+                    old,
+                    old.copy(operationId = id, clientBuild = old.clientBuild + 1),
+                    collaborationSpaceSetupRestriction(previous),
+                ),
+        )
+    }
+
+    @Test
+    fun encryptedHandoffKeepsUncertaintyAndReopensBothOriginalAndPendingSuccessor() =
+        withDatabase { f ->
+            f.insert(f.command(true))
+            f.sending()
+            val old = f.readSetup()
+            val raw = f.rawSetup()
+            val next = replacement(old)
+            assertEquals(AppResult.Success(true), f.repo().prepareReplacement(f.scope(), old, next))
+            assertEquals(
+                AppResult.Success(false),
+                f.repo().prepareReplacement(f.scope(), old, next),
+            )
+            val retained = old.copy(successorId = next.id)
+            assertEquals(AppResult.Success(retained), f.repo().find(f.scope(), old.command.id))
+            val archive =
+                assertNotNull(
+                    f.database.commands.archived(
+                        spaceSetupCommandScope(f.scope()),
+                        spaceSetupCommandPartition(f.scope()),
+                        old.command.id,
+                    )
+                )
+            assertEquals(raw, archive.record)
+            assertNotEquals(raw.state, archive.evidence)
+            assertFalse(archive.evidence.contains(next.id))
+            assertEquals(next, f.readSetup().command)
+            assertEquals(CollaborationSpaceSetupOutcome.Pending, f.readSetup().outcome)
+            assertEquals(
+                AppResult.Success(false),
+                f.repo()
+                    .update(
+                        f.scope(),
+                        old,
+                        CollaborationSpaceSetupOutcome.Bootstrapped(gateway(old.command)),
+                        old.attempts,
+                    ),
+            )
+            val renewed =
+                f.access.copy(sessionId = "replacement-login", companyId = historyId(9827))
+            f.reopen(renewed)
+            assertEquals(
+                AppResult.Success(retained),
+                f.repo().find(f.scope(renewed), old.command.id),
+            )
+            assertEquals(next, f.readSetup(f.scope(renewed)).command)
+            assertEquals(
+                listOf(next.id),
+                assertIs<AppResult.Success<List<CollaborationSpaceSetupRecord>>>(
+                        f.repo().observeAll(f.scope(renewed)).first()
+                    )
+                    .value
+                    .map { it.command.id },
+            )
+        }
+
+    @Test
+    fun replacementProofIsEncryptedAndCannotBeUsedAsAnOrdinaryBootstrapReceipt() =
+        withDatabase { f ->
+            f.insert(f.command(true))
+            f.sending()
+            val old = f.readSetup()
+            val next = replacement(old)
+            assertEquals(AppResult.Success(true), f.repo().prepareReplacement(f.scope(), old, next))
+            assertEquals(
+                AppResult.Success(true),
+                f.repo()
+                    .update(
+                        f.scope(),
+                        f.readSetup(),
+                        CollaborationSpaceSetupOutcome.Unconfirmed(),
+                        1,
+                    ),
+            )
+            val sending = f.readSetup()
+            val request = next.request as CollaborationSpaceBootstrapReplacement
+            val gateway = gateway(next.copy(request = request.replacement))
+            val proof =
+                CollaborationSpaceBootstrapReplacementReceipt(request.supersedes, next.id, gateway)
+            assertIs<AppResult.Failed>(
+                f.repo()
+                    .update(
+                        f.scope(),
+                        sending,
+                        CollaborationSpaceSetupOutcome.Bootstrapped(gateway),
+                        1,
+                    )
+            )
+            for (bad in
+                listOf(
+                    proof.copy(replacementOperationId = old.command.id),
+                    proof.copy(superseded = proof.superseded.copy(clientBuild = 333)),
+                    proof.copy(gateway = gateway.copy(version = 7)),
+                )) {
+                assertIs<AppResult.Failed>(
+                    f.repo()
+                        .update(
+                            f.scope(),
+                            sending,
+                            CollaborationSpaceSetupOutcome.BootstrapReplaced(bad),
+                            1,
+                        )
+                )
+            }
+            val outcome = CollaborationSpaceSetupOutcome.BootstrapReplaced(proof)
+            assertEquals(AppResult.Success(true), f.repo().update(f.scope(), sending, outcome, 1))
+            val raw =
+                assertNotNull(
+                    f.database.commands.get(
+                        spaceSetupCommandScope(f.scope()),
+                        spaceSetupCommandPartition(f.scope()),
+                        next.id,
+                    )
+                )
+            assertFalse(raw.state.contains(gateway.accessToken))
+            assertFalse(raw.state.contains(gateway.refreshToken))
+            f.reopen()
+            assertEquals(outcome, f.readSetup().outcome)
+            assertEquals(
+                old.copy(successorId = next.id),
+                assertIs<AppResult.Success<CollaborationSpaceSetupRecord?>>(
+                        f.repo().find(f.scope(), old.command.id)
+                    )
+                    .value,
+            )
+            assertIs<AppResult.Failed>(
+                f.repo()
+                    .prepareReplacement(
+                        f.scope(),
+                        f.readSetup(),
+                        replacement(f.readSetup(), historyId(9841)),
+                    )
+            )
+        }
+
+    @Test
+    fun repeatedHandoffsRetainDenialWithoutNestedIntentOrLostOriginal() = withDatabase { f ->
+        f.insert(f.command(true))
+        val denial =
+            Failure(FailureKind.AccessDenied, "denied", code = "collaboration_access_denied")
+        assertEquals(
+            AppResult.Success(true),
+            f.repo()
+                .update(
+                    f.scope(),
+                    f.readSetup(),
+                    CollaborationSpaceSetupOutcome.Unconfirmed(denial),
+                    1,
+                ),
+        )
+        val old = f.readSetup()
+        val next = replacement(old)
+        val request = next.request as CollaborationSpaceBootstrapReplacement
+        assertIs<AppResult.Failed>(
+            f.repo()
+                .prepareReplacement(
+                    f.scope(),
+                    old,
+                    next.copy(request = request.copy(retainedRestriction = null)),
+                )
+        )
+        assertEquals(AppResult.Success(true), f.repo().prepareReplacement(f.scope(), old, next))
+        val pending = f.readSetup()
+        assertIs<AppResult.Failed>(
+            f.repo().update(f.scope(), pending, CollaborationSpaceSetupOutcome.Unconfirmed(), 1)
+        )
+        val third = replacement(pending, historyId(9841))
+        assertEquals(
+            AppResult.Success(true),
+            f.repo().prepareReplacement(f.scope(), pending, third),
+        )
+        f.reopen()
+        val saved = f.readSetup()
+        val effect = saved.command.request as CollaborationSpaceBootstrapReplacement
+        assertEquals(request.replacement, effect.supersedes)
+        assertEquals(denial.code, effect.retainedRestriction?.code)
+        assertEquals(
+            AppResult.Success(old.copy(successorId = next.id)),
+            f.repo().find(f.scope(), old.command.id),
+        )
+        assertEquals(
+            AppResult.Success(pending.copy(successorId = third.id)),
+            f.repo().find(f.scope(), next.id),
+        )
+    }
+
+    @Test
+    fun failedEncryptionStaleScopeAndCancelledHandoffLeaveTheOriginalRecoverable() =
+        withDatabase { f ->
+            f.insert(f.command(true))
+            f.sending()
+            val old = f.readSetup()
+            val raw = f.rawSetup()
+            val next = replacement(old)
+            val other = f.access.copy(sessionId = "different-account", accountId = historyId(9828))
+            val store =
+                object : CommandStore by f.database.commands {
+                    override suspend fun archiveAndInsert(
+                        scope: CommandScope,
+                        expected: CommandRecord,
+                        evidence: String,
+                        successor: CommandRecord,
+                    ): Boolean {
+                        f.activate(other)
+                        return f.database.commands.archiveAndInsert(
+                            scope,
+                            expected,
+                            evidence,
+                            successor,
+                        )
+                    }
+                }
+            assertEquals(
+                AppResult.Success(false),
+                f.repo(store).prepareReplacement(f.scope(), old, next),
+            )
+            f.activate()
+            assertEquals(raw, f.rawSetup())
+            val cancelled =
+                object : CommandStore by f.database.commands {
+                    override suspend fun archiveAndInsert(
+                        scope: CommandScope,
+                        expected: CommandRecord,
+                        evidence: String,
+                        successor: CommandRecord,
+                    ): Boolean {
+                        throw CancellationException("test interruption")
+                    }
+                }
+            assertFailsWith<CancellationException> {
+                f.repo(cancelled).prepareReplacement(f.scope(), old, next)
+            }
+            assertEquals(raw, f.rawSetup())
+            val brokenCipher =
+                object : dev.fajar.starter.securestorage.ContentCipher by f.cipher {
+                    override suspend fun encrypt(
+                        key: ByteArray,
+                        associatedData: ByteArray,
+                        plaintext: ByteArray,
+                    ): ByteArray = error("test encryption failure")
+                }
+            assertIs<AppResult.Failed>(
+                EncryptedCollaborationSpaceSetupCommandRepository(
+                        f.database.commands,
+                        brokenCipher,
+                        f.keys,
+                    )
+                    .prepareReplacement(f.scope(), old, next)
+            )
+            assertEquals(old, f.readSetup())
+            assertNull(
+                f.database.commands.archived(
+                    spaceSetupCommandScope(f.scope()),
+                    spaceSetupCommandPartition(f.scope()),
+                    old.command.id,
+                )
+            )
+        }
+
+    @Test
+    fun handoffEvidenceCannotBeReboundToAnotherOriginalRevisionOrPurpose() = withDatabase { f ->
+        f.insert(f.command(true))
+        f.sending()
+        val old = f.readSetup()
+        assertEquals(
+            AppResult.Success(true),
+            f.repo().prepareReplacement(f.scope(), old, replacement(old)),
+        )
+        val archive =
+            assertNotNull(
+                f.database.commands.archived(
+                    spaceSetupCommandScope(f.scope()),
+                    spaceSetupCommandPartition(f.scope()),
+                    old.command.id,
+                )
+            )
+        for (bad in
+            listOf(
+                archive.copy(evidence = archive.record.state),
+                archive.copy(evidence = archive.record.request),
+                archive.copy(record = archive.record.copy(revision = archive.record.revision + 1)),
+                archive.copy(evidence = "x".repeat(8193)),
+            )) {
+            val store =
+                object : CommandStore by f.database.commands {
+                    override suspend fun archived(
+                        scope: CommandScope,
+                        partition: String,
+                        id: String,
+                    ) = bad
+                }
+            assertIs<AppResult.Failed>(f.repo(store).find(f.scope(), old.command.id))
+        }
+        assertEquals(
+            AppResult.Success(false),
+            f.repo().prepareReplacement(f.scope(), old, replacement(old, historyId(9842))),
+        )
+        assertEquals(replacement(old), f.readSetup().command)
     }
 
     private fun withDatabase(block: suspend (CollaborationHistoryFixture) -> Unit) = runTest {

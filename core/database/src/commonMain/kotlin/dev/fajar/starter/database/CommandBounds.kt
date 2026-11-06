@@ -39,3 +39,17 @@ internal fun validateCommandArchive(
     require(expected.revision in 0..9_007_199_254_740_991L)
     require(evidence.isNotEmpty() && evidence.encodeToByteArray().size <= 64 * 1024)
 }
+
+internal fun validateCommandHandoff(
+    scope: CommandScope,
+    expected: CommandRecord,
+    evidence: String,
+    successor: CommandRecord,
+) {
+    validateCommandArchive(scope, expected, evidence)
+    validateCommandRecord(scope, successor)
+    require(expected.id != successor.id)
+    require(
+        expected.partition == successor.partition && expected.resourceId == successor.resourceId
+    )
+}

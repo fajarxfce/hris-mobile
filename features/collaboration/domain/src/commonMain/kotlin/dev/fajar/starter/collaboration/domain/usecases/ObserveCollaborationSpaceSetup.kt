@@ -69,6 +69,7 @@ private fun CollaborationSpaceSetupRecord.summary() =
         command.request.deviceId,
         when (command.request) {
             is CollaborationSpaceProvisioningRetry -> CollaborationSpaceSetupKind.RETRY
+            is CollaborationSpaceBootstrapReplacement,
             is CollaborationSpaceBootstrap -> CollaborationSpaceSetupKind.BOOTSTRAP
         },
         when (outcome) {
@@ -76,6 +77,7 @@ private fun CollaborationSpaceSetupRecord.summary() =
             is CollaborationSpaceSetupOutcome.Unconfirmed ->
                 CollaborationSpaceSetupPhase.UNCONFIRMED
             is CollaborationSpaceSetupOutcome.Retried -> CollaborationSpaceSetupPhase.RETRIED
+            is CollaborationSpaceSetupOutcome.BootstrapReplaced,
             is CollaborationSpaceSetupOutcome.Bootstrapped ->
                 CollaborationSpaceSetupPhase.BOOTSTRAPPED
         },

@@ -252,4 +252,44 @@ abstract class CommandDao {
         retain(candidate)
         return true
     }
+
+    @Transaction
+    open suspend fun archiveAndInsert(
+        session: String,
+        expected: CommandEntity,
+        evidence: String,
+        successor: CommandEntity,
+    ): Boolean {
+        require(
+            expected.accountKey == successor.accountKey &&
+                expected.partition == successor.partition &&
+                expected.resourceId == successor.resourceId &&
+                expected.id != successor.id &&
+                successor.revision == 0L
+        )
+        if (!admitted(session, expected.accountKey)) return false
+        if (completed(expected.accountKey, expected.partition, expected.id) != null) return false
+        if (record(expected.accountKey, expected.partition, expected.id) != expected) return false
+        if (
+            record(successor.accountKey, successor.partition, successor.id) != null ||
+                completed(successor.accountKey, successor.partition, successor.id) != null
+        )
+            return false
+        retain(
+            CommandArchiveEntity(
+                expected.accountKey,
+                expected.partition,
+                expected.id,
+                expected.resourceId,
+                expected.sortKey,
+                expected.request,
+                expected.state,
+                expected.revision,
+                evidence,
+            )
+        )
+        check(delete(expected.accountKey, expected.partition, expected.id, expected.revision) == 1)
+        create(successor)
+        return true
+    }
 }

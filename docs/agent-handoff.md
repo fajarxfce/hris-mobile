@@ -1,5 +1,54 @@
 # Agent continuation — HRIS Mobile
 
+## Current: atomic bootstrap handoff accepted locally — 6 November 2026
+
+Thirty source/build/workflow files add raw atomic archiveAndInsert and its real encrypted
+HRIS consumer, explicit PrepareCollaborationSpaceBootstrapReplacement, replacement replay,
+flat provenance and authenticated successor links. [Contract](collaboration-space-bootstrap-handoff.md),
+[evidence](measurements/collaboration-space-bootstrap-handoff-2026-11-06.json).
+Old Pending/Unconfirmed facts are preserved exactly; local handoff is not a remote receipt.
+Lost writes/competing preparation read the retained link; missing successors are not recreated.
+Known access/MFA restrictions survive repeated build updates before HTTP. Late original
+responses cannot replace the successor. Policy/use-case/repository/datasource ownership stays
+separate; no ViewModel workflow, SDK acquisition or organization route is introduced.
+
+Raw95 passes85.950s. First consumer30576 remains FAILED138.142s: domain test compilation
+needed an exhaustive branch and non-null assertion;38 storage/transport cases passed.
+Corrected consumer60188 PASSED72/106.766s. Complete44869 PASSED723.803s, started19:33:32UTC:
+5,941 fresh cases, zero failures/errors/skips,4,228 unchanged inputs. Root :check, browser,
+Android-host/proof compilation, actual DI, Android dev assembly/lint, format and architecture
+pass. Android lint0 issues. All local heavy jobs have ended. No owned emulator is running.
+The new Apple raw database and encrypted repository hosts are added to first-source CI;
+this source's simulator tests and actual iOS app build remain pending, not a physical waiver.
+
+Group backend344211f83ed85e381f0002519c727a544efa7d8b is pushed and its new supersession
+contract PASSED38 fresh cases/303.216s with8,637 stable inputs, including PostgreSQL races,
+actual receipt cleanup, current minimum-build admission and HTTP/worker contexts. Earlier
+merge2db3f35e baseline1,226/full-worker and image-pin20 acceptance remain separate. V117–137
+are unshipped; organization feature stays disabled. Live10485916/schema116.1 unchanged.
+
+NEXT: commit/push this accepted Mobile source, then apply the exact11-file generic database
+port prepared in Starter .work/command-successor-2026-11-06/prepared. Its six original base
+hashes match and five files are new; revalidate before applying. Starter source is UNCHANGED,
+no Starter gate/CI dispatch has occurred. Run its root/database/browser/Android/Web gates,
+record and push, then obtain one first-source Apple run. Keep HRIS policy/codec/usecases here.
+Continue private-store inventory/possession, hard-parent recovery, freeze/drain, adoption of
+the original SDK store, organization runtime/UI/background routing and all54 PRD groups.
+Current FileCollaborationSdkStoreSource.acquire creates directories; generic occupied files
+are not proof of original crypto-store/key possession. Do not use missing/corrupt stores to
+authorize enrollment or rewrite an old physical namespace. Investigation notes under .work/
+space-store-inventory-2026-11-06 are only read findings, not implementation or acceptance.
+
+Phone50 stays installed; no new phone build/install/UI action or new message send. Latest
+read-only UID audit19:29:27UTC sees zero retained post-install Chat/crash lines for10962/
+1010962; hash518c42ad6b85ace21148a5ba2750bdfc338828db4c59c8372d8e95485297dd66 is unchanged.
+The user's long-pending report remains OPEN; do not repeat the existing optional48 question.
+First CI for preceding Mobile3d666135:42277469255 portable succeeded, Apple still running;
+42277469245 both native emulator jobs running. Audit completed first artifacts on that exact
+head; do not redispatch. Current source has not been pushed yet. SDK3 remains immutable;
+never republish or rerun accepted sends merely for reconciliation. Preserve original Bima
+emulator userdata/sidecars/keys; no queue clearing or phone UI driving. Push every commit.
+
 ## Current: bootstrap replacement transport accepted — 6 November 2026
 
 Eleven Kotlin files add explicit organization bootstrap replacement transport;

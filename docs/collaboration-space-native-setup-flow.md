@@ -1,5 +1,9 @@
 # Native organization setup owning flow
 
+Explicit [bootstrap replacement and durable handoff](collaboration-space-bootstrap-handoff.md)
+now extends this flow for uncertain original attempts and actual-build changes.
+Ordinary preparation still never replaces existing work implicitly.
+
 The feature owns explicit provisioning retry and group gateway bootstrap through
 `PrepareCollaborationSpaceSetup`, `ReplayCollaborationSpaceSetup`,
 `ReconcileCollaborationSpaceRetry` and `ObserveCollaborationSpaceSetup`. Constructors

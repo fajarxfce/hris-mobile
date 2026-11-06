@@ -45,7 +45,9 @@ interface CommandStore {
         expectedRevision: Long,
     ): Boolean
 
-    /** Exact owned completion read. Active observations/get deliberately exclude archives. */
+    /**
+     * Exact owned retained-evidence read. Active observations/get deliberately exclude archives.
+     */
     suspend fun archived(scope: CommandScope, partition: String, id: String): CommandArchive?
 
     /**
@@ -63,6 +65,23 @@ interface CommandStore {
      * Shares the insertion transaction, so a competing insert cannot bypass the retained ID.
      */
     suspend fun archiveAbsent(scope: CommandScope, record: CommandRecord, evidence: String): Boolean
+
+    /**
+     * Atomically retains the exact active record with opaque evidence and inserts a distinct
+     * initial successor for the same partition/resource. This records a local handoff, not remote
+     * completion. The caller encrypts the link and retains any unresolved original outcome.
+     *
+     * Returns true only for a newly committed transition. A changed/absent/archived original, an
+     * existing successor identity or a changed active account returns false without writing.
+     * Response loss requires explicit retained-link reconciliation; this method never recreates
+     * removed successor work. Active capacity is unchanged, including at its existing limit.
+     */
+    suspend fun archiveAndInsert(
+        scope: CommandScope,
+        expected: CommandRecord,
+        evidence: String,
+        successor: CommandRecord,
+    ): Boolean
 
     /** Only an existence bit, used to avoid replacing a lost key over retained ciphertext. */
     suspend fun containsRecords(): Boolean

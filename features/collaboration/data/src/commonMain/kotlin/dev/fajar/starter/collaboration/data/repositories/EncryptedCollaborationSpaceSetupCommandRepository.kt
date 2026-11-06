@@ -120,6 +120,39 @@ class EncryptedCollaborationSpaceSetupCommandRepository(
         }
     }
 
+    override suspend fun prepareReplacement(
+        access: CollaborationSpaceLocalAccess,
+        expected: CollaborationSpaceSetupRecord,
+        replacement: CollaborationSpaceSetupCommand,
+    ) = safeStorageCall {
+        require(validCollaborationSpaceSetupHandoff(access, expected, replacement))
+        keys.use { key ->
+            val scope = spaceSetupCommandScope(access)
+            val partition = spaceSetupCommandPartition(access)
+            val raw = commands.get(scope, partition, expected.command.id) ?: return@use false
+            if (decode(access, Retained(raw), key) != expected) return@use false
+            val codec =
+                CollaborationSpaceSetupCommandCodec(
+                    access,
+                    replacement.binding.nativeSessionId,
+                    cipher,
+                    key,
+                )
+            val next =
+                CommandRecord(
+                    partition,
+                    replacement.id,
+                    raw.resourceId,
+                    replacement.orderKey(),
+                    codec.request(replacement),
+                    codec.outcome(replacement, 0, CollaborationSpaceSetupOutcome.Pending, 0),
+                )
+            val evidence = codec.handoff(expected, replacement.id)
+            currentCoroutineContext().ensureActive()
+            commands.archiveAndInsert(scope, raw, evidence, next)
+        }
+    }
+
     override suspend fun update(
         access: CollaborationSpaceLocalAccess,
         expected: CollaborationSpaceSetupRecord,
@@ -156,7 +189,7 @@ class EncryptedCollaborationSpaceSetupCommandRepository(
         val raw = retained(access, expected.command.id) ?: return@safeStorageCall false
         keys.use { key ->
             if (decode(access, raw, key) != expected) return@use false
-            if (raw.archived) return@use true
+            if (raw.evidence != null) return@use true
             currentCoroutineContext().ensureActive()
             // Preserve the exact authenticated outcome as immutable opaque evidence, so replay
             // does not create fresh encryption or lose the original request/receipt.
@@ -164,7 +197,7 @@ class EncryptedCollaborationSpaceSetupCommandRepository(
         }
     }
 
-    private data class Retained(val record: CommandRecord, val archived: Boolean = false)
+    private data class Retained(val record: CommandRecord, val evidence: String? = null)
 
     private suspend fun retained(access: CollaborationSpaceLocalAccess, id: String): Retained? {
         require(validCollaborationMessageId(id))
@@ -176,8 +209,8 @@ class EncryptedCollaborationSpaceSetupCommandRepository(
             return Retained(active)
         }
         return commands.archived(scope, partition, id)?.let {
-            require(it.record.id == id && it.evidence == it.record.state)
-            Retained(it.record, true)
+            require(it.record.id == id)
+            Retained(it.record, it.evidence)
         }
     }
 
@@ -188,10 +221,15 @@ class EncryptedCollaborationSpaceSetupCommandRepository(
     ): CollaborationSpaceSetupRecord {
         val parent = raw.record.resourceId.removePrefix("setup/")
         require(spaceSetupResource(parent) == raw.record.resourceId)
-        return CollaborationSpaceSetupCommandCodec(access, parent, cipher, key)
-            .decode(raw.record)
-            .also {
-                if (raw.archived) require(it.outcome is CollaborationSpaceSetupOutcome.Retried)
-            }
+        val codec = CollaborationSpaceSetupCommandCodec(access, parent, cipher, key)
+        val record = codec.decode(raw.record)
+        if (raw.evidence == null) return record
+        if (raw.evidence == raw.record.state) {
+            require(record.outcome is CollaborationSpaceSetupOutcome.Retried)
+            return record
+        }
+        return record.copy(successorId = codec.successor(raw.record, raw.evidence)).also {
+            require(validCollaborationSpaceSetupRecord(access, it))
+        }
     }
 }

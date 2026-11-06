@@ -25,6 +25,16 @@ interface CollaborationSpaceSetupCommandRepository {
         command: CollaborationSpaceSetupCommand,
     ): AppResult<CollaborationSetupInsertion>
 
+    /**
+     * Exact local CAS: retain the original and its link, insert the pending replacement atomically.
+     * False is not a successful replay: the owning use case must read the authenticated link.
+     */
+    suspend fun prepareReplacement(
+        access: CollaborationSpaceLocalAccess,
+        expected: CollaborationSpaceSetupRecord,
+        replacement: CollaborationSpaceSetupCommand,
+    ): AppResult<Boolean>
+
     suspend fun update(
         access: CollaborationSpaceLocalAccess,
         expected: CollaborationSpaceSetupRecord,

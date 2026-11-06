@@ -216,6 +216,32 @@ internal class IndexedDbCommandStore(
 
     override suspend fun containsRecords() = anyCommands(database()).await<JsBoolean>().toBoolean()
 
+    override suspend fun archiveAndInsert(
+        scope: CommandScope,
+        expected: CommandRecord,
+        evidence: String,
+        successor: CommandRecord,
+    ): Boolean {
+        validateCommandHandoff(scope, expected, evidence, successor)
+        val db = database()
+        currentCoroutineContext().ensureActive()
+        return withContext(NonCancellable) {
+            val changed =
+                archiveAndInsertCommand(
+                        db,
+                        scope.sessionId,
+                        scope.accountKey,
+                        codec.encodeToString(expected),
+                        evidence,
+                        codec.encodeToString(successor),
+                    )
+                    .await<JsBoolean>()
+                    .toBoolean()
+            if (changed) changes.tryEmit(Unit)
+            changed
+        }
+    }
+
     override suspend fun archiveAbsent(
         scope: CommandScope,
         record: CommandRecord,

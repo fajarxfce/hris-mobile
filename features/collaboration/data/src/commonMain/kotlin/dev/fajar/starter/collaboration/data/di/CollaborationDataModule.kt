@@ -44,6 +44,29 @@ class CollaborationDataModule {
             Clock.System,
         )
 
+    @Factory
+    fun prepareSpaceBootstrapReplacement(
+        commands: CollaborationSpaceSetupCommandRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        identities: CollaborationSpaceIdentityRepository,
+        devices: CollaborationSpaceDeviceRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        PrepareCollaborationSpaceBootstrapReplacement(
+            commands,
+            registrations,
+            identities,
+            devices,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
     @Single
     fun replaySpaceSetup(
         commands: CollaborationSpaceSetupCommandRepository,

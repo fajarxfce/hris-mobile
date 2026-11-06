@@ -23,6 +23,8 @@ class PrepareCollaborationSpaceSetupTest {
             assertEquals(4L, f.registered.command.clientBuild)
             assertIs<CollaborationSpaceSetupOutcome.Pending>(record.outcome)
             when (val request = record.command.request) {
+                is CollaborationSpaceBootstrapReplacement ->
+                    error("Ordinary preparation cannot replace uncertainty")
                 is CollaborationSpaceProvisioningRetry -> {
                     assertEquals(0L, request.deviceVersion)
                     assertEquals(1L, request.provisioningRevision)

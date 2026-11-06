@@ -150,6 +150,39 @@ internal class RoomCommandStore(private val database: StarterDatabase) : Command
 
     override suspend fun containsRecords() = dao.containsRecords()
 
+    override suspend fun archiveAndInsert(
+        scope: CommandScope,
+        expected: CommandRecord,
+        evidence: String,
+        successor: CommandRecord,
+    ): Boolean {
+        validateCommandHandoff(scope, expected, evidence, successor)
+        return dao.archiveAndInsert(
+            scope.sessionId,
+            CommandEntity(
+                scope.accountKey,
+                expected.partition,
+                expected.id,
+                expected.resourceId,
+                expected.sortKey,
+                expected.request,
+                expected.state,
+                expected.revision,
+            ),
+            evidence,
+            CommandEntity(
+                scope.accountKey,
+                successor.partition,
+                successor.id,
+                successor.resourceId,
+                successor.sortKey,
+                successor.request,
+                successor.state,
+                successor.revision,
+            ),
+        )
+    }
+
     override suspend fun archiveAbsent(
         scope: CommandScope,
         record: CommandRecord,

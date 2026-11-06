@@ -88,6 +88,18 @@ internal class CollaborationSpaceSetupCommandCodec(
                         receipt =
                             CollaborationReceiptDto(outcome.receipt.id, outcome.receipt.version),
                     )
+                is CollaborationSpaceSetupOutcome.BootstrapReplaced ->
+                    SetupOutcomeDto(
+                        2,
+                        "BOOTSTRAP_REPLACED",
+                        attempts,
+                        replacement =
+                            CollaborationSpaceBootstrapReplacementDto(
+                                outcome.receipt.superseded.effectDto(),
+                                outcome.receipt.replacementOperationId,
+                                outcome.receipt.gateway.toSetupDto(),
+                            ),
+                    )
                 is CollaborationSpaceSetupOutcome.Bootstrapped ->
                     SetupOutcomeDto(
                         1,
@@ -120,6 +132,32 @@ internal class CollaborationSpaceSetupCommandCodec(
                 state.domain(command),
             )
             .also { require(validCollaborationSpaceSetupRecord(access, it)) }
+    }
+
+    suspend fun handoff(expected: CollaborationSpaceSetupRecord, successorId: String): String {
+        require(
+            validCollaborationSpaceSetupRecord(access, expected.copy(successorId = successorId))
+        )
+        return seal(
+            expected.command.id,
+            "successor",
+            expected.revision,
+            Json.encodeToString(SetupHandoffDto(1, "REPLACEMENT_PREPARED", successorId)),
+        )
+    }
+
+    suspend fun successor(raw: CommandRecord, evidence: String): String {
+        val link =
+            Json.decodeFromString<SetupHandoffDto>(
+                open(raw.id, "successor", raw.revision, evidence)
+            )
+        require(
+            link.schema == 1 &&
+                link.kind == "REPLACEMENT_PREPARED" &&
+                validCollaborationMessageId(link.successorId) &&
+                link.successorId != raw.id
+        )
+        return link.successorId
     }
 
     private suspend fun seal(id: String, purpose: String, revision: Long, value: String): String {
@@ -180,9 +218,14 @@ private data class SetupRequestDto(
     val gatewayVersion: Long? = null,
     val provider: CollaborationSpaceIdentityDto? = null,
     val matrixDeviceId: String? = null,
+    val supersedes: SupersededCollaborationSpaceBootstrapDto? = null,
+    val restriction: CollaborationSetupFailureDto? = null,
 ) {
     fun command(access: CollaborationSpaceLocalAccess): CollaborationSpaceSetupCommand {
-        require(schema == 1)
+        require(
+            (schema == 1 && supersedes == null && restriction == null && kind != "REPLACEMENT") ||
+                (schema == 2 && kind == "REPLACEMENT" && supersedes != null)
+        )
         val binding = CollaborationSpaceDeviceBinding(audience, accountId, spaceId, nativeSessionId)
         val nativePlatform = CollaborationNativePlatform.valueOf(platform)
         val request =
@@ -197,7 +240,8 @@ private data class SetupRequestDto(
                         requireNotNull(provisioningRevision),
                     )
                 }
-                "BOOTSTRAP" -> {
+                "BOOTSTRAP",
+                "REPLACEMENT" -> {
                     require(provisioningRevision == null)
                     val owner =
                         CollaborationSpaceOwner(
@@ -209,17 +253,31 @@ private data class SetupRequestDto(
                             ),
                             spaceId,
                         )
-                    CollaborationSpaceBootstrap(
-                        id,
-                        binding,
-                        nativePlatform,
-                        clientBuild,
-                        deviceId,
-                        deviceVersion,
-                        gatewayVersion,
-                        requireNotNull(provider).toSpaceIdentity(owner),
-                        requireNotNull(matrixDeviceId),
-                    )
+                    val bootstrap =
+                        CollaborationSpaceBootstrap(
+                            id,
+                            binding,
+                            nativePlatform,
+                            clientBuild,
+                            deviceId,
+                            deviceVersion,
+                            gatewayVersion,
+                            requireNotNull(provider).toSpaceIdentity(owner),
+                            requireNotNull(matrixDeviceId),
+                        )
+                    if (kind == "BOOTSTRAP") bootstrap
+                    else
+                        CollaborationSpaceBootstrapReplacement(
+                            requireNotNull(supersedes).effect(bootstrap),
+                            bootstrap,
+                            restriction?.let {
+                                CollaborationSpaceSetupRestriction(
+                                    FailureKind.valueOf(it.kind),
+                                    it.code,
+                                    it.retryAfterSeconds,
+                                )
+                            },
+                        )
                 }
                 else -> error("Unsupported native setup request.")
             }
@@ -236,9 +294,10 @@ private data class SetupRequestDto(
 
 private fun CollaborationSpaceSetupCommand.toSetupDto(): SetupRequestDto {
     val retry = request as? CollaborationSpaceProvisioningRetry
-    val bootstrap = request as? CollaborationSpaceBootstrap
+    val bootstrap = request.bootstrapEffect()
+    val replacement = request as? CollaborationSpaceBootstrapReplacement
     return SetupRequestDto(
-        1,
+        if (replacement == null) 1 else 2,
         registrationId,
         id,
         binding.audience,
@@ -248,7 +307,7 @@ private fun CollaborationSpaceSetupCommand.toSetupDto(): SetupRequestDto {
         platform.name,
         clientBuild,
         createdAt.toString(),
-        if (retry != null) "RETRY" else "BOOTSTRAP",
+        if (retry != null) "RETRY" else if (replacement != null) "REPLACEMENT" else "BOOTSTRAP",
         request.deviceId,
         request.deviceVersion,
         retry?.provisioningRevision,
@@ -266,6 +325,10 @@ private fun CollaborationSpaceSetupCommand.toSetupDto(): SetupRequestDto {
             )
         },
         bootstrap?.matrixDeviceId,
+        replacement?.supersedes?.effectDto(),
+        replacement?.retainedRestriction?.let {
+            CollaborationSetupFailureDto(it.kind.name, it.code, it.retryAfterSeconds)
+        },
     )
 }
 
@@ -293,9 +356,14 @@ private data class SetupOutcomeDto(
     val failure: CollaborationSetupFailureDto? = null,
     val receipt: CollaborationReceiptDto? = null,
     val gateway: CollaborationSpaceGatewayDto? = null,
+    val replacement: CollaborationSpaceBootstrapReplacementDto? = null,
 ) {
     fun domain(command: CollaborationSpaceSetupCommand): CollaborationSpaceSetupOutcome {
-        require(schema == 1 && attempts in 0..1_000)
+        require(attempts in 0..1_000)
+        require(
+            (schema == 1 && replacement == null && phase != "BOOTSTRAP_REPLACED") ||
+                (schema == 2 && phase == "BOOTSTRAP_REPLACED" && replacement != null)
+        )
         return when (phase) {
             "PENDING" -> {
                 require(attempts == 0 && failure == null && receipt == null && gateway == null)
@@ -323,6 +391,16 @@ private data class SetupOutcomeDto(
                     CollaborationSetupReceipt(value.id, value.version)
                 )
             }
+            "BOOTSTRAP_REPLACED" -> {
+                require(attempts > 0 && failure == null && receipt == null && gateway == null)
+                val request =
+                    command.request as? CollaborationSpaceBootstrapReplacement
+                        ?: error("Unexpected replacement outcome.")
+                CollaborationSpaceSetupOutcome.BootstrapReplaced(
+                    requireNotNull(replacement)
+                        .toSpaceBootstrapReplacement(request, request.supersedes.effectDto())
+                )
+            }
             "BOOTSTRAPPED" -> {
                 require(attempts > 0 && failure == null && receipt == null)
                 val request =
@@ -335,4 +413,38 @@ private data class SetupOutcomeDto(
             else -> error("Unsupported native setup outcome.")
         }
     }
+}
+
+@Serializable
+private data class SetupHandoffDto(val schema: Int, val kind: String, val successorId: String)
+
+private fun CollaborationSpaceBootstrap.effectDto() =
+    SupersededCollaborationSpaceBootstrapDto(
+        operationId,
+        binding.spaceId,
+        binding.accountId,
+        binding.nativeSessionId,
+        deviceId,
+        deviceVersion,
+        gatewayVersion,
+        platform.name,
+        clientBuild,
+    )
+
+private fun SupersededCollaborationSpaceBootstrapDto.effect(
+    next: CollaborationSpaceBootstrap
+): CollaborationSpaceBootstrap {
+    require(
+        spaceId == next.binding.spaceId &&
+            accountId == next.binding.accountId &&
+            nativeSessionId == next.binding.nativeSessionId &&
+            deviceId == next.deviceId &&
+            platform == next.platform.name
+    )
+    return next.copy(
+        operationId = operationId,
+        deviceVersion = expectedDeviceVersion,
+        gatewayVersion = expectedGatewayVersion,
+        clientBuild = clientBuild,
+    )
 }

@@ -73,8 +73,12 @@ class ReplayCollaborationSpaceSetup(
                 return@withTimeoutOrNull invalidSpaceSetup()
             // A received result (including an archive) remains owned across age/build/parent
             // changes.
-            if (original.completed()) return@withTimeoutOrNull AppResult.Success(original)
-            remember((original.outcome as? CollaborationSpaceSetupOutcome.Unconfirmed)?.failure)
+            if (original.successorId != null || original.completed())
+                return@withTimeoutOrNull AppResult.Success(original)
+            remember(
+                (original.outcome as? CollaborationSpaceSetupOutcome.Unconfirmed)?.failure
+                    ?: collaborationSpaceSetupRestriction(original)?.failure()
+            )
             val admission = directory.admission(access)
             if (admission is AppResult.Failed) return@withTimeoutOrNull failed(admission.failure)
             if (!validCollaborationSpaceDirectoryAdmission((admission as AppResult.Success).value))
@@ -129,8 +133,11 @@ class ReplayCollaborationSpaceSetup(
                 !validCollaborationSpaceSetupRecord(attempt.access, original)
         )
             return attempt.failed(invalidSpaceSetup().failure)
-        if (original.completed()) return AppResult.Success(original)
-        attempt.remember((original.outcome as? CollaborationSpaceSetupOutcome.Unconfirmed)?.failure)
+        if (original.successorId != null || original.completed()) return AppResult.Success(original)
+        attempt.remember(
+            (original.outcome as? CollaborationSpaceSetupOutcome.Unconfirmed)?.failure
+                ?: collaborationSpaceSetupRestriction(original)?.failure()
+        )
         val source = original(attempt, original.command)
         if (source is AppResult.Failed) return source
         if (original.outcome is CollaborationSpaceSetupOutcome.Pending) {
@@ -155,7 +162,7 @@ class ReplayCollaborationSpaceSetup(
                 build.number !in 1..999_999_999L
         )
             return attempt.failed(originalSpaceSetupRequired().failure)
-        if (command.request is CollaborationSpaceBootstrap && command.clientBuild != build.number)
+        if (command.request.bootstrapEffect() != null && command.clientBuild != build.number)
             return attempt.failed(
                 collaborationRecoveryFailure(
                         "client.collaboration_build_changed",
@@ -181,7 +188,7 @@ class ReplayCollaborationSpaceSetup(
                 command.platform != original.command.platform
         )
             return attempt.failed(changedSpaceSetup().failure)
-        val bootstrap = command.request as? CollaborationSpaceBootstrap
+        val bootstrap = command.request.bootstrapEffect()
         if (
             bootstrap != null &&
                 (bootstrap.provider != original.command.provider ||
@@ -214,6 +221,7 @@ class ReplayCollaborationSpaceSetup(
         val kind =
             when (command.request) {
                 is CollaborationSpaceProvisioningRetry -> CollaborationSpaceSetupKind.RETRY
+                is CollaborationSpaceBootstrapReplacement,
                 is CollaborationSpaceBootstrap -> CollaborationSpaceSetupKind.BOOTSTRAP
             }
         val request =
@@ -226,7 +234,12 @@ class ReplayCollaborationSpaceSetup(
                 clock.now(),
             )
         if (request is AppResult.Failed) return attempt.failed(request.failure)
-        return if ((request as AppResult.Success).value == command.request) AppResult.Success(Unit)
+        return if (
+            (request as AppResult.Success).value ==
+                ((command.request as? CollaborationSpaceBootstrapReplacement)?.replacement
+                    ?: command.request)
+        )
+            AppResult.Success(Unit)
         else attempt.failed(changedSpaceSetup().failure)
     }
 
@@ -243,7 +256,9 @@ class ReplayCollaborationSpaceSetup(
                     )
                     .failure
             )
-        val failure = (original.outcome as? CollaborationSpaceSetupOutcome.Unconfirmed)?.failure
+        val failure =
+            (original.outcome as? CollaborationSpaceSetupOutcome.Unconfirmed)?.failure
+                ?: collaborationSpaceSetupRestriction(original)?.failure()
         val uncertain = CollaborationSpaceSetupOutcome.Unconfirmed(failure)
         val sending =
             original.copy(
@@ -286,9 +301,15 @@ class ReplayCollaborationSpaceSetup(
         if (!(saved as AppResult.Success).value) return attempt.failed(changedSpaceSetup().failure)
         val finalGate = attempt.unchangedAdmission(gate)
         if (finalGate is AppResult.Failed) return finalGate
+        val gateway =
+            when (outcome) {
+                is CollaborationSpaceSetupOutcome.Bootstrapped -> outcome.gateway
+                is CollaborationSpaceSetupOutcome.BootstrapReplaced -> outcome.receipt.gateway
+                else -> null
+            }
         if (
-            outcome is CollaborationSpaceSetupOutcome.Bootstrapped &&
-                outcome.gateway.accessExpiresAtEpochMillis <= clock.now().toEpochMilliseconds()
+            gateway != null &&
+                gateway.accessExpiresAtEpochMillis <= clock.now().toEpochMilliseconds()
         )
             return attempt.failed(
                 collaborationRecoveryFailure(
@@ -316,6 +337,30 @@ class ReplayCollaborationSpaceSetup(
                             AppResult.Success(CollaborationSpaceSetupOutcome.Retried(result.value))
                         else invalidSpaceSetup()
                 }
+            is CollaborationSpaceBootstrapReplacement ->
+                when (val result = setup.replaceBootstrap(attempt.owner, input)) {
+                    is AppResult.Failed -> result
+                    is AppResult.Success ->
+                        when {
+                            !validCollaborationSpaceSetupReplacementReceipt(
+                                command,
+                                result.value,
+                            ) ||
+                                result.value.gateway.expiresAtEpochMillis >
+                                    attempt.hardDeadline.toEpochMilliseconds() ->
+                                invalidSpaceSetup()
+                            result.value.gateway.accessExpiresAtEpochMillis <=
+                                clock.now().toEpochMilliseconds() ->
+                                collaborationRecoveryFailure(
+                                    "client.collaboration_revalidation_required",
+                                    FailureKind.Unavailable,
+                                )
+                            else ->
+                                AppResult.Success(
+                                    CollaborationSpaceSetupOutcome.BootstrapReplaced(result.value)
+                                )
+                        }
+                }
             is CollaborationSpaceBootstrap ->
                 when (val result = setup.bootstrap(attempt.owner, input)) {
                     is AppResult.Failed -> result
@@ -341,7 +386,8 @@ class ReplayCollaborationSpaceSetup(
 }
 
 private fun CollaborationSpaceSetupRecord.completed() =
-    outcome is CollaborationSpaceSetupOutcome.Retried ||
+    outcome is CollaborationSpaceSetupOutcome.BootstrapReplaced ||
+        outcome is CollaborationSpaceSetupOutcome.Retried ||
         outcome is CollaborationSpaceSetupOutcome.Bootstrapped
 
 private fun originalSpaceSetupRequired() =

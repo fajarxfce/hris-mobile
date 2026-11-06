@@ -59,6 +59,21 @@ internal class SpaceSetupFixture {
     var beforeUpdate: suspend (CollaborationSpaceSetupOutcome) -> AppResult<Boolean> = {
         AppResult.Success(true)
     }
+    var beforeHandoff: suspend () -> AppResult<Boolean> = { AppResult.Success(true) }
+    var afterHandoff: suspend () -> AppResult<Boolean> = { AppResult.Success(true) }
+    var beforeReplacement:
+        suspend (CollaborationSpaceBootstrapReplacement) -> AppResult<
+                CollaborationSpaceBootstrapReplacementReceipt
+            > =
+        {
+            AppResult.Success(
+                CollaborationSpaceBootstrapReplacementReceipt(
+                    it.supersedes,
+                    it.operationId,
+                    gateway(it.replacement),
+                )
+            )
+        }
     var beforeArchive: suspend () -> AppResult<Boolean> = { AppResult.Success(true) }
     var beforeRetry:
         suspend (CollaborationSpaceProvisioningRetry) -> AppResult<CollaborationSetupReceipt> =
@@ -230,6 +245,28 @@ internal class SpaceSetupFixture {
                 return AppResult.Success(CollaborationSetupInsertion.STORED)
             }
 
+            override suspend fun prepareReplacement(
+                access: CollaborationSpaceLocalAccess,
+                expected: CollaborationSpaceSetupRecord,
+                replacement: CollaborationSpaceSetupCommand,
+            ): AppResult<Boolean> {
+                val result = beforeHandoff()
+                if (result !is AppResult.Success || !result.value) return result
+                if (saved() != expected) return AppResult.Success(false)
+                check(validCollaborationSpaceSetupHandoff(access, expected, replacement))
+                archives[expected.command.id] = expected.copy(successorId = replacement.id)
+                records.value =
+                    AppResult.Success(
+                        CollaborationSpaceSetupRecord(
+                            replacement,
+                            0,
+                            0,
+                            CollaborationSpaceSetupOutcome.Pending,
+                        )
+                    )
+                return afterHandoff()
+            }
+
             override suspend fun update(
                 access: CollaborationSpaceLocalAccess,
                 expected: CollaborationSpaceSetupRecord,
@@ -271,8 +308,12 @@ internal class SpaceSetupFixture {
             override suspend fun replaceBootstrap(
                 owner: CollaborationSpaceOwner,
                 command: CollaborationSpaceBootstrapReplacement,
-            ): AppResult<CollaborationSpaceBootstrapReplacementReceipt> =
-                error("Ordinary setup must not silently replace an uncertain bootstrap")
+            ): AppResult<CollaborationSpaceBootstrapReplacementReceipt> {
+                assertIs<CollaborationSpaceSetupOutcome.Unconfirmed>(assertNotNull(saved()).outcome)
+                assertEquals(saved()?.command?.request, command)
+                sent += command
+                return beforeReplacement(command)
+            }
 
             override suspend fun retry(
                 owner: CollaborationSpaceOwner,
@@ -299,6 +340,20 @@ internal class SpaceSetupFixture {
 
     fun prepare(build: AppBuild = this.build) =
         PrepareCollaborationSpaceSetup(
+            commands,
+            registration.commands,
+            registration.identities,
+            registration.devices,
+            base.directory,
+            base.sessions,
+            native.server,
+            build,
+            native.clock,
+            native.time,
+        )
+
+    fun replace(build: AppBuild = this.build) =
+        PrepareCollaborationSpaceBootstrapReplacement(
             commands,
             registration.commands,
             registration.identities,
