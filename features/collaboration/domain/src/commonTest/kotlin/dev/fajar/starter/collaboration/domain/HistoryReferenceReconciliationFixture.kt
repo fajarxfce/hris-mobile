@@ -2,6 +2,7 @@ package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
+import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationHistoryEnd
 import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationHistoryEvent
 import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationHistoryReferences
 import dev.fajar.starter.collaboration.domain.usecases.ReconcileCollaborationHistoryReferences
@@ -249,6 +250,19 @@ internal class HistoryReferenceReconciliationFixture(
             local.build,
             local.clock,
         )
+
+    val endReader =
+        ReadCollaborationHistoryEnd(
+            traversal,
+            local.lists,
+            local.setup.sessions,
+            local.setup.workspaces,
+            local.server,
+            local.build,
+            local.clock,
+        )
+
+    suspend fun readEnd() = endReader("selection", key)
 
     suspend fun read(after: String? = null, limit: Int = 20) =
         reader("selection", key, after, limit)

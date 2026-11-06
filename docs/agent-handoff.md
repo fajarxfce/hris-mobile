@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-## Current: release 46 installed; history boundary follow-up — 6 November 2026
+## Current: release 46 installed; history boundary accepted; pending-send investigation — 6 November 2026
 
 Release 46 from pushed source **00a51e14d8919a152aae810017528f1947ef37e6** is accepted
 and installed on **10.77.77.3:5555**. Normal public SDK 2 dependency, devRelease
@@ -26,8 +26,11 @@ at13:35:46–47 UTC. Do not ask that feedback question again or claim send laten
 
 Bima emulator 2089464 / startTicks 164786875 stopped at 13:25:39 UTC. Original
 userdata/keys remain under .work/demo-chat-device-2026-11-05/bima, now with 46.
-No emulator is active. History-domain full gate87727 is the only heavy local job,
-.work/history-completion-domain-2026-11-06/full-1; its source inputs are frozen.
+No emulator or heavy local job is active. History-domain gate87727/full-1 is
+drained and PASSED:1,089.263s,7,056 fresh cases/911 suites, zero failures/errors/
+skips or Android lint findings,4,215 source inputs unchanged. The15 new common
+domain cases passed on desktop and browser.
+[Boundary evidence](measurements/collaboration-history-end-domain-2026-11-06.json).
 Private build, smoke and install evidence is
 in .work/release-phone-2026-11-06-build46. Never wipe/reseed the original Bima store.
 Announce EVERY future phone installation, select the serial explicitly, use
@@ -70,14 +73,22 @@ do not substitute it into SDK 2.
 
 NEXT: audit automatic 00a51e14 CI (do not manually redispatch): native HRIS
 42224141387 now includes separate x86_64 and ARM64 jobs with APK ABI assertions;
-protocol 42224141654 and control 42224141378 are also running. Preserve precise
+protocol42224141654 has now passed both modes; control42224141378 portable has
+passed4,249 cases/461 suites (artifact13506177782), Apple still runs. Verified
+downloads/summary: .work/sdk-confirmed-queue-2026-11-06/remote-app-00a51e14. Preserve precise
 artifact hashes and platform scope. Continue all 54 PRD groups after this release.
-The history-end increment now has eight uncommitted Kotlin files (new domain reader,
-pure completion policy, DI/VM/fixtures and15 common domain regressions). Full gate
-87727 is running; do not mutate those inputs until it finishes. Its contract doc is
-also updated. Use cases coordinate repositories, never other use cases.
+This checkpoint commits the accepted eight-file history-end increment (domain
+reader/pure completion policy, DI/VM/fixtures and15 common domain regressions).
+Use cases coordinate repositories, never other use cases. There is no47 APK yet.
 
-PRIORITY after draining that gate: reproduce the delayed-ACK recovery issue.
+PRIORITY now: reproduce the delayed-ACK recovery issue. A test-only detached
+worktree is prepared at /home/fajar/hris/.worktrees/hris-pending-ack-2026-11-06
+(base b1fcac03). Its only change adds the distant-ACK regression in
+CollaborationDeliveryWorkerTest. Do not build that separate checkout; apply its
+diff to the warm main checkout after this commit, then run the prepared
+.work/chat-pending-phone-2026-11-06-build46/check-distant-ack.py red-1. The runner
+expects source stability and records the actual result; it has NOT run yet.
+The test patch is also in that folder as distant-ack-regression.patch.
 CollaborationDeliveryWorker.acquireOriginals currently focuses the first Sent event
 even alongside unconfirmed commands. Check a distant newer ACK and alias-changed
 bootstrap against that old focus before implementing a latest-head recovery policy.

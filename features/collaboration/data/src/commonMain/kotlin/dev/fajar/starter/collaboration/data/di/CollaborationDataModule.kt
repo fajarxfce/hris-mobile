@@ -1247,6 +1247,25 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun readHistoryEnd(
+        traversal: CollaborationHistoryTraversalRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReadCollaborationHistoryEnd(
+            traversal,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun advanceIncomingReferences(
         traversal: CollaborationHistoryTraversalRepository,
         lists: CollaborationListRepository,

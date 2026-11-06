@@ -614,6 +614,7 @@ internal class ChatThreadFixture {
                 createReopenCollaborationHistory(),
                 createAcquireCollaborationProviderHistory(),
                 createReadCollaborationHistoryReferences(),
+                createReadCollaborationHistoryEnd(),
                 createReconcileCollaborationHistoryReferences(),
                 createObserveCollaborationDraft(),
                 EditCollaborationDraft(drafts, local, sessions, workspaces, server, build, clock),
@@ -963,6 +964,19 @@ internal class ChatThreadFixture {
     private fun createReadCollaborationHistoryReferences() =
         with(base) {
             ReadCollaborationHistoryReferences(
+                past.traversal,
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+            )
+        }
+
+    private fun createReadCollaborationHistoryEnd() =
+        with(base) {
+            ReadCollaborationHistoryEnd(
                 past.traversal,
                 local,
                 sessions,

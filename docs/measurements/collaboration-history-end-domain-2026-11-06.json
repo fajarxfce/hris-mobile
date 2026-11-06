@@ -1,0 +1,81 @@
+{
+  "date": "2026-11-06",
+  "sourceBaseCommit": "b1fcac03",
+  "sourceManifestSha256": "5d2440c6e1fda172471444bf49879e504338eeb6d34ac256d7a5dfcd481935a4",
+  "sourceFiles": 4215,
+  "sourcesUnchanged": true,
+  "checks": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "env",
+      "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+      "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+      "ANDROID_HOME=/home/fajar/Android/Sdk",
+      "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+      "./gradlew",
+      "--dependency-verification",
+      "strict",
+      "--stacktrace",
+      "--continue",
+      ":check",
+      ":features:collaboration:data:testAndroidHostTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":core:database:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:presentation:wasmJsBrowserTest",
+      ":apps:android:assembleDevDebug",
+      ":apps:android:lintDevDebug",
+      ":formatCheck",
+      ":architectureCheck",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=47",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m",
+      "-Pkotlin.compiler.execution.strategy=in-process"
+    ],
+    "startedAt": "2026-11-06T13:31:22.996413+00:00",
+    "elapsedSeconds": 1089.263,
+    "exitCode": 0,
+    "freshCounts": {
+      "tests": 7056,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "freshSuites": 911,
+  "newDomainReports": {
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ReadCollaborationHistoryEndTest.xml": {
+      "sha256": "2cb915dd66e67a8df7bc906b5b208c5c7ab6b6d64b916e7b4e3514902dee4bd9",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.ReadCollaborationHistoryEndTest.xml": {
+      "sha256": "da9588e321f040772e99f7a405552a0125f15552a716247df1063fc5d4af3c0c",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "lint": {
+    "issues": 0,
+    "reportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "boundaries": [
+    "History-end restoration directly coordinates repositories in domain; no use-case-to-use-case calls.",
+    "One captured local owner is checked around every bounded page; confirmed denial wins over late storage/session failures.",
+    "Message classification and traversal-extent policy are shared domain functions.",
+    "No network, SDK, acknowledgement or message deletion occurs during end restoration."
+  ],
+  "scope": "Desktop and browser domain/VM regressions, full application check, Android host tests and debug build/lint. Physical phone remains accepted release 46, with pending-send recovery still under investigation.",
+  "starterPortRequired": false
+}

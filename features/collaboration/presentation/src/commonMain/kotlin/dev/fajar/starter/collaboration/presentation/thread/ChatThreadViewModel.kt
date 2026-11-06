@@ -42,6 +42,7 @@ class ChatThreadViewModel(
     private val reopenHistory: ReopenCollaborationHistory,
     acquireProviderHistory: AcquireCollaborationProviderHistory,
     readHistoryReferences: ReadCollaborationHistoryReferences,
+    private val readHistoryEnd: ReadCollaborationHistoryEnd,
     reconcileHistoryReferences: ReconcileCollaborationHistoryReferences,
     private val observeDraft: ObserveCollaborationDraft,
     private val editDraft: EditCollaborationDraft,
@@ -1640,7 +1641,7 @@ class ChatThreadViewModel(
                 olderRecoveryAnchor = null
                 olderKey = key
                 updateState { it.copy(historyIncomplete = false, historyFailure = null) }
-                val restored = olderHistory.exhausted(workspaceId, key)
+                val restored = readHistoryEnd(workspaceId, key)
                 currentCoroutineContext().ensureActive()
                 if (access != owned) return
                 when (restored) {
