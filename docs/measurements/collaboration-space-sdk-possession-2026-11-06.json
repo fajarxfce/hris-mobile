@@ -183,7 +183,13 @@
     "preparedProbeStillPresent": true,
     "qualityConventionSha256": "f61dec1331e7e5abd604336ef85e4050b4f8c1f4712b953266a6fe3edea63aa3",
     "onlySourceDifferenceBetweenFullGates": "build-logic/src/main/kotlin/starter.quality.gradle.kts",
-    "starterPort": "pending"
+    "starterPort": {
+      "head": "5fb4eca355e3d3761c0c976c42b4386a3c7e31aa",
+      "acceptedLocally": true,
+      "freshTests": 490,
+      "firstApple": 42308538803,
+      "appleStatus": "running"
+    }
   },
   "firstCi": {
     "head": "5081e629259e33af286304ccd79d91fbd7e8dade",

@@ -11,21 +11,25 @@ coroutine exception-identity test assertion. [Product evidence](measurements/col
 Product5081e629259e33af286304ccd79d91fbd7e8dade is committed/pushed. Its automatic first
 CI runs control42306713193, native42306713065 and protocol42306715423 are running;
 never redispatch. Audit driver is private space-store-inventory-2026-11-06/remote-ci-5081.
-The ONLY heavy local job is Starter47695, quality-source-scope-2026-11-06/full-1.
-Exact generic quality source is applied there and its owned malformed .work fixture
-remains present. Detekt/format/architecture pass; full root/browser/Android/Web is
-still running. Starter inputs stay frozen. No emulator is active.
+Starter port5fb4eca is committed/pushed: full47695 ENDED PASS824.801s with490 fresh
+cases/143 suites, zero failures/errors/skips,994 stable inputs and lint0 errors/44
+existing warnings. Real formatter/Detekt passed with the unchanged malformed .work
+fixture, then only that owned fixture was removed. First Apple42308538803 was
+dispatched ONCE on the exact port and is running; do not redispatch.
+The ONLY heavy local job is Mobile82616, chat-queue-family-2026-11-06/red-1.
+ONLY the two new regression test files are applied to root; all three existing
+production baselines and absent new policy remain unchanged. Inputs stay frozen
+until the red reproduction ends. No emulator is active.
 
 The first full run46295 remains FAILED945.818s despite7,216 passing fresh tests:
 quality tasks incorrectly included36 generated SDK bindings plus one private probe.
 Only build-logic/src/main/kotlin/starter.quality.gradle.kts changed before the accepted
 full retry: exclude **/.work/** in both shared source selection and Detekt arguments.
 All37 scratch files are retained. Original SARIF49582d77... stays archived; no baseline
-or authored finding was suppressed. NEXT port this exact generic file to Starter;
-its original baseline matched. Keep a small owned malformed .work fixture throughout
-Starter root/browser/Android/Web checks, then delete only that fixture. The prepared
-driver is .work/space-store-inventory-2026-11-06/check-starter-quality.py; run from
-Starter after creating .work/quality-source-scope-2026-11-06. No HRIS identity port.
+or authored finding was suppressed. The exact generic file is now ported to Starter5fb4eca after matching its original
+baseline. Independent root/browser/Android/Web acceptance and owned scratch cleanup
+are recorded in Starter docs/measurements/quality-source-scope-port-2026-11-06.json.
+No HRIS identity source was ported.
 
 SDK4 release437093395 remains immutable/public, tag matrix-sdk-26.10.23-hris.4,
 target4228599ba659cf68cfea1138e6f8017b0b77c222. Normal Gradle uses public AAR
@@ -47,14 +51,18 @@ No phone UI/install/send occurred; exact old/current IDs remain unobserved.
 
 Source review identifies two linked issues: delivery rejects the current physical
 queue when account-owned history contains older-family Staged work; the worker's
-oldest-eight limit can also repeatedly select only older-family work. After the
-Starter port, prioritize .work/chat-queue-family-2026-11-06: six prepared files/seven
-new cases, formatted but NOT applied/compiled/tested. Three existing source baselines
+oldest-eight limit can also repeatedly select only older-family work. Prioritize
+.work/chat-queue-family-2026-11-06: six prepared files/seven new cases. Only the two
+test files are applied for the currently running baseline reproduction; all four
+production files remain isolated and uncompiled/untested. Three existing source baselines
 are pinned. Four production files isolate current-store mapping/staging and delegate
 batch selection to a pure domain policy before its limit; two test files cover actual
 use cases plus encrypted AppContainer restart with ten older uncertain messages.
-Run check-red.py red-1 with ONLY the two tests copied first, retaining baseline failures;
-then apply four production files and run check-focused.py plus the full gate. A
+After check-red.py red-1 ends, retain its baseline failures; apply the four production
+files only after checking the pinned original hashes, then run check-focused.py and
+check-full.py. Release51 build/verification/install drivers are prepared under
+.work/release-phone-2026-11-06-build51, syntax-checked but not run; emulator/probe
+drivers still need adapting from50 without touching Bima userdata/sidecars. A
 foreign Staged ID actually captured in the current queue must still reject; unknown
 current echoes and same-store unfinished staging remain closed. Original state,
 revision, keys and transaction IDs must remain unchanged. This allows current work;
