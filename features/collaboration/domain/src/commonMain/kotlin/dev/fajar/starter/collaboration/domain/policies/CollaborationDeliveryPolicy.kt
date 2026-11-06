@@ -3,7 +3,7 @@ package dev.fajar.starter.collaboration.domain.policies
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.*
 
-/** Reject uncertain or foreign staged work before allowing this room's native queue to send. */
+/** Map the acquired physical queue while retaining other account-owned work unchanged. */
 fun collaborationDeliveryMappings(
     records: List<CollaborationMessageRecord>,
     access: CollaborationLocalAccess,
@@ -18,6 +18,8 @@ fun collaborationDeliveryMappings(
             !capturedTransactions.all(::validCollaborationTransactionId)
     )
         return collaborationSetupFailure("client.collaboration_queue_mapping_bounds")
+    if (!validCollaborationMessageDevice(device))
+        return collaborationSetupFailure("client.collaboration_queue_mapping_device")
     val mapped = mutableMapOf<String, CollaborationMessageRecord>()
     for (record in records) {
         if (
@@ -35,25 +37,40 @@ fun collaborationDeliveryMappings(
                 CollaborationMessageState.Queued -> null
                 CollaborationMessageState.Cancelled ->
                     return collaborationSetupFailure("client.collaboration_queue_mapping_cancelled")
-                is CollaborationMessageState.Staging ->
-                    return collaborationSetupFailure("client.collaboration_queue_mapping_staging")
-                is CollaborationMessageState.Staged -> {
-                    collaborationRetainedTransaction(record, device, capturedTransactions)
-                        ?: return collaborationSetupFailure(
-                            when {
-                                !validCollaborationMessageDevice(device) ->
-                                    "client.collaboration_queue_mapping_device"
-                                state.device.nativeSessionId != device.nativeSessionId ->
-                                    "client.collaboration_queue_mapping_native_family"
-                                state.device.deviceId != device.deviceId ->
-                                    "client.collaboration_queue_mapping_device"
-                                state.device.roomId != device.roomId ->
-                                    "client.collaboration_queue_mapping_room"
-                                state.origin == null ->
-                                    "client.collaboration_queue_mapping_legacy_receipt"
-                                else -> "client.collaboration_queue_mapping_missing_receipt"
-                            }
+                is CollaborationMessageState.Staging -> {
+                    // Account-owned history may retain uncertainty in another physical store.
+                    // That store is not acquired, resumed, rewritten or completed here.
+                    if (
+                        state.device.nativeSessionId != device.nativeSessionId ||
+                            state.device.deviceId != device.deviceId
+                    )
+                        null
+                    else
+                        return collaborationSetupFailure(
+                            "client.collaboration_queue_mapping_staging"
                         )
+                }
+                is CollaborationMessageState.Staged -> {
+                    val anotherStore =
+                        state.device.nativeSessionId != device.nativeSessionId ||
+                            state.device.deviceId != device.deviceId
+                    // An ID captured in this queue must never borrow a foreign store's mapping.
+                    if (anotherStore && state.transactionId !in capturedTransactions) null
+                    else
+                        collaborationRetainedTransaction(record, device, capturedTransactions)
+                            ?: return collaborationSetupFailure(
+                                when {
+                                    state.device.nativeSessionId != device.nativeSessionId ->
+                                        "client.collaboration_queue_mapping_native_family"
+                                    state.device.deviceId != device.deviceId ->
+                                        "client.collaboration_queue_mapping_device"
+                                    state.device.roomId != device.roomId ->
+                                        "client.collaboration_queue_mapping_room"
+                                    state.origin == null ->
+                                        "client.collaboration_queue_mapping_legacy_receipt"
+                                    else -> "client.collaboration_queue_mapping_missing_receipt"
+                                }
+                            )
                 }
                 is CollaborationMessageState.Sent ->
                     collaborationRetainedTransaction(record, device, capturedTransactions)

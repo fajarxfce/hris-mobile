@@ -28,7 +28,9 @@ one new confirmation, retains every old record unchanged through another restart
 and never enqueues or resumes the old transactions. Its provider is simulated;
 physical old-message delivery has not been accepted.
 
-[Evidence](measurements/collaboration-chat-queue-ownership-2026-11-06.json). The complete
-root/Android/browser gate and exact release APK checks remain required. Recovery of
+The complete root/Android/browser gate passed in 540.556 seconds: 5,454 fresh cases
+in 639 suites, zero failures/errors/skips, 4,254 unchanged source inputs, and zero
+Android lint/Detekt findings. Exact release APK checks remain required.
+[Evidence](measurements/collaboration-chat-queue-ownership-2026-11-06.json). Recovery of
 original pending commands through their original private store and current authority
 is separate ongoing work; this change does not claim those commands were delivered.

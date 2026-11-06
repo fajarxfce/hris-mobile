@@ -170,14 +170,22 @@ class StageCollaborationText(
             records.size > 128 ||
                 records.any {
                     it.intent.owner != access.messageOwner() ||
-                        it.intent.conversationId != original.intent.conversationId
+                        it.intent.conversationId != original.intent.conversationId ||
+                        !validCollaborationMessageState(it.state)
                 } ||
                 records.map { it.intent.id }.distinct().size != records.size ||
                 records.singleOrNull { it.intent.id == original.intent.id } != original
         )
             return failed("client.collaboration_message_changed")
         val others = records.filter { it.intent.id != original.intent.id }
-        if (others.any { it.state is CollaborationMessageState.Staging })
+        if (
+            others.any {
+                val state = it.state
+                state is CollaborationMessageState.Staging &&
+                    state.device.nativeSessionId == queue.device.nativeSessionId &&
+                    state.device.deviceId == queue.device.deviceId
+            }
+        )
             return failed("client.collaboration_queue_unresolved")
         val current = checked(scope, owner) { queue.snapshot() }
         if (current is AppResult.Failed) return current

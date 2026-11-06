@@ -1,6 +1,6 @@
 {
-  "recordedAt": "2026-11-06T23:03:05.355163+00:00",
-  "status": "focused accepted; complete gate pending",
+  "recordedAt": "2026-11-06T23:13:24.538253+00:00",
+  "status": "focused and complete local gates accepted; release and original-message recovery pending",
   "baselineProgram": "5081e629259e33af286304ccd79d91fbd7e8dade",
   "physicalEvidence": "collaboration-phone-queue-family-2026-11-06.json",
   "red": {
@@ -90,7 +90,7 @@
   ],
   "testsByteIdentical": true,
   "newCases": 7,
-  "fullAccepted": false,
+  "fullAccepted": true,
   "phoneInstalled": false,
   "originalPendingMessagesRecovered": false,
   "candidateFiles": {
@@ -100,5 +100,65 @@
     "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationDeliveryPolicy.kt": "e0c186c30eb89be0ae6007262e1e5cb06a7ecc666cc4718c40726312528108af",
     "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/StageCollaborationText.kt": "ac8eac71babcf97053956406c5c0b937078f9b83ce46c2a9aadbbccdc6f7a5ce",
     "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationQueueNamespaceTest.kt": "1b384220ba2e50a885930e30bae5c7a42c3102eefc05acbf030eb5c0e0581cc2"
+  },
+  "full": {
+    "startedAt": "2026-11-06T23:03:05.541794+00:00",
+    "elapsedSeconds": 540.556,
+    "exitCode": 0,
+    "sourceFiles": 4254,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 5454,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": 639,
+    "resultSha256": "4c9a89fa8896632e7382744ac0796da09f7666cd59d60795e0ddc22998a9e191",
+    "sourceManifestSha256": "5db8d980ea8893b213f4b9ca7b80a960fd0782c392988d7c399f17b7c29aae6e",
+    "targets": [
+      ":check",
+      ":features:collaboration:data:testAndroidHostTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":core:database:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:presentation:wasmJsBrowserTest",
+      ":apps:android:assembleDevDebug",
+      ":apps:android:lintDevDebug",
+      ":formatCheck",
+      ":architectureCheck"
+    ],
+    "newRegressionReports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationQueueNamespaceWorkerTest.xml": {
+        "sha256": "cb2d5dba3d4335bc6d593a8e5549290bcc827427860ddadaecbc1c40ef13108c",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationQueueNamespaceTest.xml": {
+        "sha256": "fcddf547e3eb9c055afeb3065d49d7d62c8cdd1b2c298795eafeaf0eee6f4eb5",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationQueueNamespaceTest.xml": {
+        "sha256": "ec3db985b19f17923d7f551aa798b8bcac07fbf54671e9f3c91ef2feff9e553c",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "androidLint": {
+      "issues": 0,
+      "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+    },
+    "detekt": {
+      "findings": 0,
+      "sha256": "389c5ae396e211a0a0bc876fd100b58d043fe70085d467fd4e747684e0e5e693"
+    }
   }
 }

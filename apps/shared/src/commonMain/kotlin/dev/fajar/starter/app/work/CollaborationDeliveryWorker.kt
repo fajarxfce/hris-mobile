@@ -1,6 +1,7 @@
 package dev.fajar.starter.app.work
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.collaborationDeliveryBatch
 import dev.fajar.starter.collaboration.domain.policies.collaborationReceiptRecoveryAnchor
 import dev.fajar.starter.collaboration.domain.policies.localListAccess
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationBackgroundRuntimeLease
@@ -236,15 +237,15 @@ class CollaborationDeliveryWorker(
             val current = messages(work.scope, conversationId).first()
             currentCoroutineContext().ensureActive()
             if (current is AppResult.Failed) return current
-            val selected =
-                (current as AppResult.Success)
-                    .value
-                    .filter { it.state !is CollaborationMessageState.Sent }
-                    .sortedWith(
-                        compareBy<CollaborationMessageRecord> { it.intent.createdAt }
-                            .thenBy { it.intent.id }
-                    )
-                    .take(8)
+            val batch =
+                collaborationDeliveryBatch(
+                    (current as AppResult.Success).value,
+                    work.access,
+                    conversationId,
+                    requireNotNull(child).device,
+                )
+            if (batch is AppResult.Failed) return batch
+            val selected = (batch as AppResult.Success).value
             stage(CollaborationDeliveryStage.Flush)
             val flushed = flush(work, scope, device.id, conversationId, selected, stage)
             if (flushed is AppResult.Failed) return flushed

@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-## Current: SDK4 product accepted; physical queue conflict reproduced in source review — 6 November 2026
+## Current: physical queue isolation accepted; build51 next — 6 November 2026
 
 SDK4 product/probe/dependency source is accepted locally. Full retry80460 ENDED PASS
 in1,581.972s with7,388 fresh cases/963 suites, zero failures/errors/skips,4,251 stable
@@ -21,9 +21,9 @@ cases/74.023s, zero errors/skips and4,253 stable inputs. Identical test sources 
 exactly four production changes then passed focused72105:76 cases/143.266s, zero
 failures/errors/skips and4,254 stable inputs. The actual encrypted AppContainer test
 retains ten older uncertain records unchanged through restart while only the new
-message is enqueued/confirmed; its provider is simulated. Source is applied but still
-UNCOMMITTED. Do not discard the six code/test files. The ONLY heavy local job is
-Mobile57507, chat-queue-family-2026-11-06/full-1. Inputs are frozen until it ends.
+message is enqueued/confirmed; its provider is simulated. The six code/test files are now accepted for commit. Complete gate57507 ENDED PASS
+in540.556s with5,454 fresh cases/639 suites, zero failures/errors/skips,4,254 unchanged
+source inputs and zero Android lint/Detekt findings. No heavy local job remains.
 [Candidate contract](collaboration-chat-queue-ownership.md),
 [evidence](measurements/collaboration-chat-queue-ownership-2026-11-06.json). No emulator
 is active, no APK51 has been built, and phone50's original pending report stays OPEN.
@@ -63,20 +63,21 @@ No phone UI/install/send occurred; exact old/current IDs remain unobserved.
 
 Source review identifies two linked issues: delivery rejects the current physical
 queue when account-owned history contains older-family Staged work; the worker's
-oldest-eight limit can also repeatedly select only older-family work. Prioritize the frozen queue candidate under .work/chat-queue-family-2026-11-06.
+oldest-eight limit can also repeatedly select only older-family work. The accepted queue fix and original red/green evidence are under .work/chat-queue-family-2026-11-06.
 It isolates current-store mapping/staging and delegates worker batch selection to a
 pure domain policy before its eight-command limit. A foreign Staged ID actually
 captured in the current queue still rejects; unknown current echoes and same-store
 unfinished staging remain closed. Original state/revision/keys/transaction IDs stay
-unchanged. Focused acceptance is complete; await full57507, audit its original inputs,
-then commit/push the six source files and contract/evidence. HRIS-specific, no Starter
+unchanged. Focused and full acceptance are complete, with all original input hashes checked.
+Commit/push the six source files and contract/evidence before building. HRIS-specific, no Starter
 port. This enables current work but does not recover older pending sends.
 
 Release51 build/verification/install drivers are prepared and syntax-checked under
 .work/release-phone-2026-11-06-build51. They require the accepted queue-family/full-1
 manifest and pushed source, public SDK4, the existing signer and installed phone50
-hash. They have NOT run. Adapt owned emulator/probe drivers from50 next, retaining
-original Bima userdata/sidecars; install the exact validated APK with advance notice
+hash. They have NOT run. Owned emulator/probe drivers are now adapted and syntax-checked,
+retaining original Bima userdata/sidecars. Build and validate51 sequentially; install
+the exact validated APK with advance notice
 and --install-only. Never drive the phone UI. Continue original-parent recovery.
 
 The nine-file/seven-case organization transport preparation under
