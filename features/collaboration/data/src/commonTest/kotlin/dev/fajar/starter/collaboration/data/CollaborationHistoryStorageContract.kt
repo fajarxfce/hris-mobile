@@ -309,9 +309,15 @@ abstract class CollaborationHistoryStorageContract {
                 requireNotNull(first.logicalId),
             ),
         )
+        val page =
+            assertIs<AppResult.Success<CollaborationHistoryPage>>(
+                    f.repository.observe(f.access, f.conversation).first()
+                )
+                .value
+        assertNotNull(page.revision)
         assertEquals(
-            AppResult.Success(CollaborationHistoryPage(listOf(expected), null, roomId = f.room)),
-            f.repository.observe(f.access, f.conversation).first(),
+            CollaborationHistoryPage(listOf(expected), null, roomId = f.room),
+            page.copy(revision = null),
         )
         for (raw in f.raw().documents) {
             assertFalse(raw.toString().contains("fictional"))

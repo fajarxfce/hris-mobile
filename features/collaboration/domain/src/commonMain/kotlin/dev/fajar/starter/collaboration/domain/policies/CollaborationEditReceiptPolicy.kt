@@ -9,25 +9,8 @@ fun recoverCollaborationEditReceipt(
     record: CollaborationMessageRecord,
     evidence: List<CollaborationEditEvidence>,
 ): CollaborationMessageReceipt? {
-    val target = record.intent.editTarget ?: return null
     val state = record.state as? CollaborationMessageState.Staged ?: return null
-    val origin = state.origin ?: return null
-    if (
-        !validCollaborationEditRecord(record) ||
-            !validCollaborationMessageState(state) ||
-            evidence.size !in 1..128 ||
-            evidence.map { it.eventId }.distinct().size != evidence.size ||
-            evidence.any {
-                !validCollaborationEventId(it.eventId) ||
-                    it.eventId == target.eventId ||
-                    it.sender != origin.sender ||
-                    it.targetEventId != target.eventId ||
-                    it.operationId != record.intent.id ||
-                    it.contentHash != origin.contentHash ||
-                    it.timestamp !in 0..9_007_199_254_740_991L
-            }
-    )
-        return null
+    if (!validCollaborationEditEvidence(record, evidence)) return null
     return CollaborationMessageReceipt(
         record.intent,
         state.device,

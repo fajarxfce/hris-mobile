@@ -1,0 +1,472 @@
+{
+  "date": "2026-11-06",
+  "scope": "Owned local chat editor, optimistic same-original edit projection, durable outcomes and exact reviewed failure acknowledgement. Full root/browser/Android gates accepted; native encrypted edit exchange and phone release remain pending.",
+  "sourceSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBackgroundDeliveryWorkerTest.kt": "7fb113bc1284452f1b9313c985344dbb7b34dcb323490bf81f85f752db29684a",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "6932cc7d6f3aa65d67d05d0f51a07765207db97c58404401aad6e70e7cb986f2",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "74201ac8b7bf9b76f62b406e198ff7187d148da388af26d55aae9a88d4fdb354",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "471c5249d0285dd7bbc51bd6bb33ff8a0ed3225f46ed749da2d40952d5316e4d",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "10fbe00f41ebea0b308c6759f75f34a8a4ad3b0fab302a502702b42eca9530fa",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationHistoryRepository.kt": "b0d22ee01016440327e5d72830d1bcc1dd00eb8ebec329b625e9ce1860342cd7",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationEditEvidenceStorageContract.kt": "397e452d9bac86913d2e61c4885984414775d4f71556036239b1a95c15b820a6",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationHistoryStorageContract.kt": "a38d7c1ea94d3f183900ae84c1f26f1dbf914437175a6b5fe718a3746357b72d",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationMessageEditStorageContract.kt": "3e606545c2f95448804a8ceece6eccea7cffb1f709c543234dd59b8eee20db1b",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationEditAcknowledgement.kt": "31517d0aa9d4fcb44b2a389ff9d0fa302894bcaf26f76c303760d99d31747f4d",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationEditOutcome.kt": "8e6f20012ae3cdd1bfb0036f316766e005fa7880b1f81ce07d0ffe5977fdc756",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationHistory.kt": "6ede3bcde44097a624d48c6948af0d43f4f37c2627734f1b37835c89d7cd7d9b",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationEditOutcomePolicy.kt": "dff89ef7dd32e65bc5611348eb87e4e3c70222b4ade24fdcbcfcc6898041a6b4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationEditReceiptPolicy.kt": "d0f29f12c3cabec8a9fb7f38f060c67a256d2bd395151d29a9cff591efd3bc9c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationEditOutcomes.kt": "7bc3e9cc322045da0e9c10988606db5505eb367bb3ca30b2d50a6b8bdc55bc35",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RetireCollaborationMessages.kt": "33d36908c4c2e167848d3b0ed0a870954f187c8de08bd795c50d342a0a923a11",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationEditReceiptFlowTest.kt": "b3f7ac3cdcbaf2db46674856e33a103d0a39ebbdd6e211b474d42e0dac5f46f9",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatEditProjection.kt": "0ce4aeca69b9672debc67679df3ea9739abf4134219fc0a7043166d82a00ec11",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatEditState.kt": "c0a5f3674404e5f611b6cb4d97920317ab81bd8f0eeda3344c2aaa0daeafbb1b",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatMessageRow.kt": "b93533a748c35c57131b9e1052624498efe11d6c9774e58d0772314a6b1a92c2",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatMessageSelection.kt": "1f1c2b93fe6930e6ce44e99507af68d820d9b2980a40ada8fe11cd13132bf718",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadEditController.kt": "9b64012adc786d6acde6c9851f88ec7efb353ac332881a20ae022f66fc9fbb9e",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadEvent.kt": "8d5fff142917a1747cd9c10978ae76e71a6f2731c1323d4c4d542562c8adfb67",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadProjection.kt": "ff1540fa0dc2b0e7007859e73cad17180a192d6078617e586878792ec8ba9327",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadState.kt": "efd609941f6aea36a0103255359df505b357adea3a6083b79159d60e366d4ab2",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModel.kt": "c361b01820735c9b47c93f9449dbdae9b9df63713b8e102c640717d1a3e91581",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatComposer.kt": "42475a171d52cff6b6cfaf2dcd7fc42fa91a2547e3016d5534be3cd5a497d62d",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatMessageBubble.kt": "bba6e91f5c801f5539ec687d73f6dbb35a75794637dc75208db8d424c2a79feb",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatSelectionMenu.kt": "6f6c2ac3affc361b8d4e5ccfb6dbd90d25aa6e098d69e761af616810776b360e",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatThreadPage.kt": "6bd84d4648c376ca9f597cb915111afe600c8cdc600a0bf6529ed9756f9a9cfa",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatEditProjectionTest.kt": "d93c5f1b47f48fdf4657836385262cf7392002b9085f904752c046b65a392ec0",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadEditFixture.kt": "54e3cb951ec5dbefd0e597aba65bb1a958baf71d846dfb73df6358d51065a085",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadEditorTest.kt": "66c41e9fc925eab1f798b69c764f35f4e07d2e717ded2c0f9ca43b610f54a739",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "f481ed23375b2d4e62b336b798557c08351a08783906efa3c9fe153db13c44d2",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatEditorLayoutTest.kt": "914bf6fce3a380e356fbac9a0a3fa1fb3db1152a65ae30291e707c74c1097c5e"
+  },
+  "checks": {
+    "editor-static1": {
+      "startedAt": "2026-11-06T00:58:12.613871+00:00",
+      "elapsedSeconds": 46.235,
+      "exitCode": 1,
+      "sourceFiles": 4188,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "d23d0a4a376b7098cebfc66ef87fb2f8cf928d4feb3dffa2405f4f168b215844",
+      "sourceManifestSha256": "a3eb30080cbb98c4a04d0c881ee84be7f5d9b75be66da494b2d8b3453a953599",
+      "relevantSuites": {},
+      "failureReview": "Nested outcome logic and long fixture factory."
+    },
+    "editor-static2": {
+      "startedAt": "2026-11-06T00:59:31.369310+00:00",
+      "elapsedSeconds": 40.81,
+      "exitCode": 1,
+      "sourceFiles": 4188,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "4d55609707abe7251ddcc4ea9cf3703bb87db4300c26c38f3566c599b932a8a6",
+      "sourceManifestSha256": "14e6e139c95998fde2d00d1884db1aab31f751e5f7644f8316ea42b22a11d217",
+      "relevantSuites": {},
+      "failureReview": "Remaining nesting and fixture factory one line beyond limit."
+    },
+    "editor-static3": {
+      "startedAt": "2026-11-06T01:00:47.087440+00:00",
+      "elapsedSeconds": 49.991,
+      "exitCode": 0,
+      "sourceFiles": 4188,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "bbe3b1306fc3113633b7919586a9b72b5bd4e87a8295a8cd1f2cbbe7e375122d",
+      "sourceManifestSha256": "4365ed1c9902b93e2bfdfceea5f4b56d6812fad7fae50ad869d113bbb4dfccea",
+      "relevantSuites": {}
+    },
+    "editor1": {
+      "startedAt": "2026-11-06T01:01:46.132346+00:00",
+      "elapsedSeconds": 205.842,
+      "exitCode": 1,
+      "sourceFiles": 4188,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 61,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "0a593d7c7895396817123186c48c54cfc278b88a5d9062a0a7aefa9b542261c7",
+      "sourceManifestSha256": "4365ed1c9902b93e2bfdfceea5f4b56d6812fad7fae50ad869d113bbb4dfccea",
+      "relevantSuites": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationEditEvidenceStorageTest.xml": {
+          "sha256": "aac5c3d7b25dcdbefc6940fd263b984fbd63e6dc9ad487e46d23eaee54ca793c",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationEditReceiptFlowTest.xml": {
+          "sha256": "de82c1845974241fff8364e0a39eea55f64aa5099772b9749d2ea349028a6c44",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "failureReview": "Missing return expression after row helper extraction; 61 tests passed before compile failure."
+    },
+    "editor2": {
+      "startedAt": "2026-11-06T01:05:30.396106+00:00",
+      "elapsedSeconds": 67.243,
+      "exitCode": 1,
+      "sourceFiles": 4188,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "2d72b97a67b95f67438692a0f79a028ddbc438016185d6b8ca0af3183676af31",
+      "sourceManifestSha256": "bb43764f31c2e2db5ad474432ff3f55a95b1e6c65985952a5cd59c5c3bbeba35",
+      "relevantSuites": {},
+      "failureReview": "New Compose selection helper returns Unit; split the subsequent assertion into a fresh node lookup."
+    },
+    "editor3": {
+      "startedAt": "2026-11-06T01:07:14.595018+00:00",
+      "elapsedSeconds": 55.29,
+      "exitCode": 1,
+      "sourceFiles": 4188,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 68,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "2641519f2e95aca9b5a4b28cb1b285e778dce88d1ea3545c1df4719adf6ea653",
+      "sourceManifestSha256": "bd48b4f3acad2b7711cbdd654137f2523ee3403c3bdfcccd7bab4f822536cd83",
+      "relevantSuites": {
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatEditProjectionTest.xml": {
+          "sha256": "03f2d1528688572042c5a64a0e57ba3a664e14b8a1391c9bb27a87c188272500",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadEditorTest.xml": {
+          "sha256": "cad79c28486c3d0f70a7cae2c74ee7e3ac9da8db558c5a4f2c9c91c8e5f736a7",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": {
+          "sha256": "da74534708cb7d5f6671c2e4ff1695a5f58ed8d79fc25ee5bb820931aa069966",
+          "tests": 33,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatEditorLayoutTest.xml": {
+          "sha256": "d5f0ae038212e629ac096cb7c4c46f315d5bc8e3d444c7dac0e216da0e6947a6",
+          "tests": 3,
+          "failures": 3,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "failureReview": "Three new visual tests searched text on the disabled outer bubble; now locate its actual descendant while still asserting visibility."
+    },
+    "editor4": {
+      "startedAt": "2026-11-06T01:08:34.442125+00:00",
+      "elapsedSeconds": 271.796,
+      "exitCode": 0,
+      "sourceFiles": 4188,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 68,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "ae73746802a9141e81aee88e22fe12b9ce17558dbe137ea1fd70dbe0e55fa5a4",
+      "sourceManifestSha256": "fe110db1f615dd26c4066799452e9c754ed95f9b565507294382618fa72114ad",
+      "relevantSuites": {
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatEditProjectionTest.xml": {
+          "sha256": "7f2983c7a26d56281ee826f6ee6d639807c255b5db4c6c553e70040c7154cd19",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadEditorTest.xml": {
+          "sha256": "71b209069c8b4ec2d70a14775708205c52ebd32d41cd743738e3143fdc17b3ce",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": {
+          "sha256": "88170893cb8299a60841440db4380d0c2f6303d49f3ddb9d78d7fb98de827620",
+          "tests": 33,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatEditorLayoutTest.xml": {
+          "sha256": "083bc4a89c46894ee3e56387de058fea0fc77a75fae7eed5cd55ab75fa99f24f",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "editor-full1": {
+      "startedAt": "2026-11-06T01:13:12.357731+00:00",
+      "elapsedSeconds": 790.255,
+      "exitCode": 1,
+      "sourceFiles": 4188,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5406,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "727880bca2a02f662cfbae3a4a131f67101d722119284547b36dc250ae81cff2",
+      "sourceManifestSha256": "fe110db1f615dd26c4066799452e9c754ed95f9b565507294382618fa72114ad",
+      "relevantSuites": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBackgroundDeliveryWorkerTest.xml": {
+          "sha256": "e09c2ba81c333e67340da0766cdd9741877cbd25b2bfd1e8fecb9254a77396bc",
+          "tests": 11,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatEditorLayoutTest.xml": {
+          "sha256": "19948fcc3504aeee155dc5b7584f130ca13baf6587e10f6f288678890f58e734",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatEditProjectionTest.xml": {
+          "sha256": "61be4b1ee682f55b5798b2008711b2b41d3863899c10b1ae7a639903bf62d3bf",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadEditorTest.xml": {
+          "sha256": "b73568eac6458e5f0a2373b292fed77799c0604fe6773d171368c7fc2f30f96d",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": {
+          "sha256": "30858b9467d5ba33d334947852b297d246a849457e18d1ae5bb36d85473206de",
+          "tests": 33,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatEditProjectionTest.xml": {
+          "sha256": "e71cf0e8d361bb3215fa06eb236ac40fec36074cc95ef5e4d34cc29aebfeb882",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatThreadEditorTest.xml": {
+          "sha256": "345de6c42747ca3ae62971137acf96ef8e22df2e4418fa181619d9a2cb2c49d7",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": {
+          "sha256": "a77cf3f043ae376b05f24fd10832e097f71ae9487854e263f838f06589e731b8",
+          "tests": 33,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationEditEvidenceStorageTest.xml": {
+          "sha256": "ec2350f59e77fc34c6ab0547d9709d25a179764be3733ce234877612dadb0db5",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationMessageEditStorageTest.xml": {
+          "sha256": "55ca8d410ae377ffabe8010ff9666c00d97a78074429009da0586501c59e11b8",
+          "tests": 14,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTes-EEV8OIJCFMBLG.dev.fajar.starter.collaboration.data.BrowserCollaborationEditEvidenceStorageTest.xml": {
+          "sha256": "603808aedf3a49ace90351c87031e13c2c8fc6a2aa767303fc5d0fc586fa1779",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationMessageEditStorageTest.xml": {
+          "sha256": "10dc22c93c97dada6d7167fd2da87f2c679a893bfa95f5f77f5d7fa9d53220b5",
+          "tests": 14,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationEditReceiptFlowTest.xml": {
+          "sha256": "d5c6d7a97803946fd898a4f889d0feb9aed981ed3d646818b8490d13cefb2eca",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationEditReceiptFlowTest.xml": {
+          "sha256": "3ed5f3ac47af58d126690c643fefa2a3a034f806a1d6a7b2d3ca0209d26c85b3",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "failureReview": "One background deadline case timed out awaiting completion (102.599s case duration). The fixture now controls monotonic/coroutine time while retaining exact two-second expiry and resource assertions. Two SQLite/browser failures expected an unchanged whole history page after an off-page edit; now explicitly require stable contents/cursors and changed revision, retained after reopen."
+    },
+    "editor-regressions1": {
+      "startedAt": "2026-11-06T01:29:55.156492+00:00",
+      "elapsedSeconds": 96.744,
+      "exitCode": 0,
+      "sourceFiles": 4188,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "d89893e2f1fb70126a4c81db7ceec8e8f7181a5f579ae872a6de54fc7f9b60fd",
+      "sourceManifestSha256": "49f6932dbb9111139535af614dd0daf71480f083b2abdf86246adabfb9060988",
+      "relevantSuites": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBackgroundDeliveryWorkerTest.xml": {
+          "sha256": "15f885b48d2912b9b134ecceb698d575dd067eaf0470b0ab127d29d8ffb9e2d1",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationMessageEditStorageTest.xml": {
+          "sha256": "3811c0f7b755cdee6c3ec8024a4de5ec04cba1b960b56e0c3bf305cea9e30cb9",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "editor-full2": {
+      "startedAt": "2026-11-06T01:31:39.134086+00:00",
+      "elapsedSeconds": 378.927,
+      "exitCode": 0,
+      "sourceFiles": 4188,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2347,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "4e6cb2f531baa19b3ab8a89ef90cdbc27a76d4cffa29e11a050fee20898d6648",
+      "sourceManifestSha256": "49f6932dbb9111139535af614dd0daf71480f083b2abdf86246adabfb9060988",
+      "relevantSuites": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBackgroundDeliveryWorkerTest.xml": {
+          "sha256": "d47853293a761469433f4af59f6e151cabc939c265ddb04610d4485a7edcb648",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationEditEvidenceStorageTest.xml": {
+          "sha256": "ad12cf8b9028d287cb27e1dc3f83267ce6bb83456546af1c42978ec312fc31f8",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationMessageEditStorageTest.xml": {
+          "sha256": "5fafe67cc69ca1f29ae554c2e247f2f37f0659cfb140924657884dc7baca2905",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTes-EEV8OIJCFMBLG.dev.fajar.starter.collaboration.data.BrowserCollaborationEditEvidenceStorageTest.xml": {
+          "sha256": "2dcd6ed279c73a1f5046fbec42643b6ac792172415e69263127ea039504acaba",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationMessageEditStorageTest.xml": {
+          "sha256": "2a0c66eb9ec15ec750e39e746cf2369337d7ae53b90b1ece6bff56754727c6e3",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "preexistingReportCounts": {
+        "tests": 5372,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "androidLint": {
+    "errors": 0,
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "screenshots": [
+    {
+      "variant": "light",
+      "path": "docs/images/chat-editor/chat-editor-light.png",
+      "sha256": "fa37da6dae1e1b749e84d74da6ec91f6541451d80f532d6436fdd88b3d4ec091",
+      "bytes": 17283,
+      "visuallyInspected": true
+    },
+    {
+      "variant": "dark-large-text",
+      "path": "docs/images/chat-editor/chat-editor-dark-large-text.png",
+      "sha256": "9a04c700ddbf50c182a5785468a3e72d4002dd63719546e29b2570753aa910e8",
+      "bytes": 30495,
+      "visuallyInspected": true
+    },
+    {
+      "variant": "landscape",
+      "path": "docs/images/chat-editor/chat-editor-landscape.png",
+      "sha256": "01b262b7d9f7d4e9f24591fd2590bc528259d8449c7008c0f1dc039f04220a71",
+      "bytes": 16885,
+      "visuallyInspected": true
+    }
+  ],
+  "limitations": [
+    "No native edit publication/decryption/cold-revision proof or actual Megolm ciphertext budget accepted.",
+    "Pinned SDK26.10.23 raw point reads still drop custom metadata; isolated source extension and tests are uncompiled and unused. Decryption provenance must be explicit before adopting it.",
+    "No Apple acceptance for this editor increment, no release APK or phone installation. Phone40 stays installed.",
+    "Rejected edit commands remain durable; add a human-facing way to recover/copy their attempted text before release.",
+    "All54 PRD groups remain in progress. No generic starter foundation change is included."
+  ]
+}

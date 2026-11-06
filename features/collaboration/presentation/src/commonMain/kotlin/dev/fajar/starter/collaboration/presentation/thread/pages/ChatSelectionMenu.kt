@@ -32,6 +32,25 @@ internal fun ChatSelectionMenu(state: ChatThreadState, onEvent: (ChatThreadEvent
                 properties = PopupProperties(focusable = true),
             ) {
                 AppCard(Modifier.widthIn(min = 220.dp, max = 300.dp), padding = 4.dp) {
+                    if (state.canEditSelection)
+                        AppListRow(
+                            appString(AppString.ChatEditMessage),
+                            {
+                                onEvent(ChatThreadEvent.SelectionMenuDismissed)
+                                onEvent(ChatThreadEvent.EditSelected)
+                            },
+                            leading = { AppIcon(Icons.Regular.Edit) },
+                        )
+                    if (state.selectedMessages.singleOrNull()?.failedEditIds?.isNotEmpty() == true)
+                        AppListRow(
+                            appString(AppString.ChatDiscardEdit),
+                            {
+                                onEvent(ChatThreadEvent.SelectionMenuDismissed)
+                                onEvent(ChatThreadEvent.FailedEditsDismissRequested)
+                            },
+                            enabled = state.canDismissFailedEdits,
+                            leading = { AppIcon(Icons.Regular.Dismiss) },
+                        )
                     AppListRow(
                         appString(AppString.ChatCopyMessages),
                         {

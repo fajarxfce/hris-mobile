@@ -16,6 +16,8 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.TestTimeSource
 import kotlinx.coroutines.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineScheduler
 import org.koin.dsl.module
 
 class CollaborationBackgroundDeliveryWorkerTest {
@@ -232,6 +234,7 @@ class CollaborationBackgroundDeliveryWorkerTest {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun originalAdmissionDeadlineIncludesPendingNativeAcquisition() = runBlocking {
         withFixture { f ->
@@ -243,13 +246,43 @@ class CollaborationBackgroundDeliveryWorkerTest {
                 entered.complete(Unit)
                 awaitCancellation()
             }
-            val attempt = async { f.worker(f.grant(2.seconds)) }
-            withTimeout(5.seconds) { entered.await() }
-            val result = assertIs<SyncResult.Retry>(withTimeout(5.seconds) { attempt.await() })
-            assertEquals("client.collaboration_delivery_timeout", result.failure?.code)
-            assertEquals(1, f.sdk.backgroundCloses)
-            assertEquals(0, f.sdk.backgroundPublications)
-            assertEquals(0, f.sdk.childOpens)
+            // Keep the two-second admission clock still while real SQLite/HTTP setup runs.
+            // The worker timeout is then advanced explicitly, independently of machine pauses.
+            val elapsed = TestTimeSource()
+            val scheduler = TestCoroutineScheduler()
+            val grant = f.grant().copy(monotonicDeadline = elapsed.markNow() + 2.seconds)
+            val attempt = async(StandardTestDispatcher(scheduler)) { f.worker(grant) }
+            try {
+                withTimeout(5.seconds) {
+                    while (!entered.isCompleted) {
+                        scheduler.runCurrent()
+                        if (!entered.isCompleted) delay(1)
+                    }
+                }
+                scheduler.advanceTimeBy(1_999)
+                scheduler.runCurrent()
+                assertFalse(attempt.isCompleted)
+                elapsed += 2.seconds
+                scheduler.advanceTimeBy(1)
+                scheduler.runCurrent()
+                assertTrue(attempt.isCompleted)
+                val result = assertIs<SyncResult.Retry>(attempt.await())
+                assertEquals("client.collaboration_delivery_timeout", result.failure?.code)
+                assertEquals(1, f.sdk.backgroundCloses)
+                assertEquals(0, f.sdk.backgroundPublications)
+                assertEquals(0, f.sdk.childOpens)
+            } finally {
+                attempt.cancel()
+                withContext(NonCancellable) {
+                    withTimeout(5.seconds) {
+                        while (!attempt.isCompleted) {
+                            scheduler.runCurrent()
+                            if (!attempt.isCompleted) delay(1)
+                        }
+                    }
+                    attempt.join()
+                }
+            }
         }
     }
 

@@ -22,6 +22,9 @@ data class ChatThreadState(
     val unsentReplies: List<ChatUnsentReply> = emptyList(),
     val unsentFailure: Failure? = null,
     val draft: String = "",
+    val editing: ChatEditState? = null,
+    val editFailure: Failure? = null,
+    val editAcknowledging: Boolean = false,
     val draftReplyToEventId: String? = null,
     val quotes: List<CollaborationQuotedMessage> = emptyList(),
     val selfSender: String? = null,
@@ -33,6 +36,8 @@ data class ChatThreadState(
     val selecting: Boolean = false,
     val selectionMenuOpen: Boolean = false,
     val selectedMessages: List<ChatMessageRow> = emptyList(),
+    /** Captured at the selection gesture; final authoring eligibility is rechecked locally. */
+    val selectionTime: Long = 0,
     val deletionDialog: ChatDeletionDialog? = null,
     val forwarding: ChatForwardState? = null,
     val selectionLimitReached: Boolean = false,
@@ -51,21 +56,7 @@ data class ChatThreadState(
     val localFailure: Failure? = null,
     val failure: Failure? = null,
 ) {
-    val canCompose: Boolean
-        get() =
-            title != null &&
-                draftReady &&
-                localFailure == null &&
-                !submissionPending &&
-                !saving &&
-                !leaving &&
-                cancellationDialog == null &&
-                !selecting &&
-                forwarding == null &&
-                deletionDialog == null &&
-                draftDialog == null
-
-    val canSend: Boolean
+    private val composerReady: Boolean
         get() =
             title != null &&
                 draftReady &&
@@ -76,8 +67,16 @@ data class ChatThreadState(
                 forwarding == null &&
                 deletionDialog == null &&
                 localFailure == null &&
-                !saving &&
-                (submissionPending || draft.isNotBlank())
+                !saving
+
+    val canCompose: Boolean
+        get() = composerReady && !submissionPending && editing == null
+
+    val canEditInput: Boolean
+        get() = composerReady && !submissionPending && editing != null
+
+    val canSend: Boolean
+        get() = composerReady && editing == null && (submissionPending || draft.isNotBlank())
 
     override fun toString() = "ChatThreadState([redacted])"
 }

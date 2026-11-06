@@ -2,6 +2,7 @@ package dev.fajar.starter.collaboration.presentation.thread
 
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationCancellation
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationEditRecord
 import dev.fajar.starter.common.result.*
 
 /** Presentation only: no ACK, retirement, queue replay or durable history mutation. */
@@ -14,6 +15,8 @@ internal fun chatThreadRows(
     pending: List<CollaborationMessageRecord>,
     timeline: List<CollaborationTimelineItem>,
     includeUnmatched: Boolean = true,
+    editOutcomes: List<CollaborationEditOutcome> = emptyList(),
+    historyRoomId: String? = null,
 ): AppResult<List<ChatMessageRow>> {
     if (history.size > 500 || pending.size > 128 || timeline.size > 128)
         return invalidThreadProjection()
@@ -27,7 +30,27 @@ internal fun chatThreadRows(
     val rows = mutableListOf<ChatMessageRow>()
     val consumed = mutableSetOf<String>()
     val events = mutableSetOf<String>()
-    val pendingById = pending.associateBy { it.intent.id }
+    val edits = pending.filter { it.intent.editTarget != null }
+    if (
+        edits.any { !validCollaborationEditRecord(it) } ||
+            editOutcomes.size > 128 ||
+            editOutcomes.map { it.operationId }.distinct().size != editOutcomes.size ||
+            editOutcomes.any { outcome -> edits.none { it.intent.id == outcome.operationId } }
+    )
+        return invalidThreadProjection()
+    val pendingById = pending.filter { it.intent.editTarget == null }.associateBy { it.intent.id }
+    for (edit in edits) {
+        if (
+            edit.intent.editTarget?.roomId != historyRoomId &&
+                edit.intent.editTarget?.roomId != timelineDevice?.roomId
+        )
+            continue
+        (edit.state as? CollaborationMessageState.Sent)?.eventId?.let(events::add)
+        timeline
+            .firstOrNull { matchesEditEcho(edit, timelineDevice, it) }
+            ?.eventId
+            ?.let(events::add)
+    }
     for (message in history) {
         val candidate = message.logicalId?.let(pendingById::get)
         val matching =
@@ -52,44 +75,21 @@ internal fun chatThreadRows(
         events += message.eventIds
         val live =
             timeline.firstOrNull { it.eventId in message.eventIds && it.sender == message.sender }
-        val kind =
-            when {
-                message.redacted || live?.kind == CollaborationMessageKind.REDACTED ->
-                    CollaborationMessageKind.REDACTED
-                else -> CollaborationMessageKind.TEXT
-            }
+        val originalRow = storedMessageRow(key, message, matching, self, live)
         rows +=
-            ChatMessageRow(
-                key,
-                message.primaryEventId,
-                matching?.intent?.id,
-                message.timestamp,
-                if (matching != null || own) ChatMessageOwnership.SELF
-                else if (self == null) ChatMessageOwnership.UNKNOWN
-                else ChatMessageOwnership.COLLEAGUE,
-                kind,
-                if (kind == CollaborationMessageKind.REDACTED) null
-                else message.latestEdit?.edit?.text ?: message.text,
-                CollaborationMessageDelivery.SENT,
-                kind == CollaborationMessageKind.TEXT && message.latestEdit != null,
-                reference =
-                    CollaborationMessageReference(
-                        message.sender,
-                        message.primaryEventId,
-                        message.logicalId,
-                    ),
-                visibilityKnown = true,
-                forwarded =
-                    kind == CollaborationMessageKind.TEXT &&
-                        (message.forwarded || matching?.intent?.forwarded == true),
-                replyToEventId =
-                    if (kind == CollaborationMessageKind.TEXT)
-                        (message.replyToEventId ?: matching?.intent?.replyToEventId)
-                    else null,
+            projectChatEdits(
+                originalRow,
+                message,
+                historyRoomId,
+                edits,
+                editOutcomes,
+                timelineDevice,
+                timeline,
             )
     }
     for (record in pending) {
-        if (!includeUnmatched || record.intent.id in consumed) continue
+        if (!includeUnmatched || record.intent.editTarget != null || record.intent.id in consumed)
+            continue
         val native = timeline.firstOrNull { matchesOwnedEcho(record, timelineDevice, it) }
         native?.eventId?.let(events::add)
         val sent =
@@ -106,6 +106,49 @@ internal fun chatThreadRows(
     if (rows.map { it.key }.distinct().size != rows.size) return invalidThreadProjection()
     return AppResult.Success(
         rows.sortedWith(compareByDescending<ChatMessageRow> { it.timestamp }.thenBy { it.key })
+    )
+}
+
+private fun storedMessageRow(
+    key: String,
+    message: CollaborationHistoryMessage,
+    matching: CollaborationMessageRecord?,
+    self: CollaborationSelfIdentity?,
+    live: CollaborationTimelineItem?,
+): ChatMessageRow {
+    val own = self?.matrixUserId == message.sender
+    val kind =
+        when {
+            message.redacted || live?.kind == CollaborationMessageKind.REDACTED ->
+                CollaborationMessageKind.REDACTED
+            else -> CollaborationMessageKind.TEXT
+        }
+    return ChatMessageRow(
+        key,
+        message.primaryEventId,
+        matching?.intent?.id,
+        message.timestamp,
+        if (matching != null || own) ChatMessageOwnership.SELF
+        else if (self == null) ChatMessageOwnership.UNKNOWN else ChatMessageOwnership.COLLEAGUE,
+        kind,
+        if (kind == CollaborationMessageKind.REDACTED) null
+        else message.latestEdit?.edit?.text ?: message.text,
+        CollaborationMessageDelivery.SENT,
+        kind == CollaborationMessageKind.TEXT && message.latestEdit != null,
+        reference =
+            CollaborationMessageReference(
+                message.sender,
+                message.primaryEventId,
+                message.logicalId,
+            ),
+        visibilityKnown = true,
+        forwarded =
+            kind == CollaborationMessageKind.TEXT &&
+                (message.forwarded || matching?.intent?.forwarded == true),
+        replyToEventId =
+            if (kind == CollaborationMessageKind.TEXT)
+                (message.replyToEventId ?: matching?.intent?.replyToEventId)
+            else null,
     )
 }
 

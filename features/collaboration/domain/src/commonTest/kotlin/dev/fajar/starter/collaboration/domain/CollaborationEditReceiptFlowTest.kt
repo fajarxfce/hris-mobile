@@ -6,6 +6,8 @@ import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.AppResult
 import kotlin.test.*
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runTest
 
@@ -113,12 +115,187 @@ class CollaborationEditReceiptFlowTest {
         assertTrue(f.delivery.journal.isEmpty())
         assertEquals(listOf(f.record), f.delivery.records)
     }
+
+    @Test
+    fun cancellationDrainsOutcomeAndAcknowledgementReadsWithoutLosingCommands() = runTest {
+        for (acknowledge in listOf(false, true)) {
+            val f = EditReceiptFixture()
+            f.prepare()
+            if (acknowledge) {
+                assertEquals(AppResult.Success(1), f.recover())
+                f.markSent()
+            }
+            val entered = CompletableDeferred<Unit>()
+            val released = CompletableDeferred<Unit>()
+            f.afterEvidence = {
+                entered.complete(Unit)
+                try {
+                    awaitCancellation()
+                } finally {
+                    released.complete(Unit)
+                }
+            }
+            val retained = f.delivery.journal.toList()
+            val pending = async {
+                if (acknowledge) f.acknowledge(listOf(f.record.intent.id)) else f.readOutcomes()
+            }
+            entered.await()
+            pending.cancelAndJoin()
+            assertTrue(released.isCompleted)
+            assertEquals(listOf(f.record), f.delivery.records)
+            assertEquals(retained, f.delivery.journal)
+            assertTrue(f.base.completions.records.isEmpty())
+        }
+    }
+
+    @Test
+    fun localOutcomesDistinguishUnobservedRejectedAndSettledEditsWithoutMutatingCommands() =
+        runTest {
+            val f = EditReceiptFixture()
+            f.prepare()
+            f.owner.setup.now += 365.days
+            val retained = f.record
+            fun status(result: AppResult<List<CollaborationEditOutcome>>) =
+                assertIs<AppResult.Success<List<CollaborationEditOutcome>>>(result)
+                    .value
+                    .single()
+                    .kind
+            assertEquals(CollaborationEditOutcomeKind.NOT_APPLIED, status(f.readOutcomes()))
+            val rejected = f.evidence
+            f.evidence = emptyList()
+            assertEquals(CollaborationEditOutcomeKind.AWAITING_PROVIDER, status(f.readOutcomes()))
+            f.evidence =
+                rejected.map { it.copy(eligible = true, timestamp = f.target.firstAcceptedAt + 1) }
+            assertEquals(CollaborationEditOutcomeKind.OBSERVED, status(f.readOutcomes()))
+            f.evidence = rejected.map { it.copy(redacted = true) }
+            assertEquals(CollaborationEditOutcomeKind.OBSERVED, status(f.readOutcomes()))
+            assertEquals(listOf(retained), f.delivery.records)
+            assertTrue(f.delivery.journal.isEmpty())
+        }
+
+    @Test
+    fun outcomeReadRejectsMismatchedOverflowAndLateDenialWithoutPublishingPartialResults() =
+        runTest {
+            val f = EditReceiptFixture()
+            f.prepare()
+            val expected = f.evidence
+            f.evidence = expected.map { it.copy(contentHash = "d".repeat(64)) }
+            assertIs<AppResult.Failed>(f.readOutcomes())
+            f.evidence = (1..129).map { expected.single().copy(eventId = "\$alias-$it") }
+            assertIs<AppResult.Failed>(f.readOutcomes())
+            f.evidence = expected
+            f.afterEvidence = {
+                f.owner.gate.value = CollaborationListAdmission("denied", f.owner.denied)
+            }
+            assertEquals(f.owner.denied, assertIs<AppResult.Failed>(f.readOutcomes()).failure)
+            assertEquals(listOf(f.record), f.delivery.records)
+        }
+
+    @Test
+    fun visibleNewerCompletionSuppressesAnOlderUnobservedLocalEditWithoutComparingProviderClocks() =
+        runTest {
+            val f = EditReceiptFixture()
+            f.prepare()
+            val staged = f.record.state as CollaborationMessageState.Staged
+            val newer =
+                f.record.copy(
+                    intent =
+                        f.record.intent.copy(
+                            id = "00000000-0000-0000-0000-000000009992",
+                            createdAt = f.record.intent.createdAt + 1.milliseconds,
+                        ),
+                    state =
+                        CollaborationMessageState.Sent(
+                            staged.device,
+                            "newer",
+                            "\$newer",
+                            staged.origin,
+                        ),
+                )
+            f.base.completions.records[newer.intent.id] =
+                CollaborationMessageCompletion(newer, listOf("\$newer"))
+            val original =
+                f.base.original.originals.values
+                    .single()
+                    .copy(
+                        latestEdit =
+                            CollaborationMessageRevision(
+                                CollaborationMessageEdit(
+                                    "\$newer",
+                                    f.target.sender,
+                                    f.target.eventId,
+                                    f.target.firstAcceptedAt + 1,
+                                    "Newer",
+                                    requireNotNull(staged.origin).contentHash,
+                                    newer.intent.id,
+                                    f.target.originalLogicalId,
+                                ),
+                                f.target.firstAcceptedAt,
+                            )
+                    )
+            f.evidence = emptyList()
+            val result =
+                assertIs<AppResult.Success<List<CollaborationEditOutcome>>>(
+                        f.readOutcomes(listOf(original))
+                    )
+                    .value
+                    .single()
+            assertEquals(CollaborationEditOutcomeKind.SUPERSEDED, result.kind)
+            assertEquals(f.record.intent.id, result.operationId)
+            assertEquals(listOf(f.record), f.delivery.records)
+        }
+
+    @Test
+    fun failedEditAcknowledgementRequiresCapturedAccessRoomAndExactReviewedIds() = runTest {
+        val f = EditReceiptFixture()
+        f.prepare()
+        assertEquals(AppResult.Success(1), f.recover())
+        f.markSent()
+        val ids = listOf(f.record.intent.id)
+        assertIs<AppResult.Failed>(f.acknowledge(ids, expected = null))
+        assertIs<AppResult.Failed>(
+            f.acknowledge(ids, expected = f.access.copy(accountId = "changed"))
+        )
+        assertIs<AppResult.Failed>(f.acknowledge(ids, room = "!other:example.test"))
+        assertIs<AppResult.Failed>(f.acknowledge(ids + ids))
+        assertEquals(
+            AppResult.Success(0),
+            f.acknowledge(listOf("00000000-0000-0000-0000-000000009999")),
+        )
+        assertEquals(listOf(f.record), f.delivery.records)
+        assertTrue(f.base.completions.records.isEmpty())
+    }
+
+    @Test
+    fun aFailureArrivingDuringAcknowledgementIsNotSilentlyDiscarded() = runTest {
+        val f = EditReceiptFixture()
+        f.prepare()
+        assertEquals(AppResult.Success(1), f.recover())
+        f.markSent()
+        val sent = f.record.state as CollaborationMessageState.Sent
+        val late =
+            f.record.copy(
+                intent = f.record.intent.copy(id = "00000000-0000-0000-0000-000000009992"),
+                state = sent.copy(transactionId = "later", eventId = "\$later"),
+            )
+        val lateReceipt =
+            CollaborationMessageReceipt(late.intent, sent.device, "later", listOf("\$later"))
+        f.afterEvidence = {
+            f.owner.records.value = listOf(f.record, late)
+            f.delivery.journal = f.delivery.journal + lateReceipt
+        }
+        assertEquals(AppResult.Success(1), f.acknowledge(listOf(f.record.intent.id)))
+        assertEquals(listOf(late), f.delivery.records)
+        assertEquals(listOf(lateReceipt), f.delivery.journal)
+        assertEquals(setOf(f.record.intent.id), f.base.completions.records.keys)
+    }
 }
 
 private class EditReceiptFixture {
     val base = CollaborationRetirementFixture()
     val delivery = base.delivery
     val owner = base.base
+    val access = delivery.owner.localListAccess()
     lateinit var record: CollaborationMessageRecord
     val target
         get() = requireNotNull(record.intent.editTarget)
@@ -200,6 +377,42 @@ private class EditReceiptFixture {
             targets,
         )
 
+    private val outcomeReader =
+        ReadCollaborationEditOutcomes(
+            edits,
+            base.completions,
+            delivery.lists,
+            owner.setup.sessions,
+            owner.setup.workspaces,
+            owner.server,
+            owner.build,
+            owner.clock,
+        )
+
+    suspend fun readOutcomes(
+        originals: List<CollaborationHistoryMessage> = base.original.originals.values.toList()
+    ) =
+        outcomeReader(
+            "selection",
+            access,
+            delivery.conversation,
+            target.roomId,
+            delivery.records,
+            originals,
+        )
+
+    suspend fun acknowledge(
+        ids: List<String>,
+        expected: CollaborationLocalAccess? = access,
+        room: String = target.roomId,
+    ) =
+        retirement(
+            "selection",
+            delivery.conversation,
+            CollaborationEditAcknowledgement(room, target.eventId, ids),
+            expected,
+        )
+
     suspend fun prepare() {
         base.original.prepare()
         val original = delivery.records.single()
@@ -253,5 +466,12 @@ private class EditReceiptFixture {
     suspend fun recover() = recovery("selection", delivery.conversation)
 
     suspend fun retire(acknowledged: String? = null) =
-        retirement("selection", delivery.conversation, acknowledged)
+        retirement(
+            "selection",
+            delivery.conversation,
+            acknowledged?.let {
+                CollaborationEditAcknowledgement(target.roomId, it, listOf(record.intent.id))
+            },
+            delivery.owner.localListAccess(),
+        )
 }

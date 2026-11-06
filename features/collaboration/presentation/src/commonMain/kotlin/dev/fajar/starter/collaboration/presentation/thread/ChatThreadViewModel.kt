@@ -16,6 +16,7 @@ import dev.fajar.starter.collaboration.presentation.chatRequiresReconnect
 import dev.fajar.starter.collaboration.presentation.replies.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.presentation.mvi.MviViewModel
+import kotlin.time.Clock
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -60,6 +61,10 @@ class ChatThreadViewModel(
     forwardTargets: ReadCollaborationForwardTargets,
     prepareForward: PrepareCollaborationForward,
     queueForward: QueueCollaborationForward,
+    readEditCandidate: ReadCollaborationEditCandidate,
+    queueEdit: QueueCollaborationEdit,
+    private val readEditOutcomes: ReadCollaborationEditOutcomes,
+    private val retireMessages: RetireCollaborationMessages,
 ) : MviViewModel<ChatThreadState, ChatThreadEvent, ChatThreadEffect>(ChatThreadState()) {
     private val forwarding =
         ChatThreadForwardController(
@@ -72,6 +77,28 @@ class ChatThreadViewModel(
             onRestricted = ::restrict,
             onForwarded = { clearSelection() },
         )
+    private val editing =
+        ChatThreadEditController(
+            viewModelScope,
+            workspaceId,
+            conversationId,
+            readEditCandidate,
+            queueEdit,
+            onState = { value -> updateState { it.copy(editing = value) } },
+            onStarted = {
+                clearSelection()
+                updateState { it.copy(editFailure = null) }
+                viewModelScope.launch { emitEffect(ChatThreadEffect.FocusComposer) }
+            },
+            onQueued = {
+                wakeRequested = true
+                pulse?.trySend(Unit)
+            },
+            onFailure = { failure -> updateState { it.copy(editFailure = failure) } },
+            onRestricted = ::restrict,
+        )
+    private var editAcknowledgement: Job? = null
+    private var editOutcomes = emptyList<CollaborationEditOutcome>()
     private val projection = MutableStateFlow<ChatVisibilityProjection?>(null)
     private val quoteRequests = MutableStateFlow<ChatQuoteRequest?>(null)
     private var deletionSelection: ChatDeletionSelection? = null
@@ -164,6 +191,17 @@ class ChatThreadViewModel(
         on<ChatThreadEvent.SelectionMenuDismissed> {
             updateState { it.copy(selectionMenuOpen = false) }
         }
+        on<ChatThreadEvent.EditSelected> { openEditing() }
+        on<ChatThreadEvent.EditChanged> { if (visible) editing.change(it.text) }
+        on<ChatThreadEvent.EditSaveRequested> {
+            if (visible && state.value.canEditInput) editing.save()
+        }
+        on<ChatThreadEvent.EditCancelled> {
+            editing.close()
+            updateState { it.copy(editFailure = null) }
+        }
+        on<ChatThreadEvent.EditFailureDismissed> { updateState { it.copy(editFailure = null) } }
+        on<ChatThreadEvent.FailedEditsDismissRequested> { dismissFailedEdits() }
         on<ChatThreadEvent.CopySelected>(::onCopySelected)
         on<ChatThreadEvent.ForwardSelected> { openForwarding() }
         on<ChatThreadEvent.ForwardDismissed> { forwarding.close() }
@@ -277,13 +315,13 @@ class ChatThreadViewModel(
         combine(pages, observeMessages(workspaceId, conversationId)) { loaded, messages ->
                 Triple(loaded.first, loaded.second, messages)
             }
-            .collect { (selected, loaded, messages) ->
+            .collectLatest { (selected, loaded, messages) ->
                 currentCoroutineContext().ensureActive()
-                if (access != owned || selected != window.value) return@collect
+                if (access != owned || selected != window.value) return@collectLatest
                 val failed = loaded as? AppResult.Failed ?: messages as? AppResult.Failed
                 if (failed != null) {
                     restrict(failed.failure)
-                    return@collect
+                    return@collectLatest
                 }
                 val page = (loaded as AppResult.Success).value
                 // Once reverse traversal reaches the head, observe the live head instead of keeping
@@ -294,12 +332,34 @@ class ChatThreadViewModel(
                         (!selected.latest && page.messages.isEmpty())
                 ) {
                     selectWindow(ChatThreadLocalWindow())
-                    return@collect
+                    return@collectLatest
                 }
+                val commands = (messages as AppResult.Success).value
+                val outcomes =
+                    readEditOutcomes(
+                        workspaceId,
+                        owned,
+                        conversationId,
+                        page.roomId,
+                        commands,
+                        page.messages,
+                    )
+                currentCoroutineContext().ensureActive()
+                if (access != owned || selected != window.value) return@collectLatest
+                if (
+                    outcomes is AppResult.Failed &&
+                        collaborationContentResponseClosesRead(outcomes.failure)
+                ) {
+                    restrict(outcomes.failure)
+                    return@collectLatest
+                }
+                editOutcomes = (outcomes as? AppResult.Success)?.value.orEmpty()
+                if (outcomes is AppResult.Failed)
+                    updateState { it.copy(editFailure = outcomes.failure) }
                 if (historyRoomId != page.roomId) readTracker.clear()
                 historyRoomId = page.roomId
                 history = page.messages
-                pending = (messages as AppResult.Success).value
+                pending = commands
                 next = page.next
                 previous = page.previous
                 displayedWindow = selected
@@ -314,6 +374,10 @@ class ChatThreadViewModel(
     }
 
     private fun clearScope() {
+        editing.close()
+        editAcknowledgement?.cancel()
+        editAcknowledgement = null
+        editOutcomes = emptyList()
         updateState { it.copy(selectionMenuOpen = false) }
         forwarding.close()
         projection.value = null
@@ -389,6 +453,8 @@ class ChatThreadViewModel(
                     pending,
                     timeline,
                     includeUnmatched = displayedWindow.latest,
+                    editOutcomes = editOutcomes,
+                    historyRoomId = historyRoomId,
                 )
         ) {
             is AppResult.Failed -> {
@@ -496,6 +562,8 @@ class ChatThreadViewModel(
     }
 
     private fun onMessageSelected(event: ChatThreadEvent.MessageSelected) {
+        if (state.value.editing != null) return
+        editing.cancelPreparation()
         val current = state.value
         if (
             !visible ||
@@ -507,6 +575,9 @@ class ChatThreadViewModel(
         )
             return
         val row = current.rows.singleOrNull { it.key == event.key } ?: return
+        updateState {
+            it.copy(selectionTime = Clock.System.now().toEpochMilliseconds(), editFailure = null)
+        }
         val old = current.selectedMessages
         val existing = old.firstOrNull { sameChatMessage(it, row) }
         if (existing != null)
@@ -529,6 +600,7 @@ class ChatThreadViewModel(
     }
 
     private fun clearSelection() {
+        editing.cancelPreparation()
         updateState { it.copy(selectionMenuOpen = false) }
         updateState {
             it.copy(
@@ -633,6 +705,57 @@ class ChatThreadViewModel(
                 .joinToString("\n\n") { it.text.orEmpty() }
         viewModelScope.launch { emitEffect(ChatThreadEffect.CopyMessages(owned, token, text)) }
         clearSelection()
+    }
+
+    private fun openEditing() {
+        val current = state.value
+        val owned = access ?: return
+        val room = historyRoomId ?: return
+        if (!visible || !current.canEditSelection) return
+        val reference = current.selectedMessages.single().reference ?: return
+        updateState { it.copy(selectionMenuOpen = false, editFailure = null) }
+        editing.open(owned, room, reference)
+    }
+
+    private fun dismissFailedEdits() {
+        val current = state.value
+        val owned = access ?: return
+        val room = historyRoomId ?: return
+        if (!visible || !current.canDismissFailedEdits || editAcknowledgement?.isActive == true)
+            return
+        val row = current.selectedMessages.single()
+        val reference = row.reference ?: return
+        val ids = row.failedEditIds.toList()
+        if (ids.size !in 1..128) return
+        updateState {
+            it.copy(editAcknowledging = true, selectionMenuOpen = false, editFailure = null)
+        }
+        editAcknowledgement =
+            viewModelScope.launch {
+                for (batch in ids.chunked(32)) {
+                    val result =
+                        retireMessages(
+                            workspaceId,
+                            conversationId,
+                            CollaborationEditAcknowledgement(room, reference.eventId, batch),
+                            owned,
+                        )
+                    currentCoroutineContext().ensureActive()
+                    if (access != owned || !visible) return@launch
+                    if (result is AppResult.Failed) {
+                        if (collaborationContentResponseClosesRead(result.failure))
+                            restrict(result.failure)
+                        else
+                            updateState {
+                                it.copy(editAcknowledging = false, editFailure = result.failure)
+                            }
+                        return@launch
+                    }
+                }
+                updateState { it.copy(editAcknowledging = false, editFailure = null) }
+                if (state.value.selectedMessages.singleOrNull()?.reference == reference)
+                    clearSelection()
+            }
     }
 
     private fun openForwarding() {
@@ -788,6 +911,10 @@ class ChatThreadViewModel(
     }
 
     private fun onStopped(event: ChatThreadEvent.Stopped) {
+        editing.pause()
+        editAcknowledgement?.cancel()
+        editAcknowledgement = null
+        updateState { it.copy(editAcknowledging = false) }
         forwarding.pause()
         visible = false
         viewportKeys = emptyList()
@@ -817,6 +944,11 @@ class ChatThreadViewModel(
     }
 
     private fun onBackRequested(event: ChatThreadEvent.BackRequested) {
+        if (state.value.editing != null) {
+            editing.close()
+            updateState { it.copy(editFailure = null) }
+            return
+        }
         if (state.value.forwarding != null) {
             forwarding.close()
             return

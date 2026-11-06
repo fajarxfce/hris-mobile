@@ -140,7 +140,10 @@ abstract class CollaborationMessageEditStorageContract {
             assertEquals(identity, edited.copy(latestEdit = null))
             assertEquals(revision, edited.latestEdit?.edit)
             assertEquals(alias.timestamp, edited.latestEdit?.targetAcceptedAt)
-            assertEquals(before, f.read(limit = 1))
+            val after = f.read(limit = 1)
+            assertNotNull(before.revision)
+            assertNotEquals(before.revision, after.revision)
+            assertEquals(before.copy(revision = null), after.copy(revision = null))
             assertEquals(
                 AppResult.Success(null),
                 f.repository.getEventFact(f.access, f.conversation, f.room, revision.eventId),
@@ -165,6 +168,7 @@ abstract class CollaborationMessageEditStorageContract {
             val key = f.keys.read()
             f.reopen()
             assertEquals(edited, f.lookup())
+            assertEquals(after, f.read(limit = 1))
             assertEquals(key, f.keys.read())
             assertTrue(
                 f.raw().documents.all {

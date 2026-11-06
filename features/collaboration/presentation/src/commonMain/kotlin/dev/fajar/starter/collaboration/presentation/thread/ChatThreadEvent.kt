@@ -55,6 +55,20 @@ sealed interface ChatThreadEvent {
 
     data object ReplyCleared : ChatThreadEvent
 
+    data object EditSelected : ChatThreadEvent
+
+    data object EditCancelled : ChatThreadEvent
+
+    data object EditSaveRequested : ChatThreadEvent
+
+    data object EditFailureDismissed : ChatThreadEvent
+
+    data object FailedEditsDismissRequested : ChatThreadEvent
+
+    data class EditChanged(val text: String) : ChatThreadEvent {
+        override fun toString() = "EditChanged([redacted])"
+    }
+
     data object CopySelected : ChatThreadEvent
 
     data object ForwardSelected : ChatThreadEvent

@@ -149,6 +149,7 @@ fun ChatThreadPage(
                                 },
                             enabled =
                                 state.localFailure == null &&
+                                    state.editing == null &&
                                     !state.leaving &&
                                     state.deletionDialog == null &&
                                     state.cancellationDialog == null,

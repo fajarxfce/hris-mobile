@@ -1080,4 +1080,14 @@
     <string name="chat_forward_changed_en">Some selected messages or chats are no longer available. Go back and select them again.</string>
     <string name="chat_forward_targets_failed_en">Could not open your chats. Try again.</string>
     <string name="chat_forward_failed_en">Could not save these messages. Try again.</string>
+    <string name="chat_edit_message_en">Edit</string>
+    <string name="chat_editing_message_en">Edit message</string>
+    <string name="chat_save_edit_en">Save changes</string>
+    <string name="chat_cancel_edit_en">Cancel editing</string>
+    <string name="chat_discard_edit_en">Discard changes</string>
+    <string name="chat_edit_not_applied_en">Changes were not applied.</string>
+    <string name="chat_edit_unavailable_en">This message cannot be edited.</string>
+    <string name="chat_edit_not_saved_en">Changes have not been saved. Try again.</string>
+    <string name="chat_edit_queued_en">Changes waiting to send</string>
+    <string name="chat_edit_send_failed_en">Changes not sent</string>
 </resources>

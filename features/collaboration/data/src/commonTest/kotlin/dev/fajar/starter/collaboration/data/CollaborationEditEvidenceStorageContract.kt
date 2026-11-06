@@ -6,7 +6,8 @@ import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.database.*
 import kotlin.test.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 
 /**
@@ -14,6 +15,50 @@ import kotlinx.coroutines.test.runTest
  */
 abstract class CollaborationEditEvidenceStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
+
+    @Test
+    fun rejectedEditInvalidatesAnUnchangedOriginalAndReplayKeepsTheRevisionStable() =
+        withDatabase { f ->
+            val original = f.event()
+            val late =
+                edit(original)
+                    .copy(timestamp = original.timestamp + CollaborationMessageEditWindowMillis)
+            f.merge(original)
+            val after = coroutineScope {
+                val pages = Channel<CollaborationHistoryPage>(2)
+                val observation = launch {
+                    f.repository
+                        .observe(f.access, f.conversation)
+                        .distinctUntilChanged()
+                        .take(2)
+                        .collect {
+                            pages.send(
+                                assertIs<AppResult.Success<CollaborationHistoryPage>>(it).value
+                            )
+                        }
+                }
+                try {
+                    val before = pages.receive()
+                    assertNotNull(before.revision)
+                    f.edits(late)
+                    val next = pages.receive()
+                    assertEquals(before.messages, next.messages)
+                    assertNotEquals(before.revision, next.revision)
+                    observation.join()
+                    next
+                } finally {
+                    observation.cancelAndJoin()
+                    pages.cancel()
+                }
+            }
+            f.edits(late)
+            f.reopen()
+            assertEquals(
+                AppResult.Success(after),
+                f.repository.observe(f.access, f.conversation).first(),
+            )
+            assertEquals(AppResult.Success(evidence(late, eligible = false)), f.evidence(late))
+        }
 
     @Test
     fun lateProviderAcceptanceSurvivesRestartWithoutReplacingOriginalOrBecomingItsReceipt() =

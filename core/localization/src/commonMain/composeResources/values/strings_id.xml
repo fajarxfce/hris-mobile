@@ -1080,4 +1080,14 @@
     <string name="chat_forward_changed_id">Sebagian pesan atau obrolan tidak lagi tersedia. Kembali dan pilih ulang.</string>
     <string name="chat_forward_targets_failed_id">Obrolan belum bisa dibuka. Coba lagi.</string>
     <string name="chat_forward_failed_id">Pesan belum bisa disimpan. Coba lagi.</string>
+    <string name="chat_edit_message_id">Edit</string>
+    <string name="chat_editing_message_id">Edit pesan</string>
+    <string name="chat_save_edit_id">Simpan perubahan</string>
+    <string name="chat_cancel_edit_id">Batalkan edit</string>
+    <string name="chat_discard_edit_id">Buang perubahan</string>
+    <string name="chat_edit_not_applied_id">Perubahan tidak diterapkan.</string>
+    <string name="chat_edit_unavailable_id">Pesan ini tidak bisa diedit.</string>
+    <string name="chat_edit_not_saved_id">Perubahan belum tersimpan. Coba lagi.</string>
+    <string name="chat_edit_queued_id">Perubahan menunggu dikirim</string>
+    <string name="chat_edit_send_failed_id">Perubahan belum terkirim</string>
 </resources>

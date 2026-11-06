@@ -17,6 +17,31 @@ internal val ChatThreadState.canCopySelection: Boolean
         selectedMessages.isNotEmpty() &&
             selectedMessages.all { it.kind == CollaborationMessageKind.TEXT && it.text != null }
 
+internal val ChatThreadState.canEditSelection: Boolean
+    get() =
+        selectedMessages.singleOrNull()?.let {
+            it.ownership == ChatMessageOwnership.SELF &&
+                it.visibilityKnown &&
+                it.kind == CollaborationMessageKind.TEXT &&
+                it.text != null &&
+                it.reference?.eventId?.let(::validCollaborationReplyEventId) == true &&
+                it.delivery == CollaborationMessageDelivery.SENT &&
+                it.editDelivery == null &&
+                it.editEligibleUntil?.let { deadline ->
+                    selectionTime >= it.timestamp && selectionTime < deadline
+                } == true
+        } == true && copy(selecting = false).canCompose
+
+internal val ChatThreadState.canDismissFailedEdits: Boolean
+    get() =
+        !editAcknowledging &&
+            selectedMessages.singleOrNull()?.let {
+                it.ownership == ChatMessageOwnership.SELF &&
+                    it.visibilityKnown &&
+                    it.reference != null &&
+                    it.failedEditIds.isNotEmpty()
+            } == true
+
 internal val ChatThreadState.canDeleteSelection: Boolean
     get() = selectedMessages.isNotEmpty() && selectedMessages.all { it.reference != null }
 

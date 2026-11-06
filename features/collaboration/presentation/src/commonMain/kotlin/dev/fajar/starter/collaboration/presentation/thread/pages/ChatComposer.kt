@@ -23,7 +23,9 @@ import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
+import io.github.composefluent.icons.regular.Checkmark
 import io.github.composefluent.icons.regular.Dismiss
+import io.github.composefluent.icons.regular.Edit
 import io.github.composefluent.icons.regular.Send
 
 @Composable
@@ -33,42 +35,72 @@ internal fun ChatComposer(
     modifier: Modifier = Modifier,
     inputModifier: Modifier = Modifier,
 ) {
-    val label = appString(AppString.ChatMessage)
+    val editing = state.editing
+    val text = editing?.text ?: state.draft
+    val label =
+        appString(if (editing != null) AppString.ChatEditingMessage else AppString.ChatMessage)
     val savingLabel = appString(AppString.ChatDraftSaving)
     Column(modifier.fillMaxWidth().background(AppColors.canvas)) {
-        state.draftReplyToEventId?.let { target ->
+        if (editing != null) {
             Row(
-                Modifier.fillMaxWidth().padding(start = 12.dp, end = 4.dp, top = 4.dp),
+                Modifier.fillMaxWidth().padding(start = 16.dp, end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                ChatQuotePreview(
-                    state.quote(target),
-                    state.selfSender,
-                    state.title,
+                AppIcon(Icons.Regular.Edit, null, Modifier.size(20.dp), tint = AppColors.accent)
+                AppText(
+                    appString(AppString.ChatEditingMessage),
                     Modifier.weight(1f),
+                    color = AppColors.accent,
                 )
                 AppIconButton(
                     Icons.Regular.Dismiss,
-                    appString(AppString.ChatRemoveReply),
-                    { onEvent(ChatThreadEvent.ReplyCleared) },
-                    enabled = state.canCompose,
+                    appString(AppString.ChatCancelEdit),
+                    { onEvent(ChatThreadEvent.EditCancelled) },
                 )
             }
         }
+        state.draftReplyToEventId
+            ?.takeIf { editing == null }
+            ?.let { target ->
+                Row(
+                    Modifier.fillMaxWidth().padding(start = 12.dp, end = 4.dp, top = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    ChatQuotePreview(
+                        state.quote(target),
+                        state.selfSender,
+                        state.title,
+                        Modifier.weight(1f),
+                    )
+                    AppIconButton(
+                        Icons.Regular.Dismiss,
+                        appString(AppString.ChatRemoveReply),
+                        { onEvent(ChatThreadEvent.ReplyCleared) },
+                        enabled = state.canCompose,
+                    )
+                }
+            }
         Row(
             Modifier.fillMaxWidth().padding(8.dp),
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             BasicTextField(
-                value = state.draft,
-                onValueChange = { onEvent(ChatThreadEvent.DraftChanged(it)) },
+                value = text,
+                onValueChange = {
+                    onEvent(
+                        if (editing == null) ChatThreadEvent.DraftChanged(it)
+                        else ChatThreadEvent.EditChanged(it)
+                    )
+                },
                 modifier =
                     inputModifier.weight(1f).heightIn(min = 48.dp).semantics {
                         contentDescription = label
-                        if (state.draftSaving) stateDescription = savingLabel
+                        if (editing == null && state.draftSaving) stateDescription = savingLabel
                     },
-                enabled = state.canCompose,
+                enabled = if (editing == null) state.canCompose else state.canEditInput,
+                readOnly = editing?.let { it.busy || it.locked } == true,
                 singleLine = false,
                 maxLines = 6,
                 textStyle = FluentTheme.typography.body.copy(color = AppColors.text),
@@ -80,7 +112,7 @@ internal fun ChatComposer(
                             .padding(horizontal = 16.dp, vertical = 12.dp),
                         contentAlignment = Alignment.CenterStart,
                     ) {
-                        if (state.draft.isEmpty()) AppText(label, color = AppColors.muted)
+                        if (text.isEmpty()) AppText(label, color = AppColors.muted)
                         input()
                     }
                 },
@@ -91,39 +123,72 @@ internal fun ChatComposer(
                     ),
             )
             AppIconButton(
-                Icons.Regular.Send,
-                appString(if (state.submissionPending) AppString.Retry else AppString.ChatSend),
-                { onEvent(ChatThreadEvent.SendRequested) },
+                if (editing == null) Icons.Regular.Send else Icons.Regular.Checkmark,
+                appString(
+                    if (editing != null) AppString.ChatSaveEdit
+                    else if (state.submissionPending) AppString.Retry else AppString.ChatSend
+                ),
+                {
+                    onEvent(
+                        if (editing == null) ChatThreadEvent.SendRequested
+                        else ChatThreadEvent.EditSaveRequested
+                    )
+                },
                 modifier = Modifier.background(AppColors.tint, CircleShape),
-                enabled = state.canSend,
+                enabled =
+                    if (editing == null) state.canSend else state.canEditInput && editing.canSave,
             )
         }
 
-        state.draftFailure?.let { failure ->
-            val changed = failure.code == "client.collaboration_draft_changed"
+        (editing?.failure ?: state.editFailure)?.let { failure ->
             Row(
-                Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, bottom = 4.dp),
+                Modifier.fillMaxWidth().padding(start = 16.dp, end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AppText(
                     appString(
-                        when {
-                            changed -> AppString.ChatDraftChanged
-                            failure.code == "client.collaboration_invalid_message" ->
-                                AppString.ChatDraftInvalid
-                            else -> AppString.ChatDraftNotSaved
-                        }
+                        if (failure.code == "client.collaboration_edit_unavailable")
+                            AppString.ChatEditUnavailable
+                        else AppString.ChatEditNotSaved
                     ),
-                    modifier = Modifier.weight(1f),
+                    Modifier.weight(1f),
                     color = AppColors.muted,
                 )
-                if (!state.submissionPending || changed)
-                    AppTextButton(
-                        appString(if (changed) AppString.ChatDraftReload else AppString.Retry),
-                        { onEvent(ChatThreadEvent.DraftRetryRequested) },
-                        enabled = !state.saving && !state.draftSaving && !state.leaving,
+                if (editing == null)
+                    AppIconButton(
+                        Icons.Regular.Dismiss,
+                        appString(AppString.Close),
+                        { onEvent(ChatThreadEvent.EditFailureDismissed) },
                     )
             }
         }
+        state.draftFailure
+            ?.takeIf { editing == null }
+            ?.let { failure ->
+                val changed = failure.code == "client.collaboration_draft_changed"
+                Row(
+                    Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, bottom = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    AppText(
+                        appString(
+                            when {
+                                changed -> AppString.ChatDraftChanged
+                                failure.code == "client.collaboration_invalid_message" ->
+                                    AppString.ChatDraftInvalid
+                                else -> AppString.ChatDraftNotSaved
+                            }
+                        ),
+                        modifier = Modifier.weight(1f),
+                        color = AppColors.muted,
+                    )
+                    if (!state.submissionPending || changed)
+                        AppTextButton(
+                            appString(if (changed) AppString.ChatDraftReload else AppString.Retry),
+                            { onEvent(ChatThreadEvent.DraftRetryRequested) },
+                            enabled = !state.saving && !state.draftSaving && !state.leaving,
+                        )
+                }
+            }
     }
 }

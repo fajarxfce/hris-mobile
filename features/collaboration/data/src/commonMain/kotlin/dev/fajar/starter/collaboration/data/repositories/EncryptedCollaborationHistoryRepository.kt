@@ -276,6 +276,7 @@ class EncryptedCollaborationHistoryRepository(
                                 if (hasNewer && selected.isNotEmpty()) selected[retained].sortKey
                                 else null,
                                 checkpoint.roomId,
+                                raw.handle.generation + ":" + raw.revision,
                             )
                         }
                 },

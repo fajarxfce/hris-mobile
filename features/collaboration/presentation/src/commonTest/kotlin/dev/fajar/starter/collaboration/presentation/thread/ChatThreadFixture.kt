@@ -154,6 +154,7 @@ internal class ChatThreadFixture {
     var activeHistory = 0
     var maxActiveHistory = 0
     val past = ChatThreadHistoryFixture(this)
+    val edits = ChatThreadEditFixture(this)
     val transactions = mutableMapOf<String, String>()
 
     init {
@@ -617,15 +618,7 @@ internal class ChatThreadFixture {
                 createAcquireCollaborationProviderHistory(),
                 createReadCollaborationHistoryReferences(),
                 createReconcileCollaborationHistoryReferences(),
-                ObserveCollaborationDraft(
-                    drafts,
-                    local,
-                    sessions,
-                    workspaces,
-                    server,
-                    build,
-                    clock,
-                ),
+                createObserveCollaborationDraft(),
                 EditCollaborationDraft(drafts, local, sessions, workspaces, server, build, clock),
                 PrepareCollaborationDraftSend(
                     drafts,
@@ -690,6 +683,78 @@ internal class ChatThreadFixture {
                 createReadCollaborationForwardTargets(),
                 createPrepareCollaborationForward(),
                 createQueueCollaborationForward(),
+                createReadCollaborationEditCandidate(),
+                createQueueCollaborationEdit(),
+                createReadCollaborationEditOutcomes(),
+                createRetireCollaborationMessages(),
+            )
+        }
+
+    private fun createObserveCollaborationDraft() =
+        with(base) {
+            ObserveCollaborationDraft(drafts, local, sessions, workspaces, server, build, clock)
+        }
+
+    private fun createReadCollaborationEditCandidate() =
+        with(base) {
+            ReadCollaborationEditCandidate(
+                edits.targets,
+                identities,
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+            )
+        }
+
+    private fun createQueueCollaborationEdit() =
+        with(base) {
+            QueueCollaborationEdit(
+                messages,
+                edits.targets,
+                identities,
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+                schedules,
+            )
+        }
+
+    private fun createReadCollaborationEditOutcomes() =
+        with(base) {
+            ReadCollaborationEditOutcomes(
+                edits.evidence,
+                edits.completions,
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+            )
+        }
+
+    private fun createRetireCollaborationMessages() =
+        with(base) {
+            RetireCollaborationMessages(
+                messages,
+                edits.completions,
+                receipts,
+                edits.retirement,
+                history,
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+                edits.evidence,
+                edits.targets,
             )
         }
 

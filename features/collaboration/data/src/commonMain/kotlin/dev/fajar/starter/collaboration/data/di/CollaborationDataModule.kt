@@ -2015,4 +2015,25 @@ class CollaborationDataModule {
             build,
             Clock.System,
         )
+
+    @Factory
+    fun readEditOutcomes(
+        evidence: CollaborationEditEvidenceRepository,
+        completions: CollaborationMessageCompletionRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReadCollaborationEditOutcomes(
+            evidence,
+            completions,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
 }

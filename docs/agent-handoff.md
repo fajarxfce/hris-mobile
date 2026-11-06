@@ -1,5 +1,88 @@
 # Agent continuation — HRIS Mobile
 
+## Local editor accepted; continue native edit proof — 6 November 2026
+
+Thirty-three Kotlin files/two resources add the separate edit composer, local
+outcomes and same-original pending/failure display. [Contract](collaboration-edit-editor.md),
+[evidence](measurements/collaboration-edit-editor-2026-11-06.json), three inspected
+screenshots under docs/images/chat-editor. Long press -> More -> Edit; normal draft
+and quote retained, immutable retry on lost local response, original bubble key/
+time/read identity unchanged. Rejected edits remain durable, bound acknowledgement
+cannot discard a concurrently arriving failure. No network spinner/refresh added.
+
+Focused editor4 PASS68/271.796s plus unchanged domain/storage cases; regression1
+PASS25/96.744s. Full editor-full2 PASS2,347 fresh/378.927s, no failures/errors/skips,
+Android lint0,4,188 inputs unchanged. Other checks/reports were up-to-date; do not
+count retained reports as freshly executed. First full1 completed5,406 cases with
+three failures: two page equality checks omitted the new revision; one real-time
+background deadline test timed out. Corrected tests retain content/order/reopen and
+exact2s worker expiry/cleanup assertions under controlled clocks. All drivers,
+including18708, are drained. Static and preceding compile/selector failures are
+preserved in measurement. Commit/push this editor increment, then continue.
+
+NEXT: rejected edit text needs recovery/copy in the normal long-press actions before
+release. Complete raw cold revisions and actual encrypted edit exchange/ciphertext
+size. SDK checkout .worktrees/matrix-sdk-raw-event is detached8de215a0... with two
+UNCOMPILED Rust files (one raw point method plus7 structure/network/cache/cancellation
+tests). Mobile.work/sdk-raw-event-2026-11-06 contains exact source/patch/Cargo.lock
+hashes. Do NOT apply the older .patch.draft on top. Before consumption, return SDK
+decryption kind with raw bytes: encrypted room membership alone cannot establish
+that a raw text event was decrypted. Add UTD/decryption/reopen cases and bounded
+reference/original-first integration under current owner/admission/cancellation.
+No artifact/version change, SDK publication or real edit send yet.
+
+Rustup installer SHA b1c8cb14... was verified from the official distribution. Its
+isolated1.96.0/rustfmt install PASS7.227s (driver64259 drained), root
+~/.local/share/hris-sdk-rust, shell profile/PATH unchanged. rustc/cargo1.96.0 verified.
+Host C compiler/build tools and NDK are still missing; prepare them, then compile/
+test the isolated patch and controlled Android/Apple artifacts. Protected Mobile stashes remain; no applied draft may be replayed.
+No editor Apple gate/release APK/phone acceptance yet. Phone40 and stopped retained
+Rani/Bima data/keys stay intact; announce each future install and use install-only.
+
+Platform63eddd5b documentation is pushed; LIVE product10485916/schema116.1 after
+all14 CI42139174304 jobs passed. Packages/images/rollout all verified;19.227s rollout
+at01:28UTC, API/provider healthy, migration history checked after startup, existing
+keys/flags/provider/storage retained. Deployment scripts HAVE EXECUTED: never rerun
+or replay accepted Forward publications. Starterbce2012 unchanged. Continue all54
+PRD groups after this commit; this local editor acceptance is not a completion.
+
+## Editor integration in progress — 6 November 2026
+
+HEAD f993e2a9 is pushed. The eleven editor drafts below have now been APPLIED;
+do not reapply them. Current product WIP includes local outcomes, authenticated
+history revision invalidation, exact reviewed-ID/expected-access acknowledgement,
+DI/ViewModel/controller, long-press Edit, separate composer buffer and localization.
+Draft work is supplemented with shared SQLite/IndexedDB invalidation, outcome/
+ack cancellation, five editor lifecycle tests and three desktop visual cases.
+[Current contract](collaboration-edit-editor.md). No edit APK/phone acceptance yet.
+
+Static3 PASS49.991s after factoring nested outcome logic and fixture factories;
+static1/2 failed complexity checks and are retained. Focused editor1 passed61 tests
+but failed a missing return in the row helper; editor2 failed a UI-test chaining
+signature. Editor3 passed65/68 cases: three new visual cases incorrectly asserted
+text on the disabled outer bubble node; they now target its actual text descendant.
+Input focus and all five ViewModel editor tests passed. All those drivers drained.
+Focused editor4 is RUNNING; freeze source during it and audit screenshots before
+full root/browser/Android/lint checks. Do not claim screenshots or full acceptance.
+
+New SDK raw-event patch is DRAFT ONLY in .work/sdk-raw-event-2026-11-06. It adds one
+bounded exact raw event point read after the existing SDK decryption attempt,
+preserving EventCache/crypto ownership and UTD status. Base8de215a0..., Cargo.lock
+and source/build metadata captured; not applied/compiled/published/consumed. Host
+has no Rust/NDK. Need raw metadata/UTD/cancellation/byte-boundary tests, controlled
+Android/Apple artifacts and real encrypted edit exchange/ciphertext budget. Existing
+Maven26.10.23 and Apple26.10.27 remain. All54 PRD groups still need continuation.
+
+Platform10485916 is pushed. Full Verify42139174304 is running; all4 dashboard and
+7 backend shards passed at last check, backend5/downstream integrations pending.
+Previousa678 failed recovery; its dashboard integration was cancelled by newer CI.
+Isolated backup recovery2 PASS68.003s,46 unit tests passed; owned resources removed.
+Prepared edit-release scripts NOW target104/42139174304 and accepted Mobile outbox-
+full2, but remain UNEXECUTED. Require all14 passing jobs and exact artifact digests
+before staging/rollout. No live change:54b/schema116.1/keys/flags retained. Phone40,
+stopped Rani/Bima data/keys, Starterbce2012 and both protected stashes unchanged.
+Never repeat accepted Forward publications. Continue after the editor commit.
+
 ## Edit outbox accepted locally; continue projection and editor — 6 November 2026
 
 Thirty-six Kotlin changes add immutable local edit commands, exact typed SDK

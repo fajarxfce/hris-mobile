@@ -108,6 +108,12 @@ internal fun ChatMessageBubble(
                     CollaborationMessageKind.UNSUPPORTED -> appString(AppString.ChatUnsupported)
                 }
             AppText(body)
+            if (row.failedEditIds.isNotEmpty())
+                AppText(
+                    appString(AppString.ChatEditNotApplied),
+                    style = FluentTheme.typography.caption,
+                    color = AppColors.error,
+                )
             val time = chatMessageTime(row.timestamp, TimeZone.currentSystemDefault())
             Row(
                 Modifier.align(Alignment.End),
@@ -122,12 +128,17 @@ internal fun ChatMessageBubble(
                     )
                 AppText(time, style = FluentTheme.typography.caption, color = AppColors.muted)
                 if (own) {
+                    val delivery = row.editDelivery ?: row.delivery
                     val (icon, label) =
-                        when (row.delivery) {
+                        when (delivery) {
                             CollaborationMessageDelivery.PENDING ->
-                                Icons.Regular.Clock to AppString.ChatQueued
+                                Icons.Regular.Clock to
+                                    if (row.editDelivery != null) AppString.ChatEditQueued
+                                    else AppString.ChatQueued
                             CollaborationMessageDelivery.FAILED ->
-                                Icons.Regular.ErrorCircle to AppString.ChatSendFailed
+                                Icons.Regular.ErrorCircle to
+                                    if (row.editDelivery != null) AppString.ChatEditSendFailed
+                                    else AppString.ChatSendFailed
                             CollaborationMessageDelivery.SENT ->
                                 Icons.Regular.Checkmark to AppString.ChatSent
                         }
@@ -136,7 +147,7 @@ internal fun ChatMessageBubble(
                         appString(label),
                         Modifier.size(16.dp),
                         tint =
-                            if (row.delivery == CollaborationMessageDelivery.FAILED) AppColors.error
+                            if (delivery == CollaborationMessageDelivery.FAILED) AppColors.error
                             else AppColors.muted,
                     )
                 }

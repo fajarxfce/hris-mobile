@@ -69,6 +69,8 @@ data class CollaborationHistoryPage(
     val previous: String? = null,
     /** Authenticated retained room binding; null only when no history checkpoint exists. */
     val roomId: String? = null,
+    /** Authenticated local invalidation, including evidence that leaves visible text unchanged. */
+    val revision: String? = null,
 ) {
     override fun toString() = "CollaborationHistoryPage([redacted])"
 }

@@ -25,6 +25,10 @@ data class ChatMessageRow(
     val visibilityKnown: Boolean = false,
     val replyToEventId: String? = null,
     val forwarded: Boolean = false,
+    /** Replacement progress does not change the original send/read identity. */
+    val editDelivery: CollaborationMessageDelivery? = null,
+    val failedEditIds: List<String> = emptyList(),
+    val editEligibleUntil: Long? = null,
 ) {
     override fun toString() = "ChatMessageRow([redacted])"
 }
