@@ -11,6 +11,7 @@ on:
       - tool/collaboration-sdk-patches/raw-event.patch
       - tool/collaboration-sdk-patches/confirmed-queue.patch
       - tool/collaboration-sdk-patches/android-arm64-baseline.patch
+      - tool/collaboration-sdk-patches/refresh-retry.patch
   workflow_dispatch:
     inputs:
       abi:

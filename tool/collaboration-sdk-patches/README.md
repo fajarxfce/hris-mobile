@@ -6,6 +6,28 @@ The current published dependency is `26.10.23-hris.2`. See the
 Earlier candidate sections below retain their original scope and failures; they
 do not override the current distribution status.
 
+## Refresh backoff candidate
+
+`refresh-retry.patch` extends the current candidate manifest after the three
+SDK 2 patches. The shipping dependency remains SDK 2 until a separately validated
+new distribution replaces it; published SDK 1/2 assets are immutable.
+
+The retained Bima emulator reproduced a successful token refresh followed by
+`429 / M_LIMIT_EXCEEDED / collaboration_gateway_rotation_too_soon`. The SDK
+classified that transient response as a rejected session and also treated any
+refresh failure as an expired send-queue token. The patch keeps transient refreshes
+retryable, preserves Retry-After, and forwards the wrapped Matrix error through
+the existing FFI type so Android's owned sync pump observes the server deadline.
+Real authentication/access denials retain their original classification. No public
+binding API, credentials, queue identity or ARM64 feature flags change.
+
+Two core regressions failed before the patch and passed after it. All 18 HTTP
+refresh integration cases and two FFI mapping cases pass; the three SDK build-driver
+tests pass. A clean upstream checkout plus four patches reconstructs all 12 pinned
+source files exactly. All five core error-policy cases pass. Native ABI builds, actual HRIS recovery
+and candidate/normal release acceptance remain.
+[Evidence](../../docs/measurements/collaboration-sdk-refresh-retry-2026-11-06.json).
+
 ## Raw-event development history
 
 `raw-event.patch` applies to Matrix Rust SDK commit

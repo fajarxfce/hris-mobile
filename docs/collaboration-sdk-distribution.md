@@ -29,7 +29,7 @@ content and owner; the SDK does not authenticate an arbitrary supplied event ID.
 See the [recovery contract](collaboration-confirmed-queue-recovery.md).
 
 The [build manifest](../tool/collaboration-sdk-patches/android-build.json) pins the
-upstream revision, three patches, toolchains and generated Kotlin hashes. The
+upstream revision, candidate patches, toolchains and generated Kotlin hashes. The
 [distribution manifest](../tool/collaboration-sdk-patches/android-distribution.json)
 pins the Kotlin wrapper and upstream dependency POM. Follow the
 [packaging instructions](../tool/collaboration-sdk-patches/README.md#four-abi-candidate-packaging)
@@ -52,3 +52,8 @@ Apple checks. Its native scenarios executed x86_64; the SDK 2 ARM64 runtime proo
 above is separate. Physical phone send latency, physical 32-bit execution and R8
 execution are not claimed. Existing application release variants do not enable
 R8, and Apple's SDK dependency is unchanged.
+
+The current build manifest additionally includes the unshipped refresh-backoff
+candidate. It preserves retryable token refresh failures and the native Retry-After
+classification. [Candidate evidence](measurements/collaboration-sdk-refresh-retry-2026-11-06.json)
+does not replace SDK 2 acceptance or authorize reuse of its version/assets.

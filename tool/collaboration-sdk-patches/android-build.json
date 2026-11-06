@@ -8,7 +8,8 @@
   "patches": {
     "raw-event.patch": "fed8120ba7e7ea88a23cde675d70bb27a3a97304c6c913ad5a9578d28053f76e",
     "confirmed-queue.patch": "23354aeb43aabe937543355d7255d31527c0a3c78acf0a677f113e9592776872",
-    "android-arm64-baseline.patch": "82fda7d5cadc965059364c7094948fe71286293c24a1df2966d2d673327c3ec3"
+    "android-arm64-baseline.patch": "82fda7d5cadc965059364c7094948fe71286293c24a1df2966d2d673327c3ec3",
+    "refresh-retry.patch": "93f106e16efd486fde187432fb901dc6777f8235e2ca0c84d780e93ef7d5836a"
   },
   "patchedSources": {
     "Cargo.lock": "e3f28c9f54076bb320270aea995fc1f124c7ed727968dad338f544fe764df7f0",
@@ -19,7 +20,10 @@
     "bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs": "4dc9c6774802d43c090c8836471f7860809de490cc0317103e262e2848893c58",
     "Cargo.toml": "cc436eb2188bc6af76078cae40c649a71752a9ef4aa7e832afdd0f3e40853b43",
     ".cargo/config.toml": "531ceda5e3e8a7ba878c0e475434ca67651242843d6dab928877a8e31b90d5e4",
-    "xtask/src/kotlin.rs": "f52edba777e389a1efb34797e93d55dc67fb1c4460b1c539da439860004ae52a"
+    "xtask/src/kotlin.rs": "f52edba777e389a1efb34797e93d55dc67fb1c4460b1c539da439860004ae52a",
+    "crates/matrix-sdk/src/error.rs": "0941cc1e145a3b55878d500438a2eaf4790a755a890833a67694c41bc8a3d627",
+    "crates/matrix-sdk/tests/integration/refresh_token.rs": "b8261042d822721b4ab7230f7c263fb9ac80e8c1533a4c4dfc2653d0995b7e5b",
+    "bindings/matrix-sdk-ffi/src/error.rs": "02eabd46e009a478e5325d2c74cc3d38d46f344f0d67bac3b41057b8960424dd"
   },
   "generatedKotlin": {
     "kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt": "dbf7effa2fb593b30860fa706be26e1990bbe4104ef598331a37388ce44fff7a",

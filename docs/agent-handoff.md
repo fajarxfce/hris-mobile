@@ -1,6 +1,46 @@
 # Agent continuation — HRIS Mobile
 
-## Current: release 48 installed; phone mapping diagnosis next — 6 November 2026
+## Current: SDK refresh-rate-limit fix validated; Android rebuild — 6 November 2026
+
+Phone remains accepted **release 48**, installed at 15:07 UTC, with one optional
+request to open Bima still pending. At 15:18 its app was not running; do not drive
+phone UI or repeat the answered47 question. Old pending diagnosis remains open.
+
+The original Bima store reproduced the intermittent soft logout at **15:11:38UTC**.
+A bounded HRIS bridge trace captured Matrix refresh **200 then429**, with
+M_LIMIT_EXCEEDED / collaboration_gateway_rotation_too_soon. The native parent/device
+remained active and the gateway advanced to66. The pinned SDK classified all
+non-5xx refresh errors as session rejection; it also classified every wrapped
+refresh failure as an expired queue token. This explains the reproduced emulator
+failure, not yet the phone's per-message pending history.
+
+`tool/collaboration-sdk-patches/refresh-retry.patch` corrects those classifications,
+keeps Retry-After, and exposes wrapped Matrix failures through the existing FFI
+error type. No binding API, owner fence, credential, queue identity or CPU baseline
+changes. SDK1/2 assets remain immutable and shipping still usesSDK2. The current
+candidate build manifest now includes this fourth patch and12exact source files.
+Clean upstream reconstruction matches all12. Rust unit red:2intended failures,
+51.633s; green:2pass48.920s. All5core error cases pass0.365s; all18HTTP refresh
+integration cases pass59.487s; FFI2pass77.780s. Python build-driver3pass0.122s.
+[Evidence](measurements/collaboration-sdk-refresh-retry-2026-11-06.json).
+
+Only heavy local job is the **ARM64 SDK rebuild** in
+.work/chat-refresh-boundary-2026-11-06/android-arm64. Its12manifest inputs in
+/home/fajar/hris/.worktrees/matrix-sdk-raw-event are FROZEN. Check result.json before
+another build. No emulator is active:2837625/startTicks165453502 stopped15:13:23UTC,
+with original Bima data/keys retained. Next build/verify x86_64, ARMv7 andx86;
+compare all nine Kotlin files; package a new immutable SDK revision only after
+native/retained-store acceptance. Never publish overSDK2 or install rejected44.
+Use .work/chat-refresh-boundary-2026-11-06/build-android.py with distinct ABI outputs.
+Then validate actual token-boundary recovery and the normal release before49phone.
+Current release variants do not enableR8; do not call them minified.
+
+Sourcecf28 automatic native/control CI still runs; portable job passed, Apple was
+still active on last inspection. No manual redispatch. Platform live10485916/
+schema116.1 and Starter578d97a unchanged. Continue all54PRD groups and push each
+commit. No accepted Forward send, live rollout, or SDK publication may replay.
+
+## Prior checkpoint: release 48 installed; phone mapping diagnosis next — 6 November 2026
 
 Release **48** from pushed source **cf28a7c4dac0a523df6d47fa82e115be340ea1e5** is
 installed on **10.77.77.3:5555**. Announced in advance, install-only/no UI.

@@ -1,0 +1,249 @@
+diff --git a/bindings/matrix-sdk-ffi/src/error.rs b/bindings/matrix-sdk-ffi/src/error.rs
+index a9e2d39..304e54f 100644
+--- a/bindings/matrix-sdk-ffi/src/error.rs
++++ b/bindings/matrix-sdk-ffi/src/error.rs
+@@ -78,7 +78,14 @@ impl From<matrix_sdk::Error> for ClientError {
+     fn from(e: matrix_sdk::Error) -> Self {
+         match e {
+             matrix_sdk::Error::Http(http_error) => {
+-                if let Some(api_error) = http_error.as_client_api_error() {
++                let api_error =
++                    http_error.as_client_api_error().or_else(|| match http_error.as_ref() {
++                        HttpError::RefreshToken(matrix_sdk::RefreshTokenError::MatrixAuth(
++                            inner,
++                        )) => inner.as_client_api_error(),
++                        _ => None,
++                    });
++                if let Some(api_error) = api_error {
+                     match &api_error.body {
+                         ErrorBody::Standard(StandardErrorBody { kind, message, .. }) => {
+                             let Ok(ffi_error_kind) = kind.clone().try_into() else {
+@@ -123,6 +130,53 @@ impl From<StoreError> for ClientError {
+     }
+ }
+ 
++#[cfg(test)]
++mod refresh_error_tests {
++    use std::sync::Arc;
++
++    use matrix_sdk::{HttpError, RefreshTokenError, reqwest::StatusCode};
++    use ruma::api::{client::uiaa::UiaaResponse, error::FromHttpResponseError};
++    use serde_json::json;
++
++    use super::{ClientError, ErrorBody, ErrorKind, StandardErrorBody};
++
++    fn refresh_error(status: u16, code: &str) -> ClientError {
++        let body: StandardErrorBody = serde_json::from_value(json!({
++            "errcode": code,
++            "error": "Fictional refresh response",
++            "retry_after_ms": 10000
++        }))
++        .unwrap();
++        let api = ErrorBody::Standard(body).into_error(StatusCode::from_u16(status).unwrap());
++        let error = HttpError::RefreshToken(RefreshTokenError::MatrixAuth(Arc::new(
++            HttpError::Api(Box::new(FromHttpResponseError::Server(UiaaResponse::MatrixError(api)))),
++        )));
++        ClientError::from(matrix_sdk::Error::from(error))
++    }
++
++    #[test]
++    fn wrapped_refresh_rate_limit_keeps_structured_retry_after_for_native_sync() {
++        let ClientError::MatrixApi {
++            kind: ErrorKind::LimitExceeded { retry_after_ms }, code, ..
++        } = refresh_error(429, "M_LIMIT_EXCEEDED")
++        else {
++            panic!("Expected structured refresh rate limit")
++        };
++        assert_eq!(code, "M_LIMIT_EXCEEDED");
++        assert_eq!(retry_after_ms, Some(10000));
++    }
++
++    #[test]
++    fn wrapped_refresh_denials_keep_their_native_authentication_classification() {
++        for (status, expected) in [(401, "M_UNKNOWN_TOKEN"), (403, "M_FORBIDDEN")] {
++            let ClientError::MatrixApi { code, .. } = refresh_error(status, expected) else {
++                panic!("Expected structured refresh denial")
++            };
++            assert_eq!(code, expected);
++        }
++    }
++}
++
+ impl From<CryptoStoreError> for ClientError {
+     fn from(e: CryptoStoreError) -> Self {
+         Self::from_err(e)
+diff --git a/crates/matrix-sdk/src/error.rs b/crates/matrix-sdk/src/error.rs
+index bcd742e..524aabe 100644
+--- a/crates/matrix-sdk/src/error.rs
++++ b/crates/matrix-sdk/src/error.rs
+@@ -127,7 +127,7 @@ impl HttpError {
+     /// with.
+     pub(crate) fn is_rejected_token(&self) -> bool {
+         match self {
+-            Self::RefreshToken(_) => true,
++            Self::RefreshToken(error) => error.is_session_rejected(),
+             Self::Cached(inner) => inner.is_rejected_token(),
+             _ => matches!(self.client_api_error_kind(), Some(ErrorKind::UnknownToken(_))),
+         }
+@@ -165,6 +165,15 @@ impl HttpError {
+             HttpError::RefreshToken(error) => {
+                 if error.is_session_rejected() {
+                     RetryKind::Permanent
++                } else if let RefreshTokenError::MatrixAuth(inner) = error {
++                    // Preserve server backoff through the refresh wrapper. A transient refresh
++                    // does not establish that either session token has been rejected.
++                    match inner.retry_kind() {
++                        RetryKind::Transient { retry_after } => {
++                            RetryKind::Transient { retry_after }
++                        }
++                        _ => RetryKind::Transient { retry_after: None },
++                    }
+                 } else {
+                     RetryKind::Transient { retry_after: None }
+                 }
+@@ -728,9 +737,10 @@ impl RefreshTokenError {
+             // There is no refresh token to exchange and retrying won't fix it.
+             Self::RefreshTokenRequired => true,
+ 
+-            Self::MatrixAuth(http_error) => http_error
+-                .as_client_api_error()
+-                .is_some_and(|error| !error.status_code.is_server_error()),
++            Self::MatrixAuth(http_error) => http_error.as_client_api_error().is_some_and(|error| {
++                !error.status_code.is_server_error()
++                    && matches!(http_error.retry_kind(), RetryKind::Permanent)
++            }),
+ 
+             Self::OAuth(oauth_error) => matches!(
+                 &**oauth_error,
+@@ -850,6 +860,55 @@ mod tests {
+         );
+     }
+ 
++    #[test]
++    fn refresh_rate_limits_preserve_the_retry_deadline_without_rejecting_the_session() {
++        let failure = refresh_failure(
++            StatusCode::TOO_MANY_REQUESTS,
++            r#"{"errcode":"M_LIMIT_EXCEEDED","error":"Retry later","retry_after_ms":10000}"#,
++        );
++        let HttpError::RefreshToken(ref refresh) = failure else { unreachable!() };
++        assert!(!refresh.is_session_rejected());
++        assert!(!failure.is_rejected_token());
++        assert_matches!(
++            failure.retry_kind(),
++            RetryKind::Transient { retry_after: Some(delay) } => {
++                assert_eq!(delay, Duration::from_secs(10));
++            }
++        );
++        let operation: crate::Error = failure.into();
++        assert_matches!(
++            crate::QueueWedgeError::from(&operation),
++            crate::QueueWedgeError::GenericApiError { .. }
++        );
++    }
++
++    #[test]
++    fn refresh_timeouts_do_not_reject_the_session_but_real_denials_still_do() {
++        for status in [StatusCode::REQUEST_TIMEOUT, StatusCode::TOO_MANY_REQUESTS] {
++            let failure =
++                refresh_failure(status, r#"{"errcode":"M_UNKNOWN","error":"Retry later"}"#);
++            let HttpError::RefreshToken(ref refresh) = failure else { unreachable!() };
++            assert!(!refresh.is_session_rejected());
++            assert!(!failure.is_rejected_token());
++            assert_matches!(failure.retry_kind(), RetryKind::Transient { .. });
++        }
++        for (status, code) in
++            [(StatusCode::UNAUTHORIZED, "M_UNKNOWN_TOKEN"), (StatusCode::FORBIDDEN, "M_FORBIDDEN")]
++        {
++            let failure =
++                refresh_failure(status, &format!(r#"{{"errcode":"{code}","error":"Rejected"}}"#));
++            let HttpError::RefreshToken(ref refresh) = failure else { unreachable!() };
++            assert!(refresh.is_session_rejected());
++            assert!(failure.is_rejected_token());
++            assert_matches!(failure.retry_kind(), RetryKind::Permanent);
++            let operation: crate::Error = failure.into();
++            assert_matches!(
++                crate::QueueWedgeError::from(&operation),
++                crate::QueueWedgeError::ExpiredAccessToken
++            );
++        }
++    }
++
+     #[test]
+     fn test_retry_kind_from_retry_after() {
+         assert_matches!(
+diff --git a/crates/matrix-sdk/tests/integration/refresh_token.rs b/crates/matrix-sdk/tests/integration/refresh_token.rs
+index 1ca9450..0a7315b 100644
+--- a/crates/matrix-sdk/tests/integration/refresh_token.rs
++++ b/crates/matrix-sdk/tests/integration/refresh_token.rs
+@@ -430,6 +430,71 @@ async fn test_refresh_token_transient_failure_is_not_a_logout() {
+     assert_eq!(session_changes.try_recv(), Err(TryRecvError::Empty));
+ }
+ 
++#[async_test]
++async fn test_refresh_token_rate_limit_and_timeout_preserve_the_original_session() {
++    for status in [429, 408] {
++        let (builder, server) = test_client_builder_with_server().await;
++        let client = builder
++            .request_config(RequestConfig::new().disable_retry())
++            .server_versions([MatrixVersion::V1_3])
++            .handle_refresh_tokens()
++            .build()
++            .await
++            .unwrap();
++        let original = session();
++        client
++            .matrix_auth()
++            .restore_session(original.clone(), RoomLoadSettings::default())
++            .await
++            .unwrap();
++        let mut changes = client.subscribe_to_session_changes();
++
++        Mock::given(method("GET"))
++            .and(path("/_matrix/client/v3/account/whoami"))
++            .and(header(http::header::AUTHORIZATION, "Bearer 1234"))
++            .respond_with(
++                ResponseTemplate::new(401).set_body_json(&*test_json::UNKNOWN_TOKEN_SOFT_LOGOUT),
++            )
++            .expect(2)
++            .mount(&server)
++            .await;
++        Mock::given(method("GET"))
++            .and(path("/_matrix/client/v3/account/whoami"))
++            .and(header(http::header::AUTHORIZATION, "Bearer 5678"))
++            .respond_with(ResponseTemplate::new(200).set_body_json(&*test_json::WHOAMI))
++            .expect(1)
++            .mount(&server)
++            .await;
++        let blocked = Mock::given(method("POST"))
++            .and(path("/_matrix/client/v3/refresh"))
++            .and(body_partial_json(json!({"refresh_token":"abcd"})))
++            .respond_with(ResponseTemplate::new(status).set_body_json(json!({
++                "errcode": if status == 429 { "M_LIMIT_EXCEEDED" } else { "M_UNKNOWN" },
++                "error": "Retry later",
++                "retry_after_ms": 10000
++            })))
++            .expect(1)
++            .mount_as_scoped(&server)
++            .await;
++
++        assert_matches!(client.whoami().await, Err(HttpError::RefreshToken(_)));
++        assert_eq!(changes.try_recv(), Err(TryRecvError::Empty));
++        assert_eq!(client.session_tokens().unwrap(), original.tokens);
++        drop(blocked);
++
++        Mock::given(method("POST"))
++            .and(path("/_matrix/client/v3/refresh"))
++            .and(body_partial_json(json!({"refresh_token":"abcd"})))
++            .respond_with(ResponseTemplate::new(200).set_body_json(&*test_json::REFRESH_TOKEN))
++            .expect(1)
++            .mount(&server)
++            .await;
++        client.whoami().await.unwrap();
++        assert_eq!(changes.try_recv(), Ok(SessionChange::TokensRefreshed));
++        assert_eq!(changes.try_recv(), Err(TryRecvError::Empty));
++    }
++}
++
+ #[async_test]
+ async fn test_refresh_token_handled_multi_success() {
+     let (builder, server) = test_client_builder_with_server().await;

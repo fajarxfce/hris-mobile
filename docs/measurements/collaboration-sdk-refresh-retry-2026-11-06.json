@@ -1,0 +1,105 @@
+{
+  "date": "2026-11-06",
+  "status": "host_tests_passed_android_build_in_progress",
+  "phoneVersion": 48,
+  "phonePending": "Open; one optional request to open Bima after update is pending.",
+  "sourceBase": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+  "patchSha256": "93f106e16efd486fde187432fb901dc6777f8235e2ca0c84d780e93ef7d5836a",
+  "patchedSources": {
+    "crates/matrix-sdk/src/error.rs": "0941cc1e145a3b55878d500438a2eaf4790a755a890833a67694c41bc8a3d627",
+    "crates/matrix-sdk/tests/integration/refresh_token.rs": "b8261042d822721b4ab7230f7c263fb9ac80e8c1533a4c4dfc2653d0995b7e5b",
+    "bindings/matrix-sdk-ffi/src/error.rs": "02eabd46e009a478e5325d2c74cc3d38d46f344f0d67bac3b41057b8960424dd"
+  },
+  "ownedEmulatorReproduction": {
+    "versionCode": 48,
+    "softLogoutAt": "2026-11-06T15:11:38Z",
+    "originalStoreRetained": true,
+    "newMessagesSent": 0,
+    "refreshResponses": [
+      200,
+      429
+    ],
+    "closedProviderError": "collaboration_gateway_rotation_too_soon",
+    "gatewayVersion": 66,
+    "nativeParentAndDeviceStillActive": true,
+    "limits": "HTTP request/response order observed on one connection; no per-packet RTT or phone outbox correlation is asserted. Earlier empty loopback capture did not observe Docker-routed traffic."
+  },
+  "coreRed": {
+    "startedAt": "2026-11-06T15:15:03.047321+00:00",
+    "elapsedSeconds": 51.633,
+    "exitCode": 101,
+    "sourcesUnchanged": true,
+    "logSha256": "f7e23792c3a3d20ae7e45ce3ba114c72ff0b2fbe6f54aaaa04c2719575a48bf5",
+    "tests": 2,
+    "failures": 2
+  },
+  "coreGreen": {
+    "startedAt": "2026-11-06T15:17:44.000837+00:00",
+    "elapsedSeconds": 48.92,
+    "exitCode": 0,
+    "sourcesUnchanged": true,
+    "logSha256": "b63098d60ef90f3d74ad9d7fa623a601044a44a43c3bdba3a5331d3bf3d75a87",
+    "tests": 2,
+    "failures": 0
+  },
+  "implementation": [
+    "Transient refresh responses no longer reject the session or classify a queued message as ExpiredAccessToken.",
+    "Preserve Retry-After through the refresh wrapper.",
+    "Expose the wrapped Matrix error through the existing FFI error type so the native sync pump keeps the server retry deadline.",
+    "Real authentication/access denials stay classified as denials; no token reset, ownership relaxation or original-send replacement."
+  ],
+  "remaining": [
+    "Build and verify all native ABI/binding pairs before candidate packaging.",
+    "Prove actual HRIS token-boundary recovery and nondebuggable release retained-store acceptance before next phone update.",
+    "Publish only a new immutable SDK version after validation; SDK 1 and 2 assets remain unchanged."
+  ],
+  "httpIntegration": {
+    "startedAt": "2026-11-06T15:19:00.783760+00:00",
+    "elapsedSeconds": 59.487,
+    "exitCode": 0,
+    "sourcesUnchanged": true,
+    "tests": 18,
+    "failures": 0,
+    "logSha256": "ace348fcef23c3f110234d38bdea800616588eb185fa99cb8e04218a10e4de4c"
+  },
+  "ffi": {
+    "startedAt": "2026-11-06T15:20:40.378068+00:00",
+    "elapsedSeconds": 77.78,
+    "exitCode": 0,
+    "sourcesUnchanged": true,
+    "tests": 2,
+    "failures": 0,
+    "logSha256": "4e5a2d140073dc14b38c30ce6476fbf8628633d4a50b444d83e61f8a5dc3a1c7"
+  },
+  "patchReconstruction": {
+    "at": "2026-11-06T15:20:41.651721+00:00",
+    "passed": true,
+    "upstream": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+    "patches": {
+      "raw-event.patch": "fed8120ba7e7ea88a23cde675d70bb27a3a97304c6c913ad5a9578d28053f76e",
+      "confirmed-queue.patch": "23354aeb43aabe937543355d7255d31527c0a3c78acf0a677f113e9592776872",
+      "android-arm64-baseline.patch": "82fda7d5cadc965059364c7094948fe71286293c24a1df2966d2d673327c3ec3",
+      "refresh-retry.patch": "93f106e16efd486fde187432fb901dc6777f8235e2ca0c84d780e93ef7d5836a"
+    },
+    "sourceFiles": 12,
+    "sourcesMatchManifest": true,
+    "checkout": "/home/fajar/hris/.worktrees/matrix-sdk-refresh-patch-check-2026-11-06"
+  },
+  "pythonBuildDriverTests": {
+    "tests": 3,
+    "failures": 0,
+    "elapsedSeconds": 0.122
+  },
+  "limits": [
+    "Current release builds do not enable R8; no minifier acceptance is claimed.",
+    "The phone pending report is still open; emulator token-boundary failure is independently reproduced."
+  ],
+  "allCoreErrorPolicies": {
+    "startedAt": "2026-11-06T15:23:14.799386+00:00",
+    "elapsedSeconds": 0.365,
+    "tests": 5,
+    "failures": 0,
+    "sourcesUnchanged": true,
+    "logSha256": "63f061c1054f0e933ba31a70680038cb2b14da713dc471e8ea1ed405dcb528f4"
+  }
+}
