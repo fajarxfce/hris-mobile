@@ -36,9 +36,10 @@ The existing worker fixture's lost-response case removes native queued items bef
 returning its simulated failure. It does not reproduce a server-accepted event
 whose transaction remains in the protected SDK queue after process death. The
 worker can recover confirmation from original history, select no remaining pending
-commands, then retire the confirmed command. Test whether that leaves an unmapped
-SDK transaction blocking a later submission before treating this as the phone's
-root cause.
+commands, then retire the confirmed command. The added fake-SDK regression reproduces exactly that: first-message recovery
+completes, then the next delivery is blocked by `QueueUnresolved`. Both expected
+failure runs and the isolated patch are [recorded](measurements/collaboration-confirmed-queue-reproduction-2026-11-06.json).
+This still does not establish the phone's current root cause.
 
 Do not blindly abort or replay such transactions. In the pinned SDK,
 `SendHandle.abort_with_reason` can schedule a server redaction when a send is in

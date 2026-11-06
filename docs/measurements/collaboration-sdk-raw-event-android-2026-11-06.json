@@ -58,7 +58,7 @@
     "assembled": true
   },
   "limitations": [
-    "Arm64 AAR is packaged; x86_64 native and matching generated Kotlin are verified. Two-ABI packaging, remaining 32-bit ABIs, and Apple paired artifacts remain pending.",
+    "Arm64/x86_64 AAR is packaged and verified; remaining 32-bit ABIs and Apple paired artifacts remain pending.",
     "No application SDK dependency change or native consumer acceptance.",
     "The wrapper and AAR both have empty upstream consumer rules; no minified application acceptance is claimed."
   ],
@@ -102,5 +102,33 @@
     "candidateOnly": true,
     "applicationDependencyChanged": false,
     "packaged": false
+  },
+  "pairedAar": {
+    "candidateOnly": true,
+    "sourceSdkBase": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+    "wrapperCommit": "c1664f712bed33488b10f33232fb424faf257d49",
+    "buildSeconds": 24.063,
+    "artifact": ".work/sdk-raw-event-2026-11-06/package-android-aar-2/matrix-sdk-android-26.10.23-hris-raw-event-arm64-x86_64.aar",
+    "bytes": 96782109,
+    "sha256": "94d907f139a7484bd687b538d8cfce3e90478daa2ab93b9835d9aa8a606becae",
+    "nativeAbis": [
+      "arm64-v8a",
+      "x86_64"
+    ],
+    "jniSha256": {
+      "arm64-v8a": "4e63f1aac9884121050553777d54778a93d66ecf96a90babd1cae625c8911611",
+      "x86_64": "0f9d908ef616c650949fedd51c97c0ce5e5c2d98810606731bc811634acf3cab"
+    },
+    "jniMatchesGeneratedPair": true,
+    "classesSha256": "82eb8b49b602134eb1171852a71e379465fc893edca0e67a78db23cfd8665774",
+    "rawEventMethodsAndTypesPresent": true,
+    "minSdk": 21,
+    "consumerRulesMatchUpstream": true,
+    "consumerRulesEmpty": true,
+    "generatedInputsUnchanged": true,
+    "published": false,
+    "applicationDependencyChanged": false,
+    "consumerAcceptance": false,
+    "initialVerifierCorrection": "Removed an incorrect assumption that upstream consumer rules name Matrix/UniFFI packages. The upstream file and packaged file are both empty; no rules or artifact changed."
   }
 }

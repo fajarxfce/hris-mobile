@@ -68,3 +68,27 @@ x86_64. The in-progress x86_64 build and existing arm64 candidate cover the phon
 and emulator proof targets; both 32-bit targets are still required before replacing
 the complete shipping artifact. Keep generated Kotlin/JNI pairs together for every
 ABI and compare all nine generated Kotlin files before combining native libraries.
+
+## Confirmed native queue recovery regression
+
+`confirmed-queue-repro.patch` applies to Mobile46bec39a (and docs-only56f48bd8).
+It is a diagnostic expected-failure test, separate from the raw-event binding patch.
+The application worker uses real encrypted command/history stores and a fake native
+SDK that preserves its transaction after accepting an event and losing the response.
+Recovery completes the first message, then the next message is blocked with
+`client.collaboration_queue_unresolved`. The original fixture removed the native
+transaction before returning its lost-response failure and could not expose this.
+
+The focused case ran twice:42.659s, then40.847s with phase-specific assertions.
+Both produce the expected single failure; the second names delivery of the next
+message as the failing step. [Evidence](../../docs/measurements/collaboration-confirmed-queue-reproduction-2026-11-06.json).
+The tested patch is retained here; baseline test files were restored afterwards.
+No production source changed, and no native or phone reproduction is claimed.
+
+To reproduce on an isolated checkout, apply the patch and run
+`:apps:shared:desktopTest --tests '*CollaborationDeliveryWorkerTest.recoveredNativeAcceptanceDoesNotLeaveAnUnmappedQueueBlockingTheNextMessage'`
+with the repository's Java21/headless setup. Expect a red test until confirmed-queue
+settlement is implemented. Do not automatically abort native handles: the pinned
+SDK can queue a server redaction when their send is in flight. Exact original
+transaction evidence and a settlement operation with no redaction side effect are
+needed before removing a retained native entry.

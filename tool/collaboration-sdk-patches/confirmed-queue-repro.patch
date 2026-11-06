@@ -1,0 +1,47 @@
+diff --git a/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt b/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt
+index 4dd539f2..3ba5cf44 100644
+--- a/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt
++++ b/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt
+@@ -35,6 +35,22 @@ class CollaborationDeliveryWorkerTest {
+             }
+         }
+ 
++    @Test
++    fun recoveredNativeAcceptanceDoesNotLeaveAnUnmappedQueueBlockingTheNextMessage() = runBlocking {
++        withFixture { f ->
++            val first = f.queue(text = "First retained message")
++            f.sdk.loseDeliveryReply = true
++            f.sdk.retainQueueAfterLostReply = true
++            assertIs<SyncResult.Retry>(f.worker())
++            f.reopen()
++            assertEquals(SyncResult.Complete, f.worker(), "Recover the accepted first message")
++            val next = f.queue(text = "Next retained message")
++            assertEquals(SyncResult.Complete, f.worker(), "Deliver the next message after recovery")
++            assertEquals(listOf(first.intent.id, next.intent.id), f.sdk.enqueued)
++            assertEquals(f.sdk.childOpens, f.sdk.childCloses)
++        }
++    }
++
+     @Test
+     fun missingNativeAckIsRecoveredBeforeAnySecondEnqueueOrResume() = runBlocking {
+         withFixture { f ->
+diff --git a/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt b/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt
+index 90e8b8c9..50810311 100644
+--- a/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt
++++ b/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt
+@@ -52,6 +52,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
+     val backgroundCredentialFailures = MutableStateFlow<Failure?>(null)
+     var restoreFailure: Failure? = null
+     var loseDeliveryReply = false
++    var retainQueueAfterLostReply = false
+     var withholdOriginals = false
+     var historyCapacityOnce = false
+     var historyReopens = 0
+@@ -442,6 +443,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
+                         .addAll(sent.map { it.second })
+                     if (loseDeliveryReply) {
+                         loseDeliveryReply = false
++                        if (retainQueueAfterLostReply) pending.putAll(sent)
+                         return AppResult.Failed(
+                             Failure(FailureKind.Network, "Fixture lost delivery response")
+                         )

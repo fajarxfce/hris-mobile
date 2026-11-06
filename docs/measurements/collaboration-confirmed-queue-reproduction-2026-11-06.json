@@ -1,0 +1,39 @@
+{
+  "scope": "Application worker with actual encrypted command/history stores and a fake native SDK retaining a transaction after server acceptance and a lost response. Not a physical-phone root-cause diagnosis.",
+  "baseCommit": "46bec39aa599f78f38f8fb639f59b3de080bdf68",
+  "patchSha256": "b63fa23bbc27659f940f4bd3977c24655f54a94e9793bfe88bf54223f8f887b7",
+  "expectedFailure": true,
+  "phases": {
+    "retained-queue-baseline": {
+      "startedAt": "2026-11-06T09:05:35.343360+00:00",
+      "seconds": 42.659,
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "failures": [
+        "java.lang.AssertionError: expected:<Complete> but was:<Blocked(failure=Failure(kind=Conflict, code=client.collaboration_queue_unresolved))>"
+      ],
+      "sourcesUnchanged": true
+    },
+    "retained-queue-phases": {
+      "startedAt": "2026-11-06T09:08:36.807700+00:00",
+      "seconds": 40.847,
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "failures": [
+        "java.lang.AssertionError: Deliver the next message after recovery expected:<Complete> but was:<Blocked(failure=Failure(kind=Conflict, code=client.collaboration_queue_unresolved))>"
+      ],
+      "sourcesUnchanged": true
+    }
+  },
+  "productionSourceChanged": false,
+  "firstMessageRecovery": "completed",
+  "nextMessageDelivery": "blocked: client.collaboration_queue_unresolved"
+}

@@ -48,24 +48,40 @@ EACH install, then install.py --install-only; never launch/drive phone UI. Do no
 rebuild or repeat emulator acceptance merely because the phone is unavailable.
 No local heavy job/emulator is active at this checkpoint.
 
-Next investigate long pending while phone availability is pending. The prepared
-.work/chat-send-feedback-2026-11-06/retained-queue-repro.patch adds a fake SDK
-lost-response case that retains its native transaction. It is NOT applied/run.
-Run a focused regression after applying only those owned test changes; preserve
-its patch/evidence and restore baseline tests if still a diagnostic-only failure.
-Old phone logs identify only Flush/QueueUnresolved;43 distinguishes Stage/Deliver.
-The contract explains why blind native abort can redact an accepted event. Server
-sample13 encrypted sends all200,36ms median/55ms maximum server processing;
-no end-to-end latency conclusion. New46bec39a CI Native42191546121 running and
-Control42191546066 pending; do not dispatch duplicates.
+Confirmed-native-queue diagnostic case now REPRODUCED. First42.659s and a
+phase-labelled repeat40.847s each fail exactly one case: first message recovery
+completes, but NEXT message delivery becomes Blocked/QueueUnresolved. Fake SDK
+retains the transaction after accepting the event and losing the response; real
+encrypted command/history stores and actual application worker are used. This is
+not a native/phone root-cause diagnosis. Baseline test files are restored, and the
+formatted patch is tracked at tool/collaboration-sdk-patches/confirmed-queue-repro.patch
+(SHAb63fa23bbc27659f940f4bd3977c24655f54a94e9793bfe88bf54223f8f887b7).
+No production source changed. See its README and measurement for exact commands.
+Shipping bindings expose no original JSON for unsent local echoes; blind native
+abort can queue a server redaction. Implement exact original-transaction settlement
+before removing confirmed native entries. Old phone logs only identify Flush /
+QueueUnresolved;43 will distinguish Stage/Deliver after installation.
+
+ONLY current local heavy job: raw-event consumer build86413 in the isolated
+Mobile worktree based on270efd56; no emulator active. Two-ABI AAR build86188
+finished24.063s and verified:96,782,109 bytes, SHA
+94d907f139a7484bd687b538d8cfce3e90478daa2ab93b9835d9aa8a606becae.
+Both JNI and all Kotlin/classes match the verified pair. prepare-consumer.py has
+RUN: private Maven coordinate and exact verification hashes are added only in the
+isolated consumer, shipping dependency unchanged. Wait for86413, verify its APK,
+then use the dedicated fresh consumer userdata/emulator and existing Platform
+provider fixture (--docker-sudo, --android-sync-mode classic). No provider test has
+run yet. Stop the exact owned emulator afterwards. Do not reuse/wipe Bima userdata.
+New46bec39a CI Native42191546121 running and Control42191546066 pending;
+do not dispatch duplicates.
 
 SDK x86_64 driver95397 is FINISHED and drained:901.084s,142,673,032 bytes,
 SHA0f9d908ef616c650949fedd51c97c0ce5e5c2d98810606731bc811634acf3cab.
 Nine generated Kotlin files exactly match arm64; four16KiB ELF LOAD alignments,
 raw-event symbol and unchanged sources verified. prepare-x86-aar.py has RUN and
 added its JNI beside arm64 in the isolated wrapper; do not repeat its one-shot
-backup. Two-ABI AAR packaging and native consumer are NOT run. Continue them after
-the send issue, then native edit recovery, domain-owned history paging and all54
+backup. Two-ABI AAR is now packaged; native consumer compilation is active as recorded
+above. Continue confirmed-queue repair, native edit recovery, domain-owned history paging and all54
 PRD groups. Shipping SDK dependency unchanged;32-bit and Apple remain pending.
 
 Mobile motion23ce Native CI42183953532 SUCCESS: artifact13488369157 digest
