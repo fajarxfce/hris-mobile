@@ -1,0 +1,148 @@
+{
+  "date": "2026-11-06",
+  "scope": "Active local submission feedback; sequential pending/confirmed row ordering under client/server clock skew; closed worker staging/delivery diagnostics.",
+  "phases": {
+    "baseline": {
+      "startedAt": "2026-11-06T08:29:51.789476+00:00",
+      "elapsedSeconds": 38.974,
+      "exitCode": 1,
+      "sourceFiles": 4205,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportsSha256": "75833b3d0c368c81e099eccf2d5371016457028fb3e9a6580bf4fe68e2b81f9a"
+    },
+    "order-baseline": {
+      "startedAt": "2026-11-06T08:32:37.632453+00:00",
+      "elapsedSeconds": 57.993,
+      "exitCode": 1,
+      "sourceFiles": 4205,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 16,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportsSha256": "e7d7be72b863937e2d4389ec4279ef535bcdf42d2bc10782a2f901fb6d32173e"
+    },
+    "corrected": {
+      "startedAt": "2026-11-06T08:34:04.987015+00:00",
+      "elapsedSeconds": 50.956,
+      "exitCode": 0,
+      "sourceFiles": 4205,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportsSha256": "bb11946445c1abd93e531db26d7d776d6203dcfb3b1629127caf22f00ee12940"
+    },
+    "full1": {
+      "startedAt": "2026-11-06T08:38:26.219555+00:00",
+      "elapsedSeconds": 1029.005,
+      "exitCode": 1,
+      "sourceFiles": 4205,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 6775,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportsSha256": "b25300dcb3759d61605281b57d69eace448ec91b26ef4c4628d4a8834f305b9b"
+    },
+    "full2": {
+      "startedAt": "2026-11-06T08:56:10.582305+00:00",
+      "elapsedSeconds": 107.592,
+      "exitCode": 0,
+      "sourceFiles": 4205,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 208,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportsSha256": "c219932963380577033d77b00463e5725a67f4075ef3b0e845fde212078fe99e"
+    }
+  },
+  "fullRetryReason": "Wasm presentation test compiler exhausted1536MiB heap; repeat used2560MiB and identical product inputs.",
+  "sourceHashes": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryDiagnostics.kt": "bb7f702d4c7569ee5d6b3209ae34e14c2f4f7d3de058f8efbc731bfe755ca670",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "7376aa56ad19687018ad77655710a932633527f3efb42f53d9eb9219fbfba051",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadProjection.kt": "0e3aa8059bfc20d90236223b76a46aeccbbb36c217120a00fdd71b7c82d2ef17",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatThreadPage.kt": "ece07ce2f56fa3451eb47e7577b2a3aa931f132686cec4119686842950bd9db5",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadProjectionTest.kt": "6fefded3a4ebab3d2f96facb9fd4f2b80a8bc8d6c301ffc8b37e0d4b87e85989",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatSendFeedbackTest.kt": "a6968f0508c61a9f90c63eaefb5e54b1740b930088eb2e6ddcc6bd7bb90812ea"
+  },
+  "lintIssues": 0,
+  "lintReportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+  "clockComparison": {
+    "at": "2026-11-06T08:30:24.991411+00:00",
+    "readOnly": true,
+    "samples": [
+      {
+        "roundTripMillis": 98.522,
+        "phoneMinusServerMillis": -1854.697,
+        "uncertaintyMillis": 49.261
+      },
+      {
+        "roundTripMillis": 112.081,
+        "phoneMinusServerMillis": -1867.413,
+        "uncertaintyMillis": 56.04
+      },
+      {
+        "roundTripMillis": 92.085,
+        "phoneMinusServerMillis": -1858.538,
+        "uncertaintyMillis": 46.043
+      }
+    ],
+    "scope": "ADB clock comparison, not Matrix event timestamp measurement."
+  },
+  "serverRequestSample": {
+    "at": "2026-11-06T08:55:20.528166+00:00",
+    "since": "2026-11-06T08:00:00Z",
+    "readOnly": true,
+    "scope": "Existing private Synapse request log; no room, actor, payload, token, or URL recorded. Server request durations are not end-to-end delivery latency.",
+    "requests": {
+      "encryptedSend": {
+        "count": 13,
+        "statusCounts": {
+          "200": 13
+        },
+        "secondsMedian": 0.036,
+        "secondsMax": 0.055
+      },
+      "keyQuery": {
+        "count": 13,
+        "statusCounts": {
+          "200": 13
+        },
+        "secondsMedian": 0.002,
+        "secondsMax": 0.004
+      },
+      "sync": {
+        "count": 150,
+        "statusCounts": {
+          "200": 150
+        },
+        "secondsMedian": 10.002,
+        "secondsMax": 10.008
+      }
+    },
+    "unparsedRelevantRequests": 0
+  },
+  "limitations": [
+    "No queue ownership, native delivery, retry or deadline policy changed.",
+    "Arbitrary out-of-order acknowledgement stability is not established; the regression covers sequential receipt prefixes.",
+    "Server request durations are not phone end-to-end delivery latency.",
+    "Long pending remains under investigation; release43 and physical phone acceptance follow separately."
+  ]
+}

@@ -8,6 +8,55 @@ import kotlin.time.Instant
 
 class ChatThreadProjectionTest {
     @Test
+    fun sequentialReceiptsKeepPendingMessagesAfterTheConfirmedPrefixDespiteClockSkew() {
+        val bodies = listOf("AAA", "BBB", "CCC", "DDD")
+        for (clientBase in listOf(1_000L, 20_000L)) {
+            val records =
+                bodies.mapIndexed { index, body ->
+                    staged.copy(
+                        intent =
+                            intent.copy(
+                                id = chatId(100 + index),
+                                text = body,
+                                createdAt = Instant.fromEpochMilliseconds(clientBase + index),
+                            ),
+                        state =
+                            CollaborationMessageState.Staged(device, "transaction-$index", origin),
+                    )
+                }
+            for (confirmedCount in 0..4) {
+                val confirmed =
+                    records.take(confirmedCount).mapIndexed { index, record ->
+                        original.copy(
+                            logicalId = record.intent.id,
+                            primaryEventId = "\$accepted-$index",
+                            eventIds = listOf("\$accepted-$index"),
+                            timestamp = 10_000L + index,
+                            text = record.intent.text,
+                        )
+                    }
+                // Earlier commands may already be retired when their successors are still pending.
+                val projected = rows(history = confirmed, pending = records.drop(confirmedCount))
+                assertEquals(bodies.reversed(), projected.map { it.text })
+                assertEquals(
+                    records.reversed().map { "outgoing:${it.intent.id}" },
+                    projected.map { it.key },
+                )
+                for (record in records.drop(confirmedCount)) {
+                    val row = projected.single { it.localId == record.intent.id }
+                    assertEquals(CollaborationMessageDelivery.PENDING, row.delivery)
+                    assertEquals(record.intent.createdAt.toEpochMilliseconds(), row.timestamp)
+                }
+                for (message in confirmed) {
+                    val row = projected.single { it.eventId == message.primaryEventId }
+                    assertEquals(CollaborationMessageDelivery.SENT, row.delivery)
+                    assertEquals(message.timestamp, row.timestamp)
+                }
+            }
+        }
+    }
+
+    @Test
     fun forwardIndicatorFollowsPendingLiveAndStoredContentButNotDeletedRows() {
         val forwarded = intent.copy(forwarded = true)
         assertTrue(

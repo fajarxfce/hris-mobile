@@ -1,5 +1,66 @@
 # Agent continuation — HRIS Mobile
 
+## Current priority: send feedback and message order — 6 November 2026
+
+The user's new reports take priority over SDK packaging: ordinary sends display
+“Saving was interrupted” and a pending BBB moves above already confirmed AAA.
+Six working source/test files fix the active-submission banner, group pending
+outgoing rows after confirmed history, and distinguish StageMessage from
+DeliverMessages in closed worker diagnostics. No queue admission or delivery
+policy has changed; long pending delivery is still unresolved.
+
+Focused baseline: two expected banner failures. With banner corrected, the
+16-case projection/UI run caught the expected clock-skew ordering failure.
+Corrected run:16 PASS/50.956s,4,205 inputs unchanged. The sequence regression
+covers AAA–DDD with zero through four sequential acknowledgements, previously
+acknowledged commands retired, and client clocks ahead/behind. Actual timestamp,
+stable keys and delivery evidence are preserved. It does not establish arbitrary
+out-of-order acknowledgement stability. Read-only phone clock comparison found
+about1.86s behind this server; this is not a Matrix timestamp measurement.
+
+Full1 gate97634 drained:6,775 fresh tests pass; only Wasm presentation test
+compilation failed with explicit compiler heap exhaustion (1536MiB),1029.005s.
+Full2 gate73360 drained PASS107.592s:208 additional fresh cases, unchanged4,205
+inputs, same complete command with heap2560MiB. Reports are disjoint:6,983 cases
+in total, no failures/errors/skips. Android debug assembly/lint0, Android host tests,
+proof compilation, browser tests, formatting and architecture checks pass. No
+source/verification changes or skipped assertions. No emulator/heavy job active.
+[Contract](collaboration-chat-send-feedback.md) and
+[evidence](measurements/collaboration-chat-send-feedback-2026-11-06.json).
+
+Next commit/push this repair, then build43 from the accepted sources with
+.work/release-phone-2026-11-06-build43/build-arm64.py (bound to full2), verify,
+start the original retained-data Bima emulator and run install-owned-sample.py,
+probe.py, inspect both screenshots and record release acceptance. Stop only the
+owned emulator. Phone still42; ADB disconnected08:52UTC and bounded reconnect
+attempt timed out. Async availability question is pending. Do not infer app process
+state from an empty pidof response. Announce EACH install and use --install-only;
+never launch/drive phone UI. Phone availability does not block SDK work.
+Long pending is not claimed fixed: old logs only identify Flush/QueueUnresolved.
+The contract records the missing retained-native-queue fixture case and why blindly
+aborting an SDK send can redact a delivered event. Private reproduction patch is
+prepared but not applied/executed. Server sample13 encrypted sends all200,36ms
+median/55ms maximum server processing; no end-to-end latency conclusion.
+
+SDK x86_64 driver95397 is FINISHED and drained:901.084s,142,673,032 bytes,
+SHA0f9d908ef616c650949fedd51c97c0ce5e5c2d98810606731bc811634acf3cab.
+Nine generated Kotlin files exactly match arm64; four16KiB ELF LOAD alignments,
+raw-event symbol and unchanged sources verified. prepare-x86-aar.py has RUN and
+added its JNI beside arm64 in the isolated wrapper; do not repeat its one-shot
+backup. Two-ABI AAR packaging and native consumer are NOT run. Continue them after
+the send issue, then native edit recovery, domain-owned history paging and all54
+PRD groups. Shipping SDK dependency unchanged;32-bit and Apple remain pending.
+
+Mobile motion23ce Native CI42183953532 SUCCESS: artifact13488369157 digest
+verified,381 cases/66 suites and all six native result groups/cleanup pass.
+Earlier27cff Control42181039404 SUCCESS: Apple artifact13488905467 verified,
+1,626 cases/179 suites pass. Both predate these send changes. Motion Control
+42183953620 running. Starter motion Apple42185888342 SUCCESS: exact e39747c,
+artifact13489600174 verified129 cases/34 suites. Starter578d97a records/pushes
+acceptance; do not dispatch again. Platform LIVE10485916/schema116.1 unchanged;
+never repeat rollout or accepted Forward publications.
+
+
 ## Release 42 delivered; Starter navigation validation active — 6 November 2026
 
 Mobile23ce87fa is pushed. Directional280ms push/pop, RTL mirroring and reduced

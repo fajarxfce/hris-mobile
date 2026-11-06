@@ -105,7 +105,16 @@ internal fun chatThreadRows(
     }
     if (rows.map { it.key }.distinct().size != rows.size) return invalidThreadProjection()
     return AppResult.Success(
-        rows.sortedWith(compareByDescending<ChatMessageRow> { it.timestamp }.thenBy { it.key })
+        // Pending outgoing rows follow confirmed history even when the phone clock is behind
+        // the server. Their local creation order and keys survive each confirmed prefix.
+        // Keep the actual timestamps and delivery evidence unchanged.
+        rows.sortedWith(
+            compareByDescending<ChatMessageRow> {
+                    it.localId != null && it.delivery != CollaborationMessageDelivery.SENT
+                }
+                .thenByDescending { it.timestamp }
+                .thenBy { it.key }
+        )
     )
 }
 

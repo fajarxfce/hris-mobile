@@ -58,7 +58,7 @@
     "assembled": true
   },
   "limitations": [
-    "Only arm64 is packaged so far. x86_64 and Apple paired artifacts remain pending.",
+    "Arm64 AAR is packaged; x86_64 native and matching generated Kotlin are verified. Two-ABI packaging, remaining 32-bit ABIs, and Apple paired artifacts remain pending.",
     "No application SDK dependency change or native consumer acceptance.",
     "The wrapper and AAR both have empty upstream consumer rules; no minified application acceptance is claimed."
   ],
@@ -84,5 +84,23 @@
     "applicationDependencyChanged": false,
     "consumerAcceptance": false,
     "initialVerifierCorrection": "Removed an incorrect assumption that upstream consumer rules name Matrix/UniFFI packages. The upstream file and packaged file are both empty; no rules or artifact changed."
+  },
+  "x86_64": {
+    "nativeSha256": "0f9d908ef616c650949fedd51c97c0ce5e5c2d98810606731bc811634acf3cab",
+    "nativeBytes": 142673032,
+    "kotlinFiles": 9,
+    "kotlinPairIdenticalToArm64": true,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "rawEventSymbolPresent": true,
+    "sdkSourcesUnchanged": true,
+    "buildSeconds": 901.084,
+    "candidateOnly": true,
+    "applicationDependencyChanged": false,
+    "packaged": false
   }
 }

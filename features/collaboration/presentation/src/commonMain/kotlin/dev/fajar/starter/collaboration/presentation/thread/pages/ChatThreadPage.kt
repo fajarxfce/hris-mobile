@@ -86,7 +86,7 @@ fun ChatThreadPage(
                         !state.historyIncomplete
                 if (
                     failure != null ||
-                        state.submissionPending ||
+                        (state.submissionPending && !state.saving) ||
                         state.connection == ChatThreadConnection.SETUP_REQUIRED
                 )
                     item("status") { ChatThreadStatus(state, onEvent) }
@@ -267,7 +267,7 @@ private fun ChatThreadStatus(state: ChatThreadState, onEvent: (ChatThreadEvent) 
                 else failureText(it)
             )
         }
-        if (state.submissionPending)
+        if (state.submissionPending && !state.saving)
             AppText(appString(AppString.ChatSaveUnconfirmed), color = AppColors.muted)
         if (state.connection == ChatThreadConnection.SETUP_REQUIRED)
             AppTextButton(

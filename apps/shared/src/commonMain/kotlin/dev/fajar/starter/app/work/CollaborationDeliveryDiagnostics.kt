@@ -12,6 +12,8 @@ internal enum class CollaborationDeliveryStage {
     RecoverOriginal,
     ReadPrepared,
     Flush,
+    StageMessage,
+    DeliverMessages,
     Retire,
 }
 

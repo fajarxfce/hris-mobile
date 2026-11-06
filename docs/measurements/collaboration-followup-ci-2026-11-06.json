@@ -1,0 +1,70 @@
+{
+  "date": "2026-11-06",
+  "evidence": [
+    {
+      "runId": 42183953532,
+      "commit": "23ce87fa70b162a9aab5a5c1a1f6c4a00a5e2095",
+      "artifactId": 13488369157,
+      "artifactSha256": "af5f182dc569cfb6d64d710150c1df56aa0aac5f0b157b8c9f14cde02993bd8b",
+      "suites": 66,
+      "counts": {
+        "tests": 381,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "results": [
+        {
+          "path": "platform/.work/collaboration/125b1a9a9bbf453c95cae47cee291205/result.json",
+          "passed": true,
+          "cleanup": true
+        },
+        {
+          "path": "platform/.work/collaboration-worker/26fba47910f24261ac6eccb2a7d3dce9/result.json",
+          "passed": true,
+          "cleanup": true
+        },
+        {
+          "path": "platform/.work/collaboration-worker/d82b934881a5471983278f53ddaa691d/result.json",
+          "passed": true,
+          "cleanup": true,
+          "networkRestored": true
+        },
+        {
+          "path": "platform/.work/collaboration-worker/eac83179366f46b494c9b0058daa440e/result.json",
+          "passed": true,
+          "cleanup": true
+        },
+        {
+          "path": "platform/.work/collaboration-worker/fc79c5bac73c446d8bd5e7b9bacfd7a4/result.json",
+          "passed": true,
+          "cleanup": true
+        },
+        {
+          "path": "mobile/.work/native-notification-proof/result.json",
+          "complete": true,
+          "fixtureAbsent": true,
+          "fixtureUninstalled": true,
+          "fixtureDataCleared": true
+        }
+      ],
+      "appliesToCurrentSendFix": false
+    },
+    {
+      "runId": 42181039404,
+      "commit": "27cff22a",
+      "artifactId": 13488905467,
+      "artifactSha256": "7045a947613511ddc18c2985de98d69431912e397e22b4dcdea67f87bfc7c3f5",
+      "suites": 179,
+      "counts": {
+        "tests": 1626,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "results": [],
+      "appliesToCurrentSendFix": false
+    }
+  ],
+  "scope": "Native motion baseline and prior notification fixture Apple acceptance. These runs predate the send-feedback/order repair."
+}

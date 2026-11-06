@@ -240,7 +240,7 @@ class CollaborationDeliveryWorker(
                     )
                     .take(8)
             stage(CollaborationDeliveryStage.Flush)
-            val flushed = flush(work, scope, device.id, conversationId, selected)
+            val flushed = flush(work, scope, device.id, conversationId, selected, stage)
             if (flushed is AppResult.Failed) return flushed
             stage(CollaborationDeliveryStage.Retire)
             return acquireAndRetire(work, scope, device.id, conversationId)
@@ -255,13 +255,16 @@ class CollaborationDeliveryWorker(
         deviceId: String,
         conversationId: String,
         selected: List<CollaborationMessageRecord>,
+        reportStage: (CollaborationDeliveryStage) -> Unit,
     ): AppResult<Unit> {
         for (record in selected) {
+            reportStage(CollaborationDeliveryStage.StageMessage)
             val result = stage(scope, deviceId, record.intent.id)
             currentCoroutineContext().ensureActive()
             if (result is AppResult.Failed) return result
         }
         if (selected.isNotEmpty()) {
+            reportStage(CollaborationDeliveryStage.DeliverMessages)
             val sent = deliver(scope, deviceId, conversationId)
             currentCoroutineContext().ensureActive()
             if (sent is AppResult.Failed) return sent
