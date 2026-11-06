@@ -1,5 +1,64 @@
 # Agent continuation — HRIS Mobile
 
+## Queue recovery integrated; release44 next — 6 November 2026
+
+The application recovery increment is accepted and committed with the public SDK
+dependency in this checkpoint. Do not reapply the historical21-file consumer patch.
+The new use case owns completion/account/company/device policy; repositories map
+raw facts and the Android datasource performs SDK I/O. ViewModels are unchanged.
+
+SDK26.10.23-hris.1 is published as prerelease436429809, target3c0526077ae3bfe1ffc88349dd307ea0b6653384.
+All six asset digests match; do not replace them. AAR185,442,691 bytes SHA
+de52b51a3bdf346f27dfb66b891f51abf42236f52523e1f99bb9b9b2da6304b5;
+Ivy SHA30c35845ae5dd2bd643ab0a0ed69db7d1338cc7ebbf1a76795e5021df692722e.
+[Distribution](collaboration-sdk-distribution.md) describes the normal catalog,
+exclusive Ivy repository and strict verification; the local candidate override is removed.
+
+Full candidate check90726 passed1066.733s:7,026 fresh tests/909 suites, zero failures,
+errors, skips or lint findings. Normal public-dependency check32227 passed77.814s;
+all909 report hashes retain that pass, with zero newly executed tests. Only catalog,
+settings and verification differ from the earlier4,212-source candidate manifest.
+First normal attempt4134 passed Android build/lint but root format/detekt inspected
+the downloaded SDK Kotlin under .work. The owned generated main tree moved to
+.worktrees/matrix-sdk-queue-android-x86-2026-11-06; no app code or threshold changed.
+[Shipping evidence](measurements/collaboration-confirmed-queue-shipping-2026-11-06.json).
+
+Actual Android/HRIS recovery already passed both scenarios, including two process
+restarts, offline native settlement and repeated no-op, with exactly3 encrypted
+messages and zero redactions per case. The four-ABI distribution's Kotlin classes
+and both64-bit JNI files are byte-identical to that accepted consumer. Android debug
+packaging also matches the verified SDK after NDK28.2 strip. The workflow now pins
+Platform4dc8c9d15cde42160f93096325360a7aeff65204 to execute both recovery scenarios.
+
+Corrected SDK CI42208777389/8791ad52 is SUCCESS1416.9s. Artifact13499911693,
+49,962,441 bytes SHA f6fd77cc9947c1b1a4cad525ae7b23785477e7b1ab2f7650c7c8c511da06240a
+is digest-verified; sources/Kotlin match and x86 is byte-identical to the published
+SDK. Earlier failed validator run42206523839 stays recorded separately. All SDK
+builds, packaging and local gates are drained; no emulator or heavy job is active
+at11:47UTC. Inspect automatic product CI after pushing this checkpoint; do not
+redispatch old release43 runs.
+
+NEXT: build release44 from the pushed application commit using
+.work/release-phone-2026-11-06-build44/build-arm64.py (requires full-shipping-2), then
+verify-arm64.py and verify-sdk.py. These scripts are prepared;44 has NOT been built
+or installed yet. The SDK has no GNU build-id; verify-sdk.py instead compares actual
+APK native bytes with the accepted full library processed by NDK28.2 strip. Keep
+all source inputs fixed during the build. Then run the retained-data Bima emulator
+acceptance and stop only the owned emulator. Existing release variants do NOT enable
+R8; do not claim minifier execution. Original Bima data and keys remain intact.
+
+Phone last confirmed42; the11:26UTC ADB reconnect timed out. One availability
+question is pending, so do not repeat it. Release43 is accepted and still available
+for install-only if the phone returns before44 is ready. Announce EVERY installation,
+select10.77.77.3:5555 explicitly, verify the installed signer/version/hash, and never
+launch or drive the phone UI. New44 installation scripts still need preparation.
+
+This closes the reproduced worker queue gap, not a phone-specific diagnosis of
+all pending messages. Protected uncertain Staging.before entries remain untouched.
+Continue all54 PRD groups after current release/CI acceptance. Starter remains
+578d97a; no HRIS queue-policy port is needed. Live Platform remains10485916ee02850cf913793398f7ef3dd1e09afb/schema116.1.
+Do not replay accepted Forward publications or the live rollout.
+
 ## Current priority: send ordering and retained native queue — 6 November 2026
 
 Release43 is ACCEPTED, source46bec39aa599f78f38f8fb639f59b3de080bdf68, pushed.
@@ -141,8 +200,7 @@ proof. All four native hashes/architectures, API declarations, minSdk21 and upst
 consumer rules are verified. .work/sdk-confirmed-queue-2026-11-06/distribution-four-abi-1
 contains the AAR, Ivy descriptor, sources/license, build record and SHA256SUMS.
 The actual four-ABI candidate passes isolated Gradle Ivy resolution with strict
-verification and Android JNA as AAR (distribution-ivy-probe/session9609). No SDK
-publication or application shipping dependency change has occurred yet.
+verification and Android JNA as AAR (distribution-ivy-probe/session9609). SDK publication and application dependency changes are recorded below.
 
 A PRIVATE Ivy repository prototype resolves the exact two-ABI AAR and all upstream
 runtime dependencies with Gradle strict verification. Attempt1 failed before lookup
@@ -152,10 +210,36 @@ as an AAR. This proves the repository descriptor layout, not application accepta
 No publication or shipping dependency change has occurred. The candidate descriptor
 and evidence are under .work/sdk-confirmed-queue-2026-11-06/ivy-candidate and ivy-probe.
 
-Remaining: publish the verified SDK artifact/descriptor under its own immutable
-version; change the application catalog/repository and strict hashes; run the
-normal-dependency product/release gate;
-commit/push the accepted application changes and install the next validated release.
+SDK release436429809 / matrix-sdk-26.10.23-hris.1 is PUBLISHED11:38:58UTC,
+prerelease/not latest, target3c0526077ae3bfe1ffc88349dd307ea0b6653384. All six
+uploaded asset sizes and GitHub digests match locally verified files. The public
+unauthenticated Ivy descriptor matches its strict hash. Do NOT replace these assets.
+[Distribution](collaboration-sdk-distribution.md) and the Android measurement contain
+publication/source/artifact details. sdk-build.json records the build-time candidate;
+its published:false field is historical and must not be edited in place.
+
+Application catalog/settings/strict verification now reference the public custom
+coordinate. The temporary local-candidate verification entry is removed. The native
+HRIS workflow pin is changed to accepted Platform4dc8c9d15cde42160f93096325360a7aeff65204,
+which includes both native restart scenarios. These product/build changes remain
+UNCOMMITTED until the normal dependency gate passes. Original21-file patch remains
+historical evidence; its old temporary Gradle component is no longer the active input.
+
+Normal shipping check4134 FINISHED172.974s with Android build/lint passing and no
+fresh test execution (existing source/class inputs were cached). It failed ONLY root
+format/detekt because the downloaded remote SDK Kotlin was extracted under .work
+inside the application root. The owned main output is now relocated, hashes intact,
+to .worktrees/matrix-sdk-queue-android-x86-2026-11-06/main. Archive/build logs remain
+under .work/sdk-confirmed-queue-2026-11-06/remote-x86-42206523839. No application
+code or quality threshold was changed to address that inspection-artifact mistake.
+
+ONLY local heavy job: normal shipping retry32227, started11:44UTC,
+.work/sdk-confirmed-queue-2026-11-06/full-shipping-2. This is the full root/Android/Web
+check with explicit strict verification and NO SDK init override. All app/core/
+features/Gradle sources are FROZEN. No emulator is running. SDK packaging49786 and
+Ivy probe9609 are complete/drained. Remaining: normal gate acceptance, atomic
+application commit/push, nondebuggable release build/emulator validation, install-only
+on the available phone, matching CI audit, then continue all54 PRD groups.
 The four-ABI packaging/Ivy preparation tool is now executed and accepted; it never
 publishes by itself. Existing release variants do NOT enable R8; older notes saying
 "minified acceptance" were inaccurate. Validate the actual nondebuggable release

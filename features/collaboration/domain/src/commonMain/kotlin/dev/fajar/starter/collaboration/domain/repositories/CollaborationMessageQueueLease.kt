@@ -1,7 +1,7 @@
 package dev.fajar.starter.collaboration.domain.repositories
 
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.common.result.AppResult
+import dev.fajar.starter.common.result.*
 
 /** One exclusive native writer, initially paused. Closing it pauses without deleting messages. */
 interface CollaborationMessageQueueLease {
@@ -10,6 +10,29 @@ interface CollaborationMessageQueueLease {
 
     /** Complete captured per-room IDs, not a possibly unhydrated timeline or a quiet-time guess. */
     suspend fun snapshot(): AppResult<Set<String>>
+
+    /** Complete original content from a paused, quiescent native queue; no timeline inference. */
+    suspend fun originals(): AppResult<List<CollaborationQueuedOriginal>> =
+        AppResult.Failed(
+            Failure(
+                FailureKind.Conflict,
+                "The original message is unavailable.",
+                code = "client.collaboration_queue_unresolved",
+            )
+        )
+
+    /** Caller supplies immutable application completion proof; never cancels or redacts a send. */
+    suspend fun settleConfirmed(
+        original: CollaborationQueuedOriginal,
+        eventId: String,
+    ): AppResult<CollaborationQueueSettlement> =
+        AppResult.Failed(
+            Failure(
+                FailureKind.Conflict,
+                "The original message is unavailable.",
+                code = "client.collaboration_queue_unresolved",
+            )
+        )
 
     /**
      * Describes exact outgoing content under this owned SDK identity, without enqueue or delivery.

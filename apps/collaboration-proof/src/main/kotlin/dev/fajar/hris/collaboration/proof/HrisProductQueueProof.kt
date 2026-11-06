@@ -21,6 +21,7 @@ import dev.fajar.starter.collaboration.domain.usecases.DeliverCollaborationMessa
 import dev.fajar.starter.collaboration.domain.usecases.ReconcileCollaborationHistoryReferences
 import dev.fajar.starter.collaboration.domain.usecases.ReconcileCollaborationMessages
 import dev.fajar.starter.collaboration.domain.usecases.RecoverCollaborationMessageReceipts
+import dev.fajar.starter.collaboration.domain.usecases.SettleCollaborationCompletedQueue
 import dev.fajar.starter.collaboration.domain.usecases.StageCollaborationText
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.createAppDatabase
@@ -178,6 +179,7 @@ internal class HrisProductQueueProof(
         logicalId: String,
         text: String,
         replyToEventId: String,
+        retainConfirmedNativeQueue: Boolean,
         acknowledged: suspend (String, String) -> Unit,
     ) {
         val app = prepareAckApplication()
@@ -207,6 +209,37 @@ internal class HrisProductQueueProof(
         val record = success(stage(app.workspaceId, runtime.deviceId, logicalId))
         val state = record.state as CollaborationMessageState.Staged
         check(requireNotNull(state.origin).sender == runtime.nativeClient.userId())
+        if (retainConfirmedNativeQueue) {
+            val queue = success(runtime.acquireMessageQueue(roomId))
+            val original =
+                try {
+                    check(success(queue.snapshot()) == setOf(state.transactionId))
+                    success(queue.originals()).single().also {
+                        check(it.transactionId == state.transactionId)
+                        check(it.logicalId == logicalId && it.origin == state.origin)
+                    }
+                } finally {
+                    success(queue.close())
+                }
+            // Test-only construction of an accepted event beside its paused native original.
+            // sendRaw encrypts the exact content but owns a different HTTP transaction; this
+            // establishes the recovery postcondition, not a literal lost-response simulation.
+            val eventId =
+                requireNotNull(runtime.nativeClient.getRoom(roomId)).use { room ->
+                    room.sendRaw(original.eventType, original.serializedContent)
+                }
+            val retained = success(runtime.acquireMessageQueue(roomId))
+            try {
+                check(success(retained.snapshot()) == setOf(state.transactionId))
+                check(success(retained.originals()) == listOf(original))
+            } finally {
+                success(retained.close())
+            }
+            check(success(receipts.read(access, conversationId)).none { it.intent.id == logicalId })
+            check(success(messages.get(access, logicalId)) == record)
+            acknowledged(state.transactionId, eventId)
+            awaitCancellation()
+        }
         val withheld =
             object : CollaborationReceiptRepository by receipts {
                 override suspend fun append(
@@ -257,6 +290,7 @@ internal class HrisProductQueueProof(
         text: String,
         expectedTransaction: String,
         replyToEventId: String,
+        retainConfirmedNativeQueue: Boolean,
     ): ProofQueuedMessageResult {
         val app = prepareAckApplication()
         val original = requireNotNull(success(messages.get(access, logicalId)))
@@ -270,7 +304,12 @@ internal class HrisProductQueueProof(
         check(success(receipts.read(access, conversationId)).none { it.intent.id == logicalId })
         val queue = success(runtime.acquireMessageQueue(roomId))
         try {
-            check(success(queue.snapshot()).isEmpty())
+            if (retainConfirmedNativeQueue) {
+                check(success(queue.snapshot()) == setOf(expectedTransaction))
+                val retained = success(queue.originals()).single()
+                check(retained.transactionId == expectedTransaction)
+                check(retained.logicalId == logicalId && retained.origin == staged.origin)
+            } else check(success(queue.snapshot()).isEmpty())
         } finally {
             success(queue.close())
         }
@@ -340,6 +379,47 @@ internal class HrisProductQueueProof(
 
     suspend fun recoverCompletion(logicalId: String, transaction: String) =
         retirementProof(prepareAckApplication()).recover(logicalId, transaction)
+
+    suspend fun settleConfirmedQueueOffline(logicalId: String, transaction: String) {
+        val app = requireNotNull(application)
+        check(success(messages.observe(access, conversationId).first()).isEmpty())
+        val completion = requireNotNull(success(messages.readCompletion(access, logicalId)))
+        check(success(messages.get(access, logicalId)) == completion.record)
+        val retained = success(runtime.acquireMessageQueue(roomId))
+        try {
+            check(success(retained.snapshot()) == setOf(transaction))
+            check(success(retained.originals()).single().logicalId == logicalId)
+        } finally {
+            success(retained.close())
+        }
+        val timeline = success(runtime.openTimeline(roomId))
+        try {
+            val settle =
+                SettleCollaborationCompletedQueue(
+                    messages,
+                    messages,
+                    listRepository(),
+                    HrisProofRuntimeAccess(runtime),
+                    app.sessions,
+                    app.workspaces,
+                    app.server,
+                    app.build,
+                    app.clock,
+                )
+            val scope = CollaborationOperationScope.Selected(app.workspaceId)
+            check(success(settle(scope, conversationId, timeline)) == 1)
+            check(success(settle(scope, conversationId, timeline)) == 0)
+        } finally {
+            success(timeline.close())
+        }
+        val settled = success(runtime.acquireMessageQueue(roomId))
+        try {
+            check(success(settled.snapshot()).isEmpty())
+            check(success(settled.originals()).isEmpty())
+        } finally {
+            success(settled.close())
+        }
+    }
 
     suspend fun verifyColdOfflineHistory(
         expected: List<Pair<String, String>>,

@@ -13,6 +13,8 @@ internal enum class AndroidCollaborationOperation {
     Timeline,
     ReadReceipt,
     QueueSnapshot,
+    QueueOriginals,
+    QueueSettle,
     QueueOrigin,
     QueueMatch,
     QueueEnqueue,

@@ -1,5 +1,6 @@
 package dev.fajar.starter.collaboration.data.datasources
 
+import dev.fajar.starter.collaboration.data.dto.CollaborationQueuedOriginalDto
 import dev.fajar.starter.collaboration.data.messages.collaborationOutgoingContent
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
@@ -84,6 +85,30 @@ internal class AndroidCollaborationMessageQueueSource(
             synchronized(guard) { collecting = false }
             stopListener()
         }
+    }
+
+    suspend fun originals(): List<CollaborationQueuedOriginalDto> {
+        check(listener == null && !stopping)
+        val acquired = requireNotNull(room)
+        check(!acquired.isSendQueueEnabled())
+        return acquired.queuedMessageEvents().map {
+            CollaborationQueuedOriginalDto(it.transactionId, it.eventType, it.contentJson)
+        }
+    }
+
+    suspend fun settleConfirmed(
+        original: CollaborationQueuedOriginalDto,
+        eventId: String,
+    ): ConfirmedQueueEventResult {
+        check(listener == null && !stopping)
+        val acquired = requireNotNull(room)
+        check(!acquired.isSendQueueEnabled())
+        return acquired.settleConfirmedQueueEvent(
+            original.transactionId,
+            original.eventType,
+            original.contentJson,
+            eventId,
+        )
     }
 
     suspend fun enqueue(

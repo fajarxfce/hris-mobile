@@ -1513,6 +1513,29 @@ class CollaborationDataModule {
         )
 
     @Single
+    fun settleCompletedQueue(
+        messages: CollaborationMessageRepository,
+        completions: CollaborationMessageCompletionRepository,
+        lists: CollaborationListRepository,
+        runtimes: CollaborationRuntimeRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        SettleCollaborationCompletedQueue(
+            messages,
+            completions,
+            lists,
+            runtimes,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
     fun stageText(
         messages: CollaborationMessageRepository,
         lists: CollaborationListRepository,

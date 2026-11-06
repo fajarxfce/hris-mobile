@@ -35,6 +35,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
     val enqueued = mutableListOf<String>()
     val enqueuedReplies = mutableMapOf<String, String?>()
     val attemptedRooms = mutableListOf<String>()
+    var settlements = 0
     var deliveries = 0
     var childCloses = 0
     var childOpens = 0
@@ -52,6 +53,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
     val backgroundCredentialFailures = MutableStateFlow<Failure?>(null)
     var restoreFailure: Failure? = null
     var loseDeliveryReply = false
+    var retainQueueAfterLostReply = false
     var withholdOriginals = false
     var historyCapacityOnce = false
     var historyReopens = 0
@@ -383,6 +385,25 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
 
                 override suspend fun snapshot() = AppResult.Success(pending.keys.toSet())
 
+                override suspend fun originals() =
+                    AppResult.Success(
+                        pending.map { (transaction, event) -> queuedOriginal(transaction, event) }
+                    )
+
+                override suspend fun settleConfirmed(
+                    original: CollaborationQueuedOriginal,
+                    eventId: String,
+                ): AppResult<CollaborationQueueSettlement> {
+                    val event =
+                        pending[original.transactionId]
+                            ?: return AppResult.Success(CollaborationQueueSettlement.AlreadyAbsent)
+                    check(queuedOriginal(original.transactionId, event) == original)
+                    check(event.eventId == eventId)
+                    pending.remove(original.transactionId)
+                    settlements++
+                    return AppResult.Success(CollaborationQueueSettlement.Settled)
+                }
+
                 override suspend fun prepareText(
                     logicalId: String,
                     text: String,
@@ -442,6 +463,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
                         .addAll(sent.map { it.second })
                     if (loseDeliveryReply) {
                         loseDeliveryReply = false
+                        if (retainQueueAfterLostReply) pending.putAll(sent)
                         return AppResult.Failed(
                             Failure(FailureKind.Network, "Fixture lost delivery response")
                         )
@@ -462,6 +484,15 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
             }
         )
     }
+
+    private fun queuedOriginal(transaction: String, event: CollaborationHistoryChange.Text) =
+        CollaborationQueuedOriginal(
+            transaction,
+            event.logicalId,
+            CollaborationMessageOrigin(event.sender, event.contentHash),
+            "m.room.message",
+            "{\"fixtureContentHash\":\"${event.contentHash}\"}",
+        )
 
     private fun device(owner: CollaborationOwner, room: String) =
         CollaborationMessageDevice(owner.nativeSessionId, wire.deviceId, wire.bootstrapId, room)

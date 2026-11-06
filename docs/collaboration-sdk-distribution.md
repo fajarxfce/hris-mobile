@@ -7,9 +7,10 @@ content and owner; the SDK does not authenticate an arbitrary supplied event ID.
 See [recovery contract](collaboration-confirmed-queue-recovery.md).
 
 The verified four-ABI candidate is `dev.fajar.hris.matrix:sdk-android:26.10.23-hris.1`.
-It is prepared for a versioned GitHub release in this repository with an Ivy
-descriptor; it has not been published at this checkpoint. The application still
-uses a temporary local override while the shipping repository is prepared.
+It is published in [this SDK release](https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.1)
+with an Ivy descriptor, source bundle, license and checked asset digests. The
+application catalog now uses this coordinate through an exclusive Ivy repository;
+Gradle pins the descriptor and AAR hashes. The normal dependency gate has passed.
 
 The [build manifest](../tool/collaboration-sdk-patches/android-build.json) pins the
 upstream revision, both patches, toolchains and generated Kotlin hashes. The
@@ -31,5 +32,5 @@ release variants do not enable R8. Apple's dependency remains unchanged.
 [SDK measurements](measurements/collaboration-sdk-confirmed-queue-android-2026-11-06.json)
 retain the first remote verifier failure separately from corrected local validation.
 [Full candidate checks](measurements/collaboration-confirmed-queue-full-candidate-2026-11-06.json)
-record 7,026 passing application tests and lint without errors or warnings. Normal
-shipping dependency resolution and the application release are separate remaining gates.
+record 7,026 passing application tests and lint without errors or warnings. The [normal dependency gate](measurements/collaboration-confirmed-queue-shipping-2026-11-06.json)
+also passes. The nondebuggable application release remains a separate acceptance gate.

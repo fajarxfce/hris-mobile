@@ -1,0 +1,38 @@
+{
+  "accepted": true,
+  "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.1",
+  "sdkAarSha256": "de52b51a3bdf346f27dfb66b891f51abf42236f52523e1f99bb9b9b2da6304b5",
+  "strictVerification": true,
+  "localSdkOverride": false,
+  "sourceFiles": 4212,
+  "sourcesUnchanged": true,
+  "changedInputsSinceCandidate": [
+    "gradle/libs.versions.toml",
+    "gradle/verification-metadata.xml",
+    "settings.gradle.kts"
+  ],
+  "freshTests": 0,
+  "retainedVerifiedTests": {
+    "tests": 7026,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "retainedSuiteReports": 909,
+  "retainedReportHashesMatchCandidate": true,
+  "lintIssues": 0,
+  "normalFirstAttempt": {
+    "exitCode": 1,
+    "elapsedSeconds": 172.974,
+    "failure": "Root format/detekt discovered temporary extracted SDK Kotlin under .work. No product code or threshold changed; generated output relocated to the separate SDK worktree.",
+    "androidBuildAndLintPassed": true
+  },
+  "normalRetry": {
+    "exitCode": 0,
+    "elapsedSeconds": 77.814,
+    "sourceManifestSha256": "975f438307db890c1691a6c9a67091e7ed7fe43f3a4d1507ef20698d8a080c36"
+  },
+  "kotlinSourcesIdenticalToAcceptedNativeProof": true,
+  "androidDebugStrippedNativeEqualsVerifiedSdk": true,
+  "releaseAccepted": false
+}

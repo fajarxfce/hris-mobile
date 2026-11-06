@@ -423,7 +423,7 @@ internal class StageFixture {
             )
     }
 
-    private val messages =
+    val messages =
         object : CollaborationMessageRepository by base.messages {
             override suspend fun update(
                 access: CollaborationLocalAccess,
@@ -445,7 +445,7 @@ internal class StageFixture {
                 return AppResult.Success(true)
             }
         }
-    private val lists =
+    val lists =
         object : CollaborationListRepository by base.lists {
             override suspend fun restrict(
                 access: CollaborationLocalAccess,
@@ -455,7 +455,7 @@ internal class StageFixture {
                 return AppResult.Failed(base.storage)
             }
         }
-    private val runtimes =
+    val runtimes =
         object : CollaborationRuntimeRepository {
             override suspend fun handoverIntent(
                 owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,

@@ -45,8 +45,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: fajarxfce/hris-platform
-          # Same accepted runtime plus bounded native-driver failure stages.
-          ref: ef8a41b3c8a4bb57291203c11b3067dd1aa56b9b
+          # Includes the accepted two-restart/offline confirmed-native-queue scenario.
+          ref: 4dc8c9d15cde42160f93096325360a7aeff65204
           path: platform
       - uses: actions/setup-java@v4
         with:

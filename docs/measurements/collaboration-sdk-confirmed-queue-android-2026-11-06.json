@@ -151,7 +151,7 @@
     "buildSeconds": 1313.699,
     "correction": "Remote compile and binding generation completed; old verifier incorrectly required 16 KiB for ELF32. Actual binary passes the corrected ABI-specific local verifier without rebuilding.",
     "correctedWorkflowRun": 42208777389,
-    "correctedWorkflowStatus": "in_progress",
+    "correctedWorkflowStatus": "success",
     "packaged": false,
     "published": false,
     "sourceAudit": "Pinned old driver completed both source fingerprint checks and generated Kotlin matching before its ELF alignment assertion failed at line 124."
@@ -282,5 +282,74 @@
       ],
       "publicRepositoryResolved": false
     }
+  },
+  "publication": {
+    "releaseId": 436429809,
+    "tag": "matrix-sdk-26.10.23-hris.1",
+    "targetCommit": "3c0526077ae3bfe1ffc88349dd307ea0b6653384",
+    "publishedAt": "2026-11-06T11:38:58Z",
+    "url": "https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.1",
+    "draft": false,
+    "prerelease": true,
+    "publicDescriptorHashVerified": true,
+    "assets": [
+      {
+        "id": 716962098,
+        "name": "LICENSE",
+        "size": 10174,
+        "digest": "sha256:0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "state": "uploaded"
+      },
+      {
+        "id": 716962095,
+        "name": "sdk-android-26.10.23-hris.1-sources.tar.gz",
+        "size": 427352,
+        "digest": "sha256:3111e009711cbe8a51c78541b81ba1ef56862b3b5f89156d5ad0b31585b695e8",
+        "state": "uploaded"
+      },
+      {
+        "id": 716962094,
+        "name": "sdk-android-26.10.23-hris.1.aar",
+        "size": 185442691,
+        "digest": "sha256:de52b51a3bdf346f27dfb66b891f51abf42236f52523e1f99bb9b9b2da6304b5",
+        "state": "uploaded"
+      },
+      {
+        "id": 716962099,
+        "name": "sdk-android-26.10.23-hris.1.ivy.xml",
+        "size": 1201,
+        "digest": "sha256:30c35845ae5dd2bd643ab0a0ed69db7d1338cc7ebbf1a76795e5021df692722e",
+        "state": "uploaded"
+      },
+      {
+        "id": 716962097,
+        "name": "sdk-build.json",
+        "size": 5120,
+        "digest": "sha256:533f02faf73055807fac9a2c0647e387145d972a002fa6840ead283de86d63e7",
+        "state": "uploaded"
+      },
+      {
+        "id": 716962164,
+        "name": "SHA256SUMS",
+        "size": 464,
+        "digest": "sha256:2ef4484eef7ff8aedec2057330bda08d84966b7f86a9e7e84a4467b68f0bdd17",
+        "state": "uploaded"
+      }
+    ]
+  },
+  "correctedX86Ci": {
+    "runId": 42208777389,
+    "head": "8791ad527c7a69fb1e154c472d9ee97ae5b21c2f",
+    "conclusion": "success",
+    "artifactId": 13499911693,
+    "artifactBytes": 49962441,
+    "artifactSha256": "f6fd77cc9947c1b1a4cad525ae7b23785477e7b1ab2f7650c7c8c511da06240a",
+    "nativeSha256": "6373a13b3dc61fe25d66e580740476158572db3477361fa5ecabf934a1c13353",
+    "nativeBytes": 148135532,
+    "elapsedSeconds": 1416.9,
+    "sourceAndKotlinHashesVerified": true,
+    "nativeByteIdenticalToPublishedSdk": true,
+    "correctedAbiVerifierAccepted": true,
+    "verifiedAt": "2026-11-06T11:47:29.547796+00:00"
   }
 }

@@ -1,11 +1,15 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationMessageQueueSource
+import dev.fajar.starter.collaboration.data.dto.CollaborationQueuedOriginalDto
+import dev.fajar.starter.collaboration.data.mappers.toQueuedOriginal
 import dev.fajar.starter.collaboration.data.messages.collaborationOutgoingOrigin
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.network.RequestFailureException
+import org.matrix.rustcomponents.sdk.ConfirmedQueueEventResult
 
 internal class AndroidCollaborationMessageQueueLease(
     override val owner: CollaborationOwner,
@@ -23,6 +27,59 @@ internal class AndroidCollaborationMessageQueueLease(
             }
             safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueSnapshot) {
                 source.snapshot()
+            }
+        }
+
+    override suspend fun originals(): AppResult<List<CollaborationQueuedOriginal>> =
+        operations.execute {
+            failure()?.let {
+                return@execute AppResult.Failed(it)
+            }
+            safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueOriginals) {
+                source.originals().map { it.toQueuedOriginal(matrixSender) }
+            }
+        }
+
+    override suspend fun settleConfirmed(
+        original: CollaborationQueuedOriginal,
+        eventId: String,
+    ): AppResult<CollaborationQueueSettlement> =
+        operations.execute {
+            failure()?.let {
+                return@execute AppResult.Failed(it)
+            }
+            safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueSettle) {
+                require(validCollaborationEventId(eventId))
+                val dto =
+                    CollaborationQueuedOriginalDto(
+                        original.transactionId,
+                        original.eventType,
+                        original.serializedContent,
+                    )
+                require(dto.toQueuedOriginal(matrixSender) == original)
+                when (source.settleConfirmed(dto, eventId)) {
+                    ConfirmedQueueEventResult.SETTLED -> CollaborationQueueSettlement.Settled
+                    ConfirmedQueueEventResult.MISSING -> CollaborationQueueSettlement.AlreadyAbsent
+                    ConfirmedQueueEventResult.QUEUE_ENABLED,
+                    ConfirmedQueueEventResult.IN_FLIGHT ->
+                        throw RequestFailureException(
+                            Failure(
+                                FailureKind.Unavailable,
+                                "Message recovery is waiting.",
+                                code = "client.collaboration_queue_settlement_pending",
+                            )
+                        )
+                    ConfirmedQueueEventResult.CONTENT_MISMATCH,
+                    ConfirmedQueueEventResult.NOT_AN_EVENT,
+                    ConfirmedQueueEventResult.DEPENDENT_WORK ->
+                        throw RequestFailureException(
+                            Failure(
+                                FailureKind.Conflict,
+                                "Message recovery needs its original record.",
+                                code = "client.collaboration_queue_unresolved",
+                            )
+                        )
+                }
             }
         }
 

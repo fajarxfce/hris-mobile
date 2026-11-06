@@ -10,6 +10,7 @@ internal enum class CollaborationDeliveryStage {
     PrepareRoom,
     EnterTimeline,
     RecoverOriginal,
+    SettleCompletedQueue,
     ReadPrepared,
     Flush,
     StageMessage,

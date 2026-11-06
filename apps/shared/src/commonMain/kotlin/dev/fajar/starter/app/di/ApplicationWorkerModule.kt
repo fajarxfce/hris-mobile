@@ -125,6 +125,7 @@ fun applicationWorkerModule() = module {
             reopenHistory = get(),
             recover = get(),
             retire = get(),
+            settleCompleted = get(),
             acquireBackground = get(),
         )
     } bind SyncTask::class

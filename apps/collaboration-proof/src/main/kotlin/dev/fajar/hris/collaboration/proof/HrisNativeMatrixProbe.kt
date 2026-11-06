@@ -164,6 +164,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                         logicalId(fixture, "ackLogicalId"),
                         body(fixture, "ackBody"),
                         replyToEventId,
+                        fixture.opt("retainConfirmedNativeQueue") == true,
                     ) { transaction, eventId ->
                         check(incoming.eventId() == eventId)
                         write(
@@ -238,7 +239,10 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                         body(fixture, "ackBody"),
                         transaction,
                         result.getString("senderEventId"),
+                        fixture.opt("retainConfirmedNativeQueue") == true,
                     )
+                if (fixture.opt("retainConfirmedNativeQueue") == true)
+                    result.put("confirmedNativeQueueRestored", true)
                 proof.recoverReadState(result)
                 write(
                     "gateway-precompletion-result",
@@ -325,6 +329,14 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                     sent.eventId == result.getString("ackSenderEventId") &&
                         sent.transactionId == transaction
                 )
+                if (fixture.opt("retainConfirmedNativeQueue") == true) {
+                    proof.settleConfirmedQueueOffline(
+                        logicalId(fixture, "ackLogicalId"),
+                        transaction,
+                    )
+                    result.put("confirmedNativeQueueSettledOffline", true)
+                    result.put("confirmedNativeQueueRetryNoop", true)
+                }
                 proof.verifyColdOfflineHistory(
                     listOf(
                         result.getString("senderEventId") to body(fixture, "body"),
@@ -377,6 +389,10 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
 
     private fun readFixture(resuming: Boolean, afterAck: Boolean = false): Pair<JSONObject, URI> {
         val fixture = read("gateway-fixture", 16_384)
+        require(
+            !fixture.has("retainConfirmedNativeQueue") ||
+                fixture.get("retainConfirmedNativeQueue") is Boolean
+        )
         val home = URI(fixture.getString("baseUrl"))
         require(
             home.scheme == "http" &&

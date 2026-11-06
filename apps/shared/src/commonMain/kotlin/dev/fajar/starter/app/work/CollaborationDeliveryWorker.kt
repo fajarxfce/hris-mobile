@@ -35,6 +35,7 @@ class CollaborationDeliveryWorker(
     private val reopenHistory: ReopenCollaborationHistory,
     private val recover: RecoverCollaborationMessageReceipts,
     private val retire: RetireCollaborationMessages,
+    private val settleCompleted: SettleCollaborationCompletedQueue,
     private val acquireBackground: AcquireCollaborationBackgroundRuntime,
     private val clock: Clock = Clock.System,
 ) : SyncTask {
@@ -226,6 +227,10 @@ class CollaborationDeliveryWorker(
                     if (reopened is AppResult.Failed) return reopened
                 }
             }
+            stage(CollaborationDeliveryStage.SettleCompletedQueue)
+            val settled = settleCompleted(scope, conversationId, requireNotNull(child))
+            currentCoroutineContext().ensureActive()
+            if (settled is AppResult.Failed) return settled
             stage(CollaborationDeliveryStage.ReadPrepared)
             val current = messages(work.scope, conversationId).first()
             currentCoroutineContext().ensureActive()

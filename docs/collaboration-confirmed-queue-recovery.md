@@ -1,4 +1,4 @@
-# Confirmed native queue recovery — under validation
+# Confirmed native queue recovery
 
 After a send is accepted, interrupted recovery can leave its native transaction
 behind while the application archives the completed command. A later send then
@@ -47,10 +47,11 @@ new native scenario deliberately sends the same content through a separate SDK
 request while retaining its paused queue original, then restarts the process twice
 and settles offline. This constructs the recovery postcondition; it does not
 simulate a literal lost HTTP response or prove the user's phone root cause.
-The shipping dependency and release43 do not contain this settlement increment.
+The normal shipping dependency and application sources now contain this increment;
+release43 does not. Release44 acceptance remains pending.
 
 The native test candidate has arm64 and x86_64 libraries. All four Android ABI
-outputs are now independently verified; combined packaging, normal dependency
-distribution and nondebuggable release acceptance remain outstanding. Existing
+outputs are independently verified, packaged and published with strict dependency
+hashes. The normal dependency gate passes; nondebuggable release acceptance remains. Existing
 release variants do not enable R8, so no minification claim is made. The user’s
 phone is still on42 and accepted release43 awaits ADB availability.

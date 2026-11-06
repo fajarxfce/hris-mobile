@@ -36,6 +36,27 @@ class CollaborationDeliveryWorkerTest {
         }
 
     @Test
+    fun recoveredNativeAcceptanceDoesNotLeaveAnUnmappedQueueBlockingTheNextMessage() = runBlocking {
+        withFixture { f ->
+            val first = f.queue(text = "First retained message")
+            f.sdk.loseDeliveryReply = true
+            f.sdk.retainQueueAfterLostReply = true
+            assertIs<SyncResult.Retry>(f.worker())
+            f.reopen()
+            assertEquals(SyncResult.Complete, f.worker(), "Recover the accepted first message")
+            val next = f.queue(text = "Next retained message")
+            assertEquals(SyncResult.Complete, f.worker(), "Deliver the next message after recovery")
+            assertEquals(listOf(first.intent.id, next.intent.id), f.sdk.enqueued)
+            assertEquals(1, f.sdk.settlements)
+            assertEquals(2, f.sdk.deliveries)
+            assertEquals(SyncResult.Complete, f.worker())
+            assertEquals(1, f.sdk.settlements)
+            assertEquals(2, f.sdk.deliveries)
+            assertEquals(f.sdk.childOpens, f.sdk.childCloses)
+        }
+    }
+
+    @Test
     fun missingNativeAckIsRecoveredBeforeAnySecondEnqueueOrResume() = runBlocking {
         withFixture { f ->
             val message = f.queue()
