@@ -1,0 +1,791 @@
+diff --git a/crates/matrix-sdk/src/send_queue/mod.rs b/crates/matrix-sdk/src/send_queue/mod.rs
+--- a/crates/matrix-sdk/src/send_queue/mod.rs
++++ b/crates/matrix-sdk/src/send_queue/mod.rs
+@@ -196,6 +196,8 @@
+     room::{WeakRoom, edit::EditedContent},
+ };
+ 
++#[cfg(all(test, not(target_family = "wasm")))]
++mod confirmed_event_tests;
+ mod progress;
+ mod upload;
+ 
+@@ -1388,6 +1390,50 @@
+         }
+     }
+ 
++    /// Read original persisted requests under the queue lock. Local timeline
++    /// echoes are unsuitable here: they omit uploads and synthesize dependents.
++    /// Only a paused, quiescent queue containing standalone events is returned.
++    #[instrument(skip_all)]
++    pub async fn queued_event_contents(
++        &self,
++    ) -> Result<QueuedEventSnapshot, RoomSendQueueStorageError> {
++        if self.is_enabled() {
++            return Ok(QueuedEventSnapshot::QueueEnabled);
++        }
++        self.inner.queue.queued_event_contents(&self.inner.locally_enabled).await
++    }
++
++    /// Settle an exact queued event whose server acceptance the caller has
++    /// independently verified. This does not send, retry, cancel, or redact an
++    /// event. The caller owns the evidence linking the original transaction,
++    /// exact content, authenticated sender and confirmed server event ID.
++    ///
++    /// The queue must be paused. In-flight work, dependent actions and a changed
++    /// event are retained. Repeating a completed settlement returns `Missing`.
++    #[instrument(skip_all)]
++    pub async fn settle_confirmed_event(
++        &self,
++        transaction_id: &TransactionId,
++        expected: &SerializableEventContent,
++        event_id: OwnedEventId,
++    ) -> Result<ConfirmedEventSettlement, RoomSendQueueStorageError> {
++        if self.is_enabled() {
++            return Ok(ConfirmedEventSettlement::QueueEnabled);
++        }
++        let result = self
++            .inner
++            .queue
++            .settle_confirmed_event(transaction_id, expected, &self.inner.locally_enabled)
++            .await?;
++        if result == ConfirmedEventSettlement::Settled {
++            self.send_update(RoomSendQueueUpdate::SentEvent {
++                transaction_id: transaction_id.to_owned(),
++                event_id,
++            });
++        }
++        Ok(result)
++    }
++
+     /// Returns whether the room is enabled, at the room level.
+     pub fn is_enabled(&self) -> bool {
+         self.inner.locally_enabled.load(Ordering::SeqCst)
+@@ -1825,6 +1871,76 @@
+         self.thumbnail_file_sizes.lock().remove(transaction_id);
+ 
+         Ok(())
++    }
++
++    async fn queued_event_contents(
++        &self,
++        locally_enabled: &AtomicBool,
++    ) -> Result<QueuedEventSnapshot, RoomSendQueueStorageError> {
++        let guard = self.store.lock().await;
++        if locally_enabled.load(Ordering::SeqCst) {
++            return Ok(QueuedEventSnapshot::QueueEnabled);
++        }
++        if guard.being_sent.is_some() {
++            return Ok(QueuedEventSnapshot::InFlight);
++        }
++        let client = guard.client()?;
++        let store = client.state_store();
++        if !store.load_dependent_queued_requests(&self.room_id).await?.is_empty() {
++            return Ok(QueuedEventSnapshot::DependentWork);
++        }
++        let requests = store.load_send_queue_requests(&self.room_id).await?;
++        let mut events = Vec::with_capacity(requests.len());
++        for request in requests {
++            let QueuedRequestKind::Event { content, .. } = request.kind else {
++                return Ok(QueuedEventSnapshot::NotAnEvent);
++            };
++            events.push((request.transaction_id, content));
++        }
++        Ok(QueuedEventSnapshot::Ready(events))
++    }
++
++    /// Removes only a matching, quiescent event. Unlike cancellation, this never
++    /// creates a dependent redaction or changes another request's sending state.
++    async fn settle_confirmed_event(
++        &self,
++        transaction_id: &TransactionId,
++        expected: &SerializableEventContent,
++        locally_enabled: &AtomicBool,
++    ) -> Result<ConfirmedEventSettlement, RoomSendQueueStorageError> {
++        let guard = self.store.lock().await;
++        if locally_enabled.load(Ordering::SeqCst) {
++            return Ok(ConfirmedEventSettlement::QueueEnabled);
++        }
++        if guard.being_sent.is_some() {
++            return Ok(ConfirmedEventSettlement::InFlight);
++        }
++        let client = guard.client()?;
++        let store = client.state_store();
++        let requests = store.load_send_queue_requests(&self.room_id).await?;
++        let Some(request) = requests.into_iter().find(|item| item.transaction_id == transaction_id)
++        else {
++            return Ok(ConfirmedEventSettlement::Missing);
++        };
++        let QueuedRequestKind::Event { content, .. } = request.kind else {
++            return Ok(ConfirmedEventSettlement::NotAnEvent);
++        };
++        let (actual_json, actual_type) = content.raw();
++        let (expected_json, expected_type) = expected.raw();
++        if actual_type != expected_type || actual_json.json().get() != expected_json.json().get() {
++            return Ok(ConfirmedEventSettlement::ContentMismatch);
++        }
++        if store.load_dependent_queued_requests(&self.room_id).await?.iter().any(|item| {
++            item.parent_transaction_id == transaction_id
++                || &*item.own_transaction_id == transaction_id
++        }) {
++            return Ok(ConfirmedEventSettlement::DependentWork);
++        }
++        if !store.remove_send_queue_request(&self.room_id, transaction_id).await? {
++            return Ok(ConfirmedEventSettlement::Missing);
++        }
++        self.thumbnail_file_sizes.lock().remove(transaction_id);
++        Ok(ConfirmedEventSettlement::Settled)
+     }
+ 
+     /// Cancel a sending command for an event that has been sent with
+@@ -2910,6 +3026,51 @@
+     pub content: LocalEchoContent,
+ }
+ 
++/// Original queue contents; rejection never returns an incomplete subset.
++pub enum QueuedEventSnapshot {
++    /// Complete original transaction/content pairs from the paused native store.
++    Ready(Vec<(OwnedTransactionId, SerializableEventContent)>),
++    /// The queue is enabled.
++    QueueEnabled,
++    /// A request is still in flight.
++    InFlight,
++    /// The queue contains an upload or redaction.
++    NotAnEvent,
++    /// Dependent requests could change or synthesize the original content.
++    DependentWork,
++}
++
++impl std::fmt::Debug for QueuedEventSnapshot {
++    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
++        f.write_str(match self {
++            Self::Ready(_) => "Ready([redacted])",
++            Self::QueueEnabled => "QueueEnabled",
++            Self::InFlight => "InFlight",
++            Self::NotAnEvent => "NotAnEvent",
++            Self::DependentWork => "DependentWork",
++        })
++    }
++}
++
++/// Result of matching external confirmation to an existing paused queue event.
++#[derive(Clone, Copy, Debug, Eq, PartialEq)]
++pub enum ConfirmedEventSettlement {
++    /// The exact native entry was removed and its confirmed ID was published locally.
++    Settled,
++    /// No queue entry exists with this transaction ID.
++    Missing,
++    /// The queue is enabled; no entry was changed.
++    QueueEnabled,
++    /// A request is still in flight; no entry or redaction was changed.
++    InFlight,
++    /// The event type or exact raw content differs from the supplied original.
++    ContentMismatch,
++    /// The transaction is an upload or redaction rather than an event.
++    NotAnEvent,
++    /// The transaction still has dependent actions; they and their parent are retained.
++    DependentWork,
++}
++
+ /// An update to a room send queue, observable with
+ /// [`RoomSendQueue::subscribe`].
+ #[derive(Clone, Debug)]
+diff --git a/bindings/matrix-sdk-ffi/src/room/mod.rs b/bindings/matrix-sdk-ffi/src/room/mod.rs
+--- a/bindings/matrix-sdk-ffi/src/room/mod.rs
++++ b/bindings/matrix-sdk-ffi/src/room/mod.rs
+@@ -84,6 +84,7 @@
+ 
+ mod message_like_events;
+ mod power_levels;
++mod queued_events;
+ pub mod room_info;
+ #[cfg(feature = "unstable-msc4354")]
+ mod sticky_events;
+diff --git a/crates/matrix-sdk/src/send_queue/confirmed_event_tests.rs b/crates/matrix-sdk/src/send_queue/confirmed_event_tests.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/matrix-sdk/src/send_queue/confirmed_event_tests.rs
+@@ -0,0 +1,254 @@
++// Copyright 2026 Fajar HRIS contributors.
++// SPDX-License-Identifier: Apache-2.0
++
++use super::*;
++use crate::test_utils::logged_in_client;
++use matrix_sdk_test::{JoinedRoomBuilder, SyncResponseBuilder, async_test};
++use ruma::{event_id, room_id};
++
++async fn room() -> (Client, Room) {
++    let client = logged_in_client(None).await;
++    client.send_queue().set_enabled(false).await;
++    client
++        .base_client()
++        .receive_sync_response(
++            SyncResponseBuilder::new()
++                .add_joined_room(JoinedRoomBuilder::new(room_id!("!confirmed:example.org")))
++                .build_sync_response(),
++        )
++        .await
++        .unwrap();
++    let room = client.get_room(room_id!("!confirmed:example.org")).unwrap();
++    (client, room)
++}
++
++async fn queued(q: &RoomSendQueue) -> (OwnedTransactionId, SerializableEventContent) {
++    let raw = Raw::from_json(
++        serde_json::value::RawValue::from_string(
++            r#"{ "msgtype":"m.text", "body":"same", "org.hris.message_id":"original", "unknown":[1,2] }"#.to_owned(),
++        )
++        .unwrap(),
++    );
++    let content = SerializableEventContent::from_raw(raw.clone(), "m.room.message".to_owned());
++    let handle = q.send_raw(raw, "m.room.message".to_owned()).await.unwrap();
++    (handle.transaction_id().to_owned(), content)
++}
++
++#[async_test]
++async fn test_confirmed_settlement_removes_only_exact_transaction_and_publishes_one_local_ack() {
++    let (_client, room) = room().await;
++    let q = room.send_queue();
++    let (first, content) = queued(&q).await;
++    let (second, _) = queued(&q).await;
++    let QueuedEventSnapshot::Ready(originals) = q.queued_event_contents().await.unwrap() else {
++        panic!("Paused original queue was not readable");
++    };
++    assert_eq!(originals.len(), 2);
++    assert_eq!(originals[0].0, first);
++    assert_eq!(originals[1].0, second);
++    assert_eq!(originals[0].1.raw().0.json().get(), content.raw().0.json().get());
++    let (_, mut updates) = q.subscribe().await.unwrap();
++    assert_eq!(
++        q.settle_confirmed_event(&first, &content, event_id!("$confirmed").to_owned())
++            .await
++            .unwrap(),
++        ConfirmedEventSettlement::Settled
++    );
++    assert!(matches!(updates.try_recv().unwrap(), RoomSendQueueUpdate::SentEvent {
++        transaction_id, event_id
++    } if transaction_id == first && event_id == event_id!("$confirmed")));
++    let (remaining, _) = q.subscribe().await.unwrap();
++    assert_eq!(remaining.len(), 1);
++    assert_eq!(remaining[0].transaction_id, second);
++    assert_eq!(
++        q.settle_confirmed_event(&first, &content, event_id!("$confirmed").to_owned())
++            .await
++            .unwrap(),
++        ConfirmedEventSettlement::Missing
++    );
++    assert!(matches!(updates.try_recv(), Err(broadcast::error::TryRecvError::Empty)));
++    assert!(!q.is_enabled());
++}
++
++#[async_test]
++async fn test_confirmed_settlement_rejects_type_bytes_and_unknown_transaction() {
++    let (_client, room) = room().await;
++    let q = room.send_queue();
++    let (transaction, original) = queued(&q).await;
++    let (raw, _) = original.raw();
++    let wrong_type =
++        SerializableEventContent::from_raw(raw.clone(), "org.example.other".to_owned());
++    let changed =
++        SerializableEventContent::new(&RoomMessageEventContent::text_plain("changed").into())
++            .unwrap();
++    let semantic_rewrite = SerializableEventContent::from_raw(
++        Raw::from_json(
++            serde_json::value::RawValue::from_string(
++                serde_json::from_str::<serde_json::Value>(raw.json().get()).unwrap().to_string(),
++            )
++            .unwrap(),
++        ),
++        "m.room.message".to_owned(),
++    );
++    for content in [wrong_type, changed, semantic_rewrite] {
++        assert_eq!(
++            q.settle_confirmed_event(&transaction, &content, event_id!("$confirmed").to_owned())
++                .await
++                .unwrap(),
++            ConfirmedEventSettlement::ContentMismatch
++        );
++    }
++    assert_eq!(
++        q.settle_confirmed_event(
++            &TransactionId::new(),
++            &original,
++            event_id!("$confirmed").to_owned()
++        )
++        .await
++        .unwrap(),
++        ConfirmedEventSettlement::Missing
++    );
++    assert_eq!(q.subscribe().await.unwrap().0.len(), 1);
++}
++
++#[async_test]
++async fn test_confirmed_settlement_does_not_cancel_in_flight_work_or_create_redactions() {
++    let (client, room) = room().await;
++    let q = room.send_queue();
++    let (transaction, original) = queued(&q).await;
++    *q.inner.queue.store.lock().await.being_sent =
++        Some(BeingSentInfo { transaction_id: transaction.clone(), cancel_upload: None });
++    assert_eq!(
++        q.settle_confirmed_event(&transaction, &original, event_id!("$confirmed").to_owned())
++            .await
++            .unwrap(),
++        ConfirmedEventSettlement::InFlight
++    );
++    assert!(matches!(q.queued_event_contents().await.unwrap(), QueuedEventSnapshot::InFlight));
++    assert!(
++        client
++            .state_store()
++            .load_dependent_queued_requests(room.room_id())
++            .await
++            .unwrap()
++            .is_empty()
++    );
++    assert_eq!(q.subscribe().await.unwrap().0.len(), 1);
++    let mut guard = q.inner.queue.store.lock().await;
++    assert_eq!(guard.being_sent.as_ref().unwrap().transaction_id, transaction);
++    *guard.being_sent = None;
++}
++
++#[async_test]
++async fn test_confirmed_settlement_rejects_an_enabled_queue_without_removing_work() {
++    let (_client, room) = room().await;
++    let q = room.send_queue();
++    let (transaction, original) = queued(&q).await;
++    // Retain the store lock so even a faulty background enable cannot start a request.
++    let guard = q.inner.queue.store.lock().await;
++    q.set_enabled(true);
++    assert_eq!(
++        q.settle_confirmed_event(&transaction, &original, event_id!("$confirmed").to_owned())
++            .await
++            .unwrap(),
++        ConfirmedEventSettlement::QueueEnabled
++    );
++    assert!(matches!(q.queued_event_contents().await.unwrap(), QueuedEventSnapshot::QueueEnabled));
++    q.set_enabled(false);
++    drop(guard);
++    assert_eq!(q.subscribe().await.unwrap().0.len(), 1);
++}
++
++#[async_test]
++async fn test_confirmed_settlement_preserves_dependent_actions_and_their_parent() {
++    let (client, room) = room().await;
++    let q = room.send_queue();
++    let (transaction, original) = queued(&q).await;
++    client
++        .state_store()
++        .save_dependent_queued_request(
++            room.room_id(),
++            &transaction,
++            ChildTransactionId::new(),
++            MilliSecondsSinceUnixEpoch::now(),
++            DependentQueuedRequestKind::RedactEvent,
++        )
++        .await
++        .unwrap();
++    assert_eq!(
++        q.settle_confirmed_event(&transaction, &original, event_id!("$confirmed").to_owned())
++            .await
++            .unwrap(),
++        ConfirmedEventSettlement::DependentWork
++    );
++    assert!(matches!(q.queued_event_contents().await.unwrap(), QueuedEventSnapshot::DependentWork));
++    assert_eq!(q.subscribe().await.unwrap().0.len(), 1);
++    assert_eq!(
++        client.state_store().load_dependent_queued_requests(room.room_id()).await.unwrap().len(),
++        1
++    );
++}
++
++#[async_test]
++async fn test_confirmed_settlement_does_not_remove_a_native_redaction() {
++    let (_client, room) = room().await;
++    let q = room.send_queue();
++    let (_, original) = queued(&q).await;
++    let handle = q.redact(event_id!("$redacted").to_owned(), None).await.unwrap();
++    assert_eq!(
++        q.settle_confirmed_event(
++            handle.transaction_id(),
++            &original,
++            event_id!("$confirmed").to_owned()
++        )
++        .await
++        .unwrap(),
++        ConfirmedEventSettlement::NotAnEvent
++    );
++    assert!(matches!(q.queued_event_contents().await.unwrap(), QueuedEventSnapshot::NotAnEvent));
++    assert_eq!(q.subscribe().await.unwrap().0.len(), 2);
++}
++
++#[async_test]
++async fn test_concurrent_confirmed_settlements_publish_once() {
++    let (_client, room) = room().await;
++    let q = room.send_queue();
++    let (transaction, original) = queued(&q).await;
++    let (_, mut updates) = q.subscribe().await.unwrap();
++    let (first, second) = tokio::join!(
++        q.settle_confirmed_event(&transaction, &original, event_id!("$confirmed").to_owned()),
++        q.settle_confirmed_event(&transaction, &original, event_id!("$confirmed").to_owned()),
++    );
++    let results = [first.unwrap(), second.unwrap()];
++    assert_eq!(results.iter().filter(|r| **r == ConfirmedEventSettlement::Settled).count(), 1);
++    assert_eq!(results.iter().filter(|r| **r == ConfirmedEventSettlement::Missing).count(), 1);
++    assert!(matches!(updates.try_recv().unwrap(), RoomSendQueueUpdate::SentEvent { .. }));
++    assert!(matches!(updates.try_recv(), Err(broadcast::error::TryRecvError::Empty)));
++    assert!(q.subscribe().await.unwrap().0.is_empty());
++}
++
++#[async_test]
++async fn test_cancelled_settlement_waiter_preserves_original_and_allows_later_recovery() {
++    let (_client, room) = room().await;
++    let q = room.send_queue();
++    let (transaction, original) = queued(&q).await;
++    let (_, mut updates) = q.subscribe().await.unwrap();
++    let guard = q.inner.queue.store.lock().await;
++    assert!(
++        tokio::time::timeout(
++            Duration::from_millis(25),
++            q.settle_confirmed_event(&transaction, &original, event_id!("$confirmed").to_owned())
++        )
++        .await
++        .is_err()
++    );
++    drop(guard);
++    assert_eq!(q.subscribe().await.unwrap().0.len(), 1);
++    assert!(matches!(updates.try_recv(), Err(broadcast::error::TryRecvError::Empty)));
++    assert_eq!(
++        q.settle_confirmed_event(&transaction, &original, event_id!("$confirmed").to_owned())
++            .await
++            .unwrap(),
++        ConfirmedEventSettlement::Settled
++    );
++}
+diff --git a/bindings/matrix-sdk-ffi/src/room/queued_events.rs b/bindings/matrix-sdk-ffi/src/room/queued_events.rs
+new file mode 100644
+--- /dev/null
++++ b/bindings/matrix-sdk-ffi/src/room/queued_events.rs
+@@ -0,0 +1,324 @@
++// Copyright 2026 Fajar HRIS contributors.
++// SPDX-License-Identifier: Apache-2.0
++
++use super::*;
++use matrix_sdk::send_queue::{ConfirmedEventSettlement, QueuedEventSnapshot};
++use matrix_sdk_base::store::SerializableEventContent;
++use ruma::{OwnedTransactionId, serde::Raw};
++use std::collections::HashSet;
++
++const MAX_QUEUE_EVENTS: usize = 128;
++const MAX_QUEUE_EVENT_BYTES: usize = 96_000;
++const MAX_QUEUE_SNAPSHOT_BYTES: usize = 1_048_576;
++
++/// Exact local event content from the paused native queue. It is not evidence
++/// that a server accepted the event. Callers must keep this private.
++#[derive(uniffi::Record)]
++pub struct QueuedMessageEvent {
++    pub transaction_id: String,
++    pub event_type: String,
++    pub content_json: String,
++}
++
++impl std::fmt::Debug for QueuedMessageEvent {
++    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
++        f.write_str("QueuedMessageEvent([redacted])")
++    }
++}
++
++/// No rejection removes a queue item or schedules a server redaction.
++#[derive(Debug, uniffi::Enum)]
++pub enum ConfirmedQueueEventResult {
++    Settled,
++    Missing,
++    QueueEnabled,
++    InFlight,
++    ContentMismatch,
++    NotAnEvent,
++    DependentWork,
++}
++
++impl From<ConfirmedEventSettlement> for ConfirmedQueueEventResult {
++    fn from(value: ConfirmedEventSettlement) -> Self {
++        match value {
++            ConfirmedEventSettlement::Settled => Self::Settled,
++            ConfirmedEventSettlement::Missing => Self::Missing,
++            ConfirmedEventSettlement::QueueEnabled => Self::QueueEnabled,
++            ConfirmedEventSettlement::InFlight => Self::InFlight,
++            ConfirmedEventSettlement::ContentMismatch => Self::ContentMismatch,
++            ConfirmedEventSettlement::NotAnEvent => Self::NotAnEvent,
++            ConfirmedEventSettlement::DependentWork => Self::DependentWork,
++        }
++    }
++}
++
++#[matrix_sdk_ffi_macros::export]
++impl Room {
++    /// Capture all original queued events while paused, with bounded count and
++    /// UTF-8 size. Unknown fields and exact JSON bytes are preserved. Mixed
++    /// upload/redaction queues are rejected rather than returned incompletely.
++    pub async fn queued_message_events(&self) -> Result<Vec<QueuedMessageEvent>, ClientError> {
++        let result: Result<Vec<QueuedMessageEvent>> = async {
++            let queue = self.inner.send_queue();
++            let QueuedEventSnapshot::Ready(originals) = queue.queued_event_contents().await? else {
++                anyhow::bail!("Original queue is not a quiescent standalone event queue");
++            };
++            checked_queue_originals(originals)
++        }
++        .await;
++        result.map_err(Into::into)
++    }
++
++    /// Settle externally verified server acceptance for exactly the captured
++    /// transaction, type and original JSON bytes. The caller owns authenticated
++    /// sender, room, device and server-event proof. This method does no network
++    /// I/O and never schedules a cancellation or redaction.
++    pub async fn settle_confirmed_queue_event(
++        &self,
++        transaction_id: String,
++        event_type: String,
++        content_json: String,
++        event_id: String,
++    ) -> Result<ConfirmedQueueEventResult, ClientError> {
++        check_queue_identifier(&transaction_id)?;
++        check_queue_identifier(&event_id)?;
++        let event_id = EventId::parse(event_id)?;
++        let transaction_id = OwnedTransactionId::from(transaction_id);
++        let original = checked_queue_content(content_json, event_type)?;
++        Ok(self
++            .inner
++            .send_queue()
++            .settle_confirmed_event(&transaction_id, &original, event_id)
++            .await
++            .map_err(anyhow::Error::from)?
++            .into())
++    }
++}
++
++fn checked_queue_originals(
++    originals: Vec<(OwnedTransactionId, SerializableEventContent)>,
++) -> Result<Vec<QueuedMessageEvent>> {
++    anyhow::ensure!(originals.len() <= MAX_QUEUE_EVENTS, "Original queue exceeds event limit");
++    let mut events = Vec::with_capacity(originals.len());
++    let mut seen = HashSet::with_capacity(originals.len());
++    let mut bytes = 0;
++    for (transaction_id, serialized_event) in originals {
++        let event = checked_queued_original(transaction_id.to_string(), serialized_event)?;
++        anyhow::ensure!(
++            seen.insert(event.transaction_id.clone()),
++            "Original queue repeats an identity"
++        );
++        bytes += event.content_json.len();
++        anyhow::ensure!(bytes <= MAX_QUEUE_SNAPSHOT_BYTES, "Original queue exceeds content limit");
++        events.push(event);
++    }
++    Ok(events)
++}
++
++fn check_queue_identifier(value: &str) -> Result<()> {
++    anyhow::ensure!(
++        !value.is_empty()
++            && value.len() <= 255
++            && !value.chars().any(|c| c.is_whitespace() || c.is_control()),
++        "Invalid original queue identifier"
++    );
++    Ok(())
++}
++
++fn checked_queue_content(json: String, event_type: String) -> Result<SerializableEventContent> {
++    check_queue_identifier(&event_type)?;
++    anyhow::ensure!(
++        json.len() <= MAX_QUEUE_EVENT_BYTES,
++        "Original queue event exceeds content limit"
++    );
++    let parsed: serde_json::Value = serde_json::from_str(&json)?;
++    anyhow::ensure!(parsed.is_object(), "Original queue event content must be an object");
++    Ok(SerializableEventContent::from_raw(
++        Raw::from_json(RawJsonValue::from_string(json)?),
++        event_type,
++    ))
++}
++
++fn checked_queued_original(
++    transaction_id: String,
++    content: SerializableEventContent,
++) -> Result<QueuedMessageEvent> {
++    check_queue_identifier(&transaction_id)?;
++    let (raw, event_type) = content.into_raw();
++    let content_json = raw.json().get().to_owned();
++    // Validate without replacing the captured bytes with a typed reconstruction.
++    checked_queue_content(content_json.clone(), event_type.clone())?;
++    Ok(QueuedMessageEvent { transaction_id, event_type, content_json })
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    #[test]
++    fn queued_original_preserves_unknown_fields_and_exact_bytes() {
++        let text = r#"{ "body":"é", "unknown": [1,2], "org.hris.message_id":"original" }"#;
++        let content = checked_queue_content(text.to_owned(), "m.room.message".to_owned()).unwrap();
++        let event = checked_queued_original("transaction".to_owned(), content).unwrap();
++        assert_eq!(event.content_json, text);
++        assert_eq!(event.event_type, "m.room.message");
++        assert_eq!(event.transaction_id, "transaction");
++        assert_eq!(format!("{event:?}"), "QueuedMessageEvent([redacted])");
++    }
++
++    #[test]
++    fn queued_original_rejects_non_objects_invalid_identifiers_and_utf8_overflow() {
++        for text in ["[]", "null", "true", "42", "\"private\"", "invalid"] {
++            assert!(checked_queue_content(text.to_owned(), "m.room.message".to_owned()).is_err());
++        }
++        for id in ["", "with space", "with\ncontrol"] {
++            assert!(check_queue_identifier(id).is_err());
++            assert!(checked_queue_content("{}".to_owned(), id.to_owned()).is_err());
++        }
++        assert!(check_queue_identifier(&"x".repeat(256)).is_err());
++        let json = format!("{{\"body\":\"{}\"}}", "é".repeat(MAX_QUEUE_EVENT_BYTES / 2));
++        assert!(json.chars().count() < MAX_QUEUE_EVENT_BYTES);
++        assert!(checked_queue_content(json, "m.room.message".to_owned()).is_err());
++    }
++
++    fn original(index: usize, bytes: usize) -> (OwnedTransactionId, SerializableEventContent) {
++        let json = format!(r#"{{"p":"{}"}}"#, "x".repeat(bytes - 8));
++        assert_eq!(json.len(), bytes);
++        (
++            OwnedTransactionId::from(format!("transaction-{index}")),
++            checked_queue_content(json, "m.room.message".to_owned()).unwrap(),
++        )
++    }
++
++    #[test]
++    fn queued_snapshot_bounds_count_and_rejects_duplicate_identity() {
++        assert!(checked_queue_originals(Vec::new()).unwrap().is_empty());
++        let items = (0..MAX_QUEUE_EVENTS).map(|i| original(i, 8)).collect();
++        assert_eq!(checked_queue_originals(items).unwrap().len(), MAX_QUEUE_EVENTS);
++        let items = (0..=MAX_QUEUE_EVENTS).map(|i| original(i, 8)).collect();
++        assert!(checked_queue_originals(items).is_err());
++        assert!(checked_queue_originals(vec![original(0, 8), original(0, 8)]).is_err());
++    }
++
++    #[test]
++    fn queued_snapshot_bounds_exact_utf8_bytes_per_event_and_in_total() {
++        let (_, content) = original(0, MAX_QUEUE_EVENT_BYTES);
++        assert_eq!(content.raw().0.json().get().len(), MAX_QUEUE_EVENT_BYTES);
++        let mut items: Vec<_> = (0..11).map(|i| original(i, 95_000)).collect();
++        items.push(original(11, MAX_QUEUE_SNAPSHOT_BYTES - 11 * 95_000));
++        assert_eq!(checked_queue_originals(items.clone()).unwrap().len(), 12);
++        items.push(original(12, 8));
++        assert!(checked_queue_originals(items).is_err());
++        let too_large = format!(r#"{{"p":"{}"}}"#, "x".repeat(MAX_QUEUE_EVENT_BYTES - 7));
++        assert!(checked_queue_content(too_large, "m.room.message".to_owned()).is_err());
++    }
++
++    #[tokio::test]
++    async fn queued_original_settlement_survives_sqlite_reopen_without_send_or_redaction() {
++        tokio::time::timeout(Duration::from_secs(20), async {
++            let server = matrix_sdk::test_utils::mocks::MatrixMockServer::new().await;
++            let directory = tempfile::tempdir().unwrap();
++            let id = ruma::room_id!("!queued:example.org");
++            let content = r#"{ "msgtype":"m.text", "body":"fictional", "unknown":[1,2] }"#;
++            let client = server
++                .client_builder()
++                .on_builder(|builder| builder.sqlite_store(directory.path(), None))
++                .build()
++                .await;
++            client.send_queue().set_enabled(false).await;
++            let sdk_room = server.sync_joined_room(&client, id).await;
++            let queue = sdk_room.send_queue();
++            let handle = queue
++                .send_raw(
++                    Raw::from_json(RawJsonValue::from_string(content.to_owned()).unwrap()),
++                    "m.room.message".to_owned(),
++                )
++                .await
++                .unwrap();
++            let transaction_id = handle.transaction_id().to_string();
++            drop(handle);
++            drop(queue);
++            let room = Room::new(sdk_room, None);
++            let originals = room.queued_message_events().await.unwrap();
++            assert_eq!(originals.len(), 1);
++            assert_eq!(originals[0].transaction_id, transaction_id);
++            assert_eq!(originals[0].content_json, content);
++            drop(room);
++            drop(client);
++
++            let restored = server
++                .client_builder()
++                .on_builder(|builder| builder.sqlite_store(directory.path(), None))
++                .build()
++                .await;
++            restored.send_queue().set_enabled(false).await;
++            let room = Room::new(restored.get_room(id).unwrap(), None);
++            let original = room.queued_message_events().await.unwrap().pop().unwrap();
++            assert_eq!(original.transaction_id, transaction_id);
++            assert_eq!(original.content_json, content);
++            for (event_type, json) in [("m.room.message", "{}"), ("org.example.other", content)] {
++                assert!(matches!(
++                    room.settle_confirmed_queue_event(
++                        transaction_id.clone(),
++                        event_type.to_owned(),
++                        json.to_owned(),
++                        "$confirmed".to_owned(),
++                    )
++                    .await
++                    .unwrap(),
++                    ConfirmedQueueEventResult::ContentMismatch
++                ));
++            }
++            assert!(
++                room.settle_confirmed_queue_event(
++                    transaction_id.clone(),
++                    "m.room.message".to_owned(),
++                    content.to_owned(),
++                    "invalid".to_owned(),
++                )
++                .await
++                .is_err()
++            );
++            assert_eq!(room.queued_message_events().await.unwrap().len(), 1);
++            assert!(matches!(
++                room.settle_confirmed_queue_event(
++                    transaction_id.clone(),
++                    "m.room.message".to_owned(),
++                    content.to_owned(),
++                    "$confirmed".to_owned(),
++                )
++                .await
++                .unwrap(),
++                ConfirmedQueueEventResult::Settled
++            ));
++            drop(room);
++            drop(restored);
++
++            let settled = server
++                .client_builder()
++                .on_builder(|builder| builder.sqlite_store(directory.path(), None))
++                .build()
++                .await;
++            settled.send_queue().set_enabled(false).await;
++            let room = Room::new(settled.get_room(id).unwrap(), None);
++            assert!(room.queued_message_events().await.unwrap().is_empty());
++            assert!(matches!(
++                room.settle_confirmed_queue_event(
++                    transaction_id,
++                    "m.room.message".to_owned(),
++                    content.to_owned(),
++                    "$confirmed".to_owned(),
++                )
++                .await
++                .unwrap(),
++                ConfirmedQueueEventResult::Missing
++            ));
++            let requests = server.server().received_requests().await.unwrap();
++            assert!(!requests.iter().any(|request| {
++                request.url.path().contains("/send/") || request.url.path().contains("/redact/")
++            }));
++        })
++        .await
++        .unwrap();
++    }
++}

@@ -75,21 +75,36 @@ startTicks163428482 stopped09:35:40UTC; original Bima data and phone untouched.
 [Consumer evidence](measurements/collaboration-sdk-raw-event-consumer-2026-11-06.json).
 The frozen candidate DOES NOT contain confirmed queue settlement.
 
-ONLY local heavy job is confirmed-queue Rust test85403, driver
-.work/sdk-confirmed-queue-2026-11-06/test-queue.py core-1 core. Six input hashes are
-frozen for this run. Draft lives only in .worktrees/matrix-sdk-raw-event: core queue
-settlement and tests plus FFI queued_events.rs and room export. It requires paused,
-quiescent exact transaction/type/raw bytes, preserves dependent work and does no
-HTTP/cancel/redaction. Not yet compiled/accepted or in any AAR. Initial test output
-reports async_test requires names starting test_; wait for driver exit before edits.
-Review snapshot source too: SDK local echoes synthesize uploads and omit dependent
-requests; a complete original snapshot must read the native queue store under its
-lock, not infer it from UI echoes. Then test/export a separate patch, implement
-owning domain/data recovery and reproduce the real application-worker failure.
-No shipping queue policy change yet. Latest phone reconnect09:36UTC timed out18s;
-availability question remains pending, accepted43 awaits install-only.
-New46bec39a CI Native42191546121 and Control42191546066 still running09:33UTC;
-do not dispatch duplicates.
+Confirmed queue SDK patch is TESTED at Rust level:8 core cases45.164s and19 FFI
+room cases35.883s, identical final inputs and no warnings. Snapshot reads the actual
+native store, not synthesized local echoes. SQLite reopen and settlement persistence,
+no send/redaction, cancelled lock waiter, concurrency and exact-content/type bounds
+pass. Patch tool/collaboration-sdk-patches/confirmed-queue.patch applies AFTER raw-event.patch,
+SHA23354aeb43aabe937543355d7255d31527c0a3c78acf0a677f113e9592776872.
+[Evidence](measurements/collaboration-sdk-confirmed-queue-2026-11-06.json).
+Core1 failed test naming convention; earlier successful runs had warnings now removed.
+No application/native-Android settlement acceptance yet. Caller still owns trusted
+acceptance proof; the native API never authenticates an arbitrary supplied event ID.
+
+ONLY local heavy job is Android queue candidate71588, driver
+.work/sdk-confirmed-queue-2026-11-06/build-android.py arm64. The SDK worktree and
+nine fingerprinted inputs are FROZEN. Two Cargo jobs, offline locked dependencies,
+NDK28.2.13676358/API21; outputs .worktrees/matrix-sdk-queue-android-arm64-2026-11-06.
+No emulator active. Verify its JNI/Kotlin pair, build remaining ABIs sequentially,
+package and prove application integration. Do not mix with the accepted OLD raw-event
+candidate. New operations are still absent from the shipping SDK/application.
+
+Next domain/data work: recover unknown original native transactions from immutable
+completion proof before new staging; preserve uncertain Staging.before provenance,
+active mapped commands, exact sender/device/room/content and queue ownership. Do not
+silently discard unresolved IDs or reconstruct fingerprints from text alone. Use
+owning use cases/repository adapters, no VM policy or generic worker helpers. Reapply
+the retained real-worker/fake-SDK regression and prove the next send completes.
+Latest phone reconnect09:36UTC timed out18s; question remains pending, accepted43
+awaits install-only. Native42191546121 on46bec39a now SUCCESS: artifact13491584498
+SHAec91d3555fea3293dce583d0fef9ccc96cd7a07f03f8f1fd417023f93619abaf,
+381 XML cases/66 suites and all six native result groups/cleanup verified. Control
+42191546066 still running; do not dispatch duplicates.
 
 SDK x86_64 driver95397 is FINISHED and drained:901.084s,142,673,032 bytes,
 SHA0f9d908ef616c650949fedd51c97c0ce5e5c2d98810606731bc811634acf3cab.

@@ -103,3 +103,35 @@ settlement is implemented. Do not automatically abort native handles: the pinned
 SDK can queue a server redaction when their send is in flight. Exact original
 transaction evidence and a settlement operation with no redaction side effect are
 needed before removing a retained native entry.
+
+## Tested confirmed-queue SDK operations
+
+`confirmed-queue.patch` applies **after** `raw-event.patch` on the same pinned Rust
+SDK. Its SHA-256 is
+`23354aeb43aabe937543355d7255d31527c0a3c78acf0a677f113e9592776872`.
+It reconstructs the four tested source files exactly from the saved raw-event
+baseline. [Evidence](../../docs/measurements/collaboration-sdk-confirmed-queue-2026-11-06.json)
+records8 core cases and19 FFI room cases passing on the identical final sources,
+with no warnings. These are Rust/SQLite tests, not Android binding or app acceptance.
+
+`Room.queued_message_events` captures exact transaction/type/content from the native
+store under its queue lock. It rejects enabled/in-flight, upload/redaction or
+incomplete dependent work. Local echoes are unsuitable: some native requests are
+omitted or synthesized there. The FFI validates unique IDs, JSON objects,128 entries,
+96,000 UTF-8 bytes per event and1,048,576 total bytes. The underlying SDK store first
+materializes its queue; this is not a bounded SQL-query claim.
+
+`Room.settle_confirmed_queue_event` compares the transaction, type and exact raw
+JSON bytes while paused/quiescent. It preserves changed entries and dependent work,
+then removes only a proven original and publishes one local SentEvent. It does no
+send/cancel/server-redaction request. Repeated settlement returns Missing. The
+caller must independently prove the authenticated sender, room, device/native
+family, complete content and accepted server event; supplying an event ID alone
+is not proof. Do not substitute ordinary abort, which may schedule redaction.
+
+Tests cover concurrent acknowledgement, cancellation while waiting for the store
+lock, changed content, preserved native redaction/dependents and SQLite reopen
+before/after settlement without a send/redaction request. Diagnostic Debug output
+is redacted. The previous raw-event AAR/consumer excludes this increment. A new
+Android arm64 candidate is building; generated JNI/Kotlin must be kept together.
+Application integration and the preserved worker reproduction remain outstanding.

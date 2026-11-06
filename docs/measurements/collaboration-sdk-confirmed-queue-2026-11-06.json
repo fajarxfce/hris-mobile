@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "candidateOnly": true,
+  "upstream": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+  "prerequisiteRawPatchSha256": "fed8120ba7e7ea88a23cde675d70bb27a3a97304c6c913ad5a9578d28053f76e",
+  "patchSha256": "23354aeb43aabe937543355d7255d31527c0a3c78acf0a677f113e9592776872",
+  "patchAppliesToSavedBaseline": true,
+  "reconstructedSourcesMatch": true,
+  "sourceSha256": {
+    "Cargo.lock": "e3f28c9f54076bb320270aea995fc1f124c7ed727968dad338f544fe764df7f0",
+    "crates/matrix-sdk/src/send_queue/mod.rs": "91d2ff7784fc4cd3c484e184dfe31c65766dfaa508f6e089a403aa9cfb8ba50e",
+    "crates/matrix-sdk/src/send_queue/confirmed_event_tests.rs": "308e0bc9ecb650c55f66040cf3a76dbb34a3a38040ae5899436567dadbc8323c",
+    "bindings/matrix-sdk-ffi/src/room/mod.rs": "d38b0bc50f9da0365c14717e0821ae2eac9f498f34501211aa66c2ed29febfec",
+    "bindings/matrix-sdk-ffi/src/room/queued_events.rs": "ae6efcba570bbe83ece6e8529b6f6e1dcae7735eec5622586a45a7c4defa1b3f",
+    "bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs": "4dc9c6774802d43c090c8836471f7860809de490cc0317103e262e2848893c58"
+  },
+  "tests": [
+    {
+      "scope": "core",
+      "cases": 8,
+      "startedAt": "2026-11-06T09:44:02.691982+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "matrix-sdk",
+        "--lib",
+        "confirmed_event_tests",
+        "--",
+        "--test-threads=1"
+      ],
+      "elapsedSeconds": 45.164,
+      "exitCode": 0
+    },
+    {
+      "scope": "ffi-room",
+      "cases": 19,
+      "startedAt": "2026-11-06T09:45:04.639238+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "matrix-sdk-ffi",
+        "--features",
+        "sentry,experimental-x509-identity-verification",
+        "room::",
+        "--",
+        "--test-threads=1"
+      ],
+      "elapsedSeconds": 35.883,
+      "exitCode": 0
+    }
+  ],
+  "earlierAttempts": [
+    {
+      "scope": "core-1",
+      "seconds": 83.078,
+      "result": "compile failed: upstream async_test requires test_ prefix"
+    },
+    {
+      "scope": "core-2",
+      "seconds": 43.347,
+      "result": "7 passed; snapshot Debug warning, corrected with redacted Debug"
+    },
+    {
+      "scope": "ffi-1",
+      "seconds": 71.0,
+      "result": "19 passed; unused re-export warning removed"
+    }
+  ],
+  "warningsInFinalRuns": 0,
+  "behaviors": [
+    "paused native store snapshot rejects in-flight, upload/redaction and dependent work without partial projection",
+    "exact transaction/type/raw JSON match before local settlement",
+    "no cancellation, send or server redaction",
+    "concurrent settlement publishes one local acknowledgement",
+    "cancelled lock waiter leaves original available",
+    "SQLite original retained across reopen and settlement persists after another reopen",
+    "FFI unique IDs, object-only JSON, UTF-8 96000-byte event and 1048576-byte aggregate bounds, 128-event cap"
+  ],
+  "limitations": [
+    "Caller must independently prove authenticated sender, device, room and server acceptance. SDK method does not provide that proof.",
+    "Native store API materializes persisted requests before FFI bounds; this is not a bounded SQL read claim.",
+    "Not packaged for Android/Apple or integrated into shipping app yet.",
+    "Worker fake-SDK reproduction remains red until domain/data integration; phone root cause unconfirmed."
+  ]
+}
