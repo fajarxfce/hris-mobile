@@ -17,6 +17,110 @@ abstract class CollaborationMessageStorageContract {
     protected abstract fun databaseOwner(): CollaborationListDatabaseOwner
 
     @Test
+    fun encryptedEditTargetSurvivesRestartAndCannotCollideWithAnOrdinarySend() = withDatabase { f ->
+        val intent = editIntent(f)
+        f.insert(intent)
+        val raw =
+            f.database.commands
+                .observeAll(messageScope(f.access), messagePartition(f.access))
+                .first()
+                .single()
+        for (value in
+            listOf(
+                intent.text,
+                intent.editTarget!!.sender,
+                intent.editTarget!!.eventId,
+                "editTarget",
+            )) assertFalse(raw.request.contains(value))
+        f.reopen(f.access.copy(sessionId = "renewed-edit"))
+        assertEquals(intent, f.read().intent)
+        assertIs<AppResult.Failed>(f.repo.insert(f.access, f.intent))
+        assertEquals(intent, f.read().intent)
+        assertEquals(listOf(f.read()), f.rows())
+    }
+
+    @Test
+    fun editStagingRejectsAnotherRoomOrSenderAndRetainsTargetInCompletion() = withDatabase { f ->
+        val intent = editIntent(f)
+        f.insert(intent)
+        val queued = f.read()
+        val origin = CollaborationMessageOrigin(intent.editTarget!!.sender, "b".repeat(64))
+        for (state in
+            listOf(
+                CollaborationMessageState.Staging(
+                    f.device.copy(roomId = "!other:test"),
+                    emptySet(),
+                    origin,
+                ),
+                CollaborationMessageState.Staging(
+                    f.device,
+                    emptySet(),
+                    origin.copy(sender = "@other:test"),
+                ),
+                CollaborationMessageState.Staging(f.device, emptySet()),
+            )) {
+            assertIs<AppResult.Failed>(f.repo.update(f.access, queued, state))
+            assertEquals(queued, f.read())
+        }
+        for (state in
+            listOf(
+                CollaborationMessageState.Staging(f.device, emptySet(), origin),
+                CollaborationMessageState.Staged(f.device, "edit-transaction", origin),
+                CollaborationMessageState.Sent(
+                    f.device,
+                    "edit-transaction",
+                    "\$accepted-edit",
+                    origin,
+                ),
+            )) assertEquals(AppResult.Success(true), f.repo.update(f.access, f.read(), state))
+        val completion = CollaborationMessageCompletion(f.read(), listOf("\$accepted-edit"))
+        assertEquals(AppResult.Success(true), f.repo.archiveCompletion(f.access, completion))
+        f.reopen(f.access.copy(sessionId = "completed-edit"))
+        assertEquals(AppResult.Success(completion), f.repo.readCompletion(f.access, intent.id))
+        assertEquals(completion.record, f.read())
+        assertTrue(f.rows().isEmpty())
+        assertEquals(
+            AppResult.Success(CollaborationMessageInsertion.STORED),
+            f.repo.insert(f.access, intent),
+        )
+        assertTrue(f.rows().isEmpty())
+    }
+
+    @Test
+    fun cancelledEditRetainsItsTargetAndRejectsRetargetedPreventionReplay() = withDatabase { f ->
+        val intent = editIntent(f)
+        f.insert(intent)
+        assertEquals(AppResult.Success(true), f.repo.cancel(f.access, f.read()))
+        f.reopen(f.access.copy(sessionId = "cancelled-edit"))
+        assertEquals(intent, f.read().intent)
+        assertEquals(CollaborationMessageState.Cancelled, f.read().state)
+        assertEquals(AppResult.Success(true), f.repo.prevent(f.access, intent))
+        val retargeted = intent.copy(editTarget = intent.editTarget!!.copy(eventId = "\$another"))
+        assertEquals(AppResult.Success(false), f.repo.prevent(f.access, retargeted))
+        assertTrue(f.rows().isEmpty())
+    }
+
+    private fun editIntent(f: MessageStorageFixture): CollaborationMessageIntent {
+        val target =
+            CollaborationEditTarget(
+                f.device.roomId,
+                "\$original-private",
+                messageTestId(99),
+                "@private:example.test",
+                "c".repeat(64),
+                1_000,
+                900,
+                "\$quoted",
+                true,
+            )
+        return f.intent.copy(
+            replyToEventId = target.replyToEventId,
+            forwarded = target.forwarded,
+            editTarget = target,
+        )
+    }
+
+    @Test
     fun encryptedBatchReplayRetainsCiphertextAndTerminalOutcomesAcrossReopen() = withDatabase { f ->
         val intents =
             (1..3).map {

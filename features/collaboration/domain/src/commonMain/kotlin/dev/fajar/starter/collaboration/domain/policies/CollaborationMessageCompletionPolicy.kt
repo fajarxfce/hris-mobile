@@ -7,6 +7,7 @@ fun collaborationCompletionReceipt(
     completion: CollaborationMessageCompletion
 ): CollaborationMessageReceipt? {
     val record = completion.record
+    if (!validCollaborationEditRecord(record)) return null
     val sent = record.state as? CollaborationMessageState.Sent ?: return null
     if (record.revision !in 1..9_007_199_254_740_991L || sent.origin == null) return null
     val receipt =

@@ -26,3 +26,28 @@ fun canAuthorCollaborationEdit(
         target.sender == sender &&
         now >= target.targetAcceptedAt &&
         now - target.firstAcceptedAt < CollaborationMessageEditWindowMillis
+
+/** Context of the original is immutable; a replacement has its own operation ID. */
+fun validCollaborationEditIntent(intent: CollaborationMessageIntent): Boolean {
+    val target = intent.editTarget ?: return true
+    return validCollaborationEditTarget(target) &&
+        intent.id != target.originalLogicalId &&
+        intent.replyToEventId == target.replyToEventId &&
+        intent.forwarded == target.forwarded
+}
+
+/** An edit cannot move to another room or native sender during staging/recovery. */
+fun validCollaborationEditRecord(record: CollaborationMessageRecord): Boolean {
+    if (!validCollaborationEditIntent(record.intent)) return false
+    val target = record.intent.editTarget ?: return true
+    val state = record.state
+    val device =
+        when (state) {
+            CollaborationMessageState.Queued,
+            CollaborationMessageState.Cancelled -> return true
+            is CollaborationMessageState.Staging -> state.device
+            is CollaborationMessageState.Staged -> state.device
+            is CollaborationMessageState.Sent -> state.device
+        }
+    return device.roomId == target.roomId && state.origin?.sender == target.sender
+}

@@ -81,6 +81,7 @@ fun collaborationMessageTransition(
 fun validCollaborationCancellation(record: CollaborationMessageRecord): Boolean =
     record.state == CollaborationMessageState.Queued &&
         record.revision == 0L &&
+        validCollaborationEditRecord(record) &&
         validCollaborationMessageId(record.intent.id) &&
         validCollaborationMessageId(record.intent.conversationId) &&
         validCollaborationText(record.intent.text) &&

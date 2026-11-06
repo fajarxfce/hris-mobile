@@ -38,6 +38,7 @@ internal data class MessageIntentDto(
     val text: String,
     val replyToEventId: String? = null,
     val forwarded: Boolean = false,
+    val editTarget: MessageEditTargetDto? = null,
 ) {
     override fun toString() = "MessageIntentDto([redacted])"
 }
@@ -66,6 +67,7 @@ internal fun CollaborationMessageIntent.toDto(access: CollaborationLocalAccess):
             validCollaborationText(text)
     )
     require(replyToEventId?.let(::validCollaborationReplyEventId) != false)
+    require(validCollaborationEditIntent(this))
     return MessageIntentDto(
         id,
         owner.audience,
@@ -76,6 +78,7 @@ internal fun CollaborationMessageIntent.toDto(access: CollaborationLocalAccess):
         text,
         replyToEventId,
         forwarded,
+        editTarget?.toMessageEditDto(),
     )
 }
 
@@ -88,6 +91,7 @@ internal fun MessageIntentDto.toIntent(access: CollaborationLocalAccess) =
             text,
             replyToEventId,
             forwarded,
+            editTarget?.toDomain(),
         )
         .also { require(it.toDto(access) == this) }
 
@@ -202,7 +206,9 @@ internal class CollaborationMessageCodec(
             Json.decodeFromString<MessageStateDto>(open(raw.id, "state", raw.revision, raw.state))
                 .toState()
         require((raw.revision == 0L) == (state == CollaborationMessageState.Queued))
-        return CollaborationMessageRecord(intent, raw.revision, state)
+        return CollaborationMessageRecord(intent, raw.revision, state).also {
+            require(validCollaborationEditRecord(it))
+        }
     }
 
     suspend fun completion(raw: CommandRecord, eventIds: List<String>): String {

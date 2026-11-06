@@ -36,6 +36,7 @@ fun validCollaborationForwardBatch(batch: CollaborationForwardBatch): Boolean {
             intent.text == sources[index % sources.size].text &&
             intent.replyToEventId == null &&
             intent.forwarded &&
+            intent.editTarget == null &&
             intent.createdAt.toEpochMilliseconds() in 0 until 253_402_300_800_000L
     }
 }

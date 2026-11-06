@@ -1125,6 +1125,8 @@ class CollaborationDataModule {
 
     @Single
     fun retireMessages(
+        edits: CollaborationEditEvidenceRepository,
+        editTargets: CollaborationEditTargetRepository,
         messages: CollaborationMessageRepository,
         completions: CollaborationMessageCompletionRepository,
         receipts: CollaborationReceiptRepository,
@@ -1148,10 +1150,13 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            edits,
+            editTargets,
         )
 
     @Single
     fun recoverMessageReceipts(
+        edits: CollaborationEditEvidenceRepository,
         completions: CollaborationMessageCompletionRepository,
         history: CollaborationHistoryRepository,
         messages: CollaborationMessageRepository,
@@ -1173,6 +1178,7 @@ class CollaborationDataModule {
             build,
             Clock.System,
             completions,
+            edits,
         )
 
     @Single
@@ -1521,6 +1527,31 @@ class CollaborationDataModule {
         QueueCollaborationText(
             messages,
             conversations,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+            schedules,
+        )
+
+    @Single
+    fun queueEdit(
+        messages: CollaborationMessageRepository,
+        targets: CollaborationEditTargetRepository,
+        identities: CollaborationIdentityRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        schedules: SyncScheduleRepository,
+    ) =
+        QueueCollaborationEdit(
+            messages,
+            targets,
+            identities,
+            lists,
             sessions,
             workspaces,
             server,

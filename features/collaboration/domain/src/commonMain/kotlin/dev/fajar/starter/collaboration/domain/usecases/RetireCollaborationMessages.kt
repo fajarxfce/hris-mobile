@@ -28,18 +28,34 @@ class RetireCollaborationMessages(
     private val server: IdentityServer,
     private val build: AppBuild,
     private val clock: Clock,
+    private val edits: CollaborationEditEvidenceRepository,
+    private val editTargets: CollaborationEditTargetRepository,
 ) {
     private val execution = Mutex()
 
-    suspend operator fun invoke(workspaceId: String, conversationId: String): AppResult<Int> =
-        invoke(CollaborationLocalScope.Selected(workspaceId), conversationId)
+    suspend operator fun invoke(
+        workspaceId: String,
+        conversationId: String,
+        acknowledgedEditTarget: String? = null,
+    ): AppResult<Int> =
+        invoke(
+            CollaborationLocalScope.Selected(workspaceId),
+            conversationId,
+            acknowledgedEditTarget,
+        )
 
     suspend operator fun invoke(
         scope: CollaborationLocalScope,
         conversationId: String,
+        acknowledgedEditTarget: String? = null,
     ): AppResult<Int> =
         execution.withLock {
-            if (!validCollaborationMessageId(conversationId)) return@withLock failed()
+            if (
+                !validCollaborationMessageId(conversationId) ||
+                    (acknowledgedEditTarget != null &&
+                        !validCollaborationReplyEventId(acknowledgedEditTarget))
+            )
+                return@withLock failed()
             val captured = capture(scope)
             if (captured is AppResult.Failed) return@withLock captured
             val access = (captured as AppResult.Success).value
@@ -64,7 +80,7 @@ class RetireCollaborationMessages(
                     }
             )
                 return@withLock failed()
-            val prepared = prepare(scope, access, conversationId, journal)
+            val prepared = prepare(scope, access, conversationId, journal, acknowledgedEditTarget)
             if (prepared is AppResult.Failed) return@withLock prepared
             val batch = (prepared as AppResult.Success).value
             if (batch.isEmpty()) return@withLock AppResult.Success(0)
@@ -88,11 +104,12 @@ class RetireCollaborationMessages(
         access: CollaborationLocalAccess,
         conversationId: String,
         journal: List<CollaborationMessageReceipt>,
+        acknowledgedEditTarget: String?,
     ): AppResult<List<Pair<CollaborationMessageCompletion, CollaborationMessageReceipt>>> {
         val batch =
             mutableListOf<Pair<CollaborationMessageCompletion, CollaborationMessageReceipt>>()
         for (receipt in journal) {
-            val prepared = candidate(scope, access, conversationId, receipt)
+            val prepared = candidate(scope, access, conversationId, receipt, acknowledgedEditTarget)
             if (prepared is AppResult.Failed) return prepared
             (prepared as AppResult.Success).value?.let { batch += it to receipt }
             if (batch.size == 32) break
@@ -105,6 +122,7 @@ class RetireCollaborationMessages(
         access: CollaborationLocalAccess,
         conversationId: String,
         receipt: CollaborationMessageReceipt,
+        acknowledgedEditTarget: String?,
     ): AppResult<CollaborationMessageCompletion?> {
         val retained =
             checked(scope, access) {
@@ -127,6 +145,53 @@ class RetireCollaborationMessages(
             return failed()
         val sent = record.state as? CollaborationMessageState.Sent ?: return AppResult.Success(null)
         val origin = sent.origin ?: return AppResult.Success(null)
+        val target = record.intent.editTarget
+        if (target != null) {
+            val observed =
+                checked(scope, access) {
+                    when (
+                        val result =
+                            edits.getEditOperationEvidence(
+                                access,
+                                conversationId,
+                                sent.device.roomId,
+                                origin.sender,
+                                record.intent.id,
+                            )
+                    ) {
+                        is AppResult.Failed -> result
+                        is AppResult.Success ->
+                            if (result.value.size > 128) failed()
+                            else AppResult.Success(result.value.toList())
+                    }
+                }
+            if (observed is AppResult.Failed) return observed
+            val evidence = (observed as AppResult.Success).value.toList()
+            if (evidence.isEmpty()) return AppResult.Success(null)
+            val completion =
+                collaborationEditRetirementCompletion(record, receipt, evidence, previous)
+                    ?: return failed()
+            if (
+                evidence.none { it.eligible } &&
+                    evidence.any { !it.redacted } &&
+                    acknowledgedEditTarget != target.eventId
+            ) {
+                val visible =
+                    checked(scope, access) {
+                        editTargets.getEditCandidate(
+                            access,
+                            conversationId,
+                            target.roomId,
+                            target.eventId,
+                        )
+                    }
+                if (visible is AppResult.Failed) return visible
+                // Keep a visible failed edit durable until its owner acknowledges it. Hidden or
+                // redacted originals cannot leave an unreachable command consuming capacity.
+                if ((visible as AppResult.Success).value != null) return AppResult.Success(null)
+            }
+            return AppResult.Success(completion)
+        }
         val original =
             checked(scope, access) {
                 when (

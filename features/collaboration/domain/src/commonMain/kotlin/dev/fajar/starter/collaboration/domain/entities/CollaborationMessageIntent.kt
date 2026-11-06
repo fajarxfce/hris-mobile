@@ -20,6 +20,7 @@ data class CollaborationMessageIntent(
     val text: String,
     val replyToEventId: String? = null,
     val forwarded: Boolean = false,
+    val editTarget: CollaborationEditTarget? = null,
 ) {
     override fun toString() = "CollaborationMessageIntent([redacted])"
 }

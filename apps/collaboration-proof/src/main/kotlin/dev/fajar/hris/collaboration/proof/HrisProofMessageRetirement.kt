@@ -1,5 +1,6 @@
 package dev.fajar.hris.collaboration.proof
 
+import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationHistoryRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationMessageRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationReceiptRepository
 import dev.fajar.starter.collaboration.domain.entities.*
@@ -16,7 +17,7 @@ internal class HrisProofMessageRetirement(
     private val conversationId: String,
     private val messages: () -> EncryptedCollaborationMessageRepository,
     private val receipts: () -> EncryptedCollaborationReceiptRepository,
-    private val history: () -> CollaborationHistoryRepository,
+    private val history: () -> EncryptedCollaborationHistoryRepository,
     private val lists: () -> CollaborationListRepository,
     private val app: HrisProofApplicationAccess,
     private val reopen: suspend () -> Unit,
@@ -79,6 +80,7 @@ internal class HrisProofMessageRetirement(
                 app.build,
                 app.clock,
                 messages(),
+                history(),
             )
         check(success(recovery(app.workspaceId, conversationId)) == 0)
         check(success(retire()(app.workspaceId, conversationId)) == 2)
@@ -133,6 +135,8 @@ internal class HrisProofMessageRetirement(
             app.server,
             app.build,
             app.clock,
+            history(),
+            history(),
         )
 
     private fun <T> success(result: AppResult<T>): T =

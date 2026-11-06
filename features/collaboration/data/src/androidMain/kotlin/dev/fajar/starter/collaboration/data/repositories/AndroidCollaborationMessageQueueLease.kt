@@ -1,7 +1,7 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationMessageQueueSource
-import dev.fajar.starter.collaboration.data.messages.collaborationTextOrigin
+import dev.fajar.starter.collaboration.data.messages.collaborationOutgoingOrigin
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
@@ -31,11 +31,13 @@ internal class AndroidCollaborationMessageQueueLease(
         text: String,
         replyToEventId: String?,
         forwarded: Boolean,
+        editTarget: CollaborationEditTarget?,
     ): AppResult<CollaborationMessageOrigin> {
         if (
             !validCollaborationMessageId(logicalId) ||
                 !validCollaborationText(text) ||
-                (replyToEventId != null && !validCollaborationReplyEventId(replyToEventId))
+                (replyToEventId != null && !validCollaborationReplyEventId(replyToEventId)) ||
+                !editMatches(logicalId, replyToEventId, forwarded, editTarget)
         )
             return collaborationSetupFailure(
                 "client.collaboration_invalid_message",
@@ -46,7 +48,14 @@ internal class AndroidCollaborationMessageQueueLease(
                 return@execute AppResult.Failed(it)
             }
             safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueOrigin) {
-                collaborationTextOrigin(matrixSender, logicalId, text, replyToEventId, forwarded)
+                collaborationOutgoingOrigin(
+                    matrixSender,
+                    logicalId,
+                    text,
+                    replyToEventId,
+                    forwarded,
+                    editTarget,
+                )
             }
         }
     }
@@ -57,11 +66,13 @@ internal class AndroidCollaborationMessageQueueLease(
         origin: CollaborationMessageOrigin,
         replyToEventId: String?,
         forwarded: Boolean,
+        editTarget: CollaborationEditTarget?,
     ): AppResult<Unit> {
         if (
             !validCollaborationMessageId(logicalId) ||
                 !validCollaborationText(text) ||
-                (replyToEventId != null && !validCollaborationReplyEventId(replyToEventId))
+                (replyToEventId != null && !validCollaborationReplyEventId(replyToEventId)) ||
+                !editMatches(logicalId, replyToEventId, forwarded, editTarget)
         )
             return collaborationSetupFailure(
                 "client.collaboration_invalid_message",
@@ -73,12 +84,13 @@ internal class AndroidCollaborationMessageQueueLease(
             }
             val expected =
                 safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueMatch) {
-                    collaborationTextOrigin(
+                    collaborationOutgoingOrigin(
                         matrixSender,
                         logicalId,
                         text,
                         replyToEventId,
                         forwarded,
+                        editTarget,
                     )
                 }
             if (expected is AppResult.Failed) return@execute expected
@@ -87,10 +99,24 @@ internal class AndroidCollaborationMessageQueueLease(
                     "client.collaboration_message_content_changed"
                 )
             safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueEnqueue) {
-                source.enqueue(logicalId, text, replyToEventId, forwarded)
+                source.enqueue(logicalId, text, replyToEventId, forwarded, editTarget)
             }
         }
     }
+
+    private fun editMatches(
+        id: String,
+        reply: String?,
+        forwarded: Boolean,
+        target: CollaborationEditTarget?,
+    ): Boolean =
+        target == null ||
+            (validCollaborationEditTarget(target) &&
+                target.roomId == device.roomId &&
+                target.sender == matrixSender &&
+                target.originalLogicalId != id &&
+                target.replyToEventId == reply &&
+                target.forwarded == forwarded)
 
     override suspend fun resume(
         mappedTransactions: Set<String>

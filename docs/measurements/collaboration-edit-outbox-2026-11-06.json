@@ -1,0 +1,263 @@
+{
+  "date": "2026-11-06",
+  "scope": "Durable local edit commands, encrypted codec, native queue construction and exact replacement receipt recovery/retirement; authoring UI and native exchange remain pending.",
+  "sourceSha256": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProductQueueProof.kt": "cdd7f79ef9b4f8708a3bb76bf34b8836581854d02a746f65a90724de8c0fb7b8",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProofMessageRetirement.kt": "a5f73bc94f739f3cfe29eb4d8010b28fb8cb32f8c5277a2f4c9c5043042a26e6",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt": "e2821ddcc9826d4e7efd9ec04417f2193b3a1538c8e2417ffea2eaed4c05d501",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationEditQueueSourceTest.kt": "31c4b4d4928c9437c9598909c85468abc6455406804b6b76b8a3918e82b672f2",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/QueueSdkFixture.kt": "c5ece69ced3bd6aef0635eb9359f61d19257a516a226403b819e79c0671fff32",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationMessageQueueSource.kt": "a739b3117e65d79bcc36f8eb5a2fe7a92f250d944f8f7f0995cf78ddc83b526b",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationMessageQueueLease.kt": "3a816ddedf1869b06055ac1dc9e94467dede3430f71480ae40f297f21bef2507",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "9b0ebe7ace776eefc46f7be4cdcde3d4c1d51262fefd443dd10df1b9dd47d78a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/messages/CollaborationEditContent.kt": "11168b317c65c9a46618708df7ce203bfe1b50d3c663336ed8ddf2f173e09889",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/messages/CollaborationMessageCodec.kt": "d312c4951271b78165afbd54c6495a119ac8828c2957c72086d2326e03ccfea1",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/messages/MessageEditTargetDto.kt": "8e6fe78d9e42a6f375921f0dbe213d388a88e73a8d7acacce59d9d7d39e8b92a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationMessageRepository.kt": "652ad04a36ed1fc85511909f8786e2bdfb253529ad5983afe57b14cfa58195d7",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationMessageStorageContract.kt": "d6ef02e1186d0e00cff6e0f01a13ffbb7b148e81b8461f4f35bd77136f5a9cd7",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationOutgoingEditContentTest.kt": "73a9c39bd0868675a6ff32160561675412cec83e59e1c419887d78e707e2355c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationMessageIntent.kt": "1258a573a4e30ece7aaa4bc97c0baca779a01c7f396ffc37d967945ea5ab4bbf",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationEditReceiptPolicy.kt": "ef217dd70951e4dc6972f2c73cfe4b220f2dc21ab56931065926a3fa1df9ae92",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationEditTargetPolicy.kt": "9ddfaef3796398e8ec9dd5876c8ca4783a744a0c468ff86acdac3be84ef32f6d",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationForwardPolicy.kt": "2d95aa02b0ca23465272aeecfd76849b59bbd7f1e21141689190b969aabb91a4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationMessageCompletionPolicy.kt": "a4e41e17946a52890aacd12278de3071776c99ee015e2d6cfbea1dd3cba964dd",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationMessagePolicy.kt": "eb0f23e512c2294596d6e71f6c76e04dfc727ac2fa7a1939dd496d68773d2c57",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationOriginalReceipt.kt": "0fd420ce19714b819d50f2ef423e10d191ed1c2c0765c3d3cccfc80f7c41d20d",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationReceiptPolicy.kt": "f589c38dc93d82398a879efedd7bb75978d583675535d576f42d0669fee5d636",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationMessageQueueLease.kt": "6063aec4c2947f7e7c3d8cbe3fbcb7b49519d6cfd8871b99f66e4de4e8dc4798",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationEdit.kt": "8a466e75dc4d1c60682295b24fca4ada2dafd8978d88570e7a6036a38466f07e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationText.kt": "634c949929647830108587efb606e713cf097d5adcbdd2e12b10d8a0387371b1",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RecoverCollaborationMessageReceipts.kt": "84187cc47c969cb8b872e90a9af7a956af44455564306b6d1e8de9ebcba144e4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RetireCollaborationMessages.kt": "5978e6a9a0b1b604638fb5ac227192a866ff9db499b9b5b191c791f9ecc79dc9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/StageCollaborationText.kt": "60119ba9274a7963d74e20cdc5a51169167f111752321e7641398ee547bd1364",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDeliveryFixture.kt": "3d12484a110b2e6f685d06ef09c35a875bfc9c880d6cfd97d34e740dc38cbce4",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationEditReceiptFlowTest.kt": "d0119dfebf1d4b61358ba703561b90897cc08bf89536eb0a48cc227c2958e8e0",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRetirementFixture.kt": "6348e588e939c8d2eca2667924e8509fae9965fdd1cebe852152a6d3f17df58a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/OriginalOnlyEditRepositories.kt": "ed6a696608766ba835608f9cc8e4728b188447dbfcc507bdd694d2da2c27b9ba",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/OriginalReceiptFixture.kt": "0a6de7b79f00f73bafbd2fb12cd7278e5da1d564ea0c2feb6f69109612c553b9",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/QueueCollaborationEditTest.kt": "987bb32976c0435d1e2c0f869ef93bf5520307c77091e9691041ae8214f15517",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationTextTest.kt": "c3832a1a62dc115c6c1f661f57913e9131813e24f79f5d9e0759b89dd792a20c",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "52eab21345a7f01b5db62d1174c4250cbe944c8e55321595ec0633e87e0fc58b"
+  },
+  "checks": {
+    "outbox1": {
+      "startedAt": "2026-11-06T00:10:43.277046+00:00",
+      "elapsedSeconds": 232.35,
+      "exitCode": -15,
+      "sourceFiles": 4177,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 124,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "relevantSuites": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationOutgoingEditContentTest.xml": {
+          "sha256": "42f5f0d0e538122d1991954733808d42e652ca310d62e84cd2605787e98684a8",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationMessageStorageTest.xml": {
+          "sha256": "544cab75d7aac3e13a70a7c30f46324973b44540d403ee433be200f7194a7402",
+          "tests": 20,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.QueueCollaborationEditTest.xml": {
+          "sha256": "4902756baad6f9542631eb6d25a8c4aacf2c7e0019e419b6b6c0abced85cbfe9",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationEditReceiptFlowTest.xml": {
+          "sha256": "812ebb552098bd4d7d3b85f0c6dd092cee35d8500d3a664c5eda261b406b73db",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stoppedReason": "Known compile errors in SDK nullable fixture signature and presentation lease fixture; stop before changing sources"
+    },
+    "outbox2": {
+      "startedAt": "2026-11-06T00:15:29.432550+00:00",
+      "elapsedSeconds": 97.568,
+      "exitCode": -15,
+      "sourceFiles": 4177,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 23,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "relevantSuites": {
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationEditQueueSourceTest.xml": {
+          "sha256": "988e5a78814338a5f9adf25d64ed62978132af7f9d03b528b5b598247965233a",
+          "tests": 2,
+          "failures": 2,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "stoppedReason": "New test missing import; two Android queue source test failures require inspection"
+    },
+    "outbox3": {
+      "startedAt": "2026-11-06T00:17:35.542018+00:00",
+      "elapsedSeconds": 133.278,
+      "exitCode": 1,
+      "sourceFiles": 4177,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 151,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "relevantSuites": {
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationEditQueueSourceTest.xml": {
+          "sha256": "429869e9dc246ee0b7910db31bffc0a146f57e8c5dde12b616ff64b0d9941415",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.QueueCollaborationEditTest.xml": {
+          "sha256": "e092ee58e54d17b0414b6cce83e7e510d1fc307a8a49f0611447987d0e38f43b",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationEditReceiptFlowTest.xml": {
+          "sha256": "355609ae064c2753978f19a643857888d89b98a90ac9a59c61e3194e60b645eb",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "outbox-full1": {
+      "startedAt": "2026-11-06T00:20:10.054509+00:00",
+      "elapsedSeconds": 232.745,
+      "exitCode": -15,
+      "sourceFiles": 4177,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "relevantSuites": {},
+      "stoppedReason": "Static checks found QueueEdit method still over 100 lines and stale .work/*.kt drafts picked up by formatter; stop before editing"
+    },
+    "outbox-full2": {
+      "startedAt": "2026-11-06T00:25:18.724476+00:00",
+      "elapsedSeconds": 719.112,
+      "exitCode": 0,
+      "sourceFiles": 4177,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5065,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "relevantSuites": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationMessageStorageTest.xml": {
+          "sha256": "b40b5f31063e7af7ba07699dce66cce7751aec0fd875e12666bf0da3b70b0429",
+          "tests": 20,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationOutgoingEditContentTest.xml": {
+          "sha256": "0b5801411debfc320299afc68b5d226b492a4dfb8ad18dcd5be8f98796b0e6b1",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationOutgoingEditContentTest.xml": {
+          "sha256": "b18b5aa7afaa1d2a35b2de70bec5542afb8a0267922f06c4c00975c268b7cd14",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationMessageStorageTest.xml": {
+          "sha256": "83331b5c8ebd1e7fe04e0184cfcbfe0d15fa4981a99482ab7a77bf45b89738bb",
+          "tests": 20,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationEditQueueSourceTest.xml": {
+          "sha256": "782d7c8916ce81a18f4281febd33d8b0a99c9319a09bb074fdfd907a61c90813",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationOutgoingEditContentTest.xml": {
+          "sha256": "5993c0885fb4cd3980da5ae48d680173ef183cd81b15c146de1ec9f8c80789c7",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationEditReceiptFlowTest.xml": {
+          "sha256": "d6566fb4810b91d52dc125aeac8ff4398e8cf8b93639fd9a3b7d26eebe7b1ccf",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.QueueCollaborationEditTest.xml": {
+          "sha256": "93a97aa5ae7cdb5b729f70a49b4b39b94d82eba1b739acfe9a7c71613948e3c6",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationEditReceiptFlowTest.xml": {
+          "sha256": "87469c6e29d14a7ca2af7f1c228d002d6239fbd9c6fe4cd4be72b8933acf3782",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.QueueCollaborationEditTest.xml": {
+          "sha256": "8b30125f84f6b7f085b2ea7aeaa2156fa4b82e8d8719d5ef173f4ca1fbc6b5d8",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "outbox-static1": {
+      "exitCode": 0,
+      "elapsedSeconds": 49.504,
+      "sourcesUnchanged": true
+    }
+  },
+  "androidLint": {
+    "errors": 0,
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "limitations": [
+    "No authoring UI, pending/failed-edit bubble projection or native encrypted edit exchange accepted.",
+    "Worst-case serialized JSON stays within the regression budget; actual native encrypted envelope still needs measurement.",
+    "Complete cold revision acquisition requires raw metadata absent from the pinned SDK point-read API.",
+    "UI acknowledgement must bind expected access and exact reviewed failed edit IDs before exposure.",
+    "Physical phone remains release 40; no new installation or phone UI interaction."
+  ]
+}

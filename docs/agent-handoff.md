@@ -1,5 +1,54 @@
 # Agent continuation — HRIS Mobile
 
+## Edit outbox accepted locally; continue projection and editor — 6 November 2026
+
+Thirty-six Kotlin changes add immutable local edit commands, exact typed SDK
+replacement content, encrypted codec/restart support and separate edit receipt
+recovery/retirement. [Contract](collaboration-edit-outbox.md),
+[evidence](measurements/collaboration-edit-outbox-2026-11-06.json).
+Final outbox-full2 PASS5,065 fresh/719.112s, no failures/errors/skips, Android lint0;
+4,177 source inputs unchanged. Static1 PASS49.504s; driver82756 drained.
+Earlier attempts: outbox1 stopped for fixture signatures; outbox2 stopped for a
+missing test import and fake close/destroy expectations; outbox3's151 fresh tests
+passed but static/format checks failed. Full1 was stopped after those static
+failures. Queue creation ordering is now a separate helper; all28 already-applied
+.work drafts were renamed .kt.draft with hashes preserved so they cannot enter
+source-tree static analysis. Do not reapply them. Both protected stashes remain.
+Commit/push this increment, then continue the all54 PRD groups; no group closure.
+
+NEXT: integrate the11 UNAPPLIED *.kt.draft files in .work/chat-editing-review-
+2026-11-05 after reviewing edit-projection-integration.md. They cover local edit
+outcomes, same-original pending/failure projection, editor controller/state/events,
+composer and seven projection tests. Product UI is NOT wired and those drafts
+are NOT compiled. Add authenticated history revision invalidation, exact expected-
+access/reviewed-ID acknowledgement, use-case DI/VM/selection/localization wiring,
+real SQLite/IndexedDB outcome invalidation, controller/VM and layout tests. Retain
+ordinary drafts, original keys/timestamps/read identity and all unseen failures.
+Never let an older unresolved edit override a newer observed/retired local edit.
+Require the authenticated history room before any pending text overlay.
+
+Complete raw cold revisions/native ciphertext budget and encrypted edit exchange
+remain open. The pinned SDK still drops custom metadata on cold point reads.
+No edit APK, native publication, Apple acceptance for this increment or phone
+installation yet. Phone40 remains installed; retained Rani/Bima emulators stopped
+with data/keys intact. Starter bce2012 is complete. Never repeat Forward sends.
+
+PlatformCI42134116564 exacta678 passed all8 backend and4 dashboard shards but FAILED
+recovery-integration: backup writer retains combined postgres:tag@digest while
+load_backup allowed only tag OR digest. Two Python WIP files now accept the exact
+combined18.x-alpine digest spelling without normalizing it;46 recovery unit tests
+passed, malformed/unrelated images remain rejected before Docker. A detached
+.worktrees/recovery-image-manifest fixture contains that two-file patch and GitHub-
+digest-verified exacta678 API/worker JARs. Its isolated recovery1 is RUNNING and
+owns the only heavy local slot; no Mobile build until it drains. Artifacts are
+for this fixture only, not release acceptance. API98,700,805B SHA45dfbc10…;
+worker78,770,874B SHA7b5968be…. Main build/libs and all live data are untouched.
+Prepared rollout scripts now point to a678/42134116564 but remain UNEXECUTED and
+must NOT run against failed CI. Live54b/schema116.1 and flags stay unchanged.
+For this gh version only gh api supports --allow-escape-sequences; gh run view
+rejects that option. Captured recovery job log confirms the manifest validation
+failure. Remaining dashboard integration and local recovery still need auditing.
+
 ## Owned edit target accepted; outbox integration next — 6 November 2026
 
 Eleven Kotlin files add immutable room/original/context-bound edit candidates and

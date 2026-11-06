@@ -45,6 +45,8 @@ internal class CollaborationRetirementFixture {
             base.server,
             base.build,
             base.clock,
+            OriginalOnlyEditEvidence,
+            OriginalOnlyEditTargets,
         )
 
     suspend fun prepare(count: Int = 1) {

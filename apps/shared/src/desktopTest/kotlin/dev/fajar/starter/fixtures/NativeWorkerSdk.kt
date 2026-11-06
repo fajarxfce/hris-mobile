@@ -388,6 +388,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
                     text: String,
                     replyToEventId: String?,
                     forwarded: Boolean,
+                    editTarget: CollaborationEditTarget?,
                 ) =
                     AppResult.Success(
                         CollaborationMessageOrigin(
@@ -408,7 +409,9 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
                     origin: CollaborationMessageOrigin,
                     replyToEventId: String?,
                     forwarded: Boolean,
+                    editTarget: CollaborationEditTarget?,
                 ): AppResult<Unit> {
+                    check(editTarget == null) { "Original-only worker fixture" }
                     enqueued += logicalId
                     enqueuedReplies[logicalId] = replyToEventId
                     val transaction = "tx-$logicalId"

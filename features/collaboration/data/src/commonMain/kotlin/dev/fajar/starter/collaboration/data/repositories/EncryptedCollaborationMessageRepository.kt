@@ -69,7 +69,8 @@ class EncryptedCollaborationMessageRepository(
             record.intent.conversationId == intent.conversationId &&
             record.intent.text == intent.text &&
             record.intent.replyToEventId == intent.replyToEventId &&
-            record.intent.forwarded == intent.forwarded
+            record.intent.forwarded == intent.forwarded &&
+            record.intent.editTarget == intent.editTarget
 
     override fun observe(
         access: CollaborationLocalAccess,
@@ -327,6 +328,7 @@ class EncryptedCollaborationMessageRepository(
         val detached = state.toDto()
         val previousState = expected.state.toDto().toState()
         require(collaborationMessageTransition(previousState, detached.toState()))
+        require(validCollaborationEditRecord(expected.copy(state = detached.toState())))
         require(expected.revision in 0 until 9_007_199_254_740_991L)
         val scope = messageScope(access)
         val partition = messagePartition(access)

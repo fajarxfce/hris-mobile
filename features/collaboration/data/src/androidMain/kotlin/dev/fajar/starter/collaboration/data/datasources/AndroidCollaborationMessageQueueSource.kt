@@ -1,16 +1,22 @@
 package dev.fajar.starter.collaboration.data.datasources
 
-import dev.fajar.starter.collaboration.data.messages.collaborationTextContent
+import dev.fajar.starter.collaboration.data.messages.collaborationOutgoingContent
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationTransactionId
 import dev.fajar.starter.observability.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlinx.serialization.json.jsonPrimitive
 import org.matrix.rustcomponents.sdk.*
 
 /** Raw paused SDK operations. The runtime owns exclusivity and every in-flight operation. */
-internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: suspend () -> Room) {
+internal class AndroidCollaborationMessageQueueSource(
+    private val createTextContent: (String) -> RoomMessageEventContentWithoutRelation = {
+        messageEventContentNew(MessageType.Text(TextMessageContent(it, null)))
+    },
+    private val acquireRoom: suspend () -> Room,
+) {
     private var room: Room? = null
     private var timeline: Timeline? = null
     private var retries: AndroidCollaborationQueueRetries? = null
@@ -85,16 +91,15 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
         text: String,
         replyToEventId: String?,
         forwarded: Boolean = false,
+        editTarget: CollaborationEditTarget? = null,
     ) {
         check(listener == null && !stopping)
         check(!requireNotNull(room).isSendQueueEnabled())
-        messageEventContentNew(MessageType.Text(TextMessageContent(text, null))).use { content ->
-            requireNotNull(timeline)
-                .sendWithExtraContent(
-                    content,
-                    collaborationTextContent(logicalId, text, replyToEventId, forwarded).toString(),
-                )
-                .close()
+        val json =
+            collaborationOutgoingContent(logicalId, text, replyToEventId, forwarded, editTarget)
+        val wireBody = requireNotNull(json["body"]).jsonPrimitive.content
+        createTextContent(wireBody).use { content ->
+            requireNotNull(timeline).sendWithExtraContent(content, json.toString()).close()
         }
     }
 

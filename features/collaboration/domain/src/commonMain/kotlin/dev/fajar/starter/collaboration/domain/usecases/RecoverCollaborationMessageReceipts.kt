@@ -28,6 +28,7 @@ class RecoverCollaborationMessageReceipts(
     private val build: AppBuild,
     private val clock: Clock,
     private val completions: CollaborationMessageCompletionRepository,
+    private val edits: CollaborationEditEvidenceRepository,
 ) {
     private val execution = Mutex()
 
@@ -105,6 +106,32 @@ class RecoverCollaborationMessageReceipts(
             if (record.intent.id in known) continue
             val state = record.state as? CollaborationMessageState.Staged ?: continue
             val origin = state.origin ?: continue
+            if (record.intent.editTarget != null) {
+                val observed =
+                    checked(scope, access) {
+                        when (
+                            val result =
+                                edits.getEditOperationEvidence(
+                                    access,
+                                    conversationId,
+                                    state.device.roomId,
+                                    origin.sender,
+                                    record.intent.id,
+                                )
+                        ) {
+                            is AppResult.Failed -> result
+                            is AppResult.Success ->
+                                if (result.value.size > 128) failed()
+                                else AppResult.Success(result.value.toList())
+                        }
+                    }
+                if (observed is AppResult.Failed) return observed
+                val evidence = (observed as AppResult.Success).value.toList()
+                if (evidence.isEmpty()) continue
+                batch += recoverCollaborationEditReceipt(record, evidence) ?: return failed()
+                if (batch.size == 32) break
+                continue
+            }
             val read =
                 checked(scope, access) {
                     when (

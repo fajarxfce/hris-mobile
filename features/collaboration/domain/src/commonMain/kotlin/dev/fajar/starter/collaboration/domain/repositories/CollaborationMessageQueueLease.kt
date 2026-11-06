@@ -19,6 +19,7 @@ interface CollaborationMessageQueueLease {
         text: String,
         replyToEventId: String? = null,
         forwarded: Boolean = false,
+        editTarget: CollaborationEditTarget? = null,
     ): AppResult<CollaborationMessageOrigin>
 
     /** The caller durably records Staging first; cancellation can leave this enqueue committed. */
@@ -28,6 +29,7 @@ interface CollaborationMessageQueueLease {
         origin: CollaborationMessageOrigin,
         replyToEventId: String? = null,
         forwarded: Boolean = false,
+        editTarget: CollaborationEditTarget? = null,
     ): AppResult<Unit>
 
     /**

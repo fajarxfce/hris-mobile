@@ -315,6 +315,11 @@ internal class HrisProductQueueProof(
                 app.build,
                 app.clock,
                 messages,
+                EncryptedCollaborationHistoryRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                ),
             )
         check(success(recovery(app.workspaceId, conversationId)) == 1)
         check(success(recovery(app.workspaceId, conversationId)) == 0)

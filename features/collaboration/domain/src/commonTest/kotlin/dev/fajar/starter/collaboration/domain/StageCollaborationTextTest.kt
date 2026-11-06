@@ -569,6 +569,7 @@ internal class StageFixture {
                             text: String,
                             replyToEventId: String?,
                             forwarded: Boolean,
+                            editTarget: CollaborationEditTarget?,
                         ): AppResult<CollaborationMessageOrigin> {
                             assertEquals(record.intent.id, logicalId)
                             assertEquals(record.intent.text, text)
@@ -585,6 +586,7 @@ internal class StageFixture {
                             origin: CollaborationMessageOrigin,
                             replyToEventId: String?,
                             forwarded: Boolean,
+                            editTarget: CollaborationEditTarget?,
                         ): AppResult<Unit> {
                             assertEquals(
                                 origin,

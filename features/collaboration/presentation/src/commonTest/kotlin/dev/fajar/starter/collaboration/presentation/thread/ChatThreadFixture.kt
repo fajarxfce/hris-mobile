@@ -529,6 +529,7 @@ internal class ChatThreadFixture {
                             text: String,
                             replyToEventId: String?,
                             forwarded: Boolean,
+                            editTarget: CollaborationEditTarget?,
                         ) =
                             AppResult.Success(
                                 CollaborationMessageOrigin(self.matrixUserId, "a".repeat(64))
@@ -540,7 +541,9 @@ internal class ChatThreadFixture {
                             origin: CollaborationMessageOrigin,
                             replyToEventId: String?,
                             forwarded: Boolean,
+                            editTarget: CollaborationEditTarget?,
                         ): AppResult<Unit> {
+                            check(editTarget == null) { "Original-only delivery fixture" }
                             transactions[logicalId] = "tx-$logicalId"
                             return AppResult.Success(Unit)
                         }

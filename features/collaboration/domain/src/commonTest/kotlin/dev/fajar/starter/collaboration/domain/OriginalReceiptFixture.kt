@@ -103,6 +103,7 @@ internal class OriginalReceiptFixture {
             base.build,
             base.clock,
             delivery.completions,
+            OriginalOnlyEditEvidence,
         )
 
     suspend fun recover(

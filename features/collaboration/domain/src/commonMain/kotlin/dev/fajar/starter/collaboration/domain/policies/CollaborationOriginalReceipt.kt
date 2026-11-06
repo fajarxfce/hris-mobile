@@ -10,7 +10,8 @@ fun recoverCollaborationOriginalReceipt(
     val state = record.state as? CollaborationMessageState.Staged ?: return null
     val origin = state.origin ?: return null
     if (
-        !validCollaborationMessageState(state) ||
+        record.intent.editTarget != null ||
+            !validCollaborationMessageState(state) ||
             !validCollaborationHistoryMessage(original) ||
             original.sender != origin.sender ||
             original.logicalId != record.intent.id ||

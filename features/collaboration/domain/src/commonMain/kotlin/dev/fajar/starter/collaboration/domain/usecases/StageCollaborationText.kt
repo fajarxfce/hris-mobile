@@ -76,6 +76,13 @@ class StageCollaborationText(
             val room = admitRoom(scope, owner, deviceId, record.intent.conversationId)
             if (room is AppResult.Failed) return@withLock room
             val roomId = (room as AppResult.Success).value
+            if (record.intent.editTarget?.roomId?.let { it != roomId } == true)
+                return@withLock failed(
+                    "client.collaboration_conversation_mismatch",
+                    FailureKind.AccessDenied,
+                )
+            if (!validCollaborationEditRecord(record))
+                return@withLock failed("client.collaboration_invalid_message")
             var queue: CollaborationMessageQueueLease? = null
             try {
                 // Capture the resource before rechecking admission, so a late owner cannot orphan
@@ -200,6 +207,7 @@ class StageCollaborationText(
                                 origin,
                                 pending.intent.replyToEventId,
                                 pending.intent.forwarded,
+                                pending.intent.editTarget,
                             )
                         }
                     if (sent is AppResult.Failed) return sent
@@ -247,6 +255,7 @@ class StageCollaborationText(
                             original.intent.text,
                             original.intent.replyToEventId,
                             original.intent.forwarded,
+                            original.intent.editTarget,
                         )
                     }
                 if (prepared is AppResult.Failed) return prepared

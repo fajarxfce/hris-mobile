@@ -19,7 +19,11 @@ fun collaborationReceiptState(
     record: CollaborationMessageRecord,
     receipt: CollaborationMessageReceipt,
 ): CollaborationMessageState.Sent? {
-    if (record.intent != receipt.intent || !validCollaborationMessageState(record.state))
+    if (
+        record.intent != receipt.intent ||
+            !validCollaborationMessageState(record.state) ||
+            !validCollaborationEditRecord(record)
+    )
         return null
     if (
         receipt.eventIds.size !in 1..128 ||

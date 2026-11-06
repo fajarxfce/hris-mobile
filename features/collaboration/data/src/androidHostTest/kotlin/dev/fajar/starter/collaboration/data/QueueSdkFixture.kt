@@ -66,6 +66,22 @@ internal class QueueTimeline(private val calls: MutableList<String>) : Timeline(
     val retried = mutableListOf<String>()
     var listener: TimelineListener? = null
     var finished = true
+    var sentJson: String? = null
+    var beforeEnqueue: suspend () -> Unit = {}
+
+    override suspend fun sendWithExtraContent(
+        msg: RoomMessageEventContentWithoutRelation,
+        extraContentJson: String?,
+    ): SendHandle {
+        calls += "send.enqueue"
+        sentJson = extraContentJson
+        beforeEnqueue()
+        return object : SendHandle(NoHandle) {
+            override fun close() {
+                calls += "send.close"
+            }
+        }
+    }
 
     override suspend fun addListener(listener: TimelineListener): TaskHandle {
         calls += "retry.listener.open"
