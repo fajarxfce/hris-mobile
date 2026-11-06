@@ -28,19 +28,36 @@ source/verification changes or skipped assertions. No emulator/heavy job active.
 [Contract](collaboration-chat-send-feedback.md) and
 [evidence](measurements/collaboration-chat-send-feedback-2026-11-06.json).
 
-Next commit/push this repair, then build43 from the accepted sources with
-.work/release-phone-2026-11-06-build43/build-arm64.py (bound to full2), verify,
-start the original retained-data Bima emulator and run install-owned-sample.py,
-probe.py, inspect both screenshots and record release acceptance. Stop only the
-owned emulator. Phone still42; ADB disconnected08:52UTC and bounded reconnect
-attempt timed out. Async availability question is pending. Do not infer app process
-state from an empty pidof response. Announce EACH install and use --install-only;
-never launch/drive phone UI. Phone availability does not block SDK work.
-Long pending is not claimed fixed: old logs only identify Flush/QueueUnresolved.
-The contract records the missing retained-native-queue fixture case and why blindly
-aborting an SDK send can redact a delivered event. Private reproduction patch is
-prepared but not applied/executed. Server sample13 encrypted sends all200,36ms
-median/55ms maximum server processing; no end-to-end latency conclusion.
+Repair46bec39aa599f78f38f8fb639f59b3de080bdf68 is pushed. Release43 from that
+exact source built93.373s/lint0; nondebuggable devRelease/arm64, existing signer,
+private API/Firebase/backup exclusions verified. APK88,584,188 bytes, SHA
+639a5454496813a9ad4fa70294a4fbb5364df8473658468662a199167fd970bf.
+The original retained-data Bima emulator passed offline/online first and repeated
+entry:9/9 cached rows, then9/11 online rows with incoming catch-up. No recovery,
+Older or reconnect prompt. All THREE screenshots inspected at original size;
+quoted content, bubble/timestamp/composer layout accepted. No new messages were
+sent, no outgoing-latency claim. Settings restored; owned emulator350599 /
+startTicks163234107 stopped09:04:32UTC with all original data/keys retained.
+[Release evidence](measurements/collaboration-release43-2026-11-06.json).
+
+PHONE STILL42: ADB disconnected08:52UTC and bounded reconnect attempts timed out,
+last checked09:01:24UTC. Async availability question is pending. Do not infer app
+process state from an empty pidof. Exact43 APK is accepted and ready in
+.work/release-phone-2026-11-06-build43. When connected, run preflight.py, announce
+EACH install, then install.py --install-only; never launch/drive phone UI. Do not
+rebuild or repeat emulator acceptance merely because the phone is unavailable.
+No local heavy job/emulator is active at this checkpoint.
+
+Next investigate long pending while phone availability is pending. The prepared
+.work/chat-send-feedback-2026-11-06/retained-queue-repro.patch adds a fake SDK
+lost-response case that retains its native transaction. It is NOT applied/run.
+Run a focused regression after applying only those owned test changes; preserve
+its patch/evidence and restore baseline tests if still a diagnostic-only failure.
+Old phone logs identify only Flush/QueueUnresolved;43 distinguishes Stage/Deliver.
+The contract explains why blind native abort can redact an accepted event. Server
+sample13 encrypted sends all200,36ms median/55ms maximum server processing;
+no end-to-end latency conclusion. New46bec39a CI Native42191546121 running and
+Control42191546066 pending; do not dispatch duplicates.
 
 SDK x86_64 driver95397 is FINISHED and drained:901.084s,142,673,032 bytes,
 SHA0f9d908ef616c650949fedd51c97c0ce5e5c2d98810606731bc811634acf3cab.
