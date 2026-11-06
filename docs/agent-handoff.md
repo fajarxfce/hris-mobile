@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-## Current: SDK3 published; workspace-expiry fix ready for full gate — 6 November 2026
+## Current: SDK3 and workspace-expiry full gate accepted; release50 next — 6 November 2026
 
 Phone remains **release 48**, installed15:07UTC, data/keys retained. App was not
 running16:31:20UTC. One optional Bima-open question is pending. The user said47 was
@@ -17,7 +17,9 @@ and old expired gates remain until actual admitted acquisition. Tests cover cold
 entry, timer/token rotation, local row continuity and failed cleanup.
 [Regression evidence](measurements/collaboration-workspace-expiry-2026-11-06.json):
 red34cases/3intendedfailures59.915s, green34/0failures28.328s,4216stableinputs each.
-No Starter port: its template has no HRIS workspace/company policy module.
+Full96089 PASSED1055.864s:7086fresh tests/911suites,0failures/errors/skips,
+4216unchanged inputs, devDebug lint0, strict normal publicSDK3 and no dependency
+override. No Starter port: template has no HRIS workspace/company policy module.
 
 SDK3 **release436740986** published once16:37:18UTC, target411b323c; all six existing
 asset digests and the public descriptor verify. First draft tag lookup404 and stale
@@ -48,13 +50,24 @@ sample. Screenshots inspected. [All candidate evidence](measurements/collaborati
 Original Bima emulator3291263/startTicks165852469 stopped16:29:25UTC; data/keys remain
 at .work/demo-chat-device-2026-11-05/bima/userdata.img, now49.
 
-NEXT: run .work/chat-workspace-expiry-2026-11-06/check-full.py full-1 with normalSDK3
-(no candidate override). Source must stay unchanged. Then commit/push gate evidence,
-build normal devRelease50, verify exact SDK/signer/API/backup/ABI, and smoke retained
-Bima data with stale company authority before the next install-only phone update.
-No build50 exists yet. All emulators stopped; no heavy local job currently active.
-Keep candidate/failed smoke evidence; do not replay accepted Forward sends or live
-rollout. User's phone pending remains open until its real diagnostics support a fix.
+NEXT: build normal release50 with .work/release-phone-2026-11-06-build50/build-arm64.py
+from this pushed checkpoint. Full gate already accepted; do not repeat it. Prepared
+verify-arm64.py/verify-sdk.py check exact SDK, signer, API, backup and ABI. Bima start/
+install/probe/stop scripts retain the original store. Probe simulates65minutes of age
+ONLY in the offline owned guest, then restores guest clock/auto_time/network/ADB
+privilege; its screenshot is retained before failure cleanup. This probe has not run.
+All emulators stopped and no heavy local job active. No build50 APK exists yet.
+Notify before any phone installation, then preflight.py and install.py --install-only
+after exact APK acceptance. Never replay accepted Forward sends, publication or rollout.
+
+Phone UID logs at16:46:56UTC contain no new chat diagnostic since48 installation;
+retained crash entries are only from1November. No new runtime/phone acceptance follows
+from absent logs. App remained stopped16:46:10UTC. The existing question stays pending.
+First exactf04c CI: protocol42254474390, native42254474298, control42254474193; all
+were still in progress16:55UTC. Audit actual artifacts and steps after completion;
+do not redispatch. Group backend location and pending recovery are recorded in
+Platform8bad394e. A read-only merge preview reports seven conflicts (four docs,
+CollaborationConfiguration.kt, recovery_set.py and its test); no merge was performed.
 
 Exactcf28 CI portable4299/463 and Apple1671/182+iOS host passed. Its native CI failed
 both ABIs; that original run remains failed. Corrected Platform fixture was locally

@@ -1,6 +1,6 @@
 {
   "date": "2026-11-06",
-  "status": "sdk3_published_normal_dependency_selected_full_application_gate_pending",
+  "status": "sdk3_published_normal_application_full_gate_passed",
   "phoneVersion": 48,
   "phonePending": "Open; one optional request to open Bima after update is pending.",
   "sourceBase": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
@@ -49,8 +49,8 @@
     "Real authentication/access denials stay classified as denials; no token reset, ownership relaxation or original-send replacement."
   ],
   "remaining": [
-    "Complete normal SDK3 full application and CI gates with the workspace-expiry fix.",
-    "Build and smoke the next normal release with retained stale-authority data before phone installation.",
+    "Build and smoke normal release50 with retained stale-authority data before phone installation.",
+    "Audit first exact-source f04c0864 CI artifacts when complete.",
     "Inspect original phone pending-message diagnostics when its app opens."
   ],
   "httpIntegration": {
@@ -508,5 +508,6 @@
     "url": "https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.3",
     "publicDescriptorVerified": true,
     "descriptorUrlRefreshedAfterPublication": true
-  }
+  },
+  "normalApplicationFullGate": "collaboration-workspace-expiry-2026-11-06.json"
 }

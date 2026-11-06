@@ -246,5 +246,14 @@
     "dataRetained": true,
     "phoneTouched": false,
     "at": "2026-11-06T15:06:58.974505+00:00"
+  },
+  "retainedPhoneLogAudit": {
+    "at": "2026-11-06T16:46:56.995898+00:00",
+    "newChatDiagnosticsSinceInstall": 0,
+    "currentAppRunning": false,
+    "crashesSinceInstall": 0,
+    "olderCrashDate": "2026-11-01",
+    "limitation": "No new process or message-delivery observation; absence of retained logs is not phone acceptance.",
+    "phoneUiDriven": false
   }
 }
