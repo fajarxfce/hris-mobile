@@ -1,5 +1,44 @@
 # Agent continuation — HRIS Mobile
 
+## Current: release 48 candidate; emulator auth investigation — 6 November 2026
+
+Phone **10.77.77.3:5555 remains release 47**, with the latest user response
+**still pending for a long time**. Do not ask that same question again. Source
+**cf28a7c4dac0a523df6d47fa82e115be340ea1e5** is pushed; its 7,081-case gate passed.
+Release 48 build 38509 passed in 122.575s, lint zero, normal public SDK 2.
+APK SHA **444ade26ccb411aeda91b7579fbfd6b5abb194c85b3a55491c9e61d4e5a5aa38**,
+121,090,044 bytes, same signer, nondebuggable. New closed queue mapping categories
+are present in the actual DEX. **48 is not accepted or installed on the phone.**
+[Candidate and failed smoke evidence](measurements/collaboration-release48-2026-11-06.json).
+
+The first same-store emulator smoke passed four room openings (12/12 offline,
+12/11 online) but failed its final auth check: ChatAuthSoftLogout and
+ChatSync_GenericRefreshToken at 14:50:51 UTC. Another callback appeared at
+14:56:10. Read-only server metadata confirms the fictional device/native parent
+remain active, and ordinary refreshes to gateway versions 63/64 followed those
+callbacks by less than one second. This does not establish the response cause.
+Opening Reconnect displayed ready without a new bootstrap; a subsequent cold
+same-store room entry had no chat diagnostics. Preserve the failed first attempt,
+now archived in .work/release-phone-2026-11-06-build48/smoke-attempt-1.
+
+A second exact-APK offline/online probe 97963 is RUNNING; bridge-only closed HTTP
+capture 18017 accompanies it. Original Bima emulator **2686582/startTicks165319908**,
+**emulator-5562**, is active. Do not wipe/reseed it or start a heavy build. Data/keys
+remain .work/demo-chat-device-2026-11-05/bima/userdata.img. No new messages sent,
+no phone UI touched. Capture only emits fixed route/status/error classifications;
+private historical app logs stay outside Git. Follow the prepared scripts in
+.work/release-phone-2026-11-06-build48; every phone install needs advance notice,
+explicit serial, --install-only and actual exact-APK acceptance. Do not override
+an auth failure or claim sending fixed merely because peer messages are visible.
+
+Automatic CI now runs source cf28a7c4: native **42236786643**, control **42236786667**.
+Source 074087d7 control42231135714 succeeded; native42231135711 was cancelled while
+pending. Earlier be86d478 native42228820195 succeeded. Artifacts for these newer
+runs are not yet audited. Exact source00a51e14 CI remains fully accepted below.
+Platform live10485916/schema116.1 and Starter578d97a remain unchanged. All 54 PRD
+groups remain in scope; no accepted send, live rollout or SDK publication may replay.
+
+
 ## Current: release 47 installed; progressive receipt recovery next — 6 November 2026
 
 Release 47 from pushed source **074087d7f78fa721a1cbcc6a4dd3e99a6ff06ce9** is installed
