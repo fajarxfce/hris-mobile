@@ -17,12 +17,18 @@ accepted SDK 2 fixture after NDK 28.2 stripping. Retained Bima-store acceptance
 passed two offline and two online openings with visible messages, no interrupted-save,
 older-history or reconnect prompts, and the same process alive after 30s online.
 Both original screenshots were inspected. No new messages were sent by this smoke;
-physical-phone send latency is not proved by room-entry acceptance. A single optional
-user feedback question about ordered sends and pending state is now outstanding.
+physical-phone send latency is not proved by room-entry acceptance. The user answered the optional
+feedback: ordering is correct, but sending still remains pending for a long time.
+This issue is OPEN. Read-only phone logs show StageMessage timeout then repeated
+DeliverMessages QueueUnresolved, continuing after four provider sends returned200
+at13:35:46–47 UTC. Do not ask that feedback question again or claim send latency fixed.
+[Current investigation](measurements/collaboration-pending-delivery-2026-11-06.json).
 
 Bima emulator 2089464 / startTicks 164786875 stopped at 13:25:39 UTC. Original
 userdata/keys remain under .work/demo-chat-device-2026-11-05/bima, now with 46.
-No emulator/heavy local job is active. Private build, smoke and install evidence is
+No emulator is active. History-domain full gate87727 is the only heavy local job,
+.work/history-completion-domain-2026-11-06/full-1; its source inputs are frozen.
+Private build, smoke and install evidence is
 in .work/release-phone-2026-11-06-build46. Never wipe/reseed the original Bima store.
 Announce EVERY future phone installation, select the serial explicitly, use
 --install-only, and never drive phone UI.
@@ -66,10 +72,19 @@ NEXT: audit automatic 00a51e14 CI (do not manually redispatch): native HRIS
 42224141387 now includes separate x86_64 and ARM64 jobs with APK ABI assertions;
 protocol 42224141654 and control 42224141378 are also running. Preserve precise
 artifact hashes and platform scope. Continue all 54 PRD groups after this release.
-The next code increment has just started: move owned history-end scanning and pure
-completion policy out of ChatThreadHistoryPager into domain. Two new domain files
-are uncommitted; integration and tests are not yet done. Do not report this follow-up
-as accepted. Use cases must coordinate repositories, never other use cases.
+The history-end increment now has eight uncommitted Kotlin files (new domain reader,
+pure completion policy, DI/VM/fixtures and15 common domain regressions). Full gate
+87727 is running; do not mutate those inputs until it finishes. Its contract doc is
+also updated. Use cases coordinate repositories, never other use cases.
+
+PRIORITY after draining that gate: reproduce the delayed-ACK recovery issue.
+CollaborationDeliveryWorker.acquireOriginals currently focuses the first Sent event
+even alongside unconfirmed commands. Check a distant newer ACK and alias-changed
+bootstrap against that old focus before implementing a latest-head recovery policy.
+Also inspect the12s room/15s SDK-window mismatch and receipt publication only at
+window completion. These are hypotheses/code gaps, not a proved phone root cause.
+Closed diagnostics are in .work/chat-pending-phone-2026-11-06-build46; raw app-only
+and provider logs are private. Do not clear data, keys or blindly resend originals.
 
 Starter stays 578d97a; no HRIS queue-policy port belongs there. Platform source stays
 4dc8c9d15cde42160f93096325360a7aeff65204; live remains

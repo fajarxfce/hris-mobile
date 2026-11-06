@@ -180,5 +180,10 @@
     },
     "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
   },
-  "buildTimeCandidateLabels": "Candidate labels in artifact/source describe pre-acceptance build state; release acceptance above is current."
+  "buildTimeCandidateLabels": "Candidate labels in artifact/source describe pre-acceptance build state; release acceptance above is current.",
+  "userFeedback": {
+    "orderedMessages": true,
+    "pendingDelayStillReported": true,
+    "status": "Pending-send issue remains open; room-entry acceptance does not establish send-latency acceptance."
+  }
 }

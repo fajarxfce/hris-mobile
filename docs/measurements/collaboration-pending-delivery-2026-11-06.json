@@ -1,0 +1,136 @@
+{
+  "date": "2026-11-06",
+  "phoneVersionCode": 46,
+  "sourceCommit": "00a51e14d8919a152aae810017528f1947ef37e6",
+  "userFeedback": {
+    "orderedMessages": true,
+    "pendingDelayStillReported": true,
+    "status": "Pending-send issue remains open; room-entry acceptance does not establish send-latency acceptance."
+  },
+  "phoneUiLaunched": false,
+  "diagnostics": [
+    {
+      "area": "Network",
+      "event": "OperationFailed",
+      "category": "ChatSync_Generic",
+      "at": "2026-11-06T13:32:26.207000+00:00"
+    },
+    {
+      "area": "Network",
+      "event": "OperationFailed",
+      "category": "ChatSync_Generic",
+      "at": "2026-11-06T13:33:13.140000+00:00"
+    },
+    {
+      "area": "Worker",
+      "event": "OperationFailed",
+      "category": "ChatRecovery_incoming_Unavailable",
+      "at": "2026-11-06T13:33:47.444000+00:00"
+    },
+    {
+      "area": "Worker",
+      "event": "OperationFailed",
+      "category": "ChatDelivery_StageMessage_Timeout",
+      "at": "2026-11-06T13:33:52.871000+00:00"
+    },
+    {
+      "area": "Worker",
+      "event": "OperationFailed",
+      "category": "ChatRecovery_outgoing_Unavailable",
+      "at": "2026-11-06T13:33:56.112000+00:00"
+    },
+    {
+      "area": "Worker",
+      "event": "OperationFailed",
+      "category": "ChatDelivery_DeliverMessages_QueueUnresolved",
+      "at": "2026-11-06T13:33:56.366000+00:00"
+    },
+    {
+      "area": "Network",
+      "event": "OperationFailed",
+      "category": "ConnectTimeoutException",
+      "at": "2026-11-06T13:34:36.994000+00:00"
+    },
+    {
+      "area": "Network",
+      "event": "OperationFailed",
+      "category": "ChatSync_Generic",
+      "at": "2026-11-06T13:34:53.660000+00:00"
+    }
+  ],
+  "laterFailures": [
+    {
+      "at": "2026-11-06T13:36:33.727000+00:00",
+      "category": "ChatDelivery_DeliverMessages_QueueUnresolved"
+    },
+    {
+      "at": "2026-11-06T13:36:49.606000+00:00",
+      "category": "ChatDelivery_DeliverMessages_QueueUnresolved"
+    },
+    {
+      "at": "2026-11-06T13:37:38.298000+00:00",
+      "category": "ChatDelivery_DeliverMessages_QueueUnresolved"
+    },
+    {
+      "at": "2026-11-06T13:37:38.333000+00:00",
+      "category": "ChatRecovery_outgoing_Conflict"
+    },
+    {
+      "at": "2026-11-06T13:37:57.909000+00:00",
+      "category": "ChatDelivery_DeliverMessages_QueueUnresolved"
+    },
+    {
+      "at": "2026-11-06T13:38:56.773000+00:00",
+      "category": "ChatDelivery_DeliverMessages_QueueUnresolved"
+    }
+  ],
+  "successfulHttpRequests": {
+    "count": 115,
+    "medianMillis": 94,
+    "maxMillis": 8960,
+    "overOneSecond": 23
+  },
+  "subsequentVpnProbe": {
+    "packets": 6,
+    "received": 6,
+    "lossPercent": 0,
+    "minMillis": 22.315,
+    "averageMillis": 63.735,
+    "maxMillis": 172.804
+  },
+  "providerAcceptedEncryptedSends": [
+    {
+      "at": "2026-11-06T13:35:46",
+      "route": "encrypted-message",
+      "processingSeconds": 0.039,
+      "status": 200
+    },
+    {
+      "at": "2026-11-06T13:35:46",
+      "route": "encrypted-message",
+      "processingSeconds": 0.038,
+      "status": 200
+    },
+    {
+      "at": "2026-11-06T13:35:47",
+      "route": "encrypted-message",
+      "processingSeconds": 0.066,
+      "status": 200
+    },
+    {
+      "at": "2026-11-06T13:35:47",
+      "route": "encrypted-message",
+      "processingSeconds": 0.035,
+      "status": 200
+    }
+  ],
+  "scope": "Read-only log and network inspection. No message contents, tokens, device keys or unrelated phone logs retained in Git; provider send requests are not individually mapped to user outbox entries.",
+  "investigation": [
+    "Phone reported StageMessage timeout followed by repeated DeliverMessages QueueUnresolved, including after four provider send responses returned HTTP 200.",
+    "Worker room budget is 12 seconds; the SDK delivery window permits 15 seconds and a flush stages up to eight commands before resuming.",
+    "Delivery mappings reject an absent native transaction after a bootstrap alias change until original-history recovery proves its receipt.",
+    "acquireOriginals chooses the first retained Sent event as a focus even when unconfirmed commands require recent history; reproduce a distant newer ACK before changing recovery policy.",
+    "Per-message acknowledgement is currently returned after the SDK delivery window; inspect progressive persistence and cancellation before claiming latency fixed."
+  ],
+  "resolved": false
+}
