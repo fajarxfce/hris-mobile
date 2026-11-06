@@ -16,7 +16,7 @@ first/repeat offline and online room entry; all THREE screenshots were inspected
 Owned emulator350599/startTicks163234107 stopped09:04:32UTC, original userdata and
 crypto preserved. No outgoing latency claim. [Release evidence](measurements/collaboration-release43-2026-11-06.json).
 
-PHONE STILL42. Last bounded ADB reconnect about10:25UTC timed out18s. One async
+PHONE STILL42. Last bounded ADB reconnect about10:35UTC timed out18s. One async
 availability question is pending; do not ask again. Once reachable, run43's
 preflight.py, announce EVERY installation, then install.py --install-only.
 Never launch/drive phone UI, erase keys or rebuild43 just because HEAD advanced.
@@ -63,42 +63,62 @@ protected. Reproduction passes2 enqueues/2 sends/1 settlement, repeated work doe
 nothing. [Evidence](measurements/collaboration-confirmed-queue-application-2026-11-06.json).
 Previous44-case pass predates this refactor; application-1 failed task naming before tests.
 
-SINCE that pass, TWO Mobile proof files and FOUR Platform test/driver files are WIP.
-The new second HRIS native scenario stages a real paused SDK original, then sends
-its same logical ID/full content through SDK Room.sendRaw, retaining the native row.
-That direct send owns a different HTTP transaction: this constructs the recovery
-postcondition, NOT a literal lost-response simulation. After two actual process
-restarts, offline completion recovery must settle the original and repeat as a no-op,
-with exactly3 encrypted server messages. The existing scenario is preserved; each
-scenario gets a fresh Spring trace/context. Python driver34 tests PASS0.166s (latest0.186s);
-Kotlin/native scenario NOT YET compiled or accepted. No live Platform change.
+The full Android candidate is now ACCEPTED at the native recovery boundary.
+AAR87653 passed89.489s:96,849,072 bytes SHA
+4534e86ed5f15fa036cf5c198cfbf551dbc742ca68d32363e8ba68305ddbb92a,
+exact two JNI identities and all raw/queue API declarations verified. No publication.
+Main has a TEMPORARY local-candidate Gradle verification entry; shipping catalog
+and repository remain unchanged. App source references require this custom SDK.
 
-AAR87653 FINISHED89.489s and verified:96,849,072 bytes SHA
-4534e86ed5f15fa036cf5c198cfbf551dbc742ca68d32363e8ba68305ddbb92a.
-Both exact JNI identities and compiled queue/raw methods/result types are present.
-No external publication. Main has a TEMPORARY local-candidate entry in Gradle
-verification metadata; version catalog/shipping repository is unchanged.
+Consumer60155 passed370.511s/380 fresh Android cases/lint0 errors47 warnings.
+Native attempt1 passed the original scenario but failed second-provider login setup
+before Android. Attempt2 isolated provider containers per scenario and reached the
+retained queue after two restarts, then failed because the offline fixture wrongly
+called runtime.enterTimeline (which joins over the network). Both cleanup paths pass.
+The existing local runtime.openTimeline fixes that fixture; production code is unchanged.
+Consumer44226/build-2 passed80.140s,18 fresh proof cases,362 unchanged data cases
+retain their prior pass. The only source delta is HrisProductQueueProof.kt.
+Final proof APK316,309,385 bytes SHA
+fd265937885b5cada09d95afae9e8bf5eb6e6727c65cf839181a50c612cec914.
 
-Mobile consumer60155 FINISHED370.511s:380 fresh Android cases pass, lint0 errors/
-47 warnings, frozen sources unchanged. Verified315,750,034-byte proof APK SHA
-7d1a231bfecbfed75e490baea517ccb5347a2ee56d8436396b5be552dde3a18b;
-exact paired JNI and compiled queue/proof markers verified.
-[Consumer build evidence](measurements/collaboration-confirmed-queue-android-consumer-2026-11-06.json).
-Platform5500 compilation/format/architecture FINISHED33.464s/8,242 inputs unchanged.
+Native18481/native-3 FINISHED171.206s: BOTH cases pass,12,454 inputs/APK unchanged,
+zero failures/errors/skips. Exact native original survives two process deaths,
+settles offline, and repeats without mutation. Each scenario sends exactly3 encrypted
+messages and requests zero server redactions. Original scenario stays intact. This
+fixture sends identical content through a separate SDK sendRaw transaction while
+retaining the paused original; it proves that postcondition, not literal HTTP loss
+or the phone root cause. Provider/Spring contexts are isolated per scenario.
+Platform compilation/format/architecture passed33.464s then32.279s on final inputs;
+Python driver34 cases pass. [All evidence](measurements/collaboration-confirmed-queue-android-consumer-2026-11-06.json)
+retains the failed setups separately. Owned native-3 emulator1031697 /
+startTicks163846449 stopped10:47:09UTC; native-1 and native-2 are also stopped.
+Original Bima data/keys and phone are untouched. No emulator is active.
 
-ONLY active heavy job: Platform64042, .work/sdk-confirmed-queue-2026-11-06/native-1,
-running BOTH NativeCollaborationSdkInteropTest scenarios against the exact APK.
-Both repositories' program/test/Gradle/tool inputs are FROZEN. The original scenario
-has already produced passed=true/cleanup=true; retained-queue scenario is still
-running. No final two-case acceptance yet. Owned fresh-data emulator-5560 PID928902,
-startTicks163756454, native-1/userdata.img, boot41.071s. Stop with Mobile's
-native-1/stop-emulator.py after the proof and BEFORE any later heavy build.
-NEXT: drain/audit both strict native results; preserve failures if any. Then finish
-remaining SDK ABIs/distribution and full/minified product acceptance. SDK source
-may only be built after stopping the emulator. Bima data/keys and phone are untouched.
-Do not commit product references against shipping26.10.23: it lacks these methods.
-Complete required ABIs/distribution, full product gates and minified acceptance before
-shipping a queue-fix APK. Preserve Bima userdata and all accepted Forward/rollout results.
+The21-file application/Android proof candidate is retained in Git as
+ tool/collaboration-sdk-patches/confirmed-queue-android-consumer.patch,
+basef6532c82d1b5f491e1c848dee0a6ace276e22e71, SHA
+a97d23385e7f4a399edd1c0c420c5759d3f6b8dc39eb48b8c6f781bad4b526b7.
+An isolated worktree .worktrees/hris-confirmed-queue-patch-check reconstructed every
+file exactly. Main still has these21 UNCOMMITTED files; seven new Kotlin files have
+intent-to-add only. Do not accidentally commit product code against upstream26.10.23.
+[Contract](collaboration-confirmed-queue-recovery.md) explains the ownership bounds.
+
+ONLY heavy job: armv7 queue SDK build37017, .work/sdk-confirmed-queue-2026-11-06/
+android-armv7. Rust1.96 targets armv7-linux-androideabi/i686-linux-android are installed.
+The SDK's9 fingerprinted source files are FROZEN; app/docs may be edited independently.
+Next verify armv7 Kotlin/JNI pairing, then build x86 (or use an explicitly verified
+remote build) before combining all FOUR ABIs. Existing two-ABI accepted AAR/APKs
+must stay intact. Add native libraries only to matrix-kotlin-confirmed-queue after
+comparing all9 Kotlin hashes; old raw-only wrapper/consumer is separate.
+
+Remaining: complete SDK artifact distribution with strict hashes, full product/
+minified acceptance, final application commit/push, and next release installation.
+A public immutable SDK artifact in this same public repo with an Ivy descriptor is
+one possible distribution approach, analogous to the existing Binaryen repository;
+no descriptor/workflow/publication or shipping dependency change is implemented yet.
+SDK32-bit remote build workflow is also only a possible next step. Do not assume
+those ideas have run. Apple dependency is unchanged; no new Swift API is referenced.
+Preserve all accepted Forward publications and live rollout; never replay them.
 
 Old raw-only native consumer remains accepted: AAR94d907f139a7484bd687b538d8cfce3e90478daa2ab93b9835d9aa8a606becae;
 APK50f728a9613dc3d06253a9c42decd508e399722527e60e4f21067788db67efb7,

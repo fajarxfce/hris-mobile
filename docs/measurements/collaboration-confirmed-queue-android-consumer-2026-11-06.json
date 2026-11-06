@@ -485,6 +485,218 @@
     }
   },
   "sourceInputsSha256": "adf06a367eec30de444ff54dc8a93ddbd8647531b23a80f36b25d1d46d886837",
-  "nativeScenarioAccepted": false,
-  "phoneInstalled": false
+  "nativeScenarioAccepted": true,
+  "phoneInstalled": false,
+  "nativeAttempts": [
+    {
+      "attempt": 1,
+      "elapsedSeconds": 118.866,
+      "exitCode": 1,
+      "sourcesUnchanged": true,
+      "apkUnchanged": true,
+      "counts": {
+        "tests": 2,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "originalScenarioPassed": true,
+      "originalScenarioCleanup": true,
+      "retainedScenarioReachedAndroid": false,
+      "failure": "Provider login setup returned Result.Failed before creating the retained-queue driver fixture. The original assertion did not retain its failure code.",
+      "nextChange": "Give each scenario a fresh provider container as well as Spring context/trace; retain the same APK and all recovery assertions."
+    },
+    {
+      "attempt": 2,
+      "elapsedSeconds": 170.857,
+      "exitCode": 1,
+      "sourcesUnchanged": true,
+      "apkUnchanged": true,
+      "counts": {
+        "tests": 2,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "originalScenarioPassed": true,
+      "bothScenarioCleanup": true,
+      "retainedScenarioReachedAndroid": true,
+      "retainedOriginalSurvivedTwoRestarts": true,
+      "failure": "Fixture entered its offline observer through runtime.enterTimeline, which calls joinRoomById over the disconnected gateway. It failed before invoking settlement.",
+      "nextChange": "Use existing runtime.openTimeline for the already-known cached room; keep gateway disconnected and preserve all settlement/no-resend/no-redaction assertions."
+    }
+  ],
+  "offlineFixtureCorrectionBuild": {
+    "build": {
+      "startedAt": "2026-11-06T10:40:58.889799+00:00",
+      "candidateOnly": true,
+      "uncommittedApplicationIntegration": true,
+      "sourceHead": "f6532c82d1b5f491e1c848dee0a6ace276e22e71",
+      "candidateAarSha256": "4534e86ed5f15fa036cf5c198cfbf551dbc742ca68d32363e8ba68305ddbb92a",
+      "initScriptSha256": "91e80b068829db0e18f1643302097c32c5c07cf4111429316a641af0dd30c050",
+      "exitCode": 0,
+      "elapsedSeconds": 80.14,
+      "inputsUnchanged": true
+    },
+    "apk": {
+      "artifact": ".work/sdk-confirmed-queue-2026-11-06/consumer-build-2/confirmed-queue-consumer-debug.apk",
+      "sha256": "fd265937885b5cada09d95afae9e8bf5eb6e6727c65cf839181a50c612cec914",
+      "bytes": 316309385,
+      "package": "dev.fajar.hris.collaboration.proof",
+      "debuggable": true,
+      "nativeMatchesCandidate": true,
+      "candidateSdkSha256": "4534e86ed5f15fa036cf5c198cfbf551dbc742ca68d32363e8ba68305ddbb92a",
+      "candidateJniSha256": {
+        "arm64-v8a": "43856af213036df7c2f70dabf7b387a7b60f21dbd79a0a23e69b4a814354a8d3",
+        "x86_64": "48f6a14d6e39a332f8d5f8cc75d8924d636951cdbd97bac1cbc96284eac894ad"
+      },
+      "queueMethodsAndProofMarkersCompiled": true,
+      "lintErrors": 0,
+      "lintWarnings": 47,
+      "executed": false,
+      "minifiedConsumer": false
+    },
+    "freshTestCounts": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofFailureTest.xml": {
+        "sha256": "da335c034fca270980efc223a6baa84912ac70c9442cee6f81ca7e05d3d78d91",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofObservationTest.xml": {
+        "sha256": "5f999e3ca10b5a5e6e2c4d5c4deef10357f2ec7b0fbb028d3d79a7e56dc9af1b",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisReadReceiptBarrierTest.xml": {
+        "sha256": "c5239b74e45c77edae8bb5781295cc5cc840bcf617b7cc30709756531d80d62b",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.NotificationInputCheckpointTest.xml": {
+        "sha256": "8a0046d561bfe2f037a3f849e15eea8c3518c919045b6108512c3b843866e76a",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": {
+        "sha256": "ddc5878e0a4a306c4634f174c1c2277eac50e8cf73b4776248a793c05c1c3131",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "sourceInputsSha256": "3bfad8e209d17d045fa5933ebfc144af5562ce42cbc8a51abf647f59f55aa9cd",
+    "change": "Proof uses the existing cached-room openTimeline method offline; production settlement and SDK sources are unchanged.",
+    "changedSourceFiles": [
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProductQueueProof.kt"
+    ],
+    "priorUnchangedAndroidDataCases": 362
+  },
+  "nativeAcceptance": {
+    "startedAt": "2026-11-06T10:43:51.934097+00:00",
+    "elapsedSeconds": 171.206,
+    "exitCode": 0,
+    "sourceFiles": 12454,
+    "sourcesUnchanged": true,
+    "apkSha256": "fd265937885b5cada09d95afae9e8bf5eb6e6727c65cf839181a50c612cec914",
+    "apkUnchanged": true,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": {
+        "sha256": "7e6a1ab07b2fba3de9f909677a7bc2a9ac390eadd9988dbba76158a1510f6224",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "accepted": [
+      {
+        "passed": true,
+        "cleanup": true,
+        "processRestartedAfterAck": true,
+        "coldHistoryRecoveredOffline": true,
+        "gatewayUnavailableAfterProcessDeath": true,
+        "quotedReplyRecoveredOffline": true,
+        "processRestartedAfterCompletion": true,
+        "encryptedSendCount": 3,
+        "nativeRedactionRequests": 0,
+        "retainedConfirmedQueueScenario": false
+      },
+      {
+        "passed": true,
+        "cleanup": true,
+        "processRestartedAfterAck": true,
+        "coldHistoryRecoveredOffline": true,
+        "gatewayUnavailableAfterProcessDeath": true,
+        "quotedReplyRecoveredOffline": true,
+        "processRestartedAfterCompletion": true,
+        "encryptedSendCount": 3,
+        "nativeRedactionRequests": 0,
+        "retainedConfirmedQueueScenario": true,
+        "confirmedNativeQueueRestored": true,
+        "confirmedNativeQueueSettledOffline": true,
+        "confirmedNativeQueueRetryNoop": true
+      }
+    ],
+    "sourceInputsSha256": "e293e465e34ca52454d7e838b41bd9cc36667cc1b61881d7f11422b7e32b74f1",
+    "emulatorStop": {
+      "pid": 1031697,
+      "startTicks": "163846449",
+      "stopped": true,
+      "dataRetained": true,
+      "phoneTouched": false,
+      "at": "2026-11-06T10:47:09.419928+00:00"
+    },
+    "scenarioConstruction": "The test SDK sends the staged content once through sendRaw with a separate HTTP transaction while the original queue entry stays paused. This constructs accepted content plus a retained native entry; it is not literal HTTP-response-loss injection.",
+    "phoneRootCauseProven": false
+  },
+  "consumerPatch": {
+    "base": "f6532c82d1b5f491e1c848dee0a6ace276e22e71",
+    "patchSha256": "a97d23385e7f4a399edd1c0c420c5759d3f6b8dc39eb48b8c6f781bad4b526b7",
+    "sourceFiles": {
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisNativeMatrixProbe.kt": "3f2147495d3f572b2a4f5ec05f9c87bb4a66b5dd973359e9c4150f264c1ac2ee",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProductQueueProof.kt": "ddcd2513a5cccc21d7edc035059e60c9f2cc33f1ea50c24512461c2545d0e18c",
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt": "9b8f09e1b43f9a0fba9cd60748fb9858378bce97336505d915d04f44993b3a17",
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryDiagnostics.kt": "360f29abc4c0ebf5b8c3652a19098f613af7196444efe8cf9758502536cdee5b",
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "e37df1d2f5c052c8c757f09311bebf4c7b0e9e0a7f1dc9cd70c70f572270f7a4",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt": "26417c8068d7b90be489d7151d70d145da62861524b76e9bc8031a43ca71a504",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt": "af864f8f9189a916be2accad39ef71abdf77781ddfd52fa5e795d36caefbe3c6",
+      "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationMessageQueueSource.kt": "1cd1d42eaf5561b2ccd43181c0663764962dd5af69879f99c38bcc5088de07a1",
+      "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationCall.kt": "37ed6c0e50ca657d0d57cb90a460d0a8c257b67899237aa972c0701b5b6dbf40",
+      "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationMessageQueueLease.kt": "cd47afe9829ac29f8b08c4e322a88a2b72f2eed315c1fe7c2572991e6023bd56",
+      "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "e6e5b174c0090b5eee9a2a8d1f430bc2d64aa0b839f04a0828f79a4dbd6195d4",
+      "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationQueuedOriginalDto.kt": "37655345c17bd3344b1422194ba89a9d0bbaf83b1d023b770ae1ee9c71f0f2d0",
+      "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationQueuedOriginalMapper.kt": "aef8e399a4d041a88effe9aed61d883889c3cc3a1c62612313d6fcb9494e7a4e",
+      "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationQueuedOriginalMapperTest.kt": "eb1efa30c5403dff2f19736f76f96be5e5b83e1e15eed54eb3c7b5f1c56c588c",
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationQueuedOriginal.kt": "ed534801cd4adcdc8cb14b6fe4e6ec1335dac6158708f31d4b2f30d6ac6e711e",
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationQueueCompletionPolicy.kt": "863ca065017f217ba1a8a4cd8b73fbe6c1002940aa3eb726f529031298720d03",
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationMessageQueueLease.kt": "3bfa2d2eb8c8197bd1b3aff9643bb385d296376486cdc3ad19ec6bd279d4ad8b",
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/SettleCollaborationCompletedQueue.kt": "fbbffdcccb6aa1becc3d480c4b0750ebd6ea879f8819c3185fb6452ff0ea5598",
+      "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SettleCollaborationCompletedQueueTest.kt": "7815e2df3df348bea108689201ee1066615b266100fe8ca6e338503c0824ce62",
+      "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationTextTest.kt": "8d319c46734faf2909dd9f5d75fabe5d457750c2996ac9b1995d6edca7ce325b",
+      "gradle/verification-metadata.xml": "d5f426a0ed9580adddbaa802da46aca302486a5262deaf27ded21b6cb7cac5b0"
+    },
+    "reconstructionVerified": true,
+    "shippingDependencyChanged": false
+  }
 }

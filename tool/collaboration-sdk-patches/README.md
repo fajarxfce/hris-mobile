@@ -132,6 +132,50 @@ is not proof. Do not substitute ordinary abort, which may schedule redaction.
 Tests cover concurrent acknowledgement, cancellation while waiting for the store
 lock, changed content, preserved native redaction/dependents and SQLite reopen
 before/after settlement without a send/redaction request. Diagnostic Debug output
-is redacted. The previous raw-event AAR/consumer excludes this increment. A new
-Android arm64 candidate is building; generated JNI/Kotlin must be kept together.
-Application integration and the preserved worker reproduction remain outstanding.
+is redacted. The previous raw-event AAR/consumer excludes this increment. The new
+arm64/x86_64 candidate is built; generated JNI/Kotlin remain paired.
+Application integration is accepted as an isolated candidate below; complete SDK
+distribution and minified application acceptance remain outstanding.
+
+## Accepted confirmed-queue application candidate
+
+`confirmed-queue-android-consumer.patch` applies to Mobile
+`f6532c82d1b5f491e1c848dee0a6ace276e22e71`. Its SHA-256 is
+`a97d23385e7f4a399edd1c0c420c5759d3f6b8dc39eb48b8c6f781bad4b526b7`.
+An isolated checkout reconstructed all21 source/verification files exactly.
+It contains the domain settlement policy/use case, raw Android queue adapter,
+worker orchestration, regression tests and actual native proof scenario. It is
+not a shipping dependency change: the new Android methods require the paired SDK.
+
+The new paired AAR has SHA-256
+`4534e86ed5f15fa036cf5c198cfbf551dbc742ca68d32363e8ba68305ddbb92a`,
+96,849,072 bytes. All nine generated Kotlin files match between arm64 and x86_64;
+the APK contains the exact JNI pair. Candidate build/lint passed370.511s with380
+host cases and zero lint errors. A fixture-only correction rebuilt80.140s with18
+fresh proof cases; its362 unchanged Android data cases retain their earlier pass.
+The final debug proof APK SHA-256 is
+`fd265937885b5cada09d95afae9e8bf5eb6e6727c65cf839181a50c612cec914`.
+
+Both actual HRIS native scenarios pass171.206s with12,454 source inputs unchanged.
+The retained-original scenario survives two process deaths, settles with the gateway
+disconnected, and repeats without another mutation. Each scenario sends exactly3
+encrypted messages and makes zero server-redaction requests; both clean up.
+The test constructs accepted content through a separate SDK sendRaw request while
+leaving the queued original paused. Its HTTP transaction differs, so this proves
+the recovery postcondition rather than literal lost-response injection. The first
+two attempts failed in fixture setup: shared provider login state, then accidentally
+using the joining timeline entry offline. Provider isolation and existing local
+openTimeline correct those paths without changing settlement assertions.
+
+Use a local Maven coordinate `org.matrix.rustcomponents:sdk-android:26.10.23-hris-confirmed-queue-local`
+and the exact owned AAR/POM hashes in the patch for isolated compilation. Preserve
+strict dependency verification. The current workspace's candidate init script and
+build drivers are recorded in the handoff; source/toolchain instructions above
+reconstruct the SDK if those local files are unavailable. Do not install this proof
+package on the user's phone. Complete remaining ABIs, SDK distribution and minified
+product validation before making this the normal application dependency.
+
+[Consumer/native evidence](../../docs/measurements/collaboration-confirmed-queue-android-consumer-2026-11-06.json)
+records APK, JNI, source, patch and test hashes and retains failed attempts separately.
+The [domain contract](../../docs/collaboration-confirmed-queue-recovery.md) describes
+ownership, complete-content matching and protected uncertain queue entries.

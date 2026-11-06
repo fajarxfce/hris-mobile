@@ -39,9 +39,16 @@ contains45 passing cases with real encrypted application stores and a fake SDK.
 contains8 core and19 FFI cases, including SQLite reopen, cancellation, concurrency,
 exact-content comparison and absence of send/redaction requests.
 
-Android consumer and actual HRIS native acceptance are still in progress. The
+Android consumer and actual HRIS native acceptance passed on6 November2026:
+380 initial host cases,18 fresh proof cases after the fixture correction, and both
+HRIS native scenarios. [Native evidence](measurements/collaboration-confirmed-queue-android-consumer-2026-11-06.json)
+retains earlier setup failures separately. The
 new native scenario deliberately sends the same content through a separate SDK
 request while retaining its paused queue original, then restarts the process twice
 and settles offline. This constructs the recovery postcondition; it does not
 simulate a literal lost HTTP response or prove the user's phone root cause.
 The shipping dependency and release43 do not contain this settlement increment.
+
+The current verified candidate has arm64 and x86_64 libraries. Complete SDK
+distribution and minified product acceptance remain outstanding; the user’s phone
+is still on42 and accepted release43 awaits ADB availability.

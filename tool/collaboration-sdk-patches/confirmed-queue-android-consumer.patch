@@ -1,0 +1,1447 @@
+diff --git a/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisNativeMatrixProbe.kt b/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisNativeMatrixProbe.kt
+index 2810fa5f..26262a36 100644
+--- a/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisNativeMatrixProbe.kt
++++ b/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisNativeMatrixProbe.kt
+@@ -164,6 +164,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
+                         logicalId(fixture, "ackLogicalId"),
+                         body(fixture, "ackBody"),
+                         replyToEventId,
++                        fixture.opt("retainConfirmedNativeQueue") == true,
+                     ) { transaction, eventId ->
+                         check(incoming.eventId() == eventId)
+                         write(
+@@ -238,7 +239,10 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
+                         body(fixture, "ackBody"),
+                         transaction,
+                         result.getString("senderEventId"),
++                        fixture.opt("retainConfirmedNativeQueue") == true,
+                     )
++                if (fixture.opt("retainConfirmedNativeQueue") == true)
++                    result.put("confirmedNativeQueueRestored", true)
+                 proof.recoverReadState(result)
+                 write(
+                     "gateway-precompletion-result",
+@@ -325,6 +329,14 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
+                     sent.eventId == result.getString("ackSenderEventId") &&
+                         sent.transactionId == transaction
+                 )
++                if (fixture.opt("retainConfirmedNativeQueue") == true) {
++                    proof.settleConfirmedQueueOffline(
++                        logicalId(fixture, "ackLogicalId"),
++                        transaction,
++                    )
++                    result.put("confirmedNativeQueueSettledOffline", true)
++                    result.put("confirmedNativeQueueRetryNoop", true)
++                }
+                 proof.verifyColdOfflineHistory(
+                     listOf(
+                         result.getString("senderEventId") to body(fixture, "body"),
+@@ -377,6 +389,10 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
+ 
+     private fun readFixture(resuming: Boolean, afterAck: Boolean = false): Pair<JSONObject, URI> {
+         val fixture = read("gateway-fixture", 16_384)
++        require(
++            !fixture.has("retainConfirmedNativeQueue") ||
++                fixture.get("retainConfirmedNativeQueue") is Boolean
++        )
+         val home = URI(fixture.getString("baseUrl"))
+         require(
+             home.scheme == "http" &&
+diff --git a/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProductQueueProof.kt b/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProductQueueProof.kt
+index 9230245d..b28f84cd 100644
+--- a/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProductQueueProof.kt
++++ b/apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProductQueueProof.kt
+@@ -21,6 +21,7 @@ import dev.fajar.starter.collaboration.domain.usecases.DeliverCollaborationMessa
+ import dev.fajar.starter.collaboration.domain.usecases.ReconcileCollaborationHistoryReferences
+ import dev.fajar.starter.collaboration.domain.usecases.ReconcileCollaborationMessages
+ import dev.fajar.starter.collaboration.domain.usecases.RecoverCollaborationMessageReceipts
++import dev.fajar.starter.collaboration.domain.usecases.SettleCollaborationCompletedQueue
+ import dev.fajar.starter.collaboration.domain.usecases.StageCollaborationText
+ import dev.fajar.starter.common.result.*
+ import dev.fajar.starter.database.createAppDatabase
+@@ -178,6 +179,7 @@ internal class HrisProductQueueProof(
+         logicalId: String,
+         text: String,
+         replyToEventId: String,
++        retainConfirmedNativeQueue: Boolean,
+         acknowledged: suspend (String, String) -> Unit,
+     ) {
+         val app = prepareAckApplication()
+@@ -207,6 +209,37 @@ internal class HrisProductQueueProof(
+         val record = success(stage(app.workspaceId, runtime.deviceId, logicalId))
+         val state = record.state as CollaborationMessageState.Staged
+         check(requireNotNull(state.origin).sender == runtime.nativeClient.userId())
++        if (retainConfirmedNativeQueue) {
++            val queue = success(runtime.acquireMessageQueue(roomId))
++            val original =
++                try {
++                    check(success(queue.snapshot()) == setOf(state.transactionId))
++                    success(queue.originals()).single().also {
++                        check(it.transactionId == state.transactionId)
++                        check(it.logicalId == logicalId && it.origin == state.origin)
++                    }
++                } finally {
++                    success(queue.close())
++                }
++            // Test-only construction of an accepted event beside its paused native original.
++            // sendRaw encrypts the exact content but owns a different HTTP transaction; this
++            // establishes the recovery postcondition, not a literal lost-response simulation.
++            val eventId =
++                requireNotNull(runtime.nativeClient.getRoom(roomId)).use { room ->
++                    room.sendRaw(original.eventType, original.serializedContent)
++                }
++            val retained = success(runtime.acquireMessageQueue(roomId))
++            try {
++                check(success(retained.snapshot()) == setOf(state.transactionId))
++                check(success(retained.originals()) == listOf(original))
++            } finally {
++                success(retained.close())
++            }
++            check(success(receipts.read(access, conversationId)).none { it.intent.id == logicalId })
++            check(success(messages.get(access, logicalId)) == record)
++            acknowledged(state.transactionId, eventId)
++            awaitCancellation()
++        }
+         val withheld =
+             object : CollaborationReceiptRepository by receipts {
+                 override suspend fun append(
+@@ -257,6 +290,7 @@ internal class HrisProductQueueProof(
+         text: String,
+         expectedTransaction: String,
+         replyToEventId: String,
++        retainConfirmedNativeQueue: Boolean,
+     ): ProofQueuedMessageResult {
+         val app = prepareAckApplication()
+         val original = requireNotNull(success(messages.get(access, logicalId)))
+@@ -270,7 +304,12 @@ internal class HrisProductQueueProof(
+         check(success(receipts.read(access, conversationId)).none { it.intent.id == logicalId })
+         val queue = success(runtime.acquireMessageQueue(roomId))
+         try {
+-            check(success(queue.snapshot()).isEmpty())
++            if (retainConfirmedNativeQueue) {
++                check(success(queue.snapshot()) == setOf(expectedTransaction))
++                val retained = success(queue.originals()).single()
++                check(retained.transactionId == expectedTransaction)
++                check(retained.logicalId == logicalId && retained.origin == staged.origin)
++            } else check(success(queue.snapshot()).isEmpty())
+         } finally {
+             success(queue.close())
+         }
+@@ -341,6 +380,47 @@ internal class HrisProductQueueProof(
+     suspend fun recoverCompletion(logicalId: String, transaction: String) =
+         retirementProof(prepareAckApplication()).recover(logicalId, transaction)
+ 
++    suspend fun settleConfirmedQueueOffline(logicalId: String, transaction: String) {
++        val app = requireNotNull(application)
++        check(success(messages.observe(access, conversationId).first()).isEmpty())
++        val completion = requireNotNull(success(messages.readCompletion(access, logicalId)))
++        check(success(messages.get(access, logicalId)) == completion.record)
++        val retained = success(runtime.acquireMessageQueue(roomId))
++        try {
++            check(success(retained.snapshot()) == setOf(transaction))
++            check(success(retained.originals()).single().logicalId == logicalId)
++        } finally {
++            success(retained.close())
++        }
++        val timeline = success(runtime.openTimeline(roomId))
++        try {
++            val settle =
++                SettleCollaborationCompletedQueue(
++                    messages,
++                    messages,
++                    listRepository(),
++                    HrisProofRuntimeAccess(runtime),
++                    app.sessions,
++                    app.workspaces,
++                    app.server,
++                    app.build,
++                    app.clock,
++                )
++            val scope = CollaborationOperationScope.Selected(app.workspaceId)
++            check(success(settle(scope, conversationId, timeline)) == 1)
++            check(success(settle(scope, conversationId, timeline)) == 0)
++        } finally {
++            success(timeline.close())
++        }
++        val settled = success(runtime.acquireMessageQueue(roomId))
++        try {
++            check(success(settled.snapshot()).isEmpty())
++            check(success(settled.originals()).isEmpty())
++        } finally {
++            success(settled.close())
++        }
++    }
++
+     suspend fun verifyColdOfflineHistory(
+         expected: List<Pair<String, String>>,
+         quotedEventId: String,
+diff --git a/apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt b/apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt
+index dbacd3b3..1794952b 100644
+--- a/apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt
++++ b/apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt
+@@ -125,6 +125,7 @@ fun applicationWorkerModule() = module {
+             reopenHistory = get(),
+             recover = get(),
+             retire = get(),
++            settleCompleted = get(),
+             acquireBackground = get(),
+         )
+     } bind SyncTask::class
+diff --git a/apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryDiagnostics.kt b/apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryDiagnostics.kt
+index 4c2aa285..eb66897e 100644
+--- a/apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryDiagnostics.kt
++++ b/apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryDiagnostics.kt
+@@ -10,6 +10,7 @@ internal enum class CollaborationDeliveryStage {
+     PrepareRoom,
+     EnterTimeline,
+     RecoverOriginal,
++    SettleCompletedQueue,
+     ReadPrepared,
+     Flush,
+     StageMessage,
+diff --git a/apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt b/apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt
+index dbc54264..038270f4 100644
+--- a/apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt
++++ b/apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt
+@@ -35,6 +35,7 @@ class CollaborationDeliveryWorker(
+     private val reopenHistory: ReopenCollaborationHistory,
+     private val recover: RecoverCollaborationMessageReceipts,
+     private val retire: RetireCollaborationMessages,
++    private val settleCompleted: SettleCollaborationCompletedQueue,
+     private val acquireBackground: AcquireCollaborationBackgroundRuntime,
+     private val clock: Clock = Clock.System,
+ ) : SyncTask {
+@@ -226,6 +227,10 @@ class CollaborationDeliveryWorker(
+                     if (reopened is AppResult.Failed) return reopened
+                 }
+             }
++            stage(CollaborationDeliveryStage.SettleCompletedQueue)
++            val settled = settleCompleted(scope, conversationId, requireNotNull(child))
++            currentCoroutineContext().ensureActive()
++            if (settled is AppResult.Failed) return settled
+             stage(CollaborationDeliveryStage.ReadPrepared)
+             val current = messages(work.scope, conversationId).first()
+             currentCoroutineContext().ensureActive()
+diff --git a/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt b/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt
+index 4dd539f2..b93e337b 100644
+--- a/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt
++++ b/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt
+@@ -35,6 +35,27 @@ class CollaborationDeliveryWorkerTest {
+             }
+         }
+ 
++    @Test
++    fun recoveredNativeAcceptanceDoesNotLeaveAnUnmappedQueueBlockingTheNextMessage() = runBlocking {
++        withFixture { f ->
++            val first = f.queue(text = "First retained message")
++            f.sdk.loseDeliveryReply = true
++            f.sdk.retainQueueAfterLostReply = true
++            assertIs<SyncResult.Retry>(f.worker())
++            f.reopen()
++            assertEquals(SyncResult.Complete, f.worker(), "Recover the accepted first message")
++            val next = f.queue(text = "Next retained message")
++            assertEquals(SyncResult.Complete, f.worker(), "Deliver the next message after recovery")
++            assertEquals(listOf(first.intent.id, next.intent.id), f.sdk.enqueued)
++            assertEquals(1, f.sdk.settlements)
++            assertEquals(2, f.sdk.deliveries)
++            assertEquals(SyncResult.Complete, f.worker())
++            assertEquals(1, f.sdk.settlements)
++            assertEquals(2, f.sdk.deliveries)
++            assertEquals(f.sdk.childOpens, f.sdk.childCloses)
++        }
++    }
++
+     @Test
+     fun missingNativeAckIsRecoveredBeforeAnySecondEnqueueOrResume() = runBlocking {
+         withFixture { f ->
+diff --git a/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt b/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt
+index 90e8b8c9..c7860a1f 100644
+--- a/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt
++++ b/apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt
+@@ -35,6 +35,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
+     val enqueued = mutableListOf<String>()
+     val enqueuedReplies = mutableMapOf<String, String?>()
+     val attemptedRooms = mutableListOf<String>()
++    var settlements = 0
+     var deliveries = 0
+     var childCloses = 0
+     var childOpens = 0
+@@ -52,6 +53,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
+     val backgroundCredentialFailures = MutableStateFlow<Failure?>(null)
+     var restoreFailure: Failure? = null
+     var loseDeliveryReply = false
++    var retainQueueAfterLostReply = false
+     var withholdOriginals = false
+     var historyCapacityOnce = false
+     var historyReopens = 0
+@@ -383,6 +385,25 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
+ 
+                 override suspend fun snapshot() = AppResult.Success(pending.keys.toSet())
+ 
++                override suspend fun originals() =
++                    AppResult.Success(
++                        pending.map { (transaction, event) -> queuedOriginal(transaction, event) }
++                    )
++
++                override suspend fun settleConfirmed(
++                    original: CollaborationQueuedOriginal,
++                    eventId: String,
++                ): AppResult<CollaborationQueueSettlement> {
++                    val event =
++                        pending[original.transactionId]
++                            ?: return AppResult.Success(CollaborationQueueSettlement.AlreadyAbsent)
++                    check(queuedOriginal(original.transactionId, event) == original)
++                    check(event.eventId == eventId)
++                    pending.remove(original.transactionId)
++                    settlements++
++                    return AppResult.Success(CollaborationQueueSettlement.Settled)
++                }
++
+                 override suspend fun prepareText(
+                     logicalId: String,
+                     text: String,
+@@ -442,6 +463,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
+                         .addAll(sent.map { it.second })
+                     if (loseDeliveryReply) {
+                         loseDeliveryReply = false
++                        if (retainQueueAfterLostReply) pending.putAll(sent)
+                         return AppResult.Failed(
+                             Failure(FailureKind.Network, "Fixture lost delivery response")
+                         )
+@@ -463,6 +485,15 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
+         )
+     }
+ 
++    private fun queuedOriginal(transaction: String, event: CollaborationHistoryChange.Text) =
++        CollaborationQueuedOriginal(
++            transaction,
++            event.logicalId,
++            CollaborationMessageOrigin(event.sender, event.contentHash),
++            "m.room.message",
++            "{\"fixtureContentHash\":\"${event.contentHash}\"}",
++        )
++
+     private fun device(owner: CollaborationOwner, room: String) =
+         CollaborationMessageDevice(owner.nativeSessionId, wire.deviceId, wire.bootstrapId, room)
+ 
+diff --git a/features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationMessageQueueSource.kt b/features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationMessageQueueSource.kt
+index eeaad4a6..926f9cda 100644
+--- a/features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationMessageQueueSource.kt
++++ b/features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationMessageQueueSource.kt
+@@ -1,5 +1,6 @@
+ package dev.fajar.starter.collaboration.data.datasources
+ 
++import dev.fajar.starter.collaboration.data.dto.CollaborationQueuedOriginalDto
+ import dev.fajar.starter.collaboration.data.messages.collaborationOutgoingContent
+ import dev.fajar.starter.collaboration.data.sdk.*
+ import dev.fajar.starter.collaboration.domain.entities.*
+@@ -86,6 +87,30 @@ internal class AndroidCollaborationMessageQueueSource(
+         }
+     }
+ 
++    suspend fun originals(): List<CollaborationQueuedOriginalDto> {
++        check(listener == null && !stopping)
++        val acquired = requireNotNull(room)
++        check(!acquired.isSendQueueEnabled())
++        return acquired.queuedMessageEvents().map {
++            CollaborationQueuedOriginalDto(it.transactionId, it.eventType, it.contentJson)
++        }
++    }
++
++    suspend fun settleConfirmed(
++        original: CollaborationQueuedOriginalDto,
++        eventId: String,
++    ): ConfirmedQueueEventResult {
++        check(listener == null && !stopping)
++        val acquired = requireNotNull(room)
++        check(!acquired.isSendQueueEnabled())
++        return acquired.settleConfirmedQueueEvent(
++            original.transactionId,
++            original.eventType,
++            original.contentJson,
++            eventId,
++        )
++    }
++
+     suspend fun enqueue(
+         logicalId: String,
+         text: String,
+diff --git a/features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationCall.kt b/features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationCall.kt
+index bea65f12..94265a3c 100644
+--- a/features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationCall.kt
++++ b/features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationCall.kt
+@@ -13,6 +13,8 @@ internal enum class AndroidCollaborationOperation {
+     Timeline,
+     ReadReceipt,
+     QueueSnapshot,
++    QueueOriginals,
++    QueueSettle,
+     QueueOrigin,
+     QueueMatch,
+     QueueEnqueue,
+diff --git a/features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationMessageQueueLease.kt b/features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationMessageQueueLease.kt
+index cf223262..b9dbc813 100644
+--- a/features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationMessageQueueLease.kt
++++ b/features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationMessageQueueLease.kt
+@@ -1,11 +1,15 @@
+ package dev.fajar.starter.collaboration.data.repositories
+ 
+ import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationMessageQueueSource
++import dev.fajar.starter.collaboration.data.dto.CollaborationQueuedOriginalDto
++import dev.fajar.starter.collaboration.data.mappers.toQueuedOriginal
+ import dev.fajar.starter.collaboration.data.messages.collaborationOutgoingOrigin
+ import dev.fajar.starter.collaboration.domain.entities.*
+ import dev.fajar.starter.collaboration.domain.policies.*
+ import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
+ import dev.fajar.starter.common.result.*
++import dev.fajar.starter.network.RequestFailureException
++import org.matrix.rustcomponents.sdk.ConfirmedQueueEventResult
+ 
+ internal class AndroidCollaborationMessageQueueLease(
+     override val owner: CollaborationOwner,
+@@ -26,6 +30,59 @@ internal class AndroidCollaborationMessageQueueLease(
+             }
+         }
+ 
++    override suspend fun originals(): AppResult<List<CollaborationQueuedOriginal>> =
++        operations.execute {
++            failure()?.let {
++                return@execute AppResult.Failed(it)
++            }
++            safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueOriginals) {
++                source.originals().map { it.toQueuedOriginal(matrixSender) }
++            }
++        }
++
++    override suspend fun settleConfirmed(
++        original: CollaborationQueuedOriginal,
++        eventId: String,
++    ): AppResult<CollaborationQueueSettlement> =
++        operations.execute {
++            failure()?.let {
++                return@execute AppResult.Failed(it)
++            }
++            safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueSettle) {
++                require(validCollaborationEventId(eventId))
++                val dto =
++                    CollaborationQueuedOriginalDto(
++                        original.transactionId,
++                        original.eventType,
++                        original.serializedContent,
++                    )
++                require(dto.toQueuedOriginal(matrixSender) == original)
++                when (source.settleConfirmed(dto, eventId)) {
++                    ConfirmedQueueEventResult.SETTLED -> CollaborationQueueSettlement.Settled
++                    ConfirmedQueueEventResult.MISSING -> CollaborationQueueSettlement.AlreadyAbsent
++                    ConfirmedQueueEventResult.QUEUE_ENABLED,
++                    ConfirmedQueueEventResult.IN_FLIGHT ->
++                        throw RequestFailureException(
++                            Failure(
++                                FailureKind.Unavailable,
++                                "Message recovery is waiting.",
++                                code = "client.collaboration_queue_settlement_pending",
++                            )
++                        )
++                    ConfirmedQueueEventResult.CONTENT_MISMATCH,
++                    ConfirmedQueueEventResult.NOT_AN_EVENT,
++                    ConfirmedQueueEventResult.DEPENDENT_WORK ->
++                        throw RequestFailureException(
++                            Failure(
++                                FailureKind.Conflict,
++                                "Message recovery needs its original record.",
++                                code = "client.collaboration_queue_unresolved",
++                            )
++                        )
++                }
++            }
++        }
++
+     override suspend fun prepareText(
+         logicalId: String,
+         text: String,
+diff --git a/features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt b/features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt
+index 1d1f602e..63b6e894 100644
+--- a/features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt
++++ b/features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt
+@@ -1512,6 +1512,29 @@ class CollaborationDataModule {
+             completions,
+         )
+ 
++    @Single
++    fun settleCompletedQueue(
++        messages: CollaborationMessageRepository,
++        completions: CollaborationMessageCompletionRepository,
++        lists: CollaborationListRepository,
++        runtimes: CollaborationRuntimeRepository,
++        sessions: SessionRepository,
++        workspaces: WorkspaceRepository,
++        server: IdentityServer,
++        build: AppBuild,
++    ) =
++        SettleCollaborationCompletedQueue(
++            messages,
++            completions,
++            lists,
++            runtimes,
++            sessions,
++            workspaces,
++            server,
++            build,
++            Clock.System,
++        )
++
+     @Single
+     fun stageText(
+         messages: CollaborationMessageRepository,
+diff --git a/features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationQueuedOriginalDto.kt b/features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationQueuedOriginalDto.kt
+new file mode 100644
+index 00000000..efc88245
+--- /dev/null
++++ b/features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationQueuedOriginalDto.kt
+@@ -0,0 +1,10 @@
++package dev.fajar.starter.collaboration.data.dto
++
++/** Exact native store bytes. No acceptance or ownership decision belongs to this DTO. */
++internal data class CollaborationQueuedOriginalDto(
++    val transactionId: String,
++    val eventType: String,
++    val contentJson: String,
++) {
++    override fun toString() = "CollaborationQueuedOriginalDto([redacted])"
++}
+diff --git a/features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationQueuedOriginalMapper.kt b/features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationQueuedOriginalMapper.kt
+new file mode 100644
+index 00000000..b6e55aaf
+--- /dev/null
++++ b/features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationQueuedOriginalMapper.kt
+@@ -0,0 +1,35 @@
++package dev.fajar.starter.collaboration.data.mappers
++
++import dev.fajar.starter.collaboration.data.dto.CollaborationQueuedOriginalDto
++import dev.fajar.starter.collaboration.domain.entities.*
++import dev.fajar.starter.collaboration.domain.policies.*
++import kotlinx.serialization.json.*
++
++/** Fingerprint the captured full object; never reconstruct native content from a displayed body. */
++internal suspend fun CollaborationQueuedOriginalDto.toQueuedOriginal(
++    sender: String
++): CollaborationQueuedOriginal {
++    require(
++        validCollaborationTransactionId(transactionId) && validCollaborationHistorySender(sender)
++    )
++    require(contentJson.encodeToByteArray(throwOnInvalidSequence = true).size in 2..96_000)
++    validateHistoryJsonDepth(contentJson)
++    val content =
++        Json.parseToJsonElement(contentJson) as? JsonObject
++            ?: error("Invalid native original content")
++    val relation = content["m.relates_to"] as? JsonObject
++    val edit = (relation?.get("rel_type") as? JsonPrimitive)?.contentOrNull == "m.replace"
++    val logical =
++        (content[if (edit) "org.hris.edit_id" else "org.hris.message_id"] as? JsonPrimitive)
++            ?.takeIf { it.isString }
++            ?.content
++            ?.takeIf(::validCollaborationMessageId)
++    return CollaborationQueuedOriginal(
++            transactionId,
++            logical,
++            CollaborationMessageOrigin(sender, collaborationHistoryContentHash(content)),
++            eventType,
++            contentJson,
++        )
++        .also { require(validCollaborationQueuedOriginal(it)) }
++}
+diff --git a/features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationQueuedOriginalMapperTest.kt b/features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationQueuedOriginalMapperTest.kt
+new file mode 100644
+index 00000000..a43e2d1c
+--- /dev/null
++++ b/features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationQueuedOriginalMapperTest.kt
+@@ -0,0 +1,94 @@
++package dev.fajar.starter.collaboration.data
++
++import dev.fajar.starter.collaboration.data.dto.CollaborationQueuedOriginalDto
++import dev.fajar.starter.collaboration.data.mappers.toQueuedOriginal
++import dev.fajar.starter.collaboration.data.messages.*
++import kotlin.test.*
++import kotlinx.coroutines.test.runTest
++import kotlinx.serialization.json.*
++
++class CollaborationQueuedOriginalMapperTest {
++    private val id = "00000000-0000-4000-8000-000000000001"
++    private val sender = "@fictional:example.test"
++
++    @Test
++    fun capturedOriginalKeepsExactBytesAndCompletePreparedFingerprint() = runTest {
++        val text = "Original 🙂 with a quote"
++        val content = collaborationTextContent(id, text, "$" + "quoted", forwarded = true)
++        val raw = Json { prettyPrint = true }.encodeToString(JsonObject.serializer(), content)
++        val dto = CollaborationQueuedOriginalDto("native-tx", "m.room.message", raw)
++        val original = dto.toQueuedOriginal(sender)
++        assertEquals(raw, original.serializedContent)
++        assertEquals(id, original.logicalId)
++        assertEquals(
++            collaborationTextOrigin(sender, id, text, "$" + "quoted", true),
++            original.origin,
++        )
++        assertEquals("CollaborationQueuedOriginal([redacted])", original.toString())
++        assertEquals("CollaborationQueuedOriginalDto([redacted])", dto.toString())
++    }
++
++    @Test
++    fun unknownFieldsRemainSignificantWhileJsonObjectOrderDoesNot() = runTest {
++        val content = collaborationTextContent(id, "Original")
++        val dto = CollaborationQueuedOriginalDto("native-tx", "m.room.message", content.toString())
++        val original = dto.toQueuedOriginal(sender)
++        val extended =
++            JsonObject(
++                content + ("unknown" to JsonArray(listOf(JsonPrimitive(1), JsonPrimitive(2))))
++            )
++        val changed = dto.copy(contentJson = extended.toString()).toQueuedOriginal(sender)
++        assertNotEquals(original.origin.contentHash, changed.origin.contentHash)
++        val reordered = JsonObject(extended.entries.reversed().associate { it.key to it.value })
++        assertEquals(
++            changed.origin,
++            dto.copy(contentJson = reordered.toString()).toQueuedOriginal(sender).origin,
++        )
++        assertNotEquals(
++            changed.origin,
++            dto.copy(contentJson = reordered.toString())
++                .toQueuedOriginal("@other:example.test")
++                .origin,
++        )
++    }
++
++    @Test
++    fun missingOrInvalidLogicalIdentityCannotBeInventedFromTheBody() = runTest {
++        for (logical in
++            listOf<JsonElement?>(null, JsonPrimitive("not-an-id"), JsonPrimitive(123))) {
++            val content = buildJsonObject {
++                put("body", id)
++                put("msgtype", "m.text")
++                logical?.let { put("org.hris.message_id", it) }
++            }
++            val original =
++                CollaborationQueuedOriginalDto("native-tx", "m.room.message", content.toString())
++                    .toQueuedOriginal(sender)
++            assertNull(original.logicalId)
++        }
++    }
++
++    @Test
++    fun nestedNonObjectMalformedAndOversizedContentIsRejected() = runTest {
++        val invalid =
++            listOf(
++                "[]",
++                "null",
++                "{",
++                "{" + "\"nested\":" + "[".repeat(17) + "0" + "]".repeat(17) + "}",
++                "{\"body\":\"" + "é".repeat(48_000) + "\"}",
++            )
++        for (raw in invalid) assertFails {
++            CollaborationQueuedOriginalDto("native-tx", "m.room.message", raw)
++                .toQueuedOriginal(sender)
++        }
++        assertFails {
++            CollaborationQueuedOriginalDto("bad transaction", "m.room.message", "{}")
++                .toQueuedOriginal(sender)
++        }
++        assertFails {
++            CollaborationQueuedOriginalDto("native-tx", "m.room.redaction", "{}")
++                .toQueuedOriginal(sender)
++        }
++    }
++}
+diff --git a/features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationQueuedOriginal.kt b/features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationQueuedOriginal.kt
+new file mode 100644
+index 00000000..1527d445
+--- /dev/null
++++ b/features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationQueuedOriginal.kt
+@@ -0,0 +1,18 @@
++package dev.fajar.starter.collaboration.domain.entities
++
++/** Exact native queue fact. The data adapter fingerprints all original content under its sender. */
++data class CollaborationQueuedOriginal(
++    val transactionId: String,
++    val logicalId: String?,
++    val origin: CollaborationMessageOrigin,
++    val eventType: String,
++    val serializedContent: String,
++) {
++    override fun toString() = "CollaborationQueuedOriginal([redacted])"
++}
++
++/** Both outcomes leave the externally confirmed original out of the paused queue. */
++enum class CollaborationQueueSettlement {
++    Settled,
++    AlreadyAbsent,
++}
+diff --git a/features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationQueueCompletionPolicy.kt b/features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationQueueCompletionPolicy.kt
+new file mode 100644
+index 00000000..6d51dbc9
+--- /dev/null
++++ b/features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationQueueCompletionPolicy.kt
+@@ -0,0 +1,38 @@
++package dev.fajar.starter.collaboration.domain.policies
++
++import dev.fajar.starter.collaboration.domain.entities.*
++
++fun validCollaborationQueuedOriginal(original: CollaborationQueuedOriginal): Boolean =
++    validCollaborationTransactionId(original.transactionId) &&
++        (original.logicalId == null || validCollaborationMessageId(original.logicalId)) &&
++        validCollaborationMessageOrigin(original.origin) &&
++        original.eventType == "m.room.message" &&
++        runCatching {
++                original.serializedContent.encodeToByteArray(throwOnInvalidSequence = true).size in
++                    2..96_000
++            }
++            .getOrDefault(false)
++
++/** An opaque native ID alone never establishes accepted application content or ownership. */
++fun collaborationQueueCompletionEvent(
++    access: CollaborationLocalAccess,
++    conversationId: String,
++    device: CollaborationMessageDevice,
++    original: CollaborationQueuedOriginal,
++    completion: CollaborationMessageCompletion,
++): String? {
++    if (!validCollaborationQueuedOriginal(original)) return null
++    collaborationCompletionReceipt(completion) ?: return null
++    val record = completion.record
++    val sent = record.state as? CollaborationMessageState.Sent ?: return null
++    if (
++        record.intent.owner != access.messageOwner() ||
++            record.intent.conversationId != conversationId ||
++            record.intent.id != original.logicalId ||
++            sent.origin != original.origin ||
++            collaborationRetainedTransaction(record, device, setOf(original.transactionId)) !=
++                original.transactionId
++    )
++        return null
++    return sent.eventId.takeIf { it in completion.eventIds }
++}
+diff --git a/features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationMessageQueueLease.kt b/features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationMessageQueueLease.kt
+index 64b3c435..3e98f8c9 100644
+--- a/features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationMessageQueueLease.kt
++++ b/features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationMessageQueueLease.kt
+@@ -1,7 +1,7 @@
+ package dev.fajar.starter.collaboration.domain.repositories
+ 
+ import dev.fajar.starter.collaboration.domain.entities.*
+-import dev.fajar.starter.common.result.AppResult
++import dev.fajar.starter.common.result.*
+ 
+ /** One exclusive native writer, initially paused. Closing it pauses without deleting messages. */
+ interface CollaborationMessageQueueLease {
+@@ -11,6 +11,29 @@ interface CollaborationMessageQueueLease {
+     /** Complete captured per-room IDs, not a possibly unhydrated timeline or a quiet-time guess. */
+     suspend fun snapshot(): AppResult<Set<String>>
+ 
++    /** Complete original content from a paused, quiescent native queue; no timeline inference. */
++    suspend fun originals(): AppResult<List<CollaborationQueuedOriginal>> =
++        AppResult.Failed(
++            Failure(
++                FailureKind.Conflict,
++                "The original message is unavailable.",
++                code = "client.collaboration_queue_unresolved",
++            )
++        )
++
++    /** Caller supplies immutable application completion proof; never cancels or redacts a send. */
++    suspend fun settleConfirmed(
++        original: CollaborationQueuedOriginal,
++        eventId: String,
++    ): AppResult<CollaborationQueueSettlement> =
++        AppResult.Failed(
++            Failure(
++                FailureKind.Conflict,
++                "The original message is unavailable.",
++                code = "client.collaboration_queue_unresolved",
++            )
++        )
++
+     /**
+      * Describes exact outgoing content under this owned SDK identity, without enqueue or delivery.
+      */
+diff --git a/features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/SettleCollaborationCompletedQueue.kt b/features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/SettleCollaborationCompletedQueue.kt
+new file mode 100644
+index 00000000..fb390673
+--- /dev/null
++++ b/features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/SettleCollaborationCompletedQueue.kt
+@@ -0,0 +1,229 @@
++package dev.fajar.starter.collaboration.domain.usecases
++
++import dev.fajar.starter.collaboration.domain.entities.*
++import dev.fajar.starter.collaboration.domain.policies.*
++import dev.fajar.starter.collaboration.domain.repositories.*
++import dev.fajar.starter.common.config.AppBuild
++import dev.fajar.starter.common.result.*
++import dev.fajar.starter.identity.domain.entities.IdentityServer
++import dev.fajar.starter.identity.domain.repositories.SessionRepository
++import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
++import kotlin.time.Clock
++import kotlinx.coroutines.*
++import kotlinx.coroutines.flow.first
++import kotlinx.coroutines.sync.Mutex
++import kotlinx.coroutines.sync.withLock
++
++/**
++ * Closes archived, confirmed native originals under an already admitted timeline. The caller owns
++ * that observer. Current account/company and SDK fences are rechecked; no room metadata is fetched.
++ */
++class SettleCollaborationCompletedQueue(
++    private val messages: CollaborationMessageRepository,
++    private val completions: CollaborationMessageCompletionRepository,
++    private val lists: CollaborationListRepository,
++    private val runtimes: CollaborationRuntimeRepository,
++    private val sessions: SessionRepository,
++    private val workspaces: WorkspaceRepository,
++    private val server: IdentityServer,
++    private val build: AppBuild,
++    private val clock: Clock,
++) {
++    private val execution = Mutex()
++
++    suspend operator fun invoke(
++        scope: CollaborationOperationScope,
++        conversationId: String,
++        timeline: CollaborationTimelineLease,
++    ): AppResult<Int> =
++        execution.withLock {
++            if (
++                !validCollaborationMessageDevice(timeline.device) ||
++                    !validCollaborationMessageId(conversationId) ||
++                    !collaborationOperationOwnsDevice(scope, timeline.deviceId)
++            )
++                return@withLock failed(
++                    "client.collaboration_invalid_message",
++                    FailureKind.Validation,
++                )
++            val captured = capture(scope)
++            if (captured is AppResult.Failed) return@withLock captured
++            val owner = (captured as AppResult.Success).value
++            continuation(scope, owner, null).let { if (it is AppResult.Failed) return@withLock it }
++            if (
++                timeline.owner != owner ||
++                    timeline.device.nativeSessionId != owner.nativeSessionId ||
++                    timeline.device.deviceId != timeline.deviceId ||
++                    timeline.device.roomId != timeline.matrixRoomId
++            )
++                return@withLock failed(
++                    "client.collaboration_queue_owner_changed",
++                    FailureKind.Unauthorized,
++                )
++            var queue: CollaborationMessageQueueLease? = null
++            try {
++                val acquired =
++                    runtimes.acquireMessageQueue(owner, timeline.deviceId, timeline.matrixRoomId)
++                if (acquired is AppResult.Success) queue = acquired.value
++                continuation(scope, owner, acquired).let {
++                    if (it is AppResult.Failed) return@withLock it
++                }
++                if (acquired is AppResult.Failed) return@withLock acquired
++                val writer = requireNotNull(queue)
++                if (
++                    writer.owner != owner ||
++                        writer.device != timeline.device ||
++                        !validCollaborationMessageDevice(writer.device)
++                )
++                    return@withLock failed(
++                        "client.collaboration_queue_owner_changed",
++                        FailureKind.Unauthorized,
++                    )
++                settle(scope, owner, conversationId, writer)
++            } finally {
++                withContext(NonCancellable) { queue?.close() }
++            }
++        }
++
++    private suspend fun settle(
++        scope: CollaborationOperationScope,
++        owner: CollaborationOwner,
++        conversationId: String,
++        queue: CollaborationMessageQueueLease,
++    ): AppResult<Int> {
++        val access = owner.localListAccess()
++        val read = checked(scope, owner) { messages.observe(access, conversationId).first() }
++        if (read is AppResult.Failed) return read
++        val records = (read as AppResult.Success).value
++        if (
++            records.size > 128 ||
++                records.map { it.intent.id }.distinct().size != records.size ||
++                records.any {
++                    it.intent.owner != access.messageOwner() ||
++                        it.intent.conversationId != conversationId ||
++                        !validCollaborationEditRecord(it) ||
++                        !validCollaborationMessageState(it.state)
++                }
++        )
++            return failed("client.collaboration_message_changed")
++        val captured = checked(scope, owner) { queue.snapshot() }
++        if (captured is AppResult.Failed) return captured
++        val snapshot = (captured as AppResult.Success).value.toSet()
++        if (snapshot.size > 128 || !snapshot.all(::validCollaborationTransactionId))
++            return failed("client.collaboration_queue_unresolved")
++        val mapped =
++            records
++                .mapNotNull { collaborationRetainedTransaction(it, queue.device, snapshot) }
++                .toSet()
++        // Leave a uniquely recoverable uncertain enqueue to its original staging use case.
++        val uncertain =
++            records
++                .mapNotNull { record ->
++                    val attempt =
++                        record.state as? CollaborationMessageState.Staging ?: return@mapNotNull null
++                    if (!mapped.containsAll(attempt.before)) return@mapNotNull null
++                    (recoverCollaborationQueue(attempt, queue.device, snapshot)
++                            as? CollaborationQueueRecovery.Found)
++                        ?.transactionId
++                }
++                .toSet()
++        val unknown = snapshot - mapped - uncertain
++        if (unknown.isEmpty()) return AppResult.Success(0)
++        val raw = checked(scope, owner) { queue.originals() }
++        if (raw is AppResult.Failed) return raw
++        val originals = (raw as AppResult.Success).value.toList()
++        if (
++            originals.size != snapshot.size ||
++                originals.any { !validCollaborationQueuedOriginal(it) } ||
++                originals.map { it.transactionId }.toSet() != snapshot ||
++                originals.sumOf { it.serializedContent.encodeToByteArray().size } > 1_048_576
++        )
++            return failed("client.collaboration_queue_unresolved")
++        val confirmed = mutableListOf<Pair<CollaborationQueuedOriginal, String>>()
++        for (original in originals.filter { it.transactionId in unknown }) {
++            val logicalId = original.logicalId ?: continue
++            val proof = checked(scope, owner) { completions.readCompletion(access, logicalId) }
++            if (proof is AppResult.Failed) return proof
++            val completion = (proof as AppResult.Success).value ?: continue
++            val event =
++                collaborationQueueCompletionEvent(
++                    access,
++                    conversationId,
++                    queue.device,
++                    original,
++                    completion,
++                ) ?: return failed("client.collaboration_receipt_unresolved")
++            // An uncertain enqueue still owns its original before-snapshot. Do not rewrite or
++            // remove a referenced entry until that attempt has acquired its durable mapping.
++            if (
++                records.any {
++                    (it.state as? CollaborationMessageState.Staging)
++                        ?.before
++                        ?.contains(original.transactionId) == true
++                }
++            )
++                return failed("client.collaboration_queue_unresolved")
++            confirmed += original to event
++        }
++        for ((original, event) in confirmed) {
++            val current = checked(scope, owner) { messages.observe(access, conversationId).first() }
++            if (current is AppResult.Failed) return current
++            if ((current as AppResult.Success).value != records)
++                return failed("client.collaboration_message_changed")
++            val settled = checked(scope, owner) { queue.settleConfirmed(original, event) }
++            if (settled is AppResult.Failed) return settled
++        }
++        if (confirmed.isNotEmpty()) {
++            val after = checked(scope, owner) { queue.snapshot() }
++            if (after is AppResult.Failed) return after
++            if (
++                (after as AppResult.Success).value !=
++                    snapshot - confirmed.map { it.first.transactionId }.toSet()
++            )
++                return failed("client.collaboration_queue_unresolved")
++        }
++        return AppResult.Success(confirmed.size)
++    }
++
++    private suspend fun <T> checked(
++        scope: CollaborationOperationScope,
++        owner: CollaborationOwner,
++        operation: suspend () -> AppResult<T>,
++    ): AppResult<T> {
++        val result = operation()
++        val admitted = continuation(scope, owner, result)
++        return if (admitted is AppResult.Failed) admitted else result
++    }
++
++    private suspend fun continuation(
++        scope: CollaborationOperationScope,
++        owner: CollaborationOwner,
++        received: AppResult<*>?,
++    ): AppResult<Unit> {
++        val rejected = (received as? AppResult.Failed)?.failure
++        if (rejected != null && collaborationContentResponseClosesRead(rejected))
++            withContext(NonCancellable) {
++                withTimeoutOrNull(2_000) { lists.restrict(owner.localListAccess(), rejected) }
++            }
++        currentCoroutineContext().ensureActive()
++        val gate = lists.admission(owner.localListAccess())
++        val current = capture(scope)
++        currentCoroutineContext().ensureActive()
++        if (rejected != null && collaborationContentResponseClosesRead(rejected))
++            return AppResult.Failed(rejected)
++        if (gate is AppResult.Success)
++            gate.value.denial?.let {
++                return AppResult.Failed(it)
++            }
++        val admitted = requireCollaborationOwner(current, owner, received)
++        if (admitted is AppResult.Failed) return admitted
++        if (gate is AppResult.Failed) return gate
++        return AppResult.Success(Unit)
++    }
++
++    private suspend fun capture(scope: CollaborationOperationScope) =
++        sessions.captureCollaborationOwner(scope, workspaces, server, build, clock)
++
++    private fun failed(code: String, kind: FailureKind = FailureKind.Conflict) =
++        collaborationSetupFailure(code, kind)
++}
+diff --git a/features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SettleCollaborationCompletedQueueTest.kt b/features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SettleCollaborationCompletedQueueTest.kt
+new file mode 100644
+index 00000000..0766261e
+--- /dev/null
++++ b/features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SettleCollaborationCompletedQueueTest.kt
+@@ -0,0 +1,394 @@
++package dev.fajar.starter.collaboration.domain
++
++import dev.fajar.starter.collaboration.domain.entities.*
++import dev.fajar.starter.collaboration.domain.repositories.*
++import dev.fajar.starter.collaboration.domain.usecases.SettleCollaborationCompletedQueue
++import dev.fajar.starter.common.result.*
++import kotlin.test.*
++import kotlinx.coroutines.*
++import kotlinx.coroutines.flow.emptyFlow
++import kotlinx.coroutines.test.runTest
++
++class SettleCollaborationCompletedQueueTest {
++    @Test
++    fun archivedOriginalSettlesWithoutSendingAndPreservesNewIntentAndCompletion() = runTest {
++        val f = CompletedQueueFixture().apply { prepare() }
++        val intent = f.stage.record
++        val proof = f.completed.records.toMap()
++        assertEquals(AppResult.Success(1), f.run())
++        assertEquals(emptySet(), f.stage.nativeIds)
++        assertEquals(listOf(f.original.transactionId), f.settled)
++        assertEquals(intent, f.stage.record)
++        assertEquals(proof, f.completed.records)
++        assertEquals(0, f.stage.enqueues)
++        assertEquals(1, f.stage.closes)
++        assertEquals(AppResult.Success(0), f.run())
++        assertEquals(1, f.settled.size)
++    }
++
++    @Test
++    fun retainedBootstrapAliasStillRequiresSameNativeFamilyDeviceRoomAndCompleteContent() =
++        runTest {
++            val f = CompletedQueueFixture().apply { prepare() }
++            val record = f.completion.record
++            val sent = record.state as CollaborationMessageState.Sent
++            f.completed.records[f.original.logicalId!!] =
++                f.completion.copy(
++                    record =
++                        record.copy(
++                            state =
++                                sent.copy(
++                                    device =
++                                        sent.device.copy(bootstrapOperationId = completedId(900))
++                                )
++                        )
++                )
++            assertEquals(AppResult.Success(1), f.run())
++        }
++
++    @Test
++    fun staleTimelineOwnerOrDeviceCannotAcquireAnotherWriter() = runTest {
++        for (device in listOf(false, true)) {
++            val f = CompletedQueueFixture().apply { prepare() }
++            if (device) f.timelineDevice = f.stage.device.copy(nativeSessionId = completedId(900))
++            else f.timelineOwner = f.stage.owner.copy(accountId = completedId(900))
++            assertIs<AppResult.Failed>(f.run())
++            assertEquals(0, f.stage.acquisitions)
++            assertTrue(f.settled.isEmpty())
++        }
++    }
++
++    @Test
++    fun mismatchedArchiveNeverRemovesNativeWork() = runTest {
++        for (scenario in 0..10) {
++            val f = CompletedQueueFixture().apply { prepare() }
++            val record = f.completion.record
++            val sent = record.state as CollaborationMessageState.Sent
++            val changed =
++                when (scenario) {
++                    0 ->
++                        record.copy(
++                            intent =
++                                record.intent.copy(
++                                    owner = record.intent.owner.copy(accountId = completedId(900))
++                                )
++                        )
++                    1 ->
++                        record.copy(
++                            intent =
++                                record.intent.copy(
++                                    owner = record.intent.owner.copy(companyId = completedId(900))
++                                )
++                        )
++                    2 -> record.copy(intent = record.intent.copy(conversationId = completedId(900)))
++                    3 -> record.copy(intent = record.intent.copy(id = completedId(900)))
++                    4 ->
++                        record.copy(
++                            state =
++                                sent.copy(
++                                    device = sent.device.copy(nativeSessionId = completedId(900))
++                                )
++                        )
++                    5 ->
++                        record.copy(
++                            state =
++                                sent.copy(device = sent.device.copy(deviceId = completedId(900)))
++                        )
++                    6 ->
++                        record.copy(
++                            state =
++                                sent.copy(device = sent.device.copy(roomId = "!other:example.test"))
++                        )
++                    7 -> record.copy(state = sent.copy(transactionId = "other-transaction"))
++                    8 ->
++                        record.copy(
++                            state =
++                                sent.copy(
++                                    origin = f.stage.origin.copy(sender = "@other:example.test")
++                                )
++                        )
++                    9 ->
++                        record.copy(
++                            state =
++                                sent.copy(
++                                    origin = f.stage.origin.copy(contentHash = "b".repeat(64))
++                                )
++                        )
++                    else -> record.copy(revision = 0)
++                }
++            f.completed.records[f.original.logicalId!!] = f.completion.copy(record = changed)
++            assertIs<AppResult.Failed>(f.run(), "scenario $scenario")
++            assertEquals(setOf(f.original.transactionId), f.stage.nativeIds)
++            assertTrue(f.settled.isEmpty())
++            assertEquals(1, f.stage.closes)
++        }
++    }
++
++    @Test
++    fun archiveWithoutConfirmedPrimaryEventCannotSettle() = runTest {
++        val f = CompletedQueueFixture().apply { prepare() }
++        f.completed.records[f.original.logicalId!!] =
++            f.completion.copy(eventIds = listOf("$" + "unrelated"))
++        assertIs<AppResult.Failed>(f.run())
++        assertTrue(f.settled.isEmpty())
++    }
++
++    @Test
++    fun unknownUnarchivedEntryRemainsForExistingStagingGuard() = runTest {
++        val f = CompletedQueueFixture().apply { prepare() }
++        f.completed.records.clear()
++        assertEquals(AppResult.Success(0), f.run())
++        assertEquals(setOf(f.original.transactionId), f.stage.nativeIds)
++        assertIs<AppResult.Failed>(f.stage.stage())
++        assertEquals(0, f.stage.enqueues)
++    }
++
++    @Test
++    fun activeMappedAndUniquelyRecoverableStagingDoNotNeedOriginalReadCapability() = runTest {
++        for (staging in listOf(false, true)) {
++            val f = CompletedQueueFixture().apply { prepare() }
++            f.stage.nativeIds.clear()
++            f.stage.nativeIds += "original"
++            val state =
++                if (staging)
++                    CollaborationMessageState.Staging(f.stage.device, emptySet(), f.stage.origin)
++                else CollaborationMessageState.Staged(f.stage.device, "original", f.stage.origin)
++            f.stage.replace(f.stage.record.copy(revision = 1, state = state))
++            f.beforeOriginals = {
++                error("Mapped/uncertain original must retain its existing recovery path")
++            }
++            assertEquals(AppResult.Success(0), f.run())
++            assertIs<AppResult.Success<*>>(f.stage.stage())
++            assertTrue(f.settled.isEmpty())
++            assertEquals(0, f.stage.enqueues)
++        }
++    }
++
++    @Test
++    fun uncertainBeforeSnapshotCannotLoseItsReferencedOriginal() = runTest {
++        val f = CompletedQueueFixture().apply { prepare() }
++        f.stage.replace(
++            f.stage.record.copy(
++                revision = 1,
++                state =
++                    CollaborationMessageState.Staging(
++                        f.stage.device,
++                        setOf(f.original.transactionId),
++                        f.stage.origin,
++                    ),
++            )
++        )
++        assertIs<AppResult.Failed>(f.run())
++        assertEquals(setOf(f.original.transactionId), f.stage.nativeIds)
++        assertTrue(f.settled.isEmpty())
++    }
++
++    @Test
++    fun incompleteDuplicateOrUnboundedSnapshotNeverSettles() = runTest {
++        for (scenario in 0..4) {
++            val f = CompletedQueueFixture().apply { prepare() }
++            f.raw =
++                when (scenario) {
++                    0 -> emptyList()
++                    1 -> listOf(f.original, f.original)
++                    2 -> listOf(f.original.copy(transactionId = "other"))
++                    3 -> listOf(f.original.copy(eventType = "m.room.redaction"))
++                    else -> listOf(f.original.copy(serializedContent = "é".repeat(48_001)))
++                }
++            assertIs<AppResult.Failed>(f.run())
++            assertTrue(f.settled.isEmpty())
++        }
++    }
++
++    @Test
++    fun failedProofReadOrRevokedOwnerRetainsAllOriginals() = runTest {
++        for (revoked in listOf(false, true)) {
++            val f = CompletedQueueFixture().apply { prepare() }
++            if (revoked) f.completed.afterRead = { f.stage.base.setup.session = null }
++            else f.completed.readFailure = f.stage.base.storage
++            assertIs<AppResult.Failed>(f.run())
++            assertEquals(setOf(f.original.transactionId), f.stage.nativeIds)
++            assertTrue(f.settled.isEmpty())
++            assertEquals(1, f.stage.closes)
++        }
++    }
++
++    @Test
++    fun changedActiveRecordBeforeSettlementRetainsOriginal() = runTest {
++        val f = CompletedQueueFixture().apply { prepare() }
++        f.completed.afterRead = {
++            f.stage.replace(f.stage.record.copy(revision = f.stage.record.revision + 1))
++        }
++        assertIs<AppResult.Failed>(f.run())
++        assertTrue(f.settled.isEmpty())
++        assertEquals(setOf(f.original.transactionId), f.stage.nativeIds)
++    }
++
++    @Test
++    fun cancellationDuringOriginalReadClosesWriterAndRetainsQueue() = runTest {
++        val f = CompletedQueueFixture().apply { prepare() }
++        val entered = CompletableDeferred<Unit>()
++        f.beforeOriginals = {
++            entered.complete(Unit)
++            awaitCancellation()
++        }
++        val task = launch { f.run() }
++        entered.await()
++        task.cancelAndJoin()
++        assertTrue(f.settled.isEmpty())
++        assertEquals(setOf(f.original.transactionId), f.stage.nativeIds)
++        assertEquals(1, f.stage.closes)
++    }
++
++    @Test
++    fun cancellationAfterNativeSettlementRecoversWithoutAnotherRemovalOrSend() = runTest {
++        val f = CompletedQueueFixture().apply { prepare() }
++        val entered = CompletableDeferred<Unit>()
++        f.afterSettlement = {
++            entered.complete(Unit)
++            awaitCancellation()
++        }
++        val task = launch { f.run() }
++        entered.await()
++        task.cancelAndJoin()
++        assertTrue(f.stage.nativeIds.isEmpty())
++        f.afterSettlement = {}
++        assertEquals(AppResult.Success(0), f.run())
++        assertEquals(1, f.settled.size)
++        assertEquals(0, f.stage.enqueues)
++        assertEquals(2, f.stage.closes)
++    }
++
++    @Test
++    fun failedNativeSettlementRetainsOriginalAndRetriesSameProof() = runTest {
++        val f = CompletedQueueFixture().apply { prepare() }
++        f.settlementFailure = f.stage.base.storage
++        assertIs<AppResult.Failed>(f.run())
++        assertEquals(setOf(f.original.transactionId), f.stage.nativeIds)
++        f.settlementFailure = null
++        assertEquals(AppResult.Success(1), f.run())
++        assertEquals(listOf(f.original.transactionId), f.settled)
++    }
++
++    @Test
++    fun unexpectedQueueChangeAfterSettlementDoesNotAuthorizeAnotherSend() = runTest {
++        val f = CompletedQueueFixture().apply { prepare() }
++        f.afterSettlement = { f.stage.nativeIds += "foreign" }
++        assertIs<AppResult.Failed>(f.run())
++        assertEquals(setOf("foreign"), f.stage.nativeIds)
++        assertEquals(0, f.stage.enqueues)
++    }
++}
++
++private class CompletedQueueFixture {
++    val stage = StageFixture()
++    val completed = CollaborationCompletionFixture(stage.base)
++    lateinit var completion: CollaborationMessageCompletion
++    lateinit var original: CollaborationQueuedOriginal
++    var raw: List<CollaborationQueuedOriginal>? = null
++    val settled = mutableListOf<String>()
++    var beforeOriginals: suspend () -> Unit = {}
++    var afterSettlement: suspend () -> Unit = {}
++    var settlementFailure: Failure? = null
++
++    private val runtimes =
++        object : CollaborationRuntimeRepository by stage.runtimes {
++            override suspend fun acquireMessageQueue(
++                owner: CollaborationOwner,
++                deviceId: String,
++                matrixRoomId: String,
++            ): AppResult<CollaborationMessageQueueLease> {
++                val acquired = stage.runtimes.acquireMessageQueue(owner, deviceId, matrixRoomId)
++                if (acquired is AppResult.Failed) return acquired
++                val queue = (acquired as AppResult.Success).value
++                return AppResult.Success(
++                    object : CollaborationMessageQueueLease by queue {
++                        override suspend fun originals():
++                            AppResult<List<CollaborationQueuedOriginal>> {
++                            beforeOriginals()
++                            return AppResult.Success(raw ?: listOf(original))
++                        }
++
++                        override suspend fun settleConfirmed(
++                            original: CollaborationQueuedOriginal,
++                            eventId: String,
++                        ): AppResult<CollaborationQueueSettlement> {
++                            settlementFailure?.let {
++                                return AppResult.Failed(it)
++                            }
++                            assertEquals(this@CompletedQueueFixture.original, original)
++                            assertEquals(
++                                (completion.record.state as CollaborationMessageState.Sent).eventId,
++                                eventId,
++                            )
++                            assertTrue(stage.nativeIds.remove(original.transactionId))
++                            settled += original.transactionId
++                            afterSettlement()
++                            return AppResult.Success(CollaborationQueueSettlement.Settled)
++                        }
++                    }
++                )
++            }
++        }
++    private val reconcile =
++        SettleCollaborationCompletedQueue(
++            stage.messages,
++            completed,
++            stage.lists,
++            runtimes,
++            stage.base.setup.sessions,
++            stage.base.setup.workspaces,
++            stage.base.server,
++            stage.base.build,
++            stage.base.clock,
++        )
++
++    suspend fun prepare() {
++        stage.prepare()
++        val record =
++            stage.record.copy(
++                intent = stage.record.intent.copy(id = completedId(999), text = "Older original"),
++                revision = 3,
++                state =
++                    CollaborationMessageState.Sent(
++                        stage.device,
++                        "old-native",
++                        "$" + "accepted",
++                        stage.origin,
++                    ),
++            )
++        completion = CollaborationMessageCompletion(record, listOf("$" + "accepted"))
++        original =
++            CollaborationQueuedOriginal(
++                "old-native",
++                record.intent.id,
++                stage.origin,
++                "m.room.message",
++                "{}",
++            )
++        completed.records[record.intent.id] = completion
++        stage.nativeIds += original.transactionId
++    }
++
++    var timelineOwner: CollaborationOwner? = null
++    var timelineDevice: CollaborationMessageDevice? = null
++
++    suspend fun run() =
++        reconcile(
++            CollaborationOperationScope.Selected("selection"),
++            stage.record.intent.conversationId,
++            object : CollaborationTimelineLease {
++                override val owner = timelineOwner ?: stage.owner
++                override val device = timelineDevice ?: stage.device
++                override val deviceId = device.deviceId
++                override val matrixRoomId = device.roomId
++                override val updates = emptyFlow<AppResult<List<CollaborationTimelineItem>>>()
++
++                override suspend fun close(): AppResult<Unit> =
++                    error("Settlement never owns the caller's timeline")
++            },
++        )
++}
++
++private fun completedId(value: Int) =
++    "00000000-0000-0000-0000-" + value.toString().padStart(12, '0')
+diff --git a/features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationTextTest.kt b/features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationTextTest.kt
+index 2f93ba75..ce3df3bd 100644
+--- a/features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationTextTest.kt
++++ b/features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationTextTest.kt
+@@ -423,7 +423,7 @@ internal class StageFixture {
+             )
+     }
+ 
+-    private val messages =
++    val messages =
+         object : CollaborationMessageRepository by base.messages {
+             override suspend fun update(
+                 access: CollaborationLocalAccess,
+@@ -445,7 +445,7 @@ internal class StageFixture {
+                 return AppResult.Success(true)
+             }
+         }
+-    private val lists =
++    val lists =
+         object : CollaborationListRepository by base.lists {
+             override suspend fun restrict(
+                 access: CollaborationLocalAccess,
+@@ -455,7 +455,7 @@ internal class StageFixture {
+                 return AppResult.Failed(base.storage)
+             }
+         }
+-    private val runtimes =
++    val runtimes =
+         object : CollaborationRuntimeRepository {
+             override suspend fun handoverIntent(
+                 owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
+diff --git a/gradle/verification-metadata.xml b/gradle/verification-metadata.xml
+index 4bfce275..e66ea92b 100644
+--- a/gradle/verification-metadata.xml
++++ b/gradle/verification-metadata.xml
+@@ -14937,5 +14937,13 @@
+             <sha256 value="8cc8fd7665276b7c50f9f4aa42d578b78d092b3cbcb6cd05fd329f7c4dfa038d" origin="Generated by Gradle"/>
+          </artifact>
+       </component>
++      <component group="org.matrix.rustcomponents" name="sdk-android" version="26.10.23-hris-confirmed-queue-local">
++         <artifact name="sdk-android-26.10.23-hris-confirmed-queue-local.aar">
++            <sha256 value="4534e86ed5f15fa036cf5c198cfbf551dbc742ca68d32363e8ba68305ddbb92a" origin="Verified local confirmed-queue SDK candidate"/>
++         </artifact>
++         <artifact name="sdk-android-26.10.23-hris-confirmed-queue-local.pom">
++            <sha256 value="69f3d29fcf1b3495f56b3da99185b43bb7fcc1b15a9566b3e44bf75c7010425a" origin="Verified local confirmed-queue SDK candidate"/>
++         </artifact>
++      </component>
+    </components>
+ </verification-metadata>
