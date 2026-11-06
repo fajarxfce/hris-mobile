@@ -48,8 +48,18 @@ with `crypto-store,bundled`, then `existing_crypto_store::tests` in `matrix-sdk-
 with `sentry,experimental-x509-identity-verification`. The local driver and full commands
 are supplementary evidence; the patch and hashes are retained here in Git.
 
-Android ABI builds, paired generated bindings, real Android consumer, private-identity
-repository/use-case integration and Apple runtime support remain required. Every changed
+ARM64 completed in 645.717 seconds with all 1,214 source inputs unchanged. Its native
+library has four 16 KiB-aligned LOAD segments and the exact new function plus all three
+existing recovery methods. Nine Kotlin files were generated from that binary; only the
+main SDK binding changed. [Android evidence](measurements/collaboration-sdk-existing-identity-android-2026-11-06.json)
+and the separate `android-existing-identity-build.json` retain this candidate pair.
+The build/package drivers accept that filename with `--manifest`, and require its
+additional native function and compiled JVM API. Four build-driver cases pass, including
+rejecting missing or prefix-only function symbols. The candidate workflow selects it;
+the shipping manifest and dependency remain SDK 3.
+
+Remaining Android ABIs, real Android consumer, private-identity repository/use-case
+integration and Apple runtime support remain required. Every changed
 binary must use a new SDK version; never replace SDK 3 assets. Phone 50 and its pending-
 send report remain unchanged by this source-only candidate. Continue original-parent
 recovery, stop/join, freeze/drain/adoption and the remaining communications PRD.

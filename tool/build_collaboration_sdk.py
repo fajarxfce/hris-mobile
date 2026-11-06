@@ -19,6 +19,7 @@ TARGETS = {
     "x86": ("i686-linux-android", "Intel 80386", "ELF32"),
     "x86_64": ("x86_64-linux-android", "Advanced Micro Devices X86-64", "ELF64"),
 }
+BUILD_MANIFESTS = ("android-build.json", "android-existing-identity-build.json")
 
 
 def sha(path):
@@ -46,7 +47,7 @@ def run(command, *, cwd, env, log, timeout=4800):
             raise subprocess.CalledProcessError(code, command)
 
 
-def verify_native_library(native, abi, ndk):
+def verify_native_library(native, abi, ndk, required_functions=()):
     """Validate the ELF ABI and Android's page alignment requirement for that ABI."""
     _, machine, elf_class = TARGETS[abi]
     if not 1 <= native.stat().st_size <= 512 * 1024 * 1024:
@@ -55,6 +56,7 @@ def verify_native_library(native, abi, ndk):
     header = subprocess.check_output([str(readelf), "-h", str(native)], text=True, timeout=30)
     segments = subprocess.check_output([str(readelf), "-lW", str(native)], text=True, timeout=30)
     symbols = subprocess.check_output([str(readelf), "--dyn-syms", "--wide", str(native)], text=True, timeout=30)
+    symbol_names = {line.split()[-1] for line in symbols.splitlines() if line.split()}
     alignments = [int(line.split()[-1], 16) for line in segments.splitlines() if line.strip().startswith("LOAD")]
     # Android's 16 KB requirement applies to arm64-v8a/x86_64. The NDK still emits
     # 4 KB-aligned ARMv7/x86 libraries for their 32-bit device targets.
@@ -62,8 +64,10 @@ def verify_native_library(native, abi, ndk):
     if machine not in header or elf_class not in header or len(alignments) < 2 or not all(n >= minimum for n in alignments):
         raise ValueError("Unexpected ELF architecture or alignment")
     required = ["load_or_fetch_raw_event", "queued_message_events", "settle_confirmed_queue_event"]
-    if not all("uniffi_matrix_sdk_ffi_fn_method_room_" + name in symbols for name in required):
+    if not all("uniffi_matrix_sdk_ffi_fn_method_room_" + name in symbol_names for name in required):
         raise ValueError("Missing SDK entry point")
+    if not all("uniffi_matrix_sdk_ffi_fn_func_" + name in symbol_names for name in required_functions):
+        raise ValueError("Missing SDK function entry point")
     return {"nativeSha256": sha(native), "nativeBytes": native.stat().st_size,
             "elfClass": elf_class, "requiredElfAlignment": minimum,
             "loadAlignments": alignments, "requiredSymbolsPresent": True}
@@ -71,7 +75,11 @@ def verify_native_library(native, abi, ndk):
 
 def build(args):
     patches = Path(__file__).resolve().parent / "collaboration-sdk-patches"
-    manifest = json.loads((patches / "android-build.json").read_text())
+    manifest_name = getattr(args, "manifest", "android-build.json")
+    if manifest_name not in BUILD_MANIFESTS:
+        raise ValueError("Unknown SDK build manifest")
+    manifest_path = patches / manifest_name
+    manifest = json.loads(manifest_path.read_text())
     sdk = args.sdk.resolve(strict=True)
     out = args.output.resolve()
     if out == sdk or sdk in out.parents or out in sdk.parents:
@@ -99,7 +107,8 @@ def build(args):
     target = TARGETS[args.abi][0]
     started = time.monotonic()
     record = {"startedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-              "abi": args.abi, "target": target, "manifestSha256": sha(patches / "android-build.json"),
+              "abi": args.abi, "target": target, "manifest": manifest_name,
+              "manifestSha256": sha(manifest_path),
               "upstream": manifest["upstream"], "patches": manifest["patches"],
               "rust": manifest["rust"], "ndk": manifest["ndk"], "cargoNdk": manifest["cargoNdk"],
               "androidApiLevel": manifest["androidApiLevel"], "jobs": manifest["jobs"],
@@ -141,7 +150,7 @@ def build(args):
         native = main / "jniLibs" / args.abi / "libmatrix_sdk_ffi.so"
         if libraries != [native]:
             raise ValueError("Unexpected native library output")
-        inspected = verify_native_library(native, args.abi, ndk)
+        inspected = verify_native_library(native, args.abi, ndk, manifest.get("requiredFunctions", []))
         shutil.copy2(sdk / "LICENSE", out / "LICENSE")
         shutil.copy2(sdk / "Cargo.lock", out / "Cargo.lock")
         record.update(passed=True, sourcesUnchanged=True, sourceSha256=manifest["patchedSources"],
@@ -159,5 +168,6 @@ if __name__ == "__main__":
     parser.add_argument("--tools-dir", type=Path, required=True)
     parser.add_argument("--android-sdk", type=Path, required=True)
     parser.add_argument("--abi", choices=TARGETS, required=True)
+    parser.add_argument("--manifest", choices=BUILD_MANIFESTS, default="android-build.json")
     parser.add_argument("--bootstrap", action="store_true", help="Install pinned tooling in the owned build environment")
     build(parser.parse_args())

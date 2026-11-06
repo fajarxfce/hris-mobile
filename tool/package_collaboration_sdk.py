@@ -15,7 +15,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 import zipfile
 
-from build_collaboration_sdk import TARGETS, run, sha, verify_native_library
+from build_collaboration_sdk import BUILD_MANIFESTS, TARGETS, run, sha, verify_native_library
 
 
 def require(condition, message):
@@ -32,7 +32,7 @@ def write_ivy(pom, distribution, version, output):
                          module=distribution["module"], revision=version, status="release")
     ET.SubElement(info, "license", name="Apache-2.0", url="https://www.apache.org/licenses/LICENSE-2.0.txt")
     ET.SubElement(info, "description", homepage="https://github.com/matrix-org/matrix-rust-sdk").text = (
-        "Matrix Rust SDK Android bindings with HRIS raw-event and confirmed-queue recovery patches."
+        "Matrix Rust SDK Android bindings with HRIS local-store and delivery recovery patches."
     )
     ET.SubElement(ET.SubElement(ivy, "configurations"), "conf", name="default", visibility="public")
     ET.SubElement(ET.SubElement(ivy, "publications"), "artifact", name=distribution["module"],
@@ -63,7 +63,10 @@ def write_ivy(pom, distribution, version, output):
 
 def package(args):
     patches = Path(__file__).resolve().parent / "collaboration-sdk-patches"
-    manifest = json.loads((patches / "android-build.json").read_text())
+    manifest_name = getattr(args, "manifest", "android-build.json")
+    require(manifest_name in BUILD_MANIFESTS, "Unknown SDK build manifest")
+    manifest_path = patches / manifest_name
+    manifest = json.loads(manifest_path.read_text())
     distribution = json.loads((patches / "android-distribution.json").read_text())
     require(re.fullmatch(r"\d+\.\d+\.\d+-hris\.[1-9]\d*", args.version), "Unexpected release version")
     wrapper, sdk = args.wrapper.resolve(), args.sdk.resolve()
@@ -91,7 +94,8 @@ def package(args):
     expected = {"jniLibs/" + abi + "/libmatrix_sdk_ffi.so" for abi in TARGETS}
     require({str(p.relative_to(main)) for p in main.glob("jniLibs/**/*.so")} == expected,
             "Exactly four native ABI libraries are required")
-    native = {abi: verify_native_library(main / "jniLibs" / abi / "libmatrix_sdk_ffi.so", abi, ndk)
+    native = {abi: verify_native_library(main / "jniLibs" / abi / "libmatrix_sdk_ffi.so", abi, ndk,
+                                       manifest.get("requiredFunctions", []))
               for abi in TARGETS}
     tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=wrapper).decode().split("\0")
     fingerprint = lambda: {name: sha(wrapper / name) for name in tracked if name and (wrapper / name).is_file()}
@@ -105,7 +109,8 @@ def package(args):
               "patchedSources": manifest["patchedSources"], "patches": manifest["patches"],
               "packagingDriverSha256": sha(Path(__file__).resolve()),
               "nativeVerifierSha256": sha(patches.parent / "build_collaboration_sdk.py"),
-              "androidBuildManifestSha256": sha(patches / "android-build.json"),
+              "androidBuildManifest": manifest_name,
+              "androidBuildManifestSha256": sha(manifest_path),
               "distributionManifestSha256": sha(patches / "android-distribution.json")}
     started = time.monotonic()
     try:
@@ -144,7 +149,7 @@ def package(args):
                     "Consumer rules differ from wrapper")
             classes = out / "classes.jar"
             classes.write_bytes(archive.read("classes.jar"))
-        for name, members in {
+        required_api = {
             "Room": ["loadOrFetchRawEvent", "queuedMessageEvents", "settleConfirmedQueueEvent"],
             "RoomInterface": ["loadOrFetchRawEvent", "queuedMessageEvents", "settleConfirmedQueueEvent"],
             "QueuedMessageEvent": ["getTransactionId", "getEventType", "getContentJson"],
@@ -152,7 +157,9 @@ def package(args):
                                            "CONTENT_MISMATCH", "NOT_AN_EVENT", "DEPENDENT_WORK"],
             "RawTimelineEvent": ["getJson", "getEncryption"],
             "RawEventEncryption": ["NOT_DECRYPTED", "DECRYPTED", "UNABLE_TO_DECRYPT"],
-        }.items():
+        }
+        required_api.update(manifest.get("additionalJvmApi", {}))
+        for name, members in required_api.items():
             declaration = subprocess.check_output([str(java / "bin/javap"), "-classpath", str(classes),
                                                    "org.matrix.rustcomponents.sdk." + name], text=True, timeout=30)
             require(all(member in declaration for member in members), "Missing SDK API: " + name)
@@ -165,7 +172,7 @@ def package(args):
         with tarfile.open(bundle, "w:gz") as archive:
             for name in ["LICENSE", "Cargo.lock"]:
                 archive.add(sdk / name, arcname=name)
-            for name in ["android-build.json", "android-distribution.json", *manifest["patches"]]:
+            for name in [manifest_name, "android-distribution.json", *manifest["patches"]]:
                 archive.add(patches / name, arcname="patches/" + name)
             for name in generated:
                 archive.add(main / name, arcname=name)
@@ -191,4 +198,5 @@ if __name__ == "__main__":
     parser.add_argument("--java-home", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--version", required=True)
+    parser.add_argument("--manifest", choices=BUILD_MANIFESTS, default="android-build.json")
     package(parser.parse_args())

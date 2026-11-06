@@ -8,6 +8,8 @@ on:
       - tool/build_collaboration_sdk.py
       - tool/test_build_collaboration_sdk.py
       - tool/collaboration-sdk-patches/android-build.json
+      - tool/collaboration-sdk-patches/android-existing-identity-build.json
+      - tool/collaboration-sdk-patches/existing-crypto-identity.patch
       - tool/collaboration-sdk-patches/raw-event.patch
       - tool/collaboration-sdk-patches/confirmed-queue.patch
       - tool/collaboration-sdk-patches/android-arm64-baseline.patch
@@ -61,6 +63,7 @@ jobs:
             --output "$GITHUB_WORKSPACE/artifact/${{ matrix.abi }}" \
             --tools-dir "$RUNNER_TEMP/matrix-sdk-tools" \
             --android-sdk "$ANDROID_HOME" \
+            --manifest android-existing-identity-build.json \
             --abi '${{ matrix.abi }}' --bootstrap
       - uses: actions/upload-artifact@v4
         if: always()

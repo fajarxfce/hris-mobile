@@ -9,7 +9,7 @@ import unittest
 from unittest.mock import patch
 from types import SimpleNamespace
 
-from build_collaboration_sdk import build, run
+from build_collaboration_sdk import build, run, verify_native_library
 
 
 class SdkBuildProcessTest(unittest.TestCase):
@@ -52,6 +52,32 @@ class SdkBuildEnvironmentTest(unittest.TestCase):
                     side_effect=[manifest["upstream"], ""],
                 ), self.assertRaisesRegex(ValueError, "ambient Rust flags"):
                     build(args)
+
+
+class SdkNativeSymbolsTest(unittest.TestCase):
+    def test_candidate_requires_its_exact_function_and_all_existing_recovery_methods(self):
+        methods = ["load_or_fetch_raw_event", "queued_message_events", "settle_confirmed_queue_event"]
+        existing = ["uniffi_matrix_sdk_ffi_fn_method_room_" + name for name in methods]
+        function = "uniffi_matrix_sdk_ffi_fn_func_read_existing_crypto_identity"
+        cases = [existing, existing + [function + "_checksum"], existing[1:] + [function]]
+        with tempfile.TemporaryDirectory() as directory:
+            native = Path(directory) / "candidate.so"
+            native.write_bytes(b"fixture")
+            for symbols in cases:
+                with self.subTest(symbols=symbols), patch(
+                    "build_collaboration_sdk.subprocess.check_output",
+                    side_effect=["ELF64 AArch64", "LOAD fixture 0x4000\nLOAD fixture 0x4000",
+                                 "\n".join(symbols)],
+                ), self.assertRaises(ValueError):
+                    verify_native_library(native, "arm64-v8a", Path(directory),
+                                          ["read_existing_crypto_identity"])
+            with patch("build_collaboration_sdk.subprocess.check_output", side_effect=[
+                "ELF64 AArch64", "LOAD fixture 0x4000\nLOAD fixture 0x4000",
+                "\n".join(existing + [function]),
+            ]):
+                self.assertTrue(verify_native_library(
+                    native, "arm64-v8a", Path(directory), ["read_existing_crypto_identity"]
+                )["requiredSymbolsPresent"])
 
 
 if __name__ == "__main__":

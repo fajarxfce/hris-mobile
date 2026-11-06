@@ -13,8 +13,13 @@ pinned upstream. It is deliberately not in the shipping build manifest yet. The
 read-only crypto-account reader passed cipher11, SQLite6 and FFI1 cases; clean
 reconstruction matches all1,214 tested files. [Contract and limits](../../docs/collaboration-sdk-existing-identity.md),
 [evidence](../../docs/measurements/collaboration-sdk-existing-identity-2026-11-06.json).
-Android binary/binding and actual consumer acceptance remain pending. SDK 3 assets
-and the app dependency are unchanged; a changed binary requires a new version.
+ARM64 and its nine generated Kotlin files are now validated. The separate
+`android-existing-identity-build.json` pins all five patches, 19 changed sources and
+the new binding pair; pass it through `--manifest` to either build or package driver.
+The SDK workflow now builds that candidate. Both drivers retain their SDK 3 default
+for explicit historical reproduction; never republish SDK 3. Other ABIs and actual
+consumer acceptance remain pending. [Android evidence](../../docs/measurements/collaboration-sdk-existing-identity-android-2026-11-06.json).
+SDK 3 assets and the app dependency are unchanged; a changed binary requires a new version.
 
 ## Refresh backoff candidate
 

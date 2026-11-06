@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Current: ARM64 private reader pair accepted; x86_64 building — 6 November 2026
+
+ARM64 70624 PASSED in 645.717 seconds, all 1,214 native inputs unchanged. Exact new
+function/recovery symbols and four 16 KiB-aligned segments pass. Native SHA
+4ebfa7e44fa04a5a269dc725ff65bbb8f58f43e8eb7c683d2426c05fc0bf2983; nine paired Kotlin
+files, only the main SDK binding changed. Separate candidate manifest
+`tool/collaboration-sdk-patches/android-existing-identity-build.json` pins five patches,
+19 sources and that pair. Build/package drivers accept `--manifest`; SDK workflow
+now selects the new candidate. Four Python driver cases pass; no app source changed.
+[Evidence](measurements/collaboration-sdk-existing-identity-android-2026-11-06.json).
+SDK 3 shipping manifest, dependency and published assets remain immutable/unchanged.
+
+The ONLY heavy local job is x86_64 16653, using .work/space-store-inventory-2026-11-06/
+build-android.py. After it ends compare all nine Kotlin hashes, verify ELF/new symbols,
+then build armv7 and x86 sequentially. No owned emulator is active. The isolated
+consumer is .worktrees/hris-mobile-sdk-inventory-consumer at35dfec82; its only change
+is the prepared LocalSdkIdentityProbe, not yet built/configured. Generated Kotlin
+confirms its assumed function/exception/field names. The isolated wrapper is
+.worktrees/matrix-kotlin-sdk-inventory-2026-11-06 atc1664f71, not yet populated/built.
+Use a fresh owned emulator image and actual process-death proof; preserve Bima data.
+
+First7ef control42282707724 remains running (portable PASS, iOS host building).
+Native42282707833 has ARM64 PASS and x86_64 running. First35df control42288555007/
+native42288554801 remain queued; do not displace them with another app-source push.
+New SDK-tool changes do not trigger those workflows. Audit exact first artifacts;
+never redispatch accepted sends merely for evidence. Starter Apple remains accepted.
+Phone50 remains installed and long-pending report OPEN, with no new install/send/UI.
+Continue product key possession, original-parent recovery, freeze/drain/adoption,
+organization routing and the remaining 54 communications groups. Push every commit;
+announce every later explicit-serial install-only phone update.
+
 ## Current: native private-account reader tested; ARM64 candidate building — 6 November 2026
 
 Mobile program 35dfec8223d184757486d0086791f50928e9eb45 is pushed and clean after original
