@@ -10,20 +10,21 @@ on:
       - tool/collaboration-sdk-patches/android-build.json
       - tool/collaboration-sdk-patches/raw-event.patch
       - tool/collaboration-sdk-patches/confirmed-queue.patch
+      - tool/collaboration-sdk-patches/android-arm64-baseline.patch
   workflow_dispatch:
     inputs:
       abi:
         description: Android ABI to build (candidate only; no publication)
         type: choice
         required: true
-        default: x86
-        options: [x86, armeabi-v7a, arm64-v8a, x86_64, all]
+        default: arm64-v8a
+        options: [arm64-v8a, x86, armeabi-v7a, x86_64, all]
 
 permissions:
   contents: read
 
 concurrency:
-  group: collaboration-sdk-${{ github.ref }}-${{ inputs.abi || 'x86' }}
+  group: collaboration-sdk-${{ github.ref }}-${{ inputs.abi || 'arm64-v8a' }}
   cancel-in-progress: false
 
 jobs:
@@ -33,7 +34,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        abi: ${{ fromJSON(inputs.abi == 'all' && '["x86","armeabi-v7a","arm64-v8a","x86_64"]' || format('["{0}"]', inputs.abi || 'x86')) }}
+        abi: ${{ fromJSON(inputs.abi == 'all' && '["x86","armeabi-v7a","arm64-v8a","x86_64"]' || format('["{0}"]', inputs.abi || 'arm64-v8a')) }}
     steps:
       - uses: actions/checkout@v4
         with:

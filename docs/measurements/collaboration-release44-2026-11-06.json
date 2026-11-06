@@ -1,0 +1,89 @@
+{
+  "accepted": false,
+  "phoneInstalled": false,
+  "sourceCommit": "62d9fba1a8ee855a14dd62d5c2d3e72f4f4dc6ac",
+  "versionCode": 44,
+  "apkSha256": "df17605158026144ccf52cda70ab6c596aa094d6e697bbf98d23df635303d839",
+  "apkBytes": 121024508,
+  "buildSeconds": 169.409,
+  "signatureAndManifestVerified": true,
+  "sdkIdentityVerified": {
+    "nativeSha256": "0f1515a201d6756e9f1bde6feb6b817a50a269af14735cea8da8c9e40c815206",
+    "nativeBytes": 97320800,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "aarSha256": "de52b51a3bdf346f27dfb66b891f51abf42236f52523e1f99bb9b9b2da6304b5",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.1",
+    "strippedNativeMatchesVerifiedSdk": true,
+    "stripToolNdkVersion": "28.2.13676358",
+    "queueApisAndUseCaseInDex": true
+  },
+  "lintIssues": 0,
+  "offlineSnapshots": [
+    {
+      "mode": "offline",
+      "opening": 1,
+      "visibleRows": 11,
+      "sendVisible": true,
+      "recoveryBanner": false,
+      "olderAction": false,
+      "reconnectPrompt": false
+    },
+    {
+      "mode": "offline",
+      "opening": 2,
+      "visibleRows": 10,
+      "sendVisible": true,
+      "recoveryBanner": false,
+      "olderAction": false,
+      "reconnectPrompt": false
+    }
+  ],
+  "onlineAccepted": false,
+  "runtimeFailure": {
+    "processId": 4280,
+    "at": "2026-11-06T11:56:36Z",
+    "reason": "APP CRASH(NATIVE)",
+    "signal": "SIGILL",
+    "hostAbi": "x86_64",
+    "guestAbi": "arm64",
+    "stage": "ClientBuilder restoring encrypted SDK SQLite store",
+    "symbolizedTopFrames": [
+      "sha2::sha256::aarch64_sha2::compress",
+      "matrix_sdk_store_encryption::StoreCipher::expand_key",
+      "matrix_sdk_store_encryption::StoreCipher::import"
+    ],
+    "upstreamArm64TargetFeatures": [
+      "neon",
+      "aes",
+      "sha2",
+      "pmuv3"
+    ],
+    "baselineCorrectionUnderTest": true
+  },
+  "screenshotsInspected": [
+    "offline.png",
+    "online-failure.png"
+  ],
+  "emulatorStopped": {
+    "pid": 1505571,
+    "startTicks": "164268084",
+    "stopped": true,
+    "dataRetained": true,
+    "phoneTouched": false,
+    "at": "2026-11-06T12:07:27.826137+00:00"
+  },
+  "keysAndUserdataRetained": true,
+  "limitations": [
+    "Offline history passed; online acceptance failed. This APK is not approved for phone installation.",
+    "The runtime failure is observed under ARM64 translation on the owned x86_64 emulator. No physical-phone crash is claimed.",
+    "The queue logic/native x86_64 acceptance remains separate from ARM64 CPU compatibility."
+  ]
+}

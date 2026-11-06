@@ -1,5 +1,54 @@
 # Agent continuation — HRIS Mobile
 
+## URGENT: release44 ARM64 runtime acceptance failed — 6 November 2026
+
+Release44 is NOT ACCEPTED and MUST NOT be installed on the phone. Its nondebuggable
+arm64 APK builds/validates from62d9fba1 (169.409s, lint0), SHA
+df17605158026144ccf52cda70ab6c596aa094d6e697bbf98d23df635303d839,
+121,024,508 bytes. SDK bytes match the published26.10.23-hris.1 candidate after NDK28.2 strip.
+The two offline room openings show11/10 rows and no recovery/older/reconnect prompts.
+Online client restoration then crashes natively with SIGILL at11:56:36UTC/PID4280.
+The later PID4762 was a different process; its empty crash log must not be used to
+claim the failed app never crashed. System exit-info confirms APP CRASH(NATIVE).
+
+The owned x86_64 emulator runs the arm64 APK through native translation. Symbolized
+frames point to sha2::sha256::aarch64_sha2::compress, then StoreCipher::expand_key /
+import while opening existing encrypted SDK SQLite, before queue recovery. Upstream
+.cargo/config.toml forces +neon,+aes,+sha2,+pmuv3, bypassing optional crypto dispatch.
+The baseline candidate keeps +neon and allows crypto crates to detect AES/SHA2.
+This is under runtime validation; do not claim a physical-device crash or a fix yet.
+[Release44 failure evidence](measurements/collaboration-release44-2026-11-06.json).
+Both captured screenshots (offline and failed online/launcher) were inspected.
+No new chat was submitted. The original Bima userdata/keys are retained. Emulator
+1505571/startTicks164268084 stopped12:07:27UTC; no emulator is active.
+
+ONLY local heavy job: SDK baseline arm64 build60362, started12:09UTC,
+.work/sdk-confirmed-queue-2026-11-06/android-baseline-arm64. Output will be under
+.worktrees/matrix-sdk-queue-baseline-android-arm64-2026-11-06/main. The SDK's nine
+fingerprinted inputs are FROZEN until completion. Original v1 outputs/wrapper/AAR
+and all failure evidence stay intact. New android-arm64-baseline.patch SHA
+82fda7d5cadc965059364c7094948fe71286293c24a1df2966d2d673327c3ec3 applies after the
+raw-event and confirmed-queue patches; only the ARM64 Cargo target flags change.
+android-build.json records it and config SHA531ceda5e3e8a7ba878c0e475434ca67651242843d6dab928877a8e31b90d5e4.
+This build uses the existing owned Cargo target cache with matching toolchains;
+ambient Rust flags are rejected. Production Rust source and Kotlin API are unchanged.
+
+Next: verify baseline arm64 JNI/Kotlin; verify remaining ABI outputs against the
+new target-only config (reuse valid caches); prepare an isolated new wrapper/AAR,
+then test a new ARM64 release candidate against the SAME retained Bima store before
+publishing SDK26.10.23-hris.2. Do not replace the published SDK1 assets or accept the
+failed44 APK by testing a different ABI. Add a repeatable ARM64 crypto/store smoke
+check to native CI so structural ELF validation alone cannot miss this again.
+The SDK1 publication remains immutable; update its notes with the observed limitation.
+Application source remains62d9fba1, still using SDK1 until a validated replacement.
+
+Exact62d9fba1 CI runs are active: Native protocol42213012559, HRIS42213012407,
+Control/Apple42213012469. They currently execute native x86_64, not this ARM64
+translation path. Audit their results separately. The latest phone ADB reconnect
+about11:50UTC timed out. Phone last confirmed42; one availability question remains
+pending. Accepted release43 can still be installed if the phone returns, with the
+usual announcement/explicit serial/install-only. Never launch or drive its UI.
+
 ## Queue recovery integrated; release44 next — 6 November 2026
 
 The application recovery increment is accepted and committed with the public SDK

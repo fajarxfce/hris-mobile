@@ -1,0 +1,15 @@
+diff --git a/.cargo/config.toml b/.cargo/config.toml
+index 68856a7..69c5e84 100644
+--- a/.cargo/config.toml
++++ b/.cargo/config.toml
+@@ -9,8 +9,8 @@ crates-io = "https://docs.rs/"
+ rustdoc-map = true
+ 
+ [target.aarch64-linux-android]
+-# These rust flags improve the performance on Android on arm64
+-rustflags = ["-C", "target-feature=+neon,+aes,+sha2,+pmuv3"]
++# Keep the Android arm64 baseline; crypto crates detect optional CPU features at runtime.
++rustflags = ["-C", "target-feature=+neon"]
+ 
+ [env]
+ IPHONEOS_DEPLOYMENT_TARGET = "16.0"

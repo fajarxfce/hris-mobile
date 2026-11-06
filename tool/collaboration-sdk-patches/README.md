@@ -191,7 +191,7 @@ and writes candidate evidence beside the JNI/Kotlin pair. It never publishes an
 artifact or changes an application dependency. Timeout handling reaps its owned
 subprocess; two process-lifetime/exit-code tests pass locally.
 
-`.github/workflows/collaboration-sdk.yml` builds x86 on changes to these SDK build
+`.github/workflows/collaboration-sdk.yml` builds arm64-v8a on changes to these SDK build
 inputs; manual runs can select another ABI or all four. It uses an isolated runner,
 read-only repository permissions and a seven-day candidate artifact. Downloaded
 artifacts must pass source, Kotlin, native and workflow-artifact digest checks before
@@ -238,3 +238,18 @@ hashes and the application release checks. Publish only those exact immutable fi
 do not replace an existing version or confuse a failed CI run with independent
 local verification. Existing application release variants do not enable R8, so their
 acceptance is not evidence of minifier compatibility.
+
+## Android ARM64 CPU baseline — under runtime validation
+
+`android-arm64-baseline.patch` applies after the two recovery patches. It changes
+only the Android arm64 target configuration: NEON remains enabled, while AES, SHA2
+and PMUv3 are no longer unconditionally enabled. Crypto crates keep their runtime
+feature detection and software fallback. The pinned source/patch hashes include
+this configuration change. Ambient Rust flags are rejected by the build driver.
+
+This follows a real release44 SIGILL while importing the encrypted SDK store under
+ARM64 translation, despite successful ELF/API checks. The native x86_64 queue proof
+and the offline UI pass do not establish ARM64 compatibility. Preserve the failed
+APK and SDK1 assets. The baseline must reopen the same retained encrypted store and
+pass online acceptance before a new SDK/app release is accepted. The SDK workflow
+now defaults to arm64-v8a; native runtime coverage still needs an ARM64 smoke gate.

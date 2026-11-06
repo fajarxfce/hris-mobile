@@ -1,5 +1,14 @@
 # Android Matrix SDK distribution
 
+ARM64 release acceptance is currently paused. Release44 opens owned local history
+offline but crashes with SIGILL when restoring the encrypted SDK store under the
+owned x86_64 emulator's ARM64 translation. The stack reaches accelerated SHA-256
+from `StoreCipher::import`. Upstream Cargo settings force optional AES/SHA2/PMUv3
+features. A baseline ARM64 build now removes those assumptions and lets crypto
+crates detect supported instructions. Its runtime acceptance is still pending.
+The published `26.10.23-hris.1` assets remain unchanged; this finding does not claim
+a physical-phone crash. [Failure evidence](measurements/collaboration-release44-2026-11-06.json).
+
 The Android recovery adapter needs two additions to the Matrix Rust SDK: reading
 an original event without losing fields, and settling a proven server-confirmed
 original in a paused local send queue. The caller must still prove the accepted

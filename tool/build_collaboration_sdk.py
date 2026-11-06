@@ -85,6 +85,10 @@ def build(args):
             raise ValueError("SDK patch digest changed")
     out.mkdir(parents=True, exist_ok=False)
     env = os.environ.copy()
+    if any(value for name, value in env.items()
+           if name in {"RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS"}
+           or (name.startswith("CARGO_TARGET_") and name.endswith("_RUSTFLAGS"))):
+        raise ValueError("Use manifest-pinned Rust flags; ambient Rust flags are unsupported")
     env.pop("CARGO_NET_OFFLINE", None)
     ndk = args.android_sdk.resolve(strict=True) / "ndk" / manifest["ndk"]
     tools_dir = args.tools_dir.resolve()

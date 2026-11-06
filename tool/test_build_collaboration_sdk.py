@@ -1,13 +1,15 @@
 """The SDK build driver owns and reaps its subprocess when a build times out."""
 import os
+import json
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+from types import SimpleNamespace
 
-from build_collaboration_sdk import run
+from build_collaboration_sdk import build, run
 
 
 class SdkBuildProcessTest(unittest.TestCase):
@@ -34,6 +36,22 @@ class SdkBuildProcessTest(unittest.TestCase):
             run([sys.executable, "-c", "raise SystemExit(7)"],
                 cwd=Path.cwd(), env=os.environ.copy(), log=log, timeout=5)
         self.assertEqual(7, failed.exception.returncode)
+
+
+class SdkBuildEnvironmentTest(unittest.TestCase):
+    def test_ambient_flags_cannot_bypass_the_pinned_cpu_baseline(self):
+        manifest = json.loads((Path(__file__).parent / "collaboration-sdk-patches/android-build.json").read_text())
+        for name in ("RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "CARGO_TARGET_AARCH64_LINUX_ANDROID_RUSTFLAGS"):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                sdk = root / "sdk"
+                sdk.mkdir()
+                args = SimpleNamespace(sdk=sdk, output=root / "output")
+                with patch.dict(os.environ, {name: "-C target-feature=+sha2"}), patch(
+                    "build_collaboration_sdk.subprocess.check_output",
+                    side_effect=[manifest["upstream"], ""],
+                ), self.assertRaisesRegex(ValueError, "ambient Rust flags"):
+                    build(args)
 
 
 if __name__ == "__main__":
