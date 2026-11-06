@@ -45,4 +45,21 @@ class CollaborationSpaceSetupApi(@Named(HttpClients.Authenticated) private val c
             contentType(ContentType.Application.Json)
             setBody(input)
         }
+
+    suspend fun replaceBootstrap(
+        sessionId: String,
+        spaceId: String,
+        operation: String,
+        input: CollaborationSpaceBootstrapReplacementRequestDto,
+    ): CollaborationSpaceBootstrapReplacementDto =
+        client.requestJson(
+            "collaboration/spaces/${Uuid.parse(spaceId)}/native-device/bootstrap/replacements",
+            HttpMethod.Post,
+            maximumBytes = 4096,
+        ) {
+            forSession(sessionId)
+            header("Idempotency-Key", Uuid.parse(operation).toString())
+            contentType(ContentType.Application.Json)
+            setBody(input)
+        }
 }

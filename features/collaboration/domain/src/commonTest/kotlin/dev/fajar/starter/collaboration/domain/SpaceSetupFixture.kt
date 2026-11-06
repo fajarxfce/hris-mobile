@@ -268,6 +268,12 @@ internal class SpaceSetupFixture {
         }
     val remote =
         object : CollaborationSpaceSetupRepository {
+            override suspend fun replaceBootstrap(
+                owner: CollaborationSpaceOwner,
+                command: CollaborationSpaceBootstrapReplacement,
+            ): AppResult<CollaborationSpaceBootstrapReplacementReceipt> =
+                error("Ordinary setup must not silently replace an uncertain bootstrap")
+
             override suspend fun retry(
                 owner: CollaborationSpaceOwner,
                 command: CollaborationSpaceProvisioningRetry,

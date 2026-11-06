@@ -2,7 +2,7 @@ package dev.fajar.starter.collaboration.data
 
 import dev.fajar.starter.collaboration.data.api.CollaborationSpaceSetupApi
 import dev.fajar.starter.collaboration.data.datasources.ApiCollaborationSpaceSetupRemoteSource
-import dev.fajar.starter.collaboration.data.dto.CollaborationSpaceGatewayDto
+import dev.fajar.starter.collaboration.data.dto.*
 import dev.fajar.starter.collaboration.data.repositories.RemoteCollaborationSpaceSetupRepository
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.config.*
@@ -61,6 +61,11 @@ class CollaborationSpaceSetupTransportTest {
             "HRIS_${SETUP_DEVICE.replace("-", "")}",
         )
     private val headers = headersOf(HttpHeaders.ContentType, "application/json")
+    private val replacement =
+        CollaborationSpaceBootstrapReplacement(
+            bootstrap.copy(operationId = "70000000-0000-4000-8000-000000000099", clientBuild = 4),
+            bootstrap.copy(gatewayVersion = 0),
+        )
     private val receipt = """{"id":"$SETUP_DEVICE","version":7}"""
 
     private fun gateway(command: CollaborationSpaceBootstrap = bootstrap) =
@@ -78,6 +83,235 @@ class CollaborationSpaceSetupTransportTest {
             "2026-11-05T00:05:00Z",
             "2026-11-06T00:00:00Z",
         )
+
+    private fun replacementReply(command: CollaborationSpaceBootstrapReplacement = replacement) =
+        CollaborationSpaceBootstrapReplacementDto(
+            with(command.supersedes) {
+                SupersededCollaborationSpaceBootstrapDto(
+                    operationId,
+                    binding.spaceId,
+                    binding.accountId,
+                    binding.nativeSessionId,
+                    deviceId,
+                    deviceVersion,
+                    gatewayVersion,
+                    platform.name,
+                    clientBuild,
+                )
+            },
+            command.replacement.operationId,
+            gateway(command.replacement),
+        )
+
+    @Test
+    fun replacementKeepsTheOriginalDescriptorAndActualNewBuildAcrossOneNativeRotation() = runTest {
+        val bodies = mutableListOf<String>()
+        withRepository(
+            MockEngine { request ->
+                assertRequest(request, "bootstrap/replacements")
+                val body = request.body.toByteArray().decodeToString()
+                bodies += body
+                val fields = Json.parseToJsonElement(body).jsonObject
+                assertEquals(
+                    setOf(
+                        "deviceId",
+                        "expectedDeviceVersion",
+                        "expectedGatewayVersion",
+                        "supersedes",
+                    ),
+                    fields.keys,
+                )
+                assertEquals(0L, fields.getValue("expectedGatewayVersion").jsonPrimitive.long)
+                val original = fields.getValue("supersedes").jsonObject
+                assertEquals(
+                    replacement.supersedes.operationId,
+                    original.getValue("operationId").jsonPrimitive.content,
+                )
+                assertEquals(
+                    parent.nativeSessionId,
+                    original.getValue("nativeSessionId").jsonPrimitive.content,
+                )
+                assertEquals(4L, original.getValue("clientBuild").jsonPrimitive.long)
+                assertEquals(JsonNull, original.getValue("expectedGatewayVersion"))
+                assertFalse(body.contains(setupUser))
+                assertFalse(body.contains("accessToken"))
+                if (bodies.size == 1) respond("{}", HttpStatusCode.Unauthorized, headers)
+                else respond(Json.encodeToString(replacementReply()), headers = headers)
+            }
+        ) {
+            val receipt =
+                assertIs<AppResult.Success<CollaborationSpaceBootstrapReplacementReceipt>>(
+                        it.replaceBootstrap(owner, replacement)
+                    )
+                    .value
+            assertEquals(replacement.supersedes, receipt.superseded)
+            assertEquals(SETUP_OPERATION, receipt.replacementOperationId)
+            assertEquals(1L, receipt.gateway.version)
+            assertEquals(bootstrap.matrixDeviceId, receipt.gateway.matrixDeviceId)
+            assertEquals(2, bodies.size)
+            assertEquals(bodies[0], bodies[1])
+            for (text in
+                listOf(
+                    replacement.toString(),
+                    receipt.toString(),
+                    replacementReply().toString(),
+                    replacementReply().superseded.toString(),
+                )) {
+                assertFalse(text.contains(setupUser))
+                assertFalse(text.contains(parent.accountId))
+                assertFalse(text.contains(receipt.gateway.accessToken))
+            }
+        }
+    }
+
+    @Test
+    fun replacementRejectsEveryChangedProofFieldEvenWhenTheReturnedGatewayIsValid() = runTest {
+        val valid = replacementReply()
+        val original = valid.superseded
+        val changed =
+            listOf(
+                    original.copy(operationId = SETUP_GATEWAY),
+                    original.copy(spaceId = SETUP_GATEWAY),
+                    original.copy(accountId = SETUP_GATEWAY),
+                    original.copy(nativeSessionId = SETUP_GATEWAY),
+                    original.copy(deviceId = SETUP_GATEWAY),
+                    original.copy(expectedDeviceVersion = 1),
+                    original.copy(expectedGatewayVersion = 0),
+                    original.copy(platform = "IOS"),
+                    original.copy(clientBuild = 5),
+                )
+                .map { valid.copy(superseded = it) } +
+                listOf(
+                    valid.copy(replacementOperationId = replacement.supersedes.operationId),
+                    valid.copy(gateway = valid.gateway.copy(matrixDeviceId = "OTHER")),
+                    valid.copy(gateway = valid.gateway.copy(version = 0)),
+                    valid.copy(gateway = valid.gateway.copy(accessToken = setupAccess)),
+                )
+        for (body in changed.map { Json.encodeToString(it) } + listOf("{}", "x".repeat(4097))) {
+            var calls = 0
+            withRepository(
+                MockEngine {
+                    calls++
+                    respond(body, headers = headers)
+                }
+            ) {
+                assertIs<AppResult.Failed>(it.replaceBootstrap(owner, replacement))
+                assertEquals(1, calls)
+            }
+        }
+    }
+
+    @Test
+    fun replacementCannotLaunderAnotherParentDeviceSdkIdentityOrFutureObservation() = runTest {
+        val original = replacement.supersedes
+        val invalid =
+            listOf(
+                original.copy(operationId = SETUP_OPERATION),
+                original.copy(operationId = "bad"),
+                original.copy(binding = binding.copy(nativeSessionId = SETUP_GATEWAY)),
+                original.copy(binding = binding.copy(accountId = SETUP_GATEWAY)),
+                original.copy(binding = binding.copy(spaceId = SETUP_GATEWAY)),
+                original.copy(binding = binding.copy(audience = "https://other.example/")),
+                original.copy(deviceId = SETUP_GATEWAY),
+                original.copy(platform = CollaborationNativePlatform.IOS),
+                original.copy(clientBuild = 0),
+                original.copy(clientBuild = 1_000_000_000),
+                original.copy(deviceVersion = -1),
+                original.copy(deviceVersion = 3),
+                original.copy(gatewayVersion = -1),
+                original.copy(gatewayVersion = 1),
+                original.copy(gatewayVersion = 999_999),
+                original.copy(matrixDeviceId = "OTHER"),
+                original.copy(provider = provider.copy(matrixUserId = "@other:matrix.example.test")),
+            )
+        withRepository(MockEngine { error("Invalid replacement reached HTTP") }) { repo ->
+            for (input in invalid) assertIs<AppResult.Failed>(
+                repo.replaceBootstrap(owner, replacement.copy(supersedes = input))
+            )
+            assertIs<AppResult.Failed>(
+                repo.replaceBootstrap(
+                    owner,
+                    replacement.copy(replacement = replacement.replacement.copy(clientBuild = 4)),
+                )
+            )
+        }
+    }
+
+    @Test
+    fun replacementUsesTheActualIosBuildWithoutReplayingHistoricalHeaders() = runTest {
+        val input =
+            replacement.copy(
+                supersedes =
+                    replacement.supersedes.copy(platform = CollaborationNativePlatform.IOS),
+                replacement =
+                    replacement.replacement.copy(platform = CollaborationNativePlatform.IOS),
+            )
+        withRepository(
+            MockEngine { request ->
+                assertRequest(request, "bootstrap/replacements", platform = "IOS")
+                respond(Json.encodeToString(replacementReply(input)), headers = headers)
+            },
+            platform = AppPlatform.Ios,
+        ) {
+            assertIs<AppResult.Success<*>>(it.replaceBootstrap(owner, input))
+        }
+    }
+
+    @Test
+    fun replacementDenialAndUnavailableResponsesKeepTheirClassificationWithoutReplacementRetry() =
+        runTest {
+            for (status in
+                listOf(
+                    HttpStatusCode.Forbidden,
+                    HttpStatusCode.Unauthorized,
+                    HttpStatusCode.ServiceUnavailable,
+                )) {
+                var calls = 0
+                withRepository(
+                    MockEngine {
+                        calls++
+                        respond("""{"code":"collaboration_access_denied"}""", status, headers)
+                    }
+                ) {
+                    val result = assertIs<AppResult.Failed>(it.replaceBootstrap(owner, replacement))
+                    if (status == HttpStatusCode.Forbidden)
+                        assertEquals(FailureKind.AccessDenied, result.failure.kind)
+                    if (status == HttpStatusCode.Unauthorized)
+                        assertEquals(FailureKind.Unauthorized, result.failure.kind)
+                    if (status == HttpStatusCode.ServiceUnavailable)
+                        assertEquals(FailureKind.Service, result.failure.kind)
+                    assertEquals(if (status == HttpStatusCode.Unauthorized) 2 else 1, calls)
+                }
+            }
+        }
+
+    @Test
+    fun cancelledReplacementCannotPublishALatePairOrStartAnotherRequest() = runTest {
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        var calls = 0
+        var published = false
+        withRepository(
+            MockEngine {
+                calls++
+                entered.complete(Unit)
+                withContext(NonCancellable) { release.await() }
+                respond(Json.encodeToString(replacementReply()), headers = headers)
+            }
+        ) {
+            val task = launch {
+                it.replaceBootstrap(owner, replacement)
+                published = true
+            }
+            entered.await()
+            task.cancel()
+            release.complete(Unit)
+            task.join()
+            assertTrue(task.isCancelled)
+            assertFalse(published)
+            assertEquals(1, calls)
+        }
+    }
 
     @Test
     fun retryKeepsOriginalNativeOperationBodyAndProvisioningRevisionAcrossOneRotation() = runTest {

@@ -16,4 +16,11 @@ interface CollaborationSpaceSetupRemoteSource {
         operation: String,
         input: CollaborationSpaceBootstrapRequestDto,
     ): CollaborationSpaceGatewayDto
+
+    suspend fun replaceBootstrap(
+        sessionId: String,
+        spaceId: String,
+        operation: String,
+        input: CollaborationSpaceBootstrapReplacementRequestDto,
+    ): CollaborationSpaceBootstrapReplacementDto
 }

@@ -20,4 +20,11 @@ class ApiCollaborationSpaceSetupRemoteSource(private val api: CollaborationSpace
         operation: String,
         input: CollaborationSpaceBootstrapRequestDto,
     ) = api.bootstrap(sessionId, spaceId, operation, input)
+
+    override suspend fun replaceBootstrap(
+        sessionId: String,
+        spaceId: String,
+        operation: String,
+        input: CollaborationSpaceBootstrapReplacementRequestDto,
+    ) = api.replaceBootstrap(sessionId, spaceId, operation, input)
 }

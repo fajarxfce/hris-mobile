@@ -1,5 +1,51 @@
 # Agent continuation — HRIS Mobile
 
+## Current: bootstrap replacement transport accepted — 6 November 2026
+
+Eleven Kotlin files add explicit organization bootstrap replacement transport;
+[contract](collaboration-space-bootstrap-replacement.md),
+[evidence](measurements/collaboration-space-bootstrap-replacement-2026-11-06.json).
+Request mapping is separate from repository I/O. The bounded response must match
+the complete original descriptor and new gateway. Current actual headers are never
+replaced by historical build metadata. Existing durable setup formats/routes are unchanged.
+
+Focused46 passes123.870s. First complete run98494 passes5,329 fresh tests but fails
+formatCheck on one test file; keep that run failed. After its verified whitespace-only
+correction, final54784 PASSED207.192s:677 fresh browser cases plus4,652 identical retained
+successful task reports, zero failures/errors/skips. Root :check, Android host/proof
+compilation, database/collaboration browser targets, Android assembly/lint, format and
+architecture pass with4,218 unchanged inputs; the other4,217 files match the first run.
+No physical device or Apple-on-this-source acceptance is implied. First-source CI can
+be audited after this commit is pushed; do not redispatch previously accepted proofs.
+
+Group merge2db3f35e is pushed. Baseline1,226 fresh cases/5,343.291s passes API and FULL
+worker graphs with zero failures/errors and one existing opt-in elapsed-retention skip.
+Separate test-image pin follow-up20 passes305.542s. Ten backend supersession files are
+now APPLIED there, after four base hashes matched; normal bootstrap input remains
+unchanged. Actual PostgreSQL races/rollback, cleanup/new minimum-build metadata,
+HTTP proof and worker contexts are running in supersession gate81290, the ONLY heavy
+local job. Do not build or start an emulator in parallel; keep Group source frozen.
+No organization/live rollout has occurred; V117–137 remain unshipped.
+
+NEXT: raw storage candidate is prepared under .work/command-successor-2026-11-06:
+eleven Kotlin files, six base hashes, atomic archiveAndInsert with desktop/browser/
+Apple contracts. It is NOT applied or tested. Apply after this transport commit,
+with no Mobile source gate active, then implement and validate the actual encrypted
+HRIS consumer before a generic Starter port. Raw transition retains exact original
+Unconfirmed state and local successor link; it never claims a remote acknowledgment.
+Repeat returns false and requires explicit retained-link reconciliation, without
+recreating removed work. Carry inherited access/MFA denial into successor intent when
+an earlier directory restriction write failed, including another build update before
+HTTP. Private-store possession, hard-parent recovery and original SDK adoption remain
+required before organization UI/background routing. Continue media/voice/calls/meet;
+all54 PRD groups remain open. Push every atomic commit.
+
+Phone release50 remains installed; no new install or phone UI driving. The user's
+pending-send report stays OPEN. Both Android UIDs10962/1010962 still have no retained
+new Chat/crash lines in the19:04UTC read-only audit; raw hash matches18:04/18:36. This
+is not a new send result. All owned emulators remain stopped; original data/keys kept.
+Live10485916/schema116.1, Starter578d97a and immutable SDK3 remain unchanged.
+
 ## Current: release50 installed; continue group integration — 6 November 2026
 
 **Release50** from pushed sourcec2384b7d (programf04c0864) is installed on the phone

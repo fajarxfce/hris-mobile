@@ -1,0 +1,107 @@
+{
+  "date": "2026-11-06",
+  "status": "transport-accepted-owning-recovery-not-activated",
+  "scope": "Bounded organization bootstrap replacement transport; original full effect proof, actual current client headers, native owner, failure and cancellation mapping. Existing setup formats unchanged.",
+  "focused": {
+    "startedAt": "2026-11-06T18:45:36.651254+00:00",
+    "elapsedSeconds": 123.87,
+    "exitCode": 0,
+    "sourceFiles": 4218,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 5,
+    "inputManifestSha256": "cf67d3b27bbc3a306ab5544da1c8fb6f2176bdcaf18e9195c687b17256f5d21a",
+    "reportManifestSha256": "06076dccd720470de976dbd8d8c5a73cc27bcc40e028e17bb38c7c23b8e5b9cb"
+  },
+  "firstCompleteRun": {
+    "startedAt": "2026-11-06T18:54:34.553975+00:00",
+    "elapsedSeconds": 615.115,
+    "exitCode": 1,
+    "sourceFiles": 4218,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 5329,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 622,
+    "inputManifestSha256": "cf67d3b27bbc3a306ab5544da1c8fb6f2176bdcaf18e9195c687b17256f5d21a",
+    "reportManifestSha256": "3d2d6d277f8b42f15ed3358534aea5b7bb4a931641c1364b56bd0fb33341a05b",
+    "failure": "formatCheck on one test file only; all executed tests passed. This whole run remains failed."
+  },
+  "formatCorrection": {
+    "file": "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceSetupTransportTest.kt",
+    "beforeSha256": "e2b95f1014cf1ab0425036bd846b4fdd108a81ca0247788dd5dca407a9ba2824",
+    "afterSha256": "adced74985f40f4b307034915b575b5b1cf97f3395e3de025ab220d1b3f9fee2",
+    "onlyWhitespaceChanged": true,
+    "applied": true
+  },
+  "finalCompleteRun": {
+    "startedAt": "2026-11-06T19:05:24.337773+00:00",
+    "elapsedSeconds": 207.192,
+    "exitCode": 0,
+    "sourceFiles": 4218,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 677,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 76,
+    "inputManifestSha256": "9b71995e4b9c49d664e415e5ab86ce3d416bf7d0487911962f7b996e00a57009",
+    "reportManifestSha256": "f0dc70e54cd9a414ee6d546fb59512ba1833c73e4e3258f90d3e78af891ff9c5",
+    "checks": [
+      "root :check",
+      "collaboration Android host tests",
+      "native proof application compilation",
+      "database/collaboration data/domain/presentation browser tests",
+      "Android devDebug assembly and lint",
+      "formatCheck",
+      "architectureCheck",
+      "strict dependency verification and normal public SDK3"
+    ],
+    "retainedSuccessfulTaskReportsFromFirstRun": {
+      "suites": 546,
+      "counts": {
+        "tests": 4652,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportHashesMatch": true
+    },
+    "sourceDeltaFromFirstRun": [
+      "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceSetupTransportTest.kt"
+    ],
+    "other4217InputsIdentical": true
+  },
+  "cases": [
+    "original descriptor and actual new build survive one native bearer renewal",
+    "every changed supersession proof field fails before publication",
+    "foreign owner/device/provider and unsupported observations fail before HTTP",
+    "actual iOS headers",
+    "denial and service response classifications retained",
+    "cancelled late response cannot publish credentials",
+    "existing setup owning flows and assembled app regressions"
+  ],
+  "limits": {
+    "durableLinkedPreparationImplemented": false,
+    "originalSdkStoreAdoptionImplemented": false,
+    "organizationProductActivated": false,
+    "actualAppleBuildOnThisSource": "pending first source CI",
+    "phoneRelease": 50,
+    "phonePendingSendResolved": false,
+    "newPhoneInstall": false,
+    "newMessagesSent": 0,
+    "newSdkPublication": false,
+    "liveRollout": false,
+    "starterPort": "HRIS transport only; generic handoff storage remains a separate candidate."
+  }
+}

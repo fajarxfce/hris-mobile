@@ -14,4 +14,9 @@ interface CollaborationSpaceSetupRepository {
         owner: CollaborationSpaceOwner,
         command: CollaborationSpaceBootstrap,
     ): AppResult<CollaborationSpaceGateway>
+
+    suspend fun replaceBootstrap(
+        owner: CollaborationSpaceOwner,
+        command: CollaborationSpaceBootstrapReplacement,
+    ): AppResult<CollaborationSpaceBootstrapReplacementReceipt>
 }

@@ -1,6 +1,8 @@
 package dev.fajar.starter.collaboration.data.mappers
 
+import dev.fajar.starter.collaboration.data.dto.CollaborationSpaceBootstrapReplacementDto
 import dev.fajar.starter.collaboration.data.dto.CollaborationSpaceGatewayDto
+import dev.fajar.starter.collaboration.data.dto.SupersededCollaborationSpaceBootstrapDto
 import dev.fajar.starter.collaboration.domain.entities.*
 
 /** Response ownership and wire format only. Expiry/admission belongs to the owning use case. */
@@ -30,5 +32,20 @@ internal fun CollaborationSpaceGatewayDto.toSpaceGateway(
         refreshToken,
         access,
         hard,
+    )
+}
+
+internal fun CollaborationSpaceBootstrapReplacementDto.toSpaceBootstrapReplacement(
+    command: CollaborationSpaceBootstrapReplacement,
+    expectedOriginal: SupersededCollaborationSpaceBootstrapDto,
+): CollaborationSpaceBootstrapReplacementReceipt {
+    require(superseded == expectedOriginal)
+    require(replacementOperationId == command.replacement.operationId)
+    val received = gateway.toSpaceGateway(command.replacement)
+    require(received.version > (command.supersedes.gatewayVersion ?: -1))
+    return CollaborationSpaceBootstrapReplacementReceipt(
+        command.supersedes,
+        replacementOperationId,
+        received,
     )
 }

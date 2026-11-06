@@ -21,6 +21,40 @@ data class CollaborationSpaceBootstrapRequestDto(
 }
 
 @Serializable
+data class SupersededCollaborationSpaceBootstrapDto(
+    val operationId: String,
+    val spaceId: String,
+    val accountId: String,
+    val nativeSessionId: String,
+    val deviceId: String,
+    val expectedDeviceVersion: Long,
+    val expectedGatewayVersion: Long?,
+    val platform: String,
+    val clientBuild: Long,
+) {
+    override fun toString() = "SupersededCollaborationSpaceBootstrapDto([redacted])"
+}
+
+@Serializable
+data class CollaborationSpaceBootstrapReplacementRequestDto(
+    val deviceId: String,
+    val expectedDeviceVersion: Long,
+    val expectedGatewayVersion: Long?,
+    val supersedes: SupersededCollaborationSpaceBootstrapDto,
+) {
+    override fun toString() = "CollaborationSpaceBootstrapReplacementRequestDto([redacted])"
+}
+
+@Serializable
+data class CollaborationSpaceBootstrapReplacementDto(
+    val superseded: SupersededCollaborationSpaceBootstrapDto,
+    val replacementOperationId: String,
+    val gateway: CollaborationSpaceGatewayDto,
+) {
+    override fun toString() = "CollaborationSpaceBootstrapReplacementDto([redacted])"
+}
+
+@Serializable
 data class CollaborationSpaceGatewayDto(
     val spaceId: String,
     val accountId: String,
