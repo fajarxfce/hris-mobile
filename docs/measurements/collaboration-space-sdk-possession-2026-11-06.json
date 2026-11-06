@@ -1,6 +1,6 @@
 {
   "recordedAt": "2026-11-06T22:01:32.280058+00:00",
-  "status": "focused acceptance passed; normal root gate in progress with quality-scope failure",
+  "status": "focused accepted; first full run has passing tests/build/lint with scratch-scope failures; second root gate in progress",
   "sdk": "26.10.23-hris.4",
   "sdkReleaseId": 437093395,
   "sdkConsumerEvidence": "collaboration-sdk-existing-identity-consumer-2026-11-06.json",
@@ -117,5 +117,31 @@
   "sourceAppliedToRoot": true,
   "fullGateAccepted": false,
   "phoneUpdated": false,
-  "physicalPendingSendReport": "open"
+  "physicalPendingSendReport": "open",
+  "firstFull": {
+    "startedAt": "2026-11-06T21:58:02.534650+00:00",
+    "elapsedSeconds": 945.818,
+    "exitCode": 1,
+    "sourceFiles": 4251,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7216,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "qualityScopeFailure": {
+      "detektFindings": 28,
+      "detektSarifSha256": "49582d77d8a50b63f09a3e63f0a9c39c1b9d45bc2b199e1c3a794e9758700fe7",
+      "formatterFiles": 37,
+      "allFindingsInPrivateScratch": true,
+      "authoredApplicationFindings": 0,
+      "generatedBindings": 36,
+      "preparedPrivateProbeCopies": 1,
+      "filesRetained": true,
+      "sourceFixPending": true
+    },
+    "androidLintIssues": 0
+  },
+  "fullRetryOnlySourceChange": "Exclude **/.work/** in the shared Kotlin sources and Detekt arguments; application, test and dependency sources unchanged"
 }

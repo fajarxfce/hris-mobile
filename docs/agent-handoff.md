@@ -29,28 +29,35 @@ The isolated possession checkout at5ea9bf69 retains these accepted inputs; root 
 was guarded against baseline drift. Root now selects normal published SDK4 with exact
 public AAR/Ivy hashes; there is no local candidate substitution in its build.
 
-The ONLY heavy local job is root full gate46295: check-possession-full.py
-possession-full-1 under .work/space-store-inventory-2026-11-06. It runs normal headless
-root :check, Android host/proof compile, browser, dev assembly/lint, format/architecture,
-versionCode51. No emulator is active. Application/build inputs are FROZEN until it ends.
-Detekt has ALREADY FAILED28 findings, all in ignored generated SDK Kotlin under
-.work/.../android-{arm64,armv7,x86,x86_64}/main/kotlin/uniffi/ruma_events. No authored
-application finding appears in its SARIF. The current quality convention's source tree
-incorrectly includes .work; formatCheck may encounter the same generated outputs.
-Let the remaining checks finish and retain the failed gate. Do not format generated SDK
-files, hide an application finding or edit any current build input while it runs.
+The first normal root gate46295 ENDED FAILED945.818s:7,216 fresh cases, zero failures/
+errors/skips,4,251 stable inputs. Android/proof/browser/build targets and Android lint
+passed (zero lint issues). Only Detekt and formatter failed because their source
+selection included ignored private scratch files:28 LongMethod findings in36 generated
+SDK bindings and37 formatter files (those bindings plus one prepared private probe).
+No authored application finding. Exact original SARIF is archived as
+possession-full-1/quality-original.sarif, digest49582d77d8a50b63f09a3e63f0a9c39c1b9d45bc2b199e1c3a794e9758700fe7.
+All37 scratch Kotlin files remain unmodified/in place for the regression check.
 
-A two-pattern fix is PREPARED ONLY as quality-convention-candidate.txt in the private
-working root: add **/.work/** to the shared Kotlin source tree exclusion and Detekt's
-exclusions. After46295 ends, apply that exact small convention fix, format/check it,
-then rerun normal root :check/relevant failed gates with unchanged product source.
-Port this reusable quality fix to Starter after Mobile acceptance; both existing
-starter.quality.gradle.kts files matched before preparation. Follow Starter AGENTS
-and its root gate; this is not an HRIS policy port. No new mirror unit test is needed:
-the actual generated files that exposed the failure remain in place for verification.
-Keep first failed gate and second acceptance separate; do not rerun accepted provider
-sends or republish SDKs. Commit/push the accepted Mobile source/evidence, then continue
-original-parent recovery, provider publication, freeze/drain/adoption and all54 groups.
+The two-pattern quality fix is now APPLIED to build-logic/src/main/kotlin/
+starter.quality.gradle.kts: exclude **/.work/** in both shared Kotlin source selection
+and Detekt arguments. No application/test/dependency input changed. Exact public SDK4
+AAR was downloaded by normal Gradle and matches9b6806de02b7d40b8487b54a51b192c114a38c68c6dfe35c68faf50d3b6bfd21.
+The ONLY heavy local job is root full retry80460, check-possession-full.py
+possession-full-2. Convention compilation passed; remaining normal :check, Android/
+browser/assembly/lint gates are RUNNING. Inputs are frozen until it ends. No emulator
+is active. Never erase the failed first run or claim full acceptance before this passes.
+
+After Mobile acceptance, port the exact quality convention to Starter; original
+baseline hashes matched before applying the fix. Starter AGENTS/README/architecture
+were read; follow docs/downstream-development.md and its headless root gate. Keep a
+small malformed .work fixture during Starter checks to verify the exclusion using the
+real tasks, then clean up only that owned fixture. No HRIS private identity port.
+No mirror unit test or new dependency is needed for this two-pattern correction.
+Commit/push the accepted Mobile source/evidence, retain first-source CI, then port and
+continue original-parent recovery/provider publication/freeze/drain/adoption/all54 groups.
+Verified next-flow notes are in private next-runtime-transfer-notes.md: freeze receipt
+is original legacy device/version1; drain is only a bounded observation; completion is
+worker-owned, not a new client POST. Do not activate a partial irreversible transition.
 
 Both first35df CI runs are now SUCCESS and fully audited: control42288555007 has
 4,383 portable/470 suites and1,762 Apple/193 suites, actual iOS host success; native
