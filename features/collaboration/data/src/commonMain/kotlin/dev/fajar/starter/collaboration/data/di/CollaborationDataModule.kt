@@ -15,6 +15,14 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Factory
+    fun readSpaceSdkPossession(
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        possession: CollaborationSdkPossessionRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceSdkPossession(registrations, possession, sessions, server)
+
+    @Factory
     fun readSpaceSdkInventory(
         registrations: CollaborationSpaceRegistrationCommandRepository,
         inventory: CollaborationSdkInventoryRepository,

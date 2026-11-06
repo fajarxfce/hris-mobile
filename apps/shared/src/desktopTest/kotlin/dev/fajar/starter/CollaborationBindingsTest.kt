@@ -41,6 +41,15 @@ class CollaborationBindingsTest {
             var suppliedServer: IdentityServer? = null
             var suppliedHttp: HttpClient? = null
             var inventoryServer: IdentityServer? = null
+            var possessionServer: IdentityServer? = null
+            val possession =
+                object : CollaborationSdkPossessionRepository {
+                    override suspend fun readPrivateIdentity(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                    ): AppResult<CollaborationSdkPossession?> =
+                        error("No implicit private-account read")
+                }
             val inventory =
                 object : CollaborationSdkInventoryRepository {
                     override suspend fun inspect(
@@ -208,6 +217,10 @@ class CollaborationBindingsTest {
                                 }
                                 .onClose { it?.cancelAndClose() }
                         },
+                    collaborationSdkPossession = { server ->
+                        possessionServer = server
+                        possession
+                    },
                     collaborationSdkInventory = { server ->
                         inventoryServer = server
                         inventory
@@ -239,6 +252,9 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<CollaborationSpaceSetupCommandRepository>())
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceSetup>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceSdkInventory>())
+                assertNotNull(container.koin.get<ReadCollaborationSpaceSdkPossession>())
+                assertSame(possession, container.koin.get<CollaborationSdkPossessionRepository>())
+                assertSame(container.koin.get<IdentityServer>(), possessionServer)
                 assertSame(inventory, container.koin.get<CollaborationSdkInventoryRepository>())
                 assertSame(container.koin.get<IdentityServer>(), inventoryServer)
                 assertNotNull(container.koin.get<PrepareCollaborationSpaceSetup>())

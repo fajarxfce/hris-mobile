@@ -20,7 +20,7 @@ dependencies { add(formatter.name, catalog.findLibrary("ktfmt").get()) }
 val sources =
     fileTree(rootDir) {
         include("**/*.kt", "**/*.kts")
-        exclude("**/build/**", "**/.gradle/**", "**/.kotlin/**")
+        exclude("**/build/**", "**/.gradle/**", "**/.kotlin/**", "**/.work/**")
     }
 
 tasks.register<JavaExec>("formatKotlin") {
@@ -80,6 +80,7 @@ tasks.register<JavaExec>("detekt") {
                 "**/composeResources/**",
                 "**/.gradle/**",
                 "**/.kotlin/**",
+                "**/.work/**",
                 "--config",
                 "config/detekt.yml",
                 "--report",

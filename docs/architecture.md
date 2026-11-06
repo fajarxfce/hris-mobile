@@ -32,6 +32,10 @@ keeps cached messages independent of transport and places held replies in contex
 [Contextual message selection and durable local deletion](collaboration-message-selection.md)
 adds multi-select/copy/delete-for-me while retaining original message evidence.
 
+[Original private-account identity](collaboration-space-sdk-possession.md) compares
+keys derived from the existing private account with immutable original provenance;
+its raw read remains under one directory lease through cancellation and cleanup.
+
 [Original SDK inventory](collaboration-space-sdk-inventory.md) separates account-owned
 protected-record/file facts from key possession, live authority and runtime adoption.
 

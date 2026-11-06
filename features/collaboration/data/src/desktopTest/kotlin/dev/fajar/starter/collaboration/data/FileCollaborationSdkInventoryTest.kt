@@ -76,6 +76,34 @@ class FileCollaborationSdkInventoryTest {
         }
 
     @Test
+    fun applicationRootAliasReturnsTheCanonicalPathProtectedByTheOriginalLock() = runTest {
+        withRoot { root ->
+            val stores = FileCollaborationSdkStoreSource(root)
+            stores.acquire(id).close()
+            withRoot { aliases ->
+                val alias = File(aliases, "android-user-0")
+                Files.createSymbolicLink(alias.toPath(), root.toPath())
+                try {
+                    val before = snapshot(root)
+                    val lease =
+                        assertNotNull(FileCollaborationSdkInventorySource(alias).inspect(id))
+                    lease.use {
+                        assertEquals(File(root.canonicalFile, "$id/database").path, it.databasePath)
+                        assertFalse(it.databasePath.startsWith(alias.path))
+                        assertFailsWith<CollaborationSdkStoreBusyException> {
+                            stores.acquire(id).close()
+                        }
+                    }
+                    assertEquals(before, snapshot(root))
+                    stores.acquire(id).close()
+                } finally {
+                    check(alias.delete())
+                }
+            }
+        }
+    }
+
+    @Test
     fun absentRootOrStoreIsNotCreated() = runTest {
         withRoot { root ->
             val absent = File(root, "absent")

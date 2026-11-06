@@ -10,7 +10,16 @@ import kotlinx.coroutines.ensureActive
 class UnavailableCollaborationRuntimeRepository :
     CollaborationRuntimeRepository,
     CollaborationLocalDeviceIdentityRepository,
-    CollaborationSdkInventoryRepository {
+    CollaborationSdkInventoryRepository,
+    CollaborationSdkPossessionRepository {
+    override suspend fun readPrivateIdentity(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationSdkPossession?> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
     override suspend fun inspect(
         owner: CollaborationOwner,
         deviceId: String,

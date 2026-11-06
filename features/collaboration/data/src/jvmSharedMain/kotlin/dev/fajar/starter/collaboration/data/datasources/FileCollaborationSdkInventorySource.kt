@@ -68,6 +68,7 @@ class FileCollaborationSdkInventorySource(
             }
             return FileSdkInventoryLease(
                 storeId,
+                database.absolutePath,
                 retainedDatabase(File(database, "matrix-sdk-state.sqlite3")),
                 retainedDatabase(File(database, "matrix-sdk-crypto.sqlite3")),
                 channel,
@@ -101,6 +102,7 @@ class FileCollaborationSdkInventorySource(
 
 private class FileSdkInventoryLease(
     override val storeId: String,
+    override val databasePath: String,
     override val stateDatabasePresent: Boolean,
     override val cryptoDatabasePresent: Boolean,
     private val channel: FileChannel,

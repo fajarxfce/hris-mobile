@@ -1,6 +1,6 @@
 {
-  "recordedAt": "2026-11-06T22:01:32.280058+00:00",
-  "status": "focused accepted; first full run has passing tests/build/lint with scratch-scope failures; second root gate in progress",
+  "recordedAt": "2026-11-06T22:42:08.749287+00:00",
+  "status": "focused and normal published-dependency root/Android/browser gates accepted",
   "sdk": "26.10.23-hris.4",
   "sdkReleaseId": 437093395,
   "sdkConsumerEvidence": "collaboration-sdk-existing-identity-consumer-2026-11-06.json",
@@ -115,7 +115,7 @@
   "acceptedDistinctFocusedTests": 61,
   "newTests": 16,
   "sourceAppliedToRoot": true,
-  "fullGateAccepted": false,
+  "fullGateAccepted": true,
   "phoneUpdated": false,
   "physicalPendingSendReport": "open",
   "firstFull": {
@@ -143,5 +143,46 @@
     },
     "androidLintIssues": 0
   },
-  "fullRetryOnlySourceChange": "Exclude **/.work/** in the shared Kotlin sources and Detekt arguments; application, test and dependency sources unchanged"
+  "fullRetryOnlySourceChange": "Exclude **/.work/** in the shared Kotlin sources and Detekt arguments; application, test and dependency sources unchanged",
+  "fullRetry": {
+    "startedAt": "2026-11-06T22:14:30.421776+00:00",
+    "elapsedSeconds": 1581.972,
+    "exitCode": 0,
+    "sourceFiles": 4251,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7388,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 963,
+    "reusedSuites": 119,
+    "resultSha256": "ce4f641deaacbd2095689db57b6f75bc1b9c6b7b7ad4237ff9c88f63a821b282",
+    "sourceManifestSha256": "7952091e67c46ed537f2a6649987caa7972c4870c3ec1d5d92bbf1755ac33439",
+    "androidLintIssues": 0,
+    "androidLintSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+    "detektFindings": 0,
+    "detektSarifSha256": "389c5ae396e211a0a0bc876fd100b58d043fe70085d467fd4e747684e0e5e693",
+    "targets": [
+      ":check",
+      ":features:collaboration:data:testAndroidHostTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":core:database:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:presentation:wasmJsBrowserTest",
+      ":apps:android:assembleDevDebug",
+      ":apps:android:lintDevDebug",
+      ":formatCheck",
+      ":architectureCheck"
+    ]
+  },
+  "qualityScopeCorrection": {
+    "filesStillPresent": 36,
+    "preparedProbeStillPresent": true,
+    "qualityConventionSha256": "f61dec1331e7e5abd604336ef85e4050b4f8c1f4712b953266a6fe3edea63aa3",
+    "onlySourceDifferenceBetweenFullGates": "build-logic/src/main/kotlin/starter.quality.gradle.kts",
+    "starterPort": "pending"
+  }
 }

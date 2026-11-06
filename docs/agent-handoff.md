@@ -1,99 +1,73 @@
 # Agent continuation — HRIS Mobile
 
-## Current: SDK4 product source applied; full root gate running — 6 November 2026
+## Current: SDK4 product accepted; physical queue conflict reproduced in source review — 6 November 2026
 
-Root Mobile HEAD81d580d9 is pushed, with28 reviewed SDK4 product/probe/docs/dependency
-files APPLIED but not yet committed. Do not discard them. Shipping phone50 stays on
-its existing SDK3 binary. SDK4 release437093395 is immutable/public at21:48:30UTC,
-tag matrix-sdk-26.10.23-hris.4, target4228599ba659cf68cfea1138e6f8017b0b77c222. All six
-asset IDs/digests and actual public Ivy URL passed verification. Initial draft-tag404
-and stale draft download URL were recovered on the same release; never run either
-publisher again. Package/native source and the published SDK3 assets remain unchanged.
+SDK4 product/probe/dependency source is accepted locally. Full retry80460 ENDED PASS
+in1,581.972s with7,388 fresh cases/963 suites, zero failures/errors/skips,4,251 stable
+inputs and zero Android lint/Detekt findings. All required root/Android-host/proof/
+browser/assembly/lint/format/architecture targets pass. Focused61 distinct cases
+(including16 new) and actual DI acceptance remain recorded, including the one corrected
+coroutine exception-identity test assertion. [Product evidence](measurements/collaboration-space-sdk-possession-2026-11-06.json).
+No heavy local job or emulator is active at this checkpoint. Product source is being
+committed with this checkpoint; retain and audit its first control/native CI afterward.
 
-Actual SDK4 consumer proof76877 PASSED124.327s: original SDK3-to-SDK4 ARM64 upgrade
-retains UID/firstInstallTime/private keys before Client restore; x86_64 cold process
-also passes. Both use the canonical path from the real inventory lease, explicitly
-reject the raw Android alias and wrong keys/missing stores, preserve main DB bytes,
-and clean up the owned fixture/emulator. First reads2,733ms translated ARM64/314ms
-x86_64 are not phone/send timing. [Evidence](measurements/collaboration-sdk-existing-identity-consumer-2026-11-06.json).
-Failed native attempts and consumer builds remain retained; no native rebuild needed.
+The first full run46295 remains FAILED945.818s despite7,216 passing fresh tests:
+quality tasks incorrectly included36 generated SDK bindings plus one private probe.
+Only build-logic/src/main/kotlin/starter.quality.gradle.kts changed before the accepted
+full retry: exclude **/.work/** in both shared source selection and Detekt arguments.
+All37 scratch files are retained. Original SARIF49582d77... stays archived; no baseline
+or authored finding was suppressed. NEXT port this exact generic file to Starter;
+its original baseline matched. Keep a small owned malformed .work fixture throughout
+Starter root/browser/Android/Web checks, then delete only that fixture. The prepared
+driver is .work/space-store-inventory-2026-11-06/check-starter-quality.py; run from
+Starter after creating .work/quality-source-scope-2026-11-06. No HRIS identity port.
 
-Product focused gate54775 FAILED623.964s with61 cases, one failure, zero errors/skips,
-all4,250 inputs unchanged. The ONLY failed case compared exception object identity
-across coroutine stack-trace recovery. Only that host test assertion changed; it now
-checks the technical type and original cause. Targeted host retry95367 PASSED50.794s,
-two fresh cases, zero failures/errors/skips and4,250 stable inputs. All production and
-other tests are byte-identical between focused gates. Actual AppContainer DI passed.
-61 distinct focused cases are accepted, including16 new ones. [Evidence](measurements/collaboration-space-sdk-possession-2026-11-06.json).
-The isolated possession checkout at5ea9bf69 retains these accepted inputs; root copy
-was guarded against baseline drift. Root now selects normal published SDK4 with exact
-public AAR/Ivy hashes; there is no local candidate substitution in its build.
+SDK4 release437093395 remains immutable/public, tag matrix-sdk-26.10.23-hris.4,
+target4228599ba659cf68cfea1138e6f8017b0b77c222. Normal Gradle uses public AAR
+9b6806de02b7d40b8487b54a51b192c114a38c68c6dfe35c68faf50d3b6bfd21, not a local candidate.
+All six publication assets/digests passed; never run either publisher again. The actual
+consumer76877 PASSED124.327s, retaining original private keys across an SDK3-to-SDK4
+ARM64 upgrade and x86_64 process death, with real canonical inventory leases and
+owned cleanup. Native/source/pair acceptance and earlier failed attempts stay recorded.
+[Consumer evidence](measurements/collaboration-sdk-existing-identity-consumer-2026-11-06.json).
+No inference about send latency or physical phone delivery follows from this reader.
 
-The first normal root gate46295 ENDED FAILED945.818s:7,216 fresh cases, zero failures/
-errors/skips,4,251 stable inputs. Android/proof/browser/build targets and Android lint
-passed (zero lint issues). Only Detekt and formatter failed because their source
-selection included ignored private scratch files:28 LongMethod findings in36 generated
-SDK bindings and37 formatter files (those bindings plus one prepared private probe).
-No authored application finding. Exact original SARIF is archived as
-possession-full-1/quality-original.sarif, digest49582d77d8a50b63f09a3e63f0a9c39c1b9d45bc2b199e1c3a794e9758700fe7.
-All37 scratch Kotlin files remain unmodified/in place for the regression check.
+Phone50 pending report remains OPEN, with NEW direct evidence. Passive22:31:39UTC
+covers both10962/1010962:93 retained post-install lines, zero fatal exceptions, three
+QueueMappingNativeFamily events at22:23:34–49UTC and two outgoing Conflict events.
+Eighty HTTP operations succeeded(max460ms); three of five Sync operations failed.
+[Phone evidence](measurements/collaboration-phone-queue-family-2026-11-06.json). Raw private
+log SHAe795a06e388711f4e4c024af8a50b9d8d3e2dec55279fb844d15d41e476b81f6.
+No phone UI/install/send occurred; exact old/current IDs remain unobserved.
 
-The two-pattern quality fix is now APPLIED to build-logic/src/main/kotlin/
-starter.quality.gradle.kts: exclude **/.work/** in both shared Kotlin source selection
-and Detekt arguments. No application/test/dependency input changed. Exact public SDK4
-AAR was downloaded by normal Gradle and matches9b6806de02b7d40b8487b54a51b192c114a38c68c6dfe35c68faf50d3b6bfd21.
-The ONLY heavy local job is root full retry80460, check-possession-full.py
-possession-full-2. Convention compilation passed; remaining normal :check, Android/
-browser/assembly/lint gates are RUNNING. Inputs are frozen until it ends. No emulator
-is active. Never erase the failed first run or claim full acceptance before this passes.
+Source review identifies two linked issues: delivery rejects the current physical
+queue when account-owned history contains older-family Staged work; the worker's
+oldest-eight limit can also repeatedly select only older-family work. After the
+Starter port, prioritize .work/chat-queue-family-2026-11-06: six prepared files/seven
+new cases, formatted but NOT applied/compiled/tested. Three existing source baselines
+are pinned. Four production files isolate current-store mapping/staging and delegate
+batch selection to a pure domain policy before its limit; two test files cover actual
+use cases plus encrypted AppContainer restart with ten older uncertain messages.
+Run check-red.py red-1 with ONLY the two tests copied first, retaining baseline failures;
+then apply four production files and run check-focused.py plus the full gate. A
+foreign Staged ID actually captured in the current queue must still reject; unknown
+current echoes and same-store unfinished staging remain closed. Original state,
+revision, keys and transaction IDs must remain unchanged. This allows current work;
+original pending sends still require original-parent recovery and are not resolved.
 
-After Mobile acceptance, port the exact quality convention to Starter; original
-baseline hashes matched before applying the fix. Starter AGENTS/README/architecture
-were read; follow docs/downstream-development.md and its headless root gate. Keep a
-small malformed .work fixture during Starter checks to verify the exclusion using the
-real tasks, then clean up only that owned fixture. No HRIS private identity port.
-No mirror unit test or new dependency is needed for this two-pattern correction.
-Commit/push the accepted Mobile source/evidence, retain first-source CI, then port and
-continue original-parent recovery/provider publication/freeze/drain/adoption/all54 groups.
-Verified next-flow notes are in private next-runtime-transfer-notes.md: freeze receipt
-is original legacy device/version1; drain is only a bounded observation; completion is
-worker-owned, not a new client POST. Do not activate a partial irreversible transition.
+The nine-file/seven-case organization transport preparation under
+space-store-inventory-2026-11-06/runtime-transfer-next remains isolated/uncompiled/
+untested. Freeze receipt is original legacy device/version1; drain is bounded metadata,
+and completion belongs to the backend worker. Resume it after the phone regression,
+then owning provider publication, hard-parent recovery, freeze/drain/adoption and all54
+PRD groups. Do not activate a partial irreversible ownership transition.
 
-Both first35df CI runs are now SUCCESS and fully audited: control42288555007 has
-4,383 portable/470 suites and1,762 Apple/193 suites, actual iOS host success; native
-42288554801 has403 cases/68 suites per ABI and all scoped queue/history/worker/
-notification cleanup proofs. All failures/errors/skips are zero and REST digests match.
-[Evidence](measurements/collaboration-space-sdk-inventory-ci-2026-11-06.json).
-No redispatch. First7ef and SDK4 first CI remain accepted. Starter0ff7e59 Apple accepted;
-Group344211f8/V117–137 unshipped; live10485916/schema116.1 unchanged.
-
-Phone50 pending report remains OPEN, with NEW direct evidence. Passive audit22:31:39UTC
-covers UIDs10962/1010962:93 retained post-install lines, zero fatal exceptions and three
-ChatDelivery_DeliverMessages_QueueMappingNativeFamily events at22:23:34–49UTC. Two outgoing
-Conflict diagnostics accompany them. Eighty HTTP operations succeeded (max460ms), while
-three of five Sync operations failed. Raw private log SHA
-e795a06e388711f4e4c024af8a50b9d8d3e2dec55279fb844d15d41e476b81f6.
-[Phone evidence](measurements/collaboration-phone-queue-family-2026-11-06.json). No new
-phone UI, install or send; do not infer exact old/current IDs from this closed category.
-
-This identifies a separate current-room delivery issue: account-owned history includes
-Staged work from an older physical SDK namespace, and mapping all retained rows rejects
-the current queue before it resumes. Private .work/chat-queue-family-2026-11-06 contains
-a bounded three-file candidate plus six tests, formatted but NOT applied/compiled/tested.
-It must preserve old state/revision/transaction, reject contradictory captured IDs and
-unknown current echoes, and only allow the current physical store's owned work. Old
-pending messages must not be restaged or acknowledged under replacement keys. Root
-80460 inputs remain frozen. After SDK4 acceptance/commit and exact Starter quality port,
-run the new test against the baseline first, then the candidate and full checks. This
-phone regression now takes priority over the next organization transport slice.
-
-Private space-store-inventory-2026-11-06/runtime-transfer-next has nine prepared files
-and seven MockEngine cases (formatted, NOT applied/compiled/tested). Its freeze receipt
-is original legacy device/version1; drain remains metadata, never completion. Keep it
-isolated until the phone queue regression is addressed. Continue owning recovery and
-all54 PRD groups afterward. Preserve original Bima userdata/sidecars/private keys and
-pending transaction IDs. Announce every later explicit-serial install-only phone update.
-SDK4's observation capability alone is not proof that phone pending is fixed.
+First35df control42288555007/native42288554801 and first7ef are fully accepted with
+verified artifact digests; do not redispatch. Starter0ff7e59 retains280 local/138 Apple
+acceptance; Group344211f8/V117–137 stays unshipped/disabled. Live10485916/schema116.1
+is unchanged. Phone50 stays installed. Preserve original Bima userdata, all sidecars,
+private keys and pending transaction IDs. Push every commit, announce each future
+explicit-serial install-only phone update, and never drive the user's phone UI.
 
 ## Current: ARM64 private reader pair accepted; x86_64 building — 6 November 2026
 

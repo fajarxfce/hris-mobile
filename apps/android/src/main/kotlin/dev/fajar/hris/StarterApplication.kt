@@ -10,6 +10,7 @@ import dev.fajar.starter.app.navigation.AppLinkChannel
 import dev.fajar.starter.app.notifications.*
 import dev.fajar.starter.collaboration.data.di.androidCollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.data.di.androidCollaborationSdkInventoryRepository
+import dev.fajar.starter.collaboration.data.di.androidCollaborationSdkPossessionRepository
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
 import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.config.AppPlatform
@@ -124,6 +125,16 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
             fileOutputs = fileOutputs,
             collaborationSdkInventory = { server ->
                 androidCollaborationSdkInventoryRepository(
+                    this,
+                    server,
+                    CollaborationSdkEndpoint.fromApiBaseUrl(
+                        server.audience,
+                        allowCleartext = environment == AppEnvironment.Dev,
+                    ),
+                )
+            },
+            collaborationSdkPossession = { server ->
+                androidCollaborationSdkPossessionRepository(
                     this,
                     server,
                     CollaborationSdkEndpoint.fromApiBaseUrl(

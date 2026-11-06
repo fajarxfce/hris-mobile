@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkInventorySource
+import dev.fajar.starter.collaboration.data.mappers.toCredentialInventory
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSdkInventoryRepository
@@ -36,17 +37,7 @@ class StoredCollaborationSdkInventoryRepository(
                 directory != null,
                 directory?.stateDatabasePresent == true,
                 directory?.cryptoDatabasePresent == true,
-                record?.let {
-                    CollaborationSdkCredentialInventory(
-                        it.matrixUserId,
-                        it.matrixDeviceId,
-                        it.bootstrapOperationId,
-                        it.messageOperationId,
-                        it.credentialRevision,
-                        it.initialized,
-                        codec.handoverIntent(it),
-                    )
-                },
+                record?.toCredentialInventory(codec),
             )
         } catch (caught: Throwable) {
             failure = caught

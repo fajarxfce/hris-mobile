@@ -258,6 +258,7 @@ class StoredCollaborationSdkInventoryTest {
                     if (!directoryPresent) return null
                     return object : CollaborationSdkInventoryLease {
                         override val storeId = leaseId
+                        override val databasePath = "/fixture/database"
                         override val cryptoDatabasePresent = true
                         override val stateDatabasePresent = true
 

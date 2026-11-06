@@ -8,6 +8,7 @@ interface CollaborationSdkInventorySource {
 /** File facts under the original exclusive directory lock; not proof of private-key possession. */
 interface CollaborationSdkInventoryLease : AutoCloseable {
     val storeId: String
+    val databasePath: String
     val stateDatabasePresent: Boolean
     val cryptoDatabasePresent: Boolean
 }
