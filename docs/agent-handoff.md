@@ -46,7 +46,9 @@ organization routing and all54 PRD groups after this capability.
 
 First35df native CI42288554801 PASSED403 cases/68 suites per ABI and all scoped native/
 worker/notification proof flags, exact REST digests audited. [Evidence](measurements/collaboration-space-sdk-inventory-ci-2026-11-06.json).
-Control42288555007 portable passed; Apple host is still running. Do not redispatch.
+Control42288555007 also PASSED:4,383 portable/470 suites and1,762 Apple/193 suites,
+zero failures/errors/skips; actual iOS host success and both REST digests audited.
+Artifacts13541193854/13543542194 are retained under remote-ci-35df. Do not redispatch.
 First7ef control/native and first SDK4 CI42291341014 remain accepted/audited.
 Starter0ff7e59 Apple remains accepted; Group344211f8/V117–137 remains unshipped.
 Live10485916/schema116.1 is unchanged.

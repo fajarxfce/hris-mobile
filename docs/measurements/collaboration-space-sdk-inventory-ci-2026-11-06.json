@@ -1,12 +1,17 @@
 {
   "date": "2026-11-06",
   "programCommit": "35dfec8223d184757486d0086791f50928e9eb45",
-  "kind": "audit of the completed first native CI run",
+  "kind": "audit of completed first-source control and native CI runs",
   "runs": [
     {
       "id": 42288554801,
       "conclusion": "success",
       "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42288554801"
+    },
+    {
+      "id": 42288555007,
+      "conclusion": "success",
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42288555007"
     }
   ],
   "artifactDigestsVerifiedAgainstGitHubRest": true,
@@ -184,16 +189,45 @@
         "fixtureUninstalled": true,
         "fixtureDataCleared": true
       }
+    },
+    {
+      "artifactId": 13543542194,
+      "name": "collaboration-control-apple",
+      "sha256": "287e32c214216f8bf07739ca7b1189be0dc13243c917a18b15de3e93ea788655",
+      "bytes": 326561,
+      "suites": 193,
+      "counts": {
+        "tests": 1762,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "abi": null
+    },
+    {
+      "artifactId": 13541193854,
+      "name": "collaboration-control-portable",
+      "sha256": "4022ae82e0eb3cb74f49fa0c52f069fb04a0213386ddf52e48287eb8dc3078a4",
+      "bytes": 2296256,
+      "suites": 470,
+      "counts": {
+        "tests": 4383,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "abi": null
     }
   ],
   "controlRun": {
     "id": 42288555007,
-    "status": "in_progress",
+    "status": "completed",
     "portable": "success",
-    "apple": "building iOS application host"
+    "apple": "success"
   },
   "physicalPhoneAcceptance": false,
   "physicalPendingSendReport": "open",
   "rerunDispatchedForThisAudit": false,
-  "sdkDistributionChanged": false
+  "sdkDistributionChanged": false,
+  "iosApplicationHost": "success"
 }

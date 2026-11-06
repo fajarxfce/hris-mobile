@@ -70,4 +70,6 @@ The first native CI run at35dfec82 also passed on ARM64 and x86_64:403 cases in6
 suites per ABI, zero failures/errors/skips. Exact REST artifact digests, original
 queue recovery, cold history, quoted replies, worker and notification cleanup were
 audited without redispatch. [CI evidence](measurements/collaboration-space-sdk-inventory-ci-2026-11-06.json).
-The first control run's portable job passed; Apple host compilation remains running.
+The first control run also passed:4,383 portable cases in470 suites and1,762 Apple
+cases in193 suites, zero failures/errors/skips. The actual iOS application host built
+successfully. Both artifact digests were checked against GitHub REST.
