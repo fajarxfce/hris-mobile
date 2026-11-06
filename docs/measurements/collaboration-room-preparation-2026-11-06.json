@@ -1,0 +1,95 @@
+{
+  "date": "2026-11-06",
+  "scope": "Contextual copy of unapplied edit text and domain-owned finite room preparation. No new phone build or native edit acceptance.",
+  "sourceSha256": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationRoomReadiness.kt": "f09839b5be04655c8d98126a0f5d2ca254ebec5d57498171903556945aba7b80",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationRoomRequestPolicy.kt": "12a1260de5ad98c7d1c6746a5e8125eaab224407513229b9e14bf9c28045b3b2",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationRoom.kt": "ca654204c5c0889c9642cf8a9fa13119ef7fcda53109ed462cf4593926db5d27",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/PrepareCollaborationRoomTest.kt": "3a7bb143a30c1edba80e150a04217fdfca5e9fb455059d13b27314e4f098e064",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/RoomPreparationFixture.kt": "5116d77594c22ebc4e5f9db3432a19dd5143c2db11f41a2d2b2f2ebb9c6bf2ac",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "f026ce982e326d2116fa5591683ac3f489a1e683f7f9087e8da8347c581403ea",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "dbb10952b98c1b1ce1ed2c9bd248378ecedba43297f360a0e1a5a68d155f34bb",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "3810ecb70458a9e6fb7e1755db4e3d49104770660efee9b622f10adc5b0756b1",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "86554cdcef7ad3240a48c878e4a12f4f90a1a8af7a800eed24e26b3ff6e128cf",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationConversation.kt": "bb8381ae8b009f975cfe5152502aa9787124a591f885fcb27ba4ffe115ac94c1",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatEditProjection.kt": "a55d7da7a968c508eddddc52df1f3cdda96dd89727a2cdca0540af2e4e619881",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatMessageRow.kt": "16ecc14725d09506cefe4950c12ea15cb3337d05844d7a136bbf3d9ef41e9cf6",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatMessageSelection.kt": "8a4c886e9ed756242394989839d7983003faa8c2fcf57afb8a74ccf33ec03426",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadEvent.kt": "9f2ca442828adbfcf42c734b131298793c526f9b286884ac30b16a776b0bf5e2",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModel.kt": "4b945b1cd7f10d6f033a588cc5d5600d556a105a5110657c43f61793c533ecb0",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatSelectionMenu.kt": "3ea6db3e3fce06c649bd5b0ebd5147eb3ac16fa639f6a2cd29fb73778ead3f98",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatEditProjectionTest.kt": "fd15b48528884bc4ccf77b9e34d2393c26d0f621bbe78336e214b16d852333dd",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadEditorTest.kt": "8e4f4c402af97d73f3a9f73dc07edfa0f924c7a84e49ae74eb0318c633aaf69d",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "2c15aef885f00feba17e686025d59125726abecf5bc3281fdd1abe25399d711b",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatEditorLayoutTest.kt": "4b44995cf5e4eac906983c011dae3c6a0e867f1c8754e926c312bb67dba44fe5"
+  },
+  "checks": {
+    "editor-copy1": {
+      "startedAt": "2026-11-06T01:54:49.451612+00:00",
+      "elapsedSeconds": 308.488,
+      "exitCode": 0,
+      "sourceFiles": 4188,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 131,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "0bb8d1dda37c644452626a7bb95f24530d357ec62d40cc3c5e7fe296f846a497",
+      "sourceManifestSha256": "b36c3c052a876b3929af3d879f3129a7e63165bd33e35a427ef250c1600d5aa9"
+    },
+    "room-preparation1": {
+      "startedAt": "2026-11-06T02:07:07.944620+00:00",
+      "elapsedSeconds": 168.658,
+      "exitCode": 1,
+      "sourceFiles": 4193,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 81,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "34a10630dad89bb2a92f2f35abc546be15aefc9d6ae01c8e490b2d31350c8be6",
+      "sourceManifestSha256": "4caf806fabe4517e45936eb103f0c3852f6ac1521d7e008367ffd585754d7d9c",
+      "failureReview": "All 81 tests passed; detekt rejected 111-line invoke. Extracted the cohesive bounded readiness polling step in the same domain use case."
+    },
+    "room-preparation2": {
+      "startedAt": "2026-11-06T02:11:42.337174+00:00",
+      "elapsedSeconds": 178.663,
+      "exitCode": 0,
+      "sourceFiles": 4193,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 81,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "91ce01892994e1e775ce0d77f6429f89c7aa67924c84a44581111cbd5b0371ca",
+      "sourceManifestSha256": "ce0f0ebb75faae7e6c107eb1648acd663ae1d6d33120e302fbfd93b00bf4cf8e"
+    },
+    "room-full1": {
+      "startedAt": "2026-11-06T02:16:28.368179+00:00",
+      "elapsedSeconds": 674.163,
+      "exitCode": 0,
+      "sourceFiles": 4193,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5428,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportManifestSha256": "2f903c63244034871f212f842dd16ad1b4c1a1e5fec6ab9428283407cfb0b668",
+      "sourceManifestSha256": "ce0f0ebb75faae7e6c107eb1648acd663ae1d6d33120e302fbfd93b00bf4cf8e"
+    }
+  },
+  "lint": {
+    "issues": 0,
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "phoneVersion": 40,
+  "nativeEditExchangeAccepted": false
+}

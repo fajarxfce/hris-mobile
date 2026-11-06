@@ -29,6 +29,8 @@ data class ChatMessageRow(
     val editDelivery: CollaborationMessageDelivery? = null,
     val failedEditIds: List<String> = emptyList(),
     val editEligibleUntil: Long? = null,
+    /** Unapplied local changes in creation order, available through contextual copy. */
+    val failedEditText: String? = null,
 ) {
     override fun toString() = "ChatMessageRow([redacted])"
 }

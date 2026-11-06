@@ -138,12 +138,23 @@ class ChatEditorLayoutTest {
             runOnIdle {
                 state =
                     state.copy(
-                        rows = listOf(original.copy(failedEditIds = listOf("reviewed-edit")))
+                        rows =
+                            listOf(
+                                original.copy(
+                                    failedEditIds = listOf("reviewed-edit"),
+                                    failedEditText = "Rapat pukul sepuluh.",
+                                )
+                            )
                     )
             }
             onNodeWithText("Perubahan tidak diterapkan.", useUnmergedTree = true)
                 .assertIsDisplayed()
             onNodeWithTag("chat-message-original").performTouchInput { longClick() }
+            onNodeWithContentDescription("Tindakan lainnya").performClick()
+            onNodeWithText("Salin perubahan yang gagal")
+                .assertIsDisplayed()
+                .assertIsEnabled()
+                .performClick()
             onNodeWithContentDescription("Tindakan lainnya").performClick()
             onNodeWithText("Buang perubahan").assertIsEnabled().performClick()
             runOnIdle {
@@ -153,6 +164,7 @@ class ChatEditorLayoutTest {
                             ChatThreadEvent.EditCancelled,
                             ChatThreadEvent.EditSaveRequested,
                             ChatThreadEvent.FailedEditsDismissRequested,
+                            ChatThreadEvent.CopyFailedEdits,
                         )
                     )
                 )

@@ -56,6 +56,8 @@ Failed attempts remain recorded, including first full5,406 cases/three failures.
 The corrected deadline fixture drives the actual worker timer to1,999ms/2,000ms
 and retains its cancellation/close/no-publication assertions. History storage now
 asserts both stable page contents and deliberate revision invalidation/reopen.
-Before phone release, finish raw encrypted history proof, actual ciphertext size,
-and recovery/copy of the attempted text for rejected edits. No generic starter
-foundation change was needed for this HRIS feature increment.
+Before phone release, finish raw encrypted history proof and actual ciphertext size.
+The follow-up recovery now offers Copy unapplied changes in normal long-press
+actions, preserves all attempted texts/drafts and rechecks owner/viewport before
+clipboard access. See [recovery evidence](measurements/collaboration-room-preparation-2026-11-06.json).
+No generic starter foundation change was needed for this HRIS feature increment.

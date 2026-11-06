@@ -8,21 +8,22 @@ or controller does not correct its ownership.
 
 ## Current findings and correction
 
-ChatThreadViewModel still decides explicit room provisioning retry eligibility and
-polls readiness up to twelve times. PrepareCollaborationRoom is being implemented
-as the finite domain workflow over repository contracts. It will capture and
-recheck ownership/admission, read pending commands, retain an eligible explicit
-retry, wake the application worker and bound readiness polling. Shared pure request
-validation will also serve PrepareCollaborationConversation. The ViewModel will
-invoke this use case and map its outcome to state. No use-case-to-use-case calls;
-provisioning and message publication remain with the worker.
+PrepareCollaborationRoom now owns finite provisioning readiness and explicit retry
+preparation through repository contracts. The ViewModel invokes it and maps READY/
+WAITING to screen state. The use case checks ownership/admission, pending commands,
+current device and exact failed generation, retains an immutable eligible retry,
+wakes the worker and bounds polling to twelve reads/two-second intervals. Shared
+pure request validation also serves PrepareCollaborationConversation. It never
+calls another use case or provisions/sends messages itself.
 
-The domain implementation is currently an UNAPPLIED .kt.draft under
-.work/chat-editing-review-2026-11-05. It still needs review, integration and tests.
-Do not report this boundary correction as complete. Cover cancellation during I/O
-and delay, late account changes, retained denial, stale device/version, uncertain
-insertion, concurrent intent, explicit retry, no direct publication and the poll
-limit. The existing room-readiness and retry ViewModel tests remain required.
+Nine new domain cases cover cancellation during I/O/delay, account replacement,
+retained denial, stale/missing retry generation, uncertain insertion, no implicit
+provisioning, foreign commands and the poll limit. Existing ViewModel readiness/
+retry cases remain. Focused gate2 passed81; full room-full1 passed5,428 fresh tests
+in674.163s with0 failures/errors/skips, lint0 and4,193 unchanged source inputs.
+Gate1's81 tests passed but detekt rejected a long invoke; the cohesive polling
+step was then factored within the owning domain use case. [Evidence](measurements/collaboration-room-preparation-2026-11-06.json).
+The room-preparation drafts HAVE BEEN APPLIED and refined; never reapply them.
 
 ChatThreadHistoryPager also contains original/reference reconciliation policy in
 presentation. Move that orchestration into its owning domain use case next. Audit
@@ -31,10 +32,19 @@ selection and editor rendering mechanics remain presentation concerns.
 
 ## Active work
 
-Mobile feaf9b1a is pushed and contains the accepted local editor. The working tree
-adds contextual copy of unapplied edit text; editor-copy1 is running. Its source
-must remain frozen until the gate drains. Full checks and layout inspection are
-still required for this change. The SDK raw point patch is isolated at
+Mobile feaf9b1a contains the accepted local editor. Contextual copy now recovers
+all owned unapplied edit texts in chronological order through normal long-press
+selection. Copy checks the captured owner/viewport again before clipboard access,
+keeps ordinary drafts and never retires failed commands. Focused copy gate passed
+131 tests; the full gate above includes this increment. Three layout/callback
+cases passed; no new copy-menu screenshot was recorded.
+
+[First-frame investigation](collaboration-chat-first-frame.md) reproduced a367–533ms
+header-to-bubble interval in release40, including offline. Proposed combined local
+thread acquisition is still UNAPPLIED/UNCOMPILED .kt.draft work. Apply/review/test,
+then measure the resulting Android build before claiming any speed improvement.
+
+The SDK raw point patch is isolated at
 .worktrees/matrix-sdk-raw-event, pinned to upstream8de215a0aa0026afa5754ae5f05a6d168d1a1d60.
 It now returns SDK decryption kind alongside exact bounded raw JSON. Test2 passed
 7 structure/cache/network/cancellation tests in34.692s; this does not establish

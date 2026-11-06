@@ -42,6 +42,16 @@ internal val ChatThreadState.canDismissFailedEdits: Boolean
                     it.failedEditIds.isNotEmpty()
             } == true
 
+internal val ChatThreadState.canCopyFailedEdits: Boolean
+    get() =
+        selectedMessages.singleOrNull()?.let {
+            it.ownership == ChatMessageOwnership.SELF &&
+                it.visibilityKnown &&
+                it.reference != null &&
+                it.failedEditIds.isNotEmpty() &&
+                it.failedEditText != null
+        } == true
+
 internal val ChatThreadState.canDeleteSelection: Boolean
     get() = selectedMessages.isNotEmpty() && selectedMessages.all { it.reference != null }
 

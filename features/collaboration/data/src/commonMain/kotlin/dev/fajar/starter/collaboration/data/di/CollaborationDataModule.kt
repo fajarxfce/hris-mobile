@@ -1833,6 +1833,33 @@ class CollaborationDataModule {
             lists,
         )
 
+    @Factory
+    fun prepareRoom(
+        commands: CollaborationConversationCommandRepository,
+        conversations: CollaborationConversationRepository,
+        messages: CollaborationMessageRepository,
+        setup: CollaborationSetupRepository,
+        schedules: SyncScheduleRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        PrepareCollaborationRoom(
+            commands,
+            conversations,
+            messages,
+            setup,
+            schedules,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
     @Single
     fun replayConversation(
         commands: CollaborationConversationCommandRepository,

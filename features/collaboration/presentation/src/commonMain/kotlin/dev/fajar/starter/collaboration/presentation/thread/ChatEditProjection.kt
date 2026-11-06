@@ -56,8 +56,10 @@ internal fun projectChatEdits(
     val failed =
         matching
             .filter { states[it.intent.id] == CollaborationEditOutcomeKind.NOT_APPLIED }
-            .map { it.intent.id }
-            .sorted()
+            .sortedWith(
+                compareBy<CollaborationMessageRecord> { it.intent.createdAt }
+                    .thenBy { it.intent.id }
+            )
     val local = pending?.let { edit -> timeline.firstOrNull { matchesEditEcho(edit, source, it) } }
     return row.copy(
         text = pending?.intent?.text ?: row.text,
@@ -67,7 +69,8 @@ internal fun projectChatEdits(
             else if (local?.delivery == CollaborationMessageDelivery.FAILED)
                 CollaborationMessageDelivery.FAILED
             else CollaborationMessageDelivery.PENDING,
-        failedEditIds = failed,
+        failedEditIds = failed.map { it.intent.id }.sorted(),
+        failedEditText = failed.takeIf { it.isNotEmpty() }?.joinToString("\n\n") { it.intent.text },
         editEligibleUntil =
             (original.firstAcceptedAt ?: original.timestamp) + CollaborationMessageEditWindowMillis,
     )

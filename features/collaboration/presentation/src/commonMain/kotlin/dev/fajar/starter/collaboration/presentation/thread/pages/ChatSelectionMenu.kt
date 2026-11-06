@@ -41,6 +41,15 @@ internal fun ChatSelectionMenu(state: ChatThreadState, onEvent: (ChatThreadEvent
                             },
                             leading = { AppIcon(Icons.Regular.Edit) },
                         )
+                    if (state.canCopyFailedEdits)
+                        AppListRow(
+                            appString(AppString.ChatCopyFailedEdits),
+                            {
+                                onEvent(ChatThreadEvent.SelectionMenuDismissed)
+                                onEvent(ChatThreadEvent.CopyFailedEdits)
+                            },
+                            leading = { AppIcon(Icons.Regular.Copy) },
+                        )
                     if (state.selectedMessages.singleOrNull()?.failedEditIds?.isNotEmpty() == true)
                         AppListRow(
                             appString(AppString.ChatDiscardEdit),

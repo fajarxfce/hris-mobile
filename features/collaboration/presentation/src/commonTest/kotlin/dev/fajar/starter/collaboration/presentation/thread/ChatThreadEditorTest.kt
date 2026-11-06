@@ -157,6 +157,68 @@ class ChatThreadEditorTest {
         runCurrent()
     }
 
+    @Test
+    fun rejectedEditCanBeCopiedAfterReopeningWithoutChangingDraftOrDiscardingTheCommand() =
+        runTest {
+            withEditor { f, vm, effects ->
+                vm.onEvent(ChatThreadEvent.DraftChanged("Normal draft"))
+                runCurrent()
+                begin(vm)
+                vm.onEvent(ChatThreadEvent.EditChanged("Keep my attempted change"))
+                vm.onEvent(ChatThreadEvent.EditSaveRequested)
+                runCurrent()
+                val queued = f.records.value.single()
+                val origin = CollaborationMessageOrigin(f.self.matrixUserId, "b".repeat(64))
+                f.edits.facts[queued.intent.id] =
+                    listOf(
+                        CollaborationEditEvidence(
+                            "\$rejected-edit",
+                            origin.sender,
+                            queued.intent.editTarget!!.eventId,
+                            f.base.now.toEpochMilliseconds(),
+                            origin.contentHash,
+                            queued.intent.id,
+                            eligible = false,
+                            redacted = false,
+                        )
+                    )
+                f.records.value =
+                    listOf(
+                        queued.copy(
+                            revision = 1,
+                            state = CollaborationMessageState.Staged(f.source, "tx-edit", origin),
+                        )
+                    )
+                runCurrent()
+                assertEquals("Original", vm.state.value.rows.single().text)
+                assertEquals(
+                    "Keep my attempted change",
+                    vm.state.value.rows.single().failedEditText,
+                )
+                vm.onEvent(ChatThreadEvent.Stopped)
+                runCurrent()
+                f.base.now += 20.minutes
+                vm.onEvent(ChatThreadEvent.Entered)
+                runCurrent()
+                select(vm)
+                assertTrue(vm.state.value.canCopyFailedEdits)
+                vm.onEvent(ChatThreadEvent.CopyFailedEdits)
+                runCurrent()
+                val copy = effects.filterIsInstance<ChatThreadEffect.CopyMessages>().single()
+                assertEquals("Keep my attempted change", copy.text)
+                assertTrue(vm.confirmCopy(copy))
+                assertFalse(vm.state.value.selecting)
+                assertEquals("Normal draft", vm.state.value.draft)
+                assertEquals(queued.intent, f.records.value.single().intent)
+                assertTrue(f.edits.archived.isEmpty())
+                assertTrue(f.transactions.isEmpty())
+                f.base.session.value = null
+                assertFalse(vm.confirmCopy(copy))
+                runCurrent()
+                assertTrue(vm.state.value.rows.isEmpty())
+            }
+        }
+
     private fun TestScope.begin(vm: ChatThreadViewModel) {
         select(vm)
         assertTrue(vm.state.value.canEditSelection)

@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-06",
+  "status": "baseline reproduced; correction not yet implemented",
+  "source": "927407ad185400f16cd5b91ab47208141183bbba",
+  "versionCode": 40,
+  "device": "retained dedicated Android emulator, x86_64",
+  "scope": "Two offline and two online conversation entries; no new messages sent; phone untouched",
+  "method": "Screen recordings resampled to30fps; fixed back-arrow/message-text regions; dark pixels below170 with threshold10% above initial background; manually inspected frames. Quantization about33ms; not tap latency or a physical-device benchmark.",
+  "trials": [
+    {
+      "trial": "offline-1",
+      "headerFirstSeconds": 1.2666666666666666,
+      "bubbleFirstSeconds": 1.7666666666666666,
+      "blankAfterHeaderMillis": 500.0,
+      "videoSha256": "94a459c22e1deff10522329265cd62566d4588413a2ab0a273ac6d8c8d6d006d"
+    },
+    {
+      "trial": "offline-2",
+      "headerFirstSeconds": 1.2333333333333334,
+      "bubbleFirstSeconds": 1.6666666666666667,
+      "blankAfterHeaderMillis": 433.333,
+      "videoSha256": "c7976e676b8a032246d12b1e55e8c00b46e4d826f2fdcefc29a2e3f04285524a"
+    },
+    {
+      "trial": "online-1",
+      "headerFirstSeconds": 1.2666666666666666,
+      "bubbleFirstSeconds": 1.8,
+      "blankAfterHeaderMillis": 533.333,
+      "videoSha256": "11ac64b6bc9f79aa7882ec8f04cf8ab8575968d8eab836a01146fabcee863e16"
+    },
+    {
+      "trial": "online-2",
+      "headerFirstSeconds": 1.2333333333333334,
+      "bubbleFirstSeconds": 1.6,
+      "blankAfterHeaderMillis": 366.667,
+      "videoSha256": "f19fb15c87282c7998db2673f020a988727314a01fe993b8aae5cabf4bf1525c"
+    }
+  ],
+  "offlineMessageCount": 8,
+  "onlineFinalMessageCount": 9,
+  "onlineDatasetChangedDuringSync": true,
+  "emulatorStopped": true,
+  "dataAndKeysRetained": true,
+  "rawMessageContentIncluded": false
+}

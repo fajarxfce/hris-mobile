@@ -1,17 +1,36 @@
 # Agent continuation — HRIS Mobile
 
-## Layer ownership correction in progress — 6 November 2026
+## Room preparation accepted; first-frame correction next — 6 November 2026
 
-Latest user steering explicitly rejects misplaced business logic hidden in
-ViewModel/helper methods. Read [the concrete audit and correction](collaboration-layer-review.md).
-AGENTS.md in all three repositories now records that requirement. Mobile feaf9b1a
-is pushed. Contextual failed-edit copy is UNCOMMITTED and editor-copy1 is running;
-freeze its source until the gate drains. The new domain room-preparation and shared
-policy files are UNAPPLIED .kt.draft files, not compiled or integrated. Complete
-that correction, cancellation/ownership/polling tests and full checks, then commit/
-push. SDK raw-event test2 passed7/34.692s; native crypto/reopen proof remains open.
-No editor APK/install or new deployment. Phone40; Platform10485916/schema116.1;
-Starterbce2012 product unchanged. Never repeat accepted rollout/Forward operations.
+The local room workflow and failed-edit copy are now validated. Read the updated
+[layer audit](collaboration-layer-review.md) and [gate evidence](measurements/collaboration-room-preparation-2026-11-06.json).
+Full room-full1 PASS5,428 fresh/674.163s, no failures/errors/skips, lint0;4,193 source
+inputs unchanged. Driver70818 drained. Focused copy1 PASS131; room2 PASS81. The
+room-preparation drafts were APPLIED/refined; never reapply them. No phone install.
+
+Latest steering: chat room shows a blank body before bubbles, including offline.
+[Recorded release40 baseline](collaboration-chat-first-frame.md):367–533ms from
+header to first bubble at30fps; not tap latency or a physical benchmark. Four
+videos inspected, no new sends, settings restored and retained Bima emulator
+stopped without wiping keys/data. No performance fix accepted yet.
+
+NEXT: review/apply the NEW first-frame drafts in.work/chat-editing-review-2026-11-05:
+CollaborationThreadSnapshot, CollaborationThreadPolicy, ObserveCollaborationThread,
+ThreadObservationFixture, ObserveCollaborationThreadTest and the five files ending
+-first-frame.kt.draft. They combine scoped local context/history/commands with one
+fresh publication gate, prioritize initial history before draft/reply reads, and
+short-circuit content-free empty edit queries. UNCOMPILED/UNAPPLIED. Update DI and
+fixture factories, share history-window validation, then test cancellation, late
+owner/denial, bounded snapshots, recovery, paging and editor regressions. Measure
+actual Android before accepting performance. No unscoped cache or key-check bypass.
+
+SDK raw-event test2 passed7/34.692s; crypto/reopen draft is UNAPPLIED/UNCOMPILED. No
+SDK artifact/version changed. Rust1.96/GCC/make installed, NDK absent. Next after
+urgent render work: native edit exchange/ciphertext budget, remaining layer audit
+and all54 PRD groups. Phone40; LIVE Platform10485916/schema116.1 (docs a5f1defc);
+Starter productbce2012/docs0c1d00c. Never replay rollout/accepted Forward operations.
+Announce EACH phone install and use install-only; never operate its UI. Protected
+stashes and both retained emulator images remain intact. No heavy task active.
 
 ## Local editor accepted; continue native edit proof — 6 November 2026
 

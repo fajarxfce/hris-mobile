@@ -1090,4 +1090,5 @@
     <string name="chat_edit_not_saved_id">Perubahan belum tersimpan. Coba lagi.</string>
     <string name="chat_edit_queued_id">Perubahan menunggu dikirim</string>
     <string name="chat_edit_send_failed_id">Perubahan belum terkirim</string>
+    <string name="chat_copy_failed_edits_id">Salin perubahan yang gagal</string>
 </resources>

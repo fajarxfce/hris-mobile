@@ -609,9 +609,7 @@ internal class ChatThreadFixture {
                 createLoadCollaborationSetup(),
                 createEnsureCollaborationRuntime(),
                 createReadCollaborationIdentity(),
-                createReadCollaborationConversations(),
-                createReadCollaborationControl(),
-                createPrepareCollaborationConversation(),
+                createPrepareCollaborationRoom(),
                 createEnterCollaborationConversation(),
                 createAcquireCollaborationHistory(),
                 createReopenCollaborationHistory(),
@@ -869,45 +867,20 @@ internal class ChatThreadFixture {
             )
         }
 
-    private fun createReadCollaborationConversations() =
+    private fun createPrepareCollaborationRoom() =
         with(base) {
-            ReadCollaborationConversations(
-                sessions,
-                workspaces,
-                this@ChatThreadFixture.remote,
-                server,
-                build,
-                clock,
-                local,
-            )
-        }
-
-    private fun createReadCollaborationControl() =
-        with(base) {
-            ReadCollaborationControl(
-                setup.commands,
-                controls.commands,
-                local,
-                sessions,
-                workspaces,
-                server,
-                build,
-                clock,
-            )
-        }
-
-    private fun createPrepareCollaborationConversation() =
-        with(base) {
-            PrepareCollaborationConversation(
+            PrepareCollaborationRoom(
                 controls.commands,
                 this@ChatThreadFixture.remote,
+                messages,
                 setup.remote,
+                schedules,
+                local,
                 sessions,
                 workspaces,
                 server,
                 build,
                 clock,
-                local,
             )
         }
 

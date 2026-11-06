@@ -37,9 +37,7 @@ class ChatThreadViewModel(
     private val loadSetup: LoadCollaborationSetup,
     private val ensureRuntime: EnsureCollaborationRuntime,
     private val identity: ReadCollaborationIdentity,
-    private val read: ReadCollaborationConversations,
-    private val control: ReadCollaborationControl,
-    private val prepare: PrepareCollaborationConversation,
+    private val prepareRoom: PrepareCollaborationRoom,
     private val enter: EnterCollaborationConversation,
     private val acquireHistory: AcquireCollaborationHistory,
     private val reopenHistory: ReopenCollaborationHistory,
@@ -202,6 +200,7 @@ class ChatThreadViewModel(
         }
         on<ChatThreadEvent.EditFailureDismissed> { updateState { it.copy(editFailure = null) } }
         on<ChatThreadEvent.FailedEditsDismissRequested> { dismissFailedEdits() }
+        on<ChatThreadEvent.CopyFailedEdits> { copyFailedEdits() }
         on<ChatThreadEvent.CopySelected>(::onCopySelected)
         on<ChatThreadEvent.ForwardSelected> { openForwarding() }
         on<ChatThreadEvent.ForwardDismissed> { forwarding.close() }
@@ -690,19 +689,25 @@ class ChatThreadViewModel(
 
     private fun onCopySelected(event: ChatThreadEvent.CopySelected) {
         val current = state.value
-        val owned = access ?: return
-        val token = current.readViewportToken ?: return
-        if (
-            !visible ||
-                current.localFailure != null ||
-                !current.canCopySelection ||
-                current.deletionDialog != null
-        )
-            return
+        if (!current.canCopySelection) return
         val text =
             current.selectedMessages
                 .sortedWith(compareBy<ChatMessageRow> { it.timestamp }.thenBy { it.key })
                 .joinToString("\n\n") { it.text.orEmpty() }
+        copyText(text)
+    }
+
+    private fun copyFailedEdits() {
+        val current = state.value
+        if (!current.canCopyFailedEdits) return
+        copyText(current.selectedMessages.single().failedEditText ?: return)
+    }
+
+    private fun copyText(text: String) {
+        val current = state.value
+        val owned = access ?: return
+        val token = current.readViewportToken ?: return
+        if (!visible || current.localFailure != null || current.deletionDialog != null) return
         viewModelScope.launch { emitEffect(ChatThreadEffect.CopyMessages(owned, token, text)) }
         clearSelection()
     }
@@ -1541,12 +1546,13 @@ class ChatThreadViewModel(
         }
         context = context?.copy(self = (self as AppResult.Success).value.value ?: context?.self)
         project()
-        val ready = prepareRoom(device, retryRoom)
+        val ready =
+            prepareRoom(workspaceId, owned, conversationId, device.id, device.version, retryRoom)
         currentCoroutineContext().ensureActive()
         when (ready) {
             is AppResult.Failed -> connectionFailed(ready.failure)
             is AppResult.Success ->
-                if (ready.value) {
+                if (ready.value == CollaborationRoomReadiness.READY) {
                     if (recoverHistory && !restoreHistory(device.id)) return null
                     currentCoroutineContext().ensureActive()
                     if (access == owned) {
@@ -1575,77 +1581,6 @@ class ChatThreadViewModel(
         if (olderRecoveryAnchor != null) olderRequested = true
         olderRecoveryAnchor = null
         return true
-    }
-
-    private suspend fun prepareRoom(
-        device: CollaborationDeviceSetup,
-        retry: Boolean,
-    ): AppResult<Boolean> {
-        val retained = control.room(workspaceId, conversationId)
-        currentCoroutineContext().ensureActive()
-        if (retained is AppResult.Failed) return retained
-        val command = (retained as AppResult.Success).value.value
-        val status = read.room(workspaceId, conversationId)
-        currentCoroutineContext().ensureActive()
-        if (status is AppResult.Failed) return status
-        val room = (status as AppResult.Success).value.value
-        if (command == null && room.state == CollaborationDirectRoomState.READY)
-            return AppResult.Success(true)
-        val records = observeMessages(workspaceId, conversationId).first()
-        currentCoroutineContext().ensureActive()
-        if (records is AppResult.Failed) return records
-        val hasPending =
-            (records as AppResult.Success).value.any { it.state !is CollaborationMessageState.Sent }
-        if (
-            command == null &&
-                hasPending &&
-                retry &&
-                room.retryable &&
-                room.state in
-                    setOf(
-                        CollaborationDirectRoomState.FAILED,
-                        CollaborationDirectRoomState.CANCELLED,
-                    )
-        ) {
-            // A failed provisioning attempt requires explicit user intent. The worker sends it.
-            val prepared =
-                prepare(
-                    workspaceId,
-                    CollaborationConversationAction.RequestRoom(
-                        conversationId,
-                        device.id,
-                        device.version,
-                        room.version,
-                    ),
-                )
-            currentCoroutineContext().ensureActive()
-            if (prepared is AppResult.Failed) return prepared
-        }
-        if (hasPending || command != null) {
-            val requested = requestDelivery(workspaceId)
-            currentCoroutineContext().ensureActive()
-            if (requested is AppResult.Failed) return requested
-        }
-        if (!hasPending) return AppResult.Success(room.state == CollaborationDirectRoomState.READY)
-        repeat(12) { attempt ->
-            if (attempt > 0) delay(2_000)
-            val loaded = read.room(workspaceId, conversationId)
-            currentCoroutineContext().ensureActive()
-            if (loaded is AppResult.Failed) return loaded
-            val current = (loaded as AppResult.Success).value.value
-            if (current.state == CollaborationDirectRoomState.READY) return AppResult.Success(true)
-            if (
-                current.state !in
-                    setOf(
-                        CollaborationDirectRoomState.NOT_REQUESTED,
-                        CollaborationDirectRoomState.QUEUED,
-                        CollaborationDirectRoomState.RUNNING,
-                    )
-            )
-                return AppResult.Success(false)
-            updateState { it.copy(connection = ChatThreadConnection.WAITING) }
-        }
-        return AppResult.Success(false)
     }
 
     private suspend fun observeTimeline(owned: CollaborationLocalAccess, deviceId: String) {

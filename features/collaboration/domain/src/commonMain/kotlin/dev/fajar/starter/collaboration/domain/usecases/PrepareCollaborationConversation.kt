@@ -3,7 +3,7 @@
 package dev.fajar.starter.collaboration.domain.usecases
 
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.collaboration.domain.policies.collaborationSetupFailure
+import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
@@ -60,34 +60,21 @@ class PrepareCollaborationConversation(
             if (current is AppResult.Failed) return current
             if (device is AppResult.Failed) return device
             val value = (device as AppResult.Success).value
-            if (
-                value?.id != action.deviceId ||
-                    value.version != action.deviceVersion ||
-                    value.state != CollaborationDeviceState.ACTIVE ||
-                    value.platform.name != build.platform.name.uppercase()
-            )
+            if (!matchesCollaborationRoomRequestDevice(action, value, build))
                 return collaborationSetupFailure("client.collaboration_setup_changed")
             val room = conversations.room(owner, action.conversationId)
             val latest = continuation(scope, owner, room, room)
             if (latest is AppResult.Failed) return latest
             if (room is AppResult.Failed) return room
             val status = (room as AppResult.Success).value
-            if (status.conversationId != action.conversationId)
-                return collaborationSetupFailure("client.collaboration_command_changed")
-            if (
-                action.provisioningVersion != null &&
-                    (status.version != action.provisioningVersion ||
-                        !status.retryable ||
-                        status.creatorAccountId != owner.accountId ||
-                        status.state !in
-                            setOf(
-                                CollaborationDirectRoomState.FAILED,
-                                CollaborationDirectRoomState.CANCELLED,
-                            ) ||
-                        status.retryAt == null ||
-                        status.retryAt > clock.now().toEpochMilliseconds())
-            )
-                return collaborationSetupFailure("client.collaboration_room_changed")
+            val validStatus =
+                validateCollaborationRoomRequestStatus(
+                    action,
+                    owner,
+                    status,
+                    clock.now().toEpochMilliseconds(),
+                )
+            if (validStatus is AppResult.Failed) return validStatus
         }
         val command =
             CollaborationConversationCommand(

@@ -115,6 +115,7 @@ class ChatEditProjectionTest {
         assertEquals("Original", row.text)
         assertNull(row.editDelivery)
         assertEquals(listOf(record.intent.id), row.failedEditIds)
+        assertEquals("Updated", row.failedEditText)
         assertEquals(row, rows(listOf(record), listOf(rejected)).single())
     }
 
@@ -168,7 +169,55 @@ class ChatEditProjectionTest {
                 .single()
         assertEquals(row.text, acknowledged.text)
         assertTrue(acknowledged.failedEditIds.isEmpty())
+        assertNull(acknowledged.failedEditText)
         assertEquals(row.key, acknowledged.key)
+    }
+
+    @Test
+    fun unappliedTextIsChronologicalAndExcludesPendingObservedAndOtherRoomEdits() {
+        fun change(id: Int, text: String, time: Long) =
+            record.copy(
+                intent =
+                    intent.copy(
+                        id = chatId(id),
+                        text = text,
+                        createdAt = Instant.fromEpochMilliseconds(time),
+                    )
+            )
+        val earlier = change(10, "First attempt", 1100)
+        val later = change(11, "Second attempt", 1200)
+        val pending = change(12, "Pending attempt", 1300)
+        val observed = change(13, "Accepted attempt", 1400)
+        val foreign =
+            change(14, "Other room", 1500).let {
+                it.copy(
+                    intent =
+                        it.intent.copy(editTarget = target.copy(roomId = "!other:example.test"))
+                )
+            }
+        val commands = listOf(later, pending, foreign, earlier, observed)
+        val states =
+            commands.map {
+                outcome(
+                    it,
+                    when (it) {
+                        pending -> CollaborationEditOutcomeKind.AWAITING_PROVIDER
+                        observed -> CollaborationEditOutcomeKind.OBSERVED
+                        else -> CollaborationEditOutcomeKind.NOT_APPLIED
+                    },
+                )
+            }
+        val result = rows(commands, states, source = null).single()
+        assertEquals("First attempt\n\nSecond attempt", result.failedEditText)
+        assertEquals(listOf(earlier.intent.id, later.intent.id).sorted(), result.failedEditIds)
+        assertEquals("Original", result.text)
+        assertNull(rows(commands, states, roomId = null).single().failedEditText)
+        assertNull(rows(commands, states, self = null).single().failedEditText)
+        assertNull(
+            rows(commands, states, history = listOf(original.copy(text = null, redacted = true)))
+                .single()
+                .failedEditText
+        )
     }
 
     @Test

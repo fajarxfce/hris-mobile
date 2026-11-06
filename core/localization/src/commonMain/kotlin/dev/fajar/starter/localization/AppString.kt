@@ -227,6 +227,7 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     ChatSaveEdit(Res.string.chat_save_edit_en, Res.string.chat_save_edit_id),
     ChatCancelEdit(Res.string.chat_cancel_edit_en, Res.string.chat_cancel_edit_id),
     ChatDiscardEdit(Res.string.chat_discard_edit_en, Res.string.chat_discard_edit_id),
+    ChatCopyFailedEdits(Res.string.chat_copy_failed_edits_en, Res.string.chat_copy_failed_edits_id),
     ChatEditNotApplied(Res.string.chat_edit_not_applied_en, Res.string.chat_edit_not_applied_id),
     ChatEditUnavailable(Res.string.chat_edit_unavailable_en, Res.string.chat_edit_unavailable_id),
     ChatEditNotSaved(Res.string.chat_edit_not_saved_en, Res.string.chat_edit_not_saved_id),
