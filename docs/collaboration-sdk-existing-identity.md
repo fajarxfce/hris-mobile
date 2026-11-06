@@ -58,7 +58,9 @@ additional native function and compiled JVM API. Four build-driver cases pass, i
 rejecting missing or prefix-only function symbols. The candidate workflow selects it;
 the shipping manifest and dependency remain SDK 3.
 
-Remaining Android ABIs, real Android consumer, private-identity repository/use-case
+x86_64 subsequently completed in 612.261 seconds with the same 1,214 source inputs,
+all nine Kotlin hashes identical to ARM64, and the same entry-point/alignment checks.
+The two 32-bit Android ABIs, actual Android consumer, private-identity repository/use-case
 integration and Apple runtime support remain required. Every changed
 binary must use a new SDK version; never replace SDK 3 assets. Phone 50 and its pending-
 send report remain unchanged by this source-only candidate. Continue original-parent

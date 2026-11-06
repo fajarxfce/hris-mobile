@@ -83,3 +83,14 @@ Private-store inventory/possession, hard-parent recovery, freeze/drain, original
 adoption and organization runtime/UI/background routing remain separate work. Generic
 raw storage changes return to Starter after the real HRIS consumer is validated. HRIS
 replacement policy, protocol adapters, encrypted formats and use cases stay in Mobile.
+
+## First-source CI acceptance
+
+The first control42282707724 and native42282707833 runs on implementation7ef01cd57
+both passed. Digest-verified artifacts contain4,345 portable,1,747 Apple and395 cases
+per Android ABI, with zero failures/errors/skips. Apple includes nine real raw database
+handoff cases and20 encrypted setup-storage cases; the actual iOS application host
+also builds. Both native artifacts retain successful encrypted delivery, original
+queue/process-restart/offline and worker/notification proofs with cleanup.
+[Evidence](measurements/collaboration-space-bootstrap-handoff-ci-2026-11-06.json).
+This artifact audit made no new dispatch, live rollout or physical-phone acceptance.

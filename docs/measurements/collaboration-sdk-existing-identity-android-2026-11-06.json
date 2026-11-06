@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-11-06T20:47:34.854881+00:00",
+  "recordedAt": "2026-11-06T21:00:10.776232+00:00",
   "candidateOnly": true,
   "published": false,
   "versionReservedForNewBinary": "26.10.23-hris.4",
@@ -44,7 +44,6 @@
     "elapsedSeconds": 0.123
   },
   "pending": [
-    "x86_64 build and generated-binding comparison",
     "armeabi-v7a build and generated-binding comparison",
     "x86 build and generated-binding comparison",
     "four-ABI AAR packaging and actual Android consumer",
@@ -52,5 +51,36 @@
     "new-version distribution and normal application gate"
   ],
   "phoneUpdated": false,
-  "physicalPendingSendReport": "open"
+  "physicalPendingSendReport": "open",
+  "x86_64": {
+    "startedAt": "2026-11-06T20:45:30.918207+00:00",
+    "exitCode": 0,
+    "sourceCount": 1214,
+    "nativeSha256": "e36a61778b11e6775316f3d3e64fdb5eafefb308619214e4012d9ee263a35131",
+    "nativeBytes": 142908224,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "privateAccountReaderSymbol": "uniffi_matrix_sdk_ffi_fn_func_read_existing_crypto_identity",
+    "generatedKotlin": {
+      "kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt": "2d4aa8ca4c84b7bdf2d127b8aa1b208078a489f64070d4210061843e5d1a6f91",
+      "kotlin/uniffi/matrix_sdk_crypto/matrix_sdk_crypto.kt": "120a5d8db4b0ec3e609077b78832dd750e241fd5ea7c0ffb98647a19daade005",
+      "kotlin/uniffi/matrix_sdk/matrix_sdk.kt": "de44cd55bb6a1bd6888c2918df3f7974a8da6326f00192f96fef0b3bb859ea44",
+      "kotlin/uniffi/matrix_sdk_contentscanner/matrix_sdk_contentscanner.kt": "db48b8b84f391c2205b3a6d7802cfd9f61aeb9d28cb2049d24518a4d98a22a24",
+      "kotlin/uniffi/matrix_sdk_sqlite/matrix_sdk_sqlite.kt": "6738c2e65bd83217510f8b1bb5553827d9810c9e7add039f28ff8c9d75fb30ca",
+      "kotlin/uniffi/matrix_sdk_ui/matrix_sdk_ui.kt": "d91d9e1a8f040c8435673ad8dd12a41a1df0a90d9a5dd54b2c0de968c2046c28",
+      "kotlin/uniffi/matrix_sdk_base/matrix_sdk_base.kt": "ca64fbaf9aac400fa3b9d57036467968501138df313a8c07ed4af9ccf6cccb06",
+      "kotlin/uniffi/matrix_sdk_common/matrix_sdk_common.kt": "301030a61a133f6e133457e3434d97ec3f92d32a91684b9e13e8c61c4ba3a1b1",
+      "kotlin/uniffi/ruma_events/ruma_events.kt": "de0a855239a51a0bc959451d9d3bc408c3af027cdcea68fab4055df7b28d7e0c"
+    },
+    "sourcesUnchanged": true,
+    "elapsedSeconds": 612.261,
+    "matchesArm64Bindings": true
+  }
 }
