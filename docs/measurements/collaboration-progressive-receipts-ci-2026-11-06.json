@@ -127,5 +127,17 @@
     "run": 42236786667,
     "step": "Build iOS application host",
     "conclusion": "success"
+  },
+  "localFixtureCorrection": {
+    "platformCommit": "62ee11818a4928b2598d046c7b3283bf3e416554",
+    "accepted": true,
+    "nativeCases": 2,
+    "nativeSeconds": 174.389,
+    "sdk": "26.10.23-hris.2",
+    "abi": "x86_64",
+    "unitCases": 7,
+    "unitSeconds": 33.54,
+    "evidence": "https://github.com/fajarxfce/hris-platform/blob/62ee11818a4928b2598d046c7b3283bf3e416554/docs/measurements/collaboration-cached-history-admission-2026-11-06.json",
+    "originalCiRunRemainsFailed": true
   }
 }

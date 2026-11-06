@@ -1,124 +1,76 @@
 # Agent continuation — HRIS Mobile
 
-## Current: SDK refresh-rate-limit fix validated; Android rebuild — 6 November 2026
+## Current: SDK3 packaged; native fixture accepted; candidate49 next — 6 November 2026
 
-Phone remains accepted **release 48**, installed at 15:07 UTC, with one optional
-request to open Bima still pending. At 15:18 its app was not running; do not drive
-phone UI or repeat the answered47 question. Old pending diagnosis remains open.
+Phone remains **release48**, installed15:07UTC, with data/keys intact. Its app was
+not running at15:58:39UTC. One optional Bima-open question remains pending. User
+answered47 still pending; do not repeat that question, drive phone UI, or claim
+phone pending resolved. Future phone installs need advance notice, explicit serial,
+--install-only. Original Bima emulator is stopped with48 and its retained store.
 
-The original Bima store reproduced the intermittent soft logout at **15:11:38UTC**.
-A bounded HRIS bridge trace captured Matrix refresh **200 then429**, with
-M_LIMIT_EXCEEDED / collaboration_gateway_rotation_too_soon. The native parent/device
-remained active and the gateway advanced to66. The pinned SDK classified all
-non-5xx refresh errors as session rejection; it also classified every wrapped
-refresh failure as an expired queue token. This explains the reproduced emulator
-failure, not yet the phone's per-message pending history.
+SDK3 fixes the reproduced emulator token-boundary failure: gateway refresh200 then
+429/rotation_too_soon caused SDK2 to classify temporary refresh failure as session
+rejection/expired queue token. Retry-After and existing FFI error classification
+are now preserved; real denials still gate access. Patch411b323c is pushed. Its
+12 source inputs and nine generated Kotlin files reconstruct exactly. Core5,
+HTTP18, FFI2 and Python3 cases pass, with intended red evidence retained.
+[SDK patch, builds and package](measurements/collaboration-sdk-refresh-retry-2026-11-06.json).
 
-`tool/collaboration-sdk-patches/refresh-retry.patch` corrects those classifications,
-keeps Retry-After, and exposes wrapped Matrix failures through the existing FFI
-error type. No binding API, owner fence, credential, queue identity or CPU baseline
-changes. SDK1/2 assets remain immutable and shipping still usesSDK2. The current
-candidate build manifest now includes this fourth patch and12exact source files.
-Clean upstream reconstruction matches all12. Rust unit red:2intended failures,
-51.633s; green:2pass48.920s. All5core error cases pass0.365s; all18HTTP refresh
-integration cases pass59.487s; FFI2pass77.780s. Python build-driver3pass0.122s.
-[Evidence](measurements/collaboration-sdk-refresh-retry-2026-11-06.json).
+All four ABI libraries are rebuilt and verified. Local ARM64 took505.000s and
+x86_64 took464.836s. Remote ARMv7 run42243119369 took956.948s; x86 run42243123291
+took1301.753s. Their artifact digests,12sources,nine bindings,ABI/entry points and
+alignment verify. First remote ARM64 run42242739402 also passed; its independently
+built binary was NOT substituted for the accepted local ARM64 one. No redispatch.
 
-The ARM64 rebuild 25579 is drained and PASSED in **505.000s** on 12 unchanged
-source inputs. Its 138,709,480-byte native SHA is
-**bafdc75b68ffa0a5f00036b51b13d695eaa901bd4794531d278335e502c26b7e**.
-ABI, entry points and four 16 KiB LOAD segments verify; all nine generated Kotlin
-files match the manifest. This is structural/build acceptance, not a runtime proof.
+SDK3 packaging35171 PASSED106.131s from15:59:03UTC. Candidate AAR185,494,730bytes SHA
+**1e6871785970f8652759f57b4d59229aa16ac9a198309cedc13b5ac64168cadc**;
+Ivy SHA**16f28d79298011895ad017c241ff21e6bf8d5154c4869036b710d11160240373**.
+All four packaged libraries,12source hashes,nine bindings and required APIs verify;
+compiled classes matchSDK2. Assets: .work/chat-refresh-boundary-2026-11-06/distribution-3.
+Wrapper: /home/fajar/hris/.worktrees/matrix-kotlin-refresh-2026-11-06, pinnedc1664f71.
+It is NOT published/shipping. SDK1/2 assets stay immutable; normal catalog staysSDK2.
+Current release variants do not enable R8; do not describe them as minified.
 
-ARM64 and x86_64 local builds are drained and structurally verified. x86_64 took
-464.836s on 12 unchanged inputs; its native SHA is
-4c1ec503a869ffd7dc4c1c947b5f2875f8d4ed7b1e4edba05e152176048b739e,
-142,885,048 bytes. Remote ARMv7 42243119369 passed956.948s; artifact13517714070
-SHAf9d134aaeff6b6b456459ab2bd2d4a9b3b22176d98c277ba94e639c52236498c
-was downloaded, digest/source/binding/native verified. Remote x86 42243123291
-still runs; first automatic ARM64 42242739402 passed. Do not redispatch or replace
-the locally accepted ARM64 binary with the independently built remote one.
-All four binaries must use the new patch. No published SDK asset changes.
+Exactcf28 CI: portable4,299/463 and Apple1,671/182 plus iOS host PASS. Native42236786643
+FAILED bothABIs (389cases,2failures each) because fixture assertions depended on a
+network context miss and obsolete absolute admission totals. Those failed CI runs
+remain failed. Platform **62ee11818a4928b2598d046c7b3283bf3e416554** now commits the locally accepted fixture
+correction: compare head reads with original-send admission, preserve two heads,
+require fresh admission between operations and before provider pages, and retain
+bounded integer evidence. Seven unit cases+format/architecture pass33.540s.
+Final native63241 passes bothSDK2 x86_64 scenarios174.389s on12,459 stableinputs:
+three encrypted sends/zero redactions each, process death/offline settlement/repeat
+no-op and cleanup. Its APK SHA is
+e4db3b5d0912bafe3c9384a756271bb3680ebbe43d8d10a8c3c3d0ce86c6557c.
+[CI failure and accepted local correction](measurements/collaboration-progressive-receipts-ci-2026-11-06.json).
+Keep rejected native-1/2 evidence; their three-head and absolute-four assumptions
+were corrected. This fixture acceptance does not prove SDK3 or phone delivery.
 
-All four native builds are verified. Remote x86 42243123291 passed1301.753s;
-artifact13518666187 SHAcaa99da96ffca20026a87f2ba3abcc92374e6ac428983b9c47afe81a14dcd8c5
-and all12source/nine Kotlin hashes verify. Its148,131,760-byte native SHA is
-3fa6466fe49e6ffe8f3c1043f6931814ec3f6d57b323ee2a6954aa0a3b370410.
-All four verified libraries and the nine matching bindings are copied into the
-pinned packaging wrapper /home/fajar/hris/.worktrees/matrix-kotlin-refresh-2026-11-06.
-SDK3 packaging has NOT run; use tool/package_collaboration_sdk.py after emulator stop.
+All heavy jobs are drained and all emulators STOPPED. Last fixture emulator3181930/
+startTicks165755158 stopped16:05:06UTC; separate SDK fixture disk is preserved.
+Do not confuse that disk with .work/demo-chat-device-2026-11-05/bima/userdata.img.
 
-The current SDK2 proof APK built in232.167s with18fresh cases/5suites passing,
-zero lint errors and48warnings (dependency updates, proof ABI/icon/backup config;
-not the shipping product lint result). Artifact144,143,608bytes SHA
-e4db3b5d0912bafe3c9384a756271bb3680ebbe43d8d10a8c3c3d0ce86c6557c,
-x86_64 only. Original Bima data/keys remain48 and inactive.
+NEXT: run .work/chat-refresh-boundary-2026-11-06/prepare-consumer.py ONCE to stage the
+exact localSDK3 Ivy candidate and additive checksum entries. Then build candidate49
+using .work/release-phone-2026-11-06-build49/build-arm64.py. Its command builds both
+product devRelease49 and ARM64 native proof; only verification metadata may differ
+from acceptedcf28 program inputs. Do not change Mobile HEAD during this build.
+Verify with49/verify-arm64.py and verify-sdk.py, then
+.work/chat-refresh-boundary-2026-11-06/verify-proof-sdk3.py. Candidate49 is for the
+retained Bima emulator only; no49APK/build exists yet. Use its owned start/install/
+probe/stop scripts, preserving keys/data. Capture actual expired-token recovery
+with bounded closed bridge diagnostics. SDK3 native ARM64 recovery remains required.
 
-SDK3 packaging **35171 is drained and PASSED**,106.131s from15:59:03UTC.
-AAR185,494,730bytes SHA1e6871785970f8652759f57b4d59229aa16ac9a198309cedc13b5ac64168cadc;
-Ivy SHA16f28d79298011895ad017c241ff21e6bf8d5154c4869036b710d11160240373.
-All four packaged native libraries,12sources,nine generated Kotlin files and required
-APIs verify. Compiled classes matchSDK2. Candidate assets are under
-.work/chat-refresh-boundary-2026-11-06/distribution-3, NOT published or shipping.
+After candidate runtime acceptance, publish SDK3 once as new immutable assets,
+switch the normal catalog and checksums, and pin the accepted Platform fixture
+above in .github/workflows/collaboration-hris.yml in that same shipping increment.
+Run required full/normal-release gates and actual smoke before the next phone
+update (planned50); do not start an avoidable SDK2 CI run by changing the pin early.
+No accepted Forward sends, live rollout or SDK publication may replay.
 
-Only active heavy job is **Platform63241**, sdk-refresh-history-2026-11-06/native-sdk2-3.
-Fixture emulator3181930/startTicks165755158, emulator-5560, is active under
-Mobile .work/chat-refresh-boundary-2026-11-06/native-sdk2-3. Do not overlap builds.
-It uses the separate cleaned SDK fixture disk; original Bima stays48 and inactive.
-Source inputs are frozen until the test drains. Shipping catalog/verification entries
-still contain no SDK3 switch. After native-3 acceptance and emulator stop, run
-.work/chat-refresh-boundary-2026-11-06/prepare-consumer.py once to stage the exact SDK3
-Ivy candidate and checksum entries, then candidate49 build/verification and runtime.
-
-Platform's Native-1 failed both cases in175.648s because the first trace correction
-expected three heads. Native-2 failed both in149.143s at admittedHistoryHeads:
-actual first-head admissions are3, recovery-head22, final25, all failures0. Early
-progressive ACK projection deliberately fails before the sender's final admission;
-an absolute minimum4 wrongly depends on that interrupted step. No production code
-or authorization checks changed. The final test-only correction compares the first
-head to the original send checkpoint, requires fresh permission between heads,
-post-history permission, and first provider admission after both history readmission
-and provider admission. It retains two heads and existing page bounds/positions.
-Seven positive/negative trace cases plus format/architecture PASS33.540s on12,459
-unchanged inputs. Native validation of this final correction remains required.
-
-Emulator3126325/startTicks165707343 stopped15:57:24UTC. Current native runtime scripts:
-Mobile .work/chat-refresh-boundary-2026-11-06/native-sdk2-3/start-emulator.py and
-stop-emulator.py, with Platform .work/sdk-refresh-history-2026-11-06/run-native-sdk2.py
-native-sdk2-3. They use the separate cleaned SDK fixture disk, NOT Bima's disk.
-Keep all failed evidence; never overwrite or call the fixture accepted yet.
-
-Private candidate49 scripts are prepared in .work/release-phone-2026-11-06-build49
-for original Bima's emulator only. No49APK exists; the next normal phone build will
-follow candidate acceptance and immutable SDK3 distribution. Shipping stillSDK2.
-Remote fetch/verification script: .work/chat-refresh-boundary-2026-11-06/fetch-remote.py.
-Generated outputs stay outside this repo in .worktrees; SDK1/2 assets immutable.
-
-Next finish the fixture validation, package a new candidate, prove actual HRIS token-boundary
-recovery and retained original-queue behavior, then normal release acceptance before
-the next phone update. Current release variants do not enable R8; do not call them
-minified. Phone remains 48, with one optional Bima-open request pending.
-
-Exact sourcecf28 CI is audited: portable4,299/463 and Apple1,671/182 pass.
-Native42236786643 FAILED BOTH ABIs, each389cases/67suites with2failures. Both
-NativeCollaborationSdkInteropTest scenarios fail applicationAdmittedAroundHistory;
-the driver passes encrypted exchange/cleanup/3sends/zero redactions before that
-assertion. The old trace waits for /context even though the SDK can serve its
-event-focused window from cache; the two head reads remain unchanged. The native suite
-is NOT accepted. [Failed CI evidence](measurements/collaboration-progressive-receipts-ci-2026-11-06.json).
-
-Platform has an uncommitted test-only correction proving two admitted head reads
-and admission after the recovery read, without requiring redundant network context
-I/O. Seven positive/negative trace cases plus format/architecture pass33.540s on12,459
-unchanged inputs; actual native validation remains. Its script/evidence are
-Platform .work/sdk-refresh-history-2026-11-06. Do not weaken admission assertions.
-After acceptance commit/push Platform. Pin its new revision in collaboration-hris.yml
-together with the SDK3 shipping switch to avoid a redundant SDK2 CI dispatch.
-
-Phone remains48, app not running at15:58:39UTC, one Bima-open question pending. Never
-ask the answered47 question again or drive phone UI. Platform live10485916/
-schema116.1 and Starter578d97a unchanged. Continue all54PRD groups and push each
-commit. No accepted Forward send, live rollout, or SDK publication may replay.
+Live Platform10485916/schema116.1 and Starter578d97a remain unchanged. All54 PRD
+groups stay active, including calls/meetings. Continue after this repair and push
+each commit. HRIS receipt policy is not a Starter port.
 
 ## Prior checkpoint: release 48 installed; phone mapping diagnosis next — 6 November 2026
 
