@@ -94,33 +94,43 @@ verified. Output .worktrees/matrix-sdk-queue-android-arm64-2026-11-06/main.
 No AAR yet. Do not mix with the earlier raw-only AAR/consumer. Build remaining ABIs
 sequentially after the active application test; SDK source is accepted and unchanged.
 
-ONLY local heavy job is application66462, driver
-.work/sdk-confirmed-queue-2026-11-06/check-application.py application-2. Main Mobile
-has18 UNCOMMITTED Kotlin source/test files;4,212 inputs are frozen during this run.
-New SettleCollaborationCompletedQueue use case reads exact paused originals, matches
-immutable completions under native family/device/room/content and closes only those
-entries. It preserves mapped work and uniquely recoverable Staging; referenced
-Staging.before entries stay protected. Worker calls the use case, not repo policy.
-Android raw datasource/repository adapters are drafted but CANNOT compile against
-shipping SDK26.10.23. They require the new paired queue AAR. Do not commit/push
-these product sources before candidate compilation and meaningful full acceptance.
+Application66462/application-2 drained PASS200.622s:44 cases on unchanged4,212
+inputs,14 domain +4 mapper +foreground/background worker suites. The retained-native
+reproduction now passes with2 enqueues/2 sends/1 settlement and no extra work on
+repeat. Real encrypted stores/worker, FAKE SDK; no phone/native root-cause proof.
+[Evidence](measurements/collaboration-confirmed-queue-application-2026-11-06.json).
+application-1 failed before tests due to wrong jvmTest task name; corrected to desktopTest.
 
-The preserved worker reproduction patch has been REAPPLIED and the fake SDK now
-implements exact settlement. New tests:14 domain recovery cases and4 full-content
-mapper cases. application-2 runs those plus both foreground/background worker
-suites; no result yet. application-1 failed before tests due to wrong task name
-jvmTest; convention uses desktopTest, driver corrected without source changes.
-After draining, inspect results. Review unnecessary remote room/setup reads in the
-new local settlement path; it can borrow the worker's already-admitted timeline
-provenance while preserving current account/company/SDK fences. No phone root-cause
-or native application fix acceptance claimed yet. Continue x86_64/new candidate
-packaging, real JNI worker proof, remaining ABIs/Apple and normal PRD work.
+SINCE that pass, main Mobile's18 UNCOMMITTED Kotlin files have been refactored:
+SettleCollaborationCompletedQueue now takes the worker's existing admitted timeline,
+rechecks live account/company/SDK ownership and performs local settlement without
+remote room/setup repository dependencies. Added a15th domain test for stale
+borrowed owner/device; formatter passes, new signature NOT TESTED yet. Worker only
+calls the use case; exact-content mapper/data sources retain raw SDK I/O. Referenced
+uncertain Staging.before entries remain protected; ordinary uniquely recoverable
+Staging follows its existing path. Legacy adapters without original-read support
+retain Conflict/QueueUnresolved, not an automatic retry loop.
+Android adapter draft requires the new SDK methods and CANNOT compile with current
+shipping26.10.23. Do not commit these sources before candidate/full acceptance.
 
-Latest phone reconnect09:36UTC timed out18s; question remains pending, accepted43
-awaits install-only. Native42191546121 on46bec39a SUCCESS: artifact13491584498
-SHAec91d3555fea3293dce583d0fef9ccc96cd7a07f03f8f1fd417023f93619abaf,
-381 XML cases/66 suites and all six native result groups/cleanup verified;105dd7dd
-records this. Control42191546066 still running09:55UTC; do not dispatch duplicates.
+ONLY current local heavy job: SDK x86_64 queue build34477, started10:01:25UTC,
+.work/sdk-confirmed-queue-2026-11-06/build-android.py x86_64. SDK's9 fingerprinted
+inputs are FROZEN; Mobile app files may be edited independently. No emulator active.
+After draining/verification, run check-application.py application-3 for newer owning
+use case, then package native candidate and Android compile/proof. Isolated wrapper
+.worktrees/matrix-kotlin-confirmed-queue now contains the verified arm64 pair only;
+private kotlin-wrapper-inputs.json and package-android-aar.py are prepared. Neither
+packaging nor publication ran. Verify all9 x86 Kotlin hashes match arm64, add its
+JNI to this new wrapper/manifest, preserve the accepted old raw-only wrapper/AAR.
+Remaining32-bit/Apple/full product dependency distribution are still outstanding.
+
+Latest bounded phone reconnect about10:01UTC also timed out18s. Availability
+question remains pending; exact accepted43 still awaits install-only. Do not rebuild
+or launch/drive phone UI. Native42191546121 succeeded on46bec39a;381 cases/66 suites
+and all6 native result groups verified. Control42191546066 now SUCCESS on same
+source: Apple artifact13493108249 digest verified1,627 cases/179 suites; portable
+13493041185 digest verified4,211 cases/457 suites. These accept the send feedback/
+ordering source, not this newer queue integration. Do not re-dispatch.
 
 SDK x86_64 driver95397 is FINISHED and drained:901.084s,142,673,032 bytes,
 SHA0f9d908ef616c650949fedd51c97c0ce5e5c2d98810606731bc811634acf3cab.

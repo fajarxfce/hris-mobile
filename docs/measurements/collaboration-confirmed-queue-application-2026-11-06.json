@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "stage": "Application integration before admitted-timeline refactor",
+  "startedAt": "2026-11-06T09:57:09.251828+00:00",
+  "seconds": 200.622,
+  "passed": true,
+  "sourceFiles": 4212,
+  "sourcesUnchangedDuringRun": true,
+  "allInputManifestSha256": "645a34d35f6c58a47f94becf0549f07af707971384d8a8a3ce89689fcc311802",
+  "changedSourceSha256": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt": "9b8f09e1b43f9a0fba9cd60748fb9858378bce97336505d915d04f44993b3a17",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryDiagnostics.kt": "360f29abc4c0ebf5b8c3652a19098f613af7196444efe8cf9758502536cdee5b",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "f7456a0ebffb123cb4185a61b713d6f83cf799a0447d8d49e3d822f0f8ba179a",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt": "26417c8068d7b90be489d7151d70d145da62861524b76e9bc8031a43ca71a504",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt": "af864f8f9189a916be2accad39ef71abdf77781ddfd52fa5e795d36caefbe3c6",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationMessageQueueSource.kt": "1cd1d42eaf5561b2ccd43181c0663764962dd5af69879f99c38bcc5088de07a1",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationCall.kt": "37ed6c0e50ca657d0d57cb90a460d0a8c257b67899237aa972c0701b5b6dbf40",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationMessageQueueLease.kt": "cd47afe9829ac29f8b08c4e322a88a2b72f2eed315c1fe7c2572991e6023bd56",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "ba54ed11ceab64df8e39e10190d38d9bcd18939a2c7b5bc8f977d0793caee07b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationQueuedOriginalDto.kt": "37655345c17bd3344b1422194ba89a9d0bbaf83b1d023b770ae1ee9c71f0f2d0",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationQueuedOriginalMapper.kt": "aef8e399a4d041a88effe9aed61d883889c3cc3a1c62612313d6fcb9494e7a4e",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationQueuedOriginalMapperTest.kt": "eb1efa30c5403dff2f19736f76f96be5e5b83e1e15eed54eb3c7b5f1c56c588c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationQueuedOriginal.kt": "ed534801cd4adcdc8cb14b6fe4e6ec1335dac6158708f31d4b2f30d6ac6e711e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationQueueCompletionPolicy.kt": "863ca065017f217ba1a8a4cd8b73fbe6c1002940aa3eb726f529031298720d03",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationMessageQueueLease.kt": "3bfa2d2eb8c8197bd1b3aff9643bb385d296376486cdc3ad19ec6bd279d4ad8b",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/SettleCollaborationCompletedQueue.kt": "90b41d6a83ff90f8fb94e47f8cded6e4c93122d543e1649c35831f6d6605cd9d",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SettleCollaborationCompletedQueueTest.kt": "74fb55b61cc86c90db5d1443fb6178c97c3a7e57ef774605e258ecd57f3a1fa6",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationTextTest.kt": "8d319c46734faf2909dd9f5d75fabe5d457750c2996ac9b1995d6edca7ce325b"
+  },
+  "counts": {
+    "tests": 44,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reports": {
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBackgroundDeliveryWorkerTest.xml": {
+      "sha256": "1ea690d9bcf5a1247b8c869141041e8fd0ceab9294c88b04f05750ec80c8ca92",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+      "sha256": "5cd28bdca94b67c98b356248a793eed298508eda8b3513efc2a74947a1b46a49",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationQueuedOriginalMapperTest.xml": {
+      "sha256": "a986cb12c3cad0bca6745d40c619387bfc0389e0527cdf1bbbcb0c2d600baf41",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SettleCollaborationCompletedQueueTest.xml": {
+      "sha256": "9e930ae70b3bc3716caee55ac79921d81a049281279203dbf63763a2aff322a5",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "scope": [
+    "14 owning domain recovery tests",
+    "4 exact original-content mapper tests",
+    "Foreground and background real application worker suites using a fake SDK and real encrypted stores",
+    "Previously red retained-native-acceptance case passes; two original enqueues, two sends, one settlement, no extra work on repeat"
+  ],
+  "limitations": [
+    "No real Android/native queue integration acceptance.",
+    "After this run the use case was refactored to borrow the worker-admitted timeline and remove remote room/setup dependencies. That newer source has not been tested yet."
+  ],
+  "firstAttempt": {
+    "seconds": 23.884,
+    "tests": 0,
+    "failure": "Incorrect domain task name jvmTest; repository target is desktopTest."
+  }
+}
