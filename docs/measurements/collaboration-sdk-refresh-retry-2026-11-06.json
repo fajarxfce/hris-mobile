@@ -242,5 +242,46 @@
     "generatedKotlinCount": 9,
     "buildSeconds": 956.948,
     "published": false
+  },
+  "androidX86": {
+    "at": "2026-11-06T15:49:30.051624+00:00",
+    "passed": true,
+    "abi": "x86",
+    "run": 42243123291,
+    "head": "411b323c6c0e1bb3e1594970bc5abbea7e62b979",
+    "artifactId": 13518666187,
+    "artifactSha256": "caa99da96ffca20026a87f2ba3abcc92374e6ac428983b9c47afe81a14dcd8c5",
+    "artifactBytes": 49960197,
+    "native": {
+      "nativeSha256": "3fa6466fe49e6ffe8f3c1043f6931814ec3f6d57b323ee2a6954aa0a3b370410",
+      "nativeBytes": 148131760,
+      "elfClass": "ELF32",
+      "requiredElfAlignment": 4096,
+      "loadAlignments": [
+        4096,
+        4096,
+        4096,
+        4096
+      ],
+      "requiredSymbolsPresent": true
+    },
+    "sourceSha256": {
+      "Cargo.lock": "e3f28c9f54076bb320270aea995fc1f124c7ed727968dad338f544fe764df7f0",
+      "crates/matrix-sdk/src/send_queue/mod.rs": "91d2ff7784fc4cd3c484e184dfe31c65766dfaa508f6e089a403aa9cfb8ba50e",
+      "crates/matrix-sdk/src/send_queue/confirmed_event_tests.rs": "308e0bc9ecb650c55f66040cf3a76dbb34a3a38040ae5899436567dadbc8323c",
+      "bindings/matrix-sdk-ffi/src/room/mod.rs": "d38b0bc50f9da0365c14717e0821ae2eac9f498f34501211aa66c2ed29febfec",
+      "bindings/matrix-sdk-ffi/src/room/queued_events.rs": "ae6efcba570bbe83ece6e8529b6f6e1dcae7735eec5622586a45a7c4defa1b3f",
+      "bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs": "4dc9c6774802d43c090c8836471f7860809de490cc0317103e262e2848893c58",
+      "Cargo.toml": "cc436eb2188bc6af76078cae40c649a71752a9ef4aa7e832afdd0f3e40853b43",
+      ".cargo/config.toml": "531ceda5e3e8a7ba878c0e475434ca67651242843d6dab928877a8e31b90d5e4",
+      "xtask/src/kotlin.rs": "f52edba777e389a1efb34797e93d55dc67fb1c4460b1c539da439860004ae52a",
+      "crates/matrix-sdk/src/error.rs": "0941cc1e145a3b55878d500438a2eaf4790a755a890833a67694c41bc8a3d627",
+      "crates/matrix-sdk/tests/integration/refresh_token.rs": "b8261042d822721b4ab7230f7c263fb9ac80e8c1533a4c4dfc2653d0995b7e5b",
+      "bindings/matrix-sdk-ffi/src/error.rs": "02eabd46e009a478e5325d2c74cc3d38d46f344f0d67bac3b41057b8960424dd"
+    },
+    "generatedKotlinMatchesManifest": true,
+    "generatedKotlinCount": 9,
+    "buildSeconds": 1301.753,
+    "published": false
   }
 }

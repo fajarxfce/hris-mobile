@@ -121,6 +121,6 @@
       "arm64-v8a",
       "x86_64"
     ],
-    "diagnosis": "Trace required a network event-context request. Latest-head ACK recovery adds a third admitted head read; the SDK can satisfy its focused window from its cache. The trace must prove admission around this current recovery read, including all three heads. Runtime revalidation is pending."
+    "diagnosis": "The trace required a network event-context request even when the SDK could serve the focused history window from its retained cache. The fixture invokes two latest-head acquisitions, including ACK recovery after restart. Admission must be proved around these reads without requiring a redundant network context request. An initial three-head correction was rejected by local native evidence; the two-head correction still requires native revalidation."
   }
 }

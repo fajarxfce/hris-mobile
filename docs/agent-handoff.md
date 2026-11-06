@@ -40,14 +40,39 @@ still runs; first automatic ARM64 42242739402 passed. Do not redispatch or repla
 the locally accepted ARM64 binary with the independently built remote one.
 All four binaries must use the new patch. No published SDK asset changes.
 
-Only heavy local job is **29817**, current-source normal SDK2 proof APK build,
-.work/chat-refresh-boundary-2026-11-06/proof-sdk2. No emulator is active.
-Original Bima data/keys remain after stop15:13:23UTC. The new packaging wrapper
-/home/fajar/hris/.worktrees/matrix-kotlin-refresh-2026-11-06 remains pinned c1664f71.
-Remote fetch/verification script is .work/chat-refresh-boundary-2026-11-06/fetch-remote.py.
-Generated remote files stay outside this repo, under .worktrees.
+All four native builds are verified. Remote x86 42243123291 passed1301.753s;
+artifact13518666187 SHAcaa99da96ffca20026a87f2ba3abcc92374e6ac428983b9c47afe81a14dcd8c5
+and all12source/nine Kotlin hashes verify. Its148,131,760-byte native SHA is
+3fa6466fe49e6ffe8f3c1043f6931814ec3f6d57b323ee2a6954aa0a3b370410.
+All four verified libraries and the nine matching bindings are copied into the
+pinned packaging wrapper /home/fajar/hris/.worktrees/matrix-kotlin-refresh-2026-11-06.
+SDK3 packaging has NOT run; use tool/package_collaboration_sdk.py after emulator stop.
 
-Next finish native builds, package a new candidate, prove actual HRIS token-boundary
+The current SDK2 proof APK built in232.167s with18fresh cases/5suites passing,
+zero lint errors and48warnings (dependency updates, proof ABI/icon/backup config;
+not the shipping product lint result). Artifact144,143,608bytes SHA
+e4db3b5d0912bafe3c9384a756271bb3680ebbe43d8d10a8c3c3d0ce86c6557c,
+x86_64 only. Original Bima data/keys remain48 and inactive.
+
+Only active heavy job is **Platform25882**, sdk-refresh-history-2026-11-06/native-sdk2-2.
+Owned fixture emulator3126325/startTicks165707343, emulator-5560, is active under
+Mobile .work/chat-refresh-boundary-2026-11-06/native-sdk2-2. Do not overlap builds.
+It reuses the separate cleaned SDK-test disk, NOT original Bima's disk.
+Native-1 failed both cases in175.648s because the initial trace correction expected
+three heads. Code inspection confirms TWO AcquireCollaborationHistory calls;
+provider pagination accounts for the other /messages requests. The corrected trace
+retains two strictly admitted heads and checks admission after the recovery head.
+It now saves bounded history-admission.json evidence before assertions. Four unit
+cases and format/architecture pass36.379s on12,459 unchanged inputs. Native-2 is
+pending; no native acceptance claim yet. First emulator3092170 stopped15:52:16UTC.
+
+Private candidate49 scripts are prepared in .work/release-phone-2026-11-06-build49
+for original Bima's emulator only. No49APK exists; the next normal phone build will
+follow candidate acceptance and immutable SDK3 distribution. Shipping stillSDK2.
+Remote fetch/verification script: .work/chat-refresh-boundary-2026-11-06/fetch-remote.py.
+Generated outputs stay outside this repo in .worktrees; SDK1/2 assets immutable.
+
+Next finish the fixture validation, package a new candidate, prove actual HRIS token-boundary
 recovery and retained original-queue behavior, then normal release acceptance before
 the next phone update. Current release variants do not enable R8; do not call them
 minified. Phone remains 48, with one optional Bima-open request pending.
@@ -56,13 +81,13 @@ Exact sourcecf28 CI is audited: portable4,299/463 and Apple1,671/182 pass.
 Native42236786643 FAILED BOTH ABIs, each389cases/67suites with2failures. Both
 NativeCollaborationSdkInteropTest scenarios fail applicationAdmittedAroundHistory;
 the driver passes encrypted exchange/cleanup/3sends/zero redactions before that
-assertion. The old trace waits for /context, but latest-head recovery now performs
-a third head read and can serve its focused window from cache. The native suite
+assertion. The old trace waits for /context even though the SDK can serve its
+event-focused window from cache; the two head reads remain unchanged. The native suite
 is NOT accepted. [Failed CI evidence](measurements/collaboration-progressive-receipts-ci-2026-11-06.json).
 
-Platform has an uncommitted test-only correction proving three admitted head reads
-and admission after the recovery read, without requiring network context I/O.
-Four positive/negative trace cases plus format/architecture pass37.147s on12,459
+Platform has an uncommitted test-only correction proving two admitted head reads
+and admission after the recovery read, without requiring redundant network context
+I/O. Four positive/negative trace cases plus format/architecture pass36.379s on12,459
 unchanged inputs; actual native validation remains. Its script/evidence are
 Platform .work/sdk-refresh-history-2026-11-06. Do not weaken admission assertions.
 After acceptance commit/push Platform and pin its new revision in collaboration-hris.yml.
