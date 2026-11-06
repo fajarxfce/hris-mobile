@@ -1,5 +1,22 @@
 # Admitted latest-head history recovery
 
+The delivery worker selects its recovery anchor through the domain
+`collaborationReceiptRecoveryAnchor` policy. A retained `Staging` or `Staged`
+command requires the current head. An older `Sent` command cannot pin that
+missing-acknowledgement recovery to a distant historical window. When no uncertain
+delivery remains, confirmed commands keep their original retirement anchor.
+Selection does not acknowledge a send: account/device/room admission, original
+sender/content/operation matching and durable receipt reconciliation still apply.
+
+A worker regression retains an old confirmation whose original is unavailable,
+places later messages outside its window, loses a newer send response and restarts
+the application container. Before the fix, the newer accepted command remains
+pending. With the new policy it recovers and retires exactly once, while the older
+command stays retained, without another enqueue or resume. This test uses actual
+encrypted application storage and simulated provider history; physical-phone
+latency is a separate acceptance step.
+[Reproduction and phone observations](measurements/collaboration-pending-delivery-2026-11-06.json).
+
 `ReopenCollaborationHistory` accepts either a retained event anchor or an explicit
 request to resolve the current head. A known anchor keeps the existing behavior. When
 no anchor is supplied, it reads the SDK head only after live account/device/conversation

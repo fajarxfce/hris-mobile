@@ -72,6 +72,54 @@ class CollaborationDeliveryWorkerTest {
     }
 
     @Test
+    fun anOlderConfirmedMessageCannotHideARecentLostAcknowledgementOutsideItsWindow() =
+        runBlocking {
+            withFixture { f ->
+                val older = f.queue(text = "Older confirmation awaiting original history")
+                f.sdk.withholdOriginals = true
+                assertIs<SyncResult.Retry>(f.worker())
+                val stored =
+                    assertIs<AppResult.Success<List<CollaborationMessageRecord>>>(
+                            f.koin.get<ObserveCollaborationMessages>()(f.workspaceId, f.first)
+                                .first()
+                        )
+                        .value
+                        .single()
+                val confirmed = assertIs<CollaborationMessageState.Sent>(stored.state)
+                f.sdk.withholdOriginals = false
+                f.sdk.withheldHistory += confirmed.eventId
+                f.sdk.historyWindowLimit = 4
+                repeat(12) { f.sdk.incoming(f.first, "Intervening message $it") }
+                val recent = f.queue(text = "Recent message with a lost acknowledgement")
+                f.sdk.loseDeliveryReply = true
+                assertIs<SyncResult.Retry>(f.worker())
+                assertEquals(2, f.sdk.deliveries)
+
+                // Both durable commands survive process/container replacement. Recovery must
+                // find the new head while the unrelated old original remains unavailable.
+                f.reopen()
+                assertIs<SyncResult.Retry>(f.worker())
+                val remaining =
+                    assertIs<AppResult.Success<List<CollaborationMessageRecord>>>(
+                            f.koin.get<ObserveCollaborationMessages>()(f.workspaceId, f.first)
+                                .first()
+                        )
+                        .value
+                assertEquals(listOf(older.intent.id), remaining.map { it.intent.id })
+                assertEquals(listOf(older.intent.id, recent.intent.id), f.sdk.enqueued)
+                assertEquals(2, f.sdk.deliveries, "Recover the ACK without another resume")
+                val history =
+                    assertIs<AppResult.Success<CollaborationHistoryPage>>(
+                            f.koin.get<ObserveCollaborationHistory>()(f.workspaceId, f.first)
+                                .first()
+                        )
+                        .value
+                assertEquals(1, history.messages.count { it.logicalId == recent.intent.id })
+                assertEquals(f.sdk.childOpens, f.sdk.childCloses)
+            }
+        }
+
+    @Test
     fun absentOriginalHistoryBacksOffAndNeverReopensConfirmedOnlyDelivery() = runBlocking {
         withFixture { f ->
             f.queue()

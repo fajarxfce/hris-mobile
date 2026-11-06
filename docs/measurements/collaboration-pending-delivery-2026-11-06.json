@@ -147,8 +147,21 @@
     },
     "reportSha256": "3e294572e9b11d842052ccd7de8333f74c4ff046087c265c46dc006b84176ff3",
     "failure": "Recent accepted command stays in the outbox across container restart when an older confirmed command pins a distant history window.",
-    "fixInProgress": "Domain recovery anchor selects the current head while Staging or Staged commands remain; exact receipt validation and send identity remain unchanged.",
-    "accepted": false
+    "accepted": true,
+    "green": {
+      "elapsedSeconds": 141.325,
+      "sourcesUnchanged": true,
+      "sourceFiles": 4216,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reportSha256": "414548a34f7942aa3f032bc5e1d1e179823812e9858b8a3a6358fe7c2759ee5c",
+      "scope": "Exact formerly failing worker regression, with retained encrypted store and simulated provider. Full required checks now pass; physical phone delivery remains pending."
+    },
+    "fix": "Domain recovery anchor selects the current head while Staging or Staged commands remain; exact receipt validation and send identity remain unchanged."
   },
   "providerRoomCounts": [
     {
@@ -157,5 +170,37 @@
       "encryptedMessages": 22
     }
   ],
-  "nativeHistoryFocusParameter": 20
+  "nativeHistoryFocusParameter": 20,
+  "fullValidation": {
+    "startedAt": "2026-11-06T13:56:10.056613+00:00",
+    "elapsedSeconds": 591.158,
+    "exitCode": 0,
+    "sourceFiles": 4216,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 5283,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 622,
+    "preexistingSuitesNotCountedAsFresh": 444,
+    "checks": [
+      "root check",
+      "Android host tests",
+      "Android proof compile",
+      "database/collaboration Wasm browser tests",
+      "Android dev debug assemble/lint",
+      "format",
+      "architecture"
+    ],
+    "lintFindings": 0,
+    "lintReportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+    "sourceManifestSha256": "4bcb9a87608cd3bb8fc5411c091e82d1aeb4282ad60acfdefc3802a17ca29d7b",
+    "changedSources": {
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "b243cb1d2ad89149503291d1256fd825d0f905eedcf9cc1128506bb4372d13cf",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt": "3ed645e864ff22ad019e6b323c0ff18df50e1b0c25675042f4de068ca25ea959",
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationReceiptRecoveryPolicy.kt": "9f247855b59f083a9023ac4fb1178431bf6937efad03a17f07e94eeab1a1ef58"
+    }
+  }
 }

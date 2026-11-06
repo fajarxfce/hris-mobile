@@ -81,30 +81,30 @@ This checkpoint commits the accepted eight-file history-end increment (domain
 reader/pure completion policy, DI/VM/fixtures and15 common domain regressions).
 Use cases coordinate repositories, never other use cases. There is no47 APK yet.
 
-PRIORITY: delayed-ACK recovery is now REPRODUCED. Test-only red-1 passed compilation
-and failed its single assertion in52.456s with4,215 unchanged inputs: a recent
-accepted command remains in the outbox after container restart because an older
-Sent command anchors a distant window. The fixture uses actual encrypted app
-storage and simulated provider history, not a native/provider or phone proof.
-This is committed evidence below; the production fix is still uncommitted.
+PRIORITY: delayed-ACK recovery has a reproduced and validated fix. Red-1 passed
+compilation then failed its outbox assertion in 52.456s. With the domain recovery
+anchor policy, green-1 passed in 141.325s without another enqueue/resume. The
+worker now selects latest history while Staging/Staged commands remain; confirmed-
+only retirement retains its original anchor. Exact receipt/content/device checks
+are unchanged. This is encrypted app-store integration with simulated provider
+history, not proof that the physical-phone delay is resolved.
 
-Main checkout now has three pending Kotlin changes: the regression in
-CollaborationDeliveryWorkerTest, domain CollaborationReceiptRecoveryPolicy, and
-the worker's use of that policy. When Staging/Staged commands remain, recovery
-chooses the latest head; confirmed-only retirement retains its original anchor.
-No receipt/content/device checks are relaxed and no original send is replaced.
-Green-1 is currently the ONLY heavy local job, session59816; do not alter its
-4,216 program inputs until it finishes. Driver/results:
-.work/chat-pending-phone-2026-11-06-build46/check-distant-ack.py green-1.
-All emulators are stopped. Worktree /home/fajar/hris/.worktrees/hris-pending-ack-2026-11-06
-(base b1fcac03) contains only the original test patch and is no longer the active
-implementation; do not build it or reapply its test patch.
+Full required gate 52583 is drained and PASSED: 591.158s, 5,283 fresh cases in 622
+suites, zero failures/errors/skips, 4,216 inputs unchanged, zero Android lint
+findings. Another 444 preexisting report suites are not counted as fresh. Root
+check, Android host/debug/proof compile, collaboration/database Web, format and
+architecture passed. Source hashes and validation are recorded in the pending-
+delivery measurement. No emulator or heavy local job is active at this checkpoint.
 
-After green-1, run full required root/Android/Web gates, record source/acceptance,
-commit and push, then build/accept/install release47 from that pushed source.
-There is NO47 APK or phone installation yet. Reuse the46 release drivers carefully
-with47/hash/current-phone46 guards; announce every install, install-only/no UI.
-Current phone remains46 and sending is NOT accepted as fixed.
+NEXT: build release 47 from this pushed source using the prepared drivers under
+.work/release-phone-2026-11-06-build47. They require the full-1 gate in
+.work/chat-pending-phone-2026-11-06-build46 and a pushed HEAD, accept only the known
+installed 46 APK hash, and update the retained Bima emulator from 46. Validate
+APK/SDK/lint, perform retained-store offline/online acceptance, inspect screenshots,
+stop the owned emulator, then announce and install-only on the phone. There is
+NO 47 APK or phone installation yet. Current phone remains 46; pending delay is OPEN.
+The test-only worktree /home/fajar/hris/.worktrees/hris-pending-ack-2026-11-06
+(base b1fcac03) is not the active implementation; do not build or reapply its patch.
 
 Read-only phone evidence: StageMessage timeout followed by repeated DeliverMessages
 QueueUnresolved persisted after four provider encrypted sends returned200 at

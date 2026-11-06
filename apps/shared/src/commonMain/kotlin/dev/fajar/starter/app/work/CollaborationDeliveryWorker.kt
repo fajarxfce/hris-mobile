@@ -1,6 +1,7 @@
 package dev.fajar.starter.app.work
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.collaborationReceiptRecoveryAnchor
 import dev.fajar.starter.collaboration.domain.policies.localListAccess
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationBackgroundRuntimeLease
 import dev.fajar.starter.collaboration.domain.usecases.*
@@ -367,11 +368,7 @@ class CollaborationDeliveryWorker(
         val snapshot = messages(work.scope, conversationId).first()
         currentCoroutineContext().ensureActive()
         if (snapshot is AppResult.Failed) return snapshot
-        val anchor =
-            (snapshot as AppResult.Success)
-                .value
-                .mapNotNull { (it.state as? CollaborationMessageState.Sent)?.eventId }
-                .firstOrNull()
+        val anchor = collaborationReceiptRecoveryAnchor((snapshot as AppResult.Success).value)
         var reopened = false
         var acquired = acquire(scope, deviceId, conversationId, anchor)
         currentCoroutineContext().ensureActive()
