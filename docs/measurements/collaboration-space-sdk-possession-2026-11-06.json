@@ -1,0 +1,121 @@
+{
+  "recordedAt": "2026-11-06T22:01:32.280058+00:00",
+  "status": "focused acceptance passed; normal root gate in progress with quality-scope failure",
+  "sdk": "26.10.23-hris.4",
+  "sdkReleaseId": 437093395,
+  "sdkConsumerEvidence": "collaboration-sdk-existing-identity-consumer-2026-11-06.json",
+  "focusedInitial": {
+    "startedAt": "2026-11-06T21:45:17.741383+00:00",
+    "elapsedSeconds": 623.964,
+    "exitCode": 1,
+    "sourceFiles": 4250,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 61,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+        "sha256": "7d65aa4da2d869f507422d23e75cd3f522a147bfb8bdc74c340f3767683f5b2f",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ReadCollaborationSpaceSdkPossessionTest.xml": {
+        "sha256": "84ca786580b8700186543b1107ece76cd2f7c8cfbdda93efa1f68a5354929474",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ReadCollaborationSpaceSdkInventoryTest.xml": {
+        "sha256": "f7ee68545d68d607fd7a5eacb0c81a5d004c2201acfed930a08d7c67be43773c",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkIdentityMapperTest.xml": {
+        "sha256": "fd06f2a9d0347d858b0d5b41dec409757c242715bd836ac764526a3e0eed2ba0",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.FileCollaborationSdkInventoryTest.xml": {
+        "sha256": "1ce10b0e45f72d5059985b4775a64058003d674122bb607d0680cca3a06b64a7",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.FileCollaborationSdkStoreTest.xml": {
+        "sha256": "eeab07751df4ae6694d9a1f33dddf3cc9a9e0c86d9c19d8f26c561f6341c790a",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.StoredCollaborationSdkInventoryTest.xml": {
+        "sha256": "ee0db44283d657187428e5dba5c6d233f51d1d122dab648b7da8a32982a962e0",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.StoredCollaborationSdkPossessionTest.xml": {
+        "sha256": "2198a5a1f334c6b49cc4630419b3131e7c74781e76a12b1cff75a0dd19458583",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkRecordTest.xml": {
+        "sha256": "ea830944561704a51be0262f50832307ca1ca3ee3217e949c5a55deecf7f383d",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidSdkPrivateIdentitySourceTest.xml": {
+        "sha256": "5bf4d1f693591587be592b035c115ea42f6cbcf81f3184908da35cebf87107f0",
+        "tests": 2,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "focusedHostRetry": {
+    "startedAt": "2026-11-06T21:56:28.878011+00:00",
+    "elapsedSeconds": 50.794,
+    "exitCode": 0,
+    "sourceFiles": 4250,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidSdkPrivateIdentitySourceTest.xml": {
+        "sha256": "7ff0e4d1f986b15e59eb29be4530080e9afc54ed6e1c76e17292deed681eac6f",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "onlyChangeBetweenFocusedGates": "Android host assertion accounts for coroutine exception stack-trace recovery while verifying the same technical type and original cause; production unchanged",
+  "acceptedDistinctFocusedTests": 61,
+  "newTests": 16,
+  "sourceAppliedToRoot": true,
+  "fullGateAccepted": false,
+  "phoneUpdated": false,
+  "physicalPendingSendReport": "open"
+}
