@@ -60,8 +60,9 @@ the shipping manifest and dependency remain SDK 3.
 
 x86_64 subsequently completed in 612.261 seconds with the same 1,214 source inputs,
 all nine Kotlin hashes identical to ARM64, and the same entry-point/alignment checks.
-The two 32-bit Android ABIs, actual Android consumer, private-identity repository/use-case
-integration and Apple runtime support remain required. Every changed
+ARMv7 then completed in 616.798 seconds with identical sources/Kotlin, exact symbols
+and four 4 KiB-aligned ELF32 segments. The x86 ABI, actual Android consumer, private-
+identity repository/use-case integration and Apple runtime support remain required. Every changed
 binary must use a new SDK version; never replace SDK 3 assets. Phone 50 and its pending-
 send report remain unchanged by this source-only candidate. Continue original-parent
 recovery, stop/join, freeze/drain/adoption and the remaining communications PRD.

@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-## Current: original-key product candidate prepared; ARMv7 building — 6 November 2026
+## Current: original-key product candidate prepared; x86 building — 6 November 2026
 
 Mobile program35dfec82 is unchanged; SDK build support5ea9bf69 is committed/pushed.
 Both first7ef CI runs are now SUCCESS and audited: control42282707724 has4,345 portable
@@ -11,11 +11,14 @@ worker/notification proofs. All zero failures/errors/skips; REST artifact digest
 First35df control42288555007/native42288554801 are now running. Do not redispatch them.
 New SDK4 candidate first CI42291341014 on5ea9bf69 is running; no publication.
 
-ARM64 and x86_64 candidate pairs PASSED. x86_6416653 took612.261s, all1,214 sources
+ARM64, x86_64 and ARMv7 candidate pairs PASSED. x86_6416653 took612.261s, all1,214 sources
 unchanged, all nine Kotlin hashes equal ARM64, native SHA
 e36a61778b11e6775316f3d3e64fdb5eafefb308619214e4012d9ee263a35131.
-ARMv7 57560 is the ONLY heavy local job, started20:56:23UTC. Next audit it and build
-x86 with .work/space-store-inventory-2026-11-06/build-android.py. No emulator is active.
+ARMv7 57560 PASSED616.798s, all1,214 sources and nine Kotlin hashes unchanged; four
+4KiB-aligned ELF32 segments, exact new and existing symbols, SHA
+e58e79fbfa204ce82a45cfc55ae8cda5a69fba57611f0fab9843eeac97a1ceab.
+x86 96415 is now the ONLY heavy local job, started21:06UTC with
+.work/space-store-inventory-2026-11-06/build-android.py. No emulator is active.
 Shipping SDK3 assets/dependency/manifest remain unchanged; SDK4 uses the separate
 android-existing-identity-build.json with explicit --manifest. Never replace SDK3.
 
@@ -25,8 +28,9 @@ private identity datasource, resource-owning repository, public possession entit
 original-account/registration/key policy and use case, Android composition/fallback,
 and15 new common/Android-host cases plus actual DI coverage. Format and architecture
 (74 modules) pass; these are NOT compilation or runtime acceptance. No ViewModel/UI
-change. Latest hashes must be recorded after final edits; the private prepared snapshot
-is supplementary. Do not apply/publish this source before paired consumer acceptance.
+change. Final formatted24-file snapshot is .work/space-store-inventory-2026-11-06/
+possession-prepared.json (22 Kotlin +two docs), supplemental to the actual isolated
+worktree. Architecture74 passes; common/Android compilation is still pending. Do not apply/publish this source before paired consumer acceptance.
 
 The isolated protocol consumer at35dfec82 has only LocalSdkIdentityProbe changed,
 now reporting SDK4. Four-ABI wrapper preparation, exact-hash candidate Ivy substitution,
@@ -37,6 +41,11 @@ NOT STARTED. Driver stages a fictional offline store, kills its process, reads p
 keys before client restore and checks wrong keys/missing store/unchanged DB, for ARM64
 then x86_64 from one matching APK. It uninstalls only its absent-before-run fixture and
 stops the owned emulator; original Bima userdata/sidecars/keys stay untouched.
+The source review confirmed vodozemac0.11.1 pickle conversions rederive both public
+keys from secret key material; they do not trust cached public metadata. Notes under
+private-account-derivation-review.json, no native source changed. check-possession.py
+is also prepared for focused domain/data/Android-host/actual DI acceptance after
+copying the exact candidate verification component into the isolated product checkout.
 After all ABIs: prepare-wrapper.py; package with the new manifest/version4 into
 .work/space-store-inventory-2026-11-06/package-android; configure/build isolated consumer;
 then run native-android/run-native.py with no concurrent local build. Audit before new
