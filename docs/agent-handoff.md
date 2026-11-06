@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-## Current: original-key product candidate prepared; x86 building — 6 November 2026
+## Current: four native ABI pairs accepted; AAR packaging — 6 November 2026
 
 Mobile program35dfec82 is unchanged; SDK build support5ea9bf69 is committed/pushed.
 Both first7ef CI runs are now SUCCESS and audited: control42282707724 has4,345 portable
@@ -9,16 +9,25 @@ host passed; native42282707833 has395 cases per ABI and complete encrypted/nativ
 worker/notification proofs. All zero failures/errors/skips; REST artifact digests match.
 [Evidence](measurements/collaboration-space-bootstrap-handoff-ci-2026-11-06.json).
 First35df control42288555007/native42288554801 are now running. Do not redispatch them.
-New SDK4 candidate first CI42291341014 on5ea9bf69 is running; no publication.
+New SDK4 first CI42291341014 on5ea9bf69 PASSED1,056.244s. REST-verified artifact
+13540134319 (46,222,710 bytes), SHA f1dd40f48904abd05c9cd69d286909050a99205a857a328ed83b0a0ba873caa2,
+matches all19 patched sources, five patches and nine Kotlin files. Its separate native
+SHA02f3d08f25ea2a8848cb199a075e42ea52a1d70f30481661d6cad551cfe3a36c remains CI evidence,
+not part of the local package. No SDK4 publication.
 
-ARM64, x86_64 and ARMv7 candidate pairs PASSED. x86_6416653 took612.261s, all1,214 sources
+All four candidate ABI pairs PASSED. x86_6416653 took612.261s, all1,214 sources
 unchanged, all nine Kotlin hashes equal ARM64, native SHA
 e36a61778b11e6775316f3d3e64fdb5eafefb308619214e4012d9ee263a35131.
 ARMv7 57560 PASSED616.798s, all1,214 sources and nine Kotlin hashes unchanged; four
 4KiB-aligned ELF32 segments, exact new and existing symbols, SHA
 e58e79fbfa204ce82a45cfc55ae8cda5a69fba57611f0fab9843eeac97a1ceab.
-x86 96415 is now the ONLY heavy local job, started21:06UTC with
-.work/space-store-inventory-2026-11-06/build-android.py. No emulator is active.
+x86 96415 PASSED899.411s, started21:07:05UTC. All1,214 sources and nine bindings match;
+ELF32/4KiB/new symbols pass, SHA bca9f2d4a15c814d2dea5a3218b9d80b5c4585b421f05b086cc7f39b16a122da.
+prepare-wrapper.py verified and copied all four local binaries plus their exact binding
+pair into the isolated wrapper. AAR packaging59725 is now the ONLY heavy local job.
+It runs tool/package_collaboration_sdk.py with --manifest android-existing-identity-build.json,
+version26.10.23-hris.4 and output .work/space-store-inventory-2026-11-06/package-android.
+No emulator is active. Do not rebuild the accepted ABIs.
 Shipping SDK3 assets/dependency/manifest remain unchanged; SDK4 uses the separate
 android-existing-identity-build.json with explicit --manifest. Never replace SDK3.
 
@@ -33,7 +42,7 @@ possession-prepared.json (22 Kotlin +two docs), supplemental to the actual isola
 worktree. Architecture74 passes; common/Android compilation is still pending. Do not apply/publish this source before paired consumer acceptance.
 
 The isolated protocol consumer at35dfec82 has only LocalSdkIdentityProbe changed,
-now reporting SDK4. Four-ABI wrapper preparation, exact-hash candidate Ivy substitution,
+now reporting SDK4 and the measured first private-read duration after process death. Four-ABI wrapper preparation, exact-hash candidate Ivy substitution,
 consumer build and two-ABI native driver are PREPARED ONLY under .work/space-store-
 inventory-2026-11-06/{prepare-wrapper.py,prepare-consumer.py,build-consumer.py,native-android/}.
 A fresh dedicated AVD hris-private-reader-20261106 was created there, serial5564;
@@ -46,8 +55,9 @@ keys from secret key material; they do not trust cached public metadata. Notes u
 private-account-derivation-review.json, no native source changed. check-possession.py
 is also prepared for focused domain/data/Android-host/actual DI acceptance after
 copying the exact candidate verification component into the isolated product checkout.
-After all ABIs: prepare-wrapper.py; package with the new manifest/version4 into
-.work/space-store-inventory-2026-11-06/package-android; configure/build isolated consumer;
+After packaging59725 ends: verify sdk-build.json and exact compiled/new API, then run
+prepare-consumer.py and build-consumer.py (strict local Ivy substitution in isolated
+consumer; shipping unchanged);
 then run native-android/run-native.py with no concurrent local build. Audit before new
 SDK publication or product focused/full gates. Continue parent recovery/freeze/drain/
 adoption/organization routing and all54 PRD groups after this bounded capability.

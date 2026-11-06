@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-11-06T21:18:21.945234+00:00",
+  "runId": 42291341014,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42291341014",
+  "programCommit": "5ea9bf69c1780efce675af0f4a6a1c5661496b9e",
+  "conclusion": "success",
+  "artifactId": 13540134319,
+  "artifactSha256": "f1dd40f48904abd05c9cd69d286909050a99205a857a328ed83b0a0ba873caa2",
+  "artifactBytes": 46222710,
+  "restDigestVerified": true,
+  "manifest": "android-existing-identity-build.json",
+  "manifestSha256": "63c132544e66492ae7b51c54d080ace572bff31d8091636904a317fb83c2fbbf",
+  "elapsedSeconds": 1056.244,
+  "nativeSha256": "02f3d08f25ea2a8848cb199a075e42ea52a1d70f30481661d6cad551cfe3a36c",
+  "nativeBytes": 138804944,
+  "patchedSourceCount": 19,
+  "allPatchedSourcesMatchManifest": true,
+  "generatedKotlinMatchesLocalArm64": true,
+  "allRequiredSymbolsPresent": true,
+  "loadAlignments": [
+    16384,
+    16384,
+    16384,
+    16384
+  ],
+  "candidateOnly": true,
+  "published": false,
+  "runtimeConsumerAcceptance": false,
+  "redispatched": false
+}
