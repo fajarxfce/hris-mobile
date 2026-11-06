@@ -16,7 +16,7 @@ first/repeat offline and online room entry; all THREE screenshots were inspected
 Owned emulator350599/startTicks163234107 stopped09:04:32UTC, original userdata and
 crypto preserved. No outgoing latency claim. [Release evidence](measurements/collaboration-release43-2026-11-06.json).
 
-PHONE STILL42. Last bounded ADB reconnect about11:05UTC timed out18s. One async
+PHONE STILL42. Last bounded ADB reconnect about11:26UTC timed out18s. One async
 availability question is pending; do not ask again. Once reachable, run43's
 preflight.py, announce EVERY installation, then install.py --install-only.
 Never launch/drive phone UI, erase keys or rebuild43 just because HEAD advanced.
@@ -113,11 +113,36 @@ and rejects a mismatched ABI. No native build flags or binary changed. Three ABI
 are now paired in matrix-kotlin-confirmed-queue; the accepted two-ABI AAR is intact.
 
 Remote SDK run42206523839, sourceb31ff3cd365f88805c71a6b4fbe5b37176fdabd1,
-is building x86. It contains the old uniform16KiB verifier and may reject the valid
-32-bit output. The next SDK-tool push automatically queues the corrected run; do not
-manually dispatch a duplicate. Audit run status, source and artifacts before use.
-No local emulator or heavy process is running as of11:13UTC. The Rust sources remain
-unchanged. [Android evidence](measurements/collaboration-sdk-confirmed-queue-android-2026-11-06.json).
+FAILED only at the old ELF32 alignment assertion after compile/generation and both
+source fingerprints passed. Artifact13497877820,49,910,307 bytes, SHA
+a2d4567567fbc02da71aaeec3acf95f725687e0fbdea67cbcc2369f6d5ddaee6 was downloaded
+and digest-verified. Corrected local verifier accepts the actual ELF32 x86 binary:
+148,135,532 bytes, SHA6373a13b3dc61fe25d66e580740476158572db3477361fa5ecabf934a1c13353,
+all three symbols, four4KiB LOAD segments and all nine Kotlin hashes match.
+The failed CI conclusion is preserved separately from this local acceptance. That
+verified JNI is now copied to matrix-kotlin-confirmed-queue: all FOUR ABIs are ready.
+Corrected remote run42208777389 /8791ad52 started11:19:25UTC; inspect its result later.
+No duplicate run is needed. [Android evidence](measurements/collaboration-sdk-confirmed-queue-android-2026-11-06.json).
+
+Full application candidate check90726 FINISHED1066.733s:7,026 fresh tests in909
+suites, zero failures/errors/skips, Android lint0 errors0 warnings. Root/Android/Web,
+format/architecture/debug assembly pass with all4,212 source inputs unchanged.
+[Evidence](measurements/collaboration-confirmed-queue-full-candidate-2026-11-06.json).
+This uses the accepted exact-hash TWO-ABI Maven candidate override, not the final
+normal shipping dependency. The source freeze is released; app sources have not
+changed since this gate. No emulator is running.
+
+Four-ABI packaging49786 FINISHED39.024s using the public packaging driver. Candidate
+version26.10.23-hris.1,185,442,691 bytes, SHA
+de52b51a3bdf346f27dfb66b891f51abf42236f52523e1f99bb9b9b2da6304b5;
+Ivy descriptor SHA30c35845ae5dd2bd643ab0a0ed69db7d1338cc7ebbf1a76795e5021df692722e.
+Kotlin classes and both64-bit JNI files are byte-identical to the accepted native
+proof. All four native hashes/architectures, API declarations, minSdk21 and upstream
+consumer rules are verified. .work/sdk-confirmed-queue-2026-11-06/distribution-four-abi-1
+contains the AAR, Ivy descriptor, sources/license, build record and SHA256SUMS.
+The actual four-ABI candidate passes isolated Gradle Ivy resolution with strict
+verification and Android JNA as AAR (distribution-ivy-probe/session9609). No SDK
+publication or application shipping dependency change has occurred yet.
 
 A PRIVATE Ivy repository prototype resolves the exact two-ABI AAR and all upstream
 runtime dependencies with Gradle strict verification. Attempt1 failed before lookup
@@ -127,9 +152,14 @@ as an AAR. This proves the repository descriptor layout, not application accepta
 No publication or shipping dependency change has occurred. The candidate descriptor
 and evidence are under .work/sdk-confirmed-queue-2026-11-06/ivy-candidate and ivy-probe.
 
-Remaining: verify x86 and package all four ABIs; complete immutable SDK artifact
-and descriptor distribution with strict hashes; run full product/minified acceptance;
+Remaining: publish the verified SDK artifact/descriptor under its own immutable
+version; change the application catalog/repository and strict hashes; run the
+normal-dependency product/release gate;
 commit/push the accepted application changes and install the next validated release.
+The four-ABI packaging/Ivy preparation tool is now executed and accepted; it never
+publishes by itself. Existing release variants do NOT enable R8; older notes saying
+"minified acceptance" were inaccurate. Validate the actual nondebuggable release
+variant and native behavior without introducing a new minification policy.
 The pinned builder/manifest/CI workflow are tracked. Apple dependency is unchanged;
 no new Swift API is referenced. The Android-only local verification component must
 be replaced by the shipping component before accepting a normal dependency build.

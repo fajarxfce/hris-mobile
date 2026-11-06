@@ -49,6 +49,8 @@ and settles offline. This constructs the recovery postcondition; it does not
 simulate a literal lost HTTP response or prove the user's phone root cause.
 The shipping dependency and release43 do not contain this settlement increment.
 
-The current verified candidate has arm64 and x86_64 libraries. Complete SDK
-distribution and minified product acceptance remain outstanding; the user’s phone
-is still on42 and accepted release43 awaits ADB availability.
+The native test candidate has arm64 and x86_64 libraries. All four Android ABI
+outputs are now independently verified; combined packaging, normal dependency
+distribution and nondebuggable release acceptance remain outstanding. Existing
+release variants do not enable R8, so no minification claim is made. The user’s
+phone is still on42 and accepted release43 awaits ADB availability.

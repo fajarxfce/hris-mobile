@@ -195,10 +195,46 @@ subprocess; two process-lifetime/exit-code tests pass locally.
 inputs; manual runs can select another ABI or all four. It uses an isolated runner,
 read-only repository permissions and a seven-day candidate artifact. Downloaded
 artifacts must pass source, Kotlin, native and workflow-artifact digest checks before
-being combined with the already accepted pair. The hosted build has not yet run
-at this checkpoint; a successful syntax/process test alone does not accept its JNI.
+being combined with the already accepted pair. The first hosted x86 build completed compilation but failed the old ELF32 alignment
+assertion. Its artifact passes the corrected local verifier; the corrected hosted
+run is tracked in the Android evidence. A syntax/process test alone does not accept JNI.
 
 Android's [16 KB page-size requirement](https://developer.android.com/guide/practices/page-sizes)
 applies to `arm64-v8a` and `x86_64`. The verifier requires 16 KiB LOAD alignment for
 those ELF64 binaries and 4 KiB for ELF32 ARMv7/x86, matching NDK 28 output. It rejects
 wrong architectures and missing queue/raw-event entry points independently.
+
+## Four-ABI candidate packaging
+
+`../package_collaboration_sdk.py` uses the pinned Kotlin wrapper revision in
+`android-distribution.json`. Populate its Android `src/main` from the four verified
+native outputs; every ABI must share the exact nine Kotlin files in `android-build.json`.
+Keep the patched SDK checkout available for source fingerprints, license and lockfile.
+
+```sh
+python3 tool/package_collaboration_sdk.py \
+  --wrapper /path/to/matrix-rust-components-kotlin \
+  --sdk /path/to/patched-matrix-rust-sdk \
+  --android-sdk /path/to/android-sdk \
+  --java-home /path/to/jdk-21 \
+  --version 26.10.23-hris.1 \
+  --output /path/to/new-candidate-directory
+```
+
+The command checks all four native architectures, alignment, exported methods,
+generated Kotlin and pinned sources before packaging. It then verifies the AAR's
+JNI hashes, public methods, minimum SDK and consumer rules. The Ivy descriptor
+preserves the checksum-pinned upstream runtime dependencies, including JNA's Android
+AAR. The source bundle includes generated Kotlin, both patches, manifests, license
+and Cargo lockfile; the upstream and wrapper revisions are recorded in `sdk-build.json`.
+The output also includes `SHA256SUMS`. The command never publishes a release or
+changes application dependencies. The four-ABI AAR packaging passes locally in39.024s. Its Kotlin classes and both
+64-bit JNI files are byte-identical to the accepted native recovery proof. Descriptor
+dependencies match the Gradle-accepted prototype; see the Android measurement for
+artifact hashes and the separate failed/corrected CI validation history.
+
+A shipping artifact must pass normal Gradle resolution with strict descriptor/AAR
+hashes and the application release checks. Publish only those exact immutable files;
+do not replace an existing version or confuse a failed CI run with independent
+local verification. Existing application release variants do not enable R8, so their
+acceptance is not evidence of minifier compatibility.

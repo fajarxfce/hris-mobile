@@ -124,5 +124,163 @@
     "alignmentReference": "https://developer.android.com/guide/practices/page-sizes",
     "wrongAbiRejected": true,
     "acceptedArm64StillRequires16KiB": true
+  },
+  "x86RemoteBuild": {
+    "nativeSha256": "6373a13b3dc61fe25d66e580740476158572db3477361fa5ecabf934a1c13353",
+    "nativeBytes": 148135532,
+    "elfClass": "ELF32",
+    "requiredElfAlignment": 4096,
+    "loadAlignments": [
+      4096,
+      4096,
+      4096,
+      4096
+    ],
+    "requiredSymbolsPresent": true,
+    "abi": "x86",
+    "localVerificationPassed": true,
+    "verifiedAt": "2026-11-06T11:21:25.970330+00:00",
+    "generatedKotlinFiles": 9,
+    "kotlinMatchesAcceptedPair": true,
+    "workflowRun": 42206523839,
+    "workflowHead": "b31ff3cd365f88805c71a6b4fbe5b37176fdabd1",
+    "workflowConclusion": "failure",
+    "artifactId": 13497877820,
+    "artifactSha256": "a2d4567567fbc02da71aaeec3acf95f725687e0fbdea67cbcc2369f6d5ddaee6",
+    "artifactBytes": 49910307,
+    "buildSeconds": 1313.699,
+    "correction": "Remote compile and binding generation completed; old verifier incorrectly required 16 KiB for ELF32. Actual binary passes the corrected ABI-specific local verifier without rebuilding.",
+    "correctedWorkflowRun": 42208777389,
+    "correctedWorkflowStatus": "in_progress",
+    "packaged": false,
+    "published": false,
+    "sourceAudit": "Pinned old driver completed both source fingerprint checks and generated Kotlin matching before its ELF alignment assertion failed at line 124."
+  },
+  "fourAbiCandidate": {
+    "startedAt": "2026-11-06T11:34:27.099006+00:00",
+    "version": "26.10.23-hris.1",
+    "group": "dev.fajar.hris.matrix",
+    "module": "sdk-android",
+    "sdkBase": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+    "wrapperCommit": "c1664f712bed33488b10f33232fb424faf257d49",
+    "passed": true,
+    "published": false,
+    "native": {
+      "arm64-v8a": {
+        "nativeSha256": "43856af213036df7c2f70dabf7b387a7b60f21dbd79a0a23e69b4a814354a8d3",
+        "nativeBytes": 138602760,
+        "elfClass": "ELF64",
+        "requiredElfAlignment": 16384,
+        "loadAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "requiredSymbolsPresent": true
+      },
+      "armeabi-v7a": {
+        "nativeSha256": "74b8e8b818602dcc1c76d14ab292dfddfda87bd0b29e1bfb4a25527ee01c6b3a",
+        "nativeBytes": 98488616,
+        "elfClass": "ELF32",
+        "requiredElfAlignment": 4096,
+        "loadAlignments": [
+          4096,
+          4096,
+          4096,
+          4096
+        ],
+        "requiredSymbolsPresent": true
+      },
+      "x86": {
+        "nativeSha256": "6373a13b3dc61fe25d66e580740476158572db3477361fa5ecabf934a1c13353",
+        "nativeBytes": 148135532,
+        "elfClass": "ELF32",
+        "requiredElfAlignment": 4096,
+        "loadAlignments": [
+          4096,
+          4096,
+          4096,
+          4096
+        ],
+        "requiredSymbolsPresent": true
+      },
+      "x86_64": {
+        "nativeSha256": "48f6a14d6e39a332f8d5f8cc75d8924d636951cdbd97bac1cbc96284eac894ad",
+        "nativeBytes": 142711904,
+        "elfClass": "ELF64",
+        "requiredElfAlignment": 16384,
+        "loadAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "requiredSymbolsPresent": true
+      }
+    },
+    "generatedKotlin": {
+      "kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt": "dbf7effa2fb593b30860fa706be26e1990bbe4104ef598331a37388ce44fff7a",
+      "kotlin/uniffi/matrix_sdk_ui/matrix_sdk_ui.kt": "d91d9e1a8f040c8435673ad8dd12a41a1df0a90d9a5dd54b2c0de968c2046c28",
+      "kotlin/uniffi/matrix_sdk_contentscanner/matrix_sdk_contentscanner.kt": "db48b8b84f391c2205b3a6d7802cfd9f61aeb9d28cb2049d24518a4d98a22a24",
+      "kotlin/uniffi/matrix_sdk_crypto/matrix_sdk_crypto.kt": "120a5d8db4b0ec3e609077b78832dd750e241fd5ea7c0ffb98647a19daade005",
+      "kotlin/uniffi/matrix_sdk_base/matrix_sdk_base.kt": "ca64fbaf9aac400fa3b9d57036467968501138df313a8c07ed4af9ccf6cccb06",
+      "kotlin/uniffi/matrix_sdk_common/matrix_sdk_common.kt": "301030a61a133f6e133457e3434d97ec3f92d32a91684b9e13e8c61c4ba3a1b1",
+      "kotlin/uniffi/ruma_events/ruma_events.kt": "de0a855239a51a0bc959451d9d3bc408c3af027cdcea68fab4055df7b28d7e0c",
+      "kotlin/uniffi/matrix_sdk_sqlite/matrix_sdk_sqlite.kt": "6738c2e65bd83217510f8b1bb5553827d9810c9e7add039f28ff8c9d75fb30ca",
+      "kotlin/uniffi/matrix_sdk/matrix_sdk.kt": "de44cd55bb6a1bd6888c2918df3f7974a8da6326f00192f96fef0b3bb859ea44"
+    },
+    "patchedSources": {
+      "Cargo.lock": "e3f28c9f54076bb320270aea995fc1f124c7ed727968dad338f544fe764df7f0",
+      "crates/matrix-sdk/src/send_queue/mod.rs": "91d2ff7784fc4cd3c484e184dfe31c65766dfaa508f6e089a403aa9cfb8ba50e",
+      "crates/matrix-sdk/src/send_queue/confirmed_event_tests.rs": "308e0bc9ecb650c55f66040cf3a76dbb34a3a38040ae5899436567dadbc8323c",
+      "bindings/matrix-sdk-ffi/src/room/mod.rs": "d38b0bc50f9da0365c14717e0821ae2eac9f498f34501211aa66c2ed29febfec",
+      "bindings/matrix-sdk-ffi/src/room/queued_events.rs": "ae6efcba570bbe83ece6e8529b6f6e1dcae7735eec5622586a45a7c4defa1b3f",
+      "bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs": "4dc9c6774802d43c090c8836471f7860809de490cc0317103e262e2848893c58",
+      "Cargo.toml": "cc436eb2188bc6af76078cae40c649a71752a9ef4aa7e832afdd0f3e40853b43",
+      ".cargo/config.toml": "c0c47ae16f20393a824473ecafb819d94d43b4445862b3618729c0feeef36c72",
+      "xtask/src/kotlin.rs": "f52edba777e389a1efb34797e93d55dc67fb1c4460b1c539da439860004ae52a"
+    },
+    "patches": {
+      "raw-event.patch": "fed8120ba7e7ea88a23cde675d70bb27a3a97304c6c913ad5a9578d28053f76e",
+      "confirmed-queue.patch": "23354aeb43aabe937543355d7255d31527c0a3c78acf0a677f113e9592776872"
+    },
+    "packagingDriverSha256": "2b0be27d322eab8ae3e197eafa6b11e8166b78cd4b6693bd572132a23a9d3851",
+    "nativeVerifierSha256": "518563b05e7dc25a2989aec2f8d6f13e788bc52cb2e79b772913a46aa090dd74",
+    "androidBuildManifestSha256": "c4d22bde272711ac45b16067eb8495812518baf6327b5b40b2b7dad98fe87399",
+    "distributionManifestSha256": "fcec6d5c478f37a02e105713e72c586a36734f565283f8b58e259fd2a042d17d",
+    "inputsUnchanged": true,
+    "classesSha256": "68ffb5d1e78891621469586cff3d37e35f40d6f79375839becdba5b20f50510e",
+    "aarSha256": "de52b51a3bdf346f27dfb66b891f51abf42236f52523e1f99bb9b9b2da6304b5",
+    "aarBytes": 185442691,
+    "ivySha256": "30c35845ae5dd2bd643ab0a0ed69db7d1338cc7ebbf1a76795e5021df692722e",
+    "upstreamPomSha256": "aeaba76925bdad99821e3a4ac811d59432ea3731c92fffe9a030ebe1aca9ec10",
+    "sourcesSha256": "3111e009711cbe8a51c78541b81ba1ef56862b3b5f89156d5ad0b31585b695e8",
+    "releaseFiles": [
+      "sdk-android-26.10.23-hris.1.aar",
+      "sdk-android-26.10.23-hris.1.ivy.xml",
+      "sdk-android-26.10.23-hris.1-sources.tar.gz",
+      "LICENSE"
+    ],
+    "elapsedSeconds": 39.024,
+    "classesIdenticalToAcceptedNativeProof": true,
+    "native64IdenticalToAcceptedNativeProof": true,
+    "applicationShippingDependencyChanged": false,
+    "phoneInstalled": false,
+    "ivyDependencyProbe": {
+      "passed": true,
+      "strictVerification": true,
+      "sdkAarHashVerified": true,
+      "jnaAndroidArtifact": true,
+      "resolvedArtifacts": [
+        "annotation-jvm-1.9.1.jar",
+        "annotations-23.0.0.jar",
+        "jna-5.18.1.aar",
+        "kotlin-stdlib-2.3.21.jar",
+        "kotlinx-coroutines-core-jvm-1.10.2.jar",
+        "sdk-android-26.10.23-hris.1.aar"
+      ],
+      "publicRepositoryResolved": false
+    }
   }
 }

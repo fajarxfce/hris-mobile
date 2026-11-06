@@ -1,0 +1,7 @@
+{
+  "group": "dev.fajar.hris.matrix",
+  "module": "sdk-android",
+  "wrapperCommit": "c1664f712bed33488b10f33232fb424faf257d49",
+  "upstreamPom": "https://repo.maven.apache.org/maven2/org/matrix/rustcomponents/sdk-android/26.10.23/sdk-android-26.10.23.pom",
+  "upstreamPomSha256": "aeaba76925bdad99821e3a4ac811d59432ea3731c92fffe9a030ebe1aca9ec10"
+}
