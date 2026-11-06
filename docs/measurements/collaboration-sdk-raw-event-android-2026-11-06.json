@@ -59,7 +59,7 @@
   },
   "limitations": [
     "Arm64/x86_64 AAR is packaged and verified; remaining 32-bit ABIs and Apple paired artifacts remain pending.",
-    "No application SDK dependency change or native consumer acceptance.",
+    "Shipping application dependency unchanged; isolated Android native consumer passed. HRIS edit recovery remains pending.",
     "The wrapper and AAR both have empty upstream consumer rules; no minified application acceptance is claimed."
   ],
   "aar": {
@@ -101,7 +101,7 @@
     "buildSeconds": 901.084,
     "candidateOnly": true,
     "applicationDependencyChanged": false,
-    "packaged": false
+    "packaged": true
   },
   "pairedAar": {
     "candidateOnly": true,
@@ -128,7 +128,8 @@
     "generatedInputsUnchanged": true,
     "published": false,
     "applicationDependencyChanged": false,
-    "consumerAcceptance": false,
-    "initialVerifierCorrection": "Removed an incorrect assumption that upstream consumer rules name Matrix/UniFFI packages. The upstream file and packaged file are both empty; no rules or artifact changed."
+    "consumerAcceptance": true,
+    "initialVerifierCorrection": "Removed an incorrect assumption that upstream consumer rules name Matrix/UniFFI packages. The upstream file and packaged file are both empty; no rules or artifact changed.",
+    "consumerAcceptanceScope": "Isolated non-minified Android provider fixture; see collaboration-sdk-raw-event-consumer-2026-11-06.json"
   }
 }

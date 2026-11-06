@@ -62,17 +62,33 @@ abort can queue a server redaction. Implement exact original-transaction settlem
 before removing confirmed native entries. Old phone logs only identify Flush /
 QueueUnresolved;43 will distinguish Stage/Deliver after installation.
 
-ONLY current local heavy job: raw-event consumer build86413 in the isolated
-Mobile worktree based on270efd56; no emulator active. Two-ABI AAR build86188
-finished24.063s and verified:96,782,109 bytes, SHA
-94d907f139a7484bd687b538d8cfce3e90478daa2ab93b9835d9aa8a606becae.
-Both JNI and all Kotlin/classes match the verified pair. prepare-consumer.py has
-RUN: private Maven coordinate and exact verification hashes are added only in the
-isolated consumer, shipping dependency unchanged. Wait for86413, verify its APK,
-then use the dedicated fresh consumer userdata/emulator and existing Platform
-provider fixture (--docker-sudo, --android-sync-mode classic). No provider test has
-run yet. Stop the exact owned emulator afterwards. Do not reuse/wipe Bima userdata.
-New46bec39a CI Native42191546121 running and Control42191546066 pending;
+Raw-event candidate native consumer is ACCEPTED: build86413 passed486.129s,
+APK315,651,730 bytes SHA50f728a9613dc3d06253a9c42decd508e399722527e60e4f21067788db67efb7,
+exact paired AAR/JNI and strict local dependency verification, lint0 errors/48 warnings.
+Provider proof b5707215cb144219bf2899cc6e5d6884 passed55.429s:2 browser cases,
+Android/web bidirectional encryption, logical IDs, refresh with unchanged device keys,
+offline invitee delivery and cleanup. Both raw point-read assertions execute inside
+this APK before its first reply. Standard runner does not retain the extra numeric
+marker. Initial wrong emulator serial and premature boot attempts are recorded
+separately; no fixture assertion changed. Owned fresh-data emulator564348 /
+startTicks163428482 stopped09:35:40UTC; original Bima data and phone untouched.
+[Consumer evidence](measurements/collaboration-sdk-raw-event-consumer-2026-11-06.json).
+The frozen candidate DOES NOT contain confirmed queue settlement.
+
+ONLY local heavy job is confirmed-queue Rust test85403, driver
+.work/sdk-confirmed-queue-2026-11-06/test-queue.py core-1 core. Six input hashes are
+frozen for this run. Draft lives only in .worktrees/matrix-sdk-raw-event: core queue
+settlement and tests plus FFI queued_events.rs and room export. It requires paused,
+quiescent exact transaction/type/raw bytes, preserves dependent work and does no
+HTTP/cancel/redaction. Not yet compiled/accepted or in any AAR. Initial test output
+reports async_test requires names starting test_; wait for driver exit before edits.
+Review snapshot source too: SDK local echoes synthesize uploads and omit dependent
+requests; a complete original snapshot must read the native queue store under its
+lock, not infer it from UI echoes. Then test/export a separate patch, implement
+owning domain/data recovery and reproduce the real application-worker failure.
+No shipping queue policy change yet. Latest phone reconnect09:36UTC timed out18s;
+availability question remains pending, accepted43 awaits install-only.
+New46bec39a CI Native42191546121 and Control42191546066 still running09:33UTC;
 do not dispatch duplicates.
 
 SDK x86_64 driver95397 is FINISHED and drained:901.084s,142,673,032 bytes,
@@ -80,8 +96,7 @@ SHA0f9d908ef616c650949fedd51c97c0ce5e5c2d98810606731bc811634acf3cab.
 Nine generated Kotlin files exactly match arm64; four16KiB ELF LOAD alignments,
 raw-event symbol and unchanged sources verified. prepare-x86-aar.py has RUN and
 added its JNI beside arm64 in the isolated wrapper; do not repeat its one-shot
-backup. Two-ABI AAR is now packaged; native consumer compilation is active as recorded
-above. Continue confirmed-queue repair, native edit recovery, domain-owned history paging and all54
+backup. Two-ABI AAR is packaged and native consumer is accepted as recorded above. Continue confirmed-queue repair, native edit recovery, domain-owned history paging and all54
 PRD groups. Shipping SDK dependency unchanged;32-bit and Apple remain pending.
 
 Mobile motion23ce Native CI42183953532 SUCCESS: artifact13488369157 digest

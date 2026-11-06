@@ -40,12 +40,13 @@ are both empty; this is not minified-consumer acceptance.
 
 The 50,667,076-byte arm64 candidate has SHA-256
 `691c96bb9a502c8ab5a684259a753bc8017fce61c66cfef2e4dd7963bc02da43`.
-It has not been published or consumed. Before consumption, build the required
-remaining ABIs and Swift/XCFramework pair and prove the native HRIS edit exchange
+It has not been published; the two-ABI successor below passed isolated consumption.
+Before shipping, build the required remaining ABIs and Swift/XCFramework pair and
+prove the native HRIS edit exchange
 under existing owner/admission checks. Android 26.10.23 and Apple 26.10.27 remain
 unchanged. Local history never waits for a point fetch.
 
-## Prepared Android consumer probe
+## Accepted isolated Android consumer probe
 
 `raw-event-android-consumer.patch` applies to HRIS Mobile
 `270efd56d0f8e39a45143954c46210bb4653f833` in an isolated checkout. It extends the
@@ -55,8 +56,18 @@ the original body and custom logical identity, within the 96,000-byte bound.
 The existing provider fixture independently checks encrypted wire content, SDK
 credential renewal and durable queue behavior. No raw body or key is added to logs.
 
-The patch is prepared and formatted, **not compiled or executed yet**. It cannot
-compile against the shipping SDK. Use only the paired candidate AAR, with an
+The patch compiled and passed the isolated Android/provider fixture on 6 November.
+The two-ABI AAR is 96,782,109 bytes, SHA-256
+`94d907f139a7484bd687b538d8cfce3e90478daa2ab93b9835d9aa8a606becae`.
+Consumer build/lint passed in486.129s (0 errors/48 warnings); the provider proof
+passed55.429s with both browser cases, native encrypted exchange and cleanup.
+[Consumer evidence](../../docs/measurements/collaboration-sdk-raw-event-consumer-2026-11-06.json)
+records setup failures separately. The fixture requires exactly `emulator-5560`;
+wait for completed boot before invoking it. Fresh consumer userdata was used and
+the owned emulator is stopped. The raw-read assertions execute inside the proof APK;
+the standard runner does not retain the additional numeric result marker.
+
+This patch cannot compile against the shipping SDK. Use only the paired candidate AAR, with an
 isolated local Maven coordinate and exact artifact/POM verification hashes; keep
 shipping dependency verification enabled. Run the existing provider driver with
 `--android-sync-mode classic` on the explicitly owned emulator. Passing this
@@ -64,7 +75,7 @@ probe alone will not accept HRIS edit recovery, cold-cache completeness, remaini
 ABIs, Apple integration or minified application packaging.
 
 The production upstream AAR contains four ABIs: arm64-v8a, armeabi-v7a, x86 and
-x86_64. The in-progress x86_64 build and existing arm64 candidate cover the phone
+x86_64. The accepted x86_64/arm64 pair covers the phone
 and emulator proof targets; both 32-bit targets are still required before replacing
 the complete shipping artifact. Keep generated Kotlin/JNI pairs together for every
 ABI and compare all nine generated Kotlin files before combining native libraries.
