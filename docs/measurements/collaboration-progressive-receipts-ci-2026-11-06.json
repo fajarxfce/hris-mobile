@@ -121,6 +121,11 @@
       "arm64-v8a",
       "x86_64"
     ],
-    "diagnosis": "The trace required a network event-context request even when the SDK could serve the focused history window from its retained cache. The fixture invokes two latest-head acquisitions, including ACK recovery after restart. Admission must be proved around these reads without requiring a redundant network context request. An initial three-head correction was rejected by local native evidence; the two-head correction still requires native revalidation."
+    "diagnosis": "The trace required a network event-context request even when the SDK could serve the focused window from its cache. It also assumed absolute admission counts including a final sender readmission that the injected early projection failure no longer reaches. Preserve two head acquisitions and assert fresh admission relative to the original send, then history post-admission plus provider pre-admission. Initial three-head and absolute-four-count corrections were rejected by local native evidence. The relative-checkpoint correction requires native revalidation."
+  },
+  "appleHostBuild": {
+    "run": 42236786667,
+    "step": "Build iOS application host",
+    "conclusion": "success"
   }
 }

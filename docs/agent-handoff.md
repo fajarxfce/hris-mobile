@@ -54,17 +54,39 @@ not the shipping product lint result). Artifact144,143,608bytes SHA
 e4db3b5d0912bafe3c9384a756271bb3680ebbe43d8d10a8c3c3d0ce86c6557c,
 x86_64 only. Original Bima data/keys remain48 and inactive.
 
-Only active heavy job is **Platform25882**, sdk-refresh-history-2026-11-06/native-sdk2-2.
-Owned fixture emulator3126325/startTicks165707343, emulator-5560, is active under
-Mobile .work/chat-refresh-boundary-2026-11-06/native-sdk2-2. Do not overlap builds.
-It reuses the separate cleaned SDK-test disk, NOT original Bima's disk.
-Native-1 failed both cases in175.648s because the initial trace correction expected
-three heads. Code inspection confirms TWO AcquireCollaborationHistory calls;
-provider pagination accounts for the other /messages requests. The corrected trace
-retains two strictly admitted heads and checks admission after the recovery head.
-It now saves bounded history-admission.json evidence before assertions. Four unit
-cases and format/architecture pass36.379s on12,459 unchanged inputs. Native-2 is
-pending; no native acceptance claim yet. First emulator3092170 stopped15:52:16UTC.
+SDK3 packaging **35171 is drained and PASSED**,106.131s from15:59:03UTC.
+AAR185,494,730bytes SHA1e6871785970f8652759f57b4d59229aa16ac9a198309cedc13b5ac64168cadc;
+Ivy SHA16f28d79298011895ad017c241ff21e6bf8d5154c4869036b710d11160240373.
+All four packaged native libraries,12sources,nine generated Kotlin files and required
+APIs verify. Compiled classes matchSDK2. Candidate assets are under
+.work/chat-refresh-boundary-2026-11-06/distribution-3, NOT published or shipping.
+
+Only active heavy job is **Platform63241**, sdk-refresh-history-2026-11-06/native-sdk2-3.
+Fixture emulator3181930/startTicks165755158, emulator-5560, is active under
+Mobile .work/chat-refresh-boundary-2026-11-06/native-sdk2-3. Do not overlap builds.
+It uses the separate cleaned SDK fixture disk; original Bima stays48 and inactive.
+Source inputs are frozen until the test drains. Shipping catalog/verification entries
+still contain no SDK3 switch. After native-3 acceptance and emulator stop, run
+.work/chat-refresh-boundary-2026-11-06/prepare-consumer.py once to stage the exact SDK3
+Ivy candidate and checksum entries, then candidate49 build/verification and runtime.
+
+Platform's Native-1 failed both cases in175.648s because the first trace correction
+expected three heads. Native-2 failed both in149.143s at admittedHistoryHeads:
+actual first-head admissions are3, recovery-head22, final25, all failures0. Early
+progressive ACK projection deliberately fails before the sender's final admission;
+an absolute minimum4 wrongly depends on that interrupted step. No production code
+or authorization checks changed. The final test-only correction compares the first
+head to the original send checkpoint, requires fresh permission between heads,
+post-history permission, and first provider admission after both history readmission
+and provider admission. It retains two heads and existing page bounds/positions.
+Seven positive/negative trace cases plus format/architecture PASS33.540s on12,459
+unchanged inputs. Native validation of this final correction remains required.
+
+Emulator3126325/startTicks165707343 stopped15:57:24UTC. Current native runtime scripts:
+Mobile .work/chat-refresh-boundary-2026-11-06/native-sdk2-3/start-emulator.py and
+stop-emulator.py, with Platform .work/sdk-refresh-history-2026-11-06/run-native-sdk2.py
+native-sdk2-3. They use the separate cleaned SDK fixture disk, NOT Bima's disk.
+Keep all failed evidence; never overwrite or call the fixture accepted yet.
 
 Private candidate49 scripts are prepared in .work/release-phone-2026-11-06-build49
 for original Bima's emulator only. No49APK exists; the next normal phone build will
@@ -87,12 +109,13 @@ is NOT accepted. [Failed CI evidence](measurements/collaboration-progressive-rec
 
 Platform has an uncommitted test-only correction proving two admitted head reads
 and admission after the recovery read, without requiring redundant network context
-I/O. Four positive/negative trace cases plus format/architecture pass36.379s on12,459
+I/O. Seven positive/negative trace cases plus format/architecture pass33.540s on12,459
 unchanged inputs; actual native validation remains. Its script/evidence are
 Platform .work/sdk-refresh-history-2026-11-06. Do not weaken admission assertions.
-After acceptance commit/push Platform and pin its new revision in collaboration-hris.yml.
+After acceptance commit/push Platform. Pin its new revision in collaboration-hris.yml
+together with the SDK3 shipping switch to avoid a redundant SDK2 CI dispatch.
 
-Phone remains48, app not running at15:41UTC, one Bima-open question pending. Never
+Phone remains48, app not running at15:58:39UTC, one Bima-open question pending. Never
 ask the answered47 question again or drive phone UI. Platform live10485916/
 schema116.1 and Starter578d97a unchanged. Continue all54PRD groups and push each
 commit. No accepted Forward send, live rollout, or SDK publication may replay.
