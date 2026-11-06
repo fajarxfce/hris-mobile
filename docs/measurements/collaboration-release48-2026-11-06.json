@@ -1,9 +1,8 @@
 {
   "date": "2026-11-06",
-  "updatedAt": "2026-11-06T15:05:19.469247+00:00",
-  "accepted": false,
-  "phoneInstalled": false,
-  "phoneStillVersion": 47,
+  "updatedAt": "2026-11-06T15:09:09.985054+00:00",
+  "accepted": true,
+  "phoneInstalled": true,
   "phonePendingIssue": "Open: user reports release 47 remains pending for a long time. Do not repeat the answered question.",
   "artifact": {
     "candidateOnly": true,
@@ -139,10 +138,113 @@
     "preservedUnder": ".work/release-phone-2026-11-06-build48/smoke-attempt-1",
     "followup": "Original device and native parent are active. Normal server refreshes followed the two soft-logout callbacks by less than one second. Reconnect entry showed ready without a new bootstrap; subsequent same-store cold room entry had no chat diagnostics. The underlying response cause is not established."
   },
-  "next": "A second exact-APK offline/online smoke is running on the retained Bima emulator. Do not install unless accepted; archive all failures. After validated phone installation read the new closed queue mapping classification.",
+  "next": "Phone app was not running after update. One optional request to open the Bima room is pending; read new closed mapping diagnostics when available. Continue the long run and do not repeat the release-47 question.",
   "limits": [
     "No new test message sent; visible peer history does not prove individual phone outbox settlement.",
     "No phone UI driven or data reset.",
     "No claim that chat token refresh or phone pending latency is fixed."
-  ]
+  ],
+  "phoneVersion": 48,
+  "acceptedSmoke": {
+    "startedAt": "2026-11-06T15:04:48.616514+00:00",
+    "accepted": true,
+    "serial": "emulator-5562",
+    "versionCode": 48,
+    "installedApkSha256": "444ade26ccb411aeda91b7579fbfd6b5abb194c85b3a55491c9e61d4e5a5aa38",
+    "phoneTouched": false,
+    "newMessagesSent": 0,
+    "snapshots": [
+      {
+        "mode": "offline",
+        "opening": 1,
+        "visibleRows": 12,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      },
+      {
+        "mode": "offline",
+        "opening": 2,
+        "visibleRows": 12,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      },
+      {
+        "mode": "online",
+        "opening": 1,
+        "visibleRows": 12,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      },
+      {
+        "mode": "online",
+        "opening": 2,
+        "visibleRows": 12,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      }
+    ],
+    "settingsRestored": true,
+    "offlineRows": 12,
+    "onlineRows": 12,
+    "sameProcessAfterOnlineWait": true
+  },
+  "acceptance": {
+    "accepted": true,
+    "at": "2026-11-06T15:06:57.445980+00:00",
+    "apkSha256": "444ade26ccb411aeda91b7579fbfd6b5abb194c85b3a55491c9e61d4e5a5aa38",
+    "sourceCommit": "cf28a7c4dac0a523df6d47fa82e115be340ea1e5",
+    "versionCode": 48,
+    "scope": "Signed release APK and retained Bima store: second smoke passed two offline and two online openings, same process after 30 seconds online, no new sends. Physical phone pending latency remains open.",
+    "screenshotsInspected": {
+      "offline": "48e747dcd8abd314a01759cccd2a242197ebb298ad9ea652e9f7c00c55838177",
+      "online": "6e1af683d31cf1441255301ebd7b7354b0bb0eb85476b54473c14787009a9b64"
+    },
+    "normalPublicSdk": "26.10.23-hris.2",
+    "firstAttemptRetained": true,
+    "authLimitation": "First attempt reported soft logout, followed by successful normal gateway refresh. Same-store entry recovered without bootstrap or key changes. The underlying intermittent refresh cause remains open; the subsequent full smoke has no auth diagnostics."
+  },
+  "installation": {
+    "confirmed": true,
+    "startedAt": "2026-11-06T15:07:09.744274+00:00",
+    "elapsedSecondsIncludingVerification": 72.806,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 48,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "444ade26ccb411aeda91b7579fbfd6b5abb194c85b3a55491c9e61d4e5a5aa38",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-06 22:08:19",
+      "versionCode": "48 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    },
+    "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+  },
+  "emulatorStop": {
+    "pid": 2686582,
+    "startTicks": "165319908",
+    "stopped": true,
+    "dataRetained": true,
+    "phoneTouched": false,
+    "at": "2026-11-06T15:06:58.974505+00:00"
+  }
 }

@@ -1,43 +1,46 @@
 # Agent continuation — HRIS Mobile
 
-## Current: release 48 candidate; emulator auth investigation — 6 November 2026
+## Current: release 48 installed; phone mapping diagnosis next — 6 November 2026
 
-Phone **10.77.77.3:5555 remains release 47**, with the latest user response
-**still pending for a long time**. Do not ask that same question again. Source
-**cf28a7c4dac0a523df6d47fa82e115be340ea1e5** is pushed; its 7,081-case gate passed.
-Release 48 build 38509 passed in 122.575s, lint zero, normal public SDK 2.
-APK SHA **444ade26ccb411aeda91b7579fbfd6b5abb194c85b3a55491c9e61d4e5a5aa38**,
-121,090,044 bytes, same signer, nondebuggable. New closed queue mapping categories
-are present in the actual DEX. **48 is not accepted or installed on the phone.**
-[Candidate and failed smoke evidence](measurements/collaboration-release48-2026-11-06.json).
+Release **48** from pushed source **cf28a7c4dac0a523df6d47fa82e115be340ea1e5** is
+installed on **10.77.77.3:5555**. Announced in advance, install-only/no UI.
+Install93439 completed in72.806s, starting15:07:09UTC. Device APK SHA matches
+**444ade26ccb411aeda91b7579fbfd6b5abb194c85b3a55491c9e61d4e5a5aa38**,
+121,090,044bytes, nondebuggable devRelease48/1.0.0, normal public SDK2/same signer.
+App identity10962, first-install time, data and keys remain. Do not reinstall.
+The phone app was not running after update; **one optional request to open Bima
+is pending**. When it opens, inspect closed QueueMapping diagnostics. User already
+answered that47 remained pending; never repeat that question or claim resolved.
+[Release and first failed smoke evidence](measurements/collaboration-release48-2026-11-06.json).
 
-The first same-store emulator smoke passed four room openings (12/12 offline,
-12/11 online) but failed its final auth check: ChatAuthSoftLogout and
-ChatSync_GenericRefreshToken at 14:50:51 UTC. Another callback appeared at
-14:56:10. Read-only server metadata confirms the fictional device/native parent
-remain active, and ordinary refreshes to gateway versions 63/64 followed those
-callbacks by less than one second. This does not establish the response cause.
-Opening Reconnect displayed ready without a new bootstrap; a subsequent cold
-same-store room entry had no chat diagnostics. Preserve the failed first attempt,
-now archived in .work/release-phone-2026-11-06-build48/smoke-attempt-1.
+Source full gate91409 passed7,081fresh cases/911suites, zero failures/errors/skips,
+4,216unchanged inputs. Build38509 passed122.575s, lint0. First emulator smoke
+failed its final auth check after four successful openings (ChatAuthSoftLogout/
+ChatSync_GenericRefreshToken at14:50:51UTC); another callback appeared14:56:10.
+Read-only server audit found ordinary refreshes to versions63/64 less than one
+second later, with the original fictional device/native parent active. Reconnect
+entry showed ready without a new bootstrap, then cold same-store entry had no chat
+diagnostics. The intermittent response cause remains OPEN. No auth guard was removed.
 
-A second exact-APK offline/online probe 97963 is RUNNING; bridge-only closed HTTP
-capture 18017 accompanies it. Original Bima emulator **2686582/startTicks165319908**,
-**emulator-5562**, is active. Do not wipe/reseed it or start a heavy build. Data/keys
-remain .work/demo-chat-device-2026-11-05/bima/userdata.img. No new messages sent,
-no phone UI touched. Capture only emits fixed route/status/error classifications;
-private historical app logs stay outside Git. Follow the prepared scripts in
-.work/release-phone-2026-11-06-build48; every phone install needs advance notice,
-explicit serial, --install-only and actual exact-APK acceptance. Do not override
-an auth failure or claim sending fixed merely because peer messages are visible.
+Second exact-APK smoke97963 PASSED: two offline/two online openings,12rows each,
+no interrupted-save/older/reconnect prompt, no auth diagnostic or process crash,
+same process after30s online, settings restored, zero new sends. Both original
+screenshots inspected. First failure is retained in smoke-attempt-1. A bounded
+bridge trace during the successful smoke observed sync200s but no refresh; it does
+not explain the earlier rejection. No phone UI or pending data was changed.
 
-Automatic CI now runs source cf28a7c4: native **42236786643**, control **42236786667**.
-Source 074087d7 control42231135714 succeeded; native42231135711 was cancelled while
-pending. Earlier be86d478 native42228820195 succeeded. Artifacts for these newer
-runs are not yet audited. Exact source00a51e14 CI remains fully accepted below.
-Platform live10485916/schema116.1 and Starter578d97a remain unchanged. All 54 PRD
-groups remain in scope; no accepted send, live rollout or SDK publication may replay.
+Emulator2686582/startTicks165319908 STOPPED15:06:58UTC. Original Bima data/keys at
+.work/demo-chat-device-2026-11-05/bima/userdata.img remain, now48. No owned emulator
+or heavy local job is active. All48scripts/evidence are under
+.work/release-phone-2026-11-06-build48. Future installs require advance notice,
+explicit serial and --install-only after acceptance.
 
+Automatic exact-sourcecf28 CI runs: native42236786643, control42236786667.
+074087d7 control42231135714 succeeded; native42231135711 was cancelled while pending.
+be86d478 native42228820195 succeeded. Newer artifacts are not yet audited.
+Exact00a51e14 CI remains fully accepted below. Platform live10485916/schema116.1,
+Starter578d97a unchanged. All54PRD groups remain; no accepted send, live rollout or
+SDK publication may replay. HRIS receipt/mapping policy is not a Starter port.
 
 ## Current: release 47 installed; progressive receipt recovery next — 6 November 2026
 
