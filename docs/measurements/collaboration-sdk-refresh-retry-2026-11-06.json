@@ -1,7 +1,7 @@
 {
   "date": "2026-11-06",
-  "status": "sdk3_published_normal_application_full_gate_passed",
-  "phoneVersion": 48,
+  "status": "sdk3_normal_release50_installed_phone_pending_unconfirmed",
+  "phoneVersion": 50,
   "phonePending": "Open; one optional request to open Bima after update is pending.",
   "sourceBase": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
   "patchSha256": "93f106e16efd486fde187432fb901dc6777f8235e2ca0c84d780e93ef7d5836a",
@@ -49,9 +49,9 @@
     "Real authentication/access denials stay classified as denials; no token reset, ownership relaxation or original-send replacement."
   ],
   "remaining": [
-    "Build and smoke normal release50 with retained stale-authority data before phone installation.",
-    "Audit first exact-source f04c0864 CI artifacts when complete.",
-    "Inspect original phone pending-message diagnostics when its app opens."
+    "Audit first exact-source f04c0864 native and Apple/control CI artifacts when complete.",
+    "Inspect original phone pending-message diagnostics when its app opens.",
+    "Continue all54 communications groups, starting with group-branch reconciliation and explicit bootstrap recovery."
   ],
   "httpIntegration": {
     "startedAt": "2026-11-06T15:19:00.783760+00:00",

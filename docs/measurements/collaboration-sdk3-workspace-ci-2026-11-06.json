@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-06",
+  "source": "f04c0864cdd103790e6dd0ed8bab1e67bf5780c3",
+  "protocol": {
+    "runId": 42254474390,
+    "platformFixturePin": "e0dbb567acc4c5571b82324c515ed8ddc145007d",
+    "conclusion": "success",
+    "artifacts": [
+      {
+        "artifactId": 13522872628,
+        "name": "native-protocol-evidence-native",
+        "sha256": "f2724b1c15ab6408ceaaa70d0635dc069553c3be4ce68a2970f43784f863d834",
+        "bytes": 2523,
+        "checks": {
+          "wrong_issuer": true,
+          "wrong_audience": true,
+          "expired_jwt_beyond_provider_leeway": true,
+          "public_registration_disabled": true,
+          "loopback_only_http": true,
+          "isolated_dedicated_network": true,
+          "provider_protocol_counters": true,
+          "browser_e2ee_restart_media": true,
+          "browser_offline_invitee_first_message_sender_offline": true,
+          "android_requested_sync_protocol": true,
+          "android_web_bidirectional_e2ee": true,
+          "android_sdk_refresh_preserves_device_key": true,
+          "android_sdk_queue_encrypted_logical_ids": true,
+          "android_encrypts_for_offline_invitee_before_join": true
+        },
+        "complete": true,
+        "cleanup": true,
+        "elapsedSeconds": 75.026,
+        "syncMode": "native",
+        "browser": {
+          "expected": 2,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 21648.900999999998
+        },
+        "sourceHashesVerified": 14,
+        "providerOnly": true,
+        "phoneAcceptance": false
+      },
+      {
+        "artifactId": 13522004165,
+        "name": "native-protocol-evidence-classic",
+        "sha256": "1db3c0a19707f3a2f59934cf8758ab33b509b390a3439f42bd41c93068fe8d3a",
+        "bytes": 2506,
+        "checks": {
+          "wrong_issuer": true,
+          "wrong_audience": true,
+          "expired_jwt_beyond_provider_leeway": true,
+          "public_registration_disabled": true,
+          "loopback_only_http": true,
+          "isolated_dedicated_network": true,
+          "provider_protocol_counters": true,
+          "browser_e2ee_restart_media": true,
+          "browser_offline_invitee_first_message_sender_offline": true,
+          "android_requested_sync_protocol": true,
+          "android_web_bidirectional_e2ee": true,
+          "android_sdk_refresh_preserves_device_key": true,
+          "android_sdk_queue_encrypted_logical_ids": true,
+          "android_encrypts_for_offline_invitee_before_join": true
+        },
+        "complete": true,
+        "cleanup": true,
+        "elapsedSeconds": 88.878,
+        "syncMode": "classic",
+        "browser": {
+          "expected": 2,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 28522.077
+        },
+        "sourceHashesVerified": 14,
+        "providerOnly": true,
+        "phoneAcceptance": false
+      }
+    ]
+  },
+  "native": {
+    "runId": 42254474298,
+    "status": "in_progress"
+  },
+  "control": {
+    "runId": 42254474193,
+    "status": "in_progress"
+  },
+  "phoneVersion": 50,
+  "phonePendingResolved": false
+}

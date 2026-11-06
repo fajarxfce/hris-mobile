@@ -90,6 +90,7 @@
     "androidDevDebugLintIssues": 0,
     "lintReportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
   },
-  "phoneInstalled": false,
-  "starterPort": "Not applicable: HRIS workspace/company policy has no Starter workspace counterpart."
+  "phoneInstalled": true,
+  "starterPort": "Not applicable: HRIS workspace/company policy has no Starter workspace counterpart.",
+  "releaseEvidence": "collaboration-release50-2026-11-06.json"
 }

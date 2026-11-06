@@ -1,80 +1,79 @@
 # Agent continuation — HRIS Mobile
 
-## Current: SDK3 and workspace-expiry full gate accepted; release50 next — 6 November 2026
+## Current: release50 installed; continue group integration — 6 November 2026
 
-Phone remains **release 48**, installed15:07UTC, data/keys retained. App was not
-running16:31:20UTC. One optional Bima-open question is pending. The user said47 was
-still pending; do not repeat that question, drive phone UI or claim resolution.
-Future installs need advance notice, explicit serial and --install-only.
+**Release50** from pushed sourcec2384b7d (programf04c0864) is installed on the phone
+10.77.77.3:5555. Announced beforehand, install10348 started17:05:20UTC and completed
+67.638s. Exact device APK SHA
+**215217d1a8f1228b4be526164efa79d75b5c647ad8980367735ea5aa2a1ce898**,
+121,090,044bytes, ARM64 nondebuggable devRelease/1.0.0, normal publicSDK3/same signer.
+App10962, first-install date, data and keys are preserved; no phone UI launched or
+driven. [Build, actual smoke and install](measurements/collaboration-release50-2026-11-06.json).
+Do not reinstall. The user reported47 still pending; this physical-phone issue is
+still OPEN, not proven resolved by receiver/cache acceptance. One optional Bima-open
+question from48 is pending; do not repeat it. Read closed per-message diagnostics
+when the phone app opens; no queue clearing, fabricated receipts or replacement sends.
 
-This increment selects normal public SDK3 and pins the accepted Platform history
-fixture62ee11818a4928b2598d046c7b3283bf3e416554 in the native CI workflow. It also fixes
-workspace freshness: `validateWorkspaceOwnership` returns Unavailable for expired
-company authority. Previously AccessDenied caused runtime ownership to persist a
-false cache denial and overwrite an earlier real denial. Stale authority still
-cannot authorize operations. No old gate is blindly erased; real permission/MFA
-and old expired gates remain until actual admitted acquisition. Tests cover cold
-entry, timer/token rotation, local row continuity and failed cleanup.
-[Regression evidence](measurements/collaboration-workspace-expiry-2026-11-06.json):
-red34cases/3intendedfailures59.915s, green34/0failures28.328s,4216stableinputs each.
-Full96089 PASSED1055.864s:7086fresh tests/911suites,0failures/errors/skips,
-4216unchanged inputs, devDebug lint0, strict normal publicSDK3 and no dependency
-override. No Starter port: template has no HRIS workspace/company policy module.
+Phone app was not running16:46:10UTC before update. UID log audit16:46:56 contains
+no new chat diagnostics after48 install; crash records are only from1November.
+Future installs require advance notice, explicit serial and --install-only/no UI.
+The new app-only read driver is .work/release-phone-2026-11-06-build50/read-diagnostics.py.
 
-SDK3 **release436740986** published once16:37:18UTC, target411b323c; all six existing
-asset digests and the public descriptor verify. First draft tag lookup404 and stale
-draft download URL404 were recovered using the existing release ID and freshly
-published URL. No asset was reuploaded/replaced, no release recreated. Never rerun
-publish-sdk3.py or finish-sdk3-publication.py. Publication record:
-.work/chat-refresh-boundary-2026-11-06/distribution-3/publication.json.
-AAR185,494,730bytes SHA
-**1e6871785970f8652759f57b4d59229aa16ac9a198309cedc13b5ac64168cadc**;
-Ivy SHA**16f28d79298011895ad017c241ff21e6bf8d5154c4869036b710d11160240373**.
-SDK1/2 stay immutable. Four rebuilt ABIs preserve ARM64 baseline flags and identical
-nine Kotlin bindings/classes. Core5, HTTP18, FFI2, Python3 and source reconstruction
-passed. [SDK evidence](measurements/collaboration-sdk-refresh-retry-2026-11-06.json).
+Programf04c0864 selects SDK3 and fixes `validateWorkspaceOwnership` freshness
+classification: ordinary expired company authority is Unavailable, not a persisted
+AccessDenied. Stale authority still cannot authorize operations. Real permission/MFA
+and old expired gates remain until admitted acquisition; no gate is blindly erased.
+Regression red34/3intendedfailures59.915s, green34/0failures28.328s. Full96089 passed
+1055.864s:7086fresh cases/911suites,0failures/errors/skips,4216stable inputs, devDebug
+lint0, strict normal publicSDK3. [Evidence](measurements/collaboration-workspace-expiry-2026-11-06.json).
+No Starter port: the template has no HRIS workspace/company policy module.
 
-SDK3 ARM64 native38765/native-sdk3-arm64-1 PASSED251.177s,2cases/0failures,12459stable
-inputs, exact proof APK SHA538dc2ba390867d90579c897a237ac80a7f3cf97efaafefac1acad8606a35cc4.
-Both scenarios:3encrypted sends,0redactions, access renewal, process death, offline
-history recovery and cleanup. Retained confirmed queue also settled offline and
-repeated recovery was a no-op. Separate emulator3372867/startTicks165927091 stopped
-16:34:45UTC; fixture disk remains separate from Bima. Do not rerun accepted proof.
+Build6245 passed90.395s, release lint0. APK/native/signer/API/Firebase/backup/16KiB
+checks pass; release variants do not enable R8. Actual retained Bima smoke70697
+passed two offline and two online openings,12original rows each, no saving/older/
+reconnect prompt, no crash/auth-rejection diagnostic and stable process after30s.
+For offline age the owned guest clock alone advanced65minutes; guest clock, auto_time,
+network and ADB root privilege were restored. Both screenshots inspected. No new
+message sent. Closed120s sample observed sync200, no refresh/429; do not claim those
+branches from this sample. Bima emulator3586863/startTicks166115068 stopped17:04:22UTC;
+original data/keys remain at .work/demo-chat-device-2026-11-05/bima/userdata.img, now50.
+No owned emulator, heavy build, installation or bridge capture remains active.
 
-Candidate49 built588.986s from2a1d9879 with localSDK3override, lint0. It is NOT a phone
-release. First offline smoke exposed the above workspace bug; after actual company
-readmission, two offline/two online openings each showed12original rows, no recovery/
-older/reconnect prompt, no crash/auth diagnostic, stable process after30seconds and
-zero new sends. Bounded trace proved Matrix66→67 renewal+sync200 but no429 in this
-sample. Screenshots inspected. [All candidate evidence](measurements/collaboration-release49-candidate-2026-11-06.json).
-Original Bima emulator3291263/startTicks165852469 stopped16:29:25UTC; data/keys remain
-at .work/demo-chat-device-2026-11-05/bima/userdata.img, now49.
+SDK3 release436740986 published once16:37:18UTC, target411b323c. AAR SHA
+1e6871785970f8652759f57b4d59229aa16ac9a198309cedc13b5ac64168cadc;
+Ivy SHA16f28d79298011895ad017c241ff21e6bf8d5154c4869036b710d11160240373.
+All six assets/digests and public descriptor verified. Earlier draft/API URL404s
+were recovered on the existing release ID and existing assets; never repeat publish,
+reupload or staging/build scripts. SDK1/2 immutable. [SDK evidence](measurements/collaboration-sdk-refresh-retry-2026-11-06.json).
+Four ABIs, source reconstruction/core/HTTP/FFI cases and SDK3 ARM64 native2cases
+passed251.177s; each3encrypted sends/0redactions, restart/offline recovery and cleanup.
+The confirmed queue settles offline; retry is a no-op. Candidate49's first expired-
+workspace failure remains recorded separately, never reclassified as a phone pass.
 
-NEXT: build normal release50 with .work/release-phone-2026-11-06-build50/build-arm64.py
-from this pushed checkpoint. Full gate already accepted; do not repeat it. Prepared
-verify-arm64.py/verify-sdk.py check exact SDK, signer, API, backup and ABI. Bima start/
-install/probe/stop scripts retain the original store. Probe simulates65minutes of age
-ONLY in the offline owned guest, then restores guest clock/auto_time/network/ADB
-privilege; its screenshot is retained before failure cleanup. This probe has not run.
-All emulators stopped and no heavy local job active. No build50 APK exists yet.
-Notify before any phone installation, then preflight.py and install.py --install-only
-after exact APK acceptance. Never replay accepted Forward sends, publication or rollout.
+Exactf04c first CI: protocol42254474390 PASSED both native/classic modes,14checks+
+cleanup each, artifact digests and14Platform source hashes verified against the
+workflow's e0dbb567 pin. Native42254474298 still running; control42254474193 portable
+job succeeded while Apple was running17:06UTC. Audit completed artifacts and explicit
+iOS host step before calling them accepted. Native workflow correctly pins accepted
+Platform62ee1181; failed oldercf28 CI remains failed. No manual redispatch.
+[CI evidence](measurements/collaboration-sdk3-workspace-ci-2026-11-06.json).
+Private audit driver: .work/chat-workspace-expiry-2026-11-06/remote-ci-f04c/audit.py;
+pass only completed first-run IDs. It skips already downloaded immutable artifacts.
 
-Phone UID logs at16:46:56UTC contain no new chat diagnostic since48 installation;
-retained crash entries are only from1November. No new runtime/phone acceptance follows
-from absent logs. App remained stopped16:46:10UTC. The existing question stays pending.
-First exactf04c CI: protocol42254474390, native42254474298, control42254474193; all
-were still in progress16:55UTC. Audit actual artifacts and steps after completion;
-do not redispatch. Group backend location and pending recovery are recorded in
-Platform8bad394e. A read-only merge preview reports seven conflicts (four docs,
-CollaborationConfiguration.kt, recovery_set.py and its test); no merge was performed.
-
-Exactcf28 CI portable4299/463 and Apple1671/182+iOS host passed. Its native CI failed
-both ABIs; that original run remains failed. Corrected Platform fixture was locally
-accepted with SDK2 x86_64 and now SDK3 ARM64; await the new source's first CI runs.
-Live Platform10485916/schema116.1 and Starter578d97a unchanged. All54 PRD groups stay
-active; continue after repair with explicit space bootstrap recovery, original-store
-ownership adoption, cross-company/group UI, media/voice, calls and meetings.
+NEXT: continue all54PRD groups while watching phone diagnostics/CI. Group backend
+is the separate clean /home/fajar/hris/.worktrees/communication-space, branch
+feat/communication-space at28bcf2a4, with unshipped migrations117–137. Main Platform
+is8bad394e; live10485916/schema116.1 and Starter578d97a stay unchanged. The read-only
+merge preview reports seven conflicts: four docs, CollaborationConfiguration.kt,
+recovery_set.py and test_recovery_set.py. Preserve both group and new company-summary
+bindings, fractional116.1 parsing and reviewed group schema/envelope coverage. No
+actual merge or new group feature edits yet. Preview and unimplemented bootstrap
+recovery notes live under that worktree's .work/reconcile-main-2026-11-06.
+Merge/reconcile, run its own API/full-worker/recovery and group gates, then implement
+explicit original bootstrap-operation recovery and original SDK-store ownership
+adoption before group UI. Do not weaken ownership or freeze an old runtime as setup.
+Push every commit; continue media/voice, calls and meetings after these prerequisites.
+Never replay accepted Forward sends, SDK publication or live deployment.
 
 ## Prior checkpoint: release 48 installed; phone mapping diagnosis next — 6 November 2026
 
