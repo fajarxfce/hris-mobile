@@ -67,8 +67,23 @@ The [first clean CI build](measurements/collaboration-sdk-existing-identity-ci-2
 also passed on5ea9bf69 in1,056.244 seconds; its REST-verified ARM64 artifact matches all
 19 patched source hashes, five patches and the same generated bindings. Its binary
 is separately recorded, not substituted into the local four-ABI package.
-Actual Android consumer, private-identity repository/use-case integration and Apple
-runtime support remain required. Every changed
-binary must use a new SDK version; never replace SDK 3 assets. Phone 50 and its pending-
-send report remain unchanged by this source-only candidate. Continue original-parent
-recovery, stop/join, freeze/drain/adoption and the remaining communications PRD.
+Four-ABI AAR packaging passed in107.224 seconds, with exact native/binding hashes and
+compiled JVM API. The [actual consumer proof](measurements/collaboration-sdk-existing-identity-consumer-2026-11-06.json)
+then passed in124.327 seconds: ARM64 stages an original SDK3 private account, kills its
+process, upgrades the same package to SDK4 without data removal, and reads the same
+private keys before any Client restore. The x86_64 case stages and reopens SDK4 after
+process death. Both reject wrong passphrases and absent stores, preserve main database
+bytes, and release the original exclusive lock. Owned fixtures/emulator are removed/stopped.
+
+The probe initially passed Android's /data/user/0 alias, which SQLite NOFOLLOW rejected.
+It now consumes the canonical databasePath from the actual inventory lease. Both ABIs
+explicitly verify that the raw alias is rejected while the leased canonical path works.
+Native source/binaries did not change. The earlier Gradle init failure, Android UID
+parser failure and rejected alias attempt are retained in the evidence.
+First private reads measured2,733ms on translated ARM64 and314ms on x86_64 in this owned
+emulator; neither number is a physical-phone or message-delivery measurement.
+
+SDK4 publication, private-identity repository/use-case integration/full acceptance,
+and Apple runtime support remain required. Never replace SDK3 assets. Phone50 and its
+pending-send report remain unchanged. Continue original-parent recovery, stop/join,
+freeze/drain/adoption and the remaining communications PRD.

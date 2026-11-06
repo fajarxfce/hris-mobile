@@ -1,0 +1,230 @@
+{
+  "recordedAt": "2026-11-06T21:46:22.262416+00:00",
+  "version": "26.10.23-hris.4",
+  "published": false,
+  "shippingDependency": "26.10.23-hris.3",
+  "package": {
+    "startedAt": "2026-11-06T21:23:07.672697+00:00",
+    "elapsedSeconds": 107.224,
+    "passed": true,
+    "inputsUnchanged": true,
+    "aarSha256": "9b6806de02b7d40b8487b54a51b192c114a38c68c6dfe35c68faf50d3b6bfd21",
+    "aarBytes": 185703351,
+    "ivySha256": "4a8d987381c2266af5b1f1e88a75dbf80db36d24d8be6fec252afec7d7a57e95",
+    "classesSha256": "1aa84d356f2ecfe62822427e62799a9c7680d7b21312c54c857205eb8794d272",
+    "sourcesSha256": "f27547d1128b2c57ef6fa4a669a8b562526115b342ecc838742ae91e2bf52e89",
+    "androidBuildManifestSha256": "63c132544e66492ae7b51c54d080ace572bff31d8091636904a317fb83c2fbbf"
+  },
+  "consumerBase": "35dfec8223d184757486d0086791f50928e9eb45",
+  "consumerChangedInputs": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/LocalSdkIdentityProbe.kt": "322738f2513dd12b726b3b970f2f8551cb6bf2e09cd1f56ccc115858094e65ac",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationSdkInventorySource.kt": "5c3a1c94d77d6d6083d8d59e924704f69b7ec229f0c278f5269cba10d4e31543",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/StoredCollaborationSdkInventoryTest.kt": "2c5aa540bc9030d45b0dbe985dbfcbb115c3a28bd9660aa9353d2caf62bcfca1",
+    "features/collaboration/data/src/jvmSharedMain/kotlin/dev/fajar/starter/collaboration/data/datasources/FileCollaborationSdkInventorySource.kt": "03780b4a2de7de4d64836d7ba14eb9979444f9312856a0a6e1fa1f53159cb13d",
+    "gradle/verification-metadata.xml": "6be94eb0b269d756ce3abf6880672907efa31059480273a3ca6c09d8dffb1644"
+  },
+  "builds": [
+    {
+      "startedAt": "2026-11-06T21:26:14.317738+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 4.477,
+      "inputsUnchanged": true,
+      "failure": "Private Gradle init closure used ivy() on ExclusiveContentRepositorySpec; no compilation."
+    },
+    {
+      "startedAt": "2026-11-06T21:28:21.545079+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 435.863,
+      "inputsUnchanged": true,
+      "nativeAcceptance": false
+    },
+    {
+      "startedAt": "2026-11-06T21:39:53.011631+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 171.503,
+      "inputsUnchanged": true,
+      "lint": {
+        "errors": 0,
+        "warnings": 48,
+        "categories": {
+          "AndroidGradlePluginVersion": 2,
+          "GradleDependency": 8,
+          "NewerVersionAvailable": 35,
+          "ChromeOsAbiSupport": 1,
+          "DataExtractionRules": 1,
+          "MissingApplicationIcon": 1
+        }
+      }
+    }
+  ],
+  "nativeAttempts": [
+    {
+      "startedAt": "2026-11-06T21:36:01.665723+00:00",
+      "elapsedSeconds": 58.455,
+      "apkSha256": "b6b71bbec61f318f62ae464124d22163a1b0610f71cd35d1af2099f47422e906",
+      "cases": [
+        {
+          "abi": "arm64-v8a",
+          "passed": false,
+          "stageSdk": "26.10.23-hris.3",
+          "stageApkSha256": "538dc2ba390867d90579c897a237ac80a7f3cf97efaafefac1acad8606a35cc4",
+          "selectedAbiVerified": true
+        }
+      ],
+      "providerRequired": false,
+      "productApkInstalled": false,
+      "complete": false,
+      "ownedEmulatorStopped": true,
+      "failure": "Driver parsed a removed userId dumpsys field; failed before staging. Fixture removed."
+    },
+    {
+      "startedAt": "2026-11-06T21:37:36.940780+00:00",
+      "elapsedSeconds": 88.367,
+      "apkSha256": "b6b71bbec61f318f62ae464124d22163a1b0610f71cd35d1af2099f47422e906",
+      "cases": [
+        {
+          "abi": "arm64-v8a",
+          "passed": false,
+          "stageSdk": "26.10.23-hris.3",
+          "stageApkSha256": "538dc2ba390867d90579c897a237ac80a7f3cf97efaafefac1acad8606a35cc4",
+          "selectedAbiVerified": true,
+          "stageInstrumentation": {
+            "complete": true
+          },
+          "stage": {
+            "complete": true,
+            "localIdentityRead": true,
+            "exclusiveStore": true,
+            "providerRequired": false
+          },
+          "processAbsentBetweenPhases": true,
+          "sameUidAndFirstInstallAfterUpgrade": true,
+          "upgradedBeforeFirstPrivateRead": true,
+          "resumeInstrumentation": {
+            "complete": false,
+            "failureCategory": "Unavailable",
+            "failureFrames": [
+              "org.matrix.rustcomponents.sdk.FfiConverterTypeExistingCryptoIdentityError.read:53104",
+              "org.matrix.rustcomponents.sdk.FfiConverterTypeExistingCryptoIdentityError.read:53099",
+              "org.matrix.rustcomponents.sdk.FfiConverter$DefaultImpls.liftFromRustBuffer:324",
+              "org.matrix.rustcomponents.sdk.FfiConverterRustBuffer$DefaultImpls.liftFromRustBuffer:340",
+              "org.matrix.rustcomponents.sdk.FfiConverterTypeExistingCryptoIdentityError.liftFromRustBuffer:53099",
+              "org.matrix.rustcomponents.sdk.FfiConverterTypeExistingCryptoIdentityError.liftFromRustBuffer:53099",
+              "org.matrix.rustcomponents.sdk.FfiConverterRustBuffer$DefaultImpls.lift:341",
+              "org.matrix.rustcomponents.sdk.FfiConverterTypeExistingCryptoIdentityError.lift:53099",
+              "org.matrix.rustcomponents.sdk.FfiConverterTypeExistingCryptoIdentityError.lift:53099",
+              "org.matrix.rustcomponents.sdk.ExistingCryptoIdentityException$ErrorHandler.lift:53090",
+              "org.matrix.rustcomponents.sdk.ExistingCryptoIdentityException$ErrorHandler.lift:53089",
+              "org.matrix.rustcomponents.sdk.Matrix_sdk_ffiKt.uniffiCheckCallStatus:408"
+            ]
+          }
+        }
+      ],
+      "providerRequired": false,
+      "productApkInstalled": false,
+      "complete": false,
+      "ownedEmulatorStopped": true,
+      "failure": "Probe passed the Android /data/user/0 alias to SQLite NOFOLLOW instead of the canonical database path retained by the inventory lease. SDK3 staging and data-preserving upgrade succeeded; private read returned Unavailable."
+    },
+    {
+      "startedAt": "2026-11-06T21:42:58.614228+00:00",
+      "elapsedSeconds": 124.327,
+      "apkSha256": "902ebe3505c2f30442e80635d0cb73f4797ce4d6c16aa6d15e4fff48575f8b4e",
+      "cases": [
+        {
+          "abi": "arm64-v8a",
+          "passed": true,
+          "stageSdk": "26.10.23-hris.3",
+          "stageApkSha256": "538dc2ba390867d90579c897a237ac80a7f3cf97efaafefac1acad8606a35cc4",
+          "selectedAbiVerified": true,
+          "stageInstrumentation": {
+            "complete": true
+          },
+          "stage": {
+            "complete": true,
+            "localIdentityRead": true,
+            "exclusiveStore": true,
+            "providerRequired": false
+          },
+          "processAbsentBetweenPhases": true,
+          "sameUidAndFirstInstallAfterUpgrade": true,
+          "upgradedBeforeFirstPrivateRead": true,
+          "resumeInstrumentation": {
+            "complete": true
+          },
+          "continuity": {
+            "complete": true,
+            "privateAccountReadBeforeClientRestore": true,
+            "privateReaderElapsedMillis": 2733,
+            "privateReaderSameKeys": true,
+            "privateReaderRawAliasRejected": true,
+            "leasedCanonicalPathUsed": true,
+            "privateReaderWrongKeyRejected": true,
+            "privateReaderDatabaseBytesUnchanged": true,
+            "privateReaderMissingStoreNotCreated": true,
+            "reopenedSameKeys": true,
+            "emptyStoreMismatch": true,
+            "wrongPassphraseRejected": true,
+            "reopenedAfterFailure": true,
+            "exclusiveStoreReleased": true,
+            "ownedFilesRemoved": true,
+            "providerRequired": false,
+            "sdk": "26.10.23-hris.4"
+          },
+          "fixtureRemoved": true,
+          "elapsedSeconds": 74.467
+        },
+        {
+          "abi": "x86_64",
+          "passed": true,
+          "stageSdk": "26.10.23-hris.4",
+          "stageApkSha256": "902ebe3505c2f30442e80635d0cb73f4797ce4d6c16aa6d15e4fff48575f8b4e",
+          "selectedAbiVerified": true,
+          "stageInstrumentation": {
+            "complete": true
+          },
+          "stage": {
+            "complete": true,
+            "localIdentityRead": true,
+            "exclusiveStore": true,
+            "providerRequired": false
+          },
+          "processAbsentBetweenPhases": true,
+          "resumeInstrumentation": {
+            "complete": true
+          },
+          "continuity": {
+            "complete": true,
+            "privateAccountReadBeforeClientRestore": true,
+            "privateReaderElapsedMillis": 314,
+            "privateReaderSameKeys": true,
+            "privateReaderRawAliasRejected": true,
+            "leasedCanonicalPathUsed": true,
+            "privateReaderWrongKeyRejected": true,
+            "privateReaderDatabaseBytesUnchanged": true,
+            "privateReaderMissingStoreNotCreated": true,
+            "reopenedSameKeys": true,
+            "emptyStoreMismatch": true,
+            "wrongPassphraseRejected": true,
+            "reopenedAfterFailure": true,
+            "exclusiveStoreReleased": true,
+            "ownedFilesRemoved": true,
+            "providerRequired": false,
+            "sdk": "26.10.23-hris.4"
+          },
+          "fixtureRemoved": true,
+          "elapsedSeconds": 7.243
+        }
+      ],
+      "providerRequired": false,
+      "productApkInstalled": false,
+      "complete": true,
+      "ownedEmulatorStopped": true,
+      "correction": "Uses actual lease.databasePath; canonical read succeeds and raw Android alias is explicitly rejected. Native libraries and paired Kotlin unchanged."
+    }
+  ],
+  "productIntegrationAccepted": false,
+  "phoneUpdated": false,
+  "physicalPendingSendReport": "open",
+  "timingScope": "One first read per ABI on an owned API35 x86_64 emulator, ARM64 translated; not physical-device performance or message-send latency."
+}

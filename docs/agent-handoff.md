@@ -1,66 +1,59 @@
 # Agent continuation — HRIS Mobile
 
-## Current: SDK4 package built; canonical-path consumer correction — 6 November 2026
+## Current: SDK4 actual upgrade proof accepted; product focused gate — 6 November 2026
 
-Mobile application program35dfec82 and shipping SDK3 remain unchanged. SDK build
-support5ea9bf69 and four accepted native ABI pairs remain frozen. AAR packaging59725
-PASSED in107.224s, all inputs unchanged, exact new/old JVM API verified. AAR SHA
-9b6806de02b7d40b8487b54a51b192c114a38c68c6dfe35c68faf50d3b6bfd21,
-185,703,351 bytes; public Ivy SHA4a8d987381c2266af5b1f1e88a75dbf80db36d24d8be6fec252afec7d7a57e95.
-Package/source/checksums are under .work/space-store-inventory-2026-11-06/package-android.
-SDK4 is NOT published. Never rebuild or replace accepted SDK3 assets for evidence.
+SDK4 remains UNPUBLISHED and shipping application program35dfec82 still uses SDK3.
+All four native pairs, Kotlin bindings and package are frozen/accepted. The final
+consumer build3 session36101 PASSED171.503s with unchanged inputs, zero lint errors
+and48 fixture warnings. Native attempt3 session76877 PASSED124.327s. ARM64 stages the
+immutable SDK3 fixture, kills its process, upgrades to SDK4 retaining UID/firstInstallTime,
+then derives the same private identity BEFORE any Client restore. x86_64 separately
+proves SDK4 process-death continuity. Wrong keys/missing stores are rejected, database
+bytes preserved, original lock released and owned fixture/emulator cleanup confirmed.
+APK SHA902ebe3505c2f30442e80635d0cb73f4797ce4d6c16aa6d15e4fff48575f8b4e.
+First reads:2,733ms translated ARM64,314ms x86_64; not phone/send performance.
+[Package and consumer evidence](measurements/collaboration-sdk-existing-identity-consumer-2026-11-06.json).
 
-The ONLY heavy local job is consumer build3, session36101, running build-consumer.py
-consumer-build-3. Isolated checkout .worktrees/hris-mobile-sdk-inventory-consumer
-uses strict exact-hash local candidate Ivy substitution. Shipping dependencies stay
-unchanged. Build1 failed in4.477s on private Gradle repository closure scope; build2
-PASSED435.863s with all inputs unchanged, zero lint errors and48 fixture warnings
-(dependency updates, ABI coverage, extraction rules and absent fixture icon).
+The alias diagnosis is CONFIRMED: both native cases reject raw /data/user/0 and read
+successfully through the inventory lease's canonical databasePath. Native source and
+all accepted ABI binaries remain unchanged. Failed build1/private Gradle closure,
+native attempt1/UID parser and native attempt2/raw path alias remain recorded. Do not
+repeat accepted sends or rebuild/republish SDK3. The private working root is
+.work/space-store-inventory-2026-11-06; consumer-build-3 and native-android-3 hold the
+accepted logs, inputs and cleanup. Both earlier native attempt directories are retained.
 
-Native attempt1 session85143 FAILED58.455s on the driver's Android UID parser before
-staging; fixture cleanup and owned emulator stop passed. Attempt2 session43949
-FAILED88.367s: original SDK3 ARM64 fixture staged successfully, process stopped,
-SDK4 installed over it retaining UID/firstInstallTime, then first private read
-returned Unavailable. No valid private identity or latency was observed. Native source
-is unchanged. The probe had passed Android's raw /data/user/0 alias instead of the
-canonical checked database directory. Build3 now includes the actual prepared
-inventory lease's databasePath and uses it in the probe; an explicit raw-alias
-rejection check will test that diagnosis. Do not call the cause confirmed yet.
-Both failed runs are retained under native-android and native-android-2; their owned
-fixtures were removed and emulator processes stopped. Bima/phone data stay untouched.
+The ONLY heavy local job is product focused gate54775, check-possession.py
+possession-focused-1, in .worktrees/hris-mobile-sdk-possession at5ea9bf69. No emulator
+is active. Frozen prepared product has23 Kotlin files, two docs and candidate-only
+verification metadata;16 new tests include the original-directory alias regression.
+Actual raw I/O, repository resource ownership, original-account/identity policy,
+Android composition and DI are included, no ViewModel/UI workflows. Compilation and
+focused/full acceptance are NOT claimed until results pass. Source snapshot is
+possession-prepared.json. Do not edit those inputs while the gate runs.
 
-native-android-3/run-native.py is PREPARED, NOT RUN. After build3 succeeds, invoke it
-with consumer-build-3 and no other local build. It uses a new userdata file on the
-owned5564 AVD: SDK3-to-SDK4 ARM64 upgrade, then separate SDK4 x86_64 process death.
-Verify all flags, original keys, raw alias rejection and first-read timing; ensure
-fixture removal and owned emulator stop. No provider or real account is used.
-The immutable old fixture is proof-sdk3-arm64/sdk3-arm64-consumer-debug.apk under
-.work/chat-refresh-boundary-2026-11-06, SHA538dc2ba390867d90579c897a237ac80a7f3cf97efaafefac1acad8606a35cc4.
+Next audit the focused gate. New SDK4 immutable publication is authorized only after
+actual proof (now passed); prepared publish-sdk4.py reads attempt3's accepted result
+and exact six package checksums, creates a new draft, audits uploaded digests, then
+publishes. Supply the reviewed SDK4-evidence commit as target; never overwrite any
+existing release. Apply accepted product/probe source to root with SDK4 catalog and
+public strict verification pins, then run normal root :check plus relevant Android/
+browser/actual DI/assembly/lint gates. No local build/emulator overlap. Continue
+original-parent recovery, provider publication, stop/join, freeze/drain/adoption,
+organization routing and all54 PRD groups after this capability.
 
-Product private-identity integration remains PREPARED/UNCOMPILED in
-.worktrees/hris-mobile-sdk-possession at5ea9bf69:22 Kotlin files, two docs, and the
-exact local candidate verification component. Format/architecture74 passed earlier;
-no compilation/runtime claim follows. Read docs/collaboration-space-sdk-possession.md
-there. check-possession.py is prepared for15 new cases plus inventory/DI regressions.
-After actual native proof, stop the emulator and run it from that isolated checkout.
-Keep resource ownership in repository, raw I/O in datasource and admission/original
-identity policy in the use case. No ViewModel or UI work is hidden in helpers.
+First35df native CI42288554801 PASSED403 cases/68 suites per ABI and all scoped native/
+worker/notification proof flags, exact REST digests audited. [Evidence](measurements/collaboration-space-sdk-inventory-ci-2026-11-06.json).
+Control42288555007 portable passed; Apple host is still running. Do not redispatch.
+First7ef control/native and first SDK4 CI42291341014 remain accepted/audited.
+Starter0ff7e59 Apple remains accepted; Group344211f8/V117–137 remains unshipped.
+Live10485916/schema116.1 is unchanged.
 
-First35df native CI42288554801 PASSED:403 cases/68 suites per ABI, exact digests and
-all scoped native/worker/notification proof flags audited. [Evidence](measurements/collaboration-space-sdk-inventory-ci-2026-11-06.json).
-Control42288555007 portable passed; Apple is building its host. Do not redispatch.
-Both first7ef runs and first SDK4 CI42291341014 remain accepted/audited; no repeats.
-Starter program0ff7e59 Apple is accepted; Group program344211f8 remains unshipped at
-V117–137. Live10485916/schema116.1 is unchanged.
-
-After paired acceptance, publish SDK4 as a new immutable prerelease (prepared
-publish-sdk4.py is gated on native attempt3 success; do not run early), apply reviewed
-product/probe source with SDK4 catalog/verification pins, and run normal root :check
-plus relevant Android/browser/DI/assembly/lint gates. Continue original-parent
-recovery, provider publication, stop/join, freeze/drain/adoption, organization routing
-and all54 PRD groups. Phone50 remains installed and the pending report is OPEN.
-No phone UI or new install/send. Preserve original Bima userdata/sidecars/private keys;
-push every commit and announce every later explicit-serial install-only update.
+Phone50 remains installed and pending report OPEN. Passive audit21:43:10UTC has zero
+retained post-install lines for10962/1010962, unchanged518c42ad... log hash; no successful
+send inferred. No phone UI or new install/send. Preserve original Bima userdata,
+sidecars/private keys and original pending operations. Push each commit and announce
+every later explicit-serial install-only phone update. New SDK capability alone does
+not require an immediate phone update or establish that the reported pending is fixed.
 
 ## Current: ARM64 private reader pair accepted; x86_64 building — 6 November 2026
 

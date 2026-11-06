@@ -44,7 +44,6 @@
     "elapsedSeconds": 0.123
   },
   "pending": [
-    "four-ABI AAR packaging and actual Android consumer",
     "private-identity product integration and acceptance",
     "new-version distribution and normal application gate"
   ],
@@ -143,5 +142,6 @@
     "elapsedSeconds": 899.411,
     "matchesArm64Bindings": true
   },
-  "allFourAbisMatchOneKotlinPair": true
+  "allFourAbisMatchOneKotlinPair": true,
+  "consumerEvidence": "collaboration-sdk-existing-identity-consumer-2026-11-06.json"
 }
