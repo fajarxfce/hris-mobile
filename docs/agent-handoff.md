@@ -1,5 +1,52 @@
 # Agent continuation — HRIS Mobile
 
+## Current: handoff port pushed; original SDK inventory next — 6 November 2026
+
+Mobile program7ef01cd57caad50f7bdb7ebee782c7cc45413bcf/docs5bc151eb and Group
+program344211f8/docs9f298b2e are pushed. Local atomic handoff/recovery acceptance below
+is unchanged. Starter program0ff7e59e0d0acc4b73918e1504e516598b2a32fb/docs08639aa is now
+pushed too: exact11 generic files, root30376 PASS244.326s,280 fresh cases/74 suites,
+zero failures/errors/skips,1,024 stable inputs; root/database/browser/Android/Web pass,
+lint0 errors/44 existing warnings. Starter first Apple42283698949 was dispatched ONCE
+19:54:15UTC on0ff7e59 and is running. Never dispatch it again; audit completed artifacts.
+No heavy local job, install or owned emulator is active. All source worktrees are clean.
+
+First Mobile7ef CIcontrol42282707724/native42282707833 remains queued behind3d666
+control42277469255 (portable success, Apple now building the iOS host) and native
+42277469245 (emulators). Audit exact first-source artifacts after completion. Do not
+replace a pending first run with another source push before it can execute. Docs-only
+checkpoints do not change program acceptance. SDK3 is immutable; no publication/rebuild
+or accepted-send rerun merely for evidence reconciliation.
+
+NEXT implementation: account-owned inventory of the original physical SDK store, then
+private-key possession, hard-parent recovery and freeze/drain/adoption. Current raw
+FileCollaborationSdkStoreSource.acquire creates absent directories; occupied database OR
+cache entries are not crypto-key proof. Existing Android acquisition prevents missing
+credentials over occupied files but does not separately inventory missing crypto/state
+files when protected credentials remain. This is an investigation finding, NOT the
+proven cause of the phone's pending messages. Do not silently recreate keys or treat a
+missing store as permission for fresh enrollment. First initialization interruption,
+credential rotation (which can set initialized=false), and loss of an initialized store
+need separate treatment. No new SDK inventory implementation has been applied yet.
+
+SDK3 source /home/fajar/hris/.worktrees/matrix-sdk-raw-event has its previously accepted
+dirty patches; do not modify them. It uses matrix-sdk-crypto.sqlite3 and
+matrix-sdk-state.sqlite3. AndroidCollaborationSdkClientSource.restorePaused disables send
+queues before session restore; identity reads actual Ed25519/Curve25519 public keys.
+Plan an existing-only raw directory inspection with explicit lease ownership, then a
+repository mapping protected record/file facts and a use case validating account and
+original registration provenance. File metadata alone must not grant SDK/live authority.
+Keep orchestration out of ViewModels/repositories. Read notes in .work/space-store-inventory-
+2026-11-06 only as supplementary findings. Continue organization UI/background routing,
+media/voice/calls/meet and all54 PRD groups after the required ownership/adoption flows.
+
+Phone50 stays installed and the pending-send report remains OPEN. Latest passive UID
+audit19:29UTC retains no new Chat/crash lines; this is not a successful phone-send result.
+Keep the existing optional48 question pending, preserve original Bima userdata/sidecars/
+keys, and do not drive phone UI. Group V117–137 remain unshipped/disabled; live10485916/
+schema116.1 unchanged. Announce every later phone install, explicit serial/--install-only.
+
+
 ## Current: atomic bootstrap handoff accepted locally — 6 November 2026
 
 Thirty source/build/workflow files add raw atomic archiveAndInsert and its real encrypted
