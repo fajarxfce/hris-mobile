@@ -1,0 +1,34 @@
+{
+  "upstreamBase": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+  "patchSha256": "fed8120ba7e7ea88a23cde675d70bb27a3a97304c6c913ad5a9578d28053f76e",
+  "sourceFiles": {
+    "bindings/matrix-sdk-ffi/src/room/mod.rs": "565ed1217612d5c86f0b36c15a51fe153d7c74f5a48507b9012c9343823d275c",
+    "bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs": "4dc9c6774802d43c090c8836471f7860809de490cc0317103e262e2848893c58"
+  },
+  "rustGate": {
+    "startedAt": "2026-11-06T05:13:41.706358+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--locked",
+      "-p",
+      "matrix-sdk-ffi",
+      "--features",
+      "sentry,experimental-x509-identity-verification",
+      "raw_event",
+      "--",
+      "--test-threads=1"
+    ],
+    "jobs": 2,
+    "debugInfo": 0,
+    "incremental": false,
+    "elapsedSeconds": 32.474,
+    "exitCode": 0
+  },
+  "sourcesUnchanged": true,
+  "testsPassed": 9,
+  "failures": 0,
+  "androidOrAppleArtifactBuilt": false,
+  "nativeConsumerAccepted": false,
+  "limitation": "Tests3 and4 each passed8/failed1 because default mock event authentication expected1234 but crypto fixture clients use TOKEN_0/TOKEN_1. Exact per-client mock authentication fixed the fixture; test5 passed. SDK raw decryption classification is not sender verification. Existing shipping native artifacts are unchanged."
+}

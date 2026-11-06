@@ -1,0 +1,320 @@
+diff --git a/bindings/matrix-sdk-ffi/src/room/mod.rs b/bindings/matrix-sdk-ffi/src/room/mod.rs
+index 5483ae4..a31e4f8 100644
+--- a/bindings/matrix-sdk-ffi/src/room/mod.rs
++++ b/bindings/matrix-sdk-ffi/src/room/mod.rs
+@@ -22,7 +22,9 @@ use matrix_sdk::{
+     PredecessorRoom as SdkPredecessorRoom, RoomHeroWithProfile as SdkRoomHeroWithProfile,
+     RoomMemberships, RoomState, SuccessorRoom as SdkSuccessorRoom,
+     config::RequestConfig,
+-    deserialized_responses::{RawAnySyncOrStrippedState, TimelineEvent as SdkTimelineEvent},
++    deserialized_responses::{
++        RawAnySyncOrStrippedState, TimelineEvent as SdkTimelineEvent, TimelineEventKind,
++    },
+     encryption::LocalTrust,
+     room::{
+         Room as SdkRoom, RoomMemberRole, edit::EditedContent, power_levels::RoomPowerLevelChanges,
+@@ -1403,6 +1405,20 @@ impl Room {
+         Arc::new(ThreadListService::new(&self.inner))
+     }
+ 
++    /// Load one raw event after the SDK decryption attempt without discarding
++    /// extension fields. Decryption status comes from the SDK, not room state
++    /// or the event type. It does not imply that the sender is verified.
++    /// Uses the existing event cache and crypto store, without saving fetched
++    /// events into the cache or creating a timeline or subscription.
++    pub async fn load_or_fetch_raw_event(
++        &self,
++        event_id: String,
++    ) -> Result<RawTimelineEvent, ClientError> {
++        let event_id = EventId::parse(event_id)?;
++        let event = self.inner.load_or_fetch_event(&event_id, None).await?;
++        checked_raw_event(&event.kind, &event_id)
++    }
++
+     /// Either loads the event associated with the `event_id` from the event
+     /// cache or fetches it from the homeserver.
+     pub async fn load_or_fetch_event(
+@@ -1457,6 +1473,55 @@ impl Room {
+     }
+ }
+ 
++/// Exact event JSON together with the SDK's decryption result.
++/// Intentionally does not implement Debug: event content can be private.
++#[derive(uniffi::Record)]
++pub struct RawTimelineEvent {
++    pub json: String,
++    pub encryption: RawEventEncryption,
++}
++
++/// Cryptographic provenance, separate from sender/device verification.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, uniffi::Enum)]
++pub enum RawEventEncryption {
++    /// No successful decryption; the SDK fallback can also contain malformed ciphertext.
++    NotDecrypted,
++    Decrypted,
++    UnableToDecrypt,
++}
++
++fn checked_raw_event(
++    kind: &TimelineEventKind,
++    event_id: &EventId,
++) -> Result<RawTimelineEvent, ClientError> {
++    let json = checked_raw_event_json(kind.raw(), event_id)?;
++    let encryption = match kind {
++        TimelineEventKind::PlainText { .. } => RawEventEncryption::NotDecrypted,
++        TimelineEventKind::Decrypted(_) => RawEventEncryption::Decrypted,
++        TimelineEventKind::UnableToDecrypt { .. } => RawEventEncryption::UnableToDecrypt,
++    };
++    Ok(RawTimelineEvent { json, encryption })
++}
++
++// Bound before allocating or deserializing fields. Preserve exact source bytes.
++fn checked_raw_event_json(
++    raw: &ruma::serde::Raw<AnySyncTimelineEvent>,
++    event_id: &EventId,
++) -> Result<String, ClientError> {
++    let json = raw.json().get();
++    if json.len() > 96_000 {
++        return Err(ClientError::from_str("Raw event exceeds the byte limit", None));
++    }
++    let identity: Option<String> = raw.get_field("event_id")?;
++    if identity.as_deref() != Some(event_id.as_str()) {
++        return Err(ClientError::from_str("Raw event identity mismatch", None));
++    }
++    Ok(json.to_owned())
++}
++
++#[cfg(all(test, not(target_family = "wasm")))]
++mod raw_event_tests;
++
+ /// The relation types that can be used to filter related events when calling
+ /// [`Room::load_or_fetch_event_with_relations`].
+ #[derive(uniffi::Enum)]
+diff --git a/bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs b/bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs
+new file mode 100644
+index 0000000..7387ca5
+--- /dev/null
++++ b/bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs
+@@ -0,0 +1,222 @@
++// Copyright 2026 Fajar HRIS contributors.
++// SPDX-License-Identifier: Apache-2.0
++
++use super::*;
++use matrix_sdk::test_utils::mocks::MatrixMockServer;
++use matrix_sdk_test::JoinedRoomBuilder;
++use ruma::{event_id, room_id, serde::Raw};
++use serde_json::json;
++use tokio::time::{sleep, timeout};
++
++fn raw(text: &str) -> Raw<AnySyncTimelineEvent> {
++    Raw::from_json(RawJsonValue::from_string(text.to_owned()).unwrap())
++}
++
++fn replacement() -> Raw<AnySyncTimelineEvent> {
++    raw(&json!({
++        "event_id": "$raw", "sender": "@alice:example.org",
++        "origin_server_ts": 1_700_000_000_000_u64, "type": "m.room.message",
++        "content": {
++            "msgtype": "m.text", "body": "* Changed",
++            "m.relates_to": {"rel_type": "m.replace", "event_id": "$original"},
++            "org.hris.edit_id": "00000000-0000-0000-0000-000000000001",
++            "m.new_content": {
++                "msgtype": "m.text", "body": "Changed",
++                "org.hris.message_id": "00000000-0000-0000-0000-000000000002",
++                "m.relates_to": {"m.in_reply_to": {"event_id": "$quote"}},
++                "org.hris.forwarded": true
++            }
++        }
++    }).to_string())
++}
++
++#[test]
++fn raw_event_retains_exact_unknown_content_and_escaped_identity() {
++    for text in [
++        r#"{ "event_id": "$raw", "content": {"unknown": [1,2,3]} }"#,
++        r#"{ "event_id": "\u0024raw", "content": {"unknown": "\u00e9"} }"#,
++    ] {
++        assert_eq!(checked_raw_event_json(&raw(text), event_id!("$raw")).unwrap(), text);
++    }
++    let edit = replacement();
++    assert_eq!(checked_raw_event_json(&edit, event_id!("$raw")).unwrap(), edit.json().get());
++}
++
++#[test]
++fn raw_event_rejects_missing_wrong_or_nonstring_identity() {
++    for text in [r#"{}"#, r#"{"event_id":"$other"}"#, r#"{"event_id":7}"#] {
++        assert!(checked_raw_event_json(&raw(text), event_id!("$raw")).is_err());
++    }
++}
++
++#[test]
++fn raw_event_limit_counts_utf8_bytes_before_copying() {
++    let prefix = r#"{"event_id":"$raw","content":""#;
++    let suffix = "\"}";
++    let available = 96_000 - prefix.len() - suffix.len();
++    let text = format!("{prefix}{}{suffix}", "é".repeat(available / 2) + "a".repeat(available % 2).as_str());
++    assert_eq!(text.len(), 96_000);
++    assert_eq!(checked_raw_event_json(&raw(&text), event_id!("$raw")).unwrap(), text);
++    let too_large = text.replacen("content\":\"", "content\":\"a", 1);
++    assert!(checked_raw_event_json(&raw(&too_large), event_id!("$raw")).is_err());
++}
++
++#[tokio::test]
++async fn raw_event_network_fetch_preserves_extensions_without_writing_event_cache() {
++    let server = MatrixMockServer::new().await;
++    let client = server.client_builder().build().await;
++    let id = room_id!("!raw:example.org");
++    let sdk_room = server.sync_joined_room(&client, id).await;
++    let (cache, _handles) = client.event_cache().unwrap().room(id).await.unwrap();
++    let source = replacement();
++    server.mock_room_event().room(id).match_event_id()
++        .ok(SdkTimelineEvent::from_plaintext(source.clone())).mock_once().mount().await;
++    let room = Room::new(sdk_room, None);
++    let loaded = room.load_or_fetch_raw_event("$raw".to_owned()).await.unwrap();
++    assert_eq!(loaded.json, source.json().get());
++    assert_eq!(loaded.encryption, RawEventEncryption::NotDecrypted);
++    assert!(cache.find_event(event_id!("$raw")).await.unwrap().is_none());
++}
++
++#[tokio::test]
++async fn raw_event_reads_the_existing_cache_without_a_network_request() {
++    let server = MatrixMockServer::new().await;
++    let client = server.client_builder().build().await;
++    let id = room_id!("!raw:example.org");
++    let sdk_room = server.sync_joined_room(&client, id).await;
++    let (cache, _handles) = client.event_cache().unwrap().room(id).await.unwrap();
++    let (_, mut changes) = cache.subscribe().await.unwrap();
++    let source = replacement();
++    server.mock_sync().ok_and_run(&client, |sync| {
++        sync.add_joined_room(JoinedRoomBuilder::new(id).add_timeline_event(source.clone()));
++    }).await;
++    timeout(Duration::from_secs(5), changes.recv()).await.unwrap().unwrap();
++    let room = Room::new(sdk_room, None);
++    let loaded = room.load_or_fetch_raw_event("$raw".to_owned()).await.unwrap();
++    assert_eq!(loaded.json, source.json().get());
++    assert_eq!(loaded.encryption, RawEventEncryption::NotDecrypted);
++    let requests = server.server().received_requests().await.unwrap();
++    assert!(!requests.iter().any(|request| request.url.path().contains("/event/")));
++}
++
++#[tokio::test]
++async fn raw_event_cancellation_drops_the_pending_request_and_allows_a_later_read() {
++    let server = MatrixMockServer::new().await;
++    let client = server.client_builder().build().await;
++    let id = room_id!("!raw:example.org");
++    let room = Arc::new(Room::new(server.sync_joined_room(&client, id).await, None));
++    let source = replacement();
++    server.mock_room_event().room(id).match_event_id().with_delay(Duration::from_secs(20))
++        .ok(SdkTimelineEvent::from_plaintext(source.clone())).mock_once().mount().await;
++    let read = room.clone();
++    let pending = tokio::spawn(async move { read.load_or_fetch_raw_event("$raw".to_owned()).await });
++    timeout(Duration::from_secs(5), async {
++        loop {
++            let requests = server.server().received_requests().await.unwrap();
++            if requests.iter().any(|request| request.url.path().contains("/event/")) { break; }
++            sleep(Duration::from_millis(5)).await;
++        }
++    }).await.unwrap();
++    pending.abort();
++    assert!(matches!(pending.await, Err(error) if error.is_cancelled()));
++    server.mock_room_event().room(id).match_event_id()
++        .ok(SdkTimelineEvent::from_plaintext(source.clone())).mock_once().mount().await;
++    let later = timeout(Duration::from_secs(5), room.load_or_fetch_raw_event("$raw".to_owned()))
++        .await.unwrap().unwrap();
++    assert_eq!(later.json, source.json().get());
++    assert_eq!(later.encryption, RawEventEncryption::NotDecrypted);
++}
++
++#[tokio::test]
++async fn raw_event_invalid_id_never_starts_a_provider_request() {
++    let server = MatrixMockServer::new().await;
++    let client = server.client_builder().build().await;
++    let room = Room::new(server.sync_joined_room(&client, room_id!("!raw:example.org")).await, None);
++    assert!(room.load_or_fetch_raw_event("invalid".to_owned()).await.is_err());
++    let requests = server.server().received_requests().await.unwrap();
++    assert!(!requests.iter().any(|request| request.url.path().contains("/event/")));
++}
++
++#[test]
++fn raw_event_plaintext_fallback_never_claims_malformed_ciphertext_is_unencrypted() {
++    let event = raw(r#"{"event_id":"$raw","type":"m.room.encrypted","content":{"algorithm":"unsupported"}}"#);
++    let kind = TimelineEventKind::PlainText { event };
++    let loaded = checked_raw_event(&kind, event_id!("$raw")).unwrap();
++    assert_eq!(loaded.encryption, RawEventEncryption::NotDecrypted);
++    assert_eq!(loaded.json, kind.raw().json().get());
++}
++
++#[tokio::test]
++async fn raw_event_encrypted_edit_retains_extensions_missing_keys_and_cold_cache() {
++    timeout(Duration::from_secs(40), async {
++        let server = MatrixMockServer::new().await;
++        server.mock_crypto_endpoints_preset().await;
++        let dir = tempfile::tempdir().unwrap();
++        let user = ruma::user_id!("@alice:example.org");
++        let device = ruma::device_id!("RAWALICE");
++        let id = room_id!("!raw:example.org");
++        let alice = server.client_builder_for_crypto_end_to_end(user, device)
++            .on_builder(|builder| builder.sqlite_store(dir.path(), None)).build().await;
++        let factory = matrix_sdk_test::event_factory::EventFactory::new().room(id).sender(user);
++        server.mock_sync().ok_and_run(&alice, |sync| {
++            sync.add_joined_room(JoinedRoomBuilder::new(id)
++                .add_state_event(factory.create(user, ruma::RoomVersionId::V1))
++                .add_state_event(factory.room_encryption())
++                .add_state_event(factory.member(user)));
++        }).await;
++        let sdk_room = alice.get_room(id).unwrap();
++        let content: serde_json::Value = replacement().get_field("content").unwrap().unwrap();
++        let (received, send) = server.mock_room_send().ok_with_capture(event_id!("$raw"), user);
++        send.mock_once().mount().await;
++        server.mock_get_members().ok(vec![factory.member(user).into_raw()]).mock_once().mount().await;
++        sdk_room.send_raw("m.room.message", content.clone()).await.unwrap();
++        let ciphertext = received.await.unwrap();
++        assert_eq!(ciphertext.get_field::<String>("type").unwrap().as_deref(), Some("m.room.encrypted"));
++        assert!(!ciphertext.json().get().contains("org.hris.edit_id"));
++        server.mock_room_event().room(id).match_event_id().expect_access_token("TOKEN_0")
++            .ok(SdkTimelineEvent::from_plaintext(ciphertext.clone())).mock_once().mount().await;
++        let room = Room::new(sdk_room, None);
++        let loaded = room.load_or_fetch_raw_event("$raw".to_owned()).await.unwrap();
++        assert_eq!(loaded.encryption, RawEventEncryption::Decrypted);
++        assert_eq!(raw(&loaded.json).get_field::<serde_json::Value>("content").unwrap().unwrap(), content);
++
++        // An unrelated crypto store must retain ciphertext, not fabricate a plaintext result.
++        let bob = server.client_builder_for_crypto_end_to_end(
++            ruma::user_id!("@bob:example.org"), ruma::device_id!("RAWBOB")).build().await;
++        let bob_room = Room::new(server.sync_joined_room(&bob, id).await, None);
++        server.mock_room_event().room(id).match_event_id().expect_access_token("TOKEN_1")
++            .ok(SdkTimelineEvent::from_plaintext(ciphertext.clone())).mock_once().mount().await;
++        let unavailable = bob_room.load_or_fetch_raw_event("$raw".to_owned()).await.unwrap();
++        assert_eq!(unavailable.encryption, RawEventEncryption::UnableToDecrypt);
++        assert_eq!(raw(&unavailable.json).get_field::<String>("type").unwrap().as_deref(), Some("m.room.encrypted"));
++        drop(bob_room);
++        drop(bob);
++
++        // Only sync owns cache persistence. A fetched point read must not insert it.
++        let (cache, handles) = alice.event_cache().unwrap().room(id).await.unwrap();
++        assert!(cache.find_event(event_id!("$raw")).await.unwrap().is_none());
++        let (_, mut changes) = cache.subscribe().await.unwrap();
++        server.mock_sync().ok_and_run(&alice, |sync| {
++            sync.add_joined_room(JoinedRoomBuilder::new(id).add_timeline_event(ciphertext));
++        }).await;
++        timeout(Duration::from_secs(5), changes.recv()).await.unwrap().unwrap();
++        assert!(cache.find_event(event_id!("$raw")).await.unwrap().is_some());
++        let before = server.server().received_requests().await.unwrap().into_iter()
++            .filter(|request| request.url.path().contains("/event/")).count();
++        drop(changes);
++        drop(cache);
++        drop(handles);
++        drop(room);
++        drop(alice);
++
++        let restored = server.client_builder_for_crypto_end_to_end(user, device)
++            .on_builder(|builder| builder.sqlite_store(dir.path(), None)).build().await;
++        let restored_room = Room::new(restored.get_room(id).unwrap(), None);
++        let cold = restored_room.load_or_fetch_raw_event("$raw".to_owned()).await.unwrap();
++        assert_eq!(cold.encryption, RawEventEncryption::Decrypted);
++        assert_eq!(raw(&cold.json).get_field::<serde_json::Value>("content").unwrap().unwrap(), content);
++        let after = server.server().received_requests().await.unwrap().into_iter()
++            .filter(|request| request.url.path().contains("/event/")).count();
++        assert_eq!(before, after);
++    }).await.unwrap();
++}

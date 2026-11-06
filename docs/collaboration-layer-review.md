@@ -49,12 +49,15 @@ was added to that cache. The history-pager ownership finding above remains open.
 
 The SDK raw point patch is isolated at
 .worktrees/matrix-sdk-raw-event, pinned to upstream8de215a0aa0026afa5754ae5f05a6d168d1a1d60.
-It now returns SDK decryption kind alongside exact bounded raw JSON. Test2 passed
-7 structure/cache/network/cancellation tests in34.692s; this does not establish
-E2EE exchange, missing-key recovery or reopen acceptance. Test1 failed two fixture
-compile errors, subsequently fixed. No SDK artifact/version was published or
-consumed. Rust1.96.0 and GCC/make are installed; the broader package transaction
-failed on mirror404s without changing packages. NDK is still absent.
+It returns SDK decryption kind alongside exact bounded raw JSON. Test5 passed
+nine cases/32.474s, including actual encrypted custom metadata, missing-key behavior
+and SQLite cold-cache reopen without another event request. Tests3/4 each failed
+one fixture because the event mock expected the default token; exact synthetic
+crypto-client tokens fixed it. No auth expectation was removed. The reviewed
+[portable patch](../tool/collaboration-sdk-patches/README.md) and
+[test evidence](measurements/collaboration-sdk-raw-event-tests-2026-11-06.json)
+are in Git. No native artifact/version was built, published or consumed. NDK is
+still absent; native encrypted edit proof remains required.
 
 Platform product10485916 is already deployed after all14 CI jobs passed. Do not
 replay the rollout or accepted Forward publications. Phone build40 is unchanged;
