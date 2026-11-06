@@ -1,7 +1,7 @@
 {
   "recordedAt": "2026-11-06T21:46:22.262416+00:00",
   "version": "26.10.23-hris.4",
-  "published": false,
+  "published": true,
   "shippingDependency": "26.10.23-hris.3",
   "package": {
     "startedAt": "2026-11-06T21:23:07.672697+00:00",
@@ -226,5 +226,47 @@
   "productIntegrationAccepted": false,
   "phoneUpdated": false,
   "physicalPendingSendReport": "open",
-  "timingScope": "One first read per ABI on an owned API35 x86_64 emulator, ARM64 translated; not physical-device performance or message-send latency."
+  "timingScope": "One first read per ABI on an owned API35 x86_64 emulator, ARM64 translated; not physical-device performance or message-send latency.",
+  "publication": {
+    "releaseId": 437093395,
+    "tag": "matrix-sdk-26.10.23-hris.4",
+    "target": "4228599ba659cf68cfea1138e6f8017b0b77c222",
+    "publishedAt": "2026-11-06T21:48:30Z",
+    "url": "https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.4",
+    "publicDescriptorVerified": true,
+    "assets": {
+      "sdk-android-26.10.23-hris.4.aar": {
+        "id": 718673312,
+        "sha256": "9b6806de02b7d40b8487b54a51b192c114a38c68c6dfe35c68faf50d3b6bfd21",
+        "bytes": 185703351
+      },
+      "sdk-android-26.10.23-hris.4.ivy.xml": {
+        "id": 718673315,
+        "sha256": "4a8d987381c2266af5b1f1e88a75dbf80db36d24d8be6fec252afec7d7a57e95",
+        "bytes": 1196
+      },
+      "sdk-android-26.10.23-hris.4-sources.tar.gz": {
+        "id": 718673316,
+        "sha256": "f27547d1128b2c57ef6fa4a669a8b562526115b342ecc838742ae91e2bf52e89",
+        "bytes": 436717
+      },
+      "LICENSE": {
+        "id": 718673313,
+        "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "bytes": 10174
+      },
+      "sdk-build.json": {
+        "id": 718673314,
+        "sha256": "dd545a1ce72f4a33f649a93f7a8a6243ce49e2031dc5e7e54505fb9047294d36",
+        "bytes": 6692
+      },
+      "SHA256SUMS": {
+        "id": 718673351,
+        "sha256": "bc92abee466ece00a9b8e3394396fde0ccfa6ebeecc3b9fee225c166ea2d17ea",
+        "bytes": 464
+      }
+    },
+    "draftLookupRecovery": "Initial tag lookup returned 404; resumed the same fully uploaded draft by immutable release ID without recreating or uploading assets",
+    "publicLookupRecovery": "Post-publish verification uses the published asset URL, not the stale draft asset URL; existing asset IDs and digests unchanged"
+  }
 }

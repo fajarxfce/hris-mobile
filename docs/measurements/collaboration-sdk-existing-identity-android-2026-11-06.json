@@ -1,7 +1,7 @@
 {
   "recordedAt": "2026-11-06T21:24:27.705625+00:00",
   "candidateOnly": true,
-  "published": false,
+  "published": true,
   "versionReservedForNewBinary": "26.10.23-hris.4",
   "shippingDependency": "26.10.23-hris.3",
   "upstream": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
@@ -45,7 +45,7 @@
   },
   "pending": [
     "private-identity product integration and acceptance",
-    "new-version distribution and normal application gate"
+    "normal application gate using the new published version"
   ],
   "phoneUpdated": false,
   "physicalPendingSendReport": "open",

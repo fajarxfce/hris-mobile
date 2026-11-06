@@ -1,4 +1,4 @@
-# Existing private crypto-account reader candidate
+# Existing private crypto-account reader
 
 The candidate adds a synchronous local SDK entry point that reads an existing encrypted
 SQLite account and derives its public Matrix identity from the restored private Olm
@@ -83,7 +83,12 @@ parser failure and rejected alias attempt are retained in the evidence.
 First private reads measured2,733ms on translated ARM64 and314ms on x86_64 in this owned
 emulator; neither number is a physical-phone or message-delivery measurement.
 
-SDK4 publication, private-identity repository/use-case integration/full acceptance,
-and Apple runtime support remain required. Never replace SDK3 assets. Phone50 and its
+[SDK4](https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.4)
+was published at21:48:30UTC, release437093395, targeting4228599ba659cf68cfea1138e6f8017b0b77c222.
+All six asset IDs/digests and the public Ivy download were verified. Draft lookup and
+post-publish stale-URL failures were recovered on the same release without recreating
+or replacing any asset. The application's shipping catalog still selects SDK3 pending
+private-identity repository/use-case integration and full acceptance. Apple runtime
+support remains required. Never replace SDK3 assets. Phone50 and its
 pending-send report remain unchanged. Continue original-parent recovery, stop/join,
 freeze/drain/adoption and the remaining communications PRD.

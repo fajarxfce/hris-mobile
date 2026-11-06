@@ -2,7 +2,8 @@
 
 ## Current: SDK4 actual upgrade proof accepted; product focused gate — 6 November 2026
 
-SDK4 remains UNPUBLISHED and shipping application program35dfec82 still uses SDK3.
+SDK4 is PUBLISHED as release437093395 at21:48:30UTC, tag matrix-sdk-26.10.23-hris.4,
+target4228599ba659cf68cfea1138e6f8017b0b77c222. Shipping program35dfec82 still uses SDK3.
 All four native pairs, Kotlin bindings and package are frozen/accepted. The final
 consumer build3 session36101 PASSED171.503s with unchanged inputs, zero lint errors
 and48 fixture warnings. Native attempt3 session76877 PASSED124.327s. ARM64 stages the
@@ -31,12 +32,14 @@ Android composition and DI are included, no ViewModel/UI workflows. Compilation 
 focused/full acceptance are NOT claimed until results pass. Source snapshot is
 possession-prepared.json. Do not edit those inputs while the gate runs.
 
-Next audit the focused gate. New SDK4 immutable publication is authorized only after
-actual proof (now passed); prepared publish-sdk4.py reads attempt3's accepted result
-and exact six package checksums, creates a new draft, audits uploaded digests, then
-publishes. Supply the reviewed SDK4-evidence commit as target; never overwrite any
-existing release. Apply accepted product/probe source to root with SDK4 catalog and
-public strict verification pins, then run normal root :check plus relevant Android/
+Next audit the focused gate. SDK4 publication is complete: exact six uploaded IDs,
+sizes/digests and actual public Ivy download verified. Initial session65519 created/
+uploaded the draft then failed on draft-tag REST404; session26611 resumed that exact
+release by ID, verified its assets and published it, then failed on a stale draft
+asset URL. Read-only session13628 verified the current published URL and retained
+publication.json. No assets were re-uploaded/replaced. Never rerun either publisher.
+Apply accepted product/probe source to root with SDK4 catalog and public strict
+verification pins, then run normal root :check plus relevant Android/
 browser/actual DI/assembly/lint gates. No local build/emulator overlap. Continue
 original-parent recovery, provider publication, stop/join, freeze/drain/adoption,
 organization routing and all54 PRD groups after this capability.
