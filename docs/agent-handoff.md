@@ -67,11 +67,33 @@ notification cleanup proofs. All failures/errors/skips are zero and REST digests
 No redispatch. First7ef and SDK4 first CI remain accepted. Starter0ff7e59 Apple accepted;
 Group344211f8/V117–137 unshipped; live10485916/schema116.1 unchanged.
 
-Phone50 pending report remains OPEN. Passive audit21:43:10UTC has no retained
-post-install lines for10962/1010962 and unchanged518c42ad... hash; no success inferred.
-No new phone install, UI or send. Preserve original Bima userdata/sidecars/private keys
-and pending transaction IDs. Announce every later explicit-serial install-only phone
-update. SDK4's observation capability alone is not proof that phone pending is fixed.
+Phone50 pending report remains OPEN, with NEW direct evidence. Passive audit22:31:39UTC
+covers UIDs10962/1010962:93 retained post-install lines, zero fatal exceptions and three
+ChatDelivery_DeliverMessages_QueueMappingNativeFamily events at22:23:34–49UTC. Two outgoing
+Conflict diagnostics accompany them. Eighty HTTP operations succeeded (max460ms), while
+three of five Sync operations failed. Raw private log SHA
+e795a06e388711f4e4c024af8a50b9d8d3e2dec55279fb844d15d41e476b81f6.
+[Phone evidence](measurements/collaboration-phone-queue-family-2026-11-06.json). No new
+phone UI, install or send; do not infer exact old/current IDs from this closed category.
+
+This identifies a separate current-room delivery issue: account-owned history includes
+Staged work from an older physical SDK namespace, and mapping all retained rows rejects
+the current queue before it resumes. Private .work/chat-queue-family-2026-11-06 contains
+a bounded three-file candidate plus six tests, formatted but NOT applied/compiled/tested.
+It must preserve old state/revision/transaction, reject contradictory captured IDs and
+unknown current echoes, and only allow the current physical store's owned work. Old
+pending messages must not be restaged or acknowledged under replacement keys. Root
+80460 inputs remain frozen. After SDK4 acceptance/commit and exact Starter quality port,
+run the new test against the baseline first, then the candidate and full checks. This
+phone regression now takes priority over the next organization transport slice.
+
+Private space-store-inventory-2026-11-06/runtime-transfer-next has nine prepared files
+and seven MockEngine cases (formatted, NOT applied/compiled/tested). Its freeze receipt
+is original legacy device/version1; drain remains metadata, never completion. Keep it
+isolated until the phone queue regression is addressed. Continue owning recovery and
+all54 PRD groups afterward. Preserve original Bima userdata/sidecars/private keys and
+pending transaction IDs. Announce every later explicit-serial install-only phone update.
+SDK4's observation capability alone is not proof that phone pending is fixed.
 
 ## Current: ARM64 private reader pair accepted; x86_64 building — 6 November 2026
 

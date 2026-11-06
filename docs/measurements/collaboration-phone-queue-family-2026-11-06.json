@@ -1,0 +1,67 @@
+{
+  "at": "2026-11-06T22:31:39.919118+00:00",
+  "serial": "10.77.77.3:5555",
+  "uids": [
+    10962,
+    1010962
+  ],
+  "deviceClockOffsetSeconds": -2.204,
+  "afterInstallUtc": "2026-11-06T17:06:28.272000+00:00",
+  "retainedLinesAfterInstall": 93,
+  "fatalExceptionsAfterInstall": 0,
+  "chatDiagnostics": [
+    {
+      "at": "2026-11-06T22:23:34.533000+00:00",
+      "category": "ChatDelivery_DeliverMessages_QueueMappingNativeFamily"
+    },
+    {
+      "at": "2026-11-06T22:23:36.968000+00:00",
+      "category": "ChatRecovery_device_sync_Unavailable"
+    },
+    {
+      "at": "2026-11-06T22:23:39.797000+00:00",
+      "category": "ChatDelivery_DeliverMessages_QueueMappingNativeFamily"
+    },
+    {
+      "at": "2026-11-06T22:23:39.873000+00:00",
+      "category": "ChatRecovery_outgoing_Conflict"
+    },
+    {
+      "at": "2026-11-06T22:23:47.232000+00:00",
+      "category": "ChatRecovery_incoming_Unavailable"
+    },
+    {
+      "at": "2026-11-06T22:23:49.284000+00:00",
+      "category": "ChatDelivery_DeliverMessages_QueueMappingNativeFamily"
+    },
+    {
+      "at": "2026-11-06T22:23:49.353000+00:00",
+      "category": "ChatRecovery_outgoing_Conflict"
+    },
+    {
+      "at": "2026-11-06T22:23:54.456000+00:00",
+      "category": "ChatSync_Generic"
+    }
+  ],
+  "logSha256": "e795a06e388711f4e4c024af8a50b9d8d3e2dec55279fb844d15d41e476b81f6",
+  "phoneUiDriven": false,
+  "newMessagesSent": 0,
+  "build": 50,
+  "source": "f04c0864cdd103790e6dd0ed8bab1e67bf5780c3",
+  "pendingSendResolved": false,
+  "interpretation": "Current room delivery rejects at least one retained staged row from a different native family before opening the SDK send window. Exact old/current device identifiers and whether every pending message is affected are not exposed by the closed diagnostic.",
+  "httpMetrics": {
+    "requests": 80,
+    "succeeded": 80,
+    "aggregateMillis": 4717,
+    "maximumMillis": 460
+  },
+  "syncMetrics": {
+    "operations": 5,
+    "succeeded": 2,
+    "failed": 3,
+    "aggregateMillis": 54048,
+    "maximumMillis": 24376
+  },
+  "next": "Reproduce cross-store head-of-line blocking and preserve original uncertainty; current-family progress must not restage or acknowledge old-family messages. Original-parent recovery remains required."
+}
