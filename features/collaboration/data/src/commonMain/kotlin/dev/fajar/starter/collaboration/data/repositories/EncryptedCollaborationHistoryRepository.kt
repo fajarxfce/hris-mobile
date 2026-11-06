@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationEditEvidenceRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationEditTargetRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationHistoryRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationLocalVisibilityRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageEditRepository
@@ -27,9 +28,29 @@ class EncryptedCollaborationHistoryRepository(
     CollaborationHistoryRepository,
     CollaborationMessageEditRepository,
     CollaborationEditEvidenceRepository,
+    CollaborationEditTargetRepository,
     CollaborationLocalVisibilityRepository,
     CollaborationQuoteRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
+
+    override suspend fun getEditCandidate(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        eventId: String,
+    ) = safeStorageCall {
+        validateHistoryRoom(roomId)
+        require(validCollaborationEventId(eventId))
+        val scope = historyScope(access)
+        val partition = historyPartition(access, conversationId)
+        val raw = replicas.checkpoint(scope, partition) ?: return@safeStorageCall null
+        withKey(access, conversationId, roomId) { codec ->
+            codec.checkpoint(raw)
+            val value = CollaborationEditTargetReader(replicas, raw, codec, roomId).get(eventId)
+            require(replicas.checkpoint(scope, partition) == raw)
+            value
+        }
+    }
 
     override fun observeQuotes(
         access: CollaborationLocalAccess,

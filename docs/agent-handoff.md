@@ -1,5 +1,46 @@
 # Agent continuation — HRIS Mobile
 
+## Owned edit target accepted; outbox integration next — 6 November 2026
+
+Eleven Kotlin files add immutable room/original/context-bound edit candidates and
+owned local preparation, including legacy earliest-alias reads, hidden/redacted
+exclusion and cancellation/checkpoint/account guards.
+[Contract](collaboration-edit-target.md),
+[evidence](measurements/collaboration-edit-target-2026-11-06.json).
+Focused target1 PASS185/357.682s; final target-full1 PASS5,015/624.663s, no failures/
+errors/skips, Android lint0;4,168 source inputs unchanged. Drivers75044/37834 drained.
+Commit/push next. Preceding evidence product169ee9dc is already pushed, full4,995
+accepted. No editor UI or edit APK/native publication is accepted yet.
+
+NEXT: integrate22 UNAPPLIED Kotlin drafts under .work/chat-editing-review-2026-11-05/
+outbox-drafts, guarded by manifest source/draft hashes. They extend the existing
+immutable encrypted command, SDK content/staging, original-only guards, local
+QueueEdit and edit receipt recovery/retirement. NOT compiled; repository bindings,
+proof/test fixture constructors, new tests and pending/error projection still
+required before applying/acceptance. Legacy fallback draft reduced to256 UTF16
+units; full text retained once in m.new_content. Verify actual native ciphertext
+budget. Ineligible Sent edits retain a durable failure on the original until
+explicit acknowledgement; hidden/redacted originals retire without unreachable
+commands. Ordinary drafts must remain separate. Do not reapply the older3 drafts.
+
+Raw complete cold revisions remain open. Upstream main FFI event/room still drops
+raw custom metadata; Maven latest26.11.05 was inspected only, not upgraded. A narrow
+pinned FFI raw point-read extension is outlined in .work/raw-revision-acquisition-
+design.md; no SDK fork, binary or workflow modification/publication yet.
+
+PlatformCI42129516710 exact49ec FAILED backend8's document-reference/retirement
+ordering test;11 other jobs passed,2 downstream skipped. Verified artifact13463318718
+and exact failing XML retained. Test paused at company client admission, before
+document locks. Two test-only WIP files now probe the actual exclusive document
+lock and wait for the competing attempt, retaining all outcome assertions.
+Focused retirement1 is RUNNING; Platform owns the only heavy local build slot.
+Do not run prepared edit-release scripts (they still target failed49ec) or rerun
+old CI. No deployment; live54b/schema116.1/flags unchanged.
+
+Phone40 stays installed; both emulators stopped/data and keys preserved. Starter
+bce2012 complete. Keep both stashes and accepted Forward publications untouched.
+Continue all54 PRD groups after this commit; no group closure is claimed.
+
 ## Edit transport evidence accepted; continue authoring — 5 November 2026
 
 Twelve Kotlin files now retain encrypted body-free replacement evidence, including

@@ -1530,6 +1530,27 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun readEditCandidate(
+        targets: CollaborationEditTargetRepository,
+        identities: CollaborationIdentityRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReadCollaborationEditCandidate(
+            targets,
+            identities,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun cancelText(
         cancellations: CollaborationMessageCancellationRepository,
         lists: CollaborationListRepository,

@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-06",
+  "scope": "Owned local edit target and editor preparation only; no edit queue/UI/native publication yet.",
+  "sourceSha256": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "99f39f896be2d6a700770750a4d4a66bda1edc2d7cec49e34ec8b7e99d45396e",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/history/CollaborationEditTargetReader.kt": "abc9b45dec84c6c45e523b6d88bbbb56dbab11e4f348e97c4762f6b748b5b3f6",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationHistoryRepository.kt": "f74bab4eac8d60e991299d86d58ab47cd783323b4d16b1c2824011b730ed8d98",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationEditTargetStorageContract.kt": "67c915c683aef7b964eefddf7b9b55363758b24cbfd4ed6196c2069911ce809b",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationEditTargetStorageTest.kt": "e0e4960e4d08157b2a3294bc6fc5ec6ae53738a8fc1c902ffb62f074c2ff7eb9",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationEditTargetStorageTest.kt": "29e80a2d97bcb51021275261e3e44684af466888bca3453aaacf1bbcd8fe521b",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationEditTarget.kt": "c016e1c2ec5501699dbaecb80d884468cff1a6a57d147f7b36457a681e6f3dc5",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationEditTargetPolicy.kt": "4345237e1cd71e5dfe6fcb708dc0fa116b566f760852d08d539fde8381972e5e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationEditTargetRepository.kt": "2a57eccefc71cb2e375c9b65c5853614206cc16c5e062bf9c40613a6e4518665",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationEditCandidate.kt": "475bb64d2d0346b496849a92e63bceb0681138182bfe748ed15eaad8771a2207",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationEditCandidateTest.kt": "cafbd65eec5f4e0145fa4bad22a1e8c969a2e5dfff0c70883844e2f2230c7ed0"
+  },
+  "checks": {
+    "target1": {
+      "startedAt": "2026-11-05T23:42:59.255182+00:00",
+      "elapsedSeconds": 357.682,
+      "exitCode": 0,
+      "sourceFiles": 4168,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 185,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "targetSuites": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationEditTargetStorageTest.xml": {
+          "sha256": "c7fc6784cd738f845a682527b292ac3519ddb1f85692a80573282dafb298d46b",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ReadCollaborationEditCandidateTest.xml": {
+          "sha256": "b0445b96159a6740dfbe3556cfe13f89a5ae99c5043be02af6bf68b4e3b7572e",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "target-full1": {
+      "startedAt": "2026-11-05T23:49:36.849674+00:00",
+      "elapsedSeconds": 624.663,
+      "exitCode": 0,
+      "sourceFiles": 4168,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5015,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "targetSuites": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationEditTargetStorageTest.xml": {
+          "sha256": "1c4614ec9081b4aebe74037ac39e0800aeae6ee25aed4a3cd85bac3254f46f2c",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationEditTargetStorageTest.xml": {
+          "sha256": "21b93013edffbea674dbbd5a7d140901b907a0b8f8c473ccb2aae28b7067da37",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ReadCollaborationEditCandidateTest.xml": {
+          "sha256": "79914a21821c4eba399628c2672f790bef20e0a15e656c98387fde63efc01629",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.ReadCollaborationEditCandidateTest.xml": {
+          "sha256": "e4b1cce927e311a7bf8d1df9a65bef78922f79781318114f6742753d683e4dda",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "androidLintErrors": 0,
+  "note": "Target1 precedes the final opaque-ASCII target validation; target-full1 covers all final source hashes."
+}
