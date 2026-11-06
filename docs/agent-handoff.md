@@ -81,21 +81,41 @@ This checkpoint commits the accepted eight-file history-end increment (domain
 reader/pure completion policy, DI/VM/fixtures and15 common domain regressions).
 Use cases coordinate repositories, never other use cases. There is no47 APK yet.
 
-PRIORITY now: reproduce the delayed-ACK recovery issue. A test-only detached
-worktree is prepared at /home/fajar/hris/.worktrees/hris-pending-ack-2026-11-06
-(base b1fcac03). Its only change adds the distant-ACK regression in
-CollaborationDeliveryWorkerTest. Do not build that separate checkout; apply its
-diff to the warm main checkout after this commit, then run the prepared
-.work/chat-pending-phone-2026-11-06-build46/check-distant-ack.py red-1. The runner
-expects source stability and records the actual result; it has NOT run yet.
-The test patch is also in that folder as distant-ack-regression.patch.
-CollaborationDeliveryWorker.acquireOriginals currently focuses the first Sent event
-even alongside unconfirmed commands. Check a distant newer ACK and alias-changed
-bootstrap against that old focus before implementing a latest-head recovery policy.
-Also inspect the12s room/15s SDK-window mismatch and receipt publication only at
-window completion. These are hypotheses/code gaps, not a proved phone root cause.
-Closed diagnostics are in .work/chat-pending-phone-2026-11-06-build46; raw app-only
-and provider logs are private. Do not clear data, keys or blindly resend originals.
+PRIORITY: delayed-ACK recovery is now REPRODUCED. Test-only red-1 passed compilation
+and failed its single assertion in52.456s with4,215 unchanged inputs: a recent
+accepted command remains in the outbox after container restart because an older
+Sent command anchors a distant window. The fixture uses actual encrypted app
+storage and simulated provider history, not a native/provider or phone proof.
+This is committed evidence below; the production fix is still uncommitted.
+
+Main checkout now has three pending Kotlin changes: the regression in
+CollaborationDeliveryWorkerTest, domain CollaborationReceiptRecoveryPolicy, and
+the worker's use of that policy. When Staging/Staged commands remain, recovery
+chooses the latest head; confirmed-only retirement retains its original anchor.
+No receipt/content/device checks are relaxed and no original send is replaced.
+Green-1 is currently the ONLY heavy local job, session59816; do not alter its
+4,216 program inputs until it finishes. Driver/results:
+.work/chat-pending-phone-2026-11-06-build46/check-distant-ack.py green-1.
+All emulators are stopped. Worktree /home/fajar/hris/.worktrees/hris-pending-ack-2026-11-06
+(base b1fcac03) contains only the original test patch and is no longer the active
+implementation; do not build it or reapply its test patch.
+
+After green-1, run full required root/Android/Web gates, record source/acceptance,
+commit and push, then build/accept/install release47 from that pushed source.
+There is NO47 APK or phone installation yet. Reuse the46 release drivers carefully
+with47/hash/current-phone46 guards; announce every install, install-only/no UI.
+Current phone remains46 and sending is NOT accepted as fixed.
+
+Read-only phone evidence: StageMessage timeout followed by repeated DeliverMessages
+QueueUnresolved persisted after four provider encrypted sends returned200 at
+13:35:46–47. Their room has32 total events/22 encrypted messages; Android original
+focus uses20. A later six-packet VPN probe had0% loss/22–173ms, while earlier app
+requests reached8,960ms. Do not blame the connection or call the phone cause fully
+proved. Remaining code concerns:12s room budget versus15s native delivery window,
+and receipt publication only after that window. Progressive receipt retention and
+more precise closed mapping diagnostics may still be needed if47 remains pending.
+Private app-only logs/diagnostics: .work/chat-pending-phone-2026-11-06-build46.
+Do not clear data/keys, replay accepted Forward sends, or blindly resend originals.
 
 Starter stays 578d97a; no HRIS queue-policy port belongs there. Platform source stays
 4dc8c9d15cde42160f93096325360a7aeff65204; live remains

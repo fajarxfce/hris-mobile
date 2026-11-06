@@ -132,5 +132,30 @@
     "acquireOriginals chooses the first retained Sent event as a focus even when unconfirmed commands require recent history; reproduce a distant newer ACK before changing recovery policy.",
     "Per-message acknowledgement is currently returned after the SDK delivery window; inspect progressive persistence and cancellation before claiming latency fixed."
   ],
-  "resolved": false
+  "resolved": false,
+  "reproduction": {
+    "kind": "Application worker with actual encrypted application store and simulated provider history",
+    "sourceBaseCommit": "be86d478",
+    "test": "anOlderConfirmedMessageCannotHideARecentLostAcknowledgementOutsideItsWindow[desktop]",
+    "elapsedSeconds": 52.456,
+    "sourcesUnchanged": true,
+    "counts": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reportSha256": "3e294572e9b11d842052ccd7de8333f74c4ff046087c265c46dc006b84176ff3",
+    "failure": "Recent accepted command stays in the outbox across container restart when an older confirmed command pins a distant history window.",
+    "fixInProgress": "Domain recovery anchor selects the current head while Staging or Staged commands remain; exact receipt validation and send identity remain unchanged.",
+    "accepted": false
+  },
+  "providerRoomCounts": [
+    {
+      "roomHash": "e290597ed23e1558",
+      "events": 32,
+      "encryptedMessages": 22
+    }
+  ],
+  "nativeHistoryFocusParameter": 20
 }
