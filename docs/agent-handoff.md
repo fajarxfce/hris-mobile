@@ -42,17 +42,24 @@ privilege were restored. Both private screenshots were viewed. Owned emulator st
 `.work/release-phone-2026-11-06-build51`. Phone preflight verified installed50 and its
 signer/hash; installation uses explicit10.77.77.3:5555 and `--install-only`.
 
-The ONLY heavy local job is **15063**, organization runtime transfer **full-1**,
-under `.work/space-store-inventory-2026-11-06/runtime-transfer-next`. Its ten applied
-Kotlin files are **UNCOMMITTED**; keep all inputs frozen until the job ends. Nine new
-files add typed freeze/drain transport plus seven MockEngine cases; the tenth extends
-actual AppContainer DI resolution. Focused65759 PASSED175.602s with9 cases (7 transport/2 actual DI), zero failures/
-errors/skips,4,263 unchanged inputs and format/architecture checks. [Contract](collaboration-space-runtime-transfer.md),
-[evidence](measurements/collaboration-space-runtime-transfer-2026-11-06.json). Freeze uses
-the original operation/current native owner and receives original legacy device/version1;
-drain observes bounded server slots. There is no UI, owning workflow, server call,
-completed transfer, or live enablement. Full acceptance remains required. No local
-emulator is active. Preserve prepared/source/result manifests and failed attempts.
+The ONLY heavy local job is **86050**, existing-store handover **focused-1**, under
+`.work/space-store-inventory-2026-11-06/closed-handover-next`. Seven formatted/applied
+Kotlin files are UNCOMMITTED: registry exclusion/current-parent checks, six registry
+cases, a typed local capability/default, Android existing-only staging/composition,
+and nine storage/lifetime cases. Keep all inputs frozen until this gate ends. It has
+no owning use case, server freeze, product activation or actual SDK consumer proof yet.
+Existing live acquisition guards remain unchanged. No emulator is active.
+
+The ten separate organization runtime transfer files are also UNCOMMITTED but fully
+accepted. Focused65759 PASSED9 cases/175.602s (7 transport/2 actual DI). Full15063 ENDED
+PASS603.54s with5,475 fresh cases/642 suites, zero failures/errors/skips,4,263 unchanged
+inputs and zero Android lint/Detekt findings. Its source hashes still match after
+applying the non-overlapping existing-store candidate. [Contract](collaboration-space-runtime-transfer.md),
+[evidence](measurements/collaboration-space-runtime-transfer-2026-11-06.json). Commit
+these ten files separately when first queue-source control42310411055 has started;
+it remains pending behind SDK4 control42306713193 and must not be displaced. Stage
+only its prepared manifest's files and verify the index against the accepted full
+source manifest. The seven newer lifecycle files must not enter that commit yet.
 
 ## Next actions
 
@@ -62,10 +69,10 @@ emulator is active. Preserve prepared/source/result manifests and failed attempt
    the actual installation and corrects measured device clock offset. First passive
    audit23:24:02UTC retained no post-install lines for either profile; silence proves
    no delivery outcome. Do not launch the phone to manufacture evidence.
-2. Reap full15063 and audit unchanged source hashes, fresh report counts and all
-   required root/Android/browser/quality targets. Preserve the accepted focused evidence.
-   Commit/push accepted transport separately. First queue-source CI must start before
-   another app-source push can displace its pending runs.
+2. Reap existing-store focused86050. Retain failures, fix actual issues, add actual
+   file-lock/SDK4 closed-store/restart acceptance before considering activation, then
+   run the complete root/Android/browser/quality gate. Transport's full gate is already
+   accepted; preserve its original inputs rather than rerunning it solely for evidence.
 3. Continue original pending-message recovery through the original private store and
    current authority. Keep old-parent/device guards; never reset queues, replace pending
    sends, invent acknowledgements or change original encrypted namespaces. Current
@@ -73,13 +80,13 @@ emulator is active. Preserve prepared/source/result manifests and failed attempt
 4. Complete provider-publication preflight, durable local stop/join and target intent,
    current-admitted freeze/drain/publication/adoption, hard-parent recovery and group
    routing. The new transport alone cannot activate this irreversible transition.
-The next isolated preparation is `.work/space-store-inventory-2026-11-06/closed-handover-next`.
-Six files prepare a current-account exact-store gate, six registry lifetime cases, a
-typed local handover capability and Android existing-only private-read/staging/composition.
-None is applied/formatted/compiled/tested. Storage failure/cancellation/real-file-lock
-tests, actual SDK4 closed-store/restart proof and owning provider-publication flow are
-still required. Existing live acquisition guards stay unchanged; original stores are
-never restored by this local staging path. Read its design and hashes before continuing.
+Existing-store design and hashes are under closed-handover-next. The seven-file
+candidate and15 prepared cases are now applied/frozen for86050, not accepted. It
+preserves original private files and only stages a local target after all old
+reservations drain. The current codec still requires an initialized original record;
+credential rotation with initialized=false remains a distinct unresolved phase.
+Provider-publication admission and hard-parent server registration still need their
+owning implementation; this local mechanism grants neither.
 
 5. Continue all54 communications PRD groups; delivery remains3 in progress/51 planned,
    complete=false. Calls/meetings and remaining chat scope are not finished.
@@ -94,7 +101,7 @@ never restored by this local staging path. Read its design and hashes before con
   those exact runs after completion and verifies immutable artifact digests.
 - Its protocol42306715423 **PASSED**, native/classic each14 checks with owned cleanup;
   artifact digests and14 Platform hashes match immutablee0dbb567. [Evidence](measurements/collaboration-sdk4-product-ci-2026-11-06.json).
-- Queue68d848b7: first control42310411055/native42310411202 are **pending behind SDK4**.
+- Queue68d848b7: first control42310411055 is **pending behind SDK4**; native42310411202 is running.
   IDs are retained in `.work/chat-queue-family-2026-11-06/first-runs.json`.
 - Prior35df/7ef/f04 and SDK native42291341014 are accepted; do not rerun their sends
   solely for evidence. Actual new-source CI remains separate from physical-phone proof.

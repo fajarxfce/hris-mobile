@@ -27,7 +27,7 @@
     }
   },
   "recordedAt": "2026-11-06T23:25:31.448930+00:00",
-  "status": "focused accepted; full gate running",
+  "status": "focused and complete gates accepted; source not yet committed",
   "baselineProgram": "68d848b7fed810984ddb59ca53079442dcac7819",
   "candidateFiles": {
     "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/api/CollaborationSpaceRuntimeTransferApi.kt": "69ba07cab80b2563dff7304eb958b2604b82c060c7e92b63b57c87c74bc6300b",
@@ -41,12 +41,43 @@
     "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceRuntimeTransferRepository.kt": "025f2a516c6dc47baede718696135f5968ac20d21f756b009d9f8bce6ee36363",
     "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "1f02268c1b0c29ca5a6f1126beee845d3547b96b98efbd3047378641f632329b"
   },
-  "fullAccepted": false,
+  "fullAccepted": true,
   "actualServerCalled": false,
   "productWorkflowEnabled": false,
   "tests": {
     "transport": 7,
     "actualAppContainer": 2
   },
-  "fullRun": "runtime-transfer-next/full-1"
+  "fullRun": "runtime-transfer-next/full-1",
+  "full": {
+    "startedAt": "2026-11-06T23:24:55.906847+00:00",
+    "elapsedSeconds": 603.54,
+    "exitCode": 0,
+    "sourceFiles": 4263,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 5475,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": 642,
+    "resultSha256": "03bac43ebbf6a249dbf636e7bc055fb02066379b3566a5f91b88355f15b85065",
+    "sourceManifestSha256": "b44a98d19ce1e15de016935dd381fe0995a05eee7007163e78cfd2ee34b838bc",
+    "targets": [
+      ":check",
+      ":features:collaboration:data:testAndroidHostTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":core:database:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:presentation:wasmJsBrowserTest",
+      ":apps:android:assembleDevDebug",
+      ":apps:android:lintDevDebug",
+      ":formatCheck",
+      ":architectureCheck"
+    ],
+    "androidLintIssues": 0,
+    "detektFindings": 0
+  }
 }

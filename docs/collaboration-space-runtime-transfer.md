@@ -22,7 +22,9 @@ zero/eight-slot reads, malformed/oversized responses, wrong provenance/receipts,
 and repeated unauthorized responses, and cancellation without another request. Two
 actual AppContainer cases resolve the new repository through its generated data-module
 bindings. Focused acceptance passed9 cases in175.602s with4,263 unchanged inputs and
-format/architecture checks. The complete root/Android/browser gate is still running.
+format/architecture checks. The complete root/Android/browser gate passed5,475 fresh
+cases/642 suites in603.54s with zero failures/errors/skips,4,263 unchanged inputs and
+zero Android lint/Detekt findings. The source is accepted but not yet committed.
 [Evidence](measurements/collaboration-space-runtime-transfer-2026-11-06.json).
 
 An owning use case must first establish original private keys and provider publication,
