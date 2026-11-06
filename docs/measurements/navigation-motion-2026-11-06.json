@@ -76,6 +76,9 @@
   },
   "release42Installed": true,
   "androidMotionRecordingPending": false,
-  "starterPortPending": true,
-  "androidAcceptance": "collaboration-release42-2026-11-06.json"
+  "starterPortPending": false,
+  "androidAcceptance": "collaboration-release42-2026-11-06.json",
+  "starterPortCommit": "e39747c9b67548e8d2a67f5a1dff9f678722b0fd",
+  "starterAppleRun": 42185888342,
+  "starterAppleAcceptancePending": true
 }

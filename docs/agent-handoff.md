@@ -22,19 +22,24 @@ Bima keys/data retained. All install/capture/review drivers drained. The follow-
 boot wrapper ended143, but exact owned process completed boot and was inspected
 then stopped with its recorded PID/startTicks; no unrelated process was touched.
 
-Starter has the exact three generic files and documentation port, not yet committed.
-Its ONLY heavy local job is navigation check18630, .work/navigation-motion-2026-11-06/check-1,
-root/Android/lint/Web. Wait for it before starting SDK compilation. After acceptance,
-commit/push then dispatch Starter Apple scope ONCE against that commit; no phone
-Starter install. Mobile CI23ce Native42183953532 running, Control42183953620 pending;
-27cff Control42181039404 running and Native cancelled by newer source. No duplicate
-workflow dispatch. Stable-history ac7668 native and Apple acceptance remain valid
-for their original source, not the motion increment.
+Starter e39747c9b67548e8d2a67f5a1dff9f678722b0fd ports the exact three generic
+files. Local check18630 drained PASS272.990s, 71 fresh cases/32 suites, no failures,
+errors/skips; root/Android/Web and lint0 errors/44 existing warnings. Apple scope
+was dispatched ONCE:42185888342, exact e39747c, now running. Do not re-dispatch.
+Mobile CI23ce Native42183953532 running, Control42183953620 pending;
+27cff Control42181039404 running. Stable-history ac7668 native/Apple evidence
+predates motion. No new phone install or emulator action is needed.
 
-Then run prepared SDK x86_64 build; arm64 AAR970ea462 is built/verified but not an
-app dependency or consumer acceptance. Preserve paired generated sources outside
-Mobile, validate remaining ABI/consumer and original native edit exchange, then
-finish history-pager domain ownership and all54 PRD groups. Platform remains
+ONLY heavy local job: SDK x86_64 driver95397, child13949/startTicks162936862,
+started08:11:15UTC. Output .work/sdk-raw-event-2026-11-06/android-x86_64,
+paired generated sources outside Mobile in .worktrees/matrix-sdk-android-x86_64-2026-11-06.
+Two Cargo jobs, offline/locked sources,45minute bound. Wait for completion before
+another local build/emulator. Verify native ELF, raw API symbol and all nine Kotlin
+hashes against arm64, then package the paired candidate and native consumer proof.
+Shipping upstream AAR includes arm64-v8a, armeabi-v7a, x86 and x86_64; remaining
+32-bit builds and Swift/XCFramework are still required before replacement shipping.
+Arm64 AAR970ea462 remains candidate-only, no app dependency/publication. Continue
+history-pager domain ownership and all54 PRD groups. Platform remains
 LIVE10485916/schema116.1. Never replay rollout or accepted Forward publications.
 
 
