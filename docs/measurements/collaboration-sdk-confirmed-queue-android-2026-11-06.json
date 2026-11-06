@@ -62,5 +62,32 @@
     "candidateOnly": true,
     "applicationDependencyChanged": false,
     "packaged": false
+  },
+  "pairedAar": {
+    "candidateOnly": true,
+    "sourceSdkBase": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+    "wrapperCommit": "c1664f712bed33488b10f33232fb424faf257d49",
+    "buildSeconds": 89.489,
+    "artifact": ".work/sdk-confirmed-queue-2026-11-06/package-android-aar-1/matrix-sdk-android-26.10.23-hris-confirmed-queue-arm64-x86_64.aar",
+    "bytes": 96849072,
+    "sha256": "4534e86ed5f15fa036cf5c198cfbf551dbc742ca68d32363e8ba68305ddbb92a",
+    "nativeAbis": [
+      "arm64-v8a",
+      "x86_64"
+    ],
+    "jniSha256": {
+      "arm64-v8a": "43856af213036df7c2f70dabf7b387a7b60f21dbd79a0a23e69b4a814354a8d3",
+      "x86_64": "48f6a14d6e39a332f8d5f8cc75d8924d636951cdbd97bac1cbc96284eac894ad"
+    },
+    "jniMatchesGeneratedPair": true,
+    "classesSha256": "68ffb5d1e78891621469586cff3d37e35f40d6f79375839becdba5b20f50510e",
+    "rawEventAndQueueMethodsAndTypesPresent": true,
+    "minSdk": 21,
+    "consumerRulesMatchUpstream": true,
+    "consumerRulesEmpty": true,
+    "generatedInputsUnchanged": true,
+    "published": false,
+    "applicationDependencyChanged": false,
+    "consumerAcceptance": false
   }
 }

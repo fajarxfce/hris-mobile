@@ -16,7 +16,7 @@ first/repeat offline and online room entry; all THREE screenshots were inspected
 Owned emulator350599/startTicks163234107 stopped09:04:32UTC, original userdata and
 crypto preserved. No outgoing latency claim. [Release evidence](measurements/collaboration-release43-2026-11-06.json).
 
-PHONE STILL42. Last bounded ADB reconnect about10:16UTC timed out18s. One async
+PHONE STILL42. Last bounded ADB reconnect about10:25UTC timed out18s. One async
 availability question is pending; do not ask again. Once reachable, run43's
 preflight.py, announce EVERY installation, then install.py --install-only.
 Never launch/drive phone UI, erase keys or rebuild43 just because HEAD advanced.
@@ -63,21 +63,39 @@ protected. Reproduction passes2 enqueues/2 sends/1 settlement, repeated work doe
 nothing. [Evidence](measurements/collaboration-confirmed-queue-application-2026-11-06.json).
 Previous44-case pass predates this refactor; application-1 failed task naming before tests.
 
-SINCE that pass, TWO Mobile proof files and THREE Platform test/driver files are WIP.
+SINCE that pass, TWO Mobile proof files and FOUR Platform test/driver files are WIP.
 The new second HRIS native scenario stages a real paused SDK original, then sends
 its same logical ID/full content through SDK Room.sendRaw, retaining the native row.
 That direct send owns a different HTTP transaction: this constructs the recovery
 postcondition, NOT a literal lost-response simulation. After two actual process
 restarts, offline completion recovery must settle the original and repeat as a no-op,
 with exactly3 encrypted server messages. The existing scenario is preserved; each
-scenario gets a fresh Spring trace/context. Python driver34 tests PASS0.166s;
+scenario gets a fresh Spring trace/context. Python driver34 tests PASS0.166s (latest0.186s);
 Kotlin/native scenario NOT YET compiled or accepted. No live Platform change.
 
-ONLY heavy job: queue AAR packaging87653, .work/sdk-confirmed-queue-2026-11-06/
-package-android-aar-1. Wrapper inputs are frozen; Mobile/Platform source may be edited.
-No emulator active. NEXT: drain, run verify-android-aar-paired.py; build current
-Mobile draft using exact candidate AAR/POM verification, then compile/run BOTH HRIS
-native scenarios on owned emulator-5560. Prepare builds before starting emulator.
+AAR87653 FINISHED89.489s and verified:96,849,072 bytes SHA
+4534e86ed5f15fa036cf5c198cfbf551dbc742ca68d32363e8ba68305ddbb92a.
+Both exact JNI identities and compiled queue/raw methods/result types are present.
+No external publication. Main has a TEMPORARY local-candidate entry in Gradle
+verification metadata; version catalog/shipping repository is unchanged.
+
+Mobile consumer60155 FINISHED370.511s:380 fresh Android cases pass, lint0 errors/
+47 warnings, frozen sources unchanged. Verified315,750,034-byte proof APK SHA
+7d1a231bfecbfed75e490baea517ccb5347a2ee56d8436396b5be552dde3a18b;
+exact paired JNI and compiled queue/proof markers verified.
+[Consumer build evidence](measurements/collaboration-confirmed-queue-android-consumer-2026-11-06.json).
+Platform5500 compilation/format/architecture FINISHED33.464s/8,242 inputs unchanged.
+
+ONLY active heavy job: Platform64042, .work/sdk-confirmed-queue-2026-11-06/native-1,
+running BOTH NativeCollaborationSdkInteropTest scenarios against the exact APK.
+Both repositories' program/test/Gradle/tool inputs are FROZEN. The original scenario
+has already produced passed=true/cleanup=true; retained-queue scenario is still
+running. No final two-case acceptance yet. Owned fresh-data emulator-5560 PID928902,
+startTicks163756454, native-1/userdata.img, boot41.071s. Stop with Mobile's
+native-1/stop-emulator.py after the proof and BEFORE any later heavy build.
+NEXT: drain/audit both strict native results; preserve failures if any. Then finish
+remaining SDK ABIs/distribution and full/minified product acceptance. SDK source
+may only be built after stopping the emulator. Bima data/keys and phone are untouched.
 Do not commit product references against shipping26.10.23: it lacks these methods.
 Complete required ABIs/distribution, full product gates and minified acceptance before
 shipping a queue-fix APK. Preserve Bima userdata and all accepted Forward/rollout results.
