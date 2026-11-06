@@ -1,5 +1,43 @@
 # Agent continuation — HRIS Mobile
 
+## Native phases accepted; directional navigation is the next priority — 6 November 2026
+
+Latest user: navigation has no perceptible transition and feels laggy. Host uses
+only symmetric180ms fades. Next implement directional push/pop centrally in
+ScopedNavHost, preserve prepared chat content/reduced motion, test actual NavHost
+forward/Back/RTL/lifetimes, record Android motion, ship next validated build and
+port generic changes to Starter. No navigation motion code has changed yet.
+Do not place animation/data policy in ViewModels or abandon communications.
+
+Notification fixture now drives both existing production phases. Real-storage
+cancellation after transfer/reopen passes; production workers/deadlines unchanged.
+Full gate91307 PASS658 fresh /301.911s,4,206 unchanged inputs, app lint0, proof lint
+0 errors/47 warnings. Python29 PASS. Native42927 PASS90.721s: three process kills,
+both phases complete, one held SessionChanged copy, zero HTTP/message sends and
+real inline-reply callbacks. Final identity/review/no-command assertions remain
+strict. Emulator3885164/startTicks162648807 stopped07:25:37; original clean-userdata
+retained. Drivers14042/42927/91307 drained. No emulator/heavy local job active.
+[Contract](collaboration-notification-recovery-phases.md),
+[evidence](measurements/collaboration-notification-phases-2026-11-06.json).
+
+ac7668 Native42174041004 PASSED. Verified artifact13484683008 SHA84a86effba95a366d2c5bc133711839891e67802dc3b7247d0e7006a208ccd21
+contains six passed/cleaned result groups sharing one APK, including original
+history replay, offline recovery and foreground paging. Control42174041125 still
+active; newer58a5 runs queued. No duplicate dispatch. Native evidence is in
+measurements/collaboration-stable-history-native-2026-11-06.json.
+
+SDK AAR85053 drained PASS164.980s. Candidate50,667,076 bytes SHA691c96bb9a502c8ab5a684259a753bc8017fce61c66cfef2e4dd7963bc02da43;
+exact JNI pair and compiled raw-event API verified. Wrapper required no build
+changes; its consumer rules and the AAR rules are empty. An incorrect initial
+verifier assumption was corrected without changing the artifact. No SDK app
+change/publication/consumer acceptance. x86_64 build driver is PREPARED ONLY at
+.work/sdk-raw-event-2026-11-06/build-android-x86_64.py; generated files stay outside
+Mobile. Resume SDK/consumer proof and history-pager domain ownership after motion.
+
+PHONE41 already installed; no repeat install/phone UI action. All54 PRD groups
+active. PlatformLIVE10485916/schema116.1 unchanged; never replay rollout or
+accepted Forward sends. Generic Starter motion port follows Mobile validation.
+
 ## Release 41 installed; native SDK packaging and recovery fixture next — 6 November 2026
 
 Mobile58a5a6ed is pushed. The corrected release41 APK is NOW INSTALLED on the

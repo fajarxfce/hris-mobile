@@ -3,6 +3,7 @@ package dev.fajar.starter
 import dev.fajar.starter.app.notifications.*
 import dev.fajar.starter.app.work.CollaborationIncomingRecovery
 import dev.fajar.starter.app.work.CollaborationNotificationInputRecoveryWorker
+import dev.fajar.starter.app.work.CollaborationNotificationReplyRecoveryWorker
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.localListAccess
 import dev.fajar.starter.collaboration.domain.repositories.*
@@ -191,6 +192,107 @@ class CollaborationNotificationInputRecoveryWorkerTest {
             assertNull(f.message(action.operationId))
         }
     }
+
+    @Test
+    fun interruptedTransferReopensIntoTheSeparateReplyPhaseWithoutLosingOrSendingInput() =
+        runBlocking {
+            withFixture { f, target ->
+                val action = CollaborationNotificationAction.Reply(id(), target)
+                val token =
+                    value(
+                        f.koin
+                            .get<CollaborationNotificationActionRepository>()
+                            .seal(f.parent(), action)
+                    )
+                val old = f.session
+                assertEquals(
+                    AppResult.Success(true),
+                    f.koin.get<SessionRepository>().compareAndSet(old, null),
+                )
+                val text = "Retained across the transfer boundary"
+                val reference =
+                    value(f.koin.get<CollaborationNotificationReplies>().capture(token, text))
+                val next = old.copy(id = id())
+                assertEquals(
+                    AppResult.Success(true),
+                    f.koin.get<SessionRepository>().compareAndSet(null, next),
+                )
+                f.session = next
+                f.withoutIncomingSelection()
+                val actual = f.koin.get<CollaborationNotificationInputRepository>()
+                val removed = CompletableDeferred<Unit>()
+                var joined = false
+                val interrupted =
+                    object : CollaborationNotificationInputRepository by actual {
+                        override suspend fun remove(
+                            expected: CollaborationNotificationInput
+                        ): AppResult<Boolean> {
+                            assertEquals(AppResult.Success(true), actual.remove(expected))
+                            try {
+                                removed.complete(Unit)
+                                awaitCancellation()
+                            } finally {
+                                joined = true
+                            }
+                        }
+                    }
+                val job = launch { f.inputWorker(interrupted)(f.parent()) }
+                select<Unit> {
+                    removed.onAwait {}
+                    job.onJoin { fail("Recovery returned before the transfer boundary") }
+                }
+                job.cancelAndJoin()
+                assertTrue(joined)
+                assertNull(value(actual.get(reference)))
+                val copy =
+                    value(
+                            f.koin
+                                .get<CollaborationNotificationReplyRepository>()
+                                .page(f.access(), pendingOnly = false)
+                        )
+                        .inputs
+                        .single()
+                assertEquals(text, copy.candidate.text)
+                assertEquals(token, copy.candidate.token)
+                assertNull(copy.review)
+                assertNull(copy.draft)
+                assertNull(copy.resolution)
+                f.reopen()
+                f.withoutIncomingSelection()
+                assertIs<SyncResult.Retry>(
+                    f.koin.get<CollaborationNotificationInputRecoveryWorker>()(f.parent())
+                )
+                // Production runs the independent reply phase even if input recovery retries.
+                assertEquals(
+                    SyncResult.Complete,
+                    f.koin.get<CollaborationNotificationReplyRecoveryWorker>()(f.parent()),
+                )
+                assertEquals(
+                    SyncResult.Complete,
+                    f.koin.get<CollaborationNotificationInputRecoveryWorker>()(f.parent()),
+                )
+                val held =
+                    value(
+                            f.koin
+                                .get<CollaborationNotificationReplyRepository>()
+                                .page(f.access(), pendingOnly = false)
+                        )
+                        .inputs
+                        .single()
+                assertEquals(copy.version.generation, held.version.generation)
+                assertEquals(copy.version.revision + 1, held.version.revision)
+                assertEquals(
+                    copy.copy(
+                        version = held.version,
+                        review = CollaborationNotificationReplyReview.SessionChanged,
+                    ),
+                    held,
+                )
+                assertNull(f.message(action.operationId))
+                assertTrue(f.sdk.enqueued.isEmpty())
+                assertEquals(0, f.sdk.deliveries)
+            }
+        }
 
     private fun CollaborationWorkerFixture.inputWorker(
         inputs: CollaborationNotificationInputRepository

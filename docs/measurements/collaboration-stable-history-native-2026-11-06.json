@@ -1,0 +1,153 @@
+{
+  "sourceCommit": "ac7668ae76b09f1c6c15604761ac3d9ebd48e552",
+  "run": 42174041004,
+  "artifactId": 13484683008,
+  "artifactSha256": "84a86effba95a366d2c5bc133711839891e67802dc3b7247d0e7006a208ccd21",
+  "passed": true,
+  "cases": [
+    {
+      "evidenceFile": "mobile/.work/native-notification-proof/result.json",
+      "passed": true,
+      "cleanup": true,
+      "apkSha256": "3a99dc397283f682da07db03a8b2d081ce8bdfad80ee696edb54830686c4a5a7",
+      "seconds": 110.547,
+      "notificationInputRecoveryPassed": true,
+      "phasesOnlyFixtureLimitation": "This earlier source runs the input phase only; a separate interruption regression and two-phase native fixture are being validated."
+    },
+    {
+      "evidenceFile": "platform/.work/collaboration/b066105694cc45d8abcffac65bea3720/result.json",
+      "passed": true,
+      "cleanup": true,
+      "apkSha256": "3a99dc397283f682da07db03a8b2d081ce8bdfad80ee696edb54830686c4a5a7",
+      "verifiedBehaviors": [
+        "encryptedBothDirections",
+        "logicalIdsPreserved",
+        "protectedStoreReopened",
+        "missingRecordPreserved",
+        "wrongPassphrasePreserved",
+        "exclusiveOwner",
+        "queueRestored",
+        "transactionReused",
+        "identityAfterRestart",
+        "messageIntentRestored",
+        "queueMappingRecovered",
+        "queueWriterExclusive",
+        "perRoomDeliveryIsolated",
+        "heldQueueRestored",
+        "nativeDeliveryOwned",
+        "commonSenderOwned",
+        "receiptJournalRecovered",
+        "projectionInterrupted",
+        "nativeReadReceiptsExchanged",
+        "nativePrivateReceiptIsolated",
+        "nativeReadReceiptStoreRestored",
+        "nativeLocalReadIntentPrepared",
+        "nativeLocalReadIntentStoreRestored",
+        "nativeReadReceiptReplayAdmitted",
+        "nativeReadReceiptAckUncertaintyRecovered",
+        "originalHistoryWindowOwned",
+        "historyBodiesRestored",
+        "commonHistoryAcquisitionOwned",
+        "latestHistoryHeadOwned",
+        "providerHistoryPageOwned",
+        "commonProviderHistoryAcquisitionOwned",
+        "providerHistoryReferencesRestored",
+        "providerHistoryReferencesReconciled",
+        "providerHistoryRestartPreserved",
+        "historyRuntimeReopened",
+        "ackBeforeJournalRecovered",
+        "completionCleanupRecovered",
+        "coldHistoryRecoveredOffline",
+        "gatewayUnavailableAfterProcessDeath",
+        "quotedReplyDecrypted",
+        "quotedReplyRecovered",
+        "quotedReplyRecoveredOffline",
+        "processRestarted",
+        "processRestartedAfterAck",
+        "processRestartedAfterCompletion"
+      ],
+      "counts": {}
+    },
+    {
+      "evidenceFile": "platform/.work/collaboration-worker/3451288897214742b85e8999615b5775/result.json",
+      "passed": true,
+      "cleanup": true,
+      "apkSha256": "3a99dc397283f682da07db03a8b2d081ce8bdfad80ee696edb54830686c4a5a7",
+      "verifiedBehaviors": [
+        "encryptedReceived",
+        "senderRuntimeRestoredByWorker",
+        "originalHistoryAcquired",
+        "completionRetired",
+        "repeatedWorkerComplete",
+        "foregroundHistoryPaged",
+        "foregroundStoppedHistoryRetained"
+      ],
+      "counts": {
+        "historyPages": 11,
+        "providerReferences": 186,
+        "pendingStateReferences": 10
+      }
+    },
+    {
+      "evidenceFile": "platform/.work/collaboration-worker/7b5f1d2c790d47af9510240b8e8d1c7c/result.json",
+      "passed": true,
+      "cleanup": true,
+      "apkSha256": "3a99dc397283f682da07db03a8b2d081ce8bdfad80ee696edb54830686c4a5a7",
+      "verifiedBehaviors": [
+        "frozenDraftRecovered",
+        "outboxEmptyBeforeRecovery",
+        "draftConfirmedCleared",
+        "encryptedReceived",
+        "senderRuntimeRestoredByWorker",
+        "originalHistoryAcquired",
+        "completionRetired",
+        "repeatedWorkerComplete",
+        "foregroundHistoryPaged",
+        "foregroundStoppedHistoryRetained"
+      ],
+      "counts": {
+        "historyPages": 11,
+        "providerReferences": 186,
+        "pendingStateReferences": 10
+      }
+    },
+    {
+      "evidenceFile": "platform/.work/collaboration-worker/9e3daae3eb374e3f94cbeccc23fd6a2b/result.json",
+      "passed": true,
+      "cleanup": true,
+      "apkSha256": "3a99dc397283f682da07db03a8b2d081ce8bdfad80ee696edb54830686c4a5a7",
+      "verifiedBehaviors": [
+        "cancelledArchiveRetained",
+        "cancelledReceiptAbsent",
+        "cancelledReplayDidNotSchedule",
+        "cancelledDraftConfirmedCleared",
+        "cancelledAbsentFromHistory",
+        "encryptedReceived",
+        "senderRuntimeRestoredByWorker",
+        "originalHistoryAcquired",
+        "completionRetired",
+        "repeatedWorkerComplete",
+        "foregroundHistoryPaged",
+        "foregroundStoppedHistoryRetained"
+      ],
+      "counts": {
+        "historyPages": 11,
+        "providerReferences": 186,
+        "pendingStateReferences": 10
+      }
+    },
+    {
+      "evidenceFile": "platform/.work/collaboration-worker/cd74f2d275e54f91b884b689d0f8721c/result.json",
+      "passed": true,
+      "cleanup": true,
+      "apkSha256": "3a99dc397283f682da07db03a8b2d081ce8bdfad80ee696edb54830686c4a5a7",
+      "verifiedBehaviors": [
+        "senderRuntimeRestoredByWorker",
+        "originalHistoryAcquired",
+        "completionRetired"
+      ],
+      "counts": {}
+    }
+  ],
+  "scope": "Existing Android SDK, normal encrypted chat/history/restart/worker/notification acceptance; no new raw-event SDK, editing/call/meeting acceptance."
+}

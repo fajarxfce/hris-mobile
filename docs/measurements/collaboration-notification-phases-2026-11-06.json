@@ -1,0 +1,70 @@
+{
+  "date": "2026-11-06",
+  "fullGate": {
+    "startedAt": "2026-11-06T07:16:57.667356+00:00",
+    "elapsedSeconds": 301.911,
+    "exitCode": 0,
+    "sourceFiles": 4206,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 658,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "pythonDriverTests": 29,
+  "native": {
+    "startedAt": "2026-11-06T07:24:04.898153+00:00",
+    "elapsedSeconds": 90.721,
+    "exitCode": 0,
+    "apkSha256": "fb2db54c3b444d22ea4d31b960efd711e9dab50c227b2a4fd88746f9a3b0a1f4",
+    "sourcesUnchanged": true,
+    "phoneTouched": false
+  },
+  "nativeFixture": {
+    "complete": true,
+    "fixtureAbsent": true,
+    "fixtureUninstalled": true,
+    "fixtureDataCleared": true,
+    "inputRecovery": {
+      "complete": true,
+      "protectedRowsBeforeRecovery": 1,
+      "reviewRowsAfterRecovery": 1,
+      "wrongAccountPreservedInput": true,
+      "oldFamilyRequiresReview": true,
+      "recoveryTurns": [
+        {
+          "turn": 1,
+          "phases": [
+            "Complete",
+            "Complete"
+          ],
+          "result": "Complete",
+          "failureKind": null,
+          "failureCode": null,
+          "milliseconds": 573,
+          "protectedRows": 0,
+          "reviewRows": 1,
+          "reviewStates": [
+            "SessionChanged"
+          ]
+        }
+      ],
+      "httpCalls": 0,
+      "commandRetained": false,
+      "ordinaryProcessKills": 3,
+      "callbackCount": 4
+    },
+    "systemUiReply": true
+  },
+  "emulatorDataRetained": true,
+  "productionPolicyChanged": false,
+  "productionDeadlinesChanged": false,
+  "finalCopyAssertionsRelaxed": false,
+  "scope": "Both existing recovery phases; actual storage interruption/reopen and native Android callbacks, no live FCM/send rollout.",
+  "applicationLint": {},
+  "proofLint": {
+    "Warning": 47
+  }
+}

@@ -9,6 +9,7 @@ import android.util.AtomicFile
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.notifications.*
 import dev.fajar.starter.app.work.CollaborationNotificationInputRecoveryWorker
+import dev.fajar.starter.app.work.CollaborationNotificationReplyRecoveryWorker
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
@@ -259,14 +260,23 @@ internal class NotificationInputProof(private val context: Context) {
     ): JSONArray {
         val turns = JSONArray()
         val worker = container.koin.get<CollaborationNotificationInputRecoveryWorker>()
+        val replyWorker = container.koin.get<CollaborationNotificationReplyRecoveryWorker>()
         val replies = container.koin.get<CollaborationNotificationReplyRepository>()
         val access =
             CollaborationRecoveryAccess(parent.sessionId, parent.audience, parent.accountId)
-        // A finite worker may request a subsequent scheduler turn. This fixture drives at most
-        // four such invocations; the production one-second/four-second deadlines stay unchanged.
+        // Production runs both independent phases even when the input phase requests retry.
+        // Transfer can finish before interruption leaves its copy pending in the reply phase.
+        // Drive at most four turns; all production phase/attempt deadlines stay unchanged.
         repeat(4) { index ->
             val began = SystemClock.elapsedRealtime()
-            val result = worker(parent)
+            val phases = listOf(worker(parent), replyWorker(parent))
+            val result =
+                phases.filterIsInstance<SyncResult.Blocked>().firstOrNull()
+                    ?: phases.filterIsInstance<SyncResult.Retry>().firstOrNull {
+                        it.failure != null
+                    }
+                    ?: phases.filterIsInstance<SyncResult.Retry>().firstOrNull()
+                    ?: SyncResult.Complete
             val elapsed = SystemClock.elapsedRealtime() - began
             val protected = value(inputs.get(original.reference))
             val saved = value(replies.page(access, pendingOnly = false)).inputs
@@ -279,6 +289,18 @@ internal class NotificationInputProof(private val context: Context) {
             turns.put(
                 JSONObject()
                     .put("turn", index + 1)
+                    .put(
+                        "phases",
+                        JSONArray(
+                            phases.map {
+                                when (it) {
+                                    SyncResult.Complete -> "Complete"
+                                    is SyncResult.Retry -> "Retry"
+                                    is SyncResult.Blocked -> "Blocked"
+                                }
+                            }
+                        ),
+                    )
                     .put(
                         "result",
                         when (result) {

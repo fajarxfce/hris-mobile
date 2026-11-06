@@ -207,6 +207,11 @@ def validate_input_recovery_turns(turns):
         assert isinstance(turn, dict) and turn.get("turn") == index
         expected = "Complete" if index == len(turns) else "Retry"
         assert turn.get("result") == expected, "Recovery is still pending or blocked"
+        phases = turn.get("phases")
+        assert isinstance(phases, list) and len(phases) == 2, "Both recovery phases must run"
+        assert all(phase in ("Complete", "Retry") for phase in phases), "Recovery phase was blocked"
+        combined = "Complete" if phases == ["Complete", "Complete"] else "Retry"
+        assert turn["result"] == combined, "A phase cannot complete another phase's pending work"
         counts = [turn.get("protectedRows"), turn.get("reviewRows")]
         assert all(type(value) is int and 0 <= value <= 1 for value in counts)
         assert sum(counts) >= 1, "Captured input disappeared before its reviewed copy"

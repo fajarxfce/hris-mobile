@@ -196,7 +196,8 @@ class NotificationInputProcessOwnershipTest(unittest.TestCase):
             return ''
         if command[:3] == ('shell', 'am', 'instrument'):
             self.files['instrumentation'] = {'complete': True}
-            turns = [{'turn': 1, 'result': 'Complete', 'protectedRows': 0, 'reviewRows': 1,
+            turns = [{'turn': 1, 'result': 'Complete', 'phases': ['Complete', 'Complete'],
+                      'protectedRows': 0, 'reviewRows': 1,
                       'reviewStates': ['SessionChanged']}]
             self.files['reply-recovery'] = {'turns': turns}
             self.files['reply-verified'] = {'complete': True, 'cleanedUp': True,
@@ -253,7 +254,7 @@ class NotificationInputProcessOwnershipTest(unittest.TestCase):
 class NotificationRecoveryTurnsTest(unittest.TestCase):
     def turn(self, number, result='Retry', protected=1, reviewed=0, state='SessionChanged'):
         return dict(turn=number, result=result, protectedRows=protected, reviewRows=reviewed,
-                    reviewStates=[state] * reviewed)
+                    reviewStates=[state] * reviewed, phases=[result, 'Complete'])
 
     def test_subsequent_finite_turn_can_finish_the_exact_copy(self):
         proof.validate_input_recovery_turns([
@@ -271,6 +272,19 @@ class NotificationRecoveryTurnsTest(unittest.TestCase):
     def test_completed_unreviewed_copy_is_not_accepted(self):
         with self.assertRaises(AssertionError):
             proof.validate_input_recovery_turns([self.turn(1, 'Complete', 0, 1, 'Pending')])
+
+    def test_both_phases_are_required_and_neither_can_hide_a_pending_phase(self):
+        for phases in (None, [], ['Complete'], ['Complete', 'Complete', 'Complete'],
+                       ['Retry', 'Complete'], ['Complete', 'Retry'], ['Blocked', 'Complete']):
+            turn = self.turn(1, 'Complete', 0, 1)
+            turn['phases'] = phases
+            with self.subTest(phases=phases), self.assertRaises(AssertionError):
+                proof.validate_input_recovery_turns([turn])
+
+    def test_reply_phase_can_finish_after_device_input_phase_is_already_complete(self):
+        first = self.turn(1, 'Retry', 0, 1, 'Pending')
+        first['phases'] = ['Complete', 'Retry']
+        proof.validate_input_recovery_turns([first, self.turn(2, 'Complete', 0, 1)])
 
     def test_loss_or_duplicate_copies_cannot_pass(self):
         for first in [self.turn(1, protected=0), self.turn(1, reviewed=2)]:
