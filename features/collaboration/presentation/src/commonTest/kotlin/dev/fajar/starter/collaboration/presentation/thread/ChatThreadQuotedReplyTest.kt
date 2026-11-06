@@ -19,7 +19,7 @@ class ChatThreadQuotedReplyTest {
                 delivering.complete(Unit)
                 awaitCancellation()
             }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("First message"))
             vm.onEvent(ChatThreadEvent.SendRequested)
@@ -41,7 +41,7 @@ class ChatThreadQuotedReplyTest {
     fun longPressReplyKeepsTypedTextAndQueuesOneOfflineReply() = runTest {
         withThread { f, vm, _, effects ->
             f.historyRows.value = listOf(f.original())
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Typed before choosing reply"))
             choose(vm, vm.state.value.rows.single().key)
@@ -77,7 +77,7 @@ class ChatThreadQuotedReplyTest {
             f.historyRows.value = listOf(second, first)
             val release = CompletableDeferred<Unit>()
             f.afterDraftWrite = { if (f.draftWrites.size == 1) release.await() }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Same text"))
             choose(vm, vm.state.value.rows.single { it.eventId == first.primaryEventId }.key)
@@ -114,7 +114,7 @@ class ChatThreadQuotedReplyTest {
                         replyToEventId = original.primaryEventId,
                     )
                 )
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals(original.text, vm.state.value.quote(original.primaryEventId)?.text)
             assertEquals(1, f.activeQuotes)
@@ -131,7 +131,7 @@ class ChatThreadQuotedReplyTest {
     fun restoredComposerReadsTheOriginalQuoteAndClearRemovesOnlyItsReference() = runTest {
         withThread { f, vm, store, _ ->
             f.historyRows.value = listOf(f.original())
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Retain this body"))
             choose(vm, vm.state.value.rows.single().key)
@@ -142,7 +142,7 @@ class ChatThreadQuotedReplyTest {
             assertEquals(0, f.activeQuotes)
             val restored = f.model()
             store.put("thread", restored)
-            restored.onEvent(ChatThreadEvent.Entered)
+            restored.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals(original.text, restored.state.value.draft)
             assertEquals(original.replyToEventId, restored.state.value.draftReplyToEventId)

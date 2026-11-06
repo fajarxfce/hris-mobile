@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import dev.fajar.starter.app.bootstrap.*
 import dev.fajar.starter.app.notifications.CollaborationNotificationFocus
 import dev.fajar.starter.auth.presentation.navigation.*
+import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalAccess
 import dev.fajar.starter.collaboration.presentation.navigation.*
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.documents.presentation.navigation.*
@@ -302,6 +303,15 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppInco
                         }
                         collaborationRoutes(
                             stage.workspace.id,
+                            threadAccessHint =
+                                stage.owner?.let {
+                                    CollaborationLocalAccess(
+                                        it.sessionId,
+                                        it.audience,
+                                        it.accountId,
+                                        stage.workspace.company.id,
+                                    )
+                                },
                             threadGraphOwner = {
                                 controller.getBackStackEntry("application/$scope")
                             },

@@ -95,7 +95,7 @@ class ChatThreadEditorTest {
             assertTrue(assertNotNull(vm.state.value.editing).locked)
             f.afterInsert = {}
             f.base.now += 20.minutes
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.EditSaveRequested)
             runCurrent()
@@ -198,7 +198,7 @@ class ChatThreadEditorTest {
                 vm.onEvent(ChatThreadEvent.Stopped)
                 runCurrent()
                 f.base.now += 20.minutes
-                vm.onEvent(ChatThreadEvent.Entered)
+                vm.onEvent(ChatThreadEvent.Entered())
                 runCurrent()
                 select(vm)
                 assertTrue(vm.state.value.canCopyFailedEdits)
@@ -250,7 +250,7 @@ class ChatThreadEditorTest {
         val effects = mutableListOf<ChatThreadEffect>()
         val collection = backgroundScope.launch { vm.effects.collect { effects += it } }
         try {
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals("Original", vm.state.value.rows.single().text)
             block(f, vm, effects)

@@ -17,7 +17,7 @@ class ChatThreadCancellationTest {
             val original = f.queued()
             val release = CompletableDeferred<Unit>()
             f.afterCancel = { withContext(NonCancellable) { release.await() } }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.CancelRequested(original.intent.id))
             vm.onEvent(ChatThreadEvent.CancellationConfirmed)
@@ -44,7 +44,7 @@ class ChatThreadCancellationTest {
             f.records.value += other
             val release = CompletableDeferred<Unit>()
             f.afterCancel = { withContext(NonCancellable) { release.await() } }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.CancelRequested(original.intent.id))
             vm.onEvent(ChatThreadEvent.CancellationConfirmed)
@@ -65,7 +65,7 @@ class ChatThreadCancellationTest {
     fun requestingAndDismissingDoesNotMutateTheOriginalOrCurrentDraft() = runTest {
         withThread { f, vm, _ ->
             val original = f.queued()
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("New draft"))
             advanceTimeBy(250)
@@ -94,7 +94,7 @@ class ChatThreadCancellationTest {
             f.records.value += other
             val release = CompletableDeferred<Unit>()
             f.beforeCancel = { release.await() }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.CancelRequested(original.intent.id))
             vm.onEvent(ChatThreadEvent.CancellationConfirmed)
@@ -119,7 +119,7 @@ class ChatThreadCancellationTest {
         withThread { f, vm, _ ->
             val original = f.queued()
             f.cancelFailure = f.base.network
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.CancelRequested(original.intent.id))
             vm.onEvent(ChatThreadEvent.CancellationConfirmed)
@@ -146,7 +146,7 @@ class ChatThreadCancellationTest {
     fun changedPendingStateMakesAnOpenSelectionUnavailableWithoutReplacingIt() = runTest {
         withThread { f, vm, _ ->
             val original = f.queued()
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.CancelRequested(original.intent.id))
             runCurrent()
@@ -170,7 +170,7 @@ class ChatThreadCancellationTest {
         withThread { f, vm, _ ->
             val original = f.queued()
             f.rejectCancel = true
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.CancelRequested(original.intent.id))
             vm.onEvent(ChatThreadEvent.CancellationConfirmed)
@@ -189,7 +189,7 @@ class ChatThreadCancellationTest {
         withThread { f, vm, _ ->
             val original = f.queued()
             f.beforeCancel = { awaitCancellation() }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.CancelRequested(original.intent.id))
             vm.onEvent(ChatThreadEvent.CancellationConfirmed)
@@ -226,7 +226,7 @@ class ChatThreadCancellationTest {
                         closed = true
                     }
                 }
-                vm.onEvent(ChatThreadEvent.Entered)
+                vm.onEvent(ChatThreadEvent.Entered())
                 runCurrent()
                 vm.onEvent(ChatThreadEvent.CancelRequested(original.intent.id))
                 vm.onEvent(ChatThreadEvent.CancellationConfirmed)
@@ -246,7 +246,7 @@ class ChatThreadCancellationTest {
             val original = f.queued()
             val release = CompletableDeferred<Unit>()
             f.afterCancel = { withContext(NonCancellable) { release.await() } }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.CancelRequested(original.intent.id))
             vm.onEvent(ChatThreadEvent.CancellationConfirmed)

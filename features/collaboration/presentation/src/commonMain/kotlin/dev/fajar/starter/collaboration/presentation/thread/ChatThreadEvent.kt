@@ -1,11 +1,14 @@
 package dev.fajar.starter.collaboration.presentation.thread
 
+import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalAccess
+
 sealed interface ChatThreadEvent {
     data class UnsentReplySelected(val id: String) : ChatThreadEvent
 
     data object LocalReadRetryRequested : ChatThreadEvent
 
-    data object Entered : ChatThreadEvent
+    /** A navigation hint starts private reads earlier; domain publication still verifies access. */
+    data class Entered(val accessHint: CollaborationLocalAccess? = null) : ChatThreadEvent
 
     data object Stopped : ChatThreadEvent
 

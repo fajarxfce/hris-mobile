@@ -17,7 +17,7 @@ class ChatThreadReadTest {
             val seen = f.readState.original()
             f.historyPages[null to null] =
                 AppResult.Success(CollaborationHistoryPage(listOf(seen), null))
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.show(seen)
             runCurrent()
@@ -39,7 +39,7 @@ class ChatThreadReadTest {
             f.base.now += 365.days
             val seen = f.readState.original()
             val unseen = f.readState.original(2)
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertTrue(f.readState.marks.isEmpty())
             vm.onEvent(
@@ -73,7 +73,7 @@ class ChatThreadReadTest {
         withModel { f, vm, _ ->
             val own = f.readState.original(1, f.self.matrixUserId)
             val peer = f.readState.original(2)
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(
                 ChatThreadEvent.ViewportChanged(
@@ -97,7 +97,7 @@ class ChatThreadReadTest {
     fun repeatedViewportAndRecreatedViewModelReuseRetainedCoverageAndPendingIntent() = runTest {
         withModel { f, vm, store ->
             val seen = f.readState.original()
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             repeat(5) { vm.show(seen) }
             runCurrent()
@@ -110,7 +110,7 @@ class ChatThreadReadTest {
             runCurrent()
             val next = f.model()
             store.put("replacement", next)
-            next.onEvent(ChatThreadEvent.Entered)
+            next.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             next.show(seen)
             runCurrent()
@@ -125,7 +125,7 @@ class ChatThreadReadTest {
         withModel { f, vm, _ ->
             val seen = f.readState.original()
             f.readState.markFailure = f.base.network
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.show(seen)
             runCurrent()
@@ -150,13 +150,13 @@ class ChatThreadReadTest {
             val next = f.readState.original(2)
             val release = CompletableDeferred<Unit>()
             f.readState.afterMark = { withContext(NonCancellable) { release.await() } }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.show(first)
             runCurrent()
             val initial = f.readState.marks.single()
             vm.onEvent(ChatThreadEvent.Stopped)
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.show(next)
             runCurrent()
@@ -189,7 +189,7 @@ class ChatThreadReadTest {
                     cancelled = true
                 }
             }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.show(seen)
             runCurrent()
@@ -212,7 +212,7 @@ class ChatThreadReadTest {
             val seen = f.readState.original()
             val release = CompletableDeferred<Unit>()
             f.readState.afterMark = { withContext(NonCancellable) { release.await() } }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             val token = vm.state.value.readViewportToken
             vm.show(seen)

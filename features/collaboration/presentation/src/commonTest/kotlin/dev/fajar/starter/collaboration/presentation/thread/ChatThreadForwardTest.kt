@@ -16,7 +16,7 @@ class ChatThreadForwardTest {
         runTest {
             withThread { f, vm ->
                 f.base.now += 365.days
-                vm.onEvent(ChatThreadEvent.Entered)
+                vm.onEvent(ChatThreadEvent.Entered())
                 runCurrent()
                 vm.onEvent(ChatThreadEvent.DraftChanged("Keep this draft"))
                 advanceTimeBy(250)
@@ -44,7 +44,7 @@ class ChatThreadForwardTest {
     @Test
     fun backClosesOnlyTheRecipientPickerAndNeverPublishes() = runTest {
         withThread { f, vm ->
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             open(vm)
             vm.onEvent(ChatThreadEvent.ForwardTargetSelected(f.base.item(2).conversation.id))
@@ -59,7 +59,7 @@ class ChatThreadForwardTest {
     @Test
     fun retryAfterLostLocalReplyReusesThePreparedIdsWithoutAnotherInsert() = runTest {
         withThread { f, vm ->
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             open(vm)
             f.insertResult = AppResult.Failed(Failure(FailureKind.Storage, "Lost local response"))
@@ -85,7 +85,7 @@ class ChatThreadForwardTest {
     @Test
     fun backgroundCancellationRetainsAnUncertainBatchForTheSameRetry() = runTest {
         withThread { f, vm ->
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             open(vm)
             val entered = CompletableDeferred<Unit>()
@@ -102,7 +102,7 @@ class ChatThreadForwardTest {
             runCurrent()
             assertFalse(vm.state.value.forwarding!!.busy)
             f.afterInsert = {}
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             vm.onEvent(ChatThreadEvent.ForwardConfirmed)
             runCurrent()
             assertNull(vm.state.value.forwarding)
@@ -113,7 +113,7 @@ class ChatThreadForwardTest {
     @Test
     fun accountLossCancelsPendingPreparationAndClearsRecipientNames() = runTest {
         withThread { f, vm ->
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             open(vm)
             f.beforeQuote = { awaitCancellation() }

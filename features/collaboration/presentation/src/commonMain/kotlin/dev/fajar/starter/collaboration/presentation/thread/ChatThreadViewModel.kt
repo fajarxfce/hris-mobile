@@ -236,37 +236,43 @@ class ChatThreadViewModel(
         visible = true
         forwarding.resume()
         reconnectAttempt = 0
-        if (observation?.isActive != true) observeLocal() else if (context != null) connect()
+        if (observation?.isActive != true) observeLocal(event.accessHint)
+        else if (context != null) connect()
     }
 
-    private fun observeLocal() {
+    private fun observeLocal(accessHint: CollaborationLocalAccess? = null) {
         observation?.cancel()
         observation =
             viewModelScope.launch {
-                observeAccess(workspaceId).collectLatest { result ->
-                    ensureActive()
-                    if (result is AppResult.Failed) {
-                        restrict(result.failure)
-                        return@collectLatest
-                    }
-                    val owned = (result as AppResult.Success).value
-                    if (access != owned) clearScope()
-                    access = owned
-                    coroutineScope {
-                        val firstPage = CompletableDeferred<Unit>()
-                        launch {
-                            firstPage.await()
-                            observeComposer(owned)
+                observeAccess(workspaceId)
+                    // This only chooses the private read scope. The thread use case checks the
+                    // captured session and fresh workspace/admission before publishing a snapshot.
+                    .onStart { accessHint?.let { emit(AppResult.Success(it)) } }
+                    .distinctUntilChanged()
+                    .collectLatest { result ->
+                        ensureActive()
+                        if (result is AppResult.Failed) {
+                            restrict(result.failure)
+                            return@collectLatest
                         }
-                        launch {
-                            firstPage.await()
-                            observeUnsentReplies(owned)
+                        val owned = (result as AppResult.Success).value
+                        if (access != owned) clearScope()
+                        access = owned
+                        coroutineScope {
+                            val firstPage = CompletableDeferred<Unit>()
+                            launch {
+                                firstPage.await()
+                                observeComposer(owned)
+                            }
+                            launch {
+                                firstPage.await()
+                                observeUnsentReplies(owned)
+                            }
+                            launch { observeVisibleRows(owned) }
+                            launch { observeQuotePreviews(owned) }
+                            observePages(owned, firstPage)
                         }
-                        launch { observeVisibleRows(owned) }
-                        launch { observeQuotePreviews(owned) }
-                        observePages(owned, firstPage)
                     }
-                }
             }
     }
 

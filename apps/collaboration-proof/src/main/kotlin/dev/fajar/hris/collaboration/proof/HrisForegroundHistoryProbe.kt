@@ -39,7 +39,7 @@ internal class HrisForegroundHistoryProbe(
                 ViewModelProvider.create(store, viewModelFactory { initializer { factory() } })
             val model = provider[ChatThreadViewModel::class]
             try {
-                model.onEvent(ChatThreadEvent.Entered)
+                model.onEvent(ChatThreadEvent.Entered())
                 await(HrisForegroundPhase.LATEST, model) {
                     healthy(model.state.value)
                     model.state.value.connection == ChatThreadConnection.CONNECTED &&

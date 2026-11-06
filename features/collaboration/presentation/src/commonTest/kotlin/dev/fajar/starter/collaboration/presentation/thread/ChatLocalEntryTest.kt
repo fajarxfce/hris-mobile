@@ -23,7 +23,7 @@ class ChatLocalEntryTest {
                 remote.await()
                 AppResult.Success(f.setup.active)
             }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals(0, f.setup.reads)
             local.complete(Unit)
@@ -50,7 +50,7 @@ class ChatLocalEntryTest {
                 remote.await()
                 AppResult.Success(f.setup.active)
             }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals(storage, vm.state.value.localFailure)
             assertEquals(0, f.setup.reads)
@@ -72,7 +72,7 @@ class ChatLocalEntryTest {
             f.online()
             f.historyRows.value = listOf(f.original())
             f.setup.read = { AppResult.Failed(f.base.network) }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertFalse(vm.state.value.loading)
             assertEquals(1, f.setup.reads)
@@ -95,7 +95,7 @@ class ChatLocalEntryTest {
             val reopened = f.model()
             store.put("reopened", reopened)
             f.setup.read = { AppResult.Failed(f.base.network) }
-            reopened.onEvent(ChatThreadEvent.Entered)
+            reopened.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals("Saved conversation", reopened.state.value.rows.single().text)
             assertFalse(reopened.state.value.loading)
@@ -108,7 +108,7 @@ class ChatLocalEntryTest {
             f.online()
             f.historyRows.value = listOf(f.original())
             f.setup.read = { AppResult.Failed(f.base.network) }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.Stopped)
             runCurrent()
@@ -129,7 +129,7 @@ class ChatLocalEntryTest {
             f.online()
             f.historyRows.value = listOf(f.original())
             f.setup.read = { AppResult.Failed(f.base.network) }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             f.base.gate.value = CollaborationListAdmission("denied", f.base.denied)
             runCurrent()
@@ -151,7 +151,7 @@ class ChatLocalEntryTest {
                 withContext(NonCancellable) { release.await() }
                 AppResult.Success(f.setup.active)
             }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             advanceTimeBy(30_001)
             runCurrent()
@@ -175,7 +175,7 @@ class ChatLocalEntryTest {
             val other = f.replies.input(f.base, 2, f.base.item(2).conversation.id)
             val ordinary = f.replies.input(f.base, 3).copy(review = null)
             f.replies.inputs.value = listOf(held, other, ordinary)
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals(listOf(held.id), vm.state.value.unsentReplies.map { it.id })
             assertEquals(held.candidate.text, vm.state.value.unsentReplies.single().text)

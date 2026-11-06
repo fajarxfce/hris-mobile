@@ -1,0 +1,137 @@
+{
+  "status": "Guarded early read scheduling passed focused and complete root/browser/Android validation. First process opening still has a blank body; cold-online recovery comparison remains pending.",
+  "sourceBase": "74152c0bf00170e6264f4b7174c78948d6853ed4",
+  "artifact": {
+    "sha256": "21938aa5443b3eea2d614bee76555946cf58b96e01afd8319434d115492ed5c4",
+    "bytes": 88584188,
+    "versionCode": 41,
+    "variant": "devRelease",
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "debuggable": false,
+    "diagnosticMarkersAbsent": true,
+    "sourceQualification": "Candidate5 predates only the proof-application Entered() call correction. That file is not packaged in the shipping app; no exact final Git-source identity is claimed for this candidate."
+  },
+  "focusedGate": {
+    "startedAt": "2026-11-06T04:44:19.566977+00:00",
+    "elapsedSeconds": 131.455,
+    "exitCode": 0,
+    "freshCounts": {
+      "tests": 228,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceFiles": 4202,
+    "sourcesUnchanged": true
+  },
+  "capture": {
+    "startedAt": "2026-11-06T04:50:51.080918+00:00",
+    "complete": true,
+    "settingsRestored": true,
+    "newMessagesSent": 0,
+    "phoneTouched": false,
+    "hierarchyInspectedOnlyAfterVideo": true
+  },
+  "freshProcessCount": 3,
+  "method": "30fps resampling; dark ink in two fixed video regions; 10% of observed range above initial background; inspect detection frames before accepting",
+  "visualReview": "All12 adjacent frames inspected. First openings show a fully drawn blank room before the bubbles; all repeats show bubbles during hub/room transition. The final online repeat shows a contextual reconnect prompt while keeping nine messages. This needs a cold-online comparison with the previous candidate before release. Threshold values are approximate; faint bubbles can precede detection.",
+  "reviewImageSha256": "002598d22a3031e7d8f4e3ce539f08374e4c2413fe6c0fe84bbb027b634075f1",
+  "firstProcessOpeningAccepted": false,
+  "repeatedRoomTransitionAccepted": true,
+  "trials": [
+    {
+      "name": "offline-1-first",
+      "cycle": 1,
+      "roomOpenSinceProcessStart": 1,
+      "networkReachable": false,
+      "visibleMessageRows": 9,
+      "videoSha256": "7c569d26a6e29e0ba83dbd43fe3363c730464f45a87f0b4d2fefe6207e436f9f",
+      "blankAfterArrowMillis": 200.0,
+      "bubbleAfterFullArrowMillis": 200.0
+    },
+    {
+      "name": "offline-1-repeat",
+      "cycle": 1,
+      "roomOpenSinceProcessStart": 2,
+      "networkReachable": false,
+      "visibleMessageRows": 9,
+      "videoSha256": "9975f14dee1e8e07ccb0389cae74f40f7b3ed769c547234a3aaf30fce166b428",
+      "blankAfterArrowMillis": 0.0,
+      "bubbleAfterFullArrowMillis": -66.667
+    },
+    {
+      "name": "offline-2-first",
+      "cycle": 2,
+      "roomOpenSinceProcessStart": 1,
+      "networkReachable": false,
+      "visibleMessageRows": 9,
+      "videoSha256": "12889f4dac3f016404509974db15066a642acf5ac7f28bec9f7837e29ddf1446",
+      "blankAfterArrowMillis": 133.333,
+      "bubbleAfterFullArrowMillis": 133.333
+    },
+    {
+      "name": "offline-2-repeat",
+      "cycle": 2,
+      "roomOpenSinceProcessStart": 2,
+      "networkReachable": false,
+      "visibleMessageRows": 9,
+      "videoSha256": "2b1a850293098e4de5d02ebc0e20ec727d393e4cac6da63fd687981ae3ae37dd",
+      "blankAfterArrowMillis": 0.0,
+      "bubbleAfterFullArrowMillis": -66.667
+    },
+    {
+      "name": "online-1-first",
+      "cycle": 3,
+      "roomOpenSinceProcessStart": 1,
+      "networkReachable": true,
+      "visibleMessageRows": 9,
+      "videoSha256": "d0c26fa262a5b422061df2bbebb9e9237b436c5f207c319df8e37569e5edc173",
+      "blankAfterArrowMillis": 133.333,
+      "bubbleAfterFullArrowMillis": 133.333
+    },
+    {
+      "name": "online-1-repeat",
+      "cycle": 3,
+      "roomOpenSinceProcessStart": 2,
+      "networkReachable": true,
+      "visibleMessageRows": 9,
+      "videoSha256": "ba73e5b1fe9e323b8f198bbbba89f803137e89f73cceb70b49e70c61f9352e65",
+      "blankAfterArrowMillis": -33.333,
+      "bubbleAfterFullArrowMillis": -100.0
+    }
+  ],
+  "fullGateAttempts": [
+    {
+      "name": "thread-hint-full1",
+      "startedAt": "2026-11-06T04:56:05.311122+00:00",
+      "elapsedSeconds": 344.814,
+      "exitCode": 1,
+      "sourceFiles": 4202,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2288,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "limitation": "All 2,288 newly executed tests passed. The proof application still used the old Entered singleton and failed compilation. Its call was updated to Entered()."
+    },
+    {
+      "name": "thread-hint-full2",
+      "startedAt": "2026-11-06T05:04:00.995003+00:00",
+      "elapsedSeconds": 95.034,
+      "exitCode": 0,
+      "sourceFiles": 4202,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "scope": "Root check, collaboration browser tests, Android debug, lint, and native proof compile succeeded. Tests were up-to-date: zero newly executed cases are claimed. The wrapper no longer requires a positive fresh-test count; source-integrity, Gradle exit and test-failure checks remain."
+    }
+  ]
+}

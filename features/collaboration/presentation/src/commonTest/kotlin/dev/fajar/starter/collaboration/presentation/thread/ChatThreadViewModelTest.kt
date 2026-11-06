@@ -4,6 +4,8 @@ package dev.fajar.starter.collaboration.presentation.thread
 
 import androidx.lifecycle.ViewModelStore
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.localListAccess
+import dev.fajar.starter.collaboration.presentation.inbox.chatId
 import dev.fajar.starter.common.result.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.days
@@ -12,6 +14,80 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.*
 
 class ChatThreadViewModelTest {
+    @Test
+    fun navigationHintStartsGuardedHistoryBeforeWorkspaceObservationAndKeepsTheSameReader() =
+        runTest {
+            withModel { f, vm, _, _ ->
+                f.base.now += 365.days
+                f.historyRows.value = listOf(f.original())
+                val observed = CompletableDeferred<Unit>()
+                f.base.beforeWorkspaceObservation = { observed.await() }
+                vm.onEvent(ChatThreadEvent.Entered(f.setup.owner.localListAccess()))
+                runCurrent()
+                assertFalse(observed.isCompleted)
+                assertEquals("Saved conversation", vm.state.value.rows.single().text)
+                assertFalse(vm.state.value.loading)
+                assertEquals(0, f.timelineOpens)
+                val reads = f.requestedWindows.toList()
+                assertEquals(1, reads.size)
+                observed.complete(Unit)
+                runCurrent()
+                assertEquals(reads, f.requestedWindows)
+                f.base.session.value = null
+                runCurrent()
+                assertTrue(vm.state.value.rows.isEmpty())
+                assertNull(vm.state.value.title)
+                assertEquals(0, f.activeHistory)
+            }
+        }
+
+    @Test
+    fun anotherAccountHintCannotReadHistoryBeforeTheObservedOwnerArrives() = runTest {
+        withModel { f, vm, _, _ ->
+            f.historyRows.value = listOf(f.original())
+            f.base.beforeWorkspaceObservation = { awaitCancellation() }
+            val foreign = f.setup.owner.localListAccess().copy(accountId = chatId(77))
+            vm.onEvent(ChatThreadEvent.Entered(foreign))
+            runCurrent()
+            assertTrue(vm.state.value.rows.isEmpty())
+            assertNull(vm.state.value.title)
+            assertNotNull(vm.state.value.localFailure)
+            assertTrue(f.requestedWindows.isEmpty())
+            assertEquals(0, f.timelineOpens)
+        }
+    }
+
+    @Test
+    fun navigationHintCannotPublishHistoryWhenTheCurrentWorkspaceIsGone() = runTest {
+        withModel { f, vm, _, _ ->
+            f.historyRows.value = listOf(f.original())
+            f.base.beforeWorkspaceObservation = { awaitCancellation() }
+            f.base.workspace.value = null
+            vm.onEvent(ChatThreadEvent.Entered(f.setup.owner.localListAccess()))
+            runCurrent()
+            assertTrue(vm.state.value.rows.isEmpty())
+            assertNull(vm.state.value.title)
+            assertNotNull(vm.state.value.localFailure)
+            assertFalse(vm.state.value.canCompose)
+            assertEquals(0, f.timelineOpens)
+        }
+    }
+
+    @Test
+    fun navigationHintKeepsRetainedDenialClosedWhileWorkspaceObservationIsPending() = runTest {
+        withModel { f, vm, _, _ ->
+            f.historyRows.value = listOf(f.original())
+            f.base.beforeWorkspaceObservation = { awaitCancellation() }
+            f.base.gate.value = CollaborationListAdmission(null, f.base.denied)
+            vm.onEvent(ChatThreadEvent.Entered(f.setup.owner.localListAccess()))
+            runCurrent()
+            assertTrue(vm.state.value.rows.isEmpty())
+            assertEquals(f.base.denied, vm.state.value.localFailure)
+            assertTrue(f.requestedWindows.isEmpty())
+            assertEquals(0, f.timelineOpens)
+        }
+    }
+
     @Test
     fun cachedMessagesRenderBeforePendingDraftReadAndWithoutAConnection() = runTest {
         withModel { f, vm, _, _ ->
@@ -24,7 +100,7 @@ class ChatThreadViewModelTest {
                 entered.complete(Unit)
                 awaitCancellation()
             }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertTrue(entered.isCompleted)
             assertEquals("Saved conversation", vm.state.value.rows.single().text)
@@ -48,7 +124,7 @@ class ChatThreadViewModelTest {
                 )
             }
             f.historyRows.value = listOf(f.original())
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals("Saved conversation", vm.state.value.rows.single().text)
             assertFalse(vm.state.value.loading)
@@ -71,7 +147,7 @@ class ChatThreadViewModelTest {
         withModel { f, vm, store, _ ->
             f.online()
             f.past.pages += listOf(f.past.event(1))
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             advanceUntilIdle()
@@ -80,7 +156,7 @@ class ChatThreadViewModelTest {
             runCurrent()
             val restored = f.model()
             store.put("restored", restored)
-            restored.onEvent(ChatThreadEvent.Entered)
+            restored.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             assertEquals("Older message 1", restored.state.value.rows.single().text)
             assertFalse(restored.state.value.hasOlder)
@@ -95,7 +171,7 @@ class ChatThreadViewModelTest {
     fun anEmptyCommittedEndDoesNotAdvertiseOlderMessagesAfterRestart() = runTest {
         withModel { f, vm, store, _ ->
             f.online()
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             advanceUntilIdle()
@@ -104,7 +180,7 @@ class ChatThreadViewModelTest {
             runCurrent()
             val restored = f.model()
             store.put("restored", restored)
-            restored.onEvent(ChatThreadEvent.Entered)
+            restored.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             assertFalse(restored.state.value.hasOlder)
             assertFalse(restored.state.value.loading)
@@ -119,7 +195,7 @@ class ChatThreadViewModelTest {
         withModel { f, vm, _, _ ->
             f.base.now += 30.days
             f.historyRows.value = listOf(f.original())
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals("Colleague 1", vm.state.value.title)
             assertEquals(f.setup.owner, vm.state.value.notificationOwner)
@@ -140,7 +216,7 @@ class ChatThreadViewModelTest {
     fun lostLocalReplyRetainsExactIdAndBodyUntilRetryReadsTheCommit() = runTest {
         withModel { f, vm, _, effects ->
             f.insertResult = AppResult.Failed(f.base.network)
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             vm.onEvent(ChatThreadEvent.DraftChanged("exact original"))
             runCurrent()
             // Entry is asynchronous; edit after the owned context is ready.
@@ -167,7 +243,7 @@ class ChatThreadViewModelTest {
         withModel { f, vm, _, effects ->
             val release = CompletableDeferred<Unit>()
             f.afterInsert = { withContext(NonCancellable) { release.await() } }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("saved before cancellation"))
             vm.onEvent(ChatThreadEvent.SendRequested)
@@ -179,7 +255,7 @@ class ChatThreadViewModelTest {
             runCurrent()
             assertTrue(vm.state.value.submissionPending)
             assertTrue(effects.isEmpty())
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
             assertFalse(vm.state.value.submissionPending)
@@ -191,7 +267,7 @@ class ChatThreadViewModelTest {
     fun hiddenOwnerLossClearsBodiesDraftAndPendingIdentityAndDisposalClosesObservers() = runTest {
         withModel { f, vm, store, _ ->
             f.historyRows.value = listOf(f.original())
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("private draft"))
             vm.onEvent(ChatThreadEvent.Stopped)
@@ -215,8 +291,8 @@ class ChatThreadViewModelTest {
     fun foregroundTimelineIsReleasedOnStopAndNewEntryOpensOneChild() = runTest {
         withModel { f, vm, store, _ ->
             f.online()
-            vm.onEvent(ChatThreadEvent.Entered)
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals(ChatThreadConnection.CONNECTED, vm.state.value.connection)
             assertEquals(1, f.timelineOpens)
@@ -224,7 +300,7 @@ class ChatThreadViewModelTest {
             runCurrent()
             assertEquals(1, f.timelineCloses)
             assertEquals(0, f.setup.closes)
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals(2, f.timelineOpens)
             store.clear()
@@ -241,7 +317,7 @@ class ChatThreadViewModelTest {
             f.online()
             val release = CompletableDeferred<Unit>()
             f.beforeEnter = { withContext(NonCancellable) { release.await() } }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals(1, f.timelineOpens)
             f.base.gate.value = CollaborationListAdmission("denied", f.base.denied)
@@ -259,7 +335,7 @@ class ChatThreadViewModelTest {
     fun sendStoresAndSchedulesWhileExternalDeliveryUpdatesTheOwnedProjection() = runTest {
         withModel { f, vm, _, _ ->
             f.online()
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("one send"))
             vm.onEvent(ChatThreadEvent.SendRequested)
@@ -302,7 +378,7 @@ class ChatThreadViewModelTest {
                     matrixRoomId = null,
                     version = null,
                 )
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertTrue(f.roomRequests.isEmpty())
             assertEquals(ChatThreadConnection.WAITING, vm.state.value.connection)
@@ -337,7 +413,7 @@ class ChatThreadViewModelTest {
                     retryable = true,
                     retryAt = f.base.now.toEpochMilliseconds(),
                 )
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("retry after review"))
             vm.onEvent(ChatThreadEvent.SendRequested)
@@ -359,7 +435,7 @@ class ChatThreadViewModelTest {
             f.base.now += 30.days
             f.pageNext = "0000000000001000/m-" + "a".repeat(64)
             f.historyRows.value = listOf(f.original())
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertTrue(vm.state.value.hasOlder)
             vm.onEvent(ChatThreadEvent.OlderRequested)
@@ -375,7 +451,7 @@ class ChatThreadViewModelTest {
     @Test
     fun validationFailureDoesNotLockComposerOrReserveAnUnsendableIntent() = runTest {
         withModel { f, vm, _, _ ->
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("bad\u0000text"))
             vm.onEvent(ChatThreadEvent.SendRequested)
@@ -396,7 +472,7 @@ class ChatThreadViewModelTest {
         withModel { f, vm, _, _ ->
             f.online()
             f.timelineFlow = kotlinx.coroutines.flow.flowOf(AppResult.Success(emptyList()))
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals(ChatThreadConnection.OFFLINE, vm.state.value.connection)
             assertEquals("client.collaboration_timeline_stopped", vm.state.value.failure?.code)
@@ -410,7 +486,7 @@ class ChatThreadViewModelTest {
     fun stoppingKeepsDurableWorkAndReentryDoesNotCreateAnotherSend() = runTest {
         withModel { f, vm, _, _ ->
             f.online()
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("continue after closing"))
             vm.onEvent(ChatThreadEvent.SendRequested)
@@ -423,7 +499,7 @@ class ChatThreadViewModelTest {
             assertEquals(keys, f.scheduledKeys)
             assertEquals(1, f.timelineCloses)
             assertEquals(ChatThreadConnection.OFFLINE, vm.state.value.connection)
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals(0, f.deliveries)
             assertEquals(1, f.insertions.size)
@@ -437,7 +513,7 @@ class ChatThreadViewModelTest {
             f.historyRows.value = listOf(f.original())
             f.base.gate.value = CollaborationListAdmission("denied", f.base.denied)
             f.setup.read = { AppResult.Failed(f.base.network) }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.RefreshRequested)
             runCurrent()
@@ -458,7 +534,7 @@ class ChatThreadViewModelTest {
             f.online()
             f.historyRows.value = listOf(f.original())
             f.historyFull = true
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             advanceTimeBy(400)
             runCurrent()
@@ -487,7 +563,7 @@ class ChatThreadViewModelTest {
             f.historyFull = true
             val release = CompletableDeferred<Unit>()
             f.beforeHistoryReopen = { withContext(NonCancellable) { release.await() } }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             advanceTimeBy(400)
             runCurrent()
@@ -511,7 +587,7 @@ class ChatThreadViewModelTest {
         withModel { f, vm, _, _ ->
             f.online()
             f.past.pages += listOf(f.past.event(2), f.past.event(1))
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             assertTrue(vm.state.value.hasOlder)
             assertTrue(f.past.requestedPositions.isEmpty())
@@ -538,7 +614,7 @@ class ChatThreadViewModelTest {
             f.online()
             f.past.pages += listOf(f.past.event(2))
             f.past.pages += listOf(f.past.event(1))
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             advanceUntilIdle()
@@ -557,7 +633,7 @@ class ChatThreadViewModelTest {
             f.online()
             f.past.pages += List(20) { f.past.event(40 - it, readable = false) }
             f.past.pages += listOf(f.past.event(1))
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             repeat(3) {
                 vm.onEvent(ChatThreadEvent.OlderRequested)
@@ -579,7 +655,7 @@ class ChatThreadViewModelTest {
             f.past.pages += listOf(f.past.event(2))
             f.past.pages += listOf(f.past.event(1))
             f.past.originalFailure = f.base.network
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             advanceUntilIdle()
@@ -602,7 +678,7 @@ class ChatThreadViewModelTest {
             f.past.pages += listOf(f.past.event(1))
             val release = CompletableDeferred<Unit>()
             f.past.beforeProvider = { withContext(NonCancellable) { release.await() } }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             runCurrent()
@@ -626,7 +702,7 @@ class ChatThreadViewModelTest {
             f.past.pages += listOf(f.past.event(1))
             val release = CompletableDeferred<Unit>()
             f.past.beforeOriginal = { withContext(NonCancellable) { release.await() } }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             runCurrent()
@@ -648,7 +724,7 @@ class ChatThreadViewModelTest {
             f.online()
             f.past.pages += emptyList<CollaborationProviderHistoryEvent>()
             f.past.pages += listOf(f.past.event(1))
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             advanceUntilIdle()
@@ -666,7 +742,7 @@ class ChatThreadViewModelTest {
         withModel { f, vm, _, _ ->
             f.online()
             f.past.pages += listOf(f.past.event(1, readable = false))
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             advanceUntilIdle()
@@ -699,7 +775,7 @@ class ChatThreadViewModelTest {
             // Every original is durable, including ones outside the currently visible window.
             // Any new native focus would fail, as it does after exhausting the real SDK budget.
             f.past.originalFailure = f.base.network
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             repeat(20) {
                 vm.onEvent(ChatThreadEvent.OlderRequested)
@@ -729,7 +805,7 @@ class ChatThreadViewModelTest {
                     )
             }
             f.past.pages += events
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             advanceUntilIdle()
@@ -747,7 +823,7 @@ class ChatThreadViewModelTest {
             f.online()
             val event = f.past.event(1)
             f.past.pages += listOf(event)
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             f.historyFull = true
             vm.onEvent(ChatThreadEvent.OlderRequested)
@@ -778,7 +854,7 @@ class ChatThreadViewModelTest {
                     f.past.event(2, readable = false).copy(type = "m.room.member"),
                     f.past.event(1),
                 )
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             advanceUntilIdle()
@@ -798,7 +874,7 @@ class ChatThreadViewModelTest {
                     f.past.event(2, readable = false).copy(type = "m.room.member"),
                     f.past.event(1, readable = false).copy(type = "m.room.create"),
                 )
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             advanceUntilIdle()
@@ -824,7 +900,7 @@ class ChatThreadViewModelTest {
                     f.past.progress = requireNotNull(f.past.progress).copy(references = 2)
                 }
             }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             advanceUntilIdle()

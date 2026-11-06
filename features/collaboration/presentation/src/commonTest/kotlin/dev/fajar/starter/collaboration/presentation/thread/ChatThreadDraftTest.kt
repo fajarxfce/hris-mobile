@@ -17,7 +17,7 @@ class ChatThreadDraftTest {
         withDraft { f, vm, _, _ ->
             f.beforeDraftWriteFailure =
                 Failure(FailureKind.Conflict, "Busy", code = "client.collaboration_draft_busy")
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Keep my unsaved text"))
             advanceUntilIdle()
@@ -46,7 +46,7 @@ class ChatThreadDraftTest {
             val ready = CompletableDeferred<Unit>()
             f.draftSlot.value = f.savedDraft("Saved text")
             f.beforeDraft = { ready.await() }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertFalse(vm.state.value.canCompose)
             vm.onEvent(ChatThreadEvent.DraftChanged("Too early"))
@@ -65,7 +65,7 @@ class ChatThreadDraftTest {
         withDraft { f, vm, _, _ ->
             val release = CompletableDeferred<Unit>()
             f.afterDraftWrite = { if (f.draftWrites.size == 1) release.await() }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("First"))
             advanceTimeBy(250)
@@ -87,7 +87,7 @@ class ChatThreadDraftTest {
     fun lostWriteReplyRetriesTheSameRevisionBeforeSavingLaterInput() = runTest {
         withDraft { f, vm, _, _ ->
             f.draftWriteFailure = f.base.network
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Uncertain"))
             advanceUntilIdle()
@@ -108,7 +108,7 @@ class ChatThreadDraftTest {
             val emissions =
                 MutableStateFlow<AppResult<CollaborationDraft?>>(AppResult.Success(null))
             f.draftFlow = emissions
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Current text"))
             advanceUntilIdle()
@@ -122,7 +122,7 @@ class ChatThreadDraftTest {
     @Test
     fun savedDraftReopensInANewViewModelWithExactWhitespace() = runTest {
         withDraft { f, vm, store, _ ->
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("  saved\n🙂  "))
             advanceUntilIdle()
@@ -130,7 +130,7 @@ class ChatThreadDraftTest {
             val reopened = f.model()
             val owner = ViewModelStore().also { it.put("reopened", reopened) }
             try {
-                reopened.onEvent(ChatThreadEvent.Entered)
+                reopened.onEvent(ChatThreadEvent.Entered())
                 runCurrent()
                 assertEquals("  saved\n🙂  ", reopened.state.value.draft)
                 assertTrue(reopened.state.value.canCompose)
@@ -144,7 +144,7 @@ class ChatThreadDraftTest {
     fun deathAfterFreezeBeforeQueueReopensTheOriginalSubmissionId() = runTest {
         withDraft { f, vm, store, _ ->
             f.afterDraftWrite = { if (it.submissionId != null) awaitCancellation() }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Frozen before death"))
             vm.onEvent(ChatThreadEvent.SendRequested)
@@ -157,7 +157,7 @@ class ChatThreadDraftTest {
             val reopened = f.model()
             val owner = ViewModelStore().also { it.put("reopened", reopened) }
             try {
-                reopened.onEvent(ChatThreadEvent.Entered)
+                reopened.onEvent(ChatThreadEvent.Entered())
                 runCurrent()
                 assertTrue(reopened.state.value.submissionPending)
                 assertFalse(reopened.state.value.canCompose)
@@ -176,7 +176,7 @@ class ChatThreadDraftTest {
     fun deathAfterQueueCommitBeforeAcknowledgementDoesNotInsertAgain() = runTest {
         withDraft { f, vm, store, _ ->
             f.afterInsert = { awaitCancellation() }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Queued before death"))
             vm.onEvent(ChatThreadEvent.SendRequested)
@@ -187,7 +187,7 @@ class ChatThreadDraftTest {
             val reopened = f.model()
             val owner = ViewModelStore().also { it.put("reopened", reopened) }
             try {
-                reopened.onEvent(ChatThreadEvent.Entered)
+                reopened.onEvent(ChatThreadEvent.Entered())
                 runCurrent()
                 reopened.onEvent(ChatThreadEvent.SendRequested)
                 runCurrent()
@@ -204,7 +204,7 @@ class ChatThreadDraftTest {
     fun lostClearReplyThenNewerDraftKeepsNewTextAfterRetry() = runTest {
         withDraft { f, vm, _, _ ->
             f.afterDraftWrite = { if (it.text.isEmpty()) f.draftWriteFailure = f.base.network }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Original send"))
             vm.onEvent(ChatThreadEvent.SendRequested)
@@ -225,7 +225,7 @@ class ChatThreadDraftTest {
     @Test
     fun rejectedCharactersCanBeCorrectedWithoutRetryingAnInvalidBodyForever() = runTest {
         withDraft { f, vm, _, _ ->
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Bad\u0000text"))
             advanceUntilIdle()
@@ -242,7 +242,7 @@ class ChatThreadDraftTest {
     fun navigationFlushesTheDebounceAndFailedSaveRequiresExplicitDiscard() = runTest {
         withDraft { f, vm, _, effects ->
             f.draftWriteFailure = f.base.network
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Before back"))
             vm.onEvent(ChatThreadEvent.BackRequested)
@@ -259,7 +259,7 @@ class ChatThreadDraftTest {
     @Test
     fun concurrentDraftIsNotOverwrittenAndReloadRequiresConfirmation() = runTest {
         withDraft { f, vm, _, _ ->
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             val concurrent = f.savedDraft("Other window")
             f.draftSlot.value = concurrent
@@ -283,7 +283,7 @@ class ChatThreadDraftTest {
         withDraft { f, vm, _, effects ->
             val release = CompletableDeferred<Unit>()
             f.afterDraftWrite = { withContext(NonCancellable) { release.await() } }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Private input"))
             advanceTimeBy(250)
@@ -305,7 +305,7 @@ class ChatThreadDraftTest {
         withDraft { f, vm, store, effects ->
             val release = CompletableDeferred<Unit>()
             f.afterDraftWrite = { withContext(NonCancellable) { release.await() } }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Slow write"))
             advanceTimeBy(250)

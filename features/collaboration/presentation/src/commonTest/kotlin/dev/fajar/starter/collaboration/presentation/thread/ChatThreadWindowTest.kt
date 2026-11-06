@@ -15,7 +15,7 @@ class ChatThreadWindowTest {
     @Test
     fun sixHundredOriginalsRemainReachableInBothDirectionsWithOneOwnedObserver() = runTest {
         withWindow { f, vm, _ ->
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             val visited = vm.state.value.rows.mapNotNull { it.eventId }.toMutableSet()
             vm.onEvent(ChatThreadEvent.DraftChanged("Retain my draft"))
@@ -48,7 +48,7 @@ class ChatThreadWindowTest {
     @Test
     fun returnToLatestAndSendingFromOldHistoryPublishOnlyAfterTheHeadArrives() = runTest {
         withWindow { f, vm, effects ->
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             runCurrent()
@@ -80,7 +80,7 @@ class ChatThreadWindowTest {
     @Test
     fun latestSupersedesAnUncooperativeOlderReadWithoutPublishingItsRows() = runTest {
         withWindow { f, vm, effects ->
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             val release = CompletableDeferred<Unit>()
             f.beforePage = { after, _ ->
@@ -104,7 +104,7 @@ class ChatThreadWindowTest {
     @Test
     fun denialClosesPendingReverseReadAndClearsDraftDespiteLateStorage() = runTest {
         withWindow { f, vm, _ ->
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             runCurrent()
@@ -129,7 +129,7 @@ class ChatThreadWindowTest {
     @Test
     fun failedOrReplacedOlderWindowCannotKeepHiddenStaleRows() = runTest {
         for (failed in listOf(false, true)) withWindow { f, vm, _ ->
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             f.historyPages[anchor(1) to null] =
                 if (failed) AppResult.Failed(f.base.network)

@@ -2,12 +2,36 @@
 
 ## Cached room entry accepted; first process opening next — 6 November 2026
 
-The first-frame increment is validated and ready for its atomic commit/push after
-CI-only dcfea4f3 (already pushed). Do not reapply any local drafts. Final source has
-4,202 inputs, and final first-frame-full2 PASS2,280 fresh/368.759s, zero failures,
-errors or skips; Android debug/lint and browser/root/architecture checks passed.
-Initial first-frame-full1 PASS6,938 fresh/804.331s. Both lint reports have zero issues.
-All local drivers and owned emulators are drained/stopped; data/keys retained.
+The first-frame increment is committed/pushed in74152c0b after CI-only dcfea4f3.
+Its final source had4,202 inputs; first-frame-full2 PASS2,280 fresh/368.759s and
+first-frame-full1 PASS6,938 fresh/804.331s, zero failures/errors/skips. Lint has zero
+issues. All Mobile local drivers and emulators are drained/stopped; data/keys kept.
+
+CURRENT: initial-scope-hint implementation is validated in this increment. Focused thread-hint1 PASS228/131.455s on4,202 unchanged inputs.
+Full1 passed2,288 fresh tests but failed native-proof compilation at its obsolete
+Entered singleton. The proof-only call is fixed to Entered(); full2 PASS95.034s,
+4,202 unchanged inputs, root/browser/Android/lint/native proof compile. Tests were
+up-to-date; zero fresh cases claimed for full2. All local drivers are drained.
+Eighteen changed Kotlin files are formatted. Candidate5 predates only the separate
+proof-app constructor correction, not shipping app code. Its build/lint PASS113.005s
+and artifact verification passed; SHA21938aa5443b3eea2d614bee76555946cf58b96e01afd8319434d115492ed5c4.
+Six recordings in three fresh processes completed, nine rows throughout, no sends.
+All12 adjacent frames inspected. First room gaps200/133/133ms remain AFTER the
+fully drawn header; repeated entries have bubbles during transition (0/0/−33ms).
+Thus first-opening target is NOT accepted. The final online repeat shows a
+contextual reconnect prompt (this copy follows SDK Unauthorized); no exact cause
+claimed. Compare cold-online startup against candidate4 and inspect sanitized
+ChatAuth diagnostics before release. No recovery-comparison scripts are prepared.
+Emulator2857012/startTicks161728441 stopped04:54:08, data/keys retained. All candidate5
+build/verify/install/capture/analyze drivers drained. No emulator is active. Phone40.
+[Evidence](measurements/collaboration-chat-first-opening-hint-2026-11-06.json).
+
+Starter f92b272 is committed/pushed. Independent check-1 PASS271.266s:81 fresh,
+396 total desktop/six targeted browser cases, no failures/errors/skips, Android/
+lint/production Web pass (44 existing lint warnings). Driver54568 is drained.
+Apple-only42164549935 PASSED on exact f92b272. Artifact/source audit confirms
+129 cases/34 suites, including six core-presentation cases, and full Xcode app.
+No duplicate dispatch. All local heavy jobs are drained; no emulator is active.
 
 [Current behavior and evidence](collaboration-chat-first-frame.md): the account/
 company graph keeps three idle, established latest-window room ViewModels with
@@ -26,33 +50,36 @@ built/linted270.160s and passed artifact checks. It predates only the final depa
 cancellation/test; no final release or phone delivery claimed. Phone remains40.
 Emulator2584551/startTicks161491526 stopped04:13:12 with data/keys retained.
 
-NEXT after committing this increment: run prepared Starter check at.work/mvi-effect-
-retirement-2026-11-06/check.py (currently UNEXECUTED). Its two exact core MVI files
-and common regression are already APPLIED, UNCOMMITTED; Apple CI now includes
-core:presentation compile/tests. Port only this primitive, not HRIS rooms/policy.
-One heavy local task at a time; Mobile edits can proceed while Starter is checking.
+First-opening change: AppStage.SignedIn's owner and selected company provide an
+optional local access hint through navigation and data-class ChatThreadEvent.Entered.
+observeLocal seeds the ownership flow with onStart + distinctUntilChanged, letting
+private thread reads overlap initial workspace observation. ObserveCollaborationThread
+still verifies captured session and fresh selected workspace/admission before every
+publication. The hint is not authority. Default Entered() retains the ordinary
+no-hint path. Focused tests and Android recordings completed; first-entry target remains unmet.
 
-First-opening approach is PLANNED, UNAPPLIED: AppStage.SignedIn already carries
-WorkspaceSelectionOwner and selected company. Pass an optional local access hint
-through collaboration navigation to a data-class ChatThreadEvent.Entered. Seed
-observeLocal's ownership flow with that hint using onStart + distinctUntilChanged,
-so private thread reads overlap the initial workspace observation. The existing
-ObserveCollaborationThread must retain session capture and fresh selected-workspace/
-admission checks before every publication. The hint is not authority. Keep an
-ordinary no-hint fallback; test delayed workspace observation with valid point reads,
-identical actual owner without reopening history, wrong-account hint, missing current
-workspace, held denial and later owner loss. Then measure actual Android first
-entry again. Do not claim the proposed optimization works before tests/recordings.
+Next: cold-online recovery comparison and
+remaining first-entry work before release. Commit/push only accurately scoped
+validated increments; this does not close the first-entry target. The late-departure correction is
+already in74152c0b; never reapply its draft. Starter port is already pushed; only
+its hosted Apple acceptance remains pending.
 
-Native CI42162194348 is IN PROGRESS automatically on dcfea4f3, using already-live
+Native CI42162194348 FAILED on dcfea4f3; its evidence is downloaded for exact
+diagnosis.74152c0b native42163759500 runs now. Control42163759602 portable passed
+and Apple is in progress. All were automatic.
+Native CI uses already-live
 Platform10485916. Last step: isolated Android SDK fixture build. Do not dispatch a
 duplicate or replay Platform deployment/accepted Forward sends. Earlier native runs
 failed against304be with only a generic RuntimeError; no exact diagnosis claimed.
 ControlCI3a42150575846 and feaf42145472209 passed portable+Apple.
 
-SDK raw-event nine Rust cases are APPLIED but UNCOMPILED in the isolated8de215a0
-worktree, including crypto/missing-key/cold-cache recovery. Old seven-test evidence
-is not current. NDK absent; no native artifact/version changed. Finish this and
+SDK raw-event nine Rust cases compile. Test3/test4 each passed8 and failed1:
+crypto clients generate distinct TOKEN_0/TOKEN_1 but mock_room_event defaults to1234,
+so the exact event GET returned404. Test-only mocks now require the exact synthetic
+client tokens; no auth expectation is removed. Test5 PASS9/32.474s on unchanged
+inputs in isolated8de215a0, including crypto/missing-key/cold-cache recovery. All
+SDK drivers drained. NDK absent; no native
+artifact/version changed. Finish this and
 actual encrypted edit/ciphertext size before phone release, then continue all54
 communications PRD groups. ChatThreadHistoryPager business policy in presentation
 remains flagged in the layer review. Always announce phone installs and use install-

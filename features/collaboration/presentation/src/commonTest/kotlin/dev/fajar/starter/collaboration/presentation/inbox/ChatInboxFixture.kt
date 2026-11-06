@@ -92,9 +92,13 @@ internal class ChatInboxFixture {
 
             override suspend fun clear(sessionId: String): AppResult<Boolean> = error("No logout")
         }
+    var beforeWorkspaceObservation: suspend () -> Unit = {}
     val workspaces =
         object : WorkspaceRepository {
-            override fun observe(sessionId: String) = workspace.map { AppResult.Success(it) }
+            override fun observe(sessionId: String) = flow {
+                beforeWorkspaceObservation()
+                emitAll(workspace.map { AppResult.Success(it) })
+            }
 
             override suspend fun current(sessionId: String) = AppResult.Success(workspace.value)
 

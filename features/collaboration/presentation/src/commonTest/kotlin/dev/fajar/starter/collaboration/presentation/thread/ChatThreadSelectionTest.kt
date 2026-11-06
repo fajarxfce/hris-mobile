@@ -36,7 +36,7 @@ class ChatThreadSelectionTest {
                     ),
                 )
             f.records.value = listOf(command)
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals("Sent before history import", vm.state.value.rows.single().text)
             assertEquals(0, f.timelineOpens)
@@ -72,7 +72,7 @@ class ChatThreadSelectionTest {
                     CollaborationMessageDelivery.SENT,
                 )
             f.updates.value = AppResult.Success(listOf(item))
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertTrue(vm.state.value.rows.isEmpty())
             assertNull(vm.state.value.localFailure)
@@ -94,7 +94,7 @@ class ChatThreadSelectionTest {
                     f.original(),
                     f.original().copy(primaryEventId = "\$second", eventIds = listOf("\$second")),
                 )
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Keep this draft"))
             advanceTimeBy(250)
@@ -122,7 +122,7 @@ class ChatThreadSelectionTest {
     fun duplicateConfirmationsDeleteOneExactBatchAndClearSelection() = runTest {
         withThread { f, vm ->
             f.historyRows.value = listOf(f.original())
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             selectAll(vm)
             vm.onEvent(ChatThreadEvent.DeleteSelected)
@@ -148,7 +148,7 @@ class ChatThreadSelectionTest {
         withThread { f, vm ->
             f.historyRows.value = listOf(f.original())
             f.hideFailure = Failure(FailureKind.Storage, "Lost local response")
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             selectAll(vm)
             vm.onEvent(ChatThreadEvent.DeleteSelected)
@@ -171,7 +171,7 @@ class ChatThreadSelectionTest {
             f.historyRows.value = listOf(f.original())
             val release = CompletableDeferred<Unit>()
             f.afterHide = { withContext(NonCancellable) { release.await() } }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             selectAll(vm)
             vm.onEvent(ChatThreadEvent.DeleteSelected)
@@ -203,7 +203,7 @@ class ChatThreadSelectionTest {
                             text = "Older",
                         ),
                 )
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             selectAll(vm)
             val effect = async { vm.effects.first { it is ChatThreadEffect.CopyMessages } }
@@ -227,7 +227,7 @@ class ChatThreadSelectionTest {
                     f.original()
                         .copy(primaryEventId = "\$event-$it", eventIds = listOf("\$event-$it"))
                 }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             selectAll(vm)
             assertEquals(50, vm.state.value.selectedMessages.size)

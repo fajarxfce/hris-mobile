@@ -25,7 +25,7 @@ class ChatThreadRetainedStateTest {
                     owner.viewModelStore.put("thread", it)
                     owner.bind(it)
                 }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             val saved = vm.state.value.rows
             assertEquals("Saved conversation", saved.single().text)
@@ -46,7 +46,7 @@ class ChatThreadRetainedStateTest {
             val reopened = stores.open(f.conversationId).also { route.put("owner", it) }
             assertSame(vm, reopened.viewModelStore["thread"])
             val nextEffect = backgroundScope.async { vm.effects.first() }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             assertEquals(saved, vm.state.value.rows)
             runCurrent()
             assertEquals(reads, f.requestedWindows)
@@ -87,7 +87,7 @@ class ChatThreadRetainedStateTest {
                     owner.viewModelStore.put("thread", it)
                     owner.bind(it)
                 }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertEquals(1, f.activeHistory)
             route.clear()
@@ -120,7 +120,7 @@ class ChatThreadRetainedStateTest {
                     owner.viewModelStore.put("thread", it)
                     owner.bind(it)
                 }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Keep this draft"))
             vm.onEvent(ChatThreadEvent.BackRequested)
@@ -134,7 +134,7 @@ class ChatThreadRetainedStateTest {
             val reopened = stores.open(f.conversationId).also { route.put("owner", it) }
             assertSame(vm, reopened.viewModelStore["thread"])
             val nextEffect = backgroundScope.async { vm.effects.first() }
-            vm.onEvent(ChatThreadEvent.Entered)
+            vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             saved.complete(Unit)
             runCurrent()

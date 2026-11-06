@@ -26,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalAccess
 import dev.fajar.starter.collaboration.presentation.inbox.*
 import dev.fajar.starter.collaboration.presentation.inbox.pages.ChatInboxPage
 import dev.fajar.starter.collaboration.presentation.participants.*
@@ -64,6 +65,7 @@ fun NavGraphBuilder.collaborationRoutes(
     onSetup: () -> Unit,
     onBack: () -> Unit,
     threadGraphOwner: () -> ViewModelStoreOwner,
+    threadAccessHint: CollaborationLocalAccess? = null,
     onThreadFocus:
         (
             dev.fajar.starter.collaboration.domain.entities.CollaborationOwner, String,
@@ -100,6 +102,7 @@ fun NavGraphBuilder.collaborationRoutes(
             workspaceId,
             conversationId,
             owner,
+            threadAccessHint,
             onSetup,
             onBack,
             onThreadFocus,
@@ -193,6 +196,7 @@ private fun ChatThreadEntry(
     workspaceId: String,
     conversationId: String,
     owner: ChatThreadViewModelOwner,
+    accessHint: CollaborationLocalAccess?,
     onSetup: () -> Unit,
     onBack: () -> Unit,
     onThreadFocus:
@@ -221,7 +225,7 @@ private fun ChatThreadEntry(
         }
     }
     LifecycleStartEffect(vm) {
-        vm.onEvent(ChatThreadEvent.Entered)
+        vm.onEvent(ChatThreadEvent.Entered(accessHint))
         onStopOrDispose { vm.onEvent(ChatThreadEvent.Stopped) }
     }
     CollectEffects(vm.effects) {

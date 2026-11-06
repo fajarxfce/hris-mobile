@@ -127,7 +127,7 @@ class ChatThreadHistoryRestoreTest {
                 }
             }
             val room = f.model().also { store.put("room", it) }
-            room.onEvent(ChatThreadEvent.Entered)
+            room.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             assertTrue(reading.isCompleted)
             store.clear()
@@ -157,7 +157,7 @@ class ChatThreadHistoryRestoreTest {
         store: ViewModelStore,
     ): ChatThreadViewModel {
         val room = f.model().also { store.put("room", it) }
-        room.onEvent(ChatThreadEvent.Entered)
+        room.onEvent(ChatThreadEvent.Entered())
         advanceUntilIdle()
         return room
     }
