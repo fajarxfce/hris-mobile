@@ -1,0 +1,10 @@
+{
+  "previousFixtureCommit": "10485916ee02850cf913793398f7ef3dd1e09afb",
+  "fixtureCommit": "ef8a41b3c8a4bb57291203c11b3067dd1aa56b9b",
+  "change": "The CI-only pin adopts bounded native-driver failure stages. Runtime code remains the accepted10485916; no Platform rollout.",
+  "platformTests": 118,
+  "platformFailures": 0,
+  "priorFailedRun": 42162194348,
+  "newNativeAcceptance": false,
+  "phoneChanged": false
+}
