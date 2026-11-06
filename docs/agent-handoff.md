@@ -1,5 +1,18 @@
 # Agent continuation — HRIS Mobile
 
+## Layer ownership correction in progress — 6 November 2026
+
+Latest user steering explicitly rejects misplaced business logic hidden in
+ViewModel/helper methods. Read [the concrete audit and correction](collaboration-layer-review.md).
+AGENTS.md in all three repositories now records that requirement. Mobile feaf9b1a
+is pushed. Contextual failed-edit copy is UNCOMMITTED and editor-copy1 is running;
+freeze its source until the gate drains. The new domain room-preparation and shared
+policy files are UNAPPLIED .kt.draft files, not compiled or integrated. Complete
+that correction, cancellation/ownership/polling tests and full checks, then commit/
+push. SDK raw-event test2 passed7/34.692s; native crypto/reopen proof remains open.
+No editor APK/install or new deployment. Phone40; Platform10485916/schema116.1;
+Starterbce2012 product unchanged. Never repeat accepted rollout/Forward operations.
+
 ## Local editor accepted; continue native edit proof — 6 November 2026
 
 Thirty-three Kotlin files/two resources add the separate edit composer, local

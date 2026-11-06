@@ -19,6 +19,12 @@ files and chat history are supplementary.
   and coordinate use cases. UI dispatches through onEvent; reducers update immutable
   state and route collectors consume transient effects. No SDK I/O, navigation calls,
   or service locators. Keep durable outcomes in state/storage, not only in effects.
+- Keep ViewModels focused on screen state, typed events and use-case results. Business
+  retry rules, provisioning, reconciliation and durable command orchestration belong
+  in domain use cases coordinating repositories and pure policies. Do not conceal
+  misplaced responsibilities in generic helpers, utilities, controllers or extension
+  files. Extract a component only when it has a clear role and lifetime; reducing
+  method counts alone is not an architecture fix.
 - Pages/widgets render state and forward actions. Keep DI, state collection, and
   navigation effects in feature navigation entry points and app composition.
 - Reuse public `safeApiCall` and `safeStorageCall` functions. Include acquisition and
