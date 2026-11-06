@@ -1,7 +1,7 @@
 {
-  "recordedAt": "2026-11-06T23:34:53.140924+00:00",
+  "recordedAt": "2026-11-06T23:53:29.345513+00:00",
   "head": "5081e629259e33af286304ccd79d91fbd7e8dade",
-  "status": "first protocol and native HRIS accepted; control still running",
+  "status": "first protocol, native HRIS and control accepted",
   "protocol": {
     "id": 42306715423,
     "status": "completed",
@@ -112,7 +112,42 @@
   },
   "control": {
     "id": 42306713193,
-    "status": "pending audit"
+    "status": "completed",
+    "conclusion": "success",
+    "auditedAt": "2026-11-06T23:42:51.067589+00:00",
+    "artifacts": [
+      {
+        "artifactId": 13549177558,
+        "name": "collaboration-control-apple",
+        "sha256": "dd60ef8ec12c8f33455225819a050207e7bbf0348a6cf797df93c246241bbe94",
+        "bytes": 329712,
+        "suites": 195,
+        "counts": {
+          "tests": 1775,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "abi": null,
+        "proof": {}
+      },
+      {
+        "artifactId": 13548077331,
+        "name": "collaboration-control-portable",
+        "sha256": "14dd8b4a74881dcf516b02f9dd437ab10a3dfbb89a7a2508cda0c03daad1a183",
+        "bytes": 2300868,
+        "suites": 474,
+        "counts": {
+          "tests": 4410,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "abi": null,
+        "proof": {}
+      }
+    ],
+    "iosApplicationHostBuilt": true
   },
   "native": {
     "id": 42306713065,
