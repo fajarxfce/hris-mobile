@@ -1,11 +1,23 @@
 # Android Matrix SDK distribution
 
-The application uses `dev.fajar.hris.matrix:sdk-android:26.10.23-hris.2` through an
-exclusive Ivy repository and strict checksum verification. The [SDK release](https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.2)
+The application uses `dev.fajar.hris.matrix:sdk-android:26.10.23-hris.3` through an
+exclusive Ivy repository and strict checksum verification. The [SDK release](https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.3)
 contains the AAR, descriptor, source bundle, license, build record and checksums.
-The [normal dependency gate](measurements/collaboration-sdk-baseline-shipping-2026-11-06.json)
-passes with 7,026 tests retained after a formatting-only correction and zero
-Android lint findings. Candidate runtime acceptance is recorded separately below.
+SDK 3 preserves retryable token-refresh failures and their Retry-After information;
+HTTP 429/408 must not become rejected sessions. Permanent denials remain enforced.
+All four native ABIs were rebuilt; the nine generated Kotlin bindings and compiled
+class archive remain unchanged. Core, HTTP and FFI regressions pass, together with
+two ARM64 encrypted-message, process-death and offline queue-recovery scenarios.
+[SDK 3 build, native acceptance and publication](measurements/collaboration-sdk-refresh-retry-2026-11-06.json).
+
+[Candidate 49](measurements/collaboration-release49-candidate-2026-11-06.json) passed
+retained-store smoke and ordinary expired-token renewal after actual company
+readmission. Its first offline attempt exposed a separate application workspace
+freshness bug, so candidate 49 is not a phone release. The normal dependency/full
+application gate must include that fix before the next phone update. No429 was
+observed in the successful candidate runtime sample; SDK regression tests exercise
+that response. The earlier [SDK 2 normal dependency gate](measurements/collaboration-sdk-baseline-shipping-2026-11-06.json)
+remains historical acceptance for SDK 2 only.
 
 This version preserves runtime detection of optional ARM64 CPU instructions.
 SDK 1 inherited Cargo flags forcing AES/SHA2/PMUv3; release 44 crashed with SIGILL
@@ -53,7 +65,6 @@ above is separate. Physical phone send latency, physical 32-bit execution and R8
 execution are not claimed. Existing application release variants do not enable
 R8, and Apple's SDK dependency is unchanged.
 
-The current build manifest additionally includes the unshipped refresh-backoff
-candidate. It preserves retryable token refresh failures and the native Retry-After
-classification. [Candidate evidence](measurements/collaboration-sdk-refresh-retry-2026-11-06.json)
-does not replace SDK 2 acceptance or authorize reuse of its version/assets.
+The current build manifest includes the published SDK 3 refresh-backoff patch.
+Every version retains its own source and acceptance evidence; SDK 1 and 2 assets
+remain unchanged.

@@ -46,7 +46,8 @@ fun validateWorkspaceOwnership(
             workspace.admission.expiresAt >
                 workspace.admission.checkedAt + WORKSPACE_AUTHORIZATION_PERIOD ||
             workspace.admission.expiresAt.toEpochMilliseconds() >
-                session.binding.expiresAtEpochMillis -> workspaceFailure("client.workspace_expired")
+                session.binding.expiresAtEpochMillis ->
+            workspaceFailure("client.workspace_expired", FailureKind.Unavailable)
         else -> AppResult.Success(Unit)
     }
 }

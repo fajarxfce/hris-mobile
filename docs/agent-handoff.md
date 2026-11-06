@@ -1,84 +1,67 @@
 # Agent continuation — HRIS Mobile
 
-## Current: SDK3 candidate exposed a workspace-expiry cache gate — 6 November 2026
+## Current: SDK3 published; workspace-expiry fix ready for full gate — 6 November 2026
 
-Phone remains **release 48**, installed 15:07 UTC with data/keys intact. Its app was
-not running at 16:31:20 UTC. One optional Bima-open question remains pending. The
-user said build 47 was still pending; do not repeat that question or claim phone
-pending resolved. Notify before each future install, choose the serial explicitly,
-and use --install-only without launching or driving the phone UI.
+Phone remains **release 48**, installed15:07UTC, data/keys retained. App was not
+running16:31:20UTC. One optional Bima-open question is pending. The user said47 was
+still pending; do not repeat that question, drive phone UI or claim resolution.
+Future installs need advance notice, explicit serial and --install-only.
 
-Candidate **49** built in 588.986s from pushed 2a1d9879 with the local SDK3 override;
-only additive verification metadata differed from accepted cf28 application inputs.
-Its APK is 121,090,044 bytes, SHA
-**62c2e3e1a7b14aae69f708b904755a4ff8563e98c3b140aad1c428e8fd069580**;
-ARM64, nondebuggable devRelease, same signer, lint zero, aligned, backup rules and
-exact stripped SDK3 verified. Current release variants do not enable R8.
-[Candidate evidence, including failed first smoke](measurements/collaboration-release49-candidate-2026-11-06.json).
-It was installed ONLY in the original Bima emulator, preserving data and keys.
+This increment selects normal public SDK3 and pins the accepted Platform history
+fixture62ee11818a4928b2598d046c7b3283bf3e416554 in the native CI workflow. It also fixes
+workspace freshness: `validateWorkspaceOwnership` returns Unavailable for expired
+company authority. Previously AccessDenied caused runtime ownership to persist a
+false cache denial and overwrite an earlier real denial. Stale authority still
+cannot authorize operations. No old gate is blindly erased; real permission/MFA
+and old expired gates remain until actual admitted acquisition. Tests cover cold
+entry, timer/token rotation, local row continuity and failed cleanup.
+[Regression evidence](measurements/collaboration-workspace-expiry-2026-11-06.json):
+red34cases/3intendedfailures59.915s, green34/0failures28.328s,4216stableinputs each.
+No Starter port: its template has no HRIS workspace/company policy module.
 
-First offline smoke FAILED before Matrix acquisition: "Connect to renew company
-access" hid the local chat list. `validateWorkspaceOwnership` returns
-`client.workspace_expired` with the default AccessDenied kind. Runtime ownership
-therefore persists ordinary stale authority as a confirmed local read denial.
-The proper fix is an Unavailable freshness classification, with regression tests
-through runtime ownership, local observation and retained real denials. Do not
-blindly erase old gates: reopening must follow actual admitted acquisition.
-No workspace-policy fix is committed yet. This is HRIS company policy; Starter has
-no corresponding workspace module.
-
-After an actual online Retry renewed company admission, the same APK/store passed
-two offline and two online openings with 12 original rows each, no recovery/older/
-reconnect prompts, no auth diagnostic or crash, stable process after 30 seconds,
-settings restored and zero new sends. Both screenshots were inspected. Closed
-120-second diagnostics observed expired Matrix access, refresh200, gateway66→67
-at 16:25:34 UTC and subsequent sync200. No429 occurred in this sample; do not claim
-that runtime branch was exercised. Original Bima emulator3291263/startTicks165852469
-stopped 16:29:25 UTC; its disk remains at .work/demo-chat-device-2026-11-05/bima/userdata.img.
-Candidate49 is NOT accepted as a phone update while the stale-authority bug remains.
-
-SDK3 patch411b323c fixes the separately reproduced SDK2 refresh200→429 failure:
-preserve retryable refresh errors and Retry-After instead of classifying soft logout.
-Core5, HTTP18, FFI2 and Python3 cases pass; 12source inputs and nine Kotlin bindings
-reconstruct. Four ABIs built/verified; no accepted build needs redispatch.
-[SDK patch/build/package evidence](measurements/collaboration-sdk-refresh-retry-2026-11-06.json).
-Package35171 passed106.131s. AAR185,494,730bytes SHA
+SDK3 **release436740986** published once16:37:18UTC, target411b323c; all six existing
+asset digests and the public descriptor verify. First draft tag lookup404 and stale
+draft download URL404 were recovered using the existing release ID and freshly
+published URL. No asset was reuploaded/replaced, no release recreated. Never rerun
+publish-sdk3.py or finish-sdk3-publication.py. Publication record:
+.work/chat-refresh-boundary-2026-11-06/distribution-3/publication.json.
+AAR185,494,730bytes SHA
 **1e6871785970f8652759f57b4d59229aa16ac9a198309cedc13b5ac64168cadc**;
 Ivy SHA**16f28d79298011895ad017c241ff21e6bf8d5154c4869036b710d11160240373**.
-Assets: .work/chat-refresh-boundary-2026-11-06/distribution-3. SDK3 is not published;
-normal catalog staysSDK2 and only checksum metadata is modified. Candidate staging
-and packaging have completed; NEVER rerun prepare-consumer.py or those accepted builds.
-SDK1/2 assets remain immutable.
+SDK1/2 stay immutable. Four rebuilt ABIs preserve ARM64 baseline flags and identical
+nine Kotlin bindings/classes. Core5, HTTP18, FFI2, Python3 and source reconstruction
+passed. [SDK evidence](measurements/collaboration-sdk-refresh-retry-2026-11-06.json).
 
-SDK3 ARM64 native proof is now running via Platform
-.work/sdk-refresh-history-2026-11-06/run-native-sdk3.py native-sdk3-arm64-1,
-session38765. The separate emulator3372867/startTicks165927091 uses serial5560 and
-.work/sdk-confirmed-queue-2026-11-06/native-baseline-arm64/userdata.img, NOT Bima.
-Do not edit fingerprinted source or run another heavy job until it drains. Stop it
-using Mobile .work/chat-refresh-boundary-2026-11-06/native-sdk3-arm64/stop-emulator.py.
-The proof APK already built with49 has SHA
-538dc2ba390867d90579c897a237ac80a7f3cf97efaafefac1acad8606a35cc4.
+SDK3 ARM64 native38765/native-sdk3-arm64-1 PASSED251.177s,2cases/0failures,12459stable
+inputs, exact proof APK SHA538dc2ba390867d90579c897a237ac80a7f3cf97efaafefac1acad8606a35cc4.
+Both scenarios:3encrypted sends,0redactions, access renewal, process death, offline
+history recovery and cleanup. Retained confirmed queue also settled offline and
+repeated recovery was a no-op. Separate emulator3372867/startTicks165927091 stopped
+16:34:45UTC; fixture disk remains separate from Bima. Do not rerun accepted proof.
 
-Exactcf28 CI portable4,299/463 and Apple1,671/182+iOS host passed. Native42236786643
-FAILED bothABIs because its history fixture assumed a context miss and fixed
-admission counts. The original CI remains failed. Platform62ee11818a4928b2598d046c7b3283bf3e416554
-corrects only the fixture: retain two heads, original-send admission checkpoint,
-fresh admission between operations and bounded provider-page evidence. Seven unit
-cases and SDK2 x86_64 native scenarios passed (174.389s, three sends/zero redactions
-each). [CI and correction](measurements/collaboration-progressive-receipts-ci-2026-11-06.json).
+Candidate49 built588.986s from2a1d9879 with localSDK3override, lint0. It is NOT a phone
+release. First offline smoke exposed the above workspace bug; after actual company
+readmission, two offline/two online openings each showed12original rows, no recovery/
+older/reconnect prompt, no crash/auth diagnostic, stable process after30seconds and
+zero new sends. Bounded trace proved Matrix66→67 renewal+sync200 but no429 in this
+sample. Screenshots inspected. [All candidate evidence](measurements/collaboration-release49-candidate-2026-11-06.json).
+Original Bima emulator3291263/startTicks165852469 stopped16:29:25UTC; data/keys remain
+at .work/demo-chat-device-2026-11-05/bima/userdata.img, now49.
 
-NEXT: finish SDK3 ARM64 proof; fix/test workspace expiry; publish SDK3 once as new
-immutable assets, then switch normal catalog and pin Platform62ee1181 in
-.github/workflows/collaboration-hris.yml in the same shipping increment. Run full
-required checks and a normal release (planned50), test the retained Bima store with
-stale company authority before installing the phone. Do not replay accepted Forward
-sends, SDK publication, or live rollout. Private test drivers are prepared under
-.work/chat-workspace-expiry-2026-11-06 but have not run.
+NEXT: run .work/chat-workspace-expiry-2026-11-06/check-full.py full-1 with normalSDK3
+(no candidate override). Source must stay unchanged. Then commit/push gate evidence,
+build normal devRelease50, verify exact SDK/signer/API/backup/ABI, and smoke retained
+Bima data with stale company authority before the next install-only phone update.
+No build50 exists yet. All emulators stopped; no heavy local job currently active.
+Keep candidate/failed smoke evidence; do not replay accepted Forward sends or live
+rollout. User's phone pending remains open until its real diagnostics support a fix.
 
-Live Platform10485916/schema116.1 and Starter578d97a remain unchanged. All54 PRD
-groups remain, including calls/meetings. Continue after this repair and push each
-commit; next capability work is explicit space bootstrap recovery followed by
-private-store ownership adoption and communication features in the PRD.
+Exactcf28 CI portable4299/463 and Apple1671/182+iOS host passed. Its native CI failed
+both ABIs; that original run remains failed. Corrected Platform fixture was locally
+accepted with SDK2 x86_64 and now SDK3 ARM64; await the new source's first CI runs.
+Live Platform10485916/schema116.1 and Starter578d97a unchanged. All54 PRD groups stay
+active; continue after repair with explicit space bootstrap recovery, original-store
+ownership adoption, cross-company/group UI, media/voice, calls and meetings.
 
 ## Prior checkpoint: release 48 installed; phone mapping diagnosis next — 6 November 2026
 

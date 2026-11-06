@@ -1,6 +1,6 @@
 # Patched Matrix Android SDK
 
-The current published dependency is `26.10.23-hris.2`. See the
+The current published dependency is `26.10.23-hris.3`. See the
 [distribution contract](../../docs/collaboration-sdk-distribution.md) and
 [ARM64 acceptance](../../docs/measurements/collaboration-sdk-arm64-baseline-2026-11-06.json).
 Earlier candidate sections below retain their original scope and failures; they

@@ -5,6 +5,7 @@ package dev.fajar.starter.collaboration.domain
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.MaintainCollaborationRuntimeOwnership
+import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationList
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.Session
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
@@ -20,6 +21,97 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
 
 class CollaborationRuntimeOwnershipTest {
+    @Test
+    fun expiredWorkspaceKeepsLocalRowsOnColdEntryAndSameFamilyTokenRotation() = runTest {
+        for (coldEntry in listOf(false, true)) {
+            val f = OwnershipFixture(testScheduler)
+            f.workspace.value =
+                AppResult.Success(
+                    f.selected.copy(
+                        admission = f.selected.admission.copy(expiresAt = f.now() + 1.seconds)
+                    )
+                )
+            if (coldEntry) advanceTimeBy(1_000)
+            val values = mutableListOf<AppResult<CollaborationLocalList>>()
+            val reading =
+                backgroundScope.launch {
+                    f.observeList(f.selected.id, flowOf(CollaborationListSelection()))
+                        .collect(values::add)
+                }
+            val runtime = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+            try {
+                runCurrent()
+                if (!coldEntry) {
+                    assertEquals(f.owner, f.retentions.last().foreground)
+                    advanceTimeBy(1_000)
+                    runCurrent()
+                    assertEquals(0, f.local.restricts)
+                }
+                f.session.value =
+                    AppResult.Success(
+                        f.initial.copy(tokens = f.initial.tokens.copy(accessToken = "rotated"))
+                    )
+                runCurrent()
+                assertEquals(
+                    listOf(f.local.summary),
+                    assertIs<AppResult.Success<CollaborationLocalList>>(values.last()).value.items,
+                )
+                assertEquals(
+                    FailureKind.Unavailable,
+                    assertIs<AppResult.Failed>(f.observed.last()).failure.kind,
+                )
+                assertEquals(0, f.local.restricts)
+                assertEquals(0, f.local.admits)
+                assertNull(f.local.gate.value.denial)
+                assertEquals(f.parent, f.retentions.last().parent)
+                assertNull(f.retentions.last().foreground)
+                assertNull(f.retentions.last().deniedCompanyId)
+            } finally {
+                reading.cancelAndJoin()
+                runtime.cancelAndJoin()
+            }
+            assertEquals(0, f.local.localCollectors)
+            assertEquals(0, f.workspaceObservers)
+        }
+    }
+
+    @Test
+    fun staleAuthorityCannotReplaceOrClearRetainedDenialsEvenAfterFailedCleanup() = runTest {
+        for (code in listOf("permission_denied", "mfa_required", "client.workspace_expired")) {
+            val f = OwnershipFixture(testScheduler)
+            val denial = Failure(FailureKind.AccessDenied, "Denied", code = code)
+            val retained = CollaborationListAdmission("retained", denial)
+            f.local.gate.value = retained
+            f.local.restrictResult = f.setup.storageFailure
+            f.onClose = { f.setup.storageFailure }
+            f.workspace.value =
+                AppResult.Success(
+                    f.selected.copy(admission = f.selected.admission.copy(expiresAt = f.now()))
+                )
+            val values = mutableListOf<AppResult<CollaborationLocalList>>()
+            val reading =
+                backgroundScope.launch {
+                    f.observeList(f.selected.id, flowOf(CollaborationListSelection()))
+                        .collect(values::add)
+                }
+            val runtime = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+            try {
+                runCurrent()
+                assertEquals(AppResult.Failed(denial), values.last())
+                assertEquals(retained, f.local.gate.value)
+                assertEquals(0, f.local.restricts)
+                assertEquals(0, f.local.admits)
+                assertEquals(0, f.local.localReads)
+                assertEquals(f.parent, f.retentions.last().parent)
+                assertNull(f.retentions.last().foreground)
+            } finally {
+                reading.cancelAndJoin()
+                runtime.cancelAndJoin()
+            }
+            assertEquals(0, f.workspaceObservers)
+        }
+    }
+
     @Test
     fun typedPublicationWaitsForRetentionAndDoesNotWaitForAWorkspace() = runTest {
         val f = OwnershipFixture(testScheduler)
@@ -840,6 +932,19 @@ private class OwnershipFixture(private val scheduler: TestCoroutineScheduler) {
                 return onClose(retainedOwner)
             }
         }
+    private val clock =
+        object : Clock {
+            override fun now() = this@OwnershipFixture.now()
+        }
+    val observeList =
+        ObserveCollaborationList(
+            local.replica,
+            sessions,
+            workspaces,
+            setup.server,
+            setup.build,
+            clock,
+        )
     val maintain =
         MaintainCollaborationRuntimeOwnership(
             runtimes,
@@ -848,9 +953,7 @@ private class OwnershipFixture(private val scheduler: TestCoroutineScheduler) {
             workspaces,
             setup.server,
             setup.build,
-            object : Clock {
-                override fun now() = this@OwnershipFixture.now()
-            },
+            clock,
             scheduler.timeSource,
         )
 }

@@ -22,6 +22,41 @@ import kotlinx.coroutines.test.*
 
 class WorkspaceAdmissionTest {
     @Test
+    fun staleAuthorityRequiresRenewalWithoutRevokingOwnedLocalData() {
+        val f = AdmissionFixture()
+        val now = f.clock.now()
+        val admission = f.workspace.admission
+        val cases =
+            listOf(
+                f.workspace.copy(admission = admission.copy(expiresAt = now)) to f.session,
+                f.workspace.copy(admission = admission.copy(checkedAt = now + 1.seconds)) to
+                    f.session,
+                f.workspace.copy(admission = admission.copy(expiresAt = now + 2.hours)) to
+                    f.session,
+                f.workspace to
+                    f.session.copy(
+                        binding =
+                            f.session.binding.copy(
+                                expiresAtEpochMillis = (now + 30.minutes).toEpochMilliseconds()
+                            )
+                    ),
+            )
+        for ((workspace, session) in cases) {
+            assertEquals(
+                AppResult.Success(Unit),
+                validateLocalWorkspaceOwnership(workspace.id, workspace, session),
+            )
+            val failure =
+                assertIs<AppResult.Failed>(
+                        validateWorkspaceOwnership(workspace.id, workspace, session, now)
+                    )
+                    .failure
+            assertEquals("client.workspace_expired", failure.code)
+            assertEquals(FailureKind.Unavailable, failure.kind)
+        }
+    }
+
+    @Test
     fun credentialsExpiringDuringRenewalDoNotRevokeTheStoredSelection() = runTest {
         val origin = Instant.parse("2026-10-11T00:00:00Z")
         for (phase in listOf("account", "permissions")) {

@@ -1,6 +1,6 @@
 {
   "date": "2026-11-06",
-  "status": "arm64_verified_x86_64_build_in_progress",
+  "status": "sdk3_published_normal_dependency_selected_full_application_gate_pending",
   "phoneVersion": 48,
   "phonePending": "Open; one optional request to open Bima after update is pending.",
   "sourceBase": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
@@ -49,11 +49,9 @@
     "Real authentication/access denials stay classified as denials; no token reset, ownership relaxation or original-send replacement."
   ],
   "remaining": [
-    "Accept corrected native HRIS history-admission fixture.",
-    "Prove SDK3 against the retained Bima Android store and an actual expired-token boundary.",
-    "Accept native encrypted message recovery with SDK3 before immutable distribution.",
-    "Switch normal dependency and run required product/CI gates, then install a validated normal phone release.",
-    "Observe the original phone pending-message diagnostics when its app opens."
+    "Complete normal SDK3 full application and CI gates with the workspace-expiry fix.",
+    "Build and smoke the next normal release with retained stale-authority data before phone installation.",
+    "Inspect original phone pending-message diagnostics when its app opens."
   ],
   "httpIntegration": {
     "startedAt": "2026-11-06T15:19:00.783760+00:00",
@@ -388,5 +386,127 @@
     },
     "inputsUnchanged": true,
     "classesMatchSdk2": true
+  },
+  "candidateApplicationEvidence": "collaboration-release49-candidate-2026-11-06.json",
+  "nativeArm64": {
+    "startedAt": "2026-11-06T16:30:18.679593+00:00",
+    "elapsedSeconds": 251.177,
+    "exitCode": 0,
+    "sourceFiles": 12459,
+    "sourcesUnchanged": true,
+    "apkSha256": "538dc2ba390867d90579c897a237ac80a7f3cf97efaafefac1acad8606a35cc4",
+    "apkUnchanged": true,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "resultSha256": "f0110ccf747de0821ea3a53c630c4ec3c4bdc4b70bd3e0ab94530407247a1bb9",
+    "platformFixtureCommit": "62ee11818a4928b2598d046c7b3283bf3e416554",
+    "artifact": {
+      "artifact": ".work/chat-refresh-boundary-2026-11-06/proof-sdk3-arm64/sdk3-arm64-consumer-debug.apk",
+      "sha256": "538dc2ba390867d90579c897a237ac80a7f3cf97efaafefac1acad8606a35cc4",
+      "bytes": 130544831,
+      "nativeAbis": [
+        "arm64-v8a"
+      ],
+      "native": {
+        "nativeSha256": "069f3b9ac402ab18616dacb0133d6661e4fbe8adab8f1443da769ca498af443a",
+        "nativeBytes": 97374352,
+        "elfClass": "ELF64",
+        "requiredElfAlignment": 16384,
+        "loadAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "requiredSymbolsPresent": true
+      },
+      "sdkCoordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.3",
+      "sdkAarSha256": "1e6871785970f8652759f57b4d59229aa16ac9a198309cedc13b5ac64168cadc",
+      "sourceManifestSha256": "8aff40918add0159ba274bbb15911de10d5b8d8c9b1aace1cc319839756f915b",
+      "candidateInitSha256": "561f52284f08a7d8e07851f3cf5fdb2affc14119c7183e5f9a25f0b2cf4b00b8",
+      "sourcesUnchanged": true,
+      "candidateOnly": true
+    },
+    "scenarios": [
+      {
+        "passed": true,
+        "cleanup": true,
+        "sdkAccessRenewed": true,
+        "coldHistoryRecoveredOffline": true,
+        "gatewayUnavailableAfterProcessDeath": true,
+        "encryptedSendCount": 3,
+        "nativeRedactionRequests": 0,
+        "retainedConfirmedQueueScenario": false,
+        "confirmedNativeQueueRestored": null,
+        "confirmedNativeQueueSettledOffline": null,
+        "confirmedNativeQueueRetryNoop": null
+      },
+      {
+        "passed": true,
+        "cleanup": true,
+        "sdkAccessRenewed": true,
+        "coldHistoryRecoveredOffline": true,
+        "gatewayUnavailableAfterProcessDeath": true,
+        "encryptedSendCount": 3,
+        "nativeRedactionRequests": 0,
+        "retainedConfirmedQueueScenario": true,
+        "confirmedNativeQueueRestored": true,
+        "confirmedNativeQueueSettledOffline": true,
+        "confirmedNativeQueueRetryNoop": true
+      }
+    ],
+    "emulatorStopped": true,
+    "originalBimaDiskUsed": false
+  },
+  "publication": {
+    "at": "2026-11-06T16:37:16.723941+00:00",
+    "releaseId": 436740986,
+    "tag": "matrix-sdk-26.10.23-hris.3",
+    "target": "411b323c6c0e1bb3e1594970bc5abbea7e62b979",
+    "draftAssetsVerified": true,
+    "resumedAfter": "Draft assets uploaded successfully; tag API returned404. Continued verification by existing release ID without reupload or recreation.",
+    "assets": {
+      "sdk-android-26.10.23-hris.3.aar": {
+        "id": 717795162,
+        "sha256": "1e6871785970f8652759f57b4d59229aa16ac9a198309cedc13b5ac64168cadc",
+        "bytes": 185494730
+      },
+      "sdk-android-26.10.23-hris.3.ivy.xml": {
+        "id": 717795168,
+        "sha256": "16f28d79298011895ad017c241ff21e6bf8d5154c4869036b710d11160240373",
+        "bytes": 1201
+      },
+      "sdk-android-26.10.23-hris.3-sources.tar.gz": {
+        "id": 717795160,
+        "sha256": "3c0f7a89cb9805fdc1062625d4d755edac0e66fd374f0d2b8dc3f6c6655a1d74",
+        "bytes": 430138
+      },
+      "LICENSE": {
+        "id": 717795188,
+        "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "bytes": 10174
+      },
+      "sdk-build.json": {
+        "id": 717795163,
+        "sha256": "379680d8d9a9f002f875b5995e78a0752628b6e87b34924b6829d8b08bbdf0cd",
+        "bytes": 5666
+      },
+      "SHA256SUMS": {
+        "id": 717795233,
+        "sha256": "3b747a2cf379eeaa9039ff9be9a49fda1d01d22ef76cf97615f9f29bc8fc0529",
+        "bytes": 464
+      }
+    },
+    "runtimeAcceptedVersionCode": 49,
+    "scope": "SDK native recovery and candidate after actual company readmission; application workspace-expiry bug remains unshipped",
+    "public": true,
+    "publishedAt": "2026-11-06T16:37:18Z",
+    "url": "https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.3",
+    "publicDescriptorVerified": true,
+    "descriptorUrlRefreshedAfterPublication": true
   }
 }

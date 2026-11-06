@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-06",
+  "trigger": "Candidate49 cold offline entry after ordinary company-admission expiry hid retained chat rows before Matrix acquisition.",
+  "cause": "validateWorkspaceOwnership defaulted workspace_expired to AccessDenied; runtime ownership persisted it as a read denial, including overwriting a previously retained permission denial.",
+  "change": "Return Unavailable for stale workspace authority. Remote authority still requires renewal. Local ownership, real denials, hard native-parent expiry and clock bounds are preserved.",
+  "regressionCoverage": [
+    "Cold entry and live deadline followed by same-family token rotation retain local rows without implicit admission.",
+    "Permission, MFA and old workspace-expired denial gates are neither erased nor overwritten, even when cleanup fails.",
+    "Malformed or stale freshness bounds do not authorize an operation; owned local scope remains separate."
+  ],
+  "red": {
+    "startedAt": "2026-11-06T16:35:35.925875+00:00",
+    "elapsedSeconds": 59.915,
+    "exitCode": 1,
+    "sourceFiles": 4216,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 34,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0
+    },
+    "resultSha256": "01561d3e73c31943870362fc5ff8e4da5d9b57bf4494cdac103f9641409b4f81"
+  },
+  "green": {
+    "startedAt": "2026-11-06T16:36:59.161864+00:00",
+    "elapsedSeconds": 28.328,
+    "exitCode": 0,
+    "sourceFiles": 4216,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "resultSha256": "96ed42d8090030e713bd7c04958b8f270765bc3bdf03a3c910515caa1489407d"
+  },
+  "fullGate": "pending",
+  "phoneInstalled": false,
+  "starterPort": "Not applicable: HRIS workspace/company policy has no Starter workspace counterpart."
+}
