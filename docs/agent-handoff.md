@@ -50,16 +50,17 @@ and nine storage/lifetime cases. Keep all inputs frozen until this gate ends. It
 no owning use case, server freeze, product activation or actual SDK consumer proof yet.
 Existing live acquisition guards remain unchanged. No emulator is active.
 
-The ten separate organization runtime transfer files are also UNCOMMITTED but fully
-accepted. Focused65759 PASSED9 cases/175.602s (7 transport/2 actual DI). Full15063 ENDED
+The ten separate organization runtime transfer files are fully accepted and committed
+with this checkpoint. Focused65759 PASSED9 cases/175.602s (7 transport/2 actual DI). Full15063 ENDED
 PASS603.54s with5,475 fresh cases/642 suites, zero failures/errors/skips,4,263 unchanged
 inputs and zero Android lint/Detekt findings. Its source hashes still match after
 applying the non-overlapping existing-store candidate. [Contract](collaboration-space-runtime-transfer.md),
 [evidence](measurements/collaboration-space-runtime-transfer-2026-11-06.json). Commit
-these ten files separately when first queue-source control42310411055 has started;
-it remains pending behind SDK4 control42306713193 and must not be displaced. Stage
-only its prepared manifest's files and verify the index against the accepted full
-source manifest. The seven newer lifecycle files must not enter that commit yet.
+the transport source separately from the newer lifecycle files. Its index was verified
+against all4,263 accepted source hashes; the newer working-tree changes were excluded.
+Queue68d first control42310411055 and native42310411202 are now running. SDK4 control
+42306713193 has completed successfully and awaits its original artifact audit. Do not
+redispatch or displace the new transport's first pending source runs with another push.
 
 ## Next actions
 
@@ -97,11 +98,11 @@ owning implementation; this local mechanism grants neither.
   on each ABI, zero failures/errors/skips, all original native/worker/notification
   proofs and cleanup pass). Artifact13549485285 x86_64 SHA5a812cfabf56988ff82785942d563812db6146db345bbc60f3859f9e1a01c6be;
   ARM6413548922641 SHAad46667029dfbff4ecee8a1796e10b4e616f8bd31d066c71c77921549d2fc079.
-  Control42306713193 is still running/pending audit. Private `.work/space-store-inventory-2026-11-06/remote-ci-5081/audit.py` accepts
+  Control42306713193 completed successfully and awaits original artifact audit. Private `.work/space-store-inventory-2026-11-06/remote-ci-5081/audit.py` accepts
   those exact runs after completion and verifies immutable artifact digests.
 - Its protocol42306715423 **PASSED**, native/classic each14 checks with owned cleanup;
   artifact digests and14 Platform hashes match immutablee0dbb567. [Evidence](measurements/collaboration-sdk4-product-ci-2026-11-06.json).
-- Queue68d848b7: first control42310411055 is **pending behind SDK4**; native42310411202 is running.
+- Queue68d848b7: first control42310411055/native42310411202 are running.
   IDs are retained in `.work/chat-queue-family-2026-11-06/first-runs.json`.
 - Prior35df/7ef/f04 and SDK native42291341014 are accepted; do not rerun their sends
   solely for evidence. Actual new-source CI remains separate from physical-phone proof.

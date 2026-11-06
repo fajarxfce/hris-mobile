@@ -27,7 +27,7 @@
     }
   },
   "recordedAt": "2026-11-06T23:25:31.448930+00:00",
-  "status": "focused and complete gates accepted; source not yet committed",
+  "status": "focused and complete gates accepted; transport source included in this commit",
   "baselineProgram": "68d848b7fed810984ddb59ca53079442dcac7819",
   "candidateFiles": {
     "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/api/CollaborationSpaceRuntimeTransferApi.kt": "69ba07cab80b2563dff7304eb958b2604b82c060c7e92b63b57c87c74bc6300b",
