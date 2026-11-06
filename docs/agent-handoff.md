@@ -52,7 +52,12 @@ workspace failure remains recorded separately, never reclassified as a phone pas
 
 Exactf04c first CI: protocol42254474390 PASSED both native/classic modes,14checks+
 cleanup each, artifact digests and14Platform source hashes verified against the
-workflow's e0dbb567 pin. Native42254474298 ARM remains running; x86 job succeeded. Control42254474193
+workflow's e0dbb567 pin. Native42254474298 PASSED and both artifact digests/ABI-APK references are audited:
+389cases/67suites per ABI, zero failures/errors/skips. Each original and confirmed-
+queue native case retains three encrypted sends, restart/offline history/quoted
+reply and cleanup; confirmed queue restores/settles offline and retry is a no-op.
+Four worker scenarios and notification cleanup pass per ABI. No new429-path or
+phone-send claim follows from these fixtures. Control42254474193
 PASSED and was audited: portable4,303cases/463suites, Apple1,673/182, zero
 failures/errors/skips, both artifact digests verified. Explicit iOS application host
 build PASSED17:27:35UTC. This does not establish physical Apple/PushKit acceptance. Native workflow correctly pins accepted
@@ -78,7 +83,13 @@ never invents an original acknowledgment. See that branch's pending
 space-bootstrap-supersession.md. Apply only after the merge gate/commit, with base
 hash verification; then actual race/rollback/API/worker tests. Mobile original and
 replacement intent persistence/SDK-store adoption remain next, before group UI.
-Phone app was still not running17:17UTC; no new user-send outcome is known.
+Phone app was still not running17:17UTC. At18:04UTC, read-only package metadata
+showed this app has UIDs10962 and1010962 (two Android profiles). A bounded retained
+log read covering BOTH UIDs after the50 install found zero retained new Chat or
+crash lines; this cannot exclude a discarded log or prove runtime success. Earlier
+PID-only reads did not cover an already-closed process. No new user-send outcome
+is known. Use .work/release-phone-2026-11-06-build50/audit-phone-uid.py for retained
+closed-category audit; it never launches or drives UI.
 Push every commit; continue media/voice, calls and meetings after these prerequisites.
 Never replay accepted Forward sends, SDK publication or live deployment.
 

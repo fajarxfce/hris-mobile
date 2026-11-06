@@ -82,7 +82,209 @@
   },
   "native": {
     "runId": 42254474298,
-    "status": "in_progress"
+    "platformFixturePin": "62ee11818a4928b2598d046c7b3283bf3e416554",
+    "status": "completed",
+    "conclusion": "success",
+    "firstRun": true,
+    "artifactsDigestVerified": true,
+    "jobs": [
+      {
+        "name": "Android HRIS (x86_64)",
+        "conclusion": "success",
+        "startedAt": "2026-11-06T16:39:52Z",
+        "completedAt": "2026-11-06T17:18:28Z"
+      },
+      {
+        "name": "Android HRIS (arm64-v8a)",
+        "conclusion": "success",
+        "startedAt": "2026-11-06T16:39:53Z",
+        "completedAt": "2026-11-06T17:32:52Z"
+      }
+    ],
+    "artifacts": [
+      {
+        "artifactId": 13525482428,
+        "name": "native-hris-arm64-evidence",
+        "sha256": "1cfe4b3e9a93d84d538a9d717d2ee62b26245186d170beaa1f2beb6d7099b939",
+        "bytes": 283702,
+        "suites": 67,
+        "counts": {
+          "tests": 389,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "abi": {
+          "abi": "arm64-v8a",
+          "apkSha256": "94d5c1c0c9e16b2126accb0cfec0ddd67963776ee136f6a4f9f639ea12309db9"
+        },
+        "nativeCases": [
+          {
+            "retainedConfirmedQueueScenario": false,
+            "checks": {
+              "passed": true,
+              "encryptedBothDirections": true,
+              "sdkAccessRenewed": true,
+              "sameGatewayAfterRenewal": true,
+              "coldHistoryRecoveredOffline": true,
+              "gatewayUnavailableAfterProcessDeath": true,
+              "quotedReplyDecrypted": true,
+              "quotedReplyRecoveredOffline": true,
+              "cleanup": true
+            },
+            "encryptedSendCount": 3,
+            "nativeRedactionRequests": 0
+          },
+          {
+            "retainedConfirmedQueueScenario": true,
+            "checks": {
+              "passed": true,
+              "encryptedBothDirections": true,
+              "sdkAccessRenewed": true,
+              "sameGatewayAfterRenewal": true,
+              "coldHistoryRecoveredOffline": true,
+              "gatewayUnavailableAfterProcessDeath": true,
+              "quotedReplyDecrypted": true,
+              "quotedReplyRecoveredOffline": true,
+              "cleanup": true,
+              "confirmedNativeQueueRestored": true,
+              "confirmedNativeQueueSettledOffline": true,
+              "confirmedNativeQueueRetryNoop": true
+            },
+            "encryptedSendCount": 3,
+            "nativeRedactionRequests": 0
+          }
+        ],
+        "workerScenarios": [
+          {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 1,
+            "workManagerExecutionAccepted": true,
+            "retryCancellationAccepted": false
+          },
+          {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 176,
+            "foregroundHistoryAccepted": true,
+            "platformWorkManagerAccepted": false
+          },
+          {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 176,
+            "foregroundHistoryAccepted": true,
+            "platformWorkManagerAccepted": false
+          },
+          {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 176,
+            "foregroundHistoryAccepted": true,
+            "platformWorkManagerAccepted": false
+          }
+        ],
+        "notificationFixture": {
+          "complete": true,
+          "fixtureAbsent": true,
+          "fixtureUninstalled": true,
+          "fixtureDataCleared": true
+        },
+        "artifactApkMatchesAbiProof": true
+      },
+      {
+        "artifactId": 13523763872,
+        "name": "native-hris-evidence",
+        "sha256": "6fa4d832976ba9cc9d6198f251704a3da9261a350d7bcad1b8d6bdf513d211c3",
+        "bytes": 282360,
+        "suites": 67,
+        "counts": {
+          "tests": 389,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "abi": {
+          "abi": "x86_64",
+          "apkSha256": "3d4a4864a8e0a6514ecde2d3e568509cf8d0b7c35be98d12de9bdfb2ea9a8dca"
+        },
+        "nativeCases": [
+          {
+            "retainedConfirmedQueueScenario": false,
+            "checks": {
+              "passed": true,
+              "encryptedBothDirections": true,
+              "sdkAccessRenewed": true,
+              "sameGatewayAfterRenewal": true,
+              "coldHistoryRecoveredOffline": true,
+              "gatewayUnavailableAfterProcessDeath": true,
+              "quotedReplyDecrypted": true,
+              "quotedReplyRecoveredOffline": true,
+              "cleanup": true
+            },
+            "encryptedSendCount": 3,
+            "nativeRedactionRequests": 0
+          },
+          {
+            "retainedConfirmedQueueScenario": true,
+            "checks": {
+              "passed": true,
+              "encryptedBothDirections": true,
+              "sdkAccessRenewed": true,
+              "sameGatewayAfterRenewal": true,
+              "coldHistoryRecoveredOffline": true,
+              "gatewayUnavailableAfterProcessDeath": true,
+              "quotedReplyDecrypted": true,
+              "quotedReplyRecoveredOffline": true,
+              "cleanup": true,
+              "confirmedNativeQueueRestored": true,
+              "confirmedNativeQueueSettledOffline": true,
+              "confirmedNativeQueueRetryNoop": true
+            },
+            "encryptedSendCount": 3,
+            "nativeRedactionRequests": 0
+          }
+        ],
+        "workerScenarios": [
+          {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 176,
+            "foregroundHistoryAccepted": true,
+            "platformWorkManagerAccepted": false
+          },
+          {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 1,
+            "workManagerExecutionAccepted": true,
+            "retryCancellationAccepted": false
+          },
+          {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 176,
+            "foregroundHistoryAccepted": true,
+            "platformWorkManagerAccepted": false
+          },
+          {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 176,
+            "foregroundHistoryAccepted": true,
+            "platformWorkManagerAccepted": false
+          }
+        ],
+        "notificationFixture": {
+          "complete": true,
+          "fixtureAbsent": true,
+          "fixtureUninstalled": true,
+          "fixtureDataCleared": true
+        },
+        "artifactApkMatchesAbiProof": true
+      }
+    ]
   },
   "control": {
     "runId": 42254474193,

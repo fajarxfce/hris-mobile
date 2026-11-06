@@ -220,5 +220,21 @@
       "debuggable": false
     },
     "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+  },
+  "readOnlyLogFollowup": {
+    "at": "2026-11-06T18:04:43.840686+00:00",
+    "serial": "10.77.77.3:5555",
+    "uids": [
+      10962,
+      1010962
+    ],
+    "deviceClockOffsetSeconds": -2.253,
+    "afterInstallUtc": "2026-11-06T17:06:28.272000+00:00",
+    "retainedLinesAfterInstall": 0,
+    "fatalExceptionsAfterInstall": 0,
+    "chatDiagnostics": [],
+    "logSha256": "518c42ad6b85ace21148a5ba2750bdfc338828db4c59c8372d8e95485297dd66",
+    "phoneUiDriven": false,
+    "newMessagesSent": 0
   }
 }
