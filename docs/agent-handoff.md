@@ -42,11 +42,13 @@ privilege were restored. Both private screenshots were viewed. Owned emulator st
 `.work/release-phone-2026-11-06-build51`. Phone preflight verified installed50 and its
 signer/hash; installation uses explicit10.77.77.3:5555 and `--install-only`.
 
-The ONLY heavy local job is **65759**, organization runtime transfer **focused-1**,
+The ONLY heavy local job is **15063**, organization runtime transfer **full-1**,
 under `.work/space-store-inventory-2026-11-06/runtime-transfer-next`. Its ten applied
 Kotlin files are **UNCOMMITTED**; keep all inputs frozen until the job ends. Nine new
 files add typed freeze/drain transport plus seven MockEngine cases; the tenth extends
-actual AppContainer DI resolution. All were formatted before application. Freeze uses
+actual AppContainer DI resolution. Focused65759 PASSED175.602s with9 cases (7 transport/2 actual DI), zero failures/
+errors/skips,4,263 unchanged inputs and format/architecture checks. [Contract](collaboration-space-runtime-transfer.md),
+[evidence](measurements/collaboration-space-runtime-transfer-2026-11-06.json). Freeze uses
 the original operation/current native owner and receives original legacy device/version1;
 drain observes bounded server slots. There is no UI, owning workflow, server call,
 completed transfer, or live enablement. Full acceptance remains required. No local
@@ -57,9 +59,11 @@ emulator is active. Preserve prepared/source/result manifests and failed attempt
 1. Phone51 is installed; [release evidence](measurements/collaboration-release51-2026-11-06.json)
    records the exact APK and owned offline/online acceptance. Keep the original pending
    report open. Do not drive phone UI. Passive audit driver derives its cutoff from
-   the actual installation and corrects measured device clock offset.
-2. Reap focused65759; fix any real failure, then run its prepared complete root/Android/
-   browser gate sequentially. Audit unchanged source hashes and fresh report counts.
+   the actual installation and corrects measured device clock offset. First passive
+   audit23:24:02UTC retained no post-install lines for either profile; silence proves
+   no delivery outcome. Do not launch the phone to manufacture evidence.
+2. Reap full15063 and audit unchanged source hashes, fresh report counts and all
+   required root/Android/browser/quality targets. Preserve the accepted focused evidence.
    Commit/push accepted transport separately. First queue-source CI must start before
    another app-source push can displace its pending runs.
 3. Continue original pending-message recovery through the original private store and

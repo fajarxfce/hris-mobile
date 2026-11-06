@@ -1,0 +1,52 @@
+{
+  "startedAt": "2026-11-06T23:21:28.057213+00:00",
+  "elapsedSeconds": 175.602,
+  "exitCode": 0,
+  "sourceFiles": 4263,
+  "sourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reports": {
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+      "sha256": "7595a97c5841f506a8ea524f0923f22a4e56294e237b197e22177d5c8e88dc54",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRuntimeTransferTransportTest.xml": {
+      "sha256": "2c67e9f949442044d1c7aebab94ec151b39e2672af82b3c4a641df4abf1cafac",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "recordedAt": "2026-11-06T23:25:31.448930+00:00",
+  "status": "focused accepted; full gate running",
+  "baselineProgram": "68d848b7fed810984ddb59ca53079442dcac7819",
+  "candidateFiles": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/api/CollaborationSpaceRuntimeTransferApi.kt": "69ba07cab80b2563dff7304eb958b2604b82c060c7e92b63b57c87c74bc6300b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/ApiCollaborationSpaceRuntimeTransferRemoteSource.kt": "e400c6e78e8d65f8969f1efac04e4a6013ddeea52b389c7e6792ca6be8c89be8",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationSpaceRuntimeTransferRemoteSource.kt": "620f88547ca6af5f58e06207a01678124257b97a478507d2932715866d07993f",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationSpaceRuntimeTransferDto.kt": "c39407552017a4a1f0ed7b0c1608b9e7a416c197ce8325b7a1c6f9a3bb830ece",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationSpaceRuntimeTransferMapper.kt": "730d3af3987f3201e12007cbfdda424439072590a1a7ff609f82cc3e8db16229",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/RemoteCollaborationSpaceRuntimeTransferRepository.kt": "bcb35c7fb9f1a48526985698991dec86edf90cdca048b744fbe428502537fc38",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRuntimeTransferTransportTest.kt": "5ddf7fd94ea2c3feb4bd7802cbd3e1ae325ec653769fc4e9dce53f25b613f707",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceRuntimeTransfer.kt": "ffe8fba9f0f2816223184b40940e96039958756c439f90e75cc08821a46596a9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceRuntimeTransferRepository.kt": "025f2a516c6dc47baede718696135f5968ac20d21f756b009d9f8bce6ee36363",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "1f02268c1b0c29ca5a6f1126beee845d3547b96b98efbd3047378641f632329b"
+  },
+  "fullAccepted": false,
+  "actualServerCalled": false,
+  "productWorkflowEnabled": false,
+  "tests": {
+    "transport": 7,
+    "actualAppContainer": 2
+  },
+  "fullRun": "runtime-transfer-next/full-1"
+}

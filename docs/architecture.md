@@ -1,5 +1,8 @@
 # Architecture
 
+[Original runtime transfer transport](collaboration-space-runtime-transfer.md) maps exact
+freeze/drain metadata without granting SDK shutdown or completed ownership.
+
 [Delivery across retained device namespaces](collaboration-chat-queue-ownership.md)
 keeps older uncertain commands intact while selecting current-store work before
 the finite worker batch limit.
