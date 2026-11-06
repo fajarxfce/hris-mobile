@@ -1,0 +1,18 @@
+{
+  "runId": 42145472298,
+  "mobileCommit": "feaf9b1a285da26b048e609342dcaebd198e7591",
+  "platformCommit": "304be02700cf07e496421c17e90f5a471b4bd68c",
+  "conclusion": "failure",
+  "freshCases": 5,
+  "failedCases": 1,
+  "failedCase": "actualAndroidSdkExchangesEncryptedMessagesThroughCurrentHrisGatewayAdmission",
+  "failureCategory": "RuntimeError",
+  "cleanup": true,
+  "artifactId": 13471977630,
+  "artifactSha256": "e669e8f4d3ef606b1bd2945a690a8267241d168a7f404856e2cfbb852b78a1cd",
+  "gatewayRequestCount": 78,
+  "gatewayTraceSha256": "295a5dc01a50fa9516b932fda11c756542b5eba5013403256230883fd9937169",
+  "review": "CI still pinned the older fixture without subsequent access-renewal, gateway-disconnect and quoted-reply assertions. Update to already-accepted Platform10485916. The previous generic RuntimeError does not identify an exact failure stage; a passing updated native run is still required.",
+  "correctedPin": "10485916ee02850cf913793398f7ef3dd1e09afb",
+  "newNativeAcceptance": false
+}
