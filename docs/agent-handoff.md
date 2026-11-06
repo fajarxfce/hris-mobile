@@ -1,53 +1,108 @@
 # Agent continuation — HRIS Mobile
 
-## URGENT: release44 ARM64 runtime acceptance failed — 6 November 2026
+## Current: SDK 2 published after ARM64 acceptance — 6 November 2026
 
-Release44 is NOT ACCEPTED and MUST NOT be installed on the phone. Its nondebuggable
-arm64 APK builds/validates from62d9fba1 (169.409s, lint0), SHA
-df17605158026144ccf52cda70ab6c596aa094d6e697bbf98d23df635303d839,
-121,024,508 bytes. SDK bytes match the published26.10.23-hris.1 candidate after NDK28.2 strip.
-The two offline room openings show11/10 rows and no recovery/older/reconnect prompts.
-Online client restoration then crashes natively with SIGILL at11:56:36UTC/PID4280.
-The later PID4762 was a different process; its empty crash log must not be used to
-claim the failed app never crashed. System exit-info confirms APP CRASH(NATIVE).
+The replacement SDK is published and the application catalog now selects it.
+This checkpoint commits the normal SDK 2 dependency, two-ABI HRIS runtime CI,
+verified SDK publication, candidate acceptance and installed phone 43 evidence.
+Branch feat/communications; application policy still comes from 62d9fba1.
 
-The owned x86_64 emulator runs the arm64 APK through native translation. Symbolized
-frames point to sha2::sha256::aarch64_sha2::compress, then StoreCipher::expand_key /
-import while opening existing encrypted SDK SQLite, before queue recovery. Upstream
-.cargo/config.toml forces +neon,+aes,+sha2,+pmuv3, bypassing optional crypto dispatch.
-The baseline candidate keeps +neon and allows crypto crates to detect AES/SHA2.
-This is under runtime validation; do not claim a physical-device crash or a fix yet.
-[Release44 failure evidence](measurements/collaboration-release44-2026-11-06.json).
-Both captured screenshots (offline and failed online/launcher) were inspected.
-No new chat was submitted. The original Bima userdata/keys are retained. Emulator
-1505571/startTicks164268084 stopped12:07:27UTC; no emulator is active.
+The normal public-dependency gate is COMPLETE. Initial 57307 finished in
+1055.140s with 7,026 fresh tests/909 suites, zero failures/errors/skips and
+unchanged 4,212 inputs; only formatCheck failed. ktfmt inserted one blank line
+in the proof build script. Final 75313/full-shipping-baseline-2 passed 81.012s;
+those 909 report digests retain their passes, with zero newly executed tests and
+zero Android lint findings. Another 155 historical reports are unchanged but are
+not counted as tests executed for this increment. The single blank line is the
+only input difference. [Normal gate evidence](measurements/collaboration-sdk-baseline-shipping-2026-11-06.json).
+All local gate/build sessions are drained; no emulator or heavy job is active.
+Next commit/push this checkpoint, then run the prepared normal release 46 build.
 
-ONLY local heavy job: SDK baseline arm64 build60362, started12:09UTC,
-.work/sdk-confirmed-queue-2026-11-06/android-baseline-arm64. Output will be under
-.worktrees/matrix-sdk-queue-baseline-android-arm64-2026-11-06/main. The SDK's nine
-fingerprinted inputs are FROZEN until completion. Original v1 outputs/wrapper/AAR
-and all failure evidence stay intact. New android-arm64-baseline.patch SHA
-82fda7d5cadc965059364c7094948fe71286293c24a1df2966d2d673327c3ec3 applies after the
-raw-event and confirmed-queue patches; only the ARM64 Cargo target flags change.
-android-build.json records it and config SHA531ceda5e3e8a7ba878c0e475434ca67651242843d6dab928877a8e31b90d5e4.
-This build uses the existing owned Cargo target cache with matching toolchains;
-ambient Rust flags are rejected. Production Rust source and Kotlin API are unchanged.
+SDK release 436496933, tag matrix-sdk-26.10.23-hris.2, is PUBLIC prerelease at
+source 6484d136, published 12:52:23 UTC. All six remote asset IDs/sizes/digests and
+the unauthenticated descriptor are verified. AAR 185,486,495 bytes SHA
+c4df31e057eee5ec3f7986a6a4e06db4f2118e072de879aa7fc247a43d25b162;
+Ivy SHA f1c74227ddafee4774e18b31fbb952942c919d0d37c962c24fac6471d80ebbd5.
+Do not replay publication or replace assets. Initial upload succeeded but lookup
+by tag returned 404 for the draft; resume used the verified numeric release ID.
+After publishing, the cached draft asset URL also returned 404. Refreshing the
+published metadata yielded the correct public URL. Both stages are recorded;
+no duplicate upload/publication occurred. Publication audit is in
+.work/sdk-confirmed-queue-2026-11-06/distribution-baseline-2/publication.json.
+[SDK evidence](measurements/collaboration-sdk-arm64-baseline-2026-11-06.json).
 
-Next: verify baseline arm64 JNI/Kotlin; verify remaining ABI outputs against the
-new target-only config (reuse valid caches); prepare an isolated new wrapper/AAR,
-then test a new ARM64 release candidate against the SAME retained Bima store before
-publishing SDK26.10.23-hris.2. Do not replace the published SDK1 assets or accept the
-failed44 APK by testing a different ABI. Add a repeatable ARM64 crypto/store smoke
-check to native CI so structural ELF validation alone cannot miss this again.
-The SDK1 publication remains immutable; update its notes with the observed limitation.
-Application source remains62d9fba1, still using SDK1 until a validated replacement.
+SDK 2 keeps +neon and runtime detection of optional ARM64 crypto instructions.
+Local build 60362 passed 935.696s; packaging 37494 passed 107.344s. The other three
+native libraries are reused byte-for-byte from SDK 1: production sources,
+Cargo.lock and their effective target configuration match. All nine generated
+Kotlin files and classes.jar are unchanged. Keep old/new wrappers and outputs
+separate under .worktrees. SDK 1 remains immutable; its release notes describe
+the ARM64 limitation. Release 44 remains REJECTED and MUST NOT be installed.
+[Failure evidence](measurements/collaboration-release44-2026-11-06.json).
 
-Exact62d9fba1 CI runs are active: Native protocol42213012559, HRIS42213012407,
-Control/Apple42213012469. They currently execute native x86_64, not this ARM64
-translation path. Audit their results separately. The latest phone ADB reconnect
-about11:50UTC timed out. Phone last confirmed42; one availability question remains
-pending. Accepted release43 can still be installed if the phone returns, with the
-usual announcement/explicit serial/install-only. Never launch or drive its UI.
+Internal candidate 45 PASSED the retained Bima-store smoke: two offline and two
+online room openings, no interrupted-save/older/reconnect prompts, and the same
+process alive after the 30-second online wait. Both screenshots were inspected.
+APK 121,090,044 bytes SHA
+2313efeca2b05c70134b399fea15e4d2d5bbf10ac2fd5359ffaee48175f9e9c1,
+nondebuggable devRelease45/1.0.0, same dev signer, lint 0, SDK bytes exactly match
+the local SDK 2 after NDK 28.2 strip. Build 33380 passed 552.843s. Earlier attempt
+36718 failed only candidate init scoping (7.083s) and is retained separately.
+[Candidate evidence](measurements/collaboration-release45-2026-11-06.json).
+45 uses an isolated local Ivy override and is NOT the normal phone deliverable.
+Original Bima data/keys remain, now with 45 installed. Its emulator 1811690 /
+startTicks 164540307 stopped 12:41:22 UTC; never erase/reseed that store.
+
+Actual ARM64 native recovery also PASSED before publication. Consumer build 49773
+passed 168.677s, arm64-only APK SHA
+6a8304dbe6607488bd0de57b095f74a27415ae58a9e6b885e2ccfd000ffcad12,
+130,544,831 bytes; its native library equals candidate 45. The 18 fixture unit
+cases were UP-TO-DATE, not newly executed. Fixture lint passed with 48 warnings
+(dependency update notices and test-only launcher/backup/ChromeOS configuration);
+shipping release 45 lint remains zero findings. Do not report fixture lint as zero.
+Platform run 31415/native-baseline-arm64-1 passed BOTH cases in 254.246s with
+12,454 source inputs/APK unchanged: three encrypted sends and zero redactions per
+case, two process restarts, offline confirmed-original settlement and repeated
+no-op. This proves the retained-confirmed-original postcondition, not every
+physical-phone pending-message cause. Its isolated emulator 1852689 /
+startTicks 164578185 stopped 12:50:33 UTC; no live rollout was performed.
+
+All exact 62d9fba1 source CI is COMPLETE: protocol 42213012559 passed 14 checks in
+both native/classic modes; HRIS 42213012407 passed 386 cases/67 suites including
+confirmed native queue recovery. Control 42213012469 passed 4,249 portable cases/
+461 suites and 1,646 Apple cases/181 suites plus iOS host build. Artifact digests
+were checked. [CI evidence](measurements/collaboration-confirmed-queue-ci-2026-11-06.json).
+Those native scenarios executed x86_64; ARM64 was additionally proved locally.
+SDK CI 42216097534/6484d136 passed 1413.629s with verified source/Kotlin/Cargo.lock
+and artifact digest. Its independently built ARM64 library differs from the tested
+local release binary. Do not substitute it into the accepted AAR.
+
+NEXT after the full gate/format correction: record exact normal-resolution checks,
+update distribution docs, commit/push the SDK 2 catalog/verification, proof ABI
+option and two-ABI HRIS CI matrix together. Both matrix jobs assert the APK's
+native ABI; ARM64 executes through the emulator bridge with no x86_64 fallback.
+Then build/verify normal release 46 from that pushed commit, retain Bima data for
+its in-place smoke, and deliver install-only when the phone is reachable. Do not
+rerun old accepted CI/Forward publications. The old SDK 2 publication scripts must
+not be invoked again. Release 46 drivers are prepared in .work/release-phone-2026-11-06-build46;
+build-arm64.py requires a passing full-shipping-baseline-2 gate and a pushed HEAD.
+Do not run them until those prerequisites hold. Its phone preflight accepts the
+known 42/43 APK hashes, and installation requires --install-only.
+
+Phone is now 43. The user reactivated WireGuard at about 13:06 UTC. Preflight
+verified the exact installed 42 APK/signer; the announced install-only update
+completed in 48.285s from 13:08:14 UTC. Device SHA equals the accepted 43 APK
+639a5454496813a9ad4fa70294a4fbb5364df8473658468662a199167fd970bf.
+App identity, first-install time, data and keys remain; no phone UI was launched.
+[Updated phone evidence](measurements/collaboration-release43-2026-11-06.json).
+Do not repeat the 43 install or the already answered availability question.
+Release 46's preflight already accepts known 43. Announce EVERY future install,
+select 10.77.77.3:5555 explicitly, use --install-only, and never drive phone UI.
+Continue all 54 PRD groups after release/CI acceptance. ChatThreadHistoryPager
+still owns domain traversal policy in presentation and remains a later architecture
+follow-up. Starter stays 578d97a; no HRIS queue-policy port belongs there. Platform
+source stays 4dc8c9d15cde42160f93096325360a7aeff65204; live stays
+10485916ee02850cf913793398f7ef3dd1e09afb/schema116.1. Do not replay its rollout.
 
 ## Queue recovery integrated; release44 next — 6 November 2026
 

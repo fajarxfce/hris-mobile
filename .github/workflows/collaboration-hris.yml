@@ -36,8 +36,13 @@ concurrency:
 
 jobs:
   android-hris:
+    name: Android HRIS (${{ matrix.abi }})
+    strategy:
+      fail-fast: false
+      matrix:
+        abi: [x86_64, arm64-v8a]
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
         with:
@@ -61,7 +66,24 @@ jobs:
         working-directory: mobile
         run: |
           python3 -m unittest discover -s tool -p 'test_native_notifications.py'
-          ./gradlew --no-daemon --no-parallel --max-workers=1 :features:collaboration:data:testAndroidHostTest :apps:collaboration-proof:testDebugUnitTest :apps:collaboration-proof:assembleDebug :apps:collaboration-proof:lintDebug
+          ./gradlew --no-daemon --no-parallel --max-workers=1 -PcollaborationProofAbi=${{ matrix.abi }} :features:collaboration:data:testAndroidHostTest :apps:collaboration-proof:testDebugUnitTest :apps:collaboration-proof:assembleDebug :apps:collaboration-proof:lintDebug
+      - name: Verify fixture native ABI before runtime acceptance
+        working-directory: mobile
+        env:
+          EXPECTED_SDK_ABI: ${{ matrix.abi }}
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json, os, zipfile
+          apk = Path('apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk')
+          abi = os.environ['EXPECTED_SDK_ABI']
+          with zipfile.ZipFile(apk) as archive:
+              libraries = {name for name in archive.namelist() if name.endswith('/libmatrix_sdk_ffi.so')}
+              assert libraries == {'lib/' + abi + '/libmatrix_sdk_ffi.so'}, libraries
+          output = Path('.work/native-abi.json')
+          output.parent.mkdir(parents=True, exist_ok=True)
+          output.write_text(json.dumps({'abi': abi, 'apkSha256': hashlib.sha256(apk.read_bytes()).hexdigest()}) + '\n')
+          PY
       - name: Compile HRIS fixture and verify driver cleanup
         working-directory: platform
         run: |
@@ -79,6 +101,8 @@ jobs:
           api-level: 35
           target: google_apis
           arch: x86_64
+          # The arm64-only APK exercises encrypted store restoration through the
+          # native bridge; the ABI assertion above prevents an x86_64 fallback.
           avd-name: hris-mobile-dev
           emulator-port: 5560
           emulator-options: -no-window -no-snapshot -noaudio -no-boot-anim -gpu swiftshader -memory 2048 -cores 2
@@ -88,7 +112,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: native-hris-evidence
+          name: ${{ matrix.abi == 'x86_64' && 'native-hris-evidence' || 'native-hris-arm64-evidence' }}
           path: |
             platform/.work/collaboration/*/result.json
             platform/.work/collaboration/*/verified.json
@@ -106,6 +130,7 @@ jobs:
             mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-*.xml
             mobile/apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-*.xml
             mobile/.work/native-notification-proof/
+            mobile/.work/native-abi.json
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 7

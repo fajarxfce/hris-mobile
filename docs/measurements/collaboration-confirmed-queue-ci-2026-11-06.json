@@ -1,0 +1,168 @@
+{
+  "date": "2026-11-06",
+  "sourceCommit": "62d9fba1a8ee855a14dd62d5c2d3e72f4f4dc6ac",
+  "platformFixtureCommit": "4dc8c9d15cde42160f93096325360a7aeff65204",
+  "sdk": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.1",
+  "nativeExecutionAbi": "x86_64",
+  "runs": {
+    "protocol": {
+      "id": 42213012559,
+      "conclusion": "success",
+      "modes": [
+        "classic",
+        "native"
+      ],
+      "checksPerMode": 14,
+      "cleanup": true
+    },
+    "nativeHris": {
+      "id": 42213012407,
+      "conclusion": "success",
+      "tests": 386,
+      "suites": 67
+    },
+    "control": {
+      "id": 42213012469,
+      "portable": "success",
+      "apple": "success",
+      "portableTests": 4249,
+      "portableSuites": 461,
+      "conclusion": "success",
+      "appleTests": 1646,
+      "appleSuites": 181
+    }
+  },
+  "artifacts": [
+    {
+      "artifactId": 13501330002,
+      "sha256": "8431aa37e520d4a4da3c8bda54994a1c7dfdc1523b4255640ea067e52ffa5411",
+      "bytes": 2510,
+      "suites": 0,
+      "counts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "artifactId": 13499959886,
+      "sha256": "351661a5d5d1542890a0f9e47ddc8a1acab2926c00099bd0ccc65997b37d7ada",
+      "bytes": 2520,
+      "suites": 0,
+      "counts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "artifactId": 13500859426,
+      "sha256": "9e7acf1431a6f87b665ef78867f38122f0a0962d7ca30958b2c4165fab233fca",
+      "bytes": 282077,
+      "suites": 67,
+      "counts": {
+        "tests": 386,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "artifactId": 13500294351,
+      "sha256": "588ee0498f66ec18439cce0193f44dbef410f8b44e356df6099d6061a1946a4c",
+      "bytes": 2275272,
+      "suites": 461,
+      "counts": {
+        "tests": 4249,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "artifactId": 13502518048,
+      "sha256": "8273248ce66164563748517e82e5ded96f4dbde1de29019eab8d04f987493667",
+      "bytes": 297781,
+      "suites": 181,
+      "counts": {
+        "tests": 1646,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "nativeHrisAcceptance": {
+    "platform/.work/collaboration/10970dbe687343b097ebc183bead3e40/verified.json": {
+      "passed": true,
+      "cleanup": true,
+      "encryptedSendCount": 3,
+      "nativeRedactionRequests": 0,
+      "retainedConfirmedQueueScenario": false,
+      "confirmedNativeQueueRestored": null,
+      "confirmedNativeQueueRetryNoop": null,
+      "confirmedNativeQueueSettledOffline": null,
+      "processRestartedAfterAck": true,
+      "processRestartedAfterCompletion": true
+    },
+    "platform/.work/collaboration/e72072c6714443858a8ec049a2f9566a/verified.json": {
+      "passed": true,
+      "cleanup": true,
+      "encryptedSendCount": 3,
+      "nativeRedactionRequests": 0,
+      "retainedConfirmedQueueScenario": true,
+      "confirmedNativeQueueRestored": true,
+      "confirmedNativeQueueRetryNoop": true,
+      "confirmedNativeQueueSettledOffline": true,
+      "processRestartedAfterAck": true,
+      "processRestartedAfterCompletion": true
+    },
+    "platform/.work/collaboration-worker/4a3d719594eb4485a558e27d2ed3e2c0/acceptance.json": {
+      "passed": true,
+      "cleanup": true,
+      "encryptedSends": 1,
+      "foregroundHistoryAccepted": null,
+      "platformWorkManagerAccepted": null,
+      "workManagerExecutionAccepted": true,
+      "retryCancellationAccepted": false
+    },
+    "platform/.work/collaboration-worker/4b6d3f8200294e0a9b9ab080054db439/acceptance.json": {
+      "passed": true,
+      "cleanup": true,
+      "encryptedSends": 176,
+      "foregroundHistoryAccepted": true,
+      "platformWorkManagerAccepted": false,
+      "workManagerExecutionAccepted": null,
+      "retryCancellationAccepted": null
+    },
+    "platform/.work/collaboration-worker/8031d503e17a434d9c845b084328b312/acceptance.json": {
+      "passed": true,
+      "cleanup": true,
+      "encryptedSends": 176,
+      "foregroundHistoryAccepted": true,
+      "platformWorkManagerAccepted": false,
+      "workManagerExecutionAccepted": null,
+      "retryCancellationAccepted": null
+    },
+    "platform/.work/collaboration-worker/e3bce9b38187448c99bdfca8881277d9/acceptance.json": {
+      "passed": true,
+      "cleanup": true,
+      "encryptedSends": 176,
+      "foregroundHistoryAccepted": true,
+      "platformWorkManagerAccepted": false,
+      "workManagerExecutionAccepted": null,
+      "retryCancellationAccepted": null
+    },
+    "mobile/.work/native-notification-proof/result.json": {
+      "complete": true,
+      "fixtureAbsent": true,
+      "fixtureUninstalled": true,
+      "fixtureDataCleared": true
+    }
+  },
+  "arm64ReleaseAcceptance": false,
+  "scope": "Source CI and isolated native fixtures only. These x86_64 executions do not accept the rejected ARM64 release44 or establish physical-device send latency.",
+  "allSourceCiComplete": true
+}

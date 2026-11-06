@@ -131,11 +131,36 @@
     "at": "2026-11-06T09:04:32.826250+00:00"
   },
   "phoneAvailability": {
+    "at": "2026-11-06T13:08:14.034327+00:00",
+    "connected": true,
+    "uiTouched": false
+  },
+  "phoneInstalled": true,
+  "phoneStillVersion": 43,
+  "nextPhoneAction": "Release43 is installed. Continue the SDK2/normal release46 work; announce its separate installation and use install-only after exact artifact acceptance.",
+  "earlierPhoneAvailability": {
     "at": "2026-11-06T09:01:24.843337+00:00",
     "connected": false,
     "uiTouched": false
   },
-  "phoneInstalled": false,
-  "phoneStillVersion": 42,
-  "nextPhoneAction": "After WireGuard/ADB reconnects, preflight, announce EACH installation, then install.py --install-only. Never launch or drive the phone UI."
+  "phoneInstallation": {
+    "confirmed": true,
+    "startedAt": "2026-11-06T13:08:14.034327+00:00",
+    "elapsedSecondsIncludingVerification": 48.285,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 43,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "639a5454496813a9ad4fa70294a4fbb5364df8473658468662a199167fd970bf",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+  }
 }

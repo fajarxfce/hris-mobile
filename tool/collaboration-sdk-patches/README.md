@@ -1,4 +1,12 @@
-# Matrix raw-event binding under validation
+# Patched Matrix Android SDK
+
+The current published dependency is `26.10.23-hris.2`. See the
+[distribution contract](../../docs/collaboration-sdk-distribution.md) and
+[ARM64 acceptance](../../docs/measurements/collaboration-sdk-arm64-baseline-2026-11-06.json).
+Earlier candidate sections below retain their original scope and failures; they
+do not override the current distribution status.
+
+## Raw-event development history
 
 `raw-event.patch` applies to Matrix Rust SDK commit
 `8de215a0aa0026afa5754ae5f05a6d168d1a1d60` (Apache-2.0).
@@ -184,12 +192,12 @@ ownership, complete-content matching and protected uncertain queue entries.
 
 `../build_collaboration_sdk.py` takes a fresh checkout of the pinned upstream commit,
 an explicit ABI, an Android SDK directory, and separate tooling/output directories.
-`android-build.json` pins both patches, all nine relevant Rust/build inputs, the
+`android-build.json` pins all three patches, nine relevant Rust/build inputs, the
 toolchain versions and every generated Kotlin file. The driver rejects changed
 inputs, checks ELF architecture, ABI-specific alignment and the three required entry points,
 and writes candidate evidence beside the JNI/Kotlin pair. It never publishes an
 artifact or changes an application dependency. Timeout handling reaps its owned
-subprocess; two process-lifetime/exit-code tests pass locally.
+subprocess; three tests cover process lifetime, exit codes and rejected ambient Rust flags.
 
 `.github/workflows/collaboration-sdk.yml` builds arm64-v8a on changes to these SDK build
 inputs; manual runs can select another ABI or all four. It uses an isolated runner,
@@ -210,6 +218,7 @@ wrong architectures and missing queue/raw-event entry points independently.
 `android-distribution.json`. Populate its Android `src/main` from the four verified
 native outputs; every ABI must share the exact nine Kotlin files in `android-build.json`.
 Keep the patched SDK checkout available for source fingerprints, license and lockfile.
+Choose an unused revision for a new distribution; SDK 2 is already immutable.
 
 ```sh
 python3 tool/package_collaboration_sdk.py \
@@ -217,7 +226,7 @@ python3 tool/package_collaboration_sdk.py \
   --sdk /path/to/patched-matrix-rust-sdk \
   --android-sdk /path/to/android-sdk \
   --java-home /path/to/jdk-21 \
-  --version 26.10.23-hris.1 \
+  --version 26.10.23-hris.3 \
   --output /path/to/new-candidate-directory
 ```
 
@@ -225,13 +234,14 @@ The command checks all four native architectures, alignment, exported methods,
 generated Kotlin and pinned sources before packaging. It then verifies the AAR's
 JNI hashes, public methods, minimum SDK and consumer rules. The Ivy descriptor
 preserves the checksum-pinned upstream runtime dependencies, including JNA's Android
-AAR. The source bundle includes generated Kotlin, both patches, manifests, license
+AAR. The source bundle includes generated Kotlin, all patches, manifests, license
 and Cargo lockfile; the upstream and wrapper revisions are recorded in `sdk-build.json`.
 The output also includes `SHA256SUMS`. The command never publishes a release or
-changes application dependencies. The four-ABI AAR packaging passes locally in39.024s. Its Kotlin classes and both
-64-bit JNI files are byte-identical to the accepted native recovery proof. Descriptor
-dependencies match the Gradle-accepted prototype; see the Android measurement for
-artifact hashes and the separate failed/corrected CI validation history.
+changes application dependencies. SDK 2 packaging passed in 107.344s. Its ARM64
+library passed retained-store and native encrypted recovery acceptance before
+publication. The three other ABI libraries are unchanged from SDK 1, with source
+and effective target-configuration equivalence recorded. All generated Kotlin and
+compiled binding classes remain unchanged; see the ARM64 measurement for hashes.
 
 A shipping artifact must pass normal Gradle resolution with strict descriptor/AAR
 hashes and the application release checks. Publish only those exact immutable files;
@@ -239,7 +249,7 @@ do not replace an existing version or confuse a failed CI run with independent
 local verification. Existing application release variants do not enable R8, so their
 acceptance is not evidence of minifier compatibility.
 
-## Android ARM64 CPU baseline — under runtime validation
+## Android ARM64 CPU baseline — accepted
 
 `android-arm64-baseline.patch` applies after the two recovery patches. It changes
 only the Android arm64 target configuration: NEON remains enabled, while AES, SHA2
@@ -247,9 +257,14 @@ and PMUv3 are no longer unconditionally enabled. Crypto crates keep their runtim
 feature detection and software fallback. The pinned source/patch hashes include
 this configuration change. Ambient Rust flags are rejected by the build driver.
 
-This follows a real release44 SIGILL while importing the encrypted SDK store under
-ARM64 translation, despite successful ELF/API checks. The native x86_64 queue proof
-and the offline UI pass do not establish ARM64 compatibility. Preserve the failed
-APK and SDK1 assets. The baseline must reopen the same retained encrypted store and
-pass online acceptance before a new SDK/app release is accepted. The SDK workflow
-now defaults to arm64-v8a; native runtime coverage still needs an ARM64 smoke gate.
+Release 44 crashed with SIGILL while importing an existing encrypted SDK store
+under ARM64 translation, despite successful ELF/API checks. The failed APK and
+SDK 1 assets remain intact. Candidate 45, using SDK 2, reopened the same retained
+store twice offline and twice online and remained alive afterward. Both screenshots
+were inspected. Two additional ARM64 native scenarios passed encrypted messaging,
+process restarts, offline confirmed-original settlement and repeated no-op recovery.
+
+The SDK workflow defaults to arm64-v8a. The HRIS native workflow has x86_64 and
+ARM64 jobs and asserts each APK's exact native ABI before execution, so the ARM64
+bridge run cannot silently use x86_64. Structural checks and source CI remain
+separate from actual native runtime acceptance.

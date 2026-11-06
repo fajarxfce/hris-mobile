@@ -1,5 +1,11 @@
 plugins { id("starter.android.application") }
 
+val proofAbi = providers.gradleProperty("collaborationProofAbi").orNull
+
+require(proofAbi == null || proofAbi in setOf("arm64-v8a", "x86_64")) {
+    "collaborationProofAbi must be arm64-v8a or x86_64"
+}
+
 android {
     namespace = "dev.fajar.hris.collaboration.proof"
     defaultConfig {
@@ -7,6 +13,7 @@ android {
         versionCode = 1
         versionName = "0.1.0-proof"
         manifestPlaceholders["appAuthRedirectScheme"] = "hris-collaboration-proof-auth"
+        proofAbi?.let { ndk.abiFilters += it }
     }
 }
 

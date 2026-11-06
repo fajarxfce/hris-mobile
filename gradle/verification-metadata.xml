@@ -14948,5 +14948,16 @@
             <sha256 value="30c35845ae5dd2bd643ab0a0ed69db7d1338cc7ebbf1a76795e5021df692722e" origin="Verified SDK release matrix-sdk-26.10.23-hris.1"/>
          </artifact>
       </component>
+      <component group="dev.fajar.hris.matrix" name="sdk-android" version="26.10.23-hris.2">
+         <artifact name="sdk-android-26.10.23-hris.2.aar">
+            <sha256 value="c4df31e057eee5ec3f7986a6a4e06db4f2118e072de879aa7fc247a43d25b162" origin="Verified SDK release matrix-sdk-26.10.23-hris.2"/>
+         </artifact>
+         <artifact name="ivy-26.10.23-hris.2.xml">
+            <sha256 value="f1c74227ddafee4774e18b31fbb952942c919d0d37c962c24fac6471d80ebbd5" origin="Verified SDK release matrix-sdk-26.10.23-hris.2"/>
+         </artifact>
+         <artifact name="sdk-android-26.10.23-hris.2.ivy.xml">
+            <sha256 value="f1c74227ddafee4774e18b31fbb952942c919d0d37c962c24fac6471d80ebbd5" origin="Verified SDK release matrix-sdk-26.10.23-hris.2"/>
+         </artifact>
+      </component>
    </components>
 </verification-metadata>

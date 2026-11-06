@@ -1,45 +1,54 @@
 # Android Matrix SDK distribution
 
-ARM64 release acceptance is currently paused. Release44 opens owned local history
-offline but crashes with SIGILL when restoring the encrypted SDK store under the
-owned x86_64 emulator's ARM64 translation. The stack reaches accelerated SHA-256
-from `StoreCipher::import`. Upstream Cargo settings force optional AES/SHA2/PMUv3
-features. A baseline ARM64 build now removes those assumptions and lets crypto
-crates detect supported instructions. Its runtime acceptance is still pending.
-The published `26.10.23-hris.1` assets remain unchanged; this finding does not claim
-a physical-phone crash. [Failure evidence](measurements/collaboration-release44-2026-11-06.json).
+The application uses `dev.fajar.hris.matrix:sdk-android:26.10.23-hris.2` through an
+exclusive Ivy repository and strict checksum verification. The [SDK release](https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.2)
+contains the AAR, descriptor, source bundle, license, build record and checksums.
+The [normal dependency gate](measurements/collaboration-sdk-baseline-shipping-2026-11-06.json)
+passes with 7,026 tests retained after a formatting-only correction and zero
+Android lint findings. Candidate runtime acceptance is recorded separately below.
 
-The Android recovery adapter needs two additions to the Matrix Rust SDK: reading
-an original event without losing fields, and settling a proven server-confirmed
-original in a paused local send queue. The caller must still prove the accepted
+This version preserves runtime detection of optional ARM64 CPU instructions.
+SDK 1 inherited Cargo flags forcing AES/SHA2/PMUv3; release 44 crashed with SIGILL
+while importing its existing encrypted store under Android ARM64 translation.
+[The rejected release](measurements/collaboration-release44-2026-11-06.json) remains
+rejected, and SDK 1 assets are unchanged. Its release notes describe the limitation.
+
+The replacement passed [retained-store acceptance](measurements/collaboration-release45-2026-11-06.json)
+in nondebuggable candidate 45: two offline and two online room openings, followed
+by a stable-process wait. The original data and keys were retained. Two further
+ARM64 native scenarios passed encrypted messaging, process restarts, offline
+settlement of a server-confirmed original and repeated recovery without another
+send. Each scenario recorded three encrypted sends and zero redactions.
+[Build, runtime and publication evidence](measurements/collaboration-sdk-arm64-baseline-2026-11-06.json).
+Candidate 45 uses a local dependency override and is not the normal phone build.
+
+The Android adapter needs two additions to the Matrix Rust SDK: reading an
+original event without losing fields, and settling a proven server-confirmed
+original in a paused local send queue. Application policy must prove the accepted
 content and owner; the SDK does not authenticate an arbitrary supplied event ID.
-See [recovery contract](collaboration-confirmed-queue-recovery.md).
-
-The verified four-ABI candidate is `dev.fajar.hris.matrix:sdk-android:26.10.23-hris.1`.
-It is published in [this SDK release](https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.1)
-with an Ivy descriptor, source bundle, license and checked asset digests. The
-application catalog now uses this coordinate through an exclusive Ivy repository;
-Gradle pins the descriptor and AAR hashes. The normal dependency gate has passed.
+See the [recovery contract](collaboration-confirmed-queue-recovery.md).
 
 The [build manifest](../tool/collaboration-sdk-patches/android-build.json) pins the
-upstream revision, both patches, toolchains and generated Kotlin hashes. The
+upstream revision, three patches, toolchains and generated Kotlin hashes. The
 [distribution manifest](../tool/collaboration-sdk-patches/android-distribution.json)
 pins the Kotlin wrapper and upstream dependency POM. Follow the
 [packaging instructions](../tool/collaboration-sdk-patches/README.md#four-abi-candidate-packaging)
-to produce the AAR, Ivy descriptor, source bundle, license, build record and checksums.
-Each new binary requires a new version; never replace an existing release asset.
-Gradle must verify both descriptor and AAR hashes before accepting the dependency.
+to produce the assets. Every changed binary needs a new version; never replace a
+published asset. Verify both descriptor and AAR hashes before accepting a dependency.
 
-The descriptor preserves upstream dependencies, including JNA's Android AAR.
-The Kotlin class archive and arm64/x86_64 libraries exactly match the Android
-consumer that passed both native recovery scenarios. All four ABIs pass structural,
-entry-point and alignment checks. The 16 KiB requirement applies to the two 64-bit
-ABIs; the NDK 28 ARMv7/x86 outputs use 4 KiB alignment. These checks do not claim
-execution on a physical 32-bit device or R8 compatibility. Existing application
-release variants do not enable R8. Apple's dependency remains unchanged.
+SDK 2 rebuilds ARM64. The other three native binaries are reused unchanged from
+SDK 1: production sources, Cargo.lock and their effective target configuration
+match. All nine generated Kotlin files and the compiled class archive are also
+unchanged. Every packaged library passes ABI, entry-point and alignment checks.
+The 16 KiB requirement applies to the two 64-bit ABIs; NDK 28 ARMv7/x86 outputs
+use 4 KiB alignment. The descriptor preserves upstream dependencies, including
+JNA's Android AAR. Fresh ARM64 SDK CI passed with verified source/binding hashes;
+its independently built native file differs from the locally tested release file
+and is not substituted into this package.
 
-[SDK measurements](measurements/collaboration-sdk-confirmed-queue-android-2026-11-06.json)
-retain the first remote verifier failure separately from corrected local validation.
-[Full candidate checks](measurements/collaboration-confirmed-queue-full-candidate-2026-11-06.json)
-record 7,026 passing application tests and lint without errors or warnings. The [normal dependency gate](measurements/collaboration-confirmed-queue-shipping-2026-11-06.json)
-also passes. The nondebuggable application release remains a separate acceptance gate.
+[Application source CI](measurements/collaboration-confirmed-queue-ci-2026-11-06.json)
+records the preceding application commit's protocol, native HRIS, portable and
+Apple checks. Its native scenarios executed x86_64; the SDK 2 ARM64 runtime proof
+above is separate. Physical phone send latency, physical 32-bit execution and R8
+execution are not claimed. Existing application release variants do not enable
+R8, and Apple's SDK dependency is unchanged.

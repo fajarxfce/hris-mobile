@@ -1,0 +1,449 @@
+{
+  "date": "2026-11-06",
+  "sdkVersion": "26.10.23-hris.2",
+  "sourceCommit": "6484d136283621e0a9d9e79d1fc120ed6925f22c",
+  "upstream": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+  "reason": "Release44 SIGILL during encrypted SDK store restoration through Android ARM64 translation.",
+  "previousFailure": "collaboration-release44-2026-11-06.json",
+  "targetFlagsBefore": [
+    "+neon",
+    "+aes",
+    "+sha2",
+    "+pmuv3"
+  ],
+  "targetFlagsAfter": [
+    "+neon"
+  ],
+  "optionalCryptoDetection": "Runtime CPU feature detection remains enabled.",
+  "build": {
+    "exitCode": 0,
+    "elapsedSeconds": 935.696,
+    "sourcesUnchanged": true,
+    "rust": "1.96.0",
+    "ndk": "28.2.13676358",
+    "cargoNdk": "4.1.2",
+    "androidApiLevel": 21
+  },
+  "wrapperInputs": {
+    "arm64BuildSeconds": 935.696,
+    "allProductionSourcesUnchanged": true,
+    "onlyCargoTargetChanged": "aarch64-linux-android",
+    "otherTargetsEffectiveConfigUnchanged": true,
+    "otherTargetsRebuilt": false,
+    "generatedKotlin": {
+      "kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt": "dbf7effa2fb593b30860fa706be26e1990bbe4104ef598331a37388ce44fff7a",
+      "kotlin/uniffi/matrix_sdk/matrix_sdk.kt": "de44cd55bb6a1bd6888c2918df3f7974a8da6326f00192f96fef0b3bb859ea44",
+      "kotlin/uniffi/matrix_sdk_base/matrix_sdk_base.kt": "ca64fbaf9aac400fa3b9d57036467968501138df313a8c07ed4af9ccf6cccb06",
+      "kotlin/uniffi/matrix_sdk_common/matrix_sdk_common.kt": "301030a61a133f6e133457e3434d97ec3f92d32a91684b9e13e8c61c4ba3a1b1",
+      "kotlin/uniffi/matrix_sdk_contentscanner/matrix_sdk_contentscanner.kt": "db48b8b84f391c2205b3a6d7802cfd9f61aeb9d28cb2049d24518a4d98a22a24",
+      "kotlin/uniffi/matrix_sdk_crypto/matrix_sdk_crypto.kt": "120a5d8db4b0ec3e609077b78832dd750e241fd5ea7c0ffb98647a19daade005",
+      "kotlin/uniffi/matrix_sdk_sqlite/matrix_sdk_sqlite.kt": "6738c2e65bd83217510f8b1bb5553827d9810c9e7add039f28ff8c9d75fb30ca",
+      "kotlin/uniffi/matrix_sdk_ui/matrix_sdk_ui.kt": "d91d9e1a8f040c8435673ad8dd12a41a1df0a90d9a5dd54b2c0de968c2046c28",
+      "kotlin/uniffi/ruma_events/ruma_events.kt": "de0a855239a51a0bc959451d9d3bc408c3af027cdcea68fab4055df7b28d7e0c"
+    },
+    "native": {
+      "arm64-v8a": {
+        "nativeSha256": "13a49c2978e45b9d985ef166c98744f1850b82ef67c86863323fb50d2d0bc28b",
+        "nativeBytes": 138711408,
+        "elfClass": "ELF64",
+        "requiredElfAlignment": 16384,
+        "loadAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "requiredSymbolsPresent": true,
+        "provenance": "baseline-arm64-build"
+      },
+      "x86_64": {
+        "nativeSha256": "48f6a14d6e39a332f8d5f8cc75d8924d636951cdbd97bac1cbc96284eac894ad",
+        "nativeBytes": 142711904,
+        "elfClass": "ELF64",
+        "requiredElfAlignment": 16384,
+        "loadAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "requiredSymbolsPresent": true,
+        "provenance": "unchanged-target-reused-from-26.10.23-hris.1"
+      },
+      "armeabi-v7a": {
+        "nativeSha256": "74b8e8b818602dcc1c76d14ab292dfddfda87bd0b29e1bfb4a25527ee01c6b3a",
+        "nativeBytes": 98488616,
+        "elfClass": "ELF32",
+        "requiredElfAlignment": 4096,
+        "loadAlignments": [
+          4096,
+          4096,
+          4096,
+          4096
+        ],
+        "requiredSymbolsPresent": true,
+        "provenance": "unchanged-target-reused-from-26.10.23-hris.1"
+      },
+      "x86": {
+        "nativeSha256": "6373a13b3dc61fe25d66e580740476158572db3477361fa5ecabf934a1c13353",
+        "nativeBytes": 148135532,
+        "elfClass": "ELF32",
+        "requiredElfAlignment": 4096,
+        "loadAlignments": [
+          4096,
+          4096,
+          4096,
+          4096
+        ],
+        "requiredSymbolsPresent": true,
+        "provenance": "unchanged-target-reused-from-26.10.23-hris.1"
+      }
+    }
+  },
+  "packaging": {
+    "passed": true,
+    "inputsUnchanged": true,
+    "elapsedSeconds": 107.344,
+    "wrapperCommit": "c1664f712bed33488b10f33232fb424faf257d49",
+    "aarSha256": "c4df31e057eee5ec3f7986a6a4e06db4f2118e072de879aa7fc247a43d25b162",
+    "aarBytes": 185486495,
+    "ivySha256": "f1c74227ddafee4774e18b31fbb952942c919d0d37c962c24fac6471d80ebbd5",
+    "classesSha256": "68ffb5d1e78891621469586cff3d37e35f40d6f79375839becdba5b20f50510e",
+    "sourcesSha256": "b6a1a54a77ffd1549dd5f53bc723142f895dc8b006bdfbe526e1c2b55567fa1f",
+    "packagingDriverSha256": "2b0be27d322eab8ae3e197eafa6b11e8166b78cd4b6693bd572132a23a9d3851",
+    "nativeVerifierSha256": "392bf201b0497970bcf96664edaea5e494bad2ac4a9ca2a5a9da2527a6e4fd88",
+    "androidBuildManifestSha256": "2e55579e22012d713e7c5024f48e8a6a75f5f2f38dd15db4ed6bbfaadaec19ba",
+    "distributionManifestSha256": "fcec6d5c478f37a02e105713e72c586a36734f565283f8b58e259fd2a042d17d"
+  },
+  "patches": {
+    "raw-event.patch": "fed8120ba7e7ea88a23cde675d70bb27a3a97304c6c913ad5a9578d28053f76e",
+    "confirmed-queue.patch": "23354aeb43aabe937543355d7255d31527c0a3c78acf0a677f113e9592776872",
+    "android-arm64-baseline.patch": "82fda7d5cadc965059364c7094948fe71286293c24a1df2966d2d673327c3ec3"
+  },
+  "generatedBindingsUnchangedFromSdk1": true,
+  "otherAbisRebuilt": false,
+  "otherAbiReuse": "x86_64, ARMv7 and x86 libraries are byte-identical to SDK1. All production sources and Cargo.lock are unchanged; parsed Cargo configuration is equal after removing the Android ARM64 target. Every reused library is structurally reverified.",
+  "runtimeAcceptance": {
+    "status": "passed-retained-store",
+    "candidateVersionCode": 45,
+    "apkSha256": "2313efeca2b05c70134b399fea15e4d2d5bbf10ac2fd5359ffaee48175f9e9c1",
+    "preservedOriginalBimaStore": true,
+    "offlineOpenings": 2,
+    "onlineOpenings": 2,
+    "sameProcessAfterOnlineWait": true,
+    "evidence": "collaboration-release45-2026-11-06.json",
+    "encryptedSendAndQueueRecovery": "passed"
+  },
+  "published": true,
+  "physicalPhoneAcceptance": false,
+  "physical32BitAcceptance": false,
+  "minifierAcceptance": false,
+  "remoteBuild": {
+    "runId": 42216097534,
+    "headSha": "6484d136283621e0a9d9e79d1fc120ed6925f22c",
+    "conclusion": "success",
+    "artifactId": 13503265094,
+    "artifactSha256": "1be0c0e3a8e1d69a014e6fc7787d59e363f0df7f91700c00fc7a8cec3694994c",
+    "artifactBytes": 46143136,
+    "elapsedSeconds": 1413.629,
+    "sourcesAndGeneratedKotlinVerified": true,
+    "nativeSha256": "50b13c25b0fdd55eeb2ae345766aa44f7dfd330a0676c6fa7ab6d3b831b18020",
+    "nativeBytes": 138686616,
+    "nativeEqualToLocalCandidate": false,
+    "runtimeExecution": false
+  },
+  "nativeRecovery": {
+    "elapsedSeconds": 254.246,
+    "sourceFiles": 12454,
+    "sourcesUnchanged": true,
+    "apkSha256": "6a8304dbe6607488bd0de57b095f74a27415ae58a9e6b885e2ccfd000ffcad12",
+    "apkUnchanged": true,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": {
+        "sha256": "ce525097d5e299d743eb55e1ea4a77c77ea77e25e2297397aa68693ba67b6249",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "accepted": [
+      {
+        "passed": true,
+        "encryptedBothDirections": true,
+        "sdkAccessRenewed": true,
+        "sameGatewayAfterRenewal": true,
+        "verificationUsedRefreshReplay": true,
+        "logicalIdsPreserved": true,
+        "cleanup": true,
+        "protectedStoreReopened": true,
+        "missingRecordPreserved": true,
+        "wrongPassphrasePreserved": true,
+        "exclusiveOwner": true,
+        "processRestarted": true,
+        "queueRestored": true,
+        "transactionReused": true,
+        "identityAfterRestart": true,
+        "messageIntentRestored": true,
+        "queueMappingRecovered": true,
+        "queueWriterExclusive": true,
+        "perRoomDeliveryIsolated": true,
+        "heldQueueRestored": true,
+        "nativeDeliveryOwned": true,
+        "commonSenderOwned": true,
+        "receiptJournalRecovered": true,
+        "projectionInterrupted": true,
+        "originalHistoryWindowOwned": true,
+        "historyBodiesRestored": true,
+        "nativeReadReceiptsExchanged": true,
+        "nativePrivateReceiptIsolated": true,
+        "nativeReadReceiptStoreRestored": true,
+        "nativeLocalReadIntentPrepared": true,
+        "nativeLocalReadIntentStoreRestored": true,
+        "nativeReadReceiptReplayAdmitted": true,
+        "nativeReadReceiptAckUncertaintyRecovered": true,
+        "commonHistoryAcquisitionOwned": true,
+        "latestHistoryHeadOwned": true,
+        "admittedHistoryHeads": true,
+        "providerHistoryPageOwned": true,
+        "commonProviderHistoryAcquisitionOwned": true,
+        "providerHistoryReferencesRestored": true,
+        "providerHistoryReferencesReconciled": true,
+        "providerHistoryRestartPreserved": true,
+        "historyRuntimeReopened": true,
+        "ackBeforeJournalRecovered": true,
+        "processRestartedAfterAck": true,
+        "completionCleanupRecovered": true,
+        "coldHistoryRecoveredOffline": true,
+        "gatewayUnavailableAfterProcessDeath": true,
+        "quotedReplyDecrypted": true,
+        "quotedReplyRecovered": true,
+        "quotedReplyRecoveredOffline": true,
+        "processRestartedAfterCompletion": true,
+        "encryptedSendCount": 3,
+        "nativeRedactionRequests": 0,
+        "admittedProviderPages": true,
+        "historyWindow": {
+          "originals": 2,
+          "unavailable": 9,
+          "extractionNanos": 11709055,
+          "modelCharacters": 4732,
+          "originalCharacters": 953
+        },
+        "applicationAdmittedBeforeSend": true,
+        "applicationAdmittedAroundHistory": true,
+        "applicationAdmissions": {
+          "device": 26,
+          "conversation": 26,
+          "room": 26,
+          "failures": 0
+        },
+        "heldRoomNeverSent": true,
+        "pausedAcrossRestart": true,
+        "syncInterruptedAfterRestart": true,
+        "syncRetriedWithRetainedCursor": true,
+        "artifact": {
+          "apkSha256": "6a8304dbe6607488bd0de57b095f74a27415ae58a9e6b885e2ccfd000ffcad12",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35"
+        },
+        "retainedConfirmedQueueScenario": false
+      },
+      {
+        "passed": true,
+        "encryptedBothDirections": true,
+        "sdkAccessRenewed": true,
+        "sameGatewayAfterRenewal": true,
+        "verificationUsedRefreshReplay": true,
+        "logicalIdsPreserved": true,
+        "cleanup": true,
+        "protectedStoreReopened": true,
+        "missingRecordPreserved": true,
+        "wrongPassphrasePreserved": true,
+        "exclusiveOwner": true,
+        "processRestarted": true,
+        "queueRestored": true,
+        "transactionReused": true,
+        "identityAfterRestart": true,
+        "messageIntentRestored": true,
+        "queueMappingRecovered": true,
+        "queueWriterExclusive": true,
+        "perRoomDeliveryIsolated": true,
+        "heldQueueRestored": true,
+        "nativeDeliveryOwned": true,
+        "commonSenderOwned": true,
+        "receiptJournalRecovered": true,
+        "projectionInterrupted": true,
+        "originalHistoryWindowOwned": true,
+        "historyBodiesRestored": true,
+        "nativeReadReceiptsExchanged": true,
+        "nativePrivateReceiptIsolated": true,
+        "nativeReadReceiptStoreRestored": true,
+        "nativeLocalReadIntentPrepared": true,
+        "nativeLocalReadIntentStoreRestored": true,
+        "nativeReadReceiptReplayAdmitted": true,
+        "nativeReadReceiptAckUncertaintyRecovered": true,
+        "commonHistoryAcquisitionOwned": true,
+        "latestHistoryHeadOwned": true,
+        "admittedHistoryHeads": true,
+        "providerHistoryPageOwned": true,
+        "commonProviderHistoryAcquisitionOwned": true,
+        "providerHistoryReferencesRestored": true,
+        "providerHistoryReferencesReconciled": true,
+        "providerHistoryRestartPreserved": true,
+        "historyRuntimeReopened": true,
+        "ackBeforeJournalRecovered": true,
+        "processRestartedAfterAck": true,
+        "completionCleanupRecovered": true,
+        "coldHistoryRecoveredOffline": true,
+        "gatewayUnavailableAfterProcessDeath": true,
+        "quotedReplyDecrypted": true,
+        "quotedReplyRecovered": true,
+        "quotedReplyRecoveredOffline": true,
+        "processRestartedAfterCompletion": true,
+        "encryptedSendCount": 3,
+        "nativeRedactionRequests": 0,
+        "admittedProviderPages": true,
+        "historyWindow": {
+          "originals": 2,
+          "unavailable": 9,
+          "extractionNanos": 27770974,
+          "modelCharacters": 4732,
+          "originalCharacters": 953
+        },
+        "applicationAdmittedBeforeSend": true,
+        "applicationAdmittedAroundHistory": true,
+        "applicationAdmissions": {
+          "device": 24,
+          "conversation": 24,
+          "room": 24,
+          "failures": 0
+        },
+        "heldRoomNeverSent": true,
+        "pausedAcrossRestart": true,
+        "syncInterruptedAfterRestart": true,
+        "syncRetriedWithRetainedCursor": true,
+        "artifact": {
+          "apkSha256": "6a8304dbe6607488bd0de57b095f74a27415ae58a9e6b885e2ccfd000ffcad12",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35"
+        },
+        "retainedConfirmedQueueScenario": true,
+        "confirmedNativeQueueRestored": true,
+        "confirmedNativeQueueSettledOffline": true,
+        "confirmedNativeQueueRetryNoop": true
+      }
+    ]
+  },
+  "consumerBuild": {
+    "startedAt": "2026-11-06T12:41:37.647529+00:00",
+    "elapsedSeconds": 168.677,
+    "artifact": ".work/sdk-confirmed-queue-2026-11-06/consumer-baseline-arm64/baseline-arm64-consumer-debug.apk",
+    "sha256": "6a8304dbe6607488bd0de57b095f74a27415ae58a9e6b885e2ccfd000ffcad12",
+    "bytes": 130544831,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "native": {
+      "nativeSha256": "a3db663ca38d877e67db10c33ad46f2f2c2fe81b72bd67c389e125ce56cd6d30",
+      "nativeBytes": 97374256,
+      "elfClass": "ELF64",
+      "requiredElfAlignment": 16384,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "requiredSymbolsPresent": true
+    },
+    "sdkAarSha256": "c4df31e057eee5ec3f7986a6a4e06db4f2118e072de879aa7fc247a43d25b162",
+    "sourcesUnchanged": true,
+    "candidateOnly": true
+  },
+  "consumerChecks": {
+    "counts": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": 5,
+    "unitTask": "UP-TO-DATE",
+    "newlyExecutedUnitTests": 0,
+    "reportSha256": {
+      "TEST-dev.fajar.hris.collaboration.proof.HrisProofFailureTest.xml": "da335c034fca270980efc223a6baa84912ac70c9442cee6f81ca7e05d3d78d91",
+      "TEST-dev.fajar.hris.collaboration.proof.HrisProofObservationTest.xml": "5f999e3ca10b5a5e6e2c4d5c4deef10357f2ec7b0fbb028d3d79a7e56dc9af1b",
+      "TEST-dev.fajar.hris.collaboration.proof.HrisReadReceiptBarrierTest.xml": "c5239b74e45c77edae8bb5781295cc5cc840bcf617b7cc30709756531d80d62b",
+      "TEST-dev.fajar.hris.collaboration.proof.NotificationInputCheckpointTest.xml": "8a0046d561bfe2f037a3f849e15eea8c3518c919045b6108512c3b843866e76a",
+      "TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": "ddc5878e0a4a306c4634f174c1c2277eac50e8cf73b4776248a793c05c1c3131"
+    },
+    "lintSeverity": {
+      "Warning": 48
+    },
+    "lintIds": {
+      "AndroidGradlePluginVersion": 2,
+      "GradleDependency": 8,
+      "NewerVersionAvailable": 35,
+      "ChromeOsAbiSupport": 1,
+      "DataExtractionRules": 1,
+      "MissingApplicationIcon": 1
+    },
+    "scope": "Test-only fixture. Pinned-dependency update notices, omitted fixture launcher/backup resources, and deliberate arm64-only ChromeOS ABI warning. Shipping release45 lint has zero findings."
+  },
+  "publication": {
+    "at": "2026-11-06T12:52:22.004945+00:00",
+    "releaseId": 436496933,
+    "tag": "matrix-sdk-26.10.23-hris.2",
+    "target": "6484d136283621e0a9d9e79d1fc120ed6925f22c",
+    "draftAssetsVerified": true,
+    "assets": {
+      "sdk-android-26.10.23-hris.2.aar": {
+        "id": 717164946,
+        "sha256": "c4df31e057eee5ec3f7986a6a4e06db4f2118e072de879aa7fc247a43d25b162",
+        "bytes": 185486495
+      },
+      "sdk-android-26.10.23-hris.2.ivy.xml": {
+        "id": 717164949,
+        "sha256": "f1c74227ddafee4774e18b31fbb952942c919d0d37c962c24fac6471d80ebbd5",
+        "bytes": 1201
+      },
+      "sdk-android-26.10.23-hris.2-sources.tar.gz": {
+        "id": 717164944,
+        "sha256": "b6a1a54a77ffd1549dd5f53bc723142f895dc8b006bdfbe526e1c2b55567fa1f",
+        "bytes": 427301
+      },
+      "LICENSE": {
+        "id": 717164950,
+        "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "bytes": 10174
+      },
+      "sdk-build.json": {
+        "id": 717164947,
+        "sha256": "d3dc97afa02522b1d9c868a2f5093c5802b091d522e10f15042490a54b6a3d88",
+        "bytes": 5225
+      },
+      "SHA256SUMS": {
+        "id": 717165005,
+        "sha256": "54d8ef4f95103a787dd17ebba00b00c8078cd84a0764cf5c7801d3f75761ba89",
+        "bytes": 464
+      }
+    },
+    "runtimeAcceptedVersionCode": 45,
+    "public": true,
+    "publishedAt": "2026-11-06T12:52:23Z",
+    "url": "https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.2",
+    "publicDescriptorVerified": true,
+    "postPublishCheck": "Refreshed the release asset URL after publication; the cached draft URL returned404. No second publication or upload was performed.",
+    "tagRefCommit": "6484d136283621e0a9d9e79d1fc120ed6925f22c",
+    "tagRefVerified": true
+  }
+}

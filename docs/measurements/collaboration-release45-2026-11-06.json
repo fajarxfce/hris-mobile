@@ -1,0 +1,166 @@
+{
+  "date": "2026-11-06",
+  "artifact": {
+    "candidateOnly": true,
+    "diagnosticMarkersAbsent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-06-build45/hris-mobile-dev-release-1.0.0-45-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 45,
+    "versionName": "1.0.0",
+    "bytes": 121090044,
+    "sha256": "2313efeca2b05c70134b399fea15e4d2d5bbf10ac2fd5359ffaee48175f9e9c1",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+  },
+  "source": {
+    "baseCommit": "6484d136283621e0a9d9e79d1fc120ed6925f22c",
+    "sourceManifestSha256": "bbbcca808f49f731c0095633ff9dd04da1ddc0dac94bc488a7d2d83d71960c71",
+    "sourcesUnchanged": true,
+    "candidateOnly": true,
+    "changedFromAcceptedShippingInputs": [
+      "apps/collaboration-proof/build.gradle.kts",
+      "gradle/verification-metadata.xml"
+    ],
+    "sdkAarSha256": "c4df31e057eee5ec3f7986a6a4e06db4f2118e072de879aa7fc247a43d25b162",
+    "candidateInitSha256": "9a43fb10bc42924942c1957936f06401b0e28183a4186a872f272a51156f3d69"
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      "--dependency-verification",
+      "strict",
+      ":apps:android:assembleDevRelease",
+      ":apps:android:lintDevRelease",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=45",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-06-build45/phone-arm64.init.gradle",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-06-build45/baseline-sdk.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m"
+    ],
+    "startedAt": "2026-11-06T12:28:47.893555+00:00",
+    "elapsedSeconds": 552.843,
+    "exitCode": 0
+  },
+  "sdk": {
+    "nativeSha256": "a3db663ca38d877e67db10c33ad46f2f2c2fe81b72bd67c389e125ce56cd6d30",
+    "nativeBytes": 97374256,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "aarSha256": "c4df31e057eee5ec3f7986a6a4e06db4f2118e072de879aa7fc247a43d25b162",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.2",
+    "strippedNativeMatchesVerifiedSdk": true,
+    "stripToolNdkVersion": "28.2.13676358",
+    "queueApisAndUseCaseInDex": true
+  },
+  "lint": {
+    "issues": 0,
+    "reportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "acceptance": {
+    "accepted": true,
+    "candidateOnly": true,
+    "scope": "Retained Bima encrypted-store and offline/online room-entry acceptance, not physical-device send latency.",
+    "versionCode": 45,
+    "apkSha256": "2313efeca2b05c70134b399fea15e4d2d5bbf10ac2fd5359ffaee48175f9e9c1",
+    "screenshotsInspected": true,
+    "screenshots": {
+      "offline": "0a01f99b5551f9271cd6b44cdfcc7aa1316c5c4d2984c9b96989922dd3ca2223",
+      "online": "e8c5c01c473c0c8b3864f4f4444c459076db425a60ba496e1d187a8e83aaa195"
+    },
+    "probe": {
+      "startedAt": "2026-11-06T12:39:29.405385+00:00",
+      "accepted": true,
+      "serial": "emulator-5562",
+      "versionCode": 45,
+      "installedApkSha256": "2313efeca2b05c70134b399fea15e4d2d5bbf10ac2fd5359ffaee48175f9e9c1",
+      "phoneTouched": false,
+      "newMessagesSent": 0,
+      "snapshots": [
+        {
+          "mode": "offline",
+          "opening": 1,
+          "visibleRows": 11,
+          "sendVisible": true,
+          "recoveryBanner": false,
+          "olderAction": false,
+          "reconnectPrompt": false
+        },
+        {
+          "mode": "offline",
+          "opening": 2,
+          "visibleRows": 10,
+          "sendVisible": true,
+          "recoveryBanner": false,
+          "olderAction": false,
+          "reconnectPrompt": false
+        },
+        {
+          "mode": "online",
+          "opening": 1,
+          "visibleRows": 12,
+          "sendVisible": true,
+          "recoveryBanner": false,
+          "olderAction": false,
+          "reconnectPrompt": false
+        },
+        {
+          "mode": "online",
+          "opening": 2,
+          "visibleRows": 11,
+          "sendVisible": true,
+          "recoveryBanner": false,
+          "olderAction": false,
+          "reconnectPrompt": false
+        }
+      ],
+      "settingsRestored": true,
+      "offlineRows": 11,
+      "onlineRows": 12,
+      "sameProcessAfterOnlineWait": true
+    },
+    "emulatorStopped": true,
+    "dataAndKeysRetained": true,
+    "phoneInstalled": false
+  },
+  "initialBuildAttempt": {
+    "exitCode": 1,
+    "elapsedSeconds": 7.083,
+    "reason": "Candidate init script also ran for the included build, which has no HRIS Matrix SDK repository. Restricting the override to application settings fixed initialization; no application implementation changed."
+  },
+  "previousRejectedRelease": 44,
+  "normalPublishedDependencyBuild": false,
+  "phoneInstallation": false
+}
