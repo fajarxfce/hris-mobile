@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-06",
+  "red": {
+    "startedAt": "2026-11-06T14:13:23.128281+00:00",
+    "elapsedSeconds": 67.371,
+    "exitCode": 1,
+    "sourcesUnchanged": true,
+    "sourceFiles": 4216,
+    "report": {
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sha256": "2b3281fe5d499217869f7d383a9ebc41a6b36d7a681a14b79febc6b26e0fed58",
+      "testNames": [
+        "anAcknowledgedMessageIsDurableAndVisibleBeforeTheNextMessageFinishes[desktop]"
+      ]
+    },
+    "scope": "Domain delivery use case and simulated queue report a first accepted receipt before the second send finishes. A no-op observation contract was added for the reproduction; the use case still waited for the final batch result.",
+    "accepted": false,
+    "sourceBaseCommit": "074087d7f78fa721a1cbcc6a4dd3e99a6ff06ce9"
+  },
+  "implementation": "In progress; no release 48 build or acceptance."
+}

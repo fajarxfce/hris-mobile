@@ -1,6 +1,53 @@
 # Agent continuation — HRIS Mobile
 
-## Current: release 46 installed; history boundary accepted; pending-send investigation — 6 November 2026
+## Current: release 47 installed; progressive receipt recovery next — 6 November 2026
+
+Release 47 from pushed source **074087d7f78fa721a1cbcc6a4dd3e99a6ff06ce9** is installed
+on **10.77.77.3:5555**, install-only/no UI after advance notice. Exact device APK SHA
+**3e9c265984ba902d751aaa95966e054e86f97301610958b1a47f8dc1be2adcbe**, 121,090,044 bytes,
+nondebuggable devRelease 47/1.0.0, same dev signer and normal public SDK 2. App/data/
+first-install time retained. Install started 14:13:15 UTC, 59.807s including verification.
+Do not reinstall or repeat availability requests. One optional release-47 feedback
+question is pending; the user's release-46 answer confirmed ordering but long pending.
+Physical-phone delivery latency is still OPEN.
+[Release evidence](measurements/collaboration-release47-2026-11-06.json).
+
+Build 46814 passed 102.699s, lint zero. Its source matched the accepted 5,283-case
+full gate. Retained Bima store passed two offline and two online openings, with
+messages present and no interrupted-save/older/reconnect prompts, zero new sends,
+and the same process after 30s online. Both original screenshots were inspected.
+Emulator 2427400/startTicks165089163 stopped 14:13:03 UTC; original data and keys
+remain, now with 47. No emulator or heavy local job is active at this checkpoint.
+Private drivers/artifacts: .work/release-phone-2026-11-06-build47.
+
+Current UNCOMMITTED work is the next progressive-ACK increment. Seven Kotlin files
+add a queue observation callback contract, adapt implementing signatures, and add
+a domain regression/fixture for a first acknowledgement before the window ends.
+There is no working progressive implementation yet. Red-1/40903 completed 67.371s:
+1 case/1 expected assertion failure, zero errors/skips, 4,216 stable source inputs.
+The exact assertion proves the first acknowledgement is not yet durable while the
+second send is outstanding. This is a simulated queue/domain reproduction.
+[Evidence](measurements/collaboration-progressive-receipts-2026-11-06.json).
+NEXT implement cumulative receipt observation in the raw SDK datasource, adapt it
+through the repository, and have the delivery use case retain verified facts and
+project while its original invocation remains admitted and active. Bounded native
+operations may outlive a cancelled waiter; late facts must retain the captured
+account fence and never project into a cancelled/replacement invocation. Test
+partial progress, cancellation, denial, account replacement, failed storage, and
+listener cleanup. Then full checks, commit/push, and validated release 48 delivery.
+No release 48 APK exists. Do not loosen mappings or resend originals.
+
+Exact release-46 native CI is now accepted on ARM64 and x86_64, each 386 cases/67
+suites; both protocol modes pass 14 checks with cleanup. Portable passes 4,249/461.
+Apple still runs. Artifact digests/ABI/closed fixture results are recorded in
+[SDK 2 shipping CI](measurements/collaboration-sdk2-shipping-ci-2026-11-06.json).
+Do not redispatch accepted runs or republish SDK assets. All 54 PRD groups remain.
+Starter stays 578d97a; this HRIS-specific queue policy does not belong there.
+Platform live remains 10485916ee02850cf913793398f7ef3dd1e09afb/schema116.1; never
+replay accepted Forward sends/publications or the live rollout. Every future phone
+install needs advance notice, explicit serial, install-only and no phone UI.
+
+## Prior checkpoint: release 46 installed; history boundary accepted — 6 November 2026
 
 Release 46 from pushed source **00a51e14d8919a152aae810017528f1947ef37e6** is accepted
 and installed on **10.77.77.3:5555**. Normal public SDK 2 dependency, devRelease

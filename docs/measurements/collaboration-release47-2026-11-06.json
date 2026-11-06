@@ -1,0 +1,188 @@
+{
+  "date": "2026-11-06",
+  "artifact": {
+    "candidateOnly": true,
+    "diagnosticMarkersAbsent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-06-build47/hris-mobile-dev-release-1.0.0-47-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 47,
+    "versionName": "1.0.0",
+    "bytes": 121090044,
+    "sha256": "3e9c265984ba902d751aaa95966e054e86f97301610958b1a47f8dc1be2adcbe",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "sameInstalledSigner": true
+  },
+  "source": {
+    "baseCommit": "074087d7f78fa721a1cbcc6a4dd3e99a6ff06ce9",
+    "sourceManifestSha256": "4bcb9a87608cd3bb8fc5411c091e82d1aeb4282ad60acfdefc3802a17ca29d7b",
+    "sourcesUnchanged": true,
+    "candidateOnly": true,
+    "normalPublicSdk": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.2"
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      "--dependency-verification",
+      "strict",
+      ":apps:android:assembleDevRelease",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=47",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-06-build47/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m"
+    ],
+    "startedAt": "2026-11-06T14:07:42.203986+00:00",
+    "elapsedSeconds": 102.699,
+    "exitCode": 0
+  },
+  "sdk": {
+    "nativeSha256": "a3db663ca38d877e67db10c33ad46f2f2c2fe81b72bd67c389e125ce56cd6d30",
+    "nativeBytes": 97374256,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "aarSha256": "c4df31e057eee5ec3f7986a6a4e06db4f2118e072de879aa7fc247a43d25b162",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.2",
+    "strippedNativeMatchesVerifiedSdk": true,
+    "stripToolNdkVersion": "28.2.13676358",
+    "queueApisAndUseCaseInDex": true
+  },
+  "lint": {
+    "issues": 0,
+    "reportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "acceptance": {
+    "accepted": true,
+    "at": "2026-11-06T14:13:02.366222+00:00",
+    "apkSha256": "3e9c265984ba902d751aaa95966e054e86f97301610958b1a47f8dc1be2adcbe",
+    "sourceCommit": "074087d7f78fa721a1cbcc6a4dd3e99a6ff06ce9",
+    "versionCode": 47,
+    "scope": "Signed release APK and retained Bima store: two offline and two online openings, same process after 30 seconds online, no new sends. Physical phone delivery latency remains open.",
+    "screenshotsInspected": {
+      "offline": "86c12ee1e0f7dcfa03ef7eb99462c596018e9b0cc5365cfc16897492daa79b17",
+      "online": "9766d810cfc495cebb7238e917044ef1812bbbba224ac59895c0548aab4d4358"
+    },
+    "normalPublicSdk": "26.10.23-hris.2"
+  },
+  "emulatorProbe": {
+    "startedAt": "2026-11-06T14:11:18.663667+00:00",
+    "accepted": true,
+    "serial": "emulator-5562",
+    "versionCode": 47,
+    "installedApkSha256": "3e9c265984ba902d751aaa95966e054e86f97301610958b1a47f8dc1be2adcbe",
+    "phoneTouched": false,
+    "newMessagesSent": 0,
+    "snapshots": [
+      {
+        "mode": "offline",
+        "opening": 1,
+        "visibleRows": 11,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      },
+      {
+        "mode": "offline",
+        "opening": 2,
+        "visibleRows": 10,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      },
+      {
+        "mode": "online",
+        "opening": 1,
+        "visibleRows": 11,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      },
+      {
+        "mode": "online",
+        "opening": 2,
+        "visibleRows": 12,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      }
+    ],
+    "settingsRestored": true,
+    "offlineRows": 11,
+    "onlineRows": 11,
+    "sameProcessAfterOnlineWait": true
+  },
+  "emulatorStop": {
+    "pid": 2427400,
+    "startTicks": "165089163",
+    "stopped": true,
+    "dataRetained": true,
+    "phoneTouched": false,
+    "at": "2026-11-06T14:13:03.206313+00:00"
+  },
+  "phoneInstallation": {
+    "confirmed": true,
+    "startedAt": "2026-11-06T14:13:15.732704+00:00",
+    "elapsedSecondsIncludingVerification": 59.807,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 47,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "3e9c265984ba902d751aaa95966e054e86f97301610958b1a47f8dc1be2adcbe",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-06 21:14:12",
+      "versionCode": "47 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    },
+    "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+  },
+  "buildTimeCandidateLabels": "Candidate labels describe the original pre-acceptance build step. Exact APK acceptance and confirmed phone installation above supersede them.",
+  "phoneDeliveryAcceptance": "Open. One optional feedback question asks whether retained pending messages now get their acknowledgement on release 47."
+}
