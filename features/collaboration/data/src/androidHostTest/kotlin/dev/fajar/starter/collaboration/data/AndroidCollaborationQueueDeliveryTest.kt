@@ -12,6 +12,80 @@ import org.matrix.rustcomponents.sdk.*
 @OptIn(ExperimentalCoroutinesApi::class)
 class AndroidCollaborationQueueDeliveryTest {
     @Test
+    fun acknowledgementsAreObservedWhileTheNextNativeSendIsStillPending() = runTest {
+        val room = QueueRoom(transactions = setOf("first", "second"))
+        val source = AndroidCollaborationMessageQueueSource { room }
+        source.open()
+        val observations = mutableListOf<CollaborationQueueDelivery>()
+        val delivery = async { source.resume(setOf("first", "second")) { observations += it } }
+        runCurrent()
+        room.emit(RoomSendQueueUpdate.SentEvent("first", "\$first"))
+        runCurrent()
+        assertTrue(room.enabled)
+        assertFalse(delivery.isCompleted)
+        assertEquals(
+            listOf(CollaborationQueueReceipt("first", "\$first")),
+            observations.single().receipts,
+        )
+        assertEquals(setOf("second"), observations.single().pending)
+        room.emit(RoomSendQueueUpdate.SentEvent("second", "\$second"))
+        assertEquals(2, delivery.await().receipts.size)
+        assertEquals(2, observations.last().receipts.size)
+        assertFalse(room.enabled)
+        source.stop()
+        val count = observations.size
+        room.emit(RoomSendQueueUpdate.SentEvent("second", "\$late"))
+        runCurrent()
+        assertEquals(count, observations.size)
+    }
+
+    @Test
+    fun failedProgressRetentionPausesAndDisposesTheNativeListener() = runTest {
+        val room = QueueRoom(transactions = setOf("first", "second"))
+        room.onEnable = { room.emit(RoomSendQueueUpdate.SentEvent("first", "\$first")) }
+        val source = AndroidCollaborationMessageQueueSource { room }
+        source.open()
+        val failure = IllegalStateException("Fictional receipt failure")
+        val observed =
+            assertFailsWith<IllegalStateException> {
+                source.resume(setOf("first", "second")) { throw failure }
+            }
+        // Coroutine stack recovery can copy an exception; its type and cause remain technical
+        // facts.
+        assertEquals(failure.message, observed.message)
+        assertTrue(observed === failure || observed.cause === failure)
+        assertFalse(room.enabled)
+        assertEquals(1, room.calls.count { it == "listener.close" })
+        source.stop()
+    }
+
+    @Test
+    fun cancelledWaiterDoesNotDropTheParentOwnedReceiptObserver() = runTest {
+        val room = QueueRoom(transactions = setOf("original"))
+        val source = AndroidCollaborationMessageQueueSource { room }
+        val operations = SdkQueueOperations(backgroundScope)
+        val observations = mutableListOf<CollaborationQueueDelivery>()
+        source.open()
+        val waiter = launch {
+            operations.execute {
+                AppResult.Success(source.resume(setOf("original")) { observations += it })
+            }
+        }
+        runCurrent()
+        waiter.cancelAndJoin()
+        room.emit(RoomSendQueueUpdate.SentEvent("original", "\$event"))
+        runCurrent()
+        assertEquals(
+            listOf(CollaborationQueueReceipt("original", "\$event")),
+            observations.single().receipts,
+        )
+        source.requestStop()
+        operations.stop()
+        source.stop()
+        assertEquals(1, room.calls.count { it == "listener.close" })
+    }
+
+    @Test
     fun acknowledgedWindowPausesAndDisposesTheListenerBeforeReturning() = runTest {
         val room = QueueRoom(transactions = setOf("original"))
         room.onEnable = { room.emit(RoomSendQueueUpdate.SentEvent("original", "\$event")) }

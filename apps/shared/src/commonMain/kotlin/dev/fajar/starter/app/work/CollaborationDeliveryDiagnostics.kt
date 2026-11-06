@@ -30,6 +30,21 @@ internal suspend fun traceCollaborationDelivery(
                 when (result.failure.code) {
                     "client.collaboration_sdk_unauthorized" -> "SdkAuthentication"
                     "client.collaboration_queue_unresolved" -> "QueueUnresolved"
+                    "client.collaboration_queue_mapping_bounds" -> "QueueMappingBounds"
+                    "client.collaboration_queue_mapping_owner" -> "QueueMappingOwner"
+                    "client.collaboration_queue_mapping_invalid_record" ->
+                        "QueueMappingInvalidRecord"
+                    "client.collaboration_queue_mapping_cancelled" -> "QueueMappingCancelled"
+                    "client.collaboration_queue_mapping_staging" -> "QueueMappingStaging"
+                    "client.collaboration_queue_mapping_device" -> "QueueMappingDevice"
+                    "client.collaboration_queue_mapping_native_family" -> "QueueMappingNativeFamily"
+                    "client.collaboration_queue_mapping_room" -> "QueueMappingRoom"
+                    "client.collaboration_queue_mapping_legacy_receipt" ->
+                        "QueueMappingLegacyReceipt"
+                    "client.collaboration_queue_mapping_missing_receipt" ->
+                        "QueueMappingMissingReceipt"
+                    "client.collaboration_queue_mapping_duplicate_transaction" ->
+                        "QueueMappingDuplicateTransaction"
                     "client.collaboration_delivery_pending" -> "DeliveryPending"
                     "client.collaboration_history_pending" -> "HistoryPending"
                     "client.collaboration_room_retry_required" -> "RoomPreparation"

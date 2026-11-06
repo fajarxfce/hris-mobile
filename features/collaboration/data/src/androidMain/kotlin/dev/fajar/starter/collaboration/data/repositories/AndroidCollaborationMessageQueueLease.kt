@@ -176,7 +176,8 @@ internal class AndroidCollaborationMessageQueueLease(
                 target.forwarded == forwarded)
 
     override suspend fun resume(
-        mappedTransactions: Set<String>
+        mappedTransactions: Set<String>,
+        onObserved: suspend (CollaborationQueueDelivery) -> AppResult<Unit>,
     ): AppResult<CollaborationQueueDelivery> {
         val mapped = mappedTransactions.toSet()
         if (mapped.size > 128 || !mapped.all(::validCollaborationTransactionId))
@@ -189,7 +190,11 @@ internal class AndroidCollaborationMessageQueueLease(
                 return@execute AppResult.Failed(it)
             }
             safeAndroidCollaborationCall(AndroidCollaborationOperation.QueueResume) {
-                source.resume(mapped)
+                source.resume(mapped) { observed ->
+                    val retained = onObserved(observed)
+                    if (retained is AppResult.Failed)
+                        throw RequestFailureException(retained.failure)
+                }
             }
         }
     }

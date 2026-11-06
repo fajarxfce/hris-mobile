@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.domain.policies
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.common.result.*
 
 /** Reject uncertain or foreign staged work before allowing this room's native queue to send. */
 fun collaborationDeliveryMappings(
@@ -9,38 +10,60 @@ fun collaborationDeliveryMappings(
     conversationId: String,
     device: CollaborationMessageDevice,
     capturedTransactions: Set<String> = emptySet(),
-): Map<String, CollaborationMessageRecord>? {
+): AppResult<Map<String, CollaborationMessageRecord>> {
     if (
         records.size > 128 ||
             records.map { it.intent.id }.distinct().size != records.size ||
             capturedTransactions.size > 128 ||
             !capturedTransactions.all(::validCollaborationTransactionId)
     )
-        return null
+        return collaborationSetupFailure("client.collaboration_queue_mapping_bounds")
     val mapped = mutableMapOf<String, CollaborationMessageRecord>()
     for (record in records) {
         if (
             record.intent.owner != access.messageOwner() ||
-                record.intent.conversationId != conversationId ||
-                !validCollaborationMessageId(record.intent.id) ||
+                record.intent.conversationId != conversationId
+        )
+            return collaborationSetupFailure("client.collaboration_queue_mapping_owner")
+        if (
+            !validCollaborationMessageId(record.intent.id) ||
                 !validCollaborationMessageState(record.state)
         )
-            return null
+            return collaborationSetupFailure("client.collaboration_queue_mapping_invalid_record")
         val transaction =
             when (val state = record.state) {
                 CollaborationMessageState.Queued -> null
-                CollaborationMessageState.Cancelled -> return null
-                is CollaborationMessageState.Staging -> return null
+                CollaborationMessageState.Cancelled ->
+                    return collaborationSetupFailure("client.collaboration_queue_mapping_cancelled")
+                is CollaborationMessageState.Staging ->
+                    return collaborationSetupFailure("client.collaboration_queue_mapping_staging")
                 is CollaborationMessageState.Staged -> {
                     collaborationRetainedTransaction(record, device, capturedTransactions)
-                        ?: return null
+                        ?: return collaborationSetupFailure(
+                            when {
+                                !validCollaborationMessageDevice(device) ->
+                                    "client.collaboration_queue_mapping_device"
+                                state.device.nativeSessionId != device.nativeSessionId ->
+                                    "client.collaboration_queue_mapping_native_family"
+                                state.device.deviceId != device.deviceId ->
+                                    "client.collaboration_queue_mapping_device"
+                                state.device.roomId != device.roomId ->
+                                    "client.collaboration_queue_mapping_room"
+                                state.origin == null ->
+                                    "client.collaboration_queue_mapping_legacy_receipt"
+                                else -> "client.collaboration_queue_mapping_missing_receipt"
+                            }
+                        )
                 }
                 is CollaborationMessageState.Sent ->
                     collaborationRetainedTransaction(record, device, capturedTransactions)
             }
-        if (transaction != null && mapped.put(transaction, record) != null) return null
+        if (transaction != null && mapped.put(transaction, record) != null)
+            return collaborationSetupFailure(
+                "client.collaboration_queue_mapping_duplicate_transaction"
+            )
     }
-    return mapped
+    return AppResult.Success(mapped.toMap())
 }
 
 /**

@@ -58,8 +58,17 @@ interface CollaborationMessageQueueLease {
     /**
      * One bounded delivery window after live admission and durable mapping of every queued ID. Only
      * this room can resume. Missing native IDs never imply a successful application send.
+     * Cumulative observations are serialized within that window, before the final result. A failed
+     * observer stops delivery. The owned native operation may outlive its cancelled waiter; an
+     * observer must retain only captured-account facts and gate publication on its original caller.
+     * Closing the lease drains the operation and its observer before releasing the writer.
      */
-    suspend fun resume(mappedTransactions: Set<String>): AppResult<CollaborationQueueDelivery>
+    suspend fun resume(
+        mappedTransactions: Set<String>,
+        onObserved: suspend (CollaborationQueueDelivery) -> AppResult<Unit> = {
+            AppResult.Success(Unit)
+        },
+    ): AppResult<CollaborationQueueDelivery>
 
     /** Waiter cancellation cannot release the exclusive writer before native work has drained. */
     suspend fun close(): AppResult<Unit>

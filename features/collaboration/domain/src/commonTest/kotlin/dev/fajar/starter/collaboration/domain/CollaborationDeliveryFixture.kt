@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
 import kotlin.test.*
+import kotlinx.coroutines.*
 
 internal class CollaborationDeliveryFixture {
     val base = MessageIntentFixture()
@@ -57,6 +58,10 @@ internal class CollaborationDeliveryFixture {
     var snapshotFailure: Failure? = null
     var afterAcquire: suspend () -> Unit = {}
     var afterResume: suspend () -> Unit = {}
+    var progress = emptyList<CollaborationQueueDelivery>()
+    var beforeProgress: suspend () -> Unit = {}
+    var afterProgress: suspend () -> Unit = {}
+    var windowLifetime: CoroutineScope? = null
     var beforeAppend: suspend () -> Unit = {}
     var afterAppend: suspend () -> Unit = {}
     var afterProject: suspend () -> Unit = {}
@@ -265,6 +270,8 @@ internal class CollaborationDeliveryFixture {
                 acquisitions++
                 val queue =
                     object : CollaborationMessageQueueLease {
+                        private var activeWindow: Deferred<AppResult<CollaborationQueueDelivery>>? =
+                            null
                         override val owner = this@CollaborationDeliveryFixture.owner
                         override val device = this@CollaborationDeliveryFixture.device
 
@@ -291,19 +298,34 @@ internal class CollaborationDeliveryFixture {
                         ): AppResult<Unit> = error("Delivery never replaces native work")
 
                         override suspend fun resume(
-                            mappedTransactions: Set<String>
+                            mappedTransactions: Set<String>,
+                            onObserved: suspend (CollaborationQueueDelivery) -> AppResult<Unit>,
                         ): AppResult<CollaborationQueueDelivery> {
-                            windows++
-                            knownTransactions = mappedTransactions.toSet()
-                            events += "resume"
-                            val captured =
-                                resumeFailure?.let { AppResult.Failed(it) }
-                                    ?: AppResult.Success(window)
-                            afterResume()
-                            return captured
+                            val operation: suspend () -> AppResult<CollaborationQueueDelivery> =
+                                operation@{
+                                    windows++
+                                    knownTransactions = mappedTransactions.toSet()
+                                    events += "resume"
+                                    val captured =
+                                        resumeFailure?.let { AppResult.Failed(it) }
+                                            ?: AppResult.Success(window)
+                                    for (observed in progress) {
+                                        beforeProgress()
+                                        val saved = onObserved(observed)
+                                        if (saved is AppResult.Failed) return@operation saved
+                                        afterProgress()
+                                    }
+                                    afterResume()
+                                    captured
+                                }
+                            val lifetime = windowLifetime ?: return operation()
+                            val pending = lifetime.async { operation() }
+                            activeWindow = pending
+                            return pending.await()
                         }
 
                         override suspend fun close(): AppResult<Unit> {
+                            activeWindow?.join()
                             closes++
                             events += "close"
                             return AppResult.Success(Unit)

@@ -22,7 +22,7 @@
     "accepted": false,
     "sourceBaseCommit": "074087d7f78fa721a1cbcc6a4dd3e99a6ff06ce9"
   },
-  "implementation": "Full gate 91409 active on final 13-file progressive-observation and closed-mapping candidate, including two separate-parent/caller cancellation regressions. Release 48 not built.",
+  "implementation": "Validated 13-file progressive receipt observation and closed mapping classification increment. Separate-parent/caller cancellation cases pass. Release 48 build and physical phone diagnosis remain next.",
   "green": {
     "startedAt": "2026-11-06T14:16:59.467438+00:00",
     "elapsedSeconds": 65.113,
@@ -78,5 +78,49 @@
       }
     },
     "failure": "Android test asserted exception object identity across coroutine stack recovery; now checks preserved type/message/original cause before the unchanged pause/cleanup assertions."
-  }
+  },
+  "full": {
+    "startedAt": "2026-11-06T14:30:29.216829+00:00",
+    "elapsedSeconds": 826.949,
+    "exitCode": 0,
+    "sourceFiles": 4216,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7081,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 911,
+    "preexistingSuitesNotCountedAsFresh": 155,
+    "sourceManifestSha256": "51d81659a2c792e988339844067c9020dcaf1fb38761c9162eb0f1e6ac886705",
+    "changedSources": {
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryDiagnostics.kt": "47aa24e1163692a97b7f8fd746ac58d0d3c8c028a4161aabe670a0b1c495a33a",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryDiagnosticsTest.kt": "c1743a310100ba5106d9492a8c4f1441280112c2eeb69bb45aeac0b8c8f66293",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt": "6ffe149838e2a680784a6fccc4d4616b35eac998d3b8769bf353290a00967eac",
+      "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationQueueDeliveryTest.kt": "d52abc7126f60a5e8d0f58bd137fd55d8242297b1f7a1a0d48222999e7dc5d76",
+      "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationMessageQueueSource.kt": "102e54e3440eda9e606dda392ab100621cf75ebc573ed1f1d99add2e50169bd8",
+      "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationMessageQueueLease.kt": "bc8ad505ebe76afe9fab7e49911aad38d9c91f4d074d460f5dff613ba7f4d967",
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationDeliveryPolicy.kt": "b66b04e7b6bf41bdeea11e66560569d4d2142609f72d62fc06297b2198535e34",
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationMessageQueueLease.kt": "6f5dce36afa261f8cdedde31b7db969cdd311eb0c8f5ca6e0c13d7680a48fb88",
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/DeliverCollaborationMessages.kt": "833de55bc23d0955474b46b0b5bc0f955227b3ecbfd967dbc111d7c0d2c267a0",
+      "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDeliveryFixture.kt": "f6b68970e225e4d8dba540f2961272890e492a252ab64c785f2729befed65e80",
+      "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/DeliverCollaborationMessagesTest.kt": "3ec4ed5953d6f7c7b687a82b01fcae3a3490561ac98af38e0ec367b35c12140b",
+      "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationTextTest.kt": "1e228d59c050bf685d860f748ef744cd902d1f5738d34e343695870b3e02fd96",
+      "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "ec18240658e25deb57030d7de5436c7366dc0e197142cd32f28a0313b85da52d"
+    },
+    "lintFindings": 0,
+    "lintSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+    "checks": [
+      "root check",
+      "Android host tests",
+      "Android proof compile",
+      "database/collaboration browser tests",
+      "Android dev debug assemble/lint",
+      "format",
+      "architecture"
+    ]
+  },
+  "accepted": true,
+  "acceptanceScope": "Domain, encrypted application integration, simulated native adapter, Android build/lint and browser tests. No new native-provider latency or physical-phone resolution is claimed."
 }

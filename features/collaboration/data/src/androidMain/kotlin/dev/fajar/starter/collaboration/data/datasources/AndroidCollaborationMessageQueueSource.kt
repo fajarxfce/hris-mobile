@@ -128,7 +128,10 @@ internal class AndroidCollaborationMessageQueueSource(
         }
     }
 
-    suspend fun resume(mapped: Set<String>): CollaborationQueueDelivery {
+    suspend fun resume(
+        mapped: Set<String>,
+        onObserved: suspend (CollaborationQueueDelivery) -> Unit = {},
+    ): CollaborationQueueDelivery {
         check(listener == null)
         val acquired = requireNotNull(room)
         val observation = DeliveryObservation(SdkQueueDelivery(mapped))
@@ -165,7 +168,8 @@ internal class AndroidCollaborationMessageQueueSource(
                 }
             if (enabled)
                 withTimeoutOrNull(15_000) {
-                    observation.signal.first {
+                    observation.signal.first { progress ->
+                        if (progress.receipts.isNotEmpty()) onObserved(progress)
                         synchronized(controls) { stopping || observation.queue.ended }
                     }
                 }

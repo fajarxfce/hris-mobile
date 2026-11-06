@@ -100,20 +100,47 @@ class DeliverCollaborationMessages(
         val captured = checked(scope, owner) { queue.snapshot() }
         if (captured is AppResult.Failed) return captured
         val snapshot = (captured as AppResult.Success).value.toSet()
-        val mapped =
+        val mapping =
             collaborationDeliveryMappings(
                 records,
                 owner.localListAccess(),
                 conversationId,
                 queue.device,
                 snapshot,
-            ) ?: return failed("client.collaboration_queue_unresolved")
+            )
+        if (mapping is AppResult.Failed) return mapping
+        val mapped = (mapping as AppResult.Success).value
         if (mapped.isEmpty()) return AppResult.Success(collaborationDeliveryReport(records, null))
         val admitted = admitRoom(scope, owner, queue.device.deviceId, conversationId)
         if (admitted is AppResult.Failed) return admitted
         if ((admitted as AppResult.Success).value != queue.device.roomId)
             return failed("client.collaboration_conversation_mismatch", FailureKind.AccessDenied)
-        val delivered = queue.resume(mapped.keys.toSet())
+        val invocation = currentCoroutineContext()
+        val delivered =
+            queue.resume(mapped.keys.toSet()) { progress ->
+                val observed =
+                    collaborationDeliveryReceipts(progress, mapped, queue.device, snapshot)
+                        ?: return@resume failed("client.collaboration_receipt_unresolved")
+                val saved = retainObserved(owner.localListAccess(), conversationId, observed)
+                if (saved is AppResult.Failed) return@resume saved
+                // The SDK parent owns the native window beyond waiter cancellation. Its late ACK
+                // can be journaled, but cannot project through the cancelled invocation.
+                if (!invocation.isActive || !currentCoroutineContext().isActive)
+                    return@resume AppResult.Success(Unit)
+                try {
+                    withContext(invocation) {
+                        val current = continuation(scope, owner, saved)
+                        if (current is AppResult.Failed) return@withContext current
+                        when (val projected = project(scope, owner, conversationId)) {
+                            is AppResult.Failed -> projected
+                            is AppResult.Success -> AppResult.Success(Unit)
+                        }
+                    }
+                } catch (cancelled: CancellationException) {
+                    if (invocation.isActive) throw cancelled
+                    AppResult.Success(Unit)
+                }
+            }
         if (delivered is AppResult.Failed) {
             val current = continuation(scope, owner, delivered)
             return if (current is AppResult.Failed) current else delivered

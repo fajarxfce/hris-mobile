@@ -452,7 +452,8 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
                 }
 
                 override suspend fun resume(
-                    mappedTransactions: Set<String>
+                    mappedTransactions: Set<String>,
+                    onObserved: suspend (CollaborationQueueDelivery) -> AppResult<Unit>,
                 ): AppResult<CollaborationQueueDelivery> {
                     deliveries++
                     beforeResume()

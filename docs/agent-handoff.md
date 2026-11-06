@@ -22,7 +22,7 @@ Emulator 2427400/startTicks165089163 stopped 14:13:03 UTC; original data and key
 remain, now with 47. No emulator is active. The current full gate is listed below.
 Private drivers/artifacts: .work/release-phone-2026-11-06-build47.
 
-Current UNCOMMITTED work is the progressive-ACK increment (13 Kotlin files).
+This checkpoint commits the validated progressive-ACK increment (13 Kotlin files).
 The queue contract adds a serialized observation callback; Android emits cumulative
 receipt snapshots inside its existing window, the repository preserves typed
 observer failures, and the delivery use case journals exact mapped facts before
@@ -42,17 +42,22 @@ retains its queue-pause/listener-close assertions. Two more domain tests exercis
 actual separate parent/caller coroutine lifetimes: late ACK after waiter cancellation
 (including account replacement), and cancellation during multi-row projection.
 
-ONLY heavy local job: full required gate **91409**, driver
-.work/chat-progressive-ack-2026-11-06/check-full.py full-1. Its 4,216 source inputs are
-FROZEN until completion. No emulator is running. Inspect all required tests/format/
-architecture/Android lint results; do not infer success from an early subset.
-[Reproduction evidence](measurements/collaboration-progressive-receipts-2026-11-06.json).
-NEXT accept full-1, commit/push implementation and evidence, then build/verify/smoke
-release 48. Prepared scripts in .work/release-phone-2026-11-06-build48 require that
-full gate and a pushed HEAD, retain normal SDK 2, and accept only the known previous
-47 on emulator/phone. There is no 48 APK or acceptance yet. Announce each install,
-install-only/no phone UI. After installation, inspect closed mapping diagnostics
-before claiming the old pending messages resolved; do not ask the 47 question again.
+Full required gate **91409** is drained and PASSED in 826.949s: **7,081 fresh
+cases / 911 suites**, zero failures/errors/skips, 4,216 unchanged inputs, Android
+lint zero. Another 155 preexisting suites are not counted as fresh. Root check,
+Android host/debug/proof compile, database/collaboration Web, format and architecture
+passed. Domain delivery has 31 cases on both desktop/browser; Android queue source
+has 12, and closed app diagnostics 3. The earlier exception-identity test failure
+is fixed and its cleanup assertions pass. No heavy job or emulator is active.
+[Validation](measurements/collaboration-progressive-receipts-2026-11-06.json).
+
+NEXT: after this source is pushed, build/verify/smoke release 48. Prepared scripts
+in .work/release-phone-2026-11-06-build48 require the accepted full gate in
+.work/chat-progressive-ack-2026-11-06/full-1 and pushed HEAD, retain normal SDK 2,
+and accept only known previous 47 on emulator/phone. There is no 48 APK or acceptance
+yet. Announce each install, install-only/no phone UI. After installation, inspect
+closed mapping diagnostics before claiming the old pending messages resolved;
+do not ask the already answered 47 question again. Preserve original Bima keys/data.
 
 Exact release-46/source 00a51e14 CI is COMPLETE and accepted: ARM64 and x86_64 each
 386 cases/67 suites; both protocol modes 14 checks with cleanup; portable 4,249/461;

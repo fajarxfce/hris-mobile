@@ -8,6 +8,54 @@ import kotlinx.coroutines.*
 
 class CollaborationDeliveryDiagnosticsTest {
     @Test
+    fun mappingFailuresRecordOnlyTheirClosedClassification() = runBlocking {
+        val events = mutableListOf<Diagnostic>()
+        Diagnostics.install { event, error ->
+            assertNull(error)
+            events += event
+        }
+        try {
+            val classifications =
+                mapOf(
+                    "bounds" to "QueueMappingBounds",
+                    "owner" to "QueueMappingOwner",
+                    "invalid_record" to "QueueMappingInvalidRecord",
+                    "cancelled" to "QueueMappingCancelled",
+                    "staging" to "QueueMappingStaging",
+                    "device" to "QueueMappingDevice",
+                    "native_family" to "QueueMappingNativeFamily",
+                    "room" to "QueueMappingRoom",
+                    "legacy_receipt" to "QueueMappingLegacyReceipt",
+                    "missing_receipt" to "QueueMappingMissingReceipt",
+                    "duplicate_transaction" to "QueueMappingDuplicateTransaction",
+                )
+            for ((suffix, expected) in classifications) {
+                events.clear()
+                val failure =
+                    AppResult.Failed(
+                        Failure(
+                            FailureKind.Conflict,
+                            "private",
+                            code = "client.collaboration_queue_mapping_$suffix",
+                            parameters = mapOf("private" to "payload"),
+                        )
+                    )
+                assertSame(
+                    failure,
+                    traceCollaborationDelivery { stage ->
+                        stage(CollaborationDeliveryStage.DeliverMessages)
+                        failure
+                    },
+                )
+                assertEquals("ChatDelivery_DeliverMessages_$expected", events.single().category)
+                assertFalse(encodeDiagnostic(events.single()).contains("private"))
+            }
+        } finally {
+            Diagnostics.install(ConsoleDiagnosticSink)
+        }
+    }
+
+    @Test
     fun deliveryFailureRecordsLastStageWithoutFreeFailureFields() = runBlocking {
         val events = mutableListOf<Diagnostic>()
         Diagnostics.install { event, error ->

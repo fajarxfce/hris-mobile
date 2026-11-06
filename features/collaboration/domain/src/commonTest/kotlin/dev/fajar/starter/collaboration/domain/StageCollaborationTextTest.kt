@@ -603,7 +603,8 @@ internal class StageFixture {
                         }
 
                         override suspend fun resume(
-                            mappedTransactions: Set<String>
+                            mappedTransactions: Set<String>,
+                            onObserved: suspend (CollaborationQueueDelivery) -> AppResult<Unit>,
                         ): AppResult<CollaborationQueueDelivery> =
                             error("Staging never enables delivery")
 

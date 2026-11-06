@@ -9,6 +9,230 @@ import kotlinx.coroutines.test.runTest
 
 class DeliverCollaborationMessagesTest {
     @Test
+    fun lateParentOwnedAcknowledgementRetainsOnlyTheOriginalAccountAfterWaiterCancellation() =
+        runTest {
+            for (replacement in listOf(false, true)) {
+                val f = CollaborationDeliveryFixture()
+                f.prepare()
+                f.windowLifetime = backgroundScope
+                f.progress = listOf(f.window)
+                val entered = CompletableDeferred<Unit>()
+                val release = CompletableDeferred<Unit>()
+                f.beforeProgress = {
+                    entered.complete(Unit)
+                    release.await()
+                }
+                val waiting = launch { f.deliver() }
+                entered.await()
+                waiting.cancel()
+                if (replacement)
+                    f.base.setup.session =
+                        f.base.setup.session!!.copy(
+                            user = f.base.setup.session!!.user.copy(id = deliveryId(999))
+                        )
+                release.complete(Unit)
+                waiting.join()
+                assertTrue(waiting.isCancelled)
+                assertEquals(if (replacement) 0 else 1, f.journal.size)
+                assertEquals(0, f.projections)
+                assertEquals(1, f.windows)
+                assertEquals(1, f.closes)
+                if (!replacement) assertEquals(AppResult.Success(1), f.reconcile())
+            }
+        }
+
+    @Test
+    fun cancellingDuringProjectionStopsFurtherRowsWithoutCancellingTheNativeParent() = runTest {
+        val f = CollaborationDeliveryFixture()
+        f.prepare(2)
+        f.retainedTransactions = setOf("original", "tx-2")
+        f.windowLifetime = backgroundScope
+        f.window =
+            f.window.copy(
+                receipts = f.window.receipts + CollaborationQueueReceipt("tx-2", "\$second")
+            )
+        f.progress = listOf(f.window)
+        var parentCompleted = false
+        f.afterResume = { parentCompleted = true }
+        val waiting = launch { f.deliver() }
+        f.afterProject = { waiting.cancel() }
+        waiting.join()
+        assertTrue(waiting.isCancelled)
+        assertTrue(parentCompleted)
+        assertEquals(2, f.journal.size)
+        assertEquals(1, f.projections)
+        assertIs<CollaborationMessageState.Staged>(f.records.last().state)
+        assertEquals(1, f.closes)
+        f.afterProject = {}
+        assertEquals(AppResult.Success(1), f.reconcile())
+    }
+
+    @Test
+    fun unresolvedMappingDistinguishesOriginalDeviceAndUnfinishedStagingWithoutEnablingQueue() =
+        runTest {
+            for (staging in listOf(false, true)) {
+                val f = CollaborationDeliveryFixture()
+                f.prepare()
+                f.base.records.value =
+                    f.records.map {
+                        it.copy(
+                            state =
+                                if (staging) CollaborationMessageState.Staging(f.device, emptySet())
+                                else
+                                    CollaborationMessageState.Staged(
+                                        f.device.copy(bootstrapOperationId = deliveryId(999)),
+                                        "original",
+                                    )
+                        )
+                    }
+                f.retainedTransactions = emptySet()
+                val failure = assertIs<AppResult.Failed>(f.deliver()).failure
+                assertEquals(
+                    "client.collaboration_queue_mapping_" +
+                        if (staging) "staging" else "legacy_receipt",
+                    failure.code,
+                )
+                assertEquals(FailureKind.Conflict, failure.kind)
+                assertEquals(0, f.windows)
+                assertTrue(f.journal.isEmpty())
+                assertEquals(1, f.closes)
+            }
+        }
+
+    @Test
+    fun cumulativeProgressDoesNotRewriteAlreadyConfirmedRows() = runTest {
+        val f = CollaborationDeliveryFixture()
+        f.prepare(2)
+        f.retainedTransactions = setOf("original", "tx-2")
+        val first =
+            f.window.copy(
+                pending = setOf("tx-2"),
+                reason = CollaborationQueueDeliveryReason.TIMED_OUT,
+            )
+        f.window =
+            f.window.copy(
+                receipts = f.window.receipts + CollaborationQueueReceipt("tx-2", "\$second")
+            )
+        f.progress = listOf(first, f.window)
+        assertIs<AppResult.Success<CollaborationDeliveryReport>>(f.deliver())
+        assertEquals(2, f.journal.size)
+        assertEquals(2, f.projections)
+        assertTrue(f.records.all { it.revision == 3L })
+        assertEquals(1, f.windows)
+    }
+
+    @Test
+    fun invalidProgressStopsTheWindowWithoutConfirmingUnmappedText() = runTest {
+        val f = CollaborationDeliveryFixture()
+        f.prepare()
+        f.progress =
+            listOf(
+                f.window.copy(receipts = listOf(CollaborationQueueReceipt("foreign", "\$event")))
+            )
+        f.afterResume = { fail("Invalid progress must stop the native window") }
+        assertEquals(
+            "client.collaboration_receipt_unresolved",
+            assertIs<AppResult.Failed>(f.deliver()).failure.code,
+        )
+        assertTrue(f.journal.isEmpty())
+        assertEquals(0, f.projections)
+        assertEquals(1, f.closes)
+    }
+
+    @Test
+    fun aFailedPartialReceiptCommitIsRecoveredWithoutAnotherSend() = runTest {
+        val f = CollaborationDeliveryFixture()
+        f.prepare()
+        f.progress = listOf(f.window)
+        f.appendFailure = f.base.storage
+        assertEquals(f.base.storage, assertIs<AppResult.Failed>(f.deliver()).failure)
+        assertEquals(1, f.journal.size)
+        assertEquals(0, f.projections)
+        f.appendFailure = null
+        assertEquals(AppResult.Success(1), f.reconcile())
+        assertEquals(1, f.windows)
+        assertEquals(1, f.closes)
+    }
+
+    @Test
+    fun expiryOrDenialDuringProgressRetainsFactsWithoutProjection() = runTest {
+        for (denied in listOf(false, true)) {
+            val f = CollaborationDeliveryFixture()
+            f.prepare()
+            f.progress = listOf(f.window)
+            f.beforeProgress = {
+                if (denied) f.base.gate.value = CollaborationListAdmission("denied", f.base.denied)
+                else f.base.setup.now += 365.days
+            }
+            assertIs<AppResult.Failed>(f.deliver())
+            assertEquals(1, f.journal.size)
+            assertEquals(0, f.projections)
+            assertEquals(1, f.closes)
+        }
+    }
+
+    @Test
+    fun partialAcknowledgementsCannotCrossIntoAReplacementAccount() = runTest {
+        val f = CollaborationDeliveryFixture()
+        f.prepare()
+        f.progress = listOf(f.window)
+        f.beforeProgress = {
+            f.base.setup.session =
+                f.base.setup.session!!.copy(
+                    user = f.base.setup.session!!.user.copy(id = deliveryId(999))
+                )
+        }
+        assertIs<AppResult.Failed>(f.deliver())
+        assertTrue(f.journal.isEmpty())
+        assertEquals(0, f.projections)
+        assertEquals(1, f.closes)
+    }
+
+    @Test
+    fun cancellationDuringProgressRetainsTheObservedReceiptWithoutProjection() = runTest {
+        val f = CollaborationDeliveryFixture()
+        f.prepare()
+        f.progress = listOf(f.window)
+        f.beforeProgress = { currentCoroutineContext().cancel() }
+        val pending = launch { f.deliver() }
+        pending.join()
+        assertTrue(pending.isCancelled)
+        assertEquals(1, f.journal.size)
+        assertEquals(0, f.projections)
+        assertEquals(1, f.closes)
+        assertEquals(AppResult.Success(1), f.reconcile())
+    }
+
+    @Test
+    fun anAcknowledgedMessageIsDurableAndVisibleBeforeTheNextMessageFinishes() = runTest {
+        val f = CollaborationDeliveryFixture()
+        f.prepare(2)
+        f.retainedTransactions = setOf("original", "tx-2")
+        f.progress =
+            listOf(
+                f.window.copy(
+                    pending = setOf("tx-2"),
+                    reason = CollaborationQueueDeliveryReason.TIMED_OUT,
+                )
+            )
+        f.afterProgress = {
+            assertEquals(1, f.journal.size, "The first acknowledgement must already be durable")
+            assertIs<CollaborationMessageState.Sent>(f.records.first().state)
+            assertIs<CollaborationMessageState.Staged>(f.records.last().state)
+            assertEquals(0, f.closes, "The next send still owns the native window")
+        }
+        f.window =
+            f.window.copy(
+                receipts = f.window.receipts + CollaborationQueueReceipt("tx-2", "\$second")
+            )
+        val result = assertIs<AppResult.Success<CollaborationDeliveryReport>>(f.deliver()).value
+        assertEquals(2, result.confirmed.size)
+        assertTrue(result.unresolved.isEmpty())
+        assertEquals(1, f.windows)
+        assertEquals(1, f.closes)
+    }
+
+    @Test
     fun legacyBootstrapReplacementUsesRetainedTransactionAndJournalsOriginalDevice() = runTest {
         val f = CollaborationDeliveryFixture()
         f.prepare()
