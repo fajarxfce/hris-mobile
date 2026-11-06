@@ -73,13 +73,24 @@ emulator is active. Preserve prepared/source/result manifests and failed attempt
 4. Complete provider-publication preflight, durable local stop/join and target intent,
    current-admitted freeze/drain/publication/adoption, hard-parent recovery and group
    routing. The new transport alone cannot activate this irreversible transition.
+The next isolated preparation is `.work/space-store-inventory-2026-11-06/closed-handover-next`.
+Six files prepare a current-account exact-store gate, six registry lifetime cases, a
+typed local handover capability and Android existing-only private-read/staging/composition.
+None is applied/formatted/compiled/tested. Storage failure/cancellation/real-file-lock
+tests, actual SDK4 closed-store/restart proof and owning provider-publication flow are
+still required. Existing live acquisition guards stay unchanged; original stores are
+never restored by this local staging path. Read its design and hashes before continuing.
+
 5. Continue all54 communications PRD groups; delivery remains3 in progress/51 planned,
    complete=false. Calls/meetings and remaining chat scope are not finished.
 
 ## First source CI — audit, never redispatch accepted runs
 
-- SDK4 product5081e629: control42306713193 and native42306713065 are running/pending
-  audit. Private `.work/space-store-inventory-2026-11-06/remote-ci-5081/audit.py` accepts
+- SDK4 product5081e629: native42306713065 PASSED and is audited (412 cases/70 suites
+  on each ABI, zero failures/errors/skips, all original native/worker/notification
+  proofs and cleanup pass). Artifact13549485285 x86_64 SHA5a812cfabf56988ff82785942d563812db6146db345bbc60f3859f9e1a01c6be;
+  ARM6413548922641 SHAad46667029dfbff4ecee8a1796e10b4e616f8bd31d066c71c77921549d2fc079.
+  Control42306713193 is still running/pending audit. Private `.work/space-store-inventory-2026-11-06/remote-ci-5081/audit.py` accepts
   those exact runs after completion and verifies immutable artifact digests.
 - Its protocol42306715423 **PASSED**, native/classic each14 checks with owned cleanup;
   artifact digests and14 Platform hashes match immutablee0dbb567. [Evidence](measurements/collaboration-sdk4-product-ci-2026-11-06.json).
@@ -98,8 +109,9 @@ emulator is active. Preserve prepared/source/result manifests and failed attempt
   pushed/clean. Exact reusable quality-source fix excludes private`.work` in both file
   selection and Detekt. Full47695 passed490 fresh cases/824.801s,994 stable inputs,
   lint0 errors/44 existing warnings, actual malformed fixture retained during checks
-  then only that owned fixture removed. First Apple42308538803 on exact5fb4eca is
-  running; do not redispatch. Prior0ff7e59 retains280 local/138 Apple acceptance.
+  then only that owned fixture removed. First Apple42308538803 on exact5fb4eca PASSED and is audited:138 cases/35 suites, actual simulator app and
+  associations; artifact13548473056 SHA7517404fa7edc9f8572eeb2670a74adc80f2c34269360b0c04e39bf09955eebc.
+  Docs b37f8c8 are pushed, source5fb4eca unchanged; do not redispatch. Prior0ff7e59 retains280 local/138 Apple acceptance.
 - Group`/home/fajar/hris/.worktrees/communication-space`, branch`feat/communication-space`,
   c9de3753/program344211f8 pushed. V117–137 remain unshipped/disabled. MainPlatform
   `hris-platform` atf4a2424d; live10485916ee02850cf913793398f7ef3dd1e09afb/schema116.1
