@@ -14,7 +14,23 @@ records nine passing Rust tests on locked dependencies with Rust1.96. Tests cove
 unknown original/edit/reply/forward metadata, encrypted reads, missing keys, SQLite
 reopen without another event fetch, cancellation, identity and byte bounds.
 
-Before consumption, build paired Kotlin/JNI and Swift/XCFramework artifacts from
-this exact source with pinned toolchains, record checksums and ABIs, and prove the
-native HRIS edit exchange under existing owner/admission checks. Android26.10.23
-and Apple26.10.27 remain unchanged. Local history never waits for a point fetch.
+Android arm64 JNI and nine Kotlin binding files have now been generated from the
+same binary. [Build evidence](../../docs/measurements/collaboration-sdk-raw-event-android-2026-11-06.json)
+records source/output checksums, Rust 1.96.0, cargo-ndk 4.1.2, NDK 28.2.13676358,
+API 21 and four ELF LOAD segments aligned to 16 KB. The first run compiled the
+library but could not generate bindings because offline cargo metadata lacked an
+all-target dependency. A locked metadata fetch resolved this; the second run reused
+the identical binary and completed generation in 1.917 seconds.
+
+For a fresh build, fetch locked dependencies for **all** targets before going offline;
+UniFFI generation calls cargo metadata without an Android target filter. Apply the
+patch to the pinned SDK, then run its host `xtask kotlin build-android-library
+--package full-sdk --release --only-target aarch64-linux-android --src-dir OUTPUT`
+with the toolchains above, `CARGO_NDK_PLATFORM=21` and `CARGO_NET_OFFLINE=true`.
+Keep generated Kotlin and JNI together; never combine them with another SDK build.
+
+These files are not yet an assembled or consumed AAR. Before consumption, compile
+the bindings in the pinned upstream Kotlin wrapper, build the required remaining
+ABIs and Swift/XCFramework pair, and prove the native HRIS edit exchange under
+existing owner/admission checks. Android 26.10.23 and Apple 26.10.27 remain unchanged.
+Local history never waits for a point fetch.

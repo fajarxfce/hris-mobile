@@ -1,0 +1,66 @@
+{
+  "nativeMatchesInitialCompile": true,
+  "verifiedAt": "2026-11-06T06:11:50.367169+00:00",
+  "candidateOnly": true,
+  "packagedAar": false,
+  "consumedByApplication": false,
+  "upstream": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+  "patchSha256": "fed8120ba7e7ea88a23cde675d70bb27a3a97304c6c913ad5a9578d28053f76e",
+  "sourceHashes": {
+    "bindings/matrix-sdk-ffi/src/room/mod.rs": "565ed1217612d5c86f0b36c15a51fe153d7c74f5a48507b9012c9343823d275c",
+    "bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs": "4dc9c6774802d43c090c8836471f7860809de490cc0317103e262e2848893c58",
+    "Cargo.lock": "e3f28c9f54076bb320270aea995fc1f124c7ed727968dad338f544fe764df7f0",
+    "Cargo.toml": "cc436eb2188bc6af76078cae40c649a71752a9ef4aa7e832afdd0f3e40853b43",
+    ".cargo/config.toml": "c0c47ae16f20393a824473ecafb819d94d43b4445862b3618729c0feeef36c72",
+    "xtask/src/kotlin.rs": "f52edba777e389a1efb34797e93d55dc67fb1c4460b1c539da439860004ae52a"
+  },
+  "rust": "1.96.0",
+  "ndk": "28.2.13676358",
+  "cargoNdk": "4.1.2",
+  "androidApiLevel": 21,
+  "abi": "arm64-v8a",
+  "loadAlignments": [
+    16384,
+    16384,
+    16384,
+    16384
+  ],
+  "rawEventSymbolPresent": true,
+  "kotlinFiles": 9,
+  "generatedFiles": {
+    "jniLibs/arm64-v8a/libmatrix_sdk_ffi.so": "4e63f1aac9884121050553777d54778a93d66ecf96a90babd1cae625c8911611",
+    "kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt": "c2a34ead8d110a011258fdb8476ab68784554d11d0a3275025830f479892237f",
+    "kotlin/uniffi/matrix_sdk/matrix_sdk.kt": "de44cd55bb6a1bd6888c2918df3f7974a8da6326f00192f96fef0b3bb859ea44",
+    "kotlin/uniffi/matrix_sdk_base/matrix_sdk_base.kt": "ca64fbaf9aac400fa3b9d57036467968501138df313a8c07ed4af9ccf6cccb06",
+    "kotlin/uniffi/matrix_sdk_common/matrix_sdk_common.kt": "301030a61a133f6e133457e3434d97ec3f92d32a91684b9e13e8c61c4ba3a1b1",
+    "kotlin/uniffi/matrix_sdk_contentscanner/matrix_sdk_contentscanner.kt": "db48b8b84f391c2205b3a6d7802cfd9f61aeb9d28cb2049d24518a4d98a22a24",
+    "kotlin/uniffi/matrix_sdk_crypto/matrix_sdk_crypto.kt": "120a5d8db4b0ec3e609077b78832dd750e241fd5ea7c0ffb98647a19daade005",
+    "kotlin/uniffi/matrix_sdk_sqlite/matrix_sdk_sqlite.kt": "6738c2e65bd83217510f8b1bb5553827d9810c9e7add039f28ff8c9d75fb30ca",
+    "kotlin/uniffi/matrix_sdk_ui/matrix_sdk_ui.kt": "d91d9e1a8f040c8435673ad8dd12a41a1df0a90d9a5dd54b2c0de968c2046c28",
+    "kotlin/uniffi/ruma_events/ruma_events.kt": "de0a855239a51a0bc959451d9d3bc408c3af027cdcea68fab4055df7b28d7e0c"
+  },
+  "nativeBytes": 138559720,
+  "elapsedSeconds": 1.917,
+  "initialAttempt": {
+    "nativeCompilation": "passed",
+    "completeGeneration": false,
+    "elapsedSeconds": 994.615,
+    "failure": "Offline cargo metadata needed an uncached all-target dependency (console_error_panic_hook 0.1.7)."
+  },
+  "lockedMetadataFetch": {
+    "passed": true,
+    "elapsedSeconds": 2.869,
+    "sourcesUnchanged": true
+  },
+  "wrapper": {
+    "repository": "https://github.com/matrix-org/matrix-rust-components-kotlin",
+    "commit": "c1664f712bed33488b10f33232fb424faf257d49",
+    "assembled": false
+  },
+  "limitations": [
+    "Kotlin files are generated but not compiled into an AAR.",
+    "Only Android arm64 is built; x86_64 and Apple artifacts are pending.",
+    "No product dependency, SDK publication or phone installation changed.",
+    "Native encrypted edit/original/missing-key/cold-store consumption remains unaccepted."
+  ]
+}
