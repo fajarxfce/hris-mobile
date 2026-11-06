@@ -1,0 +1,69 @@
+name: Patched Android Matrix SDK candidate
+
+on:
+  push:
+    branches: [feat/communications]
+    paths:
+      - .github/workflows/collaboration-sdk.yml
+      - tool/build_collaboration_sdk.py
+      - tool/test_build_collaboration_sdk.py
+      - tool/collaboration-sdk-patches/android-build.json
+      - tool/collaboration-sdk-patches/raw-event.patch
+      - tool/collaboration-sdk-patches/confirmed-queue.patch
+  workflow_dispatch:
+    inputs:
+      abi:
+        description: Android ABI to build (candidate only; no publication)
+        type: choice
+        required: true
+        default: x86
+        options: [x86, armeabi-v7a, arm64-v8a, x86_64, all]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: collaboration-sdk-${{ github.ref }}-${{ inputs.abi || 'x86' }}
+  cancel-in-progress: false
+
+jobs:
+  bindings:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        abi: ${{ fromJSON(inputs.abi == 'all' && '["x86","armeabi-v7a","arm64-v8a","x86_64"]' || format('["{0}"]', inputs.abi || 'x86')) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: mobile
+      - uses: actions/checkout@v4
+        with:
+          repository: matrix-org/matrix-rust-sdk
+          ref: 8de215a0aa0026afa5754ae5f05a6d168d1a1d60
+          path: sdk
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - name: Build and verify pinned native library and Kotlin pair
+        run: |
+          python3 -m unittest discover -s mobile/tool -p test_build_collaboration_sdk.py
+          python3 mobile/tool/build_collaboration_sdk.py \
+            --sdk "$GITHUB_WORKSPACE/sdk" \
+            --output "$GITHUB_WORKSPACE/artifact/${{ matrix.abi }}" \
+            --tools-dir "$RUNNER_TEMP/matrix-sdk-tools" \
+            --android-sdk "$ANDROID_HOME" \
+            --abi '${{ matrix.abi }}' --bootstrap
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: matrix-sdk-${{ matrix.abi }}
+          path: artifact/${{ matrix.abi }}/
+          if-no-files-found: error
+          retention-days: 7

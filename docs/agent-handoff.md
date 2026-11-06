@@ -116,8 +116,11 @@ minified acceptance, final application commit/push, and next release installatio
 A public immutable SDK artifact in this same public repo with an Ivy descriptor is
 one possible distribution approach, analogous to the existing Binaryen repository;
 no descriptor/workflow/publication or shipping dependency change is implemented yet.
-SDK32-bit remote build workflow is also only a possible next step. Do not assume
-those ideas have run. Apple dependency is unchanged; no new Swift API is referenced.
+A pinned SDK build driver/manifest and x86 CI workflow are now prepared. Two
+subprocess lifetime/exit-code tests pass0.118s; YAML/manifest shape checks pass.
+The workflow triggers only on SDK input changes (default x86); hosted build has
+NOT run yet. After pushing, inspect the automatic run; do not dispatch a duplicate.
+No descriptor or SDK publication has been implemented. Apple dependency is unchanged; no new Swift API is referenced.
 Preserve all accepted Forward publications and live rollout; never replay them.
 
 Old raw-only native consumer remains accepted: AAR94d907f139a7484bd687b538d8cfce3e90478daa2ab93b9835d9aa8a606becae;

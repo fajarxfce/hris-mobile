@@ -1,0 +1,34 @@
+{
+  "upstream": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+  "rust": "1.96.0",
+  "ndk": "28.2.13676358",
+  "cargoNdk": "4.1.2",
+  "androidApiLevel": 21,
+  "jobs": 2,
+  "patches": {
+    "raw-event.patch": "fed8120ba7e7ea88a23cde675d70bb27a3a97304c6c913ad5a9578d28053f76e",
+    "confirmed-queue.patch": "23354aeb43aabe937543355d7255d31527c0a3c78acf0a677f113e9592776872"
+  },
+  "patchedSources": {
+    "Cargo.lock": "e3f28c9f54076bb320270aea995fc1f124c7ed727968dad338f544fe764df7f0",
+    "crates/matrix-sdk/src/send_queue/mod.rs": "91d2ff7784fc4cd3c484e184dfe31c65766dfaa508f6e089a403aa9cfb8ba50e",
+    "crates/matrix-sdk/src/send_queue/confirmed_event_tests.rs": "308e0bc9ecb650c55f66040cf3a76dbb34a3a38040ae5899436567dadbc8323c",
+    "bindings/matrix-sdk-ffi/src/room/mod.rs": "d38b0bc50f9da0365c14717e0821ae2eac9f498f34501211aa66c2ed29febfec",
+    "bindings/matrix-sdk-ffi/src/room/queued_events.rs": "ae6efcba570bbe83ece6e8529b6f6e1dcae7735eec5622586a45a7c4defa1b3f",
+    "bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs": "4dc9c6774802d43c090c8836471f7860809de490cc0317103e262e2848893c58",
+    "Cargo.toml": "cc436eb2188bc6af76078cae40c649a71752a9ef4aa7e832afdd0f3e40853b43",
+    ".cargo/config.toml": "c0c47ae16f20393a824473ecafb819d94d43b4445862b3618729c0feeef36c72",
+    "xtask/src/kotlin.rs": "f52edba777e389a1efb34797e93d55dc67fb1c4460b1c539da439860004ae52a"
+  },
+  "generatedKotlin": {
+    "kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt": "dbf7effa2fb593b30860fa706be26e1990bbe4104ef598331a37388ce44fff7a",
+    "kotlin/uniffi/matrix_sdk/matrix_sdk.kt": "de44cd55bb6a1bd6888c2918df3f7974a8da6326f00192f96fef0b3bb859ea44",
+    "kotlin/uniffi/matrix_sdk_base/matrix_sdk_base.kt": "ca64fbaf9aac400fa3b9d57036467968501138df313a8c07ed4af9ccf6cccb06",
+    "kotlin/uniffi/matrix_sdk_common/matrix_sdk_common.kt": "301030a61a133f6e133457e3434d97ec3f92d32a91684b9e13e8c61c4ba3a1b1",
+    "kotlin/uniffi/matrix_sdk_contentscanner/matrix_sdk_contentscanner.kt": "db48b8b84f391c2205b3a6d7802cfd9f61aeb9d28cb2049d24518a4d98a22a24",
+    "kotlin/uniffi/matrix_sdk_crypto/matrix_sdk_crypto.kt": "120a5d8db4b0ec3e609077b78832dd750e241fd5ea7c0ffb98647a19daade005",
+    "kotlin/uniffi/matrix_sdk_sqlite/matrix_sdk_sqlite.kt": "6738c2e65bd83217510f8b1bb5553827d9810c9e7add039f28ff8c9d75fb30ca",
+    "kotlin/uniffi/matrix_sdk_ui/matrix_sdk_ui.kt": "d91d9e1a8f040c8435673ad8dd12a41a1df0a90d9a5dd54b2c0de968c2046c28",
+    "kotlin/uniffi/ruma_events/ruma_events.kt": "de0a855239a51a0bc959451d9d3bc408c3af027cdcea68fab4055df7b28d7e0c"
+  }
+}

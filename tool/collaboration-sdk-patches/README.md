@@ -179,3 +179,21 @@ product validation before making this the normal application dependency.
 records APK, JNI, source, patch and test hashes and retains failed attempts separately.
 The [domain contract](../../docs/collaboration-confirmed-queue-recovery.md) describes
 ownership, complete-content matching and protected uncertain queue entries.
+
+## Pinned SDK build driver
+
+`../build_collaboration_sdk.py` takes a fresh checkout of the pinned upstream commit,
+an explicit ABI, an Android SDK directory, and separate tooling/output directories.
+`android-build.json` pins both patches, all nine relevant Rust/build inputs, the
+toolchain versions and every generated Kotlin file. The driver rejects changed
+inputs, checks ELF architecture/16KiB alignment and the three required entry points,
+and writes candidate evidence beside the JNI/Kotlin pair. It never publishes an
+artifact or changes an application dependency. Timeout handling reaps its owned
+subprocess; two process-lifetime/exit-code tests pass locally.
+
+`.github/workflows/collaboration-sdk.yml` builds x86 on changes to these SDK build
+inputs; manual runs can select another ABI or all four. It uses an isolated runner,
+read-only repository permissions and a seven-day candidate artifact. Downloaded
+artifacts must pass source, Kotlin, native and workflow-artifact digest checks before
+being combined with the already accepted pair. The hosted build has not yet run
+at this checkpoint; a successful syntax/process test alone does not accept its JNI.
