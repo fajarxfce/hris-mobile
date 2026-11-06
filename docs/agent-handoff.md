@@ -1,5 +1,47 @@
 # Agent continuation — HRIS Mobile
 
+## Directional navigation validated locally; build and inspect release42 next — 6 November 2026
+
+Latest user asks for perceptible Flutter-like in/out page transitions. ScopedNavHost
+now slides pages from the trailing side and moves the parent by one third; Back
+reverses direction. Default page duration280ms, RTL mirrored, viewport clipped,
+reduced motion uses None. Tabs retain their shorter timing. No ViewModel, domain,
+repository, acquisition or scope-owner behavior changed. Phone system animation
+settings were read only: all1.0; no phone UI was opened or settings changed.
+
+Baseline NavigationOwnershipTest:5 cases/1 expected directional failure42.638s.
+Corrected:5 PASS65.613s (LTR/RTL forward+Back/content/reduced motion/restoration/
+owner disposal). Full1 passed6,979 fresh cases but packageDevDebug alone failed
+IncrementalSplitterRunnable, with no inner cause. Full2 repeated the same command
+with stacktrace on identical4,204 inputs, PASS110.402s, tests up-to-date/0 fresh,
+lint0; no code/dependency/assertion changes or cleaning to bypass the failure.
+Drivers28213/47720/6843/27200 drained. No emulator/heavy job active at checkpoint.
+[Contract](navigation-motion.md), [evidence](measurements/navigation-motion-2026-11-06.json).
+
+PHONE STILL41 (e45e6f1e…). Build42 scripts are PREPARED ONLY in
+.work/release-phone-2026-11-06-build42. Bind build-arm64.py to successful motion
+full2; build from this committed source, verify APK, then use retained Bima emulator
+for four first/repeat offline/online entries and four Back recordings. review-progress.py
+creates eight strips/32 timed frames: inspect ALL before acceptance. Moving crop
+measurements are not comparable with old fade latency. Do not auto-launch an extra
+emulator process during install: capture owns the two measured startups. Preserve
+all original keys/data; announce EACH phone installation and run --install-only,
+never launch or drive phone UI. release-acceptance.json is still false.
+
+Port the three generic files (ScopedNavHost, AppMotion, NavigationOwnershipTest)
+to Starter after Android visual acceptance; all three baseline files were identical
+there. Then run Starter root/Android/Web checks and its Apple CI scope once, no
+Starter phone install. Continue native SDK x86_64/AAR consumer/edit proof and
+history-pager domain ownership, then all54 groups. x86_64 driver remains prepared,
+not executed; new arm64 SDK candidate970ea462 is not an app dependency.
+
+Previous stable-history ac7668 Native42174041004 AND Control42174041125 now pass.
+Apple artifact13485298149 SHA42afe2eb1c5ecd7485c6d45926f0763a090e4894ab60c0fd43a244cd63582ea3
+verified1,626 cases/179 suites, no failures/errors/skips; exact ac7668 source.
+This is pre-motion Apple evidence. New27cff22a fixes the two-phase notification
+fixture and passes local/native checks. PlatformLIVE10485916/schema116.1 unchanged;
+never replay deployment or accepted Forward publications.
+
 ## Native phases accepted; directional navigation is the next priority — 6 November 2026
 
 Latest user: navigation has no perceptible transition and feels laggy. Host uses

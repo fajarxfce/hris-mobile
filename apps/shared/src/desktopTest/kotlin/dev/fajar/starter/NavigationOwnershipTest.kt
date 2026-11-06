@@ -12,7 +12,10 @@ import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.LocalBackGestureDispatcher
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.*
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -28,6 +31,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import dev.fajar.starter.app.navigation.ScopedNavHost
 import dev.fajar.starter.app.navigation.rememberScopedNavigationState
+import dev.fajar.starter.designsystem.components.AppPage
 import dev.fajar.starter.designsystem.components.AppText
 import dev.fajar.starter.designsystem.theme.AppTheme
 import dev.fajar.starter.fixtures.TestBackDispatcher
@@ -37,6 +41,121 @@ import kotlinx.serialization.Serializable
 import org.junit.Test
 
 class NavigationOwnershipTest {
+    @Test
+    fun pushAndBackMoveInOppositeDirectionsWithContentPresentDuringTheTransition() {
+        for (direction in listOf(LayoutDirection.Ltr, LayoutDirection.Rtl)) runComposeUiTest {
+            val owner = TestNavigationOwner()
+            lateinit var controller: NavHostController
+            try {
+                mainClock.autoAdvance = false
+                setContent {
+                    CompositionLocalProvider(
+                        LocalViewModelStoreOwner provides owner,
+                        LocalLifecycleOwner provides owner,
+                        LocalLayoutDirection provides direction,
+                    ) {
+                        val navigation = rememberScopedNavigationState()
+                        controller = navigation.controller
+                        AppTheme {
+                            Box(Modifier.size(360.dp, 600.dp).testTag("viewport")) {
+                                ScopedNavHost(navigation, "account", NavigationProbeRoute) {
+                                    composable<NavigationProbeRoute> {
+                                        AppPage(Modifier.testTag("root")) {
+                                            AppText("Conversations")
+                                        }
+                                    }
+                                    composable<NavigationDetailProbeRoute> {
+                                        AppPage(Modifier.testTag("detail")) {
+                                            AppText("Saved message")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                mainClock.advanceTimeBy(400)
+                val viewport = onNodeWithTag("viewport").getUnclippedBoundsInRoot()
+                runOnIdle { controller.navigate(NavigationDetailProbeRoute) }
+                mainClock.advanceTimeBy(96)
+                onNodeWithText("Saved message").assertExists()
+                val incoming = onNodeWithTag("detail").getUnclippedBoundsInRoot()
+                val outgoing = onNodeWithTag("root").getUnclippedBoundsInRoot()
+                if (direction == LayoutDirection.Ltr) {
+                    assertTrue(incoming.left > viewport.left)
+                    assertTrue(outgoing.left < viewport.left)
+                } else {
+                    assertTrue(incoming.left < viewport.left)
+                    assertTrue(outgoing.left > viewport.left)
+                }
+                mainClock.advanceTimeBy(400)
+                assertEquals(viewport, onNodeWithTag("detail").getUnclippedBoundsInRoot())
+                onNodeWithTag("root").assertDoesNotExist()
+                runOnIdle { assertTrue(controller.popBackStack()) }
+                mainClock.advanceTimeBy(96)
+                onNodeWithText("Conversations").assertExists()
+                val returning = onNodeWithTag("root").getUnclippedBoundsInRoot()
+                val leaving = onNodeWithTag("detail").getUnclippedBoundsInRoot()
+                if (direction == LayoutDirection.Ltr) {
+                    assertTrue(returning.left < viewport.left)
+                    assertTrue(leaving.left > viewport.left)
+                } else {
+                    assertTrue(returning.left > viewport.left)
+                    assertTrue(leaving.left < viewport.left)
+                }
+                mainClock.advanceTimeBy(400)
+                assertEquals(viewport, onNodeWithTag("root").getUnclippedBoundsInRoot())
+                onNodeWithTag("detail").assertDoesNotExist()
+            } finally {
+                mainClock.autoAdvance = true
+                runOnIdle { owner.close() }
+            }
+        }
+    }
+
+    @Test
+    fun reducedMotionSettlesForwardAndBackWithoutKeepingAnOutgoingPage() = runComposeUiTest {
+        val owner = TestNavigationOwner()
+        lateinit var controller: NavHostController
+        try {
+            setContent {
+                CompositionLocalProvider(
+                    LocalViewModelStoreOwner provides owner,
+                    LocalLifecycleOwner provides owner,
+                ) {
+                    val navigation = rememberScopedNavigationState()
+                    controller = navigation.controller
+                    AppTheme(reduceMotion = true) {
+                        Box(Modifier.size(360.dp, 600.dp).testTag("viewport")) {
+                            ScopedNavHost(navigation, "account", NavigationProbeRoute) {
+                                composable<NavigationProbeRoute> {
+                                    AppPage(Modifier.testTag("root")) { AppText("Conversations") }
+                                }
+                                composable<NavigationDetailProbeRoute> {
+                                    AppPage(Modifier.testTag("detail")) { AppText("Saved message") }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            onNodeWithTag("root").assertIsDisplayed()
+            val viewport = onNodeWithTag("viewport").getUnclippedBoundsInRoot()
+            mainClock.autoAdvance = false
+            runOnIdle { controller.navigate(NavigationDetailProbeRoute) }
+            mainClock.advanceTimeBy(48)
+            assertEquals(viewport, onNodeWithTag("detail").getUnclippedBoundsInRoot())
+            onNodeWithTag("root").assertDoesNotExist()
+            runOnIdle { assertTrue(controller.popBackStack()) }
+            mainClock.advanceTimeBy(48)
+            assertEquals(viewport, onNodeWithTag("root").getUnclippedBoundsInRoot())
+            onNodeWithTag("detail").assertDoesNotExist()
+        } finally {
+            mainClock.autoAdvance = true
+            runOnIdle { owner.close() }
+        }
+    }
+
     @Test
     fun backCannotLeaveTheAppWhileTheRootPageIsReturningFromAnInnerPage() = runComposeUiTest {
         val compose = this

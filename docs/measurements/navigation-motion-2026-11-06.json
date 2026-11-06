@@ -1,0 +1,80 @@
+{
+  "date": "2026-11-06",
+  "sourceManifestSha256": "0fb201087c427736578ac929eb9d9a4b3add0ae900f7fa6418112f48e669418b",
+  "runs": {
+    "baseline": {
+      "startedAt": "2026-11-06T07:28:50.617955+00:00",
+      "elapsedSeconds": 42.638,
+      "exitCode": 1,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "directional": {
+      "startedAt": "2026-11-06T07:30:10.434759+00:00",
+      "elapsedSeconds": 65.613,
+      "exitCode": 0,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "full1": {
+      "startedAt": "2026-11-06T07:31:52.058983+00:00",
+      "elapsedSeconds": 1046.634,
+      "exitCode": 1,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 6979,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "full2": {
+      "startedAt": "2026-11-06T07:50:13.340117+00:00",
+      "elapsedSeconds": 110.402,
+      "exitCode": 0,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "debugLintIssues": 0,
+  "debugLintReportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+  "fullGateSourceUnchangedBetweenAttempts": true,
+  "firstFullGateFailure": "Only packageDevDebug failed in IncrementalSplitterRunnable; Gradle did not provide an inner cause. All 6979 fresh tests passed.",
+  "secondFullGate": "Same source; complete command succeeded. Tests were up-to-date, zero fresh cases claimed. No code, dependency, quality rule or test assertion changed to pass packaging.",
+  "pageMillis": 280,
+  "forwardAndBackDirectionsVerified": [
+    "LTR",
+    "RTL"
+  ],
+  "reducedMotionVerified": true,
+  "scopeReplacementAndRestorationVerified": true,
+  "phoneAnimationSettings": {
+    "readOnly": true,
+    "uiOpened": false,
+    "animator_duration_scale": "1.0",
+    "transition_animation_scale": "1.0",
+    "window_animation_scale": "1.0"
+  },
+  "release42Installed": false,
+  "androidMotionRecordingPending": true,
+  "starterPortPending": true
+}

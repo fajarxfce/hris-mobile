@@ -1,8 +1,11 @@
 package dev.fajar.starter.app.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -11,6 +14,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.currentStateAsState
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
@@ -43,6 +49,7 @@ fun ScopedNavHost(
             }
         }
     val motion = LocalAppMotion.current
+    val direction = if (LocalLayoutDirection.current == LayoutDirection.Ltr) 1 else -1
     val entry by controller.currentBackStackEntryAsState()
     val lifecycle = entry?.lifecycle?.currentStateAsState()?.value
     val canLeave =
@@ -56,11 +63,43 @@ fun ScopedNavHost(
             NavHost(
                 controller,
                 graph = graph,
-                modifier = modifier,
-                enterTransition = { fadeIn(tween(motion.pageMillis)) },
-                exitTransition = { fadeOut(tween(motion.pageMillis)) },
-                popEnterTransition = { fadeIn(tween(motion.pageMillis)) },
-                popExitTransition = { fadeOut(tween(motion.pageMillis)) },
+                modifier = modifier.clipToBounds(),
+                enterTransition = {
+                    if (motion.pageMillis == 0) EnterTransition.None
+                    else
+                        slideInHorizontally(
+                            tween(motion.pageMillis, easing = FastOutSlowInEasing)
+                        ) {
+                            it * direction
+                        }
+                },
+                exitTransition = {
+                    if (motion.pageMillis == 0) ExitTransition.None
+                    else
+                        slideOutHorizontally(
+                            tween(motion.pageMillis, easing = FastOutSlowInEasing)
+                        ) {
+                            -it * direction / 3
+                        }
+                },
+                popEnterTransition = {
+                    if (motion.pageMillis == 0) EnterTransition.None
+                    else
+                        slideInHorizontally(
+                            tween(motion.pageMillis, easing = FastOutSlowInEasing)
+                        ) {
+                            -it * direction / 3
+                        }
+                },
+                popExitTransition = {
+                    if (motion.pageMillis == 0) ExitTransition.None
+                    else
+                        slideOutHorizontally(
+                            tween(motion.pageMillis, easing = FastOutSlowInEasing)
+                        ) {
+                            it * direction
+                        }
+                },
             )
         }
     }
