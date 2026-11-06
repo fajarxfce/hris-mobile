@@ -1,5 +1,46 @@
 # Agent continuation — HRIS Mobile
 
+## Retained reconnect feedback fixed; release 41 rebuild next — 6 November 2026
+
+The page no longer turns a retained SDK rejection into generic feedback/Retry
+when the route stops or starts connecting. The current SETUP_REQUIRED action and
+local-read failures stay visible. No ViewModel, authorization or recovery policy
+changed. Baseline regression failed; four focused Compose cases and full root,
+Android, browser, proof compile, format and architecture pass. Full gate: 1,114
+fresh tests / 369.573s, 4,204 unchanged inputs, lint0. Driver92704 drained.
+[Contract](collaboration-chat-reconnect.md),
+[evidence](measurements/collaboration-retained-feedback-2026-11-06.json).
+
+Three clean online entries of the retained emulator later showed nine rows and no
+parsed auth diagnostics. Read-only server audit showed normal gateway refreshes.
+The original transport callback cause is still unestablished. Capture now stops
+the preceding process before changing networking; interrupted-refresh acceptance
+remains separate. Do not treat the UI correction as a transport recovery fix.
+
+PHONE STILL40. Old APK41 (4dfadc60…) is held and must not be installed. Use the
+prepared .work/release-phone-2026-11-06-build41-fixed scripts, bound to successful
+reconnect-feedback-full1. Build from the committed source, verify, install only on
+the owned Bima emulator, record four first/repeat offline/online trials and inspect
+eight adjacent frames. Preserve its original userdata/crypto. Release acceptance
+must bind the exact APK hash, no auth diagnostics and no stale prompt before the
+explicitly announced install.py --install-only phone delivery. No phone UI actions.
+No emulator or heavy local job is active at this checkpoint.
+
+CI919 native42170117581 failed a DIFFERENT assertion: NotificationInputProof
+recoverInputs:300. Artifact13482867756 SHA5b7875ddae3222742bb1b0ea11d68e72722ab9f7cdeb7b843c1ee7f2aeedfc47
+was downloaded/verified. First worker turn Retry transferred the original input;
+second returned Complete while its reviewed copy remained Pending. The exact
+checkpoint assertion stays unchanged; investigate transfer-versus-review recovery.
+Control91942170117574 passed. ac7668 native42174041004 and Control42174041125 are
+still active; no manual duplicate dispatch. Earlier replay failures at history:54
+are separate and the ac7668 storage fix needs its native acceptance.
+
+Next: phone delivery, notification recovery diagnosis, paired SDK AAR/consumer
+proof, ChatThreadHistoryPager domain ownership and all54 PRD groups. SDK generated
+files live outside Mobile; packaging driver remains prepared/unexecuted. Platform
+LIVE10485916/schema116.1 unchanged; never replay rollout or accepted Forward sends.
+Starter's existing MVI foundation port remains accepted; no new generic port here.
+
 ## Release 41 render passed; transient SDK auth recovery under investigation — 6 November 2026
 
 Mobileac7668ae fixes stable history replay, abccff51 records paired SDK outputs;

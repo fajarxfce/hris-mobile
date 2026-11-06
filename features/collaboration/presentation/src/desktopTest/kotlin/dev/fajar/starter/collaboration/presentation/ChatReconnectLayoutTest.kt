@@ -34,6 +34,90 @@ class ChatReconnectLayoutTest {
         )
 
     @Test
+    fun reopeningWithRetainedSdkFailureKeepsMessagesAndComposerWithoutStaleRetryFeedback() =
+        runDesktopComposeUiTest(width = 375, height = 780) {
+            var state by
+                mutableStateOf(
+                    ChatThreadState(
+                        title = "Bima Santoso",
+                        loading = false,
+                        draftReady = true,
+                        draft = "Keep this draft",
+                        connection = ChatThreadConnection.SETUP_REQUIRED,
+                        failure = rejected,
+                        rows =
+                            listOf(
+                                ChatMessageRow(
+                                    "one",
+                                    "\$one",
+                                    null,
+                                    1_793_865_600_000,
+                                    ChatMessageOwnership.COLLEAGUE,
+                                    CollaborationMessageKind.TEXT,
+                                    "Cached message",
+                                    CollaborationMessageDelivery.SENT,
+                                )
+                            ),
+                    )
+                )
+            setContent {
+                CompositionLocalProvider(LocalAppLanguage provides AppLanguage.English) {
+                    AppTheme(reduceMotion = true) {
+                        ChatThreadPage(state, rememberLazyListState(), {})
+                    }
+                }
+            }
+            onNodeWithText("Reconnect").assertIsDisplayed()
+            for (connection in
+                listOf(
+                    ChatThreadConnection.OFFLINE,
+                    ChatThreadConnection.CONNECTING,
+                    ChatThreadConnection.CONNECTED,
+                )) {
+                runOnIdle { state = state.copy(connection = connection) }
+                onNodeWithText("Cached message").assertIsDisplayed()
+                onNodeWithText("Keep this draft").assertIsDisplayed()
+                onNodeWithContentDescription("Send message").assertIsEnabled()
+                onNodeWithText("Reconnect to send and receive messages again.").assertDoesNotExist()
+                onNodeWithText("Reconnect").assertDoesNotExist()
+                onNodeWithText("Retry").assertDoesNotExist()
+                onNodeWithText("Refresh").assertDoesNotExist()
+            }
+            runOnIdle { state = state.copy(connection = ChatThreadConnection.SETUP_REQUIRED) }
+            onAllNodesWithText("Reconnect").assertCountEquals(1)
+            onNodeWithText("Retry").assertDoesNotExist()
+        }
+
+    @Test
+    fun localReadFailureRemainsVisibleWhileConnectionRestarts() =
+        runDesktopComposeUiTest(width = 375, height = 780) {
+            var state by
+                mutableStateOf(
+                    ChatThreadState(
+                        title = "Bima Santoso",
+                        loading = false,
+                        draftReady = true,
+                        draft = "Keep this draft",
+                        localFailure = rejected,
+                    )
+                )
+            setContent {
+                CompositionLocalProvider(LocalAppLanguage provides AppLanguage.English) {
+                    AppTheme(reduceMotion = true) {
+                        ChatThreadPage(state, rememberLazyListState(), {})
+                    }
+                }
+            }
+            onNodeWithText("Reconnect to send and receive messages again.").assertIsDisplayed()
+            onNodeWithText("Retry").assertIsEnabled()
+            onNodeWithContentDescription("Send message").assertIsNotEnabled()
+            runOnIdle { state = state.copy(connection = ChatThreadConnection.CONNECTING) }
+            onNodeWithText("Reconnect to send and receive messages again.").assertIsDisplayed()
+            onNodeWithText("Retry").assertIsNotEnabled()
+            onNodeWithContentDescription("Send message").assertIsNotEnabled()
+        }
+
+    @Test
     fun retainedConversationHasOneReconnectActionWithoutRefreshOrGenericRetry() =
         runDesktopComposeUiTest(width = 375, height = 780) {
             val events = mutableListOf<ChatThreadEvent>()

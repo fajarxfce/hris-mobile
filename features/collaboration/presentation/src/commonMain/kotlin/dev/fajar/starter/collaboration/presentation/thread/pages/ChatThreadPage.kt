@@ -254,22 +254,19 @@ private fun ChatDayDivider(date: LocalDate, today: LocalDate) {
 
 @Composable
 private fun ChatThreadStatus(state: ChatThreadState, onEvent: (ChatThreadEvent) -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    val feedbackFailure =
         (state.localFailure
                 ?: state.historyFailure
                 ?: state.failure?.takeUnless(::chatCanReconnect))
-            ?.takeUnless {
-                state.localFailure == null &&
-                    state.connection == ChatThreadConnection.SETUP_REQUIRED &&
-                    chatRequiresReconnect(it)
-            }
-            ?.let {
-                AppFeedback(
-                    if (state.localFailure == null && chatCanReconnect(it))
-                        appString(AppString.ChatEarlierUnavailable)
-                    else failureText(it)
-                )
-            }
+            ?.takeUnless { state.localFailure == null && chatRequiresReconnect(it) }
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        feedbackFailure?.let {
+            AppFeedback(
+                if (state.localFailure == null && chatCanReconnect(it))
+                    appString(AppString.ChatEarlierUnavailable)
+                else failureText(it)
+            )
+        }
         if (state.submissionPending)
             AppText(appString(AppString.ChatSaveUnconfirmed), color = AppColors.muted)
         if (state.connection == ChatThreadConnection.SETUP_REQUIRED)
@@ -280,11 +277,7 @@ private fun ChatThreadStatus(state: ChatThreadState, onEvent: (ChatThreadEvent) 
                 ),
                 { onEvent(ChatThreadEvent.SetupRequested) },
             )
-        else if (
-            state.localFailure != null ||
-                state.historyFailure != null ||
-                state.failure?.let { !chatCanReconnect(it) } == true
-        )
+        else if (feedbackFailure != null)
             AppTextButton(
                 appString(AppString.Retry),
                 { onEvent(ChatThreadEvent.RefreshRequested) },

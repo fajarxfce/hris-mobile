@@ -1,5 +1,34 @@
 # Recover the original chat connection
 
+## Retained room feedback — 6 November 2026
+
+A retained SDK rejection belongs to the reconnect action while the thread is in
+SETUP_REQUIRED. When the route stops or starts connecting again, that old SDK
+failure must not become a generic warning and Retry button. The page now derives
+its feedback once and uses the same result for both the notice and retry action.
+Local-read failures remain visible and keep the composer disabled during retry.
+The ViewModel, SDK failure state, authorization and credential recovery are unchanged.
+
+Release41 recordings exposed the old warning during an online reentry transition;
+the final UI had already recovered. A subsequent three-entry online probe showed
+nine retained rows and no auth diagnostics. Read-only server audit confirmed normal
+token refreshes. The original callback's transport cause remains unestablished;
+the old capture also enabled networking before terminating the preceding process.
+Clean first-entry captures now stop that process before changing connectivity.
+Interrupted refresh recovery remains a separate acceptance task.
+
+The new UI regression failed on the old page and passes with the correction. It
+checks cached messages, drafts and send availability through OFFLINE/CONNECTING/
+CONNECTED, the one current reconnect action, and retained local-read failures.
+
+Validation: the corrected focused run passed four Compose tests; the complete
+root/Android/browser/proof/format/architecture gate passed 1,114 fresh tests in
+369.573 seconds on 4,204 unchanged product inputs, with zero lint issues.
+[Measurements](measurements/collaboration-retained-feedback-2026-11-06.json).
+Release 41 still requires exact-APK emulator acceptance before phone installation.
+
+## Original connection recovery implementation
+
 A rejected Matrix refresh now reaches the product through the pinned SDK ClientDelegate, registered before restore. The callback exposes only a closed unauthorized classification. It has no reference to the SDK client, route or Activity. Its native task handle belongs to the runtime and is deactivated before shutdown, canceled/closed after native drain. Repeated and late closed callbacks are ignored. Background task strings are discarded. Known authentication failure survives storage callback failures, delayed writes and failing acquisition cleanup; cancellation remains cancellation.
 
 This failure stops live SDK activity and retains account-owned local chat reads under the existing policy. It does not imply HRIS account/company revocation. Explicit HRIS denials remain sticky through normal acquisition. No keys, private messages, tokens or provider exception details enter diagnostics.

@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-06",
+  "sourceManifestSha256": "ec6bf0785b406daced568cb5d6ba7c9f543a56cd1076eaaadca546773721ad37",
+  "runs": {
+    "reconnect-feedback1": {
+      "startedAt": "2026-11-06T06:57:47.578127+00:00",
+      "elapsedSeconds": 32.304,
+      "exitCode": 1,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 4,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "reconnect-feedback2": {
+      "startedAt": "2026-11-06T06:59:08.071055+00:00",
+      "elapsedSeconds": 49.348,
+      "exitCode": 0,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "reconnect-feedback-full1": {
+      "startedAt": "2026-11-06T07:00:08.659979+00:00",
+      "elapsedSeconds": 369.573,
+      "exitCode": 0,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1114,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "debugLintIssues": 0,
+  "debugLintReportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+  "boundary": "Page presentation only; no authorization, credential recovery, ViewModel or repository behavior changed.",
+  "baselineFailure": "The retained SDK failure appeared as generic reconnect feedback during OFFLINE/CONNECTING/CONNECTED. The new regression failed before the fix.",
+  "localReadFailureRetained": true,
+  "phoneInstalled": false,
+  "releaseAcceptancePending": true,
+  "transportCallbackCauseEstablished": false
+}
