@@ -77,5 +77,51 @@
     "seconds": 23.884,
     "tests": 0,
     "failure": "Incorrect domain task name jvmTest; repository target is desktopTest."
+  },
+  "borrowedTimelineRefactor": {
+    "validated": true,
+    "startedAt": "2026-11-06T10:13:02.979336+00:00",
+    "elapsedSeconds": 199.194,
+    "exitCode": 0,
+    "sourceFiles": 4212,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 45,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+        "sha256": "2cfdb03af4c3ba33ec86657c1fc08bfee481c7e9339ac9fed3de1b13e0ed9ad4",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBackgroundDeliveryWorkerTest.xml": {
+        "sha256": "fadda9aeb1dc82c7fa0befbb412161e047282d8b5cd759c12392446d7b433b53",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationQueuedOriginalMapperTest.xml": {
+        "sha256": "595761640548bcf624188c42adc153365d0e113c550387c29922e7c8c0a84ac9",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SettleCollaborationCompletedQueueTest.xml": {
+        "sha256": "899618e341a7ac6b911822f84f22d1a0a61964415f4db38287d656022087fbf6",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "nativeSdk": "fake; Android proof still pending",
+    "scope": "15 domain + 4 mapper + 26 foreground/background worker tests"
   }
 }

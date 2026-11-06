@@ -44,5 +44,23 @@
     "Arm64 JNI and generated Kotlin only; no packaged AAR or Android consumer acceptance yet.",
     "Shipping SDK dependency is unchanged; working application adapters now require this new candidate before Android compilation.",
     "Remaining ABIs, Swift/XCFramework, minified and native application recovery acceptance remain pending."
-  ]
+  ],
+  "x86_64": {
+    "nativeSha256": "48f6a14d6e39a332f8d5f8cc75d8924d636951cdbd97bac1cbc96284eac894ad",
+    "nativeBytes": 142711904,
+    "kotlinFiles": 9,
+    "kotlinPairIdenticalToArm64": true,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "rawEventAndQueueSymbolsPresent": true,
+    "sdkSourcesUnchanged": true,
+    "buildSeconds": 447.202,
+    "candidateOnly": true,
+    "applicationDependencyChanged": false,
+    "packaged": false
+  }
 }

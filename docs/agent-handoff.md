@@ -1,154 +1,97 @@
 # Agent continuation — HRIS Mobile
 
-## Current priority: send feedback and message order — 6 November 2026
+## Current priority: send ordering and retained native queue — 6 November 2026
 
-The user's new reports take priority over SDK packaging: ordinary sends display
-“Saving was interrupted” and a pending BBB moves above already confirmed AAA.
-Six working source/test files fix the active-submission banner, group pending
-outgoing rows after confirmed history, and distinguish StageMessage from
-DeliverMessages in closed worker diagnostics. No queue admission or delivery
-policy has changed; long pending delivery is still unresolved.
-
-Focused baseline: two expected banner failures. With banner corrected, the
-16-case projection/UI run caught the expected clock-skew ordering failure.
-Corrected run:16 PASS/50.956s,4,205 inputs unchanged. The sequence regression
-covers AAA–DDD with zero through four sequential acknowledgements, previously
-acknowledged commands retired, and client clocks ahead/behind. Actual timestamp,
-stable keys and delivery evidence are preserved. It does not establish arbitrary
-out-of-order acknowledgement stability. Read-only phone clock comparison found
-about1.86s behind this server; this is not a Matrix timestamp measurement.
-
-Full1 gate97634 drained:6,775 fresh tests pass; only Wasm presentation test
-compilation failed with explicit compiler heap exhaustion (1536MiB),1029.005s.
-Full2 gate73360 drained PASS107.592s:208 additional fresh cases, unchanged4,205
-inputs, same complete command with heap2560MiB. Reports are disjoint:6,983 cases
-in total, no failures/errors/skips. Android debug assembly/lint0, Android host tests,
-proof compilation, browser tests, formatting and architecture checks pass. No
-source/verification changes or skipped assertions. No emulator/heavy job active.
-[Contract](collaboration-chat-send-feedback.md) and
+Release43 is ACCEPTED, source46bec39aa599f78f38f8fb639f59b3de080bdf68, pushed.
+It fixes the false interrupted-save banner and pending BBB moving above confirmed
+AAA. Root/Android/Web checks passed6,983 fresh tests, lint0. Sequence tests cover
+AAA–DDD with sequential confirmations and skewed clocks, not arbitrary ACK order.
+[Contract](collaboration-chat-send-feedback.md),
 [evidence](measurements/collaboration-chat-send-feedback-2026-11-06.json).
 
-Repair46bec39aa599f78f38f8fb639f59b3de080bdf68 is pushed. Release43 from that
-exact source built93.373s/lint0; nondebuggable devRelease/arm64, existing signer,
-private API/Firebase/backup exclusions verified. APK88,584,188 bytes, SHA
-639a5454496813a9ad4fa70294a4fbb5364df8473658468662a199167fd970bf.
-The original retained-data Bima emulator passed offline/online first and repeated
-entry:9/9 cached rows, then9/11 online rows with incoming catch-up. No recovery,
-Older or reconnect prompt. All THREE screenshots inspected at original size;
-quoted content, bubble/timestamp/composer layout accepted. No new messages were
-sent, no outgoing-latency claim. Settings restored; owned emulator350599 /
-startTicks163234107 stopped09:04:32UTC with all original data/keys retained.
-[Release evidence](measurements/collaboration-release43-2026-11-06.json).
+Exact nondebuggable arm64 devRelease43/1.0.0 APK88,584,188 bytes, SHA
+639a5454496813a9ad4fa70294a4fbb5364df8473658468662a199167fd970bf,
+ready in .work/release-phone-2026-11-06-build43. Retained-data Bima emulator passed
+first/repeat offline and online room entry; all THREE screenshots were inspected.
+Owned emulator350599/startTicks163234107 stopped09:04:32UTC, original userdata and
+crypto preserved. No outgoing latency claim. [Release evidence](measurements/collaboration-release43-2026-11-06.json).
 
-PHONE STILL42: ADB disconnected08:52UTC and bounded reconnect attempts timed out,
-last checked09:01:24UTC. Async availability question is pending. Do not infer app
-process state from an empty pidof. Exact43 APK is accepted and ready in
-.work/release-phone-2026-11-06-build43. When connected, run preflight.py, announce
-EACH install, then install.py --install-only; never launch/drive phone UI. Do not
-rebuild or repeat emulator acceptance merely because the phone is unavailable.
-No local heavy job/emulator is active at this checkpoint.
+PHONE STILL42. Last bounded ADB reconnect about10:16UTC timed out18s. One async
+availability question is pending; do not ask again. Once reachable, run43's
+preflight.py, announce EVERY installation, then install.py --install-only.
+Never launch/drive phone UI, erase keys or rebuild43 just because HEAD advanced.
 
-Confirmed-native-queue diagnostic case now REPRODUCED. First42.659s and a
-phase-labelled repeat40.847s each fail exactly one case: first message recovery
-completes, but NEXT message delivery becomes Blocked/QueueUnresolved. Fake SDK
-retains the transaction after accepting the event and losing the response; real
-encrypted command/history stores and actual application worker are used. This is
-not a native/phone root-cause diagnosis. Baseline test files are restored, and the
-formatted patch is tracked at tool/collaboration-sdk-patches/confirmed-queue-repro.patch
-(SHAb63fa23bbc27659f940f4bd3977c24655f54a94e9793bfe88bf54223f8f887b7).
-No production source changed. See its README and measurement for exact commands.
-Shipping bindings expose no original JSON for unsent local echoes; blind native
-abort can queue a server redaction. Implement exact original-transaction settlement
-before removing confirmed native entries. Old phone logs only identify Flush /
-QueueUnresolved;43 will distinguish Stage/Deliver after installation.
+CI for exact46bec39a is COMPLETE: Native42191546121 has381 cases/66 suites and
+all6 result groups; Control42191546066 Apple1,627 cases/179 suites and portable
+4,211 cases/457 suites, all zero failures/errors/skips. Artifact hashes verified.
+[CI evidence](measurements/collaboration-followup-ci-2026-11-06.json). These runs
+accept43, not the new native queue integration. Do not redispatch them.
 
-Raw-event candidate native consumer is ACCEPTED: build86413 passed486.129s,
-APK315,651,730 bytes SHA50f728a9613dc3d06253a9c42decd508e399722527e60e4f21067788db67efb7,
-exact paired AAR/JNI and strict local dependency verification, lint0 errors/48 warnings.
-Provider proof b5707215cb144219bf2899cc6e5d6884 passed55.429s:2 browser cases,
-Android/web bidirectional encryption, logical IDs, refresh with unchanged device keys,
-offline invitee delivery and cleanup. Both raw point-read assertions execute inside
-this APK before its first reply. Standard runner does not retain the extra numeric
-marker. Initial wrong emulator serial and premature boot attempts are recorded
-separately; no fixture assertion changed. Owned fresh-data emulator564348 /
-startTicks163428482 stopped09:35:40UTC; original Bima data and phone untouched.
-[Consumer evidence](measurements/collaboration-sdk-raw-event-consumer-2026-11-06.json).
-The frozen candidate DOES NOT contain confirmed queue settlement.
+Long pending: actual application worker + real encrypted stores + FAKE SDK
+reproduced a retained native transaction blocking the NEXT message after first
+message recovery. Original failing patch is tracked at
+ tool/collaboration-sdk-patches/confirmed-queue-repro.patch. This proves an
+application recovery gap, not the phone's native root cause. Phone43 diagnostics
+will distinguish StageMessage/DeliverMessages; older logs only say Flush/QueueUnresolved.
+Do not blindly abort: the SDK can schedule a server redaction for an in-flight send.
 
-Confirmed queue SDK patch is TESTED at Rust level:8 core cases45.164s and19 FFI
-room cases35.883s, identical final inputs and no warnings. Snapshot reads the actual
-native store, not synthesized local echoes. SQLite reopen and settlement persistence,
-no send/redaction, cancelled lock waiter, concurrency and exact-content/type bounds
-pass. Patch tool/collaboration-sdk-patches/confirmed-queue.patch applies AFTER raw-event.patch,
-SHA23354aeb43aabe937543355d7255d31527c0a3c78acf0a677f113e9592776872.
-[Evidence](measurements/collaboration-sdk-confirmed-queue-2026-11-06.json).
-Core1 failed test naming convention; earlier successful runs had warnings now removed.
-No application/native-Android settlement acceptance yet. Caller still owns trusted
-acceptance proof; the native API never authenticates an arbitrary supplied event ID.
+The separate SDK patch is TESTED:8 core and19 FFI room cases, exact source hashes,
+SQLite reopen, byte/type/transaction matching, cancellation, concurrency and no
+send/redaction. tool/collaboration-sdk-patches/confirmed-queue.patch applies AFTER
+raw-event.patch to8de215a0aa0026afa5754ae5f05a6d168d1a1d60; SHA
+23354aeb43aabe937543355d7255d31527c0a3c78acf0a677f113e9592776872.
+The caller must independently prove trusted server acceptance and native ownership.
+[SDK evidence](measurements/collaboration-sdk-confirmed-queue-2026-11-06.json).
 
-Android queue arm64 build71588 FINISHED470.596s with unchanged SDK inputs.
-New native138,602,760 bytes SHA43856af213036df7c2f70dabf7b387a7b60f21dbd79a0a23e69b4a814354a8d3;
-all nine generated Kotlin files, raw/queue symbols and four16KiB LOAD segments
-verified. Output .worktrees/matrix-sdk-queue-android-arm64-2026-11-06/main.
+New queue Android arm64 and x86_64 builds are FINISHED470.596s/447.202s.
+All9 Kotlin files match; JNI symbols and16KiB LOAD alignment verified.
+arm64 SHA43856af213036df7c2f70dabf7b387a7b60f21dbd79a0a23e69b4a814354a8d3;
+x86_64 SHA48f6a14d6e39a332f8d5f8cc75d8924d636951cdbd97bac1cbc96284eac894ad.
 [Evidence](measurements/collaboration-sdk-confirmed-queue-android-2026-11-06.json).
-No AAR yet. Do not mix with the earlier raw-only AAR/consumer. Build remaining ABIs
-sequentially after the active application test; SDK source is accepted and unchanged.
+New isolated wrapper .worktrees/matrix-kotlin-confirmed-queue contains both paired
+ABIs. The old accepted raw-only wrapper/AAR/consumer remains unchanged and DOES
+NOT have queue methods. Remaining32-bit and Apple distribution are outstanding.
 
-Application66462/application-2 drained PASS200.622s:44 cases on unchanged4,212
-inputs,14 domain +4 mapper +foreground/background worker suites. The retained-native
-reproduction now passes with2 enqueues/2 sends/1 settlement and no extra work on
-repeat. Real encrypted stores/worker, FAKE SDK; no phone/native root-cause proof.
-[Evidence](measurements/collaboration-confirmed-queue-application-2026-11-06.json).
-application-1 failed before tests due to wrong jvmTest task name; corrected to desktopTest.
+Application integration remains UNCOMMITTED. Latest application-3/session78573
+FINISHED199.194s:45 tests (15 domain,4 mapper,26 foreground/background worker),
+4,212 inputs unchanged, zero failures/errors/skips. It accepts the borrowed-timeline
+refactor: worker invokes SettleCollaborationCompletedQueue; the use case owns
+account/company/device/completion policy, repo maps raw DTOs, datasource does SDK I/O.
+No remote room/setup metadata fetch is added. Exact full-content hashes and immutable
+completion records prove ownership; referenced uncertain Staging.before entries stay
+protected. Reproduction passes2 enqueues/2 sends/1 settlement, repeated work does
+nothing. [Evidence](measurements/collaboration-confirmed-queue-application-2026-11-06.json).
+Previous44-case pass predates this refactor; application-1 failed task naming before tests.
 
-SINCE that pass, main Mobile's18 UNCOMMITTED Kotlin files have been refactored:
-SettleCollaborationCompletedQueue now takes the worker's existing admitted timeline,
-rechecks live account/company/SDK ownership and performs local settlement without
-remote room/setup repository dependencies. Added a15th domain test for stale
-borrowed owner/device; formatter passes, new signature NOT TESTED yet. Worker only
-calls the use case; exact-content mapper/data sources retain raw SDK I/O. Referenced
-uncertain Staging.before entries remain protected; ordinary uniquely recoverable
-Staging follows its existing path. Legacy adapters without original-read support
-retain Conflict/QueueUnresolved, not an automatic retry loop.
-Android adapter draft requires the new SDK methods and CANNOT compile with current
-shipping26.10.23. Do not commit these sources before candidate/full acceptance.
+SINCE that pass, TWO Mobile proof files and THREE Platform test/driver files are WIP.
+The new second HRIS native scenario stages a real paused SDK original, then sends
+its same logical ID/full content through SDK Room.sendRaw, retaining the native row.
+That direct send owns a different HTTP transaction: this constructs the recovery
+postcondition, NOT a literal lost-response simulation. After two actual process
+restarts, offline completion recovery must settle the original and repeat as a no-op,
+with exactly3 encrypted server messages. The existing scenario is preserved; each
+scenario gets a fresh Spring trace/context. Python driver34 tests PASS0.166s;
+Kotlin/native scenario NOT YET compiled or accepted. No live Platform change.
 
-ONLY current local heavy job: SDK x86_64 queue build34477, started10:01:25UTC,
-.work/sdk-confirmed-queue-2026-11-06/build-android.py x86_64. SDK's9 fingerprinted
-inputs are FROZEN; Mobile app files may be edited independently. No emulator active.
-After draining/verification, run check-application.py application-3 for newer owning
-use case, then package native candidate and Android compile/proof. Isolated wrapper
-.worktrees/matrix-kotlin-confirmed-queue now contains the verified arm64 pair only;
-private kotlin-wrapper-inputs.json and package-android-aar.py are prepared. Neither
-packaging nor publication ran. Verify all9 x86 Kotlin hashes match arm64, add its
-JNI to this new wrapper/manifest, preserve the accepted old raw-only wrapper/AAR.
-Remaining32-bit/Apple/full product dependency distribution are still outstanding.
+ONLY heavy job: queue AAR packaging87653, .work/sdk-confirmed-queue-2026-11-06/
+package-android-aar-1. Wrapper inputs are frozen; Mobile/Platform source may be edited.
+No emulator active. NEXT: drain, run verify-android-aar-paired.py; build current
+Mobile draft using exact candidate AAR/POM verification, then compile/run BOTH HRIS
+native scenarios on owned emulator-5560. Prepare builds before starting emulator.
+Do not commit product references against shipping26.10.23: it lacks these methods.
+Complete required ABIs/distribution, full product gates and minified acceptance before
+shipping a queue-fix APK. Preserve Bima userdata and all accepted Forward/rollout results.
 
-Latest bounded phone reconnect about10:01UTC also timed out18s. Availability
-question remains pending; exact accepted43 still awaits install-only. Do not rebuild
-or launch/drive phone UI. Native42191546121 succeeded on46bec39a;381 cases/66 suites
-and all6 native result groups verified. Control42191546066 now SUCCESS on same
-source: Apple artifact13493108249 digest verified1,627 cases/179 suites; portable
-13493041185 digest verified4,211 cases/457 suites. These accept the send feedback/
-ordering source, not this newer queue integration. Do not re-dispatch.
+Old raw-only native consumer remains accepted: AAR94d907f139a7484bd687b538d8cfce3e90478daa2ab93b9835d9aa8a606becae;
+APK50f728a9613dc3d06253a9c42decd508e399722527e60e4f21067788db67efb7,
+provider b5707215cb144219bf2899cc6e5d6884 passed55.429s/two browser cases/cleanup.
+[Evidence](measurements/collaboration-sdk-raw-event-consumer-2026-11-06.json).
+Original Bima emulator and all fresh consumer emulators are stopped.
 
-SDK x86_64 driver95397 is FINISHED and drained:901.084s,142,673,032 bytes,
-SHA0f9d908ef616c650949fedd51c97c0ce5e5c2d98810606731bc811634acf3cab.
-Nine generated Kotlin files exactly match arm64; four16KiB ELF LOAD alignments,
-raw-event symbol and unchanged sources verified. prepare-x86-aar.py has RUN and
-added its JNI beside arm64 in the isolated wrapper; do not repeat its one-shot
-backup. Two-ABI AAR is packaged and native consumer is accepted as recorded above. Continue confirmed-queue repair, native edit recovery, domain-owned history paging and all54
-PRD groups. Shipping SDK dependency unchanged;32-bit and Apple remain pending.
-
-Mobile motion23ce Native CI42183953532 SUCCESS: artifact13488369157 digest
-verified,381 cases/66 suites and all six native result groups/cleanup pass.
-Earlier27cff Control42181039404 SUCCESS: Apple artifact13488905467 verified,
-1,626 cases/179 suites pass. Both predate these send changes. Motion Control
-42183953620 running. Starter motion Apple42185888342 SUCCESS: exact e39747c,
-artifact13489600174 verified129 cases/34 suites. Starter578d97a records/pushes
-acceptance; do not dispatch again. Platform LIVE10485916/schema116.1 unchanged;
-never repeat rollout or accepted Forward publications.
-
+Starter578d97a records navigation port e39747c: local71 cases/Apple129 pass.
+No HRIS queue-policy port belongs in Starter. Live Platform remains
+10485916ee02850cf913793398f7ef3dd1e09afb/schema116.1. All54 PRD groups remain open;
+continue the authorized long run after current bugs, with atomic commits/pushes.
 
 ## Release 42 delivered; Starter navigation validation active — 6 November 2026
 
