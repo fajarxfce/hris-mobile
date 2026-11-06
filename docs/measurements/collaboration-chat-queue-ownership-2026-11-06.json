@@ -1,6 +1,6 @@
 {
   "recordedAt": "2026-11-06T23:13:24.538253+00:00",
-  "status": "focused and complete local gates accepted; release and original-message recovery pending",
+  "status": "local gates and exact release accepted; installed phone51; original-message recovery pending",
   "baselineProgram": "5081e629259e33af286304ccd79d91fbd7e8dade",
   "physicalEvidence": "collaboration-phone-queue-family-2026-11-06.json",
   "red": {
@@ -91,7 +91,7 @@
   "testsByteIdentical": true,
   "newCases": 7,
   "fullAccepted": true,
-  "phoneInstalled": false,
+  "phoneInstalled": true,
   "originalPendingMessagesRecovered": false,
   "candidateFiles": {
     "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "008636d24f5bd82d2e133a4f1551986754cee70071df04a6dae4607071eff361",
@@ -160,5 +160,7 @@
       "findings": 0,
       "sha256": "389c5ae396e211a0a0bc876fd100b58d043fe70085d467fd4e747684e0e5e693"
     }
-  }
+  },
+  "phoneVersionCode": 51,
+  "releaseEvidence": "collaboration-release51-2026-11-06.json"
 }
