@@ -29,8 +29,18 @@ patch to the pinned SDK, then run its host `xtask kotlin build-android-library
 with the toolchains above, `CARGO_NDK_PLATFORM=21` and `CARGO_NET_OFFLINE=true`.
 Keep generated Kotlin and JNI together; never combine them with another SDK build.
 
-These files are not yet an assembled or consumed AAR. Before consumption, compile
-the bindings in the pinned upstream Kotlin wrapper, build the required remaining
-ABIs and Swift/XCFramework pair, and prove the native HRIS edit exchange under
-existing owner/admission checks. Android 26.10.23 and Apple 26.10.27 remain unchanged.
-Local history never waits for a point fetch.
+The paired arm64 files now compile into an AAR in 164.980 seconds using Kotlin
+wrapper `c1664f712bed33488b10f33232fb424faf257d49`, Gradle 8.14.2, Java 21 and the
+same NDK. Replace its entire generated Kotlin/JNI pair, then run only
+`:sdk:sdk-android:assembleRelease`; no upstream publication task is needed. The
+wrapper build configuration required no changes. The AAR JNI bytes match the
+generated binary, and compiled Room/RoomInterface expose `loadOrFetchRawEvent`
+with both raw event result types. Upstream consumer rules and the packaged file
+are both empty; this is not minified-consumer acceptance.
+
+The 50,667,076-byte arm64 candidate has SHA-256
+`691c96bb9a502c8ab5a684259a753bc8017fce61c66cfef2e4dd7963bc02da43`.
+It has not been published or consumed. Before consumption, build the required
+remaining ABIs and Swift/XCFramework pair and prove the native HRIS edit exchange
+under existing owner/admission checks. Android 26.10.23 and Apple 26.10.27 remain
+unchanged. Local history never waits for a point fetch.

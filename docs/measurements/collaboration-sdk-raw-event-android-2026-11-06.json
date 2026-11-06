@@ -2,7 +2,7 @@
   "nativeMatchesInitialCompile": true,
   "verifiedAt": "2026-11-06T06:11:50.367169+00:00",
   "candidateOnly": true,
-  "packagedAar": false,
+  "packagedAar": true,
   "consumedByApplication": false,
   "upstream": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
   "patchSha256": "fed8120ba7e7ea88a23cde675d70bb27a3a97304c6c913ad5a9578d28053f76e",
@@ -55,12 +55,34 @@
   "wrapper": {
     "repository": "https://github.com/matrix-org/matrix-rust-components-kotlin",
     "commit": "c1664f712bed33488b10f33232fb424faf257d49",
-    "assembled": false
+    "assembled": true
   },
   "limitations": [
-    "Kotlin files are generated but not compiled into an AAR.",
-    "Only Android arm64 is built; x86_64 and Apple artifacts are pending.",
-    "No product dependency, SDK publication or phone installation changed.",
-    "Native encrypted edit/original/missing-key/cold-store consumption remains unaccepted."
-  ]
+    "Only arm64 is packaged so far. x86_64 and Apple paired artifacts remain pending.",
+    "No application SDK dependency change or native consumer acceptance.",
+    "The wrapper and AAR both have empty upstream consumer rules; no minified application acceptance is claimed."
+  ],
+  "aar": {
+    "candidateOnly": true,
+    "sourceSdkBase": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+    "wrapperCommit": "c1664f712bed33488b10f33232fb424faf257d49",
+    "buildSeconds": 164.98,
+    "bytes": 50667076,
+    "sha256": "691c96bb9a502c8ab5a684259a753bc8017fce61c66cfef2e4dd7963bc02da43",
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "jniSha256": "4e63f1aac9884121050553777d54778a93d66ecf96a90babd1cae625c8911611",
+    "jniMatchesGeneratedPair": true,
+    "classesSha256": "82eb8b49b602134eb1171852a71e379465fc893edca0e67a78db23cfd8665774",
+    "rawEventMethodsAndTypesPresent": true,
+    "minSdk": 21,
+    "consumerRulesMatchUpstream": true,
+    "consumerRulesEmpty": true,
+    "generatedInputsUnchanged": true,
+    "published": false,
+    "applicationDependencyChanged": false,
+    "consumerAcceptance": false,
+    "initialVerifierCorrection": "Removed an incorrect assumption that upstream consumer rules name Matrix/UniFFI packages. The upstream file and packaged file are both empty; no rules or artifact changed."
+  }
 }
