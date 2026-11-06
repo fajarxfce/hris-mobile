@@ -14,6 +14,81 @@ abstract class CollaborationHistoryStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
     @Test
+    fun replayedOriginalsAndRedactionsKeepTheStoredRevisionAndCiphertext() = withDatabase { f ->
+        val original = f.event()
+        val alias = original.copy(eventId = "\$replayed-alias", timestamp = original.timestamp + 1)
+        val redaction = CollaborationHistoryChange.Redacted(alias.eventId, alias.sender)
+        val tombstone = CollaborationHistoryChange.Redacted("\$unseen", original.sender)
+        f.merge(original, alias, f.event(2))
+        for (redacted in listOf(false, true)) {
+            if (redacted) f.merge(redaction, tombstone)
+            val stored = f.raw()
+            val page = f.read()
+            val key = f.keys.read()
+            f.reopen()
+            f.merge(original, alias, original, f.event(2))
+            if (redacted) f.merge(redaction, tombstone, redaction)
+            assertEquals(stored, f.raw())
+            assertEquals(page, f.read())
+            assertEquals(key, f.keys.read())
+        }
+    }
+
+    @Test
+    fun aBatchWithNewMessagesDoesNotRewriteItsReplayedOriginals() = withDatabase { f ->
+        val original = f.event()
+        f.merge(original)
+        val before = f.raw()
+        f.merge(original, f.event(2), original)
+        val after = f.raw()
+        assertEquals(before.checkpoint!!.revision + 1, after.checkpoint!!.revision)
+        for (retained in before.documents) assertEquals(
+            retained,
+            after.documents.single { it.id == retained.id },
+        )
+        assertEquals(2, f.read().messages.size)
+    }
+
+    @Test
+    fun aReplayDoesNotSucceedThroughOwnerReplacementOrCancelledCheckpointReads() =
+        withDatabase { f ->
+            val original = f.event()
+            f.merge(original)
+            val before = f.raw()
+            for (cancel in listOf(false, true)) {
+                var reads = 0
+                val store =
+                    object : ReplicaStore by f.database.replicas {
+                        override suspend fun checkpoint(
+                            scope: ReplicaScope,
+                            partition: String,
+                        ): ReplicaCheckpoint? {
+                            if (++reads == 2) {
+                                if (cancel) throw CancellationException("Fixture cancellation")
+                                f.activate(f.access.copy(sessionId = "replacement-login"))
+                            }
+                            return f.database.replicas.checkpoint(scope, partition)
+                        }
+
+                        override suspend fun commit(
+                            handle: ReplicaHandle,
+                            expectedRevision: Long,
+                            checkpoint: String,
+                            documents: List<ReplicaDocument>,
+                            publish: Boolean,
+                        ): Boolean = error("Replayed history must not commit")
+                    }
+                val replay = suspend {
+                    f.repository(store).merge(f.access, f.conversation, f.room, listOf(original))
+                }
+                if (cancel) assertFailsWith<CancellationException> { replay() }
+                else assertEquals(AppResult.Success(false), replay())
+                f.activate()
+                assertEquals(before, f.raw())
+            }
+        }
+
+    @Test
     fun forwardedHistorySurvivesReopenAliasReplayAndRetainedRedaction() = withDatabase { f ->
         val event = f.event().copy(forwarded = true)
         val alias = event.copy(eventId = "\$forward-alias", timestamp = event.timestamp + 1)

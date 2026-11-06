@@ -85,8 +85,8 @@ internal class CollaborationHistoryBatch(
                 else value
             }
         if (old == null) added++
-        messages[id] = next
-        aliases[aliasId] =
+        if (next != old) messages[id] = next
+        val nextAlias =
             HistoryAliasDto(
                 change.eventId,
                 change.sender,
@@ -94,6 +94,7 @@ internal class CollaborationHistoryBatch(
                 change.timestamp,
                 alias?.redacted == true,
             )
+        if (nextAlias != alias) aliases[aliasId] = nextAlias
     }
 
     private suspend fun redacted(
@@ -109,11 +110,13 @@ internal class CollaborationHistoryBatch(
         alias?.messageId?.let { id ->
             val old = requireNotNull(message(id))
             require(old.sender == change.sender && change.eventId in old.eventIds)
-            messages[id] = old.copy(text = null, redacted = true, latestEdit = null)
+            val next = old.copy(text = null, redacted = true, latestEdit = null)
+            if (next != old) messages[id] = next
         }
-        aliases[aliasId] =
+        val nextAlias =
             alias?.copy(redacted = true)
                 ?: HistoryAliasDto(change.eventId, change.sender, null, null, true)
+        if (nextAlias != alias) aliases[aliasId] = nextAlias
     }
 
     internal suspend fun editEvidence(eventId: String): HistoryEditEvidenceDto? {

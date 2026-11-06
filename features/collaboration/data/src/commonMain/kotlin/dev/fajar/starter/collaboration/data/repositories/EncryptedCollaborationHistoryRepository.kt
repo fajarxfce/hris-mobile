@@ -482,6 +482,9 @@ class EncryptedCollaborationHistoryRepository(
             val count = (previous?.count ?: 0) + mutation.added
             require(count in 0..9_007_199_254_740_991L)
             val documents = mutation.documents(generation, revision)
+            currentCoroutineContext().ensureActive()
+            if (raw != null && documents.isEmpty())
+                return@withKey replicas.checkpoint(scope, partition) == raw
             val checkpoint =
                 codec.checkpoint(generation, revision, count, previous?.hiddenRules ?: 0)
             currentCoroutineContext().ensureActive()

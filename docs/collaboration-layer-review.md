@@ -43,7 +43,9 @@ cases passed; no new copy-menu screenshot was recorded.
 room ViewModels under the account/company navigation graph. The domain use case
 owns combined local context/history/command publication with fresh access checks.
 Android repeated-entry recordings show bubbles during transition, including offline;
-first entry after process start still has233ms of blank body. Final root validation
+visible-room preparation91902546 also shows bubbles during first-entry transitions
+across two offline process starts and one online start (three first + three repeated
+trials). The bound remains three idle prepared/visited rooms. Final root validation
 passed2,280 fresh tests/368.759s after6,938 in the initial full gate; lint has zero issues. Navigation owns cache lifetime; no SDK/Activity or business retry policy
 was added to that cache. The history-pager ownership finding above remains open.
 
@@ -56,10 +58,16 @@ one fixture because the event mock expected the default token; exact synthetic
 crypto-client tokens fixed it. No auth expectation was removed. The reviewed
 [portable patch](../tool/collaboration-sdk-patches/README.md) and
 [test evidence](measurements/collaboration-sdk-raw-event-tests-2026-11-06.json)
-are in Git. No native artifact/version was built, published or consumed. NDK is
-still absent; native encrypted edit proof remains required.
+are in Git. Android arm64 JNI and paired Kotlin sources are now built and hashed with
+NDK28.2.13676358; the AAR and native encrypted edit consumer proof remain pending.
+No shipping SDK version changed. See the newest agent-handoff checkpoint.
 
 Platform product10485916 is already deployed after all14 CI jobs passed. Do not
 replay the rollout or accepted Forward publications. Phone build40 is unchanged;
 announce each future installation and use install-only. Continue the full54-group
 PRD after these increments; neither this review nor local edit acceptance closes it.
+
+Stable encrypted history replay now preserves unchanged records and checkpoint
+revisions; [validation](collaboration-chat-history-replay.md) includes three
+regressions, 2,353 full-gate cases and zero lint issues. This is storage ownership;
+ChatThreadHistoryPager orchestration remains a separate pending domain correction.

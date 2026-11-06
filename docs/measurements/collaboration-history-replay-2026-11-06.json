@@ -1,0 +1,81 @@
+{
+  "date": "2026-11-06",
+  "sourceManifestSha256": "18f21b81ebbb0d3c0b32485bd8dd562e69e59c3d3d84dcaef2b557f0842e8d0d",
+  "runs": {
+    "history-replay1": {
+      "startedAt": "2026-11-06T06:08:17.537738+00:00",
+      "elapsedSeconds": 54.429,
+      "exitCode": 1,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 22,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "history-replay2": {
+      "startedAt": "2026-11-06T06:09:55.867399+00:00",
+      "elapsedSeconds": 59.531,
+      "exitCode": 0,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "history-replay-full1": {
+      "startedAt": "2026-11-06T06:11:50.556338+00:00",
+      "elapsedSeconds": 448.354,
+      "exitCode": 1,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2353,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "history-replay-full2": {
+      "startedAt": "2026-11-06T06:20:22.249890+00:00",
+      "elapsedSeconds": 72.886,
+      "exitCode": 0,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "debugLintIssues": 0,
+  "debugLintReportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+  "fullGateSourceUnchangedBetweenAttempts": true,
+  "firstFullGateFailure": "Only detekt/format scanned nine generated SDK files under a temporary src directory. Generated files were moved outside the application without changing their bytes; no quality rule or product source was changed.",
+  "secondFullGateTests": "Up-to-date; zero fresh cases claimed. The same source passed 2353 fresh tests in the first full gate.",
+  "nativeEvidence": [
+    {
+      "run": 42163759500,
+      "artifactId": 13479924335,
+      "artifactSha256": "803160e64d185c9c128a56b479ab358388df6156779361f049a9d0617b46efd3",
+      "failedAssertion": "HrisProofOriginalHistory.verify:54"
+    },
+    {
+      "run": 42168989689,
+      "artifactId": 13482012332,
+      "artifactSha256": "ff015c70756c536c128ddf59e3cdd774849ed7786e5fde934caecf4b3182fbf9",
+      "failureStage": "validating_completion",
+      "failedAssertion": "HrisProofOriginalHistory.verify:54"
+    }
+  ],
+  "assertionsRelaxed": false,
+  "phoneInstalled": false,
+  "newNativeSdkConsumed": false
+}

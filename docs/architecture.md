@@ -1,5 +1,8 @@
 # Architecture
 
+[History replay](collaboration-chat-history-replay.md) preserves encrypted records
+and revisions when original messages or redactions have not changed.
+
 [Cached room entry](collaboration-chat-first-frame.md) retains bounded screen state
 under the account/company navigation graph and keeps guarded local thread reads
 in the domain use case.

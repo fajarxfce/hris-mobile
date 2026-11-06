@@ -1,5 +1,52 @@
 # Agent continuation — HRIS Mobile
 
+## Stable replay accepted; phone release 41 next — 6 November 2026
+
+The current increment fixes encrypted history replay: unchanged originals, retry
+aliases and redactions keep their ciphertext/checkpoint revision; mixed batches
+write only changed records. The repository checks the same owned checkpoint before
+returning a no-op success. No new presentation helper or weakened native assertion.
+[Contract](collaboration-chat-history-replay.md),
+[evidence](measurements/collaboration-history-replay-2026-11-06.json).
+
+Baseline history-replay1 failed exactly three new cases out of22 in54.429s;
+history-replay2 passed22 in59.531s. Full1 passed2,353 fresh tests/448.354s but quality
+tasks scanned temporary SDK-generated files. Those unchanged artifacts now live at
+.worktrees/matrix-sdk-android-arm64-2026-11-06/main, outside Mobile. Full2 passed
+72.886s with all4,204 product source inputs identical; tests were up-to-date and
+zero fresh cases are claimed for full2. Android debug/proof compile/browser/root,
+format/architecture passed; lint0. All gate drivers drained. Production replay
+drafts HAVE BEEN APPLIED; never reapply them.
+
+Prepared rendering91902546 remains accepted in six candidate6 Android trials.
+Phone40 remains unchanged and reachable. Release41 scripts are prepared at
+.work/release-phone-2026-11-06-build41, NOT EXECUTED. Build from the committed source,
+verify APK, then use its owned-emulator scripts on the retained Bima data. Four
+first/repeated entry recordings are planned (one offline process and one online).
+Inspect frames before marking accepted; announce EACH phone install and run its
+install.py --install-only. Never launch/drive phone UI. The release keeps the
+existing SDK; native raw-event consumption is a separate pending increment.
+
+SDK native arm64 compilation PASS, initial full generation failed994.615s only
+because offline cargo metadata lacked an all-target dependency. Locked metadata
+fetch PASS2.869s; retry PASS1.917s, exact initial native binary preserved. Nine
+Kotlin files +138,559,720-byte JNI verified, four16KB LOAD segments; all source and
+output hashes recorded. Drivers42167/26762/12602 drained. SDK34 also installed.
+Generated pair is copied into isolated Kotlin wrapperc1664f7; only generated files
+are replaced. No AAR build or product dependency change yet. The packaging driver
+.work/sdk-raw-event-2026-11-06/package-android-aar.py is PREPARED ONLY. Source location
+is recorded in generated-location.json; do not use the old android-arm64-2/src path.
+No emulator/heavy local job is active at this checkpoint. Package/test SDK after
+phone delivery, then continue the history-pager layer cleanup and all54 PRD groups.
+
+CI42168989689 also failed exactly HrisProofOriginalHistory.verify:54; new safe
+stage says validating_completion. Its snapshot replay assertion is unchanged and
+must pass with this fix.91902546 native42170117581 and Control42170117574 run;
+5be Control42167279345 PASSED (Apple artifact audited:1,621 cases/179 suites).
+No manual duplicate runs. Platform LIVE10485916/schema116.1 stays unchanged;
+never replay rollout or accepted Forward publications. Starter foundation port
+remains accepted; no new reusable product change in this HRIS storage fix.
+
 ## Native raw-event Android build active — 6 November 2026
 
 Prepared room rendering is committed/pushed in91902546. Six Android trials show
