@@ -1,0 +1,199 @@
+{
+  "date": "2026-11-06",
+  "programCommit": "35dfec8223d184757486d0086791f50928e9eb45",
+  "kind": "audit of the completed first native CI run",
+  "runs": [
+    {
+      "id": 42288554801,
+      "conclusion": "success",
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42288554801"
+    }
+  ],
+  "artifactDigestsVerifiedAgainstGitHubRest": true,
+  "platformFixturePin": "62ee11818a4928b2598d046c7b3283bf3e416554",
+  "platformPinSource": ".github/workflows/collaboration-hris.yml at programCommit",
+  "artifacts": [
+    {
+      "artifactId": 13542013503,
+      "name": "native-hris-arm64-evidence",
+      "sha256": "a5b790d593e0aacedb65c30df98280d0160be8923fabc86a661bd9c9d3ce995c",
+      "bytes": 283852,
+      "suites": 68,
+      "counts": {
+        "tests": 403,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "abi": {
+        "abi": "arm64-v8a",
+        "apkSha256": "e77edc32f7ffded609e707e558a7377bfdb15a6bfea188285c2fc5868236a0d3"
+      },
+      "nativeCases": [
+        {
+          "passed": true,
+          "cleanup": true,
+          "sameGatewayAfterRenewal": true,
+          "processRestartedAfterAck": true,
+          "coldHistoryRecoveredOffline": true,
+          "gatewayUnavailableAfterProcessDeath": true,
+          "quotedReplyDecrypted": true,
+          "quotedReplyRecoveredOffline": true,
+          "processRestartedAfterCompletion": true,
+          "retainedConfirmedQueueScenario": true,
+          "confirmedNativeQueueRestored": true,
+          "confirmedNativeQueueRetryNoop": true,
+          "confirmedNativeQueueSettledOffline": true,
+          "encryptedSendCount": 3,
+          "nativeRedactionRequests": 0
+        },
+        {
+          "passed": true,
+          "cleanup": true,
+          "sameGatewayAfterRenewal": true,
+          "processRestartedAfterAck": true,
+          "coldHistoryRecoveredOffline": true,
+          "gatewayUnavailableAfterProcessDeath": true,
+          "quotedReplyDecrypted": true,
+          "quotedReplyRecoveredOffline": true,
+          "processRestartedAfterCompletion": true,
+          "retainedConfirmedQueueScenario": false,
+          "encryptedSendCount": 3,
+          "nativeRedactionRequests": 0
+        }
+      ],
+      "workers": [
+        {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 176,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        },
+        {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 176,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        },
+        {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 176,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        },
+        {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 1,
+          "workManagerExecutionAccepted": true,
+          "retryCancellationAccepted": false
+        }
+      ],
+      "notifications": {
+        "complete": true,
+        "fixtureAbsent": true,
+        "fixtureUninstalled": true,
+        "fixtureDataCleared": true
+      }
+    },
+    {
+      "artifactId": 13541292904,
+      "name": "native-hris-evidence",
+      "sha256": "c6e61051453ff2a7aaca3c4d19fdfa9a83abc2a89cdbc6a177fa3965175d5cd0",
+      "bytes": 284010,
+      "suites": 68,
+      "counts": {
+        "tests": 403,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "abi": {
+        "abi": "x86_64",
+        "apkSha256": "06fd966755e2432f75837cf6d1b73aa655c2c1b4046e9005ca731b8ad486047c"
+      },
+      "nativeCases": [
+        {
+          "passed": true,
+          "cleanup": true,
+          "sameGatewayAfterRenewal": true,
+          "processRestartedAfterAck": true,
+          "coldHistoryRecoveredOffline": true,
+          "gatewayUnavailableAfterProcessDeath": true,
+          "quotedReplyDecrypted": true,
+          "quotedReplyRecoveredOffline": true,
+          "processRestartedAfterCompletion": true,
+          "retainedConfirmedQueueScenario": false,
+          "encryptedSendCount": 3,
+          "nativeRedactionRequests": 0
+        },
+        {
+          "passed": true,
+          "cleanup": true,
+          "sameGatewayAfterRenewal": true,
+          "processRestartedAfterAck": true,
+          "coldHistoryRecoveredOffline": true,
+          "gatewayUnavailableAfterProcessDeath": true,
+          "quotedReplyDecrypted": true,
+          "quotedReplyRecoveredOffline": true,
+          "processRestartedAfterCompletion": true,
+          "retainedConfirmedQueueScenario": true,
+          "confirmedNativeQueueRestored": true,
+          "confirmedNativeQueueRetryNoop": true,
+          "confirmedNativeQueueSettledOffline": true,
+          "encryptedSendCount": 3,
+          "nativeRedactionRequests": 0
+        }
+      ],
+      "workers": [
+        {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 176,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        },
+        {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 176,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        },
+        {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 1,
+          "workManagerExecutionAccepted": true,
+          "retryCancellationAccepted": false
+        },
+        {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 176,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        }
+      ],
+      "notifications": {
+        "complete": true,
+        "fixtureAbsent": true,
+        "fixtureUninstalled": true,
+        "fixtureDataCleared": true
+      }
+    }
+  ],
+  "controlRun": {
+    "id": 42288555007,
+    "status": "in_progress",
+    "portable": "success",
+    "apple": "building iOS application host"
+  },
+  "physicalPhoneAcceptance": false,
+  "physicalPendingSendReport": "open",
+  "rerunDispatchedForThisAudit": false,
+  "sdkDistributionChanged": false
+}

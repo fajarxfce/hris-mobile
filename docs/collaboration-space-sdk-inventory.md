@@ -65,3 +65,9 @@ recovery, stop/join the old SDK and coordinate freeze/drain/adoption before rout
 organization foreground/background work. The current company runtime stays intact.
 Phone50's long-pending report remains open until there is a physical send result.
 All remaining chat, voice/video and meeting requirements continue independently.
+
+The first native CI run at35dfec82 also passed on ARM64 and x86_64:403 cases in68
+suites per ABI, zero failures/errors/skips. Exact REST artifact digests, original
+queue recovery, cold history, quoted replies, worker and notification cleanup were
+audited without redispatch. [CI evidence](measurements/collaboration-space-sdk-inventory-ci-2026-11-06.json).
+The first control run's portable job passed; Apple host compilation remains running.
