@@ -86,25 +86,41 @@ Core1 failed test naming convention; earlier successful runs had warnings now re
 No application/native-Android settlement acceptance yet. Caller still owns trusted
 acceptance proof; the native API never authenticates an arbitrary supplied event ID.
 
-ONLY local heavy job is Android queue candidate71588, driver
-.work/sdk-confirmed-queue-2026-11-06/build-android.py arm64. The SDK worktree and
-nine fingerprinted inputs are FROZEN. Two Cargo jobs, offline locked dependencies,
-NDK28.2.13676358/API21; outputs .worktrees/matrix-sdk-queue-android-arm64-2026-11-06.
-No emulator active. Verify its JNI/Kotlin pair, build remaining ABIs sequentially,
-package and prove application integration. Do not mix with the accepted OLD raw-event
-candidate. New operations are still absent from the shipping SDK/application.
+Android queue arm64 build71588 FINISHED470.596s with unchanged SDK inputs.
+New native138,602,760 bytes SHA43856af213036df7c2f70dabf7b387a7b60f21dbd79a0a23e69b4a814354a8d3;
+all nine generated Kotlin files, raw/queue symbols and four16KiB LOAD segments
+verified. Output .worktrees/matrix-sdk-queue-android-arm64-2026-11-06/main.
+[Evidence](measurements/collaboration-sdk-confirmed-queue-android-2026-11-06.json).
+No AAR yet. Do not mix with the earlier raw-only AAR/consumer. Build remaining ABIs
+sequentially after the active application test; SDK source is accepted and unchanged.
 
-Next domain/data work: recover unknown original native transactions from immutable
-completion proof before new staging; preserve uncertain Staging.before provenance,
-active mapped commands, exact sender/device/room/content and queue ownership. Do not
-silently discard unresolved IDs or reconstruct fingerprints from text alone. Use
-owning use cases/repository adapters, no VM policy or generic worker helpers. Reapply
-the retained real-worker/fake-SDK regression and prove the next send completes.
+ONLY local heavy job is application66462, driver
+.work/sdk-confirmed-queue-2026-11-06/check-application.py application-2. Main Mobile
+has18 UNCOMMITTED Kotlin source/test files;4,212 inputs are frozen during this run.
+New SettleCollaborationCompletedQueue use case reads exact paused originals, matches
+immutable completions under native family/device/room/content and closes only those
+entries. It preserves mapped work and uniquely recoverable Staging; referenced
+Staging.before entries stay protected. Worker calls the use case, not repo policy.
+Android raw datasource/repository adapters are drafted but CANNOT compile against
+shipping SDK26.10.23. They require the new paired queue AAR. Do not commit/push
+these product sources before candidate compilation and meaningful full acceptance.
+
+The preserved worker reproduction patch has been REAPPLIED and the fake SDK now
+implements exact settlement. New tests:14 domain recovery cases and4 full-content
+mapper cases. application-2 runs those plus both foreground/background worker
+suites; no result yet. application-1 failed before tests due to wrong task name
+jvmTest; convention uses desktopTest, driver corrected without source changes.
+After draining, inspect results. Review unnecessary remote room/setup reads in the
+new local settlement path; it can borrow the worker's already-admitted timeline
+provenance while preserving current account/company/SDK fences. No phone root-cause
+or native application fix acceptance claimed yet. Continue x86_64/new candidate
+packaging, real JNI worker proof, remaining ABIs/Apple and normal PRD work.
+
 Latest phone reconnect09:36UTC timed out18s; question remains pending, accepted43
-awaits install-only. Native42191546121 on46bec39a now SUCCESS: artifact13491584498
+awaits install-only. Native42191546121 on46bec39a SUCCESS: artifact13491584498
 SHAec91d3555fea3293dce583d0fef9ccc96cd7a07f03f8f1fd417023f93619abaf,
-381 XML cases/66 suites and all six native result groups/cleanup verified. Control
-42191546066 still running; do not dispatch duplicates.
+381 XML cases/66 suites and all six native result groups/cleanup verified;105dd7dd
+records this. Control42191546066 still running09:55UTC; do not dispatch duplicates.
 
 SDK x86_64 driver95397 is FINISHED and drained:901.084s,142,673,032 bytes,
 SHA0f9d908ef616c650949fedd51c97c0ce5e5c2d98810606731bc811634acf3cab.
