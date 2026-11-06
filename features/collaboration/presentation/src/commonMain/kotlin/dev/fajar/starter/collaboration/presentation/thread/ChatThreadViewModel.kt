@@ -168,6 +168,9 @@ class ChatThreadViewModel(
         }
         on<ChatThreadEvent.LocalReadRetryRequested> { if (visible) observeLocal() }
         on<ChatThreadEvent.Entered>(::onEntered)
+        on<ChatThreadEvent.LocalPrepared> {
+            if (!visible && observation?.isActive != true) observeLocal(it.accessHint)
+        }
         on<ChatThreadEvent.Stopped>(::onStopped)
         on<ChatThreadEvent.RouteReleased> {
             onStopped(ChatThreadEvent.Stopped)
@@ -236,7 +239,8 @@ class ChatThreadViewModel(
         visible = true
         forwarding.resume()
         reconnectAttempt = 0
-        if (observation?.isActive != true) observeLocal(event.accessHint)
+        if (observation?.isActive != true || (context == null && state.value.localFailure != null))
+            observeLocal(event.accessHint)
         else if (context != null) connect()
     }
 

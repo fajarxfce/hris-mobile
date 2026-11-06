@@ -10,6 +10,11 @@ sealed interface ChatThreadEvent {
     /** A navigation hint starts private reads earlier; domain publication still verifies access. */
     data class Entered(val accessHint: CollaborationLocalAccess? = null) : ChatThreadEvent
 
+    /**
+     * Reads owned local content while the destination is still visible in the conversation list.
+     */
+    data class LocalPrepared(val accessHint: CollaborationLocalAccess) : ChatThreadEvent
+
     data object Stopped : ChatThreadEvent
 
     data object RouteReleased : ChatThreadEvent

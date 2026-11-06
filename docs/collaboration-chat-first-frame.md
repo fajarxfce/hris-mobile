@@ -1,9 +1,38 @@
 # Chat first-frame rendering — 6 November 2026
 
-Repeated entry now renders saved bubbles during the Android navigation transition,
-both offline and online. The first room opening after process restart still showed
-about233ms of blank body after the header and remains an open performance issue.
-Phone build40 is unchanged. [Measured candidate and validation](measurements/collaboration-chat-first-frame-retention-2026-11-06.json).
+Prepared conversations now show saved bubbles during their first Android navigation
+transition, including after a process restart with networking disabled. Six recordings
+across three fresh processes retained nine messages and showed no blank room after
+the header. Phone build 40 remains unchanged. This applies to bounded prepared
+conversations; other destinations still use the ordinary guarded local-read path.
+[Latest evidence](measurements/collaboration-chat-visible-preparation-2026-11-06.json).
+
+## Visible conversation preparation
+
+The navigation graph now prepares up to three visible conversation destinations
+when list scrolling settles. It uses the existing bounded room stores and the
+normal guarded local reader. Previously opened rooms have priority; active entries
+remain independent. Unopened preparations are cancelled when their list candidates
+change, and graph disposal clears every store. Other rooms use the ordinary local
+read path, so this is not an instant-opening claim for every destination.
+
+A typed LocalPrepared event keeps the room hidden while its state is built. It
+starts no SDK connection, provisioning, delivery, draft write or read receipt.
+An entry adopts pending preparation without restarting it. A failed local read can
+retry on entry, while confirmed access denial still prevents content publication.
+
+Focused checks passed 233 cases. A real Koin/NavHost test reuses the prepared model
+and displays saved text at 32 ms during its first 180 ms transition. Full root,
+browser and Android checks passed 2,299 fresh cases in 375.906 seconds on 4,204
+unchanged inputs; lint has zero issues. The signed release candidate built in
+87.445 seconds. All twelve adjacent Android frames were inspected. First-entry
+header-to-bubble measurements are 0/0/−33 ms, compared with the previous
+candidate’s 200/133/133 ms; these are approximate 30 fps observations, not a phone
+benchmark. Bubbles are visible while the list and room overlap. Final online
+reentry showed no reconnect prompt or authentication rejection diagnostics.
+No messages were sent; settings were restored and the emulator stopped with its
+original data and keys retained.
+[Preparation evidence](measurements/collaboration-chat-visible-preparation-2026-11-06.json).
 
 ## Guarded first-opening read scheduling
 
@@ -27,8 +56,11 @@ First-entry header-to-bubble gaps are200/133/133ms; repeated entry is0/0/−33ms
 All12 adjacent frames were inspected: first entries still render an empty room
 before bubbles, whereas repeated entries render bubbles during the transition.
 The final online repeat also shows a contextual reconnect prompt. Compare that
-cold-online session behavior against the prior candidate before release; do not
-infer that read scheduling caused it. All settings restored, owned emulator stopped
+cold-online session behavior was subsequently compared against the prior candidate:
+three fresh first openings (4/5/4) retained nine rows and showed no exact reconnect
+prompt or authentication rejection diagnostics. The earlier detector omitted the
+localized period, and those first detector results remain invalid. These corrected
+observations do not establish the original prompt’s cause. All settings restored, owned emulator stopped
 with data/keys retained, no sends or phone action. Root/browser/Android validation
 passed after correcting the separate native-proof app to call Entered(). The first
 full attempt passed2,288 fresh tests but failed that proof compilation; the final

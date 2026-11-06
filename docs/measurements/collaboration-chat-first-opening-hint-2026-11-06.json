@@ -133,5 +133,22 @@
       },
       "scope": "Root check, collaboration browser tests, Android debug, lint, and native proof compile succeeded. Tests were up-to-date: zero newly executed cases are claimed. The wrapper no longer requires a positive fresh-test count; source-integrity, Gradle exit and test-failure checks remain."
     }
-  ]
+  ],
+  "coldOnlineComparison": {
+    "date": "2026-11-06",
+    "candidateOrder": [
+      4,
+      5,
+      4
+    ],
+    "freshProcesses": 3,
+    "visibleRowsEach": 9,
+    "reconnectPromptSeen": false,
+    "authenticationRejectionDiagnosticsSeen": false,
+    "newMessagesSent": 0,
+    "sameInstalledAppIdentity": true,
+    "settingsRestored": true,
+    "priorDetectorFailure": "An earlier comparison omitted the localized period, so its prompt booleans were invalid. These three new trials use the exact resource text.",
+    "conclusion": "The earlier reconnect prompt did not recur in either build. This does not establish its original root cause."
+  }
 }

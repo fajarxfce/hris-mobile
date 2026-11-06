@@ -13,16 +13,38 @@ import dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModel
  */
 internal class ChatThreadViewModelStores(private val capacity: Int = 3) : ViewModel() {
     private val idle = linkedMapOf<String, ThreadStore>()
-    private val active = mutableSetOf<ChatThreadViewModelOwner>()
+    private val active = mutableMapOf<ChatThreadViewModelOwner, String>()
     private var closed = false
 
     init {
         require(capacity in 1..3)
     }
 
+    /** Prepare visible list destinations without displacing a previously opened room. */
+    fun prepare(conversationIds: List<String>): Map<String, ThreadStore> {
+        check(!closed)
+        val requested = conversationIds.distinct().take(capacity)
+        idle.keys.toList().forEach { id ->
+            if (id !in requested && idle[id]?.wasOpened == false) idle.remove(id)?.clear()
+        }
+        return buildMap {
+            requested.forEach { id ->
+                if (id !in active.values) {
+                    val stored =
+                        idle[id]
+                            ?: if (idle.size < capacity) {
+                                ThreadStore().also { idle[id] = it }
+                            } else null
+                    if (stored != null) put(id, stored)
+                }
+            }
+        }
+    }
+
     fun open(conversationId: String): ChatThreadViewModelOwner {
         check(!closed)
         val stored = idle.remove(conversationId) ?: ThreadStore()
+        stored.wasOpened = true
         return ChatThreadViewModelOwner(stored) { owner ->
                 active.remove(owner)
                 if (!closed) {
@@ -33,16 +55,21 @@ internal class ChatThreadViewModelStores(private val capacity: Int = 3) : ViewMo
                         model?.onEvent(ChatThreadEvent.RouteReleased)
                         idle.remove(conversationId)?.clear()
                         idle[conversationId] = stored
-                        while (idle.size > capacity) idle.remove(idle.keys.first())?.clear()
+                        while (idle.size > capacity) {
+                            val oldest =
+                                idle.entries.firstOrNull { !it.value.wasOpened }?.key
+                                    ?: idle.keys.first()
+                            idle.remove(oldest)?.clear()
+                        }
                     }
                 }
             }
-            .also(active::add)
+            .also { active[it] = conversationId }
     }
 
     override fun onCleared() {
         closed = true
-        active.forEach { it.closeGraph() }
+        active.keys.forEach { it.closeGraph() }
         active.clear()
         idle.values.forEach { it.clear() }
         idle.clear()
@@ -52,8 +79,17 @@ internal class ChatThreadViewModelStores(private val capacity: Int = 3) : ViewMo
 internal class ThreadStore {
     val models = ViewModelStore()
     var model: ChatThreadViewModel? = null
+        private set
+
+    var wasOpened = false
     var closed = false
         private set
+
+    fun bind(model: ChatThreadViewModel) {
+        check(!closed)
+        check(this.model == null || this.model === model)
+        this.model = model
+    }
 
     fun clear() {
         if (closed) return
@@ -78,8 +114,7 @@ internal class ChatThreadViewModelOwner(
 
     fun bind(model: ChatThreadViewModel) {
         check(!released && !stored.closed)
-        check(stored.model == null || stored.model === model)
-        stored.model = model
+        stored.bind(model)
     }
 
     fun closeGraph() = stored.clear()

@@ -1,5 +1,58 @@
 # Agent continuation — HRIS Mobile
 
+## Prepared room first-entry rendering accepted — 6 November 2026
+
+The visible-room preparation increment is validated and ready to commit/push.
+[Contract](collaboration-chat-first-frame.md), [evidence](measurements/collaboration-chat-visible-preparation-2026-11-06.json).
+The account/company graph prepares up to three visible idle rooms after list
+scrolling settles, sharing its existing cache bound. Previously visited rooms take
+priority; active entries stay independent. LocalPrepared keeps visible=false and
+starts no SDK, provisioning, sends, draft writes or read receipts. Pending reads
+continue on entry; failed local reads can retry under the unchanged denial gate.
+Other rooms still use the ordinary guarded-read path; do not claim all-room preloading.
+
+Focused preparation1 PASS233/132.714s. Actual Koin/NavHost navigation2 PASS2/44.985s,
+including prepared rows at32ms of the first180ms transition. Its initial compile
+failure was a waitUntil argument-label mistake, not a relaxed assertion. Full
+root/browser/Android/proof compile/lint PASS2,299 fresh/375.906s on4,204 unchanged
+inputs; lint0. All those drivers are drained.
+
+Candidate6 arm64 devRelease41 built/linted87.445s, source base a5f0e06c plus this
+increment. SHA40a8705e3ac3424ff172351c4433c2924e96d65ca683c61086aac3db50686e31,
+88,584,188 bytes, original dev signer, nondebuggable,16KiB aligned and private
+configuration/backup checks passed. Six recordings across three fresh processes
+(two offline startups, one online) retained nine rows without sends. First-entry
+header-to-bubble gaps0/0/−33ms; repeated0/−33/−33ms. All12 adjacent frames inspected:
+bubbles are visible during every list/room transition. This accepts the prepared
+conversation, not a physical-phone benchmark or every uncached destination.
+Final online repeat had no exact reconnect prompt or ChatAuth diagnostics.
+
+Candidate4/5/4 cold-online first-entry comparison also completed: nine rows each,
+no exact reconnect prompt or ChatAuth diagnostics. An earlier detector omitted the
+localized period; those earlier prompt booleans are INVALID. The corrected first-
+entry comparison and candidate6 repeat did not reproduce the old prompt; its exact
+original cause is not established. All capture/analysis/verification drivers drained.
+Emulator3152948/startTicks161995778 stopped05:41:04; all original data/keys retained.
+No emulator or heavy local job is active. Phone40 remains installed and was reachable
+at05:30. Announce every phone installation and use install-only; never drive its UI.
+
+Pushed: Mobile762b715a preserves the SDK raw-event patch/evidence; a5f0e06c pins CI
+fixtures to Platformef8a41b3 for bounded failure stages. Platform runtime remains
+LIVE10485916/schema116.1; never replay rollout or accepted Forward sends. Starter
+queued-effect retirement is accepted locally and on Apple in f92b272/dd40d24.
+Mobile74152 Control42163759602 passed portable+Apple. Main native42163759500 was
+still running at05:31; new CI-only pin will queue its own automatic run. Do not
+manually duplicate runs. Old dcfea native42162194348 failed only its main SDK case
+with generic RuntimeError; worker/scheduled/notification proofs passed.
+
+NEXT: commit/push this measured increment, then native SDK artifacts/edit exchange,
+phone update and the remaining layer audit/all54 PRD groups. Native raw-event test5
+PASS9/32.474s, but Android/Apple bindings are unchanged. The exact patch and public
+evidence are in tool/collaboration-sdk-patches; NDK remains absent. The private
+android-artifact-next.md is a plan only: no SDK artifact workflow/install/build has
+run. Do not reapply stale isolated SDK drafts. ChatThreadHistoryPager orchestration
+in presentation still needs an owning domain use case. Do not stop at this milestone.
+
 ## Cached room entry accepted; first process opening next — 6 November 2026
 
 The first-frame increment is committed/pushed in74152c0b after CI-only dcfea4f3.

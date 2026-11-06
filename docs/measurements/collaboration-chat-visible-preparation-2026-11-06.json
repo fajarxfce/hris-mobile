@@ -1,0 +1,165 @@
+{
+  "status": "Local checks and actual Android first-entry rendering accepted for the prepared conversation. Other destinations retain the ordinary guarded-read path.",
+  "gates": {
+    "thread-preparation1": {
+      "startedAt": "2026-11-06T05:20:42.275966+00:00",
+      "elapsedSeconds": 132.714,
+      "exitCode": 0,
+      "sourceFiles": 4203,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 233,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "thread-preparation-navigation1": {
+      "startedAt": "2026-11-06T05:23:10.292964+00:00",
+      "elapsedSeconds": 27.89,
+      "exitCode": 1,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "thread-preparation-navigation2": {
+      "startedAt": "2026-11-06T05:23:59.230849+00:00",
+      "elapsedSeconds": 44.985,
+      "exitCode": 0,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "thread-preparation-full1": {
+      "startedAt": "2026-11-06T05:25:15.260377+00:00",
+      "elapsedSeconds": 375.906,
+      "exitCode": 0,
+      "sourceFiles": 4204,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2299,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "behavior": "Prepare up to three currently visible, idle conversations after list scrolling settles. Navigation owns retained models; typed local preparation never enters foreground delivery. Previously visited rooms have priority over preparatory entries.",
+  "boundaries": [
+    "No API or SDK acquisition from preparation",
+    "No sends, draft writes or read receipts while hidden",
+    "Fresh domain session/workspace/admission checks still gate each publication",
+    "Unopened entries cancel when removed; graph disposal clears all entries",
+    "Pending preparation continues on entry; failed local reads may retry without reopening a retained denial"
+  ],
+  "integration": "Actual Koin and NavHost reuse the prepared model and display saved text32ms into a180ms first-entry transition.",
+  "androidFirstOpeningAccepted": true,
+  "phoneInstalled": false,
+  "limitations": [
+    "Only up to three visible idle destinations are prepared. Previously visited rooms can occupy that capacity. Other destinations retain the ordinary guarded local-read path.",
+    "The new desktop integration initially failed compilation because waitUntil received an integer as its optional message argument; using the named timeout preserves the assertion."
+  ],
+  "artifact": {
+    "sha256": "40a8705e3ac3424ff172351c4433c2924e96d65ca683c61086aac3db50686e31",
+    "bytes": 88584188,
+    "versionCode": 41,
+    "variant": "devRelease",
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "debuggable": false,
+    "diagnosticMarkersAbsent": true,
+    "baseCommit": "a5f0e06c",
+    "candidateOnly": true
+  },
+  "build": {
+    "startedAt": "2026-11-06T05:32:26.988741+00:00",
+    "elapsedSeconds": 87.445,
+    "exitCode": 0
+  },
+  "capture": {
+    "startedAt": "2026-11-06T05:38:13.364030+00:00",
+    "complete": true,
+    "settingsRestored": true,
+    "newMessagesSent": 0,
+    "phoneTouched": false,
+    "hierarchyInspectedOnlyAfterVideo": true,
+    "freshProcesses": 3,
+    "firstProcessNetwork": [
+      false,
+      false,
+      true
+    ]
+  },
+  "visualReview": "All twelve adjacent frames inspected at original resolution. Every first/repeated opening shows bubbles while the room and conversation list overlap during transition. No blank room follows a rendered header in these trials. Threshold timing is approximate at30fps; faint bubbles can precede detection.",
+  "reviewImageSha256": "cd9858f26be702e2e2e738964bb70d381e6c19d156dfd5bfb67f0db1140e0b74",
+  "measurementMethod": "30fps resampling; dark ink in two fixed video regions; 10% of observed range above initial background; inspect detection frames before accepting",
+  "trials": [
+    {
+      "name": "offline-1-first",
+      "firstOpening": true,
+      "visibleMessageRows": 9,
+      "blankAfterArrowMillis": 0.0,
+      "bubbleAfterFullArrowMillis": 0.0,
+      "videoSha256": "f0f9b4ed844824d35886a83fa8e747446c62704d45b4dc6dac7b40395e70f750"
+    },
+    {
+      "name": "offline-1-repeat",
+      "firstOpening": false,
+      "visibleMessageRows": 9,
+      "blankAfterArrowMillis": 0.0,
+      "bubbleAfterFullArrowMillis": -66.667,
+      "videoSha256": "7ea224f28f2ca270d67f9ded5b76b467c060b9cf9f3c72fff69eca6bbda23bd8"
+    },
+    {
+      "name": "offline-2-first",
+      "firstOpening": true,
+      "visibleMessageRows": 9,
+      "blankAfterArrowMillis": 0.0,
+      "bubbleAfterFullArrowMillis": -33.333,
+      "videoSha256": "74c8738ea2dfad8cb00a79c7d4df6ec685fd9a436c2a0fab2ce7793092eea7a1"
+    },
+    {
+      "name": "offline-2-repeat",
+      "firstOpening": false,
+      "visibleMessageRows": 9,
+      "blankAfterArrowMillis": -33.333,
+      "bubbleAfterFullArrowMillis": -66.667,
+      "videoSha256": "063114f948f94f6974eabed462df4bfef69dcffab6dabe9a29b34ee0878e3f3e"
+    },
+    {
+      "name": "online-1-first",
+      "firstOpening": true,
+      "visibleMessageRows": 9,
+      "blankAfterArrowMillis": -33.333,
+      "bubbleAfterFullArrowMillis": -66.667,
+      "videoSha256": "25de2b1cb01d75cd88dfe004019eda8dfb41a89f20a2f310558464569d77963b"
+    },
+    {
+      "name": "online-1-repeat",
+      "firstOpening": false,
+      "visibleMessageRows": 9,
+      "blankAfterArrowMillis": -33.333,
+      "bubbleAfterFullArrowMillis": -33.333,
+      "videoSha256": "ea3329dd35b30574e740637ea9e390982d1117fbbc857e7cebbc41cd5b243bd4"
+    }
+  ],
+  "finalOnlineState": {
+    "afterOnlineFirstAndRepeat": true,
+    "reconnectPromptVisible": false,
+    "authDiagnostics": [],
+    "phoneTouched": false
+  },
+  "emulatorStopped": true,
+  "dataAndKeysRetained": true
+}

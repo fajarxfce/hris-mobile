@@ -6,6 +6,49 @@ import kotlin.test.*
 
 class ChatThreadViewModelStoresTest {
     @Test
+    fun preparationUsesTheSameBoundAndDoesNotDisplaceVisitedOrActiveRooms() {
+        val graph = ViewModelStore()
+        val cache = ChatThreadViewModelStores(2).also { graph.put("rooms", it) }
+        val route = ViewModelStore()
+        val live = ViewModelStore()
+        try {
+            val opened = cache.open("visited").also { route.put("owner", it) }
+            val visited = Probe().also { opened.viewModelStore.put("probe", it) }
+            route.clear()
+            val active = cache.open("active").also { live.put("owner", it) }
+            val activeProbe = Probe().also { active.viewModelStore.put("probe", it) }
+            val prepared = cache.prepare(listOf("first", "second", "third"))
+            assertEquals(setOf("first"), prepared.keys)
+            val old = Probe().also { prepared.getValue("first").models.put("probe", it) }
+            assertTrue(cache.prepare(listOf("active")).isEmpty())
+            assertEquals(1, old.cleared)
+            assertEquals(0, activeProbe.cleared)
+            assertEquals(0, visited.cleared)
+            val next = cache.prepare(listOf("second", "third"))
+            assertEquals(setOf("second"), next.keys)
+            val owner = cache.open("second").also { route.put("owner", it) }
+            assertSame(next.getValue("second").models, owner.viewModelStore)
+        } finally {
+            route.clear()
+            live.clear()
+            graph.clear()
+        }
+    }
+
+    @Test
+    fun graphDisposalClearsUnopenedPreparationAndRejectsLatePreparation() {
+        val graph = ViewModelStore()
+        val cache = ChatThreadViewModelStores().also { graph.put("rooms", it) }
+        val prepared = cache.prepare(listOf("first", "first", "second", "third", "fourth"))
+        assertEquals(3, prepared.size)
+        val probes =
+            prepared.values.map { stored -> Probe().also { stored.models.put("probe", it) } }
+        graph.clear()
+        assertTrue(probes.all { it.cleared == 1 })
+        assertFailsWith<IllegalStateException> { cache.prepare(listOf("late")) }
+    }
+
+    @Test
     fun removedRouteCanReopenItsSameModelWithANewEntryOwner() {
         val graph = ViewModelStore()
         val cache = ChatThreadViewModelStores().also { graph.put("rooms", it) }

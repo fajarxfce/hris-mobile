@@ -263,6 +263,9 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppInco
                                     topBar = {},
                                     active = active,
                                     bottomPadding = bottomPadding,
+                                    threadGraphOwner = {
+                                        controller.getBackStackEntry("application/$scope")
+                                    },
                                     onNewChat = {
                                         controller.navigate(ChatParticipantsRoute) {
                                             launchSingleTop = true

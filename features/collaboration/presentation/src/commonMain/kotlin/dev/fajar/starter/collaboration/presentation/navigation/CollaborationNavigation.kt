@@ -75,7 +75,14 @@ fun NavGraphBuilder.collaborationRoutes(
         },
 ) {
     composable<ChatInboxRoute> {
-        ChatInboxContent(workspaceId, onNewChat, onSavedReplies, onConversation, onBack)
+        ChatInboxContent(
+            workspaceId,
+            onNewChat,
+            onSavedReplies,
+            onConversation,
+            onBack,
+            threadGraphOwner = threadGraphOwner,
+        )
     }
     composable<ChatSavedRepliesRoute> {
         SavedRepliesEntry(workspaceId, "", onSavedReply, onConversation, onBack)
@@ -121,11 +128,17 @@ fun ChatInboxContent(
     topBar: (@Composable () -> Unit)? = null,
     active: Boolean = true,
     bottomPadding: Dp = 8.dp,
+    threadGraphOwner: (() -> ViewModelStoreOwner)? = null,
 ) {
     val vm = koinViewModel<ChatInboxViewModel>(parameters = { parametersOf(workspaceId) })
     val state by vm.state.collectAsStateWithLifecycle()
     val list = rememberLazyListState()
     if (active) {
+        if (threadGraphOwner != null) {
+            val graphOwner = remember(workspaceId) { threadGraphOwner() }
+            val stores = viewModel(viewModelStoreOwner = graphOwner) { ChatThreadViewModelStores() }
+            PrepareVisibleChatThreads(workspaceId, state, list, stores)
+        }
         LifecycleStartEffect(vm) {
             vm.onEvent(ChatInboxEvent.Entered)
             onStopOrDispose { vm.onEvent(ChatInboxEvent.Stopped) }
