@@ -1,5 +1,51 @@
 # Agent continuation — HRIS Mobile
 
+## Release 41 render passed; transient SDK auth recovery under investigation — 6 November 2026
+
+Mobileac7668ae fixes stable history replay, abccff51 records paired SDK outputs;
+both are pushed. APK41 from exact abccff516e5303636713f4d84a041cb68a3d5468 built
+108.555s, lint0, source unchanged, 88,584,188 bytes. SHA
+4dfadc60fdc7c0589b344520cb3cbc7dd33c6d12387f65d0307e3c246d82aa0b. Signer, private API,
+Firebase app, backup exclusions, nondebuggable release and16KB zip alignment pass.
+The build preflight initially referenced failed full1 and correctly stopped before
+building; it was corrected to successful unchanged-source full2. Build86434 drained.
+
+Owned emulator3505788/startTicks162303905 booted24.358s, installed the exact APK in
+6.2s without clearing data/keys. Four recordings completed: offline fresh/repeat
+and online fresh/repeat, nine rows each, no sends, settings restored. Header-to-
+bubble gaps−33/0/0/−33ms. All8 adjacent frames inspected and rendering accepted:
+bubbles appear during the transition. HOWEVER online-repeat visibly contains the
+contextual reconnect prompt during transition. It has disappeared at the final
+hierarchy read, but PID3939 log matching found SoftLogout. Crash/ChatAuthRejected
+were absent. The exact auth event details were not archived before stopping.
+Do not infer its cause. A similar prompt had occurred in candidate5 previously;
+clean first-entry comparisons did not establish its origin.
+
+PHONE STILL40. Do NOT install41 yet: release-acceptance.json is explicitly false,
+and install.py now requires that acceptance. Continue session-recovery diagnosis,
+using the original retained Bima userdata. The previous final-state shell continued
+cleanup/analysis after its auth assertion failed; its final exit0 DOES NOT mean
+recovery passed. Capture28654 and inspection17227 drained; emulator stopped at
+06:29:15 with all data/keys retained. No emulator/heavy local job is active.
+Private evidence/scripts: .work/release-phone-2026-11-06-build41. Announce each phone
+installation, use install-only, never launch/drive phone UI. No phone action occurred.
+
+AndroidSdkAuthDelegate records ChatAuthSoftLogout via SdkSessionPersistence on a
+Matrix unknown-token callback. The gateway maps UNAUTHENTICATED to401 with
+soft_logout=true. No API log entries were present during the capture interval.
+Docker access requires sudo -n; live containers hris-dev-api-1/worker-1 remain
+healthy and unchanged. Runtime10485916/schema116.1; never replay deployment or
+accepted Forward publications. Next trace the captured SDK/native parent renewal
+and preserve bounded redacted diagnostic evidence before emulator shutdown.
+
+Native SDK paired files are built/verified but NOT consumed or packaged. The
+Kotlin wrapper inputs have been staged; package-android-aar.py is PREPARED ONLY.
+Generated source location is outside Mobile (see generated-location.json). Resume
+that and ChatThreadHistoryPager domain ownership after recovery/phone delivery;
+all54 PRD groups remain active. ac7668ae CI Native42174041004 and Control42174041125
+are queued behind919 runs. Platformef8 Control42168678959 and provider42168678967
+both PASSED. No manual duplicate runs or additional foundation port needed so far.
+
 ## Stable replay accepted; phone release 41 next — 6 November 2026
 
 The current increment fixes encrypted history replay: unchanged originals, retry
