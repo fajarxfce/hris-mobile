@@ -1,5 +1,9 @@
 # Architecture
 
+[Delivery across retained device namespaces](collaboration-chat-queue-ownership.md)
+keeps older uncertain commands intact while selecting current-store work before
+the finite worker batch limit.
+
 [History replay](collaboration-chat-history-replay.md) preserves encrypted records
 and revisions when original messages or redactions have not changed.
 

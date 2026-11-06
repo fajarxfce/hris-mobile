@@ -16,10 +16,22 @@ cases/143 suites, zero failures/errors/skips,994 stable inputs and lint0 errors/
 existing warnings. Real formatter/Detekt passed with the unchanged malformed .work
 fixture, then only that owned fixture was removed. First Apple42308538803 was
 dispatched ONCE on the exact port and is running; do not redispatch.
-The ONLY heavy local job is Mobile82616, chat-queue-family-2026-11-06/red-1.
-ONLY the two new regression test files are applied to root; all three existing
-production baselines and absent new policy remain unchanged. Inputs stay frozen
-until the red reproduction ends. No emulator is active.
+The queue regression's baseline82616 ENDED with the expected five failures in seven
+cases/74.023s, zero errors/skips and4,253 stable inputs. Identical test sources plus
+exactly four production changes then passed focused72105:76 cases/143.266s, zero
+failures/errors/skips and4,254 stable inputs. The actual encrypted AppContainer test
+retains ten older uncertain records unchanged through restart while only the new
+message is enqueued/confirmed; its provider is simulated. Source is applied but still
+UNCOMMITTED. Do not discard the six code/test files. The ONLY heavy local job is
+Mobile57507, chat-queue-family-2026-11-06/full-1. Inputs are frozen until it ends.
+[Candidate contract](collaboration-chat-queue-ownership.md),
+[evidence](measurements/collaboration-chat-queue-ownership-2026-11-06.json). No emulator
+is active, no APK51 has been built, and phone50's original pending report stays OPEN.
+
+First SDK4 protocol42306715423 PASSED and is audited: native/classic each14 checks,
+owned cleanup, REST-matching artifact digests, and14 Platform source hashes matched
+immutable e0dbb567. Control42306713193/native42306713065 remain running/pending audit.
+[CI evidence](measurements/collaboration-sdk4-product-ci-2026-11-06.json). No redispatch.
 
 The first full run46295 remains FAILED945.818s despite7,216 passing fresh tests:
 quality tasks incorrectly included36 generated SDK bindings plus one private probe.
@@ -51,22 +63,21 @@ No phone UI/install/send occurred; exact old/current IDs remain unobserved.
 
 Source review identifies two linked issues: delivery rejects the current physical
 queue when account-owned history contains older-family Staged work; the worker's
-oldest-eight limit can also repeatedly select only older-family work. Prioritize
-.work/chat-queue-family-2026-11-06: six prepared files/seven new cases. Only the two
-test files are applied for the currently running baseline reproduction; all four
-production files remain isolated and uncompiled/untested. Three existing source baselines
-are pinned. Four production files isolate current-store mapping/staging and delegate
-batch selection to a pure domain policy before its limit; two test files cover actual
-use cases plus encrypted AppContainer restart with ten older uncertain messages.
-After check-red.py red-1 ends, retain its baseline failures; apply the four production
-files only after checking the pinned original hashes, then run check-focused.py and
-check-full.py. Release51 build/verification/install drivers are prepared under
-.work/release-phone-2026-11-06-build51, syntax-checked but not run; emulator/probe
-drivers still need adapting from50 without touching Bima userdata/sidecars. A
-foreign Staged ID actually captured in the current queue must still reject; unknown
-current echoes and same-store unfinished staging remain closed. Original state,
-revision, keys and transaction IDs must remain unchanged. This allows current work;
-original pending sends still require original-parent recovery and are not resolved.
+oldest-eight limit can also repeatedly select only older-family work. Prioritize the frozen queue candidate under .work/chat-queue-family-2026-11-06.
+It isolates current-store mapping/staging and delegates worker batch selection to a
+pure domain policy before its eight-command limit. A foreign Staged ID actually
+captured in the current queue still rejects; unknown current echoes and same-store
+unfinished staging remain closed. Original state/revision/keys/transaction IDs stay
+unchanged. Focused acceptance is complete; await full57507, audit its original inputs,
+then commit/push the six source files and contract/evidence. HRIS-specific, no Starter
+port. This enables current work but does not recover older pending sends.
+
+Release51 build/verification/install drivers are prepared and syntax-checked under
+.work/release-phone-2026-11-06-build51. They require the accepted queue-family/full-1
+manifest and pushed source, public SDK4, the existing signer and installed phone50
+hash. They have NOT run. Adapt owned emulator/probe drivers from50 next, retaining
+original Bima userdata/sidecars; install the exact validated APK with advance notice
+and --install-only. Never drive the phone UI. Continue original-parent recovery.
 
 The nine-file/seven-case organization transport preparation under
 space-store-inventory-2026-11-06/runtime-transfer-next remains isolated/uncompiled/

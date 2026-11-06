@@ -1,0 +1,104 @@
+{
+  "recordedAt": "2026-11-06T23:03:05.355163+00:00",
+  "status": "focused accepted; complete gate pending",
+  "baselineProgram": "5081e629259e33af286304ccd79d91fbd7e8dade",
+  "physicalEvidence": "collaboration-phone-queue-family-2026-11-06.json",
+  "red": {
+    "startedAt": "2026-11-06T22:57:04.168744+00:00",
+    "elapsedSeconds": 74.023,
+    "exitCode": 1,
+    "sourceFiles": 4253,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7,
+      "failures": 5,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationQueueNamespaceWorkerTest.xml": {
+        "sha256": "a1b39b64bebb41da790fda00a1c089ab7fad1051fdca662db21f0e72cc871b16",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationQueueNamespaceTest.xml": {
+        "sha256": "f0bc696c7aa1c269f740785297befc943f78952adb91b176138b9fb786cb5868",
+        "tests": 6,
+        "failures": 4,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "focused": {
+    "startedAt": "2026-11-06T22:59:08.149892+00:00",
+    "elapsedSeconds": 143.266,
+    "exitCode": 0,
+    "sourceFiles": 4254,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 76,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+        "sha256": "e7fee3616041ad58fb2ef2c8ec973105288860c267dfb9e997a3f4527573043d",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationQueueNamespaceWorkerTest.xml": {
+        "sha256": "69487081983a84a3872fbade5aec1f4622a54994d133abdcedd9a559ccadadf7",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.DeliverCollaborationMessagesTest.xml": {
+        "sha256": "80be486c3583360dff6423caf584949f4f02a7f71d2e1622789a9c10e9175af8",
+        "tests": 31,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.StageCollaborationTextTest.xml": {
+        "sha256": "b509c34f0b9670a1772ec7cada25783025697049518d3a7b7f16622f4c3677ea",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationQueueNamespaceTest.xml": {
+        "sha256": "cb236163c294156e1fb561a0085542b90df9b7b6d13f6130cc18c5294dd29c01",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "onlyChangesBetweenRedAndGreen": [
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationDeliveryBatchPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationDeliveryPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/StageCollaborationText.kt"
+  ],
+  "testsByteIdentical": true,
+  "newCases": 7,
+  "fullAccepted": false,
+  "phoneInstalled": false,
+  "originalPendingMessagesRecovered": false,
+  "candidateFiles": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "008636d24f5bd82d2e133a4f1551986754cee70071df04a6dae4607071eff361",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationQueueNamespaceWorkerTest.kt": "7818f89535ac99f2a39802027592c224a7ce74ec9960ec3ef95d7aade691d7d0",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationDeliveryBatchPolicy.kt": "7e3bc57cfaa1b01a708b78ad3aef8e12d57e949ac2b14f5f4990d671f49a13bb",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationDeliveryPolicy.kt": "e0c186c30eb89be0ae6007262e1e5cb06a7ecc666cc4718c40726312528108af",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/StageCollaborationText.kt": "ac8eac71babcf97053956406c5c0b937078f9b83ce46c2a9aadbbccdc6f7a5ce",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationQueueNamespaceTest.kt": "1b384220ba2e50a885930e30bae5c7a42c3102eefc05acbf030eb5c0e0581cc2"
+  }
+}
