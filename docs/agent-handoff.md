@@ -1,5 +1,48 @@
 # Agent continuation — HRIS Mobile
 
+## Current: native private-account reader tested; ARM64 candidate building — 6 November 2026
+
+Mobile program 35dfec8223d184757486d0086791f50928e9eb45 is pushed and clean after original
+SDK metadata inventory acceptance: 43 focused and 5,405 full fresh cases, no failures/
+errors/skips, 4,239 stable full inputs and zero Android lint issues. No runtime or phone
+build changes. First-source control 42288555007/native 42288554801 are PENDING behind
+running 7ef01cd5 control 42282707724/native 42282707833. Do not displace those pending
+first-source runs with another application source push; audit them after completion.
+
+New [private-account reader candidate](collaboration-sdk-existing-identity.md) and its
+[patch](../tool/collaboration-sdk-patches/existing-crypto-identity.patch) are retained in
+Git with [evidence](measurements/collaboration-sdk-existing-identity-2026-11-06.json).
+Cipher 95869 PASSED 11 cases/8.232 seconds; SQLite 55706 PASSED six/50.065 seconds; final
+FFI 46728 PASSED one/35.288 seconds. FFI attempts 42365 (74.514 seconds) and 68554
+(17.397 seconds) remain FAILED test-import compilation. Only test import paths/order
+changed, verified against retained input hashes. All final production code is unchanged
+from the passing cipher/SQLite runs. Clean upstream plus five patches reconstructs all
+1,214 tested files. Correcting missing new-file mode headers changed no source.
+
+ARM64 candidate build 70624 is the ONLY heavy local job. Driver .work/space-store-inventory-
+2026-11-06/build-android.py uses the isolated candidate checkout, the shared Cargo target
+cache and the unchanged xtask (its workspace lookup follows current-directory metadata).
+Original /home/fajar/hris/.worktrees/matrix-sdk-raw-event SOURCE remains unchanged, as do
+published SDK 3 assets. Current shipping build manifest intentionally excludes the new
+patch until paired Android outputs are available. Do not publish or substitute a binary
+without matching generated Kotlin, ABI/alignment/symbol checks and actual consumer proof.
+
+Next audit ARM64, build remaining ABIs sequentially, retain exact source/binding hashes,
+then validate the actual Android consumer and original-store identity under its lease.
+Product integration notes are in .work/space-store-inventory-2026-11-06/possession-integration-
+notes.md. Keep private-identity I/O in datasource, record mapping/resource ownership in
+repository, account/registration/fingerprint policy in use case; no new ViewModel workflow.
+No heavy local build or owned emulator alongside 70624. No owned emulator is running.
+
+Starter program 0ff7e59/docs ad7e747 is pushed and Apple-accepted (138 cases plus actual
+host); Group program 344211f8/docs 63f21e32 is pushed. Group V117–137 remain unshipped/
+disabled; live 10485916/schema 116.1 unchanged. Phone 50 remains installed and the pending-
+send report OPEN. No phone UI, new install or send. Preserve original Bima userdata,
+sidecars, private keys and existing optional question. Continue hard-parent recovery,
+freeze/drain/adoption, organization routing and all 54 communications groups. Push each
+commit; announce every later explicit-serial install-only phone update.
+
+
 ## Current: original SDK inventory accepted locally — 6 November 2026
 
 The original-store inventory is implemented in 17 Kotlin files (including tests and

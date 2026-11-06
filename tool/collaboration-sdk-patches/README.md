@@ -6,6 +6,16 @@ The current published dependency is `26.10.23-hris.3`. See the
 Earlier candidate sections below retain their original scope and failures; they
 do not override the current distribution status.
 
+## Existing private-account reader candidate
+
+`existing-crypto-identity.patch` applies after the four SDK 3 patches on the same
+pinned upstream. It is deliberately not in the shipping build manifest yet. The
+read-only crypto-account reader passed cipher11, SQLite6 and FFI1 cases; clean
+reconstruction matches all1,214 tested files. [Contract and limits](../../docs/collaboration-sdk-existing-identity.md),
+[evidence](../../docs/measurements/collaboration-sdk-existing-identity-2026-11-06.json).
+Android binary/binding and actual consumer acceptance remain pending. SDK 3 assets
+and the app dependency are unchanged; a changed binary requires a new version.
+
 ## Refresh backoff candidate
 
 `refresh-retry.patch` extends the current candidate manifest after the three

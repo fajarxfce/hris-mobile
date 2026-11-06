@@ -1,0 +1,546 @@
+diff --git a/crates/matrix-sdk-store-encryption/src/lib.rs b/crates/matrix-sdk-store-encryption/src/lib.rs
+--- a/crates/matrix-sdk-store-encryption/src/lib.rs
++++ b/crates/matrix-sdk-store-encryption/src/lib.rs
+@@ -79,6 +79,10 @@
+          mechanism than the one being used for import (passphrase vs. key)"
+     )]
+     KdfMismatch,
++
++    /// The caller's maximum PBKDF work factor was exceeded or the stored factor is zero.
++    #[error("Store cipher work factor is outside the caller's bounds")]
++    KdfWorkFactor,
+ }
+ 
+ /// An encryption key that can be used to encrypt data for key/value stores.
+@@ -289,6 +293,24 @@
+     /// # anyhow::Ok(()) };
+     /// ```
+     pub fn import(passphrase: &str, encrypted: &[u8]) -> Result<Self, Error> {
++        Self::import_with_round_limit(passphrase, encrypted, None)
++    }
++
++    /// Import without allowing an untrusted export to request unbounded PBKDF work.
++    /// This neither changes the stored export nor performs an encryption upgrade.
++    pub fn import_with_max_rounds(
++        passphrase: &str,
++        encrypted: &[u8],
++        max_rounds: u32,
++    ) -> Result<Self, Error> {
++        Self::import_with_round_limit(passphrase, encrypted, Some(max_rounds))
++    }
++
++    fn import_with_round_limit(
++        passphrase: &str,
++        encrypted: &[u8],
++        max_rounds: Option<u32>,
++    ) -> Result<Self, Error> {
+         // Our old export format used serde_json for the serialization format.
+         // Let's first try the new format and if that fails, try the old one.
+         let encrypted: EncryptedStoreCipher =
+@@ -300,6 +322,9 @@
+ 
+         let key = match encrypted.kdf_info {
+             KdfInfo::Pbkdf2ToChaCha20Poly1305 { rounds, kdf_salt } => {
++                if max_rounds.is_some_and(|maximum| rounds == 0 || rounds > maximum) {
++                    return Err(Error::KdfWorkFactor);
++                }
+                 Self::expand_key(passphrase, &kdf_salt, rounds)
+             }
+             KdfInfo::None | KdfInfo::HkdfSha256 => {
+@@ -920,6 +945,40 @@
+     use crate::{
+         EncryptedStoreCipher, EncryptedValue, EncryptedValueBase64, EncryptedValueBase64DecodeError,
+     };
++
++    #[test]
++    fn bounded_import_keeps_valid_formats_and_rejects_excessive_work_before_derivation() {
++        let cipher = StoreCipher::new().unwrap();
++        let export = cipher._insecure_export_fast_for_testing("fixture-passphrase").unwrap();
++        let encrypted: EncryptedStoreCipher = rmp_serde::from_slice(&export).unwrap();
++        let json = serde_json::to_vec(&encrypted).unwrap();
++        for encoded in [&export, &json] {
++            StoreCipher::import_with_max_rounds("fixture-passphrase", encoded, 1000).unwrap();
++            assert!(matches!(
++                StoreCipher::import_with_max_rounds("fixture-passphrase", encoded, 999),
++                Err(Error::KdfWorkFactor)
++            ));
++            assert!(StoreCipher::import_with_max_rounds("wrong", encoded, 1000).is_err());
++        }
++        for rounds in [0, u32::MAX] {
++            let mut invalid: EncryptedStoreCipher = rmp_serde::from_slice(&export).unwrap();
++            if let crate::KdfInfo::Pbkdf2ToChaCha20Poly1305 { rounds: value, .. } =
++                &mut invalid.kdf_info
++            {
++                *value = rounds;
++            }
++            for encoded in
++                [rmp_serde::to_vec_named(&invalid).unwrap(), serde_json::to_vec(&invalid).unwrap()]
++            {
++                assert!(matches!(
++                    StoreCipher::import_with_max_rounds("fixture-passphrase", &encoded, 1_000_000),
++                    Err(Error::KdfWorkFactor)
++                ));
++            }
++        }
++        // The existing unrestricted API and export format are unchanged.
++        StoreCipher::import("fixture-passphrase", &export).unwrap();
++    }
+ 
+     #[test]
+     fn generating() {
+diff --git a/crates/matrix-sdk-sqlite/src/lib.rs b/crates/matrix-sdk-sqlite/src/lib.rs
+--- a/crates/matrix-sdk-sqlite/src/lib.rs
++++ b/crates/matrix-sdk-sqlite/src/lib.rs
+@@ -43,7 +43,10 @@
+ use zeroize::{Zeroize, ZeroizeOnDrop, Zeroizing};
+ 
+ #[cfg(feature = "crypto-store")]
+-pub use self::crypto_store::SqliteCryptoStore;
++pub use self::crypto_store::{
++    ExistingCryptoStoreError, ExistingCryptoStoreIdentity, SqliteCryptoStore,
++    read_existing_crypto_store_identity,
++};
+ pub use self::error::OpenStoreError;
+ #[cfg(feature = "event-cache-store")]
+ pub use self::event_cache_store::SqliteEventCacheStore;
+diff --git a/crates/matrix-sdk-sqlite/src/crypto_store.rs b/crates/matrix-sdk-sqlite/src/crypto_store.rs
+--- a/crates/matrix-sdk-sqlite/src/crypto_store.rs
++++ b/crates/matrix-sdk-sqlite/src/crypto_store.rs
+@@ -63,6 +63,11 @@
+         EncryptableStore, Key, SqliteAsyncConnExt, SqliteKeyValueStoreAsyncConnExt,
+         SqliteKeyValueStoreConnExt, map_interact_err,
+     },
++};
++
++mod existing;
++pub use existing::{
++    ExistingCryptoStoreError, ExistingCryptoStoreIdentity, read_existing_crypto_store_identity,
+ };
+ 
+ /// The database name.
+diff --git a/crates/matrix-sdk-sqlite/src/crypto_store/existing.rs b/crates/matrix-sdk-sqlite/src/crypto_store/existing.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/matrix-sdk-sqlite/src/crypto_store/existing.rs
+@@ -0,0 +1,133 @@
++// Copyright 2026 The Matrix.org Foundation C.I.C.
++// SPDX-License-Identifier: Apache-2.0
++
++use std::{fmt, fs, path::Path, time::Duration};
++
++use matrix_sdk_crypto::Account;
++use matrix_sdk_store_encryption::StoreCipher;
++use rusqlite::{Connection, OpenFlags, OptionalExtension, limits::Limit};
++use zeroize::Zeroizing;
++
++use super::{DATABASE_NAME, DATABASE_VERSION};
++use crate::utils::EncryptableStore;
++
++/// Public identity derived from the private Olm account in an existing encrypted store.
++/// This does not establish live server admission or verification by another device.
++#[derive(Clone, PartialEq, Eq)]
++pub struct ExistingCryptoStoreIdentity {
++    /// Stored Matrix account ID.
++    pub user_id: String,
++    /// Stored Matrix device ID.
++    pub device_id: String,
++    /// Public Ed25519 key derived from the retained private account.
++    pub ed25519_key: String,
++    /// Public Curve25519 key derived from the retained private account.
++    pub curve25519_key: String,
++}
++
++impl fmt::Debug for ExistingCryptoStoreIdentity {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        f.write_str("ExistingCryptoStoreIdentity([redacted])")
++    }
++}
++
++/// Inspection failures never authorize creating a store or account.
++#[derive(Debug, thiserror::Error)]
++pub enum ExistingCryptoStoreError {
++    /// Cannot inspect the existing file.
++    #[error("Cannot inspect the existing crypto store")]
++    Io(#[from] std::io::Error),
++    /// The path or record is incomplete, invalid, redirected or outside its byte bounds.
++    #[error("Existing crypto store is incomplete or invalid")]
++    InvalidStore,
++    /// Inspection supports the current schema without migrating it.
++    #[error("Existing crypto store needs a compatible schema reader")]
++    UnsupportedVersion,
++    /// Existing SQLite read failed.
++    #[error("Cannot read the existing crypto store")]
++    Sqlite(#[from] rusqlite::Error),
++    /// Cannot decrypt the original cipher export within the work bound.
++    #[error("Cannot open the retained store cipher")]
++    Cipher(#[from] matrix_sdk_store_encryption::Error),
++    /// Cannot deserialize or unpickle the original private account.
++    #[error("Cannot decode the retained private account")]
++    Account(#[source] Box<dyn std::error::Error + Send + Sync>),
++}
++
++struct ExistingCipher(StoreCipher);
++impl EncryptableStore for ExistingCipher {
++    fn get_cypher(&self) -> Option<&StoreCipher> {
++        Some(&self.0)
++    }
++}
++
++/// Synchronously inspect an existing encrypted private account without opening a client,
++/// creating files/accounts/ciphers, migrating, checkpointing or sending network requests.
++/// The caller must own its exclusive SDK directory lease and invoke this off the UI thread.
++/// A read transaction includes committed WAL content; do not use SQLite immutable mode.
++/// SQLite may manage its existing WAL shared-memory bookkeeping while opening a reader.
++/// Missing/corrupt stores return errors, not an enrollment or recovery decision.
++pub fn read_existing_crypto_store_identity(
++    directory: impl AsRef<Path>,
++    passphrase: &str,
++) -> Result<ExistingCryptoStoreIdentity, ExistingCryptoStoreError> {
++    if passphrase.len() > 4096 {
++        return Err(ExistingCryptoStoreError::InvalidStore);
++    }
++    let path = directory.as_ref().join(DATABASE_NAME);
++    let metadata = fs::symlink_metadata(&path)?;
++    if !metadata.is_file() || metadata.len() == 0 {
++        return Err(ExistingCryptoStoreError::InvalidStore);
++    }
++    let mut connection = Connection::open_with_flags(
++        &path,
++        OpenFlags::SQLITE_OPEN_READ_ONLY
++            | OpenFlags::SQLITE_OPEN_NO_MUTEX
++            | OpenFlags::SQLITE_OPEN_NOFOLLOW,
++    )?;
++    connection.busy_timeout(Duration::from_millis(250))?;
++    connection.set_limit(Limit::SQLITE_LIMIT_LENGTH, 8 * 1024 * 1024)?;
++    let transaction = connection.transaction()?;
++    let version = required_record(&transaction, "version", 1)?;
++    if version.as_slice() != [DATABASE_VERSION] {
++        return Err(ExistingCryptoStoreError::UnsupportedVersion);
++    }
++    let export = required_record(&transaction, "cipher", 65_536)?;
++    let cipher =
++        ExistingCipher(StoreCipher::import_with_max_rounds(passphrase, &export, 1_000_000)?);
++    let account = required_record(&transaction, "account", 8 * 1024 * 1024)?;
++    // Reuse the SDK's encrypted value and pickle codec. No alternative key representation.
++    let pickle = cipher
++        .deserialize_value(&account)
++        .map_err(|error| ExistingCryptoStoreError::Account(Box::new(error)))?;
++    let account = Account::from_pickle(pickle)
++        .map_err(|error| ExistingCryptoStoreError::Account(Box::new(error)))?;
++    let identity = account.identity_keys();
++    Ok(ExistingCryptoStoreIdentity {
++        user_id: account.user_id().to_string(),
++        device_id: account.device_id().to_string(),
++        ed25519_key: identity.ed25519.to_base64(),
++        curve25519_key: identity.curve25519.to_base64(),
++    })
++}
++
++fn required_record(
++    connection: &Connection,
++    key: &str,
++    maximum: usize,
++) -> Result<Zeroizing<Vec<u8>>, ExistingCryptoStoreError> {
++    let size: Option<i64> = connection
++        .query_row("SELECT length(value) FROM kv WHERE key = ?", [key], |row| row.get(0))
++        .optional()?;
++    if !size.is_some_and(|n| n > 0 && n <= maximum as i64) {
++        return Err(ExistingCryptoStoreError::InvalidStore);
++    }
++    Ok(Zeroizing::new(connection.query_row(
++        "SELECT value FROM kv WHERE key = ?",
++        [key],
++        |row| row.get(0),
++    )?))
++}
++
++#[cfg(test)]
++mod tests;
+diff --git a/crates/matrix-sdk-sqlite/src/crypto_store/existing/tests.rs b/crates/matrix-sdk-sqlite/src/crypto_store/existing/tests.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/matrix-sdk-sqlite/src/crypto_store/existing/tests.rs
+@@ -0,0 +1,176 @@
++// Copyright 2026 The Matrix.org Foundation C.I.C.
++// SPDX-License-Identifier: Apache-2.0
++
++use super::*;
++use crate::SqliteCryptoStore;
++use matrix_sdk_crypto::{
++    Account,
++    store::{CryptoStore, types::PendingChanges},
++};
++use ruma::{device_id, user_id};
++use rusqlite::{Connection, params};
++use std::fs;
++use tempfile::TempDir;
++
++const PASSPHRASE: &str = "local-inventory-test-passphrase";
++
++async fn retained() -> (TempDir, ExistingCryptoStoreIdentity) {
++    let dir = tempfile::tempdir().unwrap();
++    let account =
++        Account::with_device_id(user_id!("@fixture:example.test"), device_id!("ORIGINAL"));
++    let keys = account.identity_keys();
++    let expected = ExistingCryptoStoreIdentity {
++        user_id: account.user_id().to_string(),
++        device_id: account.device_id().to_string(),
++        ed25519_key: keys.ed25519.to_base64(),
++        curve25519_key: keys.curve25519.to_base64(),
++    };
++    let store = SqliteCryptoStore::open(dir.path(), Some(PASSPHRASE)).await.unwrap();
++    store.save_pending_changes(PendingChanges { account: Some(account) }).await.unwrap();
++    store.close().await.unwrap();
++    (dir, expected)
++}
++
++#[tokio::test]
++async fn existing_private_account_matches_without_mutating_the_database() {
++    let (dir, expected) = retained().await;
++    let before = fs::read(dir.path().join(DATABASE_NAME)).unwrap();
++    for _ in 0..2 {
++        assert_eq!(read_existing_crypto_store_identity(dir.path(), PASSPHRASE).unwrap(), expected);
++    }
++    assert_eq!(before, fs::read(dir.path().join(DATABASE_NAME)).unwrap());
++    assert!(!format!("{expected:?}").contains(&expected.user_id));
++    let store = SqliteCryptoStore::open(dir.path(), Some(PASSPHRASE)).await.unwrap();
++    assert_eq!(
++        store.load_account().await.unwrap().unwrap().identity_keys().ed25519.to_base64(),
++        expected.ed25519_key
++    );
++    store.close().await.unwrap();
++}
++
++#[test]
++fn absent_empty_and_redirected_database_is_never_created_or_repaired() {
++    let dir = tempfile::tempdir().unwrap();
++    let absent = dir.path().join("absent");
++    assert!(read_existing_crypto_store_identity(&absent, PASSPHRASE).is_err());
++    assert!(!absent.exists());
++    let file = dir.path().join(DATABASE_NAME);
++    fs::write(&file, []).unwrap();
++    assert!(matches!(
++        read_existing_crypto_store_identity(dir.path(), PASSPHRASE),
++        Err(ExistingCryptoStoreError::InvalidStore)
++    ));
++    assert_eq!(fs::metadata(&file).unwrap().len(), 0);
++    fs::remove_file(&file).unwrap();
++    #[cfg(unix)]
++    {
++        let target = dir.path().join("retained");
++        fs::write(&target, "unchanged").unwrap();
++        std::os::unix::fs::symlink(&target, &file).unwrap();
++        assert!(matches!(
++            read_existing_crypto_store_identity(dir.path(), PASSPHRASE),
++            Err(ExistingCryptoStoreError::InvalidStore)
++        ));
++        assert_eq!(fs::read_to_string(target).unwrap(), "unchanged");
++    }
++}
++
++#[tokio::test]
++async fn missing_private_account_is_not_initialized() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = SqliteCryptoStore::open(dir.path(), Some(PASSPHRASE)).await.unwrap();
++    store.close().await.unwrap();
++    let before = fs::read(dir.path().join(DATABASE_NAME)).unwrap();
++    assert!(matches!(
++        read_existing_crypto_store_identity(dir.path(), PASSPHRASE),
++        Err(ExistingCryptoStoreError::InvalidStore)
++    ));
++    assert_eq!(before, fs::read(dir.path().join(DATABASE_NAME)).unwrap());
++    store.reopen().await.unwrap();
++    assert!(store.load_account().await.unwrap().is_none());
++    store.close().await.unwrap();
++}
++
++#[tokio::test]
++async fn wrong_passphrase_corruption_and_missing_cipher_never_replace_the_account() {
++    let (dir, _) = retained().await;
++    let path = dir.path().join(DATABASE_NAME);
++    let before = fs::read(&path).unwrap();
++    assert!(matches!(
++        read_existing_crypto_store_identity(dir.path(), "wrong"),
++        Err(ExistingCryptoStoreError::Cipher(_))
++    ));
++    assert_eq!(before, fs::read(&path).unwrap());
++    let conn = Connection::open(&path).unwrap();
++    conn.execute("UPDATE kv SET value = ? WHERE key = 'account'", [b"corrupt".as_slice()]).unwrap();
++    assert!(matches!(
++        read_existing_crypto_store_identity(dir.path(), PASSPHRASE),
++        Err(ExistingCryptoStoreError::Account(_))
++    ));
++    conn.execute("DELETE FROM kv WHERE key = 'cipher'", []).unwrap();
++    assert!(matches!(
++        read_existing_crypto_store_identity(dir.path(), PASSPHRASE),
++        Err(ExistingCryptoStoreError::InvalidStore)
++    ));
++    assert_eq!(
++        conn.query_row("SELECT count(*) FROM kv WHERE key = 'cipher'", [], |r| r.get::<_, i64>(0))
++            .unwrap(),
++        0
++    );
++    assert_eq!(
++        conn.query_row("SELECT value FROM kv WHERE key = 'account'", [], |r| r
++            .get::<_, Vec<u8>>(0))
++            .unwrap(),
++        b"corrupt"
++    );
++}
++
++#[tokio::test]
++async fn unsupported_schema_and_oversized_records_fail_without_migrating() {
++    let (dir, _) = retained().await;
++    let conn = Connection::open(dir.path().join(DATABASE_NAME)).unwrap();
++    conn.execute(
++        "UPDATE kv SET value = ? WHERE key = 'version'",
++        [[DATABASE_VERSION + 1].as_slice()],
++    )
++    .unwrap();
++    assert!(matches!(
++        read_existing_crypto_store_identity(dir.path(), PASSPHRASE),
++        Err(ExistingCryptoStoreError::UnsupportedVersion)
++    ));
++    assert_eq!(
++        conn.query_row("SELECT value FROM kv WHERE key = 'version'", [], |r| r
++            .get::<_, Vec<u8>>(0))
++            .unwrap(),
++        [DATABASE_VERSION + 1]
++    );
++    conn.execute("UPDATE kv SET value = ? WHERE key = 'version'", [[DATABASE_VERSION].as_slice()])
++        .unwrap();
++    conn.execute("UPDATE kv SET value = zeroblob(65537) WHERE key = 'cipher'", []).unwrap();
++    assert!(matches!(
++        read_existing_crypto_store_identity(dir.path(), PASSPHRASE),
++        Err(ExistingCryptoStoreError::InvalidStore)
++    ));
++}
++
++#[tokio::test]
++async fn reader_includes_committed_wal_but_not_an_uncommitted_replacement() {
++    let (dir, original) = retained().await;
++    let mut writer = Connection::open(dir.path().join(DATABASE_NAME)).unwrap();
++    writer.pragma_update(None, "journal_mode", "WAL").unwrap();
++    writer.pragma_update(None, "wal_autocheckpoint", 0).unwrap();
++    let exported: Vec<u8> =
++        writer.query_row("SELECT value FROM kv WHERE key = 'cipher'", [], |r| r.get(0)).unwrap();
++    let cipher = ExistingCipher(StoreCipher::import(PASSPHRASE, &exported).unwrap());
++    let changed = Account::with_device_id(user_id!("@fixture:example.test"), device_id!("SECOND"));
++    let encoded = cipher.serialize_value(&changed.pickle()).unwrap();
++    let transaction = writer.transaction().unwrap();
++    transaction.execute("UPDATE kv SET value = ? WHERE key = 'account'", params![encoded]).unwrap();
++    assert_eq!(read_existing_crypto_store_identity(dir.path(), PASSPHRASE).unwrap(), original);
++    transaction.commit().unwrap();
++    assert!(fs::metadata(dir.path().join(format!("{DATABASE_NAME}-wal"))).unwrap().len() > 0);
++    let actual = read_existing_crypto_store_identity(dir.path(), PASSPHRASE).unwrap();
++    assert_eq!(actual.device_id, "SECOND");
++    assert_eq!(actual.ed25519_key, changed.identity_keys().ed25519.to_base64());
++    assert_ne!(actual.ed25519_key, original.ed25519_key);
++}
+diff --git a/bindings/matrix-sdk-ffi/src/lib.rs b/bindings/matrix-sdk-ffi/src/lib.rs
+--- a/bindings/matrix-sdk-ffi/src/lib.rs
++++ b/bindings/matrix-sdk-ffi/src/lib.rs
+@@ -13,6 +13,8 @@
+ mod encryption;
+ mod error;
+ mod event;
++#[cfg(feature = "sqlite")]
++mod existing_crypto_store;
+ mod helpers;
+ mod identity_status_change;
+ mod live_locations_observer;
+diff --git a/bindings/matrix-sdk-ffi/src/existing_crypto_store.rs b/bindings/matrix-sdk-ffi/src/existing_crypto_store.rs
+new file mode 100644
+--- /dev/null
++++ b/bindings/matrix-sdk-ffi/src/existing_crypto_store.rs
+@@ -0,0 +1,90 @@
++// Copyright 2026 The Matrix.org Foundation C.I.C.
++// SPDX-License-Identifier: Apache-2.0
++
++use matrix_sdk_sqlite::{ExistingCryptoStoreError, read_existing_crypto_store_identity};
++use zeroize::Zeroizing;
++
++/// Identity from the retained private Olm account, with no token or private-key fields.
++#[derive(uniffi::Record)]
++pub struct ExistingCryptoIdentity {
++    pub user_id: String,
++    pub device_id: String,
++    pub ed25519_key: String,
++    pub curve25519_key: String,
++}
++
++/// Closed categories deliberately omit paths, stored records and raw exception messages.
++#[derive(Debug, thiserror::Error, uniffi::Error)]
++pub enum ExistingCryptoIdentityError {
++    #[error("Existing crypto store is unavailable")]
++    Unavailable,
++    #[error("Existing crypto store is incomplete or invalid")]
++    InvalidStore,
++    #[error("Existing crypto store requires a compatible reader")]
++    UnsupportedVersion,
++}
++
++/// Blocking local read; call off the UI thread while owning the SDK directory lock.
++/// It never constructs a client, restores a session, creates keys or accesses a server.
++#[matrix_sdk_ffi_macros::export]
++pub fn read_existing_crypto_identity(
++    database_directory: String,
++    passphrase: String,
++) -> Result<ExistingCryptoIdentity, ExistingCryptoIdentityError> {
++    let passphrase = Zeroizing::new(passphrase);
++    let identity =
++        read_existing_crypto_store_identity(database_directory, &passphrase).map_err(|error| {
++            match error {
++                ExistingCryptoStoreError::Io(_) | ExistingCryptoStoreError::Sqlite(_) => {
++                    ExistingCryptoIdentityError::Unavailable
++                }
++                ExistingCryptoStoreError::UnsupportedVersion => {
++                    ExistingCryptoIdentityError::UnsupportedVersion
++                }
++                _ => ExistingCryptoIdentityError::InvalidStore,
++            }
++        })?;
++    Ok(ExistingCryptoIdentity {
++        user_id: identity.user_id,
++        device_id: identity.device_id,
++        ed25519_key: identity.ed25519_key,
++        curve25519_key: identity.curve25519_key,
++    })
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use matrix_sdk::ruma::{device_id, user_id};
++    use matrix_sdk_base::crypto::{
++        Account,
++        store::{CryptoStore, types::PendingChanges},
++    };
++    use matrix_sdk_sqlite::SqliteCryptoStore;
++
++    #[tokio::test]
++    async fn ffi_returns_only_the_original_identity_and_closed_failure_categories() {
++        let directory = tempfile::tempdir().unwrap();
++        let path = directory.path().to_string_lossy().into_owned();
++        assert!(matches!(
++            read_existing_crypto_identity(path.clone(), "fixture".into()),
++            Err(ExistingCryptoIdentityError::Unavailable)
++        ));
++        assert_eq!(std::fs::read_dir(directory.path()).unwrap().count(), 0);
++        let account =
++            Account::with_device_id(user_id!("@fixture:example.test"), device_id!("RETAINED"));
++        let keys = account.identity_keys();
++        let store = SqliteCryptoStore::open(directory.path(), Some("fixture")).await.unwrap();
++        store.save_pending_changes(PendingChanges { account: Some(account) }).await.unwrap();
++        store.close().await.unwrap();
++        let identity = read_existing_crypto_identity(path.clone(), "fixture".into()).unwrap();
++        assert_eq!(identity.user_id, "@fixture:example.test");
++        assert_eq!(identity.device_id, "RETAINED");
++        assert_eq!(identity.ed25519_key, keys.ed25519.to_base64());
++        assert_eq!(identity.curve25519_key, keys.curve25519.to_base64());
++        assert!(matches!(
++            read_existing_crypto_identity(path, "wrong".into()),
++            Err(ExistingCryptoIdentityError::InvalidStore)
++        ));
++    }
++}

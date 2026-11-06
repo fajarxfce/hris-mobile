@@ -1,0 +1,147 @@
+{
+  "recordedAt": "2026-11-06T20:35:35.912860+00:00",
+  "status": "Rust candidate accepted; Android ABI, paired binding and consumer acceptance pending",
+  "upstream": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+  "previousPatches": {
+    "raw-event.patch": "fed8120ba7e7ea88a23cde675d70bb27a3a97304c6c913ad5a9578d28053f76e",
+    "confirmed-queue.patch": "23354aeb43aabe937543355d7255d31527c0a3c78acf0a677f113e9592776872",
+    "android-arm64-baseline.patch": "82fda7d5cadc965059364c7094948fe71286293c24a1df2966d2d673327c3ec3",
+    "refresh-retry.patch": "93f106e16efd486fde187432fb901dc6777f8235e2ca0c84d780e93ef7d5836a"
+  },
+  "patch": "tool/collaboration-sdk-patches/existing-crypto-identity.patch",
+  "patchSha256": "2a023f8c2c3b4fe81a4736875668439ce336870849d4b4942e4a04ba1de6b754",
+  "changedSources": {
+    "crates/matrix-sdk-store-encryption/src/lib.rs": "52edb6615222462a08b558b8e56c58b8ec8378e5172e84860c20e7d98d808651",
+    "crates/matrix-sdk-sqlite/src/lib.rs": "496eb78ed1ef6c84c0cc09143c946553fdd7cd553106d2a221b04d987fa3da97",
+    "crates/matrix-sdk-sqlite/src/crypto_store.rs": "083eff104b0f2b6f09db2498ec014ef4d6e4fa631ce74ac53a64b247afe190a5",
+    "crates/matrix-sdk-sqlite/src/crypto_store/existing.rs": "03e747a3be6eace9733a63ad3c61ff32710877a74615b611abf31afcff88fed6",
+    "crates/matrix-sdk-sqlite/src/crypto_store/existing/tests.rs": "1544e00b98a541d38ba10fc6b24c11af8989209da3019f274843e532cc148668",
+    "bindings/matrix-sdk-ffi/src/lib.rs": "94ec4be7577f2fa63f697136f3cf38b65e016a2f3edd04c27303c1dc33c748e3",
+    "bindings/matrix-sdk-ffi/src/existing_crypto_store.rs": "582276ff6c6db86ea613686b795571c9f95567bd5314f29e27188fdeb6ed442f"
+  },
+  "checks": {
+    "sdk-cipher-1": {
+      "startedAt": "2026-11-06T20:27:14.277314+00:00",
+      "seconds": 8.232,
+      "exitCode": 0,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "matrix-sdk-store-encryption",
+        "--lib",
+        "--",
+        "--test-threads=1"
+      ],
+      "sourceFiles": 1214,
+      "sourcesUnchangedDuringRun": true,
+      "onlyDifferenceFromFinal": "test-only FFI crypto import and import ordering"
+    },
+    "sdk-sqlite-1": {
+      "startedAt": "2026-11-06T20:28:04.084695+00:00",
+      "seconds": 50.065,
+      "exitCode": 0,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "matrix-sdk-sqlite",
+        "--features",
+        "crypto-store,bundled",
+        "--lib",
+        "crypto_store::existing::tests",
+        "--",
+        "--test-threads=1"
+      ],
+      "sourceFiles": 1214,
+      "sourcesUnchangedDuringRun": true,
+      "onlyDifferenceFromFinal": "test-only FFI crypto import and import ordering"
+    },
+    "sdk-ffi-1": {
+      "startedAt": "2026-11-06T20:29:55.948055+00:00",
+      "seconds": 74.514,
+      "exitCode": 101,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "matrix-sdk-ffi",
+        "--features",
+        "sentry,experimental-x509-identity-verification",
+        "--lib",
+        "existing_crypto_store::tests",
+        "--",
+        "--test-threads=1"
+      ],
+      "sourceFiles": 1214,
+      "sourcesUnchangedDuringRun": true,
+      "onlyDifferenceFromFinal": "test-only FFI crypto import and import ordering"
+    },
+    "sdk-ffi-2": {
+      "startedAt": "2026-11-06T20:32:10.484134+00:00",
+      "seconds": 17.397,
+      "exitCode": 101,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "matrix-sdk-ffi",
+        "--features",
+        "sentry,experimental-x509-identity-verification",
+        "--lib",
+        "existing_crypto_store::tests",
+        "--",
+        "--test-threads=1"
+      ],
+      "sourceFiles": 1214,
+      "sourcesUnchangedDuringRun": true,
+      "onlyDifferenceFromFinal": "test-only FFI crypto import and import ordering"
+    },
+    "sdk-ffi-3": {
+      "startedAt": "2026-11-06T20:33:05.430923+00:00",
+      "seconds": 35.288,
+      "exitCode": 0,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "matrix-sdk-ffi",
+        "--features",
+        "sentry,experimental-x509-identity-verification",
+        "--lib",
+        "existing_crypto_store::tests",
+        "--",
+        "--test-threads=1"
+      ],
+      "sourceFiles": 1214,
+      "sourcesUnchangedDuringRun": true,
+      "onlyDifferenceFromFinal": null
+    }
+  },
+  "passedCases": {
+    "cipher": 11,
+    "encryptedSqlite": 6,
+    "ffi": 1
+  },
+  "unchangedShippingSdk": "26.10.23-hris.3",
+  "limits": [
+    "No SDK client construction, network I/O, schema migration, account or cipher initialization.",
+    "Raw reader returns identity from a decrypted private account; application registration/fingerprint checks and lifecycle integration remain required.",
+    "Read transaction includes committed WAL data; SQLite may manage WAL shared-memory bookkeeping.",
+    "Two failed FFI test-import builds are retained; only test imports changed before the successful FFI run.",
+    "No Android ABI, paired generated binding, actual app/phone, Apple runtime or rollout acceptance yet.",
+    "Existing SDK3 source, assets and phone50 remain unchanged."
+  ],
+  "cleanReconstruction": {
+    "sourceFiles": 1214,
+    "allHashesMatchFinalFfiSource": true,
+    "from": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+    "patchCount": 5,
+    "firstAttempt": "New-file mode headers were missing from the generated patch; corrected without source changes before successful reconstruction."
+  }
+}
