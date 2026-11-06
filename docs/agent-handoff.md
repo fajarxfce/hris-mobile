@@ -52,26 +52,33 @@ workspace failure remains recorded separately, never reclassified as a phone pas
 
 Exactf04c first CI: protocol42254474390 PASSED both native/classic modes,14checks+
 cleanup each, artifact digests and14Platform source hashes verified against the
-workflow's e0dbb567 pin. Native42254474298 still running; control42254474193 portable
-job succeeded while Apple was running17:06UTC. Audit completed artifacts and explicit
-iOS host step before calling them accepted. Native workflow correctly pins accepted
+workflow's e0dbb567 pin. Native42254474298 ARM remains running; x86 job succeeded. Control42254474193
+PASSED and was audited: portable4,303cases/463suites, Apple1,673/182, zero
+failures/errors/skips, both artifact digests verified. Explicit iOS application host
+build PASSED17:27:35UTC. This does not establish physical Apple/PushKit acceptance. Native workflow correctly pins accepted
 Platform62ee1181; failed oldercf28 CI remains failed. No manual redispatch.
 [CI evidence](measurements/collaboration-sdk3-workspace-ci-2026-11-06.json).
 Private audit driver: .work/chat-workspace-expiry-2026-11-06/remote-ci-f04c/audit.py;
 pass only completed first-run IDs. It skips already downloaded immutable artifacts.
 
 NEXT: continue all54PRD groups while watching phone diagnostics/CI. Group backend
-is the separate clean /home/fajar/hris/.worktrees/communication-space, branch
-feat/communication-space at28bcf2a4, with unshipped migrations117–137. Main Platform
-is8bad394e; live10485916/schema116.1 and Starter578d97a stay unchanged. The read-only
-merge preview reports seven conflicts: four docs, CollaborationConfiguration.kt,
-recovery_set.py and test_recovery_set.py. Preserve both group and new company-summary
-bindings, fractional116.1 parsing and reviewed group schema/envelope coverage. No
-actual merge or new group feature edits yet. Preview and unimplemented bootstrap
-recovery notes live under that worktree's .work/reconcile-main-2026-11-06.
-Merge/reconcile, run its own API/full-worker/recovery and group gates, then implement
-explicit original bootstrap-operation recovery and original SDK-store ownership
-adoption before group UI. Do not weaken ownership or freeze an old runtime as setup.
+is /home/fajar/hris/.worktrees/communication-space, branch feat/communication-space.
+The merge of Main8bad394e into28bcf2a4 is IN PROGRESS: seven conflicts are resolved
+and staged, preserving both DI graphs and ordered116.1–137 recovery. Current group
+DB/collaboration/API/full-worker gate60730 is running on frozen source. Python
+migration/recovery26 passed. Group migrations117–137 remain unshipped; live10485916/
+schema116.1 and Starter578d97a unchanged. Group's current handoff is authoritative
+for that merge; do not infer old process state from its historical entries.
+
+Explicit bootstrap supersession is being prepared separately under group .work/
+reconcile-main-2026-11-06/supersession-prepared; it is NOT applied or tested yet.
+Its design uses the existing undeletable monotonic gateway head to fence late
+original CAS/replays, binds the exact original descriptor to the new receipt, and
+never invents an original acknowledgment. See that branch's pending
+space-bootstrap-supersession.md. Apply only after the merge gate/commit, with base
+hash verification; then actual race/rollback/API/worker tests. Mobile original and
+replacement intent persistence/SDK-store adoption remain next, before group UI.
+Phone app was still not running17:17UTC; no new user-send outcome is known.
 Push every commit; continue media/voice, calls and meetings after these prerequisites.
 Never replay accepted Forward sends, SDK publication or live deployment.
 

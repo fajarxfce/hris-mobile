@@ -86,7 +86,54 @@
   },
   "control": {
     "runId": 42254474193,
-    "status": "in_progress"
+    "status": "completed",
+    "conclusion": "success",
+    "firstRun": true,
+    "artifactsDigestVerified": true,
+    "iosApplicationHost": "success",
+    "applePhysicalDeviceAcceptance": false,
+    "jobs": [
+      {
+        "name": "portable",
+        "conclusion": "success",
+        "startedAt": "2026-11-06T16:39:52Z",
+        "completedAt": "2026-11-06T17:02:35Z"
+      },
+      {
+        "name": "apple",
+        "conclusion": "success",
+        "startedAt": "2026-11-06T16:39:54Z",
+        "completedAt": "2026-11-06T17:27:35Z"
+      }
+    ],
+    "artifacts": [
+      {
+        "artifactId": 13524239378,
+        "name": "collaboration-control-apple",
+        "sha256": "09cefd039d99da4be03de61fe03b9d5e7b7091fd80d42d9461fa15a1f35d1812",
+        "bytes": 299518,
+        "suites": 182,
+        "counts": {
+          "tests": 1673,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "artifactId": 13523397715,
+        "name": "collaboration-control-portable",
+        "sha256": "5127b145ab96cbacb4477df95926ded230a47a85bc5a9dc092626938e487b363",
+        "bytes": 2278211,
+        "suites": 463,
+        "counts": {
+          "tests": 4303,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    ]
   },
   "phoneVersion": 50,
   "phonePendingResolved": false
