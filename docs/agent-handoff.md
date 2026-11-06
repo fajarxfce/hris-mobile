@@ -17,7 +17,8 @@ needed an exhaustive branch and non-null assertion;38 storage/transport cases pa
 Corrected consumer60188 PASSED72/106.766s. Complete44869 PASSED723.803s, started19:33:32UTC:
 5,941 fresh cases, zero failures/errors/skips,4,228 unchanged inputs. Root :check, browser,
 Android-host/proof compilation, actual DI, Android dev assembly/lint, format and architecture
-pass. Android lint0 issues. All local heavy jobs have ended. No owned emulator is running.
+pass. Android lint0 issues. The Mobile gate has ended. Starter now owns the only heavy local job,30376.
+No owned emulator is running; do not start another local build alongside Starter.
 The new Apple raw database and encrypted repository hosts are added to first-source CI;
 this source's simulator tests and actual iOS app build remain pending, not a physical waiver.
 
@@ -27,11 +28,12 @@ actual receipt cleanup, current minimum-build admission and HTTP/worker contexts
 merge2db3f35e baseline1,226/full-worker and image-pin20 acceptance remain separate. V117–137
 are unshipped; organization feature stays disabled. Live10485916/schema116.1 unchanged.
 
-NEXT: commit/push this accepted Mobile source, then apply the exact11-file generic database
-port prepared in Starter .work/command-successor-2026-11-06/prepared. Its six original base
-hashes match and five files are new; revalidate before applying. Starter source is UNCHANGED,
-no Starter gate/CI dispatch has occurred. Run its root/database/browser/Android/Web gates,
-record and push, then obtain one first-source Apple run. Keep HRIS policy/codec/usecases here.
+Mobile implementation7ef01cd57caad50f7bdb7ebee782c7cc45413bcf is committed and pushed.
+The exact11-file generic database port is now APPLIED in Starter after all six original
+base hashes and five absent new paths were verified again. Its gate30376 runs root/check,
+database browser, Android assembly/lint and production Web on frozen Starter inputs.
+No Starter commit or CI dispatch yet. Audit that gate, record and push the port, then
+obtain one first-source Apple run. Keep HRIS policy/codec/usecases here.
 Continue private-store inventory/possession, hard-parent recovery, freeze/drain, adoption of
 the original SDK store, organization runtime/UI/background routing and all54 PRD groups.
 Current FileCollaborationSdkStoreSource.acquire creates directories; generic occupied files
@@ -45,7 +47,9 @@ read-only UID audit19:29:27UTC sees zero retained post-install Chat/crash lines 
 The user's long-pending report remains OPEN; do not repeat the existing optional48 question.
 First CI for preceding Mobile3d666135:42277469255 portable succeeded, Apple still running;
 42277469245 both native emulator jobs running. Audit completed first artifacts on that exact
-head; do not redispatch. Current source has not been pushed yet. SDK3 remains immutable;
+head; do not redispatch. First7ef CI is queued behind them:control42282707724 and
+native42282707833. Preserve those first runs; docs-only continuation commits do not
+change the accepted program source. No new protocol run. SDK3 remains immutable;
 never republish or rerun accepted sends merely for reconciliation. Preserve original Bima
 emulator userdata/sidecars/keys; no queue clearing or phone UI driving. Push every commit.
 
