@@ -74,7 +74,8 @@
     "transition_animation_scale": "1.0",
     "window_animation_scale": "1.0"
   },
-  "release42Installed": false,
-  "androidMotionRecordingPending": true,
-  "starterPortPending": true
+  "release42Installed": true,
+  "androidMotionRecordingPending": false,
+  "starterPortPending": true,
+  "androidAcceptance": "collaboration-release42-2026-11-06.json"
 }

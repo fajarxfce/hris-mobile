@@ -1,0 +1,359 @@
+{
+  "date": "2026-11-06",
+  "sourceCommit": "23ce87fa70b162a9aab5a5c1a1f6c4a00a5e2095",
+  "artifact": {
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 42,
+    "versionName": "1.0.0",
+    "bytes": 88584188,
+    "sha256": "09eea50a9ad0ef1f3b1294ba2e1fceb4503e418d3d6e795029c205c08376259f",
+    "debuggable": false,
+    "signatureVerified": true,
+    "sameInstalledSigner": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "privateApiVerifiedInDex": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true
+  },
+  "build": {
+    "startedAt": "2026-11-06T07:54:44.218077+00:00",
+    "elapsedSeconds": 91.727,
+    "exitCode": 0
+  },
+  "releaseLintIssues": 0,
+  "installed": {
+    "confirmed": true,
+    "startedAt": "2026-11-06T08:06:02.933540+00:00",
+    "elapsedSecondsIncludingVerification": 43.702,
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false
+  },
+  "renderTrials": [
+    {
+      "name": "offline-1-first",
+      "networkReachable": false,
+      "visibleRows": 9,
+      "authDiagnosticCount": 0,
+      "reconnectPromptAfterVideo": false
+    },
+    {
+      "name": "offline-1-repeat",
+      "networkReachable": false,
+      "visibleRows": 9,
+      "authDiagnosticCount": 0,
+      "reconnectPromptAfterVideo": false
+    },
+    {
+      "name": "online-1-first",
+      "networkReachable": true,
+      "visibleRows": 9,
+      "authDiagnosticCount": 0,
+      "reconnectPromptAfterVideo": false
+    },
+    {
+      "name": "online-1-repeat",
+      "networkReachable": true,
+      "visibleRows": 9,
+      "authDiagnosticCount": 0,
+      "reconnectPromptAfterVideo": false
+    }
+  ],
+  "backTrials": [
+    {
+      "name": "offline-1-first-back",
+      "networkReachable": false,
+      "conversationRestored": true
+    },
+    {
+      "name": "offline-1-repeat-back",
+      "networkReachable": false,
+      "conversationRestored": true
+    },
+    {
+      "name": "online-1-first-back",
+      "networkReachable": true,
+      "conversationRestored": true
+    },
+    {
+      "name": "online-1-repeat-back",
+      "networkReachable": true,
+      "conversationRestored": true
+    }
+  ],
+  "visualReview": {
+    "method": "Actual decoded frames held at four requested samples 33/100/180/400ms after touch command return for each forward/Back video; records actual PTS. Android screenrecord omits unchanged frames. Command return is not exact presentation time; no frame-time performance claim.",
+    "accepted": true,
+    "rows": [
+      {
+        "trial": "offline-1-first",
+        "samples": [
+          {
+            "requestedSeconds": 1.165694,
+            "actualFramePtsSeconds": 1.136833,
+            "decodedFrame": 6
+          },
+          {
+            "requestedSeconds": 1.232694,
+            "actualFramePtsSeconds": 1.193222,
+            "decodedFrame": 8
+          },
+          {
+            "requestedSeconds": 1.312694,
+            "actualFramePtsSeconds": 1.305111,
+            "decodedFrame": 10
+          },
+          {
+            "requestedSeconds": 1.532694,
+            "actualFramePtsSeconds": 1.371389,
+            "decodedFrame": 13
+          }
+        ],
+        "decodedFrames": 15,
+        "reviewImage": "offline-1-first-motion.png",
+        "imageSha256": "c61e21b40f60c246000f429bb5d5b62a08f67cd4f59d11878e3c3e34530c2580",
+        "videoSha256": "809f61e5979ac28c37f49488fd2ab9c3db39e3a70d5efb77e8598352bcf13d56"
+      },
+      {
+        "trial": "offline-1-repeat",
+        "samples": [
+          {
+            "requestedSeconds": 1.170254,
+            "actualFramePtsSeconds": 1.157567,
+            "decodedFrame": 6
+          },
+          {
+            "requestedSeconds": 1.237254,
+            "actualFramePtsSeconds": 1.2124,
+            "decodedFrame": 8
+          },
+          {
+            "requestedSeconds": 1.317254,
+            "actualFramePtsSeconds": 1.292011,
+            "decodedFrame": 11
+          },
+          {
+            "requestedSeconds": 1.537254,
+            "actualFramePtsSeconds": 1.461667,
+            "decodedFrame": 16
+          }
+        ],
+        "decodedFrames": 19,
+        "reviewImage": "offline-1-repeat-motion.png",
+        "imageSha256": "a885325ecbdf111522aef5df2fea9651da09b8adf4f7869cd00dd95f24ace589",
+        "videoSha256": "c2e73943590ddd1715c7fbcefd6e124317a4681c88c3667f9485d9f378e3250b"
+      },
+      {
+        "trial": "online-1-first",
+        "samples": [
+          {
+            "requestedSeconds": 1.156687,
+            "actualFramePtsSeconds": 1.156278,
+            "decodedFrame": 6
+          },
+          {
+            "requestedSeconds": 1.223687,
+            "actualFramePtsSeconds": 1.179856,
+            "decodedFrame": 7
+          },
+          {
+            "requestedSeconds": 1.303687,
+            "actualFramePtsSeconds": 1.294622,
+            "decodedFrame": 9
+          },
+          {
+            "requestedSeconds": 1.523687,
+            "actualFramePtsSeconds": 1.379156,
+            "decodedFrame": 13
+          }
+        ],
+        "decodedFrames": 18,
+        "reviewImage": "online-1-first-motion.png",
+        "imageSha256": "236c38afefa724f054990c52d90a9c3f789e23e1f56a2a42ea71d8c36b838045",
+        "videoSha256": "5e8e6cf66748bb6574feae76f183ad2aae90e6dd1dea6a850c34b53067833e61"
+      },
+      {
+        "trial": "online-1-repeat",
+        "samples": [
+          {
+            "requestedSeconds": 1.170223,
+            "actualFramePtsSeconds": 1.169944,
+            "decodedFrame": 7
+          },
+          {
+            "requestedSeconds": 1.237223,
+            "actualFramePtsSeconds": 1.219667,
+            "decodedFrame": 10
+          },
+          {
+            "requestedSeconds": 1.317223,
+            "actualFramePtsSeconds": 1.285,
+            "decodedFrame": 13
+          },
+          {
+            "requestedSeconds": 1.537223,
+            "actualFramePtsSeconds": 1.431267,
+            "decodedFrame": 19
+          }
+        ],
+        "decodedFrames": 24,
+        "reviewImage": "online-1-repeat-motion.png",
+        "imageSha256": "208944ec3304e68e0e4df76e144c3db5d00e455fe7dc8b1ec30a837d2a3f4e9d",
+        "videoSha256": "517fe5ebd0c52ea9272023a44922f3ceeeafa0f057e465367b7289f7e7382548"
+      },
+      {
+        "trial": "offline-1-first-back",
+        "samples": [
+          {
+            "requestedSeconds": 1.181024,
+            "actualFramePtsSeconds": 1.166933,
+            "decodedFrame": 6
+          },
+          {
+            "requestedSeconds": 1.248024,
+            "actualFramePtsSeconds": 1.237911,
+            "decodedFrame": 9
+          },
+          {
+            "requestedSeconds": 1.328024,
+            "actualFramePtsSeconds": 1.295367,
+            "decodedFrame": 12
+          },
+          {
+            "requestedSeconds": 1.548024,
+            "actualFramePtsSeconds": 1.469689,
+            "decodedFrame": 18
+          }
+        ],
+        "decodedFrames": 21,
+        "reviewImage": "offline-1-first-back-motion.png",
+        "imageSha256": "5b13d94a8b4f1c5367a59619cceae0bb59425493c958dfd9edc53ff429008da6",
+        "videoSha256": "5c4548bcefaee70ca7ef3c0a4cefc81574006ee172ee44dbcd163b0041c61bfc"
+      },
+      {
+        "trial": "offline-1-repeat-back",
+        "samples": [
+          {
+            "requestedSeconds": 1.171591,
+            "actualFramePtsSeconds": 1.1634,
+            "decodedFrame": 7
+          },
+          {
+            "requestedSeconds": 1.238591,
+            "actualFramePtsSeconds": 1.231856,
+            "decodedFrame": 10
+          },
+          {
+            "requestedSeconds": 1.318591,
+            "actualFramePtsSeconds": 1.307478,
+            "decodedFrame": 13
+          },
+          {
+            "requestedSeconds": 1.538591,
+            "actualFramePtsSeconds": 1.416778,
+            "decodedFrame": 17
+          }
+        ],
+        "decodedFrames": 19,
+        "reviewImage": "offline-1-repeat-back-motion.png",
+        "imageSha256": "f499dd3a052906b97328fb1146f6c1a1632aeff1508475f90bed4467dbc57c9c",
+        "videoSha256": "6b0ce6b5e9c5c3d50ecfe20b3968b53aee835afbd9a31aea2ce3e882edbb126b"
+      },
+      {
+        "trial": "online-1-first-back",
+        "samples": [
+          {
+            "requestedSeconds": 1.191023,
+            "actualFramePtsSeconds": 1.174322,
+            "decodedFrame": 7
+          },
+          {
+            "requestedSeconds": 1.258023,
+            "actualFramePtsSeconds": 1.235067,
+            "decodedFrame": 10
+          },
+          {
+            "requestedSeconds": 1.338023,
+            "actualFramePtsSeconds": 1.313311,
+            "decodedFrame": 13
+          },
+          {
+            "requestedSeconds": 1.558023,
+            "actualFramePtsSeconds": 1.446711,
+            "decodedFrame": 18
+          }
+        ],
+        "decodedFrames": 19,
+        "reviewImage": "online-1-first-back-motion.png",
+        "imageSha256": "e698129703407a8ee4ff12a37cb55f5bd234248b3cd9816810a9c7658790a13e",
+        "videoSha256": "2e68816adaf413d94978c8a02d74bafd930329c74c6d1d87183f925a43eeee6e"
+      },
+      {
+        "trial": "online-1-repeat-back",
+        "samples": [
+          {
+            "requestedSeconds": 1.170152,
+            "actualFramePtsSeconds": 1.142967,
+            "decodedFrame": 7
+          },
+          {
+            "requestedSeconds": 1.237152,
+            "actualFramePtsSeconds": 1.228478,
+            "decodedFrame": 10
+          },
+          {
+            "requestedSeconds": 1.317152,
+            "actualFramePtsSeconds": 1.306389,
+            "decodedFrame": 14
+          },
+          {
+            "requestedSeconds": 1.537152,
+            "actualFramePtsSeconds": 1.513356,
+            "decodedFrame": 20
+          }
+        ],
+        "decodedFrames": 20,
+        "reviewImage": "online-1-repeat-back-motion.png",
+        "imageSha256": "cb13696a0053eac90a01714b02e737c2d6faa2e6e900bf3499d87ad8d23647ed",
+        "videoSha256": "2e64bb4e49ee30daa1612a83827b3916b0c0a74200f1fd88e66297e723dece8a"
+      }
+    ],
+    "reviewedAt": "2026-11-06T08:05:21.842252+00:00",
+    "allEightStripsViewedAtOriginalSize": true,
+    "forwardDirectionVisible": true,
+    "backDirectionReversed": true,
+    "cachedBubblesPresentDuringMovement": true,
+    "viewportClippingAndFinalAlignmentAccepted": true,
+    "frameTimePerformanceClaim": false
+  },
+  "finalState": {
+    "at": "2026-11-06T08:04:56.276745+00:00",
+    "ownedEmulatorOnly": true,
+    "visibleMessageRows": 9,
+    "sendMessagePresent": true,
+    "retryPresent": false,
+    "olderMessagesPresent": false,
+    "reconnectPresent": false,
+    "fatalException": false,
+    "newMessagesSent": 0,
+    "separateColdStartup": true,
+    "roomEntryConfirmed": true
+  },
+  "settingsRestored": true,
+  "emulatorDataRetained": true,
+  "newMessagesSent": 0,
+  "frameTimePerformanceClaim": false,
+  "scope": "Directional navigation, retained room content and Back restoration on owned Android emulator. Phone installation only; not complete communications acceptance.",
+  "inspectionNotes": [
+    "Initial final-state probe did not confirm room entry; separate retained-data cold startup with an 80ms press and awaited Send message passed. No app changes.",
+    "Sparse screenrecord frames can end before a requested sample. Review uses the actual last frame at or before each sample and records its presentation timestamp. No fixed-position crop latency comparison."
+  ]
+}

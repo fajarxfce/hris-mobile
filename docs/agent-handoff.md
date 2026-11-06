@@ -1,5 +1,43 @@
 # Agent continuation — HRIS Mobile
 
+## Release 42 delivered; Starter navigation validation active — 6 November 2026
+
+Mobile23ce87fa is pushed. Directional280ms push/pop, RTL mirroring and reduced
+motion passed the complete local gate (6,979 fresh tests; unchanged-source debug
+packaging repeat passed). Release42 built91.727s/lint0 from exact
+23ce87fa70b162a9aab5a5c1a1f6c4a00a5e2095, APK SHA
+09eea50a9ad0ef1f3b1294ba2e1fceb4503e418d3d6e795029c205c08376259f.
+Eight emulator videos cover first/repeat offline/online entries and Back. All eight
+strips/32 sample positions inspected at original size: bubbles remain present
+during movement; direction, clipping, final alignment and retained list accepted.
+Variable-frame recordings use actual decoded PTS/held frames; no comparison with
+old fixed-position fade latency. Final separate retained-data startup confirms nine
+rows, Send present, no Older/Retry/Reconnect/crash. Initial immediate-tap probe did
+not confirm room entry and is preserved separately; no app change was needed.
+
+PHONE NOW42: announced then installed08:06:02UTC, verified43.702s, same identity,
+no erase/uninstall/UI actions. [Delivery evidence](measurements/collaboration-release42-2026-11-06.json).
+Do not repeat installation. Owned emulators4113872 and4157622 stopped, original
+Bima keys/data retained. All install/capture/review drivers drained. The follow-up
+boot wrapper ended143, but exact owned process completed boot and was inspected
+then stopped with its recorded PID/startTicks; no unrelated process was touched.
+
+Starter has the exact three generic files and documentation port, not yet committed.
+Its ONLY heavy local job is navigation check18630, .work/navigation-motion-2026-11-06/check-1,
+root/Android/lint/Web. Wait for it before starting SDK compilation. After acceptance,
+commit/push then dispatch Starter Apple scope ONCE against that commit; no phone
+Starter install. Mobile CI23ce Native42183953532 running, Control42183953620 pending;
+27cff Control42181039404 running and Native cancelled by newer source. No duplicate
+workflow dispatch. Stable-history ac7668 native and Apple acceptance remain valid
+for their original source, not the motion increment.
+
+Then run prepared SDK x86_64 build; arm64 AAR970ea462 is built/verified but not an
+app dependency or consumer acceptance. Preserve paired generated sources outside
+Mobile, validate remaining ABI/consumer and original native edit exchange, then
+finish history-pager domain ownership and all54 PRD groups. Platform remains
+LIVE10485916/schema116.1. Never replay rollout or accepted Forward publications.
+
+
 ## Directional navigation validated locally; build and inspect release42 next — 6 November 2026
 
 Latest user asks for perceptible Flutter-like in/out page transitions. ScopedNavHost
