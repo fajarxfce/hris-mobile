@@ -1,8 +1,47 @@
 # Agent continuation — HRIS Mobile
 
+## Native raw-event Android build active — 6 November 2026
+
+Prepared room rendering is committed/pushed in91902546. Six Android trials show
+bubbles during first/repeated transitions for the prepared conversation, including
+two offline process starts. All emulators are stopped and their data/keys retained.
+Phone40 remains unchanged; no phone install or UI action occurred in this increment.
+
+NDK28.2.13676358 installed/verified in22.261s. Rust1.96.0 Android arm64/x86_64 targets
+installed in3.57s; cargo-ndk4.1.2 installed in33.885s. Initial version verification
+used an unsupported direct binary invocation; cargo ndk --version then verified the
+existing installation without reinstalling. All installer drivers are drained.
+SDK locked arm64 dependency fetch PASS2.418s; host xtask build PASS60.334s, source
+hashes unchanged. SDK source stays at8de215a0 plus committed raw-event.patch.
+
+ACTIVE: actual arm64 release SDK compilation driver42167, child3264835/startTicks
+162095421, started05:51:01. Metadata/logs in Mobile
+.work/sdk-raw-event-2026-11-06/android-arm64; two cargo workers, API21, offline after
+locked fetch,45min bound. Do not alter SDK sources or start another heavy local
+build/emulator until it drains. This produces paired Kotlin/JNI candidate files,
+not a consumed AAR. No native raw-event consumer acceptance yet.
+
+The upstream Kotlin AAR wrapper is cloned, unmodified and UNBUILT at
+.worktrees/matrix-kotlin-raw-event, pinned c1664f712bed33488b10f33232fb424faf257d49.
+Its Gradle8.14.2 wrapper has a pinned distribution hash; AGP8.13.2/Kotlin1.9.25,
+compileSdk34/minSdk21/JNA5.18.1. Override NDK_VERSION to the installed28.2.13676358
+when assembling locally. Do not run its publication scripts. No Maven release or
+application dependency changed. Review generated Kotlin/JNI/ELF hashes and16KiB
+LOAD alignment, package a candidate AAR, then compile and test the owned native
+edit/original/missing-key/cold-store workflow before phone delivery.
+
+Hosted:74152 native42163759500 also FAILED;5be native42167279215 was superseded
+while pending. CI-only a5f0e06c native42168989689 is running with Platformef8a41b3's
+safe failure stages;91902546 native42170117581 and Control42170117574 are pending.
+5be protocol42167279220 PASSED both classic/native Android/Web;5be Control42167279345
+runs.74152 Control passed portable+Apple. Do not manually duplicate runs.
+Platform LIVE remains10485916/schema116.1; ef8a41b3 changes only the test driver/docs.
+Starterdd40d24 accepted its reusable port on Apple. Continue all54 PRD groups;
+ChatThreadHistoryPager business orchestration is still pending layer cleanup.
+
 ## Prepared room first-entry rendering accepted — 6 November 2026
 
-The visible-room preparation increment is validated and ready to commit/push.
+The visible-room preparation increment is committed/pushed in91902546.
 [Contract](collaboration-chat-first-frame.md), [evidence](measurements/collaboration-chat-visible-preparation-2026-11-06.json).
 The account/company graph prepares up to three visible idle rooms after list
 scrolling settles, sharing its existing cache bound. Previously visited rooms take
@@ -45,7 +84,7 @@ still running at05:31; new CI-only pin will queue its own automatic run. Do not
 manually duplicate runs. Old dcfea native42162194348 failed only its main SDK case
 with generic RuntimeError; worker/scheduled/notification proofs passed.
 
-NEXT: commit/push this measured increment, then native SDK artifacts/edit exchange,
+NEXT: native SDK artifacts/edit exchange,
 phone update and the remaining layer audit/all54 PRD groups. Native raw-event test5
 PASS9/32.474s, but Android/Apple bindings are unchanged. The exact patch and public
 evidence are in tool/collaboration-sdk-patches; NDK remains absent. The private

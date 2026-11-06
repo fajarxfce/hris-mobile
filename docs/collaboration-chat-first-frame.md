@@ -55,8 +55,8 @@ one online, each followed by a repeated room entry. All retain nine messages.
 First-entry header-to-bubble gaps are200/133/133ms; repeated entry is0/0/−33ms.
 All12 adjacent frames were inspected: first entries still render an empty room
 before bubbles, whereas repeated entries render bubbles during the transition.
-The final online repeat also shows a contextual reconnect prompt. Compare that
-cold-online session behavior was subsequently compared against the prior candidate:
+The final online repeat also showed a contextual reconnect prompt. That cold-online
+session behavior was subsequently compared against the prior candidate:
 three fresh first openings (4/5/4) retained nine rows and showed no exact reconnect
 prompt or authentication rejection diagnostics. The earlier detector omitted the
 localized period, and those first detector results remain invalid. These corrected
