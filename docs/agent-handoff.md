@@ -1,5 +1,45 @@
 # Agent continuation — HRIS Mobile
 
+## Release 41 installed; native SDK packaging and recovery fixture next — 6 November 2026
+
+Mobile58a5a6ed is pushed. The corrected release41 APK is NOW INSTALLED on the
+phone after explicit advance notice, install-only, zero phone UI actions.
+SHAe45e6f1e0af64dc0c0c67106b126ff0fe805405082dba36541c99af7c35d3114,
+88,584,188 bytes, exact committed source58a5a6edc2af5f2efe2d774c5a652fcab26bf699.
+Build82.202s, lint0, signer/manifest/private API/Firebase/backup/alignment verified.
+Four emulator trials: offline first/repeat and online first/repeat, nine rows,
+no auth diagnostics or reconnect warning. Header-to-bubble gaps−33/0/−33/0ms;
+all8 adjacent frames visually reviewed. Final state has no Retry/older/reconnect
+or crash. Emulator3790914/startTicks162563662 stopped07:12:04, data/keys retained.
+Installation07:13:09UTC completed/verified in45.806s; same app identity, no data
+clearing or uninstall. Drivers95985/8074/33086/87868/48055/87212/59662 drained.
+[Public evidence](measurements/collaboration-release41-2026-11-06.json), private
+.work/release-phone-2026-11-06-build41-fixed. Do not reinstall this completed update.
+Older checkpoints saying phone40 or held41 are superseded.
+
+Current ONLY heavy local job: SDK AAR packaging85053, started07:13, private output
+.work/sdk-raw-event-2026-11-06/package-android-aar-1. It builds isolated wrapper
+c1664f7 with the paired Oct23 raw-event JNI/Kotlin sources; no publication or app
+SDK dependency change. Do not overlap another heavy build. No emulator is active.
+If upstream AGP publication-component setup fails, preserve evidence and fix only
+isolated wrapper configuration before retrying. Original paired hashes stay frozen.
+
+Native42170117581 failure is a fixture phase omission: input transfer can complete
+before interruption leaves the durable reply Pending. Production recovery always
+runs the separate reply worker even if input worker retries. Four uncommitted
+TEST/DRIVER files now exercise both phases and reject false phase completion; a
+new actual-storage application test cancels after protected-input retirement then
+reopens into independent reply recovery. Python29 cases PASS; Kotlin/native are
+UNVALIDATED. Never relax exact final SessionChanged/no-command/copy assertions or
+lengthen production deadlines. No production recovery behavior changed. Validate
+these after SDK packaging drains, then commit/push and run actual native fixture.
+ac7668 native42174041004/Control42174041125 remain active at this checkpoint.
+
+Continue SDK AAR verification/consumer proof, history-pager domain ownership and
+all54 PRD groups. Retained warning UI fix does not establish the cause of the old
+interrupted refresh callback. Platform LIVE10485916/schema116.1 remains unchanged;
+never replay deployment or accepted Forward sends. No new generic Starter port.
+
 ## Retained reconnect feedback fixed; release 41 rebuild next — 6 November 2026
 
 The page no longer turns a retained SDK rejection into generic feedback/Retry

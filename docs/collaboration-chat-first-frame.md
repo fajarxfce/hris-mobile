@@ -1,5 +1,16 @@
 # Chat first-frame rendering — 6 November 2026
 
+## Installed release 41 — 6 November 2026
+
+Release 41 from `58a5a6ed` is installed on the authorized Android phone, with
+data and app identity preserved and no phone UI interaction. The exact APK passed
+four retained-chat entry recordings: first/repeat offline and online. Bubbles
+appear during every transition; all eight adjacent frames were inspected. The
+30 fps measurement found no positive bubble delay after the header appeared.
+No stale reconnect feedback, auth diagnostic or crash appeared in these trials.
+This is bounded prepared-room evidence, not a claim that every uncached destination
+is preloaded. [Release evidence](measurements/collaboration-release41-2026-11-06.json).
+
 Prepared conversations now show saved bubbles during their first Android navigation
 transition, including after a process restart with networking disabled. Six recordings
 across three fresh processes retained nine messages and showed no blank room after

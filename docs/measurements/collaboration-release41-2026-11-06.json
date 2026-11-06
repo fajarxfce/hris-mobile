@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-06",
+  "sourceCommit": "58a5a6edc2af5f2efe2d774c5a652fcab26bf699",
+  "artifact": {
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 41,
+    "versionName": "1.0.0",
+    "bytes": 88584188,
+    "sha256": "e45e6f1e0af64dc0c0c67106b126ff0fe805405082dba36541c99af7c35d3114",
+    "debuggable": false,
+    "signatureVerified": true,
+    "sameInstalledSigner": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "privateApiVerifiedInDex": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true
+  },
+  "build": {
+    "startedAt": "2026-11-06T07:07:12.212036+00:00",
+    "elapsedSeconds": 82.202,
+    "exitCode": 0
+  },
+  "releaseLintIssues": 0,
+  "installed": {
+    "confirmed": true,
+    "startedAt": "2026-11-06T07:13:09.568943+00:00",
+    "elapsedSecondsIncludingVerification": 45.806,
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false
+  },
+  "renderTrials": [
+    {
+      "name": "offline-1-first",
+      "networkReachable": false,
+      "visibleRows": 9,
+      "authDiagnosticCount": 0,
+      "reconnectPromptAfterVideo": false,
+      "blankAfterArrowMillis": -33.333,
+      "videoSha256": "64c34161e0bf2024125715814139eee321c6706cd50c6dc7c08397edb889c336",
+      "bubbleAfterFullArrowMillis": -33.333
+    },
+    {
+      "name": "offline-1-repeat",
+      "networkReachable": false,
+      "visibleRows": 9,
+      "authDiagnosticCount": 0,
+      "reconnectPromptAfterVideo": false,
+      "blankAfterArrowMillis": 0.0,
+      "videoSha256": "24075f172c814a8c06a49e8c0c00850aac520cb17b17b01cede10a29633af75d",
+      "bubbleAfterFullArrowMillis": -66.667
+    },
+    {
+      "name": "online-1-first",
+      "networkReachable": true,
+      "visibleRows": 9,
+      "authDiagnosticCount": 0,
+      "reconnectPromptAfterVideo": false,
+      "blankAfterArrowMillis": -33.333,
+      "videoSha256": "abceaeed164d50d559072b3d6592351f8ae6979e0e4904948897b4f82693a8af",
+      "bubbleAfterFullArrowMillis": -33.333
+    },
+    {
+      "name": "online-1-repeat",
+      "networkReachable": true,
+      "visibleRows": 9,
+      "authDiagnosticCount": 0,
+      "reconnectPromptAfterVideo": false,
+      "blankAfterArrowMillis": 0.0,
+      "videoSha256": "60128fdd2839e4a93ba9aa3546d0021eba669b4c7304a82eb7f09d703a984112",
+      "bubbleAfterFullArrowMillis": -33.333
+    }
+  ],
+  "visualReview": {
+    "framesInspected": 8,
+    "reviewImage": "review.png",
+    "result": "All adjacent frames show retained bubbles during first/repeat transitions, offline and online; no stale reconnect warning or Retry.",
+    "resolution": "30 fps resampling; scoped to prepared retained conversation on this emulator."
+  },
+  "measurementAccepted": true,
+  "settingsRestored": true,
+  "emulatorDataRetained": true,
+  "newMessagesSent": 0,
+  "scope": "Prepared retained conversation on owned emulator; first/repeat entry, offline and online. Physical phone installation only, no UI interaction. Interrupted refresh, new SDK and other communications acceptance remain separate."
+}
