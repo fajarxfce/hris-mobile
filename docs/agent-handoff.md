@@ -1,5 +1,55 @@
 # Agent continuation — HRIS Mobile
 
+## Current: original SDK inventory accepted locally — 6 November 2026
+
+The original-store inventory is implemented in 17 Kotlin files (including tests and
+app composition). Focused gate 35798 PASSED: 43 fresh cases, zero failures/errors/skips,
+215.601 seconds and 4,238 stable inputs. Full gate 51677 PASSED in 610.974 seconds:
+5,405 fresh cases in 630 suites, zero failures/errors/skips and 4,239 stable inputs.
+Root, Android host/proof compilation, browser, Android assembly/lint, format and
+architecture passed; Android lint has zero issues. The gate has ended. [Contract](collaboration-space-sdk-inventory.md),
+[evidence](measurements/collaboration-space-sdk-inventory-2026-11-06.json).
+Native cipher test 95869 is now the ONLY heavy local job; no owned emulator is active.
+
+The inventory reads existing directory/file and protected-record facts with one SDK
+owner lock. Missing data never authorizes enrollment. Account validation occurs before
+and after local reads; old native namespaces remain readable after same-account login.
+No runtime restoration, SDK dependency, schema, UI or phone build changed. Private-key
+possession and actual organization adoption are still required, not proved by file facts.
+
+Next native candidate is PREPARED ONLY in the isolated checkout
+/home/fajar/hris/.worktrees/matrix-sdk-inventory-2026-11-06. Base is the pinned upstream
+8de215a0 plus the four accepted SDK 3 patches; all 12 existing source hashes matched.
+Seven new/changed files add a read-only SQLite crypto-account reader, bounded cipher
+import, tests and a synchronous FFI entry. It uses the SDK encrypted-value/pickle codec,
+returns public keys derived from the private account, reads committed WAL content,
+never constructs a client or initializes a cipher/account, and preserves closed FFI
+failure categories. Candidate patch/hashes and sequential test driver are under .work/
+space-store-inventory-2026-11-06. They are untested/unpublished and not shipping inputs.
+Native cipher test 95869 has started after gate 51677 ended. Audit its result, then run
+SQLite and FFI checks sequentially with test-sdk.py; no local build/emulator overlap.
+Do not modify /home/fajar/hris/.worktrees/matrix-sdk-raw-event source or published SDK 3.
+Only its compiled Cargo cache may be reused after the Mobile gate ends. Future changed
+binaries require a distinct version, paired bindings and actual consumer acceptance.
+
+Mobile 3d666135 first control 42277469255/native 42277469245 both succeeded. Digest-
+verified artifacts contain 4,315 portable, 1,679 Apple and 395 cases per Android ABI;
+iOS host and encrypted native/worker/notification scenarios passed. [CI evidence](measurements/collaboration-space-bootstrap-transport-ci-2026-11-06.json).
+No redispatch or accepted-send rerun. First 7ef01cd5 control 42282707724 remains running
+(Portable passed, Apple building); native 42282707833 remains running. Preserve those runs.
+
+Starter program 0ff7e59 and Apple audit docs ad7e747 are pushed. Its first Apple run
+42283698949 passed 138 cases/35 suites including nine command-handoff cases, actual iOS
+host and associations. Digest 49865a8b3b1bbd6b40e3957275779fab024de86a62c66d805daf14c6c2fcb397.
+Do not redispatch. Group remains 344211f8/docs 9f298b2e; V117–137 unshipped/disabled.
+Live 10485916/schema 116.1 unchanged. Phone 50 stays installed; pending-send report OPEN.
+Passive UID audit 20:12:51 UTC retains no new Chat/crash lines, not a successful send.
+No phone UI driven, install or new send. Preserve original Bima userdata/sidecars/keys,
+keep the existing optional question pending, and announce every later install-only update.
+Continue hard-parent recovery, freeze/drain/adoption, organization routing and all 54 PRD
+groups. Push every commit; the physical iPhone waiver does not waive Apple builds.
+
+
 ## Current: handoff port pushed; original SDK inventory next — 6 November 2026
 
 Mobile program7ef01cd57caad50f7bdb7ebee782c7cc45413bcf/docs5bc151eb and Group

@@ -6,6 +6,7 @@ import dev.fajar.starter.availability.presentation.di.AvailabilityPresentationMo
 import dev.fajar.starter.collaboration.data.di.CollaborationDataModule
 import dev.fajar.starter.collaboration.data.repositories.UnavailableCollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationSdkInventoryRepository
 import dev.fajar.starter.collaboration.presentation.di.CollaborationPresentationModule
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.config.AppEnvironment
@@ -113,6 +114,9 @@ fun createAppContainer(
     fileInputs: FileInputSource = UnavailableFileInputSource(),
     fileOutputs: FileOutputSource = UnavailableFileOutputSource(),
     http: Module? = null,
+    collaborationSdkInventory: (IdentityServer) -> CollaborationSdkInventoryRepository = {
+        UnavailableCollaborationRuntimeRepository()
+    },
     collaborationRuntime: (IdentityServer, HttpClient) -> CollaborationRuntimeRepository = { _, _ ->
         UnavailableCollaborationRuntimeRepository()
     },
@@ -125,6 +129,7 @@ fun createAppContainer(
         applicationWorkerModule(),
         applicationCollaborationModule(
             collaborationRuntime,
+            collaborationSdkInventory,
             collaborationListCredentials,
             collaborationSpaceDirectoryCredentials,
             collaborationReceiptCredentials,

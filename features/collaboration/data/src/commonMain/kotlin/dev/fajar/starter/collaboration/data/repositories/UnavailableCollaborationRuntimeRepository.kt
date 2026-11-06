@@ -8,7 +8,17 @@ import kotlinx.coroutines.ensureActive
 
 /** Hosts without a native binding cannot create a substitute store or claim SDK readiness. */
 class UnavailableCollaborationRuntimeRepository :
-    CollaborationRuntimeRepository, CollaborationLocalDeviceIdentityRepository {
+    CollaborationRuntimeRepository,
+    CollaborationLocalDeviceIdentityRepository,
+    CollaborationSdkInventoryRepository {
+    override suspend fun inspect(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationSdkInventory> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
     override suspend fun readLocalIdentity(
         owner: CollaborationOwner,
         deviceId: String,

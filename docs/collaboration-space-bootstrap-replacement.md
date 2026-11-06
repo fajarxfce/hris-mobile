@@ -41,3 +41,14 @@ original/replacement intents through atomic local preparation, lost responses an
 process interruption. No existing Unconfirmed command may be erased or silently
 rewritten. Original SDK-store possession, parent recovery and runtime handover remain
 separate requirements before organization chat can be activated.
+
+
+## First-source CI audit — 6 November 2026
+
+Program 3d666135 first control 42277469255 and native 42277469245 both completed
+successfully. Artifact digests match GitHub REST: 4,315 portable and 1,679 Apple tests,
+395 tests on each Android ABI, no failures/errors/skips. The actual iOS host built.
+Each Android ABI retains both encrypted native recovery scenarios, worker scenarios
+and notification cleanup. The native workflow pins Platform 62ee1181. [CI evidence](measurements/collaboration-space-bootstrap-transport-ci-2026-11-06.json)
+records exact commits, artifact checksums and proof limits. No redispatch, SDK
+publication or local accepted-send rerun was used to reconcile this evidence.

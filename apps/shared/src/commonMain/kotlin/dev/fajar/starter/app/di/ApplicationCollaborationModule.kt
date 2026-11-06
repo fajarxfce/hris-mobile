@@ -2,6 +2,7 @@ package dev.fajar.starter.app.di
 
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationSdkInventoryRepository
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.push.usecases.ObserveNativePushStatus
 import dev.fajar.starter.securestorage.AtomicCredentialStore
@@ -13,12 +14,14 @@ import org.koin.dsl.onClose
 /** The application host supplies platform resources; feature bindings remain in collaboration. */
 internal fun applicationCollaborationModule(
     runtime: (IdentityServer, HttpClient) -> CollaborationRuntimeRepository,
+    sdkInventory: (IdentityServer) -> CollaborationSdkInventoryRepository,
     listCredentials: AtomicCredentialStore,
     spaceDirectoryCredentials: AtomicCredentialStore,
     receiptCredentials: AtomicCredentialStore,
     historyCredentials: AtomicCredentialStore,
     notificationInputCredentials: AtomicCredentialStore,
 ) = module {
+    single<CollaborationSdkInventoryRepository> { sdkInventory(get()) }
     single<CollaborationRuntimeRepository> {
         runtime(get(), get(named(dev.fajar.starter.network.HttpClients.Public)))
     }

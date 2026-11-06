@@ -40,6 +40,15 @@ class CollaborationBindingsTest {
             val factoryCount = AtomicInteger()
             var suppliedServer: IdentityServer? = null
             var suppliedHttp: HttpClient? = null
+            var inventoryServer: IdentityServer? = null
+            val inventory =
+                object : CollaborationSdkInventoryRepository {
+                    override suspend fun inspect(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                    ): AppResult<CollaborationSdkInventory> =
+                        error("No implicit private-store inspection")
+                }
             val runtime =
                 object :
                     CollaborationRuntimeRepository, CollaborationLocalDeviceIdentityRepository {
@@ -199,6 +208,10 @@ class CollaborationBindingsTest {
                                 }
                                 .onClose { it?.cancelAndClose() }
                         },
+                    collaborationSdkInventory = { server ->
+                        inventoryServer = server
+                        inventory
+                    },
                     collaborationRuntime = { server, http ->
                         suppliedHttp = http
                         suppliedServer = server
@@ -225,6 +238,9 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<CollaborationSpaceSetupRepository>())
                 assertNotNull(container.koin.get<CollaborationSpaceSetupCommandRepository>())
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceSetup>())
+                assertNotNull(container.koin.get<ReadCollaborationSpaceSdkInventory>())
+                assertSame(inventory, container.koin.get<CollaborationSdkInventoryRepository>())
+                assertSame(container.koin.get<IdentityServer>(), inventoryServer)
                 assertNotNull(container.koin.get<PrepareCollaborationSpaceSetup>())
                 assertNotNull(container.koin.get<PrepareCollaborationSpaceBootstrapReplacement>())
                 assertNotNull(container.koin.get<ReconcileCollaborationSpaceRetry>())

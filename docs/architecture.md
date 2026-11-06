@@ -32,6 +32,9 @@ keeps cached messages independent of transport and places held replies in contex
 [Contextual message selection and durable local deletion](collaboration-message-selection.md)
 adds multi-select/copy/delete-for-me while retaining original message evidence.
 
+[Original SDK inventory](collaboration-space-sdk-inventory.md) separates account-owned
+protected-record/file facts from key possession, live authority and runtime adoption.
+
 [Atomic organization bootstrap handoff](collaboration-space-bootstrap-handoff.md)
 retains the original uncertainty and authenticated successor before explicit replacement
 replay; the use case owns recovery and the repository maps one raw database transaction.
