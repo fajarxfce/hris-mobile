@@ -8,8 +8,13 @@ inputs and zero Android lint/Detekt findings. All required root/Android-host/pro
 browser/assembly/lint/format/architecture targets pass. Focused61 distinct cases
 (including16 new) and actual DI acceptance remain recorded, including the one corrected
 coroutine exception-identity test assertion. [Product evidence](measurements/collaboration-space-sdk-possession-2026-11-06.json).
-No heavy local job or emulator is active at this checkpoint. Product source is being
-committed with this checkpoint; retain and audit its first control/native CI afterward.
+Product5081e629259e33af286304ccd79d91fbd7e8dade is committed/pushed. Its automatic first
+CI runs control42306713193, native42306713065 and protocol42306715423 are running;
+never redispatch. Audit driver is private space-store-inventory-2026-11-06/remote-ci-5081.
+The ONLY heavy local job is Starter47695, quality-source-scope-2026-11-06/full-1.
+Exact generic quality source is applied there and its owned malformed .work fixture
+remains present. Detekt/format/architecture pass; full root/browser/Android/Web is
+still running. Starter inputs stay frozen. No emulator is active.
 
 The first full run46295 remains FAILED945.818s despite7,216 passing fresh tests:
 quality tasks incorrectly included36 generated SDK bindings plus one private probe.

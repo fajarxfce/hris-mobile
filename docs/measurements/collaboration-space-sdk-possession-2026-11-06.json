@@ -184,5 +184,13 @@
     "qualityConventionSha256": "f61dec1331e7e5abd604336ef85e4050b4f8c1f4712b953266a6fe3edea63aa3",
     "onlySourceDifferenceBetweenFullGates": "build-logic/src/main/kotlin/starter.quality.gradle.kts",
     "starterPort": "pending"
+  },
+  "firstCi": {
+    "head": "5081e629259e33af286304ccd79d91fbd7e8dade",
+    "control": 42306713193,
+    "native": 42306713065,
+    "protocol": 42306715423,
+    "status": "running",
+    "redispatched": false
   }
 }
