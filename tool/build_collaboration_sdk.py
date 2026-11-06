@@ -46,6 +46,29 @@ def run(command, *, cwd, env, log, timeout=4800):
             raise subprocess.CalledProcessError(code, command)
 
 
+def verify_native_library(native, abi, ndk):
+    """Validate the ELF ABI and Android's page alignment requirement for that ABI."""
+    _, machine, elf_class = TARGETS[abi]
+    if not 1 <= native.stat().st_size <= 512 * 1024 * 1024:
+        raise ValueError("Unexpected native library size")
+    readelf = ndk / "toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-readelf"
+    header = subprocess.check_output([str(readelf), "-h", str(native)], text=True, timeout=30)
+    segments = subprocess.check_output([str(readelf), "-lW", str(native)], text=True, timeout=30)
+    symbols = subprocess.check_output([str(readelf), "--dyn-syms", "--wide", str(native)], text=True, timeout=30)
+    alignments = [int(line.split()[-1], 16) for line in segments.splitlines() if line.strip().startswith("LOAD")]
+    # Android's 16 KB requirement applies to arm64-v8a/x86_64. The NDK still emits
+    # 4 KB-aligned ARMv7/x86 libraries for their 32-bit device targets.
+    minimum = 16384 if elf_class == "ELF64" else 4096
+    if machine not in header or elf_class not in header or len(alignments) < 2 or not all(n >= minimum for n in alignments):
+        raise ValueError("Unexpected ELF architecture or alignment")
+    required = ["load_or_fetch_raw_event", "queued_message_events", "settle_confirmed_queue_event"]
+    if not all("uniffi_matrix_sdk_ffi_fn_method_room_" + name in symbols for name in required):
+        raise ValueError("Missing SDK entry point")
+    return {"nativeSha256": sha(native), "nativeBytes": native.stat().st_size,
+            "elfClass": elf_class, "requiredElfAlignment": minimum,
+            "loadAlignments": alignments, "requiredSymbolsPresent": True}
+
+
 def build(args):
     patches = Path(__file__).resolve().parent / "collaboration-sdk-patches"
     manifest = json.loads((patches / "android-build.json").read_text())
@@ -69,7 +92,7 @@ def build(args):
                CARGO_PROFILE_DEV_DEBUG="0", CARGO_PROFILE_RELEASE_DEBUG="0", CARGO_INCREMENTAL="0",
                ANDROID_NDK_HOME=str(ndk), CARGO_NDK_PLATFORM=str(manifest["androidApiLevel"]))
     env["PATH"] = str(tools_dir / "bin") + os.pathsep + env["PATH"]
-    target, machine, elf_class = TARGETS[args.abi]
+    target = TARGETS[args.abi][0]
     started = time.monotonic()
     record = {"startedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
               "abi": args.abi, "target": target, "manifestSha256": sha(patches / "android-build.json"),
@@ -112,23 +135,13 @@ def build(args):
             raise ValueError("Generated Kotlin differs from the accepted binding pair")
         libraries = list(main.glob("jniLibs/**/*.so"))
         native = main / "jniLibs" / args.abi / "libmatrix_sdk_ffi.so"
-        if libraries != [native] or not 1 <= native.stat().st_size <= 512 * 1024 * 1024:
+        if libraries != [native]:
             raise ValueError("Unexpected native library output")
-        readelf = ndk / "toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-readelf"
-        header = subprocess.check_output([str(readelf), "-h", str(native)], text=True, timeout=30)
-        segments = subprocess.check_output([str(readelf), "-lW", str(native)], text=True, timeout=30)
-        symbols = subprocess.check_output([str(readelf), "--dyn-syms", "--wide", str(native)], text=True, timeout=30)
-        alignments = [int(line.split()[-1], 16) for line in segments.splitlines() if line.strip().startswith("LOAD")]
-        required = ["load_or_fetch_raw_event", "queued_message_events", "settle_confirmed_queue_event"]
-        if machine not in header or elf_class not in header or len(alignments) < 2 or not all(n >= 16384 for n in alignments):
-            raise ValueError("Unexpected ELF architecture or alignment")
-        if not all("uniffi_matrix_sdk_ffi_fn_method_room_" + name in symbols for name in required):
-            raise ValueError("Missing SDK entry point")
+        inspected = verify_native_library(native, args.abi, ndk)
         shutil.copy2(sdk / "LICENSE", out / "LICENSE")
         shutil.copy2(sdk / "Cargo.lock", out / "Cargo.lock")
         record.update(passed=True, sourcesUnchanged=True, sourceSha256=manifest["patchedSources"],
-                      generatedKotlin=kotlin, nativeSha256=sha(native), nativeBytes=native.stat().st_size,
-                      loadAlignments=alignments, requiredSymbolsPresent=True)
+                      generatedKotlin=kotlin, **inspected)
     finally:
         record["elapsedSeconds"] = round(time.monotonic() - started, 3)
         (out / "result.json").write_text(json.dumps(record, indent=2) + "\n")

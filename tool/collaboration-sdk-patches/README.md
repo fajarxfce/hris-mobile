@@ -186,7 +186,7 @@ ownership, complete-content matching and protected uncertain queue entries.
 an explicit ABI, an Android SDK directory, and separate tooling/output directories.
 `android-build.json` pins both patches, all nine relevant Rust/build inputs, the
 toolchain versions and every generated Kotlin file. The driver rejects changed
-inputs, checks ELF architecture/16KiB alignment and the three required entry points,
+inputs, checks ELF architecture, ABI-specific alignment and the three required entry points,
 and writes candidate evidence beside the JNI/Kotlin pair. It never publishes an
 artifact or changes an application dependency. Timeout handling reaps its owned
 subprocess; two process-lifetime/exit-code tests pass locally.
@@ -197,3 +197,8 @@ read-only repository permissions and a seven-day candidate artifact. Downloaded
 artifacts must pass source, Kotlin, native and workflow-artifact digest checks before
 being combined with the already accepted pair. The hosted build has not yet run
 at this checkpoint; a successful syntax/process test alone does not accept its JNI.
+
+Android's [16 KB page-size requirement](https://developer.android.com/guide/practices/page-sizes)
+applies to `arm64-v8a` and `x86_64`. The verifier requires 16 KiB LOAD alignment for
+those ELF64 binaries and 4 KiB for ELF32 ARMv7/x86, matching NDK 28 output. It rejects
+wrong architectures and missing queue/raw-event entry points independently.

@@ -16,7 +16,7 @@ first/repeat offline and online room entry; all THREE screenshots were inspected
 Owned emulator350599/startTicks163234107 stopped09:04:32UTC, original userdata and
 crypto preserved. No outgoing latency claim. [Release evidence](measurements/collaboration-release43-2026-11-06.json).
 
-PHONE STILL42. Last bounded ADB reconnect about10:35UTC timed out18s. One async
+PHONE STILL42. Last bounded ADB reconnect about11:05UTC timed out18s. One async
 availability question is pending; do not ask again. Once reachable, run43's
 preflight.py, announce EVERY installation, then install.py --install-only.
 Never launch/drive phone UI, erase keys or rebuild43 just because HEAD advanced.
@@ -48,8 +48,8 @@ All9 Kotlin files match; JNI symbols and16KiB LOAD alignment verified.
 arm64 SHA43856af213036df7c2f70dabf7b387a7b60f21dbd79a0a23e69b4a814354a8d3;
 x86_64 SHA48f6a14d6e39a332f8d5f8cc75d8924d636951cdbd97bac1cbc96284eac894ad.
 [Evidence](measurements/collaboration-sdk-confirmed-queue-android-2026-11-06.json).
-New isolated wrapper .worktrees/matrix-kotlin-confirmed-queue contains both paired
-ABIs. The old accepted raw-only wrapper/AAR/consumer remains unchanged and DOES
+New isolated wrapper .worktrees/matrix-kotlin-confirmed-queue contains these paired
+ABIs and the verified ARMv7 library below. The old accepted raw-only wrapper/AAR/consumer remains unchanged and DOES
 NOT have queue methods. Remaining32-bit and Apple distribution are outstanding.
 
 Application integration remains UNCOMMITTED. Latest application-3/session78573
@@ -103,24 +103,36 @@ file exactly. Main still has these21 UNCOMMITTED files; seven new Kotlin files h
 intent-to-add only. Do not accidentally commit product code against upstream26.10.23.
 [Contract](collaboration-confirmed-queue-recovery.md) explains the ownership bounds.
 
-ONLY heavy job: armv7 queue SDK build37017, .work/sdk-confirmed-queue-2026-11-06/
-android-armv7. Rust1.96 targets armv7-linux-androideabi/i686-linux-android are installed.
-The SDK's9 fingerprinted source files are FROZEN; app/docs may be edited independently.
-Next verify armv7 Kotlin/JNI pairing, then build x86 (or use an explicitly verified
-remote build) before combining all FOUR ABIs. Existing two-ABI accepted AAR/APKs
-must stay intact. Add native libraries only to matrix-kotlin-confirmed-queue after
-comparing all9 Kotlin hashes; old raw-only wrapper/consumer is separate.
+ARMv7 SDK build37017 FINISHED883.102s. All nine Kotlin files match the accepted
+pair; native SHA74b8e8b818602dcc1c76d14ab292dfddfda87bd0b29e1bfb4a25527ee01c6b3a,
+98,488,616 bytes. ELF32 ARM and all three entry points verified. The initial local
+verifier incorrectly required16KiB for every ABI. Android's requirement applies to
+64-bit targets: ARMv7/x86 retain their NDK28 default4KiB alignment. Corrected verifier
+accepts the actual ARMv7 binary, still requires16KiB for the accepted arm64 binary,
+and rejects a mismatched ABI. No native build flags or binary changed. Three ABIs
+are now paired in matrix-kotlin-confirmed-queue; the accepted two-ABI AAR is intact.
 
-Remaining: complete SDK artifact distribution with strict hashes, full product/
-minified acceptance, final application commit/push, and next release installation.
-A public immutable SDK artifact in this same public repo with an Ivy descriptor is
-one possible distribution approach, analogous to the existing Binaryen repository;
-no descriptor/workflow/publication or shipping dependency change is implemented yet.
-A pinned SDK build driver/manifest and x86 CI workflow are now prepared. Two
-subprocess lifetime/exit-code tests pass0.118s; YAML/manifest shape checks pass.
-The workflow triggers only on SDK input changes (default x86); hosted build has
-NOT run yet. After pushing, inspect the automatic run; do not dispatch a duplicate.
-No descriptor or SDK publication has been implemented. Apple dependency is unchanged; no new Swift API is referenced.
+Remote SDK run42206523839, sourceb31ff3cd365f88805c71a6b4fbe5b37176fdabd1,
+is building x86. It contains the old uniform16KiB verifier and may reject the valid
+32-bit output. The next SDK-tool push automatically queues the corrected run; do not
+manually dispatch a duplicate. Audit run status, source and artifacts before use.
+No local emulator or heavy process is running as of11:13UTC. The Rust sources remain
+unchanged. [Android evidence](measurements/collaboration-sdk-confirmed-queue-android-2026-11-06.json).
+
+A PRIVATE Ivy repository prototype resolves the exact two-ABI AAR and all upstream
+runtime dependencies with Gradle strict verification. Attempt1 failed before lookup
+because of a trailing space in the test dependency version; attempt2/session95305
+passed5s after correcting that test string. The isolated probe resolves Android JNA
+as an AAR. This proves the repository descriptor layout, not application acceptance.
+No publication or shipping dependency change has occurred. The candidate descriptor
+and evidence are under .work/sdk-confirmed-queue-2026-11-06/ivy-candidate and ivy-probe.
+
+Remaining: verify x86 and package all four ABIs; complete immutable SDK artifact
+and descriptor distribution with strict hashes; run full product/minified acceptance;
+commit/push the accepted application changes and install the next validated release.
+The pinned builder/manifest/CI workflow are tracked. Apple dependency is unchanged;
+no new Swift API is referenced. The Android-only local verification component must
+be replaced by the shipping component before accepting a normal dependency build.
 Preserve all accepted Forward publications and live rollout; never replay them.
 
 Old raw-only native consumer remains accepted: AAR94d907f139a7484bd687b538d8cfce3e90478daa2ab93b9835d9aa8a606becae;

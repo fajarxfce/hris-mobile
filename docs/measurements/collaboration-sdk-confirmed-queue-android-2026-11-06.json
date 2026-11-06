@@ -89,5 +89,40 @@
     "published": false,
     "applicationDependencyChanged": false,
     "consumerAcceptance": false
+  },
+  "armv7": {
+    "abi": "armeabi-v7a",
+    "nativeSha256": "74b8e8b818602dcc1c76d14ab292dfddfda87bd0b29e1bfb4a25527ee01c6b3a",
+    "nativeBytes": 98488616,
+    "elfClass": "ELF32",
+    "requiredElfAlignment": 4096,
+    "loadAlignments": [
+      4096,
+      4096,
+      4096,
+      4096
+    ],
+    "requiredSymbolsPresent": true,
+    "generatedKotlinFiles": 9,
+    "kotlinMatchesAcceptedPair": true,
+    "buildSeconds": 883.102,
+    "sourceSha256": {
+      "Cargo.lock": "e3f28c9f54076bb320270aea995fc1f124c7ed727968dad338f544fe764df7f0",
+      "crates/matrix-sdk/src/send_queue/mod.rs": "91d2ff7784fc4cd3c484e184dfe31c65766dfaa508f6e089a403aa9cfb8ba50e",
+      "crates/matrix-sdk/src/send_queue/confirmed_event_tests.rs": "308e0bc9ecb650c55f66040cf3a76dbb34a3a38040ae5899436567dadbc8323c",
+      "bindings/matrix-sdk-ffi/src/room/mod.rs": "d38b0bc50f9da0365c14717e0821ae2eac9f498f34501211aa66c2ed29febfec",
+      "bindings/matrix-sdk-ffi/src/room/queued_events.rs": "ae6efcba570bbe83ece6e8529b6f6e1dcae7735eec5622586a45a7c4defa1b3f",
+      "bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs": "4dc9c6774802d43c090c8836471f7860809de490cc0317103e262e2848893c58",
+      "Cargo.toml": "cc436eb2188bc6af76078cae40c649a71752a9ef4aa7e832afdd0f3e40853b43",
+      ".cargo/config.toml": "c0c47ae16f20393a824473ecafb819d94d43b4445862b3618729c0feeef36c72",
+      "xtask/src/kotlin.rs": "f52edba777e389a1efb34797e93d55dc67fb1c4460b1c539da439860004ae52a"
+    },
+    "verifiedAt": "2026-11-06T11:08:23.497775+00:00",
+    "candidateOnly": true,
+    "packaged": false,
+    "initialVerifierCorrection": "Rejected an incorrect uniform 16 KB requirement. Android specifies arm64-v8a/x86_64 for this requirement; NDK 28 ARMv7 output retains 4 KB ELF LOAD alignment. No binary or build flags changed.",
+    "alignmentReference": "https://developer.android.com/guide/practices/page-sizes",
+    "wrongAbiRejected": true,
+    "acceptedArm64StillRequires16KiB": true
   }
 }
