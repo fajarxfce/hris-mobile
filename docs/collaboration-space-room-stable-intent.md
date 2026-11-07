@@ -37,3 +37,15 @@ New tests cover authentication replay after native parent/build replacement, exa
 original echo/account ownership, absent then late receipts, denied/conflicting and
 oversized responses, invalid inputs before I/O, and cancellation before publication.
 No APK was built or installed; phone build 53 latency remains unresolved.
+
+## Original first CI acceptance
+
+The original control42366357406 and native42366357400 runs for source79b41269 passed
+and their original artifacts were audited: 1,975 Apple cases / 225 suites, 4,817
+portable cases / 536 suites, and 543 cases / 86 suites on each native Android ABI,
+with zero failures, errors or skips. Both native artifacts contain the pinned SDK4
+library bytes under NDK28.2.13676358. Original queue continuity took31.255s x86 and
+77.166s ARM, preserving original keys/IDs through process death with no provider sends
+and complete fixture cleanup. Separate native HRIS scenarios retain their own send
+counts and passed cleanup. This is not physical-phone latency acceptance.
+[Artifact digests and exact results](measurements/collaboration-room-stable-intent-control-native-ci-2026-11-07.json).

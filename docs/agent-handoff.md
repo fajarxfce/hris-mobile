@@ -38,14 +38,16 @@ No product caller, new APK or organization routing activation exists for these p
 1. Accepted3b3a5d81 is pushed to recovery and primary. First control42369792173 and
    native42369792184 are pending behind running79b. Preserve these first pending runs
    before another primary promotion; continue code on recovery while CI runs.
-2. Push this accepted metadata increment to recovery; preserve first3b3 pending CI
-   before primary promotion. Then apply the SEVEN prepared owning Open preparation
-   files under .work/space-conversation-preparation-2026-11-07/candidate only after
-   checking manifest baseline hashes. They are not applied/tested. They recover an
-   active same-peer original or canonical ID before allocating a new operation,
-   retain known denial for new setup, and reconcile exact-ID lost insertion replies.
-   Thirteen domain cases and application binding are prepared, with focused/full
-   verification drivers. No HTTP, SDK, archive or product routing in that increment.
+2. Metadata aa700e37 is pushed to recovery; preserve first3b3 pending CI before
+   primary promotion. SEVEN owning Open preparation files are now applied/FROZEN
+   after all baseline/candidate hashes matched. Focused50437 passed15 cases204.552s
+   on4,385 unchanged inputs with zero failures/errors/skips and quality checks. Sole
+   heavy job36411 now runs full-1 in .work/space-conversation-preparation-2026-11-07:
+   root/Android host/release lint/actual Browser preparation/shared Wasm. Not accepted yet. They recover an active same-peer
+   original or canonical ID before allocating a new operation, retain denial for
+   new setup and reconcile exact-ID lost insertion replies. Full gate is prepared.
+   No HTTP, SDK, archive or product routing is added by this increment. Next Open
+   replay notes are in its next-open-replay.md; no replay implementation exists yet.
 3. Implement finite owning prepare/replay and projection-before-archive. Recover the
    same original resource/operation after response loss; CAS to Unconfirmed BEFORE HTTP.
    Separate native account/MFA/client denial from conversation/peer denial; do not close
@@ -64,7 +66,7 @@ The reviewed source notes remain in .work/space-conversation-metadata-2026-11-07
 next-preparation.md and the prior command next-owning-flow.md. The metadata key decision
 is now explicit: its partition is INSIDE the existing guarded collaboration-history/
 prefix, like organization root metadata, tested against metadata-only and inactive-
-account key loss. Metadata sources are accepted; preparation candidates are unapplied.
+account key loss. Metadata sources are accepted; preparation candidates are applied/FROZEN, not accepted.
 No fence implementation exists. Do not reinterpret a missing receipt as non-execution.
 
 ## Original SDK and phone invariants
@@ -101,9 +103,14 @@ the cause or resolution of the user's20s–2min pending delay.
 
 ## CI and live state
 
-First3b3 control42369792173/native42369792184 are PENDING. Preserve them.
-First79b control42366357406/native42366357400 have both STARTED. Audit their original
-artifacts when complete; do not rerun accepted provider scenarios just for evidence.
+First3b3 control42369792173/native42369792184 have BOTH STARTED. After preparation's
+full local acceptance, promote the latest accepted source, then preserve its first
+pending runs. First79b control42366357406/native42366357400 are SUCCESS and fully
+audited: Apple1,975/225, portable4,817/536, each native ABI543/86, zero failures/errors/
+skips. Original queue continuity31.255s x86/77.166s ARM preserved keys/IDs and cleanup,
+zero provider sends; separate native HRIS scenarios also passed with cleanup.
+[Original evidence](measurements/collaboration-room-stable-intent-control-native-ci-2026-11-07.json).
+ImmutableSDK4 artifact hashes match. Audit61573 is reaped; no provider scenario rerun.
 First fb514281 control42363807332/native42363807289 are SUCCESS and fully audited:
 portable4,805/534; Apple1,969/224; each native ABI537/85, all zero failures/errors/skips.
 [Control evidence](measurements/collaboration-room-receipts-control-ci-2026-11-07.json),
@@ -116,7 +123,7 @@ its own primary CI after pending runs have started.
 Live API2e75fe1ee88b5766259fc3efd3ab7f21e70d621a, worker10485916, schema116.1 remain
 unchanged. Group V117–137 remain disabled/unshipped. Starterb11437a is clean/pushed;
 current HRIS-specific work requires no generic Starter port. Main branch checkpoint
-3fcccde8 and Group2316eadb point here for build ownership; their earlier running-job
+1a1dba11 and Group2160044c point here for build ownership; their earlier running-job
 statements are superseded by accepted full33894 above.
 
 ## Work rules
