@@ -60,3 +60,17 @@ offline still needs an explicit provisional mapping to its eventual canonical ID
 preserving original message transaction IDs. [Finite original replay and canonical publication before archival](collaboration-space-conversation-open-replay.md)
 are now locally validated. Room request fencing, original SDK delivery/history and
 product integration remain separate work. Physical-phone delivery latency remains open.
+
+## First source CI — 7 November 2026
+
+Original1d9493df control42372520573 and native42372520624 completed SUCCESS, and their
+original artifacts were downloaded and digest-verified. Apple passed2,028 cases/230
+suites; portable passed4,923/546, with zero failures/errors/skips. Actual Apple,
+Desktop and Browser each include14 metadata-storage and13 Open-preparation cases.
+Each Android ABI passed543/86 with the immutable SDK4 libraries and pinned NDK.
+Original queued state/private keys survived interruption and process death in43.694s
+x86 and79.229s ARM, with zero provider sends in that synthetic continuity case.
+Separate actual HRIS fixtures preserve their measured sends, cleanup and inapplicable
+false flags. [Exact runs, artifact hashes and selected reports](measurements/collaboration-space-conversation-preparation-control-native-ci-2026-11-07.json).
+This is read-only artifact review, not a provider rerun, later Open-replay/fence proof
+or physical-phone latency acceptance.

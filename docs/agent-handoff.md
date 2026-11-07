@@ -53,24 +53,25 @@ No product caller, new APK or organization routing activation exists for these p
 
 ## Next work
 
-1. Primary now31e618cc89e2ca0cce38bcb62ccd95b8533c88c0 (Open335e3914 included). First
-   control42376025279/native42376025306 are PENDING behind running first1d9493df
-   control42372520573/native42372520624. Preserve before another primary promotion.
-   First3b3 control/native are SUCCESS and fully audited; no provider reruns.
-2. Group native fenced recovery dcdaf220 is accepted/pushed:14 Kotlin files over V138
-   storagec6937843, dedicated raw/typed mapping, owning native transaction and current-
-   admitted stable writer rejection. Focused49421 passed195 cases319.052s; API + FULL
-   worker71315 passed241 cases540.839s, zero failures/errors and one existing opt-in
-   retention skip. Both had8,635 unchanged inputs and quality passed; all reaped.
-   [Native contract](https://github.com/fajarxfce/hris-platform/blob/dcdaf220/docs/collaboration/native-room-request-fence.md).
-   Sole heavy job57183 now runs Group `.work/room-request-fence-http-2026-11-07/http-1`:
-   SIX HTTP files are applied/FROZEN, NOT accepted. Typed original-key fence route,
-   exact Recorded/Fenced echo, refresh/parent purge, bounds/no-store/OpenAPI/disabled
-   tests. Do not edit Group frozen inputs or run another heavy job.
-   ELEVEN Mobile candidates are isolated in `.work/space-room-request-fence-2026-11-07`:
-   typed result/policy/transport, shared original-echo mapping and8 Ktor cases. They
-   are NOT applied or tested. Accept Group HTTP first and verify baseline hashes before
-   applying. HTTP503 maps to Service; no durable evidence/successor or product caller.
+1. Primary31e618cc89e2ca0cce38bcb62ccd95b8533c88c0 includes Open335e3914. Its first
+   control42376025279/native42376025306 have BOTH STARTED by14:00UTC. A later accepted
+   source promotion no longer risks replacing their pending first runs. First1d9493df
+   control42372520573/native42372520624 are SUCCESS and fully audited: Apple2,028/230,
+   portable4,923/546, native543/86 each. Actual Apple/Desktop/Browser each contain14
+   metadata-storage and13 Open-preparation cases; immutableSDK4 keys/IDs/cleanup pass.
+   Audit85452 is reaped; no provider rerun. [First-source evidence](measurements/collaboration-space-conversation-preparation-control-native-ci-2026-11-07.json).
+2. Group native dcdaf220 and HTTP cf885a1c are accepted/pushed. Focused195/319.052s and
+   API/FULL worker241/540.839s pass with one existing opt-in retention skip. Corrected
+   HTTP42852 passes99/202.31s on8,637 stable inputs,0failure/error/skip/quality. First57183
+   fixture expectation failure is retained: unselected provider identity rejects the
+   writer with peer_unavailable. Current admission is unchanged. All Group jobs reaped.
+   [Server contract](https://github.com/fajarxfce/hris-platform/blob/cf885a1c/docs/collaboration/native-room-request-fence-http.md).
+   ELEVEN Mobile files are now applied/FROZEN, NOT accepted. Focused12497 passed44 cases
+   in187.108s on4,398 unchanged inputs, zero failures/errors/skips, format/architecture/
+   Detekt. Sole heavy job77406 runs `.work/space-room-request-fence-2026-11-07/full-1`:
+   root, Android host/release lint,14 actual Browser fence/receipt cases, shared Wasm
+   and quality. Do not edit frozen source or start another compiler/emulator. No
+   durable evidence/successor, product caller or APK yet; candidates are historical.
 3. Open preparation/replay and canonical projection-before-archive are locally accepted.
    Continue equivalent owning Room request projection/recovery and original SDK routing.
    Separate native account/MFA/client denial from conversation/peer denial; do not close
@@ -86,9 +87,9 @@ No product caller, new APK or organization routing activation exists for these p
    is waived, but relevant Apple CI/compilation remains required.
 
 Metadata/preparation/Open candidates are historical applied staging; do not reapply.
-The real codec fix supersedes Open's initial candidate directory. Group's native14-file
-fence integration is accepted/pushed; its6 HTTP files are frozen for57183. Mobile's11
-fence candidates remain unapplied. Group's handoff is now concise with linked full history.
+The real codec fix supersedes Open's initial candidate directory. Group native14-file
+and HTTP6-file fence integration are accepted/pushed. Mobile's11 fence files are
+applied/FROZEN for77406; their candidates must not be reapplied.
 Metadata remains inside the guarded collaboration-history/ prefix.
 
 ## Original SDK and phone invariants
@@ -118,14 +119,16 @@ never launch or drive the user's phone UI while it is in use.
 
 Phone latency is OPEN. Latest bounded10s reconnect at11:41UTC timed out; no new phone
 logs. Earlier08:38 passive UID audit had0 postinstall lines: silence is not acceptance.
-Existing optional feedback is pending; do not repeat the question. Bima's06:42:18UTC
-read-only audit had1 active device,1 device key,50 signed one-time keys and1 fallback.
+Existing optional feedback is pending; do not repeat the question. Fresh14:00:00UTC
+read-only Bima audit confirms1 active device/provider binding,1 device key,50 signed
+one-time keys and1 fallback, without login/send/private-key/phone access. [Server evidence](https://github.com/fajarxfce/hris-platform/blob/ddf214f1/docs/measurements/collaboration-bima-recipient-keys-2026-11-07.json).
 He does not need to stay online for sender server acceptance. This does not establish
 the cause or resolution of the user's20s–2min pending delay.
 
 ## CI and live state
 
-Both first1d9493df control42372520573/native42372520624 have STARTED.
+Both first1d9493df control42372520573/native42372520624 are SUCCESS and fully audited;
+first31e618cc control42376025279/native42376025306 have STARTED.
 First3b3 native42369792184 is SUCCESS and original artifacts audited:543/86 perABI,
 zero failures/errors/skips, original queue33.483s x86/80.188s ARM,0 provider sends,
 keys/IDs and cleanup preserved. Separate HRIS fixture sends/cleanup remain exact.
