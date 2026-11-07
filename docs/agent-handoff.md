@@ -35,11 +35,11 @@ Their source contracts and exact results are linked by architecture and prior ch
 
 ## Next work
 
-1. Commit/push accepted owning resolution, then ordinary fast-forward primary promotion.
-   Primary was fe3992f1426712bf23964bf5aea68ad382f1b624; its first control42380244144 and
-   native42380243983 have BOTH STARTED. The pending-first-run barrier is clear for this
-   promotion. Record/preserve the next first control/native IDs before another primary
-   promotion; recovery source/doc work can continue without replacing pending runs.
+1. Accepted source0d10c395fb0c637d27344d037d63961a1af9bd80 is pushed to recovery and
+   primary. First control42383612502/native42383612567 are PENDING behind running
+   firstfe control42380244144/native42380243983. Preserve both new first runs before
+   another primary promotion; continue implementation on recovery. The nine owning
+   resolution files and durable storagefc0034ed are included in that exact primary head.
 2. Implement [atomic original/successor storage](collaboration-space-room-successor-plan.md)
    using existing raw archiveAndInsert, authenticated forward/back references and unchanged
    original ciphertext. NINE production/fixture candidates are isolated in
