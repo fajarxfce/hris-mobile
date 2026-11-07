@@ -17,7 +17,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.collaboration.presentation.navigation.ChatThreadViewportObserver
+import dev.fajar.starter.collaboration.presentation.navigation.ChatThreadViewport
 import dev.fajar.starter.collaboration.presentation.thread.*
 import dev.fajar.starter.collaboration.presentation.thread.pages.ChatThreadPage
 import dev.fajar.starter.designsystem.theme.AppTheme
@@ -75,7 +75,7 @@ class ChatThreadViewportTest {
                     if (render) {
                         list = rememberLazyListState()
                         Box(Modifier.size(width, height)) {
-                            ChatThreadViewportObserver(state, list) {
+                            ChatThreadViewport(state, list) {
                                 events += assertIs<ChatThreadEvent.ViewportChanged>(it)
                             }
                             ChatThreadPage(state, list, {})

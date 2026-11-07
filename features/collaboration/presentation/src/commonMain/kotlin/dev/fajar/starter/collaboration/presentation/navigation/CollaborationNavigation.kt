@@ -263,7 +263,7 @@ private fun ChatThreadEntry(
     }
     BackHandler { vm.onEvent(ChatThreadEvent.BackRequested) }
     ChatThreadFocusObserver(state, conversationId, onThreadFocus)
-    ChatThreadViewportObserver(state, list, vm::onEvent)
+    ChatThreadViewport(state, list, vm::onEvent)
     ChatThreadPage(
         state,
         list,

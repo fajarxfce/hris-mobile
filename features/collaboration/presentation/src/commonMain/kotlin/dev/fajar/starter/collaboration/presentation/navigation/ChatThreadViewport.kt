@@ -10,13 +10,34 @@ import dev.fajar.starter.collaboration.presentation.thread.ChatThreadEvent
 import dev.fajar.starter.collaboration.presentation.thread.ChatThreadState
 import kotlinx.coroutines.flow.*
 
-/** Rendering evidence only; the ViewModel admits exact retained originals before local writes. */
+/** Owns route-local end anchoring and visibility; domain admission still guards read writes. */
 @Composable
-internal fun ChatThreadViewportObserver(
+internal fun ChatThreadViewport(
     state: ChatThreadState,
     list: LazyListState,
     onEvent: (ChatThreadEvent) -> Unit,
 ) {
+    val newestKey = state.rows.firstOrNull()?.key
+    var displayedNewestKey by remember(list) { mutableStateOf(newestKey) }
+    SideEffect {
+        if (displayedNewestKey != newestKey) {
+            displayedNewestKey = newestKey
+            // Preserve the end position in this layout pass. Stable-key anchoring would
+            // otherwise keep the previous last message visible and place the new one below it
+            // until the later send-confirmation effect requests a scroll.
+            if (
+                state.forwarding == null &&
+                    !state.leaving &&
+                    state.localFailure == null &&
+                    !state.browsingHistory &&
+                    !state.hasNewer &&
+                    !list.isScrollInProgress &&
+                    list.firstVisibleItemIndex == 0 &&
+                    list.firstVisibleItemScrollOffset == 0
+            )
+                list.requestScrollToItem(0)
+        }
+    }
     val current by rememberUpdatedState(state)
     val dispatch by rememberUpdatedState(onEvent)
     val owner = LocalLifecycleOwner.current

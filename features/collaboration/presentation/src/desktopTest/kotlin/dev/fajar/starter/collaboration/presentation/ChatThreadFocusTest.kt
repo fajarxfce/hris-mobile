@@ -13,7 +13,7 @@ import androidx.lifecycle.*
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.presentation.navigation.ChatThreadFocusObserver
-import dev.fajar.starter.collaboration.presentation.navigation.ChatThreadViewportObserver
+import dev.fajar.starter.collaboration.presentation.navigation.ChatThreadViewport
 import dev.fajar.starter.collaboration.presentation.thread.*
 import kotlin.test.*
 import org.junit.Rule
@@ -134,7 +134,7 @@ class ChatThreadFocusTest {
                         item("message") { Box(Modifier.fillMaxWidth().height(64.dp)) }
                     }
                 if (observing)
-                    ChatThreadViewportObserver(state, list) { event ->
+                    ChatThreadViewport(state, list) { event ->
                         if (event is ChatThreadEvent.ViewportChanged) events += event
                     }
             }

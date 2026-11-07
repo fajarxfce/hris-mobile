@@ -1,5 +1,8 @@
 # Architecture
 
+[Chat end positioning](collaboration-chat-new-message-position.md) belongs to the route
+viewport owner; the page remains state-driven and older reading positions stay anchored.
+
 [Chat authority renewal](collaboration-offline-authority-renewal.md) targets captured
 selected work while preserving local reads, durable originals and separate background admission.
 

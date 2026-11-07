@@ -5,6 +5,37 @@ continuing. [Previous checkpoint](https://github.com/fajarxfce/hris-mobile/blob/
 retains all earlier source/CI history and links older local handoff archives. Git and
 contracts are authoritative; `.work` is staging/evidence, never permission to reapply.
 
+## Latest viewport acceptance — 7 November 2026, 18:30 UTC
+
+The existing route viewport now owns end anchoring and visibility, renamed to
+ChatThreadViewport. ChatThreadPage is restored exactly; navigation/two existing tests
+reference the renamed owner and a new three-case UI fixture verifies first-frame
+pending visibility at narrow2× text/landscape and stable older reading position.
+Focused79843:13 cases/61.538s; full21721:927 fresh cases/387.643s on4,415 unchanged
+inputs, zero failures/errors/skips/lint. Root/Android/quality/shared Wasm pass; both
+actual synthetic first-layout screenshots were opened. All Mobile jobs REAPED.
+[Contract](collaboration-chat-new-message-position.md). Original baseline9523 has two
+intended UI failures; focused47010 passes eight UI cases but fails page architecture;
+focused77480 lacks lifecycle in three new fixtures. All earlier failures are retained.
+The final fixture uses STARTED lifecycle and destroys its owner; no production change
+between focused-3 and full-1. This has no device/phone56 acceptance and does not fix
+keyboard dismissal. Phone and original stopped emulator remain55 with all data intact.
+
+Inspector sole heavy job29293 now runs the first Compose viewer strict check. Inspector
+sources are FROZEN until reaped; no Mobile compiler/emulator may overlap. Its new optional
+Compose module has three production/two test Kotlin files: state-driven list/detail,
+source/status/query filtering, bounded search, host-owned selection/clear/navigation and
+missing-detail erasure. Four common and four JVM UI cases are authored, NOT accepted.
+All targets declared; actual target acceptance still needed. Existing core42/Ktor39
+local cases remain accepted. Private main f7fc606 is pushed, first CI billing-blocked,
+visibility question pending. No real Matrix observer, release or app integration yet.
+
+Main/Group4f53bcb6/183e3989 are pushed. Primary Mobile95e35b9d first control42399395125/
+native42399395077 are still the next first runs to preserve; do not advance primary
+until both start. Recovery can push accepted work. Live services/schema and Starter
+unchanged. Continue keyboard/durable composer, actual Matrix inspector/host integration,
+then original Room dispatch and all54 PRD groups; no PRD group is complete.
+
 ## Latest installed continuation — 7 November 2026, 18:11 UTC
 
 Release55 on source95e35b9d39f43b671ad1bb6612b1b3d26f233161 is installed on the phone.
