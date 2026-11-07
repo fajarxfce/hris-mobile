@@ -1,5 +1,9 @@
 # Architecture
 
+[Original organization queue facts](collaboration-space-original-queue.md) retain the
+physical message namespace while observing one exact logical runtime through its
+existing exclusive paused writer. Publication and delivery remain separately admitted.
+
 [Organization runtime admission](collaboration-space-runtime-admission.md) owns the
 finite current-session/device checks and final publication while preserving original
 bootstrap identity through ordinary token refresh and concurrent activation.

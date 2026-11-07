@@ -48,6 +48,28 @@ class AndroidCollaborationRuntimeRepository(
     private val legacyLeases
         get() = registry.legacyResources()
 
+    override suspend fun inspectOriginalQueue(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+    ): AppResult<CollaborationSpaceOriginalQueueSnapshot> {
+        currentCoroutineContext().ensureActive()
+        val lease =
+            registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
+                ?: return handoverPending()
+        val result = lease.inspectOriginalQueue(matrixRoomId)
+        currentCoroutineContext().ensureActive()
+        lease.credentialFailures.value?.let {
+            return AppResult.Failed(it)
+        }
+        if (registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId) !== lease)
+            return handoverPending()
+        return when (result) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                AppResult.Success(CollaborationSpaceOriginalQueueSnapshot(runtime, result.value))
+        }
+    }
+
     override suspend fun isSpaceOpen(
         owner: CollaborationSpaceOwner,
         deviceId: String,

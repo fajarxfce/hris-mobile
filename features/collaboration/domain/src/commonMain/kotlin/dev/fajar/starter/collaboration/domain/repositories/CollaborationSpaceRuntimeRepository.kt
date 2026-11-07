@@ -6,6 +6,16 @@ import kotlinx.coroutines.flow.StateFlow
 
 /** Original store I/O and logical SDK lifetime. The owning use case admits every live operation. */
 interface CollaborationSpaceRuntimeRepository {
+    /**
+     * Complete paused queue facts from an already installed exact runtime and known room. Never
+     * opens a store, joins, synchronizes, enqueues, settles or resumes. The owning use case must
+     * admit publication; an unavailable live runtime never invalidates retained offline history.
+     */
+    suspend fun inspectOriginalQueue(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+    ): AppResult<CollaborationSpaceOriginalQueueSnapshot>
+
     suspend fun isSpaceOpen(
         owner: CollaborationSpaceOwner,
         deviceId: String,

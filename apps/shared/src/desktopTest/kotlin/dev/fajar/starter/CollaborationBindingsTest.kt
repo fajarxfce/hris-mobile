@@ -63,6 +63,12 @@ class CollaborationBindingsTest {
                     CollaborationRuntimeRepository,
                     CollaborationLocalDeviceIdentityRepository,
                     CollaborationSpaceRuntimeRepository {
+                    override suspend fun inspectOriginalQueue(
+                        runtime: CollaborationSpaceRuntimeReady,
+                        matrixRoomId: String,
+                    ): AppResult<CollaborationSpaceOriginalQueueSnapshot> =
+                        error("No implicit original queue read")
+
                     override suspend fun isSpaceOpen(
                         owner: CollaborationSpaceOwner,
                         deviceId: String,

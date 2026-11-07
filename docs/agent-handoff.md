@@ -4,7 +4,50 @@ This is the active checkpoint. The [historical handoff](agent-handoff-history-th
 retains earlier work verbatim. Detailed measurements below are authoritative; do not
 restart accepted builds, native sends or SDK publication solely to recreate evidence.
 
-## Current next step — 7 November 2026, 05:36 UTC
+## Accepted original queue observation — 7 November 2026, 05:55 UTC
+
+The exact logical-runtime queue observation is accepted and ready to commit/push from
+f21f340a. No heavy job or emulator remains. Ten source/test files match the final
+4,300-input manifest. Focused61572 passed30fresh/4suites/199.31s; full27586 passed
+5,657fresh/659suites/568.365s; after explicitly opting the new test class into the
+experimental scheduler API, final42773 passed466fresh/71suites/107.828s. Zero failures,
+errors, skips, Android lint or Detekt findings; no new original-queue compiler warning.
+[Contract](collaboration-space-original-queue.md),
+[evidence](measurements/collaboration-space-original-queue-2026-11-07.json).
+
+The existing exclusive writer now owns bounded original-queue reads and late cleanup.
+It retains exact physical binding/device/message-bootstrap/content while the repository
+addresses the installed Space/native/device/bootstrap identity. No legacy send handle,
+new transaction, sync, settlement or delivery is exposed. Host queues are simulated;
+actual original pending-transaction continuity and live delivery are NOT established.
+
+NEXT: review/apply the SEPARATE candidate under
+.work/space-original-queue-native-2026-11-07/candidate AFTER this accepted slice is
+committed/pushed. Four Kotlin and three Python files add actual paused native transactions
+through a synthetic loopback room seed, then verify originals after interrupted schema4
+staging, process death and offline adoption. Candidate Python8cases passed2.017s with
+ResourceWarning promoted to error; original unclosed HTTPError warnings and corrections
+are recorded. The final post-test review moves request counters after joined seed
+shutdown; rerun candidate tests before application. Kotlin is not yet compiled and no
+native run has occurred. Reformat the final candidate before compile. Validate exact
+source hashes on application, use fresh uniquely owned emulator userdata, and never
+run Gradle beside it. Preserve first failures, SDK4 and original Bima files/keys.
+
+Primary Mobile remainsa48c59f1: FIRST control42342142245 is PENDING while native
+42342142282 has STARTED. Push the temporary branch now; do not supersede that first
+pending control. FIRST2509 native42340255481 is FAILED and fully audited: ARM477/79
+pass, x86host471/76 pass, then raw notification absence throws IOException at
+confirmRemoved:228 before later native proofs. Both artifact digests and original log
+are in [CI evidence](measurements/collaboration-adoption-native-ci-2026-11-07.json).
+Control42340255503 remains IN_PROGRESS; protocol is audited. Both original notification
+failures remain unexplained; no OS timing repair is claimed.
+
+Mainab1d0832/Group1fcc84ec are pushed checkpoints; Starter03ebcde unchanged. Live API,
+schema/V117–137 disabled status and immutable SDK4 are unchanged. Phone53 optional
+feedback and latency stay OPEN; passive05:34:41 audit found no post-install logs.
+No phone UI or new messages. Continue all54groups and push every atomic commit.
+
+## Accepted notification checkpoint — 7 November 2026, 05:33 UTC
 
 Notification diagnostics are accepted and ready to commit from a48c59f1. No heavy
 job or emulator remains. Four proof/driver/test files match the final 4,298-input

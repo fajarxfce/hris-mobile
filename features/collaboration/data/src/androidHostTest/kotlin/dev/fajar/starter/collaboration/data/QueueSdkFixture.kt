@@ -6,7 +6,7 @@ import org.matrix.rustcomponents.sdk.*
 internal class QueueRoom(
     private val encrypted: Boolean = true,
     private val timelineFailure: Boolean = false,
-    private val transactions: Set<String> = emptySet(),
+    var transactions: Set<String> = emptySet(),
     private val beforeTimeline: suspend () -> Unit = {},
 ) : Room(NoHandle) {
     val calls = mutableListOf<String>()
@@ -15,6 +15,19 @@ internal class QueueRoom(
     private var initialized = false
     var enabled = false
         private set
+
+    var originals: List<QueuedMessageEvent> = emptyList()
+    var beforeOriginals: suspend () -> Unit = {}
+    var beforeClose: () -> Unit = {}
+    var originalReads = 0
+
+    override suspend fun queuedMessageEvents(): List<QueuedMessageEvent> {
+        calls += "originals.read"
+        check(!enabled)
+        originalReads++
+        beforeOriginals()
+        return originals
+    }
 
     var onEnable: () -> Unit = {}
     var beforeSubscriptionReturns: suspend () -> Unit = {}
@@ -55,6 +68,7 @@ internal class QueueRoom(
     }
 
     override fun close() {
+        beforeClose()
         calls += "room.close"
     }
 }

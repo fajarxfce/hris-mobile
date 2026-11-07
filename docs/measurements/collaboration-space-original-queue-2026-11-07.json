@@ -1,0 +1,113 @@
+{
+  "recordedAt": "2026-11-07T05:55:31.933550+00:00",
+  "baseCommit": "f21f340aff55518e53f75cdf516b49512b1e7790",
+  "sourceFiles": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "3e5cc9be56a77d6df337ca61bf2841b8b8d667aebc7104791ab3f7e2b64d90a5",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationOriginalQueueTest.kt": "1839da13734f695835cba9aa7bd82a0db4ed1df106e4520c486930fb8be59770",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/QueueSdkFixture.kt": "2e9dd91f0b94f03a0989128ba19b474da27214392f177748879e960b1391bfb1",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationMessageQueues.kt": "f6c2377a375ffbe991455b5bba57d6360e12489a5015724531c4e8537407a979",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeLease.kt": "873034b2ce2b64a97075ec91c804b7b14f81889c2cad2a516a0a518e70d8556d",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "665c87663520d0fac0acd6ff6aa189de78ad17baa209a67f10a927903eae8a80",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/UnavailableCollaborationRuntimeRepository.kt": "5cf318b4fd47c1d9b6c16f31e6b26e22d2c7e6d3874fc97b6f9781abd674b3a3",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationOriginalQueueSnapshot.kt": "add5109b740a906d529281a2149ab780a198456ba97b766477df2d99e8000f26",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceRuntimeRepository.kt": "3613446d314ec74e9ba5a255e5bf2da1aad937f549801824e450a1ebfdc1860d",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRuntimeAdoptionFixture.kt": "09c726b73fee73acbe59233e23842c62875bdd8633ee3329a70f477b8d193620"
+  },
+  "checks": [
+    {
+      "startedAt": "2026-11-07T05:39:33.947791+00:00",
+      "elapsedSeconds": 199.31,
+      "exitCode": 0,
+      "sourceFiles": 4300,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 30,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "focused-1",
+      "freshSuites": 4,
+      "sourceManifestSha256": "45ef7b8852e4ac86aeb8cd55a240656d0834812248012d290b5d5c012cd0b4ce",
+      "stdoutSha256": "e3ce1601e3d560c0648d8129c78e5ccec9504625a86765e4aa89d5260d2eeafa",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "startedAt": "2026-11-07T05:43:20.575622+00:00",
+      "elapsedSeconds": 568.365,
+      "exitCode": 0,
+      "sourceFiles": 4300,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5657,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "full-1",
+      "freshSuites": 659,
+      "sourceManifestSha256": "45ef7b8852e4ac86aeb8cd55a240656d0834812248012d290b5d5c012cd0b4ce",
+      "stdoutSha256": "5333f4f583334a55d46c0e19bfe6053c6effd0c037445e4f79c9a1228246d409",
+      "stderrSha256": "0205568d9f783d329f200ef7e828a736ca91822ce02b9f74d0bb6e78b7fcd022"
+    },
+    {
+      "startedAt": "2026-11-07T05:53:26.512253+00:00",
+      "elapsedSeconds": 107.828,
+      "exitCode": 0,
+      "sourceFiles": 4300,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 466,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "final-1",
+      "freshSuites": 71,
+      "sourceManifestSha256": "113f63c932d97ceb37a1896f037dee6a25d20884a15679402185c954e57c6aaa",
+      "stdoutSha256": "74124d0b94961a402cc0e34f3078e193cf9da402c1b2fcdb3f6662ead5cfe09c",
+      "stderrSha256": "6415a66315f6b97ad6c62285cd43d9ef0212ed54c7a13adaaff68a0ba2ecb12b"
+    }
+  ],
+  "acceptedCommand": [
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    "--stacktrace",
+    "--continue",
+    ":check",
+    ":features:collaboration:data:testAndroidHostTest",
+    ":formatCheck",
+    ":architectureCheck",
+    ":apps:collaboration-proof:compileDebugKotlin",
+    ":apps:android:lintDevDebug",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=53",
+    "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx2560m",
+    "-Pkotlin.compiler.execution.strategy=in-process"
+  ],
+  "review": {
+    "at": "2026-11-07T05:52:33.625853+00:00",
+    "activeGate": 27586,
+    "applyAfterGateOnly": true,
+    "file": "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationOriginalQueueTest.kt",
+    "finding": "New runCurrent test call needs explicit ExperimentalCoroutinesApi opt-in. Add the class annotation after full-1 completes; preserve test behavior and recompile/check final source."
+  },
+  "reviewApplied": true,
+  "lintErrors": 0,
+  "lintWarnings": 0,
+  "detektFindings": 0,
+  "hostQueueSimulated": true,
+  "nativePendingContinuityProven": false,
+  "actualPendingMessageDeliveryProven": false,
+  "liveProductCallerAdded": false,
+  "liveGroupActivation": false,
+  "phoneTouched": false,
+  "phoneLatencyResolved": false,
+  "nativeSdkRebuilt": false
+}

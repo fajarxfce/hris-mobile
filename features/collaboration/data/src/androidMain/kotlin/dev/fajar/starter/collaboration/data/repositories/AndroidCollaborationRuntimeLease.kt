@@ -11,6 +11,7 @@ import dev.fajar.starter.collaboration.data.mappers.toLocalDeviceIdentity
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkRecord
 import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalDeviceIdentity
 import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageDevice
+import dev.fajar.starter.collaboration.domain.entities.CollaborationOriginalQueueSnapshot
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwnReadReceipts
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.domain.entities.CollaborationProviderHistoryPage
@@ -262,6 +263,11 @@ internal constructor(
     /** Explicit queue entry acquires a child writer; SDK delivery stays paused. */
     suspend fun acquireMessageQueue(roomId: String): AppResult<CollaborationMessageQueueLease> =
         messageQueues.acquire(roomId)
+
+    /** Original local queue facts only; no send capability escapes through this operation. */
+    internal suspend fun inspectOriginalQueue(
+        roomId: String
+    ): AppResult<CollaborationOriginalQueueSnapshot> = messageQueues.inspectOriginals(roomId)
 
     /** Borrowed transport reads only a head; this runtime owns cancellation of that request. */
     suspend fun findHistoryHead(roomId: String): AppResult<String?> = historyReads.read(roomId)

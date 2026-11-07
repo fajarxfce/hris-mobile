@@ -85,6 +85,12 @@ internal class SpaceRuntimeAdoptionFixture {
     var beforeIsOpen: suspend () -> Unit = {}
     val runtimes =
         object : CollaborationSpaceRuntimeRepository {
+            override suspend fun inspectOriginalQueue(
+                runtime: CollaborationSpaceRuntimeReady,
+                matrixRoomId: String,
+            ): AppResult<CollaborationSpaceOriginalQueueSnapshot> =
+                error("No implicit original queue read")
+
             override suspend fun isSpaceOpen(
                 owner: CollaborationSpaceOwner,
                 deviceId: String,

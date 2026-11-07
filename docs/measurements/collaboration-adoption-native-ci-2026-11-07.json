@@ -1,0 +1,325 @@
+{
+  "at": "2026-11-07T05:45:02.559812+00:00",
+  "headSha": "2509c9dda373f9eb7b9babc854c67d732b17c6cd",
+  "runs": [
+    {
+      "id": 42340255481,
+      "status": "completed",
+      "conclusion": "failure",
+      "jobs": [
+        {
+          "name": "Android HRIS (arm64-v8a)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-07T04:51:40Z",
+          "completedAt": "2026-11-07T05:42:01Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run android-actions/setup-android@v3",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build isolated Android SDK fixture before starting the emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Verify fixture native ABI before runtime acceptance",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Compile HRIS fixture and verify driver cleanup",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Enable KVM for the owned runner emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run reactivecircus/android-emulator-runner@v2",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "name": "Android HRIS (x86_64)",
+          "status": "completed",
+          "conclusion": "failure",
+          "startedAt": "2026-11-07T04:51:41Z",
+          "completedAt": "2026-11-07T05:13:50Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run android-actions/setup-android@v3",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build isolated Android SDK fixture before starting the emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Verify fixture native ABI before runtime acceptance",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Compile HRIS fixture and verify driver cleanup",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Enable KVM for the owned runner emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run reactivecircus/android-emulator-runner@v2",
+              "status": "completed",
+              "conclusion": "failure"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "artifactId": 13562344048,
+          "name": "native-hris-arm64-evidence",
+          "sha256": "4f786773e15f700ada25d5635e30ef166b512adf37a73e09f32fff3b5bbf740a",
+          "bytes": 300109,
+          "suites": 79,
+          "counts": {
+            "tests": 477,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": {
+            "abi": "arm64-v8a",
+            "apkSha256": "af3086deb35702cab6e755e4b472eb68d6646e1709d15e49da10d4a4a9429763"
+          },
+          "proof": {
+            "platform/.work/collaboration/2e224fab0ea9414cbc3a31594967d880/verified.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSendCount": 3,
+              "nativeRedactionRequests": 0,
+              "retainedConfirmedQueueScenario": false,
+              "processRestartedAfterAck": true,
+              "processRestartedAfterCompletion": true
+            },
+            "platform/.work/collaboration/5c00ec0accf6427881e6ed34aa319167/verified.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSendCount": 3,
+              "nativeRedactionRequests": 0,
+              "retainedConfirmedQueueScenario": true,
+              "confirmedNativeQueueRestored": true,
+              "confirmedNativeQueueRetryNoop": true,
+              "confirmedNativeQueueSettledOffline": true,
+              "processRestartedAfterAck": true,
+              "processRestartedAfterCompletion": true
+            },
+            "platform/.work/collaboration-worker/30e1df7d8b074794a4e147f2cdb51c7f/acceptance.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSends": 1,
+              "workManagerExecutionAccepted": true,
+              "retryCancellationAccepted": false
+            },
+            "platform/.work/collaboration-worker/5ef2ed9d74124b058ae5d5fb6ad242fc/acceptance.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSends": 176,
+              "foregroundHistoryAccepted": true,
+              "platformWorkManagerAccepted": false
+            },
+            "platform/.work/collaboration-worker/c67c41455c444cb2b1d162901055e552/acceptance.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSends": 176,
+              "foregroundHistoryAccepted": true,
+              "platformWorkManagerAccepted": false
+            },
+            "platform/.work/collaboration-worker/c72cab25e9334f9c865f0d78360962be/acceptance.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSends": 176,
+              "foregroundHistoryAccepted": true,
+              "platformWorkManagerAccepted": false
+            },
+            "mobile/.work/native-notification-proof/result.json": {
+              "complete": true,
+              "fixtureAbsent": true,
+              "fixtureUninstalled": true,
+              "fixtureDataCleared": true
+            }
+          }
+        },
+        {
+          "artifactId": 13562135131,
+          "name": "native-hris-evidence",
+          "sha256": "d6af5233b315a13da816f88d70f6c5fb7789da162bcb1751782793c91002d7e3",
+          "bytes": 89101,
+          "suites": 76,
+          "counts": {
+            "tests": 471,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": {
+            "abi": "x86_64",
+            "apkSha256": "7542333a213aad9004e2dbbe07df0bb49fc4942fe76a6754018dd3650e7a736b"
+          },
+          "proof": {
+            "mobile/.work/native-notification-proof/result.json": {
+              "fixtureAbsent": true,
+              "fixtureUninstalled": true,
+              "fixtureDataCleared": true
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "firstRun": true,
+  "rerunRequested": false,
+  "failureEvidence": {
+    "jobId": 128306127745,
+    "abi": "x86_64",
+    "failureCategory": "IOException",
+    "frame": "AndroidActionNotificationDisplaySource.confirmRemoved:228",
+    "rawNotificationFailedBeforeLaterNativeProofs": true,
+    "logSha256": "aa4b6775f6c66ac86a32937deaed0ccf7d0a64288df24a643e1de2c77812d316",
+    "initialDownloadRejectedTerminalEscapeSequences": true,
+    "downloadRetriedIntoPrivateFileWithoutTerminalRendering": true,
+    "sameFrameAsRun": 42336761242,
+    "causeEstablished": false
+  }
+}
