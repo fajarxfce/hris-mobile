@@ -5,6 +5,7 @@ plugins {
 
 kotlin.sourceSets {
     getByName("commonMain").dependencies {
+        api(projects.core.common)
         implementation(libs.serialization.json)
         implementation(libs.coroutines.core)
     }

@@ -7,6 +7,10 @@ enum class PerformanceOperation {
     HttpRequest,
     FileUpload,
     FileDownload,
+    DraftPersistence,
+    CommandPreparation,
+    CommandQueue,
+    CommandConfirmation,
 }
 
 enum class PerformanceOutcome {

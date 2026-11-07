@@ -1,5 +1,47 @@
 # Agent continuation — HRIS Mobile
 
+## Local send measurements accepted — 7 November 2026, 23:28 UTC
+
+Full-1/60113 is REAPED:859.724s,4,427 unchanged app inputs and unchanged private-library
+inputs,5,560 fresh cases, zero failures/errors/skips. Root check, Android host tests,
+Android release compilation/lint, Wasm/iOS source compilation and quality gates pass;
+lint has zero issues. The new generic measureAppResult preserves typed results and
+original exceptions/cancellation, while four closed operation names and per-send trace
+context measure existing flush/prepare/queue/confirm boundaries. No sender, body or
+message ID enters these diagnostics. Delivery, scheduler, draft and editor behavior
+are unchanged. [Contract](collaboration-send-timing.md) / [exact evidence](measurements/collaboration-send-timing-local-2026-11-07.json).
+
+First focus59601 passed17 draft/send and2Firebase cases but retained one new exception
+reference assertion failure. Coroutines can recover its stacktrace with the original
+as cause; only that fixture changed to the existing preservation contract. Focused-2/
+8100 passed8 fresh core cases/75.328s, with17+2 unchanged cases reused. Both are reaped.
+Firebase engine-factory compatibility5550f738 is separately committed/pushed; its two
+actual Ktor/Koin cases verify lazy ownership, response preservation and capture reset.
+
+Starterb4d6aa4 is accepted/pushed and clean on feat/network-inspector-20261107. Final
+78354 passed61.419s:10 fresh browser cases,1,031 stable inputs, root/Android/browser/
+production web/iOS source/quality checks, zero errors and44 old lint warnings. Earlier
+fixture/lockfile failures remain in its Git evidence. No Matrix SDK or HRIS policy was
+ported. Generic typed-result measurement is a later port after Mobile device acceptance.
+
+Phone and original stopped Bima emulator remain57. No heavy job or emulator runs at
+this checkpoint. Next commit/push the accepted timing source, then run the prepared
+.work/release-phone-2026-11-07-build58/build-arm64.py as the sole compiler. It validates
+the exact full-1 source/library fingerprints and pushed branch before packaging. Run
+verify-arm64.py and verify-sdk.py; then use the owned original emulator and its single
+explicit send probe. record-send-timings.py owns a per-process log reader and requires
+four correlated phases, stopping before navigation. Raw logs/screens stay private.
+Inspect screenshots/video, verify cold offline continuity, reap the emulator, and notify
+before --install-only phone update57→58. No APK58 or device timing is accepted yet.
+
+Private inspector58877fe (productiona8d7d60), SDK5 and Mobile primarybe2fe021 are unchanged.
+Keep private-library and app source inputs fixed through packaging; visibility approval
+is still unanswered. No primary promotion or private-source copy into public CI. Continue
+measured composer/latency work, Apple inspector bridge/overhead, generic ports and all54
+original PRDgroups; none newly complete. API2e75fe1e/worker10485916/schema116.1 and disabled
+Group routing remain unchanged; V117–138 undeployed. The journal redesign remains a
+review candidate in .work/chat-composer-handoff-2026-11-07, not implemented or selected.
+
 ## Inspector57 installed — 7 November 2026, 22:35 UTC
 
 APK57/source52df4ee1 is installed on phone and original Bima emulator, using the exact

@@ -6,12 +6,108 @@ import androidx.lifecycle.ViewModelStore
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.presentation.inbox.chatId
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.observability.*
 import kotlin.test.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
 
 class ChatThreadDraftTest {
+    @Test
+    fun sendTimingsShareOneTraceWithoutRecordingMessageOrOwner() = runTest {
+        val timings = mutableListOf<Diagnostic>()
+        Diagnostics.install(DiagnosticSink { event, _ -> timings += event })
+        try {
+            withDraft { f, vm, _, _ ->
+                vm.onEvent(ChatThreadEvent.Entered())
+                runCurrent()
+                val text = "Private body that must never enter diagnostics"
+                vm.onEvent(ChatThreadEvent.DraftChanged(text))
+                vm.onEvent(ChatThreadEvent.SendRequested)
+                runCurrent()
+                val phases = timings.filter { it.kind == DiagnosticKind.OperationCompleted }
+                assertEquals(
+                    listOf(
+                        PerformanceOperation.DraftPersistence,
+                        PerformanceOperation.CommandPreparation,
+                        PerformanceOperation.CommandQueue,
+                        PerformanceOperation.CommandConfirmation,
+                    ),
+                    phases.map { it.operation },
+                )
+                assertTrue(phases.all { it.outcome == PerformanceOutcome.Succeeded })
+                assertTrue(phases.all { requireNotNull(it.durationMillis) >= 0 })
+                assertEquals(1, phases.map { requireNotNull(it.traceId) }.distinct().size)
+                assertEquals(4, phases.map { requireNotNull(it.spanId) }.distinct().size)
+                val encoded = phases.joinToString { encodeDiagnostic(it) }
+                assertFalse(encoded.contains(text))
+                assertFalse(encoded.contains(f.insertions.single().id))
+                assertEquals(text, f.insertions.single().text)
+                assertEquals("", vm.state.value.draft)
+            }
+        } finally {
+            Diagnostics.install(ConsoleDiagnosticSink)
+        }
+    }
+
+    @Test
+    fun failedDraftTimingCannotAcknowledgeOrAdvanceSubmission() = runTest {
+        val timings = mutableListOf<Diagnostic>()
+        Diagnostics.install(DiagnosticSink { event, _ -> timings += event })
+        try {
+            withDraft { f, vm, _, _ ->
+                f.beforeDraftWriteFailure = f.base.network
+                vm.onEvent(ChatThreadEvent.Entered())
+                runCurrent()
+                vm.onEvent(ChatThreadEvent.DraftChanged("Retain after failed storage"))
+                vm.onEvent(ChatThreadEvent.SendRequested)
+                runCurrent()
+                val phase = timings.single { it.kind == DiagnosticKind.OperationCompleted }
+                assertEquals(PerformanceOperation.DraftPersistence, phase.operation)
+                assertEquals(PerformanceOutcome.Failed, phase.outcome)
+                assertTrue(f.insertions.isEmpty())
+                assertNull(f.draftSlot.value)
+                assertEquals("Retain after failed storage", vm.state.value.draft)
+            }
+        } finally {
+            Diagnostics.install(ConsoleDiagnosticSink)
+        }
+    }
+
+    @Test
+    fun cancelledQueueTimingKeepsTheCommittedOriginalAndSkipsConfirmation() = runTest {
+        val timings = mutableListOf<Diagnostic>()
+        Diagnostics.install(DiagnosticSink { event, _ -> timings += event })
+        try {
+            withDraft { f, vm, store, _ ->
+                f.afterInsert = { awaitCancellation() }
+                vm.onEvent(ChatThreadEvent.Entered())
+                runCurrent()
+                vm.onEvent(ChatThreadEvent.DraftChanged("Original queue remains"))
+                vm.onEvent(ChatThreadEvent.SendRequested)
+                runCurrent()
+                val original = f.records.value.single()
+                store.clear()
+                runCurrent()
+                val phases = timings.filter { it.kind == DiagnosticKind.OperationCompleted }
+                assertEquals(
+                    listOf(
+                        PerformanceOperation.DraftPersistence,
+                        PerformanceOperation.CommandPreparation,
+                        PerformanceOperation.CommandQueue,
+                    ),
+                    phases.map { it.operation },
+                )
+                assertEquals(PerformanceOutcome.Cancelled, phases.last().outcome)
+                assertEquals(original, f.records.value.single())
+                assertEquals(original.intent.id, f.draftSlot.value?.submissionId)
+                assertEquals(original.intent.text, f.draftSlot.value?.text)
+            }
+        } finally {
+            Diagnostics.install(ConsoleDiagnosticSink)
+        }
+    }
+
     @Test
     fun technicalContentionRetriesOriginalTextAndRevisionWithoutAskingToReload() = runTest {
         withDraft { f, vm, _, _ ->

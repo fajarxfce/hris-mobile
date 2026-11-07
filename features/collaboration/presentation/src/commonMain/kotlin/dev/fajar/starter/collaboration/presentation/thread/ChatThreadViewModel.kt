@@ -15,6 +15,7 @@ import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.collaboration.presentation.chatRequiresReconnect
 import dev.fajar.starter.collaboration.presentation.replies.*
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.observability.*
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import kotlin.time.Clock
 import kotlin.uuid.Uuid
@@ -1298,17 +1299,21 @@ class ChatThreadViewModel(
             }
     }
 
-    private suspend fun flushDraft(): Boolean {
-        persistDraft(immediate = true)
-        localSave?.join()
-        currentCoroutineContext().ensureActive()
-        return state.value.draftReady &&
-            state.value.localFailure == null &&
-            state.value.draftFailure == null &&
-            draftWrite == null &&
-            (state.value.draft == localDraft?.text.orEmpty() &&
-                state.value.draftReplyToEventId == localDraft?.replyToEventId)
-    }
+    private suspend fun flushDraft(): Boolean =
+        measureOperation(
+            PerformanceOperation.DraftPersistence,
+            classify = { if (it) PerformanceOutcome.Succeeded else PerformanceOutcome.Failed },
+        ) {
+            persistDraft(immediate = true)
+            localSave?.join()
+            currentCoroutineContext().ensureActive()
+            state.value.draftReady &&
+                state.value.localFailure == null &&
+                state.value.draftFailure == null &&
+                draftWrite == null &&
+                (state.value.draft == localDraft?.text.orEmpty() &&
+                    state.value.draftReplyToEventId == localDraft?.replyToEventId)
+        }
 
     private fun reportDraftFailure(failure: Failure) {
         // Input validation runs before I/O; this rejected body can safely be corrected.
@@ -1432,7 +1437,7 @@ class ChatThreadViewModel(
             return
         updateState { it.copy(saving = true, draftFailure = null, failure = null) }
         submission =
-            viewModelScope.launch {
+            viewModelScope.launch(OperationTrace.create()) {
                 if (!state.value.submissionPending && !flushDraft()) {
                     updateState { it.copy(saving = false) }
                     return@launch
@@ -1450,7 +1455,10 @@ class ChatThreadViewModel(
                 updateState { it.copy(submissionPending = true) }
                 val frozen =
                     if (expected.submissionId != null) AppResult.Success(expected)
-                    else prepareDraftSend(workspaceId, expected, owned)
+                    else
+                        measureAppResult(PerformanceOperation.CommandPreparation) {
+                            prepareDraftSend(workspaceId, expected, owned)
+                        }
                 ensureActive()
                 if (access != owned) return@launch
                 if (frozen is AppResult.Failed) {
@@ -1461,14 +1469,16 @@ class ChatThreadViewModel(
                 preparingDraft = null
                 val draft = frozen.value
                 val result =
-                    queue(
-                        workspaceId,
-                        conversationId,
-                        requireNotNull(draft.submissionId),
-                        draft.text,
-                        owned,
-                        draft.replyToEventId,
-                    )
+                    measureAppResult(PerformanceOperation.CommandQueue) {
+                        queue(
+                            workspaceId,
+                            conversationId,
+                            requireNotNull(draft.submissionId),
+                            draft.text,
+                            owned,
+                            draft.replyToEventId,
+                        )
+                    }
                 ensureActive()
                 if (access != owned) return@launch
                 if (result is AppResult.Failed) {
@@ -1477,7 +1487,10 @@ class ChatThreadViewModel(
                     else updateState { it.copy(saving = false, failure = result.failure) }
                     return@launch
                 }
-                val confirmed = confirmDraftSend(workspaceId, draft, owned)
+                val confirmed =
+                    measureAppResult(PerformanceOperation.CommandConfirmation) {
+                        confirmDraftSend(workspaceId, draft, owned)
+                    }
                 ensureActive()
                 if (access != owned) return@launch
                 when (confirmed) {

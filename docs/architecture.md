@@ -1,5 +1,8 @@
 # Architecture
 
+[Local send timing](collaboration-send-timing.md) observes existing presentation/use-case
+boundaries through core result instrumentation; it does not own delivery or admission policy.
+
 [Development network inspection](network-inspector.md) is owned by application composition;
 transport adapters observe actual attempts and the optional viewer renders bounded snapshots.
 
