@@ -1,0 +1,307 @@
+{
+  "at": "2026-11-07T18:12:04.564647+00:00",
+  "source": {
+    "baseCommit": "95e35b9d39f43b671ad1bb6612b1b3d26f233161",
+    "sourceBranch": "feat/chat-recovery-20261107",
+    "sourceManifestSha256": "a0d40b1db778afc73bdb1ac9f226ea008bd33f2d33efee7f8cbeaaacd89e4ec1",
+    "sourcesUnchanged": true,
+    "candidateOnly": true,
+    "normalPublicSdk": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.4"
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      "--dependency-verification",
+      "strict",
+      ":apps:android:assembleDevRelease",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=55",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-07-build55/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m"
+    ],
+    "startedAt": "2026-11-07T17:53:44.801170+00:00",
+    "elapsedSeconds": 515.788,
+    "exitCode": 0
+  },
+  "artifact": {
+    "candidateOnly": true,
+    "diagnosticMarkersAbsent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-07-build55/hris-mobile-dev-release-1.0.0-55-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 55,
+    "versionName": "1.0.0",
+    "bytes": 121235752,
+    "sha256": "0b1c7d11ae3d03282e71135244a368c526b455679bf2d610f6fa344710d24329",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+  },
+  "sdk": {
+    "nativeSha256": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34",
+    "nativeBytes": 97477760,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "aarSha256": "9b6806de02b7d40b8487b54a51b192c114a38c68c6dfe35c68faf50d3b6bfd21",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.4",
+    "strippedNativeMatchesVerifiedSdk": true,
+    "stripToolNdkVersion": "28.2.13676358",
+    "queueApisAndUseCaseInDex": true
+  },
+  "lint": {
+    "issues": 0,
+    "reportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "acceptance": {
+    "accepted": true,
+    "at": "2026-11-07T18:09:38.307925+00:00",
+    "scope": "Pending and draft chat previews, persisted offline re-entry, and outgoing echo correlation.",
+    "sourceCommit": "95e35b9d39f43b671ad1bb6612b1b3d26f233161",
+    "apkSha256": "0b1c7d11ae3d03282e71135244a368c526b455679bf2d610f6fa344710d24329",
+    "screenshotsInspected": true,
+    "actualVideoInspected": true,
+    "screenshotsSha256": {
+      "online-send.png": "42cf0745e256435ba65f118516268d02c7174d71fe494587ca99f11dfd867be3",
+      "offline-send.png": "82be47777eba2b012ef495784a0f2371fc98258f4297ac5830441e8497346beb",
+      "pending-preview-offline.png": "1a1a39372072d43b73c9ab07216b6f6809b18b0fc6f0f456193ae9b6875bb505",
+      "draft-preview-offline.png": "5d132749939244fafab4013217ef37e1fcb765598c21b3def9af3cd8f0be3218"
+    },
+    "originalStorePreserved": true,
+    "explicitNewMessagesSent": 2,
+    "onlineSentObservedBySeconds": 5.232,
+    "duplicateBubbleObserved": false,
+    "immediateKeyboardViewportAccepted": false,
+    "remainingKeyboardIssue": "Composer becomes disabled during local save, dismissing the keyboard. Pending dedicated fix; this build does not claim keyboard viewport acceptance.",
+    "phoneLatencyResolved": false,
+    "latencyBoundary": "Coarse emulator UI observations; not a transport ACK benchmark or phone guarantee.",
+    "normalPublicSdk": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.4",
+    "videoReviewScope": "First six seconds of each online/offline send recording, sampled at four frames per second and visually inspected in six storyboards. Not a full-recording frame-by-frame audit.",
+    "offlineAcknowledgedObservedBySecondsAfterRoomReentry": 5.326,
+    "automaticReconnectAccepted": true
+  },
+  "phoneInstallation": {
+    "confirmed": true,
+    "startedAt": "2026-11-07T18:09:58.508664+00:00",
+    "elapsedSecondsIncludingVerification": 64.143,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 55,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "0b1c7d11ae3d03282e71135244a368c526b455679bf2d610f6fa344710d24329",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-08 01:10:59",
+      "versionCode": "55 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    },
+    "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+  },
+  "emulator": {
+    "updateInPlace": {
+      "sample": 55,
+      "ownedEmulatorOnly": true,
+      "versionCode": 55,
+      "sha256": "0b1c7d11ae3d03282e71135244a368c526b455679bf2d610f6fa344710d24329",
+      "startedAt": "2026-11-07T18:04:30.056893+00:00",
+      "elapsedSeconds": 3.272,
+      "updateInPlace": true,
+      "dataCleared": false,
+      "uninstalled": false,
+      "uiLaunched": false,
+      "sameAppIdentity": true
+    },
+    "stop": {
+      "pid": 1224526,
+      "startTicks": "175129612",
+      "stopped": true,
+      "dataRetained": true,
+      "phoneTouched": false,
+      "at": "2026-11-07T18:08:31.069805+00:00"
+    },
+    "passiveProcess": {
+      "sameProcess": true,
+      "fatalLines": 0,
+      "startedAt": "2026-11-07T18:08:11.406023+00:00",
+      "finishedAt": "2026-11-07T18:08:21.446820+00:00",
+      "observedPid": "4601",
+      "afterPid": "4601",
+      "crashBufferSince": "2026-11-07T18:04:56.097665+00:00",
+      "uiTouched": false
+    },
+    "pendingPreviewOffline": true,
+    "pendingPreviewAfterColdOfflineRestart": true,
+    "draftPreviewOffline": true,
+    "draftAfterColdOfflineRestart": true,
+    "networkAndImeSettingsRestored": true,
+    "offlineRecovery": {
+      "observations": [
+        {
+          "secondsAfterTap": 3.069,
+          "visibleCopies": 1,
+          "sent": false,
+          "pending": true,
+          "bubbleBounds": [
+            33,
+            1921,
+            1047,
+            2065
+          ],
+          "composerBounds": [
+            22,
+            2120,
+            904,
+            2252
+          ],
+          "aboveComposer": true
+        },
+        {
+          "secondsAfterTap": 5.326,
+          "visibleCopies": 1,
+          "sent": true,
+          "pending": false,
+          "bubbleBounds": [
+            33,
+            1921,
+            1047,
+            2065
+          ],
+          "composerBounds": [
+            22,
+            2120,
+            904,
+            2252
+          ],
+          "aboveComposer": true
+        }
+      ]
+    },
+    "sendObservations": [
+      {
+        "phase": "online-send",
+        "tapStartedAt": "2026-11-07T18:05:28.869942+00:00",
+        "observations": [
+          {
+            "secondsAfterTap": 3.169,
+            "visibleCopies": 1,
+            "sent": false,
+            "pending": true,
+            "bubbleBounds": [
+              33,
+              1921,
+              1047,
+              2065
+            ],
+            "composerBounds": [
+              22,
+              2120,
+              904,
+              2252
+            ],
+            "aboveComposer": true
+          },
+          {
+            "secondsAfterTap": 5.232,
+            "visibleCopies": 1,
+            "sent": true,
+            "pending": false,
+            "bubbleBounds": [
+              33,
+              1921,
+              1047,
+              2065
+            ],
+            "composerBounds": [
+              22,
+              2120,
+              904,
+              2252
+            ],
+            "aboveComposer": true
+          }
+        ],
+        "online": true,
+        "keyboardVisibleBeforeSend": true,
+        "confirmedUiSeconds": 5.232
+      },
+      {
+        "phase": "offline-send",
+        "tapStartedAt": "2026-11-07T18:06:01.493703+00:00",
+        "observations": [
+          {
+            "secondsAfterTap": 2.976,
+            "visibleCopies": 1,
+            "sent": false,
+            "pending": true,
+            "bubbleBounds": [
+              33,
+              1910,
+              1047,
+              2054
+            ],
+            "composerBounds": [
+              22,
+              2120,
+              904,
+              2252
+            ],
+            "aboveComposer": true
+          }
+        ],
+        "online": false,
+        "keyboardVisibleBeforeSend": true,
+        "confirmedUiSeconds": null
+      }
+    ]
+  },
+  "videoStoryboards": {
+    "offline-send-frames-0.png": "862b5cf80b6d4ba292ce5ac9e8a599fe4d6d041063fee5b9239132548ec45a42",
+    "offline-send-frames-2.png": "8ee84cc20ace6ea4348ad8f9721ab81e13c52209f4fd5392dce4b7896011e422",
+    "offline-send-frames-4.png": "514121370280282e4efd413067b73fc9319943e23139943708bf82c3cd48e611",
+    "online-send-frames-0.png": "ba2dbbed93108ae3bedfc9d5d1f0427622dc77ada4d08f4e443a202ccc29eff2",
+    "online-send-frames-2.png": "3754578ddc1738d7cb0f68f6a0505fb65f3c422f77af8a43a22d4f8d16533cae",
+    "online-send-frames-4.png": "18f7c52ca85560e5981556c6761c40e535ef164fcff389b4cb87c611e004c048"
+  },
+  "privateEvidenceBoundary": "Real chat text, screenshots, videos, raw XML/logs and device stores stay in ignored .work. Only bounded measurements and hashes are committed."
+}

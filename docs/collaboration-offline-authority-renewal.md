@@ -4,8 +4,8 @@ Release54 retained the original offline message but did not send it within90 sec
 of reconnection. Returning the same process to foreground triggered recovery. Local
 history and pending/draft previews remained readable. That failed device probe is
 preserved in [its evidence](measurements/collaboration-release54-probe-2026-11-07.json).
-The exact rejected runtime code was not captured, so this increment still needs its
-own device acceptance.
+The exact rejected runtime code was not captured. Release55 acceptance below tests
+the resulting reconnect behavior without claiming that missing diagnostic evidence.
 
 The Android foreground worker discovered retained commands but returned Blocked when
 selected-workspace or company-policy authority was stale. App foreground refresh is
@@ -35,6 +35,12 @@ and40 actual Workspace Browser cases pass. Explicit workspace tests and app-work
 coverage/report upload were added to portable/Apple CI after focused checks; no Kotlin
 change occurred between gates. Both jobs are reaped. [Exact source and reports](measurements/chat-offline-renewal-2026-11-07.json).
 
-This establishes local implementation checks. The next APK must demonstrate automatic
-reconnect without manually foregrounding or replacing the original intent. Composer
-keyboard dismissal, initial viewport clipping and final phone latency remain open.
+Release55 source95e35b9d now demonstrates automatic reconnect with the same original
+Bima store, without manually foregrounding or replacing the offline intent. After
+network restoration and opening the room, it is observed Pending at3.069s and Sent
+at5.326s (coarse UI polling, not transport timing). Pending/draft previews and composer
+restore survive two cold offline re-entries. The same process remains alive with no
+fatal crash since the probe started. [Exact build/device evidence](measurements/collaboration-release55-2026-11-07.json).
+The validated APK55 is installed in place on the phone; original data and app identity
+are preserved. Composer keyboard dismissal, initial viewport clipping and final
+phone latency remain open. Do not rewrite the failed54 probe as passed.

@@ -55,9 +55,18 @@ redaction and edits. No sending, SDK acquisition or API request is added to obse
 The three current synthetic captures were opened and reviewed: [small phone](images/chat-inbox-pending/chat-inbox-previews-light.png),
 [dark with2x text](images/chat-inbox-pending/chat-inbox-previews-dark-large-text.png),
 and [landscape](images/chat-inbox-pending/chat-inbox-previews-landscape.png).
-These are rendered UI checks, not pixel-baseline comparisons. This source has not
-yet produced a new phone APK or completed its first Apple CI. Send latency and the
-separately observed transient duplicate room bubble remain open.
+These are rendered UI checks, not pixel-baseline comparisons. First source700 CI is
+now artifact-audited: Apple2,152 cases, portable5,171, and553 native fixture cases per
+Android ABI, all zero failures/errors/skips. [Exact first CI](measurements/chat-preview-first-ci-2026-11-07.json).
+
+Release55 on source95e35b9d passes actual original-store emulator acceptance: pending
+and draft previews survive cold offline restart; the draft restores to its composer.
+The same original offline send becomes Sent after reconnect without a foreground
+rescue. Both online send and reconnect showed one visible outgoing row in coarse
+observations. Four screenshots and the first6s of both videos at4fps were inspected.
+The exact validated ARM64 APK is installed in place on the authorized phone.
+[Device/build evidence](measurements/collaboration-release55-2026-11-07.json).
+Keyboard dismissal, first-frame clipping and final phone latency remain open.
 
 ## Initial preview acceptance — 3 November 2026
 

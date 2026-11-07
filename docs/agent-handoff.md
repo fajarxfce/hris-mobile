@@ -5,6 +5,52 @@ continuing. [Previous checkpoint](https://github.com/fajarxfce/hris-mobile/blob/
 retains all earlier source/CI history and links older local handoff archives. Git and
 contracts are authoritative; `.work` is staging/evidence, never permission to reapply.
 
+## Latest installed continuation — 7 November 2026, 18:11 UTC
+
+Release55 on source95e35b9d39f43b671ad1bb6612b1b3d26f233161 is installed on the phone.
+APK SHA2560b1c7d11ae3d03282e71135244a368c526b455679bf2d610f6fa344710d24329,
+121,235,752 bytes, ARM64/nondebuggable devRelease1.0.0, existing dev signer and exact
+immutableSDK4. Build7746 passed515.788s; verification82861/90592 passed, zero lint.
+All jobs REAPED. Original Bima emulator updated54→55 in place (39403); probe6937
+passed18:07:49UTC with two explicit test sends. Online Sent observed5.232s. Pending
+preview/draft survive cold offline restarts, and same original offline send becomes
+Sent5.326s after reconnect/room re-entry without a foreground rescue. Coarse observations
+and the inspected first6s/4fps of both send recordings show no duplicate; keyboard
+dismissal and initial clipped bubble remain confirmed/open. Four screenshots and all
+six storyboards were opened. Passive80454: same PID4601/no fatal since probe start.
+Owned emulator PID1224526/startTicks175129612 STOPPED18:08:31UTC (22269); all original
+userdata, keys and new55 send IDs retained. Never restore54/53/pre-send snapshots.
+[Exact sanitized evidence](measurements/collaboration-release55-2026-11-07.json).
+
+Phone preflight succeeded; install46055 --install-only completed in64.143s starting
+18:09:58.508664UTC. Exact installed hash, appID10962 and first-install identity match;
+no data clear/uninstall/UI launch. Phone now55, so future installers must expect55.
+Emulator also55. No compiler/emulator/installation is currently running.
+
+Next: staged viewport candidate in .work/chat-new-message-position-2026-11-07 has
+one page change/three UI cases and prepared focused/full scripts. Not yet applied or
+compiled. Compare candidate-base.json, run regression against old page, then apply,
+validate and inspect synthetic first-layout screenshots before a later APK. Keep
+composer durable submission orchestration separate; merely enabling the field while
+the VM drops changes is wrong. Do not lose the frozen original or newer editor text.
+
+Primary feat/communications advanced to95e35b9d only after both3308 first runs started.
+95 first control42399395125/native42399395077 are pending; do not replace either before
+both start. Recovery remains the implementation branch. Source700 first CI is fully
+artifact-audited: Apple2,152/237, portable5,171/560, native553/87 per ABI; zero failures/
+errors/skips, exact SDK4, original keys/queue IDs and cleanup verified. Synthetic queue
+continuity sends zero provider messages and does not activate live Group routing.
+[Artifacts/digests](measurements/chat-preview-first-ci-2026-11-07.json).
+
+Inspector private main f5bc5f3 is pushed: core42/Ktor39 local cases pass, all local jobs
+reaped. First Ktor CI42398651350 on fadf22e also failed before any steps due to GitHub
+billing; zero CI tests ran. Public-visibility question is still unanswered. No viewer,
+Matrix observer, body capture/export, app integration or library release yet. New SDK
+Mobile design branch84f60d4d is pushed; Rust isolated baseline is ready, no observer code.
+Original communications/54-group PRD/Room-dispatch work remains active. Live API/schema,
+Main/Group deployment and Starter are unchanged. Earlier sections retain historical
+status only; do not treat their running sessions or older candidates as current.
+
 ## Latest accepted renewal — 7 November 2026, 17:43 UTC
 
 Selected-workspace offline renewal is locally accepted in this commit: six Kotlin
