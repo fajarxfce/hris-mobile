@@ -1,5 +1,44 @@
 # Agent continuation — HRIS Mobile
 
+## Native inspector continuation — 07 November 2026, 20:16 UTC
+
+Phone and original stopped Bima emulator remain55. Pending/draft inbox previews and
+offline renewal are installed. Accepted bb106154 first-layout viewport fix awaits56;
+composer keyboard and send latency remain open. No new APK has been installed.
+Original54 PRD groups remain3 in progress/51 planned, none complete.
+
+Source95e35b9d original native CI42399395077 is fully audited: each ABI553 cases/87
+suites, zero failures/errors/skips, GitHub archive digests and immutableSDK4 hashes
+verified. ARM queue41.333s, x86 queue33.127s; synthetic queue makes zero provider sends.
+Six separate HRIS scenarios each ABI retain original keys/IDs, pass and release resources.
+[Native evidence](measurements/chat-renewal-native-first-ci-2026-11-07.json). Control
+42399395125 was already audited. Bothbb106 first runs have started and remain preserved.
+
+SDK observer branch feat/matrix-http-observer-20261107 at2f45785f contains the corrected
+FFI stop binding, pinned Android manifest/driver and separate Apple toolchain/build/proof.
+ARM64 native/wrapper passed; SDK4 is unchanged. First four-ABI CI42408652180 is running;
+ARMv7 artifact13588019784 was downloaded and its GitHub digest, source/Kotlin hashes,
+exact native APIs and4KiB ELF alignment verified. Other ABI jobs and Apple first
+CI42408920984 remain pending completion. No SDK5 publication or live host capture yet.
+Worktree: /home/fajar/hris/.worktrees/mobile-matrix-http-observer-2026-11-07.
+
+Private inspector main388a1cb remains portable. New branch
+feat/matrix-rust-bindings-20261107 atc20cf8d adds the actual Android adapter:13 host tests
+pass and an ARM64 JNI fixture APK compiles with exact unstripped native bytes. The SDK
+dependency is an explicitly local unpublished candidate; do not merge/publish that
+branch until paired SDK artifacts and real device execution are verified. Fixture
+onCreate/start and controlled failure diagnostics were added after that commit and
+are being validated. No native fixture has run or been installed. Private CI still
+executes zero steps due to billing; visibility question remains unanswered. Do not
+copy private library source into public Mobile to bypass this.
+
+Next finish artifact auditing/paired packaging, run the native observer fixture on the
+emulator with a matching ABI, wire the reusable viewer/transport into Mobile, then test
+original retained sends and observer overhead, install a validated update and port
+reusable integration to Starter. Preserve original Bima userdata/keys/queues. No reset,
+re-enrollment, synthetic acknowledgement or replacement send. Continue the original
+communications scope after these fixes; current live API/schema/Group routing are unchanged.
+
 Read [architecture](architecture.md), the linked contracts and this checkpoint before
 continuing. [Previous checkpoint](https://github.com/fajarxfce/hris-mobile/blob/99048061/docs/agent-handoff.md)
 retains all earlier source/CI history and links older local handoff archives. Git and
