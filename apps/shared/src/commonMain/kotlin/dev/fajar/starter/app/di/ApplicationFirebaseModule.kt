@@ -13,8 +13,8 @@ import org.koin.dsl.onClose
 fun applicationFirebaseModule(
     options: FirebaseClientOptionsSource,
     google: GoogleCredentialSource,
-    engineFactory: () -> HttpClientEngine = ::createPlatformHttpEngine,
     inspection: NetworkInspection? = null,
+    engineFactory: () -> HttpClientEngine = ::createPlatformHttpEngine,
 ) = module {
     single<FirebaseClientOptionsSource> { options }
     single<GoogleCredentialSource> { google }.onClose { it?.close() }

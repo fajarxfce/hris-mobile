@@ -48,7 +48,10 @@ core/Ktor/viewer tests and Apple klib compilation are separate from platform acc
 Android's actual JNI observer passes six loopback scenarios. Four Swift/native observer
 cases pass on macOS against the same verified SDK candidate. Apple library binding,
 Apple simulator tests, a capture-overhead comparison and reusable Starter integration
-are still pending. Android host runtime is accepted separately below. Private-repository CI currently cannot run because of GitHub billing.
+were separate acceptance targets. The generic Starter integration is now accepted and
+pushed asb4d6aa4, with independent root/Android/browser/production web/iOS source checks;
+the other targets remain pending. Android host runtime is accepted separately below.
+Private-repository CI currently cannot run because of GitHub billing.
 
 The first host check stopped before compilation on an inherited plugin checksum missing
 from Mobile. The follow-up imports32 exact entries already verified in the separate
@@ -67,3 +70,8 @@ screenshots and three sampled video storyboards were inspected. One send had a23
 Matrix response/240ms transfer; pending and sent UI polls occurred at2.876s/5.071s. Those
 are different boundaries, not an overhead benchmark or a solved phone-latency claim.
 The phone received the same APK with --install-only, preserving app identity and data.
+
+Firebase's optional inspection parameter precedes its final HTTP engine factory,
+preserving existing trailing-lambda injection. Two actual Ktor/Koin cases verify lazy
+engine ownership, the original response, and capture after reset. The complete
+workspace gate also passes; [exact compatibility evidence](measurements/firebase-inspector-engine-factory-2026-11-07.json).

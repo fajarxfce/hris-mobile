@@ -1,0 +1,71 @@
+{
+  "accepted": true,
+  "scope": "Keep the Firebase HTTP engine factory last when adding optional inspection.",
+  "parentCommit": "e500691f551f99a4a3b3b455dbf643c481478999",
+  "sourceFiles": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationFirebaseModule.kt": "bd4c0f3cb68d500ae917042f4fa3b0233ce1257d248b4d27a72848bf92c1011f",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/FirebaseInspectionModuleTest.kt": "7b6c81dd4e0d78e0c20e9396594b6fab0c3a936124aafe6a44f2cc52b7739a06"
+  },
+  "focusedCases": {
+    "sha256": "94f10f7c84845429304ad197dc5cb161b39a5f2f88c6e204da5f182c31d2a16b",
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedAttemptScope": "The two module cases passed; the same run retained an unrelated new timing-fixture exception identity failure, subsequently corrected.",
+  "completeWorkspaceCheck": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "env",
+      "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+      "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+      "ANDROID_HOME=/home/fajar/Android/Sdk",
+      "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+      "./gradlew",
+      "--dependency-verification",
+      "strict",
+      "--stacktrace",
+      "--continue",
+      ":check",
+      ":features:collaboration:data:testAndroidHostTest",
+      ":apps:android:compileDevReleaseKotlin",
+      ":apps:android:lintDevRelease",
+      ":apps:shared:compileKotlinWasmJs",
+      ":apps:shared:compileKotlinIosArm64",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+      "-PmatrixSdkRepository=/home/fajar/hris/kmp-network-inspector/.work/matrix-android-2026-11-07/sdk-repository",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=58",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m",
+      "-Pkotlin.compiler.execution.strategy=in-process"
+    ],
+    "startedAt": "2026-11-07T23:13:00.206424+00:00",
+    "elapsedSeconds": 859.724,
+    "exitCode": 0,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 5560,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "assertions": [
+    "Trailing engine lambda stays lazy and owns the only request.",
+    "Capture preserves the original response and excludes query values.",
+    "After reset the same client uses the replacement capture; the old recorder is closed and empty."
+  ],
+  "starterConsumer": "b4d6aa4a9d2371bad035758d949eb17d7e9d85bf",
+  "runtime": "Actual Ktor MockEngine/Koin integration; no external Firebase request."
+}
