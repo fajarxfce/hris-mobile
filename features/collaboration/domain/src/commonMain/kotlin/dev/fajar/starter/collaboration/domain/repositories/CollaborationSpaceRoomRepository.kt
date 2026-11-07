@@ -14,4 +14,10 @@ interface CollaborationSpaceRoomRepository {
         operation: String,
         request: CollaborationSpaceRoomRequest,
     ): AppResult<CollaborationSetupReceipt>
+
+    /** Read original request evidence under the current owner; grants no room or send authority. */
+    suspend fun readReceipt(
+        conversation: CollaborationSpaceConversation,
+        original: CollaborationSpaceRoomOperation,
+    ): AppResult<CollaborationSpaceRoomReceiptObservation>
 }

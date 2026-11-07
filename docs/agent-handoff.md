@@ -7,26 +7,41 @@ and [history through build 50](agent-handoff-history-through-build50.md).
 
 ## Current work — 7 November 2026
 
-Original72a first native42358423298 passed on both ABIs:509 cases/82 suites each,
-zero failures/errors/skips, exact immutable SDK4 libraries. Original-queue adoption,
-process death and offline held-writer recovery passed in ARM56.661s/x8639.118s with
-zero provider sends and fixture cleanup. First control42358423232 FAILED portable
-fresh app-test compilation because its runtime fake omitted `acquireOriginalQueue`;
-Apple1,941/221 passed, portable4,747/527 XML is partial, not overall acceptance.
-The missing fake is already fixed and locally accepted in e8fc7844. All original
-artifacts/digests and actual failure are retained in
-[the CI record](measurements/collaboration-original-writer-control-native-ci-2026-11-07.json).
-e8fc first control42360096500/native42360096584 have both started; audit on completion.
+Native original room receipt transport is accepted:11 Kotlin files, current owner/
+actual build distinct from immutable original proof, exact full echo/account checks,
+4KiB response bound, read-only authentication replay and retained uncertainty.
+Focused93348 passed30 cases/4 suites183.845s; full78045 passed3,548 fresh cases365.793s,
+4,354 stable inputs, no failures/errors/skips or Android release lint issues. Root,
+Android host, format/architecture and Detekt passed. All Mobile sessions are reaped.
+[Contract/evidence](collaboration-space-room-receipts.md). No product caller or APK.
 
-Groupf7268950 adds internal original room receipt acquisition under CURRENT native/
-group/participant admission while retaining the unchanged original fingerprint.
-175 fresh domain/database cases passed197.492s with8,617 stable inputs. Its native
-HTTP integration is now the only heavy local job, session24490/http-2; Group sources
-are frozen. Prior HTTP run had93/94 passing, with one incorrect expected401 for a
-missing-bearer POST (existing CSRF boundary returns403); corrected test is running
-with actual API and FULL worker contexts. No new endpoint is live or accepted yet.
-Mobile receipt transport and durable original room/open commands remain next.
+Group `4e1b5b90` is accepted/pushed: native original receipt HTTP+shared DI,238 API/
+FULL worker cases504.080s, one existing elapsed-retention skip,8,619 unchanged inputs.
+ONLY heavy local job51650 is Group room-proof-capture/characterize-1: one test file
+is frozen to characterize real initial HTTP write after native refresh. Current
+native credential DTOs/session storage do NOT expose native version, while the old
+writer fingerprints the actual bearer version/build. Never guess a durable proof.
 
+NEXT accept that characterization, then implement the stable versioned room intent
+namespace, preserving original fingerprints/receipts and current native/device/peer
+admission. Eight candidate domain/test files are PREPARED ONLY outside source in
+Group .work/room-stable-intent-2026-11-07, not applied or compiled; verify their before
+hashes before use. No new HTTP route for stable intent yet. Stable native intent and
+its explicit receipt acquisition must precede durable Mobile commands and owning
+original-message delivery. Missing receipt is not a fence; retain uncertainty before
+any explicit replacement. Then publication/history, parent recovery, product routing
+and all54 PRD groups. V117-137 remains disabled/unshipped.
+
+Original72a native42358423298 passed both ABIs509/82 with exact immutableSDK4, original
+keys/queue preserved through process death and offline held-writer recovery. Its
+first control42358423232 FAILED the old app-test fake, fixed in e8fc7844; original
+artifacts/failure are audited in777d6215. e8fc first control42360096500/native42360096584
+are IN_PROGRESS. Preserve later first pending runs before another primary promotion.
+Phone53 latency stays OPEN; last bounded reconnect timed out10:10-10:11UTC. Existing
+optional feedback is pending, no new question or phone UI driving. Live services,
+SDK4, original Bima data/keys/IDs and Starterb11437a are unchanged.
+
+## Prior native room transport
 
 Native group conversation/open and room request/status transport is now accepted:
 22 source/test files; full87652 passed 3,530 fresh cases/439 suites in416.326s with

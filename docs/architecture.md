@@ -1,5 +1,9 @@
 # Architecture
 
+[Original room request receipts](collaboration-space-room-receipts.md) read complete
+original proof under the current native owner. Initial durable proof capture and
+stable owning dispatch remain separate; receipt absence does not fence late work.
+
 [Organization conversations and room transport](collaboration-space-conversations-and-rooms.md)
 separate immutable pair intent from published room status. Native transport preserves
 account-local request revisions and exact group identity; live admission and durable

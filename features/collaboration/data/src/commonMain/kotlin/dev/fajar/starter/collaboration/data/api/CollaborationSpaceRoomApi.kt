@@ -12,6 +12,22 @@ import org.koin.core.annotation.*
 
 @Single
 class CollaborationSpaceRoomApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun readReceipt(
+        sessionId: String,
+        spaceId: String,
+        conversationId: String,
+        original: CollaborationSpaceRoomReceiptReadDto,
+    ): CollaborationSpaceRoomReceiptObservationDto =
+        client.requestJson(
+            "collaboration/spaces/${Uuid.parse(spaceId)}/direct-conversations/${Uuid.parse(conversationId)}/room/receipts/read",
+            HttpMethod.Post,
+            maximumBytes = 4096,
+        ) {
+            forSession(sessionId, AuthenticationReplay.ReadOnlyPost)
+            contentType(ContentType.Application.Json)
+            setBody(original)
+        }
+
     suspend fun get(
         sessionId: String,
         spaceId: String,

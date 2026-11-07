@@ -10,6 +10,8 @@ import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.network.*
 import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.request.header
 import io.ktor.http.*
 import kotlin.test.assertEquals
 
@@ -71,6 +73,8 @@ internal class SpaceConversationTransportFixture {
 
     suspend fun withRepositories(
         engine: MockEngine,
+        currentOwner: CollaborationSpaceOwner = owner,
+        currentBuild: Long = 29,
         action:
             suspend (
                 RemoteCollaborationSpaceConversationRepository,
@@ -79,10 +83,14 @@ internal class SpaceConversationTransportFixture {
     ) {
         val client =
             createHttpClient(engine, HttpClientSettings(SETUP_BASE)) {
+                defaultRequest {
+                    header("X-HRIS-Client-Platform", "ANDROID")
+                    header("X-HRIS-Client-Build", currentBuild)
+                }
                 install(SessionAuthentication) {
                     origin = Url(SETUP_BASE)
                     acquire = { session, rejected ->
-                        assertEquals(owner.parent.sessionId, session)
+                        assertEquals(currentOwner.parent.sessionId, session)
                         AppResult.Success(
                             if (rejected == null) "fictional-native" else "rotated-native"
                         )
