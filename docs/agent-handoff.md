@@ -5,6 +5,19 @@ linked below. Earlier checkpoints remain verbatim in
 [history through original queue matching](agent-handoff-history-through-original-queue-matching-2026-11-07.md)
 and [history through build 50](agent-handoff-history-through-build50.md).
 
+## Original native receipt CI audit — 7 November 2026
+
+First fb514281 native42363807289 completed SUCCESS and its original artifacts are
+fully audited: each ABI537 cases/85 suites, zero failures/errors/skips; NDK28.2.13676358
+and immutableSDK4 hashes match. Original held queue continuity passed24.827s x86 and
+80.993s ARM with process death, unchanged original keys/IDs, zero provider sends and
+complete cleanup. Other original native/app/worker/notification proofs passed with
+cleanup. No accepted provider scenario was rerun. [Evidence](measurements/collaboration-room-receipts-native-ci-2026-11-07.json).
+Control42363807332 remains in progress. First79b native42366357400 has STARTED but
+control42366357406 remains pending; preserve that pending first run before primary
+promotion. Local durable command full18016 is still running with ten frozen sources;
+Desktop/browser command contracts and policy tests passed; shared Wasm compile remains.
+
 ## Active durable command validation — 7 November 2026
 
 Program79b41269475c396cbef28a2c1424681c4cb57409 is pushed to recovery and primary.

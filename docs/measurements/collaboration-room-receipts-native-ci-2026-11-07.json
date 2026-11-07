@@ -1,0 +1,492 @@
+{
+  "at": "2026-11-07T11:25:17.983133+00:00",
+  "headSha": "fb514281b191e74d25ad44e20521666a322d0848",
+  "runs": [
+    {
+      "id": 42363807289,
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "name": "Android HRIS (x86_64)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-07T10:30:44Z",
+          "completedAt": "2026-11-07T11:09:30Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run android-actions/setup-android@v3",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install Android SDK and pinned proof NDK",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build isolated Android SDK fixture before starting the emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Verify fixture native ABI before runtime acceptance",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Compile HRIS fixture and verify driver cleanup",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Enable KVM for the owned runner emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run reactivecircus/android-emulator-runner@v2",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "name": "Android HRIS (arm64-v8a)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-07T10:30:44Z",
+          "completedAt": "2026-11-07T11:21:56Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run android-actions/setup-android@v3",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install Android SDK and pinned proof NDK",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build isolated Android SDK fixture before starting the emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Verify fixture native ABI before runtime acceptance",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Compile HRIS fixture and verify driver cleanup",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Enable KVM for the owned runner emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run reactivecircus/android-emulator-runner@v2",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "artifactId": 13572281757,
+          "name": "native-hris-evidence",
+          "sha256": "0b886e181729cbf9459f7283dc73cb8746bb0b3168aea26a57d891474b22102b",
+          "bytes": 314399,
+          "suites": 85,
+          "counts": {
+            "tests": 537,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": {
+            "abi": "x86_64",
+            "apkSha256": "98a0b3f7cdaa036df084cd78ac0224afaf50df182fcbe76d9f34d83cb3bea132",
+            "ndk": "28.2.13676358",
+            "nativeLibraries": {
+              "lib/x86_64/libmatrix_sdk_ffi.so": "55bde5be2080c3e42a2ece6053f94231d27165cc39698c89c50e36ecbdb2909a"
+            },
+            "validated": true
+          },
+          "proof": {
+            "platform/.work/collaboration/0e83c77185fd43a1bfeef3921b50e97b/verified.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSendCount": 3,
+              "nativeRedactionRequests": 0,
+              "retainedConfirmedQueueScenario": false,
+              "processRestartedAfterAck": true,
+              "processRestartedAfterCompletion": true
+            },
+            "platform/.work/collaboration/29e27c771b284f699dd1b2d3c2628b87/verified.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSendCount": 3,
+              "nativeRedactionRequests": 0,
+              "retainedConfirmedQueueScenario": true,
+              "confirmedNativeQueueRestored": true,
+              "confirmedNativeQueueRetryNoop": true,
+              "confirmedNativeQueueSettledOffline": true,
+              "processRestartedAfterAck": true,
+              "processRestartedAfterCompletion": true
+            },
+            "platform/.work/collaboration-worker/31bad2faaf654b20a5fa86a1273c920a/acceptance.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSends": 1,
+              "workManagerExecutionAccepted": true,
+              "retryCancellationAccepted": false
+            },
+            "platform/.work/collaboration-worker/654faed7139641558850ddce983f7267/acceptance.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSends": 176,
+              "foregroundHistoryAccepted": true,
+              "platformWorkManagerAccepted": false
+            },
+            "platform/.work/collaboration-worker/671ad34de6564735b0a72a9e411c419e/acceptance.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSends": 176,
+              "foregroundHistoryAccepted": true,
+              "platformWorkManagerAccepted": false
+            },
+            "platform/.work/collaboration-worker/bf8c85c44d834c71956bd0081d47cdcc/acceptance.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSends": 176,
+              "foregroundHistoryAccepted": true,
+              "platformWorkManagerAccepted": false
+            },
+            "mobile/.work/native-notification-proof/result.json": {
+              "complete": true,
+              "fixtureAbsent": true,
+              "fixtureUninstalled": true,
+              "fixtureDataCleared": true
+            }
+          },
+          "originalQueueContinuity": {
+            "complete": true,
+            "serial": "emulator-5560",
+            "abi": "x86_64",
+            "apkSha256": "98a0b3f7cdaa036df084cd78ac0224afaf50df182fcbe76d9f34d83cb3bea132",
+            "sdk": "26.10.23-hris.4",
+            "syntheticRoomSeed": true,
+            "providerMessagesSent": 0,
+            "liveHrisAcceptance": false,
+            "selectedAbiVerified": true,
+            "stage": {
+              "originalSdkClosed": true,
+              "committedBeforeCancellation": true,
+              "uninitializedAdoptionRetained": true,
+              "originalFieldsAndQueueNamespacePreserved": true,
+              "originalPrivateKeysPreserved": true,
+              "ownedResourcesReleased": true,
+              "passed": true,
+              "complete": true,
+              "newMessagesSent": 0,
+              "processId": 2855
+            },
+            "seedRequests": {
+              "GET /_matrix/client/versions": 1,
+              "GET /_matrix/client/v3/user/*/account_data/*": 2,
+              "POST /_matrix/client/v3/keys/upload": 1,
+              "POST /_matrix/client/v3/keys/query": 2,
+              "GET /_matrix/client/v3/sync": 1
+            },
+            "unexpectedSeedRoutes": {},
+            "seedClosedBeforeRecovery": true,
+            "processAbsentBetweenPhases": true,
+            "continuity": {
+              "durableAfterProcessDeath": true,
+              "actualExistingOnlySdkRestore": true,
+              "unpublishedUntilAcceptance": true,
+              "hrCompanySelectionAndDenialIndependent": true,
+              "legacyRuntimeLookupExcluded": true,
+              "originalFieldsAndQueueNamespacePreserved": true,
+              "originalPrivateKeysPreserved": true,
+              "sameBootstrapReplayWithoutWrite": true,
+              "actualPendingQueueRetained": true,
+              "originalQueueReadOffline": true,
+              "originalQueueHeldUnderLogicalOwner": true,
+              "partialAndChangedQueueResumeRejected": true,
+              "ownedResourcesReleased": true,
+              "ownedFilesRemoved": true,
+              "liveGroupActivation": false,
+              "passed": true,
+              "complete": true,
+              "newMessagesSent": 0,
+              "processId": 3492
+            },
+            "fixtureAbsent": true,
+            "seconds": 24.827
+          },
+          "reportsSha256": "ca039af8317c4132dd8b2dfb1f94baf74e49f2d60163830a8266bc516ee3a9c7"
+        },
+        {
+          "artifactId": 13571834419,
+          "name": "native-hris-arm64-evidence",
+          "sha256": "b0caf00476e37d4ad76066b8801048a71d8d7eaee3082dec3c7bb4ecc5920423",
+          "bytes": 315869,
+          "suites": 85,
+          "counts": {
+            "tests": 537,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": {
+            "abi": "arm64-v8a",
+            "apkSha256": "9516731e303f6747753482725f87f78ea9d61cb0e8e724492d0b17a087cbd837",
+            "ndk": "28.2.13676358",
+            "nativeLibraries": {
+              "lib/arm64-v8a/libmatrix_sdk_ffi.so": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34"
+            },
+            "validated": true
+          },
+          "proof": {
+            "platform/.work/collaboration/417103bebc0d46b19da5e0147de1fccf/verified.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSendCount": 3,
+              "nativeRedactionRequests": 0,
+              "retainedConfirmedQueueScenario": true,
+              "confirmedNativeQueueRestored": true,
+              "confirmedNativeQueueRetryNoop": true,
+              "confirmedNativeQueueSettledOffline": true,
+              "processRestartedAfterAck": true,
+              "processRestartedAfterCompletion": true
+            },
+            "platform/.work/collaboration/f2586d80e1994750845dde411c6fd521/verified.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSendCount": 3,
+              "nativeRedactionRequests": 0,
+              "retainedConfirmedQueueScenario": false,
+              "processRestartedAfterAck": true,
+              "processRestartedAfterCompletion": true
+            },
+            "platform/.work/collaboration-worker/63be2a10e0ea4e999c1a59586a2aabcc/acceptance.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSends": 176,
+              "foregroundHistoryAccepted": true,
+              "platformWorkManagerAccepted": false
+            },
+            "platform/.work/collaboration-worker/85eaf1db053941a29af5843cd8f5255e/acceptance.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSends": 176,
+              "foregroundHistoryAccepted": true,
+              "platformWorkManagerAccepted": false
+            },
+            "platform/.work/collaboration-worker/beed9fef073b4362b0256e08bd104f6c/acceptance.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSends": 1,
+              "workManagerExecutionAccepted": true,
+              "retryCancellationAccepted": false
+            },
+            "platform/.work/collaboration-worker/d0c2e1821b2b4e68839d07d858b43ed0/acceptance.json": {
+              "passed": true,
+              "cleanup": true,
+              "encryptedSends": 176,
+              "foregroundHistoryAccepted": true,
+              "platformWorkManagerAccepted": false
+            },
+            "mobile/.work/native-notification-proof/result.json": {
+              "complete": true,
+              "fixtureAbsent": true,
+              "fixtureUninstalled": true,
+              "fixtureDataCleared": true
+            }
+          },
+          "originalQueueContinuity": {
+            "complete": true,
+            "serial": "emulator-5560",
+            "abi": "arm64-v8a",
+            "apkSha256": "9516731e303f6747753482725f87f78ea9d61cb0e8e724492d0b17a087cbd837",
+            "sdk": "26.10.23-hris.4",
+            "syntheticRoomSeed": true,
+            "providerMessagesSent": 0,
+            "liveHrisAcceptance": false,
+            "selectedAbiVerified": true,
+            "stage": {
+              "originalSdkClosed": true,
+              "committedBeforeCancellation": true,
+              "uninitializedAdoptionRetained": true,
+              "originalFieldsAndQueueNamespacePreserved": true,
+              "originalPrivateKeysPreserved": true,
+              "ownedResourcesReleased": true,
+              "passed": true,
+              "complete": true,
+              "newMessagesSent": 0,
+              "processId": 2525
+            },
+            "seedRequests": {
+              "GET /_matrix/client/versions": 1,
+              "GET /_matrix/client/v3/user/*/account_data/*": 2,
+              "POST /_matrix/client/v3/keys/upload": 1,
+              "POST /_matrix/client/v3/keys/query": 2,
+              "GET /_matrix/client/v3/sync": 1
+            },
+            "unexpectedSeedRoutes": {},
+            "seedClosedBeforeRecovery": true,
+            "processAbsentBetweenPhases": true,
+            "continuity": {
+              "durableAfterProcessDeath": true,
+              "actualExistingOnlySdkRestore": true,
+              "unpublishedUntilAcceptance": true,
+              "hrCompanySelectionAndDenialIndependent": true,
+              "legacyRuntimeLookupExcluded": true,
+              "originalFieldsAndQueueNamespacePreserved": true,
+              "originalPrivateKeysPreserved": true,
+              "sameBootstrapReplayWithoutWrite": true,
+              "actualPendingQueueRetained": true,
+              "originalQueueReadOffline": true,
+              "originalQueueHeldUnderLogicalOwner": true,
+              "partialAndChangedQueueResumeRejected": true,
+              "ownedResourcesReleased": true,
+              "ownedFilesRemoved": true,
+              "liveGroupActivation": false,
+              "passed": true,
+              "complete": true,
+              "newMessagesSent": 0,
+              "processId": 3860
+            },
+            "fixtureAbsent": true,
+            "seconds": 80.993
+          },
+          "reportsSha256": "8ce6f3e2c97a0078512af80e0b78b3afedaf36d6b72df348940300baec720c41"
+        }
+      ]
+    }
+  ],
+  "auditSourceSha256": "a567fd9b9e3ad768116cee6b1e1c01c5bb63680e96821eed9b80aa9e1da424f1",
+  "limits": [
+    "Audit of original first native run; no provider scenario rerun.",
+    "Original queue continuity is an offline seeded SDK test with zero provider messages.",
+    "Phone build 53 latency remains open; no new phone APK.",
+    "First control 42363807332 is still in progress; its Apple/portable results are not claimed here."
+  ]
+}
