@@ -5,6 +5,29 @@ linked below. Earlier checkpoints remain verbatim in
 [history through original queue matching](agent-handoff-history-through-original-queue-matching-2026-11-07.md)
 and [history through build 50](agent-handoff-history-through-build50.md).
 
+## Active owning command observation — 7 November 2026
+
+Durable storage programc8c952af is accepted/pushed on recovery:3,598 cases/447 suites,
+813.971s,4,369 stable inputs, zero failures/errors/skips/lint issues, root/Android/
+Browser/shared Wasm/quality passed. No local storage job remains. First79b control
+42366357406 is still pending behind running fb control42363807332; first79b native
+42366357400 has started. Preserve pending first control before primary promotion.
+
+Exactly FOUR candidate files have now been baseline-verified and APPLIED/FROZEN:
+ObserveCollaborationSpaceConversationCommands, data factory registration, seven
+ownership/lifetime domain cases and application binding resolution. Sole heavy
+job73246 is observation focused-1 under .work/space-conversation-command-observation-
+2026-11-07. No other compiler/emulator may run. These four sources are NOT yet
+accepted/committed. After focused, run its prepared full gate (root/Android/lint,
+Browser observation and shared Wasm) before source commit/push. Candidate files are
+now historical staging; do not reapply them over later edits.
+
+Then prepare/replay commands and materialize canonical local conversation projection,
+explicit non-execution fencing, original SDK delivery/history, native-parent recovery,
+product routing and all54 groups. Current storage and observation grant no network
+or provider delivery authority. No new APK; phone53 latency is OPEN, original keys/
+IDs/data, immutableSDK4, live schema/services and Starter remain unchanged.
+
 ## Accepted durable conversation storage — 7 November 2026
 
 TEN Kotlin source/test files are accepted: immutable open/stable-room intent, pure
