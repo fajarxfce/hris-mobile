@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
+import android.os.SystemClock
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
 import dev.fajar.starter.notifications.data.datasources.*
@@ -46,8 +48,11 @@ internal class NativeNotificationProbe(private val context: Context, private val
             labels
         }
     private val cases = mutableListOf<String>()
+    private val startedAt = SystemClock.elapsedRealtime()
+    private var phase = "initial-clear"
 
     suspend fun run(denied: Boolean) {
+        var primary: Throwable? = null
         try {
             source.clear()
             if (denied) {
@@ -55,24 +60,39 @@ internal class NativeNotificationProbe(private val context: Context, private val
                 check(source.active().isEmpty())
                 cases += "permission-denial-does-not-submit"
             } else {
+                phase = "replacements"
                 replacements()
+                phase = "actions"
                 actions()
+                phase = "bounded-input"
                 boundedInput()
+                phase = "cleanup"
                 cleanup()
+                phase = "disabled-channel"
                 disabledChannel()
+                phase = "inventory-reopen"
                 inventoryReopen()
+                phase = "older-visible-render"
                 olderVisibleRender()
+                phase = "inventory-capacity"
                 inventoryCapacity()
+                phase = "corrupt-inventory"
                 corruptInventory()
             }
+        } catch (failure: Throwable) {
+            primary = failure
+            runCatching { recordFailure() }.exceptionOrNull()?.let(failure::addSuppressed)
+            throw failure
         } finally {
-            source.clear()
-            manager.cancel("unrelated-proof", 71)
-            while (NotificationProofReceiver.received.tryReceive().isSuccess) {
-                /* Release fixture inputs. */
-            }
+            closeFixture(primary)
         }
-        waitFor { source.active().isEmpty() }
+        phase = "final-absence"
+        try {
+            waitFor { source.active().isEmpty() }
+        } catch (failure: Throwable) {
+            runCatching { recordFailure() }.exceptionOrNull()?.let(failure::addSuppressed)
+            throw failure
+        }
         directory.mkdirs()
         File(directory, "native-notification.json")
             .writeText(
@@ -87,6 +107,77 @@ internal class NativeNotificationProbe(private val context: Context, private val
                     )
                     .toString()
             )
+    }
+
+    /** Retain the first failure while still releasing every owned fixture resource. */
+    private suspend fun closeFixture(primary: Throwable?) =
+        withContext(NonCancellable) {
+            var cleanup: Throwable? = null
+            try {
+                source.clear()
+            } catch (failure: Throwable) {
+                cleanup = failure
+            }
+            try {
+                manager.cancel("unrelated-proof", 71)
+            } catch (failure: Throwable) {
+                cleanup?.addSuppressed(failure) ?: run { cleanup = failure }
+            }
+            while (NotificationProofReceiver.received.tryReceive().isSuccess) {
+                /* Release fixture inputs even when notification removal failed. */
+            }
+            val failed = cleanup
+            if (failed != null) {
+                if (primary != null) primary.addSuppressed(failed)
+                else {
+                    phase = "final-clear"
+                    runCatching { recordFailure() }.exceptionOrNull()?.let(failed::addSuppressed)
+                    throw failed
+                }
+            }
+        }
+
+    /**
+     * Only controlled-fixture state: no notification content, envelopes, tokens or reply inputs.
+     */
+    private fun recordFailure() {
+        val power = context.getSystemService(PowerManager::class.java)
+        val at = System.currentTimeMillis()
+        val active =
+            manager.activeNotifications
+                .filter { it.id == 0 && it.tag?.startsWith(prefix) == true }
+                .take(50)
+                .map {
+                    JSONObject()
+                        .put(
+                            "neutral",
+                            it.notification.extras.containsKey("owned_notification_retirement"),
+                        )
+                        .put(
+                            "render",
+                            it.notification.extras.containsKey("owned_notification_render"),
+                        )
+                        .put(
+                            "timeoutAfterMs",
+                            if (Build.VERSION.SDK_INT >= 26)
+                                it.notification.timeoutAfter.coerceIn(0, 86_400_000)
+                            else 0L,
+                        )
+                        .put("postAgeMs", (at - it.postTime).coerceIn(0, 86_400_000))
+                }
+        val value =
+            JSONObject()
+                .put("schema", 1)
+                .put("phase", phase)
+                .put("elapsedMs", SystemClock.elapsedRealtime() - startedAt)
+                .put("completedCases", cases.size)
+                .put("interactive", power.isInteractive)
+                .put("deviceIdle", power.isDeviceIdleMode)
+                .put("powerSave", power.isPowerSaveMode)
+                .put("notificationsEnabled", manager.areNotificationsEnabled())
+                .put("active", JSONArray(active))
+        directory.mkdirs()
+        File(directory, "native-notification-failure.json").writeText(value.toString())
     }
 
     private suspend fun replacements() {

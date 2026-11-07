@@ -1,0 +1,357 @@
+{
+  "recordedAt": "2026-11-07T05:33:15.685999+00:00",
+  "baseCommit": "a48c59f1c72892c37abb5bcccf64e3e4417e6ed8",
+  "sourceFiles": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "6ae26c8e9b39a8f090199f624131e30a9e84dc79a071b44539efff47745b7a2e",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NativeNotificationProbe.kt": "2285fc6bc9fbf9c59b3ef8471d99bbf75f4a048f201e342a44c3c1cffa82a217",
+    "tool/check_native_notifications.py": "ac23c6785e774826cdbd0c91455c2da38aff1faddd82ee749862ad1681d228f2",
+    "tool/test_native_notifications.py": "e12632ffef251d1c5fa01f667f0a9ba4b721b489a4722ca26891e87eaebe1f08"
+  },
+  "checks": [
+    {
+      "startedAt": "2026-11-07T05:19:01.430550+00:00",
+      "elapsedSeconds": 81.402,
+      "exitCode": 0,
+      "sourceFiles": 4298,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "check-1",
+      "freshSuites": 0,
+      "sourceManifestSha256": "108904fe3d6655b9a66d02aaf56f12475055ddf618777a171356c1bf8fab0f29",
+      "stdoutSha256": "0f9bc5965a4ec6d48ad1d5fb82272f02d59fb42250dae6db2bd04c5f53a0ea5d",
+      "stderrSha256": "abf99a0d6da627246005125c809a042167b192fbfb9e421e11b828422fca7fa4"
+    },
+    {
+      "startedAt": "2026-11-07T05:21:41.491065+00:00",
+      "elapsedSeconds": 55.509,
+      "exitCode": 0,
+      "sourceFiles": 4298,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "check-2",
+      "freshSuites": 0,
+      "sourceManifestSha256": "9927f8704ab146e7500359dfff5f99f50b8ef34aa13b8ae181d43e321913b4d9",
+      "stdoutSha256": "348960d12f7832f0c5fa2ba2208b31fb9d60befa52e0e72b4b780f07a05cb0f0",
+      "stderrSha256": "b71ef8f78aa694b95643a722c173db5e2dfc99d1c620d4d4adde33088b437b9f"
+    },
+    {
+      "startedAt": "2026-11-07T05:23:08.911689+00:00",
+      "elapsedSeconds": 110.687,
+      "exitCode": 0,
+      "sourceFiles": 4298,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "check-3",
+      "freshSuites": 0,
+      "sourceManifestSha256": "b10ad76ba131b4408b15f594f480267990bd13952697155c00984c212927c1ad",
+      "stdoutSha256": "3fb19f965287595a3a104b937a7042aa522ff45e39d63217892ca0cb70ea1f42",
+      "stderrSha256": "4dc73ae017ecae0e774a6ad144ddbd892aca841987316df6bf645305df386797"
+    }
+  ],
+  "acceptedCommand": [
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    "--stacktrace",
+    "--continue",
+    ":check",
+    ":apps:collaboration-proof:compileDebugKotlin",
+    ":apps:collaboration-proof:assembleDebug",
+    ":apps:collaboration-proof:lintDebug",
+    ":formatCheck",
+    ":architectureCheck",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=53",
+    "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx2560m",
+    "-Pkotlin.compiler.execution.strategy=in-process"
+  ],
+  "driver": {
+    "exitCode": 0,
+    "elapsedSeconds": 0.103,
+    "sourceFiles": {
+      "tool/check_native_notifications.py": "ac23c6785e774826cdbd0c91455c2da38aff1faddd82ee749862ad1681d228f2",
+      "tool/test_native_notifications.py": "e12632ffef251d1c5fa01f667f0a9ba4b721b489a4722ca26891e87eaebe1f08"
+    },
+    "stderrSha256": "364619f073e382e37208a01f4c1ce42e1275432e9c5b5af387ca168370f311b1",
+    "tests": 33,
+    "testSeconds": 0.015
+  },
+  "native": {
+    "startedAt": "2026-11-07T05:26:47.706808+00:00",
+    "serial": "emulator-5564",
+    "apkSha256": "e0c13ad506283dee5c31673df9d33194f05bfb625468ab7f1504c22a6ed6fb50",
+    "sdk": "26.10.23-hris.4",
+    "nativeSha256": {
+      "arm64-v8a": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34",
+      "x86_64": "55bde5be2080c3e42a2ece6053f94231d27165cc39698c89c50e36ecbdb2909a"
+    },
+    "providerRequired": false,
+    "phoneTouched": false,
+    "originalBimaTouched": false,
+    "newProviderMessagesSent": 0,
+    "complete": true,
+    "driverExitCode": 0,
+    "proof": {
+      "serial": "emulator-5564",
+      "scenarios": [
+        {
+          "name": "native-notification-denied",
+          "seconds": 5.071,
+          "complete": true,
+          "sdk": 35,
+          "cases": [
+            "permission-denial-does-not-submit"
+          ],
+          "cleanedUp": true,
+          "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+        },
+        {
+          "name": "native-notification",
+          "seconds": 11.037,
+          "complete": true,
+          "sdk": 35,
+          "cases": [
+            "actual-private-display-and-immutable-public-version",
+            "same-render-replay-updates-stable-card",
+            "stale-removal-preserves-new-render-and-new-render-may-alert",
+            "same-render-reissue-keeps-original-immutable-envelope",
+            "real-remote-input-and-old-render-envelope-remain-distinct",
+            "immutable-actions-ignore-injected-remote-input",
+            "colliding-java-hashes-cannot-retarget-pending-intents",
+            "missing-oversized-or-cross-component-input-is-rejected",
+            "namespace-cleanup-preserves-unrelated-application-notifications",
+            "disabled-channel-is-distinct-from-submitted",
+            "newer-inventory-fences-stale-removal-while-os-card-is-absent",
+            "opaque-no-backup-inventory-reopens-and-clears-without-account-data",
+            "latest-owned-inventory-can-cancel-its-older-visible-predecessor",
+            "full-opaque-inventory-does-not-evict-or-submit",
+            "corrupt-inventory-withholds-new-posts-and-cleans-visible-cards"
+          ],
+          "cleanedUp": true,
+          "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+        }
+      ],
+      "sdk": 35,
+      "apkSha256": "e0c13ad506283dee5c31673df9d33194f05bfb625468ab7f1504c22a6ed6fb50",
+      "runtimeComposition": {
+        "seconds": 3.25,
+        "complete": true,
+        "cleanedUp": true,
+        "cases": [
+          "english-copy-and-native-actions",
+          "language-change-without-host-replacement",
+          "system-language-resource-resolution",
+          "one-application-host-and-joined-native-cleanup"
+        ],
+        "scope": "Android runtime composition and OS resources; fake admission/settings storage, no provider/account/actions"
+      },
+      "inputRecovery": {
+        "complete": true,
+        "pid": 4802,
+        "protectedRowsBeforeRecovery": 1,
+        "reviewRowsAfterRecovery": 1,
+        "wrongAccountPreservedInput": true,
+        "oldFamilyRequiresReview": true,
+        "recoveryTurns": [
+          {
+            "turn": 1,
+            "phases": [
+              "Retry",
+              "Complete"
+            ],
+            "result": "Retry",
+            "failureKind": "Unavailable",
+            "failureCode": "client.collaboration_notification_input_worker_unavailable",
+            "milliseconds": 3221,
+            "protectedRows": 0,
+            "reviewRows": 1,
+            "reviewStates": [
+              "SessionChanged"
+            ]
+          },
+          {
+            "turn": 2,
+            "phases": [
+              "Complete",
+              "Complete"
+            ],
+            "result": "Complete",
+            "failureKind": null,
+            "failureCode": null,
+            "milliseconds": 134,
+            "protectedRows": 0,
+            "reviewRows": 1,
+            "reviewStates": [
+              "SessionChanged"
+            ]
+          }
+        ],
+        "httpCalls": 0,
+        "commandRetained": false,
+        "cleanedUp": true,
+        "ordinaryProcessKills": 3,
+        "callbackCount": 4,
+        "processIds": [
+          4092,
+          4441,
+          4620,
+          4802
+        ],
+        "seconds": 35.182,
+        "scope": "Real Android callback, Keystore/Room/app recovery; fictional account; no HTTP/Matrix send or production host activation"
+      },
+      "actionCallbacks": {
+        "complete": true,
+        "cases": [
+          {
+            "complete": true,
+            "mode": "Open",
+            "pid": 4938,
+            "state": "Published",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 1,
+            "callbackCount": 1
+          },
+          {
+            "complete": true,
+            "mode": "MarkRead",
+            "pid": 4938,
+            "state": "Cancelled",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 2
+          },
+          {
+            "complete": true,
+            "mode": "Dismiss",
+            "pid": 4938,
+            "state": "Dismissed",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 3
+          },
+          {
+            "complete": true,
+            "mode": "Reply",
+            "pid": 4938,
+            "state": "Dismissed",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 4
+          },
+          {
+            "complete": true,
+            "mode": "Mute",
+            "pid": 4938,
+            "state": "Cancelled",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 5
+          }
+        ],
+        "systemUiReply": true,
+        "seconds": 48.475,
+        "scope": "Actual Android application callbacks, encrypted Room/Keystore and native cards; seeded fictional session/conversation/history; no discovery actor, provider send or product activation"
+      },
+      "complete": true,
+      "fixtureAbsent": true,
+      "fixtureUninstalled": true,
+      "fixtureDataCleared": true,
+      "seconds": 129.286
+    },
+    "emulatorStopped": {
+      "pid": 339173,
+      "serial": "emulator-5564",
+      "stopped": true,
+      "signalSent": true,
+      "transportAbsent": true,
+      "seconds": 1.805
+    },
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "elapsedSeconds": 171.988
+  },
+  "nativeResultSha256": "fc3a37c588a65e0b9c9ccf13809d7bf50dccc24bb4ea25c98a0ddbbda555ff7f",
+  "proofLint": {
+    "severities": {
+      "Warning": 49
+    },
+    "ids": {
+      "AndroidGradlePluginVersion": 2,
+      "GradleDependency": 9,
+      "NewerVersionAvailable": 35,
+      "ChromeOsAbiSupport": 1,
+      "DataExtractionRules": 1,
+      "MissingApplicationIcon": 1
+    },
+    "reportSha256": "7d62216788cf1c55fc781efb887f3546d064fed2ffac44f910e2fa43a9805fcf"
+  },
+  "detektFindings": 0,
+  "originalFailure": {
+    "runId": 42336761242,
+    "sourceCommit": "780624a42cd0c39c8e0eb2daa8f4d9b47dc90dd0",
+    "category": "IOException",
+    "frame": "AndroidActionNotificationDisplaySource.confirmRemoved:228",
+    "record": "collaboration-credentials-native-ci-2026-11-07.json",
+    "causeEstablished": false,
+    "rerunRequested": false
+  },
+  "reviews": {
+    "source-review.json": {
+      "at": "2026-11-07T05:08:41.629758+00:00",
+      "primaryFailureCanBeMaskedAt": [
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NativeNotificationProbe.kt:run finally",
+        "tool/check_native_notifications.py:run finally"
+      ],
+      "currentProductionAbsenceTimeoutMs": 1000,
+      "currentNeutralExpiryMs": 600,
+      "causeEstablished": false,
+      "plannedProductionBehaviorChange": false,
+      "phoneTouched": false
+    },
+    "report-write-review.json": {
+      "at": "2026-11-07T05:20:47.610052+00:00",
+      "concern": "Final result.json persistence can still mask an existing primary or cleanup exception if local report I/O fails.",
+      "nextAfterCurrentGate": "Retain original exception while attaching only report failure class; when cleanup is the first failure retain it too. Add one driver regression for failing final report persistence with a native failure; rerun driver/root gate before native acceptance.",
+      "sourceChangesApplied": false
+    },
+    "check-2-review.json": {
+      "at": "2026-11-07T05:23:07.775544+00:00",
+      "check2PassedSeconds": 55.509,
+      "sourceInputsStable": 4298,
+      "newConcern": "Proof application inherits minSdk24, while Notification.getTimeoutAfter was added in26.",
+      "correction": "Guard only the diagnostic timeout getter by SDK level; add proof APK lint to the final gate. Raw scenarios still require API33+ and production notification behavior is unchanged.",
+      "candidateDriverCases": 33,
+      "furtherChangesPlanned": false
+    }
+  },
+  "productionAdapterChanged": false,
+  "notificationTimeoutsChanged": false,
+  "phoneLatencyResolved": false,
+  "starterPortRequired": false
+}

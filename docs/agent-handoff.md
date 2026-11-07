@@ -4,7 +4,41 @@ This is the active checkpoint. The [historical handoff](agent-handoff-history-th
 retains earlier work verbatim. Detailed measurements below are authoritative; do not
 restart accepted builds, native sends or SDK publication solely to recreate evidence.
 
-## Current next step — 7 November 2026, 05:17 UTC
+## Current next step — 7 November 2026, 05:36 UTC
+
+Notification diagnostics are accepted and ready to commit from a48c59f1. No heavy
+job or emulator remains. Four proof/driver/test files match the final 4,298-input
+manifest. Python passed 33 cases (0.015s). Final gate42538 passed in110.687s, reusing
+all XML test outputs; proof lint has zero errors and49 warnings, Detekt zero.
+[Contract](native-notification-diagnostics.md),
+[evidence](measurements/native-notification-diagnostics-2026-11-07.json).
+
+Actual native30775 passed171.988s, with16 raw cases,4 runtime cases, process-death
+input recovery (three ordinary process kills) and five callbacks including System UI
+reply. The owned fixture was uninstalled; emulator5564 PID339173/startTicks170590039
+is stopped and its transport absent. Sources/APK stayed unchanged. No provider sends,
+original Bima data or phone UI. Production notification code/timeouts are unchanged;
+the first780 removal-confirmation failure remains unexplained and retained.
+
+FIRST2509 protocol42340255483 is fully audited SUCCESS:14 checks in each mode, both
+artifact digests verified against the pinned Platforme0dbb567 source. Initial comparison
+with current Platform found three evolved files; the corrected exact-commit audit is
+recorded without rerunning the proof. See
+[protocol CI record](measurements/collaboration-adoption-protocol-ci-2026-11-07.json).
+FIRST2509 control42340255503/native42340255481 remain IN_PROGRESS. FIRSTa48 control
+42342142245/native42342142282 are PENDING; no protocol trigger for that slice. Commit
+and push the temporary branch now, but wait for those first pending runs to START
+before another primary-source promotion. Do not cancel or rerun accepted sends.
+
+Next continue actual original pending-transaction continuity, logical organization
+message/history ownership, hard-parent recovery and product/root routing. Original
+key and queue NAMESPACE continuity is accepted; actual old transaction delivery is
+not yet proven. All54 PRD groups and organization activation remain unfinished;
+V117–137 stay disabled/unshipped. Phone53 latency and optional feedback remain OPEN.
+Bima has an eligible device/key and matched200; unrelated zero-peer-device403s are
+not proof of a Bima key failure. Push each atomic commit and continue the long run.
+
+## Accepted owning-admission checkpoint — 7 November 2026, 05:17 UTC
 
 The owning organization runtime admission slice is accepted, ready to commit/push
 from base2509c9dda373f9eb7b9babc854c67d732b17c6cd. No heavy job or emulator remains.

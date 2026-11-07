@@ -52,6 +52,10 @@ class MatrixProofInstrumentation : Instrumentation() {
                     ?: failure.javaClass.simpleName,
             )
             output.put(
+                "suppressedFailureCategories",
+                JSONArray(failure.suppressed.take(4).map { it.javaClass.simpleName }),
+            )
+            output.put(
                 "failureFrames",
                 JSONArray(
                     failure.stackTrace

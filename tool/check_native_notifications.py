@@ -232,6 +232,40 @@ def aapt_path(args):
     return str(sdk / "build-tools/36.0.0/aapt2")
 
 
+def collect_native_failure(adb, output):
+    raw = adb("shell", "run-as", PACKAGE, "cat", "files/protocol-proof/native-notification-failure.json", timeout=10)
+    if len(raw.encode()) > 16_384:
+        raise ValueError("Notification observation exceeded its bound")
+    value = json.loads(raw)
+    phases = {"initial-clear", "replacements", "actions", "bounded-input", "cleanup",
+              "disabled-channel", "inventory-reopen", "older-visible-render",
+              "inventory-capacity", "corrupt-inventory", "final-clear", "final-absence"}
+    assert isinstance(value, dict) and value.get("schema") == 1 and value.get("phase") in phases
+    result = {"schema": 1, "phase": value["phase"]}
+    for key, maximum in [("elapsedMs", 300_000), ("completedCases", 15)]:
+        item = value[key]
+        assert type(item) is int and 0 <= item <= maximum
+        result[key] = item
+    for key in ["interactive", "deviceIdle", "powerSave", "notificationsEnabled"]:
+        assert type(value[key]) is bool
+        result[key] = value[key]
+    active = value["active"]
+    assert isinstance(active, list) and len(active) <= 50
+    result["active"] = []
+    for notification in active:
+        selected = {}
+        for key in ["neutral", "render"]:
+            assert type(notification[key]) is bool
+            selected[key] = notification[key]
+        for key in ["postAgeMs", "timeoutAfterMs"]:
+            item = notification[key]
+            assert type(item) is int and 0 <= item <= 86_400_000
+            selected[key] = item
+        result["active"].append(selected)
+    (output / "native-notification-failure.json").write_text(json.dumps(result, indent=2) + "\n")
+    return result
+
+
 def run(args):
     if not re.fullmatch(r"emulator-\d{4,5}", args.serial):
         raise ValueError("Only an explicitly selected emulator serial is allowed")
@@ -250,6 +284,8 @@ def run(args):
     result = {"serial": args.serial, "scenarios": []}
     start = time.monotonic()
     installation_attempted = False
+    primary_failure = None
+    scenario = None
     try:
         # This caller must exclusively own the dedicated AVD for the whole run.
         assert adb("shell", "getprop", "ro.kernel.qemu").strip() == "1"
@@ -289,6 +325,7 @@ def run(args):
             assert proof.get("complete") is True and proof.get("cleanedUp") is True
             assert len(proof["cases"]) == expected and len(set(proof["cases"])) == expected
             result["scenarios"].append({"name": scenario, "seconds": round(time.monotonic()-began, 3), **proof})
+        scenario = None
         began = time.monotonic()
         output = adb("shell", "am", "instrument", "-w", "-e", "scenario", "notification-runtime",
                      f"{PACKAGE}/.MatrixProofInstrumentation", timeout=60)
@@ -303,6 +340,16 @@ def run(args):
         result["actionCallbacks"] = action_callbacks(adb, args.output, getattr(args, "reply_system_ui", False))
         assert hashlib.sha256(args.apk.read_bytes()).hexdigest() == digest
         result["complete"] = True
+    except BaseException as failure:
+        primary_failure = failure
+        result["complete"] = False
+        result["failureCategory"] = type(failure).__name__
+        if scenario in {"native-notification", "native-notification-denied"}:
+            try:
+                result["failureObservation"] = collect_native_failure(adb, args.output)
+            except Exception as observation_failure:
+                result["observationFailureCategory"] = type(observation_failure).__name__
+        raise
     finally:
         try:
             if installation_attempted:
@@ -329,10 +376,18 @@ def run(args):
         except Exception as failure:
             result["complete"] = False
             result["cleanupFailureCategory"] = type(failure).__name__
-            raise
+            if primary_failure is None:
+                primary_failure = failure
+                raise
+            primary_failure.add_note("Owned fixture cleanup also failed: " + type(failure).__name__)
         finally:
             result["seconds"] = round(time.monotonic()-start, 3)
-            (args.output / "result.json").write_text(json.dumps(result, indent=2) + "\n")
+            try:
+                (args.output / "result.json").write_text(json.dumps(result, indent=2) + "\n")
+            except Exception as report_failure:
+                if primary_failure is None:
+                    raise
+                primary_failure.add_note("Diagnostic report could not be saved: " + type(report_failure).__name__)
     return result
 
 

@@ -1,0 +1,349 @@
+{
+  "at": "2026-11-07T05:25:21.901212+00:00",
+  "headSha": "2509c9dda373f9eb7b9babc854c67d732b17c6cd",
+  "runs": [
+    {
+      "id": 42340255483,
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "name": "android-web (classic)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-07T04:51:41Z",
+          "completedAt": "2026-11-07T05:06:23Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run android-actions/setup-android@v3",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build debug-only isolated fixture",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npm ci --ignore-scripts --no-audit --no-fund",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npx playwright install --with-deps chromium",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Enable KVM for the owned runner emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run reactivecircus/android-emulator-runner@v2",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "name": "android-web (native)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-07T04:51:41Z",
+          "completedAt": "2026-11-07T05:07:55Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run android-actions/setup-android@v3",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build debug-only isolated fixture",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npm ci --ignore-scripts --no-audit --no-fund",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npx playwright install --with-deps chromium",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Enable KVM for the owned runner emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run reactivecircus/android-emulator-runner@v2",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "artifactId": 13561940814,
+          "name": "native-protocol-evidence-classic",
+          "sha256": "ee476678ed691979b5e448e63da6fc4bec6baf1fc1160502ae87e19e452203f3",
+          "bytes": 2526,
+          "suites": 0,
+          "counts": {
+            "tests": 0,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": null,
+          "proof": {},
+          "protocol": {
+            "kind": "isolated_provider_proof",
+            "complete": true,
+            "productAcceptance": false,
+            "capacityAcceptance": false,
+            "checks": {
+              "wrong_issuer": true,
+              "wrong_audience": true,
+              "expired_jwt_beyond_provider_leeway": true,
+              "public_registration_disabled": true,
+              "loopback_only_http": true,
+              "isolated_dedicated_network": true,
+              "provider_protocol_counters": true,
+              "browser_e2ee_restart_media": true,
+              "browser_offline_invitee_first_message_sender_offline": true,
+              "android_requested_sync_protocol": true,
+              "android_web_bidirectional_e2ee": true,
+              "android_sdk_refresh_preserves_device_key": true,
+              "android_sdk_queue_encrypted_logical_ids": true,
+              "android_encrypts_for_offline_invitee_before_join": true
+            },
+            "cleanup": true,
+            "sourceSha256": {
+              "tool/check_collaboration_providers.py": "da39c44d9a1ec59df4118b4900f11c29be3acf3fae74ec45dd2ce7b5e9b76ba1",
+              "tool/test_collaboration_providers.py": "a22fd049c7ffb11601f9496679b4093ecec64dea47cafcfce3dae827e3110fa0",
+              "tool/collaboration_native_device.py": "0475be5ae31f5383d924917304fb5a7ef81da8cc1a55168090155fc826f61547",
+              "tool/test_collaboration_native_device.py": "13c541192f42d719595f25d6a8c840bedf029ef189316d2f2c08b4a0826f1e24",
+              "tool/collaboration_protocol_metrics.py": "602e33d3c946e13468e3345ebe2d39c8ac3b443fee93577c6c71b44a3f5e2bb1",
+              "tool/test_collaboration_protocol_metrics.py": "c83ec8ca57e3d6d9e26e910428480a1d87e4dad0c86df8d5aa2b422ac4327a52",
+              "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+              "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+              "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+              "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+              "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+              "tool/collaboration-proof/src/probe.js": "b452de9882c7f121e811bde62bca92eaf678ce785030d4c715b99b316cb9a5f6",
+              "tool/collaboration-proof/tests/providers.spec.mjs": "1d498852844d41f350fd5ef295484acafb18bc8b90d9eb7daf3d05825c6ca3c2",
+              "tool/collaboration-proof/tests/native.spec.mjs": "c36faa5d4ba38061af590cc8e4ef863ddb8c624ffce78b86bc26ecd98613256b"
+            },
+            "elapsedSeconds": 89.146,
+            "pinnedPlatformInputsVerified": true
+          }
+        },
+        {
+          "artifactId": 13560923999,
+          "name": "native-protocol-evidence-native",
+          "sha256": "6d9ad5fac8203d57a6d60f78b03c5ee8caf73c2d338c033ea4bfd50c88b961a9",
+          "bytes": 2527,
+          "suites": 0,
+          "counts": {
+            "tests": 0,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": null,
+          "proof": {},
+          "protocol": {
+            "kind": "isolated_provider_proof",
+            "complete": true,
+            "productAcceptance": false,
+            "capacityAcceptance": false,
+            "checks": {
+              "wrong_issuer": true,
+              "wrong_audience": true,
+              "expired_jwt_beyond_provider_leeway": true,
+              "public_registration_disabled": true,
+              "loopback_only_http": true,
+              "isolated_dedicated_network": true,
+              "provider_protocol_counters": true,
+              "browser_e2ee_restart_media": true,
+              "browser_offline_invitee_first_message_sender_offline": true,
+              "android_requested_sync_protocol": true,
+              "android_web_bidirectional_e2ee": true,
+              "android_sdk_refresh_preserves_device_key": true,
+              "android_sdk_queue_encrypted_logical_ids": true,
+              "android_encrypts_for_offline_invitee_before_join": true
+            },
+            "cleanup": true,
+            "sourceSha256": {
+              "tool/check_collaboration_providers.py": "da39c44d9a1ec59df4118b4900f11c29be3acf3fae74ec45dd2ce7b5e9b76ba1",
+              "tool/test_collaboration_providers.py": "a22fd049c7ffb11601f9496679b4093ecec64dea47cafcfce3dae827e3110fa0",
+              "tool/collaboration_native_device.py": "0475be5ae31f5383d924917304fb5a7ef81da8cc1a55168090155fc826f61547",
+              "tool/test_collaboration_native_device.py": "13c541192f42d719595f25d6a8c840bedf029ef189316d2f2c08b4a0826f1e24",
+              "tool/collaboration_protocol_metrics.py": "602e33d3c946e13468e3345ebe2d39c8ac3b443fee93577c6c71b44a3f5e2bb1",
+              "tool/test_collaboration_protocol_metrics.py": "c83ec8ca57e3d6d9e26e910428480a1d87e4dad0c86df8d5aa2b422ac4327a52",
+              "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+              "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+              "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+              "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+              "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+              "tool/collaboration-proof/src/probe.js": "b452de9882c7f121e811bde62bca92eaf678ce785030d4c715b99b316cb9a5f6",
+              "tool/collaboration-proof/tests/providers.spec.mjs": "1d498852844d41f350fd5ef295484acafb18bc8b90d9eb7daf3d05825c6ca3c2",
+              "tool/collaboration-proof/tests/native.spec.mjs": "c36faa5d4ba38061af590cc8e4ef863ddb8c624ffce78b86bc26ecd98613256b"
+            },
+            "elapsedSeconds": 87.33,
+            "pinnedPlatformInputsVerified": true
+          }
+        }
+      ]
+    }
+  ],
+  "firstRun": true,
+  "rerunRequested": false,
+  "pinnedPlatformCommit": "e0dbb567acc4c5571b82324c515ed8ddc145007d",
+  "comparisonNote": "Initial comparison with current Platform mismatched three evolved tool files. The workflow deliberately pins this earlier fixture commit; every reported input is verified against that exact Git object."
+}

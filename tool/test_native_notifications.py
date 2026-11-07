@@ -55,7 +55,7 @@ class NotificationDriverOwnershipTest(unittest.TestCase):
                 output = ''
             elif c[0] == 'uninstall':
                 self.assertEqual(c[1], proof.PACKAGE)
-                if self.failure == 'uninstall':
+                if self.failure in ('uninstall', 'native-and-cleanup'):
                     raise subprocess.CalledProcessError(1, command)
                 self.present = False
                 output = 'Success'
@@ -65,8 +65,18 @@ class NotificationDriverOwnershipTest(unittest.TestCase):
                     raise subprocess.CalledProcessError(1, command)
                 output = 'INSTRUMENTATION_CODE: 0'
             elif c[:2] == ['shell', 'run-as']:
-                if c[-1].endswith('/instrumentation.json'):
-                    output = json.dumps({'complete': True})
+                if c[-1].endswith('/native-notification-failure.json'):
+                    if self.failure == 'state-unavailable':
+                        raise subprocess.CalledProcessError(1, command)
+                    output = json.dumps({'schema': 1, 'phase': 'replacements', 'elapsedMs': 900,
+                        'completedCases': 2, 'interactive': True, 'deviceIdle': False,
+                        'powerSave': False, 'notificationsEnabled': True,
+                        'active': [{'neutral': True, 'render': False, 'postAgeMs': 1100,
+                                    'timeoutAfterMs': 600, 'body': 'must-not-be-copied'}],
+                        'private': 'must-not-be-copied'})
+                elif c[-1].endswith('/instrumentation.json'):
+                    output = json.dumps({'complete': self.failure not in
+                        ('native-status', 'state-unavailable', 'native-and-cleanup')})
                 else:
                     count = 4 if self.scenario == 'notification-runtime' else (1 if self.scenario.endswith('denied') else 15)
                     output = json.dumps({'complete': True, 'cleanedUp': True, 'cases': list(range(count))})
@@ -100,6 +110,49 @@ class NotificationDriverOwnershipTest(unittest.TestCase):
         # A sequential run must acquire an absent package again, never replace existing data.
         self.args.output = self.root/'second'
         self.assertTrue(self.execute()['complete'])
+
+    def test_failed_native_status_archives_only_bounded_state_before_uninstall(self):
+        self.failure = 'native-status'
+        with self.assertRaises(AssertionError): self.execute()
+        result = self.result()
+        self.assertEqual('replacements', result['failureObservation']['phase'])
+        self.assertEqual(600, result['failureObservation']['active'][0]['timeoutAfterMs'])
+        self.assertNotIn('must-not-be-copied', (self.args.output/'native-notification-failure.json').read_text())
+        collected = next(i for i, c in enumerate(self.commands) if c[-1].endswith('/native-notification-failure.json'))
+        removed = next(i for i, c in enumerate(self.commands) if c[3:4] == ['uninstall'])
+        self.assertLess(collected, removed)
+        self.assertTrue(result['fixtureUninstalled'])
+        self.assertFalse(self.present)
+
+    def test_missing_diagnostic_preserves_native_assertion_and_owned_cleanup(self):
+        self.failure = 'state-unavailable'
+        with self.assertRaises(AssertionError): self.execute()
+        self.assertEqual('CalledProcessError', self.result()['observationFailureCategory'])
+        self.assertTrue(self.result()['fixtureUninstalled'])
+        self.assertFalse(self.present)
+
+    def test_cleanup_failure_cannot_mask_the_original_native_assertion(self):
+        self.failure = 'native-and-cleanup'
+        with self.assertRaises(AssertionError): self.execute()
+        result = self.result()
+        self.assertEqual('AssertionError', result['failureCategory'])
+        self.assertEqual('RuntimeError', result['cleanupFailureCategory'])
+        self.assertFalse(result['complete'])
+        self.assertTrue(self.present)
+
+    def test_failed_report_write_preserves_original_failure_after_releasing_fixture(self):
+        self.failure = 'native-status'
+        original_write = Path.write_text
+        def write(path, *args, **kwargs):
+            if path.name == 'result.json':
+                raise OSError('Fictional report storage failure')
+            return original_write(path, *args, **kwargs)
+        with patch.object(Path, 'write_text', write):
+            with self.assertRaises(AssertionError) as raised:
+                self.execute()
+        self.assertFalse(self.present)
+        self.assertTrue(any('OSError' in note for note in raised.exception.__notes__))
+        self.assertTrue((self.args.output/'native-notification-failure.json').is_file())
 
     def test_existing_fixture_is_not_replaced_or_deleted(self):
         self.present = True
