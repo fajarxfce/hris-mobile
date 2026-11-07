@@ -36,3 +36,16 @@ crash is triggered by the starter UI or automated application tests.
 
 See [performance](performance.md) for manual Firebase traces, first-party HTTP
 correlation and lifecycle/recomposition boundaries.
+
+## Failure outcome across suspension
+
+`measureOperation` explicitly assigns `Failed` when a non-cancellation exception
+escapes its block, then rethrows the same exception. Cancellation keeps its separate
+outcome. The original Starter Apple network test exposed a null failure sample;
+its assertion remains unchanged. A suspended dispatcher-hop regression supplements
+that test, and collaboration CI now runs observability on desktop, browser and Apple.
+
+[Evidence](measurements/native-failure-outcome-2026-11-07.json) retains the original
+failed Apple run and the accepted Mobile local checks. Verification on the changed
+Apple source remains pending. This diagnostic correction does not establish the
+cause or resolution of physical-phone message delays.

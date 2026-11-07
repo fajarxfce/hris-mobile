@@ -21,6 +21,24 @@ class PerformanceTest {
     }
 
     @Test
+    fun failureAfterDispatcherSuspensionClosesTheSampleWithTheOriginalError() = runTest {
+        val original = IllegalStateException("private operation")
+        val received =
+            assertFailsWith<IllegalStateException> {
+                measureOperation(PerformanceOperation.HttpRequest) {
+                    withContext(Dispatchers.Default) {
+                        yield()
+                        throw original
+                    }
+                }
+            }
+        assertTrue(received === original || received.cause === original)
+        assertEquals(listOf(PerformanceOutcome.Failed), samples)
+        assertEquals(PerformanceOutcome.Failed, events.single().outcome)
+        assertFalse(encodeDiagnostic(events.single()).contains("private operation"))
+    }
+
+    @Test
     fun cancellationClosesTheSampleAndPreservesTheOriginalCancellation() = runTest {
         val cancelled = CancellationException("private")
         val error =

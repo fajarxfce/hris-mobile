@@ -1,0 +1,110 @@
+{
+  "recordedAt": "2026-11-07T04:03:01.890127+00:00",
+  "baseCommit": "41870f779cdba506e97bec3543083622d73e09bc",
+  "combinedFullGateIncludes": [
+    "group credential envelope/persistence",
+    "explicit failed performance sample outcome"
+  ],
+  "fullGate": {
+    "startedAt": "2026-11-07T03:54:19.700947+00:00",
+    "elapsedSeconds": 466.159,
+    "exitCode": 0,
+    "sourceFiles": 4282,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 3159,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "name": "full-1",
+    "freshSuites": 454,
+    "inputManifestSha256": "517e779b3af7a1ea913fc6ca08bbefb0ce2a403897a1643de63d34d914cc400f",
+    "stdoutSha256": "0525e34f5da06a6eb873ffc5a26f7de30afec4304e205ebc2350ab31d745ebcb",
+    "stderrSha256": "7b786105fe41094db908ac92bd487448c26d69ed23f2c94b253e11a3975d3d41"
+  },
+  "acceptedCommand": [
+    "xvfb-run",
+    "-a",
+    "env",
+    "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+    "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+    "ANDROID_HOME=/home/fajar/Android/Sdk",
+    "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    "--stacktrace",
+    "--continue",
+    ":check",
+    ":features:collaboration:data:testAndroidHostTest",
+    ":apps:collaboration-proof:compileDebugKotlin",
+    ":apps:collaboration-proof:assembleDebug",
+    ":core:network:wasmJsBrowserTest",
+    ":core:observability:wasmJsBrowserTest",
+    ":core:worker:wasmJsBrowserTest",
+    ":core:database:wasmJsBrowserTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":features:collaboration:presentation:wasmJsBrowserTest",
+    ":apps:android:assembleDevDebug",
+    ":apps:android:lintDevDebug",
+    ":formatCheck",
+    ":architectureCheck",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=53",
+    "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx2560m",
+    "-Pkotlin.compiler.execution.strategy=in-process"
+  ],
+  "lintErrors": 0,
+  "lintWarnings": 0,
+  "detektFindings": 0,
+  "sourceFiles": {
+    "core/observability/src/commonMain/kotlin/dev/fajar/starter/observability/MeasureOperation.kt": "4e6306b38d5c6171bd7ea6ca2ad9ea7343c55f8c2ff66617455d4eda980a8f7b",
+    "core/observability/src/commonTest/kotlin/dev/fajar/starter/observability/PerformanceTest.kt": "602a1b240c71e32253358606b5d5fff88176f5d85d91316273650fc2cb5e5ffe",
+    ".github/workflows/collaboration-control.yml": "f8b456c401ed3df0bd218ad727e81895f262ed440fa9f217f7bb594b995b590c"
+  },
+  "focusedGate": {
+    "startedAt": "2026-11-07T03:52:26.646602+00:00",
+    "elapsedSeconds": 78.848,
+    "exitCode": 0,
+    "sourceFiles": 4282,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 88,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "name": "focused-1",
+    "freshSuites": 27,
+    "inputManifestSha256": "517e779b3af7a1ea913fc6ca08bbefb0ce2a403897a1643de63d34d914cc400f",
+    "stdoutSha256": "316a83cd2002d2bba2445decf77323e2a4c42c301c007d6f9e3a1b5fad3db77c",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "originalStarterAppleFailure": {
+    "recordedAt": "2026-11-07T03:50:01.398923+00:00",
+    "runId": 42334504381,
+    "headSha": "fdbff51fd09605a2dba546ce9020b595f467c26c",
+    "conclusion": "failure",
+    "artifactId": 13559650754,
+    "artifactSha256": "d7d3ad4c308a9537cc6901c1f35cdf60d4ac563b9ee3203ca68497bf770d9028",
+    "githubDigestVerified": true,
+    "counts": {
+      "tests": 191,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": 48
+  },
+  "originalFailedTest": "HttpDiagnosticsTest.transportFailureAndCancellationBothFinishTheirSamples",
+  "originalAssertionUnchanged": true,
+  "appleVerificationPending": true,
+  "phoneLatencyResolved": false
+}

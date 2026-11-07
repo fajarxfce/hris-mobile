@@ -28,6 +28,10 @@ suspend fun <T> measureOperation(
         } catch (cancelled: CancellationException) {
             outcome = PerformanceOutcome.Cancelled
             throw cancelled
+        } catch (failed: Throwable) {
+            // Assign on the exception path as well, including after a native dispatcher hop.
+            outcome = PerformanceOutcome.Failed
+            throw failed
         } finally {
             try {
                 sample?.finish(outcome)
