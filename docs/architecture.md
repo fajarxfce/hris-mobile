@@ -1,5 +1,9 @@
 # Architecture
 
+[Owned conversation command observation](collaboration-space-conversation-observation.md)
+keeps local facts independent of token age and cancels old account subscriptions without
+starting business retry. Preparation, dispatch and canonical projection are separate.
+
 [Durable organization conversation commands](collaboration-space-conversation-commands.md)
 retain stable setup intent, uncertainty and exact archived receipts across local login
 replacement. Owning dispatch, projection and replacement fencing remain separate.

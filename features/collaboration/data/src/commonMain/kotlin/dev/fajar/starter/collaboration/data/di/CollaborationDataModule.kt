@@ -250,6 +250,13 @@ class CollaborationDataModule {
             ?: UnavailableCollaborationRuntimeRepository()
 
     @Factory
+    fun observeSpaceConversationCommands(
+        commands: CollaborationSpaceConversationCommandRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceConversationCommands(commands, sessions, server)
+
+    @Factory
     fun observeSpaceIdentityCommand(
         commands: CollaborationSpaceIdentityCommandRepository,
         sessions: SessionRepository,
