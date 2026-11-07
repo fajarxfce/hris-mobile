@@ -7,6 +7,18 @@ and [history through build 50](agent-handoff-history-through-build50.md).
 
 ## Current work — 7 November 2026
 
+Program `72a70e8c29b7a7b55e193fd23a914ac83109585b` is pushed to the recovery
+and primary branches. Its first runs have started: control `42358423232`, native
+`42358423298`, protocol `42358423295`. Preserve these first runs; subsequent work
+continues on the recovery branch until promotion is appropriate.
+
+The original `9deb55bf` control and native runs are now fully audited SUCCESS.
+Apple: 1,941 cases/221 suites; portable: 4,749/528; each Android ABI: 499/81,
+all without failures/errors/skips. Both native APKs contain the immutable accepted
+SDK4 hashes with NDK 28.2.13676358. Original artifact digests were verified.
+[Control/native evidence](measurements/collaboration-sdk4-packaging-control-native-ci-2026-11-07.json).
+Protocol evidence below is also accepted. No provider test was rerun for this audit.
+
 No heavy local job, emulator or tool session remains. The restricted original-writer
 increment is accepted locally:17source/test/probe files. Full8613 passed3,512fresh cases
 in441suites/438.471s on4,328 unchanged inputs, zero failures/errors/skips/lint errors;
@@ -43,8 +55,8 @@ reproduce the reported phone delay. No production retry/timeout/writer change fo
 Phone53 latency remains OPEN and its optional question is already pending.
 [Diagnosis/result](collaboration-mixed-room-delivery-diagnosis.md).
 
-Primary before this writer promotion is9deb55bf. Its first control42354718734 and native
-42354718728 have STARTED; preserve each later first pending run before further primary
+Primary is now72a70e8c. Prior9deb55bf control42354718734 and native
+42354718728 are accepted; preserve each later first pending run before further primary
 promotions. Protocol42354718729 is fully audited:14checks each, all14source hashes match
 Platformpine0dbb567. Classic89.411s artifact13567970547; native89.862s artifact13567611736.
 [Protocol evidence](measurements/collaboration-sdk4-packaging-protocol-ci-2026-11-07.json).
@@ -77,7 +89,7 @@ new acceptable hashes. Plan/reproduction: `.work/native-sdk4-packaging-ci-2026-1
 The accepted correction pins the proof NDK, installs it from the catalog before CI
 assembly and records native hashes before strict APK validation. Source, local checks
 and both preflight outcomes are in the linked packaging measurement. Remote acceptance
-of the corrected source remains to observe; no SDK update or provider send was needed.
+of the corrected source is accepted above; no SDK update or extra provider send was needed.
 
 After that, continue actual original-message delivery under current organization
 admission, immutable receipt/history publication, hard/revoked native-parent
@@ -126,7 +138,7 @@ pending; do not repeat it. No phone UI/new messages were driven.
   passed. [Failure evidence](measurements/collaboration-original-metadata-native-ci-2026-11-07.json).
   Protocol 42348626066 is accepted: 14 checks each mode and 14 source hashes match
   pinned Platform `e0dbb567acc4c5571b82324c515ed8ddc145007d`.
-- Primary `feat/communications` is `9deb55bf`; current work is on temporary
+- Primary `feat/communications` is `72a70e8c`; current work is on temporary
   `feat/chat-recovery-20261107`. Push every atomic commit. Preserve every first pending control/native
   run before later primary promotions; even `cancel-in-progress: false` replaces
   an older pending run. Do not rerun accepted provider sends just for evidence.
