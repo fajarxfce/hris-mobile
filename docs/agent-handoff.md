@@ -1,5 +1,24 @@
 # Agent continuation — HRIS Mobile
 
+## Apple runtime report accepted — 7 November 2026, 22:00 UTC
+
+First proof-only CI42418364475 at966043b1 PASSED. Archive13592361719 is digest-verified;
+its original XCTest XML has4cases, zero failures/errors/skips. Three exact profile
+requests occurred once each, fixture thread stopped; total79.271s including Swift build.
+The runner reused native candidate13591919151 after verifying source manifests and43
+generated files. No repeated Rust build. [Evidence](measurements/matrix-http-observer-apple-runtime-2026-11-07.json).
+Previous full-build workflow failure remains recorded separately. This accepts macOS
+Swift/native observation and the corrected report runner; it does not accept iPhone
+runtime, a library Apple adapter or SDK5 publication. Temporary artifact expires in14days.
+
+Mobile focused-3/61640 is REAPED: platform sources compile,6owner tests pass,2UI cases
+failed missing fixture lifecycle; detekt also found the container function too long.
+The fixture now supplies lifecycle/back ownership and inspector DI has its own module.
+Focused-4/31627 is the only heavy local job; Mobile/private library sources frozen until
+reaped, no emulator. Phone remains56. Both be2fe021 first CI archives are downloaded and
+digest-verified; final per-scenario audit is next. Continue host inspector acceptance,
+actual capture/overhead, validated install, Starter, composer and original54PRDgroups.
+
 ## Native Swift observer / report runner — 7 November 2026, 21:58 UTC
 
 Corrected Apple firstCI42413788416 at9673eb1f successfully built all three native slices

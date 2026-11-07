@@ -1,0 +1,60 @@
+{
+  "at": "2026-11-07T22:05:08.273124+00:00",
+  "sourceCommit": "966043b153181798f56da2e23757a4572b9c5a70",
+  "run": 42418364475,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42418364475",
+  "ciConclusion": "success",
+  "artifact": 13592361719,
+  "archiveSha256": "a9043e55af2f94a12164aea74b05f7ceda159d9956e9f09e42f625a80e3dd97d",
+  "archiveBytes": 1330,
+  "nativeCandidate": {
+    "run": 42413788416,
+    "artifact": 13591919151,
+    "archiveSha256": "6936bb1cd6f8de61a6d40738c16e3ccebddfffff4c605fba32367dbc116193c3",
+    "generatedFilesVerified": 43,
+    "nativeRecompiled": false
+  },
+  "proof": {
+    "passed": true,
+    "actualSwiftNativeHttp": true,
+    "published": false,
+    "testCases": 4,
+    "elapsedSeconds": 79.271,
+    "requests": {
+      "/_matrix/client/versions": 3,
+      "/_matrix/client/v3/profile/@cancelled:fixture.invalid": 1,
+      "/_matrix/client/v3/profile/@observer:fixture.invalid": 1,
+      "/_matrix/client/v3/profile/@replacement:fixture.invalid": 1
+    },
+    "fixtureThreadStopped": true
+  },
+  "testCases": [
+    {
+      "name": "testCancelledReaderDoesNotCancelClientRequest",
+      "seconds": 0.086162333
+    },
+    {
+      "name": "testOriginalResponseAndActualHttpStages",
+      "seconds": 0.046680334
+    },
+    {
+      "name": "testReplacementClosesOldSubscription",
+      "seconds": 0.048002875
+    },
+    {
+      "name": "testStopWakesPendingReadAndCanRepeat",
+      "seconds": 0.054740709
+    }
+  ],
+  "reportSha256": "aba13fe2c2b7f9344b960c95345283af7ee048b4cd27198393f7b5c6845c7db7",
+  "logSha256": "f1ac9a48ad15243c1739656f0aa36ee34fd6f94fada9be0a4d330a59765d81b5",
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "limits": [
+    "Actual Swift/native runtime is macOS arm64; iOS device and simulator slices compile but no iPhone app runtime is accepted.",
+    "Reader cancellation test explicitly stops observation before a subsequent new HTTP request, not during an overlapping HTTP request.",
+    "Apple library adapter and Mobile integration are still pending; SDK5 remains unpublished.",
+    "Pinned native candidate is a 14-day CI artifact; accepted release distribution must replace it before long-term use."
+  ]
+}
