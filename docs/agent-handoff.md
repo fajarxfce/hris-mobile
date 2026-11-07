@@ -1,5 +1,28 @@
 # Agent continuation — HRIS Mobile
 
+## Compiled observer binding — 7 November 2026, 20:00 UTC
+
+Replacement ARM64 build22819 is REAPED:265.740s,836 stable inputs, native
+c08b1e214951d542d59f3d24ae4d53321d5c49e55e0f08e4380f9cce82607093 with four16KiB
+LOAD segments. The generated subscription has distinct stop() and close(); no duplicate
+methods. Wrapper59175 is REAPED:88.960s, unchanged inputs, AAR50939244B/
+cebc6829be3de4b38552664a7ece06244b0ee5f454bd2bf6a0f9a5aa9c1ce621. Exact embedded
+native bytes, twelve required JVM APIs and three native observer symbols pass.
+[Evidence](measurements/matrix-http-observer-android-wrapper-2026-11-07.json).
+
+The new android-http-observer-build.json pins six patches,28 source hashes and nine
+Kotlin hashes. Drivers validate exact method symbols; five driver cases pass. A separate
+workflow builds all four Android ABIs from clean pinned source. Its first run is pending;
+no ABI packaging/publication or runtime acceptance is implied. Shipping SDK4 is unchanged.
+All local compiler jobs are reaped; Rust and the isolated wrapper can be read/edited.
+
+Next: implement the actual generated-binding adapter in the private reusable inspector,
+verify Android lifecycle/cancellation and real HTTP capture, then build paired Apple
+bindings and integrate the viewer into Mobile. Phone/stopped original Bima emulator stay55.
+Mobile bb106154 viewport fix is accepted but uninstalled; composer/latency remain open.
+Private inspector CI remains blocked by billing; visibility question is unanswered.
+Original54-group scope remains active, with no newly complete PRD group.
+
 ## HTTP observer binding continuation — 7 November 2026, 19:47 UTC
 
 This branch contains the corrected observer patch: exported FFI stop() no longer

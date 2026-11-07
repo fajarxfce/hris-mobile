@@ -1,0 +1,61 @@
+name: Matrix HTTP observer Android candidate
+
+on:
+  push:
+    branches: [feat/matrix-http-observer-20261107]
+    paths:
+      - .github/workflows/collaboration-http-observer-sdk.yml
+      - tool/build_collaboration_sdk.py
+      - tool/test_build_collaboration_sdk.py
+      - tool/collaboration-sdk-patches/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: matrix-http-observer-sdk-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        abi: [arm64-v8a, armeabi-v7a, x86, x86_64]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: mobile
+      - uses: actions/checkout@v4
+        with:
+          repository: matrix-org/matrix-rust-sdk
+          ref: 8de215a0aa0026afa5754ae5f05a6d168d1a1d60
+          path: sdk
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - name: Build the pinned native library and matching Kotlin bindings
+        run: |
+          python3 -m unittest discover -s mobile/tool -p test_build_collaboration_sdk.py
+          python3 mobile/tool/build_collaboration_sdk.py \
+            --sdk "$GITHUB_WORKSPACE/sdk" \
+            --output "$GITHUB_WORKSPACE/artifact/${{ matrix.abi }}" \
+            --tools-dir "$RUNNER_TEMP/matrix-observer-tools" \
+            --android-sdk "$ANDROID_HOME" \
+            --manifest android-http-observer-build.json \
+            --abi '${{ matrix.abi }}' --bootstrap
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: matrix-http-observer-${{ matrix.abi }}
+          path: artifact/${{ matrix.abi }}/
+          if-no-files-found: error
+          retention-days: 14
