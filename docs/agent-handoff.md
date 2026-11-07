@@ -8,7 +8,7 @@ and staging, never permission to reapply old candidates.
 
 ## Current accepted work — 7 November 2026
 
-Original Open replay is now locally accepted:12 Kotlin source/test files. It retains
+Original Open replay335e3914 is now locally accepted/pushed on recovery:12 Kotlin source/test files. It retains
 original intent, marks uncertainty before HTTP, reads the normalized persisted record
 for exact CAS, captures observed outcomes through bounded cancellation, and publishes
 canonical metadata before archive. Full69888 passed3,669 fresh cases/452 suites505.461s
@@ -53,8 +53,8 @@ No product caller, new APK or organization routing activation exists for these p
 
 ## Next work
 
-1. First1d9493df control42372520573/native42372520624 are PENDING behind running
-   first3b3 control42369792173/native42369792184. Preserve these first pending runs
+1. First1d9493df native42372520624 has started; control42372520573 remains PENDING
+   behind first3b3 control42369792173. First3b3 native42369792184 is SUCCESS/audited. Preserve these first pending runs
    before another primary promotion; continue source work on recovery.
 2. Sole heavy local job34560 now runs Group .work/room-request-fence-2026-11-07/storage-1:
    new V138 fence migration and original stable/legacy room writer regressions, format
@@ -117,8 +117,12 @@ the cause or resolution of the user's20s–2min pending delay.
 
 ## CI and live state
 
-First1d9493df control42372520573/native42372520624 are PENDING; preserve them.
-First3b3 control42369792173/native42369792184 have BOTH STARTED. First79b control42366357406/native42366357400 are SUCCESS and fully
+First1d9493df native42372520624 has started; control42372520573 is PENDING; preserve it.
+First3b3 native42369792184 is SUCCESS and original artifacts audited:543/86 perABI,
+zero failures/errors/skips, original queue33.483s x86/80.188s ARM,0 provider sends,
+keys/IDs and cleanup preserved. Separate HRIS fixture sends/cleanup remain exact.
+[Native evidence](measurements/collaboration-space-conversation-commands-native-ci-2026-11-07.json).
+Audit4322 is reaped; no provider rerun. First3b3 control42369792173 still runs Apple. First79b control42366357406/native42366357400 are SUCCESS and fully
 audited: Apple1,975/225, portable4,817/536, each native ABI543/86, zero failures/errors/
 skips. Original queue continuity31.255s x86/77.166s ARM preserved keys/IDs and cleanup,
 zero provider sends; separate native HRIS scenarios also passed with cleanup.

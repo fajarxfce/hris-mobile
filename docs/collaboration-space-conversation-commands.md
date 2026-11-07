@@ -73,3 +73,16 @@ lost insert/update/archive responses, competing writes, exact archives, shared c
 account/server/space changes, login replacement, malformed envelopes, missing keys,
 retained denials, cancelled reads and absence of partial publication. No new APK or
 phone latency acceptance is part of this storage increment.
+
+## Original first native CI
+
+First native42369792184 for source3b3a5d81 passed on both Android ABIs. Original
+artifacts contain543 cases/86 suites each, zero failures/errors/skips, with matching
+immutable SDK4 bytes and NDK28.2.13676358. Original queue continuity33.483s x86 and
+80.188s ARM preserved keys and transaction IDs through process death, rejected partial
+resumption, sent zero provider messages and cleaned up fully. Separate actual HRIS
+fixtures retain their own send counts and passed cleanup; non-applicable false flags
+remain explicit. No native/provider scenario was repeated to audit this result.
+[Original artifacts and hashes](measurements/collaboration-space-conversation-commands-native-ci-2026-11-07.json).
+Control42369792173 still runs Apple. Later metadata/preparation/Open replay have their
+own source CI requirement; phone53 latency remains open.
