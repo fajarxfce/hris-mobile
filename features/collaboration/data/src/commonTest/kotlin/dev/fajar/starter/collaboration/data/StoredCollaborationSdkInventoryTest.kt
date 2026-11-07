@@ -18,6 +18,35 @@ import kotlinx.serialization.json.Json
 
 class StoredCollaborationSdkInventoryTest {
     @Test
+    fun uninitializedHandoverIsDecodedAfterRepositoryAndLoginReplacementWithoutWriting() = runTest {
+        val f = Fixture.create()
+        val target =
+            CollaborationRuntimeHandoverIntent(
+                SETUP_JOB,
+                SETUP_OPERATION,
+                SETUP_DEVICE,
+                0,
+                "a".repeat(64),
+            )
+        val held = f.codec.stageExistingHandover(f.original, target)
+        assertEquals(3, held.schema)
+        f.saved = f.codec.encode(held)
+        val before = f.saved
+        for (session in listOf("new-login", "later-login")) {
+            val observed =
+                assertIs<AppResult.Success<CollaborationSdkInventory>>(
+                        f.repository().inspect(setupOwner.copy(sessionId = session), SETUP_DEVICE)
+                    )
+                    .value
+            val credential = assertNotNull(observed.credential)
+            assertFalse(credential.initialized)
+            assertEquals(target, credential.handover)
+            assertEquals(f.original.messageOperationId, credential.messageOperationId)
+            assertEquals(before, f.saved)
+        }
+    }
+
+    @Test
     fun originalRecordIsDecodedAfterLoginReplacementWithoutExposingOrWritingSecrets() = runTest {
         val f = Fixture.create()
         val expected = f.codec.initialized(f.original)

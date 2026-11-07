@@ -1,0 +1,110 @@
+{
+  "recordedAt": "2026-11-07T01:03:17.335145+00:00",
+  "phone": {
+    "at": "2026-11-07T00:51:35.472909+00:00",
+    "serial": "10.77.77.3:5555",
+    "uids": [
+      10962,
+      1010962
+    ],
+    "deviceClockOffsetSeconds": -2.736,
+    "afterInstallUtc": "2026-11-07T00:40:30.351354+00:00",
+    "retainedLinesAfterInstall": 75,
+    "fatalExceptionsAfterInstall": 0,
+    "chatDiagnostics": [
+      {
+        "at": "2026-11-07T00:48:06.445240+00:00",
+        "category": "ChatRecovery_device_sync_Unavailable"
+      },
+      {
+        "at": "2026-11-07T00:48:07.815240+00:00",
+        "category": "ChatQueueRetained_ApiForbidden"
+      },
+      {
+        "at": "2026-11-07T00:48:10.973240+00:00",
+        "category": "ChatQueueSend_ApiForbidden"
+      },
+      {
+        "at": "2026-11-07T00:48:10.981240+00:00",
+        "category": "ChatQueueRetained_ApiForbidden"
+      },
+      {
+        "at": "2026-11-07T00:48:11.274240+00:00",
+        "category": "ChatDelivery_DeliverMessages_DeliveryPending"
+      },
+      {
+        "at": "2026-11-07T00:48:16.377240+00:00",
+        "category": "ChatRecovery_outgoing_Unavailable"
+      }
+    ],
+    "logSha256": "fb2f098695c1946a05134de02c1be7e5538a793a82356c6a7955473f3d9d0a53",
+    "phoneUiDriven": false,
+    "newMessagesSent": 0,
+    "logClockCorrectedToHostUtc": true,
+    "installedVersionCode": 52
+  },
+  "nativeFailureMeaning": "Native queue reports HTTP403. Deployed API recorded collaboration_recipient_unavailable at01:07:33UTC; operation and exact unavailable target are not yet identified. The original Bima peer and caller still have one eligible confirmed device each in the read-only recipient view.",
+  "passiveWireCapture": {
+    "durationSeconds": 45,
+    "passiveReadOnly": true,
+    "http": [],
+    "failures": [],
+    "startedAt": "2026-11-07T00:53:24.761512+00:00",
+    "installedVersionCode": 52
+  },
+  "providerLog": {
+    "windowUtc": [
+      "2026-11-07T00:47:00Z",
+      "2026-11-07T00:49:00Z"
+    ],
+    "bytes": 9299,
+    "lines": 40,
+    "sha256": "6dad50411b2c4d07e6af43cb20b80a21b02025fc7e00f9fe95b42f836a5319e8",
+    "http4xxMentions": 0
+  },
+  "apiLog": {
+    "sameWindow": true,
+    "bytes": 0
+  },
+  "agentPhoneUiDriven": false,
+  "agentMessagesSent": 0,
+  "queuesReset": false,
+  "resolved": false,
+  "gatewayObservation": {
+    "recordedAt": "2026-11-07T01:14:45.943706+00:00",
+    "apiSource": "061cac310de6aba27fd6f1e3568509ba1c7cee8f",
+    "rows": [
+      {
+        "at": "2026-11-07T01:07:27.203Z",
+        "reason": "endpoint_unavailable"
+      },
+      {
+        "at": "2026-11-07T01:07:27.203Z",
+        "reason": "endpoint_unavailable"
+      },
+      {
+        "at": "2026-11-07T01:07:33.467Z",
+        "reason": "collaboration_recipient_unavailable"
+      }
+    ],
+    "phoneUiDriven": false,
+    "messagesSent": 0
+  },
+  "recipientRead": {
+    "at": "2026-11-07T01:10:14.796420+00:00",
+    "readOnly": true,
+    "callerFromUniqueOriginalConversation": true,
+    "fictionalPeerSample": 2,
+    "observations": {
+      "callerPresent": true,
+      "peerEligible": 1,
+      "peerConfirmed": 1,
+      "callerEligible": 1,
+      "callerConfirmed": 1
+    },
+    "providerKeysFetched": false,
+    "phoneUiDriven": false,
+    "messageSent": false,
+    "originalPendingResolved": false
+  }
+}

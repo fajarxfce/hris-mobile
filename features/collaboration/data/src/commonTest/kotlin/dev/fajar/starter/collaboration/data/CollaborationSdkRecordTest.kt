@@ -157,6 +157,44 @@ class CollaborationSdkRecordTest {
         }
     }
 
+    @Test
+    fun uninitializedHandoverRecordRetainsItsDistinctSchemaAndRejectsLegacyCredentials() = runTest {
+        val codec = CollaborationSdkRecordCodec(scope())
+        val original = codec.initialized(codec.create(command, gateway, passphrase))
+        val held = codec.stageHandover(original, handover).copy(schema = 3, initialized = false)
+        val restored = codec.decode(Json.encodeToString(held))
+        assertFalse(restored.initialized)
+        assertEquals(held, restored)
+        assertEquals(handover, codec.handoverIntent(restored))
+        assertEquals(held, codec.decode(codec.encode(restored)))
+        assertEquals(original.messageOperationId, restored.messageOperationId)
+        assertFailsWith<IllegalArgumentException> { codec.initialized(restored) }
+        assertFailsWith<IllegalArgumentException> {
+            codec.withTokens(restored, restored.accessToken, restored.refreshToken)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            codec.replaceCredentials(restored, command.copy(id = SETUP_JOB), renewedGateway())
+        }
+        assertFailsWith<IllegalArgumentException> { codec.stageHandover(restored, handover) }
+    }
+
+    @Test
+    fun uninitializedHandoverFormatCannotClaimInitializationOrLoseItsTarget() = runTest {
+        val codec = CollaborationSdkRecordCodec(scope())
+        val original = codec.initialized(codec.create(command, gateway, passphrase))
+        val held = codec.stageHandover(original, handover).copy(schema = 3, initialized = false)
+        for (invalid in
+            listOf(
+                held.copy(initialized = true),
+                held.copy(handover = null),
+                held.copy(credentialRevision = 0),
+                held.copy(schema = 2),
+                held.copy(schema = 4),
+            )) assertFailsWith<IllegalArgumentException> {
+            codec.decode(Json.encodeToString(invalid))
+        }
+    }
+
     private val endpoint = CollaborationSdkEndpoint("https://hris.example.test/")
     private val server = IdentityServer(SETUP_BASE, "Fictional phone")
     private val command =

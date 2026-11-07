@@ -21,14 +21,14 @@ create a store, restore a session, construct an SDK or replace the retained keys
 The Android composition root supplies the raw inventory and SDK4 identity sources;
 repositories do not call other repositories. Unsupported hosts remain unavailable.
 
-The durable target uses the existing strict schema2 record. Only its schema, revision
-and handover fields change. A repeated identical target performs no write; any changed
+An initialized original record uses the existing strict schema2 target. Only its
+schema, revision and handover fields change. An identical target performs no write; any changed
 target fails. After process death, the same account may read/retry it with a new local
 login handle while the original physical namespace stays unchanged. All legacy
-foreground/background/restore/install paths reject the staged record. The current
-codec requires `initialized=true`: an interrupted credential replacement that retains
-private keys with `initialized=false` needs a separate versioned record path. This
-implementation does not invent initialization or silently relax the existing decoder.
+foreground/background/restore/install paths reject the staged record. A separate
+[interrupted-credential path](collaboration-interrupted-credential-handover.md) uses
+strict schema3 while preserving `initialized=false` after the same private-key checks.
+Schema2 and open-client staging still require initialization; neither path invents it.
 
 The directory remains leased through synchronous private-account work, cancellation
 and credential cleanup. A primary cancellation/failure survives cleanup failures.

@@ -16,8 +16,7 @@ import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.Instant
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.json.JSONObject
 
 /** Real SDK/Keystore with inert credentials and an unreachable loopback provider, emulator only. */
@@ -41,6 +40,7 @@ internal class LocalRuntimeHandoverFixture(private val context: Context, val own
     val name = AtomicReference<String?>()
     @Volatile var beforeStageWrite: suspend () -> Unit = {}
     @Volatile var afterStageWrite: suspend () -> Unit = {}
+    @Volatile var afterReplacementWrite: suspend () -> Unit = {}
     private val http = HttpClient(MockEngine { error("No HRIS transport in local handover proof") })
     val runtime =
         AndroidCollaborationRuntimeRepository(
@@ -67,10 +67,17 @@ internal class LocalRuntimeHandoverFixture(private val context: Context, val own
                 activeCredentials.incrementAndGet()
                 object : AtomicCredentialStore by record {
                     override suspend fun write(value: String?) {
-                        val staging = value?.let { JSONObject(it).optInt("schema") == 2 } == true
+                        val saved = value?.let(::JSONObject)
+                        val staging = saved?.optInt("schema")?.let { it in 2..3 } == true
                         if (staging) beforeStageWrite()
                         record.write(value)
                         if (staging) afterStageWrite()
+                        else if (
+                            saved != null &&
+                                saved.optLong("bootstrapGatewayVersion") == 1L &&
+                                !saved.optBoolean("initialized")
+                        )
+                            afterReplacementWrite()
                     }
 
                     override fun close() {
@@ -121,6 +128,67 @@ internal class LocalRuntimeHandoverFixture(private val context: Context, val own
         success(lease.publish())
         select(owner)
         return lease
+    }
+
+    suspend fun interruptCredentialReplacement() = coroutineScope {
+        val original = JSONObject(record())
+        check(original.getBoolean("initialized"))
+        val first = command()
+        val gateway = (first.outcome as CollaborationSetupOutcome.Bootstrapped).gateway
+        val nextGateway =
+            CollaborationGateway(
+                gateway.owner,
+                gateway.deviceId,
+                gateway.sessionId,
+                gateway.version + 1,
+                gateway.matrixUserId,
+                gateway.matrixDeviceId,
+                "hris_mx_a_" + "e".repeat(43),
+                "hris_mx_r_" + "f".repeat(43),
+                gateway.accessExpiresAtEpochMillis,
+                gateway.expiresAtEpochMillis,
+            )
+        val next =
+            first.copy(
+                command =
+                    first.command.copy(
+                        id = "77777777-7777-4777-8777-777777777777",
+                        action = CollaborationSetupAction.Bootstrap(device, 1, gateway.version),
+                    ),
+                outcome = CollaborationSetupOutcome.Bootstrapped(nextGateway),
+            )
+        val committed = CompletableDeferred<Unit>()
+        afterReplacementWrite = {
+            committed.complete(Unit)
+            awaitCancellation()
+        }
+        val request = async { runtime.install(owner, next) }
+        try {
+            withTimeout(15_000) { committed.await() }
+            check(!success(runtime.isOpen(owner, device)))
+            check(activeDirectories.get() == 1 && activeCredentials.get() == 1)
+        } finally {
+            request.cancelAndJoin()
+            afterReplacementWrite = {}
+        }
+        check(request.isCancelled)
+        check(activeDirectories.get() == 0 && activeCredentials.get() == 0)
+        val retained = JSONObject(record())
+        check(!retained.getBoolean("initialized") && retained.getInt("schema") == 1)
+        check(retained.getString("bootstrapOperationId") == next.command.id)
+        check(retained.getLong("bootstrapGatewayVersion") == gateway.version + 1)
+        for (field in
+            listOf(
+                "storeId",
+                "passphrase",
+                "matrixUserId",
+                "matrixDeviceId",
+                "nativeSessionId",
+                "companyId",
+                "queueOperationId",
+            )) {
+            check(retained.get(field) == original.get(field))
+        }
     }
 
     suspend fun restore(): AndroidCollaborationRuntimeLease {

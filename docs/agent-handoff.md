@@ -79,17 +79,36 @@ runs below before another source push. Docs-only pushes do not trigger these gat
    actual native queue rejection; no agent phone UI action or replacement send. An
    empty passive log proves nothing. Original old/new message outcomes remain open.
    The latest optional question requests opening Bima in52 without sending new messages.
-2. Interrupted-credential handover is now applied but NOT accepted. Seven files and
-   retained drivers/results are under
-   `.work/space-store-inventory-2026-11-06/rotation-handover-next`. Red95305 passed its
-   expected negative outcome:5 new cases/3 failures,91.738s,zero errors/skips,4,267
-   stable inputs and completed format/architecture checks on unchanged product.
-   Focused64026 is RUNNING; keep all source frozen until it ends. Strict schema3
-   preserves `initialized=false`; schema2 and open-client guards stay strict.
-   Next inspect focused/quality results, run actual two-ABI SDK4 proof on fresh owned
-   5564, then full gate. Actual proof interrupts product credential replacement after
-   commit before new SDK construction; it does not manually flip a persisted flag.
-   Retain each first failure. Never copy/replace original Bima or use the phone.
+   NEW post-install52 logs at00:48:07–10 show retained/send ApiForbidden (403), with
+   device-sync/outgoing Unavailable. Passive00:51:35 audit has75 lines/zero fatals;
+   rawSHAfb2f098695c1946a05134de02c1be7e5538a793a82356c6a7955473f3d9d0a53.
+   Main Platform061cac31 finite rejection diagnostics passed52 cases and deployed
+   API-only at01:04:56UTC; worker10485916/provider/DB/schema116.1 are unchanged.
+   At01:07:33UTC the server logged collaboration_recipient_unavailable. The precise
+   operation/target is still unknown. Read-only original-pair selection finds one
+   eligible confirmed device for both Bima and caller; the earlier email-based null
+   caller query is invalid evidence. See
+   [current rejection evidence](measurements/collaboration-phone52-send-rejection-2026-11-07.json).
+2. Interrupted-credential handover has12 accepted Kotlin files in this commit.
+   Private drivers/results are under
+   `.work/space-store-inventory-2026-11-06/rotation-handover-next`. Initial red95305
+   proved5 new cases/3 failures on unchanged codec. Focused64026 passed50 cases/
+   236.176s and quality. Actual SDK4 proof24863 passed132.367s on x86_64(45.945s)
+   and ARM64(43.52s), with real interrupted credential replacement, process death,
+   original keys/main databases retained, zero sends and complete owned cleanup.
+   Exact proofAPK is retained under native-1/proof-verified.apk.
+   Review found the separate domain inventory policy still rejected false initialization
+   plus a handover. Full30680 was deliberately stopped after89.987s before fresh tests,
+   source unchanged; its controlled-stop/result remain under full-1. Read-red-1 had
+   two expected domain failures plus a fake event-log reuse error. Clearing that per-read
+   fake log was the only test correction; read-red-2 passed its expected4 cases/2 failures
+   in68.029s with domain production unchanged. After correcting the pure read policy,
+   focused10901 passed67 cases/116.74s, zero failures/errors/skips and lint-free Detekt.
+   Full96083/full-2 PASSED5,512 fresh cases/644 suites in513.264s,4,267 stable
+   inputs, zero failures/errors/skips and zero lint/Detekt findings. No heavy local
+   job or owned emulator is active. Do not rerun the accepted native mechanism: its original
+   seven files remain identical; only one pure read policy/four read-path tests changed.
+   Keep all original keys/namespaces/transaction identities. No group activation.
 
 3. Implement provider-publication preflight and the owning recovery flow: durable
    local stop/join/target, current-admitted freeze/drain/publication/adoption, explicit
@@ -102,12 +121,15 @@ runs below before another source push. Docs-only pushes do not trigger these gat
 
 ## First source CI — preserve/audit original runs
 
-- **fd05b731**: control42318790930 pending, native42318790943 pending,
-  protocol42318790936 running. Exact IDs/head recorded under
+- **fd05b731**: control42318790930 pending, native42318790943 running.
+  Protocol42318790936 FAILED before native tests: SDK emulator image download was
+  not a valid archive. Classic job passed; original failure retained, no redispatch. Exact IDs/head recorded under
   `.work/phone51-send-rejection-2026-11-07/first-runs.json`. Do not displace the
   pending source runs with a newer primary-branch push or manually redispatch them.
-- **15facc91**: control42313584270 running from00:31:15UTC; native42313584318 running
-  from00:24:17UTC. IDs and auditor under
+- **15facc91**: control42313584270 running from00:31:15UTC; native42313584318 FAILED: ARM64 passed419 cases/71 suites;
+  x86_64 had one worker priority-history Storage_Unclassified failure out of419.
+  First artifacts/logs are retained under runtime-transfer-next/remote-ci-15 and
+  .work/ci-failures-2026-11-07. This app failure remains under investigation. IDs and auditor under
   `.work/space-store-inventory-2026-11-06/runtime-transfer-next`.
 - **68d848b7**: control42310411055 and native42310411202 both successful and audited.
   Control:4,422 portable cases/476 suites and1,781 Apple cases/196 suites, actual iOS
@@ -135,8 +157,8 @@ runs below before another source push. Docs-only pushes do not trigger these gat
   Do not redispatch. Prior0ff7e59 retains280 local/138 Apple acceptance.
 - Group`/home/fajar/hris/.worktrees/communication-space`, `feat/communication-space`,
   c9de3753/program344211f8 pushed; V117–137 unshipped/disabled. MainPlatform
-  `hris-platform` atf4a2424d; live10485916ee02850cf913793398f7ef3dd1e09afb/schema116.1
-  unchanged. Native CI fixture62ee11818a4928b2598d046c7b3283bf3e416554;
+  `hris-platform` ate9538934; liveAPI061cac31/worker10485916/schema116.1.
+  API-only finite rejection logging is deployed; all other runtime inputs unchanged. Native CI fixture62ee11818a4928b2598d046c7b3283bf3e416554;
   protocol fixturee0dbb567acc4c5571b82324c515ed8ddc145007d.
 - SDK4 release437093395/tag`matrix-sdk-26.10.23-hris.4`, target4228599ba659cf68cfea1138e6f8017b0b77c222,
   AARSHA9b6806de02b7d40b8487b54a51b192c114a38c68c6dfe35c68faf50d3b6bfd21 is immutable.

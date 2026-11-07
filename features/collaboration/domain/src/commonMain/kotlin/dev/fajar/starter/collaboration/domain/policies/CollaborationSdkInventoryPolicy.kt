@@ -24,8 +24,9 @@ fun validCollaborationSdkInventory(
     )
         return false
     val handover = credential.handover ?: return true
-    return credential.initialized &&
-        credential.revision > 0 &&
+    // A strict decoded handover may retain interrupted initialization; this is local metadata,
+    // not permission to open an SDK or claim completed ownership.
+    return credential.revision > 0 &&
         validCollaborationMessageId(handover.operationId) &&
         validCollaborationMessageId(handover.spaceId) &&
         validCollaborationMessageId(handover.deviceId) &&

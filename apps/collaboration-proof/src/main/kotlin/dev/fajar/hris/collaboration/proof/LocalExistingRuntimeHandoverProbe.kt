@@ -17,8 +17,10 @@ import org.json.JSONObject
 internal class LocalExistingRuntimeHandoverProbe(
     private val context: Context,
     private val directory: File,
+    private val rotationPending: Boolean = false,
 ) {
-    private val owned = File(directory, "existing-handover-owned")
+    private val prefix = if (rotationPending) "rotation-handover" else "existing-handover"
+    private val owned = File(directory, "$prefix-owned")
     private val checkpoint = File(owned, "checkpoint.json")
 
     suspend fun stage() =
@@ -28,11 +30,13 @@ internal class LocalExistingRuntimeHandoverProbe(
             try {
                 val lease = f.install()
                 val identity = f.identity(lease)
+                if (rotationPending) f.interruptCredentialReplacement()
                 val parent = replacement(f, "replacement-login")
                 f.select(parent.owner(f.owner.companyId))
                 check(!f.success(f.runtime.isOpen(f.owner, f.device)))
                 check(f.activeDirectories.get() == 0 && f.activeCredentials.get() == 0)
                 val original = JSONObject(f.record())
+                check(original.getBoolean("initialized") != rotationPending)
                 val hashes = databaseHashes(f, original)
                 check(privateIdentity(f, original) == identity)
                 val target = target(f, identity)
@@ -44,7 +48,7 @@ internal class LocalExistingRuntimeHandoverProbe(
                     if (key !in setOf("schema", "credentialRevision"))
                         check(original.get(key) == staged.get(key))
                 }
-                check(staged.getInt("schema") == 2)
+                check(staged.getInt("schema") == if (rotationPending) 3 else 2)
                 check(
                     staged.getLong("credentialRevision") ==
                         original.getLong("credentialRevision") + 1
@@ -63,7 +67,7 @@ internal class LocalExistingRuntimeHandoverProbe(
                         .toString()
                 )
                 write(
-                    "existing-handover-stage.json",
+                    "$prefix-stage.json",
                     JSONObject()
                         .put("oldSdkClosedBeforeStaging", true)
                         .put("replacementNativeParent", true)
@@ -167,6 +171,8 @@ internal class LocalExistingRuntimeHandoverProbe(
                 f.select(parent.owner(f.owner.companyId))
                 val target = target(f, identity)
                 val original = f.record()
+                check(JSONObject(original).getBoolean("initialized") != rotationPending)
+                check(JSONObject(original).getInt("schema") == if (rotationPending) 3 else 2)
                 check(f.success(f.runtime.stageExistingHandover(parent, target)) == target.intent)
                 check(f.record() == original)
                 check(
@@ -189,7 +195,7 @@ internal class LocalExistingRuntimeHandoverProbe(
             }
             check(owned.deleteRecursively())
             write(
-                "existing-handover-result.json",
+                "$prefix-result.json",
                 JSONObject()
                     .put("durableAfterProcessDeath", true)
                     .put("replacementLocalLoginSameOriginalStore", true)
@@ -257,6 +263,7 @@ internal class LocalExistingRuntimeHandoverProbe(
                 value
                     .put("complete", true)
                     .put("providerRequired", false)
+                    .put("interruptedCredentialReplacement", rotationPending)
                     .put("newMessagesSent", 0)
                     .toString()
             )

@@ -107,6 +107,16 @@ internal class CollaborationSdkRecordCodec(private val scope: CollaborationSdkSc
         intent: CollaborationRuntimeHandoverIntent,
     ): CollaborationSdkRecord {
         validate(previous)
+        require(previous.initialized)
+        return stageExistingHandover(previous, intent)
+    }
+
+    /** Caller must drain the original SDK and verify private identity under its directory lease. */
+    fun stageExistingHandover(
+        previous: CollaborationSdkRecord,
+        intent: CollaborationRuntimeHandoverIntent,
+    ): CollaborationSdkRecord {
+        validate(previous)
         val target =
             CollaborationSdkHandover(
                 intent.operationId,
@@ -116,14 +126,13 @@ internal class CollaborationSdkRecordCodec(private val scope: CollaborationSdkSc
                 intent.fingerprint,
             )
         validateHandover(target)
-        require(previous.initialized)
         previous.handover?.let {
             require(it == target) { "SDK handover target changed." }
             return previous
         }
         return previous
             .copy(
-                schema = 2,
+                schema = if (previous.initialized) 2 else 3,
                 credentialRevision = previous.credentialRevision + 1,
                 handover = target,
             )
@@ -163,10 +172,10 @@ internal class CollaborationSdkRecordCodec(private val scope: CollaborationSdkSc
 
     private fun validate(record: CollaborationSdkRecord) {
         val owner = scope.owner
-        require(record.schema in 1..2 && record.storeId == scope.storeId)
-        require((record.schema == 2) == (record.handover != null))
+        require(record.schema in 1..3 && record.storeId == scope.storeId)
+        require((record.schema != 1) == (record.handover != null))
         record.handover?.let {
-            require(record.initialized && record.credentialRevision > 0)
+            require(record.initialized == (record.schema == 2) && record.credentialRevision > 0)
             validateHandover(it)
         }
         require(

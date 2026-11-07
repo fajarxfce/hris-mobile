@@ -23,6 +23,105 @@ import kotlinx.serialization.json.Json
 
 class AndroidExistingHandoverStorageTest {
     @Test
+    fun uninitializedPrivateStoreStagesAndRestartsWithoutClaimingInitialization() = runTest {
+        val f = ExistingHandoverStorageFixture.create()
+        try {
+            val retained = f.original.copy(initialized = false)
+            f.saved = f.codec.encode(retained)
+            val repo = f.repository()
+            f.select(repo)
+            assertEquals(
+                AppResult.Success(f.target.intent),
+                repo.stageExistingHandover(f.current, f.target),
+            )
+            val staged = f.codec.decode(assertNotNull(f.saved))
+            assertFalse(staged.initialized)
+            assertEquals(3, staged.schema)
+            assertEquals(
+                retained,
+                staged.copy(
+                    schema = 1,
+                    credentialRevision = retained.credentialRevision,
+                    handover = null,
+                ),
+            )
+            val reopened = f.repository()
+            f.select(reopened)
+            assertEquals(
+                AppResult.Success(f.target.intent),
+                reopened.stageExistingHandover(f.current, f.target),
+            )
+            assertEquals(staged, f.codec.decode(assertNotNull(f.saved)))
+            assertEquals(1, f.writes)
+            assertEquals(0, f.newStoreAcquisitions)
+            assertEquals(0, f.httpRequests)
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
+    fun uninitializedRecordCannotSubstituteForMissingOrDifferentPrivateMaterial() = runTest {
+        for (missing in 0..4) {
+            val f = ExistingHandoverStorageFixture.create()
+            try {
+                f.saved = f.codec.encode(f.original.copy(initialized = false))
+                when (missing) {
+                    0 -> f.directoryPresent = false
+                    1 -> f.cryptoPresent = false
+                    2 -> f.statePresent = false
+                    3 -> f.identity = f.identity.copy(ed25519 = Base64.encode(ByteArray(32) { 8 }))
+                    4 -> f.beforePrivateRead = { error("private account unavailable") }
+                }
+                val before = f.saved
+                val repo = f.repository()
+                f.select(repo)
+                assertIs<AppResult.Failed>(repo.stageExistingHandover(f.current, f.target))
+                assertEquals(before, f.saved)
+                assertEquals(0, f.writes)
+                assertEquals(0, f.newStoreAcquisitions)
+                assertEquals(0, f.httpRequests)
+            } finally {
+                f.close()
+            }
+        }
+    }
+
+    @Test
+    fun uninitializedCommittedIntentSurvivesCancellationWithoutRetargeting() = runTest {
+        val f = ExistingHandoverStorageFixture.create()
+        try {
+            f.saved = f.codec.encode(f.original.copy(initialized = false))
+            val repo = f.repository()
+            f.select(repo)
+            f.afterWrite = { throw CancellationException("interrupted after commit") }
+            assertFailsWith<CancellationException> {
+                repo.stageExistingHandover(f.current, f.target)
+            }
+            val committed = assertNotNull(f.saved)
+            assertFalse(f.codec.decode(committed).initialized)
+            assertEquals(f.target.intent, f.codec.handoverIntent(f.codec.decode(committed)))
+            f.afterWrite = {}
+            val reopened = f.repository()
+            f.select(reopened)
+            assertEquals(
+                AppResult.Success(f.target.intent),
+                reopened.stageExistingHandover(f.current, f.target),
+            )
+            assertIs<AppResult.Failed>(
+                reopened.stageExistingHandover(
+                    f.current,
+                    f.target.copy(intent = f.target.intent.copy(expectedDeviceVersion = 2)),
+                )
+            )
+            assertEquals(committed, f.saved)
+            assertEquals(1, f.writes)
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
     fun closedOriginalKeysAndQueueProvenanceSurviveExactStagingAndRepositoryRestart() = runTest {
         val f = ExistingHandoverStorageFixture.create()
         try {
@@ -57,32 +156,30 @@ class AndroidExistingHandoverStorageTest {
     }
 
     @Test
-    fun missingDirectoriesDatabasesCredentialsOrInitializationNeverCreatesAStoreOrIntent() =
-        runTest {
-            for (missing in 0..4) {
-                val f = ExistingHandoverStorageFixture.create()
-                try {
-                    when (missing) {
-                        0 -> f.directoryPresent = false
-                        1 -> f.cryptoPresent = false
-                        2 -> f.statePresent = false
-                        3 -> f.saved = null
-                        4 -> f.saved = f.codec.encode(f.original.copy(initialized = false))
-                    }
-                    val before = f.saved
-                    val repo = f.repository()
-                    f.select(repo)
-                    assertIs<AppResult.Failed>(repo.stageExistingHandover(f.current, f.target))
-                    assertEquals(before, f.saved)
-                    assertEquals(0, f.writes)
-                    assertEquals(0, f.newStoreAcquisitions)
-                    assertEquals(0, f.httpRequests)
-                    assertFalse(f.leased)
-                } finally {
-                    f.close()
+    fun missingDirectoriesDatabasesOrCredentialsNeverCreatesAStoreOrIntent() = runTest {
+        for (missing in 0..3) {
+            val f = ExistingHandoverStorageFixture.create()
+            try {
+                when (missing) {
+                    0 -> f.directoryPresent = false
+                    1 -> f.cryptoPresent = false
+                    2 -> f.statePresent = false
+                    3 -> f.saved = null
                 }
+                val before = f.saved
+                val repo = f.repository()
+                f.select(repo)
+                assertIs<AppResult.Failed>(repo.stageExistingHandover(f.current, f.target))
+                assertEquals(before, f.saved)
+                assertEquals(0, f.writes)
+                assertEquals(0, f.newStoreAcquisitions)
+                assertEquals(0, f.httpRequests)
+                assertFalse(f.leased)
+            } finally {
+                f.close()
             }
         }
+    }
 
     @Test
     fun corruptForeignOrDifferentPrivateIdentityRetainsOriginalCredentials() = runTest {

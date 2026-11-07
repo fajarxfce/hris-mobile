@@ -1,5 +1,9 @@
 # Architecture
 
+[Interrupted credential handover](collaboration-interrupted-credential-handover.md)
+preserves the original uninitialized record in a distinct strict format after verified
+private-store drain; it grants no provider publication or server authority.
+
 [Closed original SDK handover](collaboration-existing-store-handover.md) stages an
 exact target under the original private-store lease after all old reservations drain.
 

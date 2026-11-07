@@ -104,6 +104,12 @@ class MatrixProofInstrumentation : Instrumentation() {
                 LocalExistingRuntimeHandoverProbe(targetContext, directory).stage()
             "existing-handover-resume" ->
                 LocalExistingRuntimeHandoverProbe(targetContext, directory).resume()
+            "rotation-handover-stage" ->
+                LocalExistingRuntimeHandoverProbe(targetContext, directory, rotationPending = true)
+                    .stage()
+            "rotation-handover-resume" ->
+                LocalExistingRuntimeHandoverProbe(targetContext, directory, rotationPending = true)
+                    .resume()
             "local-identity-stage" -> LocalSdkIdentityProbe(directory).stage()
             "local-identity-resume" -> LocalSdkIdentityProbe(directory).resume()
             "provider" -> NativeMatrixProbe(directory).run()

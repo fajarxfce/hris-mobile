@@ -11,6 +11,41 @@ import kotlinx.coroutines.test.*
 
 class ReadCollaborationSpaceSdkPossessionTest {
     @Test
+    fun uninitializedHandoverKeepsOriginalPrivateProofWithoutGrantingAnotherIdentity() = runTest {
+        val f = Fixture()
+        val target =
+            CollaborationRuntimeHandoverIntent(
+                f.setup.owner.spaceId,
+                f.setup.owner.spaceId,
+                f.setup.registration.sdkDevice,
+                0,
+                f.proof.identity.fingerprint,
+            )
+        val retained =
+            f.proof.copy(
+                inventory =
+                    f.proof.inventory.copy(
+                        credential =
+                            f.proof.inventory.credential!!.copy(
+                                initialized = false,
+                                handover = target,
+                            )
+                    )
+            )
+        f.response = { AppResult.Success(retained) }
+        assertEquals(AppResult.Success(retained), f.read()(f.setup.owner, f.setup.registrationId))
+        f.response = {
+            AppResult.Success(
+                retained.copy(identity = retained.identity.copy(fingerprint = "b".repeat(64)))
+            )
+        }
+        assertIs<AppResult.Failed>(f.read()(f.setup.owner, f.setup.registrationId))
+        assertTrue(f.setup.registration.sent.isEmpty())
+        assertTrue(f.setup.sent.isEmpty())
+        assertTrue(f.setup.base.requests.isEmpty())
+    }
+
+    @Test
     fun newLocalLoginCanProveOriginalKeysAfterParentExpiryAndCompanyRemovalWithoutHttp() = runTest {
         val f = Fixture()
         val owner =

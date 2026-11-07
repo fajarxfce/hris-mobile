@@ -18,6 +18,45 @@ import kotlinx.serialization.json.Json
 
 class StoredCollaborationSdkPossessionTest {
     @Test
+    fun uninitializedHandoverKeepsPrivateIdentityAcrossRepositoryAndLoginReplacement() = runTest {
+        val f = Fixture.create()
+        val target =
+            CollaborationRuntimeHandoverIntent(
+                SETUP_JOB,
+                SETUP_OPERATION,
+                SETUP_DEVICE,
+                0,
+                "a".repeat(64),
+            )
+        val held = f.codec.stageExistingHandover(f.original, target)
+        assertEquals(3, held.schema)
+        f.saved = f.codec.encode(held)
+        val before = f.saved
+        var identity: CollaborationLocalDeviceIdentity? = null
+        for (session in listOf("new-login", "later-login")) {
+            f.events.clear()
+            val observed =
+                assertNotNull(
+                    assertIs<AppResult.Success<CollaborationSdkPossession?>>(
+                            f.repository()
+                                .readPrivateIdentity(
+                                    setupOwner.copy(sessionId = session),
+                                    SETUP_DEVICE,
+                                )
+                        )
+                        .value
+                )
+            val credential = assertNotNull(observed.inventory.credential)
+            assertFalse(credential.initialized)
+            assertEquals(target, credential.handover)
+            assertEquals(f.original.messageOperationId, credential.messageOperationId)
+            if (identity != null) assertEquals(identity, observed.identity)
+            identity = observed.identity
+            assertEquals(before, f.saved)
+        }
+    }
+
+    @Test
     fun readsOriginalPrivateAccountUnderOneLeaseWithoutWritingCredentials() = runTest {
         val f = Fixture.create()
         val original = f.saved

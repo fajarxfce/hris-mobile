@@ -236,7 +236,7 @@ class AndroidCollaborationRuntimeRepository(
                     identity.matrixDeviceId == current.matrixDeviceId
             )
             if (!registry.existingHandoverCurrent(gate, currentParent)) return@safeStorageCall null
-            val staged = codec.stageHandover(current, target.intent)
+            val staged = codec.stageExistingHandover(current, target.intent)
             if (staged != current) store.write(codec.encode(staged))
             currentCoroutineContext().ensureActive()
             requireNotNull(codec.handoverIntent(staged))

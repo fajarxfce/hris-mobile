@@ -11,6 +11,42 @@ import kotlinx.coroutines.test.*
 
 class ReadCollaborationSpaceSdkInventoryTest {
     @Test
+    fun uninitializedHandoverRemainsReadableWithoutLosingOriginalTargetGuards() = runTest {
+        val f = Fixture()
+        val target =
+            CollaborationRuntimeHandoverIntent(
+                f.owner.spaceId,
+                f.owner.spaceId,
+                f.registration.sdkDevice,
+                0,
+                f.registration.sdkIdentity.fingerprint,
+            )
+        val retained =
+            f.facts.copy(
+                credential =
+                    assertNotNull(f.facts.credential).copy(initialized = false, handover = target)
+            )
+        f.response = { AppResult.Success(retained) }
+        assertEquals(AppResult.Success(retained), f.read()(f.owner, f.setup.registrationId))
+        for (invalid in
+            listOf(
+                retained.copy(credential = retained.credential!!.copy(revision = 0)),
+                retained.copy(
+                    credential =
+                        retained.credential!!.copy(
+                            handover = target.copy(fingerprint = "b".repeat(64))
+                        )
+                ),
+            )) {
+            f.response = { AppResult.Success(invalid) }
+            assertIs<AppResult.Failed>(f.read()(f.owner, f.setup.registrationId))
+        }
+        assertEquals(0, f.registration.inserts)
+        assertTrue(f.registration.sent.isEmpty())
+        assertTrue(f.setup.base.requests.isEmpty())
+    }
+
+    @Test
     fun freshLoginReadsTheOriginalPhysicalNamespaceEvenAfterExpiryAndCompanyRemoval() = runTest {
         val f = Fixture()
         val original = f.registration.sdkOwner
