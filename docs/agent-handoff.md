@@ -42,17 +42,20 @@ privilege were restored. Both private screenshots were viewed. Owned emulator st
 `.work/release-phone-2026-11-06-build51`. Phone preflight verified installed50 and its
 signer/hash; installation uses explicit10.77.77.3:5555 and `--install-only`.
 
-The ONLY heavy local job is **8440**, existing-store handover **proof-build-2**, under
+The ONLY heavy local job is **50781**, existing-store handover **full-1**, under
 `.work/space-store-inventory-2026-11-06/closed-handover-next`. Ten Kotlin files are
-UNCOMMITTED: seven product/host-test files plus three native-proof fixture files.
-Focused86050 PASSED34 cases in127.354s, zero failures/errors/skips,4,266 stable inputs.
-The first proof build72231 assembled its APK but FAILED Detekt: instrumentation
-onStart grew to104 lines against100 allowed. Original SARIF is retained; scenario
-execution is now separated from instrumentation lifecycle. The retry checks APK,
-formatting, architecture and Detekt. No emulator is active; keep source frozen.
-Actual SDK4 two-ABI/process-death proof is prepared under `native-1`, not yet run.
-It uses a fresh owned5564 emulator, never the phone or original Bima data. No owning
-use case, server freeze, product activation or full-candidate acceptance exists yet.
+UNCOMMITTED and frozen: seven product/host-test files plus three native-proof files.
+Focused86050 PASSED34 cases/127.354s, zero failures/errors/skips,4,266 stable inputs.
+First proof build72231 assembled but FAILED Detekt (onStart104 lines/max100); original
+SARIF is retained. Separating scenario dispatch from lifecycle fixed it; exact-source
+proof-build-2/8440 PASSED74.868s,4,267 stable inputs, zero quality findings.
+Real native11165 PASSED120.442s on both ABIs: x86_64 42.045s, ARM64 38.118s, original
+private keys/main SQLite bytes unchanged, actual file contention and interrupted writes,
+process absence between phases, same-intent replay without SDK construction. Fresh
+owned5564 emulator stopped, fixture packages removed; original Bima/phone untouched.
+[Contract](collaboration-existing-store-handover.md),
+[evidence](measurements/collaboration-existing-store-handover-2026-11-06.json).
+No owning use case, provider preflight, server freeze or product activation exists yet.
 
 The ten separate organization runtime transfer files are fully accepted and committed
 with this checkpoint. Focused65759 PASSED9 cases/175.602s (7 transport/2 actual DI). Full15063 ENDED
@@ -73,12 +76,20 @@ Queue68d first control42310411055 and native42310411202 are now running. SDK4 co
    the actual installation and corrects measured device clock offset. Passive audits
    at23:24:02 and23:50:00UTC retained no post-install lines for either profile; silence
    proves no delivery outcome. Do not launch the phone to manufacture evidence.
-2. Reap proof-build-2/8440. After successful exact-source build, run the prepared
-   `native-1/run-native.py proof-build-2` for real SDK4 closed-store/key preservation,
-   file contention, interrupted writes and process restart on both x86_64/ARM64.
-   Preserve any failed fixture for inspection. Then `check-full.py full-1` runs the
-   complete root/Android/browser/quality gate. Transport's full gate is already
-   accepted; preserve its original inputs rather than rerunning solely for evidence.
+2. Reap full-1/50781. After all required gates pass, commit the ten exact accepted
+   source/test files with their evidence. Do not displace transport15facc91's first
+   pending CI; wait until those runs start before a newer source push. Native11165
+   already accepted; do not rerun it solely for evidence. Preserve original sources.
+   Credential rotation with initialized=false still needs its own versioned retained
+   record phase; preserve that flag and prior strict schema2 behavior.
+   Seven formatted candidate files and red/green/full/native drivers are prepared only
+   under `.work/space-store-inventory-2026-11-06/rotation-handover-next` (not applied).
+   Five new regression cases are ready for a red gate against unchanged production.
+   The separate strict schema3 preserves initialized=false; schema2/open-client guards
+   remain unchanged. Its real SDK proof interrupts actual product credential replacement
+   after commit before new SDK construction; it never manually flips the saved flag.
+   Apply/test only after full-1 ends, and retain exact accepted closed-store sources for
+   their separate commit if transport CI has not yet started.
 3. Continue original pending-message recovery through the original private store and
    current authority. Keep old-parent/device guards; never reset queues, replace pending
    sends, invent acknowledgements or change original encrypted namespaces. Current
@@ -87,7 +98,7 @@ Queue68d first control42310411055 and native42310411202 are now running. SDK4 co
    current-admitted freeze/drain/publication/adoption, hard-parent recovery and group
    routing. The new transport alone cannot activate this irreversible transition.
 Existing-store design and hashes are under closed-handover-next. Its34 focused cases
-are accepted; real native and full candidate gates are still required. It preserves
+and real two-ABI native proof are accepted; full candidate gate is running. It preserves
 original private files and stages one exact local target only after all old
 reservations drain. The codec still requires an initialized original record;
 credential rotation with initialized=false remains a distinct unresolved phase.

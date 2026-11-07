@@ -1,5 +1,9 @@
 # Durable Android runtime handover
 
+[Closed original-store handover](collaboration-existing-store-handover.md) adds a
+separate existing-only path after login replacement. The open-client path below
+retains its original guards.
+
 [Actual original queued-key continuity](collaboration-space-sdk-history.md) now
 passes with the retained SDK store across native server completion and two process
 deaths. Its fixture owner does not adopt this product runtime or integrate push.

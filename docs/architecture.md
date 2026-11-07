@@ -1,5 +1,8 @@
 # Architecture
 
+[Closed original SDK handover](collaboration-existing-store-handover.md) stages an
+exact target under the original private-store lease after all old reservations drain.
+
 [Original runtime transfer transport](collaboration-space-runtime-transfer.md) maps exact
 freeze/drain metadata without granting SDK shutdown or completed ownership.
 

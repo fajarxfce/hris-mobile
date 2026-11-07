@@ -1,0 +1,212 @@
+{
+  "recordedAt": "2026-11-06T23:56:55.165822+00:00",
+  "status": "focused and real SDK acceptance passed; full candidate gate running",
+  "baseSource": "15facc913e792bfab94f6c32a61651f1275c9d57",
+  "candidateFiles": {
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkRuntimeRegistry.kt": "628760a1c3bfa7227669a0ab52344ba92a02a9d7a839211b137c787d392743b9",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/SdkExistingHandoverRegistryTest.kt": "09cb920c8b474cd2e4169c443b66a88b823451d93207813637ea5512faa3de9e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationExistingRuntimeHandover.kt": "b625e8e7a8784eacdb09f8df6a7780dd63e0abd2b07329596e5bc6df15dcfe71",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationRuntimeRepository.kt": "c17002b0d75e39c4378ac9a79a8c04b2c044a0f42b7e52ed0113e7a78e81cd19",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "c13bfedcf38fd7348f4aa6e73dea64e0927b2e57e5b945cfeb5b90ec7dd33441",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/di/AndroidCollaborationRuntimeFactory.kt": "1cefd9a6fb1e152351996d27efae9ca411c75a8fa560628903f7f61994aeefc7",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidExistingHandoverStorageTest.kt": "e19b75916f3aff23940ecfc614baec26d31fa18a168ec210c51c88f230efdb7f",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/LocalRuntimeHandoverFixture.kt": "8e6345645b7758b091748a421f0592d421e8037b640f6b8aede59df14fbc0dd3",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "b4fa4be03e66b46df20716a43a10f19d7fc51167e33cf2bafb2803f11adc9e8f",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/LocalExistingRuntimeHandoverProbe.kt": "ebb6d5590238fdb99e1d3c8beeb4b311c14d848f437db1fd055a97c185a85d34"
+  },
+  "focused": {
+    "startedAt": "2026-11-06T23:39:13.391056+00:00",
+    "elapsedSeconds": 127.354,
+    "exitCode": 0,
+    "sourceFiles": 4266,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 4
+  },
+  "proofBuildFirst": {
+    "startedAt": "2026-11-06T23:47:01.438418+00:00",
+    "elapsedSeconds": 163.597,
+    "exitCode": 1,
+    "sourceFiles": 4267,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 0
+  },
+  "firstQualityFailure": {
+    "accepted": false,
+    "finding": "LongMethod",
+    "function": "MatrixProofInstrumentation.onStart",
+    "actualLength": 104,
+    "limit": 100,
+    "sarifSha256": "4edf05a34f5bbab73407a2d657fc0cf3ac54113a590b309e9c1b0bc40d3ec409"
+  },
+  "qualityCorrection": "Separate instrumentation lifecycle from unchanged scenario dispatch; no suppression or baseline.",
+  "proofBuildAccepted": {
+    "startedAt": "2026-11-06T23:52:55.017505+00:00",
+    "elapsedSeconds": 74.868,
+    "exitCode": 0,
+    "sourceFiles": 4267,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 0
+  },
+  "native": {
+    "startedAt": "2026-11-06T23:54:19.777804+00:00",
+    "serial": "emulator-5564",
+    "apkSha256": "585b8dc571e2e199c446b99e5a2f95ae75b7767240e84ef0b5f1166b7f1d3c70",
+    "sdk": "26.10.23-hris.4",
+    "native": {
+      "x86_64": {
+        "sha256": "55bde5be2080c3e42a2ece6053f94231d27165cc39698c89c50e36ecbdb2909a",
+        "matchesPublishedSdk": true,
+        "mode": "stripped"
+      },
+      "arm64-v8a": {
+        "sha256": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34",
+        "matchesPublishedSdk": true,
+        "mode": "stripped"
+      }
+    },
+    "providerRequired": false,
+    "phoneTouched": false,
+    "productApkInstalled": false,
+    "newMessagesSent": 0,
+    "complete": true,
+    "cases": [
+      {
+        "abi": "x86_64",
+        "passed": true,
+        "selectedAbiVerified": true,
+        "stageInstrumentation": {
+          "complete": true
+        },
+        "stage": {
+          "oldSdkClosedBeforeStaging": true,
+          "replacementNativeParent": true,
+          "realDirectoryContentionRejected": true,
+          "wrongPrivateIdentityRejected": true,
+          "cancelBeforeWriteRecoverable": true,
+          "writeFailureRecoverable": true,
+          "cancelAfterCommitRetained": true,
+          "sameTargetReplay": true,
+          "originalRecordFieldsPreserved": true,
+          "originalDatabaseBytesPreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "noSdkConstructionDuringStaging": true,
+          "complete": true,
+          "providerRequired": false,
+          "newMessagesSent": 0
+        },
+        "processAbsentBetweenPhases": true,
+        "resumeInstrumentation": {
+          "complete": true
+        },
+        "continuity": {
+          "durableAfterProcessDeath": true,
+          "replacementLocalLoginSameOriginalStore": true,
+          "sameTargetReplayWithoutWrite": true,
+          "targetImmutable": true,
+          "legacyAcquisitionRejected": true,
+          "noSdkConstructionDuringResume": true,
+          "originalDatabaseBytesPreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "ownedResourcesReleased": true,
+          "ownedFilesRemoved": true,
+          "complete": true,
+          "providerRequired": false,
+          "newMessagesSent": 0
+        },
+        "fixtureRemoved": true,
+        "elapsedSeconds": 42.045
+      },
+      {
+        "abi": "arm64-v8a",
+        "passed": true,
+        "selectedAbiVerified": true,
+        "stageInstrumentation": {
+          "complete": true
+        },
+        "stage": {
+          "oldSdkClosedBeforeStaging": true,
+          "replacementNativeParent": true,
+          "realDirectoryContentionRejected": true,
+          "wrongPrivateIdentityRejected": true,
+          "cancelBeforeWriteRecoverable": true,
+          "writeFailureRecoverable": true,
+          "cancelAfterCommitRetained": true,
+          "sameTargetReplay": true,
+          "originalRecordFieldsPreserved": true,
+          "originalDatabaseBytesPreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "noSdkConstructionDuringStaging": true,
+          "complete": true,
+          "providerRequired": false,
+          "newMessagesSent": 0
+        },
+        "processAbsentBetweenPhases": true,
+        "resumeInstrumentation": {
+          "complete": true
+        },
+        "continuity": {
+          "durableAfterProcessDeath": true,
+          "replacementLocalLoginSameOriginalStore": true,
+          "sameTargetReplayWithoutWrite": true,
+          "targetImmutable": true,
+          "legacyAcquisitionRejected": true,
+          "noSdkConstructionDuringResume": true,
+          "originalDatabaseBytesPreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "ownedResourcesReleased": true,
+          "ownedFilesRemoved": true,
+          "complete": true,
+          "providerRequired": false,
+          "newMessagesSent": 0
+        },
+        "fixtureRemoved": true,
+        "elapsedSeconds": 38.118
+      }
+    ],
+    "sourcesUnchanged": true,
+    "emulatorStopped": {
+      "pid": 2292420,
+      "serial": "emulator-5564",
+      "stopped": true,
+      "signalSent": true,
+      "transportAbsent": true,
+      "seconds": 1.604
+    },
+    "elapsedSeconds": 120.442
+  },
+  "fullGate": {
+    "status": "running",
+    "session": 50781,
+    "path": ".work/space-store-inventory-2026-11-06/closed-handover-next/full-1"
+  },
+  "scope": {
+    "providerOrServerCalled": false,
+    "newMessagesSent": 0,
+    "phoneTouched": false,
+    "owningUseCaseImplemented": false,
+    "groupRuntimeActivated": false,
+    "hardParentServerRecoveryImplemented": false,
+    "originalPhonePendingReportResolved": false,
+    "initializedFalseSupported": false,
+    "sqliteMainFilesUnchanged": true,
+    "sqliteWalSidecarsClaimedUnchanged": false
+  }
+}
