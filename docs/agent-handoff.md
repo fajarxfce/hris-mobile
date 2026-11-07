@@ -45,15 +45,20 @@ No product caller, new APK or organization routing activation exists for these p
 1. First1d9493df control42372520573/native42372520624 are PENDING behind running
    first3b3 control42369792173/native42369792184. Preserve these first pending runs
    before another primary promotion; continue source work on recovery.
-2. EIGHT original Open replay files are now applied/FROZEN. Sole heavy local job15001
-   runs .work/space-conversation-open-replay-2026-11-07/focused-1:24 new domain cases,
-   existing command policy and actual app binding. Not accepted yet; full gate is
-   prepared. It separates pair denial from global restriction, durably marks before
-   HTTP, captures observed outcomes through cancellation, preserves stronger denial,
-   materializes exact canonical facts before archive, and uses original IDs under the
-   current native owner. No SDK, message ACK, product caller or new APK. Complete
-   focused/full root/Android/lint/Browser checks before committing. Reviewed contract
-   remains in .work/space-conversation-preparation-2026-11-07/next-open-replay.md.
+2. TWELVE original Open replay files are applied/FROZEN. Sole heavy local job35951
+   runs .work/space-conversation-open-replay-2026-11-07/focused-3:25 domain cases,
+   three real encrypted storage cases, command policy and actual app binding.
+   Focused15001 passed30 fake-domain/binding cases195.304s. Focused3935 then
+   REPRODUCED a real codec normalization failure:3 fresh storage cases,1 failure,
+   104.619s,4,393 unchanged inputs; both jobs reaped. Directory and command codecs
+   deliberately normalize human error text differently, making an in-memory expected
+   mark differ from the stored record. Fixed dispatch exact-reads the successful mark
+   before HTTP, validates original command/revision/attempts and stored kind/code/retry,
+   rechecks ownership/native admission, then uses the actual stored record for outcome
+   CAS. Changed/missing marks cannot dispatch. Do not weaken raw CAS or persist private
+   error presentation. This new organization flow is NOT installed phone53's latency
+   diagnosis. Full root/Android/lint/actual Browser checks remain required. No SDK,
+   message ACK, product caller or new APK. Preserve the failing run as regression proof.
 3. Implement finite owning prepare/replay and projection-before-archive. Recover the
    same original resource/operation after response loss; CAS to Unconfirmed BEFORE HTTP.
    Separate native account/MFA/client denial from conversation/peer denial; do not close
@@ -69,7 +74,8 @@ No product caller, new APK or organization routing activation exists for these p
    is waived, but relevant Apple CI/compilation remains required.
 
 Metadata/preparation candidates are historical applied staging. Open replay candidates
-are also applied now, but unaccepted and frozen for15001. Metadata stays inside the
+are also applied now, but unaccepted and frozen for35951. Its candidate folder is
+historical before the real codec fix; do not reapply it. Metadata stays inside the
 existing guarded collaboration-history/ prefix with metadata-only/inactive key-loss
 coverage. No server fence or room request successor implementation exists yet.
 
