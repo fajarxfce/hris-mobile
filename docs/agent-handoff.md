@@ -89,7 +89,8 @@ runs below before another source push. Docs-only pushes do not trigger these gat
    eligible confirmed device for both Bima and caller; the earlier email-based null
    caller query is invalid evidence. See
    [current rejection evidence](measurements/collaboration-phone52-send-rejection-2026-11-07.json).
-2. Interrupted-credential handover has12 accepted Kotlin files in this commit.
+2. Interrupted-credential handover has12 accepted Kotlin files in34d507bc, pushed
+   on temporaryfeat/chat-recovery-20261107. Primary promotion follows firstfd05start.
    Private drivers/results are under
    `.work/space-store-inventory-2026-11-06/rotation-handover-next`. Initial red95305
    proved5 new cases/3 failures on unchanged codec. Focused64026 passed50 cases/
@@ -121,13 +122,14 @@ runs below before another source push. Docs-only pushes do not trigger these gat
 
 ## First source CI — preserve/audit original runs
 
-- **fd05b731**: control42318790930 pending, native42318790943 running.
+- **fd05b731**: control42318790930 running from01:19:28UTC, native42318790943 running.
   Protocol42318790936 FAILED before native tests: SDK emulator image download was
   not a valid archive. Classic job passed; original failure retained, no redispatch. Exact IDs/head recorded under
   `.work/phone51-send-rejection-2026-11-07/first-runs.json`. Do not displace the
   pending source runs with a newer primary-branch push or manually redispatch them.
-- **15facc91**: control42313584270 running from00:31:15UTC; native42313584318 FAILED: ARM64 passed419 cases/71 suites;
+- **15facc91**: control42313584270 SUCCEEDED at01:19:25UTC; original artifacts still need audit; native42313584318 FAILED: ARM64 passed419 cases/71 suites;
   x86_64 had one worker priority-history Storage_Unclassified failure out of419.
+  [Original CI failure evidence](measurements/collaboration-first-ci-failures-2026-11-07.json).
   First artifacts/logs are retained under runtime-transfer-next/remote-ci-15 and
   .work/ci-failures-2026-11-07. This app failure remains under investigation. IDs and auditor under
   `.work/space-store-inventory-2026-11-06/runtime-transfer-next`.
@@ -157,8 +159,10 @@ runs below before another source push. Docs-only pushes do not trigger these gat
   Do not redispatch. Prior0ff7e59 retains280 local/138 Apple acceptance.
 - Group`/home/fajar/hris/.worktrees/communication-space`, `feat/communication-space`,
   c9de3753/program344211f8 pushed; V117–137 unshipped/disabled. MainPlatform
-  `hris-platform` ate9538934; liveAPI061cac31/worker10485916/schema116.1.
-  API-only finite rejection logging is deployed; all other runtime inputs unchanged. Native CI fixture62ee11818a4928b2598d046c7b3283bf3e416554;
+  `hris-platform` atf26f953e; liveAPI2e75fe1e/worker10485916/schema116.1.
+  API-only finite rejection/operation logging is deployed; all other runtime inputs
+  unchanged. The operation update passed52 cases/81.557s and deployed01:20:40UTC
+  in11.048s. FirstMainCI42323441241 running. Phone pending still open. Native CI fixture62ee11818a4928b2598d046c7b3283bf3e416554;
   protocol fixturee0dbb567acc4c5571b82324c515ed8ddc145007d.
 - SDK4 release437093395/tag`matrix-sdk-26.10.23-hris.4`, target4228599ba659cf68cfea1138e6f8017b0b77c222,
   AARSHA9b6806de02b7d40b8487b54a51b192c114a38c68c6dfe35c68faf50d3b6bfd21 is immutable.
