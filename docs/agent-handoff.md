@@ -5,6 +5,42 @@ linked below. Earlier checkpoints remain verbatim in
 [history through original queue matching](agent-handoff-history-through-original-queue-matching-2026-11-07.md)
 and [history through build 50](agent-handoff-history-through-build50.md).
 
+## Active durable command validation — 7 November 2026
+
+Program79b41269475c396cbef28a2c1424681c4cb57409 is pushed to recovery and primary.
+First control42366357406/native42366357400 are PENDING behind running fb514281
+control42363807332/native42363807289. Preserve these first pending runs before another
+primary source promotion; work/commits can continue on the recovery branch.
+
+TEN new Kotlin files implement durable Space open/room commands, pure policy, strict
+versioned encrypted codec and raw CommandStore repository, plus Desktop/Browser/Apple
+storage contracts and pure tests. They are NOT yet accepted/committed. Focused71754
+passed21 cases190.699s on4,369 unchanged inputs, no failures/errors/skips and quality
+passed. First33920 failed test compilation208.465s due to read/raw fixture member
+collisions (six other cases passed); correction uses readCommand/rawCommand. The
+source also explicitly rejects zero account identities. All focused jobs are reaped.
+Sole heavy job18016 is full-1 under .work/space-conversation-commands-2026-11-07;
+TEN sources FROZEN. Required root/Android/lint/browser storage/policy/shared Wasm gate
+is running. Do not overlap builds or emulator. After acceptance record measurements,
+commit/push; promote primary only after79b first pending runs have started.
+
+Repository preserves immutable intent across login replacement, exact CAS before
+HTTP, retained uncertainty/denials, recorded setup receipts and immutable archives.
+Archive only after idempotent owning projection; never scan archives or recreate a
+lost key over retained ciphertext. No HTTP/use-case/product caller was added yet.
+NEXT owning preparation/replay and local canonical conversation projection, explicit
+server non-execution evidence before replacement, original SDK delivery/history,
+parent recovery/product routing/all54 groups. Server fence design is in Group
+[reviewable plan](https://github.com/fajarxfce/hris-platform/blob/feat/communication-space/docs/collaboration/native-room-request-fencing-plan.md);
+no fence endpoint/table is implemented yet. Local next-owning-flow.md adds source
+review notes; it is supplementary to this checkpoint and the linked contract.
+
+Phone53 latency remains OPEN. Another10s ADB reconnect timed out by11:09UTC; no phone
+UI driven, messages sent or new APK. Bima keys already exist; this does not explain
+or accept the user's20s–2min delay. Original Bima store/keys/IDs, immutableSDK4,
+live services/schema and Starterb11437a remain unchanged. This section is authoritative
+for running work; earlier sections retain accepted transport evidence.
+
 ## Latest continuation — 7 November 2026
 
 Stable native room transport is accepted against Group `d37459fd`: 11 Kotlin files,
