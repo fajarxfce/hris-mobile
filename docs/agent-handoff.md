@@ -13,8 +13,11 @@ failures/errors/skips. Proof lint: zero errors, 49 existing warnings. Actual wor
 preflight accepted APK `fca8e884a7f0f48af5baf5aa4dd339421d7060368721342f7c57d0dc37955c27`
 and rejected a separate local APK containing the exact published unstripped library.
 The SDK4 hashes and original APK/source stayed unchanged. [Packaging contract](collaboration-sdk4-packaging-ci.md).
-Commit/push the three accepted packaging files and documentation, then fast-forward
-primary: both first05de gates have started/ended, so no first pending run is replaced.
+Packaging program `9deb55bf93314622967231c9de8ab695c775faeb` is committed and pushed
+to both temporary and primary branches. First control42354718734 is PENDING behind
+05de's Apple job; native42354718728 and protocol42354718729 have started. Preserve
+that first pending control before the next primary source promotion. Short-SHA run
+lookup returned no results; the full SHA returned these three actual runs.
 
 NEXT run the narrowly scoped [mixed-room diagnosis](collaboration-mixed-room-delivery-diagnosis.md)
 using controlled recipients with different device/key readiness. No production policy
@@ -96,9 +99,8 @@ pending; do not repeat it. No phone UI/new messages were driven.
   passed. [Failure evidence](measurements/collaboration-original-metadata-native-ci-2026-11-07.json).
   Protocol 42348626066 is accepted: 14 checks each mode and 14 source hashes match
   pinned Platform `e0dbb567acc4c5571b82324c515ed8ddc145007d`.
-- Primary `feat/communications` remains `05de0bf6`; current work is on temporary
-  `feat/chat-recovery-20261107`. Push every atomic commit. Promote after the CI
-  packaging correction passes locally. Preserve every first pending control/native
+- Primary `feat/communications` is `9deb55bf`; current work is on temporary
+  `feat/chat-recovery-20261107`. Push every atomic commit. Preserve every first pending control/native
   run before later primary promotions; even `cancel-in-progress: false` replaces
   an older pending run. Do not rerun accepted provider sends just for evidence.
 
