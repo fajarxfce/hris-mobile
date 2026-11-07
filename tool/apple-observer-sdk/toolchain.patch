@@ -27,3 +27,60 @@
              for triple in &triples {
                  cmd = cmd.arg("--target").arg(triple);
              }
+@@ -576,6 +576,23 @@
+ /// The crate an object file belongs to, or its own name for the objects that
+ /// don't come from one, such as the bundled SQLite.
+ fn crate_of(member: &str) -> &str {
++    // Cargo also names the primary crate's objects `crate.crate.hash-cgu.N.rcgu.o`.
++    // Treating these as separate owners merges only the units referencing SQLite;
++    // their hidden Rust symbols can no longer bind to the units left in the archive.
++    if let Some((name, rest)) = member.split_once('.') {
++        if let Some(rest) = rest.strip_prefix(name).and_then(|rest| rest.strip_prefix('.')) {
++            if let Some((hash, unit)) = rest.split_once("-cgu.") {
++                if hash.len() == 16
++                    && hash.bytes().all(|byte| byte.is_ascii_hexdigit())
++                    && unit.strip_suffix(".rcgu.o").is_some_and(|number| {
++                        !number.is_empty() && number.bytes().all(|byte| byte.is_ascii_digit())
++                    })
++                {
++                    return name;
++                }
++            }
++        }
++    }
+     member
+         .split_once('-')
+         .filter(|(_, rest)| {
+@@ -735,3 +752,32 @@
+     std::fs::write(destination.join("module.modulemap"), modulemap)?;
+     Ok(())
+ }
++
++#[cfg(test)]
++mod object_owner_tests {
++    use super::crate_of;
++
++    #[test]
++    fn primary_codegen_units_share_one_owner() {
++        let first = "matrix_sdk_ffi.matrix_sdk_ffi.e1f89a1db0544933-cgu.02.rcgu.o";
++        let second = "matrix_sdk_ffi.matrix_sdk_ffi.e1f89a1db0544933-cgu.15.rcgu.o";
++        assert_eq!(crate_of(first), "matrix_sdk_ffi");
++        assert_eq!(crate_of(first), crate_of(second));
++    }
++
++    #[test]
++    fn dependency_codegen_units_still_share_their_crate() {
++        assert_eq!(crate_of("rusqlite-1234567890abcdef.rusqlite.123-cgu.0.rcgu.o"), "rusqlite");
++        assert_eq!(crate_of("matrix_sdk_base-0123456789abcdef.0.rcgu.o"), "matrix_sdk_base");
++    }
++
++    #[test]
++    fn unrelated_or_malformed_objects_keep_their_own_identity() {
++        for name in ["sqlite3.o", "a.b.0123456789abcdef-cgu.0.rcgu.o",
++            "a.a.0123456789abcdeg-cgu.0.rcgu.o", "a.a.123-cgu.0.rcgu.o",
++            "a.a.0123456789abcdef-cgu..rcgu.o", "a.a.0123456789abcdef-cgu.x.rcgu.o",
++            "a-0123456789abcdeg.0.rcgu.o"] {
++            assert_eq!(crate_of(name), name);
++        }
++    }
++}

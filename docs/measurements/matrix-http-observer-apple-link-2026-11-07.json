@@ -1,0 +1,55 @@
+{
+  "at": "2026-11-07T21:00:42.754632+00:00",
+  "firstRun": {
+    "id": 42408920984,
+    "head": "81a82bf941f0c8d005fa7cfdc0d3de3efe66965b",
+    "conclusion": "failure",
+    "artifactId": 13590010377,
+    "archiveSha256": "28c840a2a79c53232563e77f05cb3797c72da39d4829dda8ccd819ad57da360b",
+    "archiveDigestVerified": true,
+    "failure": "Rust built three targets and xtask created the XCFramework, but swift build failed linking arm64 because only some primary-crate codegen units were merged while localizing SQLite symbols.",
+    "runtimeProofExecuted": false
+  },
+  "change": "Recognize primary Cargo crate.crate.hash-cgu.N.rcgu.o members as one crate owner. Preserve dependency crate-hash recognition and reject malformed object names. This groups all of a selected crate\u2019s codegen units before localization.",
+  "localRustUnit": {
+    "startedAt": "2026-11-07T21:00:14.141066+00:00",
+    "seconds": 0.354,
+    "passed": true,
+    "cases": 3,
+    "compiler": "rustc1.96.0",
+    "scope": "Exact object-owner function and its three Rust tests extracted from the Apple-only patched source; no macOS linking on this Linux host.",
+    "sourceSha256": "0807b9aab6f0fc33d32e48d54daaecf03fe4a1a589c27f2d941a665907105697",
+    "command": [
+      "/home/fajar/.local/share/hris-sdk-rust/cargo/bin/rustc",
+      "+1.96.0",
+      "--edition=2024",
+      "--test",
+      "/home/fajar/hris/.worktrees/mobile-matrix-http-observer-2026-11-07/.work/apple-symbols-2026-11-07/owner-tests.rs",
+      "-o",
+      "/home/fajar/hris/.worktrees/mobile-matrix-http-observer-2026-11-07/.work/apple-symbols-2026-11-07/owner-tests"
+    ]
+  },
+  "appleManifest": {
+    "baseManifest": "android-http-observer-build.json",
+    "baseManifestSha256": "7545e12760f30fdd2628d64e6de345822f07e63d6c30ad006cee83757020de0e",
+    "patch": "toolchain.patch",
+    "patchSha256": "e219068afa6607b1becaab66daa9add68c906f36fc37d48649210165aa4ee526",
+    "patchedSources": {
+      "xtask/src/swift.rs": "bad08366d13105f1464fa972652c68ec5cddaf4ff8429c5541380e36d3ad5b11"
+    },
+    "targets": [
+      "aarch64-apple-darwin",
+      "aarch64-apple-ios",
+      "aarch64-apple-ios-sim"
+    ],
+    "profile": "small-release",
+    "macosDeploymentTarget": "12.0",
+    "iosDeploymentTarget": "16.0"
+  },
+  "androidManifestChanged": false,
+  "sdk4Changed": false,
+  "appleLinkedAccepted": false,
+  "appleRuntimeAccepted": false,
+  "published": false,
+  "next": "Original CI for this corrected Apple-only build patch must compile Swift and execute the four native proof cases."
+}

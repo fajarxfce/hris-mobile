@@ -69,6 +69,9 @@ def build(args):
             lock_hash = sha(sdk / "Cargo.lock")
             run(["cargo", "fetch", "--locked"], cwd=sdk, env=env, log=log, timeout=900)
             env["CARGO_NET_OFFLINE"] = "true"
+            run(["cargo", "test", "--locked", "-p", "xtask", "object_owner_tests"],
+                cwd=sdk, env=env, log=log, timeout=900)
+            record["objectOwnerTestsPassed"] = True
             command = ["cargo", "run", "--locked", "-p", "xtask", "--", "swift", "build-framework",
                        "--profile", config["profile"], "--sequentially",
                        "--macos-deployment-target", config["macosDeploymentTarget"],

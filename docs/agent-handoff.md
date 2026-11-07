@@ -1,5 +1,33 @@
 # Agent continuation — HRIS Mobile
 
+## Apple packaging correction — 7 November2026,21:00UTC
+
+First Apple run42408920984 failed at Swift linking after all three Rust builds.
+The primary crate's Cargo object names were treated as separate owners; SQLite
+symbol localization split hidden references across merged/unmerged units. The
+Apple-only patch now groups the primary crate correctly. Three exact-function
+Rust tests pass locally with1.96.0 in0.354s; this is not Apple linker/runtime acceptance.
+The driver also runs these tests before the framework build. First failure archive
+13590010377 has its GitHub digest verified. [Evidence](measurements/matrix-http-observer-apple-link-2026-11-07.json).
+
+Android SDK5 full candidate and six-source observer patch remain unchanged;
+SDK4 is immutable. No SDK5 publication. Push this accepted packaging correction
+and preserve its first Apple CI; do not claim Apple accepted until Swift linking
+and all four proof cases pass. The Swift fixture now explicitly documents that
+Task.cancel alone does not wake UniFFI0.32.1: the owner must call native.stop.
+
+Mobile branch feat/network-inspector-20261107 has an optional raw observer hook
+under test. First local check37523 is reaped:879.898s/4417 stable inputs,5547 fresh
+cases with one fixture failure (completeAcquisition after requestClose), plus a
+LongMethod finding. Both are corrected and full-2 is running. No host integration
+or new APK. Phone and original stopped emulator remain55, viewport fix awaits56.
+Inspector9e710f0 has an unaccepted capture-lifetime increment (reset/close, dynamic
+Ktor store lookup, Matrix source rotation,15 common tests and sixth native fixture).
+Its tests have not run yet; only one heavy local job may run at a time.
+Private-library visibility question remains pending; do not expose its source.
+Original54-group communications PRD, composer handoff and latency remain active.
+
+
 ## Android native observer verified — 7 November 2026, 20:31 UTC
 
 All four first Android ABI artifacts from CI42408652180/8713b4f8 are audited: GitHub

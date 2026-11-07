@@ -93,8 +93,8 @@ final class ObserverTests: XCTestCase, @unchecked Sendable {
         let pending = Task { await observer.nextBatch() }
         await Task.yield()
         pending.cancel()
-        // UniFFI's generated nonthrowing async API may deliver an empty batch on
-        // cancellation. Only termination is required here, not a fabricated error.
+        // UniFFI 0.32.1 does not observe Swift Task cancellation. The owner must
+        // explicitly stop the subscription to wake this pending native read.
         observer.stop()
         _ = await pending.value
         let profile = try await client.getProfile(userId: "@cancelled:fixture.invalid")

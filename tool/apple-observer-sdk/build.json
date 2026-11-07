@@ -2,9 +2,9 @@
   "baseManifest": "android-http-observer-build.json",
   "baseManifestSha256": "7545e12760f30fdd2628d64e6de345822f07e63d6c30ad006cee83757020de0e",
   "patch": "toolchain.patch",
-  "patchSha256": "1cdf8297b84a752fdbe7130f6dc960c3fa2ac06c1f979dc8edc6018041b22c5b",
+  "patchSha256": "e219068afa6607b1becaab66daa9add68c906f36fc37d48649210165aa4ee526",
   "patchedSources": {
-    "xtask/src/swift.rs": "15c6130c46bc97f6f8b00b1179eee2c9140a60576a83b16bee73f5b15af520a9"
+    "xtask/src/swift.rs": "bad08366d13105f1464fa972652c68ec5cddaf4ff8429c5541380e36d3ad5b11"
   },
   "targets": [
     "aarch64-apple-darwin",
