@@ -53,7 +53,7 @@ internal fun sdkExceptionCategory(failure: Exception): String {
     }
 }
 
-/** Structured SDK error variants have private fields which are deliberately never inspected. */
+/** Finite diagnostics only; provider prose, identities and credentials never leave this mapper. */
 internal fun QueueWedgeError.closedSendFailure(recoverable: Boolean): SdkSendFailure =
     when (this) {
         is QueueWedgeError.InsecureDevices -> SdkSendFailure.InsecureDevices
@@ -62,6 +62,43 @@ internal fun QueueWedgeError.closedSendFailure(recoverable: Boolean): SdkSendFai
         is QueueWedgeError.ExpiredAccessToken -> SdkSendFailure.ExpiredAccessToken
         is QueueWedgeError.MissingMediaContent -> SdkSendFailure.MissingMedia
         is QueueWedgeError.InvalidMimeType -> SdkSendFailure.InvalidMediaType
-        is QueueWedgeError.GenericApiError ->
-            if (recoverable) SdkSendFailure.Retryable else SdkSendFailure.Rejected
+        is QueueWedgeError.GenericApiError -> genericSendFailure(msg, recoverable)
     }
+
+private val matrixFailureStatus =
+    Regex("^the server returned an error: \\[([1-5][0-9]{2})(?: / M_[A-Z0-9_]{1,64})?] ")
+
+/** Prefixes are from the pinned SDK/Ruma display contract, never a search through server prose. */
+private fun genericSendFailure(message: String, recoverable: Boolean): SdkSendFailure {
+    val fallback = if (recoverable) SdkSendFailure.Retryable else SdkSendFailure.Rejected
+    if (message.length > 16_384) return fallback
+    val status = matrixFailureStatus.find(message)?.groupValues?.get(1)?.toIntOrNull()
+    if (status != null)
+        return when (status) {
+            400 -> SdkSendFailure.ApiBadRequest
+            401 -> SdkSendFailure.ApiUnauthorized
+            403 -> SdkSendFailure.ApiForbidden
+            404 -> SdkSendFailure.ApiNotFound
+            409 -> SdkSendFailure.ApiConflict
+            413 -> SdkSendFailure.ApiTooLarge
+            429 -> SdkSendFailure.ApiRateLimited
+            in 500..599 -> SdkSendFailure.ApiServerError
+            else -> fallback
+        }
+    return when {
+        message.startsWith("deserialization failed: ") -> SdkSendFailure.ResponseDecoding
+        message ==
+            "encryption failed because the device does not have a valid Olm session with us" ->
+            SdkSendFailure.MissingOlmSession
+        message == "Local cache doesn't contain all necessary data to perform the action." ->
+            SdkSendFailure.MissingLocalData
+        message.startsWith("failed to read or write to the crypto store ") ->
+            SdkSendFailure.CryptoStore
+        message.startsWith("wrong room state: ") -> SdkSendFailure.WrongRoomState
+        message == "a concurrent request failed; see logs for details" ->
+            SdkSendFailure.ConcurrentRequest
+        message == "local echo failed to send in a previous session" ->
+            SdkSendFailure.PreviousSession
+        else -> fallback
+    }
+}

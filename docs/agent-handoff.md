@@ -49,9 +49,10 @@ Detekt findings. Focused34 and real SDK4 two-ABI/native process-death proof also
 `feat/chat-recovery-20261107`, while transport15facc91's first CI is pending. Their exact accepted contents are
 retained in `.work/space-store-inventory-2026-11-06/closed-handover-next/accepted-source`.
 No heavy local job or emulator is active. The three additional diagnostic Kotlin files
-remain uncommitted for their separate commit. Focused76606 PASSED6 cases/93.998s;
+are accepted and included in the separate diagnostic commit with this checkpoint. Focused76606 PASSED6 cases/93.998s;
 full28124 PASSED424.942s with2,498 fresh cases, zero failures/errors/skips and4,267
-unchanged inputs. Final quality/lint will be recorded in the diagnostic commit. [Contract](collaboration-existing-store-handover.md),
+unchanged inputs. Zero Android lint/Detekt findings;6 focused and329 fresh full suites are recorded in
+[diagnostic evidence](measurements/collaboration-queue-rejection-diagnostics-2026-11-07.json). [Contract](collaboration-existing-store-handover.md),
 [evidence](measurements/collaboration-existing-store-handover-2026-11-06.json).
 
 NEW phone51 passive evidence at00:05:47UTC on7 November has164 post-install lines:
@@ -77,9 +78,9 @@ that exact pushed branch. This preserves the previous first pending CI while all
 phone delivery. Fast-forward feat/communications only after both15facc91 first runs
 start; that will launch the combined source's first CI. Do not redispatch it or
 change either old pending run. Return the local branch to feat/communications at that
-point without dropping the accepted/source work. Temporary recovery branch now exists; its closed-store source commit is pushed first.
-Next commit/push the three accepted diagnostic files, then build52 from that exact
-pushed branch. Do not change source or HEAD while the release build is running.
+point without dropping the accepted/source work. Temporary recovery branch now exists; closed-store d609e31e is pushed. The diagnostic
+commit follows it with its accepted three source/test files. Next build52 from that
+exact pushed branch. Do not change source or HEAD while the release build is running.
 [Physical evidence](measurements/collaboration-phone51-send-rejection-2026-11-07.json).
 
 
@@ -102,7 +103,7 @@ Queue68d first control42310411055 and native42310411202 are now running. SDK4 co
    the actual installation and corrects measured device clock offset. Passive audits
    at23:24:02 and23:50:00UTC retained no post-install lines for either profile; silence
    proves no delivery outcome. Do not launch the phone to manufacture evidence.
-2. Commit/push accepted diagnostics, build/verify release52 and run its owned Bima
+2. Build/verify release52 from the pushed recovery branch and run its owned Bima
    offline/online acceptance, then announce and install-only on the authorized phone.
    Continue tracing actual phone51 generic queue rejection. Read-only server logs for00:00–00:05
    are retained under `.work/phone51-send-rejection-2026-11-07`; use closed categories,

@@ -28,6 +28,21 @@ internal enum class SdkSendFailure {
     InvalidMediaType,
     Retryable,
     Rejected,
+    ApiBadRequest,
+    ApiUnauthorized,
+    ApiForbidden,
+    ApiNotFound,
+    ApiConflict,
+    ApiTooLarge,
+    ApiRateLimited,
+    ApiServerError,
+    ResponseDecoding,
+    MissingOlmSession,
+    MissingLocalData,
+    CryptoStore,
+    WrongRoomState,
+    ConcurrentRequest,
+    PreviousSession,
 }
 
 internal data class CollaborationSdkTimelineDto(

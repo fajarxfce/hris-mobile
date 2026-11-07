@@ -1,0 +1,52 @@
+{
+  "recordedAt": "2026-11-07T00:23:19.624828+00:00",
+  "status": "accepted implementation committed with this record",
+  "sourceBranch": "feat/chat-recovery-20261107",
+  "originalInstalledSource": "68d848b7fed810984ddb59ca53079442dcac7819",
+  "existingStoreSource": "d609e31ee1e46614b37c171ba5cbfcb3e6ac3d20",
+  "files": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationSdkTimelineDto.kt": "3b3837bbb5e51ba4eeffa9b363014b1969b20d6a06cc08b24c8db241698dfbc7",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/sdk/AndroidCollaborationDiagnostics.kt": "084b5b26844eae1e6e25c4cb62fa1be577f69acc8dc96164658d6ffd46042732",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationDeliveryDiagnosticsTest.kt": "651262ea30ed820166b50f509147e4887a15596a1c9da5f292bf20b77b8abc06"
+  },
+  "focused": {
+    "startedAt": "2026-11-07T00:12:48.156744+00:00",
+    "elapsedSeconds": 93.998,
+    "exitCode": 0,
+    "sourceFiles": 4267,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 1
+  },
+  "full": {
+    "startedAt": "2026-11-07T00:14:55.465662+00:00",
+    "elapsedSeconds": 424.942,
+    "exitCode": 0,
+    "sourceFiles": 4267,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 2498,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 329
+  },
+  "detektFindings": 0,
+  "androidLintFindings": 0,
+  "scope": {
+    "rawErrorBodyLogged": false,
+    "deliveryOrRetryPolicyChanged": false,
+    "sdkRebuilt": false,
+    "phoneUiDriven": false,
+    "newMessagesSent": 0,
+    "physicalPendingReportResolved": false,
+    "release52Built": false,
+    "release52Installed": false
+  }
+}
