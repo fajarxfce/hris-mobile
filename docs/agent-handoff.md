@@ -53,17 +53,21 @@ No product caller, new APK or organization routing activation exists for these p
 
 ## Next work
 
-1. First1d9493df native42372520624 has started; control42372520573 remains PENDING
-   behind first3b3 control42369792173. First3b3 native42369792184 is SUCCESS/audited. Preserve these first pending runs
-   before another primary promotion; continue source work on recovery.
-2. Sole heavy local job34560 now runs Group .work/room-request-fence-2026-11-07/storage-1:
-   new V138 fence migration and original stable/legacy room writer regressions, format
-   and architecture. FOUR Group files are applied/FROZEN, NOT accepted: immutable actor/
-   original-operation fence, same-lock stable receipt exclusion,7 real migration cases,
-   recovery schema138 with unchanged encrypted envelope projection. Python recovery
-   checks passed26 cases after correcting an old future-schema138 assertion to139;
-   first failure retained. No domain fence repository/use case/HTTP/successor exists.
-   Do not start a second heavy job or edit Group's frozen source. V138 is NOT deployed.
+1. Both first1d9493df control42372520573/native42372520624 have STARTED. Original
+   first3b3 control42369792173/native42369792184 are SUCCESS and fully audited: Apple
+   2,001/228, portable4,869/542, native543/86 perABI, zero failures/errors/skips; original
+   SDK4 keys/IDs and cleanup retained. Audits74274/4322 are reaped. Open335e3914 can now
+   be fast-forwarded to primary for its own first source CI without replacing pending1d.
+2. Sole heavy local job4436 runs Group .work/room-request-fence-2026-11-07/storage-2.
+   FIVE Group source/test/recovery files are applied/FROZEN, NOT accepted: V138 immutable
+   original-operation fence, same-lock receipt exclusion,7 actual migration cases,
+   recovery schema138 without new encrypted envelope, and the existing room test fixture
+   updated from133 to138. First34560 passed24 cases315.431s on8,626 stable inputs with
+   zero failures/errors/skips, but its17 original writer cases still used133. That gap
+   justified this follow-up;7 actual new migration cases already passed. Python recovery
+   passed26 cases after its future-schema expectation fix. No domain fence repository/
+   use case/HTTP/successor or live rollout exists; do not edit frozen Group inputs or
+   start another heavy job. Candidate copies are historical applied staging.
 3. Open preparation/replay and canonical projection-before-archive are locally accepted.
    Continue equivalent owning Room request projection/recovery and original SDK routing.
    Separate native account/MFA/client denial from conversation/peer denial; do not close
@@ -80,7 +84,7 @@ No product caller, new APK or organization routing activation exists for these p
 
 Metadata/preparation/Open candidates are historical applied staging; do not reapply.
 The real codec fix supersedes Open's initial candidate directory. Group's4 fence
-candidates are also applied now and frozen for34560; they have no domain/HTTP caller.
+candidates are also applied now and frozen for4436; they have no domain/HTTP caller.
 Metadata remains inside the guarded collaboration-history/ prefix.
 
 ## Original SDK and phone invariants
@@ -117,12 +121,14 @@ the cause or resolution of the user's20s–2min pending delay.
 
 ## CI and live state
 
-First1d9493df native42372520624 has started; control42372520573 is PENDING; preserve it.
+Both first1d9493df control42372520573/native42372520624 have STARTED.
 First3b3 native42369792184 is SUCCESS and original artifacts audited:543/86 perABI,
 zero failures/errors/skips, original queue33.483s x86/80.188s ARM,0 provider sends,
 keys/IDs and cleanup preserved. Separate HRIS fixture sends/cleanup remain exact.
 [Native evidence](measurements/collaboration-space-conversation-commands-native-ci-2026-11-07.json).
-Audit4322 is reaped; no provider rerun. First3b3 control42369792173 still runs Apple. First79b control42366357406/native42366357400 are SUCCESS and fully
+Audits4322/74274 are reaped; no provider rerun. First3b3 control42369792173 is SUCCESS:
+Apple2,001/228, portable4,869/542, zero failures/errors/skips and original artifact digests
+verified. [Control evidence](measurements/collaboration-space-conversation-commands-control-ci-2026-11-07.json). First79b control42366357406/native42366357400 are SUCCESS and fully
 audited: Apple1,975/225, portable4,817/536, each native ABI543/86, zero failures/errors/
 skips. Original queue continuity31.255s x86/77.166s ARM preserved keys/IDs and cleanup,
 zero provider sends; separate native HRIS scenarios also passed with cleanup.
@@ -134,8 +140,8 @@ portable4,805/534; Apple1,969/224; each native ABI537/85, all zero failures/erro
 [native evidence](measurements/collaboration-room-receipts-native-ci-2026-11-07.json).
 Original queue continuity24.827s x86/80.993s ARM preserved keys/IDs through process death,
 zero provider sends and full cleanup. Older e8fc and72a original evidence is in history;
-72a's app fake compilation failure was corrected and accepted ine8fc. Storage/observation await first3b3 Apple/native CI; newer metadata will require
-its own primary CI after pending runs have started.
+72a's app fake compilation failure was corrected and accepted ine8fc. Storage/observation first3b3 Apple/native CI is fully accepted. Metadata/preparation
+first1d CI is running; Open335e3914 requires its own subsequent first CI.
 
 Live API2e75fe1ee88b5766259fc3efd3ab7f21e70d621a, worker10485916, schema116.1 remain
 unchanged. Group V117–137 remain disabled/unshipped. Starterb11437a is clean/pushed;

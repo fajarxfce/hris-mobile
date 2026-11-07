@@ -84,5 +84,9 @@ resumption, sent zero provider messages and cleaned up fully. Separate actual HR
 fixtures retain their own send counts and passed cleanup; non-applicable false flags
 remain explicit. No native/provider scenario was repeated to audit this result.
 [Original artifacts and hashes](measurements/collaboration-space-conversation-commands-native-ci-2026-11-07.json).
-Control42369792173 still runs Apple. Later metadata/preparation/Open replay have their
-own source CI requirement; phone53 latency remains open.
+First control42369792173 also completed successfully:2,001 Apple cases/228 suites
+and4,869 portable cases/542 suites, zero failures/errors/skips. Actual Apple storage15,
+command policy4 and observation7 cases passed; corresponding desktop/browser reports
+and application graph/builds passed. [Control evidence](measurements/collaboration-space-conversation-commands-control-ci-2026-11-07.json).
+Later metadata/preparation/Open replay retain their own source CI requirement; phone53
+latency remains open.
