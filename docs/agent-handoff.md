@@ -5,6 +5,44 @@ continuing. [Previous checkpoint](https://github.com/fajarxfce/hris-mobile/blob/
 retains all earlier source/CI history and links older local handoff archives. Git and
 contracts are authoritative; `.work` is staging/evidence, never permission to reapply.
 
+## Current continuation — 7 November2026,19:00UTC
+
+Primary feat/communications and recovery implementation arebb106154, pushed. Both
+95e35b9d first runs started before primary promotion: control42399395125 at18:23:13,
+native42399395077 at18:46:36. bb106154 first control42403266288 and native42403266310
+are pending; preserve them until both start. No new Mobile compiler/emulator ran.
+Phone and stopped original Bima emulator remain release55; all original data retained.
+
+Source3308a93f first CI has now been artifact-audited: Apple2,154/237, portable5,175/560,
+native553/87 per ABI, zero failures/errors/skips. ExactSDK4, retained original queue/
+keys and six HRIS scenario cleanups pass. Synthetic queue continuity sends zero provider
+messages,66.177s ARM/44.718s x86; it does not activate live Group routing. [Evidence](measurements/chat-local-echo-first-ci-2026-11-07.json).
+
+Inspector viewer implementationf71f308 and first-CI documentation4b61dfb are pushed at
+https://github.com/fajarxfce/kmp-network-inspector . Locally accepted16 module cases
+(JVM8 including4UI, Android host4, actual Wasm filter4),42 core and39 Ktor reused with
+same-source proof,97 total. Android AAR and Apple main/test klibs compile. Final two
+synthetic screenshots were opened. No Apple/device/browser UI runtime acceptance.
+First viewer CI42403768313 ran zero steps due to GitHub billing. Visibility remains
+private; the public-visibility question is still unanswered. No library release or
+app integration exists. All inspector jobs REAPED.
+
+Isolated Rust source `../.worktrees/matrix-sdk-http-observer-2026-11-07` now implements
+an optional bounded client-owned pull observer at actual SDK Matrix HTTP execution,
+with native/Wasm hooks and FFI API. No bodies/query values/header values enter the
+buffer. Separate response/body/cancellation stages preserve real status. Core-1 had
+one fixture ownership failure, retained; core-2 passed15 tests in57.031s on unchanged
+source. Sole heavy job is its ffi-1 check (SDK source frozen until reaped). No generated
+binding, SDK5 artifact/release, Apple/Android ABI test or app capture acceptance yet.
+SDK4 and frozen inventories remain unchanged. The source/patch needs acceptance and
+recording on feat/matrix-http-observer-20261107; that branch currently holds design84f60d4d.
+
+Continue actual inspector timing/adapter/integration and durable composer/keyboard,
+then validated APK56 including the accepted first-layout bubble fix. No56 build has
+started. Original54-group communications/Room-dispatch scope remains active; no PRD
+group is newly complete. Main/Group and live services/schema remain unchanged.
+Historical running jobs/candidates below are superseded by this section.
+
 ## Latest viewport acceptance — 7 November 2026, 18:30 UTC
 
 The existing route viewport now owns end anchoring and visibility, renamed to
