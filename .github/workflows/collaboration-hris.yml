@@ -67,7 +67,16 @@ jobs:
       - uses: android-actions/setup-android@v3
         with:
           packages: platform-tools
-      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Install Android SDK and pinned proof NDK
+        working-directory: mobile
+        run: |
+          python3 - <<'PYTHON'
+          from pathlib import Path
+          import re, subprocess, tomllib
+          ndk = tomllib.loads(Path('gradle/libs.versions.toml').read_text())['versions']['android-ndk']
+          assert re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', ndk)
+          subprocess.run(['sdkmanager', 'platforms;android-36', 'build-tools;36.0.0', 'ndk;' + ndk], check=True)
+          PYTHON
       - name: Build isolated Android SDK fixture before starting the emulator
         working-directory: mobile
         run: |
@@ -81,15 +90,25 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import hashlib, json, os, zipfile
+          import hashlib, json, os, sys, tomllib, zipfile
+          sys.path.insert(0, str(Path('tool').resolve()))
+          from check_space_queue_adoption import validate_apk
           apk = Path('apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk')
           abi = os.environ['EXPECTED_SDK_ABI']
+          ndk = tomllib.loads(Path('gradle/libs.versions.toml').read_text())['versions']['android-ndk']
           with zipfile.ZipFile(apk) as archive:
-              libraries = {name for name in archive.namelist() if name.endswith('/libmatrix_sdk_ffi.so')}
-              assert libraries == {'lib/' + abi + '/libmatrix_sdk_ffi.so'}, libraries
+              libraries = {name: hashlib.sha256(archive.read(name)).hexdigest()
+                           for name in archive.namelist() if name.endswith('/libmatrix_sdk_ffi.so')}
           output = Path('.work/native-abi.json')
           output.parent.mkdir(parents=True, exist_ok=True)
-          output.write_text(json.dumps({'abi': abi, 'apkSha256': hashlib.sha256(apk.read_bytes()).hexdigest()}) + '\n')
+          evidence = {'abi': abi, 'apkSha256': hashlib.sha256(apk.read_bytes()).hexdigest(),
+                      'ndk': ndk, 'nativeLibraries': libraries, 'validated': False}
+          output.write_text(json.dumps(evidence) + '\n')
+          assert set(libraries) == {'lib/' + abi + '/libmatrix_sdk_ffi.so'}, libraries
+          aapt2 = str(Path(os.environ['ANDROID_HOME']) / 'build-tools/36.0.0/aapt2')
+          assert validate_apk(apk, abi, aapt2) == evidence['apkSha256']
+          evidence['validated'] = True
+          output.write_text(json.dumps(evidence) + '\n')
           PY
       - name: Compile HRIS fixture and verify driver cleanup
         working-directory: platform

@@ -7,10 +7,26 @@ and [history through build 50](agent-handoff-history-through-build50.md).
 
 ## Current work — 7 November 2026
 
+No heavy local job or emulator remains. Packaging gate15900 passed 5,373 fresh
+cases in 754 suites (1,364.389 seconds), with 4,324 unchanged inputs and zero
+failures/errors/skips. Proof lint: zero errors, 49 existing warnings. Actual workflow
+preflight accepted APK `fca8e884a7f0f48af5baf5aa4dd339421d7060368721342f7c57d0dc37955c27`
+and rejected a separate local APK containing the exact published unstripped library.
+The SDK4 hashes and original APK/source stayed unchanged. [Packaging contract](collaboration-sdk4-packaging-ci.md).
+Commit/push the three accepted packaging files and documentation, then fast-forward
+primary: both first05de gates have started/ended, so no first pending run is replaced.
+
+NEXT run the narrowly scoped [mixed-room diagnosis](collaboration-mixed-room-delivery-diagnosis.md)
+using controlled recipients with different device/key readiness. No production policy
+change or new message has been made for this experiment. Supplementary plans are in
+`.work/mixed-room-delivery-2026-11-07` and `.work/space-original-queue-delivery-2026-11-07`.
+The user was told this experiment follows packaging acceptance; continue it before
+returning to original organization delivery/publication. Phone latency remains open.
+
 Original SDK/application queue matching and its owning admission read have passed
 local acceptance. Full1361 passed 5,538 fresh cases in 649 suites (512.73 seconds), with 4,320
-unchanged inputs and no failures/errors/skips or Android lint findings. No heavy
-local job or emulator remains; the source is ready to commit and push.
+unchanged inputs and no failures/errors/skips or Android lint findings. Program
+`032697ea` is committed and pushed on the temporary recovery branch.
 Eight source/test/DI files implement the complete bounded queue match and owning
 read. The focused final run passed 22 fresh tests in 3 suites (201.624 seconds).
 [Contract](collaboration-space-original-queue-reconciliation.md),
@@ -18,7 +34,7 @@ read. The focused final run passed 22 fresh tests in 3 suites (201.624 seconds).
 No queue delivery, settlement, new acknowledgement or product caller was added.
 This increment retains original physical/native/bootstrap/transaction identities.
 
-NEXT fix native CI packaging before promoting another primary source. First 05de
+The native packaging correction is accepted locally. First 05de
 native run 42348626124 failed on both ABIs before installing the fixture:
 `check_space_queue_adoption.validate_apk` rejected the native library digest.
 Both original logs say Matrix could not be stripped and was packaged as-is. The
@@ -28,7 +44,10 @@ both already accepted stripped hashes exactly. Keep the strict SDK check. Pin th
 proof NDK in the version catalog/proof module, install it before CI assembly, and
 run the same actual APK validator before starting the emulator. No SDK rebuild or
 new acceptable hashes. Plan/reproduction: `.work/native-sdk4-packaging-ci-2026-11-07`.
-No packaging source changes have been applied yet.
+The accepted correction pins the proof NDK, installs it from the catalog before CI
+assembly and records native hashes before strict APK validation. Source, local checks
+and both preflight outcomes are in the linked packaging measurement. Remote acceptance
+of the corrected source remains to observe; no SDK update or provider send was needed.
 
 After that, continue actual original-message delivery under current organization
 admission, immutable receipt/history publication, hard/revoked native-parent
@@ -85,8 +104,8 @@ pending; do not repeat it. No phone UI/new messages were driven.
 
 ## Repositories and invariants
 
-Main Platform `feat/communications` checkpoint `5591b454` and Group worktree
-`feat/communication-space` checkpoint `98da308d` are pushed. Group source remains
+Main Platform `feat/communications` checkpoint `e162d0a5` and Group worktree
+`feat/communication-space` checkpoint `ab5fed5c` are pushed. Group source remains
 `e45a4313`. Live API `2e75fe1ee88b5766259fc3efd3ab7f21e70d621a`, worker `10485916`,
 schema 116.1 and V117–137 disabled status are unchanged. Starter is clean/pushed
 at `b11437a`. Detailed program state is in each repository's handoff.

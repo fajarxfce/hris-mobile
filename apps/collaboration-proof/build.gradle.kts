@@ -8,6 +8,7 @@ require(proofAbi == null || proofAbi in setOf("arm64-v8a", "x86_64")) {
 
 android {
     namespace = "dev.fajar.hris.collaboration.proof"
+    ndkVersion = libs.versions.android.ndk.get()
     defaultConfig {
         applicationId = "dev.fajar.hris.collaboration.proof"
         versionCode = 1

@@ -1,0 +1,147 @@
+{
+  "recordedAt": "2026-11-07T08:12:21.702005+00:00",
+  "baseCommit": "032697ead57fba9392cc4f10311b4ccaeaa8d319",
+  "sourceFiles": {
+    "gradle/libs.versions.toml": "7c6f8b7e875fa542131dec72fcf0c56fe71e3b10bd541db909e0c234a2d9e768",
+    "apps/collaboration-proof/build.gradle.kts": "5a53d40852a7d65d3b580775088e20739973d2e4a44a8d6a4ce22f40a340c8c2",
+    ".github/workflows/collaboration-hris.yml": "9f2d032a16f27ee2a9d202b8a2f45d14c7b53ef3c0c94cfe68881e297d83d0e0"
+  },
+  "firstNativeRun": 42348626124,
+  "failureEvidence": "collaboration-original-metadata-native-ci-2026-11-07.json",
+  "observedFailure": "Both first jobs reported Matrix native library could not be stripped and was packaged as-is, then failed the strict SDK4 digest check before installation. The original APK/library bytes were not uploaded.",
+  "stripReproduction": {
+    "at": "2026-11-07T07:42:02.210119+00:00",
+    "aarSha256": "9b6806de02b7d40b8487b54a51b192c114a38c68c6dfe35c68faf50d3b6bfd21",
+    "ndk": "28.2.13676358",
+    "stripSha256": "1da35c6bcee9649adcaadf8a493132c3b7205901149622836d28e42d7fca7267",
+    "sdkRebuilt": false,
+    "abi": {
+      "arm64-v8a": {
+        "originalSha256": "4ebfa7e44fa04a5a269dc725ff65bbb8f58f43e8eb7c683d2426c05fc0bf2983",
+        "originalBytes": 138827136,
+        "strippedSha256": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34",
+        "strippedBytes": 97477760,
+        "elapsedSeconds": 0.508,
+        "matchesAcceptedSdk4": true
+      },
+      "x86_64": {
+        "originalSha256": "e36a61778b11e6775316f3d3e64fdb5eafefb308619214e4012d9ee263a35131",
+        "originalBytes": 142908224,
+        "strippedSha256": "55bde5be2080c3e42a2ece6053f94231d27165cc39698c89c50e36ecbdb2909a",
+        "strippedBytes": 111139808,
+        "elapsedSeconds": 0.476,
+        "matchesAcceptedSdk4": true
+      }
+    }
+  },
+  "check": {
+    "startedAt": "2026-11-07T07:48:02.026657+00:00",
+    "elapsedSeconds": 1364.389,
+    "exitCode": 0,
+    "sourceFiles": 4324,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 5373,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 754,
+    "sourceManifestSha256": "a50b2edcf418fb563e556db5b7aae7a039a437ab386589ab07684e2cc5753ca2",
+    "stdoutSha256": "05f812dde6b5c96936235cb038e2e5a298bbeca18cbcc73fdd41be51dee5cdbd",
+    "stderrSha256": "6d844b9ba6106761368bedf26588de663dda30a16c8fc0d1403dcb67081bbd69"
+  },
+  "acceptedCommand": [
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    "--stacktrace",
+    "--continue",
+    ":check",
+    ":features:collaboration:data:testAndroidHostTest",
+    ":apps:collaboration-proof:assembleDebug",
+    ":apps:collaboration-proof:lintDebug",
+    ":apps:collaboration-proof:testDebugUnitTest",
+    ":formatCheck",
+    ":architectureCheck",
+    ":detekt",
+    "-PcollaborationProofAbi=x86_64",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=53",
+    "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx2560m",
+    "-Pkotlin.compiler.execution.strategy=in-process"
+  ],
+  "workflowPreflight": {
+    "recordedAt": "2026-11-07T08:12:00.588402+00:00",
+    "cases": [
+      {
+        "case": "actual-gradle-apk",
+        "exitCode": 0,
+        "evidence": {
+          "abi": "x86_64",
+          "apkSha256": "fca8e884a7f0f48af5baf5aa4dd339421d7060368721342f7c57d0dc37955c27",
+          "ndk": "28.2.13676358",
+          "nativeLibraries": {
+            "lib/x86_64/libmatrix_sdk_ffi.so": "55bde5be2080c3e42a2ece6053f94231d27165cc39698c89c50e36ecbdb2909a"
+          },
+          "validated": true
+        },
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "unstripped-immutable-sdk4-rejected",
+        "exitCode": 1,
+        "evidence": {
+          "abi": "x86_64",
+          "apkSha256": "a5d248ba4a73255c896d6df94b0ec1cb088621d69ab8ba17fcbd345c7d0909ba",
+          "ndk": "28.2.13676358",
+          "nativeLibraries": {
+            "lib/x86_64/libmatrix_sdk_ffi.so": "e36a61778b11e6775316f3d3e64fdb5eafefb308619214e4012d9ee263a35131"
+          },
+          "validated": false
+        },
+        "stderrSha256": "74c06ae26b0d9626ebe0241480ad68822c68c890ad5316a2ae88eda1cc6b8986"
+      }
+    ],
+    "actualApkUnchanged": true,
+    "sourcesUnchanged": true,
+    "exactWorkflowPythonExecuted": true,
+    "emulatorStarted": false,
+    "fixtureInstalled": false,
+    "providerMessagesSent": 0,
+    "sdkRebuilt": false,
+    "limitation": "The rejected APK is a local packaging reproduction using the exact published unstripped library, not the unavailable first CI APK."
+  },
+  "proofLint": {
+    "errors": 0,
+    "warnings": 49
+  },
+  "originalGuardUnchanged": true,
+  "sdk4Rebuilt": false,
+  "emulatorStarted": false,
+  "providerMessagesSent": 0,
+  "phoneLatencyResolved": false,
+  "starterPortRequired": false,
+  "starterPortReason": "Only the HRIS proof NDK selection and native fixture CI change; product and generic runtime sources are unchanged.",
+  "installerCommandValidation": {
+    "exactExtractedWorkflowStepExecuted": true,
+    "sdkmanagerInvocation": [
+      "sdkmanager",
+      "platforms;android-36",
+      "build-tools;36.0.0",
+      "ndk;28.2.13676358"
+    ],
+    "externalInstallerInvoked": false,
+    "actualBuildUsedInstalledPinnedNdk": true
+  },
+  "retainedLocalApk": {
+    "path": ".work/native-sdk4-packaging-ci-2026-11-07/accepted-proof.apk",
+    "sha256": "fca8e884a7f0f48af5baf5aa4dd339421d7060368721342f7c57d0dc37955c27",
+    "bytes": 144520436
+  }
+}

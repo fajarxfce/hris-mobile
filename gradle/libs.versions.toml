@@ -2,6 +2,7 @@
 kotlin = "2.3.21"
 compose = "1.9.3"
 agp = "9.1.0"
+android-ndk = "28.2.13676358"
 desugar-jdk = "2.1.5"
 ksp = "2.3.12"
 koin = "4.1.1"
