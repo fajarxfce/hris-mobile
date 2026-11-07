@@ -15,10 +15,12 @@ fresh app-test compilation: an old runtime fake omitted the new original-writer 
 The fake now rejects implicit writer acquisition; application bindings pass. All Mobile
 sessions are reaped. [Contract/results](collaboration-space-conversations-and-rooms.md).
 
-ONLY heavy local job is Group86925, `.work/room-receipt-recovery-2026-11-07/baseline-1`.
-It tests the existing native room fingerprint with actual PostgreSQL. One Group test
-file is changed/frozen; no provider call, production change or rollout. Do not start a
-Mobile build/emulator while that job runs.
+Group86925 passed all6 native room database cases in118.329s,8,613 stable inputs,
+with format/architecture and no failures/errors/skips. It confirms the existing
+original-proof fingerprint restriction without modifying provider/production behavior.
+Group `c80432eb` stores the test and
+[next recovery contract](https://github.com/fajarxfce/hris-platform/blob/c80432eb/docs/collaboration/native-room-receipt-recovery.md).
+All sessions are reaped; no heavy job/emulator remains.
 
 NEXT retain durable open/room commands, including original native parent/version and
 actual platform/build, and implement explicit original-room receipt recovery. Source
@@ -30,10 +32,13 @@ delivery, receipt/history publication, native-parent recovery and product routin
 Transport tests verify wire preservation; they do not accept server recovery across
 an earlier committed fingerprint. Group V117–137 remains disabled and no new APK exists.
 
-Program `72a70e8c29b7a7b55e193fd23a914ac83109585b` is pushed to the recovery
-and primary branches. Its first runs have started: control `42358423232`, native
-`42358423298`, protocol `42358423295`. Preserve these first runs; subsequent work
-continues on the recovery branch until promotion is appropriate.
+Program `e8fc784489e32136a0b47d0df5778af8fee562e5` is pushed to recovery and primary.
+Its first control `42360096500` and native `42360096584` are PENDING; preserve before
+another primary promotion. Prior72a control `42358423232` and native `42358423298`
+still run. Protocol `42358423295` is fully audited SUCCESS:14 checks each, all14
+Platform-pinned sources verified; native91.638s/artifact13568937867 and classic69.285s/
+artifact13568743001. [Original protocol evidence](measurements/collaboration-original-writer-protocol-ci-2026-11-07.json).
+Do not rerun accepted provider scenarios to audit them. Continue on the recovery branch.
 
 The original `9deb55bf` control and native runs are now fully audited SUCCESS.
 Apple: 1,941 cases/221 suites; portable: 4,749/528; each Android ABI: 499/81,
@@ -77,7 +82,7 @@ reproduce the reported phone delay. No production retry/timeout/writer change fo
 Phone53 latency remains OPEN and its optional question is already pending.
 [Diagnosis/result](collaboration-mixed-room-delivery-diagnosis.md).
 
-Primary is now72a70e8c. Prior9deb55bf control42354718734 and native
+Primary is nowe8fc7844. Prior9deb55bf control42354718734 and native
 42354718728 are accepted; preserve each later first pending run before further primary
 promotions. Protocol42354718729 is fully audited:14checks each, all14source hashes match
 Platformpine0dbb567. Classic89.411s artifact13567970547; native89.862s artifact13567611736.
@@ -162,7 +167,7 @@ reconnect timed out (session11456, exit124, reaped). There is no newer phone evi
   passed. [Failure evidence](measurements/collaboration-original-metadata-native-ci-2026-11-07.json).
   Protocol 42348626066 is accepted: 14 checks each mode and 14 source hashes match
   pinned Platform `e0dbb567acc4c5571b82324c515ed8ddc145007d`.
-- Primary `feat/communications` is `72a70e8c`; current work is on temporary
+- Primary `feat/communications` is `e8fc7844`; current work is on temporary
   `feat/chat-recovery-20261107`. Push every atomic commit. Preserve every first pending control/native
   run before later primary promotions; even `cancel-in-progress: false` replaces
   an older pending run. Do not rerun accepted provider sends just for evidence.
@@ -170,7 +175,7 @@ reconnect timed out (session11456, exit124, reaped). There is no newer phone evi
 ## Repositories and invariants
 
 Main Platform `feat/communications` checkpoint `d1dbbc3a` and Group worktree
-`feat/communication-space` checkpoint `7692c1c1` are pushed. Group production source remains
+`feat/communication-space` checkpoint `c80432eb` are pushed. Group production source remains
 `e45a4313`. Live API `2e75fe1ee88b5766259fc3efd3ab7f21e70d621a`, worker `10485916`,
 schema 116.1 and V117–137 disabled status are unchanged. Starter is clean/pushed
 at `b11437a`. Detailed program state is in each repository's handoff.
