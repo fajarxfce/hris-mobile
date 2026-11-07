@@ -1,5 +1,35 @@
 # Agent continuation — HRIS Mobile
 
+## Release 56 installed — 7 November 2026, 21:29 UTC
+
+Phone and original Bima emulator now retain release56, sourcebe2fe021 on immutableSDK4.
+One actual send stays above the composer as pending becomes sent; cold offline restart
+retains that original message and inbox preview. Three screenshots and three sampled
+video storyboards inspected; no duplicate bubble or crash observed. Keyboard still
+closes during local save, and an extra composer outline appeared in the online still;
+overall composer polish and phone latency are NOT accepted. [Exact evidence](measurements/collaboration-release56-2026-11-07.json).
+Build56645/508.932s, verify4973/17611, probe64417 and install90021 are all REAPED.
+Phone update55→56 succeeded in71.432s including verification; exact APK hash, UID and
+first-install identity retained, --install-only, no UI launch/reset. Original emulator
+PID2532987 stopped and31704 reaped. No original messages or SDK keys were reset.
+
+Private inspector1e5fdad capture lifetime passes226 local cases, but new sixth actual
+JNI reset scenario FAILED. Five prior JNI cases still pass. Diagnostic candidate only
+adds controlled fixture line/counters: first diagnosis points to current-capture-not-empty,
+not yet a proven native-generation bug. Sole heavy resource is diagnostic emulator
+.work/inspector-reset-native-2026-11-07-2 (own start/stop scripts); compiler93470 is REAPED.
+Do not compile until this emulator is stopped/reaped. No HRIS/UI send is repeated there.
+Library remains private, no release/host integration; visibility question unanswered.
+
+Apple SDK first correctedCI42413788416 and Mobile first control42414100643/native42414100684
+remain in progress. Preserve first runs; main branch promotion already occurred only
+after jobs started. SDK5 Android artifacts are accepted but unpublished; SDK4 untouched.
+Next resolve actual reset proof, integrate separate reusable library in Mobile, validate
+capture/overhead, complete composer handoff, port reusable foundations to Starter and
+continue all54 original PRD groups. None is newly complete; live API/schema/Group routing
+unchanged. Older checkpoint process states below are historical.
+
+
 ## Inspector runtime hook accepted — 7 November2026,21:03UTC
 
 The optional Android HTTP observer hook is accepted locally. It is started once under
