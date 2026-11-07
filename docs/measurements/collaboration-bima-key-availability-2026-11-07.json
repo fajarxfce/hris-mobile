@@ -1,0 +1,21 @@
+{
+  "at": "2026-11-07T06:42:18.507677+00:00",
+  "exactDemoAccountMatched": true,
+  "hrisAccountActive": true,
+  "devices": [
+    {
+      "hrisState": "ACTIVE",
+      "revoked": false,
+      "deviceKeys": 1,
+      "oneTimeKeys": 50,
+      "fallbackKeys": 1
+    }
+  ],
+  "readOnly": true,
+  "messageSent": false,
+  "keyClaimedOrConsumed": false,
+  "rawKeysRead": false,
+  "phoneOrBimaUiDriven": false,
+  "phoneLatencyResolved": false,
+  "priorLookup": "Exact display name without Demo suffix matched no account; stopped before key query. Correct exact demo display name then uniquely matched."
+}

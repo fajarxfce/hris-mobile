@@ -4,6 +4,49 @@ This is the active checkpoint. The [historical handoff](agent-handoff-history-th
 retains earlier work verbatim. Detailed measurements below are authoritative; do not
 restart accepted builds, native sends or SDK publication solely to recreate evidence.
 
+## Original conversation metadata accepted locally — 7 November 2026, 06:44 UTC
+
+No heavy job, emulator, or remote download remains. Thirteen source/test files match
+the accepted full-1 manifest under .work/space-original-conversation-metadata-2026-11-07.
+Full83343 PASSED649.416s:5,480fresh/643suites,4,312unchanged inputs,zero failures/errors/
+skips/Android lint/Detekt. Five new domain and7transport cases cover exact original
+coordinates/pair/room provenance, nil UUIDs, finite microsecond times, composite pages,
+size bounds, HTTP denials and cancellation; actual app DI resolves the singleton.
+Focused-1 FAILED242.017s due only to a nonexistent error-enum name in the new test;
+focused-2 PASSED108.926s/22fresh after using existing AccessDenied. The final nil-ID
+review tightened only the new original metadata policy, preserving old message-ID rules.
+[Contract](collaboration-space-original-conversations.md),
+[evidence](measurements/collaboration-space-original-conversations-2026-11-07.json).
+Commit/push this accepted slice from temporaryf361f535. HTTP is mocked locally; no
+owning acquisition, local projection, immutable message matching, SDK adoption or UI caller.
+
+NEXT: owning finite original metadata acquisition with current native parent and explicit
+organization read admission; then match original runtime queue facts with immutable
+application commands. Preserve original company/conversation/device/bootstrap/transaction
+IDs. Unknown or ambiguous originals remain retained. Metadata cannot reopen a denied
+projection, infer ACK or authorize sending. Continue publication/history, new-parent
+recovery, product routing and all54PRD groups afterward. Never use a Space ID as company.
+
+Primary remains1bb572eb: FIRST native42344999033 has started; control42344998885 remains
+PENDING (recheck before promoting another primary source). Protocol42344998987 is fully
+audited14checks per mode with14 pinned source hashes/digests verified. FIRSTa48 native
+42342142282 failed: ARM481/79 pass, x86host475/76 pass, then raw x86 IOException at
+confirmRemoved:228; original log3e95d77dc19e9272afd1b55e41b3b6b014468656b235d3fca26761ced0934d94
+and artifacts13564665247/13563247413 are audited. Cause remains unknown; newer f21
+instrumentation diagnostics run in1bb. FIRSTa48 control42342142245 remains running.
+The new original-queue-protocol-ci and runtime-admission-native-ci records belong in commit.
+
+Direct read-only audit06:42:18UTC uniquely matched Bima Demo:1ACTIVE/unrevoked device,
+50signed_curve25519 one-time keys and1fallback. Initial lookup without Demo suffix
+matched no account and stopped; it was not treated as missing keys. No raw keys,
+claims, sends, phone/Bima UI or device/store changes. Key availability is confirmed;
+physical-phone latency remains OPEN, with optional53feedback pending. Passive phone
+06:27:12 audit found no post-install logs. Include the bounded Bima-key measurement.
+
+Mainc1513262/Group e4709ca0 checkpoints are pushed; Starter03ebcde unchanged. SDK4,
+original Bima userdata/sidecars/keys, phone53, live API and disabled V117–137 unchanged.
+No accepted provider-send rerun, SDK republication, or original pending-ID replacement.
+
 ## Native original-queue accepted locally — 7 November 2026, 06:19 UTC
 
 Native-3/50423 PASSED134.91s: x86_64 45.932s and arm64-v8a 47.049s. Both retained

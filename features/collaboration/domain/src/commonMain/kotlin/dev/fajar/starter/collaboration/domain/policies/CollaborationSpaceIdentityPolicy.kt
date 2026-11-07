@@ -14,12 +14,7 @@ fun validCollaborationSpaceIdentity(
             !validCollaborationMessageId(value.accountId) ||
             value.version != 0L ||
             value.createdAt.toEpochMilliseconds() !in 0..253_402_300_799_999L ||
-            value.serverName.length !in 1..180 ||
-            value.serverName.any {
-                it !in 'a'..'z' && it !in 'A'..'Z' && it !in '0'..'9' && it !in ".-:[]"
-            } ||
-            value.serverName.none { it in 'a'..'z' || it in 'A'..'Z' || it in '0'..'9' } ||
-            !validExplicitPort(value.serverName)
+            !validCollaborationSpaceServerName(value.serverName)
     )
         return false
     val prefix =
@@ -36,6 +31,13 @@ fun validCollaborationSpaceIdentity(
         }
     return value.matrixUserId == "@$prefix${value.accountId.replace("-", "")}:${value.serverName}"
 }
+
+/** Matrix realm metadata only; never chooses the configured transport origin. */
+fun validCollaborationSpaceServerName(server: String): Boolean =
+    server.length in 1..180 &&
+        server.all { it in 'a'..'z' || it in 'A'..'Z' || it in '0'..'9' || it in ".-:[]" } &&
+        server.any { it in 'a'..'z' || it in 'A'..'Z' || it in '0'..'9' } &&
+        validExplicitPort(server)
 
 /** URL libraries may normalize explicit port zero to the scheme default. Validate raw intent. */
 private fun validExplicitPort(server: String): Boolean {

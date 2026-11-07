@@ -1,5 +1,9 @@
 # Architecture
 
+[Original conversation metadata](collaboration-space-original-conversations.md) preserves
+company/conversation coordinates and independent room provenance through bounded native
+organization reads. Owning publication and application-command matching remain separate.
+
 [Native original-queue continuity](collaboration-space-original-queue-native.md) exercises
 the actual SDK transaction store through interrupted adoption and offline process restart.
 It does not grant new delivery or product-routing authority.

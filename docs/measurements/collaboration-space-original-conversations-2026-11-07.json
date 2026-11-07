@@ -1,0 +1,131 @@
+{
+  "recordedAt": "2026-11-07T06:43:14.965305+00:00",
+  "baseCommit": "f361f535f4b0b61feb1982e78b128d5cb4d206ae",
+  "sourceFiles": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "ec0f9594e8b7138a49df9562026582e65300096c10ad120fc27c581815f800df",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/api/CollaborationSpaceOriginalConversationApi.kt": "9e3531592c8ab593b28216592a20c8a06934cd5d22019372b7616d9c41ee536e",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/ApiCollaborationSpaceOriginalConversationRemoteSource.kt": "475fb3aeb6bae4fafa43c70737efe2be64fe3efba45ddcfa3a614aa1a0a41474",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationSpaceOriginalConversationRemoteSource.kt": "409f8699f06567db436eeeb9ff9b246535e56a6ae7e6353090aa7af6c936423e",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationSpaceOriginalConversationDto.kt": "8b157c94ee06fdb4f502232cbc64908de6ff1a399e5e9fcc2fa8c9013be58f2d",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationSpaceOriginalConversationMapper.kt": "97e8cf06ef5778dbb11d996e68e9b727e60920dadde0c69cc9b6c523c293ecff",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/RemoteCollaborationSpaceOriginalConversationRepository.kt": "13ac6b34ec396e2f1cc907e23a0b40c42303c1f4837f1283de78826556297961",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceOriginalConversationTransportTest.kt": "f1f78d0d02a689fa6a6448cc760138a56fe7f1fb50344489541d0bd6e464dacf",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceOriginalConversation.kt": "7a54a5df7acc41b2dcb2baa0cb5b78ecbcd1ee140d98f13062e3802223a8cae5",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationOriginalConversationPolicy.kt": "1b1e3dad73ed49972e71748a99a2b7a0a83587fb7b5d5c2dc47c232099f783e4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceIdentityPolicy.kt": "ea4d74be7988d78df5f634c6c0f60dd80338961febdf15ad5ffc13dee5f10dda",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceOriginalConversationRepository.kt": "66ce575a10ee66bb6bce930baa5df2842e8906551584d9c73bbe13a7906812b0",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationOriginalConversationPolicyTest.kt": "4d36fe0b399717677866a835b664858e8d348570f0a9614be11266d3fa5dc67c"
+  },
+  "checks": [
+    {
+      "startedAt": "2026-11-07T06:24:47.115930+00:00",
+      "elapsedSeconds": 242.017,
+      "exitCode": 1,
+      "sourceFiles": 4312,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "focused-1",
+      "freshSuites": 4,
+      "sourceManifestSha256": "a1d7c89b3f7c4122e5cebd8712f8532f179a6b5275ab8baabe22d34efcca5002",
+      "stdoutSha256": "998d3d53569fcda973712e58b6c9b5a885d2f58f83c03dd6f2da063973f8ce37",
+      "stderrSha256": "b37ce09cad54a5b577c361b33e0e462674a1bb148c47e3cb29a3a6240983b01e"
+    },
+    {
+      "startedAt": "2026-11-07T06:29:34.809674+00:00",
+      "elapsedSeconds": 108.926,
+      "exitCode": 0,
+      "sourceFiles": 4312,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "focused-2",
+      "freshSuites": 4,
+      "sourceManifestSha256": "81c22569d414069df4b96aff5fe2b12bfacde669f0e8aebd32d6aa79195a95dd",
+      "stdoutSha256": "558305955bf1573851396abe8e94b72fd0b454e247576940845b7a3cf18b38d3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "startedAt": "2026-11-07T06:31:52.781635+00:00",
+      "elapsedSeconds": 649.416,
+      "exitCode": 0,
+      "sourceFiles": 4312,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5480,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "full-1",
+      "freshSuites": 643,
+      "sourceManifestSha256": "6a2edb11f870b19f48de2a01b4c4012e32525c273e63e9a600d6a5e00a6b3c8a",
+      "stdoutSha256": "49deb60660b0c55fd72841e024868fc7aac7554c54b9ed39b401c8ec3a8233a4",
+      "stderrSha256": "b8dbd9e72a96971b29e26e9e346293bec80199c3fe3164261b8eebd25889fe71"
+    }
+  ],
+  "acceptedCommand": [
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    "--stacktrace",
+    "--continue",
+    ":check",
+    ":features:collaboration:data:testAndroidHostTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":apps:collaboration-proof:compileDebugKotlin",
+    ":apps:android:assembleDevDebug",
+    ":apps:android:lintDevDebug",
+    ":formatCheck",
+    ":architectureCheck",
+    ":detekt",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=53",
+    "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx2560m",
+    "-Pkotlin.compiler.execution.strategy=in-process"
+  ],
+  "initialCompileFailure": {
+    "at": "2026-11-07T06:29:33.782891+00:00",
+    "result": "failed",
+    "freshTests": 27,
+    "sourceStable": true,
+    "failure": "New transport test referenced nonexistent FailureKind.Forbidden. Existing HTTP403 contract maps to AccessDenied. No program behavior was changed to pass the test.",
+    "correction": "Use existing AccessDenied category and resolve the new singleton repository in actual application DI regression.",
+    "addedDiSource": "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt"
+  },
+  "finalNilReview": {
+    "existingMessageIdShapeAcceptsNil": true,
+    "originalOnlyOwnerPositionPairRejectNil": true,
+    "oldMessageIdSemanticsUnchanged": true,
+    "regressionCasesAdded": true
+  },
+  "newDomainCases": 5,
+  "newTransportCases": 7,
+  "actualApplicationDiResolved": true,
+  "androidLintFindings": 0,
+  "detektFindings": 0,
+  "hostHttpMocked": true,
+  "serverContractReference": "https://github.com/fajarxfce/hris-platform/blob/e45a4313/docs/collaboration/space-conversations.md",
+  "owningAcquisitionAdded": false,
+  "encryptedProjectionAdded": false,
+  "originalMessageMatchingAdded": false,
+  "liveProductCallerAdded": false,
+  "liveGroupActivation": false,
+  "phoneLatencyResolved": false,
+  "providerMessagesSent": 0,
+  "nativeSdkRebuilt": false
+}

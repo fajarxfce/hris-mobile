@@ -1,5 +1,14 @@
 # Validation
 
+[Original conversation metadata](collaboration-space-original-conversations.md) passed
+5,480 fresh cases/643 suites with strict source stability and clean Android lint/Detekt.
+Its12 new domain/transport cases cover composite cursor progress, exact ownership,
+separate room creators, nil IDs, finite microsecond times, bounds, denials and cancellation.
+HTTP is simulated here; no room adoption, provider delivery or product activation follows.
+The [Bima key audit](measurements/collaboration-bima-key-availability-2026-11-07.json)
+separately confirms50 initial keys and1fallback on its active device using only database
+counts. It does not establish physical-phone send latency.
+
 [Original paused native queue continuity](collaboration-space-original-queue-native.md)
 now has actual x86_64 and ARM64 evidence across interrupted adoption, process death and
 offline restoration. The measurement preserves two earlier fixture failures and their
