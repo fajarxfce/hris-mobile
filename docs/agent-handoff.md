@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-## Apple observer candidate build — 7 November 2026, 20:15 UTC
+## Apple observer candidate build — 7 November 2026, 20:00 UTC
 
 Android first CI42408652180 for8713b4f8 has started. Preserve that original run;
 no second Android build is needed for this Apple-only tooling change. Apple tooling
@@ -19,7 +19,7 @@ Next implement/validate the Android generated-binding adapter in the inspector w
 this first Apple build runs. Previous ARM64 wrapper acceptance and app/PRD continuation
 below are unchanged. All local compiler jobs are reaped; no emulator is running.
 
-## Compiled observer binding — 7 November 2026, 20:00 UTC
+## Compiled observer binding — 7 November 2026, 19:56 UTC
 
 Replacement ARM64 build22819 is REAPED:265.740s,836 stable inputs, native
 c08b1e214951d542d59f3d24ae4d53321d5c49e55e0f08e4380f9cce82607093 with four16KiB
