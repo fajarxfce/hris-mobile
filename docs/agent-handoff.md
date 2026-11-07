@@ -5,6 +5,24 @@ linked below. Earlier checkpoints remain verbatim in
 [history through original queue matching](agent-handoff-history-through-original-queue-matching-2026-11-07.md)
 and [history through build 50](agent-handoff-history-through-build50.md).
 
+## Completed original receipt control CI — 7 November 2026
+
+First fb514281 control42363807332 is now SUCCESS/audited: original portable artifact
+13572205414 has4,805 cases/534 suites; Apple13572184593 has1,969/224, zero failures/
+errors/skips and artifact digests verified. Native42363807289 was already audited537/
+85 per ABI. [Control evidence](measurements/collaboration-room-receipts-control-ci-2026-11-07.json)
+and [native evidence](measurements/collaboration-room-receipts-native-ci-2026-11-07.json).
+Both first79b control42366357406/native42366357400 have now STARTED. Primary can receive
+the next accepted source after current observation validation, without replacing a
+pending first run. Primary is still79b; recovery has accepted storagec8c952af.
+
+Only heavy local job75614 is observation focused-2, FOUR source files FROZEN. First
+73246 failed only a nested generic expected-list assertion during domain test
+compilation185.754s (two application binding cases passed). The assertion now declares
+its expected AppResult/list type explicitly. After focused success run the prepared
+root/Android/lint/Browser observation/shared Wasm gate. No source acceptance yet.
+Phone53 latency remains OPEN; no new APK, physical phone UI or provider rerun.
+
 ## Active owning command observation — 7 November 2026
 
 Durable storage programc8c952af is accepted/pushed on recovery:3,598 cases/447 suites,
