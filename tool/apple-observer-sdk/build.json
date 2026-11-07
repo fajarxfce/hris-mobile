@@ -1,0 +1,17 @@
+{
+  "baseManifest": "android-http-observer-build.json",
+  "baseManifestSha256": "7545e12760f30fdd2628d64e6de345822f07e63d6c30ad006cee83757020de0e",
+  "patch": "toolchain.patch",
+  "patchSha256": "1cdf8297b84a752fdbe7130f6dc960c3fa2ac06c1f979dc8edc6018041b22c5b",
+  "patchedSources": {
+    "xtask/src/swift.rs": "15c6130c46bc97f6f8b00b1179eee2c9140a60576a83b16bee73f5b15af520a9"
+  },
+  "targets": [
+    "aarch64-apple-darwin",
+    "aarch64-apple-ios",
+    "aarch64-apple-ios-sim"
+  ],
+  "profile": "small-release",
+  "macosDeploymentTarget": "12.0",
+  "iosDeploymentTarget": "16.0"
+}

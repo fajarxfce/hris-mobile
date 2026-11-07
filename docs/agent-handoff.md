@@ -1,5 +1,24 @@
 # Agent continuation — HRIS Mobile
 
+## Apple observer candidate build — 7 November 2026, 20:15 UTC
+
+Android first CI42408652180 for8713b4f8 has started. Preserve that original run;
+no second Android build is needed for this Apple-only tooling change. Apple tooling
+lives in tool/apple-observer-sdk so it does not match Android patch-path triggers.
+
+The new Apple driver reuses the exact Android observer manifest/source and adds one
+build-only xtask patch pinning Rust1.96.0 plus --locked, instead of upstream's floating
+stable. Actual patch application and source digests, Python syntax and workflow YAML
+were checked locally. Three candidate slices are requested: arm64 device, simulator,
+and macOS; generated Swift must compile. Four authored Swift runtime cases then use a
+private loopback fixture for original HTTP response/stages, stop, replacement and
+cancelled reader. These cases and the Apple build have NOT run locally; CI is the gate.
+No Apple acceptance, SDK publication or phone update is claimed.
+
+Next implement/validate the Android generated-binding adapter in the inspector while
+this first Apple build runs. Previous ARM64 wrapper acceptance and app/PRD continuation
+below are unchanged. All local compiler jobs are reaped; no emulator is running.
+
 ## Compiled observer binding — 7 November 2026, 20:00 UTC
 
 Replacement ARM64 build22819 is REAPED:265.740s,836 stable inputs, native
