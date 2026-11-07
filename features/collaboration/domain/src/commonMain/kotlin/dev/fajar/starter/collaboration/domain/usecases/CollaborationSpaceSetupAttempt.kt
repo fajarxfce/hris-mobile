@@ -26,6 +26,9 @@ internal class CollaborationSpaceSetupAttempt(
     val access = owner.localDirectoryAccess()
     private var denial: Failure? = null
 
+    val restriction: Failure?
+        get() = denial
+
     fun remember(value: Failure?) {
         if (value != null && collaborationSpaceDirectoryResponseClosesRead(value)) denial = value
     }

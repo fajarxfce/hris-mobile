@@ -53,7 +53,7 @@ class AndroidCollaborationRuntimeRepository(
         deviceId: String,
         operationId: String,
     ): AppResult<Boolean> = safeStorageCall {
-        registry.findSpace(SdkSpaceRuntimeIdentity(owner, deviceId, operationId)) != null
+        registry.findSpace(owner, deviceId, operationId) != null
     }
 
     override suspend fun closeSpace(owner: CollaborationSpaceOwner): AppResult<Unit> =
@@ -107,6 +107,8 @@ class AndroidCollaborationRuntimeRepository(
                 owner,
                 installation.command.request.deviceId,
                 installation.command.id,
+                installation.gateway.sessionId,
+                installation.gateway.version,
             )
         val reserved =
             registry.beginSpaceAdoption(scope.storeId, scope.owner, scope.deviceId, identity)

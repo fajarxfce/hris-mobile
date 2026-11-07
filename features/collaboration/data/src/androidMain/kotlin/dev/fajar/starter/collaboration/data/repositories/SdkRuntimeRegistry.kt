@@ -211,13 +211,13 @@ internal class SdkRuntimeRegistry<T : Any>(
             )
                 return@synchronized busy()
             val entry = entries[storeId]
+            // A duplicate opener cannot restart a live or still-constructing exact bootstrap.
+            if (entry?.space == space && !entry.retired) return@synchronized busy()
             if (
                 entry != null &&
                     (entry.owner.setupBinding() != originalOwner.setupBinding() ||
                         entry.deviceId != originalDeviceId ||
-                        entry.space?.let {
-                            it.owner != space.owner || it.deviceId != space.deviceId
-                        } == true)
+                        entry.space?.let { !it.canBeReplacedBy(space) } == true)
             )
                 return@synchronized busy()
             val gate =
@@ -276,6 +276,21 @@ internal class SdkRuntimeRegistry<T : Any>(
             if (retention?.parent != space.owner.parent) return@synchronized null
             entries.values
                 .singleOrNull { it.space == space && !it.retired }
+                ?.resource
+                ?.takeIf(available)
+        }
+
+    /** Public readiness lookup still requires the exact immutable bootstrap operation. */
+    fun findSpace(owner: CollaborationSpaceOwner, deviceId: String, operationId: String): T? =
+        synchronized(monitor) {
+            if (retention?.parent != owner.parent) return@synchronized null
+            entries.values
+                .singleOrNull {
+                    it.space?.owner == owner &&
+                        it.space.deviceId == deviceId &&
+                        it.space.operationId == operationId &&
+                        !it.retired
+                }
                 ?.resource
                 ?.takeIf(available)
         }

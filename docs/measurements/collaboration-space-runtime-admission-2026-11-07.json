@@ -1,0 +1,168 @@
+{
+  "recordedAt": "2026-11-07T05:15:42.051751+00:00",
+  "baseCommit": "2509c9dda373f9eb7b9babc854c67d732b17c6cd",
+  "sourceFiles": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "b379ef3859ce76b205a5721d6ae9a0bb53bf0cad1de82eecba1b461b66535180",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/SdkSpaceRuntimeRegistryTest.kt": "81c6d30b0e3c58ee571714a5142622eb8fb2717da297571d20cd1b336acb8e77",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "479608df7d97c1c2b2976e92cc42389a010d3e31a8a67534fcd90f6baa4ab3ec",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkRuntimeRegistry.kt": "239951b8895b42cc659a5dd1da803393b81ef27a35fe831452e2f11df9a6870d",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkSpaceRuntimeIdentity.kt": "dff84e0ba2419e8c00686ee385108cb18bdac3371deff672cee85dc5476986c5",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "452c581bccf068e89b96765576ab4a93c4be2d449de91a0ecd5ae170c0bfb09a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceRuntimeAdoption.kt": "c792b38e3ef6ad2fe41c35dccd6d94777815e1d0b16e450e02194a3e53061901",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceRuntimeAdoptionPolicy.kt": "8f4ccac3f71eff05fe0851b5aed2295928d93aeb5ace64ae60958a3d4036904d",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AdoptCollaborationSpaceRuntime.kt": "9263154a4a5f2804a22f86ea8331a712433d92a152d3e9aa5684586038565d12",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationSpaceSetupAttempt.kt": "64507fdc7e6df54ed2c74b22f3667d55678fc7ec55c1e1ca598908cd19a23fd2",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/AdoptCollaborationSpaceRuntimeTest.kt": "b35036b2f5d3da8df08bd7ceb1c35f113f6a915ef0d5ad98ce215bf6239d0165",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRuntimeAdoptionFixture.kt": "c0c751d4e0e881b7439985998d53841598fa1bafc0794a84b0a45702466e3806"
+  },
+  "attempts": [
+    {
+      "startedAt": "2026-11-07T04:52:49.584299+00:00",
+      "elapsedSeconds": 41.622,
+      "exitCode": 1,
+      "sourceFiles": 4291,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 11,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "registry-before",
+      "freshSuites": 1,
+      "inputManifestSha256": "6e543f6131ba139707c167c30543a8dfbf64e1d5fdee07687cbe80108a1b2f10",
+      "stdoutSha256": "cec45047354c7022fc10d99192c1e87fcd8ab606b5bfefab5576591ddd722568",
+      "stderrSha256": "fcf3a9dab16f0fee076162385ffd0b6320a0eb325b39e80f07a24d60e94289d3"
+    },
+    {
+      "startedAt": "2026-11-07T04:57:10.117745+00:00",
+      "elapsedSeconds": 234.015,
+      "exitCode": 0,
+      "sourceFiles": 4296,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 30,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "focused-1",
+      "freshSuites": 3,
+      "inputManifestSha256": "f0593a436f6eb3963e82bf6093837e6210893bdb4b4188b0120e034f50704bbb",
+      "stdoutSha256": "67d63ff280fdbb444b43506043f91bd8ae20fc950eb2bb1a33292ce0aca69114",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "startedAt": "2026-11-07T05:02:21.391112+00:00",
+      "elapsedSeconds": 134.88,
+      "exitCode": 0,
+      "sourceFiles": 4296,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "focused-2",
+      "freshSuites": 3,
+      "inputManifestSha256": "b6c837f88e3d66da480be2e3a33466bb49e35b11d387efd2aa1403c0d5cad311",
+      "stdoutSha256": "d136a32a8144de6021a332fd121ac76a2a12b13653ff0fbc8da1cd5398af514e",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "startedAt": "2026-11-07T05:05:34.630693+00:00",
+      "elapsedSeconds": 543.951,
+      "exitCode": 0,
+      "sourceFiles": 4296,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5646,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "full-1",
+      "freshSuites": 658,
+      "inputManifestSha256": "fab0af95658411c040086be82dd1bb97c3f3d2b119886f2d438217cfca08dd16",
+      "stdoutSha256": "49cbd2075e028cc99d5232873ca2eef24655cb53fc305b37a677c2b7fab20bc9",
+      "stderrSha256": "83a3f1e970d8debeb276f2be76ebe3f2a95707b2ca2b0e7e241ee066316c3c02"
+    }
+  ],
+  "reviews": {
+    "focused-1-review.json": {
+      "at": "2026-11-07T05:02:19.970028+00:00",
+      "initialFocused": "30 fresh cases passed, but cross-repository review found missing normal-refresh semantics.",
+      "backendEvidence": {
+        "repository": "hris-platform feat/communication-space",
+        "path": "modules/collaboration/domain/src/main/kotlin/dev/fajar/hris/collaboration/domain/usecases/RefreshNativeCollaborationSpaceGateway.kt",
+        "line": 240,
+        "behavior": "Ordinary refresh increments the gateway version while retaining its id, hard expiry and client build."
+      },
+      "corrections": [
+        "Permit current head versions at or above original bootstrap and below terminal bound; retain exact gateway id, immutable hard expiry, build and current durable operation.",
+        "Add ordinary refresh regression and valid older-head rejection; all server hard times share the offset in the skew fixture.",
+        "Failed private acquisition checks local admission without a second remote status request.",
+        "Two earlier registry fixtures now mark legitimate replacement as a higher generation; original ownership assertions unchanged."
+      ],
+      "noLiveActivation": true
+    },
+    "focused-2-review.json": {
+      "at": "2026-11-07T05:05:33.181789+00:00",
+      "originalFocused": "32 fresh cases/134.88s passed with stable 4296 inputs.",
+      "addedConcern": "A duplicate exact bootstrap could pass the earlier closed check while another caller opened it, then retire that live or still-constructing reservation.",
+      "correction": "Reject duplicate exact non-retired reservation before creating a handover gate. Higher explicit bootstrap generations still own drain; exact replay can resume after old resources release.",
+      "addedRegression": "duplicateActivationCannotRestartTheSameLiveOrStillConstructingBootstrap",
+      "nextGate": "full-1 including new registry regression, all domain/DI and Android/browser/root checks"
+    }
+  },
+  "acceptedCommand": [
+    "xvfb-run",
+    "-a",
+    "env",
+    "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+    "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+    "ANDROID_HOME=/home/fajar/Android/Sdk",
+    "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    "--stacktrace",
+    "--continue",
+    ":check",
+    ":features:collaboration:data:testAndroidHostTest",
+    ":apps:collaboration-proof:compileDebugKotlin",
+    ":apps:collaboration-proof:assembleDebug",
+    ":core:network:wasmJsBrowserTest",
+    ":core:observability:wasmJsBrowserTest",
+    ":core:worker:wasmJsBrowserTest",
+    ":core:database:wasmJsBrowserTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":features:collaboration:presentation:wasmJsBrowserTest",
+    ":apps:android:assembleDevDebug",
+    ":apps:android:lintDevDebug",
+    ":formatCheck",
+    ":architectureCheck",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=53",
+    "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx2560m",
+    "-Pkotlin.compiler.execution.strategy=in-process"
+  ],
+  "lintErrors": 0,
+  "lintWarnings": 0,
+  "detektFindings": 0,
+  "originalBimaDataTouched": false,
+  "phoneTouched": false,
+  "productCallerAdded": false,
+  "liveGroupActivation": false,
+  "actualPendingMessageDeliveryProven": false,
+  "phoneLatencyResolved": false,
+  "nativeSdkRebuilt": false,
+  "previousOriginalKeyAndNamespaceProof": "collaboration-space-runtime-adoption-2026-11-07.json"
+}

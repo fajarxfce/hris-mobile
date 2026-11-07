@@ -4,7 +4,63 @@ This is the active checkpoint. The [historical handoff](agent-handoff-history-th
 retains earlier work verbatim. Detailed measurements below are authoritative; do not
 restart accepted builds, native sends or SDK publication solely to recreate evidence.
 
-## Current next step — 7 November 2026, 04:51 UTC
+## Current next step — 7 November 2026, 05:17 UTC
+
+The owning organization runtime admission slice is accepted, ready to commit/push
+from base2509c9dda373f9eb7b9babc854c67d732b17c6cd. No heavy job or emulator remains.
+Full56844 passed5,646fresh cases/658suites in543.951s,4,296unchanged program inputs,
+zero failures/errors/skips/lint/Detekt. All12source/test/DI files match the recorded
+manifest. [Contract](collaboration-space-runtime-admission.md),
+[evidence](measurements/collaboration-space-runtime-admission-2026-11-07.json).
+
+AdoptCollaborationSpaceRuntime selects current durable registration/bootstrap and
+original handover, validates native parent/device/gateway/local admission, owns late
+returned leases before cancellation, and publishes only after final revalidation.
+It returns readiness metadata, not an SDK or close handle. Confirmed denial stops
+exact Space resources even if cleanup fails. No selected HR-company authority or
+product/root caller was added. Native key/queue-namespace proof remains2509; actual
+old pending-message delivery and organization activation are NOT established.
+
+Registry admission now fences stale/conflicting gateway bootstrap generations BEFORE
+retiring live or still-constructing resources. Duplicate exact activation cannot
+restart another caller's current reservation. Red99848 reproduced two failures in
+11cases/41.622s. Corrected focused63714 passed30fresh/234.015s. Backend review found
+normal token refresh also increments the gateway head: current versions may exceed
+the original bootstrap while exact ID, hard expiry, build and current durable setup
+must match. Focused60113 passed32fresh/134.88s; full56844 additionally verifies the
+new duplicate-activation regression. No assertion weakening or quality suppression.
+
+Next: apply/review the FOUR-FILE diagnostic candidate under
+.work/notification-absence-investigation-2026-11-07/candidate only AFTER this slice is
+committed/pushed. It changes NativeNotificationProbe, MatrixProofInstrumentation and
+the two native-notification Python driver/test files. Candidate-only Python tests
+passed32cases/0.014s; native compile/acceptance has NOT run. The source snapshot and
+plan remain there. It preserves primary failures through secondary cleanup errors,
+records bounded controlled-fixture phase/OS state without private content, and archives
+that observation before uninstall. It does NOT change the production notification
+adapter or claim the original absence-timing cause fixed. Preserve first780 x86 failure.
+Run only affected no-provider scenarios on fresh isolated emulator userdata; no Gradle
+alongside emulator, no original Bima data reset and no phone UI. Include BOTH Python
+driver/test paths in the new gate input fingerprint; the older gate excludes tool/.
+
+FIRST780 control42336761340 is SUCCESS and audited:4,624portable/515suites and
+1,881Apple/215suites,zero failures/errors/skips. Artifacts13561152865/13561803109
+have verified GitHub digests; new public control CI record preserves original runs.
+FIRST2509 control42340255503 and native42340255481 are IN_PROGRESS; protocol
+42340255483 is SUCCESS but its artifact still needs audit. No reruns. Since all
+first2509 gates have started, combined accepted source may be promoted after commit.
+Maina8901c73/Group10f750e5 and Starter03ebcde are pushed checkpoints. Live server,
+V117–137 disabled/unshipped and immutable SDK4 are unchanged.
+
+Release53 remains installed on10.77.77.3:5555, sameUID10962. Passive04:50:29 audit
+retained no post-install logs/fatals; silence proves no delivery. Bima already has a
+confirmed eligible device/key and matched200;403s came from another room with zero
+peer devices. Physical pending latency and optional new-message feedback remain OPEN.
+No new messages or phone UI. Announce each explicit-serial --install-only installation.
+Continue long run: original pending continuity, changed/revoked-parent recovery,
+root/product routing and all54PRD groups remain unfinished. Push every atomic commit.
+
+## Accepted adoption checkpoint — 7 November 2026, 04:51 UTC
 
 The original-store Android adoption slice is accepted and ready to commit/push from
 base c70fe7cb9cd9dd8ca9c688f35b111e933f60424c on feat/chat-recovery-20261107.

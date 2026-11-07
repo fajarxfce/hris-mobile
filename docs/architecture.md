@@ -1,5 +1,9 @@
 # Architecture
 
+[Organization runtime admission](collaboration-space-runtime-admission.md) owns the
+finite current-session/device checks and final publication while preserving original
+bootstrap identity through ordinary token refresh and concurrent activation.
+
 [Original SDK adoption](collaboration-space-runtime-adoption.md) restores existing
 private keys under one physical lease, retains logical organization ownership, and
 keeps live publication in the owning admission flow.

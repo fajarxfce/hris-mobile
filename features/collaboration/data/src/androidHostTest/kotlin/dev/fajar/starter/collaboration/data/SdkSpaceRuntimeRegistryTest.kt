@@ -7,6 +7,93 @@ import kotlin.test.*
 
 class SdkSpaceRuntimeRegistryTest {
     @Test
+    fun duplicateActivationCannotRestartTheSameLiveOrStillConstructingBootstrap() {
+        for (alreadyAttached in listOf(false, true)) {
+            val f = SpaceRegistryFixture()
+            val entry = f.reserve(f.begin())
+            val resource = SpaceRegistryResource()
+            if (alreadyAttached) f.registry.attach(entry, resource)
+            assertIs<AppResult.Failed>(
+                f.registry.beginSpaceAdoption("store", f.originalOwner, "original-device", f.space)
+            )
+            if (!alreadyAttached) assertTrue(f.registry.attach(entry, resource))
+            assertEquals(0, resource.stops)
+            assertTrue(f.registry.accepts(entry))
+            assertSame(resource, f.registry.findSpace(f.space))
+        }
+    }
+
+    @Test
+    fun staleOrConflictingBootstrapCannotRetireTheCurrentOrganizationRuntime() {
+        for (next in
+            listOf(
+                { v: SdkSpaceRuntimeIdentity -> v.copy(operationId = "older", gatewayVersion = 1) },
+                { v: SdkSpaceRuntimeIdentity -> v.copy(operationId = "conflicting") },
+                { v: SdkSpaceRuntimeIdentity -> v.copy(gatewayVersion = 3) },
+                { v: SdkSpaceRuntimeIdentity ->
+                    v.copy(operationId = "foreign", gatewaySessionId = "other", gatewayVersion = 3)
+                },
+            )) {
+            val f = SpaceRegistryFixture()
+            val entry = f.reserve(f.begin())
+            val resource = SpaceRegistryResource()
+            f.registry.attach(entry, resource)
+            assertIs<AppResult.Failed>(
+                f.registry.beginSpaceAdoption(
+                    "store",
+                    f.originalOwner,
+                    "original-device",
+                    next(f.space),
+                )
+            )
+            assertEquals(0, resource.stops)
+            assertTrue(f.registry.accepts(entry))
+            assertSame(resource, f.registry.findSpace(f.space))
+            assertSame(
+                resource,
+                f.registry.findSpace(f.space.owner, f.space.deviceId, f.space.operationId),
+            )
+        }
+    }
+
+    @Test
+    fun staleAttemptCannotRetireANewerReservationBeforeItsNativeClientAttaches() {
+        val f = SpaceRegistryFixture()
+        val entry = f.reserve(f.begin())
+        assertIs<AppResult.Failed>(
+            f.registry.beginSpaceAdoption(
+                "store",
+                f.originalOwner,
+                "original-device",
+                f.space.copy(operationId = "older", gatewayVersion = 1),
+            )
+        )
+        val late = SpaceRegistryResource()
+        assertTrue(f.registry.attach(entry, late))
+        assertEquals(0, late.stops)
+        assertTrue(f.registry.accepts(entry))
+    }
+
+    @Test
+    fun aHigherGatewayGenerationForTheSameSessionMayDrainTheExactOriginalSlot() {
+        val f = SpaceRegistryFixture()
+        val entry = f.reserve(f.begin())
+        val resource = SpaceRegistryResource()
+        f.registry.attach(entry, resource)
+        val next = f.space.copy(operationId = "successor", gatewayVersion = 3)
+        val gate =
+            assertIs<AppResult.Success<SdkRuntimeHandoverGate>>(
+                    f.registry.beginSpaceAdoption("store", f.originalOwner, "original-device", next)
+                )
+                .value
+        assertEquals(1, resource.stops)
+        f.registry.released(entry)
+        val adopted = f.reserve(gate)
+        assertEquals(next, adopted.space)
+        assertTrue(f.registry.accepts(adopted))
+    }
+
+    @Test
     fun adoptionDrainsTheOriginalAndTransfersTheSamePhysicalSlotAtomically() {
         val f = SpaceRegistryFixture()
         val original = f.original()
@@ -187,7 +274,8 @@ class SdkSpaceRuntimeRegistryTest {
                 f.space.copy(owner = f.space.owner.copy(spaceId = "foreign")),
             )
         )
-        val replacement = f.begin(space = f.space.copy(operationId = "replacement"))
+        val replacement =
+            f.begin(space = f.space.copy(operationId = "replacement", gatewayVersion = 3))
         assertTrue(f.registry.spaceHandoverCurrent(replacement))
     }
 
@@ -201,7 +289,7 @@ class SdkSpaceRuntimeRegistryTest {
         val second = f.reserve(f.begin("other-store", other))
         val secondResource = SpaceRegistryResource()
         f.registry.attach(second, secondResource)
-        val pending = f.begin(space = f.space.copy(operationId = "replacement"))
+        val pending = f.begin(space = f.space.copy(operationId = "replacement", gatewayVersion = 3))
         f.registry.closeSpace(f.space.owner)
         assertFalse(f.registry.spaceHandoverCurrent(pending))
         assertNull(f.registry.findSpace(f.space))
@@ -263,6 +351,8 @@ private class SpaceRegistryFixture {
             CollaborationSpaceOwner(parent, "space"),
             "space-device",
             "bootstrap",
+            "gateway",
+            2,
         )
     val registry = SdkRuntimeRegistry<SpaceRegistryResource>({ it.stops == 0 }, { it.stops++ })
 

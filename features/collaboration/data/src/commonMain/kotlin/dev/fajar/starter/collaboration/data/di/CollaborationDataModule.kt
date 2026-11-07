@@ -15,6 +15,31 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Factory
+    fun adoptSpaceRuntime(
+        commands: CollaborationSpaceSetupCommandRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        devices: CollaborationSpaceDeviceRepository,
+        originals: CollaborationRuntimeRepository,
+        runtimes: CollaborationSpaceRuntimeRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        AdoptCollaborationSpaceRuntime(
+            commands,
+            registrations,
+            devices,
+            originals,
+            runtimes,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun advanceSpaceRuntimeTransfer(
         registrations: CollaborationSpaceRegistrationCommandRepository,
         devices: CollaborationSpaceDeviceRepository,
