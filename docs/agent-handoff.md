@@ -57,16 +57,20 @@ No product caller, new APK or organization routing activation exists for these p
    control42376025279/native42376025306 are PENDING behind running first1d9493df
    control42372520573/native42372520624. Preserve before another primary promotion.
    First3b3 control/native are SUCCESS and fully audited; no provider reruns.
-2. Group V138 storagec6937843 is accepted/pushed:7 migration138 cases plus17 actual
-   writer cases after fixture upgrade133→138, same-lock stable receipt/fence exclusion,
-   immutable evidence and archive/restore;26 recovery checks retain unchanged envelopes.
-   [Storage contract](https://github.com/fajarxfce/hris-platform/blob/c6937843/docs/collaboration/room-request-fence-storage.md).
-   Sole heavy job49421 now runs Group .work/room-request-fence-native-2026-11-07/focused-1.
-   FOURTEEN Kotlin files are applied/FROZEN, not accepted: typed repo/raw source/mapping,
-   native owning fence, current-admitted stable writer rejection and shared DI;27 native
-   transaction/4 mapping cases plus domain/quality. After focused, API + FULL worker
-   context-check.py is required. No HTTP endpoint or Mobile successor/rollout yet.
-   Do not edit frozen Group source or start a second heavy job.
+2. Group native fenced recovery dcdaf220 is accepted/pushed:14 Kotlin files over V138
+   storagec6937843, dedicated raw/typed mapping, owning native transaction and current-
+   admitted stable writer rejection. Focused49421 passed195 cases319.052s; API + FULL
+   worker71315 passed241 cases540.839s, zero failures/errors and one existing opt-in
+   retention skip. Both had8,635 unchanged inputs and quality passed; all reaped.
+   [Native contract](https://github.com/fajarxfce/hris-platform/blob/dcdaf220/docs/collaboration/native-room-request-fence.md).
+   Sole heavy job57183 now runs Group `.work/room-request-fence-http-2026-11-07/http-1`:
+   SIX HTTP files are applied/FROZEN, NOT accepted. Typed original-key fence route,
+   exact Recorded/Fenced echo, refresh/parent purge, bounds/no-store/OpenAPI/disabled
+   tests. Do not edit Group frozen inputs or run another heavy job.
+   ELEVEN Mobile candidates are isolated in `.work/space-room-request-fence-2026-11-07`:
+   typed result/policy/transport, shared original-echo mapping and8 Ktor cases. They
+   are NOT applied or tested. Accept Group HTTP first and verify baseline hashes before
+   applying. HTTP503 maps to Service; no durable evidence/successor or product caller.
 3. Open preparation/replay and canonical projection-before-archive are locally accepted.
    Continue equivalent owning Room request projection/recovery and original SDK routing.
    Separate native account/MFA/client denial from conversation/peer denial; do not close
@@ -82,8 +86,9 @@ No product caller, new APK or organization routing activation exists for these p
    is waived, but relevant Apple CI/compilation remains required.
 
 Metadata/preparation/Open candidates are historical applied staging; do not reapply.
-The real codec fix supersedes Open's initial candidate directory. Group's5 V138 storage files are accepted;14 new owning
-fence files are frozen for49421 and have no HTTP caller yet.
+The real codec fix supersedes Open's initial candidate directory. Group's native14-file
+fence integration is accepted/pushed; its6 HTTP files are frozen for57183. Mobile's11
+fence candidates remain unapplied. Group's handoff is now concise with linked full history.
 Metadata remains inside the guarded collaboration-history/ prefix.
 
 ## Original SDK and phone invariants
