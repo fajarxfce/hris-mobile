@@ -1,0 +1,205 @@
+{
+  "recordedAt": "2026-11-07T19:07:13.844350+00:00",
+  "upstream": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+  "patch": "http-observer.patch",
+  "patchSha256": "4893938ff507bbdb1fe893277e53770ad570dcf6f7a131027cdbc4787832d657",
+  "sources": {
+    "bindings/matrix-sdk-ffi/src/http_observer.rs": "3b94e0e661e0a21c8618a64d4c3cffbdcfaa12ecf27ae38b5b1561d92b8366ed",
+    "bindings/matrix-sdk-ffi/src/lib.rs": "ba50c540c73f2c62e5c687237feaa985bbd235e515ac7ea1627da05b56a372e1",
+    "crates/matrix-sdk/src/client/mod.rs": "957ecc90d35f5617d3fb78a6dbd2c4cfd1c4d0dea8e8f04f20a1cd19490a06b4",
+    "crates/matrix-sdk/src/http_client/http_observer_tests.rs": "f48e58a8c67b4998377383c80b8601ed39f8b90b3d8ac4eec71ac30fb1f22c71",
+    "crates/matrix-sdk/src/http_client/mod.rs": "dd6757ddc1d869f9670add6c2f7cad597b3fe9cea30cb4d4f73f986bb5e1c154",
+    "crates/matrix-sdk/src/http_client/native.rs": "e2cf93b6c4d4c09176bd543b122eceb2a4c0c08eaea533fa1e7561de0bc49b85",
+    "crates/matrix-sdk/src/http_client/wasm.rs": "f1bd32acfa72d9532f31ec2d46b8905f969f34998e4ff4e445bb42db296fffee",
+    "crates/matrix-sdk/src/http_observer.rs": "5be709cfab3206978060905643895e0a861cdb435d7b21cc730e68fe1cc11e96",
+    "crates/matrix-sdk/src/http_observer/tests.rs": "0814af2d7ac05a3e3e7e703df117ec531694302bbb2bd093875ca20aff27ff62",
+    "crates/matrix-sdk/src/lib.rs": "7275d07fb3f29e18e1a39953a54e0f74d488723c30d0a4ee5a0ea9d69f4fb2c3"
+  },
+  "runs": {
+    "core-1": {
+      "startedAt": "2026-11-07T18:54:25.830989+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "matrix-sdk",
+        "--lib",
+        "http_observer",
+        "--",
+        "--test-threads=1"
+      ],
+      "jobs": 2,
+      "debugInfo": 0,
+      "incremental": false,
+      "targetDirectory": "/home/fajar/hris/.worktrees/matrix-sdk-http-observer-2026-11-07/target",
+      "pid": 1563508,
+      "startTicks": "175435853",
+      "elapsedSeconds": 180.08,
+      "exitCode": 101,
+      "sourceCount": 836,
+      "sourcesUnchanged": true,
+      "sourceManifestSha256": "a0ad527282a16b970e5c7783c15dbce506e9bc5df5d9c8e0cbbc328742511ec7",
+      "logSha256": "446713a44081c5734acafa3f5f286192feaedd4aa5c803c38ca239d834fa99ab"
+    },
+    "core-2": {
+      "startedAt": "2026-11-07T18:58:54.401294+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "matrix-sdk",
+        "--lib",
+        "http_observer",
+        "--",
+        "--test-threads=1"
+      ],
+      "jobs": 2,
+      "debugInfo": 0,
+      "incremental": false,
+      "targetDirectory": "/home/fajar/hris/.worktrees/matrix-sdk-http-observer-2026-11-07/target",
+      "pid": 1600067,
+      "startTicks": "175462707",
+      "elapsedSeconds": 57.031,
+      "exitCode": 0,
+      "sourceCount": 836,
+      "sourcesUnchanged": true,
+      "sourceManifestSha256": "f272158fc01bc591e55f6585783bf81688f4eb7d28045cf03540f1deeb280867",
+      "logSha256": "f736a4a8107eb7dbbc533c031e14dbeb6e47e8f54a9fbcf9e56effe49fc57fd1"
+    },
+    "ffi-1": {
+      "startedAt": "2026-11-07T19:00:34.292709+00:00",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "-p",
+        "matrix-sdk-ffi",
+        "--features",
+        "sentry,experimental-x509-identity-verification"
+      ],
+      "jobs": 2,
+      "debugInfo": 0,
+      "incremental": false,
+      "targetDirectory": "/home/fajar/hris/.worktrees/matrix-sdk-http-observer-2026-11-07/target",
+      "pid": 1610291,
+      "startTicks": "175472696",
+      "elapsedSeconds": 143.053,
+      "exitCode": 0,
+      "sourceCount": 836,
+      "sourcesUnchanged": true,
+      "sourceManifestSha256": "f272158fc01bc591e55f6585783bf81688f4eb7d28045cf03540f1deeb280867",
+      "logSha256": "35bd64da6a0942de08a1db3cbb96b983c403a102767dacd5f8b2b37761c5da2e"
+    },
+    "wasm-1": {
+      "startedAt": "2026-11-07T19:03:52.227769+00:00",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "-p",
+        "matrix-sdk",
+        "--no-default-features",
+        "--features",
+        "indexeddb",
+        "--target",
+        "wasm32-unknown-unknown"
+      ],
+      "jobs": 2,
+      "debugInfo": 0,
+      "incremental": false,
+      "targetDirectory": "/home/fajar/hris/.worktrees/matrix-sdk-http-observer-2026-11-07/target",
+      "pid": 1635634,
+      "startTicks": "175492489",
+      "elapsedSeconds": 49.365,
+      "exitCode": 0,
+      "sourceCount": 836,
+      "sourcesUnchanged": true,
+      "sourceManifestSha256": "f272158fc01bc591e55f6585783bf81688f4eb7d28045cf03540f1deeb280867",
+      "logSha256": "6b3229b8505d612522178541bedf38265f3a9d019d4133be38c3ec6083882452"
+    }
+  },
+  "passingTests": [
+    "http_client::http_observer_tests::broken_body_preserves_headers_and_original_error",
+    "http_client::http_observer_tests::cancellation_before_headers_is_not_a_response",
+    "http_client::http_observer_tests::cancellation_during_body_retains_real_response_status",
+    "http_client::http_observer_tests::http_status_and_original_bytes_survive_observation",
+    "http_client::http_observer_tests::saturated_unconsumed_capture_cannot_stall_http",
+    "http_client::http_observer_tests::sdk_retry_has_distinct_attempts_and_actual_server_count",
+    "http_observer::tests::busy_reader_and_registry_never_block_http_producer",
+    "http_observer::tests::canceled_read_does_not_consume_and_close_wakes_registered_reader",
+    "http_observer::tests::disabled_registry_does_not_create_an_attempt",
+    "http_observer::tests::dropped_attempt_is_cancelled_not_successful",
+    "http_observer::tests::dropping_client_registry_erases_capture_and_releases_reader",
+    "http_observer::tests::metadata_is_bounded_before_buffering_and_excludes_credentials",
+    "http_observer::tests::replacement_erases_old_queue_and_fences_inflight_completions",
+    "http_observer::tests::slow_reader_is_bounded_and_reports_loss_instead_of_waiting",
+    "http_observer::tests::string_bounds_keep_utf8_valid"
+  ],
+  "acceptedScope": "Optional client-owned nonblocking bounded metadata channel, actual Matrix HTTP attempt hook and typed FFI source.",
+  "bounds": {
+    "queuedEvents": 256,
+    "batchEvents": 32,
+    "pathBytes": 1024,
+    "queryScanBytes": 8192,
+    "queryNameCount": 32,
+    "queryNameBytes": 64,
+    "headerNameCount": 32,
+    "headerNameBytes": 64,
+    "methodBytes": 16,
+    "hostBytes": 253
+  },
+  "coverage": [
+    "Actual native Matrix SDK engine attempts, including SDK retry attempts.",
+    "Native response headers and existing response-body conversion; actual statuses and original payload/error propagation.",
+    "Cancellation before headers/during body, drop/close/replacement, bounded overflow/contention, redaction.",
+    "Wasm SDK execution hook compiles with indexeddb; no browser runtime test.",
+    "Native FFI source compiles with sentry and experimental-x509-identity-verification."
+  ],
+  "knownExclusions": [
+    "OAuth separate HTTP client and QR login/grant HTTP paths.",
+    "Direct reqwest calls, including Client::http_client and FFI external-auth issuer request.",
+    "Engine-internal redirects/socket operations.",
+    "All bodies, query values and header values."
+  ],
+  "limitations": {
+    "androidArtifactAndAbiVerified": false,
+    "appleCompiled": false,
+    "appleRuntimeTested": false,
+    "wasmRuntimeTested": false,
+    "generatedBindingsVerified": false,
+    "hostIntegrated": false,
+    "liveHrisRequestsVerified": false,
+    "captureOverheadBenchmarked": false,
+    "sdkPublished": false
+  },
+  "firstFailure": "core-1 body-cancellation test moved its only HttpClient into the aborted future, which closed/erased the observer by contract. core-2 retains a separate client clone; original failure kept.",
+  "patchVerification": {
+    "appliesToSdk4Baseline": true,
+    "allTenCandidateHashesMatch": true,
+    "initialIssue": "First git apply invoked in a subdirectory of the parent repository skipped paths. No acceptance inferred; retried in a dedicated initialized temporary repository and compared all10 output hashes."
+  },
+  "tools": {
+    "rust": "1.96.0",
+    "wasmTargetInstall": {
+      "command": [
+        "/home/fajar/.local/share/hris-sdk-rust/cargo/bin/rustup",
+        "target",
+        "add",
+        "wasm32-unknown-unknown",
+        "--toolchain",
+        "1.96.0"
+      ],
+      "seconds": 2.585,
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "info: downloading component rust-std\n"
+    },
+    "formatter": "rustfmt1.96; stable tool reports upstream nightly-only formatting options unavailable. Modified code formatted without touching frozen inventories."
+  }
+}

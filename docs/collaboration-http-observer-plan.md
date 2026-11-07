@@ -1,8 +1,9 @@
 # Matrix HTTP observation — next SDK source increment
 
-Status: design and isolated source baseline only. No HTTP observer, SDK5 artifact,
-new generated binding, consumer integration or publication is implemented here.
-The shipping SDK4 remains immutable and the application still depends on it.
+Status: observer source increment locally accepted. Core15 tests, native FFI and
+Wasm core compilation pass. No generated binding, SDK5 artifact, Android/Apple ABI
+acceptance, application integration or publication yet. Shipping SDK4 is unchanged.
+[Exact checks](measurements/matrix-http-observer-source-2026-11-07.json).
 
 ## Observed source boundary
 
@@ -83,3 +84,38 @@ The user's physical iPhone test waiver does not waive source/Apple CI verificati
 
 Continue Mobile95e35b9d/build55 device acceptance independently of this SDK increment.
 The original Room-dispatch/communications PRD remains active alongside these repairs.
+
+## Implemented source increment — 7 November2026
+
+`tool/collaboration-sdk-patches/http-observer.patch` applies after the five SDK4
+patches. Its separate `http-observer-source.json` pins the base manifest and10 changed/
+new files; the shipping SDK4 manifest is not edited. The patch was reconstructed in
+an isolated repository and every resulting file hash matched tested source.
+
+Client::observe_http_requests returns an explicitly owned subscription. Producers use
+try-lock admission and never await a reader. The256-event buffer reports overflow and
+contention, returning at most32 records per batch. Close, replacement, client registry
+destruction and subscription drop clear the old queue and wake readers. In-flight
+attempts keep their original queue so they cannot enter a replacement capture. An
+unconsumed channel cannot delay a request. No foreign callback executes on the HTTP path.
+
+Started, Response and Finished records carry real native timestamps/monotonic elapsed
+time. Response status survives later body failure; canceling an in-flight future emits
+cancellation, never success. Request/response bodies and query/header values are never
+retained. Path/query/header work is bounded before buffering. No auth, retry, TLS,
+request bytes, response bytes or Matrix parsing semantics are changed.
+
+Fifteen cases pass, including real local HTTP401, SDK429→200 retry with exact server
+count, interrupted body, cancellation, saturation and lifecycle fencing. FFI source
+and wasm32-unknown-unknown/indexeddb compile. This does not establish Apple/native ABI,
+generated Kotlin/Swift, browser runtime, live HRIS capture or overhead acceptance.
+The standalone viewer is locally accepted at inspector f71f308; its repository stays
+private while the visibility question is pending. It still needs the external-timing
+API and Matrix adapter before app integration.
+
+Coverage deliberately excludes OAuth's separate client, QR authentication HTTP,
+raw reqwest access (including the external issuer request in FFI), and redirects
+inside reqwest. Source supports observing native SDK attempts, not every socket.
+Keep these exclusions visible until separately instrumented and tested. No SDK5
+version or assets may be published by reusing SDK4's version or by substituting
+an operation log for actual HTTP observation.

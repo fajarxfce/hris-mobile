@@ -1,20 +1,37 @@
 # Agent continuation — HRIS Mobile
 
-## This isolated branch — 7 November 2026
+## This isolated branch — 7 November2026,19:06UTC
 
-Branch feat/matrix-http-observer-20261107 starts from Mobile95e35b9d. It owns only
-the next SDK HTTP-observer design/patch work; it is not the active phone-build branch.
-Read [the source boundary and acceptance plan](collaboration-http-observer-plan.md).
-A separate Rust checkout at ../matrix-sdk-http-observer-2026-11-07 reconstructs all
-five immutableSDK4 patches and19 manifest hashes. No observer code or new artifact
-exists yet. Frozen SDK4 inventories remain untouched.
+This branch owns only the next Matrix HTTP observer source, based on Mobile95e35b9d.
+It is not the active phone-build branch. Ten-file observer patch and separate source
+manifest are locally accepted: core-2 passed15 tests in57.031s; native FFI check143.053s;
+Wasm core/indexeddb check49.365s. Source fingerprints are unchanged in each run. Core-1
+fixture ownership failure is preserved. The patch was applied in an isolated temp
+repository and all10 hashes matched. [Contract/remaining gates](collaboration-http-observer-plan.md).
 
-Main Mobile is building55 in sole heavy job7746. Do not compile Rust/Gradle or start
-an emulator alongside it. Bima original emulator is STOPPED54, phone53. Inspector
-fadf22e core/Ktor is locally accepted:39 new Ktor cases/51.993s plus42 verified core
-cases, Android AAR and Apple klibs; Apple runtime remains blocked by private CI billing.
-Visibility approval is pending. No Matrix/viewer/app integration yet. Do not treat
-earlier inherited checkpoints below as this branch's current implementation status.
+All SDK/compiler jobs75358/18983/40646/51071 are REAPED. Toolchain target install18284
+is reaped. No heavy job or emulator is running. Rust source remains at
+`/home/fajar/hris/.worktrees/matrix-sdk-http-observer-2026-11-07`; its fresh target cache
+is local only. Do not edit frozen SDK4 inventories or the shipping SDK4 manifest/assets.
+
+Next: preserve native observed timing and incomplete/body results in the reusable
+inspector API, add/test the bounded adapter, then new frozen SDK bindings/Android ABI/
+Apple verification and live Mobile capture/overhead before publication/install. Raw
+OAuth/QR/direct-reqwest and engine redirects are explicitly outside current coverage.
+No generated Kotlin/Swift, SDK5 artifact, Apple runtime, Android ABI or app acceptance.
+
+Standalone inspector viewer f71f308/CI doc4b61dfb is pushed:16 module tests plus42core/
+39Ktor pass locally,97total. Apple klibs compile, but all three first private CI runs
+executed zero steps due to billing. Visibility question is pending; do not make that
+repo public without an answer. No library release/host integration yet.
+
+Active Mobile recoverycd7fc023/primarybb106154 are pushed. Phone and original stopped
+Bima emulator remain55 with all data/keys preserved. Inbox pending/draft preview fix is
+installed; viewport fix is tested but not in an APK. Composer keyboard/latency remain
+open. Source3308 first CI artifacts are fully audited. Preserve primarybb106154 first
+control42403266288/native42403266310 until both start. Main/Groupb82934b2/30c819f7 are
+pushed; live services/schema and Starter unchanged. Continue all54 PRD groups alongside
+these fixes; none are complete. Inherited checkpoints below are historical.
 
 
 Read [architecture](architecture.md), the linked contracts and this checkpoint before

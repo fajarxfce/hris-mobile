@@ -305,3 +305,15 @@ The SDK workflow defaults to arm64-v8a. The HRIS native workflow has x86_64 and
 ARM64 jobs and asserts each APK's exact native ABI before execution, so the ARM64
 bridge run cannot silently use x86_64. Structural checks and source CI remain
 separate from actual native runtime acceptance.
+
+## HTTP observation — source accepted, distribution pending
+
+`http-observer.patch` applies after the complete five-patch SDK4 chain. Its standalone
+`http-observer-source.json` pins10 exact source files and the immutable base manifest.
+Core15 tests, FFI compilation and Wasm compilation pass. It adds bounded optional
+pull-based observation of actual Matrix HTTP attempts, including response/body/
+cancellation stages, without changing request delivery. [Evidence and limits](../../docs/measurements/matrix-http-observer-source-2026-11-07.json).
+
+No generated Kotlin/Swift, Android ABI, Apple runtime, app integration or SDK5 artifact
+is accepted yet. Do not add this patch to the SDK4 shipping manifest or replace SDK4
+release assets. A new frozen build/distribution manifest and SDK version are required.
