@@ -5,6 +5,30 @@ linked below. Earlier checkpoints remain verbatim in
 [history through original queue matching](agent-handoff-history-through-original-queue-matching-2026-11-07.md)
 and [history through build 50](agent-handoff-history-through-build50.md).
 
+## Latest continuation — 7 November 2026
+
+Original e8fc first control42360096500/native42360096584 are fully audited SUCCESS:
+Apple1,960/223, portable4,787/532 and each Android ABI528/84, zero failures/errors/skips.
+Original artifact digests and both immutableSDK4 hashes verified. Original queue
+continuity passed31.145s x86/48.618s ARM, no provider sends, complete cleanup. No
+accepted provider scenario was rerun. [CI evidence](measurements/collaboration-room-transport-control-native-ci-2026-11-07.json).
+First fb514281 control42363807332/native42363807289 have BOTH started; preserve/audit
+original evidence when complete. Primary remainsfb514281; this branch131723d5 follows.
+
+Groupa6be53b1 stable request domain is accepted/pushed:181 cases/213.656s,8,622 stable
+inputs, zero failures/errors/skips, delivery/quality passed. Sole heavy local job98418
+is its stable intent HTTP/http-1: SIX Kotlin files applied/FROZEN. New explicit routes
+use /room/requests and /room/requests/receipts/read; actual refresh/replay/new-parent,
+input bounds, OpenAPI and disabled-route acceptance is running. No DI constructor
+change; prior full worker acceptance4e1b5b90 remains relevant. Do not overlap builds.
+
+NEXT accept server HTTP, then Mobile stable intent transport/durable commands and
+finite owning recovery. Complete original SDK delivery/history, parent recovery,
+product routing and all54 groups. V117-137 remain disabled; no new APK or phone53
+latency claim. Current native version must never be guessed. Original operation
+absence remains uncertain; explicit fencing is still required before replacement.
+Earlier sections below retain previous checkpoints; this section is authoritative.
+
 ## Current work — 7 November 2026
 
 Native original room receipt transport is accepted:11 Kotlin files, current owner/
