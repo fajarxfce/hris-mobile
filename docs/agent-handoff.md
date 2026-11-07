@@ -5,6 +5,41 @@ continuing. [Previous checkpoint](https://github.com/fajarxfce/hris-mobile/blob/
 retains all earlier source/CI history and links older local handoff archives. Git and
 contracts are authoritative; `.work` is staging/evidence, never permission to reapply.
 
+## Current continuation — 7 November2026,19:30UTC
+
+Inspector dfebf666 is accepted/pushed: buffered transport timestamps and separate
+header/body outcomes, generation-fenced starts/finishes/loss, explicit incomplete
+capture. Core66/Ktor39/Compose21 cases pass locally,126 total including six desktop
+UI cases;60 fresh cases in final strict run and66 unchanged core reports reused.
+Android AARs and Apple main/test klibs compile. First CI42405812195 ran zero steps
+because GitHub billing blocked both jobs. Repository remains private; visibility
+question is unanswered. No library release or actual app integration yet.
+
+Rust observer source bce66311 is accepted/pushed on the isolated SDK branch, with15
+Rust cases, native FFI and Wasm compilation. Sole heavy job93078 builds the first
+ARM64 native/binding candidate in
+`/home/fajar/hris/.worktrees/matrix-sdk-http-observer-2026-11-07/.work/http-observer-2026-11-07/android-arm64-1`.
+Rust inputs are FROZEN until reaped. No other compiler/emulator may overlap. SDK4
+and frozen inventories are unchanged; no generated-binding/ABI result or SDK5 release.
+
+The inspector now has an UNACCEPTED common Matrix pull-adapter candidate: bounded
+correlation/replay, native attempts, cleanup that distinguishes stopped observation
+from transport cancellation, and13 common cases. Core adds one case for incomplete
+observation. Check script is `.work/matrix-bridge-2026-11-07/check.py`; it has not run.
+Run only after reaping the native build. Actual Android/Apple binding adapters remain.
+
+Source95e35b9d first control42399395125 artifacts are audited: Apple2,194/241 and
+portable5,281/570, zero failures/errors/skips and exact GitHub artifact digests.
+[Evidence](measurements/chat-renewal-control-first-ci-2026-11-07.json). Native first
+42399395077 is still in progress. bb106154 first control42403266288 is in progress,
+native42403266310 pending; keep primary unchanged until both have started.
+
+Phone and original stopped Bima emulator remain55. Pending/draft inbox fix is
+installed; accepted bb106154 first-layout bubble fix awaits APK56. Durable composer/
+keyboard and latency remain open. Continue inspector integration, validated install,
+reusable Starter port and original54-group communications/Room dispatch. No PRD group
+is newly complete. Earlier job statuses below are historical.
+
 ## Current continuation — 7 November2026,19:00UTC
 
 Primary feat/communications and recovery implementation arebb106154, pushed. Both
