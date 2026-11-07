@@ -4,6 +4,35 @@ This is the active checkpoint. The [historical handoff](agent-handoff-history-th
 retains earlier work verbatim. Detailed measurements below are authoritative; do not
 restart accepted builds, native sends or SDK publication solely to recreate evidence.
 
+## Notification port and first original-queue CI recorded — 7 November 2026
+
+Mobile program11e2b36bb6be72089d17418ce68e9edfe03c0e9c is accepted/pushed on the temporary
+branch. Starterb11437a is also accepted/pushed: exact Android adapter, independent root/
+Android gate64.236s,1,025stable inputs,0fresh XML(reused),no lint errors/44oldwarnings.
+Common/Apple unchanged; no unrelated Apple redispatch. No local heavy job or emulator.
+
+FIRST1bb native42344999033 is FAILED and fully audited: x86_64 artifact13565357384 has
+492cases/80suites and successful actual native proofs; ARM13564229568 has486host/77
+before raw replacement failure (neutral still visible1217ms with600ms OS timeout).
+Both artifact digests verified, original diagnostics retained in
+[CI evidence](measurements/collaboration-original-queue-native-ci-2026-11-07.json).
+FIRST05de native42348626124 has STARTED but control42348626104 is still PENDING behind
+1bb control42344998885. Preserve that first pending control before primary promotion.
+05de protocol42348626066 is fully accepted. No accepted native sends were repeated.
+
+NEXT implement exact original SDK/application-command reconciliation and its owning
+current-admission read; no source applied yet. Match separately acquired original
+conversation/legacy identity with exact physical binding/device/room, every original
+logical/transaction/content identity and immutable app record. Preserve historical
+bootstrap aliases only for the captured same physical queue; never rewrite the original
+record's namespace. Sent originals require matching immutable completion/event evidence;
+missing, duplicate, ambiguous or unknown originals leave the entire queue retained.
+A successful match never itself grants delivery, changes state or infers ACK. No company
+selection or use-case-to-use-case calls. Continue publication/history, parent recovery,
+product routing and all54groups. Phone53 latency stays OPEN, optional feedback pending;
+Bima key availability is confirmed. Original Bima data, immutable SDK4, live API and
+V117–137 disabled status unchanged. Earlier timestamped entries below are history.
+
 ## Explicit notification retirement accepted — 7 November 2026, 07:15 UTC
 
 No heavy job, emulator or download remains. Native27900 PASSED156.823s on exactly the

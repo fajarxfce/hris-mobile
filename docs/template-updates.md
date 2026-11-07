@@ -1,13 +1,14 @@
 # Template updates
 
-## Explicit Android notification retirement — downstream accepted, port pending
+## Explicit Android notification retirement — port complete
 
-The one generic display adapter now cancels explicitly after confirmed neutral
-publication and reply-history grace. Downstream native tests cover delayed OS expiry,
-cancellation/recovery and actual SystemUI reply removal; root/product/proof checks
-pass. Copy only that Android source after commit, then validate Starter root and
-Android build/lint. HRIS fixture and callback policy remain downstream; common/Apple
-sources are unchanged. [Evidence](measurements/native-notification-retirement-2026-11-07.json).
+Mobile11e2b36b's exact generic Android display source is copied to Starterb11437a.
+Mobile native delayed-expiry/cancellation/SystemUI cases pass, with3screenshots inspected;
+Starter independently passes root/Android build/lint in64.236s,1,025stable inputs,
+reused host XML,zero errors/44existing lint warnings. Common/Apple source/API unchanged.
+HRIS fixture and callback policy remain downstream.
+[Mobile evidence](measurements/native-notification-retirement-2026-11-07.json),
+[Starter evidence](https://github.com/fajarxfce/compose-fluent-starter/blob/b11437a/docs/measurements/notification-retirement-port-2026-11-07.json).
 
 ## Explicit failed-operation outcome — port complete
 
