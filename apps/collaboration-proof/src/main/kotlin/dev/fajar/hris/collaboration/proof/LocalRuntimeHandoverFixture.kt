@@ -32,6 +32,8 @@ internal class LocalRuntimeHandoverFixture(private val context: Context, val own
         )
     val device = "44444444-4444-4444-8444-444444444444"
     val stores = FileCollaborationSdkStoreSource(File(owned, "stores"))
+    val inventories = FileCollaborationSdkInventorySource(File(owned, "stores"))
+    val inventoryAcquisitions = AtomicInteger()
     val clients = AndroidCollaborationSdkClientSource()
     val directoryAcquisitions = AtomicInteger()
     val activeDirectories = AtomicInteger()
@@ -85,6 +87,24 @@ internal class LocalRuntimeHandoverFixture(private val context: Context, val own
             IdentityServer(owner.audience, "Owned SDK handover"),
             CollaborationSdkEndpoint("http://127.0.0.1:9/", allowCleartext = true),
             http,
+            inventories =
+                object : CollaborationSdkInventorySource {
+                    override suspend fun inspect(storeId: String): CollaborationSdkInventoryLease? {
+                        val lease = inventories.inspect(storeId) ?: return null
+                        inventoryAcquisitions.incrementAndGet()
+                        activeDirectories.incrementAndGet()
+                        return object : CollaborationSdkInventoryLease by lease {
+                            override fun close() {
+                                try {
+                                    lease.close()
+                                } finally {
+                                    activeDirectories.decrementAndGet()
+                                }
+                            }
+                        }
+                    }
+                },
+            privateIdentities = AndroidCollaborationSdkPrivateIdentitySource(),
         )
 
     fun intent(fingerprint: String) =

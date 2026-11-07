@@ -1,6 +1,6 @@
 {
   "recordedAt": "2026-11-07T00:06:53.275700+00:00",
-  "status": "focused, actual SDK4 two-ABI and full candidate accepted; source commit pending first CI start",
+  "status": "accepted implementation committed with this record on temporary recovery branch",
   "baseSource": "15facc913e792bfab94f6c32a61651f1275c9d57",
   "candidateFiles": {
     "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkRuntimeRegistry.kt": "628760a1c3bfa7227669a0ab52344ba92a02a9d7a839211b137c787d392743b9",
@@ -219,5 +219,6 @@
     "initializedFalseSupported": false,
     "sqliteMainFilesUnchanged": true,
     "sqliteWalSidecarsClaimedUnchanged": false
-  }
+  },
+  "sourceBranch": "feat/chat-recovery-20261107"
 }

@@ -37,68 +37,7 @@ class MatrixProofInstrumentation : Instrumentation() {
                 android.os.Build.FINGERPRINT.contains("generic") ||
                     android.os.Build.MODEL.contains("sdk")
             )
-            runBlocking {
-                withTimeout(scenarioTimeoutMillis()) {
-                    when (scenario) {
-                        "hris-product-peer" ->
-                            HrisProductNotificationPeer(targetContext, directory).run()
-                        "notification-input-verify" -> {
-                            val owner =
-                                (targetContext.applicationContext as HrisScheduledProofApplication)
-                                    .inputProof
-                            try {
-                                owner.verifyRecovery()
-                            } finally {
-                                owner.close()
-                            }
-                        }
-                        "native-notification" ->
-                            NativeNotificationProbe(targetContext, directory).run(denied = false)
-                        "notification-runtime" ->
-                            NotificationRuntimeProbe(targetContext, directory).run()
-                        "native-notification-denied" ->
-                            NativeNotificationProbe(targetContext, directory).run(denied = true)
-                        "company-recovery" -> CompanyRecoveryProbe(targetContext, directory).run()
-                        "company-recovery-stage" ->
-                            CompanyRecoveryProbe(targetContext, directory).stage()
-                        "company-recovery-resume" ->
-                            CompanyRecoveryProbe(targetContext, directory)
-                                .run(CompanyRecoveryProbe.Scenario.Resume)
-                        "company-recovery-backlog" ->
-                            CompanyRecoveryProbe(targetContext, directory)
-                                .run(CompanyRecoveryProbe.Scenario.Backlog)
-                        "work-wake" -> CollapsedSchedulingProbe(targetContext, directory).run()
-                        "work-wake-stage" ->
-                            CollapsedSchedulingProbe(targetContext, directory).stage()
-                        "work-wake-resume" ->
-                            CollapsedSchedulingProbe(targetContext, directory).run(resuming = true)
-                        "local-handover-stage" ->
-                            LocalRuntimeHandoverProbe(targetContext, directory).stage()
-                        "local-handover-resume" ->
-                            LocalRuntimeHandoverProbe(targetContext, directory).resume()
-                        "local-identity-stage" -> LocalSdkIdentityProbe(directory).stage()
-                        "local-identity-resume" -> LocalSdkIdentityProbe(directory).resume()
-                        "provider" -> NativeMatrixProbe(directory).run()
-                        "hris-worker-stage" ->
-                            HrisWorkerMatrixProbe(targetContext, directory).stage()
-                        "hris-worker-resume" ->
-                            HrisWorkerMatrixProbe(targetContext, directory).resume()
-                        "hris-auth-rejection" -> HrisSdkAuthProbe(targetContext, directory).run()
-                        "hris-stage" ->
-                            HrisNativeMatrixProbe(targetContext, directory).run(resuming = false)
-                        "hris-resume" ->
-                            HrisNativeMatrixProbe(targetContext, directory).run(resuming = true)
-                        "hris-ack-recover" ->
-                            HrisNativeMatrixProbe(targetContext, directory).runAckRecovery()
-                        "hris-completion-recover" ->
-                            HrisNativeMatrixProbe(targetContext, directory).runCompletionRecovery()
-                        else -> {
-                            check(scenario.startsWith("space-history-"))
-                            HrisSpaceHistoryProbe(targetContext, directory).run(scenario)
-                        }
-                    }
-                }
-            }
+            runBlocking { withTimeout(scenarioTimeoutMillis()) { runScenario(directory) } }
             output.put("complete", true)
         } catch (failure: Exception) {
             output.put("complete", false)
@@ -127,6 +66,59 @@ class MatrixProofInstrumentation : Instrumentation() {
                 if (output.optBoolean("complete")) Activity.RESULT_OK else Activity.RESULT_CANCELED,
                 Bundle().apply { putString("proof", output.toString()) },
             )
+        }
+    }
+
+    private suspend fun runScenario(directory: File) {
+        when (scenario) {
+            "hris-product-peer" -> HrisProductNotificationPeer(targetContext, directory).run()
+            "notification-input-verify" -> {
+                val owner =
+                    (targetContext.applicationContext as HrisScheduledProofApplication).inputProof
+                try {
+                    owner.verifyRecovery()
+                } finally {
+                    owner.close()
+                }
+            }
+            "native-notification" ->
+                NativeNotificationProbe(targetContext, directory).run(denied = false)
+            "notification-runtime" -> NotificationRuntimeProbe(targetContext, directory).run()
+            "native-notification-denied" ->
+                NativeNotificationProbe(targetContext, directory).run(denied = true)
+            "company-recovery" -> CompanyRecoveryProbe(targetContext, directory).run()
+            "company-recovery-stage" -> CompanyRecoveryProbe(targetContext, directory).stage()
+            "company-recovery-resume" ->
+                CompanyRecoveryProbe(targetContext, directory)
+                    .run(CompanyRecoveryProbe.Scenario.Resume)
+            "company-recovery-backlog" ->
+                CompanyRecoveryProbe(targetContext, directory)
+                    .run(CompanyRecoveryProbe.Scenario.Backlog)
+            "work-wake" -> CollapsedSchedulingProbe(targetContext, directory).run()
+            "work-wake-stage" -> CollapsedSchedulingProbe(targetContext, directory).stage()
+            "work-wake-resume" ->
+                CollapsedSchedulingProbe(targetContext, directory).run(resuming = true)
+            "local-handover-stage" -> LocalRuntimeHandoverProbe(targetContext, directory).stage()
+            "local-handover-resume" -> LocalRuntimeHandoverProbe(targetContext, directory).resume()
+            "existing-handover-stage" ->
+                LocalExistingRuntimeHandoverProbe(targetContext, directory).stage()
+            "existing-handover-resume" ->
+                LocalExistingRuntimeHandoverProbe(targetContext, directory).resume()
+            "local-identity-stage" -> LocalSdkIdentityProbe(directory).stage()
+            "local-identity-resume" -> LocalSdkIdentityProbe(directory).resume()
+            "provider" -> NativeMatrixProbe(directory).run()
+            "hris-worker-stage" -> HrisWorkerMatrixProbe(targetContext, directory).stage()
+            "hris-worker-resume" -> HrisWorkerMatrixProbe(targetContext, directory).resume()
+            "hris-auth-rejection" -> HrisSdkAuthProbe(targetContext, directory).run()
+            "hris-stage" -> HrisNativeMatrixProbe(targetContext, directory).run(resuming = false)
+            "hris-resume" -> HrisNativeMatrixProbe(targetContext, directory).run(resuming = true)
+            "hris-ack-recover" -> HrisNativeMatrixProbe(targetContext, directory).runAckRecovery()
+            "hris-completion-recover" ->
+                HrisNativeMatrixProbe(targetContext, directory).runCompletionRecovery()
+            else -> {
+                check(scenario.startsWith("space-history-"))
+                HrisSpaceHistoryProbe(targetContext, directory).run(scenario)
+            }
         }
     }
 }

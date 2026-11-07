@@ -23,6 +23,23 @@ interface CollaborationRuntimeRepository {
         intent: CollaborationRuntimeHandoverIntent,
     ): AppResult<CollaborationRuntimeHandoverIntent>
 
+    /**
+     * Excludes/drains the original namespace, verifies its private identity under an existing-only
+     * lease, and retains the exact local target. It never restores a client or grants server
+     * authority. The owning use case must establish provider publication and current admission.
+     */
+    suspend fun stageExistingHandover(
+        currentParent: CollaborationNativeParent,
+        target: CollaborationExistingRuntimeHandover,
+    ): AppResult<CollaborationRuntimeHandoverIntent> =
+        AppResult.Failed(
+            Failure(
+                FailureKind.Unavailable,
+                "Original chat storage is unavailable.",
+                code = "client.collaboration_existing_handover_unavailable",
+            )
+        )
+
     /** Retain current parent and foreground resources; invalidate obsolete pending acquisitions. */
     suspend fun updateRetention(retention: CollaborationRuntimeRetention): AppResult<Unit>
 

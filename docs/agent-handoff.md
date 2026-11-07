@@ -45,11 +45,13 @@ signer/hash; installation uses explicit10.77.77.3:5555 and `--install-only`.
 Existing-store handover is fully accepted. Full50781 PASSED586.14s:5,490 fresh
 cases/644 suites, zero failures/errors/skips,4,267 unchanged source inputs and zero
 Detekt findings. Focused34 and real SDK4 two-ABI/native process-death proof also pass
-(120.442s; x86_64 42.045s, ARM64 38.118s). All ten Kotlin files remain uncommitted
-while transport15facc91's first CI is pending. Their exact accepted contents are
+(120.442s; x86_64 42.045s, ARM64 38.118s). All ten Kotlin files are included in this atomic source commit on temporary branch
+`feat/chat-recovery-20261107`, while transport15facc91's first CI is pending. Their exact accepted contents are
 retained in `.work/space-store-inventory-2026-11-06/closed-handover-next/accepted-source`.
-The ONLY heavy local job is76606, phone51 rejection diagnostic focused-1; no emulator
-is active. Three additional diagnostic Kotlin files are now applied/frozen. [Contract](collaboration-existing-store-handover.md),
+No heavy local job or emulator is active. The three additional diagnostic Kotlin files
+remain uncommitted for their separate commit. Focused76606 PASSED6 cases/93.998s;
+full28124 PASSED424.942s with2,498 fresh cases, zero failures/errors/skips and4,267
+unchanged inputs. Final quality/lint will be recorded in the diagnostic commit. [Contract](collaboration-existing-store-handover.md),
 [evidence](measurements/collaboration-existing-store-handover-2026-11-06.json).
 
 NEW phone51 passive evidence at00:05:47UTC on7 November has164 post-install lines:
@@ -67,7 +69,17 @@ saw no requests and grants no delivery evidence. The additional diagnostic maps 
 bounded pinned SDK/Ruma prefixes to finite categories (HTTP status, response decoding,
 missing Olm/local state, crypto store, wrong room state, concurrent/older failure).
 It never emits server prose or changes queue policy. Six focused cases including
-three new privacy/prefix cases run first, then the exact full gate and release52.
+three new privacy/prefix cases pass; the exact full gate also passed before release52.
+Release drivers are prepared under `.work/release-phone-2026-11-07-build52`; no APK
+is built. After the gate, use temporary `feat/chat-recovery-20261107` for two atomic
+source commits (accepted closed-store10, diagnostic3), push each, then build52 from
+that exact pushed branch. This preserves the previous first pending CI while allowing
+phone delivery. Fast-forward feat/communications only after both15facc91 first runs
+start; that will launch the combined source's first CI. Do not redispatch it or
+change either old pending run. Return the local branch to feat/communications at that
+point without dropping the accepted/source work. Temporary recovery branch now exists; its closed-store source commit is pushed first.
+Next commit/push the three accepted diagnostic files, then build52 from that exact
+pushed branch. Do not change source or HEAD while the release build is running.
 [Physical evidence](measurements/collaboration-phone51-send-rejection-2026-11-07.json).
 
 
@@ -90,12 +102,14 @@ Queue68d first control42310411055 and native42310411202 are now running. SDK4 co
    the actual installation and corrects measured device clock offset. Passive audits
    at23:24:02 and23:50:00UTC retained no post-install lines for either profile; silence
    proves no delivery outcome. Do not launch the phone to manufacture evidence.
-2. Trace actual phone51 generic queue rejection. Read-only server logs for00:00–00:05
+2. Commit/push accepted diagnostics, build/verify release52 and run its owned Bima
+   offline/online acceptance, then announce and install-only on the authorized phone.
+   Continue tracing actual phone51 generic queue rejection. Read-only server logs for00:00–00:05
    are retained under `.work/phone51-send-rejection-2026-11-07`; use closed categories,
    not raw private bodies/tokens. User has an optional question about new vs old sends
    in build51 pending; do not infer its answer from elapsed time.
-   Commit the ten exact accepted closed-store files after transport15facc91's first
-   pending CI starts. Full50781 and native11165 already pass; do not rerun for evidence.
+   The ten exact accepted closed-store files are committed on the temporary branch.
+   Full50781 and native11165 already pass; do not rerun solely for evidence.
    Seven formatted later files and red/green/full/native drivers are prepared only
    under `.work/space-store-inventory-2026-11-06/rotation-handover-next` (not applied).
    Five new regressions precede a separate strict schema3 preserving initialized=false.
@@ -143,7 +157,8 @@ owning implementation; this local mechanism grants neither.
 
 ## Repositories and immutable artifacts
 
-- Mobile branch`feat/communications`; last program15facc91. SDK4 possession program
+- Mobile temporary branch`feat/chat-recovery-20261107`; origin feat/communications
+  remains0497dd6d/program15facc91 until its first pending CI starts. SDK4 possession program
   5081e629 passed61 focused cases and7,388 fresh full cases/963 suites in1,581.972s.
   Earlier failed quality run and corrected coroutine assertion remain recorded.
   [Possession contract/evidence](collaboration-space-sdk-possession.md).

@@ -3,6 +3,7 @@ package dev.fajar.starter.collaboration.data.repositories
 import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.api.CollaborationPusherApi
 import dev.fajar.starter.collaboration.data.datasources.*
+import dev.fajar.starter.collaboration.data.mappers.toLocalDeviceIdentity
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.collaborationGatewayMatchesCommand
@@ -32,6 +33,8 @@ class AndroidCollaborationRuntimeRepository(
     private val server: IdentityServer,
     private val endpoint: CollaborationSdkEndpoint,
     private val http: HttpClient,
+    private val inventories: CollaborationSdkInventorySource? = null,
+    private val privateIdentities: CollaborationSdkPrivateIdentitySource? = null,
 ) : CollaborationRuntimeRepository, CollaborationLocalDeviceIdentityRepository {
     private val registry =
         SdkRuntimeRegistry<AndroidCollaborationRuntimeLease>(
@@ -152,6 +155,106 @@ class AndroidCollaborationRuntimeRepository(
             }
         } finally {
             registry.endHandover(gate)
+        }
+    }
+
+    override suspend fun stageExistingHandover(
+        currentParent: CollaborationNativeParent,
+        target: CollaborationExistingRuntimeHandover,
+    ): AppResult<CollaborationRuntimeHandoverIntent> {
+        if (inventories == null || privateIdentities == null) return handoverPending()
+        val original = target.original
+        val prepared = safeStorageCall {
+            val owner =
+                CollaborationOwner(
+                    currentParent.sessionId,
+                    original.binding.audience,
+                    original.binding.accountId,
+                    original.binding.companyId,
+                    original.binding.nativeSessionId,
+                )
+            collaborationSdkScope(owner, original.deviceId, server, endpoint).also {
+                CollaborationSdkRecordCodec(it).validateHandoverIntent(target.intent)
+                require(target.intent.fingerprint == original.identity.fingerprint)
+            }
+        }
+        if (prepared is AppResult.Failed) return prepared
+        val scope = (prepared as AppResult.Success).value
+        val reserved =
+            registry.beginExistingHandover(
+                scope.storeId,
+                scope.owner,
+                scope.deviceId,
+                currentParent,
+            )
+        if (reserved is AppResult.Failed) return reserved
+        val gate = (reserved as AppResult.Success).value
+        return try {
+            val drained = drainHandover(gate)
+            if (drained is AppResult.Failed) return drained
+            currentCoroutineContext().ensureActive()
+            if (!registry.existingHandoverCurrent(gate, currentParent)) return handoverPending()
+            val stored = persistExistingHandover(scope, target, gate, currentParent)
+            if (stored is AppResult.Failed) return stored
+            currentCoroutineContext().ensureActive()
+            if (!registry.existingHandoverCurrent(gate, currentParent)) return handoverPending()
+            val intent = (stored as AppResult.Success).value ?: return handoverPending()
+            AppResult.Success(intent)
+        } finally {
+            registry.endHandover(gate)
+        }
+    }
+
+    private suspend fun persistExistingHandover(
+        scope: CollaborationSdkScope,
+        target: CollaborationExistingRuntimeHandover,
+        gate: SdkRuntimeHandoverGate,
+        currentParent: CollaborationNativeParent,
+    ): AppResult<CollaborationRuntimeHandoverIntent?> = safeStorageCall {
+        val directory =
+            requireNotNull(inventories).inspect(scope.storeId) ?: return@safeStorageCall null
+        var credentials: AtomicCredentialStore? = null
+        var primary: Throwable? = null
+        try {
+            require(directory.storeId == scope.storeId)
+            if (!directory.stateDatabasePresent || !directory.cryptoDatabasePresent)
+                return@safeStorageCall null
+            val store = credentialFactory(scope.credentialRecordName)
+            credentials = store
+            check(store.persistent) { "SDK handover requires protected persistent storage." }
+            val codec = CollaborationSdkRecordCodec(scope)
+            val current = store.read()?.let(codec::decode) ?: return@safeStorageCall null
+            currentCoroutineContext().ensureActive()
+            val identity =
+                requireNotNull(privateIdentities)
+                    .read(directory.databasePath, current.passphrase)
+                    .toLocalDeviceIdentity()
+            currentCoroutineContext().ensureActive()
+            require(identity == target.original.identity)
+            require(
+                identity.matrixUserId == current.matrixUserId &&
+                    identity.matrixDeviceId == current.matrixDeviceId
+            )
+            if (!registry.existingHandoverCurrent(gate, currentParent)) return@safeStorageCall null
+            val staged = codec.stageHandover(current, target.intent)
+            if (staged != current) store.write(codec.encode(staged))
+            currentCoroutineContext().ensureActive()
+            requireNotNull(codec.handoverIntent(staged))
+        } catch (failure: Throwable) {
+            primary = failure
+            throw failure
+        } finally {
+            withContext(NonCancellable) {
+                val credentialClose = runCatching { credentials?.close() }.exceptionOrNull()
+                val directoryClose = runCatching { directory.close() }.exceptionOrNull()
+                val closing = credentialClose ?: directoryClose
+                if (credentialClose != null && directoryClose != null)
+                    credentialClose.addSuppressed(directoryClose)
+                if (closing != null) {
+                    val original = primary
+                    if (original != null) original.addSuppressed(closing) else throw closing
+                }
+            }
         }
     }
 

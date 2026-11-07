@@ -183,6 +183,54 @@ internal class SdkRuntimeRegistry<T : Any>(
             replacingCredentials = false,
         )
 
+    /** Exclude an account-owned original store for local inspection/staging, never SDK restore. */
+    fun beginExistingHandover(
+        storeId: String,
+        originalOwner: CollaborationOwner,
+        deviceId: String,
+        currentParent: CollaborationNativeParent,
+    ): AppResult<SdkRuntimeHandoverGate> =
+        synchronized(monitor) {
+            if (
+                retention?.parent != currentParent ||
+                    originalOwner.audience != currentParent.audience ||
+                    originalOwner.accountId != currentParent.accountId
+            )
+                return@synchronized stopped()
+            if (storeId in handovers) return@synchronized handoverPending()
+            if (handovers.size >= CLIENT_LIMIT) return@synchronized capacity()
+            val entry = entries[storeId]
+            if (
+                entry != null &&
+                    (entry.owner.setupBinding() != originalOwner.setupBinding() ||
+                        entry.deviceId != deviceId)
+            )
+                return@synchronized busy()
+            val gate =
+                SdkRuntimeHandoverGate(
+                    storeId,
+                    originalOwner,
+                    deviceId,
+                    replacingCredentials = false,
+                    existingStoreParent = currentParent,
+                )
+            handovers[storeId] = gate
+            entry?.let(::retire)
+            changed()
+            AppResult.Success(gate)
+        }
+
+    /** Recheck the captured process owner around I/O; an invalidated gate still owns cleanup. */
+    fun existingHandoverCurrent(
+        gate: SdkRuntimeHandoverGate,
+        currentParent: CollaborationNativeParent,
+    ): Boolean =
+        synchronized(monitor) {
+            handovers[gate.storeId] === gate &&
+                gate.existingStoreParent == currentParent &&
+                retention?.parent == currentParent
+        }
+
     /** The repository validates the confirmed newer bootstrap before retiring this exact client. */
     fun beginCredentialReplacement(
         storeId: String,
@@ -351,6 +399,7 @@ internal constructor(
     internal val owner: CollaborationOwner,
     internal val deviceId: String,
     internal val replacingCredentials: Boolean,
+    internal val existingStoreParent: CollaborationNativeParent? = null,
 ) {
     override fun toString() = "SdkRuntimeHandoverGate([redacted])"
 }
