@@ -4,31 +4,58 @@ This is the active checkpoint. The [historical handoff](agent-handoff-history-th
 retains earlier work verbatim. Detailed measurements below are authoritative; do not
 restart accepted builds, native sends or SDK publication solely to recreate evidence.
 
-## Current next step — 7 November 2026 01:28UTC
+## Current next step — 7 November 2026, 02:41UTC
 
-Proof-only storage diagnostics pass root check/20 fresh cases/91.471s,4,269 stable
-inputs, proof assemble/format/architecture and Detekt0. Exact APK4b62c4999cbde3d78c44e020d493e588d909f494ec307cd059d4d377e9ae197d
-is retained in .work/native-storage-diagnostic-2026-11-07/accepted-proof.apk.
-No shipping runtime policy changed. Native CI now pins Platform940c181c parser;
-13 native-device+34 HRIS+18 worker-driver cases pass. See
-[proof contract](collaboration-native-proof-diagnostics.md).
-NEXT: run ONLY the unresolved frozen-draft/priority worker case on fresh owned
-emulator data with this diagnostic APK; original Bima userdata/sidecars stay intact.
-No heavy local job/emulator is currently active. Do not claim a native fix yet.
+Phone52/sourcefd05 remains installed. Original pending latency report stays OPEN.
+The user asked whether Bima lacks keys: Bima has one confirmed eligible device and
+one captured room send succeeded HTTP200. Four matched403room_send rejections belong
+to ANOTHER owned room with zero registered recipient devices. No requirement for
+Bima to remain online. Main90ef7b52 records safe metadata; routing identities remain
+private. No phone UI, replacement send or data/key reset occurred.
 
-Primary/sourceee338fb3/34d507bc is pushed after both fd05 source gates started.
-Firstee runs: control42323799690 pending, native42323799725 pending,
-protocol42323799691 running. Preserve pending first runs before another primary
-source push; commit/push current proof diagnostics on the temporary recovery branch.
-15facc91 control42313584270 is audited:4,436 portable/478 suites and1,788 Apple/197
-suites, no failures/errors/skips. Original x86 native failure remains unresolved.
+Full24248 PASSED1056.119s with7,436fresh tests, zero failures/errors/skips and4,270
+stable inputs. Android/proof/browser/root/format/architecture passed; lint and Detekt
+have zero findings. focused-2 had16passing worker cases but failed two missing
+savedstate1.3.1 verification entries; matching official HTTPS bytes were pinned before
+this accepted full gate. Strict verification remained enabled.
 
-Phone52 remains installed; original pending OPEN. Live API2e75fe1e finite operation
-logging is healthy, worker10485916/schema116.1 unchanged. Passive5minute observation
-from01:18:34UTC captured zero relevant requests; no phone UI/sends. One optional
-request to open Bima after server diagnostics is outstanding; do not repeat it.
-Caller has one current and one revoked-parent device; the failed target is unknown.
-Continue this diagnosis and all54PRD groups after the native investigation.
+Native1473 PASSED70.507s. New synthetic durable wake was acknowledged in436ms while
+original WorkManager retry remained ENQUEUED/attempt1 and appended job BLOCKED;
+stop/restart consumed one retained wake. No SDK/login/provider/messages. Exact APK
+bb4df9a8ff734b86f0daacfaa368d6d513d97e94442044c654ec6cac61929ed6 was used. Fixture was
+uninstalled; owned5560/PID3414825 stopped, transport absent.4,270 inputs unchanged.
+Full/native evidence is recorded in collaboration-foreground-delivery measurement.
+
+No heavy local job or emulator is active. Atomic commit/push is next, then release53
+build-arm64.py from the pushed temporary branch. All release drivers are prepared at
+.work/release-phone-2026-11-07-build53; use accepted full-1 inputs and freeze HEAD during
+build. Then verify-arm64.py/verify-sdk.py, original Bima5562 offline/online acceptance,
+screenshot review, stop, announce explicitserial10.77.77.3:5555 --install-only update.
+Never drive phone UI. Original pending latency report remains OPEN until actual phone
+outcomes; synthetic scheduling proof is not a chat acknowledgement or latency claim.
+
+Starter .work/foreground-delivery-port-2026-11-07 has guarded apply/check/record scripts
+for four exact worker files plus actual Apple worker CI targets; NOT applied. Apply
+only after Mobile acceptance, run one heavy job at a time, push and dispatch first
+Apple run once. Mobile .work/legacy-publication-transport-2026-11-07 has nine prepared
+source/test files, four new transport cases, guarded apply and focused/full drivers;
+NOT applied/tested. Continue it after release53 and reusable port. Its apply requires
+release53 acceptance and exact original input hashes. No group activation follows.
+
+Group preflighte45a4313 is committed/pushed:186domain/data and236API/full-worker cases
+pass, one existing opt-in skip,8,613 stable inputs. V117–137 stay disabled/unshipped.
+Live Main API2e75fe1e/worker10485916/schema116.1 is unchanged. Owning publication/
+freeze/drain/adoption and all54PRD groups remain unfinished. SDK4 is immutable.
+
+Mobile376a5096 source is temporaryfeat/chat-recovery-20261107. First primaryee control
+42323799690 now RUNNING; native42323799725 PASSED/audited444cases/73suites perABI,
+protocol42323799691 PASSED/audited14checks per mode. Next primary promotion may proceed
+after accepted source commit;
+never replace original first-run evidence. Firstfd05 control42318790930 PASSED/audited
+4,436portable/478suites plus1,788Apple/197, zero failures/errors/skips. Its native
+42318790943 is already accepted437cases/73suites perABI. Public CI measurement is
+currently uncommitted alongside this work. Previous native investigation83374 passed
+but did not reproduce the prior15facc91 first-CI storage failure; do not rerun for logs.
 
 ## Current work — 7 November 2026
 

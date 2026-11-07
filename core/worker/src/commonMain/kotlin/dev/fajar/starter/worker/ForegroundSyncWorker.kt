@@ -28,8 +28,11 @@ class ForegroundSyncWorker(
                         var wait: Duration? = Duration.ZERO
                         var backoff = retryDelay
                         while (isActive) {
-                            if (wait == null) requests.receive()
-                            else withTimeoutOrNull(wait) { requests.receive() }
+                            // Coalesce a wake retained while stopped with the startup scan.
+                            if (requests.tryReceive().isFailure) {
+                                if (wait == null) requests.receive()
+                                else withTimeoutOrNull(wait) { requests.receive() }
+                            }
                             when (val result = runSyncTask(task)) {
                                 SyncResult.Complete -> {
                                     wait = interval

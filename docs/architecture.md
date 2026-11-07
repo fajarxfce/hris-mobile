@@ -1,5 +1,9 @@
 # Architecture
 
+[Foreground chat delivery](collaboration-foreground-delivery.md) gives the Android
+process a lifecycle-owned wake path while WorkManager retains persistent background
+scheduling. Both use the same admitted worker and existing SDK writer exclusion.
+
 [Interrupted credential handover](collaboration-interrupted-credential-handover.md)
 preserves the original uninitialized record in a distinct strict format after verified
 private-store drain; it grants no provider publication or server authority.

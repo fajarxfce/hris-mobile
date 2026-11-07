@@ -11,6 +11,106 @@ import kotlinx.coroutines.test.*
 
 class ForegroundSyncWorkerTest {
     @Test
+    fun hostWakeInterruptsBackoffWithoutWaitingForAnOlderPlatformRequest() = runTest {
+        var calls = 0
+        val task =
+            object : SyncTask {
+                override val key = "delivery"
+
+                override suspend fun invoke(): SyncResult {
+                    calls++
+                    return if (calls == 1) SyncResult.Retry(Failure(FailureKind.Network, "Offline"))
+                    else SyncResult.Complete
+                }
+            }
+        val queue = ForegroundWorkScheduler(setOf(task.key))
+        val worker = ForegroundSyncWorker(listOf(task), queue).start(backgroundScope)
+        runCurrent()
+        assertEquals(1, calls)
+        advanceTimeBy(1_000)
+        assertFalse(queue.notify("unrelated"))
+        assertTrue(queue.notify(task.key))
+        runCurrent()
+        assertEquals(2, calls)
+        assertEquals(1_000L, testScheduler.currentTime)
+        worker.cancelAndJoin()
+        queue.close()
+        assertFalse(queue.notify(task.key))
+    }
+
+    @Test
+    fun stoppedForegroundOwnerCannotConsumeWakeForItsReplacement() = runTest {
+        var calls = 0
+        var cancellations = 0
+        val task =
+            object : SyncTask {
+                override val key = "delivery"
+
+                override suspend fun invoke(): SyncResult {
+                    calls++
+                    if (calls == 1) {
+                        try {
+                            awaitCancellation()
+                        } finally {
+                            cancellations++
+                        }
+                    }
+                    return SyncResult.Complete
+                }
+            }
+        val queue = ForegroundWorkScheduler(setOf(task.key))
+        val first = ForegroundSyncWorker(listOf(task), queue).start(backgroundScope)
+        runCurrent()
+        first.cancelAndJoin()
+        assertEquals(1, cancellations)
+        repeat(100) { assertTrue(queue.notify(task.key)) }
+        advanceTimeBy(120_000)
+        runCurrent()
+        assertEquals(1, calls)
+        val next = ForegroundSyncWorker(listOf(task), queue).start(backgroundScope)
+        runCurrent()
+        assertEquals(2, calls)
+        next.cancelAndJoin()
+        queue.close()
+    }
+
+    @Test
+    fun hostWakesDuringDeliveryAreConflatedAndDoNotStartConcurrentWriters() = runTest {
+        val release = CompletableDeferred<Unit>()
+        var calls = 0
+        var active = 0
+        var maximum = 0
+        val task =
+            object : SyncTask {
+                override val key = "delivery"
+
+                override suspend fun invoke(): SyncResult {
+                    active++
+                    maximum = maxOf(maximum, active)
+                    try {
+                        calls++
+                        if (calls == 1) release.await()
+                        return SyncResult.Complete
+                    } finally {
+                        active--
+                    }
+                }
+            }
+        val queue = ForegroundWorkScheduler(setOf(task.key))
+        val worker = ForegroundSyncWorker(listOf(task), queue).start(backgroundScope)
+        runCurrent()
+        repeat(100) { assertTrue(queue.notify(task.key)) }
+        runCurrent()
+        assertEquals(1, calls)
+        release.complete(Unit)
+        runCurrent()
+        assertEquals(2, calls)
+        assertEquals(1, maximum)
+        worker.cancelAndJoin()
+        queue.close()
+    }
+
+    @Test
     fun successfulBatchesContinueWithoutNetworkBackoff() = runTest {
         var calls = 0
         val task =

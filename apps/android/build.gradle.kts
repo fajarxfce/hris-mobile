@@ -14,6 +14,7 @@ dependencies {
     implementation(projects.core.sync.domain)
     implementation(projects.features.inbox.domain)
     implementation(libs.android.activity)
+    implementation(libs.android.lifecycle.process)
     implementation(libs.android.appauth)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)

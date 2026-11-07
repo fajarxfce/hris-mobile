@@ -1,0 +1,123 @@
+{
+  "detektFindings": 0,
+  "lintIssues": 0,
+  "recordedAt": "2026-11-07T02:41:03.933562+00:00",
+  "change": "Lifecycle-owned foreground chat delivery and bounded background requests",
+  "sourceFiles": 4270,
+  "sourceManifestSha256": "da9e0d654e75974c921d9f752809937b765f7017f8483dee1d21ab91d3685790",
+  "full": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "env",
+      "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+      "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+      "ANDROID_HOME=/home/fajar/Android/Sdk",
+      "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+      "./gradlew",
+      "--dependency-verification",
+      "strict",
+      "--stacktrace",
+      "--continue",
+      ":check",
+      ":features:collaboration:data:testAndroidHostTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":apps:collaboration-proof:assembleDebug",
+      ":core:database:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:presentation:wasmJsBrowserTest",
+      ":apps:android:assembleDevDebug",
+      ":apps:android:lintDevDebug",
+      ":formatCheck",
+      ":architectureCheck",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=53",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m",
+      "-Pkotlin.compiler.execution.strategy=in-process"
+    ],
+    "startedAt": "2026-11-07T02:21:16.568044+00:00",
+    "elapsedSeconds": 1056.119,
+    "exitCode": 0,
+    "sourceFiles": 4270,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7436,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "freshSuites": 967,
+  "native": {
+    "startedAt": "2026-11-07T02:39:06.568205+00:00",
+    "apkSha256": "bb4df9a8ff734b86f0daacfaa368d6d513d97e94442044c654ec6cac61929ed6",
+    "serial": "emulator-5560",
+    "providerRequests": 0,
+    "newMessagesSent": 0,
+    "phoneTouched": false,
+    "complete": true,
+    "instrumentation": {
+      "complete": true
+    },
+    "proof": {
+      "foregroundAcknowledgementMillis": 436,
+      "olderWorkStillInBackoff": true,
+      "appendedWorkStillBlocked": true,
+      "exactDurableGenerationAcknowledged": true,
+      "stoppedOwnerDidNotRun": true,
+      "restartConsumedWakeOnce": true,
+      "cleanup": true,
+      "providerRequests": 0,
+      "messagesSent": 0
+    },
+    "fixtureRemoved": true,
+    "sourcesUnchanged": true,
+    "emulatorStop": {
+      "pid": 3414825,
+      "serial": "emulator-5560",
+      "stopped": true,
+      "signalSent": true,
+      "transportAbsent": true,
+      "seconds": 1.204
+    },
+    "elapsedSeconds": 70.507
+  },
+  "dependencyVerification": [
+    {
+      "artifact": "savedstate-android-1.3.1.module",
+      "source": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate-android/1.3.1/savedstate-android-1.3.1.module",
+      "bytes": 10837,
+      "sha256": "e994994c7def60c071171928edc45a01e3b07e369261c669f5082d306a1b885f",
+      "matchesCachedArtifact": true
+    },
+    {
+      "artifact": "savedstate-release.aar",
+      "source": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate-android/1.3.1/savedstate-android-1.3.1.aar",
+      "bytes": 141149,
+      "sha256": "45dbbd54dc986f17b260ffae74e3d224e2ca64498fd0c02e5b584a569f79dce8",
+      "matchesCachedArtifact": true
+    }
+  ],
+  "precedingFocusedFailure": {
+    "startedAt": "2026-11-07T02:07:16.841618+00:00",
+    "elapsedSeconds": 598.824,
+    "exitCode": 1,
+    "sourceFiles": 4269,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "precedingFocusedFailureCause": "Two missing savedstate1.3.1 verification entries; exact bytes independently matched official Google Maven HTTPS artifacts before adding SHA256. Strict verification stayed enabled. Earlier focused-1 selected a nonexistent AndroidHostTest task and ran zero tests.",
+  "physicalPhoneLatencyAccepted": false,
+  "interpretation": "Native fixture acknowledges synthetic durable wake metadata while original WorkManager retry and appended work remain waiting. It sends no chat messages, starts no SDK and establishes no chat receipt or fixed network latency."
+}

@@ -87,6 +87,7 @@ class MatrixProofInstrumentation : Instrumentation() {
 
     private suspend fun runScenario(directory: File) {
         when (scenario) {
+            "foreground-scheduling" -> ForegroundSchedulingProbe(targetContext, directory).run()
             "hris-product-peer" -> HrisProductNotificationPeer(targetContext, directory).run()
             "notification-input-verify" -> {
                 val owner =

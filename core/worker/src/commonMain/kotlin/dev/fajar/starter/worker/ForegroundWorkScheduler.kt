@@ -12,6 +12,9 @@ class ForegroundWorkScheduler(keys: Set<String>) : WorkScheduler {
         requests.getValue(key).send(Unit)
     }
 
+    /** A host signal never waits for an OS backoff; unrelated or closed lanes ignore it. */
+    fun notify(key: String): Boolean = requests[key]?.trySend(Unit)?.isSuccess == true
+
     internal fun requests(key: String): ReceiveChannel<Unit> = requests.getValue(key)
 
     fun close() {

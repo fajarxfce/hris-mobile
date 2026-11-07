@@ -2,16 +2,22 @@ package dev.fajar.hris
 
 import android.app.Application
 import android.content.ComponentName
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.navigation.AppLinkChannel
 import dev.fajar.starter.app.notifications.*
+import dev.fajar.starter.app.work.CollaborationDeliveryWorker
 import dev.fajar.starter.collaboration.data.di.androidCollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.data.di.androidCollaborationSdkInventoryRepository
 import dev.fajar.starter.collaboration.data.di.androidCollaborationSdkPossessionRepository
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
+import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationText
 import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.database.createAppDatabase
@@ -29,7 +35,13 @@ import dev.fajar.starter.securestorage.AndroidCredentialStore
 import dev.fajar.starter.security.data.lock.datasources.AndroidDeviceAuthenticationSource
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.worker.AndroidWorkScheduler
+import dev.fajar.starter.worker.ForegroundSyncWorker
+import dev.fajar.starter.worker.ForegroundWorkScheduler
 import dev.fajar.starter.worker.SyncWorkerFactory
+import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
 
 class StarterApplication : Application(), Configuration.Provider, AndroidCollaborationActionHost {
@@ -65,14 +77,20 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
                 .setWorkerFactory(SyncWorkerFactory { container.koin.getAll<SyncTask>() })
                 .build()
 
+    private val foregroundRequests =
+        ForegroundWorkScheduler(setOf(QueueCollaborationText.DELIVERY_KEY))
+    private var foregroundDelivery: Job? = null
+
     private val scheduler by lazy {
         AndroidWorkScheduler(
             WorkManager.getInstance(this),
             collapsedKeys =
                 setOf(
                     dev.fajar.starter.collaboration.domain.entities.CollaborationRecoveryWake
-                        .WORK_KEY
+                        .WORK_KEY,
+                    QueueCollaborationText.DELIVERY_KEY,
                 ),
+            onRequested = { foregroundRequests.notify(it) },
         )
     }
     val container by lazy {
@@ -171,10 +189,25 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
         PerformanceMonitoring.install(AndroidPerformanceSink(this, enabled = !BuildConfig.DEBUG))
         scheduler.installPeriodic(container.koin.getAll<SyncTask>().map { it.key }.toSet())
         container.koin.get<ApplicationCollaborationLifetime>().start()
+        val lifecycle = ProcessLifecycleOwner.get().lifecycle
+        foregroundDelivery =
+            lifecycle.coroutineScope.launch(Dispatchers.Default) {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    ForegroundSyncWorker(
+                            listOf(container.koin.get<CollaborationDeliveryWorker>()),
+                            foregroundRequests,
+                            retryDelay = 1.seconds,
+                        )
+                        .start(this)
+                        .join()
+                }
+            }
         notificationRuntime.value.start()
     }
 
     override fun onTerminate() {
+        foregroundDelivery?.cancel()
+        foregroundRequests.close()
         if (notificationRuntime.isInitialized()) notificationRuntime.value.close()
         container.close()
         super.onTerminate()

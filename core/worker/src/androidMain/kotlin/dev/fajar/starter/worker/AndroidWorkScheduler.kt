@@ -3,16 +3,22 @@ package dev.fajar.starter.worker
 import androidx.work.*
 import dev.fajar.starter.sync.data.datasources.WorkScheduler
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.first
 
 /** WorkManager persists only the task key; feature payloads remain in the transactional outbox. */
 class AndroidWorkScheduler(
     private val workManager: WorkManager,
     collapsedKeys: Set<String> = emptySet(),
+    private val onRequested: (String) -> Unit = {},
 ) : WorkScheduler {
     private val collapsed = CollapsedWorkGate(collapsedKeys)
 
     override suspend fun enqueue(key: String) {
+        kotlinx.coroutines.currentCoroutineContext().ensureActive()
+        // The caller already persisted its command. The host may wake foreground execution
+        // independently of an older WorkManager request waiting for backoff or constraints.
+        onRequested(key)
         if (collapsed.contains(key)) {
             collapsed.enqueue(key, { unfinished(key) }, { enqueueRequest(key, it) })
         } else enqueueRequest(key, null)
