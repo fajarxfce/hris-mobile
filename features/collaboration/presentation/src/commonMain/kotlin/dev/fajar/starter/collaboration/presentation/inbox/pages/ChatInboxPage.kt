@@ -4,11 +4,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.collaboration.domain.entities.CollaborationInboxPreview
+import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageState
 import dev.fajar.starter.collaboration.presentation.inbox.*
 import dev.fajar.starter.collaboration.presentation.thread.*
 import dev.fajar.starter.collaboration.presentation.widgets.ChatPersonRow
@@ -19,6 +21,8 @@ import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.Add
 import io.github.composefluent.icons.regular.ArrowLeft
+import io.github.composefluent.icons.regular.Checkmark
+import io.github.composefluent.icons.regular.Clock
 import kotlin.time.Clock
 import kotlinx.datetime.*
 
@@ -132,7 +136,10 @@ fun ChatInboxPage(
         ) { item ->
             val preview = state.previews[item.conversation.id]
             val draft = preview?.draft?.takeIf { it.text.isNotEmpty() }
-            val timestamp = draft?.savedAt?.toEpochMilliseconds() ?: preview?.message?.timestamp
+            val timestamp =
+                draft?.savedAt?.toEpochMilliseconds()
+                    ?: preview?.outgoing?.intent?.createdAt?.toEpochMilliseconds()
+                    ?: preview?.message?.timestamp
             ChatPersonRow(
                 item.peer.displayName,
                 { onEvent(ChatInboxEvent.ConversationSelected(item.conversation.id)) },
@@ -140,7 +147,7 @@ fun ChatInboxPage(
                 supporting = {
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         val count = state.unsentCounts[item.conversation.id] ?: 0
-                        if (count > 0)
+                        if (count > 0 && preview?.outgoing == null && draft == null)
                             AppText(
                                 appString(AppString.ChatUnsentCount, count.toString()),
                                 color = AppColors.error,
@@ -177,20 +184,40 @@ fun ChatInboxPage(
 @Composable
 private fun InboxPreviewText(preview: CollaborationInboxPreview) {
     val draft = preview.draft?.takeIf { it.text.isNotEmpty() }
+    val outgoing = preview.outgoing
     val text =
         when {
+            draft?.submissionId != null -> draft.text
             draft != null -> "${appString(AppString.ChatDraftLabel)}: ${draft.text}"
+            outgoing != null -> outgoing.intent.text
             preview.message?.redacted == true -> appString(AppString.ChatDeleted)
             else -> preview.message?.let { it.latestEdit?.edit?.text ?: it.text }
         }
     if (text != null)
-        AppText(
-            text,
-            style = FluentTheme.typography.body,
-            color = if (draft != null) AppColors.accent else AppColors.muted,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            if (draft?.submissionId != null || (draft == null && outgoing != null)) {
+                val sent = draft == null && outgoing?.state is CollaborationMessageState.Sent
+                AppIcon(
+                    if (sent) Icons.Regular.Checkmark else Icons.Regular.Clock,
+                    appString(if (sent) AppString.ChatSent else AppString.ChatQueued),
+                    Modifier.size(16.dp),
+                    tint = AppColors.muted,
+                )
+            }
+            AppText(
+                text,
+                modifier = Modifier.weight(1f),
+                style = FluentTheme.typography.body,
+                color =
+                    if (draft != null && draft.submissionId == null) AppColors.accent
+                    else AppColors.muted,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
 }
 
 @Composable

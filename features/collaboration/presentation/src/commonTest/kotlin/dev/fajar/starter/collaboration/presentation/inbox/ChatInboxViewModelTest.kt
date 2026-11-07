@@ -146,10 +146,12 @@ class ChatInboxViewModelTest {
             runCurrent()
             assertEquals(30, f.content.historyObservers)
             assertEquals(30, f.content.draftObservers)
+            assertEquals(1, f.content.commandObservers)
             vm.onEvent(ChatInboxEvent.NextRequested)
             runCurrent()
             assertEquals(15, f.content.historyObservers)
             assertEquals(15, f.content.draftObservers)
+            assertEquals(1, f.content.commandObservers)
             assertEquals(
                 (31..45).map { f.item(it).conversation.id }.toSet(),
                 vm.state.value.previews.keys,
@@ -160,6 +162,7 @@ class ChatInboxViewModelTest {
             assertTrue(vm.state.value.previews.isEmpty())
             assertEquals(0, f.content.historyObservers)
             assertEquals(0, f.content.draftObservers)
+            assertEquals(0, f.content.commandObservers)
         }
     }
 

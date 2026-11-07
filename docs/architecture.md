@@ -1,5 +1,8 @@
 # Architecture
 
+[Local pending and draft previews](chat-inbox-previews.md) share one owned bounded
+command observation and keep presentation independent of transport acknowledgement.
+
 [Owned Room request preparation](collaboration-space-room-preparation.md)
 recovers original work before current native/device reads and exact fenced handoff.
 

@@ -7,6 +7,16 @@ contracts are authoritative; `.work` is staging/evidence, never permission to re
 
 ## Current accepted work — 7 November 2026
 
+
+Pending chat-list preview is accepted in this commit: eleven source/test files share
+one account command subscription, combine the latest original sends with local history
+and drafts, and render compact clock/check icons. Frozen submission is not mislabelled
+as an editable draft. Focused74307 passed50/7/266.430s; full95262 passed3,760 fresh cases/
+458 suites/514.213s on4,412 unchanged inputs, zero failures/errors/skips/lint. Root,
+Android host/quality/shared Wasm and20 actual Browser cases pass; three synthetic
+small/dark200%/landscape captures were opened. All jobs reaped. [Contract](chat-inbox-previews.md).
+No new APK yet; global recency cursor/recipient read receipts are unchanged.
+
 Owning Room preparation is locally accepted in this source commit: seven source/test
 files recover original work before current native room/device reads, preserve explicit
 retry account/revision and perform one insertion or exact known-link atomic handoff.
@@ -56,39 +66,46 @@ Their source contracts and exact results are linked by architecture and prior ch
 
 ## Next work
 
-Priority steering received after local acceptance: user confirms release53 STILL has
-long pending and explicitly requests that we send real test messages ourselves to
-their account or another contact. Use original Bima emulator on serial5562 to send
-a bounded real test to Karyawan Demo, measure enqueue/Matrix ACK/projection, and
-continue the broader PRD after the latency investigation. No phone UI interaction
-is needed. New bounded ADB connect31740 at15:41UTC timed out/reaped. Avoid repeating
-feedback questions; device unavailability must not stop this authorized self-test.
-No local heavy job remains; all61602/93110 and CI audits are reaped. Finish this
-accepted source commit/push before emulator startup; no compiler/emulator overlap.
+1. Commit/push this accepted pending-preview change to recovery. Primary currently
+   c760c6c7; preserve its first native42387719927 (still pending) before promotion.
+   Its control42387719940 has started. First0d control42383612502 succeeded (audit
+   pending); native42383612567 still runs. Previous firstfe is fully accepted below.
+2. Fix the actual transient duplicate outgoing bubble and measure composer visibility.
+   User explicitly authorized sending our own test chats. ORIGINAL Bima emulator
+   sent ONE real message to Karyawan Demo on the exact phone53 APK at15:49:26.104527UTC.
+   Polling first saw Pending5.534s and Sent7.799s; these are observation bounds, not
+   exact ACK timings. The actual recording shows a transient duplicated outgoing
+   bubble during remote-echo reconciliation. No keyboard was visible in this first
+   recording; do not claim the reported keyboard/viewport problem was reproduced.
+   No further user test question is needed. Source clue: Android mapper uses the
+   exclusive EventOrTransactionId enum, while matchesOwnedEcho and its synthetic
+   test fixture assume transactionId is retained on a remote EventId. Inspect the
+   existing bounded JSON's unsigned.transaction_id and exact durable Sent event ID;
+   preserve sender/owner/room/logical checks and never fabricate ACKs or new IDs.
+   Then validate and install build54 (none exists yet).
+3. Implement the requested Chucker-like inspector including Matrix Rust traffic and
+   CROSS-PLATFORM support. If custom, create a separate reusable Git repository.
+   Research only: KtorScope targets Android/iOS; KmpInspector has external records
+   but Android/iOS/JVM only; Kick has Wasm but its network Logger is internal and
+   its stock plugin stores raw headers/bodies and reads full responses before truncation.
+   SDK4 already emits HTTP tracing spans, but has no exposed FFI HTTP observer.
+   Proper Matrix instrumentation may need a NEW immutable SDK version. Never edit
+   or republish SDK4. No inspector implementation or separate repo exists yet.
+4. Continue original Room dispatch after accepted preparationc760c6c7. Preserve22
+   original resolver cases and normalized marks/full CAS/finite observed capture.
+   Design-only .work/space-room-execution-2026-11-07/plan.md is NOT applied source.
+   Then published binding/projection, original SDK delivery/history, native-parent
+   recovery, product routing and all54 PRD groups:3 in progress/51 planned/none complete.
+   These complaints are additive, not cancellation of long-run work. Validate reusable
+   foundations in Mobile before Starter; physical iPhone tests waived, Apple CI required.
 
-
-1. First0d10c395 control42383612502 and native42383612567 have BOTH STARTED.
-   Earlier firstfe control42380244144/native42380243983 are fully accepted below.
-   Commit/push this accepted preparation source, then ordinary fast-forward primary
-   to include atomic handoff98ef15a6 and preparation. Preserve new first source runs
-   before another primary promotion; no CI/provider rerun for old evidence.
-2. Next implement original Room dispatch alongside the existing explicit resolution.
-   Avoid a duplicate full orchestration owner or use-case-to-use-case calls. Design in
-   `.work/space-room-execution-2026-11-07/plan.md` is supplementary, NOT applied source:
-   consider ExecuteCollaborationSpaceRoomRequest with invoke for original dispatch and
-   resolve for the existing fence behavior. Preserve all22 resolution cases, normalized
-   marks/full CAS and2s observed-result capture. Receipt-only reads/fences must not
-   consume send attempts; null receipts and changed parents never authorize replacement.
-   Then persist published room binding and validate original LEGACY metadata before
-   SDK delivery/history, native-parent recovery and product routing. No new execution
-   candidates exist. Seven preparation files are now accepted and must not be reapplied.
-3. Continue owning Room dispatch,
-   projection/recovery, original SDK delivery/history, native-parent recovery and product
-   routing. A setup receipt/fence is not a message ACK or content authority. New offline
-   chats also need provisional peer/Open mapping without replacing original message IDs.
-4. Continue all54 PRD groups:3 in progress/51 planned/none complete. Physical iPhone
-   testing is waived; relevant Apple compilation/CI is still required. Validate reusable
-   foundations in Mobile before Starter ports. No HRIS-specific policy port is needed here.
+No local heavy job remains. Original emulator5562/PID295446 was stopped at15:56:48UTC,
+original userdata/sidecars preserved. .work/phone53-self-send-2026-11-07 retains the
+private recording/logs and inactive pre-send backup: EVIDENCE ONLY, never restore it
+after the send or run another SDK store from it. No phone UI was touched. New bounded
+ADB connect31740 at15:41UTC timed out/reaped; do not repeat connection/feedback loops.
+Do not attribute concurrent gateway403 endpoint_unavailable logs or all HRIS calls to
+this send without route/correlation proof. Send latency remains open.
 
 ## Original first CI
 
@@ -119,11 +136,11 @@ is fully accepted, with exact original artifacts retained in the previous checkp
 
 ## Other repositories and live state
 
-Group branch feat/communication-space isf0d85ea5 (docs checkpoint), native dcdaf220
+Group branch feat/communication-space is28651f50 (docs checkpoint), native dcdaf220
 and HTTP cf885a1c accepted/pushed. Focused195/319.052s and API/FULL worker241/540.839s
 pass with one existing opt-in retention skip. Corrected HTTP99/202.31s on8,637 stable
 inputs passes; initial wrong fixture expectation is retained. V138 storage is c6937843.
-All Group jobs are reaped. Main branch feat/communications is6b01d529 (docs checkpoint).
+All Group jobs are reaped. Main branch feat/communications is19be24ce (docs checkpoint).
 Starter feat/communications remainsb11437a. Their delivery.json next lists now point at current handoffs instead of obsolete jobs.
 Update cross-repository handoffs after this source commit/promotion.
 

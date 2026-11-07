@@ -6,6 +6,8 @@ import dev.fajar.starter.common.result.Failure
 data class CollaborationInboxPreview(
     val message: CollaborationHistoryMessage?,
     val draft: CollaborationDraft?,
+    /** Latest owned send not yet represented by the selected history row. */
+    val outgoing: CollaborationMessageRecord? = null,
 ) {
     override fun toString() = "CollaborationInboxPreview([redacted])"
 }

@@ -1,0 +1,50 @@
+{
+  "sender": "Bima demo",
+  "recipient": "Karyawan Demo (authorized user)",
+  "serial": "emulator-5562",
+  "versionCode": 53,
+  "phoneTouched": false,
+  "sendButtonTapped": true,
+  "observations": [
+    {
+      "secondsAfterTap": 2.928,
+      "bubblePresent": false
+    },
+    {
+      "secondsAfterTap": 5.534,
+      "bubblePresent": true,
+      "bubbleBounds": "[267,1943][1014,1988]",
+      "rowLabels": [
+        "15:49",
+        "Waiting to send"
+      ],
+      "composerBounds": "[22,2120][904,2252]"
+    },
+    {
+      "secondsAfterTap": 7.799,
+      "bubblePresent": true,
+      "bubbleBounds": "[267,1943][1014,1988]",
+      "rowLabels": [
+        "15:49",
+        "Sent"
+      ],
+      "composerBounds": "[22,2120][904,2252]"
+    }
+  ],
+  "tapStartedAt": "2026-11-07T15:49:26.104527+00:00",
+  "tapReturnedAfterSeconds": 0.069,
+  "firstConfirmedUiAfterSeconds": 7.799,
+  "videoExitCode": 0,
+  "recordedVideo": true,
+  "finishedAt": "2026-11-07T15:49:52.254674+00:00",
+  "scope": "One user-authorized real send from the original Bima account to Karyawan Demo",
+  "sourceCommit": "08545820c0b58f46d784971e71ceb207dd628c0f",
+  "apkSha256": "994d161ade3455745157d0793475b5091d67e968af909bda7a282dce163152c6",
+  "timingLimit": "UI polling bounds; screenrecord startup was not synchronized to the tap clock",
+  "observedTransientDuplicateBubble": true,
+  "keyboardVisibleInRecording": false,
+  "latencyResolved": false,
+  "originalEmulatorStoppedAt": "2026-11-07T15:56:48.356127+00:00",
+  "originalDataPreserved": true,
+  "rawVideoAndLogsPublished": false
+}

@@ -7,7 +7,8 @@ list; it never creates an SDK runtime, fetches a provider room or starts deliver
 
 Each visible page contains at most 50 conversations (30 in the current UI). Only
 that page owns detail observers: one latest-message query with limit 1 and one
-composer-slot observation per conversation. The history repository authenticates
+composer-slot observation per conversation. A single shared account command observer
+reads at most128 original sends for the entire visible page. The history repository authenticates
 its bounded lookahead as before. Changing page cancels those children. Hiding the
 tab stops detail observers while retaining the list/admission observation, so a
 hidden route still clears after confirmed denial or account replacement.
@@ -18,18 +19,47 @@ content clears previews and exposes a recoverable failure without removing saved
 conversation names; ownership failure clears the entire page. Cancellation waits
 for an uncooperative child read before allowing its owner to finish.
 
-The row shows the original retained message, or a labelled nonempty composer draft.
+The row also projects the latest original local send before transport acknowledges it.
+An unsent command shows its text and a compact clock icon; an acknowledged retained
+command shows a check. An exact corresponding history row takes over without restoring
+the earlier text. Cancelled sends, edits of earlier messages and other conversations
+do not replace the preview. A nonempty editable draft keeps its Draf/Draft label.
+A frozen composer is already a send action and shows a clock until its exact command
+is visible; the same submitted text is not relabelled as an editable draft.
 Redacted originals use the deleted-message label. Same-day timestamps use HH:mm,
 yesterday and the preceding weekdays use localized labels, and older dates use
 dd/MM/yyyy. Draft dates use the actual saved timestamp. At large text sizes a
 narrow heading moves its time below the name instead of squeezing the name beside
 a full date. Preview text can wrap to two lines; opening the row shows the thread.
 
-This increment does not infer unread counts, recipient acknowledgements or global
+This projection does not infer unread counts, recipient acknowledgements or global
 recency ordering. The existing acquired conversation cursor is preserved; it is
 not a last-activity cursor. Delivery/read ACKs, an indexed recent-conversation
 projection and group ownership across company selection remain required work.
 No generic Starter component changes are included.
+
+## Pending-preview acceptance — 7 November 2026
+
+The eleven-file change passed focused74307:50 cases/7 suites/266.430s, and full95262:
+3,760 fresh cases/458 suites/514.213s. Both used4,412 unchanged inputs and had zero
+failures, errors or skips. Root check, Android host/release lint, formatting,
+architecture, Detekt, shared Wasm compilation and20 explicitly verified Browser
+cases passed. Both jobs are reaped. [Exact source and reports](measurements/chat-inbox-pending-2026-11-07.json).
+
+Regression cases cover offline pending updates with expired credentials, hidden
+reopening, one queue subscription for30 visible conversations, no blank emission
+for unchanged inputs, frozen-draft handoff, original send order across ACK/history
+publication, account boundaries, denial/disposal, bounded immutable snapshots,
+redaction and edits. No sending, SDK acquisition or API request is added to observation.
+
+The three current synthetic captures were opened and reviewed: [small phone](images/chat-inbox-pending/chat-inbox-previews-light.png),
+[dark with2x text](images/chat-inbox-pending/chat-inbox-previews-dark-large-text.png),
+and [landscape](images/chat-inbox-pending/chat-inbox-previews-landscape.png).
+These are rendered UI checks, not pixel-baseline comparisons. This source has not
+yet produced a new phone APK or completed its first Apple CI. Send latency and the
+separately observed transient duplicate room bubble remain open.
+
+## Initial preview acceptance — 3 November 2026
 
 The initial focused check passed 1,101 cases. After correcting the large-text
 name/date collision and local retry behavior, the complete check passed in

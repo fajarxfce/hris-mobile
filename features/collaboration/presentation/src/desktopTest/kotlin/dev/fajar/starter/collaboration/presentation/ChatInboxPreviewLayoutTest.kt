@@ -76,7 +76,7 @@ class ChatInboxPreviewLayoutTest {
                             "\$event-$i",
                             Instant.parse(dates[i]).toEpochMilliseconds(),
                             "a".repeat(64),
-                            messages[i],
+                            if (i == 1 || i == 2) "Older stored preview" else messages[i],
                             listOf("\$event-$i"),
                             false,
                         )
@@ -91,6 +91,35 @@ class ChatInboxPreviewLayoutTest {
                                     Instant.parse(dates[0]),
                                 )
                             else null,
+                            outgoing =
+                                if (i == 1 || i == 2)
+                                    CollaborationMessageRecord(
+                                        CollaborationMessageIntent(
+                                            chatId(9100 + i),
+                                            CollaborationMessageOwner(
+                                                f.server.audience,
+                                                f.initial.user.id,
+                                                row.conversation.companyId,
+                                            ),
+                                            row.conversation.id,
+                                            Instant.parse(dates[i]),
+                                            messages[i],
+                                        ),
+                                        0,
+                                        if (i == 1) CollaborationMessageState.Queued
+                                        else
+                                            CollaborationMessageState.Sent(
+                                                CollaborationMessageDevice(
+                                                    "native",
+                                                    "device",
+                                                    "bootstrap",
+                                                    "!room:example.test",
+                                                ),
+                                                "txn",
+                                                "\$event-$i",
+                                            ),
+                                    )
+                                else null,
                         )
                 }
                 .toMap()
@@ -138,6 +167,15 @@ class ChatInboxPreviewLayoutTest {
             .onNodeWithText("Draf: Aku lengkapi kuitansinya sebentar lagi.", useUnmergedTree = true)
             .assertIsDisplayed()
         compose.onNodeWithText("10:15", useUnmergedTree = true).assertIsDisplayed()
+        if (!large && !landscape) {
+            compose
+                .onNodeWithContentDescription("Menunggu dikirim", useUnmergedTree = true)
+                .assertIsDisplayed()
+            compose.onNodeWithText(messages[1], useUnmergedTree = true).assertIsDisplayed()
+            compose
+                .onNodeWithText("Older stored preview", useUnmergedTree = true)
+                .assertDoesNotExist()
+        }
         if (!large && !landscape) {
             compose.onNodeWithText("Kemarin", useUnmergedTree = true).assertIsDisplayed()
             compose.onNodeWithText("Sabtu", useUnmergedTree = true).assertIsDisplayed()

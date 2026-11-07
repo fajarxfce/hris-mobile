@@ -10,11 +10,42 @@ import kotlinx.coroutines.flow.*
 internal class ChatInboxContentFixture {
     val messages = MutableStateFlow<Map<String, CollaborationHistoryMessage>>(emptyMap())
     val slots = MutableStateFlow<Map<String, CollaborationDraft>>(emptyMap())
+    val commands = MutableStateFlow<List<CollaborationMessageRecord>>(emptyList())
+    var commandObservers = 0
     var historyStarts = 0
     var historyObservers = 0
     var draftObservers = 0
     var historyFailureOnOpen: Failure? = null
     var historyReadGate: CompletableDeferred<Unit>? = null
+
+    val outbox =
+        object : CollaborationMessageRepository {
+            override fun observe(access: CollaborationLocalAccess, conversationId: String?) = flow {
+                assertNull(conversationId)
+                commandObservers++
+                try {
+                    emitAll(commands.map { AppResult.Success(it) })
+                } finally {
+                    commandObservers--
+                }
+            }
+
+            override suspend fun get(
+                access: CollaborationLocalAccess,
+                id: String,
+            ): AppResult<CollaborationMessageRecord?> = error("No command lookup")
+
+            override suspend fun insert(
+                access: CollaborationLocalAccess,
+                intent: CollaborationMessageIntent,
+            ): AppResult<CollaborationMessageInsertion> = error("No sending")
+
+            override suspend fun update(
+                access: CollaborationLocalAccess,
+                expected: CollaborationMessageRecord,
+                state: CollaborationMessageState,
+            ): AppResult<Boolean> = error("No delivery")
+        }
 
     val history =
         object : CollaborationHistoryRepository {

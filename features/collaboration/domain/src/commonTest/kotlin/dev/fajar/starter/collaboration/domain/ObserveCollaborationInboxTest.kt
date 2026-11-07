@@ -14,6 +14,148 @@ import kotlinx.coroutines.test.*
 
 class ObserveCollaborationInboxTest {
     @Test
+    fun pendingPublishesOfflineAndSurvivesHiddenReopenWithoutNetworkOrDelivery() = runTest {
+        val f = InboxPreviewFixture()
+        f.owner.setup.now += 365.days
+        val values = mutableListOf<AppResult<CollaborationInboxPage>>()
+        val job =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                f.observe().collect(values::add)
+            }
+        runCurrent()
+        val record = f.pending()
+        f.owner.records.value = listOf(record)
+        runCurrent()
+        assertEquals(record, (values.last() as AppResult.Success).value.previews[f.id]!!.outgoing)
+        assertEquals(1, f.owner.activeMessageObservers)
+        f.selection.value = CollaborationInboxSelection(includePreviews = false)
+        runCurrent()
+        assertEquals(0, f.owner.activeMessageObservers)
+        f.selection.value = CollaborationInboxSelection()
+        runCurrent()
+        assertEquals(record, (values.last() as AppResult.Success).value.previews[f.id]!!.outgoing)
+        assertEquals(0, f.owner.setup.calls)
+        assertTrue(f.owner.scheduledKeys.isEmpty())
+        job.cancelAndJoin()
+        assertEquals(0, f.owner.activeMessageObservers)
+    }
+
+    @Test
+    fun oneQueueSubscriptionServesThePageAndUnchangedRecordsDoNotBlankPreviews() = runTest {
+        val f = InboxPreviewFixture()
+        val values = mutableListOf<AppResult<CollaborationInboxPage>>()
+        val job =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                f.observe().collect(values::add)
+            }
+        f.owner.records.value = listOf(f.pending())
+        runCurrent()
+        val count = values.size
+        repeat(3) {
+            f.listInvalidation.value++
+            f.owner.records.value = f.owner.records.value.toList()
+            runCurrent()
+        }
+        assertEquals(count, values.size)
+        assertEquals(1, f.owner.messageObservations)
+        f.owner.gate.value = CollaborationListAdmission("denied", f.owner.denied)
+        runCurrent()
+        assertEquals(AppResult.Failed(f.owner.denied), values.last())
+        assertEquals(0, f.owner.activeMessageObservers)
+        job.cancelAndJoin()
+    }
+
+    @Test
+    fun queuedDraftHandoffAndAcknowledgedHistoryNeverFallBackToThePreviousMessage() = runTest {
+        val f = InboxPreviewFixture()
+        val values = mutableListOf<AppResult<CollaborationInboxPage>>()
+        val job =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                f.observe().collect(values::add)
+            }
+        runCurrent()
+        val record = f.pending()
+        val slot =
+            CollaborationDraft(
+                f.id,
+                "revision",
+                record.intent.text,
+                f.owner.setup.now,
+                record.intent.id,
+            )
+        f.draft.slot.value = slot
+        runCurrent()
+        assertEquals(slot, (values.last() as AppResult.Success).value.previews[f.id]!!.draft)
+        f.owner.records.value = listOf(record)
+        runCurrent()
+        val queued = (values.last() as AppResult.Success).value.previews[f.id]!!
+        assertNull(queued.draft)
+        assertEquals(record, queued.outgoing)
+        f.draft.slot.value = null
+        runCurrent()
+        assertEquals(queued, (values.last() as AppResult.Success).value.previews[f.id])
+        val sent =
+            record.copy(
+                state =
+                    CollaborationMessageState.Sent(
+                        CollaborationMessageDevice(
+                            "native",
+                            "device",
+                            "bootstrap",
+                            "!room:example.test",
+                        ),
+                        "transaction",
+                        "\$new",
+                    )
+            )
+        f.owner.records.value = listOf(sent)
+        runCurrent()
+        assertEquals(sent, (values.last() as AppResult.Success).value.previews[f.id]!!.outgoing)
+        val confirmed =
+            f.message.copy(
+                primaryEventId = "\$new",
+                eventIds = listOf("\$new"),
+                text = record.intent.text,
+                timestamp = record.intent.createdAt.toEpochMilliseconds(),
+            )
+        f.historyPage.value = AppResult.Success(f.saved.copy(messages = listOf(confirmed)))
+        runCurrent()
+        val accepted = (values.last() as AppResult.Success).value.previews[f.id]!!
+        assertEquals(confirmed, accepted.message)
+        assertNull(accepted.outgoing)
+        f.owner.records.value = emptyList()
+        runCurrent()
+        assertEquals(accepted, (values.last() as AppResult.Success).value.previews[f.id])
+        job.cancelAndJoin()
+    }
+
+    @Test
+    fun foreignDuplicateAndOversizedCommandSnapshotsNeverPublishPrivatePreview() = runTest {
+        for (mode in 0..2) {
+            val f = InboxPreviewFixture()
+            val record = f.pending()
+            f.owner.records.value =
+                when (mode) {
+                    0 ->
+                        listOf(
+                            record.copy(
+                                intent =
+                                    record.intent.copy(
+                                        owner = record.intent.owner.copy(accountId = "foreign")
+                                    )
+                            )
+                        )
+                    1 -> listOf(record, record)
+                    else -> List(129) { record }
+                }
+            val result =
+                f.observe().first { (it as? AppResult.Success)?.value?.previewFailure != null }
+            assertTrue((result as AppResult.Success).value.previews.isEmpty())
+            assertEquals(0, f.owner.activeMessageObservers)
+        }
+    }
+
+    @Test
     fun savedNamesPublishBeforeSlowLocalDetailsWithExpiredCredentialsAndNoNetwork() = runTest {
         val f = InboxPreviewFixture()
         f.owner.setup.now += 365.days
@@ -227,6 +369,24 @@ private class InboxPreviewFixture {
     val draft = DraftIntentFixture()
     val owner = draft.f
     val id = owner.summary!!.conversation.id
+
+    fun pending() =
+        CollaborationMessageRecord(
+            CollaborationMessageIntent(
+                "00000000-0000-0000-0000-000000000009",
+                CollaborationMessageOwner(
+                    owner.server.audience,
+                    owner.setup.session!!.user.id,
+                    owner.setup.workspace!!.company.id,
+                ),
+                id,
+                owner.setup.now,
+                "Newest offline message",
+            ),
+            0,
+            CollaborationMessageState.Queued,
+        )
+
     val rows = MutableStateFlow(listOf(owner.summary!!))
     val selection = MutableStateFlow(CollaborationInboxSelection())
     val listInvalidation = MutableStateFlow(0)
@@ -319,6 +479,7 @@ private class InboxPreviewFixture {
             lists,
             history,
             draft.drafts,
+            owner.messages,
             owner.setup.sessions,
             owner.setup.workspaces,
             owner.server,

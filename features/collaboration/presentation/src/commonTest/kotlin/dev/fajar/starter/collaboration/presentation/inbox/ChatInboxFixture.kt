@@ -267,6 +267,7 @@ internal class ChatInboxFixture {
                 local,
                 content.history,
                 content.drafts,
+                content.outbox,
                 sessions,
                 workspaces,
                 server,
