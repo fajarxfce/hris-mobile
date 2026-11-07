@@ -1,0 +1,486 @@
+{
+  "recordedAt": "2026-11-07T07:15:51.750924+00:00",
+  "baseCommit": "b7f39b3856d94a93d3786c1dae6a4f29ad104222",
+  "sourceFiles": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NativeNotificationProbe.kt": "125420777bef47802c8fbf4f270bc50317f19ee9ca5cd852986ca7346ff9077c",
+    "tool/check_native_notifications.py": "39f67a1788b4ec2ef2e93c2a98ced60715120458b4e9c1f8b06381b0412f0f14",
+    "tool/test_native_notifications.py": "df0c957784f39085909f19e393298a59e6838d25159be7cef66af6624070a5db",
+    "core/notifications/data/src/androidMain/kotlin/dev/fajar/starter/notifications/data/datasources/AndroidActionNotificationDisplaySource.kt": "40c075305ed7065dba966a92838dd386cc696a23c4a6a76c0e9f0f276b05f91c"
+  },
+  "checks": [
+    {
+      "startedAt": "2026-11-07T07:04:22.471108+00:00",
+      "elapsedSeconds": 119.663,
+      "exitCode": 0,
+      "sourceFiles": 4314,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "check-red-1",
+      "freshSuites": 0,
+      "sourceManifestSha256": "44fb3795b476a76ddc8e90a081de3eaed9f01abaa76a4af15003617c1ecd5d9e",
+      "stdoutSha256": "50c5ce683707b16192786c201bc13b067b74927d6e4f1efaec44e68595b12ea3",
+      "stderrSha256": "5a2457ce41a7d9fca1b355e1e4ef0e435dd9bf8de7d49b3fe7c2630f50452442"
+    },
+    {
+      "startedAt": "2026-11-07T07:08:47.526924+00:00",
+      "elapsedSeconds": 22.397,
+      "exitCode": 1,
+      "sourceFiles": 4314,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "check-green-1",
+      "freshSuites": 0,
+      "sourceManifestSha256": "073c3c73b9457a8694bce13e1064a438ca5b29f25988680e515534b46e46160b",
+      "stdoutSha256": "8efa6acf3754be803cbc9567645b8d3c276763af2ea5fc4b16acf207ad26e36b",
+      "stderrSha256": "856453992aca47452f37a77edcca9075381cfe7fbfd88cd710559f85dc3baf68"
+    },
+    {
+      "startedAt": "2026-11-07T07:09:36.099185+00:00",
+      "elapsedSeconds": 130.633,
+      "exitCode": 0,
+      "sourceFiles": 4314,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "check-green-2",
+      "freshSuites": 0,
+      "sourceManifestSha256": "073c3c73b9457a8694bce13e1064a438ca5b29f25988680e515534b46e46160b",
+      "stdoutSha256": "f44db9efb08306bc02c8e1c831e4134b9b6eff48c6edece4f46d5b95fd0f6672",
+      "stderrSha256": "8eaaca5037b59be17c61bb4f98cb97b63e0936b05fc961e0430c8bca6b797ead"
+    }
+  ],
+  "acceptedCommand": [
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    "--stacktrace",
+    "--continue",
+    ":check",
+    ":features:collaboration:data:testAndroidHostTest",
+    ":apps:android:assembleDevDebug",
+    ":apps:android:lintDevDebug",
+    ":apps:collaboration-proof:compileDebugKotlin",
+    ":apps:collaboration-proof:assembleDebug",
+    ":apps:collaboration-proof:lintDebug",
+    ":formatCheck",
+    ":architectureCheck",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=53",
+    "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx2560m",
+    "-Pkotlin.compiler.execution.strategy=in-process"
+  ],
+  "rejectedTaskSelection": {
+    "attempt": "check-green-1",
+    "exitCode": 1,
+    "elapsedSeconds": 22.397,
+    "sourcesUnchanged": true,
+    "failure": "TaskSelectionException: core notifications does not expose testAndroidHostTest. No test or product compilation ran.",
+    "correction": "Remove nonexistent task; retain root desktop tests, collaboration Android-host tests, Android product/proof assembly and lint. Native notification consumer remains the device test.",
+    "programSourcesChanged": false
+  },
+  "originalCiObservation": {
+    "at": "2026-11-07T07:05:09.235869+00:00",
+    "runId": 42344999033,
+    "headSha": "1bb572eb05b60a17e8b96762124d22cbd7d21dd4",
+    "jobId": 128328168549,
+    "job": "Android HRIS (arm64-v8a)",
+    "jobConclusion": "failure",
+    "runStillInProgress": true,
+    "artifactId": 13564229568,
+    "artifactSha256": "3b79eaa4112a41b1b40b421605cd7f7b27b1494aa6234fdc0f9599c657945e51",
+    "githubDigestVerified": true,
+    "hostCounts": {
+      "tests": 486,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "hostSuites": 77,
+    "notification": {
+      "serial": "emulator-5560",
+      "scenarios": [
+        {
+          "name": "native-notification-denied",
+          "seconds": 10.791,
+          "complete": true,
+          "sdk": 35,
+          "cases": [
+            "permission-denial-does-not-submit"
+          ],
+          "cleanedUp": true,
+          "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+        }
+      ],
+      "sdk": 35,
+      "apkSha256": "d071f82e4a6b40f40addb5e88106aed6a4fe494e3bbf0f938578369d93c2a363",
+      "complete": false,
+      "failureCategory": "AssertionError",
+      "failureObservation": {
+        "schema": 1,
+        "phase": "replacements",
+        "elapsedMs": 3389,
+        "completedCases": 2,
+        "interactive": true,
+        "deviceIdle": false,
+        "powerSave": false,
+        "notificationsEnabled": true,
+        "active": [
+          {
+            "neutral": true,
+            "render": false,
+            "postAgeMs": 1217,
+            "timeoutAfterMs": 600
+          }
+        ]
+      },
+      "fixtureAbsent": true,
+      "fixtureUninstalled": true,
+      "fixtureDataCleared": true,
+      "seconds": 31.439
+    },
+    "originalJobLogSha256": "a8a7b36afa4f8dfc438062c912c02e177684bfc78ff752c89a31eed07f0fcc1c",
+    "preciseOsSchedulingCauseEstablished": false,
+    "diagnosticScenarioRerunRequested": false
+  },
+  "platformSourceReview": {
+    "tag": "android-15.0.0_r1",
+    "sources": [
+      {
+        "url": "https://android.googlesource.com/platform/frameworks/base/+/android-15.0.0_r1/services/core/java/com/android/server/notification/NotificationManagerService.java",
+        "sha256": "2e9294f89aa99c3c223cdb4c04fd7281bbc713872abd79b12e01a162600ce6b5",
+        "lines": [
+          9088,
+          9092,
+          9692
+        ]
+      },
+      {
+        "url": "https://android.googlesource.com/platform/frameworks/base/+/android-15.0.0_r1/packages/SystemUI/src/com/android/systemui/statusbar/notification/collection/coordinator/RemoteInputCoordinator.kt",
+        "sha256": "e171f9d9b9615192b256edc15166f5460c7feca0486b809d698d53b90729b2f6",
+        "lines": [
+          52,
+          60,
+          187
+        ]
+      },
+      {
+        "url": "https://android.googlesource.com/platform/frameworks/base/+/android-15.0.0_r1/core/java/android/app/Notification.java",
+        "sha256": "4295d445c676e7e719448ef2150a042c64275606776bd27595ba60f7ae36fe93",
+        "lines": [
+          4617,
+          4623
+        ]
+      }
+    ],
+    "observation": "Timeout is an asynchronously scheduled cancellation, not acknowledgement of notification absence. SystemUI uses a500ms remote-input active extender and200ms explicit release delay. This source review does not prove the exact original CI scheduling cause."
+  },
+  "nativeRed": {
+    "startedAt": "2026-11-07T07:06:43.024825+00:00",
+    "serial": "emulator-5564",
+    "apkSha256": "5f5beef8133aaa94e1515eee0366f6988f45f4e59a4209b017eddcdd00a262dc",
+    "sdk": "26.10.23-hris.4",
+    "nativeSha256": {
+      "arm64-v8a": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34",
+      "x86_64": "55bde5be2080c3e42a2ece6053f94231d27165cc39698c89c50e36ecbdb2909a"
+    },
+    "providerRequired": false,
+    "phoneTouched": false,
+    "originalBimaTouched": false,
+    "newProviderMessagesSent": 0,
+    "complete": false,
+    "driverExitCode": 1,
+    "proof": {
+      "serial": "emulator-5564",
+      "scenarios": [
+        {
+          "name": "native-notification-denied",
+          "seconds": 5.892,
+          "complete": true,
+          "sdk": 35,
+          "cases": [
+            "permission-denial-does-not-submit"
+          ],
+          "cleanedUp": true,
+          "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+        }
+      ],
+      "sdk": 35,
+      "apkSha256": "5f5beef8133aaa94e1515eee0366f6988f45f4e59a4209b017eddcdd00a262dc",
+      "complete": false,
+      "failureCategory": "AssertionError",
+      "failureObservation": {
+        "schema": 1,
+        "phase": "delayed-expiry",
+        "elapsedMs": 1555,
+        "completedCases": 0,
+        "interactive": true,
+        "deviceIdle": false,
+        "powerSave": false,
+        "notificationsEnabled": true,
+        "active": []
+      },
+      "fixtureAbsent": true,
+      "fixtureUninstalled": true,
+      "fixtureDataCleared": true,
+      "seconds": 35.156
+    },
+    "failureClass": "AssertionError",
+    "emulatorStopped": {
+      "pid": 1001277,
+      "serial": "emulator-5564",
+      "stopped": true,
+      "signalSent": true,
+      "transportAbsent": true,
+      "seconds": 1.606
+    },
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "elapsedSeconds": 77.856
+  },
+  "nativeGreen": {
+    "startedAt": "2026-11-07T07:12:12.839713+00:00",
+    "serial": "emulator-5564",
+    "apkSha256": "1fc75dd953f718889d1234ef211c5b0dcc090c069609bce797ed702b75a8e92a",
+    "sdk": "26.10.23-hris.4",
+    "nativeSha256": {
+      "arm64-v8a": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34",
+      "x86_64": "55bde5be2080c3e42a2ece6053f94231d27165cc39698c89c50e36ecbdb2909a"
+    },
+    "providerRequired": false,
+    "phoneTouched": false,
+    "originalBimaTouched": false,
+    "newProviderMessagesSent": 0,
+    "complete": true,
+    "driverExitCode": 0,
+    "proof": {
+      "serial": "emulator-5564",
+      "scenarios": [
+        {
+          "name": "native-notification-denied",
+          "seconds": 6.708,
+          "complete": true,
+          "sdk": 35,
+          "cases": [
+            "permission-denial-does-not-submit"
+          ],
+          "cleanedUp": true,
+          "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+        },
+        {
+          "name": "native-notification",
+          "seconds": 11.74,
+          "complete": true,
+          "sdk": 35,
+          "cases": [
+            "explicit-removal-and-namespace-clear-do-not-depend-on-expiry",
+            "cancelled-neutral-retirement-retains-inventory-until-explicit-recovery",
+            "actual-private-display-and-immutable-public-version",
+            "same-render-replay-updates-stable-card",
+            "stale-removal-preserves-new-render-and-new-render-may-alert",
+            "same-render-reissue-keeps-original-immutable-envelope",
+            "real-remote-input-and-old-render-envelope-remain-distinct",
+            "immutable-actions-ignore-injected-remote-input",
+            "colliding-java-hashes-cannot-retarget-pending-intents",
+            "missing-oversized-or-cross-component-input-is-rejected",
+            "namespace-cleanup-preserves-unrelated-application-notifications",
+            "disabled-channel-is-distinct-from-submitted",
+            "newer-inventory-fences-stale-removal-while-os-card-is-absent",
+            "opaque-no-backup-inventory-reopens-and-clears-without-account-data",
+            "latest-owned-inventory-can-cancel-its-older-visible-predecessor",
+            "full-opaque-inventory-does-not-evict-or-submit",
+            "corrupt-inventory-withholds-new-posts-and-cleans-visible-cards"
+          ],
+          "cleanedUp": true,
+          "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+        }
+      ],
+      "sdk": 35,
+      "apkSha256": "1fc75dd953f718889d1234ef211c5b0dcc090c069609bce797ed702b75a8e92a",
+      "runtimeComposition": {
+        "seconds": 3.444,
+        "complete": true,
+        "cleanedUp": true,
+        "cases": [
+          "english-copy-and-native-actions",
+          "language-change-without-host-replacement",
+          "system-language-resource-resolution",
+          "one-application-host-and-joined-native-cleanup"
+        ],
+        "scope": "Android runtime composition and OS resources; fake admission/settings storage, no provider/account/actions"
+      },
+      "inputRecovery": {
+        "complete": true,
+        "pid": 4630,
+        "protectedRowsBeforeRecovery": 1,
+        "reviewRowsAfterRecovery": 1,
+        "wrongAccountPreservedInput": true,
+        "oldFamilyRequiresReview": true,
+        "recoveryTurns": [
+          {
+            "turn": 1,
+            "phases": [
+              "Complete",
+              "Complete"
+            ],
+            "result": "Complete",
+            "failureKind": null,
+            "failureCode": null,
+            "milliseconds": 927,
+            "protectedRows": 0,
+            "reviewRows": 1,
+            "reviewStates": [
+              "SessionChanged"
+            ]
+          }
+        ],
+        "httpCalls": 0,
+        "commandRetained": false,
+        "cleanedUp": true,
+        "ordinaryProcessKills": 3,
+        "callbackCount": 4,
+        "processIds": [
+          3977,
+          4209,
+          4407,
+          4630
+        ],
+        "seconds": 27.932,
+        "scope": "Real Android callback, Keystore/Room/app recovery; fictional account; no HTTP/Matrix send or production host activation"
+      },
+      "actionCallbacks": {
+        "complete": true,
+        "cases": [
+          {
+            "complete": true,
+            "mode": "Open",
+            "pid": 4708,
+            "state": "Published",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 1,
+            "callbackCount": 1
+          },
+          {
+            "complete": true,
+            "mode": "MarkRead",
+            "pid": 4708,
+            "state": "Cancelled",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 2
+          },
+          {
+            "complete": true,
+            "mode": "Dismiss",
+            "pid": 4708,
+            "state": "Dismissed",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 3
+          },
+          {
+            "complete": true,
+            "mode": "Reply",
+            "pid": 4708,
+            "state": "Dismissed",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 4
+          },
+          {
+            "complete": true,
+            "mode": "Mute",
+            "pid": 4708,
+            "state": "Cancelled",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 5
+          }
+        ],
+        "systemUiReply": true,
+        "seconds": 48.131,
+        "scope": "Actual Android application callbacks, encrypted Room/Keystore and native cards; seeded fictional session/conversation/history; no discovery actor, provider send or product activation"
+      },
+      "complete": true,
+      "fixtureAbsent": true,
+      "fixtureUninstalled": true,
+      "fixtureDataCleared": true,
+      "seconds": 119.887
+    },
+    "emulatorStopped": {
+      "pid": 1038004,
+      "serial": "emulator-5564",
+      "stopped": true,
+      "signalSent": true,
+      "transportAbsent": true,
+      "seconds": 2.008
+    },
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "elapsedSeconds": 156.823
+  },
+  "screenshots": [
+    {
+      "name": "reply-notification.png",
+      "sha256": "f84a66dde0d892fa5aca8253f79e588fc72c739a4be42bb249985d19a376a845",
+      "inspected": true,
+      "observation": "Owned fictional notification is visible with Reply, Mark as read and Mute. Unrelated Android system notification remains.",
+      "at": "2026-11-07T07:15:51.605886+00:00"
+    },
+    {
+      "name": "reply-editor.png",
+      "sha256": "5dcb20f782b246dcdd953b955e40f1c796186a2b62428b5b89f913fd7fc82e91",
+      "inspected": true,
+      "observation": "Actual SystemUI editor contains the fixed fictional reply and keyboard is visible.",
+      "at": "2026-11-07T07:15:51.606167+00:00"
+    },
+    {
+      "name": "reply-acknowledged.png",
+      "sha256": "57ac869a098b15906188a88c1d37f9eac7aae21747b61598f4b048f29ed24913",
+      "inspected": true,
+      "observation": "Owned notification, neutral replacement, reply editor and keyboard are absent; unrelated Android system notification is preserved.",
+      "at": "2026-11-07T07:15:51.606301+00:00"
+    }
+  ],
+  "pythonToolCases": 59,
+  "notificationDriverCasesIncluded": 33,
+  "distributionPythonCases": 17,
+  "productLintFindings": 0,
+  "proofLintSeverities": {
+    "Warning": 49
+  },
+  "detektFindings": 0,
+  "osFallbackTimeoutMs": 600,
+  "postPublicationGraceMs": 600,
+  "publicationConfirmationTimeoutMs": 1000,
+  "absenceConfirmationTimeoutMs": 1000,
+  "publicationAndAbsenceTimeoutsUnchanged": true,
+  "originalOsSchedulingCauseProven": false,
+  "phoneLatencyResolved": false,
+  "newProviderMessagesSent": 0,
+  "nativeSdkChanged": false,
+  "starterPortRequired": true
+}

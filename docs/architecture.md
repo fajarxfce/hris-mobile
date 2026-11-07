@@ -1,5 +1,9 @@
 # Architecture
 
+[Explicit native notification retirement](native-notification-retirement.md) keeps
+OS timeout separate from observed removal and retains opaque inventory through
+cancellation. The raw adapter owns this bounded OS interaction.
+
 [Owning original metadata reads](collaboration-space-original-conversation-reads.md)
 coordinate finite native admission and capture immutable bounded pages; a successful
 recovery read cannot reopen a denied content projection or authorize queue delivery.

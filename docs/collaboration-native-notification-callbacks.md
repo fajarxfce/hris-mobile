@@ -41,7 +41,9 @@ neutral-update/cancel both failed the actual shade assertion in rejected attempt
 
 The raw adapter replaces visible owned cards with silent, empty, actionless updates
 and a public 600 ms OS expiry. It confirms publication with unique opaque markers,
-then native absence before dropping its durable inventory. Namespace cleanup batches
+then600ms of grace before explicit cancellation and observed native absence, as described
+in [explicit retirement](native-notification-retirement.md). The OS timeout is a
+process-death fallback and does not acknowledge removal. Namespace cleanup batches
 all updates in the same bounded window. Expiry owns cleanup if the process dies;
 uncertainty retains the inventory. No hidden Android flags or privileged APIs are
 used. The expiry exceeds the observed AOSP 500 ms reply-history cooldown, and the

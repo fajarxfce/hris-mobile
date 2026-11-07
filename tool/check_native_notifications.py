@@ -237,12 +237,12 @@ def collect_native_failure(adb, output):
     if len(raw.encode()) > 16_384:
         raise ValueError("Notification observation exceeded its bound")
     value = json.loads(raw)
-    phases = {"initial-clear", "replacements", "actions", "bounded-input", "cleanup",
+    phases = {"initial-clear", "delayed-expiry", "cancelled-retirement", "replacements", "actions", "bounded-input", "cleanup",
               "disabled-channel", "inventory-reopen", "older-visible-render",
               "inventory-capacity", "corrupt-inventory", "final-clear", "final-absence"}
     assert isinstance(value, dict) and value.get("schema") == 1 and value.get("phase") in phases
     result = {"schema": 1, "phase": value["phase"]}
-    for key, maximum in [("elapsedMs", 300_000), ("completedCases", 15)]:
+    for key, maximum in [("elapsedMs", 300_000), ("completedCases", 17)]:
         item = value[key]
         assert type(item) is int and 0 <= item <= maximum
         result[key] = item
@@ -312,7 +312,7 @@ def run(args):
             raise
         for scenario, granted, expected in [
             ("native-notification-denied", False, 1),
-            ("native-notification", True, 15),
+            ("native-notification", True, 17),
         ]:
             began = time.monotonic()
             adb("shell", "pm", "grant" if granted else "revoke", PACKAGE, PERMISSION)

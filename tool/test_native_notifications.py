@@ -78,7 +78,7 @@ class NotificationDriverOwnershipTest(unittest.TestCase):
                     output = json.dumps({'complete': self.failure not in
                         ('native-status', 'state-unavailable', 'native-and-cleanup')})
                 else:
-                    count = 4 if self.scenario == 'notification-runtime' else (1 if self.scenario.endswith('denied') else 15)
+                    count = 4 if self.scenario == 'notification-runtime' else (1 if self.scenario.endswith('denied') else 17)
                     output = json.dumps({'complete': True, 'cleanedUp': True, 'cases': list(range(count))})
             elif c[:2] == ['shell', 'pm'] and c[2] in ('grant', 'revoke'):
                 output = ''
@@ -104,7 +104,7 @@ class NotificationDriverOwnershipTest(unittest.TestCase):
         self.assertTrue(result['complete'])
         self.assertTrue(result['fixtureUninstalled'])
         self.assertTrue(result['fixtureDataCleared'])
-        self.assertEqual(16, sum(len(s['cases']) for s in result['scenarios']))
+        self.assertEqual(18, sum(len(s['cases']) for s in result['scenarios']))
         self.assertEqual(4, len(result['runtimeComposition']['cases']))
         self.assertFalse(self.present)
         # A sequential run must acquire an absent package again, never replace existing data.

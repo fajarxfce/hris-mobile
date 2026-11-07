@@ -4,7 +4,9 @@ The original x86 CI run `42336761242` failed while confirming removal of an
 Android notification. Its `IOException` and source/artifact evidence remain in
 [the first-run record](measurements/collaboration-credentials-native-ci-2026-11-07.json).
 The OS timing cause is not established. The production adapter and its removal
-deadline and neutral-card timeout are unchanged.
+deadline and neutral-card timeout were unchanged in that diagnostic-only increment.
+A later [explicit retirement correction](native-notification-retirement.md) uses the
+new delayed-expiry evidence while preserving both confirmation bounds and OS timeout.
 
 The isolated native probe now retains the primary exception through fixture cleanup
 and records the failing phase before removing its own notifications. The bounded

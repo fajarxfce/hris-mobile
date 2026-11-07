@@ -4,6 +4,40 @@ This is the active checkpoint. The [historical handoff](agent-handoff-history-th
 retains earlier work verbatim. Detailed measurements below are authoritative; do not
 restart accepted builds, native sends or SDK publication solely to recreate evidence.
 
+## Explicit notification retirement accepted — 7 November 2026, 07:15 UTC
+
+No heavy job, emulator or download remains. Native27900 PASSED156.823s on exactly the
+four source/proof/driver files from green-2:18raw cases,4runtime cases,3ordinary process
+kills/input recovery,5actions including real SystemUI Reply. All3original screenshots
+were inspected: notification/editor visible before send, owned card/neutral/editor/
+keyboard absent after acknowledgment, unrelated Android system card preserved. Fixture
+uninstalled/data cleared; owned emulator5564 PID1038004 stopped/transport absent2.008s.
+ProofAPK1fc75dd953f718889d1234ef211c5b0dcc090c069609bce797ed702b75a8e92a unchanged.
+[Contract](native-notification-retirement.md), [evidence](measurements/native-notification-retirement-2026-11-07.json).
+
+Green11145 PASSED130.633s,4,314stable inputs,0fresh XML(reused),59tool Python cases incl
+33driver plus17distribution, product lint0/proof49oldwarnings/Detekt0. Initial green13392
+FAILED22.397s due only to nonexistent core Android-host task; corrected command changes
+no source. Red64220 compile passed119.663s then native73435 reproduced the unchanged
+adapter IOException at confirmRemoved:228 during controlled delayed expiry. Failed
+native-red-1 image/evidence preserved; emulator1001277 stopped and fixture removed.
+
+Commit/push this accepted slice from temporaryb7f39b38. Include fully audited FIRST05de
+protocol42348626066 (14checks each mode,14pinned Platforme0dbb567 hashes). Primary05de
+remains to preserve FIRST pending control42348626104/native42348626124; FIRST1bb control/
+native still run. Its ARM486host/77suite+raw failure is retained with bounded diagnostics.
+Do not supersede first pending runs or rerun accepted provider sends.
+
+NEXT port only exact generic AndroidActionNotificationDisplaySource.kt to Starter
+from its identical oldhash06c65a6d23eaa4035783acaf737a2fe29f60e48e3aff1f00c934f5dab371136b;
+prepared Starter .work/notification-retirement-port-2026-11-07/check.py runs root/Android
+checks. Do not port HRIS proof or change common/Apple source merely to test Android.
+Then continue immutable original queue/application command matching, separately owned
+current group admission, publication/history, parent recovery, product routing/all54groups.
+No message ACK inference, unknown-original subset resume, SDK4 rebuild, Bima file/ID reset,
+phone UI/provider sends or live V117–137 activation. Phone53 latency/optional feedback stay
+OPEN. Main3dc28446/Group66d2598d checkpoints are pushed; Starter03ebcde remains unchanged.
+
 ## Owning original metadata reads accepted — 7 November 2026, 07:03 UTC
 
 No heavy job, emulator or download remains. Full76749 PASSED530.638s,5,498fresh/645

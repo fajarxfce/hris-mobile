@@ -1,5 +1,14 @@
 # Template updates
 
+## Explicit Android notification retirement — downstream accepted, port pending
+
+The one generic display adapter now cancels explicitly after confirmed neutral
+publication and reply-history grace. Downstream native tests cover delayed OS expiry,
+cancellation/recovery and actual SystemUI reply removal; root/product/proof checks
+pass. Copy only that Android source after commit, then validate Starter root and
+Android build/lint. HRIS fixture and callback policy remain downstream; common/Apple
+sources are unchanged. [Evidence](measurements/native-notification-retirement-2026-11-07.json).
+
 ## Explicit failed-operation outcome — port complete
 
 Mobile c50a8983 makes failed performance samples explicit while preserving original

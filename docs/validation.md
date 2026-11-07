@@ -1,5 +1,11 @@
 # Validation
 
+[Explicit notification retirement](native-notification-retirement.md) reproduces the
+old delayed-expiry failure, then passes actual18 raw/4 runtime cases,3 process deaths
+and5 actions with SystemUI Reply in156.823s. Three screenshots were inspected; owned
+fixture and emulator cleanup passed. Root/Android/lint gates pass with reused XML.
+This accepts native removal behavior, not physical-phone delivery latency.
+
 [Owning original metadata acquisition](collaboration-space-original-conversation-reads.md)
 passed5,498 fresh cases/645 suites in530.638s,4,314 stable inputs and zero failures,
 errors, skips, Android lint or Detekt findings. Nine lifecycle cases also pass the

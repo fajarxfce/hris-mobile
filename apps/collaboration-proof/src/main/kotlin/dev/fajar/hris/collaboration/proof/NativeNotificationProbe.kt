@@ -60,6 +60,10 @@ internal class NativeNotificationProbe(private val context: Context, private val
                 check(source.active().isEmpty())
                 cases += "permission-denial-does-not-submit"
             } else {
+                phase = "delayed-expiry"
+                delayedExpiry()
+                phase = "cancelled-retirement"
+                cancelledRetirement()
                 phase = "replacements"
                 replacements()
                 phase = "actions"
@@ -178,6 +182,92 @@ internal class NativeNotificationProbe(private val context: Context, private val
                 .put("active", JSONArray(active))
         directory.mkdirs()
         File(directory, "native-notification-failure.json").writeText(value.toString())
+    }
+
+    /** Hold the OS fallback open: foreground removal must still retire the actual native card. */
+    private suspend fun delayedExpiry() = coroutineScope {
+        if (Build.VERSION.SDK_INT < 26) return@coroutineScope
+        for (clearNamespace in listOf(false, true)) {
+            val reference = ActionNotificationReference("delayed-expiry", "render")
+            check(
+                source.show(payload().copy(reference = reference)) ==
+                    ActionNotificationSubmission.Submitted
+            )
+            waitFor { source.active() == listOf(reference) }
+            val tag = prefix + reference.id
+            val held =
+                async(start = CoroutineStart.UNDISPATCHED) {
+                    withTimeout(2_000) {
+                        var neutral: Notification? = null
+                        while (neutral == null) {
+                            neutral =
+                                manager.activeNotifications
+                                    .singleOrNull {
+                                        it.id == 0 &&
+                                            it.tag == tag &&
+                                            it.notification.extras.containsKey(
+                                                "owned_notification_retirement"
+                                            )
+                                    }
+                                    ?.notification
+                            if (neutral == null) delay(5)
+                        }
+                        check(neutral.timeoutAfter == 600L)
+                        // Same owned neutral render, unchanged marker/content/actions. Only the
+                        // synthetic OS fallback deadline changes; no production timing hook.
+                        manager.notify(
+                            tag,
+                            0,
+                            Notification.Builder.recoverBuilder(context, neutral)
+                                .setTimeoutAfter(60_000)
+                                .build(),
+                        )
+                    }
+                }
+            try {
+                if (clearNamespace) source.clear()
+                else check(source.remove(reference) == ActionNotificationRemoval.Removed)
+                held.await()
+                check(manager.activeNotifications.none { it.id == 0 && it.tag == tag })
+                check(JSONObject(inventoryFile.readText()).getJSONArray("references").length() == 0)
+            } finally {
+                withContext(NonCancellable) { held.cancelAndJoin() }
+            }
+        }
+        cases += "explicit-removal-and-namespace-clear-do-not-depend-on-expiry"
+    }
+
+    private suspend fun cancelledRetirement() = coroutineScope {
+        val reference = ActionNotificationReference("cancelled-retirement", "render")
+        check(
+            source.show(payload().copy(reference = reference)) ==
+                ActionNotificationSubmission.Submitted
+        )
+        waitFor { source.active() == listOf(reference) }
+        val original = inventoryFile.readBytes()
+        val removing = async { source.remove(reference) }
+        try {
+            waitFor {
+                manager.activeNotifications.any {
+                    it.id == 0 &&
+                        it.tag == prefix + reference.id &&
+                        it.notification.extras.containsKey("owned_notification_retirement")
+                }
+            }
+            check(!removing.isCompleted)
+            removing.cancelAndJoin()
+            check(inventoryFile.readBytes().contentEquals(original))
+            waitFor {
+                manager.activeNotifications.none { it.id == 0 && it.tag == prefix + reference.id }
+            }
+            // A separate retry reconciles actual absence; cancellation never discards inventory.
+            check(source.remove(reference) == ActionNotificationRemoval.Absent)
+            check(JSONObject(inventoryFile.readText()).getJSONArray("references").length() == 0)
+            cases += "cancelled-neutral-retirement-retains-inventory-until-explicit-recovery"
+        } finally {
+            withContext(NonCancellable) { removing.cancelAndJoin() }
+            original.fill(0)
+        }
     }
 
     private suspend fun replacements() {

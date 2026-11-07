@@ -174,7 +174,7 @@ class AndroidActionNotificationDisplaySource(
         if (visible.isEmpty() || !allowed()) return
         // Direct-reply history may outlive cancel(), including in SystemUI after the service
         // forgets the original. Replace existing cards without private content or actions, then
-        // let the OS expiry pass the reply-history cooldown. Batch the namespace in one window.
+        // pass the reply-history cooldown before explicit cancellation. Batch the namespace.
         val pending = visible.associateWith { UUID.randomUUID().toString() }.toMutableMap()
         try {
             for ((tag, retirement) in pending) {
@@ -209,7 +209,10 @@ class AndroidActionNotificationDisplaySource(
                     true
                 } == true
             if (!posted) throw IOException("Owned notification retirement was not confirmed")
-            confirmRemoved(visible)
+            // Android's timeout is an asynchronous fallback, not a removal acknowledgement.
+            // Start the grace after confirmed publication so SystemUI can release reply history;
+            // finally cancels explicitly and the caller must still observe actual absence.
+            delay(600)
         } finally {
             // Native expiry still owns cleanup if the process dies after the neutral update.
             // Opaque inventory remains until both publication and absence have been confirmed.
