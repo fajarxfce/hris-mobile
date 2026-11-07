@@ -429,6 +429,11 @@ private class ExistingHandoverStorageFixture(
         AndroidCollaborationRuntimeRepository(
             stores =
                 object : CollaborationSdkStoreSource {
+                    override suspend fun acquireExisting(
+                        storeId: String
+                    ): CollaborationSdkStoreLease? =
+                        error("Existing SDK acquisition is not part of this fixture.")
+
                     override suspend fun acquire(storeId: String): CollaborationSdkStoreLease {
                         newStoreAcquisitions++
                         error("Existing handover cannot create a store or SDK client")

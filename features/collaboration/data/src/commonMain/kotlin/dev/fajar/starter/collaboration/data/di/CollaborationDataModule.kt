@@ -213,6 +213,11 @@ class CollaborationDataModule {
     ) = ReadCollaborationSpaceIdentity(identities, directory, sessions, server, build, Clock.System)
 
     @Single
+    fun spaceRuntime(runtime: CollaborationRuntimeRepository): CollaborationSpaceRuntimeRepository =
+        runtime as? CollaborationSpaceRuntimeRepository
+            ?: UnavailableCollaborationRuntimeRepository()
+
+    @Single
     fun localDeviceIdentity(
         runtime: CollaborationRuntimeRepository
     ): CollaborationLocalDeviceIdentityRepository =

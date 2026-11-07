@@ -1,5 +1,9 @@
 # Architecture
 
+[Original SDK adoption](collaboration-space-runtime-adoption.md) restores existing
+private keys under one physical lease, retains logical organization ownership, and
+keeps live publication in the owning admission flow.
+
 [Logical organization runtime ownership](collaboration-space-runtime-ownership.md)
 keeps original physical SDK slots distinct from Space lifetime, excludes legacy
 borrowers and preserves cleanup through native-parent changes.

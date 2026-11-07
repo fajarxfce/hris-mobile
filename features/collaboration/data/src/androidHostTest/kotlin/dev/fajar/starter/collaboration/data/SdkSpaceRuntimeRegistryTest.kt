@@ -41,6 +41,8 @@ class SdkSpaceRuntimeRegistryTest {
         val resource = SpaceRegistryResource()
         assertTrue(f.registry.attach(entry, resource))
         assertSame(resource, f.registry.findSpace(f.space))
+        assertEquals(listOf(resource), f.registry.resources())
+        assertTrue(f.registry.legacyResources().isEmpty())
         assertNull(f.registry.find(f.originalOwner, "original-device"))
         assertNull(f.registry.retainForeground(f.originalOwner, "original-device"))
         assertNull(

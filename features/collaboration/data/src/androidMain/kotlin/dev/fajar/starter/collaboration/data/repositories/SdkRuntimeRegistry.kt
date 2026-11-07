@@ -122,6 +122,12 @@ internal class SdkRuntimeRegistry<T : Any>(
 
     fun resources(): List<T> = synchronized(monitor) { entries.values.mapNotNull { it.resource } }
 
+    /** Legacy operations cannot reach logical Space resources through a bulk lookup. */
+    fun legacyResources(): List<T> =
+        synchronized(monitor) {
+            entries.values.filter { it.space == null }.mapNotNull { it.resource }
+        }
+
     fun accepts(reservation: SdkRuntimeReservation<T>): Boolean =
         synchronized(monitor) {
             entries[reservation.storeId] === reservation && !reservation.retired

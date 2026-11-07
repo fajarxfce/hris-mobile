@@ -60,7 +60,26 @@ class CollaborationBindingsTest {
                 }
             val runtime =
                 object :
-                    CollaborationRuntimeRepository, CollaborationLocalDeviceIdentityRepository {
+                    CollaborationRuntimeRepository,
+                    CollaborationLocalDeviceIdentityRepository,
+                    CollaborationSpaceRuntimeRepository {
+                    override suspend fun isSpaceOpen(
+                        owner: CollaborationSpaceOwner,
+                        deviceId: String,
+                        operationId: String,
+                    ): AppResult<Boolean> = error("No implicit Space SDK lookup")
+
+                    override suspend fun installOriginal(
+                        owner: CollaborationSpaceOwner,
+                        original: CollaborationExistingRuntimeHandover,
+                        setup: CollaborationSpaceSetupRecord,
+                    ): AppResult<CollaborationSpaceRuntimeLease> =
+                        error("No implicit Space SDK adoption")
+
+                    override suspend fun closeSpace(
+                        owner: CollaborationSpaceOwner
+                    ): AppResult<Unit> = error("No implicit Space SDK disposal")
+
                     override suspend fun readLocalIdentity(
                         owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
                         deviceId: String,
@@ -240,6 +259,7 @@ class CollaborationBindingsTest {
                     container.koin.get<CollaborationLocalDeviceIdentityRepository>(),
                 )
                 assertSame(runtime, container.koin.get<CollaborationRuntimeRepository>())
+                assertSame(runtime, container.koin.get<CollaborationSpaceRuntimeRepository>())
                 assertEquals(1, factoryCount.get())
                 assertSame(container.koin.get<IdentityServer>(), suppliedServer)
                 assertSame(container.koin.get<HttpClient>(named(HttpClients.Public)), suppliedHttp)

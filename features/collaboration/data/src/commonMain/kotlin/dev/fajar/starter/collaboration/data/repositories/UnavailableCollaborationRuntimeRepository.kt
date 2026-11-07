@@ -9,9 +9,25 @@ import kotlinx.coroutines.ensureActive
 /** Hosts without a native binding cannot create a substitute store or claim SDK readiness. */
 class UnavailableCollaborationRuntimeRepository :
     CollaborationRuntimeRepository,
+    CollaborationSpaceRuntimeRepository,
     CollaborationLocalDeviceIdentityRepository,
     CollaborationSdkInventoryRepository,
     CollaborationSdkPossessionRepository {
+    override suspend fun isSpaceOpen(
+        owner: CollaborationSpaceOwner,
+        deviceId: String,
+        operationId: String,
+    ): AppResult<Boolean> = unavailable()
+
+    override suspend fun installOriginal(
+        owner: CollaborationSpaceOwner,
+        original: CollaborationExistingRuntimeHandover,
+        setup: CollaborationSpaceSetupRecord,
+    ): AppResult<CollaborationSpaceRuntimeLease> = unavailable()
+
+    override suspend fun closeSpace(owner: CollaborationSpaceOwner): AppResult<Unit> =
+        AppResult.Success(Unit)
+
     override suspend fun readPrivateIdentity(
         owner: CollaborationOwner,
         deviceId: String,

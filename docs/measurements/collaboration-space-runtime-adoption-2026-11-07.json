@@ -1,0 +1,415 @@
+{
+  "recordedAt": "2026-11-07T04:50:37.207803+00:00",
+  "baseCommit": "c70fe7cb9cd9dd8ca9c688f35b111e933f60424c",
+  "sourceFiles": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/LocalRuntimeHandoverFixture.kt": "c2431e6f367804cdc363345ba64db73853e6e222e83befea22462b711da81695",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/LocalSpaceRuntimeAdoptionProbe.kt": "4fe5f7086f4f9a9cfd752604c7b2dd47db0a86d1ea1cb01fe08a8747b7a96a94",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "91e4b71fbb523f19a882315073be579d09596c9995868be57a6b0bc5d6cd9ea0",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "45ffc5dc82ca4a68bc26c89b89eaa1b81cee684b6200efbe751f4828642832a1",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationIdentityTest.kt": "c5b6d8cfb89a897ee92f52e6fc1cb6f2584640beba5ccac4d3c39ef5e3064405",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidExistingHandoverStorageTest.kt": "8e4c027a138e8d2c16795f0f7ba2bbc63198871406904ac7a0a487ea84cac1a4",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidSpaceRuntimeAdoptionTest.kt": "4ef104e7f3098406acbe157420056504df8f8f364d94194cb53d2d25d87f121e",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/SdkSpaceRuntimeRegistryTest.kt": "0205ad0d244ffb9378b0a87c7022c1071c566dd252cb286bf3166f0a67cf8f64",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "07249695b111b4b43b70fc036a9678de335ab0c73a8cf631b3db0681969bc868",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationSpaceRuntimeLease.kt": "c05cad3887bf46b58e926245b62c04aa70d0bb03664eba32e5a74d19320ae8cf",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidSdkPreparedSession.kt": "59d92bf0306bba6dc21c79ffeb8f8d5357c4dc10524943057e3266b311212850",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkRuntimeRegistry.kt": "0b04ecdd8dc35e49697276b3e8049fc11635bd963ff3fbc702ab1b713a21fb0d",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkSpaceRuntimeInstallation.kt": "d56951a213be5d3b8957b9e422befec37aa3e42f74618748177e79230066c15a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationSdkStoreSource.kt": "9cff02dd575553ce1faa45331b7ce204f2b8e753cbf576fec9a352451a99fd2b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "954490856122327c2caa624b78b8451004512f8dd7d75a4906505bd67ccb915c",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/UnavailableCollaborationRuntimeRepository.kt": "9834abff476e84cc0197ea6daf7204175cfeb4c6ae495569125f462eb870dc7e",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/FileExistingSdkStoreTest.kt": "d8f87e90613b2ff7945bf9f6550f37455d860be3e2dc5b8c54cf1a3e2374f829",
+    "features/collaboration/data/src/jvmSharedMain/kotlin/dev/fajar/starter/collaboration/data/datasources/FileCollaborationSdkStoreSource.kt": "4129b69d90d5bf9285656b6af986e7b837c98dd347ac5ab7d593d1e085a72e87",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceRuntimeRepository.kt": "4c74912cc19fabece57cee9776253af962ad99ab374a5ea66bedd1d4f4ec334d"
+  },
+  "attempts": [
+    {
+      "startedAt": "2026-11-07T04:19:06.170244+00:00",
+      "elapsedSeconds": 198.13,
+      "exitCode": 1,
+      "sourceFiles": 4289,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "focused-1",
+      "freshSuites": 4,
+      "inputManifestSha256": "2e58f88b3ab9eac737751ad91f78587efa5307a5d894de1591e8d5fd362e7ba9",
+      "stdoutSha256": "aa5f846762ff28e4ca0af29dca8275825f29093ec8fe471582b6601915740b59",
+      "stderrSha256": "45f7c021827a952314b9216e56e83ebb9a9d237b1e193fcb610a9b9be5dbb03a"
+    },
+    {
+      "startedAt": "2026-11-07T04:23:24.877092+00:00",
+      "elapsedSeconds": 101.244,
+      "exitCode": 1,
+      "sourceFiles": 4290,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "focused-2",
+      "freshSuites": 0,
+      "inputManifestSha256": "6905770f534ec29e7147639d5bb94bc5f1fdd2c4b41ae35572bf72b48d8006f2",
+      "stdoutSha256": "d1ff061092865ba8395c7969182f9c338a1296b91bc09779fb174b13a107a28a",
+      "stderrSha256": "d8563a41a35f1c1570a68581733df6f60c87fd56c74e6f80621f8bc11f06de62"
+    },
+    {
+      "startedAt": "2026-11-07T04:26:46.318030+00:00",
+      "elapsedSeconds": 74.923,
+      "exitCode": 1,
+      "sourceFiles": 4290,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "focused-3",
+      "freshSuites": 4,
+      "inputManifestSha256": "9515447c7ced2391c42880dae269e3537cc8e1ac528f1fe61bed3c8d0c3890a8",
+      "stdoutSha256": "5a6aec4e304a196d96f854580015737408469cba85a44c05fd23f90105c6d0c1",
+      "stderrSha256": "b3b7a7dcbc34566010118bf84929aa5b522a8ddabfcddae34a927267c12d038d"
+    },
+    {
+      "startedAt": "2026-11-07T04:29:32.477323+00:00",
+      "elapsedSeconds": 113.797,
+      "exitCode": 0,
+      "sourceFiles": 4291,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "proof-1",
+      "freshSuites": 0,
+      "inputManifestSha256": "ceb230b833f5b83fcb980594124f913c18665b264656e04e0ed3e1e263e04242",
+      "stdoutSha256": "d4298b35641c80219f7b9365c7332afcfb41738a518d15ddac28f6c10a8430bf",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "startedAt": "2026-11-07T04:35:46.216779+00:00",
+      "elapsedSeconds": 93.796,
+      "exitCode": 0,
+      "sourceFiles": 4291,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "proof-2",
+      "freshSuites": 0,
+      "inputManifestSha256": "0bbb3e185077140a57418b4eebf46cf9471e44137a70880fa21bb7236afd9a27",
+      "stdoutSha256": "b269c3bb3f5ecea7c000940d5a11dd036a2e84f623820a99391906325636bb33",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "startedAt": "2026-11-07T04:41:17.355967+00:00",
+      "elapsedSeconds": 544.194,
+      "exitCode": 0,
+      "sourceFiles": 4291,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5604,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "full-1",
+      "freshSuites": 656,
+      "inputManifestSha256": "0bbb3e185077140a57418b4eebf46cf9471e44137a70880fa21bb7236afd9a27",
+      "stdoutSha256": "fc17d2213a179fb1e8b96f0eb662b1a36727e52e595e9ad276ebe4381c637857",
+      "stderrSha256": "385c02ceab131f12a94e2cfdcc38becb9bce05dc24f0413905c6cee5f9b0f6a2"
+    }
+  ],
+  "corrections": {
+    "focused-1-corrections.json": {
+      "originalFailures": [
+        "Android compilation: new acquisition selection was inserted into the older staging path",
+        "Detekt: shared acquisition reached 116 lines against the 100-line limit"
+      ],
+      "correction": "Restore the unchanged staging path and select existing-only files in native acquisition. Bind protected record, credential writer and native session in one explicit preparation result reused by that acquisition.",
+      "files": {
+        "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "5e84f6e151f33a698d1c5da1cfd88db3bec3351caf72acd0233b91de09dced44",
+        "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidSdkPreparedSession.kt": "59d92bf0306bba6dc21c79ffeb8f8d5357c4dc10524943057e3266b311212850"
+      }
+    },
+    "focused-2-corrections.json": {
+      "originalFailures": [
+        "New fixture called a suspending key mapper in a constructor",
+        "Native acquisition still exceeded the 100-line method limit (113)"
+      ],
+      "correction": "Compute fixture identity in its suspending factory. Keep paused restore, actual key verification and readiness persistence in one named initialization step under the same owning acquisition.",
+      "files": {
+        "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "43687fd730e8b739fb32fe2db8c52dbef099d7d9487389075efe94b003f65c94",
+        "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidSpaceRuntimeAdoptionTest.kt": "4ef104e7f3098406acbe157420056504df8f8f364d94194cb53d2d25d87f121e"
+      }
+    },
+    "focused-3-corrections.json": {
+      "originalFailure": "Detekt: acquire was still 105 lines; all 24 selected Android host cases passed",
+      "correction": "Remove redundant owner/record/session aliases and shorten the existing persistent-storage check. No policy change. Next gate compiles the added native proof and runs quality; final full gate retains regression coverage.",
+      "files": {
+        "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "bd69828872e537ef9c9f82ac14838ad294d5bc37fecfd1061647464a0994085d"
+      }
+    },
+    "native-1-corrections.json": {
+      "originalFailure": "First x86 native restore passed through publication and HR switch/denial, then legacy isOpen saw the Space lease through the repository bulk resource scan and returned Unavailable at the unchanged probe assertion.",
+      "correction": "Separate registry legacyResources from all cleanup resources; every legacy repository bulk lookup uses only that projection. Native assertion is unchanged.",
+      "sourceFiles": {
+        "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkRuntimeRegistry.kt": "0b04ecdd8dc35e49697276b3e8049fc11635bd963ff3fbc702ab1b713a21fb0d",
+        "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "07249695b111b4b43b70fc036a9678de335ab0c73a8cf631b3db0681969bc868",
+        "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/SdkSpaceRuntimeRegistryTest.kt": "0205ad0d244ffb9378b0a87c7022c1071c566dd252cb286bf3166f0a67cf8f64"
+      },
+      "failedFixtureRetained": "native-1/userdata.img and all sidecars/AVD files",
+      "retest": "New source requires complete two-ABI acceptance in a fresh owned native-2 fixture. No messages in either attempt."
+    }
+  },
+  "firstNativeFailure": {
+    "startedAt": "2026-11-07T04:31:55.880984+00:00",
+    "serial": "emulator-5564",
+    "apkSha256": "da8a45c3a6a5df145f5d93d9c95afcc1c23e435c45bcbf4dcf86860b2ab2db1a",
+    "sdk": "26.10.23-hris.4",
+    "native": {
+      "x86_64": {
+        "sha256": "55bde5be2080c3e42a2ece6053f94231d27165cc39698c89c50e36ecbdb2909a",
+        "matchesPublishedSdk": true,
+        "mode": "stripped"
+      },
+      "arm64-v8a": {
+        "sha256": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34",
+        "matchesPublishedSdk": true,
+        "mode": "stripped"
+      }
+    },
+    "providerRequired": false,
+    "phoneTouched": false,
+    "productApkInstalled": false,
+    "newMessagesSent": 0,
+    "complete": false,
+    "cases": [
+      {
+        "abi": "x86_64",
+        "passed": false,
+        "selectedAbiVerified": true,
+        "stageInstrumentation": {
+          "complete": true
+        },
+        "stage": {
+          "originalSdkClosed": true,
+          "committedBeforeCancellation": true,
+          "uninitializedAdoptionRetained": true,
+          "originalFieldsAndQueueNamespacePreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "ownedResourcesReleased": true,
+          "passed": true,
+          "complete": true,
+          "newMessagesSent": 0
+        },
+        "processAbsentBetweenPhases": true,
+        "resumeInstrumentation": {
+          "complete": false,
+          "failureCategory": "HrisProof_Unavailable_Unclassified",
+          "failureFrames": [
+            "dev.fajar.hris.collaboration.proof.LocalRuntimeHandoverFixture.success:300",
+            "dev.fajar.hris.collaboration.proof.LocalSpaceRuntimeAdoptionProbe$resume$2.invokeSuspend:137"
+          ],
+          "recentStorageFailures": []
+        }
+      }
+    ],
+    "failureClass": "AssertionError",
+    "failedFixtureRetainedForInspection": true,
+    "failureInstrumentation": {
+      "complete": false,
+      "failureCategory": "HrisProof_Unavailable_Unclassified",
+      "failureFrames": [
+        "dev.fajar.hris.collaboration.proof.LocalRuntimeHandoverFixture.success:300",
+        "dev.fajar.hris.collaboration.proof.LocalSpaceRuntimeAdoptionProbe$resume$2.invokeSuspend:137"
+      ],
+      "recentStorageFailures": []
+    },
+    "emulatorStopped": {
+      "pid": 4169210,
+      "serial": "emulator-5564",
+      "stopped": true,
+      "signalSent": true,
+      "transportAbsent": true,
+      "seconds": 1.404
+    },
+    "elapsedSeconds": 88.382
+  },
+  "acceptedNative": {
+    "startedAt": "2026-11-07T04:37:58.497007+00:00",
+    "serial": "emulator-5564",
+    "apkSha256": "c5daa9afce0d0e772c6b74133cf7e66b97aed6869fa6322c4270619392c94dc7",
+    "sdk": "26.10.23-hris.4",
+    "native": {
+      "x86_64": {
+        "sha256": "55bde5be2080c3e42a2ece6053f94231d27165cc39698c89c50e36ecbdb2909a",
+        "matchesPublishedSdk": true,
+        "mode": "stripped"
+      },
+      "arm64-v8a": {
+        "sha256": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34",
+        "matchesPublishedSdk": true,
+        "mode": "stripped"
+      }
+    },
+    "providerRequired": false,
+    "phoneTouched": false,
+    "productApkInstalled": false,
+    "newMessagesSent": 0,
+    "complete": true,
+    "cases": [
+      {
+        "abi": "x86_64",
+        "passed": true,
+        "selectedAbiVerified": true,
+        "stageInstrumentation": {
+          "complete": true
+        },
+        "stage": {
+          "originalSdkClosed": true,
+          "committedBeforeCancellation": true,
+          "uninitializedAdoptionRetained": true,
+          "originalFieldsAndQueueNamespacePreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "ownedResourcesReleased": true,
+          "passed": true,
+          "complete": true,
+          "newMessagesSent": 0
+        },
+        "processAbsentBetweenPhases": true,
+        "resumeInstrumentation": {
+          "complete": true
+        },
+        "continuity": {
+          "durableAfterProcessDeath": true,
+          "actualExistingOnlySdkRestore": true,
+          "unpublishedUntilAcceptance": true,
+          "hrCompanySelectionAndDenialIndependent": true,
+          "legacyRuntimeLookupExcluded": true,
+          "originalFieldsAndQueueNamespacePreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "sameBootstrapReplayWithoutWrite": true,
+          "ownedResourcesReleased": true,
+          "ownedFilesRemoved": true,
+          "liveGroupActivation": false,
+          "passed": true,
+          "complete": true,
+          "newMessagesSent": 0
+        },
+        "fixtureRemoved": true,
+        "elapsedSeconds": 47.932
+      },
+      {
+        "abi": "arm64-v8a",
+        "passed": true,
+        "selectedAbiVerified": true,
+        "stageInstrumentation": {
+          "complete": true
+        },
+        "stage": {
+          "originalSdkClosed": true,
+          "committedBeforeCancellation": true,
+          "uninitializedAdoptionRetained": true,
+          "originalFieldsAndQueueNamespacePreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "ownedResourcesReleased": true,
+          "passed": true,
+          "complete": true,
+          "newMessagesSent": 0
+        },
+        "processAbsentBetweenPhases": true,
+        "resumeInstrumentation": {
+          "complete": true
+        },
+        "continuity": {
+          "durableAfterProcessDeath": true,
+          "actualExistingOnlySdkRestore": true,
+          "unpublishedUntilAcceptance": true,
+          "hrCompanySelectionAndDenialIndependent": true,
+          "legacyRuntimeLookupExcluded": true,
+          "originalFieldsAndQueueNamespacePreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "sameBootstrapReplayWithoutWrite": true,
+          "ownedResourcesReleased": true,
+          "ownedFilesRemoved": true,
+          "liveGroupActivation": false,
+          "passed": true,
+          "complete": true,
+          "newMessagesSent": 0
+        },
+        "fixtureRemoved": true,
+        "elapsedSeconds": 47.282
+      }
+    ],
+    "sourcesUnchanged": true,
+    "emulatorStopped": {
+      "pid": 15745,
+      "serial": "emulator-5564",
+      "stopped": true,
+      "signalSent": true,
+      "transportAbsent": true,
+      "seconds": 1.404
+    },
+    "elapsedSeconds": 139.411
+  },
+  "acceptedCommand": [
+    "xvfb-run",
+    "-a",
+    "env",
+    "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+    "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+    "ANDROID_HOME=/home/fajar/Android/Sdk",
+    "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    "--stacktrace",
+    "--continue",
+    ":check",
+    ":features:collaboration:data:testAndroidHostTest",
+    ":apps:collaboration-proof:compileDebugKotlin",
+    ":apps:collaboration-proof:assembleDebug",
+    ":core:network:wasmJsBrowserTest",
+    ":core:observability:wasmJsBrowserTest",
+    ":core:worker:wasmJsBrowserTest",
+    ":core:database:wasmJsBrowserTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":features:collaboration:presentation:wasmJsBrowserTest",
+    ":apps:android:assembleDevDebug",
+    ":apps:android:lintDevDebug",
+    ":formatCheck",
+    ":architectureCheck",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=53",
+    "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx2560m",
+    "-Pkotlin.compiler.execution.strategy=in-process"
+  ],
+  "lintErrors": 0,
+  "lintWarnings": 0,
+  "detektFindings": 0,
+  "originalBimaDataTouched": false,
+  "phoneTouched": false,
+  "productCallerAdded": false,
+  "liveGroupActivation": false,
+  "actualPendingMessageDeliveryProven": false,
+  "owningFreshAdmissionStillRequired": true
+}

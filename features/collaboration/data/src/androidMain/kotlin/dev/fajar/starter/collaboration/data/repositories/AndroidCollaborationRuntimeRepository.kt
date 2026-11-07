@@ -9,6 +9,7 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.collaborationGatewayMatchesCommand
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationEventId
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationMessageId
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationSpaceSetupRecord
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
@@ -35,14 +36,103 @@ class AndroidCollaborationRuntimeRepository(
     private val http: HttpClient,
     private val inventories: CollaborationSdkInventorySource? = null,
     private val privateIdentities: CollaborationSdkPrivateIdentitySource? = null,
-) : CollaborationRuntimeRepository, CollaborationLocalDeviceIdentityRepository {
+) :
+    CollaborationRuntimeRepository,
+    CollaborationLocalDeviceIdentityRepository,
+    CollaborationSpaceRuntimeRepository {
     private val registry =
         SdkRuntimeRegistry<AndroidCollaborationRuntimeLease>(
             { it.availableForEntry && it.credentialFailures.value == null },
             { it.requestClose() },
         )
-    private val leases
-        get() = registry.resources()
+    private val legacyLeases
+        get() = registry.legacyResources()
+
+    override suspend fun isSpaceOpen(
+        owner: CollaborationSpaceOwner,
+        deviceId: String,
+        operationId: String,
+    ): AppResult<Boolean> = safeStorageCall {
+        registry.findSpace(SdkSpaceRuntimeIdentity(owner, deviceId, operationId)) != null
+    }
+
+    override suspend fun closeSpace(owner: CollaborationSpaceOwner): AppResult<Unit> =
+        drain(registry.closeSpace(owner))
+
+    override suspend fun installOriginal(
+        owner: CollaborationSpaceOwner,
+        original: CollaborationExistingRuntimeHandover,
+        setup: CollaborationSpaceSetupRecord,
+    ): AppResult<CollaborationSpaceRuntimeLease> {
+        val prepared = safeStorageCall {
+            val command = setup.command
+            val local =
+                CollaborationSpaceLocalAccess(
+                    owner.parent.sessionId,
+                    owner.parent.audience,
+                    owner.parent.accountId,
+                    owner.spaceId,
+                )
+            require(validCollaborationSpaceSetupRecord(local, setup) && setup.successorId == null)
+            require(command.platform == CollaborationNativePlatform.ANDROID)
+            require(command.binding.nativeSessionId == owner.parent.nativeSessionId)
+            require(command.binding.spaceId == original.intent.spaceId)
+            require(command.request.deviceId == original.intent.deviceId)
+            require(command.request.deviceVersion == original.intent.expectedDeviceVersion + 1)
+            val gateway =
+                when (val outcome = setup.outcome) {
+                    is CollaborationSpaceSetupOutcome.Bootstrapped -> outcome.gateway
+                    is CollaborationSpaceSetupOutcome.BootstrapReplaced -> outcome.receipt.gateway
+                    else -> error("Original runtime requires confirmed credentials.")
+                }
+            require(original.intent.fingerprint == original.original.identity.fingerprint)
+            val binding = original.original.binding
+            val physical =
+                CollaborationOwner(
+                    owner.parent.sessionId,
+                    binding.audience,
+                    binding.accountId,
+                    binding.companyId,
+                    binding.nativeSessionId,
+                )
+            val scope =
+                collaborationSdkScope(physical, original.original.deviceId, server, endpoint)
+            CollaborationSdkRecordCodec(scope).validateHandoverIntent(original.intent)
+            scope to SdkSpaceRuntimeInstallation(original, command, gateway)
+        }
+        if (prepared is AppResult.Failed) return prepared
+        val (scope, installation) = (prepared as AppResult.Success).value
+        val identity =
+            SdkSpaceRuntimeIdentity(
+                owner,
+                installation.command.request.deviceId,
+                installation.command.id,
+            )
+        val reserved =
+            registry.beginSpaceAdoption(scope.storeId, scope.owner, scope.deviceId, identity)
+        if (reserved is AppResult.Failed) return reserved
+        val gate = (reserved as AppResult.Success).value
+        return try {
+            val drained = drainHandover(gate)
+            if (drained is AppResult.Failed) return drained
+            currentCoroutineContext().ensureActive()
+            if (!registry.spaceHandoverCurrent(gate)) return handoverPending()
+            val selected = registry.reserveSpaceAdoption(gate)
+            if (selected is AppResult.Failed) return selected
+            val reservation = (selected as AppResult.Success).value
+            when (
+                val opened = handoverAndroidSdkRuntime { failed ->
+                    requireNotNull(acquire(reservation, scope, null, failed, installation))
+                }
+            ) {
+                is AppResult.Failed -> opened
+                is AppResult.Success ->
+                    AppResult.Success(AndroidCollaborationSpaceRuntimeLease(identity, opened.value))
+            }
+        } finally {
+            registry.endHandover(gate)
+        }
+    }
 
     override suspend fun readLocalIdentity(
         owner: CollaborationOwner,
@@ -296,7 +386,7 @@ class AndroidCollaborationRuntimeRepository(
         retention: CollaborationRuntimeRetention
     ): AppResult<Unit> {
         val stopped = registry.update(retention)
-        return drain((stopped + leases.filter { it.closingRequested }).distinct())
+        return drain((stopped + registry.resources().filter { it.closingRequested }).distinct())
     }
 
     override suspend fun acquireBackground(
@@ -307,7 +397,7 @@ class AndroidCollaborationRuntimeRepository(
         if (lifetimeMillis !in 1..60_000)
             return AppResult.Failed(Failure(FailureKind.Validation, "Invalid recovery lifetime."))
         val deadline = TimeSource.Monotonic.markNow() + lifetimeMillis.milliseconds
-        drain(leases.filter { it.closingRequested })
+        drain(registry.resources().filter { it.closingRequested })
         currentCoroutineContext().ensureActive()
         if (deadline.hasPassedNow()) return AppResult.Failed(backgroundRuntimeExpired())
         val prepared = safeStorageCall { collaborationSdkScope(owner, deviceId, server, endpoint) }
@@ -362,7 +452,7 @@ class AndroidCollaborationRuntimeRepository(
     ): AppResult<dev.fajar.starter.collaboration.domain.entities.CollaborationOwnReadReceipts> {
         currentCoroutineContext().ensureActive()
         val runtime =
-            leases.singleOrNull {
+            legacyLeases.singleOrNull {
                 it.owner == owner && it.deviceId == deviceId && it.availableForEntry
             }
                 ?: return AppResult.Failed(
@@ -385,7 +475,7 @@ class AndroidCollaborationRuntimeRepository(
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
         val runtime =
-            leases.singleOrNull {
+            legacyLeases.singleOrNull {
                 it.owner == owner && it.deviceId == deviceId && it.availableForEntry
             }
                 ?: return AppResult.Failed(
@@ -403,7 +493,7 @@ class AndroidCollaborationRuntimeRepository(
         deviceId: String,
     ): AppResult<Unit> {
         val runtime =
-            leases.singleOrNull {
+            legacyLeases.singleOrNull {
                 it.owner == owner && it.deviceId == deviceId && it.availableForEntry
             }
                 ?: return AppResult.Failed(
@@ -421,7 +511,7 @@ class AndroidCollaborationRuntimeRepository(
         deviceId: String,
     ): AppResult<Unit> {
         val runtime =
-            leases.singleOrNull {
+            legacyLeases.singleOrNull {
                 it.owner == owner && it.deviceId == deviceId && it.availableForEntry
             }
                 ?: return AppResult.Failed(
@@ -485,7 +575,7 @@ class AndroidCollaborationRuntimeRepository(
         untilPosition: String?,
     ): AppResult<CollaborationProviderHistoryPage> {
         val runtime =
-            leases.singleOrNull {
+            legacyLeases.singleOrNull {
                 it.owner == owner && it.deviceId == deviceId && it.availableForEntry
             }
                 ?: return AppResult.Failed(
@@ -504,7 +594,7 @@ class AndroidCollaborationRuntimeRepository(
         matrixRoomId: String,
     ): AppResult<CollaborationHistoryHead> {
         val runtime =
-            leases.singleOrNull {
+            legacyLeases.singleOrNull {
                 it.owner == owner && it.deviceId == deviceId && it.availableForEntry
             }
                 ?: return AppResult.Failed(
@@ -535,7 +625,7 @@ class AndroidCollaborationRuntimeRepository(
         anchorEventId: String,
     ): AppResult<CollaborationOriginalWindow> {
         val runtime =
-            leases.singleOrNull {
+            legacyLeases.singleOrNull {
                 it.owner == owner && it.deviceId == deviceId && it.availableForEntry
             }
                 ?: return AppResult.Failed(
@@ -567,7 +657,7 @@ class AndroidCollaborationRuntimeRepository(
         matrixRoomId: String,
     ): AppResult<CollaborationMessageQueueLease> {
         val runtime =
-            leases.singleOrNull {
+            legacyLeases.singleOrNull {
                 it.owner == owner && it.deviceId == deviceId && it.availableForEntry
             }
                 ?: return AppResult.Failed(
@@ -583,7 +673,7 @@ class AndroidCollaborationRuntimeRepository(
     override suspend fun isOpen(owner: CollaborationOwner, deviceId: String): AppResult<Boolean> {
         currentCoroutineContext().ensureActive()
         val existing =
-            leases.singleOrNull {
+            legacyLeases.singleOrNull {
                 it.owner == owner && it.deviceId == deviceId && !it.closingRequested
             } ?: return AppResult.Success(false)
         existing.credentialFailures.value?.let {
@@ -637,7 +727,7 @@ class AndroidCollaborationRuntimeRepository(
         matrixRoomId: String,
     ): AppResult<CollaborationTimelineLease> {
         val runtime =
-            leases.singleOrNull {
+            legacyLeases.singleOrNull {
                 it.owner == owner && it.deviceId == deviceId && it.availableForEntry
             }
                 ?: return AppResult.Failed(
@@ -656,7 +746,7 @@ class AndroidCollaborationRuntimeRepository(
 
     override suspend fun closeOtherOwners(retainedOwner: CollaborationOwner?): AppResult<Unit> {
         val obsolete = registry.closeOtherOwners(retainedOwner)
-        return drain((obsolete + leases.filter { it.closingRequested }).distinct())
+        return drain((obsolete + registry.resources().filter { it.closingRequested }).distinct())
     }
 
     private suspend fun drain(resources: List<AndroidCollaborationRuntimeLease>): AppResult<Unit> {
@@ -670,7 +760,7 @@ class AndroidCollaborationRuntimeRepository(
         installation: Pair<CollaborationSetupCommand, CollaborationGateway>?,
         result: (AndroidCollaborationRuntimeLease?) -> T,
     ): AppResult<T> {
-        drain(leases.filter { it.closingRequested })
+        drain(registry.resources().filter { it.closingRequested })
         currentCoroutineContext().ensureActive()
         val prepared = safeStorageCall { collaborationSdkScope(owner, deviceId, server, endpoint) }
         if (prepared is AppResult.Failed) return prepared
@@ -718,8 +808,8 @@ class AndroidCollaborationRuntimeRepository(
         scope: CollaborationSdkScope,
         installation: Pair<CollaborationSetupCommand, CollaborationGateway>?,
         failed: (Failure) -> Unit,
+        spaceInstallation: SdkSpaceRuntimeInstallation? = null,
     ): AndroidCollaborationRuntimeLease? {
-        val owner = reservation.owner
         var directory: CollaborationSdkStoreLease? = null
         var lease: AndroidCollaborationRuntimeLease? = null
         var credentials: AtomicCredentialStore? = null
@@ -728,21 +818,33 @@ class AndroidCollaborationRuntimeRepository(
         var authenticationDelegate: AndroidSdkAuthDelegate? = null
         var authentication: AndroidSdkAuthRegistration? = null
         var handedOver = false
+        var primary: Throwable? = null
         try {
             check(registry.accepts(reservation)) { "SDK acquisition is no longer retained." }
-            directory = stores.acquire(scope.storeId)
+            check((reservation.space == null) == (spaceInstallation == null))
+            directory =
+                if (spaceInstallation == null) stores.acquire(scope.storeId)
+                else
+                    requireNotNull(stores.acquireExisting(scope.storeId)) {
+                        "Original SDK store is unavailable."
+                    }
             credentials = credentialFactory(scope.credentialRecordName)
-            check(credentials.persistent) {
-                "SDK credentials require protected persistent storage."
-            }
-            val codec = CollaborationSdkRecordCodec(scope)
-            val retained = acquireRecord(directory, credentials, codec, installation) ?: return null
-            persistence = SdkSessionPersistence(credentials, codec, retained)
+            check(credentials.persistent) { "Persistent SDK credentials are required." }
+            val prepared =
+                readRuntimeSession(
+                    directory,
+                    credentials,
+                    CollaborationSdkRecordCodec(scope),
+                    installation,
+                    spaceInstallation,
+                    reservation,
+                ) ?: return null
+            persistence = prepared.persistence
             client =
                 clients.create(
                     directory,
-                    retained.passphrase,
-                    retained.toNativeSession(),
+                    prepared.record.passphrase,
+                    prepared.session,
                     AndroidSdkSessionDelegate(persistence),
                 )
             authenticationDelegate = AndroidSdkAuthDelegate(persistence)
@@ -755,11 +857,11 @@ class AndroidCollaborationRuntimeRepository(
                 )
             lease =
                 AndroidCollaborationRuntimeLease(
-                    owner,
+                    reservation.owner,
                     client,
                     directory,
                     persistence,
-                    retained,
+                    prepared.record,
                     CollaborationHistoryApi(http, endpoint),
                     CollaborationPusherApi(http, endpoint),
                     authentication = authentication,
@@ -767,16 +869,18 @@ class AndroidCollaborationRuntimeRepository(
                     registry.released(reservation)
                 }
             check(registry.attach(reservation, lease)) { "SDK acquisition is no longer retained." }
-            clients.restorePaused(client, retained.toNativeSession())
-            lease.startMonitoring()
-            when (persistence.markInitialized()) {
-                is AppResult.Failed -> error("SDK initialization could not be persisted.")
-                is AppResult.Success -> Unit
-            }
-            currentCoroutineContext().ensureActive()
-            lease.completeAcquisition()
+            initializeRuntime(
+                lease,
+                client,
+                prepared,
+                reservation,
+                spaceInstallation?.original?.original?.identity,
+            )
             handedOver = true
             return lease
+        } catch (failure: Throwable) {
+            primary = failure
+            throw failure
         } finally {
             lease?.finishAcquisition()
             if (!handedOver) {
@@ -796,11 +900,36 @@ class AndroidCollaborationRuntimeRepository(
                             registry.released(reservation)
                         }
                     }
+                } catch (closing: Throwable) {
+                    val original = primary
+                    if (original != null) original.addSuppressed(closing) else throw closing
                 } finally {
                     persistence?.failures?.value?.let(failed)
                 }
             }
         }
+    }
+
+    /** Restore/verify the paused native owner and persist readiness before any publication. */
+    private suspend fun initializeRuntime(
+        lease: AndroidCollaborationRuntimeLease,
+        client: Client,
+        prepared: AndroidSdkPreparedSession,
+        reservation: SdkRuntimeReservation<AndroidCollaborationRuntimeLease>,
+        expectedIdentity: CollaborationLocalDeviceIdentity?,
+    ) {
+        clients.restorePaused(client, prepared.session)
+        if (expectedIdentity != null) {
+            require(clients.identity(client).toLocalDeviceIdentity() == expectedIdentity)
+            check(registry.accepts(reservation)) { "SDK acquisition is no longer retained." }
+        }
+        lease.startMonitoring()
+        when (prepared.persistence.markInitialized()) {
+            is AppResult.Failed -> error("SDK initialization could not be persisted.")
+            is AppResult.Success -> Unit
+        }
+        currentCoroutineContext().ensureActive()
+        lease.completeAcquisition()
     }
 
     private suspend fun closeUnattached(
@@ -824,6 +953,67 @@ class AndroidCollaborationRuntimeRepository(
         } finally {
             directory?.close()
         }
+    }
+
+    /** One protected-record selection binds the writer and native session to the same namespace. */
+    private suspend fun readRuntimeSession(
+        directory: CollaborationSdkStoreLease,
+        credentials: AtomicCredentialStore,
+        codec: CollaborationSdkRecordCodec,
+        installation: Pair<CollaborationSetupCommand, CollaborationGateway>?,
+        spaceInstallation: SdkSpaceRuntimeInstallation?,
+        reservation: SdkRuntimeReservation<AndroidCollaborationRuntimeLease>,
+    ): AndroidSdkPreparedSession? {
+        val record =
+            if (spaceInstallation == null)
+                acquireRecord(directory, credentials, codec, installation) ?: return null
+            else acquireAdoptedRecord(directory, credentials, codec, spaceInstallation, reservation)
+        val namespace =
+            spaceInstallation?.let { SdkCredentialNamespace.Adopted(it.command.id) }
+                ?: SdkCredentialNamespace.Original
+        val persistence = SdkSessionPersistence(credentials, codec, record, namespace)
+        val session =
+            when (val selected = persistence.session()) {
+                is AppResult.Failed -> error("SDK credentials are unavailable.")
+                is AppResult.Success -> selected.value.toNativeSession()
+            }
+        return AndroidSdkPreparedSession(record, persistence, session)
+    }
+
+    private suspend fun acquireAdoptedRecord(
+        directory: CollaborationSdkStoreLease,
+        credentials: AtomicCredentialStore,
+        codec: CollaborationSdkRecordCodec,
+        installation: SdkSpaceRuntimeInstallation,
+        reservation: SdkRuntimeReservation<AndroidCollaborationRuntimeLease>,
+    ): CollaborationSdkRecord {
+        val stored =
+            requireNotNull(credentials.read()?.let(codec::decode)) {
+                "Original SDK credentials are unavailable."
+            }
+        require(codec.handoverIntent(stored) == installation.original.intent)
+        val identity =
+            requireNotNull(privateIdentities)
+                .read(directory.databasePath, stored.passphrase)
+                .toLocalDeviceIdentity()
+        currentCoroutineContext().ensureActive()
+        require(identity == installation.original.original.identity)
+        require(
+            identity.matrixUserId == stored.matrixUserId &&
+                identity.matrixDeviceId == stored.matrixDeviceId
+        )
+        val selected =
+            if (
+                stored.adoption == null ||
+                    stored.adoption.bootstrapOperationId == installation.command.id
+            )
+                codec.stageAdoption(stored, installation.command, installation.gateway)
+            else codec.replaceAdoptedCredentials(stored, installation.command, installation.gateway)
+        check(registry.accepts(reservation)) { "SDK acquisition is no longer retained." }
+        if (selected != stored) credentials.write(codec.encode(selected))
+        currentCoroutineContext().ensureActive()
+        check(registry.accepts(reservation)) { "SDK acquisition is no longer retained." }
+        return selected
     }
 
     private suspend fun acquireRecord(

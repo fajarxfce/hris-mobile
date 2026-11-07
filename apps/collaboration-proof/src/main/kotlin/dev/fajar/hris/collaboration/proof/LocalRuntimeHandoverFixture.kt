@@ -41,10 +41,26 @@ internal class LocalRuntimeHandoverFixture(private val context: Context, val own
     @Volatile var beforeStageWrite: suspend () -> Unit = {}
     @Volatile var afterStageWrite: suspend () -> Unit = {}
     @Volatile var afterReplacementWrite: suspend () -> Unit = {}
+    @Volatile var afterAdoptionWrite: suspend () -> Unit = {}
     private val http = HttpClient(MockEngine { error("No HRIS transport in local handover proof") })
     val runtime =
         AndroidCollaborationRuntimeRepository(
             object : CollaborationSdkStoreSource {
+                override suspend fun acquireExisting(storeId: String): CollaborationSdkStoreLease? {
+                    val lease = stores.acquireExisting(storeId) ?: return null
+                    directoryAcquisitions.incrementAndGet()
+                    activeDirectories.incrementAndGet()
+                    return object : CollaborationSdkStoreLease by lease {
+                        override fun close() {
+                            try {
+                                lease.close()
+                            } finally {
+                                activeDirectories.decrementAndGet()
+                            }
+                        }
+                    }
+                }
+
                 override suspend fun acquire(storeId: String): CollaborationSdkStoreLease {
                     val lease = stores.acquire(storeId)
                     directoryAcquisitions.incrementAndGet()
@@ -71,6 +87,8 @@ internal class LocalRuntimeHandoverFixture(private val context: Context, val own
                         val staging = saved?.optInt("schema")?.let { it in 2..3 } == true
                         if (staging) beforeStageWrite()
                         record.write(value)
+                        if (saved?.optJSONObject("adoption")?.optBoolean("initialized") == false)
+                            afterAdoptionWrite()
                         if (staging) afterStageWrite()
                         else if (
                             saved != null &&

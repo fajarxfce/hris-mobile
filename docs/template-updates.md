@@ -1,5 +1,18 @@
 # Template updates
 
+## Explicit failed-operation outcome — port complete
+
+Mobile c50a8983 makes failed performance samples explicit while preserving original
+exceptions and cancellation. The two generic source/test files are copied exactly
+to Starter f25cb3de, with observability included in its Apple gate. Independent local
+checks passed 293 fresh cases in 93 suites; the first Apple run
+[42337213669](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/42337213669)
+passed 197 cases in 50 suites plus simulator application and association checks.
+The artifact digest is verified. The previous first Apple failure remains recorded;
+its exact compiler cause is not established. This change does not prove physical
+chat delivery latency. [Evidence](measurements/native-failure-outcome-2026-11-07.json).
+
+
 ## Replica staging operations — Mobile consumer proof remains
 
 Nine generic storage/contract files add exact staging discard and bounded working

@@ -273,6 +273,11 @@ class AndroidCollaborationIdentityTest {
         val runtime =
             AndroidCollaborationRuntimeRepository(
                 object : CollaborationSdkStoreSource {
+                    override suspend fun acquireExisting(
+                        storeId: String
+                    ): CollaborationSdkStoreLease? =
+                        error("Existing SDK acquisition is not part of this fixture.")
+
                     override suspend fun acquire(storeId: String): CollaborationSdkStoreLease {
                         check(allowDirectory) { "No identity directory acquisition" }
                         directories++

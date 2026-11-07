@@ -105,6 +105,26 @@
   },
   "originalFailedTest": "HttpDiagnosticsTest.transportFailureAndCancellationBothFinishTheirSamples",
   "originalAssertionUnchanged": true,
-  "appleVerificationPending": true,
-  "phoneLatencyResolved": false
+  "appleVerificationPending": false,
+  "phoneLatencyResolved": false,
+  "acceptedStarterFirstApple": {
+    "auditAt": "2026-11-07T04:38:02.315738+00:00",
+    "runId": 42337213669,
+    "headSha": "f25cb3de4d8f18a7cf95ec956dea5a7485f92623",
+    "conclusion": "success",
+    "url": "https://github.com/fajarxfce/compose-fluent-starter/actions/runs/42337213669",
+    "artifactId": 13560653234,
+    "artifactSha256": "cd808d95bc5c189cbbff52220e2f1b71be1b7b663df691fa37712d83926406b2",
+    "artifactBytes": 259751,
+    "githubDigestVerified": true,
+    "counts": {
+      "tests": 197,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": 50
+  },
+  "acceptedStarterDocumentationCommit": "03ebcde59dbe8a6e09b8178ae6416db57fe65000",
+  "counterevidence": "Mobile c141 first control 42333989403 passed the original Apple network assertion without the explicit failure catch; no deterministic compiler cause is established."
 }

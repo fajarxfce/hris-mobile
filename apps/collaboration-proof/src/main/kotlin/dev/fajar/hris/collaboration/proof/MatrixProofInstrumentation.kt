@@ -115,6 +115,10 @@ class MatrixProofInstrumentation : Instrumentation() {
             "work-wake-stage" -> CollapsedSchedulingProbe(targetContext, directory).stage()
             "work-wake-resume" ->
                 CollapsedSchedulingProbe(targetContext, directory).run(resuming = true)
+            "space-adoption-stage" ->
+                LocalSpaceRuntimeAdoptionProbe(targetContext, directory).stage()
+            "space-adoption-resume" ->
+                LocalSpaceRuntimeAdoptionProbe(targetContext, directory).resume()
             "local-handover-stage" -> LocalRuntimeHandoverProbe(targetContext, directory).stage()
             "local-handover-resume" -> LocalRuntimeHandoverProbe(targetContext, directory).resume()
             "existing-handover-stage" ->
