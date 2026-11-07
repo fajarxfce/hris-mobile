@@ -1,5 +1,9 @@
 # Architecture
 
+[Original queue matching](collaboration-space-original-queue-reconciliation.md)
+keeps pure whole-inventory validation separate from the owning current-admission
+read. Matching retained commands and completion evidence grants no queue mutation.
+
 [Explicit native notification retirement](native-notification-retirement.md) keeps
 OS timeout separate from observed removal and retains opaque inventory through
 cancellation. The raw adapter owns this bounded OS interaction.

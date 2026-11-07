@@ -1,0 +1,133 @@
+{
+  "recordedAt": "2026-11-07T07:47:07.146927+00:00",
+  "baseCommit": "8f4e4d15284650dced354f8f685e033da0932dd3",
+  "sourceFiles": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationOriginalQueueMatch.kt": "399a7c6186424ead2dfcfa6b4a3e89941985d2ac61f4268231965d5d48365dc1",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationOriginalQueueMatchPolicy.kt": "00645372164ae51738d68774965295197f6c1a874992057481fb7cf7368c2b19",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/OriginalQueueMatchFixture.kt": "a9e037ea8710d2fc1ac5fce0d48e2b8463cd3d68e81446bcc9cc5ed780180db2",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationOriginalQueueMatchTest.kt": "23573752a033edb66807536ddb966cf6f47038c1bfcc97a86ebc7c09295c7841",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceOriginalQueue.kt": "d49e612e76c9f46fab935b97e41663b7021fb670f774c1fe5e8affae08a1b47d",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationOriginalQueueReadTest.kt": "8760a56e063e1e2e3deb5eaad727e829f939ee2567e6bcc9a0979ed5963ca4ab",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "3faa27f1e51f0c2ddefe2a260ce6c57148f7d4a3e79be6395373b64379a70f97",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "8f85136453ce751ce9a81874b00828570332ebdf14ff234c6ffed0925c43be32"
+  },
+  "checks": [
+    {
+      "startedAt": "2026-11-07T07:23:58.544969+00:00",
+      "elapsedSeconds": 100.624,
+      "exitCode": 1,
+      "sourceFiles": 4318,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "focused-1",
+      "freshSuites": 1,
+      "sourceManifestSha256": "24a22a5ab0f5670333e1c263a13605ed11383e29f938bd35f45a9e45b86bcaf3",
+      "stdoutSha256": "a21155484ac46cc43a6f158a8e312a5858bfa0e91c85b6e35311ab997a03bfd2",
+      "stderrSha256": "e2921f1222b8d5d38be6d99f03292f1b428a1d5137b713abd343f01ab972a6f7"
+    },
+    {
+      "startedAt": "2026-11-07T07:26:42.158550+00:00",
+      "elapsedSeconds": 99.139,
+      "exitCode": 0,
+      "sourceFiles": 4318,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "focused-2",
+      "freshSuites": 1,
+      "sourceManifestSha256": "d605d3d897fed6a73278e014eabccb8625424041ebd29a215a8e68d7490392e6",
+      "stdoutSha256": "ccbd721085a8ce75f99c7af737f46c52e26430432b4da3a4f2a4c505b9727a03",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "startedAt": "2026-11-07T07:31:26.897628+00:00",
+      "elapsedSeconds": 201.624,
+      "exitCode": 0,
+      "sourceFiles": 4320,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "focused-3",
+      "freshSuites": 3,
+      "sourceManifestSha256": "324b4b84514f42c07bd380c31e5441643044384dce9645762b806d4ec84a1e88",
+      "stdoutSha256": "b8ee776836c5c686a5ada5b9e895809a7d2db2e0a4bcc51b502fff4eae2a4f9a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "startedAt": "2026-11-07T07:38:06.800538+00:00",
+      "elapsedSeconds": 512.73,
+      "exitCode": 0,
+      "sourceFiles": 4320,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5538,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "full-1",
+      "freshSuites": 649,
+      "sourceManifestSha256": "324b4b84514f42c07bd380c31e5441643044384dce9645762b806d4ec84a1e88",
+      "stdoutSha256": "57e7615380a1f553bef4c5399db341c507162bbe5edaf43f4a66e97479313a4e",
+      "stderrSha256": "942c0f47dc33d5e47252c653f1bab9e92e1c9b40a2eee033b10c27ef4bc08555"
+    }
+  ],
+  "acceptedCommand": [
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    "--stacktrace",
+    "--continue",
+    ":check",
+    ":features:collaboration:data:testAndroidHostTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":apps:collaboration-proof:compileDebugKotlin",
+    ":apps:android:assembleDevDebug",
+    ":apps:android:lintDevDebug",
+    ":formatCheck",
+    ":architectureCheck",
+    ":detekt",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=53",
+    "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx2560m",
+    "-Pkotlin.compiler.execution.strategy=in-process"
+  ],
+  "newPolicyCases": 10,
+  "newOwningLifecycleCases": 10,
+  "actualApplicationDiCases": 2,
+  "firstFailure": "Initial formatter syntax corrected before compilation; focused-1 had only Detekt LongMethod112>100 while all10 policy cases passed. Pure provenance/ID preflight split is required before storage point reads; no guard removed or suppression added.",
+  "wholeOriginalInventoryMatched": true,
+  "immutableCompletionRequiredForSentRecords": true,
+  "originalPhysicalNamespacesAndBootstrapAliasesRetained": true,
+  "currentNativeParentAndOriginalHardDeadlineRequired": true,
+  "denialsSurviveCancellationAndFailedPersistence": true,
+  "nativeCredentialFailureDoesNotPersistGroupDenial": true,
+  "repositoryCollectionsDetachedBeforeLaterSuspension": true,
+  "sdk4Rebuilt": false,
+  "queueResumed": false,
+  "newMessageAcknowledgementInferred": false,
+  "providerMessagesSent": 0,
+  "productCallerAdded": false,
+  "liveGroupActivation": false,
+  "phoneLatencyResolved": false,
+  "androidLintFindings": 0
+}

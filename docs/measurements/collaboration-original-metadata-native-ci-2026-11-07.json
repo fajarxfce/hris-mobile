@@ -1,0 +1,271 @@
+{
+  "at": "2026-11-07T07:38:55.295098+00:00",
+  "headSha": "05de0bf61d2f3eec2f607a10704235ef2bb91424",
+  "runs": [
+    {
+      "id": 42348626124,
+      "status": "completed",
+      "conclusion": "failure",
+      "jobs": [
+        {
+          "name": "Android HRIS (arm64-v8a)",
+          "status": "completed",
+          "conclusion": "failure",
+          "startedAt": "2026-11-07T07:17:19Z",
+          "completedAt": "2026-11-07T07:37:19Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run android-actions/setup-android@v3",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build isolated Android SDK fixture before starting the emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Verify fixture native ABI before runtime acceptance",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Compile HRIS fixture and verify driver cleanup",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Enable KVM for the owned runner emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run reactivecircus/android-emulator-runner@v2",
+              "status": "completed",
+              "conclusion": "failure"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "name": "Android HRIS (x86_64)",
+          "status": "completed",
+          "conclusion": "failure",
+          "startedAt": "2026-11-07T07:17:20Z",
+          "completedAt": "2026-11-07T07:37:37Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run android-actions/setup-android@v3",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build isolated Android SDK fixture before starting the emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Verify fixture native ABI before runtime acceptance",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Compile HRIS fixture and verify driver cleanup",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Enable KVM for the owned runner emulator",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run reactivecircus/android-emulator-runner@v2",
+              "status": "completed",
+              "conclusion": "failure"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "artifactId": 13566047020,
+          "name": "native-hris-evidence",
+          "sha256": "949a2f0cba04094d8f6938282df4d5b1fa25cb200c8b0187bbe528105818bb78",
+          "bytes": 91522,
+          "suites": 78,
+          "counts": {
+            "tests": 493,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": {
+            "abi": "x86_64",
+            "apkSha256": "38ea0c504cd2684e734e5492744433ba501ec66965847856c938f6815971673b"
+          },
+          "proof": {}
+        },
+        {
+          "artifactId": 13565518948,
+          "name": "native-hris-arm64-evidence",
+          "sha256": "e76f888f3235c79e3859a63d418163be9cc4a693af6894dbf3288ceac899bfb8",
+          "bytes": 91517,
+          "suites": 78,
+          "counts": {
+            "tests": 493,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": {
+            "abi": "arm64-v8a",
+            "apkSha256": "3335abfe0ee1b2dcfab8bc8c25e23835871207d529bb513293dbef685d506983"
+          },
+          "proof": {}
+        }
+      ]
+    }
+  ],
+  "failureAudit": {
+    "originalJobs": [
+      {
+        "job": 128337828473,
+        "bytes": 588594,
+        "sha256": "8c008d15d0a1766a2c78b4f40415fa2acd9884b3c827b74429a4c6e55d102c79"
+      },
+      {
+        "job": 128337828637,
+        "bytes": 588779,
+        "sha256": "c687ec83944ab4f4baad374dcbae24bcadec0525329c9c085e8f76fb3a2b001b"
+      }
+    ],
+    "phase": "check_space_queue_adoption.validate_apk, before fixture installation",
+    "error": "Expected the immutable SDK4 native library",
+    "observedPackaging": "Both original job logs say libmatrix_sdk_ffi.so could not be stripped and was packaged as-is. The original APK/library bytes were not uploaded.",
+    "proofsReached": false,
+    "providerSendsPerformed": false,
+    "phoneLatencyResolved": false,
+    "sdkRebuilt": false,
+    "initialLogDownload": "gh refused ANSI escape sequences. Empty first files were retained; the same logs were downloaded to private files with explicit raw-output opt-in and sanitized before summary display."
+  }
+}

@@ -340,6 +340,31 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun readSpaceOriginalQueue(
+        conversations: CollaborationSpaceOriginalConversationRepository,
+        identities: CollaborationSpaceIdentityRepository,
+        runtimes: CollaborationSpaceRuntimeRepository,
+        messages: CollaborationMessageRepository,
+        completions: CollaborationMessageCompletionRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReadCollaborationSpaceOriginalQueue(
+            conversations,
+            identities,
+            runtimes,
+            messages,
+            completions,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun readSpaceContacts(
         spaces: CollaborationSpaceRepository,
         sessions: SessionRepository,
