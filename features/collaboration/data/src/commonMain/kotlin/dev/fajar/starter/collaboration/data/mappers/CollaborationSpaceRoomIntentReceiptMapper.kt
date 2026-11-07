@@ -16,20 +16,27 @@ fun CollaborationSpaceRoomIntentReceiptObservationDto.toRoomIntentReceiptObserva
     expected: CollaborationSpaceRoomRequestIntent
 ): CollaborationSpaceRoomIntentReceiptObservation {
     require(collaborationId(accountId) == expected.binding.accountId)
-    require(collaborationId(original.operationId) == expected.operationId)
-    require(collaborationId(original.spaceId) == expected.binding.spaceId)
-    require(collaborationId(original.conversationId) == expected.conversationId)
-    require(collaborationId(original.deviceId) == expected.request.deviceId)
-    require(original.expectedDeviceVersion == expected.request.expectedDeviceVersion)
-    require(original.expectedRequestRevision == expected.request.expectedAttempt?.revision)
-    require(
-        original.expectedRequestAccountId?.let(::collaborationId) ==
-            expected.request.expectedAttempt?.accountId
-    )
+    original.requireOriginalRoomRequestIntent(expected)
     return CollaborationSpaceRoomIntentReceiptObservation(
         expected,
         receipt?.toReceipt()?.also {
             require(it.id == expected.conversationId && it.version in 0..999999)
         },
+    )
+}
+
+/** Verifies every echoed stable coordinate before any receipt or fence is accepted. */
+fun CollaborationSpaceRoomRequestIntentDto.requireOriginalRoomRequestIntent(
+    expected: CollaborationSpaceRoomRequestIntent
+) {
+    require(collaborationId(operationId) == expected.operationId)
+    require(collaborationId(spaceId) == expected.binding.spaceId)
+    require(collaborationId(conversationId) == expected.conversationId)
+    require(collaborationId(deviceId) == expected.request.deviceId)
+    require(expectedDeviceVersion == expected.request.expectedDeviceVersion)
+    require(expectedRequestRevision == expected.request.expectedAttempt?.revision)
+    require(
+        expectedRequestAccountId?.let(::collaborationId) ==
+            expected.request.expectedAttempt?.accountId
     )
 }

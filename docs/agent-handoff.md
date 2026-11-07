@@ -8,6 +8,15 @@ and staging, never permission to reapply old candidates.
 
 ## Current accepted work — 7 November 2026
 
+Typed room fence transport is locally accepted:11 Kotlin files, exact current-native
+original mutation key/body and full response echo, distinct Recorded/Fenced domain
+results, bounded4KiB response and preserved cancellation. Focused12497 passed44 cases
+187.108s; full77406 passed3,671 fresh cases/454 suites472.962s on4,398 unchanged inputs,
+zero failures/errors/skips/lint. Root/Android host/quality/shared Wasm and14 selected
+Browser cases passed;8 new fence cases ran Desktop/Android host/Browser. All local
+jobs are reaped. [Contract and measurements](collaboration-space-room-request-fence.md).
+No durable fence outcome, successor, product caller, SDK send or new APK yet.
+
 Original Open replay335e3914 is now locally accepted/pushed on recovery:12 Kotlin source/test files. It retains
 original intent, marks uncertainty before HTTP, reads the normalized persisted record
 for exact CAS, captures observed outcomes through bounded cancellation, and publishes
@@ -66,12 +75,10 @@ No product caller, new APK or organization routing activation exists for these p
    fixture expectation failure is retained: unselected provider identity rejects the
    writer with peer_unavailable. Current admission is unchanged. All Group jobs reaped.
    [Server contract](https://github.com/fajarxfce/hris-platform/blob/cf885a1c/docs/collaboration/native-room-request-fence-http.md).
-   ELEVEN Mobile files are now applied/FROZEN, NOT accepted. Focused12497 passed44 cases
-   in187.108s on4,398 unchanged inputs, zero failures/errors/skips, format/architecture/
-   Detekt. Sole heavy job77406 runs `.work/space-room-request-fence-2026-11-07/full-1`:
-   root, Android host/release lint,14 actual Browser fence/receipt cases, shared Wasm
-   and quality. Do not edit frozen source or start another compiler/emulator. No
-   durable evidence/successor, product caller or APK yet; candidates are historical.
+   Mobile11-file typed fence transport is now locally accepted, with44 focused and
+   3,671 full cases as above. All jobs are reaped. Push/promote accepted source after
+   confirming the old primary remains its ancestor; first31e runs already started.
+   Preserve the next source's first pending runs before any later primary promotion.
 3. Open preparation/replay and canonical projection-before-archive are locally accepted.
    Continue equivalent owning Room request projection/recovery and original SDK routing.
    Separate native account/MFA/client denial from conversation/peer denial; do not close
@@ -87,9 +94,9 @@ No product caller, new APK or organization routing activation exists for these p
    is waived, but relevant Apple CI/compilation remains required.
 
 Metadata/preparation/Open candidates are historical applied staging; do not reapply.
-The real codec fix supersedes Open's initial candidate directory. Group native14-file
-and HTTP6-file fence integration are accepted/pushed. Mobile's11 fence files are
-applied/FROZEN for77406; their candidates must not be reapplied.
+The real codec fix supersedes Open's initial candidate directory. Group native14-file, HTTP6-file and Mobile11-file fence transport are accepted locally.
+Their candidate directories must not be reapplied. Next durable design is retained in
+`.work/space-room-request-fence-2026-11-07/next-durable.md`; it is not implemented.
 Metadata remains inside the guarded collaboration-history/ prefix.
 
 ## Original SDK and phone invariants
@@ -122,6 +129,9 @@ logs. Earlier08:38 passive UID audit had0 postinstall lines: silence is not acce
 Existing optional feedback is pending; do not repeat the question. Fresh14:00:00UTC
 read-only Bima audit confirms1 active device/provider binding,1 device key,50 signed
 one-time keys and1 fallback, without login/send/private-key/phone access. [Server evidence](https://github.com/fajarxfce/hris-platform/blob/ddf214f1/docs/measurements/collaboration-bima-recipient-keys-2026-11-07.json).
+At14:04:40UTC the exact retained peer view still admitted1 publication-confirmed
+recipient device despite expired interactive access and with a live hard parent.
+[Eligibility evidence](https://github.com/fajarxfce/hris-platform/blob/4fad6bb3/docs/measurements/collaboration-bima-recipient-keys-2026-11-07.json).
 He does not need to stay online for sender server acceptance. This does not establish
 the cause or resolution of the user's20s–2min pending delay.
 

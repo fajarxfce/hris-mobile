@@ -15,6 +15,22 @@ class RemoteCollaborationSpaceRoomRepository(
     private val remote: CollaborationSpaceRoomRemoteSource,
     private val server: IdentityServer,
 ) : CollaborationSpaceRoomRepository {
+    override suspend fun fenceRequest(
+        conversation: CollaborationSpaceConversation,
+        original: CollaborationSpaceRoomRequestIntent,
+    ) = safeApiCall {
+        validate(conversation)
+        require(validCollaborationSpaceRoomRequestIntent(conversation, original))
+        remote
+            .fenceRequest(
+                conversation.owner.parent.sessionId,
+                conversation.owner.spaceId,
+                conversation.id,
+                original.toRoomRequestFenceDto(),
+            )
+            .toRoomRequestResolution(conversation, original)
+    }
+
     override suspend fun readIntentReceipt(
         conversation: CollaborationSpaceConversation,
         original: CollaborationSpaceRoomRequestIntent,

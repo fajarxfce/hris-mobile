@@ -1,5 +1,9 @@
 # Architecture
 
+[Exact original room-request resolution](collaboration-space-room-request-fence.md)
+maps retained receipts or explicit non-execution evidence under current native transport.
+Durable capture and successor orchestration remain with the owning flow.
+
 [Owned original conversation opening](collaboration-space-conversation-open-replay.md)
 retains the original operation, reads normalized durable marks before dispatch and
 materializes exact canonical metadata before archival. Content admission stays separate.

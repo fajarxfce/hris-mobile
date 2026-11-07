@@ -12,6 +12,23 @@ import org.koin.core.annotation.*
 
 @Single
 class CollaborationSpaceRoomApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun fenceRequest(
+        sessionId: String,
+        spaceId: String,
+        conversationId: String,
+        original: CollaborationSpaceRoomRequestFenceDto,
+    ): CollaborationSpaceRoomRequestResolutionDto =
+        client.requestJson(
+            "collaboration/spaces/${Uuid.parse(spaceId)}/direct-conversations/${Uuid.parse(conversationId)}/room/requests/fence",
+            HttpMethod.Post,
+            maximumBytes = 4096,
+        ) {
+            forSession(sessionId)
+            header("Idempotency-Key", Uuid.parse(original.operationId).toString())
+            contentType(ContentType.Application.Json)
+            setBody(original)
+        }
+
     suspend fun readIntentReceipt(
         sessionId: String,
         spaceId: String,
