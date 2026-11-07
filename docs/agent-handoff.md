@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Inspector57 installed — 7 November 2026, 22:35 UTC
+
+APK57/source52df4ee1 is installed on phone and original Bima emulator, using the exact
+unpublishedSDK5 and private inspectora8d7d60. Build34797 passed279.765s; verify82774/24808,
+original-data install39392, real single-send/capture/offline probe59278, passive30494,
+stop55397/emulator70092 and phone install26187 are all REAPED. No emulator/compiler runs.
+Phone56→57 update succeeded62.036s including verification, exactAPK hash/appUID/first
+install identity retained, --install-only, no phone UI or data reset. [Exact evidence](measurements/network-inspector-host-device-2026-11-07.json).
+
+Actual API/Ktor and Rust Matrix capture, source/search filters, detail/back and Clear
+work. One Matrix send attempt returnsHTTP200 in239ms, transfer240ms/59bytes. UI polls
+show one pending bubble at2.876s and sent at5.071s, always above composer; no duplicate.
+Cold offline restart retains original history/latest preview. Nine screenshots and three
+sampled video storyboards inspected; keyboard still dismisses on local save. No capture
+body/query values, pause/resume/export, overhead or phone-latency completion is claimed.
+Capture122total/106Ktor includes startup and screen navigation; not a per-send request count.
+
+Starter has a new UNACCEPTED feat/network-inspector-20261107 candidate fromb11437a:
+generic owner/viewer/DI/fixture port, Ktor/Firebase wiring and Settings entry. It adds no
+Matrix SDK/HRIS policy. Session test fixture uses Starter's own constructor. Six source
+files remain byte-identical; the seventh is this fixture adaptation. Checks not run yet;
+.work/network-inspector-port-2026-11-07 owns staging. Next run independent Starter gates,
+then commit/push accepted port; preserve private dependency/distribution boundary.
+
+Continue reusable port, inspector overhead/Apple bridge and composer/latency, then all54
+original PRD groups (none newly complete). Composer journal remains unimplemented review
+in .work/chat-composer-handoff-2026-11-07; read it and actual tap/request timing before
+claiming a delay source. PrimaryMobilebe2fe021, liveAPI2e75fe1e/worker10485916/schema116.1
+and disabled Group routing unchanged. V117–138 undeployed. Private visibility question
+unanswered; do not expose library source or promote unpublished dependencies to primary.
+
 ## Inspector host accepted locally — 7 November 2026, 22:18 UTC
 
 Full-1/38121 is REAPED:617.945s,4,424 unchanged app inputs and unchanged private-library

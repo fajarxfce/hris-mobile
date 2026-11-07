@@ -4,9 +4,10 @@ This integration candidate uses the separate [KMP Network Inspector](https://git
 repository. The repository is currently private and no library package is published.
 Do not copy its source into this repository or change its visibility to make CI pass.
 
-**Host integration is locally accepted; actual application capture and overhead are still pending.**
-The installed release56 remains on SDK4 without the inspector. This branch selects the
-unpublished, paired four-ABI SDK5 candidate; immutable SDK4 release assets are unchanged.
+**Build57 is installed on the authorized Android phone after actual emulator acceptance.**
+Ktor/API and Rust Matrix HTTP capture, filters, detail/back, Clear and cold offline chat
+continuity passed. This branch selects the unpublished, paired four-ABI SDK5 candidate;
+immutable SDK4 release assets are unchanged. [Device/package evidence](measurements/network-inspector-host-device-2026-11-07.json).
 
 The development app opens the viewer through Account → Settings → Network inspector.
 Ktor clients for HRIS, OIDC and Firebase and the Android Matrix Rust client share one
@@ -46,8 +47,8 @@ until distribution is ready. The library targets Android, iOS, JVM and Wasm. Por
 core/Ktor/viewer tests and Apple klib compilation are separate from platform acceptance:
 Android's actual JNI observer passes six loopback scenarios. Four Swift/native observer
 cases pass on macOS against the same verified SDK candidate. Apple library binding,
-Apple simulator tests, application runtime/overhead and reusable Starter integration
-are still pending. Private-repository CI currently cannot run because of GitHub billing.
+Apple simulator tests, a capture-overhead comparison and reusable Starter integration
+are still pending. Android host runtime is accepted separately below. Private-repository CI currently cannot run because of GitHub billing.
 
 The first host check stopped before compilation on an inherited plugin checksum missing
 from Mobile. The follow-up imports32 exact entries already verified in the separate
@@ -61,5 +62,8 @@ Environment/build/server configuration and inspector lifetime registration have 
 application DI modules. Feature ViewModels and repositories do not own diagnostics.
 Six lifetime tests cover token rotation, account replacement/logout, failed/completed
 identity observation, pending disposal and late cleanup. Two desktop UI cases cover
-platform Back, clear/ID reuse and large text on a small screen. No phone/device viewer
-or overhead result is inferred from these local checks.
+platform Back, clear/ID reuse and large text on a small screen. Android device viewer acceptance comes from the separate exact-APK probe. Nine actual
+screenshots and three sampled video storyboards were inspected. One send had a239ms
+Matrix response/240ms transfer; pending and sent UI polls occurred at2.876s/5.071s. Those
+are different boundaries, not an overhead benchmark or a solved phone-latency claim.
+The phone received the same APK with --install-only, preserving app identity and data.
