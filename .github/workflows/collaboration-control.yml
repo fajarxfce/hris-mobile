@@ -10,6 +10,8 @@ on:
       - 'apps/ios/**'
       - 'core/network/**'
       - 'core/database/**'
+      - 'core/worker/**'
+      - 'core/sync/**'
       - 'core/securestorage/**'
       - 'core/storage/**'
       - 'core/workspace/domain/**'
@@ -25,6 +27,8 @@ on:
       - 'apps/ios/**'
       - 'core/network/**'
       - 'core/database/**'
+      - 'core/worker/**'
+      - 'core/sync/**'
       - 'core/securestorage/**'
       - 'core/storage/**'
       - 'core/workspace/domain/**'
@@ -63,6 +67,7 @@ jobs:
       - name: Check setup transport and ownership
         run: >-
           xvfb-run -a ./gradlew --no-daemon --no-parallel --max-workers=2
+          :core:worker:desktopTest :core:worker:wasmJsBrowserTest
           :features:collaboration:domain:desktopTest :features:collaboration:data:desktopTest
           :features:collaboration:domain:wasmJsBrowserTest :features:collaboration:data:wasmJsBrowserTest
           :features:collaboration:presentation:desktopTest :features:collaboration:presentation:wasmJsBrowserTest
@@ -79,6 +84,7 @@ jobs:
           name: collaboration-control-portable
           path: |
             features/collaboration/**/build/test-results/
+            core/worker/build/test-results/
             features/collaboration/presentation/build/reports/screenshots/
             apps/shared/build/test-results/
   apple:
@@ -101,6 +107,7 @@ jobs:
         run: >-
           ./gradlew --no-daemon --no-parallel --max-workers=2
           :core:database:iosSimulatorArm64Test
+          :core:worker:iosSimulatorArm64Test
           :features:collaboration:domain:iosSimulatorArm64Test
           :features:collaboration:data:iosSimulatorArm64Test
           :features:collaboration:presentation:iosSimulatorArm64Test
@@ -122,4 +129,5 @@ jobs:
           name: collaboration-control-apple
           path: |
             features/collaboration/**/build/test-results/
+            core/worker/build/test-results/
             core/database/build/test-results/

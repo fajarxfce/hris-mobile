@@ -48,10 +48,10 @@ new cases under.work/legacy-publication-transport-2026-11-07, NOT yet applied/te
 Guarded apply.py requires release53 acceptance and unchanged originals. Apply/review
 while Starter runs; focused/full tests must wait. It extends the existing transfer
 boundary with fresh bounded original-publication metadata, no activation or SDK writes.
-Also prepared: foreground-chat-delivery/control-followup.yml/json adds worker CI
-triggers, desktop/browser/Apple tests and artifact retention; NOT yet applied. This
-CI-only follow-up should be committed separately after review, before the next full
-Mobile source gate. Keep every commit pushed on the temporary branch while necessary.
+CI-only follow-up is now applied/reviewed: collaboration control watches worker/sync,
+runs desktop/browser/Apple worker tests and retains both jobs reports. YAML parsed
+locally; runtime execution remains pending. Commit/push it separately on the temporary
+branch while preserving first085 pending control, then apply publication transport.
 
 First085 control42330502891 is PENDING; native42330503083 and protocol42330502995 are
 RUNNING. Never displace the first pending control with another primary SOURCE push.

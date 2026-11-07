@@ -49,3 +49,7 @@ Release53 from08545820 is installed after exact APK verification and four origin
 room entries offline/online. The physical phone received an update in place with its
 original application identity retained; no phone UI was driven. Physical message
 latency remains open pending actual observations. [Release evidence](measurements/collaboration-release53-2026-11-07.json).
+
+The collaboration control workflow also watches `core/worker` and `core/sync`, runs
+worker regressions on desktop/browser/Apple, and uploads those reports from both
+jobs. Its YAML structure was parsed locally; remote execution is separate evidence.
