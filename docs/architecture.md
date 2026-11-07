@@ -1,5 +1,9 @@
 # Architecture
 
+[Owning original metadata reads](collaboration-space-original-conversation-reads.md)
+coordinate finite native admission and capture immutable bounded pages; a successful
+recovery read cannot reopen a denied content projection or authorize queue delivery.
+
 [Original conversation metadata](collaboration-space-original-conversations.md) preserves
 company/conversation coordinates and independent room provenance through bounded native
 organization reads. Owning publication and application-command matching remain separate.

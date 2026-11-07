@@ -323,6 +323,23 @@ class CollaborationDataModule {
     ) = DiscoverCollaborationSpace(spaces, sessions, server, build, Clock.System)
 
     @Factory
+    fun readSpaceOriginalConversations(
+        originals: CollaborationSpaceOriginalConversationRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReadCollaborationSpaceOriginalConversations(
+            originals,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun readSpaceContacts(
         spaces: CollaborationSpaceRepository,
         sessions: SessionRepository,

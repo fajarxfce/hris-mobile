@@ -1,0 +1,204 @@
+{
+  "recordedAt": "2026-11-07T06:50:46.819525+00:00",
+  "headSha": "a48c59f1c72892c37abb5bcccf64e3e4417e6ed8",
+  "runId": 42342142245,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42342142245",
+  "firstRun": true,
+  "rerun": false,
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "portable",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-07T05:56:12Z",
+      "completedAt": "2026-11-07T06:22:53Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-java@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run gradle/actions/setup-gradle@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run android-actions/setup-android@v3",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check setup transport and ownership",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check application bindings and platform compilation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run gradle/actions/setup-gradle@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-java@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "name": "apple",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-07T05:56:12Z",
+      "completedAt": "2026-11-07T06:47:42Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Select Xcode 26.3",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-java@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run gradle/actions/setup-gradle@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Prepare public app-link test registrations",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check Apple setup adapter",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build iOS application host",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run gradle/actions/setup-gradle@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-java@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "artifactId": 13565045601,
+      "name": "collaboration-control-apple",
+      "sha256": "d8f11f1e19088402a9c6592f2eb8b28c7eb43ee86867c05d979be71fba63a396",
+      "bytes": 369438,
+      "suites": 216,
+      "counts": {
+        "tests": 1900,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "abi": null,
+      "proof": {}
+    },
+    {
+      "artifactId": 13563459428,
+      "name": "collaboration-control-portable",
+      "sha256": "a07506e480ded872f4ed7df90a85980e6d8534f99a65c2e9aa1eb6bea039fe76",
+      "bytes": 2377175,
+      "suites": 518,
+      "counts": {
+        "tests": 4667,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "abi": null,
+      "proof": {}
+    }
+  ],
+  "artifactDigestsVerified": true,
+  "productAcceptance": false,
+  "phoneLatencyResolved": false
+}

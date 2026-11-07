@@ -4,6 +4,47 @@ This is the active checkpoint. The [historical handoff](agent-handoff-history-th
 retains earlier work verbatim. Detailed measurements below are authoritative; do not
 restart accepted builds, native sends or SDK publication solely to recreate evidence.
 
+## Owning original metadata reads accepted — 7 November 2026, 07:03 UTC
+
+No heavy job, emulator or download remains. Full76749 PASSED530.638s,5,498fresh/645
+suites,4,314 unchanged inputs,zero failures/errors/skips/Android lint/Detekt. Focused
+97315 passed18/3 in195.321s on the exact same source manifest. Four source/test files
+are accepted: original list/exact owning use case,9 lifecycle cases, collaboration DI
+and actual app resolution. [Contract](collaboration-space-original-conversation-reads.md),
+[evidence](measurements/collaboration-space-original-conversation-reads-2026-11-07.json).
+Commit/push this slice on feat/chat-recovery-20261107 from05de0bf6. Include accepted
+firsta48 control42342142245 evidence: Apple1900/216,portable4667/518,zero all/digests verified.
+
+Primary remains05de0bf61d2f3eec2f607a10704235ef2bb91424. FIRST control42348626104 and
+native42348626124 remain PENDING; preserve before another primary-source promotion.
+Protocol42348626066 is running. FIRST1bb control42344998885/native42344999033 run.
+The latter ARM job128328168549 FAILED the raw notification replacement phase;
+x86 is still running. Original ARM artifact13564229568 digest3b79eaa4112a41b1b40b421605cd7f7b27b1494aa6234fdc0f9599c657945e51
+is verified. New diagnostics:2cases completed,elapsed3389ms,interactive=true,idle=false,
+powerSave=false,notificationsEnabled=true;1neutral card,postAge1217ms,timeout600ms.
+Fixture uninstalled/data cleared. No completed provider scenarios for this job. Original
+job loga8a7b36afa4f8dfc438062c912c02e177684bfc78ff752c89a31eed07f0fcc1c retained privately.
+Audit complete first runs when terminal; do not rerun accepted sends. Next investigate
+neutral-card retirement from these observed facts, preserving primary failures and bounds.
+Do not equate delayed OS disappearance with message-delivery failure or blindly weaken tests.
+
+Original metadata reads require no selected HR company and preserve original coordinates.
+Successful explicit metadata recovery leaves a denied directory CLOSED. Next original
+queue reconciliation must own current group admission separately, coordinate repositories
+(not another use case), and match exact physical room/device/bootstrap/transaction/content
+with immutable original commands. Unknown/ambiguous originals remain retained; no inferred
+ACK, replacement IDs or subset resume that could send unrecognized originals. Continue
+publication/history, hard-native-parent recovery, product/root routing and all54groups.
+The supplementary reconciliation plan is under .work/space-original-conversation-read-2026-11-07.
+
+Bima read-only06:42:18 audit confirmed1ACTIVE device,50initial keys and1fallback; no key
+material was read/consumed. Phone53 optional feedback and latency stay OPEN. Passive
+07:00:03 audit found0post-install lines,0fatal or chat diagnostics (same retained log
+518c42ad6b85ace21148a5ba2750bdfc338828db4c59c8372d8e95485297dd66). This is not delivery proof.
+No phone/Bima UI, messages, SDK4 rebuild/publication, or original Bima file/ID changes.
+Main209d7273/Group e8cdc933 checkpoints pushed; Starter03ebcde unchanged. Live API and
+V117–137 disabled/unshipped remain unchanged. Earlier timestamped sections below are history.
+
 ## Original conversation metadata accepted locally — 7 November 2026, 06:44 UTC
 
 No heavy job, emulator, or remote download remains. Thirteen source/test files match

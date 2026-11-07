@@ -1,0 +1,90 @@
+{
+  "recordedAt": "2026-11-07T07:00:59.645961+00:00",
+  "baseCommit": "05de0bf61d2f3eec2f607a10704235ef2bb91424",
+  "sourceFiles": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceOriginalConversations.kt": "b63fb87eb7fb040b6de2e372cd4ee2a9734b1a7f19b2cddba388b8e0ea7b059a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationOriginalConversationReadTest.kt": "ac9b58c7423be9941e37e6004d0addf3836f72e8a9c91cd3838e2bca816d7e7b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "f157d4bb55fde36b3788f54f8d307e8c5401d6afa3a97b59b8a85eacab60082b",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "efc931ba11358115c11c8688c10b1ff5ece26631b5ebbdae35f900c9b7532361"
+  },
+  "checks": [
+    {
+      "startedAt": "2026-11-07T06:47:52.278831+00:00",
+      "elapsedSeconds": 195.321,
+      "exitCode": 0,
+      "sourceFiles": 4314,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "focused-1",
+      "freshSuites": 3,
+      "sourceManifestSha256": "d299ba3b9834817595dd9cda62d0e7bd505e815c7624e59c3566448eb4d4c8c2",
+      "stdoutSha256": "bef22a0fad84e620a836f94dc451d6c4f2b6380f35f900e8718c073606b372a3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "startedAt": "2026-11-07T06:51:43.304922+00:00",
+      "elapsedSeconds": 530.638,
+      "exitCode": 0,
+      "sourceFiles": 4314,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5498,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "full-1",
+      "freshSuites": 645,
+      "sourceManifestSha256": "d299ba3b9834817595dd9cda62d0e7bd505e815c7624e59c3566448eb4d4c8c2",
+      "stdoutSha256": "8a8a5d4fdb7fbb87e23a2f0bbb9325ba790a143fd27f887e51e9407c61a17337",
+      "stderrSha256": "4592c5ca1d97a5c2c2ed9755ff17ebc6117fbeeca17e9e847cdfc65321920382"
+    }
+  ],
+  "acceptedCommand": [
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    "--stacktrace",
+    "--continue",
+    ":check",
+    ":features:collaboration:data:testAndroidHostTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":apps:collaboration-proof:compileDebugKotlin",
+    ":apps:android:assembleDevDebug",
+    ":apps:android:lintDevDebug",
+    ":formatCheck",
+    ":architectureCheck",
+    ":detekt",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=53",
+    "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx2560m",
+    "-Pkotlin.compiler.execution.strategy=in-process"
+  ],
+  "newLifecycleCases": 9,
+  "actualApplicationDiResolved": true,
+  "newReadOwnerAdded": true,
+  "boundedIsolatedPageSnapshot": true,
+  "originalHardDeadlineRetained": true,
+  "denialsRetainedAcrossCancellationAndFailedPersistence": true,
+  "successfulMetadataCannotReopenDeniedDirectory": true,
+  "androidLintFindings": 0,
+  "detektFindings": 0,
+  "encryptedProjectionAdded": false,
+  "originalMessageMatchingAdded": false,
+  "liveProductCallerAdded": false,
+  "liveGroupActivation": false,
+  "phoneLatencyResolved": false,
+  "providerMessagesSent": 0,
+  "nativeSdkRebuilt": false
+}

@@ -1,5 +1,11 @@
 # Validation
 
+[Owning original metadata acquisition](collaboration-space-original-conversation-reads.md)
+passed5,498 fresh cases/645 suites in530.638s,4,314 stable inputs and zero failures,
+errors, skips, Android lint or Detekt findings. Nine lifecycle cases also pass the
+focused gate; actual application DI resolves the owner. This grants no SDK/send or
+product activation. Physical-phone latency remains open.
+
 [Original conversation metadata](collaboration-space-original-conversations.md) passed
 5,480 fresh cases/643 suites with strict source stability and clean Android lint/Detekt.
 Its12 new domain/transport cases cover composite cursor progress, exact ownership,
