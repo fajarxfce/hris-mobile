@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-07",
+  "purpose": "Actual worker delivery across recipients with different published-key readiness",
+  "scope": "Controlled loopback API/PostgreSQL/Synapse/SDK4 and isolated x86_64 emulator; no user phone or Bima data",
+  "sourceHashes": {
+    "mobile": {
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisMixedRoomProbe.kt": "77fbffacb2eab59169735222367c8fe41047da736f243f7c65e2ea8c464b82fd",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofContainer.kt": "e1fa68d596deabcf33e94bcf16b5318ca4dcb38d0ac7c4c59cbbf54f5447880a",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "fdcf18a6a1129ffb3ba6a2f70a11af80dc8b8f204c50d0d1e503504b6d387932"
+    },
+    "platform": {
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeMixedRoomDeliveryTest.kt": "f9209acf8e024fb5441a662f1507d1cc932c4ff74dcabebbbbf93e3efa7b9460",
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeMixedRoomTrace.kt": "8c05ef8a492a9cf88cbfb0fd345fb0f96890ad3b85037d33f37c00decc416a0f",
+      "tool/collaboration_mixed_room_native.py": "d04917b9a5d1c51391faaeab9d4d7e45c1a7f2175f403d95400f3ead18e73c70",
+      "tool/test_collaboration_mixed_room_native.py": "f600b658fe1be2b0fbb036f5860d650bf67da3912c30419dc617f6d1b240dd4e"
+    }
+  },
+  "inputCounts": {
+    "platform": 8248,
+    "mobile": 4325
+  },
+  "inputManifestSha256": "8fec751945ed900e6dc79b28a08197acffa324d51b4fbab3de9c9c8c2c667893",
+  "mobileGate": {
+    "startedAt": "2026-11-07T08:30:41.025935+00:00",
+    "elapsedSeconds": 134.102,
+    "sourceFiles": 4325,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "proofLint": {
+    "errors": 0,
+    "existingWarnings": 49
+  },
+  "backendCompileAttempts": [
+    {
+      "startedAt": "2026-11-07T08:33:22.129536+00:00",
+      "seconds": 16.957,
+      "exitCode": 1,
+      "sourcesUnchanged": true,
+      "reason": "Missing test-only URI encoder, corrected before native execution"
+    },
+    {
+      "startedAt": "2026-11-07T08:34:10.621386+00:00",
+      "seconds": 31.02,
+      "exitCode": 0,
+      "sourcesUnchanged": true,
+      "reason": "Accepted test compilation, repository format and architecture checks"
+    }
+  ],
+  "validatorTests": {
+    "cases": 4,
+    "failures": 0,
+    "errors": 0
+  },
+  "native": {
+    "startedAt": "2026-11-07T08:35:02.122556+00:00",
+    "seconds": 149.551,
+    "exitCode": 0,
+    "counts": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourcesUnchanged": true,
+    "artifactUnchanged": true,
+    "emulatorStopped": {
+      "pid": 1586182,
+      "serial": "emulator-5560",
+      "stopped": true,
+      "signalSent": true,
+      "transportAbsent": true,
+      "seconds": 2.007
+    }
+  },
+  "apk": {
+    "path": ".work/mixed-room-delivery-2026-11-07/accepted-proof.apk",
+    "sha256": "5fda06e653d221ece3dc2bbca2db58ae01c1afc56b40569fd77221b6426b27a9",
+    "abi": "x86_64",
+    "immutableSdk4Validated": true
+  },
+  "nativeReportSha256": "470e0348dc278d41c983d87b3111fea2b1aef93506d40d843f058f5f9ac150fc",
+  "preconditions": {
+    "senderPublishedDevice": true,
+    "readyRecipientPublishedDevice": true,
+    "unavailableRecipientPublishedDevice": false,
+    "bothRoomsPublishedReady": true,
+    "readyRecipientRuntimeClosedBeforeCommands": true,
+    "actualForegroundWorker": true,
+    "operatingSystemSchedulerNotPartOfThisCase": true
+  },
+  "deviceMonotonicMilestonesMillis": {
+    "recipientRuntimeClosedMillis": 17033,
+    "unavailableQueuedMillis": 17719,
+    "readyQueuedMillis": 19077,
+    "sentObservedMillis": 20393,
+    "completionObservedMillis": 20892,
+    "journalObservedMillis": 20398
+  },
+  "queueReturnToSentObservedMillis": 1316,
+  "queueReturnToJournalObservedMillis": 1321,
+  "queueReturnToCompletionObservedMillis": 1815,
+  "serverMonotonicObservations": [
+    {
+      "room": "unavailable",
+      "startedMillis": 32310,
+      "finishedMillis": 32344,
+      "status": 403,
+      "errorCode": "collaboration_recipient_unavailable"
+    },
+    {
+      "room": "ready",
+      "startedMillis": 33689,
+      "finishedMillis": 33799,
+      "status": 200,
+      "errorCode": ""
+    }
+  ],
+  "invariants": {
+    "originalReadyIntentRetained": true,
+    "unavailableOriginalRetained": true,
+    "unavailableReceiptAbsent": true
+  },
+  "actualEncryptedEventReadVerified": true,
+  "productPolicyChanged": false,
+  "sdkRebuilt": false,
+  "phoneLatencyResolved": false,
+  "interpretation": "The missing-key room did not reproduce the reported 20-second to 2-minute delay in this warm-runtime fixture. A recipient need not keep its SDK open after publishing keys. Journal polling and Sent-flow observations are separate samples, not exact commit timestamps; host/device clocks are never subtracted.",
+  "remaining": "Physical phone latency remains open; retain original pending IDs and use current trace evidence before changing retry, timeout or writer policy."
+}

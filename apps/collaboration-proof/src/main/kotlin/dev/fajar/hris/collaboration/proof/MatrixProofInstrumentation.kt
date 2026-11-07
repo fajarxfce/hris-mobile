@@ -26,6 +26,7 @@ class MatrixProofInstrumentation : Instrumentation() {
             scenario == "hris-product-peer" -> 300_000
             scenario == "hris-auth-rejection" -> 180_000
             scenario == "hris-worker-resume" -> 420_000
+            scenario == "hris-mixed-room" -> 300_000
             scenario.startsWith("hris-worker-") || scenario.startsWith("company-recovery") ->
                 210_000
             else -> 120_000
@@ -154,6 +155,7 @@ class MatrixProofInstrumentation : Instrumentation() {
             "provider" -> NativeMatrixProbe(directory).run()
             "hris-worker-stage" -> HrisWorkerMatrixProbe(targetContext, directory).stage()
             "hris-worker-resume" -> HrisWorkerMatrixProbe(targetContext, directory).resume()
+            "hris-mixed-room" -> HrisMixedRoomProbe(targetContext, directory).run()
             "hris-auth-rejection" -> HrisSdkAuthProbe(targetContext, directory).run()
             "hris-stage" -> HrisNativeMatrixProbe(targetContext, directory).run(resuming = false)
             "hris-resume" -> HrisNativeMatrixProbe(targetContext, directory).run(resuming = true)

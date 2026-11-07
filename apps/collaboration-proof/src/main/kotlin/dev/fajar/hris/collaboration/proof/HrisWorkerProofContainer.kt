@@ -140,19 +140,23 @@ internal class HrisWorkerProofContainer(
         )
     }
 
-    suspend fun cacheConversation() {
+    suspend fun cacheConversation(targetConversationId: String = conversationId) {
         expect(
             container.koin
                 .get<RefreshCollaborationList>()
-                .conversation(application.workspaceId, conversationId)
+                .conversation(application.workspaceId, targetConversationId)
         )
     }
 
-    suspend fun queue(id: String, body: String): CollaborationMessageRecord =
+    suspend fun queue(
+        id: String,
+        body: String,
+        targetConversationId: String = conversationId,
+    ): CollaborationMessageRecord =
         expect(
             container.koin.get<QueueCollaborationText>()(
                 application.workspaceId,
-                conversationId,
+                targetConversationId,
                 id,
                 body,
                 access,
@@ -167,6 +171,17 @@ internal class HrisWorkerProofContainer(
 
     suspend fun message(id: String): CollaborationMessageRecord? =
         expect(container.koin.get<CollaborationMessageRepository>().get(access, id))
+
+    fun observePending(targetConversationId: String = conversationId) =
+        container.koin.get<ObserveCollaborationMessages>()(
+            application.workspaceId,
+            targetConversationId,
+        )
+
+    suspend fun receipts(targetConversationId: String = conversationId) =
+        expect(
+            container.koin.get<CollaborationReceiptRepository>().read(access, targetConversationId)
+        )
 
     suspend fun draft(): CollaborationDraft? =
         expect(

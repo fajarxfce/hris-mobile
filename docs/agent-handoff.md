@@ -7,24 +7,38 @@ and [history through build 50](agent-handoff-history-through-build50.md).
 
 ## Current work — 7 November 2026
 
-No heavy local job or emulator remains. Packaging gate15900 passed 5,373 fresh
-cases in 754 suites (1,364.389 seconds), with 4,324 unchanged inputs and zero
-failures/errors/skips. Proof lint: zero errors, 49 existing warnings. Actual workflow
-preflight accepted APK `fca8e884a7f0f48af5baf5aa4dd339421d7060368721342f7c57d0dc37955c27`
-and rejected a separate local APK containing the exact published unstripped library.
-The SDK4 hashes and original APK/source stayed unchanged. [Packaging contract](collaboration-sdk4-packaging-ci.md).
-Packaging program `9deb55bf93314622967231c9de8ab695c775faeb` is committed and pushed
-to both temporary and primary branches. First control42354718734 is PENDING behind
-05de's Apple job; native42354718728 and protocol42354718729 have started. Preserve
-that first pending control before the next primary source promotion. Short-SHA run
-lookup returned no results; the full SHA returned these three actual runs.
+No heavy local job, emulator or tool session remains. The narrow mixed-room native
+experiment PASSED: a real missing-key-room403 was followed by one encrypted200 to the
+ready recipient. The ready command reached observable Sent 1,316 ms after queue return;
+journal read1,321ms/completion1,815ms. The ready recipient's SDK was already closed.
+The unavailable original command/ID remained intact without a receipt. This warm-runtime
+fixture did NOT reproduce the reported phone delay and grants no production retry,
+timeout or writer change. Phone53 latency remains OPEN.
+[Diagnosis/result](collaboration-mixed-room-delivery-diagnosis.md),
+[measurement](measurements/collaboration-mixed-room-delivery-2026-11-07.json).
 
-NEXT run the narrowly scoped [mixed-room diagnosis](collaboration-mixed-room-delivery-diagnosis.md)
-using controlled recipients with different device/key readiness. No production policy
-change or new message has been made for this experiment. Supplementary plans are in
-`.work/mixed-room-delivery-2026-11-07` and `.work/space-original-queue-delivery-2026-11-07`.
-The user was told this experiment follows packaging acceptance; continue it before
-returning to original organization delivery/publication. Phone latency remains open.
+Three Mobile proof files and four Platform fixture/driver files are accepted locally.
+Mobile gate31449 passed134.102s,20fresh cases,4,325 unchanged inputs, zero failures/
+errors/skips and lint errors (49 existing proof warnings). Backend compile64777 passed
+31.020s after a retained test-only URI-encoder error. Four Python validator cases passed.
+Actual native48997 passed149.551s/one case/zero skips with immutable SDK4 and unchanged
+source/APK; emulator and transport stopped. These sessions are all reaped. No phone
+install, UI, send, Bima-store mutation or new provider rerun is needed for this result.
+
+NEXT continue original organization delivery/publication, native-parent recovery and
+product routing, then all54 PRD groups. The complete original queue matcher is accepted;
+actual original delivery remains absent. The plan is in
+`.work/space-original-queue-delivery-2026-11-07/plan.md`. Do not turn a history read or
+queue match into delivery authority. Preserve current recipient admission, the published
+group room binding and V132 original canonical-pair routing. Keep phone latency open
+until actual phone evidence arrives; the optional question is already pending.
+
+Packaging program `9deb55bf93314622967231c9de8ab695c775faeb` remains the primary source.
+First control42354718734 and native42354718728 have STARTED; protocol42354718729 is
+SUCCESS but its artifact audit remains pending. Previous packaging gate15900 passed
+5,373 fresh cases/754 suites,4,324 unchanged inputs, zero failures/errors/skips/lint
+errors;49 existing warnings. Actual workflow accepted APKfca8e884 and rejected a
+separate unstripped SDK4 copy. [Packaging contract](collaboration-sdk4-packaging-ci.md).
 
 Original SDK/application queue matching and its owning admission read have passed
 local acceptance. Full1361 passed 5,538 fresh cases in 649 suites (512.73 seconds), with 4,320
@@ -73,7 +87,7 @@ in. Read-only server audit at 06:42:18 UTC confirmed one active Bima Demo device
 50 signed one-time keys and one fallback key; no keys were read or consumed.
 Bima need not remain online. Earlier phone52 traces matched one HTTP200 to Bima's
 room and repeated403s to another owned room with no recipient device. This does
-not prove prompt UI acknowledgement. The last passive phone53 audit at 07:38:44
+not prove prompt UI acknowledgement. The last passive phone53 audit at 08:38:32
 UTC found zero post-install lines, fatals or chat diagnostics; unchanged private
 log SHA `518c42ad6b85ace21148a5ba2750bdfc338828db4c59c8372d8e95485297dd66`.
 Silence is not delivery evidence. An optional release53 feedback question is already
@@ -106,8 +120,8 @@ pending; do not repeat it. No phone UI/new messages were driven.
 
 ## Repositories and invariants
 
-Main Platform `feat/communications` checkpoint `e162d0a5` and Group worktree
-`feat/communication-space` checkpoint `ab5fed5c` are pushed. Group source remains
+Main Platform `feat/communications` checkpoint `ead88a2e` and Group worktree
+`feat/communication-space` checkpoint `e9496cb2` are pushed. Group source remains
 `e45a4313`. Live API `2e75fe1ee88b5766259fc3efd3ab7f21e70d621a`, worker `10485916`,
 schema 116.1 and V117–137 disabled status are unchanged. Starter is clean/pushed
 at `b11437a`. Detailed program state is in each repository's handoff.
