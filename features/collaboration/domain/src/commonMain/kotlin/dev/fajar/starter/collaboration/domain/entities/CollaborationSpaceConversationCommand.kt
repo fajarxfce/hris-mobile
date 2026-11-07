@@ -43,6 +43,10 @@ sealed interface CollaborationSpaceConversationOutcome {
     /** A setup receipt, not provider readiness, content admission or a message acknowledgement. */
     data class Recorded(val receipt: CollaborationSetupReceipt) :
         CollaborationSpaceConversationOutcome
+
+    /** Immutable original Room non-execution evidence; successor creation is separate. */
+    data class Fenced(val evidence: CollaborationSpaceRoomRequestFence) :
+        CollaborationSpaceConversationOutcome
 }
 
 data class CollaborationSpaceConversationCommandRecord(

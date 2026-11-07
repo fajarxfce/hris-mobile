@@ -5,11 +5,13 @@ import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationS
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
+import kotlin.io.encoding.Base64
 import kotlin.test.*
 import kotlin.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.*
 
 abstract class CollaborationSpaceConversationCommandStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
@@ -115,6 +117,307 @@ abstract class CollaborationSpaceConversationCommandStorageContract {
                 ),
         )
         return readCommand(command)
+    }
+
+    private fun CollaborationHistoryFixture.fence(
+        command: CollaborationSpaceConversationCommand.Room = room()
+    ) =
+        CollaborationSpaceConversationOutcome.Fenced(
+            CollaborationSpaceRoomRequestFence(
+                command.intent,
+                historyId(9870),
+                Instant.parse("2026-11-07T00:00:01.123456Z"),
+            )
+        )
+
+    private suspend fun CollaborationHistoryFixture.markRoom():
+        CollaborationSpaceConversationCommandRecord {
+        insert(room())
+        assertEquals(
+            AppResult.Success(true),
+            repo()
+                .update(
+                    scope(),
+                    readCommand(room()),
+                    CollaborationSpaceConversationOutcome.Unconfirmed(),
+                    1,
+                ),
+        )
+        return readCommand(room())
+    }
+
+    // Pin the original v1 authenticated envelope, independently of the current codec.
+    private fun CollaborationHistoryFixture.outcomeAad(raw: CommandRecord) =
+        Json.encodeToString(
+                listOf(
+                    "hris-collaboration-space-conversation-v1",
+                    access.audience,
+                    access.accountId,
+                    scope().spaceId,
+                    raw.id,
+                    "conversation-setup",
+                    "outcome",
+                    raw.revision.toString(),
+                )
+            )
+            .encodeToByteArray()
+
+    private suspend fun CollaborationHistoryFixture.outcomeJson(raw: CommandRecord): JsonObject {
+        val key = Base64.decode(assertNotNull(keys.read()))
+        return try {
+            val bytes = cipher.decrypt(key, outcomeAad(raw), Base64.decode(raw.state))
+            try {
+                Json.parseToJsonElement(bytes.decodeToString()).jsonObject
+            } finally {
+                bytes.fill(0)
+            }
+        } finally {
+            key.fill(0)
+        }
+    }
+
+    private suspend fun CollaborationHistoryFixture.sealOutcome(
+        raw: CommandRecord,
+        value: JsonObject,
+    ): String {
+        val key = Base64.decode(assertNotNull(keys.read()))
+        val bytes = value.toString().encodeToByteArray()
+        return try {
+            Base64.encode(cipher.encrypt(key, outcomeAad(raw), bytes))
+        } finally {
+            key.fill(0)
+            bytes.fill(0)
+        }
+    }
+
+    @Test
+    fun fencedRoomReopensWithExactEvidenceAndStillOccupiesItsOriginalResource() =
+        withDatabase { f ->
+            val before = f.markRoom()
+            val request = f.rawCommand(f.room()).request
+            val key = f.keys.read()
+            val evidence = f.fence()
+            assertEquals(AppResult.Success(true), f.repo().update(f.scope(), before, evidence, 1))
+            val saved = f.readCommand(f.room())
+            val raw = f.rawCommand(f.room())
+            assertEquals(evidence, saved.outcome)
+            assertEquals(request, raw.request)
+            assertFalse(raw.state.contains(evidence.evidence.id))
+            assertEquals(2, f.outcomeJson(raw)["schema"]?.jsonPrimitive?.int)
+            val login = f.access.copy(sessionId = "replacement", companyId = historyId(9899))
+            f.reopen(login)
+            assertEquals(saved, f.readCommand(f.room(), f.scope(login)))
+            assertEquals(key, f.keys.read())
+            assertEquals(
+                listOf(saved),
+                assertIs<AppResult.Success<List<CollaborationSpaceConversationCommandRecord>>>(
+                        f.repo().observeAll(f.scope(login)).first()
+                    )
+                    .value,
+            )
+            assertIs<AppResult.Failed>(f.repo().archiveRecorded(f.scope(login), saved))
+            assertEquals(
+                AppResult.Success(CollaborationSetupInsertion.OCCUPIED),
+                f.repo()
+                    .insert(
+                        f.scope(login),
+                        f.room().copy(intent = f.room().intent.copy(operationId = historyId(9871))),
+                    ),
+            )
+            assertEquals(
+                AppResult.Success(CollaborationSetupInsertion.STORED),
+                f.repo().insert(f.scope(login), f.room()),
+            )
+            f.activate()
+            assertEquals(raw, f.rawCommand(f.room()))
+        }
+
+    @Test
+    fun lostFenceSaveResponseSurvivesDatabaseRestartWithoutAnotherAttempt() = withDatabase { f ->
+        val before = f.markRoom()
+        val request = f.rawCommand(f.room()).request
+        val evidence = f.fence()
+        val store =
+            object : CommandStore by f.database.commands {
+                override suspend fun update(
+                    scope: CommandScope,
+                    partition: String,
+                    id: String,
+                    expectedRevision: Long,
+                    state: String,
+                ): Boolean {
+                    val saved =
+                        f.database.commands.update(scope, partition, id, expectedRevision, state)
+                    currentCoroutineContext().cancel()
+                    return saved
+                }
+            }
+        supervisorScope {
+            val work = async { f.repo(store).update(f.scope(), before, evidence, 1) }
+            assertFailsWith<CancellationException> { work.await() }
+        }
+        val committed = f.rawCommand(f.room())
+        f.reopen()
+        val saved = f.readCommand(f.room())
+        assertEquals(evidence, saved.outcome)
+        assertEquals(1, saved.attempts)
+        assertEquals(2L, saved.revision)
+        assertEquals(request, committed.request)
+        assertEquals(committed, f.rawCommand(f.room()))
+        assertEquals(AppResult.Success(false), f.repo().update(f.scope(), before, evidence, 1))
+        assertIs<AppResult.Failed>(
+            f.repo()
+                .update(f.scope(), saved, CollaborationSpaceConversationOutcome.Unconfirmed(), 2)
+        )
+        assertEquals(committed, f.rawCommand(f.room()))
+    }
+
+    @Test
+    fun competingFenceAndReceiptCaptureKeepsExactlyOneTerminalOutcome() = withDatabase { f ->
+        val before = f.markRoom()
+        val fence = f.fence()
+        val receipt =
+            CollaborationSpaceConversationOutcome.Recorded(
+                CollaborationSetupReceipt(f.conversation, 10)
+            )
+        val results = coroutineScope {
+            listOf(
+                    async { f.repo().update(f.scope(), before, fence, 1) },
+                    async { f.repo().update(f.scope(), before, receipt, 1) },
+                )
+                .awaitAll()
+        }
+        assertEquals(1, results.count { it == AppResult.Success(true) })
+        assertEquals(1, results.count { it == AppResult.Success(false) })
+        val saved = f.readCommand(f.room())
+        assertTrue(saved.outcome == fence || saved.outcome == receipt)
+        assertEquals(2L, saved.revision)
+        assertIs<AppResult.Failed>(
+            f.repo().update(f.scope(), saved, if (saved.outcome == fence) receipt else fence, 1)
+        )
+        assertEquals(saved, f.readCommand(f.room()))
+    }
+
+    @Test
+    fun legacyOutcomeEnvelopesRemainVersionOneBesideRetainedFences() = withDatabase { f ->
+        val open = f.record()
+        val original = f.rawCommand()
+        val legacy = f.outcomeJson(original)
+        assertEquals(1, legacy["schema"]?.jsonPrimitive?.int)
+        assertFalse(legacy.containsKey("fence"))
+        val before = f.markRoom()
+        assertEquals(1, f.outcomeJson(f.rawCommand(f.room()))["schema"]?.jsonPrimitive?.int)
+        assertEquals(AppResult.Success(true), f.repo().update(f.scope(), before, f.fence(), 1))
+        f.reopen()
+        assertEquals(open, f.readCommand())
+        assertEquals(original, f.rawCommand())
+        assertEquals(AppResult.Success(true), f.repo().archiveRecorded(f.scope(), open))
+        assertEquals(AppResult.Success(open), f.repo().find(f.scope(), f.open().id))
+        assertEquals(
+            listOf(f.readCommand(f.room())),
+            assertIs<AppResult.Success<List<CollaborationSpaceConversationCommandRecord>>>(
+                    f.repo().observeAll(f.scope()).first()
+                )
+                .value,
+        )
+    }
+
+    @Test
+    fun authenticatedButConflictingFenceDescriptorsAndSchemasAreRejected() = withDatabase { f ->
+        val before = f.markRoom()
+        assertEquals(AppResult.Success(true), f.repo().update(f.scope(), before, f.fence(), 1))
+        val saved = f.readCommand(f.room())
+        val raw = f.rawCommand(f.room())
+        val payload = f.outcomeJson(raw)
+        val evidence = payload.getValue("fence").jsonObject
+        val original = evidence.getValue("original").jsonObject
+        fun withEvidence(proof: JsonObject) = JsonObject(payload + ("fence" to proof))
+        val invalid = mutableListOf<JsonObject>()
+        for (field in
+            listOf(
+                "operationId",
+                "spaceId",
+                "conversationId",
+                "deviceId",
+                "expectedRequestAccountId",
+            )) {
+            val changed = JsonObject(original + (field to JsonPrimitive(historyId(9879))))
+            invalid += withEvidence(JsonObject(evidence + ("original" to changed)))
+        }
+        for (field in listOf("expectedDeviceVersion", "expectedRequestRevision")) {
+            val changed = JsonObject(original + (field to JsonPrimitive(999999)))
+            invalid += withEvidence(JsonObject(evidence + ("original" to changed)))
+        }
+        invalid +=
+            withEvidence(
+                JsonObject(evidence + ("accountId" to JsonPrimitive(f.open().peerAccountId)))
+            )
+        invalid +=
+            withEvidence(
+                JsonObject(
+                    evidence + ("id" to JsonPrimitive("00000000-0000-0000-0000-000000000000"))
+                )
+            )
+        invalid +=
+            withEvidence(
+                JsonObject(
+                    evidence + ("createdAt" to JsonPrimitive("2026-11-07T00:00:01.123456789Z"))
+                )
+            )
+        invalid += JsonObject(payload + ("schema" to JsonPrimitive(1)))
+        invalid += JsonObject(payload + ("schema" to JsonPrimitive(3)))
+        invalid += JsonObject(payload + ("attempts" to JsonPrimitive(0)))
+        invalid += JsonObject(payload + ("fence" to JsonNull))
+        invalid +=
+            JsonObject(
+                payload +
+                    ("receipt" to
+                        buildJsonObject {
+                            put("id", f.conversation)
+                            put("version", 10)
+                        })
+            )
+        invalid +=
+            JsonObject(
+                payload +
+                    ("failure" to
+                        buildJsonObject {
+                            put("kind", "Network")
+                            put("code", JsonNull)
+                            put("retryAfterSeconds", JsonNull)
+                        })
+            )
+        for (changed in invalid) {
+            val altered = raw.copy(state = f.sealOutcome(raw, changed))
+            val store =
+                object : CommandStore by f.database.commands {
+                    override suspend fun get(scope: CommandScope, partition: String, id: String) =
+                        altered
+
+                    override fun observeAll(scope: CommandScope, partition: String) =
+                        flowOf(listOf(altered))
+                }
+            assertIs<AppResult.Failed>(f.repo(store).find(f.scope(), f.room().id))
+            assertIs<AppResult.Failed>(f.repo(store).observeAll(f.scope()).first())
+        }
+        assertEquals(saved, f.readCommand(f.room()))
+        assertEquals(raw, f.rawCommand(f.room()))
+    }
+
+    @Test
+    fun fencedEvidenceCannotBeUsedToReplaceALostKeyOrReadAnotherOwner() = withDatabase { f ->
+        val before = f.markRoom()
+        assertEquals(AppResult.Success(true), f.repo().update(f.scope(), before, f.fence(), 1))
+        val original = f.rawCommand(f.room())
+        val other = f.access.copy(sessionId = "other", accountId = historyId(9879))
+        f.activate(other)
+        assertEquals(AppResult.Success(null), f.repo().find(f.scope(other), f.room().id))
+        f.activate()
+        f.keys.write(null)
+        assertIs<AppResult.Failed>(f.repo().find(f.scope(), f.room().id))
+        assertIs<AppResult.Failed>(f.repo().insert(f.scope(), f.open()))
+        assertNull(f.keys.read())
+        assertEquals(original, f.rawCommand(f.room()))
     }
 
     @Test

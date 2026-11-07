@@ -65,10 +65,18 @@ fun validCollaborationSpaceConversationCommandRecord(
                         outcome.receipt.id == command.intent.conversationId &&
                             outcome.receipt.version in 0..999999
                 }
+        is CollaborationSpaceConversationOutcome.Fenced ->
+            record.revision >= 2 &&
+                record.attempts > 0 &&
+                record.command is CollaborationSpaceConversationCommand.Room &&
+                validCollaborationSpaceRoomRequestFenceEvidence(
+                    record.command.intent,
+                    outcome.evidence,
+                )
     }
 }
 
-/** A recorded result cannot reopen; retries retain any confirmed access restriction. */
+/** A resolved result cannot reopen; retries retain any confirmed access restriction. */
 fun validCollaborationSpaceConversationCommandTransition(
     previous: CollaborationSpaceConversationCommandRecord,
     outcome: CollaborationSpaceConversationOutcome,
@@ -90,9 +98,17 @@ fun validCollaborationSpaceConversationCommandTransition(
                                     ) == outcome.failure)
                     is CollaborationSpaceConversationOutcome.Recorded ->
                         attempts == previous.attempts
+                    is CollaborationSpaceConversationOutcome.Fenced ->
+                        attempts == previous.attempts &&
+                            previous.command is CollaborationSpaceConversationCommand.Room &&
+                            validCollaborationSpaceRoomRequestFenceEvidence(
+                                previous.command.intent,
+                                outcome.evidence,
+                            )
                     else -> false
                 }
-            is CollaborationSpaceConversationOutcome.Recorded -> false
+            is CollaborationSpaceConversationOutcome.Recorded,
+            is CollaborationSpaceConversationOutcome.Fenced -> false
         }
 
 fun retainCollaborationSpaceConversationFailure(previous: Failure?, received: Failure): Failure =

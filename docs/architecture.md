@@ -1,5 +1,8 @@
 # Architecture
 
+[Durable original room non-execution evidence](collaboration-space-room-fence-storage.md)
+retains exact immutable fences without changing old request envelopes or granting successor authority.
+
 [Exact original room-request resolution](collaboration-space-room-request-fence.md)
 maps retained receipts or explicit non-execution evidence under current native transport.
 Durable capture and successor orchestration remain with the owning flow.

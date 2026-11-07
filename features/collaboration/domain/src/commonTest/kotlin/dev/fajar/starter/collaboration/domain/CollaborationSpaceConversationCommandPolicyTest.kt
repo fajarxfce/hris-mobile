@@ -209,4 +209,114 @@ class CollaborationSpaceConversationCommandPolicyTest {
             )
         }
     }
+
+    @Test
+    fun exactRoomFenceIsTerminalAndRetainsOriginalBindingAcrossLocalLogin() {
+        val proof =
+            CollaborationSpaceRoomRequestFence(
+                room.intent,
+                id(20),
+                Instant.parse("2026-11-07T00:00:01.123456Z"),
+            )
+        val fenced = CollaborationSpaceConversationOutcome.Fenced(proof)
+        val uncertain =
+            CollaborationSpaceConversationCommandRecord(
+                room,
+                1,
+                1,
+                CollaborationSpaceConversationOutcome.Unconfirmed(),
+            )
+        assertTrue(validCollaborationSpaceConversationCommandTransition(uncertain, fenced, 1))
+        assertFalse(validCollaborationSpaceConversationCommandTransition(uncertain, fenced, 2))
+        val retained = uncertain.copy(revision = 2, outcome = fenced)
+        assertTrue(
+            validCollaborationSpaceConversationCommandRecord(
+                access.copy(sessionId = "new-login"),
+                retained,
+            )
+        )
+        assertFalse(
+            validCollaborationSpaceConversationCommandRecord(
+                access.copy(accountId = open.peerAccountId),
+                retained,
+            )
+        )
+        assertFalse(
+            validCollaborationSpaceConversationCommandRecord(access, retained.copy(command = open))
+        )
+        assertFalse(
+            validCollaborationSpaceConversationCommandRecord(access, retained.copy(revision = 1))
+        )
+        assertFalse(
+            validCollaborationSpaceConversationCommandTransition(
+                uncertain.copy(command = open),
+                fenced,
+                1,
+            )
+        )
+        for (outcome in
+            listOf(
+                CollaborationSpaceConversationOutcome.Pending,
+                CollaborationSpaceConversationOutcome.Unconfirmed(),
+                CollaborationSpaceConversationOutcome.Recorded(
+                    CollaborationSetupReceipt(room.intent.conversationId, 0)
+                ),
+                fenced,
+            )) {
+            assertFalse(validCollaborationSpaceConversationCommandTransition(retained, outcome, 1))
+        }
+    }
+
+    @Test
+    fun durableFenceMustRetainTheCompleteOriginalAndBoundedEvidenceIdentity() {
+        val proof =
+            CollaborationSpaceRoomRequestFence(
+                room.intent,
+                id(20),
+                Instant.parse("2026-11-07T00:00:01.123456Z"),
+            )
+        val uncertain =
+            CollaborationSpaceConversationCommandRecord(
+                room,
+                1,
+                1,
+                CollaborationSpaceConversationOutcome.Unconfirmed(),
+            )
+        val changed =
+            listOf(
+                proof.copy(original = room.intent.copy(operationId = id(21))),
+                proof.copy(
+                    original =
+                        room.intent.copy(binding = room.binding.copy(nativeSessionId = id(21)))
+                ),
+                proof.copy(original = room.intent.copy(conversationId = id(21))),
+                proof.copy(
+                    original =
+                        room.intent.copy(request = room.intent.request.copy(deviceId = id(21)))
+                ),
+                proof.copy(
+                    original =
+                        room.intent.copy(
+                            request = room.intent.request.copy(expectedDeviceVersion = 0)
+                        )
+                ),
+                proof.copy(
+                    original =
+                        room.intent.copy(request = room.intent.request.copy(expectedAttempt = null))
+                ),
+                proof.copy(id = "00000000-0000-0000-0000-000000000000"),
+                proof.copy(createdAt = Instant.parse("2026-11-07T00:00:01.123456789Z")),
+                proof.copy(createdAt = Instant.parse("+10000-01-01T00:00:00Z")),
+            )
+        for (invalid in changed) {
+            val outcome = CollaborationSpaceConversationOutcome.Fenced(invalid)
+            assertFalse(validCollaborationSpaceConversationCommandTransition(uncertain, outcome, 1))
+            assertFalse(
+                validCollaborationSpaceConversationCommandRecord(
+                    access,
+                    uncertain.copy(revision = 2, outcome = outcome),
+                )
+            )
+        }
+    }
 }

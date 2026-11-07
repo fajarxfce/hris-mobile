@@ -1,5 +1,8 @@
 # Durable organization conversation setup commands
 
+[Room-only terminal fence storage](collaboration-space-room-fence-storage.md) adds exact
+non-execution evidence while preserving these original envelopes, keys and archive rules.
+
 Conversation opening and stable v2 room setup have account-owned durable commands.
 An opening retains its peer; a room request retains the exact accepted stable intent
 and its immutable participant pair. Both retain operation ID, API/account/space,

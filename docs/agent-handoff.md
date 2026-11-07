@@ -8,6 +8,29 @@ and staging, never permission to reapply old candidates.
 
 ## Current accepted work — 7 November 2026
 
+Room-only durable Fenced evidence is locally accepted: six Kotlin source/test files,
+unchanged v1 immutable requests/keys and old outcome envelopes, schema2 only for exact
+new fences, terminal CAS and no Fenced archive/successor permission. Focused99362
+passed65 cases/217.124s; full22532 passed3,697 fresh cases/455 suites/513.19s on4,398
+unchanged inputs, zero failures/errors/skips/lint. Audit caught a Browser domain filter
+with zero selected tests; corrected supplemental82617 ran all6 policy cases/26.512s
+on identical source. Actual Desktop/Browser each ran21 storage,3 Open-storage,8 fence
+transport and6 policy cases. Root/Android host/quality/shared Wasm passed. All local
+jobs are reaped. [Contract and exact results](collaboration-space-room-fence-storage.md).
+No owning capture, successor, product caller, SDK operation or new APK is added.
+
+Nine next resolution candidates are formatted but NOT APPLIED/TESTED, isolated in
+`.work/space-room-request-resolution-2026-11-07`; mapping/baseline hashes and focused91/
+full-browser64 scripts are prepared. The owning use case receives current canonical
+conversation plus original Room ID, reads terminal facts locally, rejects Pending,
+marks the same attempt before one finite current-native fence call, reads normalized
+stored state for exact CAS and captures the observed result for at most2s despite
+caller cancellation. Keep strongest denial; peer denial never closes all contacts.
+No request()/old-device login/archive/successor/SDK action. Candidates include22 domain,
+4 actual SQLite/IndexedDB storage cases and Apple wrappers plus real application DI.
+Verify baselines before applying; then focused and required full gate. Enforce actual
+Browser case selection, not only task success. Atomic successor linkage follows capture.
+
 Typed room fence transport is locally accepted:11 Kotlin files, exact current-native
 original mutation key/body and full response echo, distinct Recorded/Fenced domain
 results, bounded4KiB response and preserved cancellation. Focused12497 passed44 cases
@@ -15,7 +38,7 @@ results, bounded4KiB response and preserved cancellation. Focused12497 passed44 
 zero failures/errors/skips/lint. Root/Android host/quality/shared Wasm and14 selected
 Browser cases passed;8 new fence cases ran Desktop/Android host/Browser. All local
 jobs are reaped. [Contract and measurements](collaboration-space-room-request-fence.md).
-No durable fence outcome, successor, product caller, SDK send or new APK yet.
+Durable evidence is now accepted above; successor, product caller and SDK delivery remain separate.
 
 Original Open replay335e3914 is now locally accepted/pushed on recovery:12 Kotlin source/test files. It retains
 original intent, marks uncertainty before HTTP, reads the normalized persisted record
@@ -75,9 +98,9 @@ No product caller, new APK or organization routing activation exists for these p
    writer with peer_unavailable. Current admission is unchanged. All Group jobs reaped.
    [Server contract](https://github.com/fajarxfce/hris-platform/blob/cf885a1c/docs/collaboration/native-room-request-fence-http.md).
    Mobile11-file typed fence transport fe3992f1 is accepted/pushed to both branches,
-   with44 focused and3,671 full cases as above. All local jobs are reaped. Next add
-   immutable Room-only Fenced outcome storage while preserving existing v1 request/
-   outcome bytes and keys. Keep owning capture and atomic successor linkage separate.
+   with44 focused and3,671 full cases as above. Durable Fenced storage is now accepted
+   above. Next validate the nine owning-resolution candidates, then implement atomic
+   original/successor linkage with retained exact evidence.
 3. Open preparation/replay and canonical projection-before-archive are locally accepted.
    Continue equivalent owning Room request projection/recovery and original SDK routing.
    Separate native account/MFA/client denial from conversation/peer denial; do not close
@@ -94,8 +117,8 @@ No product caller, new APK or organization routing activation exists for these p
 
 Metadata/preparation/Open candidates are historical applied staging; do not reapply.
 The real codec fix supersedes Open's initial candidate directory. Group native14-file, HTTP6-file and Mobile11-file fence transport are accepted locally.
-Their candidate directories must not be reapplied. Next durable design is retained in
-`.work/space-room-request-fence-2026-11-07/next-durable.md`; it is not implemented.
+Their candidate directories must not be reapplied. The six-file durable slice is now
+accepted; only the separate nine resolution candidates remain unapplied.
 Metadata remains inside the guarded collaboration-history/ prefix.
 
 ## Original SDK and phone invariants
@@ -157,7 +180,7 @@ portable4,805/534; Apple1,969/224; each native ABI537/85, all zero failures/erro
 Original queue continuity24.827s x86/80.993s ARM preserved keys/IDs through process death,
 zero provider sends and full cleanup. Older e8fc and72a original evidence is in history;
 72a's app fake compilation failure was corrected and accepted ine8fc. Storage/observation first3b3 Apple/native CI is fully accepted. Metadata/preparation
-first1d CI is running; Open335e3914 requires its own subsequent first CI.
+first1d CI is fully accepted; Open335e3914 first31e CI remains running.
 
 Live API2e75fe1ee88b5766259fc3efd3ab7f21e70d621a, worker10485916, schema116.1 remain
 unchanged. Group V117–137 remain disabled/unshipped. Starterb11437a is clean/pushed;

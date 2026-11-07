@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data.identity
 
 import dev.fajar.starter.collaboration.data.dto.*
+import dev.fajar.starter.collaboration.data.mappers.requireOriginalRoomRequestIntent
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.common.result.*
@@ -114,8 +115,32 @@ internal class CollaborationSpaceConversationCommandCodec(
                         receipt =
                             CollaborationReceiptDto(outcome.receipt.id, outcome.receipt.version),
                     )
+                is CollaborationSpaceConversationOutcome.Fenced -> {
+                    val proof = outcome.evidence
+                    val original = proof.original
+                    ConversationOutcome(
+                        2,
+                        "FENCED",
+                        attempts,
+                        fence =
+                            ConversationFenceEvidence(
+                                original.binding.accountId,
+                                CollaborationSpaceRoomRequestIntentDto(
+                                    original.operationId,
+                                    original.binding.spaceId,
+                                    original.conversationId,
+                                    original.request.deviceId,
+                                    original.request.expectedDeviceVersion,
+                                    original.request.expectedAttempt?.revision,
+                                    original.request.expectedAttempt?.accountId,
+                                ),
+                                proof.id,
+                                proof.createdAt.toString(),
+                            ),
+                    )
+                }
             }
-        state.domain()
+        state.domain(command)
         return seal(command.id, "outcome", revision, Json.encodeToString(state))
     }
 
@@ -191,7 +216,7 @@ internal class CollaborationSpaceConversationCommandCodec(
                 command,
                 raw.revision,
                 state.attempts,
-                state.domain(),
+                state.domain(command),
             )
             .also { require(validCollaborationSpaceConversationCommandRecord(access, it)) }
     }
@@ -257,16 +282,25 @@ private data class ConversationOutcome(
     val attempts: Int,
     val failure: CollaborationSetupFailureDto? = null,
     val receipt: CollaborationReceiptDto? = null,
+    val fence: ConversationFenceEvidence? = null,
 ) {
-    fun domain(): CollaborationSpaceConversationOutcome {
-        require(schema == 1 && attempts in 0..1_000)
+    fun domain(
+        command: CollaborationSpaceConversationCommand
+    ): CollaborationSpaceConversationOutcome {
+        require(schema in 1..2 && attempts in 0..1_000)
         return when (phase) {
             "PENDING" -> {
-                require(attempts == 0 && failure == null && receipt == null)
+                require(
+                    schema == 1 &&
+                        attempts == 0 &&
+                        failure == null &&
+                        receipt == null &&
+                        fence == null
+                )
                 CollaborationSpaceConversationOutcome.Pending
             }
             "UNCONFIRMED" -> {
-                require(attempts > 0 && receipt == null)
+                require(schema == 1 && attempts > 0 && receipt == null && fence == null)
                 CollaborationSpaceConversationOutcome.Unconfirmed(
                     failure?.let {
                         require(it.code == null || it.code.matches(Regex("[A-Za-z0-9_.:-]{1,100}")))
@@ -281,16 +315,40 @@ private data class ConversationOutcome(
                 )
             }
             "RECORDED" -> {
-                require(attempts > 0 && failure == null)
+                require(schema == 1 && attempts > 0 && failure == null && fence == null)
                 val value = requireNotNull(receipt)
                 CollaborationSpaceConversationOutcome.Recorded(
                     CollaborationSetupReceipt(value.id, value.version)
+                )
+            }
+            "FENCED" -> {
+                require(schema == 2 && attempts > 0 && failure == null && receipt == null)
+                val room =
+                    command as? CollaborationSpaceConversationCommand.Room
+                        ?: error("Only a Room request can retain a fence.")
+                val proof = requireNotNull(fence)
+                require(proof.accountId == room.binding.accountId)
+                proof.original.requireOriginalRoomRequestIntent(room.intent)
+                CollaborationSpaceConversationOutcome.Fenced(
+                    CollaborationSpaceRoomRequestFence(
+                        room.intent,
+                        proof.id,
+                        Instant.parse(proof.createdAt),
+                    )
                 )
             }
             else -> error("Unsupported conversation setup outcome.")
         }
     }
 }
+
+@Serializable
+private data class ConversationFenceEvidence(
+    val accountId: String,
+    val original: CollaborationSpaceRoomRequestIntentDto,
+    val id: String,
+    val createdAt: String,
+)
 
 @Serializable
 private data class ConversationRoomRequest(
