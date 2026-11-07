@@ -5,6 +5,14 @@ Wasm core compilation pass. No generated binding, SDK5 artifact, Android/Apple A
 acceptance, application integration or publication yet. Shipping SDK4 is unchanged.
 [Exact checks](measurements/matrix-http-observer-source-2026-11-07.json).
 
+The first ARM64 native library and nine Kotlin files have now been generated, but
+that pair is rejected: the exported `close()` collides with UniFFI's generated
+`AutoCloseable.close()`. Only the exported FFI operation is renamed to `stop()`;
+Rust subscription close remains unchanged. The corrected FFI compiles, and its
+replacement ARM64 generation is running. Kotlin wrapper/runtime and other ABIs/Apple
+are still open. [Collision and fix evidence](measurements/matrix-http-observer-binding-stop-2026-11-07.json).
+The binding adapter must call native `stop()` before disposing its generated handle.
+
 ## Observed source boundary
 
 SDK4 uses Matrix Rust SDK8de215a0 plus the five patches in

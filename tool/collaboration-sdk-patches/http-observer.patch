@@ -1,8 +1,9 @@
 diff --git a/bindings/matrix-sdk-ffi/src/http_observer.rs b/bindings/matrix-sdk-ffi/src/http_observer.rs
 new file mode 100644
+index 0000000..3f3f1d3
 --- /dev/null
 +++ b/bindings/matrix-sdk-ffi/src/http_observer.rs
-@@ -0,0 +1,147 @@
+@@ -0,0 +1,148 @@
 +// Copyright 2026 Fajar HRIS contributors.
 +// SPDX-License-Identifier: Apache-2.0
 +
@@ -90,7 +91,8 @@ new file mode 100644
 +    }
 +
 +    /// Erase buffered metadata and reject late observations. Safe to call repeatedly.
-+    pub fn close(&self) {
++    /// Named separately from Kotlin's generated AutoCloseable::close (handle disposal).
++    pub fn stop(&self) {
 +        self.inner.close();
 +    }
 +}
@@ -151,9 +153,10 @@ new file mode 100644
 +    }
 +}
 diff --git a/bindings/matrix-sdk-ffi/src/lib.rs b/bindings/matrix-sdk-ffi/src/lib.rs
+index b17533c..d8e969b 100644
 --- a/bindings/matrix-sdk-ffi/src/lib.rs
 +++ b/bindings/matrix-sdk-ffi/src/lib.rs
-@@ -16,6 +16,7 @@
+@@ -16,6 +16,7 @@ mod event;
  #[cfg(feature = "sqlite")]
  mod existing_crypto_store;
  mod helpers;
@@ -162,9 +165,10 @@ diff --git a/bindings/matrix-sdk-ffi/src/lib.rs b/bindings/matrix-sdk-ffi/src/li
  mod live_locations_observer;
  mod notification;
 diff --git a/crates/matrix-sdk/src/client/mod.rs b/crates/matrix-sdk/src/client/mod.rs
+index 76d5f3e..230aad7 100644
 --- a/crates/matrix-sdk/src/client/mod.rs
 +++ b/crates/matrix-sdk/src/client/mod.rs
-@@ -654,6 +654,16 @@
+@@ -654,6 +654,16 @@ impl Client {
          &self.inner.http_client.inner
      }
  
@@ -183,6 +187,7 @@ diff --git a/crates/matrix-sdk/src/client/mod.rs b/crates/matrix-sdk/src/client/
      }
 diff --git a/crates/matrix-sdk/src/http_client/http_observer_tests.rs b/crates/matrix-sdk/src/http_client/http_observer_tests.rs
 new file mode 100644
+index 0000000..4b7d266
 --- /dev/null
 +++ b/crates/matrix-sdk/src/http_client/http_observer_tests.rs
 @@ -0,0 +1,248 @@
@@ -435,9 +440,10 @@ new file mode 100644
 +    assert_eq!(server.received_requests().await.unwrap().len(), 1);
 +}
 diff --git a/crates/matrix-sdk/src/http_client/mod.rs b/crates/matrix-sdk/src/http_client/mod.rs
+index 9224c88..562c085 100644
 --- a/crates/matrix-sdk/src/http_client/mod.rs
 +++ b/crates/matrix-sdk/src/http_client/mod.rs
-@@ -45,6 +45,9 @@
+@@ -45,6 +45,9 @@ mod native;
  #[cfg(target_family = "wasm")]
  mod wasm;
  
@@ -447,7 +453,7 @@ diff --git a/crates/matrix-sdk/src/http_client/mod.rs b/crates/matrix-sdk/src/ht
  #[cfg(not(target_family = "wasm"))]
  pub(crate) use native::HttpSettings;
  
-@@ -77,6 +80,7 @@
+@@ -77,6 +80,7 @@ impl MaybeSemaphore {
  #[derive(Clone, Debug)]
  pub(crate) struct HttpClient {
      pub(crate) inner: reqwest::Client,
@@ -455,7 +461,7 @@ diff --git a/crates/matrix-sdk/src/http_client/mod.rs b/crates/matrix-sdk/src/ht
      pub(crate) request_config: RequestConfig,
      concurrent_request_semaphore: MaybeSemaphore,
      next_request_id: Arc<AtomicU64>,
-@@ -86,6 +90,7 @@
+@@ -86,6 +90,7 @@ impl HttpClient {
      pub(crate) fn new(inner: reqwest::Client, request_config: RequestConfig) -> Self {
          HttpClient {
              inner,
@@ -463,12 +469,10 @@ diff --git a/crates/matrix-sdk/src/http_client/mod.rs b/crates/matrix-sdk/src/ht
              request_config,
              concurrent_request_semaphore: MaybeSemaphore::new(
                  request_config.max_concurrent_requests,
-@@ -97,6 +102,37 @@
-     fn get_request_id(&self) -> String {
-         let request_id = self.next_request_id.fetch_add(1, Ordering::SeqCst);
+@@ -99,6 +104,37 @@ impl HttpClient {
          format!("REQ-{request_id}")
-+    }
-+
+     }
+ 
 +    /// Observe exactly the existing engine execution and body conversion. Parsing,
 +    /// retries, TLS and the request/response payload remain outside this observer.
 +    async fn execute_observed(
@@ -498,13 +502,16 @@ diff --git a/crates/matrix-sdk/src/http_client/mod.rs b/crates/matrix-sdk/src/ht
 +            }
 +        }
 +        result
-     }
- 
++    }
++
      fn serialize_request<R>(
+         &self,
+         request: R,
 diff --git a/crates/matrix-sdk/src/http_client/native.rs b/crates/matrix-sdk/src/http_client/native.rs
+index dc57b0e..6e0c633 100644
 --- a/crates/matrix-sdk/src/http_client/native.rs
 +++ b/crates/matrix-sdk/src/http_client/native.rs
-@@ -30,7 +30,7 @@
+@@ -30,7 +30,7 @@ use reqwest::tls;
  use ruma::api::{IncomingResponseExt as _, OutgoingRequest, error::FromHttpResponseError};
  use tracing::{debug, info, warn};
  
@@ -513,7 +520,7 @@ diff --git a/crates/matrix-sdk/src/http_client/native.rs b/crates/matrix-sdk/src
  use crate::{
      HttpResult,
      config::RequestConfig,
-@@ -75,7 +75,7 @@
+@@ -75,7 +75,7 @@ impl HttpClient {
              backoff
          }
          async fn send_request_inner(
@@ -522,7 +529,7 @@ diff --git a/crates/matrix-sdk/src/http_client/native.rs b/crates/matrix-sdk/src
              request: &http::Request<Bytes>,
              timeout: Option<Duration>,
              retry_count: &AtomicU64,
-@@ -85,7 +85,8 @@
+@@ -85,7 +85,8 @@ impl HttpClient {
              debug!(num_attempt, "Sending request");
              let before = ruma::time::Instant::now();
  
@@ -532,7 +539,7 @@ diff --git a/crates/matrix-sdk/src/http_client/native.rs b/crates/matrix-sdk/src
  
              let request_duration = ruma::time::Instant::now().saturating_duration_since(before);
  
-@@ -149,14 +150,9 @@
+@@ -149,14 +150,9 @@ impl HttpClient {
          let send_request = || {
              let send_progress = send_progress.clone();
              async {
@@ -550,7 +557,7 @@ diff --git a/crates/matrix-sdk/src/http_client/native.rs b/crates/matrix-sdk/src
                  let (parts, body) = response.into_parts();
                  let response: http::Response<&[u8]> = http::Response::from_parts(parts, &body);
                  R::IncomingResponse::try_from_http_response(response).map_err(HttpError::from)
-@@ -245,10 +241,11 @@
+@@ -245,10 +241,11 @@ impl HttpSettings {
  }
  
  pub(super) async fn execute_request(
@@ -563,7 +570,7 @@ diff --git a/crates/matrix-sdk/src/http_client/native.rs b/crates/matrix-sdk/src
  ) -> Result<http::Response<Bytes>, HttpError> {
      use std::convert::Infallible;
  
-@@ -289,8 +286,7 @@
+@@ -289,8 +286,7 @@ pub(super) async fn execute_request(
          request
      };
  
@@ -574,9 +581,10 @@ diff --git a/crates/matrix-sdk/src/http_client/native.rs b/crates/matrix-sdk/src
  
  struct BytesChunks {
 diff --git a/crates/matrix-sdk/src/http_client/wasm.rs b/crates/matrix-sdk/src/http_client/wasm.rs
+index f08346b..3b78fa5 100644
 --- a/crates/matrix-sdk/src/http_client/wasm.rs
 +++ b/crates/matrix-sdk/src/http_client/wasm.rs
-@@ -19,7 +19,7 @@
+@@ -19,7 +19,7 @@ use bytesize::ByteSize;
  use eyeball::SharedObservable;
  use ruma::api::{IncomingResponseExt as _, OutgoingRequest, error::FromHttpResponseError};
  
@@ -585,7 +593,7 @@ diff --git a/crates/matrix-sdk/src/http_client/wasm.rs b/crates/matrix-sdk/src/h
  use crate::{config::RequestConfig, error::HttpError};
  
  impl HttpClient {
-@@ -39,7 +39,7 @@
+@@ -39,7 +39,7 @@ impl HttpClient {
  
          let before = ruma::time::Instant::now();
  
@@ -596,6 +604,7 @@ diff --git a/crates/matrix-sdk/src/http_client/wasm.rs b/crates/matrix-sdk/src/h
          let status_code = response.status();
 diff --git a/crates/matrix-sdk/src/http_observer.rs b/crates/matrix-sdk/src/http_observer.rs
 new file mode 100644
+index 0000000..469fda8
 --- /dev/null
 +++ b/crates/matrix-sdk/src/http_observer.rs
 @@ -0,0 +1,440 @@
@@ -1041,6 +1050,7 @@ new file mode 100644
 +mod tests;
 diff --git a/crates/matrix-sdk/src/http_observer/tests.rs b/crates/matrix-sdk/src/http_observer/tests.rs
 new file mode 100644
+index 0000000..fbd855a
 --- /dev/null
 +++ b/crates/matrix-sdk/src/http_observer/tests.rs
 @@ -0,0 +1,152 @@
@@ -1197,9 +1207,10 @@ new file mode 100644
 +    assert!(batch.events.is_empty());
 +}
 diff --git a/crates/matrix-sdk/src/lib.rs b/crates/matrix-sdk/src/lib.rs
+index eb88e78..c5ae858 100644
 --- a/crates/matrix-sdk/src/lib.rs
 +++ b/crates/matrix-sdk/src/lib.rs
-@@ -44,6 +44,7 @@
+@@ -44,6 +44,7 @@ mod error;
  pub mod event_cache;
  pub mod event_handler;
  mod http_client;

@@ -1,10 +1,10 @@
 {
-  "status": "Locally accepted observer source increment: core15 tests, native FFI and Wasm checks pass. Not a released SDK or generated binding.",
+  "status": "Observer source and FFI stop rename compile. First generated Android pair rejected for close() collision; replacement ARM64 generation is still running. Not a released SDK.",
   "upstream": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
   "baseManifest": "android-existing-identity-build.json",
   "baseManifestSha256": "63c132544e66492ae7b51c54d080ace572bff31d8091636904a317fb83c2fbbf",
   "patch": "http-observer.patch",
-  "patchSha256": "4893938ff507bbdb1fe893277e53770ad570dcf6f7a131027cdbc4787832d657",
+  "patchSha256": "7e4cd8d2b251ce9fd2a7025e3d40ea9965aa806fd34b56c168549f3552a9cee6",
   "baselineSources": {
     "bindings/matrix-sdk-ffi/src/http_observer.rs": null,
     "bindings/matrix-sdk-ffi/src/lib.rs": "94ec4be7577f2fa63f697136f3cf38b65e016a2f3edd04c27303c1dc33c748e3",
@@ -18,7 +18,7 @@
     "crates/matrix-sdk/src/lib.rs": "ff90d2109796330eac90b428e20e6fc53f37b7888f902b4630034b353b456505"
   },
   "patchedSources": {
-    "bindings/matrix-sdk-ffi/src/http_observer.rs": "3b94e0e661e0a21c8618a64d4c3cffbdcfaa12ecf27ae38b5b1561d92b8366ed",
+    "bindings/matrix-sdk-ffi/src/http_observer.rs": "9d8e1ab1c51ab1de6d44432b30166db09b4539fc5b3efeaf347e26cc2fafac21",
     "bindings/matrix-sdk-ffi/src/lib.rs": "ba50c540c73f2c62e5c687237feaa985bbd235e515ac7ea1627da05b56a372e1",
     "crates/matrix-sdk/src/client/mod.rs": "957ecc90d35f5617d3fb78a6dbd2c4cfd1c4d0dea8e8f04f20a1cd19490a06b4",
     "crates/matrix-sdk/src/http_client/http_observer_tests.rs": "f48e58a8c67b4998377383c80b8601ed39f8b90b3d8ac4eec71ac30fb1f22c71",
@@ -37,5 +37,6 @@
   "appleRuntimeAccepted": false,
   "applicationIntegrated": false,
   "wasmCoreCompiled": true,
-  "nativeFfiCompiled": true
+  "nativeFfiCompiled": true,
+  "exportedStopMethod": "HttpObservationSubscription.stop"
 }

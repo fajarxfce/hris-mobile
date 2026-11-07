@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## HTTP observer binding continuation — 7 November 2026, 19:47 UTC
+
+This branch contains the corrected observer patch: exported FFI stop() no longer
+collides with Kotlin AutoCloseable.close(). Native subscription close and transport
+semantics are unchanged. FFI-stop-1 (16230) passed18.950s and is REAPED;15 accepted
+core cases are reused with exact unchanged core hashes. The only changed source
+since those cases is bindings/matrix-sdk-ffi/src/http_observer.rs. The full10-file
+patch was regenerated, applied in its own initialized verification repository and
+all output hashes match. Shipping SDK4 manifests/assets remain unchanged.
+[Evidence](measurements/matrix-http-observer-binding-stop-2026-11-07.json).
+
+First ARM64 generation (93078) is REAPED:1085.305s/836 unchanged inputs, native ELF
+139025528B/582925c360212fdbcea69ec8499395f43d676cc8e8d8f25fc07edfe45a9f6609 and four
+16KiB-aligned LOAD segments. Nine Kotlin files generated, eight identical toSDK4.
+The subscription contains two close() methods, so the pair is REJECTED by static
+inspection before Kotlin compile/runtime. Keep it as failed evidence; never patch
+its generated Kotlin or publish it. Sole heavy job22819 is ARM64 replacement build
+`.work/http-observer-2026-11-07/android-arm64-2` in the isolated Rust worktree. Rust
+sources remain FROZEN until reaped. No overlapping compiler or emulator.
+
+Fresh Kotlin wrapper is /home/fajar/hris/.worktrees/matrix-kotlin-http-observer-2026-11-07
+atc1664f7, clean and not yet populated. Next inspect the regenerated native/Kotlin pair,
+compile the wrapper, then add the exact generated hashes/new build manifest and test
+other ABIs/Apple. No SDK5 artifact release, actual binding adapter or HRIS capture yet.
+
+Inspector388a1cb is accepted/pushed: portable Matrix collector with bounded correlation/
+replay, native times/attempts and explicit incomplete capture. Strict168 fresh cases
+pass in161.923s (core69/Ktor39/Compose21/Matrix39); AARs and Apple main/test klibs compile.
+No native observer is wired to it yet. Its private CI is billing-blocked, visibility
+question unanswered. Phone and original stopped Bima emulator remain55; accepted
+Mobilebb106154 viewport fix awaits56, composer/latency remain open. Continue original
+54-group communications work, with no newly complete PRD group. Earlier jobs below
+are historical; current root Mobile handoff owns application work.
+
 ## This isolated branch — 7 November2026,19:06UTC
 
 This branch owns only the next Matrix HTTP observer source, based on Mobile95e35b9d.
