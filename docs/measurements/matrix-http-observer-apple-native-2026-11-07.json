@@ -1,0 +1,193 @@
+{
+  "at": "2026-11-07T21:57:12.897182+00:00",
+  "sourceCommit": "9673eb1ffbc6326480aa84eef5b28cdb1d85f24f",
+  "run": 42413788416,
+  "artifact": 13591919151,
+  "archiveSha256": "6936bb1cd6f8de61a6d40738c16e3ccebddfffff4c605fba32367dbc116193c3",
+  "archiveBytes": 176488896,
+  "overallCiConclusion": "failure",
+  "failure": "After all four XCTest cases passed, run_proof.py could not read tests.xml. SwiftPM sequential XCTest does not emit that xUnit file; its separate zero-test Swift Testing report is not acceptance.",
+  "nativeBuild": {
+    "startedAt": "2026-11-07T21:01:07.473624+00:00",
+    "manifestSha256": "833a90bfa9e599e615c602015c0e4984409b3f5cf57823882f0b0cadc2bc8605",
+    "baseManifestSha256": "7545e12760f30fdd2628d64e6de345822f07e63d6c30ad006cee83757020de0e",
+    "upstream": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+    "patches": {
+      "raw-event.patch": "fed8120ba7e7ea88a23cde675d70bb27a3a97304c6c913ad5a9578d28053f76e",
+      "confirmed-queue.patch": "23354aeb43aabe937543355d7255d31527c0a3c78acf0a677f113e9592776872",
+      "android-arm64-baseline.patch": "82fda7d5cadc965059364c7094948fe71286293c24a1df2966d2d673327c3ec3",
+      "refresh-retry.patch": "93f106e16efd486fde187432fb901dc6777f8235e2ca0c84d780e93ef7d5836a",
+      "existing-crypto-identity.patch": "2a023f8c2c3b4fe81a4736875668439ce336870849d4b4942e4a04ba1de6b754",
+      "http-observer.patch": "7e4cd8d2b251ce9fd2a7025e3d40ea9965aa806fd34b56c168549f3552a9cee6",
+      "toolchain.patch": "e219068afa6607b1becaab66daa9add68c906f36fc37d48649210165aa4ee526"
+    },
+    "targets": [
+      "aarch64-apple-darwin",
+      "aarch64-apple-ios",
+      "aarch64-apple-ios-sim"
+    ],
+    "rust": "1.96.0",
+    "profile": "small-release",
+    "passed": true,
+    "runtimeAccepted": false,
+    "published": false,
+    "objectOwnerTestsPassed": true,
+    "sourcesUnchanged": true,
+    "sourceSha256": {
+      "Cargo.lock": "e3f28c9f54076bb320270aea995fc1f124c7ed727968dad338f544fe764df7f0",
+      "crates/matrix-sdk/src/send_queue/mod.rs": "91d2ff7784fc4cd3c484e184dfe31c65766dfaa508f6e089a403aa9cfb8ba50e",
+      "crates/matrix-sdk/src/send_queue/confirmed_event_tests.rs": "308e0bc9ecb650c55f66040cf3a76dbb34a3a38040ae5899436567dadbc8323c",
+      "bindings/matrix-sdk-ffi/src/room/mod.rs": "d38b0bc50f9da0365c14717e0821ae2eac9f498f34501211aa66c2ed29febfec",
+      "bindings/matrix-sdk-ffi/src/room/queued_events.rs": "ae6efcba570bbe83ece6e8529b6f6e1dcae7735eec5622586a45a7c4defa1b3f",
+      "bindings/matrix-sdk-ffi/src/room/raw_event_tests.rs": "4dc9c6774802d43c090c8836471f7860809de490cc0317103e262e2848893c58",
+      "Cargo.toml": "cc436eb2188bc6af76078cae40c649a71752a9ef4aa7e832afdd0f3e40853b43",
+      ".cargo/config.toml": "531ceda5e3e8a7ba878c0e475434ca67651242843d6dab928877a8e31b90d5e4",
+      "xtask/src/kotlin.rs": "f52edba777e389a1efb34797e93d55dc67fb1c4460b1c539da439860004ae52a",
+      "crates/matrix-sdk/src/error.rs": "0941cc1e145a3b55878d500438a2eaf4790a755a890833a67694c41bc8a3d627",
+      "crates/matrix-sdk/tests/integration/refresh_token.rs": "b8261042d822721b4ab7230f7c263fb9ac80e8c1533a4c4dfc2653d0995b7e5b",
+      "bindings/matrix-sdk-ffi/src/error.rs": "02eabd46e009a478e5325d2c74cc3d38d46f344f0d67bac3b41057b8960424dd",
+      "crates/matrix-sdk-store-encryption/src/lib.rs": "52edb6615222462a08b558b8e56c58b8ec8378e5172e84860c20e7d98d808651",
+      "crates/matrix-sdk-sqlite/src/lib.rs": "496eb78ed1ef6c84c0cc09143c946553fdd7cd553106d2a221b04d987fa3da97",
+      "crates/matrix-sdk-sqlite/src/crypto_store.rs": "083eff104b0f2b6f09db2498ec014ef4d6e4fa631ce74ac53a64b247afe190a5",
+      "crates/matrix-sdk-sqlite/src/crypto_store/existing.rs": "03e747a3be6eace9733a63ad3c61ff32710877a74615b611abf31afcff88fed6",
+      "crates/matrix-sdk-sqlite/src/crypto_store/existing/tests.rs": "1544e00b98a541d38ba10fc6b24c11af8989209da3019f274843e532cc148668",
+      "bindings/matrix-sdk-ffi/src/lib.rs": "ba50c540c73f2c62e5c687237feaa985bbd235e515ac7ea1627da05b56a372e1",
+      "bindings/matrix-sdk-ffi/src/existing_crypto_store.rs": "582276ff6c6db86ea613686b795571c9f95567bd5314f29e27188fdeb6ed442f",
+      "bindings/matrix-sdk-ffi/src/http_observer.rs": "9d8e1ab1c51ab1de6d44432b30166db09b4539fc5b3efeaf347e26cc2fafac21",
+      "crates/matrix-sdk/src/client/mod.rs": "957ecc90d35f5617d3fb78a6dbd2c4cfd1c4d0dea8e8f04f20a1cd19490a06b4",
+      "crates/matrix-sdk/src/http_client/http_observer_tests.rs": "f48e58a8c67b4998377383c80b8601ed39f8b90b3d8ac4eec71ac30fb1f22c71",
+      "crates/matrix-sdk/src/http_client/mod.rs": "dd6757ddc1d869f9670add6c2f7cad597b3fe9cea30cb4d4f73f986bb5e1c154",
+      "crates/matrix-sdk/src/http_client/native.rs": "e2cf93b6c4d4c09176bd543b122eceb2a4c0c08eaea533fa1e7561de0bc49b85",
+      "crates/matrix-sdk/src/http_client/wasm.rs": "f1bd32acfa72d9532f31ec2d46b8905f969f34998e4ff4e445bb42db296fffee",
+      "crates/matrix-sdk/src/http_observer.rs": "5be709cfab3206978060905643895e0a861cdb435d7b21cc730e68fe1cc11e96",
+      "crates/matrix-sdk/src/http_observer/tests.rs": "0814af2d7ac05a3e3e7e703df117ec531694302bbb2bd093875ca20aff27ff62",
+      "crates/matrix-sdk/src/lib.rs": "7275d07fb3f29e18e1a39953a54e0f74d488723c30d0a4ee5a0ea9d69f4fb2c3",
+      "xtask/src/swift.rs": "bad08366d13105f1464fa972652c68ec5cddaf4ff8429c5541380e36d3ad5b11"
+    },
+    "swiftCompiled": true,
+    "cargoLockSha256": "e3f28c9f54076bb320270aea995fc1f124c7ed727968dad338f544fe764df7f0",
+    "generated": {
+      "MatrixSDKFFI.xcframework/Info.plist": "30464db56cfc58579e2b4736db8c93918e8ac89c17a9fd2c841a6d40b6bd0b86",
+      "swift/ruma_events.swift": "e916f5df83a84e45a758738cbde941599ddec4f1314863e3cec174c8e5e5796c",
+      "swift/matrix_sdk_contentscanner.swift": "61acddd004bdac0fc6a496e806652491218fa2961f93ff33503ac26bee5bd5e5",
+      "swift/matrix_sdk_base.swift": "89dd8ec013e0d397071472e81990e65a74290d754fcb140c7a723a4e865da3c8",
+      "swift/matrix_sdk_ffi.swift": "c41fe3f81ce3925905e5e0c420fa1de93aea255992476a5f77b175b97102b600",
+      "swift/matrix_sdk_ui.swift": "e23c4e02c41d934016a8e998714340ef630d896fd8b004e7facf5423168db8d2",
+      "swift/matrix_sdk_common.swift": "0f6bf9e98bd74c8d178c4102046d1d0e1c3822d68331b5ce9e222433206781f4",
+      "swift/matrix_sdk_crypto.swift": "02b662f54e12ea618a856396e3aef749eac93706dc9d6af612d64deec1f68324",
+      "swift/matrix_sdk_sqlite.swift": "9d9f94afa6313dc2a62ba19b37bfb502bba0021146fbf0f3bb7118eaa6bf2cf1",
+      "swift/matrix_sdk.swift": "630bf4cc8e529c67f48628769b233b01c3348f358f68054f243772ab40e942d3",
+      "MatrixSDKFFI.xcframework/ios-arm64-simulator/libmatrix_sdk_ffi.a": "dc82243ead2e6bc22d5a588fd8d5bf7aa31660492a62ded7098f442dffcfa87f",
+      "MatrixSDKFFI.xcframework/macos-arm64/libmatrix_sdk_ffi.a": "ef54166f4e06baf96b674836a2dbdd81460ea4e9f19376e6ff67f61abe352acd",
+      "MatrixSDKFFI.xcframework/ios-arm64/libmatrix_sdk_ffi.a": "2d9fed378e4712cc0ce0809197e8fb9b0bf8e9ba3597f8105c3d61202f1100f8",
+      "MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_uiFFI.h": "29dcb5e2708f164b2657ad02b9d4539de721b1e17919e0a93d5d3cce2dbae9ef",
+      "MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_ffiFFI.h": "fd57cc1dd486e2c2a5ae5dfc7bc166d3f062ad754af340f175de391818c3f947",
+      "MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_sqliteFFI.h": "2bc2a579dc1410136bb579ac115e191689a27cca54d3089ae10dcc14d4db2e47",
+      "MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_contentscannerFFI.h": "0ce37456c773a99486e69d5af33933b93abca6e1ca70b7a23895a5b1fb7e63dd",
+      "MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_baseFFI.h": "387c558d754b75bb98bc3f0905e5631db05a1666dc307e35de03ee115eaa44f6",
+      "MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_cryptoFFI.h": "4821cdf9d356c98f211616feff4c506dae1b8c2238da4918c04ae34ecbf978de",
+      "MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdkFFI.h": "bfa73a44fbd901b9a1a919a58bf003ebeda38f666e223733e08ad3a47a7e6f20",
+      "MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/module.modulemap": "129370e9f5b2e29a8dcff5c3bd6f34f2723938c2faefd74c5abbf7ed3fc7d82d",
+      "MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/matrix_sdk_commonFFI.h": "3a22d33577ae8f12eca3458b5a1bab4ed2469e41420975a17be05f341ac2f20c",
+      "MatrixSDKFFI.xcframework/ios-arm64/Headers/MatrixSDKFFI/ruma_eventsFFI.h": "33ecaa3a2d17c3ec058983b5520143cf60c40a92a851a5c395c1f6f8f725ba2f",
+      "MatrixSDKFFI.xcframework/macos-arm64/Headers/MatrixSDKFFI/matrix_sdk_uiFFI.h": "29dcb5e2708f164b2657ad02b9d4539de721b1e17919e0a93d5d3cce2dbae9ef",
+      "MatrixSDKFFI.xcframework/macos-arm64/Headers/MatrixSDKFFI/matrix_sdk_ffiFFI.h": "fd57cc1dd486e2c2a5ae5dfc7bc166d3f062ad754af340f175de391818c3f947",
+      "MatrixSDKFFI.xcframework/macos-arm64/Headers/MatrixSDKFFI/matrix_sdk_sqliteFFI.h": "2bc2a579dc1410136bb579ac115e191689a27cca54d3089ae10dcc14d4db2e47",
+      "MatrixSDKFFI.xcframework/macos-arm64/Headers/MatrixSDKFFI/matrix_sdk_contentscannerFFI.h": "0ce37456c773a99486e69d5af33933b93abca6e1ca70b7a23895a5b1fb7e63dd",
+      "MatrixSDKFFI.xcframework/macos-arm64/Headers/MatrixSDKFFI/matrix_sdk_baseFFI.h": "387c558d754b75bb98bc3f0905e5631db05a1666dc307e35de03ee115eaa44f6",
+      "MatrixSDKFFI.xcframework/macos-arm64/Headers/MatrixSDKFFI/matrix_sdk_cryptoFFI.h": "4821cdf9d356c98f211616feff4c506dae1b8c2238da4918c04ae34ecbf978de",
+      "MatrixSDKFFI.xcframework/macos-arm64/Headers/MatrixSDKFFI/matrix_sdkFFI.h": "bfa73a44fbd901b9a1a919a58bf003ebeda38f666e223733e08ad3a47a7e6f20",
+      "MatrixSDKFFI.xcframework/macos-arm64/Headers/MatrixSDKFFI/module.modulemap": "129370e9f5b2e29a8dcff5c3bd6f34f2723938c2faefd74c5abbf7ed3fc7d82d",
+      "MatrixSDKFFI.xcframework/macos-arm64/Headers/MatrixSDKFFI/matrix_sdk_commonFFI.h": "3a22d33577ae8f12eca3458b5a1bab4ed2469e41420975a17be05f341ac2f20c",
+      "MatrixSDKFFI.xcframework/macos-arm64/Headers/MatrixSDKFFI/ruma_eventsFFI.h": "33ecaa3a2d17c3ec058983b5520143cf60c40a92a851a5c395c1f6f8f725ba2f",
+      "MatrixSDKFFI.xcframework/ios-arm64-simulator/Headers/MatrixSDKFFI/matrix_sdk_uiFFI.h": "29dcb5e2708f164b2657ad02b9d4539de721b1e17919e0a93d5d3cce2dbae9ef",
+      "MatrixSDKFFI.xcframework/ios-arm64-simulator/Headers/MatrixSDKFFI/matrix_sdk_ffiFFI.h": "fd57cc1dd486e2c2a5ae5dfc7bc166d3f062ad754af340f175de391818c3f947",
+      "MatrixSDKFFI.xcframework/ios-arm64-simulator/Headers/MatrixSDKFFI/matrix_sdk_sqliteFFI.h": "2bc2a579dc1410136bb579ac115e191689a27cca54d3089ae10dcc14d4db2e47",
+      "MatrixSDKFFI.xcframework/ios-arm64-simulator/Headers/MatrixSDKFFI/matrix_sdk_contentscannerFFI.h": "0ce37456c773a99486e69d5af33933b93abca6e1ca70b7a23895a5b1fb7e63dd",
+      "MatrixSDKFFI.xcframework/ios-arm64-simulator/Headers/MatrixSDKFFI/matrix_sdk_baseFFI.h": "387c558d754b75bb98bc3f0905e5631db05a1666dc307e35de03ee115eaa44f6",
+      "MatrixSDKFFI.xcframework/ios-arm64-simulator/Headers/MatrixSDKFFI/matrix_sdk_cryptoFFI.h": "4821cdf9d356c98f211616feff4c506dae1b8c2238da4918c04ae34ecbf978de",
+      "MatrixSDKFFI.xcframework/ios-arm64-simulator/Headers/MatrixSDKFFI/matrix_sdkFFI.h": "bfa73a44fbd901b9a1a919a58bf003ebeda38f666e223733e08ad3a47a7e6f20",
+      "MatrixSDKFFI.xcframework/ios-arm64-simulator/Headers/MatrixSDKFFI/module.modulemap": "129370e9f5b2e29a8dcff5c3bd6f34f2723938c2faefd74c5abbf7ed3fc7d82d",
+      "MatrixSDKFFI.xcframework/ios-arm64-simulator/Headers/MatrixSDKFFI/matrix_sdk_commonFFI.h": "3a22d33577ae8f12eca3458b5a1bab4ed2469e41420975a17be05f341ac2f20c",
+      "MatrixSDKFFI.xcframework/ios-arm64-simulator/Headers/MatrixSDKFFI/ruma_eventsFFI.h": "33ecaa3a2d17c3ec058983b5520143cf60c40a92a851a5c395c1f6f8f725ba2f"
+    },
+    "slices": [
+      {
+        "BinaryPath": "libmatrix_sdk_ffi.a",
+        "HeadersPath": "Headers",
+        "LibraryIdentifier": "ios-arm64",
+        "LibraryPath": "libmatrix_sdk_ffi.a",
+        "SupportedArchitectures": [
+          "arm64"
+        ],
+        "SupportedPlatform": "ios"
+      },
+      {
+        "BinaryPath": "libmatrix_sdk_ffi.a",
+        "HeadersPath": "Headers",
+        "LibraryIdentifier": "macos-arm64",
+        "LibraryPath": "libmatrix_sdk_ffi.a",
+        "SupportedArchitectures": [
+          "arm64"
+        ],
+        "SupportedPlatform": "macos"
+      },
+      {
+        "BinaryPath": "libmatrix_sdk_ffi.a",
+        "HeadersPath": "Headers",
+        "LibraryIdentifier": "ios-arm64-simulator",
+        "LibraryPath": "libmatrix_sdk_ffi.a",
+        "SupportedArchitectures": [
+          "arm64"
+        ],
+        "SupportedPlatform": "ios",
+        "SupportedPlatformVariant": "simulator"
+      }
+    ],
+    "elapsedSeconds": 2805.734
+  },
+  "actualMacOsSwiftTests": {
+    "cases": [
+      {
+        "name": "testCancelledReaderDoesNotCancelClientRequest",
+        "seconds": 0.03
+      },
+      {
+        "name": "testOriginalResponseAndActualHttpStages",
+        "seconds": 0.01
+      },
+      {
+        "name": "testReplacementClosesOldSubscription",
+        "seconds": 0.003
+      },
+      {
+        "name": "testStopWakesPendingReadAndCanRepeat",
+        "seconds": 0.001
+      }
+    ],
+    "failed": 0,
+    "logSha256": "1ea4d11c4fda80538c16db3c4b32357e1bda9e58e185dd2789bec336bdd40dac",
+    "originalRequestsVerifiedOnce": true,
+    "fixtureThreadStopped": true,
+    "instrumentedHttpAccepted": true
+  },
+  "verification": {
+    "archiveSha256": "6936bb1cd6f8de61a6d40738c16e3ccebddfffff4c605fba32367dbc116193c3",
+    "generatedFilesVerified": 43,
+    "sourceManifestsVerified": true,
+    "nativeRecompiled": false
+  },
+  "localVerifierTests": {
+    "cases": 7,
+    "passed": true,
+    "logSha256": "1dc2c1b49e065d27477067712b514a211cb062cb4e256b2e667bb0fa503a259f"
+  },
+  "correction": "Use SwiftPM parallel XCTest runner with one worker and disable the separate Swift Testing runner. A separate workflow reuses the exact accepted binary archive, checking source/patch manifests and every generated file before running tests.",
+  "limits": [
+    "The corrected machine-readable test runner still needs its first macOS CI execution.",
+    "Actual native Swift tests run on macOS; no iPhone/iOS-simulator app runtime proof.",
+    "Cancellation case stops a pending reader, then starts a new profile request; it is not an overlapping in-flight request test.",
+    "No SDK5 release or library Apple adapter integration yet.",
+    "Reusable candidate artifact expires under the 14-day CI retention policy; switch to an accepted release archive before long-term use."
+  ]
+}

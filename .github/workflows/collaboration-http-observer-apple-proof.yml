@@ -1,0 +1,55 @@
+name: Matrix HTTP observer Apple runtime proof
+
+on:
+  push:
+    branches: [feat/matrix-http-observer-20261107]
+    paths:
+      - .github/workflows/collaboration-http-observer-apple-proof.yml
+      - tool/apple-observer-sdk/run_proof.py
+      - tool/apple-observer-sdk/verify_candidate.py
+      - tool/apple-observer-sdk/test_verify_candidate.py
+      - tool/apple-observer-sdk/proof/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: matrix-http-observer-apple-proof-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  apple:
+    runs-on: macos-15
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode 26.3
+        run: sudo xcode-select -s /Applications/Xcode_26.3.app/Contents/Developer
+      - name: Check immutable candidate acceptance guards
+        run: python3 -m unittest discover -s tool/apple-observer-sdk -p 'test_verify_candidate.py' -v
+      - name: Download the exact previously built candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh api repos/fajarxfce/hris-mobile/actions/artifacts/13591919151/zip
+          > "$RUNNER_TEMP/matrix-observer.zip"
+      - name: Verify archive, source manifests and every generated native file
+        run: >-
+          python3 tool/apple-observer-sdk/verify_candidate.py
+          --archive "$RUNNER_TEMP/matrix-observer.zip"
+          --sha256 6936bb1cd6f8de61a6d40738c16e3ccebddfffff4c605fba32367dbc116193c3
+          --output "$RUNNER_TEMP/matrix-observer-sdk"
+      - name: Exercise the original compiled Swift and native observer
+        run: >-
+          python3 tool/apple-observer-sdk/run_proof.py
+          --sdk "$RUNNER_TEMP/matrix-observer-sdk"
+          --output "$GITHUB_WORKSPACE/artifact/apple-proof"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: matrix-http-observer-apple-runtime
+          path: artifact/apple-proof/
+          if-no-files-found: error
+          retention-days: 14

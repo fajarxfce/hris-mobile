@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Native Swift observer / report runner — 7 November 2026, 21:58 UTC
+
+Corrected Apple firstCI42413788416 at9673eb1f successfully built all three native slices
+and linked Swift (2805.734s). All four actual macOS XCTest observer cases passed with
+original fixture requests once and cleanup complete. Overall CI FAILED afterward:
+run_proof.py expected tests.xml, but SwiftPM's sequential XCTest mode does not generate
+that xUnit report; the separate Swift Testing runner had zero tests. This distinction
+is preserved, not reported as a green workflow. [Exact evidence](measurements/matrix-http-observer-apple-native-2026-11-07.json).
+Archive13591919151/176488896B has verified SHA6936bb1cd6f8de61a6d40738c16e3ccebddfffff4c605fba32367dbc116193c3;
+43 generated Swift/native files, source and patch manifests verified. The paired candidate
+is .work/apple-observer-corrected-ci-2026-11-07/verified-sdk-3. No SDK5 publication or
+Apple app/inspector bridge acceptance. Native Swift cancellation test stops the reader,
+then starts another request; do not claim it tests cancelling an overlapping HTTP request.
+
+Runner now selects parallel XCTest with one worker and disables empty Swift Testing.
+A separate proof workflow reuses this exact immutable candidate after strict verification;
+7 verifier unit cases pass locally. It still needs its first macOS execution. Full native
+workflow now reacts only to native build driver/build manifest/toolchain changes (manual
+dispatch remains); pure proof changes do not rebuild Rust. Candidate artifact retention
+is14days; published distribution must replace this temporary pinned artifact later.
+SDK4, Android candidate and native source/manifest hashes are unchanged.
+
+Mobile796585ad has installed56 on phone and retained Bima emulator. Current unaccepted
+host inspector changes use the private composite/SDK5 candidate. Sole local heavy job
+61640 checks focused-3: six owner tests pass; two desktop UI tests fail because the test
+fixture omitted LocalLifecycleOwner. Android source compiles; Wasm/iOS/quality still run.
+Mobile/library sources are FROZEN until reaped; no emulator runs. Fix only the UI fixture
+then full gate/actual capture/overhead/install/Starter. Private librarya8d7d60 is pushed,
+all6actual JNI reset scenarios accepted. Visibility remains unanswered; no private source
+copy into public Mobile. Main0a926a2c/Groupa7e49c4a pushed. Original54PRDgroups remainactive,
+none complete; keyboard journal candidate is still read-only design, not implemented.
+
+
 ## Apple packaging correction — 7 November2026,21:00UTC
 
 First Apple run42408920984 failed at Swift linking after all three Rust builds.

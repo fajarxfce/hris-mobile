@@ -56,7 +56,11 @@ started = time.monotonic()
 record = {"passed": False, "actualSwiftNativeHttp": True, "published": False}
 try:
     with (output / "swift-test.log").open("w") as log:
-        run(["swift", "test", "-c", "release", "--jobs", "2", "--xunit-output",
+        # SwiftPM writes XCTest xUnit output only through its parallel test runner.
+        # One worker keeps these owned-loopback cases sequential. Disable the separate
+        # Swift Testing runner, which has zero tests in this XCTest-only package.
+        run(["swift", "test", "-c", "release", "--jobs", "2", "--parallel",
+             "--num-workers", "1", "--disable-swift-testing", "--xunit-output",
              str(output / "tests.xml")], cwd=Path(__file__).resolve().parent / "proof",
             env=env, log=log, timeout=900)
     report = ET.parse(output / "tests.xml").getroot()

@@ -4,9 +4,9 @@ on:
   push:
     branches: [feat/matrix-http-observer-20261107]
     paths:
-      - .github/workflows/collaboration-http-observer-apple.yml
       - tool/build_collaboration_observer_apple.py
-      - tool/apple-observer-sdk/**
+      - tool/apple-observer-sdk/build.json
+      - tool/apple-observer-sdk/toolchain.patch
   workflow_dispatch:
 
 permissions:
