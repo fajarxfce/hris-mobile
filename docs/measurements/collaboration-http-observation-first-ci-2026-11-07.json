@@ -1,0 +1,381 @@
+{
+  "at": "2026-11-07T22:05:55.020095+00:00",
+  "sourceCommit": "be2fe0219639b0b931adf12596a7706d7690ad43",
+  "firstRuns": [
+    {
+      "run": 42414100643,
+      "conclusion": "success",
+      "jobs": [
+        {
+          "name": "apple",
+          "startedAt": "2026-11-07T21:04:42Z",
+          "completedAt": "2026-11-07T21:54:32Z",
+          "conclusion": "success"
+        },
+        {
+          "name": "portable",
+          "startedAt": "2026-11-07T21:04:42Z",
+          "completedAt": "2026-11-07T21:25:23Z",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "run": 42414100684,
+      "conclusion": "success",
+      "jobs": [
+        {
+          "name": "Android HRIS (x86_64)",
+          "startedAt": "2026-11-07T21:04:42Z",
+          "completedAt": "2026-11-07T21:49:48Z",
+          "conclusion": "success"
+        },
+        {
+          "name": "Android HRIS (arm64-v8a)",
+          "startedAt": "2026-11-07T21:04:43Z",
+          "completedAt": "2026-11-07T21:57:01Z",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "artifactId": 13592865165,
+      "name": "collaboration-control-apple",
+      "sha256": "5b01179f382b52aa403b2bb2f9effd060fc9cc69e23fac930829fb1e8fb1a5e9",
+      "bytes": 432941,
+      "suites": 241,
+      "counts": {
+        "tests": 2194,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "abi": null,
+      "proof": {},
+      "originalQueueContinuity": null,
+      "run": 42414100643,
+      "httpObserverCases": [],
+      "reportManifestSha256": "8d06f1468483ffe47dd7a699bca0b5fa85aad8455ed1b10e473e99d72a6218bc"
+    },
+    {
+      "artifactId": 13591491540,
+      "name": "collaboration-control-portable",
+      "sha256": "3c870faef9ff84073e8376495e352cd53802ba66750f1fd61f376deb5ca9375b",
+      "bytes": 2617671,
+      "suites": 571,
+      "counts": {
+        "tests": 5284,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "abi": null,
+      "proof": {},
+      "originalQueueContinuity": null,
+      "run": 42414100643,
+      "httpObserverCases": [],
+      "reportManifestSha256": "ce56eb6021c2b6897f533655d4bfded8576d92a056df9b5318caac789b9f4282"
+    },
+    {
+      "artifactId": 13592865543,
+      "name": "native-hris-arm64-evidence",
+      "sha256": "134cfeb8f32a1bf82c3073fd62268471bb4a838f69da7fd1601be37f0d592a6b",
+      "bytes": 319400,
+      "suites": 88,
+      "counts": {
+        "tests": 560,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "abi": {
+        "abi": "arm64-v8a",
+        "apkSha256": "377fe49effdefb0772f6c0970b7747aac0694eee8e841bbbb588fccfd6e627e2",
+        "ndk": "28.2.13676358",
+        "nativeLibraries": {
+          "lib/arm64-v8a/libmatrix_sdk_ffi.so": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34"
+        },
+        "validated": true
+      },
+      "proof": {
+        "platform/.work/collaboration/11a5955ce60748879f1e25bf5d542235/verified.json": {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSendCount": 3,
+          "nativeRedactionRequests": 0,
+          "retainedConfirmedQueueScenario": false,
+          "processRestartedAfterAck": true,
+          "processRestartedAfterCompletion": true
+        },
+        "platform/.work/collaboration/41803b6e867c4f37abdbf020593a6fa2/verified.json": {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSendCount": 3,
+          "nativeRedactionRequests": 0,
+          "retainedConfirmedQueueScenario": true,
+          "confirmedNativeQueueRestored": true,
+          "confirmedNativeQueueRetryNoop": true,
+          "confirmedNativeQueueSettledOffline": true,
+          "processRestartedAfterAck": true,
+          "processRestartedAfterCompletion": true
+        },
+        "platform/.work/collaboration-worker/14f6b06b290a41c2b2bee79bf8bf1b72/acceptance.json": {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 176,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        },
+        "platform/.work/collaboration-worker/43dd5d8b6842447c85b2e4984384e388/acceptance.json": {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 176,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        },
+        "platform/.work/collaboration-worker/52ce63a3aac64ca0858e8366c3c666ce/acceptance.json": {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 1,
+          "workManagerExecutionAccepted": true,
+          "retryCancellationAccepted": false
+        },
+        "platform/.work/collaboration-worker/9dbaf01c49ad48d58133ab5f1121e8d3/acceptance.json": {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 176,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        },
+        "mobile/.work/native-notification-proof/result.json": {
+          "complete": true,
+          "fixtureAbsent": true,
+          "fixtureUninstalled": true,
+          "fixtureDataCleared": true
+        }
+      },
+      "originalQueueContinuity": {
+        "complete": true,
+        "serial": "emulator-5560",
+        "abi": "arm64-v8a",
+        "apkSha256": "377fe49effdefb0772f6c0970b7747aac0694eee8e841bbbb588fccfd6e627e2",
+        "sdk": "26.10.23-hris.4",
+        "syntheticRoomSeed": true,
+        "providerMessagesSent": 0,
+        "liveHrisAcceptance": false,
+        "selectedAbiVerified": true,
+        "stage": {
+          "originalSdkClosed": true,
+          "committedBeforeCancellation": true,
+          "uninitializedAdoptionRetained": true,
+          "originalFieldsAndQueueNamespacePreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "ownedResourcesReleased": true,
+          "passed": true,
+          "complete": true,
+          "newMessagesSent": 0,
+          "processId": 2528
+        },
+        "seedRequests": {
+          "GET /_matrix/client/versions": 1,
+          "GET /_matrix/client/v3/user/*/account_data/*": 2,
+          "POST /_matrix/client/v3/keys/upload": 1,
+          "POST /_matrix/client/v3/keys/query": 2,
+          "GET /_matrix/client/v3/sync": 1
+        },
+        "unexpectedSeedRoutes": {},
+        "seedClosedBeforeRecovery": true,
+        "processAbsentBetweenPhases": true,
+        "continuity": {
+          "durableAfterProcessDeath": true,
+          "actualExistingOnlySdkRestore": true,
+          "unpublishedUntilAcceptance": true,
+          "hrCompanySelectionAndDenialIndependent": true,
+          "legacyRuntimeLookupExcluded": true,
+          "originalFieldsAndQueueNamespacePreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "sameBootstrapReplayWithoutWrite": true,
+          "actualPendingQueueRetained": true,
+          "originalQueueReadOffline": true,
+          "originalQueueHeldUnderLogicalOwner": true,
+          "partialAndChangedQueueResumeRejected": true,
+          "ownedResourcesReleased": true,
+          "ownedFilesRemoved": true,
+          "liveGroupActivation": false,
+          "passed": true,
+          "complete": true,
+          "newMessagesSent": 0,
+          "processId": 3992
+        },
+        "fixtureAbsent": true,
+        "seconds": 79.706
+      },
+      "run": 42414100684,
+      "httpObserverCases": [
+        "closingOneClientDoesNotCancelAnotherClientsObservation",
+        "startingTwiceCannotReplaceTheActiveSubscription",
+        "observationStartsDuringAcquisitionAndStopsBeforeClientRelease",
+        "optionalSourceFailureOrCancellationDoesNotChangeReadiness",
+        "pendingObserverCleanupKeepsTheNativeClientOwned",
+        "aClosingOwnerNeverOpensANewSubscription",
+        "cleanupFailureCannotRetainTheClientOrBlockItsNormalShutdown"
+      ],
+      "reportManifestSha256": "6ca7f96b6bd2aff2b6ab3e7e549f98139b7f82e266a88c30b2fb18e7165cddd6"
+    },
+    {
+      "artifactId": 13592365638,
+      "name": "native-hris-evidence",
+      "sha256": "ed4af70777b41747081578cc2dab7abad83f3db19549ab98d511c750e44d680a",
+      "bytes": 319932,
+      "suites": 88,
+      "counts": {
+        "tests": 560,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "abi": {
+        "abi": "x86_64",
+        "apkSha256": "d5d044cadf0edeb5443f24b614ae57624d1b6ce5739eac52226bfa8e80ad5d32",
+        "ndk": "28.2.13676358",
+        "nativeLibraries": {
+          "lib/x86_64/libmatrix_sdk_ffi.so": "55bde5be2080c3e42a2ece6053f94231d27165cc39698c89c50e36ecbdb2909a"
+        },
+        "validated": true
+      },
+      "proof": {
+        "platform/.work/collaboration/0d442ba9337f44c8843d5c16d64beec4/verified.json": {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSendCount": 3,
+          "nativeRedactionRequests": 0,
+          "retainedConfirmedQueueScenario": true,
+          "confirmedNativeQueueRestored": true,
+          "confirmedNativeQueueRetryNoop": true,
+          "confirmedNativeQueueSettledOffline": true,
+          "processRestartedAfterAck": true,
+          "processRestartedAfterCompletion": true
+        },
+        "platform/.work/collaboration-worker/17fbe57e06f2481c841a551557ef2bbb/acceptance.json": {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 176,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        },
+        "platform/.work/collaboration/c6848236ddc64130ada4d70c4eed98c2/verified.json": {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSendCount": 3,
+          "nativeRedactionRequests": 0,
+          "retainedConfirmedQueueScenario": false,
+          "processRestartedAfterAck": true,
+          "processRestartedAfterCompletion": true
+        },
+        "platform/.work/collaboration-worker/18b48ec2ccf54995a866ceea2f86f12f/acceptance.json": {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 1,
+          "workManagerExecutionAccepted": true,
+          "retryCancellationAccepted": false
+        },
+        "platform/.work/collaboration-worker/4a56d8678c2841cb85dd8d21104a0132/acceptance.json": {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 176,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        },
+        "platform/.work/collaboration-worker/fa424200c79149c0895fef84edc77c39/acceptance.json": {
+          "passed": true,
+          "cleanup": true,
+          "encryptedSends": 176,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        },
+        "mobile/.work/native-notification-proof/result.json": {
+          "complete": true,
+          "fixtureAbsent": true,
+          "fixtureUninstalled": true,
+          "fixtureDataCleared": true
+        }
+      },
+      "originalQueueContinuity": {
+        "complete": true,
+        "serial": "emulator-5560",
+        "abi": "x86_64",
+        "apkSha256": "d5d044cadf0edeb5443f24b614ae57624d1b6ce5739eac52226bfa8e80ad5d32",
+        "sdk": "26.10.23-hris.4",
+        "syntheticRoomSeed": true,
+        "providerMessagesSent": 0,
+        "liveHrisAcceptance": false,
+        "selectedAbiVerified": true,
+        "stage": {
+          "originalSdkClosed": true,
+          "committedBeforeCancellation": true,
+          "uninitializedAdoptionRetained": true,
+          "originalFieldsAndQueueNamespacePreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "ownedResourcesReleased": true,
+          "passed": true,
+          "complete": true,
+          "newMessagesSent": 0,
+          "processId": 2593
+        },
+        "seedRequests": {
+          "GET /_matrix/client/versions": 1,
+          "GET /_matrix/client/v3/user/*/account_data/*": 2,
+          "POST /_matrix/client/v3/keys/query": 2,
+          "POST /_matrix/client/v3/keys/upload": 1,
+          "GET /_matrix/client/v3/sync": 1
+        },
+        "unexpectedSeedRoutes": {},
+        "seedClosedBeforeRecovery": true,
+        "processAbsentBetweenPhases": true,
+        "continuity": {
+          "durableAfterProcessDeath": true,
+          "actualExistingOnlySdkRestore": true,
+          "unpublishedUntilAcceptance": true,
+          "hrCompanySelectionAndDenialIndependent": true,
+          "legacyRuntimeLookupExcluded": true,
+          "originalFieldsAndQueueNamespacePreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "sameBootstrapReplayWithoutWrite": true,
+          "actualPendingQueueRetained": true,
+          "originalQueueReadOffline": true,
+          "originalQueueHeldUnderLogicalOwner": true,
+          "partialAndChangedQueueResumeRejected": true,
+          "ownedResourcesReleased": true,
+          "ownedFilesRemoved": true,
+          "liveGroupActivation": false,
+          "passed": true,
+          "complete": true,
+          "newMessagesSent": 0,
+          "processId": 3654
+        },
+        "fixtureAbsent": true,
+        "seconds": 46.67
+      },
+      "run": 42414100684,
+      "httpObserverCases": [
+        "closingOneClientDoesNotCancelAnotherClientsObservation",
+        "startingTwiceCannotReplaceTheActiveSubscription",
+        "observationStartsDuringAcquisitionAndStopsBeforeClientRelease",
+        "optionalSourceFailureOrCancellationDoesNotChangeReadiness",
+        "pendingObserverCleanupKeepsTheNativeClientOwned",
+        "aClosingOwnerNeverOpensANewSubscription",
+        "cleanupFailureCannotRetainTheClientOrBlockItsNormalShutdown"
+      ],
+      "reportManifestSha256": "83e0e948185c5e84bbecdb571fd37753f58a50bba8621313493e200b4cfd6f17"
+    }
+  ],
+  "accepted": true,
+  "limits": [
+    "SDK4 remains immutable. This is the optional runtime hook, not the unpublished SDK5 host inspector candidate.",
+    "Synthetic original queue continuity sends zero provider messages and does not enable organization/Group routing.",
+    "Actual SDK5 native observer acceptance is recorded separately.",
+    "No new end-to-end phone latency or overall composer acceptance."
+  ]
+}

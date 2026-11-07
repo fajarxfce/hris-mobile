@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Inspector host continuation — 7 November 2026, 22:09 UTC
+
+Both be2fe021 first CI runs are fully audited: control42414100643 Apple2194/241 and
+portable5284/571; native42414100684 each ABI560/88, zero failures/errors/skips. All
+four archive digests, immutableSDK4, seven observer lifetime cases, original queue/keys
+and six independent HRIS scenario cleanups per ABI verified. Synthetic queue sends
+zero provider messages (ARM79.706s/x86 46.67s). [Evidence](measurements/collaboration-http-observation-first-ci-2026-11-07.json).
+Phone/original stopped Bima emulator remain56; pending/draft preview and first-layout
+viewport fixes installed, keyboard handoff and send latency still open.
+
+Private inspectora8d7d60 is pushed: all6actual JNI reset scenarios accepted. Reset-test
+failures were fixture assumptions about SDK discovery requests; no native/core fix.
+SDK branch6866251a records Apple proof42418364475 success: four exact macOS Swift/native
+cases, original request counts and cleanup, verified paired native archive. SDK5 is
+still unpublished; no library Apple bridge or iPhone app acceptance. SDK4 unchanged.
+
+Mobile host integration remains UNACCEPTED and unstaged. Focused-3/61640 is REAPED:
+platform source compilation passed,6owner tests passed;2UI cases lacked lifecycle in
+the test fixture and detekt found a LongMethod. The fixture now supplies lifecycle/back
+ownership; a dedicated DI module owns capture registration. Focused-4/31627 is the
+sole heavy local job. Mobile/private-library sources FROZEN until reaped; no emulator.
+Next full checks, actual API/Matrix capture and overhead, validated APK57 install, then
+Starter integration, composer and all54 original PRD groups. No PRD group newly complete.
+Library visibility question remains unanswered; no public source copy or default CI
+resolution of private/unpublished dependencies. Do not promote the host candidate yet.
+
 ## Release 56 installed — 7 November 2026, 21:29 UTC
 
 Phone and original Bima emulator now retain release56, sourcebe2fe021 on immutableSDK4.
