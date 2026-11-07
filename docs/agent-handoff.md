@@ -4,66 +4,75 @@ This is the active checkpoint. The [historical handoff](agent-handoff-history-th
 retains earlier work verbatim. Detailed measurements below are authoritative; do not
 restart accepted builds, native sends or SDK publication solely to recreate evidence.
 
-## Current next step — 7 November 2026, 02:54UTC
+## Current next step — 7 November 2026, 03:25UTC
 
 Release53/source08545820c0b58f46d784971e71ceb207dd628c0f is INSTALLED on the authorized
-phone. Original latency report stays OPEN; a new optional question asks whether new
-Bima messages now become checked sooner. Passive audit02:53:33 had no post-install
-lines for UID10962/work1010962, which proves no delivery outcome. No agent phone UI.
+phone. Original latency report stays OPEN. The optional question about whether new Bima
+messages now become checked sooner is pending; do not repeat it. Passive audit02:53:33
+had no post-install UID lines. At03:10 ADB was offline before reading logs; neither
+observation establishes delivery. No agent phone UI, new send, uninstall or data clear.
 
-The user asked whether Bima lacks keys. Matched original Bima send succeeded HTTP200
-and he has one confirmed eligible device; he need not remain online. Four captured
-403room_send failures belong to another owned room with zero registered peer devices.
-Main31e15bc8/current diagnosis preserves public metadata; routing identities stay private.
+Bima has one confirmed eligible device and an original matched send HTTP200; he need
+not remain online. Four captured403room_send failures belong to another owned room
+with zero registered peer devices. Main31e15bc8 preserves the matched diagnosis.
 
-Foreground08545820 is committed/pushed to temporaryfeat/chat-recovery-20261107 and
-originfeat/communications. Full24248 PASSED7,436fresh tests/967suites/1056.119s, zero
-failures/errors/skips,4,270 stable inputs and zero Android lint/Detekt findings.
-Actual WorkManager1473 passed70.507s: new synthetic wake436ms while older backoff and
-appended BLOCKED request remained; stop/restart retained one wake, no SDK/provider/
-messages, complete owned5560cleanup. Do not confuse it with phone send latency.
-Initial task-selection and missing-verification failures remain recorded.
-[Contract/evidence](collaboration-foreground-delivery.md).
+Foreground085 is pushed to temporaryfeat/chat-recovery-20261107 and originfeat/communications.
+Full24248 passed7,436fresh cases/967suites/1056.119s with4,270stable inputs and zero
+failures/errors/skips/lint/Detekt. Real WorkManager1473 passed70.507s: synthetic wake436ms
+while older OS backoff/appended BLOCKED work remained. This is not phone chat latency.
+[Contract/evidence](collaboration-foreground-delivery.md). Release53 exact APK SHA256
+994d161ade3455745157d0793475b5091d67e968af909bda7a282dce163152c6,121,022,760bytes,
+was built from frozen pushed085. Original Bima52→53 passed four offline/online room
+entries with11rows,30s same-process online stability and both actually viewed screenshots.
+Owned5562 stopped02:50:13; all original userdata/sidecars/keys remain. Phone install-only3455
+passed126.87s at02:52:45UTC, sameUID10962/first-install and exactAPK hash.
+[Release53](measurements/collaboration-release53-2026-11-07.json).
 
-Release build5893 PASSED259.896s from pushed08545820 with HEAD/inputs frozen. Signed
-ARM64 devRelease53/1.0.0 is nondebuggable and uses exact immutableSDK4. APK121,022,760
-bytes SHA994d161ade3455745157d0793475b5091d67e968af909bda7a282dce163152c6; old signer,
-API/Firebase,16KiB alignment, backup exclusions and foreground entry-point code verified.
-Original Bima52→53 updated in place; probe1983 passed four room entries(11visible rows
-each) offline/online, guestclock+3900s then restored,30s online process stability.
-Both actual screenshots were inspected. Emulator5562/PID3470186 stopped02:50:13;
-all original userdata/sidecars/keys remain. Phone3455 install-only passed126.87s at
-02:52:45UTC, sameUID10962 and original first-install time, exact APKhash. No uninstall,
-data clear, launch or replacement send. [Release53](measurements/collaboration-release53-2026-11-07.json).
-Private drivers/results are .work/release-phone-2026-11-07-build53.
+Publication transport and explicit read-only POST auth replay are NOW accepted locally:
+full67784/full-1 passed6,096fresh cases/753suites in830.513s;4,271unchanged inputs and
+zero failures/errors/skips/Android lint/Detekt. Root, network/worker/database/collaboration
+browser, Android host/compilation/lint and proof compilation passed. No SDK/provider
+write or activation. The first82879 failed two transport assertions; second62485 passed
+11transport cases but core test nullable assertion did not compile. Corrected41607 passed
+37fresh core-network cases, unchanged transport reports reused. All original failures
+and manifests remain in [the accepted record](measurements/collaboration-legacy-publication-transport-2026-11-07.json).
+Eleven Kotlin source/test files must be committed/pushed together. Generic SessionAuthentication
+and its new ReadOnlyPostAuthenticationTest are the only two files to port to Starter.
+Read-only POST opts into one repeatable-body auth replay; ordinary POST/PATCH/streaming,
+original scope and cancellation guards remain. No invented command idempotency key.
 
-ONLY heavy local job86151 is Starter.work/foreground-delivery-port-2026-11-07/check-1.
-Its four exact Mobile worker files and Apple CI targets are applied but UNCOMMITTED
-and FROZEN until the gate ends. No emulator is active. After it passes: run record.py,
-update Starter docs, commit/push and dispatch FIRST Apple CI once. Do not start another
-local build/emulator while86151 runs. Starter docs/foreground-work.md records ownership.
+There is NO heavy local job or emulator. Owning-flow candidate is PREPARED ONLY under
+.work/runtime-transfer-flow-2026-11-07: publication, exact existing SDK stop/join/private
+proof and durable target, current admission, same-operation freeze and one drain read.
+No live caller or adoption. Apply only after the accepted transport is committed/pushed.
+Finish its tests/DI and validate; do not rerun accepted native sends merely for evidence.
 
-Mobile publication transport has nine prepared/formatted source/test files and four
-new cases under.work/legacy-publication-transport-2026-11-07, NOT yet applied/tested.
-Guarded apply.py requires release53 acceptance and unchanged originals. Apply/review
-while Starter runs; focused/full tests must wait. It extends the existing transfer
-boundary with fresh bounded original-publication metadata, no activation or SDK writes.
-CI-only follow-up is now applied/reviewed: collaboration control watches worker/sync,
-runs desktop/browser/Apple worker tests and retains both jobs reports. YAML parsed
-locally; runtime execution remains pending. Commit/push it separately on the temporary
-branch while preserving first085 pending control, then apply publication transport.
+Starter0002d102ba2dab693aef4173ab7b958d39ab7d03 exact generic worker port passed86151
+in245.086s:90fresh cases/29suites/1,024stable inputs;zero failures/errors/skips/Detekt/lint
+errors,44existing warnings. FIRST Apple42331840556 is now SUCCESS and artifact audited:
+154cases/37suites,including16core-worker cases,zero failures/errors/skips; actual simulator
+app/associations passed. Artifact13558119586SHA6680c3547acadf552f77bb93fe106459efa99f1462ea328a7db41b7ad18798eb.
+Starter .work/read-only-post-port-2026-11-07 is prepared but NOT applied. Guarded apply
+requires committed accepted Mobile transport. Prior Apple run is complete; next accepted
+port may dispatch its own first Apple gate. Record existing worker Apple evidence with it.
 
-First085 control42330502891 is PENDING; native42330503083 and protocol42330502995 are
-RUNNING. Never displace the first pending control with another primary SOURCE push.
-Docs-only pushes do not trigger it. Precedingee control42323799690 is running; native
-42323799725 accepted444cases/73suites perABI, protocol42323799691 accepted14checks per
-mode, originals audited. Firstfd05 control/native are accepted/audited. Evidence is
-in collaboration-interrupted-handover-ci and collaboration-queue-diagnostics-ci records.
+CI-only7c1a7293 is pushed on the temporary Mobile branch; it adds worker tests and reports
+across desktop/browser/Apple. First085control42330502891 is IN_PROGRESS, so accepted new
+source may fast-forward originfeat/communications (currently52ca0720/docs above085).
+First085native42330503083 SUCCESS:446cases/74suites EACHABI,0failures/errors/skips;
+artifacts13558198023/13557828538 audited and hash verified. Protocol42330502995 SUCCESS,
+14checks eachmode, artifacts13557920777/13557588423 audited. Public native/protocol records
+are in docs/measurements. Prior ee control42323799690 also SUCCESS/audited4448portable+
+1794Apple,0failures/errors/skips; its original native/protocol success remains recorded.
+Never displace a first pending control or rerun first failures to make green evidence.
 
-Group e45a4313 publication preflight is accepted/pushed:186domain/data and236API/full-
-worker cases, one existing opt-in skip,8,613 stable inputs. V117–137 remain disabled/
-unshipped. Live API2e75fe1e/worker10485916/schema116.1 remains unchanged. SDK4 is
-immutable. Owning publication/freeze/drain/adoption and all54PRD groups remain unfinished.
+Group e45a4313 publication preflight passed186domain/data and236API/full-worker cases,
+one existing opt-in skip,8,613 stable inputs. V117–137 remain disabled/unshipped.
+Live API2e75fe1e/worker10485916/schema116.1 is unchanged. SDK4 is immutable; never run
+its publisher again. Owning transfer/adoption, changed/revoked original-parent recovery,
+organization routing and all54PRD groups remain unfinished. Continue the authorized long
+run, push each atomic commit, and announce each phone installation with explicit serial
+10.77.77.3:5555 and --install-only. No agent phone UI.
 
 ## Current work — 7 November 2026
 

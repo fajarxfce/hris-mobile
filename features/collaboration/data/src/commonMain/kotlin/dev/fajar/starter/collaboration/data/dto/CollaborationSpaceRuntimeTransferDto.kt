@@ -20,3 +20,14 @@ data class CollaborationLegacyRuntimeDrainDto(
     val latestRequestExpiresAt: String?,
     val observedAt: String,
 )
+
+@Serializable
+data class CollaborationLegacyPublicationDto(
+    val spaceId: String,
+    val deviceId: String,
+    val deviceVersion: Long,
+    val original: CollaborationSpaceLegacyPositionDto,
+    val fingerprint: String,
+    val observedAt: String,
+    val expiresAt: String,
+)

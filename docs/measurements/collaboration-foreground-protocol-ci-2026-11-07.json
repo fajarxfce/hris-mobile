@@ -1,0 +1,332 @@
+{
+  "source": "08545820c0b58f46d784971e71ceb207dd628c0f",
+  "firstRun": {
+    "at": "2026-11-07T03:11:51.480891+00:00",
+    "headSha": "08545820c0b58f46d784971e71ceb207dd628c0f",
+    "runs": [
+      {
+        "id": 42330502995,
+        "status": "completed",
+        "conclusion": "success",
+        "jobs": [
+          {
+            "name": "android-web (native)",
+            "status": "completed",
+            "conclusion": "success",
+            "startedAt": "2026-11-07T02:41:48Z",
+            "completedAt": "2026-11-07T02:55:05Z",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-java@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run gradle/actions/setup-gradle@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run android-actions/setup-android@v3",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build debug-only isolated fixture",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run npm ci --ignore-scripts --no-audit --no-fund",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run npx playwright install --with-deps chromium",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Enable KVM for the owned runner emulator",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run reactivecircus/android-emulator-runner@v2",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/upload-artifact@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run gradle/actions/setup-gradle@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-java@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success"
+              }
+            ]
+          },
+          {
+            "name": "android-web (classic)",
+            "status": "completed",
+            "conclusion": "success",
+            "startedAt": "2026-11-07T02:41:48Z",
+            "completedAt": "2026-11-07T02:59:32Z",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-java@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run gradle/actions/setup-gradle@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run android-actions/setup-android@v3",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build debug-only isolated fixture",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run npm ci --ignore-scripts --no-audit --no-fund",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run npx playwright install --with-deps chromium",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Enable KVM for the owned runner emulator",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run reactivecircus/android-emulator-runner@v2",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/upload-artifact@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run gradle/actions/setup-gradle@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-java@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success"
+              }
+            ]
+          }
+        ],
+        "artifacts": [
+          {
+            "artifactId": 13557920777,
+            "name": "native-protocol-evidence-native",
+            "sha256": "8966657e092e04dbdcd8af233df24629286fe59a74d23d853645287fd75ad302",
+            "bytes": 2518,
+            "suites": 0,
+            "counts": {
+              "tests": 0,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "abi": null,
+            "proof": {},
+            "protocol": {
+              "kind": "isolated_provider_proof",
+              "complete": true,
+              "cleanup": true,
+              "productAcceptance": false,
+              "capacityAcceptance": false,
+              "checks": {
+                "wrong_issuer": true,
+                "wrong_audience": true,
+                "expired_jwt_beyond_provider_leeway": true,
+                "public_registration_disabled": true,
+                "loopback_only_http": true,
+                "isolated_dedicated_network": true,
+                "provider_protocol_counters": true,
+                "browser_e2ee_restart_media": true,
+                "browser_offline_invitee_first_message_sender_offline": true,
+                "android_requested_sync_protocol": true,
+                "android_web_bidirectional_e2ee": true,
+                "android_sdk_refresh_preserves_device_key": true,
+                "android_sdk_queue_encrypted_logical_ids": true,
+                "android_encrypts_for_offline_invitee_before_join": true
+              },
+              "native": {
+                "apkSha256": "8fc34eba595acc61bb5aa3beb901835788207a3e5e1d1fcc21cad7393c53e676",
+                "package": "dev.fajar.hris.collaboration.proof",
+                "avd": "hris-mobile-dev",
+                "androidApi": "35",
+                "syncMode": "native"
+              },
+              "elapsedSeconds": 82.272
+            },
+            "resultSha256": "353b1c2ea4ecfc8761cbefd8ee2d7f604d0d35c625732c7ab7ed673d0ca9b104"
+          },
+          {
+            "artifactId": 13557588423,
+            "name": "native-protocol-evidence-classic",
+            "sha256": "e4915f7a150e60d798b21954c4e86b1ded18e2bacfee42cbaec5c46f978d9482",
+            "bytes": 2508,
+            "suites": 0,
+            "counts": {
+              "tests": 0,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "abi": null,
+            "proof": {},
+            "protocol": {
+              "kind": "isolated_provider_proof",
+              "complete": true,
+              "cleanup": true,
+              "productAcceptance": false,
+              "capacityAcceptance": false,
+              "checks": {
+                "wrong_issuer": true,
+                "wrong_audience": true,
+                "expired_jwt_beyond_provider_leeway": true,
+                "public_registration_disabled": true,
+                "loopback_only_http": true,
+                "isolated_dedicated_network": true,
+                "provider_protocol_counters": true,
+                "browser_e2ee_restart_media": true,
+                "browser_offline_invitee_first_message_sender_offline": true,
+                "android_requested_sync_protocol": true,
+                "android_web_bidirectional_e2ee": true,
+                "android_sdk_refresh_preserves_device_key": true,
+                "android_sdk_queue_encrypted_logical_ids": true,
+                "android_encrypts_for_offline_invitee_before_join": true
+              },
+              "native": {
+                "apkSha256": "dae9610d3f1ad72778645afb61ec24a69ad8ca85030ded475a94c13feaf09b5e",
+                "package": "dev.fajar.hris.collaboration.proof",
+                "avd": "hris-mobile-dev",
+                "androidApi": "35",
+                "syncMode": "classic"
+              },
+              "elapsedSeconds": 95.721
+            },
+            "resultSha256": "54f70943f81618acc8a2b73b03482e548d93e2ad4f7c8609397940dba6d95100"
+          }
+        ]
+      }
+    ]
+  },
+  "rerun": false,
+  "interpretation": "Both original protocol modes passed14 isolated checks; product latency on the phone and the new publication transport remain separate acceptance."
+}

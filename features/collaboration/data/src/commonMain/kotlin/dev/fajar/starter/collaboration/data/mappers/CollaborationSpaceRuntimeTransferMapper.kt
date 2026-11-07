@@ -72,3 +72,27 @@ internal fun CollaborationLegacyRuntimeDrainDto.toRuntimeDrain(
         observed,
     )
 }
+
+internal fun CollaborationLegacyPublicationDto.toLegacyPublication(
+    request: CollaborationSpaceRuntimeTransfer
+): CollaborationSpaceLegacyPublication {
+    require(spaceId == request.intent.spaceId && deviceId == request.intent.deviceId)
+    require(deviceVersion == request.intent.expectedDeviceVersion)
+    require(original.companyId == request.legacy.binding.companyId)
+    require(original.deviceId == request.legacy.deviceId)
+    require(fingerprint == request.intent.fingerprint)
+    val observed = Instant.parse(observedAt)
+    val expires = Instant.parse(expiresAt)
+    require(observed.toEpochMilliseconds() >= 0)
+    require(expires > observed && expires - observed <= 30.seconds)
+    return CollaborationSpaceLegacyPublication(
+        spaceId,
+        deviceId,
+        deviceVersion,
+        original.companyId,
+        original.deviceId,
+        fingerprint,
+        observed,
+        expires,
+    )
+}

@@ -3,6 +3,12 @@ package dev.fajar.starter.collaboration.data.datasources
 import dev.fajar.starter.collaboration.data.dto.*
 
 interface CollaborationSpaceRuntimeTransferRemoteSource {
+    suspend fun publication(
+        sessionId: String,
+        spaceId: String,
+        input: CollaborationLegacyRuntimeRequestDto,
+    ): CollaborationLegacyPublicationDto
+
     suspend fun freeze(
         sessionId: String,
         spaceId: String,

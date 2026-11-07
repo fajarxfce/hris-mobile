@@ -34,3 +34,32 @@ admission before freeze. Freeze is irreversible for the original runtime. Only t
 backend's admitted worker can complete atomic publication and retirement. Old-parent
 recovery, SDK adoption, pending-message continuity and actual organization routing remain
 required. No live endpoint was called or deployment enabled by this local transport test.
+
+## Original publication observation
+
+`publication(owner, transfer)` observes the original provider keys before irreversible
+local staging through the organization's legacy-runtime/publication POST route.
+It reuses exact original provenance and target coordinates, carries current native
+session/client headers, and requires no idempotency key because the server performs
+no command mutation. The repository bounds the response to1024bytes and verifies the
+complete target/device version, original company/device and retained fingerprint.
+The reported observation interval must be positive and no greater than30seconds.
+
+The result is metadata, not a bearer or proof of current private-key possession.
+The owning use case must still check freshness, current admission and private-store
+ownership before staging, freeze/drain or adoption. Native-parent equality remains;
+this transport cannot silently rebind a revoked or replaced original parent.
+No SDK, local durable record or server device/runtime changes occur through this read.
+Four new transport cases cover native rotation/exact request, malformed/foreign or
+oversized response, finite classified rejection and cancellation. Existing invalid
+provenance checks include publication. Complete acceptance passed6,096 fresh cases in753 suites
+in830.513seconds, with4,271 unchanged inputs and zero failures/errors/skips, Android
+lint or Detekt findings. Group remains disabled. The two failed focused attempts and
+final acceptance are retained in [the publication record](measurements/collaboration-legacy-publication-transport-2026-11-07.json).
+
+The read-only POST explicitly selects `AuthenticationReplay.ReadOnlyPost` at its
+HTTP boundary. Authentication may replay repeatable bytes once after native refresh,
+with original scope and no fabricated command key. Ordinary POST, streaming bodies
+and other unsafe methods keep their existing restrictions. Cancellation interrupts
+refresh/replay. The first transport gate exposed this missing explicit classification;
+its original two failures are retained, not weakened to accept a login interruption.

@@ -690,5 +690,208 @@
       }
     ]
   },
-  "recordedAt": "2026-11-07T02:33:57.143268+00:00"
+  "recordedAt": "2026-11-07T02:33:57.143268+00:00",
+  "control": {
+    "at": "2026-11-07T03:11:51.444147+00:00",
+    "headSha": "ee338fb36bb220c4d10bd5f664891ff462ab672c",
+    "runs": [
+      {
+        "id": 42323799690,
+        "status": "completed",
+        "conclusion": "success",
+        "jobs": [
+          {
+            "name": "apple",
+            "status": "completed",
+            "conclusion": "success",
+            "startedAt": "2026-11-07T02:08:52Z",
+            "completedAt": "2026-11-07T02:59:11Z",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Select Xcode 26.3",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-java@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run gradle/actions/setup-gradle@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Prepare public app-link test registrations",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Check Apple setup adapter",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build iOS application host",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/upload-artifact@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run gradle/actions/setup-gradle@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-java@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success"
+              }
+            ]
+          },
+          {
+            "name": "portable",
+            "status": "completed",
+            "conclusion": "success",
+            "startedAt": "2026-11-07T02:08:52Z",
+            "completedAt": "2026-11-07T02:36:14Z",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-java@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run gradle/actions/setup-gradle@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run android-actions/setup-android@v3",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Check setup transport and ownership",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Check application bindings and platform compilation",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/upload-artifact@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run gradle/actions/setup-gradle@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-java@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@v4",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success"
+              }
+            ]
+          }
+        ],
+        "artifacts": [
+          {
+            "artifactId": 13557666460,
+            "name": "collaboration-control-apple",
+            "sha256": "2f22b3c27a4682cbbf14d3412c3dd418122f9533fc2c1c04f8b632da65159276",
+            "bytes": 334942,
+            "suites": 197,
+            "counts": {
+              "tests": 1794,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "abi": null,
+            "proof": {}
+          },
+          {
+            "artifactId": 13556528403,
+            "name": "collaboration-control-portable",
+            "sha256": "7e660b181826e6bda91d0d4bc5e7f96f2c13b8496e593d9b6d7f4917000a6204",
+            "bytes": 2309743,
+            "suites": 478,
+            "counts": {
+              "tests": 4448,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "abi": null,
+            "proof": {}
+          }
+        ]
+      }
+    ]
+  }
 }

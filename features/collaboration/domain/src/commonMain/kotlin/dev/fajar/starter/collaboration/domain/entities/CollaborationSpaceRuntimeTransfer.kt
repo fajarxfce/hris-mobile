@@ -22,3 +22,17 @@ data class CollaborationSpaceRuntimeDrain(
 ) {
     override fun toString() = "CollaborationSpaceRuntimeDrain([redacted])"
 }
+
+/** Fresh original provider-key metadata; never private-key possession or freeze authority. */
+data class CollaborationSpaceLegacyPublication(
+    val spaceId: String,
+    val deviceId: String,
+    val deviceVersion: Long,
+    val originalCompanyId: String,
+    val originalDeviceId: String,
+    val fingerprint: String,
+    val observedAt: Instant,
+    val expiresAt: Instant,
+) {
+    override fun toString() = "CollaborationSpaceLegacyPublication([redacted])"
+}

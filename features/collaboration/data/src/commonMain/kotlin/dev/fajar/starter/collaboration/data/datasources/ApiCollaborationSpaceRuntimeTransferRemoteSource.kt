@@ -8,6 +8,12 @@ import org.koin.core.annotation.Single
 class ApiCollaborationSpaceRuntimeTransferRemoteSource(
     private val api: CollaborationSpaceRuntimeTransferApi
 ) : CollaborationSpaceRuntimeTransferRemoteSource {
+    override suspend fun publication(
+        sessionId: String,
+        spaceId: String,
+        input: CollaborationLegacyRuntimeRequestDto,
+    ) = api.publication(sessionId, spaceId, input)
+
     override suspend fun freeze(
         sessionId: String,
         spaceId: String,

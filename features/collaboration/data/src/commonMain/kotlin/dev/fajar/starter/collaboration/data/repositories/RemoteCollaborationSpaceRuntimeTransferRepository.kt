@@ -13,6 +13,16 @@ class RemoteCollaborationSpaceRuntimeTransferRepository(
     private val remote: CollaborationSpaceRuntimeTransferRemoteSource,
     private val server: IdentityServer,
 ) : CollaborationSpaceRuntimeTransferRepository {
+    override suspend fun publication(
+        owner: CollaborationSpaceOwner,
+        transfer: CollaborationSpaceRuntimeTransfer,
+    ) = safeApiCall {
+        val input = transfer.toLegacyRuntimeRequest(owner, server)
+        remote
+            .publication(owner.parent.sessionId, owner.spaceId, input)
+            .toLegacyPublication(transfer)
+    }
+
     override suspend fun freeze(
         owner: CollaborationSpaceOwner,
         transfer: CollaborationSpaceRuntimeTransfer,

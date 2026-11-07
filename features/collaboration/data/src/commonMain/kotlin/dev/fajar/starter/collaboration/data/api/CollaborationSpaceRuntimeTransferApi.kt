@@ -14,6 +14,21 @@ import org.koin.core.annotation.*
 class CollaborationSpaceRuntimeTransferApi(
     @Named(HttpClients.Authenticated) private val client: HttpClient
 ) {
+    suspend fun publication(
+        sessionId: String,
+        spaceId: String,
+        input: CollaborationLegacyRuntimeRequestDto,
+    ): CollaborationLegacyPublicationDto =
+        client.requestJson(
+            "collaboration/spaces/${Uuid.parse(spaceId)}/native-device/legacy-runtime/publication",
+            HttpMethod.Post,
+            maximumBytes = 1024,
+        ) {
+            forSession(sessionId, AuthenticationReplay.ReadOnlyPost)
+            contentType(ContentType.Application.Json)
+            setBody(input)
+        }
+
     suspend fun freeze(
         sessionId: String,
         spaceId: String,

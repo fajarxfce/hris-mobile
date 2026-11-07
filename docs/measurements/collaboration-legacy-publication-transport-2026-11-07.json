@@ -1,0 +1,148 @@
+{
+  "recordedAt": "2026-11-07T03:25:13.672876+00:00",
+  "baseCommit": "7c1a7293d3caa20eeb59963a102649531b723ea6",
+  "sourceFiles": {
+    "core/network/src/commonMain/kotlin/dev/fajar/starter/network/SessionAuthentication.kt": "dca92394a9fdeb6549bb8fb22022b8c510c811bc0258fd938fb848e1d1d6d682",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/api/CollaborationSpaceRuntimeTransferApi.kt": "20036bedf43ce09c3625ef7fe4c4aa5a36a2211befecb5dfba91b5d13aef1647",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/ApiCollaborationSpaceRuntimeTransferRemoteSource.kt": "614e8edf4d557485f6e2498b252f969b70addc47c45e2f67f1cf66372b071df1",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationSpaceRuntimeTransferRemoteSource.kt": "0ac7d5e8afa907b7c4c5739bf1046b69dd41b663b421be41932d97eb00a55672",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationSpaceRuntimeTransferDto.kt": "cfeb595c7a68806dc033895d5f037c52def8ee82c8d4c062eca28d4d1d53bb82",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationSpaceRuntimeTransferMapper.kt": "1d29859f92129c7fb6935fd80d4a85f329a693c2d29aea94dad1cd85cb67da65",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/RemoteCollaborationSpaceRuntimeTransferRepository.kt": "c8664f09907de04f6a30e4537064dfa8ed0ebb7637569db9cbbd6e0e648aeca8",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRuntimeTransferTransportTest.kt": "3a123060c545d2fbcad4409a92b20a3fafbb73cdc01f140b69599d5d49a754df",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceRuntimeTransfer.kt": "ec8ba76bc592bf6656fae26c7be7c401c04a19a5f255aba3e1c17491ab5bf6c9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceRuntimeTransferRepository.kt": "c953c4df51958af174a4b4f9c72eecd09e71fdadfd8aaf47b7b69c5e46f9f507",
+    "core/network/src/commonTest/kotlin/dev/fajar/starter/network/ReadOnlyPostAuthenticationTest.kt": "47e3a1b7a75e6237f0d0a82a0132dce69a8339589b968975c313580cb23dbc8b"
+  },
+  "attempts": [
+    {
+      "name": "focused-1",
+      "note": "Two assertions exposed absent read-only POST authentication replay.",
+      "startedAt": "2026-11-07T02:59:36.373161+00:00",
+      "elapsedSeconds": 116.197,
+      "exitCode": 1,
+      "sourceFiles": 4270,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 11,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 1,
+      "inputManifestSha256": "9d46982214ce068ab892f02107cf7fe4798ff020832c88a935b6ad77c653eddd",
+      "stdoutSha256": "70cded44588a6ede0de06ce02c05f822173c5a5c5991596441d9c5bfec18242b",
+      "stderrSha256": "47a3f4495e77a36258dca0c5298010d0ccb9775bab156a8fc6b42cdf4dc66e7e"
+    },
+    {
+      "name": "focused-2",
+      "note": "Transport tests passed; new core test did not compile because nullable token list assertion needed an explicit type.",
+      "startedAt": "2026-11-07T03:06:24.441271+00:00",
+      "elapsedSeconds": 97.14,
+      "exitCode": 1,
+      "sourceFiles": 4271,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 1,
+      "inputManifestSha256": "0b0fc629535de6a886837473a3ef03a07640ff9f541b2be75013a119256317af",
+      "stdoutSha256": "de7e862a61e6444c25fdf02e9a31c78f3306321dab2253ce08668306cdf8422e",
+      "stderrSha256": "f87cacd0108632efb5de471d0de93e7aa3e4b86c0b76c57280541e1811f254c5"
+    },
+    {
+      "name": "focused-3",
+      "note": "Core network cases passed; unchanged transport cases reused from focused-2.",
+      "startedAt": "2026-11-07T03:09:03.722302+00:00",
+      "elapsedSeconds": 44.688,
+      "exitCode": 0,
+      "sourceFiles": 4271,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 37,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 11,
+      "inputManifestSha256": "432c5fb17013306c923a54f9f9f65e19f76dafb237b18aa0d1ecbd8a293ce36a",
+      "stdoutSha256": "6cfe6c88e6113a0547f4b68e8cfb0cacb477a0b4eed6b8a228de6ff975061c42",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "full-1",
+      "note": "Complete local acceptance.",
+      "startedAt": "2026-11-07T03:10:41.305154+00:00",
+      "elapsedSeconds": 830.513,
+      "exitCode": 0,
+      "sourceFiles": 4271,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 6096,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 753,
+      "inputManifestSha256": "432c5fb17013306c923a54f9f9f65e19f76dafb237b18aa0d1ecbd8a293ce36a",
+      "stdoutSha256": "e4c0baf08c5ba75c08521ecbda1f0f933c51be818ccc05513590c875c3264452",
+      "stderrSha256": "7037c6271780a3605c9716dd18c7dfdda92488248c9dd8604b127517a0fba772"
+    }
+  ],
+  "acceptedCommand": [
+    "xvfb-run",
+    "-a",
+    "env",
+    "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+    "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+    "ANDROID_HOME=/home/fajar/Android/Sdk",
+    "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    "--stacktrace",
+    "--continue",
+    ":check",
+    ":features:collaboration:data:testAndroidHostTest",
+    ":apps:collaboration-proof:compileDebugKotlin",
+    ":apps:collaboration-proof:assembleDebug",
+    ":core:network:wasmJsBrowserTest",
+    ":core:worker:wasmJsBrowserTest",
+    ":core:database:wasmJsBrowserTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":features:collaboration:presentation:wasmJsBrowserTest",
+    ":apps:android:assembleDevDebug",
+    ":apps:android:lintDevDebug",
+    ":formatCheck",
+    ":architectureCheck",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=53",
+    "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx2560m",
+    "-Pkotlin.compiler.execution.strategy=in-process"
+  ],
+  "freshCounts": {
+    "tests": 6096,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "freshSuites": 753,
+  "unchangedInputs": 4271,
+  "lintErrors": 0,
+  "lintWarnings": 0,
+  "detektFindings": 0,
+  "limitations": [
+    "Transport and authentication semantics only.",
+    "No live endpoint call, SDK write, encrypted send, deployment, phone latency acceptance or group activation.",
+    "Owning runtime transfer and adoption remain required."
+  ]
+}

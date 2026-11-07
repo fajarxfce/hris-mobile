@@ -11,10 +11,22 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 
 val RequestSession = AttributeKey<String>("request-session")
+private val RequestAuthenticationReplay =
+    AttributeKey<AuthenticationReplay>("authentication-replay")
+
+/** Endpoint transport semantics; read-only POST must never be selected for a command. */
+enum class AuthenticationReplay {
+    HttpSemantics,
+    ReadOnlyPost,
+}
 
 /** Set the originating session on account-owned API calls. Never derive it from the current UI. */
-fun HttpRequestBuilder.forSession(id: String) {
+fun HttpRequestBuilder.forSession(
+    id: String,
+    replay: AuthenticationReplay = AuthenticationReplay.HttpSemantics,
+) {
     attributes.put(RequestSession, id)
+    attributes.put(RequestAuthenticationReplay, replay)
 }
 
 class SessionAuthenticationConfig {
@@ -72,7 +84,11 @@ val SessionAuthentication =
                         HttpMethod.Put,
                         HttpMethod.Delete,
                     ) || !request.headers["Idempotency-Key"].isNullOrBlank()
-            if (!repeatable || !idempotent) return@on call
+            val readOnlyPost =
+                request.method == HttpMethod.Post &&
+                    request.attributes.getOrNull(RequestAuthenticationReplay) ==
+                        AuthenticationReplay.ReadOnlyPost
+            if (!repeatable || (!idempotent && !readOnlyPost)) return@on call
             currentCoroutineContext().ensureActive()
             request.headers.remove(HttpHeaders.Authorization)
             request.bearerAuth(refreshed)

@@ -64,6 +64,147 @@ class CollaborationSpaceRuntimeTransferTransportTest {
             "2026-11-06T12:00:00Z",
         )
 
+    private val publication =
+        CollaborationLegacyPublicationDto(
+            owner.spaceId,
+            target,
+            transfer.intent.expectedDeviceVersion,
+            CollaborationSpaceLegacyPositionDto(setupOwner.companyId, SETUP_DEVICE),
+            transfer.intent.fingerprint,
+            "2026-11-07T12:00:00Z",
+            "2026-11-07T12:00:30Z",
+        )
+
+    @Test
+    fun publicationIsFreshBoundedPostAcrossOneNativeRotationWithoutCommandReplay() = runTest {
+        val bodies = mutableListOf<String>()
+        withRepository(
+            MockEngine { request ->
+                assertEquals(HttpMethod.Post, request.method)
+                assertEquals(
+                    "/api/v1/collaboration/spaces/${owner.spaceId}/native-device/legacy-runtime/publication",
+                    request.url.encodedPath,
+                )
+                assertNull(request.headers["Idempotency-Key"])
+                assertEquals("ANDROID", request.headers["X-HRIS-Client-Platform"])
+                assertEquals("57", request.headers["X-HRIS-Client-Build"])
+                val body = request.body.toByteArray().decodeToString()
+                bodies += body
+                val json = Json.parseToJsonElement(body).jsonObject
+                assertEquals(setOf("deviceId", "expectedDeviceVersion", "fingerprint"), json.keys)
+                assertEquals(target, json.getValue("deviceId").jsonPrimitive.content)
+                assertEquals(2L, json.getValue("expectedDeviceVersion").jsonPrimitive.long)
+                assertEquals(
+                    transfer.intent.fingerprint,
+                    json.getValue("fingerprint").jsonPrimitive.content,
+                )
+                if (bodies.size == 1) {
+                    assertEquals(
+                        "Bearer initial-native",
+                        request.headers[HttpHeaders.Authorization],
+                    )
+                    respond("{}", HttpStatusCode.Unauthorized, headers)
+                } else {
+                    assertEquals(
+                        "Bearer renewed-native",
+                        request.headers[HttpHeaders.Authorization],
+                    )
+                    respond(Json.encodeToString(publication), headers = headers)
+                }
+            }
+        ) { repo ->
+            val result =
+                assertIs<AppResult.Success<CollaborationSpaceLegacyPublication>>(
+                        repo.publication(owner, transfer)
+                    )
+                    .value
+            assertEquals(target, result.deviceId)
+            assertEquals(2L, result.deviceVersion)
+            assertEquals(setupOwner.companyId, result.originalCompanyId)
+            assertEquals(SETUP_DEVICE, result.originalDeviceId)
+            assertEquals(Instant.parse(publication.observedAt), result.observedAt)
+            assertEquals(Instant.parse(publication.expiresAt), result.expiresAt)
+            assertEquals(2, bodies.size)
+            assertEquals(bodies.first(), bodies.last())
+        }
+    }
+
+    @Test
+    fun publicationRejectsForeignIdentityRevisionAndUnboundedObservation() = runTest {
+        val values =
+            listOf(
+                    publication.copy(spaceId = target),
+                    publication.copy(deviceId = SETUP_DEVICE),
+                    publication.copy(deviceVersion = publication.deviceVersion + 1),
+                    publication.copy(original = publication.original.copy(companyId = target)),
+                    publication.copy(original = publication.original.copy(deviceId = target)),
+                    publication.copy(fingerprint = "b".repeat(64)),
+                    publication.copy(observedAt = "1969-01-01T00:00:00Z"),
+                    publication.copy(expiresAt = publication.observedAt),
+                    publication.copy(expiresAt = "2026-11-07T11:59:59Z"),
+                    publication.copy(expiresAt = "2026-11-07T12:00:30.001Z"),
+                    publication.copy(observedAt = "invalid"),
+                )
+                .map { Json.encodeToString(it) } + listOf("{}", "x".repeat(1025))
+        for (body in values) {
+            var calls = 0
+            withRepository(
+                MockEngine {
+                    calls++
+                    respond(body, headers = headers)
+                }
+            ) { repo ->
+                assertIs<AppResult.Failed>(repo.publication(owner, transfer))
+                assertEquals(1, calls)
+            }
+        }
+    }
+
+    @Test
+    fun publicationDenialKeepsClassificationAndDoesNotRetryWithoutBound() = runTest {
+        for (status in listOf(HttpStatusCode.Forbidden, HttpStatusCode.Unauthorized)) {
+            var calls = 0
+            withRepository(
+                MockEngine {
+                    calls++
+                    respond("""{"code":"collaboration_access_denied"}""", status, headers)
+                }
+            ) { repo ->
+                val result = assertIs<AppResult.Failed>(repo.publication(owner, transfer))
+                assertEquals(
+                    if (status == HttpStatusCode.Forbidden) FailureKind.AccessDenied
+                    else FailureKind.Unauthorized,
+                    result.failure.kind,
+                )
+                assertEquals(if (status == HttpStatusCode.Forbidden) 1 else 2, calls)
+            }
+        }
+    }
+
+    @Test
+    fun cancellationStopsPublicationObservationWithoutAnotherRequest() = runTest {
+        val entered = CompletableDeferred<Unit>()
+        val stopped = CompletableDeferred<Unit>()
+        var calls = 0
+        withRepository(
+            MockEngine {
+                try {
+                    calls++
+                    entered.complete(Unit)
+                    awaitCancellation()
+                } finally {
+                    stopped.complete(Unit)
+                }
+            }
+        ) { repo ->
+            val pending = async { repo.publication(owner, transfer) }
+            entered.await()
+            pending.cancelAndJoin()
+            stopped.await()
+            assertEquals(1, calls)
+        }
+    }
+
     @Test
     fun freezeRetainsOriginalOperationAndCurrentHeadersAcrossOneNativeRotation() = runTest {
         val bodies = mutableListOf<String>()
@@ -176,6 +317,7 @@ class CollaborationSpaceRuntimeTransferTransportTest {
             for (value in values) {
                 assertIs<AppResult.Failed>(repo.freeze(owner, value))
                 assertIs<AppResult.Failed>(repo.drain(owner, value))
+                assertIs<AppResult.Failed>(repo.publication(owner, value))
             }
             assertEquals(0, calls)
         }
