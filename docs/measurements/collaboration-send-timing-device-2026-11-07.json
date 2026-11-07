@@ -1,0 +1,293 @@
+{
+  "acceptedAt": "2026-11-07T23:44:32.244207+00:00",
+  "source": {
+    "baseCommit": "09e7eaf75cd7bd76ab866a8865d9d9c63bfaf260",
+    "sourceBranch": "feat/chat-send-timing-20261107",
+    "sourceManifestSha256": "dde973a684f2fc0cf13d8fa73815ec163143bb65724451450569c0e195710a8c",
+    "sourcesUnchanged": true,
+    "candidateOnly": true,
+    "sdkCandidate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+    "privateInspectorCommit": "58877fe7b1fec6959070044686dc4eb6b5768164",
+    "librarySourcesUnchanged": true
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      "--dependency-verification",
+      "strict",
+      ":apps:android:assembleDevRelease",
+      "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+      "-PmatrixSdkRepository=/home/fajar/hris/kmp-network-inspector/.work/matrix-android-2026-11-07/sdk-repository",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=58",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-07-build58/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m"
+    ],
+    "startedAt": "2026-11-07T23:31:35.398475+00:00",
+    "elapsedSeconds": 108.116,
+    "exitCode": 0
+  },
+  "artifact": {
+    "candidateOnly": true,
+    "diagnosticMarkersAbsent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-07-build58/hris-mobile-dev-release-1.0.0-58-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 58,
+    "versionName": "1.0.0",
+    "bytes": 123251011,
+    "sha256": "d8eaaf255852af5ddd2e8754da8d498e3d16598b70bc3bab56f50fd01bfc6e24",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+  },
+  "sdk": {
+    "nativeSha256": "4e8df548f98df275fc5ec23205388d716919ea9d0ab7e927d5cc39020171fa00",
+    "nativeBytes": 97549216,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "aarSha256": "5bffa2f4318d1edc7518ad21dc156393ef8a7e2610fd42320a67c12ab645ba5c",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+    "published": false,
+    "strippedNativeMatchesVerifiedSdk": true,
+    "stripToolNdkVersion": "28.2.13676358",
+    "queueApisAndUseCaseInDex": true,
+    "actualNativeObserverSymbolsPresent": true
+  },
+  "acceptance": {
+    "accepted": true,
+    "at": "2026-11-07T23:38:26.030023+00:00",
+    "scope": "Four correlated local send-phase timings without body/owner fields, actual Matrix HTTP capture, one original-account send and cold offline continuity. No keyboard or latency fix is claimed.",
+    "sourceCommit": "09e7eaf75cd7bd76ab866a8865d9d9c63bfaf260",
+    "apkSha256": "d8eaaf255852af5ddd2e8754da8d498e3d16598b70bc3bab56f50fd01bfc6e24",
+    "inspectorProbe": {
+      "accepted": true,
+      "apkSha256": "d8eaaf255852af5ddd2e8754da8d498e3d16598b70bc3bab56f50fd01bfc6e24",
+      "serial": "emulator-5562",
+      "phoneTouched": false,
+      "additionalMessagesSent": 0,
+      "startedAt": "2026-11-07T23:35:49.799803+00:00",
+      "actualKtorCapture": true,
+      "actualMatrixCapture": true,
+      "requestPathSha256": "43b12ce8af441d0928f52bd21e8e51cf8fb10d8f154bb487c7be8d9569596d6a",
+      "httpStatusLabels": [
+        "HTTP 200"
+      ],
+      "timing": {
+        "Started (UTC)": "2026-11-07T23:35:29.041Z",
+        "Time to response": "225 ms",
+        "Transfer": "Complete (229 ms)",
+        "Observed response bytes": "59"
+      },
+      "responseAndTransferVisible": true,
+      "bodyCaptureExplicitlyUnavailable": true,
+      "clearVerified": true,
+      "scope": "Real API and Rust Matrix HTTP metadata, separate response/transfer fields, filtering, detail/back and old-send removal. Not an ACK-latency or capture-overhead benchmark.",
+      "finishedAt": "2026-11-07T23:37:01.047332+00:00"
+    },
+    "screenshotsInspected": true,
+    "actualVideoInspected": true,
+    "screenshotsSha256": {
+      "online-send.png": "080cdd03256889221cf345856faa7e8ff3d468082cd0c0a8d4ae373ffed79a7a",
+      "latest-preview-offline.png": "504131eadc724046354e5e80a20ba455b252d7b4be198039e4dd4780a7aaa4a0",
+      "thread-offline.png": "c6da5673f08c46b91770667b17673bb8243ba29488b00460047a83639a3f60b1",
+      "inspector-all.png": "faa8fd453d84f30999f0f95ad0b4900f61801fea17994b69969110f1d5c0387a",
+      "inspector-ktor.png": "6b93e3d55d65fc865542a9de6e9a11399cb9d036e2609cc79b0d854f46128cbb",
+      "inspector-matrix-send.png": "a7bdd934ec5ff9f0d7728a9bd182718114096bca7c617564a26e064807717670",
+      "inspector-matrix-detail-0.png": "5b16cdca0767a71ba1fcfb0f783cdfd45f95538a7d3dff6037129ed4d9a6fd18",
+      "inspector-matrix-detail-1.png": "fe5da7d4a5bbd1f7d607df19a75de26520c020f3d07d6640df84ecd2e997a2a0",
+      "inspector-cleared.png": "82b5bea3616754f6eaa209cb802cc474a0426040891a4117a4c7c21e49f2255f"
+    },
+    "originalStorePreserved": true,
+    "explicitNewMessagesSent": 1,
+    "onlineSentObservedBySeconds": 5.071,
+    "duplicateBubbleObserved": false,
+    "immediateKeyboardViewportAccepted": false,
+    "remainingKeyboardIssue": "Composer becomes disabled during local save, dismissing the keyboard. Pending dedicated fix; this build does not claim keyboard viewport acceptance.",
+    "phoneLatencyResolved": false,
+    "latencyBoundary": "Coarse emulator UI observations; not a transport ACK benchmark or phone guarantee.",
+    "sdkCandidate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+    "videoReviewScope": "First six seconds of one online send recording, sampled at four frames per second and visually inspected in three storyboards. Not a full-recording frame-by-frame audit.",
+    "originalHistoryAfterColdOfflineRestart": true,
+    "viewportObservation": "One visible pending bubble above composer throughout captured post-save frames; keyboard still dismisses during save. No duplicated bubble is visible in the sampled frames; overall keyboard/editor polish remains open.",
+    "captureOverheadAccepted": false,
+    "localSendTimings": {
+      "accepted": true,
+      "versionCode": 58,
+      "apkSha256": "d8eaaf255852af5ddd2e8754da8d498e3d16598b70bc3bab56f50fd01bfc6e24",
+      "startedAt": "2026-11-07T23:35:16.937772+00:00",
+      "serial": "emulator-5562",
+      "processId": 3228,
+      "phaseDurationsMillis": {
+        "DraftPersistence": 711,
+        "CommandPreparation": 294,
+        "CommandQueue": 211,
+        "CommandConfirmation": 85
+      },
+      "phaseOutcomes": {
+        "DraftPersistence": "Succeeded",
+        "CommandPreparation": "Succeeded",
+        "CommandQueue": "Succeeded",
+        "CommandConfirmation": "Succeeded"
+      },
+      "sharedGestureTrace": true,
+      "distinctPhaseSpans": 4,
+      "originalLogSha256": "e20fe9eafb8d7c7375a4a1ed27cebaaad668cbd76341d1eedf2a3fa316ae07b7",
+      "bodyOrOwnerRetainedInDiagnostics": false,
+      "boundary": "Same-process monotonic local phases; overlaps with asynchronous delivery. Not end-to-end acknowledgement latency or transport overhead."
+    },
+    "sdk5NativeBytecodeVerified": true
+  },
+  "observations": [
+    {
+      "phase": "online-send",
+      "tapStartedAt": "2026-11-07T23:35:26.170284+00:00",
+      "observations": [
+        {
+          "secondsAfterTap": 2.997,
+          "visibleCopies": 1,
+          "sent": false,
+          "pending": true,
+          "bubbleBounds": [
+            33,
+            1921,
+            1047,
+            2065
+          ],
+          "composerBounds": [
+            22,
+            2120,
+            904,
+            2252
+          ],
+          "aboveComposer": true
+        },
+        {
+          "secondsAfterTap": 5.071,
+          "visibleCopies": 1,
+          "sent": true,
+          "pending": false,
+          "bubbleBounds": [
+            33,
+            1921,
+            1047,
+            2065
+          ],
+          "composerBounds": [
+            22,
+            2120,
+            904,
+            2252
+          ],
+          "aboveComposer": true
+        }
+      ],
+      "online": true,
+      "keyboardVisibleBeforeSend": true,
+      "confirmedUiSeconds": 5.071
+    }
+  ],
+  "phoneInstallation": {
+    "confirmed": true,
+    "startedAt": "2026-11-07T23:39:22.127769+00:00",
+    "elapsedSecondsIncludingVerification": 63.121,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 58,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "d8eaaf255852af5ddd2e8754da8d498e3d16598b70bc3bab56f50fd01bfc6e24",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-08 06:40:21",
+      "versionCode": "58 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    },
+    "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+  },
+  "emulatorStopped": {
+    "pid": 3445294,
+    "startTicks": "177112360",
+    "stopped": true,
+    "dataRetained": true,
+    "phoneTouched": false,
+    "at": "2026-11-07T23:38:27.603176+00:00"
+  },
+  "jobsReaped": [
+    59663,
+    17871,
+    23122,
+    26560,
+    18144,
+    60488,
+    92147,
+    64132,
+    87885
+  ],
+  "captureCompleteness": {
+    "observedTotal": 98,
+    "observedKtor": 82,
+    "observedMatrix": 16,
+    "reportedObservationLoss": 1,
+    "clearRemovesOldSend": true,
+    "newCaptureRowsAfterClear": 3,
+    "boundary": "Counts include startup and navigation, not per-send request counts. One incomplete/lost observation is visible; the selected send has all stages."
+  },
+  "preflightCorrections": [
+    {
+      "stage": "phone preflight called before acceptance",
+      "outcome": "Stopped before ADB with missing release-acceptance.json; repeated after acceptance successfully."
+    },
+    {
+      "stage": "first installer invocation omitted --install-only",
+      "outcome": "Argparse rejected it before ADB. Explicit --install-only invocation succeeded."
+    }
+  ],
+  "limits": [
+    "No keyboard or acknowledgement latency fix in this build.",
+    "Local phase durations can overlap background delivery. Do not infer end-to-end latency from their sum.",
+    "Device/host clock difference was not bounded. UI observations are coarse; no phone latency guarantee.",
+    "No capture overhead comparison yet. SDK5 and library artifacts remain unpublished."
+  ]
+}

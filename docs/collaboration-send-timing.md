@@ -34,7 +34,7 @@ cases. The complete application gate passes5,560 fresh cases with zero failures,
 errors or skips on4,427 unchanged inputs in859.724s. Root checks, Android host tests,
 release compilation/lint, Wasm/iOS source compilation and quality checks pass; lint
 has zero issues. [Exact results and retained first failure](measurements/collaboration-send-timing-local-2026-11-07.json).
-No build58 or new device timing is claimed yet.
+Build58 device and installation acceptance is recorded below.
 
 The prepared build58 probe owns one per-process log reader on the dedicated emulator,
 records one explicit original-account send, and stops collection before leaving the
@@ -42,3 +42,24 @@ thread. Raw logs remain local. Its report requires four successful correlated ph
 and publishes only closed timing fields. These intervals can overlap asynchronous
 delivery: adding them is not an end-to-end acknowledgement or network latency measure.
 Actual capture overhead needs a separate comparison with observation disabled.
+
+## Original Android account acceptance
+
+Source09e7eaf7/build58 passes its package/signature/native-byte checks and is installed
+in place on the authorized phone, retaining application ID, first installation and data.
+The owned original Bima emulator sent one new message, then cold-started offline;
+original history and the latest list preview remained visible. Nine screenshots and
+three video storyboards (first six seconds at4fps) were inspected. All owned jobs are
+reaped and the emulator is stopped. [Exact evidence](measurements/collaboration-send-timing-device-2026-11-07.json).
+
+The four correlated local phases took711ms (draft persistence),294ms (preparation),
+211ms (queue),85ms (confirmation). The actual original Matrix send was one HTTP200
+attempt with225ms to headers and229ms transfer/59bytes. Coarse UI polls showed a
+single pending bubble at2.997s and sent at5.071s, above the composer in both samples.
+The full inspector showed98 requests, including82Ktor and16Matrix, and one observation
+loss. Clear removed the old send; three fresh capture rows appeared afterward.
+
+These measurements do not isolate the full pending delay, nor do they justify removing
+scheduler/authorization checks. Keyboard dismissal during the existing disabled-input
+phase remains visible. Separate durable ownership for prepared sends and subsequent
+editing remains required before accepting input throughout submission.

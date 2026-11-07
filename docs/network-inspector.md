@@ -1,10 +1,10 @@
 # Development network inspection
 
 This integration candidate uses the separate [KMP Network Inspector](https://github.com/fajarxfce/kmp-network-inspector)
-repository. The repository is currently private and no library package is published.
+repository. The repository is now public with explicit owner approval; no library package is published.
 Do not copy its source into this repository or change its visibility to make CI pass.
 
-**Build57 is installed on the authorized Android phone after actual emulator acceptance.**
+**Build58 is installed on the authorized Android phone after actual emulator acceptance.**
 Ktor/API and Rust Matrix HTTP capture, filters, detail/back, Clear and cold offline chat
 continuity passed. This branch selects the unpublished, paired four-ABI SDK5 candidate;
 immutable SDK4 release assets are unchanged. [Device/package evidence](measurements/network-inspector-host-device-2026-11-07.json).
@@ -41,8 +41,8 @@ mirror, for example:
   --dependency-verification strict
 ```
 
-Catalog versions and exact checksums are retained. Public CI cannot resolve the private,
-unpublished dependency by default; do not merge this candidate into the primary branch
+Catalog versions and exact checksums are retained. Public source is available; CI still needs explicit source/dependency distribution for the
+unpublished library and SDK5. Do not merge this candidate into the primary branch
 until distribution is ready. The library targets Android, iOS, JVM and Wasm. Portable
 core/Ktor/viewer tests and Apple klib compilation are separate from platform acceptance:
 Android's actual JNI observer passes six loopback scenarios. Four Swift/native observer
@@ -75,3 +75,9 @@ Firebase's optional inspection parameter precedes its final HTTP engine factory,
 preserving existing trailing-lambda injection. Two actual Ktor/Koin cases verify lazy
 engine ownership, the original response, and capture after reset. The complete
 workspace gate also passes; [exact compatibility evidence](measurements/firebase-inspector-engine-factory-2026-11-07.json).
+
+Build58 adds correlated local send timing without changing delivery. See the
+[device measurement](measurements/collaboration-send-timing-device-2026-11-07.json).
+Inspector [PR1](https://github.com/fajarxfce/kmp-network-inspector/pull/1) now runs
+public portable/Apple checks; its first portable setup exposed an obsolete SDK tools
+package and has a workflow-only correction. Apple binding and overhead remain open.

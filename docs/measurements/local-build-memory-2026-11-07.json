@@ -1,0 +1,23 @@
+{
+  "at": "2026-11-07T23:44:32.247422+00:00",
+  "machineMemoryGiB": 31.33,
+  "emulatorGuestMiB": 1536,
+  "emulatorStoppedAt": "2026-11-07T23:38:27.603176+00:00",
+  "unusedOwnedJavaDaemonsFound": 0,
+  "activeCompiler": "Starter result-timing port; --no-daemon, --no-parallel, --max-workers=1, heap2GiB; observed total RSS about3.1GiB.",
+  "tmpfsCleanup": {
+    "bytesMoved": 8510893345,
+    "directoriesMoved": 519,
+    "archive": "/home/fajar/hris/.work/tmp-browser-cache-2026-11-07",
+    "method": "Reversible disk copy with per-file SHA-256 verification, unchanged source stat checks and no active process references before removing only exact old generated Karma directories.",
+    "finishedAt": "2026-11-07T23:42:57.085531+00:00",
+    "remainingTmpfsMiBApprox": 725
+  },
+  "availableMemoryGiBApprox": {
+    "before": 5.1,
+    "after": 10
+  },
+  "processesKilled": [],
+  "otherServicesStopped": false,
+  "nextBuildTempDirectory": "/home/fajar/hris/.work/build-tmp"
+}

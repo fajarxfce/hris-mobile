@@ -1,5 +1,45 @@
 # Agent continuation — HRIS Mobile
 
+## Build58 installed; public inspector CI and resource cleanup — 07 November 2026, 23:44 UTC
+
+Phone and stopped original Bima emulator now run58 on source09e7eaf7. All package,
+probe, passive-crash, stop and phone-install jobs are reaped. The exact APK is
+`d8eaaf255852af5ddd2e8754da8d498e3d16598b70bc3bab56f50fd01bfc6e24`;
+phone update57→58 took63.121s including verification with --install-only, no data reset
+or phone UI. One original-account send and cold offline history/preview continuity pass.
+[Device evidence](measurements/collaboration-send-timing-device-2026-11-07.json).
+Local phases711/294/211/85ms share one gesture trace. Matrix HTTP200 takes225ms to
+headers/229ms transfer; pending/sent UI polls2.997/5.071s are coarse. Keyboard still
+closes during save. No composer/latency fix or overhead acceptance is implied.
+
+The user explicitly approved PUBLIC inspector visibility; GitHub verifies it. Current
+library PR1 runs the first public checks. Original head d78c0a6 run42426252305 has a
+portable setup failure (obsolete Android tools package); its Apple job continues.
+Workflow-only correction276cc1c was committed in isolated worktree
+`.worktrees/inspector-public-ci-2026-11-07` and pushed to the PR branch. Library main
+checkout remains d78c0a6 so the active Starter gate retains identical inputs. After that
+gate is reaped, fast-forward the library checkout; inspect both CI runs/artifacts.
+SDK5/library artifacts remain unpublished and primary Mobilebe2fe021 remains unchanged.
+
+Sole local compiler: Starter result-timing port87993,4 source/build files copied after
+Mobile device acceptance; no emulator runs. Reap and inspect its exact gate before
+accepting/pushing. It ports only generic measureAppResult, operation names and tests.
+
+The user reported RAM pressure. No idle owned Java build daemon was found; active
+Java services and other Codex sessions were retained.519 unused generated Karma cache
+directories,7.93GiB, were copied from RAM-backed /tmp to disk with per-file hashes,
+unchanged-source checks and no live references. Available memory rose about5.1→10GiB.
+[Resource record](measurements/local-build-memory-2026-11-07.json). Use
+`TMPDIR=/home/fajar/hris/.work/build-tmp` for future local build runners (disk-backed),
+retain one compiler OR emulator, and reap --no-daemon builds. Emulator guest RAM is
+1536MiB; that is not a host RSS guarantee. Do not kill unrelated running services.
+
+Next finish Starter port and current public CI, then address the measured composer
+handoff/latency, Apple inspector binding/overhead/distribution, and all54 original PRD
+groups. Journal and atomic command/replica handoff are still design alternatives, not
+implemented or selected. No group is newly complete. Live API2e75fe1e,worker10485916,
+schema116.1 and disabled Group routing are unchanged; V117–138 remain undeployed.
+
 ## Local send measurements accepted — 7 November 2026, 23:28 UTC
 
 Full-1/60113 is REAPED:859.724s,4,427 unchanged app inputs and unchanged private-library
