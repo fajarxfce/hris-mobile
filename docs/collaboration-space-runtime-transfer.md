@@ -63,3 +63,7 @@ with original scope and no fabricated command key. Ordinary POST, streaming bodi
 and other unsafe methods keep their existing restrictions. Cancellation interrupts
 refresh/replay. The first transport gate exposed this missing explicit classification;
 its original two failures are retained, not weakened to accept a login interruption.
+
+The [owning transfer flow](collaboration-space-runtime-transfer-flow.md) now coordinates
+publication, existing-only stop/join/private proof and staging, current admission,
+same-operation freeze and one drain observation. It has no product caller or adoption.

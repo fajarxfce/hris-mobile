@@ -1,5 +1,9 @@
 # Architecture
 
+[Original runtime transfer](collaboration-space-runtime-transfer-flow.md) owns the finite
+publication, private-store staging, admitted freeze and drain sequence. SDK adoption
+and product activation remain separate.
+
 [Foreground chat delivery](collaboration-foreground-delivery.md) gives the Android
 process a lifecycle-owned wake path while WorkManager retains persistent background
 scheduling. Both use the same admitted worker and existing SDK writer exclusion.

@@ -1,0 +1,105 @@
+{
+  "recordedAt": "2026-11-07T03:45:58.110410+00:00",
+  "baseCommit": "c1410b31229541844b0d215d81faede385b432d6",
+  "sourceFiles": {
+    ".github/workflows/collaboration-control.yml": "9bd3dce290f87c753de3f78f421ec2a3b5918a396d91430efc0fade4abe8262b",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "8038fd02258978a7d2f47af985027f211950d40323dacf48ec8080aff099834e",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "b381ab0f56d43976d6d3f117a6c1832aff2cce69993b1727e835e4ba81d1e6e7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceRuntimeTransferProgress.kt": "548ec975ce79db346cf23d68b57e0a056e95c56611d477b4187460d1001711ca",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceRuntimeTransferPolicy.kt": "696f092d2d5c7e42c6316cf5eb7d68320ddaac456a2abbfe02b28c2f51698d01",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AdvanceCollaborationSpaceRuntimeTransfer.kt": "ec60df3dea355d14d65c9ef29ff5f392fd78a3491541c595a82b9f55aac9f7bd",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/AdvanceCollaborationSpaceRuntimeTransferTest.kt": "acf94054e09c649c2b55bd35953f810556d93d1f4594b4558a2eadd8c50fdfc8",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRuntimeTransferFixture.kt": "62d8fb1087ff7225b533e4872dd766da31b6650e544dc81be7eb67ba1b1c2c04"
+  },
+  "attempts": [
+    {
+      "name": "focused-1",
+      "startedAt": "2026-11-07T03:31:53.396226+00:00",
+      "elapsedSeconds": 178.895,
+      "exitCode": 0,
+      "sourceFiles": 4276,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 2,
+      "inputManifestSha256": "9a8b37bef8d192f688d5481c67ca49059cf00e564a899e4cfa95d028a9520d51",
+      "stdoutSha256": "03300330799fe011bd8eb5d8dba143997f3518011af87ca8b8652fa5dc5a9dc7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "full-1",
+      "startedAt": "2026-11-07T03:35:09.994622+00:00",
+      "elapsedSeconds": 585.003,
+      "exitCode": 0,
+      "sourceFiles": 4276,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5552,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 646,
+      "inputManifestSha256": "9a8b37bef8d192f688d5481c67ca49059cf00e564a899e4cfa95d028a9520d51",
+      "stdoutSha256": "222efc64e544a8d3967f356ec8b81c32784690741c6d1ab6f37d4a031092a27f",
+      "stderrSha256": "522ddc3d34e5d27512f3944bc0edb798ac3fb4c44a2a811e093f6c54d3e22f54"
+    }
+  ],
+  "acceptedCommand": [
+    "xvfb-run",
+    "-a",
+    "env",
+    "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+    "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+    "ANDROID_HOME=/home/fajar/Android/Sdk",
+    "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    "--stacktrace",
+    "--continue",
+    ":check",
+    ":features:collaboration:data:testAndroidHostTest",
+    ":apps:collaboration-proof:compileDebugKotlin",
+    ":apps:collaboration-proof:assembleDebug",
+    ":core:network:wasmJsBrowserTest",
+    ":core:worker:wasmJsBrowserTest",
+    ":core:database:wasmJsBrowserTest",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    ":features:collaboration:domain:wasmJsBrowserTest",
+    ":features:collaboration:presentation:wasmJsBrowserTest",
+    ":apps:android:assembleDevDebug",
+    ":apps:android:lintDevDebug",
+    ":formatCheck",
+    ":architectureCheck",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=53",
+    "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx2560m",
+    "-Pkotlin.compiler.execution.strategy=in-process"
+  ],
+  "freshCounts": {
+    "tests": 5552,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "freshSuites": 646,
+  "unchangedInputs": 4276,
+  "lintFindings": 0,
+  "detektFindings": 0,
+  "limitations": [
+    "No product caller, group activation, deployment or actual transfer.",
+    "SDK stop/join/private proof comes from the separately accepted original-store repository; these tests use controlled repository outcomes.",
+    "No new encrypted send or SDK publication.",
+    "Completed metadata does not authorize bootstrap or SDK adoption."
+  ]
+}

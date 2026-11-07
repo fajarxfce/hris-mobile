@@ -4,13 +4,14 @@ This is the active checkpoint. The [historical handoff](agent-handoff-history-th
 retains earlier work verbatim. Detailed measurements below are authoritative; do not
 restart accepted builds, native sends or SDK publication solely to recreate evidence.
 
-## Current next step — 7 November 2026, 03:25UTC
+## Current next step — 7 November 2026, 03:46UTC
 
 Release53/source08545820c0b58f46d784971e71ceb207dd628c0f is INSTALLED on the authorized
 phone. Original latency report stays OPEN. The optional question about whether new Bima
 messages now become checked sooner is pending; do not repeat it. Passive audit02:53:33
-had no post-install UID lines. At03:10 ADB was offline before reading logs; neither
-observation establishes delivery. No agent phone UI, new send, uninstall or data clear.
+had no post-install UID lines. At03:10 ADB was offline. Read-only audit03:40:49 reached the phone again, with
+zero post-install chat lines/fatals and unchanged rawSHA518c42ad6b85ace21148a5ba2750bdfc338828db4c59c8372d8e95485297dd66.
+Neither observation establishes delivery. No agent phone UI, new send, uninstall or data clear.
 
 Bima has one confirmed eligible device and an original matched send HTTP200; he need
 not remain online. Four captured403room_send failures belong to another owned room
@@ -36,29 +37,48 @@ write or activation. The first82879 failed two transport assertions; second62485
 11transport cases but core test nullable assertion did not compile. Corrected41607 passed
 37fresh core-network cases, unchanged transport reports reused. All original failures
 and manifests remain in [the accepted record](measurements/collaboration-legacy-publication-transport-2026-11-07.json).
-Eleven Kotlin source/test files must be committed/pushed together. Generic SessionAuthentication
-and its new ReadOnlyPostAuthenticationTest are the only two files to port to Starter.
+Eleven Kotlin source/test files are committed/pushed as c1410b31229541844b0d215d81faede385b432d6.
+Generic SessionAuthentication and ReadOnlyPostAuthenticationTest are now ported to Starter.
 Read-only POST opts into one repeatable-body auth replay; ordinary POST/PATCH/streaming,
 original scope and cancellation guards remain. No invented command idempotency key.
 
-There is NO heavy local job or emulator. Owning-flow candidate is PREPARED ONLY under
-.work/runtime-transfer-flow-2026-11-07: publication, exact existing SDK stop/join/private
-proof and durable target, current admission, same-operation freeze and one drain read.
-No live caller or adoption. Apply only after the accepted transport is committed/pushed.
-Finish its tests/DI and validate; do not rerun accepted native sends merely for evidence.
+Owning AdvanceCollaborationSpaceRuntimeTransfer is NOW accepted locally: focused29903
+passed16cases(14domain+2actualDI) in178.895s; full12140 passed5,552fresh cases/646suites
+in585.003s with4,276unchanged inputs and zero failures/errors/skips/lint/Detekt. Eight
+source/CI files are ready to commit/push atomically with their contract/evidence.
+[Owning flow](collaboration-space-runtime-transfer-flow.md). No product caller, adoption,
+live freeze or new native encrypted send. Private drivers: .work/runtime-transfer-flow-2026-11-07.
+It preserves original operation through loss/cancellation and revalidates current
+admission after private SDK staging. Publication lifetime uses conservative monotonic
+elapsed request time, not mixed server/device wall clocks.
+
+There is NO heavy local job or emulator. Next: commit/push the accepted owning flow to
+temporaryfeat/chat-recovery-20261107. Preserve first c141 control42333989403 while it is
+PENDING before another primary source push. Then apply the prepared ten-file adoption
+candidate from .work/space-sdk-adoption-2026-11-07 using apply.py. It requires a clean,
+pushed owning-flow HEAD and exact accepted inputs. Candidate is formatted ONLY, NOT
+compiled or tested: strict schema4 retains all original fields/keys/queue/handover and
+separate group credentials; explicit per-lease namespace prevents original callbacks
+from selecting group credentials or stale operations. Six codec, four common persistence
+and three Android callback tests are prepared. Run focused then full, never concurrently.
+No new SDK artifact, native runtime activation or group-routing support is claimed.
 
 Starter0002d102ba2dab693aef4173ab7b958d39ab7d03 exact generic worker port passed86151
 in245.086s:90fresh cases/29suites/1,024stable inputs;zero failures/errors/skips/Detekt/lint
 errors,44existing warnings. FIRST Apple42331840556 is now SUCCESS and artifact audited:
 154cases/37suites,including16core-worker cases,zero failures/errors/skips; actual simulator
 app/associations passed. Artifact13558119586SHA6680c3547acadf552f77bb93fe106459efa99f1462ea328a7db41b7ad18798eb.
-Starter .work/read-only-post-port-2026-11-07 is prepared but NOT applied. Guarded apply
-requires committed accepted Mobile transport. Prior Apple run is complete; next accepted
-port may dispatch its own first Apple gate. Record existing worker Apple evidence with it.
+Starter fdbff51fd09605a2dba546ce9020b595f467c26c is committed/pushed: exact two-file
+network port plus Apple network targets passed61036/check-1 in305.569s,194fresh cases/
+64suites,1,025stable inputs, zero failures/errors/skips/Detekt/lint errors,44oldwarnings.
+Root/network-browser/Android/productionWeb passed. FIRST Apple42334504381 is dispatched
+once and IN_PROGRESS; keep it intact. Audit driver is prepared under Starter
+.work/read-only-post-port-2026-11-07. Prior worker Apple is complete/audited as above.
 
 CI-only7c1a7293 is pushed on the temporary Mobile branch; it adds worker tests and reports
-across desktop/browser/Apple. First085control42330502891 is IN_PROGRESS, so accepted new
-source may fast-forward originfeat/communications (currently52ca0720/docs above085).
+across desktop/browser/Apple. First085control42330502891 remains IN_PROGRESS. Originfeat/communications is now c1410b31;
+its FIRST control42333989403 is PENDING, native42333989369 runs. Preserve that first
+pending control before promoting the next accepted source; temporary branch pushes continue.
 First085native42330503083 SUCCESS:446cases/74suites EACHABI,0failures/errors/skips;
 artifacts13558198023/13557828538 audited and hash verified. Protocol42330502995 SUCCESS,
 14checks eachmode, artifacts13557920777/13557588423 audited. Public native/protocol records
@@ -74,7 +94,7 @@ organization routing and all54PRD groups remain unfinished. Continue the authori
 run, push each atomic commit, and announce each phone installation with explicit serial
 10.77.77.3:5555 and --install-only. No agent phone UI.
 
-## Current work — 7 November 2026
+## Historical trace through release52 — superseded by the checkpoint above
 
 The original physical-phone pending-message report is **OPEN**. Release51 fixed
 older physical queues blocking current-store batch selection. Its passive log then
@@ -143,7 +163,7 @@ runs below before another source push. Docs-only pushes do not trigger these gat
   [Contract](collaboration-existing-store-handover.md),
   [evidence](measurements/collaboration-existing-store-handover-2026-11-06.json).
 
-## Next actions
+## Historical next actions through release52
 
 1. Release52 is accepted/installed. Use post-install UID logs to distinguish the
    actual native queue rejection; no agent phone UI action or replacement send. An
