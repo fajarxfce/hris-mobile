@@ -1,0 +1,174 @@
+{
+  "recordedAt": "2026-11-07T00:41:09.634405+00:00",
+  "source": {
+    "baseCommit": "fd05b7318b0f4cc2e562d5d9ec29481923bc563c",
+    "sourceBranch": "feat/chat-recovery-20261107",
+    "sourceManifestSha256": "58aebcc0c2f03e7c0456692733d231f114768f355660ce48585aa223704c6731",
+    "sourcesUnchanged": true,
+    "candidateOnly": true,
+    "normalPublicSdk": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.4"
+  },
+  "build": {
+    "startedAt": "2026-11-07T00:23:45.453528+00:00",
+    "elapsedSeconds": 499.447,
+    "exitCode": 0
+  },
+  "artifact": {
+    "candidateOnly": true,
+    "diagnosticMarkersAbsent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-07-build52/hris-mobile-dev-release-1.0.0-52-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 52,
+    "versionName": "1.0.0",
+    "bytes": 121022756,
+    "sha256": "88600d7650a5c46e7c77a571c0d2ac2b00fe27849901d41cbf7fc5e9b773dbd0",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "sameInstalledSigner": true
+  },
+  "sdkVerification": {
+    "nativeSha256": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34",
+    "nativeBytes": 97477760,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "aarSha256": "9b6806de02b7d40b8487b54a51b192c114a38c68c6dfe35c68faf50d3b6bfd21",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.4",
+    "strippedNativeMatchesVerifiedSdk": true,
+    "stripToolNdkVersion": "28.2.13676358",
+    "queueApisAndUseCaseInDex": true
+  },
+  "ownedAcceptance": {
+    "accepted": true,
+    "at": "2026-11-07T00:39:00.825172+00:00",
+    "sourceCommit": "fd05b7318b0f4cc2e562d5d9ec29481923bc563c",
+    "apkSha256": "88600d7650a5c46e7c77a571c0d2ac2b00fe27849901d41cbf7fc5e9b773dbd0",
+    "screenshotsInspected": true,
+    "normalPublicSdk": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.4",
+    "rootedOwnedGuestUsedOnlyForClockSimulation": true,
+    "staleOfflineReadAndRealTimeOnlineReopenAccepted": true,
+    "emulatorSettingsAndPrivilegeRestored": true,
+    "originalStorePreserved": true,
+    "newMessagesSent": 0,
+    "phonePendingResolved": false,
+    "screenshotsSha256": {
+      "offline.png": "583b407534f79faad184aeb45e72140f3ca7e74f137220373b6d294fca0e107d",
+      "online.png": "52b54ed8ab66a4e797105905de31b9f3e8375f6548e1f082d19883176d73a6f1"
+    }
+  },
+  "ownedProbe": {
+    "startedAt": "2026-11-07T00:37:09.556865+00:00",
+    "accepted": true,
+    "serial": "emulator-5562",
+    "versionCode": 52,
+    "installedApkSha256": "88600d7650a5c46e7c77a571c0d2ac2b00fe27849901d41cbf7fc5e9b773dbd0",
+    "phoneTouched": false,
+    "newMessagesSent": 0,
+    "snapshots": [
+      {
+        "mode": "offline",
+        "opening": 1,
+        "visibleRows": 12,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      },
+      {
+        "mode": "offline",
+        "opening": 2,
+        "visibleRows": 12,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      },
+      {
+        "mode": "online",
+        "opening": 1,
+        "visibleRows": 12,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      },
+      {
+        "mode": "online",
+        "opening": 2,
+        "visibleRows": 11,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      }
+    ],
+    "settingsRestored": true,
+    "staleAuthoritySimulated": true,
+    "guestClockShiftSeconds": 3900,
+    "hostClockChanged": false,
+    "currentPhase": "online",
+    "offlineRows": 12,
+    "onlineRows": 12,
+    "sameProcessAfterOnlineWait": true,
+    "guestClockRestored": true,
+    "adbPrivilegeRestored": true
+  },
+  "emulatorStopped": {
+    "pid": 2570618,
+    "startTicks": "168846713",
+    "stopped": true,
+    "dataRetained": true,
+    "phoneTouched": false,
+    "at": "2026-11-07T00:39:02.859924+00:00"
+  },
+  "installation": {
+    "confirmed": true,
+    "startedAt": "2026-11-07T00:39:08.503354+00:00",
+    "elapsedSecondsIncludingVerification": 81.848,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 52,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "88600d7650a5c46e7c77a571c0d2ac2b00fe27849901d41cbf7fc5e9b773dbd0",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-07 07:40:27",
+      "versionCode": "52 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    },
+    "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+  },
+  "originalPendingReportResolved": false,
+  "meaning": "Closed-store recovery capability and bounded native queue diagnostics; no forced acknowledgement or product group activation."
+}

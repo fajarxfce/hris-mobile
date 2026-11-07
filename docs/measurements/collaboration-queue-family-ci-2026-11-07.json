@@ -1,0 +1,201 @@
+{
+  "recordedAt": "2026-11-07T00:37:02.440236+00:00",
+  "head": "68d848b7fed810984ddb59ca53079442dcac7819",
+  "native": {
+    "id": 42310411202,
+    "status": "completed",
+    "conclusion": "success",
+    "platformPin": "62ee11818a4928b2598d046c7b3283bf3e416554",
+    "artifacts": [
+      {
+        "artifactId": 13551023588,
+        "name": "native-hris-arm64-evidence",
+        "sha256": "cf8c743404cdb504be2f3a2b57186c6dc34e0d1a388ed36a019e2026fbdb2310",
+        "bytes": 284616,
+        "suites": 70,
+        "counts": {
+          "tests": 412,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "abi": {
+          "abi": "arm64-v8a",
+          "apkSha256": "d72daa11954abbd596422612c62716f1c722b56b80df97f18a5fc7692d4f27a2"
+        },
+        "proof": {
+          "platform/.work/collaboration/24c9c53358074801ac36a4bb138ae54a/verified.json": {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSendCount": 3,
+            "nativeRedactionRequests": 0,
+            "retainedConfirmedQueueScenario": false,
+            "processRestartedAfterAck": true,
+            "processRestartedAfterCompletion": true
+          },
+          "platform/.work/collaboration/61edc9c3b70e407ba8cfdb4d1bcf90aa/verified.json": {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSendCount": 3,
+            "nativeRedactionRequests": 0,
+            "retainedConfirmedQueueScenario": true,
+            "confirmedNativeQueueRestored": true,
+            "confirmedNativeQueueRetryNoop": true,
+            "confirmedNativeQueueSettledOffline": true,
+            "processRestartedAfterAck": true,
+            "processRestartedAfterCompletion": true
+          },
+          "platform/.work/collaboration-worker/41fc9e53a3f8487fb5a1fb65218c7aa1/acceptance.json": {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 1,
+            "workManagerExecutionAccepted": true,
+            "retryCancellationAccepted": false
+          },
+          "platform/.work/collaboration-worker/43862a1546554551837a30887e291f2e/acceptance.json": {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 176,
+            "foregroundHistoryAccepted": true,
+            "platformWorkManagerAccepted": false
+          },
+          "platform/.work/collaboration-worker/5859dcc214dc4f4bb4dfa143e3a2fcc2/acceptance.json": {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 176,
+            "foregroundHistoryAccepted": true,
+            "platformWorkManagerAccepted": false
+          },
+          "platform/.work/collaboration-worker/f188ba67a7c5499dbc3ffd4d34426308/acceptance.json": {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 176,
+            "foregroundHistoryAccepted": true,
+            "platformWorkManagerAccepted": false
+          },
+          "mobile/.work/native-notification-proof/result.json": {
+            "complete": true,
+            "fixtureAbsent": true,
+            "fixtureUninstalled": true,
+            "fixtureDataCleared": true
+          }
+        }
+      },
+      {
+        "artifactId": 13550878772,
+        "name": "native-hris-evidence",
+        "sha256": "531d6e99ac9c1685c840abce52021c1551042efe541a3125e9058d02e020c890",
+        "bytes": 285192,
+        "suites": 70,
+        "counts": {
+          "tests": 412,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "abi": {
+          "abi": "x86_64",
+          "apkSha256": "300d3ae8d30e0a61fd03e86ba167dbcbc31973b6997216587359cc30f119d702"
+        },
+        "proof": {
+          "platform/.work/collaboration/f57a626ee910401292158c2d815dc838/verified.json": {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSendCount": 3,
+            "nativeRedactionRequests": 0,
+            "retainedConfirmedQueueScenario": true,
+            "confirmedNativeQueueRestored": true,
+            "confirmedNativeQueueRetryNoop": true,
+            "confirmedNativeQueueSettledOffline": true,
+            "processRestartedAfterAck": true,
+            "processRestartedAfterCompletion": true
+          },
+          "platform/.work/collaboration/f66cdf64d898401f8d43d0f67d414019/verified.json": {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSendCount": 3,
+            "nativeRedactionRequests": 0,
+            "retainedConfirmedQueueScenario": false,
+            "processRestartedAfterAck": true,
+            "processRestartedAfterCompletion": true
+          },
+          "platform/.work/collaboration-worker/086bea6cd4264a8d873111ea399bcfb2/acceptance.json": {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 176,
+            "foregroundHistoryAccepted": true,
+            "platformWorkManagerAccepted": false
+          },
+          "platform/.work/collaboration-worker/22cf4987767c4cb28f08f746ce89336d/acceptance.json": {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 176,
+            "foregroundHistoryAccepted": true,
+            "platformWorkManagerAccepted": false
+          },
+          "platform/.work/collaboration-worker/6ce13b53d4f3421fab7c057f9bdb0095/acceptance.json": {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 1,
+            "workManagerExecutionAccepted": true,
+            "retryCancellationAccepted": false
+          },
+          "platform/.work/collaboration-worker/732919a6d4874171863e6f626483f314/acceptance.json": {
+            "passed": true,
+            "cleanup": true,
+            "encryptedSends": 176,
+            "foregroundHistoryAccepted": true,
+            "platformWorkManagerAccepted": false
+          },
+          "mobile/.work/native-notification-proof/result.json": {
+            "complete": true,
+            "fixtureAbsent": true,
+            "fixtureUninstalled": true,
+            "fixtureDataCleared": true
+          }
+        }
+      }
+    ]
+  },
+  "control": {
+    "id": 42310411055,
+    "status": "completed",
+    "conclusion": "success",
+    "artifacts": [
+      {
+        "artifactId": 13551507805,
+        "name": "collaboration-control-apple",
+        "sha256": "6bdaa1c367f0efcdf8fcfc69c4d89e4afa3846879d7de24c602ddd823f0b07ed",
+        "bytes": 329673,
+        "suites": 196,
+        "counts": {
+          "tests": 1781,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "abi": null,
+        "proof": {}
+      },
+      {
+        "artifactId": 13549754817,
+        "name": "collaboration-control-portable",
+        "sha256": "fd9fc632607d6740211a8ab0ee437b35ea085bc7e637eaf134365e4ddab2a1f3",
+        "bytes": 2300298,
+        "suites": 476,
+        "counts": {
+          "tests": 4422,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "abi": null,
+        "proof": {}
+      }
+    ],
+    "appleHostBuilt": true
+  },
+  "redispatched": false,
+  "physicalPhonePendingResolved": false,
+  "scope": "Original control/native CI for the queue-family correction; not per-message physical-phone acceptance."
+}
