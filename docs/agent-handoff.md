@@ -7,6 +7,27 @@ and [history through build 50](agent-handoff-history-through-build50.md).
 
 ## Current work — 7 November 2026
 
+Original72a first native42358423298 passed on both ABIs:509 cases/82 suites each,
+zero failures/errors/skips, exact immutable SDK4 libraries. Original-queue adoption,
+process death and offline held-writer recovery passed in ARM56.661s/x8639.118s with
+zero provider sends and fixture cleanup. First control42358423232 FAILED portable
+fresh app-test compilation because its runtime fake omitted `acquireOriginalQueue`;
+Apple1,941/221 passed, portable4,747/527 XML is partial, not overall acceptance.
+The missing fake is already fixed and locally accepted in e8fc7844. All original
+artifacts/digests and actual failure are retained in
+[the CI record](measurements/collaboration-original-writer-control-native-ci-2026-11-07.json).
+e8fc first control42360096500/native42360096584 have both started; audit on completion.
+
+Groupf7268950 adds internal original room receipt acquisition under CURRENT native/
+group/participant admission while retaining the unchanged original fingerprint.
+175 fresh domain/database cases passed197.492s with8,617 stable inputs. Its native
+HTTP integration is now the only heavy local job, session24490/http-2; Group sources
+are frozen. Prior HTTP run had93/94 passing, with one incorrect expected401 for a
+missing-bearer POST (existing CSRF boundary returns403); corrected test is running
+with actual API and FULL worker contexts. No new endpoint is live or accepted yet.
+Mobile receipt transport and durable original room/open commands remain next.
+
+
 Native group conversation/open and room request/status transport is now accepted:
 22 source/test files; full87652 passed 3,530 fresh cases/439 suites in416.326s with
 4,349 unchanged inputs and zero failures/errors/skips/Android release lint issues.
@@ -33,9 +54,8 @@ Transport tests verify wire preservation; they do not accept server recovery acr
 an earlier committed fingerprint. Group V117–137 remains disabled and no new APK exists.
 
 Program `e8fc784489e32136a0b47d0df5778af8fee562e5` is pushed to recovery and primary.
-Its first control `42360096500` and native `42360096584` are PENDING; preserve before
-another primary promotion. Prior72a control `42358423232` and native `42358423298`
-still run. Protocol `42358423295` is fully audited SUCCESS:14 checks each, all14
+Its first control `42360096500` and native `42360096584` are IN_PROGRESS.
+Prior72a control/native outcomes are recorded above. Protocol `42358423295` is fully audited SUCCESS:14 checks each, all14
 Platform-pinned sources verified; native91.638s/artifact13568937867 and classic69.285s/
 artifact13568743001. [Original protocol evidence](measurements/collaboration-original-writer-protocol-ci-2026-11-07.json).
 Do not rerun accepted provider scenarios to audit them. Continue on the recovery branch.
