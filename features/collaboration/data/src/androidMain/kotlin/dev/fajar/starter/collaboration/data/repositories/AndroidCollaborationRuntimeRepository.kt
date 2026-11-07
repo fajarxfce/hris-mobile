@@ -36,6 +36,7 @@ class AndroidCollaborationRuntimeRepository(
     private val http: HttpClient,
     private val inventories: CollaborationSdkInventorySource? = null,
     private val privateIdentities: CollaborationSdkPrivateIdentitySource? = null,
+    private val httpObservation: AndroidCollaborationHttpObservation? = null,
 ) :
     CollaborationRuntimeRepository,
     CollaborationLocalDeviceIdentityRepository,
@@ -1003,6 +1004,7 @@ class AndroidCollaborationRuntimeRepository(
         reservation: SdkRuntimeReservation<AndroidCollaborationRuntimeLease>,
         expectedIdentity: CollaborationLocalDeviceIdentity?,
     ) {
+        lease.startHttpObservation(httpObservation)
         clients.restorePaused(client, prepared.session)
         if (expectedIdentity != null) {
             require(clients.identity(client).toLocalDeviceIdentity() == expectedIdentity)

@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data.di
 
 import android.content.Context
+import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationHttpObservation
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationSdkClientSource
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationSdkPrivateIdentitySource
 import dev.fajar.starter.collaboration.data.datasources.FileCollaborationSdkInventorySource
@@ -19,6 +20,7 @@ fun androidCollaborationRuntimeRepository(
     server: IdentityServer,
     endpoint: CollaborationSdkEndpoint,
     http: HttpClient,
+    httpObservation: AndroidCollaborationHttpObservation? = null,
 ): AndroidCollaborationRuntimeRepository {
     val application = context.applicationContext
     return AndroidCollaborationRuntimeRepository(
@@ -35,5 +37,6 @@ fun androidCollaborationRuntimeRepository(
                 File(application.noBackupFilesDir, "collaboration")
             ),
         privateIdentities = AndroidCollaborationSdkPrivateIdentitySource(),
+        httpObservation = httpObservation,
     )
 }

@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data
 
 import dev.fajar.starter.collaboration.data.api.*
+import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationHttpObservation
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLease
 import dev.fajar.starter.collaboration.data.dto.CollaborationGatewayDto
 import dev.fajar.starter.collaboration.data.mappers.toGateway
@@ -27,6 +28,7 @@ import org.matrix.rustcomponents.sdk.SyncSettingsV2
 
 internal suspend fun runtimeLeaseFixture(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    httpObservation: AndroidCollaborationHttpObservation? = null,
     released: (AndroidCollaborationRuntimeLease) -> Unit = {},
 ): RuntimeLeaseFixture {
     val endpoint = CollaborationSdkEndpoint("https://hris.example.test/")
@@ -58,6 +60,7 @@ internal suspend fun runtimeLeaseFixture(
         SdkSessionPersistence(store, codec, initial),
         dispatcher,
         released,
+        httpObservation,
     )
 }
 
@@ -67,6 +70,7 @@ internal class RuntimeLeaseFixture(
     val persistence: SdkSessionPersistence,
     dispatcher: CoroutineDispatcher,
     private val released: (AndroidCollaborationRuntimeLease) -> Unit,
+    val httpObservation: AndroidCollaborationHttpObservation?,
 ) {
     val calls: MutableList<String> = Collections.synchronizedList(mutableListOf())
     var beforePause: suspend () -> Unit = {}

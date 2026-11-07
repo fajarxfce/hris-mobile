@@ -1,0 +1,105 @@
+{
+  "at": "2026-11-07T21:04:09.539498+00:00",
+  "baseCommit": "7d8ef8aa50c367249655133714fd5e4839fe1f39",
+  "scope": "Optional Android client-owned HTTP observation hook. The application has not supplied an inspector yet; SDK4 stays selected.",
+  "sourceSha256": {
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationHttpObservationTest.kt": "d8e57e02bc7c3aa9b3a3e8e548f0ec9dfc5cc7ac85cf1223d4222c86391c1611",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationHttpObservation.kt": "1a96a23332933c1d3280d1459230d8748fef2be03b569ac4e23b39fd6c914b71",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/RuntimeLeaseFixture.kt": "383cdf453f3ce4d789891f23872640eb7fc52e1c8b3229e133f6ecf6aa3801a0",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/di/AndroidCollaborationRuntimeFactory.kt": "37fec95904d38ca44fb774bd5b8751eec4ee1ef1d8d8b141388d3c3620207e5f",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeLease.kt": "0fc6a8fa56136d2d658930744c0fae7dabdfca7156135fe8eb2759eb0e0755d4",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "ee61f02563cb6e7ccab7215b6b7a23a74cb239d18beabbac4a7b0459c6a6183c"
+  },
+  "attempts": [
+    {
+      "name": "full-1",
+      "session": 37523,
+      "reaped": true,
+      "seconds": 879.898,
+      "inputs": 4417,
+      "sourcesUnchanged": true,
+      "counts": {
+        "tests": 5547,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "exitCode": 1,
+      "failure": "New fixture incorrectly called completeAcquisition after requestClose; existing close guard correctly rejected it. LongMethod flagged an extra constructor line in acquisition."
+    },
+    {
+      "name": "full-2",
+      "session": 18525,
+      "reaped": true,
+      "seconds": 146.393,
+      "inputs": 4417,
+      "sourcesUnchanged": true,
+      "counts": {
+        "tests": 534,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "exitCode": 0,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "env",
+        "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+        "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+        "ANDROID_HOME=/home/fajar/Android/Sdk",
+        "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+        "./gradlew",
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":check",
+        ":features:collaboration:data:testAndroidHostTest",
+        ":apps:android:lintDevRelease",
+        ":apps:shared:compileKotlinWasmJs",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=55",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ]
+    }
+  ],
+  "unchangedReportsReusedFromFull1": {
+    "cases": 5013,
+    "hashesMatched": true,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "observerTests": {
+    "sha256": "63f026b6655364dfedc5a5263d9d3a241ecc92dc9b8680afab97fd889fdd15e7",
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lintIssues": 0,
+  "checks": [
+    "Headless root :check",
+    "Android collaboration data host tests",
+    "Android dev release lint",
+    "Shared Wasm compile",
+    "formatCheck",
+    "architectureCheck",
+    "detekt"
+  ],
+  "limitations": [
+    "Inert native clients in host tests; actual JNI adapter acceptance belongs to the inspector repository.",
+    "No application inspector integration, capture timing/overhead, new APK or phone installation.",
+    "Hooks never change SDK4, transport acknowledgement, SDK store ownership or business policy."
+  ]
+}

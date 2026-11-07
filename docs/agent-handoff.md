@@ -1,5 +1,45 @@
 # Agent continuation — HRIS Mobile
 
+## Inspector runtime hook accepted — 7 November2026,21:03UTC
+
+The optional Android HTTP observer hook is accepted locally. It is started once under
+the exact client lease and cancelled/joined before native release; diagnostic failures
+do not change runtime readiness. No app inspector is supplied yet and SDK4 remains.
+[Contract](collaboration-http-observation-lifetime.md) / [measurement](measurements/collaboration-http-observation-lifetime-2026-11-07.json).
+Full-1/37523 is REAPED:879.898s,5547 fresh cases with one incorrect closing fixture and
+one LongMethod finding. Both corrected without weakening the ownership guard or adding
+a helper. Full-2/18525 is REAPED:146.393s/4417 stable inputs,534 fresh cases including7
+observer cases, zero failures/errors/skips. Root check/Wasm/quality/lint pass;5013 first-run
+reports were reused with identical hashes. No compiler or emulator remains from this gate.
+
+Both bb106154 first CI runs are fully audited: control42403266288 Apple2194/241,
+portable5284/571; native42403266310 each ABI553/87, zero failures/errors/skips.
+All archive digests, immutableSDK4 hashes, original-key/queue continuity, six independent
+HRIS scenario cleanups and three new first-layout cases verified. [Evidence](measurements/chat-viewport-first-ci-2026-11-07.json).
+
+Sole heavy local job42291 now checks the inspector capture-lifetime increment in
+/home/fajar/hris/kmp-network-inspector/.work/inspection-lifetime-2026-11-07/strict-1.
+Library sources are FROZEN until reaped. Proposed NetworkInspection reset/close,
+dynamic Ktor recorder lookup, Matrix source rotation,15 common cases and a sixth native
+fixture are UNACCEPTED until this completes. Previous accepted adapter/native work9e710f0
+and fullSDK5 candidate remain. No library publication; private-visibility question pending.
+
+SDK branch9673eb1f is pushed. Apple first42408920984 failed linking because localization
+split primary Cargo codegen units. Three exact Rust grouping tests pass locally; the
+Apple-only correction's first CI42413788416 started21:00:58 and is still running.
+No Apple link/runtime acceptance or SDK5 publication. Android full4ABI and prior5 JNI
+cases remain accepted. Current SDK4 assets and source are untouched.
+
+Phone and original stopped Bima emulator remain55. Preview/draft fixes are installed;
+bb106154 viewport fix awaits56, keyboard/editor handoff and send latency remain open.
+Next finish inspector lifetime/native acceptance, integrate via separate private checkout,
+verify actual host capture/overhead, install validated progress and port to Starter.
+Host integration plan/candidate are .work/inspector-host-2026-11-07; only the plan and
+uncompiled ApplicationNetworkInspection candidate exist. Do not copy private library
+source into Mobile. Composer review .work/chat-composer-handoff-2026-11-07 is unselected,
+not implementation. Continue all54 original communications PRD groups; none complete.
+
+
 ## Native inspector continuation — 07 November 2026, 20:16 UTC
 
 Phone and original stopped Bima emulator remain55. Pending/draft inbox previews and

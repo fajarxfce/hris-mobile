@@ -2,6 +2,7 @@ package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.api.CollaborationPusherApi
+import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationHttpObservation
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationSdkClientSource
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationTimelineSource
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLease
@@ -58,6 +59,8 @@ internal constructor(
     private val acquisitionComplete = AtomicBoolean()
     private val acquisitionFinished = CompletableDeferred<Unit>()
     private val published = AtomicBoolean()
+    private val httpObservationStarted = AtomicBoolean()
+    private var httpObservationJob: Job? = null
     private val sync =
         SdkSyncLifecycle(lifetime) { createAndroidCollaborationSync(nativeClient, lifetime) }
     private val children = SdkChildResources(lifetime)
@@ -130,6 +133,27 @@ internal constructor(
         }
     internal val closingRequested
         get() = stopRequested.get()
+
+    /**
+     * Acquisition invokes this before restore. Shutdown waits for acquisition before reading its
+     * job.
+     */
+    internal fun startHttpObservation(observation: AndroidCollaborationHttpObservation?) {
+        observation ?: return
+        if (closingRequested || !httpObservationStarted.compareAndSet(false, true)) return
+        httpObservationJob =
+            lifetime.launch(start = CoroutineStart.UNDISPATCHED) {
+                try {
+                    observation.observe(nativeClient)
+                } catch (cancelled: CancellationException) {
+                    throw cancelled
+                } catch (_: Exception) {
+                    // Optional diagnostics must not cancel sync/delivery or change runtime
+                    // readiness.
+                    // The adapter retains incomplete captures without exposing raw SDK errors here.
+                }
+            }
+    }
 
     /** Registry invalidation is synchronous; its caller drains outside the registry monitor. */
     internal fun requestClose() {
@@ -436,6 +460,7 @@ internal constructor(
     private suspend fun releaseResources(): SdkShutdownAttempt {
         // Never pause/destroy the client or unlock its directory while restore still uses it.
         acquisitionFinished.await()
+        httpObservationJob?.cancelAndJoin()
         authentication?.deactivate()
         val credentialResult = persistence.close()
         credentialWatcher.cancelAndJoin()

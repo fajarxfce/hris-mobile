@@ -1,5 +1,8 @@
 # Architecture
 
+[Optional Android HTTP observation](collaboration-http-observation-lifetime.md) stays
+inside the exact native-client lifetime; application composition supplies its adapter.
+
 [Chat end positioning](collaboration-chat-new-message-position.md) belongs to the route
 viewport owner; the page remains state-driven and older reading positions stay anchored.
 
