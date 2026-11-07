@@ -1,0 +1,278 @@
+{
+  "at": "2026-11-07T15:24:32.829506+00:00",
+  "headSha": "fe3992f1426712bf23964bf5aea68ad382f1b624",
+  "runs": [
+    {
+      "id": 42380244144,
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "name": "portable",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-07T14:35:36Z",
+          "completedAt": "2026-11-07T14:57:47Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run android-actions/setup-android@v3",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check setup transport and ownership",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check application bindings and platform compilation",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "name": "apple",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-07T14:35:36Z",
+          "completedAt": "2026-11-07T15:20:50Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Select Xcode 26.3",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Prepare public app-link test registrations",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check Apple setup adapter",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build iOS application host",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "artifactId": 13579372101,
+          "name": "collaboration-control-apple",
+          "sha256": "8cab5ad77cf02c016e553c2f02a44ec9146a64e8269c31f39b61dfd22f3b2970",
+          "bytes": 415195,
+          "suites": 233,
+          "counts": {
+            "tests": 2064,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": null,
+          "proof": {},
+          "originalQueueContinuity": null,
+          "selectedReports": {
+            "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulator-F5LCB6E14A5L2.dev.fajar.starter.collaboration.data.CollaborationSpaceRoomRequestFenceTransportTest.xml": {
+              "sha256": "4330e21f363184008c1e1370a042bee8d5e8537e665136030cf46dbf1c09f435",
+              "tests": 8,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm-ESG95JVP82OF0.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceOpenReplayStorageTest.xml": {
+              "sha256": "4743a4ea90152b163be2a0ad4a20373eecf05c807996ad2a4d3734ae697b1fcf",
+              "tests": 3,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SpaceConversationOpenReplayTest.xml": {
+              "sha256": "6679e04263de2b1d55a5b1d46e4ecd91dadb9b15ab094c250e26d97456de5cc6",
+              "tests": 25,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            }
+          }
+        },
+        {
+          "artifactId": 13578807548,
+          "name": "collaboration-control-portable",
+          "sha256": "be0cabeac0d82f62f21f1811e6edb1459553146ce77020c61dbcc586793131cb",
+          "bytes": 2459661,
+          "suites": 552,
+          "counts": {
+            "tests": 4995,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": null,
+          "proof": {},
+          "originalQueueContinuity": null,
+          "selectedReports": {
+            "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceOpenReplayStorageTest.xml": {
+              "sha256": "caa24b277e9ec024f1b8ceb2d8c5400c0b8ecf84a062e61318144a1ba504efe0",
+              "tests": 3,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRoomRequestFenceTransportTest.xml": {
+              "sha256": "d27a2b97fb797d06e512e8164091295842b9f8fc2a24ecfbd75050ab99c0c251",
+              "tests": 8,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowse-QEAG0H7G0A79A.dev.fajar.starter.collaboration.data.CollaborationSpaceRoomRequestFenceTransportTest.xml": {
+              "sha256": "182faf9148617ba5eef1a85b09cbc642bfd10f51bca56c2b7996690df120dbbd",
+              "tests": 8,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowser-FSIBVEKE7BHSI.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceOpenReplayStorageTest.xml": {
+              "sha256": "a7804749cd53b44112adf9c5c676882de72f63a3ca5ca3fdc76852d0115f1397",
+              "tests": 3,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceConversationOpenReplayTest.xml": {
+              "sha256": "2dbba5a9697f4d974cede9099d34eb03dfbcc3e0c48fb5147f512a95de644b8b",
+              "tests": 25,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.SpaceConversationOpenReplayTest.xml": {
+              "sha256": "e44d20028e7f54eff937244a38ceb32e4718d098d8d5362e2823b41b957bc14d",
+              "tests": 25,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "scope": "First fe3992f1 source control CI; typed Room fence transport, original Open replay/storage regression. No owning Room resolution or successor source acceptance.",
+  "nativeRun": 42380243983,
+  "nativeStatus": "in_progress; completed x86 job observed, ARM artifact acceptance pending",
+  "providerRerun": false,
+  "newApk": false,
+  "phoneLatencyResolved": false
+}

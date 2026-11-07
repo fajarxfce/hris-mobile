@@ -53,3 +53,18 @@ then finish Room projection/recovery and product routing. No APK or organization
 activation is included. Live schema116.1/phone53 and original SDK keys/message IDs
 remain; the physical phone's pending delay is still unresolved. New source Apple/native
 CI remains separate from earlier accepted metadata/preparation CI.
+
+## First source control CI — 7 November 2026
+
+Original source `fe3992f1426712bf23964bf5aea68ad382f1b624`, control run
+`42380244144`, passed. Original artifacts were downloaded and verified against the
+GitHub SHA-256 digests: Apple passed 2,064 cases in 233 suites; portable passed 4,995
+in 552, with zero failures, errors or skips. The actual eight fence transport tests
+and 25 original Open replay plus three storage regressions ran on Apple, Desktop
+and Browser. The iOS application host build also passed.
+[Artifact hashes and selected reports](measurements/collaboration-space-room-fence-control-ci-2026-11-07.json).
+
+Native run `42380243983` remains in progress; the x86 job succeeded, while complete
+artifact acceptance awaits ARM. No provider scenario is rerun. This exact older
+source does not include durable Fenced storage, owning resolution or atomic handoff;
+their own first source CI remains separate. Phone latency remains open.

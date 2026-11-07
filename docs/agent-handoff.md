@@ -45,20 +45,22 @@ Their source contracts and exact results are linked by architecture and prior ch
 
 ## Next work
 
-1. Accepted source0d10c395fb0c637d27344d037d63961a1af9bd80 is pushed to recovery and
-   primary. First control42383612502/native42383612567 are PENDING behind running
-   firstfe control42380244144/native42380243983. Preserve both new first runs before
-   another primary promotion; continue implementation on recovery. The nine owning
-   resolution files and durable storagefc0034ed are included in that exact primary head.
-2. Atomic storage is accepted in this recovery commit; preserve pending first0d10 CI
-   before another primary promotion. All eleven candidates are historical applied copies;
-   never reapply them. [Storage contract](collaboration-space-room-successor.md).
-   Next design current-admitted Room preparation: recover an existing resource before
-   new intent, preserve original Pending/Unconfirmed/Recorded, follow known successor
-   links exactly, and acquire current device/room facts before a fenced replacement.
-   Keep observed request ACCOUNT plus revision together; peer revisions are not globally
-   ordered. Device/public room metadata never grants SDK access. Published room binding
-   must be persisted/matched against original LEGACY metadata before delivery activation.
+1. Accepted source0d10c395fb0c637d27344d037d63961a1af9bd80 remains on primary.
+   First control42383612502 is IN_PROGRESS; native42383612567 is still PENDING behind
+   firstfe native42380243983. Preserve both first0d runs before another primary
+   promotion. Recovery accepted atomic source98ef15a6 is not yet promoted.
+2. Seven next Room preparation source/test files are APPLIED/FROZEN and NOT accepted.
+   Sole heavy job93110 runs `.work/space-room-preparation-2026-11-07/focused-1`
+   (128 expected cases), then required full root/Android host/release lint/101 actual
+   Browser cases/shared Wasm. It recovers active originals before finite native room/
+   device reads, preserves exact retry account/revision, and performs one insertion or
+   atomic fenced handoff with exact known-link recovery. 23 domain and three additional
+   actual storage cases plus real DI binding are included. Reap before editing these
+   seven inputs or starting another compiler/emulator. A new unnecessary-safe-call
+   warning in RoomPreparationPolicy should be removed after this first gate is reaped.
+   No SDK action, product caller or new APK is added. Next Room dispatch/projection and
+   original LEGACY binding validation remain. Previous eleven atomic candidates are
+   historical accepted copies and must not be reapplied.
 3. Implement current-admitted owning Room preparation/dispatch,
    projection/recovery, original SDK delivery/history, native-parent recovery and product
    routing. A setup receipt/fence is not a message ACK or content authority. New offline
@@ -68,6 +70,13 @@ Their source contracts and exact results are linked by architecture and prior ch
    foundations in Mobile before Starter ports. No HRIS-specific policy port is needed here.
 
 ## Original first CI
+
+First fence transport sourcefe3992f1 control42380244144 is fully audited SUCCESS:
+Apple2,064/233 and portable4,995/552, zero failures/errors/skips. Actual8 fence transport,
+25 Open replay and3 real-storage cases per Apple/Desktop/Browser are verified. iOS host
+build passed. Audit53739 is reaped. Native42380243983 is still in progress; x86 job
+succeeded, complete ARM/original artifact acceptance remains. [Control artifacts](measurements/collaboration-space-room-fence-control-ci-2026-11-07.json).
+
 
 First Open source31e618cc control42376025279 and native42376025306 are fully audited
 SUCCESS. Apple2,056/232 and portable4,979/550 have zero failures/errors/skips; actual25
@@ -84,11 +93,11 @@ is fully accepted, with exact original artifacts retained in the previous checkp
 
 ## Other repositories and live state
 
-Group branch feat/communication-space isd67f3d37 (docs checkpoint), native dcdaf220
+Group branch feat/communication-space is32a124b4 (docs checkpoint), native dcdaf220
 and HTTP cf885a1c accepted/pushed. Focused195/319.052s and API/FULL worker241/540.839s
 pass with one existing opt-in retention skip. Corrected HTTP99/202.31s on8,637 stable
 inputs passes; initial wrong fixture expectation is retained. V138 storage is c6937843.
-All Group jobs are reaped. Main branch feat/communications is1005340a (docs checkpoint).
+All Group jobs are reaped. Main branch feat/communications isc8649419 (docs checkpoint).
 Starter feat/communications remainsb11437a. Update their handoffs after this source commit.
 
 Live API2e75fe1ee88b5766259fc3efd3ab7f21e70d621a, worker10485916 and schema116.1 remain.
