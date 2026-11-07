@@ -7,6 +7,29 @@ and [history through build 50](agent-handoff-history-through-build50.md).
 
 ## Current work — 7 November 2026
 
+Native group conversation/open and room request/status transport is now accepted:
+22 source/test files; full87652 passed 3,530 fresh cases/439 suites in416.326s with
+4,349 unchanged inputs and zero failures/errors/skips/Android release lint issues.
+Focused33116 passed20 cases/106.323s. First71194 passed18 transport cases but failed
+fresh app-test compilation: an old runtime fake omitted the new original-writer method.
+The fake now rejects implicit writer acquisition; application bindings pass. All Mobile
+sessions are reaped. [Contract/results](collaboration-space-conversations-and-rooms.md).
+
+ONLY heavy local job is Group86925, `.work/room-receipt-recovery-2026-11-07/baseline-1`.
+It tests the existing native room fingerprint with actual PostgreSQL. One Group test
+file is changed/frozen; no provider call, production change or rollout. Do not start a
+Mobile build/emulator while that job runs.
+
+NEXT retain durable open/room commands, including original native parent/version and
+actual platform/build, and implement explicit original-room receipt recovery. Source
+inspection found that Group room idempotency hashes those proof fields, so unchanged
+JSON can conflict after ordinary native rotation or app upgrade. Preserve that failure
+and uncertainty; never invent a receipt or replace the old operation on timeout. A
+missing receipt alone does not fence a delayed original. Then owning original message
+delivery, receipt/history publication, native-parent recovery and product routing.
+Transport tests verify wire preservation; they do not accept server recovery across
+an earlier committed fingerprint. Group V117–137 remains disabled and no new APK exists.
+
 Program `72a70e8c29b7a7b55e193fd23a914ac83109585b` is pushed to the recovery
 and primary branches. Its first runs have started: control `42358423232`, native
 `42358423298`, protocol `42358423295`. Preserve these first runs; subsequent work
@@ -19,7 +42,7 @@ SDK4 hashes with NDK 28.2.13676358. Original artifact digests were verified.
 [Control/native evidence](measurements/collaboration-sdk4-packaging-control-native-ci-2026-11-07.json).
 Protocol evidence below is also accepted. No provider test was rerun for this audit.
 
-No heavy local job, emulator or tool session remains. The restricted original-writer
+The previously accepted restricted original-writer
 increment is accepted locally:17source/test/probe files. Full8613 passed3,512fresh cases
 in441suites/438.471s on4,328 unchanged inputs, zero failures/errors/skips/lint errors;
 49 existing proof lint warnings. Native16901 passed154.702s for x86_64 and ARM64, with
@@ -37,9 +60,8 @@ exact; current logical owner/device is guarded independently. Never rewrite old 
 The Android handle exposes no new enqueue, store, join or sync capability. A cancelled
 waiter cannot lose its late captured receipt, and close drains before freeing the writer.
 
-NEXT add Mobile group direct-conversation/open and room request/status transport and
-durable commands BEFORE the owning original-delivery caller. Those transports are still
-absent; only original metadata exists. Group native-space-room.md/space-conversations.md
+The group direct-conversation/open and room request/status transports are accepted above;
+durable commands and owning original-delivery remain absent. Group native-space-room.md/space-conversations.md
 and V132 original-pair-routing.md define the contract. Open keeps operation/space/peer
 fixed and returns a GROUP conversation ID; retain original company/conversation IDs
 separately. Terminal room retry uses observed account+revision together. A LEGACY room
@@ -118,6 +140,8 @@ log SHA `518c42ad6b85ace21148a5ba2750bdfc338828db4c59c8372d8e95485297dd66`.
 Silence is not delivery evidence. An optional release53 feedback question is already
 pending; do not repeat it. No phone UI/new messages were driven.
 [Key evidence](measurements/collaboration-bima-key-availability-2026-11-07.json).
+The next passive read around09:18UTC failed because ADB was offline. One bounded
+reconnect timed out (session11456, exit124, reaped). There is no newer phone evidence.
 
 ## Accepted foundations and first CI
 
@@ -145,8 +169,8 @@ pending; do not repeat it. No phone UI/new messages were driven.
 
 ## Repositories and invariants
 
-Main Platform `feat/communications` checkpoint `1de67d71` and Group worktree
-`feat/communication-space` checkpoint `84358628` are pushed. Group source remains
+Main Platform `feat/communications` checkpoint `d1dbbc3a` and Group worktree
+`feat/communication-space` checkpoint `7692c1c1` are pushed. Group production source remains
 `e45a4313`. Live API `2e75fe1ee88b5766259fc3efd3ab7f21e70d621a`, worker `10485916`,
 schema 116.1 and V117–137 disabled status are unchanged. Starter is clean/pushed
 at `b11437a`. Detailed program state is in each repository's handoff.

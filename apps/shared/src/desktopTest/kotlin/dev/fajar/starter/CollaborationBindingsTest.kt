@@ -63,6 +63,12 @@ class CollaborationBindingsTest {
                     CollaborationRuntimeRepository,
                     CollaborationLocalDeviceIdentityRepository,
                     CollaborationSpaceRuntimeRepository {
+                    override suspend fun acquireOriginalQueue(
+                        runtime: CollaborationSpaceRuntimeReady,
+                        matrixRoomId: String,
+                    ): AppResult<CollaborationSpaceOriginalQueueLease> =
+                        error("No implicit original queue writer")
+
                     override suspend fun inspectOriginalQueue(
                         runtime: CollaborationSpaceRuntimeReady,
                         matrixRoomId: String,
@@ -403,6 +409,14 @@ class CollaborationBindingsTest {
                 assertSame(
                     container.koin.get<CollaborationSpaceOriginalConversationRepository>(),
                     container.koin.get<CollaborationSpaceOriginalConversationRepository>(),
+                )
+                assertSame(
+                    container.koin.get<CollaborationSpaceConversationRepository>(),
+                    container.koin.get<CollaborationSpaceConversationRepository>(),
+                )
+                assertSame(
+                    container.koin.get<CollaborationSpaceRoomRepository>(),
+                    container.koin.get<CollaborationSpaceRoomRepository>(),
                 )
                 assertNotNull(container.koin.get<ReadCollaborationConversations>())
                 assertNotNull(container.koin.get<CollaborationListRepository>())

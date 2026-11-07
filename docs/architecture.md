@@ -1,5 +1,10 @@
 # Architecture
 
+[Organization conversations and room transport](collaboration-space-conversations-and-rooms.md)
+separate immutable pair intent from published room status. Native transport preserves
+account-local request revisions and exact group identity; live admission and durable
+command orchestration remain with the owning use cases.
+
 [Original organization message writer](collaboration-space-original-writer.md) preserves
 the physical queue namespace under exact logical runtime ownership. Current logical
 device identity remains separate from the device recorded in original messages.
