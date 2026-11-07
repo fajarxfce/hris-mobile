@@ -8,8 +8,15 @@ and staging, never permission to reapply old candidates.
 
 ## Current accepted work — 7 November 2026
 
-Canonical conversation metadata is accepted in the source commit containing this
-checkpoint: ten Kotlin files, native-parent-free facts, atomic encrypted conversation/
+Owning Open preparation is accepted in the source commit containing this checkpoint:
+seven Kotlin files, bounded original/canonical recovery, current discovery for new
+intent and exact-ID lost response reconciliation. Focused50437 passed15 cases204.552s;
+full36411 passed3,626 fresh cases/449 suites491.548s on4,385 unchanged inputs, zero
+failures/errors/skips/lint. Root/Android host/quality/13 actual Browser cases/shared
+Wasm passed. All local jobs reaped. [Contract/results](collaboration-space-conversation-preparation.md).
+No HTTP/SDK/archive/product caller or new APK is added.
+
+Canonical conversation metadata aa700e37 is accepted/pushed to recovery: ten Kotlin files, native-parent-free facts, atomic encrypted conversation/
 peer indexes and actual application binding. Focused15306 passed16 cases183.384s;
 full33894 passed3,614 fresh cases/448 suites476.855s on4,380 unchanged inputs, zero
 failures/errors/skips/lint. Root/Android host/quality/14 actual Browser cases/shared
@@ -35,19 +42,19 @@ No product caller, new APK or organization routing activation exists for these p
 
 ## Next work
 
-1. Accepted3b3a5d81 is pushed to recovery and primary. First control42369792173 and
-   native42369792184 are pending behind running79b. Preserve these first pending runs
-   before another primary promotion; continue code on recovery while CI runs.
-2. Metadata aa700e37 is pushed to recovery; preserve first3b3 pending CI before
-   primary promotion. SEVEN owning Open preparation files are now applied/FROZEN
-   after all baseline/candidate hashes matched. Focused50437 passed15 cases204.552s
-   on4,385 unchanged inputs with zero failures/errors/skips and quality checks. Sole
-   heavy job36411 now runs full-1 in .work/space-conversation-preparation-2026-11-07:
-   root/Android host/release lint/actual Browser preparation/shared Wasm. Not accepted yet. They recover an active same-peer
-   original or canonical ID before allocating a new operation, retain denial for
-   new setup and reconcile exact-ID lost insertion replies. Full gate is prepared.
-   No HTTP, SDK, archive or product routing is added by this increment. Next Open
-   replay notes are in its next-open-replay.md; no replay implementation exists yet.
+1. Push this accepted source to recovery and primary. BOTH first3b3 runs started;
+   first79b control/native are accepted and fully audited in8579a0de. After promotion,
+   record new first run IDs and preserve pending runs before another primary push.
+2. Implement finite original Open replay and projection-before-archive. Source review
+   is in .work/space-conversation-preparation-2026-11-07/next-open-replay.md. The server
+   Open key is stable across native-parent changes, but current native/client/peer
+   admission remains required for network work. TWO preliminary pure denial-policy
+   candidates exist in .work/space-conversation-open-replay-2026-11-07/candidate;
+   they are unapplied, untested and incomplete. Complete owning replay/tests before
+   applying. Preserve stronger global denial over pair denial or a transient failure;
+   never close every contact because one peer is unavailable. Capture observed setup
+   outcomes under bounded local ownership, materialize exact canonical facts before
+   archive, and recover response loss without another operation ID or invented ACK.
 3. Implement finite owning prepare/replay and projection-before-archive. Recover the
    same original resource/operation after response loss; CAS to Unconfirmed BEFORE HTTP.
    Separate native account/MFA/client denial from conversation/peer denial; do not close
@@ -62,12 +69,10 @@ No product caller, new APK or organization routing activation exists for these p
    and all54 PRD groups:3 in progress/51 planned/none complete. Physical iPhone testing
    is waived, but relevant Apple CI/compilation remains required.
 
-The reviewed source notes remain in .work/space-conversation-metadata-2026-11-07/
-next-preparation.md and the prior command next-owning-flow.md. The metadata key decision
-is now explicit: its partition is INSIDE the existing guarded collaboration-history/
-prefix, like organization root metadata, tested against metadata-only and inactive-
-account key loss. Metadata sources are accepted; preparation candidates are applied/FROZEN, not accepted.
-No fence implementation exists. Do not reinterpret a missing receipt as non-execution.
+The metadata and preparation candidates are now historical applied staging, not
+pending patches. Metadata remains inside the existing guarded collaboration-history/
+prefix, with metadata-only/inactive-account key-loss coverage. Preliminary Open replay
+policies are the only new candidates; no owning Open replay or server fence exists yet.
 
 ## Original SDK and phone invariants
 
@@ -124,7 +129,7 @@ Live API2e75fe1ee88b5766259fc3efd3ab7f21e70d621a, worker10485916, schema116.1 re
 unchanged. Group V117–137 remain disabled/unshipped. Starterb11437a is clean/pushed;
 current HRIS-specific work requires no generic Starter port. Main branch checkpoint
 1a1dba11 and Group2160044c point here for build ownership; their earlier running-job
-statements are superseded by accepted full33894 above.
+statements are superseded by accepted full36411 above.
 
 ## Work rules
 

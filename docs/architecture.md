@@ -1,5 +1,9 @@
 # Architecture
 
+[Owned conversation opening preparation](collaboration-space-conversation-preparation.md)
+recovers original local commands or canonical IDs before allocating a new setup intent.
+Current admission and exact-ID reconciliation stay in the owning use case.
+
 [Owned canonical conversation metadata](collaboration-space-conversation-metadata.md)
 keeps immutable pair facts independent of mutable login/native identity, with atomic
 encrypted conversation/peer indexes. Current content admission remains separate.

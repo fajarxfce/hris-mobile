@@ -1,0 +1,155 @@
+{
+  "scope": "Finite owned Open preparation with canonical/original recovery and exact-ID local response-loss reconciliation; no HTTP or product activation",
+  "parentCommit": "8579a0dea834db621d791a324de7eab4f83a6d18",
+  "sources": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "3132e000a23d28d10c1829e58c96b6a275686c03e64b2ebbc1b2ab869c67f59b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "8c74177415912cc853a32c0b992a8f89b88d1320cb6e78b476c02a8c45a72530",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceOpenPreparation.kt": "18cd56925e3511c68ea1b039da13845e9528cb819f521632004456de05ca67f8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceConversationCommandInventoryPolicy.kt": "0e56959b06baa1eb79fdca3cd5ea95260258e52479d99d1c7e918964cc4c424c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationSpaceConversation.kt": "c29e56d1a2d1f59c696bd727343d0f21588e33c65f4a7afd928d37ee1fee911f",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceConversationPreparationFixture.kt": "9fb1e1fb39df344ac6ee0c47edb4e78267ba2f2088680bc8b4803350b3372046",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceConversationPreparationTest.kt": "3c694110b1c90d54d34d13de8410a11c3c67b162f85339288701a390822603eb"
+  },
+  "runs": {
+    "focused-1": {
+      "startedAt": "2026-11-07T12:12:25.085825+00:00",
+      "elapsedSeconds": 204.552,
+      "exitCode": 0,
+      "sourceFiles": 4385,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*SpaceConversationPreparationTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationBindingsTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PcollaborationProofAbi=x86_64",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "freshSuites": 2,
+      "reusedSuites": 695,
+      "sourceManifestSha256": "2b10c7b228ea0d249fe373d0ad86429b332d4d03f56d1373103f0ee694502776",
+      "resultSha256": "d301fd06aa2a02f62f7a1d50f867b31525cb696dc8c8f4833b613cff7c38254d",
+      "stdoutSha256": "653146d539833720818de8d1dfd337083e1b2986ef9ec06bfbf80e5d19b801da",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "owningReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "940f413801367eccfcf028f116ac7ef52dc1a3628fcc45cc6915783429e17e8e",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceConversationPreparationTest.xml": {
+          "sha256": "b0701e1bd351d996e49a780b0aa8ec8f4ee1a74e67315542dc2bf36d53b0cc71",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "full-1": {
+      "startedAt": "2026-11-07T12:17:05.837903+00:00",
+      "elapsedSeconds": 491.548,
+      "exitCode": 0,
+      "sourceFiles": 4385,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3626,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":check",
+        ":features:collaboration:data:testAndroidHostTest",
+        ":apps:android:lintDevRelease",
+        ":features:collaboration:domain:wasmJsBrowserTest",
+        "--tests",
+        "*SpaceConversationPreparationTest*",
+        ":apps:shared:compileKotlinWasmJs",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "freshSuites": 449,
+      "reusedSuites": 484,
+      "sourceManifestSha256": "2b10c7b228ea0d249fe373d0ad86429b332d4d03f56d1373103f0ee694502776",
+      "resultSha256": "9a8cafe140fa6f45366141252164c9d4f83dd9f3a80b01dcc485ae5ec0d106c7",
+      "stdoutSha256": "7d34e53067a7cfec5e3ad60ad682a1f6df0f63ea160a1f76387811ce7d328092",
+      "stderrSha256": "f7595d81890ac5be208917f98b17c59fc8e5af6b67d7ded2bf9b51e5b5d7a9a8",
+      "owningReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "8d6c71eec0df3a1d654264814400063780cc3e709076d6632db23f931b85f212",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceConversationPreparationTest.xml": {
+          "sha256": "c45d598dd0591feaa31e5b84af6b5c9d5c380737add6d293597f3fc29b8af5dd",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.SpaceConversationPreparationTest.xml": {
+          "sha256": "221616bc11a4060e3ed4e92064f939cc2be0cda2fdd2f8d440613b538ccc609b",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "androidReleaseLint": {
+    "issues": 0,
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "environment": {
+    "javaHome": "/usr/lib/jvm/java-21-openjdk",
+    "androidSdk": "/home/fajar/Android/Sdk",
+    "gradleWorkers": 1,
+    "compiler": "in-process",
+    "dependencyVerification": "strict"
+  },
+  "apple": "This source still requires Apple CI",
+  "phone": "Build 53 unchanged; reported delay remains open; no APK built or installed"
+}
