@@ -200,9 +200,12 @@
       "pending-preview-offline.png",
       "draft-preview-offline.png"
     ],
-    "videoReviewed": false,
+    "videoReviewed": true,
     "keyboardDismissesDuringLocalSave": true,
-    "outgoingDuplicateObservedDuringRecovery": true
+    "outgoingDuplicateObservedDuringRecovery": true,
+    "videoReviewScope": "Six storyboards, first six seconds of each online/offline send, sampled at four frames per second; not a frame-by-frame review of the entire videos",
+    "onlineTransientSecondBubbleTipObserved": true,
+    "newPendingBubbleInitiallyUnderComposer": true
   },
   "next": [
     "Recover workspace renewal after an offline cold start without requiring foreground re-entry; preserve admission and cancellation.",

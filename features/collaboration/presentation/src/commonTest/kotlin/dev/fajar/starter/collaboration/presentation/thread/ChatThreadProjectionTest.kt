@@ -8,6 +8,53 @@ import kotlin.time.Instant
 
 class ChatThreadProjectionTest {
     @Test
+    fun sdkLocalEchoWithServerIdAndNoJsonKeepsOnePendingRowUntilOriginalEvidenceArrives() {
+        val localSent = native.copy(transactionId = null, logicalId = null, localEcho = true)
+        for (record in
+            listOf(
+                staged.copy(state = CollaborationMessageState.Staging(device, emptySet(), origin)),
+                staged,
+            )) {
+            val before = rows(pending = listOf(record)).single()
+            val sending = rows(pending = listOf(record), timeline = listOf(localSent)).single()
+            assertEquals(before.key, sending.key)
+            assertEquals(intent.text, sending.text)
+            assertEquals(CollaborationMessageDelivery.PENDING, sending.delivery)
+            assertNull(sending.eventId)
+            assertFalse(sending.canCancel)
+        }
+        val received = rows(pending = listOf(staged), timeline = listOf(native)).single()
+        assertEquals("outgoing:${intent.id}", received.key)
+        assertEquals(CollaborationMessageDelivery.SENT, received.delivery)
+        assertEquals("\$original", received.eventId)
+        val retained = rows(history = listOf(original), timeline = listOf(localSent)).single()
+        assertEquals(received.key, retained.key)
+        assertEquals(CollaborationMessageDelivery.SENT, retained.delivery)
+    }
+
+    @Test
+    fun unmatchedSdkLocalEchoCannotReplaceMissingDurableIntentOrHideIncomingMessages() {
+        val local = native.copy(transactionId = null, logicalId = null, localEcho = true)
+        assertTrue(rows(timeline = listOf(local)).isEmpty())
+        val incoming =
+            native.copy(
+                eventId = "\$incoming",
+                transactionId = null,
+                logicalId = null,
+                sender = "@peer:example.test",
+                own = false,
+                body = "Incoming text",
+            )
+        val projected = rows(pending = listOf(staged), timeline = listOf(local, incoming))
+        assertEquals(2, projected.size)
+        assertEquals("Incoming text", projected.single { it.eventId == "\$incoming" }.text)
+        assertEquals(
+            CollaborationMessageDelivery.PENDING,
+            projected.single { it.localId == intent.id }.delivery,
+        )
+    }
+
+    @Test
     fun sequentialReceiptsKeepPendingMessagesAfterTheConfirmedPrefixDespiteClockSkew() {
         val bodies = listOf("AAA", "BBB", "CCC", "DDD")
         for (clientBase in listOf(1_000L, 20_000L)) {

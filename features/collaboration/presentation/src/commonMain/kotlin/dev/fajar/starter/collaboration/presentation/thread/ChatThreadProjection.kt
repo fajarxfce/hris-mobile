@@ -98,7 +98,11 @@ internal fun chatThreadRows(
         rows += pendingRow(record, native, sent)
     }
     for (item in timeline) {
-        val eventId = item.eventId ?: continue // Durable owned commands supply local echoes.
+        // SDK local echoes may already have an event ID after PUT succeeds, while their
+        // JSON/transaction metadata is still absent. Durable commands supply those rows;
+        // event ID presence alone must not create a second outgoing bubble.
+        if (item.localEcho) continue
+        val eventId = item.eventId ?: continue
         if (!includeUnmatched || eventId in events || item.edited) continue
         rows += nativeRow(eventId, item, self)
         events += eventId

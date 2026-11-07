@@ -1,0 +1,189 @@
+{
+  "scope": "Keep SDK local echoes with a server event ID out of unmatched remote rows; durable original commands own outgoing rows",
+  "baseCommit": "e936d052ba20f60437c3e00a91028386a3c8c713",
+  "sources": {
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/mappers/AndroidCollaborationTimelineMapper.kt": "c6258896748ba59f982bb53c01855b8eb6879a5df3f8393702f0d1efa313f67f",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationSdkTimelineDto.kt": "fb93cb0fdccff4ec3495544ddab038ceca9056444942367a368e4fed541cd791",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationSdkTimelineMapper.kt": "97fce932428c256c4e88596c514cd0bf9174235e208a0060255b380df827822a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationTimelineItem.kt": "0b369f6a8dbd48a90f199422faecb3e12615d7e6f611247e8701fc12c6221da7",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadProjection.kt": "b7bde77aefbb331006a6a9380d2ecd2d0b1fdd2c2d1d8c00ae20da7b23745e87",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadProjectionTest.kt": "41442e358044d09c852899ae60bf50f1afd5690dc0e6da26b2bbb53612ecb627"
+  },
+  "runs": {
+    "focused-1": {
+      "startedAt": "2026-11-07T17:08:20.805274+00:00",
+      "elapsedSeconds": 183.799,
+      "exitCode": 0,
+      "sourceFiles": 4412,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 35,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "suites": 3,
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":features:collaboration:data:desktopTest",
+        "--tests",
+        "*CollaborationTextContentTest",
+        ":features:collaboration:presentation:desktopTest",
+        "--tests",
+        "*ChatThreadProjectionTest",
+        "--tests",
+        "*ChatEditProjectionTest",
+        ":features:collaboration:data:compileAndroidMain",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PcollaborationProofAbi=x86_64",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "fullLocalResultSha256": "40523d529ad46354b018971a5a555059305f7eebd4429fa75dfecc71c133822c",
+      "selectedReports": {
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadProjectionTest.xml": {
+          "sha256": "152ee66b014570eef7d5d466abe708a7367dbe295ae733e9c469a1798a298c23",
+          "tests": 19,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatEditProjectionTest.xml": {
+          "sha256": "88a9dd4a8929c74c66fde310a3ee4dd0addc7a471f8e684c4876098f90f06e6b",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationTextContentTest.xml": {
+          "sha256": "da0cf4d137cb917a80dd849ba8dbd35d42d95e20b193466e09a58bd76e43bd68",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "full-1": {
+      "startedAt": "2026-11-07T17:13:25.000346+00:00",
+      "elapsedSeconds": 609.149,
+      "exitCode": 0,
+      "sourceFiles": 4412,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3784,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "suites": 459,
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":check",
+        ":features:collaboration:data:testAndroidHostTest",
+        ":apps:android:lintDevRelease",
+        ":features:collaboration:data:wasmJsBrowserTest",
+        "--tests",
+        "*CollaborationTextContentTest*",
+        ":features:collaboration:presentation:wasmJsBrowserTest",
+        "--tests",
+        "*ChatThreadProjectionTest*",
+        "--tests",
+        "*ChatEditProjectionTest*",
+        ":apps:shared:compileKotlinWasmJs",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "fullLocalResultSha256": "68622d63c02329f7ee33491b2542871ed30ed5b02bbdfdbf7f942d89d1b58dc4",
+      "selectedReports": {
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatEditProjectionTest.xml": {
+          "sha256": "c2d67daca5c9f7bb80b5db5e76919af93fb79959329b293acbb1b998d30449d1",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadProjectionTest.xml": {
+          "sha256": "4ad465d1801181fc915bd051b098278f2269f45f73f4b18d649271be74279607",
+          "tests": 19,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatThreadProjectionTest.xml": {
+          "sha256": "f6bd688fb3ef3b3953f2a8f8444f554fbfba2d3e6403d278944b5d2849054b21",
+          "tests": 19,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.presentation.thread.ChatEditProjectionTest.xml": {
+          "sha256": "0c738041be8fe0ce7ba53574a3a8977f8568bcf6f6127530405fe52981deb849",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationTextContentTest.xml": {
+          "sha256": "b0580e719d3cb95c4082408eff5c86a552605b4a5f979a3715e6fef80950c253",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationTextContentTest.xml": {
+          "sha256": "7f9dfd1783118d4b7ef9707bea8c2570a6bcac8f7c6153310f22af3667657eef",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationTextContentTest.xml": {
+          "sha256": "446ee94d15b7ec0570ea815149f2787fda62ab5b120de6b9fd1370b739bb8321",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "actualBrowserCases": 35,
+  "androidReleaseLintIssues": 0,
+  "jobsReaped": [
+    36539,
+    90580
+  ],
+  "deviceAcceptance": false,
+  "limitations": [
+    "No new APK or actual device confirmation for this increment",
+    "No changed acknowledgement, delivery, keys, IDs or SDK4 artifacts",
+    "Offline recovery and keyboard/viewport issues remain separate",
+    "Apple source CI remains required"
+  ]
+}

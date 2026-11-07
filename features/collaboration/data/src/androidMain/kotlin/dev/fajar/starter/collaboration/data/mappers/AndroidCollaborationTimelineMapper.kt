@@ -39,6 +39,7 @@ internal fun TimelineItem.toCollaborationTimelineItem(): CollaborationSdkTimelin
             sender = sender,
             timestamp = event.timestamp.toLong(),
             own = event.isOwn,
+            localEcho = !event.isRemote,
             kind = kind,
             body = text?.body,
             edited = message?.isEdited == true,

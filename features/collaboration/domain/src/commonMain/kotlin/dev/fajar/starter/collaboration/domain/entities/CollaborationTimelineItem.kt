@@ -28,6 +28,8 @@ data class CollaborationTimelineItem(
     val delivery: CollaborationMessageDelivery,
     val replyToEventId: String? = null,
     val forwarded: Boolean = false,
+    /** SDK provenance; a local echo can already have a server event ID. */
+    val localEcho: Boolean = false,
 ) {
     override fun toString() = "CollaborationTimelineItem([redacted])"
 }

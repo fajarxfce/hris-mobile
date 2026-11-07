@@ -5,6 +5,34 @@ continuing. [Previous checkpoint](https://github.com/fajarxfce/hris-mobile/blob/
 retains all earlier source/CI history and links older local handoff archives. Git and
 contracts are authoritative; `.work` is staging/evidence, never permission to reapply.
 
+## Current continuation — 7 November 2026, 17:24 UTC
+
+Local-echo provenance is locally accepted in this commit (six Kotlin source/test
+files). SDK local Sent echoes can already have a server event ID but no remote JSON;
+carry `!event.isRemote` through data/domain and exclude unmatched local echoes from
+remote rows. Durable commands retain the original row and exact evidence controls
+ACK status. No SDK mutation/version change. Focused36539:35/3/183.799s. Full90580:
+3,784 fresh cases/459 suites/609.149s,4,412 unchanged inputs, zero failures/errors/
+skips/lint,35 actual Browser cases and root/Android/quality/shared Wasm pass. Both
+jobs REAPED; no compiler/emulator running. [Contract](collaboration-chat-remote-echo.md).
+Six actual release54 video storyboards were also opened: first6s of each online/
+offline send,4fps. Keyboard dismissal and initial bubble clipping are confirmed;
+online sampling also shows a transient extra bubble tip. Preserve the failed54 probe.
+
+Next candidate is staged only in .work/chat-offline-recovery-2026-11-07/candidate;
+compare candidate-base.json before applying. Four production/two test files target
+one owned RefreshWorkspace after stale authority, Retry offline, unchanged denials/
+cancellation and original delivery IDs. Not yet compiled/applied. Do not invent an
+exact observed server failure code: current source/evidence motivates this test.
+
+Inspector main a0f04f6 is pushed: core has42 local cases; first private CI42394553310
+failed before any steps because GitHub account billing/spending-limit blocked it.
+User approval to make the new library public is pending; do not change visibility
+without an answer. No adapters/viewer/Matrix HTTP bridge or app integration yet.
+Mobile700 first control42392876943 and native42392876947 have both started, so a
+later accepted source can advance primary without canceling a never-started native run.
+Phone still53; original emulator STOPPED54. Live API/schema unchanged.
+
 ## Current device findings — 7 November 2026, 16:59 UTC
 
 Build54 source700a8a210908e90b53f6f65b4c672795d553aa6c compiled in659.185s;

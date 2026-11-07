@@ -34,3 +34,24 @@ cases passed. All jobs are reaped. [Exact source and reports](measurements/chat-
 A new phone build and actual-device confirmation remain next; these local tests do
 not establish the final send latency or keyboard/viewport behavior. Relevant Apple
 source CI remains required. No claim of runtime correction is based on tests alone.
+
+## SDK local echoes after transport acceptance
+
+Release54's original offline send produced a second outgoing row during recovery.
+The SDK can attach a server event ID to a local echo before remote JSON and its
+original logical/transaction metadata exist. Event-ID presence is not proof that
+an item is a remote echo. The Android adapter now carries the SDK's `isRemote`
+provenance through the DTO and domain entity as `localEcho`.
+
+The final unmatched-row projection excludes these local echoes. Durable original
+commands supply outgoing rows; exact correlated native evidence still supplies its
+proven status. Incoming remote messages and archived original history remain visible.
+This does not guess identity from text, grant cancellation, change delivery or fake
+an acknowledgement. It uses the existing immutable SDK4 API.
+
+Focused36539 passed35 cases/3 suites/183.799s. Full90580 passed3,784 fresh cases/
+459 suites/609.149s on4,412 unchanged inputs, zero failures/errors/skips/lint. Root,
+Android host/quality/shared Wasm and35 actual Browser cases pass. Both jobs are reaped.
+[Source hashes and verification](measurements/chat-local-echo-2026-11-07.json).
+No APK from this increment is accepted yet; offline renewal and composer behavior
+still require the separate fixes and actual-device acceptance.
