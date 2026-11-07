@@ -24,3 +24,19 @@ fun validCollaborationSpaceConversationMetadata(
         value.version == 0L &&
         value.createdAt.epochSeconds in -62_135_596_800L..253_402_300_799L &&
         value.createdAt.nanosecondsOfSecond % 1000 == 0
+
+/** A retained Open receipt identifies this immutable pair, never a room or message receipt. */
+fun matchesRecordedCollaborationSpaceConversation(
+    access: CollaborationSpaceLocalAccess,
+    record: CollaborationSpaceConversationCommandRecord,
+    metadata: CollaborationSpaceConversationMetadata,
+): Boolean {
+    val command = record.command as? CollaborationSpaceConversationCommand.Open ?: return false
+    val receipt =
+        (record.outcome as? CollaborationSpaceConversationOutcome.Recorded)?.receipt ?: return false
+    return validCollaborationSpaceConversationCommandRecord(access, record) &&
+        validCollaborationSpaceConversationMetadata(access, metadata) &&
+        receipt.id == metadata.id &&
+        receipt.version == metadata.version &&
+        command.peerAccountId in listOf(metadata.firstAccountId, metadata.secondAccountId)
+}

@@ -1,0 +1,335 @@
+{
+  "scope": "One owned original Open replay with durable uncertainty, normalized record CAS, bounded observed-outcome capture and canonical metadata before archive; no product activation",
+  "parentCommit": "7576e0af2e217db8a7738fbdabc29f3da2423fb7",
+  "sources": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "f5a92a27efa044e4df2306868ebdc544feb676c099d2201a32846ed6061f4e63",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "6fb2595cbab16a5c9d6efb96cb9c64a006e15142142dc00d0b754c00cfa0ac07",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceOpenReplayStorageContract.kt": "a15fe2f400d7f4b2de39d1ea679c298a57a4ff676e3d5f8735a099ebf68c78f8",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceOpenReplayStorageTest.kt": "b1b7e552099a972840b5796e18e7356e90d080b728fe712812c4131465d92c7e",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceOpenReplayStorageTest.kt": "c82d220bc5b1c1c568039ec354f8b7ccbbf509a6ed7b949f066ce5658d22782f",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceOpenReplayStorageTest.kt": "82dd0099b8fc00735313ea91c6d622e3df4913725cff1431314bc132cbccde5f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceConversationAdmissionPolicy.kt": "d7b3b5769b6f1d3ec6263053b88cfba02d46579a4f455654ee2bad13f5feeed4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceConversationCommandPolicy.kt": "c57677eed56ae379063432f7cd6fa8417e66bb56b8c243f8b36d157ff2127a2b",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceConversationMetadataPolicy.kt": "fbb4293aa9dd5fb9df6355387c153465208b9904ed8fc2ffc1b91ce5d6217417",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReplayCollaborationSpaceConversationOpen.kt": "f0d680d29ddaaeaeafed7e7ad78da3c8add8a3796176eb4e5b6e895b35b3b964",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceConversationOpenReplayFixture.kt": "5b648b313e5eaff8d65c976817356434dcbaeb91f1a53ae1efe3213d2ac30760",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceConversationOpenReplayTest.kt": "95da0f358a11878b2f44c8b9f848100236fb39369f1fac634c1b298b4e505164"
+  },
+  "runs": {
+    "focused-1": {
+      "startedAt": "2026-11-07T12:41:34.735152+00:00",
+      "elapsedSeconds": 195.304,
+      "exitCode": 0,
+      "sourceFiles": 4389,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 30,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*SpaceConversationOpenReplayTest",
+        "--tests",
+        "*SpaceConversationCommandPolicyTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationBindingsTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PcollaborationProofAbi=x86_64",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "freshSuites": 3,
+      "reusedSuites": 695,
+      "sourceManifestSha256": "0a43812b4e5d8b9218d3b052b1217f517bc1f19a53b14c43d92b54552ef6e6db",
+      "resultSha256": "e7b8bd24e754e2584134c6c618c8f5619a8d761d9cc38f2bba273b14c799c564",
+      "stdoutSha256": "503042d477f1b6836942fa7d7b35c54b9a82a5e00ece3de11366b19cf2d60dce",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "owningReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "195a4166b0de2f764f115f3d03532cfe6b02d1a538699a1b4604d9315957e0f6",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceConversationOpenReplayTest.xml": {
+          "sha256": "a5565d2365a5d35a182bf1e46402b672bbe1ccdc92e51873bb60852d810ee477",
+          "tests": 24,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceConversationCommandPolicyTest.xml": {
+          "sha256": "1d49b5eb715c2219abd0c416534d6592b037dd29e6546ac9205e01eae146476b",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "focused-2": {
+      "startedAt": "2026-11-07T12:53:26.917567+00:00",
+      "elapsedSeconds": 104.619,
+      "exitCode": 1,
+      "sourceFiles": 4393,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*SpaceConversationOpenReplayTest",
+        "--tests",
+        "*SpaceConversationCommandPolicyTest",
+        ":features:collaboration:data:desktopTest",
+        "--tests",
+        "*CollaborationSpaceOpenReplayStorageTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationBindingsTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PcollaborationProofAbi=x86_64",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "freshSuites": 1,
+      "reusedSuites": 605,
+      "sourceManifestSha256": "e333300a89d93059b4a0b6c3d41ddf8ee3b455823a1303ef40fbf493db6a1d47",
+      "resultSha256": "3d09e5f716e34c325b65a9e425360b75934c8186759e4c83144912e7b23006e7",
+      "stdoutSha256": "d64915392054411789ac2023d7cad622c4dbdcbd8af6a3eefc89051ad87b423b",
+      "stderrSha256": "388644d242a05254801aa7bf33251ea0715f63cdb7dd7a6a0807f0beac632158",
+      "owningReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceOpenReplayStorageTest.xml": {
+          "sha256": "bed80963f4f73ed78a528f7cbbe872d8b21a44e7edacb96cd51bc7e75ed66981",
+          "tests": 3,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "focused-3": {
+      "startedAt": "2026-11-07T12:55:33.943316+00:00",
+      "elapsedSeconds": 134.702,
+      "exitCode": 0,
+      "sourceFiles": 4393,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 34,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*SpaceConversationOpenReplayTest",
+        "--tests",
+        "*SpaceConversationCommandPolicyTest",
+        ":features:collaboration:data:desktopTest",
+        "--tests",
+        "*CollaborationSpaceOpenReplayStorageTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationBindingsTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PcollaborationProofAbi=x86_64",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "freshSuites": 4,
+      "reusedSuites": 602,
+      "sourceManifestSha256": "db9caa18491bcf2c6187f0cb8fc2ea32ef1f76c60ae82e485be81f950f417ed9",
+      "resultSha256": "e7957ad1b69aed0b9ac2ae02f642c63ab3a9e68737386210bfb392a7534b4337",
+      "stdoutSha256": "bbb431663d44a0836120792c9cf758a5cd20210def0173cc5f7bdd9f06cd3cf2",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "owningReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "508414dab9e14d4075a5a6c1eb39753f72c9cc2c98d334b0711accff8eb17543",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceOpenReplayStorageTest.xml": {
+          "sha256": "e243ea03cee0589463a41e3ac5855349483d5d5f1394abbe2245219bdb0a5065",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceConversationOpenReplayTest.xml": {
+          "sha256": "c4baf2f45ea7d2eaadf866fd34f27133f92fe968214e953df763947da25a1706",
+          "tests": 25,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceConversationCommandPolicyTest.xml": {
+          "sha256": "67e768179d467455b6ea57f6e4cc2abf236acaeaee3453da2f11027ce485c48d",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "full-1": {
+      "startedAt": "2026-11-07T12:58:01.401327+00:00",
+      "elapsedSeconds": 505.461,
+      "exitCode": 0,
+      "sourceFiles": 4393,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3669,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":check",
+        ":features:collaboration:data:testAndroidHostTest",
+        ":apps:android:lintDevRelease",
+        ":features:collaboration:domain:wasmJsBrowserTest",
+        "--tests",
+        "*SpaceConversationOpenReplayTest*",
+        ":features:collaboration:data:wasmJsBrowserTest",
+        "--tests",
+        "*BrowserCollaborationSpaceOpenReplayStorageTest*",
+        ":apps:shared:compileKotlinWasmJs",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "freshSuites": 452,
+      "reusedSuites": 483,
+      "sourceManifestSha256": "db9caa18491bcf2c6187f0cb8fc2ea32ef1f76c60ae82e485be81f950f417ed9",
+      "resultSha256": "5d23302527e71719a7bfbab5199341392761308602d6cfa8909f9448fe322a98",
+      "stdoutSha256": "4d99d4086ee9f8aa512d46986340976647429e6d175fb30e75d74ec8c58ce855",
+      "stderrSha256": "7561ea5d7e561ffa14419ed4c4422afea803043307bd4f6032b7b1ba2450e707",
+      "owningReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "6bba80844e914a7c1e0f3451fda85306c5c41a2b8561a0b14702e0425fb79dcb",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceOpenReplayStorageTest.xml": {
+          "sha256": "31ccd658de28f4b01f39ca571f40222a48167061b91d09cb7d26d05688e160e7",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowser-FSIBVEKE7BHSI.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceOpenReplayStorageTest.xml": {
+          "sha256": "879a2e0ad3febb418ea79598dbcdd9b0f0b93beed9b87f90770970c8380dd973",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceConversationCommandPolicyTest.xml": {
+          "sha256": "996de82a811f4fbba0cb224ed55036435221c9eef3ba17450c142b83d9ce34e6",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceConversationOpenReplayTest.xml": {
+          "sha256": "3135bc0671b71f21664ec9869bfa0bf70e6919ed587d146c0c1a8d2f6c7ddb17",
+          "tests": 25,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.SpaceConversationOpenReplayTest.xml": {
+          "sha256": "b7e538fb87c2fe957a840a8c0509e3cf783edf2621bc34ce58b1bcbae9df877b",
+          "tests": 25,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "regression": {
+    "focused-1": "Thirty fake-domain/binding cases passed before real codec integration; not sufficient acceptance",
+    "focused-2": "Real encrypted SQLite reproduced one failure among three storage cases: normalized directory failure differs from decoded command failure, rejecting the in-memory expected mark during positive-result CAS. Two other real recovery cases passed.",
+    "fix": "After successful marking, read the exact persisted command, validate intent/revision/attempts/phase and durable failure kind/code/retry, recheck ownership/native admission, and use the actual record for response CAS. Keep raw CAS exact; do not persist private error presentation."
+  },
+  "androidReleaseLint": {
+    "issues": 0,
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "environment": {
+    "javaHome": "/usr/lib/jvm/java-21-openjdk",
+    "androidSdk": "/home/fajar/Android/Sdk",
+    "gradleWorkers": 1,
+    "compiler": "in-process",
+    "dependencyVerification": "strict"
+  },
+  "apple": "This source requires its own first Apple/native CI after primary promotion",
+  "phone": "Build53 unchanged. No APK built or installed; reported 20s\u20132min delay remains unresolved."
+}

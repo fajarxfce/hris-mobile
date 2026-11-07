@@ -1,5 +1,9 @@
 # Architecture
 
+[Owned original conversation opening](collaboration-space-conversation-open-replay.md)
+retains the original operation, reads normalized durable marks before dispatch and
+materializes exact canonical metadata before archival. Content admission stays separate.
+
 [Owned conversation opening preparation](collaboration-space-conversation-preparation.md)
 recovers original local commands or canonical IDs before allocating a new setup intent.
 Current admission and exact-ID reconciliation stay in the owning use case.

@@ -8,6 +8,17 @@ and staging, never permission to reapply old candidates.
 
 ## Current accepted work — 7 November 2026
 
+Original Open replay is now locally accepted:12 Kotlin source/test files. It retains
+original intent, marks uncertainty before HTTP, reads the normalized persisted record
+for exact CAS, captures observed outcomes through bounded cancellation, and publishes
+canonical metadata before archive. Full69888 passed3,669 fresh cases/452 suites505.461s
+on4,393 unchanged inputs, zero failures/errors/skips/lint. Root, Android host, quality,
+25 actual Browser domain cases,3 actual Browser real-storage cases/shared Wasm passed.
+Focused35951 passed34 cases134.702s. All Mobile jobs are reaped. The first real-storage
+run3935 REPRODUCED the normalized-error CAS failure (1 of3 cases); it and the earlier
+fake-only30-case pass15001 are preserved. [Contract/results](collaboration-space-conversation-open-replay.md).
+No SDK send, message ACK, product caller or new APK. First source Apple/native CI remains.
+
 Owning Open preparation1d9493df is accepted/pushed to recovery and primary:
 seven Kotlin files, bounded original/canonical recovery, current discovery for new
 intent and exact-ID lost response reconciliation. Focused50437 passed15 cases204.552s;
@@ -45,24 +56,16 @@ No product caller, new APK or organization routing activation exists for these p
 1. First1d9493df control42372520573/native42372520624 are PENDING behind running
    first3b3 control42369792173/native42369792184. Preserve these first pending runs
    before another primary promotion; continue source work on recovery.
-2. TWELVE original Open replay files are applied/FROZEN. Sole heavy local job69888
-   runs .work/space-conversation-open-replay-2026-11-07/full-1: root check, Android
-   host/release lint, actual Browser domain/storage, shared Wasm and quality checks.
-   Focused35951 passed34 fresh cases134.702s on4,393 unchanged inputs, zero failures/
-   errors/skips; all focused jobs are reaped. [Contract](collaboration-space-conversation-open-replay.md).
-   Focused15001 passed30 fake-domain/binding cases195.304s. Focused3935 then
-   REPRODUCED a real codec normalization failure:3 fresh storage cases,1 failure,
-   104.619s,4,393 unchanged inputs; both jobs reaped. Directory and command codecs
-   deliberately normalize human error text differently, making an in-memory expected
-   mark differ from the stored record. Fixed dispatch exact-reads the successful mark
-   before HTTP, validates original command/revision/attempts and stored kind/code/retry,
-   rechecks ownership/native admission, then uses the actual stored record for outcome
-   CAS. Changed/missing marks cannot dispatch. Do not weaken raw CAS or persist private
-   error presentation. This new organization flow is NOT installed phone53's latency
-   diagnosis. Full root/Android/lint/actual Browser checks remain required. No SDK,
-   message ACK, product caller or new APK. Preserve the failing run as regression proof.
-3. Implement finite owning prepare/replay and projection-before-archive. Recover the
-   same original resource/operation after response loss; CAS to Unconfirmed BEFORE HTTP.
+2. Sole heavy local job34560 now runs Group .work/room-request-fence-2026-11-07/storage-1:
+   new V138 fence migration and original stable/legacy room writer regressions, format
+   and architecture. FOUR Group files are applied/FROZEN, NOT accepted: immutable actor/
+   original-operation fence, same-lock stable receipt exclusion,7 real migration cases,
+   recovery schema138 with unchanged encrypted envelope projection. Python recovery
+   checks passed26 cases after correcting an old future-schema138 assertion to139;
+   first failure retained. No domain fence repository/use case/HTTP/successor exists.
+   Do not start a second heavy job or edit Group's frozen source. V138 is NOT deployed.
+3. Open preparation/replay and canonical projection-before-archive are locally accepted.
+   Continue equivalent owning Room request projection/recovery and original SDK routing.
    Separate native account/MFA/client denial from conversation/peer denial; do not close
    every contact because one peer is unavailable. A setup receipt grants no SDK/content
    authority or message ACK. Truly new offline chats also need an explicit provisional
@@ -75,11 +78,10 @@ No product caller, new APK or organization routing activation exists for these p
    and all54 PRD groups:3 in progress/51 planned/none complete. Physical iPhone testing
    is waived, but relevant Apple CI/compilation remains required.
 
-Metadata/preparation candidates are historical applied staging. Open replay candidates
-are also applied now, but unaccepted and frozen for69888. Its candidate folder is
-historical before the real codec fix; do not reapply it. Metadata stays inside the
-existing guarded collaboration-history/ prefix with metadata-only/inactive key-loss
-coverage. No server fence or room request successor implementation exists yet.
+Metadata/preparation/Open candidates are historical applied staging; do not reapply.
+The real codec fix supersedes Open's initial candidate directory. Group's4 fence
+candidates are also applied now and frozen for34560; they have no domain/HTTP caller.
+Metadata remains inside the guarded collaboration-history/ prefix.
 
 ## Original SDK and phone invariants
 

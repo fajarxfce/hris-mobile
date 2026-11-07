@@ -98,8 +98,10 @@ fun validCollaborationSpaceConversationCommandTransition(
 fun retainCollaborationSpaceConversationFailure(previous: Failure?, received: Failure): Failure =
     if (
         previous != null &&
-            collaborationSpaceDirectoryResponseClosesRead(previous) &&
-            !collaborationSpaceDirectoryResponseClosesRead(received)
+            ((collaborationSpaceConversationResponseClosesDirectory(previous) &&
+                !collaborationSpaceConversationResponseClosesDirectory(received)) ||
+                (collaborationSpaceDirectoryResponseClosesRead(previous) &&
+                    !collaborationSpaceDirectoryResponseClosesRead(received)))
     )
         previous
     else received

@@ -1,7 +1,7 @@
 # Owned original conversation opening
 
-Status: source applied; focused checks pass. Full validation is running and this
-increment is not yet accepted. No product caller or phone update is included.
+Local validation is complete. No product caller or phone update is included;
+first Apple/native CI for this source remains required.
 
 `ReplayCollaborationSpaceConversationOpen` performs one explicit, bounded attempt
 for an owned original Open command. It never allocates another operation ID or peer
@@ -72,7 +72,12 @@ Initial fake-domain/binding checks passed 30 cases. Adding real storage reproduc
 one normalization failure among three cases. After the fix, focused validation passed
 34 fresh cases in 134.702 seconds on 4,393 unchanged inputs, with zero failures,
 errors or skips; format, architecture and Detekt passed. The original failed run is
-retained. Full root/Android/lint/actual Browser validation and source CI remain pending.
+retained. Full validation passed 3,669 fresh cases across 452 suites in 505.461 seconds
+on the same 4,393 unchanged inputs, with zero failures, errors, skips or Android lint
+issues. Root check, Android host tests, all 25 actual Browser domain cases, all three
+actual Browser storage cases, shared Wasm compilation and quality checks passed.
+[Source hashes and all runs](measurements/collaboration-space-conversation-open-replay-2026-11-07.json).
+First Apple/native CI for this source remains required.
 
 Room request projection/fencing, original SDK delivery/history, provisional offline
 peer mapping and product routing remain separate work. Setup receipts and canonical

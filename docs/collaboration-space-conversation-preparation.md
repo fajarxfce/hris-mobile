@@ -57,6 +57,6 @@ Wasm compilation passed. Apple CI for this source remains pending.
 
 Product routing and a new APK are not added here. Opening a completely new chat while
 offline still needs an explicit provisional mapping to its eventual canonical ID,
-preserving original message transaction IDs. Finite original replay, canonical
-publication before archival, room request fencing and original SDK delivery/history
-remain separate work. Physical-phone delivery latency remains open.
+preserving original message transaction IDs. [Finite original replay and canonical publication before archival](collaboration-space-conversation-open-replay.md)
+are now locally validated. Room request fencing, original SDK delivery/history and
+product integration remain separate work. Physical-phone delivery latency remains open.
