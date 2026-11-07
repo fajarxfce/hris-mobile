@@ -19,17 +19,30 @@ transport and6 policy cases. Root/Android host/quality/shared Wasm passed. All l
 jobs are reaped. [Contract and exact results](collaboration-space-room-fence-storage.md).
 No owning capture, successor, product caller, SDK operation or new APK is added.
 
-Nine next resolution candidates are formatted but NOT APPLIED/TESTED, isolated in
-`.work/space-room-request-resolution-2026-11-07`; mapping/baseline hashes and focused91/
-full-browser64 scripts are prepared. The owning use case receives current canonical
-conversation plus original Room ID, reads terminal facts locally, rejects Pending,
-marks the same attempt before one finite current-native fence call, reads normalized
-stored state for exact CAS and captures the observed result for at most2s despite
-caller cancellation. Keep strongest denial; peer denial never closes all contacts.
-No request()/old-device login/archive/successor/SDK action. Candidates include22 domain,
-4 actual SQLite/IndexedDB storage cases and Apple wrappers plus real application DI.
-Verify baselines before applying; then focused and required full gate. Enforce actual
-Browser case selection, not only task success. Atomic successor linkage follows capture.
+NINE next owning-resolution source/test files are applied/FROZEN and NOT accepted.
+Focused21909 passed91 cases/219.787s on4,405 unchanged inputs, zero failures/errors/
+skips and format/architecture/Detekt. All22 domain and4 actual-storage new cases and
+application DI passed. Sole heavy job28463 now runs
+`.work/space-room-request-resolution-2026-11-07/full-1`: root/Android host/release lint,
+64 actual selected Browser cases/shared Wasm. Its script asserts the selected case
+counts explicitly. Do not edit frozen inputs or overlap another compiler/emulator.
+The finite owner reads terminal facts locally, rejects Pending, marks the same send
+attempt before one current-native original fence call and reads normalized stored
+state for exact CAS. Observed evidence has a2s cancellation capture budget; peer
+failure does not close all contacts. No successor/archive/provider/product caller.
+After acceptance implement atomic original/successor storage using archiveAndInsert,
+authenticated forward/back references and unchanged original ciphertext. The next
+local design is `.work/space-room-successor-2026-11-07/plan.md`; no successor source
+is applied. The nine resolution candidates are now historical applied copies.
+
+First Open source31e control42376025279 is fully audited SUCCESS: Apple2,056/232,
+portable4,979/550, zero failures/errors/skips; actual25 Open replay and3 storage
+cases on each Apple/Desktop/Browser verified. Original artifact hashes retained,
+no provider rerun. [Evidence](measurements/collaboration-space-conversation-open-control-ci-2026-11-07.json).
+Native42376025306 still awaits ARM completion and original-artifact audit. First
+fe3992f1 control42380244144 has STARTED; native42380243983 remains PENDING. Preserve
+that first native run before another primary promotion. Recovery source/storage
+fc0034ed is pushed; primary staysfe3992f1.
 
 Typed room fence transport is locally accepted:11 Kotlin files, exact current-native
 original mutation key/body and full response echo, distinct Recorded/Fenced domain
@@ -86,8 +99,8 @@ No product caller, new APK or organization routing activation exists for these p
 ## Next work
 
 1. Primary and recovery now contain accepted sourcefe3992f1426712bf23964bf5aea68ad382f1b624.
-   First control42380244144/native42380243983 are PENDING behind running first31e
-   control42376025279/native42376025306. Preserve both new first runs before another
+   First control42380244144 has STARTED; native42380243983 remains PENDING behind
+   first31e native42376025306. First31e control42376025279 is now audited SUCCESS. Preserve both new first runs before another
    primary promotion; continue source work on recovery. First1d9493df control/native
    are fully audited SUCCESS, including14 metadata-storage and13 preparation cases
    on Apple/Desktop/Browser, SDK4 native keys/IDs and cleanup. [Evidence](measurements/collaboration-space-conversation-preparation-control-native-ci-2026-11-07.json).
@@ -99,7 +112,7 @@ No product caller, new APK or organization routing activation exists for these p
    [Server contract](https://github.com/fajarxfce/hris-platform/blob/cf885a1c/docs/collaboration/native-room-request-fence-http.md).
    Mobile11-file typed fence transport fe3992f1 is accepted/pushed to both branches,
    with44 focused and3,671 full cases as above. Durable Fenced storage is now accepted
-   above. Next validate the nine owning-resolution candidates, then implement atomic
+   above. Next finish the nine-file owning-resolution full gate, then implement atomic
    original/successor linkage with retained exact evidence.
 3. Open preparation/replay and canonical projection-before-archive are locally accepted.
    Continue equivalent owning Room request projection/recovery and original SDK routing.
@@ -118,7 +131,7 @@ No product caller, new APK or organization routing activation exists for these p
 Metadata/preparation/Open candidates are historical applied staging; do not reapply.
 The real codec fix supersedes Open's initial candidate directory. Group native14-file, HTTP6-file and Mobile11-file fence transport are accepted locally.
 Their candidate directories must not be reapplied. The six-file durable slice is now
-accepted; only the separate nine resolution candidates remain unapplied.
+accepted; the separate nine resolution files are applied and frozen for full28463.
 Metadata remains inside the guarded collaboration-history/ prefix.
 
 ## Original SDK and phone invariants
@@ -180,7 +193,7 @@ portable4,805/534; Apple1,969/224; each native ABI537/85, all zero failures/erro
 Original queue continuity24.827s x86/80.993s ARM preserved keys/IDs through process death,
 zero provider sends and full cleanup. Older e8fc and72a original evidence is in history;
 72a's app fake compilation failure was corrected and accepted ine8fc. Storage/observation first3b3 Apple/native CI is fully accepted. Metadata/preparation
-first1d CI is fully accepted; Open335e3914 first31e CI remains running.
+first1d CI is fully accepted; Open335e3914 first31e control is accepted and native remains running.
 
 Live API2e75fe1ee88b5766259fc3efd3ab7f21e70d621a, worker10485916, schema116.1 remain
 unchanged. Group V117–137 remain disabled/unshipped. Starterb11437a is clean/pushed;

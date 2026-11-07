@@ -83,3 +83,14 @@ Room request projection/fencing, original SDK delivery/history, provisional offl
 peer mapping and product routing remain separate work. Setup receipts and canonical
 metadata grant no SDK or content authority. This change does not establish the cause
 or resolution of the reported 20-second to two-minute delay on installed phone build 53.
+
+## Original first control CI
+
+First control42376025279 for source31e618cc89e2ca0cce38bcb62ccd95b8533c88c0 is SUCCESS.
+Original Apple artifact13577353748 contains2,056 cases/232 suites; portable13577059834
+contains4,979 cases/550 suites, zero failures/errors/skips. Their GitHub digests and
+actual25 Open replay plus3 real-storage cases on each Apple/Desktop/Browser target
+are verified. No provider scenario was rerun. [Artifacts and report hashes](measurements/collaboration-space-conversation-open-control-ci-2026-11-07.json).
+First native42376025306 still awaits ARM completion and original-artifact audit.
+This source predates the fence transport/storage/owning-resolution slices; it does
+not establish their source CI or phone53 latency acceptance.
