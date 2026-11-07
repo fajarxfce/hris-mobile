@@ -53,21 +53,20 @@ No product caller, new APK or organization routing activation exists for these p
 
 ## Next work
 
-1. Both first1d9493df control42372520573/native42372520624 have STARTED. Original
-   first3b3 control42369792173/native42369792184 are SUCCESS and fully audited: Apple
-   2,001/228, portable4,869/542, native543/86 perABI, zero failures/errors/skips; original
-   SDK4 keys/IDs and cleanup retained. Audits74274/4322 are reaped. Open335e3914 can now
-   be fast-forwarded to primary for its own first source CI without replacing pending1d.
-2. Sole heavy local job4436 runs Group .work/room-request-fence-2026-11-07/storage-2.
-   FIVE Group source/test/recovery files are applied/FROZEN, NOT accepted: V138 immutable
-   original-operation fence, same-lock receipt exclusion,7 actual migration cases,
-   recovery schema138 without new encrypted envelope, and the existing room test fixture
-   updated from133 to138. First34560 passed24 cases315.431s on8,626 stable inputs with
-   zero failures/errors/skips, but its17 original writer cases still used133. That gap
-   justified this follow-up;7 actual new migration cases already passed. Python recovery
-   passed26 cases after its future-schema expectation fix. No domain fence repository/
-   use case/HTTP/successor or live rollout exists; do not edit frozen Group inputs or
-   start another heavy job. Candidate copies are historical applied staging.
+1. Primary now31e618cc89e2ca0cce38bcb62ccd95b8533c88c0 (Open335e3914 included). First
+   control42376025279/native42376025306 are PENDING behind running first1d9493df
+   control42372520573/native42372520624. Preserve before another primary promotion.
+   First3b3 control/native are SUCCESS and fully audited; no provider reruns.
+2. Group V138 storagec6937843 is accepted/pushed:7 migration138 cases plus17 actual
+   writer cases after fixture upgrade133→138, same-lock stable receipt/fence exclusion,
+   immutable evidence and archive/restore;26 recovery checks retain unchanged envelopes.
+   [Storage contract](https://github.com/fajarxfce/hris-platform/blob/c6937843/docs/collaboration/room-request-fence-storage.md).
+   Sole heavy job49421 now runs Group .work/room-request-fence-native-2026-11-07/focused-1.
+   FOURTEEN Kotlin files are applied/FROZEN, not accepted: typed repo/raw source/mapping,
+   native owning fence, current-admitted stable writer rejection and shared DI;27 native
+   transaction/4 mapping cases plus domain/quality. After focused, API + FULL worker
+   context-check.py is required. No HTTP endpoint or Mobile successor/rollout yet.
+   Do not edit frozen Group source or start a second heavy job.
 3. Open preparation/replay and canonical projection-before-archive are locally accepted.
    Continue equivalent owning Room request projection/recovery and original SDK routing.
    Separate native account/MFA/client denial from conversation/peer denial; do not close
@@ -83,8 +82,8 @@ No product caller, new APK or organization routing activation exists for these p
    is waived, but relevant Apple CI/compilation remains required.
 
 Metadata/preparation/Open candidates are historical applied staging; do not reapply.
-The real codec fix supersedes Open's initial candidate directory. Group's4 fence
-candidates are also applied now and frozen for4436; they have no domain/HTTP caller.
+The real codec fix supersedes Open's initial candidate directory. Group's5 V138 storage files are accepted;14 new owning
+fence files are frozen for49421 and have no HTTP caller yet.
 Metadata remains inside the guarded collaboration-history/ prefix.
 
 ## Original SDK and phone invariants
