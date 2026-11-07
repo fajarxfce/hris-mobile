@@ -8,7 +8,7 @@ interface CollaborationSpaceRoomRepository {
         conversation: CollaborationSpaceConversation
     ): AppResult<CollaborationSpaceRoomView>
 
-    /** The caller owns durable intent, current admission and explicit terminal retry policy. */
+    /** Stable request identity; the caller owns durable intent, admission and terminal retry. */
     suspend fun request(
         conversation: CollaborationSpaceConversation,
         operation: String,
@@ -20,4 +20,9 @@ interface CollaborationSpaceRoomRepository {
         conversation: CollaborationSpaceConversation,
         original: CollaborationSpaceRoomOperation,
     ): AppResult<CollaborationSpaceRoomReceiptObservation>
+
+    suspend fun readIntentReceipt(
+        conversation: CollaborationSpaceConversation,
+        original: CollaborationSpaceRoomRequestIntent,
+    ): AppResult<CollaborationSpaceRoomIntentReceiptObservation>
 }

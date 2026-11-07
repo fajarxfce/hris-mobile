@@ -1,5 +1,9 @@
 # Architecture
 
+[Stable organization room requests](collaboration-space-room-stable-intent.md) keep
+immutable business intent separate from rotating native proof. Receipt absence
+remains uncertain; durable dispatch and explicit replacement fencing are separate.
+
 [Original room request receipts](collaboration-space-room-receipts.md) read complete
 original proof under the current native owner. Initial durable proof capture and
 stable owning dispatch remain separate; receipt absence does not fence late work.

@@ -3,6 +3,13 @@ package dev.fajar.starter.collaboration.data.datasources
 import dev.fajar.starter.collaboration.data.dto.*
 
 interface CollaborationSpaceRoomRemoteSource {
+    suspend fun readIntentReceipt(
+        sessionId: String,
+        spaceId: String,
+        conversationId: String,
+        original: CollaborationSpaceRoomIntentReceiptReadDto,
+    ): CollaborationSpaceRoomIntentReceiptObservationDto
+
     suspend fun readReceipt(
         sessionId: String,
         spaceId: String,

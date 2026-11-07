@@ -56,3 +56,7 @@ now confirms the initial proof gap through real native refresh and PostgreSQL-ba
 room writes. The selected follow-up is a separate stable business-intent namespace,
 retaining original receipt semantics. Its initial domain implementation is under test;
 new native routes and durable Mobile dispatch remain unfinished.
+
+The [stable v2 transport](collaboration-space-room-stable-intent.md) now uses the
+accepted separate Group namespace for new writes. It resolves the initial proof
+capture gap without altering the legacy reader; durable owning dispatch is next.

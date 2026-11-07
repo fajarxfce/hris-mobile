@@ -68,7 +68,7 @@ class CollaborationSpaceRoomTransportTest {
         f.withRepositories(
             MockEngine { request ->
                 assertEquals(HttpMethod.Post, request.method)
-                assertEquals("${f.root}/${f.id}/room", request.url.encodedPath)
+                assertEquals("${f.root}/${f.id}/room/requests", request.url.encodedPath)
                 assertEquals(f.operation, request.headers["Idempotency-Key"])
                 assertNull(request.headers["X-Company-Id"])
                 val body = request.body.toByteArray().decodeToString()
@@ -120,7 +120,7 @@ class CollaborationSpaceRoomTransportTest {
     }
 
     @Test
-    fun aChangedNativeProofConflictCannotBecomeAReceiptOrANewOperation() = runTest {
+    fun aServerPayloadConflictCannotBecomeAReceiptOrANewOperation() = runTest {
         var calls = 0
         val bodies = mutableListOf<String>()
         f.withRepositories(

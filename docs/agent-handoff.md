@@ -7,27 +7,40 @@ and [history through build 50](agent-handoff-history-through-build50.md).
 
 ## Latest continuation — 7 November 2026
 
-Original e8fc first control42360096500/native42360096584 are fully audited SUCCESS:
-Apple1,960/223, portable4,787/532 and each Android ABI528/84, zero failures/errors/skips.
-Original artifact digests and both immutableSDK4 hashes verified. Original queue
-continuity passed31.145s x86/48.618s ARM, no provider sends, complete cleanup. No
-accepted provider scenario was rerun. [CI evidence](measurements/collaboration-room-transport-control-native-ci-2026-11-07.json).
-First fb514281 control42363807332/native42363807289 have BOTH started; preserve/audit
-original evidence when complete. Primary remainsfb514281; this branch131723d5 follows.
+Stable native room transport is accepted against Group `d37459fd`: 11 Kotlin files,
+new writes `/room/requests`, read-only `/room/requests/receipts/read`, immutable v2
+business input separated from CURRENT native proof/build. Legacy proof reader stays.
+[Contract and evidence](collaboration-space-room-stable-intent.md). Focused92668:
+36 cases/5 suites/180.349s. Full82398: 3,560 fresh cases/443 suites/366.186s,
+4,359 unchanged inputs, zero failures/errors/skips and Android release lint issues;
+root/Android host/format/architecture/Detekt passed. All local jobs are reaped.
 
-Groupa6be53b1 stable request domain is accepted/pushed:181 cases/213.656s,8,622 stable
-inputs, zero failures/errors/skips, delivery/quality passed. Sole heavy local job98418
-is its stable intent HTTP/http-1: SIX Kotlin files applied/FROZEN. New explicit routes
-use /room/requests and /room/requests/receipts/read; actual refresh/replay/new-parent,
-input bounds, OpenAPI and disabled-route acceptance is running. No DI constructor
-change; prior full worker acceptance4e1b5b90 remains relevant. Do not overlap builds.
+Group `a6be53b1` stable domain passed181 cases/213.656s; `d37459fd` HTTP passed97
+cases/192.018s with actual refresh/new-parent/denial/bounds/OpenAPI/disabled routes.
+No DI constructor changes; prior full worker acceptance4e1b5b90 is retained.
+V117–137 remain disabled/unshipped; no production deployment or new APK.
 
-NEXT accept server HTTP, then Mobile stable intent transport/durable commands and
-finite owning recovery. Complete original SDK delivery/history, parent recovery,
-product routing and all54 groups. V117-137 remain disabled; no new APK or phone53
-latency claim. Current native version must never be guessed. Original operation
-absence remains uncertain; explicit fencing is still required before replacement.
-Earlier sections below retain previous checkpoints; this section is authoritative.
+Original e8fc control42360096500/native42360096584 are audited SUCCESS: Apple1,960,
+portable4,787, each Android ABI528; immutable SDK4 and original artifact hashes
+verified. [CI evidence](measurements/collaboration-room-transport-control-native-ci-2026-11-07.json).
+First fb514281 control42363807332/native42363807289 are both in progress. Preserve
+and audit their original artifacts when complete; no accepted provider rerun.
+
+NEXT durable open/room commands using existing CommandStore, cipher and key custody.
+Persist immutable open peer or stable room intent before dispatch. Pending→Unconfirmed
+must commit before HTTP. Recorded receipts are setup facts, not room-ready or message
+ACK. Use exact encrypted recorded state as archive evidence after idempotent local
+projection, freeing the 128 active slots; recover exact known archived IDs without
+scanning or recreating keys. Test CAS, competing inserts, lost responses, archives,
+ownership, cancellation and missing keys. Null receipt is NOT a replacement fence.
+Then owning flow, explicit finite fencing, original SDK delivery/history, native
+parent recovery, product routing and all54 PRD groups (none complete).
+
+Phone53 latency remains OPEN; latest bounded ADB reconnect timed out10:10–10:11UTC.
+No new feedback question or phone UI driving. Bima keys exist and recipients need
+not remain online for server acceptance. Preserve original Bima store/keys/message
+IDs and SDK4. Starterb11437a and live services are unchanged. This section supersedes
+older running-job/next-step statements below; retain earlier evidence as history.
 
 ## Current work — 7 November 2026
 

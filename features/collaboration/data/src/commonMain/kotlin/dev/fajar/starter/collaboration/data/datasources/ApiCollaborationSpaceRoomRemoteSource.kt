@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data.datasources
 
 import dev.fajar.starter.collaboration.data.api.CollaborationSpaceRoomApi
+import dev.fajar.starter.collaboration.data.dto.CollaborationSpaceRoomIntentReceiptReadDto
 import dev.fajar.starter.collaboration.data.dto.CollaborationSpaceRoomReceiptReadDto
 import dev.fajar.starter.collaboration.data.dto.CollaborationSpaceRoomRequestDto
 import org.koin.core.annotation.Single
@@ -8,6 +9,13 @@ import org.koin.core.annotation.Single
 @Single
 class ApiCollaborationSpaceRoomRemoteSource(private val api: CollaborationSpaceRoomApi) :
     CollaborationSpaceRoomRemoteSource {
+    override suspend fun readIntentReceipt(
+        sessionId: String,
+        spaceId: String,
+        conversationId: String,
+        original: CollaborationSpaceRoomIntentReceiptReadDto,
+    ) = api.readIntentReceipt(sessionId, spaceId, conversationId, original)
+
     override suspend fun readReceipt(
         sessionId: String,
         spaceId: String,
