@@ -17,26 +17,31 @@ Android host, format/architecture and Detekt passed. All Mobile sessions are rea
 
 Group `4e1b5b90` is accepted/pushed: native original receipt HTTP+shared DI,238 API/
 FULL worker cases504.080s, one existing elapsed-retention skip,8,619 unchanged inputs.
-ONLY heavy local job51650 is Group room-proof-capture/characterize-1: one test file
-is frozen to characterize real initial HTTP write after native refresh. Current
-native credential DTOs/session storage do NOT expose native version, while the old
-writer fingerprints the actual bearer version/build. Never guess a durable proof.
+Group `dedab8dc` now characterizes the actual initial proof gap:23 native HTTP cases
+passed131.606s,8,619 stable inputs, zero failures/errors/skips and quality checks. Real
+native refresh advances0→1 without exposing the version; first room write commits,
+assumed original0 conflicts and exact1 recovers without changing receipt/queue counts.
+Three prior fixture failures are retained (compile argument, cooldown, app-only future
+clock); final test waits11 real seconds. No production time/security policy changed.
 
-NEXT accept that characterization, then implement the stable versioned room intent
-namespace, preserving original fingerprints/receipts and current native/device/peer
-admission. Eight candidate domain/test files are PREPARED ONLY outside source in
-Group .work/room-stable-intent-2026-11-07, not applied or compiled; verify their before
-hashes before use. No new HTTP route for stable intent yet. Stable native intent and
-its explicit receipt acquisition must precede durable Mobile commands and owning
-original-message delivery. Missing receipt is not a fence; retain uncertainty before
-any explicit replacement. Then publication/history, parent recovery, product routing
-and all54 PRD groups. V117-137 remains disabled/unshipped.
+ONLY heavy local job39808 is Group room-stable-intent/domain-1. EIGHT reviewed Kotlin
+files are now APPLIED/FROZEN, not yet accepted: explicit request-intent descriptor,
+separate `collaboration.space_room_setup.v2` business fingerprint, generic typed receipt
+observation, same admitted reader and writer with explicit format, concrete legacy HTTP
+response compatibility, plus pure/data tests. This differs from the existing provider
+room intent. Domain/data/delivery/quality gate is running; no stable HTTP endpoint yet.
+NEXT accept that gate, add explicit native request/read routes and actual HTTP coverage,
+then durable Mobile commands, finite fenced handoff and original SDK delivery/history.
+Do not guess native versions or replace an absent/uncertain operation. Continue parent
+recovery, product routing and all54 PRD groups. V117-137 remain disabled/unshipped.
 
-Original72a native42358423298 passed both ABIs509/82 with exact immutableSDK4, original
-keys/queue preserved through process death and offline held-writer recovery. Its
-first control42358423232 FAILED the old app-test fake, fixed in e8fc7844; original
-artifacts/failure are audited in777d6215. e8fc first control42360096500/native42360096584
-are IN_PROGRESS. Preserve later first pending runs before another primary promotion.
+Mobile program `fb514281b191e74d25ad44e20521666a322d0848` is pushed to BOTH branches.
+FIRST control42363807332/native42363807289 are PENDING behind running e8fc control
+42360096500/native42360096584. Preserve both pending first runs before promoting more
+source to primary; continue on this recovery branch. Prior72a native passed509/82 on
+both ABIs; its failed portable fake compilation and original artifacts are audited in
+777d6215, with the correction already accepted ine8fc/fb514. SDK4 remains immutable.
+
 Phone53 latency stays OPEN; last bounded reconnect timed out10:10-10:11UTC. Existing
 optional feedback is pending, no new question or phone UI driving. Live services,
 SDK4, original Bima data/keys/IDs and Starterb11437a are unchanged.

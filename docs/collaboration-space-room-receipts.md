@@ -50,3 +50,9 @@ Tests cover current-parent/build replacement with unchanged original proof,
 authentication replay, uncertain absence and late receipt, full fingerprint/account
 isolation, input/response bounds, denied/conflicting responses and late cancellation.
 No native SDK or phone/provider test was needed for this metadata-only change.
+
+The [actual Group HTTP characterization](https://github.com/fajarxfce/hris-platform/blob/dedab8dc/docs/collaboration/native-room-receipt-recovery.md)
+now confirms the initial proof gap through real native refresh and PostgreSQL-backed
+room writes. The selected follow-up is a separate stable business-intent namespace,
+retaining original receipt semantics. Its initial domain implementation is under test;
+new native routes and durable Mobile dispatch remain unfinished.
