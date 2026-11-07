@@ -62,23 +62,22 @@ No product caller, new APK or organization routing activation exists for these p
 
 ## Next work
 
-1. Primary31e618cc89e2ca0cce38bcb62ccd95b8533c88c0 includes Open335e3914. Its first
-   control42376025279/native42376025306 have BOTH STARTED by14:00UTC. A later accepted
-   source promotion no longer risks replacing their pending first runs. First1d9493df
-   control42372520573/native42372520624 are SUCCESS and fully audited: Apple2,028/230,
-   portable4,923/546, native543/86 each. Actual Apple/Desktop/Browser each contain14
-   metadata-storage and13 Open-preparation cases; immutableSDK4 keys/IDs/cleanup pass.
-   Audit85452 is reaped; no provider rerun. [First-source evidence](measurements/collaboration-space-conversation-preparation-control-native-ci-2026-11-07.json).
+1. Primary and recovery now contain accepted sourcefe3992f1426712bf23964bf5aea68ad382f1b624.
+   First control42380244144/native42380243983 are PENDING behind running first31e
+   control42376025279/native42376025306. Preserve both new first runs before another
+   primary promotion; continue source work on recovery. First1d9493df control/native
+   are fully audited SUCCESS, including14 metadata-storage and13 preparation cases
+   on Apple/Desktop/Browser, SDK4 native keys/IDs and cleanup. [Evidence](measurements/collaboration-space-conversation-preparation-control-native-ci-2026-11-07.json).
 2. Group native dcdaf220 and HTTP cf885a1c are accepted/pushed. Focused195/319.052s and
    API/FULL worker241/540.839s pass with one existing opt-in retention skip. Corrected
    HTTP42852 passes99/202.31s on8,637 stable inputs,0failure/error/skip/quality. First57183
    fixture expectation failure is retained: unselected provider identity rejects the
    writer with peer_unavailable. Current admission is unchanged. All Group jobs reaped.
    [Server contract](https://github.com/fajarxfce/hris-platform/blob/cf885a1c/docs/collaboration/native-room-request-fence-http.md).
-   Mobile11-file typed fence transport is now locally accepted, with44 focused and
-   3,671 full cases as above. All jobs are reaped. Push/promote accepted source after
-   confirming the old primary remains its ancestor; first31e runs already started.
-   Preserve the next source's first pending runs before any later primary promotion.
+   Mobile11-file typed fence transport fe3992f1 is accepted/pushed to both branches,
+   with44 focused and3,671 full cases as above. All local jobs are reaped. Next add
+   immutable Room-only Fenced outcome storage while preserving existing v1 request/
+   outcome bytes and keys. Keep owning capture and atomic successor linkage separate.
 3. Open preparation/replay and canonical projection-before-archive are locally accepted.
    Continue equivalent owning Room request projection/recovery and original SDK routing.
    Separate native account/MFA/client denial from conversation/peer denial; do not close
