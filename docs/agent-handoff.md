@@ -45,9 +45,11 @@ No product caller, new APK or organization routing activation exists for these p
 1. First1d9493df control42372520573/native42372520624 are PENDING behind running
    first3b3 control42369792173/native42369792184. Preserve these first pending runs
    before another primary promotion; continue source work on recovery.
-2. TWELVE original Open replay files are applied/FROZEN. Sole heavy local job35951
-   runs .work/space-conversation-open-replay-2026-11-07/focused-3:25 domain cases,
-   three real encrypted storage cases, command policy and actual app binding.
+2. TWELVE original Open replay files are applied/FROZEN. Sole heavy local job69888
+   runs .work/space-conversation-open-replay-2026-11-07/full-1: root check, Android
+   host/release lint, actual Browser domain/storage, shared Wasm and quality checks.
+   Focused35951 passed34 fresh cases134.702s on4,393 unchanged inputs, zero failures/
+   errors/skips; all focused jobs are reaped. [Contract](collaboration-space-conversation-open-replay.md).
    Focused15001 passed30 fake-domain/binding cases195.304s. Focused3935 then
    REPRODUCED a real codec normalization failure:3 fresh storage cases,1 failure,
    104.619s,4,393 unchanged inputs; both jobs reaped. Directory and command codecs
@@ -74,7 +76,7 @@ No product caller, new APK or organization routing activation exists for these p
    is waived, but relevant Apple CI/compilation remains required.
 
 Metadata/preparation candidates are historical applied staging. Open replay candidates
-are also applied now, but unaccepted and frozen for35951. Its candidate folder is
+are also applied now, but unaccepted and frozen for69888. Its candidate folder is
 historical before the real codec fix; do not reapply it. Metadata stays inside the
 existing guarded collaboration-history/ prefix with metadata-only/inactive key-loss
 coverage. No server fence or room request successor implementation exists yet.
