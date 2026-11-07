@@ -1,0 +1,160 @@
+{
+  "date": "2026-11-07",
+  "scope": "Android observer build, binding package and real JNI/loopback behavior only",
+  "ciRun": 42408652180,
+  "ciHead": "8713b4f810834cd02b665bc23ac6005f4c4ef808",
+  "manifestSha256": "7545e12760f30fdd2628d64e6de345822f07e63d6c30ad006cee83757020de0e",
+  "artifacts": [
+    {
+      "abi": "arm64-v8a",
+      "artifactId": 13589071204,
+      "archiveSha256": "f9da70f06a4e3cdcd3d59ff74c1a71dd2957dfe99be69e6a07e498c37ea37593",
+      "githubDigestVerified": true,
+      "elapsedSeconds": 1153.041,
+      "sourceAndGeneratedHashesMatchedManifest": true,
+      "native": {
+        "nativeSha256": "e10c154a80aa4c1132c1d1410c0055af2e9394608a8ac6d24c4e103ffa9b0b37",
+        "nativeBytes": 138998408,
+        "elfClass": "ELF64",
+        "requiredElfAlignment": 16384,
+        "loadAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "requiredSymbolsPresent": true
+      }
+    },
+    {
+      "abi": "armeabi-v7a",
+      "artifactId": 13588019784,
+      "archiveSha256": "75ea53381d4a2017fc84da929c4ad068c25f3e9df3e1b1213acbc5dc6f8abc7f",
+      "githubDigestVerified": true,
+      "elapsedSeconds": 934.289,
+      "sourceAndGeneratedHashesMatchedManifest": true,
+      "native": {
+        "nativeSha256": "b71dae84d717fdadc8321ff19bbfa1fc98818fb94788f2c88159e46f76a37238",
+        "nativeBytes": 98628880,
+        "elfClass": "ELF32",
+        "requiredElfAlignment": 4096,
+        "loadAlignments": [
+          4096,
+          4096,
+          4096,
+          4096
+        ],
+        "requiredSymbolsPresent": true
+      }
+    },
+    {
+      "abi": "x86",
+      "artifactId": 13588788007,
+      "archiveSha256": "0383f71038221cc15dd6bfc4982fbe2bdd17bbe9cabe82eb59ee817f84aa0aed",
+      "githubDigestVerified": true,
+      "elapsedSeconds": 1343.258,
+      "sourceAndGeneratedHashesMatchedManifest": true,
+      "native": {
+        "nativeSha256": "0eff2c017c7285d753917e0089ea33387bb427b61a3bea03e4f7d46ceaa02adc",
+        "nativeBytes": 148241228,
+        "elfClass": "ELF32",
+        "requiredElfAlignment": 4096,
+        "loadAlignments": [
+          4096,
+          4096,
+          4096,
+          4096
+        ],
+        "requiredSymbolsPresent": true
+      }
+    },
+    {
+      "abi": "x86_64",
+      "artifactId": 13588794675,
+      "archiveSha256": "ba4b269680d7b7b53fabcfd38b2edb73fa55f8321e367e9b61c4db2b05d20424",
+      "githubDigestVerified": true,
+      "elapsedSeconds": 1293.034,
+      "sourceAndGeneratedHashesMatchedManifest": true,
+      "native": {
+        "nativeSha256": "03e23ca8c98038f5fc408855471e9d7278fcf7a6b38ef8013e033f7738dcd67d",
+        "nativeBytes": 143012808,
+        "elfClass": "ELF64",
+        "requiredElfAlignment": 16384,
+        "loadAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "requiredSymbolsPresent": true
+      }
+    }
+  ],
+  "package": {
+    "version": "26.10.23-hris.5",
+    "wrapperCommit": "c1664f712bed33488b10f33232fb424faf257d49",
+    "passed": true,
+    "published": false,
+    "elapsedSeconds": 111.824,
+    "aarSha256": "5bffa2f4318d1edc7518ad21dc156393ef8a7e2610fd42320a67c12ab645ba5c",
+    "aarBytes": 185971020,
+    "classesSha256": "2718b789a1ac4ad1ffbe840fbb2addf7ef1a0efd22a43c215b891047a4bcd1a2",
+    "ivySha256": "181d7fa434b528de36a077562120f9083c16adca5bb3b66985a0d92a44519b2e",
+    "sourcesSha256": "aa1919633fcfbe600c5a375c291378c663a67788d9f9bd77adf9d3f61f95acf0",
+    "inputsUnchanged": true
+  },
+  "firstNativeAttempt": {
+    "at": "2026-11-07T20:28:40.141837+00:00",
+    "passed": false,
+    "scope": "Harness failed before invoking native instrumentation",
+    "requestedPackage": "dev.fajar.inspector.matrix.rust.proof",
+    "actualManifestPackage": "dev.fajar.inspector.matrix.rust.test",
+    "nativeExecuted": false,
+    "installedApkSha256Verified": "f48b30350fdae1c40bee57c017d4f91848b4cf6248993cccd2f5e06192da65be",
+    "fixtureUninstalled": true,
+    "originalHrisBuildRetained": 55,
+    "phoneTouched": false
+  },
+  "actualNativeProbe": {
+    "at": "2026-11-07T20:28:40.868372+00:00",
+    "serial": "emulator-5562",
+    "package": "dev.fajar.inspector.matrix.rust.test",
+    "apkSha256": "f48b30350fdae1c40bee57c017d4f91848b4cf6248993cccd2f5e06192da65be",
+    "native": {
+      "lib/x86_64/libmatrix_sdk_ffi.so": "03e23ca8c98038f5fc408855471e9d7278fcf7a6b38ef8013e033f7738dcd67d"
+    },
+    "phoneTouched": false,
+    "originalHrisBuild": 55,
+    "passed": true,
+    "instrumentationExitCode": 0,
+    "nativeResult": {
+      "originalResponseAndCapture": true,
+      "pendingReadStoppedAndDisposed": true,
+      "replacementClosesExactOldHandle": true,
+      "captureCancellationPreservesRequest": true,
+      "boundedCapturePreservesAllRequests": true,
+      "passed": true
+    },
+    "fixtureUninstalled": true,
+    "originalHrisBuildRetained": true,
+    "seconds": 2.88
+  },
+  "emulatorStop": {
+    "pid": 2190705,
+    "startTicks": "175983793",
+    "stopped": true,
+    "dataRetained": true,
+    "phoneTouched": false,
+    "at": "2026-11-07T20:29:16.792796+00:00"
+  },
+  "appleAccepted": false,
+  "mobileHostCaptureAccepted": false,
+  "transportLatencyImproved": false,
+  "notes": [
+    "First native harness addressed the wrong package. The installed APK hash was verified before cleanup; no native test was invoked in that attempt.",
+    "The corrected harness uses the compiled test package and passed five actual JNI scenarios. Capture preserved 100 original loopback requests under queue saturation.",
+    "2.880s is fixture installation/execution/cleanup wall time, not an HTTP latency or overhead benchmark.",
+    "Original HRIS build55 remains installed; no HRIS clear/reset/re-enrollment or user phone operation occurred.",
+    "Apple first CI42408920984 is still running. No SDK5 publication, iOS capture or host integration is claimed."
+  ]
+}

@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Android native observer verified — 7 November 2026, 20:31 UTC
+
+All four first Android ABI artifacts from CI42408652180/8713b4f8 are audited: GitHub
+archive digests, pinned source/Kotlin hashes, exact observer APIs and required ELF
+alignment pass. The fresh distribution wrapper packages26.10.23-hris.5 successfully:
+111.824s,185971020B AAR/5bffa2f4318d1edc7518ad21dc156393ef8a7e2610fd42320a67c12ab645ba5c.
+It remains UNPUBLISHED. APK/host dependency changes are still on the private inspector
+candidate branch; Mobile continues to useSDK4.
+
+Actual x86_64 JNI/loopback probe-2 passed five scenarios: original response/capture,
+stop wakes pending read before disposal, replacement closes the old handle, cancelling
+capture preserves the request, and a full queue preserves100 original requests. Probe-1
+was a harness package mismatch before invocation; installed APK hash was verified before
+cleanup. The test package is dev.fajar.inspector.matrix.rust.test, as in compiled metadata.
+The fixture is uninstalled. Original HRIS55 remains installed. EmulatorPID2190705/
+startTicks175983793 stopped20:29:16.792796Z; sessions1755/86647/38846/77109 are REAPED.
+All local compilers and auditors are reaped, no emulator runs. [Evidence](measurements/matrix-http-observer-android-native-2026-11-07.json).
+
+Apple first CI42408920984 remains running. Its UniFFI0.32.1 Swift async template does
+not observe Task cancellation itself; the owner must call native stop to wake a reader.
+The authored Swift cancellation case explicitly does that. Apple host adapters need an
+explicit cancellation handler/close lifetime; no iOS runtime acceptance is claimed.
+
+Next finish Apple verification, integrate the private reusable viewer/capture into Mobile,
+measure original retained send timing/overhead and deliver a validated APK, then Starter.
+Do not publicize private inspector source while its visibility question remains unanswered.
+Main library388a1cb remains portable; candidate2752c5d has accepted Android adapter tests.
+Its pending local changes use the four-ABI candidate and select the emulator APK ABI.
+Phone/stopped original Bima emulator remain55; viewport fixbb106154 awaits56 and composer/
+latency remain open. Bothbb106 first CI runs completed successfully and their archives
+are downloaded in Mobile; exact native continuity assertions/audit write-up remain.
+Continue all54 communications PRD groups, with none newly complete.
+
 ## Apple observer candidate build — 7 November 2026, 20:00 UTC
 
 Android first CI42408652180 for8713b4f8 has started. Preserve that original run;
