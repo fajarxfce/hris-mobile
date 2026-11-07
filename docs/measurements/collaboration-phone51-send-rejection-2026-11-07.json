@@ -1,0 +1,68 @@
+{
+  "at": "2026-11-07T00:05:47.147730+00:00",
+  "serial": "10.77.77.3:5555",
+  "uids": [
+    10962,
+    1010962
+  ],
+  "deviceClockOffsetSeconds": -2.436,
+  "afterInstallUtc": "2026-11-06T23:22:17.666733+00:00",
+  "retainedLinesAfterInstall": 164,
+  "fatalExceptionsAfterInstall": 0,
+  "chatDiagnostics": [
+    {
+      "at": "2026-11-07T00:01:39.700210+00:00",
+      "category": "ChatQueueRetained_Rejected"
+    },
+    {
+      "at": "2026-11-07T00:01:41.341210+00:00",
+      "category": "ChatQueueSend_Rejected"
+    },
+    {
+      "at": "2026-11-07T00:01:41.344210+00:00",
+      "category": "ChatQueueRetained_Rejected"
+    },
+    {
+      "at": "2026-11-07T00:01:41.478210+00:00",
+      "category": "ChatDelivery_DeliverMessages_Unavailable"
+    },
+    {
+      "at": "2026-11-07T00:02:09.504210+00:00",
+      "category": "ChatSync_Generic"
+    },
+    {
+      "at": "2026-11-07T00:02:35.767210+00:00",
+      "category": "ChatSync_Generic"
+    },
+    {
+      "at": "2026-11-07T00:03:03.023210+00:00",
+      "category": "ChatSync_Generic"
+    }
+  ],
+  "logSha256": "c5551798664f5fa0d5d325efe894b53b8814e631e033a493f5b0ad5e84a64503",
+  "phoneUiDriven": false,
+  "newMessagesSent": 0,
+  "logClockCorrectedToHostUtc": true,
+  "installedVersionCode": 51,
+  "source": "68d848b7fed810984ddb59ca53079442dcac7819",
+  "httpMetrics": {
+    "scope": "Ktor HRIS requests only, not native Matrix",
+    "requests": 154,
+    "succeeded": 154,
+    "maximumMillis": 387,
+    "cancelled": 2
+  },
+  "providerObservation": {
+    "window": "2026-11-07T00:00:00Z/2026-11-07T00:05:00Z",
+    "oneSendAndOneKeyQueryHttp200At": "2026-11-07T00:01:36Z",
+    "individualPendingRowsMatched": false
+  },
+  "passiveWireCapture": {
+    "durationSeconds": 45,
+    "passiveReadOnly": true,
+    "http": [],
+    "failures": []
+  },
+  "interpretation": "At least one live send and retained queue item expose SDK GenericApiError as nonrecoverable. This category cannot distinguish native HTTP rejection, response decoding, local crypto/storage or another SDK failure. Previous native-family mapping failure is absent from this retained window; no complete per-message outcome is established.",
+  "phonePendingResolved": false
+}

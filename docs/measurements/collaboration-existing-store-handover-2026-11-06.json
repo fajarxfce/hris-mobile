@@ -1,6 +1,6 @@
 {
-  "recordedAt": "2026-11-06T23:56:55.165822+00:00",
-  "status": "focused and real SDK acceptance passed; full candidate gate running",
+  "recordedAt": "2026-11-07T00:06:53.275700+00:00",
+  "status": "focused, actual SDK4 two-ABI and full candidate accepted; source commit pending first CI start",
   "baseSource": "15facc913e792bfab94f6c32a61651f1275c9d57",
   "candidateFiles": {
     "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkRuntimeRegistry.kt": "628760a1c3bfa7227669a0ab52344ba92a02a9d7a839211b137c787d392743b9",
@@ -193,9 +193,20 @@
     "elapsedSeconds": 120.442
   },
   "fullGate": {
-    "status": "running",
-    "session": 50781,
-    "path": ".work/space-store-inventory-2026-11-06/closed-handover-next/full-1"
+    "startedAt": "2026-11-06T23:56:31.937761+00:00",
+    "elapsedSeconds": 586.14,
+    "exitCode": 0,
+    "sourceFiles": 4267,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 5490,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 644,
+    "detektFindings": 0,
+    "androidLintFindings": 0
   },
   "scope": {
     "providerOrServerCalled": false,

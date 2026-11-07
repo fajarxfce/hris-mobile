@@ -42,20 +42,34 @@ privilege were restored. Both private screenshots were viewed. Owned emulator st
 `.work/release-phone-2026-11-06-build51`. Phone preflight verified installed50 and its
 signer/hash; installation uses explicit10.77.77.3:5555 and `--install-only`.
 
-The ONLY heavy local job is **50781**, existing-store handover **full-1**, under
-`.work/space-store-inventory-2026-11-06/closed-handover-next`. Ten Kotlin files are
-UNCOMMITTED and frozen: seven product/host-test files plus three native-proof files.
-Focused86050 PASSED34 cases/127.354s, zero failures/errors/skips,4,266 stable inputs.
-First proof build72231 assembled but FAILED Detekt (onStart104 lines/max100); original
-SARIF is retained. Separating scenario dispatch from lifecycle fixed it; exact-source
-proof-build-2/8440 PASSED74.868s,4,267 stable inputs, zero quality findings.
-Real native11165 PASSED120.442s on both ABIs: x86_64 42.045s, ARM64 38.118s, original
-private keys/main SQLite bytes unchanged, actual file contention and interrupted writes,
-process absence between phases, same-intent replay without SDK construction. Fresh
-owned5564 emulator stopped, fixture packages removed; original Bima/phone untouched.
-[Contract](collaboration-existing-store-handover.md),
+Existing-store handover is fully accepted. Full50781 PASSED586.14s:5,490 fresh
+cases/644 suites, zero failures/errors/skips,4,267 unchanged source inputs and zero
+Detekt findings. Focused34 and real SDK4 two-ABI/native process-death proof also pass
+(120.442s; x86_64 42.045s, ARM64 38.118s). All ten Kotlin files remain uncommitted
+while transport15facc91's first CI is pending. Their exact accepted contents are
+retained in `.work/space-store-inventory-2026-11-06/closed-handover-next/accepted-source`.
+The ONLY heavy local job is76606, phone51 rejection diagnostic focused-1; no emulator
+is active. Three additional diagnostic Kotlin files are now applied/frozen. [Contract](collaboration-existing-store-handover.md),
 [evidence](measurements/collaboration-existing-store-handover-2026-11-06.json).
-No owning use case, provider preflight, server freeze or product activation exists yet.
+
+NEW phone51 passive evidence at00:05:47UTC on7 November has164 post-install lines:
+ChatQueueRetained_Rejected twice, ChatQueueSend_Rejected once, delivery Unavailable,
+and three ChatSync_Generic. All154 traced HRIS HTTP calls are200(max387ms); those
+Ktor metrics do not establish native Matrix HTTP success. Zero fatal exceptions.
+This is NOT the former native-family mapping failure; inspect actual generic SDK/API
+rejection before attributing old/current pending messages. Private sanitized summary
+and raw log are under release-phone-2026-11-06-build51/phone51-uid-000547.*.
+Prioritize this actual phone rejection while retaining the accepted handover work.
+No phone UI was driven and no message was sent by the agent.
+Provider logs contain one send and one key query200 at00:01:36, without per-message
+matching; one later API error is a client-aborted response. A45s passive wire capture
+saw no requests and grants no delivery evidence. The additional diagnostic maps only
+bounded pinned SDK/Ruma prefixes to finite categories (HTTP status, response decoding,
+missing Olm/local state, crypto store, wrong room state, concurrent/older failure).
+It never emits server prose or changes queue policy. Six focused cases including
+three new privacy/prefix cases run first, then the exact full gate and release52.
+[Physical evidence](measurements/collaboration-phone51-send-rejection-2026-11-07.json).
+
 
 The ten separate organization runtime transfer files are fully accepted and committed
 with this checkpoint. Focused65759 PASSED9 cases/175.602s (7 transport/2 actual DI). Full15063 ENDED
@@ -76,20 +90,19 @@ Queue68d first control42310411055 and native42310411202 are now running. SDK4 co
    the actual installation and corrects measured device clock offset. Passive audits
    at23:24:02 and23:50:00UTC retained no post-install lines for either profile; silence
    proves no delivery outcome. Do not launch the phone to manufacture evidence.
-2. Reap full-1/50781. After all required gates pass, commit the ten exact accepted
-   source/test files with their evidence. Do not displace transport15facc91's first
-   pending CI; wait until those runs start before a newer source push. Native11165
-   already accepted; do not rerun it solely for evidence. Preserve original sources.
-   Credential rotation with initialized=false still needs its own versioned retained
-   record phase; preserve that flag and prior strict schema2 behavior.
-   Seven formatted candidate files and red/green/full/native drivers are prepared only
+2. Trace actual phone51 generic queue rejection. Read-only server logs for00:00–00:05
+   are retained under `.work/phone51-send-rejection-2026-11-07`; use closed categories,
+   not raw private bodies/tokens. User has an optional question about new vs old sends
+   in build51 pending; do not infer its answer from elapsed time.
+   Commit the ten exact accepted closed-store files after transport15facc91's first
+   pending CI starts. Full50781 and native11165 already pass; do not rerun for evidence.
+   Seven formatted later files and red/green/full/native drivers are prepared only
    under `.work/space-store-inventory-2026-11-06/rotation-handover-next` (not applied).
-   Five new regression cases are ready for a red gate against unchanged production.
-   The separate strict schema3 preserves initialized=false; schema2/open-client guards
-   remain unchanged. Its real SDK proof interrupts actual product credential replacement
-   after commit before new SDK construction; it never manually flips the saved flag.
-   Apply/test only after full-1 ends, and retain exact accepted closed-store sources for
-   their separate commit if transport CI has not yet started.
+   Five new regressions precede a separate strict schema3 preserving initialized=false.
+   The actual probe interrupts product credential replacement after commit before new
+   SDK construction; it does not manually change the saved flag. Preserve schema2 and
+   open-client guards. This continuation stays required after the physical rejection.
+
 3. Continue original pending-message recovery through the original private store and
    current authority. Keep old-parent/device guards; never reset queues, replace pending
    sends, invent acknowledgements or change original encrypted namespaces. Current
@@ -98,7 +111,7 @@ Queue68d first control42310411055 and native42310411202 are now running. SDK4 co
    current-admitted freeze/drain/publication/adoption, hard-parent recovery and group
    routing. The new transport alone cannot activate this irreversible transition.
 Existing-store design and hashes are under closed-handover-next. Its34 focused cases
-and real two-ABI native proof are accepted; full candidate gate is running. It preserves
+and real two-ABI native proof are accepted; full candidate gate also passed. It preserves
 original private files and stages one exact local target only after all old
 reservations drain. The codec still requires an initialized original record;
 credential rotation with initialized=false remains a distinct unresolved phase.

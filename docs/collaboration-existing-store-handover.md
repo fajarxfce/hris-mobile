@@ -46,7 +46,8 @@ private keys/main database bytes through contention, wrong identity, interrupted
 writes, process death and exact replay without new SDK construction. SQLite WAL/SHM
 bookkeeping bytes are not claimed unchanged. No messages are sent and no provider,
 employee account or product APK is involved. Both owned fixtures and their emulator
-are cleaned up. The full root/Android/browser gate is still running.
+are cleaned up. The full root/Android/browser gate passed5,490 fresh cases/644 suites in586.14s,
+with zero failures/errors/skips and unchanged4,267 inputs. Detekt has zero findings.
 [Evidence](measurements/collaboration-existing-store-handover-2026-11-06.json).
 
 To reproduce the native mechanism, use only a fresh owned emulator and the debug
