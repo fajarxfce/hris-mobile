@@ -5,6 +5,31 @@ continuing. [Previous checkpoint](https://github.com/fajarxfce/hris-mobile/blob/
 retains all earlier source/CI history and links older local handoff archives. Git and
 contracts are authoritative; `.work` is staging/evidence, never permission to reapply.
 
+## Current device findings — 7 November 2026, 16:59 UTC
+
+Build54 source700a8a210908e90b53f6f65b4c672795d553aa6c compiled in659.185s;
+strict dependencies, signing, zero lint, exact immutableSDK4, ARM64/16KiB and source
+checks pass. Recovery and primary feat/communications are both pushed at700a8a21.
+It is **NOT release-accepted or installed on the phone**. The owned original Bima
+emulator was updated in place, with two explicitly authorized real test sends.
+Pending preview survives offline/cold process restart; a new draft appears in the
+list and restores to the composer after cold offline restart. Four actual screenshots
+were opened. Online send was observed Pending2.769s and Sent4.857s (coarse bounds).
+
+The same offline send failed to ACK within90s after network restoration. A separate
+probe only sent the app Home and brought it back, without force-stop/new send. It
+then ACKed by11.010s, but showed TWO outgoing copies at8.929s. The initial failed
+probe remains intact; do not rewrite it as passed. Composer disabling during local
+save also dismisses the software keyboard. [Sanitized evidence](measurements/collaboration-release54-probe-2026-11-07.json).
+AppViewModel refreshes workspace once on foreground and does not retry the transient
+failure; Android foreground worker currently owns only chat delivery. Exact failure
+classification still needs validation. Do not weaken current authorization gates.
+
+Original emulator PID705779/startTicks174661775 was stopped16:56:38.666036UTC; original
+Bima userdata/sidecars/keys remain. It now holds54 and both actual sends, so future
+install scripts must expect54. No restore/clone/re-enrollment or repeated test sends.
+Phone still53; no ADB/phone UI operation was performed in this54 probe.
+
 ## Current accepted work — 7 November 2026
 
 The five-file remote-echo correlation fix is now locally accepted: bounded unsigned
@@ -14,7 +39,7 @@ checks remain; no fake ACK, queue mutation or SDK change. Focused74451 passed33/
 157.361s; full83806 passed2,343 fresh cases/319 suites/519.474s on4,412 unchanged inputs,
 zero failures/errors/skips/lint. Root/Android/quality/shared Wasm and33 actual Browser
 cases passed. All jobs reaped. [Contract](collaboration-chat-remote-echo.md). Actual
-phone/emulator confirmation still needed; build54 does not exist yet.
+54 recovery revealed the remaining cases above; these source-only gates do not close them.
 
 
 
@@ -25,7 +50,7 @@ as an editable draft. Focused74307 passed50/7/266.430s; full95262 passed3,760 fr
 458 suites/514.213s on4,412 unchanged inputs, zero failures/errors/skips/lint. Root,
 Android host/quality/shared Wasm and20 actual Browser cases pass; three synthetic
 small/dark200%/landscape captures were opened. All jobs reaped. [Contract](chat-inbox-previews.md).
-No new APK yet; global recency cursor/recipient read receipts are unchanged.
+Build54 contains this source; global recency cursor/recipient read receipts are unchanged.
 
 Owning Room preparation is locally accepted in this source commit: seven source/test
 files recover original work before current native room/device reads, preserve explicit
@@ -76,52 +101,30 @@ Their source contracts and exact results are linked by architecture and prior ch
 
 ## Next work
 
-1. Preview f76f5f50 is committed/pushed to recovery. Commit/push this accepted echo change. Primary currently
-   c760c6c7; preserve its first native42387719927 (still pending) before promotion.
-   Its control42387719940 has started. First0d control42383612502 succeeded (audit
-   pending); native42383612567 still runs. Previous firstfe is fully accepted below.
-2. Build54 from the accepted preview+echo source, then verify actual sending, pending/draft list previews and keyboard/composer visibility on the original owned emulator.
-   User explicitly authorized sending our own test chats. ORIGINAL Bima emulator
-   sent ONE real message to Karyawan Demo on the exact phone53 APK at15:49:26.104527UTC.
-   Polling first saw Pending5.534s and Sent7.799s; these are observation bounds, not
-   exact ACK timings. The actual recording shows a transient duplicated outgoing
-   bubble during remote-echo reconciliation. No keyboard was visible in this first
-   recording; do not claim the reported keyboard/viewport problem was reproduced.
-   No further user test question is needed. Source clue: Android mapper uses the
-   exclusive EventOrTransactionId enum, while matchesOwnedEcho and its synthetic
-   test fixture assume transactionId is retained on a remote EventId. Inspect the
-   existing bounded JSON's unsigned.transaction_id and exact durable Sent event ID;
-   preserve sender/owner/room/logical checks and never fabricate ACKs or new IDs.
-   Then validate and install build54 (none exists yet).
-3. Continue the requested Chucker-like inspector including Matrix Rust traffic and
-   CROSS-PLATFORM support in the new separate reusable repository:
-   https://github.com/fajarxfce/kmp-network-inspector (private), local sibling directory.
-   Main5fa5a21 is a pushed docs/design baseline. Uncommitted Gradle scaffold plus five
-   Kotlin source/test files implement an initial metadata-only bounded recorder;
-   thirteen common tests are WRITTEN BUT NOT RUN. No adapters/viewer/release/integration.
-   Read its own AGENTS/design/handoff; .work/core-2026-11-07/status.md has candidate state.
-   Do not start its compiler while the mobile build or owned emulator is running.
-   Research only: KtorScope targets Android/iOS; KmpInspector has external records
-   but Android/iOS/JVM only; Kick has Wasm but its network Logger is internal and
-   its stock plugin stores raw headers/bodies and reads full responses before truncation.
-   SDK4 already emits HTTP tracing spans, but has no exposed FFI HTTP observer.
-   Proper Matrix instrumentation may need a NEW immutable SDK version. Never edit
-   or republish SDK4. The initial core candidate is unvalidated; Ktor/Matrix instrumentation and viewer do not exist yet.
+1. Fix/verify the original54 offline recovery, echo and keyboard cases above. Preserve
+   .work/release-phone-2026-11-07-build54 and its failed probe. No54 acceptance/install
+   record exists. Actual videos are retained privately but not yet reviewed. Continue
+   on recovery, test each source change, then build the next version and test the
+   original emulator. Announce validated phone installs and use --install-only.
+2. Preserve first700 control42392876943/native42392876947 (both pending when queried).
+   Do not promote another primary source until both start. Priorc760 control42387719940
+   and native42387719927 have started. First0d control42383612502 and native42383612567
+   both succeeded; artifacts still need audit. Firstfe artifacts are fully accepted below.
+3. The separate reusable inspector repo https://github.com/fajarxfce/kmp-network-inspector
+   is private, main5fa5a21 docs baseline. Core candidate has14 tests, Android/JVM/iOS/Wasm
+   targets and CI draft; no transport adapters/viewer/release/app integration. Bootstrap
+   dependency job56466 PASSED/REAPED in31.758s with16 frozen inputs.210 components match
+   existing Mobile verification;12 known artifact hashes supplemented; only two Gradle
+   plugin markers are new. First strict52497 failed before tests because the default Yarn plugin added a project
+   repository under FAIL_ON_PROJECT_REPOS; it is reaped. Switched to npm like Mobile;
+   strict97570 now runs. Do not overlap a Mobile compiler/emulator. Read its own AGENTS/design/handoff before edits. Real Matrix Rust
+   HTTP observation requires a new immutable SDK version; SDK4 remains untouched.
 4. Continue original Room dispatch after accepted preparationc760c6c7. Preserve22
-   original resolver cases and normalized marks/full CAS/finite observed capture.
-   Design-only .work/space-room-execution-2026-11-07/plan.md is NOT applied source.
-   Then published binding/projection, original SDK delivery/history, native-parent
+   resolution regressions, exact pending/uncertain original intent, finite capture and
+   explicit fenced-only successor authority. Then room binding, existing SDK runtime
    recovery, product routing and all54 PRD groups:3 in progress/51 planned/none complete.
-   These complaints are additive, not cancellation of long-run work. Validate reusable
-   foundations in Mobile before Starter; physical iPhone tests waived, Apple CI required.
-
-No local heavy job remains. Original emulator5562/PID295446 was stopped at15:56:48UTC,
-original userdata/sidecars preserved. .work/phone53-self-send-2026-11-07 retains the
-private recording/logs and inactive pre-send backup: EVIDENCE ONLY, never restore it
-after the send or run another SDK store from it. No phone UI was touched. New bounded
-ADB connect31740 at15:41UTC timed out/reaped; do not repeat connection/feedback loops.
-Do not attribute concurrent gateway403 endpoint_unavailable logs or all HRIS calls to
-this send without route/correlation proof. Send latency remains open.
+   These complaints are additive. Validate reusable changes in Mobile before Starter;
+   physical iPhone tests are waived, relevant Apple CI remains required.
 
 ## Original first CI
 
@@ -184,7 +187,7 @@ Phone10.77.77.3:5555, dev.fajar.hris.mobile.dev, UID10962 (also1010962), release
 source08545820c0b58f46d784971e71ceb207dd628c0f remains installed since02:52:45.968748UTC.
 ARM64 devRelease1.0.0/nondebuggable/noR8,121022760 bytes,
 SHA256994d161ade3455745157d0793475b5091d67e968af909bda7a282dce163152c6.
-No54 exists. Announce each validated feature install, explicit serial, --install-only;
+Build54 exists but failed recovery acceptance above. Announce each validated feature install, explicit serial, --install-only;
 never launch/drive the user's UI while in use. Use the owned emulator for interaction.
 
 Physical20s–2min pending remains OPEN. ADB retries10:10/11:08/11:41UTC timed out; no

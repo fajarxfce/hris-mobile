@@ -1,0 +1,213 @@
+{
+  "recordedAt": "2026-11-07T16:59:52.243553+00:00",
+  "source": {
+    "baseCommit": "700a8a210908e90b53f6f65b4c672795d553aa6c",
+    "sourceBranch": "feat/chat-recovery-20261107",
+    "sourceManifestSha256": "20d75e39b4faa06c5b9dd9895f0489df112a3fe6c154078180da825ae84718e0",
+    "sourcesUnchanged": true,
+    "candidateOnly": true,
+    "normalPublicSdk": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.4"
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      "--dependency-verification",
+      "strict",
+      ":apps:android:assembleDevRelease",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=54",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-07-build54/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m"
+    ],
+    "startedAt": "2026-11-07T16:33:43.074163+00:00",
+    "elapsedSeconds": 659.185,
+    "exitCode": 0
+  },
+  "artifact": {
+    "candidateOnly": true,
+    "diagnosticMarkersAbsent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-07-build54/hris-mobile-dev-release-1.0.0-54-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 54,
+    "versionName": "1.0.0",
+    "bytes": 121235752,
+    "sha256": "3a95cc1c37a94f05d16d38721ecc9100c4eea0ab312fa28f85bb82d444ab35dd",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+  },
+  "sdk": {
+    "nativeSha256": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34",
+    "nativeBytes": 97477760,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "aarSha256": "9b6806de02b7d40b8487b54a51b192c114a38c68c6dfe35c68faf50d3b6bfd21",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.4",
+    "strippedNativeMatchesVerifiedSdk": true,
+    "stripToolNdkVersion": "28.2.13676358",
+    "queueApisAndUseCaseInDex": true
+  },
+  "releaseAccepted": false,
+  "installedOnPhone": false,
+  "ownedEmulator": {
+    "originalStorePreserved": true,
+    "updateInPlace": true,
+    "explicitTestMessages": 2,
+    "pendingPreviewOffline": true,
+    "pendingPreviewColdOfflineRestart": true,
+    "draftPreviewOffline": true,
+    "draftRestoredColdOfflineRestart": true,
+    "onlineSendUiObservations": [
+      {
+        "phase": "online-send",
+        "tapStartedAt": "2026-11-07T16:47:11.566752+00:00",
+        "observations": [
+          {
+            "secondsAfterTap": 2.769,
+            "visibleCopies": 1,
+            "sent": false,
+            "pending": true,
+            "bubbleBounds": [
+              33,
+              1921,
+              1047,
+              2065
+            ],
+            "composerBounds": [
+              22,
+              2120,
+              904,
+              2252
+            ],
+            "aboveComposer": true
+          },
+          {
+            "secondsAfterTap": 4.857,
+            "visibleCopies": 1,
+            "sent": true,
+            "pending": false,
+            "bubbleBounds": [
+              33,
+              1921,
+              1047,
+              2065
+            ],
+            "composerBounds": [
+              22,
+              2120,
+              904,
+              2252
+            ],
+            "aboveComposer": true
+          }
+        ],
+        "online": true,
+        "keyboardVisibleBeforeSend": true,
+        "confirmedUiSeconds": 4.857
+      }
+    ],
+    "sameOfflineMessageUnacknowledgedAfterReconnectDeadlineSeconds": 90,
+    "settingsRestored": true,
+    "reforegroundRecovery": {
+      "startedAt": "2026-11-07T16:54:47.499339+00:00",
+      "newSends": 0,
+      "forceStopped": false,
+      "phoneTouched": false,
+      "originalMessageOnly": true,
+      "observations": [
+        {
+          "secondsAfterReturn": 2.642,
+          "visibleCopies": 1,
+          "sent": false
+        },
+        {
+          "secondsAfterReturn": 4.661,
+          "visibleCopies": 1,
+          "sent": false
+        },
+        {
+          "secondsAfterReturn": 6.687,
+          "visibleCopies": 1,
+          "sent": false
+        },
+        {
+          "secondsAfterReturn": 8.929,
+          "visibleCopies": 2,
+          "sent": false
+        },
+        {
+          "secondsAfterReturn": 11.01,
+          "visibleCopies": 1,
+          "sent": true
+        }
+      ],
+      "sameProcess": true,
+      "originalMessageSent": true,
+      "finishedAt": "2026-11-07T16:55:00.742355+00:00"
+    },
+    "passiveProcess": {
+      "at": "2026-11-07T16:52:30.827045+00:00",
+      "pid": 4617,
+      "sameProcess": true,
+      "fatalLines": 0,
+      "phoneTouched": false
+    },
+    "stopped": {
+      "pid": 705779,
+      "startTicks": "174661775",
+      "stopped": true,
+      "dataRetained": true,
+      "phoneTouched": false,
+      "at": "2026-11-07T16:56:38.666036+00:00"
+    }
+  },
+  "visualReview": {
+    "actualScreenshotsOpened": [
+      "online-send.png",
+      "failed-probe.png",
+      "pending-preview-offline.png",
+      "draft-preview-offline.png"
+    ],
+    "videoReviewed": false,
+    "keyboardDismissesDuringLocalSave": true,
+    "outgoingDuplicateObservedDuringRecovery": true
+  },
+  "next": [
+    "Recover workspace renewal after an offline cold start without requiring foreground re-entry; preserve admission and cancellation.",
+    "Coalesce original outgoing presentation without treating matching text as delivery acknowledgement; remote-echo source fix did not cover recovery.",
+    "Keep the composer and keyboard stable during local submission; separate input from the frozen outgoing operation."
+  ],
+  "limitations": "UI polling supplies observation bounds, not exact HTTP ACK latency. No phone interaction, no original IDs/keys reset, and no new replay send in the foreground recovery probe."
+}
