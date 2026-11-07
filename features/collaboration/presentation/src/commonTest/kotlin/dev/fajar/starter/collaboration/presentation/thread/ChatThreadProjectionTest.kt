@@ -307,6 +307,58 @@ class ChatThreadProjectionTest {
     }
 
     @Test
+    fun remoteEchoWithOriginalTransactionBecomesOneCheckedBubbleBeforeHistoryArrives() {
+        val result = rows(pending = listOf(staged), timeline = listOf(native)).single()
+        assertEquals("outgoing:${intent.id}", result.key)
+        assertEquals(CollaborationMessageDelivery.SENT, result.delivery)
+        assertEquals(intent.text, result.text)
+        assertEquals(
+            result.key,
+            rows(listOf(original), listOf(staged), listOf(native)).single().key,
+        )
+    }
+
+    @Test
+    fun exactDurableSentEventMatchesARemoteEchoWithoutUnsignedTransaction() {
+        val sent =
+            staged.copy(
+                state = CollaborationMessageState.Sent(device, "transaction", "\$original", origin)
+            )
+        val remote = native.copy(transactionId = null)
+        val result = rows(pending = listOf(sent), timeline = listOf(remote)).single()
+        assertEquals("outgoing:${intent.id}", result.key)
+        assertEquals(CollaborationMessageDelivery.SENT, result.delivery)
+        for (other in
+            listOf(
+                remote.copy(eventId = "\$another"),
+                remote.copy(sender = "@other:example.test"),
+                remote.copy(own = false),
+                remote.copy(logicalId = chatId(9)),
+                remote.copy(transactionId = "conflicting"),
+            )) assertEquals(2, rows(pending = listOf(sent), timeline = listOf(other)).size)
+        assertEquals(
+            2,
+            rows(
+                    pending = listOf(sent),
+                    timeline = listOf(remote),
+                    source = device.copy(deviceId = chatId(8)),
+                )
+                .size,
+        )
+    }
+
+    @Test
+    fun remoteEchoWithoutOriginalTransactionOrReceiptDoesNotAcknowledgeByTextAlone() {
+        val result =
+            rows(pending = listOf(staged), timeline = listOf(native.copy(transactionId = null)))
+        assertEquals(2, result.size)
+        assertEquals(
+            CollaborationMessageDelivery.PENDING,
+            result.single { it.localId != null }.delivery,
+        )
+    }
+
+    @Test
     fun unownedLocalEchoesAndMissingOriginalEvidenceDoNotInventAnotherSend() {
         assertTrue(rows(timeline = listOf(native.copy(eventId = null))).isEmpty())
         val legacy = staged.copy(state = CollaborationMessageState.Staged(device, "transaction"))

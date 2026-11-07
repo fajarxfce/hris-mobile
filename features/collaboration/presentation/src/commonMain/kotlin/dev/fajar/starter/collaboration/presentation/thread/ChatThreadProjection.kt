@@ -188,10 +188,15 @@ private fun matchesOwnedEcho(
             is CollaborationMessageState.Staged -> state.device
             is CollaborationMessageState.Sent -> state.device
         }
+    val matchedTransport =
+        item.transactionId == transaction ||
+            (item.transactionId == null &&
+                state is CollaborationMessageState.Sent &&
+                item.eventId == state.eventId)
     return device == source &&
         item.own &&
         item.sender == origin.sender &&
-        item.transactionId == transaction &&
+        matchedTransport &&
         item.logicalId == record.intent.id
 }
 

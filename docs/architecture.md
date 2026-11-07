@@ -1,5 +1,8 @@
 # Architecture
 
+[Original outgoing remote echoes](collaboration-chat-remote-echo.md) preserve separate
+transaction/event identities without changing transport or durable acknowledgement.
+
 [Local pending and draft previews](chat-inbox-previews.md) share one owned bounded
 command observation and keep presentation independent of transport acknowledgement.
 

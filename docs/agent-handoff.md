@@ -7,6 +7,16 @@ contracts are authoritative; `.work` is staging/evidence, never permission to re
 
 ## Current accepted work — 7 November 2026
 
+The five-file remote-echo correlation fix is now locally accepted: bounded unsigned
+transaction metadata reaches the Android mapper, with an exact durable Sent event-ID
+fallback when transaction metadata is absent. Original ownership/device/sender/logical
+checks remain; no fake ACK, queue mutation or SDK change. Focused74451 passed33/3/
+157.361s; full83806 passed2,343 fresh cases/319 suites/519.474s on4,412 unchanged inputs,
+zero failures/errors/skips/lint. Root/Android/quality/shared Wasm and33 actual Browser
+cases passed. All jobs reaped. [Contract](collaboration-chat-remote-echo.md). Actual
+phone/emulator confirmation still needed; build54 does not exist yet.
+
+
 
 Pending chat-list preview is accepted in this commit: eleven source/test files share
 one account command subscription, combine the latest original sends with local history
@@ -66,11 +76,11 @@ Their source contracts and exact results are linked by architecture and prior ch
 
 ## Next work
 
-1. Commit/push this accepted pending-preview change to recovery. Primary currently
+1. Preview f76f5f50 is committed/pushed to recovery. Commit/push this accepted echo change. Primary currently
    c760c6c7; preserve its first native42387719927 (still pending) before promotion.
    Its control42387719940 has started. First0d control42383612502 succeeded (audit
    pending); native42383612567 still runs. Previous firstfe is fully accepted below.
-2. Fix the actual transient duplicate outgoing bubble and measure composer visibility.
+2. Build54 from the accepted preview+echo source, then verify actual sending, pending/draft list previews and keyboard/composer visibility on the original owned emulator.
    User explicitly authorized sending our own test chats. ORIGINAL Bima emulator
    sent ONE real message to Karyawan Demo on the exact phone53 APK at15:49:26.104527UTC.
    Polling first saw Pending5.534s and Sent7.799s; these are observation bounds, not
@@ -83,14 +93,20 @@ Their source contracts and exact results are linked by architecture and prior ch
    existing bounded JSON's unsigned.transaction_id and exact durable Sent event ID;
    preserve sender/owner/room/logical checks and never fabricate ACKs or new IDs.
    Then validate and install build54 (none exists yet).
-3. Implement the requested Chucker-like inspector including Matrix Rust traffic and
-   CROSS-PLATFORM support. If custom, create a separate reusable Git repository.
+3. Continue the requested Chucker-like inspector including Matrix Rust traffic and
+   CROSS-PLATFORM support in the new separate reusable repository:
+   https://github.com/fajarxfce/kmp-network-inspector (private), local sibling directory.
+   Main5fa5a21 is a pushed docs/design baseline. Uncommitted Gradle scaffold plus five
+   Kotlin source/test files implement an initial metadata-only bounded recorder;
+   thirteen common tests are WRITTEN BUT NOT RUN. No adapters/viewer/release/integration.
+   Read its own AGENTS/design/handoff; .work/core-2026-11-07/status.md has candidate state.
+   Do not start its compiler while the mobile build or owned emulator is running.
    Research only: KtorScope targets Android/iOS; KmpInspector has external records
    but Android/iOS/JVM only; Kick has Wasm but its network Logger is internal and
    its stock plugin stores raw headers/bodies and reads full responses before truncation.
    SDK4 already emits HTTP tracing spans, but has no exposed FFI HTTP observer.
    Proper Matrix instrumentation may need a NEW immutable SDK version. Never edit
-   or republish SDK4. No inspector implementation or separate repo exists yet.
+   or republish SDK4. The initial core candidate is unvalidated; Ktor/Matrix instrumentation and viewer do not exist yet.
 4. Continue original Room dispatch after accepted preparationc760c6c7. Preserve22
    original resolver cases and normalized marks/full CAS/finite observed capture.
    Design-only .work/space-room-execution-2026-11-07/plan.md is NOT applied source.

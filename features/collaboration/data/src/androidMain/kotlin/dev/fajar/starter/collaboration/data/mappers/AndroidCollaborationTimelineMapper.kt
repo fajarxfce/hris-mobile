@@ -29,7 +29,11 @@ internal fun TimelineItem.toCollaborationTimelineItem(): CollaborationSdkTimelin
         return CollaborationSdkTimelineItemDto(
             key = key,
             eventId = (id as? EventOrTransactionId.EventId)?.eventId,
-            transactionId = (id as? EventOrTransactionId.TransactionId)?.transactionId,
+            // A remote echo uses EventId in the SDK's exclusive enum. Matrix retains the
+            // originating client's transaction in unsigned, separately from the logical ID.
+            transactionId =
+                (id as? EventOrTransactionId.TransactionId)?.transactionId
+                    ?: metadata?.transactionId,
             logicalId = metadata?.logicalId,
             forwarded = metadata?.forwarded == true,
             sender = sender,

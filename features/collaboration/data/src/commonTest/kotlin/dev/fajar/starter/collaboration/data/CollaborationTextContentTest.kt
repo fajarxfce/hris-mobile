@@ -14,6 +14,50 @@ class CollaborationTextContentTest {
     private val sender = "@fictional:example.test"
 
     @Test
+    fun remoteEchoPreservesUnsignedTransactionSeparatelyFromLogicalMessageId() {
+        val raw = buildJsonObject {
+            put("event_id", "\$remote")
+            put("sender", sender)
+            put("content", collaborationTextContent(id, "Text"))
+            put("unsigned", buildJsonObject { put("transaction_id", "original-sdk-transaction") })
+        }
+        val metadata = assertNotNull(collaborationSdkMessageMetadata(raw.toString()))
+        assertEquals(id, metadata.logicalId)
+        assertEquals("original-sdk-transaction", metadata.transactionId)
+        val missingLogical =
+            JsonObject(raw + ("content" to buildJsonObject { put("body", "Text") }))
+        assertNull(collaborationSdkMessageMetadata(missingLogical.toString())?.logicalId)
+        assertEquals(
+            "original-sdk-transaction",
+            collaborationSdkMessageMetadata(missingLogical.toString())?.transactionId,
+        )
+    }
+
+    @Test
+    fun missingOrMalformedUnsignedTransactionNeverManufacturesAnEchoMatch() {
+        for (transaction in
+            listOf<JsonElement>(
+                JsonNull,
+                JsonPrimitive(42),
+                JsonPrimitive(""),
+                JsonPrimitive("x".repeat(513)),
+                JsonPrimitive("bad\ntransaction"),
+                buildJsonObject {},
+            )) {
+            val raw = buildJsonObject {
+                put("content", collaborationTextContent(id, "Text"))
+                put("transaction_id", "wrong-level")
+                put("unsigned", buildJsonObject { put("transaction_id", transaction) })
+            }
+            val metadata = assertNotNull(collaborationSdkMessageMetadata(raw.toString()))
+            assertEquals(id, metadata.logicalId)
+            assertNull(metadata.transactionId)
+        }
+        val missing = buildJsonObject { put("content", collaborationTextContent(id, "Text")) }
+        assertNull(collaborationSdkMessageMetadata(missing.toString())?.transactionId)
+    }
+
+    @Test
     fun forwardedContentIsBoundToTheOriginWithoutOriginalAuthorOrRoomMetadata() = runTest {
         val content = collaborationTextContent(id, "Forwarded text", forwarded = true)
         assertEquals(

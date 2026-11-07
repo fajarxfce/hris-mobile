@@ -7,7 +7,11 @@ import kotlinx.serialization.json.*
 internal fun collaborationSdkLogicalId(raw: String?): String? =
     collaborationSdkMessageMetadata(raw)?.logicalId
 
-internal data class CollaborationSdkMessageMetadata(val logicalId: String?, val forwarded: Boolean)
+internal data class CollaborationSdkMessageMetadata(
+    val logicalId: String?,
+    val forwarded: Boolean,
+    val transactionId: String?,
+)
 
 internal fun collaborationSdkMessageMetadata(raw: String?): CollaborationSdkMessageMetadata? {
     if (raw == null || raw.length > 262_144 || !hasBoundedJsonDepth(raw)) return null
@@ -19,7 +23,12 @@ internal fun collaborationSdkMessageMetadata(raw: String?): CollaborationSdkMess
                 ?.takeIf { it.isString }
                 ?.content
                 ?.takeIf { it.matches(logicalIdPattern) }
-        CollaborationSdkMessageMetadata(logicalId, collaborationForwarded(content))
+        val transactionId =
+            ((event["unsigned"] as? JsonObject)?.get("transaction_id") as? JsonPrimitive)
+                ?.takeIf { it.isString }
+                ?.content
+                ?.takeIf { it.length in 1..512 && it.none(Char::isISOControl) }
+        CollaborationSdkMessageMetadata(logicalId, collaborationForwarded(content), transactionId)
     } catch (_: IllegalArgumentException) {
         null
     }
