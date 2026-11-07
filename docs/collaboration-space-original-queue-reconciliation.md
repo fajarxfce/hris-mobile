@@ -1,5 +1,10 @@
 # Match original SDK transactions with immutable application commands
 
+The [original writer increment](collaboration-space-original-writer.md) corrects the
+initial equality check between original and logical device IDs. Actual adoption keeps
+them distinct. The original physical ID remains validated against every retained command;
+current logical device admission and exact runtime ownership remain separate.
+
 The original queue read coordinates current native setup admission, the exact original
 conversation and selected legacy identity, a paused runtime snapshot, and point lookups
 of immutable message/completion records. It needs no selected HR company. Original

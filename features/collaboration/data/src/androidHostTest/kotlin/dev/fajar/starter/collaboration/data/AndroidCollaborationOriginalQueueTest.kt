@@ -232,7 +232,7 @@ class AndroidCollaborationOriginalQueueTest {
     }
 }
 
-private class OriginalQueueFixture(lifetime: CoroutineScope) {
+internal class OriginalQueueFixture(lifetime: CoroutineScope) {
     val room = QueueRoom(transactions = setOf("original-a", "original-b"))
     val children = SdkChildResources(lifetime)
     var failure: Failure? = null

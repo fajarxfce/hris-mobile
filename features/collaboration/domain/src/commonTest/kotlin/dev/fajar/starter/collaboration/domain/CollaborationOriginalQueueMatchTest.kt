@@ -28,6 +28,7 @@ class CollaborationOriginalQueueMatchTest {
         assertNull(value.messages.single().completion)
         assertNotEquals(f.owner.parent.nativeSessionId, value.binding.nativeSessionId)
         assertNotEquals(f.runtime.operationId, oldDevice.bootstrapOperationId)
+        assertNotEquals(f.runtime.deviceId, value.device.deviceId)
     }
 
     @Test
@@ -63,7 +64,7 @@ class CollaborationOriginalQueueMatchTest {
                 f.snapshot.original.copy(
                     binding = f.binding.copy(audience = "https://other.test/")
                 ),
-                f.snapshot.original.copy(device = f.device.copy(deviceId = f.id(62))),
+                f.snapshot.original.copy(device = f.device.copy(deviceId = f.id(63))),
                 f.snapshot.original.copy(device = f.device.copy(nativeSessionId = f.id(82))),
                 f.snapshot.original.copy(device = f.device.copy(roomId = "!other:example.test")),
             )) assertIs<AppResult.Failed>(f.match(captured = f.snapshot.copy(original = physical)))

@@ -13,6 +13,14 @@ class UnavailableCollaborationRuntimeRepository :
     CollaborationLocalDeviceIdentityRepository,
     CollaborationSdkInventoryRepository,
     CollaborationSdkPossessionRepository {
+    override suspend fun acquireOriginalQueue(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+    ): AppResult<CollaborationSpaceOriginalQueueLease> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
     override suspend fun inspectOriginalQueue(
         runtime: CollaborationSpaceRuntimeReady,
         matrixRoomId: String,

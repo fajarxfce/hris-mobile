@@ -182,6 +182,8 @@ internal class LocalSpaceRuntimeAdoptionProbe(
                     .put("sameBootstrapReplayWithoutWrite", true)
                     .put("actualPendingQueueRetained", queue != null)
                     .put("originalQueueReadOffline", queue != null)
+                    .put("originalQueueHeldUnderLogicalOwner", queue != null)
+                    .put("partialAndChangedQueueResumeRejected", queue != null)
                     .put("ownedResourcesReleased", true)
                     .put("ownedFilesRemoved", !owned.exists())
                     .put("liveGroupActivation", false),

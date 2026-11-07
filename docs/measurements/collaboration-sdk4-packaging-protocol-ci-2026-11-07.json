@@ -1,0 +1,111 @@
+{
+  "recordedAt": "2026-11-07T08:53:11.309131+00:00",
+  "headSha": "9deb55bf93314622967231c9de8ab695c775faeb",
+  "runId": 42354718729,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42354718729",
+  "conclusion": "success",
+  "firstRun": true,
+  "rerun": false,
+  "platformPin": "e0dbb567acc4c5571b82324c515ed8ddc145007d",
+  "artifacts": [
+    {
+      "artifactId": 13567970547,
+      "name": "native-protocol-evidence-classic",
+      "sha256": "aa4c320aa9090de1a90b79bed82736074b84eaaf57adac833b5d66dfdef1986c",
+      "artifactDigestVerified": true,
+      "complete": true,
+      "cleanup": true,
+      "checks": {
+        "wrong_issuer": true,
+        "wrong_audience": true,
+        "expired_jwt_beyond_provider_leeway": true,
+        "public_registration_disabled": true,
+        "loopback_only_http": true,
+        "isolated_dedicated_network": true,
+        "provider_protocol_counters": true,
+        "browser_e2ee_restart_media": true,
+        "browser_offline_invitee_first_message_sender_offline": true,
+        "android_requested_sync_protocol": true,
+        "android_web_bidirectional_e2ee": true,
+        "android_sdk_refresh_preserves_device_key": true,
+        "android_sdk_queue_encrypted_logical_ids": true,
+        "android_encrypts_for_offline_invitee_before_join": true
+      },
+      "sourceSha256": {
+        "tool/check_collaboration_providers.py": "da39c44d9a1ec59df4118b4900f11c29be3acf3fae74ec45dd2ce7b5e9b76ba1",
+        "tool/test_collaboration_providers.py": "a22fd049c7ffb11601f9496679b4093ecec64dea47cafcfce3dae827e3110fa0",
+        "tool/collaboration_native_device.py": "0475be5ae31f5383d924917304fb5a7ef81da8cc1a55168090155fc826f61547",
+        "tool/test_collaboration_native_device.py": "13c541192f42d719595f25d6a8c840bedf029ef189316d2f2c08b4a0826f1e24",
+        "tool/collaboration_protocol_metrics.py": "602e33d3c946e13468e3345ebe2d39c8ac3b443fee93577c6c71b44a3f5e2bb1",
+        "tool/test_collaboration_protocol_metrics.py": "c83ec8ca57e3d6d9e26e910428480a1d87e4dad0c86df8d5aa2b422ac4327a52",
+        "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+        "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+        "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+        "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+        "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+        "tool/collaboration-proof/src/probe.js": "b452de9882c7f121e811bde62bca92eaf678ce785030d4c715b99b316cb9a5f6",
+        "tool/collaboration-proof/tests/providers.spec.mjs": "1d498852844d41f350fd5ef295484acafb18bc8b90d9eb7daf3d05825c6ca3c2",
+        "tool/collaboration-proof/tests/native.spec.mjs": "c36faa5d4ba38061af590cc8e4ef863ddb8c624ffce78b86bc26ecd98613256b"
+      },
+      "native": {
+        "apkSha256": "952617624909c5ee35cc65025628a84de6bf61e7c3513cd723c40517272cb856",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35",
+        "syncMode": "classic"
+      },
+      "elapsedSeconds": 89.411,
+      "pinnedSourcesVerified": true
+    },
+    {
+      "artifactId": 13567611736,
+      "name": "native-protocol-evidence-native",
+      "sha256": "a9e29ee346563c35499cafc72fde91dff0ac117561f63f9a1af680dc6b45016e",
+      "artifactDigestVerified": true,
+      "complete": true,
+      "cleanup": true,
+      "checks": {
+        "wrong_issuer": true,
+        "wrong_audience": true,
+        "expired_jwt_beyond_provider_leeway": true,
+        "public_registration_disabled": true,
+        "loopback_only_http": true,
+        "isolated_dedicated_network": true,
+        "provider_protocol_counters": true,
+        "browser_e2ee_restart_media": true,
+        "browser_offline_invitee_first_message_sender_offline": true,
+        "android_requested_sync_protocol": true,
+        "android_web_bidirectional_e2ee": true,
+        "android_sdk_refresh_preserves_device_key": true,
+        "android_sdk_queue_encrypted_logical_ids": true,
+        "android_encrypts_for_offline_invitee_before_join": true
+      },
+      "sourceSha256": {
+        "tool/check_collaboration_providers.py": "da39c44d9a1ec59df4118b4900f11c29be3acf3fae74ec45dd2ce7b5e9b76ba1",
+        "tool/test_collaboration_providers.py": "a22fd049c7ffb11601f9496679b4093ecec64dea47cafcfce3dae827e3110fa0",
+        "tool/collaboration_native_device.py": "0475be5ae31f5383d924917304fb5a7ef81da8cc1a55168090155fc826f61547",
+        "tool/test_collaboration_native_device.py": "13c541192f42d719595f25d6a8c840bedf029ef189316d2f2c08b4a0826f1e24",
+        "tool/collaboration_protocol_metrics.py": "602e33d3c946e13468e3345ebe2d39c8ac3b443fee93577c6c71b44a3f5e2bb1",
+        "tool/test_collaboration_protocol_metrics.py": "c83ec8ca57e3d6d9e26e910428480a1d87e4dad0c86df8d5aa2b422ac4327a52",
+        "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+        "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+        "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+        "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+        "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+        "tool/collaboration-proof/src/probe.js": "b452de9882c7f121e811bde62bca92eaf678ce785030d4c715b99b316cb9a5f6",
+        "tool/collaboration-proof/tests/providers.spec.mjs": "1d498852844d41f350fd5ef295484acafb18bc8b90d9eb7daf3d05825c6ca3c2",
+        "tool/collaboration-proof/tests/native.spec.mjs": "c36faa5d4ba38061af590cc8e4ef863ddb8c624ffce78b86bc26ecd98613256b"
+      },
+      "native": {
+        "apkSha256": "bfbb058e006fa5eb00771171f66ce442ce2f058c43e8bb91ed3c579adda63d18",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35",
+        "syncMode": "native"
+      },
+      "elapsedSeconds": 89.862,
+      "pinnedSourcesVerified": true
+    }
+  ],
+  "interpretation": "Both first protocol modes passed14 isolated checks. This does not establish phone latency or original organization delivery."
+}

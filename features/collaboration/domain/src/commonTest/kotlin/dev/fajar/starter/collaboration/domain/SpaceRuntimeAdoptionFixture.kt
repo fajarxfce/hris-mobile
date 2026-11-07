@@ -85,6 +85,12 @@ internal class SpaceRuntimeAdoptionFixture {
     var beforeIsOpen: suspend () -> Unit = {}
     val runtimes =
         object : CollaborationSpaceRuntimeRepository {
+            override suspend fun acquireOriginalQueue(
+                runtime: CollaborationSpaceRuntimeReady,
+                matrixRoomId: String,
+            ): AppResult<CollaborationSpaceOriginalQueueLease> =
+                error("No delivery writer during adoption")
+
             override suspend fun inspectOriginalQueue(
                 runtime: CollaborationSpaceRuntimeReady,
                 matrixRoomId: String,

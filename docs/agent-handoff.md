@@ -7,38 +7,51 @@ and [history through build 50](agent-handoff-history-through-build50.md).
 
 ## Current work — 7 November 2026
 
-No heavy local job, emulator or tool session remains. The narrow mixed-room native
-experiment PASSED: a real missing-key-room403 was followed by one encrypted200 to the
-ready recipient. The ready command reached observable Sent 1,316 ms after queue return;
-journal read1,321ms/completion1,815ms. The ready recipient's SDK was already closed.
-The unavailable original command/ID remained intact without a receipt. This warm-runtime
-fixture did NOT reproduce the reported phone delay and grants no production retry,
-timeout or writer change. Phone53 latency remains OPEN.
-[Diagnosis/result](collaboration-mixed-room-delivery-diagnosis.md),
-[measurement](measurements/collaboration-mixed-room-delivery-2026-11-07.json).
+No heavy local job, emulator or tool session remains. The restricted original-writer
+increment is accepted locally:17source/test/probe files. Full8613 passed3,512fresh cases
+in441suites/438.471s on4,328 unchanged inputs, zero failures/errors/skips/lint errors;
+49 existing proof lint warnings. Native16901 passed154.702s for x86_64 and ARM64, with
+original keys/two pending messages intact through interrupted adoption, process death,
+offline restoration and replays. Held-writer exclusion, partial/changed resume rejection,
+close/reacquisition passed. Both fixtures, emulator and transport are stopped. All
+sessions are reaped. [Contract](collaboration-space-original-writer.md),
+[measurement](measurements/collaboration-space-original-writer-2026-11-07.json).
 
-Three Mobile proof files and four Platform fixture/driver files are accepted locally.
-Mobile gate31449 passed134.102s,20fresh cases,4,325 unchanged inputs, zero failures/
-errors/skips and lint errors (49 existing proof warnings). Backend compile64777 passed
-31.020s after a retained test-only URI-encoder error. Four Python validator cases passed.
-Actual native48997 passed149.551s/one case/zero skips with immutable SDK4 and unchanged
-source/APK; emulator and transport stopped. These sessions are all reaped. No phone
-install, UI, send, Bima-store mutation or new provider rerun is needed for this result.
+Actual native adoption preserves a DIFFERENT original physical device ID from the
+current logical organization device. The earlier matcher incorrectly equated them.
+Red83172 reproduced5failures/10cases in75.293s; focused39902 passed41cases in131.880s
+following correction. Original device/family/bootstrap and immutable commands remain
+exact; current logical owner/device is guarded independently. Never rewrite old IDs.
+The Android handle exposes no new enqueue, store, join or sync capability. A cancelled
+waiter cannot lose its late captured receipt, and close drains before freeing the writer.
 
-NEXT continue original organization delivery/publication, native-parent recovery and
-product routing, then all54 PRD groups. The complete original queue matcher is accepted;
-actual original delivery remains absent. The plan is in
-`.work/space-original-queue-delivery-2026-11-07/plan.md`. Do not turn a history read or
-queue match into delivery authority. Preserve current recipient admission, the published
-group room binding and V132 original canonical-pair routing. Keep phone latency open
-until actual phone evidence arrives; the optional question is already pending.
+NEXT add Mobile group direct-conversation/open and room request/status transport and
+durable commands BEFORE the owning original-delivery caller. Those transports are still
+absent; only original metadata exists. Group native-space-room.md/space-conversations.md
+and V132 original-pair-routing.md define the contract. Open keeps operation/space/peer
+fixed and returns a GROUP conversation ID; retain original company/conversation IDs
+separately. Terminal room retry uses observed account+revision together. A LEGACY room
+must equal the original room. Delivery still needs current recipient admission and a
+published group binding; a local queue match/history read alone grants neither.
+Then original receipt/history publication, native-parent recovery, product routing and
+all54 PRD groups. Supplementary trace: `.work/space-original-queue-delivery-2026-11-07/plan.md`.
 
-Packaging program `9deb55bf93314622967231c9de8ab695c775faeb` remains the primary source.
-First control42354718734 and native42354718728 have STARTED; protocol42354718729 is
-SUCCESS but its artifact audit remains pending. Previous packaging gate15900 passed
-5,373 fresh cases/754 suites,4,324 unchanged inputs, zero failures/errors/skips/lint
-errors;49 existing warnings. Actual workflow accepted APKfca8e884 and rejected a
-separate unstripped SDK4 copy. [Packaging contract](collaboration-sdk4-packaging-ci.md).
+Mobileca76e87d/Main1de67d71 mixed-room fixture is pushed and accepted: one real missing-
+key-room403 then one encrypted200 to a ready recipient whose SDK was closed. Queue
+return to Sent1,316ms/journal1,321ms/completion1,815ms. This warm-runtime case did NOT
+reproduce the reported phone delay. No production retry/timeout/writer change follows.
+Phone53 latency remains OPEN and its optional question is already pending.
+[Diagnosis/result](collaboration-mixed-room-delivery-diagnosis.md).
+
+Primary before this writer promotion is9deb55bf. Its first control42354718734 and native
+42354718728 have STARTED; preserve each later first pending run before further primary
+promotions. Protocol42354718729 is fully audited:14checks each, all14source hashes match
+Platformpine0dbb567. Classic89.411s artifact13567970547; native89.862s artifact13567611736.
+[Protocol evidence](measurements/collaboration-sdk4-packaging-protocol-ci-2026-11-07.json).
+First05de control42348626104 is fully audited SUCCESS: Apple1,912/218 and portable
+4,691/522, zero failures/errors/skips, original artifact digests verified.
+[Control evidence](measurements/collaboration-original-metadata-control-ci-2026-11-07.json).
+Packaging9deb's pinned NDK and unchanged SDK4 hashes remain accepted; no SDK rebuild.
 
 Original SDK/application queue matching and its owning admission read have passed
 local acceptance. Full1361 passed 5,538 fresh cases in 649 suites (512.73 seconds), with 4,320
@@ -108,7 +121,7 @@ pending; do not repeat it. No phone UI/new messages were driven.
   [Control evidence](measurements/collaboration-original-queue-control-ci-2026-11-07.json).
   Its native 42344999033 failed ARM notification expiry after 486 host cases; x86
   passed 492 cases and native proofs. That failure predates accepted `11e2b36b`.
-- First `05de0bf6` control 42348626104 has STARTED. Native 42348626124 is fully
+- First `05de0bf6` control 42348626104 is fully audited SUCCESS (Apple1,912/218; portable4,691/522). Native 42348626124 is fully
   audited FAILED at SDK packaging before any runtime proof; 493 host cases per ABI
   passed. [Failure evidence](measurements/collaboration-original-metadata-native-ci-2026-11-07.json).
   Protocol 42348626066 is accepted: 14 checks each mode and 14 source hashes match
@@ -120,8 +133,8 @@ pending; do not repeat it. No phone UI/new messages were driven.
 
 ## Repositories and invariants
 
-Main Platform `feat/communications` checkpoint `ead88a2e` and Group worktree
-`feat/communication-space` checkpoint `e9496cb2` are pushed. Group source remains
+Main Platform `feat/communications` checkpoint `1de67d71` and Group worktree
+`feat/communication-space` checkpoint `84358628` are pushed. Group source remains
 `e45a4313`. Live API `2e75fe1ee88b5766259fc3efd3ab7f21e70d621a`, worker `10485916`,
 schema 116.1 and V117–137 disabled status are unchanged. Starter is clean/pushed
 at `b11437a`. Detailed program state is in each repository's handoff.

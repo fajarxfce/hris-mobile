@@ -315,6 +315,12 @@ class CollaborationOriginalQueueReadTest {
             }
         val runtimes =
             object : CollaborationSpaceRuntimeRepository {
+                override suspend fun acquireOriginalQueue(
+                    runtime: CollaborationSpaceRuntimeReady,
+                    matrixRoomId: String,
+                ): AppResult<CollaborationSpaceOriginalQueueLease> =
+                    error("No delivery writer during a read")
+
                 override suspend fun inspectOriginalQueue(
                     runtime: CollaborationSpaceRuntimeReady,
                     matrixRoomId: String,

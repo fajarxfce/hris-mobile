@@ -1,0 +1,224 @@
+{
+  "recordedAt": "2026-11-07T09:05:59.755603+00:00",
+  "sourceHashes": {
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidSpaceOriginalQueueLeaseTest.kt": "49bbca50b03a779c29d34199dce41ca05492284d91c4b708adb82a3fd84d1a75",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationSpaceOriginalQueueLease.kt": "2026ddda355bbb264bc2bc3c3e5a7495e74ef7d1fee1e943ff20e5160f2a66f7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceOriginalQueueLease.kt": "7c7fb04ec23c0fb3914103f103e7a371c24ca8b2b098dfe7a46aec37be5dbf13",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/LocalSpaceRuntimeAdoptionProbe.kt": "5aba2240d4da8e0f3f3c8fd74cbb19a8dc93863fe3a3beef011e7d563f08cb45",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/OriginalQueueAdoptionProbe.kt": "3d7cf27655ccd257f348c50507eaf3d54319fbaf6f84ebb5f60b71ffee9eaa5c",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationOriginalQueueTest.kt": "0f49b3f836090e05b01d905990dc1ff3b19b7423fce9ffcab83ab7ee4aa2f4ae",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationMessageQueues.kt": "dd86ca0d6944bb71ed488841f2f9197aea8430859da36be7007a0f269a24b761",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeLease.kt": "3bf2a16a96e36d2e4716aaf90b937b991836400a2742d20fc6a184bb1203498c",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "53bbc3ace8a1a8525c8ca1e35415aa0e32075fe65e56e5bd305581fe75679db9",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/UnavailableCollaborationRuntimeRepository.kt": "3fffa3b6532f820c107a798c377ad3c6703c2160b95740ab6dc200fb45ac7dca",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationOriginalQueueMatchPolicy.kt": "b302185ad9416518aa4a0cd788d21c65f561b1bfc6f250bc24ce29c3d93b48cc",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceRuntimeRepository.kt": "f04cd351a503cf4a5189f73d74b733da416f62297e8b0ee73b01536a497688c9",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationOriginalQueueMatchTest.kt": "b7a846994ae67cacafb3ed57f3972a47e4a1c038deff8bcca4fa05d5a6dcb645",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationOriginalQueueReadTest.kt": "4c87ecbfa1bd6ef96d310e145c9a570f74359b204f79f13274310fb2ffd28dfb",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/OriginalQueueMatchFixture.kt": "fde05cbabd9ce03c86e60ff2586ce300fa5f5f441b279a92e917a4e1b1317a48",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRuntimeAdoptionFixture.kt": "4e3ac103efc565a83260e2e54fdcdb37ae022ce4a560e28c8079143cf4a734fb",
+    "tool/check_space_queue_adoption.py": "589f01a0635935df2fdba7242727b71283e7aa67197b3c2ba4fb6ab6454fe298"
+  },
+  "inputManifestSha256": "7e008fefe8672c1fdf5abd15509cd16cb41effd7db226ca0a7e1a6834b2d4490",
+  "originalDeviceAliasRed": {
+    "startedAt": "2026-11-07T08:48:42.827684+00:00",
+    "elapsedSeconds": 75.293,
+    "exitCode": 1,
+    "sourceFiles": 4328,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 10,
+      "failures": 5,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 1
+  },
+  "focused": {
+    "startedAt": "2026-11-07T08:50:34.081042+00:00",
+    "elapsedSeconds": 131.88,
+    "exitCode": 0,
+    "sourceFiles": 4328,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 41,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 4
+  },
+  "full": {
+    "startedAt": "2026-11-07T08:54:14.582766+00:00",
+    "elapsedSeconds": 438.471,
+    "exitCode": 0,
+    "sourceFiles": 4328,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 3512,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 441
+  },
+  "native": {
+    "startedAt": "2026-11-07T09:02:04.966424+00:00",
+    "serial": "emulator-5564",
+    "apkSha256": "f437c6623d6a8476403b9e4a0c5d754c5616692253192719decccbfca582b09c",
+    "sourceFiles": 4328,
+    "complete": true,
+    "sdk": "26.10.23-hris.4",
+    "providerRequired": false,
+    "syntheticRoomSeed": true,
+    "phoneTouched": false,
+    "originalBimaTouched": false,
+    "liveGroupActivation": false,
+    "newProviderMessagesSent": 0,
+    "cases": [
+      {
+        "complete": true,
+        "serial": "emulator-5564",
+        "abi": "x86_64",
+        "apkSha256": "f437c6623d6a8476403b9e4a0c5d754c5616692253192719decccbfca582b09c",
+        "sdk": "26.10.23-hris.4",
+        "syntheticRoomSeed": true,
+        "providerMessagesSent": 0,
+        "liveHrisAcceptance": false,
+        "selectedAbiVerified": true,
+        "stage": {
+          "originalSdkClosed": true,
+          "committedBeforeCancellation": true,
+          "uninitializedAdoptionRetained": true,
+          "originalFieldsAndQueueNamespacePreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "ownedResourcesReleased": true,
+          "passed": true,
+          "complete": true,
+          "newMessagesSent": 0,
+          "processId": 2794
+        },
+        "seedRequests": {
+          "GET /_matrix/client/versions": 1,
+          "GET /_matrix/client/v3/user/*/account_data/*": 2,
+          "POST /_matrix/client/v3/keys/upload": 1,
+          "POST /_matrix/client/v3/keys/query": 2,
+          "GET /_matrix/client/v3/sync": 1
+        },
+        "unexpectedSeedRoutes": {},
+        "seedClosedBeforeRecovery": true,
+        "processAbsentBetweenPhases": true,
+        "continuity": {
+          "durableAfterProcessDeath": true,
+          "actualExistingOnlySdkRestore": true,
+          "unpublishedUntilAcceptance": true,
+          "hrCompanySelectionAndDenialIndependent": true,
+          "legacyRuntimeLookupExcluded": true,
+          "originalFieldsAndQueueNamespacePreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "sameBootstrapReplayWithoutWrite": true,
+          "actualPendingQueueRetained": true,
+          "originalQueueReadOffline": true,
+          "originalQueueHeldUnderLogicalOwner": true,
+          "partialAndChangedQueueResumeRejected": true,
+          "ownedResourcesReleased": true,
+          "ownedFilesRemoved": true,
+          "liveGroupActivation": false,
+          "passed": true,
+          "complete": true,
+          "newMessagesSent": 0,
+          "processId": 3601
+        },
+        "fixtureAbsent": true,
+        "seconds": 50.521
+      },
+      {
+        "complete": true,
+        "serial": "emulator-5564",
+        "abi": "arm64-v8a",
+        "apkSha256": "f437c6623d6a8476403b9e4a0c5d754c5616692253192719decccbfca582b09c",
+        "sdk": "26.10.23-hris.4",
+        "syntheticRoomSeed": true,
+        "providerMessagesSent": 0,
+        "liveHrisAcceptance": false,
+        "selectedAbiVerified": true,
+        "stage": {
+          "originalSdkClosed": true,
+          "committedBeforeCancellation": true,
+          "uninitializedAdoptionRetained": true,
+          "originalFieldsAndQueueNamespacePreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "ownedResourcesReleased": true,
+          "passed": true,
+          "complete": true,
+          "newMessagesSent": 0,
+          "processId": 4127
+        },
+        "seedRequests": {
+          "GET /_matrix/client/versions": 1,
+          "GET /_matrix/client/v3/user/*/account_data/*": 2,
+          "POST /_matrix/client/v3/keys/upload": 1,
+          "POST /_matrix/client/v3/keys/query": 2,
+          "GET /_matrix/client/v3/sync": 1
+        },
+        "unexpectedSeedRoutes": {},
+        "seedClosedBeforeRecovery": true,
+        "processAbsentBetweenPhases": true,
+        "continuity": {
+          "durableAfterProcessDeath": true,
+          "actualExistingOnlySdkRestore": true,
+          "unpublishedUntilAcceptance": true,
+          "hrCompanySelectionAndDenialIndependent": true,
+          "legacyRuntimeLookupExcluded": true,
+          "originalFieldsAndQueueNamespacePreserved": true,
+          "originalPrivateKeysPreserved": true,
+          "sameBootstrapReplayWithoutWrite": true,
+          "actualPendingQueueRetained": true,
+          "originalQueueReadOffline": true,
+          "originalQueueHeldUnderLogicalOwner": true,
+          "partialAndChangedQueueResumeRejected": true,
+          "ownedResourcesReleased": true,
+          "ownedFilesRemoved": true,
+          "liveGroupActivation": false,
+          "passed": true,
+          "complete": true,
+          "newMessagesSent": 0,
+          "processId": 4445
+        },
+        "fixtureAbsent": true,
+        "seconds": 54.078
+      }
+    ],
+    "emulatorStopped": {
+      "pid": 1766557,
+      "serial": "emulator-5564",
+      "stopped": true,
+      "signalSent": true,
+      "transportAbsent": true,
+      "seconds": 1.404
+    },
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "elapsedSeconds": 154.702
+  },
+  "nativeResultSha256": "8895969fc12a9979bdddeb72113386668a31ffbb02cb56f6df1660f673be74ba",
+  "sdkLibraries": {
+    "x86_64": "55bde5be2080c3e42a2ece6053f94231d27165cc39698c89c50e36ecbdb2909a",
+    "arm64-v8a": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34"
+  },
+  "proofLint": {
+    "Error": 0,
+    "Warning": 49
+  },
+  "seedValidatorTests": {
+    "tests": 12,
+    "failures": 0,
+    "errors": 0
+  },
+  "scope": "Restricted original physical writer under exact logical runtime; no product send caller, enqueue, store creation or live group rollout.",
+  "interpretation": "The native fixture preserves a different original device ID from the adopted logical device. The old matcher incorrectly equated them; five positive scenarios failed before correction. Current logical admission stays independent from immutable original message provenance. Host tests cover cancellation, late receipt callbacks, current-runtime loss, bounded complete matching and failed cleanup. Both actual ABIs hold/release the paused original writer after process death and reject partial/changed inventories without provider sends.",
+  "phoneLatencyResolved": false,
+  "liveGroupActivation": false,
+  "sdkRebuilt": false,
+  "remaining": "Group direct-conversation/open and room publication/status transport, durable command orchestration and owning original delivery/history publication remain required before product integration."
+}

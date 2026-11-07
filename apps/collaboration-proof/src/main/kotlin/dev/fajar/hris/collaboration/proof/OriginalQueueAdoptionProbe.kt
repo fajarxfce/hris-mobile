@@ -75,6 +75,7 @@ internal class OriginalQueueAdoptionProbe(directory: File) {
         ready: CollaborationSpaceRuntimeReady,
     ) {
         check(f.runtime.inspectOriginalQueue(ready, roomId) is AppResult.Failed)
+        check(f.runtime.acquireOriginalQueue(ready, roomId) is AppResult.Failed)
     }
 
     suspend fun verify(
@@ -98,7 +99,10 @@ internal class OriginalQueueAdoptionProbe(directory: File) {
                                 )
                         )
                 ),
-            )) check(f.runtime.inspectOriginalQueue(changed, roomId) is AppResult.Failed)
+            )) {
+            check(f.runtime.inspectOriginalQueue(changed, roomId) is AppResult.Failed)
+            check(f.runtime.acquireOriginalQueue(changed, roomId) is AppResult.Failed)
+        }
         check(f.runtime.acquireMessageQueue(f.owner, f.device, roomId) is AppResult.Failed)
         val result = f.success(f.runtime.inspectOriginalQueue(ready, roomId))
         check(result.runtime == ready)
@@ -129,6 +133,61 @@ internal class OriginalQueueAdoptionProbe(directory: File) {
                 )
             }
         }
+        verifyHeldQueue(f, ready, result)
+    }
+
+    private suspend fun verifyHeldQueue(
+        f: LocalRuntimeHandoverFixture,
+        ready: CollaborationSpaceRuntimeReady,
+        expected: CollaborationSpaceOriginalQueueSnapshot,
+    ) {
+        val queue = f.success(f.runtime.acquireOriginalQueue(ready, roomId))
+        var primary: Throwable? = null
+        try {
+            check(queue.runtime == ready && queue.binding == expected.original.binding)
+            check(
+                queue.device == expected.original.device && queue.device.deviceId != ready.deviceId
+            )
+            check(f.success(queue.snapshot()) == expected)
+            check(f.runtime.acquireOriginalQueue(ready, roomId) is AppResult.Failed)
+            check(f.runtime.inspectOriginalQueue(ready, roomId) is AppResult.Failed)
+            val partial =
+                expected.copy(
+                    original = expected.original.copy(messages = expected.original.messages.take(1))
+                )
+            check(
+                queue.resume(partial) { error("A partial original queue cannot send") }
+                    is AppResult.Failed
+            )
+            val changed =
+                expected.copy(
+                    original =
+                        expected.original.copy(
+                            messages =
+                                expected.original.messages.map {
+                                    it.copy(serializedContent = "changed")
+                                }
+                        )
+                )
+            check(
+                queue.resume(changed) { error("Changed original content cannot send") }
+                    is AppResult.Failed
+            )
+            check(f.success(queue.snapshot()) == expected)
+        } catch (failure: Throwable) {
+            primary = failure
+            throw failure
+        } finally {
+            withContext(NonCancellable) {
+                try {
+                    f.success(queue.close())
+                } catch (failure: Throwable) {
+                    if (primary != null) primary.addSuppressed(failure) else throw failure
+                }
+            }
+        }
+        check(queue.snapshot() is AppResult.Failed)
+        check(f.success(f.runtime.inspectOriginalQueue(ready, roomId)) == expected)
     }
 
     private fun serialize(messages: List<CollaborationQueuedOriginal>) =

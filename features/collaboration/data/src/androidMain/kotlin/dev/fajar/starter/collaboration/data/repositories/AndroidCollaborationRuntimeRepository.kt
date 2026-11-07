@@ -48,6 +48,67 @@ class AndroidCollaborationRuntimeRepository(
     private val legacyLeases
         get() = registry.legacyResources()
 
+    override suspend fun acquireOriginalQueue(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+    ): AppResult<CollaborationSpaceOriginalQueueLease> {
+        currentCoroutineContext().ensureActive()
+        val lease =
+            registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
+                ?: return handoverPending()
+        var child: CollaborationMessageQueueLease? = null
+        var handedOver = false
+        var primary: Throwable? = null
+        try {
+            val acquired = lease.acquireMessageQueue(matrixRoomId)
+            if (acquired is AppResult.Success) child = acquired.value
+            currentCoroutineContext().ensureActive()
+            if (acquired is AppResult.Failed) return acquired
+            val original = requireNotNull(child)
+            val restriction: () -> Failure? = {
+                lease.credentialFailures.value
+                    ?: if (
+                        registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId) !==
+                            lease
+                    )
+                        handoverPending().failure
+                    else null
+            }
+            restriction()?.let {
+                return AppResult.Failed(it)
+            }
+            if (
+                original.owner.audience != runtime.owner.parent.audience ||
+                    original.owner.accountId != runtime.owner.parent.accountId ||
+                    original.device.roomId != matrixRoomId
+            )
+                return handoverPending()
+            return AppResult.Success(
+                    AndroidCollaborationSpaceOriginalQueueLease(
+                        runtime,
+                        original,
+                        { lease.readHeldOriginalQueue(original) },
+                        restriction,
+                    )
+                )
+                .also { handedOver = true }
+        } catch (failure: Throwable) {
+            primary = failure
+            throw failure
+        } finally {
+            if (!handedOver)
+                withContext(NonCancellable) {
+                    try {
+                        child?.close()
+                    } catch (failure: Throwable) {
+                        // Acquisition failure/cancellation remains primary; the parent keeps the
+                        // unfinished writer reserved until its own drain can complete.
+                        primary?.addSuppressed(failure)
+                    }
+                }
+        }
+    }
+
     override suspend fun inspectOriginalQueue(
         runtime: CollaborationSpaceRuntimeReady,
         matrixRoomId: String,

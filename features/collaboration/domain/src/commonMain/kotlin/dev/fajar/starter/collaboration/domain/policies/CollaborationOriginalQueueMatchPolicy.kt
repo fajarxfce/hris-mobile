@@ -37,9 +37,9 @@ fun collaborationOriginalQueueLogicalIds(
             binding.companyId != position.companyId ||
             !originalQueueId(binding.nativeSessionId) ||
             !validCollaborationMessageDevice(device) ||
+            !originalQueueId(device.deviceId) ||
             !originalQueueId(device.bootstrapOperationId) ||
             device.nativeSessionId != binding.nativeSessionId ||
-            device.deviceId != runtime.deviceId ||
             device.roomId != room.roomId
     )
         return mismatch("scope")

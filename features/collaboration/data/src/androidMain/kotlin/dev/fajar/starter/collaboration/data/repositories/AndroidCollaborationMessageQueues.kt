@@ -61,7 +61,7 @@ internal class AndroidCollaborationMessageQueues(
         return result
     }
 
-    private suspend fun readOriginals(
+    internal suspend fun readOriginals(
         lease: CollaborationMessageQueueLease
     ): AppResult<CollaborationOriginalQueueSnapshot> {
         val before = lease.snapshot()

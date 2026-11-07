@@ -121,6 +121,7 @@ def run(args):
                     "legacyRuntimeLookupExcluded", "originalFieldsAndQueueNamespacePreserved",
                     "originalPrivateKeysPreserved", "sameBootstrapReplayWithoutWrite",
                     "actualPendingQueueRetained", "originalQueueReadOffline",
+                    "originalQueueHeldUnderLogicalOwner", "partialAndChangedQueueResumeRejected",
                     "ownedResourcesReleased", "ownedFilesRemoved"):
             assert resumed[key] is True, key
         assert resumed["newMessagesSent"] == 0 and resumed["liveGroupActivation"] is False

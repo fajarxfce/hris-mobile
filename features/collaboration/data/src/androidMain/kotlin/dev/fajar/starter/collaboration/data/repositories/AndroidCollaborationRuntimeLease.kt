@@ -269,6 +269,10 @@ internal constructor(
         roomId: String
     ): AppResult<CollaborationOriginalQueueSnapshot> = messageQueues.inspectOriginals(roomId)
 
+    internal suspend fun readHeldOriginalQueue(
+        queue: CollaborationMessageQueueLease
+    ): AppResult<CollaborationOriginalQueueSnapshot> = messageQueues.readOriginals(queue)
+
     /** Borrowed transport reads only a head; this runtime owns cancellation of that request. */
     suspend fun findHistoryHead(roomId: String): AppResult<String?> = historyReads.read(roomId)
 

@@ -19,7 +19,7 @@ internal class OriginalQueueMatchFixture(
     val device =
         CollaborationMessageDevice(
             binding.nativeSessionId,
-            runtime.deviceId,
+            id(62),
             id(91),
             "!original:example.test",
         )

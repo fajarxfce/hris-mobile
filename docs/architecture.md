@@ -1,5 +1,9 @@
 # Architecture
 
+[Original organization message writer](collaboration-space-original-writer.md) preserves
+the physical queue namespace under exact logical runtime ownership. Current logical
+device identity remains separate from the device recorded in original messages.
+
 [Original queue matching](collaboration-space-original-queue-reconciliation.md)
 keeps pure whole-inventory validation separate from the owning current-admission
 read. Matching retained commands and completion evidence grants no queue mutation.
