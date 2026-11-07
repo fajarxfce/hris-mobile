@@ -105,6 +105,7 @@ fun applicationWorkerModule() = module {
     } bind SyncTask::class
     single {
         CollaborationDeliveryWorker(
+            refreshWorkspace = get(),
             recoverDrafts = get(),
             discover = get(),
             advance = get(),

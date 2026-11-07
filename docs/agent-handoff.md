@@ -5,6 +5,40 @@ continuing. [Previous checkpoint](https://github.com/fajarxfce/hris-mobile/blob/
 retains all earlier source/CI history and links older local handoff archives. Git and
 contracts are authoritative; `.work` is staging/evidence, never permission to reapply.
 
+## Latest accepted renewal — 7 November 2026, 17:43 UTC
+
+Selected-workspace offline renewal is locally accepted in this commit: six Kotlin
+source/test files plus CI coverage. App worker renews once for two known stale-authority
+codes using an exact captured target, rechecks ownership, then retries setup once.
+Network remains Retry; denial/replacement/cancellation never erase commands or borrow
+SDK. Background admitted work is unchanged. Focused82722:52/5/376.389s; full60955:
+5,229 fresh cases/657 suites/589.990s on4,414 unchanged inputs, zero failures/errors/
+skips/lint and40 actual Browser cases. Root/Android host/quality/shared Wasm pass.
+Both jobs REAPED. [Contract](collaboration-offline-authority-renewal.md).
+
+Build55 scripts are prepared only in .work/release-phone-2026-11-07-build55; no build
+or emulator55 operation yet. They require this accepted/pushed exact source and full
+manifest. Original emulator is STOPPED54, phone53. Test pending/draft offline persistence
+and automatic reconnect without a foreground rescue; preserve original54 failed evidence.
+Keyboard/first-frame viewport remain explicitly outside that release acceptance boundary.
+A separate page/three-case UI candidate exists in .work/chat-new-message-position-2026-11-07;
+NOT applied/compiled. Never copy it over an active frozen build; compare candidate-base.json.
+
+Inspector sole heavy job73814 now runs first Ktor strict gates. Its new two production/
+one test Kotlin files and configuration are FROZEN until reaped; no Mobile compiler
+or emulator may overlap. Thirteen Ktor cases authored, none accepted yet. Core42 local
+cases remain accepted. Private repo a0f04f6 has a billing-blocked first CI; visibility
+approval is still pending. Main/Group handoffs c5561ae0/41c28a12 are pushed.
+
+Mobile3308 first control42396219062/native42396218957 are both still pending; keep
+primary at3308 until both have started. Recovery commits may continue/push/build.
+First0d source0d10c395fb0c637d27344d037d63961a1af9bd80 is fully artifact-audited:
+Apple2,098/235, portable5,063/556, native551/87 on each ABI, zero failures/errors/skips.
+GitHub artifact hashes and immutableSDK4/owned keys/IDs/cleanup pass. Synthetic queue
+continuity makes zero provider sends and grants no live Group activation; retained
+inapplicable false flags are not failures. [Full audit](measurements/room-resolution-first-ci-2026-11-07.json).
+Live services/schema, Starter and original PRD/Room-dispatch objective are unchanged.
+
 ## Current continuation — 7 November 2026, 17:24 UTC
 
 Local-echo provenance is locally accepted in this commit (six Kotlin source/test

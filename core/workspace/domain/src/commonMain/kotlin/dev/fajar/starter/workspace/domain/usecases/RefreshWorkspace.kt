@@ -7,6 +7,7 @@ import dev.fajar.starter.identity.domain.repositories.*
 import dev.fajar.starter.sync.domain.*
 import dev.fajar.starter.workspace.domain.entities.CompanyPolicySnapshot
 import dev.fajar.starter.workspace.domain.entities.Workspace
+import dev.fajar.starter.workspace.domain.entities.WorkspaceRefreshTarget
 import dev.fajar.starter.workspace.domain.policies.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
@@ -26,10 +27,12 @@ class RefreshWorkspace(
     override val key = "hris-workspace-access"
     private val execution = Mutex()
 
-    override suspend fun invoke(): SyncResult =
+    override suspend fun invoke(): SyncResult = invoke(null)
+
+    suspend operator fun invoke(target: WorkspaceRefreshTarget?): SyncResult =
         execution.withLock {
             val result =
-                withTimeoutOrNull(30.seconds) { refresh() }
+                withTimeoutOrNull(30.seconds) { refresh(target) }
                     ?: return@withLock SyncResult.Retry(
                         Failure(FailureKind.Timeout, "Company access timed out.")
                     )
@@ -39,18 +42,26 @@ class RefreshWorkspace(
             }
         }
 
-    private suspend fun refresh(): AppResult<Unit> {
+    private suspend fun refresh(target: WorkspaceRefreshTarget?): AppResult<Unit> {
         val startedAt = clock.now()
         val session =
             when (val result = sessions.current()) {
                 is AppResult.Failed -> return result
-                is AppResult.Success -> result.value ?: return AppResult.Success(Unit)
+                is AppResult.Success ->
+                    result.value
+                        ?: return if (target == null) AppResult.Success(Unit)
+                        else workspaceFailure("client.workspace_changed", FailureKind.Conflict)
             }
         val previous =
             when (val result = workspaces.current(session.id)) {
                 is AppResult.Failed -> return result
-                is AppResult.Success -> result.value ?: return AppResult.Success(Unit)
+                is AppResult.Success ->
+                    result.value
+                        ?: return if (target == null) AppResult.Success(Unit)
+                        else workspaceFailure("client.workspace_changed", FailureKind.Conflict)
             }
+        if (target != null && !target.matches(session, previous))
+            return workspaceFailure("client.workspace_changed", FailureKind.Conflict)
         if (!belongsToWorkspaceSession(previous, session))
             return invalidate(
                 previous,

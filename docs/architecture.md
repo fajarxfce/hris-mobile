@@ -1,5 +1,8 @@
 # Architecture
 
+[Chat authority renewal](collaboration-offline-authority-renewal.md) targets captured
+selected work while preserving local reads, durable originals and separate background admission.
+
 [Original outgoing remote echoes](collaboration-chat-remote-echo.md) preserve separate
 transaction/event identities without changing transport or durable acknowledgement.
 

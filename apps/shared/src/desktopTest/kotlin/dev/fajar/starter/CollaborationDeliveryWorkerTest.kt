@@ -2,15 +2,107 @@ package dev.fajar.starter
 
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageRepository
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.fixtures.CollaborationWorkerFixture
 import dev.fajar.starter.sync.domain.SyncResult
+import dev.fajar.starter.workspace.domain.entities.Workspace
+import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.test.*
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 
 class CollaborationDeliveryWorkerTest {
+    @Test
+    fun expiredOwnedAuthorityRetriesOfflineAndThenDeliversTheOriginalAfterRestart() = runBlocking {
+        for (workspaceExpired in listOf(false, true)) withFixture { f ->
+            val queued = f.queue(text = "Original offline recovery message")
+            val repo = f.koin.get<WorkspaceRepository>()
+            val before =
+                assertNotNull(
+                    assertIs<AppResult.Success<Workspace?>>(repo.current(f.session.id)).value
+                )
+            val now = Clock.System.now()
+            val expired =
+                if (workspaceExpired)
+                    before.copy(
+                        admission =
+                            before.admission.copy(
+                                checkedAt = now - 2.hours,
+                                expiresAt = now - 1.hours,
+                            )
+                    )
+                else
+                    before.copy(
+                        policy = requireNotNull(before.policy).copy(requestedAt = now - 2.minutes)
+                    )
+            assertEquals(AppResult.Success(true), repo.compareAndSet(f.session.id, before, expired))
+            f.reopen()
+            f.server.companyPolicy.offline = true
+            val reads = f.server.companyPolicy.reads.get()
+            val offline = assertIs<SyncResult.Retry>(f.worker())
+            assertEquals(FailureKind.Network, offline.failure?.kind)
+            assertEquals(
+                reads + 1,
+                f.server.companyPolicy.reads.get(),
+                "Only one authority renewal per pass",
+            )
+            assertTrue(f.sdk.enqueued.isEmpty())
+            assertEquals(0, f.sdk.deliveries)
+            val pending =
+                assertIs<AppResult.Success<List<CollaborationMessageRecord>>>(
+                        f.koin.get<ObserveCollaborationMessages>()(f.workspaceId, f.first).first()
+                    )
+                    .value
+            assertEquals(listOf(queued.intent.id), pending.map { it.intent.id })
+            f.server.companyPolicy.offline = false
+            assertEquals(SyncResult.Complete, f.worker())
+            assertEquals(listOf(queued.intent.id), f.sdk.enqueued)
+            assertEquals(1, f.sdk.deliveries)
+            assertEquals(SyncResult.Complete, f.worker())
+            assertEquals(1, f.sdk.deliveries)
+        }
+    }
+
+    @Test
+    fun renewedModuleDenialRetainsOriginalWorkWithoutOpeningTheSdk() = runBlocking {
+        withFixture { f ->
+            val queued = f.queue()
+            val access =
+                assertIs<AppResult.Success<CollaborationLocalAccess>>(
+                        f.koin.get<ObserveCollaborationAccess>()(f.workspaceId).first()
+                    )
+                    .value
+            val repo = f.koin.get<WorkspaceRepository>()
+            val before =
+                assertNotNull(
+                    assertIs<AppResult.Success<Workspace?>>(repo.current(f.session.id)).value
+                )
+            val expired =
+                before.copy(
+                    policy =
+                        requireNotNull(before.policy)
+                            .copy(requestedAt = Clock.System.now() - 2.minutes)
+                )
+            assertEquals(AppResult.Success(true), repo.compareAndSet(f.session.id, before, expired))
+            f.server.companyPolicy.disabledModules = setOf("COLLABORATION")
+            val denied = assertIs<SyncResult.Blocked>(f.worker())
+            assertEquals("company_module_disabled", denied.failure.code)
+            assertTrue(f.sdk.enqueued.isEmpty())
+            assertEquals(0, f.sdk.deliveries)
+            val retained =
+                assertIs<AppResult.Success<List<CollaborationMessageRecord>>>(
+                        f.koin.get<CollaborationMessageRepository>().observe(access, null).first()
+                    )
+                    .value
+            assertEquals(listOf(queued.intent.id), retained.map { it.intent.id })
+        }
+    }
+
     @Test
     fun storedIntentResumesAfterContainerRestartAndIsRetiredOnlyWithOriginalEvidence() =
         runBlocking {

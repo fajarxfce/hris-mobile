@@ -8,6 +8,8 @@ import dev.fajar.starter.collaboration.domain.repositories.CollaborationBackgrou
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.sync.domain.*
+import dev.fajar.starter.workspace.domain.entities.WorkspaceRefreshTarget
+import dev.fajar.starter.workspace.domain.usecases.RefreshWorkspace
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -22,6 +24,7 @@ class CollaborationDeliveryWorker(
     private val advance: AdvanceCollaborationDelivery,
     private val observeAccess: ObserveCollaborationAccess,
     private val loadSetup: LoadCollaborationSetup,
+    private val refreshWorkspace: RefreshWorkspace,
     private val ensureRuntime: EnsureCollaborationRuntime,
     private val control: ReadCollaborationControl,
     private val read: ReadCollaborationConversations,
@@ -115,8 +118,32 @@ class CollaborationDeliveryWorker(
         val selection =
             work.scope as? CollaborationLocalScope.Selected ?: return SyncResult.Blocked(changed())
         val scope = CollaborationOperationScope.Selected(selection.workspaceId)
-        val setup = loadSetup(scope)
+        var setup = loadSetup(scope)
         currentCoroutineContext().ensureActive()
+        if (
+            setup is AppResult.Failed &&
+                setup.failure.code in
+                    setOf("client.workspace_expired", "client.company_policy_expired")
+        ) {
+            // Renew only the selected owner captured with this durable work. Background
+            // notification admission has a separate lifetime and never enters this path.
+            val renewed =
+                refreshWorkspace(
+                    WorkspaceRefreshTarget(
+                        work.access.sessionId,
+                        scope.workspaceId,
+                        work.access.audience,
+                        work.access.accountId,
+                        work.access.companyId,
+                    )
+                )
+            currentCoroutineContext().ensureActive()
+            if (renewed != SyncResult.Complete) return renewed
+            val current = guard(work)
+            if (current is AppResult.Failed) return syncFailure(current.failure)
+            setup = loadSetup(scope)
+            currentCoroutineContext().ensureActive()
+        }
         if (setup is AppResult.Failed) return syncFailure(setup.failure)
         val configured = (setup as AppResult.Success).value
         if (configured.owner.localListAccess() != work.access) return SyncResult.Blocked(changed())

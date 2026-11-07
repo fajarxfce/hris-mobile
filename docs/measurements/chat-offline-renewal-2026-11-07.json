@@ -1,0 +1,221 @@
+{
+  "scope": "Renew one captured selected workspace before retrying stale-authority chat setup; preserve original queued work, denials and background admission",
+  "baseCommit": "3308a93fc352c511032ed20d5b470274342a7a4a",
+  "sources": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt": "50748a234124df65caedc724590b9598cc53893c354dff352c5630102110525d",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "157941eab4352748ae5bf94d81d26c0190e5c662fc3af83c8264e0cf27634b31",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt": "26eb91c5cf833aa4a5b178f9c2844144bcce9e1457d2e7dc09955e69cf49b9b8",
+    "core/workspace/domain/src/commonMain/kotlin/dev/fajar/starter/workspace/domain/entities/WorkspaceRefreshTarget.kt": "676a219243241b7527ace4094fe334ec49f76904d474e0bb449006175d7d212b",
+    "core/workspace/domain/src/commonMain/kotlin/dev/fajar/starter/workspace/domain/usecases/RefreshWorkspace.kt": "2c28654d0af55b55af4e896dbc570c446e59f52120f87d4599544c616a10777e",
+    "core/workspace/domain/src/commonTest/kotlin/dev/fajar/starter/workspace/domain/WorkspaceRefreshTargetTest.kt": "fd0d0762cfa6a8dc07c8c4c28792748d9294bcf8667428c0373b85953e7c194d",
+    ".github/workflows/collaboration-control.yml": "889df56b815e0b79c9f57353fe84350bf2c6f2714a066f4f72ff981a48bdf526"
+  },
+  "runs": {
+    "focused-1": {
+      "startedAt": "2026-11-07T17:25:31.743909+00:00",
+      "elapsedSeconds": 376.389,
+      "exitCode": 0,
+      "sourceFiles": 4414,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 52,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "suites": 5,
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":core:workspace:domain:desktopTest",
+        "--tests",
+        "*WorkspaceRefreshTargetTest",
+        "--tests",
+        "*WorkspaceAdmissionTest",
+        "--tests",
+        "*CompanyAvailabilityTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationDeliveryWorkerTest",
+        "--tests",
+        "*AppLocalWorkspaceTest",
+        ":apps:shared:compileAndroidMain",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PcollaborationProofAbi=x86_64",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "fullLocalResultSha256": "eed9c46b8ceb296cb5188543c8ab6da7ef512687f7eadf5b577ad7b6ee383b1b",
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.bootstrap.AppLocalWorkspaceTest.xml": {
+          "sha256": "e7342977a65e766b0334f6d0e6a18888764d32fbc406dd702173d8ec95062ede",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+          "sha256": "2b9988a5d0ed6d15ca726e35e5a6227dbb3454b10b2679ae78348224f2472ba1",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/workspace/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.domain.WorkspaceAdmissionTest.xml": {
+          "sha256": "2f5a9e1035a485559bd08bef8d3ec217aea2cf886d9e3e461940acc2fed5188a",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/workspace/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.domain.WorkspaceRefreshTargetTest.xml": {
+          "sha256": "c2a9c565ddee58e30b1ea9db5a8590de5094cdeeedcea6f84f3441851e428d8f",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/workspace/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.domain.CompanyAvailabilityTest.xml": {
+          "sha256": "7ffbbf51d30e1967e42067d26877e13c5ff86e374dcd447f330b56147b56f78c",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "full-1": {
+      "startedAt": "2026-11-07T17:32:29.113070+00:00",
+      "elapsedSeconds": 589.99,
+      "exitCode": 0,
+      "sourceFiles": 4414,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5229,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "suites": 657,
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":check",
+        ":features:collaboration:data:testAndroidHostTest",
+        ":apps:android:lintDevRelease",
+        ":core:workspace:domain:wasmJsBrowserTest",
+        ":apps:shared:compileKotlinWasmJs",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "fullLocalResultSha256": "fdb981040b838585070c87152d216e4a2f8873343992ebb0a7bbbf73d9046c0e",
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+          "sha256": "7838233f3d7b4219a432ea9b696158e35d68761d8df30b00ab5fd676178ca768",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.bootstrap.AppLocalWorkspaceTest.xml": {
+          "sha256": "74342f95c05a9b51f025f9d70e2baf9cba3844384be5e4e29cbaf699477c3bb8",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/workspace/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.domain.WorkspaceAdmissionTest.xml": {
+          "sha256": "93391a52cb3d6cc7b819fd2466c1dcb5d4fde3d4997fb552292f7f3a381eb6a8",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/workspace/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.domain.WorkspaceRefreshTargetTest.xml": {
+          "sha256": "ee0d859144f68c4ee5bead1e00ed8b6947ed3bc069fe39f50b2e717937c50f32",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/workspace/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.domain.WorkspaceSelectionTest.xml": {
+          "sha256": "b0d94d5e302d7fbecd070deffb1827a97abe4fa44f1991d50ed1eb4b7f73814d",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/workspace/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.domain.CompanyAvailabilityTest.xml": {
+          "sha256": "bad15930cde227fdf091aa4e83f41552d87217694d9b7a742a11694b444418ac",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/workspace/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.workspace.domain.WorkspaceAdmissionTest.xml": {
+          "sha256": "591e4e05c0a19ceaf093c4c052566107c00b19ee477f5625a2816c22fefc02cc",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/workspace/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.workspace.domain.WorkspaceRefreshTargetTest.xml": {
+          "sha256": "78c3edd9d5456f983ca2b0c864dc6aa110b091ea5f0b29eb10a23b4705436ab1",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/workspace/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.workspace.domain.WorkspaceSelectionTest.xml": {
+          "sha256": "d9eb35e91b18e39a30dd8755a438480f7958a2fc8b0383259d121570c16ab249",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/workspace/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.workspace.domain.CompanyAvailabilityTest.xml": {
+          "sha256": "05439a3ccbe42d09a58111698d5cbd8b78612fbc430168d758eca50564f48058",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "actualBrowserCases": 40,
+  "androidReleaseLintIssues": 0,
+  "jobsReaped": [
+    82722,
+    60955
+  ],
+  "deviceAcceptance": false,
+  "limitations": [
+    "Workflow coverage was added after focused checks; no Kotlin changes between focused/full gates",
+    "Actual original offline send/reconnect remains to be verified in the next APK",
+    "No changed SDK, message identity, acknowledgement semantics, keyboard behavior or selected/background ownership"
+  ]
+}
