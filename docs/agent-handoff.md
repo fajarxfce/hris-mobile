@@ -4,49 +4,61 @@ This is the active checkpoint. The [historical handoff](agent-handoff-history-th
 retains earlier work verbatim. Detailed measurements below are authoritative; do not
 restart accepted builds, native sends or SDK publication solely to recreate evidence.
 
-## Current next step — 7 November 2026, 04:04UTC
+## Current next step — 7 November 2026, 04:14UTC
 
-Mobile adoption and explicit diagnostic-failure outcome full86974 PASSED466.159s:
-3,159 fresh cases/454 suites,4,282 stable inputs,zero failures/errors/skips/Detekt or
-Android lint findings. Root, Android host/proof/app, browser, format and architecture
-checks passed. No heavy job or emulator remains. The two changes shared this final
-source manifest; their separate focused checks are recorded honestly.
+Mobile logical Space registry ownership is accepted and ready to commit/push to
+feat/chat-recovery-20261107. Focused4465 PASSED38fresh cases/72.926s; full83085 PASSED
+445fresh cases/132.579s,4,284stable inputs,zero failures/errors/skips/Detekt/lint.
+All root/browser/Android host/proof/app/quality targets passed; unchanged tasks reused
+valid earlier reports. Three source/test files were frozen through both gates.
+[Contract](collaboration-space-runtime-ownership.md),
+[evidence](measurements/collaboration-space-runtime-ownership-2026-11-07.json).
 
-Generic observability correction c50a8983 is committed/pushed on temporary
-feat/chat-recovery-20261107. The ten-file adoption format/persistence change is accepted
-and ready to commit/push with this checkpoint. Primary is still c1410b31; its FIRST
-control42333989403 and native42333989369 are IN_PROGRESS, so promote the combined
-accepted source after both atomic commits are pushed. Do not displace a first pending
-primary source run with another source push. [Credentials contract](collaboration-space-sdk-adoption-credentials.md).
+The registry transfers a fully drained original physical slot into a distinct logical
+Space/native/device/bootstrap reservation atomically. Every legacy lookup/borrow/
+history/handover path excludes it. HR company selection/denial does not retire a Space
+resource; parent changes and exact-space removal do. Invalidated pending handover gates
+cannot regain authority when a previous parent returns, including legacy replacement
+and existing-store gates. Capacity/late constructor cleanup remain owned. No live caller
+or SDK adoption is added and original physical records/queued transaction IDs are unchanged.
 
-Adoption focused85400 PASSED94fresh cases/117.969s. Strict schema4 retains original
-physical fields, keys, queue identity, credentials and handover, with a separate group
-session. The fixed per-lease namespace and immutable bootstrap response prevent old
-callbacks from selecting or rolling back group credentials. Exact replay preserves
-refreshed tokens; explicit replacement requires a higher gateway generation. Six codec,
-four common persistence and three Android callback regressions are included. No live
-caller, SDK restore or group activation. Private drivers/results:
-.work/space-sdk-adoption-2026-11-07. [Evidence](measurements/collaboration-space-sdk-adoption-credentials-2026-11-07.json).
+Primary/temp currently780624a42cd0c39c8e0eb2daa8f4d9b47dc90dd0. FIRST780 control42336761340
+and native42336761242 are PENDING; preserve those before another primary source push.
+Each next atomic commit goes to the temporary branch until the first control starts.
+No local heavy job or emulator remains after full83085. Next private preparation is
+.work/space-runtime-adoption-next-2026-11-07: existing-only file acquisition candidate
+and three explicit fixture-contract additions, NOT applied/tested. Add raw filesystem
+regressions then implement same-owner existing-only paused SDK restore, namespace callback,
+actual private identity continuity and final owning admission. Do not activate group
+routing or silently replace a changed/revoked native parent.
 
-FIRST Starter Apple42334504381/sourcefdbff51 FAILED the unchanged
+Accepted credentials780624 follow observabilityc50a8983/owning transfer41870. Credentials
+focused85400 passed94fresh/117.969s; combined full86974 passed3,159fresh/454suites/466.159s,
+4,282stable inputs,zero all. Strict schema4 retains original fields/keys/queue identity,
+credentials and handover with a separate group session and immutable replay response.
+[Credentials contract](collaboration-space-sdk-adoption-credentials.md). No native adoption.
+
+Starterf25cb3de4d8f18a7cf95ec956dea5a7485f92623 is committed/pushed. Two exact generic
+observability files from Mobile passed94353/local293fresh cases/93suites/295.556s,
+1,025stable inputs,zero failures/errors/skips/Detekt/lint errors,44oldwarnings; production
+Web and Android passed. FIRST changed-source Apple42337213669 is IN_PROGRESS. Its private
+success-only audit script is prepared under .work/native-failure-outcome-port-2026-11-07.
+Never rerun accepted tests or redispatch that source just for evidence.
+
+Original Starter FIRST42334504381/sourcefdbff51 FAILED the unchanged
 HttpDiagnosticsTest.transportFailureAndCancellationBothFinishTheirSamples assertion:
 expected[Failed,Cancelled],actual[null,Cancelled].191cases/48suites,1failure,0errors/skips;
-all three new ReadOnlyPostAuthenticationTest cases passed. Original artifact13559650754
-SHA d7d3ad4c308a9537cc6901c1f35cdf60d4ac563b9ee3203ca68497bf770d9028 is downloaded and
-GitHub-digest verified. Later app/association build steps were skipped. Never erase or
-rerun this first failure. Mobile now explicitly assigns Failed on the exception path
-and retains the original Throwable; its suspended dispatcher-hop regression passed.
-Focused23498 PASSED88fresh desktop/browser cases/78.848s. Apple verification of the
-changed source is REQUIRED; the Native compiler cause is not claimed established.
-[Original failure and local acceptance](measurements/native-failure-outcome-2026-11-07.json).
+all3ReadOnlyPost tests passed. Artifact13559650754SHA
+d7d3ad4c308a9537cc6901c1f35cdf60d4ac563b9ee3203ca68497bf770d9028 is GitHub verified;
+later app/associations skipped. Both repositories retain it publicly. The new explicit
+Failed catch and dispatcher-hop regression still require changed-source Apple acceptance;
+no precise Native compiler cause or physical message-delay fix is claimed.
 
-NEXT: apply Starter's prepared .work/native-failure-outcome-port-2026-11-07, which
-requires committed accepted Mobile bytes. Port only MeasureOperation.kt/PerformanceTest.kt
-and add its Apple observability targets. Run its local gate, commit/push, dispatch a
-NEW first Apple gate for changed source. Then implement actual existing-only SDK
-adoption/restore under distinct logical Space ownership, preserving the original
-physical namespace and queued transaction IDs. Root routing and changed/revoked-parent
-recovery remain separate unfinished work.
+FIRST c141 native42333989369 PASSED/audited450cases/74suites EACHABI,zero all. Artifacts
+13559688618(ARM)/13559428045(x86) have verified GitHub digests. New public
+[CI record](measurements/collaboration-publication-native-ci-2026-11-07.json). Control
+42333989403 has portable SUCCESS, Apple IN_PROGRESS. Its audit script is prepared in
+.work/legacy-publication-transport-2026-11-07/first-ci. No new protocol run was triggered.
 
 Owning transfer41870f77 is accepted/pushed: focused29903 passed16cases(14domain+2DI)
 in178.895s; full12140 passed5,552fresh/646suites/585.003s,4,276stable inputs,zero

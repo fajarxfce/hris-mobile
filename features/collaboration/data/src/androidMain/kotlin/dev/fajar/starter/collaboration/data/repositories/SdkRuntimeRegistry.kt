@@ -54,7 +54,8 @@ internal class SdkRuntimeRegistry<T : Any>(
             val existing = entries[storeId]
             if (
                 existing != null &&
-                    (existing.owner != owner ||
+                    (existing.space != null ||
+                        existing.owner != owner ||
                         existing.deviceId != deviceId ||
                         existing.retired ||
                         existing.historyReopening ||
@@ -93,6 +94,7 @@ internal class SdkRuntimeRegistry<T : Any>(
                 borrow !in borrowers ||
                     entries[entry.storeId] !== entry ||
                     entry.retired ||
+                    entry.space != null ||
                     !retainsParent(entry.owner)
             )
                 return@synchronized stopped()
@@ -132,8 +134,9 @@ internal class SdkRuntimeRegistry<T : Any>(
     ): AppResult<SdkRuntimeReservation<T>?> =
         synchronized(monitor) {
             val entry =
-                entries.values.singleOrNull { it.owner == owner && it.deviceId == deviceId }
-                    ?: return@synchronized AppResult.Success(null)
+                entries.values.singleOrNull {
+                    it.space == null && it.owner == owner && it.deviceId == deviceId
+                } ?: return@synchronized AppResult.Success(null)
             if (entry.resource == null) return@synchronized busy()
             if (entry.historyReopening || borrowers.any { it.reservation === entry })
                 return@synchronized registryFailure("client.collaboration_runtime_busy")
@@ -151,8 +154,16 @@ internal class SdkRuntimeRegistry<T : Any>(
             val foreground = next.foreground
             require(foreground == null || next.parent?.owner(foreground.companyId) == foreground)
             retention = next
+            handovers.values.forEach { gate ->
+                val parent = gate.space?.owner?.parent ?: gate.existingStoreParent
+                if (if (parent != null) next.parent != parent else !retainsParent(gate.owner))
+                    gate.invalidated = true
+            }
             entries.values.forEach { entry ->
-                if (!retainsParent(entry.owner)) retire(entry)
+                val space = entry.space
+                if (space != null) {
+                    if (next.parent != space.owner.parent) retire(entry)
+                } else if (!retainsParent(entry.owner)) retire(entry)
                 else {
                     if (next.foreground != entry.owner) entry.foreground = false
                     retireIfIdle(entry)
@@ -164,7 +175,110 @@ internal class SdkRuntimeRegistry<T : Any>(
     /** Explicit legacy drain invalidates current reservations, not future standalone entries. */
     fun closeOtherOwners(retained: CollaborationOwner?): List<T> =
         synchronized(monitor) {
-            entries.values.filter { it.owner != retained }.forEach(::retire)
+            entries.values.filter { it.space == null && it.owner != retained }.forEach(::retire)
+            closingResources()
+        }
+
+    /**
+     * Excludes the original physical namespace while a currently admitted space adopts it. The
+     * caller still owns durable target/credential/private-key validation under the store lease.
+     */
+    fun beginSpaceAdoption(
+        storeId: String,
+        originalOwner: CollaborationOwner,
+        originalDeviceId: String,
+        space: SdkSpaceRuntimeIdentity,
+    ): AppResult<SdkRuntimeHandoverGate> =
+        synchronized(monitor) {
+            val parent = space.owner.parent
+            if (
+                retention?.parent != parent ||
+                    originalOwner.setupBinding() !=
+                        parent.owner(originalOwner.companyId).setupBinding()
+            )
+                return@synchronized stopped()
+            if (storeId in handovers) return@synchronized handoverPending()
+            if (handovers.size >= CLIENT_LIMIT) return@synchronized capacity()
+            if (
+                entries.values.any { it.storeId != storeId && it.space?.owner == space.owner } ||
+                    handovers.values.any { it.storeId != storeId && it.space?.owner == space.owner }
+            )
+                return@synchronized busy()
+            val entry = entries[storeId]
+            if (
+                entry != null &&
+                    (entry.owner.setupBinding() != originalOwner.setupBinding() ||
+                        entry.deviceId != originalDeviceId ||
+                        entry.space?.let {
+                            it.owner != space.owner || it.deviceId != space.deviceId
+                        } == true)
+            )
+                return@synchronized busy()
+            val gate =
+                SdkRuntimeHandoverGate(
+                    storeId,
+                    originalOwner,
+                    originalDeviceId,
+                    replacingCredentials = false,
+                    space = space,
+                )
+            handovers[storeId] = gate
+            entry?.let(::retire)
+            changed()
+            AppResult.Success(gate)
+        }
+
+    /** Invalidation is permanent for this attempt; cleanup still belongs to the original gate. */
+    fun spaceHandoverCurrent(gate: SdkRuntimeHandoverGate): Boolean =
+        synchronized(monitor) {
+            val space = gate.space
+            space != null &&
+                handovers[gate.storeId] === gate &&
+                !gate.invalidated &&
+                retention?.parent == space.owner.parent
+        }
+
+    /** Gate-to-reservation transfer is atomic, so no legacy opener can slip into the store. */
+    fun reserveSpaceAdoption(gate: SdkRuntimeHandoverGate): AppResult<SdkRuntimeReservation<T>> =
+        synchronized(monitor) {
+            val space = gate.space ?: return@synchronized handoverPending()
+            if (
+                handovers[gate.storeId] !== gate ||
+                    gate.invalidated ||
+                    retention?.parent != space.owner.parent
+            )
+                return@synchronized stopped()
+            if (gate.storeId in entries) return@synchronized busy()
+            if (entries.size >= CLIENT_LIMIT) return@synchronized capacity()
+            val next =
+                SdkRuntimeReservation<T>(
+                    gate.storeId,
+                    gate.owner,
+                    gate.deviceId,
+                    foreground = true,
+                    space = space,
+                )
+            entries[gate.storeId] = next
+            handovers.remove(gate.storeId)
+            changed()
+            AppResult.Success(next)
+        }
+
+    /** Exact logical identity only; physical legacy owner lookups never expose these resources. */
+    fun findSpace(space: SdkSpaceRuntimeIdentity): T? =
+        synchronized(monitor) {
+            if (retention?.parent != space.owner.parent) return@synchronized null
+            entries.values
+                .singleOrNull { it.space == space && !it.retired }
+                ?.resource
+                ?.takeIf(available)
+        }
+
+    /** Current-space denial/removal stops its resources without changing original stored facts. */
+    fun closeSpace(owner: CollaborationSpaceOwner): List<T> =
+        synchronized(monitor) {
+            handovers.values.filter { it.space?.owner == owner }.forEach { it.invalidated = true }
+            entries.values.filter { it.space?.owner == owner }.forEach(::retire)
             closingResources()
         }
 
@@ -202,7 +316,8 @@ internal class SdkRuntimeRegistry<T : Any>(
             val entry = entries[storeId]
             if (
                 entry != null &&
-                    (entry.owner.setupBinding() != originalOwner.setupBinding() ||
+                    (entry.space != null ||
+                        entry.owner.setupBinding() != originalOwner.setupBinding() ||
                         entry.deviceId != deviceId)
             )
                 return@synchronized busy()
@@ -227,6 +342,8 @@ internal class SdkRuntimeRegistry<T : Any>(
     ): Boolean =
         synchronized(monitor) {
             handovers[gate.storeId] === gate &&
+                !gate.invalidated &&
+                gate.space == null &&
                 gate.existingStoreParent == currentParent &&
                 retention?.parent == currentParent
         }
@@ -260,7 +377,10 @@ internal class SdkRuntimeRegistry<T : Any>(
             if (replacingCredentials && retention != null && retention?.foreground != owner)
                 return@synchronized stopped()
             val entry = entries[storeId]
-            if (entry != null && (entry.owner != owner || entry.deviceId != deviceId))
+            if (
+                entry != null &&
+                    (entry.space != null || entry.owner != owner || entry.deviceId != deviceId)
+            )
                 return@synchronized busy()
             if (entry?.resource !== expectedResource) return@synchronized busy()
             if (
@@ -281,7 +401,7 @@ internal class SdkRuntimeRegistry<T : Any>(
         gate: SdkRuntimeHandoverGate
     ): AppResult<SdkRuntimeReservation<T>> =
         synchronized(monitor) {
-            if (handovers[gate.storeId] !== gate || !gate.replacingCredentials)
+            if (handovers[gate.storeId] !== gate || gate.invalidated || !gate.replacingCredentials)
                 return@synchronized handoverPending()
             val decision = retention
             if (
@@ -346,7 +466,9 @@ internal class SdkRuntimeRegistry<T : Any>(
     }
 
     private fun findEntry(owner: CollaborationOwner, deviceId: String) =
-        entries.values.singleOrNull { it.owner == owner && it.deviceId == deviceId && !it.retired }
+        entries.values.singleOrNull {
+            it.space == null && it.owner == owner && it.deviceId == deviceId && !it.retired
+        }
 
     private fun retainsParent(owner: CollaborationOwner): Boolean {
         val decision = retention ?: return false
@@ -400,7 +522,10 @@ internal constructor(
     internal val deviceId: String,
     internal val replacingCredentials: Boolean,
     internal val existingStoreParent: CollaborationNativeParent? = null,
+    internal val space: SdkSpaceRuntimeIdentity? = null,
 ) {
+    internal var invalidated = false
+
     override fun toString() = "SdkRuntimeHandoverGate([redacted])"
 }
 
@@ -409,6 +534,7 @@ internal class SdkRuntimeReservation<T : Any>(
     val owner: CollaborationOwner,
     val deviceId: String,
     internal var foreground: Boolean,
+    internal val space: SdkSpaceRuntimeIdentity? = null,
 ) {
     internal var resource: T? = null
     internal var retired = false
