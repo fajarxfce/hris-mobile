@@ -51,7 +51,7 @@ jobs:
         with:
           repository: fajarxfce/hris-platform
           # Includes the accepted two-restart/offline confirmed-native-queue scenario.
-          ref: 62ee11818a4928b2598d046c7b3283bf3e416554
+          ref: 940c181c735ad687dd78cd6cfaad8cf7814b34f2
           path: platform
       - uses: actions/setup-java@v4
         with:

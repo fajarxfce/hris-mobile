@@ -1,0 +1,77 @@
+{
+  "recordedAt": "2026-11-07T01:28:20.330305+00:00",
+  "baselineSource": "ee338fb36bb220c4d10bd5f664891ff462ab672c",
+  "gate": {
+    "startedAt": "2026-11-07T01:25:49.277006+00:00",
+    "elapsedSeconds": 91.471,
+    "exitCode": 0,
+    "sourceFiles": 4269,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofFailureTest.xml": {
+        "sha256": "3f30dcb98deee9d2328ae7fdf5271616232c235d06f5738ef48b4a5263574bd9",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofObservationTest.xml": {
+        "sha256": "57a33dbc3e4ae1951c29615f82101d10d6eeec89aafb5787ca79ef103eda51c0",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofStorageDiagnosticsTest.xml": {
+        "sha256": "6a79cd45899e4ba4b2be0cf9d53b9cefbe0af7b8a53e0bf6fa262747f50d3309",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisReadReceiptBarrierTest.xml": {
+        "sha256": "6218bb5c0840c1018d594318edb3ba34d289d3be5d1ccef82df2d0db63e17fa5",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.NotificationInputCheckpointTest.xml": {
+        "sha256": "2c3d8c0e1b00e65a4192bea8056f7ac1d36b09a20584325ce4c34b7e21056bea",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": {
+        "sha256": "cbcad988fdb3c60ba2e5e5a70a3f6eb854cf4b51c7546cc1c034f10043da73f3",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "artifact": {
+    "path": ".work/native-storage-diagnostic-2026-11-07/accepted-proof.apk",
+    "bytes": 430997516,
+    "sha256": "4b62c4999cbde3d78c44e020d493e588d909f494ec307cd059d4d377e9ae197d",
+    "sdk": "26.10.23-hris.4",
+    "nativeSha256": {
+      "x86_64": "55bde5be2080c3e42a2ece6053f94231d27165cc39698c89c50e36ecbdb2909a",
+      "arm64-v8a": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34"
+    },
+    "nativeBytesMatchAcceptedProof": true
+  },
+  "detektFindings": 0,
+  "shippingProgramChanged": false,
+  "scope": "Instrumentation-owned storage diagnostics, no retry/admission or acceptance assertion change.",
+  "nativeFailureResolved": false,
+  "phonePendingResolved": false
+}

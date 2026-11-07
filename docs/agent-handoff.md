@@ -4,6 +4,32 @@ This is the active checkpoint. The [historical handoff](agent-handoff-history-th
 retains earlier work verbatim. Detailed measurements below are authoritative; do not
 restart accepted builds, native sends or SDK publication solely to recreate evidence.
 
+## Current next step — 7 November 2026 01:28UTC
+
+Proof-only storage diagnostics pass root check/20 fresh cases/91.471s,4,269 stable
+inputs, proof assemble/format/architecture and Detekt0. Exact APK4b62c4999cbde3d78c44e020d493e588d909f494ec307cd059d4d377e9ae197d
+is retained in .work/native-storage-diagnostic-2026-11-07/accepted-proof.apk.
+No shipping runtime policy changed. Native CI now pins Platform940c181c parser;
+13 native-device+34 HRIS+18 worker-driver cases pass. See
+[proof contract](collaboration-native-proof-diagnostics.md).
+NEXT: run ONLY the unresolved frozen-draft/priority worker case on fresh owned
+emulator data with this diagnostic APK; original Bima userdata/sidecars stay intact.
+No heavy local job/emulator is currently active. Do not claim a native fix yet.
+
+Primary/sourceee338fb3/34d507bc is pushed after both fd05 source gates started.
+Firstee runs: control42323799690 pending, native42323799725 pending,
+protocol42323799691 running. Preserve pending first runs before another primary
+source push; commit/push current proof diagnostics on the temporary recovery branch.
+15facc91 control42313584270 is audited:4,436 portable/478 suites and1,788 Apple/197
+suites, no failures/errors/skips. Original x86 native failure remains unresolved.
+
+Phone52 remains installed; original pending OPEN. Live API2e75fe1e finite operation
+logging is healthy, worker10485916/schema116.1 unchanged. Passive5minute observation
+from01:18:34UTC captured zero relevant requests; no phone UI/sends. One optional
+request to open Bima after server diagnostics is outstanding; do not repeat it.
+Caller has one current and one revoked-parent device; the failed target is unknown.
+Continue this diagnosis and all54PRD groups after the native investigation.
+
 ## Current work — 7 November 2026
 
 The original physical-phone pending-message report is **OPEN**. Release51 fixed

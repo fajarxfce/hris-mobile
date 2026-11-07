@@ -3,6 +3,8 @@ package dev.fajar.hris.collaboration.proof
 import android.app.Activity
 import android.app.Instrumentation
 import android.os.Bundle
+import dev.fajar.starter.observability.ConsoleDiagnosticSink
+import dev.fajar.starter.observability.Diagnostics
 import java.io.File
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
@@ -32,11 +34,13 @@ class MatrixProofInstrumentation : Instrumentation() {
     override fun onStart() {
         val directory = File(targetContext.filesDir, "protocol-proof")
         val output = JSONObject()
+        val storageDiagnostics = HrisProofStorageDiagnostics()
         try {
             check(
                 android.os.Build.FINGERPRINT.contains("generic") ||
                     android.os.Build.MODEL.contains("sdk")
             )
+            Diagnostics.install(storageDiagnostics)
             runBlocking { withTimeout(scenarioTimeoutMillis()) { runScenario(directory) } }
             output.put("complete", true)
         } catch (failure: Exception) {
@@ -60,6 +64,18 @@ class MatrixProofInstrumentation : Instrumentation() {
                 ),
             )
         } finally {
+            Diagnostics.install(ConsoleDiagnosticSink)
+            if (!output.optBoolean("complete"))
+                output.put(
+                    "recentStorageFailures",
+                    JSONArray(
+                        storageDiagnostics.snapshot().map {
+                            JSONObject()
+                                .put("categories", JSONArray(it.categories))
+                                .put("frames", JSONArray(it.frames))
+                        }
+                    ),
+                )
             directory.mkdirs()
             File(directory, "instrumentation.json").writeText(output.toString())
             finish(
