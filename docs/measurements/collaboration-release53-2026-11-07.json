@@ -1,0 +1,191 @@
+{
+  "recordedAt": "2026-11-07T02:53:33.116625+00:00",
+  "source": {
+    "baseCommit": "08545820c0b58f46d784971e71ceb207dd628c0f",
+    "sourceBranch": "feat/chat-recovery-20261107",
+    "sourceManifestSha256": "da9e0d654e75974c921d9f752809937b765f7017f8483dee1d21ab91d3685790",
+    "sourcesUnchanged": true,
+    "candidateOnly": true,
+    "normalPublicSdk": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.4"
+  },
+  "build": {
+    "startedAt": "2026-11-07T02:42:01.901408+00:00",
+    "elapsedSeconds": 259.896,
+    "exitCode": 0
+  },
+  "artifact": {
+    "candidateOnly": true,
+    "diagnosticMarkersAbsent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-07-build53/hris-mobile-dev-release-1.0.0-53-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 53,
+    "versionName": "1.0.0",
+    "bytes": 121022760,
+    "sha256": "994d161ade3455745157d0793475b5091d67e968af909bda7a282dce163152c6",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "sameInstalledSigner": true
+  },
+  "sdkVerification": {
+    "nativeSha256": "5df0419b7f1a5dd5d934b0cce3846a439812581e35f86defe3c2098f29260d34",
+    "nativeBytes": 97477760,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "aarSha256": "9b6806de02b7d40b8487b54a51b192c114a38c68c6dfe35c68faf50d3b6bfd21",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.4",
+    "strippedNativeMatchesVerifiedSdk": true,
+    "stripToolNdkVersion": "28.2.13676358",
+    "queueApisAndUseCaseInDex": true
+  },
+  "foregroundDexVerification": {
+    "previous": {
+      "foregroundRequests": false,
+      "foregroundDelivery": false,
+      "onRequested": true
+    },
+    "candidate": {
+      "foregroundRequests": true,
+      "foregroundDelivery": true,
+      "onRequested": true
+    }
+  },
+  "ownedAcceptance": {
+    "accepted": true,
+    "at": "2026-11-07T02:50:11.677912+00:00",
+    "sourceCommit": "08545820c0b58f46d784971e71ceb207dd628c0f",
+    "apkSha256": "994d161ade3455745157d0793475b5091d67e968af909bda7a282dce163152c6",
+    "screenshotsInspected": true,
+    "screenshotsReviewedPaths": [
+      ".work/release-phone-2026-11-07-build53/offline.png",
+      ".work/release-phone-2026-11-07-build53/online.png"
+    ],
+    "reviewConcern": "Release lifecycle integration preserves visible owned chat on cold offline and online room re-entry; no changed visual baseline claimed.",
+    "normalPublicSdk": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.4",
+    "rootedOwnedGuestUsedOnlyForClockSimulation": true,
+    "staleOfflineReadAndRealTimeOnlineReopenAccepted": true,
+    "emulatorSettingsAndPrivilegeRestored": true,
+    "originalStorePreserved": true,
+    "newMessagesSent": 0,
+    "phonePendingResolved": false,
+    "screenshotsSha256": {
+      "offline.png": "94a21d7046292aad41b830cbf64ee3ec820b3968e796bd01ddd365b0114b73c1",
+      "online.png": "7e97574a067c50e9dae4032104b5d275f7894dafd81015ceec82b60d77bbe406"
+    }
+  },
+  "ownedProbe": {
+    "startedAt": "2026-11-07T02:48:22.163921+00:00",
+    "accepted": true,
+    "serial": "emulator-5562",
+    "versionCode": 53,
+    "installedApkSha256": "994d161ade3455745157d0793475b5091d67e968af909bda7a282dce163152c6",
+    "phoneTouched": false,
+    "newMessagesSent": 0,
+    "snapshots": [
+      {
+        "mode": "offline",
+        "opening": 1,
+        "visibleRows": 11,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      },
+      {
+        "mode": "offline",
+        "opening": 2,
+        "visibleRows": 11,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      },
+      {
+        "mode": "online",
+        "opening": 1,
+        "visibleRows": 11,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      },
+      {
+        "mode": "online",
+        "opening": 2,
+        "visibleRows": 11,
+        "sendVisible": true,
+        "recoveryBanner": false,
+        "olderAction": false,
+        "reconnectPrompt": false
+      }
+    ],
+    "settingsRestored": true,
+    "staleAuthoritySimulated": true,
+    "guestClockShiftSeconds": 3900,
+    "hostClockChanged": false,
+    "currentPhase": "online",
+    "offlineRows": 11,
+    "onlineRows": 11,
+    "sameProcessAfterOnlineWait": true,
+    "guestClockRestored": true,
+    "adbPrivilegeRestored": true
+  },
+  "emulatorStopped": {
+    "pid": 3470186,
+    "startTicks": "169633883",
+    "stopped": true,
+    "dataRetained": true,
+    "phoneTouched": false,
+    "at": "2026-11-07T02:50:13.712663+00:00"
+  },
+  "installation": {
+    "confirmed": true,
+    "startedAt": "2026-11-07T02:50:39.098748+00:00",
+    "elapsedSecondsIncludingVerification": 126.87,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 53,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "994d161ade3455745157d0793475b5091d67e968af909bda7a282dce163152c6",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-07 09:52:42",
+      "versionCode": "53 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    },
+    "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+  },
+  "originalPendingReportResolved": false,
+  "meaning": "Foreground delivery wake bypasses an older WorkManager backoff; bounded background scheduling and lifecycle-owned execution. Actual phone message latency remains unmeasured; no forced acknowledgement or product group activation."
+}

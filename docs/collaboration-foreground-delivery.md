@@ -44,3 +44,8 @@ an explicit serial. Keep original Bima and phone data separate from this fixture
 The three common scheduling regressions run with `:core:worker:desktopTest`.
 Android process lifecycle2.9.4 adds the official savedstate1.3.1 metadata/AAR to strict
 verification; their exact cached bytes were independently matched to Google Maven.
+
+Release53 from08545820 is installed after exact APK verification and four original-data
+room entries offline/online. The physical phone received an update in place with its
+original application identity retained; no phone UI was driven. Physical message
+latency remains open pending actual observations. [Release evidence](measurements/collaboration-release53-2026-11-07.json).
