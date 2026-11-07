@@ -1,5 +1,22 @@
 # Agent continuation — HRIS Mobile
 
+## This isolated branch — 7 November 2026
+
+Branch feat/matrix-http-observer-20261107 starts from Mobile95e35b9d. It owns only
+the next SDK HTTP-observer design/patch work; it is not the active phone-build branch.
+Read [the source boundary and acceptance plan](collaboration-http-observer-plan.md).
+A separate Rust checkout at ../matrix-sdk-http-observer-2026-11-07 reconstructs all
+five immutableSDK4 patches and19 manifest hashes. No observer code or new artifact
+exists yet. Frozen SDK4 inventories remain untouched.
+
+Main Mobile is building55 in sole heavy job7746. Do not compile Rust/Gradle or start
+an emulator alongside it. Bima original emulator is STOPPED54, phone53. Inspector
+fadf22e core/Ktor is locally accepted:39 new Ktor cases/51.993s plus42 verified core
+cases, Android AAR and Apple klibs; Apple runtime remains blocked by private CI billing.
+Visibility approval is pending. No Matrix/viewer/app integration yet. Do not treat
+earlier inherited checkpoints below as this branch's current implementation status.
+
+
 Read [architecture](architecture.md), the linked contracts and this checkpoint before
 continuing. [Previous checkpoint](https://github.com/fajarxfce/hris-mobile/blob/99048061/docs/agent-handoff.md)
 retains all earlier source/CI history and links older local handoff archives. Git and
