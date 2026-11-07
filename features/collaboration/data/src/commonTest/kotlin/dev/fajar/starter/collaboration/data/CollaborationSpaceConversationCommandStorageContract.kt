@@ -1,0 +1,701 @@
+package dev.fajar.starter.collaboration.data
+
+import dev.fajar.starter.collaboration.data.identity.*
+import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationSpaceConversationCommandRepository
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.common.result.*
+import dev.fajar.starter.database.*
+import kotlin.test.*
+import kotlin.time.Instant
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.test.runTest
+
+abstract class CollaborationSpaceConversationCommandStorageContract {
+    protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
+
+    private fun CollaborationHistoryFixture.scope(owner: CollaborationLocalAccess = access) =
+        CollaborationSpaceLocalAccess(
+            owner.sessionId,
+            owner.audience,
+            owner.accountId,
+            historyId(9800),
+        )
+
+    private fun CollaborationHistoryFixture.repo(store: CommandStore = database.commands) =
+        EncryptedCollaborationSpaceConversationCommandRepository(store, cipher, keys)
+
+    private fun CollaborationHistoryFixture.open() =
+        CollaborationSpaceConversationCommand.Open(
+            historyId(9801),
+            CollaborationSpaceIdentityBinding(
+                access.audience,
+                access.accountId,
+                scope().spaceId,
+                historyId(9802),
+            ),
+            historyId(9803),
+            Instant.parse("2026-11-07T00:00:00Z"),
+        )
+
+    private fun CollaborationHistoryFixture.room() =
+        CollaborationSpaceConversationCommand.Room(
+            CollaborationSpaceRoomRequestIntent(
+                historyId(9804),
+                open().binding,
+                conversation,
+                CollaborationSpaceRoomRequest(
+                    historyId(9805),
+                    7,
+                    CollaborationSpaceRoomAttempt(open().peerAccountId, 9),
+                ),
+            ),
+            open().peerAccountId,
+            open().createdAt,
+        )
+
+    private suspend fun CollaborationHistoryFixture.readCommand(
+        command: CollaborationSpaceConversationCommand = open(),
+        access: CollaborationSpaceLocalAccess = scope(),
+    ) =
+        assertNotNull(
+            assertIs<AppResult.Success<CollaborationSpaceConversationCommandRecord?>>(
+                    repo().find(access, command.id)
+                )
+                .value
+        )
+
+    private suspend fun CollaborationHistoryFixture.rawCommand(
+        command: CollaborationSpaceConversationCommand = open()
+    ) =
+        assertNotNull(
+            database.commands.get(
+                spaceConversationCommandScope(scope()),
+                spaceConversationCommandPartition(scope()),
+                command.id,
+            )
+        )
+
+    private suspend fun CollaborationHistoryFixture.insert(
+        command: CollaborationSpaceConversationCommand = open()
+    ) {
+        assertEquals(
+            AppResult.Success(CollaborationSetupInsertion.STORED),
+            repo().insert(scope(), command),
+        )
+    }
+
+    private suspend fun CollaborationHistoryFixture.record(
+        command: CollaborationSpaceConversationCommand = open()
+    ): CollaborationSpaceConversationCommandRecord {
+        insert(command)
+        assertEquals(
+            AppResult.Success(true),
+            repo()
+                .update(
+                    scope(),
+                    readCommand(command),
+                    CollaborationSpaceConversationOutcome.Unconfirmed(),
+                    1,
+                ),
+        )
+        val receipt =
+            CollaborationSetupReceipt(
+                conversation,
+                if (command is CollaborationSpaceConversationCommand.Room) 10 else 0,
+            )
+        assertEquals(
+            AppResult.Success(true),
+            repo()
+                .update(
+                    scope(),
+                    readCommand(command),
+                    CollaborationSpaceConversationOutcome.Recorded(receipt),
+                    1,
+                ),
+        )
+        return readCommand(command)
+    }
+
+    @Test
+    fun emptyReadsAllocateNoKeyAndBothKindsReopenUnderAnotherLocalLogin() = withDatabase { f ->
+        assertEquals(AppResult.Success(null), f.repo().find(f.scope(), f.open().id))
+        assertEquals(AppResult.Success(emptyList()), f.repo().observeAll(f.scope()).first())
+        assertNull(f.keys.read())
+        f.insert()
+        f.insert(f.room())
+        val retained = listOf(f.readCommand(), f.readCommand(f.room()))
+        val original = f.rawCommand(f.room())
+        assertFalse(original.request.contains(f.room().intent.request.deviceId))
+        assertFalse(original.request.contains(f.open().binding.nativeSessionId))
+        val login = f.access.copy(sessionId = "new-local-login", companyId = historyId(9899))
+        f.reopen(login)
+        assertEquals(
+            retained,
+            assertIs<AppResult.Success<List<CollaborationSpaceConversationCommandRecord>>>(
+                    f.repo().observeAll(f.scope(login)).first()
+                )
+                .value,
+        )
+        for (command in listOf(f.open(), f.room())) {
+            assertEquals(
+                AppResult.Success(CollaborationSetupInsertion.STORED),
+                f.repo().insert(f.scope(login), command),
+            )
+            assertEquals(command, f.readCommand(command, f.scope(login)).command)
+        }
+        f.activate()
+        assertEquals(original, f.rawCommand(f.room()))
+    }
+
+    @Test
+    fun lostInsertResponseRetainsTheOriginalOperationAndCiphertext() = withDatabase { f ->
+        val store =
+            object : CommandStore by f.database.commands {
+                override suspend fun insert(
+                    scope: CommandScope,
+                    record: CommandRecord,
+                ): CommandInsertResult {
+                    val saved = f.database.commands.insert(scope, record)
+                    currentCoroutineContext().cancel()
+                    return saved
+                }
+            }
+        supervisorScope {
+            val pending = async { f.repo(store).insert(f.scope(), f.room()) }
+            assertFailsWith<CancellationException> { pending.await() }
+        }
+        val original = f.rawCommand(f.room())
+        f.reopen()
+        f.insert(f.room())
+        assertEquals(original, f.rawCommand(f.room()))
+        assertEquals(f.room(), f.readCommand(f.room()).command)
+    }
+
+    @Test
+    fun lostUnconfirmedResponseSurvivesRestartWithoutReturningToPending() = withDatabase { f ->
+        f.insert()
+        val initial = f.readCommand()
+        val request = f.rawCommand().request
+        val store =
+            object : CommandStore by f.database.commands {
+                override suspend fun update(
+                    scope: CommandScope,
+                    partition: String,
+                    id: String,
+                    expectedRevision: Long,
+                    state: String,
+                ): Boolean {
+                    val saved =
+                        f.database.commands.update(scope, partition, id, expectedRevision, state)
+                    currentCoroutineContext().cancel()
+                    return saved
+                }
+            }
+        supervisorScope {
+            val pending = async {
+                f.repo(store)
+                    .update(
+                        f.scope(),
+                        initial,
+                        CollaborationSpaceConversationOutcome.Unconfirmed(),
+                        1,
+                    )
+            }
+            assertFailsWith<CancellationException> { pending.await() }
+        }
+        f.reopen()
+        assertIs<CollaborationSpaceConversationOutcome.Unconfirmed>(f.readCommand().outcome)
+        assertEquals(1, f.readCommand().attempts)
+        f.insert()
+        assertEquals(request, f.rawCommand().request)
+        assertEquals(
+            AppResult.Success(false),
+            f.repo()
+                .update(f.scope(), initial, CollaborationSpaceConversationOutcome.Unconfirmed(), 1),
+        )
+        assertIs<AppResult.Failed>(f.repo().archiveRecorded(f.scope(), f.readCommand()))
+    }
+
+    @Test
+    fun lostArchiveResponseKeepsAnExactImmutableResultAndFreesOnlyTheActiveResource() =
+        withDatabase { f ->
+            val recorded = f.record(f.room())
+            val original = f.rawCommand(f.room())
+            val store =
+                object : CommandStore by f.database.commands {
+                    override suspend fun archive(
+                        scope: CommandScope,
+                        expected: CommandRecord,
+                        evidence: String,
+                    ): Boolean {
+                        val saved = f.database.commands.archive(scope, expected, evidence)
+                        currentCoroutineContext().cancel()
+                        return saved
+                    }
+                }
+            supervisorScope {
+                val pending = async { f.repo(store).archiveRecorded(f.scope(), recorded) }
+                assertFailsWith<CancellationException> { pending.await() }
+            }
+            f.reopen()
+            assertEquals(recorded, f.readCommand(f.room()))
+            assertEquals(AppResult.Success(emptyList()), f.repo().observeAll(f.scope()).first())
+            f.insert(f.room())
+            assertEquals(AppResult.Success(true), f.repo().archiveRecorded(f.scope(), recorded))
+            assertEquals(
+                CommandArchive(original, original.state),
+                f.database.commands.archived(
+                    spaceConversationCommandScope(f.scope()),
+                    original.partition,
+                    original.id,
+                ),
+            )
+            assertIs<AppResult.Failed>(
+                f.repo()
+                    .update(
+                        f.scope(),
+                        recorded,
+                        CollaborationSpaceConversationOutcome.Unconfirmed(),
+                        2,
+                    )
+            )
+            val next = f.room().copy(intent = f.room().intent.copy(operationId = historyId(9810)))
+            f.insert(next)
+            assertEquals(
+                listOf(next),
+                assertIs<AppResult.Success<List<CollaborationSpaceConversationCommandRecord>>>(
+                        f.repo().observeAll(f.scope()).first()
+                    )
+                    .value
+                    .map { it.command },
+            )
+            assertEquals(recorded, f.readCommand(f.room()))
+            assertIs<AppResult.Failed>(
+                f.repo().insert(f.scope(), f.room().copy(peerAccountId = historyId(9811)))
+            )
+        }
+
+    @Test
+    fun competingResourceInsertAndStateUpdateKeepTheWinner() = withDatabase { f ->
+        val winner = f.open().copy(id = historyId(9812))
+        val inserting =
+            object : CommandStore by f.database.commands {
+                override suspend fun insert(
+                    scope: CommandScope,
+                    record: CommandRecord,
+                ): CommandInsertResult {
+                    f.insert(winner)
+                    return f.database.commands.insert(scope, record)
+                }
+            }
+        assertEquals(
+            AppResult.Success(CollaborationSetupInsertion.OCCUPIED),
+            f.repo(inserting).insert(f.scope(), f.open()),
+        )
+        val initial = f.readCommand(winner)
+        val updating =
+            object : CommandStore by f.database.commands {
+                override suspend fun update(
+                    scope: CommandScope,
+                    partition: String,
+                    id: String,
+                    expectedRevision: Long,
+                    state: String,
+                ): Boolean {
+                    assertEquals(
+                        AppResult.Success(true),
+                        f.repo()
+                            .update(
+                                f.scope(),
+                                initial,
+                                CollaborationSpaceConversationOutcome.Unconfirmed(),
+                                1,
+                            ),
+                    )
+                    return f.database.commands.update(scope, partition, id, expectedRevision, state)
+                }
+            }
+        assertEquals(
+            AppResult.Success(false),
+            f.repo(updating)
+                .update(f.scope(), initial, CollaborationSpaceConversationOutcome.Unconfirmed(), 1),
+        )
+        assertEquals(1L, f.readCommand(winner).revision)
+        assertEquals(winner, f.readCommand(winner).command)
+    }
+
+    @Test
+    fun concurrentSameIdentityRecoversTheStoredRequestAfterAConflict() = withDatabase { f ->
+        val store =
+            object : CommandStore by f.database.commands {
+                override suspend fun insert(
+                    scope: CommandScope,
+                    record: CommandRecord,
+                ): CommandInsertResult {
+                    f.insert()
+                    return f.database.commands.insert(scope, record)
+                }
+            }
+        // Independent encryption produces a raw immutable-ciphertext conflict. A known-ID read
+        // recovers the winning request; it must not allocate another operation or overwrite it.
+        assertIs<AppResult.Failed>(f.repo(store).insert(f.scope(), f.open()))
+        val raw = f.rawCommand()
+        f.insert()
+        assertEquals(raw, f.rawCommand())
+        assertEquals(f.open(), f.readCommand().command)
+    }
+
+    @Test
+    fun sharedAccountCapacityIsReleasedByRecordedArchival() = withDatabase { f ->
+        val recorded = f.record()
+        val filler =
+            (1..127).map {
+                CommandRecord(
+                    "other-workflow",
+                    "filler-$it",
+                    "resource-$it",
+                    "order-$it",
+                    "opaque-request",
+                    "opaque-state",
+                )
+            }
+        assertEquals(
+            CommandInsertResult.Stored,
+            f.database.commands.insertBatch(spaceConversationCommandScope(f.scope()), filler),
+        )
+        assertEquals(
+            AppResult.Success(CollaborationSetupInsertion.CAPACITY_EXCEEDED),
+            f.repo().insert(f.scope(), f.room()),
+        )
+        assertEquals(AppResult.Success(true), f.repo().archiveRecorded(f.scope(), recorded))
+        f.insert(f.room())
+        assertEquals(recorded, f.readCommand())
+    }
+
+    @Test
+    fun anotherAccountServerOrSpaceCannotReadOrSubstituteRetainedCommands() = withDatabase { f ->
+        f.insert()
+        val original = f.readCommand()
+        val foreign = f.scope().copy(spaceId = historyId(9820))
+        assertEquals(AppResult.Success(null), f.repo().find(foreign, f.open().id))
+        assertIs<AppResult.Failed>(f.repo().insert(foreign, f.open()))
+        for (owner in
+            listOf(
+                f.access.copy(sessionId = "other", accountId = historyId(9821)),
+                f.access.copy(sessionId = "other-server", audience = "https://other.example.test/"),
+            )) {
+            f.activate(owner)
+            assertEquals(AppResult.Success(null), f.repo().find(f.scope(owner), f.open().id))
+            assertEquals(AppResult.Success(null), f.repo().find(f.scope(), f.open().id))
+            assertIs<AppResult.Failed>(f.repo().insert(f.scope(owner), f.open()))
+            f.activate()
+            assertEquals(original, f.readCommand())
+        }
+    }
+
+    @Test
+    fun scopeReplacementAtInsertionAndArchivalCannotMutateTheOriginalAccount() = withDatabase { f ->
+        val other = f.access.copy(sessionId = "replacement", accountId = historyId(9822))
+        val inserting =
+            object : CommandStore by f.database.commands {
+                override suspend fun insert(
+                    scope: CommandScope,
+                    record: CommandRecord,
+                ): CommandInsertResult {
+                    f.activate(other)
+                    return f.database.commands.insert(scope, record)
+                }
+            }
+        assertEquals(
+            AppResult.Success(CollaborationSetupInsertion.SCOPE_CHANGED),
+            f.repo(inserting).insert(f.scope(), f.open()),
+        )
+        f.activate()
+        assertEquals(AppResult.Success(null), f.repo().find(f.scope(), f.open().id))
+        val recorded = f.record()
+        val archiving =
+            object : CommandStore by f.database.commands {
+                override suspend fun archive(
+                    scope: CommandScope,
+                    expected: CommandRecord,
+                    evidence: String,
+                ): Boolean {
+                    f.activate(other)
+                    return f.database.commands.archive(scope, expected, evidence)
+                }
+            }
+        assertEquals(
+            AppResult.Success(false),
+            f.repo(archiving).archiveRecorded(f.scope(), recorded),
+        )
+        f.activate()
+        assertEquals(recorded, f.readCommand())
+        assertEquals(
+            1,
+            assertIs<AppResult.Success<List<CollaborationSpaceConversationCommandRecord>>>(
+                    f.repo().observeAll(f.scope()).first()
+                )
+                .value
+                .size,
+        )
+    }
+
+    @Test
+    fun missingKeyOverAnArchiveCannotCreateNewKeysOrPendingWork() = withDatabase { f ->
+        val recorded = f.record()
+        assertEquals(AppResult.Success(true), f.repo().archiveRecorded(f.scope(), recorded))
+        f.keys.write(null)
+        assertIs<AppResult.Failed>(f.repo().find(f.scope(), f.open().id))
+        assertIs<AppResult.Failed>(f.repo().insert(f.scope(), f.room()))
+        val other = f.access.copy(sessionId = "other", accountId = historyId(9823))
+        f.activate(other)
+        assertIs<AppResult.Failed>(
+            f.repo()
+                .insert(
+                    f.scope(other),
+                    f.open().copy(binding = f.open().binding.copy(accountId = other.accountId)),
+                )
+        )
+        assertNull(f.keys.read())
+    }
+
+    @Test
+    fun tamperedMetadataPurposeAndArchiveEvidenceNeverBecomeOwnedFacts() = withDatabase { f ->
+        f.insert()
+        val raw = f.rawCommand()
+        val original = f.readCommand()
+        for (changed in
+            listOf(
+                raw.copy(partition = "foreign"),
+                raw.copy(resourceId = "room/" + f.conversation),
+                raw.copy(id = historyId(9830)),
+                raw.copy(sortKey = "other"),
+                raw.copy(revision = 1),
+                raw.copy(request = raw.state),
+                raw.copy(state = raw.request),
+                raw.copy(request = "x".repeat(8193)),
+                raw.copy(state = "bad"),
+            )) {
+            val store =
+                object : CommandStore by f.database.commands {
+                    override suspend fun get(scope: CommandScope, partition: String, id: String) =
+                        changed
+
+                    override fun observeAll(scope: CommandScope, partition: String) =
+                        flowOf(listOf(changed))
+                }
+            assertIs<AppResult.Failed>(f.repo(store).find(f.scope(), f.open().id))
+            assertIs<AppResult.Failed>(f.repo(store).observeAll(f.scope()).first())
+            assertIs<AppResult.Failed>(f.repo(store).insert(f.scope(), f.open()))
+            assertIs<AppResult.Failed>(
+                f.repo(store)
+                    .update(
+                        f.scope(),
+                        original,
+                        CollaborationSpaceConversationOutcome.Unconfirmed(),
+                        1,
+                    )
+            )
+        }
+        val pendingArchive =
+            object : CommandStore by f.database.commands {
+                override suspend fun get(
+                    scope: CommandScope,
+                    partition: String,
+                    id: String,
+                ): CommandRecord? = null
+
+                override suspend fun archived(scope: CommandScope, partition: String, id: String) =
+                    CommandArchive(raw, raw.state)
+            }
+        assertIs<AppResult.Failed>(f.repo(pendingArchive).find(f.scope(), f.open().id))
+        val recorded = f.record()
+        val accepted = f.rawCommand()
+        val wrongArchive =
+            object : CommandStore by f.database.commands {
+                override suspend fun get(
+                    scope: CommandScope,
+                    partition: String,
+                    id: String,
+                ): CommandRecord? = null
+
+                override suspend fun archived(scope: CommandScope, partition: String, id: String) =
+                    CommandArchive(accepted, raw.state)
+            }
+        assertIs<AppResult.Failed>(f.repo(wrongArchive).archiveRecorded(f.scope(), recorded))
+        assertEquals(recorded, f.readCommand())
+    }
+
+    @Test
+    fun denialIsRetainedThroughFailuresAndSuccessCannotBeReopened() = withDatabase { f ->
+        f.insert(f.room())
+        val denied =
+            Failure(
+                FailureKind.AccessDenied,
+                "Conversation setup could not be confirmed.",
+                code = "access_denied",
+            )
+        val unavailable = Failure(FailureKind.Network, "Unavailable")
+        assertEquals(
+            AppResult.Success(true),
+            f.repo()
+                .update(
+                    f.scope(),
+                    f.readCommand(f.room()),
+                    CollaborationSpaceConversationOutcome.Unconfirmed(denied),
+                    1,
+                ),
+        )
+        val retained = f.readCommand(f.room())
+        for (failure in listOf(null, unavailable)) {
+            assertIs<AppResult.Failed>(
+                f.repo()
+                    .update(
+                        f.scope(),
+                        retained,
+                        CollaborationSpaceConversationOutcome.Unconfirmed(failure),
+                        2,
+                    )
+            )
+        }
+        for (receipt in
+            listOf(
+                CollaborationSetupReceipt(historyId(9840), 10),
+                CollaborationSetupReceipt(f.conversation, 1000000),
+            )) {
+            assertIs<AppResult.Failed>(
+                f.repo()
+                    .update(
+                        f.scope(),
+                        retained,
+                        CollaborationSpaceConversationOutcome.Recorded(receipt),
+                        1,
+                    )
+            )
+        }
+        assertEquals(retained, f.readCommand(f.room()))
+        val outcome =
+            CollaborationSpaceConversationOutcome.Recorded(
+                CollaborationSetupReceipt(f.conversation, 10)
+            )
+        assertEquals(AppResult.Success(true), f.repo().update(f.scope(), retained, outcome, 1))
+        assertIs<AppResult.Failed>(
+            f.repo()
+                .update(
+                    f.scope(),
+                    f.readCommand(f.room()),
+                    CollaborationSpaceConversationOutcome.Unconfirmed(),
+                    2,
+                )
+        )
+    }
+
+    @Test
+    fun invalidInputsAndDuplicateInventoryFailWithoutAKeyOrPartialPublication() =
+        withDatabase { f ->
+            for (access in
+                listOf(
+                    f.scope().copy(sessionId = "bad\n"),
+                    f.scope().copy(spaceId = "../space"),
+                    f.scope().copy(accountId = "invalid"),
+                )) {
+                assertIs<AppResult.Failed>(f.repo().find(access, f.open().id))
+                assertIs<AppResult.Failed>(f.repo().observeAll(access).first())
+                assertIs<AppResult.Failed>(f.repo().insert(access, f.open()))
+            }
+            assertIs<AppResult.Failed>(
+                f.repo().insert(f.scope(), f.open().copy(peerAccountId = f.access.accountId))
+            )
+            assertIs<AppResult.Failed>(
+                f.repo()
+                    .insert(
+                        f.scope(),
+                        f.room()
+                            .copy(
+                                intent =
+                                    f.room()
+                                        .intent
+                                        .copy(
+                                            request =
+                                                f.room()
+                                                    .intent
+                                                    .request
+                                                    .copy(expectedDeviceVersion = -1)
+                                        )
+                            ),
+                    )
+            )
+            assertNull(f.keys.read())
+            f.insert()
+            val raw = f.rawCommand()
+            for (rows in listOf(listOf(raw, raw), List(129) { raw })) {
+                val store =
+                    object : CommandStore by f.database.commands {
+                        override fun observeAll(scope: CommandScope, partition: String) =
+                            flowOf(rows)
+                    }
+                assertIs<AppResult.Failed>(f.repo(store).observeAll(f.scope()).first())
+            }
+        }
+
+    @Test
+    fun sameRawInsertionFindingAnArchiveRecoversTheRecordedResult() = withDatabase { f ->
+        val store =
+            object : CommandStore by f.database.commands {
+                override suspend fun insert(
+                    scope: CommandScope,
+                    record: CommandRecord,
+                ): CommandInsertResult {
+                    assertEquals(
+                        CommandInsertResult.Stored,
+                        f.database.commands.insert(scope, record),
+                    )
+                    val saved = f.record()
+                    assertEquals(
+                        AppResult.Success(true),
+                        f.repo().archiveRecorded(f.scope(), saved),
+                    )
+                    return f.database.commands.insert(scope, record)
+                }
+            }
+        assertEquals(
+            AppResult.Success(CollaborationSetupInsertion.STORED),
+            f.repo(store).insert(f.scope(), f.open()),
+        )
+        assertIs<CollaborationSpaceConversationOutcome.Recorded>(f.readCommand().outcome)
+        assertEquals(AppResult.Success(emptyList()), f.repo().observeAll(f.scope()).first())
+    }
+
+    @Test
+    fun lateCancelledReadCannotPublishItsDecryptedCommand() = withDatabase { f ->
+        f.insert()
+        val raw = f.rawCommand()
+        val store =
+            object : CommandStore by f.database.commands {
+                override suspend fun get(
+                    scope: CommandScope,
+                    partition: String,
+                    id: String,
+                ): CommandRecord? {
+                    currentCoroutineContext().cancel()
+                    return raw
+                }
+            }
+        supervisorScope {
+            val pending = async { f.repo(store).find(f.scope(), f.open().id) }
+            assertFailsWith<CancellationException> { pending.await() }
+        }
+        assertEquals(f.open(), f.readCommand().command)
+    }
+
+    private fun withDatabase(block: suspend (CollaborationHistoryFixture) -> Unit) = runTest {
+        val f = CollaborationHistoryFixture(databaseOwner())
+        try {
+            f.activate()
+            block(f)
+        } finally {
+            f.close()
+        }
+    }
+}

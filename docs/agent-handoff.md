@@ -5,6 +5,40 @@ linked below. Earlier checkpoints remain verbatim in
 [history through original queue matching](agent-handoff-history-through-original-queue-matching-2026-11-07.md)
 and [history through build 50](agent-handoff-history-through-build50.md).
 
+## Accepted durable conversation storage — 7 November 2026
+
+TEN Kotlin source/test files are accepted: immutable open/stable-room intent, pure
+record/transition policy, strict encrypted codec and existing raw CommandStore
+repository, plus real Desktop/Browser/Apple contracts and pure tests. Focused71754
+passed21 cases/190.699s; full18016 passed3,598 fresh cases/447 suites/813.971s on
+4,369 unchanged inputs with zero failures/errors/skips or Android release lint issues.
+Root/Android host/quality/actual Browser storage+policy/shared Wasm compilation passed.
+All local heavy jobs are reaped. [Contract/results](collaboration-space-conversation-commands.md).
+The first focused fixture compilation failure is retained in that evidence.
+
+Record request identity before transport, CAS to Unconfirmed before HTTP, retain
+confirmed denial and uncertainty, and accept only typed bounded setup receipts.
+Archive exact already-encrypted Recorded state only after idempotent owning local
+projection; exact known archived IDs cannot return to pending work. No archive scan,
+key recreation over retained ciphertext, provider mutation, UI or HTTP dispatcher.
+
+NEXT review/apply FOUR observation candidates in .work/space-conversation-command-
+observation-2026-11-07 only after verifying manifest baselines. They are unapplied,
+untested: local owning use case, factory DI, seven lifetime/ownership cases and app
+binding resolution. Validate focused/root/browser and preserve Apple CI. Then owning
+preparation/replay, canonical local conversation projection, explicit server fence,
+original SDK delivery/history, native-parent recovery, product routing/all54 groups.
+Key-custody review: existing directory/history key creation only guards its own prefix;
+new local conversation replicas need explicit safe key scope and platform wiring.
+
+First79b native42366357400 has started; control42366357406 is pending behind running
+fb514281 control42363807332. Preserve pending first control before another primary
+promotion; commit/push recovery branch meanwhile. fb first native537/85 per ABI is
+fully audited in ac8ac15d. Phone53 latency remains OPEN; last10s ADB retry timed out
+by11:09UTC, no UI driven/new APK. Keep original Bima data/keys/IDs, SDK4, live services,
+disabled V117–137 and Starterb11437a unchanged. This section supersedes running-job
+statements below and is the current continuation.
+
 ## Original native receipt CI audit — 7 November 2026
 
 First fb514281 native42363807289 completed SUCCESS and its original artifacts are

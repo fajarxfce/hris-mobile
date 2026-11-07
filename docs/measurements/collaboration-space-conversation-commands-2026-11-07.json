@@ -1,0 +1,249 @@
+{
+  "scope": "Encrypted durable Space conversation/room setup commands; no product activation",
+  "parentCommit": "ac8ac15d75c1ad6ed2ee3f59d8d2a2387464659b",
+  "sources": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/identity/CollaborationSpaceConversationCommandCodec.kt": "737135125c52e571e003778a167eb3b43e91e2ca4560f46628b337c70e70f496",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceConversationCommandRepository.kt": "a06537d95fd06c6d866a0685e77181a8e489d218f97a2e7ddc1e51cabdcc942b",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceConversationCommandStorageContract.kt": "61e53319b3ab94df6314999be0401fbd049f9cef5b01c3f8a0f14b5ec5a06ab5",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceConversationCommandStorageTest.kt": "aebe60b70039a4913dd789890722a932cb9df2f5f3313b40bdb7d875d2aa109e",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceConversationCommandStorageTest.kt": "7f32dc6685c358e6ed4acfc7a8ee433e7df3b0517105ba05c4e7fd97b11d9c22",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceConversationCommandStorageTest.kt": "b58e869386264b6e9257a01a371c4118a24dd2a6d88d45fa915d1e6acfc13fd2",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceConversationCommand.kt": "8515ed89dabeae02d5ba1a6d04f5cd9fc1a4875c4fd359c58b505513ed507050",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceConversationCommandPolicy.kt": "2b562d8ea10d4df103fb6f4d392d19a49033d4adb60b95b1c6d52b0da8fee23b",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceConversationCommandRepository.kt": "3e29fb3b6b9cf15b295bb2c71d7b2b5e5c4b2450503aa3f560af0d32c0ba59db",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceConversationCommandPolicyTest.kt": "a31baef0ed8ddf85e690a2cbbc80dc7bbec278199c7e5364f00321d70dc08393"
+  },
+  "runs": {
+    "focused-1": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "env",
+        "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+        "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+        "ANDROID_HOME=/home/fajar/Android/Sdk",
+        "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+        "./gradlew",
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*CollaborationSpaceConversationCommandPolicyTest",
+        ":features:collaboration:data:desktopTest",
+        "--tests",
+        "*CollaborationSpaceConversationCommandStorageTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationBindingsTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PcollaborationProofAbi=x86_64",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "startedAt": "2026-11-07T11:06:26.169515+00:00",
+      "elapsedSeconds": 208.465,
+      "exitCode": 1,
+      "sourceFiles": 4369,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 2,
+      "reusedSuites": 906,
+      "sourceManifestSha256": "c51fdf183fc8715457977c6792bf8aff3301da2079a76e6199596b36ed7be24f",
+      "resultSha256": "80653e3c62c0689126d098f013b5ef2f6091c1f9d1e901c2b37c0cb9a9606ef8",
+      "stdoutSha256": "63a9dcb70a9b12fe84c8c4f5f9cfce21fed78c11b537730f0c2c1b54143fcfbb",
+      "stderrSha256": "01c6c899de26ec6e7dad6d599023c7bfe4bba6deca7ca2207804ef34e1781808",
+      "commandReports": {
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceConversationCommandPolicyTest.xml": {
+          "sha256": "0aa8497f2ee497802d4ff31b8b6d8bac0d4592970a6cb632410bcc350c3dffde",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "focused-2": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "env",
+        "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+        "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+        "ANDROID_HOME=/home/fajar/Android/Sdk",
+        "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+        "./gradlew",
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*CollaborationSpaceConversationCommandPolicyTest",
+        ":features:collaboration:data:desktopTest",
+        "--tests",
+        "*CollaborationSpaceConversationCommandStorageTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationBindingsTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PcollaborationProofAbi=x86_64",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "startedAt": "2026-11-07T11:10:32.934375+00:00",
+      "elapsedSeconds": 190.699,
+      "exitCode": 0,
+      "sourceFiles": 4369,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 3,
+      "reusedSuites": 815,
+      "sourceManifestSha256": "ac3693fe2190cb19b78498355d9ccdd4f58f52632b1068bd0e8459b597ef15a9",
+      "resultSha256": "1824c64c89db85e061d58b76e9eb63821eff24bb8e856d6b9672744218cd33d0",
+      "stdoutSha256": "faa3c775f0d8fff7b90638b0756b78f8193eeb18793677d9dbeb71b55d663039",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "commandReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceConversationCommandStorageTest.xml": {
+          "sha256": "f951709007ec9f7ea4d7efadc642799c36b351f7ca84d2ccbc451c59054a5fcf",
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceConversationCommandPolicyTest.xml": {
+          "sha256": "d9f2378f1a9584ad9b95112d24a319b27c34737eeb7215139a95f9f6220588d3",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "full-1": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "env",
+        "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+        "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+        "ANDROID_HOME=/home/fajar/Android/Sdk",
+        "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+        "./gradlew",
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":check",
+        ":features:collaboration:data:testAndroidHostTest",
+        ":apps:android:lintDevRelease",
+        ":features:collaboration:data:wasmJsBrowserTest",
+        "--tests",
+        "*BrowserCollaborationSpaceConversationCommandStorageTest*",
+        ":features:collaboration:domain:wasmJsBrowserTest",
+        "--tests",
+        "*CollaborationSpaceConversationCommandPolicyTest*",
+        ":apps:shared:compileKotlinWasmJs",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "startedAt": "2026-11-07T11:14:10.797910+00:00",
+      "elapsedSeconds": 813.971,
+      "exitCode": 0,
+      "sourceFiles": 4369,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3598,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 447,
+      "reusedSuites": 483,
+      "sourceManifestSha256": "ac3693fe2190cb19b78498355d9ccdd4f58f52632b1068bd0e8459b597ef15a9",
+      "resultSha256": "4cde291f8919e129a31c31f620bd40fe89c0e1c1e34b197cea0520dc7cbc04e4",
+      "stdoutSha256": "c9b467c0222f3f98b493d456739db80c067e3d5b981a73a96905ccb5a0e5e376",
+      "stderrSha256": "984c11c2f6403c0e02b156a1def892fae59d922db1e3a2e4123eec438247ed76",
+      "commandReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceConversationCommandStorageTest.xml": {
+          "sha256": "d07a3e63646b62e97add254100a7f613b056db42b82d917fd862c65490020b5c",
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasm-VA12HQ93FLMTC.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceConversationCommandStorageTest.xml": {
+          "sha256": "699c6e98025ff9e5aa86644d6eb8ddb5ed371a7ee2e6c2d799e6184ef2c70f1e",
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSpaceConversationCommandPolicyTest.xml": {
+          "sha256": "331aa951afe972126e4283f5457a4addb4f0b2e83dbf7b4d7312c8ae941a0e39",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrow-5RV0I5DOBSOQ8.dev.fajar.starter.collaboration.domain.CollaborationSpaceConversationCommandPolicyTest.xml": {
+          "sha256": "107f7a170b7f16a7ed3d8467dadfd94c67c88c0009a7d199d07ad9ff56a218cf",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "androidReleaseLint": {
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+    "issues": 0
+  },
+  "earlierFailure": "focused-1 failed test compilation: fixture extensions named read/raw were shadowed by existing history member methods; renamed readCommand/rawCommand. Zero account identities were also explicitly rejected before the accepted runs.",
+  "limits": [
+    "Recorded receipts are setup metadata, not room readiness or message ACK.",
+    "Owning dispatch, canonical local projection and explicit non-execution fencing are unfinished.",
+    "Apple storage wrapper is included; Apple CI for this source is pending.",
+    "No APK or phone latency acceptance; phone build 53 remains installed."
+  ]
+}

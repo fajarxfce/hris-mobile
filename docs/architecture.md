@@ -1,5 +1,9 @@
 # Architecture
 
+[Durable organization conversation commands](collaboration-space-conversation-commands.md)
+retain stable setup intent, uncertainty and exact archived receipts across local login
+replacement. Owning dispatch, projection and replacement fencing remain separate.
+
 [Stable organization room requests](collaboration-space-room-stable-intent.md) keep
 immutable business intent separate from rotating native proof. Receipt absence
 remains uncertain; durable dispatch and explicit replacement fencing are separate.

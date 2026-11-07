@@ -1,0 +1,301 @@
+package dev.fajar.starter.collaboration.data.identity
+
+import dev.fajar.starter.collaboration.data.dto.*
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.*
+import dev.fajar.starter.common.result.*
+import dev.fajar.starter.database.*
+import dev.fajar.starter.identity.domain.policies.accountStorageKey
+import dev.fajar.starter.securestorage.ContentCipher
+import kotlin.io.encoding.Base64
+import kotlin.time.Instant
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+
+internal fun spaceConversationCommandScope(access: CollaborationSpaceLocalAccess): CommandScope {
+    require(
+        validCollaborationSpaceAccountAccess(
+            CollaborationSpaceAccountAccess(access.sessionId, access.audience, access.accountId)
+        )
+    )
+    require(validCollaborationSpaceConversationId(access.accountId))
+    require(validCollaborationSpaceConversationId(access.spaceId))
+    return CommandScope(access.sessionId, accountStorageKey(access.audience, access.accountId))
+}
+
+internal fun spaceConversationCommandPartition(access: CollaborationSpaceLocalAccess): String {
+    spaceConversationCommandScope(access)
+    return "hris.collaboration.space-conversation/v1/" + access.spaceId
+}
+
+internal fun CollaborationSpaceConversationCommand.orderKey() =
+    createdAt.toEpochMilliseconds().toString().padStart(15, '0') + "/" + id
+
+internal fun CollaborationSpaceConversationCommand.resourceId() =
+    when (this) {
+        is CollaborationSpaceConversationCommand.Open -> "open/" + peerAccountId
+        is CollaborationSpaceConversationCommand.Room -> "room/" + intent.conversationId
+    }
+
+internal class CollaborationSpaceConversationCommandCodec(
+    private val access: CollaborationSpaceLocalAccess,
+    private val cipher: ContentCipher,
+    private val key: ByteArray,
+) {
+    suspend fun request(command: CollaborationSpaceConversationCommand): String {
+        require(validCollaborationSpaceConversationCommand(access, command))
+        val b = command.binding
+        return seal(
+            command.id,
+            "request",
+            0,
+            Json.encodeToString(
+                ConversationRequest(
+                    1,
+                    command.id,
+                    b.audience,
+                    b.accountId,
+                    b.spaceId,
+                    b.nativeSessionId,
+                    command.createdAt.toString(),
+                    command.peerAccountId,
+                    if (command is CollaborationSpaceConversationCommand.Open) "OPEN" else "ROOM",
+                    (command as? CollaborationSpaceConversationCommand.Room)
+                        ?.intent
+                        ?.conversationId,
+                    (command as? CollaborationSpaceConversationCommand.Room)?.intent?.request?.let {
+                        ConversationRoomRequest(
+                            it.deviceId,
+                            it.expectedDeviceVersion,
+                            it.expectedAttempt?.revision,
+                            it.expectedAttempt?.accountId,
+                        )
+                    },
+                )
+            ),
+        )
+    }
+
+    suspend fun outcome(
+        command: CollaborationSpaceConversationCommand,
+        revision: Long,
+        outcome: CollaborationSpaceConversationOutcome,
+        attempts: Int,
+    ): String {
+        require(
+            validCollaborationSpaceConversationCommandRecord(
+                access,
+                CollaborationSpaceConversationCommandRecord(command, revision, attempts, outcome),
+            )
+        )
+        val state =
+            when (outcome) {
+                CollaborationSpaceConversationOutcome.Pending ->
+                    ConversationOutcome(1, "PENDING", attempts)
+                is CollaborationSpaceConversationOutcome.Unconfirmed ->
+                    ConversationOutcome(
+                        1,
+                        "UNCONFIRMED",
+                        attempts,
+                        failure =
+                            outcome.failure?.let {
+                                CollaborationSetupFailureDto(
+                                    it.kind.name,
+                                    it.code,
+                                    it.retryAfterSeconds,
+                                )
+                            },
+                    )
+                is CollaborationSpaceConversationOutcome.Recorded ->
+                    ConversationOutcome(
+                        1,
+                        "RECORDED",
+                        attempts,
+                        receipt =
+                            CollaborationReceiptDto(outcome.receipt.id, outcome.receipt.version),
+                    )
+            }
+        state.domain()
+        return seal(command.id, "outcome", revision, Json.encodeToString(state))
+    }
+
+    suspend fun decode(raw: CommandRecord): CollaborationSpaceConversationCommandRecord {
+        require(raw.partition == spaceConversationCommandPartition(access))
+        require(
+            validCollaborationSpaceConversationId(raw.id) &&
+                raw.revision in 0..9_007_199_254_740_991L
+        )
+        val request =
+            Json.decodeFromString<ConversationRequest>(open(raw.id, "request", 0, raw.request))
+        require(request.schema == 1)
+        val binding =
+            CollaborationSpaceIdentityBinding(
+                request.audience,
+                request.accountId,
+                request.spaceId,
+                request.nativeSessionId,
+            )
+        val createdAt = Instant.parse(request.createdAt)
+        val command =
+            when (request.kind) {
+                "OPEN" -> {
+                    require(request.conversationId == null && request.room == null)
+                    CollaborationSpaceConversationCommand.Open(
+                        request.id,
+                        binding,
+                        request.peerAccountId,
+                        createdAt,
+                    )
+                }
+                "ROOM" -> {
+                    val room = requireNotNull(request.room)
+                    require(
+                        (room.expectedRequestRevision == null) ==
+                            (room.expectedRequestAccountId == null)
+                    )
+                    val attempt =
+                        room.expectedRequestRevision?.let {
+                            CollaborationSpaceRoomAttempt(
+                                requireNotNull(room.expectedRequestAccountId),
+                                it,
+                            )
+                        }
+                    CollaborationSpaceConversationCommand.Room(
+                        CollaborationSpaceRoomRequestIntent(
+                            request.id,
+                            binding,
+                            requireNotNull(request.conversationId),
+                            CollaborationSpaceRoomRequest(
+                                room.deviceId,
+                                room.expectedDeviceVersion,
+                                attempt,
+                            ),
+                        ),
+                        request.peerAccountId,
+                        createdAt,
+                    )
+                }
+                else -> error("Unsupported conversation command.")
+            }
+        require(validCollaborationSpaceConversationCommand(access, command))
+        require(
+            command.id == raw.id &&
+                raw.sortKey == command.orderKey() &&
+                raw.resourceId == command.resourceId()
+        )
+        val state =
+            Json.decodeFromString<ConversationOutcome>(
+                open(raw.id, "outcome", raw.revision, raw.state)
+            )
+        return CollaborationSpaceConversationCommandRecord(
+                command,
+                raw.revision,
+                state.attempts,
+                state.domain(),
+            )
+            .also { require(validCollaborationSpaceConversationCommandRecord(access, it)) }
+    }
+
+    private suspend fun seal(id: String, purpose: String, revision: Long, value: String): String {
+        val bytes = value.encodeToByteArray()
+        return try {
+            require(bytes.size in 1..4096)
+            Base64.encode(cipher.encrypt(key, aad(id, purpose, revision), bytes)).also {
+                require(it.length <= 8192)
+            }
+        } finally {
+            bytes.fill(0)
+        }
+    }
+
+    private suspend fun open(id: String, purpose: String, revision: Long, value: String): String {
+        require(value.length in 1..8192)
+        val bytes = cipher.decrypt(key, aad(id, purpose, revision), Base64.decode(value))
+        return try {
+            require(bytes.size in 1..4096)
+            bytes.decodeToString(throwOnInvalidSequence = true)
+        } finally {
+            bytes.fill(0)
+        }
+    }
+
+    private fun aad(id: String, purpose: String, revision: Long) =
+        Json.encodeToString(
+                listOf(
+                    "hris-collaboration-space-conversation-v1",
+                    access.audience,
+                    access.accountId,
+                    access.spaceId,
+                    id,
+                    "conversation-setup",
+                    purpose,
+                    revision.toString(),
+                )
+            )
+            .encodeToByteArray()
+}
+
+@Serializable
+private data class ConversationRequest(
+    val schema: Int,
+    val id: String,
+    val audience: String,
+    val accountId: String,
+    val spaceId: String,
+    val nativeSessionId: String,
+    val createdAt: String,
+    val peerAccountId: String,
+    val kind: String,
+    val conversationId: String? = null,
+    val room: ConversationRoomRequest? = null,
+)
+
+@Serializable
+private data class ConversationOutcome(
+    val schema: Int,
+    val phase: String,
+    val attempts: Int,
+    val failure: CollaborationSetupFailureDto? = null,
+    val receipt: CollaborationReceiptDto? = null,
+) {
+    fun domain(): CollaborationSpaceConversationOutcome {
+        require(schema == 1 && attempts in 0..1_000)
+        return when (phase) {
+            "PENDING" -> {
+                require(attempts == 0 && failure == null && receipt == null)
+                CollaborationSpaceConversationOutcome.Pending
+            }
+            "UNCONFIRMED" -> {
+                require(attempts > 0 && receipt == null)
+                CollaborationSpaceConversationOutcome.Unconfirmed(
+                    failure?.let {
+                        require(it.code == null || it.code.matches(Regex("[A-Za-z0-9_.:-]{1,100}")))
+                        require(it.retryAfterSeconds == null || it.retryAfterSeconds in 0..86_400)
+                        Failure(
+                            FailureKind.valueOf(it.kind),
+                            "Conversation setup could not be confirmed.",
+                            code = it.code,
+                            retryAfterSeconds = it.retryAfterSeconds,
+                        )
+                    }
+                )
+            }
+            "RECORDED" -> {
+                require(attempts > 0 && failure == null)
+                val value = requireNotNull(receipt)
+                CollaborationSpaceConversationOutcome.Recorded(
+                    CollaborationSetupReceipt(value.id, value.version)
+                )
+            }
+            else -> error("Unsupported conversation setup outcome.")
+        }
+    }
+}
+
+@Serializable
+private data class ConversationRoomRequest(
+    val deviceId: String,
+    val expectedDeviceVersion: Long,
+    val expectedRequestRevision: Long? = null,
+    val expectedRequestAccountId: String? = null,
+)
