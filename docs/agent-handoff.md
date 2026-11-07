@@ -8,7 +8,7 @@ and staging, never permission to reapply old candidates.
 
 ## Current accepted work — 7 November 2026
 
-Owning Open preparation is accepted in the source commit containing this checkpoint:
+Owning Open preparation1d9493df is accepted/pushed to recovery and primary:
 seven Kotlin files, bounded original/canonical recovery, current discovery for new
 intent and exact-ID lost response reconciliation. Focused50437 passed15 cases204.552s;
 full36411 passed3,626 fresh cases/449 suites491.548s on4,385 unchanged inputs, zero
@@ -42,19 +42,18 @@ No product caller, new APK or organization routing activation exists for these p
 
 ## Next work
 
-1. Push this accepted source to recovery and primary. BOTH first3b3 runs started;
-   first79b control/native are accepted and fully audited in8579a0de. After promotion,
-   record new first run IDs and preserve pending runs before another primary push.
-2. Implement finite original Open replay and projection-before-archive. Source review
-   is in .work/space-conversation-preparation-2026-11-07/next-open-replay.md. The server
-   Open key is stable across native-parent changes, but current native/client/peer
-   admission remains required for network work. TWO preliminary pure denial-policy
-   candidates exist in .work/space-conversation-open-replay-2026-11-07/candidate;
-   they are unapplied, untested and incomplete. Complete owning replay/tests before
-   applying. Preserve stronger global denial over pair denial or a transient failure;
-   never close every contact because one peer is unavailable. Capture observed setup
-   outcomes under bounded local ownership, materialize exact canonical facts before
-   archive, and recover response loss without another operation ID or invented ACK.
+1. First1d9493df control42372520573/native42372520624 are PENDING behind running
+   first3b3 control42369792173/native42369792184. Preserve these first pending runs
+   before another primary promotion; continue source work on recovery.
+2. EIGHT original Open replay files are now applied/FROZEN. Sole heavy local job15001
+   runs .work/space-conversation-open-replay-2026-11-07/focused-1:24 new domain cases,
+   existing command policy and actual app binding. Not accepted yet; full gate is
+   prepared. It separates pair denial from global restriction, durably marks before
+   HTTP, captures observed outcomes through cancellation, preserves stronger denial,
+   materializes exact canonical facts before archive, and uses original IDs under the
+   current native owner. No SDK, message ACK, product caller or new APK. Complete
+   focused/full root/Android/lint/Browser checks before committing. Reviewed contract
+   remains in .work/space-conversation-preparation-2026-11-07/next-open-replay.md.
 3. Implement finite owning prepare/replay and projection-before-archive. Recover the
    same original resource/operation after response loss; CAS to Unconfirmed BEFORE HTTP.
    Separate native account/MFA/client denial from conversation/peer denial; do not close
@@ -69,10 +68,10 @@ No product caller, new APK or organization routing activation exists for these p
    and all54 PRD groups:3 in progress/51 planned/none complete. Physical iPhone testing
    is waived, but relevant Apple CI/compilation remains required.
 
-The metadata and preparation candidates are now historical applied staging, not
-pending patches. Metadata remains inside the existing guarded collaboration-history/
-prefix, with metadata-only/inactive-account key-loss coverage. Preliminary Open replay
-policies are the only new candidates; no owning Open replay or server fence exists yet.
+Metadata/preparation candidates are historical applied staging. Open replay candidates
+are also applied now, but unaccepted and frozen for15001. Metadata stays inside the
+existing guarded collaboration-history/ prefix with metadata-only/inactive key-loss
+coverage. No server fence or room request successor implementation exists yet.
 
 ## Original SDK and phone invariants
 
@@ -108,9 +107,8 @@ the cause or resolution of the user's20s–2min pending delay.
 
 ## CI and live state
 
-First3b3 control42369792173/native42369792184 have BOTH STARTED. After preparation's
-full local acceptance, promote the latest accepted source, then preserve its first
-pending runs. First79b control42366357406/native42366357400 are SUCCESS and fully
+First1d9493df control42372520573/native42372520624 are PENDING; preserve them.
+First3b3 control42369792173/native42369792184 have BOTH STARTED. First79b control42366357406/native42366357400 are SUCCESS and fully
 audited: Apple1,975/225, portable4,817/536, each native ABI543/86, zero failures/errors/
 skips. Original queue continuity31.255s x86/77.166s ARM preserved keys/IDs and cleanup,
 zero provider sends; separate native HRIS scenarios also passed with cleanup.
