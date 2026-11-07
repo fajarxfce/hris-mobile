@@ -14989,5 +14989,239 @@
             <sha256 value="4a8d987381c2266af5b1f1e88a75dbf80db36d24d8be6fec252afec7d7a57e95" origin="Verified SDK release matrix-sdk-26.10.23-hris.4"/>
          </artifact>
       </component>
+      <component group="dev.fajar.hris.matrix" name="sdk-android" version="26.10.23-hris.5">
+         <artifact name="sdk-android-26.10.23-hris.5.aar">
+            <sha256 value="5bffa2f4318d1edc7518ad21dc156393ef8a7e2610fd42320a67c12ab645ba5c" origin="Four-ABI observer candidate; verified original CI native bindings and pinned wrapper; unpublished" />
+         </artifact>
+         <artifact name="sdk-android-26.10.23-hris.5.ivy.xml">
+            <sha256 value="181d7fa434b528de36a077562120f9083c16adca5bb3b66985a0d92a44519b2e" origin="Four-ABI observer candidate; verified original CI native bindings and pinned wrapper; unpublished" />
+         </artifact>
+         <artifact name="ivy-26.10.23-hris.5.xml">
+            <sha256 value="181d7fa434b528de36a077562120f9083c16adca5bb3b66985a0d92a44519b2e" origin="Four-ABI observer candidate; verified original CI native bindings and pinned wrapper; unpublished" />
+         </artifact>
+      </component>
+      <component group="androidx.activity" name="activity" version="1.8.2">
+         <artifact name="activity-1.8.2.aar">
+            <sha256 value="ecc119262530a6e2f9f373207e472d476306bed3d4b216fe61b1ea42e3bef688" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="activity-1.8.2.module">
+            <sha256 value="c8923871e556cd5467addabac6773e778f3a4d3da19bfc8153bbaee0d145298f" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="androidx.activity" name="activity-compose" version="1.8.2">
+         <artifact name="activity-compose-1.8.2.aar">
+            <sha256 value="5a67e984f14ed2afc585aa3a23edff1c1791c80caa2bf68a0f799c1b11a39038" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="activity-compose-1.8.2.module">
+            <sha256 value="0460c0a46ba9a74f92b180e4a78751745384a78f462de2cc240f32da4cefcf46" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="androidx.activity" name="activity-ktx" version="1.8.2">
+         <artifact name="activity-ktx-1.8.2.aar">
+            <sha256 value="5c78283d1956b14b22cf6ad70c712a73aa084116b7535526176c3b85e6a9205a" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="activity-ktx-1.8.2.module">
+            <sha256 value="2c445c6709e5efb061db3551ef3b71f4a53e00db40bbbe782928f5531998980d" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="androidx.compose.material" name="material-ripple" version="1.9.3">
+         <artifact name="material-ripple-1.9.3.module">
+            <sha256 value="e45fd0a4df617462edadf92206889935793fbe1c07958f3d5856ba3986403395" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="androidx.compose.material" name="material-ripple-android" version="1.9.3">
+         <artifact name="material-ripple-android-1.9.3.module">
+            <sha256 value="13b29394ffdf4cabe5d32901dbc921c1a54d56896c4b42d0223192a2c350b0e7" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material-ripple.aar">
+            <sha256 value="8161fe3ebef7ecf3f40a53b7b69308507bb10b023b3fdc7b58efb31713688479" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="androidx.compose.material3" name="material3" version="1.4.0">
+         <artifact name="material3-1.4.0.module">
+            <sha256 value="757081d128daf8801c1dd9acc431fa5269e656b28a0a490ae98ccee68e9c3452" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="androidx.compose.material3" name="material3-android" version="1.4.0">
+         <artifact name="material3-android-1.4.0.module">
+            <sha256 value="fccd6a8d0d33fcf7c3277bc43eb452c73803ec620597c81dbc4a79e290a71a97" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material3.aar">
+            <sha256 value="3a37e8b36df3822fe1e6059f0f9fafda8800388860477624ac1b9422c418a36e" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="androidx.lifecycle" name="lifecycle-common-java8" version="2.8.7">
+         <artifact name="lifecycle-common-java8-2.8.7.module">
+            <sha256 value="e27df2ab2f9c1c02fc16fe87e19da0ebb79b4b3f1e2bd2af17364bed59a0a2a9" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="androidx.lifecycle" name="lifecycle-common-java8" version="2.9.4">
+         <artifact name="lifecycle-common-java8-2.9.4.jar">
+            <sha256 value="497dd84de9f2fd46324f25f9a3af032d3a23d087e87af515c4b19435f6d6a651" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="lifecycle-common-java8-2.9.4.module">
+            <sha256 value="07bab59d012bc806f03debd192f93e312d72bca56b25178234a21a6812daf041" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="com.android.kotlin.multiplatform.library" name="com.android.kotlin.multiplatform.library.gradle.plugin" version="9.1.0">
+         <artifact name="com.android.kotlin.multiplatform.library.gradle.plugin-9.1.0.pom">
+            <sha256 value="b29dd6123912f2a40408ee82c9eb8f9740cd54fae1a4feb0b75d3df568f0ac9c" origin="Generated by Gradle" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose" name="org.jetbrains.compose.gradle.plugin" version="1.9.3">
+         <artifact name="org.jetbrains.compose.gradle.plugin-1.9.3.pom">
+            <sha256 value="92aefd7eefe5159fbb120350d8edc3c24de5daa6f658fddbd7b998b4ae66ccb3" origin="Maven Central POM checked against published SHA-1 and exact dependency; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.animation" name="animation-core" version="1.9.1">
+         <artifact name="animation-core-1.9.1.module">
+            <sha256 value="b0b35c69720dd845aa32bf434d4c8c6a560e1387a52008748ef94678948ea324" origin="Maven Central artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.animation" name="animation-core-desktop" version="1.9.1">
+         <artifact name="animation-core-desktop-1.9.1.module">
+            <sha256 value="860740aa2f08723f88ab9cbda43c1323fd036ef7ddc35d6d5116b46439c044e7" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.animation" name="animation-core-uikitarm64" version="1.9.1">
+         <artifact name="animation-core-uikitarm64-1.9.1.module">
+            <sha256 value="78e9b90f1c81e76961c62f7913083df87607614675a038a449ae40ad7ccc965a" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.animation" name="animation-core-uikitsimarm64" version="1.9.1">
+         <artifact name="animation-core-uikitsimarm64-1.9.1.module">
+            <sha256 value="ac405bff18ed9322fcd99aa3b16871091f92ad92022c364adaa1483c3ce91109" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.animation" name="animation-core-wasm-js" version="1.9.1">
+         <artifact name="animation-core-wasm-js-1.9.1.module">
+            <sha256 value="4a6e191be634a4e9e49b8f7d77b5235d66b22d0d08b73f2afa99e909f8d25582" origin="Maven Central artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.material" name="material-ripple" version="1.9.1">
+         <artifact name="material-ripple-1.9.1.module">
+            <sha256 value="898dbe9a0e62c9ca391b375ec1a27b49965743b74a06ad85f6e710a0bbb4a3da" origin="Maven Central artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material-ripple-1.9.1.jar">
+            <sha256 value="292d2b3fbbbcc24bb326f3f642dac9a8cd55e18d5b518365bac6daca23a5cf74" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.material" name="material-ripple-desktop" version="1.9.1">
+         <artifact name="material-ripple-desktop-1.9.1.jar">
+            <sha256 value="2407d9e83c6fd84b90b123cc7ae6291fa7a18bb40938ad210f675e4c86425c8b" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material-ripple-desktop-1.9.1.module">
+            <sha256 value="0656a22b588a839b800eac285aa3eb4d035df3d55221c706c5d35fa6297e6d89" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.material" name="material-ripple-uikitarm64" version="1.9.1">
+         <artifact name="material-ripple-uikitarm64-1.9.1.module">
+            <sha256 value="d7acf5e4b57fe9a254131b4e2257d860aa698700794e3669897f5f9f77935c82" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material-ripple-uikitarm64-1.9.1-metadata.jar">
+            <sha256 value="c6deada2fac53b8ea6523dbda77597b128006674616f140f04df23264c6d1aa3" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material-ripple-uikitArm64Main-1.9.1.klib">
+            <sha256 value="331f2f3eef11a0eecf834e9ce4133657336f93d50d446f0391f15075e0aa2d42" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.material" name="material-ripple-uikitsimarm64" version="1.9.1">
+         <artifact name="material-ripple-uikitsimarm64-1.9.1.module">
+            <sha256 value="f0631a3a183c97ca9526a69d2448d4358249565524c25b2257e3a06d336723ec" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material-ripple-uikitsimarm64-1.9.1-metadata.jar">
+            <sha256 value="c6deada2fac53b8ea6523dbda77597b128006674616f140f04df23264c6d1aa3" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material-ripple-uikitSimArm64Main-1.9.1.klib">
+            <sha256 value="4b7eb82e2229e55e1245c21269dfe8383ff8d76b2eea4e4ee4ad77a76ac156f1" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.material" name="material-ripple-wasm-js" version="1.9.1">
+         <artifact name="material-ripple-wasm-js-1.9.1.klib">
+            <sha256 value="bda9643924505945fcc48c3ed297120c59166cb7603c443edb4e75aba1436856" origin="Maven Central artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material-ripple-wasm-js-1.9.1.module">
+            <sha256 value="667f389d3ccc37723154bb0cf59d90ce63f7ce829fd4c9051072f2f85d700d2c" origin="Maven Central artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.material3" name="material3" version="1.9.0">
+         <artifact name="material3-1.9.0.module">
+            <sha256 value="fa7a745df9170591d98f3773303bcf53829313acfb43c72c1aa4f8fb99ba45a4" origin="Maven Central artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material3-1.9.0.jar">
+            <sha256 value="0be26b1746e5baae437dbf820daefef7e107b648846f97e7b411dcd1de4f6433" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.material3" name="material3-desktop" version="1.9.0">
+         <artifact name="material3-desktop-1.9.0.jar">
+            <sha256 value="78f0787a1c6d20f9b2460a387f51ecf554e211d3c874b22d66530a540390b811" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material3-desktop-1.9.0.module">
+            <sha256 value="f24ea0bd42174905fd32af88f38a8a4d15d806543cab18b24ffe669f18e7598d" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.material3" name="material3-uikitarm64" version="1.9.0">
+         <artifact name="material3-uikitarm64-1.9.0.module">
+            <sha256 value="6e1d0b24cb631ed464bf0b043ab8f10ce19fd600eea920150400884ea4d2a368" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material3-uikitarm64-1.9.0-metadata.jar">
+            <sha256 value="8bd24d0627934a3018a958c76ddbd64a50b1719424b162a88b50c229bc9f0d0b" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material3-uikitArm64Main-1.9.0.klib">
+            <sha256 value="fa637880ccc0b8f6cae9af6a62159f4abd7c5be33e6d6134a3bc9f865e4437e2" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.material3" name="material3-uikitsimarm64" version="1.9.0">
+         <artifact name="material3-uikitsimarm64-1.9.0.module">
+            <sha256 value="de99364234e8cf8cc213c802400edb0fb37eec1a7bdb97d87fbe385e54defbaa" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material3-uikitsimarm64-1.9.0-metadata.jar">
+            <sha256 value="8bd24d0627934a3018a958c76ddbd64a50b1719424b162a88b50c229bc9f0d0b" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material3-uikitSimArm64Main-1.9.0.klib">
+            <sha256 value="2be9cb12bd12969a953d4ded412fb81acf658188d35f940eff82b32910536e56" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.material3" name="material3-wasm-js" version="1.9.0">
+         <artifact name="material3-wasm-js-1.9.0.klib">
+            <sha256 value="8049ab369302ed777837903f1b1018ffa3856e59a33b9c78afbd00d8dc34f46c" origin="Maven Central artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="material3-wasm-js-1.9.0.module">
+            <sha256 value="e5801ff01796953bd40873866af98d548b093ccecd8bc7f384a962a1dbc72b4b" origin="Maven Central artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.ui" name="ui-backhandler" version="1.9.1">
+         <artifact name="ui-backhandler-1.9.1.module">
+            <sha256 value="31dfa186cd71b355cb1be78607ffd5256dcc83cff115a260ea4d697492092582" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.compose.ui" name="ui-backhandler-android" version="1.9.1">
+         <artifact name="ui-backhandler-android-1.9.1.module">
+            <sha256 value="c26e597d1878360000d8f66f096e174e7b2a104218d2ffe07e1ae0db13245bef" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+         <artifact name="ui-backhandler-release.aar">
+            <sha256 value="8f8f37d0eb33f597608bc20f875021b1d80db6f835c138cd7cef9093c7ad4c24" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin.multiplatform" name="org.jetbrains.kotlin.multiplatform.gradle.plugin" version="2.3.21">
+         <artifact name="org.jetbrains.kotlin.multiplatform.gradle.plugin-2.3.21.pom">
+            <sha256 value="d72bd83949a0c26fe6ccbdbe5fd818d79d58bdd95d084cea963e718987eb80a3" origin="Generated by Gradle" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin.plugin.compose" name="org.jetbrains.kotlin.plugin.compose.gradle.plugin" version="2.3.21">
+         <artifact name="org.jetbrains.kotlin.plugin.compose.gradle.plugin-2.3.21.pom">
+            <sha256 value="49e705db8a543e7e59c40cb1e11633d9bc37348bffe4f115f1979cdf889f9228" origin="Maven Central POM checked against published SHA-1 and exact dependency; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlinx" name="kotlinx-coroutines-test" version="1.8.0">
+         <artifact name="kotlinx-coroutines-test-1.8.0.module">
+            <sha256 value="0ec3c75ffd99a6a2dfb68f307f2f2f73141c933e58b77b104f1c8cac3afd5394" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlinx" name="kotlinx-coroutines-test-jvm" version="1.8.0">
+         <artifact name="kotlinx-coroutines-test-jvm-1.8.0.module">
+            <sha256 value="1d2d1973a2f41a8c0c1263e60b25e7792f638b8c55d7ca1c6d0673b64be57da7" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
+         </artifact>
+      </component>
    </components>
 </verification-metadata>

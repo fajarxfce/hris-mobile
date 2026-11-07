@@ -1,4 +1,7 @@
 <resources>
+    <string name="network_inspection_title_id">Pemantau jaringan</string>
+    <string name="network_inspection_description_id">Periksa request HRIS dan Matrix terbaru di perangkat ini.</string>
+    <string name="network_inspection_clear_id">Bersihkan</string>
     <string name="chat_draft_label_id">Draf</string>
     <string name="chat_cancel_send_id">Batalkan kirim</string>
     <string name="chat_cancel_title_id">Batalkan pesan ini?</string>

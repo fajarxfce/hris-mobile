@@ -1,5 +1,7 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.inspector.NetworkInspection
+import dev.fajar.inspector.ktor.KtorNetworkInspector
 import dev.fajar.starter.identity.data.firebase.datasources.*
 import dev.fajar.starter.network.*
 import io.ktor.client.HttpClient
@@ -12,6 +14,7 @@ fun applicationFirebaseModule(
     options: FirebaseClientOptionsSource,
     google: GoogleCredentialSource,
     engineFactory: () -> HttpClientEngine = ::createPlatformHttpEngine,
+    inspection: NetworkInspection? = null,
 ) = module {
     single<FirebaseClientOptionsSource> { options }
     single<GoogleCredentialSource> { google }.onClose { it?.close() }
@@ -26,7 +29,12 @@ fun applicationFirebaseModule(
                     connectTimeoutMillis = 5_000,
                     socketTimeoutMillis = 10_000,
                 ),
-            )
+            ) {
+                if (inspection != null)
+                    install(KtorNetworkInspector) {
+                        recorderProvider = { inspection.recorders.value }
+                    }
+            }
         }
         .onClose { it?.cancelAndClose() }
 }

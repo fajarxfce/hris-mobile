@@ -15,6 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.composable
 import dev.fajar.starter.app.bootstrap.*
+import dev.fajar.starter.app.inspection.*
 import dev.fajar.starter.app.notifications.CollaborationNotificationFocus
 import dev.fajar.starter.auth.presentation.navigation.*
 import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalAccess
@@ -41,12 +42,15 @@ import dev.fajar.starter.workspace.domain.entities.PendingActionGroup
 import dev.fajar.starter.workspace.presentation.navigation.*
 import dev.fajar.starter.workspace.presentation.policy.*
 import kotlinx.coroutines.flow.Flow
+import org.koin.compose.getKoin
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppIncomingLink>) {
     val controller = navigation.controller
+    val koin = getKoin()
+    val inspection = remember(koin) { koin.getOrNull<ApplicationNetworkInspection>()?.inspection }
     val notificationFocus = koinInject<CollaborationNotificationFocus>()
     val onThreadFocus = remember(notificationFocus) { notificationFocus::register }
     val viewModel = koinViewModel<AppViewModel>()
@@ -595,10 +599,25 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppInco
                             },
                             onBack = { controller.popBackStack() },
                         )
+                        if (inspection != null) {
+                            networkInspectionRoutes(inspection) { controller.popBackStack() }
+                        }
                         settingsRoutes(
                             securitySettings = {
                                 AppLockSettings()
                                 NativePushSettings()
+                                if (inspection != null) {
+                                    AppListRow(
+                                        title = appString(AppString.NetworkInspectionTitle),
+                                        supportingText =
+                                            appString(AppString.NetworkInspectionDescription),
+                                        onClick = {
+                                            controller.navigate(NetworkInspectionRoute) {
+                                                launchSingleTop = true
+                                            }
+                                        },
+                                    )
+                                }
                             }
                         ) {
                             controller.popBackStack()

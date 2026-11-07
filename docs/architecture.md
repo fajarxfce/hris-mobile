@@ -1,5 +1,8 @@
 # Architecture
 
+[Development network inspection](network-inspector.md) is owned by application composition;
+transport adapters observe actual attempts and the optional viewer renders bounded snapshots.
+
 [Optional Android HTTP observation](collaboration-http-observation-lifetime.md) stays
 inside the exact native-client lifetime; application composition supplies its adapter.
 

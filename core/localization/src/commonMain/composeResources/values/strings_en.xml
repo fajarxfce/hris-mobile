@@ -1,4 +1,7 @@
 <resources>
+    <string name="network_inspection_title_en">Network inspector</string>
+    <string name="network_inspection_description_en">Inspect recent HRIS and Matrix requests on this device.</string>
+    <string name="network_inspection_clear_en">Clear</string>
     <string name="chat_draft_label_en">Draft</string>
     <string name="chat_cancel_send_en">Cancel send</string>
     <string name="chat_cancel_title_en">Cancel this message?</string>

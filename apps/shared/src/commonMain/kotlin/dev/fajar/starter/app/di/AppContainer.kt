@@ -1,5 +1,6 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.inspector.NetworkInspection
 import dev.fajar.starter.auth.presentation.di.AuthPresentationModule
 import dev.fajar.starter.availability.data.di.AvailabilityDataModule
 import dev.fajar.starter.availability.presentation.di.AvailabilityPresentationModule
@@ -9,11 +10,9 @@ import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeR
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSdkInventoryRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSdkPossessionRepository
 import dev.fajar.starter.collaboration.presentation.di.CollaborationPresentationModule
-import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.config.BuildEnvironment
-import dev.fajar.starter.common.config.BuildRuntime
 import dev.fajar.starter.database.AppDatabase
 import dev.fajar.starter.datastore.UserPreferencesStore
 import dev.fajar.starter.documents.data.di.DocumentsDataModule
@@ -115,6 +114,8 @@ fun createAppContainer(
     fileInputs: FileInputSource = UnavailableFileInputSource(),
     fileOutputs: FileOutputSource = UnavailableFileOutputSource(),
     http: Module? = null,
+    networkInspection: NetworkInspection? =
+        if (environment == AppEnvironment.Dev) NetworkInspection() else null,
     collaborationSdkInventory: (IdentityServer) -> CollaborationSdkInventoryRepository = {
         UnavailableCollaborationRuntimeRepository()
     },
@@ -128,7 +129,9 @@ fun createAppContainer(
     modules(applicationFeatureModules())
     modules(
         notificationPlatform,
-        http ?: applicationNetworkModule(environment),
+        applicationEnvironmentModule(environment, platform),
+        http ?: applicationNetworkModule(environment, inspection = networkInspection),
+        applicationNetworkInspectionModule(networkInspection),
         applicationStorageModule(database, preferences),
         applicationWorkerModule(),
         applicationCollaborationModule(
@@ -141,32 +144,20 @@ fun createAppContainer(
             collaborationHistoryCredentials,
             collaborationNotificationInputCredentials,
         ),
-        applicationFirebaseModule(firebaseOptions, googleCredentials),
+        applicationFirebaseModule(
+            firebaseOptions,
+            googleCredentials,
+            inspection = networkInspection,
+        ),
         module {
-            single { environment }
             single<LocationDataSource> { location }.onClose { it?.close() }
             single<FileInputSource> { fileInputs }.onClose { it?.close() }
             single<FileOutputSource> { fileOutputs }.onClose { it?.close() }
-            single {
-                IdentityServer(
-                    BuildRuntime.apiEndpoints.getValue(environment),
-                    "HRIS Mobile (${platform.key})",
-                )
-            }
-
             single<TransferInputSource> { transferInputs }
             single { SsoConfiguration(emptyList(), platform) }
             single<BrowserAuthorizationSource> { browserAuthorization }
 
             single<DeviceAuthenticationSource> { deviceAuthentication }
-            single {
-                AppBuild(
-                    platform,
-                    BuildRuntime.versionNumber,
-                    BuildRuntime.versionName,
-                    BuildRuntime.updateUrls[platform]?.takeIf { it.isNotBlank() },
-                )
-            }
             single<RemoteFeatureFlagSource> { remoteFeatureFlags }
             single<WorkScheduler> {
                     workScheduler

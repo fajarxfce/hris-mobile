@@ -8,11 +8,15 @@ import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.work.Configuration
 import androidx.work.WorkManager
+import dev.fajar.inspector.NetworkInspection
+import dev.fajar.inspector.matrix.captureMatrixHttp
+import dev.fajar.inspector.matrix.rust.observeNetworkRequests
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.navigation.AppLinkChannel
 import dev.fajar.starter.app.notifications.*
 import dev.fajar.starter.app.work.CollaborationDeliveryWorker
+import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationHttpObservation
 import dev.fajar.starter.collaboration.data.di.androidCollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.data.di.androidCollaborationSdkInventoryRepository
 import dev.fajar.starter.collaboration.data.di.androidCollaborationSdkPossessionRepository
@@ -55,6 +59,8 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
         )
     }
     val environment = AppEnvironment.entries.single { it.id == BuildConfig.APP_ENVIRONMENT }
+    private val networkInspection =
+        if (environment == AppEnvironment.Dev) NetworkInspection() else null
     private val notificationRuntime = lazy {
         val koin = container.koin
         AndroidCollaborationNotificationRuntime(
@@ -99,6 +105,7 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
             createAppDatabase(this),
             androidNotificationModule(this, environment),
             environment,
+            networkInspection = networkInspection,
             workScheduler = scheduler,
             credentials = AndroidCredentialStore(this),
             inboxCredentials = AndroidCredentialStore(this, "inbox-content-key"),
@@ -170,6 +177,12 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
                         allowCleartext = environment == AppEnvironment.Dev,
                     ),
                     http,
+                    httpObservation =
+                        networkInspection?.let { inspection ->
+                            AndroidCollaborationHttpObservation { client ->
+                                captureMatrixHttp(inspection) { client.observeNetworkRequests() }
+                            }
+                        },
                 )
             },
         )

@@ -40,9 +40,14 @@ crashlytics = "3.0.8"
 detekt = "2.0.0-alpha.6"
 cyclonedx = "3.5.0"
 junit = "4.13.2"
-matrix-sdk = "26.10.23-hris.4"
+matrix-sdk = "26.10.23-hris.5"
+network-inspector = "0.1.0-SNAPSHOT"
 
 [libraries]
+inspector-core = { module = "dev.fajar.inspector:core", version.ref = "network-inspector" }
+inspector-ktor = { module = "dev.fajar.inspector:ktor", version.ref = "network-inspector" }
+inspector-compose = { module = "dev.fajar.inspector:compose", version.ref = "network-inspector" }
+inspector-matrix-android = { module = "dev.fajar.inspector:matrix-rust-android", version.ref = "network-inspector" }
 matrix-sdk-android = { module = "dev.fajar.hris.matrix:sdk-android", version.ref = "matrix-sdk" }
 junit = { module = "junit:junit", version.ref = "junit" }
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk" }

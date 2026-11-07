@@ -7,6 +7,10 @@ pluginManagement {
     }
 }
 
+// A separate checkout keeps the reusable inspector independent of this application.
+// Until the candidate is published, consumer builds opt in to this local composite.
+providers.gradleProperty("networkInspectorDirectory").orNull?.let { includeBuild(it) }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -14,7 +18,12 @@ dependencyResolutionManagement {
         mavenCentral()
         exclusiveContent {
             forRepository {
-                ivy("https://github.com/fajarxfce/hris-mobile/releases/download") {
+                ivy(
+                    providers
+                        .gradleProperty("matrixSdkRepository")
+                        .orElse("https://github.com/fajarxfce/hris-mobile/releases/download")
+                        .get()
+                ) {
                     name = "HRIS Matrix SDK"
                     patternLayout {
                         ivy("matrix-sdk-[revision]/[module]-[revision].ivy.xml")

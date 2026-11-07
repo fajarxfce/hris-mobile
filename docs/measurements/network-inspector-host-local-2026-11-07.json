@@ -1,0 +1,554 @@
+{
+  "at": "2026-11-07T22:19:12.457355+00:00",
+  "sourceParent": "d10da769941a1bc93b08b2bbaeb071deab9f7354",
+  "sourceBranch": "feat/network-inspector-20261107",
+  "changedInputs": {
+    "apps/android/build.gradle.kts": "4dc88f7a38cf4c1773b30148d8d3ffbdd19aa297df948499b92948852258340b",
+    "apps/android/src/main/kotlin/dev/fajar/hris/StarterApplication.kt": "dddbcbb760cc4668b18d5a56b2d0972fd93c27ff8b987dc34a73b1e1f6038212",
+    "apps/shared/build.gradle.kts": "b708bd3ea215e148dab93dede6d73dd88a94d23c7200d80259f00d97a54bdf45",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/AppContainer.kt": "2250d42a764e8c30b64211128103d656a8507c77e036017135058a09b9e40598",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationEnvironmentModule.kt": "b10a8b478a50e040ed85be169ea6709d402d3ac2ebb4a44d6b453921bf235804",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationFirebaseModule.kt": "c0821d2f9e141caa17d90bb947fa4dec08f36eb076b95937e4e3ba6cb2d3a8a9",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationNetworkInspectionModule.kt": "4ace374a31ea91dffafc0f07cde58e9cee62ae9c07658560168f0722823ddebe",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationNetworkModule.kt": "e81c34ba8cf8c24c839302ae2b7eda3a7561bf347e281cf798917e238a5c9d06",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/inspection/ApplicationNetworkInspection.kt": "9481525c7ad2f21f947e83272f71bb0e08ecede9ff3913b850ce17b20ff7ba43",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/inspection/NetworkInspectionNavigation.kt": "572fba8ce24dd59262eb14415811456ca3b510a7712cb2a4a8fbc3420ca9039d",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/inspection/NetworkInspectionPage.kt": "86df2d77c45a2a89e9c70d7169fb8c54f0b26ed6c1f805b7d67283eab7ef464a",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/navigation/AppNavigation.kt": "6f7d4146e498feb0b6b65d2b5a0ab91d2e979dcf7ac522acb5c7aec1da1b1674",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/ApplicationNetworkInspectionTest.kt": "de01bf77d3fa6d3ea53f264ca225e75b6678f5286129d74d5492ad3c4ba594ab",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/NetworkInspectionUiTest.kt": "cd953cb257134d4403984f3ab902dc7debc3e2759478af3e5faea28e5b35acdf",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "d102687f8dae1829148e61afd48d6d29330beab1f3ec6f8e9a89db8afc996f06",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "1ded3fd1246f4269da3ac26a81a8d78b5637d555d3ae93ed4443206f0ccd3a1f",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "0da758dab037257311907bbef131aa6b0fe45836880ad942c33cea30437efc32",
+    "gradle/libs.versions.toml": "975a8969875f549d7f79fbc0743acc3ef162015777d88eb03c750efd04ffb2b4",
+    "gradle/verification-metadata.xml": "f1eb9d873492f3b79f4ccdd5be8a34f068f2e2d8e322ae982bf79b7b6174b973",
+    "settings.gradle.kts": "d210ebc5034f8e9e819ceab80e3d42996cc2618f58b2f1f7144f4f2f98e25993"
+  },
+  "library": {
+    "repository": "https://github.com/fajarxfce/kmp-network-inspector",
+    "visibility": "private",
+    "commit": "a8d7d60fa3873a53f646eb17708c8df49f7a3512",
+    "sourceManifestSha256": "53288a8525f9eed757ecffce6d37c4cfb06561e483d49659d0f0920d15f25dda",
+    "sourcesUnchanged": true
+  },
+  "sdkCandidate": {
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+    "aarSha256": "5bffa2f4318d1edc7518ad21dc156393ef8a7e2610fd42320a67c12ab645ba5c",
+    "published": false
+  },
+  "acceptedLocalGate": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "env",
+      "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+      "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+      "ANDROID_HOME=/home/fajar/Android/Sdk",
+      "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+      "./gradlew",
+      "--dependency-verification",
+      "strict",
+      "--stacktrace",
+      "--continue",
+      ":check",
+      ":features:collaboration:data:testAndroidHostTest",
+      ":apps:android:compileDevReleaseKotlin",
+      ":apps:android:lintDevRelease",
+      ":apps:shared:compileKotlinWasmJs",
+      ":apps:shared:compileKotlinIosArm64",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+      "-PmatrixSdkRepository=/home/fajar/hris/kmp-network-inspector/.work/matrix-android-2026-11-07/sdk-repository",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=57",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2560m",
+      "-Pkotlin.compiler.execution.strategy=in-process"
+    ],
+    "startedAt": "2026-11-07T22:07:28.399890+00:00",
+    "elapsedSeconds": 617.945,
+    "exitCode": 0,
+    "sourceFiles": 4424,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 5645,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "freshModules": {
+    "apps/shared": {
+      "tests": 656,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apps/demo": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation": {
+      "tests": 279,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data": {
+      "tests": 1397,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain": {
+      "tests": 1437,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/workforce/presentation": {
+      "tests": 69,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/workforce/domain": {
+      "tests": 177,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/workforce/data": {
+      "tests": 78,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/settings/presentation": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/security/presentation": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/people/presentation": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/people/domain": {
+      "tests": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/people/data": {
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/payroll/presentation": {
+      "tests": 25,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/payroll/domain": {
+      "tests": 59,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/payroll/data": {
+      "tests": 42,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/onboarding/presentation": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/onboarding/data": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/notifications/presentation": {
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/leave/presentation": {
+      "tests": 69,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/leave/domain": {
+      "tests": 114,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/leave/data": {
+      "tests": 76,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/inbox/domain": {
+      "tests": 77,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/inbox/data": {
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/home/presentation": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/files/presentation": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/expenses/presentation": {
+      "tests": 73,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/expenses/domain": {
+      "tests": 88,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/expenses/data": {
+      "tests": 66,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/documents/presentation": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/dashboard/presentation": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/dashboard/domain": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/dashboard/data": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/auth/presentation": {
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/workspace/domain": {
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/workspace/data": {
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/worker": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/transfers/domain": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/transfers/data": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/sync/data": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/storage": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/settings/data": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/security/domain": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/security/data": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/securestorage": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/presentation": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/observability": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/notifications/domain": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/notifications/data": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/network": {
+      "tests": 37,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/location/data": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/localization": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/identity/domain": {
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/identity/data": {
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/fileio": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/featureflags/domain": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/featureflags/data": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/documents/domain": {
+      "tests": 155,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/documents/data": {
+      "tests": 75,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/datastore": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/database": {
+      "tests": 75,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/common": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/availability/domain": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/availability/data": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "freshSuites": 775,
+  "reportManifestSha256": "cedf18a19c6bd3d98bd6c1b429bf1319ff4f5f273a9a394709d49641728718a5",
+  "sourcesManifestSha256": "bf634fdc1f20d7748211fa09fd55069c0687a20d91a07e65061efc11b6bedbf3",
+  "lintIssues": 0,
+  "lintSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+  "retainedInitialFailures": [
+    {
+      "check": "focused-1",
+      "reason": "Strict verification rejected an inherited plugin POM checksum before compilation; imported only entries already verified in the separate library.",
+      "elapsedSeconds": 19.113,
+      "exitCode": 1,
+      "sourceFiles": 4422,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "stdoutSha256": "f107fe4bcbf06047169f02400cc55f0829d348a9304b5302c9557c8c923a58e5",
+      "stderrSha256": "d965ded5df10101240051405758819cb87385001f16ece4f7e7e20e1dc0f2fd9"
+    },
+    {
+      "check": "focused-2",
+      "reason": "Experimental Compose BackHandler needed explicit opt-in; stopped dependent compilation after this first source error.",
+      "elapsedSeconds": 731.877,
+      "exitCode": -15,
+      "sourceFiles": 4422,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "stdoutSha256": "ef3251fc25781e0d06544e86e3751021666fcbb7fc6ef9acebd44d146693a3c4",
+      "stderrSha256": "1a205aa4367bdbdd40ec99cf9762b36316e5ad62f5181a463d650de5160336e4"
+    },
+    {
+      "check": "focused-3",
+      "reason": "Six owner tests passed, two UI fixtures omitted LocalLifecycleOwner; detekt also found createAppContainer above its length limit. Android/Wasm/iOS source compilation passed.",
+      "elapsedSeconds": 616.716,
+      "exitCode": 1,
+      "sourceFiles": 4422,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 8,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "stdoutSha256": "f6882b167722fd6795ad5b0ecf6c3bdb85685c2a4bc0ee80fe4d8b9298784b22",
+      "stderrSha256": "fd73973aecacca1299a0d95caed9b274621b350fcca7b1e56f3df300b8861d61"
+    },
+    {
+      "check": "focused-4",
+      "reason": "All eight inspector tests passed; detekt still found createAppContainer too long (102 lines). Moved environment/build/server configuration into its owning DI module before full-1.",
+      "elapsedSeconds": 98.736,
+      "exitCode": 1,
+      "sourceFiles": 4423,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "stdoutSha256": "87d65a7021f2730a17810f52cf5395001d39c5683402b42f064146b1d7f3001d",
+      "stderrSha256": "f87cc55809666cf8248ff0cb7ab669822e101a8ecdac9df0358b892ee25fffd1"
+    }
+  ],
+  "limits": [
+    "No actual application capture, SDK5 APK installation or host overhead acceptance yet.",
+    "Apple main sources compile locally; four native Swift tests on macOS are separate from an Apple inspector bridge and iPhone application runtime.",
+    "Private unpublished inspector/SDK dependency requires explicit composite and artifact mirror; do not promote into the primary branch before distribution is ready.",
+    "Prior pending/draft and viewport fixes remain installed in release56; keyboard editor handoff and phone send latency remain open."
+  ]
+}

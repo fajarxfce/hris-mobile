@@ -10,6 +10,9 @@ plugins {
 
 kotlin.sourceSets {
     getByName("commonMain").dependencies {
+        api(libs.inspector.core)
+        implementation(libs.inspector.ktor)
+        implementation(libs.inspector.compose)
         implementation(projects.core.availability.data)
         implementation(projects.features.availability.presentation)
         api(projects.core.security.data)

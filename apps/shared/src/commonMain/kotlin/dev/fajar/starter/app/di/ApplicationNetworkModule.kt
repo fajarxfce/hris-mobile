@@ -1,5 +1,7 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.inspector.NetworkInspection
+import dev.fajar.inspector.ktor.KtorNetworkInspector
 import dev.fajar.starter.availability.domain.usecases.CheckAppAvailability
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.config.AppEnvironment
@@ -21,9 +23,15 @@ import org.koin.dsl.onClose
 fun applicationNetworkModule(
     environment: AppEnvironment,
     engineFactory: () -> HttpClientEngine = ::createPlatformHttpEngine,
+    inspection: NetworkInspection? = null,
 ) = module {
     single<HttpClient>(named(HttpClients.Oidc)) {
-            createHttpClient(engineFactory(), HttpClientSettings("https://oidc.invalid/"))
+            createHttpClient(engineFactory(), HttpClientSettings("https://oidc.invalid/")) {
+                if (inspection != null)
+                    install(KtorNetworkInspector) {
+                        recorderProvider = { inspection.recorders.value }
+                    }
+            }
         }
         .onClose { it?.cancelAndClose() }
     single<HttpClient>(named(HttpClients.Public)) {
@@ -36,6 +44,10 @@ fun applicationNetworkModule(
                     allowCleartext = environment == AppEnvironment.Dev,
                 ),
             ) {
+                if (inspection != null)
+                    install(KtorNetworkInspector) {
+                        recorderProvider = { inspection.recorders.value }
+                    }
                 defaultRequest {
                     if (build.platform in setOf(AppPlatform.Android, AppPlatform.Ios)) {
                         header("X-HRIS-Client-Platform", build.platform.key.uppercase())
@@ -55,6 +67,10 @@ fun applicationNetworkModule(
                 engineFactory(),
                 HttpClientSettings(endpoint, allowCleartext = environment == AppEnvironment.Dev),
             ) {
+                if (inspection != null)
+                    install(KtorNetworkInspector) {
+                        recorderProvider = { inspection.recorders.value }
+                    }
                 defaultRequest {
                     if (build.platform in setOf(AppPlatform.Android, AppPlatform.Ios)) {
                         header("X-HRIS-Client-Platform", build.platform.key.uppercase())

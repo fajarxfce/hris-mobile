@@ -1,6 +1,33 @@
 # Agent continuation — HRIS Mobile
 
-## Inspector host continuation — 7 November 2026, 22:09 UTC
+## Inspector host accepted locally — 7 November 2026, 22:18 UTC
+
+Full-1/38121 is REAPED:617.945s,4,424 unchanged app inputs and unchanged private-library
+inputs,5,645 fresh cases, zero failures/errors/skips. Root check, Android host/release
+compilation/lint, Wasm/iOS source compilation, formatting, architecture and detekt pass.
+[Contract](network-inspector.md) / [measurement and retained failures](measurements/network-inspector-host-local-2026-11-07.json).
+Eight focused inspector cases pass. Environment/build/server configuration now has its
+own DI module; the capture module owns account observation and disposal. Dev Ktor clients
+and Android raw Matrix observer feed the separate reusable viewer through app composition.
+No business repository/ViewModel owns capture; selected detail is cleared on recorder change.
+
+Actual app capture/overhead and APK57 remain UNACCEPTED. Phone is connected on56;
+original Bima emulator is stopped with56 and original data. Build57 scripts are prepared
+in .work/release-phone-2026-11-07-build57, including exact SDK5 verification, owned-device
+capture inspection and cold offline continuity. After committing/pushing this accepted
+source, run build-arm64.py (sole heavy job), verify-arm64.py and verify-sdk.py, then start
+only the owned emulator. Run the single-send probe, inspect actual screenshots/video,
+complete acceptance, notify before --install-only phone update. No57 artifact exists yet.
+Do not change Mobile/private-library inputs between this gate and the package build.
+
+Private librarya8d7d60 and SDK5 remain unpublished; primary feat/communications stays
+be2fe021. Visibility question is unanswered; no private source copying or premature
+primary promotion. Apple runtime source6866251a records four passing macOS native cases.
+Continue host capture/overhead, Starter, composer/latency and original54PRDgroups; none
+newly complete. Main/Group API/schema/routing are unchanged. Older process states below
+are historical; no local compiler or emulator is active at this checkpoint.
+
+## Inspector host continuation — 7 November 2026, 22:06 UTC
 
 Both be2fe021 first CI runs are fully audited: control42414100643 Apple2194/241 and
 portable5284/571; native42414100684 each ABI560/88, zero failures/errors/skips. All
