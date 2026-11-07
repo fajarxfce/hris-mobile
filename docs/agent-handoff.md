@@ -40,13 +40,16 @@ Their source contracts and exact results are linked by architecture and prior ch
    firstfe control42380244144/native42380243983. Preserve both new first runs before
    another primary promotion; continue implementation on recovery. The nine owning
    resolution files and durable storagefc0034ed are included in that exact primary head.
-2. Implement [atomic original/successor storage](collaboration-space-room-successor-plan.md)
-   using existing raw archiveAndInsert, authenticated forward/back references and unchanged
-   original ciphertext. NINE production/fixture candidates are isolated in
-   `.work/space-room-successor-2026-11-07`, with mapping/baseline hashes. They are NOT
-   APPLIED/TESTED and lack the planned policy/real-storage behavioral cases. Add those
-   cases, review the design, verify baselines, then apply/format and run focused/full
-   gates with explicitly verified Browser selection. Do not assume candidates are accepted.
+2. ELEVEN atomic original/successor files are applied/FROZEN and NOT accepted. Sole
+   heavy job40440 runs `.work/space-room-successor-2026-11-07/focused-1` (102 expected
+   cases). It adds exact encrypted forward/back links using archiveAndInsert, retains
+   the original ciphertext and prevents independent insertion of new replacements.
+   Six production files, three explicit fixture stubs, nine new real-storage cases and
+   two new policy cases are included. Then run required full root/Android host/release
+   lint,75 explicitly selected Browser cases/shared Wasm. Reap before source edits;
+   no compiler/emulator overlap. The candidate directory is now historical/applied.
+   [Design](collaboration-space-room-successor-plan.md). No owning successor preparation,
+   SDK operation, product caller or APK change is included.
 3. After atomic storage, implement current-admitted owning Room preparation/dispatch,
    projection/recovery, original SDK delivery/history, native-parent recovery and product
    routing. A setup receipt/fence is not a message ACK or content authority. New offline
