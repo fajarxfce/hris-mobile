@@ -1,5 +1,9 @@
 # Architecture
 
+[Group SDK credentials](collaboration-space-sdk-adoption-credentials.md) preserve
+the original physical store and queue identity while isolating the adopted session
+behind a fixed per-lease callback namespace. Runtime adoption remains separate.
+
 [Original runtime transfer](collaboration-space-runtime-transfer-flow.md) owns the finite
 publication, private-store staging, admitted freeze and drain sequence. SDK adoption
 and product activation remain separate.

@@ -8,13 +8,13 @@ import org.matrix.rustcomponents.sdk.ClientSessionDelegate
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 
-/** SDK callbacks run synchronously; failed writes are retained by the owning repository helper. */
+/** SDK callbacks run synchronously; failed writes are retained by the owning per-lease writer. */
 internal class AndroidSdkSessionDelegate(private val persistence: SdkSessionPersistence) :
     ClientSessionDelegate {
     override fun retrieveSessionFromKeychain(userId: String): Session =
         try {
             runBlocking {
-                when (val current = persistence.snapshot()) {
+                when (val current = persistence.session()) {
                     is AppResult.Failed ->
                         throw ClientException.Generic("Stored session is unavailable.", null)
                     is AppResult.Success -> {
@@ -60,6 +60,17 @@ internal class AndroidSdkSessionDelegate(private val persistence: SdkSessionPers
 
 internal fun CollaborationSdkRecord.toNativeSession(): Session {
     check(schema == 1 && handover == null) { "SDK ownership is being transferred." }
+    return SdkSessionCredentials(
+            matrixUserId,
+            matrixDeviceId,
+            homeserverUrl,
+            accessToken,
+            refreshToken,
+        )
+        .toNativeSession()
+}
+
+internal fun SdkSessionCredentials.toNativeSession(): Session {
     return Session(
         accessToken,
         refreshToken,

@@ -29,6 +29,7 @@ internal data class CollaborationSdkRecord(
     val handover: CollaborationSdkHandover? = null,
     /** Stable queue namespace, independent of replacement access/refresh credentials. */
     val queueOperationId: String? = null,
+    val adoption: CollaborationSdkAdoption? = null,
 ) {
     val messageOperationId: String
         get() = queueOperationId ?: bootstrapOperationId

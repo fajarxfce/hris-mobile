@@ -3,7 +3,7 @@ package dev.fajar.starter.collaboration.data.sdk
 import dev.fajar.starter.collaboration.data.dto.CollaborationGatewayDto
 import dev.fajar.starter.collaboration.data.mappers.*
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.collaboration.domain.policies.collaborationGatewayMatchesCommand
+import dev.fajar.starter.collaboration.domain.policies.*
 import kotlin.io.encoding.Base64
 import kotlin.time.Instant
 import kotlinx.serialization.json.Json
@@ -151,6 +151,162 @@ internal class CollaborationSdkRecordCodec(private val scope: CollaborationSdkSc
         )
     }
 
+    /** Caller owns current admission, exact durable bootstrap and original private-store lease. */
+    fun stageAdoption(
+        previous: CollaborationSdkRecord,
+        command: CollaborationSpaceSetupCommand,
+        gateway: CollaborationSpaceGateway,
+    ): CollaborationSdkRecord {
+        validate(previous)
+        val candidate = adoption(previous, command, gateway)
+        previous.adoption?.let { retained ->
+            // An exact original response must not overwrite subsequently rotated credentials.
+            require(
+                candidate.copy(
+                    accessToken = retained.accessToken,
+                    refreshToken = retained.refreshToken,
+                    initialized = retained.initialized,
+                ) == retained
+            )
+            return previous
+        }
+        return previous
+            .copy(
+                schema = 4,
+                adoption = candidate,
+                credentialRevision = previous.credentialRevision + 1,
+            )
+            .also(::validate)
+    }
+
+    /** Explicit replacement only; it cannot change the original physical store or handover. */
+    fun replaceAdoptedCredentials(
+        previous: CollaborationSdkRecord,
+        command: CollaborationSpaceSetupCommand,
+        gateway: CollaborationSpaceGateway,
+    ): CollaborationSdkRecord {
+        validate(previous)
+        val retained = requireNotNull(previous.adoption)
+        val candidate = adoption(previous, command, gateway)
+        require(candidate.bootstrapOperationId != retained.bootstrapOperationId)
+        require(candidate.registrationId == retained.registrationId)
+        require(
+            candidate.gatewayId == retained.gatewayId &&
+                candidate.gatewayVersion > retained.gatewayVersion
+        )
+        return previous
+            .copy(adoption = candidate, credentialRevision = previous.credentialRevision + 1)
+            .also(::validate)
+    }
+
+    /**
+     * The operation belongs to this opened space lease; a prior delegate cannot select its
+     * successor.
+     */
+    fun withAdoptedTokens(
+        previous: CollaborationSdkRecord,
+        operationId: String,
+        accessToken: String,
+        refreshToken: String,
+    ): CollaborationSdkRecord {
+        validate(previous)
+        val retained = requireNotNull(previous.adoption)
+        require(retained.bootstrapOperationId == operationId)
+        if (retained.accessToken == accessToken && retained.refreshToken == refreshToken)
+            return previous
+        return previous
+            .copy(
+                adoption = retained.copy(accessToken = accessToken, refreshToken = refreshToken),
+                credentialRevision = previous.credentialRevision + 1,
+            )
+            .also(::validate)
+    }
+
+    fun initializedAdoption(
+        previous: CollaborationSdkRecord,
+        operationId: String,
+    ): CollaborationSdkRecord {
+        validate(previous)
+        val retained = requireNotNull(previous.adoption)
+        require(retained.bootstrapOperationId == operationId)
+        if (retained.initialized) return previous
+        return previous
+            .copy(
+                adoption = retained.copy(initialized = true),
+                credentialRevision = previous.credentialRevision + 1,
+            )
+            .also(::validate)
+    }
+
+    private fun adoption(
+        previous: CollaborationSdkRecord,
+        command: CollaborationSpaceSetupCommand,
+        gateway: CollaborationSpaceGateway,
+    ): CollaborationSdkAdoption {
+        val target = requireNotNull(previous.handover)
+        val request = requireNotNull(command.request.bootstrapEffect())
+        val owner = scope.owner
+        val access =
+            CollaborationSpaceLocalAccess(
+                owner.sessionId,
+                owner.audience,
+                owner.accountId,
+                target.spaceId,
+            )
+        require(validCollaborationSpaceSetupCommand(access, command))
+        require(validCollaborationSpaceSetupGateway(command, gateway))
+        require(command.binding.nativeSessionId == owner.nativeSessionId)
+        require(
+            request.deviceId == target.deviceId &&
+                request.deviceVersion == target.expectedDeviceVersion + 1
+        )
+        require(request.provider.origin == CollaborationSpaceIdentityOrigin.LEGACY)
+        require(request.provider.legacyCompanyId == previous.companyId)
+        require(
+            gateway.matrixUserId == previous.matrixUserId &&
+                gateway.matrixDeviceId == previous.matrixDeviceId
+        )
+        return CollaborationSdkAdoption(
+            previous.adoption?.sourceSchema ?: previous.schema,
+            target.spaceId,
+            target.deviceId,
+            request.deviceVersion,
+            command.binding.nativeSessionId,
+            command.registrationId,
+            command.id,
+            gateway.sessionId,
+            gateway.version,
+            command.clientBuild,
+            Instant.fromEpochMilliseconds(gateway.accessExpiresAtEpochMillis).toString(),
+            Instant.fromEpochMilliseconds(gateway.expiresAtEpochMillis).toString(),
+            gateway.accessToken,
+            gateway.refreshToken,
+            gateway.accessToken,
+            gateway.refreshToken,
+            false,
+        )
+    }
+
+    private fun validateAdoption(record: CollaborationSdkRecord, value: CollaborationSdkAdoption) {
+        val target = requireNotNull(record.handover)
+        require(value.sourceSchema in 2..3)
+        require(value.spaceId == target.spaceId && value.deviceId == target.deviceId)
+        require(value.nativeSessionId == record.nativeSessionId)
+        require(value.deviceVersion == target.expectedDeviceVersion + 1)
+        listOf(value.registrationId, value.bootstrapOperationId, value.gatewayId)
+            .forEach(::collaborationId)
+        require(value.gatewayVersion in 0..999_999 && value.clientBuild in 1..999_999_999L)
+        val access = Instant.parse(value.initialAccessExpiresAt).toEpochMilliseconds()
+        val hard = Instant.parse(value.expiresAt).toEpochMilliseconds()
+        require(
+            access in 0..253_402_300_799_999L && hard in 0..253_402_300_799_999L && access <= hard
+        )
+        require(value.initialAccessToken.matches(Regex("hris_mxg_a_[A-Za-z0-9_-]{43}")))
+        require(value.initialRefreshToken.matches(Regex("hris_mxg_r_[A-Za-z0-9_-]{43}")))
+        require(value.accessToken.matches(Regex("hris_mxg_a_[A-Za-z0-9_-]{43}")))
+        require(value.refreshToken.matches(Regex("hris_mxg_r_[A-Za-z0-9_-]{43}")))
+    }
+
     fun handoverIntent(record: CollaborationSdkRecord): CollaborationRuntimeHandoverIntent? {
         validate(record)
         return record.handover?.let {
@@ -172,10 +328,13 @@ internal class CollaborationSdkRecordCodec(private val scope: CollaborationSdkSc
 
     private fun validate(record: CollaborationSdkRecord) {
         val owner = scope.owner
-        require(record.schema in 1..3 && record.storeId == scope.storeId)
+        require(record.schema in 1..4 && record.storeId == scope.storeId)
+        require((record.schema == 4) == (record.adoption != null))
         require((record.schema != 1) == (record.handover != null))
         record.handover?.let {
-            require(record.initialized == (record.schema == 2) && record.credentialRevision > 0)
+            val sourceSchema = record.adoption?.sourceSchema ?: record.schema
+            require(sourceSchema in 2..3)
+            require(record.initialized == (sourceSchema == 2) && record.credentialRevision > 0)
             validateHandover(it)
         }
         require(
@@ -186,6 +345,7 @@ internal class CollaborationSdkRecordCodec(private val scope: CollaborationSdkSc
                 record.deviceId == scope.deviceId &&
                 record.homeserverUrl == scope.homeserverUrl
         )
+        record.adoption?.let { validateAdoption(record, it) }
         require(record.credentialRevision in 0..9_007_199_254_740_991L)
         require(record.bootstrapClientBuild in 1..Int.MAX_VALUE)
         collaborationId(record.bootstrapOperationId)

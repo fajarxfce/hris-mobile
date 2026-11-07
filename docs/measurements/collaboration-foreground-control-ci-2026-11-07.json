@@ -1,0 +1,203 @@
+{
+  "at": "2026-11-07T03:49:01.690670+00:00",
+  "headSha": "08545820c0b58f46d784971e71ceb207dd628c0f",
+  "runs": [
+    {
+      "id": 42330502891,
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "name": "apple",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-07T02:59:15Z",
+          "completedAt": "2026-11-07T03:46:31Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Select Xcode 26.3",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Prepare public app-link test registrations",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check Apple setup adapter",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build iOS application host",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "name": "portable",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-07T02:59:14Z",
+          "completedAt": "2026-11-07T03:21:19Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run android-actions/setup-android@v3",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check setup transport and ownership",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check application bindings and platform compilation",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "artifactId": 13558998453,
+          "name": "collaboration-control-apple",
+          "sha256": "3ceae108da9a8f5f7a242cce4d52196374b1c1386b3ee3ee08c6bb23f49f7909",
+          "bytes": 334894,
+          "suites": 197,
+          "counts": {
+            "tests": 1794,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": null,
+          "proof": {}
+        },
+        {
+          "artifactId": 13557874972,
+          "name": "collaboration-control-portable",
+          "sha256": "835336c922848451522036ec82af5ea673969a965b63775507903169ca567d16",
+          "bytes": 2307353,
+          "suites": 478,
+          "counts": {
+            "tests": 4448,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "abi": null,
+          "proof": {}
+        }
+      ]
+    }
+  ]
+}

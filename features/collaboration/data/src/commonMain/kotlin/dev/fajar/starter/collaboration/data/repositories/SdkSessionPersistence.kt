@@ -18,6 +18,7 @@ internal class SdkSessionPersistence(
     private val credentials: CredentialStore,
     private val codec: CollaborationSdkRecordCodec,
     initial: CollaborationSdkRecord,
+    private val namespace: SdkCredentialNamespace = SdkCredentialNamespace.Original,
 ) {
     private val writes = Mutex()
     private var current = initial
@@ -39,6 +40,37 @@ internal class SdkSessionPersistence(
                 }
         }
 
+    /** Exposes only the namespace fixed by the owner of this opened store. */
+    suspend fun session(): AppResult<SdkSessionCredentials> =
+        writes.withLock {
+            val denied = currentFailure()
+            if (denied != null) AppResult.Failed(denied)
+            else
+                safeStorageCall {
+                    check(!closed && pending == null) { "SDK credentials are unavailable." }
+                    codec.encode(current)
+                    val tokens =
+                        when (val owned = namespace) {
+                            SdkCredentialNamespace.Original -> {
+                                require(current.schema == 1 && current.handover == null)
+                                current.accessToken to current.refreshToken
+                            }
+                            is SdkCredentialNamespace.Adopted -> {
+                                val adopted = requireNotNull(current.adoption)
+                                require(adopted.bootstrapOperationId == owned.operationId)
+                                adopted.accessToken to adopted.refreshToken
+                            }
+                        }
+                    SdkSessionCredentials(
+                        current.matrixUserId,
+                        current.matrixDeviceId,
+                        current.homeserverUrl,
+                        tokens.first,
+                        tokens.second,
+                    )
+                }
+        }
+
     suspend fun saveTokens(
         userId: String,
         deviceId: String,
@@ -54,7 +86,17 @@ internal class SdkSessionPersistence(
                         deviceId == current.matrixDeviceId &&
                         homeserver.trimEnd('/') == current.homeserverUrl.trimEnd('/')
                 )
-                codec.withTokens(pending ?: current, access, refresh)
+                when (val owned = namespace) {
+                    SdkCredentialNamespace.Original ->
+                        codec.withTokens(pending ?: current, access, refresh)
+                    is SdkCredentialNamespace.Adopted ->
+                        codec.withAdoptedTokens(
+                            pending ?: current,
+                            owned.operationId,
+                            access,
+                            refresh,
+                        )
+                }
             }
             when (prepared) {
                 is AppResult.Failed -> retainFailure(prepared)
@@ -76,7 +118,11 @@ internal class SdkSessionPersistence(
             }
             val prepared = safeStorageCall {
                 check(!closed && pending == null) { "SDK credentials are unavailable." }
-                codec.initialized(current)
+                when (val owned = namespace) {
+                    SdkCredentialNamespace.Original -> codec.initialized(current)
+                    is SdkCredentialNamespace.Adopted ->
+                        codec.initializedAdoption(current, owned.operationId)
+                }
             }
             when (prepared) {
                 is AppResult.Failed -> retainFailure(prepared)
