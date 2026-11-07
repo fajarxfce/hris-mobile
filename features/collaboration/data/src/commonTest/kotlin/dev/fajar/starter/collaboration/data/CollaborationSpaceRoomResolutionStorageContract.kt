@@ -5,6 +5,7 @@ import dev.fajar.starter.collaboration.data.identity.*
 import dev.fajar.starter.collaboration.data.repositories.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
+import dev.fajar.starter.collaboration.domain.usecases.PrepareCollaborationSpaceRoomRequest
 import dev.fajar.starter.collaboration.domain.usecases.ResolveCollaborationSpaceRoomRequest
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
@@ -165,6 +166,144 @@ abstract class CollaborationSpaceRoomResolutionStorageContract {
                     .value
                     .denial
             )
+        }
+
+    @Test
+    fun owningPreparationPreservesActualFencedCiphertextAndReopensSuccessorOffline() =
+        withDatabase { f ->
+            assertIs<AppResult.Success<CollaborationSpaceConversationCommandRecord>>(
+                f.resolve()(f.conversation(), f.command.id)
+            )
+            val original = f.retained()
+            val rawOriginal = f.raw()
+            val result =
+                assertIs<AppResult.Success<CollaborationSpaceConversationCommandRecord>>(
+                        f.prepare()(f.conversation())
+                    )
+                    .value
+            val successor = assertIs<CollaborationSpaceConversationCommand.Room>(result.command)
+            assertEquals(original.command.id, successor.predecessorId)
+            assertEquals(original.copy(successorId = successor.id), f.retained())
+            val archive =
+                assertNotNull(
+                    f.history.database.commands.archived(
+                        spaceConversationCommandScope(f.access),
+                        spaceConversationCommandPartition(f.access),
+                        f.command.id,
+                    )
+                )
+            assertEquals(rawOriginal, archive.record)
+            val rawSuccessor =
+                assertNotNull(
+                    f.history.database.commands.get(
+                        spaceConversationCommandScope(f.access),
+                        spaceConversationCommandPartition(f.access),
+                        successor.id,
+                    )
+                )
+            val key = f.commandKey.read()
+            f.reopen()
+            assertEquals(AppResult.Success(result), f.prepare()(f.conversation()))
+            assertEquals(
+                rawSuccessor,
+                f.history.database.commands.get(
+                    spaceConversationCommandScope(f.access),
+                    spaceConversationCommandPartition(f.access),
+                    successor.id,
+                ),
+            )
+            assertEquals(key, f.commandKey.read())
+            assertEquals(original.copy(successorId = successor.id), f.retained())
+            assertEquals(1, f.roomReads)
+            assertEquals(1, f.deviceReads)
+        }
+
+    @Test
+    fun owningPreparationFindsCommittedSuccessorAfterActualTransactionReplyIsLost() =
+        withDatabase { f ->
+            assertIs<AppResult.Success<CollaborationSpaceConversationCommandRecord>>(
+                f.resolve()(f.conversation(), f.command.id)
+            )
+            var handoffs = 0
+            val store =
+                object : CommandStore by f.history.database.commands {
+                    override suspend fun archiveAndInsert(
+                        scope: CommandScope,
+                        expected: CommandRecord,
+                        evidence: String,
+                        successor: CommandRecord,
+                    ): Boolean {
+                        assertTrue(
+                            f.history.database.commands.archiveAndInsert(
+                                scope,
+                                expected,
+                                evidence,
+                                successor,
+                            )
+                        )
+                        handoffs++
+                        error("Lost response after actual atomic handoff")
+                    }
+                }
+            val result =
+                assertIs<AppResult.Success<CollaborationSpaceConversationCommandRecord>>(
+                        f.prepare(f.commands(store))(f.conversation())
+                    )
+                    .value
+            assertEquals(result.command.id, f.retained().successorId)
+            f.reopen()
+            assertEquals(AppResult.Success(result), f.prepare()(f.conversation()))
+            assertEquals(1, handoffs)
+            assertEquals(1, f.roomReads)
+        }
+
+    @Test
+    fun cancelledActualHandoffRecoversOriginalSuccessorAfterDatabaseAndParentReplacement() =
+        withDatabase { f ->
+            assertIs<AppResult.Success<CollaborationSpaceConversationCommandRecord>>(
+                f.resolve()(f.conversation(), f.command.id)
+            )
+            var successorId: String? = null
+            val store =
+                object : CommandStore by f.history.database.commands {
+                    override suspend fun archiveAndInsert(
+                        scope: CommandScope,
+                        expected: CommandRecord,
+                        evidence: String,
+                        successor: CommandRecord,
+                    ): Boolean {
+                        assertTrue(
+                            f.history.database.commands.archiveAndInsert(
+                                scope,
+                                expected,
+                                evidence,
+                                successor,
+                            )
+                        )
+                        successorId = successor.id
+                        throw CancellationException("Cancelled after actual handoff commit")
+                    }
+                }
+            assertFailsWith<CancellationException> {
+                f.prepare(f.commands(store))(f.conversation())
+            }
+            val link = f.retained()
+            assertEquals(successorId, link.successorId)
+            f.reopen()
+            val recovered =
+                assertIs<AppResult.Success<CollaborationSpaceConversationCommandRecord>>(
+                        f.prepare()(f.conversation())
+                    )
+                    .value
+            assertEquals(successorId, recovered.command.id)
+            assertEquals(
+                f.command.id,
+                assertIs<CollaborationSpaceConversationCommand.Room>(recovered.command)
+                    .predecessorId,
+            )
+            assertEquals(link, f.retained())
+            assertEquals(1, f.roomReads)
+            assertEquals(1, f.deviceReads)
         }
 
     private fun withDatabase(block: suspend (Scenario) -> Unit) = runTest {
@@ -329,6 +468,71 @@ abstract class CollaborationSpaceRoomResolutionStorageContract {
 
         fun conversation() =
             CollaborationSpaceConversation(owner, receipt.id, access.accountId, peer, peer, now, 0)
+
+        var roomReads = 0
+        var deviceReads = 0
+
+        fun prepare(commands: CollaborationSpaceConversationCommandRepository = commands()) =
+            PrepareCollaborationSpaceRoomRequest(
+                commands,
+                object : CollaborationSpaceRoomRepository by remote {
+                    override suspend fun get(
+                        conversation: CollaborationSpaceConversation
+                    ): AppResult<CollaborationSpaceRoomView> {
+                        roomReads++
+                        assertEquals(this@Scenario.conversation(), conversation)
+                        return AppResult.Success(
+                            CollaborationSpaceRoomView(conversation, null, null)
+                        )
+                    }
+                },
+                object : CollaborationSpaceDeviceRepository {
+                    override suspend fun register(
+                        owner: CollaborationSpaceOwner,
+                        command: CollaborationSpaceRegistrationCommand,
+                    ): AppResult<CollaborationSetupReceipt> = error("No device registration")
+
+                    override suspend fun status(
+                        owner: CollaborationSpaceOwner
+                    ): AppResult<CollaborationSpaceDeviceObservation> {
+                        deviceReads++
+                        assertEquals(this@Scenario.owner, owner)
+                        return AppResult.Success(
+                            CollaborationSpaceDeviceObservation(
+                                owner,
+                                CollaborationSpaceDeviceStatus(
+                                    historyId(13008),
+                                    12,
+                                    CollaborationDeviceState.ACTIVE,
+                                    CollaborationNativePlatform.ANDROID,
+                                    CollaborationSpaceDeviceOrigin.LEGACY,
+                                    "Fixture",
+                                    CollaborationSpaceProvisioningStatus(
+                                        0,
+                                        CollaborationProvisioningState.SUCCEEDED,
+                                        1,
+                                        now - 60.seconds,
+                                        CollaborationSpaceProvisioningOutcome(
+                                            0,
+                                            CollaborationProvisioningState.SUCCEEDED,
+                                            now - 120.seconds,
+                                            null,
+                                        ),
+                                        null,
+                                    ),
+                                    now,
+                                    null,
+                                ),
+                            )
+                        )
+                    }
+                },
+                directory(),
+                sessions,
+                IdentityServer(access.audience, "Fictional server"),
+                AppBuild(AppPlatform.Android, 5, "test", null),
+                clock,
+            )
 
         fun resolve(commands: CollaborationSpaceConversationCommandRepository = commands()) =
             ResolveCollaborationSpaceRoomRequest(

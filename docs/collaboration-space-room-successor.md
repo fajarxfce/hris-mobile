@@ -42,8 +42,8 @@ Missing keys cannot regenerate over retained active or archived records; account
 changes remain guarded by the raw store. A second handoff retains both earlier
 archives and only the immediate current links, without scanning old archives.
 
-The use case that owns current preparation/recovery is still to be connected. It
-must validate both ends before following a retained link and bound any continuation.
+[The owning preparation flow](collaboration-space-room-preparation.md) is now locally
+validated. It checks both ends before following a retained link and bounds continuation.
 A fence alone grants no provider/content authority, and setup operation IDs remain
 separate from original message transaction IDs. No raw database API or Starter
 foundation change is required for this HRIS-specific integration.
@@ -69,3 +69,6 @@ archives and ownership regressions remain in the same gates.
 
 No owning successor preparation, SDK operation, new APK or phone latency acceptance
 is included. Existing Apple wrappers inherit the storage cases; new source CI remains.
+
+Current preparation acceptance is separate from this original storage slice; dispatch,
+published binding, original SDK activation and product routing remain to be connected.

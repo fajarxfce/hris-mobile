@@ -7,6 +7,17 @@ contracts are authoritative; `.work` is staging/evidence, never permission to re
 
 ## Current accepted work — 7 November 2026
 
+Owning Room preparation is locally accepted in this source commit: seven source/test
+files recover original work before current native room/device reads, preserve explicit
+retry account/revision and perform one insertion or exact known-link atomic handoff.
+Focused93110 passed128 cases/224.652s with4,410 stable inputs. One compiler-reported
+unnecessary safe call was removed afterward; first hashes remain separately recorded.
+Final full61602 passed3,829 fresh cases/462 suites/581.105s on4,410 unchanged final inputs,
+zero failures/errors/skips/lint. Root, Android host/release lint, quality/shared Wasm and
+101 explicitly verified Browser cases pass. Actual23 domain preparation and7 combined
+resolution/preparation SQLite/IndexedDB cases run on Desktop/Browser. All jobs reaped.
+[Contract/results](collaboration-space-room-preparation.md). No SDK/product caller/APK.
+
 Atomic Room handoff is locally accepted: eleven source/test files, exact original
 ciphertext, immutable archive successor and replacement predecessor, existing raw
 archiveAndInsert and unchanged shared capacity128. New replacements cannot be inserted
@@ -45,23 +56,33 @@ Their source contracts and exact results are linked by architecture and prior ch
 
 ## Next work
 
-1. Accepted source0d10c395fb0c637d27344d037d63961a1af9bd80 remains on primary.
-   First control42383612502 is IN_PROGRESS; native42383612567 is still PENDING behind
-   firstfe native42380243983. Preserve both first0d runs before another primary
-   promotion. Recovery accepted atomic source98ef15a6 is not yet promoted.
-2. Seven next Room preparation source/test files are APPLIED/FROZEN and NOT accepted.
-   Sole heavy job93110 runs `.work/space-room-preparation-2026-11-07/focused-1`
-   (128 expected cases), then required full root/Android host/release lint/101 actual
-   Browser cases/shared Wasm. It recovers active originals before finite native room/
-   device reads, preserves exact retry account/revision, and performs one insertion or
-   atomic fenced handoff with exact known-link recovery. 23 domain and three additional
-   actual storage cases plus real DI binding are included. Reap before editing these
-   seven inputs or starting another compiler/emulator. A new unnecessary-safe-call
-   warning in RoomPreparationPolicy should be removed after this first gate is reaped.
-   No SDK action, product caller or new APK is added. Next Room dispatch/projection and
-   original LEGACY binding validation remain. Previous eleven atomic candidates are
-   historical accepted copies and must not be reapplied.
-3. Implement current-admitted owning Room preparation/dispatch,
+Priority steering received after local acceptance: user confirms release53 STILL has
+long pending and explicitly requests that we send real test messages ourselves to
+their account or another contact. Use original Bima emulator on serial5562 to send
+a bounded real test to Karyawan Demo, measure enqueue/Matrix ACK/projection, and
+continue the broader PRD after the latency investigation. No phone UI interaction
+is needed. New bounded ADB connect31740 at15:41UTC timed out/reaped. Avoid repeating
+feedback questions; device unavailability must not stop this authorized self-test.
+No local heavy job remains; all61602/93110 and CI audits are reaped. Finish this
+accepted source commit/push before emulator startup; no compiler/emulator overlap.
+
+
+1. First0d10c395 control42383612502 and native42383612567 have BOTH STARTED.
+   Earlier firstfe control42380244144/native42380243983 are fully accepted below.
+   Commit/push this accepted preparation source, then ordinary fast-forward primary
+   to include atomic handoff98ef15a6 and preparation. Preserve new first source runs
+   before another primary promotion; no CI/provider rerun for old evidence.
+2. Next implement original Room dispatch alongside the existing explicit resolution.
+   Avoid a duplicate full orchestration owner or use-case-to-use-case calls. Design in
+   `.work/space-room-execution-2026-11-07/plan.md` is supplementary, NOT applied source:
+   consider ExecuteCollaborationSpaceRoomRequest with invoke for original dispatch and
+   resolve for the existing fence behavior. Preserve all22 resolution cases, normalized
+   marks/full CAS and2s observed-result capture. Receipt-only reads/fences must not
+   consume send attempts; null receipts and changed parents never authorize replacement.
+   Then persist published room binding and validate original LEGACY metadata before
+   SDK delivery/history, native-parent recovery and product routing. No new execution
+   candidates exist. Seven preparation files are now accepted and must not be reapplied.
+3. Continue owning Room dispatch,
    projection/recovery, original SDK delivery/history, native-parent recovery and product
    routing. A setup receipt/fence is not a message ACK or content authority. New offline
    chats also need provisional peer/Open mapping without replacing original message IDs.
@@ -71,12 +92,17 @@ Their source contracts and exact results are linked by architecture and prior ch
 
 ## Original first CI
 
-First fence transport sourcefe3992f1 control42380244144 is fully audited SUCCESS:
-Apple2,064/233 and portable4,995/552, zero failures/errors/skips. Actual8 fence transport,
-25 Open replay and3 real-storage cases per Apple/Desktop/Browser are verified. iOS host
-build passed. Audit53739 is reaped. Native42380243983 is still in progress; x86 job
-succeeded, complete ARM/original artifact acceptance remains. [Control artifacts](measurements/collaboration-space-room-fence-control-ci-2026-11-07.json).
-
+First fence transport sourcefe3992f1 control42380244144/native42380243983 are fully
+accepted. Apple2,064/233 and portable4,995/552 have zero failures/errors/skips; actual8
+fence/25 Open/3 storage cases per Apple/Desktop/Browser and iOS host build pass.
+Each native ABI551/87 has zero failures/errors/skips, including8 Android host fence
+cases. ARM artifact13579853284/x8613579720811 preserve exactSDK4 hashes, keys/IDs,
+process death and cleanup. Synthetic queue17.969s x86/77.257s ARM sends zero; separate
+six HRIS scenarios retain exact[1,3,3,176,176,176] sends and inapplicable false flags.
+Audits53739/52588 are reaped; no provider reruns. [Control](measurements/collaboration-space-room-fence-control-ci-2026-11-07.json)
+and [native](measurements/collaboration-space-room-fence-native-ci-2026-11-07.json).
+This source does not include durable Fenced/owning resolution/atomic/preparation work;
+first0d source CI and the next promoted source remain separate.
 
 First Open source31e618cc control42376025279 and native42376025306 are fully audited
 SUCCESS. Apple2,056/232 and portable4,979/550 have zero failures/errors/skips; actual25
@@ -93,12 +119,13 @@ is fully accepted, with exact original artifacts retained in the previous checkp
 
 ## Other repositories and live state
 
-Group branch feat/communication-space is32a124b4 (docs checkpoint), native dcdaf220
+Group branch feat/communication-space isf0d85ea5 (docs checkpoint), native dcdaf220
 and HTTP cf885a1c accepted/pushed. Focused195/319.052s and API/FULL worker241/540.839s
 pass with one existing opt-in retention skip. Corrected HTTP99/202.31s on8,637 stable
 inputs passes; initial wrong fixture expectation is retained. V138 storage is c6937843.
-All Group jobs are reaped. Main branch feat/communications isc8649419 (docs checkpoint).
-Starter feat/communications remainsb11437a. Update their handoffs after this source commit.
+All Group jobs are reaped. Main branch feat/communications is6b01d529 (docs checkpoint).
+Starter feat/communications remainsb11437a. Their delivery.json next lists now point at current handoffs instead of obsolete jobs.
+Update cross-repository handoffs after this source commit/promotion.
 
 Live API2e75fe1ee88b5766259fc3efd3ab7f21e70d621a, worker10485916 and schema116.1 remain.
 V117–138 and organization routing are unshipped/disabled. No live rollout or APK is

@@ -64,7 +64,16 @@ and 25 original Open replay plus three storage regressions ran on Apple, Desktop
 and Browser. The iOS application host build also passed.
 [Artifact hashes and selected reports](measurements/collaboration-space-room-fence-control-ci-2026-11-07.json).
 
-Native run `42380243983` remains in progress; the x86 job succeeded, while complete
-artifact acceptance awaits ARM. No provider scenario is rerun. This exact older
-source does not include durable Fenced storage, owning resolution or atomic handoff;
-their own first source CI remains separate. Phone latency remains open.
+Original native run `42380243983` is also fully audited SUCCESS. ARM artifact
+`13579853284` and x86 artifact `13579720811` each contain 551 tests in 87 suites,
+with zero failures, errors or skips and eight actual Android host fence transport
+cases. The APK libraries match immutable SDK4 and pinned NDK28.2.13676358.
+The original synthetic queue retained keys and IDs through process death and offline
+restoration in 77.257 seconds on ARM and 17.969 seconds on x86, sending zero provider
+messages. Six separate HRIS scenarios retain exact send counts [1,3,3,176,176,176]
+and complete cleanup; inapplicable false flags remain explicit. Notification fixture
+cleanup is verified. [Native artifacts](measurements/collaboration-space-room-fence-native-ci-2026-11-07.json).
+
+No provider scenario was rerun for this artifact review. This exact older source does
+not include durable Fenced storage, owning resolution, atomic handoff or preparation;
+their source CI remains separate. Phone latency remains open.

@@ -1,5 +1,8 @@
 # Architecture
 
+[Owned Room request preparation](collaboration-space-room-preparation.md)
+recovers original work before current native/device reads and exact fenced handoff.
+
 [Atomic original room handoff](collaboration-space-room-successor.md)
 preserves exact fenced originals and authenticated successor links in one raw transaction.
 
