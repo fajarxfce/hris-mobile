@@ -11,23 +11,25 @@ import kotlin.time.Instant
 import kotlinx.coroutines.*
 import org.json.JSONObject
 
-/**
- * Actual SDK/Keystore, inert loopback credentials, no sync or messages; preserves original keys.
- */
+/** Actual SDK/Keystore and inert credentials; an optional owned seed adds paused originals. */
 internal class LocalSpaceRuntimeAdoptionProbe(
     private val context: Context,
     private val directory: File,
+    private val queue: OriginalQueueAdoptionProbe? = null,
 ) {
-    private val owned = File(directory, "space-adoption-owned")
+    private val owned =
+        File(directory, if (queue == null) "space-adoption-owned" else "space-original-queue-owned")
     private val checkpoint = File(owned, "checkpoint.json")
 
     suspend fun stage() =
         withContext(Dispatchers.IO) {
             check(!owned.exists() && owned.mkdirs())
-            val f = LocalRuntimeHandoverFixture(context, owned)
+            val f =
+                LocalRuntimeHandoverFixture(context, owned, queue?.baseUrl ?: "http://127.0.0.1:9/")
             try {
                 val originalLease = f.install()
                 val identity = f.identity(originalLease)
+                val pendingQueue = queue?.seed(f, originalLease)
                 f.success(originalLease.close())
                 val target = target(f, identity)
                 f.success(f.runtime.stageExistingHandover(parent(f), target))
@@ -47,6 +49,7 @@ internal class LocalSpaceRuntimeAdoptionProbe(
                         .put("matrixDeviceId", identity.matrixDeviceId)
                         .put("fingerprint", identity.fingerprint)
                         .put("originalRecordDigest", expectedOriginalDigest)
+                        .put("pendingQueue", pendingQueue)
                         .toString()
                 )
                 write(
@@ -96,7 +99,8 @@ internal class LocalSpaceRuntimeAdoptionProbe(
                     saved.getString("matrixDeviceId"),
                     saved.getString("fingerprint"),
                 )
-            val f = LocalRuntimeHandoverFixture(context, owned)
+            val f =
+                LocalRuntimeHandoverFixture(context, owned, queue?.baseUrl ?: "http://127.0.0.1:9/")
             f.name.set(saved.getString("recordName"))
             try {
                 f.select(f.owner)
@@ -117,6 +121,13 @@ internal class LocalSpaceRuntimeAdoptionProbe(
                         lease.deviceId == target.intent.deviceId &&
                         lease.installedOperationId == setup.command.id
                 )
+                val ready =
+                    CollaborationSpaceRuntimeReady(
+                        space(f),
+                        target.intent.deviceId,
+                        setup.command.id,
+                    )
+                queue?.rejectUnpublished(f, ready)
                 f.success(lease.publish())
                 check(
                     f.success(
@@ -134,6 +145,7 @@ internal class LocalSpaceRuntimeAdoptionProbe(
                         f.runtime.isSpaceOpen(space(f), target.intent.deviceId, setup.command.id)
                     )
                 )
+                queue?.verify(f, ready, saved.getJSONObject("pendingQueue"))
                 check(!f.success(f.runtime.isOpen(f.owner, f.device)))
                 check(f.runtime.restore(f.owner, f.device) is AppResult.Failed)
                 f.success(lease.close())
@@ -143,6 +155,10 @@ internal class LocalSpaceRuntimeAdoptionProbe(
                 check(privateIdentity(f, initialized) == identity)
                 val stable = f.record()
                 val reopened = f.success(f.runtime.installOriginal(space(f), target, setup))
+                if (queue != null) {
+                    f.success(reopened.publish())
+                    queue.verify(f, ready, saved.getJSONObject("pendingQueue"))
+                }
                 f.success(reopened.close())
                 check(f.record() == stable)
                 check(privateIdentity(f, JSONObject(stable)) == identity)
@@ -164,6 +180,8 @@ internal class LocalSpaceRuntimeAdoptionProbe(
                     .put("originalFieldsAndQueueNamespacePreserved", true)
                     .put("originalPrivateKeysPreserved", true)
                     .put("sameBootstrapReplayWithoutWrite", true)
+                    .put("actualPendingQueueRetained", queue != null)
+                    .put("originalQueueReadOffline", queue != null)
                     .put("ownedResourcesReleased", true)
                     .put("ownedFilesRemoved", !owned.exists())
                     .put("liveGroupActivation", false),
@@ -287,6 +305,7 @@ internal class LocalSpaceRuntimeAdoptionProbe(
                     .put("passed", true)
                     .put("complete", true)
                     .put("newMessagesSent", 0)
+                    .put("processId", android.os.Process.myPid())
                     .toString()
             )
     }

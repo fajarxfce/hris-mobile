@@ -4,6 +4,44 @@ This is the active checkpoint. The [historical handoff](agent-handoff-history-th
 retains earlier work verbatim. Detailed measurements below are authoritative; do not
 restart accepted builds, native sends or SDK publication solely to recreate evidence.
 
+## Native original-queue accepted locally — 7 November 2026, 06:19 UTC
+
+Native-3/50423 PASSED134.91s: x86_64 45.932s and arm64-v8a 47.049s. Both retained
+two exact original paused transactions across schema4 cancellation, actual process
+death and offline existing-only restoration. Exact logical-owner guards, HR-company
+independence, original physical provenance/private keys and replay invariance passed.
+Both owned packages were removed; emulator5564 PID659465/startTicks170880796 is
+stopped with transport absent. No provider sends, Bima data or phone UI changes.
+
+No heavy job or emulator remains. Check-5/5660 passed62.841s with4,305unchanged
+inputs and0fresh XML (reused). The eight source/proof/driver/test/workflow files are
+accepted and ready to commit/push from1bb572eb. Root Python59 includes12 new driver/
+seed cases; proof lint has0errors/49existing warnings and Detekt0findings. The program
+and APK c1eebb89d420b51dd532d5d5bce90f3fcffc4c64fc276af1be131f9e4f67a248 remain exactly
+those exercised by native-3; the only subsequent source change is the reviewed CI job.
+[Contract](collaboration-space-original-queue-native.md),
+[evidence](measurements/collaboration-space-original-queue-native-2026-11-07.json).
+Commit explicitly and push the temporary branch; preserve first pending primary runs.
+
+Native-1 and native-2 failed the unchanged zero-unexpected-request guard after successful
+staging; offline recovery/ARM were not reached. Their userdata/sidecars and results are
+preserved. Native-2 identified two exact-user account_data reads. The seed now returns
+Matrix404 M_NOT_FOUND for the synthetic account's absent data; other users, writes,
+malformed types and all send/join routes remain rejected. Guards were not weakened.
+
+Primary and temporary Mobile remain1bb572eb05b60a17e8b96762124d22cbd7d21dd4. FIRST1bb
+control42344998885/native42344999033 are PENDING; preserve before another primary-source
+push. Protocol42344998987 is running (native mode already successful). FIRSTa48 control
+42342142245/native42342142282 are running; x86 job128317145519 failed, ARM unfinished.
+Audit original artifacts once complete. FIRST2509 control42340255503 is fully audited,
+4,629portable/516+1,881Apple/215,zero all/digests verified; its public record is uncommitted.
+
+This proof accepts original pending continuity only, not application-command matching,
+live delivery, organization activation or phone latency. Next own publication and
+logical conversation/history/immutable command mappings, new-parent recovery and all54
+PRD groups. Phone53 optional feedback/latency stay OPEN; Bima has eligible device/key.
+No SDK4 rebuild/republication, original Bima reset, or live API/V117–137 activation.
+
 ## Accepted original queue observation — 7 November 2026, 05:55 UTC
 
 The exact logical-runtime queue observation is accepted and ready to commit/push from

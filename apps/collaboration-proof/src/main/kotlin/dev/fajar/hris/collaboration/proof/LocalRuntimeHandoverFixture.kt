@@ -13,18 +13,36 @@ import dev.fajar.starter.securestorage.*
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import java.io.File
+import java.net.URI
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.Instant
 import kotlinx.coroutines.*
 import org.json.JSONObject
 
-/** Real SDK/Keystore with inert credentials and an unreachable loopback provider, emulator only. */
-internal class LocalRuntimeHandoverFixture(private val context: Context, val owned: File) {
+/** Real SDK/Keystore with inert credentials and an owned loopback endpoint, emulator only. */
+internal class LocalRuntimeHandoverFixture(
+    private val context: Context,
+    val owned: File,
+    endpointUrl: String = "http://127.0.0.1:9/",
+) {
+    init {
+        val endpoint = URI(endpointUrl)
+        require(
+            endpoint.scheme == "http" && endpoint.host == "127.0.0.1" && endpoint.port in 1..65535
+        )
+        require(
+            endpoint.rawPath == "/" &&
+                endpoint.rawUserInfo == null &&
+                endpoint.rawQuery == null &&
+                endpoint.rawFragment == null
+        )
+    }
+
     val owner =
         CollaborationOwner(
             "local-handover",
-            "http://127.0.0.1:9/api/v1/",
+            endpointUrl + "api/v1/",
             "11111111-1111-4111-8111-111111111111",
             "22222222-2222-4222-8222-222222222222",
             "33333333-3333-4333-8333-333333333333",
@@ -110,7 +128,7 @@ internal class LocalRuntimeHandoverFixture(private val context: Context, val own
             clients,
             AesGcmContentCipher(),
             IdentityServer(owner.audience, "Owned SDK handover"),
-            CollaborationSdkEndpoint("http://127.0.0.1:9/", allowCleartext = true),
+            CollaborationSdkEndpoint(endpointUrl, allowCleartext = true),
             http,
             inventories =
                 object : CollaborationSdkInventorySource {

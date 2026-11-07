@@ -1,5 +1,11 @@
 # Validation
 
+[Original paused native queue continuity](collaboration-space-original-queue-native.md)
+now has actual x86_64 and ARM64 evidence across interrupted adoption, process death and
+offline restoration. The measurement preserves two earlier fixture failures and their
+correction. Both ABI CI jobs include this proof; first CI acceptance remains pending.
+Live original-message delivery and phone latency are still separate open checks.
+
 ## Release24 and routing hosted acceptance — 3 November 2026
 
 [Release24](measurements/android-release-phone-2026-11-03-build24.json) from clean

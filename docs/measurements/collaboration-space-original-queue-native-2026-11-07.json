@@ -1,0 +1,422 @@
+{
+  "recordedAt": "2026-11-07T06:19:17.404077+00:00",
+  "baseCommit": "1bb572eb05b60a17e8b96762124d22cbd7d21dd4",
+  "sourceFiles": {
+    ".github/workflows/collaboration-hris.yml": "3758191b249ef9e2d538bc44e5e7bd173bff00b4a2f47bf8895f6080507407ce",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/LocalRuntimeHandoverFixture.kt": "7d38759678c0d651263599165f6f276ca2a1a29123e4f372d1a8b46911660d48",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/LocalSpaceRuntimeAdoptionProbe.kt": "b8ed679ca1401fd50aa48fcd1d27f3a97732d3d19050f4cd43c2fb0d3667c2a0",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "aef8ee0a625971aa0db4a63e1e20120746778f35e4469656330aee9398fe556f",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/OriginalQueueAdoptionProbe.kt": "bb3fed1fc24bfc3cd57b63f1e641bbd6cc1d69258f343b1436661ad01bd37131",
+    "tool/check_space_queue_adoption.py": "709d34d83ddbb7ff1d583967a771a7ddc96ecf6fe0626073f2a0b3a4d3dfe74f",
+    "tool/original_queue_seed.py": "ef8f654951cc370ba73dddea1bf8964b3274467252825e92422c3b387d97b549",
+    "tool/test_original_queue_seed.py": "efb4d457706fd99abc0ba664eb854c7e35ea19ea6bf5ca361858b6668b699bfb"
+  },
+  "checks": [
+    {
+      "startedAt": "2026-11-07T05:58:13.428657+00:00",
+      "elapsedSeconds": 118.816,
+      "exitCode": 0,
+      "sourceFiles": 4304,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "check-1",
+      "freshSuites": 0,
+      "manifestSha256": "c375b80c6d4d7228a6f3ccc25cc4174f5cf4e8ffdcb95c3479d6b62319164bd7",
+      "stdoutSha256": "845d67fec8de39c3d57a78c1fbe169eb750398c096c4eae5a61297111332270a",
+      "stderrSha256": "18d75bb7adf66261a895f05a3811a52f570bce23749d78805c91b5e129d0a91f"
+    },
+    {
+      "startedAt": "2026-11-07T06:01:22.952987+00:00",
+      "elapsedSeconds": 58.728,
+      "exitCode": 0,
+      "sourceFiles": 4304,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "check-2",
+      "freshSuites": 0,
+      "manifestSha256": "459bc8a2df4c6c5bc2fec45ff13b4c7060afe46fd232b961c66333489a546e0a",
+      "stdoutSha256": "2f832378155fe5720367c3feb7d19a8c410b132f340cecbdaaf596d248075116",
+      "stderrSha256": "8498ef7e3f82bae202b056d02a4af6b6c92c7060d22d82a19e94281fc1006126"
+    },
+    {
+      "startedAt": "2026-11-07T06:07:39.475709+00:00",
+      "elapsedSeconds": 61.455,
+      "exitCode": 0,
+      "sourceFiles": 4304,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "check-3",
+      "freshSuites": 0,
+      "manifestSha256": "3113debba02a32a12269524c865bb9d086e38d3e71d5b921037046b33dc3ea91",
+      "stdoutSha256": "f541e02d342834e1b0ce98e3d45d6b353ccfc3576223569132d3953ad95d5085",
+      "stderrSha256": "89159b1103a9b0ebea6b8803e8df8185332c3bc45d692a357411dd02fba1283d"
+    },
+    {
+      "startedAt": "2026-11-07T06:13:59.795200+00:00",
+      "elapsedSeconds": 61.025,
+      "exitCode": 0,
+      "sourceFiles": 4304,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "check-4",
+      "freshSuites": 0,
+      "manifestSha256": "d5473cc9c7c659f824b6e08c91f6034ceeef5cb128981a597a8d23e32c81f5f1",
+      "stdoutSha256": "fd08c80e284a104a12d6e56da0082ef9a59722589695388e47659f980fd0d45d",
+      "stderrSha256": "191d27cdb2c2d97310517f3af78ec43ce36a6cc26f5c34724221f950ddeada20"
+    },
+    {
+      "startedAt": "2026-11-07T06:17:55.427779+00:00",
+      "elapsedSeconds": 62.841,
+      "exitCode": 0,
+      "sourceFiles": 4305,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "name": "check-5",
+      "freshSuites": 0,
+      "manifestSha256": "23e111e085b0b8154f327da80753330779ba58249a57edf0b66c50446a57f0d9",
+      "stdoutSha256": "16798c1bcf468f71a5ac6bccc62e98d5624725a82e6f3b237d82c802ff35238b",
+      "stderrSha256": "291cf5a5ea811e27e3c3bc5bdf5f82e74e97cd6b0ed539599a242fbe5944f6f5"
+    }
+  ],
+  "nativeAttempts": [
+    {
+      "name": "native-1",
+      "result": {
+        "startedAt": "2026-11-07T06:02:45.979501+00:00",
+        "serial": "emulator-5564",
+        "apkSha256": "c1eebb89d420b51dd532d5d5bce90f3fcffc4c64fc276af1be131f9e4f67a248",
+        "sourceFiles": 4304,
+        "complete": false,
+        "sdk": "26.10.23-hris.4",
+        "providerRequired": false,
+        "syntheticRoomSeed": true,
+        "phoneTouched": false,
+        "originalBimaTouched": false,
+        "liveGroupActivation": false,
+        "newProviderMessagesSent": 0,
+        "cases": [
+          {
+            "complete": false,
+            "serial": "emulator-5564",
+            "abi": "x86_64",
+            "apkSha256": "c1eebb89d420b51dd532d5d5bce90f3fcffc4c64fc276af1be131f9e4f67a248",
+            "sdk": "26.10.23-hris.4",
+            "syntheticRoomSeed": true,
+            "providerMessagesSent": 0,
+            "liveHrisAcceptance": false,
+            "selectedAbiVerified": true,
+            "stage": {
+              "originalSdkClosed": true,
+              "committedBeforeCancellation": true,
+              "uninitializedAdoptionRetained": true,
+              "originalFieldsAndQueueNamespacePreserved": true,
+              "originalPrivateKeysPreserved": true,
+              "ownedResourcesReleased": true,
+              "passed": true,
+              "complete": true,
+              "newMessagesSent": 0,
+              "processId": 3218
+            },
+            "seedRequests": {
+              "GET /_matrix/client/versions": 1,
+              "unexpected": 2,
+              "POST /_matrix/client/v3/keys/upload": 1,
+              "POST /_matrix/client/v3/keys/query": 2,
+              "GET /_matrix/client/v3/sync": 1
+            },
+            "failureCategory": "AssertionError",
+            "instrumentationFailure": {
+              "complete": true
+            },
+            "failedFixtureRetainedForInspection": true,
+            "seconds": 40.992
+          }
+        ],
+        "failureCategory": "AssertionError",
+        "emulatorStopped": {
+          "pid": 576911,
+          "serial": "emulator-5564",
+          "stopped": true,
+          "signalSent": true,
+          "transportAbsent": true,
+          "seconds": 1.807
+        },
+        "sourcesUnchanged": true,
+        "apkUnchanged": true,
+        "elapsedSeconds": 82.895
+      },
+      "resultSha256": "09fc8c00961bd313039a0e10519cf730f20c184a5a6c1aa12bfd7e367723c42a"
+    },
+    {
+      "name": "native-2",
+      "result": {
+        "startedAt": "2026-11-07T06:09:22.513327+00:00",
+        "serial": "emulator-5564",
+        "apkSha256": "c1eebb89d420b51dd532d5d5bce90f3fcffc4c64fc276af1be131f9e4f67a248",
+        "sourceFiles": 4304,
+        "complete": false,
+        "sdk": "26.10.23-hris.4",
+        "providerRequired": false,
+        "syntheticRoomSeed": true,
+        "phoneTouched": false,
+        "originalBimaTouched": false,
+        "liveGroupActivation": false,
+        "newProviderMessagesSent": 0,
+        "cases": [
+          {
+            "complete": false,
+            "serial": "emulator-5564",
+            "abi": "x86_64",
+            "apkSha256": "c1eebb89d420b51dd532d5d5bce90f3fcffc4c64fc276af1be131f9e4f67a248",
+            "sdk": "26.10.23-hris.4",
+            "syntheticRoomSeed": true,
+            "providerMessagesSent": 0,
+            "liveHrisAcceptance": false,
+            "selectedAbiVerified": true,
+            "stage": {
+              "originalSdkClosed": true,
+              "committedBeforeCancellation": true,
+              "uninitializedAdoptionRetained": true,
+              "originalFieldsAndQueueNamespacePreserved": true,
+              "originalPrivateKeysPreserved": true,
+              "ownedResourcesReleased": true,
+              "passed": true,
+              "complete": true,
+              "newMessagesSent": 0,
+              "processId": 3353
+            },
+            "seedRequests": {
+              "GET /_matrix/client/versions": 1,
+              "unexpected": 2,
+              "POST /_matrix/client/v3/keys/query": 2,
+              "POST /_matrix/client/v3/keys/upload": 1,
+              "GET /_matrix/client/v3/sync": 1
+            },
+            "unexpectedSeedRoutes": {
+              "GET /_matrix/client/v3/*/*/account_data/*": 2
+            },
+            "failureCategory": "AssertionError",
+            "instrumentationFailure": {
+              "complete": true
+            },
+            "failedFixtureRetainedForInspection": true,
+            "seconds": 41.135
+          }
+        ],
+        "failureCategory": "AssertionError",
+        "emulatorStopped": {
+          "pid": 621017,
+          "serial": "emulator-5564",
+          "stopped": true,
+          "signalSent": true,
+          "transportAbsent": true,
+          "seconds": 2.005
+        },
+        "sourcesUnchanged": true,
+        "apkUnchanged": true,
+        "elapsedSeconds": 82.756
+      },
+      "resultSha256": "ae105f590bcb4a6273f018382f82d93a5057d7503aeadf93c798d401ca7d53a7"
+    },
+    {
+      "name": "native-3",
+      "result": {
+        "startedAt": "2026-11-07T06:15:15.278140+00:00",
+        "serial": "emulator-5564",
+        "apkSha256": "c1eebb89d420b51dd532d5d5bce90f3fcffc4c64fc276af1be131f9e4f67a248",
+        "sourceFiles": 4304,
+        "complete": true,
+        "sdk": "26.10.23-hris.4",
+        "providerRequired": false,
+        "syntheticRoomSeed": true,
+        "phoneTouched": false,
+        "originalBimaTouched": false,
+        "liveGroupActivation": false,
+        "newProviderMessagesSent": 0,
+        "cases": [
+          {
+            "complete": true,
+            "serial": "emulator-5564",
+            "abi": "x86_64",
+            "apkSha256": "c1eebb89d420b51dd532d5d5bce90f3fcffc4c64fc276af1be131f9e4f67a248",
+            "sdk": "26.10.23-hris.4",
+            "syntheticRoomSeed": true,
+            "providerMessagesSent": 0,
+            "liveHrisAcceptance": false,
+            "selectedAbiVerified": true,
+            "stage": {
+              "originalSdkClosed": true,
+              "committedBeforeCancellation": true,
+              "uninitializedAdoptionRetained": true,
+              "originalFieldsAndQueueNamespacePreserved": true,
+              "originalPrivateKeysPreserved": true,
+              "ownedResourcesReleased": true,
+              "passed": true,
+              "complete": true,
+              "newMessagesSent": 0,
+              "processId": 3074
+            },
+            "seedRequests": {
+              "GET /_matrix/client/versions": 1,
+              "GET /_matrix/client/v3/user/*/account_data/*": 2,
+              "POST /_matrix/client/v3/keys/upload": 1,
+              "POST /_matrix/client/v3/keys/query": 2,
+              "GET /_matrix/client/v3/sync": 1
+            },
+            "unexpectedSeedRoutes": {},
+            "seedClosedBeforeRecovery": true,
+            "processAbsentBetweenPhases": true,
+            "continuity": {
+              "durableAfterProcessDeath": true,
+              "actualExistingOnlySdkRestore": true,
+              "unpublishedUntilAcceptance": true,
+              "hrCompanySelectionAndDenialIndependent": true,
+              "legacyRuntimeLookupExcluded": true,
+              "originalFieldsAndQueueNamespacePreserved": true,
+              "originalPrivateKeysPreserved": true,
+              "sameBootstrapReplayWithoutWrite": true,
+              "actualPendingQueueRetained": true,
+              "originalQueueReadOffline": true,
+              "ownedResourcesReleased": true,
+              "ownedFilesRemoved": true,
+              "liveGroupActivation": false,
+              "passed": true,
+              "complete": true,
+              "newMessagesSent": 0,
+              "processId": 3670
+            },
+            "fixtureAbsent": true,
+            "seconds": 45.932
+          },
+          {
+            "complete": true,
+            "serial": "emulator-5564",
+            "abi": "arm64-v8a",
+            "apkSha256": "c1eebb89d420b51dd532d5d5bce90f3fcffc4c64fc276af1be131f9e4f67a248",
+            "sdk": "26.10.23-hris.4",
+            "syntheticRoomSeed": true,
+            "providerMessagesSent": 0,
+            "liveHrisAcceptance": false,
+            "selectedAbiVerified": true,
+            "stage": {
+              "originalSdkClosed": true,
+              "committedBeforeCancellation": true,
+              "uninitializedAdoptionRetained": true,
+              "originalFieldsAndQueueNamespacePreserved": true,
+              "originalPrivateKeysPreserved": true,
+              "ownedResourcesReleased": true,
+              "passed": true,
+              "complete": true,
+              "newMessagesSent": 0,
+              "processId": 4089
+            },
+            "seedRequests": {
+              "GET /_matrix/client/versions": 1,
+              "GET /_matrix/client/v3/user/*/account_data/*": 2,
+              "POST /_matrix/client/v3/keys/upload": 1,
+              "POST /_matrix/client/v3/keys/query": 2,
+              "GET /_matrix/client/v3/sync": 1
+            },
+            "unexpectedSeedRoutes": {},
+            "seedClosedBeforeRecovery": true,
+            "processAbsentBetweenPhases": true,
+            "continuity": {
+              "durableAfterProcessDeath": true,
+              "actualExistingOnlySdkRestore": true,
+              "unpublishedUntilAcceptance": true,
+              "hrCompanySelectionAndDenialIndependent": true,
+              "legacyRuntimeLookupExcluded": true,
+              "originalFieldsAndQueueNamespacePreserved": true,
+              "originalPrivateKeysPreserved": true,
+              "sameBootstrapReplayWithoutWrite": true,
+              "actualPendingQueueRetained": true,
+              "originalQueueReadOffline": true,
+              "ownedResourcesReleased": true,
+              "ownedFilesRemoved": true,
+              "liveGroupActivation": false,
+              "passed": true,
+              "complete": true,
+              "newMessagesSent": 0,
+              "processId": 4358
+            },
+            "fixtureAbsent": true,
+            "seconds": 47.049
+          }
+        ],
+        "emulatorStopped": {
+          "pid": 659465,
+          "serial": "emulator-5564",
+          "stopped": true,
+          "signalSent": true,
+          "transportAbsent": true,
+          "seconds": 1.206
+        },
+        "sourcesUnchanged": true,
+        "apkUnchanged": true,
+        "elapsedSeconds": 134.91
+      },
+      "resultSha256": "3579c16db3c19bb82c0613d2f4e278f4ec23baa637ea07f6245f568bacfb5876"
+    }
+  ],
+  "acceptedCommand": [
+    "./gradlew",
+    "--dependency-verification",
+    "strict",
+    "--stacktrace",
+    "--continue",
+    ":check",
+    ":apps:collaboration-proof:compileDebugKotlin",
+    ":apps:collaboration-proof:assembleDebug",
+    ":apps:collaboration-proof:lintDebug",
+    ":formatCheck",
+    ":architectureCheck",
+    "-PappEnvironment=dev",
+    "-PappVersion=1.0.0",
+    "-PappVersionCode=53",
+    "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx2560m",
+    "-Pkotlin.compiler.execution.strategy=in-process"
+  ],
+  "lintErrors": 0,
+  "lintWarnings": 49,
+  "detektFindings": 0,
+  "syntheticRoomSeed": true,
+  "nativePendingContinuityProven": true,
+  "actualPendingMessageDeliveryProven": false,
+  "liveProductCallerAdded": false,
+  "liveGroupActivation": false,
+  "phoneTouched": false,
+  "phoneLatencyResolved": false,
+  "nativeSdkRebuilt": false,
+  "firstCiPending": true,
+  "failedAttemptsPreserved": true,
+  "unsupportedRouteCorrection": "Exact owned-account global data reads return Matrix404 M_NOT_FOUND; all sends, joins, writes and other users remain rejected."
+}

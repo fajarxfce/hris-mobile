@@ -1,5 +1,9 @@
 # Architecture
 
+[Native original-queue continuity](collaboration-space-original-queue-native.md) exercises
+the actual SDK transaction store through interrupted adoption and offline process restart.
+It does not grant new delivery or product-routing authority.
+
 [Original organization queue facts](collaboration-space-original-queue.md) retain the
 physical message namespace while observing one exact logical runtime through its
 existing exclusive paused writer. Publication and delivery remain separately admitted.

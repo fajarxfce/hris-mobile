@@ -13,6 +13,9 @@ on:
       - gradle/verification-metadata.xml
       - tool/check_native_notifications.py
       - tool/test_native_notifications.py
+      - tool/check_space_queue_adoption.py
+      - tool/original_queue_seed.py
+      - tool/test_original_queue_seed.py
       - .github/workflows/collaboration-hris.yml
   pull_request:
     paths:
@@ -24,6 +27,9 @@ on:
       - gradle/verification-metadata.xml
       - tool/check_native_notifications.py
       - tool/test_native_notifications.py
+      - tool/check_space_queue_adoption.py
+      - tool/original_queue_seed.py
+      - tool/test_original_queue_seed.py
       - .github/workflows/collaboration-hris.yml
 
 permissions:
@@ -66,6 +72,7 @@ jobs:
         working-directory: mobile
         run: |
           python3 -m unittest discover -s tool -p 'test_native_notifications.py'
+          python3 -W error::ResourceWarning -m unittest discover -s tool -p 'test_original_queue_seed.py'
           ./gradlew --no-daemon --no-parallel --max-workers=1 -PcollaborationProofAbi=${{ matrix.abi }} :features:collaboration:data:testAndroidHostTest :apps:collaboration-proof:testDebugUnitTest :apps:collaboration-proof:assembleDebug :apps:collaboration-proof:lintDebug
       - name: Verify fixture native ABI before runtime acceptance
         working-directory: mobile
@@ -97,6 +104,7 @@ jobs:
       - uses: reactivecircus/android-emulator-runner@v2
         env:
           HRIS_COLLAB_NATIVE_APK: ${{ github.workspace }}/mobile/apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk
+          HRIS_COLLAB_NATIVE_ABI: ${{ matrix.abi }}
         with:
           api-level: 35
           target: google_apis
@@ -107,6 +115,7 @@ jobs:
           emulator-port: 5560
           emulator-options: -no-window -no-snapshot -noaudio -no-boot-anim -gpu swiftshader -memory 2048 -cores 2
           script: |
+            python3 ./mobile/tool/check_space_queue_adoption.py --serial emulator-5560 --apk "$HRIS_COLLAB_NATIVE_APK" --abi "$HRIS_COLLAB_NATIVE_ABI" --aapt2 "$ANDROID_HOME/build-tools/36.0.0/aapt2" --output ./mobile/.work/native-original-queue-proof
             python3 ./mobile/tool/check_native_notifications.py --serial emulator-5560 --apk "$HRIS_COLLAB_NATIVE_APK" --output ./mobile/.work/native-notification-proof --reply-system-ui
             ./platform/gradlew -p platform --no-daemon --no-parallel --max-workers=1 '-Dorg.gradle.jvmargs=-Xmx1536m -Dfile.encoding=UTF-8' :apps:server:cleanTest :apps:server:test --tests '*NativeCollaborationSdkInteropTest' --tests '*NativeCollaborationWorkerInteropTest' --tests '*NativeCollaborationScheduledInteropTest'
       - uses: actions/upload-artifact@v4
@@ -130,6 +139,7 @@ jobs:
             mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-*.xml
             mobile/apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-*.xml
             mobile/.work/native-notification-proof/
+            mobile/.work/native-original-queue-proof/
             mobile/.work/native-abi.json
           include-hidden-files: true
           if-no-files-found: error

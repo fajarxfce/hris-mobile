@@ -30,5 +30,7 @@ organization projection and match these facts to immutable application commands.
 
 [Validation](measurements/collaboration-space-original-queue-2026-11-07.json) records
 the host regressions and complete local application checks. The host queue is simulated;
-actual old pending-transaction adoption and delivery remain separate native integration
-work. No product caller, group activation or physical-phone latency claim is added.
+[actual paused native transactions](collaboration-space-original-queue-native.md) now
+survive interrupted adoption and offline process restart on both Android ABIs. Live
+delivery remains separate. No product caller, group activation or physical-phone
+latency claim is added.
