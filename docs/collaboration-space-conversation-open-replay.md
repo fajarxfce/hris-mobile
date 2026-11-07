@@ -91,6 +91,12 @@ Original Apple artifact13577353748 contains2,056 cases/232 suites; portable13577
 contains4,979 cases/550 suites, zero failures/errors/skips. Their GitHub digests and
 actual25 Open replay plus3 real-storage cases on each Apple/Desktop/Browser target
 are verified. No provider scenario was rerun. [Artifacts and report hashes](measurements/collaboration-space-conversation-open-control-ci-2026-11-07.json).
-First native42376025306 still awaits ARM completion and original-artifact audit.
+First native42376025306 is now fully audited SUCCESS:543 cases/86 suites per ABI,
+zero failures/errors/skips, exact SDK4 native hashes and NDK28.2.13676358. Original
+queue continuity20.779s x86/74.454s ARM preserved keys/IDs through process death and
+rejected partial resume, with zero provider sends and full cleanup. Separate six
+HRIS scenarios retain exact send counts and their own accepted cleanup; inapplicable
+false flags remain explicit. [Native artifacts](measurements/collaboration-space-conversation-open-native-ci-2026-11-07.json).
+No native/provider scenario was rerun to audit these original artifacts.
 This source predates the fence transport/storage/owning-resolution slices; it does
 not establish their source CI or phone53 latency acceptance.

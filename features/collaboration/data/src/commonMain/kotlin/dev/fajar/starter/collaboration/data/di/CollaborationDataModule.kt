@@ -79,6 +79,25 @@ class CollaborationDataModule {
     ) = ReadCollaborationSpaceSdkInventory(registrations, inventory, sessions, server)
 
     @Factory
+    fun resolveSpaceRoomRequest(
+        commands: CollaborationSpaceConversationCommandRepository,
+        rooms: CollaborationSpaceRoomRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ResolveCollaborationSpaceRoomRequest(
+            commands,
+            rooms,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun replaySpaceConversationOpen(
         commands: CollaborationSpaceConversationCommandRepository,
         conversations: CollaborationSpaceConversationRepository,

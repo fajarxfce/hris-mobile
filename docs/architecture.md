@@ -1,5 +1,8 @@
 # Architecture
 
+[Owned original room resolution](collaboration-space-room-request-resolution.md)
+coordinates current native admission and durable evidence capture without replacing messages or SDK state.
+
 [Durable original room non-execution evidence](collaboration-space-room-fence-storage.md)
 retains exact immutable fences without changing old request envelopes or granting successor authority.
 

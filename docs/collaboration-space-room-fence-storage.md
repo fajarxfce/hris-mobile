@@ -57,3 +57,6 @@ regression still exercises normalization of durable error text before exact CAS.
 
 No product caller, successor, SDK operation, new APK or phone-latency acceptance is
 included. Apple storage wrappers inherit the cases and still require source CI.
+
+[Owning finite resolution](collaboration-space-room-request-resolution.md) now uses this
+storage with exact normalized marks and bounded capture. Atomic successor linkage remains separate.
