@@ -1,5 +1,9 @@
 # Architecture
 
+[Owned canonical conversation metadata](collaboration-space-conversation-metadata.md)
+keeps immutable pair facts independent of mutable login/native identity, with atomic
+encrypted conversation/peer indexes. Current content admission remains separate.
+
 [Owned conversation command observation](collaboration-space-conversation-observation.md)
 keeps local facts independent of token age and cancels old account subscriptions without
 starting business retry. Preparation, dispatch and canonical projection are separate.

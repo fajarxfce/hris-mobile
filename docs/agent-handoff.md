@@ -8,8 +8,15 @@ and staging, never permission to reapply old candidates.
 
 ## Current accepted work — 7 November 2026
 
-Owning local command observation is accepted in the source commit containing this
-checkpoint: four files (domain flow, data factory, seven lifetime/ownership cases,
+Canonical conversation metadata is accepted in the source commit containing this
+checkpoint: ten Kotlin files, native-parent-free facts, atomic encrypted conversation/
+peer indexes and actual application binding. Focused15306 passed16 cases183.384s;
+full33894 passed3,614 fresh cases/448 suites476.855s on4,380 unchanged inputs, zero
+failures/errors/skips/lint. Root/Android host/quality/14 actual Browser cases/shared
+Wasm passed. All local jobs reaped. [Contract/results](collaboration-space-conversation-metadata.md).
+No new APK, product caller, provider operation or phone latency acceptance.
+
+Owning local command observation3b3a5d81 is accepted/pushed to both branches: four files (domain flow, data factory, seven lifetime/ownership cases,
 actual application binding resolution). Focused75614 passed7 cases104.606s; full49430
 passed3,593 fresh cases466.030s on4,371 unchanged inputs, zero failures/errors/skips or
 Android release lint issues. Root/Android host/format/architecture/Detekt/actual Browser
@@ -28,14 +35,17 @@ No product caller, new APK or organization routing activation exists for these p
 
 ## Next work
 
-1. Push this accepted source to recovery and primary after confirming both first79b
-   runs have started (last observed BOTH in progress). Preserve any newly queued first
-   run before another primary promotion. Continue code on recovery while CI runs.
-2. Implement the owned canonical conversation projection needed before Recorded
-   command archival. Strip mutable login/native parent from persisted conversation
-   metadata. Atomically retain conversation and peer indexes in one replica transaction;
-   identical data must preserve ciphertext/revision. Use bounded reads and explicit key
-   custody; existing directory/history key guards only cover their own prefixes.
+1. Accepted3b3a5d81 is pushed to recovery and primary. First control42369792173 and
+   native42369792184 are pending behind running79b. Preserve these first pending runs
+   before another primary promotion; continue code on recovery while CI runs.
+2. Push this accepted metadata increment to recovery; preserve first3b3 pending CI
+   before primary promotion. Then apply the SEVEN prepared owning Open preparation
+   files under .work/space-conversation-preparation-2026-11-07/candidate only after
+   checking manifest baseline hashes. They are not applied/tested. They recover an
+   active same-peer original or canonical ID before allocating a new operation,
+   retain known denial for new setup, and reconcile exact-ID lost insertion replies.
+   Thirteen domain cases and application binding are prepared, with focused/full
+   verification drivers. No HTTP, SDK, archive or product routing in that increment.
 3. Implement finite owning prepare/replay and projection-before-archive. Recover the
    same original resource/operation after response loss; CAS to Unconfirmed BEFORE HTTP.
    Separate native account/MFA/client denial from conversation/peer denial; do not close
@@ -50,9 +60,12 @@ No product caller, new APK or organization routing activation exists for these p
    and all54 PRD groups:3 in progress/51 planned/none complete. Physical iPhone testing
    is waived, but relevant Apple CI/compilation remains required.
 
-The reviewed detailed source notes remain under `.work/space-conversation-commands-
-2026-11-07/next-owning-flow.md`. All observation/storage candidates are now historical
-applied staging, not pending patches. No new projection or fence implementation exists.
+The reviewed source notes remain in .work/space-conversation-metadata-2026-11-07/
+next-preparation.md and the prior command next-owning-flow.md. The metadata key decision
+is now explicit: its partition is INSIDE the existing guarded collaboration-history/
+prefix, like organization root metadata, tested against metadata-only and inactive-
+account key loss. Metadata sources are accepted; preparation candidates are unapplied.
+No fence implementation exists. Do not reinterpret a missing receipt as non-execution.
 
 ## Original SDK and phone invariants
 
@@ -88,6 +101,7 @@ the cause or resolution of the user's20s–2min pending delay.
 
 ## CI and live state
 
+First3b3 control42369792173/native42369792184 are PENDING. Preserve them.
 First79b control42366357406/native42366357400 have both STARTED. Audit their original
 artifacts when complete; do not rerun accepted provider scenarios just for evidence.
 First fb514281 control42363807332/native42363807289 are SUCCESS and fully audited:
@@ -96,13 +110,14 @@ portable4,805/534; Apple1,969/224; each native ABI537/85, all zero failures/erro
 [native evidence](measurements/collaboration-room-receipts-native-ci-2026-11-07.json).
 Original queue continuity24.827s x86/80.993s ARM preserved keys/IDs through process death,
 zero provider sends and full cleanup. Older e8fc and72a original evidence is in history;
-72a's app fake compilation failure was corrected and accepted ine8fc. Newer storage/
-observation source still needs its own Apple/native CI after primary promotion.
+72a's app fake compilation failure was corrected and accepted ine8fc. Storage/observation await first3b3 Apple/native CI; newer metadata will require
+its own primary CI after pending runs have started.
 
 Live API2e75fe1ee88b5766259fc3efd3ab7f21e70d621a, worker10485916, schema116.1 remain
 unchanged. Group V117–137 remain disabled/unshipped. Starterb11437a is clean/pushed;
 current HRIS-specific work requires no generic Starter port. Main branch checkpoint
-37b3f324 and Group839c3ae2 point here for build ownership; update them after promotion.
+3fcccde8 and Group2316eadb point here for build ownership; their earlier running-job
+statements are superseded by accepted full33894 above.
 
 ## Work rules
 

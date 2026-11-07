@@ -1,0 +1,158 @@
+{
+  "scope": "Owned immutable conversation metadata with atomic encrypted conversation/peer indexes; no product activation",
+  "parentCommit": "3b3a5d81f5632dba10f0796edbe59204a56614f8",
+  "sources": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/identity/CollaborationSpaceConversationMetadataCodec.kt": "8cca3b0b6957bc3608d1f537baa96527209f480f4e7d15e77f66b6a77b58665b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceConversationMetadataRepository.kt": "0e3b36339d090f49f42b3b59b1dacc4ae8fed7eb1f5a41f039fb30478b35d40e",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceConversationMetadataStorageContract.kt": "ab86e8078fc0dd13bd726344c99c586d01b213c81d3ad20273a9fc710efc65c7",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceConversationMetadataStorageTest.kt": "1b97a019332f5720bdfe8f3b77d83b62a2b9c9b5f4a6776367c367b191b6054b",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceConversationMetadataStorageTest.kt": "c3043ca921c7e36b5d5dd51f77fe888aab73879434753cc82b17f1c7f08dc26d",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceConversationMetadataStorageTest.kt": "c97014209249816790de78cea099f0627943c0c927f0a503bff95381dcf0cbb9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceConversationMetadata.kt": "9daeba72baa4074f529429137f0702f670e8d38605c8f60d8518d158cd62662b",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceConversationMetadataPolicy.kt": "f16cf00acdceab7bcee937d2345cb1dc1ba0310a218188327769dce310ab8ae8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceConversationMetadataRepository.kt": "a5f3b8aeaf92fdaee821593b843fc7f9064461c3715766c32781e7ee878dfcef",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "f591383001bd298f47d6cccc9f70674cb34754cec9a314a7eb00b05cebeef648"
+  },
+  "runs": {
+    "focused-1": {
+      "startedAt": "2026-11-07T11:59:12.013595+00:00",
+      "elapsedSeconds": 183.384,
+      "exitCode": 0,
+      "sourceFiles": 4380,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":features:collaboration:data:desktopTest",
+        "--tests",
+        "*CollaborationSpaceConversationMetadataStorageTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationBindingsTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PcollaborationProofAbi=x86_64",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "freshSuites": 2,
+      "reusedSuites": 737,
+      "sourceManifestSha256": "2cbd91ae2380404791a3cd3965cc9b1250964ef633aa50bcc9c53c7adffba47e",
+      "resultSha256": "2bd6f658629f86e1a2632eb6bc68adb7f69a16043ee1076bb1bc7b1614d52dfa",
+      "stdoutSha256": "d8d4c656805f9e1cd09039f1cfd296f9fc787a356406f96cad8e99cdbef845b7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "owningReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "c0c2262ed01b58110b93b122f2d8d687f8da527b796b4bed9a0af9eb3a3bfdbf",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceConversationMetadataStorageTest.xml": {
+          "sha256": "7a60d8a63b6a68878829901df69db1aee487f1644c18aa84e78147c4fdcc886c",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "full-1": {
+      "startedAt": "2026-11-07T12:02:26.134922+00:00",
+      "elapsedSeconds": 476.855,
+      "exitCode": 0,
+      "sourceFiles": 4380,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3614,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "gradleArguments": [
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":check",
+        ":features:collaboration:data:testAndroidHostTest",
+        ":apps:android:lintDevRelease",
+        ":features:collaboration:data:wasmJsBrowserTest",
+        "--tests",
+        "*BrowserCollaborationSpaceConversationMetadataStorageTest*",
+        ":apps:shared:compileKotlinWasmJs",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=53",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2560m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "freshSuites": 448,
+      "reusedSuites": 484,
+      "sourceManifestSha256": "2cbd91ae2380404791a3cd3965cc9b1250964ef633aa50bcc9c53c7adffba47e",
+      "resultSha256": "a455a6f8b6402921ba7c836afba21af4261b084019b54e5e3f004d89e3958d10",
+      "stdoutSha256": "904c62634408010b1263145a5f7902f24dff7bce3fa437e2370b7a9752371472",
+      "stderrSha256": "8ac2db001e22d7f67cd0c4d3c5d1c70ab0c25f521936182c1e9d88bb965c2ae3",
+      "owningReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "d3b569c56b3d6ef4e5bb7a1cb40234718ca5ca3ea605f73ca13dd0ef9c566ff8",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceConversationMetadataStorageTest.xml": {
+          "sha256": "9cde1a5be79584ba328a1b75cce4bcf64d14f06e4839bacd458c9ecf80f4d47a",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-was-U1RRNEFO91SNG.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceConversationMetadataStorageTest.xml": {
+          "sha256": "2a1c2d45e3d04b766564f9f82d4d8a0e21c7248295d4d81f02cb119237c263f2",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "androidReleaseLint": {
+    "issues": 0,
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "environment": {
+    "javaHome": "/usr/lib/jvm/java-21-openjdk",
+    "androidSdk": "/home/fajar/Android/Sdk",
+    "gradleWorkers": 1,
+    "compiler": "in-process",
+    "dependencyVerification": "strict"
+  },
+  "apple": "Shared SQLite contract wrapper prepared; this source still requires Apple CI",
+  "phone": "Build 53 unchanged; 20-second to 2-minute delay remains open; no APK built or installed"
+}
