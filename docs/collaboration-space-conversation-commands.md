@@ -1,5 +1,8 @@
 # Durable organization conversation setup commands
 
+[Atomic fenced-original handoff](collaboration-space-room-successor.md) now adds authenticated
+predecessor/successor links while preserving original request/state bytes and old archives.
+
 [Room-only terminal fence storage](collaboration-space-room-fence-storage.md) adds exact
 non-execution evidence while preserving these original envelopes, keys and archive rules.
 

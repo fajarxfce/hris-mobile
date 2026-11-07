@@ -23,6 +23,8 @@ sealed interface CollaborationSpaceConversationCommand {
         val intent: CollaborationSpaceRoomRequestIntent,
         override val peerAccountId: String,
         override val createdAt: Instant,
+        /** Exact local predecessor; only atomic handoff may create this replacement. */
+        val predecessorId: String? = null,
     ) : CollaborationSpaceConversationCommand {
         override val id
             get() = intent.operationId
@@ -54,6 +56,8 @@ data class CollaborationSpaceConversationCommandRecord(
     val revision: Long,
     val attempts: Int,
     val outcome: CollaborationSpaceConversationOutcome,
+    /** Authenticated archive link; the original remote outcome remains unchanged. */
+    val successorId: String? = null,
 ) {
     override fun toString() =
         "CollaborationSpaceConversationCommandRecord(revision=$revision, attempts=$attempts)"

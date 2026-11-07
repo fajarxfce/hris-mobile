@@ -27,7 +27,10 @@ fun validCollaborationSpaceConversationCommand(
         is CollaborationSpaceConversationCommand.Open -> true
         is CollaborationSpaceConversationCommand.Room -> {
             val request = command.intent.request
-            validCollaborationSpaceConversationId(command.intent.conversationId) &&
+            (command.predecessorId == null ||
+                (validCollaborationSpaceConversationId(command.predecessorId) &&
+                    command.predecessorId != command.id)) &&
+                validCollaborationSpaceConversationId(command.intent.conversationId) &&
                 validCollaborationSpaceConversationId(request.deviceId) &&
                 request.expectedDeviceVersion in 0..999999 &&
                 (request.expectedAttempt == null ||
@@ -46,7 +49,13 @@ fun validCollaborationSpaceConversationCommandRecord(
         !validCollaborationSpaceConversationCommand(access, record.command) ||
             record.revision !in 0..9_007_199_254_740_991L ||
             record.attempts !in 0..1000 ||
-            record.revision < record.attempts
+            record.revision < record.attempts ||
+            (record.successorId != null &&
+                (record.outcome !is CollaborationSpaceConversationOutcome.Fenced ||
+                    !validCollaborationSpaceConversationId(record.successorId) ||
+                    record.successorId == record.command.id ||
+                    (record.command is CollaborationSpaceConversationCommand.Room &&
+                        record.successorId == record.command.predecessorId)))
     )
         return false
     return when (val outcome = record.outcome) {
@@ -82,7 +91,8 @@ fun validCollaborationSpaceConversationCommandTransition(
     outcome: CollaborationSpaceConversationOutcome,
     attempts: Int,
 ): Boolean =
-    attempts in 1..1000 &&
+    previous.successorId == null &&
+        attempts in 1..1000 &&
         when (val before = previous.outcome) {
             CollaborationSpaceConversationOutcome.Pending ->
                 outcome is CollaborationSpaceConversationOutcome.Unconfirmed && attempts == 1

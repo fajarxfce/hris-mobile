@@ -1,5 +1,8 @@
 # Architecture
 
+[Atomic original room handoff](collaboration-space-room-successor.md)
+preserves exact fenced originals and authenticated successor links in one raw transaction.
+
 [Owned original room resolution](collaboration-space-room-request-resolution.md)
 coordinates current native admission and durable evidence capture without replacing messages or SDK state.
 

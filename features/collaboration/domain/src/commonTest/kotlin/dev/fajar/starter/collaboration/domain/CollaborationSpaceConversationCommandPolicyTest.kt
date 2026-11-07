@@ -40,6 +40,106 @@ class CollaborationSpaceConversationCommandPolicyTest {
         )
 
     @Test
+    fun onlyAnExactUnlinkedFencedRoomCanPrepareItsExplicitSuccessor() {
+        val fence =
+            CollaborationSpaceConversationOutcome.Fenced(
+                CollaborationSpaceRoomRequestFence(room.intent, id(20), open.createdAt)
+            )
+        val original = CollaborationSpaceConversationCommandRecord(room, 2, 1, fence)
+        val next =
+            room.copy(
+                intent =
+                    room.intent.copy(
+                        operationId = id(21),
+                        binding = room.binding.copy(nativeSessionId = id(22)),
+                    ),
+                predecessorId = room.id,
+            )
+        assertTrue(
+            validCollaborationSpaceRoomHandoff(access.copy(sessionId = "renewed"), original, next)
+        )
+        for (outcome in
+            listOf(
+                CollaborationSpaceConversationOutcome.Pending,
+                CollaborationSpaceConversationOutcome.Unconfirmed(),
+                CollaborationSpaceConversationOutcome.Recorded(
+                    CollaborationSetupReceipt(room.intent.conversationId, 1)
+                ),
+            )) {
+            assertFalse(
+                validCollaborationSpaceRoomHandoff(access, original.copy(outcome = outcome), next)
+            )
+        }
+        assertFalse(
+            validCollaborationSpaceRoomHandoff(access, original.copy(successorId = next.id), next)
+        )
+        for (changed in
+            listOf(
+                next.copy(predecessorId = null),
+                next.copy(predecessorId = id(23)),
+                next.copy(intent = next.intent.copy(operationId = room.id)),
+                next.copy(peerAccountId = id(23)),
+                next.copy(intent = next.intent.copy(conversationId = id(23))),
+                next.copy(
+                    intent = next.intent.copy(binding = next.binding.copy(accountId = id(23)))
+                ),
+                next.copy(intent = next.intent.copy(binding = next.binding.copy(spaceId = id(23)))),
+            )) {
+            assertFalse(validCollaborationSpaceRoomHandoff(access, original, changed))
+        }
+    }
+
+    @Test
+    fun archiveLinksRemainTerminalRoomMetadataAndRejectImmediateCycles() {
+        val predecessor = room.copy(predecessorId = id(24))
+        val fence =
+            CollaborationSpaceConversationOutcome.Fenced(
+                CollaborationSpaceRoomRequestFence(predecessor.intent, id(20), open.createdAt)
+            )
+        val original = CollaborationSpaceConversationCommandRecord(predecessor, 2, 1, fence)
+        val linked = original.copy(successorId = id(21))
+        assertTrue(validCollaborationSpaceConversationCommandRecord(access, linked))
+        assertFalse(
+            validCollaborationSpaceConversationCommandTransition(
+                linked,
+                CollaborationSpaceConversationOutcome.Unconfirmed(),
+                2,
+            )
+        )
+        assertFalse(validCollaborationSpaceConversationCommandTransition(linked, fence, 1))
+        for (id in
+            listOf(
+                "00000000-0000-0000-0000-000000000000",
+                room.id,
+                requireNotNull(predecessor.predecessorId),
+            )) {
+            assertFalse(
+                validCollaborationSpaceConversationCommandRecord(
+                    access,
+                    original.copy(successorId = id),
+                )
+            )
+        }
+        for (id in listOf("", "00000000-0000-0000-0000-000000000000", room.id)) {
+            assertFalse(
+                validCollaborationSpaceConversationCommand(access, room.copy(predecessorId = id))
+            )
+        }
+        val recordedOpen =
+            CollaborationSpaceConversationCommandRecord(
+                open,
+                2,
+                1,
+                CollaborationSpaceConversationOutcome.Recorded(CollaborationSetupReceipt(id(7), 0)),
+                successorId = id(21),
+            )
+        assertFalse(validCollaborationSpaceConversationCommandRecord(access, recordedOpen))
+        val cycle =
+            room.copy(intent = room.intent.copy(operationId = id(24)), predecessorId = room.id)
+        assertFalse(validCollaborationSpaceRoomHandoff(access, original, cycle))
+    }
+
+    @Test
     fun immutableIntentSurvivesLocalLoginReplacementButNeverChangesItsAccountOrPair() {
         val zero = "00000000-0000-0000-0000-000000000000"
         assertFalse(

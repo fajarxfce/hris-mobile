@@ -59,4 +59,4 @@ No product caller, successor, SDK operation, new APK or phone-latency acceptance
 included. Apple storage wrappers inherit the cases and still require source CI.
 
 [Owning finite resolution](collaboration-space-room-request-resolution.md) now uses this
-storage with exact normalized marks and bounded capture. Atomic successor linkage remains separate.
+storage with exact normalized marks and bounded capture. [Atomic successor storage](collaboration-space-room-successor.md) is also accepted separately; current-admitted preparation remains to be connected.

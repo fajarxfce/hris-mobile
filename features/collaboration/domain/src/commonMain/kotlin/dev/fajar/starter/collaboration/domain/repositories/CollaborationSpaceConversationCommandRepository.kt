@@ -22,6 +22,13 @@ interface CollaborationSpaceConversationCommandRepository {
         command: CollaborationSpaceConversationCommand,
     ): AppResult<CollaborationSetupInsertion>
 
+    /** Atomically retain an exact fenced original/link and create its one pending successor. */
+    suspend fun prepareReplacement(
+        access: CollaborationSpaceLocalAccess,
+        expected: CollaborationSpaceConversationCommandRecord,
+        replacement: CollaborationSpaceConversationCommand.Room,
+    ): AppResult<Boolean>
+
     suspend fun update(
         access: CollaborationSpaceLocalAccess,
         expected: CollaborationSpaceConversationCommandRecord,

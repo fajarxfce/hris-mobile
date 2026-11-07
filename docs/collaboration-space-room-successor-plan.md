@@ -1,4 +1,6 @@
-# Next atomic original/successor storage — design only
+# Atomic original/successor storage design
+
+Status: [storage implementation and exact validation](collaboration-space-room-successor.md) are locally accepted. Current-admitted owning preparation remains separate.
 
 After owning Room resolution passes, use existing raw CommandStore.archiveAndInsert. No new DB migration or raw transaction abstraction is needed. Retain exact original request/state ciphertext and an authenticated successor link in its archive, while inserting one replacement Pending Room under the same conversation resource in one transaction. No intermediate free resource; shared capacity remains unchanged at128.
 

@@ -287,6 +287,12 @@ class SpaceConversationCommandObservationTest {
                     attempts: Int,
                 ): AppResult<Boolean> = error("Observation must not mutate commands")
 
+                override suspend fun prepareReplacement(
+                    access: CollaborationSpaceLocalAccess,
+                    expected: CollaborationSpaceConversationCommandRecord,
+                    replacement: CollaborationSpaceConversationCommand.Room,
+                ): AppResult<Boolean> = error("No implicit room replacement")
+
                 override suspend fun archiveRecorded(
                     access: CollaborationSpaceLocalAccess,
                     expected: CollaborationSpaceConversationCommandRecord,

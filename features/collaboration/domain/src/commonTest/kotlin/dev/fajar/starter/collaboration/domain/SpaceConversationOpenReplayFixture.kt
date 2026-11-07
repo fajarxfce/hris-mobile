@@ -97,6 +97,12 @@ internal class SpaceConversationOpenReplayFixture {
                 return onUpdate(expected, outcome, attempts)
             }
 
+            override suspend fun prepareReplacement(
+                access: CollaborationSpaceLocalAccess,
+                expected: CollaborationSpaceConversationCommandRecord,
+                replacement: CollaborationSpaceConversationCommand.Room,
+            ): AppResult<Boolean> = error("No implicit room replacement")
+
             override suspend fun archiveRecorded(
                 access: CollaborationSpaceLocalAccess,
                 expected: CollaborationSpaceConversationCommandRecord,

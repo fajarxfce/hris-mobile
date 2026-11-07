@@ -46,13 +46,14 @@ internal class CollaborationSpaceConversationCommandCodec(
     suspend fun request(command: CollaborationSpaceConversationCommand): String {
         require(validCollaborationSpaceConversationCommand(access, command))
         val b = command.binding
+        val predecessor = (command as? CollaborationSpaceConversationCommand.Room)?.predecessorId
         return seal(
             command.id,
             "request",
             0,
             Json.encodeToString(
                 ConversationRequest(
-                    1,
+                    if (predecessor == null) 1 else 2,
                     command.id,
                     b.audience,
                     b.accountId,
@@ -72,6 +73,7 @@ internal class CollaborationSpaceConversationCommandCodec(
                             it.expectedAttempt?.accountId,
                         )
                     },
+                    predecessorId = predecessor,
                 )
             ),
         )
@@ -152,7 +154,7 @@ internal class CollaborationSpaceConversationCommandCodec(
         )
         val request =
             Json.decodeFromString<ConversationRequest>(open(raw.id, "request", 0, raw.request))
-        require(request.schema == 1)
+        require(request.schema in 1..2)
         val binding =
             CollaborationSpaceIdentityBinding(
                 request.audience,
@@ -164,7 +166,12 @@ internal class CollaborationSpaceConversationCommandCodec(
         val command =
             when (request.kind) {
                 "OPEN" -> {
-                    require(request.conversationId == null && request.room == null)
+                    require(
+                        request.schema == 1 &&
+                            request.predecessorId == null &&
+                            request.conversationId == null &&
+                            request.room == null
+                    )
                     CollaborationSpaceConversationCommand.Open(
                         request.id,
                         binding,
@@ -173,6 +180,10 @@ internal class CollaborationSpaceConversationCommandCodec(
                     )
                 }
                 "ROOM" -> {
+                    require(
+                        (request.schema == 1 && request.predecessorId == null) ||
+                            (request.schema == 2 && request.predecessorId != null)
+                    )
                     val room = requireNotNull(request.room)
                     require(
                         (room.expectedRequestRevision == null) ==
@@ -198,6 +209,7 @@ internal class CollaborationSpaceConversationCommandCodec(
                         ),
                         request.peerAccountId,
                         createdAt,
+                        request.predecessorId,
                     )
                 }
                 else -> error("Unsupported conversation command.")
@@ -219,6 +231,38 @@ internal class CollaborationSpaceConversationCommandCodec(
                 state.domain(command),
             )
             .also { require(validCollaborationSpaceConversationCommandRecord(access, it)) }
+    }
+
+    suspend fun handoff(
+        expected: CollaborationSpaceConversationCommandRecord,
+        successorId: String,
+    ): String {
+        require(
+            validCollaborationSpaceConversationCommandRecord(
+                access,
+                expected.copy(successorId = successorId),
+            )
+        )
+        return seal(
+            expected.command.id,
+            "successor",
+            expected.revision,
+            Json.encodeToString(ConversationHandoff(1, "ROOM_REPLACEMENT_PREPARED", successorId)),
+        )
+    }
+
+    suspend fun successor(raw: CommandRecord, evidence: String): String {
+        val link =
+            Json.decodeFromString<ConversationHandoff>(
+                open(raw.id, "successor", raw.revision, evidence)
+            )
+        require(
+            link.schema == 1 &&
+                link.kind == "ROOM_REPLACEMENT_PREPARED" &&
+                validCollaborationSpaceConversationId(link.successorId) &&
+                link.successorId != raw.id
+        )
+        return link.successorId
     }
 
     private suspend fun seal(id: String, purpose: String, revision: Long, value: String): String {
@@ -273,6 +317,7 @@ private data class ConversationRequest(
     val kind: String,
     val conversationId: String? = null,
     val room: ConversationRoomRequest? = null,
+    val predecessorId: String? = null,
 )
 
 @Serializable
@@ -357,3 +402,6 @@ private data class ConversationRoomRequest(
     val expectedRequestRevision: Long? = null,
     val expectedRequestAccountId: String? = null,
 )
+
+@Serializable
+private data class ConversationHandoff(val schema: Int, val kind: String, val successorId: String)

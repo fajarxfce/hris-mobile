@@ -59,6 +59,11 @@ class EncryptedCollaborationSpaceConversationCommandRepository(
         require(validCollaborationSpaceConversationCommand(access, command))
         insertions.withLock {
             val previous = retained(access, command.id)
+            require(
+                command !is CollaborationSpaceConversationCommand.Room ||
+                    command.predecessorId == null ||
+                    previous != null
+            )
             keys.use(create = previous == null) { key ->
                 if (previous != null) {
                     require(decode(access, previous, key).command == command)
@@ -91,6 +96,33 @@ class EncryptedCollaborationSpaceConversationCommandRepository(
                     CommandInsertResult.ScopeChanged -> CollaborationSetupInsertion.SCOPE_CHANGED
                 }
             }
+        }
+    }
+
+    override suspend fun prepareReplacement(
+        access: CollaborationSpaceLocalAccess,
+        expected: CollaborationSpaceConversationCommandRecord,
+        replacement: CollaborationSpaceConversationCommand.Room,
+    ) = safeStorageCall {
+        require(validCollaborationSpaceRoomHandoff(access, expected, replacement))
+        keys.use { key ->
+            val scope = spaceConversationCommandScope(access)
+            val partition = spaceConversationCommandPartition(access)
+            val raw = commands.get(scope, partition, expected.command.id) ?: return@use false
+            val codec = CollaborationSpaceConversationCommandCodec(access, cipher, key)
+            if (codec.decode(raw) != expected) return@use false
+            val next =
+                CommandRecord(
+                    partition,
+                    replacement.id,
+                    replacement.resourceId(),
+                    replacement.orderKey(),
+                    codec.request(replacement),
+                    codec.outcome(replacement, 0, CollaborationSpaceConversationOutcome.Pending, 0),
+                )
+            val evidence = codec.handoff(expected, replacement.id)
+            currentCoroutineContext().ensureActive()
+            commands.archiveAndInsert(scope, raw, evidence, next)
         }
     }
 
@@ -152,14 +184,19 @@ class EncryptedCollaborationSpaceConversationCommandRepository(
         raw: Retained,
         key: ByteArray,
     ): CollaborationSpaceConversationCommandRecord {
-        val record =
-            CollaborationSpaceConversationCommandCodec(access, cipher, key).decode(raw.record)
-        if (raw.evidence != null) {
-            require(
-                raw.evidence == raw.record.state &&
-                    record.outcome is CollaborationSpaceConversationOutcome.Recorded
-            )
+        val codec = CollaborationSpaceConversationCommandCodec(access, cipher, key)
+        val record = codec.decode(raw.record)
+        if (raw.evidence == null) return record
+        return when (record.outcome) {
+            is CollaborationSpaceConversationOutcome.Recorded -> {
+                require(raw.evidence == raw.record.state)
+                record
+            }
+            is CollaborationSpaceConversationOutcome.Fenced ->
+                record.copy(successorId = codec.successor(raw.record, raw.evidence)).also {
+                    require(validCollaborationSpaceConversationCommandRecord(access, it))
+                }
+            else -> error("Only terminal conversation evidence can be archived")
         }
-        return record
     }
 }

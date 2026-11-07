@@ -65,6 +65,12 @@ internal class SpaceConversationPreparationFixture {
                 attempts: Int,
             ): AppResult<Boolean> = error("Preparation never dispatches")
 
+            override suspend fun prepareReplacement(
+                access: CollaborationSpaceLocalAccess,
+                expected: CollaborationSpaceConversationCommandRecord,
+                replacement: CollaborationSpaceConversationCommand.Room,
+            ): AppResult<Boolean> = error("No implicit room replacement")
+
             override suspend fun archiveRecorded(
                 access: CollaborationSpaceLocalAccess,
                 expected: CollaborationSpaceConversationCommandRecord,
