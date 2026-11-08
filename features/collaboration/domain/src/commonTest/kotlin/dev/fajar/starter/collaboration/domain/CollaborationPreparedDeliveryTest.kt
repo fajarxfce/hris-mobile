@@ -36,6 +36,31 @@ class CollaborationPreparedDeliveryTest {
     }
 
     @Test
+    fun missingRecipientKeysCannotResumeTheOriginalAndLaterReadinessKeepsItsTransaction() =
+        runTest {
+            val f = CollaborationDeliveryFixture()
+            f.prepare()
+            val original = f.records.single()
+            val timeline = PreparedTimeline(f.owner, f.device)
+            f.recipientReady = false
+            val failure = assertIs<AppResult.Failed>(f.deliver(preparedTimeline = timeline)).failure
+            assertEquals(FailureKind.Conflict, failure.kind)
+            assertEquals("client.collaboration_recipient_unavailable", failure.code)
+            assertEquals(0, f.windows)
+            assertEquals(listOf(original), f.records)
+            assertTrue(f.journal.isEmpty())
+            assertEquals(f.acquisitions, f.closes)
+            f.recipientReady = true
+            assertIs<AppResult.Success<CollaborationDeliveryReport>>(
+                f.deliver(preparedTimeline = timeline)
+            )
+            assertEquals(1, f.windows)
+            assertEquals(setOf("original"), f.knownTransactions)
+            assertEquals(original.intent, f.records.single().intent)
+            assertIs<CollaborationMessageState.Sent>(f.records.single().state)
+        }
+
+    @Test
     fun everyForeignOwnerIsRejectedBeforeBorrowingOrReadingRemoteContent() = runTest {
         for (change in 0..4) {
             val f = CollaborationDeliveryFixture()

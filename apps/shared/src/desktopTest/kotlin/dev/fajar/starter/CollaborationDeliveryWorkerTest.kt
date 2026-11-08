@@ -494,6 +494,48 @@ class CollaborationDeliveryWorkerTest {
     }
 
     @Test
+    fun unreadyRecipientBlocksRetryWithoutLosingTheMessageAcrossRestart() = runBlocking {
+        withFixture { f ->
+            val queued = f.queue()
+            f.server.collaboration.unreadyRecipients += f.first
+            val result = assertIs<SyncResult.Blocked>(f.worker())
+            assertEquals("client.collaboration_recipient_unavailable", result.failure.code)
+            assertTrue(f.sdk.enqueued.isEmpty())
+            assertEquals(0, f.sdk.deliveries)
+            assertEquals(
+                listOf(queued),
+                assertIs<AppResult.Success<List<CollaborationMessageRecord>>>(
+                        f.koin.get<ObserveCollaborationMessages>()(f.workspaceId, f.first).first()
+                    )
+                    .value,
+            )
+            f.reopen()
+            assertIs<SyncResult.Blocked>(f.worker())
+            assertTrue(f.sdk.enqueued.isEmpty())
+            f.server.collaboration.unreadyRecipients.clear()
+            assertEquals(SyncResult.Complete, f.worker())
+            assertEquals(listOf(queued.intent.id), f.sdk.enqueued)
+            assertEquals(1, f.sdk.deliveries)
+            assertEquals(f.sdk.childOpens, f.sdk.childCloses)
+        }
+    }
+
+    @Test
+    fun unreadyRecipientDoesNotStopAnotherRoomOrCauseItsMessageToBeRecreated() = runBlocking {
+        withFixture { f ->
+            val queued = f.queue()
+            val other = f.queue(f.server.collaboration.ids[1], "Independent conversation")
+            f.server.collaboration.unreadyRecipients += f.first
+            val result = assertIs<SyncResult.Blocked>(f.worker())
+            assertEquals("client.collaboration_recipient_unavailable", result.failure.code)
+            assertEquals(listOf(other.intent.id), f.sdk.enqueued)
+            f.server.collaboration.unreadyRecipients.clear()
+            assertEquals(SyncResult.Complete, f.worker())
+            assertEquals(listOf(other.intent.id, queued.intent.id), f.sdk.enqueued)
+        }
+    }
+
+    @Test
     fun blockedRoomDoesNotStopRemainingBatchesInAnotherRoom() = runBlocking {
         withFixture { f ->
             val second = f.server.collaboration.ids[1]

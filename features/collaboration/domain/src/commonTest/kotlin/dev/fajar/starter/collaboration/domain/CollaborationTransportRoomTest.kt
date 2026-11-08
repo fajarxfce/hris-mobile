@@ -19,7 +19,16 @@ class CollaborationTransportRoomTest {
             "peer",
             "!opaque-v12-room",
             0,
+            true,
         )
+
+    @Test
+    fun unreadyRecipientBlocksDeliveryWithoutRevokingOwnedContent() {
+        val failure = assertIs<AppResult.Failed>(match(value.copy(recipientReady = false))).failure
+        assertEquals(FailureKind.Conflict, failure.kind)
+        assertEquals("client.collaboration_recipient_unavailable", failure.code)
+        assertEquals(AppResult.Success(value.matrixRoomId), match(value))
+    }
 
     @Test
     fun currentSnapshotSelectsOnlyItsExactRoom() {

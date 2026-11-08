@@ -11,6 +11,7 @@ data class CollaborationDirectTransport(
     val secondAccountId: String,
     val matrixRoomId: String,
     val roomProvisioningVersion: Long,
+    val recipientReady: Boolean,
 ) {
     override fun toString() = "CollaborationDirectTransport(redacted)"
 }

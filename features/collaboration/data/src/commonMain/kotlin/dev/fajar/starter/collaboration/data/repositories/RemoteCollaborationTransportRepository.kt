@@ -43,6 +43,7 @@ class RemoteCollaborationTransportRepository(
             dto.secondAccountId,
             dto.matrixRoomId,
             dto.roomProvisioningVersion,
+            dto.recipientReady,
         )
     }
 }

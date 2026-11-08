@@ -40,5 +40,10 @@ fun collaborationTransportRoom(
             "client.collaboration_room_not_ready",
             FailureKind.Unavailable,
         )
+    if (!value.recipientReady)
+        return collaborationSetupFailure(
+            "client.collaboration_recipient_unavailable",
+            FailureKind.Conflict,
+        )
     return AppResult.Success(value.matrixRoomId)
 }

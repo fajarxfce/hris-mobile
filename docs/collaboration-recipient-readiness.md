@@ -16,14 +16,15 @@ Readiness is not a reusable grant. An offline peer with a previously confirmed,
 otherwise eligible device remains ready; first-time setup is a separate condition.
 
 The focused gate passed75 fresh cases in272.703s with zero failures/errors/skips
-and all4,488 app/82 library inputs unchanged. Full gate14084 is running.
+and all4,488 app/82 library inputs unchanged. Full gate14084 passed3,987 fresh cases without failures/errors/skips in547.126s;
+all app/library source inputs remained unchanged. The eleven Kotlin changes are accepted.
 [Attempt evidence](measurements/collaboration-recipient-readiness-2026-11-08.json).
 Coverage includes API mapping (including absent
 field), no native mutation when unready, retained transaction delivery after a later
 ready read, durable restart, another room's progress and the scheduler's existing
 blocked/no-timer contract. Deploy the additive server response before the mobile APK.
 Backend1aea3228 is deployed and healthy on schema116.1. Phone69 and stopped original
-emulator69 remain unchanged. Release70 is held until full source/device acceptance.
+emulator69 remain unchanged. Release70 can now be packaged after source push, and still requires device acceptance.
 
 ## Intended first-use experience
 
@@ -81,3 +82,6 @@ departed/inactive/revoked recipients as well as absent or unpublished devices. A
 future activation-specific label needs a safely scoped reason; it must not mislabel
 a departed account as simply waiting for first login. Preserve the distinction when
 adding the persisted UX outcome, without trusting a cached fact for actual sending.
+
+The additional180.181s phone69 passive window observed no transport request, so it
+cannot establish the response flag or prove that the old mobile retry loop stopped.

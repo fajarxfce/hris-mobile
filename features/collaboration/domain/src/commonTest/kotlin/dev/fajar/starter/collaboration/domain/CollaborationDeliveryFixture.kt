@@ -360,6 +360,7 @@ internal class CollaborationDeliveryFixture {
                 retainedOwner: CollaborationOwner?
             ): AppResult<Unit> = error("No parent close")
         }
+    var recipientReady = true
     var transportReads = 0
     var afterTransport: suspend () -> Unit = {}
     private val transport = CollaborationTransportRepository { captured, conversationId ->
@@ -394,6 +395,7 @@ internal class CollaborationDeliveryFixture {
                 control.conversation.secondAccountId,
                 room.matrixRoomId!!,
                 room.version ?: 0,
+                recipientReady,
             )
         )
     }

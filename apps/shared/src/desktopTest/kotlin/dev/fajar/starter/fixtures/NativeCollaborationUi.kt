@@ -21,6 +21,7 @@ class NativeCollaborationUi {
     val roomRequests = mutableListOf<Pair<String, String>>()
     val reads = mutableListOf<String>()
     val rooms = mutableMapOf<String, String>()
+    val unreadyRecipients = mutableSetOf<String>()
     val versions = mutableMapOf<String, Long>()
     val ids = (1..3).map { "aaaaaaaa-0000-0000-0000-" + it.toString().padStart(12, '0') }
     var listedIds = ids
@@ -195,6 +196,7 @@ class NativeCollaborationUi {
                 peerId,
                 matrixRoomId,
                 value.version ?: 0,
+                id !in unreadyRecipients,
             )
         )
     }

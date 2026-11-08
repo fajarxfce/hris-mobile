@@ -14,7 +14,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runTest
 
 private val transportJson =
-    """{"companyId":"${setupOwner.companyId}","accountId":"${setupOwner.accountId}","nativeSessionId":"${setupOwner.nativeSessionId}","deviceId":"$SETUP_DEVICE","deviceVersion":1,"platform":"ANDROID","conversationId":"$CONVERSATION_ID","firstAccountId":"${setupOwner.accountId}","secondAccountId":"$PEER_ID","matrixRoomId":"!opaque-v12-room","roomProvisioningVersion":0}"""
+    """{"companyId":"${setupOwner.companyId}","accountId":"${setupOwner.accountId}","nativeSessionId":"${setupOwner.nativeSessionId}","deviceId":"$SETUP_DEVICE","deviceVersion":1,"platform":"ANDROID","conversationId":"$CONVERSATION_ID","firstAccountId":"${setupOwner.accountId}","secondAccountId":"$PEER_ID","matrixRoomId":"!opaque-v12-room","roomProvisioningVersion":0,"recipientReady":true}"""
 
 class CollaborationDirectTransportTest {
     @Test
@@ -53,6 +53,37 @@ class CollaborationDirectTransportTest {
             val denied = assertIs<AppResult.Failed>(repo.read(setupOwner, CONVERSATION_ID))
             assertEquals(FailureKind.AccessDenied, denied.failure.kind)
             assertEquals(2, attempts)
+        }
+    }
+
+    @Test
+    fun recipientReadinessIsAnExplicitFactAndMissingFieldCannotAdmitDelivery() = runTest {
+        for (ready in listOf(false, true)) withTransport(
+            MockEngine {
+                respond(
+                    transportJson.replace("\"recipientReady\":true", "\"recipientReady\":$ready"),
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            }
+        ) { repo ->
+            assertEquals(
+                ready,
+                assertIs<AppResult.Success<CollaborationDirectTransport>>(
+                        repo.read(setupOwner, CONVERSATION_ID)
+                    )
+                    .value
+                    .recipientReady,
+            )
+        }
+        withTransport(
+            MockEngine {
+                respond(
+                    transportJson.replace(",\"recipientReady\":true", ""),
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            }
+        ) { repo ->
+            assertIs<AppResult.Failed>(repo.read(setupOwner, CONVERSATION_ID))
         }
     }
 

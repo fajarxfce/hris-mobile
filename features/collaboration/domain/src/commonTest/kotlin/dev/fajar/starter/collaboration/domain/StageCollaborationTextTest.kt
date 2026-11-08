@@ -28,6 +28,25 @@ class StageCollaborationTextTest {
     }
 
     @Test
+    fun unreadyRecipientRetainsQueuedTextWithoutOpeningANativeWriter() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        val original = f.record
+        f.recipientReady = false
+        assertEquals(
+            "client.collaboration_recipient_unavailable",
+            assertIs<AppResult.Failed>(f.stage()).failure.code,
+        )
+        assertEquals(original, f.record)
+        assertEquals(0, f.acquisitions)
+        assertEquals(0, f.enqueues)
+        f.recipientReady = true
+        assertIs<AppResult.Success<*>>(f.stage())
+        assertEquals(1, f.enqueues)
+        assertEquals(original.intent, f.record.intent)
+    }
+
+    @Test
     fun oldRetainedTransactionDoesNotBlockANewMessageAfterLegacyCredentialReplacement() = runTest {
         val f = StageFixture()
         f.prepare()
@@ -660,6 +679,7 @@ internal class StageFixture {
                 retainedOwner: CollaborationOwner?
             ): AppResult<Unit> = error("No parent close")
         }
+    var recipientReady = true
     var transportReads = 0
     var afterTransport: suspend () -> Unit = {}
     private val transport = CollaborationTransportRepository { captured, conversationId ->
@@ -694,6 +714,7 @@ internal class StageFixture {
                 control.conversation.secondAccountId,
                 room.matrixRoomId!!,
                 room.version ?: 0,
+                recipientReady,
             )
         )
     }
