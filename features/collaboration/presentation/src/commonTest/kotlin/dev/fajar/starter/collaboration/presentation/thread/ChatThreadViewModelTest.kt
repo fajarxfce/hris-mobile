@@ -920,9 +920,11 @@ class ChatThreadViewModelTest {
             f.online()
             vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
+            val entryReads = f.historyReads
             vm.onEvent(ChatThreadEvent.DraftChanged("retained original"))
             vm.onEvent(ChatThreadEvent.SendRequested)
             advanceUntilIdle()
+            assertEquals(entryReads, f.historyReads, "Local enqueue already wakes delivery")
             val original = f.records.value.single()
             val reads = f.historyReads
             f.scheduledKeys.clear()
@@ -955,7 +957,7 @@ class ChatThreadViewModelTest {
                 advanceTimeBy(500)
                 runCurrent()
             }
-            assertTrue(f.historyReads > reads)
+            assertEquals(reads, f.historyReads, "Local delivery status must not reacquire history")
             assertTrue(f.scheduledKeys.isEmpty(), "Passive echoes must not restart delivery")
             assertEquals(listOf(original), f.records.value)
             assertEquals(0, f.deliveries)
@@ -970,6 +972,60 @@ class ChatThreadViewModelTest {
             assertEquals(1, f.scheduledKeys.size, "Reentry wakes retained work once")
         }
     }
+
+    @Test
+    fun remoteContentChangesAcquireHistoryButLocalAcknowledgementAndSdkRowIdentityDoNot() =
+        runTest {
+            withModel { f, vm, _, _ ->
+                f.online()
+                vm.onEvent(ChatThreadEvent.Entered())
+                advanceUntilIdle()
+                val entered = f.historyReads
+                val local =
+                    CollaborationTimelineItem(
+                        "local-row",
+                        "$" + "acknowledged",
+                        "local-transaction",
+                        null,
+                        f.self.matrixUserId,
+                        1_000,
+                        true,
+                        CollaborationMessageKind.TEXT,
+                        "Fixture message",
+                        false,
+                        CollaborationMessageDelivery.SENT,
+                        localEcho = true,
+                    )
+                f.updates.value = AppResult.Success(listOf(local))
+                advanceUntilIdle()
+                assertEquals(entered, f.historyReads, "A local ACK is not an original remote event")
+                val remote = local.copy(key = "remote-row", localEcho = false)
+                f.updates.value = AppResult.Success(listOf(remote))
+                advanceUntilIdle()
+                assertEquals(entered + 1, f.historyReads)
+                val recreated = remote.copy(key = "recreated-row", transactionId = null)
+                f.updates.value = AppResult.Success(listOf(recreated))
+                advanceUntilIdle()
+                assertEquals(entered + 1, f.historyReads, "SDK row metadata is not new history")
+                val edited = recreated.copy(body = "Edited fixture", edited = true)
+                f.updates.value = AppResult.Success(listOf(edited))
+                advanceUntilIdle()
+                assertEquals(entered + 2, f.historyReads)
+                val redacted = edited.copy(kind = CollaborationMessageKind.REDACTED, body = null)
+                f.updates.value = AppResult.Success(listOf(redacted))
+                advanceUntilIdle()
+                assertEquals(entered + 3, f.historyReads)
+                vm.onEvent(ChatThreadEvent.Stopped)
+                advanceUntilIdle()
+                f.updates.value = AppResult.Success(listOf(remote))
+                advanceUntilIdle()
+                assertEquals(entered + 3, f.historyReads, "A stopped screen owns no acquisition")
+                vm.onEvent(ChatThreadEvent.Entered())
+                advanceUntilIdle()
+                assertTrue(f.historyReads > entered + 3, "Reentry still requests admitted history")
+                assertEquals(0, f.deliveries)
+            }
+        }
 
     private suspend fun TestScope.withModel(
         block:

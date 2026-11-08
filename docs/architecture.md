@@ -1,5 +1,9 @@
 # Architecture
 
+[Remote history signals](collaboration-chat-remote-echo.md#history-acquisition-signals)
+use domain content/provenance policy; the route-owned timeline still updates every
+changed screen projection without treating local send status as new history.
+
 [Composer handoff storage](collaboration-composer-handoff.md) atomically retains the submitted original and next editor revision; product-flow adoption remains pending.
 
 [Local send timing](collaboration-send-timing.md) observes existing presentation/use-case

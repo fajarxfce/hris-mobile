@@ -132,3 +132,33 @@ and cold notification taps still open the inspector. All13 screenshots and three
 4fps storyboards were inspected; keyboard dismissal remains. Exact ordinary release62
 is installed on the phone in place, without UI automation, after the emulator was stopped.
 [Exact evidence and limits](measurements/chat-history-preparation-device-2026-11-08.json).
+
+
+## Local workspace-read measurement
+
+The isolated `workspace-read-cost` scenario uses a fresh database and credential record
+in the separate debug proof application. The workspace repository performs no network
+I/O and never opens product account records; unrelated emulator/system traffic is not measured. Actual Room, Android Keystore and authenticated decryption
+remain in the path. Each invocation checks 61 exact workspace results: one initial
+read, 30 sequential reads and two concurrent lanes of 15 reads. Owned records and
+keys are removed on completion; the separate 1,536 MiB emulator is stopped.
+
+Sequential reads average 119.523 ms immediately after first boot, then 19.562 ms
+in the second invocation of the same APK. The latter averages 8.407 ms for the
+checkpoint, 7.206 ms for credential access and 0.305 ms for content decryption.
+Android startup/JIT and host load are not independently isolated. These synthetic
+read costs cannot be reported as phone or message latency. Parallel durations overlap.
+[Exact measurement and build provenance](measurements/workspace-read-cost-2026-11-08.json).
+
+The proof is invoked through `MatrixProofInstrumentation` with
+`-e scenario workspace-read-cost` in the separate
+`dev.fajar.hris.collaboration.proof` application. Use an owned emulator with no
+`protocol-proof/workmanager-enabled.json` marker. Its closed timing output is
+`files/protocol-proof/workspace-read-cost.json`; `instrumentation.json` must also
+report completion. The fixture creates and cleans only its unique synthetic
+database, credential record and Android Keystore alias.
+
+This does not justify caching selected authority or bypassing missing/replaced keys.
+The next correction instead targets passive local delivery-status changes that
+unnecessarily request admitted original history from the chat screen. Real remote
+messages, edits, redactions and explicit entry/recovery must still acquire history.

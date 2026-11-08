@@ -1,0 +1,228 @@
+{
+  "schema": 1,
+  "purpose": "Synthetic Android local workspace-read decomposition; not product send latency or phone performance",
+  "baseCommit": "5614f133",
+  "scenario": "workspace-read-cost",
+  "sourceSha256": {
+    "apps/collaboration-proof/build.gradle.kts": "4949fe7a7585b12bc96cdaee686c986553b1c2ceafb2a10001c4ec77a3348d7b",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "5b5f8c2706cd0fbe76068e3612c8f1e56d3a736672a511d447e57b25f279270b",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/WorkspaceReadCostProbe.kt": "71c0466781333d02848920536c7ec8f0f71b5f1d7c869e660e070acf3bc9ee8b"
+  },
+  "build": {
+    "exitCode": 0,
+    "elapsedSeconds": 164.311,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "sourceFiles": 4452,
+    "tasks": [
+      ":apps:collaboration-proof:assembleDebug",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt"
+    ]
+  },
+  "artifact": {
+    "applicationId": "dev.fajar.hris.collaboration.proof",
+    "debuggable": true,
+    "abi": "arm64-v8a",
+    "sha256": "6c15d3a3af1b5df06338d0d7859145faba14511d1dacd6ecb6bbad590ad61d88",
+    "bytes": 133723406
+  },
+  "isolation": {
+    "separateFreshEmulatorData": true,
+    "guestMemoryMiB": 1536,
+    "cores": 2,
+    "bootSeconds": 48.815,
+    "networkRequests": 0,
+    "syntheticWorkspaceOnly": true,
+    "uniqueDatabaseAndCredentialRecordPerInvocation": true,
+    "bothOwnedFixturesRemoved": true,
+    "productAccountTouched": false,
+    "phoneTouched": false,
+    "emulatorStoppedAt": "2026-11-08T04:49:37.623484+00:00",
+    "networkCountScope": "Workspace repository remote calls only; unrelated emulator/system traffic was not captured."
+  },
+  "firstInvocation": {
+    "startedAt": "2026-11-08T04:48:03.516022+00:00",
+    "runnerElapsedSeconds": 25.533,
+    "ownedFixtureRemoved": true,
+    "phases": {
+      "first": {
+        "wallMillis": 128.109,
+        "checkpoint": {
+          "count": 1,
+          "meanMillis": 50.291,
+          "maxMillis": 50.291,
+          "medianMillis": 50.291
+        },
+        "credentialRead": {
+          "count": 1,
+          "meanMillis": 53.654,
+          "maxMillis": 53.654,
+          "medianMillis": 53.654
+        },
+        "contentDecrypt": {
+          "count": 1,
+          "meanMillis": 5.307,
+          "maxMillis": 5.307,
+          "medianMillis": 5.307
+        },
+        "current": {
+          "count": 1,
+          "meanMillis": 119.341,
+          "maxMillis": 119.341,
+          "medianMillis": 119.341
+        }
+      },
+      "sequential": {
+        "wallMillis": 3600.502,
+        "checkpoint": {
+          "count": 30,
+          "meanMillis": 54.005,
+          "maxMillis": 231.059,
+          "medianMillis": 37.531
+        },
+        "credentialRead": {
+          "count": 30,
+          "meanMillis": 39.471,
+          "maxMillis": 178.25,
+          "medianMillis": 24.884
+        },
+        "contentDecrypt": {
+          "count": 30,
+          "meanMillis": 3.35,
+          "maxMillis": 29.573,
+          "medianMillis": 0.475
+        },
+        "current": {
+          "count": 30,
+          "meanMillis": 119.523,
+          "maxMillis": 428.548,
+          "medianMillis": 87.621
+        }
+      },
+      "concurrent": {
+        "wallMillis": 2390.039,
+        "checkpoint": {
+          "count": 30,
+          "meanMillis": 68.59,
+          "maxMillis": 219.008,
+          "medianMillis": 65.962
+        },
+        "credentialRead": {
+          "count": 30,
+          "meanMillis": 69.871,
+          "maxMillis": 331.887,
+          "medianMillis": 43.885
+        },
+        "contentDecrypt": {
+          "count": 30,
+          "meanMillis": 5.231,
+          "maxMillis": 39.98,
+          "medianMillis": 0.471
+        },
+        "current": {
+          "count": 30,
+          "meanMillis": 157.535,
+          "maxMillis": 505.104,
+          "medianMillis": 133.223
+        }
+      }
+    }
+  },
+  "secondInvocation": {
+    "startedAt": "2026-11-08T04:48:56.512551+00:00",
+    "runnerElapsedSeconds": 4.046,
+    "ownedFixtureRemoved": true,
+    "phases": {
+      "first": {
+        "wallMillis": 13.332,
+        "checkpoint": {
+          "count": 1,
+          "meanMillis": 3.804,
+          "maxMillis": 3.804,
+          "medianMillis": 3.804
+        },
+        "credentialRead": {
+          "count": 1,
+          "meanMillis": 4.492,
+          "maxMillis": 4.492,
+          "medianMillis": 4.492
+        },
+        "contentDecrypt": {
+          "count": 1,
+          "meanMillis": 0.663,
+          "maxMillis": 0.663,
+          "medianMillis": 0.663
+        },
+        "current": {
+          "count": 1,
+          "meanMillis": 12.029,
+          "maxMillis": 12.029,
+          "medianMillis": 12.029
+        }
+      },
+      "sequential": {
+        "wallMillis": 593.201,
+        "checkpoint": {
+          "count": 30,
+          "meanMillis": 8.407,
+          "maxMillis": 31.786,
+          "medianMillis": 5.958
+        },
+        "credentialRead": {
+          "count": 30,
+          "meanMillis": 7.206,
+          "maxMillis": 38.545,
+          "medianMillis": 4.665
+        },
+        "contentDecrypt": {
+          "count": 30,
+          "meanMillis": 0.305,
+          "maxMillis": 0.694,
+          "medianMillis": 0.291
+        },
+        "current": {
+          "count": 30,
+          "meanMillis": 19.562,
+          "maxMillis": 78.469,
+          "medianMillis": 14.846
+        }
+      },
+      "concurrent": {
+        "wallMillis": 288.803,
+        "checkpoint": {
+          "count": 30,
+          "meanMillis": 7.717,
+          "maxMillis": 16.216,
+          "medianMillis": 7.03
+        },
+        "credentialRead": {
+          "count": 30,
+          "meanMillis": 8.808,
+          "maxMillis": 34.234,
+          "medianMillis": 6.393
+        },
+        "contentDecrypt": {
+          "count": 30,
+          "meanMillis": 0.415,
+          "maxMillis": 2.485,
+          "medianMillis": 0.237
+        },
+        "current": {
+          "count": 30,
+          "meanMillis": 18.768,
+          "maxMillis": 52.495,
+          "medianMillis": 18.216
+        }
+      }
+    }
+  },
+  "limits": [
+    "First invocation followed a fresh emulator boot; Android startup and JIT are not independently isolated.",
+    "Second invocation reuses the same APK and boot, with a new synthetic workspace/key/database.",
+    "Parallel per-operation durations overlap; do not sum as wall time.",
+    "No conclusion about current workspace cache correctness, current authorization, or end-to-end message latency."
+  ],
+  "decision": "Preserve workspace/key/authorization contracts; first remove history acquisition triggered only by local send-status changes."
+}

@@ -1,5 +1,48 @@
 # Agent continuation — HRIS Mobile
 
+## History-trigger correction accepted; package63 next — 08 November 2026, 05:24 UTC
+
+Full-3/session25455 is reapedPASS1203.04s:5,618fresh cases, zero failures/errors/skips,
+4,454unchanged source inputs and unchanged inspector sources. Nine actual desktop and
+nine Chrome policy cases pass; root checks, Android compilation/lint0, shared Wasm/iOS
+source and quality pass. Focused-2/session5893 passed167cases123.802s. Old code produced
+two expected failures: four local status changes caused four extra history reads, and a
+local ACK caused one. Exact evidence: measurements/chat-history-signals-2026-11-08.json.
+Earlier full-1 task-selection mistake and interrupted full-2 are retained as unaccepted.
+
+The pure domain policy now requests original history only for new/changed remote content;
+local pending/failed/ACK status and volatile SDK row metadata still render without new
+acquisition. Remote edits/redactions/decryption recovery and explicit entry/retry remain.
+A connected successful local enqueue also no longer requests history: the queue already
+schedules delivery. Only two product files change (policy + ViewModel), no added VM helper,
+permission/key cache, command/cursor/receipt or transport change. HRIS-specific; no Starter port.
+
+A separate synthetic Android fixture measured61reads twice using real SQLite/Keystore:
+sequential mean119.523ms after first boot,19.562ms on the second invocation. It removed its
+unique records/keys and its1536MiB emulator is stopped/reaped. No product account/phone UI.
+This is not a phone/send benchmark or justification for weaker key/authority checks.
+Exact proof: measurements/workspace-read-cost-2026-11-08.json; scenario workspace-read-cost.
+
+Commit/push this increment, then prepared .work/release-phone-2026-11-08-build63 scripts
+build/verify pushed source against chat-history-signals/full-3. No63 APK/device acceptance
+yet. Phone and stopped original Bima emulator remain exact accepted62; no active compiler/
+emulator. Start only original image, in-place62->63, gateway preflight, passive180s counter
+and ONE new63 probe message. New same-host monotonic tap/request/header fields separate
+pre-request work from HTTP and coarse UI polling. Existing62 UTC estimate:4184.921ms to
+request,4425.921ms to response vs7.468s coarse sent observation; timing caveat in private
+baseline-send-boundaries.json. Never replay62/61/diagnostic messages or reset original keys.
+
+Review three actual screenshots and three cropped4fps storyboards, cold offline continuity,
+passive process, analyze request windows and accept. Unchanged inspector/notification62
+acceptance is explicitly reused (source manifests and exact product diff must match).
+Stop/reap emulator; notify before EACH phone install-only, no phone UI automation. Then
+record-device.py and commit/push exact device results. Remaining latency and atomic composer
+b7929318 adoption/keyboard continuity remain; legacy UI/worker both queue/confirm prepared
+drafts, a read-only lead for that work. Full54 communications PRD still3inprogress/51planned.
+Library2b84921/Startera21b748/Platformea322180 unchanged; Group routing off. One owned heavy
+compiler OR emulator; unrelated experiment Java processes must not be killed.
+
+
 
 ## Release62 installed; next profile repeated local/admission work — 08 November 2026, 04:35 UTC
 

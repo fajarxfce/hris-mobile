@@ -92,6 +92,7 @@ class MatrixProofInstrumentation : Instrumentation() {
 
     private suspend fun runScenario(directory: File) {
         when (scenario) {
+            "workspace-read-cost" -> WorkspaceReadCostProbe(targetContext, directory).run()
             "foreground-scheduling" -> ForegroundSchedulingProbe(targetContext, directory).run()
             "hris-product-peer" -> HrisProductNotificationPeer(targetContext, directory).run()
             "notification-input-verify" -> {

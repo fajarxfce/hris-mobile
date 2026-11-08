@@ -40,6 +40,8 @@ dependencies {
     implementation(projects.core.network)
     implementation(projects.core.observability)
     implementation(projects.core.workspace.domain)
+    implementation(projects.core.workspace.data)
+    implementation(libs.room.runtime)
     implementation(libs.ktor.core)
     implementation(libs.ktor.okhttp)
     implementation(libs.ktor.mock)

@@ -55,3 +55,32 @@ Android host/quality/shared Wasm and35 actual Browser cases pass. Both jobs are 
 [Source hashes and verification](measurements/chat-local-echo-2026-11-07.json).
 No APK from this increment is accepted yet; offline renewal and composer behavior
 still require the separate fixes and actual-device acceptance.
+
+
+## History acquisition signals
+
+The same remote provenance now controls passive history acquisition. An SDK local
+echo changing from pending to failed or acknowledged still updates the screen, but
+does not request original history. Even a local echo with a server event ID is not
+a remote original. Volatile row keys, local transaction metadata and delivery state
+do not invalidate an otherwise identical remote event; timeline reordering or
+window removal alone also does not request another history window.
+
+New remote events, edits, redactions, decryption recovery and changes to authenticated
+content coordinates still request history. Explicit entry, recovery and acquisition
+retry keep their existing signals. The pure domain policy compares two snapshots
+from the same leased room; it is not an authorization cache. The ViewModel still
+projects every changed SDK snapshot and forwards only relevant history signals.
+A successful local enqueue also no longer asks the connected screen to acquire history:
+the queue already schedules delivery, and remote content signals its eventual original.
+A disconnected screen can still reconnect. No request permission, receipt, durable command,
+cursor or server route is changed.
+
+Before the correction, two focused screen regressions fail: four local status changes
+produce four extra history acquisitions, and an acknowledged local echo produces
+one extra acquisition. The final focused gate passes167cases, including local enqueue
+without redundant history work. The complete gate passes5,618fresh cases with zero
+failures/errors/skips, nine actual desktop and nine Chrome policy cases, Android
+compile/lint0, shared Wasm/iOS source and quality checks.
+[Exact validation](measurements/chat-history-signals-2026-11-08.json).
+Build63 device request counts and send timing remain separate acceptance.

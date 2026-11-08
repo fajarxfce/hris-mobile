@@ -8,6 +8,7 @@ package dev.fajar.starter.collaboration.presentation.thread
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.collaborationContentResponseClosesRead
+import dev.fajar.starter.collaboration.domain.policies.collaborationTimelineRequiresHistory
 import dev.fajar.starter.collaboration.domain.policies.localListAccess
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationCancellation
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationText
@@ -1509,7 +1510,9 @@ class ChatThreadViewModel(
                         }
                         requestQuotePreviews()
                         showLatest()
-                        if (pulse != null) requestSync(wake = false) else connect()
+                        // Queueing already wakes delivery. Remote content will signal history;
+                        // storing our own message does not invalidate server originals.
+                        if (pulse == null) connect()
                     }
                 }
             }
@@ -1691,9 +1694,14 @@ class ChatThreadViewModel(
                                 }
                                 is AppResult.Success -> {
                                     if (timeline != result.value) {
+                                        val historyChanged =
+                                            collaborationTimelineRequiresHistory(
+                                                timeline,
+                                                result.value,
+                                            )
                                         timeline = result.value.toList()
                                         project()
-                                        signals.trySend(Unit)
+                                        if (historyChanged) signals.trySend(Unit)
                                     }
                                     true
                                 }
