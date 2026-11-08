@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Activation candidate pushed; full gate running — 8 November 2026, 18:35 UTC
+
+Continue primary feature work in .worktrees/hris-mobile-recipient-waiting-20261108,
+branch feat/chat-auto-activation-20261108, pushed60d1de23. Its domain activation plus
+request-only foreground recovery is still a candidate. Focused recovery64919 REAPED
+PASS:34 fresh application cases plus40 unchanged portable worker cases. Initial failed
+assertion corrected after checking old/new wake generations; production stayed unchanged.
+Source manifest now includes the exact ignored Firebase config copied from this checkout.
+Full24514 is the sole RUNNING compiler, with4,503 app/config and82 library inputs frozen.
+No emulator may start until it is reaped. Read the side handoff for detailed evidence.
+
+Main74 progress-acceptance.json passed; install-progress.py --install-only and its
+preflight are prepared in .work/release-phone-2026-11-08-build74. Preflight99010 REAPED
+timeout at18:15, phone remains70. No install/UI action. Notify before any future install.
+Earlier71 Storage root remains unresolved; scoped delivery does not claim overall acceptance.
+
+One fresh chat-only fictional account is prepared for real automatic first-login proof.
+Main .work/automatic-activation-native-2026-11-08/provision.py apply10516 REAPED PASS:
+zero devices/key publications, audited membership/OIDC link, no employee profile, mail,
+message or existing-account/key change. Never re-run provisioning or print its private
+plan. The initial one-password utility mismatch was corrected before any DB/Firebase
+write. Fresh device start/install/first-login/stop scripts are prepared under device/;
+they require the future accepted75 artifact and use a new, separate userdata path.
+They have NOT run; the test must reach key publication without Chat/Activate controls.
+
+Side75 packaging/retained-only scripts remain HELD pending full source acceptance.
+Do not resend original71/72/73 messages or UNSENT Draft66 092041. Main native74 evidence
+6bb1e9c5 still needs merging into side before final delivery. Platform361041ce records
+the committed-outbox wake design only; live API1aea/schema116.1 unchanged. Starter and
+inspector unchanged. Automatic interrupted-setup recovery, post-commit/missed readiness
+wakes, native acceptance/Starter port, Apple runtime and all54PRD groups remain open.
+
+
 ## Guard74 native scope passed — 8 November 2026, 18:14 UTC
 
 APK74 SHA be2fa22277f448252730fa119b0eb9d5b587875f960046f729f5a0f0baab5efb,
