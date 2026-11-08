@@ -67,5 +67,6 @@ held-original retry, scope replacement, encrypted exact/archive reads, preview c
 and actual ViewModel-to-Compose input focus. Browser checks run against actual IndexedDB;
 Apple fixtures are source coverage until run on an Apple host.
 
-Signed Android device acceptance and physical phone installation are separate gates.
-Release65 remains the installed baseline until a new artifact passes those gates.
+[Release66 device acceptance](collaboration-composer-release66.md) passed on the retained
+emulator. Physical phone installation is pending connectivity; that phone still has65.
+Pending-send latency remains a separate unresolved measurement.

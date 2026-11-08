@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Release66 accepted; phone connectivity pending — 8 November 2026, 09:38 UTC
+
+Mobile a923d844 is pushed/clean and accepted: full5893/zero all, signed66 verified with
+SDK5 native bytes/signer/source; three unique emulator sends with continuous software
+IME/typing, ordered bubbles and offline cold history/next-draft/inbox preview pass.
+[Device evidence and remaining latency](collaboration-composer-release66.md).
+APK123383055bytes SHA b90e07756bdf967a20be3f4b1ab59e74f4dbc5be5d0be676808baf27dff83b2a.
+180.843s counter: default-key GET2/4042, zero403; encrypted sends3/2003, headers175–205ms.
+Host tap-to-request6.492/8.816/7.636s remains UNRESOLVED. Sync429 happened after all three
+acks. Do not claim pending latency fixed or speculate that the peer must be online.
+
+All jobs are REAPED; no owned compiler/emulator runs. Original emulator userdata retained.
+Never resend Tes66 AAA 092041 / Tes66 BBB 092041 / Tes66 CCC 092041 or any prior original.
+UNSENT `Draft66 092041` remains: preserve it and do not blindly run probes expecting an
+empty input. First70691 probe failed only on omitted Draft: prefix after sending all3;
+read-only15151 continuation passed with0new sends. Four screenshots and 4fps video samples
+were inspected; acceptance09:26:04 is real. Private jobs-reaped.json lists owned sessions.
+
+Phone remains65. Release66 preflight87557 at09:26:37 timed out, connected=false; no install
+or phone UI interaction. An async WireGuard/ADB availability question is pending. Next:
+retry bounded preflight only after preserving its previous result; after connection is
+verified, notify before `install.py --install-only`. It expects version65/appId10962 and
+accepted66; do not launch/drive phone UI. Record actual installation separately in Git.
+
+Starter exact9-core-file port is accepted/pushed e170ada: session24397 reapedPASS426.373s,
+250fresh/72suites, SQLite16/Chrome16,1045+49stableinputs, Android/web/iOS source/root/quality;
+lint0errors45dependency advisories. No more port work for this increment. Source A923 is
+canonical; isolated/staged copies remain stale. Continue measured local-submit/worker
+recovery latency and original54PRDgroups (3inprogress/51planned, none complete). Separate
+storage/scheduling/new/legacy-recovery timings before changing correctness guards. Current
+server3a7909a6, worker/schema116.1, GroupOFF and V117–138undeployed remain unchanged.
+Library2b849217 / nativeSDK5 remain unpublished; no Apple Matrix/overhead acceptance.
+
 ## Composer UI source accepted — 8 November 2026, 09:14 UTC
 
 Full-1/session75012 reaped PASS1529.189s:5,893 fresh cases, zero failures/errors/skips;

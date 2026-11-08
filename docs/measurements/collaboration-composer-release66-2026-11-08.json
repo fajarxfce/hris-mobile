@@ -1,0 +1,542 @@
+{
+  "recordedAt": "2026-11-08T09:37:25.805003+00:00",
+  "versionCode": 66,
+  "sourceCommit": "a923d844ea708fd283c88838e94586c0fae88275",
+  "artifact": {
+    "candidateOnly": true,
+    "diagnosticMarkersAbsent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-08-build66/hris-mobile-dev-release-1.0.0-66-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 66,
+    "versionName": "1.0.0",
+    "bytes": 123383055,
+    "sha256": "b90e07756bdf967a20be3f4b1ab59e74f4dbc5be5d0be676808baf27dff83b2a",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+  },
+  "acceptance": {
+    "accepted": true,
+    "at": "2026-11-08T09:26:04.671120+00:00",
+    "sourceCommit": "a923d844ea708fd283c88838e94586c0fae88275",
+    "apkSha256": "b90e07756bdf967a20be3f4b1ab59e74f4dbc5be5d0be676808baf27dff83b2a",
+    "scope": "Actual atomic composer adoption; three unique consecutive send gestures without waiting for acknowledgement, continued typing/software IME, then offline cold history/draft/preview.",
+    "unchangedInspectorEvidence": {
+      "acceptedBuild": 65,
+      "protectedSourceInputsUnchanged": [
+        "apps/android/src/main/kotlin/dev/fajar/hris/NetworkInspectionShortcut.kt",
+        "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationNetworkInspectionModule.kt",
+        "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/inspection/ApplicationNetworkInspection.kt",
+        "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/inspection/NetworkInspectionNavigation.kt",
+        "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/inspection/NetworkInspectionPage.kt",
+        "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/inspection/NetworkInspectionRequests.kt",
+        "apps/shared/src/commonTest/kotlin/dev/fajar/starter/ApplicationNetworkInspectionTest.kt",
+        "apps/shared/src/commonTest/kotlin/dev/fajar/starter/NetworkInspectionRequestsTest.kt",
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/NetworkInspectionUiTest.kt",
+        "core/network/build.gradle.kts",
+        "core/network/src/androidMain/kotlin/dev/fajar/starter/network/NetworkException.kt",
+        "core/network/src/androidMain/kotlin/dev/fajar/starter/network/PlatformHttpEngine.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/ApiResponseBody.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/ApiResponseException.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/ApiValidation.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/ApplicationAvailability.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/BinaryRangeRequest.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/HttpClientProvider.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/HttpClientSettings.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/HttpDiagnostics.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/HttpStatusException.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/JsonRequest.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/NetworkDiagnostics.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/NetworkException.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/PlatformHttpEngine.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/SafeApiCall.kt",
+        "core/network/src/commonMain/kotlin/dev/fajar/starter/network/SessionAuthentication.kt",
+        "core/network/src/commonTest/kotlin/dev/fajar/starter/network/ApiProblemTest.kt",
+        "core/network/src/commonTest/kotlin/dev/fajar/starter/network/ApiResponseBodyTest.kt",
+        "core/network/src/commonTest/kotlin/dev/fajar/starter/network/ApiValidationTest.kt",
+        "core/network/src/commonTest/kotlin/dev/fajar/starter/network/ApplicationAvailabilityTest.kt",
+        "core/network/src/commonTest/kotlin/dev/fajar/starter/network/BinaryRangeRequestTest.kt",
+        "core/network/src/commonTest/kotlin/dev/fajar/starter/network/HttpClientOwnershipTest.kt",
+        "core/network/src/commonTest/kotlin/dev/fajar/starter/network/HttpDiagnosticsTest.kt",
+        "core/network/src/commonTest/kotlin/dev/fajar/starter/network/JsonRequestTest.kt",
+        "core/network/src/commonTest/kotlin/dev/fajar/starter/network/ReadOnlyPostAuthenticationTest.kt",
+        "core/network/src/commonTest/kotlin/dev/fajar/starter/network/SafeApiCallTest.kt",
+        "core/network/src/commonTest/kotlin/dev/fajar/starter/network/SessionAuthenticationTest.kt",
+        "core/network/src/desktopMain/kotlin/dev/fajar/starter/network/NetworkException.kt",
+        "core/network/src/desktopMain/kotlin/dev/fajar/starter/network/PlatformHttpEngine.kt",
+        "core/network/src/iosMain/kotlin/dev/fajar/starter/network/NetworkException.kt",
+        "core/network/src/iosMain/kotlin/dev/fajar/starter/network/PlatformHttpEngine.kt",
+        "core/network/src/wasmJsMain/kotlin/dev/fajar/starter/network/NetworkException.kt",
+        "core/network/src/wasmJsMain/kotlin/dev/fajar/starter/network/PlatformHttpEngine.kt",
+        "core/network/src/wasmJsTest/kotlin/dev/fajar/starter/network/BrowserFetchFailureTest.kt",
+        "gradle/libs.versions.toml"
+      ],
+      "librarySourcesUnchanged": true,
+      "deviceNotificationCasesRerun": false,
+      "priorAcceptanceSha256": "997c510ecb01b0a3032a99c7d9d0687473fe3cc20f5792b5ced36acf0e1915a9"
+    },
+    "screenshotsInspected": true,
+    "screenshotsSha256": {
+      "consecutive-send.png": "93eb572ba199a0b854102c150fd04837af841e562881e9510f3ee1c8b1381af7",
+      "latest-preview-before-restart.png": "31b6118e750b723b07b9505dcf0b2be49c8df8a90cdab90f3595a355723fb387",
+      "latest-preview-offline.png": "1333a54ac5b36e692ec411c5a5255cf25834e4799471fc42743de6cacff4d427",
+      "thread-offline.png": "f4cb4f8d1b61e477428bf483ad2b2ca35dc29016c9614a5fc4f745a3eab5e635"
+    },
+    "actualVideoInspected": true,
+    "originalStorePreserved": true,
+    "explicitNewMessagesSent": 3,
+    "duplicateBubbleObserved": false,
+    "immediateKeyboardViewportAccepted": true,
+    "phoneLatencyResolved": false,
+    "captureOverheadAccepted": false,
+    "latencyBoundary": "Coarse emulator UI polling and host ADB taps. First render requires actual video review; HTTP timing is to response headers only. No physical-phone or overhead benchmark.",
+    "sdkCandidate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+    "sdk5NativeBytecodeVerified": true,
+    "localSendTimings": {
+      "accepted": true,
+      "versionCode": 66,
+      "apkSha256": "b90e07756bdf967a20be3f4b1ab59e74f4dbc5be5d0be676808baf27dff83b2a",
+      "startedAt": "2026-11-08T09:20:41.162590+00:00",
+      "serial": "emulator-5562",
+      "processId": 3408,
+      "gestureQueueDurationsMillis": [
+        1518,
+        1281,
+        238
+      ],
+      "gestureQueueOutcomes": [
+        "Succeeded",
+        "Succeeded",
+        "Succeeded"
+      ],
+      "distinctGestureTraces": 3,
+      "distinctQueueSpans": 3,
+      "originalLogSha256": "1870c265820c0ea8d03e262cc7029b5e6d2460730215a26017e857345f96b45d",
+      "bodyOrOwnerRetainedInDiagnostics": false,
+      "boundary": "Same-process monotonic local phases; overlaps with asynchronous delivery. Not end-to-end acknowledgement latency or transport overhead."
+    },
+    "encryptedSendHeadersMillis": [
+      186,
+      205,
+      175
+    ],
+    "responses403": 0,
+    "originalHistoryAfterColdOfflineRestart": true,
+    "nextDraftAfterColdOfflineRestart": true
+  },
+  "requestWindow": {
+    "gestures": [
+      {
+        "gestureOrdinal": 1,
+        "tapToRequestMillis": 6492.348,
+        "responseHeaderMillis": 186,
+        "tapToResponseHeadersMillis": 6678.348,
+        "status": 200
+      },
+      {
+        "gestureOrdinal": 2,
+        "tapToRequestMillis": 8816.151,
+        "responseHeaderMillis": 205,
+        "tapToResponseHeadersMillis": 9021.151,
+        "status": 200
+      },
+      {
+        "gestureOrdinal": 3,
+        "tapToRequestMillis": 7635.894,
+        "responseHeaderMillis": 175,
+        "tapToResponseHeadersMillis": 7810.894,
+        "status": 200
+      }
+    ],
+    "boundary": "Same host monotonic clock; three sequential event requests correspond in wire order to the three unique observed original bubbles. Header latency is not complete body/decryption/render time.",
+    "responses403": 0,
+    "sync429OffsetsSeconds": [
+      68.839
+    ],
+    "closedDeliveryMarkers": []
+  },
+  "http": {
+    "seconds": 180.843,
+    "requestCounts": {
+      "other_hris": 19,
+      "hris_device_setup": 29,
+      "hris_room": 29,
+      "secret_storage_default_key": 2,
+      "hris_conversation": 26,
+      "other_matrix": 13,
+      "sync": 7,
+      "encrypted_room_send": 3
+    },
+    "defaultKeyResponses": [
+      {
+        "offsetSeconds": 27.104,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "headerLatencyMs": 59
+      },
+      {
+        "offsetSeconds": 27.103,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "headerLatencyMs": 83
+      }
+    ],
+    "responses403": 0,
+    "boundary": "Bucketed passive emulator-to-gateway header capture. Not a complete reconstructed HTTP trace."
+  },
+  "deliveryStages": {
+    "entries": [
+      {
+        "stage": "RecoverDrafts",
+        "durationMillis": 2669,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129646.744
+      },
+      {
+        "stage": "DiscoverWork",
+        "durationMillis": 53,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129646.8
+      },
+      {
+        "stage": "LoadSetup",
+        "durationMillis": 170,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129646.973
+      },
+      {
+        "stage": "EnsureRuntime",
+        "durationMillis": 9,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129646.984
+      },
+      {
+        "stage": "Reconcile",
+        "durationMillis": 31,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129647.062
+      },
+      {
+        "stage": "ReadPending",
+        "durationMillis": 35,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129647.102
+      },
+      {
+        "stage": "PrepareRoom",
+        "durationMillis": 160,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129647.264
+      },
+      {
+        "stage": "EnterTimeline",
+        "durationMillis": 413,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129647.678
+      },
+      {
+        "stage": "SettleCompletedQueue",
+        "durationMillis": 178,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129647.856
+      },
+      {
+        "stage": "ReadPrepared",
+        "durationMillis": 10,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129647.867
+      },
+      {
+        "stage": "Flush",
+        "durationMillis": 0,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129647.868
+      },
+      {
+        "stage": "StageMessage",
+        "durationMillis": 609,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129648.477
+      },
+      {
+        "stage": "DeliverMessages",
+        "durationMillis": 1141,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129649.619
+      },
+      {
+        "stage": "Retire",
+        "durationMillis": 0,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129649.619
+      },
+      {
+        "stage": "AcquireRetirementHistory",
+        "durationMillis": 604,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129650.224
+      },
+      {
+        "stage": "RetireCommands",
+        "durationMillis": 132,
+        "terminalOutcome": "Succeeded",
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129650.357
+      },
+      {
+        "stage": "ProcessRooms",
+        "durationMillis": 3389,
+        "terminalOutcome": "Failed",
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794129650.374
+      },
+      {
+        "stage": "RecoverDrafts",
+        "durationMillis": 421,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129650.796
+      },
+      {
+        "stage": "DiscoverWork",
+        "durationMillis": 16,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129650.813
+      },
+      {
+        "stage": "LoadSetup",
+        "durationMillis": 43,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129650.857
+      },
+      {
+        "stage": "EnsureRuntime",
+        "durationMillis": 8,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129650.866
+      },
+      {
+        "stage": "Reconcile",
+        "durationMillis": 56,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129650.965
+      },
+      {
+        "stage": "ReadPending",
+        "durationMillis": 11,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129650.977
+      },
+      {
+        "stage": "PrepareRoom",
+        "durationMillis": 78,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129651.056
+      },
+      {
+        "stage": "EnterTimeline",
+        "durationMillis": 350,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129651.41
+      },
+      {
+        "stage": "SettleCompletedQueue",
+        "durationMillis": 334,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129651.745
+      },
+      {
+        "stage": "ReadPrepared",
+        "durationMillis": 13,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129651.759
+      },
+      {
+        "stage": "Flush",
+        "durationMillis": 0,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129651.759
+      },
+      {
+        "stage": "StageMessage",
+        "durationMillis": 362,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129652.122
+      },
+      {
+        "stage": "StageMessage",
+        "durationMillis": 356,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129652.482
+      },
+      {
+        "stage": "DeliverMessages",
+        "durationMillis": 1560,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129654.046
+      },
+      {
+        "stage": "Retire",
+        "durationMillis": 0,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129654.046
+      },
+      {
+        "stage": "AcquireRetirementHistory",
+        "durationMillis": 562,
+        "terminalOutcome": null,
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129654.609
+      },
+      {
+        "stage": "RetireCommands",
+        "durationMillis": 199,
+        "terminalOutcome": "Succeeded",
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129654.809
+      },
+      {
+        "stage": "ProcessRooms",
+        "durationMillis": 4001,
+        "terminalOutcome": "Succeeded",
+        "traceOrdinal": 2,
+        "guestLogEpochSeconds": 1794129654.868
+      }
+    ],
+    "traceCount": 2,
+    "durationClock": "Same-process monotonic stage intervals",
+    "eventClock": "Guest logcat wall time; not synchronized with host ADB tap",
+    "overlap": "ProcessRooms includes the nested room stages; do not add it to those durations",
+    "sourceLogSha256": "1870c265820c0ea8d03e262cc7029b5e6d2460730215a26017e857345f96b45d"
+  },
+  "passiveProcess": {
+    "sameProcess": true,
+    "fatalLines": 0,
+    "startedAt": "2026-11-08T09:25:05.148367+00:00",
+    "finishedAt": "2026-11-08T09:25:15.172477+00:00",
+    "observedPid": "4715",
+    "afterPid": "4715",
+    "crashBufferSince": "2026-11-08T09:20:12.842789+00:00",
+    "uiTouched": false
+  },
+  "coldContinuation": {
+    "startedAt": "2026-11-08T09:22:49.091857+00:00",
+    "newSendActions": 0,
+    "originalFailure": "Preview assertion omitted the visible Draft: prefix",
+    "accepted": true,
+    "finishedAt": "2026-11-08T09:23:16.576810+00:00"
+  },
+  "visualReview": {
+    "at": "2026-11-08T09:25:54.242321+00:00",
+    "reviewed": true,
+    "files": {
+      "consecutive-send.png": "93eb572ba199a0b854102c150fd04837af841e562881e9510f3ee1c8b1381af7",
+      "thread-offline.png": "f4cb4f8d1b61e477428bf483ad2b2ca35dc29016c9614a5fc4f745a3eab5e635",
+      "latest-preview-before-restart.png": "31b6118e750b723b07b9505dcf0b2be49c8df8a90cdab90f3595a355723fb387",
+      "latest-preview-offline.png": "1333a54ac5b36e692ec411c5a5255cf25834e4799471fc42743de6cacff4d427",
+      "consecutive-send-frames-0.png": "8286b3ae6087e977ed7eeccb0e6840a8ba76aa5a670cfd7d907f2bab396e70a3",
+      "consecutive-send-frames-2.png": "f4fe1484e8af7de6ecceaa80a90f0d0deae148b7cebd214aa0534741a0698b21",
+      "consecutive-send-frames-4.png": "bf14526fba08b5246ea249158f7fb9505f2bec7d072b968ab4554c5263fe20bb",
+      "consecutive-send-frames-6.png": "b621d8c5c9b57a33592da3bb2d01da0ff44a33bb993724b414bddb2cf5490d62"
+    },
+    "video": "consecutive-send.mp4",
+    "videoSha256": "31018d434d179fb1c89f199e25327da2e6138772dea6697bc717f3e37ca13155",
+    "sample": "First eight seconds at four frames per second, lower chat/composer/software keyboard",
+    "findings": [
+      "Each first sampled frame containing a new original places its bubble above the input.",
+      "Keyboard and input focus remain throughout all three sends and subsequent draft typing; no send spinner or input disable appears.",
+      "Original bubble order remains AAA, BBB, CCC with no visible duplicates.",
+      "The exact next draft and three Sent originals survive cold offline restart, as does prior65 history.",
+      "Draft preview has the visible Draft: prefix before and after restart; initial probe assertion was corrected only in a read-only continuation, without resending."
+    ],
+    "limitations": [
+      "Video is not independently synchronized to host ADB tap; four frames per second does not establish sub-frame rendering latency.",
+      "Acknowledgement latency is still several seconds and is not claimed resolved."
+    ]
+  },
+  "phone": {
+    "installed": false,
+    "retainedVersionCode": 65,
+    "preflight": {
+      "at": "2026-11-08T09:26:37.609968+00:00",
+      "serial": "10.77.77.3:5555",
+      "uiTouched": false,
+      "connected": false,
+      "reason": "bounded ADB connection timed out"
+    },
+    "availabilityQuestionPending": true,
+    "uiDriven": false
+  },
+  "evidenceSha256": {
+    "release-acceptance.json": "95de326acd16c8c1aba4ec50b51f6f384d2a0f47f3392c53d4461abcc152b297",
+    "artifact.json": "1092a3af240aed8e9263340f8ca32af2cacbfe9fd8007230b8fd8d2586fdb018",
+    "source.json": "6739975912b5162a5d5f156d5155098684e6bf4c7c9cf223dac81bdbb55ef31d",
+    "build-arm64.json": "db8d0b4c3567ca7622240f2a91b03f8815266320fd2dccff49bf602a369c1a77",
+    "sdk-verification.json": "df5774bca6aa8a11c5cac743ed1ebf49b8b74d824ce31dd974eeb536b6f5f932",
+    "emulator-install.json": "5fea33af97bfa90720e4ee3f2444749a3757f444f86fabbaa3fb6e1be5d80a94",
+    "emulator-start.json": "b2efdb0fcfa5635c09301af226fd108ed4608f7bd8566f4a42f3e19dbeb522c1",
+    "emulator-stop.json": "51c46ac160867941c8b04e78aec0eadad0ade3fad7629a7150f93811d3299fb0",
+    "emulator-probe.json": "2fd94d2084bc078728ba4c9311b9bb8083479b2f91002f544f8f386838efac21",
+    "emulator-probe-first-attempt.json": "1237c31ad7e40cf353b070d377e7a1050b2a271371624f45fd52b07ca46da1d0",
+    "cold-continuation.json": "9b7e984c889e423fb7dde5be5ddd3583c53e5cea375d0ab3ea601cd0ff7ce2cd",
+    "matrix-http-counts.json": "c982677d88cdaeef3090c5fb613721b639d287032cd2246df34d39971741654d",
+    "delivery-stage-timing.json": "fbd8b07bcb6690f4dce1094637ac39f7d91726bcdce6eb2591ab97b8d4eb8365",
+    "send-timing.json": "e53c48dc7fa7ca337592b85ee70b5385d08575eb9a846db7e68c9a3f71691dea",
+    "request-window-analysis.json": "ce0d179b32f9cb2fac73943a74a9dac04eea09ad7ed89d9b38efc4e7aecaae8c",
+    "passive-process.json": "7a3c7419a5533d8531ad9af42fe93d73c7d929e77dc1ddee7c874ced8fea9da7",
+    "visual-review.json": "b6b291c459087b934a6f4d553f91ed42e48fa146fb2923d924953645cb440da0",
+    "phone-preflight.json": "85fef1e64005dd62fe41f2056704739dcc227f407895c434002c63a996b5639c"
+  },
+  "starterPortCommit": "e170ada",
+  "limitations": [
+    "Physical phone installation pending connectivity.",
+    "Pre-send emulator latency remains 6.5\u20138.8 seconds.",
+    "One ProcessRooms span failed/continued; no closed delivery failure marker was emitted.",
+    "Sync 429 occurred after all three send acknowledgements.",
+    "No native Apple Matrix, capture overhead or publication acceptance."
+  ]
+}
