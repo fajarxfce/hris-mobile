@@ -1,0 +1,65 @@
+{
+  "accepted": false,
+  "versionCode": 75,
+  "apkSha256": "d21b3def90b1cb126d1e37078be62d991b0d0649e049f5366c172b366e2454c3",
+  "sourceCommit": "23f5af9e",
+  "firstActivation": {
+    "normalActions": [
+      "Skip",
+      "Sign in",
+      "Select company"
+    ],
+    "before": {
+      "devices": 0,
+      "activeDevices": 0,
+      "confirmedPublications": 0
+    },
+    "observedAfter": {
+      "devices": 1,
+      "activeDevices": 1,
+      "confirmedPublications": 1
+    },
+    "keyPublicationSeconds": 8.455,
+    "roomOpened": false,
+    "manualSetupOpened": false,
+    "sendGestures": 0
+  },
+  "coldRestartFailure": {
+    "category": "CollaborationSdkStoreBusyException",
+    "frame": "FileCollaborationSdkStoreSource.acquireFiles:79",
+    "atEpoch": 1794164707.179,
+    "diagnosticCaptureRestoredAdbRoot": true,
+    "uiDriverInterruptedDuringDiagnosticAdbRestart": true,
+    "resolved": false
+  },
+  "continuation": {
+    "sameOriginalData": true,
+    "deviceAndPublicationCounts": {
+      "devices": 1,
+      "activeDevices": 1,
+      "confirmedPublications": 1
+    },
+    "sendGestures": 0,
+    "scope": "Additional cold restart renders Home and keeps the one original device/publication; does not resolve the earlier ownership collision.",
+    "responses": {
+      "sync:200": 3,
+      "hris_device_setup:200": 7,
+      "other_hris:200": 7,
+      "hris_conversation_summaries:200": 2,
+      "secret_storage_default_key:404": 4
+    }
+  },
+  "phoneTouched": false,
+  "emulatorStopped": true,
+  "dataRetained": true,
+  "starterPortAccepted": false,
+  "priorRelease71StorageRootResolved": false,
+  "nativeEvidenceHashes": {
+    "first-login.json": "15b034e328f1aa367bde4c10a57d73786ae6e41e96d2e46560040d3c8a6133b5",
+    "storage-watch.json": "b525ae83a8705aacd2b4b2eeb5a9b21b365153410a8a2c33fe4a6d2992c1594a",
+    "restore.json": "1bab43267643b6538bf5cdd5e209ca9f20d975743092201517bae6c4d66b26c1",
+    "activation-http-raw-counts.json": "b8388d1cd1cad7fe01b0b0a73dfa290fdeed0e6ad078692a422e09db65e5900c",
+    "restore-http-raw-counts.json": "2999680192cc237001c67ae82bf93429c80c26d40eecf5afac9666acb9c2c518",
+    "emulator-stop.json": "4e6bafefae7288f3287acb658ac8bc0ae2f32e4217ada78cfa9bacbf3238e941"
+  }
+}

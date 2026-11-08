@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Native75 first keys passed; cold ownership collision blocks acceptance — 8 November 2026, 19:09 UTC
+
+Main75 source23f5af9e packaging12836 REAPED PASS361.136s; artifact/SDK4308 passed.
+Actual APKd21b3def90b1cb126d1e37078be62d991b0d0649e049f5366c172b366e2454c3,
+123432335bytes. Main checkout embeds the correct Git commit. No phone installation.
+
+Fresh isolated account's ordinary login/company selection created one device and
+confirmed key publication in8.455s without opening chat/setup or sending. The first
+cold restart then captured CollaborationSdkStoreBusyException at
+FileCollaborationSdkStoreSource.acquireFiles:79. Storage watcher97568 captured private
+Crashlytics and restored adbd to2000. Its root restart interrupted UI dump27341;
+this is not merely a UI harness issue. Initial failed evidence remains unchanged.
+Separate restore64646 and counter36830 passed continuity/retained1-device counts,
+but cannot clear the earlier race. No registration replay, key reset or copied store.
+
+All fresh jobs are REAPED:83924 emulator,86620 install,27341 first-login failure,
+29151 first capture,97568 storage watch,64646 restore,36830 restore capture,59255
+passive/shell/stop. Owned fresh data and original Bima74 are preserved and stopped.
+Fresh native acceptance HOLD remains; do not run the old first-login/provision again,
+install75, or port Starter yet. [Evidence](measurements/collaboration-automatic-activation-native75-2026-11-08.json).
+
+Root investigation: activation inspects inventory/private identity using the file
+owner lock outside SdkRuntimeRegistry, while background restoration reserves its
+SDK entry and acquires that same file lock. Add one scoped runtime-inspection
+reservation covering the whole domain inspection, with cancellation/late-retention
+cleanup. An already published runtime must be observed atomically instead of
+reinspected. Do not mask StoreBusy, reset keys or add another timed request loop.
+Then targeted/full checks, new76 packaging and retained/fresh-original native proof.
+Phone stays70/unreachable. Old71 Storage root remains distinct and unresolved.
+
+Platform has three UNVALIDATED/UNBOUND readiness domain files (entities, repository,
+FanOutCollaborationReadiness); no migration/datasource/worker/live change. Finish
+this Mobile ownership root before resuming that WIP. All54PRD work remains open.
+
 ## Main checkout packaging after linked-worktree metadata rejection — 8 November 2026
 
 Main and activation branches now share pushed56571c5e. The full gate ran in the
