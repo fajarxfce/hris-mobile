@@ -1,5 +1,28 @@
 # Agent continuation — HRIS Mobile
 
+## Recipient waiting implementation under test — 8 November 2026, 13:54 UTC
+
+Mobile93cb97f1 release70 docs pushed78266 REAPED. Phone70/original stopped Bima70,
+no owned emulator. Starterada8254 exact enum port accepted285fresh/0all439.630s and
+pushed70878 REAPED. Platform1aea3228 live116.1, library2b849217/SDK5 unchanged.
+
+Sole compiler50017 runs .work/recipient-waiting-2026-11-08/check.py focused-1.
+Primary Mobile has28Kotlin/twoXML source changes UNCOMMITTED/UNACCEPTED, all frozen
+with library. [Design and exact responsibility](collaboration-recipient-waiting.md).
+Read gate before changes, reap, fix actual failures, then full required checks.
+No71 APK/send/install; do not package before source and visual acceptance.
+
+Phone70 watch73435 and counter28633 REAPED: app not observed open for302.290s;
+ZEROrequests in360.360s. [Inconclusive observation](measurements/collaboration-recipient-phone70-2026-11-08.json).
+Pending user-open question remains; never drive phone UI or call this no-loop proof.
+Do not replay any original, especially Tes70 lazyqueue133144 or UNSENT Draft66092041.
+
+Next after source acceptance: inspect three actual layout images, preserve original
+keys/data in emulator acceptance, announce install-only only for a validated update.
+Automatic first-login key setup and scoped readiness/device-list+FCM/APNs wake remain
+separate required work, plus the broader PRD. No goals/subagents. Side worktree remains
+doc-only at e8f94854; no production patch to merge from it.
+
 ## Release70 installed; first-use experience remains next — 8 November 2026, 13:44 UTC
 
 Mobile sourcee8f94854 accepted/pushed. Release70 APK SHA-256

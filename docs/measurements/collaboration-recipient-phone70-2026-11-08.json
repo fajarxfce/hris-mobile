@@ -1,0 +1,35 @@
+{
+  "recordedAt": "2026-11-08T13:53:25.370400+00:00",
+  "versionCode": 70,
+  "sourceCommit": "e8f94854c19e22f4fd6acbbe3a48e486d148ca32",
+  "counter": {
+    "startedAt": "2026-11-08T13:37:08.706506+00:00",
+    "monotonicStartedSeconds": 1821721.355045339,
+    "elapsedSeconds": 360.36,
+    "requests": {},
+    "records": [],
+    "passiveReadOnly": true,
+    "bodyOrHeadersRetained": false,
+    "phoneUiDriven": false,
+    "interface": "br-3b9b9ff77286",
+    "scope": "Passive physical-phone release70 gateway traffic; fixed Matrix and HRIS route buckets only. Packet-level counts can omit fragmented starts; not a complete HTTP reconstruction or capture-overhead benchmark"
+  },
+  "watch": {
+    "observed": false,
+    "uiDriven": false,
+    "waitedSeconds": 302.29
+  },
+  "jobs": {
+    "counter": {
+      "session": 28633,
+      "reaped": true
+    },
+    "watch": {
+      "session": 73435,
+      "reaped": true
+    }
+  },
+  "conclusion": "Inconclusive: the application was not observed open and no request was captured. This is not evidence that the retry loop stopped.",
+  "phoneUiDriven": false,
+  "newMessageSent": false
+}
