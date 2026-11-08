@@ -157,5 +157,11 @@ internal class HrisProofApplicationAccess(
             server,
         )
 
+    val transport =
+        RemoteCollaborationTransportRepository(
+            ApiCollaborationConversationRemoteSource(CollaborationConversationApi(client)),
+            server,
+        )
+
     fun close() = client.cancelAndClose()
 }

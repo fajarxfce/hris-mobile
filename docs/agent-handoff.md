@@ -1,5 +1,57 @@
 # Agent continuation — HRIS Mobile
 
+## Recipient waiting source accepted — 8 November 2026, 14:28 UTC
+
+Full55172 REAPED PASS:5,775fresh/777suites, zero failures/errors/skips,1,013.143s.
+All4,498app/82library inputs unchanged. Root, actual Chrome, Android proof/compile/lint,
+web/iOS source and quality pass; lint0issues. Final3desktop screenshot hashes match
+actually viewed images. [Source/evidence](collaboration-recipient-waiting.md).
+Commit/push this atomic source+tests+docs, remove71 HOLD, then package. No owned
+compiler/emulator remains. Phone and original stopped Bima image70 are unchanged.
+
+Private release71 now has20Python scripts plus init/HOLD. Unready probe/counter and
+acceptance are implemented/AST checked but NOT RUN. Read-only live audit confirms
+owned Administrator is active/permitted with0devices/0confirmedpublications.
+Native acceptance must include one NEW ready original and one NEW unready original,
+retained offline waiting plus180s online quiet with no repeated transport after30s
+settling. Preserve exact UNSENT Draft66 092041 and all previous originals; never replay.
+No phone UI driving. Notify before validated install-only. Old phone-open question
+is pending; previous passive phone observation was inconclusive.
+
+Automatic first-login activation and scoped readiness wake remain required next.
+The doc-only side worktree at e8f94854 now also has an untracked automatic-activation
+design: consolidate setup business workflow into domain, preserve original commands/
+keys/denials, recover lost private stores, and reuse bounded recovery after publication.
+No automatic-activation source exists yet. Starterada8254, Platform1aea3228/live116.1
+and Library2b849217/SDK5 unchanged. All broader PRD work remains open.
+
+## Waiting full source gate running — 8 November 2026, 14:15 UTC
+
+Sole compiler55172 runs .work/recipient-waiting-2026-11-08/check.py full-1. All28Kotlin/
+twoXML and82library inputs FROZEN/UNACCEPTED. Focused50017 REAPED PASS135fresh0all839.287s;
+focused35512 REAPED PASS18fresh0all170.611s,4,498app inputs stable. New observations are
+normalized before combination; one explanation belongs to the latest stable row,
+so no new list key appears below a pending bubble. Optional metadata cannot delay
+initial messages. [Current source and visual evidence](collaboration-recipient-waiting.md).
+
+Three actual desktop images inspected at375x768/light,2x dark text and720x375landscape;
+final late-appearance test output has identical hashes. Source acceptance and native
+unready behavior remain required. No owned emulator; phone/original Bima remain70.
+
+Release71 has18 prepared scripts plus HOLD in .work/release-phone-2026-11-08-build71,
+AST checked, no build/run/send. They pin final waiting/full-1, additional storage/thread/
+UI reports and require both the normal one-NEW ready-recipient proof and a separate
+unready-recipient native observation before acceptance. The unready probe/counter
+scripts still need implementation. Do not accept ready-only success as unready proof.
+Preserve old originals and exact UNSENT Draft66 092041. A prospective new waiting
+original must stay retained and never be replayed just to rerun the test.
+
+Next: reap full, fix actual failures, then accepted source commit/push/build. Complete
+native observations before notifying and installing only. No phone UI driving or new
+phone question; the prior user-open question is pending and previous observation was
+inconclusive. Auto first-login activation and scoped readiness+FCM/APNs wake still
+remain separate required work. Starterada8254/Platform1aea3228/Library2b849217 unchanged.
+
 ## Recipient waiting implementation under test — 8 November 2026, 13:54 UTC
 
 Mobile93cb97f1 release70 docs pushed78266 REAPED. Phone70/original stopped Bima70,

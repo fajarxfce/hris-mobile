@@ -1,3 +1,5 @@
+@file:OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 package dev.fajar.starter.collaboration.domain.usecases
 
 import dev.fajar.starter.collaboration.domain.entities.*
@@ -9,6 +11,7 @@ import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
@@ -29,6 +32,7 @@ class DeliverCollaborationMessages(
     private val build: AppBuild,
     private val clock: Clock,
     private val completions: CollaborationMessageCompletionRepository,
+    private val recipientObservations: CollaborationRecipientObservationRepository,
 ) {
     private val execution = Mutex()
 
@@ -253,15 +257,52 @@ class DeliverCollaborationMessages(
         deviceId: String,
         conversationId: String,
     ): AppResult<String> {
+        val previous =
+            checked(scope, owner) {
+                recipientObservations.get(owner.localListAccess(), conversationId)
+            }
+        if (previous is AppResult.Failed) return previous
         val read = checked(scope, owner) { transport.read(owner, conversationId) }
         if (read is AppResult.Failed) return read
-        return collaborationTransportRoom(
-            (read as AppResult.Success).value,
-            owner,
-            deviceId,
-            conversationId,
-            build.platform.name.uppercase(),
-        )
+        val admitted =
+            collaborationTransportRoom(
+                (read as AppResult.Success).value,
+                owner,
+                deviceId,
+                conversationId,
+                build.platform.name.uppercase(),
+            )
+        val unavailable =
+            admitted is AppResult.Failed &&
+                admitted.failure.code == "client.collaboration_recipient_unavailable"
+        if (admitted is AppResult.Success || unavailable) {
+            val replacement =
+                collaborationRecipientObservation(
+                    conversationId,
+                    (previous as AppResult.Success).value,
+                    ready = !unavailable,
+                    revision = Uuid.random().toString(),
+                )
+            if (replacement != null) {
+                val saved =
+                    checked(scope, owner) {
+                        recipientObservations.replace(
+                            owner.localListAccess(),
+                            previous.value,
+                            replacement,
+                        )
+                    }
+                // A display-write failure cannot turn an unready peer into a timed send retry.
+                // Current ownership/content denials from checked still take precedence.
+                if (
+                    saved is AppResult.Failed &&
+                        !(unavailable &&
+                            saved.failure.kind in setOf(FailureKind.Storage, FailureKind.Conflict))
+                )
+                    return saved
+            }
+        }
+        return admitted
     }
 
     private suspend fun completedReceipts(

@@ -1,0 +1,417 @@
+{
+  "accepted": true,
+  "recordedAt": "2026-11-08T14:28:12.808490+00:00",
+  "focused1": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "env",
+      "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+      "ANDROID_HOME=/home/fajar/Android/Sdk",
+      "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+      "TMPDIR=/home/fajar/hris/.work/build-tmp",
+      "./gradlew",
+      "--dependency-verification",
+      "strict",
+      "--stacktrace",
+      "--continue",
+      ":features:collaboration:domain:desktopTest",
+      "--tests",
+      "*CollaborationPreparedDeliveryTest*",
+      "--tests",
+      "*StageCollaborationTextTest*",
+      "--tests",
+      "*ObserveCollaborationThreadTest*",
+      ":features:collaboration:data:desktopTest",
+      "--tests",
+      "*CollaborationRecipientObservationStorageTest*",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      "--tests",
+      "*BrowserCollaborationRecipientObservationStorageTest*",
+      ":features:collaboration:presentation:desktopTest",
+      "--tests",
+      "*ChatRecipientWaitingLayoutTest*",
+      "--tests",
+      "*ChatThreadViewModelTest*",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationDeliveryWorkerTest*",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+      "-PmatrixSdkRepository=/home/fajar/hris/kmp-network-inspector/.work/matrix-android-2026-11-07/sdk-repository",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=71",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2048m",
+      "-Pkotlin.compiler.execution.strategy=in-process"
+    ],
+    "startedAt": "2026-11-08T13:51:59.819006+00:00",
+    "elapsedSeconds": 839.287,
+    "exitCode": 0,
+    "sourceFiles": 4498,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 135,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+        "sha256": "5d68064e1bf007f797ae63e36a64487230a82801436dad9bb7a94688d3734f53",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": {
+        "sha256": "aa5be5dbaa642e8a5eb8ece4ce58b913c8b8e3cf7dffb59f8f6953cdcf8750e6",
+        "tests": 44,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatRecipientWaitingLayoutTest.xml": {
+        "sha256": "6fb8c47fa901b0b71f8986cc4eeeee24b774504071431612534301782bea1227",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRecipientObservationStorageTest.xml": {
+        "sha256": "3aca044c4561aed4a50cbfaa9b1eb16bca8d32b0e87a38b6008c3f7c8a01b8b1",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBr-46HBIHJOOPKKS.dev.fajar.starter.collaboration.data.BrowserCollaborationRecipientObservationStorageTest.xml": {
+        "sha256": "095e72e9e5263c12bb45e73c57a3d05ce134c7636a3980cb48676df22d96d15a",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ObserveCollaborationThreadTest.xml": {
+        "sha256": "84b5f63b4c1c71edb17dc0cd0868c3e94923bb2e1a69347e7fa513870ae925b6",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.StageCollaborationTextTest.xml": {
+        "sha256": "1add11d7315b76c2d8ddea1425f432f117d7071195f0733a32d6d278f38073a7",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationPreparedDeliveryTest.xml": {
+        "sha256": "63232455a13b4b1a7dcba8c4559a44310829fa2ec21772e7cdaabe9e7c3024c3",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "focused1Session": 50017,
+  "focused1Reaped": true,
+  "next": "Commit/push accepted source, then release71 native ready/unready and offline acceptance before install-only. Automatic first-login activation and event wake remain required.",
+  "correction": "Normalize recipient display booleans before combine to suppress identical-state publication guards; place explanation inside latest stable row rather than inserting a new list key below it. Add delayed-metadata and late-appearance tests. Redact observation toString.",
+  "initialVisualReview": {
+    "at": "2026-11-08T14:00:25.066104+00:00",
+    "screenshots": {
+      "chat-recipient-waiting-compact.png": {
+        "sha256": "ca70b00d2703602c49dddf2c5c100c0213c251ba19cd3278a842c50ff4aac242",
+        "bytes": 17731,
+        "dimensions": [
+          375,
+          768
+        ],
+        "actuallyViewed": true
+      },
+      "chat-recipient-waiting-dark-large-text.png": {
+        "sha256": "ca49b6b6ad7884f8b2945468736d0ee281ff85d8ceb204594db6dfac4c99a5d7",
+        "bytes": 30868,
+        "dimensions": [
+          375,
+          768
+        ],
+        "actuallyViewed": true
+      },
+      "chat-recipient-waiting-landscape.png": {
+        "sha256": "a8964db9bf1d43778efa4761bf6f2a2e3073092ca7a3d226fc81b2a6f213db36",
+        "bytes": 17335,
+        "dimensions": [
+          720,
+          375
+        ],
+        "actuallyViewed": true
+      }
+    },
+    "noticeColorTokenContrast": {
+      "light": {
+        "foregroundRgb": [
+          99,
+          112,
+          131
+        ],
+        "backgroundRgb": [
+          245,
+          247,
+          250
+        ],
+        "ratio": 4.69
+      },
+      "dark": {
+        "foregroundRgb": [
+          166,
+          177,
+          193
+        ],
+        "backgroundRgb": [
+          20,
+          23,
+          28
+        ],
+        "ratio": 8.28
+      }
+    },
+    "tokenSource": "core/designsystem/src/commonMain/kotlin/dev/fajar/starter/designsystem/theme/AppColors.kt",
+    "inspection": "One localized explanation, retained pending bubble/clock and enabled composer; no retry action, spinner or app-bar network status. Compact, 2x dark text and landscape fit.",
+    "boundary": "State-driven desktop Compose screenshots and semantics. Contrast calculated from explicit opaque text/canvas tokens, not sampled pixels. No native phone/iOS or first-frame measurement."
+  },
+  "visualBoundary": "Three actual desktop images inspected; final full-gate images match reviewed hashes. Includes late-appearance and delayed-metadata tests, not native runtime or first-frame evidence.",
+  "device": "Phone70 and stopped original Bima70 unchanged. No71 artifact/send/install.",
+  "pending": [
+    "Automatic first-login key enrollment",
+    "Scoped readiness event and background wake",
+    "Physical-phone unready-loop observation",
+    "Broader PRD"
+  ],
+  "focused2": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "env",
+      "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+      "ANDROID_HOME=/home/fajar/Android/Sdk",
+      "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+      "TMPDIR=/home/fajar/hris/.work/build-tmp",
+      "./gradlew",
+      "--dependency-verification",
+      "strict",
+      "--stacktrace",
+      "--continue",
+      ":features:collaboration:domain:desktopTest",
+      "--tests",
+      "*ObserveCollaborationThreadTest*",
+      ":features:collaboration:presentation:desktopTest",
+      "--tests",
+      "*ChatRecipientWaitingLayoutTest*",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+      "-PmatrixSdkRepository=/home/fajar/hris/kmp-network-inspector/.work/matrix-android-2026-11-07/sdk-repository",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=71",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2048m",
+      "-Pkotlin.compiler.execution.strategy=in-process"
+    ],
+    "startedAt": "2026-11-08T14:07:01.890438+00:00",
+    "elapsedSeconds": 170.611,
+    "exitCode": 0,
+    "sourceFiles": 4498,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatRecipientWaitingLayoutTest.xml": {
+        "sha256": "95cf70bfd0b07a5c5b38efa2a42b036932bc1b97b80bfb12267b68bf2c089760",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ObserveCollaborationThreadTest.xml": {
+        "sha256": "5f5f17dde5d08b42f3cf9ae5722b1effffa6c4f09643b1b9d455a465256738e2",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "focused2Session": 35512,
+  "focused2Reaped": true,
+  "finalVisualReview": {
+    "at": "2026-11-08T14:00:25.066104+00:00",
+    "screenshots": {
+      "chat-recipient-waiting-compact.png": {
+        "sha256": "ca70b00d2703602c49dddf2c5c100c0213c251ba19cd3278a842c50ff4aac242",
+        "bytes": 17731,
+        "dimensions": [
+          375,
+          768
+        ],
+        "actuallyViewed": true
+      },
+      "chat-recipient-waiting-dark-large-text.png": {
+        "sha256": "ca49b6b6ad7884f8b2945468736d0ee281ff85d8ceb204594db6dfac4c99a5d7",
+        "bytes": 30868,
+        "dimensions": [
+          375,
+          768
+        ],
+        "actuallyViewed": true
+      },
+      "chat-recipient-waiting-landscape.png": {
+        "sha256": "a8964db9bf1d43778efa4761bf6f2a2e3073092ca7a3d226fc81b2a6f213db36",
+        "bytes": 17335,
+        "dimensions": [
+          720,
+          375
+        ],
+        "actuallyViewed": true
+      }
+    },
+    "noticeColorTokenContrast": {
+      "light": {
+        "foregroundRgb": [
+          99,
+          112,
+          131
+        ],
+        "backgroundRgb": [
+          245,
+          247,
+          250
+        ],
+        "ratio": 4.69
+      },
+      "dark": {
+        "foregroundRgb": [
+          166,
+          177,
+          193
+        ],
+        "backgroundRgb": [
+          20,
+          23,
+          28
+        ],
+        "ratio": 8.28
+      }
+    },
+    "tokenSource": "core/designsystem/src/commonMain/kotlin/dev/fajar/starter/designsystem/theme/AppColors.kt",
+    "inspection": "One localized explanation, retained pending bubble/clock and enabled composer; no retry action, spinner or app-bar network status. Compact, 2x dark text and landscape fit.",
+    "boundary": "State-driven desktop Compose screenshots and semantics. Contrast calculated from explicit opaque text/canvas tokens, not sampled pixels. No native phone/iOS or first-frame measurement.",
+    "verifiedAfterFocused2": true,
+    "verifiedAt": "2026-11-08T14:13:47.930852+00:00",
+    "sourceGate": "focused-2",
+    "lateAppearanceTested": true,
+    "stableLatestRow": true
+  },
+  "full": {
+    "startedAt": "2026-11-08T14:10:18.673751+00:00",
+    "elapsedSeconds": 1013.143,
+    "exitCode": 0,
+    "sourceFiles": 4498,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 5775,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 777,
+    "gateSession": 55172,
+    "reaped": true,
+    "reportManifestSha256": "9aebef746be22176860bc8b7118acb58c9561460839bcc78118d2599515ba2bd",
+    "sourceManifestSha256": "bee8a86ad069486544615e4a6d440c736153a7ea1b065116952b11a301a81d6e",
+    "relevantReports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+        "sha256": "306a076caa18080e1d8e02367150c6f1456ead262d3b5fc66391a80772115313",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatRecipientWaitingLayoutTest.xml": {
+        "sha256": "2bf82ff53ba7f4f9ec4c7fea94ef455fd1cdaa33179c6891fb43413714b7b83c",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRecipientObservationStorageTest.xml": {
+        "sha256": "760a8879cac40866fd9673dca82faf62795ca97685bb179022cd52334b9c2c93",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBr-46HBIHJOOPKKS.dev.fajar.starter.collaboration.data.BrowserCollaborationRecipientObservationStorageTest.xml": {
+        "sha256": "1700338802e84a574149e91d267927e2505ba23781db59a4c953f2badcb7045a",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationPreparedDeliveryTest.xml": {
+        "sha256": "972cdf9c43b79a7bf082f8ee12537886a70a8f3f98ccf396c9296276f7f91d38",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ObserveCollaborationThreadTest.xml": {
+        "sha256": "c3f565a23fb9d620bf5719777cc37bd443f33de89bf785a408845e2bae6d4480",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.StageCollaborationTextTest.xml": {
+        "sha256": "68e2a241e06a9c50aba58b846d8ba297ec859b38e6065c2a88a349019e847e0d",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "targets": [
+      "root check",
+      "actual Chrome recipient storage",
+      "Android proof compilation",
+      "Android devRelease compilation/lint",
+      "Wasm source compilation",
+      "iOS arm64 source compilation",
+      "formatCheck",
+      "architectureCheck",
+      "detekt"
+    ],
+    "androidLintIssues": 0
+  }
+}

@@ -1,8 +1,14 @@
 # Retained recipient waiting explanation
 
-Implementation is in progress on the primary Mobile checkout after accepted source
-e8f94854/release70. Source is UNACCEPTED; focused50017 is running and freezes all
-28 Kotlin/two resource changes. No71 APK, emulator send, or phone installation exists.
+The primary Mobile source is accepted after e8f94854/release70. Full55172 was
+reaped successfully: 5,775 fresh cases across 777 suites, zero failures/errors/skips,
+1,013.143 seconds. All4,498 application and82 library inputs remained unchanged.
+Root check, actual Chrome storage, Android proof/devRelease compilation and lint,
+web/iOS source compilation and quality checks passed. Android lint reports zero
+issues. Focused50017 passed135 cases;35512 passed18 after observation/layout corrections.
+[Evidence](measurements/collaboration-recipient-waiting-2026-11-08.json).
+Release71 native waiting/offline/request-count acceptance and installation remain next.
+No71 APK, emulator send, or phone installation exists at source acceptance.
 
 The original command lifecycle remains untouched. A separate encrypted observation
 stores conversation ID, opaque revision and the last valid recipient-ready fact in
@@ -25,7 +31,7 @@ ObserveCollaborationThread combines this optional local fact with its existing
 history/command observation. An initial unknown value prevents optional metadata
 from delaying the first message window. Missing/failed/invalid observations are not
 sending permission and do not erase messages. Presentation maps the snapshot and
-shows one restrained history item only while an owned, durable unsent bubble remains.
+shows one restrained explanation within the latest stable row only while an owned, durable unsent bubble remains.
 It disappears when messages complete or leave the visible pending set, without a
 refresh action, spinner, app-bar network label, or technical per-bubble error.
 
@@ -38,12 +44,15 @@ still recheck current transport before resuming the exact original transaction.
 
 UI/UX Pro Max guidance was consulted for Compose state ownership and semantics.
 Search results about form submission do not fit optimistic messaging and were not
-used to add blocking feedback. The proposed UI requires actual compact, large dark
-text and landscape screenshot review, plus semantic visibility/input checks.
+used to add blocking feedback. Compact, large dark text and landscape screenshots were inspected, with semantic
+visibility/input checks.
 Source tests cover retained SQLite/real-browser data, exact replay/CAS, lost replies,
 cancellation, account/company isolation, corrupt ciphertext, same original/no
 native writer while unready, late response fencing and unchanged content publication.
-These are planned acceptance cases until the running gate actually passes.
+These focused cases and the complete source gate passed.
+The three final screenshots are byte-identical to the actually viewed initial images.
+Late appearance and delayed metadata are tested. Opaque text/canvas token contrast is
+4.69:1 in light mode and8.28:1 in dark mode. This is not native-device acceptance.
 
 Three opt-in Android proof call sites were also found using the older two-repository
 transport constructor. They now use the real scoped transport adapter and an explicit

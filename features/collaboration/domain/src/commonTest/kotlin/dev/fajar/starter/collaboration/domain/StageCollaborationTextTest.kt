@@ -40,10 +40,77 @@ class StageCollaborationTextTest {
         assertEquals(original, f.record)
         assertEquals(0, f.acquisitions)
         assertEquals(0, f.enqueues)
+        val waiting = f.recipientObservations.values.value.getValue(original.intent.conversationId)
+        assertFalse(waiting.ready)
+        assertEquals(1, f.recipientObservations.writes)
+        assertIs<AppResult.Failed>(f.stage())
+        assertEquals(
+            waiting,
+            f.recipientObservations.values.value.getValue(original.intent.conversationId),
+        )
+        assertEquals(1, f.recipientObservations.writes)
         f.recipientReady = true
         assertIs<AppResult.Success<*>>(f.stage())
         assertEquals(1, f.enqueues)
         assertEquals(original.intent, f.record.intent)
+        assertTrue(
+            f.recipientObservations.values.value.getValue(original.intent.conversationId).ready
+        )
+    }
+
+    @Test
+    fun failedWaitingWriteStillBlocksWithoutMutatingTheOriginal() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        val original = f.record
+        f.recipientReady = false
+        f.recipientObservations.writeFailure =
+            Failure(FailureKind.Storage, "Unavailable local storage")
+        assertEquals(
+            "client.collaboration_recipient_unavailable",
+            assertIs<AppResult.Failed>(f.stage()).failure.code,
+        )
+        assertEquals(original, f.record)
+        assertEquals(0, f.acquisitions)
+        assertEquals(0, f.enqueues)
+        assertTrue(f.recipientObservations.values.value.isEmpty())
+    }
+
+    @Test
+    fun concurrentNewerObservationIsNotOverwrittenByLateTransport() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        val newer =
+            CollaborationRecipientObservation(f.record.intent.conversationId, stageId(981), true)
+        f.recipientReady = false
+        f.afterTransport = {
+            f.recipientObservations.values.value = mapOf(newer.conversationId to newer)
+        }
+        assertEquals(
+            "client.collaboration_recipient_unavailable",
+            assertIs<AppResult.Failed>(f.stage()).failure.code,
+        )
+        assertEquals(newer, f.recipientObservations.values.value[newer.conversationId])
+        assertEquals(0, f.enqueues)
+    }
+
+    @Test
+    fun cancellationDuringWaitingWriteDoesNotStartTheNativeQueue() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        val original = f.record
+        f.recipientReady = false
+        val started = CompletableDeferred<Unit>()
+        f.recipientObservations.beforeWrite = {
+            started.complete(Unit)
+            awaitCancellation()
+        }
+        val attempt = launch { f.stage() }
+        started.await()
+        attempt.cancelAndJoin()
+        assertEquals(original, f.record)
+        assertEquals(0, f.acquisitions)
+        assertTrue(f.recipientObservations.values.value.isEmpty())
     }
 
     @Test
@@ -718,6 +785,7 @@ internal class StageFixture {
             )
         )
     }
+    val recipientObservations = RecipientObservationFixture()
     private val staging =
         StageCollaborationText(
             messages,
@@ -729,6 +797,7 @@ internal class StageFixture {
             base.server,
             base.build,
             base.clock,
+            recipientObservations,
         )
 
     suspend fun prepare(replyToEventId: String? = null) {

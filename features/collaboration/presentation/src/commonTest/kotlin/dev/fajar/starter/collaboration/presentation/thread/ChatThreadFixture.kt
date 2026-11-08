@@ -911,6 +911,24 @@ internal class ChatThreadFixture {
                 server,
                 build,
                 clock,
+                object : CollaborationRecipientObservationRepository {
+                    override fun observe(
+                        access: CollaborationLocalAccess,
+                        conversationId: String,
+                    ): Flow<AppResult<CollaborationRecipientObservation?>> =
+                        flowOf(AppResult.Success(null))
+
+                    override suspend fun get(
+                        access: CollaborationLocalAccess,
+                        conversationId: String,
+                    ): AppResult<CollaborationRecipientObservation?> = error("No recipient read")
+
+                    override suspend fun replace(
+                        access: CollaborationLocalAccess,
+                        expected: CollaborationRecipientObservation?,
+                        replacement: CollaborationRecipientObservation,
+                    ): AppResult<Boolean> = error("No recipient write")
+                },
             )
         }
 

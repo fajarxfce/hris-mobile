@@ -9,6 +9,66 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
 
 class ObserveCollaborationThreadTest {
+
+    @Test
+    fun pendingRecipientMetadataDoesNotDelayTheFirstMessageWindow() = runTest {
+        val f = ThreadObservationFixture()
+        assertIs<AppResult.Success<*>>(f.owner.queue())
+        f.recipientObservations.beforeObserve = { awaitCancellation() }
+        val read =
+            assertIs<AppResult.Success<CollaborationRead<CollaborationThreadSnapshot>>>(
+                    f.observe().first()
+                )
+                .value
+                .value
+        assertEquals(f.owner.records.value, read.commands)
+        assertEquals(f.history.page, read.history)
+        assertFalse(read.recipientUnavailable)
+        assertEquals(0, f.owner.activeMessageObservers)
+    }
+
+    @Test
+    fun recipientObservationChangesDoNotReplaceCommandsOrHistory() = runTest {
+        val f = ThreadObservationFixture()
+        assertIs<AppResult.Success<*>>(f.owner.queue())
+        val values = mutableListOf<AppResult<CollaborationRead<CollaborationThreadSnapshot>>>()
+        val job =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                f.observe().toList(values)
+            }
+        runCurrent()
+        val original =
+            assertIs<AppResult.Success<CollaborationRead<CollaborationThreadSnapshot>>>(
+                    values.last()
+                )
+                .value
+                .value
+        assertFalse(original.recipientUnavailable)
+        val waiting =
+            CollaborationRecipientObservation(
+                f.conversation,
+                "a1000000-0000-4000-8000-000000001001",
+                false,
+            )
+        f.recipientObservations.values.value = mapOf(f.conversation to waiting)
+        runCurrent()
+        val changed =
+            assertIs<AppResult.Success<CollaborationRead<CollaborationThreadSnapshot>>>(
+                    values.last()
+                )
+                .value
+                .value
+        assertTrue(changed.recipientUnavailable)
+        assertEquals(original.commands, changed.commands)
+        assertEquals(original.history, changed.history)
+        val count = values.size
+        f.recipientObservations.values.value = mapOf(f.conversation to waiting.copy())
+        runCurrent()
+        assertEquals(count, values.size)
+        job.cancelAndJoin()
+        assertEquals(0, f.owner.activeMessageObservers)
+    }
+
     @Test
     fun historyAndQueueStartWhileContextIsPendingAndOpenWithExpiredCredentials() = runTest {
         val f = ThreadObservationFixture()

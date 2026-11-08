@@ -153,6 +153,14 @@ fun ChatThreadPage(
                                     state.cancellationDialog == null,
                             onSelect = { onEvent(ChatThreadEvent.MessageSelected(row.key)) },
                         )
+                        if (index == 0 && state.waitingForRecipient)
+                            AppText(
+                                appString(AppString.ChatRecipientUnavailable),
+                                Modifier.fillMaxWidth()
+                                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                                color = AppColors.muted,
+                                textAlign = TextAlign.Center,
+                            )
                     }
                 }
                 if (state.loadingOlder && state.rows.isNotEmpty())

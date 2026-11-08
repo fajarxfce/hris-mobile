@@ -22,6 +22,8 @@ internal class HrisAuthMessageStore(
     private val messageKey = AndroidCredentialStore(context, "auth-proof-message-key")
     private val receiptKey = AndroidCredentialStore(context, "auth-proof-receipt-key")
     private val listKey = AndroidCredentialStore(context, "auth-proof-list-key")
+    private val observationKey =
+        AndroidCredentialStore(context, "auth-proof-recipient-observation-key")
     private val access =
         runtime.owner.let {
             CollaborationLocalAccess(it.sessionId, it.audience, it.accountId, it.companyId)
@@ -69,14 +71,18 @@ internal class HrisAuthMessageStore(
             StageCollaborationText(
                 messages,
                 lists,
-                app.conversations,
-                app.setup,
+                app.transport,
                 runtimes,
                 app.sessions,
                 app.workspaces,
                 app.server,
                 app.build,
                 app.clock,
+                EncryptedCollaborationRecipientObservationRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    observationKey,
+                ),
             )(app.workspaceId, runtime.deviceId, id)
         )
     }
@@ -87,8 +93,7 @@ internal class HrisAuthMessageStore(
                 messages,
                 receipts,
                 lists,
-                app.conversations,
-                app.setup,
+                app.transport,
                 runtimes,
                 app.sessions,
                 app.workspaces,
@@ -96,6 +101,11 @@ internal class HrisAuthMessageStore(
                 app.build,
                 app.clock,
                 messages,
+                EncryptedCollaborationRecipientObservationRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    observationKey,
+                ),
             )(app.workspaceId, runtime.deviceId, conversation)
         )
 
@@ -108,6 +118,7 @@ internal class HrisAuthMessageStore(
                 { app.close() },
                 { database.close() },
                 { messageKey.close() },
+                { observationKey.close() },
                 { receiptKey.close() },
                 { listKey.close() },
             ),

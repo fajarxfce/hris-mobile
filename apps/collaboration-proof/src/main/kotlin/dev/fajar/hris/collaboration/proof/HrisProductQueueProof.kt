@@ -9,6 +9,7 @@ import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationL
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationMessageRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationReadStateRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationReceiptRepository
+import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationRecipientObservationRepository
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.recoverCollaborationQueue
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
@@ -156,8 +157,7 @@ internal class HrisProductQueueProof(
                 faulting,
                 receipts,
                 listRepository(),
-                app.conversations,
-                app.setup,
+                app.transport,
                 HrisProofRuntimeAccess(runtime),
                 app.sessions,
                 app.workspaces,
@@ -165,6 +165,11 @@ internal class HrisProductQueueProof(
                 app.build,
                 app.clock,
                 messages,
+                EncryptedCollaborationRecipientObservationRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                ),
             )
         val result = sender(app.workspaceId, staged.device.deviceId, conversationId)
         check(result is AppResult.Failed)
@@ -197,14 +202,18 @@ internal class HrisProductQueueProof(
             StageCollaborationText(
                 messages,
                 listRepository(),
-                app.conversations,
-                app.setup,
+                app.transport,
                 HrisProofRuntimeAccess(runtime),
                 app.sessions,
                 app.workspaces,
                 app.server,
                 app.build,
                 app.clock,
+                EncryptedCollaborationRecipientObservationRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                ),
             )
         val record = success(stage(app.workspaceId, runtime.deviceId, logicalId))
         val state = record.state as CollaborationMessageState.Staged
@@ -270,8 +279,7 @@ internal class HrisProductQueueProof(
                 messages,
                 withheld,
                 listRepository(),
-                app.conversations,
-                app.setup,
+                app.transport,
                 HrisProofRuntimeAccess(runtime),
                 app.sessions,
                 app.workspaces,
@@ -279,6 +287,11 @@ internal class HrisProductQueueProof(
                 app.build,
                 app.clock,
                 messages,
+                EncryptedCollaborationRecipientObservationRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                ),
             )
         val result = sender(app.workspaceId, runtime.deviceId, conversationId)
         if (result is AppResult.Failed) throw HrisProofFailure(result.failure)

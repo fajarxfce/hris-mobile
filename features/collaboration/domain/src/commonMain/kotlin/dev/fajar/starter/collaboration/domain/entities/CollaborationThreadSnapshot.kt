@@ -5,6 +5,7 @@ data class CollaborationThreadSnapshot(
     val context: CollaborationThreadContext,
     val history: CollaborationHistoryPage,
     val commands: List<CollaborationMessageRecord>,
+    val recipientUnavailable: Boolean = false,
 ) {
     override fun toString() = "CollaborationThreadSnapshot([redacted])"
 }

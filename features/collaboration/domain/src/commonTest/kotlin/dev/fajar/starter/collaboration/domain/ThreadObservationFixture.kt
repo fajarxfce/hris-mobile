@@ -49,6 +49,7 @@ internal class ThreadObservationFixture {
                 else emitAll(owner.messages.observe(access, conversationId))
             }
         }
+    val recipientObservations = RecipientObservationFixture()
     val observer =
         ObserveCollaborationThread(
             history.history,
@@ -60,6 +61,7 @@ internal class ThreadObservationFixture {
             owner.server,
             owner.build,
             owner.clock,
+            recipientObservations,
         )
 
     fun observe(

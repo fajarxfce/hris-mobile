@@ -50,9 +50,15 @@ class CollaborationPreparedDeliveryTest {
             assertEquals(listOf(original), f.records)
             assertTrue(f.journal.isEmpty())
             assertEquals(f.acquisitions, f.closes)
+            assertFalse(
+                f.recipientObservations.values.value.getValue(original.intent.conversationId).ready
+            )
             f.recipientReady = true
             assertIs<AppResult.Success<CollaborationDeliveryReport>>(
                 f.deliver(preparedTimeline = timeline)
+            )
+            assertTrue(
+                f.recipientObservations.values.value.getValue(original.intent.conversationId).ready
             )
             assertEquals(1, f.windows)
             assertEquals(setOf("original"), f.knownTransactions)

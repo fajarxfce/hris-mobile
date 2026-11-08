@@ -226,6 +226,10 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     ChatSend(Res.string.chat_send_en, Res.string.chat_send_id),
     ChatQueued(Res.string.chat_queued_en, Res.string.chat_queued_id),
     ChatSent(Res.string.chat_sent_en, Res.string.chat_sent_id),
+    ChatRecipientUnavailable(
+        Res.string.chat_recipient_unavailable_en,
+        Res.string.chat_recipient_unavailable_id,
+    ),
     ChatSendFailed(Res.string.chat_send_failed_en, Res.string.chat_send_failed_id),
     ChatDeleted(Res.string.chat_deleted_en, Res.string.chat_deleted_id),
     ChatEncryptedUnavailable(

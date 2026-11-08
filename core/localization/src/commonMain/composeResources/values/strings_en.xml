@@ -1094,4 +1094,5 @@
     <string name="chat_edit_queued_en">Changes waiting to send</string>
     <string name="chat_edit_send_failed_en">Changes not sent</string>
     <string name="chat_copy_failed_edits_en">Copy unapplied changes</string>
+    <string name="chat_recipient_unavailable_en">The recipient cannot receive messages yet.</string>
 </resources>

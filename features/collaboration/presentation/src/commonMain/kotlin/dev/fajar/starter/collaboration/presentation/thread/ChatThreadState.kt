@@ -19,6 +19,7 @@ data class ChatThreadState(
     /** Ephemeral owner generation for viewport callbacks; never a credential. */
     val readViewportToken: String? = null,
     val rows: List<ChatMessageRow> = emptyList(),
+    val recipientUnavailable: Boolean = false,
     val unsentReplies: List<ChatUnsentReply> = emptyList(),
     val unsentFailure: Failure? = null,
     val draft: String = "",
@@ -57,6 +58,17 @@ data class ChatThreadState(
     val localFailure: Failure? = null,
     val failure: Failure? = null,
 ) {
+    val waitingForRecipient: Boolean
+        get() =
+            recipientUnavailable &&
+                localFailure == null &&
+                rows.any {
+                    it.ownership == ChatMessageOwnership.SELF &&
+                        it.localId != null &&
+                        it.composerSubmission == null &&
+                        it.delivery != CollaborationMessageDelivery.SENT
+                }
+
     private val composerReady: Boolean
         get() =
             title != null &&

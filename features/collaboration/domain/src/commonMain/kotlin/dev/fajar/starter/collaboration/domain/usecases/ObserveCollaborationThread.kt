@@ -23,6 +23,7 @@ class ObserveCollaborationThread(
     private val server: IdentityServer,
     private val build: AppBuild,
     private val clock: Clock,
+    private val recipientObservations: CollaborationRecipientObservationRepository,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(
@@ -99,7 +100,24 @@ class ObserveCollaborationThread(
                 overlap = window.overlap,
             )
         val commands = messages.observe(access, conversationId)
-        return combine(context, pages, commands) { contextResult, pageResult, commandResult ->
+        // Optional display metadata must not hold the first local message window hostage.
+        val recipient =
+            recipientObservations
+                .observe(access, conversationId)
+                .map { observed ->
+                    (observed as? AppResult.Success)?.value?.let {
+                        validCollaborationRecipientObservation(it) &&
+                            it.conversationId == conversationId &&
+                            !it.ready
+                    } == true
+                }
+                .onStart { emit(false) }
+                .distinctUntilChanged()
+        return combine(context, pages, commands, recipient) {
+                contextResult,
+                pageResult,
+                commandResult,
+                recipientResult ->
                 // Freeze bounded repository values before the suspending publication guard.
                 val snapshot =
                     when {
@@ -122,7 +140,12 @@ class ObserveCollaborationThread(
                     snapshot is AppResult.Failed -> snapshot
                     else ->
                         AppResult.Success(
-                            CollaborationRead(owner, (snapshot as AppResult.Success).value)
+                            CollaborationRead(
+                                owner,
+                                (snapshot as AppResult.Success)
+                                    .value
+                                    .copy(recipientUnavailable = recipientResult),
+                            )
                         )
                 }
             }

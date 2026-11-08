@@ -403,6 +403,7 @@ class ChatThreadViewModel(
                 updateState {
                     it.copy(
                         title = snapshot.context.summary.peer.displayName,
+                        recipientUnavailable = snapshot.recipientUnavailable,
                         notificationOwner = value.owner,
                         localFailure = null,
                         readViewportToken = it.readViewportToken ?: Uuid.random().toString(),
@@ -449,7 +450,7 @@ class ChatThreadViewModel(
         editAcknowledgement?.cancel()
         editAcknowledgement = null
         editOutcomes = emptyList()
-        updateState { it.copy(selectionMenuOpen = false) }
+        updateState { it.copy(selectionMenuOpen = false, recipientUnavailable = false) }
         forwarding.close()
         projection.value = null
         quoteRequests.value = null

@@ -399,6 +399,7 @@ internal class CollaborationDeliveryFixture {
             )
         )
     }
+    val recipientObservations = RecipientObservationFixture()
     private val delivery =
         DeliverCollaborationMessages(
             messages,
@@ -412,6 +413,7 @@ internal class CollaborationDeliveryFixture {
             base.build,
             base.clock,
             completions,
+            recipientObservations,
         )
     private val reconcile =
         ReconcileCollaborationMessages(

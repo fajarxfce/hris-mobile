@@ -1724,6 +1724,7 @@ class CollaborationDataModule {
         workspaces: WorkspaceRepository,
         server: IdentityServer,
         build: AppBuild,
+        recipientObservations: CollaborationRecipientObservationRepository,
     ) =
         ObserveCollaborationThread(
             history,
@@ -1735,6 +1736,7 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            recipientObservations,
         )
 
     @Factory
@@ -1806,6 +1808,7 @@ class CollaborationDataModule {
         workspaces: WorkspaceRepository,
         server: IdentityServer,
         build: AppBuild,
+        recipientObservations: CollaborationRecipientObservationRepository,
     ) =
         DeliverCollaborationMessages(
             messages,
@@ -1819,6 +1822,7 @@ class CollaborationDataModule {
             build,
             Clock.System,
             completions,
+            recipientObservations,
         )
 
     @Single
@@ -1877,6 +1881,7 @@ class CollaborationDataModule {
         workspaces: WorkspaceRepository,
         server: IdentityServer,
         build: AppBuild,
+        recipientObservations: CollaborationRecipientObservationRepository,
     ) =
         StageCollaborationText(
             messages,
@@ -1888,6 +1893,7 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            recipientObservations,
         )
 
     @Single
