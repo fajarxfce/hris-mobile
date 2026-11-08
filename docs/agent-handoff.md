@@ -1,5 +1,24 @@
 # Agent continuation — HRIS Mobile
 
+## Main checkout packaging after linked-worktree metadata rejection — 8 November 2026
+
+Main and activation branches now share pushed56571c5e. The full gate ran in the
+activation worktree; all4,503 application/config inputs match main exactly. Only its
+result/manifests were mirrored into main `.work/device-activation-2026-11-08/full-1`,
+with explicit execution provenance. No validation is claimed to have run twice.
+
+Side75 packaging passed but actual APK verification rejected
+`META-INF/version-control-info.textproto` containing `NO_VALID_GIT_FOUND`. AGP did not
+resolve the linked worktree's `.git` file. That APK was never installed and must not
+be reused. Main's real Git checkout will package the same accepted sources; retain
+the actual embedded commit assertion. Main75 scripts contain no copied APK.
+Fresh activation, retained Bima75 and Starter port scripts now reference main75.
+
+Next: package/verify main75, then run fresh ordinary first login and cold restore
+before the retained-only Bima test described below. No emulator/compiler is running.
+Phone remains70/unreachable; no installation or UI action occurred. Native75 and
+post-commit readiness wake remain unproven; old71 Storage root remains open.
+
 ## Activation full gate passed; package75 next — 8 November 2026, 18:46 UTC
 
 Full24514 REAPED PASS1,002.886s:5,904 fresh tests/801 suites, zero failures/errors/skips.
