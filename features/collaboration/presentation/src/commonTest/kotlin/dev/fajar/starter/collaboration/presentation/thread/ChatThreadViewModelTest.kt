@@ -914,6 +914,63 @@ class ChatThreadViewModelTest {
         }
     }
 
+    @Test
+    fun pendingSdkEchoChangesDoNotBypassTheApplicationDeliveryBackoff() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            vm.onEvent(ChatThreadEvent.Entered())
+            advanceUntilIdle()
+            vm.onEvent(ChatThreadEvent.DraftChanged("retained original"))
+            vm.onEvent(ChatThreadEvent.SendRequested)
+            advanceUntilIdle()
+            val original = f.records.value.single()
+            val reads = f.historyReads
+            f.scheduledKeys.clear()
+            for (status in
+                listOf(
+                    CollaborationMessageDelivery.FAILED,
+                    CollaborationMessageDelivery.PENDING,
+                    CollaborationMessageDelivery.FAILED,
+                    CollaborationMessageDelivery.PENDING,
+                )) {
+                f.updates.value =
+                    AppResult.Success(
+                        listOf(
+                            CollaborationTimelineItem(
+                                "local-echo",
+                                null,
+                                "original-tx",
+                                original.intent.id,
+                                f.self.matrixUserId,
+                                1_000,
+                                true,
+                                CollaborationMessageKind.TEXT,
+                                original.intent.text,
+                                false,
+                                status,
+                                localEcho = true,
+                            )
+                        )
+                    )
+                advanceTimeBy(500)
+                runCurrent()
+            }
+            assertTrue(f.historyReads > reads)
+            assertTrue(f.scheduledKeys.isEmpty(), "Passive echoes must not restart delivery")
+            assertEquals(listOf(original), f.records.value)
+            assertEquals(0, f.deliveries)
+            vm.onEvent(ChatThreadEvent.RefreshRequested)
+            advanceUntilIdle()
+            assertEquals(1, f.scheduledKeys.size, "Explicit retry must still wake delivery")
+            f.scheduledKeys.clear()
+            vm.onEvent(ChatThreadEvent.Stopped)
+            runCurrent()
+            vm.onEvent(ChatThreadEvent.Entered())
+            advanceUntilIdle()
+            assertEquals(1, f.scheduledKeys.size, "Reentry wakes retained work once")
+        }
+    }
+
     private suspend fun TestScope.withModel(
         block:
             suspend TestScope.(

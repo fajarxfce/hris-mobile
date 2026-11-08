@@ -1675,7 +1675,9 @@ class ChatThreadViewModel(
             coroutineScope {
                 val signals = Channel<Unit>(Channel.CONFLATED)
                 pulse = signals
-                wakeRequested = false
+                // Recover retained work once on entry. Passive SDK echoes must not restart
+                // delivery and bypass the application's retry backoff.
+                wakeRequested = pending.isNotEmpty()
                 signals.trySend(Unit)
                 val worker = launch { consumeHistorySignals(signals, lease.device) }
                 try {
@@ -1783,7 +1785,7 @@ class ChatThreadViewModel(
         if (acquired is AppResult.Failed) return acquired
         // Original history belongs to the local projection. The application worker owns delivery,
         // receipt reconciliation and retirement even after this screen is disposed.
-        if (wake || pending.isNotEmpty()) return requestDelivery(workspaceId)
+        if (wake) return requestDelivery(workspaceId)
         return AppResult.Success(Unit)
     }
 
