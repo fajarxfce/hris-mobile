@@ -121,9 +121,27 @@
     "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeInstallationTest.kt": "c596e09d44182eafc0f73e2597e2f5aa3f8111a37b76ab9b76b33794f21bef20",
     "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupFixture.kt": "ca6537413ded76b08e310889544264ed21c61ec7350060af3d092a7fcec7a3e6"
   },
-  "fullValidation": false,
+  "fullValidation": true,
   "native76Validation": false,
   "phoneVersionCode": 70,
   "postCommitRecipientWakeImplemented": false,
-  "priorRelease71StorageRootResolved": false
+  "priorRelease71StorageRootResolved": false,
+  "full": {
+    "sourceCommit": "05201355",
+    "seconds": 927.61,
+    "freshCounts": {
+      "tests": 5836,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 780,
+    "sources": 4503,
+    "librarySources": 82,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "resultSha256": "3e8c655063c78379f58b9f8744a8f6e1d930fe993a2016ef34fd8ba4dc9bfe1f",
+    "sourceManifestSha256": "1d718c8d00f9afd681c10f9fceca9761d26e70c98d973c5c1c988cd8c8f34570",
+    "scope": "Root check, actual browser recipient storage, Android proof/release compilation and lint, shared Wasm/iOS source compilation, formatting, architecture and detekt. Fresh report count excludes Gradle-up-to-date reports; no native iOS execution."
+  }
 }

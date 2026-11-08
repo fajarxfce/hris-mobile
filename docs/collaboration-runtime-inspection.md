@@ -36,8 +36,8 @@ Targeted tests cover competing inspection/runtime entry, published-background
 promotion, invalidation and exact release, cancellation during private reads, company
 loss, assembled foreground/background rejection before file access, and preservation
 of the occupied store's missing-key rejection. Existing setup UI fixtures need the
-same explicit reservation contract. Focused/full gates and retained-device76 proof
-remain pending; do not install rejected native75 or port the generic worker yet.
+same explicit reservation contract. The source gates pass; retained-device76 proof
+remains pending; do not install rejected native75 or port the generic worker yet.
 
 [Focused validation](measurements/collaboration-runtime-inspection-2026-11-08.json)
 passes139 fresh tests with zero failures/errors/skips in482.119seconds. All4,503
@@ -45,5 +45,7 @@ application/config and82 library inputs stayed fixed. The first run was stopped
 after obsolete fake contracts caused UI barrier waits; its failed/interrupted
 results are retained. Only four test files changed before the passing run. Domain,
 Android runtime/registry, setup UI, application ownership/bindings, formatting,
-74-module architecture and detekt checks passed. Full and native76 validation remain
-pending. No phone update or generic Starter port is accepted by this checkpoint.
+74-module architecture and detekt checks passed. The full gate subsequently passed5,836 fresh tests/zero failures/errors/skips in
+927.610seconds with unchanged4,503 application/config and82 library inputs.
+Android compilation/lint, actual browser, shared Wasm/iOS source compilation and
+quality checks passed. Native76 validation remains pending. No phone update or generic Starter port is accepted by this checkpoint.
