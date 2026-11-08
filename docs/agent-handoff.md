@@ -1,5 +1,61 @@
 # Agent continuation — HRIS Mobile
 
+## Composer recovery under full validation — 08 November 2026, 07:43 UTC
+
+Only active owned heavy job is full-1/session11353 in .work/composer-adoption-2026-11-08;
+started07:37:16UTC, main source FROZEN until reaped. No emulator. Phone and original stopped
+image remain accepted65; never resend65/older originals. Main HEAD before this documentation
+is07cb3f2c, and nineteen source files are uncommitted composer work. Do not package it as an
+input fix. [Focused evidence](measurements/collaboration-composer-adoption-2026-11-08.json).
+
+Focused-1/63738 passed188.081s/32fresh (Submit12 + storage20). Focused-2/46602 failed373.385s:
+86fresh,23failures in storage28 only, due to two129-row queries exceeding raw total200.
+Domain Submit12/Recover14/legacyDraftRecovery14 and worker18 passed. Focused-3/84359 passed
+131.177s/51fresh (SQLite core3, storage28, worker20), zero all; unchanged domain cases reuse
+focused-2. New worker cases prove two original sends+newer draft across actual DB/container
+restart and exact archived replay, plus held unavailable conversation not blocking another
+queued command. All focused jobs reaped. Full-1 adds real Chrome core bounds, Submit/Recover,
+outbox28; root checks, Android compilation/lint, shared Wasm/iOS source and quality.
+
+Implemented in main: nullable expected stored editing slot and first atomic handoff,
+SubmitCollaborationComposer exact lost-reply/archived reconciliation, separate indexed held
+state preserving immutable submission equality, bounded8 recovery with own authenticated
+cursor, original submittedAt/ID materialization and exact command proof before retirement.
+The app's existing draft-recovery entry point orchestrates both sources; the delivery worker
+already drains independent queued messages before returning recovery continuation. Legacy
+frozen drafts remain. Domain use cases do not invoke each other. No UI adoption yet.
+
+Generic core change: aggregate query budget200->400, each query still<=200, at most4.
+This allows both complete active/held inventories to share a single atomic snapshot instead
+of combining different revisions. Raw contract exercises two129-row indexes and budget400,
+rejects401,201-per-page and other invalid inputs. Outbox capacity remains128. Port these TWO
+core files and tests to Starter only after full Mobile/browser validation; other HRIS
+source stays here. No database schema migration or native SDK change.
+
+Main contains canonical FORMATTED recovery and two worker integration tests. Isolated checkout
+/home/fajar/hris/.worktrees/mobile-composer-handoff-20261108 still has stale unformatted copies
+of most recovery files: DO NOT blindly copy them back. Its ONLY additional source work is new
+presentation/thread/ChatComposerEditingSession.kt and commonTest/thread/ChatComposerEditingSessionTest.kt,
+eight UNRUN UI-state cases. It is not in main/full-1, not committed, and not wired to the page.
+The holder owns one UI-dispatcher actor, immutable save/submission attempts and next text;
+no repositories/HTTP. Submitted timestamps retain millisecond gesture order. Review/test it
+before adoption. Private supplementary design: main .work/composer-adoption-2026-11-08/UI-NEXT.txt.
+
+Outstanding: complete outbox+command+provisional thread/inbox projections, action handling for
+held or outbox-only originals, and actual ViewModel/page adoption removing old business
+prepare/queue/confirm pipeline. Completing A must never clear typed B. One unresolved edge:
+a durable provisional original can be archived Cancelled before a UI flow observes it;
+`visible` must not leave a ghost pending row waiting for history that will never exist.
+Use exact authenticated command/outbox reconciliation, not absence, a fabricated command or
+an arbitrary timeout. Actual Android software-IME continuity/consecutive sends/offline cold
+history+draft proof required before next APK. Keep component ownership and cancellation clear.
+
+Once full11353 ends, inspect real reports, fix failures if any, record/commit/push accepted
+increments; apply/test generic Starter port. Continue UI adoption, not another unused-foundation
+APK. Other repositories/SDK/public CI/platform unchanged from65 checkpoint; Group routing off,
+original54PRD3inprogress/51planned. No user input needed. One owned compiler OR emulator;
+notify before each phone install-only and never drive phone UI.
+
 ## Release65 installed; adopt the composer next — 08 November 2026, 07:21 UTC
 
 Runtime b41710caca8180bf8389abf1e3dfd9b02240b825 is pushed. Package58600 passed105.626s;

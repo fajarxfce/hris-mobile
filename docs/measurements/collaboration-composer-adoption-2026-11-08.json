@@ -1,0 +1,136 @@
+{
+  "recordedAt": "2026-11-08T07:43:08.203566+00:00",
+  "completeGateAccepted": false,
+  "scope": "Local composer submission, bounded recovery, active/held storage and owning worker integration. Presentation adoption and device acceptance remain unfinished.",
+  "checks": {
+    "focused-1": {
+      "startedAt": "2026-11-08T07:21:37.659171+00:00",
+      "elapsedSeconds": 188.081,
+      "exitCode": 0,
+      "sourceFiles": 4458,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceFingerprintSha256": "1b7df3321ff3c81ccb8b75d49b42852731c17316a660b32a013589dd7c4cab24",
+      "freshReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationComposerOutboxStorageTest.xml": {
+          "sha256": "296118b9646569079ce6bdf05cc1f7cb62f383bb7f5fedb88ddb976abfe33520",
+          "tests": 20,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SubmitCollaborationComposerTest.xml": {
+          "sha256": "f67a6bbe15b89a16056d2c941ac2eb0c33173ce8ef6514be13801a8356d5e028",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "focused-2": {
+      "startedAt": "2026-11-08T07:27:45.828234+00:00",
+      "elapsedSeconds": 373.385,
+      "exitCode": 1,
+      "sourceFiles": 4463,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 86,
+        "failures": 23,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceFingerprintSha256": "8b8af75e5adebd965b0c356371dc096d65efe5ffb50b67e9a1a1a716ccf96e13",
+      "freshReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+          "sha256": "e75964c2e46cd7a460efa7dbc68d57cbc9d6fcee9a01a8daecbd86043d87446d",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationComposerOutboxStorageTest.xml": {
+          "sha256": "105faba4d9f8d4f97243000e0d5d73eae8b03d2970ad927302e3d21d027b2006",
+          "tests": 28,
+          "failures": 23,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationDraftRecoveryTest.xml": {
+          "sha256": "12954e531365957bc697d21011683a00d138f8c1d59f3d78e1c1b3f1f1248cde",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.RecoverCollaborationComposerTest.xml": {
+          "sha256": "7ea8b97176862675eb4ac2d5c1e6f4e520ff98b24ad548b283ad231f15b1abdb",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SubmitCollaborationComposerTest.xml": {
+          "sha256": "ba83c55e611d1aafd9a84bdb476553fe0b1eb52a3029a2cac8b13b936f5ed1d8",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "focused-3": {
+      "startedAt": "2026-11-08T07:34:51.028110+00:00",
+      "elapsedSeconds": 131.177,
+      "exitCode": 0,
+      "sourceFiles": 4463,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 51,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceFingerprintSha256": "5906b1d5f2ea91a4ba5f930054c131b1cc93643724d4ef7717774d0e38e45354",
+      "freshReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+          "sha256": "f6db3c6105a5529442528be76d44cd170eafdee4d84641ef1afb58d7870636d0",
+          "tests": 20,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationComposerOutboxStorageTest.xml": {
+          "sha256": "b12c1e6db4a9f6f96574c85bbfa7cd10ad61862a38dd284de80bba84093ae81d",
+          "tests": 28,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.ReplicaStoreTest.xml": {
+          "sha256": "fa5fe1568acfa5b85a36c40709bf182988b631be859e16877e3728118dc4d221",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "failureExplanation": "focused-2: 23 of 28 storage tests rejected two 129-row queries because the shared raw aggregate query bound was 200; domain40 and worker18 passed. focused-3 permits two complete bounded inventories (max400 aggregate, max200 each, max4 queries), with actual 258-row/400-budget SQLite contract coverage and unchanged 128-outbox capacity.",
+  "activeJob": {
+    "sessionId": 11353,
+    "kind": "full-1 root/browser/Android/iOS-source/quality gate"
+  },
+  "phoneBuild": 65,
+  "presentation": "Only isolated untested editing-session source and eight tests exist, not part of this gate and not wired into the UI.",
+  "starterPort": "Generic aggregate query bounds/contract must return to Starter after Mobile full/browser acceptance."
+}
