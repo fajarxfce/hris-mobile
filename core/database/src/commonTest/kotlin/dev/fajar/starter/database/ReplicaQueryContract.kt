@@ -157,7 +157,8 @@ suspend fun verifyReplicaQueryBounds(database: AppDatabase) {
         listOf(
             emptyList(),
             List(5) { ReplicaQuery(limit = 1) },
-            listOf(ReplicaQuery(limit = 200), ReplicaQuery(limit = 1)),
+            listOf(ReplicaQuery(limit = 200), ReplicaQuery(limit = 200), ReplicaQuery(limit = 1)),
+            listOf(ReplicaQuery(limit = 201)),
             listOf(ReplicaQuery("")),
             listOf(ReplicaQuery("private filter")),
             listOf(ReplicaQuery(after = "bad cursor")),
@@ -188,5 +189,46 @@ suspend fun verifyReplicaQueryBounds(database: AppDatabase) {
             )
         }
         assertNull(store.checkpoint(scope, "bounds"))
+    }
+    // Both complete inventories must come from one checkpoint; separate observations can race.
+    val active =
+        (0..128).map { index ->
+            ReplicaDocument(
+                "active-${index.toString().padStart(3, '0')}",
+                0,
+                "active-${index.toString().padStart(3, '0')}",
+                "encrypted-active",
+                setOf("active"),
+            )
+        }
+    val held =
+        (0..128).map { index ->
+            ReplicaDocument(
+                "held-${index.toString().padStart(3, '0')}",
+                1,
+                "held-${index.toString().padStart(3, '0')}",
+                "encrypted-held",
+                setOf("held"),
+            )
+        }
+    assertTrue(
+        store.replace(scope, "bounds", null, ReplicaSnapshot("inventories", "active", active))
+    )
+    val checkpoint = assertNotNull(store.checkpoint(scope, "bounds"))
+    assertTrue(store.commit(checkpoint.handle, checkpoint.revision, "both", held, true))
+    for (limit in listOf(129, 200)) {
+        val read =
+            store
+                .observeQueries(
+                    scope,
+                    "bounds",
+                    listOf(
+                        ReplicaQuery("active", limit = limit),
+                        ReplicaQuery("held", limit = limit),
+                    ),
+                )
+                .first()
+        assertEquals("both", read.checkpoint?.payload)
+        assertEquals(listOf(active, held), read.pages)
     }
 }

@@ -1,6 +1,6 @@
 {
-  "recordedAt": "2026-11-08T07:43:08.203566+00:00",
-  "completeGateAccepted": false,
+  "recordedAt": "2026-11-08T07:52:26.566186+00:00",
+  "completeGateAccepted": true,
   "scope": "Local composer submission, bounded recovery, active/held storage and owning worker integration. Presentation adoption and device acceptance remain unfinished.",
   "checks": {
     "focused-1": {
@@ -123,14 +123,142 @@
           "skipped": 0
         }
       }
+    },
+    "full-1": {
+      "startedAt": "2026-11-08T07:37:16.916370+00:00",
+      "elapsedSeconds": 761.028,
+      "exitCode": 0,
+      "sourceFiles": 4463,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 4523,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceFingerprintSha256": "5906b1d5f2ea91a4ba5f930054c131b1cc93643724d4ef7717774d0e38e45354",
+      "command": [
+        "xvfb-run",
+        "-a",
+        "env",
+        "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+        "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+        "ANDROID_HOME=/home/fajar/Android/Sdk",
+        "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+        "TMPDIR=/home/fajar/hris/.work/build-tmp",
+        "./gradlew",
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":check",
+        ":core:database:wasmJsBrowserTest",
+        "--tests",
+        "*BrowserReplicaStoreTest*",
+        ":features:collaboration:domain:wasmJsBrowserTest",
+        "--tests",
+        "*SubmitCollaborationComposerTest*",
+        "--tests",
+        "*RecoverCollaborationComposerTest*",
+        ":features:collaboration:data:wasmJsBrowserTest",
+        "--tests",
+        "*BrowserCollaborationComposerOutboxStorageTest*",
+        ":apps:android:compileDevReleaseKotlin",
+        ":apps:android:lintDevRelease",
+        ":apps:shared:compileKotlinWasmJs",
+        ":apps:shared:compileKotlinIosArm64",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+        "-PmatrixSdkRepository=/home/fajar/hris/kmp-network-inspector/.work/matrix-android-2026-11-07/sdk-repository",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=65",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2048m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "relevantReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+          "sha256": "1f05e57e625dc6a2613ed4e315738e1471e30eaedf60ea1de428521caa461522",
+          "tests": 20,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationComposerOutboxStorageTest.xml": {
+          "sha256": "236350d0dfa57ddb5b0dfc1256a944ad5c696fcd4927df5d27c08b8716c57455",
+          "tests": 28,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserT-J385OABRIG6LQ.dev.fajar.starter.collaboration.data.BrowserCollaborationComposerOutboxStorageTest.xml": {
+          "sha256": "64e0395411097f998385d35ef0c38fb5448ee3cdf0476e357c2756441062b00a",
+          "tests": 28,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.RecoverCollaborationComposerTest.xml": {
+          "sha256": "1a6d0817153d54450a4745e84f0c9edfac9dc339d984fc8fa269c1652ff736ae",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SubmitCollaborationComposerTest.xml": {
+          "sha256": "27879852c79f5afbf3a04a1ae988e5c6f9633eb86f4fb297e628115d759c7bd2",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.SubmitCollaborationComposerTest.xml": {
+          "sha256": "6414c0782605212bbdfc257baac6ab2b26bbac9b83ab5ef520cee4d4058dd737",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.RecoverCollaborationComposerTest.xml": {
+          "sha256": "d45ee0ef9f709ed41d422919b59fdf7c57a7fbc855ee9789e94e71aadb554cdb",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.ReplicaStoreTest.xml": {
+          "sha256": "4f33adeaa6d32dd3ea75e186e2b0294b66843a65b7e4f6c7a1b4250fee3254c3",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/database/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.database.BrowserReplicaStoreTest.xml": {
+          "sha256": "36ad0f4e2e7089ec4978443e15b5b621cb9dd802752a635cfa69a18e60a7b798",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
     }
   },
   "failureExplanation": "focused-2: 23 of 28 storage tests rejected two 129-row queries because the shared raw aggregate query bound was 200; domain40 and worker18 passed. focused-3 permits two complete bounded inventories (max400 aggregate, max200 each, max4 queries), with actual 258-row/400-budget SQLite contract coverage and unchanged 128-outbox capacity.",
-  "activeJob": {
-    "sessionId": 11353,
-    "kind": "full-1 root/browser/Android/iOS-source/quality gate"
-  },
   "phoneBuild": 65,
-  "presentation": "Only isolated untested editing-session source and eight tests exist, not part of this gate and not wired into the UI.",
-  "starterPort": "Generic aggregate query bounds/contract must return to Starter after Mobile full/browser acceptance."
+  "presentation": "Two formatted but untested editing-session files and eight common tests are isolated and unused. Nine additional isolated raw command active/archive observation files are also untested. Neither set is part of this gate or installed on a device.",
+  "starterPort": "Generic aggregate query bounds/contract must return to Starter after Mobile full/browser acceptance.",
+  "androidLintIssues": 0,
+  "jobsReaped": {
+    "focused-1": 63738,
+    "focused-2": 46602,
+    "focused-3": 84359,
+    "full-1": 11353
+  }
 }

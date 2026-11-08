@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 internal const val COMPOSER_OUTBOX_TAG = "composer-outbox-v1"
+internal const val COMPOSER_HELD_TAG = "composer-held-v1"
 
 /** Separate authenticated payload type; the shared partition keeps handoff atomic. */
 internal class CollaborationComposerSubmissionCodec(
@@ -22,6 +23,7 @@ internal class CollaborationComposerSubmissionCodec(
         generation: String,
         revision: Long,
         submission: CollaborationComposerSubmission,
+        reviewRequired: Boolean = false,
     ): ReplicaDocument {
         require(validCollaborationComposerSubmission(submission))
         val original = submission.original
@@ -34,6 +36,7 @@ internal class CollaborationComposerSubmissionCodec(
                 replyToEventId = original.replyToEventId,
                 nextRevision = submission.nextRevision,
                 submittedAt = submission.submittedAt.toString(),
+                reviewRequired = reviewRequired,
             )
         val bytes = Json.encodeToString(dto).encodeToByteArray(throwOnInvalidSequence = true)
         try {
@@ -46,7 +49,7 @@ internal class CollaborationComposerSubmissionCodec(
                 revision,
                 submission.id,
                 payload,
-                setOf(COMPOSER_OUTBOX_TAG),
+                setOf(if (reviewRequired) COMPOSER_HELD_TAG else COMPOSER_OUTBOX_TAG),
             )
         } finally {
             bytes.fill(0)
@@ -56,10 +59,15 @@ internal class CollaborationComposerSubmissionCodec(
     suspend fun decode(
         checkpoint: ReplicaCheckpoint,
         document: ReplicaDocument,
-    ): CollaborationComposerSubmission {
+    ): CollaborationComposerSubmission = decodeEntry(checkpoint, document).submission
+
+    suspend fun decodeEntry(
+        checkpoint: ReplicaCheckpoint,
+        document: ReplicaDocument,
+    ): CollaborationComposerOutboxEntry {
         require(validCollaborationMessageId(document.id) && document.sortKey == document.id)
         require(document.version in 0..checkpoint.revision)
-        require(document.tags == setOf(COMPOSER_OUTBOX_TAG))
+        require(document.tags in setOf(setOf(COMPOSER_OUTBOX_TAG), setOf(COMPOSER_HELD_TAG)))
         val payload = requireNotNull(document.payload)
         require(payload.length in 1..131_072)
         val bytes =
@@ -78,18 +86,24 @@ internal class CollaborationComposerSubmissionCodec(
                 bytes.fill(0)
             }
         require(dto.schema == 1 && dto.id == document.id)
-        return CollaborationComposerSubmission(
-                CollaborationDraft(
-                    dto.conversationId,
-                    dto.id,
-                    dto.text,
-                    Instant.parse(dto.draftSavedAt),
-                    replyToEventId = dto.replyToEventId,
-                ),
-                dto.nextRevision,
-                Instant.parse(dto.submittedAt),
-            )
-            .also { require(validCollaborationComposerSubmission(it)) }
+        require(
+            document.tags ==
+                setOf(if (dto.reviewRequired) COMPOSER_HELD_TAG else COMPOSER_OUTBOX_TAG)
+        )
+        val submission =
+            CollaborationComposerSubmission(
+                    CollaborationDraft(
+                        dto.conversationId,
+                        dto.id,
+                        dto.text,
+                        Instant.parse(dto.draftSavedAt),
+                        replyToEventId = dto.replyToEventId,
+                    ),
+                    dto.nextRevision,
+                    Instant.parse(dto.submittedAt),
+                )
+                .also { require(validCollaborationComposerSubmission(it)) }
+        return CollaborationComposerOutboxEntry(submission, dto.reviewRequired)
     }
 
     private fun aad(generation: String, id: String, revision: Long) =
@@ -118,6 +132,7 @@ private data class ComposerSubmissionDto(
     val replyToEventId: String?,
     val nextRevision: String,
     val submittedAt: String,
+    val reviewRequired: Boolean = false,
 ) {
     override fun toString() = "ComposerSubmissionDto([redacted])"
 }

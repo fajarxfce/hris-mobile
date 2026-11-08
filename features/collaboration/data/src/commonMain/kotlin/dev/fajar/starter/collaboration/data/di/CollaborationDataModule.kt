@@ -1253,6 +1253,52 @@ class CollaborationDataModule {
     ) = ObserveCollaborationDraft(drafts, lists, sessions, workspaces, server, build, Clock.System)
 
     @Factory
+    fun submitComposer(
+        outbox: CollaborationComposerOutboxRepository,
+        messages: CollaborationMessageRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        schedules: SyncScheduleRepository,
+    ) =
+        SubmitCollaborationComposer(
+            outbox,
+            messages,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+            schedules,
+        )
+
+    @Factory
+    fun recoverComposer(
+        outbox: CollaborationComposerOutboxRepository,
+        cursors: CollaborationComposerRecoveryCursorRepository,
+        messages: CollaborationMessageRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        RecoverCollaborationComposer(
+            outbox,
+            cursors,
+            messages,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun editDraft(
         drafts: CollaborationDraftRepository,
         lists: CollaborationListRepository,

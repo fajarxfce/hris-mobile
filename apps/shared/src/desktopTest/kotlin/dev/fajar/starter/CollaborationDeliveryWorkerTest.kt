@@ -2,6 +2,8 @@ package dev.fajar.starter
 
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationComposerOutboxRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationDraftRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageRepository
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
@@ -17,6 +19,122 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 
 class CollaborationDeliveryWorkerTest {
+    @Test
+    fun composerOriginalsRecoverAfterRestartWithoutClearingTheNewerEditor() = runBlocking {
+        withFixture { f ->
+            val access =
+                assertIs<AppResult.Success<CollaborationLocalAccess>>(
+                        f.koin.get<ObserveCollaborationAccess>()(f.workspaceId).first()
+                    )
+                    .value
+            val submit = f.koin.get<SubmitCollaborationComposer>()
+            val now = Clock.System.now()
+            val first =
+                CollaborationComposerSubmission(
+                    CollaborationDraft(
+                        f.first,
+                        "00000000-0000-0000-0000-000000091001",
+                        "First composer original",
+                        now,
+                    ),
+                    "00000000-0000-0000-0000-000000092001",
+                    now,
+                )
+            val second =
+                CollaborationComposerSubmission(
+                    CollaborationDraft(
+                        f.first,
+                        "00000000-0000-0000-0000-000000091002",
+                        "Second composer original",
+                        now,
+                    ),
+                    "00000000-0000-0000-0000-000000092002",
+                    now + kotlin.time.Duration.parse("1s"),
+                )
+            assertEquals(AppResult.Success(first), submit(f.workspaceId, null, first, access))
+            assertEquals(
+                AppResult.Success(second),
+                submit(f.workspaceId, first.nextDraft, second, access),
+            )
+            val next =
+                second.nextDraft.copy(
+                    revision = "00000000-0000-0000-0000-000000093001",
+                    text = "Keep typing after the two sends",
+                )
+            assertEquals(
+                AppResult.Success(true),
+                f.koin.get<CollaborationDraftRepository>().replace(access, second.nextDraft, next),
+            )
+            assertTrue(f.sdk.enqueued.isEmpty())
+            f.reopen()
+            assertEquals(SyncResult.Complete, f.worker())
+            assertEquals(listOf(first.id, second.id), f.sdk.enqueued)
+            assertEquals(
+                AppResult.Success(next),
+                f.koin.get<CollaborationDraftRepository>().get(access, f.first),
+            )
+            assertTrue(
+                assertIs<AppResult.Success<CollaborationComposerSubmissionPage>>(
+                        f.koin.get<CollaborationComposerOutboxRepository>().pending(access)
+                    )
+                    .value
+                    .submissions
+                    .isEmpty()
+            )
+            // The exact authenticated archive proves replay after the outbox has gone away.
+            assertEquals(
+                AppResult.Success(first),
+                f.koin.get<SubmitCollaborationComposer>()(f.workspaceId, null, first, access),
+            )
+            assertEquals(SyncResult.Complete, f.worker())
+            assertEquals(listOf(first.id, second.id), f.sdk.enqueued)
+            assertEquals(
+                AppResult.Success(next),
+                f.koin.get<CollaborationDraftRepository>().get(access, f.first),
+            )
+        }
+    }
+
+    @Test
+    fun heldComposerInAnUnavailableConversationDoesNotBlockAnExistingMessage() = runBlocking {
+        withFixture { f ->
+            val queued = f.queue(text = "Independent existing command")
+            val access =
+                assertIs<AppResult.Success<CollaborationLocalAccess>>(
+                        f.koin.get<ObserveCollaborationAccess>()(f.workspaceId).first()
+                    )
+                    .value
+            val now = Clock.System.now()
+            val unavailable =
+                CollaborationComposerSubmission(
+                    CollaborationDraft(
+                        "00000000-0000-0000-0000-000000094001",
+                        "00000000-0000-0000-0000-000000094002",
+                        "Retain for review",
+                        now,
+                    ),
+                    "00000000-0000-0000-0000-000000094003",
+                    now,
+                )
+            // Represents a previously admitted local send whose conversation metadata is absent.
+            assertEquals(
+                AppResult.Success(CollaborationComposerHandoffResult.STORED),
+                f.koin
+                    .get<CollaborationComposerOutboxRepository>()
+                    .handoff(access, unavailable, null),
+            )
+            f.reopen()
+            assertEquals(SyncResult.Complete, f.worker())
+            assertEquals(listOf(queued.intent.id), f.sdk.enqueued)
+            assertEquals(
+                AppResult.Success(listOf(CollaborationComposerOutboxEntry(unavailable, true))),
+                f.koin.get<CollaborationComposerOutboxRepository>().observe(access).first(),
+            )
+            assertEquals(SyncResult.Complete, f.worker())
+            assertEquals(1, f.sdk.deliveries)
+        }
+    }
+
     @Test
     fun expiredOwnedAuthorityRetriesOfflineAndThenDeliversTheOriginalAfterRestart() = runBlocking {
         for (workspaceExpired in listOf(false, true)) withFixture { f ->

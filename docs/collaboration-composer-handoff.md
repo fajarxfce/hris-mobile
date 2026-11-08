@@ -53,3 +53,36 @@ workflow remains available during adoption. New typing, cancellation, and the ch
 preview all need regression coverage before replacing the old composer path.
 
 Storage foundation acceptance is recorded in [the measurement](measurements/collaboration-composer-outbox-storage-2026-11-08.json): twelve actual SQLite cases and twelve Chrome/IndexedDB cases pass. Root/native compilation and quality checks pass after the audited local inspector workspace lock update. The first class-only browser filter selected no cases; the corrected wildcard run has twelve concrete XML cases. This remains unused storage infrastructure until the owning use cases, recovery, projections and input gesture are adopted and tested.
+
+
+## Submission and recovery integration
+
+The local submission use case now atomically retains an unsaved original and its next
+editing revision against the captured stored slot. Retries compare the full immutable
+original, including ordering time. Exact active or authenticated archived commands can
+prove a lost completion after outbox retirement. A scheduling failure cannot undo a
+successful local commit. Newer editor text is preserved by this handoff.
+
+Recovery runs inside the application delivery worker independently of the screen. It
+visits at most eight indexed originals with its own encrypted cursor, retains their
+original IDs and submittedAt times, and retires outbox entries only after matching the
+actual active or archived command. Unavailable/conflicting originals are held under a
+separate authenticated status; their immutable gesture is unchanged. A held conversation
+does not prevent the worker from delivering independent commands. Legacy frozen drafts
+still use their existing recovery. No HTTP or SDK acquisition occurs in local submission
+or conversion to a message command.
+
+Active and held inventories share one raw read snapshot. The [bounded query contract](replica-query-snapshots.md)
+permits two complete inventories while the outbox remains capped at128 originals.
+[Validation](measurements/collaboration-composer-adoption-2026-11-08.json) passes4,523fresh
+root cases, with zero failures/errors/skips, Android compilation/lint0, browser and
+shared Wasm/iOS source. Actual browser cases include Submit12, Recover14 and storage28.
+Two real-storage worker cases verify original sends and newer draft through restart,
+exact archived replay, and independent delivery beside a held conversation.
+
+This is not yet wired into the input field. The next change must replace the old
+prepare/queue/confirm UI pipeline, render outbox and provisional originals in thread/list
+previews, handle held and outbox-only actions, and prove actual Android IME continuity.
+An archived cancellation that occurs before a UI subscription must not leave a pending
+ghost: observe exact active/archive identity and preserve the original proof. The isolated
+editing-session and raw-observation work is untested and excluded from this validation.

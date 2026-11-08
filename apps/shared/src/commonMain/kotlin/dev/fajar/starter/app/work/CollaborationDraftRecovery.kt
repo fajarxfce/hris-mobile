@@ -14,11 +14,36 @@ class CollaborationDraftRecovery(
     private val queue: QueueCollaborationText,
     private val confirm: ConfirmCollaborationDraftSend,
     private val suspendSend: SuspendCollaborationDraftSend,
+    private val recoverComposer: RecoverCollaborationComposer,
 ) {
-    suspend operator fun invoke(): SyncResult = recover(discover())
+    suspend operator fun invoke(): SyncResult {
+        val composer = recoverComposer()
+        currentCoroutineContext().ensureActive()
+        return combined(composer, recover(discover()))
+    }
 
-    suspend operator fun invoke(scope: CollaborationLocalScope): SyncResult =
-        recover(discover(scope))
+    suspend operator fun invoke(scope: CollaborationLocalScope): SyncResult {
+        val composer = recoverComposer(scope)
+        currentCoroutineContext().ensureActive()
+        return combined(composer, recover(discover(scope)))
+    }
+
+    private fun combined(composer: AppResult<Boolean>, legacy: SyncResult): SyncResult {
+        val current =
+            when (composer) {
+                is AppResult.Failed -> recoveryFailure(composer.failure)
+                is AppResult.Success ->
+                    if (composer.value) SyncResult.Retry() else SyncResult.Complete
+            }
+        // The worker still drains materialized messages before returning this continuation.
+        // Pending independent work needs another pass even when one source has a local hold.
+        return when {
+            legacy is SyncResult.Retry -> legacy
+            current is SyncResult.Retry -> current
+            legacy is SyncResult.Blocked -> legacy
+            else -> current
+        }
+    }
 
     private suspend fun recover(found: AppResult<CollaborationDraftRecoveryWork?>): SyncResult {
         currentCoroutineContext().ensureActive()
@@ -98,6 +123,7 @@ class CollaborationDraftRecovery(
                     "client.command_queue_full",
                     "client.collaboration_draft_changed",
                     "client.collaboration_draft_busy",
+                    "client.collaboration_composer_busy",
                 )
         )
             SyncResult.Retry(failure)

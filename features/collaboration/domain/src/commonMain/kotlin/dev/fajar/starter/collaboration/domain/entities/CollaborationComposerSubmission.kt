@@ -36,3 +36,18 @@ enum class CollaborationComposerHandoffResult {
     CHANGED,
     CAPACITY_EXCEEDED,
 }
+
+/** Review state belongs to recovery; it does not change the immutable send gesture. */
+data class CollaborationComposerOutboxEntry(
+    val submission: CollaborationComposerSubmission,
+    val reviewRequired: Boolean,
+) {
+    override fun toString() = "CollaborationComposerOutboxEntry([redacted])"
+}
+
+data class CollaborationComposerRecoveryCursor(
+    val generation: String,
+    val afterSubmissionId: String,
+) {
+    override fun toString() = "CollaborationComposerRecoveryCursor([redacted])"
+}

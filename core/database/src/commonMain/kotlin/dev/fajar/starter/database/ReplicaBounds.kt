@@ -60,8 +60,9 @@ fun validateReplicaTag(tag: String) {
     require(tag.length in 1..128 && tag.all { it in '!'..'~' })
 }
 
+// Two complete indexed inventories may share one checkpoint; each page is still capped at 200.
 fun validateReplicaQueries(queries: List<ReplicaQuery>) {
-    require(queries.size in 1..4 && queries.sumOf { it.limit.toLong() } <= 200)
+    require(queries.size in 1..4 && queries.sumOf { it.limit.toLong() } <= 400)
     queries.forEach {
         require(it.after == null || it.before == null)
         validateReplicaPage(it.after, it.limit)

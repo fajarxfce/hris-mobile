@@ -1,5 +1,51 @@
 # Agent continuation — HRIS Mobile
 
+## Composer submission/recovery gate accepted — 08 November 2026, 07:52 UTC
+
+Full-1/session11353 reapedPASS761.028s,4,523fresh cases, zero failures/errors/skips;
+4,463source files and all inspector inputs unchanged. Actual Chrome XML: coreReplica5,
+Submit12,Recover14,outbox28. Android compile/lint0, shared Wasm/iOS source and root quality
+passed. All focused/full jobs reaped. [Exact evidence](measurements/collaboration-composer-adoption-2026-11-08.json).
+Commit/push this19-source-file increment and docs; no APK from it yet. Phone and original
+stopped image remain accepted65. No owned compiler/emulator. Never resend65 or older originals.
+
+Submission/recovery are now implemented and integrated with the worker. The UI remains
+legacy; do not deploy this alone as the input fix. Read composer-handoff.md and earlier
+checkpoint. Generic core aggregate query budget is400 (max4 windows,200 each); outbox remains
+128. Next port ONLY ReplicaBounds.kt and ReplicaQueryContract.kt to Starter after reading
+its instructions, run required SQLite/browser/full checks, record/push. HRIS files stay here.
+The broad Mobile gate does not claim native Apple execution or phone latency improvement.
+
+There are ELEVEN additional UNTESTED source files only in the isolated checkout
+/home/fajar/hris/.worktrees/mobile-composer-handoff-20261108:
+- Two formatted presentation files: ChatComposerEditingSession.kt and its8-case common test.
+  No UI wiring, no executed test. It owns a UI-dispatcher actor with immutable editing/send
+  attempts; completing A preserves B. Review lifecycle, terminal outcomes and bounds.
+- Nine raw core files: CommandLookup.kt, CommandStore.kt, CommandLookupContract.kt,
+  CommandStoreTest.kt, AppleCommandLookupTest.kt, RoomCommandStore.kt, dao/CommandDao.kt,
+  IndexedDbCommandStore.kt and BrowserCommandStoreTest.kt. Exact-ID active/archive lookup
+  is one owned read transaction and observes account/active/archive invalidation. Three
+  new cases per SQLite/browser/Apple source; NONE run. Six existing-file base hashes are in
+  isolated .work/composer-adoption/command-observer-base.json. This prevents a completion
+  preceding the subscription from becoming a provisional pending ghost; domain consumer,
+  projections, actions and UI adoption still need implementation.
+
+Isolated recovery copies are stale/unformatted and its ReplicaBounds still200. NEVER copy
+that whole tree over main. Copy only those eleven files after base validation, using main's
+accepted recovery/400-budget as canonical. Then focused core and presentation tests. The
+Apple fixture is source only; Linux cannot run it. Generic exact-observer changes will also
+need a Starter port only after Mobile validation. Do not publish untested code or another
+unused-foundation APK. Existing message prevention can atomically archive an absent ID;
+a new owning cancellation must confirm full original intent via messages.get before retiring
+an outbox entry (prevent Boolean intentionally does not compare creation time).
+
+Continue outbox+command+provisional thread/inbox projections, held/outbox-only retry/cancel,
+actual input adoption and Android IME/consecutive sends/offline cold-history/draft evidence.
+Keep domain orchestration out of the ViewModel; exact archive observation must prevent
+Cancelled-before-visible ghosts. Private design notes remain main UI-NEXT.txt and isolated
+NEXT.txt. No user input needed. Other repositories/platform/SDK/PRD unchanged. Notify before
+each phone install-only; do not drive its UI. One owned compiler OR emulator.
+
 ## Composer recovery under full validation — 08 November 2026, 07:43 UTC
 
 Only active owned heavy job is full-1/session11353 in .work/composer-adoption-2026-11-08;

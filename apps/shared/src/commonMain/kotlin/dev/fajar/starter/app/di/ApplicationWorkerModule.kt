@@ -48,7 +48,7 @@ fun applicationWorkerModule() = module {
     // when Kotlin/Native links the framework. Direct app composition emits no such marker.
     single { InboxPushWorker(get(), get(), inject(), get()) } bind SyncTask::class
     single { NativePushWorker(get(), inject()) } bind SyncTask::class
-    single { CollaborationDraftRecovery(get(), get(), get(), get(), get()) }
+    single { CollaborationDraftRecovery(get(), get(), get(), get(), get(), get()) }
     single { CollaborationIncomingHistoryRecovery(get(), get(), get(), get(), get(), get()) }
     single {
         CollaborationIncomingRecovery(
