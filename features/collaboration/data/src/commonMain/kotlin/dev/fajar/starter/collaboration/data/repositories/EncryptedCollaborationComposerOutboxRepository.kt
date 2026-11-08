@@ -3,12 +3,16 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.drafts.*
+import dev.fajar.starter.collaboration.data.drafts.CollaborationComposerSubmissionCodec as SubmissionCodec
 import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.entities.CollaborationComposerHandoffResult as HandoffResult
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationComposerOutboxRepository
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
+import dev.fajar.starter.observability.PerformanceOperation
+import dev.fajar.starter.observability.measureAppResult
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.safeStorageCall
 import kotlin.uuid.Uuid
@@ -28,104 +32,105 @@ class EncryptedCollaborationComposerOutboxRepository(
         access: CollaborationLocalAccess,
         submission: CollaborationComposerSubmission,
         expected: CollaborationDraft?,
-    ): AppResult<CollaborationComposerHandoffResult> =
-        withContext(Dispatchers.Default) {
-            safeStorageCall {
-                    require(validCollaborationComposerHandoff(submission, expected))
-                    val scope = historyScope(access)
-                    val partition = draftPartition(access)
-                    val conversation = submission.original.conversationId
-                    repeat(3) {
-                        currentCoroutineContext().ensureActive()
-                        val original =
-                            replicas.observeDocument(scope, partition, conversation).first()
-                        val outgoing =
-                            replicas.observeDocument(scope, partition, submission.id).first()
-                        if (original.checkpoint != outgoing.checkpoint) return@repeat
-                        val checkpoint = original.checkpoint
-                        if (checkpoint == null) {
-                            require(original.documents.isEmpty() && outgoing.documents.isEmpty())
-                            if (expected != null)
-                                return@safeStorageCall CollaborationComposerHandoffResult.CHANGED
-                        }
-                        require(original.documents.size <= 1 && outgoing.documents.size <= 1)
-                        val result =
-                            keys.use(create = checkpoint == null) { key, _ ->
-                                val drafts = CollaborationDraftCodec(access, cipher, key)
-                                val outbox =
-                                    CollaborationComposerSubmissionCodec(access, cipher, key)
-                                if (checkpoint != null) drafts.checkpoint(checkpoint)
-                                val retained =
-                                    outgoing.documents.singleOrNull()?.let { existing ->
-                                        require(existing.id == submission.id)
-                                        outbox.decode(requireNotNull(checkpoint), existing)
-                                    }
-                                if (replicas.checkpoint(scope, partition) != checkpoint)
-                                    return@use null
-                                if (retained != null)
-                                    return@use if (retained == submission)
-                                        CollaborationComposerHandoffResult.RETAINED
-                                    else CollaborationComposerHandoffResult.CHANGED
-                                val current =
-                                    original.documents.singleOrNull()?.let {
-                                        require(it.id == conversation)
-                                        drafts.decode(requireNotNull(checkpoint), it)
-                                    }
-                                if (replicas.checkpoint(scope, partition) != checkpoint)
-                                    return@use null
-                                if (current != expected)
-                                    return@use CollaborationComposerHandoffResult.CHANGED
-                                val pending =
-                                    replicas
-                                        .observeQueries(
-                                            scope,
-                                            partition,
-                                            listOf(
-                                                ReplicaQuery(COMPOSER_OUTBOX_TAG, limit = 129),
-                                                ReplicaQuery(COMPOSER_HELD_TAG, limit = 129),
-                                            ),
-                                        )
-                                        .first()
-                                if (pending.checkpoint != checkpoint) return@use null
+    ): AppResult<HandoffResult> =
+        measureAppResult(PerformanceOperation.CommandHandoff) {
+            withContext(Dispatchers.Default) {
+                safeStorageCall {
+                        require(validCollaborationComposerHandoff(submission, expected))
+                        val scope = historyScope(access)
+                        val partition = draftPartition(access)
+                        val conversation = submission.original.conversationId
+                        repeat(3) {
+                            currentCoroutineContext().ensureActive()
+                            val original =
+                                replicas.observeDocument(scope, partition, conversation).first()
+                            val outgoing =
+                                replicas.observeDocument(scope, partition, submission.id).first()
+                            if (original.checkpoint != outgoing.checkpoint) return@repeat
+                            val checkpoint = original.checkpoint
+                            if (checkpoint == null) {
                                 require(
-                                    pending.pages.size == 2 && pending.pages.all { it.size <= 129 }
+                                    original.documents.isEmpty() && outgoing.documents.isEmpty()
                                 )
-                                if (pending.pages.sumOf { it.size } >= 128)
-                                    return@use CollaborationComposerHandoffResult.CAPACITY_EXCEEDED
-                                val revision = checkpoint?.revision?.plus(1) ?: 0L
-                                require(revision in 0 until 9_007_199_254_740_991L)
-                                val generation =
-                                    checkpoint?.handle?.generation ?: Uuid.random().toString()
-                                val documents =
-                                    listOf(
-                                        drafts.encode(generation, revision, submission.nextDraft),
-                                        outbox.encode(generation, revision, submission),
-                                    )
-                                val next = drafts.checkpoint(generation, revision)
-                                currentCoroutineContext().ensureActive()
-                                val written =
-                                    if (checkpoint == null)
-                                        replicas.replace(
-                                            scope,
-                                            partition,
-                                            null,
-                                            ReplicaSnapshot(generation, next, documents),
-                                        )
-                                    else
-                                        replicas.commit(
-                                            checkpoint.handle,
-                                            checkpoint.revision,
-                                            next,
-                                            documents,
-                                            true,
-                                        )
-                                if (written) CollaborationComposerHandoffResult.STORED else null
+                                if (expected != null) return@safeStorageCall HandoffResult.CHANGED
                             }
-                        if (result != null) return@safeStorageCall result
+                            require(original.documents.size <= 1 && outgoing.documents.size <= 1)
+                            val result =
+                                keys.use(create = checkpoint == null) { key, _ ->
+                                    val drafts = CollaborationDraftCodec(access, cipher, key)
+                                    val outbox = SubmissionCodec(access, cipher, key)
+                                    if (checkpoint != null) drafts.checkpoint(checkpoint)
+                                    val retained =
+                                        outgoing.documents.singleOrNull()?.let { existing ->
+                                            require(existing.id == submission.id)
+                                            outbox.decode(requireNotNull(checkpoint), existing)
+                                        }
+                                    if (replicas.checkpoint(scope, partition) != checkpoint)
+                                        return@use null
+                                    if (retained != null)
+                                        return@use if (retained == submission)
+                                            HandoffResult.RETAINED
+                                        else HandoffResult.CHANGED
+                                    val current =
+                                        original.documents.singleOrNull()?.let {
+                                            require(it.id == conversation)
+                                            drafts.decode(requireNotNull(checkpoint), it)
+                                        }
+                                    if (replicas.checkpoint(scope, partition) != checkpoint)
+                                        return@use null
+                                    if (current != expected) return@use HandoffResult.CHANGED
+                                    val pending =
+                                        replicas
+                                            .observeQueries(
+                                                scope,
+                                                partition,
+                                                listOf(
+                                                    ReplicaQuery(COMPOSER_OUTBOX_TAG, limit = 129),
+                                                    ReplicaQuery(COMPOSER_HELD_TAG, limit = 129),
+                                                ),
+                                            )
+                                            .first()
+                                    if (pending.checkpoint != checkpoint) return@use null
+                                    val pages = pending.pages
+                                    require(pages.size == 2 && pages.all { it.size <= 129 })
+                                    if (pages.sumOf { it.size } >= 128)
+                                        return@use HandoffResult.CAPACITY_EXCEEDED
+                                    val revision = checkpoint?.revision?.plus(1) ?: 0L
+                                    require(revision in 0 until 9_007_199_254_740_991L)
+                                    val generation =
+                                        checkpoint?.handle?.generation ?: Uuid.random().toString()
+                                    val nextDraft = submission.nextDraft
+                                    val documents =
+                                        listOf(
+                                            drafts.encode(generation, revision, nextDraft),
+                                            outbox.encode(generation, revision, submission),
+                                        )
+                                    val next = drafts.checkpoint(generation, revision)
+                                    currentCoroutineContext().ensureActive()
+                                    val written =
+                                        if (checkpoint == null)
+                                            replicas.replace(
+                                                scope,
+                                                partition,
+                                                null,
+                                                ReplicaSnapshot(generation, next, documents),
+                                            )
+                                        else
+                                            replicas.commit(
+                                                checkpoint.handle,
+                                                checkpoint.revision,
+                                                next,
+                                                documents,
+                                                true,
+                                            )
+                                    if (written) HandoffResult.STORED else null
+                                }
+                            if (result != null) return@safeStorageCall result
+                        }
+                        null
                     }
-                    null
-                }
-                .stable()
+                    .stable()
+            }
         }
 
     // Checkpoint and documents belong to one coherent observation. A different editor advancing
@@ -171,7 +176,7 @@ class EncryptedCollaborationComposerOutboxRepository(
                     } else
                         keys.use { key, _ ->
                             CollaborationDraftCodec(access, cipher, key).checkpoint(checkpoint)
-                            val codec = CollaborationComposerSubmissionCodec(access, cipher, key)
+                            val codec = SubmissionCodec(access, cipher, key)
                             documents
                                 .map { codec.decodeEntry(checkpoint, it) }
                                 .sortedBy { it.submission.id }
@@ -209,8 +214,7 @@ class EncryptedCollaborationComposerOutboxRepository(
                             keys.use { key, _ ->
                                 val drafts = CollaborationDraftCodec(access, cipher, key)
                                 drafts.checkpoint(checkpoint)
-                                val codec =
-                                    CollaborationComposerSubmissionCodec(access, cipher, key)
+                                val codec = SubmissionCodec(access, cipher, key)
                                 val document = page.documents.singleOrNull() ?: return@use false
                                 val current = codec.decodeEntry(checkpoint, document)
                                 if (
@@ -280,7 +284,7 @@ class EncryptedCollaborationComposerOutboxRepository(
                         keys.use { key, _ ->
                             CollaborationDraftCodec(access, cipher, key).checkpoint(checkpoint)
                             require(documents.size <= limit + 1)
-                            val codec = CollaborationComposerSubmissionCodec(access, cipher, key)
+                            val codec = SubmissionCodec(access, cipher, key)
                             documents
                                 .map { codec.decode(checkpoint, it) }
                                 .also { submissions ->
@@ -354,7 +358,7 @@ class EncryptedCollaborationComposerOutboxRepository(
             CollaborationDraftCodec(access, cipher, key).checkpoint(checkpoint)
             page.documents.singleOrNull()?.let {
                 require(it.id == id)
-                CollaborationComposerSubmissionCodec(access, cipher, key).decode(checkpoint, it)
+                SubmissionCodec(access, cipher, key).decode(checkpoint, it)
             }
         }
     }

@@ -15,7 +15,7 @@ class CollaborationDeliveryTimingTest {
             val original = AppResult.Success(Unit)
             assertSame(
                 original,
-                traceCollaborationDelivery(testScheduler.timeSource) { stage ->
+                traceCollaborationDelivery<Unit>(testScheduler.timeSource) { stage ->
                     delay(15)
                     stage(CollaborationDeliveryStage.StageMessage)
                     delay(40)
@@ -40,7 +40,7 @@ class CollaborationDeliveryTimingTest {
     @Test
     fun repeatedMessageStagesRemainSeparateIntervals() = runTest {
         capture { events ->
-            traceCollaborationDelivery(testScheduler.timeSource) { stage ->
+            traceCollaborationDelivery<Unit>(testScheduler.timeSource) { stage ->
                 stage(CollaborationDeliveryStage.StageMessage)
                 delay(10)
                 stage(CollaborationDeliveryStage.StageMessage)
@@ -67,7 +67,7 @@ class CollaborationDeliveryTimingTest {
                 )
             assertSame(
                 failed,
-                traceCollaborationDelivery(testScheduler.timeSource) {
+                traceCollaborationDelivery<Unit>(testScheduler.timeSource) {
                     delay(12)
                     failed
                 },
@@ -84,7 +84,7 @@ class CollaborationDeliveryTimingTest {
         capture { events ->
             assertNull(
                 withTimeoutOrNull(50) {
-                    traceCollaborationDelivery(testScheduler.timeSource) { stage ->
+                    traceCollaborationDelivery<Unit>(testScheduler.timeSource) { stage ->
                         delay(10)
                         stage(CollaborationDeliveryStage.EnterTimeline)
                         awaitCancellation()
@@ -100,7 +100,7 @@ class CollaborationDeliveryTimingTest {
             events.clear()
             val cancelled = CancellationException("private cancel")
             try {
-                traceCollaborationDelivery(testScheduler.timeSource) { throw cancelled }
+                traceCollaborationDelivery<Unit>(testScheduler.timeSource) { throw cancelled }
                 fail("Cancellation was swallowed")
             } catch (actual: CancellationException) {
                 // JVM coroutine stack recovery may copy an exception, retaining its exact cause.
@@ -116,7 +116,7 @@ class CollaborationDeliveryTimingTest {
         capture { events ->
             val thrown = IllegalStateException("private cause")
             try {
-                traceCollaborationDelivery(testScheduler.timeSource) {
+                traceCollaborationDelivery<Unit>(testScheduler.timeSource) {
                     delay(20)
                     throw thrown
                 }
@@ -143,7 +143,7 @@ class CollaborationDeliveryTimingTest {
                     stage(CollaborationDeliveryStage.DiscoverWork)
                     delay(30)
                     stage(CollaborationDeliveryStage.ProcessRooms)
-                    traceCollaborationDelivery(testScheduler.timeSource) { roomStage ->
+                    traceCollaborationDelivery<Unit>(testScheduler.timeSource) { roomStage ->
                         delay(15)
                         roomStage(CollaborationDeliveryStage.DeliverMessages)
                         delay(35)
@@ -217,14 +217,14 @@ class CollaborationDeliveryTimingTest {
         capture { events ->
             coroutineScope {
                 launch {
-                    traceCollaborationDelivery(testScheduler.timeSource) { stage ->
+                    traceCollaborationDelivery<Unit>(testScheduler.timeSource) { stage ->
                         stage(CollaborationDeliveryStage.StageMessage)
                         delay(40)
                         AppResult.Success(Unit)
                     }
                 }
                 launch {
-                    traceCollaborationDelivery(testScheduler.timeSource) { stage ->
+                    traceCollaborationDelivery<Unit>(testScheduler.timeSource) { stage ->
                         stage(CollaborationDeliveryStage.EnterTimeline)
                         delay(15)
                         AppResult.Success(Unit)

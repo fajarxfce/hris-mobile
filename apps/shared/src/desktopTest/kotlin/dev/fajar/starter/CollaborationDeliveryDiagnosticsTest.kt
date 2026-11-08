@@ -43,7 +43,7 @@ class CollaborationDeliveryDiagnosticsTest {
                     )
                 assertSame(
                     failure,
-                    traceCollaborationDelivery { stage ->
+                    traceCollaborationDelivery<Unit> { stage ->
                         stage(CollaborationDeliveryStage.DeliverMessages)
                         failure
                     },
@@ -73,16 +73,17 @@ class CollaborationDeliveryDiagnosticsTest {
                         parameters = mapOf("secret" to "private"),
                     )
                 )
-            val result = traceCollaborationDelivery { stage ->
-                stage(CollaborationDeliveryStage.Flush)
-                original
-            }
+            val result =
+                traceCollaborationDelivery<Unit> { stage ->
+                    stage(CollaborationDeliveryStage.Flush)
+                    original
+                }
             assertSame(original, result)
             assertEquals("ChatDelivery_Flush_Conflict", events.single().category)
             assertFalse(encodeDiagnostic(events.single()).contains("private"))
             events.clear()
             assertIs<AppResult.Success<Unit>>(
-                traceCollaborationDelivery { AppResult.Success(Unit) }
+                traceCollaborationDelivery<Unit> { AppResult.Success(Unit) }
             )
             assertTrue(events.isEmpty())
         } finally {
@@ -100,7 +101,7 @@ class CollaborationDeliveryDiagnosticsTest {
         try {
             assertNull(
                 withTimeoutOrNull(10) {
-                    traceCollaborationDelivery { stage ->
+                    traceCollaborationDelivery<Unit> { stage ->
                         stage(CollaborationDeliveryStage.EnterTimeline)
                         awaitCancellation()
                     }
@@ -110,7 +111,7 @@ class CollaborationDeliveryDiagnosticsTest {
             events.clear()
             val cancelled = CancellationException("private")
             try {
-                traceCollaborationDelivery { throw cancelled }
+                traceCollaborationDelivery<Unit> { throw cancelled }
                 fail("Cancellation was swallowed")
             } catch (failure: CancellationException) {
                 assertTrue(failure === cancelled || failure.cause === cancelled)

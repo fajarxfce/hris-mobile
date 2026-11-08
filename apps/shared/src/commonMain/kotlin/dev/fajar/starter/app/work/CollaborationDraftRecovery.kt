@@ -17,15 +17,29 @@ class CollaborationDraftRecovery(
     private val recoverComposer: RecoverCollaborationComposer,
 ) {
     suspend operator fun invoke(): SyncResult {
-        val composer = recoverComposer()
+        val composer =
+            traceCollaborationDelivery(initial = CollaborationDeliveryStage.RecoverComposer) {
+                recoverComposer()
+            }
         currentCoroutineContext().ensureActive()
-        return combined(composer, recover(discover()))
+        val legacy =
+            traceCollaborationDeliveryWork(CollaborationDeliveryStage.RecoverLegacyDrafts) {
+                recover(discover())
+            }
+        return combined(composer, legacy)
     }
 
     suspend operator fun invoke(scope: CollaborationLocalScope): SyncResult {
-        val composer = recoverComposer(scope)
+        val composer =
+            traceCollaborationDelivery(initial = CollaborationDeliveryStage.RecoverComposer) {
+                recoverComposer(scope)
+            }
         currentCoroutineContext().ensureActive()
-        return combined(composer, recover(discover(scope)))
+        val legacy =
+            traceCollaborationDeliveryWork(CollaborationDeliveryStage.RecoverLegacyDrafts) {
+                recover(discover(scope))
+            }
+        return combined(composer, legacy)
     }
 
     private fun combined(composer: AppResult<Boolean>, legacy: SyncResult): SyncResult {

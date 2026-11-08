@@ -1,5 +1,41 @@
 # Agent continuation — HRIS Mobile
 
+## Composer stage timing source accepted — 8 November 2026, 10:17 UTC
+
+Full-1/session94138 is REAPED PASS1113.617s:5,759 fresh cases/772 suites, zero failures/
+errors/skips;4479 unchanged app inputs and82 unchanged library files (49 non-document).
+ActualChrome schedule3/outbox28, Android compile/lint0, root, web/iOS source and quality
+pass. No compiler/emulator remains. [All attempts](measurements/collaboration-composer-stage-timing-2026-11-08.json).
+Nine source files are now ready to commit/push with evidence. Domain/admission/queue
+behavior is unchanged. Generic CommandHandoff/WorkScheduling and separate actual
+RecoverComposer/RecoverLegacyDrafts results measure existing owned operations.
+No CommandRecovery enum, helper extraction or quality suppression. Failed initial
+checks are preserved; type-inference fixtures and formatting issues are resolved.
+
+[Existing66 HTTP attribution](measurements/collaboration-worker-request-attribution-2026-11-08.json)
+exactly correlates43of71 Ktor completions to two worker traces, none to local gestures.
+Approximate windows show3perstage,6perdelivery,6perretirement-history, all200. Nested
+windows/sums overlap; no route or causality claim and no new send. This is NOT a reason
+to remove guards. Measure67 before changing behavior; original pending latency remains.
+
+Next commit/push, build/verify67 using prepared scripts, then original1536MiB/two-core
+emulator, counter and ONE NEW original through probe.py. Preserve exact UNSENT Draft66
+092041 (temporarily replace only the verified synthetic value, then restore), all66
+originals/older messages/keys. Never rerun a failed probe after Send. Recorder waits
+for that SAME gesture span instead of another send. Review actual four screenshots,
+cold offline history/draft/preview, precise phase data and HTTP counts. No video/first-frame
+measurement is claimed for67; protected66UI/inspector input fingerprints are required.
+No67APK/send exists yet. Stop/reap emulator before Starter compiler or phone installation.
+
+Phone remains65;66 is accepted but NOT installed. Third preflight54370 is REAPED timeout
+09:58:36, earlier two preserved as phone-preflight-1.json/-2.json. Availability question
+pending. Notify before any verified install-only; never drive phone UI. Prepared67
+preflight allows65or66 and verifies actual identity. Startere170ada is clean; next3-file
+port bases and full checker are prepared but NOsource copied. Port exact core files only
+after accepted source commitment, then fullgate/commit/push. Platform485d6c8f docs-only,
+liveAPI3a7909a6/worker/schema116.1/GroupOFF unchanged. Library/SDK5 unpublished. Continue
+remaining latency and original54PRDgroups (none newly complete). Main is canonical.
+
 ## Composer timing full gate running — 8 November 2026, 09:57 UTC
 
 Sole compiler94138: Mobile `.work/composer-stage-timing-2026-11-08/check.py full-1`.

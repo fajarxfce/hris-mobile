@@ -11,6 +11,8 @@ enum class PerformanceOperation {
     CommandPreparation,
     CommandQueue,
     CommandConfirmation,
+    CommandHandoff,
+    WorkScheduling,
 }
 
 enum class PerformanceOutcome {

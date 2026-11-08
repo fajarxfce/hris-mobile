@@ -1,0 +1,356 @@
+{
+  "at": "2026-11-08T10:01:22.020156+00:00",
+  "sourceLogSha256": "1870c265820c0ea8d03e262cc7029b5e6d2460730215a26017e857345f96b45d",
+  "networkCompletions": 71,
+  "workerCorrelatedCompletions": 43,
+  "otherCompletions": 28,
+  "workerTraceCount": 2,
+  "rows": [
+    {
+      "traceOrdinal": 1,
+      "stage": "RecoverDrafts",
+      "stageDurationMillis": 2669,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "DiscoverWork",
+      "stageDurationMillis": 53,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "LoadSetup",
+      "stageDurationMillis": 170,
+      "requestCompletions": 1,
+      "httpHeaderDurationSumMillis": 78,
+      "statuses": {
+        "200": 1
+      },
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "EnsureRuntime",
+      "stageDurationMillis": 9,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "Reconcile",
+      "stageDurationMillis": 31,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "ReadPending",
+      "stageDurationMillis": 35,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "PrepareRoom",
+      "stageDurationMillis": 160,
+      "requestCompletions": 1,
+      "httpHeaderDurationSumMillis": 35,
+      "statuses": {
+        "200": 1
+      },
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "EnterTimeline",
+      "stageDurationMillis": 413,
+      "requestCompletions": 3,
+      "httpHeaderDurationSumMillis": 99,
+      "statuses": {
+        "200": 3
+      },
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "SettleCompletedQueue",
+      "stageDurationMillis": 178,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "ReadPrepared",
+      "stageDurationMillis": 10,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "Flush",
+      "stageDurationMillis": 0,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "StageMessage",
+      "stageDurationMillis": 609,
+      "requestCompletions": 3,
+      "httpHeaderDurationSumMillis": 78,
+      "statuses": {
+        "200": 3
+      },
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "DeliverMessages",
+      "stageDurationMillis": 1141,
+      "requestCompletions": 6,
+      "httpHeaderDurationSumMillis": 234,
+      "statuses": {
+        "200": 6
+      },
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "Retire",
+      "stageDurationMillis": 0,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "AcquireRetirementHistory",
+      "stageDurationMillis": 604,
+      "requestCompletions": 6,
+      "httpHeaderDurationSumMillis": 170,
+      "statuses": {
+        "200": 6
+      },
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "RetireCommands",
+      "stageDurationMillis": 132,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 1,
+      "stage": "ProcessRooms",
+      "stageDurationMillis": 3389,
+      "requestCompletions": 19,
+      "httpHeaderDurationSumMillis": 616,
+      "statuses": {
+        "200": 19
+      },
+      "nestedParent": true
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "RecoverDrafts",
+      "stageDurationMillis": 421,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "DiscoverWork",
+      "stageDurationMillis": 16,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "LoadSetup",
+      "stageDurationMillis": 43,
+      "requestCompletions": 1,
+      "httpHeaderDurationSumMillis": 22,
+      "statuses": {
+        "200": 1
+      },
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "EnsureRuntime",
+      "stageDurationMillis": 8,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "Reconcile",
+      "stageDurationMillis": 56,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "ReadPending",
+      "stageDurationMillis": 11,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "PrepareRoom",
+      "stageDurationMillis": 78,
+      "requestCompletions": 1,
+      "httpHeaderDurationSumMillis": 25,
+      "statuses": {
+        "200": 1
+      },
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "EnterTimeline",
+      "stageDurationMillis": 350,
+      "requestCompletions": 3,
+      "httpHeaderDurationSumMillis": 87,
+      "statuses": {
+        "200": 3
+      },
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "SettleCompletedQueue",
+      "stageDurationMillis": 334,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "ReadPrepared",
+      "stageDurationMillis": 13,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "Flush",
+      "stageDurationMillis": 0,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "StageMessage",
+      "stageDurationMillis": 362,
+      "requestCompletions": 3,
+      "httpHeaderDurationSumMillis": 62,
+      "statuses": {
+        "200": 3
+      },
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "StageMessage",
+      "stageDurationMillis": 356,
+      "requestCompletions": 3,
+      "httpHeaderDurationSumMillis": 79,
+      "statuses": {
+        "200": 3
+      },
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "DeliverMessages",
+      "stageDurationMillis": 1560,
+      "requestCompletions": 6,
+      "httpHeaderDurationSumMillis": 173,
+      "statuses": {
+        "200": 6
+      },
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "Retire",
+      "stageDurationMillis": 0,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "AcquireRetirementHistory",
+      "stageDurationMillis": 562,
+      "requestCompletions": 6,
+      "httpHeaderDurationSumMillis": 193,
+      "statuses": {
+        "200": 6
+      },
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "RetireCommands",
+      "stageDurationMillis": 199,
+      "requestCompletions": 0,
+      "httpHeaderDurationSumMillis": 0,
+      "statuses": {},
+      "nestedParent": false
+    },
+    {
+      "traceOrdinal": 2,
+      "stage": "ProcessRooms",
+      "stageDurationMillis": 4001,
+      "requestCompletions": 22,
+      "httpHeaderDurationSumMillis": 619,
+      "statuses": {
+        "200": 22
+      },
+      "nestedParent": true
+    }
+  ],
+  "boundary": "Existing guest log only; trace identity is exact, stage assignment is approximate by completion log wall time and monotonic duration with 3ms boundary slack. Nested ProcessRooms includes child stages; a boundary completion may count in adjacent stages. HTTP sums overlap and are not exclusive critical-path durations. No route/account/body/credentials or actual trace IDs retained; no new send/device interaction."
+}

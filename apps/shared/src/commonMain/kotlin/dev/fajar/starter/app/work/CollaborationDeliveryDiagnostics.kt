@@ -8,6 +8,8 @@ import kotlinx.coroutines.*
 
 internal enum class CollaborationDeliveryStage {
     RecoverDrafts,
+    RecoverComposer,
+    RecoverLegacyDrafts,
     DiscoverWork,
     LoadSetup,
     RenewWorkspace,
@@ -30,12 +32,13 @@ internal enum class CollaborationDeliveryStage {
 }
 
 /** Room-attempt timings use closed stage names and an ephemeral trace, never message IDs. */
-internal suspend fun traceCollaborationDelivery(
+internal suspend fun <T> traceCollaborationDelivery(
     timeSource: TimeSource = TimeSource.Monotonic,
-    action: suspend ((CollaborationDeliveryStage) -> Unit) -> AppResult<Unit>,
-): AppResult<Unit> =
+    initial: CollaborationDeliveryStage = CollaborationDeliveryStage.Reconcile,
+    action: suspend ((CollaborationDeliveryStage) -> Unit) -> AppResult<T>,
+): AppResult<T> =
     traceDeliveryStages(
-        CollaborationDeliveryStage.Reconcile,
+        initial,
         timeSource,
         outcome = {
             if (it is AppResult.Success) PerformanceOutcome.Succeeded else PerformanceOutcome.Failed
