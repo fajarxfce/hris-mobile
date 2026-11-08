@@ -1,5 +1,28 @@
 # Agent continuation — HRIS Mobile
 
+## Bima fixture boot failure; continue independent server checks — 8 November 2026, 20:24 UTC
+
+Release 76 source/packaging and first-account native gates below remain valid.
+The Bima gate does NOT: Android cannot mount retained encrypted userdata, before
+any 76 install. [Incident and rejected recovery evidence](emulator-retained-data-recovery.md)
+records the missing metadata key, the false-positive empty-clone boots and the
+subsequent actual retained-clone mount failure. Original userdata plus a full COW
+snapshot are preserved. No message/draft was sent, no new chat identity created,
+and no phone action occurred. Never rerun the disproven metadata restoration script.
+
+All owned emulator processes are stopped/reaped: 30209/73758 failed original boots,
+10724 rejected empty read-only clone, 51209 rejected empty writable clone,
+84998 retained-versioned clone interrupted after mount failure (exit 130, cleanup
+confirmed). No Bima acceptance, Starter port, or phone installation is claimed.
+Phone still 70; no new availability reply. Keep its UI untouched.
+
+Next run the Platform readiness formatter/focused/full gates in
+`.work/readiness-wake-2026-11-08/check.py`, then fix actual failures. The 15 source
+files remain unvalidated and live schema/API/worker unchanged. Finish post-commit
+and missed-hint sender recovery independently of this fixture problem. Future
+emulator work must own complete isolated AVD/version/data/key metadata. All 54 PRD
+groups and prior 71 Storage root remain open; continue and push each commit.
+
 ## Original first-account native76 accepted; Bima image starting — 8 November 2026, 20:04 UTC
 
 Sourcef1da12b1 is pushed. Package67937 REAPED PASS114.057s; verifier8639 REAPED
