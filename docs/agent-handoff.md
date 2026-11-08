@@ -1,5 +1,35 @@
 # Agent continuation — HRIS Mobile
 
+## Build 60 installed; notification and retry corrections accepted — 8 November 2026, 02:20 UTC
+
+Exact c9dd7f82 application + 6433dc3 library packaged as non-debuggable Dev release 60.
+Original Bima emulator passed all six real notification OS cases, background and cold
+notification taps, Ktor/Matrix viewer details and Clear, one original send, default-key
+404, and cold offline history/latest preview. Screenshots and sampled send video were
+reviewed. The first cold-inspector probe lacked an initialized chat SDK; opening the
+existing thread and resuming navigation succeeded without another send. Preserve both
+attempts privately. [Acceptance and phone installation](measurements/network-inspector-notification-device-2026-11-08.json).
+
+The 180-second counter records zero 403, two default-key 401 followed by successful
+refresh and two 404, eleven successful syncs and one encrypted send 200. Inspector
+response/transfer takes 243 ms; local phases are 287/255/396/133 ms. UI polls observed
+pending/sent at 2.904/4.996 seconds. These are different boundaries; phone latency and
+capture overhead remain unproven. Keyboard still dismisses during local save; fix next.
+
+Emulator was stopped/reaped with original data intact. Phone 10.77.77.3:5555 received
+exact APK bff72ec7d213e8a3c5492b02da44b1b3a48dedd734c95255190bfb76f185e696
+at 02:16 UTC with --install-only after notification. Remote hash/version 60 match;
+app identity, first-install time and data retained; no phone UI launched or driven.
+Installation session 21207 is completed. All build/emulator sessions are reaped.
+
+Library CI 42436844884 on 6433dc3 passes and downloaded artifact hashes match:
+213 portable and 69 Apple cases, zero failures/errors/skips. This does not prove an
+Apple native Matrix binding or iPhone application. SDK 5/library remain unpublished.
+Next: port generic passive identity/notification navigation to Starter, then continue
+composer/pending timing and original 54 PRD groups. No group is newly complete.
+Platform 3a7909a6 remains live API-only; worker 10485916/schema 116.1 unchanged.
+One owned compiler OR emulator; never reset original accounts/keys or drive phone UI.
+
 ## Build60 source accepted locally — 8 November 2026, 02:03 UTC
 
 Notification-startup57505 is reaped and passes959.241s:10 fresh tests/zero failures,

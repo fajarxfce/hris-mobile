@@ -4,12 +4,17 @@ This integration candidate uses the separate [KMP Network Inspector](https://git
 repository. The repository is now public with explicit owner approval; no library package is published.
 Do not copy its source into this repository or change its visibility to make CI pass.
 
-**Build58 is installed on the authorized Android phone after actual emulator acceptance.**
+**Build 60 is installed on the authorized Android phone after actual emulator acceptance.**
 Ktor/API and Rust Matrix HTTP capture, filters, detail/back, Clear and cold offline chat
 continuity passed. This branch selects the unpublished, paired four-ABI SDK5 candidate;
 immutable SDK4 release assets are unchanged. [Device/package evidence](measurements/network-inspector-host-device-2026-11-07.json).
 
-The development app opens the viewer through Account → Settings → Network inspector.
+The development app opens the viewer from a silent Android notification after network
+activity, or through Account → Settings → Network inspector. The notification opens the
+shared viewer after normal navigation gates, including a cold process start. Android
+attaches the adapter on Activity resume so background session restoration cannot remove
+the retained shortcut before a tap. The host respects notification permission/channel
+settings. [Actual six OS cases, taps and exact installation](measurements/network-inspector-notification-device-2026-11-08.json).
 Ktor clients for HRIS, OIDC and Firebase and the Android Matrix Rust client share one
 bounded capture. The inspector records actual HTTP attempts, including separate Matrix
 response/body timing; it does not turn HTTP200 into message acknowledgement. No response
@@ -17,7 +22,8 @@ bodies, query values or credentials are retained. Current library text is Englis
 the application entry, title and Clear action follow the app language.
 
 Application composition creates capture only by default for the Dev environment.
-`ApplicationNetworkInspection` observes the stable session/user identity, preserves
+`ApplicationNetworkInspection` passively observes the published session/user identity
+without acquiring credentials or activating storage, preserves
 capture through token refresh, and closes/erases the old recorder on identity replacement.
 Source completion/failure and container disposal close diagnostics. It owns one supervised
 job, independently of delivery. The raw Android hook runs in the exact SDK client's lease;
