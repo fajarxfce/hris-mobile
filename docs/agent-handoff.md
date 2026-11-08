@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## Direct transport full gate running — 8 November 2026, 11:05 UTC
+
+Sole owned compiler66899 is `.work/direct-transport-2026-11-08/check.py full-1`.
+All18 Kotlin inputs and library files are FROZEN; no emulator runs. New application
+source is still UNCOMMITTED/UNACCEPTED on docHEAD e900c5aa. [Recorded attempts](measurements/collaboration-direct-transport-2026-11-08.json).
+
+Focused65789 REAPED FAIL656.191s: domain57/data4 pass,16 of20 worker cases failed
+because their fictional server had no native parent for the new response. The only
+subsequent source delta initializes that fixture from its actual signed-in binding;
+no production guard or assertion was removed. Focused77731 REAPED PASS100.430s:20 fresh
+worker cases, format/architecture/Detekt pass,4487 unchanged app inputs and82 unchanged
+library files. Full root/browser/Android/iOS-source acceptance remains required.
+
+Platform57aece56 docs are pushed; runtimee8d1d24f is ALREADY deployed/healthy on116.1.
+Do not repeat the API rollout. Starterad3aa93 is accepted/pushed, no new generic port.
+Phone/original stopped Bima emulator remain67, exact unsent Draft66 and all originals
+preserved. Release68 now has all build/verify/runtime/counter/probe/install-only scripts
+prepared and syntax checked, NONE RUN. Probe preserves DEL keycode67 and sends exactly
+one NEW original; never rerun after Send. Counter adds the actual combined-transport
+bucket and checks the deployed API identity. Require full acceptance/pushed sources
+before building, actual runtime/offline/visual proof before release acceptance, then
+stop/reap emulator and announce phone install-only. No new APK or latency claim yet.
+Continue original54 PRD work; nativeApple Matrix/overhead/SDK-library publication remain.
+
 ## Direct transport adoption under test — 8 November 2026, 10:57 UTC
 
 Platform e8d1d24f is now live/healthy after a compatible API-only rollout with218 active

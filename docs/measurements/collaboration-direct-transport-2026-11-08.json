@@ -1,0 +1,180 @@
+{
+  "accepted": false,
+  "sourceBase": "e900c5aa",
+  "backendAcceptedSource": "e8d1d24fdf9228540955f8ace1869975e78d35ec",
+  "backendDeployed": true,
+  "attempts": {
+    "focused-1": {
+      "session": 65789,
+      "reaped": true,
+      "result": {
+        "command": [
+          "xvfb-run",
+          "-a",
+          "env",
+          "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+          "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+          "ANDROID_HOME=/home/fajar/Android/Sdk",
+          "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+          "TMPDIR=/home/fajar/hris/.work/build-tmp",
+          "./gradlew",
+          "--dependency-verification",
+          "strict",
+          "--stacktrace",
+          "--continue",
+          ":features:collaboration:domain:desktopTest",
+          "--tests",
+          "*StageCollaborationTextTest*",
+          "--tests",
+          "*DeliverCollaborationMessagesTest*",
+          "--tests",
+          "*CollaborationTransportRoomTest*",
+          ":features:collaboration:data:desktopTest",
+          "--tests",
+          "*CollaborationDirectTransportTest*",
+          ":apps:shared:desktopTest",
+          "--tests",
+          "*CollaborationDeliveryWorkerTest*",
+          ":formatCheck",
+          ":architectureCheck",
+          ":detekt",
+          "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+          "-PmatrixSdkRepository=/home/fajar/hris/kmp-network-inspector/.work/matrix-android-2026-11-07/sdk-repository",
+          "-PappEnvironment=dev",
+          "-PappVersion=1.0.0",
+          "-PappVersionCode=68",
+          "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+          "--no-daemon",
+          "--no-parallel",
+          "--max-workers=1",
+          "-Dorg.gradle.jvmargs=-Xmx2048m",
+          "-Pkotlin.compiler.execution.strategy=in-process"
+        ],
+        "startedAt": "2026-11-08T10:49:23.365931+00:00",
+        "elapsedSeconds": 656.191,
+        "exitCode": 1,
+        "sourceFiles": 4487,
+        "librarySourcesUnchanged": true,
+        "sourcesUnchanged": true,
+        "freshCounts": {
+          "tests": 81,
+          "failures": 16,
+          "errors": 0,
+          "skipped": 0
+        },
+        "reports": {
+          "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+            "sha256": "5391423fd20ecb7827008f0b23c38fb1d5008de6dd04cd858f2e12aed3311327",
+            "tests": 20,
+            "failures": 16,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+            "sha256": "ff1ac4afdb2c27b10b0463100a5175face9011f89d800b523b612f2141697299",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.DeliverCollaborationMessagesTest.xml": {
+            "sha256": "974f9def1da26ae855876fc90c30819dea834226489e230c8afb9187515c589f",
+            "tests": 32,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.StageCollaborationTextTest.xml": {
+            "sha256": "196de835aac05aa1dc56f8d63c12088172ae6a3e28be161e96abdce704c57e2a",
+            "tests": 23,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationTransportRoomTest.xml": {
+            "sha256": "cb078dc193103403e56030082651972753016c6d3603d5dac1e258b6a0378a6b",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        }
+      },
+      "resultSha256": "2d1e26d162efcdf8610efb89bbabcf31d87ea0fc97e682c9853d5b9b5bdecafa",
+      "reason": "16 of20 worker integration cases reached the new wire transport with an unset fictional native parent. Domain57/data4 pass. Fixture initialize now publishes the actual signed-in parent to its server. Production assertions unchanged."
+    },
+    "focused-2": {
+      "session": 77731,
+      "reaped": true,
+      "result": {
+        "command": [
+          "xvfb-run",
+          "-a",
+          "env",
+          "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+          "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+          "ANDROID_HOME=/home/fajar/Android/Sdk",
+          "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+          "TMPDIR=/home/fajar/hris/.work/build-tmp",
+          "./gradlew",
+          "--dependency-verification",
+          "strict",
+          "--stacktrace",
+          "--continue",
+          ":features:collaboration:domain:desktopTest",
+          "--tests",
+          "*StageCollaborationTextTest*",
+          "--tests",
+          "*DeliverCollaborationMessagesTest*",
+          "--tests",
+          "*CollaborationTransportRoomTest*",
+          ":features:collaboration:data:desktopTest",
+          "--tests",
+          "*CollaborationDirectTransportTest*",
+          ":apps:shared:desktopTest",
+          "--tests",
+          "*CollaborationDeliveryWorkerTest*",
+          ":formatCheck",
+          ":architectureCheck",
+          ":detekt",
+          "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+          "-PmatrixSdkRepository=/home/fajar/hris/kmp-network-inspector/.work/matrix-android-2026-11-07/sdk-repository",
+          "-PappEnvironment=dev",
+          "-PappVersion=1.0.0",
+          "-PappVersionCode=68",
+          "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+          "--no-daemon",
+          "--no-parallel",
+          "--max-workers=1",
+          "-Dorg.gradle.jvmargs=-Xmx2048m",
+          "-Pkotlin.compiler.execution.strategy=in-process"
+        ],
+        "startedAt": "2026-11-08T11:01:54.155387+00:00",
+        "elapsedSeconds": 100.43,
+        "exitCode": 0,
+        "sourceFiles": 4487,
+        "librarySourcesUnchanged": true,
+        "sourcesUnchanged": true,
+        "freshCounts": {
+          "tests": 20,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "reports": {
+          "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+            "sha256": "771e2b7d51768f3b4b4b71ddca80d7a35c49c387cf6e5b6a4e8fd7405d962d78",
+            "tests": 20,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        }
+      },
+      "resultSha256": "e470f0be2040b4696036d4ccad5dcb2e539b9c6f48d129e07a0cdd7bdd7baef4",
+      "reason": "Only the fictional worker server parent binding changed after the first attempt; all20 worker integration cases and quality pass."
+    }
+  },
+  "next": "full-1 running, source frozen",
+  "runtimeAccepted": false
+}
