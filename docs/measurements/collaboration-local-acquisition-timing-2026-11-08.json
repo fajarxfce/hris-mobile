@@ -126,14 +126,15 @@
   },
   "pending": {
     "release": 69,
-    "apkBuilt": false,
-    "runtimeAccepted": false,
-    "installed": false
+    "apkBuilt": true,
+    "runtimeAccepted": true,
+    "installed": true
   },
   "limits": [
     "Instrumentation only; no new duration attribution or latency improvement established.",
     "Native acquisition preserves raw late-resource handover without a new context or post-acquisition cancellation check.",
     "Workspace remains HRIS-only; no Starter workspace module exists."
   ],
-  "acceptedGate": "full-1"
+  "acceptedGate": "full-1",
+  "runtimeEvidence": "collaboration-local-acquisition-release69-2026-11-08.json"
 }

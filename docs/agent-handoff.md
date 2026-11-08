@@ -1,5 +1,35 @@
 # Agent continuation — HRIS Mobile
 
+## Release 69 installed; reduce unused native timeline work — 8 November 2026, 12:34 UTC
+
+Mobile source e457e367 is pushed (62268 REAPED PASS). Full source gate passed 5,749
+fresh cases with no failures/errors/skips. Build 97240 and verification 53331 are
+REAPED PASS. APK 69 SHA-256 is
+`22d3f6f2c9f3e3e256fbeaf9ad336026dd07e30f321ff408eee825529c39d022`.
+Phone install 9275 REAPED PASS (17.229 s): same appId 10962/first install/data,
+no launch or UI driving. Original Bima image is also 69, stopped/reaped (99414).
+No owned compiler or emulator remains. All other runtime jobs are reaped.
+
+[Measurement and exact evidence](collaboration-local-acquisition-timing.md) includes
+one NEW `Tes69 acquire 123003`, never to be replayed. Exact UNSENT `Draft66 092041`
+was restored and must never be sent. Older originals including 68 remain intact.
+Four PNGs were actually viewed; sent message, draft and preview survive a cold
+offline restart, passive process check passes. No 403 in 180.054 s. Tap to encrypted
+request 3,113 ms, headers another 235 ms; pending latency is still NOT solved.
+
+Next investigate eager native timeline construction: three queue leases build it,
+267/115/136 ms in settlement/staging/delivery windows. The first lease only inspects
+or settles the queue. Keep async FFI initialization before synchronous queue controls,
+exclusive writer ownership, late-resource cleanup, current admission and exact original
+recovery. No optimization source has been written yet. The 113 workspace reads in
+the sending-worker trace totaled 726 ms, including post-ACK work; do not blindly cache
+keys/authorization or change selected/background admission to remove checks.
+
+Backend e8d1d24f/schema 116.1, Starter ad3aa93 and Library 2b849217/SDK 5 remain
+unchanged. Workspace is HRIS-only. Port reusable observability additions after this
+Mobile acceptance. Continue all 54 PRD groups and SDK/library publication separately;
+no native Apple Matrix or measurement-overhead acceptance exists.
+
 ## Acquisition timing source accepted — 8 November 2026, 12:23 UTC
 
 Full-1/37685 is REAPED PASS1290.851s:5,749 fresh cases, zero failures/errors/skips;

@@ -1,0 +1,1413 @@
+{
+  "accepted": true,
+  "versionCode": 69,
+  "recordedAt": "2026-11-08T12:34:28.230206+00:00",
+  "sourceCommit": "e457e3676158f544cc86d19eef886aa80836773a",
+  "sourceGate": "collaboration-local-acquisition-timing-2026-11-08.json",
+  "evidence": {
+    "artifact.json": {
+      "candidateOnly": true,
+      "diagnosticMarkersAbsent": true,
+      "nativeAbis": [
+        "arm64-v8a"
+      ],
+      "zipAligned16KiB": true,
+      "artifact": ".work/release-phone-2026-11-08-build69/hris-mobile-dev-release-1.0.0-69-arm64.apk",
+      "variant": "devRelease",
+      "applicationId": "dev.fajar.hris.mobile.dev",
+      "versionCode": 69,
+      "versionName": "1.0.0",
+      "bytes": 123383055,
+      "sha256": "22d3f6f2c9f3e3e256fbeaf9ad336026dd07e30f321ff408eee825529c39d022",
+      "debuggable": false,
+      "signatureVerified": true,
+      "samePreviouslyInstalledSigner": true,
+      "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+      "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+      "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+      "privateApiVerifiedInDex": true,
+      "fixtureEndpointsAbsent": true,
+      "firebaseDevAppMatches": true,
+      "compiledBackupExclusionsVerified": true,
+      "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+    },
+    "source.json": {
+      "baseCommit": "e457e3676158f544cc86d19eef886aa80836773a",
+      "applicationGate": "local-acquisition-timing/full-1",
+      "sourceBranch": "feat/chat-send-timing-20261107",
+      "sourceManifestSha256": "d93ef15b7949443292531052f1494feb9c13a7408803a29930b77718b79401bd",
+      "sourcesUnchanged": true,
+      "candidateOnly": true,
+      "sdkCandidate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+      "inspectorCommit": "2b8492170ff30915f9a6694d7d1bf8f076e74e3c",
+      "inspectorGate": "local-acquisition-timing/full-1",
+      "librarySourceManifestSha256": "3838706d98dd25b412d1ac7adbcadba8e231f764878a1586d50916fe015f0758",
+      "librarySourcesUnchanged": true
+    },
+    "build-arm64.json": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        "--dependency-verification",
+        "strict",
+        ":apps:android:assembleDevRelease",
+        "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+        "-PmatrixSdkRepository=/home/fajar/hris/kmp-network-inspector/.work/matrix-android-2026-11-07/sdk-repository",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        ":apps:android:lintDevRelease",
+        "-PrequireSigning=true",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=69",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--init-script",
+        "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-08-build69/phone-arm64.init.gradle",
+        "--stacktrace",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2048m"
+      ],
+      "startedAt": "2026-11-08T12:26:08.807081+00:00",
+      "elapsedSeconds": 111.438,
+      "exitCode": 0
+    },
+    "sdk-verification.json": {
+      "nativeSha256": "4e8df548f98df275fc5ec23205388d716919ea9d0ab7e927d5cc39020171fa00",
+      "nativeBytes": 97549216,
+      "elfClass": "ELF64",
+      "requiredElfAlignment": 16384,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "requiredSymbolsPresent": true,
+      "aarSha256": "5bffa2f4318d1edc7518ad21dc156393ef8a7e2610fd42320a67c12ab645ba5c",
+      "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+      "published": false,
+      "strippedNativeMatchesVerifiedSdk": true,
+      "stripToolNdkVersion": "28.2.13676358",
+      "queueApisAndUseCaseInDex": true,
+      "actualNativeObserverSymbolsPresent": true
+    },
+    "gateway-preflight.json": {
+      "at": "2026-11-08T12:28:13.557904+00:00",
+      "containerId": "eeab22116576daee5cf8abeee208293654d7b4e28a02b0a9efee565a19cb2605",
+      "image": "sha256:73f2d64d97630a62eb259f36b2d2e1c0ba3995695c21d86f7cb6e5d435f4dc93",
+      "apiAddress": "172.18.0.7",
+      "counterInterface": "br-3b9b9ff77286",
+      "acceptedDeploymentSource": "e8d1d24fdf9228540955f8ace1869975e78d35ec"
+    },
+    "emulator-install.json": {
+      "sample": 69,
+      "ownedEmulatorOnly": true,
+      "versionCode": 69,
+      "sha256": "22d3f6f2c9f3e3e256fbeaf9ad336026dd07e30f321ff408eee825529c39d022",
+      "startedAt": "2026-11-08T12:28:59.017495+00:00",
+      "elapsedSeconds": 17.986,
+      "updateInPlace": true,
+      "dataCleared": false,
+      "uninstalled": false,
+      "uiLaunched": false,
+      "sameAppIdentity": true
+    },
+    "send-timing.json": {
+      "accepted": true,
+      "versionCode": 69,
+      "apkSha256": "22d3f6f2c9f3e3e256fbeaf9ad336026dd07e30f321ff408eee825529c39d022",
+      "startedAt": "2026-11-08T12:30:03.687929+00:00",
+      "serial": "emulator-5562",
+      "processId": 3268,
+      "gestureQueueDurationsMillis": [
+        797
+      ],
+      "gesturePhases": [
+        {
+          "operation": "CommandHandoff",
+          "durationMillis": 205,
+          "outcome": "Succeeded"
+        },
+        {
+          "operation": "WorkScheduling",
+          "durationMillis": 43,
+          "outcome": "Succeeded"
+        },
+        {
+          "operation": "CommandQueue",
+          "durationMillis": 797,
+          "outcome": "Succeeded"
+        }
+      ],
+      "gestureQueueOutcomes": [
+        "Succeeded"
+      ],
+      "distinctGestureTraces": 1,
+      "distinctQueueSpans": 1,
+      "originalLogSha256": "e6eb166b9fd995ad391f82820b6692b9d99892c214ab5f74b6a0ae4c5bb02377",
+      "bodyOrOwnerRetainedInDiagnostics": false,
+      "boundary": "Same-process monotonic local phases; overlaps with asynchronous delivery. Not end-to-end acknowledgement latency or transport overhead."
+    },
+    "delivery-stage-timing.json": {
+      "entries": [
+        {
+          "stage": "RecoverComposer",
+          "durationMillis": 40,
+          "terminalOutcome": "Succeeded",
+          "traceOrdinal": 1,
+          "guestLogEpochSeconds": 1794141005.435
+        },
+        {
+          "stage": "RecoverLegacyDrafts",
+          "durationMillis": 26,
+          "terminalOutcome": "Succeeded",
+          "traceOrdinal": 1,
+          "guestLogEpochSeconds": 1794141005.462
+        },
+        {
+          "stage": "RecoverDrafts",
+          "durationMillis": 67,
+          "terminalOutcome": null,
+          "traceOrdinal": 1,
+          "guestLogEpochSeconds": 1794141005.462
+        },
+        {
+          "stage": "DiscoverWork",
+          "durationMillis": 12,
+          "terminalOutcome": "Succeeded",
+          "traceOrdinal": 1,
+          "guestLogEpochSeconds": 1794141005.475
+        },
+        {
+          "stage": "RecoverComposer",
+          "durationMillis": 538,
+          "terminalOutcome": "Succeeded",
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141008.046
+        },
+        {
+          "stage": "RecoverLegacyDrafts",
+          "durationMillis": 80,
+          "terminalOutcome": "Succeeded",
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141008.127
+        },
+        {
+          "stage": "RecoverDrafts",
+          "durationMillis": 621,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141008.128
+        },
+        {
+          "stage": "DiscoverWork",
+          "durationMillis": 26,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141008.155
+        },
+        {
+          "stage": "LoadSetup",
+          "durationMillis": 44,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141008.199
+        },
+        {
+          "stage": "EnsureRuntime",
+          "durationMillis": 5,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141008.205
+        },
+        {
+          "stage": "Reconcile",
+          "durationMillis": 20,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141008.246
+        },
+        {
+          "stage": "ReadPending",
+          "durationMillis": 5,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141008.251
+        },
+        {
+          "stage": "PrepareRoom",
+          "durationMillis": 53,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141008.305
+        },
+        {
+          "stage": "EnterTimeline",
+          "durationMillis": 382,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141008.687
+        },
+        {
+          "stage": "SettleCompletedQueue",
+          "durationMillis": 368,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141009.056
+        },
+        {
+          "stage": "ReadPrepared",
+          "durationMillis": 8,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141009.069
+        },
+        {
+          "stage": "Flush",
+          "durationMillis": 0,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141009.069
+        },
+        {
+          "stage": "StageMessage",
+          "durationMillis": 388,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141009.459
+        },
+        {
+          "stage": "DeliverMessages",
+          "durationMillis": 959,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141010.419
+        },
+        {
+          "stage": "Retire",
+          "durationMillis": 0,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141010.42
+        },
+        {
+          "stage": "AcquireRetirementHistory",
+          "durationMillis": 1002,
+          "terminalOutcome": null,
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141011.423
+        },
+        {
+          "stage": "RetireCommands",
+          "durationMillis": 102,
+          "terminalOutcome": "Succeeded",
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141011.525
+        },
+        {
+          "stage": "ProcessRooms",
+          "durationMillis": 3334,
+          "terminalOutcome": "Succeeded",
+          "traceOrdinal": 2,
+          "guestLogEpochSeconds": 1794141011.539
+        }
+      ],
+      "traceCount": 2,
+      "durationClock": "Same-process monotonic stage intervals",
+      "eventClock": "Guest logcat wall time; not synchronized with host ADB tap",
+      "overlap": "ProcessRooms includes the nested room stages; do not add it to those durations",
+      "sourceLogSha256": "e6eb166b9fd995ad391f82820b6692b9d99892c214ab5f74b6a0ae4c5bb02377"
+    },
+    "component-summary.json": {
+      "at": "2026-11-08T12:30:25.094771+00:00",
+      "versionCode": 69,
+      "apkSha256": "22d3f6f2c9f3e3e256fbeaf9ad336026dd07e30f321ff408eee825529c39d022",
+      "sourceLogSha256": "e6eb166b9fd995ad391f82820b6692b9d99892c214ab5f74b6a0ae4c5bb02377",
+      "workerLocalReadIntervals": {
+        "1": {
+          "WorkspaceRead": {
+            "calls": 18,
+            "sumOfIntervalsMillis": 29,
+            "minimumMillis": 1,
+            "maximumMillis": 4
+          },
+          "LocalAccessRead": {
+            "calls": 12,
+            "sumOfIntervalsMillis": 0,
+            "minimumMillis": 0,
+            "maximumMillis": 0
+          }
+        },
+        "2": {
+          "WorkspaceRead": {
+            "calls": 113,
+            "sumOfIntervalsMillis": 726,
+            "minimumMillis": 1,
+            "maximumMillis": 120
+          },
+          "LocalAccessRead": {
+            "calls": 86,
+            "sumOfIntervalsMillis": 193,
+            "minimumMillis": 0,
+            "maximumMillis": 25
+          }
+        }
+      },
+      "allCapturedLocalReadIntervals": {
+        "WorkspaceRead": {
+          "calls": 194,
+          "sumOfIntervalsMillis": 2629,
+          "minimumMillis": 1,
+          "maximumMillis": 310
+        },
+        "LocalAccessRead": {
+          "calls": 155,
+          "sumOfIntervalsMillis": 798,
+          "minimumMillis": 0,
+          "maximumMillis": 113
+        }
+      },
+      "allCapturedNativeAcquisitionIntervals": {
+        "TimelineRoom": {
+          "calls": 1,
+          "sumOfIntervalsMillis": 51,
+          "minimumMillis": 51,
+          "maximumMillis": 51
+        },
+        "TimelineEncryption": {
+          "calls": 1,
+          "sumOfIntervalsMillis": 1,
+          "minimumMillis": 1,
+          "maximumMillis": 1
+        },
+        "TimelineBuild": {
+          "calls": 1,
+          "sumOfIntervalsMillis": 188,
+          "minimumMillis": 188,
+          "maximumMillis": 188
+        },
+        "TimelineListener": {
+          "calls": 1,
+          "sumOfIntervalsMillis": 11,
+          "minimumMillis": 11,
+          "maximumMillis": 11
+        },
+        "QueueRoom": {
+          "calls": 3,
+          "sumOfIntervalsMillis": 0,
+          "minimumMillis": 0,
+          "maximumMillis": 0
+        },
+        "QueueBuild": {
+          "calls": 3,
+          "sumOfIntervalsMillis": 518,
+          "minimumMillis": 115,
+          "maximumMillis": 267
+        }
+      },
+      "boundary": "Aggregated intervals, not additive end-to-end delay. Worker traces include work after server acknowledgement. Native resource lifetime can have another trace; temporal correlation alone does not prove a dependency. No controlled profiler-overhead or physical-phone benchmark."
+    },
+    "component-stage-correlation.json": {
+      "sourceLogSha256": "e6eb166b9fd995ad391f82820b6692b9d99892c214ab5f74b6a0ae4c5bb02377",
+      "workerTraceOrdinal": 2,
+      "stages": [
+        {
+          "stage": "RecoverComposer",
+          "intervalMillis": 538,
+          "localReads": {
+            "WorkspaceRead": {
+              "calls": 15,
+              "sumOfIntervalsMillis": 216
+            },
+            "LocalAccessRead": {
+              "calls": 13,
+              "sumOfIntervalsMillis": 79
+            }
+          },
+          "nativeAcquisitionsCompletedWithinInterval": []
+        },
+        {
+          "stage": "EnterTimeline",
+          "intervalMillis": 382,
+          "localReads": {
+            "WorkspaceRead": {
+              "calls": 7,
+              "sumOfIntervalsMillis": 25
+            },
+            "LocalAccessRead": {
+              "calls": 5,
+              "sumOfIntervalsMillis": 4
+            }
+          },
+          "nativeAcquisitionsCompletedWithinInterval": [
+            {
+              "operation": "TimelineRoom",
+              "durationMillis": 51,
+              "traceOrdinal": 62
+            },
+            {
+              "operation": "TimelineEncryption",
+              "durationMillis": 1,
+              "traceOrdinal": 63
+            },
+            {
+              "operation": "TimelineBuild",
+              "durationMillis": 188,
+              "traceOrdinal": 64
+            },
+            {
+              "operation": "TimelineListener",
+              "durationMillis": 11,
+              "traceOrdinal": 65
+            }
+          ]
+        },
+        {
+          "stage": "SettleCompletedQueue",
+          "intervalMillis": 368,
+          "localReads": {
+            "WorkspaceRead": {
+              "calls": 5,
+              "sumOfIntervalsMillis": 24
+            },
+            "LocalAccessRead": {
+              "calls": 4,
+              "sumOfIntervalsMillis": 14
+            }
+          },
+          "nativeAcquisitionsCompletedWithinInterval": [
+            {
+              "operation": "QueueRoom",
+              "durationMillis": 0,
+              "traceOrdinal": 66
+            },
+            {
+              "operation": "QueueBuild",
+              "durationMillis": 267,
+              "traceOrdinal": 67
+            }
+          ]
+        },
+        {
+          "stage": "StageMessage",
+          "intervalMillis": 388,
+          "localReads": {
+            "WorkspaceRead": {
+              "calls": 12,
+              "sumOfIntervalsMillis": 56
+            },
+            "LocalAccessRead": {
+              "calls": 11,
+              "sumOfIntervalsMillis": 15
+            }
+          },
+          "nativeAcquisitionsCompletedWithinInterval": [
+            {
+              "operation": "QueueRoom",
+              "durationMillis": 0,
+              "traceOrdinal": 68
+            },
+            {
+              "operation": "QueueBuild",
+              "durationMillis": 115,
+              "traceOrdinal": 69
+            }
+          ]
+        },
+        {
+          "stage": "DeliverMessages",
+          "intervalMillis": 959,
+          "localReads": {
+            "WorkspaceRead": {
+              "calls": 15,
+              "sumOfIntervalsMillis": 97
+            },
+            "LocalAccessRead": {
+              "calls": 14,
+              "sumOfIntervalsMillis": 38
+            }
+          },
+          "nativeAcquisitionsCompletedWithinInterval": [
+            {
+              "operation": "QueueRoom",
+              "durationMillis": 0,
+              "traceOrdinal": 74
+            },
+            {
+              "operation": "QueueBuild",
+              "durationMillis": 136,
+              "traceOrdinal": 75
+            }
+          ]
+        },
+        {
+          "stage": "AcquireRetirementHistory",
+          "intervalMillis": 1002,
+          "localReads": {
+            "WorkspaceRead": {
+              "calls": 18,
+              "sumOfIntervalsMillis": 174
+            },
+            "LocalAccessRead": {
+              "calls": 15,
+              "sumOfIntervalsMillis": 20
+            }
+          },
+          "nativeAcquisitionsCompletedWithinInterval": []
+        }
+      ],
+      "boundary": "Local reads share the worker trace. Native completions are temporally matched on guest log timestamps; native traces differ and timing alone is not dependency proof. Intervals overlap; not additive end-to-end delay."
+    },
+    "latency-summary.json": {
+      "at": "2026-11-08T12:32:45.400570+00:00",
+      "versionCode": 69,
+      "apkSha256": "22d3f6f2c9f3e3e256fbeaf9ad336026dd07e30f321ff408eee825529c39d022",
+      "hostTapToEncryptedRequestMillis": 3113,
+      "encryptedRequestToResponseHeadersMillis": 235,
+      "hostTapToEncryptedResponseHeadersMillis": 3348,
+      "firstSentObservation": {
+        "secondsAfterTap": 5.054,
+        "visibleCopies": 1,
+        "sent": true,
+        "pending": false,
+        "bubbleBounds": [
+          33,
+          1154,
+          1047,
+          1298
+        ],
+        "composerBounds": [
+          22,
+          1353,
+          904,
+          1485
+        ],
+        "aboveComposer": true
+      },
+      "counterWindowSeconds": 180.054,
+      "routeRequestCounts": {
+        "other_hris": 10,
+        "hris_device_setup": 14,
+        "secret_storage_default_key": 4,
+        "hris_room": 14,
+        "refresh": 1,
+        "hris_conversation": 12,
+        "other_matrix": 8,
+        "sync": 3,
+        "hris_direct_transport": 3,
+        "encrypted_room_send": 1
+      },
+      "responseCounts": {
+        "other_hris:401": 2,
+        "other_hris:200": 8,
+        "hris_device_setup:200": 14,
+        "secret_storage_default_key:401": 2,
+        "hris_room:200": 14,
+        "refresh:200": 1,
+        "hris_conversation:200": 12,
+        "secret_storage_default_key:404": 2,
+        "other_matrix:200": 8,
+        "sync:200": 3,
+        "hris_direct_transport:200": 3,
+        "encrypted_room_send:200": 1
+      },
+      "localGesturePhases": [
+        {
+          "operation": "CommandHandoff",
+          "durationMillis": 205,
+          "outcome": "Succeeded"
+        },
+        {
+          "operation": "WorkScheduling",
+          "durationMillis": 43,
+          "outcome": "Succeeded"
+        },
+        {
+          "operation": "CommandQueue",
+          "durationMillis": 797,
+          "outcome": "Succeeded"
+        }
+      ],
+      "physicalPhoneMeasured": false,
+      "captureOverheadMeasured": false,
+      "boundary": "One new original on the retained emulator. Same-host monotonic ADB tap to packet request/header; UI polling is coarse. Counts cover the whole passive window, not only this message. Not a controlled cross-build comparison."
+    },
+    "matrix-http-counts.json": {
+      "startedAt": "2026-11-08T12:29:26.921511+00:00",
+      "monotonicStartedSeconds": 1817659.570051746,
+      "elapsedSeconds": 180.054,
+      "requests": {
+        "other_hris": 10,
+        "hris_device_setup": 14,
+        "secret_storage_default_key": 4,
+        "hris_room": 14,
+        "refresh": 1,
+        "hris_conversation": 12,
+        "other_matrix": 8,
+        "sync": 3,
+        "hris_direct_transport": 3,
+        "encrypted_room_send": 1
+      },
+      "records": [
+        {
+          "offsetSeconds": 5.997,
+          "operation": "other_hris",
+          "method": "GET",
+          "status": 401,
+          "headerLatencyMs": 2
+        },
+        {
+          "offsetSeconds": 9.949,
+          "operation": "other_hris",
+          "method": "POST",
+          "status": 200,
+          "headerLatencyMs": 18
+        },
+        {
+          "offsetSeconds": 10.51,
+          "operation": "other_hris",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 13
+        },
+        {
+          "offsetSeconds": 10.62,
+          "operation": "other_hris",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 6
+        },
+        {
+          "offsetSeconds": 10.746,
+          "operation": "other_hris",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 15
+        },
+        {
+          "offsetSeconds": 11.277,
+          "operation": "other_hris",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 80
+        },
+        {
+          "offsetSeconds": 11.368,
+          "operation": "other_hris",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 5
+        },
+        {
+          "offsetSeconds": 11.382,
+          "operation": "other_hris",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 46
+        },
+        {
+          "offsetSeconds": 18.035,
+          "operation": "other_hris",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 31
+        },
+        {
+          "offsetSeconds": 23.638,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 41
+        },
+        {
+          "offsetSeconds": 28.287,
+          "operation": "secret_storage_default_key",
+          "method": "GET",
+          "status": 401,
+          "headerLatencyMs": 12
+        },
+        {
+          "offsetSeconds": 28.3,
+          "operation": "secret_storage_default_key",
+          "method": "GET",
+          "status": 401,
+          "headerLatencyMs": 9
+        },
+        {
+          "offsetSeconds": 28.29,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 48
+        },
+        {
+          "offsetSeconds": 28.353,
+          "operation": "refresh",
+          "method": "POST",
+          "status": 200,
+          "headerLatencyMs": 21
+        },
+        {
+          "offsetSeconds": 28.384,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 23
+        },
+        {
+          "offsetSeconds": 28.424,
+          "operation": "hris_conversation",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 25
+        },
+        {
+          "offsetSeconds": 28.464,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 37
+        },
+        {
+          "offsetSeconds": 28.397,
+          "operation": "secret_storage_default_key",
+          "method": "GET",
+          "status": 404,
+          "headerLatencyMs": 126
+        },
+        {
+          "offsetSeconds": 28.397,
+          "operation": "secret_storage_default_key",
+          "method": "GET",
+          "status": 404,
+          "headerLatencyMs": 135
+        },
+        {
+          "offsetSeconds": 28.548,
+          "operation": "other_matrix",
+          "method": "POST",
+          "status": 200,
+          "headerLatencyMs": 59
+        },
+        {
+          "offsetSeconds": 29.723,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 20
+        },
+        {
+          "offsetSeconds": 29.755,
+          "operation": "hris_conversation",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 19
+        },
+        {
+          "offsetSeconds": 29.807,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 21
+        },
+        {
+          "offsetSeconds": 29.843,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 45
+        },
+        {
+          "offsetSeconds": 29.908,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 47
+        },
+        {
+          "offsetSeconds": 30.127,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 26
+        },
+        {
+          "offsetSeconds": 30.167,
+          "operation": "hris_conversation",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 18
+        },
+        {
+          "offsetSeconds": 30.201,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 20
+        },
+        {
+          "offsetSeconds": 30.72,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 26
+        },
+        {
+          "offsetSeconds": 30.758,
+          "operation": "hris_conversation",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 18
+        },
+        {
+          "offsetSeconds": 30.785,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 20
+        },
+        {
+          "offsetSeconds": 30.815,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 38
+        },
+        {
+          "offsetSeconds": 30.907,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 23
+        },
+        {
+          "offsetSeconds": 30.95,
+          "operation": "hris_conversation",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 26
+        },
+        {
+          "offsetSeconds": 30.99,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 23
+        },
+        {
+          "offsetSeconds": 28.561,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 10063
+        },
+        {
+          "offsetSeconds": 41.686,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 20
+        },
+        {
+          "offsetSeconds": 41.794,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 21
+        },
+        {
+          "offsetSeconds": 41.832,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 20
+        },
+        {
+          "offsetSeconds": 41.865,
+          "operation": "hris_conversation",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 18
+        },
+        {
+          "offsetSeconds": 41.908,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 24
+        },
+        {
+          "offsetSeconds": 41.947,
+          "operation": "other_matrix",
+          "method": "POST",
+          "status": 200,
+          "headerLatencyMs": 42
+        },
+        {
+          "offsetSeconds": 42.636,
+          "operation": "hris_direct_transport",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 26
+        },
+        {
+          "offsetSeconds": 43.195,
+          "operation": "hris_direct_transport",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 40
+        },
+        {
+          "offsetSeconds": 43.363,
+          "operation": "encrypted_room_send",
+          "method": "PUT",
+          "status": 200,
+          "headerLatencyMs": 235
+        },
+        {
+          "offsetSeconds": 38.827,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 4805
+        },
+        {
+          "offsetSeconds": 43.827,
+          "operation": "hris_direct_transport",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 31
+        },
+        {
+          "offsetSeconds": 43.979,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 22
+        },
+        {
+          "offsetSeconds": 44.268,
+          "operation": "hris_conversation",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 19
+        },
+        {
+          "offsetSeconds": 44.299,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 34
+        },
+        {
+          "offsetSeconds": 44.318,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 36
+        },
+        {
+          "offsetSeconds": 44.351,
+          "operation": "hris_conversation",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 20
+        },
+        {
+          "offsetSeconds": 44.381,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 23
+        },
+        {
+          "offsetSeconds": 44.368,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 47
+        },
+        {
+          "offsetSeconds": 44.419,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 40
+        },
+        {
+          "offsetSeconds": 44.575,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 24
+        },
+        {
+          "offsetSeconds": 44.601,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 20
+        },
+        {
+          "offsetSeconds": 44.62,
+          "operation": "hris_conversation",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 18
+        },
+        {
+          "offsetSeconds": 44.646,
+          "operation": "hris_conversation",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 31
+        },
+        {
+          "offsetSeconds": 44.673,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 23
+        },
+        {
+          "offsetSeconds": 44.695,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 20
+        },
+        {
+          "offsetSeconds": 45.228,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 33
+        },
+        {
+          "offsetSeconds": 45.273,
+          "operation": "hris_conversation",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 18
+        },
+        {
+          "offsetSeconds": 45.308,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 20
+        },
+        {
+          "offsetSeconds": 45.34,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 35
+        },
+        {
+          "offsetSeconds": 45.653,
+          "operation": "hris_device_setup",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 23
+        },
+        {
+          "offsetSeconds": 45.729,
+          "operation": "hris_conversation",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 22
+        },
+        {
+          "offsetSeconds": 45.765,
+          "operation": "hris_room",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 18
+        },
+        {
+          "offsetSeconds": 46.019,
+          "operation": "other_hris",
+          "method": "GET",
+          "status": 401,
+          "headerLatencyMs": 2
+        },
+        {
+          "offsetSeconds": 44.325,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 10078
+        }
+      ],
+      "passiveReadOnly": true,
+      "bodyOrHeadersRetained": false,
+      "phoneUiDriven": false,
+      "interface": "br-3b9b9ff77286",
+      "scope": "Controlled single-emulator local gateway traffic; fixed Matrix and HRIS route buckets only. Packet-level counts can omit fragmented starts; not a complete HTTP reconstruction or capture-overhead benchmark"
+    },
+    "visual-review.json": {
+      "reviewedAt": "2026-11-08T12:32:27.467970+00:00",
+      "actuallyViewed": [
+        "consecutive-send.png",
+        "latest-preview-before-restart.png",
+        "latest-preview-offline.png",
+        "thread-offline.png"
+      ],
+      "screenshotsSha256": {
+        "consecutive-send.png": "c7c4062bfddc4af9ef7d2e7ba3ee12e2250c4634c744fd02efcae8ebbe63d46a",
+        "latest-preview-before-restart.png": "2dcbcef0e2c8d42b06662ef63a41e3141eb50457ee386b1681b1e21cfefe2dee",
+        "latest-preview-offline.png": "a25ccb72be9d0e478a07a46791c03aa87e13e5d1ddd65e99b3a6750beef50e9a",
+        "thread-offline.png": "53c08aeec44f566c789c5e0b78200025ac9834b00f0b20adffd143c7e0df9b58"
+      },
+      "findings": [
+        "One acknowledged new original above the composer with the keyboard visible; no duplicate bubble.",
+        "Exact retained synthetic draft visible in the editor and list preview.",
+        "Airplane mode is visible in both offline preview and cold-restarted thread; older originals remain visible."
+      ],
+      "videoReviewed": false,
+      "firstFrameMeasured": false
+    },
+    "passive-process.json": {
+      "sameProcess": true,
+      "fatalLines": 0,
+      "startedAt": "2026-11-08T12:31:14.376388+00:00",
+      "finishedAt": "2026-11-08T12:31:24.400590+00:00",
+      "observedPid": "3855",
+      "afterPid": "3855",
+      "crashBufferSince": "2026-11-08T12:29:32.721622+00:00",
+      "uiTouched": false
+    },
+    "release-acceptance.json": {
+      "accepted": true,
+      "at": "2026-11-08T12:32:45.672907+00:00",
+      "sourceCommit": "e457e3676158f544cc86d19eef886aa80836773a",
+      "apkSha256": "22d3f6f2c9f3e3e256fbeaf9ad336026dd07e30f321ff408eee825529c39d022",
+      "scope": "Local read and native acquisition timing; one unique new send with the original store and retained synthetic draft, then cold offline history/preview.",
+      "unchangedInspectorEvidence": {
+        "acceptedBuild": 66,
+        "protectedSourceInputsUnchanged": [
+          "apps/android/src/main/kotlin/dev/fajar/hris/NetworkInspectionShortcut.kt",
+          "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationNetworkInspectionModule.kt",
+          "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/inspection/ApplicationNetworkInspection.kt",
+          "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/inspection/NetworkInspectionNavigation.kt",
+          "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/inspection/NetworkInspectionPage.kt",
+          "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/inspection/NetworkInspectionRequests.kt",
+          "apps/shared/src/commonTest/kotlin/dev/fajar/starter/ApplicationNetworkInspectionTest.kt",
+          "apps/shared/src/commonTest/kotlin/dev/fajar/starter/NetworkInspectionRequestsTest.kt",
+          "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/NetworkInspectionUiTest.kt",
+          "core/network/build.gradle.kts",
+          "core/network/src/androidMain/kotlin/dev/fajar/starter/network/NetworkException.kt",
+          "core/network/src/androidMain/kotlin/dev/fajar/starter/network/PlatformHttpEngine.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/ApiResponseBody.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/ApiResponseException.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/ApiValidation.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/ApplicationAvailability.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/BinaryRangeRequest.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/HttpClientProvider.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/HttpClientSettings.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/HttpDiagnostics.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/HttpStatusException.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/JsonRequest.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/NetworkDiagnostics.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/NetworkException.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/PlatformHttpEngine.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/SafeApiCall.kt",
+          "core/network/src/commonMain/kotlin/dev/fajar/starter/network/SessionAuthentication.kt",
+          "core/network/src/commonTest/kotlin/dev/fajar/starter/network/ApiProblemTest.kt",
+          "core/network/src/commonTest/kotlin/dev/fajar/starter/network/ApiResponseBodyTest.kt",
+          "core/network/src/commonTest/kotlin/dev/fajar/starter/network/ApiValidationTest.kt",
+          "core/network/src/commonTest/kotlin/dev/fajar/starter/network/ApplicationAvailabilityTest.kt",
+          "core/network/src/commonTest/kotlin/dev/fajar/starter/network/BinaryRangeRequestTest.kt",
+          "core/network/src/commonTest/kotlin/dev/fajar/starter/network/HttpClientOwnershipTest.kt",
+          "core/network/src/commonTest/kotlin/dev/fajar/starter/network/HttpDiagnosticsTest.kt",
+          "core/network/src/commonTest/kotlin/dev/fajar/starter/network/JsonRequestTest.kt",
+          "core/network/src/commonTest/kotlin/dev/fajar/starter/network/ReadOnlyPostAuthenticationTest.kt",
+          "core/network/src/commonTest/kotlin/dev/fajar/starter/network/SafeApiCallTest.kt",
+          "core/network/src/commonTest/kotlin/dev/fajar/starter/network/SessionAuthenticationTest.kt",
+          "core/network/src/desktopMain/kotlin/dev/fajar/starter/network/NetworkException.kt",
+          "core/network/src/desktopMain/kotlin/dev/fajar/starter/network/PlatformHttpEngine.kt",
+          "core/network/src/iosMain/kotlin/dev/fajar/starter/network/NetworkException.kt",
+          "core/network/src/iosMain/kotlin/dev/fajar/starter/network/PlatformHttpEngine.kt",
+          "core/network/src/wasmJsMain/kotlin/dev/fajar/starter/network/NetworkException.kt",
+          "core/network/src/wasmJsMain/kotlin/dev/fajar/starter/network/PlatformHttpEngine.kt",
+          "core/network/src/wasmJsTest/kotlin/dev/fajar/starter/network/BrowserFetchFailureTest.kt",
+          "gradle/libs.versions.toml"
+        ],
+        "librarySourcesUnchanged": true,
+        "deviceNotificationCasesRerun": false,
+        "priorAcceptanceSha256": "95de326acd16c8c1aba4ec50b51f6f384d2a0f47f3392c53d4461abcc152b297"
+      },
+      "screenshotsInspected": true,
+      "screenshotsSha256": {
+        "consecutive-send.png": "c7c4062bfddc4af9ef7d2e7ba3ee12e2250c4634c744fd02efcae8ebbe63d46a",
+        "latest-preview-before-restart.png": "2dcbcef0e2c8d42b06662ef63a41e3141eb50457ee386b1681b1e21cfefe2dee",
+        "latest-preview-offline.png": "a25ccb72be9d0e478a07a46791c03aa87e13e5d1ddd65e99b3a6750beef50e9a",
+        "thread-offline.png": "53c08aeec44f566c789c5e0b78200025ac9834b00f0b20adffd143c7e0df9b58"
+      },
+      "actualVideoInspected": false,
+      "firstFrameMeasured": false,
+      "firstFrameEvidenceBuild": 66,
+      "originalStorePreserved": true,
+      "explicitNewMessagesSent": 1,
+      "duplicateBubbleObserved": false,
+      "keyboardAndViewportContinued": true,
+      "phoneLatencyResolved": false,
+      "captureOverheadAccepted": false,
+      "latencyBoundary": "Coarse emulator UI polling and host ADB taps. No new first-frame or video measurement; HTTP timing is to response headers only. No physical-phone or overhead benchmark.",
+      "sdkCandidate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+      "sdk5NativeBytecodeVerified": true,
+      "localSendTimings": {
+        "accepted": true,
+        "versionCode": 69,
+        "apkSha256": "22d3f6f2c9f3e3e256fbeaf9ad336026dd07e30f321ff408eee825529c39d022",
+        "startedAt": "2026-11-08T12:30:03.687929+00:00",
+        "serial": "emulator-5562",
+        "processId": 3268,
+        "gestureQueueDurationsMillis": [
+          797
+        ],
+        "gesturePhases": [
+          {
+            "operation": "CommandHandoff",
+            "durationMillis": 205,
+            "outcome": "Succeeded"
+          },
+          {
+            "operation": "WorkScheduling",
+            "durationMillis": 43,
+            "outcome": "Succeeded"
+          },
+          {
+            "operation": "CommandQueue",
+            "durationMillis": 797,
+            "outcome": "Succeeded"
+          }
+        ],
+        "gestureQueueOutcomes": [
+          "Succeeded"
+        ],
+        "distinctGestureTraces": 1,
+        "distinctQueueSpans": 1,
+        "originalLogSha256": "e6eb166b9fd995ad391f82820b6692b9d99892c214ab5f74b6a0ae4c5bb02377",
+        "bodyOrOwnerRetainedInDiagnostics": false,
+        "boundary": "Same-process monotonic local phases; overlaps with asynchronous delivery. Not end-to-end acknowledgement latency or transport overhead."
+      },
+      "encryptedSendHeadersMillis": [
+        235
+      ],
+      "responses403": 0,
+      "originalHistoryAfterColdOfflineRestart": true,
+      "nextDraftAfterColdOfflineRestart": true
+    },
+    "emulator-stop.json": {
+      "pid": 404229,
+      "startTicks": "181759367",
+      "stopped": true,
+      "dataRetained": true,
+      "phoneTouched": false,
+      "at": "2026-11-08T12:32:53.319208+00:00"
+    },
+    "phone-preflight.json": {
+      "at": "2026-11-08T12:32:53.347005+00:00",
+      "serial": "10.77.77.3:5555",
+      "uiTouched": false,
+      "connected": true
+    },
+    "install-result.json": {
+      "confirmed": true,
+      "startedAt": "2026-11-08T12:33:16.798368+00:00",
+      "elapsedSecondsIncludingVerification": 17.229,
+      "serial": "10.77.77.3:5555",
+      "variant": "devRelease",
+      "applicationId": "dev.fajar.hris.mobile.dev",
+      "versionCode": 69,
+      "versionName": "1.0.0",
+      "debuggable": false,
+      "installedSha256": "22d3f6f2c9f3e3e256fbeaf9ad336026dd07e30f321ff408eee825529c39d022",
+      "installedBytesMatch": true,
+      "existingAppIdPreserved": true,
+      "firstInstallTimePreserved": true,
+      "updateInPlace": true,
+      "uninstalled": false,
+      "appDataCleared": false,
+      "uiLaunched": false,
+      "after": {
+        "appId": "10962",
+        "firstInstallTime": "2026-10-29 15:48:23",
+        "lastUpdateTime": "2026-11-08 19:33:30",
+        "versionCode": "69 minSdk=24 targetSdk=36",
+        "versionName": "1.0.0",
+        "debuggable": false
+      },
+      "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+    }
+  },
+  "evidenceSha256": {
+    "artifact.json": "cc939fb0a9cbb5868d85240bdbe1a8feb57a80537c901027fd73869af8e089f5",
+    "source.json": "82dc8d9587561a4a4e69e0611ad4dc15eaac3cd2ad24966992a35ddb4047aa5c",
+    "build-arm64.json": "abb0685c067c0e6a1ee529e973ae25aeb01b74591669a6464a234cedc9c701be",
+    "sdk-verification.json": "df5774bca6aa8a11c5cac743ed1ebf49b8b74d824ce31dd974eeb536b6f5f932",
+    "gateway-preflight.json": "28126f8fbce5bec448bd2070af0d820befaf0688d48b52be1f933a0d91d1a014",
+    "emulator-install.json": "c112bf2fa62a7504f302d286e94db16d96420b33d56ef94f1c65fd1b6332a9ed",
+    "send-timing.json": "7edd452a937371c5d141bf0597e841d47194cb74f06ed867c275410f88efdf34",
+    "delivery-stage-timing.json": "69c78beaea0af58090db61f8740aa01625df7fccf0377027c8cc8e9f76f1f1bf",
+    "component-summary.json": "b40009e0a49a43caa814ffd8a0c08ababe18108d472cd7ed9a0699f09685d1fc",
+    "component-stage-correlation.json": "77b93538a879dd89d0818e9bdff402229d5047d2f3e4213e7b2d752b3451036e",
+    "latency-summary.json": "143a1afecb17ad576bda10a1432862a2103b6cda7a2291e64a98a2cdd638f9bf",
+    "matrix-http-counts.json": "1a9f5930faf0ae5263ca96bf592654da25a2f4cd801c6edbad4b5161097f9cfd",
+    "visual-review.json": "449d172a7815fdfc505c3e3292b717ba30a1c4568c8a42038a12eea7015c7807",
+    "passive-process.json": "6593fd3a2b5575ffe56a179348739a84798d567a5c7bbdb88cde09ec749f84d0",
+    "release-acceptance.json": "e23056250f2767245914a1a0c2d85c90269478cf1ee93c80770e44c4787d93ee",
+    "emulator-stop.json": "07650c78ba6fe3a3e7f6b91dab9736c61cd6cc54fef27a32fee11f5cace88e7c",
+    "phone-preflight.json": "7468efbe753c722d21c9bb6da5c58972faeb8f06ef5741541626584f7e26de7f",
+    "install-result.json": "94dc94f436fd001a8a91f3ba6ba704d92504f0cf60ab0b29cfc1ea7dcf38994d"
+  },
+  "jobs": {
+    "build": {
+      "session": 97240,
+      "reaped": true
+    },
+    "artifactSdkGatewayVerification": {
+      "session": 53331,
+      "reaped": true
+    },
+    "emulator": {
+      "session": 99414,
+      "reaped": true,
+      "stopped": true
+    },
+    "emulatorInstall": {
+      "session": 63971,
+      "reaped": true
+    },
+    "counter": {
+      "session": 88780,
+      "reaped": true
+    },
+    "probe": {
+      "session": 86471,
+      "reaped": true
+    },
+    "passiveProcess": {
+      "session": 31823,
+      "reaped": true
+    },
+    "stopAndPhonePreflight": {
+      "session": 63475,
+      "reaped": true
+    },
+    "phoneInstall": {
+      "session": 9275,
+      "reaped": true
+    }
+  },
+  "limits": [
+    "No controlled performance comparison or capture-overhead acceptance.",
+    "No physical-phone send-latency or native Apple Matrix measurement.",
+    "Original message, prior history and exact unsent synthetic draft remain in the original emulator data. Never replay any diagnostic original or send the draft.",
+    "UI and inspector inputs match accepted build66; no new first-frame, video or notification-interaction claim."
+  ]
+}
