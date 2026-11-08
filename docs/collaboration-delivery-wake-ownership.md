@@ -40,12 +40,25 @@ Full53319 REAPED PASS:5,778fresh cases across777suites,0failures/errors/skips,94
 All4,498app/82library inputs remained unchanged. Root check, actual Chrome storage,
 Android proof/devRelease compilation and lint(0issues), web/iOS shared source
 compilation and quality passed. [Source acceptance](measurements/collaboration-delivery-wake-source-2026-11-08.json).
-Native72 scripts are prepared but have not run. Native acceptance must reuse the SAME waiting71
-original without any send gesture, verify cold offline retention and180seconds idle,
-and retain zero settled transport attempts. One new ready72 original will verify the
-normal send path. The earlier local Storage/IllegalStateException is still unresolved;
-absence in a later120-second probe is not a root fix. Installation also requires
-separate evidence resolving that error. Phone remains70;71 must not be installed.
+Release72 source e82abe16 is pushed and its APK is packaged/verified. The original
+unready71 message survived a cold offline restart with no new send gesture. In180
+seconds online, after30seconds settling, there were zero transport requests, zero
+encrypted submissions and zero403 responses. Four initial transport responses all
+confirmed recipientReady=false. Forty-four UI observations and seven actually viewed
+screenshots showed no storage error. One new ready72 original was acknowledged;
+the retained draft and older originals remained intact after offline restart.
+[Native measurements](measurements/collaboration-delivery-wake-release72-2026-11-08.json).
+
+This verifies the passive delivery-wake fix within the captured interval, not full
+release acceptance. The same settled window still contains13 device-setup reads,
+12 room reads and six secret-storage-default-key reads. The native runtime's
+admission-expiry teardown/reopening remains a separate source of repeated acquisition.
+Do not interpret normal sync alone, or the cold restarts, as a delivery retry.
+
+The earlier71 Storage/IllegalStateException is still unresolved. Its absence in72
+is not evidence identifying its cause. Local exception capture is continuing, and
+installation still requires the separate storage-error disposition. Phone remains70;
+neither71 nor72 has been installed. Automatic activation is still design-only.
 
 Automatic first-login key setup and scoped readiness-event wake are separate required
 work. A previously activated offline recipient already has public device keys; being

@@ -1,5 +1,35 @@
 # Agent continuation — HRIS Mobile
 
+## Native72 delivery wake verified; remaining runtime churn — 8 November 2026, 15:58 UTC
+
+Source e82abe16 pushed10837 REAPED; package63207 REAPED PASS103.911s; artifact/native
+verification83417 REAPED. APK72 SHA591c1a2f136d34f14fdf17128766122fe4d20e3f5d0328ccb6a8ab019a7d5437.
+Original Bima emulator73180 is RUNNING(1536MiB/2cores), now72 after install80644;
+shellUID2000 verified. An earlier pre-boot install check failed before mutation.
+No compiler. Phone remains70, untouched. No overall72 release acceptance/install.
+
+Ready probe71048 REAPED PASS: ONE NEW Tes72 waiting154845 is Sent; NEVER RESEND.
+Draft66 092041 stays UNSENT. Ready counter18457 REAPED180.114s:one encrypted200,
+nine transport200,0x403; tap-to-request3205ms/header111ms/coarseSent4.953s, not a
+controlled comparison. Component correlation's old single-room assumption failed;
+the trace now contains both ready and retained blocked rooms. Raw observations persist.
+
+Retained-only unready probe3266 and counter83794 REAPED PASS:44 UI checks,180seconds
+quiet, zero settled transport after30seconds, zero encrypted submissions/403, four
+initial false-ready responses. Seven actual PNGs viewed; history button still visible
+in empty-remote waiting room. [Evidence and remaining scope](collaboration-delivery-wake-ownership.md).
+Settled idle still had13device-setup/12room/sixdefault-key requests: investigate native
+runtime retention vs live admission before claiming the overall request loop resolved.
+
+Storage-watch58236 REAPED without error. Second watch90429 RUNNING until about15:58:40;
+reap it before stopping emulator. Both scripts request diagnostic root ONLY on an actual
+new Storage event, preserving keys/data. Known71 IllegalStateException remains unresolved;
+no storage-error-acceptance.json exists. Nonrecurrence cannot satisfy that root gate.
+Passive process61457 REAPED: same PID/no fatal exception. All probes restored settings.
+Next: capture/resolve storage failure and admission-driven SDK churn, then automatic
+activation+scoped readiness wake (side2a8d1abf remains doc-only). Platform/live116.1,
+Starterada8254 and Library2b849217/SDK5 unchanged; no broader PRD completion.
+
 ## Passive wake source accepted — 8 November 2026, 15:41 UTC
 
 Full53319 REAPED PASS5,778fresh/777suites,0failures/errors/skips947.390s. All4,498app/
