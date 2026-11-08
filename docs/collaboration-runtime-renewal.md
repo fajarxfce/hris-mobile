@@ -57,3 +57,20 @@ Storage root. A Frida diagnostic failed to attach before any retained probe or s
 the exact prior APK and root state were restored before normal73 observation.
 The emulator is stopped with data retained; phone70 is unchanged. Automatic activation
 and readiness wake are still being implemented separately.
+
+## Scoped progress delivery
+
+The user's standing request is to receive validated progress builds while implementation
+continues. The exact73 runtime fix now has source and native acceptance: no repeated
+settled initialization/transport, preserved keys/data/originals/draft, a successful new
+ready send and no fatal crash. A separate progress-delivery gate was therefore evaluated;
+it preserves all those checks and explicitly records `storageError71RootResolved=false`
+and `overallReleaseAccepted=false`. The original overall-release gate remains unchanged.
+No root disposition was fabricated. The earlier Storage issue, automatic activation and
+the observed UI follow-ups remain open. This revises the earlier decision to withhold
+all phone updates until the unrelated inherited Storage root is known; it does not
+present the entire feature as complete.
+
+The17:15 UTC phone preflight timed out at the authorized WireGuard ADB address. No
+installation occurred and phone70 is unchanged. Once available, use the exact73
+progress installer with `--install-only`, notify first, and never drive the phone UI.

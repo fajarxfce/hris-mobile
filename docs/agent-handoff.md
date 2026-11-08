@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## Scoped73 progress delivery prepared; phone offline — 8 November 2026, 17:17 UTC
+
+A separate progress gate now accepts ONLY the validated73 runtime fix for delivery
+under the user's standing request. [Decision and boundaries](collaboration-runtime-renewal.md#scoped-progress-delivery).
+Overall release/71 Storage root remain false; original accept-release.py is unchanged,
+and no storage-error-acceptance.json or release-acceptance.json was fabricated. Exact
+progress-acceptance.json passed the original native/source/inspector checks plus zero
+settled default-key initializations. This deliberately supersedes the earlier blanket
+phone hold while preserving the known issue and continued work. See
+[closed delivery evidence](measurements/collaboration-progress-release73-2026-11-08.json).
+
+Phone preflight80419 REAPED: bounded ADB timeout at10.77.77.3:5555, no UI touched and
+no install attempted. Phone70 remains. After a fresh available-device preflight, notify
+BEFORE installation and use .work/release-phone-2026-11-08-build73/install-progress.py
+--install-only. The exact validated73 APK remains pinned to0f4f0039, irrespective of
+later source work. No repeated phone-open or Firebase permission question was sent.
+
+Side guard focused24552 REAPED PASS54fresh/0failures/errors/skips103.706s; all4,498 app/
+82 library inputs stable. It now covers interrupted credential replacement and rejects
+new keys for a replacement gateway without original private state. No native/full guard
+acceptance yet. Side source remains uncommitted; full checks and automatic activation
+remain required. All emulators/compilers currently stopped. Main c84e4b70 native/runtime
+work is distinct from this new private-account guard.
+
 ## Runtime73 native scope accepted; next activation — 8 November 2026, 16:52 UTC
 
 Native73 idle scope PASSED. Unready52584/counter67735 REAPED:180.203seconds,

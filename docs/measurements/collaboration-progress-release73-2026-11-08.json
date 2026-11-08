@@ -1,0 +1,24 @@
+{
+  "accepted": true,
+  "deliveryType": "validated progress update",
+  "overallReleaseAccepted": false,
+  "storageError71RootResolved": false,
+  "apkSha256": "beb8ede7a29aac15b4f7d811866512c4380c1f130d7395ace07bccfbd2ceee3c",
+  "sourceCommit": "0f4f0039ef30a3db8413a547ca8349dca328982c",
+  "scope": "Scoped progress delivery: the admission-renewal runtime loop is fixed in the retained-store native sample; zero settled transport and secret-storage initialization across180s, with preserved originals/draft and a successful new ready send. The earlier Storage root and automatic activation remain open.",
+  "pendingWork": [
+    "Root cause of the earlier71 Storage exception",
+    "Automatic first-login activation and scoped readiness wake",
+    "Empty-room history affordance and inbox ordering"
+  ],
+  "acceptanceSha256": "e048b87a6d46baf95fe9af20d309166cf5b040c0b36781662b0dfa24f695d503",
+  "preflight": {
+    "at": "2026-11-08T17:15:46.764190+00:00",
+    "serial": "10.77.77.3:5555",
+    "uiTouched": false,
+    "connected": false,
+    "reason": "bounded ADB connection timed out"
+  },
+  "installed": false,
+  "phoneVersion": 70
+}
