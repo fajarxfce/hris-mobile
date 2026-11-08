@@ -1,5 +1,33 @@
 # Agent continuation — HRIS Mobile
 
+## Runtime full gate and Crashlytics lookup — 8 November 2026, 16:21 UTC
+
+Runtime retention focused16842 REAPED PASS85fresh/0failures/errors/skips595.030s.
+A subsequent timer audit added a real monotonic-resume check: a delayed wake cannot
+temporarily retain beyond later maintenance or parent expiry. Millisecond rounding
+keeps the original conservative boundary. Focused80769 REAPED PASS28fresh/0all107.983s.
+All4,498app/82library inputs stable in both gates. Sole compiler2292 now runs
+.work/runtime-retention-2026-11-08/check.py full-1. Five Kotlin files FROZEN/UNCOMMITTED;
+no emulator. Reap full before source acceptance, commit/push or any73 build.
+
+Release73 has21prepared/AST-checked scripts plus actual HOLD_FOR_SOURCE_ACCEPTANCE.txt.
+Packager pins final full gate and new ownership/registry suites. Existing72 image
+will upgrade in place; one NEW73 original plus SAME retained71 unready original.
+Unready native gate adds zero settled secret-storage-default-key requests to zero
+settled transport/encrypted-send/403. No73 APK/probe/install. Old Storage root gate
+is still present, unresolved; no acceptance was fabricated or requirement relaxed.
+
+Firebase Crashlytics v1alpha discovery supports filtered read-only event/stack queries.
+Scoped71 lookup returned403 SERVICE_DISABLED. An IAM test confirms the supplied
+service account lacks Crashlytics data.get and Service Usage get/enable. No cloud
+configuration or IAM change was made. One optional user question is PENDING to enable
+the API and grant Firebase Crashlytics Viewer to the existing Admin SDK service account;
+do not duplicate it. Private scripts/responses/venv are in
+/home/fajar/hris/.work/crashlytics-storage-2026-11-08. On answer, retry the bounded
+version71/time-filtered lookup preserving the first response; never print tokens/raw
+events or owner IDs. This may recover the lost14:38:29.438 storage exception stack.
+Phone70, original stopped Bima72 and all prior originals/UNSENT Draft66 are retained.
+
 ## Runtime retention candidate under test — 8 November 2026, 16:05 UTC
 
 Docs074165f9 pushed59197 REAPED. Native72 wake observation accepted, overall release

@@ -22,8 +22,15 @@ Freshness, known future maintenance and native-parent expiry are separate monoto
 boundaries. An earlier policy expiry cannot discard a later maintenance timer. Clock
 rollback and same-family token observation cannot extend either boundary. Selection
 loss, actual denial, parent change and collector disposal still remove the client.
+An overdue timer also compares the actual monotonic resume time, so an earlier
+freshness callback cannot temporarily retain beyond an already elapsed maintenance
+or parent boundary. Sub-millisecond deadlines keep conservative millisecond rounding.
 
-Focused tests and the full required checks must pass before source acceptance. Native
+Focused16842 passed85 fresh cases with zero failures/errors/skips in595.030seconds.
+The subsequent overdue-timer regression passed in focused80769:28fresh/zero failures,
+107.983seconds. Domain ownership, Android registry/background lifetimes, live entry,
+application ownership and quality checks were exercised; final full2292 is running.
+All source/library inputs remained stable. Source acceptance still requires full success. Native
 validation must use the existing private store and original waiting message, with no
 replay, and measure idle SDK requests as well as delivery requests. No claim about the
 separate71 Storage/IllegalStateException follows from fewer runtime replacements.
