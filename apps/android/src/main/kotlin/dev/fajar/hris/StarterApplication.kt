@@ -69,6 +69,18 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
     }
 
     fun refreshNetworkInspectorShortcut() {
+        // A background service may recreate the process and restore its session before a tap.
+        // Let the Activity resume before attaching the OS shortcut to those capture boundaries.
+        if (networkInspectionShortcut == null) {
+            networkInspectionShortcut =
+                networkInspection?.let {
+                    NetworkInspectionShortcut(
+                        this,
+                        it,
+                        ProcessLifecycleOwner.get().lifecycle.coroutineScope,
+                    )
+                }
+        }
         networkInspectionShortcut?.refresh()
     }
 
@@ -214,8 +226,6 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
         scheduler.installPeriodic(container.koin.getAll<SyncTask>().map { it.key }.toSet())
         container.koin.get<ApplicationCollaborationLifetime>().start()
         val lifecycle = ProcessLifecycleOwner.get().lifecycle
-        networkInspectionShortcut =
-            networkInspection?.let { NetworkInspectionShortcut(this, it, lifecycle.coroutineScope) }
         foregroundDelivery =
             lifecycle.coroutineScope.launch(Dispatchers.Default) {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {

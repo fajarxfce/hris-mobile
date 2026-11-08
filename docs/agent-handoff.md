@@ -1,5 +1,32 @@
 # Agent continuation — HRIS Mobile
 
+## Build60 source accepted locally — 8 November 2026, 02:03 UTC
+
+Notification-startup57505 is reaped and passes959.241s:10 fresh tests/zero failures,
+Android notifier fixture/release compile/lint, Wasm/iOS source and quality checks.
+Library6433dc3 is pushed with prior-shortcut retention through initial empty capture
+and a sixth actual-OS regression. Its current source has NOT yet run those six cases.
+The previous1b6ad6b CI42434553800 is accepted, digest-verified213 portable/69 Apple
+cases; its new evidence is in the library startup measurement. New6433dc3 CI is pending.
+
+Background native runtime ownership also restores the stored session. Therefore the
+Android host now attaches the notification adapter on Activity resume, preserving
+the retained shortcut while a background service restores identity and clears capture.
+The existing session/capture isolation rules remain intact. The subsequent Android-only
+compile/lint/quality gate77492 passes92.892s,4436 stable inputs,zero fresh tests; it
+reuses the preceding shared tests. [Exact local checks](measurements/network-inspector-foreground-startup-local-2026-11-08.json).
+
+Package60 only after this source is pushed. Scripts are prepared at
+.work/release-phone-2026-11-08-build60: foreground gate supplies app source hashes,
+notification-startup supplies library hashes. No60 APK or installation exists yet.
+Original stopped Bima data remains59; phone58. Verify the APK/SDK, run six real native
+cases, update emulator59→60, make one new60 test send (never replay59), validate actual
+background/cold notification taps, default-key404, offline continuity and visual evidence.
+Stop/reap emulator, notify then phone58→60 --install-only, record/push actual acceptance.
+No phone UI, no data reset. Generic Starter port follows Mobile acceptance; pending/
+keyboard/latency and original54 PRD groups remain open. One owned compiler OR emulator.
+
+
 ## Retain inspector shortcut through background process restart — 8 November 2026, 01:45 UTC
 
 Candidate59 is NOT accepted for phone installation. Original Bima emulator ran its
