@@ -1,5 +1,49 @@
 # Agent continuation — HRIS Mobile
 
+## Composer UI validation running — 8 November 2026, 08:48 UTC
+
+Sole compiler: Mobile session75012, `.work/composer-input-2026-11-08/check.py full-1`.
+All application/library source is frozen until reaped. No emulator. Phone and the original
+Bima userdata remain release65; never resend any earlier test original or clear app data.
+Source remains UNCOMMITTED on top of a2e040a0 (subsequent commits are handoff docs).
+Starter38b76e2 is pushed and accepted; no Starter job.
+
+The actual thread AND inbox now consume atomic composer submissions. Route-owned input
+serializes immutable local attempts while preserving later typing; the UI remains editable.
+The raw exact-ID active/archive observer feeds genuine command progress; provisional UI
+never invents a command or acknowledgement. Cold route watches bridge independent outbox
+and command emissions. Inbox uses the latest original before ordinary preview catches up.
+Explicit selected held-original retry uses RecoverCollaborationComposer.retry, without
+scanning the worker cursor or allocating another message. Cancellation requires full exact
+proof. Constructor wiring is in the data module. Send returns focus to the input.
+
+[All focused checks and failures](measurements/collaboration-composer-input-2026-11-08.json)
+are recorded. Sessions31955,45494,56058,29038,71859,46966,72308,12799,22879,20459,80630
+are all reaped. Latest focused11:207 tests,206 passed; sole failure compared placeholder
+text to the empty editor, while focused=true already passed. The assertion now checks
+EditableText and is included in full-1. All ordinary thread/inbox, cold handoff, held retry,
+actor and quote cases passed11; domain Recover18 passed9 and reused11. This is not full
+acceptance yet. Earlier9 failures were test fixture receiver shadowing after Inbox fixture
+added identically named repositories; Thread factories now explicitly select their own
+composer repositories. Do not remove production guards to fix a fake binding.
+
+Next: reap75012; fix actual failures, complete required browser/Android/root checks, then
+commit/push the accepted increment. Generic nine core observer files need an exact reviewed
+Starter port and tests. Private release66 scripts have been PREPARED ONLY; build-arm64.py
+requires the completed full-1 and pushed clean sources. Its remaining verifiers/install
+preconditions and fresh probe need review before execution. No66 APK or emulator exists.
+Use original Bima emulator only,1536MiB/two cores, after reaping compiler. Exercise NEW
+consecutive sends with real software IME, preserve order/one bubble/input focus, then offline
+cold preview/history and next draft. Record packet counts and current server identity. Do not
+reuse65 probe as acceptance: its keyboard behavior is explicitly not accepted. Install66 on
+phone only after validated, with advance notice and --install-only; no phone UI driving.
+
+Private `.work/composer-input-2026-11-08` is canonical for current runners/results. Earlier
+isolated checkout and staged next/*.kt are stale; do not copy them. Server403 fix and Android
+inspector notification are already deployed/installed; do not retrace them. Original54 PRD
+remains3 in progress/51 planned, none complete. Continue authorized work after this fix.
+
+
 ## Composer input adoption in progress — 8 November 2026, 08:19 UTC
 
 Mobile accepted HEAD a2e040a0 is pushed. Starter exact two-file400-budget port is committed/
