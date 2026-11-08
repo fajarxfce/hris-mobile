@@ -277,7 +277,7 @@ class CollaborationDeliveryWorker(
             val flushed = flush(work, scope, device.id, conversationId, selected, stage)
             if (flushed is AppResult.Failed) return flushed
             stage(CollaborationDeliveryStage.Retire)
-            return acquireAndRetire(work, scope, device.id, conversationId)
+            return acquireAndRetire(work, scope, device.id, conversationId, stage)
         } finally {
             withContext(NonCancellable) { child?.close() }
         }
@@ -436,10 +436,13 @@ class CollaborationDeliveryWorker(
         scope: CollaborationOperationScope,
         deviceId: String,
         conversationId: String,
+        stage: (CollaborationDeliveryStage) -> Unit,
     ): AppResult<Unit> {
+        stage(CollaborationDeliveryStage.AcquireRetirementHistory)
         val acquired = acquireOriginals(work, scope, deviceId, conversationId)
         currentCoroutineContext().ensureActive()
         if (acquired is AppResult.Failed) return acquired
+        stage(CollaborationDeliveryStage.RetireCommands)
         val retired = retire(work.scope, conversationId)
         currentCoroutineContext().ensureActive()
         if (retired is AppResult.Failed) return retired

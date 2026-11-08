@@ -16,6 +16,8 @@ internal enum class CollaborationDeliveryStage {
     StageMessage,
     DeliverMessages,
     Retire,
+    AcquireRetirementHistory,
+    RetireCommands,
 }
 
 /** One closed marker per room attempt. No identifiers, payloads or free failure codes. */

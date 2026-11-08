@@ -1,0 +1,93 @@
+{
+  "acceptedAt": "2026-11-08T03:20:48.268690+00:00",
+  "runtimeBaseCommit": "b79293185e8cd682d70066e7aa492d4376ce43c7",
+  "libraryCommit": "2b8492170ff30915f9a6694d7d1bf8f076e74e3c",
+  "scope": "Coherent published original-message read during concurrent history updates. Existing raw database APIs; no new retry, transport, admission or key policy.",
+  "before": {
+    "startedAt": "2026-11-08T03:08:24.925084+00:00",
+    "elapsedSeconds": 62.116,
+    "exitCode": 1,
+    "sourceFiles": 4448,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 6,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 1,
+    "resultSha256": "5549dd12201fedac8a31317360c9a12d55d1e9ec3c377dd27d6b4986539a5075"
+  },
+  "after": {
+    "startedAt": "2026-11-08T03:10:09.219945+00:00",
+    "elapsedSeconds": 579.837,
+    "exitCode": 0,
+    "sourceFiles": 4448,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 2081,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 284,
+    "resultSha256": "5669ba094f8c97085a6df2f4ed4471fb0f47ce4c4dc9e13495a4fe04b77ebc38"
+  },
+  "regressionReports": {
+    "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationHistoryLogicalReadTest.xml": {
+      "sha256": "4424970350995be1bfa6720260c02d899fc7ad7b07531a3e9b00759fb3f9049d",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationHistoryLogicalReadTest.xml": {
+      "sha256": "9d93d7926093c6c3b0f7e03ff7f821e31aeaa214c20ffd6912b52ac3959f3909",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "reproducedFailures": [
+    "anOriginalUpdatedDuringKeyAcquisitionUsesItsMatchingCheckpoint",
+    "anUnrelatedHistoryCommitDoesNotInvalidateTheCapturedOriginal"
+  ],
+  "beforeFailureKind": "Storage",
+  "additionalCoverage": [
+    "owner replacement after snapshot",
+    "cancellation during snapshot",
+    "corrupt ciphertext",
+    "missing history and missing key without regeneration"
+  ],
+  "closedDiagnosticStages": [
+    "AcquireRetirementHistory",
+    "RetireCommands"
+  ],
+  "lint": {
+    "issues": 0,
+    "reportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "targets": [
+    "root check",
+    "Android host tests",
+    "Android release Kotlin compile and lint",
+    "shared Wasm compile",
+    "shared iOS ARM64 source compile",
+    "format",
+    "architecture",
+    "detekt",
+    "six SQLite regression cases",
+    "six Chrome IndexedDB regression cases"
+  ],
+  "sourceManifestSha256": "79a1b9ff10bcc4baaeb82f3db74ca64857fe1919eb2dda226587e691cae3b3cf",
+  "deviceAcceptance": "Pending candidate61 packaging and original-account emulator capture. Phone remains60.",
+  "limits": [
+    "Does not yet prove the cause of build60 Retire/Storage marker",
+    "Does not prove a phone latency improvement or account for every observed HTTP request",
+    "Composer storage remains unwired to UI/delivery",
+    "No Apple application/device runtime acceptance"
+  ]
+}

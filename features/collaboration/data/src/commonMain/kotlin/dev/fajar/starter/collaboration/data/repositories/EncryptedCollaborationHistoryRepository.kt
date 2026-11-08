@@ -508,16 +508,26 @@ class EncryptedCollaborationHistoryRepository(
     ) = safeStorageCall {
         val scope = historyScope(access)
         val partition = historyPartition(access, conversationId)
-        val raw = replicas.checkpoint(scope, partition) ?: return@safeStorageCall null
+        if (replicas.observePublishedCheckpoint(scope, partition).first() == null)
+            return@safeStorageCall null
         withKey(access, conversationId, roomId) { codec ->
-            codec.checkpoint(raw)
             val id = codec.messageId(sender, logicalId, null)
+            val page = replicas.observeDocument(scope, partition, id).first()
+            val raw = requireNotNull(page.checkpoint)
+            codec.checkpoint(raw)
+            require(page.documents.size <= 1)
             val message =
-                replicas.document(scope, partition, id)?.let {
+                page.documents.singleOrNull()?.let {
                     require(it.id == id)
                     codec.message(raw, it)
                 }
-            require(replicas.checkpoint(scope, partition) == raw)
+            // A concurrent sync may advance this generation while the captured message is decoded.
+            // Retain the owned, coherent snapshot; logout or generation replacement still closes
+            // it.
+            require(
+                replicas.observePublishedCheckpoint(scope, partition).first()?.handle == raw.handle
+            )
+            currentCoroutineContext().ensureActive()
             message
         }
     }

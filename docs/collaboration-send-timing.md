@@ -81,3 +81,11 @@ its exact failing operation and whether it repeats are not yet known. No raw exc
 message, account identifier or body is retained in this measurement. This analysis
 reuses the existing sample without another send or device interaction; log emission
 wall times are approximate boundaries, not a transport-overhead benchmark.
+
+Two concurrent-history races reproduce a storage failure in the retirement lookup;
+the [coherent-read correction](collaboration-chat-history-replay.md)
+passes real SQLite and IndexedDB cases. This does not itself attribute the device
+marker to that lookup. Delivery now reports separate closed failure stages for
+`AcquireRetirementHistory` and `RetireCommands`, preserving the original failure and
+retry behavior. The next device counter includes fixed HRIS setup/conversation/room
+categories as well as Matrix, without retaining paths, headers or message bodies.

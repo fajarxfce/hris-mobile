@@ -33,3 +33,22 @@ that. The unchanged-source repeat reused tests and claims no new test executions
 
 The next native run must confirm the corrected product path. This does not accept
 the separate raw-event SDK binding or complete the communications PRD.
+
+## Reading an original during concurrent synchronization — 8 November 2026
+
+Retirement reads an original by its logical message ID. Separate checkpoint and
+document reads could combine different revisions; rejecting any later checkpoint
+change also turned an unrelated normal history update into a storage failure.
+Both races are reproduced by tests that failed against the previous implementation.
+
+The repository now reads the published document and its checkpoint in one raw
+database transaction. It decrypts that coherent snapshot and checks the retained
+owner/generation after decoding. An ordinary revision advance no longer invalidates
+the captured original. Missing keys, corrupt ciphertext, owner replacement and
+cancellation keep their existing failure behavior. Writes still use their original
+compare-and-set contract; the use case retains admission and completion policy.
+
+Six actual SQLite and six Chrome/IndexedDB cases pass, alongside root, Android,
+Wasm/iOS source and quality checks. [Exact local evidence](measurements/collaboration-history-logical-read-2026-11-08.json).
+The separate build60 device error still needs a new runtime capture before attributing
+its cause or claiming a latency improvement.

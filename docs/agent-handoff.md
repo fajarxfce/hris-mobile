@@ -1,5 +1,53 @@
 # Agent continuation — HRIS Mobile
 
+## Coherent history lookup accepted locally; package61 next — 08 November 2026, 03:20 UTC
+
+History full-1/session62665 is reapedPASS579.837s,
+2081 fresh cases/284 suites, zero failed/error/skipped,
+4448 stable app inputs and unchanged library. Six actual SQLite and six
+Chrome/IndexedDB race/ownership/cancellation/corruption cases pass. Before-1 preserved
+two expected Storage failures among six cases. Full root, Android host/compile/lint
+(zero issues), Wasm/iOS source and quality pass. Exact evidence is
+measurements/collaboration-history-logical-read-2026-11-08.json.
+
+Commit/push the coherent logical lookup, six cases and closed retirement-stage markers,
+then run prepared build61 scripts. They require this exact source gate and concrete
+SQLite/browser reports. No61 APK/device result exists yet. Prove one new original-account
+send, fixed HTTP bucket counts, late retirement marker, notification taps and cold
+offline continuity; inspect screenshots/video, stop/reap emulator, notify then phone
+--install-only. Current phone and stopped original emulator60; preserve all keys/data.
+Cold notification probe explicitly opens existing thread before demanding new Matrix
+capture, with no additional send. Recheck gateway IP/bridge before packet counter.
+
+Composer foundationb7929318 and browser-lock57f2d325 are pushed but composer UI/recovery
+adoption remains pending. Library2b84921/Startera21b748/Platformea322180 unchanged;
+live API3a7909a6, worker10485916/schema116.1 unchanged. Continue actual retirement/request
+diagnosis, input adoption and original54 PRD groups; no new completed group. One compiler
+OR owned emulator, disk TMPDIR; no phone UI automation.
+
+## Concurrent-history failure reproduced; correction gate running — 8 November 2026, 03:10 UTC
+
+Both prior commits are pushed:57f2d325 audited inspector browser lock andb7929318
+unused atomic composer storage. That foundation remains unwired to UI/delivery.
+History before-1/session58065 is reaped exit1/62.116s: six actual SQLite cases, exactly
+two failures. Updating an original during credential acquisition and committing an
+unrelated message after a document read both wrongly returned FailureKind.Storage.
+The four ownership/cancellation/corruption/missing-key cases passed. Evidence stays in
+.work/history-logical-read-2026-11-08/before-1; this reproduces a defect, not proof it
+caused the entire build60 device marker or request count.
+
+Applied coherent getByLogicalId snapshot read using existing published-document API.
+Post-read checks retain owner/generation closure while accepting normal revision
+advancement. Added closed AcquireRetirementHistory/RetireCommands diagnostic stages,
+without changing delivery, retry, authorization or key policy. ONLY compiler62665 is
+history-logical-read/full-1: full root, six actual browser cases, Android host/compile/
+lint, shared Wasm/iOS source and quality. Freeze runtime/library until reaped. Then
+record actual after results, commit/push, and build/verify candidate61. Prepared scripts
+are .work/release-phone-2026-11-08-build61, not executed. Recheck API IP before counter.
+Preserve old original test messages; one new61 send only. Phone and stopped emulator60,
+no phone UI; notify before every install-only. Remaining composer adoption and full PRD
+continue after request/retirement diagnosis.
+
 ## Composer storage accepted; next isolate history retirement — 8 November 2026, 03:07 UTC
 
 All composer jobs are reaped. Full-1 preserved exit1/1304.295s,5,585 fresh cases with
