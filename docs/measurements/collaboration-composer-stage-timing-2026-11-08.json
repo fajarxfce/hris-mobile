@@ -1,0 +1,64 @@
+{
+  "recordedAt": "2026-11-08T09:52:59.045145+00:00",
+  "accepted": false,
+  "candidateBase": "19748355",
+  "attempts": [
+    {
+      "name": "focused-1",
+      "session": 60641,
+      "reaped": true,
+      "exitCode": 1,
+      "elapsedSeconds": 556.607,
+      "freshCounts": {
+        "tests": 48,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceFiles": 4479,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "reports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDraftWorkerTest.xml": {
+          "sha256": "5a07ba9b6534cc580c447b02acdb12cdba2b6468aa615fa24f6ed79299d0727d",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryTimingTest.xml": {
+          "sha256": "61533f5361e42a0a8998a40d0bffb2995c17688c2b2369f6c0a1e5476814589f",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationComposerOutboxStorageTest.xml": {
+          "sha256": "901a8e6ec7a6080f99979b32a5e6839a66db462c24279fb650fd60c2335d550a",
+          "tests": 28,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/sync/data/build/test-results/desktopTest/TEST-dev.fajar.starter.sync.data.PlatformSyncScheduleRepositoryTest.xml": {
+          "sha256": "6c20a7ef8354afd30f42e732950d22a2f45191b219f8fddb0db8b776a93f36d3",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "gateFailure": "Detekt LongMethod: handoff109 lines after wrapping/formatting; threshold100. All48behavior cases passed.",
+      "resultSha256": "e10928a96329adf5c5e0fb8236dbb12622ff479426b56ad2f2ebab09ff44e7e8"
+    }
+  ],
+  "activeGate": {
+    "name": "focused-2",
+    "session": 11272
+  },
+  "deviceMeasurementPerformed": false,
+  "phoneVersionCode": 65,
+  "acceptedEmulatorVersionCode": 66,
+  "starterBase": "e170ada",
+  "genericPortCopied": false
+}

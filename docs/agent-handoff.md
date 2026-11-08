@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Finer composer timing candidate — 8 November 2026, 09:53 UTC
+
+Sole compiler is Mobile `.work/composer-stage-timing-2026-11-08/check.py focused-2`,
+session11272; all8 source files and library are FROZEN until reaped. No emulator.
+Source remains UNCOMMITTED on accepted19748355 (A923 application). First60641 is reaped:
+48fresh cases pass (schedule3, real outbox28, worker8, timing9), gatefailed solelyDetekt
+LongMethod109 after new nesting/formatting. The transaction stays together; concise
+result/codec import aliases and a named next draft reduce wrapping. No helper extraction.
+[Candidate contract](collaboration-composer-stage-timing.md) / [evidence](measurements/collaboration-composer-stage-timing-2026-11-08.json).
+
+Current measurement uses generic CommandHandoff/WorkScheduling; existing application
+trace is generic over AppResult and records RecoverComposer separately from legacy
+RecoverLegacyDrafts. Their original results are combined afterward; composer failure
+is never misattributed to legacy work. NO CommandRecovery core enum was introduced.
+Nine timing fixtures use explicit Unit where a thrown lambda cannot infer the generic.
+No domain behavior/admission/timeout or queue policy changed. Pending latency unresolved.
+
+Next reap11272, correct any failures and run prepared check.py full-1 (root, actualChrome
+schedule3/outbox28, Android compile/lint, web/iOS source/quality). Commit/push only accepted
+source, then `.work/release-phone-2026-11-08-build67/build-arm64.py` requires that exact full
+gate and pushed sources. Its build/verifiers/emulator/counter/one-send probe are prepared
+ONLY. Probe67 requires existing UNSENT Draft66 092041, temporarily replaces that known
+synthetic draft and restores its exact text after ONE NEW Tes67 message. Do not rerun an
+attempt after any Send; inspect intent/evidence first. Never resend66orolder originals.
+No67 APK or device measurement exists. Use original1536MiB/two-core image only after
+compiler reaped. Review actual timing/offline/visual evidence and stop/reap afterward.
+
+Phone remains65; accepted66 not installed. Preflight89422 reaped timeout09:39:56; prior
+result preserved asphone-preflight-1.json. Availability question still pending. Notify
+before any verified install-only, never drive phone UI. Generic three-file scheduling
+port bases are verified in Starter `.work/scheduling-timing-port-2026-11-08/prepared.json`,
+NO source copied; exact port/tests/commit/push follow accepted Mobile source. Startere170ada
+is clean. Platform485d6c8f only updates current evidence; liveAPI3a7909a6 remains unchanged.
+Continue original54PRDgroups; no group newly complete. Old isolated/staged copies stale.
+
 ## Release66 accepted; phone connectivity pending — 8 November 2026, 09:38 UTC
 
 Mobile a923d844 is pushed/clean and accepted: full5893/zero all, signed66 verified with
