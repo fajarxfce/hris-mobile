@@ -1,5 +1,37 @@
 # Agent continuation — HRIS Mobile
 
+## Corrected notification package awaits device acceptance — 8 November 2026, 01:33 UTC
+
+Mobile source96c5bd5b is pushed and unchanged after the accepted full4 gate. Library
+1b6ad6b is pushed with an Android lifecycle correction found by actual OS testing:
+an already-cancelled launch can wait for dispatch before its completion callback,
+so construction must retire that observer synchronously. Initial native attempt1
+reported IllegalStateException; improved fixture diagnostics in attempt2 locate the
+failure at cancelledParentCannotPostShortcut:106. Both fixtures were uninstalled,
+emulators stopped/reaped, and no HRIS59 installation or message send occurred.
+
+The correction gate15143 is reaped:102.266s,10 fresh tests, zero failures/errors/skips,
+4436 stable app inputs and stable library inputs. Notifier fixture/Android release
+compile and lint, Wasm/iOS source and quality checks pass. Corrected packaging42494
+passes91.896s; verified APK59 is0b7d84ecc768824fc570e3ba1434a3f20ead1b400b6f7d9feaccd2448d784f85,
+123268367bytes, original dev signer, non-debuggable, SDK5 native bytes unchanged.
+The first package attempt ran out of2GiB heap in ZipFlinger; retry uses3GiB. Its
+successful pre-correction APKda73a03d is superseded and retained privately, never installed.
+
+Third emulator10359 is starting with original Bima data/1536MiB. Next run all five
+native cases; only then install the corrected APK on this emulator and run one original
+send with the request counter, actual background/cold notification taps, visual review
+and offline restart. Phone remains58. Notify before phone --install-only; no phone UI.
+Local scripts/results: .work/release-phone-2026-11-08-build59; do not resend after a
+partial probe failure. Update device measurement only from completed acceptance.
+
+Prior library CI42433510185 on10b5df0 is green and artifact-verified:69 Apple and213
+portable cases, no failures/errors/skips. That CI compiled the native fixture but did
+not run it. New1b6ad6b CI/runtime acceptance remain to inspect. Starter2b012e51 remains
+clean; generic port follows actual Mobile acceptance. Continue pending/keyboard/latency
+and all54 PRD groups; none newly complete. Keep one owned compiler OR emulator.
+
+
 ## Notification and retry fixes accepted locally — 8 November 2026
 
 Full4 is reaped and accepted after 686.45s: 729 fresh cases,
