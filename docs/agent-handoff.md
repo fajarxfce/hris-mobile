@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Composer timing full gate running — 8 November 2026, 09:57 UTC
+
+Sole compiler94138: Mobile `.work/composer-stage-timing-2026-11-08/check.py full-1`.
+All9 source files and49 library inputs FROZEN. No emulator. Phone65, accepted emulator66;
+no67APK/send/install. Current nine-source-file candidate remains UNCOMMITTED on869af2c0
+(doc checkpoint; A923 app accepted). [Updated checks](measurements/collaboration-composer-stage-timing-2026-11-08.json).
+
+60641 focused-1 reaped556.607s:48tests/zeroall, qualityfailedLongMethod109.
+11272 focused-2 reaped169.475s:28freshstorage/zeroall; two thrown diagnostic fixture
+lambdas needed explicitUnit and handoff101 still exceeded100. Corrected both; capacity
+pages are named locally, no new helper or rule suppression. Quality-3/6709 reapedPASS
+52.937s,4479+49unchangedinputs, no tests requested. Format/architecture/Detekt clean.
+Full94138 includes root checks, realChrome schedule3/outbox28, Android compile/lint,
+web and iOS source. Do not accept source from the narrower quality result alone.
+
+Next reap94138, address actual failures, then commit/push accepted source+evidence.
+The `.work/release-phone-2026-11-08-build67` scripts now include guarded acceptance,
+preflight and install-only too; ALL PREPARED/UNRUN. Exact pushed source and full gate
+are prerequisites. One new Tes67 original only, preserving verified UNSENT Draft66
+092041 and all earlier originals/keys. Recorder expects CommandHandoff/WorkScheduling
+plus separate RecoverComposer/RecoverLegacyDrafts stages. No CommandRecovery enum.
+First-frame/OS notification evidence is reused only if protected66source matches;
+no new video claim. Inspect real screenshots/timings/offline data before acceptance.
+Phone preflight allows65or66, verifies the actual identity and connection; notify before
+install-only, never drive phone UI. If67 not ready, accepted66 remains installable.
+
+Starter e170ada is clean; next3generic-file bases verified but NOT copied. Only port
+these after Mobile acceptance, then fullStartergate/commit/push. Platform485d6c8f docs
+are pushed; liveAPI3a7909a6/worker/schema116.1/GroupOFF remain unchanged. Pending latency,
+SDK/library publication and original54PRDgroups remain open. No group complete.
+
 ## Finer composer timing candidate — 8 November 2026, 09:53 UTC
 
 Sole compiler is Mobile `.work/composer-stage-timing-2026-11-08/check.py focused-2`,

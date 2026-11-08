@@ -31,6 +31,9 @@ acknowledgement remain separate. Cancellation propagates through the existing ow
 retain failures and source/report fingerprints. First focused run passed48 behavior
 cases but failed the method-length quality gate after additional nesting. The candidate
 keeps the handoff together, shortens verbose type names with import aliases and names
-the next draft before encoding. A second run and full/browser/platform checks remain
-required. The exact generic timing port waits for Mobile acceptance; Starter remains
+the next draft before encoding. The second run retained28 passing storage cases but
+found two diagnostic fixture type-inference errors and a remaining101-line method.
+Explicit fixture types and naming the capacity pages address these without changing
+behavior. The52.937s quality gate now passes. Full/browser/platform checks are running;
+source acceptance remains pending. The exact generic timing port waits for Mobile acceptance; Starter remains
 e170ada. Release67 scripts are prepared only; no67 APK or new send exists.

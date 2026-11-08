@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-11-08T09:52:59.045145+00:00",
+  "recordedAt": "2026-11-08T09:58:08.016037+00:00",
   "accepted": false,
   "candidateBase": "19748355",
   "attempts": [
@@ -50,11 +50,57 @@
       },
       "gateFailure": "Detekt LongMethod: handoff109 lines after wrapping/formatting; threshold100. All48behavior cases passed.",
       "resultSha256": "e10928a96329adf5c5e0fb8236dbb12622ff479426b56ad2f2ebab09ff44e7e8"
+    },
+    {
+      "name": "focused-2",
+      "session": 11272,
+      "reaped": true,
+      "exitCode": 1,
+      "elapsedSeconds": 169.475,
+      "freshCounts": {
+        "tests": 28,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceFiles": 4479,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "reports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationComposerOutboxStorageTest.xml": {
+          "sha256": "494508b6d2dbe3c16575ebec78de9ed48c5b1317fd4a694cce7749a83d51e3c1",
+          "tests": 28,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "gateFailure": "Two thrown/cancelled diagnostic test lambdas require explicit Unit after the trace became generic; handoff101 still exceeded100. Storage28 passed. Both corrected before quality-3.",
+      "resultSha256": "03aeb1d7a5de95f2ec3f7154ab0c898f110cd322505902889314752a5549cd38"
+    },
+    {
+      "name": "quality-3",
+      "session": 6709,
+      "reaped": true,
+      "exitCode": 0,
+      "elapsedSeconds": 52.937,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceFiles": 4479,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "reports": {},
+      "gateFailure": null,
+      "resultSha256": "ad267a4c351d585e49fee71258fddd98631ff620cf8e4949144650481c86a529"
     }
   ],
   "activeGate": {
-    "name": "focused-2",
-    "session": 11272
+    "name": "full-1",
+    "session": 94138
   },
   "deviceMeasurementPerformed": false,
   "phoneVersionCode": 65,
