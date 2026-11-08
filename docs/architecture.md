@@ -1,5 +1,7 @@
 # Architecture
 
+[Composer handoff storage](collaboration-composer-handoff.md) atomically retains the submitted original and next editor revision; product-flow adoption remains pending.
+
 [Local send timing](collaboration-send-timing.md) observes existing presentation/use-case
 boundaries through core result instrumentation; it does not own delivery or admission policy.
 

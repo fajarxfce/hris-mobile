@@ -1,5 +1,55 @@
 # Agent continuation — HRIS Mobile
 
+## Composer storage accepted; next isolate history retirement — 8 November 2026, 03:07 UTC
+
+All composer jobs are reaped. Full-1 preserved exit1/1304.295s,5,585 fresh cases with
+zero failed/error/skipped testcase records; only browser lock task failed. Full-2
+passes72.319s with4,445 stable inputs and unchanged library; zero fresh cases reused
+prior results. Its class-only browser filter selected no concrete tests (skipped task
+container); do not count that as IndexedDB evidence. Corrected browser-1/session80488
+passes32.307s with12 actual IndexedDB cases/zero failed,error,skipped. Initial focused
+SQLite12 cases and full root/Android/native/quality acceptance are in
+measurements/collaboration-composer-outbox-storage-2026-11-08.json.
+
+Commit/push exact audited inspector npm workspace lock and unused composer foundation.
+Then install the prepared six history logical-read regression cases, run against old
+repository to prove the race before applying coherent-read and retirement-stage changes.
+Use a trailing wildcard for Wasm case filters and require actual nonzero XML cases.
+No compiler/emulator currently. No61 APK exists; phone60 data untouched. UI/composer
+adoption, residual request/timing diagnosis and original54 PRD groups still open.
+
+## Full gate retry after audited web lock update — 8 November 2026, 03:04 UTC
+
+Composer full-1/session38016 is reaped: exit1 after1304.295s, 5,585 fresh tests/758
+suites, zero failures/errors/skips,4,444 stable app inputs and stable library inputs.
+Only failing task is kotlinWasmStorePackageLock. The exact audited generated lock was
+applied: three inspector local workspaces/six package entries, no changed or removed
+registry packages. The ONLY compiler is full-2/session81619, same root/native/web/quality
+gate, now fingerprinting kotlin-js-store too. Freeze runtime/library inputs until reaped.
+History logical-read regression and fine-grained retirement markers remain prepared
+only. No61 APK/device result. Phone60 and stopped original emulator data preserved.
+
+## Current check and concurrent-history regression — 8 November 2026, 03:02 UTC
+
+Only compiler remains composer-outbox full-1/session38016. Its Wasm package-lock
+check has failed; --continue is finishing remaining targets. Do not edit runtime or
+library inputs until reaped. The audited lock delta adds only three local inspector
+workspaces and their links (six package entries), with no registry package/version/
+integrity changes or removals. Audit: .work/composer-outbox-2026-11-08/npm-lock-audit.json.
+After completion preserve the first result, apply that exact generated lock, and rerun
+full acceptance incrementally before committing the unused composer storage foundation.
+
+A separate .work/history-logical-read-2026-11-08 candidate is PREPARED ONLY, not in
+runtime or tests yet. getByLogicalId reads checkpoint/document separately and rejects
+any intervening revision change; ordinary concurrent history commits may therefore
+produce Storage/IllegalArgumentException during retirement. This is a hypothesis,
+not a proved explanation of the build60 device marker. Six real-database regression
+cases and a coherent single-document/published-checkpoint read are staged privately.
+Run the new tests against old code first after the composer gate/commit, then apply the
+candidate; preserve ownership/generation checks, cancellation, corruption and lost-key
+failures. Finer retirement stage markers are also prepared but unapplied. No61 APK or
+new device acceptance exists. Phone remains installed60; original emulator stopped.
+
 ## Starter port pushed; composer storage and remaining timing investigation — 8 November 2026, 02:40 UTC
 
 Starter a21b748 follows accepted Mobile60: eight generic files plus adapted host and
@@ -9,16 +59,17 @@ browser/production web/iOS source/quality. Lint0errors/45 version advisories. In
 missing-checksum46377 and the two verified imported artifacts are recorded there.
 Both jobs are reaped; Starter is pushed. Library2b84921 remains unchanged/unpublished.
 
-The ONLY compiler is Mobile .work/composer-outbox-2026-11-08/focused-1, session33475.
-It tests an UNACCEPTED foundation: immutable submitted-original storage and next editor
+Focused-1/session33475 is reapedPASS174.97s:12 real storage tests, zero failures/
+errors/skips,4,444 stable inputs; formatting/architecture/detekt pass. The ONLY compiler
+is now .work/composer-outbox-2026-11-08/full-1, session38016. It checks an UNACCEPTED foundation: immutable submitted-original storage and next editor
 revision commit in one encrypted ReplicaStore transaction. Eight new Kotlin files and
 collaboration-composer-handoff.md are currently untracked; they are not in build60.
 Twelve real-storage cases cover commit-response loss/reopen, competing sends, next text,
 account replacement, cancellation before/after commit, paging, capacity, legacy drafts,
 malformed ciphertext/keys and bounded contention. Static architecture69353 passes74
 modules. No UI/use-case/worker adoption or new APK exists; do not claim keyboard fixed.
-Freeze Mobile runtime and all library inputs until33475 is reaped. Full checker is
-prepared beside focused checker; complete checks, commit/push foundation, then implement
+Freeze Mobile runtime and all library inputs until38016 is reaped. Complete full
+checks, commit/push foundation, then implement
 owning use cases, recovery and UI adoption before device acceptance. No repository calls
 another repository; no SDK or business retry policy enters the raw storage layer.
 

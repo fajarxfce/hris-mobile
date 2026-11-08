@@ -1,0 +1,148 @@
+{
+  "acceptedAt": "2026-11-08T03:07:41.407204+00:00",
+  "scope": "Unused composer storage foundation: atomic encrypted submitted original and next editor revision. No UI, delivery-worker or recovery adoption; no new APK/device behavior.",
+  "runtimeBaseCommit": "125f3db350121dd4f2a327bd327eee776881711e",
+  "libraryCommit": "2b8492170ff30915f9a6694d7d1bf8f076e74e3c",
+  "runs": {
+    "focused-1": {
+      "startedAt": "2026-11-08T02:38:48.973357+00:00",
+      "elapsedSeconds": 174.97,
+      "exitCode": 0,
+      "sourceFiles": 4444,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 1,
+      "resultSha256": "d99b0dad061cb163d57ef60bfc62bc7559a003312d6bd34bbc8ffd6eb78d95d7",
+      "composerReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationComposerOutboxStorageTest.xml": {
+          "sha256": "ce4e4f56c52db91c441d7b717f47a6edbb9d256ac8d81a3bd277916265a77b4f",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "full-1": {
+      "startedAt": "2026-11-08T02:41:51.567015+00:00",
+      "elapsedSeconds": 1304.295,
+      "exitCode": 1,
+      "sourceFiles": 4444,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5585,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 758,
+      "resultSha256": "962e91e28f5dac7e3254f372a8ba5722b51a2ecc364f81dcb1898564f2838b17",
+      "composerReports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationComposerOutboxStorageTest.xml": {
+          "sha256": "fe2c16b63822b6eb53bcb5c889ddaaa1324cc75ad210167a3c9c6d312d5722de",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "full-2": {
+      "startedAt": "2026-11-08T03:03:53.008144+00:00",
+      "elapsedSeconds": 72.319,
+      "exitCode": 0,
+      "sourceFiles": 4445,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 0,
+      "resultSha256": "2c0515f4821569991f3c4d9f98ae9883aae82ebf40862851ff7d4f208b5865ab",
+      "composerReports": {}
+    },
+    "browser-1": {
+      "startedAt": "2026-11-08T03:06:25.049883+00:00",
+      "elapsedSeconds": 32.307,
+      "exitCode": 0,
+      "sourceFiles": 4445,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 1,
+      "resultSha256": "233445452ae12cf38659aa2f94c874eef45abc95c32c248a4180baf215631806",
+      "composerReports": {
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserT-J385OABRIG6LQ.dev.fajar.starter.collaboration.data.BrowserCollaborationComposerOutboxStorageTest.xml": {
+          "sha256": "00d5b1de2199074103542958a53f4dbaad5e293513e36b6ac147c48da98472cc",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "browserFilterCorrection": "The class-only Wasm pattern selected no concrete cases (one skipped task container, no testcase XML). Final browser-1 uses a trailing wildcard and verifies twelve concrete case records. Full-2 alone is not browser test acceptance.",
+  "initialFailure": "Only kotlinWasmStorePackageLock failed. Preserve full-1 result; no source changes during either gate.",
+  "lockAudit": {
+    "trackedSha256": "0652928b6d4b5a03c50c296aa848a25741d5787056bf2ee154c31ba9cdb947fb",
+    "generatedSha256": "3f894db15afb64112e1e747b5efb65059315ef79017d3cc659405de11df4e9dc",
+    "addedLocalWorkspaceLinks": [
+      "node_modules/kmp-network-inspector-compose",
+      "node_modules/kmp-network-inspector-core",
+      "node_modules/kmp-network-inspector-ktor",
+      "packages_imported/kmp-network-inspector-compose/0.1.0-SNAPSHOT",
+      "packages_imported/kmp-network-inspector-core/0.1.0-SNAPSHOT",
+      "packages_imported/kmp-network-inspector-ktor/0.1.0-SNAPSHOT"
+    ],
+    "addedWorkspaces": [
+      "packages_imported/kmp-network-inspector-compose/0.1.0-SNAPSHOT",
+      "packages_imported/kmp-network-inspector-core/0.1.0-SNAPSHOT",
+      "packages_imported/kmp-network-inspector-ktor/0.1.0-SNAPSHOT"
+    ],
+    "changedRegistryPackages": [],
+    "removedPackages": []
+  },
+  "foundationSources": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationComposerSubmissionCodec.kt": "84356a0154e5966ebb8e0ea957cb716a8d17b2d20b80a3c1843cd1928c1879b0",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationComposerOutboxRepository.kt": "322bee57269462b5eeace37a49c1bc62d3026ff2b5562e56d261f3b99a2a65fc",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationComposerOutboxStorageContract.kt": "21c08377c1ed5e3f03df8c4266a94d4091dec653695d312d5a3b6e5a2d9d66db",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationComposerOutboxStorageTest.kt": "f1a33936418cf69542fea9840f80e558dc4d67ff69e6bc7621abbc49c539c8cb",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationComposerOutboxStorageTest.kt": "9da26ec1d14cb50392e7165a95b9096238095ddac0afc41fdfbec2b1ea0d5125",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationComposerSubmission.kt": "0a5bc272272b101819224b77215f72d8198da96b271582ada74fad476a2a8a12",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationComposerSubmissionPolicy.kt": "bacf19171f4753acf45df6ed4ca7aa6afd8eae2779ad3ab279df4e2d65106f8e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationComposerOutboxRepository.kt": "71d4e2f089ee138e2dbc6a0d38eda91f57b7d0741b1540705fe2a1b52704d9f7"
+  },
+  "acceptedTargets": [
+    "root check",
+    "Android host tests",
+    "Android dev release Kotlin compile and lint",
+    "shared Wasm compile",
+    "shared iOS ARM64 source compile",
+    "format",
+    "architecture",
+    "detekt",
+    "12 real SQLite cases",
+    "12 real Chrome IndexedDB cases"
+  ],
+  "limits": [
+    "Composer foundation not wired to product flows",
+    "No Apple application/runtime test",
+    "No new APK, keyboard continuity or phone latency acceptance"
+  ]
+}
