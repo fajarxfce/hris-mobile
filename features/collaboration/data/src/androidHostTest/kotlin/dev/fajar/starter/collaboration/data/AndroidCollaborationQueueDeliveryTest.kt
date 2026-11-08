@@ -16,6 +16,7 @@ class AndroidCollaborationQueueDeliveryTest {
         val room = QueueRoom(transactions = setOf("first", "second"))
         val source = AndroidCollaborationMessageQueueSource { room }
         source.open()
+        room.calls.clear()
         val observations = mutableListOf<CollaborationQueueDelivery>()
         val delivery = async { source.resume(setOf("first", "second")) { observations += it } }
         runCurrent()
@@ -45,6 +46,7 @@ class AndroidCollaborationQueueDeliveryTest {
         room.onEnable = { room.emit(RoomSendQueueUpdate.SentEvent("first", "\$first")) }
         val source = AndroidCollaborationMessageQueueSource { room }
         source.open()
+        room.calls.clear()
         val failure = IllegalStateException("Fictional receipt failure")
         val observed =
             assertFailsWith<IllegalStateException> {
@@ -66,6 +68,7 @@ class AndroidCollaborationQueueDeliveryTest {
         val operations = SdkQueueOperations(backgroundScope)
         val observations = mutableListOf<CollaborationQueueDelivery>()
         source.open()
+        room.calls.clear()
         val waiter = launch {
             operations.execute {
                 AppResult.Success(source.resume(setOf("original")) { observations += it })
@@ -91,6 +94,7 @@ class AndroidCollaborationQueueDeliveryTest {
         room.onEnable = { room.emit(RoomSendQueueUpdate.SentEvent("original", "\$event")) }
         val source = AndroidCollaborationMessageQueueSource { room }
         source.open()
+        room.calls.clear()
         val result = source.resume(setOf("original"))
         assertEquals(CollaborationQueueDeliveryReason.DRAINED, result.reason)
         assertEquals(listOf(CollaborationQueueReceipt("original", "\$event")), result.receipts)
@@ -105,6 +109,7 @@ class AndroidCollaborationQueueDeliveryTest {
         val room = QueueRoom(transactions = setOf("unknown"))
         val source = AndroidCollaborationMessageQueueSource { room }
         source.open()
+        room.calls.clear()
         val result = source.resume(setOf("owned"))
         assertEquals(CollaborationQueueDeliveryReason.UNRESOLVED, result.reason)
         assertFalse("queue.true" in room.calls)
@@ -116,9 +121,10 @@ class AndroidCollaborationQueueDeliveryTest {
     fun stopDuringListenerAcquisitionCannotBeFollowedByLateEnablement() = runTest {
         val finish = CompletableDeferred<Unit>()
         val room = QueueRoom(transactions = setOf("original"))
-        room.beforeSubscriptionReturns = { finish.await() }
         val source = AndroidCollaborationMessageQueueSource { room }
         source.open()
+        room.calls.clear()
+        room.beforeSubscriptionReturns = { finish.await() }
         val delivery = async { source.resume(setOf("original")) }
         runCurrent()
         source.requestStop()
@@ -135,6 +141,7 @@ class AndroidCollaborationQueueDeliveryTest {
         room.onEnable = { room.emit(RoomSendQueueUpdate.SentEvent("first", "\$event")) }
         val source = AndroidCollaborationMessageQueueSource { room }
         source.open()
+        room.calls.clear()
         val delivery = async { source.resume(setOf("first", "second")) }
         runCurrent()
         assertTrue(room.enabled)
@@ -152,6 +159,7 @@ class AndroidCollaborationQueueDeliveryTest {
         val room = QueueRoom(transactions = setOf("original"))
         val source = AndroidCollaborationMessageQueueSource { room }
         source.open()
+        room.calls.clear()
         val delivery = async { source.resume(setOf("original")) }
         runCurrent()
         advanceTimeBy(15_000)
@@ -170,6 +178,7 @@ class AndroidCollaborationQueueDeliveryTest {
         val source = AndroidCollaborationMessageQueueSource { room }
         val operations = SdkQueueOperations(backgroundScope)
         source.open()
+        room.calls.clear()
         val waiter = launch {
             operations.execute { AppResult.Success(source.resume(setOf("original"))) }
         }
@@ -192,6 +201,7 @@ class AndroidCollaborationQueueDeliveryTest {
         }
         val source = AndroidCollaborationMessageQueueSource { room }
         source.open()
+        room.calls.clear()
         val result = source.resume(setOf("first", "second"))
         assertEquals(CollaborationQueueDeliveryReason.UNRESOLVED, result.reason)
         assertEquals(listOf(CollaborationQueueReceipt("first", "\$event")), result.receipts)
@@ -203,9 +213,9 @@ class AndroidCollaborationQueueDeliveryTest {
     fun ignoredSnapshotAndLateDeliveryCallbacksDisposeTheirNativePayloads() = runTest {
         var disposed = 0
         val snapshotRoom = QueueRoom()
-        snapshotRoom.beforeSubscriptionReturns = { snapshotRoom.emit(media { disposed++ }) }
         val snapshot = AndroidCollaborationMessageQueueSource { snapshotRoom }
         snapshot.open()
+        snapshotRoom.beforeSubscriptionReturns = { snapshotRoom.emit(media { disposed++ }) }
         assertTrue(snapshot.snapshot().isEmpty())
         snapshot.stop()
         snapshotRoom.emit(media { disposed++ })
@@ -223,12 +233,13 @@ class AndroidCollaborationQueueDeliveryTest {
     fun failingPayloadDisposalInvalidatesSnapshotWithoutUnwindingTheCallback() = runTest {
         val room = QueueRoom()
         var callbackReturned = false
+        val source = AndroidCollaborationMessageQueueSource { room }
+        source.open()
+        room.calls.clear()
         room.beforeSubscriptionReturns = {
             room.emit(media { error("Fictional disposal failure") })
             callbackReturned = true
         }
-        val source = AndroidCollaborationMessageQueueSource { room }
-        source.open()
         assertFailsWith<IllegalStateException> { source.snapshot() }
         assertTrue(callbackReturned)
         source.stop()

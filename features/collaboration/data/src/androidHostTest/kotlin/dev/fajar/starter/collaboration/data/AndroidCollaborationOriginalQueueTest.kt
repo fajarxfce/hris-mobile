@@ -274,6 +274,7 @@ internal class OriginalQueueFixture(lifetime: CoroutineScope) {
 
     suspend fun assertReleased() {
         assertEquals(1, room.calls.count { it == "room.close" })
+        assertFalse("timeline.open" in room.calls)
         assertFalse("queue.true" in room.calls)
         assertFalse("send.enqueue" in room.calls)
         assertTrue(room.timeline.retried.isEmpty())

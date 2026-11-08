@@ -21,7 +21,8 @@ The focused source gate passed 92 fresh cases without failures, errors or skips 
 134.888 seconds. It includes actual Android fake-FFI lifecycle/delivery/retry/original
 queue tests, shared child/writer ownership and domain settlement/prepared delivery.
 All 4,488 app inputs and 82 library files stayed unchanged. The full root, Android,
-browser, web/iOS source and quality gate is running; source is not accepted yet.
+browser, web/iOS source and quality gate passed 5,763 fresh cases with no failures,
+errors or skips in 1,230.997 seconds. Source inputs remained unchanged; source is accepted.
 [Exact attempt](measurements/collaboration-lazy-queue-timeline-2026-11-08.json).
 
 Release 70 preparation requires an accepted and pushed source gate, verified APK/SDK,
@@ -29,3 +30,6 @@ and the original emulator updated from 69. A single new original must produce tw
 successful QueueBuild and three QueueInitialize events, with exact old message/draft
 retention and cold offline evidence. Do not replay any previous test original or send
 the retained unsent draft. No latency improvement or new phone installation is claimed.
+
+Release70 is held for the independently verified recipient-readiness retry loop.
+This timeline change does not fix that loop and is not yet device-accepted.

@@ -31,12 +31,28 @@ internal class AndroidCollaborationMessageQueueSource(
         val acquired = traceSdkAcquisition(SdkAcquisitionStage.QueueRoom) { acquireRoom() }
         room = acquired
         require(acquired.isEncrypted())
-        // The parent's default is paused. First queue access can spawn Rust tasks;
-        // initialize it inside the async FFI runtime before synchronous room controls.
-        timeline = traceSdkAcquisition(SdkAcquisitionStage.QueueBuild) { acquired.timeline() }
-        retries = AndroidCollaborationQueueRetries(requireNotNull(timeline))
+        // First queue access can spawn Rust tasks. Initialize through async FFI while the
+        // parent's default is paused; inventory/settlement does not need a UI timeline.
+        val guard = Any()
+        var disposalFailed = false
+        listener =
+            traceSdkAcquisition(SdkAcquisitionStage.QueueInitialize) {
+                acquired.subscribeToSendQueueUpdates(
+                    object : SendQueueListener {
+                        override fun onUpdate(update: RoomSendQueueUpdate) {
+                            try {
+                                update.destroy()
+                            } catch (_: Exception) {
+                                synchronized(guard) { disposalFailed = true }
+                            }
+                        }
+                    }
+                )
+            }
         queueInitialized = true
         acquired.enableSendQueue(false)
+        stopListener()
+        synchronized(guard) { check(!disposalFailed) }
     }
 
     suspend fun snapshot(): Set<String> {
@@ -120,11 +136,14 @@ internal class AndroidCollaborationMessageQueueSource(
     ) {
         check(listener == null && !stopping)
         check(!requireNotNull(room).isSendQueueEnabled())
+        val writer = acquireTimeline()
+        currentCoroutineContext().ensureActive()
+        synchronized(controls) { check(!stopping) }
         val json =
             collaborationOutgoingContent(logicalId, text, replyToEventId, forwarded, editTarget)
         val wireBody = requireNotNull(json["body"]).jsonPrimitive.content
         createTextContent(wireBody).use { content ->
-            requireNotNull(timeline).sendWithExtraContent(content, json.toString()).close()
+            writer.sendWithExtraContent(content, json.toString()).close()
         }
     }
 
@@ -153,8 +172,12 @@ internal class AndroidCollaborationMessageQueueSource(
                         observation.queue.result(CollaborationQueueDeliveryReason.TIMED_OUT).pending
                     else null
                 }
-            if (retained != null) {
-                requireNotNull(retries).retry(retained) {
+            if (!retained.isNullOrEmpty()) {
+                val retry =
+                    retries
+                        ?: AndroidCollaborationQueueRetries(acquireTimeline()).also { retries = it }
+                currentCoroutineContext().ensureActive()
+                retry.retry(retained) {
                     synchronized(controls) { !stopping && !observation.queue.ended }
                 }
             }
@@ -192,6 +215,19 @@ internal class AndroidCollaborationMessageQueueSource(
                 stopListener()
             }
         }
+    }
+
+    /** The exclusive writer owns this lazy handle until its native operations have drained. */
+    private suspend fun acquireTimeline(): Timeline {
+        timeline?.let {
+            return it
+        }
+        synchronized(controls) { check(!stopping) }
+        val acquired =
+            traceSdkAcquisition(SdkAcquisitionStage.QueueBuild) { requireNotNull(room).timeline() }
+        // Store a late raw result before any cancellation/stop check so disposal can close it.
+        timeline = acquired
+        return acquired
     }
 
     private fun receive(observation: DeliveryObservation, update: RoomSendQueueUpdate) {

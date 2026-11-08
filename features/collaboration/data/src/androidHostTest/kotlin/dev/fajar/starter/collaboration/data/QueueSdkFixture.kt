@@ -57,10 +57,14 @@ internal class QueueRoom(
         if (enable) onEnable()
     }
 
-    override fun isSendQueueEnabled(): Boolean = enabled
+    override fun isSendQueueEnabled(): Boolean {
+        check(initialized) { "Queue read outside async FFI" }
+        return enabled
+    }
 
     override suspend fun subscribeToSendQueueUpdates(listener: SendQueueListener): TaskHandle {
         calls += "listener.open"
+        initialized = true
         queueListener = listener
         transactions.forEach { listener.onUpdate(RoomSendQueueUpdate.NewLocalEvent(it)) }
         beforeSubscriptionReturns()

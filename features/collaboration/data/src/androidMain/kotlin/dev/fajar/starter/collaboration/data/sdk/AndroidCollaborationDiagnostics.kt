@@ -14,6 +14,7 @@ internal enum class SdkAcquisitionStage {
     TimelineBuild,
     TimelineListener,
     QueueRoom,
+    QueueInitialize,
     QueueBuild,
 }
 

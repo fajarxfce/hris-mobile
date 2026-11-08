@@ -1,5 +1,24 @@
 # Agent continuation — HRIS Mobile
 
+## Source accepted; real-phone retry root fix takes priority — 8 November 2026, 13:02 UTC
+
+Lazy queue timeline full-1/81263 is REAPED PASS1230.997s: 5,763 fresh cases,
+zero failures/errors/skips, all4,488 app and82 library inputs unchanged. Seven
+Kotlin files are source-accepted; no compiler/emulator remains at this checkpoint.
+Release70 is HELD; do not package/install timeline-only changes.
+
+Actual phone69 passive capture matched the repeated room_send403 to Administrator,
+whose active HRIS account has zero collaboration devices/keys. Bima remains eligible.
+In180.476s: four transport200 and two encrypted-send403, with server closed reason
+collaboration_recipient_unavailable. Phone was not driven; no send or data/key change.
+Platform readiness contract is WIP; Mobile must distinguish missing recipient keys
+from transient delivery failure and stop timed retries while retaining original commands.
+Read Platform docs/collaboration/recipient-readiness-investigation.md. Raw captures
+remain private in .work/phone-transport-loop-2026-11-08. No fix acceptance yet.
+
+Phone/original stopped Bima image remain69. Preserve all originals and UNSENT
+Draft66 092041. Starter enum-only timing port remains untested; all54PRD groups persist.
+
 ## Lazy queue timeline full gate running — 8 November 2026, 12:41 UTC
 
 Release 69 acceptance/install documentation 4a21abb2 is pushed (81558 REAPED PASS).
