@@ -1,0 +1,83 @@
+{
+  "sourceAccepted": true,
+  "at": "2026-11-08T15:41:48.678370+00:00",
+  "scope": "Only delivery wake ownership: passive route acquisition and ordinary same-owner admission renewal no longer schedule blocked messages.",
+  "full": {
+    "startedAt": "2026-11-08T15:23:16.514446+00:00",
+    "elapsedSeconds": 947.39,
+    "exitCode": 0,
+    "sourceFiles": 4498,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 5778,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "freshSuites": 777,
+  "focused": {
+    "startedAt": "2026-11-08T15:14:36.384953+00:00",
+    "elapsedSeconds": 487.734,
+    "exitCode": 0,
+    "freshCounts": {
+      "tests": 76,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true
+  },
+  "sourceManifestSha256": "b1d2e0038cfd528cfc2f1dab9c6f67f905752c89b96c64d109f28175c925b1c5",
+  "libraryManifestSha256": "b346eac84c446f82f4801886f1be25f9d3e10fdf0e2f97375bd0010164d947f4",
+  "selectedReports": {
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ApplicationCollaborationLifetimeTest.xml": {
+      "sha256": "90111a40cdf21a4ed7e1a107da1a54ad0afb63c46873472185022fbaf8de8736",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+      "sha256": "4a0cd4eca46edf25c5504c3f4017965127a48f1abc29c20e3c7a1a32ed117924",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": {
+      "sha256": "00ac7f9c5ffe649f96b7ae4c17a249d2211700af0ca25367133bb00e5f45a0f3",
+      "tests": 44,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationRuntimeOwnershipTest.xml": {
+      "sha256": "64de45db4b6f37092758ac21c40a3e8da5b39447af358e871fcc0710c3ec48ca",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "checks": [
+    "Root check",
+    "Chrome recipient observation storage",
+    "Android proof compilation",
+    "Android devRelease compilation and lint",
+    "Wasm shared application compilation",
+    "iOS shared source compilation",
+    "Format/architecture/detekt"
+  ],
+  "androidLintIssues": 0,
+  "nativeReleaseAccepted": false,
+  "phoneVersionCode": 70,
+  "release71StillRejected": true,
+  "storageError71Resolved": false,
+  "automaticKeyActivationImplemented": false,
+  "readyEventWakeImplemented": false,
+  "starterDelta": false,
+  "sdkLibraryDelta": false
+}

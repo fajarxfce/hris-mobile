@@ -11,7 +11,6 @@ import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.policies.companyPolicyDeadline
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
-import kotlin.time.Instant
 import kotlin.time.TimeSource
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -144,22 +143,79 @@ class MaintainCollaborationRuntimeOwnership(
                 else ->
                     collaborationRequestOwner(workspace.id, session, workspace, server, build, now)
             }
-        emit(decision(parent, candidate, workspace))
+        // Fresh admission still controls acquisition. Ordinary age may retain only a client
+        // already published for this selected owner, while the gateway authorizes each request.
+        // Known module/build/maintenance/permission restrictions never qualify for that retention.
+        val renewable =
+            candidate is AppResult.Success ||
+                (candidate is AppResult.Failed &&
+                    candidate.failure.kind == FailureKind.Unavailable &&
+                    candidate.failure.code in
+                        setOf("client.workspace_expired", "client.company_policy_expired"))
+        val retained =
+            if (
+                renewable &&
+                    workspace != null &&
+                    collaborationLocalAccess(
+                        workspace.id,
+                        workspace,
+                        session,
+                        server.audience,
+                        build,
+                        now,
+                    ) is
+                        AppResult.Success
+            )
+                parent.owner(workspace.company.id)
+            else null
+        emit(
+            decision(
+                parent,
+                candidate,
+                workspace,
+                retainedForeground = retained.takeIf { candidate is AppResult.Failed },
+            )
+        )
         val parentDeadline = observation.expiresAt
-        val parentWait = (parentDeadline - now).inWholeMilliseconds.coerceAtLeast(0)
-        val foregroundDeadline =
+        val policy = workspace?.policy
+        val maintenance =
+            policy
+                ?.policy
+                ?.maintenance
+                ?.let { policy.requestedAt + (it.startsAt - policy.policy.serverTime) }
+                ?.takeIf { it > now }
+        val freshness =
             if (candidate is AppResult.Success && candidate.value != null && workspace != null)
-                foregroundDeadline(workspace, parentDeadline, now)
-            else parentDeadline
-        val firstWait = (foregroundDeadline - now).inWholeMilliseconds.coerceIn(0, parentWait)
-        delay((firstWait - elapsed.elapsedNow().inWholeMilliseconds).coerceAtLeast(0))
-        val expired = expired()
-        if (firstWait < parentWait) {
-            emit(decision(parent, expired))
-            // Keep the original relative deadline even if the wall clock moves backward.
-            delay((parentWait - elapsed.elapsedNow().inWholeMilliseconds).coerceAtLeast(0))
+                minOf(workspace.admission.expiresAt, companyPolicyDeadline(checkNotNull(policy)))
+            else null
+        val deadlines =
+            listOfNotNull(parentDeadline, freshness, maintenance.takeIf { retained != null })
+                .filter { it > now && it <= parentDeadline }
+                .distinct()
+                .sorted()
+        for (deadline in deadlines) {
+            // One captured monotonic schedule: an earlier freshness expiry must not erase a
+            // later known maintenance boundary, and clock rollback cannot extend either.
+            val wait = (deadline - now).inWholeMilliseconds
+            delay((wait - elapsed.elapsedNow().inWholeMilliseconds).coerceAtLeast(0))
+            val resumedAt = now + elapsed.elapsedNow()
+            if (deadline == parentDeadline || resumedAt >= parentDeadline) {
+                emit(decision(null, expired()))
+                break
+            }
+            emit(
+                decision(
+                    parent,
+                    expired(),
+                    workspace,
+                    retainedForeground =
+                        retained.takeIf {
+                            maintenance == null ||
+                                (deadline < maintenance && resumedAt < maintenance)
+                        },
+                )
+            )
         }
-        emit(decision(null, expired))
     }
 
     private fun expired() =
@@ -168,29 +224,11 @@ class MaintainCollaborationRuntimeOwnership(
             FailureKind.Unavailable,
         )
 
-    private fun foregroundDeadline(
-        workspace: Workspace,
-        parentDeadline: Instant,
-        now: Instant,
-    ): Instant {
-        val policy = checkNotNull(workspace.policy)
-        val maintenance =
-            policy.policy.maintenance
-                ?.let { policy.requestedAt + (it.startsAt - policy.policy.serverTime) }
-                ?.takeIf { it > now }
-        return listOfNotNull(
-                parentDeadline,
-                workspace.admission.expiresAt,
-                companyPolicyDeadline(policy),
-                maintenance,
-            )
-            .min()
-    }
-
     private fun decision(
         parent: CollaborationNativeParent?,
         result: AppResult<CollaborationOwner?>,
         workspace: Workspace? = null,
+        retainedForeground: CollaborationOwner? = null,
     ): RuntimeOwnershipDecision {
         val owner = (result as? AppResult.Success)?.value
         val denied =
@@ -208,7 +246,12 @@ class MaintainCollaborationRuntimeOwnership(
                 parent.owner(workspace.company.id)
             else null
         return RuntimeOwnershipDecision(
-            CollaborationRuntimeRetention(parent, owner, deniedOwner?.companyId),
+            CollaborationRuntimeRetention(
+                parent,
+                owner,
+                deniedOwner?.companyId,
+                retainedForeground,
+            ),
             result,
             if (deniedOwner != null && denied != null) deniedOwner.localListAccess() to denied
             else null,

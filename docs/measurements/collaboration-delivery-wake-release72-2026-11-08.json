@@ -1,0 +1,201 @@
+{
+  "at": "2026-11-08T15:57:33.228219+00:00",
+  "versionCode": 72,
+  "sourceCommit": "e82abe168924d6586abd7a0651cb6f2d732e681c",
+  "apkSha256": "591c1a2f136d34f14fdf17128766122fe4d20e3f5d0328ccb6a8ab019a7d5437",
+  "sourceAccepted": true,
+  "passiveWakeNativeObservationAccepted": true,
+  "releaseAccepted": false,
+  "phoneInstalled": false,
+  "phoneVersionCode": 70,
+  "unready": {
+    "accepted": true,
+    "at": "2026-11-08T15:56:17.389043+00:00",
+    "noTimedRetryObserved": true,
+    "quietSeconds": 180.0,
+    "settleAllowanceSeconds": 30,
+    "settledTransportRequests": 0,
+    "requestCounts": {
+      "other_hris": 18,
+      "hris_device_setup": 30,
+      "secret_storage_default_key": 10,
+      "hris_room": 28,
+      "hris_conversation": 19,
+      "other_matrix": 19,
+      "sync": 21,
+      "hris_direct_transport": 4,
+      "refresh": 1
+    },
+    "responseCounts": {
+      "other_hris:401": 3,
+      "other_hris:200": 13,
+      "hris_device_setup:200": 29,
+      "secret_storage_default_key:404": 10,
+      "hris_room:200": 28,
+      "hris_conversation:200": 19,
+      "other_matrix:200": 19,
+      "hris_direct_transport:200": 4,
+      "sync:200": 19,
+      "sync:401": 1,
+      "refresh:200": 1
+    },
+    "unreadyResponses": 4,
+    "encryptedSubmissionRequests": 0,
+    "responses403": 0,
+    "passiveReadOnly": true,
+    "bodyHeadersOrIdentifiersRetained": false,
+    "boundary": "Owned single-emulator local gateway only; closed route counts and boolean readiness. Packet starts may omit fragments; not full HTTP reconstruction. Explicit connectivity change allowed one initial wake; settled observation proves no timed retry only within this bounded interval."
+  },
+  "retainedOriginalVersionCode": 71,
+  "retainedOriginalReplayed": false,
+  "newUnreadySendGestures": 0,
+  "quietUiChecks": 44,
+  "settledRequestCounts": {
+    "secret_storage_default_key": 6,
+    "hris_room": 12,
+    "hris_device_setup": 13,
+    "hris_conversation": 9,
+    "other_matrix": 9,
+    "sync": 17,
+    "refresh": 1,
+    "other_hris": 8
+  },
+  "readySend": {
+    "at": "2026-11-08T15:51:39.206878+00:00",
+    "versionCode": 72,
+    "apkSha256": "591c1a2f136d34f14fdf17128766122fe4d20e3f5d0328ccb6a8ab019a7d5437",
+    "hostTapToEncryptedRequestMillis": 3205,
+    "encryptedRequestToResponseHeadersMillis": 111,
+    "hostTapToEncryptedResponseHeadersMillis": 3316,
+    "firstSentObservation": {
+      "secondsAfterTap": 4.953,
+      "visibleCopies": 1,
+      "sent": true,
+      "pending": false,
+      "bubbleBounds": [
+        33,
+        1154,
+        1047,
+        1298
+      ],
+      "composerBounds": [
+        22,
+        1353,
+        904,
+        1485
+      ],
+      "aboveComposer": true
+    },
+    "counterWindowSeconds": 180.114,
+    "routeRequestCounts": {
+      "other_hris": 17,
+      "hris_device_setup": 35,
+      "secret_storage_default_key": 8,
+      "other_matrix": 23,
+      "hris_room": 36,
+      "refresh": 1,
+      "hris_conversation": 26,
+      "sync": 13,
+      "hris_direct_transport": 9,
+      "encrypted_to_device": 1,
+      "encrypted_room_send": 1
+    },
+    "responseCounts": {
+      "other_hris:401": 2,
+      "other_hris:200": 14,
+      "hris_device_setup:200": 35,
+      "other_matrix:200": 23,
+      "secret_storage_default_key:401": 2,
+      "hris_room:200": 36,
+      "refresh:200": 1,
+      "secret_storage_default_key:404": 6,
+      "hris_conversation:200": 26,
+      "hris_direct_transport:200": 9,
+      "sync:200": 12,
+      "encrypted_to_device:200": 1,
+      "encrypted_room_send:200": 1
+    },
+    "localGesturePhases": [
+      {
+        "operation": "CommandHandoff",
+        "durationMillis": 31,
+        "outcome": "Succeeded"
+      },
+      {
+        "operation": "WorkScheduling",
+        "durationMillis": 6,
+        "outcome": "Succeeded"
+      },
+      {
+        "operation": "CommandQueue",
+        "durationMillis": 386,
+        "outcome": "Succeeded"
+      }
+    ],
+    "physicalPhoneMeasured": false,
+    "captureOverheadMeasured": false,
+    "boundary": "One new original on the retained emulator. Same-host monotonic ADB tap to packet request/header; UI polling is coarse. Counts cover the whole passive window, not only this message. Not a controlled cross-build comparison."
+  },
+  "screenshots": {
+    "at": "2026-11-08T15:56:58.912972+00:00",
+    "versionCode": 72,
+    "apkSha256": "591c1a2f136d34f14fdf17128766122fe4d20e3f5d0328ccb6a8ab019a7d5437",
+    "noStorageErrorVisible": true,
+    "images": [
+      {
+        "file": "consecutive-send.png",
+        "sha256": "b1f137c85c3b8919408ed8dd558ef021d5f6d61452349d381a1264dd6f2faeb3",
+        "actuallyViewed": true
+      },
+      {
+        "file": "latest-preview-before-restart.png",
+        "sha256": "d2cee357211111c37afd13efe5d9dedc9abc911f352b9000287c42e13b374199",
+        "actuallyViewed": true
+      },
+      {
+        "file": "latest-preview-offline.png",
+        "sha256": "c80bdd12c287e027cacda6853ee7bdc02961b9cf9b85c26ed68814777eea13c5",
+        "actuallyViewed": true
+      },
+      {
+        "file": "thread-offline.png",
+        "sha256": "7542117b2921eb940c71c7dbf7c285dc80e668dcba056b8c660ce09fab0b9672",
+        "actuallyViewed": true
+      },
+      {
+        "file": "unready-online.png",
+        "sha256": "308c9b949bace0b53137533c89dca5e8a8a0bb22389e5980269a85fc60fb3f2d",
+        "actuallyViewed": true
+      },
+      {
+        "file": "unready-offline.png",
+        "sha256": "854f3ae283767d9fddd2ee08b869346d1ece57530451d2613bc4c73ddb7f936c",
+        "actuallyViewed": true
+      },
+      {
+        "file": "unready-quiet.png",
+        "sha256": "92eba5eb7c0e459172734668c887543e57112f01c1b4ce746b3af19000885750",
+        "actuallyViewed": true
+      }
+    ],
+    "notes": "Original waiting bubble and ready send are above enabled composer; retained draft/preview/history after offline restart. Older-history button still appears on empty-remote unready room; no claim of full history/UX completion."
+  },
+  "storageFailure71RootResolved": false,
+  "knownLimitations": [
+    "Runtime admission expiry still retires and reopens native clients.",
+    "Storage IllegalStateException71 has not recurred or been assigned an evidence-backed root cause.",
+    "Empty-remote unready room still exposes older-history action.",
+    "Automatic recipient activation/readiness wake is not implemented.",
+    "No phone or iOS runtime performance claim."
+  ],
+  "evidenceSha256": {
+    "artifact.json": "dfcd8565da57aa572c24db646a8b6853c8dd4d536e546fdadcc3543a6e07d9e6",
+    "emulator-probe.json": "3bb87fea8726122b6770ee41010d933cd1f18f808bcb56ec02ebd5b6fb5a3418",
+    "unready-probe.json": "ead5c00e2f8df798306a92582c5dbb79b4a578e7abbc795d0cf646742cc3f0a3",
+    "unready-http-raw-counts.json": "2362aecf2fa24896e9048dbb5836f8218ae8f3b0211ad0acc91ddab02196afea",
+    "unready-counts.json": "c51f34f8061c6694180a5a76c390d15cd2eef96b97db0d46d70341f37096e891",
+    "matrix-http-counts.json": "b3db07a08050d1158c6fd081136c3d9e126789826198975664940394b38ad3ef",
+    "send-timing.json": "84539ba44c63eeffec05c880a6c5ced91f2d3824ce0f018bfbf1f5a50972f066",
+    "passive-process.json": "30bee8f723e52863e84f9de7f38a8ce26d37b1e40b664cb3d5443887b1aa2f8c"
+  }
+}

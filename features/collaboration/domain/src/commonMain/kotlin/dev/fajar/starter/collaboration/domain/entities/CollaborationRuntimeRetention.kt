@@ -5,6 +5,8 @@ data class CollaborationRuntimeRetention(
     val parent: CollaborationNativeParent?,
     val foreground: CollaborationOwner?,
     val deniedCompanyId: String? = null,
+    /** Retain an already published client during admission renewal; never open or promote one. */
+    val retainedForeground: CollaborationOwner? = null,
 ) {
     override fun toString() = "CollaborationRuntimeRetention([redacted])"
 }

@@ -1120,7 +1120,25 @@ class ChatThreadViewModelTest {
             runCurrent()
             vm.onEvent(ChatThreadEvent.Entered())
             advanceUntilIdle()
-            assertEquals(1, f.scheduledKeys.size, "Reentry wakes retained work once")
+            assertTrue(f.scheduledKeys.isEmpty(), "Route reentry cannot restart blocked delivery")
+            repeat(3) {
+                val opened = f.timelineOpens
+                f.updates.value =
+                    AppResult.Failed(
+                        Failure(
+                            FailureKind.Unavailable,
+                            "Timeline closed",
+                            code = "client.collaboration_timeline_closed",
+                        )
+                    )
+                runCurrent()
+                f.updates.value = AppResult.Success(emptyList())
+                advanceTimeBy(2_500)
+                runCurrent()
+                assertEquals(opened + 1, f.timelineOpens)
+                assertTrue(f.scheduledKeys.isEmpty(), "Automatic reconnect cannot retry delivery")
+                assertEquals(listOf(original), f.records.value)
+            }
         }
     }
 

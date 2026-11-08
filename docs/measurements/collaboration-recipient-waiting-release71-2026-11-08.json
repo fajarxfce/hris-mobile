@@ -1,0 +1,66 @@
+{
+  "accepted": false,
+  "versionCode": 71,
+  "source": "ff495af3",
+  "sourceGateAccepted": true,
+  "at": "2026-11-08T14:53:29.449175+00:00",
+  "artifact": {
+    "candidateOnly": true,
+    "diagnosticMarkersAbsent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-08-build71/hris-mobile-dev-release-1.0.0-71-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 71,
+    "versionName": "1.0.0",
+    "bytes": 123399479,
+    "sha256": "f094cfb36a4795ccc1aece85f0e8c07637b14f3dd68c39ae1257c1969ddc018c",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+  },
+  "nativeFailure": {
+    "accepted": false,
+    "at": "2026-11-08T14:42:51.157598+00:00",
+    "reason": "Settled transport requests continued, and the actual quiet screenshot contains a local data failure/retry action. Native state-only probe was insufficient.",
+    "lateTransportRequests": 6,
+    "unchangedOriginalAndOfflineStateObserved": true,
+    "phoneInstalled": false,
+    "screenshotsActuallyReviewed": 7,
+    "required": "Trace caller/wake and local storage failure. Preserve both71 originals; never replay or resend them. Automatic activation branch stays doc-only."
+  },
+  "unreadyObservation": {
+    "durationSeconds": 249.182,
+    "quietSeconds": 180,
+    "transportResponses": 8,
+    "recipientReadyFalseResponses": 8,
+    "lateTransportRequests": 6,
+    "encryptedSendRequests": 0,
+    "responses403": 0,
+    "rawContentRetainedInPublicEvidence": false
+  },
+  "readyOriginal": {
+    "acknowledged": true,
+    "oneOriginal": true,
+    "retainedOfflineHistoryAndDraft": true,
+    "coarseSentSeconds": 5.0
+  },
+  "originalsRetained": [
+    "Tes71 waiting 143424",
+    "Tes71 unready 143749"
+  ],
+  "draftNeverSent": "Draft66 092041",
+  "phone": "Still70;71 must not be installed",
+  "next": "Trace repeated scheduling and the local IllegalStateException, then prove the same retained unready original under a corrected candidate. No replay/new synthetic send required."
+}

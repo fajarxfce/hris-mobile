@@ -1,0 +1,66 @@
+{
+  "acceptedRelease": false,
+  "versionCode": 71,
+  "apkSha256": "f094cfb36a4795ccc1aece85f0e8c07637b14f3dd68c39ae1257c1969ddc018c",
+  "sourceCommit": "ff495af3",
+  "instrumentedObservation": {
+    "durationMillis": 45193.651,
+    "bufferOverflow": false,
+    "traceSha256": "070e174d26914f373f5efa61edc8b6c41a295699b6b8284795b16aa07eb0c4c5",
+    "events": [
+      {
+        "ms": 11048.9,
+        "method": "dev.fajar.starter.collaboration.domain.usecases.MaintainCollaborationRuntimeOwnership.expired"
+      },
+      {
+        "ms": 11049.8,
+        "method": "dev.fajar.starter.collaboration.data.repositories.SdkRuntimeRegistry.update"
+      },
+      {
+        "ms": 11049.9,
+        "method": "dev.fajar.starter.collaboration.data.repositories.SdkRuntimeRegistry.retireIfIdle"
+      },
+      {
+        "ms": 11049.9,
+        "method": "dev.fajar.starter.collaboration.data.repositories.SdkRuntimeRegistry.retire"
+      },
+      {
+        "ms": 11053.7,
+        "method": "dev.fajar.starter.app.bootstrap.AppViewModel.onWorkspaceRefreshRequested"
+      },
+      {
+        "ms": 11054.0,
+        "method": "dev.fajar.starter.workspace.domain.usecases.RefreshWorkspace.refresh"
+      }
+    ],
+    "limitation": "Only recorded source call symbols; optimized or suspended callers were not all recorded. This does not measure normal performance or prove the full rescheduling call stack."
+  },
+  "diagnosis": {
+    "observed": "Live admission expiry retires the SDK runtime while the parent remains current; workspace refresh starts in the same observed interval. Repeated idle delivery conflicts and WorkManager retry/failure were separately observed.",
+    "sourceConfirmedWakePaths": [
+      "ApplicationCollaborationLifetime scheduled delivery after each admitted publication, including same-owner ordinary revalidation.",
+      "ChatThreadViewModel scheduled pending delivery after each timeline acquisition, including passive reconnect."
+    ],
+    "proposedBoundary": "The application owns durable-work recovery. Passive route reconnection and ordinary same-owner admission renewal cannot restart blocked delivery; explicit actions, owner replacement and recovery from actual denial remain wake sources."
+  },
+  "retainedOriginalObservation": {
+    "additionalSendGestures": 0,
+    "offlineOriginalPreserved": true,
+    "storageErrorReproducedIn120Seconds": false,
+    "storageErrorRootResolved": false,
+    "privateCrashStoreParsedJsonFiles": 11,
+    "matchingStorageStackFound": false
+  },
+  "device": {
+    "phoneUntouched": true,
+    "phoneVersionCode": 70,
+    "emulatorStopped": true,
+    "emulatorJobReaped": true,
+    "loopbackAliasClosed": true,
+    "unrootConfirmationFailed": true,
+    "nextBootRequiresShellUidCheck": true
+  },
+  "implementationAccepted": false,
+  "automaticActivationImplemented": false,
+  "readinessEventWakeImplemented": false
+}

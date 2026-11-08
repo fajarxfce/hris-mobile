@@ -14,13 +14,225 @@ import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.test.*
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.microseconds
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TestTimeSource
+import kotlin.time.TimeSource
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
 
 class CollaborationRuntimeOwnershipTest {
+    @Test
+    fun aDelayedTimerCannotRetainPastMaintenanceOrTheNativeParentDeadline() = runTest {
+        repeat(2) { scenario ->
+            val monotonic = TestTimeSource()
+            val f = OwnershipFixture(testScheduler, monotonic)
+            val start = f.now()
+            val policy = checkNotNull(f.selected.policy)
+            if (scenario == 1)
+                f.session.value =
+                    AppResult.Success(
+                        f.initial.copy(
+                            binding =
+                                f.initial.binding.copy(
+                                    expiresAtEpochMillis = (start + 3.seconds).toEpochMilliseconds()
+                                )
+                        )
+                    )
+            f.workspace.value =
+                AppResult.Success(
+                    f.selected.copy(
+                        admission = f.selected.admission.copy(expiresAt = start + 2.seconds),
+                        policy =
+                            policy.copy(
+                                policy =
+                                    policy.policy.copy(
+                                        validUntil = start + 1.seconds,
+                                        maintenance =
+                                            CompanyMaintenance(
+                                                start + 3.seconds + 500.microseconds,
+                                                start + 1.hours,
+                                            ),
+                                    )
+                            ),
+                    )
+                )
+            val task = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+            try {
+                runCurrent()
+                assertEquals(f.owner, f.retentions.last().foreground)
+                val before = f.retentions.size
+                // The dispatcher resumes the one-second timer after five real monotonic seconds.
+                monotonic += 5.seconds
+                advanceTimeBy(1_000)
+                runCurrent()
+                val resumed = f.retentions.drop(before)
+                assertTrue(resumed.isNotEmpty())
+                assertTrue(resumed.all { it.foreground == null && it.retainedForeground == null })
+                if (scenario == 1) assertTrue(resumed.all { it.parent == null })
+            } finally {
+                task.cancelAndJoin()
+            }
+        }
+    }
+
+    @Test
+    fun expiredAdmissionRetainsAnExistingOwnerButNotItsGrantAcrossRenewals() = runTest {
+        val f = OwnershipFixture(testScheduler)
+        val policy = checkNotNull(f.selected.policy)
+        fun freshWorkspace() =
+            f.selected.copy(
+                admission =
+                    f.selected.admission.copy(checkedAt = f.now(), expiresAt = f.now() + 1.seconds),
+                policy =
+                    policy.copy(
+                        requestedAt = f.now(),
+                        policy =
+                            policy.policy.copy(
+                                serverTime = f.now(),
+                                validUntil = f.now() + 1.seconds,
+                            ),
+                    ),
+            )
+        f.workspace.value = AppResult.Success(freshWorkspace())
+        val task = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+        try {
+            repeat(3) {
+                runCurrent()
+                assertEquals(AppResult.Success(f.owner), f.observed.last())
+                assertEquals(f.owner, f.retentions.last().foreground)
+                assertNull(f.retentions.last().retainedForeground)
+                advanceTimeBy(1_000)
+                runCurrent()
+                assertIs<AppResult.Failed>(f.observed.last())
+                assertNull(f.retentions.last().foreground)
+                assertEquals(f.owner, f.retentions.last().retainedForeground)
+                f.session.value =
+                    AppResult.Success(
+                        f.initial.copy(tokens = f.initial.tokens.copy(accessToken = "rotated-$it"))
+                    )
+                runCurrent()
+                assertIs<AppResult.Failed>(f.observed.last())
+                assertEquals(f.owner, f.retentions.last().retainedForeground)
+                f.workspace.value = AppResult.Success(freshWorkspace())
+            }
+        } finally {
+            task.cancelAndJoin()
+        }
+        assertNull(f.retentions.last().retainedForeground)
+    }
+
+    @Test
+    fun maintenanceAfterFreshnessExpiryStillClosesRetentionWithoutAnyRepositoryEmission() =
+        runTest {
+            val f = OwnershipFixture(testScheduler)
+            val start = f.now()
+            val policy = checkNotNull(f.selected.policy)
+            f.workspace.value =
+                AppResult.Success(
+                    f.selected.copy(
+                        policy =
+                            policy.copy(
+                                policy =
+                                    policy.policy.copy(
+                                        validUntil = start + 1.seconds,
+                                        maintenance =
+                                            CompanyMaintenance(
+                                                start + 3.seconds + 500.microseconds,
+                                                start + 1.hours,
+                                            ),
+                                    )
+                            )
+                    )
+                )
+            val task = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+            try {
+                runCurrent()
+                advanceTimeBy(1_000)
+                runCurrent()
+                assertEquals(f.owner, f.retentions.last().retainedForeground)
+                assertNull(f.retentions.last().foreground)
+                f.clockOffset = -1.hours.inWholeMilliseconds
+                advanceTimeBy(1_999)
+                runCurrent()
+                assertEquals(f.owner, f.retentions.last().retainedForeground)
+                advanceTimeBy(1)
+                runCurrent()
+                assertNull(f.retentions.last().retainedForeground)
+                assertNull(f.retentions.last().foreground)
+                assertEquals(f.parent, f.retentions.last().parent)
+                f.session.value =
+                    AppResult.Success(
+                        f.initial.copy(tokens = f.initial.tokens.copy(accessToken = "rotated"))
+                    )
+                runCurrent()
+                assertNull(f.retentions.last().retainedForeground)
+            } finally {
+                task.cancelAndJoin()
+            }
+        }
+
+    @Test
+    fun staleWorkspaceCannotRetainAClientAgainstKnownRestrictions() = runTest {
+        repeat(4) { scenario ->
+            val f = OwnershipFixture(testScheduler)
+            val policy = checkNotNull(f.selected.policy)
+            val stale = f.selected.copy(admission = f.selected.admission.copy(expiresAt = f.now()))
+            f.workspace.value =
+                AppResult.Success(
+                    when (scenario) {
+                        0 -> stale.copy(permissions = stale.permissions - "collaboration.chat")
+                        1 ->
+                            stale.copy(
+                                policy =
+                                    policy.copy(
+                                        policy = policy.policy.copy(enabledModules = emptySet())
+                                    )
+                            )
+                        2 ->
+                            stale.copy(
+                                policy =
+                                    policy.copy(
+                                        policy =
+                                            policy.policy.copy(
+                                                minimumBuilds =
+                                                    policy.policy.minimumBuilds.copy(
+                                                        android = Long.MAX_VALUE
+                                                    )
+                                            )
+                                    )
+                            )
+                        else ->
+                            stale.copy(
+                                policy =
+                                    policy.copy(
+                                        policy =
+                                            policy.policy.copy(
+                                                maintenance =
+                                                    CompanyMaintenance(
+                                                        f.now() + 1.seconds,
+                                                        f.now() + 1.hours,
+                                                    ),
+                                                maintenanceActive = true,
+                                            )
+                                    )
+                            )
+                    }
+                )
+            val task = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+            try {
+                runCurrent()
+                assertIs<AppResult.Failed>(f.observed.last())
+                assertNull(f.retentions.last().foreground)
+                assertNull(f.retentions.last().retainedForeground)
+            } finally {
+                task.cancelAndJoin()
+            }
+        }
+    }
+
     @Test
     fun expiredWorkspaceKeepsLocalRowsOnColdEntryAndSameFamilyTokenRotation() = runTest {
         for (coldEntry in listOf(false, true)) {
@@ -738,7 +950,10 @@ class CollaborationRuntimeOwnershipTest {
     }
 }
 
-private class OwnershipFixture(private val scheduler: TestCoroutineScheduler) {
+private class OwnershipFixture(
+    private val scheduler: TestCoroutineScheduler,
+    private val monotonic: TimeSource = scheduler.timeSource,
+) {
     val setup = CollaborationCommandFixture()
     val initial =
         setup.access.initial.copy(
@@ -954,6 +1169,6 @@ private class OwnershipFixture(private val scheduler: TestCoroutineScheduler) {
             setup.server,
             setup.build,
             clock,
-            scheduler.timeSource,
+            monotonic,
         )
 }

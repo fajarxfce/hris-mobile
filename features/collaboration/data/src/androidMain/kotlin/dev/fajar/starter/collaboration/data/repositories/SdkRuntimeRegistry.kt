@@ -159,6 +159,9 @@ internal class SdkRuntimeRegistry<T : Any>(
         synchronized(monitor) {
             val foreground = next.foreground
             require(foreground == null || next.parent?.owner(foreground.companyId) == foreground)
+            val retained = next.retainedForeground
+            require(retained == null || next.parent?.owner(retained.companyId) == retained)
+            require(foreground == null || retained == null || foreground == retained)
             retention = next
             handovers.values.forEach { gate ->
                 val parent = gate.space?.owner?.parent ?: gate.existingStoreParent
@@ -171,7 +174,11 @@ internal class SdkRuntimeRegistry<T : Any>(
                     if (next.parent != space.owner.parent) retire(entry)
                 } else if (!retainsParent(entry.owner)) retire(entry)
                 else {
-                    if (next.foreground != entry.owner) entry.foreground = false
+                    if (
+                        next.foreground != entry.owner &&
+                            !(retained == entry.owner && entry.resource?.let(available) == true)
+                    )
+                        entry.foreground = false
                     retireIfIdle(entry)
                 }
             }

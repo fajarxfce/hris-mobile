@@ -1,5 +1,282 @@
 # Agent continuation — HRIS Mobile
 
+## Automatic activation implementation base — 8 November 2026, 16:48 UTC
+
+This side worktree now merges main ae15848e (accepted runtime source0f4f0039) without
+code conflicts. All4,498 application inputs match the accepted full gate exactly.
+The automatic-activation design from2a8d1abf remains in
+[collaboration-automatic-activation.md](collaboration-automatic-activation.md).
+No automatic activation code has been added yet. Keep setup retry/receipt/install
+orchestration in one domain workflow, preserve restore-only callers, and keep
+ViewModels limited to state/events. No use-case-to-use-case delegation.
+
+The primary worktree owns emulator92231 and native73 checks. Do not start any compiler
+in this side worktree while that emulator is running. No secondary emulator or
+phone UI work. Source gates here remain separate from application/native acceptance.
+
+## Build73 native observation — 8 November 2026, 16:46 UTC
+
+Runtime source 0f4f0039 pushed (74897 REAPED). Package1177 passed113.686s; artifact6664
+and SDK5941 verified. APK73 SHA beb8ede7a29aac15b4f7d811866512c4380c1f130d7395ace07bccfbd2ceee3c,
+123,399,479 bytes, same signer, nondebuggable ARM64, SDK5. No phone install/acceptance.
+Owned emulator92231 runs original Bima store, PID2073926/startTicks183253253,
+1,536MiB/2cores. No compiler. Version73 install76619 passed2.868s, same UID/first install.
+
+The earlier diagnostic20301 FAILED before any retained probe or send: Frida16.7.19
+could not attach (three TransportError attempts). Exact71 was temporarily installed,
+then exact72 restored, server stopped and shell UID2000 restored. Cleanup's first
+forward-removal assertion failed because adbd renewal had already removed the forward;
+subsequent explicit verification confirmed no remaining diagnostic forward/server.
+No stack was obtained; the old Storage cause remains unknown. No diagnostic tool is
+attached during73 native measurement. Do not repeat that attempt without addressing
+its actual attachment failure. Private artifacts: .work/storage-exception-2026-11-08.
+
+Ready probe48981 REAPED PASS: ONE NEW Tes73 waiting164145 is Sent; NEVER RESEND.
+Same UNSENT Draft66 092041 and previous72 original survive cold offline restart.
+Four actual PNGs viewed. Ready counter51407 REAPED180.293s: one encrypted200,
+8 transport200, zero403; tap-to-encrypted request2827ms/header176ms/coarseSent4.988s.
+This window includes controlled restarts/offline and is not a quiet-idle comparison.
+Source/latency/component/visual records are in .work/release-phone-2026-11-08-build73.
+The older waiting inbox row remains above newer ready-room activity: audit list
+ordering separately; no ordering correction is claimed by this runtime fix.
+
+Unready retained-only probe52584 and counter67735 are RUNNING; reap both, then give
+the exact root-owned counter JSON back to the workspace owner before reading it.
+First storage watcher87107 and second79438 are RUNNING. No Storage event yet; both
+capture root only on a new error. Reap watchers before stopping the emulator.
+Next run accept-unready-counts.py: zero settled transport AND zero settled default-key
+initializations are required. Review three unready images. Overall acceptance still
+requires a proven disposition for71 Storage; no storage-error-acceptance.json exists.
+Automatic activation/scoped readiness wake remains design-only, Firebase read access
+question pending, phone70 unchanged, other repos/live schema116.1 unchanged.
+
+## Runtime retention source accepted — 8 November 2026, 16:33 UTC
+
+Full gate 2292 REAPED PASS: 5,786 fresh tests in 777 suites, zero failures/errors/skips,
+934.056 seconds. Required root/check, Chrome, Android proof/release/lint (zero issues),
+shared web/iOS source and quality checks passed. All 4,498 app and 82 library inputs
+stable. [Source evidence](measurements/collaboration-runtime-retention-2026-11-08.json).
+The atomic five-Kotlin change is ready to commit/push, then remove build73 HOLD and
+package/verify. No compiler or emulator remains. Phone70 and original stopped Bima72
+are untouched. Native73 acceptance is still pending; known71 Storage root is unresolved.
+
+Read-only Crashlytics access question remains pending; do not duplicate it. A local
+fallback is prepared under .work/storage-exception-2026-11-08: pinned official Frida
+16.7.19 tools (preparation81247 REAPED), an observation-only Storage stack hook, and a
+bounded retained-only reproduction. No device instrumentation has run. After73 package
+verification, its owned emulator can first reproduce71 on the existing72 private store:
+reproduce.py validates equal signer/no data-layer changes between71/72, temporarily
+installs exact71, observes the SAME retained original with NO send gesture, and restores
+exact72 plus shell UID2000 in finally. The hook records only source frames, never exception
+messages, IDs, bodies or credentials. Reap and verify complete server/forward/root cleanup
+before normal73 installation/probes. If this diagnostic fails, inspect its recorded state;
+do not assume the old Storage cause or manufacture storage-error-acceptance.json.
+
+Preserve Tes72 waiting154845, both71 originals and exact UNSENT Draft66 092041.
+Automatic first-login activation and scoped readiness wake remain design-only on side
+branch2a8d1abf. Platform/live116.1, Starter and library/SDK5 unchanged. No full PRD claim.
+
+## Runtime full gate and Crashlytics lookup — 8 November 2026, 16:21 UTC
+
+Runtime retention focused16842 REAPED PASS85fresh/0failures/errors/skips595.030s.
+A subsequent timer audit added a real monotonic-resume check: a delayed wake cannot
+temporarily retain beyond later maintenance or parent expiry. Millisecond rounding
+keeps the original conservative boundary. Focused80769 REAPED PASS28fresh/0all107.983s.
+All4,498app/82library inputs stable in both gates. Sole compiler2292 now runs
+.work/runtime-retention-2026-11-08/check.py full-1. Five Kotlin files FROZEN/UNCOMMITTED;
+no emulator. Reap full before source acceptance, commit/push or any73 build.
+
+Release73 has21prepared/AST-checked scripts plus actual HOLD_FOR_SOURCE_ACCEPTANCE.txt.
+Packager pins final full gate and new ownership/registry suites. Existing72 image
+will upgrade in place; one NEW73 original plus SAME retained71 unready original.
+Unready native gate adds zero settled secret-storage-default-key requests to zero
+settled transport/encrypted-send/403. No73 APK/probe/install. Old Storage root gate
+is still present, unresolved; no acceptance was fabricated or requirement relaxed.
+
+Firebase Crashlytics v1alpha discovery supports filtered read-only event/stack queries.
+Scoped71 lookup returned403 SERVICE_DISABLED. An IAM test confirms the supplied
+service account lacks Crashlytics data.get and Service Usage get/enable. No cloud
+configuration or IAM change was made. One optional user question is PENDING to enable
+the API and grant Firebase Crashlytics Viewer to the existing Admin SDK service account;
+do not duplicate it. Private scripts/responses/venv are in
+/home/fajar/hris/.work/crashlytics-storage-2026-11-08. On answer, retry the bounded
+version71/time-filtered lookup preserving the first response; never print tokens/raw
+events or owner IDs. This may recover the lost14:38:29.438 storage exception stack.
+Phone70, original stopped Bima72 and all prior originals/UNSENT Draft66 are retained.
+
+## Runtime retention candidate under test — 8 November 2026, 16:05 UTC
+
+Docs074165f9 pushed59197 REAPED. Native72 wake observation accepted, overall release
+still unaccepted. Second storage watch90429 REAPED with no Storage event/root request.
+Owned emulator73180 and stop89062 REAPED, original Bima72/keys retained, shellUID2000
+verified before shutdown. Phone70 unchanged. Do not replay Tes72 waiting154845,
+either71 original, or exact UNSENT Draft66 092041.
+
+Five Kotlin files are UNCOMMITTED/FROZEN under sole compiler16842:
+.work/runtime-retention-2026-11-08/check.py focused-1, after successful formatting.
+Candidate adds retainedForeground distinct from fresh foreground admission. Registry
+may retain only an already published foreground client; it cannot open/promote late
+acquisitions. Selected local ownership/known restrictions guard retention. Freshness,
+later scheduled maintenance and native-parent expiry keep separate monotonic deadlines.
+Neither gateway authority nor message commands change. New tests cover renewal,
+unpublished/borrowed clients, denial, malformed owner, maintenance after expiry and
+clock rollback. [Candidate contract](collaboration-runtime-renewal.md).
+Reap and resolve focused failures before full required checks. No73 APK exists.
+Known71 Storage failure still lacks a proven cause; do not infer one from nonrecurrence.
+Automatic activation/scoped readiness wake remains required and doc-only.
+
+## Native72 delivery wake verified; remaining runtime churn — 8 November 2026, 15:58 UTC
+
+Source e82abe16 pushed10837 REAPED; package63207 REAPED PASS103.911s; artifact/native
+verification83417 REAPED. APK72 SHA591c1a2f136d34f14fdf17128766122fe4d20e3f5d0328ccb6a8ab019a7d5437.
+Original Bima emulator73180 is RUNNING(1536MiB/2cores), now72 after install80644;
+shellUID2000 verified. An earlier pre-boot install check failed before mutation.
+No compiler. Phone remains70, untouched. No overall72 release acceptance/install.
+
+Ready probe71048 REAPED PASS: ONE NEW Tes72 waiting154845 is Sent; NEVER RESEND.
+Draft66 092041 stays UNSENT. Ready counter18457 REAPED180.114s:one encrypted200,
+nine transport200,0x403; tap-to-request3205ms/header111ms/coarseSent4.953s, not a
+controlled comparison. Component correlation's old single-room assumption failed;
+the trace now contains both ready and retained blocked rooms. Raw observations persist.
+
+Retained-only unready probe3266 and counter83794 REAPED PASS:44 UI checks,180seconds
+quiet, zero settled transport after30seconds, zero encrypted submissions/403, four
+initial false-ready responses. Seven actual PNGs viewed; history button still visible
+in empty-remote waiting room. [Evidence and remaining scope](collaboration-delivery-wake-ownership.md).
+Settled idle still had13device-setup/12room/sixdefault-key requests: investigate native
+runtime retention vs live admission before claiming the overall request loop resolved.
+
+Storage-watch58236 REAPED without error. Second watch90429 RUNNING until about15:58:40;
+reap it before stopping emulator. Both scripts request diagnostic root ONLY on an actual
+new Storage event, preserving keys/data. Known71 IllegalStateException remains unresolved;
+no storage-error-acceptance.json exists. Nonrecurrence cannot satisfy that root gate.
+Passive process61457 REAPED: same PID/no fatal exception. All probes restored settings.
+Next: capture/resolve storage failure and admission-driven SDK churn, then automatic
+activation+scoped readiness wake (side2a8d1abf remains doc-only). Platform/live116.1,
+Starterada8254 and Library2b849217/SDK5 unchanged; no broader PRD completion.
+
+## Passive wake source accepted — 8 November 2026, 15:41 UTC
+
+Full53319 REAPED PASS5,778fresh/777suites,0failures/errors/skips947.390s. All4,498app/
+82library inputs unchanged. Root, Chrome6, Android proof/release/lint(0issues),
+web/iOS shared source and quality passed. Focused93645 passed76fresh/0all487.734s.
+[Exact source/evidence](collaboration-delivery-wake-ownership.md). Commit/push the
+atomic four-Kotlin change+tests+docs now, then package72. No compiler/emulator remains.
+
+72 has22prepared/AST-checked scripts plus HOLD. Build is pinned to acceptedfull-1,
+requires a clean pushed source; remove HOLD only after commit/push. Native acceptance
+uses one NEW ready72 original and the SAME retained unready71 original(no new gesture),
+180seconds quiet with zero settled transport/403/encrypted submissions, seven actual
+viewed images and original offline history/draft retention. Native acceptance has NOT
+run. The known71 Storage/IllegalStateException remains unresolved; a required separate
+storage-error-acceptance.json is currently absent, so installation cannot pass.
+watch-storage-error.py can capture a new Storage event and the sanitized Crashlytics
+store promptly; exact72/owned emulator only, no sends. It requests root only on error
+and records/restores adbd afterward. Do not infer an error's cause from timing alone.
+
+Phone stays70. Original Bima image71 is stopped;13933/82759 reaped, alias closed.
+Previous unroot confirmation failed: verify shellUID2000 on next boot or investigate.
+Keep Tes71 waiting143424(Sent), Tes71 unready143749(pending) and exact UNSENT
+Draft66 092041. Never replay any original. No phone UI driving or duplicate question.
+Automatic activation remains doc-only: side branch feat/chat-auto-activation-20261108
+now2a8d1abf,pushed98066 REAPED. It adds provider-before-confirmation race and collapsed
+recovery-backoff acceptance requirements. Platform/live116.1, Starter, library/SDK5
+unchanged. Full PRD and automatic activation/event wake are NOT complete.
+
+## Passive delivery wake gate — 8 November 2026, 15:25 UTC
+
+Focused93645 REAPED PASS76fresh/0failures/errors/skips487.734s:44thread,10lifetime,
+22delivery-worker cases; all4,498app/82library inputs stable; quality passed.
+Sole compiler53319 now runs .work/chat-delivery-wake-2026-11-08/check.py full-1.
+Four Kotlin source/test files are FROZEN/UNACCEPTED until this finishes. Do not edit
+inputs during it. Root/check, Chrome, Android proof/release/lint, web/iOS source and
+quality are in the gate. [Change responsibility](collaboration-delivery-wake-ownership.md).
+
+Root evidence docc204f914 pushed84822 REAPED. New72 has21prepared Python scripts,
+AST checked, no build/install/probe. HOLD remains. Build pins newfull-1 plus source
+commit/push. Ready probe permits one NEW72 original; unready probe has NO text-entry
+or send gesture and reuses Tes71 unready143749. It also checks for the Storage error
+throughout180seconds. Native acceptance keeps zero settled transport/403/encrypted
+unready sends, seven actual screenshot reviews, shellUID2000 verification and a
+separate REQUIRED storage-error-acceptance.json(rootResolved=true). No such evidence
+exists; do not relax the requirement or call the error solved by its non-recurrence.
+
+No owned emulator;13933 and stop82759 reaped. Unroot confirmation failed before stop;
+loopback alias is closed. Verify/restore shellUID on the next original Bima boot.
+Phone70 untouched, no new user question. Preserve both71 originals and exact UNSENT
+Draft66 092041; never replay. Platform/live116.1, Starter and inspector/SDK5 unchanged.
+Automatic first-login activation and readiness wake remain design-only/separate work.
+
+## Passive wake root identified; regression change in progress — 8 November 2026, 15:14 UTC
+
+Release71 stays REJECTED; phone stays70. [Closed diagnostic evidence](measurements/collaboration-delivery-wake-root-2026-11-08.json).
+A45.194s instrumented idle trace (no buffer overflow) records admission expiry,
+SdkRuntimeRegistry.update/retireIfIdle/retire at+11.050s and workspace refresh at
++11.054s. Source confirms two unwanted delivery wake paths: each renewed admitted
+publication and each timeline acquisition. Do not infer a complete async call stack
+or performance result from this trace. Preserve the separate live-admission gate.
+
+Uncommitted production/test changes are now in ApplicationCollaborationLifetime
+and ChatThreadViewModel: retain the scheduled owner across ordinary admission
+expiry, and remove pending-command wake from passive timeline acquisition. Add
+regressions for expiry/direct stale observation, route reconnect, explicit retry,
+actual denial/selection recovery and failed scheduling. These changes are UNACCEPTED.
+Formatter93072 REAPED failed before mutation (ambiguous task name). Sole job93645
+runs exact formatKotlin followed by frozen focused-1 under
+.work/chat-delivery-wake-2026-11-08. Reap, resolve failures, then run root/native acceptance
+on the SAME retained originals before any phone installation. Do not weaken71's
+failed observation or label its storage error resolved. No72 APK exists yet.
+
+Retained-only repro14416 REAPED:0new sends; same offline original survived; storage
+error did not recur in120s. Crashlytics11JSONfiles had no matching storage stack.
+Profile57420 and instrumented1271 REAPED. Instrumented stop writes asynchronously;
+initial local0-byte copy was recaptured after flush as6,455,581bytes. Raw private
+artifacts remain ignored. WorkManager metadata was queried read-only.
+
+Stop82759/emulator13933 REAPED. Unroot was requested but shellUID2000 confirmation
+failed; the subsequent owned stop succeeded. Loopback alias was explicitly closed.
+CHECK/RESTORE shellUID on next owned boot; do not claim root restoration succeeded.
+Original Bima image/keys and both71 originals remain intact. NEVER replay Tes71
+waiting143424, Tes71 unready143749, or UNSENT Draft66 092041. No compiler/emulator
+parallelism, no subagents/goals, no phone UI driving. Automatic activation/event
+wake remains a separate required feature (side branch design-only bb7a8d6f).
+
+## Release71 rejected by actual idle test — 8 November 2026, 14:53 UTC
+
+DO NOT INSTALL71. Sourceff495af3 passed5,775 tests and pushed61360 REAPED; package
+21205/verify18326/SDK2257 all REAPED. Native ready probe5312 passed one new original,
+offline history/draft and four actual screenshots, but UNREADY acceptance FAILED.
+[Failure evidence](measurements/collaboration-recipient-waiting-release71-2026-11-08.json).
+
+Counter43450 REAPED249.182s:8transport200 withrecipientReady=false,0encrypted sends,
+0×403; SIXtransport requests occurred after30s settling within180s idle observation.
+Unready35148 state-only assertions passed, but actualquiet PNG shows a Storage failure
+and Retry. Seven PNGs actually inspected. Do not relabel this as a passed release or
+loosen the acceptance criterion. No unready-counts/release-acceptance success exists.
+
+Preserve both original71 messages: Tes71 waiting143424 (Sent) and Tes71 unready143749
+(waiting to Administrator). NEVER replay/send either again. Exact Draft66 092041
+remains UNSENT. Original Bima image/keys intact. Emulator13933 is still running71;
+no compiler; phone remains70. All counter/probe/passive56879 jobs reaped.
+
+Private log in .work/release-phone-2026-11-08-build71/unready-log.private.txt:
+repeated StageMessage/ProcessRooms Conflict,14WorkScheduling events,one Storage
+IllegalStateException at14:38:29 just after connectivity restoration. Generic worker
+and Android WorkManager both block without retry; identify who requests a new run.
+Current hypotheses are not fixes. Do not blanket suppress legitimate future wakeups.
+
+For read-only sanitized Crashlytics inspection, owned emulator adbd was restarted
+as root. Root job14010 and wait74784 failed/reaped because original serial stayed
+offline; connecting127.0.0.1:5563 restored emulator-5562 (same PID/image). Phone was
+untouched. Private144,896-byte Crashlytics tar has no matching retained error yet;
+inspect/recapture if reproduced before another app restart. Root/loopback alias must
+be restored/closed before ending this emulator session. No keys/data were reset.
+
+Automatic activation remains separate, NOT implemented. Sideworktree is now branch
+feat/chat-auto-activation-20261108 atbb7a8d6f (design-only, pushed35124 REAPED), based
+onff495af3. Finish this discovered root failure first. Platform1aea3228/live116.1,
+Starterada8254 and Library2b849217/SDK5 unchanged. No goal/subagent. Broader PRD continues.
+
 ## Recipient waiting source accepted — 8 November 2026, 14:28 UTC
 
 Full55172 REAPED PASS:5,775fresh/777suites, zero failures/errors/skips,1,013.143s.

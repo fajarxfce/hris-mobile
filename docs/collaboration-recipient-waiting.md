@@ -1,5 +1,10 @@
 # Retained recipient waiting explanation
 
+**Native release71 failed acceptance:** repeated transport reads remain during idle,
+and an actual screenshot exposes a local storage error after offline recovery.
+The source gate passed; the build is not approved for installation.
+[Measured failure and retained originals](measurements/collaboration-recipient-waiting-release71-2026-11-08.json).
+
 The primary Mobile source is accepted after e8f94854/release70. Full55172 was
 reaped successfully: 5,775 fresh cases across 777 suites, zero failures/errors/skips,
 1,013.143 seconds. All4,498 application and82 library inputs remained unchanged.
