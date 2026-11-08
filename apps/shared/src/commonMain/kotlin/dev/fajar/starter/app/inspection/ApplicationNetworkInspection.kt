@@ -2,7 +2,7 @@ package dev.fajar.starter.app.inspection
 
 import dev.fajar.inspector.NetworkInspection
 import dev.fajar.starter.common.result.AppResult
-import dev.fajar.starter.identity.domain.usecases.ObserveSessionIdentity
+import dev.fajar.starter.identity.domain.usecases.ObservePublishedSessionIdentity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.collect
 /** The application container owns diagnostics independently of screens and message delivery. */
 class ApplicationNetworkInspection(
     val inspection: NetworkInspection,
-    observeIdentity: ObserveSessionIdentity,
+    observeIdentity: ObservePublishedSessionIdentity,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : AutoCloseable {
     private val lifetime = SupervisorJob()

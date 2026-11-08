@@ -4,8 +4,8 @@ import dev.fajar.inspector.*
 import dev.fajar.starter.app.inspection.ApplicationNetworkInspection
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.identity.domain.entities.*
-import dev.fajar.starter.identity.domain.repositories.SessionRepository
-import dev.fajar.starter.identity.domain.usecases.ObserveSessionIdentity
+import dev.fajar.starter.identity.domain.repositories.SessionIdentityRepository
+import dev.fajar.starter.identity.domain.usecases.ObservePublishedSessionIdentity
 import kotlin.test.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -164,24 +164,21 @@ class ApplicationNetworkInspectionTest {
         dispatcher: CoroutineDispatcher,
     ): ApplicationNetworkInspection {
         val repository =
-            object : SessionRepository {
-                override val persistent = false
-
-                override fun observe() = source
-
-                override suspend fun current(): AppResult<Session?> = error("Observation only")
-
-                override suspend fun compareAndSet(
-                    expected: Session?,
-                    updated: Session?,
-                ): AppResult<Boolean> = error("Observation only")
-
-                override suspend fun clear(sessionId: String): AppResult<Boolean> =
-                    error("Observation only")
+            object : SessionIdentityRepository {
+                override fun observePublished() =
+                    source.map { result ->
+                        when (result) {
+                            is AppResult.Failed -> result
+                            is AppResult.Success ->
+                                AppResult.Success(
+                                    result.value?.let { SessionIdentity(it.id, it.user) }
+                                )
+                        }
+                    }
             }
         return ApplicationNetworkInspection(
             inspection,
-            ObserveSessionIdentity(repository),
+            ObservePublishedSessionIdentity(repository),
             dispatcher,
         )
     }

@@ -103,6 +103,10 @@ class IdentityModule {
     @Factory fun observeIdentity(sessions: SessionRepository) = ObserveSessionIdentity(sessions)
 
     @Factory
+    fun observePublishedIdentity(identities: SessionIdentityRepository) =
+        ObservePublishedSessionIdentity(identities)
+
+    @Factory
     fun restore(sessions: SessionRepository, server: IdentityServer) =
         RestoreSession(sessions, server)
 
