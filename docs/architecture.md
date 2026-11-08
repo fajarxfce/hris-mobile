@@ -1,5 +1,8 @@
 # Architecture
 
+[Recipient readiness controls](collaboration-readiness-controls.md) use encrypted
+revision receipts and an owned domain wake flow, independently of message delivery.
+
 [Direct chat transport](collaboration-direct-transport.md) uses one bounded metadata
 read per Stage/Deliver admission. Use cases retain current ownership/denial policy,
 the repository maps the response, and the datasource/API perform raw I/O.

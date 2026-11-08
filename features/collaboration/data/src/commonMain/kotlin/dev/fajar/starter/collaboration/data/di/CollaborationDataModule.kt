@@ -1026,6 +1026,16 @@ class CollaborationDataModule {
     ) = QueueCollaborationPushSignal(sessions, schedules, wakes, server, build, priorities)
 
     @Factory
+    fun queueReadinessSignal(
+        sessions: SessionRepository,
+        receipts: CollaborationReadinessReceiptRepository,
+        wakes: CollaborationRecoveryWakeRepository,
+        schedules: SyncScheduleRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = QueueCollaborationReadinessSignal(sessions, receipts, wakes, schedules, server, build)
+
+    @Factory
     fun readPushPriority(
         priorities: CollaborationPushPriorityRepository,
         sessions: SessionRepository,

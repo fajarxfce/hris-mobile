@@ -1,5 +1,45 @@
 # Agent continuation — HRIS Mobile
 
+## Durable V2 readiness receipt checked — 8 November 2026, 22:48 UTC
+
+Domain/storage/application integration passes82 desktop cases and20 actual Chrome
+cases, zero failures/errors/skips. All4505 recorded application inputs are identical
+between accepted stages;82 inspector inputs unchanged where used. Full root/Android
+and native listener integration remain. [Contract](collaboration-readiness-controls.md),
+[evidence](measurements/collaboration-readiness-receipt-2026-11-08.json).
+
+The receipt retains pending/requested commit revisions per exact account/native
+parent/company/device. Local pending precedes durable recovery wake; requested only
+advances after scheduling. Duplicate/reordered completed hints do not schedule,
+late completion preserves newer pending, and cancellation/failure retains originals.
+Real SQLite/IndexedDB tests cover concurrency, reopen, same-family renewal, missing
+keys, transplant rejection and exact Long.MAX_VALUE. The misplaced suspending policy
+helper is removed; four owning use cases keep their scheduling boundary.
+
+All sessions REAPED: formatter59692/99775 passed42.778/34.020s; storage94217 failed
+compilation because two removed-helper references remained (fixed); storage15997
+passed80 cases but failed app resolution because the harness omitted local inspector
+repositories. Corrected12597 passed99.082s/two binding cases and preserved all80
+report hashes. Browser83508 exit0 had ZERO concrete cases and was rejected; corrected
+8802 used trailing wildcard filters, passed36.046s/20 actual Chrome cases. No current
+compiler/emulator. No product behavior or native delivery acceptance claimed.
+
+Next attach the existing SDK5 custom-to-device listener before sync, fence/deactivate
+and cancel/close it with the exact client, and consume bounded signals through the
+application-owned Queue flow. Private reviewed drafts/design are under
+`.work/readiness-control-2026-11-08`; they are NOT production source yet. IMPORTANT:
+ActivateCollaborationDevice.ready already requests recovery; do not add another READY
+wake in application composition. Missed-hint/connectivity/interrupted activation
+still needs review. Preserve current timeout/cancellation behavior when wiring.
+
+Platforme558a686 is pushed and its V116.4/V2 source passes296 full cases. Live remains
+schema116.2/API1aea/worker52aaccaa, control flag false. BOTH API and worker need final
+packages: the old API sync projection does not pass the new control. Verify isolated
+old/new-image compatibility and native FCM-independent proof before rollout. No117–138
+migration. Phone70 unchanged/no new availability; no phone UI. Bima74 metadata remains
+unrecovered and untouched. Starter665b9cd accepted. Continue54PRD and push each commit.
+
+
 ## Readiness sender resumed once; Google push stalled — 8 November 2026, 21:28 UTC
 
 Native probe37009 FAILED its140-second deadline and is REAPED; do not relabel it

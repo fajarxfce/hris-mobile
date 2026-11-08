@@ -56,7 +56,15 @@ class QueueCollaborationPushSignal(
             currentCoroutineContext().ensureActive()
             val priorityGuard = sessions.guardPushParent(server, build, parent(session))
             if (priorityGuard is AppResult.Failed) return@withTimeoutOrNull priorityGuard
-            val scheduled = requestRecoveryExecution(schedules)
+            val scheduled =
+                withTimeoutOrNull(1_500) { schedules.request(CollaborationRecoveryWake.WORK_KEY) }
+                    ?: AppResult.Failed(
+                        Failure(
+                            FailureKind.Timeout,
+                            "Could not request chat recovery.",
+                            code = "client.collaboration_recovery_schedule_timeout",
+                        )
+                    )
             currentCoroutineContext().ensureActive()
             val after = sessions.current()
             currentCoroutineContext().ensureActive()

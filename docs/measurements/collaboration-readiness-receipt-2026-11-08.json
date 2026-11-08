@@ -1,0 +1,197 @@
+{
+  "recordedAt": "2026-11-08T22:49:10.424257+00:00",
+  "scope": "Pure V2 readiness policies, encrypted coalesced receipt and bounded wake orchestration. SDK listener/app collector not wired; no native or phone delivery acceptance.",
+  "sourceBase": "705387b02bc29460590d5d119632d2bb5a128435",
+  "sources": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "6ea8493dd59a739df9e1f3ff451ca452283e90b02851e1bdd93f79069e2605d5",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "2274e0cf5a5fc85ed2461fd2e19d8f24882e4eca2ac56995924d86fa293fcf2c",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/recovery/CollaborationReadinessReceiptCodec.kt": "1711d8e15ca0414b53528a2a56372f6fde485a0cfbaf3e2abddc77a1ddf9b639",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationReadinessReceiptRepository.kt": "3331057d3f97a59712e9d085738b4f8675f9080f34941f05409ab5977931ba1d",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationReadinessReceiptStorageContract.kt": "55b2626796e868a4807fb5bc7d890e7fddc2ca2e78c66a7518a47a3d767b05a0",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationReadinessReceiptStorageTest.kt": "f9cac7726475f1aab0ef13dff5d5d5176b93dc3e80bc151ccb22585c200e3cb5",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationReadinessReceiptStorageTest.kt": "6c2bfc1e9559331b98901b3a5e93e5816d32fdc7b97a759f70dd35309a7bbfcf",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationReadinessControl.kt": "c61267469002eb86193fd6cfdc696564291195f1365789dcfbb5f182873c7ab1",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationReadinessControlPolicy.kt": "e3686d7f6c3462fb50b3db21ea4e8ab1a9799040892ab18eb0623de3fbdccabe",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationReadinessReceiptRepository.kt": "2d4798c87e1797188b401e57de42244220903621141d2bc12eb0f811577681f5",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ActivateCollaborationDevice.kt": "eff06bc66fbb2d2d4d9eabeef7eb93f42aac9a0eb7c1e91e413bf935c4da5b1b",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationPushSignal.kt": "424e7e05a9a136bb7cf3a6311b5da83fa22edb52474f5c387efded3947349a80",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationReadinessSignal.kt": "6b4581a1a4ade3d54b3c82bd1fdf4322bffd5c906c663719182a8a7b56f2e3fa",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RequestCollaborationRecovery.kt": "44afe753d3f0fdf67905e9b5835a19c74ba48e57f46ef59302fcc1285a372e7e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ResumeCollaborationRecovery.kt": "d97d83961d76e746507357ced21b891f07a9578296f3f748ae2d1e1fed8c6624",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationReadinessControlPolicyTest.kt": "2f46ea14de2f59c915536329ad2a0ad57f519279b23eb946de8360959d035b72",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/QueueCollaborationReadinessSignalTest.kt": "809686f79cea4b96888807dc574ffccfe1dc6a945f461f5a06a71495ff7bfeac"
+  },
+  "removedSource": [
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationRecoveryWakePolicy.kt"
+  ],
+  "desktopDomainAndStorage": {
+    "startedAt": "2026-11-08T22:37:31.499000+00:00",
+    "elapsedSeconds": 251.59,
+    "exitCode": 1,
+    "sourceFiles": 4505,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 80,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationReadinessReceiptStorageTest.xml": {
+        "sha256": "52faae2cad63e227c3a4b29b62b1f93aba3cc80829a7fc89cdc29cb47eaa2107",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationPushPriorityStorageTest.xml": {
+        "sha256": "db6f1c9f293fc3f493de5224f0581795de69aab16f72b39f49a17324a028c6ff",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationReadinessControlPolicyTest.xml": {
+        "sha256": "eb48a7f2669fd2517def399270316d157b295aa2437244774cd63f72bb5bd330",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationRecoveryWakeTest.xml": {
+        "sha256": "e1c273b1bdc094a4fb969eb73dc64081b80dda8ed963742c4397194c31ac0135",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.QueueCollaborationPushSignalTest.xml": {
+        "sha256": "3150a159359a1edc2744945a63f27fa35228907f74a2e817607de6c1b173fa98",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.QueueCollaborationReadinessSignalTest.xml": {
+        "sha256": "7f380f4ebd28754868fb1feb2245aeafe2362c68671d20277304a73f56d939d1",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ActivateCollaborationDeviceTest.xml": {
+        "sha256": "e66e09a78632439eb6a1ce1167cfa74028b6c726da32c2338dad31981d263b81",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "applicationIntegration": {
+    "startedAt": "2026-11-08T22:42:14.369156+00:00",
+    "elapsedSeconds": 99.082,
+    "exitCode": 0,
+    "sourceFiles": 4505,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+        "sha256": "91dffd0b6c1744b019c1877f35a6abee86224659117ecef19827514553196724",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "actualBrowser": {
+    "startedAt": "2026-11-08T22:47:43.006638+00:00",
+    "elapsedSeconds": 36.046,
+    "exitCode": 0,
+    "sourceFiles": 4505,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowse-RPKH3ANIL1MM0.dev.fajar.starter.collaboration.data.BrowserCollaborationReadinessReceiptStorageTest.xml": {
+        "sha256": "0c3f40027842f14863c9252fe40c0f25f362f16f2abd006f4fca9a6363a40499",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.QueueCollaborationReadinessSignalTest.xml": {
+        "sha256": "75a01de9d083ff975af88807bc55d4c7a14f894651db17f2bc9baef73aad8d16",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationReadinessControlPolicyTest.xml": {
+        "sha256": "24b4cd1d2b97821654c94d2696a1cc891292d187b3f5ca4cca079476fe975513",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "acceptance": {
+    "desktopCases": 82,
+    "browserCases": 20,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "sourceManifestFiles": 4505,
+    "sourceManifestsIdentical": true,
+    "earlier80ReportHashesPreserved": true,
+    "inspectorInputs": 82,
+    "inspectorUnchanged": true,
+    "rootAndAndroidGatePending": true
+  },
+  "failedAttempts": [
+    {
+      "run": "storage-1",
+      "seconds": 78.82,
+      "reason": "Removing the suspending policy helper missed two caller references in activation/resume; compilation failed with no executed cases. All four owning use cases now contain their own scheduling boundary."
+    },
+    {
+      "run": "storage-2",
+      "seconds": 251.59,
+      "reason": "All80 domain/storage cases passed, but the copied gate omitted local inspector/SDK repository settings and app dependency resolution failed. Source remained unchanged. Corrected harness storage-3 verified all80 report hashes and passed the two application binding cases."
+    },
+    {
+      "run": "browser-1",
+      "seconds": 156.424,
+      "reason": "Class-only Wasm filters selected zero concrete cases, with one skipped HTML container per task. Exit0 was rejected; corrected trailing-wildcard filters executed20 concrete Chrome cases in browser-2."
+    }
+  ],
+  "invariants": [
+    "100 fully handled duplicate/reordered controls create one durable recovery request; higher commit revision subsumes lower hints.",
+    "Pending receipt is saved before recovery wake; requested revision advances after durable wake and successful scheduling.",
+    "Lost scheduling and cancellation preserve pending facts; late acknowledgement cannot erase a newer revision.",
+    "Native parent/account/company/device match trusted SDK source; replaced scope cannot schedule or acknowledge late work.",
+    "CAS attempts and scheduling duration are finite; no room/network/send operations in receipt consumer.",
+    "Actual SQLite and IndexedDB reopen preserve protected content key and exact revisions beyond2^53/through Long.MAX_VALUE.",
+    "Concurrent initial writes have one winner; ciphertext transplant, invalid/oversized records and replacement-account writes rejected.",
+    "Missing content key is never recreated over retained inactive-account facts."
+  ],
+  "remaining": [
+    "Attach SDK5 exact-client listener and finite app-owned collector",
+    "Full root/Android and lifecycle gates",
+    "Missed-hint/connectivity/interrupted activation",
+    "Package BOTH API sync projection and worker; isolated116.2->116.4 migration and old/new image compatibility",
+    "Actual FCM-independent original native resumption and authorized install when phone becomes available",
+    "All54 communications PRD groups; Bima74 metadata recovery unresolved"
+  ]
+}

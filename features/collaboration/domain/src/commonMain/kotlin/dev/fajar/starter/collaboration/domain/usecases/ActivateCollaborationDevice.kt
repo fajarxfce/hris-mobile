@@ -490,7 +490,16 @@ class ActivateCollaborationDevice(
         val ready =
             CollaborationActivationProgress(owner, device, CollaborationActivationStep.READY)
         progress(ready)
-        val scheduled = requestRecoveryExecution(schedules)
+        val scheduled =
+            withTimeoutOrNull(1_500) { schedules.request(CollaborationRecoveryWake.WORK_KEY) }
+                ?: AppResult.Failed(
+                    Failure(
+                        FailureKind.Timeout,
+                        "Could not request chat recovery.",
+                        code = "client.collaboration_recovery_schedule_timeout",
+                    )
+                )
+        currentCoroutineContext().ensureActive()
         val current = continuation(workspaceId, owner, scheduled)
         if (current is AppResult.Failed) return current
         // Local publication is complete. The retained wake survives an unavailable OS scheduler.

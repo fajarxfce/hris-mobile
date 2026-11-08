@@ -392,6 +392,11 @@ class CollaborationBindingsTest {
                     container.koin.get<CollaborationRecoveryWakeRepository>(),
                 )
                 assertNotNull(container.koin.get<RequestCollaborationRecovery>())
+                assertNotNull(container.koin.get<QueueCollaborationReadinessSignal>())
+                assertSame(
+                    container.koin.get<CollaborationReadinessReceiptRepository>(),
+                    container.koin.get<CollaborationReadinessReceiptRepository>(),
+                )
                 assertNotNull(container.koin.get<ResumeCollaborationRecovery>())
                 val readWake = container.koin.get<ReadCollaborationRecoveryWake>()
                 val completeWake = container.koin.get<CompleteCollaborationRecoveryWake>()

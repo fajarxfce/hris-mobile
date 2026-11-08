@@ -1,11 +1,12 @@
 package dev.fajar.starter.collaboration.domain.usecases
 
-import dev.fajar.starter.collaboration.domain.policies.requestRecoveryExecution
+import dev.fajar.starter.collaboration.domain.entities.CollaborationRecoveryWake
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRecoveryWakeRepository
-import dev.fajar.starter.common.result.AppResult
+import dev.fajar.starter.common.result.*
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.withTimeoutOrNull
 
 /** Persists a hint before enqueue. Success requests execution; it does not grant message access. */
 class RequestCollaborationRecovery(
@@ -17,6 +18,16 @@ class RequestCollaborationRecovery(
         val retained = wakes.request()
         currentCoroutineContext().ensureActive()
         if (retained is AppResult.Failed) return retained
-        return requestRecoveryExecution(schedules)
+        val scheduled =
+            withTimeoutOrNull(1_500) { schedules.request(CollaborationRecoveryWake.WORK_KEY) }
+        currentCoroutineContext().ensureActive()
+        return scheduled
+            ?: AppResult.Failed(
+                Failure(
+                    FailureKind.Timeout,
+                    "Could not request chat recovery.",
+                    code = "client.collaboration_recovery_schedule_timeout",
+                )
+            )
     }
 }
