@@ -1,0 +1,118 @@
+{
+  "accepted": false,
+  "sourceBase": "4a21abb2",
+  "purpose": "Avoid native timeline construction for queue inventory/settlement; retain async FFI initialization and paused exclusive writer.",
+  "attempts": {
+    "focused-1": {
+      "session": 59593,
+      "reaped": true,
+      "result": {
+        "startedAt": "2026-11-08T12:38:06.589610+00:00",
+        "elapsedSeconds": 134.888,
+        "exitCode": 0,
+        "sourceFiles": 4488,
+        "librarySourcesUnchanged": true,
+        "sourcesUnchanged": true,
+        "freshCounts": {
+          "tests": 92,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "reports": {
+          "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkChildResourcesTest.xml": {
+            "sha256": "c417928cdb714c222284e88b2de011150d27b1c6714e9c21ced90baefd890668",
+            "tests": 9,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkQueueOperationsTest.xml": {
+            "sha256": "40869bd58ab1ce42852ea6837183ab784dfc2b431e340bf2020721c6fc75103e",
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationEditQueueSourceTest.xml": {
+            "sha256": "81f66c0165876a8bbe34bf7d2d128cbfcb928579b1fc413b6240e41a344733cb",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationOriginalQueueTest.xml": {
+            "sha256": "5815de17bc718efc7023179e5e7c45d05c4ee1ff6bb1251a60a5adc6efeb848c",
+            "tests": 11,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationQueueAcquisitionTest.xml": {
+            "sha256": "e98e2b00a94682c35ad58ec66cd55caa2bc317cbd59633e83497d36e29315eed",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationQueueDeliveryTest.xml": {
+            "sha256": "eba6a864b0891498b6c4616d5d7d967ac17534152e1748f86cb515d570f69626",
+            "tests": 12,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationQueueRetryTest.xml": {
+            "sha256": "288ab00571db3402e55d3fca33cd14ab0e3ec7961b322e8d07ee9f63318bec8a",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationQueueSourceTest.xml": {
+            "sha256": "79e06d5af8ad972ce8d7d8ead16040f986534f4ee060c4608b2802d0d3be6ae5",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidSpaceOriginalQueueLeaseTest.xml": {
+            "sha256": "fc41f1d39cd80f9edf3677808121fb2773d90058e7237757d9da4bff07bec238",
+            "tests": 10,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationDeliveryDiagnosticsTest.xml": {
+            "sha256": "5a4049171a34e9aaa6b06c03770d77f3cb7617371997e0e0b7a463bdaad48b20",
+            "tests": 8,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SettleCollaborationCompletedQueueTest.xml": {
+            "sha256": "e9044dee7e9cdb0c753679547dfa6fdf8a9982131a5ff09ac680087bf72ada2f",
+            "tests": 15,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        }
+      },
+      "resultSha256": "564f0ef340883cdccb17774ff0eca0dee5f94fe6ac907f8b3a153e2a1d3b4a53"
+    }
+  },
+  "pending": {
+    "fullGate": "full-1",
+    "fullGateSession": 81263,
+    "release": 70,
+    "apkBuilt": false,
+    "runtimeAccepted": false,
+    "installed": false
+  },
+  "limits": [
+    "No native SDK bytes, business admission, original transaction or retry classification changes.",
+    "Physical-device performance improvement is not established by source tests.",
+    "Source is Android-specific; no HRIS or Matrix code belongs in Starter."
+  ]
+}
