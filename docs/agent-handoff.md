@@ -16,7 +16,7 @@ cause of the stuck socket is not established. Do not blame missing recipient key
 for the later delay, use continuous transport retries, or turn every silent hint HIGH.
 
 The timed gate ended before late delivery. Its counter saw zero403 and no transport/
-default-key requests after peer start until20:33. The settled waiting window had one
+default-key requests after peer start until21:20:33. The settled waiting window had one
 additional transport read returningfalse, not zero; startup/push-registration beforehand
 had16 optional default-key404s and23 setup reads. Trace those separately instead of
 claiming all startup traffic is fixed. New-room screenshots also still show Older messages.
@@ -40,8 +40,10 @@ independent of FCM's delivery timing, with authoritative post-commit reconciliat
 missed-hint/startup/connectivity recovery and finite coalesced work. Review existing
 Matrix SDK device-change stream versus a scoped HRIS control watch; do not let network
 inspector traffic drive policy. Generic RequestedSyncWorker now has actual late-FCM
-original-resumption evidence plus first76 cold activation, which may support a clearly
-scoped Starter gate reassessment; never forge the missing Bima76 proof. Continue54PRD.
+original-resumption evidence plus first76 cold activation. Its three exact generic
+files are now ported to Starter665b9cd after an explicit gate reassessment:120 fresh
+cases/39 suites, including desktop and Chrome runner cases. Bima76 and prompt FCM
+delivery remain failed/missing; see template-updates.md. Continue54PRD.
 
 
 ## Readiness peer source checked; controlled native proof active — 8 November 2026, 21:15 UTC

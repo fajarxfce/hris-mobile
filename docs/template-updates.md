@@ -1,5 +1,20 @@
 # Template updates
 
+## Requested foreground worker — port complete
+
+The three exact generic files from Mobile `60d1de23` are now in
+[Starter `665b9cd`](https://github.com/fajarxfce/compose-fluent-starter/commit/665b9cd).
+Its independent root, Android, production Web and actual browser checks passed
+120 fresh cases in 39 suites, including four runner cases on desktop and four in
+Chrome. Android lint has zero errors and 45 existing warnings. Apple source checks
+ran; no new native Apple execution is claimed.
+
+The acceptance scope uses the original first-account 75→76 cold restore and the
+same original message resuming after actual FCM receipt. The failed 140-second
+delivery deadline and unresolved Bima metadata recovery remain explicit; neither
+is relabelled as passed. The generic runner does not own FCM delivery or HRIS
+admission. [Starter evidence](https://github.com/fajarxfce/compose-fluent-starter/blob/665b9cd/docs/measurements/requested-worker-port-2026-11-08.json).
+
 ## Explicit Android notification retirement — port complete
 
 Mobile11e2b36b's exact generic Android display source is copied to Starterb11437a.
