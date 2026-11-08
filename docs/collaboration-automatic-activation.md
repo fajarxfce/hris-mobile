@@ -154,15 +154,15 @@ assertion type-inference error; the next found only its formatting. Both are cor
 Full repository checks and native acceptance of activation remain pending. The separate
 private-account guard already passed its5,793-test full gate on the primary branch.
 
-Prompt recovery execution remains unfinished. AndroidWorkScheduler already emits its
-host callback after feature intent persistence and before the potentially slow OS
-queue inspection. WorkManager may already be waiting in backoff. Add a request-driven
-foreground runner for recovery, using the existing conflated lane; it should execute
-explicit requests, with durable retries owned by WorkManager. Do not add recovery to
-the delivery runner's one-second retry policy or introduce another periodic transport
-loop. This runner is reusable infrastructure and must be proven in mobile before porting
-to Starter. Test retained requests while stopped, requests during execution, lane isolation,
-retry/blocked outcomes without implicit timers, cancellation and actual portable targets.
+Prompt recovery execution now has a focused-tested candidate. AndroidWorkScheduler emits
+its host callback after feature intent persistence and before the potentially slow OS
+queue inspection. The [request-driven foreground runner](collaboration-requested-recovery.md)
+uses the existing conflated lane while WorkManager owns durable retries. Recovery does
+not inherit the delivery runner's one-second retry policy or another periodic timer.
+The focused gate covers40 portable worker cases and34 application recovery cases,
+including retained requests, in-flight signals, lane isolation, cancellation, exact
+wake generations and simultaneous OS/foreground execution. Full and native acceptance
+are still pending before the reusable runner is ported to Starter.
 
 Completion of activation must then reach that lane. Test fresh key publication without
 opening chat, original sender resumption, foreground/background/process restart and

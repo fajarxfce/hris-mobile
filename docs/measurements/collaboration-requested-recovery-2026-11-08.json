@@ -1,0 +1,97 @@
+{
+  "acceptedFocusedScope": true,
+  "freshRecoveryTests": 34,
+  "unchangedPortableWorkerTests": 40,
+  "coveredTests": 74,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "sourceFiles": 4503,
+  "trackedAndOtherApplicationInputs": 4502,
+  "firebaseConfigSeparatelyHashed": true,
+  "inspectorSourceFiles": 82,
+  "firstAttempt": {
+    "startedAt": "2026-11-08T18:14:26.375378+00:00",
+    "elapsedSeconds": 591.156,
+    "exitCode": 1,
+    "freshCounts": {
+      "tests": 74,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true
+  },
+  "passingAttempt": {
+    "startedAt": "2026-11-08T18:25:33.396598+00:00",
+    "elapsedSeconds": 80.894,
+    "exitCode": 0,
+    "freshCounts": {
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true
+  },
+  "correction": "The integration test now verifies the failed old sweep and later wake separately; the old acknowledgment cannot consume the new generation. Production code was unchanged between focused attempts.",
+  "configuration": "Copied the existing ignored Firebase Android config from main before the passing gate; the manifest now hashes it.",
+  "portableReports": {
+    "core/worker/build/test-results/desktopTest/TEST-dev.fajar.starter.worker.ForegroundSyncWorkerTest.xml": {
+      "sha256": "f730633b23e1f0aeca1c23f0e25bf39bb2f2076861e3754065d66ff9c0a95b46",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/worker/build/test-results/desktopTest/TEST-dev.fajar.starter.worker.RequestedSyncWorkerTest.xml": {
+      "sha256": "a234be895349dc779402c3e6f747c187d2246ca2daf0b159ae025f4bedcb83d6",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/worker/build/test-results/desktopTest/TEST-dev.fajar.starter.worker.CollapsedWorkGateTest.xml": {
+      "sha256": "20e226374b35ab87f675876a65b1f6da8f837433b6f4fab5d3bc7b4d01ce9e63",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/worker/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.worker.ForegroundSyncWorkerTest.xml": {
+      "sha256": "8ca6751be8a4ca896cae9c08c331a40fb8ebee5892fe6aaae0fcab83760385ab",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/worker/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.worker.RequestedSyncWorkerTest.xml": {
+      "sha256": "e6590f7384071e3cac51fb0cbcbf5366c7dd97e517538e7e7e23cc5b8dcdb25e",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/worker/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.worker.CollapsedWorkGateTest.xml": {
+      "sha256": "3d501e8399e591c677eb1e139aa9a58861d9d9ad3370d82e9666f26816b4b757",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "recoveryReports": {
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationRecoveryWorkerTest.xml": {
+      "sha256": "299ba7bc0cdfd83f5f788c7b6a1f8761c73c5fc226bef7c62aee54152f94c3d6",
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "fullGateAccepted": false,
+  "nativeActivationAccepted": false,
+  "starterPortAccepted": false
+}

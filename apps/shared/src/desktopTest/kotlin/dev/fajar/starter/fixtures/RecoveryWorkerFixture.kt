@@ -90,6 +90,7 @@ internal class RecoveryWorkerFixture(val scheduler: TestCoroutineScheduler, coun
     var ackFailure: Failure? = null
     var pageFailure: Failure? = null
     var scheduleFailure: Failure? = null
+    var onSchedule: (String) -> Unit = {}
     var beforePage: suspend () -> Unit = {}
     var afterAck: suspend () -> Unit = {}
     var onCompany: suspend (CollaborationBackgroundAdmission) -> SyncResult = {
@@ -172,6 +173,7 @@ internal class RecoveryWorkerFixture(val scheduler: TestCoroutineScheduler, coun
         object : SyncScheduleRepository {
             override suspend fun request(key: String): AppResult<Unit> {
                 scheduled += key
+                onSchedule(key)
                 return scheduleFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(Unit)
             }
         }

@@ -17,11 +17,13 @@ import dev.fajar.starter.app.inspection.ApplicationNetworkInspection
 import dev.fajar.starter.app.navigation.AppLinkChannel
 import dev.fajar.starter.app.notifications.*
 import dev.fajar.starter.app.work.CollaborationDeliveryWorker
+import dev.fajar.starter.app.work.CollaborationRecoveryWorker
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationHttpObservation
 import dev.fajar.starter.collaboration.data.di.androidCollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.data.di.androidCollaborationSdkInventoryRepository
 import dev.fajar.starter.collaboration.data.di.androidCollaborationSdkPossessionRepository
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
+import dev.fajar.starter.collaboration.domain.entities.CollaborationRecoveryWake
 import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationText
 import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.config.AppPlatform
@@ -42,6 +44,7 @@ import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.worker.AndroidWorkScheduler
 import dev.fajar.starter.worker.ForegroundSyncWorker
 import dev.fajar.starter.worker.ForegroundWorkScheduler
+import dev.fajar.starter.worker.RequestedSyncWorker
 import dev.fajar.starter.worker.SyncWorkerFactory
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.Dispatchers
@@ -107,18 +110,16 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
                 .build()
 
     private val foregroundRequests =
-        ForegroundWorkScheduler(setOf(QueueCollaborationText.DELIVERY_KEY))
-    private var foregroundDelivery: Job? = null
+        ForegroundWorkScheduler(
+            setOf(QueueCollaborationText.DELIVERY_KEY, CollaborationRecoveryWake.WORK_KEY)
+        )
+    private var foregroundCollaboration: Job? = null
 
     private val scheduler by lazy {
         AndroidWorkScheduler(
             WorkManager.getInstance(this),
             collapsedKeys =
-                setOf(
-                    dev.fajar.starter.collaboration.domain.entities.CollaborationRecoveryWake
-                        .WORK_KEY,
-                    QueueCollaborationText.DELIVERY_KEY,
-                ),
+                setOf(CollaborationRecoveryWake.WORK_KEY, QueueCollaborationText.DELIVERY_KEY),
             onRequested = { foregroundRequests.notify(it) },
         )
     }
@@ -226,9 +227,14 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
         scheduler.installPeriodic(container.koin.getAll<SyncTask>().map { it.key }.toSet())
         container.koin.get<ApplicationCollaborationLifetime>().start()
         val lifecycle = ProcessLifecycleOwner.get().lifecycle
-        foregroundDelivery =
+        foregroundCollaboration =
             lifecycle.coroutineScope.launch(Dispatchers.Default) {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    RequestedSyncWorker(
+                            listOf(container.koin.get<CollaborationRecoveryWorker>()),
+                            foregroundRequests,
+                        )
+                        .start(this)
                     ForegroundSyncWorker(
                             listOf(container.koin.get<CollaborationDeliveryWorker>()),
                             foregroundRequests,
@@ -242,7 +248,7 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
     }
 
     override fun onTerminate() {
-        foregroundDelivery?.cancel()
+        foregroundCollaboration?.cancel()
         foregroundRequests.close()
         networkInspectionShortcut?.close()
         if (notificationRuntime.isInitialized()) notificationRuntime.value.close()

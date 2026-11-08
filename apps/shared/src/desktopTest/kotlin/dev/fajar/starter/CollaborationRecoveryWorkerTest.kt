@@ -4,15 +4,100 @@ package dev.fajar.starter
 
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationState
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.usecases.RequestCollaborationRecovery
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.fixtures.*
 import dev.fajar.starter.sync.domain.SyncResult
+import dev.fajar.starter.worker.ForegroundWorkScheduler
+import dev.fajar.starter.worker.RequestedSyncWorker
 import kotlin.test.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 
 class CollaborationRecoveryWorkerTest {
+    @Test
+    fun aPersistedRequestBypassesOldOsBackoffWithoutAddingAForegroundRetryLoop() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 1)
+        val requests = ForegroundWorkScheduler(setOf(CollaborationRecoveryWake.WORK_KEY))
+        f.onSchedule = { key ->
+            assertNotNull(f.wake, "Persist the feature intent before notifying either scheduler")
+            assertTrue(requests.notify(key))
+        }
+        val request = RequestCollaborationRecovery(f.wakes, f.schedules)
+        val pendingAfterAcknowledgment = mutableListOf<CollaborationRecoveryWake?>()
+        f.afterAck = { pendingAfterAcknowledgment += f.wake }
+        f.onCompany = { SyncResult.Retry(Failure(FailureKind.Network, "Unavailable")) }
+        val host = RequestedSyncWorker(listOf(f.worker()), requests).start(backgroundScope)
+        runCurrent()
+        assertTrue(f.attempted.isEmpty())
+        assertIs<AppResult.Success<Unit>>(request())
+        runCurrent()
+        assertEquals(listOf(recoveryId(1)), f.attempted)
+        val oldWake = assertNotNull(f.wake)
+        advanceTimeBy(60_000)
+        runCurrent()
+        assertEquals(1, f.attempted.size)
+        f.onCompany = { SyncResult.Complete }
+        assertIs<AppResult.Success<Unit>>(request())
+        val newWake = assertNotNull(f.wake)
+        assertNotEquals(oldWake, newWake)
+        runCurrent()
+        // The failed sweep retains its original generation. Completing it must not consume
+        // the new request; one explicit continuation covers that newer generation.
+        assertEquals(3, f.attempted.size)
+        assertEquals(listOf(newWake, null), pendingAfterAcknowledgment)
+        assertNull(f.wake)
+        assertEquals(1, f.acknowledgments)
+        advanceTimeBy(60_000)
+        runCurrent()
+        assertEquals(3, f.attempted.size)
+        host.cancelAndJoin()
+        requests.close()
+    }
+
+    @Test
+    fun aForegroundRequestWaitsForTheSameOsWorkerWithoutLosingItsNewWake() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 1)
+        val requests = ForegroundWorkScheduler(setOf(CollaborationRecoveryWake.WORK_KEY))
+        f.onSchedule = { assertTrue(requests.notify(it)) }
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        var active = 0
+        var maximum = 0
+        f.onCompany = {
+            active++
+            maximum = maxOf(maximum, active)
+            try {
+                if (f.attempted.size == 1) {
+                    entered.complete(Unit)
+                    release.await()
+                }
+                SyncResult.Complete
+            } finally {
+                active--
+            }
+        }
+        val worker = f.worker()
+        val os = async { worker() }
+        entered.await()
+        val original = assertNotNull(f.wake)
+        val host = RequestedSyncWorker(listOf(worker), requests).start(backgroundScope)
+        assertIs<AppResult.Success<Unit>>(RequestCollaborationRecovery(f.wakes, f.schedules)())
+        assertNotEquals(original, f.wake)
+        runCurrent()
+        assertEquals(1, f.attempted.size)
+        release.complete(Unit)
+        assertEquals(SyncResult.Complete, os.await())
+        runCurrent()
+        assertEquals(1, maximum)
+        assertEquals(2, f.attempted.size)
+        assertNull(f.wake)
+        assertEquals(1, f.acknowledgments)
+        host.cancelAndJoin()
+        requests.close()
+    }
+
     @Test
     fun inputAndOtherIndependentDeadlinesStillLeaveTheCompanyTurnAvailable() = runTest {
         val f = RecoveryWorkerFixture(testScheduler, 1)

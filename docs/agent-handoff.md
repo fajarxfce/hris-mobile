@@ -1,5 +1,47 @@
 # Agent continuation — HRIS Mobile
 
+## Requested foreground recovery focused gate passed — 8 November 2026, 18:29 UTC
+
+New core RequestedSyncWorker executes explicit conflated signals only; no startup scan,
+periodic timer or result-driven retry. Android STARTED composition runs recovery in this
+lane and leaves delivery's runner separate. Both share the actual recovery processor.
+Six application/core files plus docs are ready for this checkpoint commit.
+
+Formatter4109 REAPED PASS30.285s; recovery-1/session5338 REAPED FAIL591.156s with74
+fresh tests/one assertion failure. The test incorrectly expected a new wake to replace
+an old failed sweep. After verifying the durable policy, it now proves both generations,
+old-ACK rejection and no later timer work. Formatter34625 REAPED PASS32.492s; recovery-2/
+64919 REAPED PASS80.894s:34 fresh application tests plus40 unchanged passing JVM/Chrome
+worker cases, zero failures/errors/skips. Android/iOS worker compilation and quality
+passed. [Evidence](measurements/collaboration-requested-recovery-2026-11-08.json).
+
+The ignored Firebase Android config was missing in this side worktree; copied the exact
+main config before recovery-2. The source manifest now hashes that config too:4,503 inputs
+(4,502 application +1 local config),82 unchanged inspector inputs. Do not omit the config
+when building75. Full gate24514 is RUNNING at .work/device-activation-2026-11-08/full-1;
+freeze source/library and do not run any other compiler/emulator until it is reaped.
+
+Held75 packaging and retained-only scripts exist at .work/release-phone-2026-11-08-build75.
+No APK75 exists. Keep HOLD_FOR_SOURCE_ACCEPTANCE.txt until full validation, commit/push
+and source manifest checks pass. Main native74 passed; its6bb1e9c5 docs still need merging
+here. Main74 progress gate passed but phone preflight99010 REAPED timeout; phone remains70.
+No emulator is running. Main .work/automatic-activation-native-2026-11-08/provision.py
+prepares one fresh fictional chat-only account for native first-login proof. Initial
+password preparation failed because the reused utility expected four inputs; its own
+one-input utility corrected this without DB/Firebase changes. Prepare and apply10516
+REAPED PASS: one new fictional chat-only membership and audited Firebase identity link,
+zero initial devices/key publications, no employee profile, message, mail or existing
+account/key change. Operator session closed. Never repeat provision.py or print its
+private plan; next use the fresh owned emulator for ordinary first login.
+
+Next: complete full gate, retained-store75 native proof, isolated first-device activation
+before opening a room, generic Starter port, post-commit server wake and interrupted-setup/
+missed-hint recovery. Platform361041ce documents the existing committed outbox route;
+no readiness worker/migration is implemented, live API1aea/schema116.1 unchanged. Do not
+resend original71/72/73 messages or UNSENT Draft66 092041; do not drive phone UI. Old71
+Storage root, physical Apple/native SDK, backups and all54PRD groups remain open.
+
+
 ## Activation candidate and main guard evidence combined — 8 November 2026, 18:02 UTC
 
 Activation source834e1e41 was committed and pushed. Focused gate73705 REAPED PASS:
