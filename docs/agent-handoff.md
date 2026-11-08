@@ -1,5 +1,37 @@
 # Agent continuation — HRIS Mobile
 
+## Retain inspector shortcut through background process restart — 8 November 2026, 01:45 UTC
+
+Candidate59 is NOT accepted for phone installation. Original Bima emulator ran its
+exact0b7d84ec APK: all five actual notification OS cases passed; one new message sent,
+with local phases671/221/145/118ms and UI pending/sent observations2.870/5.011s. Real
+Matrix send is one PUT200,266ms at the gateway and269/270ms in the inspector. A181s
+counter records zero403, four default-key reads (two401, one successful token refresh,
+then two404), twelve successful syncs and one encrypted send. This is one controlled
+emulator sample, not proof phone latency is fixed.
+[Exact progress and preserved failure](measurements/network-inspector-notification-process-restart-2026-11-08.json).
+
+Background notification tap, actual Ktor/Matrix filters, send detail and Clear pass.
+First search injected s/end/ instead of /send/; the failed attempt is retained and
+navigation-only resume83695 reused the one original message. Cold notification fails:
+am kill ended3345, then Android started5111 for Firebase JobInfoSchedulerService.
+A new empty capture cancelled the old OS shortcut before the tap. No additional send
+or phone installation occurred. Emulator10359 and stop65517 are reaped; original
+userdata remains59, phone58. Read-only check confirms phone notification permission
+is already granted; permission was enabled only on the owned emulator for testing.
+
+Library1b6ad6b has dirty follow-up code: preserve an existing shortcut through the
+initial empty recorder, while reset, prior observed requests becoming empty, close and
+parent cancellation still remove it. A sixth native regression seeds an OS notification
+and checks initial retention, reset removal and subsequent capture replacement.
+Sole compiler57505 is notification-startup; freeze source until reaped. Build60 scripts
+are prepared, not run, in .work/release-phone-2026-11-08-build60. After acceptance commit/
+push library code, package exact60, run all six actual OS cases and a fresh60 capture,
+background/cold taps, offline continuity and visual review. Never resend the original59
+message. Notify before phone --install-only. Generic Starter port and keyboard/pending/
+latency work remain next; original54 PRD groups remain open. No other services stopped.
+
+
 ## Corrected notification package awaits device acceptance — 8 November 2026, 01:33 UTC
 
 Mobile source96c5bd5b is pushed and unchanged after the accepted full4 gate. Library

@@ -1,0 +1,313 @@
+{
+  "at": "2026-11-08T01:45:42.981979+00:00",
+  "candidate59": {
+    "source": {
+      "baseCommit": "96c5bd5b290ea9659a28ea4b5b6609106cc856ee",
+      "sourceBranch": "feat/chat-send-timing-20261107",
+      "sourceManifestSha256": "5be283bc445299c8e0b097a8ea311f8857069ad152fc1580928e12b2d7831428",
+      "sourcesUnchanged": true,
+      "candidateOnly": true,
+      "sdkCandidate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+      "inspectorCommit": "1b6ad6b637e42313136f0428c77619fda09e2ed4",
+      "inspectorGate": "notification-fix",
+      "librarySourceManifestSha256": "552bf590d23001bb57c1f7ce5e7354a5e233b4d525a22c30cad58b866876742d",
+      "librarySourcesUnchanged": true
+    },
+    "apkSha256": "0b7d84ecc768824fc570e3ba1434a3f20ead1b400b6f7d9feaccd2448d784f85",
+    "installedOnOwnedEmulator": true,
+    "installedOnPhone": false,
+    "nativeCasesPassed": 5,
+    "singleSendObserved": true,
+    "sendTiming": {
+      "accepted": true,
+      "versionCode": 59,
+      "apkSha256": "0b7d84ecc768824fc570e3ba1434a3f20ead1b400b6f7d9feaccd2448d784f85",
+      "startedAt": "2026-11-08T01:35:00.495116+00:00",
+      "serial": "emulator-5562",
+      "processId": 3345,
+      "phaseDurationsMillis": {
+        "DraftPersistence": 671,
+        "CommandPreparation": 221,
+        "CommandQueue": 145,
+        "CommandConfirmation": 118
+      },
+      "phaseOutcomes": {
+        "DraftPersistence": "Succeeded",
+        "CommandPreparation": "Succeeded",
+        "CommandQueue": "Succeeded",
+        "CommandConfirmation": "Succeeded"
+      },
+      "sharedGestureTrace": true,
+      "distinctPhaseSpans": 4,
+      "originalLogSha256": "285a49c7c5ab496b683ee5f19823ca76fbc0a6dbcc0e46aeeb390f97a2236eac",
+      "bodyOrOwnerRetainedInDiagnostics": false,
+      "boundary": "Same-process monotonic local phases; overlaps with asynchronous delivery. Not end-to-end acknowledgement latency or transport overhead."
+    },
+    "uiObservations": [
+      {
+        "secondsAfterTap": 2.87,
+        "visibleCopies": 1,
+        "sent": false,
+        "pending": true,
+        "bubbleBounds": [
+          33,
+          1921,
+          1047,
+          2065
+        ],
+        "composerBounds": [
+          22,
+          2120,
+          904,
+          2252
+        ],
+        "aboveComposer": true
+      },
+      {
+        "secondsAfterTap": 5.011,
+        "visibleCopies": 1,
+        "sent": true,
+        "pending": false,
+        "bubbleBounds": [
+          33,
+          1921,
+          1047,
+          2065
+        ],
+        "composerBounds": [
+          22,
+          2120,
+          904,
+          2252
+        ],
+        "aboveComposer": true
+      }
+    ],
+    "matrixRequestCounts": {
+      "startedAt": "2026-11-08T01:34:37.919495+00:00",
+      "elapsedSeconds": 180.996,
+      "requests": {
+        "secret_storage_default_key": 4,
+        "refresh": 1,
+        "other_matrix": 10,
+        "sync": 12,
+        "encrypted_room_send": 1
+      },
+      "records": [
+        {
+          "offsetSeconds": 21.851,
+          "operation": "secret_storage_default_key",
+          "method": "GET",
+          "status": 401,
+          "headerLatencyMs": 21
+        },
+        {
+          "offsetSeconds": 21.852,
+          "operation": "secret_storage_default_key",
+          "method": "GET",
+          "status": 401,
+          "headerLatencyMs": 28
+        },
+        {
+          "offsetSeconds": 21.913,
+          "operation": "refresh",
+          "method": "POST",
+          "status": 200,
+          "headerLatencyMs": 22
+        },
+        {
+          "offsetSeconds": 21.952,
+          "operation": "secret_storage_default_key",
+          "method": "GET",
+          "status": 404,
+          "headerLatencyMs": 112
+        },
+        {
+          "offsetSeconds": 21.951,
+          "operation": "secret_storage_default_key",
+          "method": "GET",
+          "status": 404,
+          "headerLatencyMs": 122
+        },
+        {
+          "offsetSeconds": 22.079,
+          "operation": "other_matrix",
+          "method": "POST",
+          "status": 200,
+          "headerLatencyMs": 89
+        },
+        {
+          "offsetSeconds": 22.089,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 87
+        },
+        {
+          "offsetSeconds": 23.638,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 668
+        },
+        {
+          "offsetSeconds": 24.33,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 48
+        },
+        {
+          "offsetSeconds": 25.778,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 52
+        },
+        {
+          "offsetSeconds": 23.069,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 10052
+        },
+        {
+          "offsetSeconds": 33.625,
+          "operation": "other_matrix",
+          "method": "POST",
+          "status": 200,
+          "headerLatencyMs": 43
+        },
+        {
+          "offsetSeconds": 33.909,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 36
+        },
+        {
+          "offsetSeconds": 35.349,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 34
+        },
+        {
+          "offsetSeconds": 35.398,
+          "operation": "encrypted_room_send",
+          "method": "PUT",
+          "status": 200,
+          "headerLatencyMs": 266
+        },
+        {
+          "offsetSeconds": 33.245,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 2438
+        },
+        {
+          "offsetSeconds": 36.085,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 49
+        },
+        {
+          "offsetSeconds": 36.211,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 40
+        },
+        {
+          "offsetSeconds": 37.085,
+          "operation": "other_matrix",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 39
+        },
+        {
+          "offsetSeconds": 35.881,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 10050
+        },
+        {
+          "offsetSeconds": 45.983,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 10050
+        },
+        {
+          "offsetSeconds": 56.26,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 10057
+        },
+        {
+          "offsetSeconds": 66.855,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 10050
+        },
+        {
+          "offsetSeconds": 76.93,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 10052
+        },
+        {
+          "offsetSeconds": 87.058,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 10059
+        },
+        {
+          "offsetSeconds": 97.152,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 10071
+        },
+        {
+          "offsetSeconds": 107.243,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 10628
+        },
+        {
+          "offsetSeconds": 117.889,
+          "operation": "sync",
+          "method": "GET",
+          "status": 200,
+          "headerLatencyMs": 10056
+        }
+      ],
+      "passiveReadOnly": true,
+      "bodyOrHeadersRetained": false,
+      "phoneUiDriven": false,
+      "interface": "br-3b9b9ff77286",
+      "scope": "Controlled single-emulator local gateway traffic; categories only, not a capture-overhead benchmark"
+    },
+    "backgroundNotificationTapPassed": true,
+    "coldNotificationTapPassed": false,
+    "releaseAccepted": false
+  },
+  "failure": "After am kill, JobInfoSchedulerService restarted the app before the retained notification could be tapped; initial empty capture cancelled that shortcut",
+  "firstInspectorAttempt": "Synthetic search input became s/end/ instead of /send/; retained failure evidence and resumed the same send with verified slower input",
+  "messagesSentOnCandidate59": 1,
+  "nextCandidate": 60,
+  "nextChange": "Preserve a prior OS shortcut during initial empty capture; explicit reset, recorded-then-empty capture, disposal and cancellation still remove it",
+  "newNativeRegression": "Seed prior OS notification; observe initial empty capture synchronously, verify retention, explicit reset removal and new capture replacement",
+  "phoneRemainsVersion": 58,
+  "phoneUiDriven": false,
+  "phonePendingResolved": false
+}
