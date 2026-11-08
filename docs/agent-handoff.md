@@ -1,5 +1,27 @@
 # Agent continuation — HRIS Mobile
 
+## Private-account guard full gate passed — 8 November 2026, 17:40 UTC
+
+Guard source767bd226 is pushed. Full exec76594 REAPED PASS: 5,793 fresh tests,
+zero failures/errors/skips, 1,080.628s, all4,498 application/82library inputs stable.
+Root/check, browser tests, Android proof/devRelease/lint, sharedWasm/iOS source and
+quality checks passed. [Evidence](measurements/collaboration-private-account-guard-2026-11-08.json).
+No native74 APK or guard device proof exists yet. Do not claim the earlier71 Storage
+root is resolved. The owned emulator is stopped; no main compiler remains.
+
+The17:37 phone73 preflight4648 was REAPED timeout. No installation/UI action occurred;
+phone remains70. Exact73 remains available for scoped progress delivery as described
+below; notify first and use install-progress.py --install-only if a fresh preflight passes.
+
+Side branch feat/chat-auto-activation-20261108 has an UNCOMMITTED domain/application
+activation candidate. Its formatter is starting; do not run another compiler/emulator.
+It consolidates command stages, moves manual setup orchestration out of the ViewModel,
+adds original-key classification and begins activation on admitted owner selection.
+Domain/application/manual interaction and readiness wake still require validation;
+source is NOT included in the accepted guard gate or build73. Check its own handoff
+and .work/device-activation-2026-11-08 for subsequent results. This remains ongoing work.
+
+
 ## Scoped73 progress delivery prepared; phone offline — 8 November 2026, 17:17 UTC
 
 A separate progress gate now accepts ONLY the validated73 runtime fix for delivery
