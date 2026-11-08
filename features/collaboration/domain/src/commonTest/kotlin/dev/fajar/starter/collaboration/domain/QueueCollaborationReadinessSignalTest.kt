@@ -2,15 +2,61 @@ package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationReadinessReceiptRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationReadinessSignal
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import kotlin.test.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 
 class QueueCollaborationReadinessSignalTest {
+    @Test
+    fun serialObservationSurvivesMappedFailureAndStopsPendingPersistenceOnCancellation() = runTest {
+        val f = Fixture()
+        val outcomes = mutableListOf<AppResult<Boolean>>()
+        val observed = Channel<AppResult<Boolean>>(Channel.UNLIMITED)
+        val collecting =
+            launch(start = CoroutineStart.UNDISPATCHED) {
+                f.receiver().observe().collect {
+                    outcomes += it
+                    observed.send(it)
+                }
+            }
+        f.readFailure = f.push.storage
+        f.signals.emit(f.signal(1))
+        assertEquals(AppResult.Failed(f.push.storage), observed.receive())
+        f.readFailure = null
+        f.signals.emit(f.signal(1))
+        assertEquals(AppResult.Success(true), observed.receive())
+        repeat(100) {
+            f.signals.emit(f.signal(1))
+            assertEquals(AppResult.Success(false), observed.receive())
+        }
+        assertEquals(1, f.push.writes)
+        val entered = CompletableDeferred<Unit>()
+        var closed = false
+        f.beforeWrite = {
+            entered.complete(Unit)
+            try {
+                awaitCancellation()
+            } finally {
+                closed = true
+            }
+        }
+        f.signals.emit(f.signal(2))
+        entered.await()
+        collecting.cancelAndJoin()
+        assertTrue(closed)
+        assertEquals(0, f.signals.subscriptionCount.value)
+        assertEquals(102, outcomes.size)
+        assertEquals(CollaborationReadinessProgress(1, 1), f.receipt?.progress)
+        observed.close()
+    }
+
     @Test
     fun commitRevisionCoalescesDuplicatesReorderingAndRecreatedConsumer() = runTest {
         for (platform in listOf(AppPlatform.Android, AppPlatform.Ios)) {
@@ -203,6 +249,11 @@ class QueueCollaborationReadinessSignalTest {
 
     private class Fixture {
         val push = CollaborationPushFixture()
+        val signals = MutableSharedFlow<CollaborationReadinessSignal>()
+        private val runtimes =
+            object : CollaborationRuntimeRepository by CollaborationDeliveryFixture().runtimes {
+                override fun readinessSignals() = signals.asSharedFlow()
+            }
         var receipt: CollaborationReadinessReceipt? = null
         var reads = 0
         var writes = 0
@@ -265,6 +316,7 @@ class QueueCollaborationReadinessSignalTest {
                 push.schedules,
                 IdentityServer(push.initial.binding.audience, "Fictional readiness"),
                 AppBuild(platform, 76, "test", null),
+                runtimes,
             )
     }
 

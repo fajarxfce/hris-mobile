@@ -9,6 +9,8 @@ import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 /** Coalesces committed hints before waking original work; never opens a room or sends content. */
 class QueueCollaborationReadinessSignal(
@@ -18,7 +20,11 @@ class QueueCollaborationReadinessSignal(
     private val schedules: SyncScheduleRepository,
     private val server: IdentityServer,
     private val build: AppBuild,
+    private val runtimes: CollaborationRuntimeRepository,
 ) {
+    /** The application owns one serial collector, including cancellation of pending persistence. */
+    fun observe(): Flow<AppResult<Boolean>> = runtimes.readinessSignals().map { invoke(it) }
+
     suspend operator fun invoke(signal: CollaborationReadinessSignal): AppResult<Boolean> {
         currentCoroutineContext().ensureActive()
         return withTimeoutOrNull(3_000) {
@@ -42,6 +48,7 @@ class QueueCollaborationReadinessSignal(
                 if (it is AppResult.Failed) return@withTimeoutOrNull it
             }
             if (wake is AppResult.Failed) return@withTimeoutOrNull wake
+            currentCoroutineContext().ensureActive()
             val scheduled =
                 withTimeoutOrNull(1_500) { schedules.request(CollaborationRecoveryWake.WORK_KEY) }
             currentCoroutineContext().ensureActive()

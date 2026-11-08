@@ -2,10 +2,15 @@ package dev.fajar.starter.collaboration.domain.repositories
 
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.emptyFlow
 
 /** Store I/O and SDK ownership only. Use cases admit installation and live delivery separately. */
 interface CollaborationRuntimeRepository {
+    /** Bounded opaque events from existing clients only; subscription never opens an SDK. */
+    fun readinessSignals(): Flow<CollaborationReadinessSignal> = emptyFlow()
+
     /** Whether this host has a protected native implementation for first device activation. */
     val supportsDeviceActivation: Boolean
         get() = false

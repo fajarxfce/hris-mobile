@@ -1,0 +1,137 @@
+{
+  "recordedAt": "2026-11-08T23:26:10.975353+00:00",
+  "sourceBaseCommit": "903943a7a3090da07ca24dad7f5ddd1b0655d60c",
+  "scope": "Owned Android SDK readiness listener and serial application consumer, with durable domain receipt. Source validation only; no new native or phone delivery claim.",
+  "full": {
+    "startedAt": "2026-11-08T23:00:58.632937+00:00",
+    "elapsedSeconds": 1440.533,
+    "exitCode": 0,
+    "sourceFiles": 4517,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 5911,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "sourceManifestSha256": "f8400abadfdb38834f4802544ccf83dd4aba63823e568451c317862ab6834e86",
+  "reportManifestSha256": "f75ad903c64ffd59220e6b0267161b101248afd0ba28da1d220f21f7290b22fb",
+  "selectedReports": {
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ApplicationCollaborationLifetimeTest.xml": {
+      "sha256": "0acfc7544f8d2ae7fcd3ebcf7f9aca88f298f71a8eb2cf21bdb378e28dcabb3b",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+      "sha256": "a56c6364e3353e6b89c5f29f0758ac214376c9b2cf17126afe9add8c533590fc",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowse-RPKH3ANIL1MM0.dev.fajar.starter.collaboration.data.BrowserCollaborationReadinessReceiptStorageTest.xml": {
+      "sha256": "c5246177cd8d9a1463ffaa3e38f240ba0e31a068e9a80dc6b81af9f4f2f2208a",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationReadinessLifetimeTest.xml": {
+      "sha256": "725c9311536969b5d245f24a641f699d912736ff80e82eef73c4da30f42dc76f",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidSdkReadinessRegistrationTest.xml": {
+      "sha256": "7adda620757b2c2c5ba7cb78ded0397b31c6fd536657a57748909740bc8f9a64",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ActivateCollaborationDeviceTest.xml": {
+      "sha256": "32c025b05519487b8473f09c3a589afd153b7be20efd52b91dd39c21c92eb096",
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.QueueCollaborationReadinessSignalTest.xml": {
+      "sha256": "08446683f1259b22b8c6cefa2bd7c86f58e6b8d5c9cc7f4a0a3b1d9a660f8661",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationReadinessControlPolicyTest.xml": {
+      "sha256": "25777f376a6b67b39004e1353b10bbc518b8a97cc639722389da9207840aae28",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.QueueCollaborationReadinessSignalTest.xml": {
+      "sha256": "f8a516b39b724b1491ba700263ebaa739a07d47153cbd836050047a026891205",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.ActivateCollaborationDeviceTest.xml": {
+      "sha256": "e92dc2a7d847e9b0d569552806ea25dc61311ca5ec516d6579cf97f7ac0f9fc1",
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "actualBrowserCases": 47,
+  "rootCheck": true,
+  "androidReleaseCompile": true,
+  "androidReleaseLint": true,
+  "proofCompile": true,
+  "sharedWasmCompile": true,
+  "sharedIosArm64SourceCompile": true,
+  "nativeAppleExecuted": false,
+  "formatArchitectureDetekt": true,
+  "focused": {
+    "elapsedSeconds": 333.938,
+    "exitCode": 0,
+    "sourceFiles": 4508,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 76,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "focusedBoundary": "The 76-case focused run preceded the closed scheduling diagnostic; that diagnostic and its application test are included in the final full gate.",
+  "sessionsReaped": [
+    3100,
+    71390,
+    59942,
+    58200
+  ],
+  "inspectorSourceInputs": 82,
+  "nativeSdk": "26.10.23-hris.5; existing custom-to-device subscription, no binary changes",
+  "nativeWakeAccepted": false,
+  "serverDeploymentStarted": false,
+  "phoneTouched": false,
+  "starterPort": "No new generic foundation in this increment; prior RequestedSyncWorker port remains Starter665b9cd.",
+  "remaining": [
+    "Build and verify APK77 from pushed source; preserve retained sender76 identity during upgrade.",
+    "Package both Platforme558a686 images, validate isolated116.2-to116.4 migration and old/new runtime compatibility, then deploy with control disabled.",
+    "Controlled native proof with notification registration disabled, new fictional recipient, original-only send, SDK control diagnostic and independent encrypted-event timing/count.",
+    "Immediate connectivity/interrupted-activation and missed-signal recovery; no timed transport loop.",
+    "Investigate startup optional default-key reads and empty-room older-history affordance.",
+    "Bima74 encrypted metadata recovery remains unresolved; preserve all originals.",
+    "All54 communications PRD groups remain open."
+  ]
+}

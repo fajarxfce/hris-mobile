@@ -490,6 +490,7 @@ class ActivateCollaborationDevice(
         val ready =
             CollaborationActivationProgress(owner, device, CollaborationActivationStep.READY)
         progress(ready)
+        currentCoroutineContext().ensureActive()
         val scheduled =
             withTimeoutOrNull(1_500) { schedules.request(CollaborationRecoveryWake.WORK_KEY) }
                 ?: AppResult.Failed(

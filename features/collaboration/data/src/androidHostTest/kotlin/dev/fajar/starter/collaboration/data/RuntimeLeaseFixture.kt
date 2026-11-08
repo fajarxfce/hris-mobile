@@ -25,6 +25,8 @@ import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.SyncResponseRoomsV2
 import org.matrix.rustcomponents.sdk.SyncResponseV2
 import org.matrix.rustcomponents.sdk.SyncSettingsV2
+import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.ToDeviceMessageListener
 
 internal suspend fun runtimeLeaseFixture(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
@@ -76,11 +78,34 @@ internal class RuntimeLeaseFixture(
     var beforePause: suspend () -> Unit = {}
     var beforeIdentity: () -> Unit = {}
     var beforeSync: suspend () -> Unit = {}
+    var readinessListener: ToDeviceMessageListener? = null
+    var beforeReadinessSubscribe: () -> Unit = {}
+    var failReadinessSubscribe = false
     var syncRequests = 0
     var signingKey: String? = Base64.encode(ByteArray(32) { it.toByte() })
     private val http = HttpClient(MockEngine { error("Publication never sends HTTP requests") })
     private val sdk =
         object : Client(NoHandle) {
+            override fun subscribeToCustomToDeviceMessages(
+                eventTypes: List<String>,
+                listener: ToDeviceMessageListener,
+            ): TaskHandle {
+                assertEquals(listOf("dev.fajar.hris.recipient_ready"), eventTypes)
+                calls += "readiness.subscribe"
+                readinessListener = listener
+                beforeReadinessSubscribe()
+                if (failReadinessSubscribe) error("Fictional subscribe failure")
+                return object : TaskHandle(NoHandle) {
+                    override fun cancel() {
+                        calls += "readiness.cancel"
+                    }
+
+                    override fun close() {
+                        calls += "readiness.close"
+                    }
+                }
+            }
+
             override fun userId(): String {
                 beforeIdentity()
                 return "@native:proof.invalid"

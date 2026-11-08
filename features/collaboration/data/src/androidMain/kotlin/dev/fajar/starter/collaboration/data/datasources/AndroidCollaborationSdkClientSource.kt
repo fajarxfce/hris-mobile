@@ -12,11 +12,19 @@ import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
 import org.matrix.rustcomponents.sdk.SqliteStoreBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.ToDeviceMessageListener
 
 /**
  * Raw SDK construction. Its caller owns admission, protected credentials and the directory lease.
  */
 class AndroidCollaborationSdkClientSource {
+    /** The exact client owner retains and releases this native registration. */
+    fun observeCustomToDevice(
+        client: Client,
+        eventType: String,
+        listener: ToDeviceMessageListener,
+    ): TaskHandle = client.subscribeToCustomToDeviceMessages(listOf(eventType), listener)
+
     /** Install once, before restoring a session. The caller owns and cancels the handle. */
     fun observeAuthentication(client: Client, delegate: ClientDelegate): TaskHandle? =
         client.setDelegate(delegate)

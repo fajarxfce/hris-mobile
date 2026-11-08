@@ -20,6 +20,9 @@ import kotlin.io.encoding.Base64
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.TimeSource
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
 import org.matrix.rustcomponents.sdk.Client
 
@@ -42,6 +45,14 @@ class AndroidCollaborationRuntimeRepository(
     CollaborationLocalDeviceIdentityRepository,
     CollaborationSpaceRuntimeRepository {
     override val supportsDeviceActivation = true
+
+    private val readiness =
+        MutableSharedFlow<CollaborationReadinessSignal>(
+            extraBufferCapacity = 32,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        )
+
+    override fun readinessSignals() = readiness.asSharedFlow()
 
     private val registry =
         SdkRuntimeRegistry<AndroidCollaborationRuntimeLease>(
@@ -1032,6 +1043,7 @@ class AndroidCollaborationRuntimeRepository(
         expectedIdentity: CollaborationLocalDeviceIdentity?,
     ) {
         lease.startHttpObservation(httpObservation)
+        lease.startReadinessObservation(clients) { readiness.tryEmit(it) }
         clients.restorePaused(client, prepared.session)
         if (expectedIdentity != null) {
             require(clients.identity(client).toLocalDeviceIdentity() == expectedIdentity)

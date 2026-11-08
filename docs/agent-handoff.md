@@ -1,5 +1,48 @@
 # Agent continuation — HRIS Mobile
 
+## Android readiness listener checked — 8 November 2026, 23:25 UTC
+
+Native listener/application integration passes the full root gate: 5,911 fresh
+cases, including 47 actual Chrome cases, zero failures/errors/skips, 1,440.533s.
+All 4,517 application and 82 inspector inputs stayed fixed. Android release/proof
+compile, release lint, shared Wasm/iOS Arm64 source compile, format/architecture/
+detekt pass. No native Apple execution. Full71390 and focused3100 (76 cases,
+333.938s) REAPED; format59942/58200 REAPED. No compiler or emulator remains.
+[Contract](collaboration-readiness-controls.md),
+[evidence](measurements/collaboration-readiness-listener-2026-11-08.json).
+
+The exact SDK client owns one custom-control listener before sync; closing fences
+callbacks and joins acquisition before cancel/close and directory release. One
+application collector starts before activation and serially persists/coalesces
+signals through QueueCollaborationReadinessSignal. The bounded stream contains
+no content. A successful retained wake logs only ChatReadinessScheduled; duplicate
+and failed signals do not. Actual signal delivery has NOT been accepted yet.
+
+NEXT: commit/push this source, package and verify APK77 using the private build77
+scripts. Platform e558a686 must package BOTH API and worker: its old live API cannot
+project V2 controls. Private readiness-control scripts prepare exact images, online
+backup, isolated116.2→116.4, old/new runtime compatibility, then a two-image dev
+rollout with control OFF. The separate enable-control script requires qualified77
+retained identity before controlled native acceptance; do not claim native proof
+from source tests. Review each private script before running; none has run yet.
+
+`.work/readiness-control-native-2026-11-08` has unexecuted, bounded preparation/
+observation scripts for a NEW fictional recipient, an independently copied retained
+sender76 with full AVD/version/key metadata, and Matrix-only wake verification.
+Disable push via that fictional sender's product setting and assert zero enabled
+server registrations. Send one newly named Control77 original once; require a quiet
+waiting interval, commit/revision/control checkpoint, one scheduling diagnostic,
+same product PID and exactly one encrypted event with independent Synapse timing.
+The earlier `Readiness76 211625` was already sent once: NEVER RESEND. Preserve Draft66.
+
+Live still schema116.2/API1aea/worker52aaccaa, control false;117–138 untouched. Phone70
+has no new availability reply; never poll/re-ask or drive its UI without new input.
+Bima74 metadata remains unrecovered and preserved. Starter665b9cd is accepted;
+this increment is HRIS-specific and needs no generic port. Continue actual reconnect/
+interrupted activation and missed-signal recovery,16 startup optional default-key
+reads, new-room Older messages, then all54 PRD groups. Push every commit and continue.
+
+
 ## Durable V2 readiness receipt checked — 8 November 2026, 22:48 UTC
 
 Domain/storage/application integration passes82 desktop cases and20 actual Chrome

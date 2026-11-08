@@ -52,19 +52,48 @@ and push flows retain their own existing timeout and cancellation boundary.
 `ActivateCollaborationDevice.ready` already persists a wake after publication;
 the application must not add another readiness wake on every state emission.
 
-## Acceptance and remaining integration
+## Native subscription lifetime
 
-Domain/storage and integration checks pass82 desktop cases and20 actual Chrome
-cases, zero failures/errors/skips, on unchanged inputs. The full root/Android gate
-remains for native integration. [Evidence](measurements/collaboration-readiness-receipt-2026-11-08.json)
-retains compilation, dependency-harness and empty-browser-filter failures.
-The SDK listener and application collector are not connected yet, so this source
-checkpoint changes no product delivery behavior. The native listener must be
-installed before sync, fenced and released with its exact client, and feed one
-bounded application-owned consumer. Failed, missing or overflowing hints still
-need startup/connectivity/interrupted-activation recovery over the same originals.
+The Android runtime installs the existing SDK5 custom-to-device listener before
+restore/sync. Its raw datasource only registers that listener. The exact client
+lease owns the returned handle, fences obsolete callbacks immediately, and joins
+pending acquisition before cancel/close and private-directory release. Failure to
+cancel still closes the handle and permits remaining cleanup. A close during
+subscription disposes the eventual handle without publishing another runtime.
 
-Backend V116.3/V116.4 and its control worker are not deployed. Live schema116.2 and
-FCM readiness remain unchanged. Isolated migration/old-runtime compatibility,
-final package staging and actual FCM-independent native proof are required before
-enabling the new path. No physical phone or native Apple acceptance is claimed.
+The adapter accepts only the fixed clear control type, the client's own sender,
+exact scope and bounded nine-string content. It offers opaque signals to a bounded
+32-item stream. One application-owned consumer subscribes before activation and
+serially invokes the domain receipt/scheduling flow; it never opens a second SDK.
+Cancellation joins the collector. Successful retained scheduling emits only the
+closed `ChatReadinessScheduled` diagnostic, without account, device or event data.
+Duplicates do not emit that success or start another sweep. Callback failures do
+not invent a timer. Existing activation already requests recovery at READY.
+
+## Acceptance and remaining work
+
+The final root gate passes 5,911 fresh cases, including 47 concrete Chrome cases,
+with zero failures, errors or skips and 4,517 unchanged application inputs. The 82
+inspector inputs are unchanged. Android release/proof compilation, Android lint,
+shared Wasm/iOS Arm64 source compilation, formatting, architecture and detekt pass.
+No Apple executable or device test was run. The focused 76-case ownership gate
+preceded the scheduling diagnostic; the final root gate covers its added test.
+[Listener evidence](measurements/collaboration-readiness-listener-2026-11-08.json)
+and [earlier receipt evidence](measurements/collaboration-readiness-receipt-2026-11-08.json)
+retain the exact scope and earlier rejected harness results.
+
+Actual foreground delivery is still unproven for this listener. Next package APK77,
+preserve the existing sender76 store during upgrade, and exercise a new fictional
+recipient while the sender's push registration is disabled. Observe committed keys,
+Matrix control, retained scheduling and exactly one original encrypted server event
+without restarting the sender or resending a message. Preserve the earlier failed
+140-second FCM gate and its later successful original; never replay that original.
+
+Platform V116.3/V116.4 and its control worker remain undeployed at this checkpoint.
+Both API and worker must change because the old API drops the new control shape.
+Validate the isolated additive migration and old/new image compatibility, then
+stage development with controls disabled. Controlled enablement for the native
+proof follows retained-identity qualification; it is not general delivery acceptance.
+Missed/overflowing signals, actual reconnects and interrupted first activation need
+continued recovery work over the same originals. Phone and native Apple delivery,
+cloud recovery, and the broader communications PRD remain separate open work.

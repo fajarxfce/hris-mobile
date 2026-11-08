@@ -5,6 +5,7 @@ import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeR
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSdkInventoryRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSdkPossessionRepository
 import dev.fajar.starter.collaboration.domain.usecases.ActivateCollaborationDevice
+import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationReadinessSignal
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.push.usecases.ObserveNativePushStatus
 import dev.fajar.starter.securestorage.AtomicCredentialStore
@@ -32,6 +33,7 @@ internal fun applicationCollaborationModule(
     single {
             val push = inject<ObserveNativePushStatus>()
             val activate = inject<ActivateCollaborationDevice>()
+            val readiness = inject<QueueCollaborationReadinessSignal>()
             ApplicationCollaborationLifetime(
                 get(),
                 get(),
@@ -39,6 +41,7 @@ internal fun applicationCollaborationModule(
                 get(),
                 { push.value(it) },
                 { activate.value(it) },
+                observeReadiness = { readiness.value.observe() },
             )
         }
         .onClose { it?.close() }

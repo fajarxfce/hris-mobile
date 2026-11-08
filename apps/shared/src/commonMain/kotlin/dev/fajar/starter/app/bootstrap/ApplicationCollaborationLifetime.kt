@@ -10,6 +10,7 @@ import dev.fajar.starter.collaboration.domain.usecases.RequestCollaborationRecov
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.push.entities.NativePushStatus
+import dev.fajar.starter.observability.*
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -23,6 +24,7 @@ class ApplicationCollaborationLifetime(
     private val observePush: (String) -> Flow<AppResult<NativePushStatus>>,
     private val activate: (CollaborationOwner) -> Flow<AppResult<CollaborationActivationProgress>>,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val observeReadiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() },
 ) : AutoCloseable {
     private val lifetime = SupervisorJob()
     private val scope = CoroutineScope(lifetime + dispatcher)
@@ -35,6 +37,26 @@ class ApplicationCollaborationLifetime(
 
     fun start() {
         if (!started.compareAndSet(false, true)) return
+        // Subscribe before activation can start syncing. This child never opens another SDK.
+        scope.launch(start = CoroutineStart.UNDISPATCHED) {
+            if (build.platform !in setOf(AppPlatform.Android, AppPlatform.Ios)) return@launch
+            try {
+                observeReadiness().collect { result ->
+                    if ((result as? AppResult.Success)?.value == true)
+                        Diagnostics.record(
+                            Diagnostic(
+                                DiagnosticArea.Worker,
+                                DiagnosticKind.OperationCompleted,
+                                "ChatReadinessScheduled",
+                            )
+                        )
+                }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                // Durable originals and startup/network recovery own a missed signal, not a timer.
+            }
+        }
         scope.launch {
             if (build.platform !in setOf(AppPlatform.Android, AppPlatform.Ios)) return@launch
             try {

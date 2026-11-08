@@ -9,6 +9,25 @@ import kotlinx.coroutines.test.*
 
 class ActivateCollaborationDeviceTest {
     @Test
+    fun cancellationOnReadyPublicationKeepsWakeWithoutStartingScheduling() = runTest {
+        val f = CollaborationActivationFixture()
+        f.openAtInspection = true
+        val collecting = launch {
+            f.operation()(f.command.owner).collect { result ->
+                if (
+                    (result as? AppResult.Success)?.value?.step == CollaborationActivationStep.READY
+                )
+                    currentCoroutineContext().cancel()
+            }
+        }
+        collecting.join()
+        assertTrue(collecting.isCancelled)
+        assertNotNull(f.wake)
+        assertTrue(f.scheduled.isEmpty())
+        assertTrue(f.installations.isEmpty())
+    }
+
+    @Test
     fun companyLossDuringInspectionClosesTheExclusionWithoutReadingPrivateKeys() = runTest {
         val f = CollaborationActivationFixture()
         f.retainPrivateAccount()

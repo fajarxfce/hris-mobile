@@ -13,6 +13,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.fixtures.CollaborationWorkerFixture
 import dev.fajar.starter.identity.domain.entities.Session
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
+import dev.fajar.starter.observability.*
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
@@ -25,6 +26,96 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
 
 class ApplicationCollaborationLifetimeTest {
+    @Test
+    fun readinessDiagnosticRecordsOnlyScheduledWorkWithoutPacketOrFailureContent() = runBlocking {
+        val diagnostics = mutableListOf<Diagnostic>()
+        Diagnostics.install { event, error ->
+            if (event.category == "ChatReadinessScheduled") {
+                assertNull(error)
+                diagnostics += event
+            }
+        }
+        try {
+            withFixture { f ->
+                f.readiness = {
+                    flowOf(
+                        AppResult.Success(false),
+                        AppResult.Success(true),
+                        AppResult.Success(false),
+                        AppResult.Failed(Failure(FailureKind.Storage, "Fictional private details")),
+                    )
+                }
+                f.lifetime.start()
+                f.scheduler.runCurrent()
+                assertEquals(
+                    listOf(
+                        Diagnostic(
+                            DiagnosticArea.Worker,
+                            DiagnosticKind.OperationCompleted,
+                            "ChatReadinessScheduled",
+                        )
+                    ),
+                    diagnostics,
+                )
+            }
+        } finally {
+            Diagnostics.install(ConsoleDiagnosticSink)
+        }
+    }
+
+    @Test
+    fun readinessObservationStartsBeforeActivationAndClosesWithTheApplication() = runBlocking {
+        withFixture { f ->
+            var starts = 0
+            var closed = 0
+            f.readiness = {
+                flow {
+                    starts++
+                    try {
+                        awaitCancellation()
+                    } finally {
+                        closed++
+                    }
+                }
+            }
+            f.activate = { owner ->
+                flow {
+                    assertEquals(1, starts)
+                    f.activated += owner
+                }
+            }
+            f.lifetime.start()
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertEquals(1, starts)
+            assertEquals(1, f.activated.size)
+            f.lifetime.close()
+            f.scheduler.runCurrent()
+            assertEquals(1, closed)
+            f.lifetime.closeAndJoin()
+        }
+    }
+
+    @Test
+    fun failedReadinessStreamDoesNotRestartOrCancelActivation() = runBlocking {
+        withFixture { f ->
+            var starts = 0
+            f.readiness = {
+                flow {
+                    starts++
+                    error("Fictional observer stopped")
+                }
+            }
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertEquals(1, starts)
+            assertEquals(1, f.activated.size)
+            assertIs<ApplicationCollaborationState.Observed>(f.lifetime.state.value)
+        }
+    }
+
     @Test
     fun automaticActivationBelongsToTheSelectedApplicationOwner() = runBlocking {
         withFixture { f ->
@@ -446,6 +537,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
             }
         }
     val activated = mutableListOf<CollaborationOwner>()
+    var readiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() }
     var activate: (CollaborationOwner) -> Flow<AppResult<CollaborationActivationProgress>> =
         { owner ->
             flow { activated += owner }
@@ -484,6 +576,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
             { kotlinx.coroutines.flow.emptyFlow() },
             { activate(it) },
             StandardTestDispatcher(scheduler),
+            observeReadiness = { readiness() },
         )
 
     fun published() =

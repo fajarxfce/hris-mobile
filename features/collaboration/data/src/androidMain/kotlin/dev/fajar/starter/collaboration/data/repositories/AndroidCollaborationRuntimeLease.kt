@@ -17,6 +17,8 @@ import dev.fajar.starter.collaboration.domain.entities.CollaborationOwnReadRecei
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.domain.entities.CollaborationProviderHistoryPage
 import dev.fajar.starter.collaboration.domain.entities.CollaborationReadReceiptVisibility
+import dev.fajar.starter.collaboration.domain.entities.CollaborationReadinessSignal
+import dev.fajar.starter.collaboration.domain.policies.COLLABORATION_READINESS_CONTROL_TYPE
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeLease
 import dev.fajar.starter.common.result.*
@@ -61,6 +63,9 @@ internal constructor(
     private val published = AtomicBoolean()
     private val httpObservationStarted = AtomicBoolean()
     private var httpObservationJob: Job? = null
+    private val readinessStarted = AtomicBoolean()
+    private val matrixUserId = record.matrixUserId
+    private var readiness: AndroidSdkReadinessRegistration? = null
     private val sync =
         SdkSyncLifecycle(lifetime) { createAndroidCollaborationSync(nativeClient, lifetime) }
     private val children = SdkChildResources(lifetime)
@@ -134,6 +139,30 @@ internal constructor(
     internal val closingRequested
         get() = stopRequested.get()
 
+    /** Acquisition owns registration before restore/sync; shutdown joins acquisition first. */
+    internal fun startReadinessObservation(
+        source: AndroidCollaborationSdkClientSource,
+        offer: (CollaborationReadinessSignal) -> Unit,
+    ) {
+        if (closingRequested || !readinessStarted.compareAndSet(false, true)) return
+        val registration =
+            AndroidSdkReadinessRegistration(
+                owner,
+                deviceId,
+                matrixUserId,
+                { !closingRequested },
+                offer,
+            )
+        readiness = registration
+        registration.attach(
+            source.observeCustomToDevice(
+                nativeClient,
+                COLLABORATION_READINESS_CONTROL_TYPE,
+                registration,
+            )
+        )
+    }
+
     /**
      * Acquisition invokes this before restore. Shutdown waits for acquisition before reading its
      * job.
@@ -158,6 +187,7 @@ internal constructor(
     /** Registry invalidation is synchronous; its caller drains outside the registry monitor. */
     internal fun requestClose() {
         stopRequested.set(true)
+        readiness?.deactivate()
     }
 
     internal val availableForEntry
@@ -454,12 +484,17 @@ internal constructor(
 
     override suspend fun close(): AppResult<Unit> {
         stopRequested.set(true)
+        readiness?.deactivate()
         return shutdown.close()
     }
 
     private suspend fun releaseResources(): SdkShutdownAttempt {
         // Never pause/destroy the client or unlock its directory while restore still uses it.
         acquisitionFinished.await()
+        val readinessResult = safeStorageCall {
+            readiness?.close()
+            Unit
+        }
         httpObservationJob?.cancelAndJoin()
         authentication?.deactivate()
         val credentialResult = persistence.close()
@@ -492,7 +527,8 @@ internal constructor(
         released(this)
         lifetimeJob.complete()
         return SdkShutdownAttempt(
-            if (result is AppResult.Failed) result else credentialResult,
+            if (result is AppResult.Failed) result
+            else if (readinessResult is AppResult.Failed) readinessResult else credentialResult,
             released = true,
         )
     }
