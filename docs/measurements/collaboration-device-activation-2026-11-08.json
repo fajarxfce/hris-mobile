@@ -101,5 +101,38 @@
       "exitCode": 1,
       "reason": "Formatting of the corrected UI assertion; 19 UI tests passed"
     }
-  ]
+  ],
+  "fullGate": {
+    "accepted": true,
+    "startedAt": "2026-11-08T18:27:38.391937+00:00",
+    "elapsedSeconds": 1002.886,
+    "sourceCommit": "60d1de23",
+    "freshCounts": {
+      "tests": 5904,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshSuites": 801,
+    "applicationAndConfigInputs": 4503,
+    "inspectorInputs": 82,
+    "sourceManifestSha256": "cb777d8e075ecd5c31a034967be50d0960a7309435fa4839bc9f57c8ccb6ed44",
+    "reportManifestSha256": "a4cae5ba97ed2e9d41b89b75f5a44378e36fd7220dd3b8902213a5eb79982399",
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "targets": [
+      "root check",
+      "actual Chromium tests",
+      "Android proof compilation",
+      "Android dev release compilation and lint",
+      "shared Wasm compilation",
+      "shared iOS Arm64 source compilation",
+      "format",
+      "architecture",
+      "detekt"
+    ],
+    "nativeActivationAccepted": false,
+    "physicalIphoneTested": false
+  },
+  "fullGateAccepted": true
 }

@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Activation full gate passed; package75 next — 8 November 2026, 18:46 UTC
+
+Full24514 REAPED PASS1,002.886s:5,904 fresh tests/801 suites, zero failures/errors/skips.
+All4,503 application/config and82 library inputs unchanged. Root check, actual Chromium,
+Android proof/devRelease/lint, sharedWasm/iOS source and quality passed. Source60d1de23
+is pushed. Both activation and requested-recovery measurement files record the full gate.
+This merge incorporates main7bc83fe9 (native74 evidence and continuation); only the
+handoff conflict is resolved here, retaining this branch's work and the current facts.
+All application/config inputs still match the accepted full manifest exactly.
+
+No compiler/emulator remains. Commit/push this merge, remove75's source-acceptance HOLD,
+then package/verify using .work/release-phone-2026-11-08-build75. First use the separate
+fresh device at main .work/automatic-activation-native-2026-11-08/device: start.py,
+install.py, preflight-gateway.py, bounded count-http.py (sudo), watch-storage-error.py
+and first-login.py. The fixture is already provisioned; DO NOT provision it again.
+Ordinary Sign in +company selection must publish one device's keys without opening
+Chat/Activate. Scripts are prepared but NOT run. Inspect the actual PNGs, reap observers,
+restore shell ownership and stop/reap that emulator before starting Bima.
+
+Then75's retained-only scripts update original Bima74 in place, preserve original71
+waiting/original73 Sent/UNSENT Draft66 092041 and measure settled idle plus cold offline
+retention. No new send gesture. Its source75 scripts now reject both fresh and retained
+owned emulator images before compilation. Never run an old send probe. The generic
+Starter port/check scripts are prepared in Starter .work/requested-worker-port-2026-11-08,
+but Starter sources remain unchanged until mobile/native acceptance.
+
+Main74 scoped progress remains available. Preflight53226 REAPED timeout at18:35; phone
+still70, no UI touched. A read-only wg0 check found its last handshake ~4h15m earlier,
+with5555 unreachable. No further polling/permission question is needed without new
+availability. Notify before any eventual install-only. Old71 Storage root remains open.
+Platform361041ce is documentation only: liveAPI1aea/schema116.1 unchanged, no readiness
+worker/migration. Interrupted-first-setup recovery, post-commit/missed readiness hints,
+Apple runtime, cloud recovery and all54PRD groups remain required ongoing work.
+
+
 ## Requested foreground recovery focused gate passed — 8 November 2026, 18:29 UTC
 
 New core RequestedSyncWorker executes explicit conflated signals only; no startup scan,

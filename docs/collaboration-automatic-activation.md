@@ -151,7 +151,10 @@ now passes94 tests across domain, UI, application ownership and assembled bindin
 The final gate passed with19 fresh UI tests and75 unchanged, previously passing tests;
 all4,500 application and82 library inputs stayed frozen. The first attempt found a UI
 assertion type-inference error; the next found only its formatting. Both are corrected.
-Full repository checks and native acceptance of activation remain pending. The separate
+Full repository checks now pass5,904 fresh tests with zero failures/errors/skips in
+1,002.886seconds. All4,503 application/config and82 library inputs stayed unchanged;
+root, Android, browser, sharedWasm/iOS source and quality gates passed. Native acceptance
+of activation remains pending. The separate
 private-account guard already passed its5,793-test full gate on the primary branch.
 
 Prompt recovery execution now has a focused-tested candidate. AndroidWorkScheduler emits
@@ -161,8 +164,8 @@ uses the existing conflated lane while WorkManager owns durable retries. Recover
 not inherit the delivery runner's one-second retry policy or another periodic timer.
 The focused gate covers40 portable worker cases and34 application recovery cases,
 including retained requests, in-flight signals, lane isolation, cancellation, exact
-wake generations and simultaneous OS/foreground execution. Full and native acceptance
-are still pending before the reusable runner is ported to Starter.
+wake generations and simultaneous OS/foreground execution. Full acceptance passed;
+native acceptance remains pending before the reusable runner is ported to Starter.
 
 Completion of activation must then reach that lane. Test fresh key publication without
 opening chat, original sender resumption, foreground/background/process restart and

@@ -29,6 +29,8 @@ the absence of further timer-driven execution. Production code did not change.
 
 The passing focused run also compiles Android and iOS worker source and passes
 format, architecture and detekt checks. Its source manifest includes the copied,
-ignored Firebase Android config from the main mobile checkout. Full repository
-checks, native activation and the generic Starter port are still pending. This
+ignored Firebase Android config from the main mobile checkout. Full repository checks
+also passed5,904 fresh tests with zero failures/errors/skips in1,002.886seconds, alongside
+Android, actual browser, sharedWasm/iOS source and quality checks. Native activation
+and the generic Starter port are still pending. This
 runner does not implement the server's post-commit recipient-readiness wake.

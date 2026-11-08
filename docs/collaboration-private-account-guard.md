@@ -21,7 +21,14 @@ inspector-library inputs stayed unchanged during the gate. Fixtures stop before 
 native construction. Full checks passed 5,793 fresh tests with zero failures/errors/skips in 1,080.628 seconds.
 Root check, actual browser tests, Android proof/release compilation/lint, Wasm and
 iOS source compilation and quality checks passed with the same frozen source inputs.
-Retained-store native acceptance of this guard remains pending.
+Retained-store native validation passed on release74. The existing native account
+restored real sync, the original waiting message survived a cold offline restart,
+and previously sent messages and the unsent draft remained intact. No new message
+was submitted. During the 180-second quiet interval, after a 30-second settling
+allowance, transport and secret-storage initialization each recorded zero requests.
+There were zero403 responses and no new Storage exception during the five-minute
+watch. Four actual screenshots were reviewed; the owned1,536MiB emulator is stopped.
+[Native evidence](measurements/collaboration-private-account-release74-2026-11-08.json).
 
 The first focused attempt failed because a new fixture used `copy` on a non-data class;
 that constructor was corrected before the passing run. This change is not evidence
