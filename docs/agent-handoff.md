@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Runtime retention source accepted — 8 November 2026, 16:33 UTC
+
+Full gate 2292 REAPED PASS: 5,786 fresh tests in 777 suites, zero failures/errors/skips,
+934.056 seconds. Required root/check, Chrome, Android proof/release/lint (zero issues),
+shared web/iOS source and quality checks passed. All 4,498 app and 82 library inputs
+stable. [Source evidence](measurements/collaboration-runtime-retention-2026-11-08.json).
+The atomic five-Kotlin change is ready to commit/push, then remove build73 HOLD and
+package/verify. No compiler or emulator remains. Phone70 and original stopped Bima72
+are untouched. Native73 acceptance is still pending; known71 Storage root is unresolved.
+
+Read-only Crashlytics access question remains pending; do not duplicate it. A local
+fallback is prepared under .work/storage-exception-2026-11-08: pinned official Frida
+16.7.19 tools (preparation81247 REAPED), an observation-only Storage stack hook, and a
+bounded retained-only reproduction. No device instrumentation has run. After73 package
+verification, its owned emulator can first reproduce71 on the existing72 private store:
+reproduce.py validates equal signer/no data-layer changes between71/72, temporarily
+installs exact71, observes the SAME retained original with NO send gesture, and restores
+exact72 plus shell UID2000 in finally. The hook records only source frames, never exception
+messages, IDs, bodies or credentials. Reap and verify complete server/forward/root cleanup
+before normal73 installation/probes. If this diagnostic fails, inspect its recorded state;
+do not assume the old Storage cause or manufacture storage-error-acceptance.json.
+
+Preserve Tes72 waiting154845, both71 originals and exact UNSENT Draft66 092041.
+Automatic first-login activation and scoped readiness wake remain design-only on side
+branch2a8d1abf. Platform/live116.1, Starter and library/SDK5 unchanged. No full PRD claim.
+
 ## Runtime full gate and Crashlytics lookup — 8 November 2026, 16:21 UTC
 
 Runtime retention focused16842 REAPED PASS85fresh/0failures/errors/skips595.030s.

@@ -1,0 +1,123 @@
+{
+  "scope": "Source acceptance for retaining an existing published Android client across workspace and policy freshness renewal. Native observations and overall release acceptance remain separate.",
+  "baseCommit": "26111c667111099fb1909caf7fadca767a4c2373",
+  "sources": {
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/SdkRuntimeRegistryTest.kt": "c4ab23a9f68fedeba4d8d6fce01258a984a01d185483dc74c24efe7aa1bc9f8c",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkRuntimeRegistry.kt": "047ef09d95e5669b888d7464ee4d1e1fa66163ef329b5796f393aa342732e8f8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationRuntimeRetention.kt": "bc8f9e6c15ab8fbe714c48fecac5524fb72dd41a2284150e15f78ac7c6be11b5",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/MaintainCollaborationRuntimeOwnership.kt": "0655adc314e2386f7c96228a3de7ff18574a88a76d8b1cd71aef550390dc6c6c",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeOwnershipTest.kt": "6ed6d6a10ee0dbf22a46db6254d61e6ee0059aa1e4da2633693d293651243c90"
+  },
+  "checks": {
+    "focused-1": {
+      "startedAt": "2026-11-08T16:02:35.775914+00:00",
+      "elapsedSeconds": 595.03,
+      "exitCode": 0,
+      "sourceFiles": 4498,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 85,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 5,
+      "resultSha256": "be47d52f9eb9c78ecdb4ce9640c47c109ba6bfac921d0ce154ebdef1f63554ad"
+    },
+    "focused-2": {
+      "startedAt": "2026-11-08T16:14:55.718908+00:00",
+      "elapsedSeconds": 107.983,
+      "exitCode": 0,
+      "sourceFiles": 4498,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 28,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 1,
+      "resultSha256": "7771d5b0fe4a4c03261906073ef68267c5395490e8dde79e65a4f6d25d91a328"
+    },
+    "full-1": {
+      "startedAt": "2026-11-08T16:17:29.734988+00:00",
+      "elapsedSeconds": 934.056,
+      "exitCode": 0,
+      "sourceFiles": 4498,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5786,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 777,
+      "resultSha256": "d52506d1410efc35245239354887153958dccad9a0c099a01bbdf6d95c76fd6c"
+    }
+  },
+  "relevantReports": {
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ApplicationCollaborationLifetimeTest.xml": {
+      "sha256": "05d2b1b81788adf4b47fab1e8a07bae6d8b408e431618f681ff36fc74ca676ad",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBr-46HBIHJOOPKKS.dev.fajar.starter.collaboration.data.BrowserCollaborationRecipientObservationStorageTest.xml": {
+      "sha256": "430787379b158a658695c3b272a0582b1729af48f97ce3127f5e290003a99321",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkRuntimeRegistryTest.xml": {
+      "sha256": "48ffb4ee98f792e88071ed8a80b9fb0367ed23e672942189d7a03d745553a27c",
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationBackgroundRuntimeTest.xml": {
+      "sha256": "ab879a27dffb6bb27eec0d50d25992e8702f94d4ba35f5a8adf2a244543d1933",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationRuntimeOwnershipTest.xml": {
+      "sha256": "d8cb1359ed4571725cdc3eafe6028236316f83952e0e06440c01256cb08a81d1",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.EnterCollaborationConversationTest.xml": {
+      "sha256": "87f301da963d0b69d38e8edd511964312096e89354f802ae36f4beb00b96d41f",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "requiredTasks": {
+    ":check": "> Task :check",
+    ":features:collaboration:data:wasmJsBrowserTest": "> Task :features:collaboration:data:wasmJsBrowserTest",
+    ":apps:collaboration-proof:compileDebugKotlin": "> Task :apps:collaboration-proof:compileDebugKotlin",
+    ":apps:android:compileDevReleaseKotlin": "> Task :apps:android:compileDevReleaseKotlin",
+    ":apps:android:lintDevRelease": "> Task :apps:android:lintDevRelease",
+    ":apps:shared:compileKotlinWasmJs": "> Task :apps:shared:compileKotlinWasmJs",
+    ":apps:shared:compileKotlinIosArm64": "> Task :apps:shared:compileKotlinIosArm64",
+    ":formatCheck": "> Task :formatCheck",
+    ":architectureCheck": "> Task :architectureCheck",
+    ":detekt": "> Task :detekt UP-TO-DATE"
+  },
+  "lintIssues": 0,
+  "sourceAccepted": true,
+  "nativeCandidateAccepted": false,
+  "storage71RootResolved": false,
+  "automaticActivationImplemented": false,
+  "phoneVersion": 70
+}

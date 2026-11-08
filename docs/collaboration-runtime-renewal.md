@@ -1,6 +1,6 @@
 # Retaining a published client during admission renewal
 
-Candidate under test, not accepted or installed. Release72's settled unready-recipient
+Source accepted; native validation and installation remain pending. Release72's settled unready-recipient
 capture has zero delivery transport retries but still13 device-setup reads,12 room
 reads and six secret-storage-default-key reads in150seconds. The earlier instrumented
 trace directly records admission expiry calling registry update/retire. Closing and
@@ -29,8 +29,11 @@ or parent boundary. Sub-millisecond deadlines keep conservative millisecond roun
 Focused16842 passed85 fresh cases with zero failures/errors/skips in595.030seconds.
 The subsequent overdue-timer regression passed in focused80769:28fresh/zero failures,
 107.983seconds. Domain ownership, Android registry/background lifetimes, live entry,
-application ownership and quality checks were exercised; final full2292 is running.
-All source/library inputs remained stable. Source acceptance still requires full success. Native
+application ownership and quality checks were exercised. Full2292 then passed5,786 fresh
+cases in777 suites, zero failures/errors/skips, in934.056seconds. Required root, Chrome,
+Android proof/release/lint, shared web/iOS source and quality targets passed; lint has
+zero issues. All4,498 application and82 library inputs remained stable.
+[Exact source and results](measurements/collaboration-runtime-retention-2026-11-08.json). Native
 validation must use the existing private store and original waiting message, with no
 replay, and measure idle SDK requests as well as delivery requests. No claim about the
 separate71 Storage/IllegalStateException follows from fewer runtime replacements.

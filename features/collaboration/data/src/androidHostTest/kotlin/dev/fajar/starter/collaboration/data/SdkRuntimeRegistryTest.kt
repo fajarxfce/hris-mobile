@@ -10,6 +10,100 @@ import kotlin.test.*
 
 class SdkRuntimeRegistryTest {
     @Test
+    fun admissionRenewalRetainsOnlyThePublishedClientWithoutOpeningOrPromotingAnother() {
+        val f = RegistryFixture()
+        f.select()
+        val original = f.foreground()
+        val resource = RegistryResource(ready = true)
+        f.registry.attach(original, resource)
+        repeat(3) {
+            assertTrue(
+                f.registry
+                    .update(
+                        CollaborationRuntimeRetention(f.parent, null, retainedForeground = f.owner)
+                    )
+                    .isEmpty()
+            )
+            assertSame(resource, f.registry.find(f.owner, "device"))
+            assertNull(f.registry.retainForeground(f.owner, "device"))
+            assertIs<AppResult.Failed>(f.registry.reserveForeground("new-store", f.owner, "device"))
+            val borrow = f.background()
+            assertNull(f.registry.releaseBorrow(borrow, f.finished))
+            assertEquals(0, resource.stops)
+            f.select()
+            assertSame(resource, f.registry.retainForeground(f.owner, "device"))
+        }
+        assertEquals(
+            listOf(resource),
+            f.registry.update(CollaborationRuntimeRetention(f.parent, null)),
+        )
+        assertEquals(1, resource.stops)
+    }
+
+    @Test
+    fun renewalCannotRetainAnUnpublishedAcquisitionOrPromoteAnIndependentBorrow() {
+        val f = RegistryFixture()
+        f.select()
+        val acquiring = f.foreground()
+        f.registry.update(
+            CollaborationRuntimeRetention(f.parent, null, retainedForeground = f.owner)
+        )
+        val late = RegistryResource(ready = true)
+        assertFalse(f.registry.attach(acquiring, late))
+        assertEquals(1, late.stops)
+        f.registry.released(acquiring)
+        val borrow = f.background()
+        val background = RegistryResource(ready = true)
+        f.registry.attach(borrow.reservation, background)
+        f.registry.update(
+            CollaborationRuntimeRetention(f.parent, null, retainedForeground = f.owner)
+        )
+        assertNull(f.registry.retainForeground(f.owner, "device"))
+        assertSame(background, f.registry.releaseBorrow(borrow, f.finished))
+        assertEquals(1, background.stops)
+    }
+
+    @Test
+    fun aConfirmedDenialAndParentLossOverrideRetainedForeground() {
+        repeat(2) { scenario ->
+            val f = RegistryFixture()
+            f.select()
+            val resource = RegistryResource(ready = true)
+            f.registry.attach(f.foreground(), resource)
+            f.registry.update(
+                CollaborationRuntimeRetention(f.parent, null, retainedForeground = f.owner)
+            )
+            val next =
+                if (scenario == 0)
+                    CollaborationRuntimeRetention(f.parent, null, f.owner.companyId, f.owner)
+                else CollaborationRuntimeRetention(null, null)
+            assertEquals(listOf(resource), f.registry.update(next))
+            assertEquals(1, resource.stops)
+            assertNull(f.registry.find(f.owner, "device"))
+            assertIs<AppResult.Failed>(f.registry.reserveBackground("store", f.owner, "device"))
+        }
+    }
+
+    @Test
+    fun aForeignRetainedOwnerCannotChangeTheCurrentRegistry() {
+        val f = RegistryFixture()
+        f.select()
+        val resource = RegistryResource(ready = true)
+        f.registry.attach(f.foreground(), resource)
+        assertFailsWith<IllegalArgumentException> {
+            f.registry.update(
+                CollaborationRuntimeRetention(
+                    f.parent,
+                    null,
+                    retainedForeground = f.owner.copy(accountId = "foreign"),
+                )
+            )
+        }
+        assertSame(resource, f.registry.find(f.owner, "device"))
+        assertEquals(0, resource.stops)
+    }
+
+    @Test
     fun anIdentityObservationCannotRetireAReplacementClientOrAnAlreadyStoppedOwner() {
         val f = RegistryFixture()
         f.select()
