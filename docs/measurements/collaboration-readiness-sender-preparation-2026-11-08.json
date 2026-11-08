@@ -1,0 +1,35 @@
+{
+  "qualification": {
+    "at": "2026-11-08T20:53:57.051222+00:00",
+    "accepted": true,
+    "retainedFirstAccountVersion": 76,
+    "phoneTouched": false,
+    "bimaRecoveryClaimed": false,
+    "newAppInstalled": false,
+    "newSendGestures": 0,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "pid": 3806944,
+    "bootSeconds": 28.961,
+    "retainedPackage76Present": true,
+    "originalFictionalAccountHomeVisible": true,
+    "scope": "Complete isolated AVD clone boots the retained package and account Home. This is not new readiness-wake or Bima recovery acceptance.",
+    "processStopped": true,
+    "originalFilesUnchanged": true,
+    "elapsedSeconds": 43.248
+  },
+  "screenshot": {
+    "at": "2026-11-08T20:55:29.579683+00:00",
+    "file": "retained-home.png",
+    "sha256": "4c768cefcb79f07cdd894ed3db1cb6e628a6dfb2b40bb6d9cb20969efe53b7ed",
+    "reviewed": true,
+    "observation": "Original fictional Automatic activation 75 (Demo) Home and four tabs are visible; no sign-in or storage-error dialog. No chat/send or Bima recovery acceptance."
+  },
+  "copyManifestSha256": "958cbbc5395364015af3284c7458a88a4797e6011a6e6d915130af0b066f043f",
+  "originalFixtureVersion": 76,
+  "limits": [
+    "Original first-account fixture was copied; this does not recover the Bima fixture.",
+    "Package/account Home continuity only; no new readiness-wake, key-publication or send-timing acceptance.",
+    "No phone install or UI action; no new application build."
+  ]
+}

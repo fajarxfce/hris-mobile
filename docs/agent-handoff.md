@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Isolated sender fixture prepared; server readiness source validated — 8 November 2026, 20:57 UTC
+
+Platform52aaccaa is pushed: post-commit publication capture and bounded readiness
+fanout passed356 fresh cases/zero failures/errors/one existing opt-in skip. Its
+worker image is staged. A restored current database migrated116.1→116.2 while
+preserving203 old tables/history; old API/worker images also passed compatibility.
+LiveAPI1aea, worker10485916 and schema116.1 are still unchanged; no readiness flag
+was enabled. Platform320047af records exact preparation evidence and next steps.
+
+For the next native waiting-sender proof, `.work/readiness-native-2026-11-08/sender`
+contains a complete isolated clone of the ORIGINAL first-account76 device. All four
+userdata/metadata files were hash matched before boot; its separate AVD retains
+matching qemu-version/version_num files. Qualification86822 REAPED PASS43.248s,
+boot28.961s: retained package76 and Automatic activation75(Demo) Home present.
+Actual screenshot reviewed. Original files unchanged; no install/send gesture;
+owned2560MiB/2-core emulator stopped. [Evidence](measurements/collaboration-readiness-sender-preparation-2026-11-08.json).
+This is fixture continuity only, NOT key-publication/wake/timing or Bima acceptance.
+
+Bima's original74 image remains unreadable with its missing/mismatched metadata;
+preserve it and its snapshot. The failed empty-clone results below are not recovery.
+Do not rerun the disproven restoration script, send Draft66, replay old synthetic
+originals, enroll replacement keys or wipe a shared AVD. Starter port remains held.
+Phone70 has no new availability response and was untouched. No compiler/emulator
+remains; proceed with Platform dev rollout and controlled new-recipient wake proof,
+then interrupted activation/missed-hint recovery and the broader long run.
+
 ## Bima fixture boot failure; continue independent server checks — 8 November 2026, 20:24 UTC
 
 Release 76 source/packaging and first-account native gates below remain valid.
