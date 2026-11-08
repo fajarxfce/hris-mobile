@@ -1,5 +1,26 @@
 # Agent continuation — HRIS Mobile
 
+## Runtime retention candidate under test — 8 November 2026, 16:05 UTC
+
+Docs074165f9 pushed59197 REAPED. Native72 wake observation accepted, overall release
+still unaccepted. Second storage watch90429 REAPED with no Storage event/root request.
+Owned emulator73180 and stop89062 REAPED, original Bima72/keys retained, shellUID2000
+verified before shutdown. Phone70 unchanged. Do not replay Tes72 waiting154845,
+either71 original, or exact UNSENT Draft66 092041.
+
+Five Kotlin files are UNCOMMITTED/FROZEN under sole compiler16842:
+.work/runtime-retention-2026-11-08/check.py focused-1, after successful formatting.
+Candidate adds retainedForeground distinct from fresh foreground admission. Registry
+may retain only an already published foreground client; it cannot open/promote late
+acquisitions. Selected local ownership/known restrictions guard retention. Freshness,
+later scheduled maintenance and native-parent expiry keep separate monotonic deadlines.
+Neither gateway authority nor message commands change. New tests cover renewal,
+unpublished/borrowed clients, denial, malformed owner, maintenance after expiry and
+clock rollback. [Candidate contract](collaboration-runtime-renewal.md).
+Reap and resolve focused failures before full required checks. No73 APK exists.
+Known71 Storage failure still lacks a proven cause; do not infer one from nonrecurrence.
+Automatic activation/scoped readiness wake remains required and doc-only.
+
 ## Native72 delivery wake verified; remaining runtime churn — 8 November 2026, 15:58 UTC
 
 Source e82abe16 pushed10837 REAPED; package63207 REAPED PASS103.911s; artifact/native
