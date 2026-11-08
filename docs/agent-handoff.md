@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Passive wake root identified; regression change in progress — 8 November 2026, 15:14 UTC
+
+Release71 stays REJECTED; phone stays70. [Closed diagnostic evidence](measurements/collaboration-delivery-wake-root-2026-11-08.json).
+A45.194s instrumented idle trace (no buffer overflow) records admission expiry,
+SdkRuntimeRegistry.update/retireIfIdle/retire at+11.050s and workspace refresh at
++11.054s. Source confirms two unwanted delivery wake paths: each renewed admitted
+publication and each timeline acquisition. Do not infer a complete async call stack
+or performance result from this trace. Preserve the separate live-admission gate.
+
+Uncommitted production/test changes are now in ApplicationCollaborationLifetime
+and ChatThreadViewModel: retain the scheduled owner across ordinary admission
+expiry, and remove pending-command wake from passive timeline acquisition. Add
+regressions for expiry/direct stale observation, route reconnect, explicit retry,
+actual denial/selection recovery and failed scheduling. These changes are UNACCEPTED.
+Formatter93072 REAPED failed before mutation (ambiguous task name). Sole job93645
+runs exact formatKotlin followed by frozen focused-1 under
+.work/chat-delivery-wake-2026-11-08. Reap, resolve failures, then run root/native acceptance
+on the SAME retained originals before any phone installation. Do not weaken71's
+failed observation or label its storage error resolved. No72 APK exists yet.
+
+Retained-only repro14416 REAPED:0new sends; same offline original survived; storage
+error did not recur in120s. Crashlytics11JSONfiles had no matching storage stack.
+Profile57420 and instrumented1271 REAPED. Instrumented stop writes asynchronously;
+initial local0-byte copy was recaptured after flush as6,455,581bytes. Raw private
+artifacts remain ignored. WorkManager metadata was queried read-only.
+
+Stop82759/emulator13933 REAPED. Unroot was requested but shellUID2000 confirmation
+failed; the subsequent owned stop succeeded. Loopback alias was explicitly closed.
+CHECK/RESTORE shellUID on next owned boot; do not claim root restoration succeeded.
+Original Bima image/keys and both71 originals remain intact. NEVER replay Tes71
+waiting143424, Tes71 unready143749, or UNSENT Draft66 092041. No compiler/emulator
+parallelism, no subagents/goals, no phone UI driving. Automatic activation/event
+wake remains a separate required feature (side branch design-only bb7a8d6f).
+
 ## Release71 rejected by actual idle test — 8 November 2026, 14:53 UTC
 
 DO NOT INSTALL71. Sourceff495af3 passed5,775 tests and pushed61360 REAPED; package
