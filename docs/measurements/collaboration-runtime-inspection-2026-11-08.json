@@ -1,0 +1,129 @@
+{
+  "acceptedFocused": true,
+  "at": "2026-11-08T19:32:27.536232+00:00",
+  "purpose": "Coordinate activation inventory/private identity reads with the same physical namespace reservation as foreground/background SDK acquisition.",
+  "firstNativeEvidence": "collaboration-automatic-activation-native75-2026-11-08.json",
+  "firstFocused": {
+    "exitCode": -15,
+    "seconds": 365.429,
+    "freshCounts": {
+      "tests": 125,
+      "failures": 6,
+      "errors": 0,
+      "skipped": 1
+    },
+    "interrupted": true,
+    "reason": "Existing fake runtimes omitted the new inspection contract, so UI barrier waits could not progress; one new assertion also incorrectly expected an occupied store without keys to restore."
+  },
+  "correctedFilesAfterFirstGate": [
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationIdentityTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ActivateCollaborationDeviceTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeInstallationTest.kt",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupFixture.kt"
+  ],
+  "productionUnchangedBetweenFocusedRuns": true,
+  "focused": {
+    "seconds": 482.119,
+    "counts": {
+      "tests": 139,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sources": 4503,
+    "librarySources": 82,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "reports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+        "sha256": "4c5c5669bffdec0d08e876ec690d0685283f99c26e8843ec8fbdb426f40240cf",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ApplicationCollaborationLifetimeTest.xml": {
+        "sha256": "9f5d4f1d6358bfe94df19d38220f141b0e81e207d29a9203fb551cda4961bbc2",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatSetupLayoutTest.xml": {
+        "sha256": "a396b9bfe16dea692f73a0f711d3b54c1388735617d2959fee1eabc9e1823e20",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.setup.ChatSetupViewModelTest.xml": {
+        "sha256": "cfb0cabe2f34de48312cbdb4cd50eba71edb56db63d8ff690d21290d56f164c0",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkRuntimeRegistryTest.xml": {
+        "sha256": "9ab52f944e5ea22be6f4f2d8b3906da3f8d4f6b7639a61939983bfdff360aac1",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationIdentityTest.xml": {
+        "sha256": "8fbe58b67e83f8ad4e44b9f475f415b9321606397c2b0413eb40e3f099ad086e",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationRuntimeInstallationTest.xml": {
+        "sha256": "62f1757c3facb4237864921b18a15093c2848462ef7fa86257ce8f6d6f923e0f",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ActivateCollaborationDeviceTest.xml": {
+        "sha256": "be40e5ec9482f5b425319ae0bba386f9808487202021c7855a41a8f2890d0fbb",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationActivationStorePolicyTest.xml": {
+        "sha256": "476afd3f88fd625f493deb0ac5fb3fced6f40f8a1b06bce35b64f99f4ad12264",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml": {
+        "sha256": "d20b4f29989bedb4caf7980331cbc2f5fe720d21d121970515b5be31031e667c",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "resultSha256": "40fabf0087efd05ed3b8d3d90b63ddabb18cc326d5e8211ae57aac7a19c50e60"
+  },
+  "sourceFiles": {
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationIdentityTest.kt": "f930ad19fa69fe8ba7cc00eca96dcc924ae5f52c87ac765f059f58624c6e92c8",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/SdkRuntimeRegistryTest.kt": "962129f68cbe70ecb1cbe1c90df8c5d929e4c515767a45505d5ee16a3a4c942d",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "56f478d5cd9ee067464ed65629e4ee2ebb374f77b1771381bad3dd4fbaed5e11",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkRuntimeRegistry.kt": "ba09474a9c2013f46f682b54e0901b539d07bd5ec9fe023fae8de9dadfe4aed2",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationActivation.kt": "368ba234bae9577d81bd30060398b5db28961531d65db81d0da680c91c146535",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationRuntimeRepository.kt": "793db485cf2e5783835810cf0067fb45d8b43d1948ee5ad6e8a75e2487440439",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ActivateCollaborationDevice.kt": "37346bb52485f1fbc1eab60d01aa9efc8d1e5368b5ea18f5f8343506b363bcea",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ActivateCollaborationDeviceTest.kt": "c86457ac65052a142e6e36bfe20ce2be15507d078b250ecc8a2e39ddbd08380b",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationActivationFixture.kt": "45f132cff0845afb5ed6316532d4b20bfc6c573467a107720c2b04258a38458e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeInstallationTest.kt": "c596e09d44182eafc0f73e2597e2f5aa3f8111a37b76ab9b76b33794f21bef20",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupFixture.kt": "ca6537413ded76b08e310889544264ed21c61ec7350060af3d092a7fcec7a3e6"
+  },
+  "fullValidation": false,
+  "native76Validation": false,
+  "phoneVersionCode": 70,
+  "postCommitRecipientWakeImplemented": false,
+  "priorRelease71StorageRootResolved": false
+}

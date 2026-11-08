@@ -550,8 +550,18 @@ private class InstallationFixture {
         }
 
     fun installer() =
-        CollaborationActivationFixture(setup, configureDevice = false)
-            .operation(runtime = runtimes, originalCommands = commands)
+        CollaborationActivationFixture(setup, configureDevice = false).let { activation ->
+            activation.operation(
+                runtime =
+                    object : CollaborationRuntimeRepository by runtimes {
+                        override suspend fun reserveInspection(
+                            owner: CollaborationOwner,
+                            deviceId: String,
+                        ) = activation.runtimes.reserveInspection(owner, deviceId)
+                    },
+                originalCommands = commands,
+            )
+        }
 
     fun install(): suspend () -> AppResult<CollaborationRuntimeLease> {
         val useCase = installer()

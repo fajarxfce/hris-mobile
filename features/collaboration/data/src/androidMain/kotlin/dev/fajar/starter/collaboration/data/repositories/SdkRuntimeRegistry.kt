@@ -22,6 +22,34 @@ internal class SdkRuntimeRegistry<T : Any>(
     val handoverChanges = changes.asStateFlow()
     private var retention: CollaborationRuntimeRetention? = null
 
+    /** Null retains an available runtime. Otherwise the empty reservation excludes SDK opening. */
+    fun reserveInspection(
+        storeId: String,
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<SdkRuntimeReservation<T>?> =
+        synchronized(monitor) {
+            if (storeId in handovers) return@synchronized handoverPending()
+            val decision = retention
+            if (decision != null && (!retainsParent(owner) || decision.foreground != owner))
+                return@synchronized stopped()
+            val existing = entries[storeId]
+            if (existing != null) {
+                if (
+                    existing.owner != owner ||
+                        existing.deviceId != deviceId ||
+                        existing.space != null ||
+                        existing.retired ||
+                        existing.historyReopening ||
+                        existing.resource?.let(available) != true
+                )
+                    return@synchronized busy()
+                existing.foreground = true
+                return@synchronized AppResult.Success(null)
+            }
+            reserveForeground(storeId, owner, deviceId)
+        }
+
     fun reserveForeground(
         storeId: String,
         owner: CollaborationOwner,

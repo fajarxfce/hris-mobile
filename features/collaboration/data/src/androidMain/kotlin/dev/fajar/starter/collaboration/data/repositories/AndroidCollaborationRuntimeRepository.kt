@@ -51,6 +51,31 @@ class AndroidCollaborationRuntimeRepository(
     private val legacyLeases
         get() = registry.legacyResources()
 
+    override suspend fun reserveInspection(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationRuntimeInspection> {
+        currentCoroutineContext().ensureActive()
+        val scoped = safeStorageCall { collaborationSdkScope(owner, deviceId, server, endpoint) }
+        if (scoped is AppResult.Failed) return scoped
+        val scope = (scoped as AppResult.Success).value
+        val acquired = registry.reserveInspection(scope.storeId, owner, deviceId)
+        if (acquired is AppResult.Failed) return acquired
+        val reservation =
+            (acquired as AppResult.Success).value
+                ?: return AppResult.Success(CollaborationRuntimeInspection.Open)
+        return AppResult.Success(
+            object : CollaborationRuntimeInspection.Reserved {
+                override val owner = reservation.owner
+                override val deviceId = reservation.deviceId
+
+                override fun isCurrent() = registry.accepts(reservation)
+
+                override fun close() = registry.released(reservation)
+            }
+        )
+    }
+
     override suspend fun acquireOriginalQueue(
         runtime: CollaborationSpaceRuntimeReady,
         matrixRoomId: String,

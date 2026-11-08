@@ -1,5 +1,41 @@
 # Agent continuation — HRIS Mobile
 
+## Runtime inspection focused repair passed — 8 November 2026, 19:32 UTC
+
+Eleven Kotlin application/test files plus documentation are ready for commit/push.
+The domain owns one runtime-inspection reservation across inventory and private-key
+reads; the registry excludes foreground/background acquisition and atomically retains
+an already published runtime. Cancellation/late owner loss releases only the exact
+reservation. No StoreBusy suppression, timed retry or private-key replacement is added.
+[Design/evidence](collaboration-runtime-inspection.md).
+
+Formatter73552 PASS40.232s. Focused33255 was deliberately stopped/reaped365.429s
+(exit-15;125 fresh/6 failures/1 interrupted skip) after obsolete test-runtime contracts
+prevented UI barriers, plus an incorrect new assertion for missing old keys. Four
+test files changed; production stayed identical. Formatter3169 PASS35.924s. Focused57159
+REAPED PASS482.119s:139 fresh, zero failures/errors/skips,4,503 app/config and82 library
+inputs frozen. Domain25 activation cases, Android18 identity/23 registry, setup UI,
+application ownership/bindings, formatting, architecture74 and detekt pass.
+
+Next commit/push, then sole compiler `.work/runtime-inspection-2026-11-08/check.py full-1`.
+No emulator remains. Held76 scripts are prepared in `.work/release-phone-2026-11-08-build76`;
+source gate references runtime-inspection/full-1, requires new DEX markers and actual Git
+metadata. No76 APK exists. Do not remove HOLD until source full acceptance and push.
+
+`.work/runtime-inspection-2026-11-08/native76` is a second held proof directory pointing
+to the ORIGINAL first-activation75 userdata (no wipe/provision). Start/install/preflight,
+closed counter/storage watch, two-restart+180s quiet probe, passive/shell/stop and acceptance
+scripts are prepared but NOT run. Its old75 keys must stay one device/publication. Review
+actual screenshots and collect true native sync for each restart. The earlier75 Storage
+failure remains recorded; do not rerun its provisioning or first-login script. Then use
+76's retained-only Bima scripts against original74, keeping original71 pending/original73
+Sent and exact UNSENT Draft66. No new send. Starter port is still held and its old75-native
+prerequisites will need the actual76 accepted evidence, not forged75 success.
+
+Platform9683597e documents three unvalidated/unbound readiness domain files; no datasource,
+migration, worker or live change. Phone remains70/unreachable. Old71 Storage root remains
+open. Continue backend post-commit/missed wake, interrupted connectivity and all54PRD work.
+
 ## Native75 first keys passed; cold ownership collision blocks acceptance — 8 November 2026, 19:09 UTC
 
 Main75 source23f5af9e packaging12836 REAPED PASS361.136s; artifact/SDK4308 passed.

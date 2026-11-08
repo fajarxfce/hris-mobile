@@ -30,6 +30,7 @@ data class CollaborationActivationProgress(
 )
 
 enum class CollaborationActivationStore {
+    RUNTIME_OPEN,
     FIRST_INITIALIZATION,
     ORIGINAL_ACCOUNT,
     RECOVERY_REQUIRED,

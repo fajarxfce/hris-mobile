@@ -9,6 +9,95 @@ import kotlinx.coroutines.test.*
 
 class ActivateCollaborationDeviceTest {
     @Test
+    fun companyLossDuringInspectionClosesTheExclusionWithoutReadingPrivateKeys() = runTest {
+        val f = CollaborationActivationFixture()
+        f.retainPrivateAccount()
+        f.inspect = {
+            f.command.access.workspace = null
+            AppResult.Success(f.inventory)
+        }
+        f.possess = { error("Private key inspection must stop after company loss") }
+        assertIs<AppResult.Failed>(f.operation()(f.command.owner).last())
+        assertFalse(f.inspectionHeld)
+        assertEquals(1, f.inspectionCloses)
+        assertEquals(0, f.restores)
+        assertTrue(f.installations.isEmpty())
+    }
+
+    @Test
+    fun runtimePublishedAfterTheFirstCheckIsRetainedWithoutReadingItsOpenDatabase() = runTest {
+        val f = CollaborationActivationFixture()
+        f.openAtInspection = true
+        f.inspect = { error("An open runtime must not be inspected through its file lock") }
+        f.possess = { error("An open runtime must not be inspected through its private database") }
+        val result =
+            assertIs<AppResult.Success<CollaborationActivationProgress>>(
+                f.operation()(f.command.owner).last()
+            )
+        assertEquals(CollaborationActivationStep.READY, result.value.step)
+        assertEquals(0, f.restores)
+        assertTrue(f.installations.isEmpty())
+        assertEquals(0, f.inspectionCloses)
+        assertEquals(1, f.scheduled.size)
+    }
+
+    @Test
+    fun cancelledPrivateInspectionReleasesItsReservationBeforeAnotherActivation() = runTest {
+        val f = CollaborationActivationFixture()
+        f.retainPrivateAccount()
+        val entered = CompletableDeferred<Unit>()
+        f.possess = {
+            entered.complete(Unit)
+            awaitCancellation()
+        }
+        val operation = f.operation()
+        val activation = async { operation(f.command.owner).last() }
+        entered.await()
+        assertTrue(f.inspectionHeld)
+        activation.cancelAndJoin()
+        assertFalse(f.inspectionHeld)
+        assertEquals(1, f.inspectionCloses)
+        assertEquals(0, f.restores)
+        f.possess = { AppResult.Success(f.privateIdentity) }
+        assertEquals(
+            CollaborationActivationStep.READY,
+            assertIs<AppResult.Success<CollaborationActivationProgress>>(
+                    operation(f.command.owner).last()
+                )
+                .value
+                .step,
+        )
+        assertFalse(f.inspectionHeld)
+        assertEquals(2, f.inspectionCloses)
+        assertEquals(1, f.restores)
+    }
+
+    @Test
+    fun lateInspectionInvalidationCannotRestoreOrCreateKeys() = runTest {
+        for (duringPossession in listOf(false, true)) {
+            val f = CollaborationActivationFixture()
+            f.retainPrivateAccount()
+            if (duringPossession)
+                f.possess = {
+                    f.inspectionCurrent = false
+                    AppResult.Success(f.privateIdentity)
+                }
+            else
+                f.inspect = {
+                    f.inspectionCurrent = false
+                    AppResult.Success(f.inventory)
+                }
+            val result = assertIs<AppResult.Failed>(f.operation()(f.command.owner).last())
+            assertEquals("client.collaboration_runtime_not_retained", result.failure.code)
+            assertEquals(1, f.inspectionCloses)
+            assertFalse(f.inspectionHeld)
+            assertEquals(0, f.restores)
+            assertTrue(f.installations.isEmpty())
+            assertTrue(f.scheduled.isEmpty())
+        }
+    }
+
+    @Test
     fun setupPageObservesAutomaticPreparationWithoutAnotherPollerOrOwningItsJob() = runTest {
         val f = CollaborationActivationFixture()
         f.device = f.device!!.copy(state = CollaborationDeviceState.PROVISIONING)

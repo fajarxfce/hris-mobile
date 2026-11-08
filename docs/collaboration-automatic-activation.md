@@ -174,3 +174,20 @@ reconciliation as described above. Automatic recovery after connectivity returns
 an interrupted first setup also remains to be integrated; repeated admission refresh is
 not an acceptable substitute trigger. Existing key-recovery UX currently reports the
 need for recovery; cloud backup/import itself is not implemented by this change.
+
+## First native activation and cold-start repair
+
+Release75 created one active device and confirmed its first public keys8.455seconds
+following ordinary email sign-in and company selection on a fresh owned emulator.
+No setup/chat page or send gesture was used. Its first cold restart then captured
+an actual private-store ownership collision. The diagnostic root restart interrupted
+the UI driver; later Home restoration with the same one device is continuity evidence,
+not acceptance of the failed startup. [Native75 evidence](measurements/collaboration-automatic-activation-native75-2026-11-08.json)
+remains failed. Both that original image and the older Bima image are preserved.
+
+[Runtime inspection coordination](collaboration-runtime-inspection.md) addresses the
+race between activation's inventory/private-key reads and background SDK creation.
+The proposed resource reservation covers the reads without moving authorization or
+key-loss policy into storage. Its regression/full/native76 checks are ongoing. Phone
+remains70;75 was never installed. Server readiness wake and interrupted-connectivity
+recovery remain required after this repair, along with the broader collaboration PRD.

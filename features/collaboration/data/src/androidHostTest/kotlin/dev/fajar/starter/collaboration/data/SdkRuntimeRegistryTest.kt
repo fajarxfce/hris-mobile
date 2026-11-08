@@ -10,6 +10,85 @@ import kotlin.test.*
 
 class SdkRuntimeRegistryTest {
     @Test
+    fun inspectionExcludesSdkAcquisitionUntilItsOwnerReleasesEvenAfterInvalidation() {
+        val f = RegistryFixture()
+        f.select()
+        val inspection =
+            assertNotNull(
+                assertIs<AppResult.Success<SdkRuntimeReservation<RegistryResource>?>>(
+                        f.registry.reserveInspection("store", f.owner, "device")
+                    )
+                    .value
+            )
+        assertTrue(f.registry.accepts(inspection))
+        assertIs<AppResult.Failed>(f.registry.reserveForeground("store", f.owner, "device"))
+        assertIs<AppResult.Failed>(f.registry.reserveBackground("store", f.owner, "device"))
+        assertIs<AppResult.Failed>(f.registry.reserveInspection("store", f.owner, "device"))
+        f.registry.update(CollaborationRuntimeRetention(null, null))
+        assertFalse(f.registry.accepts(inspection))
+        f.select()
+        assertIs<AppResult.Failed>(f.registry.reserveBackground("store", f.owner, "device"))
+        f.registry.released(inspection)
+        val replacement = f.background()
+        f.registry.released(inspection)
+        assertTrue(f.registry.accepts(replacement.reservation))
+    }
+
+    @Test
+    fun inspectionPromotesThePublishedBackgroundOwnerWithoutReopeningItsPrivateStore() {
+        val f = RegistryFixture()
+        f.select()
+        val borrow = f.background()
+        assertIs<AppResult.Failed>(f.registry.reserveInspection("store", f.owner, "device"))
+        val resource = RegistryResource(ready = true)
+        f.registry.attach(borrow.reservation, resource)
+        assertEquals(
+            AppResult.Success(null),
+            f.registry.reserveInspection("store", f.owner, "device"),
+        )
+        assertNull(f.registry.releaseBorrow(borrow, f.finished))
+        assertSame(resource, f.registry.find(f.owner, "device"))
+        assertEquals(0, resource.stops)
+        assertIs<AppResult.Failed>(
+            f.registry.reserveInspection("store", f.owner.copy(accountId = "foreign"), "device")
+        )
+    }
+
+    @Test
+    fun competingInspectionAndRuntimeCanOwnOnlyOnePhysicalNamespace() {
+        val f = RegistryFixture()
+        f.select()
+        val threads = Executors.newFixedThreadPool(2)
+        try {
+            repeat(20) {
+                val start = CountDownLatch(1)
+                val inspection =
+                    threads.submit<AppResult<SdkRuntimeReservation<RegistryResource>?>> {
+                        check(start.await(2, TimeUnit.SECONDS))
+                        f.registry.reserveInspection("store", f.owner, "device")
+                    }
+                val runtime =
+                    threads.submit<AppResult<SdkRuntimeReservation<RegistryResource>>> {
+                        check(start.await(2, TimeUnit.SECONDS))
+                        f.registry.reserveForeground("store", f.owner, "device")
+                    }
+                start.countDown()
+                val results =
+                    listOf(inspection.get(3, TimeUnit.SECONDS), runtime.get(3, TimeUnit.SECONDS))
+                val winning =
+                    assertIs<AppResult.Success<SdkRuntimeReservation<RegistryResource>?>>(
+                        results.single { it is AppResult.Success }
+                    )
+                assertEquals(1, results.count { it is AppResult.Failed })
+                f.registry.released(assertNotNull(winning.value))
+            }
+        } finally {
+            threads.shutdownNow()
+            assertTrue(threads.awaitTermination(3, TimeUnit.SECONDS))
+        }
+    }
+
+    @Test
     fun admissionRenewalRetainsOnlyThePublishedClientWithoutOpeningOrPromotingAnother() {
         val f = RegistryFixture()
         f.select()

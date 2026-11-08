@@ -382,6 +382,13 @@ class ActivateCollaborationDevice(
                         }
                     }
                 }
+                CollaborationActivationStore.RUNTIME_OPEN -> {
+                    return when (val published = ready(workspaceId, owner, device, progress)) {
+                        is AppResult.Failed -> published
+                        is AppResult.Success ->
+                            AppResult.Success(ActivationAdvance.Finished(published.value))
+                    }
+                }
                 CollaborationActivationStore.FIRST_INITIALIZATION -> Unit
             }
             if (!mayCreate) return AppResult.Success(ActivationAdvance.Finished(observed))
@@ -422,28 +429,50 @@ class ActivateCollaborationDevice(
         device: CollaborationDeviceSetup,
         record: CollaborationSetupCommandRecord?,
     ): AppResult<CollaborationActivationStore> {
-        val inspected = inventory.inspect(owner, device.id)
-        val admitted = continuation(workspaceId, owner, inspected)
-        if (admitted is AppResult.Failed) return admitted
-        if (inspected is AppResult.Failed) return inspected
-        val facts = (inspected as AppResult.Success).value
-        val decision = collaborationActivationStore(owner, device, record, facts)
-        if (decision != CollaborationActivationStore.ORIGINAL_ACCOUNT)
-            return AppResult.Success(decision)
-        val possessed = possession.readPrivateIdentity(owner, device.id)
-        val current = continuation(workspaceId, owner, possessed)
-        if (current is AppResult.Failed) return current
-        if (possessed is AppResult.Failed) return possessed
-        return AppResult.Success(
-            if (
-                collaborationActivationPossessionMatches(
-                    facts,
-                    (possessed as AppResult.Success).value,
+        val reserved = runtimes.reserveInspection(owner, device.id)
+        // Own a late reservation before the first suspending authority check.
+        val lease =
+            (reserved as? AppResult.Success)?.value as? CollaborationRuntimeInspection.Reserved
+        try {
+            val granted = continuation(workspaceId, owner, reserved)
+            if (granted is AppResult.Failed) return granted
+            if (reserved is AppResult.Failed) return reserved
+            if ((reserved as AppResult.Success).value == CollaborationRuntimeInspection.Open)
+                return AppResult.Success(CollaborationActivationStore.RUNTIME_OPEN)
+            requireNotNull(lease)
+            if (lease.owner != owner || lease.deviceId != device.id)
+                return collaborationSetupFailure("client.session_changed", FailureKind.Unauthorized)
+            if (!lease.isCurrent())
+                return collaborationSetupFailure("client.collaboration_runtime_not_retained")
+            val inspected = inventory.inspect(owner, device.id)
+            val admitted = continuation(workspaceId, owner, inspected)
+            if (admitted is AppResult.Failed) return admitted
+            if (inspected is AppResult.Failed) return inspected
+            if (!lease.isCurrent())
+                return collaborationSetupFailure("client.collaboration_runtime_not_retained")
+            val facts = (inspected as AppResult.Success).value
+            val decision = collaborationActivationStore(owner, device, record, facts)
+            if (decision != CollaborationActivationStore.ORIGINAL_ACCOUNT)
+                return AppResult.Success(decision)
+            val possessed = possession.readPrivateIdentity(owner, device.id)
+            val current = continuation(workspaceId, owner, possessed)
+            if (current is AppResult.Failed) return current
+            if (possessed is AppResult.Failed) return possessed
+            if (!lease.isCurrent())
+                return collaborationSetupFailure("client.collaboration_runtime_not_retained")
+            return AppResult.Success(
+                if (
+                    collaborationActivationPossessionMatches(
+                        facts,
+                        (possessed as AppResult.Success).value,
+                    )
                 )
+                    CollaborationActivationStore.ORIGINAL_ACCOUNT
+                else CollaborationActivationStore.RECOVERY_REQUIRED
             )
-                CollaborationActivationStore.ORIGINAL_ACCOUNT
-            else CollaborationActivationStore.RECOVERY_REQUIRED
-        )
+        } finally {
+            lease?.close()
+        }
     }
 
     private suspend fun ready(

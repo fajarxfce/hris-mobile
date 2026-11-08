@@ -15,6 +15,10 @@ internal class CollaborationActivationFixture(
     var supported = true
     var device: CollaborationDeviceSetup? = command.access.device
     var opened = false
+    var inspectionHeld = false
+    var inspectionCurrent = true
+    var inspectionCloses = 0
+    var openAtInspection = false
     var restores = 0
     var publications = 0
     var closes = 0
@@ -116,6 +120,29 @@ internal class CollaborationActivationFixture(
         object : CollaborationRuntimeRepository {
             override val supportsDeviceActivation
                 get() = supported
+
+            override suspend fun reserveInspection(
+                owner: CollaborationOwner,
+                deviceId: String,
+            ): AppResult<CollaborationRuntimeInspection> {
+                if (openAtInspection) return AppResult.Success(CollaborationRuntimeInspection.Open)
+                check(!inspectionHeld)
+                inspectionHeld = true
+                return AppResult.Success(
+                    object : CollaborationRuntimeInspection.Reserved {
+                        override val owner = owner
+                        override val deviceId = deviceId
+
+                        override fun isCurrent() = inspectionCurrent
+
+                        override fun close() {
+                            check(inspectionHeld)
+                            inspectionHeld = false
+                            inspectionCloses++
+                        }
+                    }
+                )
+            }
 
             override suspend fun handoverIntent(
                 owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
@@ -237,6 +264,7 @@ internal class CollaborationActivationFixture(
                 command: CollaborationSetupCommandRecord,
             ): AppResult<CollaborationRuntimeLease> {
                 assertEquals(this@CollaborationActivationFixture.command.owner, owner)
+                check(!inspectionHeld)
                 installations.add(command)
                 ownedLease.installedOperationId = command.command.id
                 return onInstall()
@@ -246,6 +274,7 @@ internal class CollaborationActivationFixture(
                 owner: CollaborationOwner,
                 deviceId: String,
             ): AppResult<CollaborationRuntimeLease?> {
+                check(!inspectionHeld)
                 restores++
                 return onRestore()
             }
@@ -267,14 +296,22 @@ internal class CollaborationActivationFixture(
             command.clock,
             command.access.admission.repository,
             object : CollaborationSdkInventoryRepository {
-                override suspend fun inspect(owner: CollaborationOwner, deviceId: String) =
-                    inspect()
+                override suspend fun inspect(
+                    owner: CollaborationOwner,
+                    deviceId: String,
+                ): AppResult<CollaborationSdkInventory> {
+                    check(inspectionHeld)
+                    return inspect()
+                }
             },
             object : CollaborationSdkPossessionRepository {
                 override suspend fun readPrivateIdentity(
                     owner: CollaborationOwner,
                     deviceId: String,
-                ) = possess()
+                ): AppResult<CollaborationSdkPossession?> {
+                    check(inspectionHeld)
+                    return possess()
+                }
             },
             object : CollaborationRecoveryWakeRepository {
                 override suspend fun pending() = AppResult.Success(wake)

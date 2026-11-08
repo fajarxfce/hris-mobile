@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.data.mappers.toGateway
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeInspection
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.network.*
@@ -19,6 +20,96 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 
 class AndroidCollaborationIdentityTest {
+    @Test
+    fun anInspectionReservationBlocksBothRuntimePathsBeforeAnyFileAcquisition() = runTest {
+        val f = Fixture()
+        try {
+            val parent =
+                CollaborationNativeParent(
+                    setupOwner.sessionId,
+                    setupOwner.audience,
+                    setupOwner.accountId,
+                    setupOwner.nativeSessionId,
+                )
+            f.runtime.updateRetention(CollaborationRuntimeRetention(parent, setupOwner))
+            val inspection =
+                assertIs<CollaborationRuntimeInspection.Reserved>(
+                    assertIs<AppResult.Success<CollaborationRuntimeInspection>>(
+                            f.runtime.reserveInspection(setupOwner, SETUP_DEVICE)
+                        )
+                        .value
+                )
+            assertTrue(inspection.isCurrent())
+            assertEquals(
+                "client.collaboration_runtime_opening",
+                assertIs<AppResult.Failed>(
+                        f.runtime.acquireBackground(setupOwner, SETUP_DEVICE, 1_000)
+                    )
+                    .failure
+                    .code,
+            )
+            assertEquals(
+                "client.collaboration_runtime_opening",
+                assertIs<AppResult.Failed>(f.runtime.restore(setupOwner, SETUP_DEVICE)).failure.code,
+            )
+            assertEquals(0, f.directories)
+            assertEquals(0, f.reads)
+            f.runtime.updateRetention(CollaborationRuntimeRetention(null, null))
+            assertFalse(inspection.isCurrent())
+            inspection.close()
+            inspection.close()
+            f.runtime.updateRetention(CollaborationRuntimeRetention(parent, setupOwner))
+            f.allowDirectory = true
+            // Once exclusion is released, the original occupied store still rejects missing keys.
+            assertEquals(
+                FailureKind.Storage,
+                assertIs<AppResult.Failed>(f.runtime.restore(setupOwner, SETUP_DEVICE)).failure.kind,
+            )
+            assertEquals(1, f.directories)
+            assertEquals(1, f.directoryCloses)
+            assertEquals(0, f.writes)
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
+    fun inspectionCannotBorrowAnUnpublishedRuntimeAndCancellationReleasesItsExclusion() = runTest {
+        val f = Fixture()
+        try {
+            f.store()
+            f.allowDirectory = true
+            val entered = CompletableDeferred<Unit>()
+            f.privateIdentityRead = {
+                entered.complete(Unit)
+                awaitCancellation()
+            }
+            val restoring = async { f.runtime.restore(setupOwner, SETUP_DEVICE) }
+            entered.await()
+            assertEquals(
+                "client.collaboration_runtime_opening",
+                assertIs<AppResult.Failed>(f.runtime.reserveInspection(setupOwner, SETUP_DEVICE))
+                    .failure
+                    .code,
+            )
+            assertEquals(1, f.directories)
+            restoring.cancelAndJoin()
+            val inspection =
+                assertIs<CollaborationRuntimeInspection.Reserved>(
+                    assertIs<AppResult.Success<CollaborationRuntimeInspection>>(
+                            f.runtime.reserveInspection(setupOwner, SETUP_DEVICE)
+                        )
+                        .value
+                )
+            assertTrue(inspection.isCurrent())
+            inspection.close()
+            assertEquals(1, f.directoryCloses)
+            assertEquals(0, f.writes)
+        } finally {
+            f.close()
+        }
+    }
+
     @Test
     fun missingOpenClientDoesNotReadCredentialsOpenSdkOrInventAnEmptyStore() = runTest {
         val f = Fixture()

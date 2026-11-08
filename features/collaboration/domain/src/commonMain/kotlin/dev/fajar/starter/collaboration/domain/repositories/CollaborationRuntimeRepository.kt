@@ -10,6 +10,22 @@ interface CollaborationRuntimeRepository {
     val supportsDeviceActivation: Boolean
         get() = false
 
+    /**
+     * Atomically retain an already published runtime or exclude other runtime acquisitions while
+     * the caller inspects the original private store. Never opens, drains or creates an SDK.
+     */
+    suspend fun reserveInspection(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationRuntimeInspection> =
+        AppResult.Failed(
+            Failure(
+                FailureKind.Unavailable,
+                "Chat storage inspection is unavailable.",
+                code = "client.collaboration_inspection_unavailable",
+            )
+        )
+
     /** Owned protected metadata only; never opens an SDK client or acquires server authority. */
     suspend fun handoverIntent(
         owner: CollaborationOwner,
@@ -160,6 +176,22 @@ interface CollaborationRuntimeRepository {
 
     /** Close obsolete resources, never their stored facts. Null closes every owned runtime. */
     suspend fun closeOtherOwners(retainedOwner: CollaborationOwner?): AppResult<Unit>
+}
+
+sealed interface CollaborationRuntimeInspection {
+    data object Open : CollaborationRuntimeInspection
+
+    /**
+     * The caller releases this exclusion after every inspection outcome, including cancellation.
+     */
+    interface Reserved : CollaborationRuntimeInspection {
+        val owner: CollaborationOwner
+        val deviceId: String
+
+        fun isCurrent(): Boolean
+
+        fun close()
+    }
 }
 
 /** Finite reference to an application runtime. Closing it never closes a retained foreground. */

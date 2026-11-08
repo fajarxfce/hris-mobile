@@ -222,9 +222,32 @@ internal class ChatSetupFixture {
             }
         }
     private var installedOperation: String? = null
+    private var inspectionHeld = false
     val runtimes =
         object : CollaborationRuntimeRepository {
             override val supportsDeviceActivation = true
+
+            override suspend fun reserveInspection(
+                owner: CollaborationOwner,
+                deviceId: String,
+            ): AppResult<CollaborationRuntimeInspection> {
+                if (opened) return AppResult.Success(CollaborationRuntimeInspection.Open)
+                check(!inspectionHeld)
+                inspectionHeld = true
+                return AppResult.Success(
+                    object : CollaborationRuntimeInspection.Reserved {
+                        override val owner = owner
+                        override val deviceId = deviceId
+
+                        override fun isCurrent() = inspectionHeld
+
+                        override fun close() {
+                            check(inspectionHeld)
+                            inspectionHeld = false
+                        }
+                    }
+                )
+            }
 
             override suspend fun handoverIntent(
                 owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
