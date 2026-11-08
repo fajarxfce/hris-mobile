@@ -1,0 +1,171 @@
+{
+  "recordedAt": "2026-11-08T21:28:14.558315+00:00",
+  "productVersion": 76,
+  "peerSource": "1a96dbbd",
+  "serverWorkerSource": "52aaccaa45adc3647f3a7e6fb983d9d9c2a13d13",
+  "serverApiSource": "1aea32288656d3c4e372d6950311b4c43ce5bcdc",
+  "schema": "116.2",
+  "timelyNativeWakeAccepted": false,
+  "eventualOriginalResumptionObserved": true,
+  "original": {
+    "messageSha256": "7c8b1ccf88c523271c8b1a581a340a90c190397c4dae8784dbf6ca920a3cb7b3",
+    "sendGestures": 1,
+    "newSendGesturesDuringRecovery": 0,
+    "oneUiOriginal": true,
+    "sameProductProcess": true,
+    "pendingBeforePublication": true,
+    "quietSeconds": 62.184,
+    "sentObservedAt": "2026-11-08T21:25:07.055128+00:00",
+    "encryptedProviderEvents": 1,
+    "providerReceivedAt": "2026-11-08T21:22:46.735+00:00"
+  },
+  "publicationAndPush": {
+    "publishedAt": "2026-11-08T21:17:45.467292+00:00",
+    "jobCount": 1,
+    "jobCompleted": true,
+    "targetAdvanced": true,
+    "hintRevision": 1,
+    "deliveredRevision": 1,
+    "providerAttempts": 1,
+    "opaqueHint": true,
+    "queueDelaySeconds": 0.465,
+    "fcmAcknowledgedAt": "2026-11-08T21:17:46.682968+00:00",
+    "normalPushReceivedAt": "2026-11-08T21:22:44.018+00:00",
+    "normalPushDispatchedAt": "2026-11-08T21:22:44.089+00:00",
+    "providerAcceptedToDeviceReceivedSeconds": 297.335,
+    "deviceDispatchToEncryptedEventSeconds": 2.646,
+    "timingLimit": "Device/host UTC timestamps were not independently calibrated; cross-clock intervals are approximate."
+  },
+  "channelEvidence": {
+    "registrationMatchesCurrentFirebaseToken": true,
+    "heartbeatSentAt": "2026-11-08T21:21:43.397+00:00",
+    "connectionClosedAfterNoHeartbeatAckAt": "2026-11-08T21:22:43.401+00:00",
+    "gcmCloseError": 6,
+    "reconnectedAt": "2026-11-08T21:22:43.475+00:00",
+    "diagnosticHighPriorityAfterOriginalSend": {
+      "attemptedAt": "2026-11-08T21:24:35.016653+00:00",
+      "purpose": "One opaque diagnostic to the owned fictional sender; eventCode is ignored by the application. No chat message or readiness replay.",
+      "priority": "HIGH",
+      "phoneTouched": false,
+      "acceptedByFcm": true,
+      "httpStatus": 200,
+      "finishedAt": "2026-11-08T21:24:35.275662+00:00"
+    },
+    "diagnosticEventIgnoredByApplication": true,
+    "underlyingNetworkOrProviderCauseEstablished": false
+  },
+  "boundedProbe": {
+    "deadlineSeconds": 140,
+    "accepted": false,
+    "failureCategory": "TimeoutError",
+    "instrumentationReaped": true,
+    "peerComplete": true,
+    "peerSamePrivateIdentityVerifiedByScenario": true,
+    "newPeerMessagesSent": 0
+  },
+  "httpObservation": {
+    "elapsedSeconds": 406.499,
+    "phases": {
+      "setup_before_send": {
+        "requests": {
+          "other_hris": 31,
+          "hris_device_setup": 23,
+          "hris_conversation_summaries": 6,
+          "hris_room": 7,
+          "secret_storage_default_key": 16,
+          "sync": 7,
+          "other_matrix": 5
+        },
+        "responses": {
+          "other_hris:200": 27,
+          "hris_device_setup:200": 23,
+          "hris_conversation_summaries:200": 6,
+          "hris_room:200": 7,
+          "secret_storage_default_key:404": 16,
+          "sync:200": 7,
+          "other_hris:404": 1,
+          "other_matrix:200": 5
+        },
+        "transportReadiness": []
+      },
+      "waiting_after_five_second_settle": {
+        "requests": {
+          "sync": 10,
+          "other_hris": 5,
+          "hris_device_setup": 2,
+          "hris_room": 2,
+          "hris_conversation": 1,
+          "other_matrix": 1,
+          "hris_direct_transport": 1,
+          "refresh": 1
+        },
+        "responses": {
+          "sync:200": 9,
+          "other_hris:200": 3,
+          "hris_device_setup:200": 2,
+          "hris_room:200": 2,
+          "hris_conversation:200": 1,
+          "other_matrix:200": 1,
+          "hris_direct_transport:200": 1,
+          "sync:401": 1,
+          "refresh:200": 1
+        },
+        "transportReadiness": [
+          false
+        ]
+      },
+      "peer_started_until_counter_end": {
+        "requests": {
+          "sync": 16,
+          "other_hris": 12
+        },
+        "responses": {
+          "sync:200": 15,
+          "other_hris:200": 9
+        },
+        "transportReadiness": []
+      }
+    },
+    "scope": "Owned single-emulator local gateway only; closed route counts and boolean readiness. Packet starts may omit fragments; not full HTTP reconstruction.",
+    "endedBeforeLatePush": true,
+    "forbidden403": 0,
+    "bodyHeadersOrIdentifiersRetained": false
+  },
+  "preservation": {
+    "originalFirstAccountFilesUnchanged": true,
+    "preTestCompleteDeviceCopyRetained": true,
+    "senderAndPeerPrivateStoresRetained": true,
+    "adbTemporarilyRootedOnlyAfterBoundedProbe": true,
+    "rootRead": "One Firebase registration token for exact hash comparison, no Matrix private-key read/change. Temporary token copy removed.",
+    "shellRestored": true,
+    "ownedEmulatorStopped": true,
+    "phoneTouched": false,
+    "oldBimaReplayedOrReset": false
+  },
+  "screenshots": [
+    {
+      "file": "original-waiting.png",
+      "sha256": "5547656af239eb87c243c6ad58bf9e4d393d7758e4bcf209216e257db3bea27b",
+      "reviewed": true
+    },
+    {
+      "file": "after-late-fcm.png",
+      "sha256": "7cd6bc7cd6c2a960fffea9a920f12236f3810187c07ba3644cf82fcc40701f66",
+      "reviewed": true
+    }
+  ],
+  "remaining": [
+    "Foreground committed-readiness transport independent of FCM latency; no indefinite transport retry loop",
+    "Client missed-hint and interrupted-activation recovery",
+    "Repeated optional default-key probes during startup/push-registration recovery remain to trace; settled after peer start",
+    "Older messages action remains visible in a new one-message room",
+    "Original Bima74 metadata recovery and broader collaboration PRD"
+  ],
+  "privateEvidenceHashes": {
+    "activation.json": "33679ba5dda002c56e31f246aceb11e9c96615315f8436c8c1ed74dad051b76b",
+    "sender-http-counts.json": "e38452dd50831437583cd4bddfaa13da5b97266cf03f24cd7c25ebd6ec101f20",
+    "gcm-after-diagnostic.private.txt": "ca5f69984194648b0b4f6fa4c09ada7dd72e7f80e0a52bf918e7db9d84341288",
+    "provider-event-metadata.json": "44432a776fdc26739365bced007f4310633decda5eecda0b42b7c9e164e658e8",
+    "lifetime.json": "a733479aaa113de6543e80569c4a3a61ad97cac2effdf0f56bfedc9ebccc9db2"
+  }
+}

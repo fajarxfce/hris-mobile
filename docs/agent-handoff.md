@@ -1,5 +1,49 @@
 # Agent continuation — HRIS Mobile
 
+## Readiness sender resumed once; Google push stalled — 8 November 2026, 21:28 UTC
+
+Native probe37009 FAILED its140-second deadline and is REAPED; do not relabel it
+as timely acceptance. Later passive evidence proves the same original was sent
+once, in the same product process, after actual FCM delivery. [Evidence](measurements/collaboration-readiness-native-2026-11-08.json).
+One new synthetic original `Readiness76 211625` was queued once at21:16; do not replay it.
+Recipient's first keys committed21:17:45.467, job queued the opaque hint0.465s later,
+and FCM accepted one attempt21:17:46.683. Google Play Services' socket received no
+heartbeat acknowledgement, closed with error6 after60s at21:22:43, then reconnected.
+The NORMAL push reached the package21:22:44.018, about297.335s after provider acceptance.
+Synapse records exactly one encrypted event21:22:46.735, about2.646s after OS dispatch.
+Clock intervals are approximate across host/device. Underlying network/NAT/provider
+cause of the stuck socket is not established. Do not blame missing recipient keys
+for the later delay, use continuous transport retries, or turn every silent hint HIGH.
+
+The timed gate ended before late delivery. Its counter saw zero403 and no transport/
+default-key requests after peer start until20:33. The settled waiting window had one
+additional transport read returningfalse, not zero; startup/push-registration beforehand
+had16 optional default-key404s and23 setup reads. Trace those separately instead of
+claiming all startup traffic is fixed. New-room screenshots also still show Older messages.
+
+After the failed gate only, adbd was temporarily rooted to compare one current Firebase
+registration token hash with the server: it matched. No Matrix private-key read/reset.
+That temporary token copy was removed; shell restored2000, original product PID2380
+retained. One HIGH-priority opaque diagnostic, ignored by the application, was sent
+at21:24:35 AFTER the original had already reached Synapse; it did not wake/send it.
+The peer native scenario completed, same private identity verified, zero peer sends.
+Both pending/sent screenshots were actually reviewed.
+
+All sessions REAPED: native17393 stopped at21:27:26 after959.413s; counter19414 and
+peer37009 stopped; all UI/install/tool sessions completed. No compiler or emulator
+remains. Sender/peer stores and full pre-test backup are preserved under
+`.work/readiness-native-2026-11-08`. Original first76 source files unchanged; Bima74
+recovery unresolved. Phone70 untouched, no new availability; never drive its UI.
+
+Next provide prompt foreground recipient-change observation using an owned transport
+independent of FCM's delivery timing, with authoritative post-commit reconciliation,
+missed-hint/startup/connectivity recovery and finite coalesced work. Review existing
+Matrix SDK device-change stream versus a scoped HRIS control watch; do not let network
+inspector traffic drive policy. Generic RequestedSyncWorker now has actual late-FCM
+original-resumption evidence plus first76 cold activation, which may support a clearly
+scoped Starter gate reassessment; never forge the missing Bima76 proof. Continue54PRD.
+
+
 ## Readiness peer source checked; controlled native proof active — 8 November 2026, 21:15 UTC
 
 New debug-only `HrisReadinessPeer` plus instrumentation mode compile/package/lint,

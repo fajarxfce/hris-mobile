@@ -34,3 +34,25 @@ Future acceptance must separately cover provider device-change preceding the
 HRIS commit, missed/denied push, background/process loss, first activation interrupted
 by connectivity, and established missing-key recovery. Cloud key backup/import and
 all communications PRD groups remain outside this source increment.
+
+
+## Measured native outcome
+
+[The controlled run](measurements/collaboration-readiness-native-2026-11-08.json)
+failed its140-second prompt-wake deadline. First publication, one bounded readiness
+job and one opaque FCM hint all succeeded. The sender's Google push connection then
+timed out waiting for a heartbeat reply and reconnected; the NORMAL hint arrived
+about297seconds after FCM accepted it. No transport request followed publication
+during the initial observation. Once the OS delivered the hint, the unchanged
+product process resumed its original and Synapse retained exactly one encrypted
+event about2.6seconds later. Both crypto stores remain. This proves eventual original
+resumption for this fixture, not prompt foreground delivery or a full PRD milestone.
+
+The later token-hash check matched the server registration. An ignored diagnostic
+HIGH push was sent only after that encrypted event; it did not produce the recovery.
+The socket's underlying network/provider failure is not established. Foreground
+recipient readiness must have its own owned observation path; FCM remains useful for
+background wake but cannot be the sole prompt foreground signal. Keep current
+admission and authoritative HRIS publication checks before sending. Missed signals,
+process changes and interrupted setup must recover original commands without timed
+transport loops or replacing identity keys.
