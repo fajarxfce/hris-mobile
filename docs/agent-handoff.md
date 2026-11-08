@@ -1,5 +1,34 @@
 # Agent continuation — HRIS Mobile
 
+## Direct transport adoption under test — 8 November 2026, 10:57 UTC
+
+Platform e8d1d24f is now live/healthy after a compatible API-only rollout with218 active
+passing cases, one known unrelated skip, unchanged schema116.1/settings/other services
+and retained rollback. Platform57aece56 records deployment. Starterad3aa93 is accepted
+and pushed: exact three-source generic port,280 fresh cases/zero all. Those jobs are reaped.
+
+The sole owned compiler is Mobile focused-1/session65789 in
+`.work/direct-transport-2026-11-08`; all17 Kotlin changes and library files are FROZEN.
+Source remains UNCOMMITTED/UNACCEPTED. Actual fresh domain57 and data4 cases already
+pass; full worker integration and quality still need the completed gate. Do not treat
+partial test output as source acceptance. [Candidate contract](collaboration-direct-transport.md).
+
+Stage/Deliver replace each three-request metadata read with one native transport read;
+each separate admission still reacquires it. Current owner/denial/cancellation, immutable
+originals, paused SDK queue and receipt guards remain. A domain policy matches the returned
+coordinates, repository maps one bounded DTO, datasource/API perform raw I/O; no ViewModel
+or UI change. Enter/history still use existing readers. No cross-repository calls or
+cached grants. Fixtures retain the original lifecycle/denial scenarios plus request bounds.
+
+Next reap65789, fix actual failures, run prepared full-1 (root, real Chrome data4/policy2,
+Android/lint, web/iOS source and quality), then commit/push. Release68 has only build and
+verification scripts prepared; noAPK or device probe/install exists. Prepare its runtime
+counter/probe for liveAPIe8d1d24f and original installed67 before use. Never replay a test
+original or the exact UNSENT Draft66 092041. Original emulator is stopped, data/keys intact.
+Phone remains accepted67. Notify before each future install-only and never drive its UI.
+API rollout is already done; do not rerun it. Worker10485916/GroupOFF/V117–138undeployed,
+SDK/library publication, nativeApple/overhead and all54PRD groups remain open/unchanged.
+
 ## Release67 accepted and installed — 8 November 2026, 10:36 UTC
 
 Source b4b25259 is pushed. Signed release67 is verified, accepted on the original Bima
