@@ -1648,9 +1648,9 @@ class ChatThreadViewModel(
             coroutineScope {
                 val signals = Channel<Unit>(Channel.CONFLATED)
                 pulse = signals
-                // Recover retained work once on entry. Passive SDK echoes must not restart
-                // delivery and bypass the application's retry backoff.
-                wakeRequested = pending.isNotEmpty()
+                // Timeline acquisition owns history observation, not delivery recovery. The
+                // application worker recovers retained originals independently of this route;
+                // reconnecting after admission renewal cannot restart blocked work.
                 signals.trySend(Unit)
                 val worker = launch { consumeHistorySignals(signals, lease.device) }
                 try {

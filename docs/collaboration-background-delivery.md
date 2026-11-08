@@ -14,7 +14,10 @@ acquires credentials or an SDK runtime.
 Android's existing `SyncWorkerFactory` resolves this same instance for one-time and
 periodic work. One mutex serializes its invocations. WorkManager persists only the task
 key with connected-network constraints, 30-second exponential retry and 15-minute
-periodic recovery. Startup/renewed application ownership also requests the key. Other
+periodic recovery. Startup, selected-owner replacement and recovery from an actual
+ownership failure request the key. Ordinary same-owner admission renewal does not
+restart blocked delivery, and passive timeline acquisition is read-only with respect
+to scheduling. See [wake ownership](collaboration-delivery-wake-ownership.md). Other
 hosts use the existing cancellable foreground scheduler. These APIs do not override OS
 force-stop, background restrictions or iOS background execution limits.
 

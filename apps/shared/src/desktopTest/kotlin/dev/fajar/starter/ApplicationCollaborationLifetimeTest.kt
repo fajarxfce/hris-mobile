@@ -7,6 +7,7 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRecoveryWakeRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.domain.usecases.MaintainCollaborationRuntimeOwnership
+import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationText
 import dev.fajar.starter.collaboration.domain.usecases.RequestCollaborationRecovery
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.fixtures.CollaborationWorkerFixture
@@ -17,11 +18,126 @@ import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.test.*
 import kotlin.time.Clock
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
 
 class ApplicationCollaborationLifetimeTest {
+    @Test
+    fun repeatedAdmissionExpiryAndReadmissionDoNotWakeBlockedDelivery() = runBlocking {
+        for (policyExpiry in listOf(false, true)) {
+            withFixture { f ->
+                val selected = f.selected
+                f.lifetime.start()
+                f.scheduler.runCurrent()
+                val initial = f.scheduled.toList()
+                assertEquals(1, initial.count { it == QueueCollaborationText.DELIVERY_KEY })
+                repeat(3) { iteration ->
+                    val expiring =
+                        if (policyExpiry) {
+                            val policy = assertNotNull(selected.policy)
+                            selected.copy(
+                                policy =
+                                    policy.copy(
+                                        requestedAt =
+                                            f.clock.now() -
+                                                (policy.policy.validUntil -
+                                                    policy.policy.serverTime) + 1.seconds
+                                    )
+                            )
+                        } else
+                            selected.copy(
+                                admission =
+                                    selected.admission.copy(expiresAt = f.clock.now() + 1.seconds)
+                            )
+                    f.workspace.value = AppResult.Success(expiring)
+                    f.scheduler.runCurrent()
+                    f.scheduler.advanceTimeBy(1_000)
+                    f.scheduler.runCurrent()
+                    assertNull(f.published().retention.foreground)
+                    assertNotNull(f.published().retention.parent)
+                    assertEquals(
+                        "client.collaboration_revalidation_required",
+                        assertIs<AppResult.Failed>(f.published().result).failure.code,
+                    )
+                    // Re-observation can classify age directly instead of the timer's result.
+                    f.session.value =
+                        AppResult.Success(
+                            f.app.session.copy(
+                                tokens =
+                                    f.app.session.tokens.copy(accessToken = "rotation-$iteration")
+                            )
+                        )
+                    f.scheduler.runCurrent()
+                    assertEquals(
+                        if (policyExpiry) "client.company_policy_expired"
+                        else "client.workspace_expired",
+                        assertIs<AppResult.Failed>(f.published().result).failure.code,
+                    )
+                    f.workspace.value = AppResult.Success(selected)
+                    f.scheduler.runCurrent()
+                    assertNotNull(f.published().retention.foreground)
+                    assertEquals(initial, f.scheduled)
+                }
+            }
+        }
+    }
+
+    @Test
+    fun admissionRecoveryAfterDenialOrSelectionReplacementStillWakesDelivery() = runBlocking {
+        withFixture { f ->
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            val initial = f.scheduled.count { it == QueueCollaborationText.DELIVERY_KEY }
+            f.workspace.value =
+                AppResult.Failed(
+                    Failure(FailureKind.AccessDenied, "Denied", code = "client.workspace_expired")
+                )
+            f.scheduler.runCurrent()
+            assertIs<AppResult.Failed>(f.published().result)
+            f.workspace.value = AppResult.Success(f.selected)
+            f.scheduler.runCurrent()
+            assertEquals(
+                initial + 1,
+                f.scheduled.count { it == QueueCollaborationText.DELIVERY_KEY },
+            )
+            f.workspace.value = AppResult.Success(null)
+            f.scheduler.runCurrent()
+            f.workspace.value = AppResult.Success(f.selected)
+            f.scheduler.runCurrent()
+            assertEquals(
+                initial + 2,
+                f.scheduled.count { it == QueueCollaborationText.DELIVERY_KEY },
+            )
+        }
+    }
+
+    @Test
+    fun failedDeliveryRegistrationCanRetryOnAnAdmittedPublication() = runBlocking {
+        withFixture { f ->
+            f.scheduleFailure = Failure(FailureKind.Storage, "Scheduling failed")
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            val initial = f.scheduled.count { it == QueueCollaborationText.DELIVERY_KEY }
+            f.workspace.value =
+                AppResult.Success(
+                    f.selected.copy(
+                        admission = f.selected.admission.copy(expiresAt = f.clock.now())
+                    )
+                )
+            f.scheduler.runCurrent()
+            f.scheduleFailure = null
+            f.workspace.value = AppResult.Success(f.selected)
+            f.scheduler.runCurrent()
+            assertEquals(
+                initial + 1,
+                f.scheduled.count { it == QueueCollaborationText.DELIVERY_KEY },
+            )
+        }
+    }
+
     @Test
     fun pendingSessionIsUnknownAndParentOnlyPublicationDoesNotScheduleSelectedDelivery() =
         runBlocking {
@@ -230,8 +346,13 @@ class ApplicationCollaborationLifetimeTest {
     }
 }
 
-private class LifetimeFixture(val app: CollaborationWorkerFixture, selected: Workspace) {
+private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected: Workspace) {
     val scheduler = TestCoroutineScheduler()
+    private val startedAt = Clock.System.now()
+    val clock =
+        object : Clock {
+            override fun now() = startedAt + scheduler.currentTime.milliseconds
+        }
     private val gates = mutableListOf<CompletableDeferred<Unit>>()
 
     fun gate() = CompletableDeferred<Unit>().also(gates::add)
@@ -244,6 +365,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, selected: Wor
     }
 
     val session = MutableStateFlow<AppResult<Session?>>(AppResult.Success(app.session))
+    val workspace = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(selected))
     var sessionSource: Flow<AppResult<Session?>> = session
     var beforeWorkspace: suspend () -> Unit = {}
     var sessionObservers = 0
@@ -286,8 +408,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, selected: Wor
                 workspaceObservers++
                 try {
                     beforeWorkspace()
-                    emit(AppResult.Success(selected))
-                    awaitCancellation()
+                    emitAll(workspace)
                 } finally {
                     workspaceObservers--
                 }
@@ -318,7 +439,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, selected: Wor
                 workspaces,
                 app.koin.get(),
                 app.koin.get(),
-                Clock.System,
+                clock,
                 scheduler.timeSource,
             ),
             schedules,

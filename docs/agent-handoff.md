@@ -1,5 +1,57 @@
 # Agent continuation — HRIS Mobile
 
+## Passive wake source accepted — 8 November 2026, 15:41 UTC
+
+Full53319 REAPED PASS5,778fresh/777suites,0failures/errors/skips947.390s. All4,498app/
+82library inputs unchanged. Root, Chrome6, Android proof/release/lint(0issues),
+web/iOS shared source and quality passed. Focused93645 passed76fresh/0all487.734s.
+[Exact source/evidence](collaboration-delivery-wake-ownership.md). Commit/push the
+atomic four-Kotlin change+tests+docs now, then package72. No compiler/emulator remains.
+
+72 has22prepared/AST-checked scripts plus HOLD. Build is pinned to acceptedfull-1,
+requires a clean pushed source; remove HOLD only after commit/push. Native acceptance
+uses one NEW ready72 original and the SAME retained unready71 original(no new gesture),
+180seconds quiet with zero settled transport/403/encrypted submissions, seven actual
+viewed images and original offline history/draft retention. Native acceptance has NOT
+run. The known71 Storage/IllegalStateException remains unresolved; a required separate
+storage-error-acceptance.json is currently absent, so installation cannot pass.
+watch-storage-error.py can capture a new Storage event and the sanitized Crashlytics
+store promptly; exact72/owned emulator only, no sends. It requests root only on error
+and records/restores adbd afterward. Do not infer an error's cause from timing alone.
+
+Phone stays70. Original Bima image71 is stopped;13933/82759 reaped, alias closed.
+Previous unroot confirmation failed: verify shellUID2000 on next boot or investigate.
+Keep Tes71 waiting143424(Sent), Tes71 unready143749(pending) and exact UNSENT
+Draft66 092041. Never replay any original. No phone UI driving or duplicate question.
+Automatic activation remains doc-only: side branch feat/chat-auto-activation-20261108
+now2a8d1abf,pushed98066 REAPED. It adds provider-before-confirmation race and collapsed
+recovery-backoff acceptance requirements. Platform/live116.1, Starter, library/SDK5
+unchanged. Full PRD and automatic activation/event wake are NOT complete.
+
+## Passive delivery wake gate — 8 November 2026, 15:25 UTC
+
+Focused93645 REAPED PASS76fresh/0failures/errors/skips487.734s:44thread,10lifetime,
+22delivery-worker cases; all4,498app/82library inputs stable; quality passed.
+Sole compiler53319 now runs .work/chat-delivery-wake-2026-11-08/check.py full-1.
+Four Kotlin source/test files are FROZEN/UNACCEPTED until this finishes. Do not edit
+inputs during it. Root/check, Chrome, Android proof/release/lint, web/iOS source and
+quality are in the gate. [Change responsibility](collaboration-delivery-wake-ownership.md).
+
+Root evidence docc204f914 pushed84822 REAPED. New72 has21prepared Python scripts,
+AST checked, no build/install/probe. HOLD remains. Build pins newfull-1 plus source
+commit/push. Ready probe permits one NEW72 original; unready probe has NO text-entry
+or send gesture and reuses Tes71 unready143749. It also checks for the Storage error
+throughout180seconds. Native acceptance keeps zero settled transport/403/encrypted
+unready sends, seven actual screenshot reviews, shellUID2000 verification and a
+separate REQUIRED storage-error-acceptance.json(rootResolved=true). No such evidence
+exists; do not relax the requirement or call the error solved by its non-recurrence.
+
+No owned emulator;13933 and stop82759 reaped. Unroot confirmation failed before stop;
+loopback alias is closed. Verify/restore shellUID on the next original Bima boot.
+Phone70 untouched, no new user question. Preserve both71 originals and exact UNSENT
+Draft66 092041; never replay. Platform/live116.1, Starter and inspector/SDK5 unchanged.
+Automatic first-login activation and readiness wake remain design-only/separate work.
+
 ## Passive wake root identified; regression change in progress — 8 November 2026, 15:14 UTC
 
 Release71 stays REJECTED; phone stays70. [Closed diagnostic evidence](measurements/collaboration-delivery-wake-root-2026-11-08.json).
