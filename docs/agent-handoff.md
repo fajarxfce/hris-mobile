@@ -1,5 +1,30 @@
 # Agent continuation — HRIS Mobile
 
+## Release67 accepted and installed — 8 November 2026, 10:36 UTC
+
+Source b4b25259 is pushed. Signed release67 is verified, accepted on the original Bima
+emulator, and installed in place on the authorized phone with exact APK hash, unchanged
+app identity/first-install time and no UI automation. Package/probe/counter/passive jobs,
+installer83348, emulator83302 and stop81537 are all REAPED. Emulator data/keys are retained.
+[Device evidence and remaining latency](collaboration-composer-release67.md).
+
+ONE NEW67 original acknowledged; never resend it or earlier originals. The exact UNSENT
+synthetic next draft from66 is restored. Reviewed four screenshots and cold offline
+history/preview/draft pass. Counter180.416s has zero403, default-key401x2 then404x2 around
+one successful refresh, and one encrypted200/197ms headers. Host tap-to-request2663ms;
+coarse first observed Sent4.881s. Local handoff90ms/scheduling2ms/submit375ms; recovery
+296ms new/18ms legacy. Pending latency is not declared fixed. No new video/first-frame,
+nativeApple or overhead acceptance. Existing66 UI/inspector source hashes match.
+
+The sole owned heavy job is Starter scheduling timing check-1/session76787. Three exact
+generic files are copied from b4 and FROZEN until its full gate is reaped; e170ada is its
+base. Then record/commit/push the accepted port. No Mobile/compiler or owned emulator
+runs. Library2b849217/SDK5 remain unpublished. LiveAPI3a7909a6, worker10485916, schema116.1,
+GroupOFF/V117–138undeployed are unchanged. Continue measured pre-send work and original54
+PRD groups. Aggregate room admission is research only; no new endpoint or source exists.
+Notify before every future phone install-only and never drive its UI. Main checkout is
+canonical; older isolated composer copies and historical process references are stale.
+
 ## Composer stage timing source accepted — 8 November 2026, 10:17 UTC
 
 Full-1/session94138 is REAPED PASS1113.617s:5,759 fresh cases/772 suites, zero failures/

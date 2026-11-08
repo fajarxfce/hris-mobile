@@ -1,0 +1,855 @@
+{
+  "recordedAt": "2026-11-08T10:34:41.669924+00:00",
+  "sourceCommit": "b4b25259833fb344bcb9e65f7c2b0efca87236a3",
+  "artifact": {
+    "versionCode": 67,
+    "variant": "devRelease",
+    "sha256": "0fb9b559e7b0bc92f5212f35d454f01a812c9956e7ab4d9a9acedf6c89b52565",
+    "debuggable": false
+  },
+  "build": {
+    "startedAt": "2026-11-08T10:18:14.021605+00:00",
+    "elapsedSeconds": 130.991,
+    "exitCode": 0
+  },
+  "sourceGate": {
+    "record": "collaboration-composer-stage-timing-2026-11-08.json",
+    "freshCases": 5759,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "acceptance": {
+    "accepted": true,
+    "at": "2026-11-08T10:32:50.097215+00:00",
+    "sourceCommit": "b4b25259833fb344bcb9e65f7c2b0efca87236a3",
+    "apkSha256": "0fb9b559e7b0bc92f5212f35d454f01a812c9956e7ab4d9a9acedf6c89b52565",
+    "scope": "Existing composer handoff, scheduling and separate recovery measurements; one unique new send, continuous input with restored known synthetic draft, then cold offline history/preview.",
+    "screenshotsInspected": true,
+    "screenshotsSha256": {
+      "consecutive-send.png": "6fd38b905b87bf923350f9a316ae367a4d6acc9106fe2f461be607994f9f14ff",
+      "latest-preview-before-restart.png": "d269279ca666edc2e1dc8ec90faa6dedfc57d393ac67c394d860a4def07cccc2",
+      "latest-preview-offline.png": "52029b056b107259be02fa637508818edd4115b694b6ce199a60ef51f9fe29f5",
+      "thread-offline.png": "5d0b13a924329580f51e53ab2dfb81f09ac8323bfb953a163cec7f25b6d7e1f7"
+    },
+    "actualVideoInspected": false,
+    "firstFrameMeasured": false,
+    "firstFrameEvidenceBuild": 66,
+    "originalStorePreserved": true,
+    "explicitNewMessagesSent": 1,
+    "duplicateBubbleObserved": false,
+    "keyboardAndViewportContinued": true,
+    "phoneLatencyResolved": false,
+    "captureOverheadAccepted": false,
+    "latencyBoundary": "Coarse emulator UI polling and host ADB taps. No new first-frame or video measurement; HTTP timing is to response headers only. No physical-phone or overhead benchmark.",
+    "sdkCandidate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+    "sdk5NativeBytecodeVerified": true,
+    "encryptedSendHeadersMillis": [
+      197
+    ],
+    "responses403": 0,
+    "originalHistoryAfterColdOfflineRestart": true,
+    "nextDraftAfterColdOfflineRestart": true
+  },
+  "localSubmit": {
+    "accepted": true,
+    "versionCode": 67,
+    "apkSha256": "0fb9b559e7b0bc92f5212f35d454f01a812c9956e7ab4d9a9acedf6c89b52565",
+    "startedAt": "2026-11-08T10:26:56.086983+00:00",
+    "serial": "emulator-5562",
+    "processId": 3392,
+    "gestureQueueDurationsMillis": [
+      375
+    ],
+    "gesturePhases": [
+      {
+        "operation": "CommandHandoff",
+        "durationMillis": 90,
+        "outcome": "Succeeded"
+      },
+      {
+        "operation": "WorkScheduling",
+        "durationMillis": 2,
+        "outcome": "Succeeded"
+      },
+      {
+        "operation": "CommandQueue",
+        "durationMillis": 375,
+        "outcome": "Succeeded"
+      }
+    ],
+    "gestureQueueOutcomes": [
+      "Succeeded"
+    ],
+    "distinctGestureTraces": 1,
+    "distinctQueueSpans": 1,
+    "originalLogSha256": "af11575e2db1911076fe3e2f1ca68d1d130a6bd6f8ac3bcd329b60ecf99fa4e9",
+    "bodyOrOwnerRetainedInDiagnostics": false,
+    "boundary": "Same-process monotonic local phases; overlaps with asynchronous delivery. Not end-to-end acknowledgement latency or transport overhead."
+  },
+  "workerStages": {
+    "entries": [
+      {
+        "stage": "RecoverComposer",
+        "durationMillis": 296,
+        "terminalOutcome": "Succeeded",
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133619.503
+      },
+      {
+        "stage": "RecoverLegacyDrafts",
+        "durationMillis": 18,
+        "terminalOutcome": "Succeeded",
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133619.522
+      },
+      {
+        "stage": "RecoverDrafts",
+        "durationMillis": 316,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133619.523
+      },
+      {
+        "stage": "DiscoverWork",
+        "durationMillis": 14,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133619.538
+      },
+      {
+        "stage": "LoadSetup",
+        "durationMillis": 56,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133619.595
+      },
+      {
+        "stage": "EnsureRuntime",
+        "durationMillis": 4,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133619.6
+      },
+      {
+        "stage": "Reconcile",
+        "durationMillis": 20,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133619.679
+      },
+      {
+        "stage": "ReadPending",
+        "durationMillis": 8,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133619.689
+      },
+      {
+        "stage": "PrepareRoom",
+        "durationMillis": 62,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133619.752
+      },
+      {
+        "stage": "EnterTimeline",
+        "durationMillis": 400,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133620.153
+      },
+      {
+        "stage": "SettleCompletedQueue",
+        "durationMillis": 204,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133620.358
+      },
+      {
+        "stage": "ReadPrepared",
+        "durationMillis": 8,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133620.366
+      },
+      {
+        "stage": "Flush",
+        "durationMillis": 0,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133620.367
+      },
+      {
+        "stage": "StageMessage",
+        "durationMillis": 420,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133620.787
+      },
+      {
+        "stage": "DeliverMessages",
+        "durationMillis": 1038,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133621.826
+      },
+      {
+        "stage": "Retire",
+        "durationMillis": 0,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133621.827
+      },
+      {
+        "stage": "AcquireRetirementHistory",
+        "durationMillis": 555,
+        "terminalOutcome": null,
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133622.383
+      },
+      {
+        "stage": "RetireCommands",
+        "durationMillis": 263,
+        "terminalOutcome": "Succeeded",
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133622.647
+      },
+      {
+        "stage": "ProcessRooms",
+        "durationMillis": 3105,
+        "terminalOutcome": "Succeeded",
+        "traceOrdinal": 1,
+        "guestLogEpochSeconds": 1794133622.706
+      }
+    ],
+    "traceCount": 1,
+    "durationClock": "Same-process monotonic stage intervals",
+    "eventClock": "Guest logcat wall time; not synchronized with host ADB tap",
+    "overlap": "ProcessRooms includes the nested room stages; do not add it to those durations",
+    "sourceLogSha256": "af11575e2db1911076fe3e2f1ca68d1d130a6bd6f8ac3bcd329b60ecf99fa4e9"
+  },
+  "hostTiming": {
+    "hostTapToEncryptedRequestMillis": 2663.0,
+    "hostTapToEncryptedHeadersMillis": 2860.0,
+    "requestToHeadersMillis": 197,
+    "firstObservedSentSecondsAfterTap": 4.881,
+    "scope": "One new original; same-host monotonic ADB tap and passive request start. UI uses coarse polling. Not comparable to the prior three-send burst or a physical-phone benchmark.",
+    "evidenceSha256": {
+      "matrix-http-counts.json": "430728acbc0041bebcdb84e5b1a1222d97a828c5329634d364b279d70b376378",
+      "emulator-probe.json": "8ee7187ed7aa1fad236a914a2383c58c76f826f8e4dc261dd9cf994220f858e7"
+    }
+  },
+  "passiveHttp": {
+    "startedAt": "2026-11-08T10:26:28.161500+00:00",
+    "monotonicStartedSeconds": 1810280.810041334,
+    "elapsedSeconds": 180.416,
+    "requests": {
+      "other_hris": 6,
+      "hris_device_setup": 17,
+      "hris_room": 17,
+      "secret_storage_default_key": 4,
+      "refresh": 1,
+      "hris_conversation": 15,
+      "other_matrix": 8,
+      "sync": 3,
+      "encrypted_room_send": 1
+    },
+    "records": [
+      {
+        "offsetSeconds": 1.646,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 401,
+        "headerLatencyMs": 1
+      },
+      {
+        "offsetSeconds": 4.888,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 11
+      },
+      {
+        "offsetSeconds": 5.055,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 5
+      },
+      {
+        "offsetSeconds": 5.104,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 16
+      },
+      {
+        "offsetSeconds": 11.684,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 37
+      },
+      {
+        "offsetSeconds": 17.51,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 31
+      },
+      {
+        "offsetSeconds": 22.032,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 26
+      },
+      {
+        "offsetSeconds": 22.051,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 401,
+        "headerLatencyMs": 20
+      },
+      {
+        "offsetSeconds": 22.05,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 401,
+        "headerLatencyMs": 32
+      },
+      {
+        "offsetSeconds": 22.088,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 19
+      },
+      {
+        "offsetSeconds": 22.113,
+        "operation": "refresh",
+        "method": "POST",
+        "status": 200,
+        "headerLatencyMs": 17
+      },
+      {
+        "offsetSeconds": 22.124,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 27
+      },
+      {
+        "offsetSeconds": 22.165,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 19
+      },
+      {
+        "offsetSeconds": 22.146,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "headerLatencyMs": 110
+      },
+      {
+        "offsetSeconds": 22.146,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "headerLatencyMs": 137
+      },
+      {
+        "offsetSeconds": 22.21,
+        "operation": "other_matrix",
+        "method": "POST",
+        "status": 200,
+        "headerLatencyMs": 103
+      },
+      {
+        "offsetSeconds": 23.406,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 24
+      },
+      {
+        "offsetSeconds": 23.44,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 17
+      },
+      {
+        "offsetSeconds": 23.468,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 22
+      },
+      {
+        "offsetSeconds": 23.505,
+        "operation": "other_matrix",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 42
+      },
+      {
+        "offsetSeconds": 23.578,
+        "operation": "other_matrix",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 51
+      },
+      {
+        "offsetSeconds": 23.801,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 19
+      },
+      {
+        "offsetSeconds": 23.862,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 18
+      },
+      {
+        "offsetSeconds": 23.895,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 19
+      },
+      {
+        "offsetSeconds": 24.445,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 27
+      },
+      {
+        "offsetSeconds": 24.486,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 17
+      },
+      {
+        "offsetSeconds": 24.512,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 17
+      },
+      {
+        "offsetSeconds": 24.538,
+        "operation": "other_matrix",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 32
+      },
+      {
+        "offsetSeconds": 24.629,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 18
+      },
+      {
+        "offsetSeconds": 24.667,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 22
+      },
+      {
+        "offsetSeconds": 24.705,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 26
+      },
+      {
+        "offsetSeconds": 32.28,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 30
+      },
+      {
+        "offsetSeconds": 22.227,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 10114
+      },
+      {
+        "offsetSeconds": 32.45,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 19
+      },
+      {
+        "offsetSeconds": 32.498,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 18
+      },
+      {
+        "offsetSeconds": 32.546,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 26
+      },
+      {
+        "offsetSeconds": 32.581,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 15
+      },
+      {
+        "offsetSeconds": 32.607,
+        "operation": "other_matrix",
+        "method": "POST",
+        "status": 200,
+        "headerLatencyMs": 40
+      },
+      {
+        "offsetSeconds": 33.135,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 22
+      },
+      {
+        "offsetSeconds": 33.206,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 21
+      },
+      {
+        "offsetSeconds": 33.239,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 18
+      },
+      {
+        "offsetSeconds": 33.703,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 16
+      },
+      {
+        "offsetSeconds": 33.732,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 15
+      },
+      {
+        "offsetSeconds": 33.755,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 15
+      },
+      {
+        "offsetSeconds": 33.893,
+        "operation": "encrypted_room_send",
+        "method": "PUT",
+        "status": 200,
+        "headerLatencyMs": 197
+      },
+      {
+        "offsetSeconds": 32.547,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 1562
+      },
+      {
+        "offsetSeconds": 34.323,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 19
+      },
+      {
+        "offsetSeconds": 34.356,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 16
+      },
+      {
+        "offsetSeconds": 34.393,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 25
+      },
+      {
+        "offsetSeconds": 34.597,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 19
+      },
+      {
+        "offsetSeconds": 34.652,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 18
+      },
+      {
+        "offsetSeconds": 34.684,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 18
+      },
+      {
+        "offsetSeconds": 34.717,
+        "operation": "other_matrix",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 35
+      },
+      {
+        "offsetSeconds": 34.862,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 16
+      },
+      {
+        "offsetSeconds": 34.892,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 15
+      },
+      {
+        "offsetSeconds": 34.915,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 35
+      },
+      {
+        "offsetSeconds": 34.979,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 26
+      },
+      {
+        "offsetSeconds": 35.033,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 17
+      },
+      {
+        "offsetSeconds": 35.063,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 24
+      },
+      {
+        "offsetSeconds": 35.105,
+        "operation": "other_matrix",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 35
+      },
+      {
+        "offsetSeconds": 35.314,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 19
+      },
+      {
+        "offsetSeconds": 35.397,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 19
+      },
+      {
+        "offsetSeconds": 35.436,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 16
+      },
+      {
+        "offsetSeconds": 35.906,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 19
+      },
+      {
+        "offsetSeconds": 35.951,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 18
+      },
+      {
+        "offsetSeconds": 35.979,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 15
+      },
+      {
+        "offsetSeconds": 36.003,
+        "operation": "other_matrix",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 46
+      },
+      {
+        "offsetSeconds": 36.118,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 15
+      },
+      {
+        "offsetSeconds": 36.172,
+        "operation": "hris_conversation",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 17
+      },
+      {
+        "offsetSeconds": 36.21,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 16
+      },
+      {
+        "offsetSeconds": 36.831,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 401,
+        "headerLatencyMs": 1
+      },
+      {
+        "offsetSeconds": 34.668,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "headerLatencyMs": 10043
+      }
+    ],
+    "passiveReadOnly": true,
+    "bodyOrHeadersRetained": false,
+    "phoneUiDriven": false,
+    "interface": "br-3b9b9ff77286",
+    "scope": "Controlled single-emulator local gateway traffic; fixed Matrix and HRIS route buckets only. Packet-level counts can omit fragmented starts; not a complete HTTP reconstruction or capture-overhead benchmark"
+  },
+  "passiveProcess": {
+    "sameProcess": true,
+    "fatalLines": 0,
+    "startedAt": "2026-11-08T10:29:01.702945+00:00",
+    "finishedAt": "2026-11-08T10:29:11.739147+00:00",
+    "observedPid": "3978",
+    "afterPid": "3978",
+    "crashBufferSince": "2026-11-08T10:26:29.638817+00:00",
+    "uiTouched": false
+  },
+  "visualReview": {
+    "at": "2026-11-08T10:29:53.602254+00:00",
+    "reviewed": true,
+    "files": {
+      "consecutive-send.png": "6fd38b905b87bf923350f9a316ae367a4d6acc9106fe2f461be607994f9f14ff",
+      "latest-preview-before-restart.png": "d269279ca666edc2e1dc8ec90faa6dedfc57d393ac67c394d860a4def07cccc2",
+      "latest-preview-offline.png": "52029b056b107259be02fa637508818edd4115b694b6ce199a60ef51f9fe29f5",
+      "thread-offline.png": "5d0b13a924329580f51e53ab2dfb81f09ac8323bfb953a163cec7f25b6d7e1f7"
+    },
+    "findings": [
+      "One new original is visible once above the composer with a real Sent icon.",
+      "Input remains focused with software keyboard open and the exact prior synthetic draft restored.",
+      "Offline list retains the draft preview before and after cold restart.",
+      "Offline thread retains the new original, three prior66 originals and earlier history.",
+      "The first list capture includes a transient tab pressed surface; no pixel-identity assertion is made."
+    ],
+    "limitations": [
+      "No new video or first-frame latency measurement.",
+      "No physical-phone timing or inspector-overhead measurement."
+    ]
+  },
+  "evidenceSha256": {
+    "artifact.json": "9cb07149372d2815371d28fc1aed46d5ba697d724850a9f5af5821de819580f4",
+    "source.json": "d36d00c92473199b353294788f0f7d1eaba92e581b05f9c662b978376c1dee67",
+    "build-arm64.json": "bfb560d0dee959d06514716a70121a0c7f46e9cfaddbdf1da58127950c2826d7",
+    "sdk-verification.json": "df5774bca6aa8a11c5cac743ed1ebf49b8b74d824ce31dd974eeb536b6f5f932",
+    "release-acceptance.json": "0c5793a5b3932b418828559f8bcaf53a4dcc170c11638f75be6acd3b45ab32fd",
+    "emulator-probe.json": "8ee7187ed7aa1fad236a914a2383c58c76f826f8e4dc261dd9cf994220f858e7",
+    "send-timing.json": "2d13d6f6e255a9117898f355b1f972159164c6a5a39eb2d5987c7a1e9bed34fa",
+    "delivery-stage-timing.json": "4dc0bb4c69a5db458097d3556d50e46617717c7ec811a1e6178a7695899ba847",
+    "matrix-http-counts.json": "430728acbc0041bebcdb84e5b1a1222d97a828c5329634d364b279d70b376378",
+    "passive-process.json": "92b57c84b08518fce7e57d8147708eb1f7c275a7803690cb2f72da2e9a0de1e2",
+    "visual-review.json": "cedc838cf6520abf66b94d9ca983e16d92e7191f64deeb2a42b338d5b0a6f645",
+    "tap-request-timing.json": "6f6c4a03f17f241dc4ee13013df9d5abd732e65afafe40536cb0f6d5e3744fdf",
+    "emulator-stop.json": "6560f42847272dc6cbabceda2fb74654de6c92b0aec7eb7deebbec20b2d29ac5",
+    "install-result.json": "71d5310143ebe15292aaa2f90a797cbc70de87f9d4bb1aece2826eb4073b9e33"
+  },
+  "jobs": {
+    "61458": "reaped package pass",
+    "84468": "reaped APK verification pass",
+    "58835": "reaped SDK verification pass",
+    "12133": "reaped emulator install pass",
+    "88605": "reaped one-send probe pass",
+    "24866": "reaped 180-second counter pass",
+    "31682": "reaped passive process pass",
+    "81537": "reaped owned emulator stop pass",
+    "83302": "reaped emulator exit0",
+    "83348": "reaped phone install-only pass"
+  },
+  "limitations": [
+    "No phone latency or capture-overhead benchmark.",
+    "One quiet send cannot be compared causally to the prior three-send burst.",
+    "No new video or first-frame timing. Unchanged UI and inspector reuse accepted66 evidence.",
+    "No native Apple Matrix execution or SDK/library publication.",
+    "Original54 PRD groups remain unfinished."
+  ],
+  "phoneInstallation": {
+    "confirmed": true,
+    "startedAt": "2026-11-08T10:33:08.162420+00:00",
+    "elapsedSecondsIncludingVerification": 128.225,
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 67,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "0fb9b559e7b0bc92f5212f35d454f01a812c9956e7ab4d9a9acedf6c89b52565",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+  }
+}

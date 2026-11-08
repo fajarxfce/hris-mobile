@@ -41,8 +41,10 @@ handoff stays together with concise type aliases and named next-draft/capacity-p
 no orchestration helper or rule suppression was added. Fixtures retain explicit Unit where
 a thrown lambda cannot infer a type. These corrections pass the final full gate.
 
-The exact three-file generic timing port waits for source commitment; Starter remains
-e170ada. Release67 scripts are prepared; no67 APK or new send exists at source acceptance.
+The exact three-file generic timing port is copied from committed b4b25259 and undergoing
+Starter validation from e170ada. [Release67](collaboration-composer-release67.md) is now
+accepted on the retained emulator and installed on the phone. Source acceptance and
+runtime measurements remain distinct.
 
 ## Existing request correlation
 
