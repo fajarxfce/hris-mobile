@@ -8,7 +8,7 @@ timestamps, legacy indexing repairs and real redactions still commit atomically.
 The encrypted history batch compares decoded records before encoding changes.
 The repository skips a commit when that batch is empty, then checks that the owned
 checkpoint still matches. Cancellation propagates, and an account replacement or
-concurrent checkpoint change cannot report a successful replay. Original identity
+unresolved checkpoint conflict cannot report a successful replay. Original identity
 and content conflicts still reject the whole batch.
 
 This belongs to encrypted storage. No ViewModel filtering, UI delay or refresh
@@ -50,5 +50,32 @@ compare-and-set contract; the use case retains admission and completion policy.
 
 Six actual SQLite and six Chrome/IndexedDB cases pass, alongside root, Android,
 Wasm/iOS source and quality checks. [Exact local evidence](measurements/collaboration-history-logical-read-2026-11-08.json).
-The separate build60 device error still needs a new runtime capture before attributing
-its cause or claiming a latency improvement.
+That lookup correction alone did not eliminate the device failure. The subsequent
+diagnosis below locates a different failure during mutation preparation.
+
+## Preparing history while another writer publishes — 8 November 2026
+
+A location-only JDWP observation on the original Bima emulator identifies
+`CollaborationHistoryBatch.raw:133` as the first throw, followed by the same
+`ChatDelivery_AcquireRetirementHistory_Storage` marker. A record newer than the
+separately captured checkpoint was rejected as invalid data. The diagnostic APK used
+unchanged build61 sources with a temporary debug flag; the exact accepted release61
+was restored afterward. No original history or keys were reset. This was diagnosis,
+not a latency benchmark. [Exact evidence](measurements/chat-history-preparation-diagnosis-2026-11-08.json).
+
+Mutation preparation now reads each published document with its matching checkpoint.
+A changed checkpoint invalidates only the uncommitted plan. The repository makes at
+most three local preparation attempts using the same detached input, without network
+acquisition or message dispatch. Hidden-message rules and replacement revision indexes
+follow the same consistency rule. Commit compare-and-set failures and uncertain commit
+outcomes still return to the owning caller; they are not retried here. Corruption,
+original-content conflicts, missing keys and cancellation keep their existing behavior.
+
+Ten real-storage regression cases cover concurrent aliases, first publication, local
+hiding, edits, replacement indexes, bounded contention, ownership replacement,
+cancellation, corruption and conflicting originals. Six failed on the previous
+production code; all ten SQLite and ten Chrome/IndexedDB cases pass with this correction.
+The full gate passes 5,611 fresh cases with zero failures, errors or skips, Android
+compile/lint (zero issues), shared Wasm/iOS source and quality checks.
+[Exact validation](measurements/collaboration-history-preparation-2026-11-08.json).
+Release62 device/request measurements remain pending.

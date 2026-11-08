@@ -166,7 +166,8 @@ internal class CollaborationHistoryEditBatch(private val batch: CollaborationHis
                         listOf(ReplicaQuery(codec.revisionTag(id), after = after, limit = 32)),
                     )
                     .first()
-            require(page.checkpoint == batch.previous && page.pages.size == 1)
+            if (page.checkpoint != batch.previous) throw CollaborationHistoryPreparationChanged()
+            require(page.pages.size == 1)
             val documents = page.pages.single()
             var oldest: Long? = null
             for (raw in documents) {

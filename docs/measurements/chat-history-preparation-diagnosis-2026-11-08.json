@@ -1,0 +1,43 @@
+{
+  "capturedAt": "2026-11-08T03:55:42.389763+00:00",
+  "productSource": "76c68035b9ee651afe7404d97964c0bc6bea8d3a",
+  "productHead": "37c59110",
+  "method": "Temporary debuggable DevRelease61 built from unchanged source using a private Gradle init-script; owned original Bima emulator only.",
+  "buildSeconds": 233.365,
+  "diagnosticApkSha256": "1fd94824e61a621e60b4c7e3298facd7ce23084da7634287096c700c2101c882",
+  "sameSignerAndNativeLibrary": true,
+  "exception": "java.lang.IllegalArgumentException",
+  "firstThrow": "dev.fajar.starter.collaboration.data.history.CollaborationHistoryBatch.raw$data:133",
+  "propagation": "dev.fajar.starter.collaboration.data.history.CollaborationHistoryKeys.use:34",
+  "workerMarker": "ChatDelivery_AcquireRetirementHistory_Storage",
+  "explicitNewDiagnosticSends": 1,
+  "oldMessageReplayed": false,
+  "latencyAcceptance": false,
+  "capturedData": "Exception types and project class/method/line only; no messages, locals, exception values or credentials.",
+  "locationLogSha256": "410e5c269a40627b4eade5c0bca709e75895d513844c592be7713212b628f788",
+  "restoration": {
+    "restoredExactRelease61": true,
+    "sha256": "c106d15530c12e9cf350c24b735bb1d9ba5f037e0bdb6c91d098cb13303c0dc1",
+    "debugAppRestored": true,
+    "waitForDebuggerRestored": true,
+    "ownedForwardAbsent": true,
+    "dataRetained": true,
+    "phoneTouched": false,
+    "at": "2026-11-08T03:52:51.491350+00:00"
+  },
+  "emulatorStopped": {
+    "pid": 1012261,
+    "startTicks": "178649505",
+    "stopped": true,
+    "dataRetained": true,
+    "phoneTouched": false,
+    "at": "2026-11-08T03:53:38.695136+00:00"
+  },
+  "failedApproaches": [
+    "Non-debuggable release61 does not expose JDWP even with Android debug-app; debug settings cleared and original image stopped.",
+    "Emulator launch guard refused a still-exiting single-use Gradle daemon; no process killed; retry after read-only absence confirmation."
+  ],
+  "navigationObserverOwnSends": 0,
+  "note": "Navigation driver reports zero sends for itself; separate explicit diagnostic send driver contributes one.",
+  "correctionStatus": "Bounded coherent local preparation correction passes ten SQLite and ten browser regressions plus full5611 fresh cases; release62 device validation pending."
+}

@@ -472,31 +472,46 @@ class EncryptedCollaborationHistoryRepository(
         val batch = changes.toList()
         val scope = historyScope(access)
         val partition = historyPartition(access, conversationId)
-        val raw = replicas.checkpoint(scope, partition)
-        withKey(access, conversationId, roomId, create = raw == null) { codec ->
-            val previous = raw?.let { codec.checkpoint(it) }
-            val mutation = CollaborationHistoryBatch(replicas, scope, partition, raw, codec)
-            mutation.apply(batch)
-            val generation = raw?.handle?.generation ?: Uuid.random().toString()
-            val revision = raw?.revision?.plus(1) ?: 0
-            val count = (previous?.count ?: 0) + mutation.added
-            require(count in 0..9_007_199_254_740_991L)
-            val documents = mutation.documents(generation, revision)
+        // Retry only an uncommitted read plan whose checkpoint changed. Transport and
+        // commit uncertainty remain with the caller; never reinterpret corrupt ciphertext.
+        repeat(3) {
             currentCoroutineContext().ensureActive()
-            if (raw != null && documents.isEmpty())
-                return@withKey replicas.checkpoint(scope, partition) == raw
-            val checkpoint =
-                codec.checkpoint(generation, revision, count, previous?.hiddenRules ?: 0)
-            currentCoroutineContext().ensureActive()
-            if (raw == null)
-                replicas.replace(
-                    scope,
-                    partition,
-                    null,
-                    ReplicaSnapshot(generation, checkpoint, documents),
-                )
-            else replicas.commit(raw.handle, raw.revision, checkpoint, documents, true)
+            val raw = replicas.checkpoint(scope, partition)
+            try {
+                return@safeStorageCall withKey(
+                    access,
+                    conversationId,
+                    roomId,
+                    create = raw == null,
+                ) { codec ->
+                    val previous = raw?.let { codec.checkpoint(it) }
+                    val mutation = CollaborationHistoryBatch(replicas, scope, partition, raw, codec)
+                    mutation.apply(batch)
+                    val generation = raw?.handle?.generation ?: Uuid.random().toString()
+                    val revision = raw?.revision?.plus(1) ?: 0
+                    val count = (previous?.count ?: 0) + mutation.added
+                    require(count in 0..9_007_199_254_740_991L)
+                    val documents = mutation.documents(generation, revision)
+                    currentCoroutineContext().ensureActive()
+                    if (raw != null && documents.isEmpty())
+                        return@withKey replicas.checkpoint(scope, partition) == raw
+                    val checkpoint =
+                        codec.checkpoint(generation, revision, count, previous?.hiddenRules ?: 0)
+                    currentCoroutineContext().ensureActive()
+                    if (raw == null)
+                        replicas.replace(
+                            scope,
+                            partition,
+                            null,
+                            ReplicaSnapshot(generation, checkpoint, documents),
+                        )
+                    else replicas.commit(raw.handle, raw.revision, checkpoint, documents, true)
+                }
+            } catch (_: CollaborationHistoryPreparationChanged) {
+                currentCoroutineContext().ensureActive()
+            }
         }
+        false
     }
 
     override suspend fun getByLogicalId(
@@ -542,29 +557,39 @@ class EncryptedCollaborationHistoryRepository(
         val selected = edits.toList()
         val scope = historyScope(access)
         val partition = historyPartition(access, conversationId)
-        val raw = requireNotNull(replicas.checkpoint(scope, partition))
-        withKey(access, conversationId, roomId) { codec ->
-            val previous = codec.checkpoint(raw)
-            val batch = CollaborationHistoryBatch(replicas, scope, partition, raw, codec)
-            batch.applyEdits(selected)
-            val revision = raw.revision + 1
-            val documents = batch.documents(raw.handle.generation, revision)
+        // Retry only an uncommitted read plan whose checkpoint changed. Transport and
+        // commit uncertainty remain with the caller; never reinterpret corrupt ciphertext.
+        repeat(3) {
             currentCoroutineContext().ensureActive()
-            if (documents.isEmpty()) replicas.checkpoint(scope, partition) == raw
-            else
-                replicas.commit(
-                    raw.handle,
-                    raw.revision,
-                    codec.checkpoint(
-                        raw.handle.generation,
-                        revision,
-                        previous.count,
-                        previous.hiddenRules,
-                    ),
-                    documents,
-                    true,
-                )
+            val raw = requireNotNull(replicas.checkpoint(scope, partition))
+            try {
+                return@safeStorageCall withKey(access, conversationId, roomId) { codec ->
+                    val previous = codec.checkpoint(raw)
+                    val batch = CollaborationHistoryBatch(replicas, scope, partition, raw, codec)
+                    batch.applyEdits(selected)
+                    val revision = raw.revision + 1
+                    val documents = batch.documents(raw.handle.generation, revision)
+                    currentCoroutineContext().ensureActive()
+                    if (documents.isEmpty()) replicas.checkpoint(scope, partition) == raw
+                    else
+                        replicas.commit(
+                            raw.handle,
+                            raw.revision,
+                            codec.checkpoint(
+                                raw.handle.generation,
+                                revision,
+                                previous.count,
+                                previous.hiddenRules,
+                            ),
+                            documents,
+                            true,
+                        )
+                }
+            } catch (_: CollaborationHistoryPreparationChanged) {
+                currentCoroutineContext().ensureActive()
+            }
         }
+        false
     }
 
     private suspend fun <T> withKey(

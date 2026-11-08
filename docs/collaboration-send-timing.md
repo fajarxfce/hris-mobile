@@ -105,3 +105,10 @@ and projection before command retirement. The coherent logical-read correction p
 its regression but has not eliminated this device failure. Isolate that sub-operation
 and the repeated admission reads before changing retry or authorization rules.
 [Exact device result and installed build61](measurements/chat-retirement-device-2026-11-08.json).
+
+A subsequent emulator-only debugger capture identifies the first throw in
+`CollaborationHistoryBatch.raw:133`, during concurrent mutation preparation. Six
+real-storage race cases fail on the old code; ten targeted SQLite cases pass after
+the bounded local preparation correction. [Diagnosis and restoration evidence](measurements/chat-history-preparation-diagnosis-2026-11-08.json).
+Release62 device/request measurements remain pending; debugger timings cannot establish
+a production improvement, and the repeated admission reads remain separate work.

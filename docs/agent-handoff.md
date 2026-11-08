@@ -1,5 +1,91 @@
 # Agent continuation — HRIS Mobile
 
+
+## History preparation correction accepted; package62 next — 08 November 2026, 04:23 UTC
+
+Full-1/session14500 is reapedPASS958.24s:5,611 fresh cases, zero failures/errors/skips,
+4,451 unchanged app inputs and unchanged library. Ten concrete SQLite and ten browser
+regressions pass; Android host/release compile/lint0, shared Wasm/iOS source, root and
+quality pass. Focused12870 reaped91cases/505.676s, before39269 retains six expected
+Storage failures among ten. Exact evidence: measurements/collaboration-history-preparation-2026-11-08.json.
+Actual unchanged-source original-emulator debugger evidence separately identifies
+HistoryBatch.raw133, matching AcquireRetirementHistory_Storage. The correction only
+reprepares coherent local read plans, at most3attempts, including hidden/index reads;
+commitCAS/uncertainty/cancellation/content validation retain their contracts.
+
+Commit/push this correction and evidence, then run prepared normal NON-DEBUGGABLE62
+build/verify scripts in .work/release-phone-2026-11-08-build62. No62 APK/device acceptance
+yet. One new62 send/counter, actual inspector/notification smoke, cold offline continuity
+and visual review; unchanged six native notification cases reuse61 explicitly. Accept
+script rejects delivery failure markers in current send capture. Recheck gateway IP
+before counter. Stop/reap emulator; notify then phone install-only. Phone and original
+stopped emulator both exact accepted release61; all diagnostic debug settings/forwarding
+restored, no original keys/data reset. Never replay old61 or the separate diagnostic send.
+
+After runtime verification continue admission duplication/latency, atomic composer
+adoption/keyboard continuity, inspector overhead/publication and original54 PRD. No new
+completed PRD group. Library2b84921/Startera21b748/Platformea322180 unchanged. One compiler
+OR owned1536MiB emulator, disk TMPDIR, no phone UI automation.
+
+## Focused correction accepted; full cross-platform gate running — 08 November 2026, 04:06 UTC
+
+History-preparation/focused-1/session12870 is reapedPASS505.676s:91 fresh cases
+(70 history including10 new real SQLite races;21 delivery worker), zero failed/error/
+skipped. Format,74-module architecture and detekt pass on4451 unchanged app inputs and
+unchanged library. Before-1/session39269 preserves six expected failures among ten.
+Actual original-emulator exception location is confirmed by separate debugger evidence.
+
+The sole compiler now runs history-preparation/check.py full-1: root :check,10 actual
+browser race cases, Android host/compile/lint, shared Wasm/iOS source and quality.
+Freeze source/library until reaped. No62 APK yet. New source/tests/docs remain uncommitted
+until this full gate passes; then record measurements, commit/push, package normal62,
+verify and perform the original-account device/counter/visual flow. Phone and stopped
+original emulator remain exact accepted release61; debug resources/settings restored.
+Current private scripts and constraints are recorded in the next entry. No new PRD group
+completed; repeated admission volume, composer adoption and full communications remain.
+
+## Actual history failure located; correction gate running — 08 November 2026, 04:02 UTC
+
+Actual debugger observation on the original Bima image proves the first throw is
+CollaborationHistoryBatch.raw$data:133, propagated through HistoryKeys.use:34, with
+ChatDelivery_AcquireRetirementHistory_Storage. This is a different read race from
+getByLogicalId76c68035. The temporary diagnostic61 APK only enables debuggability via
+private init-script; same source/signer/native bytes, never phone distribution.
+One NEW diagnostic send was made, no original61 send replay. No message/exception
+values/locals/credentials captured, only types/project locations. Navigation script
+reports its own zero sends; separate send script contributes one. Exact accepted
+release61 restored on original emulator, debug_app/wait_for_debugger null, forward18761
+removed. Emulator/observer/restore/stop all reaped. Phone remains accepted61, untouched.
+See measurements/chat-history-preparation-diagnosis-2026-11-08.json and private
+.work/history-acquisition-debug-2026-11-08. No diagnostic timing acceptance.
+
+History-preparation/before-1/session39269 reaped115.176s: ten concrete SQLite cases,
+six expected Storage failures. New correction reads coherent published documents and
+checkpoint; a specific changed-plan exception permits at most three LOCAL preparation
+attempts with the same original input. Hidden/index reads included. Commit CAS false,
+uncertain outcomes, cancellation, corruption and content conflicts are unchanged.
+No API/auth/SDK or ViewModel changes. Production/test files are currently uncommitted.
+ONLY compiler12870 runs history-preparation/focused-1 (history + worker/quality checks).
+Fresh concrete ten SQLite cases already pass, but whole focused job is not finished.
+Freeze source/library until reaped. Then full root/browser10/Android/Wasm/iOS-source/
+quality gate via history-preparation/check.py full-1. Record actual results before commit
+and push. Checkpoints/keys retained; no new schema or generic starter port for HRIS policy.
+
+Candidate62 scripts are PREPARED ONLY in .work/release-phone-2026-11-08-build62.
+Normal non-debuggable init from accepted61, build requires pushed source and complete
+gate including10 actual SQLite+10 browser cases. Verify scripts before execution;
+no62 APK exists. One new62 send/counter + cold offline continuity + actual inspector
+notification smoke, reused unchanged six native notification cases from61 (do not claim
+rerun). Probe now polls restored Android settings until settled. Accept script rejects
+any delivery-failure marker in the current send capture. Recheck live API IP/bridge
+before passive counter. Complete measurement/visual review, stop/reap emulator, notify
+before each phone install-only; no phone UI. Never resend diagnosis/old61 message.
+
+Still pending: repeated admission calls, overall latency, composer b7929318 adoption
+and keyboard continuity, inspector overhead/publication and original54 PRD groups.
+Library2b84921/Startera21b748/Platformea322180 unchanged, Group routing off. One owned
+compiler OR1536MiB emulator. No new completed PRD group.
+
 ## Build61 installed; remaining acquisition failure and excessive reads — 08 November 2026, 03:36 UTC
 
 Source76c68035 is pushed and packaged as Dev release61,123,284,751bytes,

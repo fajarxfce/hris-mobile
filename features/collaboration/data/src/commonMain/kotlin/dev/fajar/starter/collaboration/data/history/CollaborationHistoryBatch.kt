@@ -3,6 +3,10 @@ package dev.fajar.starter.collaboration.data.history
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.database.*
+import kotlinx.coroutines.flow.first
+
+/** A concurrent publication invalidated this uncommitted plan, not its authenticated records. */
+internal class CollaborationHistoryPreparationChanged : Exception()
 
 /** Bounded read/merge plan; the repository commits every changed record and alias atomically. */
 internal class CollaborationHistoryBatch(
@@ -68,15 +72,12 @@ internal class CollaborationHistoryBatch(
         val hidden =
             merged.locallyHidden ||
                 (previous != null &&
-                    hiddenInHistory(
-                        replicas,
-                        previous,
-                        codec,
+                    hidden(
                         CollaborationMessageReference(
                             change.sender,
                             change.eventId,
                             change.logicalId,
-                        ),
+                        )
                     ))
         val next =
             merged.copy(locallyHidden = hidden).let { value ->
@@ -127,10 +128,23 @@ internal class CollaborationHistoryBatch(
     internal suspend fun message(id: String) =
         messages[id] ?: raw(id)?.let { codec.message(requireNotNull(previous), it) }
 
-    internal suspend fun raw(id: String) =
-        replicas.document(scope, partition, id).also {
+    private suspend fun hidden(reference: CollaborationMessageReference): Boolean {
+        for (rule in hiddenHistoryRules(reference)) {
+            val row = raw(codec.hiddenId(rule)) ?: continue
+            require(codec.hidden(requireNotNull(previous), row) == rule)
+            return true
+        }
+        return false
+    }
+
+    internal suspend fun raw(id: String): ReplicaDocument? {
+        val page = replicas.observeDocument(scope, partition, id).first()
+        if (page.checkpoint != previous) throw CollaborationHistoryPreparationChanged()
+        require(page.documents.size <= 1)
+        return page.documents.singleOrNull().also {
             require(
                 it == null || (previous != null && it.id == id && it.version <= previous.revision)
             )
         }
+    }
 }
