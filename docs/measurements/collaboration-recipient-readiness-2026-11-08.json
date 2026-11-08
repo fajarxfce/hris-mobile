@@ -1,0 +1,83 @@
+{
+  "accepted": false,
+  "base": "387c6081",
+  "attempts": {
+    "focused-1": {
+      "session": 3225,
+      "reaped": true,
+      "result": {
+        "startedAt": "2026-11-08T13:10:46.236482+00:00",
+        "elapsedSeconds": 272.703,
+        "exitCode": 0,
+        "sourceFiles": 4488,
+        "librarySourcesUnchanged": true,
+        "sourcesUnchanged": true,
+        "freshCounts": {
+          "tests": 75,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "reports": {
+          "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+            "sha256": "ef9e85864275171e5f29bb25e8b6995f28b3a717d9cfd370680d8a9293d7ed11",
+            "tests": 22,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+            "sha256": "20f1a62cf5bcf30ab778936884a3ae418bd4b1f6ec460795cd7c0c8867b21989",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationPreparedDeliveryTest.xml": {
+            "sha256": "b5ae047f8612a034de8ae870144ff6432163c6e1090564d80fae70cf86763db3",
+            "tests": 13,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationTransportRoomTest.xml": {
+            "sha256": "ad5b897c615b723fb1d9d4e2ec3a7ab0c089e21f67889040f3fd7c4dd37687ca",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.StageCollaborationTextTest.xml": {
+            "sha256": "eb5832950f025ad54f312ce9fc7b89f1b174ed648d00b5cf40830f9470b83a54",
+            "tests": 24,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "core/worker/build/test-results/desktopTest/TEST-dev.fajar.starter.worker.ForegroundSyncWorkerTest.xml": {
+            "sha256": "907d0374a9b8f5354c32e0a8e190c5e02103c521d7e1679352aa7843c0e12739",
+            "tests": 8,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        }
+      },
+      "resultSha256": "e811fc92397391c7372142f4ecbfb82bbebd880cd219533324454082d0a1fe3a"
+    }
+  },
+  "fullGate": {
+    "session": 14084,
+    "state": "running"
+  },
+  "backendSource": "1aea32288656d3c4e372d6950311b4c43ce5bcdc",
+  "backendDeployed": true,
+  "phoneVersion": 69,
+  "candidateVersion": 70,
+  "installed": false,
+  "limits": [
+    "No persisted waiting label or automatic key-readiness event wake yet.",
+    "No phone UI, send, device/key reset or original message replacement.",
+    "Root full gate and actual device no-loop acceptance are pending."
+  ]
+}
