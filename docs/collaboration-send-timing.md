@@ -190,3 +190,27 @@ every old command has been archived. Inspector/notification behavior explicitly 
 unchanged source and accepted62 evidence. Next work remains atomic composer adoption,
 keyboard continuity and the remaining send path.
 [Exact package, counter, visual and installation evidence](measurements/chat-history-signals-device-2026-11-08.json).
+
+## Delivery stage measurements
+
+The application-owned delivery worker now reports monotonic intervals for local draft
+recovery, discovery, setup, runtime preparation and each room stage. Each finite attempt
+has coroutine-scoped correlation; repeated staging operations receive distinct spans.
+A nested room belongs to the worker trace. `ProcessRooms` includes those nested intervals
+and must not be added to them when calculating elapsed time.
+
+The observer records closed stage names, elapsed milliseconds, result classification and
+random trace/span IDs. A transition to another stage makes no success claim: only the
+final interval carries the attempt outcome, since a transition can enter recovery after
+a rejected read. It does not include account, room or message IDs, text, credentials,
+free-form failure details or new HTTP calls. Existing failure classifications remain.
+Returned results and cancellation propagate to the original caller. The observer neither
+schedules work nor grants delivery or caching authority.
+
+This measurement separates the remaining pre-request delay from the Matrix response.
+It is not an optimization or acceptance of keyboard continuity. Actual Android timing,
+cross-target checks and the next composer changes remain separate evidence.
+
+[Validation](measurements/chat-delivery-stage-timing-2026-11-08.json) includes nine actual
+desktop and nine Chrome timing cases. The full gate passes with 678 fresh cases and zero
+failures/errors/skips, Android compilation/lint, shared Wasm/iOS source and quality checks.

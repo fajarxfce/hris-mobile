@@ -72,7 +72,15 @@ class CollaborationDeliveryWorker(
         }
     }
 
-    private suspend fun processBackground(admission: CollaborationBackgroundAdmission): SyncResult {
+    private suspend fun processBackground(admission: CollaborationBackgroundAdmission): SyncResult =
+        traceCollaborationDeliveryWork(CollaborationDeliveryStage.LoadSetup) { report ->
+            processBackgroundSteps(admission, report)
+        }
+
+    private suspend fun processBackgroundSteps(
+        admission: CollaborationBackgroundAdmission,
+        report: (CollaborationDeliveryStage) -> Unit,
+    ): SyncResult {
         val scope = CollaborationOperationScope.Background(admission)
         // Fresh setup can readmit an old company gate before any local discovery or SDK borrowing.
         val setup = loadSetup(scope)
@@ -82,8 +90,10 @@ class CollaborationDeliveryWorker(
         if (configured.owner != admission.owner) return SyncResult.Blocked(changed())
         val device = configured.device ?: return SyncResult.Blocked(setupRequired())
         val local = CollaborationLocalScope.Captured(configured.owner.localListAccess())
+        report(CollaborationDeliveryStage.RecoverDrafts)
         val draftResult = recoverDrafts(local)
         currentCoroutineContext().ensureActive()
+        report(CollaborationDeliveryStage.DiscoverWork)
         val found = discover(local)
         currentCoroutineContext().ensureActive()
         if (found is AppResult.Failed) return collaborationWorkFailure(found.failure)
@@ -91,11 +101,13 @@ class CollaborationDeliveryWorker(
         if (work.access != local.access) return SyncResult.Blocked(changed())
         var lease: CollaborationBackgroundRuntimeLease? = null
         try {
+            report(CollaborationDeliveryStage.AcquireBackgroundRuntime)
             val acquired = acquireBackground(admission)
             if (acquired is AppResult.Success) lease = acquired.value
             currentCoroutineContext().ensureActive()
             if (acquired is AppResult.Failed) return collaborationWorkFailure(acquired.failure)
             val borrowed = lease ?: return SyncResult.Blocked(setupRequired())
+            report(CollaborationDeliveryStage.ProcessRooms)
             return monitorCollaborationBackgroundDelivery(
                 borrowed,
                 observeAccess(local),
@@ -108,9 +120,17 @@ class CollaborationDeliveryWorker(
         }
     }
 
-    private suspend fun process(): SyncResult {
+    private suspend fun process(): SyncResult =
+        traceCollaborationDeliveryWork(CollaborationDeliveryStage.RecoverDrafts) { report ->
+            processSelectedSteps(report)
+        }
+
+    private suspend fun processSelectedSteps(
+        report: (CollaborationDeliveryStage) -> Unit
+    ): SyncResult {
         val draftResult = recoverDrafts()
         currentCoroutineContext().ensureActive()
+        report(CollaborationDeliveryStage.DiscoverWork)
         val found = discover()
         currentCoroutineContext().ensureActive()
         if (found is AppResult.Failed) return syncFailure(found.failure)
@@ -118,6 +138,7 @@ class CollaborationDeliveryWorker(
         val selection =
             work.scope as? CollaborationLocalScope.Selected ?: return SyncResult.Blocked(changed())
         val scope = CollaborationOperationScope.Selected(selection.workspaceId)
+        report(CollaborationDeliveryStage.LoadSetup)
         var setup = loadSetup(scope)
         currentCoroutineContext().ensureActive()
         if (
@@ -127,6 +148,7 @@ class CollaborationDeliveryWorker(
         ) {
             // Renew only the selected owner captured with this durable work. Background
             // notification admission has a separate lifetime and never enters this path.
+            report(CollaborationDeliveryStage.RenewWorkspace)
             val renewed =
                 refreshWorkspace(
                     WorkspaceRefreshTarget(
@@ -141,6 +163,7 @@ class CollaborationDeliveryWorker(
             if (renewed != SyncResult.Complete) return renewed
             val current = guard(work)
             if (current is AppResult.Failed) return syncFailure(current.failure)
+            report(CollaborationDeliveryStage.LoadSetup)
             setup = loadSetup(scope)
             currentCoroutineContext().ensureActive()
         }
@@ -150,10 +173,12 @@ class CollaborationDeliveryWorker(
         val device = configured.device ?: return SyncResult.Blocked(setupRequired())
         if (device.state != CollaborationDeviceState.ACTIVE)
             return SyncResult.Blocked(setupRequired())
+        report(CollaborationDeliveryStage.EnsureRuntime)
         val restored = ensureRuntime(scope.workspaceId, device.id)
         currentCoroutineContext().ensureActive()
         if (restored is AppResult.Failed) return collaborationWorkFailure(restored.failure)
         if (!(restored as AppResult.Success).value.value) return SyncResult.Blocked(setupRequired())
+        report(CollaborationDeliveryStage.ProcessRooms)
         return processPrepared(work, scope, device, draftResult)
     }
 

@@ -1,5 +1,50 @@
 # Agent continuation — HRIS Mobile
 
+## Delivery stage timing accepted; package 64 next — 08 November 2026, 06:16 UTC
+
+The new application-owned timing observer distinguishes local recovery/discovery, setup,
+runtime preparation and room delivery stages. Intermediate transitions make no success
+claim: they may enter recovery after a failed read. Only the terminal interval records
+an attempt outcome. Nested `ProcessRooms` is inclusive; do not sum it with its room stages.
+No queue, admission, persistence, transport or UI policy changes. The only product files
+are `CollaborationDeliveryDiagnostics.kt` and `CollaborationDeliveryWorker.kt` in app/work.
+The existing failure markers remain; ordinary cancellation adds only a timing event.
+
+Focused-3/session33220 passed 30 cases in 117.742s. Full-2/session14501 passed in 684.612s:
+678 fresh cases (669 shared desktop + nine actual Chrome), zero failures/errors/skips,
+4,455 stable source inputs and unchanged inspector sources. Root checks, Android
+compile/lint, shared Wasm/iOS source and quality passed. Other unchanged test tasks reused
+Gradle outputs. Nine concrete desktop and nine browser timing cases are verified in XML.
+Focused-1 had three test-assumption failures; focused-2 passed after virtual-time/cause
+corrections. Full-1 was deliberately stopped at 500.051s after 5,619 passing cases to
+correct intermediate-stage outcome semantics; it is not an accepted complete gate.
+Exact evidence: [delivery stage checks](measurements/chat-delivery-stage-timing-2026-11-08.json).
+
+All test/Gradle sessions are reaped; no owned emulator is running. Phone and original Bima
+image remain accepted 63. Commit/push this increment, then use the prepared
+`.work/release-phone-2026-11-08-build64` scripts: build-arm64, verify-arm64/verify-sdk,
+preflight-gateway, start-emulator, install-owned-sample, passive counter and ONE new probe.
+These scripts require the pushed source, full-2 fingerprints and nine actual timing cases
+on each target. The collector also records closed delivery-stage intervals; logcat event
+wall time belongs to the guest, and ProcessRooms overlaps nested intervals. Review the
+actual screenshots/storyboards, old/new history after offline restart, request counts and
+stage times. No 64 APK or device measurement exists yet. Inspector/notification acceptance
+may reuse unchanged 63 sources and its audited 62 evidence. Do not claim a speed improvement.
+Stop/reap the original emulator, notify before EACH phone install-only, and never drive
+its UI. Never resend the older 61/62/63/diagnostic originals or reset their private store.
+
+Next implementation remains the measured pre-request delay and atomic composer adoption.
+Read [composer handoff](collaboration-composer-handoff.md); the storage foundation is still
+unused. An unsaved editor needs an explicit stored-slot CAS, distinct gesture IDs and
+submittedAt values, bounded recovery/holds, command reconciliation after outbox retirement,
+and draft/outbox/command/provisional projections. Completing A must not clear newer input B.
+Keep business orchestration in owning use cases. Supplementary read-only notes are in
+`.work/chat-delivery-stage-timing-2026-11-08/composer-followup-notes.txt`.
+
+Library 2b84921, Starter a21b748 and Platform ea322180 are unchanged; Group routing stays off.
+Original communications PRD remains 3 in progress / 51 planned. One owned compiler OR
+emulator; preserve unrelated experiment Java. No new user input is required.
+
 ## Release63 installed; continue composer/send path — 08 November 2026, 05:36 UTC
 
 Source afc2bb5935b8af32421bf369df9fdccc2f7facd8 is pushed; full5618cases0all passed.

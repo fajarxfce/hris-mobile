@@ -1,0 +1,270 @@
+{
+  "recordedAt": "2026-11-08T06:16:00.753950+00:00",
+  "scope": "Application-owned monotonic delivery-stage diagnostics; no delivery, queue, admission, storage or UI policy change.",
+  "sourceSha256": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryDiagnostics.kt": "51f3d27ea37fa72b8951f8565102ddc71036f8c4d8c51f60ea3eded81d024848",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "637c132c24f63c67ec5c86b4a56035f9be5a39f82a53f2288c23d75fd2f0e3ac",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/CollaborationDeliveryTimingTest.kt": "010c2651575d9213fdbe984a268dcd998b907c4a5f032aea350eef39d93e37a5",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryDiagnosticsTest.kt": "a94e623b4aa36e29239472d0a529972b07ea53c2957cc8327467d16577afb5a0"
+  },
+  "sourceManifestSha256": "43703876019efe33e7f842077882142766b27ab6f96b5a7a0ca25665b4729710",
+  "validation": {
+    "focused-1": {
+      "startedAt": "2026-11-08T05:41:15.311242+00:00",
+      "elapsedSeconds": 508.6,
+      "exitCode": 1,
+      "sourceFiles": 4455,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 29,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryTimingTest.xml": {
+          "sha256": "7f5ddbc556c163443bdd06800a18f2fd71a2f5cd27543de4ab89831cc12934df",
+          "tests": 8,
+          "failures": 2,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+          "sha256": "11554aef95dd9a137b7451b5bc97cc01d7c402ada959e66bf31e2bfc81fa713e",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryDiagnosticsTest.xml": {
+          "sha256": "11011d6a74f75d22a88e7ded63a49abcf8351ce0927967026798adfc1f463307",
+          "tests": 3,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "resultSha256": "fe36d92007e794995fbfd947b0f62ebcc94d085bff39ec4972996db97e725971"
+    },
+    "focused-2": {
+      "startedAt": "2026-11-08T05:50:18.565069+00:00",
+      "elapsedSeconds": 110.555,
+      "exitCode": 0,
+      "sourceFiles": 4455,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 29,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryTimingTest.xml": {
+          "sha256": "d43c38c58ef5a8192e56d0bea29ba99aee9e1898164cbcd5f8f7e46d5e265db2",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+          "sha256": "b07b0ef50f69b41aec0dd7e537589e9b6a79f39ade2868211a0d09d0aaf546e9",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryDiagnosticsTest.xml": {
+          "sha256": "59f63d5911ed6794d7485b3f73698621f56b7c665636d0be79cd74eff7098140",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "resultSha256": "fc7feb383e3a74975742776a86cfdc454c4524a49be4d4b736941b0ce9c0a9f0"
+    },
+    "full-1": {
+      "startedAt": "2026-11-08T05:52:20.783346+00:00",
+      "elapsedSeconds": 500.051,
+      "exitCode": -15,
+      "sourceFiles": 4455,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5619,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryDiagnosticsTest.xml": {
+          "sha256": "e97baf00455cb5c8ebea4ef2aa5bace4e17359b1d757562003b1a1478d1d5397",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryTimingTest.xml": {
+          "sha256": "56d6f3ea2209756513f582fd9bafb9b10da66cc8f3a967adffb16f4540620eee",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+          "sha256": "4afa4e908256562cfd6be937d5e71687fd7aff3c41168783ab5000131789bb9d",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDeliveryCursorStorageTest.xml": {
+          "sha256": "49c9a40bbb136e63dc6794e0ad542c6a6d422aad33e0b414fe335aa251757115",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationDeliveryDiagnosticsTest.xml": {
+          "sha256": "311d8425b156e36d870a41b3e8aa5b9dcd94245df5de489061dde88413ddddda",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationDeliverySchedulingTest.xml": {
+          "sha256": "afe96e6a3ef34f2db4779b56ff2ed8bbe47d4f870c5a22ad1bd74546513e25ec",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ReadCollaborationDeliveryWorkTest.xml": {
+          "sha256": "2818c96c0d0dfdd6dcf80c944fe58bbeef58e8adb7e04891ea9e1d1f541ca765",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.RequestCollaborationDeliveryTest.xml": {
+          "sha256": "d79628562dcc95830694cb718c4ace73b19023034fc9cc08a81570ba4f7a0a6e",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "resultSha256": "86bdb6df78a61415332cc428bc3244344703decf5cda151c787875d34773bb92"
+    },
+    "focused-3": {
+      "startedAt": "2026-11-08T06:01:11.101477+00:00",
+      "elapsedSeconds": 117.742,
+      "exitCode": 0,
+      "sourceFiles": 4455,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 30,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryTimingTest.xml": {
+          "sha256": "d329aeec171ec1e1e5b8d6d78fb36b821a8684b8914734f1db1bb74d04825c96",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+          "sha256": "38d0e984ea15ff7238793945d2f396a0b05d3d83a8a02e803cf6d6ea37fb1f29",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryDiagnosticsTest.xml": {
+          "sha256": "a44e06d591d8389541afd5f4a6f8264ff7e10c94674a263f9042532d4d54c290",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "resultSha256": "139c5edf1404727e24c9f661dce195ac1c5c6af3c9e87fedc27fcc0545d81656"
+    },
+    "full-2": {
+      "startedAt": "2026-11-08T06:03:38.839877+00:00",
+      "elapsedSeconds": 684.612,
+      "exitCode": 0,
+      "sourceFiles": 4455,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 678,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryDiagnosticsTest.xml": {
+          "sha256": "58e913bff66aa952771fb56142dbc13d12585fff814c721db1f1ffe68fefda39",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryTimingTest.xml": {
+          "sha256": "ba75809e3b59b8d55b40d722255f346e3349cded0b77ff9adb87a4366a1ec557",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+          "sha256": "41aa3fa4f972bc428713cc2242a06feb8c4bac04b7579053bd9d55bc40c64f7a",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.CollaborationDeliveryTimingTest.xml": {
+          "sha256": "0c727fab9a2e459053318d7598e2c6551a32007fca2e6aa7aa967d1642c1695d",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "resultSha256": "e2e4043ab812fafe8b3a5250aab97d4a0dd57d28e6c17413fc099031b5e0fb33"
+    }
+  },
+  "interruptedGate": "Full-1 was stopped at 500.051s after 5619 passing cases to remove success claims from intermediate stages. It is not an accepted complete gate. Full-2 validates the corrected implementation.",
+  "initialFailures": "The first run had three test failures: a wall-clock 10ms timeout raced before the expected stage; two referential exception assertions did not account for JVM coroutine stack recovery. The timeout now uses virtual time and exceptions retain their original identity or exact cause. No production source changed between focused-1 and focused-2.",
+  "actualTimingCases": {
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryTimingTest.xml": {
+      "sha256": "ba75809e3b59b8d55b40d722255f346e3349cded0b77ff9adb87a4366a1ec557",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apps/shared/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.CollaborationDeliveryTimingTest.xml": {
+      "sha256": "0c727fab9a2e459053318d7598e2c6551a32007fca2e6aa7aa967d1642c1695d",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "boundaries": [
+    "Closed stage names, elapsed duration, result classification and random trace/span IDs only. No account/room/message IDs, text, tokens or free failure values.",
+    "ProcessRooms is an inclusive parent interval containing separately timed room stages; never sum both.",
+    "Exception type/cause and cancellation propagate. Result objects remain unchanged. Diagnostics do not schedule or authorize work.",
+    "Checks compile shared iOS source; no native Apple Matrix runtime or iPhone acceptance.",
+    "Actual release64 timing and device installation are separate evidence. No latency improvement or keyboard-continuity claim."
+  ]
+}

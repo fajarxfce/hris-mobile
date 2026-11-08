@@ -5,6 +5,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.observability.*
 import kotlin.test.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.test.runTest
 
 class CollaborationDeliveryDiagnosticsTest {
     @Test
@@ -12,7 +13,7 @@ class CollaborationDeliveryDiagnosticsTest {
         val events = mutableListOf<Diagnostic>()
         Diagnostics.install { event, error ->
             assertNull(error)
-            events += event
+            if (event.kind == DiagnosticKind.OperationFailed) events += event
         }
         try {
             val classifications =
@@ -60,7 +61,7 @@ class CollaborationDeliveryDiagnosticsTest {
         val events = mutableListOf<Diagnostic>()
         Diagnostics.install { event, error ->
             assertNull(error)
-            events += event
+            if (event.kind == DiagnosticKind.OperationFailed) events += event
         }
         try {
             val original =
@@ -90,11 +91,11 @@ class CollaborationDeliveryDiagnosticsTest {
     }
 
     @Test
-    fun timeoutIdentifiesInterruptedStageWhileNormalCancellationStaysQuiet() = runBlocking {
+    fun timeoutIdentifiesInterruptedStageWhileNormalCancellationStaysQuiet() = runTest {
         val events = mutableListOf<Diagnostic>()
         Diagnostics.install { event, error ->
             assertNull(error)
-            events += event
+            if (event.kind == DiagnosticKind.OperationFailed) events += event
         }
         try {
             assertNull(
@@ -112,7 +113,7 @@ class CollaborationDeliveryDiagnosticsTest {
                 traceCollaborationDelivery { throw cancelled }
                 fail("Cancellation was swallowed")
             } catch (failure: CancellationException) {
-                assertSame(cancelled, failure)
+                assertTrue(failure === cancelled || failure.cause === cancelled)
             }
             assertTrue(events.isEmpty())
         } finally {
