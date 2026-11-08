@@ -1111,9 +1111,33 @@ class AndroidCollaborationRuntimeRepository(
     ): CollaborationSdkRecord? {
         val stored = credentials.read()?.let(codec::decode)
         check(stored?.handover == null) { "SDK ownership is being transferred." }
+        if (
+            stored != null &&
+                (stored.initialized ||
+                    stored.bootstrapGatewayVersion > 0 ||
+                    stored.messageOperationId != stored.bootstrapOperationId)
+        ) {
+            // Initialization or credential-replacement lineage requires the original account,
+            // including an interrupted replacement whose initialized flag is false. Read it
+            // under this lease before client construction or credential replacement writes.
+            val identity =
+                requireNotNull(privateIdentities)
+                    .read(directory.databasePath, stored.passphrase)
+                    .toLocalDeviceIdentity()
+            currentCoroutineContext().ensureActive()
+            require(
+                identity.matrixUserId == stored.matrixUserId &&
+                    identity.matrixDeviceId == stored.matrixDeviceId
+            ) {
+                "Stored SDK credentials do not match the private account."
+            }
+        }
         if (stored == null) {
             check(!directory.initiallyOccupied) { "SDK store key is unavailable." }
             if (installation == null) return null
+            require(installation.second.version == 0L) {
+                "A replacement gateway requires the original private SDK account."
+            }
             val key = cipher.generateKey()
             val candidate =
                 try {

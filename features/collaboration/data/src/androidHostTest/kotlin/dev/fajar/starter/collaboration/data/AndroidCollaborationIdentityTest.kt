@@ -241,6 +241,192 @@ class AndroidCollaborationIdentityTest {
         }
     }
 
+    @Test
+    fun initializedCredentialsCannotRecreateAMissingPrivateAccountInEitherColdEntry() = runTest {
+        val f = Fixture()
+        try {
+            f.store()
+            f.allowDirectory = true
+            f.privateIdentityRead = { error("Existing private account is missing") }
+            val original = f.values.toMap()
+            val parent =
+                CollaborationNativeParent(
+                    setupOwner.sessionId,
+                    setupOwner.audience,
+                    setupOwner.accountId,
+                    setupOwner.nativeSessionId,
+                )
+            assertEquals(
+                AppResult.Success(Unit),
+                f.runtime.updateRetention(CollaborationRuntimeRetention(parent, setupOwner)),
+            )
+            repeat(6) { attempt ->
+                assertIs<AppResult.Failed>(
+                    if (attempt % 2 == 0) f.runtime.restore(setupOwner, SETUP_DEVICE)
+                    else f.runtime.acquireBackground(setupOwner, SETUP_DEVICE, 5_000)
+                )
+            }
+            assertEquals(6, f.privateReads)
+            assertEquals(6, f.directories)
+            assertEquals(6, f.directoryCloses)
+            assertEquals(6, f.closes)
+            assertEquals(0, f.writes)
+            assertEquals(original, f.values)
+            assertEquals(AppResult.Success(false), f.runtime.isOpen(setupOwner, SETUP_DEVICE))
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
+    fun foreignOrIncompletePrivateIdentityCannotRestoreAnInitializedCredentialRecord() = runTest {
+        val f = Fixture()
+        try {
+            f.store()
+            f.allowDirectory = true
+            val original = f.values.toMap()
+            val identity =
+                CollaborationSdkIdentityData(
+                    f.gateway.matrixUserId,
+                    f.gateway.matrixDeviceId,
+                    Base64.encode(ByteArray(32) { 1 }).trimEnd('='),
+                    Base64.encode(ByteArray(32) { 2 }).trimEnd('='),
+                )
+            for (invalid in
+                listOf(
+                    identity.copy(userId = "@other:matrix.example.test"),
+                    identity.copy(deviceId = "OTHERDEVICE"),
+                    identity.copy(ed25519 = null),
+                    identity.copy(curve25519 = "invalid"),
+                )) {
+                f.privateIdentityRead = { invalid }
+                assertIs<AppResult.Failed>(f.runtime.restore(setupOwner, SETUP_DEVICE))
+            }
+            assertEquals(4, f.privateReads)
+            assertEquals(4, f.directoryCloses)
+            assertEquals(4, f.closes)
+            assertEquals(0, f.writes)
+            assertEquals(original, f.values)
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
+    fun missingPrivateAccountRejectsCredentialReplacementBeforeTheProtectedWrite() = runTest {
+        val f = Fixture()
+        try {
+            f.store()
+            f.allowDirectory = true
+            f.privateIdentityRead = { error("Existing private account is missing") }
+            val original = f.values.toMap()
+            assertIs<AppResult.Failed>(f.runtime.install(setupOwner, f.replacement))
+            assertEquals(1, f.privateReads)
+            assertEquals(1, f.directoryCloses)
+            assertEquals(1, f.closes)
+            assertEquals(0, f.writes)
+            assertEquals(original, f.values)
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
+    fun interruptedCredentialReplacementStillRequiresTheOriginalPrivateAccount() = runTest {
+        val f = Fixture()
+        try {
+            val record = f.store(interruptedReplacement = true)
+            assertFalse(record.initialized)
+            assertNotEquals(record.bootstrapOperationId, record.messageOperationId)
+            f.allowDirectory = true
+            f.privateIdentityRead = { error("Previous private account is missing") }
+            val original = f.values.toMap()
+            assertIs<AppResult.Failed>(f.runtime.restore(setupOwner, SETUP_DEVICE))
+            assertEquals(1, f.privateReads)
+            assertEquals(1, f.directoryCloses)
+            assertEquals(1, f.closes)
+            assertEquals(0, f.writes)
+            assertEquals(original, f.values)
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
+    fun aReplacementGatewayCannotCreateKeysWhenTheOriginalRecordAndDirectoryAreMissing() = runTest {
+        val f = Fixture()
+        try {
+            f.allowDirectory = true
+            f.occupied = false
+            assertIs<AppResult.Failed>(f.runtime.install(setupOwner, f.replacement))
+            assertEquals(0, f.privateReads)
+            assertEquals(0, f.writes)
+            assertTrue(f.values.isEmpty())
+            assertEquals(1, f.directoryCloses)
+            assertEquals(1, f.closes)
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
+    fun firstBootstrapStillPreparesProtectedCredentialsBeforeAnyNativeConstruction() = runTest {
+        val f = Fixture()
+        try {
+            f.allowDirectory = true
+            f.occupied = false
+            val initial =
+                CollaborationSetupCommandRecord(
+                    f.command,
+                    2,
+                    1,
+                    CollaborationSetupOutcome.Bootstrapped(f.gateway),
+                )
+            // This fixture rejects the protected write; a first bootstrap must reach that
+            // durable boundary, then stop without constructing a native client or losing handles.
+            assertIs<AppResult.Failed>(f.runtime.install(setupOwner, initial))
+            assertEquals(1, f.writes)
+            assertEquals(0, f.privateReads)
+            assertTrue(f.values.isEmpty())
+            assertEquals(1, f.directoryCloses)
+            assertEquals(1, f.closes)
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
+    fun cancellationDuringPrivateVerificationReleasesTheDirectoryAndPreservesCredentials() =
+        runTest {
+            val f = Fixture()
+            try {
+                f.store()
+                f.allowDirectory = true
+                val original = f.values.toMap()
+                val entered = CompletableDeferred<Unit>()
+                f.privateIdentityRead = {
+                    entered.complete(Unit)
+                    awaitCancellation()
+                }
+                val restoring = async { f.runtime.restore(setupOwner, SETUP_DEVICE) }
+                entered.await()
+                restoring.cancelAndJoin()
+                assertTrue(restoring.isCancelled)
+                assertEquals(1, f.privateReads)
+                assertEquals(1, f.directoryCloses)
+                assertEquals(1, f.closes)
+                assertEquals(0, f.writes)
+                assertEquals(original, f.values)
+
+                f.privateIdentityRead = { error("Private account remains unavailable") }
+                assertIs<AppResult.Failed>(f.runtime.restore(setupOwner, SETUP_DEVICE))
+                assertEquals(2, f.directoryCloses)
+                assertEquals(2, f.closes)
+            } finally {
+                f.close()
+            }
+        }
+
     private class Fixture {
         val server = IdentityServer(SETUP_BASE, "Fictional phone")
         val endpoint = CollaborationSdkEndpoint("https://hris.example.test/")
@@ -259,15 +445,46 @@ class AndroidCollaborationIdentityTest {
                     setupOwner,
                     CollaborationBootstrap(SETUP_OPERATION, SETUP_DEVICE, 1, null),
                 )
+        val replacementGateway =
+            CollaborationGateway(
+                gateway.owner,
+                gateway.deviceId,
+                gateway.sessionId,
+                gateway.version + 1,
+                gateway.matrixUserId,
+                gateway.matrixDeviceId,
+                gateway.accessToken,
+                gateway.refreshToken,
+                gateway.accessExpiresAtEpochMillis,
+                gateway.expiresAtEpochMillis,
+            )
+        val replacement =
+            CollaborationSetupCommandRecord(
+                command.copy(
+                    id = "a0000000-0000-0000-0000-000000000099",
+                    action =
+                        (command.action as CollaborationSetupAction.Bootstrap).copy(
+                            gatewayVersion = gateway.version
+                        ),
+                ),
+                2,
+                1,
+                CollaborationSetupOutcome.Bootstrapped(replacementGateway),
+            )
         val values = mutableMapOf<String, String>()
         var persistent = true
         var reads = 0
         var writes = 0
         var closes = 0
         var allowDirectory = false
+        var occupied = true
         var directories = 0
         var directoryCloses = 0
         var beforeRead: suspend () -> Unit = {}
+        var privateReads = 0
+        var privateIdentityRead: suspend () -> CollaborationSdkIdentityData = {
+            error("No private identity read expected")
+        }
         private val http =
             createHttpClient(MockEngine { error("No identity network request") }, endpoint.baseUrl)
         val runtime =
@@ -283,7 +500,7 @@ class AndroidCollaborationIdentityTest {
                         directories++
                         return object : CollaborationSdkStoreLease {
                             override val storeId = storeId
-                            override val initiallyOccupied = true
+                            override val initiallyOccupied = occupied
                             override val databasePath = "must-not-open-sdk/database"
                             override val cachePath = "must-not-open-sdk/cache"
 
@@ -324,13 +541,19 @@ class AndroidCollaborationIdentityTest {
                 server,
                 endpoint,
                 http,
+                privateIdentities =
+                    CollaborationSdkPrivateIdentitySource { _, _ ->
+                        privateReads++
+                        privateIdentityRead()
+                    },
             )
 
         suspend fun store(
             initialized: Boolean = true,
             expired: Boolean = false,
             handover: CollaborationRuntimeHandoverIntent? = null,
-        ) {
+            interruptedReplacement: Boolean = false,
+        ): CollaborationSdkRecord {
             val scope = collaborationSdkScope(setupOwner, SETUP_DEVICE, server, endpoint)
             val codec = CollaborationSdkRecordCodec(scope)
             var record =
@@ -344,7 +567,10 @@ class AndroidCollaborationIdentityTest {
                         expiresAt = "2026-01-02T00:00:00Z",
                     )
             if (handover != null) record = codec.stageHandover(record, handover)
+            if (interruptedReplacement)
+                record = codec.replaceCredentials(record, replacement.command, replacementGateway)
             values[scope.credentialRecordName] = codec.encode(record)
+            return record
         }
 
         fun close() {

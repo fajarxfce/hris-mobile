@@ -1,0 +1,50 @@
+{
+  "startedAt": "2026-11-08T17:14:03.780447+00:00",
+  "elapsedSeconds": 103.706,
+  "exitCode": 0,
+  "sourceFiles": 4498,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 54,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "scope": "Android private account preservation before native SDK construction",
+  "fullValidation": false,
+  "nativeValidation": false,
+  "automaticActivationImplemented": false,
+  "priorStorageExceptionResolved": false,
+  "resultSha256": "170f421476b409665e33c0989a3f12ec5003222e7311c8e3559304638279068c",
+  "reports": {
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidExistingHandoverStorageTest.xml": {
+      "sha256": "43aa217216439ed77d7110762a42140bf558eecf2476313c6dcaf72e18e81edf",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidSpaceRuntimeAdoptionTest.xml": {
+      "sha256": "c047e499a07834ede4f388fc680a8fd6110341961118118cf2f4021e0adbcd61",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkRuntimeRegistryTest.xml": {
+      "sha256": "5133691b0577b279f48cec6b67146ff425557e400e0a743345c9d420ff1460a4",
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationIdentityTest.xml": {
+      "sha256": "1e6f44c4b649e673831a3b82689e5399e8dcedcca03e329fe1615fbb7a6773d1",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  }
+}
