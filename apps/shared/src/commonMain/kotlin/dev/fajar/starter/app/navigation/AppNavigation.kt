@@ -50,7 +50,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppIncomingLink>) {
     val controller = navigation.controller
     val koin = getKoin()
-    val inspection = remember(koin) { koin.getOrNull<ApplicationNetworkInspection>()?.inspection }
+    val inspectionOwner = remember(koin) { koin.getOrNull<ApplicationNetworkInspection>() }
+    val inspection = inspectionOwner?.inspection
     val notificationFocus = koinInject<CollaborationNotificationFocus>()
     val onThreadFocus = remember(notificationFocus) { notificationFocus::register }
     val viewModel = koinViewModel<AppViewModel>()
@@ -144,6 +145,20 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppInco
             }
         }
     }
+    if (inspectionOwner != null) {
+        val launchState by inspectionOwner.launchRequests.state.collectAsStateWithLifecycle()
+        LaunchedEffect(scope, launchState, lifecycle) {
+            val request =
+                launchState as? NetworkInspectionLaunchState.Requested ?: return@LaunchedEffect
+            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                controller.awaitAppLinkNavigation(scope)
+                if (inspectionOwner.launchRequests.state.value === request) {
+                    controller.navigate(NetworkInspectionRoute) { launchSingleTop = true }
+                    inspectionOwner.launchRequests.handled(request)
+                }
+            }
+        }
+    }
     Column(Modifier.fillMaxSize()) {
         NativeLinkStatus(
             state.openingNotification,
@@ -167,6 +182,9 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppInco
             }
             onboardingRoutes({ viewModel.onEvent(AppEvent.BootstrapRequested) })
             authRoutes()
+            if (inspection != null) {
+                networkInspectionRoutes(inspection) { controller.popBackStack() }
+            }
             if (stage is AppStage.SignedIn) {
                 if (stage.workspace == null) {
                     verificationRoutes(stage.sessionId) {
@@ -599,9 +617,6 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppInco
                             },
                             onBack = { controller.popBackStack() },
                         )
-                        if (inspection != null) {
-                            networkInspectionRoutes(inspection) { controller.popBackStack() }
-                        }
                         settingsRoutes(
                             securitySettings = {
                                 AppLockSettings()

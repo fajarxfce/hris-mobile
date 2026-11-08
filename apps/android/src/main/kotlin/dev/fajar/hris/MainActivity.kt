@@ -27,7 +27,8 @@ class MainActivity : FragmentActivity() {
         app.location.attach(this)
         app.fileInputs.attach(this)
         app.fileOutputs.attach(this)
-        if (savedInstanceState == null) receiveLink(app, intent)
+        if (savedInstanceState == null || intent.action == NetworkInspectionShortcut.ACTION)
+            receiveLink(app, intent)
         setContent { StarterApp(container, app.links.links) }
     }
 
@@ -39,6 +40,11 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun receiveLink(app: StarterApplication, intent: Intent) {
+        if (intent.action == NetworkInspectionShortcut.ACTION) {
+            app.openNetworkInspector()
+            setIntent(Intent(intent).setAction(null))
+            return
+        }
         val native =
             try {
                 app.notificationIntents.input(intent)
@@ -56,6 +62,11 @@ class MainActivity : FragmentActivity() {
                     "${app.environment.linkScheme}://app/$it"
                 })
             ?.let(app.links::receive)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (application as StarterApplication).refreshNetworkInspectorShortcut()
     }
 
     override fun onDestroy() {

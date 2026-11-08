@@ -1,0 +1,4 @@
+<resources>
+    <string name="network_inspector_notification_title">Pemantau jaringan</string>
+    <string name="network_inspector_notification_text">Ketuk untuk melihat aktivitas jaringan</string>
+</resources>

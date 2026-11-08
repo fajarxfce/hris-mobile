@@ -1,0 +1,4 @@
+<resources>
+    <string name="network_inspector_notification_title">Network inspector</string>
+    <string name="network_inspector_notification_text">Tap to view network activity</string>
+</resources>

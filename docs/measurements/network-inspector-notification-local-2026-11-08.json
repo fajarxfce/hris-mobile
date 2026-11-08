@@ -1,0 +1,266 @@
+{
+  "at": "2026-11-08T01:15:53.602113+00:00",
+  "acceptedLocally": true,
+  "checks": {
+    "focused-1": {
+      "startedAt": "2026-11-08T00:11:21.027605+00:00",
+      "elapsedSeconds": 1411.925,
+      "exitCode": 0,
+      "sourceFiles": 4432,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "relevantReports": {}
+    },
+    "full-1": {
+      "startedAt": "2026-11-08T00:35:36.753133+00:00",
+      "elapsedSeconds": 81.586,
+      "exitCode": -15,
+      "sourceFiles": 4432,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1
+      },
+      "relevantReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml": {
+          "sha256": "c3a04f7461e0b617e44a8a3e53fd3ceab9067fbae2318373c8ee1b3a8bf6b621",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 1
+        }
+      }
+    },
+    "full-2": {
+      "startedAt": "2026-11-08T00:37:16.476780+00:00",
+      "elapsedSeconds": 510.388,
+      "exitCode": 1,
+      "sourceFiles": 4432,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5591,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1
+      },
+      "relevantReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml": {
+          "sha256": "42d8adce45c35ad640106519b22804f39a2bf2c4b89242708fb4786ec2ef7650",
+          "tests": 90,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativeLinkAppFlowTest.xml": {
+          "sha256": "bf1d11c36eb9dce1775be79a8d22d78ddc2877a328d1e259feb16104c2a1cd44",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.WorkspaceLayoutTest.xml": {
+          "sha256": "1588769a7eded08e29d274cfa5af8b83c621d99ba4a83e8884c1e6b6817e3d5c",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 1
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": {
+          "sha256": "94f93d0791a1e02792beb3af2f61b9019c2e62e27a8777d9c80214a0a8778fe4",
+          "tests": 38,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "identity-focus": {
+      "startedAt": "2026-11-08T00:47:20.944059+00:00",
+      "elapsedSeconds": 403.198,
+      "exitCode": 1,
+      "sourceFiles": 4436,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "relevantReports": {}
+    },
+    "wake-baseline": {
+      "startedAt": "2026-11-08T00:54:44.769846+00:00",
+      "elapsedSeconds": 61.608,
+      "exitCode": 1,
+      "sourceFiles": 4436,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "relevantReports": {
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": {
+          "sha256": "23b2fa37e70465a6308c5c30eda54bcdc75a3acba00e36f88f867b1b687edabf",
+          "tests": 1,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "wake-fixed": {
+      "startedAt": "2026-11-08T00:56:39.709051+00:00",
+      "elapsedSeconds": 59.461,
+      "exitCode": 0,
+      "sourceFiles": 4436,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "relevantReports": {
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": {
+          "sha256": "74e2ade5464edd3110079eeabcf8edb5793b3a2471442c2b369a3649651ed8e8",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.PublishedSessionIdentityTest.xml": {
+          "sha256": "6a7a5fce1a46c5e226900fb906fe1a1ce00ba3c50d8c6da4bc262ad35d7ad960",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "full-3": {
+      "startedAt": "2026-11-08T00:58:22.622984+00:00",
+      "elapsedSeconds": 282.313,
+      "exitCode": -15,
+      "sourceFiles": 4436,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 4742,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "relevantReports": {
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": {
+          "sha256": "e11b9f357638171d1127f6b10f3ad4fee380c9400097a9a9c3fc804afb3e033c",
+          "tests": 39,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.PublishedSessionIdentityTest.xml": {
+          "sha256": "999554cd77b34388a85dde215279a65eff32310b0cf5625a53a16847b1933598",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "identity-generation-repair": {
+      "startedAt": "2026-11-08T01:03:21.673203+00:00",
+      "elapsedSeconds": 45.925,
+      "exitCode": 0,
+      "sourceFiles": 4436,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "relevantReports": {}
+    },
+    "full-4": {
+      "startedAt": "2026-11-08T01:04:19.873894+00:00",
+      "elapsedSeconds": 686.45,
+      "exitCode": 0,
+      "sourceFiles": 4436,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 729,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "relevantReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativeLinkAppFlowTest.xml": {
+          "sha256": "3bb41cf18cc06bb675336337173393a2f3c6df259c0bb1aeac688c7011ab2f7c",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.WorkspaceLayoutTest.xml": {
+          "sha256": "d2cb200df4fe5b73e574638ea893464e1f9ac881fecb12cfd18cbe32a80d143b",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml": {
+          "sha256": "8763d5ab78040723b8b035acb7ad2f2ed48e6d1f6cc1a9078d3ba4578da973ff",
+          "tests": 90,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.PublishedSessionIdentityTest.xml": {
+          "sha256": "aa9812cc4850198943d65e1b3097dc76e4e6b68fa097ab1a67760fcc0850580e",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "sourceManifestSha256": "5be283bc445299c8e0b097a8ea311f8857069ad152fc1580928e12b2d7831428",
+  "libraryManifestSha256": "5ebd92366c6d73d00d7908e6a2625d616a1f45ff917a1c403b78fc29776f917f",
+  "androidLintIssues": 0,
+  "lifecycleNotificationCasesCompiled": 5,
+  "actualNotificationOsTestsExecuted": false,
+  "apk59Built": false,
+  "phoneInstalledVersion": 58,
+  "pendingLatencyAcceptance": false,
+  "changes": [
+    "Android notification + shared navigation handoff",
+    "Passive published identity observation without credential/SQL acquisition",
+    "No delivery wake from passive SDK local-echo updates"
+  ],
+  "preservedFailureEvidence": {
+    "full1": "Stopped for old-notifier late completion race; fixed with idempotent cancellation",
+    "full2": "JNI SQLite reset crash after eager diagnostic session acquisition in short-lived container",
+    "identity-focus": "Two explicit generic-type fixture errors",
+    "wake-baseline": "Expected passive echo scheduling assertion plus independent overloaded mapper compile error",
+    "full3": "Incomplete generated IdentityModule, stopped after desktop/Android compile failure",
+    "generation-repair": "Gradle clean/regeneration only for identity data, nonincremental KSP; no generated source edited"
+  }
+}

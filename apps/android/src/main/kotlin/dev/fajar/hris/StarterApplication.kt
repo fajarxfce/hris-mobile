@@ -13,6 +13,7 @@ import dev.fajar.inspector.matrix.captureMatrixHttp
 import dev.fajar.inspector.matrix.rust.observeNetworkRequests
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
+import dev.fajar.starter.app.inspection.ApplicationNetworkInspection
 import dev.fajar.starter.app.navigation.AppLinkChannel
 import dev.fajar.starter.app.notifications.*
 import dev.fajar.starter.app.work.CollaborationDeliveryWorker
@@ -61,6 +62,16 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
     val environment = AppEnvironment.entries.single { it.id == BuildConfig.APP_ENVIRONMENT }
     private val networkInspection =
         if (environment == AppEnvironment.Dev) NetworkInspection() else null
+    private var networkInspectionShortcut: NetworkInspectionShortcut? = null
+
+    fun openNetworkInspector() {
+        container.koin.getOrNull<ApplicationNetworkInspection>()?.launchRequests?.request()
+    }
+
+    fun refreshNetworkInspectorShortcut() {
+        networkInspectionShortcut?.refresh()
+    }
+
     private val notificationRuntime = lazy {
         val koin = container.koin
         AndroidCollaborationNotificationRuntime(
@@ -203,6 +214,8 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
         scheduler.installPeriodic(container.koin.getAll<SyncTask>().map { it.key }.toSet())
         container.koin.get<ApplicationCollaborationLifetime>().start()
         val lifecycle = ProcessLifecycleOwner.get().lifecycle
+        networkInspectionShortcut =
+            networkInspection?.let { NetworkInspectionShortcut(this, it, lifecycle.coroutineScope) }
         foregroundDelivery =
             lifecycle.coroutineScope.launch(Dispatchers.Default) {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -221,6 +234,7 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
     override fun onTerminate() {
         foregroundDelivery?.cancel()
         foregroundRequests.close()
+        networkInspectionShortcut?.close()
         if (notificationRuntime.isInitialized()) notificationRuntime.value.close()
         container.close()
         super.onTerminate()

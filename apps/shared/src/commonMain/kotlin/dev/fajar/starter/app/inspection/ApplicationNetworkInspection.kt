@@ -13,6 +13,7 @@ class ApplicationNetworkInspection(
     observeIdentity: ObservePublishedSessionIdentity,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : AutoCloseable {
+    val launchRequests = NetworkInspectionRequests()
     private val lifetime = SupervisorJob()
     private val scope = CoroutineScope(lifetime + dispatcher)
     private val closing = MutableStateFlow(false)
@@ -43,6 +44,7 @@ class ApplicationNetworkInspection(
 
     override fun close() {
         if (!closing.compareAndSet(false, true)) return
+        launchRequests.close()
         scope.launch(start = CoroutineStart.UNDISPATCHED) {
             try {
                 withContext(NonCancellable) { inspection.close() }

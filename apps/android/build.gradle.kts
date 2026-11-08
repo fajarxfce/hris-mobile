@@ -9,6 +9,7 @@ plugins {
 
 dependencies {
     implementation(libs.inspector.matrix.android)
+    implementation(libs.inspector.notification.android)
     implementation(projects.apps.shared)
     implementation(projects.core.identity.data)
     implementation(projects.core.settings.domain)

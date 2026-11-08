@@ -48,6 +48,7 @@ inspector-core = { module = "dev.fajar.inspector:core", version.ref = "network-i
 inspector-ktor = { module = "dev.fajar.inspector:ktor", version.ref = "network-inspector" }
 inspector-compose = { module = "dev.fajar.inspector:compose", version.ref = "network-inspector" }
 inspector-matrix-android = { module = "dev.fajar.inspector:matrix-rust-android", version.ref = "network-inspector" }
+inspector-notification-android = { module = "dev.fajar.inspector:android-notification", version.ref = "network-inspector" }
 matrix-sdk-android = { module = "dev.fajar.hris.matrix:sdk-android", version.ref = "matrix-sdk" }
 junit = { module = "junit:junit", version.ref = "junit" }
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk" }
