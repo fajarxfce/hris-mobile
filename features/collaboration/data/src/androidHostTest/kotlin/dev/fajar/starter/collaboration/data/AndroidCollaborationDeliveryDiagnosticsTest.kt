@@ -149,8 +149,12 @@ class AndroidCollaborationDeliveryDiagnosticsTest {
             } catch (failure: ClientException.Generic) {
                 assertSame(original, failure)
             }
-            assertEquals("ChatTimelineBuild_GenericEventCache", recorded.single().category)
-            assertFalse(encodeDiagnostic(recorded.single()).contains("private"))
+            val rejected = recorded.single { it.kind == DiagnosticKind.OperationFailed }
+            assertEquals("ChatTimelineBuild_GenericEventCache", rejected.category)
+            val completed = recorded.single { it.kind == DiagnosticKind.OperationCompleted }
+            assertEquals("ChatSdkAcquisition_TimelineBuild", completed.category)
+            assertEquals(PerformanceOutcome.Failed, completed.outcome)
+            assertTrue(recorded.none { encodeDiagnostic(it).contains("private") })
             recorded.clear()
             val cancelled = CancellationException("private")
             try {
@@ -159,7 +163,85 @@ class AndroidCollaborationDeliveryDiagnosticsTest {
             } catch (failure: CancellationException) {
                 assertSame(cancelled, failure)
             }
-            assertTrue(recorded.isEmpty())
+            assertEquals(DiagnosticKind.OperationCompleted, recorded.single().kind)
+            assertEquals("ChatSdkAcquisition_QueueBuild", recorded.single().category)
+            assertEquals(PerformanceOutcome.Cancelled, recorded.single().outcome)
+            assertFalse(encodeDiagnostic(recorded.single()).contains("private"))
+        } finally {
+            Diagnostics.install(ConsoleDiagnosticSink)
+        }
+    }
+
+    @Test
+    fun acquisitionRunsOnceAndKeepsItsCallersTraceContext() = runBlocking {
+        val recorded = mutableListOf<Diagnostic>()
+        Diagnostics.install { event, exception ->
+            assertNull(exception)
+            recorded += event
+        }
+        try {
+            val parent = OperationTrace.create()
+            val resource = Any()
+            var calls = 0
+            withContext(parent) {
+                val result =
+                    traceSdkAcquisition(SdkAcquisitionStage.QueueRoom) {
+                        calls++
+                        assertSame(parent, currentCoroutineContext()[OperationTrace])
+                        resource
+                    }
+                assertSame(resource, result)
+                assertSame(parent, currentCoroutineContext()[OperationTrace])
+            }
+            assertEquals(1, calls)
+            val event = recorded.single()
+            assertEquals(DiagnosticKind.OperationCompleted, event.kind)
+            assertEquals(PerformanceOutcome.Succeeded, event.outcome)
+            assertEquals("ChatSdkAcquisition_QueueRoom", event.category)
+            assertEquals(parent.traceId, event.traceId)
+            assertNotEquals(parent.spanId, event.spanId)
+            assertTrue(requireNotNull(event.durationMillis) >= 0)
+        } finally {
+            Diagnostics.install(ConsoleDiagnosticSink)
+        }
+    }
+
+    @Test
+    fun lateResourceStillReachesItsCancelledOwnerForCleanup() = runBlocking {
+        val recorded = mutableListOf<Diagnostic>()
+        Diagnostics.install { event, exception ->
+            assertNull(exception)
+            recorded += event
+        }
+        try {
+            val entered = CompletableDeferred<Unit>()
+            val release = CompletableDeferred<Unit>()
+            val resource = Any()
+            var handedOver = false
+            var cleanedUp = false
+            val owner = launch {
+                try {
+                    val result =
+                        traceSdkAcquisition(SdkAcquisitionStage.QueueRoom) {
+                            withContext(NonCancellable) {
+                                entered.complete(Unit)
+                                release.await()
+                                resource
+                            }
+                        }
+                    handedOver = result === resource
+                } finally {
+                    cleanedUp = true
+                }
+            }
+            entered.await()
+            owner.cancel()
+            release.complete(Unit)
+            owner.join()
+            assertTrue(owner.isCancelled)
+            assertTrue(handedOver)
+            assertTrue(cleanedUp)
+            assertEquals(PerformanceOutcome.Succeeded, recorded.single().outcome)
         } finally {
             Diagnostics.install(ConsoleDiagnosticSink)
         }

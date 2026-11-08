@@ -13,6 +13,8 @@ enum class PerformanceOperation {
     CommandConfirmation,
     CommandHandoff,
     WorkScheduling,
+    WorkspaceRead,
+    LocalAccessRead,
 }
 
 enum class PerformanceOutcome {

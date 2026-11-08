@@ -5,6 +5,8 @@ package dev.fajar.starter.workspace.data.repositories
 import dev.fajar.starter.database.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.network.safeApiCall
+import dev.fajar.starter.observability.PerformanceOperation
+import dev.fajar.starter.observability.measureAppResult
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
 import dev.fajar.starter.workspace.data.datasources.WorkspaceRemoteDataSource
@@ -33,11 +35,14 @@ class EncryptedWorkspaceRepository(
             mapValue = { page -> page.checkpoint?.let { decodeWorkspace(sessionId, it) } },
         )
 
-    override suspend fun current(sessionId: String) = safeStorageCall {
-        records.checkpoint(ReplicaScope(sessionId), PARTITION)?.let {
-            decodeWorkspace(sessionId, it)
+    override suspend fun current(sessionId: String) =
+        measureAppResult(PerformanceOperation.WorkspaceRead) {
+            safeStorageCall {
+                records.checkpoint(ReplicaScope(sessionId), PARTITION)?.let {
+                    decodeWorkspace(sessionId, it)
+                }
+            }
         }
-    }
 
     override suspend fun compareAndSet(
         sessionId: String,

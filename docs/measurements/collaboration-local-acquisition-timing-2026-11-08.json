@@ -1,5 +1,5 @@
 {
-  "accepted": false,
+  "accepted": true,
   "sourceBase": "6cb7b14e",
   "attempts": {
     "focused-1": {
@@ -64,17 +64,76 @@
         }
       },
       "resultSha256": "ebe73d165aaa91dc4ef9aed2c452b5ca587993d17c7befd336d6c88408ed1667"
+    },
+    "full-1": {
+      "session": 37685,
+      "reaped": true,
+      "result": {
+        "startedAt": "2026-11-08T12:00:45.673303+00:00",
+        "elapsedSeconds": 1290.851,
+        "exitCode": 0,
+        "sourceFiles": 4487,
+        "librarySourcesUnchanged": true,
+        "sourcesUnchanged": true,
+        "freshCounts": {
+          "tests": 5749,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "freshSuites": 771,
+        "resultSha256": "53fd2acd5fcfeed44e92583696a562d6e752715ab2935a6875f4354240136364",
+        "sourceManifestSha256": "0a3caac026646b50495731c76de69a148d18c77f00952d6b9bfc23e679242c34",
+        "libraryManifestSha256": "b346eac84c446f82f4801886f1be25f9d3e10fdf0e2f97375bd0010164d947f4",
+        "requiredReports": {
+          "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationListStorageTest.xml": {
+            "sha256": "5566392abaf5f94857de5b25fbe8139d5a741f5c5068888dcb246e062553a3d0",
+            "tests": 15,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationDeliveryDiagnosticsTest.xml": {
+            "sha256": "25a432148ce2be65b4f03a5a0121d3d2bbf63d2ebe6214fd29f2775596f2138f",
+            "tests": 8,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "core/workspace/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.data.EncryptedWorkspaceTest.xml": {
+            "sha256": "27a950ba304aad7f332c7ac4c185870de8f8bc013b5a31c064fe5dc530893f1b",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        },
+        "quality": {
+          "rootCheck": true,
+          "androidCompilation": true,
+          "lintErrors": 0,
+          "lintOtherIssues": 0,
+          "realBrowserStorage": true,
+          "productionWebSource": true,
+          "iosSource": true,
+          "format": true,
+          "architecture": true,
+          "detekt": true,
+          "nativeAppleExecution": false
+        }
+      }
     }
   },
   "pending": {
-    "gate": "full-1",
-    "session": 37685,
-    "sourcesFrozen": true,
-    "sourceChanges": 6
+    "release": 69,
+    "apkBuilt": false,
+    "runtimeAccepted": false,
+    "installed": false
   },
   "limits": [
     "Instrumentation only; no new duration attribution or latency improvement established.",
     "Native acquisition preserves raw late-resource handover without a new context or post-acquisition cancellation check.",
     "Workspace remains HRIS-only; no Starter workspace module exists."
-  ]
+  ],
+  "acceptedGate": "full-1"
 }

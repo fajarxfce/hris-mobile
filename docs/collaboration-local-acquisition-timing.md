@@ -18,9 +18,16 @@ a late resource must reach its owner for cleanup. Tests preserve this handover w
 the owner is cancelled, single invocation and parent trace context, plus failure and
 cancellation redaction.
 
-Source is currently unaccepted under `.work/local-acquisition-timing-2026-11-08`.
-Require the focused SDK/workspace/list/observability checks, full root/browser/Android/
-iOS-source/quality checks, and a separate accepted APK69 before making new runtime
-claims. Original transaction identity, current admission and retry behavior are not
-modified. Release68 stays installed. Native Apple execution and capture overhead remain
-separate; the remaining54 communications groups are still open.
+Source acceptance passed on 8 November 2026: 5,749 fresh cases with zero failures,
+errors or skips in 1,290.851 seconds. Root check, real browser storage, Android
+compilation/lint, production web/iOS source, format, architecture and Detekt passed;
+4,487 application inputs and82 library files remained unchanged. The focused gate
+also passed37 cases, including eight native diagnostic/lifetime cases and six
+workspace storage cases. [Exact checks](measurements/collaboration-local-acquisition-timing-2026-11-08.json).
+
+A separately verified APK69 and actual acquisition/read capture remain required
+before attributing the pre-send delay. Transaction identity, admission and retry
+behavior are unchanged. Release68 stays installed until the next device acceptance.
+Native Apple execution, measurement overhead and the remaining54 PRD groups remain
+separate work. The workspace module stays in HRIS; only reusable observability names
+can be considered for the starter after Mobile acceptance.

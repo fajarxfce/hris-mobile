@@ -9,6 +9,7 @@ kotlin.sourceSets {
         api(projects.core.workspace.domain)
         implementation(projects.core.network)
         implementation(projects.core.storage)
+        implementation(projects.core.observability)
         implementation(projects.core.database)
         implementation(projects.core.securestorage)
         implementation(projects.core.sync.domain)

@@ -10,6 +10,8 @@ import dev.fajar.starter.collaboration.domain.repositories.CollaborationListRepo
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationListSyncReplicaRepository
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
+import dev.fajar.starter.observability.PerformanceOperation
+import dev.fajar.starter.observability.measureAppResult
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
 import kotlin.io.encoding.Base64
@@ -309,7 +311,7 @@ class EncryptedCollaborationListRepository(
             .distinctUntilChanged()
 
     override suspend fun admission(access: CollaborationLocalAccess) =
-        observeAdmission(access).first()
+        measureAppResult(PerformanceOperation.LocalAccessRead) { observeAdmission(access).first() }
 
     override suspend fun restrict(access: CollaborationLocalAccess, failure: Failure) =
         safeStorageCall {

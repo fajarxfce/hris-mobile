@@ -2,7 +2,9 @@ package dev.fajar.starter.collaboration.data.sdk
 
 import dev.fajar.starter.collaboration.data.dto.SdkSendFailure
 import dev.fajar.starter.observability.*
+import kotlin.time.TimeSource
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
 import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.QueueWedgeError
 
@@ -19,10 +21,16 @@ internal enum class SdkAcquisitionStage {
 internal suspend fun <T> traceSdkAcquisition(
     stage: SdkAcquisitionStage,
     operation: suspend () -> T,
-): T =
-    try {
-        operation()
+): T {
+    val trace = OperationTrace.create(currentCoroutineContext()[OperationTrace])
+    val started = TimeSource.Monotonic.markNow()
+    var outcome = PerformanceOutcome.Failed
+    // Do not install a new coroutine context or check cancellation after raw acquisition:
+    // a late native resource must still reach its owner so that it can be released.
+    return try {
+        operation().also { outcome = PerformanceOutcome.Succeeded }
     } catch (cancelled: CancellationException) {
+        outcome = PerformanceOutcome.Cancelled
         throw cancelled
     } catch (failure: Exception) {
         Diagnostics.record(
@@ -33,7 +41,20 @@ internal suspend fun <T> traceSdkAcquisition(
             )
         )
         throw failure
+    } finally {
+        Diagnostics.record(
+            Diagnostic(
+                DiagnosticArea.Network,
+                DiagnosticKind.OperationCompleted,
+                category = "ChatSdkAcquisition_${stage.name}",
+                durationMillis = started.elapsedNow().inWholeMilliseconds,
+                outcome = outcome,
+                traceId = trace.traceId,
+                spanId = trace.spanId,
+            )
+        )
     }
+}
 
 /** Only exact, bounded Rust variant prefixes; no provider message/details can escape. */
 internal fun sdkExceptionCategory(failure: Exception): String {

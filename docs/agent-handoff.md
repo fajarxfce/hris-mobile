@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## Acquisition timing source accepted — 8 November 2026, 12:23 UTC
+
+Full-1/37685 is REAPED PASS1290.851s:5,749 fresh cases, zero failures/errors/skips;
+4,487 unchanged app inputs and82 library files. Root check, actual browser storage,
+Android compile/lint, web/iOS source and quality pass. All SIX source changes are
+accepted. [Evidence and measurement scope](collaboration-local-acquisition-timing.md).
+No owned compiler or emulator remains at this checkpoint.
+
+Commit/push the six accepted source files and this evidence, then build69 using the
+18 prepared files in `.work/release-phone-2026-11-08-build69`. They pin this full-1
+gate and require actual SDK8/workspace6/browser-list reports. No69APK/send/install
+exists yet. Verify exact APK/SDK, then original1536MiB Bima emulator68→69, one NEW
+Tes69 acquire original with counters and component timing, four actual screenshots,
+cold offline history/draft/preview, and passive lifetime check. Source/core/read and
+native timing share a completed private-log hash. Accept actual proof before stopping/
+reaping emulator and announcing phone install-only. Never replay an original or send
+UNSENT Draft66 092041; last accepted original is Tes68 transport 114138.
+
+Phone/original Bima image remain68. Backend e8d1d24f/schema116.1, Starterad3aa93 and
+Library2b849217/SDK5 are unchanged. Workspace is HRIS-only; no Starter workspace port.
+Only reusable metric names can be considered after Mobile runtime acceptance. All54
+PRD groups, nativeApple Matrix, measurement overhead and SDK/library publication remain.
+Continue actual pre-send attribution; source tests alone do not establish a speedup.
+
 ## Acquisition timing full gate running — 8 November 2026, 12:05 UTC
 
 Focused-1/71869 is REAPED PASS258.577s:37 fresh cases, zero failures/errors/skips,
