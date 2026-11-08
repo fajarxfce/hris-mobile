@@ -1,5 +1,46 @@
 # Agent continuation — HRIS Mobile
 
+## Release65 installed; adopt the composer next — 08 November 2026, 07:21 UTC
+
+Runtime b41710caca8180bf8389abf1e3dfd9b02240b825 is pushed. Package58600 passed105.626s;
+non-debuggable ARM64 APK123301135bytes, SHA
+f544af259dc03b6b46c736b8af1fb3535de4f0534d3f76b96de5c94b38f5c6d6. Same signer,
+SDK5 native bytes, API/Firebase, backup exclusions and lint0 verified. Phone install-only
+57344 passed34.971s after notice, started07:20:11.319UTC. Exact installed hash, appId10962
+and first installation retained; no phone UI, data clear or uninstall. Both devices now65.
+Original emulator49125/PID2397459/ticks179867596 stopped07:19:56 with1536MiB/2cores.
+All package/emulator/counter/probe/install sessions reaped; no owned heavy job remains.
+
+One new65 message only, probe timestamp071429. NEVER resend it or older64/63/62/61/
+diagnostic originals. Four screenshots and three original-detail4fps storyboards viewed.
+No duplicate/FATAL/delivery-failure marker. Actual latest preview captured offline before
+restart survives cold restart; original65 stays Sent and64 remains visible. Settings restored.
+The keyboard still dismisses during storage; this is not accepted as the input fix.
+[Exact device evidence](measurements/chat-prepared-delivery-device-2026-11-08.json).
+
+Passive180s counter: zero403; one encrypted-send200/189ms headers. Host tap->request
+2818.465ms, ->headers3007.465ms; tap command64.971ms. Before-send five seconds contain
+11 setup/room/conversation responses (64:14), after ten seconds21 (unchanged). Coarse UI
+pending2.767s/sent4.849s. Four local phases720/305/221/47ms. Delivery stage862ms (64:1608),
+StageMessage359ms, recovery358ms, enter289ms, settle271ms, history560ms, retirement197ms;
+ProcessRooms2638ms is inclusive. One emulator sample, no general phone-latency guarantee;
+guest log wall time is not synchronized to host packet timing. Inspector/notification
+acceptance reuses unchanged64 sources and its audited63/62 chain; no fresh shortcut test.
+
+Continue the seven UNTESTED composer files in isolated checkout
+/home/fajar/hris/.worktrees/mobile-composer-handoff-20261108, basefbdd8283. Copy only those
+seven after base-hash comparison into main to reuse Gradle outputs. Focused20storage+
+12submission cases first. Recovery/cursor/holds, thread/list/outbox/provisional projection
+and actual UI/IME adoption remain. Do not deploy another unused foundation as the input
+fix. Keep original gesture identity/timestamp, newer editor ownership, bounded recovery,
+legacy frozen drafts, exact active/archived command reconciliation and cancellation.
+Private supplement: that checkout's .work/composer-adoption/NEXT.txt. No compiler there.
+
+Other repos unchanged: library2b84921/Startera21b748/Platformea322180; live gateway3a7909a6
+preflight07:12:37 unchanged. Group routing off; original54 PRD3inprogress/51planned.
+Continue without new user input. One owned compiler OR emulator, preserve unrelated Java,
+notify before EACH phone install-only and never operate its UI.
+
 ## Prepared delivery accepted; package65 next — 08 November 2026, 07:10 UTC
 
 Focused24462 passed532.429s/61cases. Full96464 passed926.024s/5,644fresh cases,

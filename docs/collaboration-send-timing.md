@@ -271,3 +271,19 @@ errors or skips. Android compilation/lint, shared Wasm/iOS source and quality pa
 [Exact validation](measurements/chat-prepared-delivery-2026-11-08.json). Release65 device
 timing and installation are separate; this does not yet establish a phone improvement
 or solve keyboard dismissal. The inspector and native SDK implementation are unchanged.
+
+
+## Release65: prepared queue in the signed application
+
+The exact accepted release65 is installed in place on the phone. In one original-account
+emulator sample, the encrypted request starts2,818.465ms after the host tap command versus
+3,543.413ms in64; response headers take189ms. The delivery stage falls from1,608 to862ms,
+including its post-response reconciliation. Coarse UI polls see pending at2.767s and sent
+at4.849s. These overlapping intervals must not be added, and this is not a phone benchmark.
+
+The passive capture sees zero403 and one encrypted-send200. Before-send preparation
+responses decline from14 to11, while the ten-second after-send window remains21; concurrent
+startup and incoming work are present. Four screenshots and three4fps storyboards show
+one outgoing bubble, and original history plus the actual latest preview survive an offline
+cold restart. Input still disables while saving; composer adoption remains necessary.
+[Exact package, timings, original-store proof and installation](measurements/chat-prepared-delivery-device-2026-11-08.json).
