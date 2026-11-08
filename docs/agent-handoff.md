@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Local acquisition timing under test — 8 November 2026, 11:58 UTC
+
+Mobile HEAD6cb7b14e docs are pushed (81641 REAPED PASS); source baseline is accepted
+ca0b05cc/release68. Phone install50331 REAPED PASS27.878s; phone and original stopped
+Bima image are68. No old test original may be replayed; exact UNSENT Draft66 092041
+is preserved. No emulator runs. [Installed evidence](collaboration-direct-transport-release68.md).
+
+Sole compiler71869 is `.work/local-acquisition-timing-2026-11-08/check.py focused-1`.
+All SIX changed Kotlin/KTS files and82 library inputs are FROZEN: PerformanceOperation,
+workspace-data build/EncryptedWorkspaceRepository, EncryptedCollaborationListRepository,
+AndroidCollaborationDiagnostics and AndroidCollaborationDeliveryDiagnosticsTest.
+Source is UNCOMMITTED/UNACCEPTED. Reap the focused test, fix actual failures, then full-1
+(root, actual Chrome list storage, Android compile/lint, production web/iOS source,
+format/architecture/Detekt). No69 build/probe/install scripts or artifact exist yet.
+
+[Purpose and exact lifetime semantics](collaboration-local-acquisition-timing.md): time
+workspace reads, local admission reads and existing native queue/timeline acquisition;
+no caching, policy or retry change. Native timing must NOT introduce withContext or
+post-acquisition ensureActive: cancelled callers still own late resources. Two added
+native tests preserve handover/single invocation/context; existing failure/cancellation
+checks now distinguish completion from failure diagnostics. Workspace is Mobile-only;
+only assess reusable observability enum additions for Starter after actual acceptance.
+Backend e8d1d24f/schema116.1, Starterad3aa93 and Library2b849217/SDK5 are unchanged.
+Continue pre-send attribution and the original54 PRD work; no latency/Apple/overhead/
+publication acceptance follows from these source changes.
+
 ## Release 68 accepted and installed — 8 November 2026, 11:47 UTC
 
 Source `ca0b05cc` is accepted/pushed. Release 68 is installed on the authorized phone
