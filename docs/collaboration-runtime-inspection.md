@@ -49,3 +49,10 @@ Android runtime/registry, setup UI, application ownership/bindings, formatting,
 927.610seconds with unchanged4,503 application/config and82 library inputs.
 Android compilation/lint, actual browser, shared Wasm/iOS source compilation and
 quality checks passed. Native76 validation remains pending. No phone update or generic Starter port is accepted by this checkpoint.
+
+Packaging preflight also required an actual main-checkout browser worker report.
+It stopped before compilation when that report was absent. A supplemental actual
+Chromium gate passed20 fresh tests in50.454seconds (including four requested-worker
+cases), with source/library manifests identical to the full gate. Packaging now
+checks both unchanged manifests and their actual reports. No old evidence was
+rewritten and no native76 result is claimed by these source checks.

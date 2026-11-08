@@ -143,5 +143,42 @@
     "resultSha256": "3e8c655063c78379f58b9f8744a8f6e1d930fe993a2016ef34fd8ba4dc9bfe1f",
     "sourceManifestSha256": "1d718c8d00f9afd681c10f9fceca9761d26e70c98d973c5c1c988cd8c8f34570",
     "scope": "Root check, actual browser recipient storage, Android proof/release compilation and lint, shared Wasm/iOS source compilation, formatting, architecture and detekt. Fresh report count excludes Gradle-up-to-date reports; no native iOS execution."
+  },
+  "supplementalBrowserWorker": {
+    "seconds": 50.454,
+    "freshCounts": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "core/worker/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.worker.ForegroundSyncWorkerTest.xml": {
+        "sha256": "6a8997f02683caca662efdbf48669ee9f45495b493565263ca82d5d52067a071",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/worker/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.worker.RequestedSyncWorkerTest.xml": {
+        "sha256": "043ecd23d2a624fe5c3b2c0c47b87222ba3914541f49284e3852fe56b5107e6f",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/worker/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.worker.CollapsedWorkGateTest.xml": {
+        "sha256": "3604abdb4f166a2c7eb5a3d29868cdc881e899e5d28b0b53df211559db471638",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "sameFullGateSourceManifest": true,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "resultSha256": "f7181c33ee30881dd2d421fe1e3466ee363bcac54c3cca1b2f97a7f313f606b5",
+    "reason": "Packaging preflight correctly rejected a missing RequestedSyncWorkerTest browser report in the main checkout. Ran the actual browser task on identical accepted inputs; no APK/compiler had started in that rejected preflight."
   }
 }

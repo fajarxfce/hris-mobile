@@ -8,6 +8,13 @@ Root checks, actual browser, Android proof/release/lint, shared Wasm/iOS source 
 quality pass. Fresh counts exclude unchanged Gradle-up-to-date reports. The focused
 139-test gate also passed. [Evidence](measurements/collaboration-runtime-inspection-2026-11-08.json).
 
+Supplemental browser-worker-1/session53517 is REAPED PASS50.454s/20 fresh tests,
+zero failures/errors/skips, identical full-gate source/library manifests. Packaging
+preflight had stopped before compilation because the main checkout lacked this
+actual RequestedSyncWorkerTest browser report. Build script now requires both gates.
+The source holds were released; no APK/build has yet started. Package only after
+pushing this supplemental evidence; do not rewrite full-1 or older native failures.
+
 Commit/push this evidence, then lift the source holds in release76 and
 runtime-inspection/native76. Package with build-arm64.py (version76 corrected before
 execution), verify actual Git revision/SDK/signer/backup/lint, then first use the
