@@ -1,5 +1,26 @@
 # Agent continuation — HRIS Mobile
 
+## Acquisition timing full gate running — 8 November 2026, 12:05 UTC
+
+Focused-1/71869 is REAPED PASS258.577s:37 fresh cases, zero failures/errors/skips,
+including eight SDK diagnostics/lifetime cases and six workspace persistence cases;
+format, architecture and Detekt pass. All4,487 app inputs and82 library files stayed
+unchanged. [Attempt evidence](measurements/collaboration-local-acquisition-timing-2026-11-08.json).
+
+Sole compiler37685 is full-1 in `.work/local-acquisition-timing-2026-11-08`.
+All SIX Kotlin/KTS changes and library inputs are FROZEN. Source is UNCOMMITTED/
+UNACCEPTED until the full gate finishes. Documentation HEAD86ad2b36 is pushed
+(87259 REAPED PASS). No owned emulator. Phone and original Bima image remain68.
+
+Release69's17 private preparation files now exist, syntax checked only. They require
+accepted/pushed full-1, actual SDK8/workspace6/browser-list source cases, then exact
+APK/SDK verification and original-image68→69. The new capture requires WorkspaceRead,
+LocalAccessRead and raw QueueBuild timing, with finite fields and independent trace
+ordinals. Preserve DEL keycode67, UNSENT Draft66 092041 and all originals, including
+Tes68 transport 114138. Never replay or rerun after Send. No69APK/send/install exists.
+After runtime acceptance, stop/reap emulator and notify before phone install-only.
+Backend/Starter/library/SDK and all54PRD work remain as in the checkpoint below.
+
 ## Local acquisition timing under test — 8 November 2026, 11:58 UTC
 
 Mobile HEAD6cb7b14e docs are pushed (81641 REAPED PASS); source baseline is accepted

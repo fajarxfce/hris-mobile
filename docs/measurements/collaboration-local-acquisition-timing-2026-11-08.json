@@ -1,0 +1,80 @@
+{
+  "accepted": false,
+  "sourceBase": "6cb7b14e",
+  "attempts": {
+    "focused-1": {
+      "session": 71869,
+      "reaped": true,
+      "result": {
+        "startedAt": "2026-11-08T11:55:19.645073+00:00",
+        "elapsedSeconds": 258.577,
+        "exitCode": 0,
+        "sourceFiles": 4487,
+        "librarySourcesUnchanged": true,
+        "sourcesUnchanged": true,
+        "freshCounts": {
+          "tests": 37,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "reports": {
+          "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationListStorageTest.xml": {
+            "sha256": "f0da780f0ac193ff480eaa6fb82617138166016ba1d1174ebe3afb1d82b0f61d",
+            "tests": 15,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationDeliveryDiagnosticsTest.xml": {
+            "sha256": "ac41128a502c49c3dc0ec4847523e833b4963b988c6f8643e48cfc25f8308437",
+            "tests": 8,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "core/workspace/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.data.EncryptedWorkspaceTest.xml": {
+            "sha256": "16e3cbcbfbc4172bc4da47b5b4dbcb1d0357405f894aa22b5b5f61c49f02732b",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "core/observability/build/test-results/desktopTest/TEST-dev.fajar.starter.observability.DiagnosticsTest.xml": {
+            "sha256": "d00fb2bf7acdc2cec752e6401bcee0b515dd3f12d306f45291ea1382dbfa0d97",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "core/observability/build/test-results/desktopTest/TEST-dev.fajar.starter.observability.MeasureAppResultTest.xml": {
+            "sha256": "65fa334f533c7dacbc2a83e379f06de23e6ac1158e2d5a0e68107ad997301331",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "core/observability/build/test-results/desktopTest/TEST-dev.fajar.starter.observability.PerformanceTest.xml": {
+            "sha256": "4b4e578c946b378ebe993d773aed07c3b0e6b47e53d9abd47fe1d13e94d78046",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        }
+      },
+      "resultSha256": "ebe73d165aaa91dc4ef9aed2c452b5ca587993d17c7befd336d6c88408ed1667"
+    }
+  },
+  "pending": {
+    "gate": "full-1",
+    "session": 37685,
+    "sourcesFrozen": true,
+    "sourceChanges": 6
+  },
+  "limits": [
+    "Instrumentation only; no new duration attribution or latency improvement established.",
+    "Native acquisition preserves raw late-resource handover without a new context or post-acquisition cancellation check.",
+    "Workspace remains HRIS-only; no Starter workspace module exists."
+  ]
+}
