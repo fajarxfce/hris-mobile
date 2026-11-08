@@ -1,0 +1,131 @@
+{
+  "at": "2026-11-08T20:04:41.233175+00:00",
+  "applicationSourceCommit": "f1da12b1",
+  "artifact": {
+    "candidateOnly": true,
+    "diagnosticMarkersAbsent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-08-build76/hris-mobile-dev-release-1.0.0-76-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 76,
+    "versionName": "1.0.0",
+    "bytes": 123432335,
+    "sha256": "62e45d4a7a6e9e32bee110a277f2ce1fdd9a094fbdf45be4c71f255badd6e838",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+  },
+  "buildSeconds": 114.057,
+  "originalFirstAccount": {
+    "accepted": true,
+    "versionCode": 76,
+    "apkSha256": "62e45d4a7a6e9e32bee110a277f2ce1fdd9a094fbdf45be4c71f255badd6e838",
+    "at": "2026-11-08T20:02:30.248658+00:00",
+    "scope": "Two cold startups and bounded idle using the original keys created in75. No new enrollment, send, store reset or phone UI action.",
+    "originalKeyCreationVersionCode": 75,
+    "nativeRestoredSyncCycles": 2,
+    "oneOriginalDeviceAndPublication": true,
+    "quietSeconds": 180.0,
+    "settleAllowanceSeconds": 30,
+    "settledSetupTransportAndSecretStorageRequests": 0,
+    "newStorageFailures": 0,
+    "rootRequested": false,
+    "priorRelease71StorageRootResolved": false,
+    "postCommitSenderWakeAccepted": false,
+    "actualScreenshotsReviewed": true,
+    "requestCounts": {
+      "other_hris": 37,
+      "hris_device_setup": 21,
+      "hris_conversation_summaries": 7,
+      "secret_storage_default_key": 10,
+      "refresh": 1,
+      "sync": 8
+    },
+    "responseCounts": {
+      "other_hris:200": 33,
+      "hris_device_setup:200": 21,
+      "hris_conversation_summaries:200": 7,
+      "secret_storage_default_key:401": 2,
+      "refresh:200": 1,
+      "secret_storage_default_key:404": 8,
+      "sync:200": 7,
+      "sync:429": 1
+    },
+    "phoneTouched": false,
+    "dataRetained": true
+  },
+  "originalFirstAccountProofSha256": "b57688a6671e845759e119325a8ab7d056bf1b15a937f84ec48a9f03d0369e4b",
+  "originalFirstAccountAcceptanceSha256": "367145f497c979c0b5209b93fd408329c35c5a9a2c8cefd90d92e26a4b496678",
+  "reviewedImages": [
+    {
+      "image": "restored-0.png",
+      "sha256": "8178a8b0870dd370417ceeae7460a8821aa75f667b4bc81c19adf15cda382b7b",
+      "reviewedAt": "2026-11-08T19:57:24.428818+00:00",
+      "observed": "Original fictional account on Home; bottom navigation visible; no storage failure or setup dialog."
+    },
+    {
+      "image": "restored-1.png",
+      "sha256": "39baf2db5b92c7c4f54f87a68460064a7bbddb764f082e896719bf3aa3dcbbc8",
+      "reviewedAt": "2026-11-08T19:58:10.632369+00:00",
+      "observed": "Same original fictional account on Home after second cold startup; bottom navigation visible; no storage failure or setup dialog."
+    },
+    {
+      "image": "quiet-home.png",
+      "sha256": "bd0e2f49bed682f53c7a474197572b81d6a8309f75922b27aad8144ef3d2d8e0",
+      "reviewedAt": "2026-11-08T20:01:10.058228+00:00",
+      "observed": "Original fictional account remains on Home after180seconds quiet; no storage failure or setup dialog."
+    }
+  ],
+  "storageWatch": {
+    "startedAt": "2026-11-08T19:56:00.877793+00:00",
+    "observedStorageFailure": false,
+    "rootRequested": false,
+    "phoneTouched": false,
+    "newSendGestures": 0,
+    "finishedAt": "2026-11-08T20:02:12.689832+00:00"
+  },
+  "passiveProcess": {
+    "sameProcess": true,
+    "fatalLines": 0,
+    "startedAt": "2026-11-08T20:01:10.142542+00:00",
+    "finishedAt": "2026-11-08T20:01:20.177281+00:00",
+    "observedPid": "3346",
+    "afterPid": "3346",
+    "crashBufferSince": "2026-11-08T19:56:16.442179+00:00",
+    "uiTouched": false
+  },
+  "emulatorStopped": {
+    "pid": 3379343,
+    "startTicks": "184435800",
+    "stopped": true,
+    "dataRetained": true,
+    "phoneTouched": false,
+    "at": "2026-11-08T20:02:12.931384+00:00"
+  },
+  "coldRestart429": {
+    "count": 1,
+    "newRequestOffsetSeconds": 65.853,
+    "newRequestHeaderMs": 72,
+    "previousProcessPollRequestOffsetSeconds": 55.989,
+    "previousProcessPollHeaderMs": 10045,
+    "retryRequestOffsetSeconds": 67.204,
+    "retryStatus": 200,
+    "interpretation": "The new sync request overlapped the still-running previous-process poll. HttpMatrixSyncDataSource permits one active user/device connection and maps capacity to429 with1second retry. The observed next request succeeds. No response body/error code was retained, so this is timing/source evidence rather than a captured rejection reason.",
+    "zero429Claimed": false
+  },
+  "originalBimaAcceptance": false,
+  "phoneVersionCode": 70,
+  "overallCollaborationAccepted": false
+}

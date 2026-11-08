@@ -180,5 +180,7 @@
     "librarySourcesUnchanged": true,
     "resultSha256": "f7181c33ee30881dd2d421fe1e3466ee363bcac54c3cca1b2f97a7f313f606b5",
     "reason": "Packaging preflight correctly rejected a missing RequestedSyncWorkerTest browser report in the main checkout. Ran the actual browser task on identical accepted inputs; no APK/compiler had started in that rejected preflight."
-  }
+  },
+  "native76OriginalFirstAccountValidation": true,
+  "native76Evidence": "collaboration-runtime-inspection-native76-2026-11-08.json"
 }

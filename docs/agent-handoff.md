@@ -1,5 +1,37 @@
 # Agent continuation — HRIS Mobile
 
+## Original first-account native76 accepted; Bima image starting — 8 November 2026, 20:04 UTC
+
+Sourcef1da12b1 is pushed. Package67937 REAPED PASS114.057s; verifier8639 REAPED
+PASS. APK76 SHA62e45d4a7a6e9e32bee110a277f2ce1fdd9a094fbdf45be4c71f255badd6e838,
+123432335bytes, actual Git revision, nondebuggable ARM64, same signer/SDK5,16KiB
+alignment, backup exclusions and lint0 verified. Full5836 and supplemental browser20
+source gates remain accepted without changing source inputs.
+
+Original first-account75 image under76: emulator94424, install15258, watch57609,
+passive counter73252, probe93207, passive/shell13728 and stop71525 all REAPED PASS.
+Two cold Home startups retain1device/1active/1confirmed; each has native sync200.
+180seconds quiet has zero setup/transport/default-key after30seconds settling.
+NoStorage/root/newsend; three screenshots reviewed; UID2000, stablePID3346/fatal0,
+image retained/stopped20:02:12. One sync429 at the second restart overlaps the prior
+process's outstanding poll and recovers after1.351s; source/timing explanation and
+uncaptured response-reason boundary remain explicit. [Evidence](measurements/collaboration-runtime-inspection-native76-2026-11-08.json).
+
+SOLE HEAVY process30209 is now starting the original Bima74 image for76 under
+.work/release-phone-2026-11-08-build76. It has NOT been installed/probed yet. Announce
+before installing; require74→76 sameUID, then watcher/counter before retained-only
+unready-probe. Never send Draft66 or replay synthetic originals. Reap/stop everything,
+review four actual images and accept counts before the Starter generic port. The
+Starter port harness now correctly requires actual76 evidence, not the failed75 gate.
+
+Server54a3d9bb documents15 UNVALIDATED source files plus newer uncommitted contract
+notes: V116.2/domain/data/worker/DI and29 tests (12pure,12PG,4worker lifecycle,1context).
+The actual new worker context is pinned to isolated schema116.2. No server compiler
+or live change yet; finish Mobile native/Starter first. Phone still70/no new availability.
+Historical71 Storage root, missed-hint/interrupted activation, post-commit sender wake
+and all54 PRD groups remain open. Continue the authorized long run and push each commit.
+
+
 ## Runtime inspection full gate accepted; package76 next — 8 November 2026, 19:49 UTC
 
 Mobile05201355 full gate83151 is REAPED PASS927.610s:5,836 fresh tests,

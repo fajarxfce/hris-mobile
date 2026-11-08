@@ -56,3 +56,14 @@ Chromium gate passed20 fresh tests in50.454seconds (including four requested-wor
 cases), with source/library manifests identical to the full gate. Packaging now
 checks both unchanged manifests and their actual reports. No old evidence was
 rewritten and no native76 result is claimed by these source checks.
+
+[Original first-account native76 evidence](measurements/collaboration-runtime-inspection-native76-2026-11-08.json)
+passes two cold startups and180seconds quiet, retaining the one device/publication
+created in75. Both cycles restore actual native sync. No new Storage failure, root
+request, enrollment or message send occurred; all three actual Home images were
+reviewed. After30seconds settling, there were zero setup/transport/default-key
+requests. One sync429 overlapped the preceding killed process's10-second poll; the
+next request1.351seconds later succeeded. It is retained explicitly, not counted as
+zero429 or suppressed. The original Bima/draft/offline gate remains pending. Both
+old75 failure and unrelated71 root remain recorded; this does not accept cloud
+recovery, post-commit sender wake, native Apple or the overall collaboration PRD.
