@@ -23,7 +23,7 @@ class MatrixProofInstrumentation : Instrumentation() {
 
     private fun scenarioTimeoutMillis(): Long =
         when {
-            scenario == "hris-product-peer" -> 300_000
+            scenario in setOf("hris-product-peer", "hris-readiness-peer") -> 300_000
             scenario == "hris-auth-rejection" -> 180_000
             scenario == "hris-worker-resume" -> 420_000
             scenario == "hris-mixed-room" -> 300_000
@@ -95,6 +95,7 @@ class MatrixProofInstrumentation : Instrumentation() {
             "workspace-read-cost" -> WorkspaceReadCostProbe(targetContext, directory).run()
             "foreground-scheduling" -> ForegroundSchedulingProbe(targetContext, directory).run()
             "hris-product-peer" -> HrisProductNotificationPeer(targetContext, directory).run()
+            "hris-readiness-peer" -> HrisReadinessPeer(targetContext, directory).run()
             "notification-input-verify" -> {
                 val owner =
                     (targetContext.applicationContext as HrisScheduledProofApplication).inputProof

@@ -1,0 +1,48 @@
+{
+  "recordedAt": "2026-11-08T21:15:21.822331+00:00",
+  "gate": {
+    "elapsedSeconds": 191.24,
+    "freshCounts": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "sourceFiles": 4504,
+    "tasks": [
+      ":check",
+      ":apps:collaboration-proof:assembleDebug",
+      ":apps:collaboration-proof:lintDebug",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt"
+    ],
+    "tests": "Existing unchanged test tasks were up-to-date; no fresh test cases claimed. New peer code compiled and packaged, lint/quality passed."
+  },
+  "artifact": {
+    "apkSha256": "27ab92c5d52d2cb718b0e0656a56e03cdb235f48d2183a1f85054716e9f3effb",
+    "bytes": 147502536,
+    "native": {
+      "lib/x86_64/libandroidx.graphics.path.so": "4e56c996f13670e70082658de7880c4020eabf4f25e43387f88ed78a713fc9f0",
+      "lib/x86_64/libdatastore_shared_counter.so": "ccd1862ef8f854d2322f3ee07adebd107890ded3b7c96b8f3528ac99aab4a4f6",
+      "lib/x86_64/libjnidispatch.so": "288eafff19a70e833498201071c3d724f03f32ee8ff64a14fca50b57d975db70",
+      "lib/x86_64/libmatrix_sdk_ffi.so": "035edca994ec9d20d531a55b66abc72dc61628937493ddf0092767db8916837b",
+      "lib/x86_64/libsqliteJni.so": "e3b604381b3558cebd15261d10dfef6f0eb871aeecbca46bcc96042d8cd2646d"
+    },
+    "sdkSourceNativeSha256": "03e23ca8c98038f5fc408855471e9d7278fcf7a6b38ef8013e033f7738dcd67d",
+    "independentNdkStripMatches": true,
+    "debugEmulatorOnly": true,
+    "sourceInputs": 4504,
+    "rejectedChecks": [
+      "First comparison used unstripped source instead of stripped APK; independent pinned NDK strip matches bytes. Emulator boot followed this failed assertion due to missing shell failure chaining, but no installation occurred.",
+      "Manifest tool initially ran without explicit JDK21; corrected environment passed."
+    ]
+  },
+  "gateResultSha256": "0a3115cde66d7d42661aaf83fafa7ab49d0d208fcfe4e4986db40946308907da",
+  "sourceManifestSha256": "a65dcd9fe9c21fcd7f362f828095b915bf8c675b27eef356948720af232afc0d",
+  "nativeAccepted": false,
+  "productUpdated": false,
+  "phoneTouched": false
+}

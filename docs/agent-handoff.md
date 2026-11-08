@@ -1,5 +1,34 @@
 # Agent continuation — HRIS Mobile
 
+## Readiness peer source checked; controlled native proof active — 8 November 2026, 21:15 UTC
+
+New debug-only `HrisReadinessPeer` plus instrumentation mode compile/package/lint,
+root checks and quality passed191.240s (session91475 REAPED; unchanged tests up-to-date,
+no fresh cases). Formatter78884 passed44.144s. Product source/APK remains76.
+[Contract](collaboration-readiness-native-proof.md) and [source evidence](measurements/collaboration-readiness-peer-source-2026-11-08.json).
+
+Platform29c708c8 records successful dev migration116.2 and worker52aaccaa. Native
+sender clone is running under owned session17393/pid3924492, 2560MiB/two cores;
+`.work/readiness-native-2026-11-08/native-1` records ownership. A complete pre-test
+copy of its data/key/AVD files is retained. Phone untouched; original Bima metadata
+recovery remains unresolved. No compiler may run until this emulator is stopped.
+
+One new fictional chat-only recipient is enrolled through the native API, with
+zero key publications and a direct conversation to the original first-account76
+sender. No message has been sent yet. Enrollment first hit a fixture state-name
+assertion (PENDING vs PROVISIONING); the same retained device was inspected/resumed,
+no replacement. The sender OS notification permission was enabled through Settings
+and the product notification setting enabled; confirmed Matrix push binding is
+still being checked. Debug peer package installed only on this emulator; its SDK
+has not started. Readiness counter session19414 is running, closed route counts only.
+
+Next require sender push binding, send one newly named fictional original once,
+observe quiet waiting, bootstrap/start the recipient peer, and verify committed
+publication/job/FCM/original acknowledgement. Never resend old synthetic originals,
+Draft66 or reset keys. Keep native evidence honest; source gate is not native wake
+acceptance. Starter port held; interrupted activation/missed hints and54PRD remain.
+
+
 ## Isolated sender fixture prepared; server readiness source validated — 8 November 2026, 20:57 UTC
 
 Platform52aaccaa is pushed: post-commit publication capture and bounded readiness
