@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Release77 package verified — 8 November 2026, 23:31 UTC
+
+Product source0fb27978 is pushed. APK77 build1239 passed123.393s; verifier19196
+passed, both REAPED. ARM64 APK SHA334c56938bde6a8b342680e4acf06fab705a8a44173a9862a45a5332223f317b,
+123,432,335 bytes, nondebuggable, same signer, exact source metadata and SDK5 native
+bytes/symbols,16KiB alignment, backup exclusions and lint0 verified.
+[Evidence](measurements/collaboration-readiness-release77-2026-11-08.json).
+No77 install or native signal-delivery acceptance yet; phone70 untouched.
+
+First package preflight failed BEFORE any compiler because the filtered browser
+run did not retain an older recipient-observation report. Supplemental46853 passed
+six actual Chrome cases in36.630s, on exactly the same4,517 full-gate inputs and82
+inspector inputs. Reaped; no product change or root rerun. The package preflight
+now binds both accepted reports. Root5,911/47 readiness browser cases remain valid.
+
+Sole owned heavy task62518 is packaging Platforme558a686 API/worker; no emulator.
+After it is reaped, stage-images, backup, verify-upgrade, verify-runtime old/new,
+prepare-live and deploy-live in Platform's private readiness-control directory
+must run sequentially. Rollout keeps control OFF. Before each operation review its
+concrete plan/results; logs and credentials stay private. No image/schema rollout
+has happened yet. Both API and worker must change for V2 sync projection.
+
+Native private scripts now include full sender copy, bounded emulator owner,
+in-place77 account/public-identity qualification, new fictional recipient and
+single-original observation with independent Synapse encrypted-event count/time.
+They are NOT executed/accepted yet. enable-control is gated on retained public
+identity, not a claim to have read private keys. The subsequent actual encrypted
+send must still prove native delivery. Never resend Readiness76 211625 or Draft66,
+reset keys, or touch the preserved Bima74 metadata. Broader work below remains.
+
+
 ## Android readiness listener checked — 8 November 2026, 23:25 UTC
 
 Native listener/application integration passes the full root gate: 5,911 fresh
