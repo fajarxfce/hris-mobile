@@ -407,7 +407,8 @@ internal class CollaborationDeliveryFixture {
     suspend fun deliver(
         scope: CollaborationOperationScope = CollaborationOperationScope.Selected("selection"),
         deviceId: String = device.deviceId,
-    ) = delivery(scope, deviceId, conversation)
+        preparedTimeline: CollaborationTimelineLease? = null,
+    ) = delivery(scope, deviceId, conversation, preparedTimeline)
 
     suspend fun reconcile(
         scope: CollaborationLocalScope = CollaborationLocalScope.Selected("selection")

@@ -249,3 +249,25 @@ UI polling confirm the checkmark. Inspector/notification evidence reuses unchang
 Next work is the redundant preparation around staging/delivery and the atomic composer
 handoff. Do not remove live admission or key/owner fencing solely to improve these numbers;
 review which operation owns each decision and preserve uncertain originals and late ACKs.
+
+
+## Reuse the prepared room when borrowing the paused queue
+
+The delivery worker already owns the room timeline. It now passes that observation
+into `DeliverCollaborationMessages`, which uses its coordinates to borrow the existing
+paused writer. It no longer repeats setup/conversation/room preparation before that
+borrow. The current owner, device, room and original bootstrap must match. The caller
+keeps the timeline; the use case closes only its borrowed queue, including cancellation
+and late acquisition. Without a supplied timeline, the complete prior path remains.
+
+The observation grants no permission to send. Live device/conversation/room admission
+still runs immediately before native resume and after its response. Local account,
+key and denial checks, original mappings, receipt retention and projection remain.
+No selected-workspace or key cache, transport retry, storage, ordering or UI change.
+
+The focused gate passes 61 cases; the complete gate passes 5,644 fresh cases, including
+twelve concrete desktop and twelve Chrome cases for this path, with zero failures,
+errors or skips. Android compilation/lint, shared Wasm/iOS source and quality pass.
+[Exact validation](measurements/chat-prepared-delivery-2026-11-08.json). Release65 device
+timing and installation are separate; this does not yet establish a phone improvement
+or solve keyboard dismissal. The inspector and native SDK implementation are unchanged.

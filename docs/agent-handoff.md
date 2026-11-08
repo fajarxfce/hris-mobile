@@ -1,5 +1,54 @@
 # Agent continuation — HRIS Mobile
 
+## Prepared delivery accepted; package65 next — 08 November 2026, 07:10 UTC
+
+Focused24462 passed532.429s/61cases. Full96464 passed926.024s/5,644fresh cases,
+zero failures/errors/skips;4,456source inputs and all inspector inputs unchanged.
+Twelve actual desktop and twelve Chrome prepared-delivery cases are verified in XML.
+Android compilation/lint0, shared Wasm/iOS source and quality passed; all jobs reaped.
+[Exact evidence](measurements/chat-prepared-delivery-2026-11-08.json). The focused command
+also included an unmatched StageCollaborationMessageTest glob; actual StageCollaborationTextTest
+belongs to the complete root gate. No invented focused staging cases.
+
+Only two product files change: DeliverCollaborationMessages and CollaborationDeliveryWorker.
+The worker passes its owned timeline to locate the existing paused queue. Exact owner,
+native/device/room/bootstrap match is required. Current live admission immediately before
+resume and after response remains; local account/key/denial fences and original receipts
+are unchanged. No new cache or retry. Caller retains its timeline, borrowed writer closes
+through cancellation/late completion. Default callers retain the previous full preparation.
+HRIS-specific; no Starter port. Inspector/library/platform unchanged.
+
+Commit/push this increment, then prepared .work/release-phone-2026-11-08-build65 scripts
+build/verify against chat-prepared-delivery/full-1. No65APK/device result exists yet.
+Phone and original stopped Bima image remain64. Run gateway preflight, original1536MiB
+emulator in-place64->65, passive180s counter and ONE new65 message only. Probe now captures
+the actual offline list preview before cold restart, so a newer incoming message can
+legitimately supersede the outgoing one. It still requires original65 and previous64 in
+history. Review four screenshots and three4fps storyboards, stage/HTTP timings, passive
+process, then accept, stop/reap emulator, notify before EACH phone install-only, and
+never drive phone UI. Never resend prior61/62/63/64/diagnostic originals or reset keys.
+Phone passive check06:51 found ADB connected but application not running; no fresh phone
+HTTP evidence. No phone-latency or keyboard-continuity claim yet.
+
+While full96464 ran, seven UNTESTED composer files were edited in the isolated checkout
+/home/fajar/hris/.worktrees/mobile-composer-handoff-20261108, branch
+feat/chat-composer-handoff-20261108, basefbdd8283. No other compiler ran. This is uncommitted
+local work, not deployed or part of this gate: nullable expected editing slot/initial atomic
+handoff, coherent immutable outbox reads, eight added storage cases(total20), a local-only
+SubmitCollaborationComposer use case/pure policy/DI factory and twelve domain cases.
+All seven are formatted and diff-check clean, but NO Kotlin check was run. Exact private
+continuation: that checkout's .work/composer-adoption/NEXT.txt. After65 installation, copy
+only those seven files to main after checking their base hashes; reuse existing Gradle
+outputs. Test before committing. Recovery/cursor/holds, outbox+command+provisional
+projections and actual UI/IME adoption remain unfinished; do not ship another unused
+foundation as the input fix. Retain the isolated edits until safely copied and committed.
+UIUX searches had no verified optimistic/Compose-focus match; actual Compose/Android
+behavior must establish input continuity. Read docs/collaboration-composer-handoff.md.
+
+Library2b84921/Startera21b748/Platformea322180 unchanged; live gateway3a7909a6, Group routing
+off;54communications PRD still3inprogress/51planned. Continue without user input. One owned
+heavy compiler OR emulator, preserve unrelated Java. No active job after this gate.
+
 ## Release 64 installed; continue the measured send path — 08 November 2026, 06:33 UTC
 
 Runtime29d65718f182a12f7dcaa0e40c7db2e9bc17d7b4 is pushed. Build21537 passed101.016s;

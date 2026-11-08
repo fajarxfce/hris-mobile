@@ -5,6 +5,7 @@ import dev.fajar.starter.collaboration.domain.policies.collaborationDeliveryBatc
 import dev.fajar.starter.collaboration.domain.policies.collaborationReceiptRecoveryAnchor
 import dev.fajar.starter.collaboration.domain.policies.localListAccess
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationBackgroundRuntimeLease
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationTimelineLease
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.sync.domain.*
@@ -299,7 +300,8 @@ class CollaborationDeliveryWorker(
             if (batch is AppResult.Failed) return batch
             val selected = (batch as AppResult.Success).value
             stage(CollaborationDeliveryStage.Flush)
-            val flushed = flush(work, scope, device.id, conversationId, selected, stage)
+            val flushed =
+                flush(requireNotNull(child), scope, device.id, conversationId, selected, stage)
             if (flushed is AppResult.Failed) return flushed
             stage(CollaborationDeliveryStage.Retire)
             return acquireAndRetire(work, scope, device.id, conversationId, stage)
@@ -309,7 +311,7 @@ class CollaborationDeliveryWorker(
     }
 
     private suspend fun flush(
-        work: CollaborationDeliveryWork,
+        timeline: CollaborationTimelineLease,
         scope: CollaborationOperationScope,
         deviceId: String,
         conversationId: String,
@@ -324,7 +326,7 @@ class CollaborationDeliveryWorker(
         }
         if (selected.isNotEmpty()) {
             reportStage(CollaborationDeliveryStage.DeliverMessages)
-            val sent = deliver(scope, deviceId, conversationId)
+            val sent = deliver(scope, deviceId, conversationId, preparedTimeline = timeline)
             currentCoroutineContext().ensureActive()
             if (sent is AppResult.Failed) return sent
             // Unselected durable intents are expected to remain for another bounded pass.

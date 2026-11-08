@@ -1,0 +1,129 @@
+{
+  "recordedAt": "2026-11-08T07:09:46.250792+00:00",
+  "scope": "Reuse caller-owned timeline coordinates when borrowing the existing paused message queue; current room/device admission before resume and after response remains.",
+  "sourceSha256": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "34ff0eae3826a964fc3812c591c05f8736909f1289b5962df5709546c83cff87",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/DeliverCollaborationMessages.kt": "0274b188dff69b8843c201000e2b798277c12bfac8fc5ce1df521a6e5440f4e3",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDeliveryFixture.kt": "a6c149b22fd5cd866f8d2ac1ed13f4617b03b3b1ace29a0f2a4675a479dd001c",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationPreparedDeliveryTest.kt": "3005401d4b276070027a08b80d39e32806a91be6c16590ca30e5ff00fe200a2e"
+  },
+  "sourceManifestSha256": "ad8eb1d9fc7c671c3916c72e634d20e3ad056d5fba88e52ffc1a694739a2be5b",
+  "validation": {
+    "focused-1": {
+      "startedAt": "2026-11-08T06:44:40.425347+00:00",
+      "elapsedSeconds": 532.429,
+      "exitCode": 0,
+      "sourceFiles": 4456,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 61,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+          "sha256": "24c65ee057d54f3fa2a168e20030e097c4f97eac0969de413c89b2ee362bed2b",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.DeliverCollaborationMessagesTest.xml": {
+          "sha256": "aef7feb8dbb040ff878b4dd8634df0b6b12e8232b4e89e03361e1e5c7022d724",
+          "tests": 31,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationPreparedDeliveryTest.xml": {
+          "sha256": "44916ee98bd03d26f3bfa280b0b2ee76945d9bf08511fde94aa23e7d040c7fe0",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "resultSha256": "0465433ac6e3dad4036599d10323707ef4cf6d6a06eed38ea359017d05727776"
+    },
+    "full-1": {
+      "startedAt": "2026-11-08T06:54:04.967418+00:00",
+      "elapsedSeconds": 926.024,
+      "exitCode": 0,
+      "sourceFiles": 4456,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5644,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+          "sha256": "9b9aacd6dfa21504ac15deed7b0db543a049a57c7005a0227a25ab548ac6ffbb",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationPreparedDeliveryTest.xml": {
+          "sha256": "0d10dd4ba5228eebfd5ffbe13cbc066b10d466b4e5396de81e0792c4bdb8b2a1",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.DeliverCollaborationMessagesTest.xml": {
+          "sha256": "c0f95edb7da01cd28f5285a16d819b8c33914b48ce7de74d063801116c9ec3b7",
+          "tests": 31,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.StageCollaborationTextTest.xml": {
+          "sha256": "48844555dbbc1296f0f479ee0890cc75c0ea64fbe1bef7f657e2e7e5c38eccb7",
+          "tests": 22,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationPreparedDeliveryTest.xml": {
+          "sha256": "86d66613e16dc55838f91aed1badc21ef3a426fd165c83e0dedf74e8c51cc03e",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "resultSha256": "5a115039de4f32bb8de9031f31196fffc87182c2e3f27a822ee2a2375bcd282b"
+    }
+  },
+  "actualPreparedDeliveryCases": {
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationPreparedDeliveryTest.xml": {
+      "sha256": "0d10dd4ba5228eebfd5ffbe13cbc066b10d466b4e5396de81e0792c4bdb8b2a1",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationPreparedDeliveryTest.xml": {
+      "sha256": "86d66613e16dc55838f91aed1badc21ef3a426fd165c83e0dedf74e8c51cc03e",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "focusedSelectionNote": "The focused command included an unmatched StageCollaborationMessageTest glob. It ran twelve prepared-delivery, thirty-one existing delivery and the worker cases; actual StageCollaborationTextTest belongs to the complete root gate.",
+  "boundaries": [
+    "The timeline grants no sending authority and remains owned by its caller; only the borrowed writer is closed.",
+    "Owner, original bootstrap, device and room must match; local account/key/admission checks remain current.",
+    "Fresh live admission immediately before native resume and after its response remains unchanged; callers without a timeline retain the complete preparation path.",
+    "Cancellation, late acknowledgement, account replacement, finite background scope and interrupted receipt response retain original semantics.",
+    "No token, selected-workspace or key cache. No SDK default, HTTP retry, message ordering, storage or UI policy changes.",
+    "Shared iOS source compilation is not native Apple Matrix or iPhone acceptance.",
+    "Actual release65 measurement and installation are separate; no phone-latency or keyboard-continuity claim."
+  ]
+}

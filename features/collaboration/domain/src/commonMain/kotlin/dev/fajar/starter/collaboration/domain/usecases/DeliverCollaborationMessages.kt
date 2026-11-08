@@ -44,6 +44,7 @@ class DeliverCollaborationMessages(
         scope: CollaborationOperationScope,
         deviceId: String,
         conversationId: String,
+        preparedTimeline: CollaborationTimelineLease? = null,
     ): AppResult<CollaborationDeliveryReport> =
         execution.withLock {
             if (
@@ -59,9 +60,31 @@ class DeliverCollaborationMessages(
             if (captured is AppResult.Failed) return@withLock captured
             val owner = (captured as AppResult.Success).value
             continuation(scope, owner, null).let { if (it is AppResult.Failed) return@withLock it }
-            val admitted = admitRoom(scope, owner, deviceId, conversationId)
-            if (admitted is AppResult.Failed) return@withLock admitted
-            val roomId = (admitted as AppResult.Success).value
+            // A caller-owned timeline supplies only the existing private queue coordinates.
+            // It grants no sending authority: deliver() still admits the current device and
+            // conversation immediately before resume, and the caller retains this observer.
+            val preparedDevice = preparedTimeline?.device
+            if (
+                preparedTimeline != null &&
+                    (preparedTimeline.owner != owner ||
+                        preparedTimeline.deviceId != deviceId ||
+                        preparedDevice == null ||
+                        preparedDevice.nativeSessionId != owner.nativeSessionId ||
+                        preparedDevice.deviceId != deviceId ||
+                        preparedTimeline.matrixRoomId != preparedDevice.roomId ||
+                        !validCollaborationMessageDevice(preparedDevice))
+            )
+                return@withLock failed(
+                    "client.collaboration_queue_owner_changed",
+                    FailureKind.Unauthorized,
+                )
+            val roomId =
+                if (preparedDevice != null) preparedDevice.roomId
+                else {
+                    val admitted = admitRoom(scope, owner, deviceId, conversationId)
+                    if (admitted is AppResult.Failed) return@withLock admitted
+                    (admitted as AppResult.Success).value
+                }
             var queue: CollaborationMessageQueueLease? = null
             try {
                 val acquired = runtimes.acquireMessageQueue(owner, deviceId, roomId)
@@ -76,6 +99,7 @@ class DeliverCollaborationMessages(
                         writer.device.nativeSessionId != owner.nativeSessionId ||
                         writer.device.deviceId != deviceId ||
                         writer.device.roomId != roomId ||
+                        (preparedDevice != null && writer.device != preparedDevice) ||
                         !validCollaborationMessageDevice(writer.device)
                 )
                     return@withLock failed(
