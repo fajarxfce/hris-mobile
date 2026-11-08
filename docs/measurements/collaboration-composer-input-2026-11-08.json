@@ -1,0 +1,290 @@
+{
+  "status": "WIP; no full/platform/browser acceptance or APK yet",
+  "runs": {
+    "focused-1": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "env",
+        "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+        "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+        "ANDROID_HOME=/home/fajar/Android/Sdk",
+        "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+        "TMPDIR=/home/fajar/hris/.work/build-tmp",
+        "./gradlew",
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":core:database:desktopTest",
+        "--tests",
+        "*CommandStoreTest*",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*ObserveCollaborationComposerProgressTest*",
+        ":features:collaboration:data:desktopTest",
+        "--tests",
+        "*CollaborationMessageStorageTest*",
+        ":features:collaboration:presentation:desktopTest",
+        "--tests",
+        "*ChatComposerEditingSessionTest*",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+        "-PmatrixSdkRepository=/home/fajar/hris/kmp-network-inspector/.work/matrix-android-2026-11-07/sdk-repository",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=65",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2048m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "startedAt": "2026-11-08T08:01:45.000196+00:00",
+      "elapsedSeconds": 217.479,
+      "exitCode": 1,
+      "sourceFiles": 4472,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 32,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reports": {
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatComposerEditingSessionTest.xml": {
+          "sha256": "b6363237f0b6efa44502c29aaf181a4d90b50a4965f0ad8c051b42c57c1e9e59",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ObserveCollaborationComposerProgressTest.xml": {
+          "sha256": "dfc0ed93f17dec32524891ebe84deeedb66a8f8944544cc3c41520e96db82588",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.CommandStoreTest.xml": {
+          "sha256": "83c72998b685e837056580f010dea22e73936442d0a14384047d29a2c9289d10",
+          "tests": 16,
+          "failures": 3,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "focused-2": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "env",
+        "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+        "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+        "ANDROID_HOME=/home/fajar/Android/Sdk",
+        "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+        "TMPDIR=/home/fajar/hris/.work/build-tmp",
+        "./gradlew",
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":core:database:desktopTest",
+        "--tests",
+        "*CommandStoreTest*",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*ObserveCollaborationComposerProgressTest*",
+        ":features:collaboration:data:desktopTest",
+        "--tests",
+        "*CollaborationMessageStorageTest*",
+        ":features:collaboration:presentation:desktopTest",
+        "--tests",
+        "*ChatComposerEditingSessionTest*",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+        "-PmatrixSdkRepository=/home/fajar/hris/kmp-network-inspector/.work/matrix-android-2026-11-07/sdk-repository",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=65",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2048m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "startedAt": "2026-11-08T08:05:48.962939+00:00",
+      "elapsedSeconds": 131.032,
+      "exitCode": 1,
+      "sourceFiles": 4472,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 39,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reports": {
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationMessageStorageTest.xml": {
+          "sha256": "bc41ff04093c9e314f1248322004fe2543ac86f50b3285bff7c2b864297df457",
+          "tests": 23,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.CommandStoreTest.xml": {
+          "sha256": "172c83fb085602afc07837e975178b2626853ba3a40e7f3afeeed3749f3f4432",
+          "tests": 16,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "focused-3": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "env",
+        "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+        "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+        "ANDROID_HOME=/home/fajar/Android/Sdk",
+        "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+        "TMPDIR=/home/fajar/hris/.work/build-tmp",
+        "./gradlew",
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":core:database:desktopTest",
+        "--tests",
+        "*CommandStoreTest*",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*ObserveCollaborationComposerProgressTest*",
+        ":features:collaboration:data:desktopTest",
+        "--tests",
+        "*CollaborationMessageStorageTest*",
+        ":features:collaboration:presentation:desktopTest",
+        "--tests",
+        "*ChatComposerEditingSessionTest*",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+        "-PmatrixSdkRepository=/home/fajar/hris/kmp-network-inspector/.work/matrix-android-2026-11-07/sdk-repository",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=65",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2048m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "startedAt": "2026-11-08T08:08:17.576626+00:00",
+      "elapsedSeconds": 73.687,
+      "exitCode": 1,
+      "sourceFiles": 4472,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reports": {
+        "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.CommandStoreTest.xml": {
+          "sha256": "032ccaaf7dd4d441968dfebf9b923abeed96ef3e701c04e6af1386810090ba2a",
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "focused-domain-4": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "env",
+        "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+        "PATH=/usr/lib/jvm/java-21-openjdk/bin:/home/fajar/.codex/packages/app-server-daemon/releases/0.167.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0OYYl9w:/home/fajar/.codex/tmp/arg0-linux/codex-arg0whu0Di:/home/fajar/.codex/packages/app-server-daemon/releases/0.166.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0aHJwzF:/home/fajar/.codex/packages/app-server-daemon/releases/0.165.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0VUO6kI:/home/fajar/.codex/packages/app-server-daemon/releases/0.164.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0pgT6kA:/home/fajar/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.codex/tmp/arg0-linux/codex-arg0Wyx2Uk:/home/fajar/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/fajar/.local/bin:/home/fajar/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+        "ANDROID_HOME=/home/fajar/Android/Sdk",
+        "CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+        "TMPDIR=/home/fajar/hris/.work/build-tmp",
+        "./gradlew",
+        "--dependency-verification",
+        "strict",
+        "--stacktrace",
+        "--continue",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*ObserveCollaborationComposerProgressTest*",
+        "--tests",
+        "*CancelCollaborationComposerTest*",
+        "-PnetworkInspectorDirectory=/home/fajar/hris/kmp-network-inspector",
+        "-PmatrixSdkRepository=/home/fajar/hris/kmp-network-inspector/.work/matrix-android-2026-11-07/sdk-repository",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=65",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx2048m",
+        "-Pkotlin.compiler.execution.strategy=in-process"
+      ],
+      "startedAt": "2026-11-08T08:12:20.315555+00:00",
+      "elapsedSeconds": 78.851,
+      "exitCode": 0,
+      "sourceFiles": 1850,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reports": {
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CancelCollaborationComposerTest.xml": {
+          "sha256": "ce31a63d1dfabdce621846b55496a830a598cf9121903749f12de8ad736fe8ce",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ObserveCollaborationComposerProgressTest.xml": {
+          "sha256": "2160a2b5059b95b5bf6dd798402e346f01e9e63a8a2fb377b4e42ff4424a48ab",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "failures": {
+    "focused-1": "Three new raw tests hit a virtual-time timeout while SQLite used its real dispatcher. Data compilation rejected cross-module nullable-property smart casts. Fixed with ordinary receive under runTest timeout and nullable let.",
+    "focused-2": "One new test incorrectly assumed command identifiers reject spaces; existing contract bounds length only. The test now checks actual empty/129-character boundaries.",
+    "focused-3": "All16rawcases pass; formatting only failed after changing the test list. Formatter applied before next gate."
+  },
+  "current": "All source frozen for focused-presentation-5/session71859. Real UI adoption is unaccepted; domain observation now includes outbox, and exact local cancellation is implemented.",
+  "phone": "Accepted release65 remains installed. No new APK.",
+  "limitations": [
+    "Only domain21 and prior focused raw16/encrypted23/editing8 have executed successfully; actor extended to11 cases is unrun at this checkpoint.",
+    "No native Apple execution, real IME, emulator or phone latency claim."
+  ]
+}

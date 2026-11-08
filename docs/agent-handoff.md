@@ -1,5 +1,53 @@
 # Agent continuation — HRIS Mobile
 
+## Composer input adoption in progress — 8 November 2026, 08:19 UTC
+
+Mobile accepted HEAD a2e040a0 is pushed. Starter exact two-file400-budget port is committed/
+pushed38b76e2; its28455 gate is reapedPASS236fresh/72suites, actualChromeReplica5,1042stable
+inputs/49stablelibrary inputs, Android/root/web/iOS-source/quality pass, lint0errors45advisories.
+No Starter job. Phone and stopped original Bima image remain65; NEVER resend prior originals.
+
+Only heavy job is Mobile `.work/composer-input-2026-11-08/presentation-check.py
+focused-presentation-5`, session71859; source FROZEN until reaped. No emulator. New19+source
+files remain UNCOMMITTED WIP. [Exact focused evidence/failures](measurements/collaboration-composer-input-2026-11-08.json).
+All earlier jobs reaped:31955 fail217.479s(raw3virtualtimeout+data2smartcast);45494 fail131.032s
+(raw1incorrectidentifier-test, encrypted23pass);56058 format-onlyfail73.687s(raw16pass);
+29038 PASS78.851s/domain21,1850unchanged scoped inputs/library unchanged. Domain-only4 deliberately
+excluded presentation source, allowing independent UI edits; it does not accept them. Formatter
+ran on every changed Kotlin file before presentation5. Root/full/Chrome/nativeApple not yet run.
+
+The eleven isolated files were base-verified and copied to MAIN. Isolate is stale; do NOT copy
+it again or build there. Main now has the raw active/archive exact-record observer(9core files),
+encrypted progress repository/shared23storage cases, domain ObserveCollaborationComposerProgress
+and CancelCollaborationComposer(two standalone use cases,21cases). Observation includes one
+bounded128-outbox snapshot plus at most128 distinct UI originals, exact active/archive proof,
+held/retained metadata, ownership/admission cancellation and no polling. Cancellation requires
+full authenticated intent proof after prevention/cancellation before retiring the exact outbox.
+Missing/started/changed work cannot be claimed cancelled. Generic9core port waits Mobile full
+and actual browser acceptance. All HRIS code remains Mobile.
+
+Main UI WIP: ChatComposerEditingSession now has11cases (new3notyetexecuted), keeps next input
+while immutable original writes serialize, supports discard only before admission and waiting
+for one original's local completion. ChatThreadViewModel is actually wired to EditDraft/Submit,
+progress and cancellation. Legacy prepare->queue->confirm removed from normal send; worker still
+owns legacy recovery. No saving=true or field disable on normal send. Thread projection adds
+provisional/outbox originals without synthetic commands, preserves exact original keys, and uses
+real archive proof to avoid cancellation ghosts. New projection and VM cases are unrun. Several
+old VM tests intentionally expect the removed pipeline and will need behavior-based replacement;
+inspect failures, do not just erase assertions. Ensure all current source compiles before acceptance.
+
+NEXT: reap71859, fix compilation/regressions, complete inbox preview adoption and held-original
+retry. Inbox is STILL old; no ObserveComposerProgress wiring there yet. Next/ADOPTION.txt in the
+private folder describes proposed screen ownership; staged UC files are older than MAIN now.
+Avoid stale whole-tree copies. Finish tests for cancel-in-flight, account replacement, cold local
+restore, exact retries, input focus and real Android software IME. Verify several NEW consecutive
+messages and offline cold history/draft on the original emulator; never resend65/earlier originals.
+Only then full required gate, port generic9core to Starter, build/install next release after user
+notice. No phone UI driving, one compiler OR emulator. Continue original54PRD groups; none newly
+complete. Server default-key403 fix and notification shortcut already deployed/installed; do not
+retrace them or downgrade retained keys/data. Other repos/live platform/schema/SDK unchanged.
+
+
 ## Composer submission/recovery gate accepted — 08 November 2026, 07:52 UTC
 
 Full-1/session11353 reapedPASS761.028s,4,523fresh cases, zero failures/errors/skips;
