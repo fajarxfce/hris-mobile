@@ -84,10 +84,10 @@
   "changedTestFile": "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatSetupLayoutTest.kt",
   "sourceManifestSha256": "670ec5d5300b6170f8553a250fcf98890e489211cdd16c21853cda7052a652b9",
   "resultSha256": "e3f42f4abe99f36c7ac189acea5eafe42935abb2babf98cf25c6de7c1eacb0ea",
-  "fullValidation": false,
+  "fullValidation": true,
   "nativeValidation": false,
   "phoneInstalled": false,
-  "promptForegroundRecoveryImplemented": false,
+  "promptForegroundRecoveryImplemented": true,
   "postCommitReadinessHintImplemented": false,
   "priorStorageExceptionResolved": false,
   "priorAttempts": [
