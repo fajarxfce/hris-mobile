@@ -78,4 +78,6 @@ production code; all ten SQLite and ten Chrome/IndexedDB cases pass with this co
 The full gate passes 5,611 fresh cases with zero failures, errors or skips, Android
 compile/lint (zero issues), shared Wasm/iOS source and quality checks.
 [Exact validation](measurements/collaboration-history-preparation-2026-11-08.json).
-Release62 device/request measurements remain pending.
+Release62 original-emulator validation records no delivery-failure marker in one new
+send, retains old/new history offline, and is installed on the authorized phone. Overall
+latency remains unresolved: [actual device result and limits](measurements/chat-history-preparation-device-2026-11-08.json).

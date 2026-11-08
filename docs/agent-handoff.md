@@ -1,6 +1,44 @@
 # Agent continuation — HRIS Mobile
 
 
+## Release62 installed; next profile repeated local/admission work — 08 November 2026, 04:35 UTC
+
+Runtime d8dd31417f5bcffb2f29cacd0c7002433442c368 is pushed, full5611cases0all accepted.
+Package84307PASS135.44s; ordinary non-debuggable ARM64 release62 is123284751bytes,
+SHA897b9eb4321eec04c2503f9054c4dec78df1c6fc9c6d49d9123ea0a9a64f7ce1. Same signer/nativeSDK5,
+API/Firebase/backup exclusions/lint0; actual new preparation class verified in dex.
+Original Bima emulator10736/PID1273356 ran1536MiB and was stopped04:33:04; all emulator/
+probe/counter/install jobs reaped. One new62 message, NO old61/diagnostic replay.13actual
+screenshots and three cropped4fps storyboards viewed; prior61/diagnostic originals visible
+before/after offline restart. No delivery-failure marker in the bounded send interval;
+do not equate that with archival of every historical command. Native6notification cases
+reuse unchanged accepted61 implementation explicitly. Current smoke proves actual cold/
+background notification taps and default-key404. Settings restoration polled to settled.
+
+Phone install-only23410 completed after notice, started04:33:30,87.963s incl verification.
+Exact remote APK hash matches62; appId10962/first-install time retained, no data clear,
+uninstall or phone UI. Phone and stopped original emulator are now62. Exact evidence:
+measurements/chat-history-preparation-device-2026-11-08.json. No active compiler/emulator.
+
+Still slow: UI sent observed7.468s (pending3.159/5.321), Matrix247ms response/249ms transfer;
+local phases1121/205/147/113ms.180.4s counter: zero403;4default-key404,2default-key401 and
+1refresh200 across startup/navigation. Before-send5s still8setup+8room+7conversation;
+after-send10s24 such responses vs41 in61.66Ktor completions in send capture sum2264ms;
+these overlap and are not full gesture time. Do not claim global latency fixed. Next
+profile local workspace/admission reads as well as duplicated HTTP orchestration before
+changing security policy. Initial read-only leads: StoredSessionRepository.current already
+uses in-memory record after first load; EncryptedWorkspaceRepository.current always reads
+checkpoint then decrypts via keys.read; captureCollaborationOwner invokes workspace.current.
+No new optimization source edits yet. Need inspect actual repeated-read ownership, cancellation,
+key/owner replacement and metrics; no blindly stale authorization cache.
+
+Then proper atomic composer b7929318 adoption/keyboard continuity and full54 communications
+PRD remain. Keyboard still dismisses on local save. Inspector capture overhead/publication/
+Apple native Matrix binding remain unaccepted. Library2b84921/Startera21b748/Platformea322180
+unchanged, Group routing off. One compiler OR owned emulator; notify before EACH phone
+install-only, no phone UI automation. Private scripts release-phone-2026-11-08-build62;
+never rerun probe.py or send the prior62 message again.
+
 ## History preparation correction accepted; package62 next — 08 November 2026, 04:23 UTC
 
 Full-1/session14500 is reapedPASS958.24s:5,611 fresh cases, zero failures/errors/skips,

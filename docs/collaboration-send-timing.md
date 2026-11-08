@@ -112,3 +112,23 @@ real-storage race cases fail on the old code; ten targeted SQLite cases pass aft
 the bounded local preparation correction. [Diagnosis and restoration evidence](measurements/chat-history-preparation-diagnosis-2026-11-08.json).
 Release62 device/request measurements remain pending; debugger timings cannot establish
 a production improvement, and the repeated admission reads remain separate work.
+
+
+## Release62: storage error removed in this sample; latency remains
+
+The original-account emulator sends one new message with no recorded delivery-failure
+marker. The inspector measures247ms to the Matrix response and249ms to transfer59bytes;
+UI polling observes pending at3.159s/5.321s and sent at7.468s. Local phase durations are
+1121/205/147/113ms. This is not an overall latency improvement or phone benchmark.
+
+The180.4-second counter observes zero403, four default-key404, two default-key401 and
+one refresh200 across startup/navigation. Before-send5s still has8setup+8room+7conversation
+responses; after-send10s drops to8+8+8 (24 vs41 in61). The source of overlapping requests
+and local delay still needs profiling. Sixty-six Ktor completions total2264ms of observed
+HTTP duration; those overlapping intervals cannot be added as gesture time.
+
+Cold offline restart retains the latest preview and prior original messages. Background
+and cold notification taps still open the inspector. All13 screenshots and three cropped
+4fps storyboards were inspected; keyboard dismissal remains. Exact ordinary release62
+is installed on the phone in place, without UI automation, after the emulator was stopped.
+[Exact evidence and limits](measurements/chat-history-preparation-device-2026-11-08.json).
