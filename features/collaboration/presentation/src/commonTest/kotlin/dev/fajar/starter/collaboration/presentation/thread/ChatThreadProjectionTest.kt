@@ -8,6 +8,160 @@ import kotlin.time.Instant
 
 class ChatThreadProjectionTest {
     @Test
+    fun capturedOriginalKeepsOneStableBubbleThroughOutboxCommandAndArchivedCompletion() {
+        val gesture =
+            CollaborationComposerSubmission(
+                CollaborationDraft(conversation, intent.id, intent.text, intent.createdAt),
+                chatId(99),
+                intent.createdAt,
+            )
+        val captured = ChatComposerPendingSubmission(gesture)
+        fun projected(
+            progress: List<CollaborationComposerMessageProgress>,
+            commands: List<CollaborationMessageRecord> = emptyList(),
+            history: List<CollaborationHistoryMessage> = emptyList(),
+        ) =
+            assertIs<AppResult.Success<List<ChatMessageRow>>>(
+                    chatThreadRows(
+                        owner,
+                        conversation,
+                        self,
+                        device,
+                        history,
+                        commands,
+                        emptyList(),
+                        historyRoomId = device.roomId,
+                        composer = progress,
+                        provisional = listOf(captured),
+                    )
+                )
+                .value
+        val immediate = projected(emptyList()).single()
+        assertEquals(CollaborationMessageDelivery.PENDING, immediate.delivery)
+        assertEquals(gesture, immediate.composerSubmission)
+        assertEquals(
+            immediate,
+            projected(listOf(CollaborationComposerMessageProgress(gesture, null, retained = true)))
+                .single(),
+        )
+        val queued = CollaborationMessageRecord(intent, 0, CollaborationMessageState.Queued)
+        assertEquals(
+            immediate.key,
+            projected(listOf(CollaborationComposerMessageProgress(gesture, queued)), listOf(queued))
+                .single()
+                .key,
+        )
+        val sent =
+            staged.copy(
+                state = CollaborationMessageState.Sent(device, "transaction", "\$original", origin)
+            )
+        val accepted =
+            projected(listOf(CollaborationComposerMessageProgress(gesture, sent))).single()
+        assertEquals(immediate.key, accepted.key)
+        assertEquals(CollaborationMessageDelivery.SENT, accepted.delivery)
+        assertEquals(
+            1,
+            projected(
+                    listOf(CollaborationComposerMessageProgress(gesture, sent)),
+                    history = listOf(original),
+                )
+                .size,
+        )
+    }
+
+    @Test
+    fun cancellationAlreadyArchivedBeforeObservationCannotLeaveAProvisionalGhost() {
+        val gesture =
+            CollaborationComposerSubmission(
+                CollaborationDraft(conversation, intent.id, intent.text, intent.createdAt),
+                chatId(99),
+                intent.createdAt,
+            )
+        val cancelled = CollaborationMessageRecord(intent, 0, CollaborationMessageState.Cancelled)
+        val progress =
+            listOf(CollaborationComposerMessageProgress(gesture, cancelled, retained = true))
+        val rows =
+            assertIs<AppResult.Success<List<ChatMessageRow>>>(
+                    chatThreadRows(
+                        owner,
+                        conversation,
+                        self,
+                        null,
+                        emptyList(),
+                        emptyList(),
+                        emptyList(),
+                        composer = progress,
+                        provisional = listOf(ChatComposerPendingSubmission(gesture, durable = true)),
+                    )
+                )
+                .value
+        assertTrue(rows.isEmpty())
+        assertEquals(
+            setOf(gesture),
+            progress.visibleComposerOriginals(emptyList(), emptyList(), null),
+        )
+        assertTrue(
+            progress
+                .visibleComposerOriginals(
+                    listOf(cancelled.copy(state = CollaborationMessageState.Queued)),
+                    emptyList(),
+                    null,
+                )
+                .isEmpty()
+        )
+    }
+
+    @Test
+    fun heldOriginalStaysVisibleAndAConflictingCommandCannotReplaceIt() {
+        val gesture =
+            CollaborationComposerSubmission(
+                CollaborationDraft(conversation, intent.id, intent.text, intent.createdAt),
+                chatId(99),
+                intent.createdAt,
+            )
+        val held =
+            CollaborationComposerMessageProgress(
+                gesture,
+                null,
+                retained = true,
+                reviewRequired = true,
+            )
+        val rows =
+            assertIs<AppResult.Success<List<ChatMessageRow>>>(
+                    chatThreadRows(
+                        owner,
+                        conversation,
+                        self,
+                        null,
+                        emptyList(),
+                        emptyList(),
+                        emptyList(),
+                        composer = listOf(held),
+                    )
+                )
+                .value
+        assertEquals(CollaborationMessageDelivery.FAILED, rows.single().delivery)
+        assertEquals(intent.text, rows.single().text)
+        assertIs<AppResult.Failed>(
+            chatThreadRows(
+                owner,
+                conversation,
+                self,
+                null,
+                emptyList(),
+                emptyList(),
+                emptyList(),
+                composer =
+                    listOf(
+                        held.copy(
+                            record = staged.copy(intent = intent.copy(text = "Wrong original"))
+                        )
+                    ),
+            )
+        )
+    }
+
+    @Test
     fun sdkLocalEchoWithServerIdAndNoJsonKeepsOnePendingRowUntilOriginalEvidenceArrives() {
         val localSent = native.copy(transactionId = null, logicalId = null, localEcho = true)
         for (record in

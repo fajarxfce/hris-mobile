@@ -8,8 +8,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -35,6 +38,7 @@ internal fun ChatComposer(
     modifier: Modifier = Modifier,
     inputModifier: Modifier = Modifier,
 ) {
+    val inputFocus = remember { FocusRequester() }
     val editing = state.editing
     val text = editing?.text ?: state.draft
     val label =
@@ -95,10 +99,14 @@ internal fun ChatComposer(
                     )
                 },
                 modifier =
-                    inputModifier.weight(1f).heightIn(min = 48.dp).semantics {
-                        contentDescription = label
-                        if (editing == null && state.draftSaving) stateDescription = savingLabel
-                    },
+                    inputModifier
+                        .focusRequester(inputFocus)
+                        .weight(1f)
+                        .heightIn(min = 48.dp)
+                        .semantics {
+                            contentDescription = label
+                            if (editing == null && state.draftSaving) stateDescription = savingLabel
+                        },
                 enabled = if (editing == null) state.canCompose else state.canEditInput,
                 readOnly = editing?.let { it.busy || it.locked } == true,
                 singleLine = false,
@@ -133,6 +141,7 @@ internal fun ChatComposer(
                         if (editing == null) ChatThreadEvent.SendRequested
                         else ChatThreadEvent.EditSaveRequested
                     )
+                    if (editing == null) inputFocus.requestFocus()
                 },
                 modifier = Modifier.background(AppColors.tint, CircleShape),
                 enabled =

@@ -10,6 +10,21 @@ import kotlinx.coroutines.test.runTest
 
 class BrowserCommandStoreTest {
     @Test
+    fun exactCommandObservationIncludesAtomicArchival() = runTest {
+        withCommandDatabase(::verifyCommandLookupObservation)
+    }
+
+    @Test
+    fun archiveCreatedWithoutAnActiveRowStillPublishes() = runTest {
+        withCommandDatabase(::verifyCommandLookupPrevention)
+    }
+
+    @Test
+    fun commandObservationClearsOnReauthenticationAndRestoresOnlyForItsOwner() = runTest {
+        withCommandDatabase(::verifyCommandLookupOwnership)
+    }
+
+    @Test
     fun archiveCannotSettleAReplacedRecordWithTheSameRevision() = runTest {
         withCommandDatabase(::verifyCommandArchiveReplacementFence)
     }

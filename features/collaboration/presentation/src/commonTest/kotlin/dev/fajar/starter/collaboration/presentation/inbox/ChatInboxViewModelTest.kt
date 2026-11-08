@@ -13,6 +13,101 @@ import kotlinx.coroutines.test.*
 
 class ChatInboxViewModelTest {
     @Test
+    fun outboxPreviewSurvivesHiddenReopenAndBridgesTheWorkerHandoffWithoutBlinking() = runTest {
+        withModel { f, vm, _ ->
+            val id = f.item(1).conversation.id
+            val original =
+                CollaborationComposerSubmission(
+                    CollaborationDraft(id, chatId(9001), "Pending original", f.now),
+                    chatId(9002),
+                    f.now,
+                )
+            f.records.value = listOf(f.item(1))
+            f.composerEntries.value = listOf(CollaborationComposerOutboxEntry(original, false))
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            assertEquals(original, vm.state.value.composerPreviews[id]?.original)
+            assertEquals(1, f.composerRecordObservers)
+            vm.onEvent(ChatInboxEvent.Stopped)
+            runCurrent()
+            assertEquals(0, f.composerObservers)
+            assertEquals(0, f.composerRecordObservers)
+            val published = mutableListOf<String?>()
+            val observer =
+                backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                    vm.state.collect { value ->
+                        published +=
+                            value.composerPreviews[id]?.original?.original?.text
+                                ?: value.previews[id]?.outgoing?.intent?.text
+                    }
+                }
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            val access = assertNotNull(vm.state.value.owner)
+            val queued =
+                CollaborationMessageRecord(
+                    dev.fajar.starter.collaboration.domain.policies.collaborationComposerIntent(
+                        access,
+                        original,
+                    ),
+                    0,
+                    CollaborationMessageState.Queued,
+                )
+            f.composerEntries.value = emptyList()
+            runCurrent()
+            assertEquals(original, vm.state.value.composerPreviews[id]?.original)
+            f.content.commands.value = listOf(queued)
+            runCurrent()
+            assertEquals(queued, vm.state.value.previews[id]?.outgoing)
+            assertTrue(published.isNotEmpty() && published.all { it == original.original.text })
+            assertNull(vm.state.value.composerPreviews[id])
+            assertEquals(0, f.composerRecordObservers)
+            observer.cancel()
+        }
+    }
+
+    @Test
+    fun archivedCancellationAndOwnerLossClearOnlyTheOwnedComposerPreview() = runTest {
+        withModel { f, vm, _ ->
+            val id = f.item(1).conversation.id
+            val original =
+                CollaborationComposerSubmission(
+                    CollaborationDraft(id, chatId(9001), "Pending original", f.now),
+                    chatId(9002),
+                    f.now,
+                )
+            f.records.value = listOf(f.item(1))
+            f.composerEntries.value = listOf(CollaborationComposerOutboxEntry(original, true))
+            vm.onEvent(ChatInboxEvent.Entered)
+            runCurrent()
+            assertTrue(assertNotNull(vm.state.value.composerPreviews[id]).reviewRequired)
+            val access = assertNotNull(vm.state.value.owner)
+            f.composerArchives.value =
+                mapOf(
+                    original.id to
+                        CollaborationMessageRecord(
+                            dev.fajar.starter.collaboration.domain.policies
+                                .collaborationComposerIntent(access, original),
+                            0,
+                            CollaborationMessageState.Cancelled,
+                        )
+                )
+            runCurrent()
+            assertNull(vm.state.value.composerPreviews[id])
+            f.composerArchives.value = emptyMap()
+            runCurrent()
+            assertNotNull(vm.state.value.composerPreviews[id])
+            vm.onEvent(ChatInboxEvent.Stopped)
+            runCurrent()
+            f.session.value = null
+            runCurrent()
+            assertTrue(vm.state.value.composerPreviews.isEmpty())
+            assertNull(vm.state.value.owner)
+            assertEquals(0, f.composerRecordObservers)
+        }
+    }
+
+    @Test
     fun reopeningAndUnchangedRefreshNeverPublishBlankPreviewsWhileLocalReadsArePending() = runTest {
         withModel { f, vm, _ ->
             val id = f.item(1).conversation.id

@@ -225,10 +225,105 @@ internal class ChatThreadFixture {
                 return draftWriteFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(true)
             }
         }
+    val composerEntries = MutableStateFlow(emptyList<CollaborationComposerOutboxEntry>())
+    val composerWrites = mutableListOf<CollaborationComposerSubmission>()
+    var beforeComposerHandoff: suspend () -> Unit = {}
+    var afterComposerHandoff: suspend () -> Unit = {}
+    var composerFailure: Failure? = null
+    var beforeComposerFailure: Failure? = null
+    val composerOutbox =
+        object : CollaborationComposerOutboxRepository {
+            override fun observe(access: CollaborationLocalAccess) =
+                composerEntries.map { AppResult.Success(it) }
+
+            override suspend fun get(access: CollaborationLocalAccess, id: String) =
+                AppResult.Success(
+                    composerEntries.value.firstOrNull { it.submission.id == id }?.submission
+                )
+
+            override suspend fun handoff(
+                access: CollaborationLocalAccess,
+                submission: CollaborationComposerSubmission,
+                expected: CollaborationDraft?,
+            ): AppResult<CollaborationComposerHandoffResult> {
+                beforeComposerHandoff()
+                currentCoroutineContext().ensureActive()
+                beforeComposerFailure?.let {
+                    return AppResult.Failed(it)
+                }
+                composerEntries.value
+                    .firstOrNull { it.submission.id == submission.id }
+                    ?.let {
+                        return AppResult.Success(
+                            if (it.submission == submission)
+                                CollaborationComposerHandoffResult.RETAINED
+                            else CollaborationComposerHandoffResult.CHANGED
+                        )
+                    }
+                if (draftSlot.value != expected)
+                    return AppResult.Success(CollaborationComposerHandoffResult.CHANGED)
+                draftSlot.value = submission.nextDraft
+                composerEntries.value += CollaborationComposerOutboxEntry(submission, false)
+                composerWrites += submission
+                afterComposerHandoff()
+                return composerFailure?.let { AppResult.Failed(it) }
+                    ?: AppResult.Success(CollaborationComposerHandoffResult.STORED)
+            }
+
+            override suspend fun remove(
+                access: CollaborationLocalAccess,
+                expected: CollaborationComposerSubmission,
+            ): AppResult<Boolean> {
+                val found =
+                    composerEntries.value.firstOrNull { it.submission == expected }
+                        ?: return AppResult.Success(false)
+                composerEntries.value -= found
+                return AppResult.Success(true)
+            }
+
+            override suspend fun hold(
+                access: CollaborationLocalAccess,
+                expected: CollaborationComposerSubmission,
+            ): AppResult<Boolean> = error("Worker owns recovery")
+
+            override suspend fun pending(
+                access: CollaborationLocalAccess,
+                after: String?,
+                limit: Int,
+            ): AppResult<CollaborationComposerSubmissionPage> = error("Worker owns recovery")
+        }
+    val composerRecords =
+        object : CollaborationMessageProgressRepository {
+            override fun observeRecord(
+                access: CollaborationLocalAccess,
+                id: String,
+            ): Flow<AppResult<CollaborationMessageRecord?>> =
+                combine(records, composerEntries) { rows, _ ->
+                        AppResult.Success(rows.firstOrNull { it.intent.id == id } ?: cancelled[id])
+                    }
+                    .distinctUntilChanged()
+        }
+    val prevention =
+        object : CollaborationMessagePreventionRepository {
+            override suspend fun prevent(
+                access: CollaborationLocalAccess,
+                intent: CollaborationMessageIntent,
+            ): AppResult<Boolean> {
+                if (records.value.any { it.intent.id == intent.id }) return AppResult.Success(false)
+                val record =
+                    CollaborationMessageRecord(intent, 0, CollaborationMessageState.Cancelled)
+                val prior = cancelled[intent.id]
+                if (prior != null) return AppResult.Success(prior == record)
+                cancelled[intent.id] = record
+                return AppResult.Success(true)
+            }
+        }
+    var beforeCommandProjection: suspend () -> Unit = {}
     val messages =
         object : CollaborationMessageRepository {
             override fun observe(access: CollaborationLocalAccess, conversationId: String?) =
                 records.map { rows ->
+                    beforeCommandProjection()
                     AppResult.Success(
                         rows.filter {
                             conversationId == null || it.intent.conversationId == conversationId
@@ -577,6 +672,28 @@ internal class ChatThreadFixture {
                 )
         }
 
+    /** Test driver publishes the worker's separate command handoff, never a screen-side send. */
+    fun publishQueuedComposer(
+        original: CollaborationComposerSubmission = composerWrites.single()
+    ): CollaborationMessageRecord {
+        val intent =
+            dev.fajar.starter.collaboration.domain.policies.collaborationComposerIntent(
+                dev.fajar.starter.collaboration.domain.entities.CollaborationLocalAccess(
+                    base.session.value!!.id,
+                    setup.owner.audience,
+                    setup.owner.accountId,
+                    setup.owner.companyId,
+                ),
+                original,
+            )
+        val record = CollaborationMessageRecord(intent, 0, CollaborationMessageState.Queued)
+        check(records.value.none { it.intent.id == intent.id })
+        insertions += intent
+        records.value += record
+        composerEntries.value = composerEntries.value.filterNot { it.submission == original }
+        return record
+    }
+
     fun online() {
         setup.device = setup.active
         setup.opened = true
@@ -604,7 +721,6 @@ internal class ChatThreadFixture {
                 createObserveCollaborationAccess(),
                 createReadCollaborationThreadContext(),
                 createObserveCollaborationThread(),
-                createQueueCollaborationText(),
                 createRequestCollaborationDelivery(),
                 createLoadCollaborationSetup(),
                 createEnsureCollaborationRuntime(),
@@ -619,26 +735,10 @@ internal class ChatThreadFixture {
                 createReconcileCollaborationHistoryReferences(),
                 createObserveCollaborationDraft(),
                 EditCollaborationDraft(drafts, local, sessions, workspaces, server, build, clock),
-                PrepareCollaborationDraftSend(
-                    drafts,
-                    local,
-                    sessions,
-                    workspaces,
-                    server,
-                    build,
-                    clock,
-                    schedules,
-                ),
-                ConfirmCollaborationDraftSend(
-                    drafts,
-                    local,
-                    sessions,
-                    workspaces,
-                    server,
-                    build,
-                    clock,
-                    messages,
-                ),
+                createSubmitComposer(),
+                createObserveComposerProgress(),
+                createCancelComposer(),
+                createRecoverComposer(),
                 CancelCollaborationText(
                     cancellationRepository,
                     local,
@@ -814,9 +914,68 @@ internal class ChatThreadFixture {
             )
         }
 
-    private fun createQueueCollaborationText() =
+    private fun createSubmitComposer() =
         with(base) {
-            QueueCollaborationText(
+            SubmitCollaborationComposer(
+                this@ChatThreadFixture.composerOutbox,
+                messages,
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+                schedules,
+            )
+        }
+
+    private fun createObserveComposerProgress() =
+        with(base) {
+            ObserveCollaborationComposerProgress(
+                this@ChatThreadFixture.composerRecords,
+                this@ChatThreadFixture.composerOutbox,
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+            )
+        }
+
+    private fun createCancelComposer() =
+        with(base) {
+            CancelCollaborationComposer(
+                this@ChatThreadFixture.composerOutbox,
+                messages,
+                prevention,
+                cancellationRepository,
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+            )
+        }
+
+    private fun createRecoverComposer() =
+        with(base) {
+            RecoverCollaborationComposer(
+                this@ChatThreadFixture.composerOutbox,
+                object : CollaborationComposerRecoveryCursorRepository {
+                    override suspend fun current(
+                        access: CollaborationLocalAccess
+                    ): AppResult<CollaborationComposerRecoveryCursor?> =
+                        error("Explicit retry never scans")
+
+                    override suspend fun advance(
+                        access: CollaborationLocalAccess,
+                        expected: CollaborationComposerRecoveryCursor?,
+                        submissionId: String,
+                    ): AppResult<CollaborationComposerRecoveryCursor?> =
+                        error("Explicit retry never scans")
+                },
                 messages,
                 local,
                 sessions,

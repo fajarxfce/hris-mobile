@@ -14,7 +14,7 @@ import kotlinx.coroutines.test.*
 
 class ChatThreadDraftTest {
     @Test
-    fun sendTimingsShareOneTraceWithoutRecordingMessageOrOwner() = runTest {
+    fun atomicHandoffTimingRecordsOneLocalOperationWithoutMessageOrOwner() = runTest {
         val timings = mutableListOf<Diagnostic>()
         Diagnostics.install(DiagnosticSink { event, _ -> timings += event })
         try {
@@ -25,24 +25,17 @@ class ChatThreadDraftTest {
                 vm.onEvent(ChatThreadEvent.DraftChanged(text))
                 vm.onEvent(ChatThreadEvent.SendRequested)
                 runCurrent()
-                val phases = timings.filter { it.kind == DiagnosticKind.OperationCompleted }
-                assertEquals(
-                    listOf(
-                        PerformanceOperation.DraftPersistence,
-                        PerformanceOperation.CommandPreparation,
-                        PerformanceOperation.CommandQueue,
-                        PerformanceOperation.CommandConfirmation,
-                    ),
-                    phases.map { it.operation },
-                )
-                assertTrue(phases.all { it.outcome == PerformanceOutcome.Succeeded })
-                assertTrue(phases.all { requireNotNull(it.durationMillis) >= 0 })
-                assertEquals(1, phases.map { requireNotNull(it.traceId) }.distinct().size)
-                assertEquals(4, phases.map { requireNotNull(it.spanId) }.distinct().size)
-                val encoded = phases.joinToString { encodeDiagnostic(it) }
+                val phase = timings.single { it.kind == DiagnosticKind.OperationCompleted }
+                assertEquals(PerformanceOperation.CommandQueue, phase.operation)
+                assertEquals(PerformanceOutcome.Succeeded, phase.outcome)
+                assertTrue(requireNotNull(phase.durationMillis) >= 0)
+                assertNotNull(phase.traceId)
+                assertNotNull(phase.spanId)
+                val encoded = encodeDiagnostic(phase)
                 assertFalse(encoded.contains(text))
-                assertFalse(encoded.contains(f.insertions.single().id))
-                assertEquals(text, f.insertions.single().text)
+                assertFalse(encoded.contains(f.composerWrites.single().id))
+                assertEquals(text, f.composerWrites.single().original.text)
+                assertTrue(f.insertions.isEmpty())
                 assertEquals("", vm.state.value.draft)
             }
         } finally {
@@ -51,57 +44,57 @@ class ChatThreadDraftTest {
     }
 
     @Test
-    fun failedDraftTimingCannotAcknowledgeOrAdvanceSubmission() = runTest {
-        val timings = mutableListOf<Diagnostic>()
-        Diagnostics.install(DiagnosticSink { event, _ -> timings += event })
-        try {
-            withDraft { f, vm, _, _ ->
-                f.beforeDraftWriteFailure = f.base.network
-                vm.onEvent(ChatThreadEvent.Entered())
-                runCurrent()
-                vm.onEvent(ChatThreadEvent.DraftChanged("Retain after failed storage"))
-                vm.onEvent(ChatThreadEvent.SendRequested)
-                runCurrent()
-                val phase = timings.single { it.kind == DiagnosticKind.OperationCompleted }
-                assertEquals(PerformanceOperation.DraftPersistence, phase.operation)
-                assertEquals(PerformanceOutcome.Failed, phase.outcome)
-                assertTrue(f.insertions.isEmpty())
-                assertNull(f.draftSlot.value)
-                assertEquals("Retain after failed storage", vm.state.value.draft)
+    fun failedHandoffTimingLeavesTheOriginalVisibleWithoutInventingDurableAcknowledgement() =
+        runTest {
+            val timings = mutableListOf<Diagnostic>()
+            Diagnostics.install(DiagnosticSink { event, _ -> timings += event })
+            try {
+                withDraft { f, vm, _, _ ->
+                    f.beforeComposerFailure = Failure(FailureKind.Storage, "Storage unavailable")
+                    vm.onEvent(ChatThreadEvent.Entered())
+                    runCurrent()
+                    vm.onEvent(ChatThreadEvent.DraftChanged("Retain after failed storage"))
+                    vm.onEvent(ChatThreadEvent.SendRequested)
+                    runCurrent()
+                    val phase = timings.single { it.kind == DiagnosticKind.OperationCompleted }
+                    assertEquals(PerformanceOperation.CommandQueue, phase.operation)
+                    assertEquals(PerformanceOutcome.Failed, phase.outcome)
+                    assertTrue(f.composerWrites.isEmpty())
+                    assertTrue(f.insertions.isEmpty())
+                    assertNull(f.draftSlot.value)
+                    assertEquals("Retain after failed storage", vm.state.value.rows.single().text)
+                    assertEquals(
+                        CollaborationMessageDelivery.FAILED,
+                        vm.state.value.rows.single().delivery,
+                    )
+                    assertTrue(vm.state.value.canCompose)
+                }
+            } finally {
+                Diagnostics.install(ConsoleDiagnosticSink)
             }
-        } finally {
-            Diagnostics.install(ConsoleDiagnosticSink)
         }
-    }
 
     @Test
-    fun cancelledQueueTimingKeepsTheCommittedOriginalAndSkipsConfirmation() = runTest {
+    fun cancelledHandoffTimingKeepsTheOriginalAndNextEditorFromTheSameCommit() = runTest {
         val timings = mutableListOf<Diagnostic>()
         Diagnostics.install(DiagnosticSink { event, _ -> timings += event })
         try {
             withDraft { f, vm, store, _ ->
-                f.afterInsert = { awaitCancellation() }
+                f.afterComposerHandoff = { awaitCancellation() }
                 vm.onEvent(ChatThreadEvent.Entered())
                 runCurrent()
                 vm.onEvent(ChatThreadEvent.DraftChanged("Original queue remains"))
                 vm.onEvent(ChatThreadEvent.SendRequested)
                 runCurrent()
-                val original = f.records.value.single()
+                val original = f.composerWrites.single()
                 store.clear()
                 runCurrent()
-                val phases = timings.filter { it.kind == DiagnosticKind.OperationCompleted }
-                assertEquals(
-                    listOf(
-                        PerformanceOperation.DraftPersistence,
-                        PerformanceOperation.CommandPreparation,
-                        PerformanceOperation.CommandQueue,
-                    ),
-                    phases.map { it.operation },
-                )
-                assertEquals(PerformanceOutcome.Cancelled, phases.last().outcome)
-                assertEquals(original, f.records.value.single())
-                assertEquals(original.intent.id, f.draftSlot.value?.submissionId)
-                assertEquals(original.intent.text, f.draftSlot.value?.text)
+                val phase = timings.single { it.kind == DiagnosticKind.OperationCompleted }
+                assertEquals(PerformanceOperation.CommandQueue, phase.operation)
+                assertEquals(PerformanceOutcome.Cancelled, phase.outcome)
+                assertEquals(original, f.composerEntries.value.single().submission)
+                assertEquals(original.nextDraft, f.draftSlot.value)
+                assertTrue(f.insertions.isEmpty())
             }
         } finally {
             Diagnostics.install(ConsoleDiagnosticSink)
@@ -237,30 +230,31 @@ class ChatThreadDraftTest {
     }
 
     @Test
-    fun deathAfterFreezeBeforeQueueReopensTheOriginalSubmissionId() = runTest {
+    fun deathAfterAtomicHandoffRestoresTheOriginalAndKeepsTheNextEditorAvailable() = runTest {
         withDraft { f, vm, store, _ ->
-            f.afterDraftWrite = { if (it.submissionId != null) awaitCancellation() }
+            f.afterComposerHandoff = { awaitCancellation() }
             vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
-            vm.onEvent(ChatThreadEvent.DraftChanged("Frozen before death"))
+            vm.onEvent(ChatThreadEvent.DraftChanged("Retained before death"))
             vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
-            val frozen = f.draftSlot.value!!
-            assertNotNull(frozen.submissionId)
+            val original = f.composerWrites.single()
+            assertEquals(original.nextDraft, f.draftSlot.value)
             assertTrue(f.insertions.isEmpty())
             store.clear()
-            f.afterDraftWrite = {}
+            runCurrent()
+            f.afterComposerHandoff = {}
             val reopened = f.model()
             val owner = ViewModelStore().also { it.put("reopened", reopened) }
             try {
                 reopened.onEvent(ChatThreadEvent.Entered())
                 runCurrent()
-                assertTrue(reopened.state.value.submissionPending)
-                assertFalse(reopened.state.value.canCompose)
+                assertFalse(reopened.state.value.submissionPending)
+                assertTrue(reopened.state.value.canCompose)
+                assertEquals(original.id, reopened.state.value.rows.single().localId)
                 reopened.onEvent(ChatThreadEvent.SendRequested)
                 runCurrent()
-                assertEquals(frozen.submissionId, f.insertions.single().id)
-                assertEquals(frozen.text, f.insertions.single().text)
+                assertEquals(listOf(original), f.composerWrites)
                 assertEquals("", reopened.state.value.draft)
             } finally {
                 owner.clear()
@@ -269,17 +263,23 @@ class ChatThreadDraftTest {
     }
 
     @Test
-    fun deathAfterQueueCommitBeforeAcknowledgementDoesNotInsertAgain() = runTest {
+    fun deathAfterWorkerMaterializesTheOriginalDoesNotCreateAnotherHandoff() = runTest {
         withDraft { f, vm, store, _ ->
-            f.afterInsert = { awaitCancellation() }
+            f.afterComposerHandoff = {
+                f.publishQueuedComposer()
+                awaitCancellation()
+            }
             vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Queued before death"))
             vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
+            val original = f.composerWrites.single()
             val queued = f.records.value.single()
+            assertTrue(f.composerEntries.value.isEmpty())
             store.clear()
-            f.afterInsert = {}
+            runCurrent()
+            f.afterComposerHandoff = {}
             val reopened = f.model()
             val owner = ViewModelStore().also { it.put("reopened", reopened) }
             try {
@@ -288,6 +288,8 @@ class ChatThreadDraftTest {
                 reopened.onEvent(ChatThreadEvent.SendRequested)
                 runCurrent()
                 assertEquals(listOf(queued.intent), f.insertions)
+                assertEquals(listOf(original), f.composerWrites)
+                assertEquals(queued.intent.id, reopened.state.value.rows.single().localId)
                 assertEquals("", reopened.state.value.draft)
                 assertFalse(reopened.state.value.submissionPending)
             } finally {
@@ -297,24 +299,26 @@ class ChatThreadDraftTest {
     }
 
     @Test
-    fun lostClearReplyThenNewerDraftKeepsNewTextAfterRetry() = runTest {
+    fun lateHandoffKeepsNewTypingAndCannotOverwriteAConcurrentStoredEditor() = runTest {
         withDraft { f, vm, _, _ ->
-            f.afterDraftWrite = { if (it.text.isEmpty()) f.draftWriteFailure = f.base.network }
+            val release = CompletableDeferred<Unit>()
+            f.afterComposerHandoff = { release.await() }
             vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("Original send"))
             vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
-            assertTrue(vm.state.value.submissionPending)
-            assertEquals("", f.draftSlot.value!!.text)
-            val newer = f.savedDraft("Newer draft")
-            f.draftSlot.value = newer
-            f.draftWriteFailure = null
-            vm.onEvent(ChatThreadEvent.SendRequested)
+            vm.onEvent(ChatThreadEvent.DraftChanged("My newer typing"))
             runCurrent()
-            assertEquals("Newer draft", vm.state.value.draft)
-            assertEquals(newer, f.draftSlot.value)
-            assertEquals(1, f.insertions.size)
+            val concurrent = f.savedDraft("Other window draft")
+            f.draftSlot.value = concurrent
+            release.complete(Unit)
+            advanceUntilIdle()
+            assertEquals("My newer typing", vm.state.value.draft)
+            assertEquals(concurrent, f.draftSlot.value)
+            assertEquals("client.collaboration_draft_changed", vm.state.value.draftFailure?.code)
+            assertEquals(1, f.composerWrites.size)
+            assertTrue(f.insertions.isEmpty())
         }
     }
 

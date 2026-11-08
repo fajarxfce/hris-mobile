@@ -10,6 +10,21 @@ import kotlinx.serialization.json.*
 
 class CommandStoreTest {
     @Test
+    fun exactCommandObservationIncludesAtomicArchival() = runTest {
+        withDatabase(::verifyCommandLookupObservation)
+    }
+
+    @Test
+    fun archiveCreatedWithoutAnActiveRowStillPublishes() = runTest {
+        withDatabase(::verifyCommandLookupPrevention)
+    }
+
+    @Test
+    fun commandObservationClearsOnReauthenticationAndRestoresOnlyForItsOwner() = runTest {
+        withDatabase(::verifyCommandLookupOwnership)
+    }
+
+    @Test
     fun archiveCannotSettleAReplacedRecordWithTheSameRevision() = runTest {
         withDatabase(::verifyCommandArchiveReplacementFence)
     }

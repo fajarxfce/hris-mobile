@@ -64,7 +64,7 @@ class ChatThreadWindowTest {
             vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
             entered.await()
-            assertEquals(1, f.insertions.size)
+            assertEquals(1, f.composerWrites.size)
             assertTrue(vm.state.value.browsingHistory)
             assertFalse(vm.state.value.rows.any { it.text == "Send from history" })
             assertTrue(effects.isEmpty())

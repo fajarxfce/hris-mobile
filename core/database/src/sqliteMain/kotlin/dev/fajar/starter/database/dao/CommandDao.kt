@@ -106,6 +106,17 @@ abstract class CommandDao {
     ): CommandEntity? = if (admitted(session, account)) record(account, partition, id) else null
 
     @Transaction
+    open suspend fun lookup(
+        session: String,
+        account: String,
+        partition: String,
+        id: String,
+    ): Pair<CommandEntity?, CommandArchiveEntity?> =
+        if (admitted(session, account))
+            record(account, partition, id) to completed(account, partition, id)
+        else null to null
+
+    @Transaction
     open suspend fun insert(session: String, entry: CommandEntity): CommandInsertResult {
         if (!admitted(session, entry.accountKey)) return CommandInsertResult.ScopeChanged
         val previous = record(entry.accountKey, entry.partition, entry.id)

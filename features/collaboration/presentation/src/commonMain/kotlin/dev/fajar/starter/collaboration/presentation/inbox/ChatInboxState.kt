@@ -1,5 +1,6 @@
 package dev.fajar.starter.collaboration.presentation.inbox
 
+import dev.fajar.starter.collaboration.domain.entities.CollaborationComposerMessageProgress
 import dev.fajar.starter.collaboration.domain.entities.CollaborationInboxPreview
 import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalAccess
 import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalList
@@ -18,6 +19,8 @@ data class ChatInboxState(
     val unsentCounts: Map<String, Int> = emptyMap(),
     val orphanedUnsentCount: Int = 0,
     val owner: CollaborationLocalAccess? = null,
+    val composerPreviews: Map<String, CollaborationComposerMessageProgress> = emptyMap(),
+    val composerFailure: Failure? = null,
 ) {
     val hasMore: Boolean
         get() = page?.nextCursor != null

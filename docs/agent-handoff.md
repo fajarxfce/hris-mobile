@@ -1,5 +1,48 @@
 # Agent continuation — HRIS Mobile
 
+## Composer UI source accepted — 8 November 2026, 09:14 UTC
+
+Full-1/session75012 reaped PASS1529.189s:5,893 fresh cases, zero failures/errors/skips;
+4,478 application inputs and49 library inputs unchanged. Actual Chrome90 (raw16, submit12,
+recover18, progress11, cancel10, encrypted23), actual ViewModel-to-Compose focus1, root tests,
+Android compile/lint0, web and iOS source all pass. No compiler/emulator remains.
+[Exact checks including earlier failures](measurements/collaboration-composer-input-2026-11-08.json).
+
+Commit/push this actual thread/inbox adoption and docs. Source is ready to build as66;
+phone and original stopped Bima image remain accepted65. No66 APK, send or phone interaction
+has occurred. Read [the ownership and behavior](collaboration-composer-input.md).
+Private release66 scripts are prepared in `.work/release-phone-2026-11-08-build66`:
+- build-arm64.py requires this full-1 and pushed clean sources; SDK5 stays exact/unpublished.
+- verify-arm64.py checks signer, source revision, new composer classes, native ABI, endpoints,
+  Firebase and backup rules; verify-sdk.py checks actual native SDK bytes/symbols.
+- start-emulator.py uses the ORIGINAL1536MiB/two-core Bima image/serial5562, only after compiler
+  is reaped. install-owned-sample.py expects65 and preserves application identity/data.
+- probe.py is NEW and UNRUN. It sends exactly THREE NEW originals, continuing input without
+  another focus tap or waiting for acknowledgement, keeps a next draft, then verifies cold
+  offline preview/history/draft and prior65. It persists intent before each tap and refuses
+  a repeated probe. If it fails, inspect retained originals; never rerun blindly or resend.
+- record-send-timings.py now requires exactly three successful CommandQueue gestures;
+  count-matrix-http.py captures180s of bucketed emulator HTTP only. accept-release.py requires
+  actual reviewed images/video, three acknowledged sends, no403, exact unchanged inspector
+  inputs, and no crashes. Verify all actual results; prepared scripts are not acceptance.
+- gateway preflight08:53:32 UTC and confirms unchanged container/
+  image from65. Early preflight-phone.py exited at its missing-acceptance guard before ADB;
+  run it AFTER release acceptance. Install script requires notice and --install-only.
+
+Next: build/verify66, run owned emulator/counter/probe, inspect actual captures, stop/reap
+emulator and install to authorized phone after notice. No phone UI driving. Then record
+artifact/evidence/install in Git and push. Complete the generic nine-core-file Starter port:
+its `.work/command-lookup-port-2026-11-08/prepared-port.json` verifies the six old bases against
+Mobile a2e040a0 and three absent new files. No Starter source copied yet; check.py prepared.
+Port only those exact nine files after recording accepted Mobile commit, run Starter's full
+checks and Chrome command tests, document/commit/push. Starter HEAD38b76e2 is clean/pushed.
+
+All earlier sessions and doc push2815 are reaped. Latest pushed doc checkpoint wasaf953f92.
+The isolated checkout and next/*.kt remain stale; MAIN is canonical. Continue original54
+PRD groups after this fix;3 in progress/51 planned, none complete. Preserve all original
+messages/keys. Server403 fix and inspector notification are already deployed/installed.
+
+
 ## Composer UI validation running — 8 November 2026, 08:48 UTC
 
 Sole compiler: Mobile session75012, `.work/composer-input-2026-11-08/check.py full-1`.

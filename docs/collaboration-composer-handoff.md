@@ -1,3 +1,7 @@
+# Current adoption
+
+The actual thread and inbox now use this handoff. See [input ownership and validation](collaboration-composer-input.md). The implementation notes below preserve the earlier foundation milestones; their pending-adoption statements describe those historical checkpoints.
+
 # Composer handoff
 
 Build 60 still disables the input while saving, freezing a draft, queuing its message,

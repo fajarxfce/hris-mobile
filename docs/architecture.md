@@ -4,7 +4,7 @@
 use domain content/provenance policy; the route-owned timeline still updates every
 changed screen projection without treating local send status as new history.
 
-[Composer handoff storage](collaboration-composer-handoff.md) atomically retains the submitted original and next editor revision; product-flow adoption remains pending.
+[Composer input](collaboration-composer-input.md) uses the atomic encrypted handoff in the actual thread and inbox, preserving newer typing, exact progress and original-only retry/cancellation. Device acceptance is separate from source validation.
 
 [Local send timing](collaboration-send-timing.md) observes existing presentation/use-case
 boundaries through core result instrumentation; it does not own delivery or admission policy.

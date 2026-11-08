@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import dev.fajar.starter.collaboration.domain.entities.CollaborationComposerMessageProgress
 import dev.fajar.starter.collaboration.domain.entities.CollaborationInboxPreview
 import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageState
 import dev.fajar.starter.collaboration.presentation.inbox.*
@@ -135,9 +136,11 @@ fun ChatInboxPage(
             contentType = { "conversation" },
         ) { item ->
             val preview = state.previews[item.conversation.id]
+            val composer = state.composerPreviews[item.conversation.id]
             val draft = preview?.draft?.takeIf { it.text.isNotEmpty() }
             val timestamp =
                 draft?.savedAt?.toEpochMilliseconds()
+                    ?: composer?.original?.submittedAt?.toEpochMilliseconds()
                     ?: preview?.outgoing?.intent?.createdAt?.toEpochMilliseconds()
                     ?: preview?.message?.timestamp
             ChatPersonRow(
@@ -147,12 +150,18 @@ fun ChatInboxPage(
                 supporting = {
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         val count = state.unsentCounts[item.conversation.id] ?: 0
-                        if (count > 0 && preview?.outgoing == null && draft == null)
+                        if (
+                            count > 0 &&
+                                preview?.outgoing == null &&
+                                draft == null &&
+                                composer == null
+                        )
                             AppText(
                                 appString(AppString.ChatUnsentCount, count.toString()),
                                 color = AppColors.error,
                             )
-                        else preview?.let { InboxPreviewText(it) }
+                        else if (preview != null || composer != null)
+                            InboxPreviewText(preview, composer)
                     }
                 },
                 trailing = timestamp?.let { { InboxTimestamp(it, today, zone) } },
@@ -182,24 +191,34 @@ fun ChatInboxPage(
 }
 
 @Composable
-private fun InboxPreviewText(preview: CollaborationInboxPreview) {
-    val draft = preview.draft?.takeIf { it.text.isNotEmpty() }
-    val outgoing = preview.outgoing
+private fun InboxPreviewText(
+    preview: CollaborationInboxPreview?,
+    composer: CollaborationComposerMessageProgress?,
+) {
+    val draft = preview?.draft?.takeIf { it.text.isNotEmpty() }
+    val outgoing = preview?.outgoing
     val text =
         when {
             draft?.submissionId != null -> draft.text
             draft != null -> "${appString(AppString.ChatDraftLabel)}: ${draft.text}"
+            composer != null -> composer.original.original.text
             outgoing != null -> outgoing.intent.text
-            preview.message?.redacted == true -> appString(AppString.ChatDeleted)
-            else -> preview.message?.let { it.latestEdit?.edit?.text ?: it.text }
+            preview?.message?.redacted == true -> appString(AppString.ChatDeleted)
+            else -> preview?.message?.let { it.latestEdit?.edit?.text ?: it.text }
         }
     if (text != null)
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            if (draft?.submissionId != null || (draft == null && outgoing != null)) {
-                val sent = draft == null && outgoing?.state is CollaborationMessageState.Sent
+            if (
+                draft?.submissionId != null ||
+                    (draft == null && (outgoing != null || composer != null))
+            ) {
+                val sent =
+                    draft == null &&
+                        (composer?.record?.state ?: outgoing?.state) is
+                            CollaborationMessageState.Sent
                 AppIcon(
                     if (sent) Icons.Regular.Checkmark else Icons.Regular.Clock,
                     appString(if (sent) AppString.ChatSent else AppString.ChatQueued),

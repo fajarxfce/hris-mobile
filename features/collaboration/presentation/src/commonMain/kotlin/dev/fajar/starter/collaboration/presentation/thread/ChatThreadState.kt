@@ -43,6 +43,7 @@ data class ChatThreadState(
     val selectionLimitReached: Boolean = false,
     val leaving: Boolean = false,
     val submissionPending: Boolean = false,
+    val composerCanSend: Boolean = true,
     val saving: Boolean = false,
     val loading: Boolean = true,
     val hasOlder: Boolean = false,
@@ -76,7 +77,10 @@ data class ChatThreadState(
         get() = composerReady && !submissionPending && editing != null
 
     val canSend: Boolean
-        get() = composerReady && editing == null && (submissionPending || draft.isNotBlank())
+        get() =
+            composerReady &&
+                editing == null &&
+                (submissionPending || (composerCanSend && draft.isNotBlank()))
 
     override fun toString() = "ChatThreadState([redacted])"
 }

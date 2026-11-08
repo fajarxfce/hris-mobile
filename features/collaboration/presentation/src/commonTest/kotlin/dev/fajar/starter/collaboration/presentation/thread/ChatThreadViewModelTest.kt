@@ -15,6 +15,140 @@ import kotlinx.coroutines.test.*
 
 class ChatThreadViewModelTest {
     @Test
+    fun sendsAppearBeforeLocalCommitAndTypingContinuesAcrossConsecutiveGestures() = runTest {
+        withModel { f, vm, _, _ ->
+            val release = CompletableDeferred<Unit>()
+            f.beforeComposerHandoff = { release.await() }
+            vm.onEvent(ChatThreadEvent.Entered())
+            runCurrent()
+            vm.onEvent(ChatThreadEvent.DraftChanged("A"))
+            vm.onEvent(ChatThreadEvent.SendRequested)
+            runCurrent()
+            assertTrue(vm.state.value.canCompose)
+            assertFalse(vm.state.value.saving)
+            assertEquals("", vm.state.value.draft)
+            assertEquals("A", vm.state.value.rows.single().text)
+            assertTrue(f.composerWrites.isEmpty())
+            vm.onEvent(ChatThreadEvent.DraftChanged("B"))
+            vm.onEvent(ChatThreadEvent.SendRequested)
+            runCurrent()
+            vm.onEvent(ChatThreadEvent.DraftChanged("Keep C"))
+            runCurrent()
+            assertEquals(listOf("B", "A"), vm.state.value.rows.map { it.text })
+            val keys = vm.state.value.rows.map { it.key }
+            release.complete(Unit)
+            advanceUntilIdle()
+            assertNull(vm.state.value.localFailure, "Local access failure")
+            assertNull(vm.state.value.draftFailure?.code, "Composer failure")
+            assertEquals(listOf("A", "B"), f.composerWrites.map { it.original.text })
+            assertEquals("Keep C", vm.state.value.draft)
+            assertEquals("Keep C", f.draftSlot.value?.text)
+            assertEquals(keys, vm.state.value.rows.map { it.key })
+            assertEquals(0, f.deliveries)
+        }
+    }
+
+    @Test
+    fun retainedOriginalRestoresAfterViewModelReplacementAndCanBeCancelledBeforeCommandCreation() =
+        runTest {
+            withModel { f, vm, store, _ ->
+                vm.onEvent(ChatThreadEvent.Entered())
+                runCurrent()
+                vm.onEvent(ChatThreadEvent.DraftChanged("Original"))
+                vm.onEvent(ChatThreadEvent.SendRequested)
+                advanceUntilIdle()
+                val original = f.composerWrites.single()
+                store.clear()
+                runCurrent()
+                val restored = f.model()
+                store.put("restored", restored)
+                restored.onEvent(ChatThreadEvent.Entered())
+                advanceUntilIdle()
+                assertEquals(original.id, restored.state.value.rows.single().localId)
+                restored.onEvent(ChatThreadEvent.CancelRequested(original.id))
+                runCurrent()
+                restored.onEvent(ChatThreadEvent.CancellationConfirmed)
+                advanceUntilIdle()
+                assertTrue(restored.state.value.rows.isEmpty())
+                assertTrue(f.composerEntries.value.isEmpty())
+                assertEquals(CollaborationMessageState.Cancelled, f.cancelled[original.id]?.state)
+                assertEquals(1, f.composerWrites.size)
+            }
+        }
+
+    @Test
+    fun coldOutboxOriginalRemainsVisibleUntilTheOrdinaryCommandProjectionArrives() = runTest {
+        withModel { f, vm, store, _ ->
+            vm.onEvent(ChatThreadEvent.Entered())
+            runCurrent()
+            vm.onEvent(ChatThreadEvent.DraftChanged("Retained original"))
+            vm.onEvent(ChatThreadEvent.SendRequested)
+            advanceUntilIdle()
+            val original = f.composerWrites.single()
+            store.clear()
+            runCurrent()
+            val restored = f.model()
+            store.put("restored", restored)
+            restored.onEvent(ChatThreadEvent.Entered())
+            advanceUntilIdle()
+            val key = restored.state.value.rows.single().key
+            val release = CompletableDeferred<Unit>()
+            f.beforeCommandProjection = { release.await() }
+            f.publishQueuedComposer(original)
+            runCurrent()
+            assertTrue(f.composerEntries.value.isEmpty())
+            assertEquals(key, restored.state.value.rows.single().key)
+            assertEquals("Retained original", restored.state.value.rows.single().text)
+            assertEquals(
+                CollaborationMessageDelivery.PENDING,
+                restored.state.value.rows.single().delivery,
+            )
+            release.complete(Unit)
+            advanceUntilIdle()
+            assertEquals(key, restored.state.value.rows.single().key)
+            assertNull(restored.state.value.localFailure)
+        }
+    }
+
+    @Test
+    fun explicitRetryOfColdHeldOriginalCreatesOnlyItsExactCommandAndKeepsNewTyping() = runTest {
+        withModel { f, vm, store, _ ->
+            vm.onEvent(ChatThreadEvent.Entered())
+            runCurrent()
+            vm.onEvent(ChatThreadEvent.DraftChanged("Retry original"))
+            vm.onEvent(ChatThreadEvent.SendRequested)
+            advanceUntilIdle()
+            val original = f.composerWrites.single()
+            store.clear()
+            runCurrent()
+            f.composerEntries.value = listOf(CollaborationComposerOutboxEntry(original, true))
+            val restored = f.model()
+            store.put("restored", restored)
+            restored.onEvent(ChatThreadEvent.Entered())
+            advanceUntilIdle()
+            assertEquals(
+                CollaborationMessageDelivery.FAILED,
+                restored.state.value.rows.single().delivery,
+            )
+            restored.onEvent(ChatThreadEvent.DraftChanged("Keep this draft"))
+            restored.onEvent(ChatThreadEvent.MessageRetryRequested(original.id))
+            advanceUntilIdle()
+            assertEquals("Keep this draft", restored.state.value.draft)
+            assertEquals(original.id, f.insertions.single().id)
+            assertEquals(original.original.text, f.insertions.single().text)
+            assertEquals(original.submittedAt, f.insertions.single().createdAt)
+            assertEquals(
+                CollaborationMessageDelivery.PENDING,
+                restored.state.value.rows.single().delivery,
+            )
+            assertTrue(f.composerEntries.value.isEmpty())
+            restored.onEvent(ChatThreadEvent.MessageRetryRequested(original.id))
+            advanceUntilIdle()
+            assertEquals(1, f.insertions.size)
+        }
+    }
+
+    @Test
     fun navigationHintStartsGuardedHistoryBeforeWorkspaceObservationAndKeepsTheSameReader() =
         runTest {
             withModel { f, vm, _, _ ->
@@ -205,7 +339,7 @@ class ChatThreadViewModelTest {
             vm.onEvent(ChatThreadEvent.DraftChanged("  offline\nmessage  "))
             vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
-            assertEquals("  offline\nmessage  ", f.records.value.single().intent.text)
+            assertEquals("  offline\nmessage  ", f.composerWrites.single().original.text)
             assertEquals(CollaborationMessageDelivery.PENDING, vm.state.value.rows.first().delivery)
             assertEquals("", vm.state.value.draft)
             assertEquals(0, f.deliveries)
@@ -213,53 +347,53 @@ class ChatThreadViewModelTest {
     }
 
     @Test
-    fun lostLocalReplyRetainsExactIdAndBodyUntilRetryReadsTheCommit() = runTest {
-        withModel { f, vm, _, effects ->
-            f.insertResult = AppResult.Failed(f.base.network)
+    fun lostLocalReplyKeepsTheCapturedOriginalAndAllowsNewerTypingDuringExactRetry() = runTest {
+        withModel { f, vm, _, _ ->
+            f.composerFailure = f.base.network
             vm.onEvent(ChatThreadEvent.Entered())
-            vm.onEvent(ChatThreadEvent.DraftChanged("exact original"))
             runCurrent()
-            // Entry is asynchronous; edit after the owned context is ready.
             vm.onEvent(ChatThreadEvent.DraftChanged("exact original"))
             vm.onEvent(ChatThreadEvent.SendRequested)
-            vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
-            val saved = f.records.value.single()
-            assertTrue(vm.state.value.submissionPending)
+            val saved = f.composerWrites.single()
+            assertFalse(vm.state.value.submissionPending)
+            assertTrue(vm.state.value.canCompose)
             vm.onEvent(ChatThreadEvent.DraftChanged("replacement"))
             runCurrent()
-            assertEquals("exact original", vm.state.value.draft)
-            vm.onEvent(ChatThreadEvent.SendRequested)
-            runCurrent()
-            assertEquals(listOf(saved.intent), f.insertions)
-            assertFalse(vm.state.value.submissionPending)
-            assertEquals("", vm.state.value.draft)
-            assertEquals(listOf<ChatThreadEffect>(ChatThreadEffect.ScrollToNewest), effects)
+            assertEquals("replacement", vm.state.value.draft)
+            f.composerFailure = null
+            vm.onEvent(ChatThreadEvent.DraftRetryRequested)
+            advanceUntilIdle()
+            assertEquals(listOf(saved), f.composerWrites)
+            assertEquals("replacement", f.draftSlot.value?.text)
+            assertTrue(f.insertions.isEmpty())
         }
     }
 
     @Test
-    fun stoppedUncooperativeCommitNeverPublishesSuccessAndRetryReusesIt() = runTest {
+    fun aLocalCommitContinuesWhenTheRoomHidesWithoutAnotherGestureOrNavigationEffect() = runTest {
         withModel { f, vm, _, effects ->
             val release = CompletableDeferred<Unit>()
-            f.afterInsert = { withContext(NonCancellable) { release.await() } }
+            f.afterComposerHandoff = { withContext(NonCancellable) { release.await() } }
             vm.onEvent(ChatThreadEvent.Entered())
             runCurrent()
-            vm.onEvent(ChatThreadEvent.DraftChanged("saved before cancellation"))
+            vm.onEvent(ChatThreadEvent.DraftChanged("saved before closing"))
             vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
-            assertEquals(1, f.records.value.size)
+            assertEquals(1, f.composerWrites.size)
+            vm.onEvent(ChatThreadEvent.DraftChanged("Keep newer text"))
+            runCurrent()
             vm.onEvent(ChatThreadEvent.Stopped)
             runCurrent()
+            val before = effects.toList()
             release.complete(Unit)
-            runCurrent()
-            assertTrue(vm.state.value.submissionPending)
-            assertTrue(effects.isEmpty())
+            advanceUntilIdle()
+            assertEquals(before, effects)
+            assertEquals("Keep newer text", f.draftSlot.value?.text)
             vm.onEvent(ChatThreadEvent.Entered())
-            vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
             assertFalse(vm.state.value.submissionPending)
-            assertEquals(1, f.insertions.size)
+            assertEquals(1, f.composerWrites.size)
         }
     }
 
@@ -340,6 +474,10 @@ class ChatThreadViewModelTest {
             vm.onEvent(ChatThreadEvent.DraftChanged("one send"))
             vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
+            assertEquals(1, f.composerWrites.size)
+            assertTrue(f.insertions.isEmpty())
+            f.publishQueuedComposer()
+            runCurrent()
             assertEquals(1, f.insertions.size)
             assertEquals(0, f.deliveries)
             assertEquals(CollaborationMessageState.Queued, f.records.value.single().state)
@@ -385,6 +523,10 @@ class ChatThreadViewModelTest {
             vm.onEvent(ChatThreadEvent.DraftChanged("first"))
             vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
+            assertEquals(1, f.composerWrites.size)
+            assertTrue(f.insertions.isEmpty())
+            f.publishQueuedComposer()
+            runCurrent()
             assertTrue(f.scheduledKeys.isNotEmpty())
             assertTrue(f.controls.retained.isEmpty())
             assertTrue(f.roomRequests.isEmpty())
@@ -417,6 +559,10 @@ class ChatThreadViewModelTest {
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("retry after review"))
             vm.onEvent(ChatThreadEvent.SendRequested)
+            runCurrent()
+            assertEquals(1, f.composerWrites.size)
+            assertTrue(f.insertions.isEmpty())
+            f.publishQueuedComposer()
             runCurrent()
             assertTrue(f.controls.retained.isEmpty())
             assertTrue(f.roomRequests.isEmpty())
@@ -463,7 +609,7 @@ class ChatThreadViewModelTest {
             vm.onEvent(ChatThreadEvent.DraftChanged("corrected"))
             vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
-            assertEquals("corrected", f.records.value.single().intent.text)
+            assertEquals("corrected", f.composerWrites.single().original.text)
         }
     }
 
@@ -490,6 +636,10 @@ class ChatThreadViewModelTest {
             runCurrent()
             vm.onEvent(ChatThreadEvent.DraftChanged("continue after closing"))
             vm.onEvent(ChatThreadEvent.SendRequested)
+            runCurrent()
+            assertEquals(1, f.composerWrites.size)
+            assertTrue(f.insertions.isEmpty())
+            f.publishQueuedComposer()
             runCurrent()
             val stored = f.records.value.single()
             val keys = f.scheduledKeys.toList()
@@ -925,7 +1075,8 @@ class ChatThreadViewModelTest {
             vm.onEvent(ChatThreadEvent.SendRequested)
             advanceUntilIdle()
             assertEquals(entryReads, f.historyReads, "Local enqueue already wakes delivery")
-            val original = f.records.value.single()
+            val original = f.publishQueuedComposer()
+            runCurrent()
             val reads = f.historyReads
             f.scheduledKeys.clear()
             for (status in

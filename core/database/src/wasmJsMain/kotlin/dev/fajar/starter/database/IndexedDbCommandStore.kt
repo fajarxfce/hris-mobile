@@ -62,6 +62,19 @@ internal class IndexedDbCommandStore(
             }
             .distinctUntilChanged()
 
+    override fun observeRecord(scope: CommandScope, partition: String, id: String) =
+        changes
+            .map {
+                validateCommandScope(scope, partition)
+                validateCommandIdentifier(id)
+                Json.decodeFromString<CommandLookup>(
+                    commandLookup(database(), scope.sessionId, scope.accountKey, partition, id)
+                        .await<JsString>()
+                        .toString()
+                )
+            }
+            .distinctUntilChanged()
+
     override suspend fun get(scope: CommandScope, partition: String, id: String): CommandRecord? {
         validateCommandScope(scope, partition)
         validateCommandIdentifier(id)
@@ -494,3 +507,27 @@ private external fun archiveCommand(
     json: String,
     evidence: String,
 ): Promise<JsBoolean>
+
+@JsFun(
+    """(db, session, account, partition, id) => new Promise((resolve, reject) => {
+    const tx = db.transaction(['account_scope', 'durable_commands', 'command_archives'], 'readonly');
+    const scopes = tx.objectStore('account_scope'), owner = scopes.get('current'), principal = scopes.get('command-account');
+    const value = {active: null, archived: null};
+    principal.onsuccess = () => {
+        if (owner.result !== session || principal.result !== account) return;
+        const active = tx.objectStore('durable_commands').get([account, partition, id]);
+        const archived = tx.objectStore('command_archives').get([account, partition, id]);
+        active.onsuccess = () => { if (active.result) { const {accountKey, ...entry} = active.result; value.active = entry; } };
+        archived.onsuccess = () => { if (archived.result) { const {accountKey, evidence, ...entry} = archived.result; value.archived = {record: entry, evidence}; } };
+    };
+    tx.oncomplete = () => resolve(JSON.stringify(value));
+    tx.onabort = () => reject(tx.error || new Error('Command lookup failed.'));
+})"""
+)
+private external fun commandLookup(
+    db: JsAny,
+    session: String,
+    account: String,
+    partition: String,
+    id: String,
+): Promise<JsString>

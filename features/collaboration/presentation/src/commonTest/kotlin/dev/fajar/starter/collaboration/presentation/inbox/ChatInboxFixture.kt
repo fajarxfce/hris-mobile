@@ -258,6 +258,70 @@ internal class ChatInboxFixture {
             ): AppResult<CollaborationSetupReceipt> = error("No room provisioning")
         }
 
+    val composerEntries = MutableStateFlow(emptyList<CollaborationComposerOutboxEntry>())
+    val composerArchives = MutableStateFlow(emptyMap<String, CollaborationMessageRecord>())
+    var composerObservers = 0
+    var composerRecordObservers = 0
+    val composerOutbox =
+        object : CollaborationComposerOutboxRepository {
+            override fun observe(
+                access: CollaborationLocalAccess
+            ): Flow<AppResult<List<CollaborationComposerOutboxEntry>>> = flow {
+                composerObservers++
+                try {
+                    emitAll(composerEntries.map { AppResult.Success(it) })
+                } finally {
+                    composerObservers--
+                }
+            }
+
+            override suspend fun get(
+                access: CollaborationLocalAccess,
+                id: String,
+            ): AppResult<CollaborationComposerSubmission?> = error("Observation only")
+
+            override suspend fun handoff(
+                access: CollaborationLocalAccess,
+                submission: CollaborationComposerSubmission,
+                expected: CollaborationDraft?,
+            ): AppResult<CollaborationComposerHandoffResult> = error("Observation only")
+
+            override suspend fun remove(
+                access: CollaborationLocalAccess,
+                expected: CollaborationComposerSubmission,
+            ): AppResult<Boolean> = error("Observation only")
+
+            override suspend fun hold(
+                access: CollaborationLocalAccess,
+                expected: CollaborationComposerSubmission,
+            ): AppResult<Boolean> = error("Observation only")
+
+            override suspend fun pending(
+                access: CollaborationLocalAccess,
+                after: String?,
+                limit: Int,
+            ): AppResult<CollaborationComposerSubmissionPage> = error("Observation only")
+        }
+    val composerRecords =
+        object : CollaborationMessageProgressRepository {
+            override fun observeRecord(
+                access: CollaborationLocalAccess,
+                id: String,
+            ): Flow<AppResult<CollaborationMessageRecord?>> = flow {
+                composerRecordObservers++
+                try {
+                    emitAll(
+                        combine(content.commands, composerArchives) { commands, archives ->
+                            AppResult.Success(
+                                commands.firstOrNull { it.intent.id == id } ?: archives[id]
+                            )
+                        }
+                    )
+                } finally {
+                    composerRecordObservers--
+                }
+            }
+        }
     val sync = ChatInboxSyncFixture(this)
 
     fun model() =
@@ -285,6 +349,16 @@ internal class ChatInboxFixture {
                 clock,
             ),
             replies.observer(this),
+            ObserveCollaborationComposerProgress(
+                composerRecords,
+                composerOutbox,
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+            ),
         )
 }
 

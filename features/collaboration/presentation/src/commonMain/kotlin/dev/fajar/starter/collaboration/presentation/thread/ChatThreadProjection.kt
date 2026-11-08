@@ -17,20 +17,19 @@ internal fun chatThreadRows(
     includeUnmatched: Boolean = true,
     editOutcomes: List<CollaborationEditOutcome> = emptyList(),
     historyRoomId: String? = null,
+    composer: List<CollaborationComposerMessageProgress> = emptyList(),
+    provisional: List<ChatComposerPendingSubmission> = emptyList(),
 ): AppResult<List<ChatMessageRow>> {
-    if (history.size > 500 || pending.size > 128 || timeline.size > 128)
-        return invalidThreadProjection()
-    if (pending.map { it.intent.id }.distinct().size != pending.size)
-        return invalidThreadProjection()
-    if (pending.any { it.intent.owner != owner || it.intent.conversationId != conversationId })
-        return invalidThreadProjection()
-    if (pending.any { it.state == CollaborationMessageState.Cancelled })
-        return invalidThreadProjection()
+    if (history.size > 500 || timeline.size > 128) return invalidThreadProjection()
     if (timeline.isNotEmpty() && timelineDevice == null) return invalidThreadProjection()
+    val composing = projectChatComposer(owner, conversationId, pending, composer, provisional)
+    if (composing is AppResult.Failed) return composing
+    val composerRows = (composing as AppResult.Success).value
+    val records = composerRows.records
     val rows = mutableListOf<ChatMessageRow>()
     val consumed = mutableSetOf<String>()
     val events = mutableSetOf<String>()
-    val edits = pending.filter { it.intent.editTarget != null }
+    val edits = records.filter { it.intent.editTarget != null }
     if (
         edits.any { !validCollaborationEditRecord(it) } ||
             editOutcomes.size > 128 ||
@@ -38,7 +37,7 @@ internal fun chatThreadRows(
             editOutcomes.any { outcome -> edits.none { it.intent.id == outcome.operationId } }
     )
         return invalidThreadProjection()
-    val pendingById = pending.filter { it.intent.editTarget == null }.associateBy { it.intent.id }
+    val pendingById = records.filter { it.intent.editTarget == null }.associateBy { it.intent.id }
     for (edit in edits) {
         if (
             edit.intent.editTarget?.roomId != historyRoomId &&
@@ -87,7 +86,7 @@ internal fun chatThreadRows(
                 timeline,
             )
     }
-    for (record in pending) {
+    for (record in records) {
         if (!includeUnmatched || record.intent.editTarget != null || record.intent.id in consumed)
             continue
         val native = timeline.firstOrNull { matchesOwnedEcho(record, timelineDevice, it) }
@@ -106,6 +105,10 @@ internal fun chatThreadRows(
         if (!includeUnmatched || eventId in events || item.edited) continue
         rows += nativeRow(eventId, item, self)
         events += eventId
+    }
+    if (includeUnmatched) {
+        val represented = rows.map { it.key }.toSet()
+        rows += composerRows.pendingRows.filterNot { it.key in represented }
     }
     if (rows.map { it.key }.distinct().size != rows.size) return invalidThreadProjection()
     return AppResult.Success(
@@ -165,7 +168,7 @@ private fun storedMessageRow(
     )
 }
 
-private fun invalidThreadProjection() =
+internal fun invalidThreadProjection() =
     AppResult.Failed(
         Failure(
             FailureKind.Unavailable,
@@ -257,3 +260,25 @@ private fun pendingRow(
                 else null
             } else null,
     )
+
+/** Releases only provisional presentation state after the ordinary screen projection owns it. */
+internal fun List<CollaborationComposerMessageProgress>.visibleComposerOriginals(
+    commands: List<CollaborationMessageRecord>,
+    history: List<CollaborationHistoryMessage>,
+    roomId: String?,
+): Set<CollaborationComposerSubmission> =
+    mapNotNull { item ->
+            val record = item.record ?: return@mapNotNull null
+            val visible =
+                when (val state = record.state) {
+                    CollaborationMessageState.Cancelled ->
+                        commands.none { it.intent.id == record.intent.id }
+                    is CollaborationMessageState.Sent ->
+                        commands.any { it.intent == record.intent } ||
+                            (state.device.roomId == roomId &&
+                                history.any { state.eventId in it.eventIds })
+                    else -> commands.any { it.intent == record.intent }
+                }
+            item.original.takeIf { visible }
+        }
+        .toSet()

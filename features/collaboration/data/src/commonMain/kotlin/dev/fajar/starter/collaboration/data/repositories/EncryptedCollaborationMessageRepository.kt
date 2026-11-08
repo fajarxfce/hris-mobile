@@ -22,6 +22,7 @@ class EncryptedCollaborationMessageRepository(
     @Named("command-content-key") private val credentials: AtomicCredentialStore,
 ) :
     CollaborationMessageRepository,
+    CollaborationMessageProgressRepository,
     CollaborationMessageBatchRepository,
     CollaborationMessageCompletionRepository,
     CollaborationMessageCancellationRepository,
@@ -95,6 +96,27 @@ class EncryptedCollaborationMessageRepository(
                                         it.intent.conversationId == conversationId
                                 }
                         }
+                },
+            )
+            .flowOn(Dispatchers.Default)
+
+    override fun observeRecord(
+        access: CollaborationLocalAccess,
+        id: String,
+    ): Flow<AppResult<CollaborationMessageRecord?>> =
+        safeStorageFlow(
+                flow {
+                    require(validCollaborationMessageId(id))
+                    emitAll(
+                        commands.observeRecord(messageScope(access), messagePartition(access), id)
+                    )
+                },
+                mapValue = { raw ->
+                    require(raw.active == null || raw.archived == null)
+                    require(raw.active?.let { it.id == id } != false)
+                    require(raw.archived?.let { it.record.id == id } != false)
+                    if (raw.active == null && raw.archived == null) null
+                    else withKey(access) { decode(it, raw.active, raw.archived) }
                 },
             )
             .flowOn(Dispatchers.Default)

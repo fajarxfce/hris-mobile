@@ -33,7 +33,6 @@ class ChatThreadViewModel(
     private val observeAccess: ObserveCollaborationAccess,
     private val readContext: ReadCollaborationThreadContext,
     private val observeThread: ObserveCollaborationThread,
-    private val queue: QueueCollaborationText,
     private val requestDelivery: RequestCollaborationDelivery,
     private val loadSetup: LoadCollaborationSetup,
     private val ensureRuntime: EnsureCollaborationRuntime,
@@ -48,8 +47,10 @@ class ChatThreadViewModel(
     reconcileHistoryReferences: ReconcileCollaborationHistoryReferences,
     private val observeDraft: ObserveCollaborationDraft,
     private val editDraft: EditCollaborationDraft,
-    private val prepareDraftSend: PrepareCollaborationDraftSend,
-    private val confirmDraftSend: ConfirmCollaborationDraftSend,
+    private val submitComposer: SubmitCollaborationComposer,
+    private val observeComposerProgress: ObserveCollaborationComposerProgress,
+    private val cancelComposer: CancelCollaborationComposer,
+    private val recoverComposer: RecoverCollaborationComposer,
     private val cancelText: CancelCollaborationText,
     readState: ReadCollaborationReadState,
     markRead: MarkCollaborationMessagesRead,
@@ -137,10 +138,37 @@ class ChatThreadViewModel(
 
     private var historyLoading = true
     private var scrollToLatest = false
-    private var localDraft: CollaborationDraft? = null
-    private var preparingDraft: CollaborationDraft? = null
-    private var draftWrite: ChatDraftWrite? = null
     private var localSave: Job? = null
+    private val composerOriginals = MutableStateFlow(emptyList<CollaborationComposerSubmission>())
+    private var composerProgress = emptyList<CollaborationComposerMessageProgress>()
+    private var watchedComposerOriginals = emptyList<CollaborationComposerSubmission>()
+    private var composerRetry: Job? = null
+    private var composerProgressReady = false
+    private val composer =
+        ChatComposerEditingSession(
+            viewModelScope,
+            conversationId,
+            save = { write ->
+                editDraft(
+                    workspaceId,
+                    conversationId,
+                    write.expected,
+                    write.revision,
+                    write.text,
+                    write.access,
+                    write.replyToEventId,
+                )
+            },
+            submit = { write ->
+                withContext(OperationTrace.create()) {
+                    measureAppResult(PerformanceOperation.CommandQueue) {
+                        submitComposer(workspaceId, write.expected, write.original, write.access)
+                    }
+                }
+            },
+            onSubmitted = { if (visible && pulse == null) connect() },
+            onState = ::onComposerStateChanged,
+        )
     private var departure: Job? = null
     private var departureEffect: ChatThreadEffect? = null
     private var pulse: Channel<Unit>? = null
@@ -198,6 +226,7 @@ class ChatThreadViewModel(
         on<ChatThreadEvent.DraftChanged>(::onDraftChanged)
         on<ChatThreadEvent.SendRequested>(::onSendRequested)
         on<ChatThreadEvent.DraftRetryRequested>(::onDraftRetryRequested)
+        on<ChatThreadEvent.MessageRetryRequested>(::onMessageRetryRequested)
         on<ChatThreadEvent.DraftDialogDismissed>(::onDraftDialogDismissed)
         on<ChatThreadEvent.DraftDialogConfirmed>(::onDraftDialogConfirmed)
         on<ChatThreadEvent.CancelRequested>(::onCancelRequested)
@@ -385,14 +414,29 @@ class ChatThreadViewModel(
                 if (historyRoomId != page.roomId) readTracker.clear()
                 historyRoomId = page.roomId
                 history = page.messages
+                val newlyQueued =
+                    commands.any { command -> pending.none { it.intent.id == command.intent.id } }
                 pending = commands
+                val represented =
+                    composerProgress.visibleComposerOriginals(commands, page.messages, page.roomId)
+                watchedComposerOriginals = watchedComposerOriginals.filterNot { it in represented }
+                composer.visible(represented)
+                onComposerStateChanged(composer.state)
                 next = page.next
                 previous = page.previous
                 displayedWindow = selected
                 historyLoading = false
                 project()
                 firstPage.complete(Unit)
-                if (visible && connection == null && reconnection?.isActive != true) connect()
+                if (
+                    visible &&
+                        reconnection?.isActive != true &&
+                        (connection == null ||
+                            (newlyQueued &&
+                                state.value.connection == ChatThreadConnection.WAITING &&
+                                connection?.isActive != true))
+                )
+                    connect()
                 if (scrollToLatest && selected.latest) {
                     scrollToLatest = false
                     emitEffect(ChatThreadEffect.ScrollToNewest)
@@ -445,9 +489,12 @@ class ChatThreadViewModel(
         departure?.cancel()
         departure = null
         departureEffect = null
-        localDraft = null
-        preparingDraft = null
-        draftWrite = null
+        composerProgress = emptyList()
+        watchedComposerOriginals = emptyList()
+        composerProgressReady = false
+        composerRetry?.cancel()
+        composerRetry = null
+        composer.clear()
         updateState { ChatThreadState() }
     }
 
@@ -465,7 +512,16 @@ class ChatThreadViewModel(
                 dialog != null &&
                 !dialog.busy &&
                 dialog.failure == null &&
-                selectedCancellation.record !in pending
+                (if (selectedCancellation.original != null) {
+                    val record =
+                        composerProgress
+                            .firstOrNull { it.original == selectedCancellation.original }
+                            ?.record
+                            ?: pending.firstOrNull {
+                                it.intent.id == selectedCancellation.original.id
+                            }
+                    record != null && !validCollaborationCancellation(record)
+                } else selectedCancellation.record !in pending)
         ) {
             updateState { it.copy(cancellationDialog = dialog.copy(unavailable = true)) }
         }
@@ -482,6 +538,8 @@ class ChatThreadViewModel(
                     includeUnmatched = displayedWindow.latest,
                     editOutcomes = editOutcomes,
                     historyRoomId = historyRoomId,
+                    composer = composerProgress,
+                    provisional = composer.state.submissions,
                 )
         ) {
             is AppResult.Failed -> {
@@ -651,15 +709,14 @@ class ChatThreadViewModel(
             )
         }
         requestQuotePreviews()
-        persistDraft(immediate = true)
+        composer.change(replyToEventId = target, immediate = true)
         viewModelScope.launch { emitEffect(ChatThreadEffect.FocusComposer) }
     }
 
     private fun onReplyCleared(event: ChatThreadEvent.ReplyCleared) {
         if (!visible || !state.value.canCompose) return
-        updateState { it.copy(draftReplyToEventId = null) }
+        composer.change(replyToEventId = null, immediate = true)
         requestQuotePreviews()
-        persistDraft(immediate = true)
     }
 
     private fun requestQuotePreviews() {
@@ -1020,12 +1077,25 @@ class ChatThreadViewModel(
                 current.cancellationDialog != null
         )
             return
-        if (current.rows.none { it.localId == event.id && it.canCancel }) return
-        val record = pending.singleOrNull { it.intent.id == event.id } ?: return
-        if (record.intent.owner != owned.messageOwner() || !validCollaborationCancellation(record))
-            return
-        cancellationSelection = ChatCancellationSelection(owned, record)
-        updateState { it.copy(cancellationDialog = ChatCancellationDialog(record.intent.text)) }
+        val row = current.rows.singleOrNull { it.localId == event.id && it.canCancel } ?: return
+        val original =
+            row.composerSubmission
+                ?: composerProgress.firstOrNull { it.original.id == event.id }?.original
+        if (original != null) {
+            cancellationSelection = ChatCancellationSelection(owned, original = original)
+            updateState {
+                it.copy(cancellationDialog = ChatCancellationDialog(original.original.text))
+            }
+        } else {
+            val record = pending.singleOrNull { it.intent.id == event.id } ?: return
+            if (
+                record.intent.owner != owned.messageOwner() ||
+                    !validCollaborationCancellation(record)
+            )
+                return
+            cancellationSelection = ChatCancellationSelection(owned, record)
+            updateState { it.copy(cancellationDialog = ChatCancellationDialog(record.intent.text)) }
+        }
     }
 
     private fun onCancellationConfirmed(event: ChatThreadEvent.CancellationConfirmed) {
@@ -1044,7 +1114,16 @@ class ChatThreadViewModel(
             viewModelScope.launch {
                 val result =
                     withTimeoutOrNull(5_000) {
-                        cancelText(workspaceId, selected.access, selected.record)
+                        val original = selected.original
+                        if (original == null)
+                            cancelText(
+                                workspaceId,
+                                selected.access,
+                                requireNotNull(selected.record),
+                            )
+                        else if (composer.discardUnsubmitted(original)) AppResult.Success(Unit)
+                        else if (!composer.settled(original)) AppResult.Failed(changedThread())
+                        else cancelComposer(workspaceId, selected.access, original)
                     }
                         ?: AppResult.Failed(
                             Failure(
@@ -1058,6 +1137,7 @@ class ChatThreadViewModel(
                 cancellationJob = null
                 when (result) {
                     is AppResult.Success -> {
+                        if (selected.original != null) composer.retry()
                         cancellationSelection = null
                         clearSelection()
                         updateState { it.copy(cancellationDialog = null) }
@@ -1192,112 +1272,78 @@ class ChatThreadViewModel(
         window.value = selected
     }
 
-    private suspend fun observeComposer(owned: CollaborationLocalAccess) {
+    private fun onComposerStateChanged(value: ChatComposerEditingState) {
+        val represented = composerProgress.visibleComposerOriginals(pending, history, historyRoomId)
+        if (value.submissions.any { it.durable && it.original in represented }) {
+            composer.visible(represented)
+            return
+        }
+
+        // Route-owned continuity across independently emitted outbox/command snapshots.
+        // Keep the current gestures and the newest bounded local window under observation.
+        val captured = value.submissions.map { it.original }
+        watchedComposerOriginals =
+            watchedComposerOriginals
+                .filterNot { it in represented || it in captured }
+                .sortedByDescending { it.submittedAt }
+                .take(128 - captured.size)
+        composerOriginals.value = (captured + watchedComposerOriginals).sortedBy { it.id }
+        updateState {
+            it.copy(
+                draftReady = value.ready,
+                draft = value.text,
+                draftReplyToEventId = value.replyToEventId,
+                submissionPending = value.legacyPending,
+                draftSaving = value.saving,
+                draftFailure = value.failure,
+                composerCanSend =
+                    composerProgressReady &&
+                        value.submissions.count { pending -> !pending.durable } < 16 &&
+                        composerOriginals.value.size < 128,
+            )
+        }
+        if (value.failure?.let(::collaborationContentResponseClosesRead) == true)
+            restrict(requireNotNull(value.failure))
+        else {
+            project()
+            requestQuotePreviews()
+        }
+    }
+
+    private suspend fun observeComposer(owned: CollaborationLocalAccess) = coroutineScope {
+        launch {
+            observeComposerProgress(workspaceId, owned, composerOriginals).collect { result ->
+                ensureActive()
+                if (access != owned) return@collect
+                when (result) {
+                    is AppResult.Failed -> reportDraftFailure(result.failure)
+                    is AppResult.Success -> {
+                        composerProgress =
+                            result.value.filter {
+                                it.original.original.conversationId == conversationId
+                            }
+                        composerProgressReady = true
+                        watchedComposerOriginals =
+                            (watchedComposerOriginals + composerProgress.map { it.original })
+                                .distinct()
+                        onComposerStateChanged(composer.state)
+                    }
+                }
+            }
+        }
         observeDraft(workspaceId, conversationId, owned).collect { result ->
-            currentCoroutineContext().ensureActive()
+            ensureActive()
             if (access != owned) return@collect
             when (result) {
                 is AppResult.Failed -> reportDraftFailure(result.failure)
-                is AppResult.Success ->
-                    if (!state.value.draftReady) {
-                        localDraft = result.value
-                        updateState {
-                            it.copy(
-                                draftReady = true,
-                                draft = result.value?.text.orEmpty(),
-                                draftReplyToEventId = result.value?.replyToEventId,
-                                submissionPending = result.value?.submissionId != null,
-                                draftFailure = null,
-                            )
-                        }
-                    }
+                is AppResult.Success -> composer.bind(owned, result.value)
             }
             requestQuotePreviews()
-            // Subsequent values are invalidations, not editor replacements. Only acknowledged
-            // CAS results or an explicit reload replace text; delayed emissions cannot undo input.
         }
     }
 
     private fun onDraftChanged(event: ChatThreadEvent.DraftChanged) {
-        if (!visible || !state.value.canCompose) return
-        val bounded =
-            event.text.take(16_384).let {
-                if (it.lastOrNull()?.isHighSurrogate() == true) it.dropLast(1) else it
-            }
-        updateState {
-            it.copy(
-                draft = bounded,
-                draftFailure =
-                    it.draftFailure?.takeIf { failure ->
-                        failure.code == "client.collaboration_draft_changed"
-                    },
-            )
-        }
-        persistDraft()
-    }
-
-    /** One writer, one immutable uncertain mutation, and the most recent waiting text. */
-    private fun persistDraft(immediate: Boolean = false) {
-        if (
-            !state.value.draftReady ||
-                state.value.localFailure != null ||
-                state.value.draftFailure != null ||
-                localDraft?.submissionId != null ||
-                preparingDraft != null
-        )
-            return
-        if (localSave?.isActive == true) {
-            if (!immediate || state.value.draftSaving) return
-            localSave?.cancel() // Only the debounce; never cancel an admitted write to replace it.
-        }
-        val owned = access ?: return
-        localSave =
-            viewModelScope.launch {
-                if (!immediate) delay(250)
-                while (isActive && access == owned) {
-                    if (state.value.localFailure != null || state.value.draftFailure != null)
-                        return@launch
-                    if (
-                        draftWrite == null &&
-                            (state.value.draft == localDraft?.text.orEmpty() &&
-                                state.value.draftReplyToEventId == localDraft?.replyToEventId)
-                    )
-                        return@launch
-                    val mutation =
-                        draftWrite
-                            ?: ChatDraftWrite(
-                                localDraft,
-                                Uuid.random().toString(),
-                                state.value.draft,
-                                state.value.draftReplyToEventId,
-                            )
-                    draftWrite = mutation
-                    updateState { it.copy(draftSaving = true) }
-                    val result =
-                        editDraft(
-                            workspaceId,
-                            conversationId,
-                            mutation.expected,
-                            mutation.revision,
-                            mutation.text,
-                            owned,
-                            mutation.replyToEventId,
-                        )
-                    ensureActive()
-                    if (access != owned) return@launch
-                    when (result) {
-                        is AppResult.Failed -> {
-                            reportDraftFailure(result.failure)
-                            return@launch
-                        }
-                        is AppResult.Success -> {
-                            localDraft = result.value
-                            draftWrite = null
-                            updateState { it.copy(draftSaving = false, draftFailure = null) }
-                        }
-                    }
-                }
-            }
+        if (visible && state.value.canCompose) composer.change(event.text)
     }
 
     private suspend fun flushDraft(): Boolean =
@@ -1305,24 +1351,10 @@ class ChatThreadViewModel(
             PerformanceOperation.DraftPersistence,
             classify = { if (it) PerformanceOutcome.Succeeded else PerformanceOutcome.Failed },
         ) {
-            persistDraft(immediate = true)
-            localSave?.join()
-            currentCoroutineContext().ensureActive()
-            state.value.draftReady &&
-                state.value.localFailure == null &&
-                state.value.draftFailure == null &&
-                draftWrite == null &&
-                (state.value.draft == localDraft?.text.orEmpty() &&
-                    state.value.draftReplyToEventId == localDraft?.replyToEventId)
+            state.value.localFailure == null && composer.flush()
         }
 
     private fun reportDraftFailure(failure: Failure) {
-        // Input validation runs before I/O; this rejected body can safely be corrected.
-        if (
-            failure.kind == FailureKind.Validation &&
-                failure.code == "client.collaboration_invalid_message"
-        )
-            draftWrite = null
         if (collaborationContentResponseClosesRead(failure)) {
             restrict(failure)
         } else updateState { it.copy(draftSaving = false, saving = false, draftFailure = failure) }
@@ -1336,7 +1368,35 @@ class ChatThreadViewModel(
             return
         }
         updateState { it.copy(draftFailure = null) }
-        if (!state.value.draftReady) observeLocal() else persistDraft(immediate = true)
+        if (!state.value.draftReady) observeLocal() else composer.retry()
+    }
+
+    private fun onMessageRetryRequested(event: ChatThreadEvent.MessageRetryRequested) {
+        val owned = access ?: return
+        if (!visible || state.value.localFailure != null || composerRetry?.isActive == true) return
+        val original =
+            state.value.rows
+                .singleOrNull {
+                    it.localId == event.id && it.delivery == CollaborationMessageDelivery.FAILED
+                }
+                ?.composerSubmission ?: return
+        clearSelection()
+        if (composer.state.submissions.any { it.original == original && !it.durable }) {
+            composer.retry()
+            return
+        }
+        composerRetry =
+            viewModelScope.launch {
+                val result = recoverComposer.retry(workspaceId, owned, original)
+                ensureActive()
+                if (access != owned) return@launch
+                if (
+                    result is AppResult.Failed &&
+                        collaborationContentResponseClosesRead(result.failure)
+                ) {
+                    restrict(result.failure)
+                } else if (result is AppResult.Success && visible && pulse == null) connect()
+            }
     }
 
     private fun onDraftDialogDismissed(event: ChatThreadEvent.DraftDialogDismissed) {
@@ -1372,20 +1432,8 @@ class ChatThreadViewModel(
                         when (read) {
                             is AppResult.Failed -> reportDraftFailure(read.failure)
                             is AppResult.Success -> {
-                                localDraft = read.value
-                                preparingDraft = null
-                                draftWrite = null
-                                updateState {
-                                    it.copy(
-                                        draft = read.value?.text.orEmpty(),
-                                        draftReplyToEventId = read.value?.replyToEventId,
-                                        draftReady = true,
-                                        submissionPending = read.value?.submissionId != null,
-                                        saving = false,
-                                        draftSaving = false,
-                                        draftFailure = null,
-                                    )
-                                }
+                                composer.reset(owned, read.value)
+                                updateState { it.copy(saving = false) }
                                 requestQuotePreviews()
                             }
                         }
@@ -1419,8 +1467,12 @@ class ChatThreadViewModel(
     }
 
     private fun onSendRequested(event: ChatThreadEvent.SendRequested) {
-        if (!visible || !state.value.canSend || submission?.isActive == true) return
-        val owned = access ?: return
+        if (!visible || !state.value.canSend) return
+        if (state.value.submissionPending) {
+            if (submission?.isActive == true) return
+            submission = viewModelScope.launch { requestDelivery(workspaceId) }
+            return
+        }
         if (!validCollaborationText(state.value.draft)) {
             reportDraftFailure(
                 Failure(
@@ -1431,91 +1483,8 @@ class ChatThreadViewModel(
             )
             return
         }
-        if (
-            !state.value.submissionPending &&
-                state.value.draftFailure?.code == "client.collaboration_draft_changed"
-        )
-            return
-        updateState { it.copy(saving = true, draftFailure = null, failure = null) }
-        submission =
-            viewModelScope.launch(OperationTrace.create()) {
-                if (!state.value.submissionPending && !flushDraft()) {
-                    updateState { it.copy(saving = false) }
-                    return@launch
-                }
-                ensureActive()
-                if (access != owned) return@launch
-                val expected =
-                    preparingDraft
-                        ?: localDraft
-                        ?: run {
-                            updateState { it.copy(saving = false) }
-                            return@launch
-                        }
-                preparingDraft = expected
-                updateState { it.copy(submissionPending = true) }
-                val frozen =
-                    if (expected.submissionId != null) AppResult.Success(expected)
-                    else
-                        measureAppResult(PerformanceOperation.CommandPreparation) {
-                            prepareDraftSend(workspaceId, expected, owned)
-                        }
-                ensureActive()
-                if (access != owned) return@launch
-                if (frozen is AppResult.Failed) {
-                    reportDraftFailure(frozen.failure)
-                    return@launch
-                }
-                localDraft = (frozen as AppResult.Success).value
-                preparingDraft = null
-                val draft = frozen.value
-                val result =
-                    measureAppResult(PerformanceOperation.CommandQueue) {
-                        queue(
-                            workspaceId,
-                            conversationId,
-                            requireNotNull(draft.submissionId),
-                            draft.text,
-                            owned,
-                            draft.replyToEventId,
-                        )
-                    }
-                ensureActive()
-                if (access != owned) return@launch
-                if (result is AppResult.Failed) {
-                    if (collaborationContentResponseClosesRead(result.failure))
-                        restrict(result.failure)
-                    else updateState { it.copy(saving = false, failure = result.failure) }
-                    return@launch
-                }
-                val confirmed =
-                    measureAppResult(PerformanceOperation.CommandConfirmation) {
-                        confirmDraftSend(workspaceId, draft, owned)
-                    }
-                ensureActive()
-                if (access != owned) return@launch
-                when (confirmed) {
-                    is AppResult.Failed -> reportDraftFailure(confirmed.failure)
-                    is AppResult.Success -> {
-                        localDraft = confirmed.value
-                        draftWrite = null
-                        updateState {
-                            it.copy(
-                                draft = confirmed.value?.text.orEmpty(),
-                                draftReplyToEventId = confirmed.value?.replyToEventId,
-                                submissionPending = confirmed.value?.submissionId != null,
-                                saving = false,
-                                draftFailure = null,
-                            )
-                        }
-                        requestQuotePreviews()
-                        showLatest()
-                        // Queueing already wakes delivery. Remote content will signal history;
-                        // storing our own message does not invalidate server originals.
-                        if (pulse == null) connect()
-                    }
-                }
-            }
+        if (composer.send() == null) return
+        showLatest()
     }
 
     private fun requestSync(wake: Boolean = true) {
@@ -1857,11 +1826,3 @@ private data class ChatThreadLocalWindow(val after: String? = null, val before: 
 }
 
 /** At most one uncertain write is retained alongside the latest visible input. */
-private data class ChatDraftWrite(
-    val expected: CollaborationDraft?,
-    val revision: String,
-    val text: String,
-    val replyToEventId: String?,
-) {
-    override fun toString() = "ChatDraftWrite([redacted])"
-}

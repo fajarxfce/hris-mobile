@@ -18,6 +18,9 @@ interface CommandStore {
         limit: Int = 50,
     ): Flow<List<CommandRecord>>
 
+    /** One exact active/archive identity under one ownership check and read transaction. */
+    fun observeRecord(scope: CommandScope, partition: String, id: String): Flow<CommandLookup>
+
     suspend fun get(scope: CommandScope, partition: String, id: String): CommandRecord?
 
     /** One retained command per resource; identical insertion can recover a local response loss. */

@@ -14,6 +14,89 @@ import kotlinx.coroutines.test.runTest
 
 class RecoverCollaborationComposerTest {
     @Test
+    fun explicitRetryRevisitsOnlyTheSelectedHeldOriginalAndKeepsItsIdentity() = runTest {
+        val f = ComposerRecoveryFixture()
+        val selected = f.add(0)
+        val untouched = f.add(1)
+        f.held += setOf(selected.id, untouched.id)
+        f.base.setup.now += 365.days
+        val recovered =
+            assertIs<AppResult.Success<CollaborationMessageRecord>>(f.retry(selected)).value
+        assertEquals(collaborationComposerIntent(f.access, selected), recovered.intent)
+        assertEquals(CollaborationMessageState.Queued, recovered.state)
+        assertEquals(listOf(untouched.id), f.retained.keys.toList())
+        assertEquals(0, f.advances)
+        assertTrue(f.pages.isEmpty())
+        assertEquals(1, f.base.insertions)
+        assertEquals(listOf("hris.collaboration-delivery"), f.base.scheduledKeys)
+        assertEquals(AppResult.Success(recovered), f.retry(selected))
+        assertEquals(1, f.base.insertions)
+    }
+
+    @Test
+    fun explicitRetryOfACompletedOriginalNeverSchedulesOrRecreatesIt() = runTest {
+        val f = ComposerRecoveryFixture()
+        val selected = f.add()
+        val record =
+            CollaborationMessageRecord(
+                collaborationComposerIntent(f.access, selected),
+                0,
+                CollaborationMessageState.Cancelled,
+            )
+        f.base.records.value = listOf(record)
+        assertEquals(AppResult.Success(record), f.retry(selected))
+        assertTrue(f.retained.isEmpty())
+        assertTrue(f.base.scheduledKeys.isEmpty())
+        assertEquals(0, f.base.insertions)
+    }
+
+    @Test
+    fun explicitRetryCannotReplaceAMissingConversationOrChangedOriginal() = runTest {
+        for (changed in listOf(false, true)) {
+            val f = ComposerRecoveryFixture()
+            val selected = f.add()
+            f.held += selected.id
+            if (changed)
+                f.base.records.value =
+                    listOf(
+                        CollaborationMessageRecord(
+                            collaborationComposerIntent(f.access, selected)
+                                .copy(text = "Other original"),
+                            0,
+                            CollaborationMessageState.Queued,
+                        )
+                    )
+            else f.base.summary = null
+            assertIs<AppResult.Failed>(f.retry(selected))
+            assertEquals(selected, f.retained[selected.id])
+            assertEquals(0, f.base.insertions)
+            assertTrue(f.base.scheduledKeys.isEmpty())
+        }
+    }
+
+    @Test
+    fun explicitRetryRequiresCurrentOwnershipAndPreservesACommittedOriginalThroughCancellation() =
+        runTest {
+            val f = ComposerRecoveryFixture()
+            val selected = f.add()
+            assertIs<AppResult.Failed>(
+                f.retry(selected, f.access.copy(accountId = deliveryId(899)))
+            )
+            assertEquals(0, f.base.insertions)
+            f.base.afterInsert = { currentCoroutineContext().cancel() }
+            val job = launch { f.retry(selected) }
+            job.join()
+            assertTrue(job.isCancelled)
+            assertEquals(selected, f.retained[selected.id])
+            assertEquals(1, f.base.insertions)
+            assertTrue(f.base.scheduledKeys.isEmpty())
+            f.base.afterInsert = {}
+            assertIs<AppResult.Success<CollaborationMessageRecord>>(f.retry(selected))
+            assertEquals(1, f.base.insertions)
+            assertTrue(f.retained.isEmpty())
+        }
+
+    @Test
     fun offlineRecoveryRetainsOriginalIdsAndTimeWhenIndexOrderDiffersFromSendOrder() = runTest {
         val f = ComposerRecoveryFixture()
         val a = f.add(9)
@@ -351,7 +434,13 @@ private class ComposerRecoveryFixture {
             base.server,
             base.build,
             base.clock,
+            base.schedules,
         )
+
+    suspend fun retry(
+        original: CollaborationComposerSubmission,
+        expected: CollaborationLocalAccess = access,
+    ) = operation.retry("selection", expected, original)
 
     fun add(index: Int = 0): CollaborationComposerSubmission {
         val value =

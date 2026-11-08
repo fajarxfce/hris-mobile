@@ -9,12 +9,99 @@ import dev.fajar.starter.securestorage.*
 import kotlin.test.*
 import kotlin.time.Instant
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 
 /** Real SQLite/IndexedDB contract, including original-transaction recovery across login changes. */
 abstract class CollaborationMessageStorageContract {
     protected abstract fun databaseOwner(): CollaborationListDatabaseOwner
+
+    @Test
+    fun exactProgressObservesCancellationAndRestoresAnArchiveCreatedBeforeSubscription() =
+        withDatabase { f ->
+            f.insert()
+            val queued = f.read()
+            val values = Channel<AppResult<CollaborationMessageRecord?>>(Channel.UNLIMITED)
+            coroutineScope {
+                val observer = launch {
+                    f.repo.observeRecord(f.access, f.intent.id).collect { values.send(it) }
+                }
+                try {
+                    assertEquals(AppResult.Success(queued), values.receive())
+                    assertEquals(AppResult.Success(true), f.repo.cancel(f.access, queued))
+                    assertEquals(
+                        AppResult.Success(queued.copy(state = CollaborationMessageState.Cancelled)),
+                        values.receive(),
+                    )
+                } finally {
+                    observer.cancelAndJoin()
+                    values.close()
+                }
+            }
+            val old = f.access
+            f.reopen(old.copy(sessionId = "progress-restored"))
+            assertEquals(
+                AppResult.Success(queued.copy(state = CollaborationMessageState.Cancelled)),
+                f.repo.observeRecord(f.access, f.intent.id).first(),
+            )
+            assertEquals(AppResult.Success(null), f.repo.observeRecord(old, f.intent.id).first())
+        }
+
+    @Test
+    fun exactProgressObservesPreventionWithoutPublishingAPendingCommand() = withDatabase { f ->
+        val values = Channel<AppResult<CollaborationMessageRecord?>>(Channel.UNLIMITED)
+        coroutineScope {
+            val observer = launch {
+                f.repo.observeRecord(f.access, f.intent.id).collect { values.send(it) }
+            }
+            try {
+                assertEquals(AppResult.Success(null), values.receive())
+                assertEquals(AppResult.Success(true), f.repo.prevent(f.access, f.intent))
+                val prevented =
+                    assertNotNull(
+                        assertIs<AppResult.Success<CollaborationMessageRecord?>>(values.receive())
+                            .value
+                    )
+                assertEquals(f.intent, prevented.intent)
+                assertEquals(CollaborationMessageState.Cancelled, prevented.state)
+                assertTrue(f.rows().isEmpty())
+            } finally {
+                observer.cancelAndJoin()
+                values.close()
+            }
+        }
+    }
+
+    @Test
+    fun exactProgressRejectsCorruptOrContradictoryProofAndNeverCreatesAReplacementKey() =
+        withDatabase { f ->
+            f.insert()
+            val queued = f.read()
+            assertEquals(AppResult.Success(true), f.repo.cancel(f.access, queued))
+            val store = f.database.commands
+            for (contradictory in listOf(false, true)) {
+                val corrupt =
+                    object : CommandStore by store {
+                        override fun observeRecord(
+                            scope: CommandScope,
+                            partition: String,
+                            id: String,
+                        ): Flow<CommandLookup> =
+                            store.observeRecord(scope, partition, id).map { value ->
+                                val archived = assertNotNull(value.archived)
+                                if (contradictory) value.copy(active = archived.record)
+                                else value.copy(archived = archived.copy(evidence = "malformed"))
+                            }
+                    }
+                assertIs<AppResult.Failed>(
+                    f.repository(store = corrupt).observeRecord(f.access, f.intent.id).first()
+                )
+            }
+            f.keys.write(null)
+            assertIs<AppResult.Failed>(f.repo.observeRecord(f.access, f.intent.id).first())
+            assertNull(f.keys.read())
+        }
 
     @Test
     fun encryptedEditTargetSurvivesRestartAndCannotCollideWithAnOrdinarySend() = withDatabase { f ->

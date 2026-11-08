@@ -7,10 +7,12 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
+import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * Materialize at most eight local originals; never acquire an SDK, send HTTP or clear the editor.
@@ -25,6 +27,7 @@ class RecoverCollaborationComposer(
     private val server: IdentityServer,
     private val build: AppBuild,
     private val clock: Clock,
+    private val schedules: SyncScheduleRepository,
 ) {
     /** True means another bounded pass is needed; held originals remain available for review. */
     suspend operator fun invoke(): AppResult<Boolean> {
@@ -53,6 +56,38 @@ class RecoverCollaborationComposer(
         val captured = sessions.captureMessageAccess(scope, workspaces, server, build, clock)
         if (captured is AppResult.Failed) return captured
         return recover(scope, (captured as AppResult.Success).value)
+    }
+
+    /** Explicitly revisit only this retained original, including one held by automatic recovery. */
+    suspend fun retry(
+        workspaceId: String,
+        access: CollaborationLocalAccess,
+        original: CollaborationComposerSubmission,
+    ): AppResult<CollaborationMessageRecord> {
+        if (!validCollaborationComposerSubmission(original)) return invalidDraft()
+        val scope = CollaborationLocalScope.Selected(workspaceId)
+        guard(scope, access).let { if (it is AppResult.Failed) return it }
+        val recovered = materialize(scope, access, original)
+        guard(scope, access).let { if (it is AppResult.Failed) return it }
+        if (recovered is AppResult.Failed) return recovered
+        val read = messages.get(access, original.id)
+        guard(scope, access).let { if (it is AppResult.Failed) return it }
+        if (read is AppResult.Failed) return read
+        val record =
+            (read as AppResult.Success).value
+                ?: return collaborationSetupFailure(
+                    "client.collaboration_composer_unavailable",
+                    FailureKind.Unavailable,
+                )
+        if (record.intent != collaborationComposerIntent(access, original)) return changedDraft()
+        if (
+            record.state !is CollaborationMessageState.Sent &&
+                record.state != CollaborationMessageState.Cancelled
+        ) {
+            withTimeoutOrNull(1_500) { schedules.request(QueueCollaborationText.DELIVERY_KEY) }
+            guard(scope, access).let { if (it is AppResult.Failed) return it }
+        }
+        return AppResult.Success(record)
     }
 
     private suspend fun recover(

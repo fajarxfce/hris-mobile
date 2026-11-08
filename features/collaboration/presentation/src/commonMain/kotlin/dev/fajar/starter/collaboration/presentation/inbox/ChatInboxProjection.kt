@@ -16,6 +16,10 @@ internal fun ChatInboxState.withPage(incoming: CollaborationInboxPage): ChatInbo
         page = incoming.list,
         owner = incoming.access,
         previews = nextPreviews,
+        composerPreviews =
+            if (owner == incoming.access) composerPreviews.filterKeys { it in currentIds }
+            else emptyMap(),
+        composerFailure = composerFailure.takeIf { owner == incoming.access },
         previewFailure = incoming.previewFailure,
         loading = false,
         failure = null,

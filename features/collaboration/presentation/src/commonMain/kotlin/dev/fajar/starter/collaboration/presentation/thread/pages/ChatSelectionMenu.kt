@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageDelivery
 import dev.fajar.starter.collaboration.presentation.thread.*
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.localization.*
@@ -32,6 +33,24 @@ internal fun ChatSelectionMenu(state: ChatThreadState, onEvent: (ChatThreadEvent
                 properties = PopupProperties(focusable = true),
             ) {
                 AppCard(Modifier.widthIn(min = 220.dp, max = 300.dp), padding = 4.dp) {
+                    val retry =
+                        state.selectedMessages.singleOrNull()?.takeIf {
+                            it.composerSubmission != null &&
+                                it.delivery == CollaborationMessageDelivery.FAILED
+                        }
+                    if (retry != null)
+                        AppListRow(
+                            appString(AppString.Retry),
+                            {
+                                onEvent(ChatThreadEvent.SelectionMenuDismissed)
+                                onEvent(
+                                    ChatThreadEvent.MessageRetryRequested(
+                                        requireNotNull(retry.composerSubmission).id
+                                    )
+                                )
+                            },
+                            leading = { AppIcon(Icons.Regular.ArrowClockwise) },
+                        )
                     if (state.canEditSelection)
                         AppListRow(
                             appString(AppString.ChatEditMessage),

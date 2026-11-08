@@ -1253,6 +1253,52 @@ class CollaborationDataModule {
     ) = ObserveCollaborationDraft(drafts, lists, sessions, workspaces, server, build, Clock.System)
 
     @Factory
+    fun observeComposerProgress(
+        progress: CollaborationMessageProgressRepository,
+        outbox: CollaborationComposerOutboxRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ObserveCollaborationComposerProgress(
+            progress,
+            outbox,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
+    fun cancelComposer(
+        outbox: CollaborationComposerOutboxRepository,
+        messages: CollaborationMessageRepository,
+        prevention: CollaborationMessagePreventionRepository,
+        cancellations: CollaborationMessageCancellationRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        CancelCollaborationComposer(
+            outbox,
+            messages,
+            prevention,
+            cancellations,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun submitComposer(
         outbox: CollaborationComposerOutboxRepository,
         messages: CollaborationMessageRepository,
@@ -1285,6 +1331,7 @@ class CollaborationDataModule {
         workspaces: WorkspaceRepository,
         server: IdentityServer,
         build: AppBuild,
+        schedules: SyncScheduleRepository,
     ) =
         RecoverCollaborationComposer(
             outbox,
@@ -1296,6 +1343,7 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            schedules,
         )
 
     @Factory

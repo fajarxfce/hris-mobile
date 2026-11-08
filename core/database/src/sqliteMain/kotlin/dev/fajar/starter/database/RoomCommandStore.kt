@@ -35,6 +35,34 @@ internal class RoomCommandStore(private val database: StarterDatabase) : Command
             }
             .distinctUntilChanged()
 
+    override fun observeRecord(scope: CommandScope, partition: String, id: String) =
+        database.invalidationTracker
+            .createFlow("account_scope", "durable_commands", "command_archives")
+            .map {
+                validateCommandScope(scope, partition)
+                validateCommandIdentifier(id)
+                val (active, archived) =
+                    dao.lookup(scope.sessionId, scope.accountKey, partition, id)
+                CommandLookup(
+                    active?.toRecord(),
+                    archived?.let { row ->
+                        CommandArchive(
+                            CommandRecord(
+                                row.partition,
+                                row.id,
+                                row.resourceId,
+                                row.sortKey,
+                                row.request,
+                                row.state,
+                                row.revision,
+                            ),
+                            row.evidence,
+                        )
+                    },
+                )
+            }
+            .distinctUntilChanged()
+
     override suspend fun get(scope: CommandScope, partition: String, id: String): CommandRecord? {
         validateCommandScope(scope, partition)
         validateCommandIdentifier(id)

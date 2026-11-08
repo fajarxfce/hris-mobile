@@ -2,6 +2,8 @@ package dev.fajar.starter.collaboration.presentation.inbox
 
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.collaborationContentResponseClosesRead
+import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationComposerProgress
 import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationInbox
 import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationSavedReplies
 import dev.fajar.starter.collaboration.domain.usecases.SyncCollaborationList
@@ -21,7 +23,11 @@ class ChatInboxViewModel(
     private val observe: ObserveCollaborationInbox,
     private val synchronize: SyncCollaborationList,
     private val observeReplies: ObserveCollaborationSavedReplies,
+    private val observeComposer: ObserveCollaborationComposerProgress,
 ) : MviViewModel<ChatInboxState, ChatInboxEvent, ChatInboxEffect>(ChatInboxState()) {
+    private var composerObservation: Job? = null
+    private var composerOwner: CollaborationLocalAccess? = null
+    private val composerOriginals = MutableStateFlow(emptyList<CollaborationComposerSubmission>())
     private var observation: Job? = null
     private var replies: Job? = null
     private var acquisition: Job? = null
@@ -49,7 +55,76 @@ class ChatInboxViewModel(
         previewsVisible.value = true
         if (observation?.isActive != true) startObservation()
         if (replies?.isActive != true) observeUnsentReplies()
+        if (composerObservation?.isActive != true) observeComposerPreviews()
         acquire()
+    }
+
+    private fun observeComposerPreviews() {
+        composerObservation =
+            viewModelScope.launch {
+                state
+                    .map { it.owner }
+                    .distinctUntilChanged()
+                    .collectLatest { owned ->
+                        if (composerOwner != owned) {
+                            composerOwner = owned
+                            composerOriginals.value = emptyList()
+                        }
+                        if (owned == null) return@collectLatest
+                        combine(
+                                observeComposer(workspaceId, owned, composerOriginals),
+                                state
+                                    .map { value ->
+                                        value.page
+                                            ?.items
+                                            .orEmpty()
+                                            .map { it.conversation.id }
+                                            .toSet() to value.previews
+                                    }
+                                    .distinctUntilChanged(),
+                            ) { progress, current ->
+                                when (progress) {
+                                    is AppResult.Failed -> progress
+                                    is AppResult.Success ->
+                                        AppResult.Success(
+                                            chatInboxComposerProjection(
+                                                current.first,
+                                                current.second,
+                                                progress.value,
+                                            )
+                                        )
+                                }
+                            }
+                            .collect { result ->
+                                ensureActive()
+                                if (state.value.owner != owned) return@collect
+                                when (result) {
+                                    is AppResult.Failed -> {
+                                        if (collaborationContentResponseClosesRead(result.failure))
+                                            updateState {
+                                                ChatInboxState(
+                                                    loading = false,
+                                                    failure = result.failure,
+                                                )
+                                            }
+                                        else
+                                            updateState {
+                                                it.copy(composerFailure = result.failure)
+                                            }
+                                    }
+                                    is AppResult.Success -> {
+                                        updateState {
+                                            it.copy(
+                                                composerPreviews = result.value.previews,
+                                                composerFailure = null,
+                                            )
+                                        }
+                                        composerOriginals.value = result.value.originals
+                                    }
+                                }
+                            }
+                    }
+            }
     }
 
     private fun observeUnsentReplies() {
@@ -115,6 +190,8 @@ class ChatInboxViewModel(
     private fun onStopped(event: ChatInboxEvent.Stopped) {
         visible = false
         previewsVisible.value = false
+        composerObservation?.cancel()
+        composerObservation = null
         reconnection?.cancel()
         reconnection = null
         acquisition?.cancel()

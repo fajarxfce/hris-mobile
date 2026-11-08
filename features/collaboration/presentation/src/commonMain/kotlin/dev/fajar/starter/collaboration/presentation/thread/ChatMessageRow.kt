@@ -31,6 +31,10 @@ data class ChatMessageRow(
     val editEligibleUntil: Long? = null,
     /** Unapplied local changes in creation order, available through contextual copy. */
     val failedEditText: String? = null,
+    /**
+     * Captured local gesture before a durable command exists; never fabricated command evidence.
+     */
+    val composerSubmission: CollaborationComposerSubmission? = null,
 ) {
     override fun toString() = "ChatMessageRow([redacted])"
 }
