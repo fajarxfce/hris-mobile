@@ -6,6 +6,10 @@ import kotlinx.coroutines.flow.StateFlow
 
 /** Store I/O and SDK ownership only. Use cases admit installation and live delivery separately. */
 interface CollaborationRuntimeRepository {
+    /** Whether this host has a protected native implementation for first device activation. */
+    val supportsDeviceActivation: Boolean
+        get() = false
+
     /** Owned protected metadata only; never opens an SDK client or acquires server authority. */
     suspend fun handoverIntent(
         owner: CollaborationOwner,

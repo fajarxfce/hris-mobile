@@ -1,0 +1,105 @@
+{
+  "startedAt": "2026-11-08T17:57:32.737595+00:00",
+  "elapsedSeconds": 71.149,
+  "exitCode": 0,
+  "sourceFiles": 4500,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 19,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "acceptedScope": "Focused domain, manual setup UI, application lifetime and bindings",
+  "totalCoveredTests": 94,
+  "coveredReports": {
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+      "sha256": "594f6c3db52de9951e5a06c77be25ecb060047ee9b8942be6e5f3c047e979a17",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "freshInFinalGate": false
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ApplicationCollaborationLifetimeTest.xml": {
+      "sha256": "7d822c3d68336aa2fe90848f7a6b1f0b702d246d066c53dc4d63905dab44e39e",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "freshInFinalGate": false
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationActivationStorePolicyTest.xml": {
+      "sha256": "8c018a984c4a97c22f6cb5c69498cab891b31a04927564819ce54f27d07200fe",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "freshInFinalGate": false
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationRuntimeInstallationTest.xml": {
+      "sha256": "3311721dc35a4cba31a4a1522b8bb15fe1859b297560dbc323043f033bf9fbc2",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "freshInFinalGate": false
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml": {
+      "sha256": "1670c9f1d5192dfec420df609b6695037adea276f719e33dda6d5e476c9ae55f",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "freshInFinalGate": false
+    },
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.ActivateCollaborationDeviceTest.xml": {
+      "sha256": "b5c12f48fa7a9d11921b0709e5ccb0dae583a16abefeef52eee9030cc02d733c",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "freshInFinalGate": false
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.setup.ChatSetupViewModelTest.xml": {
+      "sha256": "c69015c6442076a99c8be6500d11d75cee49c50e4bc4ed6134c4415fd9ee829d",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "freshInFinalGate": true
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatSetupLayoutTest.xml": {
+      "sha256": "cccebae7d5b24318b72e3f7400d96528f8ca49380df1f63d1111f642ad8d1c9f",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "freshInFinalGate": true
+    }
+  },
+  "previouslyPassedTestsReused": 75,
+  "productionInputsUnchangedAcrossFocusedRuns": true,
+  "changedTestFile": "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatSetupLayoutTest.kt",
+  "sourceManifestSha256": "670ec5d5300b6170f8553a250fcf98890e489211cdd16c21853cda7052a652b9",
+  "resultSha256": "e3f42f4abe99f36c7ac189acea5eafe42935abb2babf98cf25c6de7c1eacb0ea",
+  "fullValidation": false,
+  "nativeValidation": false,
+  "phoneInstalled": false,
+  "promptForegroundRecoveryImplemented": false,
+  "postCommitReadinessHintImplemented": false,
+  "priorStorageExceptionResolved": false,
+  "priorAttempts": [
+    {
+      "name": "focused-1",
+      "exitCode": 1,
+      "reason": "New UI assertion type inference error; 75 independent tests passed"
+    },
+    {
+      "name": "focused-2",
+      "exitCode": 1,
+      "reason": "Formatting of the corrected UI assertion; 19 UI tests passed"
+    }
+  ]
+}

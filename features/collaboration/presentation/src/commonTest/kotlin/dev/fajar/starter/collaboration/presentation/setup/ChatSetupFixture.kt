@@ -40,28 +40,70 @@ internal class ChatSetupFixture {
     var recoveryWake: CollaborationRecoveryWake? = null
     val scheduled = mutableListOf<String>()
     var schedule: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) }
-    val recovery =
-        RequestCollaborationRecovery(
-            object : CollaborationRecoveryWakeRepository {
-                override suspend fun pending() = AppResult.Success(recoveryWake)
+    val wakes =
+        object : CollaborationRecoveryWakeRepository {
+            override suspend fun pending() = AppResult.Success(recoveryWake)
 
-                override suspend fun request(): AppResult<CollaborationRecoveryWake> {
-                    val wake = CollaborationRecoveryWake("fixture-${scheduled.size}")
-                    recoveryWake = wake
-                    return AppResult.Success(wake)
-                }
+            override suspend fun request(): AppResult<CollaborationRecoveryWake> {
+                val wake = CollaborationRecoveryWake("fixture-${scheduled.size}")
+                recoveryWake = wake
+                return AppResult.Success(wake)
+            }
 
-                override suspend fun acknowledge(wake: CollaborationRecoveryWake) =
-                    error("No setup acknowledgment")
-            },
-            object : dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository {
-                override suspend fun request(key: String): AppResult<Unit> {
-                    check(recoveryWake != null)
-                    scheduled += key
-                    return schedule()
-                }
-            },
-        )
+            override suspend fun acknowledge(wake: CollaborationRecoveryWake) =
+                error("No setup acknowledgment")
+        }
+    val schedules =
+        object : dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository {
+            override suspend fun request(key: String): AppResult<Unit> {
+                check(recoveryWake != null)
+                scheduled += key
+                return schedule()
+            }
+        }
+    var privateAccount = false
+    private val inventory
+        get() =
+            CollaborationSdkInventory(
+                owner.setupBinding(),
+                active.id,
+                privateAccount,
+                privateAccount,
+                privateAccount,
+                if (privateAccount)
+                    CollaborationSdkCredentialInventory(
+                        gateway().matrixUserId,
+                        gateway().matrixDeviceId,
+                        chatId(6),
+                        chatId(6),
+                        0,
+                        true,
+                        null,
+                    )
+                else null,
+            )
+
+    val inventoryRepository =
+        object : CollaborationSdkInventoryRepository {
+            override suspend fun inspect(owner: CollaborationOwner, deviceId: String) =
+                AppResult.Success(inventory)
+        }
+    val possessionRepository =
+        object : CollaborationSdkPossessionRepository {
+            override suspend fun readPrivateIdentity(owner: CollaborationOwner, deviceId: String) =
+                AppResult.Success(
+                    if (privateAccount)
+                        CollaborationSdkPossession(
+                            inventory,
+                            CollaborationLocalDeviceIdentity(
+                                gateway().matrixUserId,
+                                gateway().matrixDeviceId,
+                                "a".repeat(64),
+                            ),
+                        )
+                    else null
+                )
+        }
     var beforeLocal: suspend () -> Unit = {}
     var read: suspend () -> AppResult<CollaborationDeviceSetup?> = { AppResult.Success(device) }
     var register: suspend (CollaborationRegistration) -> AppResult<CollaborationSetupReceipt> = {
@@ -182,6 +224,8 @@ internal class ChatSetupFixture {
     private var installedOperation: String? = null
     val runtimes =
         object : CollaborationRuntimeRepository {
+            override val supportsDeviceActivation = true
+
             override suspend fun handoverIntent(
                 owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
                 deviceId: String,
@@ -366,60 +410,20 @@ internal class ChatSetupFixture {
                 base.build,
                 base.clock,
             ),
-            LoadCollaborationSetup(
+            ActivateCollaborationDevice(
+                commands,
+                remote,
+                runtimes,
                 base.sessions,
                 base.workspaces,
-                remote,
                 base.server,
                 base.build,
                 base.clock,
                 base.local,
+                inventoryRepository,
+                possessionRepository,
+                wakes,
+                schedules,
             ),
-            PrepareCollaborationSetup(
-                commands,
-                remote,
-                base.sessions,
-                base.workspaces,
-                base.server,
-                base.build,
-                base.clock,
-            ),
-            ReplayCollaborationSetup(
-                commands,
-                remote,
-                base.sessions,
-                base.workspaces,
-                base.server,
-                base.build,
-                base.clock,
-            ),
-            ReconcileCollaborationSetupReceipt(
-                commands,
-                remote,
-                base.sessions,
-                base.workspaces,
-                base.server,
-                base.build,
-                base.clock,
-            ),
-            InstallCollaborationRuntime(
-                commands,
-                runtimes,
-                base.sessions,
-                base.workspaces,
-                base.server,
-                base.build,
-                base.clock,
-            ),
-            EnsureCollaborationRuntime(
-                runtimes,
-                base.sessions,
-                base.workspaces,
-                base.server,
-                base.build,
-                base.clock,
-            ),
-            base.build,
-            recovery,
         )
 }

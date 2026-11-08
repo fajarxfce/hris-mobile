@@ -276,6 +276,14 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     ChatSetupResume(Res.string.chat_setup_resume_en, Res.string.chat_setup_resume_id),
     ChatSetupReady(Res.string.chat_setup_ready_en, Res.string.chat_setup_ready_id),
     ChatSetupRevoked(Res.string.chat_setup_revoked_en, Res.string.chat_setup_revoked_id),
+    ChatKeysRecoveryTitle(
+        Res.string.chat_keys_recovery_title_en,
+        Res.string.chat_keys_recovery_title_id,
+    ),
+    ChatKeysRecoveryHint(
+        Res.string.chat_keys_recovery_hint_en,
+        Res.string.chat_keys_recovery_hint_id,
+    ),
     ChatSetupUnavailable(
         Res.string.chat_setup_unavailable_en,
         Res.string.chat_setup_unavailable_id,

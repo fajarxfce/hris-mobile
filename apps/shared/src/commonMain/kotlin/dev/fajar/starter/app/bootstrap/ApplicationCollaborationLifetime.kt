@@ -1,6 +1,7 @@
 package dev.fajar.starter.app.bootstrap
 
 import dev.fajar.starter.app.work.recoveryParent
+import dev.fajar.starter.collaboration.domain.entities.CollaborationActivationProgress
 import dev.fajar.starter.collaboration.domain.entities.CollaborationNativeParent
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.domain.usecases.MaintainCollaborationRuntimeOwnership
@@ -20,6 +21,7 @@ class ApplicationCollaborationLifetime(
     private val requestRecovery: RequestCollaborationRecovery,
     private val build: AppBuild,
     private val observePush: (String) -> Flow<AppResult<NativePushStatus>>,
+    private val activate: (CollaborationOwner) -> Flow<AppResult<CollaborationActivationProgress>>,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : AutoCloseable {
     private val lifetime = SupervisorJob()
@@ -28,6 +30,8 @@ class ApplicationCollaborationLifetime(
     private val mutableState =
         MutableStateFlow<ApplicationCollaborationState>(ApplicationCollaborationState.Pending)
     val state = mutableState.asStateFlow()
+    private var activatedOwner: CollaborationOwner? = null
+    private var activation: Job? = null
 
     fun start() {
         if (!started.compareAndSet(false, true)) return
@@ -78,7 +82,13 @@ class ApplicationCollaborationLifetime(
                                 )
                     if (!revalidating && (result !is AppResult.Success || result.value == null)) {
                         scheduledOwner = null
+                        retainActivation(null)
                     }
+                    if (
+                        current is ApplicationCollaborationState.Observed &&
+                            result is AppResult.Success
+                    )
+                        retainActivation(result.value)
                     if (
                         current is ApplicationCollaborationState.Observed &&
                             result is AppResult.Success &&
@@ -100,10 +110,30 @@ class ApplicationCollaborationLifetime(
             } catch (_: Exception) {
                 stopped(runtimeStopped())
             } finally {
+                retainActivation(null)
                 // Completion and failed observation cannot leave a previous parent published.
                 stopped(if (lifetime.isActive) runtimeStopped() else null)
             }
         }
+    }
+
+    /** Only the ownership collector replaces this child; token age never creates a new attempt. */
+    private fun retainActivation(owner: CollaborationOwner?) {
+        if (owner == activatedOwner) return
+        activation?.cancel()
+        activatedOwner = owner
+        activation =
+            owner?.let {
+                scope.launch {
+                    try {
+                        activate(it).collect()
+                    } catch (cancelled: CancellationException) {
+                        throw cancelled
+                    } catch (_: Exception) {
+                        // This owner gets one attempt; a failed activation is not a timer.
+                    }
+                }
+            }
     }
 
     private fun stopped(failure: Failure?) {

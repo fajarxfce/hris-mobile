@@ -51,6 +51,7 @@ fun ChatSetupPage(
                         ChatSetupPhase.RESUME -> AppString.ChatSetupResume
                         ChatSetupPhase.READY -> AppString.ChatSetupReady
                         ChatSetupPhase.REVOKED -> AppString.ChatSetupRevoked
+                        ChatSetupPhase.RECOVERY_REQUIRED -> AppString.ChatKeysRecoveryTitle
                         ChatSetupPhase.UNAVAILABLE -> AppString.ChatSetupUnavailable
                     }
                 ),
@@ -68,6 +69,7 @@ fun ChatSetupPage(
                             ChatSetupPhase.RESUME -> AppString.ChatSetupResumeHint
                             ChatSetupPhase.READY -> AppString.ChatSetupReadyHint
                             ChatSetupPhase.REVOKED -> AppString.ChatSetupRevokedHint
+                            ChatSetupPhase.RECOVERY_REQUIRED -> AppString.ChatKeysRecoveryHint
                             else -> AppString.ChatSetupCheckHint
                         }
                     ),

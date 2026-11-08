@@ -1,7 +1,7 @@
 # Automatic native chat activation
 
-Design under investigation, not implemented or accepted. The primary application
-is validating durable recipient waiting separately. An unavailable recipient must
+Implementation candidate under validation; automatic activation is not accepted for
+release yet. The earlier runtime-retention and private-account guard gates remain separate. An unavailable recipient must
 not cause timed message retries, and this enrollment workflow must not create a
 second polling loop.
 
@@ -119,3 +119,55 @@ Use the existing inventory/possession repositories for the domain decision. Miss
 facts, technical read failures, an in-progress handover and verified possession are
 separate outcomes. A read-only inventory check cannot replace validation under the
 actual SDK directory lease. Restore-only callers remain unable to enroll/reset keys.
+
+## Candidate implementation and remaining execution work
+
+`ActivateCollaborationDevice` now owns registration/bootstrap preparation, durable
+replay, receipt retirement, private-account inspection, runtime installation/restoration
+and recovery-wake persistence. The old four command use cases are consolidated into
+named internal stages; their existing crash/denial/lease tests now exercise those stages.
+`EnsureCollaborationRuntime` remains an independent restore-only operation for its other
+callers. Platform capability defaults false, and the Android implementation enables it.
+Unsupported hosts do not enroll through this workflow; this is not an iOS runtime claim.
+
+The domain workflow allows six delayed readbacks and sixteen total transitions.
+Automatic entry never creates a provisioning retry; explicit continuation may retry
+once after the server deadline. An uncertain command resumes its exact original ID.
+A stale Resume with no retained command only inspects, without inventing registration.
+A genuine first bootstrap differs from established private-account loss. Missing,
+foreign or unreadable original keys cannot authorize a replacement private identity.
+The runtime still rechecks private identity under its actual directory lease.
+
+Application ownership starts one cancellable run on admitted selection, cancels it on
+owner loss, and keeps ordinary age/renewal from starting another run. Observers of an
+active automatic run consume shared, scoped domain progress instead of another poller.
+Closing a setup page cancels only that observer. The initiating application owns the
+run, and durable commands remain authoritative after process loss. Local runtime Ready
+is distinct from confirmed server public-key publication. A persisted recovery wake
+survives OS scheduling failure; failed enqueue is retained separately from local readiness.
+
+[Focused validation](measurements/collaboration-device-activation-2026-11-08.json)
+now passes94 tests across domain, UI, application ownership and assembled bindings.
+The final gate passed with19 fresh UI tests and75 unchanged, previously passing tests;
+all4,500 application and82 library inputs stayed frozen. The first attempt found a UI
+assertion type-inference error; the next found only its formatting. Both are corrected.
+Full repository checks and native acceptance of activation remain pending. The separate
+private-account guard already passed its5,793-test full gate on the primary branch.
+
+Prompt recovery execution remains unfinished. AndroidWorkScheduler already emits its
+host callback after feature intent persistence and before the potentially slow OS
+queue inspection. WorkManager may already be waiting in backoff. Add a request-driven
+foreground runner for recovery, using the existing conflated lane; it should execute
+explicit requests, with durable retries owned by WorkManager. Do not add recovery to
+the delivery runner's one-second retry policy or introduce another periodic transport
+loop. This runner is reusable infrastructure and must be proven in mobile before porting
+to Starter. Test retained requests while stopped, requests during execution, lane isolation,
+retry/blocked outcomes without implicit timers, cancellation and actual portable targets.
+
+Completion of activation must then reach that lane. Test fresh key publication without
+opening chat, original sender resumption, foreground/background/process restart and
+notification denial. Readiness still needs a scoped post-commit hint and missed-hint
+reconciliation as described above. Automatic recovery after connectivity returns during
+an interrupted first setup also remains to be integrated; repeated admission refresh is
+not an acceptable substitute trigger. Existing key-recovery UX currently reports the
+need for recovery; cloud backup/import itself is not implemented by this change.

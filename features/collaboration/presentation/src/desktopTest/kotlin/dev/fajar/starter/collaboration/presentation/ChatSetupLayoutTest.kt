@@ -25,6 +25,28 @@ class ChatSetupLayoutTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun missingOriginalKeysCannotOfferNewActivationOrOpenChat() {
+        val events = mutableListOf<ChatSetupEvent>()
+        compose.setContent {
+            CompositionLocalProvider(LocalAppLanguage provides AppLanguage.English) {
+                AppTheme {
+                    ChatSetupPage(
+                        ChatSetupState(phase = ChatSetupPhase.RECOVERY_REQUIRED, loading = false),
+                        events::add,
+                    )
+                }
+            }
+        }
+        compose.onNodeWithText("Chat needs recovery").assertIsDisplayed()
+        compose.onNodeWithText("Activate chat").assertDoesNotExist()
+        compose.onNodeWithText("Open chat").assertDoesNotExist()
+        compose.onNodeWithContentDescription("Back").performClick()
+        compose.runOnIdle {
+            assertEquals(listOf<ChatSetupEvent>(ChatSetupEvent.BackRequested), events)
+        }
+    }
+
+    @Test
     fun largeIndonesianSetupKeepsNavigationSeparateAndActionReachable() {
         val events = mutableListOf<ChatSetupEvent>()
         var state by

@@ -22,6 +22,7 @@ class ChatSetupViewModelTest {
                     "Rejected",
                     code = "client.collaboration_sdk_unauthorized",
                 )
+            f.privateAccount = true
             f.restore = { AppResult.Failed(rejected) }
             vm.onEvent(ChatSetupEvent.Entered)
             runCurrent()
@@ -264,6 +265,7 @@ class ChatSetupViewModelTest {
     fun activeDeviceRestoresWithoutNewBootstrapOrEnrollment() = runTest {
         withModel { f, vm, _, _ ->
             f.device = f.active
+            f.privateAccount = true
             f.restore = {
                 f.opened = true
                 AppResult.Success(f.lease)

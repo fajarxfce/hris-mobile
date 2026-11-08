@@ -4,6 +4,7 @@ import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSdkInventoryRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSdkPossessionRepository
+import dev.fajar.starter.collaboration.domain.usecases.ActivateCollaborationDevice
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.push.usecases.ObserveNativePushStatus
 import dev.fajar.starter.securestorage.AtomicCredentialStore
@@ -30,7 +31,15 @@ internal fun applicationCollaborationModule(
     }
     single {
             val push = inject<ObserveNativePushStatus>()
-            ApplicationCollaborationLifetime(get(), get(), get(), get(), { push.value(it) })
+            val activate = inject<ActivateCollaborationDevice>()
+            ApplicationCollaborationLifetime(
+                get(),
+                get(),
+                get(),
+                get(),
+                { push.value(it) },
+                { activate.value(it) },
+            )
         }
         .onClose { it?.close() }
     single<AtomicCredentialStore>(named("collaboration-list-content-key")) { listCredentials }

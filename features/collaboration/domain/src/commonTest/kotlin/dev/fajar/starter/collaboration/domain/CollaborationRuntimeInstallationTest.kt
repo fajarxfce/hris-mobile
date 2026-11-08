@@ -2,11 +2,11 @@ package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
-import dev.fajar.starter.collaboration.domain.usecases.InstallCollaborationRuntime
 import dev.fajar.starter.common.result.*
 import kotlin.test.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.test.runTest
 
 class CollaborationRuntimeInstallationTest {
@@ -14,12 +14,13 @@ class CollaborationRuntimeInstallationTest {
     fun presentationActivationPublishesOnlyTheOwnedDeviceAfterRetirement() = runTest {
         val f = InstallationFixture()
         val result =
-            assertIs<AppResult.Success<CollaborationRead<String>>>(
-                    f.installer().activate("selection", "operation")
+            assertIs<AppResult.Success<CollaborationActivationProgress>>(
+                    f.installer()("selection", CollaborationActivationMode.CONTINUE).last()
                 )
                 .value
         assertEquals(f.setup.owner, result.owner)
-        assertEquals(f.lease.deviceId, result.value)
+        assertEquals(f.lease.deviceId, result.device?.id)
+        assertEquals(CollaborationActivationStep.READY, result.step)
         assertNull(f.setup.record)
         assertEquals(1, f.lease.publications)
         assertEquals(0, f.lease.closes)
@@ -416,6 +417,8 @@ private class InstallationFixture {
         }
     private val runtimes =
         object : CollaborationRuntimeRepository {
+            override val supportsDeviceActivation = true
+
             override suspend fun handoverIntent(
                 owner: dev.fajar.starter.collaboration.domain.entities.CollaborationOwner,
                 deviceId: String,
@@ -547,19 +550,12 @@ private class InstallationFixture {
         }
 
     fun installer() =
-        InstallCollaborationRuntime(
-            commands,
-            runtimes,
-            setup.access.sessions,
-            setup.access.workspaces,
-            setup.server,
-            setup.build,
-            setup.clock,
-        )
+        CollaborationActivationFixture(setup, configureDevice = false)
+            .operation(runtime = runtimes, originalCommands = commands)
 
     fun install(): suspend () -> AppResult<CollaborationRuntimeLease> {
         val useCase = installer()
-        return { useCase("selection", "operation") }
+        return { useCase.installRuntime("selection", "operation") }
     }
 }
 

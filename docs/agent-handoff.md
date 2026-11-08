@@ -1,5 +1,33 @@
 # Agent continuation — HRIS Mobile
 
+## Activation focused checks passed — 8 November 2026, 18:00 UTC
+
+The activation candidate now passes94 tests across eight domain/UI/app suites. Final
+exec73705 REAPED PASS71.149s with19 fresh UI tests and75 previously passed, unchanged
+tests. All4,500 app/82library inputs stayed frozen. First61981 failed UI type inference
+while75 tests passed; second18919 failed only formatting while19 UI tests passed;
+formatter78149 passed29.044s before the final gate. No compiler/emulator remains now.
+[Evidence](measurements/collaboration-device-activation-2026-11-08.json).
+
+The application entry is now wired and the manual page joins existing automatic progress,
+without another poller or ownership of the application's coroutine. Existing setup command
+and lease tests exercise the consolidated internal stages. ViewModel owns state/events only.
+Full/native acceptance, foreground recovery and post-commit recipient readiness remain open;
+this is NOT evidence that automatic keys/pending-message wake have shipped to a device.
+
+Main source767bd226 guard plus docs e484a988 has its separate full5793 PASS. Main prepared
+.work/release-phone-2026-11-08-build74 scripts for a retained-only native guard probe,
+using original73 acknowledged message and71 waiting original, with ZERO send gestures.
+No APK74 exists yet. Do not run the old73 send probe. Main build74 must finish before
+emulator start; root scripts now reject compilers across every /home/fajar/hris worktree.
+
+Next: commit/push this candidate, validate retained guard74 on the owned emulator, merge
+current main documentation into this branch without changing accepted application inputs,
+and implement prompt foreground recovery plus scoped readiness events. Keep only one heavy
+compiler/emulator active. Phone70 remains offline; both73 preflights timed out. Deliver
+only validated progress, notify before each phone install, and never drive its UI.
+
+
 ## Activation domain candidate; validation in progress — 8 November 2026, 17:37 UTC
 
 Main branch now has private-account guard 767bd226 (cherry-picked from side045cae58),

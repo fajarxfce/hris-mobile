@@ -41,6 +41,8 @@ class AndroidCollaborationRuntimeRepository(
     CollaborationRuntimeRepository,
     CollaborationLocalDeviceIdentityRepository,
     CollaborationSpaceRuntimeRepository {
+    override val supportsDeviceActivation = true
+
     private val registry =
         SdkRuntimeRegistry<AndroidCollaborationRuntimeLease>(
             { it.availableForEntry && it.credentialFailures.value == null },

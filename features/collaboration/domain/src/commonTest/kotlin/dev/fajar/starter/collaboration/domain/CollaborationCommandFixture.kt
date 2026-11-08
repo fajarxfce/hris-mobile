@@ -124,37 +124,14 @@ internal class CollaborationCommandFixture {
         }
 
     fun prepare() =
-        PrepareCollaborationSetup(
-            commands,
-            remote,
-            access.sessions,
-            access.workspaces,
-            server,
-            build,
-            clock,
-        )
+        CollaborationActivationFixture(this, configureDevice = false).operation()::prepareCommand
 
     fun replay(client: AppBuild = build) =
-        ReplayCollaborationSetup(
-            commands,
-            remote,
-            access.sessions,
-            access.workspaces,
-            server,
-            client,
-            clock,
-        )
+        CollaborationActivationFixture(this, configureDevice = false).operation(client = client)::
+            replayCommand
 
     fun reconcile() =
-        ReconcileCollaborationSetupReceipt(
-            commands,
-            remote,
-            access.sessions,
-            access.workspaces,
-            server,
-            build,
-            clock,
-        )
+        CollaborationActivationFixture(this, configureDevice = false).operation()::reconcileReceipt
 
     fun retain(
         action: CollaborationSetupAction = CollaborationSetupAction.Register("Fictional phone")

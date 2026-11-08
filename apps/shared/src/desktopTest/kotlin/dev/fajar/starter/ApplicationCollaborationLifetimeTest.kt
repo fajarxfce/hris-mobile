@@ -26,6 +26,36 @@ import kotlinx.coroutines.test.*
 
 class ApplicationCollaborationLifetimeTest {
     @Test
+    fun automaticActivationBelongsToTheSelectedApplicationOwner() = runBlocking {
+        withFixture { f ->
+            var closed = 0
+            f.activate = { owner ->
+                flow {
+                    f.activated += owner
+                    try {
+                        awaitCancellation()
+                    } finally {
+                        closed++
+                    }
+                }
+            }
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertEquals(1, f.activated.size)
+            assertEquals(f.selected.company.id, f.activated.single().companyId)
+            f.workspace.value = AppResult.Success(null)
+            f.scheduler.runCurrent()
+            assertEquals(1, closed)
+            f.workspace.value = AppResult.Success(f.selected)
+            f.scheduler.runCurrent()
+            assertEquals(2, f.activated.size)
+            f.lifetime.close()
+            f.scheduler.runCurrent()
+            assertEquals(2, closed)
+        }
+    }
+
+    @Test
     fun repeatedAdmissionExpiryAndReadmissionDoNotWakeBlockedDelivery() = runBlocking {
         for (policyExpiry in listOf(false, true)) {
             withFixture { f ->
@@ -80,6 +110,7 @@ class ApplicationCollaborationLifetimeTest {
                     f.scheduler.runCurrent()
                     assertNotNull(f.published().retention.foreground)
                     assertEquals(initial, f.scheduled)
+                    assertEquals(1, f.activated.size)
                 }
             }
         }
@@ -414,6 +445,11 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
                 }
             }
         }
+    val activated = mutableListOf<CollaborationOwner>()
+    var activate: (CollaborationOwner) -> Flow<AppResult<CollaborationActivationProgress>> =
+        { owner ->
+            flow { activated += owner }
+        }
     private val runtime =
         object : CollaborationRuntimeRepository by app.sdk {
             override suspend fun updateRetention(
@@ -446,6 +482,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
             RequestCollaborationRecovery(recoveryWakes, schedules),
             app.koin.get(),
             { kotlinx.coroutines.flow.emptyFlow() },
+            { activate(it) },
             StandardTestDispatcher(scheduler),
         )
 

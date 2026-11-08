@@ -2351,22 +2351,34 @@ class CollaborationDataModule {
     ) = RestoreCollaborationRuntime(runtimes, sessions, workspaces, server, build, Clock.System)
 
     @Single
-    fun installRuntime(
+    fun activateDevice(
         commands: CollaborationSetupCommandRepository,
+        setup: CollaborationSetupRepository,
         runtimes: CollaborationRuntimeRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         server: IdentityServer,
         build: AppBuild,
+        replicas: CollaborationListRepository,
+        inventory: CollaborationSdkInventoryRepository,
+        possession: CollaborationSdkPossessionRepository,
+        wakes: CollaborationRecoveryWakeRepository,
+        schedules: SyncScheduleRepository,
     ) =
-        InstallCollaborationRuntime(
+        ActivateCollaborationDevice(
             commands,
+            setup,
             runtimes,
             sessions,
             workspaces,
             server,
             build,
             Clock.System,
+            replicas,
+            inventory,
+            possession,
+            wakes,
+            schedules,
         )
 
     @Factory
@@ -2378,54 +2390,6 @@ class CollaborationDataModule {
         build: AppBuild,
         replicas: CollaborationListRepository,
     ) = LoadCollaborationSetup(sessions, workspaces, setup, server, build, Clock.System, replicas)
-
-    @Factory
-    fun prepareSetup(
-        commands: CollaborationSetupCommandRepository,
-        setup: CollaborationSetupRepository,
-        sessions: SessionRepository,
-        workspaces: WorkspaceRepository,
-        server: IdentityServer,
-        build: AppBuild,
-    ) =
-        PrepareCollaborationSetup(
-            commands,
-            setup,
-            sessions,
-            workspaces,
-            server,
-            build,
-            Clock.System,
-        )
-
-    @Single
-    fun replaySetup(
-        commands: CollaborationSetupCommandRepository,
-        setup: CollaborationSetupRepository,
-        sessions: SessionRepository,
-        workspaces: WorkspaceRepository,
-        server: IdentityServer,
-        build: AppBuild,
-    ) = ReplayCollaborationSetup(commands, setup, sessions, workspaces, server, build, Clock.System)
-
-    @Factory
-    fun reconcileSetup(
-        commands: CollaborationSetupCommandRepository,
-        setup: CollaborationSetupRepository,
-        sessions: SessionRepository,
-        workspaces: WorkspaceRepository,
-        server: IdentityServer,
-        build: AppBuild,
-    ) =
-        ReconcileCollaborationSetupReceipt(
-            commands,
-            setup,
-            sessions,
-            workspaces,
-            server,
-            build,
-            Clock.System,
-        )
 
     @Factory
     fun readEditOutcomes(
