@@ -63,6 +63,15 @@ class CollaborationConversationApi(
             forSession(session)
         }
 
+    suspend fun transport(
+        session: String,
+        company: String,
+        id: String,
+    ): CollaborationDirectTransportDto =
+        client.requestJson(direct(company) + "/${Uuid.parse(id)}/transport", maximumBytes = 2048) {
+            forSession(session)
+        }
+
     suspend fun summaryByRoom(
         session: String,
         company: String,

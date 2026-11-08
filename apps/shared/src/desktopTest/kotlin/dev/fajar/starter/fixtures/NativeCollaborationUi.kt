@@ -105,6 +105,10 @@ class NativeCollaborationUi {
         val id = suffix.substringBefore('/')
         check(id in ids) { "Unknown fixture conversation" }
         return when {
+            suffix.endsWith("/transport") -> {
+                check(request.method == HttpMethod.Get)
+                transport(id)
+            }
             suffix.endsWith("/summary") -> wire(summary(id))
             suffix.endsWith("/room") -> {
                 if (request.method == HttpMethod.Post) {
@@ -164,6 +168,35 @@ class NativeCollaborationUi {
             )
         }
         return null
+    }
+
+    private fun transport(id: String): Pair<String, HttpStatusCode> {
+        admissionFailureCode?.let {
+            return """{"code":"$it"}""" to HttpStatusCode.Forbidden
+        }
+        if (!activeDevice)
+            return """{"code":"collaboration_device_unavailable"}""" to
+                HttpStatusCode.ServiceUnavailable
+        val value = room(id)
+        val matrixRoomId = value.matrixRoomId
+        if (value.state != "READY" || matrixRoomId == null)
+            return """{"code":"collaboration_room_not_ready"}""" to
+                HttpStatusCode.ServiceUnavailable
+        return wire(
+            CollaborationDirectTransportDto(
+                NativeUiServer.COMPANY_ONE,
+                accountId,
+                checkNotNull(nativeSessionId),
+                deviceId,
+                0,
+                "ANDROID",
+                id,
+                accountId,
+                peerId,
+                matrixRoomId,
+                value.version ?: 0,
+            )
+        )
     }
 
     private fun direct(id: String) =

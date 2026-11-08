@@ -6,7 +6,10 @@ import org.koin.core.annotation.Single
 
 @Single
 class ApiCollaborationConversationRemoteSource(private val api: CollaborationConversationApi) :
-    CollaborationConversationRemoteSource {
+    CollaborationConversationRemoteSource, CollaborationTransportRemoteSource {
+    override suspend fun transport(session: String, company: String, conversation: String) =
+        api.transport(session, company, conversation)
+
     override suspend fun participants(
         session: String,
         company: String,

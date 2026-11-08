@@ -101,6 +101,7 @@ class CollaborationWorkerFixture {
             assertNotNull(
                 assertIs<AppResult.Success<Session?>>(koin.get<SessionRepository>().current()).value
             )
+        server.collaboration.nativeSessionId = session.binding.serverId
         workspaceId =
             assertIs<AppResult.Success<dev.fajar.starter.workspace.domain.entities.Workspace>>(
                     koin.get<SelectWorkspace>()(session.id, NativeUiServer.COMPANY_ONE)

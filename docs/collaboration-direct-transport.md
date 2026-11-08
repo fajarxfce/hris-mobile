@@ -20,7 +20,18 @@ or another repository. Cancellation remains owned by the caller. The ViewModel a
 composer remain unchanged, as do immutable originals, native transaction identity,
 receipt persistence, offline history and the separate server-side Matrix admission.
 
-At this checkpoint source validation is running. No new APK, runtime request-count
-measurement or latency improvement is accepted. The current installed release67
-remains the prior accepted artifact. This HRIS-specific endpoint and policy do not
-belong in the starter.
+Source acceptance passed on 8 November 2026: root check, actual Chrome contracts,
+Android compilation/lint (zero errors), production web and iOS source compilation,
+format, architecture and Detekt. The final gate ran 3,947 fresh cases in 551.969 seconds,
+with zero failures/errors/skips; 4,487 application inputs and82 library files were
+unchanged throughout. Failed attempts and exact contract/report hashes are retained
+in [measurements](measurements/collaboration-direct-transport-2026-11-08.json).
+
+Prepared-queue tests still require independent admission before resume and after
+completion, exact room ownership, rejection after current revocation, cancellation
+cleanup and original receipt recovery. The coded failure classifications are preserved.
+
+Release68 device acceptance is still pending; source tests alone do not establish
+request savings or latency. Installed release67 remains the accepted phone artifact.
+This HRIS-specific endpoint and policy do not belong in the starter. Native Apple
+execution, capture overhead and the remaining54 PRD groups remain separate work.

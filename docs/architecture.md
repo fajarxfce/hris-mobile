@@ -1,5 +1,9 @@
 # Architecture
 
+[Direct chat transport](collaboration-direct-transport.md) uses one bounded metadata
+read per Stage/Deliver admission. Use cases retain current ownership/denial policy,
+the repository maps the response, and the datasource/API perform raw I/O.
+
 [Remote history signals](collaboration-chat-remote-echo.md#history-acquisition-signals)
 use domain content/provenance policy; the route-owned timeline still updates every
 changed screen projection without treating local send status as new history.

@@ -20,8 +20,7 @@ import kotlinx.coroutines.sync.withLock
 class StageCollaborationText(
     private val messages: CollaborationMessageRepository,
     private val lists: CollaborationListRepository,
-    private val conversations: CollaborationConversationRepository,
-    private val setup: CollaborationSetupRepository,
+    private val transport: CollaborationTransportRepository,
     private val runtimes: CollaborationRuntimeRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
@@ -118,39 +117,15 @@ class StageCollaborationText(
         deviceId: String,
         conversationId: String,
     ): AppResult<String> {
-        val registered = checked(scope, owner) { setup.read(owner) }
-        if (registered is AppResult.Failed) return registered
-        val device = (registered as AppResult.Success).value
-        if (
-            device?.id != deviceId ||
-                device.state != CollaborationDeviceState.ACTIVE ||
-                device.platform.name != build.platform.name.uppercase()
-        )
-            return failed("client.collaboration_device_unavailable", FailureKind.Unavailable)
-        val read = checked(scope, owner) { conversations.get(owner, conversationId) }
+        val read = checked(scope, owner) { transport.read(owner, conversationId) }
         if (read is AppResult.Failed) return read
-        val direct = (read as AppResult.Success).value
-        if (
-            direct.id != conversationId ||
-                direct.companyId != owner.companyId ||
-                owner.accountId !in listOf(direct.firstAccountId, direct.secondAccountId)
+        return collaborationTransportRoom(
+            (read as AppResult.Success).value,
+            owner,
+            deviceId,
+            conversationId,
+            build.platform.name.uppercase(),
         )
-            return failed("client.collaboration_conversation_mismatch", FailureKind.AccessDenied)
-        val loaded = checked(scope, owner) { conversations.room(owner, conversationId) }
-        if (loaded is AppResult.Failed) return loaded
-        val room = (loaded as AppResult.Success).value
-        if (room.conversationId != conversationId)
-            return failed("client.collaboration_conversation_mismatch", FailureKind.AccessDenied)
-        val id = room.matrixRoomId
-        if (
-            room.state != CollaborationDirectRoomState.READY ||
-                id == null ||
-                !id.startsWith('!') ||
-                id.length !in 2..255 ||
-                id.any { it.isWhitespace() || it.isISOControl() }
-        )
-            return failed("client.collaboration_room_not_ready", FailureKind.Unavailable)
-        return AppResult.Success(id)
     }
 
     private suspend fun stage(

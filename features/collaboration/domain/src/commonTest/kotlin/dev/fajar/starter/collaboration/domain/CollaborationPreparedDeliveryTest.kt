@@ -19,12 +19,13 @@ class CollaborationPreparedDeliveryTest {
             val timeline = PreparedTimeline(f.owner, f.device)
             val reads = mutableListOf<String>()
             f.control.beforeRemote = { reads += it }
-            f.afterAcquire = { assertEquals(if (prepared) 0 else 1, f.base.setup.calls) }
-            f.afterResume = { assertEquals(if (prepared) 1 else 2, f.base.setup.calls) }
+            f.afterAcquire = { assertEquals(if (prepared) 0 else 1, f.transportReads) }
+            f.afterResume = { assertEquals(if (prepared) 1 else 2, f.transportReads) }
             val result = f.deliver(preparedTimeline = timeline.takeIf { prepared })
             assertIs<AppResult.Success<CollaborationDeliveryReport>>(result)
-            assertEquals(if (prepared) 2 else 3, f.base.setup.calls)
-            assertEquals(List(if (prepared) 2 else 3) { listOf("get", "room") }.flatten(), reads)
+            assertEquals(if (prepared) 2 else 3, f.transportReads)
+            assertEquals(List(if (prepared) 2 else 3) { "transport" }, reads)
+            assertEquals(0, f.base.setup.calls)
             assertIs<CollaborationMessageState.Sent>(f.records.single().state)
             assertEquals(setOf("original"), f.knownTransactions)
             assertEquals(1, f.acquisitions)
@@ -53,7 +54,7 @@ class CollaborationPreparedDeliveryTest {
                 assertIs<AppResult.Failed>(f.deliver(preparedTimeline = timeline)).failure.kind,
             )
             assertEquals(0, f.acquisitions)
-            assertEquals(0, f.base.setup.calls)
+            assertEquals(0, f.transportReads)
             assertEquals(0, f.windows)
             assertEquals(0, timeline.closes)
         }
@@ -81,7 +82,7 @@ class CollaborationPreparedDeliveryTest {
                 )
             assertIs<AppResult.Failed>(f.deliver(preparedTimeline = timeline))
             assertEquals(0, f.acquisitions)
-            assertEquals(0, f.base.setup.calls)
+            assertEquals(0, f.transportReads)
             assertEquals(0, f.windows)
             assertEquals(0, timeline.closes)
         }
@@ -102,7 +103,7 @@ class CollaborationPreparedDeliveryTest {
             )
             assertEquals(1, f.acquisitions)
             assertEquals(1, f.closes)
-            assertEquals(0, f.base.setup.calls)
+            assertEquals(0, f.transportReads)
             assertEquals(0, f.windows)
             assertEquals(0, timeline.closes)
         }
@@ -131,7 +132,7 @@ class CollaborationPreparedDeliveryTest {
                 assertEquals(f.base.denied, failure)
                 assertEquals(f.base.denied, f.base.gate.value.denial)
             } else assertEquals("client.collaboration_device_unavailable", failure.code)
-            assertEquals(1, f.base.setup.calls)
+            assertEquals(1, f.transportReads)
             assertEquals(0, f.windows)
             assertTrue(f.journal.isEmpty())
             assertEquals(1, f.closes)
@@ -151,7 +152,7 @@ class CollaborationPreparedDeliveryTest {
             "client.collaboration_conversation_mismatch",
             assertIs<AppResult.Failed>(f.deliver(preparedTimeline = timeline)).failure.code,
         )
-        assertEquals(1, f.base.setup.calls)
+        assertEquals(1, f.transportReads)
         assertEquals(0, f.windows)
         assertEquals(1, f.closes)
         assertEquals(0, timeline.closes)
@@ -288,7 +289,7 @@ class CollaborationPreparedDeliveryTest {
         )
         assertEquals(0, f.acquisitions)
         assertEquals(0, f.windows)
-        assertEquals(0, f.base.setup.calls)
+        assertEquals(0, f.transportReads)
         assertEquals(0, timeline.closes)
     }
 }

@@ -360,13 +360,49 @@ internal class CollaborationDeliveryFixture {
                 retainedOwner: CollaborationOwner?
             ): AppResult<Unit> = error("No parent close")
         }
+    var transportReads = 0
+    var afterTransport: suspend () -> Unit = {}
+    private val transport = CollaborationTransportRepository { captured, conversationId ->
+        transportReads++
+        val registered = base.setup.onRead()
+        control.beforeRemote("transport")
+        afterTransport()
+        control.remoteFailure?.let {
+            return@CollaborationTransportRepository AppResult.Failed(it)
+        }
+        if (registered is AppResult.Failed) return@CollaborationTransportRepository registered
+        val configured = (registered as AppResult.Success).value
+        if (configured == null || configured.state != CollaborationDeviceState.ACTIVE)
+            return@CollaborationTransportRepository collaborationSetupFailure(
+                "client.collaboration_device_unavailable",
+                FailureKind.Unavailable,
+            )
+        val room = control.room
+        if (room.state != CollaborationDirectRoomState.READY || room.matrixRoomId == null)
+            return@CollaborationTransportRepository collaborationSetupFailure(
+                "client.collaboration_room_not_ready",
+                FailureKind.Unavailable,
+            )
+        AppResult.Success(
+            CollaborationDirectTransport(
+                captured,
+                configured.id,
+                configured.version,
+                configured.platform,
+                conversationId,
+                control.conversation.firstAccountId,
+                control.conversation.secondAccountId,
+                room.matrixRoomId!!,
+                room.version ?: 0,
+            )
+        )
+    }
     private val delivery =
         DeliverCollaborationMessages(
             messages,
             receipts,
             lists,
-            control.remote,
-            base.setup.remote,
+            transport,
             runtimes,
             base.setup.sessions,
             base.setup.workspaces,

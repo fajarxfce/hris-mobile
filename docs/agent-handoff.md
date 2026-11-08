@@ -1,5 +1,28 @@
 # Agent continuation — HRIS Mobile
 
+## Direct transport source accepted — 8 November 2026, 11:36 UTC
+
+Full-2/33610 is REAPED PASS551.969s:3,947 fresh cases, zero failures/errors/skips;
+4,487 unchanged app inputs and82 unchanged library files. Root check, real Chrome
+transport/policy cases, Android compile/lint, web/iOS source and quality passed.
+All19 Kotlin changes are accepted. [Contract and limits](collaboration-direct-transport.md).
+No compiler or owned emulator remains at this checkpoint.
+
+Commit/push this accepted source and build release68 with its prepared scripts in
+`.work/release-phone-2026-11-08-build68`; they pin full-2. Then verify exact APK/SDK,
+preflight the deployed API, use the original1536MiB/two-core Bima image, upgrade67→68,
+run one NEW original with counters and timing, restore exact UNSENT Draft66 092041,
+review four screenshots and cold offline history/preview, accept only actual results,
+stop/reap the owned emulator, and announce phone install-only. Never replay an old
+original, send the retained draft, or rerun a driver after Send. No68APK/device/phone
+or latency acceptance exists yet. Phone and original stopped Bima image remain67.
+
+Platforme8d1d24f is already deployed/healthy; do not roll it out again. Starterad3aa93
+is accepted/pushed and needs no HRIS-specific port. Library2b849217/SDK5 are unchanged
+and unpublished. All54PRD groups/nativeApple Matrix/capture overhead remain open.
+Phone passive log read on67 found no complete send trace and drove no UI; no phone
+latency claim follows. Continue original communications work after this delivery.
+
 ## Direct transport final source gate running — 8 November 2026, 11:26 UTC
 
 Focused-4/72636 is REAPED PASS114.405s:69 fresh domain cases, zero failures/errors/

@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.collaborationSetupFailure
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.StageCollaborationText
 import dev.fajar.starter.common.result.*
@@ -10,6 +11,22 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runTest
 
 class StageCollaborationTextTest {
+    @Test
+    fun oneTransportReadStagesTheOriginalAndLateAccountChangePreventsQueueAcquisition() = runTest {
+        val current = StageFixture()
+        current.prepare()
+        assertIs<AppResult.Success<*>>(current.stage())
+        assertEquals(1, current.transportReads)
+        assertEquals(1, current.enqueues)
+        val changed = StageFixture()
+        changed.prepare()
+        changed.afterTransport = { changed.base.setup.session = null }
+        assertIs<AppResult.Failed>(changed.stage())
+        assertEquals(1, changed.transportReads)
+        assertEquals(0, changed.acquisitions)
+        assertEquals(0, changed.enqueues)
+    }
+
     @Test
     fun oldRetainedTransactionDoesNotBlockANewMessageAfterLegacyCredentialReplacement() = runTest {
         val f = StageFixture()
@@ -643,12 +660,48 @@ internal class StageFixture {
                 retainedOwner: CollaborationOwner?
             ): AppResult<Unit> = error("No parent close")
         }
+    var transportReads = 0
+    var afterTransport: suspend () -> Unit = {}
+    private val transport = CollaborationTransportRepository { captured, conversationId ->
+        transportReads++
+        val registered = base.setup.onRead()
+        control.beforeRemote("transport")
+        afterTransport()
+        control.remoteFailure?.let {
+            return@CollaborationTransportRepository AppResult.Failed(it)
+        }
+        if (registered is AppResult.Failed) return@CollaborationTransportRepository registered
+        val configured = (registered as AppResult.Success).value
+        if (configured == null || configured.state != CollaborationDeviceState.ACTIVE)
+            return@CollaborationTransportRepository collaborationSetupFailure(
+                "client.collaboration_device_unavailable",
+                FailureKind.Unavailable,
+            )
+        val room = control.room
+        if (room.state != CollaborationDirectRoomState.READY || room.matrixRoomId == null)
+            return@CollaborationTransportRepository collaborationSetupFailure(
+                "client.collaboration_room_not_ready",
+                FailureKind.Unavailable,
+            )
+        AppResult.Success(
+            CollaborationDirectTransport(
+                captured,
+                configured.id,
+                configured.version,
+                configured.platform,
+                conversationId,
+                control.conversation.firstAccountId,
+                control.conversation.secondAccountId,
+                room.matrixRoomId!!,
+                room.version ?: 0,
+            )
+        )
+    }
     private val staging =
         StageCollaborationText(
             messages,
             lists,
-            control.remote,
-            base.setup.remote,
+            transport,
             runtimes,
             base.setup.sessions,
             base.setup.workspaces,

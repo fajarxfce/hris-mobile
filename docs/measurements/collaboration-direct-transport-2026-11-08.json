@@ -1,5 +1,5 @@
 {
-  "accepted": false,
+  "accepted": true,
   "sourceBase": "e900c5aa",
   "backendAcceptedSource": "e8d1d24fdf9228540955f8ace1869975e78d35ec",
   "backendDeployed": true,
@@ -326,15 +326,119 @@
         },
         "resultSha256": "0d4a0473d135abb09fc4b07fc86fb581a6c007100a8bfbf4f2746bdd7e6ac3b9"
       }
+    },
+    "full-2": {
+      "session": 33610,
+      "reaped": true,
+      "result": {
+        "startedAt": "2026-11-08T11:26:27.433237+00:00",
+        "elapsedSeconds": 551.969,
+        "exitCode": 0,
+        "sourceFiles": 4487,
+        "librarySourcesUnchanged": true,
+        "sourcesUnchanged": true,
+        "freshCounts": {
+          "tests": 3947,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "freshSuites": 479,
+        "resultSha256": "f0e2e71eebee2fb0d81c7db28ede90d1f7fb4c619d7c4cc26efce3e423c2d245",
+        "sourceManifestSha256": "7c313a92b75430a4f9962e0478c9484c2ed281175d357f06575471e429e461cb",
+        "libraryManifestSha256": "b346eac84c446f82f4801886f1be25f9d3e10fdf0e2f97375bd0010164d947f4",
+        "reports": {
+          "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+            "sha256": "924e0ed73735092f406c1391d65456b695e00fd015ab87d90535a00f53fd102b",
+            "tests": 20,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+            "sha256": "9f4d71cd569f8d942cdf23817e0b2f7ad10c8dfc61cdcc8ceaae9fc4842f27ca",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+            "sha256": "1bf5cf40ba0881896f1bee73a5399dc93666932c981038e3e059c54b778f63fd",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+            "sha256": "f32bfeb93abbd46f508ae31d6e78a99fdeac7d276f8f6d13f7b324be03b9bb90",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationPreparedDeliveryTest.xml": {
+            "sha256": "9186938b0c1bcf2a897427a8a7f5965a7ec25a17a8d8d3ce3032c237162e3361",
+            "tests": 12,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationTransportRoomTest.xml": {
+            "sha256": "ab691611916a39795a885713d8314831a606c77e515a842daf5d262963abd4a3",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.DeliverCollaborationMessagesTest.xml": {
+            "sha256": "7dc674e382630c1c0c2195dcf73be849529c5fff3e60f372b9cf74bd603ad10b",
+            "tests": 32,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.StageCollaborationTextTest.xml": {
+            "sha256": "5506856cf3c618213d681a127b128fbe2b885d7f7a465c73ae2680d42a061481",
+            "tests": 23,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationTransportRoomTest.xml": {
+            "sha256": "aecfa335a57e0c56e9ae51a9a5dba357b43c129380629da2b19772f3306f3e12",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        },
+        "quality": {
+          "rootCheck": true,
+          "format": true,
+          "architecture": true,
+          "detekt": true,
+          "androidCompileDevRelease": true,
+          "androidLintErrors": 0,
+          "androidLintOtherIssues": 0,
+          "productionWasmSource": true,
+          "iosArm64Source": true,
+          "nativeAppleExecution": false
+        }
+      }
     }
   },
   "next": "full-1 running, source frozen",
   "runtimeAccepted": false,
   "pending": {
-    "gate": "full-2",
-    "sourcesFrozen": true,
-    "applicationKotlinChanges": 19,
-    "followupRequired": "complete full-2 before source acceptance and build68",
-    "session": 33610
-  }
+    "release": 68,
+    "apkBuilt": false,
+    "deviceAccepted": false,
+    "phoneInstalled": false
+  },
+  "acceptedGate": "full-2",
+  "limits": [
+    "Source acceptance only; no new runtime latency measurement.",
+    "HRIS-specific change in Stage and Deliver; Enter/history retain existing readers.",
+    "No native Apple execution or network-capture overhead acceptance."
+  ]
 }

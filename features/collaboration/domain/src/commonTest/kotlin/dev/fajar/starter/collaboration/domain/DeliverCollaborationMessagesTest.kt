@@ -9,6 +9,15 @@ import kotlinx.coroutines.test.runTest
 
 class DeliverCollaborationMessagesTest {
     @Test
+    fun transportIsReacquiredAtEachAdmissionInsteadOfSharingACachedGrant() = runTest {
+        val f = CollaborationDeliveryFixture()
+        f.prepare()
+        assertIs<AppResult.Success<*>>(f.deliver())
+        assertEquals(3, f.transportReads)
+        assertEquals(1, f.windows)
+    }
+
+    @Test
     fun lateParentOwnedAcknowledgementRetainsOnlyTheOriginalAccountAfterWaiterCancellation() =
         runTest {
             for (replacement in listOf(false, true)) {
