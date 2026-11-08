@@ -31,7 +31,9 @@ Prepared-queue tests still require independent admission before resume and after
 completion, exact room ownership, rejection after current revocation, cancellation
 cleanup and original receipt recovery. The coded failure classifications are preserved.
 
-Release68 device acceptance is still pending; source tests alone do not establish
-request savings or latency. Installed release67 remains the accepted phone artifact.
-This HRIS-specific endpoint and policy do not belong in the starter. Native Apple
-execution, capture overhead and the remaining54 PRD groups remain separate work.
+[Release68 is accepted and installed](collaboration-direct-transport-release68.md).
+Three actual transport reads returned200; no403 was observed in180.142 seconds.
+Tap-to-encrypted-request remains2,957 ms in the emulator sample, so an end-to-end
+latency improvement is not claimed. Continue investigating the remaining local
+and native queue work. This endpoint and policy stay in HRIS; native Apple,
+capture overhead and the remaining54 PRD groups remain separate work.

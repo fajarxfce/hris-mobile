@@ -1,5 +1,34 @@
 # Agent continuation — HRIS Mobile
 
+## Release 68 accepted and installed — 8 November 2026, 11:47 UTC
+
+Source `ca0b05cc` is accepted/pushed. Release 68 is installed on the authorized phone
+with exact APK hash, same app ID 10962/first-install time and preserved data. Installer
+50331 is REAPED PASS, 27.878s. No phone UI was driven. Packaging 85740, verify 88829/89581,
+emulator install 8083, probe 12427, counter 8399, passive 29163, stop 18628 and emulator 5350
+are all REAPED. No owned compiler/emulator remains; original Bima keys/data are intact.
+[Device evidence and remaining latency](collaboration-direct-transport-release68.md).
+
+Exactly ONE new original `Tes68 transport 114138` acknowledged. NEVER resend it or
+older originals. Exact UNSENT `Draft66 092041` is restored. Four PNGs actually viewed;
+cold offline history, draft and inbox preview pass. Counter 180.142s: zero 403, key 401 x2
+then 404 x2 around one refresh 200, three transport 200/38–53ms and one encrypted 200/311ms.
+Tap→request 2957ms/headers 3268ms; coarse Sent 5.091s. Local handoff 85ms/scheduling 4ms/
+submission 284ms. No end-to-end improvement or physical-phone latency claim.
+
+Continue investigating the pre-send local/native work: RecoverComposer 455ms,
+EnterTimeline 397ms, Stage 455ms, Deliver 1080ms. Current repository reads and continuation
+checks may account for unmeasured time; attribution is NOT established. Native queue
+acquisition already has traceSdkAcquisition instrumentation, but these entries were
+not present among OperationCompleted JSON in this capture; inspect its actual format
+before adding instrumentation. No new source change has started. Preserve ownership,
+revocation, durable original/receipt semantics and layer responsibilities.
+
+Backend e8d1d24f/schema116.1 remains deployed; no repeat rollout. Starter ad3aa93 is
+accepted/pushed; this HRIS-only endpoint needs no port. Library 2b849217/SDK 5 are unchanged
+and unpublished. All 54 PRD groups/nativeApple Matrix/capture overhead remain. Phone now 68;
+notify before each future install-only and never drive its UI. Continue original long run.
+
 ## Direct transport source accepted — 8 November 2026, 11:36 UTC
 
 Full-2/33610 is REAPED PASS551.969s:3,947 fresh cases, zero failures/errors/skips;

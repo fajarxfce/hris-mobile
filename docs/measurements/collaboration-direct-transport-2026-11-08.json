@@ -431,13 +431,14 @@
   "runtimeAccepted": false,
   "pending": {
     "release": 68,
-    "apkBuilt": false,
-    "deviceAccepted": false,
-    "phoneInstalled": false
+    "apkBuilt": true,
+    "deviceAccepted": true,
+    "phoneInstalled": true,
+    "deviceMeasurement": "collaboration-direct-transport-release68-2026-11-08.json"
   },
   "acceptedGate": "full-2",
   "limits": [
-    "Source acceptance only; no new runtime latency measurement.",
+    "Source and bounded release68 acceptance recorded separately; end-to-end latency remains unresolved.",
     "HRIS-specific change in Stage and Deliver; Enter/history retain existing readers.",
     "No native Apple execution or network-capture overhead acceptance."
   ]
