@@ -1,0 +1,276 @@
+{
+  "recordedAt": "2026-11-08T03:36:11.242251+00:00",
+  "sourceCommit": "76c68035b9ee651afe7404d97964c0bc6bea8d3a",
+  "libraryCommit": "2b8492170ff30915f9a6694d7d1bf8f076e74e3c",
+  "apk": {
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 61,
+    "variant": "devRelease",
+    "bytes": 123284751,
+    "sha256": "c106d15530c12e9cf350c24b735bb1d9ba5f037e0bdb6c91d098cb13303c0dc1",
+    "debuggable": false,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3"
+  },
+  "packageCheck": {
+    "startedAt": "2026-11-08T03:21:13.151761+00:00",
+    "elapsedSeconds": 114.81,
+    "exitCode": 0
+  },
+  "nativeSdk": {
+    "nativeSha256": "4e8df548f98df275fc5ec23205388d716919ea9d0ab7e927d5cc39020171fa00",
+    "nativeBytes": 97549216,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "aarSha256": "5bffa2f4318d1edc7518ad21dc156393ef8a7e2610fd42320a67c12ab645ba5c",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+    "published": false,
+    "strippedNativeMatchesVerifiedSdk": true,
+    "stripToolNdkVersion": "28.2.13676358",
+    "queueApisAndUseCaseInDex": true,
+    "actualNativeObserverSymbolsPresent": true
+  },
+  "localGate": "collaboration-history-logical-read-2026-11-08.json",
+  "notificationOs": {
+    "passed": 6,
+    "failed": 0,
+    "actualAndroidOs": true,
+    "serial": "emulator-5562",
+    "startedAt": "2026-11-08T03:25:10.916371+00:00",
+    "elapsedSeconds": 1.393,
+    "apkSha256": "6ac1b8eff39ef983938ceb17661dd99da63fdd918ac18879372dfb7ce1439648",
+    "scope": [
+      "capture/reset/disposal and late results",
+      "parent cancellation",
+      "already-cancelled parent",
+      "capture closure with live parent",
+      "late old completion after replacement",
+      "initial empty capture retains prior process shortcut until explicit reset"
+    ],
+    "phoneTouched": false,
+    "fixtureRemoved": true
+  },
+  "acceptedScope": "Coherent local history lookup and finer failure stages, actual background/cold notification entry, one encrypted send200, default-key404 and cold offline continuity. Remaining acquisition error, preflight volume and keyboard dismissal are not accepted as resolved.",
+  "notificationAndInspector": {
+    "accepted": true,
+    "apkSha256": "c106d15530c12e9cf350c24b735bb1d9ba5f037e0bdb6c91d098cb13303c0dc1",
+    "serial": "emulator-5562",
+    "phoneTouched": false,
+    "additionalMessagesSent": 0,
+    "startedAt": "2026-11-08T03:26:55.307071+00:00",
+    "backgroundNotificationTap": true,
+    "backgroundTapRetainedProcess": true,
+    "actualKtorCapture": true,
+    "actualMatrixCapture": true,
+    "requestPathSha256": "8a919e117bae81c9ace186dfecbe2441e0a63b8d3ba689e9c9104d0cdb3642a4",
+    "httpStatusLabels": [
+      "HTTP 200"
+    ],
+    "timing": {
+      "Started (UTC)": "2026-11-08T03:26:26.445Z",
+      "Time to response": "231 ms",
+      "Transfer": "Complete (232 ms)",
+      "Observed response bytes": "59"
+    },
+    "responseAndTransferVisible": true,
+    "bodyCaptureExplicitlyUnavailable": true,
+    "clearVerified": true,
+    "coldNotificationTap": true,
+    "coldTapStartedDifferentProcess": true,
+    "openedExistingThreadForSecretStorageProbe": true,
+    "actualOwnSecretStorageStatus": 404,
+    "secretStorageRequestPathSha256": "5962f3398c166cdc9607bc1a0455cc14c7eb317c7c08917a78327b1865b149d4",
+    "scope": "Real API and Rust Matrix HTTP metadata, separate response/transfer fields, filtering, detail/back and old-send removal. Not an ACK-latency or capture-overhead benchmark.",
+    "finishedAt": "2026-11-08T03:28:46.676659+00:00"
+  },
+  "phaseDurationsMillis": {
+    "DraftPersistence": 522,
+    "CommandPreparation": 261,
+    "CommandQueue": 251,
+    "CommandConfirmation": 88
+  },
+  "onlineSentObservedBySeconds": 4.929,
+  "closedFailures": [
+    {
+      "area": "Storage",
+      "category": "IllegalArgumentException"
+    },
+    {
+      "area": "Worker",
+      "category": "ChatDelivery_AcquireRetirementHistory_Storage"
+    }
+  ],
+  "counter": {
+    "startedAt": "2026-11-08T03:25:43.032506+00:00",
+    "elapsedSeconds": 180.486,
+    "requests": {
+      "other_hris": 22,
+      "hris_device_setup": 36,
+      "hris_room": 34,
+      "secret_storage_default_key": 4,
+      "hris_conversation": 30,
+      "other_matrix": 15,
+      "sync": 8,
+      "encrypted_room_send": 1
+    },
+    "responseCounts": {
+      "other_hris:401": 1,
+      "other_hris:200": 19,
+      "hris_device_setup:200": 35,
+      "hris_room:200": 34,
+      "secret_storage_default_key:404": 4,
+      "hris_conversation:200": 30,
+      "other_matrix:200": 15,
+      "sync:200": 7,
+      "encrypted_room_send:200": 1
+    },
+    "recordsSha256": "6b821faf5067ae9217b2c8f8ca99deb82e380034df0d013eca309d11e4e593f6",
+    "scope": "Controlled single-emulator local gateway traffic; fixed Matrix and HRIS route buckets only. Packet-level counts can omit fragmented starts; not a complete HTTP reconstruction or capture-overhead benchmark"
+  },
+  "requestWindows": {
+    "matrixSend": {
+      "offsetSeconds": 44.252,
+      "operation": "encrypted_room_send",
+      "method": "PUT",
+      "status": 200,
+      "headerLatencyMs": 229
+    },
+    "windows": {
+      "before_send_5_seconds": {
+        "counts": {
+          "hris_device_setup": 8,
+          "hris_room": 8,
+          "hris_conversation": 7,
+          "other_matrix": 3
+        },
+        "responses": 26
+      },
+      "after_send_10_seconds": {
+        "counts": {
+          "hris_device_setup": 14,
+          "hris_conversation": 13,
+          "hris_room": 14,
+          "encrypted_room_send": 1,
+          "other_matrix": 4,
+          "sync": 1
+        },
+        "responses": 47
+      },
+      "later_than_10_seconds": {
+        "counts": {
+          "sync": 4,
+          "other_hris": 15,
+          "hris_device_setup": 7,
+          "hris_room": 6,
+          "secret_storage_default_key": 2,
+          "hris_conversation": 5,
+          "other_matrix": 4
+        },
+        "responses": 43
+      }
+    },
+    "responses403": 0,
+    "inspectorTiming": {
+      "Started (UTC)": "2026-11-08T03:26:26.445Z",
+      "Time to response": "231 ms",
+      "Transfer": "Complete (232 ms)",
+      "Observed response bytes": "59"
+    },
+    "scope": "Same passive counter offsets, including concurrent startup/navigation/acquisition. Does not attribute all operations to the send or provide a phone latency benchmark."
+  },
+  "coldOfflineHistory": true,
+  "coldOfflinePreview": true,
+  "screenshotsSha256": {
+    "online-send.png": "600d31bd1f2307237905f0899262acf28237e8ea2256eeb06ae511e4e879fa9e",
+    "latest-preview-offline.png": "592bb9d1e560f8ba9259f2a78b406dc570081b827dd9352bfbfa9d153e3fee12",
+    "thread-offline.png": "426022d57e932385f47caf3952b009e32e73b02f2270d87396608b0683ec000e",
+    "inspector-all.png": "d381543cf2afc22caf156f7261c552a3e9700e1109870f5b11c6da12992b223f",
+    "inspector-notification.png": "44948c9e735951b584ab0cc4a79b906be2f92725c8579bf74ed4cc0d19444a4b",
+    "inspector-cold-notification.png": "58ea86ac66270abd05c7c3e60b63004527cf36018477e92bf64423e1e01b9c30",
+    "inspector-secret-storage-list.png": "fc19c28f0da45bfd90fbb99c2474cdde721fc4082feda0637cef6b2660d1538a",
+    "inspector-secret-storage-detail.png": "14c22e45a6e0342a1b4a9219a016b6c3ebfdf2a5384e66a8dbafd7b9cea42661",
+    "inspector-ktor.png": "71b234588e3f05d2363c0cd3f39509d51e641f82dce74d41b65b4244d110451a",
+    "inspector-matrix-send.png": "4d2abfbb141836330030f4157e3f4b798dc7c2fc9b1ca8350f23d886dc5ec230",
+    "inspector-matrix-detail-0.png": "79dee8ba655ee12654ac601894e485b2f35c86ec3230e5e057b4d02123c64196",
+    "inspector-matrix-detail-1.png": "7d878290033e1433fc42d7c8fa50953714de6b106bc402c60431e68f1c9cae1d",
+    "inspector-cleared.png": "0e5a50ac5850829a45a3952cbe4957a8532f39732998cb7dd7e6fecccfdfdf5d"
+  },
+  "screenshotsReviewMethod": "Three thread/list screenshots directly inspected; ten inspector screenshots inspected in three resized contact sheets.",
+  "videoReviewScope": "First six seconds sampled at four frames per second, cropped to the lower chat/composer/keyboard region, viewed in three storyboards. Does not cover every frame or show the final acknowledgement, which is checked by UI polling and the final screenshot.",
+  "initialSettingsCheck": {
+    "accepted": false,
+    "reason": "Android settings had not settled at the immediate check; preserved before-settings-settled proof."
+  },
+  "settingsRestoration": {
+    "accepted": true,
+    "serial": "emulator-5562",
+    "at": "2026-11-08T03:30:03.003017+00:00",
+    "expected": {
+      "airplane_mode_on": "0",
+      "wifi_on": "1",
+      "mobile_data": "1",
+      "show_ime_with_hard_keyboard": "1"
+    },
+    "observations": [
+      {
+        "airplane_mode_on": "0",
+        "wifi_on": "1",
+        "mobile_data": "1",
+        "show_ime_with_hard_keyboard": "1"
+      }
+    ],
+    "additionalSettingMutations": false,
+    "additionalMessagesSent": 0,
+    "reason": "Android service settings had not yet settled when the original immediate restoration check ran."
+  },
+  "emulatorStopped": {
+    "pid": 834016,
+    "startTicks": "178493083",
+    "stopped": true,
+    "dataRetained": true,
+    "phoneTouched": false,
+    "at": "2026-11-08T03:30:59.473789+00:00"
+  },
+  "phoneInstallation": {
+    "confirmed": true,
+    "startedAt": "2026-11-08T03:33:02.979930+00:00",
+    "elapsedSecondsIncludingVerification": 27.419,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 61,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "c106d15530c12e9cf350c24b735bb1d9ba5f037e0bdb6c91d098cb13303c0dc1",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-08 10:33:27",
+      "versionCode": "61 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    },
+    "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+  },
+  "limits": [
+    "AcquireRetirementHistory/Storage still observed; exact sub-operation is not proven",
+    "23 setup/conversation/room responses in the five seconds before send; concurrent work not attributed solely to this gesture",
+    "Phone latency and inspection overhead unmeasured",
+    "Keyboard still dismisses during legacy local-save workflow",
+    "Atomic composer storage remains unused by product flows",
+    "No new completed communications PRD group"
+  ]
+}

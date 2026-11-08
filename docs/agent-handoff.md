@@ -1,5 +1,50 @@
 # Agent continuation — HRIS Mobile
 
+## Build61 installed; remaining acquisition failure and excessive reads — 08 November 2026, 03:36 UTC
+
+Source76c68035 is pushed and packaged as Dev release61,123,284,751bytes,
+SHA256c106d15530c12e9cf350c24b735bb1d9ba5f037e0bdb6c91d098cb13303c0dc1.
+Package54849 passes114.81s; signer/API/SDK5 native bytes/lint verified. Original Bima
+emulator6698/PID834016 ran1536MiB, six actual notification OS cases, one new61 send,
+background/cold notification taps, actual default-key404, and cold offline original/
+preview continuity. All13 screenshots and three cropped4fps storyboards were viewed.
+Initial settings check ran before Android settled; a separate read confirmed exact
+restoration with no extra settings mutations or sends. Both results preserved. The
+first emulator start refused a briefly exiting Gradle daemon; no process was killed.
+Emulator stopped/reaped03:30:59; all test/counter/build jobs reaped. No active compiler.
+
+Phone10.77.77.3:5555 received exact61 with install-only after user-facing notice,
+03:33:02UTC,27.419s incl verification. Remote hash/version61 match; appId10962 and
+first-install time retained, no uninstall/data clear/UI launch. Install61556 is reaped.
+Exact evidence: measurements/chat-retirement-device-2026-11-08.json.
+
+Unresolved: log still has Storage/IllegalArgumentException followed by
+ChatDelivery_AcquireRetirementHistory_Storage. This occurs before RetireCommands;
+acquireAndRetire calls acquireOriginals (SDK/history acquisition, recover receipts,
+reconcile) first. Do not claim coherent logical reads fixed this actual marker.
+Those two separate race regressions do pass. Need isolate the actual sub-operation.
+Potential leads: AndroidCollaborationHistoryWindows safeStorageCall maps original
+JSON; CollaborationHistoryJson requires SDK timestamp/ID/sender to match raw JSON;
+CollaborationHistoryBatch requires existing alias timestamps/content identity to match.
+These are hypotheses, not evidence to relax invariants. RecoverReceipts itself uses
+getByLogicalId, now corrected. No source edits have been made for this next issue.
+
+Counter180.486s: zero403,4default-key404,one encrypted send200 (229ms gatewayheaders;
+inspector231ms response/232ms transfer).36 setup/34 room/30 conversation requests plus
+22otherHRIS in the full navigation/send sample. Before-send5s has8setup+8room+7conversation;
+next10s has14+14+13. Concurrent work is not wholly attributable to the gesture. Local
+phases522/261/251/88ms, UI sent polling4.929s. Need reduce repeated admitted reads after
+measuring ownership; no phone-latency claim. Keyboard still dismisses, composerb7929318
+storage remains unwired. Continue acquisition diagnosis, admission duplication, proper
+composer use-case/recovery/UI adoption and original54 PRD; no new completed group.
+
+Private scripts/results: .work/release-phone-2026-11-08-build61. Never resend the
+original61 test message. Use existing imageio_ffmpeg Python environment for visual
+artifacts; system Python lacks imageio_ffmpeg and Pillow is absent. Native library
+2b84921, Startera21b748, Platformea322180 remain unchanged; live API3a7909a6/worker10485916/
+schema116.1, Group routing off. No original keys/data reset. Notify before any next
+phone install-only, no phone UI automation. One compiler OR original owned emulator.
+
 ## Coherent history lookup accepted locally; package61 next — 08 November 2026, 03:20 UTC
 
 History full-1/session62665 is reapedPASS579.837s,

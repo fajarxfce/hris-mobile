@@ -89,3 +89,19 @@ marker to that lookup. Delivery now reports separate closed failure stages for
 `AcquireRetirementHistory` and `RetireCommands`, preserving the original failure and
 retry behavior. The next device counter includes fixed HRIS setup/conversation/room
 categories as well as Matrix, without retaining paths, headers or message bodies.
+
+## Build61 device result
+
+The original-account sample sends once: Matrix returns HTTP200 in231ms and completes
+transfer in232ms; UI polling observes the sent state at4.929s. Local phases take
+522/261/251/88ms. The180-second passive counter observes zero403 and four default-key
+404 responses. It also observes8 device-setup,8 room and7 conversation responses in
+the five seconds before the Matrix send, and41 such responses in the next ten seconds.
+These windows include concurrent acquisition; they are not a phone latency benchmark.
+
+The remaining closed failure is now `ChatDelivery_AcquireRetirementHistory_Storage`,
+preceded by Storage/IllegalArgumentException. This spans acquisition, receipt recovery
+and projection before command retirement. The coherent logical-read correction passes
+its regression but has not eliminated this device failure. Isolate that sub-operation
+and the repeated admission reads before changing retry or authorization rules.
+[Exact device result and installed build61](measurements/chat-retirement-device-2026-11-08.json).
