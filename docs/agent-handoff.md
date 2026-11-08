@@ -1,5 +1,41 @@
 # Agent continuation — HRIS Mobile
 
+## Build73 native observation — 8 November 2026, 16:46 UTC
+
+Runtime source 0f4f0039 pushed (74897 REAPED). Package1177 passed113.686s; artifact6664
+and SDK5941 verified. APK73 SHA beb8ede7a29aac15b4f7d811866512c4380c1f130d7395ace07bccfbd2ceee3c,
+123,399,479 bytes, same signer, nondebuggable ARM64, SDK5. No phone install/acceptance.
+Owned emulator92231 runs original Bima store, PID2073926/startTicks183253253,
+1,536MiB/2cores. No compiler. Version73 install76619 passed2.868s, same UID/first install.
+
+The earlier diagnostic20301 FAILED before any retained probe or send: Frida16.7.19
+could not attach (three TransportError attempts). Exact71 was temporarily installed,
+then exact72 restored, server stopped and shell UID2000 restored. Cleanup's first
+forward-removal assertion failed because adbd renewal had already removed the forward;
+subsequent explicit verification confirmed no remaining diagnostic forward/server.
+No stack was obtained; the old Storage cause remains unknown. No diagnostic tool is
+attached during73 native measurement. Do not repeat that attempt without addressing
+its actual attachment failure. Private artifacts: .work/storage-exception-2026-11-08.
+
+Ready probe48981 REAPED PASS: ONE NEW Tes73 waiting164145 is Sent; NEVER RESEND.
+Same UNSENT Draft66 092041 and previous72 original survive cold offline restart.
+Four actual PNGs viewed. Ready counter51407 REAPED180.293s: one encrypted200,
+8 transport200, zero403; tap-to-encrypted request2827ms/header176ms/coarseSent4.988s.
+This window includes controlled restarts/offline and is not a quiet-idle comparison.
+Source/latency/component/visual records are in .work/release-phone-2026-11-08-build73.
+The older waiting inbox row remains above newer ready-room activity: audit list
+ordering separately; no ordering correction is claimed by this runtime fix.
+
+Unready retained-only probe52584 and counter67735 are RUNNING; reap both, then give
+the exact root-owned counter JSON back to the workspace owner before reading it.
+First storage watcher87107 and second79438 are RUNNING. No Storage event yet; both
+capture root only on a new error. Reap watchers before stopping the emulator.
+Next run accept-unready-counts.py: zero settled transport AND zero settled default-key
+initializations are required. Review three unready images. Overall acceptance still
+requires a proven disposition for71 Storage; no storage-error-acceptance.json exists.
+Automatic activation/scoped readiness wake remains design-only, Firebase read access
+question pending, phone70 unchanged, other repos/live schema116.1 unchanged.
+
 ## Runtime retention source accepted — 8 November 2026, 16:33 UTC
 
 Full gate 2292 REAPED PASS: 5,786 fresh tests in 777 suites, zero failures/errors/skips,
