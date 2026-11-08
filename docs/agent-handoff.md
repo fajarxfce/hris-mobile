@@ -1,5 +1,37 @@
 # Agent continuation — HRIS Mobile
 
+## Activation domain candidate; validation in progress — 8 November 2026, 17:37 UTC
+
+Main branch now has private-account guard 767bd226 (cherry-picked from side045cae58),
+with focused54 PASS. Main full-1 is running as exec76594, one compiler only; inspect
+its .work/activation-private-store-2026-11-08/full-1/result.json and REAP before any
+side formatter/compiler/emulator. Main source inputs remain frozen during that gate.
+All commits through main e8ba04d4 and guard767bd226 were pushed. Emulator is stopped.
+
+This side worktree has an UNCOMMITTED activation candidate. ActivateCollaborationDevice
+consolidates the old Prepare/Replay/Reconcile/Install classes into one finite domain
+workflow with meaningful internal command stages. Original command/installation tests
+now exercise these stages; new workflow/policy tests cover missing keys, original-only
+retry, cancellation, bounded provisioning, concurrent calls and late results. The manual
+ChatSetupViewModel now maps progress and sends typed requests; its former provisioning,
+retry, installation and scheduling orchestration has moved to domain. RESTORE-only
+EnsureCollaborationRuntime remains separate and cannot enroll. A host capability defaults
+false; the actual Android SDK enables it, so unsupported native bindings cannot enroll.
+
+Candidate is NOT compiled/formatted/accepted yet. .work/device-activation-2026-11-08/
+format.py and check.py focused-1 are prepared; run only after main76594 finishes.
+Automatic application entry and prompt foreground recovery/readiness wake are NOT wired.
+The constructor and retained-store policies still need test-driven review. Keep source
+out of phone builds until validated. Build73 remains a separate validated loop-fix update,
+overall/earlier71 Storage acceptance remains false. No originals or drafts were resent.
+
+Current ongoing design: activation belongs to the admitted application owner; repeated
+ordinary admission expiry must not restart it. The manual page must not be stuck behind
+an automatic provisioning wait. Recovery scheduling needs an explicit foreground wake
+path without restoring a rapid polling loop; existing WorkManager keeps durable retry.
+Do not simply add recovery to the delivery worker's one-second retry configuration.
+
+
 ## Existing private-account guard under test — 8 November 2026, 17:07 UTC
 
 Main c84e4b70 is clean/pushed and records native73 idle success. The original Bima73
