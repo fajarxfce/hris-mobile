@@ -1,0 +1,120 @@
+{
+  "recordedAt": "2026-11-08T18:12:01.968706+00:00",
+  "codeCommit": "767bd226",
+  "sourceHead": "e484a988",
+  "versionCode": 74,
+  "apkSha256": "be2fa22277f448252730fa119b0eb9d5b587875f960046f729f5a0f0baab5efb",
+  "nativeScopeAccepted": true,
+  "overallReleaseAccepted": false,
+  "storageError71RootResolved": false,
+  "sourceFullGate": {
+    "freshTests": 5793,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "sourceFiles": 4498,
+    "inspectorSourceFiles": 82
+  },
+  "emulator": {
+    "serial": "emulator-5562",
+    "ramMiB": 1536,
+    "cores": 2,
+    "updateFrom": 73,
+    "existingIdentityAndDataPreserved": true,
+    "stopped": true
+  },
+  "probe": {
+    "newSendGestures": 0,
+    "sameOriginal71Pending": true,
+    "offlineColdRestartRetained": true,
+    "previousOriginal73StillSent": true,
+    "originalDraftUnsent": true,
+    "quietSeconds": 180.0,
+    "idleStateChecks": 45
+  },
+  "network": {
+    "accepted": true,
+    "at": "2026-11-08T18:12:01.968706+00:00",
+    "noTimedRetryObserved": true,
+    "previousReadyOriginalStillSent": true,
+    "nativeRestorationObserved": true,
+    "quietSeconds": 180.0,
+    "settleAllowanceSeconds": 30,
+    "settledTransportRequests": 0,
+    "settledSecretStorageInitializations": 0,
+    "requestCounts": {
+      "other_hris": 18,
+      "hris_device_setup": 18,
+      "secret_storage_default_key": 4,
+      "hris_room": 18,
+      "hris_conversation": 11,
+      "other_matrix": 11,
+      "sync": 20,
+      "hris_direct_transport": 5
+    },
+    "responseCounts": {
+      "other_hris:401": 3,
+      "other_hris:200": 13,
+      "hris_device_setup:200": 18,
+      "secret_storage_default_key:404": 4,
+      "hris_room:200": 18,
+      "hris_conversation:200": 11,
+      "other_matrix:200": 11,
+      "hris_direct_transport:200": 5,
+      "sync:200": 19
+    },
+    "unreadyResponses": 5,
+    "encryptedSubmissionRequests": 0,
+    "responses403": 0,
+    "passiveReadOnly": true,
+    "bodyHeadersOrIdentifiersRetained": false,
+    "boundary": "Owned single-emulator local gateway only; closed route counts and boolean readiness. Packet starts may omit fragments; not full HTTP reconstruction. Explicit connectivity change allowed one initial wake; settled observation proves no timed retry only within this bounded interval.",
+    "settledAllRequestCounts": {
+      "sync": 15,
+      "other_hris": 8
+    }
+  },
+  "storageObservation": {
+    "startedAt": "2026-11-08T18:07:32.384440+00:00",
+    "observedStorageFailure": false,
+    "rootRequested": false,
+    "phoneTouched": false,
+    "newSendGestures": 0,
+    "finishedAt": "2026-11-08T18:12:32.712730+00:00"
+  },
+  "passiveProcess": {
+    "sameProcess": true,
+    "fatalLines": 0,
+    "startedAt": "2026-11-08T18:12:02.060421+00:00",
+    "finishedAt": "2026-11-08T18:12:12.089333+00:00",
+    "observedPid": "4854",
+    "afterPid": "4854",
+    "crashBufferSince": "2026-11-08T18:07:34.818303+00:00",
+    "uiTouched": false
+  },
+  "visualReview": {
+    "reviewed": true,
+    "method": "Actual PNGs viewed with view_image",
+    "images": {
+      "unready-online.png": "1afa384da6cb32a6d8dd27e43e6f6d55ccc3c0faac3e86c72946b5c67447a3bc",
+      "unready-offline.png": "f970831002c7f55cf1def27f48e0bd67601582799b8b0c88f40b96acb80ec53c",
+      "unready-quiet.png": "ed765f0a5fd9f38c69917edf96be78911525ce1bba8f030cf86886dcd279918f",
+      "retained-ready-online.png": "3f626c3ab6be04d3e5a3fa03bf63fbf6c2b9c8f42ff0de0c8427b92c8eb14b7a"
+    },
+    "retainedPendingBubbleAndEnabledComposer": true,
+    "retainedSentBubblesAndExactUnsentDraft": true,
+    "knownFollowUps": [
+      "Older messages still visible for empty remote waiting conversation while online; not fixed here."
+    ]
+  },
+  "phone": {
+    "installedVersion": 70,
+    "touched": false
+  },
+  "limitations": [
+    "Bounded emulator observation; not a phone latency measurement.",
+    "Earlier release71 Storage exception cause is unresolved.",
+    "Automatic activation and post-commit recipient readiness are not part of APK74.",
+    "No physical iPhone test or iOS SDK runtime acceptance."
+  ]
+}

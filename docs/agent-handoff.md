@@ -1,5 +1,30 @@
 # Agent continuation — HRIS Mobile
 
+## Guard74 native scope passed — 8 November 2026, 18:14 UTC
+
+APK74 SHA be2fa22277f448252730fa119b0eb9d5b587875f960046f729f5a0f0baab5efb,
+source767bd226 plus docs e484a988, retains the exact SDK5 and same signer. Package9643,
+artifact58850 and SDK19291 REAPED PASS. Install80533 updated owned Bima73 to74 without
+clearing data. Retained-only probe1012 and counter9019 REAPED PASS; no new send gesture.
+The same71 unready original remains pending online/offline, original73 remains Sent,
+and exact Draft66 092041 remains UNSENT. Never resend any of these originals.
+
+After30s settling,180s quiet observation recorded zero transport/default-key requests
+and zero403 responses. Real native sync was observed. Watch31774 REAPED with no new
+Storage failure/root request. Passive90559 REAPED: same process, zero fatal lines.
+Four actual PNGs reviewed; the older-history affordance for the empty remote waiting
+room remains an open UI issue. Shell UID2000 verified; stop25619 and emulator36924
+REAPED. No emulator remains. [Evidence](measurements/collaboration-private-account-release74-2026-11-08.json).
+
+This is scoped native acceptance, not a disposition of the earlier71 Storage error.
+Phone70 remains untouched; optional Firebase read access is still unanswered. Automatic
+activation is NOT in74. Continue in .worktrees/hris-mobile-recipient-waiting-20261108,
+branch feat/chat-auto-activation-20261108, HEAD9eab0dde with uncommitted foreground
+request runner and recovery integration tests. Formatter4109 is RUNNING there; keep
+one compiler/emulator at a time, reap it before recovery/full gates or native work.
+Post-commit readiness hints, native activation and portable Starter port remain required.
+
+
 ## Private-account guard full gate passed — 8 November 2026, 17:40 UTC
 
 Guard source767bd226 is pushed. Full exec76594 REAPED PASS: 5,793 fresh tests,
