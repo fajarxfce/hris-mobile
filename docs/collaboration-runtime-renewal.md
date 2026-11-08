@@ -1,6 +1,6 @@
 # Retaining a published client during admission renewal
 
-Source accepted; native validation and installation remain pending. Release72's settled unready-recipient
+Source and scoped native runtime behavior accepted; overall release acceptance remains pending. Release72's settled unready-recipient
 capture has zero delivery transport retries but still13 device-setup reads,12 room
 reads and six secret-storage-default-key reads in150seconds. The earlier instrumented
 trace directly records admission expiry calling registry update/retire. Closing and
@@ -38,3 +38,22 @@ validation must use the existing private store and original waiting message, wit
 replay, and measure idle SDK requests as well as delivery requests. No claim about the
 separate71 Storage/IllegalStateException follows from fewer runtime replacements.
 Automatic first-login activation and readiness events remain separate required work.
+
+## Native validation
+
+Release73 uses source0f4f0039 and the original Bima private store. During180.203seconds
+of unready-room idle, after30seconds settling, it made zero transport, secret-storage
+initialization, device-setup, room and conversation requests. Only15 Matrix sync and
+eight other HRIS requests remained. The same pending original survived cold offline
+restart;45 UI checks found no Storage card. No encrypted submission or403 occurred.
+Release72's matching settled observation had13 device-setup,12 room and six default-key
+reads. [Exact native evidence](measurements/collaboration-runtime-retention-release73-2026-11-08.json).
+
+One new ready73 original sent and remained Sent after offline restart; its predecessor
+and unsent draft remain present. Seven actual screenshots were reviewed. The old
+empty-room Older messages affordance and inbox-ordering observation remain separate.
+Both five-minute storage watchers saw no event; this does not establish the old71
+Storage root. A Frida diagnostic failed to attach before any retained probe or send;
+the exact prior APK and root state were restored before normal73 observation.
+The emulator is stopped with data retained; phone70 is unchanged. Automatic activation
+and readiness wake are still being implemented separately.

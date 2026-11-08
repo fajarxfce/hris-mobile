@@ -1,5 +1,32 @@
 # Agent continuation — HRIS Mobile
 
+## Runtime73 native scope accepted; next activation — 8 November 2026, 16:52 UTC
+
+Native73 idle scope PASSED. Unready52584/counter67735 REAPED:180.203seconds,
+45 UI checks, zero settled transport/default-key/device-setup/room/conversation requests,
+zero encrypted submissions/403. Settled requests are15 sync/eight other HRIS only.
+Same71 pending original survives cold offline restart; NO new send gesture.
+Ready73 ONE NEW Tes73 waiting164145 is Sent; never replay it, either71 original,
+Tes72 waiting154845, or UNSENT Draft66 092041. Seven actual PNGs reviewed.
+[Native evidence](measurements/collaboration-runtime-retention-release73-2026-11-08.json).
+
+First watcher87107 and second79438 REAPED without Storage/root request. Passive57226
+REAPED: same PID6804, zero fatal lines. ShellUID2000 verified before shutdown;
+stop18480 and emulator92231 REAPED, original Bima73 data retained. No compiler or
+emulator remains. No Frida process/forward remains. Source0f4f0039, APK SHA
+beb8ede7a29aac15b4f7d811866512c4380c1f130d7395ace07bccfbd2ceee3c. Phone70 unchanged.
+No overall release-acceptance or storage-error-acceptance exists:71 Storage root is
+still unknown. Optional Firebase read-access question remains pending; don't repeat it.
+
+Automatic-activation side branch now4c27e1d6, pushed23698 REAPED, merges accepted main
+ae15848e without code conflicts. All4,498 app inputs matched the accepted gate before
+new work. Side path .worktrees/hris-mobile-recipient-waiting-20261108. Design is preserved;
+no activation source yet. Continue one domain workflow for setup/receipt/install,
+restore first, no replacement keys on missing old store, exact retained operations,
+application-owned entry and scoped readiness wake. Preserve tests and repository/layer
+boundaries. Other repos/live schema116.1 unchanged. UI follow-ups: online empty-room
+Older messages button and older waiting inbox row above newer activity remain visible.
+
 ## Build73 native observation — 8 November 2026, 16:46 UTC
 
 Runtime source 0f4f0039 pushed (74897 REAPED). Package1177 passed113.686s; artifact6664
