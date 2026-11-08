@@ -65,6 +65,27 @@ binding and respects company/account RLS. Do not query another account under the
 publisher's scope or fabricate a Matrix message event. Foreground device events and
 startup reconciliation must cover missing/denied notification delivery.
 
+Treat provider device changes as hints, distinct from the application's confirmed
+publication. A Matrix device-list update may reach the sender before the HRIS
+publication transaction commits. If that sender observes recipientReady=false,
+consuming the provider hint cannot leave the original asleep forever. Test this
+ordering explicitly and deliver a durable, scoped hint after the HRIS commit;
+coalesce duplicates without acknowledging a newer readiness generation.
+
+The existing recovery scheduler also needs an activation-path test. Collapsed
+WorkManager requests can already be waiting in backoff, while the current foreground
+scheduler accepts only the delivery task. A newly committed activation/readiness wake
+must reach an eligible foreground recovery owner promptly, without resetting unrelated
+business retry policies or relying on the user reopening a chat. Prove foreground,
+background, killed-process and denied-notification paths separately. Do not infer
+prompt activation from successful WorkManager enqueue alone.
+
+The separate passive-wake fix preserves ordinary application recovery while removing
+delivery requests from repeated admission renewal and timeline acquisition. Activation
+and readiness must have their own explicit completion/event triggers; they must not
+restore those accidental retry sources. A periodic safety sweep can recover missed
+hints, but cannot be the normal delivery path for a newly ready recipient.
+
 ## Acceptance still required
 
 Prove a fresh owned recipient can sign in, select its company, and publish keys
