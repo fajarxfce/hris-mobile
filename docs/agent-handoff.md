@@ -1,5 +1,55 @@
 # Agent continuation — HRIS Mobile
 
+## Secret-storage rollout, notification candidate and retry feedback — 8 November 2026, 00:58 UTC
+
+Platform3a7909a6 is deployed API-only and pushed, with exact own-user default-key
+GET admission. Worker10485916/schema116.1/disabled Group routing remain unchanged;
+V117–138 are undeployed. Missing provider recovery setup becomes404 M_NOT_FOUND;
+other secret routes remain denied. This does not alone prove pending is resolved.
+Bima's original enrolled device/key remains eligible while stopped. Phone passive
+samples saw no active requests; the latest ADB check is connected with no app process.
+Phone and stopped original Bima emulator remain58. No59 APK/install exists.
+
+Mobile and external library have UNCOMMITTED candidates: Android notification
+shortcut with shared navigation; passive published-session observation; and a
+narrow delivery-wake correction. [Contracts](network-inspector-notification.md),
+[retry trigger](collaboration-delivery-wakeups.md), [checks and failures](measurements/matrix-pending-notification-progress-2026-11-08.json).
+SDK echo FAILED/PENDING transitions previously requested another send whenever a
+durable command existed, bypassing the worker's wait. A regression fails before the
+change and passes after: passive echoes no longer wake delivery, while explicit retry
+and entry with retained work still do. The original command remains unchanged.
+
+Focus52684 passed10 cases and Android/Wasm/iOS/lint/quality after1411.925s. Full1/31426
+was stopped after review found late old notification completion could cancel a new
+owner; cancellation is now idempotent and five actual OS scenarios are compiled.
+Full2/1105 completed510.388s but is NOT accepted:5590 active cases pass, one test is
+interrupted by native SQLite SIGSEGV. Inspector eager identity observation could
+start SQL in a short-lived binding fixture. A new published-identity repository
+reads only the memory datasource; restoration keeps its original owner. identity-
+focus65895 passed10 inspector cases but had two test generic-type compile errors.
+wake-baseline9543 proves the scheduling regression and retains a separate mapping
+overload compile error. wake-fixed76191 passes all3 focused cases59.461s, with those
+errors corrected. All listed sessions are reaped; full3 is next as the sole compiler.
+
+Root public inspector is c4b94a7, with uncommitted notification module; do not alter
+its sources during the next Mobile gate/package build. CI42428950305 on91320f7 is
+accepted:69 actual Apple simulator and213 portable cases, digest-verified artifacts.
+No Apple native Matrix binding or publication is implied. Starter2b012e51 is clean,
+pushed and accepts the previous typed-result port; port the new passive identity and
+notification host only after actual Mobile acceptance. Primary Mobilebe2fe021 is
+unchanged; current feature branch remains feat/chat-send-timing-20261107.
+
+Next run full3 and inspect every failure before committing candidate source. Build59
+scripts now require full3. Package only pushed exact source; verify SDK5/native bytes,
+use original emulator5562/1536MiB, run five notification OS cases, actual background/
+cold notification taps and one original-account send. The header-only request counter
+was validated on the Docker bridge after loopback missed the controlled probe.
+Read .work/release-phone-2026-11-08-build59 scripts before execution: still unrun.
+Review screenshots/video, stop/reap emulator, notify before --install-only phone update.
+No phone UI automation or data reset. Continue measured pending/latency/composer work
+and original54 PRD groups; no group newly complete. Keep one compiler OR emulator and
+use disk TMPDIR=/home/fajar/hris/.work/build-tmp; do not kill unrelated services.
+
 ## Build58 installed; public inspector CI and resource cleanup — 07 November 2026, 23:44 UTC
 
 Phone and stopped original Bima emulator now run58 on source09e7eaf7. All package,

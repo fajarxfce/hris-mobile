@@ -1,0 +1,102 @@
+{
+  "at": "2026-11-08T00:58:15.184336+00:00",
+  "checks": {
+    "focused-1": {
+      "startedAt": "2026-11-08T00:11:21.027605+00:00",
+      "elapsedSeconds": 1411.925,
+      "exitCode": 0,
+      "sourceFiles": 4432,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "full-1": {
+      "startedAt": "2026-11-08T00:35:36.753133+00:00",
+      "elapsedSeconds": 81.586,
+      "exitCode": -15,
+      "sourceFiles": 4432,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1
+      }
+    },
+    "full-2": {
+      "startedAt": "2026-11-08T00:37:16.476780+00:00",
+      "elapsedSeconds": 510.388,
+      "exitCode": 1,
+      "sourceFiles": 4432,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5591,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1
+      }
+    },
+    "identity-focus": {
+      "startedAt": "2026-11-08T00:47:20.944059+00:00",
+      "elapsedSeconds": 403.198,
+      "exitCode": 1,
+      "sourceFiles": 4436,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "wake-baseline": {
+      "startedAt": "2026-11-08T00:54:44.769846+00:00",
+      "elapsedSeconds": 61.608,
+      "exitCode": 1,
+      "sourceFiles": 4436,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "wake-fixed": {
+      "startedAt": "2026-11-08T00:56:39.709051+00:00",
+      "elapsedSeconds": 59.461,
+      "exitCode": 0,
+      "sourceFiles": 4436,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "baselineWakeFailure": "Passive echoes must not restart delivery",
+  "baselineAlsoHadUnrelatedIdentityMappingOverloadCompileFailure": true,
+  "full1StoppedForLifecycleReview": true,
+  "full2Crash": "Native bundled SQLite reset during AccountCacheDao.activate; active WorkspaceLayoutTest has no database and preceding binding fixture closed its container",
+  "passiveIdentityChange": "Dedicated datasource-backed published-identity repository; inspector no longer initiates session restoration or SQL",
+  "finalFullGatePending": true,
+  "androidNotificationNativeRuntimePending": true,
+  "build59NotBuiltOrInstalled": true,
+  "liveApiCommit": "3a7909a6183fc355cabf40b6934c84a96641a19e",
+  "phoneLastObservedVersion": 58,
+  "physicalPhoneProcessAbsentAtAvailabilityCheck": true,
+  "phoneUiDriven": false,
+  "pendingRootCauseCompletelyResolved": false
+}
