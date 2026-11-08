@@ -1,119 +1,116 @@
 # Agent continuation — HRIS Mobile
 
-## Activation focused checks passed — 8 November 2026, 18:00 UTC
+## Activation candidate and main guard evidence combined — 8 November 2026, 18:02 UTC
 
-The activation candidate now passes94 tests across eight domain/UI/app suites. Final
-exec73705 REAPED PASS71.149s with19 fresh UI tests and75 previously passed, unchanged
-tests. All4,500 app/82library inputs stayed frozen. First61981 failed UI type inference
-while75 tests passed; second18919 failed only formatting while19 UI tests passed;
-formatter78149 passed29.044s before the final gate. No compiler/emulator remains now.
-[Evidence](measurements/collaboration-device-activation-2026-11-08.json).
+Activation source834e1e41 was committed and pushed. Focused gate73705 REAPED PASS:
+94 covered tests (19 fresh UI,75 unchanged domain/app/bindings), zero failures/errors/
+skips; all4,500 app/82library inputs frozen. First UI type-inference and formatting
+failures were corrected before acceptance. [Evidence](measurements/collaboration-device-activation-2026-11-08.json).
+The same domain operation owns finite setup, exact originals, private-key classification,
+application-triggered activation and shared scoped progress for the manual page. It
+preserves restore-only callers and cancellation/late-lease behavior. Full/native activation,
+foreground recovery and durable post-commit recipient readiness remain unfinished.
 
-The application entry is now wired and the manual page joins existing automatic progress,
-without another poller or ownership of the application's coroutine. Existing setup command
-and lease tests exercise the consolidated internal stages. ViewModel owns state/events only.
-Full/native acceptance, foreground recovery and post-commit recipient readiness remain open;
-this is NOT evidence that automatic keys/pending-message wake have shipped to a device.
+This merge incorporates main e484a988 guard evidence and native73 progress records.
+Only documentation conflicts were resolved: retain main's full guard5793 evidence,
+retain the activation design/candidate evidence here, and combine continuation notes.
+All4,500 application inputs still match focused-3 exactly; no code change in this merge.
 
-Main source767bd226 guard plus docs e484a988 has its separate full5793 PASS. Main prepared
-.work/release-phone-2026-11-08-build74 scripts for a retained-only native guard probe,
-using original73 acknowledged message and71 waiting original, with ZERO send gestures.
-No APK74 exists yet. Do not run the old73 send probe. Main build74 must finish before
-emulator start; root scripts now reject compilers across every /home/fajar/hris worktree.
+Main .work/release-phone-2026-11-08-build74/build-arm64.py is RUNNING as exec9643.
+It packages only main guard source767bd226 plus docs e484a988, NOT automatic activation.
+Do not start another compiler/emulator until it is reaped. Native74 scripts are prepared
+for original73 acknowledged message +original71 waiting message, exact Draft66 092041,
+zero send gestures, actual restored native sync, offline retained data and180s idle.
+The owned emulator is stopped; no APK74/device proof yet. Never run the old73 send probe.
 
-Next: commit/push this candidate, validate retained guard74 on the owned emulator, merge
-current main documentation into this branch without changing accepted application inputs,
-and implement prompt foreground recovery plus scoped readiness events. Keep only one heavy
-compiler/emulator active. Phone70 remains offline; both73 preflights timed out. Deliver
-only validated progress, notify before each phone install, and never drive its UI.
+Next native74: verify-arm64.py then verify-sdk.py, start the one owned emulator,
+install-owned-sample.py, preflight-gateway.py, run the bounded closed-route counter and
+retained-only unready-probe.py with storage observation, inspect actual PNGs, reap/stop all
+processes. Scripts live in main .work/release-phone-2026-11-08-build74. Counter requires
+sudo -n; after reaping, chown its exact0600 output before reading. The earlier71 Storage
+root remains open; do not fabricate overall acceptance. Phone70 still timed out in both
+73 preflights. Notify before any eventual validated install; never drive phone UI.
 
-
-## Activation domain candidate; validation in progress — 8 November 2026, 17:37 UTC
-
-Main branch now has private-account guard 767bd226 (cherry-picked from side045cae58),
-with focused54 PASS. Main full-1 is running as exec76594, one compiler only; inspect
-its .work/activation-private-store-2026-11-08/full-1/result.json and REAP before any
-side formatter/compiler/emulator. Main source inputs remain frozen during that gate.
-All commits through main e8ba04d4 and guard767bd226 were pushed. Emulator is stopped.
-
-This side worktree has an UNCOMMITTED activation candidate. ActivateCollaborationDevice
-consolidates the old Prepare/Replay/Reconcile/Install classes into one finite domain
-workflow with meaningful internal command stages. Original command/installation tests
-now exercise these stages; new workflow/policy tests cover missing keys, original-only
-retry, cancellation, bounded provisioning, concurrent calls and late results. The manual
-ChatSetupViewModel now maps progress and sends typed requests; its former provisioning,
-retry, installation and scheduling orchestration has moved to domain. RESTORE-only
-EnsureCollaborationRuntime remains separate and cannot enroll. A host capability defaults
-false; the actual Android SDK enables it, so unsupported native bindings cannot enroll.
-
-Candidate is NOT compiled/formatted/accepted yet. .work/device-activation-2026-11-08/
-format.py and check.py focused-1 are prepared; run only after main76594 finishes.
-Automatic application entry and prompt foreground recovery/readiness wake are NOT wired.
-The constructor and retained-store policies still need test-driven review. Keep source
-out of phone builds until validated. Build73 remains a separate validated loop-fix update,
-overall/earlier71 Storage acceptance remains false. No originals or drafts were resent.
-
-Current ongoing design: activation belongs to the admitted application owner; repeated
-ordinary admission expiry must not restart it. The manual page must not be stuck behind
-an automatic provisioning wait. Recovery scheduling needs an explicit foreground wake
-path without restoring a rapid polling loop; existing WorkManager keeps durable retry.
-Do not simply add recovery to the delivery worker's one-second retry configuration.
+While native74 runs, implement request-driven foreground recovery in this side worktree
+without compiling. Use the existing conflated host lane and keep durable retries with
+WorkManager; do not attach recovery to the delivery worker's one-second retry loop.
+The reusable runner must be tested in mobile before porting to Starter. See
+[automatic activation](collaboration-automatic-activation.md) for scoped readiness hints,
+missed-hint and interrupted-first-setup recovery that remain necessary.
 
 
-## Existing private-account guard under test — 8 November 2026, 17:07 UTC
+## Private-account guard full gate passed — 8 November 2026, 17:40 UTC
 
-Main c84e4b70 is clean/pushed and records native73 idle success. The original Bima73
-emulator is STOPPED; all native/watch jobs reaped. Phone70 unchanged. No71 Storage
-root disposition, no phone73 acceptance. Side merge4c27e1d6 is pushed.
+Guard source767bd226 is pushed. Full exec76594 REAPED PASS: 5,793 fresh tests,
+zero failures/errors/skips, 1,080.628s, all4,498 application/82library inputs stable.
+Root/check, browser tests, Android proof/devRelease/lint, sharedWasm/iOS source and
+quality checks passed. [Evidence](measurements/collaboration-private-account-guard-2026-11-08.json).
+No native74 APK or guard device proof exists yet. Do not claim the earlier71 Storage
+root is resolved. The owned emulator is stopped; no main compiler remains.
 
-This side worktree has TWO UNCOMMITTED Kotlin changes, FROZEN under sole compiler61311:
-.work/activation-private-store-2026-11-08/check.py focused-1. It checks Android identity,
-existing handover, original adoption, runtime registry, proof compilation and quality.
-Formatting8679 passed29.171s (the earlier wrong formatApply task was corrected to the
-repository's actual formatKotlin;74558 reaped). No source edits during the active gate.
-The candidate verifies an initialized record's existing private crypto identity under
-the already-owned directory lease, before client construction or credential replacement.
-Four new cases cover missing/foreign/incomplete keys, foreground/background entry,
-replacement before-write and cancellation/cleanup. Neither registration nor automatic
-activation is wired yet. No native guard proof exists yet.
+The17:37 phone73 preflight4648 was REAPED timeout. No installation/UI action occurred;
+phone remains70. Exact73 remains available for scoped progress delivery as described
+below; notify first and use install-progress.py --install-only if a fresh preflight passes.
 
-IMPORTANT follow-up before accepting this guard: codec.replaceCredentials intentionally
-resets initialized=false while retaining the original messageOperationId and advancing
-bootstrapGatewayVersion. An interrupted replacement still requires the old private keys.
-Extend the predicate after61311 finishes (initialized OR retained old queue/gateway
-lineage), and add that regression. Also audit a missing protected record with a
-noninitial bootstrap: first key creation must not reset an existing gateway identity.
-The automatic domain decision should use the existing inventory/possession repositories
-to report recovery-required; neither an empty/missing store nor an I/O failure grants
-permission to generate replacement keys. The repository must revalidate under its
-actual directory lease, closing the gap after an earlier domain inspection.
+Side branch feat/chat-auto-activation-20261108 has an UNCOMMITTED domain/application
+activation candidate. Its formatter is starting; do not run another compiler/emulator.
+It consolidates command stages, moves manual setup orchestration out of the ViewModel,
+adds original-key classification and begins activation on admitted owner selection.
+Domain/application/manual interaction and readiness wake still require validation;
+source is NOT included in the accepted guard gate or build73. Check its own handoff
+and .work/device-activation-2026-11-08 for subsequent results. This remains ongoing work.
 
-Source trace confirmed Matrix restore_session -> client.activate -> base.activate ->
-regenerate_olm creates/restores the crypto account before restore returns. Our initialized
-marker is recorded afterward. Background backup/recovery setup is distinct from device
-key upload. Do not confuse locally initialized keys, public-key publication or readiness.
-Keep initial bootstrap crash recovery distinct from previously initialized/replaced keys.
 
-Next consolidate the existing Prepare/Replay/Reconcile/Install orchestration into one
-named domain operation coordinating repositories/pure policies. Preserve meaningful
-crash/receipt/denial/lease tests; keep EnsureCollaborationRuntime restore-only for its
-other callers. Use the same workflow for automatic entry and the manual page, with
-bounded provisioning readback and exact original operations. No use-case-to-use-case
-calls, no repository policy or helpers hiding ViewModel business orchestration.
+## Scoped73 progress delivery prepared; phone offline — 8 November 2026, 17:17 UTC
 
-## Automatic activation implementation base — 8 November 2026, 16:48 UTC
+A separate progress gate now accepts ONLY the validated73 runtime fix for delivery
+under the user's standing request. [Decision and boundaries](collaboration-runtime-renewal.md#scoped-progress-delivery).
+Overall release/71 Storage root remain false; original accept-release.py is unchanged,
+and no storage-error-acceptance.json or release-acceptance.json was fabricated. Exact
+progress-acceptance.json passed the original native/source/inspector checks plus zero
+settled default-key initializations. This deliberately supersedes the earlier blanket
+phone hold while preserving the known issue and continued work. See
+[closed delivery evidence](measurements/collaboration-progress-release73-2026-11-08.json).
 
-This side worktree now merges main ae15848e (accepted runtime source0f4f0039) without
-code conflicts. All4,498 application inputs match the accepted full gate exactly.
-The automatic-activation design from2a8d1abf remains in
-[collaboration-automatic-activation.md](collaboration-automatic-activation.md).
-No automatic activation code has been added yet. Keep setup retry/receipt/install
-orchestration in one domain workflow, preserve restore-only callers, and keep
-ViewModels limited to state/events. No use-case-to-use-case delegation.
+Phone preflight80419 REAPED: bounded ADB timeout at10.77.77.3:5555, no UI touched and
+no install attempted. Phone70 remains. After a fresh available-device preflight, notify
+BEFORE installation and use .work/release-phone-2026-11-08-build73/install-progress.py
+--install-only. The exact validated73 APK remains pinned to0f4f0039, irrespective of
+later source work. No repeated phone-open or Firebase permission question was sent.
 
-The primary worktree owns emulator92231 and native73 checks. Do not start any compiler
-in this side worktree while that emulator is running. No secondary emulator or
-phone UI work. Source gates here remain separate from application/native acceptance.
+Side guard focused24552 REAPED PASS54fresh/0failures/errors/skips103.706s; all4,498 app/
+82 library inputs stable. It now covers interrupted credential replacement and rejects
+new keys for a replacement gateway without original private state. No native/full guard
+acceptance yet. Side source remains uncommitted; full checks and automatic activation
+remain required. All emulators/compilers currently stopped. Main c84e4b70 native/runtime
+work is distinct from this new private-account guard.
+
+## Runtime73 native scope accepted; next activation — 8 November 2026, 16:52 UTC
+
+Native73 idle scope PASSED. Unready52584/counter67735 REAPED:180.203seconds,
+45 UI checks, zero settled transport/default-key/device-setup/room/conversation requests,
+zero encrypted submissions/403. Settled requests are15 sync/eight other HRIS only.
+Same71 pending original survives cold offline restart; NO new send gesture.
+Ready73 ONE NEW Tes73 waiting164145 is Sent; never replay it, either71 original,
+Tes72 waiting154845, or UNSENT Draft66 092041. Seven actual PNGs reviewed.
+[Native evidence](measurements/collaboration-runtime-retention-release73-2026-11-08.json).
+
+First watcher87107 and second79438 REAPED without Storage/root request. Passive57226
+REAPED: same PID6804, zero fatal lines. ShellUID2000 verified before shutdown;
+stop18480 and emulator92231 REAPED, original Bima73 data retained. No compiler or
+emulator remains. No Frida process/forward remains. Source0f4f0039, APK SHA
+beb8ede7a29aac15b4f7d811866512c4380c1f130d7395ace07bccfbd2ceee3c. Phone70 unchanged.
+No overall release-acceptance or storage-error-acceptance exists:71 Storage root is
+still unknown. Optional Firebase read-access question remains pending; don't repeat it.
+
+Automatic-activation side branch now4c27e1d6, pushed23698 REAPED, merges accepted main
+ae15848e without code conflicts. All4,498 app inputs matched the accepted gate before
+new work. Side path .worktrees/hris-mobile-recipient-waiting-20261108. Design is preserved;
+no activation source yet. Continue one domain workflow for setup/receipt/install,
+restore first, no replacement keys on missing old store, exact retained operations,
+application-owned entry and scoped readiness wake. Preserve tests and repository/layer
+boundaries. Other repos/live schema116.1 unchanged. UI follow-ups: online empty-room
+Older messages button and older waiting inbox row above newer activity remain visible.
 
 ## Build73 native observation — 8 November 2026, 16:46 UTC
 

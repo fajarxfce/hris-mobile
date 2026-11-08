@@ -1,0 +1,197 @@
+{
+  "scope": "Accepted native runtime-retention observation only. Overall release acceptance remains open because the earlier Storage exception has no proven root disposition.",
+  "recordedAt": "2026-11-08T16:52:15.261667+00:00",
+  "sourceCommit": "0f4f0039ef30a3db8413a547ca8349dca328982c",
+  "apkSha256": "beb8ede7a29aac15b4f7d811866512c4380c1f130d7395ace07bccfbd2ceee3c",
+  "versionCode": 73,
+  "sdkCandidate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+  "runtimeIdleAccepted": true,
+  "overallReleaseAccepted": false,
+  "phoneVersion": 70,
+  "storage71RootResolved": false,
+  "automaticActivationImplemented": false,
+  "quiet": {
+    "startedAt": "2026-11-08T16:45:09.608372+00:00",
+    "endedAt": "2026-11-08T16:48:09.811610+00:00",
+    "seconds": 180.203,
+    "settlingSeconds": 30,
+    "stateChecks": 45,
+    "settledRouteCounts": {
+      "sync": 15,
+      "other_hris": 8
+    },
+    "transportRequests": 0,
+    "secretStorageInitializations": 0,
+    "deviceSetupReads": 0,
+    "roomReads": 0,
+    "conversationReads": 0,
+    "encryptedSubmissions": 0,
+    "responses403": 0,
+    "retainedOriginalSha256": "042b6816aa342c1bc6c8d0c08268c6ee1898bf9ce95c1cbc99291e2ae52cb087",
+    "newSendGestures": 0,
+    "coldOfflineOriginalRetained": true
+  },
+  "ready": {
+    "newOriginalCount": 1,
+    "newOriginalSha256": "3651d433c0a2742a6cc084c15feb7b8d72f991deacca4a4ea832439fc388a648",
+    "retainedPreviousOriginalAndDraft": true,
+    "latency": {
+      "at": "2026-11-08T16:44:57.827903+00:00",
+      "versionCode": 73,
+      "apkSha256": "beb8ede7a29aac15b4f7d811866512c4380c1f130d7395ace07bccfbd2ceee3c",
+      "hostTapToEncryptedRequestMillis": 2827,
+      "encryptedRequestToResponseHeadersMillis": 176,
+      "hostTapToEncryptedResponseHeadersMillis": 3003,
+      "firstSentObservation": {
+        "secondsAfterTap": 4.988,
+        "visibleCopies": 1,
+        "sent": true,
+        "pending": false,
+        "bubbleBounds": [
+          33,
+          1154,
+          1047,
+          1298
+        ],
+        "composerBounds": [
+          22,
+          1353,
+          904,
+          1485
+        ],
+        "aboveComposer": true
+      },
+      "counterWindowSeconds": 180.293,
+      "routeRequestCounts": {
+        "other_hris": 16,
+        "hris_device_setup": 29,
+        "secret_storage_default_key": 4,
+        "hris_room": 30,
+        "hris_conversation": 22,
+        "other_matrix": 17,
+        "sync": 16,
+        "hris_direct_transport": 8,
+        "encrypted_room_send": 1,
+        "refresh": 1
+      },
+      "responseCounts": {
+        "other_hris:401": 2,
+        "other_hris:200": 13,
+        "hris_device_setup:200": 29,
+        "secret_storage_default_key:404": 4,
+        "hris_room:200": 30,
+        "hris_conversation:200": 22,
+        "other_matrix:200": 17,
+        "hris_direct_transport:200": 8,
+        "sync:200": 14,
+        "encrypted_room_send:200": 1,
+        "sync:401": 1,
+        "refresh:200": 1
+      },
+      "localGesturePhases": [
+        {
+          "operation": "CommandHandoff",
+          "durationMillis": 93,
+          "outcome": "Succeeded"
+        },
+        {
+          "operation": "WorkScheduling",
+          "durationMillis": 8,
+          "outcome": "Succeeded"
+        },
+        {
+          "operation": "CommandQueue",
+          "durationMillis": 647,
+          "outcome": "Succeeded"
+        }
+      ],
+      "physicalPhoneMeasured": false,
+      "captureOverheadMeasured": false,
+      "boundary": "One new original on the retained emulator. Same-host monotonic ADB tap to packet request/header; UI polling is coarse. Counts cover the whole passive window, not only this message. Not a controlled cross-build comparison."
+    }
+  },
+  "screenshots": {
+    "versionCode": 73,
+    "apkSha256": "beb8ede7a29aac15b4f7d811866512c4380c1f130d7395ace07bccfbd2ceee3c",
+    "reviewedAt": "2026-11-08T16:49:37.228273+00:00",
+    "images": [
+      {
+        "file": "consecutive-send.png",
+        "sha256": "9a54bbd234d1a3d9d8f1c86f519e49e9e16cf74fc5957df26144a3e3784f9a7f",
+        "actuallyViewed": true
+      },
+      {
+        "file": "latest-preview-before-restart.png",
+        "sha256": "9c87237cba95e23560eca32bfa811cbf5ad9c35cddba49f7fb6edeeee6b0c14c",
+        "actuallyViewed": true
+      },
+      {
+        "file": "latest-preview-offline.png",
+        "sha256": "cf50310f1c477102f423bc8a48346d7c42f71d04a86ba2895cfc8c13c5f0702f",
+        "actuallyViewed": true
+      },
+      {
+        "file": "thread-offline.png",
+        "sha256": "aed61195ce89d14e19fdee4c464bd4064f3d0aa7c240b05a9fb264cfcaa5e859",
+        "actuallyViewed": true
+      },
+      {
+        "file": "unready-online.png",
+        "sha256": "baf38c8784a36d726fa2d24d7bfc836154ed61893c24804f92228de53f22b68a",
+        "actuallyViewed": true
+      },
+      {
+        "file": "unready-offline.png",
+        "sha256": "1db8fc3e2583c8d683ce50620dc2d9e596c1610d0fdf151cc823019a73f6354b",
+        "actuallyViewed": true
+      },
+      {
+        "file": "unready-quiet.png",
+        "sha256": "e301dcbac9db7c3d5d7495689773869eadbfa25cd631a108c72783a544eb9d9a",
+        "actuallyViewed": true
+      }
+    ],
+    "noStorageErrorVisible": true,
+    "pendingOriginalAndWaitingNoticeRetained": true,
+    "originalDraftVisibleUnsent": true,
+    "remainingObservations": [
+      "Older messages is still shown for the empty-remote waiting room while online.",
+      "Inbox shows an older waiting row above a newer ready-room activity; ordering needs a source audit."
+    ]
+  },
+  "storageWatches": [
+    {
+      "startedAt": "2026-11-08T16:41:14.241028+00:00",
+      "observedStorageFailure": false,
+      "rootRequested": false,
+      "phoneTouched": false,
+      "newSendGestures": 0,
+      "finishedAt": "2026-11-08T16:46:15.101696+00:00"
+    },
+    {
+      "startedAt": "2026-11-08T16:45:26.958839+00:00",
+      "observedStorageFailure": false,
+      "rootRequested": false,
+      "phoneTouched": false,
+      "newSendGestures": 0,
+      "finishedAt": "2026-11-08T16:50:27.322318+00:00"
+    }
+  ],
+  "diagnosticAttempt": {
+    "instrumentation": "Frida16.7.19",
+    "hookAttached": false,
+    "attachmentFailures": 3,
+    "errorClass": "TransportError",
+    "retainedProbeRan": false,
+    "newSendGestures": 0,
+    "exactPreviousApkRestoredBefore73": true,
+    "serverAndForwardRemovedBefore73": true
+  },
+  "emulatorStopped": true,
+  "boundaries": [
+    "Same retained native store and unready original; bounded idle sample, not proof for every lifecycle or network condition.",
+    "Four initial readiness reads follow controlled restarts/connectivity changes; settled request counts exclude the first30seconds.",
+    "Ready timing is one emulator observation with coarse UI polling, not a controlled performance comparison or physical-phone measurement.",
+    "No source-stack evidence for the old71 Storage exception was recovered."
+  ]
+}

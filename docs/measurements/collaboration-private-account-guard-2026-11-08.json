@@ -12,7 +12,7 @@
     "skipped": 0
   },
   "scope": "Android private account preservation before native SDK construction",
-  "fullValidation": false,
+  "fullValidation": true,
   "nativeValidation": false,
   "automaticActivationImplemented": false,
   "priorStorageExceptionResolved": false,
@@ -46,5 +46,22 @@
       "errors": 0,
       "skipped": 0
     }
+  },
+  "fullGate": {
+    "startedAt": "2026-11-08T17:20:48.854178+00:00",
+    "elapsedSeconds": 1080.628,
+    "exitCode": 0,
+    "sourceFiles": 4498,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 5793,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reportSuites": 777,
+    "resultSha256": "e823413cd77aeb06a80e46c6ade2c00ffe63be1e1dbedce7cfaf10ceb470d955",
+    "sourceCommit": "767bd226"
   }
 }

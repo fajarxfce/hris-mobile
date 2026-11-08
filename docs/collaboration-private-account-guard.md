@@ -18,7 +18,10 @@ passed 54 tests, including missing/foreign/incomplete keys, foreground/backgroun
 entry, interrupted replacement, missing-record replacement, genuine first-bootstrap
 preparation and cancellation/resource cleanup. All 4,498 application inputs and 82
 inspector-library inputs stayed unchanged during the gate. Fixtures stop before real
-native construction. Full checks and retained-store native acceptance remain pending.
+native construction. Full checks passed 5,793 fresh tests with zero failures/errors/skips in 1,080.628 seconds.
+Root check, actual browser tests, Android proof/release compilation/lint, Wasm and
+iOS source compilation and quality checks passed with the same frozen source inputs.
+Retained-store native acceptance of this guard remains pending.
 
 The first focused attempt failed because a new fixture used `copy` on a non-data class;
 that constructor was corrected before the passing run. This change is not evidence
