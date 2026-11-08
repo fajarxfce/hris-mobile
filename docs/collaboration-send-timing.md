@@ -63,3 +63,21 @@ These measurements do not isolate the full pending delay, nor do they justify re
 scheduler/authorization checks. Keyboard dismissal during the existing disabled-input
 phase remains visible. Separate durable ownership for prepared sends and subsequent
 editing remains required before accepting input throughout submission.
+
+
+## Remaining gap in build 60
+
+Analysis of the existing accepted original-account log gives approximately 1,074 ms
+from the first local phase start to the confirmation log, then another 2,212 ms until
+the recorded Matrix request begins. Its HTTP response takes 243 ms. Twenty-five Ktor
+HTTP operations completed during that second interval, but these closed records cannot
+attribute concurrent requests to the send or establish their route. The complete
+capture contains 83 Ktor completions. Do not remove admission checks based on this
+count alone. [Exact timestamps and limits](measurements/chat-send-gap-2026-11-08.json).
+
+The same sample records Storage/IllegalArgumentException followed by
+ChatDelivery_Retire_Storage after the encrypted send. That is a separate investigation:
+its exact failing operation and whether it repeats are not yet known. No raw exception
+message, account identifier or body is retained in this measurement. This analysis
+reuses the existing sample without another send or device interaction; log emission
+wall times are approximate boundaries, not a transport-overhead benchmark.

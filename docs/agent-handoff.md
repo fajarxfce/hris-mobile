@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Starter port pushed; composer storage and remaining timing investigation — 8 November 2026, 02:40 UTC
+
+Starter a21b748 follows accepted Mobile60: eight generic files plus adapted host and
+fixtures. Complete independent gate6244 passes888.607s,440 fresh cases/138 suites,
+zero failures/errors/skips,1,042 stable inputs/49 stable library inputs, root/Android/
+browser/production web/iOS source/quality. Lint0errors/45 version advisories. Initial
+missing-checksum46377 and the two verified imported artifacts are recorded there.
+Both jobs are reaped; Starter is pushed. Library2b84921 remains unchanged/unpublished.
+
+The ONLY compiler is Mobile .work/composer-outbox-2026-11-08/focused-1, session33475.
+It tests an UNACCEPTED foundation: immutable submitted-original storage and next editor
+revision commit in one encrypted ReplicaStore transaction. Eight new Kotlin files and
+collaboration-composer-handoff.md are currently untracked; they are not in build60.
+Twelve real-storage cases cover commit-response loss/reopen, competing sends, next text,
+account replacement, cancellation before/after commit, paging, capacity, legacy drafts,
+malformed ciphertext/keys and bounded contention. Static architecture69353 passes74
+modules. No UI/use-case/worker adoption or new APK exists; do not claim keyboard fixed.
+Freeze Mobile runtime and all library inputs until33475 is reaped. Full checker is
+prepared beside focused checker; complete checks, commit/push foundation, then implement
+owning use cases, recovery and UI adoption before device acceptance. No repository calls
+another repository; no SDK or business retry policy enters the raw storage layer.
+
+Existing60 log analysis finds approximately2,212ms from local confirmation log to
+actual Matrix send;25 concurrent Ktor completions in that interval,83 in the whole
+capture. This does not identify their routes or prove all belong to that send. A later
+Storage/IllegalArgumentException and ChatDelivery_Retire_Storage need isolation; do not
+attribute them to403 or reset original data/keys. [Timing evidence](measurements/chat-send-gap-2026-11-08.json).
+
+Phone and original stopped emulator remain60, all data intact; no phone UI automation.
+Platform ea322180 records actual SDK404/zero403 sample; live API3a7909a6, worker10485916,
+schema116.1 and disabled Group routing unchanged. Continue pending/composer, native
+Apple inspector/distribution, and all54 PRD groups; none newly complete. One owned
+compiler OR emulator, disk TMPDIR. Notify before every future phone --install-only.
+
 ## Build 60 installed; notification and retry corrections accepted — 8 November 2026, 02:20 UTC
 
 Exact c9dd7f82 application + 6433dc3 library packaged as non-debuggable Dev release 60.

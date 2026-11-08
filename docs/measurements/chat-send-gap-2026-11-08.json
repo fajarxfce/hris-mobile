@@ -1,0 +1,49 @@
+{
+  "sourceCommit": "c9dd7f8257481983cfc0bcd4d7174d5c5d974f01",
+  "versionCode": 60,
+  "privateLogSha256": "5a90dbbffa9ef472cf3956534097dc25a4755e44a3f8f242ed5bae7af89a8680",
+  "phases": [
+    {
+      "operation": "DraftPersistence",
+      "durationMs": 287,
+      "logEmittedAtDeviceUtc": "2026-11-08T02:09:04.996000+00:00",
+      "approxStartedAtDeviceUtc": "2026-11-08T02:09:04.709000+00:00"
+    },
+    {
+      "operation": "CommandPreparation",
+      "durationMs": 255,
+      "logEmittedAtDeviceUtc": "2026-11-08T02:09:05.252000+00:00",
+      "approxStartedAtDeviceUtc": "2026-11-08T02:09:04.997000+00:00"
+    },
+    {
+      "operation": "CommandQueue",
+      "durationMs": 396,
+      "logEmittedAtDeviceUtc": "2026-11-08T02:09:05.649000+00:00",
+      "approxStartedAtDeviceUtc": "2026-11-08T02:09:05.253000+00:00"
+    },
+    {
+      "operation": "CommandConfirmation",
+      "durationMs": 133,
+      "logEmittedAtDeviceUtc": "2026-11-08T02:09:05.783000+00:00",
+      "approxStartedAtDeviceUtc": "2026-11-08T02:09:05.650000+00:00"
+    }
+  ],
+  "matrixSendStartedAtDeviceUtc": "2026-11-08T02:09:07.995Z",
+  "matrixResponseMs": 243,
+  "approxConfirmationLogToMatrixStartMs": 2212,
+  "ktorHttpCompletedDuringThisGap": 25,
+  "ktorHttpCompletedWholeCapture": 83,
+  "closedFailures": [
+    {
+      "atDeviceUtc": "2026-11-08T02:09:09.209000+00:00",
+      "area": "Storage",
+      "category": "IllegalArgumentException"
+    },
+    {
+      "atDeviceUtc": "2026-11-08T02:09:09.253000+00:00",
+      "area": "Worker",
+      "category": "ChatDelivery_Retire_Storage"
+    }
+  ],
+  "scope": "Analysis of existing original-account sample; no additional message or device interaction. Log emission times are device wall clock, not exact operation timestamps. Cross-sample device/server clocks are not independently bounded. Concurrent HTTP attempts cannot be attributed to this send from these records alone. Retire/Storage failure occurred after the send; root cause and repetition remain unproven."
+}
