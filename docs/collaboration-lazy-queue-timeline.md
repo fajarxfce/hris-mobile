@@ -33,3 +33,13 @@ the retained unsent draft. No latency improvement or new phone installation is c
 
 Release70 is held for the independently verified recipient-readiness retry loop.
 This timeline change does not fix that loop and is not yet device-accepted.
+
+## Release70 device acceptance
+
+[Exact acceptance and installation evidence](measurements/collaboration-recipient-readiness-release70-2026-11-08.json)
+records one new original with retained Bima data, two QueueBuild intervals (267/130ms)
+and three QueueInitialize intervals (4/11/3ms). Queue settlement no longer builds a
+timeline; its observed interval was75ms. Tap to encrypted request was2,998ms and
+headers another283ms. These are one emulator sample, not a controlled comparison or
+proof that phone latency is resolved. All originals and exact unsent draft survived
+cold offline restart. Phone70 was installed without launching/driving its UI.

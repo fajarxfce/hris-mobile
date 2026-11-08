@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Release70 installed; first-use experience remains next — 8 November 2026, 13:44 UTC
+
+Mobile sourcee8f94854 accepted/pushed. Release70 APK SHA-256
+`bef4dd0a85a9cc6ae57b19a21fa0f4615ad4f2e7e55d9a20d297f72d332842ac`
+is installed in place (51199 REAPED PASS17.536s), same UID/firstInstall/signer/data;
+user notified, no phone UI launched/driven. All release jobs are reaped.
+[Device evidence](measurements/collaboration-recipient-readiness-release70-2026-11-08.json).
+
+Original Bima emulator42618 stopped/reaped at70. Exactly ONE NEW
+`Tes70 lazyqueue 133144` acknowledged; NEVER RESEND. UNSENT `Draft66 092041`
+restored and never sent. Four PNGs actually inspected: sent bubble above composer,
+retained draft/preview/history through cold offline restart. One encrypted200, three
+transport200, no403 in180.036s. Tap-to-request2,998ms/headers283ms/coarseSent4.991s;
+not a phone-latency or controlled performance claim. Lazy acquisition observed only
+two QueueBuild267/130ms and three QueueInitialize4/11/3ms, no settlement timeline.
+
+Physical-phone70 passive jobs28633(counter360s) and73435(wait/capture) are pending
+reap in .work/phone-release70-2026-11-08. A user-open question is already pending;
+do not duplicate or drive phone UI. Zero observations would be inconclusive.
+The successful ready-recipient emulator send is not unready-recipient loop proof.
+
+Starter87820 check-1 is the SOLE compiler, with one generic timing enum port and
+library sources frozen. No owned emulator. Platform1aea3228/schema116.1 remains
+live, HEAD521737b7. Library2b849217/SDK5 unchanged and unpublished.
+
+The waiting worktree is now detached at ACCEPTED e8f94854, containing only untracked
+docs/collaboration-recipient-waiting-design.md, no new production/test source.
+Next: automatic first-login activation retaining original setup commands; accurate
+durable waiting presentation; scoped readiness-event plus background push wake.
+Do not rewrite original command lifecycle for a display reason, fabricate private
+keys, blanket retry403, wake on every sync, or call use cases from other use cases.
+All broader54PRD work remains open; this is not overall completion.
+
 ## Recipient readiness Mobile source accepted — 8 November 2026, 13:26 UTC
 
 Full14084 REAPED PASS547.126s:3,987 fresh cases, zero failures/errors/skips,

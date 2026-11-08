@@ -23,8 +23,13 @@ Coverage includes API mapping (including absent
 field), no native mutation when unready, retained transaction delivery after a later
 ready read, durable restart, another room's progress and the scheduler's existing
 blocked/no-timer contract. Deploy the additive server response before the mobile APK.
-Backend1aea3228 is deployed and healthy on schema116.1. Phone69 and stopped original
-emulator69 remain unchanged. Release70 can now be packaged after source push, and still requires device acceptance.
+Backend1aea3228 is deployed and healthy on schema116.1. Release70 is accepted and installed in place on the authorized phone; the retained
+Bima emulator is also70 and stopped. [Release evidence](measurements/collaboration-recipient-readiness-release70-2026-11-08.json).
+One new ready-recipient original, cold offline history/draft/preview, four inspected
+PNGs and passive process lifetime passed. Phone installation preserved UID, first
+install, signer and data, with no UI launch or driving. This acceptance does not
+prove the old unready-recipient phone retry has stopped; passive user-opened
+observation is separate.
 
 ## Intended first-use experience
 

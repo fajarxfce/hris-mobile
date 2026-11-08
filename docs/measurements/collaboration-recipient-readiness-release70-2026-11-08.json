@@ -1,0 +1,427 @@
+{
+  "accepted": true,
+  "versionCode": 70,
+  "recordedAt": "2026-11-08T13:41:53.838677+00:00",
+  "sourceCommit": "e8f94854c19e22f4fd6acbbe3a48e486d148ca32",
+  "sourceGate": "collaboration-recipient-readiness-2026-11-08.json",
+  "lazyQueueGate": "collaboration-lazy-queue-timeline-2026-11-08.json",
+  "evidence": {
+    "artifact.json": {
+      "candidateOnly": true,
+      "diagnosticMarkersAbsent": true,
+      "nativeAbis": [
+        "arm64-v8a"
+      ],
+      "zipAligned16KiB": true,
+      "artifact": ".work/release-phone-2026-11-08-build70/hris-mobile-dev-release-1.0.0-70-arm64.apk",
+      "variant": "devRelease",
+      "applicationId": "dev.fajar.hris.mobile.dev",
+      "versionCode": 70,
+      "versionName": "1.0.0",
+      "bytes": 123383055,
+      "sha256": "bef4dd0a85a9cc6ae57b19a21fa0f4615ad4f2e7e55d9a20d297f72d332842ac",
+      "debuggable": false,
+      "signatureVerified": true,
+      "samePreviouslyInstalledSigner": true,
+      "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+      "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+      "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+      "privateApiVerifiedInDex": true,
+      "fixtureEndpointsAbsent": true,
+      "firebaseDevAppMatches": true,
+      "compiledBackupExclusionsVerified": true,
+      "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+    },
+    "source.json": {
+      "baseCommit": "e8f94854c19e22f4fd6acbbe3a48e486d148ca32",
+      "applicationGate": "recipient-readiness/full-1",
+      "sourceBranch": "feat/chat-send-timing-20261107",
+      "sourceManifestSha256": "4057d0fc52cebc8d32f2784daba905798c3d9a9e4ce9a5f2b3de9c70317866df",
+      "sourcesUnchanged": true,
+      "candidateOnly": true,
+      "sdkCandidate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+      "inspectorCommit": "2b8492170ff30915f9a6694d7d1bf8f076e74e3c",
+      "inspectorGate": "recipient-readiness/full-1",
+      "librarySourceManifestSha256": "3838706d98dd25b412d1ac7adbcadba8e231f764878a1586d50916fe015f0758",
+      "librarySourcesUnchanged": true
+    },
+    "sdk-verification.json": {
+      "nativeSha256": "4e8df548f98df275fc5ec23205388d716919ea9d0ab7e927d5cc39020171fa00",
+      "nativeBytes": 97549216,
+      "elfClass": "ELF64",
+      "requiredElfAlignment": 16384,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "requiredSymbolsPresent": true,
+      "aarSha256": "5bffa2f4318d1edc7518ad21dc156393ef8a7e2610fd42320a67c12ab645ba5c",
+      "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+      "published": false,
+      "strippedNativeMatchesVerifiedSdk": true,
+      "stripToolNdkVersion": "28.2.13676358",
+      "queueApisAndUseCaseInDex": true,
+      "actualNativeObserverSymbolsPresent": true
+    },
+    "gateway-preflight.json": {
+      "at": "2026-11-08T13:28:58.565222+00:00",
+      "containerId": "9da5005417a4f19264b75f74149893c4f3957c2773a45ac4fcfd7e3642c85670",
+      "image": "sha256:02b25fbbae29ded774ca774eb147a9048b25ead77051813bad9b3420c45d8e1f",
+      "apiAddress": "172.18.0.7",
+      "counterInterface": "br-3b9b9ff77286",
+      "acceptedDeploymentSource": "1aea32288656d3c4e372d6950311b4c43ce5bcdc"
+    },
+    "emulator-install.json": {
+      "sample": 70,
+      "ownedEmulatorOnly": true,
+      "versionCode": 70,
+      "sha256": "bef4dd0a85a9cc6ae57b19a21fa0f4615ad4f2e7e55d9a20d297f72d332842ac",
+      "startedAt": "2026-11-08T13:30:17.820155+00:00",
+      "elapsedSeconds": 11.994,
+      "updateInPlace": true,
+      "dataCleared": false,
+      "uninstalled": false,
+      "uiLaunched": false,
+      "sameAppIdentity": true
+    },
+    "latency-summary.json": {
+      "at": "2026-11-08T13:34:52.589492+00:00",
+      "versionCode": 70,
+      "apkSha256": "bef4dd0a85a9cc6ae57b19a21fa0f4615ad4f2e7e55d9a20d297f72d332842ac",
+      "hostTapToEncryptedRequestMillis": 2998,
+      "encryptedRequestToResponseHeadersMillis": 283,
+      "hostTapToEncryptedResponseHeadersMillis": 3281,
+      "firstSentObservation": {
+        "secondsAfterTap": 4.991,
+        "visibleCopies": 1,
+        "sent": true,
+        "pending": false,
+        "bubbleBounds": [
+          33,
+          1154,
+          1047,
+          1298
+        ],
+        "composerBounds": [
+          22,
+          1353,
+          904,
+          1485
+        ],
+        "aboveComposer": true
+      },
+      "counterWindowSeconds": 180.036,
+      "routeRequestCounts": {
+        "other_hris": 6,
+        "hris_device_setup": 13,
+        "secret_storage_default_key": 4,
+        "hris_room": 13,
+        "refresh": 1,
+        "hris_conversation": 11,
+        "other_matrix": 8,
+        "sync": 3,
+        "hris_direct_transport": 3,
+        "encrypted_room_send": 1
+      },
+      "responseCounts": {
+        "other_hris:401": 2,
+        "other_hris:200": 4,
+        "hris_device_setup:200": 13,
+        "secret_storage_default_key:401": 2,
+        "hris_room:200": 13,
+        "refresh:200": 1,
+        "hris_conversation:200": 11,
+        "secret_storage_default_key:404": 2,
+        "other_matrix:200": 8,
+        "sync:200": 3,
+        "hris_direct_transport:200": 3,
+        "encrypted_room_send:200": 1
+      },
+      "localGesturePhases": [
+        {
+          "operation": "CommandHandoff",
+          "durationMillis": 127,
+          "outcome": "Succeeded"
+        },
+        {
+          "operation": "WorkScheduling",
+          "durationMillis": 39,
+          "outcome": "Succeeded"
+        },
+        {
+          "operation": "CommandQueue",
+          "durationMillis": 699,
+          "outcome": "Succeeded"
+        }
+      ],
+      "physicalPhoneMeasured": false,
+      "captureOverheadMeasured": false,
+      "boundary": "One new original on the retained emulator. Same-host monotonic ADB tap to packet request/header; UI polling is coarse. Counts cover the whole passive window, not only this message. Not a controlled cross-build comparison."
+    },
+    "component-summary.json": {
+      "at": "2026-11-08T13:33:11.526408+00:00",
+      "versionCode": 70,
+      "apkSha256": "bef4dd0a85a9cc6ae57b19a21fa0f4615ad4f2e7e55d9a20d297f72d332842ac",
+      "sourceLogSha256": "58535c88d16ff8012fe698d1093a5d823073c8d68d8dc148a5b54a35876e7b3a",
+      "workerLocalReadIntervals": {
+        "1": {
+          "WorkspaceRead": {
+            "calls": 114,
+            "sumOfIntervalsMillis": 631,
+            "minimumMillis": 1,
+            "maximumMillis": 39
+          },
+          "LocalAccessRead": {
+            "calls": 87,
+            "sumOfIntervalsMillis": 323,
+            "minimumMillis": 0,
+            "maximumMillis": 59
+          }
+        }
+      },
+      "allCapturedLocalReadIntervals": {
+        "WorkspaceRead": {
+          "calls": 173,
+          "sumOfIntervalsMillis": 2007,
+          "minimumMillis": 1,
+          "maximumMillis": 146
+        },
+        "LocalAccessRead": {
+          "calls": 139,
+          "sumOfIntervalsMillis": 766,
+          "minimumMillis": 0,
+          "maximumMillis": 60
+        }
+      },
+      "allCapturedNativeAcquisitionIntervals": {
+        "TimelineRoom": {
+          "calls": 1,
+          "sumOfIntervalsMillis": 61,
+          "minimumMillis": 61,
+          "maximumMillis": 61
+        },
+        "TimelineEncryption": {
+          "calls": 1,
+          "sumOfIntervalsMillis": 0,
+          "minimumMillis": 0,
+          "maximumMillis": 0
+        },
+        "TimelineBuild": {
+          "calls": 1,
+          "sumOfIntervalsMillis": 162,
+          "minimumMillis": 162,
+          "maximumMillis": 162
+        },
+        "TimelineListener": {
+          "calls": 1,
+          "sumOfIntervalsMillis": 7,
+          "minimumMillis": 7,
+          "maximumMillis": 7
+        },
+        "QueueRoom": {
+          "calls": 3,
+          "sumOfIntervalsMillis": 0,
+          "minimumMillis": 0,
+          "maximumMillis": 0
+        },
+        "QueueInitialize": {
+          "calls": 3,
+          "sumOfIntervalsMillis": 18,
+          "minimumMillis": 3,
+          "maximumMillis": 11
+        },
+        "QueueBuild": {
+          "calls": 2,
+          "sumOfIntervalsMillis": 397,
+          "minimumMillis": 130,
+          "maximumMillis": 267
+        }
+      },
+      "boundary": "Aggregated intervals, not additive end-to-end delay. Worker traces include work after server acknowledgement. Native resource lifetime can have another trace; temporal correlation alone does not prove a dependency. No controlled profiler-overhead or physical-phone benchmark."
+    },
+    "passive-process.json": {
+      "sameProcess": true,
+      "fatalLines": 0,
+      "startedAt": "2026-11-08T13:33:11.551196+00:00",
+      "finishedAt": "2026-11-08T13:33:21.575623+00:00",
+      "observedPid": "3950",
+      "afterPid": "3950",
+      "crashBufferSince": "2026-11-08T13:31:14.854563+00:00",
+      "uiTouched": false
+    },
+    "emulator-stop.json": {
+      "pid": 827319,
+      "startTicks": "182125340",
+      "stopped": true,
+      "dataRetained": true,
+      "phoneTouched": false,
+      "at": "2026-11-08T13:34:54.324249+00:00"
+    },
+    "install-result.json": {
+      "confirmed": true,
+      "startedAt": "2026-11-08T13:35:10.271070+00:00",
+      "elapsedSecondsIncludingVerification": 17.536,
+      "serial": "10.77.77.3:5555",
+      "variant": "devRelease",
+      "applicationId": "dev.fajar.hris.mobile.dev",
+      "versionCode": 70,
+      "versionName": "1.0.0",
+      "debuggable": false,
+      "installedSha256": "bef4dd0a85a9cc6ae57b19a21fa0f4615ad4f2e7e55d9a20d297f72d332842ac",
+      "installedBytesMatch": true,
+      "existingAppIdPreserved": true,
+      "firstInstallTimePreserved": true,
+      "updateInPlace": true,
+      "uninstalled": false,
+      "appDataCleared": false,
+      "uiLaunched": false,
+      "after": {
+        "appId": "10962",
+        "firstInstallTime": "2026-10-29 15:48:23",
+        "lastUpdateTime": "2026-11-08 20:35:24",
+        "versionCode": "70 minSdk=24 targetSdk=36",
+        "versionName": "1.0.0",
+        "debuggable": false
+      },
+      "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+    },
+    "release-acceptance.json": {
+      "accepted": true,
+      "at": "2026-11-08T13:34:52.788857+00:00",
+      "sourceCommit": "e8f94854c19e22f4fd6acbbe3a48e486d148ca32",
+      "apkSha256": "bef4dd0a85a9cc6ae57b19a21fa0f4615ad4f2e7e55d9a20d297f72d332842ac",
+      "scope": "Recipient-readiness admission and lazy queue acquisition; one unique new ready-recipient send with original store and retained draft, then cold offline history/preview. Physical-phone unready-loop verification remains separate.",
+      "screenshotsInspected": true,
+      "screenshotsSha256": {
+        "consecutive-send.png": "8d22cf6ecb3a26869410b8ce0419e10146d0c8b0dcb537012f5b770540065b96",
+        "latest-preview-before-restart.png": "83f137cada625689ff22669a3c6ab3774a18a7fef11166d97c766addf12774c5",
+        "latest-preview-offline.png": "09b4fd6132ec789aaaca73ab740581919325d94cf67041e43858db213675a4d4",
+        "thread-offline.png": "8899416aea80863c90f70cb0ef5b9e78f8af9792bb60cdb78daa8cce4e24e6c2"
+      },
+      "actualVideoInspected": false,
+      "firstFrameMeasured": false,
+      "firstFrameEvidenceBuild": 66,
+      "originalStorePreserved": true,
+      "explicitNewMessagesSent": 1,
+      "duplicateBubbleObserved": false,
+      "keyboardAndViewportContinued": true,
+      "phoneLatencyResolved": false,
+      "captureOverheadAccepted": false,
+      "latencyBoundary": "Coarse emulator UI polling and host ADB taps. No new first-frame or video measurement; HTTP timing is to response headers only. No physical-phone or overhead benchmark.",
+      "sdkCandidate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+      "sdk5NativeBytecodeVerified": true,
+      "localSendTimings": {
+        "accepted": true,
+        "versionCode": 70,
+        "apkSha256": "bef4dd0a85a9cc6ae57b19a21fa0f4615ad4f2e7e55d9a20d297f72d332842ac",
+        "startedAt": "2026-11-08T13:31:44.032614+00:00",
+        "serial": "emulator-5562",
+        "processId": 3397,
+        "gestureQueueDurationsMillis": [
+          699
+        ],
+        "gesturePhases": [
+          {
+            "operation": "CommandHandoff",
+            "durationMillis": 127,
+            "outcome": "Succeeded"
+          },
+          {
+            "operation": "WorkScheduling",
+            "durationMillis": 39,
+            "outcome": "Succeeded"
+          },
+          {
+            "operation": "CommandQueue",
+            "durationMillis": 699,
+            "outcome": "Succeeded"
+          }
+        ],
+        "gestureQueueOutcomes": [
+          "Succeeded"
+        ],
+        "distinctGestureTraces": 1,
+        "distinctQueueSpans": 1,
+        "originalLogSha256": "58535c88d16ff8012fe698d1093a5d823073c8d68d8dc148a5b54a35876e7b3a",
+        "bodyOrOwnerRetainedInDiagnostics": false,
+        "boundary": "Same-process monotonic local phases; overlaps with asynchronous delivery. Not end-to-end acknowledgement latency or transport overhead."
+      },
+      "encryptedSendHeadersMillis": [
+        283
+      ],
+      "responses403": 0,
+      "originalHistoryAfterColdOfflineRestart": true,
+      "nextDraftAfterColdOfflineRestart": true
+    },
+    "build-arm64.json": {
+      "startedAt": "2026-11-08T13:26:32.836231+00:00",
+      "elapsedSeconds": 115.04,
+      "exitCode": 0
+    }
+  },
+  "evidenceSha256": {
+    "artifact.json": "8543625d0f8564ad1486bc0387f084c9096d8cf9b8d2963e1ad9aee255188e1a",
+    "source.json": "fce4df9a16ca9a3c6bd05d387880df96d8905148755efbd88a8c326f7d165d84",
+    "sdk-verification.json": "df5774bca6aa8a11c5cac743ed1ebf49b8b74d824ce31dd974eeb536b6f5f932",
+    "gateway-preflight.json": "1033a161907a7e6fd7cae9289ac3ef2a5292be674077ba0057edb822ae3b9c5b",
+    "emulator-install.json": "19ffc6c9e46392462133f0a20af79383021ec9ada31caef7a9ba0811b83bccc6",
+    "latency-summary.json": "dcbd80bf5e76c1fcafa095bbc24ab5d181aae21657599733da7dd0a28f38591e",
+    "component-summary.json": "0ad7a88b43fc31d43a8e9c34a717af2ca20c50b64d6a47ac4d5d1edfd9d9d597",
+    "passive-process.json": "d5b011e7ab45865839844273cc17dfe85372df53fd5e76f0e5ecd39a563a9fed",
+    "emulator-stop.json": "2c51b4432001add986547111ad06b925eca6b9298e1a269e868f1ed6803b562e",
+    "install-result.json": "3ed86f8e7efe372d60525774cf4a7c5d44e2f73ecd100f8a62e0bcd0357465c8",
+    "release-acceptance.json": "6109dfe2b325f683fce1cef6ae1eeac4849b6a5e2bd86d86178c873a49729b75",
+    "build-arm64.json": "9c89eb2723eb5b35dcb8ff00bd9cf7b10fdf072796975d4c59bec74bb666d6ba"
+  },
+  "jobs": {
+    "build": {
+      "session": 48985,
+      "reaped": true
+    },
+    "artifact": {
+      "session": 44513,
+      "reaped": true
+    },
+    "sdk": {
+      "session": 20730,
+      "reaped": true
+    },
+    "emulator": {
+      "session": 42618,
+      "reaped": true
+    },
+    "emulatorInstall": {
+      "session": 75867,
+      "reaped": true
+    },
+    "counter": {
+      "session": 82122,
+      "reaped": true
+    },
+    "probe": {
+      "session": 37451,
+      "reaped": true
+    },
+    "passiveProcess": {
+      "session": 73364,
+      "reaped": true
+    },
+    "acceptanceAndStop": {
+      "session": 17088,
+      "reaped": true
+    },
+    "phoneInstall": {
+      "session": 51199,
+      "reaped": true
+    }
+  },
+  "limits": [
+    "Ready-recipient original accepted on retained Bima emulator; physical-phone unready-recipient no-loop observation is separate and still pending.",
+    "No physical-phone latency, native Apple Matrix, controlled cross-build performance or capture-overhead benchmark.",
+    "Automatic first-login enrollment, persisted waiting reason and readiness-event wake remain unimplemented.",
+    "Never resend Tes70 lazyqueue 133144, older diagnostic originals or the retained unsent Draft66 092041.",
+    "SDK5 and inspector library remain unpublished."
+  ]
+}
