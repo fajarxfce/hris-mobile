@@ -1,0 +1,427 @@
+{
+  "recordedAt": "2026-11-08T05:36:02.570400+00:00",
+  "scope": "Remote-content history signals and removal of redundant post-enqueue history refresh; one original-account release63 send, passive request timing, offline continuity and install-only phone delivery.",
+  "sourceCommit": "afc2bb5935b8af32421bf369df9fdccc2f7facd8",
+  "sourceGate": "chat-history-signals-2026-11-08.json",
+  "artifact": {
+    "candidateOnly": true,
+    "diagnosticMarkersAbsent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-08-build63/hris-mobile-dev-release-1.0.0-63-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 63,
+    "versionName": "1.0.0",
+    "bytes": 123301135,
+    "sha256": "211b8a72fcc5fb336febc4b74c0c38afce8ead75c4a5f742b6142f88f1f01fd5",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+  },
+  "package": {
+    "startedAt": "2026-11-08T05:25:36.144589+00:00",
+    "elapsedSeconds": 106.909,
+    "exitCode": 0
+  },
+  "sdk": {
+    "nativeSha256": "4e8df548f98df275fc5ec23205388d716919ea9d0ab7e927d5cc39020171fa00",
+    "nativeBytes": 97549216,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "aarSha256": "5bffa2f4318d1edc7518ad21dc156393ef8a7e2610fd42320a67c12ab645ba5c",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+    "published": false,
+    "strippedNativeMatchesVerifiedSdk": true,
+    "stripToolNdkVersion": "28.2.13676358",
+    "queueApisAndUseCaseInDex": true,
+    "actualNativeObserverSymbolsPresent": true
+  },
+  "acceptance": {
+    "accepted": true,
+    "at": "2026-11-08T05:33:00.156364+00:00",
+    "sourceCommit": "afc2bb5935b8af32421bf369df9fdccc2f7facd8",
+    "apkSha256": "211b8a72fcc5fb336febc4b74c0c38afce8ead75c4a5f742b6142f88f1f01fd5",
+    "scope": "Remote-content history invalidation; one original-account encrypted send, bounded request counts and cold offline history/preview continuity. Inspector/notification behavior is unchanged and reuses build62 evidence.",
+    "unchangedInspectorEvidence": {
+      "acceptedBuild": 62,
+      "sourceInputsUnchanged": true,
+      "deviceNotificationCasesRerun": false,
+      "priorAcceptanceSha256": "3c1f28ddb5bcaf7b32f0fcf6f75f76ad454974a140f280038fb1259db1ad0d15"
+    },
+    "changedProductSourceFiles": [
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationHistorySignalPolicy.kt",
+      "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModel.kt"
+    ],
+    "screenshotsInspected": true,
+    "screenshotsSha256": {
+      "online-send.png": "5750023e69443f15a49cfb58dc54ec8d3c79656f039c2a8251e0a57a2e6fb230",
+      "latest-preview-offline.png": "bd8ed701e90fa9774cee75654e869028d2abaaf67aa357ab69f308affd41482b",
+      "thread-offline.png": "4065cd50687affc9f5a6c09f2c81cec31079b36e1d4b4b34a7ea6147683afde3"
+    },
+    "actualVideoInspected": true,
+    "videoReviewScope": "First six seconds, cropped lower chat/composer/keyboard at four frames per second in three storyboards; final acknowledgement separately checked by UI polling/screenshot.",
+    "originalStorePreserved": true,
+    "explicitNewMessagesSent": 1,
+    "onlineSentObservedBySeconds": 4.833,
+    "duplicateBubbleObserved": false,
+    "immediateKeyboardViewportAccepted": false,
+    "remainingKeyboardIssue": "Composer still becomes disabled during local save; atomic composer adoption is pending.",
+    "phoneLatencyResolved": false,
+    "captureOverheadAccepted": false,
+    "latencyBoundary": "Coarse emulator UI polls, one sample; HTTP header latency comes from the passive counter. Not a phone or capture-overhead benchmark.",
+    "sdkCandidate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.5",
+    "sdk5NativeBytecodeVerified": true,
+    "originalHistoryAfterColdOfflineRestart": true,
+    "localSendTimings": {
+      "accepted": true,
+      "versionCode": 63,
+      "apkSha256": "211b8a72fcc5fb336febc4b74c0c38afce8ead75c4a5f742b6142f88f1f01fd5",
+      "startedAt": "2026-11-08T05:29:51.079559+00:00",
+      "serial": "emulator-5562",
+      "processId": 3232,
+      "phaseDurationsMillis": {
+        "DraftPersistence": 774,
+        "CommandPreparation": 154,
+        "CommandQueue": 360,
+        "CommandConfirmation": 108
+      },
+      "phaseOutcomes": {
+        "DraftPersistence": "Succeeded",
+        "CommandPreparation": "Succeeded",
+        "CommandQueue": "Succeeded",
+        "CommandConfirmation": "Succeeded"
+      },
+      "sharedGestureTrace": true,
+      "distinctPhaseSpans": 4,
+      "originalLogSha256": "a169cc80f19bb06cdf02ff834aba43b3d10e69cd35f6285ca6d587caff841779",
+      "bodyOrOwnerRetainedInDiagnostics": false,
+      "boundary": "Same-process monotonic local phases; overlaps with asynchronous delivery. Not end-to-end acknowledgement latency or transport overhead."
+    },
+    "deliveryFailureMarkers": [],
+    "requestWindows": {
+      "matrixSend": {
+        "offsetSeconds": 42.968,
+        "operation": "encrypted_room_send",
+        "method": "PUT",
+        "status": 200,
+        "headerLatencyMs": 187
+      },
+      "windows": {
+        "before_send_5_seconds": {
+          "counts": {
+            "hris_device_setup": 5,
+            "hris_room": 5,
+            "hris_conversation": 4,
+            "other_matrix": 1,
+            "sync": 1
+          },
+          "responses": 16
+        },
+        "after_send_10_seconds": {
+          "counts": {
+            "encrypted_room_send": 1,
+            "hris_device_setup": 7,
+            "hris_conversation": 7,
+            "hris_room": 7,
+            "other_matrix": 3,
+            "sync": 1
+          },
+          "responses": 26
+        },
+        "later_than_10_seconds": {
+          "counts": {
+            "sync": 2,
+            "other_hris": 1
+          },
+          "responses": 3
+        }
+      },
+      "responses403": 0,
+      "scope": "Same passive counter offsets include concurrent startup/navigation/acquisition. Not all operations are attributable to the send, and this is not a phone latency or capture-overhead benchmark.",
+      "sameHostSendBoundaries": {
+        "tapCommandDurationMillis": 90.664,
+        "tapCommandStartToMatrixRequestMillis": 3218.317,
+        "tapCommandReturnToMatrixRequestMillis": 3127.652,
+        "tapCommandStartToMatrixResponseHeadersMillis": 3405.317,
+        "boundary": "Same host monotonic clock for ADB tap invocation/return and observed gateway packets. Input injection and emulator scheduling are included; this is not a physical-phone touch or UI acknowledgement timestamp."
+      }
+    },
+    "settingsRestoration": {
+      "restored": true,
+      "verifiedBy": "bounded polling after restoring actual prior Android settings"
+    }
+  },
+  "install": {
+    "confirmed": true,
+    "startedAt": "2026-11-08T05:33:43.508173+00:00",
+    "elapsedSecondsIncludingVerification": 96.372,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 63,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "211b8a72fcc5fb336febc4b74c0c38afce8ead75c4a5f742b6142f88f1f01fd5",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-08 12:35:16",
+      "versionCode": "63 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    },
+    "installedVerificationMethod": "Device SHA-256 equals validated local APK; installed.apk is a local copy, not a pull-back."
+  },
+  "emulatorInstall": {
+    "sample": 63,
+    "ownedEmulatorOnly": true,
+    "versionCode": 63,
+    "sha256": "211b8a72fcc5fb336febc4b74c0c38afce8ead75c4a5f742b6142f88f1f01fd5",
+    "startedAt": "2026-11-08T05:29:06.507534+00:00",
+    "elapsedSeconds": 13.964,
+    "updateInPlace": true,
+    "dataCleared": false,
+    "uninstalled": false,
+    "uiLaunched": false,
+    "sameAppIdentity": true
+  },
+  "emulatorStop": {
+    "pid": 1691408,
+    "startTicks": "179238796",
+    "stopped": true,
+    "dataRetained": true,
+    "phoneTouched": false,
+    "at": "2026-11-08T05:33:16.714103+00:00"
+  },
+  "passiveProcess": {
+    "sameProcess": true,
+    "fatalLines": 0,
+    "startedAt": "2026-11-08T05:31:09.377125+00:00",
+    "finishedAt": "2026-11-08T05:31:19.401076+00:00",
+    "observedPid": "3843",
+    "afterPid": "3843",
+    "crashBufferSince": "2026-11-08T05:29:28.585204+00:00",
+    "uiTouched": false
+  },
+  "gateway": {
+    "at": "2026-11-08T05:27:53.329869+00:00",
+    "containerId": "7848ee220a55729c0f58080b152d02c7943c7b38c5d430b8ab2de3d0246947b9",
+    "image": "sha256:e6bba3d14a0d08f19edad99ea2fbd527cb330affecb5956f19bd89eb218219bf",
+    "apiAddress": "172.18.0.7",
+    "counterInterface": "br-3b9b9ff77286",
+    "unchangedFrom62": true
+  },
+  "requestCounts": {
+    "other_hris": 10,
+    "hris_device_setup": 18,
+    "secret_storage_default_key": 4,
+    "hris_room": 18,
+    "refresh": 1,
+    "hris_conversation": 16,
+    "other_matrix": 8,
+    "sync": 5,
+    "encrypted_room_send": 1
+  },
+  "responseCounts": {
+    "other_hris:401": 2,
+    "other_hris:200": 8,
+    "hris_device_setup:200": 18,
+    "secret_storage_default_key:401": 2,
+    "hris_room:200": 18,
+    "refresh:200": 1,
+    "hris_conversation:200": 16,
+    "secret_storage_default_key:404": 2,
+    "other_matrix:200": 8,
+    "sync:200": 5,
+    "encrypted_room_send:200": 1
+  },
+  "counterSeconds": 180.533,
+  "counterSha256": "7ee059afe06229bab035b80acf8f2e46c1ce815bbd77921e0fc8b11de3ca335d",
+  "requestWindows": {
+    "matrixSend": {
+      "offsetSeconds": 42.968,
+      "operation": "encrypted_room_send",
+      "method": "PUT",
+      "status": 200,
+      "headerLatencyMs": 187
+    },
+    "windows": {
+      "before_send_5_seconds": {
+        "counts": {
+          "hris_device_setup": 5,
+          "hris_room": 5,
+          "hris_conversation": 4,
+          "other_matrix": 1,
+          "sync": 1
+        },
+        "responses": 16
+      },
+      "after_send_10_seconds": {
+        "counts": {
+          "encrypted_room_send": 1,
+          "hris_device_setup": 7,
+          "hris_conversation": 7,
+          "hris_room": 7,
+          "other_matrix": 3,
+          "sync": 1
+        },
+        "responses": 26
+      },
+      "later_than_10_seconds": {
+        "counts": {
+          "sync": 2,
+          "other_hris": 1
+        },
+        "responses": 3
+      }
+    },
+    "responses403": 0,
+    "scope": "Same passive counter offsets include concurrent startup/navigation/acquisition. Not all operations are attributable to the send, and this is not a phone latency or capture-overhead benchmark.",
+    "sameHostSendBoundaries": {
+      "tapCommandDurationMillis": 90.664,
+      "tapCommandStartToMatrixRequestMillis": 3218.317,
+      "tapCommandReturnToMatrixRequestMillis": 3127.652,
+      "tapCommandStartToMatrixResponseHeadersMillis": 3405.317,
+      "boundary": "Same host monotonic clock for ADB tap invocation/return and observed gateway packets. Input injection and emulator scheduling are included; this is not a physical-phone touch or UI acknowledgement timestamp."
+    }
+  },
+  "approximateBaselineSendBoundaries": {
+    "scope": "Approximate baseline from same-host UTC tap invocation and counter timestamp; no independent wall-clock discontinuity bound. New63 uses explicit monotonic clocks.",
+    "sourceBuild": 62,
+    "tapInvocationToRequestMillis": 4184.921,
+    "tapInvocationToResponseHeadersMillis": 4425.921,
+    "headerLatencyMillis": 241,
+    "coarseUiSentObservedSeconds": 7.468
+  },
+  "sendUiObservations": [
+    {
+      "secondsAfterTap": 2.757,
+      "visibleCopies": 1,
+      "sent": false,
+      "pending": true,
+      "bubbleBounds": [
+        33,
+        1921,
+        1047,
+        2065
+      ],
+      "composerBounds": [
+        22,
+        2120,
+        904,
+        2252
+      ],
+      "aboveComposer": true
+    },
+    {
+      "secondsAfterTap": 4.833,
+      "visibleCopies": 1,
+      "sent": true,
+      "pending": false,
+      "bubbleBounds": [
+        33,
+        1921,
+        1047,
+        2065
+      ],
+      "composerBounds": [
+        22,
+        2120,
+        904,
+        2252
+      ],
+      "aboveComposer": true
+    }
+  ],
+  "comparisonWith62": {
+    "beforeSend5sAdmissionResponses": {
+      "build62": 23,
+      "build63": 14
+    },
+    "afterSend10sAdmissionResponses": {
+      "build62": 24,
+      "build63": 21
+    },
+    "coarseUiSentObservedSeconds": {
+      "build62": 7.468,
+      "build63": 4.833
+    },
+    "matrixResponseHeaderMillis": {
+      "build62": 241,
+      "build63": 187
+    }
+  },
+  "videoStoryboardsSha256": {
+    "online-send-frames-0.png": "4c1650d7e09a4141ffb3a5d8e80aa8e83922e81b978dede79850c22b0f03c8ac",
+    "online-send-frames-2.png": "1e705da128a81d9fbd48d7cf07dd0f86cd08f6101a91eaf1238c2d035dfc6dbf",
+    "online-send-frames-4.png": "e18c643f992674de1dc6992f61c07732a248283fe434a79df8f138134d8c3174"
+  },
+  "limitations": [
+    "One send per build, on the same retained emulator account. Host/emulator scheduling and growing history are not independently controlled; this is not a phone speed guarantee.",
+    "Request windows include concurrent work and are not wholly attributable to the send.",
+    "New same-host monotonic tap/request timing includes ADB input injection; UI acknowledgement is separately coarsely polled.",
+    "Three screenshots and the first six seconds of cropped video were viewed; not a full recording audit.",
+    "Inspector/notification acceptance explicitly reuses unchanged source and build62 evidence; no new63 OS-notification scenario was run.",
+    "Keyboard continuity and atomic composer adoption remain pending.",
+    "No iPhone or native Apple Matrix acceptance, or inspector overhead/publication claim."
+  ],
+  "visualReview": {
+    "reviewedAt": "2026-11-08T05:32:08.613730+00:00",
+    "screenshots": [
+      "online-send.png",
+      "latest-preview-offline.png",
+      "thread-offline.png"
+    ],
+    "storyboards": [
+      "online-send-frames-0.png",
+      "online-send-frames-2.png",
+      "online-send-frames-4.png"
+    ],
+    "scope": "First six recorded seconds sampled at four frames/second; three direct screenshots.",
+    "original61DiagnosticAnd62MessagesVisuallyRetained": true,
+    "new63MessageVisuallyRetainedOffline": true,
+    "oneNewMessageBubbleObserved": true,
+    "keyboardDismissesDuringSave": true,
+    "pendingBubbleBecomesVisibleAfterLocalPersistence": true,
+    "checkedBubbleVisibleInLastStoryboard": true,
+    "phoneUiTouched": false
+  },
+  "jobsReaped": [
+    "full-3/25455",
+    "package/22176",
+    "verify-arm64/14851",
+    "verify-sdk/9857",
+    "emulator/96432",
+    "emulator-install/8100",
+    "counter/83314",
+    "probe/95500",
+    "passive-process/12547",
+    "emulator-stop/83410",
+    "phone-install/84193"
+  ]
+}

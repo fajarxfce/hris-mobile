@@ -162,3 +162,31 @@ This does not justify caching selected authority or bypassing missing/replaced k
 The next correction instead targets passive local delivery-status changes that
 unnecessarily request admitted original history from the chat screen. Real remote
 messages, edits, redactions and explicit entry/recovery must still acquire history.
+
+
+## Release63: fewer redundant reads; pre-request work remains
+
+The exact signed release63 is installed in place on the phone. The original-account
+emulator sent one new message; its older61/62/diagnostic originals and latest preview
+survived an offline cold restart. Three screenshots and three cropped4fps storyboards
+were reviewed. The keyboard still dismisses during saving.
+
+The 180.533-second counter observes zero403 and one encrypted send with HTTP200 in187ms
+to response headers. Two default-key401 responses precede one successful refresh in
+the full capture; two default-key404 responses remain. Do not interpret this as proof
+that every authentication error path is resolved.
+
+Setup/room/conversation responses in the five seconds before sending decline from23
+to14; the next ten seconds contain21 versus24. These windows include concurrent work.
+Same-host monotonic measurement places the Matrix request3,218.317ms after starting
+the ADB tap command (3,127.652ms after its return), and response headers at3,405.317ms.
+Build62's comparable UTC-derived estimates are4,184.921/4,425.921ms, with a different
+clock-method limitation. Coarse UI polling observes sent at4.833s versus7.468s.
+Local phases take774/154/360/108ms and overlap delivery. This is one emulator sample,
+not a phone latency guarantee; meaningful pre-request work remains.
+
+The bounded send capture contains no delivery-failure marker; no claim is made that
+every old command has been archived. Inspector/notification behavior explicitly reuses
+unchanged source and accepted62 evidence. Next work remains atomic composer adoption,
+keyboard continuity and the remaining send path.
+[Exact package, counter, visual and installation evidence](measurements/chat-history-signals-device-2026-11-08.json).

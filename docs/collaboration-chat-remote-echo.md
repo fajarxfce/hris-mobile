@@ -83,4 +83,7 @@ without redundant history work. The complete gate passes5,618fresh cases with ze
 failures/errors/skips, nine actual desktop and nine Chrome policy cases, Android
 compile/lint0, shared Wasm/iOS source and quality checks.
 [Exact validation](measurements/chat-history-signals-2026-11-08.json).
-Build63 device request counts and send timing remain separate acceptance.
+Build63 is now installed after the original-account counter/send/offline checks.
+The five-second pre-send setup/room/conversation count decreases23->14, with no403
+or delivery-failure marker in the bounded sample. Pre-request latency and keyboard
+continuity remain open. [Device evidence](measurements/chat-history-signals-device-2026-11-08.json).

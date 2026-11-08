@@ -1,5 +1,43 @@
 # Agent continuation — HRIS Mobile
 
+## Release63 installed; continue composer/send path — 08 November 2026, 05:36 UTC
+
+Source afc2bb5935b8af32421bf369df9fdccc2f7facd8 is pushed; full5618cases0all passed.
+Package22176PASS106.909s; APK123301135bytes,
+SHA211b8a72fcc5fb336febc4b74c0c38afce8ead75c4a5f742b6142f88f1f01fd5, non-debuggableARM64,
+same signer/nativeSDK5/API/Firebase/backup/lint0; new policy verified in actual dex.
+Phone install-only84193 completed after notice, started05:33:43.508,96.372s incl exact
+remote-hash verification. AppId10962/first-install retained, no data clear or phone UI.
+Original Bima emulator96432/PID1691408 used1536MiB and is stopped05:33:16. All jobs reaped;
+no owned compiler/emulator. Both phone and original stopped image now63. Never rerun the
+63 probe or resend its one message (Tes63 history052951) or prior61/62/diagnostic originals.
+
+Counter180.533s: zero403, default-key401x2/404x2, refresh200x1, encrypted-send200x1/187ms.
+Before-send5s:14 setup/room/conversation responses (62 had23); after10s21 (62 had24).
+Same-host monotonic tap invocation->request3218.317ms, ->response3405.317ms; tap call90.664ms.
+Coarse UI pending2.757s/sent4.833s, one bubble above composer. Four local phases774/154/360/108ms.
+No delivery-failure marker in bounded capture. Three screenshots/three4fps storyboards
+viewed; old/new originals and latest preview survived offline cold restart. Keyboard still
+dismisses during save. Inspector/notification62 evidence reused only after exact source
+comparison; no new63 OS shortcut test. Exact evidence: measurements/chat-history-signals-device-2026-11-08.json.
+This remains one emulator sample, not overall phone-latency or all-command archival proof.
+
+Next: adopt atomic composer b7929318 through owning use cases/recovery/projection/UI,
+preserving original submittedAt/IDs, legacy frozen drafts, cancellation/denial and lost
+commit recovery. Read-only lead: legacy PrepareDraftSend and QueueText both schedule the
+same key while application DraftRecovery can also queue/confirm; do not claim this is the
+remaining latency cause without measurement. Existing handoff requires an exact STORED
+original; an unsaved input buffer does not meet that CAS. New typing/multiple gestures must
+own distinct revisions; completing A must not clear B. Keep business orchestration out of
+VM helpers. Pending 3.2s pre-request work also merits stage timing if needed. No new composer
+source edits yet. Private notes: chat-history-signals-2026-11-08/composer-next-notes.txt.
+
+Commit/push this installation evidence, then continue. Other repos unchanged: library2b84921,
+Startera21b748, Platformea322180; Group routing off. Original54PRD remains3inprogress/51planned.
+One owned compiler OR emulator; no unrelated experiment Java termination. Notify before EACH
+phone installation and never operate its UI. No new user input is required for ongoing work.
+
+
 ## History-trigger correction accepted; package63 next — 08 November 2026, 05:24 UTC
 
 Full-3/session25455 is reapedPASS1203.04s:5,618fresh cases, zero failures/errors/skips,
