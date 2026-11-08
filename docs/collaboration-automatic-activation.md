@@ -101,3 +101,21 @@ pending group migrations117–138 must not be deployed as a side effect. SDK FFI
 remain unpublished until portable and real Apple CI acceptance. This document is
 not evidence that automatic activation, readiness wake, iOS runtime or calls/meetings
 have shipped.
+
+## Private account preservation before automation
+
+The legacy runtime previously constructed the native SDK using an initialized protected
+credential record without first reading the existing crypto account. Matrix session
+restoration can initialize an account when the crypto store is empty. Automatic entry
+must inspect inventory/possession first and the runtime must revalidate the original
+identity under the directory lease before constructing a client or replacing credentials.
+The current side candidate/tests are not accepted yet. A credential replacement resets
+`initialized` while retaining old message lineage: that interrupted state must also
+require the existing private account. A new gateway generation without original private
+state cannot authorize replacement identity creation. Only a proven initial bootstrap
+may initialize first keys; uncertain old state stays recoverable and untouched.
+
+Use the existing inventory/possession repositories for the domain decision. Missing
+facts, technical read failures, an in-progress handover and verified possession are
+separate outcomes. A read-only inventory check cannot replace validation under the
+actual SDK directory lease. Restore-only callers remain unable to enroll/reset keys.

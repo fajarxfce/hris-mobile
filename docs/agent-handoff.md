@@ -1,5 +1,46 @@
 # Agent continuation — HRIS Mobile
 
+## Existing private-account guard under test — 8 November 2026, 17:07 UTC
+
+Main c84e4b70 is clean/pushed and records native73 idle success. The original Bima73
+emulator is STOPPED; all native/watch jobs reaped. Phone70 unchanged. No71 Storage
+root disposition, no phone73 acceptance. Side merge4c27e1d6 is pushed.
+
+This side worktree has TWO UNCOMMITTED Kotlin changes, FROZEN under sole compiler61311:
+.work/activation-private-store-2026-11-08/check.py focused-1. It checks Android identity,
+existing handover, original adoption, runtime registry, proof compilation and quality.
+Formatting8679 passed29.171s (the earlier wrong formatApply task was corrected to the
+repository's actual formatKotlin;74558 reaped). No source edits during the active gate.
+The candidate verifies an initialized record's existing private crypto identity under
+the already-owned directory lease, before client construction or credential replacement.
+Four new cases cover missing/foreign/incomplete keys, foreground/background entry,
+replacement before-write and cancellation/cleanup. Neither registration nor automatic
+activation is wired yet. No native guard proof exists yet.
+
+IMPORTANT follow-up before accepting this guard: codec.replaceCredentials intentionally
+resets initialized=false while retaining the original messageOperationId and advancing
+bootstrapGatewayVersion. An interrupted replacement still requires the old private keys.
+Extend the predicate after61311 finishes (initialized OR retained old queue/gateway
+lineage), and add that regression. Also audit a missing protected record with a
+noninitial bootstrap: first key creation must not reset an existing gateway identity.
+The automatic domain decision should use the existing inventory/possession repositories
+to report recovery-required; neither an empty/missing store nor an I/O failure grants
+permission to generate replacement keys. The repository must revalidate under its
+actual directory lease, closing the gap after an earlier domain inspection.
+
+Source trace confirmed Matrix restore_session -> client.activate -> base.activate ->
+regenerate_olm creates/restores the crypto account before restore returns. Our initialized
+marker is recorded afterward. Background backup/recovery setup is distinct from device
+key upload. Do not confuse locally initialized keys, public-key publication or readiness.
+Keep initial bootstrap crash recovery distinct from previously initialized/replaced keys.
+
+Next consolidate the existing Prepare/Replay/Reconcile/Install orchestration into one
+named domain operation coordinating repositories/pure policies. Preserve meaningful
+crash/receipt/denial/lease tests; keep EnsureCollaborationRuntime restore-only for its
+other callers. Use the same workflow for automatic entry and the manual page, with
+bounded provisioning readback and exact original operations. No use-case-to-use-case
+calls, no repository policy or helpers hiding ViewModel business orchestration.
+
 ## Automatic activation implementation base — 8 November 2026, 16:48 UTC
 
 This side worktree now merges main ae15848e (accepted runtime source0f4f0039) without
