@@ -173,8 +173,168 @@
       },
       "resultSha256": "e470f0be2040b4696036d4ccad5dcb2e539b9c6f48d129e07a0cdd7bdd7baef4",
       "reason": "Only the fictional worker server parent binding changed after the first attempt; all20 worker integration cases and quality pass."
+    },
+    "full-1": {
+      "session": 66899,
+      "reaped": true,
+      "result": {
+        "startedAt": "2026-11-08T11:03:53.158878+00:00",
+        "elapsedSeconds": 1044.921,
+        "exitCode": 1,
+        "sourceFiles": 4487,
+        "librarySourcesUnchanged": true,
+        "sourcesUnchanged": true,
+        "freshCounts": {
+          "tests": 5746,
+          "failures": 3,
+          "errors": 0,
+          "skipped": 0
+        },
+        "freshSuites": 775,
+        "resultSha256": "26ca729a32ecf7e1fd460a8e61a42e1859eeae138e31b3934e6b4b65773842f5",
+        "sourceManifestSha256": "cd2208a2cc874df54d3a5709aa43e0f7fce179d422bf7b07d621850531d4bc76",
+        "reports": {
+          "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+            "sha256": "be9aa409a0d2ee3860a0d91cebab5b4c4151e326d15915eda675e9e9a45ee33a",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+            "sha256": "291d98dde91b0cb97e1adba4309c6a524bdf5059ba20986b77e278b7f0e6b8e8",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+            "sha256": "3698d3c738807e673506d0fa1ad249ee282983b950e171b0f2c7b1f8fc276890",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationPreparedDeliveryTest.xml": {
+            "sha256": "609f90c7e73c5691a85c34a2d25a202323543c16eceb0d4a979f1775076bf16b",
+            "tests": 12,
+            "failures": 3,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationTransportRoomTest.xml": {
+            "sha256": "be19cf78ed17527fd98eb1f4194016ef4b2b0b7516c0067d821f6d8b89eb151b",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationTransportRoomTest.xml": {
+            "sha256": "0c2114f26f9e367be9f20c0bb960b5ed16435f87dce678a9a83da5a5115b8ba4",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        }
+      },
+      "reason": "Three PreparedDelivery failures: legacy setup/get/room counters no longer observe transport reads; the newly introduced positional Failure constructor put a code in message. Corrected the pure production policy and two fakes using the existing coded failure factory; adapted preparation counters without removing revocation, late denial or room mismatch guards; exact kind/code assertions added."
+    },
+    "focused-3": {
+      "session": 39095,
+      "reaped": true,
+      "result": {
+        "startedAt": "2026-11-08T11:21:35.829045+00:00",
+        "elapsedSeconds": 149.859,
+        "exitCode": 1,
+        "sourceFiles": 4487,
+        "librarySourcesUnchanged": true,
+        "sourcesUnchanged": true,
+        "freshCounts": {
+          "tests": 24,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "freshSuites": 2,
+        "resultSha256": "e3574feaae86129e8929787fbb885ef6b6da04e946c20f65751647357ef0aa52",
+        "reports": {
+          "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationDeliveryWorkerTest.xml": {
+            "sha256": "ffbe85178a5be8b927c789838dffb57df70bf866d7065ea049a17bd49abfd819",
+            "tests": 20,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+            "sha256": "512584b08745a884f3c8a9f54afa45cdbd7b718f0e21ff80a155b79ff34c7c47",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        }
+      },
+      "reason": "Test compilation failed because StageCollaborationTextTest lacked the explicit collaborationSetupFailure import. Production/data and20 worker integration cases passed. Added only that test import after reaping this job."
+    },
+    "focused-4": {
+      "session": 72636,
+      "reaped": true,
+      "result": {
+        "startedAt": "2026-11-08T11:24:13.916512+00:00",
+        "elapsedSeconds": 114.405,
+        "exitCode": 0,
+        "sourceFiles": 4487,
+        "librarySourcesUnchanged": true,
+        "sourcesUnchanged": true,
+        "freshCounts": {
+          "tests": 69,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "freshSuites": 4,
+        "reports": {
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationTransportRoomTest.xml": {
+            "sha256": "7dc3455b900aa40c2bf7a1370dd2a4ac45179e5661a1caf73681a0529082d00b",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.DeliverCollaborationMessagesTest.xml": {
+            "sha256": "08df3c74d920d5b39b2d2d82895d6c50c1cf62c753922b7efec30a53e52b3643",
+            "tests": 32,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.StageCollaborationTextTest.xml": {
+            "sha256": "69719693a23c2ee69680e991e15ae3c7fca6d58a35ae280ebaab30b4a303de10",
+            "tests": 23,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationPreparedDeliveryTest.xml": {
+            "sha256": "77c201495b40b25320b397815e97f81895f32303bb07d0127450cea3b922d02f",
+            "tests": 12,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        },
+        "resultSha256": "0d4a0473d135abb09fc4b07fc86fb581a6c007100a8bfbf4f2746bdd7e6ac3b9"
+      }
     }
   },
   "next": "full-1 running, source frozen",
-  "runtimeAccepted": false
+  "runtimeAccepted": false,
+  "pending": {
+    "gate": "full-2",
+    "sourcesFrozen": true,
+    "applicationKotlinChanges": 19,
+    "followupRequired": "complete full-2 before source acceptance and build68",
+    "session": 33610
+  }
 }

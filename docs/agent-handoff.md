@@ -1,5 +1,46 @@
 # Agent continuation — HRIS Mobile
 
+## Direct transport final source gate running — 8 November 2026, 11:26 UTC
+
+Focused-4/72636 is REAPED PASS114.405s:69 fresh domain cases, zero failures/errors/
+skips; format/architecture/Detekt pass. Earlier24 data/worker cases remain passing.
+The missing typed-code defect and prepared-read expectations are corrected without
+removing current revocation, late denial, room mismatch or receipt ownership guards.
+All failed attempts are retained in [measurements](measurements/collaboration-direct-transport-2026-11-08.json).
+
+Sole owned compiler33610 is `.work/direct-transport-2026-11-08/check.py full-2`; all19
+Kotlin changes and82 library inputs are FROZEN. No emulator. Source is uncommitted
+and unaccepted until full-2 finishes. Release68 scripts require this exact gate;
+no68APK, send or installation exists. Then source commit/push, package/verify,
+actual emulator request/offline/visual acceptance, stop/reap emulator, notify phone
+install-only. Phone/original Bima image remain67 with all originals and exact UNSENT
+Draft66 092041 intact. Never replay those originals or send that draft.
+
+Backend e8d1d24f remains deployed healthy; no rollout repeats. Starterad3aa93 is
+accepted/pushed; this transport is HRIS-specific. All54PRD groups, nativeApple Matrix,
+network capture overhead and SDK/library publication remain open.
+
+## Direct transport corrections under test — 8 November 2026, 11:22 UTC
+
+Full-1/66899 is REAPED FAIL1044.921s:5,746 fresh cases,3 failures,0 errors/skips;
+4,487 app inputs and82 library files stayed unchanged. Android/lint, actual browser
+contracts and web/iOS source compilation ran. The three failures were in prepared
+queue delivery: stale legacy-read counters and missing typed error codes in the new
+transport policy/fakes. The five-file correction retains all denial, ownership and
+room-change assertions; policy tests now require exact failure kinds/codes.
+
+Focused-3/39095 is REAPED FAIL149.859s:24 data/worker cases pass, but the domain
+test source missed one import for the existing failure factory. Only that import
+changed afterward. Sole compiler72636 is focused-4; all19 Kotlin changes and
+library inputs are FROZEN.
+No owned emulator. After reaping it, require full-2 acceptance before source commit/push
+and release68 packaging. All68 build/accept scripts now pin full-2, never failed full-1.
+No68APK/send/installation exists. Phone and retained original emulator remain67.
+Platforme8d1d24f is already deployed healthy; no repeat API rollout. Starterad3aa93
+is accepted/pushed. Preserve all originals and exact UNSENT Draft66 092041. Notify
+before phone install-only; never drive its UI. All54PRD/nativeApple/overhead/publication
+work remains. [Recorded attempts](measurements/collaboration-direct-transport-2026-11-08.json).
+
 ## Direct transport full gate running — 8 November 2026, 11:05 UTC
 
 Sole owned compiler66899 is `.work/direct-transport-2026-11-08/check.py full-1`.
