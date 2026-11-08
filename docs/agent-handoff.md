@@ -1,5 +1,41 @@
 # Agent continuation — HRIS Mobile
 
+## Release71 rejected by actual idle test — 8 November 2026, 14:53 UTC
+
+DO NOT INSTALL71. Sourceff495af3 passed5,775 tests and pushed61360 REAPED; package
+21205/verify18326/SDK2257 all REAPED. Native ready probe5312 passed one new original,
+offline history/draft and four actual screenshots, but UNREADY acceptance FAILED.
+[Failure evidence](measurements/collaboration-recipient-waiting-release71-2026-11-08.json).
+
+Counter43450 REAPED249.182s:8transport200 withrecipientReady=false,0encrypted sends,
+0×403; SIXtransport requests occurred after30s settling within180s idle observation.
+Unready35148 state-only assertions passed, but actualquiet PNG shows a Storage failure
+and Retry. Seven PNGs actually inspected. Do not relabel this as a passed release or
+loosen the acceptance criterion. No unready-counts/release-acceptance success exists.
+
+Preserve both original71 messages: Tes71 waiting143424 (Sent) and Tes71 unready143749
+(waiting to Administrator). NEVER replay/send either again. Exact Draft66 092041
+remains UNSENT. Original Bima image/keys intact. Emulator13933 is still running71;
+no compiler; phone remains70. All counter/probe/passive56879 jobs reaped.
+
+Private log in .work/release-phone-2026-11-08-build71/unready-log.private.txt:
+repeated StageMessage/ProcessRooms Conflict,14WorkScheduling events,one Storage
+IllegalStateException at14:38:29 just after connectivity restoration. Generic worker
+and Android WorkManager both block without retry; identify who requests a new run.
+Current hypotheses are not fixes. Do not blanket suppress legitimate future wakeups.
+
+For read-only sanitized Crashlytics inspection, owned emulator adbd was restarted
+as root. Root job14010 and wait74784 failed/reaped because original serial stayed
+offline; connecting127.0.0.1:5563 restored emulator-5562 (same PID/image). Phone was
+untouched. Private144,896-byte Crashlytics tar has no matching retained error yet;
+inspect/recapture if reproduced before another app restart. Root/loopback alias must
+be restored/closed before ending this emulator session. No keys/data were reset.
+
+Automatic activation remains separate, NOT implemented. Sideworktree is now branch
+feat/chat-auto-activation-20261108 atbb7a8d6f (design-only, pushed35124 REAPED), based
+onff495af3. Finish this discovered root failure first. Platform1aea3228/live116.1,
+Starterada8254 and Library2b849217/SDK5 unchanged. No goal/subagent. Broader PRD continues.
+
 ## Recipient waiting source accepted — 8 November 2026, 14:28 UTC
 
 Full55172 REAPED PASS:5,775fresh/777suites, zero failures/errors/skips,1,013.143s.
