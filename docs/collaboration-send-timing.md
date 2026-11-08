@@ -214,3 +214,38 @@ cross-target checks and the next composer changes remain separate evidence.
 [Validation](measurements/chat-delivery-stage-timing-2026-11-08.json) includes nine actual
 desktop and nine Chrome timing cases. The full gate passes with 678 fresh cases and zero
 failures/errors/skips, Android compilation/lint, shared Wasm/iOS source and quality checks.
+
+
+## Release 64: delivery-stage baseline
+
+The exact signed release64 is installed in place on the phone. Its single emulator send
+has a Matrix HTTP200 header response in171ms, with the request beginning3,543.413ms after
+the host starts the ADB tap (3,408.373ms after the command returns). Coarse UI polls see
+pending at3.013s and sent at5.276s. Local draft/preparation/queue/confirmation phases take
+731/271/269/115ms and overlap the worker. This is a baseline, not a speed improvement.
+
+The active delivery trace records500ms in draft recovery,541ms entering the timeline,
+237ms settling completed queue entries,485ms staging the message and1,608ms in delivery.
+Delivery includes both pre-send preparation and post-response reconciliation; the stage
+number cannot be equated with HTTP latency. Retirement history/command stages take528/106ms.
+The3,647ms `ProcessRooms` interval includes these nested room stages. Guest logcat wall
+time was not independently synchronized to host tap/packet timing; only each monotonic
+interval and the separate host-to-host packet boundary are directly measured.
+
+The180.823s passive counter sees zero403, default-key401x2/404x2 and one refresh200.
+There are14 setup/room/conversation responses in the five seconds before the send and21
+in the following ten seconds, as in63. Concurrent incoming chat and startup/recovery are
+present in the full window. No delivery-failure marker appears in the bounded send log.
+
+The first offline assertion expected this outgoing message to remain the latest preview,
+but a newer incoming message had superseded it. That unsuccessful probe is retained. A
+separate offline cold restart, with no new send, verifies the newer preview and the original
+64/63 messages; older62/61/diagnostic messages are also visible in the reviewed screenshot.
+Three screenshots and three4fps storyboards were inspected. The keyboard still dismisses,
+and the first six seconds of video end with the message pending; the later screenshot and
+UI polling confirm the checkmark. Inspector/notification evidence reuses unchanged63 code.
+[Package, timing, original/follow-up evidence and installation](measurements/chat-delivery-stage-device-2026-11-08.json).
+
+Next work is the redundant preparation around staging/delivery and the atomic composer
+handoff. Do not remove live admission or key/owner fencing solely to improve these numbers;
+review which operation owns each decision and preserve uncertain originals and late ACKs.

@@ -1,5 +1,51 @@
 # Agent continuation — HRIS Mobile
 
+## Release 64 installed; continue the measured send path — 08 November 2026, 06:33 UTC
+
+Runtime29d65718f182a12f7dcaa0e40c7db2e9bc17d7b4 is pushed. Build21537 passed101.016s;
+verified non-debuggable ARM64 APK123301135bytes,
+SHA365fd989e54b0f5739ae82dc5dc5deda4e52f2c014bd103062f898094fa64922. Same signer,
+SDK5 native bytes, API/Firebase and backup exclusions; actual stage prefix verified in dex.
+Phone install-only98650 passed after notice,37.662s including exact remote-hash verification,
+started06:30:56.397; appId10962/first install retained. No phone UI operation or data clear.
+Original emulator44863/PID2037291/ticks179546656 used1536MiB/2cores and stopped06:30:34.
+All compiler/emulator/counter/probe/install sessions are reaped. Both devices now64.
+
+One new message only (the64 probe timestamp062147); NEVER resend it or prior originals.
+Probe29450 sent successfully, but its latest-preview assertion failed because a newer
+incoming message replaced the outgoing preview. Preserve that original unsuccessful
+probe. Read-only offline follow-up67548 passed without another send: latest incoming
+preview, original64 and63 remain; older62/61/diagnostic messages visible. Settings restored.
+Three screenshots and three original-detail4fps storyboards were viewed. No FATAL in the
+passive process check. Acceptance file explicitly links both probes by digest. Inspector/
+notification behavior reuses unchanged63 sources and its audited62 evidence. No new OS
+shortcut tests were run. The first video-review invocation lacked system imageio_ffmpeg;
+the existing phone53 video-tools environment succeeded. No extra package was installed.
+
+Counter85855:180.823s, zero403, default-key401x2/404x2, one refresh200, one encrypted-send200
+with171ms header latency. Host tap->request3543.413ms, ->headers3714.413ms; tap command135.04ms.
+Coarse UI pending3.013s/sent5.276s, one bubble above input. Local phases731/271/269/115ms.
+Active worker trace: recovery500, enter541, settle237, stage485, deliver1608, history528,
+retire106ms. ProcessRooms3647ms is inclusive. Guest event clocks and host packet clocks
+are not independently synchronized. Before/after admission counts14/21 match63. No failure
+marker in the bounded log. [Exact evidence](measurements/chat-delivery-stage-device-2026-11-08.json).
+The keyboard still dismisses during saving; this release measures rather than optimizes.
+
+Commit/push this installation evidence, then continue the actual send-path improvement.
+Inspect repeated preparation in Enter/Stage/Deliver and legacy UI+worker draft recovery.
+The1,608ms delivery stage contains pre-send work plus post-response reconciliation, while
+Matrix itself took171ms. Any admission consolidation needs an owning domain policy, real
+server checks and original queue/receipt/cancellation regression coverage. Do not blindly
+cache selected authority, weaken missing-key checks, or switch foreground work to a
+background scope. No optimization source edits exist yet. Atomic composer b7929318 remains
+unused; read composer-handoff.md and the prior entry/private follow-up notes before adoption.
+UI accepting new text needs a distinct editing revision; completing A must not clear B.
+
+Other repositories unchanged: library2b84921, Startera21b748, Platformea322180. Live gateway
+preflight06:19:24 is the same3a7909a6 image/container. Group routing remains off; original54
+PRD remains3inprogress/51planned. Continue without new user input. One owned heavy compiler
+OR emulator; notify before each phone install-only and preserve all original data/keys.
+
 ## Delivery stage timing accepted; package 64 next — 08 November 2026, 06:16 UTC
 
 The new application-owned timing observer distinguishes local recovery/discovery, setup,
