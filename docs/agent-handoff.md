@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 13:49 UTC. Historical detail is retained in
+Updated 9 November 2026, 14:01 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -22,12 +22,12 @@ is required; Apple source/runtime, push and calling acceptance remain separate.
 
 | Checkout | Branch/source | State |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 /this commit | Binding preparation accepted; no product activation |
+| Mobile original | feat/chat-send-timing-20261107 /78076d4e | Binding preparation accepted; no product activation |
 | Mobile isolated CI | feat/pinned-inspector-ci-20261109 /951cdbcf | Public consumer evidence accepted and integrated |
 | Inspector original | feat/matrix-rust-bindings-20261107 /f8ca3d6 | Verified public SDK6 integrated |
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | SDK6 distribution accepted; preserve unrelated gradlew.bat delta |
 | Starter | feat/network-inspector-20261107 /ffd0ac5 | Generic pinned workflow/checksum port accepted |
-| Platform original | feat/communications /4d4df31f | Runtime unchanged |
+| Platform original | feat/communications /691f3fc5 | Recovery verifier port accepted/pushed; runtime unchanged |
 | Platform group | feat/communication-space /bf6e176a | Merge of4d4df31f in progress; resolved source adaptations, not yet validated or committed |
 
 Isolated directories are under `/home/fajar/hris/.worktrees/`: `communication-space`,
@@ -80,9 +80,9 @@ Desktop/browser/Apple wrappers and actual application DI resolution.
 [Accepted evidence](measurements/collaboration-space-room-binding-preparation-2026-11-09.json)
 retains source hashes, first failures and corrected proof. Private files are in
 `.work/space-room-binding-preparation-2026-11-09`. Actual Apple execution remains
-separate; no new APK or SDK/worker/UI activation is claimed. The existing hosted
-collaboration-control workflow includes the new Apple database contract; dispatch
-once on this accepted source after push, checking for an already active run first.
+separate; no new APK or SDK/worker/UI activation is claimed. Hosted collaboration-control42628449460 is RUNNING on exact78076d4e, including
+the new Apple database contract and portable checks. No duplicate dispatch.
+[CI run](https://github.com/fajarxfce/hris-mobile/actions/runs/42628449460).
 
 ## Platform reconciliation in progress
 
@@ -95,16 +95,34 @@ when an adopted group runtime keeps the same physical Matrix user/device.
 The merged default-key HTTP endpoint originally still dispatched only company
 credentials. A fixed group read now uses its existing native/provider request lifetime;
 missing, empty and present data stay distinct. Three new actual SQL/admission cases
-and one HTTP routing case cover this; all remain UNVALIDATED. Shared API and FULL worker
+and one HTTP routing case cover this. The partial/focused results below are not yet
+full merge acceptance. Shared API and FULL worker
 contexts must run because DI changed. Do not deploy or commit the merge before its gate.
 
 The recovery verifier also rejected reviewed116.2–4 schemas. One new regression fails
 before the explicit-version correction;27 Python migration/recovery cases now pass.
 Only reviewed versions are allowed; encrypted envelope projection is unchanged. This
-is verifier proof, not a live recovery. Its later minimal port to original Platform is
-still required. Details/scripts live under the group checkout's
-`.work/space-root-reconciliation-2026-11-09`. Focused49700 is RUNNING; this is the
-only heavy local job. Group source inputs are frozen until it is reaped.
+is verifier proof, not a live recovery. Original Platform691f3fc5 independently accepts/pushes the minimal port, with40
+passing database-recovery/migration/recovery-set Python cases and its own116.4
+maximum. Group keeps138; do not copy either branch's schema maximum to the other. Details/scripts live under the group checkout's
+`.work/space-root-reconciliation-2026-11-09`:
+
+-49700 failed226.851s after207 passing domain/data cases: five Group-only fixture
+ calls retained the old directMetadata name after Root renamed it accountData.
+-67950 failed83.59s:two HTTP cases/one failure. The new default-key test froze the
+ application clock before PostgreSQL created its lease; request_lost was correct.
+ Only that live-operation fixture now follows system time, keeping all assertions.
+-24065 REAPED PASS75.409s:both HTTP cases pass, zero failures/errors/skips; cached
+ domain/data results are not recounted.
+-Full33511 is RUNNING on8,686 fixed inputs: database/collaboration/required API and
+ FULL worker, plus quality/migration/recovery checks. It is the only heavy local job;
+ Group source inputs remain frozen until reaped. No merge commit/deployment yet.
+
+Five private, uncompiled Group direct-transport drafts are prepared under
+`.work/space-direct-transport-2026-11-09/candidate`, with base hashes and remaining
+API/DI/SQL/HTTP work in its README. They are not applied to the frozen source or
+accepted. Original message.get already returns archived immutable commands, verified
+by its actual encrypted storage contract; do not add an unnecessary archive fallback.
 
 ## Accepted phone and native proof
 
@@ -150,7 +168,7 @@ Draft66 092041 must NEVER be sent. All native/emulator jobs are reaped and stopp
 
 ## Next work
 
-1. Dispatch/audit actual hosted Apple preparation coverage on this accepted source.
+1. Audit hosted collaboration-control42628449460 at78076d4e; do not dispatch again.
 2. Validate/finish the Platform source merge with shared API/FULL worker and actual
    SQL/RLS/migration/projection checks. Keep live runtime unchanged during source work.
 3. Continue owning original SDK delivery/history, current recipient readiness, worker
