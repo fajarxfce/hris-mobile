@@ -1,0 +1,2559 @@
+{
+  "startedAt": "2026-11-09T02:52:12.920501+00:00",
+  "acceptedTrace": true,
+  "passiveOnly": true,
+  "tokensOrHashesRetained": false,
+  "maxSeconds": 780,
+  "samples": [
+    {
+      "offsetSeconds": 83.514,
+      "matchesPriorReturnedRefresh": null,
+      "accessUsageSincePriorResponse": {
+        "matchingReturnedAccess": 0,
+        "otherAccess": 0
+      },
+      "status": 200,
+      "requestCredentialAfterResponse": {
+        "heads": 1,
+        "matchesCurrentRefresh": false,
+        "matchesPreviousRefresh": true,
+        "matchesCurrentAccess": null,
+        "maxVersion": 12,
+        "allRevoked": false,
+        "sessionExpired": false
+      },
+      "responseHasRefreshToken": true,
+      "returnedCredentialAfterResponse": {
+        "heads": 1,
+        "matchesCurrentRefresh": true,
+        "matchesPreviousRefresh": false,
+        "matchesCurrentAccess": true,
+        "maxVersion": 12,
+        "allRevoked": false,
+        "sessionExpired": false
+      },
+      "newRefreshDiffersFromRequest": true
+    },
+    {
+      "offsetSeconds": 386.249,
+      "matchesPriorReturnedRefresh": true,
+      "accessUsageSincePriorResponse": {
+        "matchingReturnedAccess": 59,
+        "otherAccess": 0
+      },
+      "status": 200,
+      "requestCredentialAfterResponse": {
+        "heads": 1,
+        "matchesCurrentRefresh": false,
+        "matchesPreviousRefresh": true,
+        "matchesCurrentAccess": null,
+        "maxVersion": 13,
+        "allRevoked": false,
+        "sessionExpired": false
+      },
+      "responseHasRefreshToken": true,
+      "returnedCredentialAfterResponse": {
+        "heads": 1,
+        "matchesCurrentRefresh": true,
+        "matchesPreviousRefresh": false,
+        "matchesCurrentAccess": true,
+        "maxVersion": 13,
+        "allRevoked": false,
+        "sessionExpired": false
+      },
+      "newRefreshDiffersFromRequest": true
+    }
+  ],
+  "interrupted": false,
+  "elapsedSeconds": 386.434,
+  "finishedAt": "2026-11-09T02:58:39.354526+00:00",
+  "status": "paired-home-renewal-pass-prior-route-failure-unresolved",
+  "sourceCommit": "abb4b924",
+  "versionCode": 79,
+  "artifactSha256": "d6d7f11c1ac537b971f98ef18b58b42f18d29fddc4af80fbb713094846fe3f7a",
+  "newSendGestures": 0,
+  "encryptedEventsBefore": 3,
+  "encryptedEventsAfter": 3,
+  "phoneTouched": false,
+  "privateKeysReset": false,
+  "publicIdentityUnchanged": true,
+  "lifetime": {
+    "startedAt": "2026-11-09T02:52:27.196827+00:00",
+    "accepted": true,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "phoneTouched": false,
+    "productInstalled": false,
+    "bootSeconds": 31.327,
+    "stopped": true,
+    "elapsedSeconds": 434.272,
+    "originalFilesUnchanged": true,
+    "scope": "Owned emulator lifetime only. Native message/wake acceptance is recorded separately."
+  },
+  "reapedSessions": {
+    "emulator": 20258,
+    "pairedObserver": 6646,
+    "aggregateCounter": 84209
+  },
+  "counter": {
+    "startedAt": "2026-11-09T02:52:11.764495+00:00",
+    "normalStop": true,
+    "interrupted": false,
+    "passiveReadOnly": true,
+    "rawTrafficRetained": false,
+    "maxRequests": 10000,
+    "maxSeconds": 900,
+    "binSeconds": 10,
+    "elapsedSeconds": 447.508,
+    "requestCount": 277,
+    "capReached": false,
+    "requests": [
+      {
+        "offsetBin": 70,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 70,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 70,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 70,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 70,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 9
+      },
+      {
+        "offsetBin": 70,
+        "operation": "other_hris",
+        "method": "POST",
+        "count": 1
+      },
+      {
+        "offsetBin": 80,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 80,
+        "operation": "refresh",
+        "method": "POST",
+        "count": 1
+      },
+      {
+        "offsetBin": 80,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 4
+      },
+      {
+        "offsetBin": 80,
+        "operation": "sync",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 90,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 90,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 90,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 3
+      },
+      {
+        "offsetBin": 90,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 90,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 90,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 90,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 100,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 130,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 5
+      },
+      {
+        "offsetBin": 140,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 140,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 140,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 140,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 140,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 140,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 140,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 150,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 150,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 150,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 3
+      },
+      {
+        "offsetBin": 150,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 150,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 150,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 150,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 160,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 160,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 160,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 160,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 160,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 170,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 170,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 170,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 180,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 180,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 180,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 3
+      },
+      {
+        "offsetBin": 180,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 180,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 180,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 180,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 190,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 190,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 190,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 190,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 190,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 4
+      },
+      {
+        "offsetBin": 200,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 200,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 200,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 210,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 210,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 210,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 3
+      },
+      {
+        "offsetBin": 210,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 210,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 210,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 210,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 220,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 220,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 220,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 220,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 220,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 230,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 230,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 230,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 240,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 240,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 240,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 3
+      },
+      {
+        "offsetBin": 240,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 240,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 240,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 240,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 250,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 250,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 250,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 250,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 250,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 4
+      },
+      {
+        "offsetBin": 260,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 260,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 260,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 270,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 270,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 270,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 3
+      },
+      {
+        "offsetBin": 270,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 270,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 270,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 270,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 280,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 280,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 280,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 280,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 280,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 290,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 290,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 290,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 300,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 300,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 300,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 3
+      },
+      {
+        "offsetBin": 300,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 300,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 300,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 300,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 310,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 310,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 310,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 310,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 310,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 4
+      },
+      {
+        "offsetBin": 320,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 320,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 320,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 330,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 330,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 330,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 3
+      },
+      {
+        "offsetBin": 330,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 330,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 330,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 330,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 340,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 340,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 340,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 340,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 340,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 350,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 350,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 350,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 360,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 360,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 360,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 3
+      },
+      {
+        "offsetBin": 360,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 360,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 360,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 360,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 370,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 370,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 370,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 370,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 370,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 4
+      },
+      {
+        "offsetBin": 380,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 380,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 380,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 4
+      },
+      {
+        "offsetBin": 380,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 380,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 380,
+        "operation": "refresh",
+        "method": "POST",
+        "count": 2
+      },
+      {
+        "offsetBin": 380,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 6
+      },
+      {
+        "offsetBin": 380,
+        "operation": "sync",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 390,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 390,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 390,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 390,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 390,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 400,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 400,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 400,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 410,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 410,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 410,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 3
+      },
+      {
+        "offsetBin": 410,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 410,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 410,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 410,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 420,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 420,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 420,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 420,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 420,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 430,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 430,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 3
+      },
+      {
+        "offsetBin": 430,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 430,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 440,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 440,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 440,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "count": 3
+      },
+      {
+        "offsetBin": 440,
+        "operation": "hris_room",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 440,
+        "operation": "other_hris",
+        "method": "GET",
+        "count": 1
+      },
+      {
+        "offsetBin": 440,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "count": 2
+      },
+      {
+        "offsetBin": 440,
+        "operation": "sync",
+        "method": "GET",
+        "count": 1
+      }
+    ],
+    "responses": [
+      {
+        "offsetBin": 70,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 70,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 70,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 2
+      },
+      {
+        "offsetBin": 70,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 70,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 9
+      },
+      {
+        "offsetBin": 70,
+        "operation": "other_hris",
+        "method": "POST",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 80,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 80,
+        "operation": "refresh",
+        "method": "POST",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 80,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 401,
+        "count": 2
+      },
+      {
+        "offsetBin": 80,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 80,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 80,
+        "operation": "sync",
+        "method": "GET",
+        "status": 401,
+        "count": 1
+      },
+      {
+        "offsetBin": 90,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 90,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 90,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "offsetBin": 90,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 90,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 90,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 90,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 100,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 130,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "offsetBin": 140,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 140,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 140,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 2
+      },
+      {
+        "offsetBin": 140,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 140,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 140,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 140,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 150,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 150,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 150,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "offsetBin": 150,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 150,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 150,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 150,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 160,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 160,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 160,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 2
+      },
+      {
+        "offsetBin": 160,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 160,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 170,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 170,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 170,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 180,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 180,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 180,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "offsetBin": 180,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 180,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 180,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 180,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 190,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 190,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 190,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 2
+      },
+      {
+        "offsetBin": 190,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 190,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 4
+      },
+      {
+        "offsetBin": 200,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 200,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 200,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 210,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 210,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 210,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "offsetBin": 210,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 210,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 210,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 210,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 220,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 220,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 220,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 2
+      },
+      {
+        "offsetBin": 220,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 220,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 230,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 230,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 230,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 240,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 240,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 240,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "offsetBin": 240,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 240,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 240,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 240,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 250,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 250,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 250,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 2
+      },
+      {
+        "offsetBin": 250,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 250,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 4
+      },
+      {
+        "offsetBin": 260,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 260,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 260,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 270,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 270,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 270,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "offsetBin": 270,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 270,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 270,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 270,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 280,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 280,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 280,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 2
+      },
+      {
+        "offsetBin": 280,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 280,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 290,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 290,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 290,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 300,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 300,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 300,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "offsetBin": 300,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 300,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 300,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 300,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 310,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 310,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 310,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 2
+      },
+      {
+        "offsetBin": 310,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 310,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 4
+      },
+      {
+        "offsetBin": 320,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 320,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 320,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 330,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 330,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 330,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "offsetBin": 330,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 330,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 330,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 330,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 340,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 340,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 340,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 2
+      },
+      {
+        "offsetBin": 340,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 340,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 350,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 350,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 350,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 360,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 360,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 360,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "offsetBin": 360,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 360,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 360,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 360,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 370,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 370,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 370,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 2
+      },
+      {
+        "offsetBin": 370,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 370,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 4
+      },
+      {
+        "offsetBin": 380,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 380,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 380,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 4
+      },
+      {
+        "offsetBin": 380,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 380,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 380,
+        "operation": "refresh",
+        "method": "POST",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 380,
+        "operation": "refresh",
+        "method": "POST",
+        "status": 429,
+        "count": 1
+      },
+      {
+        "offsetBin": 380,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 401,
+        "count": 2
+      },
+      {
+        "offsetBin": 380,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 4
+      },
+      {
+        "offsetBin": 380,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 380,
+        "operation": "sync",
+        "method": "GET",
+        "status": 401,
+        "count": 1
+      },
+      {
+        "offsetBin": 390,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 390,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 390,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 2
+      },
+      {
+        "offsetBin": 390,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 390,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 400,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 400,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 400,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 410,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 410,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 410,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "offsetBin": 410,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 410,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 410,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 410,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 420,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 420,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 420,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 2
+      },
+      {
+        "offsetBin": 420,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 420,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 430,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 430,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "offsetBin": 430,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      },
+      {
+        "offsetBin": 430,
+        "operation": "sync",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 440,
+        "operation": "hris_conversation_summaries",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 440,
+        "operation": "hris_device_admission",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 440,
+        "operation": "hris_device_setup",
+        "method": "GET",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "offsetBin": 440,
+        "operation": "hris_room",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 440,
+        "operation": "other_hris",
+        "method": "GET",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "offsetBin": 440,
+        "operation": "secret_storage_default_key",
+        "method": "GET",
+        "status": 404,
+        "count": 2
+      }
+    ],
+    "headerLatencies": {
+      "other_hris": {
+        "count": 51,
+        "sumMillis": 642,
+        "maxMillis": 139
+      },
+      "hris_device_admission": {
+        "count": 24,
+        "sumMillis": 415,
+        "maxMillis": 32
+      },
+      "hris_device_setup": {
+        "count": 72,
+        "sumMillis": 1506,
+        "maxMillis": 37
+      },
+      "hris_conversation_summaries": {
+        "count": 24,
+        "sumMillis": 417,
+        "maxMillis": 23
+      },
+      "hris_room": {
+        "count": 24,
+        "sumMillis": 427,
+        "maxMillis": 24
+      },
+      "secret_storage_default_key": {
+        "count": 52,
+        "sumMillis": 2645,
+        "maxMillis": 120
+      },
+      "sync": {
+        "count": 24,
+        "sumMillis": 211910,
+        "maxMillis": 10279
+      },
+      "refresh": {
+        "count": 3,
+        "sumMillis": 60,
+        "maxMillis": 22
+      }
+    },
+    "limitation": "Packet starts, not full HTTP reconstruction. Single owned emulator gateway; aggregate bins only."
+  },
+  "limitations": [
+    "Only Home was opened; this does not accept the previous room/background/history path.",
+    "Device sync timeout/unavailable failures and repeated metadata remain.",
+    "First-sync wait and the first poll both allow10000ms; new regression is not yet run to completion.",
+    "Do not infer that prior failed refresh was a server or persistence failure.",
+    "No new release or Starter port."
+  ]
+}

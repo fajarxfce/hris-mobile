@@ -1,5 +1,35 @@
 # Agent continuation — HRIS Mobile
 
+## Paired refresh succeeds on Home; idle-sync RED running — 9 November 2026, 03:01 UTC
+
+Second native79 trace preserved/cloned the complete first79 store. Emulator20258 REAPED
+434.272s, counter84209 REAPED447.508s/277requests, paired6646 REAPED386.434s. Two refresh200
+responses advance gateway11→12→13. The second request uses EXACTLY the refresh token from
+the first response;59 Matrix bearer requests also use that response's current access token.
+Both returned pairs match server current hashes. No raw token/hash is saved or emitted.
+Three original encrypted events/public identity unchanged; no send/retry, no phone UI.
+Latest COMPLETE store is token-rotation-native-2026-11-09/sender; preserve it and its AVD/
+encryption metadata. Do not use old78/earlier79 to overwrite it. This was Home-only, so the
+previous room/background/history refresh401 remains unresolved. SDK timeouts and repeated
+metadata still occur. [Evidence](measurements/collaboration-paired-refresh-2026-11-09.json).
+
+ONLY compiler34197 is classified-acquisition-2026-11-09/check.py red-1. Production source
+unchanged. Four UNCOMMITTED host-test files add/strengthen known-auth-denial diagnostic,
+null-resource typed-result, genuine-storage and idle-server first-sync checks. Fixture records
+SyncSettings. The first sync uses10000ms long poll but awaitFirstSync allows10000ms total;
+a server answering just after its poll timeout can never qualify before that waiter expires.
+New real-adapter test reproduces this candidate, not merely a copied implementation assertion.
+Do not edit input files until34197 reaped. Four targeted cases expected:3RED,1controlPASS.
+
+NEXT inspect actual RED results, fix known classified rejection propagation (no invented
+error()/false Storage, retain real exceptions/cancellation), and make first Android sync an
+immediate delta request before normal long polling, preserving SDK cursor/fullState=false.
+No production edits yet. Then focused quality/full checks. Older-history one-read failure
+still needs its own root/fix. Next native proof must cover room/background/history plus paired
+refreshes, retaining original messages and latest79 identity. Build79 is NOT accepted/installed.
+Starter port remains gated/unexecuted. Continue54open PRD groups after these fixes.
+
+
 ## Native79 failed continuity; all processes reaped — 9 November 2026, 02:50 UTC
 
 Native1675 REAPED908.341s; original78 files unchanged, updated79 complete store preserved in
