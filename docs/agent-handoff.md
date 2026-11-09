@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 17:19 UTC. Historical detail is retained in
+Updated 9 November 2026, 17:23 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -113,9 +113,9 @@ The SDK's25s delivery ownership is separate from15s preparation; current hard na
 expiry and captured denial remain gated. Final close must pause/drain before release.
 
 Actual SDK/SQL/HTTP/restart proof and group readiness wake/background/UI ownership are
-still required. `.work/space-original-delivery-native-2026-11-09/README.md` identifies
+now covered by the accepted native experiment. Its private README identifies
 existing real Synapse/SQL/HTTP/proof-app facilities and the new two-original, offline
-recipient, interrupted post-ACK projection/restart scenario. It is a plan, not code/proof. Preserve the stopped sender store and all eight originals below.
+recipient, interrupted post-ACK projection/restart scenario. Native31328 is accepted below. Preserve the stopped sender store and all eight originals below.
 
 ## Current native experiment and hosted gate
 
@@ -129,13 +129,13 @@ All five new exact delivery/transport classes and24 owning cases are present on 
 and browser; transport8 also runs on Android. Audit61011 is reaped. Apple is still
 running; do not redispatch. [Hosted evidence](measurements/collaboration-space-original-delivery-hosted-2026-11-09.json).
 
-Four proof-only Kotlin files are applied and UNCOMMITTED: HrisWorkerProofContainer,
+Four proof-only Kotlin files are accepted with this native evidence: HrisWorkerProofContainer,
 ProtectedHrisProofOwner, MatrixProofInstrumentation and new HrisSpaceOriginalDeliveryProbe.
 They use real app staging/storage/transport, a delegating pre-projection interruption,
 existing-only runtime adoption and four stage/interruption/recovery/offline scenarios.
-Group now has uncommitted NativeSpaceOriginalFixture/DeliveryTest, a bounded native
+Group now has accepted NativeSpaceOriginalFixture/DeliveryTest, a bounded native
 request counter, provider encrypted-event inspection and an owned Python driver. Six
-ownership/SDK artifact guard tests pass. Its compilation31.843s failed only on Jackson
+initial ownership/SDK artifact guard tests pass; the seventh race regression is recorded below. Its compilation31.843s failed only on Jackson
 JsonNode map overload selection; corrected compilation32.624s passes on8,697 stable
 inputs. Source-3 /21551 passes32.425s. Native61494/native-3 then fails136.271s on a driver
 checkpoint/terminal-state read race. Retained app inspection finds both staged originals,
@@ -150,9 +150,18 @@ SDK's exact signed public identity, validated against the retained fingerprint. 
 new keys, SQL publication injection or weakened readiness checks. This explicitly does
 NOT prove automatic Mobile first-publication activation; that remains required before
 product routing. Group source1075/source-4 passes32.002s on8,698 stable inputs.
-**Native31328/native-5 is RUNNING** with unchanged Mobile proof APK and frozen Group/
-Mobile source manifests. The fresh2560MiB/two-core emulator boots30.421s; all previous
-failed experiment devices are stopped and retained. No actual delivery acceptance yet.
+**Native31328/native-5 is REAPED PASS135.232s**:one actual server/SDK case,zero failures,
+errors/skips. Two original commands survive process death after durable ACK but before
+Sent CAS. Provider event count2,exact transaction/receipt mappings,no replacements.
+The recipient stays SDK-offline; a further process reads both Sent records with the
+reverse removed before any transport. Ten native requests contain exactly two bootstrap
+replays and two direct-transport reads; no native registration/room request/failure.
+Both source manifests and APK match; no compiler ran during the emulator. Native source
+inventory8,698 Group/4,608 Mobile; narrower Mobile packaging manifest4,572 also matches.
+The emulator is stopped and successful proof package removed; failed fixtures remain.
+Strict publisher passes. [Contract](collaboration-space-original-delivery-native.md) and
+[measurement](measurements/collaboration-space-original-delivery-native-2026-11-09.json)
+retain all failures and the explicit key-publication fixture limitation. No new product APK.
 Mobile source4649 failed192.054s solely on the new proof's LongMethod;20 tests passed.
 The cohesive bootstrap/adoption phase was extracted without suppression. Source89458
 (source-2) is REAPED PASS131.229s:20 fresh tests,zero failures/errors/skips,4,572 stable
@@ -317,9 +326,9 @@ Draft66 092041 must NEVER be sent. All native/emulator jobs are reaped and stopp
 
 ## Next work
 
-1. Reap the running native31328/native-5 experiment and inspect checkpoints/failures.
-   Preserve failed fixture app data, original transactions and the stopped sender87.
-   Audit hosted42656803963 separately; no duplicate dispatch or phone install.
+1. Native31328 is accepted/reaped; do not repeat its unchanged gates. Preserve failed
+   fixture data and stopped sender87. Audit the still-running Apple job42656803963;
+   portable is accepted. No duplicate dispatch or phone install.
 2. Direct contracts ab17eadd/96d2d238 and reconciliationfa90ddcc are accepted/pushed;
    do not reapply or rerun those unchanged gates.
 3. Implement automatic original-key publication activation, then continue SDK delivery/history,

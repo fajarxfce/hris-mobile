@@ -1,0 +1,160 @@
+{
+  "observedAt": "2026-11-09T17:21:56.314729+00:00",
+  "status": "Actual Android original-only delivery and lost-projection recovery accepted; product activation remains open",
+  "sourceBases": {
+    "mobile": "69e639f8a7f35a92f8803e6297f443cf3f090e46",
+    "backend": "96d2d238"
+  },
+  "actualNative": {
+    "startedAt": "2026-11-09T17:18:01.301034+00:00",
+    "elapsedSeconds": 135.232,
+    "exitCode": 0,
+    "counts": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "memoryMiB": 2560,
+    "cores": 2,
+    "bootSeconds": 30.421,
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true,
+    "phoneTouched": false
+  },
+  "artifact": {
+    "apkSha256": "1b64c9eed71feebf9cfdebb6e7ec42991512d25e8f5d7a0e0601a7f726d96b7f",
+    "sdkVersion": "26.10.23-hris.6",
+    "abi": "x86_64",
+    "librarySha256": "ecffbab72fd5dd29d656bc4757ea423bb4bccf0444140af0480684bc32761278",
+    "package": "dev.fajar.hris.collaboration.proof",
+    "avd": "hris-mobile-dev",
+    "androidApi": "35"
+  },
+  "behavior": {
+    "actualProviderEvents": 2,
+    "confirmedOriginals": 2,
+    "recipientOffline": true,
+    "originalTransactionsRetained": true,
+    "interruptedBeforeProjection": true,
+    "localReadBeforeTransport": true,
+    "nativeRequests": {
+      "requests": 10,
+      "bootstrapReplay": 2,
+      "directTransport": 2
+    },
+    "groupKeyPublication": "Explicit native gateway fixture reuses actual SDK signed public identity; automatic Mobile activation not proved"
+  },
+  "actualProcessDeaths": 1,
+  "offlineRestartBeforeTransport": true,
+  "nativeSourceManifestSha256": "810291d7b2359a6b62bcb3eca3fd71c90f631f5bdc88ea4ed7b057d9de52f3ac",
+  "sourceCounts": {
+    "backend": 8698,
+    "mobile": 4608
+  },
+  "nativeReports": {
+    "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": {
+      "sha256": "0b9fda48001b7ee3302cc0973c39893e33c8bd5a4fd2b32dd56d1e2cd6d12a05",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "backendCompilation": {
+    "phase": "source-4",
+    "elapsedSeconds": 32.002,
+    "sourceFiles": 8698,
+    "sourcesUnchanged": true,
+    "formatArchitecturePassed": true,
+    "manifestSha256": "36677d08515582fc1588d6b6736ec9043b656ef5b55d5e3e4ae92ed4cdde249b"
+  },
+  "mobileCompilation": {
+    "phase": "source-2",
+    "elapsedSeconds": 131.229,
+    "sourceFiles": 4572,
+    "freshCounts": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "rootApkLintFormatArchitectureDetektPassed": true,
+    "manifestSha256": "e7ba3bb5e293435b2bcf54e9a98a14a6eb2a6833a2b75c700a121ac47afdfaa8"
+  },
+  "python": {
+    "existingDriverCases": 82,
+    "newOwnershipCases": 7,
+    "regressionRed": {
+      "cases": 7,
+      "errors": 1
+    },
+    "regressionGreen": {
+      "cases": 7,
+      "failures": 0,
+      "errors": 0
+    },
+    "redLogSha256": "4f019fdf60a5b8ee06156115fe317419b79ec2eca08765d0b0d09d824a892d60",
+    "greenLogSha256": "670a39115e7523a8984e4842e16547cb2094b03fad392b037b4b9dc8b2656e62"
+  },
+  "earlierAttempts": [
+    {
+      "phase": "native-1",
+      "startedAt": "2026-11-09T17:04:09.615114+00:00",
+      "elapsedSeconds": 1.002,
+      "passed": false,
+      "emulatorStopped": true,
+      "failureCategory": "AssertionError",
+      "cause": "Missing SDK initial userdata image in runner, before test execution"
+    },
+    {
+      "phase": "native-2",
+      "startedAt": "2026-11-09T17:04:43.594355+00:00",
+      "elapsedSeconds": 2.004,
+      "passed": false,
+      "emulatorStopped": true,
+      "failureCategory": "AssertionError",
+      "cause": "Private blank encryption image not copied, before test execution"
+    },
+    {
+      "phase": "native-3",
+      "startedAt": "2026-11-09T17:05:27.372607+00:00",
+      "elapsedSeconds": 136.271,
+      "passed": false,
+      "emulatorStopped": true,
+      "exitCode": 1,
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cause": "Driver checkpoint versus terminal-state read race; retained staged originals verified; terminal-file inspection itself failed"
+    },
+    {
+      "phase": "native-4",
+      "startedAt": "2026-11-09T17:10:39.441787+00:00",
+      "elapsedSeconds": 121.262,
+      "passed": false,
+      "emulatorStopped": true,
+      "exitCode": 1,
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cause": "Fixture had no confirmed organization key publication; readiness correctly false; subsequent gateway fixture supplies the same signed identity"
+    }
+  ],
+  "limits": [
+    "Group key readiness is an explicit fixture precondition: real current gateway uploads the original SDK signed public identity. Automatic Mobile original-key publication activation is not proved.",
+    "Only this isolated Android x86_64 SDK6 fixture is covered; no Apple Matrix SDK, phone distribution, first-frame UI, call/push/background-owner or full PRD acceptance.",
+    "No live rollout or schema change. Group routing remains OFF and the phone stays on87.",
+    "One fixed two-message scenario; no latency percentile claim and no inference of ACK from missing SDK work."
+  ]
+}

@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRun
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceRuntimeLease
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationTimelineLease
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
@@ -88,6 +89,39 @@ internal class ProtectedHrisProofOwner(
             delay(wait)
         }
         error("Owned entry attempts exhausted")
+    }
+
+    suspend fun originalIdentity(): CollaborationLocalDeviceIdentity =
+        success(runtime.readLocalIdentity(owner, deviceId))
+
+    /** The test server admits the exact retained target/bootstrap; use actual existing-only I/O. */
+    suspend fun installOriginal(
+        target: CollaborationExistingRuntimeHandover,
+        setup: CollaborationSpaceSetupRecord,
+    ): CollaborationSpaceRuntimeLease {
+        check(
+            target.original.binding == owner.setupBinding() && target.original.deviceId == deviceId
+        )
+        val parent =
+            CollaborationNativeParent(
+                owner.sessionId,
+                owner.audience,
+                owner.accountId,
+                owner.nativeSessionId,
+            )
+        check(success(runtime.stageExistingHandover(parent, target)) == target.intent)
+        val space = CollaborationSpaceOwner(parent, target.intent.spaceId)
+        val lease = success(runtime.installOriginal(space, target, setup))
+        try {
+            check(!success(runtime.isSpaceOpen(space, target.intent.deviceId, setup.command.id)))
+            success(lease.publish())
+            check(success(runtime.isSpaceOpen(space, target.intent.deviceId, setup.command.id)))
+            check(!success(runtime.isOpen(owner, deviceId)))
+            return lease
+        } catch (failure: Exception) {
+            closeHrisProofResources(failure, listOf({ success(lease.close()) }))
+            throw failure
+        }
     }
 
     suspend fun restoreStored(): AndroidCollaborationRuntimeLease {

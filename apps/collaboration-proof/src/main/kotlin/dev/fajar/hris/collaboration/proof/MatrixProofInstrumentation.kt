@@ -156,6 +156,11 @@ class MatrixProofInstrumentation : Instrumentation() {
             "local-identity-stage" -> LocalSdkIdentityProbe(directory).stage()
             "local-identity-resume" -> LocalSdkIdentityProbe(directory).resume()
             "provider" -> NativeMatrixProbe(directory).run()
+            "space-original-stage",
+            "space-original-interrupt",
+            "space-original-recover",
+            "space-original-offline" ->
+                HrisSpaceOriginalDeliveryProbe(targetContext, directory).run(scenario)
             "hris-worker-stage" -> HrisWorkerMatrixProbe(targetContext, directory).stage()
             "hris-worker-resume" -> HrisWorkerMatrixProbe(targetContext, directory).resume()
             "hris-mixed-room" -> HrisMixedRoomProbe(targetContext, directory).run()

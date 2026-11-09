@@ -44,6 +44,7 @@ internal class HrisWorkerProofContainer(
     nativeHttp: HttpClient,
     platformScheduler: WorkScheduler? = null,
     private val backgroundOnly: Boolean = false,
+    beforeOriginalProjection: (suspend (CollaborationMessageRecord) -> Unit)? = null,
 ) {
     private val application = HrisProofApplicationAccess(owner, hrisAccessToken, backgroundOnly)
     private val database = createAppDatabase(context)
@@ -117,6 +118,28 @@ internal class HrisWorkerProofContainer(
                         }
                     )
                 )
+                if (beforeOriginalProjection != null) {
+                    val original = it.koin.get<CollaborationMessageRepository>()
+                    it.koin.loadModules(
+                        listOf(
+                            module {
+                                single<CollaborationMessageRepository> {
+                                    object : CollaborationMessageRepository by original {
+                                        override suspend fun update(
+                                            access: CollaborationLocalAccess,
+                                            expected: CollaborationMessageRecord,
+                                            state: CollaborationMessageState,
+                                        ): AppResult<Boolean> {
+                                            if (state is CollaborationMessageState.Sent)
+                                                beforeOriginalProjection(expected)
+                                            return original.update(access, expected, state)
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    )
+                }
             }
 
     suspend fun activate() {
@@ -162,6 +185,53 @@ internal class HrisWorkerProofContainer(
                 access,
             )
         )
+
+    /** Stages the fixture through the real app policy; delivery remains paused. */
+    suspend fun stageOriginal(deviceId: String, messageId: String): CollaborationMessageRecord =
+        expect(
+                container.koin.get<StageCollaborationText>()(
+                    application.workspaceId,
+                    deviceId,
+                    messageId,
+                )
+            )
+            .also { check(it.state is CollaborationMessageState.Staged && it.state.origin != null) }
+
+    suspend fun prepareOriginalRoom(
+        owner: CollaborationSpaceOwner,
+        canonicalId: String,
+    ): CollaborationSpaceConversation {
+        check(
+            owner.parent.sessionId == access.sessionId && owner.parent.accountId == access.accountId
+        )
+        val conversation =
+            expect(
+                container.koin
+                    .get<CollaborationSpaceConversationRepository>()
+                    .get(owner, canonicalId)
+            )
+        val retained =
+            expect(container.koin.get<PrepareCollaborationSpaceRoomBinding>()(conversation))
+        check(retained.original?.conversation?.position?.conversationId == conversationId)
+        return conversation
+    }
+
+    suspend fun deliverOriginals(
+        ready: CollaborationSpaceRuntimeReady,
+        conversation: CollaborationSpaceConversation,
+    ) = container.koin.get<DeliverCollaborationSpaceOriginalMessages>()(ready, conversation)
+
+    /** Fetches actual native identity metadata; never invents the original selection time. */
+    suspend fun originalIdentity(owner: CollaborationSpaceOwner): CollaborationSpaceIdentity =
+        requireNotNull(
+            expect(container.koin.get<CollaborationSpaceIdentityRepository>().read(owner)).identity
+        )
+
+    suspend fun originalBootstrap(
+        owner: CollaborationSpaceOwner,
+        request: CollaborationSpaceBootstrap,
+    ): CollaborationSpaceGateway =
+        expect(container.koin.get<CollaborationSpaceSetupRepository>().bootstrap(owner, request))
 
     suspend fun cancel(expected: CollaborationMessageRecord) {
         expect(

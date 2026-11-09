@@ -1,7 +1,8 @@
 # Owned original queue delivery
 
 Status: accepted owning source contract; focused and full local checks passed. No product
-routing, new APK, deployment or actual SDK delivery acceptance is claimed here.
+routing, product APK or deployment is claimed here. The subsequent
+[actual SDK experiment](collaboration-space-original-delivery-native.md) is accepted separately.
 Mobile direct transport is accepted/pushed asab17eadd; backend96d2d238 is accepted
 source only. Organization routing and schema remain disabled in the live pilot.
 
@@ -58,10 +59,10 @@ Root, release compilation/lint, Wasm, Linux iOS source/configuration, formatting
 architecture and Detekt pass. The strict source/report audit verifies all six browser
 classes and both initial failing assertions. No failures, errors or skips remain.
 [Accepted evidence](measurements/collaboration-space-original-delivery-2026-11-09.json).
-Actual SDK delivery and native Apple execution remain separate acceptance work.
+Actual Android SDK delivery now has separate accepted evidence; native Apple execution remains open.
 Private runner/evidence: `.work/space-original-delivery-2026-11-09`.
 
-Still required: actual SDK/SQL/HTTP/restart proof; owned group
+Still required: automatic original-key publication activation, owned group
 readiness-event consumption, background delivery ownership and product routing. Preserve
 the eight retained native originals and never-send Draft66. This HRIS policy is not a
 Starter port. Rich messages, encrypted recovery, calls and meetings remain in the PRD.
