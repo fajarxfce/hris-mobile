@@ -44,51 +44,95 @@ jobs:
         with:
           node-version: '22'
       - run: python3 -m unittest discover -s tool -p 'test_*.py'
-      - run: >-
-          xvfb-run -a ./gradlew :check
-          :features:collaboration:data:testAndroidHostTest
-          :core:presentation:wasmJsBrowserTest :core:datastore:wasmJsBrowserTest :core:database:wasmJsBrowserTest
-          :core:fileio:wasmJsBrowserTest
-          :core:sync:data:wasmJsBrowserTest :core:workspace:domain:wasmJsBrowserTest :core:workspace:data:wasmJsBrowserTest
-          :features:inbox:domain:wasmJsBrowserTest :features:inbox:data:wasmJsBrowserTest
-          :features:home:presentation:wasmJsBrowserTest
-          :features:workforce:domain:wasmJsBrowserTest :features:workforce:data:wasmJsBrowserTest
-          :features:workforce:presentation:wasmJsBrowserTest
-          :features:leave:domain:wasmJsBrowserTest :features:leave:data:wasmJsBrowserTest
-          :core:common:wasmJsBrowserTest
-          :features:payroll:domain:wasmJsBrowserTest :features:payroll:data:wasmJsBrowserTest
-          :features:payroll:presentation:wasmJsBrowserTest
-          :features:expenses:domain:wasmJsBrowserTest :features:expenses:data:wasmJsBrowserTest
-          :features:expenses:presentation:wasmJsBrowserTest
-          :features:leave:presentation:wasmJsBrowserTest :core:location:data:wasmJsBrowserTest
-          :features:people:domain:wasmJsBrowserTest :features:people:data:wasmJsBrowserTest
-          :features:people:presentation:wasmJsBrowserTest
-          :core:documents:domain:wasmJsBrowserTest :core:documents:data:wasmJsBrowserTest
-          :core:transfers:domain:wasmJsBrowserTest :core:transfers:data:wasmJsBrowserTest
-          :features:files:presentation:wasmJsBrowserTest :core:worker:wasmJsBrowserTest
-          :core:featureflags:domain:wasmJsBrowserTest :core:featureflags:data:wasmJsBrowserTest
-          :core:identity:domain:wasmJsBrowserTest :core:identity:data:wasmJsBrowserTest
-          :core:network:wasmJsBrowserTest :core:storage:wasmJsBrowserTest :core:securestorage:wasmJsBrowserTest
-          :core:notifications:data:wasmJsBrowserTest :features:notifications:presentation:wasmJsBrowserTest
-          :core:settings:data:wasmJsBrowserTest :core:localization:wasmJsBrowserTest :core:observability:wasmJsBrowserTest
-          :core:security:domain:wasmJsBrowserTest :core:security:data:wasmJsBrowserTest :features:security:presentation:wasmJsBrowserTest
-          :core:availability:domain:wasmJsBrowserTest :core:availability:data:wasmJsBrowserTest
-          :apps:shared:wasmJsBrowserTest
-          :apps:android:assembleDevDebug :apps:android:assembleStagingDebug :apps:android:assembleProdRelease
-          :apps:android:lintDevDebug
+      - name: Prepare bounded native crash diagnostics
+        run: |
+          mkdir -p .work/native-crashes
+          sudo sysctl -w "kernel.core_pattern=$GITHUB_WORKSPACE/.work/native-crashes/core.%e.%p"
+      - name: Verify application and Android builds
+        run: |
+          ulimit -c 2097152
+          xvfb-run -a ./gradlew \
+          :check \
+          :features:collaboration:data:testAndroidHostTest \
+          :core:presentation:wasmJsBrowserTest \
+          :core:datastore:wasmJsBrowserTest \
+          :core:database:wasmJsBrowserTest \
+          :core:fileio:wasmJsBrowserTest \
+          :core:sync:data:wasmJsBrowserTest \
+          :core:workspace:domain:wasmJsBrowserTest \
+          :core:workspace:data:wasmJsBrowserTest \
+          :features:inbox:domain:wasmJsBrowserTest \
+          :features:inbox:data:wasmJsBrowserTest \
+          :features:home:presentation:wasmJsBrowserTest \
+          :features:workforce:domain:wasmJsBrowserTest \
+          :features:workforce:data:wasmJsBrowserTest \
+          :features:workforce:presentation:wasmJsBrowserTest \
+          :features:leave:domain:wasmJsBrowserTest \
+          :features:leave:data:wasmJsBrowserTest \
+          :core:common:wasmJsBrowserTest \
+          :features:payroll:domain:wasmJsBrowserTest \
+          :features:payroll:data:wasmJsBrowserTest \
+          :features:payroll:presentation:wasmJsBrowserTest \
+          :features:expenses:domain:wasmJsBrowserTest \
+          :features:expenses:data:wasmJsBrowserTest \
+          :features:expenses:presentation:wasmJsBrowserTest \
+          :features:leave:presentation:wasmJsBrowserTest \
+          :core:location:data:wasmJsBrowserTest \
+          :features:people:domain:wasmJsBrowserTest \
+          :features:people:data:wasmJsBrowserTest \
+          :features:people:presentation:wasmJsBrowserTest \
+          :core:documents:domain:wasmJsBrowserTest \
+          :core:documents:data:wasmJsBrowserTest \
+          :core:transfers:domain:wasmJsBrowserTest \
+          :core:transfers:data:wasmJsBrowserTest \
+          :features:files:presentation:wasmJsBrowserTest \
+          :core:worker:wasmJsBrowserTest \
+          :core:featureflags:domain:wasmJsBrowserTest \
+          :core:featureflags:data:wasmJsBrowserTest \
+          :core:identity:domain:wasmJsBrowserTest \
+          :core:identity:data:wasmJsBrowserTest \
+          :core:network:wasmJsBrowserTest \
+          :core:storage:wasmJsBrowserTest \
+          :core:securestorage:wasmJsBrowserTest \
+          :core:notifications:data:wasmJsBrowserTest \
+          :features:notifications:presentation:wasmJsBrowserTest \
+          :core:settings:data:wasmJsBrowserTest \
+          :core:localization:wasmJsBrowserTest \
+          :core:observability:wasmJsBrowserTest \
+          :core:security:domain:wasmJsBrowserTest \
+          :core:security:data:wasmJsBrowserTest \
+          :features:security:presentation:wasmJsBrowserTest \
+          :core:availability:domain:wasmJsBrowserTest \
+          :core:availability:data:wasmJsBrowserTest \
+          :apps:shared:wasmJsBrowserTest \
+          :apps:android:assembleDevDebug \
+          :apps:android:assembleStagingDebug \
+          :apps:android:assembleProdRelease \
+          :apps:android:lintDevDebug \
           :apps:android:cyclonedxDirectBom -PsbomConfiguration=prodReleaseRuntimeClasspath
       - name: Verify configured Android app-link manifests and domain files
         run: |
           python3 tool/check_app_links.py prepare --application-id dev.fajar.hris.mobile
           ./gradlew :core:common:generateAppLinks :apps:android:processDevDebugManifestForPackage :apps:android:processStagingDebugManifestForPackage :apps:android:processProdReleaseManifestForPackage -PappLinksConfigDirectory=.work/app-links-check --no-daemon
           python3 tool/check_app_links.py verify --application-id dev.fajar.hris.mobile
+      - name: Capture native crash backtraces
+        if: always()
+        run: |
+          for crash in .work/native-crashes/core.*; do
+            [ -f "$crash" ] || continue
+            timeout 60s gdb --batch -ex 'set pagination off' -ex 'thread apply all bt' "$JAVA_HOME/bin/java" "$crash" > "$crash.backtrace.txt" 2>&1 || true
+            rm -- "$crash"
+          done
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: reports-and-android
+          include-hidden-files: true
           path: |
             **/build/reports/
             **/build/test-results/
+            **/hs_err_pid*.log
+            .work/native-crashes/*.backtrace.txt
             apps/android/build/outputs/apk/**/*.apk
   web:
     if: github.event_name != 'workflow_dispatch' || inputs.scope == 'all' || inputs.scope == 'web'

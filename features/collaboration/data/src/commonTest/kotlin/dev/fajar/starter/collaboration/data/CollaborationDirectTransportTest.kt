@@ -129,7 +129,7 @@ class CollaborationDirectTransportTest {
     @Test
     fun cancelledReadStopsItsOriginalRequestWithoutAnotherAttempt() = runTest {
         var attempts = 0
-        var disposed = false
+        val disposed = CompletableDeferred<Unit>()
         val entered = CompletableDeferred<Unit>()
         withTransport(
             MockEngine {
@@ -138,7 +138,7 @@ class CollaborationDirectTransportTest {
                 try {
                     awaitCancellation()
                 } finally {
-                    disposed = true
+                    disposed.complete(Unit)
                 }
             }
         ) { repo ->
@@ -148,7 +148,9 @@ class CollaborationDirectTransportTest {
             }
             entered.await()
             call.cancelAndJoin()
-            assertTrue(disposed)
+            // The engine owns its request coroutine independently of the caller's job.
+            disposed.await()
+            assertTrue(call.isCancelled)
             assertEquals(1, attempts)
         }
     }

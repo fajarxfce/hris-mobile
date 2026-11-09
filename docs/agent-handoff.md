@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 10:11 UTC. This file describes current work. Historical
+Updated 9 November 2026, 10:32 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -24,12 +24,12 @@ Do not restart jobs or reapply candidates from that history without checking cur
 
 | Checkout | Branch/source | Current state |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 / 2293ff05 | Pushed; frozen for native86 |
-| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / b1630963 | Pushed; consumer CI in progress |
-| Inspector original | feat/matrix-rust-bindings-20261107 / 2b849217 | Frozen for native86; still SDK5 catalog |
+| Mobile original | feat/chat-send-timing-20261107 / 2293ff05 | Pushed; native86 accepted/installed |
+| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 6c6aa4ca | Pushed; verify failure under investigation |
+| Inspector original | feat/matrix-rust-bindings-20261107 / 2b849217 | Native freeze released; still SDK5 catalog |
 | Inspector isolated | feat/sdk6-distribution-20261109 / a6b8236 | Pushed; SDK6 distribution accepted |
 | Starter | feat/network-inspector-20261107 / 6157db1 | Pushed; generic worker/identity ports accepted |
-| Platform original | feat/communications / 1c0cb482 | Pushed; runtime unchanged |
+| Platform original | feat/communications / 8769b0d0 | Pushed; runtime unchanged |
 | Platform group worktree | feat/communication-space / fdcd783e | Separate unshipped group implementation |
 
 The isolated directories are under `/home/fajar/hris/.worktrees/`:
@@ -64,49 +64,35 @@ SHA256 `4c53315ff2f1f29bc67f572d6f63527622200ad0c6b638ea65746386e03afc73`,
 16KiB alignment, Firebase/API and compiled backup exclusions verified; lint0.
 Initial packaging94519 exhausted its2GiB heap after475.303s; preserved in attempt-1.
 Retry7551 with3GiB/one worker passes88.189s; verifiers47872/8311 pass. All reaped.
-Phone remains83. No86 phone installation or full native acceptance yet.
+Phone86 installed at10:25 UTC; exact installed APK digest and existing identity verified.
+No launch, UI automation, uninstall or data clearing. [Accepted proof](measurements/collaboration-release86-accepted-2026-11-09.json).
 
-## Current native86 observation — no phone acceptance yet
+## Native86 accepted and installed; prior failures preserved
 
-Original `.work/selected-runtime-publication-native-2026-11-09` upgraded85→86,
-retaining account/public keys and six originals, then its resumed phase was interrupted.
-The full follow-up `.work/selected-runtime-publication-resumed-native-2026-11-09`
-retains the same exact APK. All four120s lifecycle intervals pass:110 complete seconds
-per phase, active sync, no setup traffic, no bootstrap, no forbidden responses. All six
-old Sent messages and history exhaustion survive route/resume/cold. Three refreshes200;
-native parent22→23 renews before expiry. Closed startup diagnostics reproduce
-RuntimeOpening while published background sync continues.
+Current `.work/selected-runtime-auth-trace-native-2026-11-09` completed all four120s
+Home/room/resumed/cold observations:110 complete seconds each, active sync, no setup
+requests or rejected admissions in those intervals. Paired refresh200×3 uses returned
+credentials; otherAccess0 in both subsequent samples. Parent24→25 renews before expiry.
+Six original Sent messages and history exhaustion remain after route/resume/cold.
+One new Selected86 102110 (SHA933c96193d5c13b7d7590c159390c2a72ad0596aa3b82b0d64e0668ed9bc1cc8)
+is sent once,2983.114ms tap→server, peer process stopped; server now SEVEN originals.
+All four jobs38867/18238/25926/91581 completed; three remaining handles reaped after
+context restoration, phases completion verified from durable record. Strict traffic,
+independent review and release acceptance all PASS; no exemptions were used.365 total
+request starts across startup/phase work,0 bootstrap/403. Setup during startup remains
+a separate cost; one send sample is not p95. Phone installation53784 reaped PASS25.499s.
 
-The overall gate is STILL FAILED: paired sample1 has one unclassified otherAccess
-request. The old observer retained only its count, not route/timing/status. Also, the
-new-send script still expected5 server events at its first assertion despite actual6,
-so it stopped BEFORE input/send. No Selected86 message exists and no old message was
-resent. These are separate observation/harness findings, not a claim of application
-success or a proved authentication root cause.
-[Recorded observation](measurements/collaboration-release86-retained-observation-2026-11-09.json).
+Latest COMPLETE STOPPED store is `.work/selected-runtime-auth-trace-native-2026-11-09/sender`
+at86, all four userdata/encryption files and full AVD. NEVER recreate from85/84/83,
+resend Selected86/the six old originals, or send Draft66 092041. Preserve Bima74 too.
+Original Mobile/inspector input freeze is released. Local desktop reproduction is active in this CI worktree; check owned processes.
 
-All jobs47713/92677/36194/71793 are reaped/stopped. Latest COMPLETE STOPPED store is
-`.work/selected-runtime-publication-resumed-native-2026-11-09/sender` at86, all four
-userdata/encryption files and full AVD. Never clone an older85/84/83 baseline.
-
-Current proof `.work/selected-runtime-auth-trace-native-2026-11-09` is ACTIVE.
-Clone3488 and prepare-counter.py completed; do not repeat either. Owned emulator18238
-(PID795640, serial emulator-5562), phases38867, counter25926 and paired observer91581
-are running. Original Mobile/inspector inputs remain frozen; no compiler overlap. Its corrected send preflight expects6. Added passive fields
-record only closed request route/method, relative timing, known-initial/previously-
-returned access classification and response status. Token hashes stay volatile.
-Existing strict credential/traffic acceptance is unchanged; seven negative controls
-still fail and baseline83 passes. No approval or product policy change is implied.
-
-Local SBOM63401 is reaped. Finish the active proof while preserving input/library freeze.
-Inspect all evidence and reaped jobs before accept-quietness.py, review-traffic.py and
-accept-release.py. Do not rerun a successful new-send.json. Only actual accepted86
-permits the notified build86/install.py --install-only phone update; phone remains83.
-
-Native84's Home failure remains preserved; diagnostic85 did not clear it. The six
-originals are Control77 235408, Warm77 235728, Recovery78 005634, Registry82 055959,
-Parent83 071123 and History84 083059. Never resend them or Draft66 092041. Preserve
-the original Bima74 store even though its AVD version metadata is incomplete.
+The first native86 upgrade retained identity before a turn interruption. Its resumed
+follow-up had one unclassified otherAccess observation and a stale preflight expecting
+five events rather than six, stopping BEFORE Send. Both failures remain preserved in
+[the prior observation](measurements/collaboration-release86-retained-observation-2026-11-09.json).
+The new passive trace does not reproduce that access mismatch; it does NOT explain it.
+Native84's Home failure also remains preserved. No gate was weakened or retried in place.
 
 ## Published dependencies and current CI
 
@@ -140,17 +126,25 @@ local inventory66020 passed70.759s and restored metadata; all8 added artifacts w
 then verified against official bytes/publisher SHA-1. Strict63401 passes46.014s with
 unchanged metadata; the393-component BOM is same-input cache reuse, not fresh execution.
 Initial local insertion/strict failure and alias-URL404 are preserved in its measurement.
-a5d74fa3 is committed/pushed; verify CI42598801511 is running. Web-only CI42597096435 also shut down at Wasm optimization; no final artifact
+a5d74fa3 verify CI42598801511 passed dependency resolution then FAILED: one Android
+cancellation test read a shared Boolean before the separately owned MockEngine coroutine
+finished; desktop test process aborted134 during AppFlowTest's catalog recovery case.
+Artifact13665023876 SHA0f71440f50071349dd9779628da761f8ea7c108e164d38d65faf63366cbba2b3
+verified. The transport test now awaits explicit engine finalization. Local18685 passes10 focused
+Android host/Desktop cases in206.420s, format/architecture/detekt and4528 app/library
+inputs unchanged. Native abort diagnostics retain bounded cores only until backtraces
+are captured. Local desktop reproduction is running; abort cause remains unclassified.
+[Exact failed/successful scope](measurements/pinned-inspector-ci-test-recovery-2026-11-09.json). No production retry/cancellation behavior was changed. Web-only CI42597096435 also shut down at Wasm optimization; no final artifact
 survived. Cause remains unproved. Next web job bounds Binaryen2cores, Gradle1worker/
 3GiB/in-process Kotlin and samples closed kernel memory numbers every15s to console.
-The exact125 Binaryen source confirms BINARYEN_CORES. Commit/push and dispatch web. No native86/phone86 acceptance has been added.
+The exact125 Binaryen source confirms BINARYEN_CORES. 6c6aa4ca web CI42599865437 is running with those bounded resources and live evidence.
 No distribution workflow was dispatched.
 Audit actual completed jobs and artifacts; do not infer success from compilation alone.
 
 ## Next implementation work
 
-1. Finish/review native86, deliver the validated APK, and record any unsolved latency
-   separately. One message sample is not a p95 measurement. Startup request cost and
+1. Native86 is accepted and installed. Preserve its seven originals and record latency
+   work separately. One message sample is not a p95 measurement. Startup request cost and
    duplicate local acquisition still need measured review; no arbitrary retry patches.
 2. Finish public consumer CI, preserve first failures and fix actual causes. Once86
    is complete, integrate verified inspector/CI source into the original checkout.
