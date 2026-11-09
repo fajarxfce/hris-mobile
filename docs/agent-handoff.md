@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Automatic recovery candidate; phone flashed to stock ROM — 9 November 2026, 01:36 UTC
+
+USER UPDATE: phone was flashed to stock ROM; HRIS is no longer installed. User says
+ADB/WireGuard ready. ADB connect10.77.77.3:5555 succeeds at01:35:57; read-only package
+availability probe is in credential-reactivation-2026-11-09/phone-availability.json.
+Previous phone70/old-queue assumptions are obsolete. Install the validated upcoming
+release as a fresh install (announce first, install-only, NEVER drive phone UI).
+Login will be needed; do not assume old phone private keys or local data survived.
+The preserved emulator78 pending original remains the regression target independently.
+
+UNCOMMITTED automatic-recovery source now adds scoped existing-client credential
+signals, ObserveCollaborationCredentialRecovery (one attempt until a different
+generation validates through successful live sync), serialized application activation
+and observer ownership, and explicit reserveRejectedInspection for exclusive old
+runtime drain/private inspection. Ordinary reserveInspection stays read-only. New
+tests cover duplicate/replacement rejection, foreign owners/devices, selected activation
+cancellation, and original credential replacement. No native/full acceptance yet.
+
+Sole compiler28468 runs credential-reactivation-2026-11-09/check.py focused-1 since
+~01:31. Do not edit source until reaped. Domain30 cases ran with ONE failure: new
+replacement test uses gateway expiry2 (epoch), so current admission correctly rejects
+it. Fix the fixture to use f.command.clock.now() with expired ACCESS but future session
+expiry, then rerun relevant checks; no evidence yet requiring a production relaxation.
+Format85852 REAPED39.851s;4,524 inputs. No emulator/counter. Last committed source
+cbacb8af (durable rejection81-case pass), pushed/reaped77828.
+
+Prepared (NOT executed): credential-reactivation/check-full.py for required :check,
+full Android-host, actual credential/readiness Chrome tests, Android/lint/proof,
+Wasm/iOS-source/quality at version79. credential-recovery-native-2026-11-09 contains
+prepare-sender.py cloning the COMPLETE stopped78 store and acceptance-plan.md. No
+native run/build79 scripts yet. Never recopy77 over78 or resend Recovery78 005634.
+After focus passes, push combined source, full gate, prepare/verify79, then native
+automatic recovery and quietness, then phone installation and Starter port.
+
 ## Durable rejected credentials pass81 focused cases — 9 November 2026, 01:25 UTC
 
 Candidate described below now passes81 fresh common-desktop/Android-host tests,
