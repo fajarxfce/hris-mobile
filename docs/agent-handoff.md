@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 12:49 UTC. This file describes current work.
+Updated 9 November 2026, 13:05 UTC. This file describes current work.
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -24,7 +24,7 @@ Do not restart jobs or reapply candidates from that history without checking cur
 
 | Checkout | Branch/source | Current state |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 / d8383438 | Joined-room/native87/phone87 and typed original-reference5b63b498 accepted; CI integration accepted |
+| Mobile original | feat/chat-send-timing-20261107 / 0f6c843f | Encrypted binding storage accepted/pushed; owning preparation92982 under test |
 | Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 21101489 | Hosted verify42611795210/artifact13672363171 audited PASS;951cdbcf pushed |
 | Inspector original | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Verified public SDK6 integrated/pushed |
 | Inspector isolated | feat/sdk6-distribution-20261109 / a6b8236 | Pushed; SDK6 distribution accepted |
@@ -281,11 +281,28 @@ canonical metadata and retain/read back the immutable binding under current admi
 Local facts remain separate from content authority. Preserve all eight originals and
 Draft66. All54 PRD acceptance groups and the remaining communication work stay open.
 
-Next design is prepared only in `.work/space-room-binding-2026-11-09/next-flow-plan.md`:
-PrepareCollaborationSpaceRoomBinding reads a matching owned binding first without
-native expiry/API/SDK work. Only absence enters finite current-admission acquisition,
-one published room read and, for LEGACY, one exact original read. The use case must
-match canonical metadata, retain/read back uncertain writes and preserve all denials
-without granting content/SDK authority. No prototype or DI for that flow exists yet.
-Do not blindly reuse the metadata recovery helper: it permits an already-denied
-metadata read and is not the fresh-preparation contract.
+## Owning binding preparation candidate
+
+Encrypted storage0f6c843f is accepted and pushed. The next9 source files are uncommitted:
+PrepareCollaborationSpaceRoomBinding, its20-case domain test/fixture, feature DI and
+actual app resolution, plus three actual-storage cases with desktop/browser/Apple
+wrappers. [Contract](collaboration-space-room-binding-preparation.md).
+
+The local owned read returns exact immutable facts without native expiry/API/SDK work.
+Only absence enters finite current-admission acquisition, one room read and, for LEGACY,
+one exact original read. The use case matches canonical metadata and reads back uncertain
+writes without replacing originals or granting content/SDK authority. No caller is active.
+
+Initial focused71916 is reaped:20 tests PASS, but quality FAIL112.911s because invoke had
+105 logical lines (limit100). The owned local read is now a separate operation inside the
+same use case; no suppression or generic helper was added. Three real database cases
+and platform wrappers followed. Formatter13885 PASS33.980s and43522 PASS34.688s are reaped.
+Focused92982 is RUNNING in `.work/space-room-binding-preparation-2026-11-09/focused-2`;
+app/Inspector sources are FROZEN until reaped. This is the only heavy local compiler.
+
+The new runner has its own browser profile:20 owning domain cases and three actual
+preparation storage cases. Both full/browser selections use that profile without CLI
+filters, and the browser-only verifier requires exactly23 cases in the two reports.
+Do not reuse the older room-resolution filter. After focused success, run required full
+and verify actual browser XML, fixed inputs and lint before accepting/pushing the source.
+No source acceptance, new APK, SDK adoption or live deployment is claimed for this candidate.
