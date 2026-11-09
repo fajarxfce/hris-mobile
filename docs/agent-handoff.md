@@ -1,6 +1,39 @@
 # Agent continuation — HRIS Mobile
 
 
+## Native82 fails third refresh; latest COMPLETE store82 — 9 November 2026, 06:01 UTC
+
+ALL REAPED: phases6384 PASS703.520s (individual message/lifecycle phases only),
+emulator28646 stopped744.281s/source81 unchanged, counter88599 normal745.107s/602requests,
+paired95196 normal743.952s. accept-quietness FAILED: Home+room110s bins PASS;
+resumed bin has8 setup/metadata requests; cold bin has a new bootstrap and18setup,
+plus third refresh401. Paired refresh statuses200,200,401; third request matches
+prior returned AND current database refresh hash; same head19, not revoked/expired.
+The client then auto-recovers gateway19→20, same public identity/device/private store.
+Thus native82 is NOT release-accepted. No install, SDK6 publication or Starter port.
+[Complete evidence](measurements/collaboration-release82-candidate-2026-11-09.json).
+
+Three original messages remain Sent, older end survives route/resume/cold. Exactly
+one new Registry82 message sent at06:00:04, server4 total, Sent and empty composer,
+recipient process stopped;2123.624ms tap-to-server (one sample, not p95).
+NEVER resend these FOUR originals. LATEST COMPLETE STORE is
+.work/sdk-shared-borrow-native-2026-11-09/sender at82, all4 userdata/encryption files
+and full AVD. Do NOT restore81/80 over82. New message/hash in closed evidence.
+
+Root investigation: Platform RefreshNativeCollaborationGateway -> admitCollaborationDevice
+-> collaborationParentDeadline requires native parent accessExpiresAt>now, independently
+of still-current Matrix refresh/head. Third rejection occurs before expected Matrix
+access expiry; native_session_invalid is a candidate reason, not yet captured/proven.
+Paired probe kept Matrix code but omitted org.hris.error_code; future observation must
+retain only an allowlisted reason plus read-only native-parent deadline facts, never tokens.
+Do NOT relax server authorization or restart/re-enroll devices to hide the failure.
+Trace application-owned parent renewal before changing policy.
+
+Prepared NOT RUN: SDK6 publish-sdk6.py and Starter port.py now gated to82; both are
+unusable because82 FAILED. accept-release.py also NOT RUN and correctly gated.
+No local compiler/emulator remains. Platform116.4/controlON unchanged,117–138 undeployed;
+all54 PRD groups open. Phone remains absent since stock reset; no installation/UI this turn.
+
 ## APK82 verified; retained81 runtime proof started — 9 November 2026, 05:48 UTC
 
 Build79353 REAPED PASS102.330s; APK29337/SDK60559 verifiers PASS. Source087d55d2

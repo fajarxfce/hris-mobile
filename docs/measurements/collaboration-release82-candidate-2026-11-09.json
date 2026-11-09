@@ -75,9 +75,220 @@
     "reportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
   },
   "limitations": [
-    "Native82 acceptance in progress; no phone installation",
+    "Native82 FAILED resumed/cold traffic and third token refresh; no phone install",
     "No actual Apple SDK6 binary or runtime acceptance",
     "SDK6 remains unpublished",
     "No communications PRD group completed"
-  ]
+  ],
+  "nativeAcceptance": {
+    "at": "2026-11-09T06:01:09.519445+00:00",
+    "accepted": false,
+    "scope": "Native82 retains data and sends once; resumed/cold traffic and third refresh fail",
+    "traffic": {
+      "at": "2026-11-09T06:00:19.223595+00:00",
+      "accepted": false,
+      "pairedRefreshFailures": [
+        {
+          "sample": 2,
+          "status": 401,
+          "credentialContinuityAccepted": false
+        }
+      ],
+      "pairedRefreshStatuses": [
+        200,
+        200,
+        401
+      ],
+      "settledIntervals": [
+        {
+          "phase": "home",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "other_hris": 9,
+            "sync": 11
+          },
+          "unexpectedSetupTraffic": {},
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 0,
+          "accepted": true
+        },
+        {
+          "phase": "room",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "sync": 14,
+            "other_hris": 8,
+            "refresh": 1
+          },
+          "unexpectedSetupTraffic": {},
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 1,
+          "accepted": true
+        },
+        {
+          "phase": "resumed",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "sync": 11,
+            "other_hris": 11,
+            "hris_conversation": 1,
+            "hris_conversation_summaries": 1,
+            "hris_device_admission": 1,
+            "hris_device_setup": 3,
+            "hris_room": 2,
+            "other_matrix": 1
+          },
+          "unexpectedSetupTraffic": {
+            "hris_conversation": 1,
+            "hris_conversation_summaries": 1,
+            "hris_device_admission": 1,
+            "hris_device_setup": 3,
+            "hris_room": 2
+          },
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 0,
+          "accepted": false
+        },
+        {
+          "phase": "cold",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "other_hris": 9,
+            "sync": 14,
+            "hris_device_bootstrap": 1,
+            "hris_device_setup": 18,
+            "refresh": 1,
+            "hris_conversation": 10,
+            "hris_conversation_summaries": 2,
+            "hris_device_admission": 2,
+            "hris_room": 12,
+            "other_matrix": 8,
+            "secret_storage_default_key": 2
+          },
+          "unexpectedSetupTraffic": {
+            "hris_device_bootstrap": 1,
+            "hris_device_setup": 18,
+            "hris_conversation": 10,
+            "hris_conversation_summaries": 2,
+            "hris_device_admission": 2,
+            "hris_room": 12,
+            "secret_storage_default_key": 2
+          },
+          "rejectedRequests": {
+            "refresh:401": 1
+          },
+          "normalExpiredSyncResponses": 1,
+          "accepted": false
+        }
+      ],
+      "bootstrapRequestsAcrossRun": 1,
+      "samePublicIdentity": true,
+      "sameGatewayHead": true,
+      "requestCount": 602,
+      "limitation": "Packet starts, not full HTTP reconstruction. Single owned emulator gateway; aggregate bins only.",
+      "phoneTouched": false
+    },
+    "upgrade": {
+      "accepted": true,
+      "startedAt": "2026-11-09T05:48:27.503102+00:00",
+      "versionCode": 82,
+      "phoneTouched": false,
+      "newSendGestures": 0,
+      "dataCleared": false,
+      "privateKeysReadOrReset": false,
+      "scope": "Retained account/package and immutable public-key identity through native upgrade; actual original encrypted delivery is a subsequent gate.",
+      "launchEpochMillis": 1794203326489.0632,
+      "launchMonotonic": 1880019.137610691,
+      "updateInPlace": true,
+      "sameAppIdentity": true,
+      "retainedAccountHomeVisible": true,
+      "retainedPublicIdentityPreserved": true,
+      "confirmedDevices": 1,
+      "artifactSha256": "925dd3b25bcae8c5448aae79fcd4516c90a5a54d69c2dee8fa759a48ca03d4d5",
+      "sdkDeliveryAccepted": false,
+      "elapsedSeconds": 26.764
+    },
+    "history": {
+      "at": "2026-11-09T05:51:54.400853+00:00",
+      "accepted": true,
+      "sendGestures": 0,
+      "retryMessageGestures": 0,
+      "olderReadGestures": 0,
+      "phoneTouched": false,
+      "initialOlderVisible": false,
+      "olderHiddenAfterRead": true,
+      "olderVisibleOnReentry": false,
+      "elapsedSeconds": 21.015
+    },
+    "lifetime": {
+      "startedAt": "2026-11-09T05:47:48.067871+00:00",
+      "accepted": true,
+      "memoryMiB": 2560,
+      "cores": 2,
+      "phoneTouched": false,
+      "productInstalled": false,
+      "pid": 3238808,
+      "startTicks": "187996071",
+      "bootSeconds": 27.765,
+      "stopped": true,
+      "elapsedSeconds": 744.281,
+      "originalFilesUnchanged": true,
+      "scope": "Owned emulator lifetime only. Native message/wake acceptance is recorded separately."
+    },
+    "requests": {
+      "hris_device_admission": 14,
+      "hris_device_setup": 140,
+      "other_hris": 80,
+      "hris_conversation": 90,
+      "hris_conversation_summaries": 13,
+      "hris_room": 109,
+      "other_matrix": 61,
+      "refresh": 3,
+      "secret_storage_default_key": 10,
+      "sync": 77,
+      "hris_device_bootstrap": 1,
+      "encrypted_room_send": 1,
+      "hris_direct_transport": 3
+    },
+    "responses": {
+      "hris_device_admission:200": 14,
+      "hris_device_setup:200": 138,
+      "other_hris:200": 67,
+      "hris_conversation:200": 90,
+      "hris_conversation_summaries:200": 13,
+      "hris_room:200": 109,
+      "other_matrix:200": 61,
+      "refresh:200": 2,
+      "secret_storage_default_key:401": 2,
+      "secret_storage_default_key:404": 8,
+      "sync:200": 73,
+      "sync:401": 3,
+      "hris_device_bootstrap:200": 1,
+      "refresh:401": 1,
+      "encrypted_room_send:200": 1,
+      "hris_direct_transport:200": 3
+    },
+    "totalRequests": 602,
+    "counterSeconds": 745.107,
+    "pairedRefreshStatuses": [
+      200,
+      200,
+      401
+    ],
+    "thirdRefreshMatchedCurrentHead": true,
+    "gatewayVersionBefore": 17,
+    "gatewayVersionAfter": 20,
+    "originalServerEventsRetained": 3,
+    "newServerEvents": 1,
+    "newSendGestures": 1,
+    "newMessage": "Registry82 055959",
+    "newMessageSha256": "133ebed51aa8d09404e81b9cbcaa5c417aed4b9e3c2e34b406395f8e2aa987e3",
+    "tapToServerReceivedMillis": 2123.6240234375,
+    "sentVisible": true,
+    "recipientRemainedStopped": true,
+    "phoneInstalled": false,
+    "phoneUiTouched": false,
+    "latestCompleteStore": "sdk-shared-borrow-native-2026-11-09/sender at82; preserve all4 userdata/encryption files and AVD",
+    "rootCauseStatus": "Investigating native parent access expiry: collaborationParentDeadline requires parent.accessExpiresAt even when the Matrix refresh token and its head remain current. Do not relax authorization or claim this hypothesis proven."
+  }
 }
