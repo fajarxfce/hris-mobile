@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 09:49 UTC. This file describes current work. Historical
+Updated 9 November 2026, 10:11 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -89,16 +89,16 @@ All jobs47713/92677/36194/71793 are reaped/stopped. Latest COMPLETE STOPPED stor
 `.work/selected-runtime-publication-resumed-native-2026-11-09/sender` at86, all four
 userdata/encryption files and full AVD. Never clone an older85/84/83 baseline.
 
-Next proof `.work/selected-runtime-auth-trace-native-2026-11-09` is PREPARED, not
-booted. Clone3488 already completed from latest86 and prepare-counter.py already ran;
-do not repeat either. Its corrected send preflight expects6. Added passive fields
+Current proof `.work/selected-runtime-auth-trace-native-2026-11-09` is ACTIVE.
+Clone3488 and prepare-counter.py completed; do not repeat either. Owned emulator18238
+(PID795640, serial emulator-5562), phases38867, counter25926 and paired observer91581
+are running. Original Mobile/inspector inputs remain frozen; no compiler overlap. Its corrected send preflight expects6. Added passive fields
 record only closed request route/method, relative timing, known-initial/previously-
 returned access classification and response status. Token hashes stay volatile.
 Existing strict credential/traffic acceptance is unchanged; seven negative controls
 still fail and baseline83 passes. No approval or product policy change is implied.
 
-After the local SBOM compiler is reaped, start count-http.py and paired-refresh.py as
-root, run-sender.py, then run-phases.py after owner boot. Preserve input/library freeze.
+Local SBOM63401 is reaped. Finish the active proof while preserving input/library freeze.
 Inspect all evidence and reaped jobs before accept-quietness.py, review-traffic.py and
 accept-release.py. Do not rerun a successful new-send.json. Only actual accepted86
 permits the notified build86/install.py --install-only phone update; phone remains83.
@@ -140,7 +140,8 @@ local inventory66020 passed70.759s and restored metadata; all8 added artifacts w
 then verified against official bytes/publisher SHA-1. Strict63401 passes46.014s with
 unchanged metadata; the393-component BOM is same-input cache reuse, not fresh execution.
 Initial local insertion/strict failure and alias-URL404 are preserved in its measurement.
-Commit/push then dispatch verify again. Web-only CI42597096435 is still running.
+a5d74fa3 is committed/pushed; verify CI42598801511 is running. Web-only CI42597096435
+is still running. No native86/phone86 acceptance has been added.
 No distribution workflow was dispatched.
 Audit actual completed jobs and artifacts; do not infer success from compilation alone.
 
