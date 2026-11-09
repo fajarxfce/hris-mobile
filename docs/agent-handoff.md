@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 15:51 UTC. Historical detail is retained in
+Updated 9 November 2026, 16:05 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -28,7 +28,7 @@ is required; Apple source/runtime, push and calling acceptance remain separate.
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | SDK6 distribution accepted; preserve unrelated gradlew.bat delta |
 | Starter | feat/network-inspector-20261107 /ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Platform original | feat/communications /691f3fc5 | Recovery verifier port accepted/pushed; runtime unchanged |
-| Platform group | feat/communication-space /fa90ddcc | Reconciliation accepted/pushed; direct transport targeted43271 running |
+| Platform group | feat/communication-space /96d2d238 | Reconciliation and current direct transport accepted/pushed |
 
 Isolated directories are under `/home/fajar/hris/.worktrees/`: `communication-space`,
 `mobile-inspector-ci-2026-11-09`, `inspector-sdk6-2026-11-09` and
@@ -46,9 +46,13 @@ mapping extraction; eight transport test methods and the application DI assertio
 [Contract](collaboration-space-direct-transport.md) records current scope and limits.
 Direct ktfmt0.59 parsing/formatting passed0.954s,0.866s and0.968s after stricter
 ID/time/encoded-identity validation;256MiB heap, no Kotlin/test acceptance yet.
-`.work/space-direct-transport-2026-11-09/check.py` is prepared, NOT RUN while Group43271
-owns the local heavy slot. Its full/browser phases must select the new eight methods
-plus the existing room transport suite; do not inherit the previous binding filters.
+Focused25221 PASSES203.352s:23 fresh cases (8 direct,13 existing room,2 app DI),
+zero failures/errors/skips,4,562 unchanged inputs and unchanged Inspector sources.
+Full90875 FAILED22.617s before testing: the private browser init used a KotlinJsTest
+filter closure that does not exist. Its script/result are preserved. The corrected
+getFilter/includeTestsMatching runner archives the exact init script used. Full94359
+(`full-2`) is RUNNING and owns frozen Mobile source; no full acceptance yet.
+Browser evidence must contain both exact data classes (8+13), not inherited filters.
 
 Review corrected one draft assumption before compilation: device SPACE does not mean
 user SPACE. A new HRISG_ crypto device may retain a LEGACY selected user/original room.
@@ -56,8 +60,8 @@ Tests include all valid combinations and reject a mismatched physical device/use
 The backend `.work/space-direct-transport-2026-11-09/candidate` now has12 files including
 API, DI and tests (seven actual SQL methods, three pure policy methods, HTTP/OpenAPI).
 Formatter2.017s covers all11 files; it remains private, applied after accepted/pushed fa90ddcc and exact base/source checks.
-Full38552 and focused34852 retained fixture failures; targeted43271 now retries
-the nine SQL/HTTP cases after exact test corrections. No contract acceptance yet.
+The backend contract is now accepted/pushed as96d2d238 after exact SQL/API/worker
+source/XML audit; its nine final corrected cases pass148.630s. Full Mobile still runs.
 
 Hosted42628449460 is complete SUCCESS on exact78076d4e. Both artifacts match GitHub
 digests and ZIP CRC. [Hosted evidence](measurements/collaboration-space-binding-hosted-2026-11-09.json)
@@ -179,11 +183,13 @@ maximum. Group keeps138; do not copy either branch's schema maximum to the other
 - Test-only corrections now create valid provisioning history through actual enqueue/
  worker claim/finish and retain explicit missing-head rejection. The HTTP query uses
  the actual schema column. Formatter1.467s; production/schema/DI are unchanged.
-- Targeted43271 (`targeted-3`) is RUNNING for those nine SQL/HTTP cases plus quality.
- It is the only heavy local job and owns frozen Group source. The strict evidence
- publisher must verify exact source/report hashes before retaining unchanged broad
- domain/room/LEGACY/OpenAPI and full-worker proof. No cached/failed case counts as new
- success. Reconciliation33511/fa90ddcc and hosted42628449460 must not be rerun.
+- Targeted43271 (`targeted-3`) is REAPED PASS148.630s for nine fresh SQL/HTTP cases
+ plus quality. Exact source/XML audit accepts452 cases:192 domain,38 SQL,72 API/OpenAPI
+ and150 complete worker, zero failures/errors and one existing opt-in skip. Broader
+ unchanged reports remain identified by their original gate. Only three SQL/API fixture
+ files changed; production/DI/build/worker inputs stayed identical. Backend96d2d238 is
+ committed/pushed;85313 is reaped. Reconciliation33511/fa90ddcc and hosted42628449460
+ must not be rerun. Mobile full94359 is now the only heavy job.
 
 The Group increment now contains twelve Kotlin files, including the actual LEGACY
 publication regression. Its guarded initial apply must not be repeated. All private
