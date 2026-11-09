@@ -1,0 +1,188 @@
+{
+  "accepted": true,
+  "scope": "Production Wasm distribution from public pinned inspector; not deployment or runtime UI acceptance",
+  "run": 42599865437,
+  "job": 129101377157,
+  "source": "6c6aa4ca8b82e9db21855a6969efb3f9c7a3dfb3",
+  "inspectorSource": "742a2d1c2285c720cef80ea3913195f3ece388cc",
+  "buildElapsedSeconds": 1415.39,
+  "executedGradleTasks": 1489,
+  "binaryenCores": 2,
+  "gradleWorkers": 1,
+  "jvmHeapMiB": 3072,
+  "kotlinCompilerInProcess": true,
+  "artifacts": [
+    {
+      "id": 13666676733,
+      "name": "diagnostics",
+      "sha256": "b25143e83eac23096ff006d17cb6901993cefeabbf1b3dab5e5ba7fe5a8c6cf3",
+      "zipBytes": 40737,
+      "manifest": [
+        {
+          "path": "build/reports/problems/problems-report.html",
+          "bytes": 127276,
+          "sha256": "08fbdfaf4f7fefeafd2d8e8d75c4c995c106e3f73a304018d265ab53066ac80a"
+        },
+        {
+          "path": ".work/web-build-resources.txt",
+          "bytes": 902,
+          "sha256": "e237f66c10e862310899af2dd41f2dbc06ea789eadfe3c45b21605463923e06a"
+        }
+      ]
+    },
+    {
+      "id": 13666571926,
+      "name": "web",
+      "sha256": "7b9c1d17f4dd1c6731359e9d6678d671ce98564b527ba9b544bf99ef984b07cd",
+      "zipBytes": 8137552,
+      "manifest": [
+        {
+          "path": "183.js",
+          "bytes": 19877,
+          "sha256": "255901a58b0e8a6227271a0fc5354f6a642689fc4ec99cc55efe1b1425060d11"
+        },
+        {
+          "path": "183.js.LICENSE.txt",
+          "bytes": 2423,
+          "sha256": "7366a8d3cf6a902bd97256bd98606f47bf1af0545380a759343db8c1cfa3c1ae"
+        },
+        {
+          "path": "183.js.map",
+          "bytes": 130008,
+          "sha256": "086575c9998dd9e348dfd093175e56504a8838bc6e0dec70c7757083deffaa13"
+        },
+        {
+          "path": "190.js",
+          "bytes": 28612,
+          "sha256": "06b0d86d4c663dc187175df309ae7173d6096cff7839d25f8aae99fde41e96bd"
+        },
+        {
+          "path": "190.js.LICENSE.txt",
+          "bytes": 4241,
+          "sha256": "86d113142083077618016006654d9ef8e2e88126adc04ba439ac9454b332697c"
+        },
+        {
+          "path": "190.js.map",
+          "bytes": 178158,
+          "sha256": "f834d0819779ed286661fe60eb3d4a3adbb3ee6607503eb94d67db87cb221362"
+        },
+        {
+          "path": "760.js",
+          "bytes": 820,
+          "sha256": "9875d3d2c23e96562bd1684c9269653805699067fcfd0588d2208d5b8d6acbba"
+        },
+        {
+          "path": "760.js.LICENSE.txt",
+          "bytes": 605,
+          "sha256": "5b62dee37efe57cbfb72bc30ab1b45e4d7de889327761e27a0cc43677d538cae"
+        },
+        {
+          "path": "760.js.map",
+          "bytes": 982,
+          "sha256": "651adb9f84178d0b24d03935809139385ecaa963d961670f586b189c148cd2c6"
+        },
+        {
+          "path": "889.js",
+          "bytes": 28798,
+          "sha256": "7a4550591686b1ba097341c060b441cb68afde5b88053f28b4a42e5c2d48647b"
+        },
+        {
+          "path": "889.js.LICENSE.txt",
+          "bytes": 1817,
+          "sha256": "ad0ad6932c8c3be5f38fbcf3f2209b72ed28285c3a06196567e88598c0542815"
+        },
+        {
+          "path": "889.js.map",
+          "bytes": 145662,
+          "sha256": "90485b7ff8a595865e1d146e1176b601967796381ffc30c3e1fd43bb48f5e358"
+        },
+        {
+          "path": "96.js",
+          "bytes": 7855,
+          "sha256": "8d60c013f67e2eb062ddd1844268badc00b41828b41fb3c78f6c48e1ec8d0fc6"
+        },
+        {
+          "path": "96.js.LICENSE.txt",
+          "bytes": 1211,
+          "sha256": "a13db7be678f5507be84a74810f08ec22313dfea14fef1a0250c20cf455756bf"
+        },
+        {
+          "path": "96.js.map",
+          "bytes": 63211,
+          "sha256": "0336dae37cc891a3d54c47ace1bd2048b5f34f5823a779d25aeb063d7a6cd5c0"
+        },
+        {
+          "path": "bccfa839aa4b38489c76.wasm",
+          "bytes": 8405319,
+          "sha256": "09ee5d3dcae24a6c90a811999dcc1287e8a669e2deed14e23c7ebd2068e8f73d"
+        },
+        {
+          "path": "composeResources/dev.fajar.starter.localization.resources/values/strings_en.commonMain.cvr",
+          "bytes": 71677,
+          "sha256": "7f1a167f8156d6a0dcc5fa69c923d4b3b23aea312d41de75bb22d896279b472e"
+        },
+        {
+          "path": "composeResources/dev.fajar.starter.localization.resources/values/strings_id.commonMain.cvr",
+          "bytes": 73961,
+          "sha256": "5ec376f9d446980cdef69d8693f250a5fc7a3796a5263d986eec35120e7d3b77"
+        },
+        {
+          "path": "d8dbedbc82d37e69c583.wasm",
+          "bytes": 17450242,
+          "sha256": "c6d41c31b134af1e1c0673f39a92dfc6f819215a62cb7535ce69e110cc9170bd"
+        },
+        {
+          "path": "firebase-config.js",
+          "bytes": 27,
+          "sha256": "9ca05d3350924dc2de5e9b9b920dcd616f3bd911f1ea9cdfaa42a69d274251d6"
+        },
+        {
+          "path": "firebase-messaging-sw.js",
+          "bytes": 1752,
+          "sha256": "e8aa5ab2502c8cf1c6845a394f514a03a2f712eaf1e7f59ab86f771530da91f7"
+        },
+        {
+          "path": "firebase-version.js",
+          "bytes": 43,
+          "sha256": "3a8991ecf6fcd263cefa01d4e424101c146371b1d70a33ad3b920cdac8277a39"
+        },
+        {
+          "path": "hris-mobile.js",
+          "bytes": 1382021,
+          "sha256": "429b33fcbd8e4254884f052f3b6520e9267c3c82056ad6a16d7796e1631a9017"
+        },
+        {
+          "path": "hris-mobile.js.LICENSE.txt",
+          "bytes": 1505,
+          "sha256": "27bb91e62dfe1cbdfa5c56b0dce84c59a6218b69291ed644061d4b89f4732b14"
+        },
+        {
+          "path": "index.html",
+          "bytes": 507,
+          "sha256": "cd3163276ad8d478767fbc26ebeae29c0fb10b683e1a6a768ebf9c6490120860"
+        },
+        {
+          "path": "hris-mobile.js.map",
+          "bytes": 1900733,
+          "sha256": "cbe330d76ceda2e8c774347276ea17f593bd2bd638fcb7feeeaafc430dfeecee"
+        }
+      ]
+    }
+  ],
+  "memoryObservation": {
+    "samples": 95,
+    "intervalSeconds": 15,
+    "hostTotalKiB": 16367524,
+    "minHostAvailableKiB": 1553584,
+    "cgroupMetricsAvailable": false,
+    "timeLauncherMaximumRssKiB": 175188,
+    "timeLauncherCpuSeconds": 6.53
+  },
+  "limitations": [
+    "The time wrapper measured the Gradle launcher, not the compiler daemon or Binaryen peak RSS",
+    "Host MemAvailable samples include the entire runner; they do not identify per-process peak memory",
+    "Earlier runner shutdown causes remain unproved; original failure records are preserved",
+    "This source precedes new Room dispatch; no new feature or whole PRD acceptance",
+    "No browser UI execution or web deployment in this job"
+  ]
+}

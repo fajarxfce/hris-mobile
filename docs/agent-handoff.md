@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 10:40 UTC. This file describes current work. Historical
+Updated 9 November 2026, 10:45 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -141,7 +141,11 @@ changes are included in that CI run.
 [Exact failed/successful scope](measurements/pinned-inspector-ci-test-recovery-2026-11-09.json). No production retry/cancellation behavior was changed. Web-only CI42597096435 also shut down at Wasm optimization; no final artifact
 survived. Cause remains unproved. Next web job bounds Binaryen2cores, Gradle1worker/
 3GiB/in-process Kotlin and samples closed kernel memory numbers every15s to console.
-The exact125 Binaryen source confirms BINARYEN_CORES. 6c6aa4ca web CI42599865437 is running with those bounded resources and live evidence.
+The exact125 Binaryen source confirms BINARYEN_CORES. 6c6aa4ca web CI42599865437 SUCCEEDED23m35.39s/1489 executed tasks. Both exact
+artifact digests verified: production web13666571926 (26files) and diagnostics13666676733.
+95 host-memory samples retain minimum1,553,584KiB available on16,367,524KiB host.
+The time wrapper's175,188KiB RSS measures only the launcher, NOT compiler/Binaryen.
+Original shutdown cause remains unproved. [Web evidence](measurements/pinned-inspector-web-distribution-2026-11-09.json).
 No distribution workflow was dispatched.
 Audit actual completed jobs and artifacts; do not infer success from compilation alone.
 
@@ -156,7 +160,9 @@ Audit actual completed jobs and artifacts; do not infer success from compilation
    HRIS selected-runtime registry policy does not belong in Starter.
 3. Root Mobile has uncommitted bounded original Room dispatch,18 domain cases, four
    additional real-storage contract cases, data DI and its assembled binding assertion.
-   Format/focused/full/browser gates are next in .work/room-request-dispatch-2026-11-09.
+   Format15207 PASS35.511s; focused34481 PASS263.919s/76 fresh cases including18 new
+   domain and11 shared real-storage cases.4532 app/library inputs unchanged. Full gate
+   is now active in .work/room-request-dispatch-2026-11-09/full-1; browser follows.
    No product route or rollout. Then durable published binding/projection, exact LEGACY metadata validation,
    original SDK delivery/history, workers and product routing. Existing Prepare and
    Resolve room use cases are accepted; do not recreate them. The group backend is in
