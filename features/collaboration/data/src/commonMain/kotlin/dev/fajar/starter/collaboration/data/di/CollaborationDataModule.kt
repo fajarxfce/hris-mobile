@@ -392,6 +392,33 @@ class CollaborationDataModule {
             ?: UnavailableCollaborationRuntimeRepository()
 
     @Single
+    fun spaceSync(runtime: CollaborationRuntimeRepository): CollaborationSpaceSyncRepository =
+        runtime as? CollaborationSpaceSyncRepository ?: UnavailableCollaborationRuntimeRepository()
+
+    @Single
+    fun synchronizeSpaceDevice(
+        commands: CollaborationSpaceSetupCommandRepository,
+        devices: CollaborationSpaceDeviceRepository,
+        runtimes: CollaborationSpaceRuntimeRepository,
+        sync: CollaborationSpaceSyncRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        SynchronizeCollaborationSpaceDevice(
+            commands,
+            devices,
+            runtimes,
+            sync,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
     fun localDeviceIdentity(
         runtime: CollaborationRuntimeRepository
     ): CollaborationLocalDeviceIdentityRepository =

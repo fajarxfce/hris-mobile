@@ -173,6 +173,96 @@ class AndroidSpaceReadinessRegistrationTest {
         }
     }
 
+    @Test
+    fun groupControlArrivesThroughTheOneOriginalSyncWithoutJoiningOrEnablingQueues() = runTest {
+        val f = runtimeLeaseFixture(StandardTestDispatcher(testScheduler))
+        val source = logicalSource(f.initial.deviceId)
+        val signals = mutableListOf<CollaborationSpaceReadinessSignal>()
+        val response = CompletableDeferred<Unit>()
+        try {
+            f.expectedReadinessEventType = COLLABORATION_SPACE_READINESS_CONTROL_TYPE
+            f.lease.startReadinessObservation(
+                AndroidCollaborationSdkClientSource(),
+                source,
+                { error("No company control") },
+                { signals += it },
+            )
+            val listener = assertNotNull(f.readinessListener)
+            f.beforeSync = {
+                listener.onMessage(packet(source, f.initial.matrixUserId))
+                response.await()
+            }
+            f.lease.completeAcquisition()
+            assertEquals(AppResult.Success(Unit), f.lease.publish())
+            val first = async { f.lease.synchronizeDevice() }
+            val second = async { f.lease.synchronizeDevice() }
+            runCurrent()
+            assertEquals(1, f.syncRequests)
+            assertEquals(source, signals.single().source)
+            assertFalse(first.isCompleted)
+            response.complete(Unit)
+            runCurrent()
+            assertEquals(AppResult.Success(Unit), first.await())
+            assertEquals(AppResult.Success(Unit), second.await())
+            assertEquals(1, f.syncRequests)
+            assertEquals(listOf(0uL), f.syncSettings.map { it.timeoutMs })
+            assertEquals(listOf("readiness.subscribe"), f.calls.toList())
+        } finally {
+            response.complete(Unit)
+            f.lease.finishAcquisition()
+            f.close()
+        }
+        assertEquals(1, f.calls.count { it == "client.close" })
+        assertEquals(1, f.calls.count { it == "directory.close" })
+        assertEquals(1, f.calls.count { it == "released" })
+        assertTrue(f.calls.indexOf("readiness.close") < f.calls.indexOf("client.close"))
+    }
+
+    @Test
+    fun closingDuringGroupSyncDeactivatesControlsAndKeepsTheOriginalStoreUntilDrain() = runTest {
+        val f = runtimeLeaseFixture(StandardTestDispatcher(testScheduler))
+        val source = logicalSource(f.initial.deviceId)
+        val signals = mutableListOf<CollaborationSpaceReadinessSignal>()
+        val response = CompletableDeferred<Unit>()
+        try {
+            f.expectedReadinessEventType = COLLABORATION_SPACE_READINESS_CONTROL_TYPE
+            f.lease.startReadinessObservation(
+                AndroidCollaborationSdkClientSource(),
+                source,
+                { error("No company control") },
+                { signals += it },
+            )
+            val listener = assertNotNull(f.readinessListener)
+            f.beforeSync = { response.await() }
+            f.lease.completeAcquisition()
+            assertEquals(AppResult.Success(Unit), f.lease.publish())
+            val waiting = async { f.lease.synchronizeDevice() }
+            runCurrent()
+            waiting.cancelAndJoin()
+            val closing = async { f.lease.close() }
+            runCurrent()
+            listener.onMessage(packet(source, f.initial.matrixUserId))
+            assertTrue(signals.isEmpty())
+            assertFalse(closing.isCompleted)
+            assertFalse("directory.close" in f.calls)
+            assertIs<AppResult.Failed>(f.lease.synchronizeDevice())
+            response.complete(Unit)
+            runCurrent()
+            assertEquals(AppResult.Success(Unit), closing.await())
+            assertEquals(1, f.syncRequests)
+            assertEquals(1, f.calls.count { it == "readiness.cancel" })
+            assertEquals(1, f.calls.count { it == "readiness.close" })
+        } finally {
+            response.complete(Unit)
+            f.lease.finishAcquisition()
+            f.close()
+        }
+        assertEquals(1, f.calls.count { it == "client.close" })
+        assertEquals(1, f.calls.count { it == "directory.close" })
+        assertEquals(1, f.calls.count { it == "released" })
+        assertTrue(f.calls.indexOf("readiness.close") < f.calls.indexOf("client.close"))
+    }
+
     private class Fixture {
         val source = logicalSource(id(4))
         val sender = "@hris_original_company:matrix.example.test"

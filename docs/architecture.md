@@ -705,3 +705,7 @@ original event reference to encrypted local intent and exact native content iden
 Background recovery carries the same reference. It does not fetch the target or
 store quoted body snapshots. Quote UI/history and actual native acceptance remain
 pending; final pipeline checks are recorded in the linked evidence.
+
+[Admitted organization device sync](collaboration-space-device-sync.md) coordinates
+current local admission and one device status read, reusing the exact published native
+client, persisted cursor and parent-owned synchronization lifetime.

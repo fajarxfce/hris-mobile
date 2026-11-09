@@ -10,9 +10,15 @@ import kotlinx.coroutines.ensureActive
 class UnavailableCollaborationRuntimeRepository :
     CollaborationRuntimeRepository,
     CollaborationSpaceRuntimeRepository,
+    CollaborationSpaceSyncRepository,
     CollaborationLocalDeviceIdentityRepository,
     CollaborationSdkInventoryRepository,
     CollaborationSdkPossessionRepository {
+    override suspend fun synchronize(runtime: CollaborationSpaceRuntimeReady): AppResult<Unit> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
     override suspend fun acquireOriginalQueue(
         runtime: CollaborationSpaceRuntimeReady,
         matrixRoomId: String,

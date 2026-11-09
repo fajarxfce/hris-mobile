@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 22:00 UTC. Historical contracts, failed experiments and
+Updated 9 November 2026, 22:27 UTC. Historical contracts, failed experiments and
 accepted evidence are retained in
 [a877c088](https://github.com/fajarxfce/hris-mobile/blob/a877c088/docs/agent-handoff.md).
 This file owns current work. Do not restart jobs from historical notes.
@@ -61,6 +61,39 @@ returns explicit continuation even for room-index-only empty projections, authen
 both immutable indexes, and reports concurrent appends for a later fresh sweep.
 Its local inventory is not content permission or completed recovery.
 
+## Current successor: admitted original group sync — accepted locally
+
+Private `.work/space-device-sync-2026-11-09` pins eba05a9c. Ten Kotlin inputs add a
+narrow group sync port implemented by the same Android runtime repository,explicit
+unsupported-platform behavior,pure exact device/bootstrap/gateway interval policy,
+and an owning bounded sync use case. It reads current local admission and one remote
+device status;no store/registration/room/message is created. Native first-sync I/O
+keeps its original parent lifetime and cancellation/drain ownership.
+
+Sixteen domain cases and three added Android cases cover current identity,denial,
+expiry,concurrent/cancelled waiters,closed runtime,group controls during actual owned
+sync with inert FFI,and late shutdown. Existing five device-sync cases remain included;
+app graph asserts the same runtime instance supplies the new port. Pinned formatter
+85341 is reaped. focused-1 /9832 REAPED FAIL242.225s:18 desktop cases,one app DI
+fixture assertion failure,and missing Android data-mapper import before Android
+execution. Domain16 pass;source/library hashes stayed unchanged. Corrected the import
+and added the new port to the existing runtime fake. Read-only review also corrected
+only two new group-native cleanup assertions to include their readiness callbacks;
+these were not observed Android failures. Old company helpers/tests are unchanged.
+
+focused-2 /85631 REAPED PASS152.816s:37 cases=16 domain+19 Android host+2 app
+bindings,zero failures/errors/skips,4,599 stable source inputs and unchanged Inspector
+bytes. Exact source/library/XML audit passes. full-1 /51820 is REAPED PASS526.554s:
+4,340 fresh cases=3,695 desktop+629 Android host+16 browser,zero failures/errors/skips.
+Required root/Android release/lint/shared Wasm/iOS source/browser/quality checks pass.
+Focused/full manifests match and strict current source/library/XML audit passes.
+Private review.md records actual first-gate failures and separate review findings.
+[Contract](collaboration-space-device-sync.md) and
+[measurement](measurements/collaboration-space-device-sync-2026-11-09.json).
+No collector,actual group recovery worker or product activation is included.
+No compiler/emulator remains active; no phone/live change. Commit and push before
+starting successor implementation.
+
 ## Accepted readiness increments
 
 - Group d4246a08: independent MATRIX/PUSH workers and complete application wiring.
@@ -84,27 +117,37 @@ Apple is also accepted: 2,511 simulator cases, zero failures/errors/skips, and
 successful unsigned Xcode host. Audit30032 is reaped; SHA256, GitHub digest, ZIP CRC,
 every XML and the full baseline report set plus12 new cases pass. Combined9173 cases.
 [Hosted measurement](measurements/collaboration-space-readiness-protocol-hosted-2026-11-09.json).
-No remote CI remains active. Do not rerun unchanged42697887863 or accepted older
+This protocol run is complete. Do not rerun unchanged42697887863 or accepted older
 42656803963 (9137 cases). This immutable protocol evidence does not cover native/wake/
 inventory successors or native Apple Matrix/APNs/calling behavior.
 
 ## Next implementation
 
-1. Wake01544c26 and protocolevidence dd15a4fd are committed/pushed;all pushes and
-   audits are reaped. Inventory focused/full and exact audits now pass;commit/push it.
-2. Dispatch one fresh collaboration-control CI on the accepted inventory commit to
-   cover cumulative native source,wake and inventory changes. Private inventory
-   hosted-audit.py/hosted-plan.json are prepared against accepted42697887863 baseline;
-   expected6,743 portable+2,549 Apple=9,292 cases. This is not yet dispatched/accepted.
-   Do not repeat the earlier immutable protocol run. Local inventory is accepted;
-   do not reimplement its cursor or reset existing encrypted binding records.
+1. Wake01544c26,protocolevidence dd15a4fd and inventory eba05a9c are committed/pushed;
+   all pushes and audits are reaped. Inventory push38798 is reaped.
+2. Fresh [CI42707758241](https://github.com/fajarxfce/hris-mobile/actions/runs/42707758241)
+   is running on immutable eba05a9c253aa7fe7f0cf816b49c128b4f3003a6;dispatch9340 reaped.
+   Portable is accepted; artifact audit75963 is REAPED PASS6,743 cases,zero failures/
+   errors/skips. Exact baseline+81 report cases,GitHub digest,ZIP CRC and all XML pass.
+   Apple remains
+   in progress. It does not cover the newer admitted sync source.
+   It covers cumulative native source,wake and inventory changes. Private inventory
+   hosted.json and hosted-audit.py pin it against accepted42697887863 baseline;
+   expected6,743 portable+2,549 Apple=9,292 cases. Apple acceptance pending. Do not repeat
+   earlier protocol execution. New successor work may proceed without changing its
+   immutable evidence attribution. Local inventory is accepted;do not recreate it.
 3. Implement actual group recovery with independent persisted progress and exact wake
    completion. Company-only CollaborationRecoveryWorker cannot discharge group work.
    Startup/reconnect must discover original commands without relying on a bounded
    callback stream. New commands in existing bindings need their own durable wake;
-   binding revision does not indicate message arrival.
-4. Group adoption restores a paused original SDK client. Add currently admitted sync
-   ownership on that same client, then bind app collector/worker lifetimes and product
+   binding revision does not indicate message arrival. The original-only writer has
+   no enqueue capability;Queued/new SPACE sends need their own owning workflow.
+   Empty active commands or retired receipts do not prove the native SDK has no
+   settlement work. Require local SDK inventory or a correctly retired durable work
+   index before skipping recovery for a room. Private inventory worker-next.md records
+   the verified command/receipt/SDK boundaries;no worker source is applied yet.
+4. Group adoption restores a paused original SDK client. Currently admitted sync on
+   that same client now passes local acceptance; bind app collector/worker lifetimes and product
    routing. Never acquire the registry lock inside the native callback monitor:
    registry retirement already deactivates callbacks while holding its lock.
 5. Existing registry retention already preserves logical group entries by exact native
@@ -128,8 +171,8 @@ The explicit vendor key-confirmation endpoint was retired. Never reapply archive
 
 | Checkout | Branch / accepted source | State |
 | --- | --- | --- |
-| Mobile | feat/chat-send-timing-20261107 / 01544c26 | Wake accepted/pushed; inventory successor accepted locally |
-| Platform original | feat/communications / de908c55 | Handoff current; recovery verifier remains schema116.4 |
+| Mobile | feat/chat-send-timing-20261107 / eba05a9c | Inventory accepted/pushed; portable CI accepted, Apple running; sync accepted locally |
+| Platform original | feat/communications / f3d3bbdf | Handoff current; recovery verifier remains schema116.4 |
 | Platform group | feat/communication-space / d4246a08 | Separate worktree; V140 workers accepted/pushed |
 | Starter | feat/network-inspector-20261107 / ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Inspector | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Public SDK6 integrated |

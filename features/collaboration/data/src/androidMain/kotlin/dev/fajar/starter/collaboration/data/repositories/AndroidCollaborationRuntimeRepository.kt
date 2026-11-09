@@ -3,6 +3,7 @@ package dev.fajar.starter.collaboration.data.repositories
 import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.api.CollaborationPusherApi
 import dev.fajar.starter.collaboration.data.datasources.*
+import dev.fajar.starter.collaboration.data.mappers.collaborationSdkAcquisitionFailure
 import dev.fajar.starter.collaboration.data.mappers.toLocalDeviceIdentity
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
@@ -43,7 +44,8 @@ class AndroidCollaborationRuntimeRepository(
 ) :
     CollaborationRuntimeRepository,
     CollaborationLocalDeviceIdentityRepository,
-    CollaborationSpaceRuntimeRepository {
+    CollaborationSpaceRuntimeRepository,
+    CollaborationSpaceSyncRepository {
     override val supportsDeviceActivation = true
 
     private val readiness =
@@ -228,6 +230,24 @@ class AndroidCollaborationRuntimeRepository(
             is AppResult.Success ->
                 AppResult.Success(CollaborationSpaceOriginalQueueSnapshot(runtime, result.value))
         }
+    }
+
+    override suspend fun synchronize(runtime: CollaborationSpaceRuntimeReady): AppResult<Unit> {
+        currentCoroutineContext().ensureActive()
+        val lease =
+            registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
+                ?: return handoverPending()
+        val result = lease.synchronizeDevice()
+        currentCoroutineContext().ensureActive()
+        lease.credentialFailures.value?.let {
+            return AppResult.Failed(it)
+        }
+        if (registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId) !== lease) {
+            return AppResult.Failed(
+                collaborationSdkAcquisitionFailure(result, handoverPending().failure)
+            )
+        }
+        return result
     }
 
     override suspend fun isSpaceOpen(

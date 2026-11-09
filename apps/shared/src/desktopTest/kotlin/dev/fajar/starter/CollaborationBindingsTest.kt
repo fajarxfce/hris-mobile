@@ -62,7 +62,12 @@ class CollaborationBindingsTest {
                 object :
                     CollaborationRuntimeRepository,
                     CollaborationLocalDeviceIdentityRepository,
-                    CollaborationSpaceRuntimeRepository {
+                    CollaborationSpaceRuntimeRepository,
+                    CollaborationSpaceSyncRepository {
+                    override suspend fun synchronize(
+                        runtime: CollaborationSpaceRuntimeReady
+                    ): AppResult<Unit> = error("No implicit organization synchronization")
+
                     override suspend fun acquireOriginalQueue(
                         runtime: CollaborationSpaceRuntimeReady,
                         matrixRoomId: String,
@@ -272,6 +277,11 @@ class CollaborationBindingsTest {
                 )
                 assertSame(runtime, container.koin.get<CollaborationRuntimeRepository>())
                 assertSame(runtime, container.koin.get<CollaborationSpaceRuntimeRepository>())
+                assertSame<Any>(runtime, container.koin.get<CollaborationSpaceSyncRepository>())
+                assertSame(
+                    container.koin.get<SynchronizeCollaborationSpaceDevice>(),
+                    container.koin.get<SynchronizeCollaborationSpaceDevice>(),
+                )
                 assertEquals(1, factoryCount.get())
                 assertSame(container.koin.get<IdentityServer>(), suppliedServer)
                 assertSame(container.koin.get<HttpClient>(named(HttpClients.Public)), suppliedHttp)
