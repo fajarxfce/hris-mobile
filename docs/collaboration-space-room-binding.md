@@ -42,9 +42,11 @@ Fourteen common storage cases have actual desktop SQLite, browser IndexedDB and 
 SQLite wrappers. They exercise both origins, keyless absence, reopen/login replacement,
 exact LEGACY mismatches, immutable conflicts, bounded reads, competing publications,
 lost responses, account changes, shared-key loss, corrupted rows/checkpoints and
-cancellation. Apple execution is separate from source compilation. The initial local
-focused gate82526 is still running in `.work/space-room-binding-2026-11-09/focused-1`.
-No acceptance, new APK or product activation is claimed yet.
+cancellation. Apple execution is separate from source compilation. Focused82526 is reaped PASS183.123s:85 fresh cases, zero failures/errors/skips;
+format/architecture/Detekt pass and4,544 app/library inputs stayed fixed. All14 new
+SQLite cases ran. The sole post-focused source change adds actual application DI
+resolution. Full root/Android/Wasm/iOS-source and browser storage checks are next;
+no storage acceptance, new APK or product activation is claimed yet.
 
 ## Owning flow follows
 

@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 12:34 UTC. This file describes current work. Historical
+Updated 9 November 2026, 12:39 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -29,8 +29,8 @@ Do not restart jobs or reapply candidates from that history without checking cur
 | Inspector original | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Verified public SDK6 integrated/pushed |
 | Inspector isolated | feat/sdk6-distribution-20261109 / a6b8236 | Pushed; SDK6 distribution accepted |
 | Starter | feat/network-inspector-20261107 / ffd0ac5 | Pushed; pinned public inspector workflows independently accepted |
-| Platform original | feat/communications / 4acbc3f9 | Pushed; runtime unchanged |
-| Platform group worktree | feat/communication-space / 8d5724e2 | Exact original-reference backend accepted/pushed; not deployed |
+| Platform original | feat/communications / 4d4df31f | Pushed; runtime unchanged |
+| Platform group worktree | feat/communication-space / bf6e176a | Exact original-reference backend accepted/pushed; not deployed |
 
 The isolated directories are under `/home/fajar/hris/.worktrees/`:
 `mobile-inspector-ci-2026-11-09`, `inspector-sdk6-2026-11-09`, and
@@ -257,18 +257,22 @@ phone update is included. This integration is committed/pushed as57ebc77a; no re
 
 ## Encrypted room binding candidate
 
-Mobile now has11 uncommitted files: immutable binding entities/repository contract,
+Mobile now has12 uncommitted source files: immutable binding entities/repository contract,
 exact original/published-room policies, encrypted dual-index storage/codec and14
-shared storage cases with desktop/browser/Apple wrappers. No owning acquisition,
+shared storage cases with desktop/browser/Apple wrappers and actual app DI resolution. No owning acquisition,
 SDK delivery, queue, UI route or deployment has changed. The original metadata
 policy refactor preserves current native-owner checks. [Contract](collaboration-space-room-binding.md).
 
-Formatter40488 is reaped PASS36.878s. Focused82526 is RUNNING and owns the only heavy
-compiler; app/Inspector source inputs are FROZEN until it is reaped. The focused
-selection includes the existing original policies/reads, room preparation and both
-old/new actual SQLite storage contracts. After it passes, add the actual application
-DI-resolution assertion, then run required full and actual browser storage gates.
-Do not start another compiler/emulator or accept the candidate without those results.
+Formatter40488 is reaped PASS36.878s. Focused82526 is reaped PASS183.123s:85 fresh
+cases (14 new SQLite binding,14 existing metadata,23 room preparation,14 original
+policy/read,20 original/room transport), zero failures/errors/skips; quality passes
+and4,544 inputs/library fixed. The sole subsequent source change resolves the new
+repository in CollaborationBindingsTest. Full45444 is RUNNING; app/Inspector source
+inputs are FROZEN. It includes root/Android-host/release compile/lint, Wasm/iOS source,
+quality and28 actual browser storage cases (14 new and14 existing). The exact browser
+count must still be verified in completed XML; do not treat this selection as a pass.
+[Current evidence](measurements/collaboration-space-room-binding-2026-11-09.json).
+Do not start another compiler/emulator or edit frozen inputs until it is reaped.
 
 The next owning flow must acquire the exact published original position, match owned
 canonical metadata and retain/read back the immutable binding under current admission.

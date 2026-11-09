@@ -1,0 +1,101 @@
+{
+  "at": "2026-11-09T12:39:26.526890+00:00",
+  "accepted": false,
+  "scope": "Immutable encrypted published-room binding and exact LEGACY metadata matching; owning acquisition/product routing remain separate",
+  "sourceSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "436761be124c908e7510f7d3fc78b45911beb2382a89d73c8745da65e086e838",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/identity/CollaborationSpaceRoomBindingCodec.kt": "2f0fe2ba2e6828790bc0f94023ecf1953b8d4cb6fcd5fa2f1a995f17d4993533",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceRoomBindingRepository.kt": "50941e745c0bbecc9a62ba9157ac3fe734f6204bafc85e34c9c5aac7cb92bafc",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingStorageContract.kt": "417dc36b5363291b8c7aa8b0d332da965fb8cdaf673e5b7728b2765adbe17e2e",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingStorageTest.kt": "13f7d2c84ac360f6090cbeb9fc1e0a894746a97d1f1da064bca62428c46c3523",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceRoomBindingStorageTest.kt": "7a880d89c78c0d243b674e0d5220510098a3b4b8a65dc01b433362f0140c14ed",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceRoomBindingStorageTest.kt": "1506a589ab6bd4f540123491d731592d5c4d1bfd174f60d0713fed9960efce5f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceRoomBinding.kt": "b58b77fe1e9e5d4995704675d6e73b94d1739eb692a083cc5ca94efc9d6a4e76",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationOriginalConversationPolicy.kt": "77ed82c0879b09d10f32f064ac77565d2cc354fe896cf07180a8494df4c23b96",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceRoomBindingPolicy.kt": "855e41d2ed0229bca75343ca2cbe588016c9a03f55dfd0ed33d4fa90c348fc09",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceRoomPolicy.kt": "af74e21dd3676fd55660b57839d28a1603d29b265be31489c995c7ca9f0f6e7c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceRoomBindingRepository.kt": "81ba0a3feb1ef4fcb360c23154178d43bf07c44a40d1c6fea3097c6f5735753d"
+  },
+  "focused": {
+    "startedAt": "2026-11-09T12:32:13.284658+00:00",
+    "elapsedSeconds": 183.123,
+    "exitCode": 0,
+    "sourceFiles": 4544,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 85,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceOriginalConversationTransportTest.xml": {
+        "sha256": "43fae4499df4567f8cda7aa5ee20aec9e98c8f328c23eff466e9db504e259e9e",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRoomBindingStorageTest.xml": {
+        "sha256": "37707a32d57dcaf8b08dd101426687129f672abe6ca2583491b0778a9eff94b7",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRoomTransportTest.xml": {
+        "sha256": "3389d34647f1aecc8019e4b3be3d00b8f2bd3269708082a5b597df577c2938aa",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceConversationMetadataStorageTest.xml": {
+        "sha256": "2e1ba188f30f02c85adeb359c677b5f5085c64633613360f0ab98b780ac2e69d",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationOriginalConversationReadTest.xml": {
+        "sha256": "4a4f790660ff05712b4f2a1a28da5879f965ff52d5cf1a5c8aec056926c4e613",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceRoomPreparationTest.xml": {
+        "sha256": "39a85fef8d6f04dd3c122a930f1edbf192c290e9bbe29c9aaa79806df12c068c",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationOriginalConversationPolicyTest.xml": {
+        "sha256": "b3ffcf9af80a774353386882f45ec5c942c63471a7037e5962a2c2457bc06c14",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "focusedSession": 82526,
+  "focusedSessionReaped": true,
+  "afterFocused": {
+    "at": "2026-11-09T12:36:34.377250+00:00",
+    "onlyChangedInput": "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt",
+    "reason": "Assert actual application container resolves the new encrypted binding repository",
+    "sha256": "436761be124c908e7510f7d3fc78b45911beb2382a89d73c8745da65e086e838"
+  },
+  "fullGate": {
+    "state": "running",
+    "session": 45444,
+    "includes": "root check, all Android host, release compile/lint, Wasm/iOS source, quality and both new/old IndexedDB storage contracts"
+  },
+  "limits": [
+    "No new Apple execution; wrapper source is present",
+    "No owning acquisition, SDK delivery, product route, new APK or live deployment"
+  ]
+}
