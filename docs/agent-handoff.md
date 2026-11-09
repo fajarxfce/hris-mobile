@@ -1,5 +1,27 @@
 # Agent continuation — HRIS Mobile
 
+## Combined79 full source gate accepted — 9 November 2026, 02:29 UTC
+
+Full46501 REAPED PASS539.089s on pushed abb4b924:810 fresh cases,0 failures/errors/
+skips;121 actual Chrome cases. Full Android-host task reused the586 cases from the
+successful605-case focused run. Root/format/architecture/detekt, Android release/lint,
+proof compile, sharedWasm and iOSArm64 source compilation pass.4,526 source/82 library
+inputs unchanged. [Evidence](measurements/collaboration-acquisition-cancellation-2026-11-09.json).
+This is source acceptance, not native Apple execution or delivery acceptance.
+
+Package48120 REAPED PASS124.756s. APK79 signature/version/source/ARM64/16KiB/Firebase/
+backup rules and lint0 pass; SHA d6d7f11c1ac537b971f98ef18b58b42f18d29fddc4af80fbb713094846fe3f7a.
+SDK byte verification is next; no compiler remains. Then
+clone complete stopped78 through credential-recovery-native-2026-11-09/prepare-sender.py,
+boot one2560MiB emulator and start passive aggregate before upgrade/launch.13 prepared
+scripts now include original bubble Sent checks, home/resume/cold transitions and
+complete-bin quietness assertions. No clone/boot79 or phone install has happened yet.
+Recover SAME Recovery78 005634 with zero send/retry gestures, same private identity,
+one encrypted event and quiet Home/room/resume/cold traffic. Preserve failed evidence.
+Phone is fresh after stock-ROM flash; announce before accepted install-only, no UI.
+Then port generic SyncTrigger to Starter and continue54 open communications PRD groups.
+
+
 ## Retired acquisition and joined recovery pass605 focused cases — 9 November 2026, 02:18 UTC
 
 Focused80286 REAPED PASS110.419s:605 fresh cases,0 failures/errors/skips; format,

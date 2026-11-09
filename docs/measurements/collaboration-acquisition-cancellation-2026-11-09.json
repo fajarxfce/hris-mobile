@@ -1,5 +1,5 @@
 {
-  "status": "focused-pass-full-native-pending",
+  "status": "full-source-pass-native-pending",
   "historicalFailure": "collaboration-storage71-crashlytics-2026-11-09.json",
   "checks": {
     "red-1": {
@@ -65,6 +65,47 @@
         "architectureCheck",
         "detekt"
       ]
+    },
+    "full-1": {
+      "startedAt": "2026-11-09T02:19:25.100683+00:00",
+      "elapsedSeconds": 539.089,
+      "exitCode": 0,
+      "sourceFiles": 4526,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 810,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourceCommit": "abb4b92468a2e439c901561add623a9533baf0b4",
+      "reapedSession": 46501,
+      "actualBrowserTests": 121,
+      "androidHostTests": "Up-to-date from the 586 host cases executed in focused-2; not counted again as fresh.",
+      "checks": [
+        "root check",
+        "formatCheck",
+        "architectureCheck",
+        "detekt",
+        "full Android host tests",
+        "actual Chrome worker and credential/readiness tests",
+        "Android release compilation and lint",
+        "proof application compilation",
+        "shared Wasm compilation",
+        "iOSArm64 source compilation"
+      ],
+      "limitations": [
+        "No native Apple execution",
+        "Original native78 message recovery and release79 installation still pending"
+      ],
+      "evidenceHashes": {
+        "result.json": "5ebeeb4ef1b2a6f3a82b5ffb7be27b772c6d62e698905150794649e5dbdcdb2f",
+        "sources.json": "ac8b0a5a7c4235da26185428214a657e72a887f61ce0d22ea92ad0605daf2f6e",
+        "library-sources.json": "b346eac84c446f82f4801886f1be25f9d3e10fdf0e2f97375bd0010164d947f4",
+        "stdout.log": "37cf77251c9dc1224073af1ddc4471683a39f5652735e1b297910f3407b167e8",
+        "stderr.log": "7f0c6b604cb38a2d198de5122c949fa9b0f9343dedcd51defd28ef6ebe54f1f1"
+      }
     }
   },
   "nativeAccepted": false,
@@ -82,5 +123,23 @@
     "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidSdkAuthRegistration.kt": "9629ee5fcf23b98701e23485661ef075a5b407dd61e2d0a7d785d026eb72ddf5",
     "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/PendingRuntimeClientSource.kt": "882d6cd9ab2ae61e6f62e82af5cd48933f24ed05ed8cc6e5eb23a7eb5c2cc8d4",
     "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationClientSource.kt": "b42cd3905d3cf7d188533a3b3a08dcae5ab50091810e3332882c8a40a46c9fe4"
+  },
+  "package": {
+    "versionCode": 79,
+    "sourceCommit": "abb4b92468a2e439c901561add623a9533baf0b4",
+    "reapedSession": 48120,
+    "elapsedSeconds": 124.756,
+    "exitCode": 0,
+    "sha256": "d6d7f11c1ac537b971f98ef18b58b42f18d29fddc4af80fbb713094846fe3f7a",
+    "bytes": 123448719,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "debuggable": false,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "lintIssues": 0,
+    "candidateOnly": true
   }
 }
