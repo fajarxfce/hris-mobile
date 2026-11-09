@@ -127,7 +127,7 @@ class AndroidSdkReadinessRegistrationTest {
         val calls = mutableListOf<String>()
         val signals = mutableListOf<CollaborationReadinessSignal>()
         val registration =
-            AndroidSdkReadinessRegistration(
+            AndroidSdkReadinessRegistration.company(
                 owner,
                 device,
                 "@owned:example.test",

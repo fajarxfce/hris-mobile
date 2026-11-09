@@ -54,6 +54,14 @@ class AndroidCollaborationRuntimeRepository(
 
     override fun readinessSignals() = readiness.asSharedFlow()
 
+    private val spaceReadiness =
+        MutableSharedFlow<CollaborationSpaceReadinessSignal>(
+            extraBufferCapacity = 32,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        )
+
+    override fun spaceReadinessSignals() = spaceReadiness.asSharedFlow()
+
     private val credentialStates =
         MutableSharedFlow<CollaborationCredentialSignal>(
             extraBufferCapacity = 32,
@@ -1108,7 +1116,14 @@ class AndroidCollaborationRuntimeRepository(
         expectedIdentity: CollaborationLocalDeviceIdentity?,
     ): AppResult<Unit> {
         lease.startHttpObservation(httpObservation)
-        lease.startReadinessObservation(clients) { readiness.tryEmit(it) }
+        lease.startReadinessObservation(
+            clients,
+            reservation.space?.let {
+                CollaborationSpaceRuntimeReady(it.owner, it.deviceId, it.operationId)
+            },
+            { readiness.tryEmit(it) },
+            { spaceReadiness.tryEmit(it) },
+        )
         clients.restorePaused(client, prepared.session)
         if (!registry.accepts(reservation))
             throw CancellationException("SDK acquisition was retired.")

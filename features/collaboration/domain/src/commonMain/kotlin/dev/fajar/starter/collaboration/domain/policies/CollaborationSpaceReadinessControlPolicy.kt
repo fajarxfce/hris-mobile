@@ -1,7 +1,9 @@
 package dev.fajar.starter.collaboration.domain.policies
 
+import dev.fajar.starter.collaboration.domain.entities.CollaborationNativeParent
 import dev.fajar.starter.collaboration.domain.entities.CollaborationSpaceReadinessControl
 import dev.fajar.starter.collaboration.domain.entities.CollaborationSpaceReadinessScope
+import dev.fajar.starter.collaboration.domain.entities.CollaborationSpaceReadinessSignal
 
 const val COLLABORATION_SPACE_READINESS_CONTROL_TYPE = "dev.fajar.hris.space_recipient_ready"
 private const val MAX_SPACE_PUBLICATION_MILLIS = 253_402_214_399_999L
@@ -70,3 +72,28 @@ fun validCollaborationSpaceReadinessScope(scope: CollaborationSpaceReadinessScop
         scope.parent.audience.all { it.code in 33..126 } &&
         listOf(scope.parent.accountId, scope.parent.nativeSessionId, scope.spaceId, scope.deviceId)
             .all { it != ZERO_SPACE_READINESS_ID && validCollaborationMessageId(it) }
+
+/**
+ * Pure source matching only; current session and exact live runtime still need repository guards.
+ */
+fun collaborationSpaceReadinessScope(
+    signal: CollaborationSpaceReadinessSignal,
+    parent: CollaborationNativeParent,
+): CollaborationSpaceReadinessScope? {
+    val source = signal.source
+    val control = signal.control
+    val scope = CollaborationSpaceReadinessScope(parent, source.owner.spaceId, source.deviceId)
+    if (
+        source.owner.parent != parent ||
+            source.operationId == ZERO_SPACE_READINESS_ID ||
+            !validCollaborationMessageId(source.operationId) ||
+            !validCollaborationSpaceReadinessScope(scope) ||
+            !validCollaborationSpaceReadinessControl(control) ||
+            control.spaceId != source.owner.spaceId ||
+            control.accountId != parent.accountId ||
+            control.nativeSessionId != parent.nativeSessionId ||
+            control.deviceId != source.deviceId
+    )
+        return null
+    return scope
+}

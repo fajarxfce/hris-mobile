@@ -20,7 +20,8 @@ import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.domain.entities.CollaborationProviderHistoryPage
 import dev.fajar.starter.collaboration.domain.entities.CollaborationReadReceiptVisibility
 import dev.fajar.starter.collaboration.domain.entities.CollaborationReadinessSignal
-import dev.fajar.starter.collaboration.domain.policies.COLLABORATION_READINESS_CONTROL_TYPE
+import dev.fajar.starter.collaboration.domain.entities.CollaborationSpaceReadinessSignal
+import dev.fajar.starter.collaboration.domain.entities.CollaborationSpaceRuntimeReady
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeLease
 import dev.fajar.starter.common.result.*
@@ -68,7 +69,7 @@ internal constructor(
     private var httpObservationJob: Job? = null
     private val readinessStarted = AtomicBoolean()
     private val matrixUserId = record.matrixUserId
-    private var readiness: AndroidSdkReadinessRegistration? = null
+    private var readiness: AndroidSdkReadinessRegistration<*>? = null
     private val sync =
         SdkSyncLifecycle(lifetime) { createAndroidCollaborationSync(nativeClient, lifetime) }
     private val children = SdkChildResources(lifetime)
@@ -146,24 +147,30 @@ internal constructor(
     /** Acquisition owns registration before restore/sync; shutdown joins acquisition first. */
     internal fun startReadinessObservation(
         source: AndroidCollaborationClientSource,
+        space: CollaborationSpaceRuntimeReady?,
         offer: (CollaborationReadinessSignal) -> Unit,
+        offerSpace: (CollaborationSpaceReadinessSignal) -> Unit,
     ) {
         if (closingRequested || !readinessStarted.compareAndSet(false, true)) return
         val registration =
-            AndroidSdkReadinessRegistration(
-                owner,
-                deviceId,
-                matrixUserId,
-                { !closingRequested },
-                offer,
-            )
+            if (space == null)
+                AndroidSdkReadinessRegistration.company(
+                    owner,
+                    deviceId,
+                    matrixUserId,
+                    { !closingRequested },
+                    offer,
+                )
+            else
+                AndroidSdkReadinessRegistration.organization(
+                    space,
+                    matrixUserId,
+                    { !closingRequested },
+                    offerSpace,
+                )
         readiness = registration
         registration.attach(
-            source.observeCustomToDevice(
-                nativeClient,
-                COLLABORATION_READINESS_CONTROL_TYPE,
-                registration,
-            )
+            source.observeCustomToDevice(nativeClient, registration.eventType, registration)
         )
     }
 

@@ -2,10 +2,15 @@ package dev.fajar.starter.collaboration.domain.repositories
 
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.emptyFlow
 
 /** Original store I/O and logical SDK lifetime. The owning use case admits every live operation. */
 interface CollaborationSpaceRuntimeRepository {
+    /** Bounded callbacks from installed native clients only; no acquisition or wake scheduling. */
+    fun spaceReadinessSignals(): Flow<CollaborationSpaceReadinessSignal> = emptyFlow()
+
     /**
      * Holds the existing paused writer for an exact logical runtime and known original room. Does
      * not open a store, join, sync, enqueue or grant server admission. The owning use case must

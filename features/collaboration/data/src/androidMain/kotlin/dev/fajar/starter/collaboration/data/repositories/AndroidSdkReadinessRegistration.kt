@@ -8,13 +8,60 @@ import org.matrix.rustcomponents.sdk.ToDeviceMessage
 import org.matrix.rustcomponents.sdk.ToDeviceMessageListener
 
 /** Exact-client callback/handle ownership. Its sink only offers a bounded, opaque signal. */
-internal class AndroidSdkReadinessRegistration(
-    private val owner: CollaborationOwner,
-    private val deviceId: String,
+internal class AndroidSdkReadinessRegistration<Signal>
+private constructor(
+    val eventType: String,
     private val matrixUserId: String,
     private val isCurrent: () -> Boolean,
-    private val offer: (CollaborationReadinessSignal) -> Unit,
+    private val parse: (Map<String, String>) -> Signal?,
+    private val offer: (Signal) -> Unit,
 ) : ToDeviceMessageListener, AutoCloseable {
+    companion object {
+        fun company(
+            owner: CollaborationOwner,
+            deviceId: String,
+            matrixUserId: String,
+            isCurrent: () -> Boolean,
+            offer: (CollaborationReadinessSignal) -> Unit,
+        ): AndroidSdkReadinessRegistration<CollaborationReadinessSignal> =
+            AndroidSdkReadinessRegistration(
+                COLLABORATION_READINESS_CONTROL_TYPE,
+                matrixUserId,
+                isCurrent,
+                { fields ->
+                    parseCollaborationReadinessControl(fields)
+                        ?.takeIf {
+                            it.companyId == owner.companyId &&
+                                it.accountId == owner.accountId &&
+                                it.nativeSessionId == owner.nativeSessionId &&
+                                it.deviceId == deviceId
+                        }
+                        ?.let { CollaborationReadinessSignal(owner, deviceId, it) }
+                },
+                offer,
+            )
+
+        fun organization(
+            source: CollaborationSpaceRuntimeReady,
+            matrixUserId: String,
+            isCurrent: () -> Boolean,
+            offer: (CollaborationSpaceReadinessSignal) -> Unit,
+        ): AndroidSdkReadinessRegistration<CollaborationSpaceReadinessSignal> =
+            AndroidSdkReadinessRegistration(
+                COLLABORATION_SPACE_READINESS_CONTROL_TYPE,
+                matrixUserId,
+                isCurrent,
+                { fields ->
+                    parseCollaborationSpaceReadinessControl(fields)
+                        ?.let { CollaborationSpaceReadinessSignal(source, it) }
+                        ?.takeIf {
+                            collaborationSpaceReadinessScope(it, source.owner.parent) != null
+                        }
+                },
+                offer,
+            )
+    }
+
     private val monitor = Any()
     private var active = true
     private var attached = false
@@ -58,7 +105,7 @@ internal class AndroidSdkReadinessRegistration(
             if (
                 !active ||
                     !isCurrent() ||
-                    message.eventType != COLLABORATION_READINESS_CONTROL_TYPE ||
+                    message.eventType != eventType ||
                     message.senderId != matrixUserId ||
                     message.encryptionInfo != null ||
                     message.content.length !in 1..4096
@@ -78,15 +125,8 @@ internal class AndroidSdkReadinessRegistration(
                     put(key, primitive.content)
                 }
             }
-            val control = parseCollaborationReadinessControl(fields) ?: return
-            if (
-                control.companyId != owner.companyId ||
-                    control.accountId != owner.accountId ||
-                    control.nativeSessionId != owner.nativeSessionId ||
-                    control.deviceId != deviceId
-            )
-                return
-            offer(CollaborationReadinessSignal(owner, deviceId, control))
+            val signal = parse(fields) ?: return
+            offer(signal)
         }
     }
 

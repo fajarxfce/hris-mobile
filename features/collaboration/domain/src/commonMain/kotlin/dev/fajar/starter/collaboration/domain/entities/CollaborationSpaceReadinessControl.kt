@@ -21,3 +21,11 @@ data class CollaborationSpaceReadinessScope(
 ) {
     override fun toString() = "CollaborationSpaceReadinessScope([redacted])"
 }
+
+/** The installed logical runtime supplies the source; packet fields cannot choose it. */
+data class CollaborationSpaceReadinessSignal(
+    val source: CollaborationSpaceRuntimeReady,
+    val control: CollaborationSpaceReadinessControl,
+) {
+    override fun toString() = "CollaborationSpaceReadinessSignal([redacted])"
+}

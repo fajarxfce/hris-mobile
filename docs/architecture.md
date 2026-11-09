@@ -1,5 +1,9 @@
 # Architecture
 
+[Organization readiness listeners](collaboration-space-readiness-listener.md) preserve
+logical runtime provenance and original Matrix sender identity through one owned
+native subscription lifetime; durable recovery remains a separate owning flow.
+
 [Organization readiness receipts](collaboration-space-readiness-receipts.md) keep strict
 V1 control facts and encrypted revision storage separate from company controls,
 current native runtime ownership and actual recovery scheduling.

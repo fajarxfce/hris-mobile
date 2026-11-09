@@ -15,9 +15,12 @@ class AndroidCollaborationReadinessLifetimeTest {
         val f = runtimeLeaseFixture(StandardTestDispatcher(testScheduler))
         try {
             repeat(3) {
-                f.lease.startReadinessObservation(AndroidCollaborationSdkClientSource()) {
-                    error("No packets")
-                }
+                f.lease.startReadinessObservation(
+                    AndroidCollaborationSdkClientSource(),
+                    null,
+                    { error("No packets") },
+                    { error("Unexpected organization packet") },
+                )
             }
             assertEquals(listOf("readiness.subscribe"), f.calls)
             f.lease.finishAcquisition()
@@ -37,16 +40,22 @@ class AndroidCollaborationReadinessLifetimeTest {
         val f = runtimeLeaseFixture(StandardTestDispatcher(testScheduler))
         try {
             f.beforeReadinessSubscribe = { f.lease.requestClose() }
-            f.lease.startReadinessObservation(AndroidCollaborationSdkClientSource()) {
-                error("Closed owner")
-            }
+            f.lease.startReadinessObservation(
+                AndroidCollaborationSdkClientSource(),
+                null,
+                { error("Closed owner") },
+                { error("Unexpected organization packet") },
+            )
             assertEquals(
                 listOf("readiness.subscribe", "readiness.cancel", "readiness.close"),
                 f.calls,
             )
-            f.lease.startReadinessObservation(AndroidCollaborationSdkClientSource()) {
-                error("No reopen")
-            }
+            f.lease.startReadinessObservation(
+                AndroidCollaborationSdkClientSource(),
+                null,
+                { error("No reopen") },
+                { error("Unexpected organization packet") },
+            )
             f.lease.finishAcquisition()
             assertEquals(AppResult.Success(Unit), f.lease.close())
             assertEquals(1, f.calls.count { it == "readiness.close" })
@@ -62,9 +71,12 @@ class AndroidCollaborationReadinessLifetimeTest {
         try {
             f.failReadinessSubscribe = true
             assertFailsWith<IllegalStateException> {
-                f.lease.startReadinessObservation(AndroidCollaborationSdkClientSource()) {
-                    error("No packets")
-                }
+                f.lease.startReadinessObservation(
+                    AndroidCollaborationSdkClientSource(),
+                    null,
+                    { error("No packets") },
+                    { error("Unexpected organization packet") },
+                )
             }
             val closing = async { f.lease.close() }
             runCurrent()

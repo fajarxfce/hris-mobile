@@ -89,6 +89,7 @@ internal class RuntimeLeaseFixture(
     var readRoom: (String) -> Room? = { error("No room read expected") }
     var joinRoom: suspend (String) -> Room = { error("No room join expected") }
     var readinessListener: ToDeviceMessageListener? = null
+    var expectedReadinessEventType = "dev.fajar.hris.recipient_ready"
     var beforeReadinessSubscribe: () -> Unit = {}
     var failReadinessSubscribe = false
     var syncRequests = 0
@@ -111,7 +112,7 @@ internal class RuntimeLeaseFixture(
                 eventTypes: List<String>,
                 listener: ToDeviceMessageListener,
             ): TaskHandle {
-                assertEquals(listOf("dev.fajar.hris.recipient_ready"), eventTypes)
+                assertEquals(listOf(expectedReadinessEventType), eventTypes)
                 calls += "readiness.subscribe"
                 readinessListener = listener
                 beforeReadinessSubscribe()

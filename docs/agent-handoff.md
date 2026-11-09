@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 20:57 UTC. Historical detail is retained in
+Updated 9 November 2026, 21:17 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -41,9 +41,10 @@ were formatted with pinned ktfmt0.59. Private `.work/space-readiness-protocol-20
   accept.py verifies all current source/library/report hashes and actual case counts.
 - [Contract](collaboration-space-readiness-receipts.md) and
   [measurement](measurements/collaboration-space-readiness-receipts-2026-11-09.json).
-- No failed gate. No active local compiler/emulator. Next commit/push this increment,
-  then dispatch fresh collaboration-control workflow on that immutable SHA. Audit
-  using private hosted-audit.py with hosted.json run ID/source SHA after dispatch.
+- No failed gate. Protocol source da248173 is committed/pushed;93828 is reaped.
+  Fresh hosted run42697887863 is IN PROGRESS on exact
+  da2481732e51132fac7249fc31d732f037c2222c. Dispatch16122 is reaped. Audit using
+  private hosted-audit.py and hosted.json;no hosted acceptance yet.
   Do not rerun accepted42656803963. Expected additions to that full hosted baseline
   are24 portable and12 Apple cases;actual reports/digests must be verified.
 
@@ -65,6 +66,43 @@ native work may proceed while hosted jobs run against the immutable protocol com
 No SDK7,APK88,emulator,phone or live change. Phone87 remains installed. This is still
 one increment;all54 broader PRD acceptance groups remain open. Native callbacks,
 durable group wake ownership,background recovery and product routing remain required.
+
+## Current successor: native group signal ownership accepted locally
+
+Private `.work/space-readiness-native-2026-11-09` pinsda248173. Eleven Kotlin inputs
+add trusted logical source/scope matching,separate bounded group callback stream and
+one existing TaskHandle lifetime through explicit company/group factories. Actual
+Matrix sender stays the original physical identity;packet fields cannot select it.
+No app collector,wake ACK,sync activation,new SDK,APK or live change is included.
+
+- Formatter99469 is reaped. focused-1 /30283 REAPED PASS198.331s:84 cases,
+  zero failures/errors/skips and4,584 stable source inputs. Four new pure source and
+  five group frame/real-lease inert-FFI cases join existing company,registry,adoption
+  and original-queue cases. Format/architecture/detekt pass.
+- full-1 /45533 REAPED PASS630.629s:4,297 fresh cases=3,645 desktop+626 Android
+  host+26 forced browser,zero failures/errors/skips. Required root check,Android
+  release compile/lint,shared Wasm/iOS source and quality pass. Both source manifests
+  are identical;Inspector inputs unchanged. accept.py verifies every current source,
+  library and fresh XML hash,case count and both new regression classes.
+- [Contract](collaboration-space-readiness-listener.md) and
+  [measurement](measurements/collaboration-space-readiness-listener-2026-11-09.json).
+- No active local compiler/emulator. Protocol hosted42697887863 remains separate,
+  running on immutableda248173. Do not claim its evidence for these successor bytes.
+  No actual provider/native callback measurement or phone build yet.
+
+Next actual group recovery work is detailed in private wake-processing-next.md.
+Use a dedicated group work key over the existing WorkWakeStore with exact-generation
+ACK;the company-only worker cannot discharge group work. The local encrypted room
+binding namespace has two immutable HMAC indexes per conversation. Bounded local
+paging must authenticate both,emit one conversation,advance even over room-index-only
+pages and define concurrent append/generation change semantics. Do not restart full
+API/native/SDK/phone proofs already accepted earlier,or the retired confirmation API.
+
+Native callbacks retain atomic stop fencing only. Calling registry.findSpace inside
+the registration monitor would invert locks against registry retirement/deactivation.
+The eventual consuming flow guards the current parent/runtime outside that monitor,
+retains pending revision before requesting group work,and acknowledges only after
+actual durable handoff. Group foreground sync/recovery/product routing remain required.
 
 ## Current checkouts and runtime
 
