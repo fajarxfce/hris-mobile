@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 17:06 UTC. Historical detail is retained in
+Updated 9 November 2026, 17:19 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -137,13 +137,22 @@ Group now has uncommitted NativeSpaceOriginalFixture/DeliveryTest, a bounded nat
 request counter, provider encrypted-event inspection and an owned Python driver. Six
 ownership/SDK artifact guard tests pass. Its compilation31.843s failed only on Jackson
 JsonNode map overload selection; corrected compilation32.624s passes on8,697 stable
-inputs. Source-3 /21551 is REAPED PASS32.425s on8,698 stable inputs after review corrected
-nested room fields and added finite transport/bootstrap counters. Existing driver82
-and new ownership6 Python tests pass. Native61494 (`native-3`) is RUNNING with both
-Mobile and Group sources frozen. Fresh isolated x86_64 emulator booted40.882s,
-2560MiB/two cores. Earlier native-1/2 failed only emulator setup (absent initial image,
-then missing private encryption image); no server/test/message was started. Both are
-reaped and stopped; corrections use the SDK blank image, never retained sender data.
+inputs. Source-3 /21551 passes32.425s. Native61494/native-3 then fails136.271s on a driver
+checkpoint/terminal-state read race. Retained app inspection finds both staged originals,
+unchanged identities and closed SDKs; terminal instrumentation-file inspection fails.
+A seven-case Python regression first reproduces the race (one error), then passes after
+an explicit checkpoint reread. The Mobile proof and production code are unchanged.
+
+Native5680/native-4 fails121.262s at recipientReady=false: the original company key
+publication is correctly insufficient for organization receiving. Group now establishes
+that precondition through its actual admitted gateway keys/upload using the original
+SDK's exact signed public identity, validated against the retained fingerprint. No
+new keys, SQL publication injection or weakened readiness checks. This explicitly does
+NOT prove automatic Mobile first-publication activation; that remains required before
+product routing. Group source1075/source-4 passes32.002s on8,698 stable inputs.
+**Native31328/native-5 is RUNNING** with unchanged Mobile proof APK and frozen Group/
+Mobile source manifests. The fresh2560MiB/two-core emulator boots30.421s; all previous
+failed experiment devices are stopped and retained. No actual delivery acceptance yet.
 Mobile source4649 failed192.054s solely on the new proof's LongMethod;20 tests passed.
 The cohesive bootstrap/adoption phase was extracted without suppression. Source89458
 (source-2) is REAPED PASS131.229s:20 fresh tests,zero failures/errors/skips,4,572 stable
@@ -308,12 +317,13 @@ Draft66 092041 must NEVER be sent. All native/emulator jobs are reaped and stopp
 
 ## Next work
 
-1. Reap the running native61494 experiment and inspect exact checkpoints/failures.
+1. Reap the running native31328/native-5 experiment and inspect checkpoints/failures.
    Preserve failed fixture app data, original transactions and the stopped sender87.
    Audit hosted42656803963 separately; no duplicate dispatch or phone install.
 2. Direct contracts ab17eadd/96d2d238 and reconciliationfa90ddcc are accepted/pushed;
    do not reapply or rerun those unchanged gates.
-3. Continue owning original SDK delivery/history, current recipient readiness, worker
+3. Implement automatic original-key publication activation, then continue SDK delivery/history,
+   current recipient readiness, worker
    lifetimes and group UI routing. Existing Room Prepare/Resolve/Replay use cases and
    immutable stores are accepted; do not recreate them or replace uncertain originals.
 4. Continue rich message actions/media/stickers/voice, Drive/iCloud encrypted recovery,
