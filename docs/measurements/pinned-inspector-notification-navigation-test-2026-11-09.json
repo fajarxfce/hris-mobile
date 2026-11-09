@@ -48,7 +48,7 @@
   ],
   "rootCause": "The navigation integration test observed New chat shell then asserted three rows while the independently acquired list still rendered Loading; the recorded semantics show Chat selected and Conversations selected.",
   "change": "Wait for the same required three colleague nodes inside the existing bounded Compose wait; preserve exact count, display, pending-link and no-send assertions.",
-  "validation": "Candidate format passes; focused integration and fifth full verify still pending",
+  "validation": "Focused integration, formatting, architecture and Detekt pass; fifth full public verify remains active",
   "priorFailures": [
     "Transport cancellation now passed",
     "Prior desktop SIGABRT not reproduced; cause still unclassified and diagnostics retained"
@@ -58,5 +58,31 @@
     "elapsedSeconds": 0.649,
     "formatter": "Pinned ktfmt0.59; only changed file,128MiB process; no second Gradle compiler"
   },
-  "candidateSourceSha256": "f48831791eaca2826309b79002214511fff5030d921d01a06094641b7a43652d"
+  "candidateSourceSha256": "f48831791eaca2826309b79002214511fff5030d921d01a06094641b7a43652d",
+  "localFocused": {
+    "startedAt": "2026-11-09T11:00:52.906531+00:00",
+    "elapsedSeconds": 95.455,
+    "exitCode": 0,
+    "sourceFiles": 4528,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativeLinkAppFlowTest.xml": {
+        "sha256": "d0bfb393f31fc61dce0c4e87ee5d4e75f2eb9a64efed13f29a2657aa58943ea6",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "candidateSource": "3657ada9c14f600f53921849e484cd16c2cdcdb6",
+  "nextRun": 42604884828,
+  "nextJob": 129118204113
 }
