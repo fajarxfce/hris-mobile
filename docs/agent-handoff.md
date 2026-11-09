@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 21:42 UTC. Historical contracts, failed experiments and
+Updated 9 November 2026, 21:56 UTC. Historical contracts, failed experiments and
 accepted evidence are retained in
 [a877c088](https://github.com/fajarxfce/hris-mobile/blob/a877c088/docs/agent-handoff.md).
 This file owns current work. Do not restart jobs from historical notes.
@@ -41,6 +41,23 @@ organization recovery worker is bound. Collector activation alone is incomplete.
   No SDK, APK, emulator, phone or live change. Commit and push before editing
   successor Kotlin inputs.
 
+## Active successor: bounded local room inventory — unaccepted
+
+Private `.work/space-room-binding-inventory-2026-11-09` pins accepted 01544c26.
+Five Kotlin inputs add a separate paged-read contract implemented by the existing
+binding repository, stable account/generation/revision cursors, nine actual database
+regressions in the existing shared storage contract, and a same-instance DI assertion.
+No original ciphertext, schema, network, key creation, worker or app activation changes.
+
+Pinned formatting has completed. focused-1 /51195 is REAPED PASS208.1s:25 cases,
+23 storage +2 graph,zero failures/errors/skips,4,595 stable inputs and strict current
+source/library/XML audit. full-1 /11069 RUNNING owns the only heavy compiler;
+expected4,328 fresh cases under required root/platform/forced browser/quality checks.
+Keep five Kotlin source inputs frozen until reaped. No emulator or phone change. The reader
+returns explicit continuation even for room-index-only empty projections, authenticates
+both immutable indexes, and reports concurrent appends for a later fresh sweep.
+Its local inventory is not content permission or completed recovery.
+
 ## Accepted readiness increments
 
 - Group d4246a08: independent MATRIX/PUSH workers and complete application wiring.
@@ -60,15 +77,18 @@ Hosted run [42697887863](https://github.com/fajarxfce/hris-mobile/actions/runs/4
 is pinned to da2481732e51132fac7249fc31d732f037c2222c, not successor source.
 Portable is accepted: 6,662 cases =3,089 desktop +621 Android host +2,952 browser,
 zero failures/errors/skips; exact artifact/report completeness and digest audit pass.
-Apple is still running the Xcode application host step. On completion, run the
-private protocol `hosted-audit.py apple`; expected additions are 12 Apple cases.
-Record actual results, never infer success or attribute this evidence to native/wake
-successors. Accepted older hosted 42656803963 passes 9,137 cases with unsigned Xcode;
-use only as the report-set baseline, never rerun unchanged execution.
+Apple is also accepted: 2,511 simulator cases, zero failures/errors/skips, and
+successful unsigned Xcode host. Audit30032 is reaped; SHA256, GitHub digest, ZIP CRC,
+every XML and the full baseline report set plus12 new cases pass. Combined9173 cases.
+[Hosted measurement](measurements/collaboration-space-readiness-protocol-hosted-2026-11-09.json).
+No remote CI remains active. Do not rerun unchanged42697887863 or accepted older
+42656803963 (9137 cases). This immutable protocol evidence does not cover native/wake/
+inventory successors or native Apple Matrix/APNs/calling behavior.
 
 ## Next implementation
 
-1. Commit/push accepted wake work and finish the separate immutable protocol CI audit.
+1. Wake01544c26 is committed/pushed;18367 reaped. Protocol CI42697887863 is accepted;
+   both audits are reaped. Finish inventory full11069 and its exact acceptance audit.
 2. Add bounded local enumeration of encrypted room bindings. There are two immutable
    HMAC indexes per conversation; authenticate both and emit one binding. Advance
    past room-index-only pages without mistaking an empty projection for exhaustion.
@@ -85,9 +105,14 @@ use only as the report-set baseline, never rerun unchanged execution.
    ownership on that same client, then bind app collector/worker lifetimes and product
    routing. Never acquire the registry lock inside the native callback monitor:
    registry retirement already deactivates callbacks while holding its lock.
-5. Prove actual group control -> durable wake -> one original provider delivery,
+5. Existing registry retention already preserves logical group entries by exact native
+   parent, independently of the selected company. Reuse the application parent state;
+   do not add another global native owner. Review legacy activation/delivery routing
+   before rollout, because legacy operations deliberately cannot reach adopted entries.
+   Private inventory `worker-next.md` records the grounded remaining design.
+6. Prove actual group control -> durable wake -> one original provider delivery,
    including duplicates/process loss without FCM dependence, before product rollout.
-6. Continue rich message actions/media/stickers/voice, encrypted Drive/iCloud recovery,
+7. Continue rich message actions/media/stickers/voice, encrypted Drive/iCloud recovery,
    MatrixRTC native calls, LiveKit meetings and the remaining PRD/delivery.json scope.
 
 Original key activation is already fixed and accepted in Group 61e8c2f5: completion
@@ -101,8 +126,8 @@ The explicit vendor key-confirmation endpoint was retired. Never reapply archive
 
 | Checkout | Branch / accepted source | State |
 | --- | --- | --- |
-| Mobile | feat/chat-send-timing-20261107 / a877c088 | Accepted wake source awaits commit/push |
-| Platform original | feat/communications / 72fd7ca4 | Handoff current; recovery verifier remains schema116.4 |
+| Mobile | feat/chat-send-timing-20261107 / 01544c26 | Wake accepted/pushed; inventory successor under validation |
+| Platform original | feat/communications / 604dffc6 | Handoff current; recovery verifier remains schema116.4 |
 | Platform group | feat/communication-space / d4246a08 | Separate worktree; V140 workers accepted/pushed |
 | Starter | feat/network-inspector-20261107 / ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Inspector | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Public SDK6 integrated |

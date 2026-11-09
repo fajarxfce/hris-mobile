@@ -45,3 +45,14 @@ actual durable organization wake processing. The existing company-only recovery
 sweep cannot by itself acknowledge an organization signal. Parser acceptance and
 receipt persistence are not proof of device wake or message delivery. Native callback,
 background recovery,product routing and phone rollout remain separate work.
+
+Hosted run [42697887863](https://github.com/fajarxfce/hris-mobile/actions/runs/42697887863)
+also passes on immutable `da2481732e51132fac7249fc31d732f037c2222c`: 9,173 cases,
+comprising 6,662 portable/Android-host/browser and 2,511 Apple simulator cases, with
+zero failures, errors or skips. The unsigned iOS application host builds successfully.
+Artifact SHA256, GitHub digests, ZIP CRCs, every XML report/count and the complete
+previous report set plus the new protocol/storage cases are verified. Apple includes
+eight actual Room receipt cases and four protocol cases. This evidence predates the
+native-listener, wake and local-inventory successors; it does not validate their bytes
+or implement native Apple Matrix callbacks.
+[Hosted evidence](measurements/collaboration-space-readiness-protocol-hosted-2026-11-09.json).
