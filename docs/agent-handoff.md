@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 16:05 UTC. Historical detail is retained in
+Updated 9 November 2026, 16:14 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -38,30 +38,31 @@ its apparent gradlew.bat change is text/eol normalization, not a byte change.
 Live API/worker remains e558a6868399058a2dcdee97acfd0e7fa7f1ef07, schema116.4,
 readiness control ON. Group V117–138 and organization routing are not deployed.
 
-## Active direct-transport candidate
+## Accepted direct transport
 
-Thirteen Mobile Kotlin files are uncommitted: finite native direct-transport API,
+Thirteen Mobile Kotlin files implement the finite native direct-transport API,
 datasource/repository/DTO, public domain facts and pure validation; published-room
-mapping extraction; eight transport test methods and the application DI assertion.
-[Contract](collaboration-space-direct-transport.md) records current scope and limits.
-Direct ktfmt0.59 parsing/formatting passed0.954s,0.866s and0.968s after stricter
-ID/time/encoded-identity validation;256MiB heap, no Kotlin/test acceptance yet.
-Focused25221 PASSES203.352s:23 fresh cases (8 direct,13 existing room,2 app DI),
-zero failures/errors/skips,4,562 unchanged inputs and unchanged Inspector sources.
-Full90875 FAILED22.617s before testing: the private browser init used a KotlinJsTest
-filter closure that does not exist. Its script/result are preserved. The corrected
-getFilter/includeTestsMatching runner archives the exact init script used. Full94359
-(`full-2`) is RUNNING and owns frozen Mobile source; no full acceptance yet.
-Browser evidence must contain both exact data classes (8+13), not inherited filters.
+mapping extraction; eight transport test methods and application DI resolution.
+[Contract](collaboration-space-direct-transport.md) and
+[measurement](measurements/collaboration-space-direct-transport-2026-11-09.json)
+record source scope, exact report hashes and limits. No SDK/UI/worker caller is added.
+Device SPACE does not imply user SPACE: a new HRISG_ crypto device may retain its
+LEGACY selected user/original room. Logical and physical device IDs stay distinct.
 
-Review corrected one draft assumption before compilation: device SPACE does not mean
-user SPACE. A new HRISG_ crypto device may retain a LEGACY selected user/original room.
-Tests include all valid combinations and reject a mismatched physical device/user.
-The backend `.work/space-direct-transport-2026-11-09/candidate` now has12 files including
-API, DI and tests (seven actual SQL methods, three pure policy methods, HTTP/OpenAPI).
-Formatter2.017s covers all11 files; it remains private, applied after accepted/pushed fa90ddcc and exact base/source checks.
-The backend contract is now accepted/pushed as96d2d238 after exact SQL/API/worker
-source/XML audit; its nine final corrected cases pass148.630s. Full Mobile still runs.
+- Focused25221 is REAPED PASS203.352s:23 fresh cases (8 direct,13 existing room,2 app DI).
+- Full90875 FAILED22.617s before testing: unsupported private browser filter closure.
+  Its script/result are preserved. No application source changed for the correction.
+- Full94359 (`full-2`) is REAPED PASS548.834s:4,237 fresh cases (3,595 desktop,
+  621 Android host,21 browser), zero failures/errors/skips. Both exact browser classes
+  contain8+13 cases. All4,562 application inputs and Inspector sources stayed fixed.
+  Root, release compilation/lint, Wasm, Linux iOS source/configuration and quality pass.
+  Exact archived init SHAbe393ff16f62e2e6a48c533eab388c2de95d05afb76a223ed8ea5371dcc87fef.
+- Strict publisher verified reports/manifests and accepted the source contract.
+  This does not claim native Apple execution, a new APK or product activation.
+
+Backend96d2d238 is accepted/pushed with452 audited domain/SQL/API/FULL-worker cases;
+its nine final corrected cases pass148.630s. Live runtime/schema remain unchanged.
+All local heavy jobs are reaped. Do not repeat accepted source reconciliation or gates.
 
 Hosted42628449460 is complete SUCCESS on exact78076d4e. Both artifacts match GitHub
 digests and ZIP CRC. [Hosted evidence](measurements/collaboration-space-binding-hosted-2026-11-09.json)
@@ -189,7 +190,7 @@ maximum. Group keeps138; do not copy either branch's schema maximum to the other
  unchanged reports remain identified by their original gate. Only three SQL/API fixture
  files changed; production/DI/build/worker inputs stayed identical. Backend96d2d238 is
  committed/pushed;85313 is reaped. Reconciliation33511/fa90ddcc and hosted42628449460
- must not be rerun. Mobile full94359 is now the only heavy job.
+ must not be rerun. Mobile full94359 also passed and is reaped; no heavy job remains.
 
 The Group increment now contains twelve Kotlin files, including the actual LEGACY
 publication regression. Its guarded initial apply must not be repeated. All private
@@ -240,9 +241,10 @@ Draft66 092041 must NEVER be sent. All native/emulator jobs are reaped and stopp
 
 ## Next work
 
-1. Hosted42628449460 is accepted/reaped; preserve its proof and continue the pending direct-transport candidate.
-2. Validate/finish the Platform source merge with shared API/FULL worker and actual
-   SQL/RLS/migration/projection checks. Keep live runtime unchanged during source work.
+1. Commit/push the accepted Mobile direct contract with its exact evidence. Backend
+   reconciliation and direct transport are already accepted/pushed; do not reapply them.
+2. Apply the seven guarded original matching files only from clean accepted checkouts,
+   then implement the owning original delivery operation and its cancellation/recovery tests.
 3. Continue owning original SDK delivery/history, current recipient readiness, worker
    lifetimes and group UI routing. Existing Room Prepare/Resolve/Replay use cases and
    immutable stores are accepted; do not recreate them or replace uncertain originals.

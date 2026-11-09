@@ -1,8 +1,8 @@
 # Native direct transport observation
 
-Status: implementation candidate, not compiled or accepted yet. The corresponding
-backend route is a private candidate behind the ongoing organization-source merge;
-organization routing stays disabled. No delivery, UI, worker or SDK caller is added.
+Status: accepted source contract. The corresponding backend route is accepted and
+pushed as96d2d238 after the source reconciliation fa90ddcc. Organization routing stays
+disabled; neither contract is deployed or connected to a delivery, UI, worker or SDK caller.
 
 `CollaborationSpaceDirectTransportRepository.read` requests one finite native GET at
 `collaboration/spaces/{spaceId}/direct-conversations/{conversationId}/transport`.
@@ -35,14 +35,19 @@ resolution. Tests cover one GET, false/true readiness, expired short access, bot
 original/new crypto-store combinations, exact immutable ownership, malformed/oversized
 responses, authentication/service failure limits and cancellation. The existing room
 mapper is factored without changing its validation; its prior transport tests remain
-in the focused/browser checks. Formatting passed; Kotlin, browser, Android and root
-checks are pending behind the one-heavy-local-job rule.
+in the focused/browser checks. Focused verification passes23 fresh cases. The full
+local gate passes4,237 fresh cases:3,595 desktop,621 Android host and21 browser,
+with zero failures, errors or skips. All4,562 application inputs and Inspector sources
+stayed unchanged. Root, release compilation/lint, Wasm, Linux iOS source/configuration,
+formatting, architecture and Detekt checks passed. This is not Apple native execution.
 
-Private local runner: `.work/space-direct-transport-2026-11-09/check.py` (prepared, not
-executed). Group full reconciliation33511 owns the heavy slot. Do not turn draft source
-or a formatter result into a feature, Apple runtime or phone acceptance claim. Continue
-with the owning original SDK queue delivery and group recipient-ready wake after the
-backend and Mobile contract are validated. HRIS-specific policy is not a Starter port.
+[Accepted measurement](measurements/collaboration-space-direct-transport-2026-11-09.json)
+records exact source and report hashes. The first full attempt failed before testing
+because its private browser init used an unsupported filter closure; the corrected
+runner archives the exact executed script and verifies both browser classes (8+13).
+Private runner/evidence: `.work/space-direct-transport-2026-11-09`. All jobs are reaped.
+No APK was assembled or installed. Continue with the owning original SDK queue delivery
+and group recipient-ready wake. HRIS-specific policy is not a Starter port.
 
 ## Original delivery integration still required
 
@@ -64,4 +69,4 @@ gated current projection.
 Backend group key publication already atomically journals
 `collaboration.space_device_keys_published` once at version0-to1. Group readiness needs
 an owned consumer of that event. Group sync must continue to reject company readiness
-controls as a different scope; no client polling loop is introduced by this draft.
+controls as a different scope; no client polling loop is introduced by this contract.

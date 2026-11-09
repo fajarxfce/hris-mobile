@@ -1,0 +1,94 @@
+{
+  "observedAt": "2026-11-09T16:10:02.681718+00:00",
+  "status": "Accepted Mobile source contract; no product activation",
+  "backendCommit": "96d2d238",
+  "focused": {
+    "startedAt": "2026-11-09T15:54:11.321997+00:00",
+    "elapsedSeconds": 203.352,
+    "exitCode": 0,
+    "sourceFiles": 4562,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "firstFullAttempt": {
+    "startedAt": "2026-11-09T15:57:58.619818+00:00",
+    "elapsedSeconds": 22.617,
+    "exitCode": 1,
+    "sourceFiles": 4562,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "full": {
+    "startedAt": "2026-11-09T16:00:09.318472+00:00",
+    "elapsedSeconds": 548.834,
+    "exitCode": 0,
+    "sourceFiles": 4562,
+    "initScriptSha256": "be393ff16f62e2e6a48c533eab388c2de95d05afb76a223ed8ea5371dcc87fef",
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 4237,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "scopes": {
+      "desktopTest": {
+        "suites": 412,
+        "tests": 3595,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 2,
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testAndroidHostTest": {
+        "suites": 86,
+        "tests": 621,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "browserReports": {
+      "TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSpaceRoomTransportTest.xml": 13,
+      "TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSpaceDirectTransportTest.xml": 8
+    }
+  },
+  "finalPhase": "full-2",
+  "sourceManifestSha256": "6749cc99715dc44b8e1b0f887992ce5fc1b845b380abc7bbc6c82c36f82ea8fc",
+  "librarySourceManifestSha256": "b8b64e4922b3270bc1151247617f614ea79a6a40c67cee0167ae52e330cc2e5d",
+  "reportManifestSha256": "190db688f289857369bac75b5e0090844d207b2e5584ae9b43002ef232f2a17e",
+  "corrections": [
+    "The private browser gate used a filter closure unsupported by KotlinJsTest. The corrected runner uses the existing getFilter/includeTestsMatching API and executes its archived exact init script. No application or library source changed."
+  ],
+  "checks": [
+    "Eight new direct transport and13 existing room transport cases on JVM and browser",
+    "Actual application DI resolves the new repository",
+    "Root check, Android host tests, release compile/lint, WebAssembly compilation, Linux iOS source/configuration tasks and quality checks"
+  ],
+  "limits": [
+    "This is finite read-only transport metadata. No SDK, worker, queue or UI caller is activated.",
+    "Original delivery, durable receipt projection, group readiness wake and product routing remain next.",
+    "No APK was assembled/installed; phone87 and live backend e558a686/schema116.4 remain unchanged.",
+    "New Apple native execution, APNs, calling and meeting acceptance are separate; earlier78076d4e hosted results are not reused as proof of this source.",
+    "All54 PRD acceptance groups remain open."
+  ]
+}

@@ -13,27 +13,28 @@ fun CollaborationSpaceRoomViewDto.toSpaceRoomView(
     return CollaborationSpaceRoomView(
             conversation,
             provisioning?.toSpaceRoomStatus(conversation),
-            room?.let {
-                CollaborationSpacePublishedRoom(
-                    it.roomId,
-                    it.serverName,
-                    CollaborationSpaceRoomOrigin.valueOf(it.origin),
-                    Instant.parse(it.publishedAt),
-                    it.original?.let { original ->
-                        CollaborationSpaceOriginalRoom(
-                            CollaborationOriginalConversationPosition(
-                                collaborationId(original.companyId),
-                                collaborationId(original.conversationId),
-                            ),
-                            original.roomId,
-                            Instant.parse(original.boundAt),
-                        )
-                    },
-                )
-            },
+            room?.toSpacePublishedRoom(),
         )
         .also { require(validCollaborationSpaceRoomView(it)) }
 }
+
+fun CollaborationSpacePublishedRoomDto.toSpacePublishedRoom(): CollaborationSpacePublishedRoom =
+    CollaborationSpacePublishedRoom(
+        roomId,
+        serverName,
+        CollaborationSpaceRoomOrigin.valueOf(origin),
+        Instant.parse(publishedAt),
+        original?.let {
+            CollaborationSpaceOriginalRoom(
+                CollaborationOriginalConversationPosition(
+                    collaborationId(it.companyId),
+                    collaborationId(it.conversationId),
+                ),
+                it.roomId,
+                Instant.parse(it.boundAt),
+            )
+        },
+    )
 
 private fun CollaborationSpaceRoomStatusDto.toSpaceRoomStatus(
     conversation: CollaborationSpaceConversation
