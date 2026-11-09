@@ -1,0 +1,156 @@
+{
+  "acceptedAt": "2026-11-09T23:57:04.460057+00:00",
+  "scope": "Actual Matrix control, durable readiness wake, registered group recovery task, original ACK journal/page claim across Android process death; later offline Sent reads.",
+  "mobileBase": "efa700bbb5a2b7a75af392afb5add8b642eb2ba0",
+  "groupBase": "d4246a08a8e57585e9e69f8b2ea5a6d7adec3eab",
+  "sourceManifests": {
+    "mobile": {
+      "files": 4630,
+      "sha256": "8cfd994b455f912ed3c7c8d2745b84fb3d8d8607545c8f001b85cd21c25748c0"
+    },
+    "group": {
+      "files": 8733,
+      "sha256": "267df3b462f1800ceecd3cc89a754d80b5a80bedee25fc3589f953ac9290a823"
+    }
+  },
+  "changedSources": {
+    "mobile": {
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceRecoveryProbe.kt": "383587e2837bf9690c987e8b4978e56a644f8b5c9bbd9dd1522d7817456d4f82",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceRecoveryProofHost.kt": "69bc1cbc2426fe8549d46c1b90466ffe32218fc61d85d4ca136bbcdb33c2cebb",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceRecoverySeed.kt": "eab77e4542a10fdc8b910cedfaffeb3206b6ad737a1684da693bd5ba1b716799",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofContainer.kt": "be60342a342a46ecdc9485effe9468a07c9135c25714d83101c3c304955d056b",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "7157256097896a1382647bc5f4a0aa0512b1560670d50351eeb17f62645ea4d8"
+    },
+    "group": {
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeSpaceOriginalFixture.kt": "23797055ea3a374118cc8981f653ba27751c982dd18b549b6a73863d3f10ced8",
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeSpaceRecoveryTrace.kt": "ee8c97476cfe86f76be4ee58548148788964579c3d233f7aa15938997a2dca7d",
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeSpaceRecoveryWorkerTest.kt": "80d579e9462a479a170ecb68583fba66c46a0aed0ac5373ba2ae9c72fbd64dcd",
+      "tool/collaboration_space_recovery.py": "c4d07ac16bc7d4218c23078c2f7caee3d2cae8462156485120f8d6a27fef6022",
+      "tool/test_collaboration_space_recovery.py": "5d0d2bded252473666e8b74028e2377883943934edd1bb8ad5e3b24bdbad8c9d"
+    }
+  },
+  "mobileFocused": {
+    "seconds": 131.926,
+    "freshTests": 20,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mobileFinal": {
+    "seconds": 68.001,
+    "freshTests": 0,
+    "validatedUnchangedTests": 4459,
+    "priorWorkerTests": 4439,
+    "proofTests": 20,
+    "reportSuites": 524,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "reuse": "Required root check passed with up-to-date test tasks. Exact archived/current XML hashes and unchanged production sources were checked. Historical reports outside these accepted sets are excluded."
+  },
+  "groupCompilation": {
+    "seconds": 34.055,
+    "formatAndArchitecture": true
+  },
+  "driverTests": {
+    "tests": 11,
+    "seconds": 0.005,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "native": {
+    "startedAt": "2026-11-09T23:45:46.997848+00:00",
+    "elapsedSeconds": 196.262,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "bootSeconds": 35.541,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": {
+        "sha256": "32b88c27815b4e13371e5b1a2786ebd8d16ae7371f24ebf6c068ea4d74956a9f",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "TEST-dev.fajar.hris.NativeSpaceRecoveryWorkerTest.xml": {
+        "sha256": "54aed921703591e67f6070012c5a038f7d322daddac2bf0e791c475542234d8c",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true,
+    "phoneTouched": false
+  },
+  "artifact": {
+    "apkSha256": "227cdc9211dd5415cb76c8167a10016acc3d50fc4753518b374250f2850a77a1",
+    "sdkVersion": "26.10.23-hris.6",
+    "abi": "x86_64",
+    "librarySha256": "ecffbab72fd5dd29d656bc4757ea423bb4bccf0444140af0480684bc32761278",
+    "apkBytes": 150441529,
+    "libraryBytes": 111204848
+  },
+  "scenarios": {
+    "originalDelivery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 10,
+        "bootstrapReplay": 2,
+        "directTransport": 2
+      }
+    },
+    "groupRecovery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 22,
+        "registration": 1,
+        "bootstrapReplay": 1,
+        "directTransport": 3
+      },
+      "matrixRequests": {
+        "requests": 16,
+        "secretStorage": 4,
+        "sync": 6,
+        "encryptedSend": 3
+      },
+      "actualGroupControl": true,
+      "consumerReplayDeduplicated": true,
+      "claimedBeforeDelivery": true,
+      "recoveredWithoutFcm": true,
+      "rejected401or403": 0,
+      "serverErrors": 0
+    }
+  },
+  "failedAttempts": [
+    "Group source-1: two shared fixture methods were private; changed to protected. No production change.",
+    "Native-1: room created after both key publications, so V139 correctly selected no readiness targets. Corrected fixture ordering, then source-3 and native-2 passed. Failed native data retained."
+  ],
+  "limits": [
+    "Manual fixture scheduler invokes actual registered task; no OS scheduling guarantee.",
+    "Actual initial native control, followed by explicit captured-signal consumer replay for deduplication.",
+    "Recovery reconnects before later offline Sent read; offline ACK-to-Sent projection immediately after process death is not established.",
+    "Counts cover each whole scenario, not per-message latency or phone/p95 measurements.",
+    "No product build88, phone update, Apple native runtime, FCM delivery or live group rollout."
+  ]
+}

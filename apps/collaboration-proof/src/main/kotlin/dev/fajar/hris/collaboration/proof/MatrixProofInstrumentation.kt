@@ -161,6 +161,10 @@ class MatrixProofInstrumentation : Instrumentation() {
             "space-original-recover",
             "space-original-offline" ->
                 HrisSpaceOriginalDeliveryProbe(targetContext, directory).run(scenario)
+            "space-recovery-interrupt" ->
+                HrisSpaceRecoveryProbe(targetContext, directory).run(interrupt = true)
+            "space-recovery-recover" ->
+                HrisSpaceRecoveryProbe(targetContext, directory).run(interrupt = false)
             "hris-worker-stage" -> HrisWorkerMatrixProbe(targetContext, directory).stage()
             "hris-worker-resume" -> HrisWorkerMatrixProbe(targetContext, directory).resume()
             "hris-mixed-room" -> HrisMixedRoomProbe(targetContext, directory).run()

@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 23:05 UTC. Historical contracts, failed experiments and
+Updated 9 November 2026, 23:57 UTC. Historical contracts, failed experiments and
 accepted evidence are retained in
 [a877c088](https://github.com/fajarxfce/hris-mobile/blob/a877c088/docs/agent-handoff.md).
 This file owns current work. Do not restart jobs from historical notes.
@@ -143,20 +143,42 @@ Failed candidates are retained:91375 new fixture collision/two LongMethod issues
 37708 all75 cases pass/one LongMethod;83939 all4,439 run/one old startup-key expectation.
 The corrected integration test preserves company/delivery assertions and adds group
 key+durable wake. CI now runs group worker and app lifetime cases. No suppression.
-No APK,emulator,phone or live change. Native proof is next;source alone is not rollout.
+Accepted as efa700bb and pushed;12097 reaped. No APK,emulator,phone or live change.
+[CI42721024887](https://github.com/fajarxfce/hris-mobile/actions/runs/42721024887) runs
+on immutable efa700bbb5a2b7a75af392afb5add8b642eb2ba0;99990 reaped. Expected6,940
+portable+2,628 Apple=9,568,unaccepted. It excludes the following native proof.
 
-Prepared native proof is separate at `.work/space-recovery-native-2026-11-09` in Mobile
-and Group:three Mobile Kotlin,two Group Kotlin,driver and four driver tests. None has
-been applied/compiled. Keep the accepted old native scenario intact. This draft uses
-actual Matrix control -> durable wake -> registered task -> original ACK,then kills only
-its isolated proof process before projection. It checks exact retained claim/wake,
-two provider events,offline reads and bounded Matrix/native traffic without401/403.
-One fresh2560MiB/two-core emulator;never use protected employee originals. Apply next
-only after this worker commit/push completes. Worker prepared copies are archival.
+## Accepted: actual organization recovery proof
 
-Producer wakes after end reads,complete SDK+app-ledger idle checks,group FCM/product
-routing,new SPACE enqueue and native/Apple runtime acceptance remain. All54 PRD groups
-remain open. Phone87,SDK6 and live group-OFF/schema116.4 are unchanged.
+Mobile worker efa700bb is accepted/pushed. The native proof is now accepted locally:
+Mobile6044 passes20 fresh proof unit cases/131.926s; final73682 is REAPED PASS68.001s
+with required root/Android-host/quality checks. Tests are up-to-date in the final gate:
+4,439 predecessor cases plus20 proof cases have exact archived/current passing XML.
+No production Mobile source changed; all4,630 source inputs and Inspector hashes match.
+
+Group source89294 passes34.055s with8,733 stable inputs and format/architecture.
+Eleven Python driver cases pass0.005s. Native98504 is REAPED PASS196.262s:2 actual
+native cases,zero failures/errors/skips. Original scenario has2 provider events and10
+native requests. Group recovery has2 provider events,22 native and16 Matrix requests,
+zero401/403/server errors. Actual control -> durable wake -> actual registered task ->
+persisted claim/ACK -> process death -> original recovery without new hint/FCM passes.
+Consumer dedup uses an explicit replay of the captured real signal. Offline Sent reads
+occur after online recovery. Manual scheduling is explicit; no OS timing claim.
+
+APK150,441,529 bytes,SHA227cdc9211dd5415cb76c8167a10016acc3d50fc4753518b374250f2850a77a1.
+SDK6 is unchanged. Strict cross-source/APK/XML/driver audit passes; no compilation
+during emulator and emulator stopped. Failed native34069 correctly had no eligible
+target because its room was created after publication; only fixture ordering changed.
+Private `.work/space-recovery-native-2026-11-09` retains failed data and accepted.json.
+Prepared files are archival. Do not repeat unchanged accepted gates.
+
+Next: complete SDK+app-ledger idle checks, producer durable wakes after final reads,
+group FCM/product routing, new SPACE enqueue and remaining rich messaging/calls/meetings.
+No product88,phone or live change; all54 PRD groups remain open. Hosted42721024887
+is pinned to worker efa700bb and audited separately; it excludes native proof edits.
+
+[Native contract](collaboration-space-recovery-native.md) and
+[measurement](measurements/collaboration-space-recovery-native-2026-11-09.json).
 
 ## Accepted readiness increments
 

@@ -30,6 +30,7 @@ import io.ktor.client.HttpClient
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -79,6 +80,8 @@ internal class HrisWorkerProofContainer(
                     AndroidCredentialStore(context, "worker-proof-command-content-key"),
                 collaborationListCredentials =
                     AndroidCredentialStore(context, "worker-proof-list-content-key"),
+                collaborationSpaceDirectoryCredentials =
+                    AndroidCredentialStore(context, "worker-proof-space-directory-content-key"),
                 collaborationReceiptCredentials =
                     AndroidCredentialStore(context, "worker-proof-receipt-content-key"),
                 collaborationHistoryCredentials =
@@ -94,6 +97,7 @@ internal class HrisWorkerProofContainer(
                                         setOf(
                                             QueueCollaborationText.DELIVERY_KEY,
                                             CollaborationRecoveryWake.WORK_KEY,
+                                            CollaborationSpaceRecoveryWake.WORK_KEY,
                                         )
                                 )
                                 synchronized(requests) { requests += key }
@@ -141,6 +145,15 @@ internal class HrisWorkerProofContainer(
                     )
                 }
             }
+
+    fun spaceRecoverySeed(
+        original: ProtectedHrisProofOwner,
+        previous: JSONObject,
+        group: JSONObject,
+    ) = HrisSpaceRecoverySeed(container.koin, original, previous, group)
+
+    fun spaceRecovery(seed: HrisSpaceRecoverySeed) =
+        HrisSpaceRecoveryProofHost(container.koin, seed) { scheduledKeys }
 
     suspend fun activate() {
         database.accounts.activate(
