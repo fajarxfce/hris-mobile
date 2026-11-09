@@ -1,0 +1,62 @@
+{
+  "run": 42601572510,
+  "job": 129107077675,
+  "source": "2d7770c0e2e1242c72f041a5495e8b60656eb89c",
+  "accepted": false,
+  "artifactId": 13667156210,
+  "artifactSha256": "81b573cad60cb6efb4226f08eeae7f5dd7624cb163179ff6da79d93f8cd78404",
+  "ciXmlTotals": {
+    "tests": 6038,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "totalsMayBePartial": true,
+  "affectedReports": [
+    {
+      "path": "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml",
+      "sha256": "160d61f46d3b4a7e45f2c0e88a92b0fea8b1b1355d7adea70b37378db33b476c",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml",
+      "sha256": "f83230ee37c05e648086e2621f1e03a6af9ac1f64bc692e6cf208acaa651b431",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml",
+      "sha256": "aa86bed0d25517ab562ffec0c6d64a7272a687f8e4c946e956608f82ee9ca0a2",
+      "tests": 90,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativeLinkAppFlowTest.xml",
+      "sha256": "1c3908e3824203aa3a8d0ec4e8c7e73a57077da7aa24340e5ee085749b19c6af",
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "rootCause": "The navigation integration test observed New chat shell then asserted three rows while the independently acquired list still rendered Loading; the recorded semantics show Chat selected and Conversations selected.",
+  "change": "Wait for the same required three colleague nodes inside the existing bounded Compose wait; preserve exact count, display, pending-link and no-send assertions.",
+  "validation": "Candidate format passes; focused integration and fifth full verify still pending",
+  "priorFailures": [
+    "Transport cancellation now passed",
+    "Prior desktop SIGABRT not reproduced; cause still unclassified and diagnostics retained"
+  ],
+  "formatCheck": {
+    "exitCode": 0,
+    "elapsedSeconds": 0.649,
+    "formatter": "Pinned ktfmt0.59; only changed file,128MiB process; no second Gradle compiler"
+  },
+  "candidateSourceSha256": "f48831791eaca2826309b79002214511fff5030d921d01a06094641b7a43652d"
+}

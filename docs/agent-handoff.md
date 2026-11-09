@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 10:45 UTC. This file describes current work. Historical
+Updated 9 November 2026, 10:55 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -136,8 +136,15 @@ verified. The transport test now awaits explicit engine finalization. Local18685
 Android host/Desktop cases in206.420s, format/architecture/detekt and4528 app/library
 inputs unchanged. Native abort diagnostics retain bounded cores only until backtraces
 are captured. Local desktop reproduction48148 passes once,448.118s; abort cause remains unclassified.
-Verify42601572510 at2d7770c0 is running with native diagnostics. No root-source feature
-changes are included in that CI run.
+Verify42601572510 at2d7770c0 FAILED one navigation assertion:6038 total XML cases,
+1failure,0errors/skips. Android/desktop transport tests now pass; prior desktop crash
+not reproduced (90 AppFlow cases pass). Artifact13667156210 digest verified. The test
+saw New chat while the first list still rendered Loading, then immediately asserted
+three rows. Candidate now includes those exact rows in its existing bounded Compose
+wait, retaining count/display/pending-link/no-send checks. Pinned single-file ktfmt
+passes0.649s/128MiB; focused integration and fifth CI verify are pending. No product
+change. [Evidence](measurements/pinned-inspector-notification-navigation-test-2026-11-09.json).
+Root Room changes are NOT included in these hosted CI runs.
 [Exact failed/successful scope](measurements/pinned-inspector-ci-test-recovery-2026-11-09.json). No production retry/cancellation behavior was changed. Web-only CI42597096435 also shut down at Wasm optimization; no final artifact
 survived. Cause remains unproved. Next web job bounds Binaryen2cores, Gradle1worker/
 3GiB/in-process Kotlin and samples closed kernel memory numbers every15s to console.

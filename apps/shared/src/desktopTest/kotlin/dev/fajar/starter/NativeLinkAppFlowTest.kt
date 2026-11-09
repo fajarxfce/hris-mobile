@@ -99,7 +99,9 @@ class NativeLinkAppFlowTest {
                 compose
                     .onAllNodesWithContentDescription("New chat")
                     .fetchSemanticsNodes()
-                    .isNotEmpty()
+                    .isNotEmpty() &&
+                    compose.onAllNodesWithText("Fictional colleague").fetchSemanticsNodes().size ==
+                        f.app.server.collaboration.ids.size
             }
             compose.onNodeWithContentDescription("New chat").assertIsDisplayed()
             compose.onNodeWithText("Saved replies").assertDoesNotExist()
