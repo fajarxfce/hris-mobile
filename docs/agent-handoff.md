@@ -1,6 +1,38 @@
 # Agent continuation — HRIS Mobile
 
 
+## Phone83 installed; SDK6 published; Starter ports testing — 9 November 2026, 07:27 UTC
+
+Phone install20751 REAPED PASS25.805s, fresh install after stock reset. Exact APK83
+SHA1acea7f495a0250970793fdd24aa9e7fa89a33eec1b4a4089d0b17684d01aad5 verified on
+10.77.77.3:5555. Install-only; no launch/UI, uninstall or data clear. User notified.
+SDK6 release438835525 is PUBLIC, targetdf49009c2656db8d7fd25033b9af91a80c82e28d:
+https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.6
+All6 exact asset sizes/digests plus unauthenticated descriptor verified. Initial
+publisher4738 REAPED failed after successful draft/upload on draft tag REST404;
+resume81346 REAPED published but verification used stale draft asset URL404. Final
+verifier29191 REAPED passes fresh public asset URL. No asset overwrite/republication.
+Recorded publication in .work/sdk-refresh-ci-2026-11-09/package-1/publication.json.
+
+Starter BOTH ports applied at07:23:58, sourcea1f2cfe9 worker8files plus c0b645d0
+identity2files/9generic tests. No native SessionBinding policy ported. Format8799
+REAPED PASS23.930s,1052 app/49 library input records, expected format changes only.
+ACTIVE heavy job: Starter check28792, .work/session-maintenance-port-2026-11-09/
+check-full-1 (root check, actual browser, Android/web/iOS source/build/quality).
+Freeze Starter/inspector inputs; no emulator or Mobile compiler. Reap it, inspect
+results, document and commit/push Starter. Mobile product sources remain c0b645d0.
+
+Next Mobile work: reduce repeated three-call metadata admission in history use cases
+through existing CollaborationTransportRepository snapshot. Existing send policy
+collaborationTransportRoom requires recipientReady; history MUST NOT adopt that
+send-only condition. Separate common metadata identity policy from send readiness,
+preserve before/after admission and revocation gates, and add meaningful regressions.
+No implementation of this next change yet. Startup metadata/latency remain open.
+Latest COMPLETE native83 store has FIVE originals incl Parent83 071123; never reset
+or resend. Original strict quietness failure and independent scheduled-work review
+both remain in Git. Platform runtime/schema116.4/controlON unchanged; all54 groups open.
+
+
 ##83 progress accepted after independent periodic-work review — 9 November 2026, 07:22 UTC
 
 No product code or schedule changed. Original strict traffic-acceptance.json remains

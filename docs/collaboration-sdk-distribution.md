@@ -1,19 +1,19 @@
 # Android Matrix SDK distribution
 
-The application currently pins the local candidate
-`dev.fajar.hris.matrix:sdk-android:26.10.23-hris.6`, built from the separate
-`android-refresh-coalescing-build.json` manifest. Its four original CI artifacts,
-matching Kotlin bindings, source hashes and packaged native libraries are verified.
-[SDK6 evidence and outstanding acceptance](collaboration-sdk-refresh-coalescing.md).
-Android consumer checks pass; native validation and publication are pending; a clean remote consumer
-cannot resolve SDK6 from GitHub yet. Use `-PmatrixSdkRepository=PATH` with the verified
-local Ivy candidate repository until that exact version is published.
+The application pins the published
+`dev.fajar.hris.matrix:sdk-android:26.10.23-hris.6`, built from
+`android-refresh-coalescing-build.json`. Its four original CI artifacts, matching
+Kotlin bindings, source hashes and packaged native libraries are verified.
+[SDK6 release](https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.6)
+contains the AAR, descriptor, source bundle, license, build record and checksums.
+All six remote asset sizes/digests match and the public descriptor was fetched and
+verified. A local repository override is optional for reproducing candidate builds.
 
-The last published prerelease is
-[SDK4](https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.4).
-SDK5 added optional HTTP observation and remains a retained local candidate. Existing
-published files and SDK5 binaries must not be replaced. The sections below record
-historical SDK1–3 acceptance, not SDK6 runtime or publication status.
+[SDK6 evidence and remaining work](collaboration-sdk-refresh-coalescing.md) includes
+full source validation, retained Android identity/message/renewal proof and phone83
+installation. Startup request volume, latency p95 and Apple SDK6 runtime remain open.
+Existing SDK1–4 releases and retained SDK5 candidate binaries are unchanged.
+The following sections preserve historical SDK1–3 acceptance.
 
 ## Historical distribution acceptance
 

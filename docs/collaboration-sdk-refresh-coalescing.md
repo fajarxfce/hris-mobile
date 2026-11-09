@@ -35,10 +35,19 @@ The pinned wrapper produced `26.10.23-hris.6` in 111.937 seconds; its AAR SHA-25
 `a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3`.
 The application now pins this candidate and its descriptor with strict checksums.
 
-All 592 Android host tests pass with SDK6; release/proof compilation, Android lint
-and format/architecture/detekt checks pass in 492.999 seconds with unchanged inputs.
-The preceding 4,261-test full run used SDK5. Only the catalog and checksum metadata
-changed between these gates; unchanged common/browser code retains that evidence.
-The full suite was not repeated on SDK6. Retained-device checks remain pending. SDK6 is available
-only in the local candidate repository at this checkpoint. SDK4 publication and
-SDK5 binaries are preserved. No phone installation or latency acceptance is claimed.
+Final full SDK6 application validation passes 5,837 fresh tests, including 595
+Android host and 160 actual browser cases, plus unchanged identity desktop coverage.
+[Parent renewal evidence](measurements/collaboration-parent-session-renewal-2026-11-09.json)
+records source/build/quality gates. Retained82→83 preserves four original messages,
+adds exactly one new encrypted message with the receiver stopped, and completes
+three successive renewals. Periodic work is attributed separately from the original
+strict zero-metadata failure; startup request volume and latency p95 remain open.
+
+[SDK6 release](https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.6)
+438835525 publishes six exact verified assets. All remote sizes/digests match;
+the published descriptor was fetched without authentication and verified. Draft
+lookup and stale draft asset-URL failures were recovered using the exact release ID
+and refreshed published URLs, without overwriting assets or republishing. Previous
+SDK releases remain unchanged. Build83 is installed on the authorized Android phone
+with exact APK checksum verification and no phone UI interaction. Apple SDK6 runtime
+and broader communications acceptance remain open.

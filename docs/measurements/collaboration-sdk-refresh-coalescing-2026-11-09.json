@@ -140,12 +140,11 @@
   "observerBuildToolsSource": "6866251a",
   "publicBindingApiChanged": false,
   "sdkBinaryBuilt": true,
-  "published": false,
-  "phoneInstalled": false,
+  "published": true,
+  "phoneInstalled": true,
   "remaining": [
-    "Native retained80 upgrade, original messages, settled traffic and one new-message timing sample",
-    "Phone install-only and immutable SDK6 distribution",
-    "Generic Starter port and remaining communications acceptance"
+    "Reduce application startup metadata volume and measure latency p95",
+    "Apple SDK6 runtime and broader communications product delivery"
   ],
   "androidCi": {
     "at": "2026-11-09T04:47:58.354371+00:00",
@@ -338,5 +337,54 @@
     "priorUnchangedCommonBrowserSource": "c1dde603",
     "priorFullTests": 4261,
     "fullSuiteRepeatedOnSdk6": false
-  }
+  },
+  "publication": {
+    "at": "2026-11-09T07:23:36.422211+00:00",
+    "releaseId": 438835525,
+    "tag": "matrix-sdk-26.10.23-hris.6",
+    "target": "df49009c2656db8d7fd25033b9af91a80c82e28d",
+    "draftAssetsVerified": true,
+    "assets": {
+      "sdk-android-26.10.23-hris.6.aar": {
+        "id": 726601688,
+        "sha256": "a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3",
+        "bytes": 185968960
+      },
+      "sdk-android-26.10.23-hris.6.ivy.xml": {
+        "id": 726601693,
+        "sha256": "69ea030963275ce080991e658172934441b73558e9de4d8e7ae3976b2f18558a",
+        "bytes": 1196
+      },
+      "sdk-android-26.10.23-hris.6-sources.tar.gz": {
+        "id": 726601692,
+        "sha256": "36b26aa15c2a295dd8d9428b2a17aa0844b090e322b44b8ea161e2f87c8d2098",
+        "bytes": 452210
+      },
+      "LICENSE": {
+        "id": 726601690,
+        "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "bytes": 10174
+      },
+      "sdk-build.json": {
+        "id": 726601689,
+        "sha256": "8d6604bf3d178ea5f466d12b733aa620f60e158d6be2d2ce690b86d1ffb714e2",
+        "bytes": 8426
+      },
+      "SHA256SUMS": {
+        "id": 726601741,
+        "sha256": "b410bfa758487ce1cf74b2262c5ce3aba96b420093783fb24fb498049e050501",
+        "bytes": 464
+      }
+    },
+    "consumerApkSha256": "1acea7f495a0250970793fdd24aa9e7fa89a33eec1b4a4089d0b17684d01aad5",
+    "scope": "SDK6 four-ABI Android package; retained ARM64 build83 upgrade, original encrypted messages and paired credential renewals; scheduled work independently attributed, startup cost remains open; Apple runtime and broad communications acceptance remain open",
+    "public": true,
+    "publishedAt": "2026-11-09T07:23:37Z",
+    "url": "https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.6",
+    "publicDescriptorVerified": true,
+    "publicationRecovery": "Initial publisher used tag lookup for a draft; resumed by exact release ID. Public verification then required refreshed published asset URLs. No asset overwrite or republication."
+  },
+  "phoneVersionCode": 83,
+  "latestApplicationValidation": "collaboration-parent-session-renewal-2026-11-09.json",
+  "latestNativeEvidence": "collaboration-release83-candidate-2026-11-09.json"
 }

@@ -2,7 +2,7 @@
   "status": "validated_progress_update_startup_optimization_open",
   "versionCode": 83,
   "nativeAccepted": true,
-  "phoneInstalled": false,
+  "phoneInstalled": true,
   "phoneUiTouched": false,
   "latestCompleteStore": "native-parent-renewal-native-2026-11-09/sender at83; preserve all4 userdata/encryption files and full AVD",
   "sourceCommit": "ddb3d058",
@@ -601,5 +601,25 @@
       "Startup metadata cost remains distinct from settled traffic",
       "Apple SDK6 runtime and all54 communications PRD groups remain open"
     ]
+  },
+  "phoneInstallation": {
+    "startedAt": "2026-11-09T07:21:52.586154+00:00",
+    "confirmed": true,
+    "serial": "10.77.77.3:5555",
+    "phoneUiTouched": false,
+    "freshInstall": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "versionCode": 83,
+    "installedSha256": "1acea7f495a0250970793fdd24aa9e7fa89a33eec1b4a4089d0b17684d01aad5",
+    "installedBytesMatch": true,
+    "verificationMethod": "Device SHA-256 equals validated local APK",
+    "existingIdentityPreserved": true,
+    "elapsedSeconds": 25.805
+  },
+  "sdkRelease": {
+    "id": 438835525,
+    "url": "https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.6",
+    "publicDescriptorVerified": true
   }
 }
