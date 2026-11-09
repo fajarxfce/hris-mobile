@@ -229,9 +229,11 @@
   },
   "native82Evidence": "collaboration-release82-candidate-2026-11-09.json",
   "pending": [
-    "Retained82 to83 runtime with four originals, HRIS-parent deadlines and paired Matrix renewals",
-    "Phone install-only, immutable SDK distribution and generic Starter port"
+    "Resolve strict quietness failure against observed periodic WorkManager and bounded continuation; reduce startup metadata",
+    "Later accepted phone install-only, immutable SDK distribution and generic Starter ports"
   ],
   "nativeAccepted": false,
-  "phoneInstalled": false
+  "phoneInstalled": false,
+  "nativeRenewalVerified": true,
+  "nativeEvidence": "collaboration-release83-candidate-2026-11-09.json"
 }

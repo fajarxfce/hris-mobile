@@ -1,10 +1,10 @@
 {
-  "status": "candidate_native_pending",
+  "status": "native_functional_pass_strict_quietness_failed",
   "versionCode": 83,
   "nativeAccepted": false,
   "phoneInstalled": false,
   "phoneUiTouched": false,
-  "latestCompleteStore": "sdk-shared-borrow-native-2026-11-09/sender at82; native83 observation running",
+  "latestCompleteStore": "native-parent-renewal-native-2026-11-09/sender at83; preserve all4 userdata/encryption files and full AVD",
   "sourceCommit": "ddb3d058",
   "fullValidation": "collaboration-parent-session-renewal-2026-11-09.json",
   "artifact": {
@@ -77,5 +77,351 @@
     "startedAt": "2026-11-09T06:55:52.201969+00:00",
     "elapsedSeconds": 97.697,
     "exitCode": 0
+  },
+  "native": {
+    "at": "2026-11-09T07:17:30.922529+00:00",
+    "accepted": false,
+    "functionalPhasesAccepted": true,
+    "traffic": {
+      "at": "2026-11-09T07:12:03.019529+00:00",
+      "accepted": false,
+      "pairedRefreshFailures": [],
+      "pairedRefreshStatuses": [
+        200,
+        200,
+        200
+      ],
+      "settledIntervals": [
+        {
+          "phase": "home",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "other_hris": 9,
+            "sync": 11
+          },
+          "unexpectedSetupTraffic": {},
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 0,
+          "accepted": true
+        },
+        {
+          "phase": "room",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "sync": 14,
+            "hris_conversation": 10,
+            "hris_conversation_summaries": 2,
+            "hris_device_admission": 2,
+            "hris_device_setup": 16,
+            "hris_room": 12,
+            "other_hris": 12,
+            "other_matrix": 6,
+            "refresh": 1
+          },
+          "unexpectedSetupTraffic": {
+            "hris_conversation": 10,
+            "hris_conversation_summaries": 2,
+            "hris_device_admission": 2,
+            "hris_device_setup": 16,
+            "hris_room": 12
+          },
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 1,
+          "accepted": false
+        },
+        {
+          "phase": "resumed",
+          "completeBinSeconds": 120,
+          "requestCounts": {
+            "sync": 12,
+            "other_hris": 10
+          },
+          "unexpectedSetupTraffic": {},
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 0,
+          "accepted": true
+        },
+        {
+          "phase": "cold",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "sync": 14,
+            "refresh": 1,
+            "other_hris": 9
+          },
+          "unexpectedSetupTraffic": {},
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 1,
+          "accepted": true
+        }
+      ],
+      "bootstrapRequestsAcrossRun": 0,
+      "samePublicIdentity": true,
+      "sameGatewayHead": true,
+      "requestCount": 572,
+      "limitation": "Packet starts, not full HTTP reconstruction. Single owned emulator gateway; aggregate bins only.",
+      "phoneTouched": false
+    },
+    "upgrade": {
+      "accepted": true,
+      "startedAt": "2026-11-09T06:59:31.417481+00:00",
+      "versionCode": 83,
+      "phoneTouched": false,
+      "newSendGestures": 0,
+      "dataCleared": false,
+      "privateKeysReadOrReset": false,
+      "scope": "Retained account/package and immutable public-key identity through native upgrade; actual original encrypted delivery is a subsequent gate.",
+      "launchEpochMillis": 1794207579211.918,
+      "launchMonotonic": 1884271.860466356,
+      "updateInPlace": true,
+      "sameAppIdentity": true,
+      "retainedAccountHomeVisible": true,
+      "retainedPublicIdentityPreserved": true,
+      "confirmedDevices": 1,
+      "artifactSha256": "1acea7f495a0250970793fdd24aa9e7fa89a33eec1b4a4089d0b17684d01aad5",
+      "sdkDeliveryAccepted": false,
+      "elapsedSeconds": 14.681
+    },
+    "history": {
+      "at": "2026-11-09T07:02:45.601863+00:00",
+      "accepted": true,
+      "sendGestures": 0,
+      "retryMessageGestures": 0,
+      "olderReadGestures": 0,
+      "phoneTouched": false,
+      "initialOlderVisible": false,
+      "olderHiddenAfterRead": true,
+      "olderVisibleOnReentry": false,
+      "elapsedSeconds": 21.191
+    },
+    "originalServerEventsRetained": 4,
+    "newServerEvents": 1,
+    "newSendGestures": 1,
+    "newMessage": "Parent83 071123",
+    "newMessageSha256": "3fb706e13d5e3f4c853a7e75b018c500adda2d9dd1778ebf387e784a32f3aa10",
+    "tapToServerReceivedMillis": 2895.24365234375,
+    "recipientRemainedStopped": true,
+    "latestCompleteStore": "native-parent-renewal-native-2026-11-09/sender at83; preserve all4 userdata/encryption files and full AVD",
+    "lifetime": {
+      "startedAt": "2026-11-09T06:58:29.486622+00:00",
+      "accepted": true,
+      "memoryMiB": 2560,
+      "cores": 2,
+      "phoneTouched": false,
+      "productInstalled": false,
+      "pid": 3712426,
+      "startTicks": "188420213",
+      "bootSeconds": 31.46,
+      "stopped": true,
+      "elapsedSeconds": 787.319,
+      "originalFilesUnchanged": true,
+      "scope": "Owned emulator lifetime only. Native message/wake acceptance is recorded separately."
+    },
+    "requestCounts": {
+      "hris_conversation_summaries": 14,
+      "hris_device_admission": 14,
+      "hris_device_setup": 128,
+      "hris_room": 101,
+      "hris_session_refresh": 2,
+      "other_hris": 82,
+      "hris_conversation": 82,
+      "other_matrix": 54,
+      "refresh": 3,
+      "secret_storage_default_key": 8,
+      "sync": 80,
+      "encrypted_room_send": 1,
+      "hris_direct_transport": 3
+    },
+    "responseCounts": {
+      "hris_conversation_summaries:200": 14,
+      "hris_device_admission:200": 14,
+      "hris_device_setup:200": 127,
+      "hris_room:200": 101,
+      "hris_session_refresh:200": 2,
+      "other_hris:200": 64,
+      "hris_conversation:200": 82,
+      "other_matrix:200": 54,
+      "refresh:200": 3,
+      "secret_storage_default_key:401": 2,
+      "secret_storage_default_key:404": 6,
+      "sync:200": 76,
+      "sync:401": 2,
+      "sync:503": 1,
+      "encrypted_room_send:200": 1,
+      "hris_direct_transport:200": 3
+    },
+    "pairedRefresh": {
+      "startedAt": "2026-11-09T06:58:28.221485+00:00",
+      "acceptedTrace": true,
+      "passiveOnly": true,
+      "tokensOrHashesRetained": false,
+      "maxSeconds": 1080,
+      "samples": [
+        {
+          "offsetSeconds": 82.507,
+          "matchesPriorReturnedRefresh": null,
+          "accessUsageSincePriorResponse": {
+            "matchingReturnedAccess": 0,
+            "otherAccess": 0
+          },
+          "requestEpochMillis": 1794207590728.6885,
+          "nativeParentBeforeResponse": {
+            "version": 16,
+            "rotatedAt": "2026-11-09T06:59:31.003743+00:00",
+            "accessExpiresAt": "2026-11-09T07:09:31.003743+00:00",
+            "parentExpiresAt": "2026-12-08T19:04:45.587789+00:00",
+            "accessExpiredAtRequest": false,
+            "rotatedAfterRequest": false,
+            "revoked": false
+          },
+          "status": 200,
+          "nativeParentAfterResponse": {
+            "version": 16,
+            "rotatedAt": "2026-11-09T06:59:31.003743+00:00",
+            "accessExpiresAt": "2026-11-09T07:09:31.003743+00:00",
+            "parentExpiresAt": "2026-12-08T19:04:45.587789+00:00",
+            "accessExpiredAtRequest": false,
+            "rotatedAfterRequest": false,
+            "revoked": false
+          },
+          "requestCredentialAfterResponse": {
+            "heads": 1,
+            "matchesCurrentRefresh": false,
+            "matchesPreviousRefresh": true,
+            "matchesCurrentAccess": null,
+            "maxVersion": 21,
+            "allRevoked": false,
+            "sessionExpired": false
+          },
+          "responseHasRefreshToken": true,
+          "returnedCredentialAfterResponse": {
+            "heads": 1,
+            "matchesCurrentRefresh": true,
+            "matchesPreviousRefresh": false,
+            "matchesCurrentAccess": true,
+            "maxVersion": 21,
+            "allRevoked": false,
+            "sessionExpired": false
+          },
+          "newRefreshDiffersFromRequest": true
+        },
+        {
+          "offsetSeconds": 382.563,
+          "matchesPriorReturnedRefresh": true,
+          "accessUsageSincePriorResponse": {
+            "matchingReturnedAccess": 68,
+            "otherAccess": 0
+          },
+          "requestEpochMillis": 1794207890784.4375,
+          "nativeParentBeforeResponse": {
+            "version": 16,
+            "rotatedAt": "2026-11-09T06:59:31.003743+00:00",
+            "accessExpiresAt": "2026-11-09T07:09:31.003743+00:00",
+            "parentExpiresAt": "2026-12-08T19:04:45.587789+00:00",
+            "accessExpiredAtRequest": false,
+            "rotatedAfterRequest": false,
+            "revoked": false
+          },
+          "status": 200,
+          "nativeParentAfterResponse": {
+            "version": 16,
+            "rotatedAt": "2026-11-09T06:59:31.003743+00:00",
+            "accessExpiresAt": "2026-11-09T07:09:31.003743+00:00",
+            "parentExpiresAt": "2026-12-08T19:04:45.587789+00:00",
+            "accessExpiredAtRequest": false,
+            "rotatedAfterRequest": false,
+            "revoked": false
+          },
+          "requestCredentialAfterResponse": {
+            "heads": 1,
+            "matchesCurrentRefresh": false,
+            "matchesPreviousRefresh": true,
+            "matchesCurrentAccess": null,
+            "maxVersion": 22,
+            "allRevoked": false,
+            "sessionExpired": false
+          },
+          "responseHasRefreshToken": true,
+          "returnedCredentialAfterResponse": {
+            "heads": 1,
+            "matchesCurrentRefresh": true,
+            "matchesPreviousRefresh": false,
+            "matchesCurrentAccess": true,
+            "maxVersion": 22,
+            "allRevoked": false,
+            "sessionExpired": false
+          },
+          "newRefreshDiffersFromRequest": true
+        },
+        {
+          "offsetSeconds": 682.624,
+          "matchesPriorReturnedRefresh": true,
+          "accessUsageSincePriorResponse": {
+            "matchingReturnedAccess": 56,
+            "otherAccess": 0
+          },
+          "requestEpochMillis": 1794208190845.1394,
+          "nativeParentBeforeResponse": {
+            "version": 17,
+            "rotatedAt": "2026-11-09T07:09:01.939744+00:00",
+            "accessExpiresAt": "2026-11-09T07:19:01.939744+00:00",
+            "parentExpiresAt": "2026-12-08T19:04:45.587789+00:00",
+            "accessExpiredAtRequest": false,
+            "rotatedAfterRequest": false,
+            "revoked": false
+          },
+          "status": 200,
+          "nativeParentAfterResponse": {
+            "version": 17,
+            "rotatedAt": "2026-11-09T07:09:01.939744+00:00",
+            "accessExpiresAt": "2026-11-09T07:19:01.939744+00:00",
+            "parentExpiresAt": "2026-12-08T19:04:45.587789+00:00",
+            "accessExpiredAtRequest": false,
+            "rotatedAfterRequest": false,
+            "revoked": false
+          },
+          "requestCredentialAfterResponse": {
+            "heads": 1,
+            "matchesCurrentRefresh": false,
+            "matchesPreviousRefresh": true,
+            "matchesCurrentAccess": null,
+            "maxVersion": 23,
+            "allRevoked": false,
+            "sessionExpired": false
+          },
+          "responseHasRefreshToken": true,
+          "returnedCredentialAfterResponse": {
+            "heads": 1,
+            "matchesCurrentRefresh": true,
+            "matchesPreviousRefresh": false,
+            "matchesCurrentAccess": true,
+            "maxVersion": 23,
+            "allRevoked": false,
+            "sessionExpired": false
+          },
+          "newRefreshDiffersFromRequest": true
+        }
+      ],
+      "interrupted": false,
+      "elapsedSeconds": 786.872,
+      "finishedAt": "2026-11-09T07:11:35.093514+00:00"
+    },
+    "nativeParentRenewedBeforePreviousAccessExpiryMillis": 29063.999,
+    "phoneInstalled": false,
+    "phoneUiTouched": false,
+    "allOwnedSessionsReaped": true,
+    "periodicInvestigation": {
+      "strictQuietnessAccepted": false,
+      "observedScheduledAt": "2026-11-09T07:03:43.088Z",
+      "periodicWorkGeneration": 13,
+      "periodicSuccessAt": "2026-11-09T07:03:45.222Z",
+      "requestedContinuationSuccessAt": "2026-11-09T07:03:46.200Z",
+      "trace": "WorkManager logs identify one periodic SyncWorker and one collapsed hris.collaboration-recovery continuation; both SUCCESS. Metadata occurs in one10s bin310. Exact continuation cause remains under investigation; do not relabel the original strict failure as a pass."
+    },
+    "limitations": [
+      "One message sample is not p95",
+      "Startup metadata cost remains high",
+      "Apple SDK6 runtime and all54 communications groups remain open"
+    ]
   }
 }

@@ -48,6 +48,15 @@ shared Wasm/iOS Arm64 source compilation, format, architecture and detekt pass.
 The earlier compile failures and deliberately interrupted full run remain in
 [the evidence](measurements/collaboration-parent-session-renewal-2026-11-09.json).
 
-Native83 must still retain the four original messages from complete82 and observe
-both native and Matrix renewal before release acceptance. Source compilation does
-not establish Apple runtime acceptance.
+Native83 preserves all four original messages and its encrypted identity across
+upgrade, route reentry, background and process restart. A fifth new message reaches
+the server in 2,895.244 ms while the receiver remains stopped (one sample, not p95).
+Native parent renewal occurs 29.064 seconds before its previous access expiry, and
+all three successive Matrix renewals return 200 with exact credential continuity.
+
+Strict quietness still fails one room interval: WorkManager starts one periodic
+recovery and one completed continuation, producing metadata requests in one ten-second
+bin. The other three idle intervals pass, with no bootstrap across the run.
+The original failed check remains recorded; startup metadata and the continuation's
+exact cause are still under investigation. No phone installation or SDK publication.
+Source compilation does not establish Apple runtime acceptance.

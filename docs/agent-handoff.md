@@ -1,6 +1,40 @@
 # Agent continuation — HRIS Mobile
 
 
+## Native83 renewals pass; strict quietness flags periodic work — 9 November 2026, 07:17 UTC
+
+ALL REAPED: phases15283 PASS724.275s; emulator46665 stopped787.319s; counter3624
+normal788.044s/572requests; paired80385 normal786.872s, all3refreshes200. Parent
+native16→17 renews07:09:01.939744,29063.999ms before previous07:09:31.003743 expiry.
+Gateway20→21→22→23, same head/keys. No bootstrap,403 or429. All4 original bubbles
+remain Sent, history end hidden across route/resume/cold. One new Parent83 071123
+sent once, server5 total, Sent/empty composer, recipient stopped,2895.244ms tap→server.
+NEVER resend these FIVE originals. Latest COMPLETE store is now
+.work/native-parent-renewal-native-2026-11-09/sender at83, all4 userdata/encryption
+files + AVD. Never restore82 over83. No compiler/emulator remains (preflight []).
+[Full evidence](measurements/collaboration-release83-candidate-2026-11-09.json).
+
+accept-quietness.py EXIT1: Home/resumed/cold complete bins pass; room bin310 has
+2admission,16setup,10conversation,2summaries,12room requests. Paired renewals pass.
+Read-only root trace from room-product.private.log: periodic SyncWorker generation13
+starts07:03:43.088, SUCCESS07:03:45.222; its collapsed recovery continuation starts
+07:03:45.223 and SUCCESS07:03:46.200. This is one scheduled sweep plus continuation,
+not recurring rejection. Exact continuation cause still unconfirmed. Preserve the
+original strict failed check; do not blindly loosen its criteria or reset the fixture.
+Startup also remains expensive (52setup initially, later103/119 after cold/renewal).
+
+NEXT trace bounded incoming/recovery continuation and duplicate metadata. Existing
+CollaborationIncomingHistoryRecovery uses provider-until head in
+CollaborationHistoryTraversalPolicy; do not assume it rescans all historical pages.
+AcquireCollaborationProviderHistory calls admitRoom before AND after provider I/O,
+each doing setup+conversation+room; candidate for grounded metadata reduction, with
+ownership/denial fences preserved. No production changes after c0b645d0 yet.
+No accept-release.py run, release-acceptance.json, install, SDK6 publication or Starter
+port. Both ports/publisher still gated to failed83 and must target later accepted proof.
+Phone ADB reachable07:10; no UI. Platform docs f366acc3 pushed, runtimee558a686/
+schema116.4/controlON unchanged;117–138 undeployed and all54 groups remain open.
+
+
 ## Verified83 now running retained-store acceptance — 9 November 2026, 07:01 UTC
 
 Build22621 REAPED PASS97.697s from pushed ddb3d058. Verifiers23196/88182 REAPED:
