@@ -24,5 +24,8 @@ identity contracts and company/recovery workers. Coverage includes contention,
 waiting cancellation/expiry, account loss, late publication and existing denial/
 cleanup rules. Formatting, architecture and detekt pass. Earlier failed tests and
 the first formatting failure are retained in [evidence](measurements/collaboration-background-runtime-contention-2026-11-09.json).
-Full application checks and native proof with the new SDK are separate remaining
-steps. No phone installation or whole collaboration-feature acceptance is claimed.
+Full application validation also passes on the unchanged source:4,261 fresh
+tests (3,519 desktop,592 Android host,150 actual browser), Android release/proof
+compilation and lint, shared Wasm/iOSArm64 source compilation and all quality checks.
+This full run still uses SDK5; final Android consumer checks and native proof with
+the new SDK remain separate. Physical iOS runtime was not tested. No phone installation or whole collaboration-feature acceptance is claimed.

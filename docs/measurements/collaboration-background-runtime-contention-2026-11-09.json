@@ -91,14 +91,36 @@
         "skipped": 0
       },
       "resultSha256": "b809d867a55f430620bc18a3aca53280a7b28074f2718e0551e6e9922c1b258d"
+    },
+    "full-1": {
+      "startedAt": "2026-11-09T04:37:05.451395+00:00",
+      "elapsedSeconds": 591.032,
+      "exitCode": 0,
+      "sourceFiles": 4528,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 4261,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "bd3b5dcf4409a463c2521528a9951b2f797a8fcadaab9be99b528cd0e603700f",
+      "freshTestsByTarget": {
+        "desktopTest": 3519,
+        "wasmJsBrowserTest": 150,
+        "testAndroidHostTest": 592
+      },
+      "sourceCommit": "c1dde603",
+      "sdkCoordinate": "26.10.23-hris.5",
+      "physicalIosRuntimeTested": false
     }
   },
   "rootCause": "Single AcquireCollaborationBackgroundRuntime rejects one of concurrently invoked device/incoming lanes as busy, causing redundant recovery work",
   "handoverRegression": "An outer withTimeout around acquisition can discard an already published reference; bound only lock waiting, retaining lock ownership through cancellation",
-  "acceptedScope": "106 fresh focused tests with format, architecture and detekt on unchanged source",
+  "acceptedScope": "106 focused tests and4261 fresh full-application tests; format, architecture, detekt, Android release/proof/lint and shared Wasm/iOSArm64 source compilation; unchanged4528 app and82 library inputs",
   "pending": [
-    "Final application check including browser history/acquisition and platform source compilation",
-    "Four-ABI SDK6 CI42561531330 and verified AAR",
+    "Original four-ABI SDK6 CI42561531330 succeeded; download, verify and package AAR before Android consumer/native acceptance",
     "Native upgrade of complete80 store, original messages and settled traffic",
     "Phone install-only and generic Starter port"
   ]

@@ -1,6 +1,43 @@
 # Agent continuation — HRIS Mobile
 
 
+## Full application accepted; SDK6 binaries downloading — 9 November 2026, 04:47 UTC
+
+Full15918 REAPED PASS591.032s on c1dde603:4261 fresh tests,0 failures/errors/skips;
+desktop3519,Android-host592,actual-browser150. Format/architecture74/detekt, Android
+release/proof/lint and shared Wasm/iOSArm64 SOURCE compilation pass. All4528 app/82
+library inputs unchanged. Application still SDK5. [Evidence](measurements/collaboration-background-runtime-contention-2026-11-09.json).
+
+FIRST four-ABI CI42561531330 completed SUCCESS on exactdc6ed11e, attempt1. Download
+session1350 is running .work/sdk-refresh-ci-2026-11-09/download.py; reap and inspect.
+No local compiler/emulator at checkpoint. Isolated wrapper is
+../.worktrees/matrix-kotlin-refresh-coalescing-2026-11-09 at c1664f7. Prepared but NOT
+RUN: prepare-package.py,package.py,adopt-consumer.py in that work directory. Packaging
+must verify original archives/native/bindings then create new26.10.23-hris.6; preserve
+SDK4 publication and SDK5 binaries. Consumer adoption changes only catalog/checksums.
+
+Prepared final SDK6 gate: .work/sdk-refresh-consumer-2026-11-09/check.py android-1
+forces all592 Android-host tests, compiles release/proof and checks lint/quality.
+Use that plus byte-identical common/browser source evidence above; do not claim the
+full suite ran on SDK6. Prepared build81 scripts use both exact gates, require pushed
+source and verify APK native bytes against SDK6. None executed yet.
+
+Prepared .work/refresh-coalescing-native-2026-11-09 clones LATEST COMPLETE80 sender
+from initial-sync-native-2026-11-09, including all4 userdata/encryption files and AVD.
+Keep native80's FAILED traffic evidence; never restore79/78 or resend originals.
+Native81 scripts are NOT RUN. Both passive observers have finite1080s budgets; phases
+retain Home/room/resume/cold120s intervals, original3 Sent/history, identity and paired
+refresh. A single NEW uniquely named Refresh81 timing sample is prepared AFTER the
+original retention phases. Its latch forbids resend; records distinguish the original
+3-event checkpoint and any fourth event. No phone interaction or installation yet.
+
+NEXT finish download/package; adoptSDK6, run final Android gate, commit+push; build81,
+native upgrade/traffic/send measurement; announce accepted phone install-only. Phone
+fresh stock-ROM; no UI. Starter port remains UNEXECUTED and old native80 gate is stale;
+update it only after appropriate81 acceptance. Platform116.4/controlON unchanged;
+all54 communications PRD groups remain open.
+
+
 ## Background acquisition waits safely; focused checks pass — 9 November 2026, 04:35 UTC
 
 Focused40143 REAPED PASS272.194s:106 fresh tests,0 failures/errors/skips; format,
