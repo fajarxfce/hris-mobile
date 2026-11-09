@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 17:49 UTC. Historical detail is retained in
+Updated 9 November 2026, 18:04 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -38,21 +38,30 @@ its apparent gradlew.bat change is text/eol normalization, not a byte change.
 Live API/worker remains e558a6868399058a2dcdee97acfd0e7fa7f1ef07, schema116.4,
 readiness control ON. Group V117–138 and organization routing are not deployed.
 
-## Original-key activation in progress (unaccepted source)
+## Original-key publication correction in progress
 
-Twenty Mobile Kotlin files add one original-identity confirmation to the owning
-AdoptCollaborationSpaceRuntime flow, a bounded SDK-owned Android request, portable
-request/response mapping, and domain/transport/lifetime tests. They are not compiled
-or accepted yet. The new operation never uploads or regenerates keys, refreshes or
-retries implicitly. No UI/worker activation, APK88 or Starter port is claimed.
+The unaccepted explicit vendor-confirmation approach is RETIRED. Its22 Mobile Kotlin
+files and9 Group Kotlin files are archived under each checkout's private
+`.work/space-original-key-confirmation-2026-11-09/retired-*` and restored to accepted
+source. Do not reapply `native-prepared` or start its old focused runner. No SDK7,
+new native endpoint, token refresh policy or Mobile source change is accepted.
 
-Group worktree has the matching explicit vendor endpoint. Its focused213 cases and
-HTTP2 cases pass. Full regression61608 is running at
-`.work/space-original-key-confirmation-2026-11-09/full-1`; do not edit its source or
-start another heavy compiler/emulator before reaping it. Next: Mobile compilation,
-quality and platform tests, then actual native confirmation/delivery proof with the
-sender's group publication initially absent. Existing native31328 remains historical
-acceptance only; it used an explicit fixture keys/upload precondition.
+Code review identified the actual missing boundary: AdvanceCollaborationSpaceProvisioning
+already reads and cryptographically verifies the original provider keys, then atomically
+completes LEGACY transfer. It did not retain V135's group key-publication row. The
+correction belongs in that existing transaction, retaining the exact completed original
+identity. Empty standard keys/upload remains counts-only; fresh SPACE devices still
+publish their own keys. No readiness guard, original key, store or message changes.
+
+Retired candidate gates:213 focused and2 HTTP cases pass. Its full61608 was deliberately
+terminated/reaped after1,231.719s; only192 domain cases completed, no full acceptance.
+The verified process group is stopped and the heavy-process guard is empty. Group's
+new regression30751 runs in `.work/space-original-key-publication-2026-11-09/red-1`;
+expect the missing publication to fail before implementing the worker correction.
+Because the worker constructor will change, validate the full API AND worker contexts.
+Then remove native31328's explicit fixture keys/upload precondition and prove original
+SDK delivery using worker-confirmed publication. Mobilea14eea78 source remains accepted
+and unchanged; hosted Apple evidencea945220c is accepted/pushed. No APK88 or phone install.
 
 ## Accepted direct transport
 
