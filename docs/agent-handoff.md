@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 18:26 UTC. Historical detail is retained in
+Updated 9 November 2026, 18:42 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -28,7 +28,7 @@ is required; Apple source/runtime, push and calling acceptance remain separate.
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | SDK6 distribution accepted; preserve unrelated gradlew.bat delta |
 | Starter | feat/network-inspector-20261107 /ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Platform original | feat/communications /691f3fc5 | Recovery verifier port accepted/pushed; runtime unchanged |
-| Platform group | feat/communication-space /67def551 | Worker-only key publication passes native proof; full gate62503 running |
+| Platform group | feat/communication-space /61e8c2f5 | Atomic original-key publication and native proof accepted/pushed |
 
 Isolated directories are under `/home/fajar/hris/.worktrees/`: `communication-space`,
 `mobile-inspector-ci-2026-11-09`, `inspector-sdk6-2026-11-09` and
@@ -38,7 +38,7 @@ its apparent gradlew.bat change is text/eol normalization, not a byte change.
 Live API/worker remains e558a6868399058a2dcdee97acfd0e7fa7f1ef07, schema116.4,
 readiness control ON. Group V117–138 and organization routing are not deployed.
 
-## Original-key publication correction in progress
+## Original-key worker publication accepted
 
 The unaccepted explicit vendor-confirmation approach is RETIRED. Its22 Mobile Kotlin
 files and9 Group Kotlin files are archived under each checkout's private
@@ -69,12 +69,18 @@ between durable ACK and Sent projection,produce exactly two encrypted provider
 events,and are read offline in a later process. Ten native requests remain exactly
 two bootstrap/two direct reads. The2560MiB/two-core emulator is stopped.
 
-Group62503/full-1 is RUNNING:complete domain,relevant SQL/provider/delivery/native API
-and FULL unfiltered worker tests/quality. Its source is frozen. The192 domain cases
-pass so far; do not count the pending gate as accepted. Audit manifests/XML/native
-results after completion,then commit implementation/tests/docs. Group67def551 records
-this checkpoint. `.work/space-readiness-control-2026-11-09` holds private successor
-protocol candidates only; no signal source/worker/consumer has been accepted yet.
+Group62503/full-1 is REAPED PASS1410.192s:616 fresh cases,zero failures/errors,
+one existing elapsed-retention opt-in skip. 192 domain,75 SQL/provider cases,
+25 delivery,174 native API/OpenAPI and FULL worker150 pass; format/architecture pass.
+Strict audit verifies every fresh report and the
+unchanged source/APK/native evidence. [Group61e8c2f5](https://github.com/fajarxfce/hris-platform/blob/61e8c2f5d62b0f7f6406972df7191e4b32638a5c/docs/collaboration/space-original-key-publication.md) is committed/pushed.
+There is no Mobile source change for this correction; it belongs to worker completion.
+
+Next is group readiness-control protocol/projection,then bounded publication fanout,
+Mobile signal consumption/background ownership and product routing. Group private
+`.work/space-readiness-control-2026-11-09` has unaccepted candidate files and an apply
+hash guard; consult the current Group handoff for subsequent work. Do not resurrect
+the retired explicit-confirmation endpoint or SDK7 work.
 
 Mobilea14eea78 source remains unchanged; hosted42656803963 is fully accepted at
 69e639f8 with9,137 cases,including2,499 Apple simulator,and unsigned Xcode host.
