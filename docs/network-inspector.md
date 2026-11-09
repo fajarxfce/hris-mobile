@@ -1,6 +1,6 @@
 # Development network inspection
 
-This integration candidate uses the separate [KMP Network Inspector](https://github.com/fajarxfce/kmp-network-inspector)
+This integration uses the separate [KMP Network Inspector](https://github.com/fajarxfce/kmp-network-inspector)
 repository. The repository is now public with explicit owner approval; no library package is published.
 Do not copy its source into this repository or change its visibility to make CI pass.
 
@@ -12,9 +12,11 @@ even though its application checkout is nested. No credentials are persisted in
 the dependency checkout. SDK `26.10.23-hris.6` resolves from its published release
 with strict checksum verification; no private SDK mirror is configured in CI.
 The library's [verified CI run](https://github.com/fajarxfce/kmp-network-inspector/actions/runs/42591111996)
-passed 226 portable/Android host cases and 69 Apple simulator cases. Application CI
-for this integration is pending; native Android fixture compilation is separate
-from device execution, and the Apple Matrix native binding remains unverified.
+passed 226 portable/Android host cases and 69 Apple simulator cases. The [consumer verification](measurements/pinned-inspector-consumer-ci-2026-11-09.json)
+passes at source21101489:7,950 cases (5,429 desktop,1,912 actual browser,599 Android
+host,10 build-logic), zero failures/errors/skips and lint issues. All three APKs,
+the393-component SBOM and the exact artifact digest were audited. This CI run does
+not replace phone87 acceptance or execute the native Apple Matrix binding.
 Both application verification workflows explicitly run the Android collaboration
 host tests, including native runtime ownership regressions.
 
@@ -61,8 +63,8 @@ and pass its absolute location. The SDK comes from the public release:
 ```
 
 Catalog versions and exact checksums are retained. The library remains a source
-composite until its packages are published. Validate the application CI before
-merging this integration into the primary branch. The library targets Android, iOS,
+composite until its packages are published. The exact consumer CI source and artifact are now verified before integration
+into the primary working branch. The library targets Android, iOS,
 JVM and Wasm. Portable
 core/Ktor/viewer tests and Apple klib compilation are separate from platform acceptance:
 Android's actual JNI observer passes six loopback scenarios. Four Swift/native observer
