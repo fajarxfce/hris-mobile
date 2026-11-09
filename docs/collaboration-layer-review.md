@@ -6,6 +6,13 @@ repositories coordinate datasources; datasources perform raw I/O. This is record
 in all three repositories' AGENTS.md. Moving misplaced logic into a generic helper
 or controller does not correct its ownership.
 
+The history finding below was corrected on 9 November 2026 in
+[`4c8adbb1`](https://github.com/fajarxfce/hris-mobile/commit/4c8adbb1).
+[Older-message discovery](collaboration-older-history-discovery.md) now belongs to
+`AcquireOlderCollaborationHistory`; the presentation pager is removed. The final
+focused gate passes 1,892 cases and architecture/quality checks. Full cross-platform
+and native80 acceptance remain separate; follow the newest agent handoff.
+
 ## Current findings and correction
 
 PrepareCollaborationRoom now owns finite provisioning readiness and explicit retry
@@ -25,8 +32,8 @@ Gate1's81 tests passed but detekt rejected a long invoke; the cohesive polling
 step was then factored within the owning domain use case. [Evidence](measurements/collaboration-room-preparation-2026-11-06.json).
 The room-preparation drafts HAVE BEEN APPLIED and refined; never reapply them.
 
-ChatThreadHistoryPager also contains original/reference reconciliation policy in
-presentation. Move that orchestration into its owning domain use case next. Audit
+The review also found original/reference reconciliation policy in the presentation
+ChatThreadHistoryPager. That orchestration now resides in the domain use case above. Audit
 local outcome acquisition and composer ownership as separate responsibilities;
 selection and editor rendering mechanics remain presentation concerns.
 
@@ -47,7 +54,8 @@ visible-room preparation91902546 also shows bubbles during first-entry transitio
 across two offline process starts and one online start (three first + three repeated
 trials). The bound remains three idle prepared/visited rooms. Final root validation
 passed2,280 fresh tests/368.759s after6,938 in the initial full gate; lint has zero issues. Navigation owns cache lifetime; no SDK/Activity or business retry policy
-was added to that cache. The history-pager ownership finding above remains open.
+was added to that cache. The history-pager finding was still open at that checkpoint;
+its later correction is linked above.
 
 The SDK raw point patch is isolated at
 .worktrees/matrix-sdk-raw-event, pinned to upstream8de215a0aa0026afa5754ae5f05a6d168d1a1d60.
@@ -70,4 +78,4 @@ PRD after these increments; neither this review nor local edit acceptance closes
 Stable encrypted history replay now preserves unchanged records and checkpoint
 revisions; [validation](collaboration-chat-history-replay.md) includes three
 regressions, 2,353 full-gate cases and zero lint issues. This is storage ownership;
-ChatThreadHistoryPager orchestration remains a separate pending domain correction.
+The separate history-pager orchestration correction is now linked above.

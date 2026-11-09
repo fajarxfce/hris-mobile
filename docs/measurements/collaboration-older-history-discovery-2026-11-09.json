@@ -2882,9 +2882,44 @@
           "skipped": 0
         }
       }
+    },
+    "full-1": {
+      "startedAt": "2026-11-09T03:31:00.375749+00:00",
+      "elapsedSeconds": 1278.304,
+      "exitCode": 0,
+      "sourceFiles": 4528,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 4158,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "targetCounts": {
+        "desktopTest": {
+          "tests": 3430,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "testAndroidHostTest": {
+          "tests": 592,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "wasmJsBrowserTest": {
+          "tests": 136,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "scope": "Root check, Android host tests, actual Chrome tests, Android release/proof compilation and lint, shared Wasm and iOSArm64 source compilation. No physical iOS execution."
     }
   },
-  "acceptedScope": "1892 feature tests plus format/architecture/detekt on the final source",
+  "acceptedScope": "4158 fresh tests with no failures/errors/skips; full quality checks and listed compilation targets on pushed 4c8adbb1 source",
   "failedEvidence": [
     "Two actual route regressions: retained originals and metadata-only pages keep Older visible",
     "First focused:1891 executed with3 failures; known failed gate stopped during app metadata compilation, not claimed complete",
@@ -2896,7 +2931,6 @@
     "Empty intermediate page now reaches its message in one gesture, so update obsolete two-gesture expectation"
   ],
   "pending": [
-    "Final root and cross-platform checks",
     "Native80 upgrade with retained79 identity",
     "Room/background/cold renewal and traffic acceptance",
     "Phone installation"

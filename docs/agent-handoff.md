@@ -1,5 +1,34 @@
 # Agent continuation — HRIS Mobile
 
+
+## Full checks and package80 pass; native upgrade active — 9 November 2026, 03:57 UTC
+
+Full51408 REAPED PASS1278.304s:4,158 fresh tests (3,430 desktop,592 Android-host,
+136 actual Chrome),0 failures/errors/skips. Root quality, Android release/proof
+compilation and lint, shared Wasm and iOSArm64 source compilation pass. All4,528
+source and82 inspector inputs unchanged on pushed4c8adbb1. No iPhone execution.
+
+Package64707 REAPED PASS122.595s; APK50039 and SDK92286 verified. Nondebug ARM64
+version80,123465103 bytes,SHA25688e0f09646d7d7df857d3e2142e11e4fe4955c137834090931e4b1947761041d,
+same development signer,16KiB alignment,SDK26.10.23-hris.5 exact bytes,lint0.
+[Package evidence](measurements/collaboration-release80-2026-11-09.json).
+NOT accepted for release or installed on phone yet.
+
+initial-sync-native-2026-11-09/prepare-sender11420 REAPED: complete latest stopped79
+store cloned,source unchanged,keys untouched. Prepared reader fixed to read the root-
+owned private prior paired result through sudo cat. No application change. Counter96051,
+paired24897 and emulator87958 are active; do not run another heavy job. Gateway starts
+at13,one account/device/key publication. Follow acceptance-plan.md: retained79→80,
+Home/room/resume/cold120s settled windows, original3 bubbles and no sends, bounded Older
+and route/cold retention, paired renewals. capture-diagnostics.py reads only owned
+emulator process; private raw logs and closed aggregate records stay local.
+
+Reap all3 sessions after explicit stop files, preserve complete advanced80 store.
+Only actual native acceptance authorizes release-acceptance.json and phone install-only.
+Phone was reachable03:32 and HRIS absent after stock-ROM; notify before installing and
+never drive phone UI. Starter generic SyncTrigger port remains unexecuted/gated. All54
+communications groups remain open; Platform runtime/schema116.4/controlON unchanged.
+
 ## Domain-owned older history passes1,892 feature cases — 9 November 2026, 03:30 UTC
 
 Focused84644 REAPED PASS163.326s:1,892 fresh tests,0 failures/errors/skips;format,
