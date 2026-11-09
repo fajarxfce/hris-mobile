@@ -14,6 +14,8 @@ import dev.fajar.starter.observability.*
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 /** The application process owns observation independently of activities and chat routes. */
 class ApplicationCollaborationLifetime(
@@ -25,6 +27,7 @@ class ApplicationCollaborationLifetime(
     private val activate: (CollaborationOwner) -> Flow<AppResult<CollaborationActivationProgress>>,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
     private val observeReadiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() },
+    private val observeCredentialRecovery: (CollaborationOwner) -> Flow<Unit> = { emptyFlow() },
 ) : AutoCloseable {
     private val lifetime = SupervisorJob()
     private val scope = CoroutineScope(lifetime + dispatcher)
@@ -34,6 +37,8 @@ class ApplicationCollaborationLifetime(
     val state = mutableState.asStateFlow()
     private var activatedOwner: CollaborationOwner? = null
     private var activation: Job? = null
+    private var credentialRecovery: Job? = null
+    private val activationChanges = Mutex()
 
     fun start() {
         if (!started.compareAndSet(false, true)) return
@@ -132,31 +137,52 @@ class ApplicationCollaborationLifetime(
             } catch (_: Exception) {
                 stopped(runtimeStopped())
             } finally {
-                retainActivation(null)
+                withContext(NonCancellable) { retainActivation(null) }
                 // Completion and failed observation cannot leave a previous parent published.
                 stopped(if (lifetime.isActive) runtimeStopped() else null)
             }
         }
     }
 
-    /** Only the ownership collector replaces this child; token age never creates a new attempt. */
-    private fun retainActivation(owner: CollaborationOwner?) {
-        if (owner == activatedOwner) return
-        activation?.cancel()
-        activatedOwner = owner
-        activation =
-            owner?.let {
-                scope.launch {
-                    try {
-                        activate(it).collect()
-                    } catch (cancelled: CancellationException) {
-                        throw cancelled
-                    } catch (_: Exception) {
-                        // This owner gets one attempt; a failed activation is not a timer.
+    /** Ownership and admitted recovery are serialized; token age creates neither. */
+    private suspend fun retainActivation(owner: CollaborationOwner?) =
+        activationChanges.withLock {
+            if (owner == activatedOwner) return@withLock
+            activation?.cancel()
+            credentialRecovery?.cancel()
+            activatedOwner = owner
+            credentialRecovery =
+                owner?.let { retained ->
+                    scope.launch(start = CoroutineStart.UNDISPATCHED) {
+                        try {
+                            observeCredentialRecovery(retained).collect {
+                                activationChanges.withLock {
+                                    if (activatedOwner == retained) {
+                                        activation?.cancel()
+                                        activation = startActivation(retained)
+                                    }
+                                }
+                            }
+                        } catch (cancelled: CancellationException) {
+                            throw cancelled
+                        } catch (_: Exception) {
+                            // An observation failure cannot manufacture another activation attempt.
+                        }
                     }
                 }
+            activation = owner?.let(::startActivation)
+        }
+
+    private fun startActivation(owner: CollaborationOwner): Job =
+        scope.launch {
+            try {
+                activate(owner).collect()
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                // Another attempt requires an owned domain recovery signal.
             }
-    }
+        }
 
     private fun stopped(failure: Failure?) {
         mutableState.update { previous ->

@@ -2,6 +2,7 @@
 
 package dev.fajar.starter.collaboration.data
 
+import dev.fajar.starter.collaboration.domain.entities.CollaborationCredentialState
 import dev.fajar.starter.common.result.*
 import kotlin.test.*
 import kotlinx.coroutines.*
@@ -9,6 +10,43 @@ import kotlinx.coroutines.test.*
 
 /** Real Android lease lifecycle with inert FFI handles; no provider or JNI claim. */
 class AndroidCollaborationRuntimePublicationTest {
+    @Test
+    fun onlyLiveSyncValidatesCredentialsAndRejectionIsDurableBeforeSignalingRecovery() = runTest {
+        val states = mutableListOf<CollaborationCredentialState>()
+        val f =
+            runtimeLeaseFixture(
+                StandardTestDispatcher(testScheduler),
+                credentialState = states::add,
+            )
+        var syncs = 0
+        f.beforeSync = { if (++syncs > 1) awaitCancellation() }
+        try {
+            f.lease.completeAcquisition()
+            assertEquals(AppResult.Success(Unit), f.lease.publish())
+            assertTrue(states.isEmpty())
+            assertEquals(AppResult.Success(Unit), f.lease.synchronizeDevice())
+            assertEquals(listOf(CollaborationCredentialState.Validated), states)
+            f.lease.startMonitoring()
+            f.persistence.reportAuthenticationFailure()
+            runCurrent()
+            assertTrue(f.codec.decode(assertNotNull(f.store.read())).authenticationRejected)
+            assertEquals(
+                listOf(
+                    CollaborationCredentialState.Validated,
+                    CollaborationCredentialState.Rejected,
+                ),
+                states,
+            )
+            assertIs<AppResult.Failed>(f.lease.synchronizeDevice())
+            f.close()
+            f.persistence.reportAuthenticationFailure()
+            runCurrent()
+            assertEquals(2, states.size)
+        } finally {
+            f.close()
+        }
+    }
+
     @Test
     fun failedNativeDrainRetainsCredentialWriterUntilTheSameOwnerFinishesClosing() = runBlocking {
         val f = runtimeLeaseFixture()

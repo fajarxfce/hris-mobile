@@ -10,6 +10,30 @@ import kotlin.test.*
 
 class SdkRuntimeRegistryTest {
     @Test
+    fun retiredOrReplacedReservationsCannotPublishCredentialSignals() {
+        val registry = SdkRuntimeRegistry<String>({ true }, {})
+        val first =
+            assertIs<AppResult.Success<SdkRuntimeReservation<String>>>(
+                    registry.reserveForeground("store", setupOwner, SETUP_DEVICE)
+                )
+                .value
+        var publications = 0
+        assertTrue(registry.publishSignal(first) { publications++ })
+        registry.closeOtherOwners(null)
+        assertFalse(registry.publishSignal(first) { publications++ })
+        registry.released(first)
+        val second =
+            assertIs<AppResult.Success<SdkRuntimeReservation<String>>>(
+                    registry.reserveForeground("store", setupOwner, SETUP_DEVICE)
+                )
+                .value
+        assertFalse(registry.publishSignal(first) { publications++ })
+        assertTrue(registry.publishSignal(second) { publications++ })
+        assertEquals(2, publications)
+        registry.released(second)
+    }
+
+    @Test
     fun inspectionExcludesSdkAcquisitionUntilItsOwnerReleasesEvenAfterInvalidation() {
         val f = RegistryFixture()
         f.select()

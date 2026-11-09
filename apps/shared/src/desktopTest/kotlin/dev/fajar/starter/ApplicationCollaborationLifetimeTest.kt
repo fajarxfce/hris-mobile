@@ -27,6 +27,51 @@ import kotlinx.coroutines.test.*
 
 class ApplicationCollaborationLifetimeTest {
     @Test
+    fun domainRecoveryReplacesOnlyTheSelectedOwnersActivationAndClosesItsObserver() = runBlocking {
+        withFixture { f ->
+            val recovery = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+            var observers = 0
+            var cancelledActivations = 0
+            f.credentialRecovery = {
+                flow {
+                    observers++
+                    try {
+                        emitAll(recovery)
+                    } finally {
+                        observers--
+                    }
+                }
+            }
+            f.activate = { owner ->
+                flow {
+                    f.activated += owner
+                    try {
+                        awaitCancellation()
+                    } finally {
+                        cancelledActivations++
+                    }
+                }
+            }
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertEquals(1, observers)
+            assertEquals(1, f.activated.size)
+            recovery.emit(Unit)
+            f.scheduler.runCurrent()
+            assertEquals(2, f.activated.size)
+            assertEquals(f.activated.first(), f.activated.last())
+            assertEquals(1, cancelledActivations)
+            f.lifetime.close()
+            f.scheduler.runCurrent()
+            assertEquals(0, observers)
+            assertEquals(2, cancelledActivations)
+            recovery.emit(Unit)
+            f.scheduler.runCurrent()
+            assertEquals(2, f.activated.size)
+        }
+    }
+
+    @Test
     fun readinessDiagnosticRecordsOnlyScheduledWorkWithoutPacketOrFailureContent() = runBlocking {
         val diagnostics = mutableListOf<Diagnostic>()
         Diagnostics.install { event, error ->
@@ -538,6 +583,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
         }
     val activated = mutableListOf<CollaborationOwner>()
     var readiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() }
+    var credentialRecovery: (CollaborationOwner) -> Flow<Unit> = { emptyFlow() }
     var activate: (CollaborationOwner) -> Flow<AppResult<CollaborationActivationProgress>> =
         { owner ->
             flow { activated += owner }
@@ -577,6 +623,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
             { activate(it) },
             StandardTestDispatcher(scheduler),
             observeReadiness = { readiness() },
+            observeCredentialRecovery = { credentialRecovery(it) },
         )
 
     fun published() =

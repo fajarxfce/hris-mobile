@@ -54,6 +54,14 @@ class AndroidCollaborationRuntimeRepository(
 
     override fun readinessSignals() = readiness.asSharedFlow()
 
+    private val credentialStates =
+        MutableSharedFlow<CollaborationCredentialSignal>(
+            extraBufferCapacity = 32,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        )
+
+    override fun credentialSignals() = credentialStates.asSharedFlow()
+
     private val registry =
         SdkRuntimeRegistry<AndroidCollaborationRuntimeLease>(
             { it.availableForEntry && it.credentialFailures.value == null },
@@ -61,6 +69,50 @@ class AndroidCollaborationRuntimeRepository(
         )
     private val legacyLeases
         get() = registry.legacyResources()
+
+    override suspend fun reserveRejectedInspection(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationRuntimeInspection> {
+        currentCoroutineContext().ensureActive()
+        val closing = drain(registry.resources().filter { it.closingRequested })
+        if (closing is AppResult.Failed) return closing
+        val scoped = safeStorageCall { collaborationSdkScope(owner, deviceId, server, endpoint) }
+        if (scoped is AppResult.Failed) return scoped
+        val scope = (scoped as AppResult.Success).value
+        val existing = registry.find(owner, deviceId) ?: return reserveInspection(owner, deviceId)
+        if (existing.credentialFailures.value?.code != "client.collaboration_sdk_unauthorized")
+            return AppResult.Failed(
+                Failure(
+                    FailureKind.Unavailable,
+                    "Chat recovery owner changed.",
+                    code = "client.collaboration_runtime_not_retained",
+                )
+            )
+        val reserved = registry.beginCredentialReplacement(scope.storeId, owner, deviceId, existing)
+        if (reserved is AppResult.Failed) return reserved
+        val gate = (reserved as AppResult.Success).value
+        try {
+            val drained = drainHandover(gate)
+            if (drained is AppResult.Failed) return drained
+            currentCoroutineContext().ensureActive()
+            val acquired = registry.reserveCredentialReplacement(gate)
+            if (acquired is AppResult.Failed) return acquired
+            val reservation = (acquired as AppResult.Success).value
+            return AppResult.Success(
+                object : CollaborationRuntimeInspection.Reserved {
+                    override val owner = reservation.owner
+                    override val deviceId = reservation.deviceId
+
+                    override fun isCurrent() = registry.accepts(reservation)
+
+                    override fun close() = registry.released(reservation)
+                }
+            )
+        } finally {
+            registry.endHandover(gate)
+        }
+    }
 
     override suspend fun reserveInspection(
         owner: CollaborationOwner,
@@ -989,6 +1041,19 @@ class AndroidCollaborationRuntimeRepository(
                     prepared.record,
                     CollaborationHistoryApi(http, endpoint),
                     CollaborationPusherApi(http, endpoint),
+                    credentialState = { state ->
+                        if (reservation.space == null)
+                            registry.publishSignal(reservation) {
+                                credentialStates.tryEmit(
+                                    CollaborationCredentialSignal(
+                                        reservation.owner,
+                                        reservation.deviceId,
+                                        prepared.record.bootstrapOperationId,
+                                        state,
+                                    )
+                                )
+                            }
+                    },
                     authentication = authentication,
                 ) {
                     registry.released(reservation)
@@ -1104,6 +1169,20 @@ class AndroidCollaborationRuntimeRepository(
             when (val selected = persistence.session()) {
                 is AppResult.Failed -> {
                     failed(selected.failure)
+                    if (
+                        namespace == SdkCredentialNamespace.Original &&
+                            selected.failure.code == "client.collaboration_sdk_unauthorized"
+                    )
+                        registry.publishSignal(reservation) {
+                            credentialStates.tryEmit(
+                                CollaborationCredentialSignal(
+                                    reservation.owner,
+                                    reservation.deviceId,
+                                    record.bootstrapOperationId,
+                                    CollaborationCredentialState.Rejected,
+                                )
+                            )
+                        }
                     error("SDK credentials are unavailable.")
                 }
                 is AppResult.Success -> selected.value.toNativeSession()

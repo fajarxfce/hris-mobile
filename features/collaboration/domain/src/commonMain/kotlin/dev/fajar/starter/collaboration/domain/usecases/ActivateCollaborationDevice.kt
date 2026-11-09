@@ -352,9 +352,14 @@ class ActivateCollaborationDevice(
         val opened = runtimes.isOpen(owner, device.id)
         val checked = continuation(workspaceId, owner, opened)
         if (checked is AppResult.Failed) return checked
-        if (opened is AppResult.Failed) return opened
-        if (!(opened as AppResult.Success).value) {
-            val storage = inspectStore(workspaceId, owner, device, null)
+        val rejected =
+            opened is AppResult.Failed &&
+                mayCreate &&
+                opened.failure.kind == FailureKind.Unauthorized &&
+                opened.failure.code == "client.collaboration_sdk_unauthorized"
+        if (opened is AppResult.Failed && !rejected) return opened
+        if (rejected || !(opened as AppResult.Success).value) {
+            val storage = inspectStore(workspaceId, owner, device, null, rejected)
             if (storage is AppResult.Failed) return storage
             when ((storage as AppResult.Success).value) {
                 CollaborationActivationStore.RECOVERY_REQUIRED ->
@@ -428,8 +433,11 @@ class ActivateCollaborationDevice(
         owner: CollaborationOwner,
         device: CollaborationDeviceSetup,
         record: CollaborationSetupCommandRecord?,
+        recoverRejected: Boolean = false,
     ): AppResult<CollaborationActivationStore> {
-        val reserved = runtimes.reserveInspection(owner, device.id)
+        val reserved =
+            if (recoverRejected) runtimes.reserveRejectedInspection(owner, device.id)
+            else runtimes.reserveInspection(owner, device.id)
         // Own a late reservation before the first suspending authority check.
         val lease =
             (reserved as? AppResult.Success)?.value as? CollaborationRuntimeInspection.Reserved

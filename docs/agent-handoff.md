@@ -1,5 +1,28 @@
 # Agent continuation — HRIS Mobile
 
+## Automatic recovery focused gates pass; full79 next — 9 November 2026, 01:43 UTC
+
+Focus65493 REAPED PASS137.400s:81 fresh tests,0 failures/errors/skips, format/architecture,
+4,524 source/82 inspector inputs stable. Application lifetime/bindings are up-to-date
+after passing first focus (do not count them as fresh81). Original focus28468 is REAPED;
+its sole failure was fixed by realistic session expiry in the new fixture. New native
+unit tests verify live-sync validation, persisted rejection before signal and stale
+reservation fencing. [Evidence](measurements/collaboration-credential-reactivation-2026-11-09.json).
+
+NEXT push this combined source, then run credential-reactivation-2026-11-09/check-full.py
+full-1. No current compiler/emulator. Required :check, full Android-host, actual Chrome
+credential/readiness cases, Android/lint/proof, Wasm/iOS-source/quality at version79.
+Do not edit gate inputs during run. Full acceptance/package/native proof are not done.
+Then prepare/verify signed79, clone the complete preserved78 store with the prepared
+credential-recovery-native scripts and recover ORIGINAL Recovery78 005634 automatically.
+Do not resend it, reset keys or use a fresh sender to bypass stale credentials.
+
+Phone authorized/connected but empty after stock-ROM flash: announce and install-only
+after validation; never drive UI. User enabled Crashlytics API, IAM Viewer grant still
+unconfirmed after instructions. No cloud read claim. Platform remains9551cbbb docs,
+runtime e558a686/116.4/control ON. Starter665b9cd awaits consumer acceptance; all54 PRD
+groups remain open. Continue root fix/native proof, phone install, Starter port and PRD.
+
 ## Combined recovery focus2 running; Crashlytics IAM instructions given — 9 November 2026, 01:40 UTC
 
 Focus28468 REAPED353.542s:96 fresh cases, one failed domain replacement case, no

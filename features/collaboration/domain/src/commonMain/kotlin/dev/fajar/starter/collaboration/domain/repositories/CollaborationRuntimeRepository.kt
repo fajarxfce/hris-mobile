@@ -11,6 +11,9 @@ interface CollaborationRuntimeRepository {
     /** Bounded opaque events from existing clients only; subscription never opens an SDK. */
     fun readinessSignals(): Flow<CollaborationReadinessSignal> = emptyFlow()
 
+    /** Existing-client facts only; observation does not open a runtime or refresh a session. */
+    fun credentialSignals(): Flow<CollaborationCredentialSignal> = emptyFlow()
+
     /** Whether this host has a protected native implementation for first device activation. */
     val supportsDeviceActivation: Boolean
         get() = false
@@ -28,6 +31,23 @@ interface CollaborationRuntimeRepository {
                 FailureKind.Unavailable,
                 "Chat storage inspection is unavailable.",
                 code = "client.collaboration_inspection_unavailable",
+            )
+        )
+
+    /**
+     * Explicit admitted recovery: exclude and drain an exactly owned rejected runtime, then reserve
+     * its original private store for inspection. Never replaces credentials or keys. A healthy,
+     * foreign, adopted or unfinished runtime cannot be discarded by this operation.
+     */
+    suspend fun reserveRejectedInspection(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationRuntimeInspection> =
+        AppResult.Failed(
+            Failure(
+                FailureKind.Unavailable,
+                "Chat recovery is unavailable.",
+                code = "client.collaboration_recovery_inspection_unavailable",
             )
         )
 

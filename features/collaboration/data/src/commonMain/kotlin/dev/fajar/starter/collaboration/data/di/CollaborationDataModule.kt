@@ -1046,6 +1046,10 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun observeCredentialRecovery(runtimes: CollaborationRuntimeRepository) =
+        ObserveCollaborationCredentialRecovery(runtimes)
+
+    @Factory
     fun readPushPriority(
         priorities: CollaborationPushPriorityRepository,
         sessions: SessionRepository,

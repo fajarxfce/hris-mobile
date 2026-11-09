@@ -9,6 +9,79 @@ import kotlinx.coroutines.test.*
 
 class ActivateCollaborationDeviceTest {
     @Test
+    fun aRejectedOpenRuntimeUsesExplicitRecoveryInspectionBeforeOriginalCredentialReplacement() =
+        runTest {
+            val f = CollaborationActivationFixture()
+            f.retainPrivateAccount()
+            val rejected =
+                Failure(
+                    FailureKind.Unauthorized,
+                    "Rejected",
+                    code = "client.collaboration_sdk_unauthorized",
+                )
+            f.openFailure = rejected
+            f.onRestore = { AppResult.Failed(rejected) }
+            val now = f.command.clock.now().toEpochMilliseconds()
+            f.device =
+                f.device!!.copy(
+                    gateway =
+                        CollaborationGatewayStatus("head", 0, 5, now - 1, now + 86_400_000, null)
+                )
+            f.command.gatewayResponse = {
+                AppResult.Success(
+                    CollaborationGateway(
+                        f.command.owner,
+                        "device",
+                        "head",
+                        1,
+                        "matrix-user",
+                        "matrix-device",
+                        "access",
+                        "refresh",
+                        now + 300_000,
+                        now + 86_400_000,
+                    )
+                )
+            }
+            val observed = f.operation()(f.command.owner).last()
+            val result =
+                assertIs<AppResult.Success<CollaborationActivationProgress>>(
+                    observed,
+                    observed.toString(),
+                )
+            assertEquals(CollaborationActivationStep.READY, result.value.step)
+            assertEquals(1, f.recoveryInspections)
+            assertEquals(1, f.restores)
+            assertEquals(1, f.installations.size)
+            val action =
+                assertIs<CollaborationSetupAction.Bootstrap>(
+                    f.installations.single().command.action
+                )
+            assertEquals("device", action.deviceId)
+            assertEquals(0L, action.gatewayVersion)
+            assertFalse(f.inspectionHeld)
+        }
+
+    @Test
+    fun inspectionOnlyAndOtherDenialsCannotDrainOrReplaceAnOpenRuntime() = runTest {
+        for (code in listOf("client.collaboration_sdk_unauthorized", "client.session_changed")) {
+            val f = CollaborationActivationFixture()
+            f.retainPrivateAccount()
+            val rejected = Failure(FailureKind.Unauthorized, "Rejected", code = code)
+            f.openFailure = rejected
+            assertEquals(
+                AppResult.Failed(rejected),
+                f.operation()("selection", CollaborationActivationMode.INSPECT).last(),
+            )
+            if (code != "client.collaboration_sdk_unauthorized")
+                assertEquals(AppResult.Failed(rejected), f.operation()(f.command.owner).last())
+            assertEquals(0, f.recoveryInspections)
+            assertEquals(0, f.restores)
+            assertTrue(f.installations.isEmpty())
+        }
+    }
+
+    @Test
     fun cancellationOnReadyPublicationKeepsWakeWithoutStartingScheduling() = runTest {
         val f = CollaborationActivationFixture()
         f.openAtInspection = true

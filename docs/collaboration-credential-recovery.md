@@ -38,25 +38,28 @@ Ordinary age, offline failures and absent backup metadata do not mark credential
 rejected. A failed rejection write retains the credential/native/directory owner for
 the same close attempt to finish. [Focused evidence](measurements/collaboration-credential-rejection-2026-11-09.json).
 
-## Remaining automatic recovery
+## Automatic recovery ownership
 
-The domain activation/recovery owner must use current HRIS admission and the existing
+The domain activation/recovery owner uses current HRIS admission and the existing
 durable Bootstrap command to replace gateway credentials. Preserve private keys,
 queue namespace, original operation IDs and pending messages. Late rejections,
 duplicate foreground/background consumers, failed persistence, cancellation and
 restart must not manufacture a chain of new bootstrap operations. The application
 owns observation; a ViewModel or network inspector must not implement this policy.
 
-Native acceptance must resume the preserved `Recovery78 005634` original, demonstrate
+Native acceptance must still resume the preserved `Recovery78 005634` original, demonstrate
 one server event, and measure Home/room/background traffic after recovery. Do not
 resend that text or replace the fixture with a new account to hide the stale session.
 
-The next implementation must handle an asynchronous auth error after activation
-already reported READY. Observe scoped signals from existing runtimes without opening
-another SDK. Serialize activation ownership and coalesce duplicate rejection signals.
-Allow one automatic recovery until the replacement has a successful live Matrix sync;
-a rejected replacement must not manufacture another bootstrap. Owner changes cancel
-old work. An already-open rejected lease needs an explicit exclusive drain/inspection
-before private identity checks; ordinary healthy inspection must remain read-only.
-Keep this admission/retry policy in domain and lifecycle observation in application
-composition. Background work must continue to respect the selected-activation boundary.
+An asynchronous auth error after READY now enters a scoped signal flow from existing
+SDKs. The domain observation admits one recovery until a different generation completes
+live Matrix sync. Duplicate rejection, a response from the rejected generation and an
+unvalidated rejected replacement cannot manufacture another bootstrap. Retired or
+replaced runtime reservations cannot publish a late signal. Observation opens no SDK.
+
+Application composition serializes selected-owner activation and recovery signals.
+Owner changes cancel old activation and its observer. A rejected live lease gets an
+explicit exclusive drain/inspection before original private identity checks; ordinary
+healthy inspection remains read-only. Other denials and inspection-only activation do
+not authorize this drain. Background work retains the selected-activation boundary.
+See [focused source evidence](measurements/collaboration-credential-reactivation-2026-11-09.json).

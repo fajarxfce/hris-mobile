@@ -15,6 +15,8 @@ internal class CollaborationActivationFixture(
     var supported = true
     var device: CollaborationDeviceSetup? = command.access.device
     var opened = false
+    var openFailure: Failure? = null
+    var recoveryInspections = 0
     var inspectionHeld = false
     var inspectionCurrent = true
     var inspectionCloses = 0
@@ -120,6 +122,17 @@ internal class CollaborationActivationFixture(
         object : CollaborationRuntimeRepository {
             override val supportsDeviceActivation
                 get() = supported
+
+            override suspend fun reserveRejectedInspection(
+                owner: CollaborationOwner,
+                deviceId: String,
+            ): AppResult<CollaborationRuntimeInspection> {
+                check(openFailure?.code == "client.collaboration_sdk_unauthorized")
+                recoveryInspections++
+                openFailure = null
+                opened = false
+                return reserveInspection(owner, deviceId)
+            }
 
             override suspend fun reserveInspection(
                 owner: CollaborationOwner,
@@ -247,7 +260,8 @@ internal class CollaborationActivationFixture(
             override suspend fun isOpen(
                 owner: CollaborationOwner,
                 deviceId: String,
-            ): AppResult<Boolean> = AppResult.Success(opened)
+            ): AppResult<Boolean> =
+                openFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(opened)
 
             override suspend fun enterTimeline(
                 owner: CollaborationOwner,

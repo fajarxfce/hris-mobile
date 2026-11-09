@@ -10,6 +10,7 @@ import dev.fajar.starter.collaboration.data.datasources.createAndroidCollaborati
 import dev.fajar.starter.collaboration.data.mappers.collaborationSdkAcquisitionFailure
 import dev.fajar.starter.collaboration.data.mappers.toLocalDeviceIdentity
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkRecord
+import dev.fajar.starter.collaboration.domain.entities.CollaborationCredentialState
 import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalDeviceIdentity
 import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageDevice
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOriginalQueueSnapshot
@@ -40,6 +41,7 @@ internal constructor(
     historyApi: CollaborationHistoryApi,
     pusherApi: CollaborationPusherApi,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val credentialState: (CollaborationCredentialState) -> Unit = {},
     private val authentication: AndroidSdkAuthRegistration? = null,
     private val released: (AndroidCollaborationRuntimeLease) -> Unit,
 ) : CollaborationRuntimeLease {
@@ -270,7 +272,12 @@ internal constructor(
     private val credentialWatcher =
         lifetime.launch(start = CoroutineStart.LAZY) {
             credentialFailures.filterNotNull().collect {
-                persistence.persistAuthenticationFailure()
+                val persisted = persistence.persistAuthenticationFailure()
+                if (
+                    persisted is AppResult.Success &&
+                        credentialFailures.value?.code == "client.collaboration_sdk_unauthorized"
+                )
+                    credentialState(CollaborationCredentialState.Rejected)
                 safeStorageCall { nativeClient.enableAllSendQueues(false) }
                 sync.stop()
                 children.close()
@@ -287,7 +294,12 @@ internal constructor(
     suspend fun startSync(): AppResult<Unit> = syncOperation { sync.start() }
 
     /** No room join or queue resume; completion belongs to the current owned SDK sync. */
-    suspend fun synchronizeDevice(): AppResult<Unit> = syncOperation { sync.awaitFirstSync() }
+    suspend fun synchronizeDevice(): AppResult<Unit> {
+        val result = syncOperation { sync.awaitFirstSync() }
+        if (result is AppResult.Success && credentialFailures.value == null && availableForEntry)
+            credentialState(CollaborationCredentialState.Validated)
+        return result
+    }
 
     private suspend fun syncOperation(operation: suspend () -> AppResult<Unit>): AppResult<Unit> {
         if (stopRequested.get()) return syncStopped()

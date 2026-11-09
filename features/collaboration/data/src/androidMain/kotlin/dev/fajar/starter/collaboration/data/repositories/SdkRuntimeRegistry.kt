@@ -161,6 +161,16 @@ internal class SdkRuntimeRegistry<T : Any>(
             entries[reservation.storeId] === reservation && !reservation.retired
         }
 
+    /** Nonblocking event publication is fenced to this exact active reservation. */
+    fun publishSignal(reservation: SdkRuntimeReservation<T>, publish: () -> Unit): Boolean =
+        synchronized(monitor) {
+            if (entries[reservation.storeId] !== reservation || reservation.retired) false
+            else {
+                publish()
+                true
+            }
+        }
+
     /** Excludes a borrower for the whole suspending history-reopen decision, not just its check. */
     fun beginHistoryReopen(
         owner: CollaborationOwner,

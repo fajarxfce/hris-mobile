@@ -31,6 +31,7 @@ import org.matrix.rustcomponents.sdk.ToDeviceMessageListener
 internal suspend fun runtimeLeaseFixture(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
     httpObservation: AndroidCollaborationHttpObservation? = null,
+    credentialState: (CollaborationCredentialState) -> Unit = {},
     released: (AndroidCollaborationRuntimeLease) -> Unit = {},
 ): RuntimeLeaseFixture {
     val endpoint = CollaborationSdkEndpoint("https://hris.example.test/")
@@ -65,6 +66,7 @@ internal suspend fun runtimeLeaseFixture(
         httpObservation,
         store,
         codec,
+        credentialState,
     )
 }
 
@@ -77,6 +79,7 @@ internal class RuntimeLeaseFixture(
     val httpObservation: AndroidCollaborationHttpObservation?,
     val store: MemoryCredentialStore,
     val codec: CollaborationSdkRecordCodec,
+    credentialState: (CollaborationCredentialState) -> Unit,
 ) {
     val calls: MutableList<String> = Collections.synchronizedList(mutableListOf())
     var beforePause: suspend () -> Unit = {}
@@ -179,6 +182,7 @@ internal class RuntimeLeaseFixture(
             CollaborationHistoryApi(http, endpoint),
             CollaborationPusherApi(http, endpoint),
             dispatcher,
+            credentialState = credentialState,
         ) {
             calls += "released"
             released(it)
