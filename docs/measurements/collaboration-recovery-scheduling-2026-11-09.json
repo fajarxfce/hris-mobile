@@ -1,5 +1,5 @@
 {
-  "status": "Candidate source validated by focused checks; full and native gates pending",
+  "status": "Full source gate accepted; native request-count/WorkManager proof and Starter port pending",
   "reproduction": {
     "session": 45404,
     "reaped": true,
@@ -62,12 +62,40 @@
   "rootCause": "Requested consumers ensured a new wake even after another consumer acknowledged the previous sweep. Continuations could feed both OS and foreground execution repeatedly.",
   "change": "Generic Scheduled/Requested trigger; feature-owned wake creation only for scheduled discovery, requested consumers stop at absent durable wake. Periodic WorkManager registrations update their tag while preserving identity.",
   "pending": [
-    "Required root/full and actual browser gate",
-    "Release78 package",
-    "Real WorkManager dispatch probe",
-    "Retained sender request-count and original-message proof",
+    "Retained sender78 request counts and original-message proof",
+    "Actual Android WorkManager dispatch probe",
     "Generic Starter port after Mobile acceptance"
   ],
   "phoneVersion": 70,
-  "newPhoneAvailability": false
+  "newPhoneAvailability": false,
+  "source": "a1f2cfe93ac08e4c46967143d3a33e7feb6c784f",
+  "full": {
+    "session": 61096,
+    "reaped": true,
+    "exitCode": 0,
+    "elapsedSeconds": 1432.942,
+    "freshCounts": {
+      "tests": 5949,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "freshBrowserCases": 77,
+    "freshSuites": 795,
+    "sourceInputs": 4521,
+    "allInputsUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "checks": [
+      "root check",
+      "actual Chrome worker/readiness/recipient storage tests",
+      "Android devRelease compile/lint",
+      "proof compile",
+      "Web compile",
+      "iOS Arm64 source compile",
+      "format",
+      "architecture",
+      "detekt"
+    ],
+    "nativeAppleExecution": false
+  }
 }

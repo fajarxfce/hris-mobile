@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Recovery source and release78 accepted; native proof next — 9 November 2026, 00:49 UTC
+
+Source a1f2cfe9 passes the full gate:5,949 fresh cases/795 suites including77 actual
+Chrome cases, zero failures/errors/skips,1,432.942s. All4,521 application and82
+inspector inputs unchanged. Root, Android compile/lint, proof, Web and actual iOS
+Arm64 source compile, format/architecture/detekt pass. No native Apple execution.
+Session61096 REAPED. [Evidence](measurements/collaboration-recovery-scheduling-2026-11-09.json).
+
+Release78 is built/verified on that exact source. SHA421fde200058dfb790fe7b0a66a6750cb1af3938f15d5570914c30386732ab6c,
+123,448,719 bytes, same signer/app ID, nondebuggable, ARM64, SDK5 bytes/symbols,
+16KiB alignment, Firebase dev app and backup exclusions verified; lint0. Build56985
+REAPED107.221s; verifier84143 REAPED. Separate scheduling78 debug proof package
+5e8fd5efe03a214342d27866b50ac705ae586c6ac4dcf79f288bceececd818fe is verified
+x86_64/SDK5/16KiB, explicit instrumentation namespace,0 lint errors and49 warning-only
+version/fixture advisories. Build4993 REAPED134.855s; verifier21184 REAPED.
+[Package evidence](measurements/collaboration-recovery-release78-2026-11-09.json).
+
+No compiler/emulator active at this checkpoint. NEXT run prepared private
+recovery-scheduling-native-2026-11-09/prepare-sender.py, then run-sender.py.
+It clones the stopped qualified77 store INCLUDING all AVD/version/encryption-key
+metadata, preserves its source, and owns emulator5562 at2,560MiB/two cores for20min.
+Before product launch prepare-counter.py and root count-http.py; then install-and-qualify.py.
+Review private acceptance-plan.md. Require120s Home idle, original room reopen,
+one newly named Recovery78 message ONCE with peer stopped, further idle and lifecycle
+observation, plus run-scheduling-proof.py in the fresh separate package. The aggregate
+counter has a900s/10,000-request bound; no raw traffic retained. Finish/join/reap it and
+the emulator explicitly. Native acceptance remains UNEXECUTED, not inferred from tests.
+
+NEVER resend Control77 235408, Warm77 235728, Readiness76 211625 or Draft66. Never reset
+private keys or Bima74 metadata. Phone70 unchanged/no new availability; no phone UI.
+Starter665b9cd awaits consumer proof before generic trigger port. Live Platform source
+e558a686/schema116.4/control ON unchanged. Continue missed-hint/reconnect/interrupted
+activation, new-room Older messages/timestamps and remaining54 PRD groups afterward.
+
+
 ## Recovery consumers no longer create fresh wakes — 9 November 2026, 00:19 UTC
 
 Candidate source separates SyncTrigger.Scheduled discovery from Requested delivery.
