@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 22:27 UTC. Historical contracts, failed experiments and
+Updated 9 November 2026, 22:48 UTC. Historical contracts, failed experiments and
 accepted evidence are retained in
 [a877c088](https://github.com/fajarxfce/hris-mobile/blob/a877c088/docs/agent-handoff.md).
 This file owns current work. Do not restart jobs from historical notes.
@@ -91,8 +91,39 @@ Private review.md records actual first-gate failures and separate review finding
 [Contract](collaboration-space-device-sync.md) and
 [measurement](measurements/collaboration-space-device-sync-2026-11-09.json).
 No collector,actual group recovery worker or product activation is included.
-No compiler/emulator remains active; no phone/live change. Commit and push before
-starting successor implementation.
+Accepted as b51e70d8 and pushed;9895 reaped. No phone/live change.
+Successor progress now owns the only compiler as recorded below.
+
+## Latest: independent recovery progress — accepted locally
+
+Private `.work/space-recovery-progress-2026-11-09` pins b51e70d8. Fourteen Kotlin
+inputs add native-family/account/space encrypted progress over the existing replica
+store/key. The exact raw boundary, continuation and at most one claimed conversation
+are persisted before SDK work;empty projected pages still advance. A pending claim
+must be completed before advancing or finishing. New wakes preserve the finite sweep;
+failed work,healthy continuation and newer binding revisions separately require a
+fresh sweep without ACK. Only a clean exhausted sweep returns its original wake.
+Local owning read/update use cases guard session/account/native family around I/O,
+without token age or selected-company dependencies. No use-case/repository cross-calls.
+
+Fourteen domain cases,twelve shared actual-storage cases with SQLite/IndexedDB/Apple
+Room bindings,and app DI cover process loss,late completion,CAS,owner changes,
+key loss,tampering,exact cursors and independent retry reasons. Pinned formatting is
+complete. Focused31161 is REAPED PASS244.986s:28 cases=14 domain+12 SQLite+2 app,
+zero failures/errors/skips. Exact source/library/XML audit passes;4,611 source inputs
+and Inspector bytes unchanged. Full35632 is REAPED PASS597.698s:4,376 fresh cases
+=3,721 desktop+629 Android host+26 browser,zero failures/errors/skips. Root check,
+Android release/lint,shared Wasm/iOS source and quality pass. Focused/full manifests
+match;strict current source/library/XML audit passes. No gate failed. No compiler
+or emulator remains active. [Contract](collaboration-space-recovery-progress.md) and
+[measurement](measurements/collaboration-space-recovery-progress-2026-11-09.json).
+Commit/push before applying successor files. This progress is
+not a worker or product activation. No APK,emulator,phone or live changes.
+Private `.work/space-recovery-worker-2026-11-09/prepared` contains eleven UNAPPLIED
+successor files (wake commands + local device/page/claimed-room readers and27 domain tests). They need
+review/tests and must not be applied until progress is accepted,committed and pushed.
+The README records the first-page concurrent-append distinction and remaining final
+inventory/wake handoff. No actual app worker source or binding is prepared yet.
 
 ## Accepted readiness increments
 
@@ -129,8 +160,8 @@ inventory successors or native Apple Matrix/APNs/calling behavior.
    is running on immutable eba05a9c253aa7fe7f0cf816b49c128b4f3003a6;dispatch9340 reaped.
    Portable is accepted; artifact audit75963 is REAPED PASS6,743 cases,zero failures/
    errors/skips. Exact baseline+81 report cases,GitHub digest,ZIP CRC and all XML pass.
-   Apple remains
-   in progress. It does not cover the newer admitted sync source.
+   Apple has passed its simulator step and is building the unsigned host.
+   Its artifact acceptance remains pending. It does not cover the newer admitted sync source.
    It covers cumulative native source,wake and inventory changes. Private inventory
    hosted.json and hosted-audit.py pin it against accepted42697887863 baseline;
    expected6,743 portable+2,549 Apple=9,292 cases. Apple acceptance pending. Do not repeat
@@ -171,8 +202,8 @@ The explicit vendor key-confirmation endpoint was retired. Never reapply archive
 
 | Checkout | Branch / accepted source | State |
 | --- | --- | --- |
-| Mobile | feat/chat-send-timing-20261107 / eba05a9c | Inventory accepted/pushed; portable CI accepted, Apple running; sync accepted locally |
-| Platform original | feat/communications / f3d3bbdf | Handoff current; recovery verifier remains schema116.4 |
+| Mobile | feat/chat-send-timing-20261107 / b51e70d8 | Sync accepted/pushed; progress accepted locally; EBA Apple host build running |
+| Platform original | feat/communications / 51d25bea | Handoff current; recovery verifier remains schema116.4 |
 | Platform group | feat/communication-space / d4246a08 | Separate worktree; V140 workers accepted/pushed |
 | Starter | feat/network-inspector-20261107 / ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Inspector | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Public SDK6 integrated |

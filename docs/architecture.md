@@ -709,3 +709,7 @@ pending; final pipeline checks are recorded in the linked evidence.
 [Admitted organization device sync](collaboration-space-device-sync.md) coordinates
 current local admission and one device status read, reusing the exact published native
 client, persisted cursor and parent-owned synchronization lifetime.
+
+[Organization recovery progress](collaboration-space-recovery-progress.md) retains a
+single claimed raw inventory page before native work, advances by exact checkpoint CAS,
+and keeps interrupted attempts, independent retry reasons and wake completion separate.

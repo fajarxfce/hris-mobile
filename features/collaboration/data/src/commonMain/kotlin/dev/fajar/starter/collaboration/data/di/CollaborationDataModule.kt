@@ -1221,6 +1221,20 @@ class CollaborationDataModule {
         EnsureCollaborationRecoveryWake(wakes)
 
     @Factory
+    fun readSpaceRecoveryProgress(
+        progress: CollaborationSpaceRecoveryProgressRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceRecoveryProgress(progress, sessions, server)
+
+    @Factory
+    fun updateSpaceRecoveryProgress(
+        progress: CollaborationSpaceRecoveryProgressRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = UpdateCollaborationSpaceRecoveryProgress(progress, sessions, server)
+
+    @Factory
     fun readRecoveryProgress(
         progress: CollaborationRecoveryProgressRepository,
         sessions: SessionRepository,
