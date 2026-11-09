@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 14:52 UTC. Historical detail is retained in
+Updated 9 November 2026, 15:25 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -71,16 +71,23 @@ Audit67988 is reaped PASS; private evidence is the prior binding preparation's
 
 ## Prepared original matching follow-up
 
-`.work/space-original-delivery-2026-11-09/candidate` contains two PRIVATE UNVALIDATED
-files: a pure matching refactor and three common test methods. The active domain source
+`.work/space-original-delivery-2026-11-09/candidate` contains seven PRIVATE UNVALIDATED
+files: pure matching/acknowledgement/transport policies, fixtures and ten common test methods. The active domain source
 is unchanged. Existing full-identity inspection APIs keep their validation/output;
 `matchCollaborationOriginalMessages` accepts the exact canonical original sender facts
 and retains the existing whole-inventory/command/completion checks, avoiding a made-up
-identity-selection timestamp. Formatter passes0.680s only; no compiler/test/SDK proof.
+identity-selection timestamp. Formatter passes0.680s initially,0.718s for four files and0.917s for all seven;
+no compiler/test/SDK proof.
 Do not apply before both direct-transport contracts are accepted. base.json pins the
 copied policy source. Existing original match/read regressions remain required, plus
 owning current admission, actual writer acquisition, durable receipt/archive recovery,
 late callback journaling and pause/drain. This is not a delivery implementation.
+
+The acknowledgement policy derives exact completion facts from a persisted Sent command
+and durable journal before archive retirement; actual archive aliases remain supported.
+It does not write an archive or infer an ACK from SDK absence. The transport policy matches
+retained room and complete original queue to current logical/physical device coordinates.
+A false recipientReady is not send authority and does not erase previously retained ACKs.
 
 ## Current Mobile gate
 
@@ -150,20 +157,20 @@ passing database-recovery/migration/recovery-set Python cases and its own116.4
 maximum. Group keeps138; do not copy either branch's schema maximum to the other. Details/scripts live under the group checkout's
 `.work/space-root-reconciliation-2026-11-09`:
 
--49700 failed226.851s after207 passing domain/data cases: five Group-only fixture
+- 49700 failed226.851s after207 passing domain/data cases: five Group-only fixture
  calls retained the old directMetadata name after Root renamed it accountData.
--67950 failed83.59s:two HTTP cases/one failure. The new default-key test froze the
+- 67950 failed83.59s:two HTTP cases/one failure. The new default-key test froze the
  application clock before PostgreSQL created its lease; request_lost was correct.
  Only that live-operation fixture now follows system time, keeping all assertions.
--24065 REAPED PASS75.409s:both HTTP cases pass, zero failures/errors/skips; cached
+- 24065 REAPED PASS75.409s:both HTTP cases pass, zero failures/errors/skips; cached
  domain/data results are not recounted.
--Full33511 is RUNNING on8,686 fixed inputs: database/collaboration/required API and
+- Full33511 is RUNNING on8,686 fixed inputs: database/collaboration/required API and
  FULL worker, plus quality/migration/recovery checks. It is the only heavy local job;
  Group source inputs remain frozen until reaped. No merge commit/deployment yet.
 
-Five private, uncompiled Group direct-transport drafts are prepared under
-`.work/space-direct-transport-2026-11-09/candidate`, with base hashes and remaining
-API/DI/SQL/HTTP work in its README. They are not applied to the frozen source or
+Eleven private, uncompiled Group direct-transport drafts are prepared under
+`.work/space-direct-transport-2026-11-09/candidate`, including API/DI/SQL/HTTP tests
+and exact base hashes; the guarded apply/check scripts remain unexecuted. They are not applied to the frozen source or
 accepted. Original message.get already returns archived immutable commands, verified
 by its actual encrypted storage contract; do not add an unnecessary archive fallback.
 
