@@ -1,5 +1,37 @@
 # Agent continuation — HRIS Mobile
 
+## APK84 verified; retained upgrade running — 9 November 2026, 08:20 UTC
+
+Source b0e4079e is pushed. Build65762 REAPED PASS110.286s; verify18843/6288/47855
+REAPED. APK84 SHA5f64e156b00696d3914fd2ebf4286230baf5db2f22306277899d4a3d271580c3,
+123465103bytes, same signer, nondebug Dev release, exact SDK6 native,16KiB, lint0,
+compiled backup exclusions. SDK publication flag was stale in the copied verifier;
+corrected from the immutable release438835525 receipt, initial record preserved.
+[Candidate evidence](measurements/collaboration-release84-candidate-2026-11-09.json).
+
+Clone5448 REAPED PASS: latest COMPLETE83 all4userdata/encryption files+AVD copied
+with checksums and source unchanged. ACTIVE native jobs: emulator37100/PID49957,
+phases94735, passive counter7443 and paired-refresh26263. Upgrade83→84 passes25.305s,
+retained account Home/app/public-key identity. No reset or send yet. Freeze product/
+library inputs. Root .work/history-transport-native-2026-11-09; its sender target is
+ALREADY BOOTED/UPGRADED84 and must be preserved even on failure. Never overwrite it
+with83. The complete stopped baseline83 remains intact, with FIVE originals incl
+Parent83 071123. One distinct new message is budgeted only at the end of the proof;
+never resend old messages or repeat a successful new-send.json.
+
+Next finish Home/room/resume/cold, history end, paired renewal and clock-aligned
+traffic review; reap all four jobs. Preserve strict accept-quietness.py results,
+then review-traffic.py requires independently bounded WorkManager/trace evidence
+when metadata occurs. It passes prior83 and seven negative controls before this run.
+Only after accept-release.py succeeds, announce phone update and run build84/install.py
+--install-only. Phone currently83; no phone UI. No native84/phone84 acceptance yet.
+
+Starter6157db1 and Platform9265b771 are pushed. API e558a686/schema116.4/controlON
+unchanged. After native84, finish inspectorSDK6/pinned CI checkout work (prepared
+inventory in history-transport-admission-2026-11-09/ci-follow-up.json). All54 PRD groups,
+Apple SDK6 runtime, startup request cost and latency p95 remain open.
+
+
 ## History transport source accepted; native84 next — 9 November 2026, 08:11 UTC
 
 Original-window and provider-page history use the existing combined transport read

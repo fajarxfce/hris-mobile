@@ -1,0 +1,93 @@
+{
+  "at": "2026-11-09T08:20:04.028178+00:00",
+  "candidateVersionCode": 84,
+  "sourceCommit": "b0e4079e",
+  "build": {
+    "startedAt": "2026-11-09T08:12:06.105056+00:00",
+    "elapsedSeconds": 110.286,
+    "exitCode": 0
+  },
+  "artifact": {
+    "candidateOnly": true,
+    "diagnosticMarkersAbsent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-09-build84/hris-mobile-dev-release-1.0.0-84-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 84,
+    "versionName": "1.0.0",
+    "bytes": 123465103,
+    "sha256": "5f64e156b00696d3914fd2ebf4286230baf5db2f22306277899d4a3d271580c3",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+  },
+  "sdk": {
+    "nativeSha256": "4e15c92398521f5f5cd9fbb30cf327019faf32abe5302b64d8b4bdc07d75e9d4",
+    "nativeBytes": 97547344,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "aarSha256": "a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.6",
+    "published": true,
+    "publicationReleaseId": 438835525,
+    "strippedNativeMatchesVerifiedSdk": true,
+    "stripToolNdkVersion": "28.2.13676358",
+    "queueApisAndUseCaseInDex": true,
+    "actualNativeObserverSymbolsPresent": true
+  },
+  "upgradeOnly": {
+    "accepted": true,
+    "startedAt": "2026-11-09T08:18:38.414767+00:00",
+    "versionCode": 84,
+    "phoneTouched": false,
+    "newSendGestures": 0,
+    "dataCleared": false,
+    "privateKeysReadOrReset": false,
+    "scope": "Retained account/package and immutable public-key identity through native upgrade; actual original encrypted delivery is a subsequent gate.",
+    "launchEpochMillis": 1794212334845.883,
+    "launchMonotonic": 1889027.494430254,
+    "updateInPlace": true,
+    "sameAppIdentity": true,
+    "retainedAccountHomeVisible": true,
+    "retainedPublicIdentityPreserved": true,
+    "confirmedDevices": 1,
+    "artifactSha256": "5f64e156b00696d3914fd2ebf4286230baf5db2f22306277899d4a3d271580c3",
+    "sdkDeliveryAccepted": false,
+    "elapsedSeconds": 25.305
+  },
+  "nativeAcceptanceComplete": false,
+  "phoneInstalled": false,
+  "activeSessions": {
+    "emulator": 37100,
+    "phases": 94735,
+    "counter": 7443,
+    "pairedRefresh": 26263
+  },
+  "retainedOriginalCountBeforeRun": 5,
+  "sourceStore": "native-parent-renewal-native-2026-11-09/sender at83",
+  "activeTargetStore": "history-transport-native-2026-11-09/sender; already booted/upgraded84, preserve it",
+  "notes": [
+    "SDK verifier initially retained the old pre-publication flag; its immutable native-byte results match. Corrected publication state uses release438835525 receipt; initial JSON preserved privately.",
+    "Source checks use a byte-verified local SDK6 mirror after public GitHub download504.",
+    "Clock alignment and bounded periodic attribution are declared before native84; no final acceptance yet."
+  ]
+}
