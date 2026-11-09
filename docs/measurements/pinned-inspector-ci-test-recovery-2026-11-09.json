@@ -1,0 +1,91 @@
+{
+  "date": "2026-11-09",
+  "ciRun": 42598801511,
+  "job": 129097910131,
+  "sourceCommit": "a5d74fa3",
+  "accepted": false,
+  "artifactId": 13665023876,
+  "artifactSha256": "0f71440f50071349dd9779628da761f8ea7c108e164d38d65faf63366cbba2b3",
+  "failureEvidence": [
+    "Android transport cancellation caller finished before MockEngine finalization Boolean was observed",
+    "Desktop executor aborted134 during AppFlowTest.publishedCatalogReopensATerminatedStorageSourceAfterRefresh; XML marks interrupted case skipped, not accepted"
+  ],
+  "correction": "Await explicit engine-finalization signal; caller cancellation and exactly one request remain asserted. No production change.",
+  "local": {
+    "startedAt": "2026-11-09T10:27:58.357079+00:00",
+    "elapsedSeconds": 206.42,
+    "exitCode": 0,
+    "sourceFiles": 4528,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "nativeAbortCause": "Unclassified; isolated catalog recovery passes once on version1 like CI. Full CI retains native core/backtrace diagnostics.",
+  "limitations": [
+    "10 focused tests on Android host and Desktop, not full application acceptance",
+    "Prior native86 proof/install remains separately accepted",
+    "No rerun erases original CI failure"
+  ],
+  "ciXmlTotals": {
+    "tests": 2338,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 1
+  },
+  "ciXmlSuites": 343,
+  "affectedReports": [
+    {
+      "path": "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml",
+      "sha256": "f1a59e3b6d4524e4d9215d25055ba2017d284803e6ee874de2209cfc2fbc763f",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml",
+      "sha256": "78354d949d3ea42eae7d76ad6c81d2466f7f37b9ebdc00bdad5fdb3ee054c87b",
+      "tests": 5,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml",
+      "sha256": "e29b63553b2ddbf10b58992b07a7abbb474825022d659560d8d6db08a5052d09",
+      "tests": 70,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    }
+  ],
+  "ciXmlTotalsArePartial": true,
+  "isolatedDesktopReproduction": {
+    "startedAt": "2026-11-09T10:31:52.642604+00:00",
+    "elapsedSeconds": 448.118,
+    "exitCode": 0,
+    "sourceFiles": 4528,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml": {
+        "sha256": "5934e392d06a9b3482bdd00db179b0bb6eb6b045d2bea3a13edc0ae18f8f431d",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  }
+}
