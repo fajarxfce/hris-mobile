@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 12:27 UTC. This file describes current work. Historical
+Updated 9 November 2026, 12:34 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -28,7 +28,7 @@ Do not restart jobs or reapply candidates from that history without checking cur
 | Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 21101489 | Hosted verify42611795210/artifact13672363171 audited PASS;951cdbcf pushed |
 | Inspector original | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Verified public SDK6 integrated/pushed |
 | Inspector isolated | feat/sdk6-distribution-20261109 / a6b8236 | Pushed; SDK6 distribution accepted |
-| Starter | feat/network-inspector-20261107 / 6157db1 | Pushed; generic worker/identity ports accepted |
+| Starter | feat/network-inspector-20261107 / ffd0ac5 | Pushed; pinned public inspector workflows independently accepted |
 | Platform original | feat/communications / 4acbc3f9 | Pushed; runtime unchanged |
 | Platform group worktree | feat/communication-space / 8d5724e2 | Exact original-reference backend accepted/pushed; not deployed |
 
@@ -233,14 +233,15 @@ emulator is running. Do not restart87 or send again.
 Keep this current file concise and replace stale status instead of appending another
 full history. Commit measurements with implementation; historical details stay in Git.
 
-Starter now has the reviewed four-file port applied: five pinned dependency
-checkouts and nine shared SBOM artifacts. Static YAML/XML and before/after checks
-pass. Its bounded full gate will use exact742a2d1 library bytes in a separate
-worktree. The fresh worktree reports a gradlew.bat normalization delta even though
-all85 tracked files match their committed blobs; nothing was reset or staged.
-No Starter compiler or distribution dispatch has run yet.
+Starter's four-file pinned inspector/checksum port is accepted and pushed asffd0ac5.
+Full88319 is REAPED PASS188.590s: root/Android/Web/iOS source, strict SBOM and quality;
+62 fresh actual browser cases, no failures/errors/skips,1,052 app/49 library inputs
+fixed. Lint0errors/45 existing advisories. Three APKs,366-component SBOM and26 web
+files are hashed. All85 library files exactly match742a2d1; its fresh checkout's
+reported gradlew.bat delta is a text/eol normalization artifact, with identical bytes.
+No hosted Starter workflow or distribution was dispatched. No Starter compiler remains.
 
-## Public inspector consumer integrated candidate
+## Public inspector consumer integration accepted
 
 The exact eight workflow/checksum/fixture paths from951cdbcf are now in Root after
 confirming no intervening edits since common base2293ff05. Their pinned inspector
@@ -252,4 +253,24 @@ Earlier failures are retained. This CI source predates Root's newer room increme
 Focused Root integration87699 is reaped PASS100.523s:66 fresh cases, zero failures/
 errors/skips; format/architecture/Detekt pass,4,541 app and library inputs fixed.
 [Integration evidence](measurements/pinned-inspector-root-integration-2026-11-09.json). No new production app behavior or
-phone update is included. No owned compiler/emulator remains; Starter validation is next.
+phone update is included. This integration is committed/pushed as57ebc77a; no repeated CI graph is needed.
+
+## Encrypted room binding candidate
+
+Mobile now has11 uncommitted files: immutable binding entities/repository contract,
+exact original/published-room policies, encrypted dual-index storage/codec and14
+shared storage cases with desktop/browser/Apple wrappers. No owning acquisition,
+SDK delivery, queue, UI route or deployment has changed. The original metadata
+policy refactor preserves current native-owner checks. [Contract](collaboration-space-room-binding.md).
+
+Formatter40488 is reaped PASS36.878s. Focused82526 is RUNNING and owns the only heavy
+compiler; app/Inspector source inputs are FROZEN until it is reaped. The focused
+selection includes the existing original policies/reads, room preparation and both
+old/new actual SQLite storage contracts. After it passes, add the actual application
+DI-resolution assertion, then run required full and actual browser storage gates.
+Do not start another compiler/emulator or accept the candidate without those results.
+
+The next owning flow must acquire the exact published original position, match owned
+canonical metadata and retain/read back the immutable binding under current admission.
+Local facts remain separate from content authority. Preserve all eight originals and
+Draft66. All54 PRD acceptance groups and the remaining communication work stay open.
