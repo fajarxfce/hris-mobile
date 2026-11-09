@@ -140,8 +140,10 @@ local inventory66020 passed70.759s and restored metadata; all8 added artifacts w
 then verified against official bytes/publisher SHA-1. Strict63401 passes46.014s with
 unchanged metadata; the393-component BOM is same-input cache reuse, not fresh execution.
 Initial local insertion/strict failure and alias-URL404 are preserved in its measurement.
-a5d74fa3 is committed/pushed; verify CI42598801511 is running. Web-only CI42597096435
-is still running. No native86/phone86 acceptance has been added.
+a5d74fa3 is committed/pushed; verify CI42598801511 is running. Web-only CI42597096435 also shut down at Wasm optimization; no final artifact
+survived. Cause remains unproved. Next web job bounds Binaryen2cores, Gradle1worker/
+3GiB/in-process Kotlin and samples closed kernel memory numbers every15s to console.
+The exact125 Binaryen source confirms BINARYEN_CORES. Commit/push and dispatch web. No native86/phone86 acceptance has been added.
 No distribution workflow was dispatched.
 Audit actual completed jobs and artifacts; do not infer success from compilation alone.
 

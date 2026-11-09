@@ -112,7 +112,52 @@ jobs:
         with:
           node-version: '22'
       - name: Build web distribution and record resource usage
-        run: /usr/bin/time -v -o .work/web-build-resources.txt ./gradlew :apps:shared:wasmJsBrowserDistribution
+        env:
+          BINARYEN_CORES: '2'
+        run: |
+          python3 - <<'PY'
+          import json, os, signal, subprocess, time
+          from pathlib import Path
+
+          def interrupted(_signal, _frame):
+              raise KeyboardInterrupt()
+
+          for event in (signal.SIGINT, signal.SIGTERM):
+              signal.signal(event, interrupted)
+          command = [
+              '/usr/bin/time', '-v', '-o', '.work/web-build-resources.txt',
+              './gradlew', ':apps:shared:wasmJsBrowserDistribution',
+              '--no-daemon', '--no-parallel', '--max-workers=1',
+              '-Pkotlin.compiler.execution.strategy=in-process',
+              '-Dorg.gradle.jvmargs=-Xmx3072m',
+          ]
+          process = subprocess.Popen(command, start_new_session=True)
+          started = time.monotonic()
+          try:
+              while process.poll() is None:
+                  memory = dict(line.split(':', 1) for line in Path('/proc/meminfo').read_text().splitlines())
+                  sample = {'elapsedSeconds': round(time.monotonic() - started),
+                            'availableMemory': memory['MemAvailable'].strip(),
+                            'totalMemory': memory['MemTotal'].strip()}
+                  for name in ('memory.current', 'memory.peak', 'memory.max', 'memory.events'):
+                      path = Path('/sys/fs/cgroup') / name
+                      if path.is_file():
+                          sample[name] = path.read_text().strip()
+                  print('WEB_BUILD_RESOURCE ' + json.dumps(sample), flush=True)
+                  try:
+                      process.wait(timeout=15)
+                  except subprocess.TimeoutExpired:
+                      pass
+          finally:
+              if process.poll() is None:
+                  os.killpg(process.pid, signal.SIGTERM)
+                  try:
+                      process.wait(timeout=20)
+                  except subprocess.TimeoutExpired:
+                      os.killpg(process.pid, signal.SIGKILL)
+                      process.wait(timeout=5)
+          raise SystemExit(process.returncode)
+          PY
       - name: Retain web build diagnostics
         uses: actions/upload-artifact@v4
         if: always()

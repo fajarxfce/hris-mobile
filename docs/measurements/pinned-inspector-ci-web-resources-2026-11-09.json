@@ -1,0 +1,22 @@
+{
+  "run": 42597096435,
+  "head": "6aad96ba",
+  "job": 129092300600,
+  "accepted": false,
+  "observedFailure": "Second runner shutdown during compileProductionExecutableKotlinWasmJsOptimize; no artifact upload or final resource report",
+  "cause": "Not established; do not claim OOM from shutdown alone",
+  "logSha256": "2182383c3eb3c2f08d669c78bee3d00e2669f80ab9f87e4898b5d448d76bbfed",
+  "nextControls": {
+    "binaryenCores": 2,
+    "gradleWorkers": 1,
+    "gradleParallel": false,
+    "kotlinCompiler": "in-process",
+    "heapMiB": 3072,
+    "resourceSamplingSeconds": 15,
+    "sampling": "Kernel memory numbers only, written to console before any runner shutdown"
+  },
+  "binaryenControlSource": "https://raw.githubusercontent.com/WebAssembly/binaryen/version_125/src/support/threads.cpp",
+  "binaryenControlSourceSha256": "589647fc64c2ba43f5577bbc1e68a8c37d5b512849a12818efc28ea636ab455e",
+  "workflowPythonSyntaxValid": true,
+  "applicationCodeChanged": false
+}
