@@ -1,0 +1,236 @@
+{
+  "at": "2026-11-09T10:24:31.196218+00:00",
+  "accepted": true,
+  "scope": "Retained product86 runtime/credential/original-message continuity after interrupted upgrade proof; whole PRD remains open",
+  "apkSha256": "4c53315ff2f1f29bc67f572d6f63527622200ad0c6b638ea65746386e03afc73",
+  "versionCode": 86,
+  "traffic": {
+    "at": "2026-11-09T10:24:20.255113+00:00",
+    "accepted": true,
+    "pairedRefreshFailures": [],
+    "pairedRefreshStatuses": [
+      200,
+      200,
+      200
+    ],
+    "settledIntervals": [
+      {
+        "phase": "home",
+        "completeBinSeconds": 110,
+        "requestCounts": {
+          "sync": 11,
+          "other_hris": 9
+        },
+        "unexpectedSetupTraffic": {},
+        "rejectedRequests": {},
+        "normalExpiredSyncResponses": 0,
+        "accepted": true
+      },
+      {
+        "phase": "room",
+        "completeBinSeconds": 110,
+        "requestCounts": {
+          "sync": 15,
+          "other_hris": 8,
+          "refresh": 1
+        },
+        "unexpectedSetupTraffic": {},
+        "rejectedRequests": {},
+        "normalExpiredSyncResponses": 1,
+        "accepted": true
+      },
+      {
+        "phase": "resumed",
+        "completeBinSeconds": 110,
+        "requestCounts": {
+          "sync": 10,
+          "other_hris": 9
+        },
+        "unexpectedSetupTraffic": {},
+        "rejectedRequests": {},
+        "normalExpiredSyncResponses": 0,
+        "accepted": true
+      },
+      {
+        "phase": "cold",
+        "completeBinSeconds": 110,
+        "requestCounts": {
+          "sync": 14,
+          "hris_session_refresh": 1,
+          "other_hris": 9,
+          "refresh": 1
+        },
+        "unexpectedSetupTraffic": {},
+        "rejectedRequests": {},
+        "normalExpiredSyncResponses": 1,
+        "accepted": true
+      }
+    ],
+    "bootstrapRequestsAcrossRun": 0,
+    "samePublicIdentity": true,
+    "sameGatewayHead": true,
+    "requestCount": 365,
+    "limitation": "Packet starts, not full HTTP reconstruction. Single owned emulator gateway; aggregate bins only.",
+    "phoneTouched": false
+  },
+  "requestCounts": {
+    "hris_session_refresh": 2,
+    "other_hris": 69,
+    "hris_conversation": 13,
+    "hris_conversation_summaries": 8,
+    "hris_device_admission": 8,
+    "hris_device_setup": 46,
+    "hris_direct_transport": 57,
+    "hris_room": 26,
+    "other_matrix": 47,
+    "refresh": 3,
+    "secret_storage_default_key": 8,
+    "sync": 77,
+    "encrypted_room_send": 1
+  },
+  "responseCounts": {
+    "hris_session_refresh:200": 2,
+    "other_hris:200": 56,
+    "hris_conversation:200": 13,
+    "hris_conversation_summaries:200": 8,
+    "hris_device_admission:200": 8,
+    "hris_device_setup:200": 45,
+    "hris_direct_transport:200": 57,
+    "hris_room:200": 26,
+    "other_matrix:200": 46,
+    "other_matrix:401": 1,
+    "refresh:200": 3,
+    "secret_storage_default_key:401": 2,
+    "secret_storage_default_key:404": 6,
+    "sync:200": 72,
+    "sync:401": 3,
+    "sync:503": 1,
+    "encrypted_room_send:200": 1
+  },
+  "gatewayVersionBefore": 33,
+  "gatewayVersionAfter": 35,
+  "samePublicIdentity": true,
+  "preservedOriginalUpgradeAccepted": true,
+  "originalServerEventsRetained": 6,
+  "newServerEvents": 1,
+  "newSendGestures": 1,
+  "tapToServerReceivedMillis": 2983.113525390625,
+  "recipientRemainedStopped": true,
+  "phoneInstalled": true,
+  "phoneUiTouched": false,
+  "emulatorStopped": true,
+  "latestCompleteStore": "selected-runtime-auth-trace-native-2026-11-09/sender at86; preserve all4 userdata/encryption files and AVD",
+  "originalStrictTrafficAccepted": true,
+  "scheduledTrafficReview": {
+    "at": "2026-11-09T10:24:31.080659+00:00",
+    "accepted": true,
+    "originalStrictAccepted": true,
+    "strictSha256": "06df2a0d64ae8b32c9f94631877997f9b69249a3e6e377582ea88d7a687f5ae2",
+    "schedulerSourceSha256": "d45340f7a499407dbc81df94fa085959005cccf81e072f1fd94cbffef41f6906",
+    "attributions": [],
+    "classifiedTraffic": {
+      "at": "2026-11-09T10:24:20.255113+00:00",
+      "accepted": true,
+      "pairedRefreshFailures": [],
+      "pairedRefreshStatuses": [
+        200,
+        200,
+        200
+      ],
+      "settledIntervals": [
+        {
+          "phase": "home",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "sync": 11,
+            "other_hris": 9
+          },
+          "unexpectedSetupTraffic": {},
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 0,
+          "accepted": true
+        },
+        {
+          "phase": "room",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "sync": 15,
+            "other_hris": 8,
+            "refresh": 1
+          },
+          "unexpectedSetupTraffic": {},
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 1,
+          "accepted": true
+        },
+        {
+          "phase": "resumed",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "sync": 10,
+            "other_hris": 9
+          },
+          "unexpectedSetupTraffic": {},
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 0,
+          "accepted": true
+        },
+        {
+          "phase": "cold",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "sync": 14,
+            "hris_session_refresh": 1,
+            "other_hris": 9,
+            "refresh": 1
+          },
+          "unexpectedSetupTraffic": {},
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 1,
+          "accepted": true
+        }
+      ],
+      "bootstrapRequestsAcrossRun": 0,
+      "samePublicIdentity": true,
+      "sameGatewayHead": true,
+      "requestCount": 365,
+      "limitation": "Packet starts, not full HTTP reconstruction. Single owned emulator gateway; aggregate bins only.",
+      "phoneTouched": false
+    },
+    "boundsDeclaredBeforeRun": {
+      "periodicSequences": 1,
+      "continuationsPerSequence": 1,
+      "secondsPerSequence": 5,
+      "httpCallsPerSync": 22,
+      "totalMetadata": 42
+    },
+    "limitations": [
+      "Packet bins require corroboration from independent WorkManager and application trace records",
+      "Startup cost and latency are separate measurements",
+      "No p95 or whole communications completion claim"
+    ],
+    "tokensOwnersWorkIdsOrTraceIdsRetained": false
+  },
+  "limitations": [
+    "One new message sample is not a p95 latency measurement",
+    "Startup metadata cost remains distinct from settled traffic",
+    "Apple SDK6 runtime and all54 communications PRD groups remain open",
+    "Prior follow-up had one unclassified other-access request; absent in this observation, not retrospectively explained"
+  ],
+  "phoneInstallation": {
+    "startedAt": "2026-11-09T10:24:59.979502+00:00",
+    "confirmed": true,
+    "phoneUiTouched": false,
+    "freshInstall": false,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "versionCode": 86,
+    "installedSha256": "4c53315ff2f1f29bc67f572d6f63527622200ad0c6b638ea65746386e03afc73",
+    "installedBytesMatch": true,
+    "verificationMethod": "Device SHA-256 equals validated local APK",
+    "existingIdentityPreserved": true,
+    "elapsedSeconds": 25.499
+  },
+  "sourceCommit": "2293ff05",
+  "previousOtherAccessObservationStillUnclassified": true
+}
