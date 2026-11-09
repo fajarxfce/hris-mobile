@@ -22,6 +22,7 @@ import kotlinx.serialization.json.Json
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.Encryption
 import org.matrix.rustcomponents.sdk.NoHandle
+import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.SyncResponseRoomsV2
 import org.matrix.rustcomponents.sdk.SyncResponseV2
 import org.matrix.rustcomponents.sdk.SyncSettingsV2
@@ -85,6 +86,8 @@ internal class RuntimeLeaseFixture(
     var beforePause: suspend () -> Unit = {}
     var beforeIdentity: () -> Unit = {}
     var beforeSync: suspend () -> Unit = {}
+    var readRoom: (String) -> Room? = { error("No room read expected") }
+    var joinRoom: suspend (String) -> Room = { error("No room join expected") }
     var readinessListener: ToDeviceMessageListener? = null
     var beforeReadinessSubscribe: () -> Unit = {}
     var failReadinessSubscribe = false
@@ -94,6 +97,16 @@ internal class RuntimeLeaseFixture(
     private val http = HttpClient(MockEngine { error("Publication never sends HTTP requests") })
     private val sdk =
         object : Client(NoHandle) {
+            override fun getRoom(roomId: String): Room? {
+                calls += "room.lookup"
+                return readRoom(roomId)
+            }
+
+            override suspend fun joinRoomById(roomId: String): Room {
+                calls += "room.join"
+                return joinRoom(roomId)
+            }
+
             override fun subscribeToCustomToDeviceMessages(
                 eventTypes: List<String>,
                 listener: ToDeviceMessageListener,

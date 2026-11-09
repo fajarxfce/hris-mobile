@@ -1,5 +1,8 @@
 # Architecture
 
+[Joined native room acquisition](collaboration-joined-room-entry.md) reuses the current
+SDK membership through raw I/O while the admitted runtime retains child ownership.
+
 [History metadata admission](collaboration-history-transport.md) separates current
 room ownership from sending readiness and preserves independent post-I/O admission.
 

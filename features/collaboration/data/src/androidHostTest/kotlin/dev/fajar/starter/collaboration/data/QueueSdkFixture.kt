@@ -21,6 +21,8 @@ internal class QueueRoom(
     var beforeClose: () -> Unit = {}
     var originalReads = 0
 
+    override fun membership(): Membership = Membership.JOINED
+
     override suspend fun queuedMessageEvents(): List<QueuedMessageEvent> {
         calls += "originals.read"
         check(!enabled)

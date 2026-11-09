@@ -1,0 +1,301 @@
+{
+  "base": "4e7be081",
+  "scope": "Android raw joined-room acquisition; admission and original message identity unchanged",
+  "sources": {
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationRoomSourceTest.kt": "5e0ecc4622d2d26f6d8957cf4996cc3b6ac6e17e931ae44f7b9af433b6456049",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationRuntimeRoomTest.kt": "37ddeb6630a527e61b7f2c705215dd688d10dae8f9b33c6d0607ea221f2d1985",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/QueueSdkFixture.kt": "e031152cc68bbb4f3a19c21a1b402bc9009c41451bb2a2e22d3f2ec31e3d5532",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/RuntimeLeaseFixture.kt": "5f339a70d6012efd2251284deb03092fcecbe0f5c92d49e5069d89e549907b91",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationRoomSource.kt": "f2131e54355f41933d06b1db53afb70c8761066a079b196c40f28c61f71121e7",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeLease.kt": "d0408cd110f735e63f628608f26950c7e00ee629fc526cdd3ee203af1a35199a"
+  },
+  "gates": {
+    "red-1": {
+      "startedAt": "2026-11-09T11:07:58.815785+00:00",
+      "elapsedSeconds": 66.916,
+      "exitCode": 1,
+      "sourceFiles": 4534,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedReports": {
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationRoomSourceTest.xml": {
+          "sha256": "45feb18f8f43479b7a4f74cccf96d6c04f84b1a75002f28524745d210eb85d33",
+          "tests": 1,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "focused-1": {
+      "startedAt": "2026-11-09T11:10:42.300605+00:00",
+      "elapsedSeconds": 71.209,
+      "exitCode": 0,
+      "sourceFiles": 4535,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 611,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedReports": {
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationRuntimeRoomTest.xml": {
+          "sha256": "d6dc7c79d22ace51dd5f1325189eb71d543f17a6f9c91db0c0b6d6ab6fcfdd53",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationRoomSourceTest.xml": {
+          "sha256": "c504497dbe0cb0b72d539657692a242f17974e07ab283740861fc0e249082f8a",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "full-1": {
+      "startedAt": "2026-11-09T11:12:17.847073+00:00",
+      "elapsedSeconds": 1290.936,
+      "exitCode": 0,
+      "sourceFiles": 4535,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5975,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "byTarget": {
+        "desktopTest": 5364,
+        "testAndroidHostTest": 611
+      },
+      "freshSuites": 792,
+      "preexistingSuites": 146,
+      "selectedReports": {
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationRoomSourceTest.xml": {
+          "sha256": "7ef43661fac31a4f542a7b795aa55ba292060d551b97c42a1e42109696db349a",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationRuntimeRoomTest.xml": {
+          "sha256": "ef933dd1d18ea9e50fa387c7ad38e8cebae092db6bba3595b5c62a52c992abbf",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "redScope": "Existing unconditional SDK join retained behind the new datasource; isolates the old acquisition behavior, not an unmodified whole application checkout",
+  "sdkJoinReview": {
+    "upstreamBase": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+    "file": "crates/matrix-sdk/src/client/mod.rs",
+    "method": "Client.join_room_by_id",
+    "methodMatchesUpstreamBase": true,
+    "methodSha256": "40bd7e7aa50eb41f1ff1d521bc751459fd9286f5e353e3f4d3a8ae20ae4db389",
+    "behavior": "Always sends join_room_by_id::v3::Request; no existing Joined fast path",
+    "sdkCoordinate": "26.10.23-hris.6",
+    "newSdkBinaryBuilt": false
+  },
+  "baseline": {
+    "tapToServerMillis": 2983.113525390625,
+    "clockUncertaintyMillis": 5.002013,
+    "stages": [
+      {
+        "event": "CommandHandoff",
+        "durationMillis": 43,
+        "endAfterTapMillis": 332.75
+      },
+      {
+        "event": "CommandQueue",
+        "durationMillis": 457,
+        "endAfterTapMillis": 499.75
+      },
+      {
+        "event": "ChatDeliveryStage_RecoverComposer",
+        "durationMillis": 423,
+        "endAfterTapMillis": 860.75
+      },
+      {
+        "event": "ChatDeliveryStage_RecoverLegacyDrafts",
+        "durationMillis": 24,
+        "endAfterTapMillis": 884.75
+      },
+      {
+        "event": "ChatDeliveryStage_RecoverDrafts",
+        "durationMillis": 448,
+        "endAfterTapMillis": 884.75
+      },
+      {
+        "event": "ChatDeliveryStage_DiscoverWork",
+        "durationMillis": 18,
+        "endAfterTapMillis": 903.75
+      },
+      {
+        "event": "ChatDeliveryStage_LoadSetup",
+        "durationMillis": 522,
+        "endAfterTapMillis": 1425.75
+      },
+      {
+        "event": "ChatDeliveryStage_EnsureRuntime",
+        "durationMillis": 5,
+        "endAfterTapMillis": 1430.75
+      },
+      {
+        "event": "ChatDeliveryStage_Reconcile",
+        "durationMillis": 17,
+        "endAfterTapMillis": 1495.75
+      },
+      {
+        "event": "ChatDeliveryStage_ReadPending",
+        "durationMillis": 7,
+        "endAfterTapMillis": 1503.75
+      },
+      {
+        "event": "ChatDeliveryStage_PrepareRoom",
+        "durationMillis": 62,
+        "endAfterTapMillis": 1566.75
+      },
+      {
+        "event": "ChatSdkAcquisition_TimelineRoom",
+        "durationMillis": 509,
+        "endAfterTapMillis": 2179.75
+      },
+      {
+        "event": "ChatSdkAcquisition_TimelineEncryption",
+        "durationMillis": 0,
+        "endAfterTapMillis": 2180.75
+      },
+      {
+        "event": "ChatSdkAcquisition_TimelineBuild",
+        "durationMillis": 58,
+        "endAfterTapMillis": 2239.75
+      },
+      {
+        "event": "ChatSdkAcquisition_TimelineListener",
+        "durationMillis": 15,
+        "endAfterTapMillis": 2256.75
+      },
+      {
+        "event": "ChatDeliveryStage_EnterTimeline",
+        "durationMillis": 704,
+        "endAfterTapMillis": 2270.75
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueRoom",
+        "durationMillis": 1,
+        "endAfterTapMillis": 2278.75
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueInitialize",
+        "durationMillis": 4,
+        "endAfterTapMillis": 2284.75
+      },
+      {
+        "event": "ChatDeliveryStage_SettleCompletedQueue",
+        "durationMillis": 56,
+        "endAfterTapMillis": 2327.75
+      },
+      {
+        "event": "ChatDeliveryStage_ReadPrepared",
+        "durationMillis": 7,
+        "endAfterTapMillis": 2334.75
+      },
+      {
+        "event": "ChatDeliveryStage_Flush",
+        "durationMillis": 0,
+        "endAfterTapMillis": 2335.75
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueRoom",
+        "durationMillis": 0,
+        "endAfterTapMillis": 2394.75
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueInitialize",
+        "durationMillis": 1,
+        "endAfterTapMillis": 2396.75
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueBuild",
+        "durationMillis": 41,
+        "endAfterTapMillis": 2479.75
+      },
+      {
+        "event": "ChatDeliveryStage_StageMessage",
+        "durationMillis": 224,
+        "endAfterTapMillis": 2559.75
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueRoom",
+        "durationMillis": 0,
+        "endAfterTapMillis": 2570.75
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueInitialize",
+        "durationMillis": 4,
+        "endAfterTapMillis": 2575.75
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueBuild",
+        "durationMillis": 66,
+        "endAfterTapMillis": 2770.75
+      },
+      {
+        "event": "ChatDeliveryStage_DeliverMessages",
+        "durationMillis": 801,
+        "endAfterTapMillis": 3361.75
+      },
+      {
+        "event": "ChatDeliveryStage_Retire",
+        "durationMillis": 0,
+        "endAfterTapMillis": 3361.75
+      },
+      {
+        "event": "ChatDeliveryStage_AcquireRetirementHistory",
+        "durationMillis": 522,
+        "endAfterTapMillis": 3884.75
+      },
+      {
+        "event": "ChatDeliveryStage_RetireCommands",
+        "durationMillis": 163,
+        "endAfterTapMillis": 4047.75
+      },
+      {
+        "event": "ChatDeliveryStage_ProcessRooms",
+        "durationMillis": 2655,
+        "endAfterTapMillis": 4086.75
+      }
+    ],
+    "singleSampleOnly": true,
+    "clockRoundTripMillis": 10.004026,
+    "encryptedSendHeaderMillis": 145,
+    "limitation": "One prior retained-emulator sample, no before/after speedup accepted yet; HTTP header capture excludes full request/client acquisition cost."
+  },
+  "fullGate": "passed: root check, Android host tests, devRelease compile/lint, Wasm/iOS source, formatting, architecture and Detekt",
+  "nativeCandidate": "prepared only; retained native measurement remains required before installing87",
+  "phone": "86 remains installed",
+  "androidLint": {
+    "issues": 0,
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "validationVersionCodes": {
+    "focused": 86,
+    "full": 87
+  },
+  "sourceAccepted": true
+}

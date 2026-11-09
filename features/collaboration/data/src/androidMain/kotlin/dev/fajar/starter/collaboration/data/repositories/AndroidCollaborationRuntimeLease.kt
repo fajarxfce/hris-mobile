@@ -4,6 +4,7 @@ import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.api.CollaborationPusherApi
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationClientSource
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationHttpObservation
+import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationRoomSource
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationTimelineSource
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLease
 import dev.fajar.starter.collaboration.data.datasources.createAndroidCollaborationSync
@@ -71,6 +72,7 @@ internal constructor(
     private val sync =
         SdkSyncLifecycle(lifetime) { createAndroidCollaborationSync(nativeClient, lifetime) }
     private val children = SdkChildResources(lifetime)
+    private val rooms = AndroidCollaborationRoomSource(nativeClient)
     private val pusher =
         AndroidCollaborationPusher(
             nativeClient,
@@ -325,7 +327,7 @@ internal constructor(
 
     /** The admitted entry operation may join; the resulting child still belongs to this parent. */
     suspend fun enterTimeline(roomId: String): AppResult<AndroidCollaborationTimelineLease> =
-        acquireTimeline(roomId) { nativeClient.joinRoomById(roomId) }
+        acquireTimeline(roomId) { rooms.joined(roomId) }
 
     /** Explicit queue entry acquires a child writer; SDK delivery stays paused. */
     suspend fun acquireMessageQueue(roomId: String): AppResult<CollaborationMessageQueueLease> =
