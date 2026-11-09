@@ -270,6 +270,7 @@ internal constructor(
     private val credentialWatcher =
         lifetime.launch(start = CoroutineStart.LAZY) {
             credentialFailures.filterNotNull().collect {
+                persistence.persistAuthenticationFailure()
                 safeStorageCall { nativeClient.enableAllSendQueues(false) }
                 sync.stop()
                 children.close()
@@ -499,6 +500,8 @@ internal constructor(
         authentication?.deactivate()
         credentialWatcher.cancelAndJoin()
         syncWatcher.cancelAndJoin()
+        val rejection = persistence.persistAuthenticationFailure()
+        if (rejection is AppResult.Failed) return SdkShutdownAttempt(rejection, released = false)
         safeStorageCall { nativeClient.enableAllSendQueues(false) }
         val syncStopped = sync.stop()
         if (syncStopped is AppResult.Failed)

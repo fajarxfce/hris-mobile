@@ -27,13 +27,18 @@ abort an in-flight HTTP send. Network loss or process death can also interrupt a
 rotating refresh response. Credential recovery must therefore remain correct even
 when the client has a stale token. The historical loss instant in native77 is unknown.
 
-## Remaining recovery work
+## Retained rejection
 
-Persist a confirmed gateway rejection with its exact protected credential namespace.
-Reopening that namespace must preserve the rejection and avoid constructing another
-network client. Ordinary age, offline failures and absent backup metadata must not
-mark credentials rejected. Rotated callback tokens alone must not clear a confirmed
-rejection; only an admitted replacement of the same logical device may do so.
+Confirmed gateway rejection is now stored in the exact protected credential namespace.
+Reopening that namespace preserves rejection before constructing another network
+client. The original and adopted namespaces carry separate flags. Callback tokens,
+initialization and exact bootstrap replay cannot clear them; an admitted replacement
+clears only its own namespace. Original keys and queue identity stay unchanged.
+Ordinary age, offline failures and absent backup metadata do not mark credentials
+rejected. A failed rejection write retains the credential/native/directory owner for
+the same close attempt to finish. [Focused evidence](measurements/collaboration-credential-rejection-2026-11-09.json).
+
+## Remaining automatic recovery
 
 The domain activation/recovery owner must use current HRIS admission and the existing
 durable Bootstrap command to replace gateway credentials. Preserve private keys,
@@ -45,3 +50,13 @@ owns observation; a ViewModel or network inspector must not implement this polic
 Native acceptance must resume the preserved `Recovery78 005634` original, demonstrate
 one server event, and measure Home/room/background traffic after recovery. Do not
 resend that text or replace the fixture with a new account to hide the stale session.
+
+The next implementation must handle an asynchronous auth error after activation
+already reported READY. Observe scoped signals from existing runtimes without opening
+another SDK. Serialize activation ownership and coalesce duplicate rejection signals.
+Allow one automatic recovery until the replacement has a successful live Matrix sync;
+a rejected replacement must not manufacture another bootstrap. Owner changes cancel
+old work. An already-open rejected lease needs an explicit exclusive drain/inspection
+before private identity checks; ordinary healthy inspection must remain read-only.
+Keep this admission/retry policy in domain and lifecycle observation in application
+composition. Background work must continue to respect the selected-activation boundary.

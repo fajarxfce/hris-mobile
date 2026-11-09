@@ -9,6 +9,46 @@ import kotlinx.coroutines.test.runTest
 
 class SdkAdoptedSessionPersistenceTest {
     @Test
+    fun adoptedRejectionPersistsWithoutChangingTheOriginalNamespaceOrReplayingItAway() = runTest {
+        val f = SdkAdoptionFixture.create()
+        f.store.write(f.codec.encode(f.adopted))
+        val namespace = SdkCredentialNamespace.Adopted(f.command.id)
+        val writer = SdkSessionPersistence(f.store, f.codec, f.adopted, namespace)
+        writer.reportAuthenticationFailure()
+        assertEquals(AppResult.Success(Unit), writer.close())
+        val retained = f.codec.decode(assertNotNull(f.store.read()))
+        assertTrue(assertNotNull(retained.adoption).authenticationRejected)
+        assertFalse(retained.authenticationRejected)
+        assertEquals(f.adopted.accessToken, retained.accessToken)
+        assertEquals(f.adopted.passphrase, retained.passphrase)
+        assertEquals(f.adopted.messageOperationId, retained.messageOperationId)
+        assertEquals(retained, f.codec.stageAdoption(retained, f.command, f.gateway))
+        val reopened = SdkSessionPersistence(f.store, f.codec, retained, namespace)
+        assertEquals(
+            "client.collaboration_sdk_unauthorized",
+            assertIs<AppResult.Failed>(reopened.session()).failure.code,
+        )
+    }
+
+    @Test
+    fun originalRejectionDoesNotRejectSeparateAdmittedAdoptedCredentials() = runTest {
+        val f = SdkAdoptionFixture.create()
+        val retained = f.adopted.copy(authenticationRejected = true)
+        f.store.write(f.codec.encode(retained))
+        val writer =
+            SdkSessionPersistence(
+                f.store,
+                f.codec,
+                retained,
+                SdkCredentialNamespace.Adopted(f.command.id),
+            )
+        assertNull(writer.failures.value)
+        assertIs<AppResult.Success<*>>(writer.session())
+        assertEquals(AppResult.Success(Unit), writer.close())
+        assertEquals(retained, f.codec.decode(assertNotNull(f.store.read())))
+    }
+
+    @Test
     fun onlyTheExplicitAdoptedLeaseReadsAndUpdatesItsNewCredentials() = runTest {
         val f = SdkAdoptionFixture.create()
         f.store.write(f.codec.encode(f.adopted))

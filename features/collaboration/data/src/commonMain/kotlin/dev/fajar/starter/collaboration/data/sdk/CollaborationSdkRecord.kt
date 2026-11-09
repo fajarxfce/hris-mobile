@@ -30,6 +30,8 @@ internal data class CollaborationSdkRecord(
     /** Stable queue namespace, independent of replacement access/refresh credentials. */
     val queueOperationId: String? = null,
     val adoption: CollaborationSdkAdoption? = null,
+    /** Confirmed server rejection; independent of private keys and queue ownership. */
+    val authenticationRejected: Boolean = false,
 ) {
     val messageOperationId: String
         get() = queueOperationId ?: bootstrapOperationId

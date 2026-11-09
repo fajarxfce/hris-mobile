@@ -21,6 +21,49 @@ import kotlinx.serialization.json.Json
 
 class AndroidCollaborationIdentityTest {
     @Test
+    fun retainedRejectionStopsBothColdEntryPathsBeforeNativeClientConstruction() = runTest {
+        val f = Fixture()
+        try {
+            val record = f.store(authenticationRejected = true)
+            f.allowDirectory = true
+            f.privateIdentityRead = {
+                CollaborationSdkIdentityData(
+                    record.matrixUserId,
+                    record.matrixDeviceId,
+                    Base64.encode(ByteArray(32) { 1 }).trimEnd('='),
+                    Base64.encode(ByteArray(32) { 2 }).trimEnd('='),
+                )
+            }
+            val parent =
+                CollaborationNativeParent(
+                    setupOwner.sessionId,
+                    setupOwner.audience,
+                    setupOwner.accountId,
+                    setupOwner.nativeSessionId,
+                )
+            f.runtime.updateRetention(CollaborationRuntimeRetention(parent, setupOwner))
+            val original = f.values.toMap()
+            repeat(6) { attempt ->
+                val result =
+                    if (attempt % 2 == 0) f.runtime.restore(setupOwner, SETUP_DEVICE)
+                    else f.runtime.acquireBackground(setupOwner, SETUP_DEVICE, 5_000)
+                assertEquals(
+                    "client.collaboration_sdk_unauthorized",
+                    assertIs<AppResult.Failed>(result).failure.code,
+                )
+            }
+            assertEquals(original, f.values)
+            assertEquals(0, f.writes)
+            assertEquals(6, f.directories)
+            assertEquals(6, f.directoryCloses)
+            assertEquals(6, f.closes)
+            assertEquals(AppResult.Success(false), f.runtime.isOpen(setupOwner, SETUP_DEVICE))
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
     fun anInspectionReservationBlocksBothRuntimePathsBeforeAnyFileAcquisition() = runTest {
         val f = Fixture()
         try {
@@ -644,13 +687,17 @@ class AndroidCollaborationIdentityTest {
             expired: Boolean = false,
             handover: CollaborationRuntimeHandoverIntent? = null,
             interruptedReplacement: Boolean = false,
+            authenticationRejected: Boolean = false,
         ): CollaborationSdkRecord {
             val scope = collaborationSdkScope(setupOwner, SETUP_DEVICE, server, endpoint)
             val codec = CollaborationSdkRecordCodec(scope)
             var record =
                 codec
                     .create(command, gateway, Base64.encode(ByteArray(32) { 7 }))
-                    .copy(initialized = initialized)
+                    .copy(
+                        initialized = initialized,
+                        authenticationRejected = authenticationRejected,
+                    )
             if (expired)
                 record =
                     record.copy(

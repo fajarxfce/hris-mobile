@@ -17,6 +17,58 @@ import kotlinx.serialization.json.Json
 
 class SdkSessionPersistenceTest {
     @Test
+    fun authenticationRejectionSurvivesClosingAndReopeningTheProtectedRecord() = runTest {
+        val f = fixture()
+        val writer = SdkSessionPersistence(f.store, f.codec, f.initial)
+        writer.reportAuthenticationFailure()
+        assertEquals(AppResult.Success(Unit), writer.close())
+        val retained = f.codec.decode(assertNotNull(f.store.read()))
+        assertEquals(f.initial.passphrase, retained.passphrase)
+        assertEquals(f.initial.messageOperationId, retained.messageOperationId)
+        assertEquals(f.initial.accessToken, retained.accessToken)
+        assertEquals(f.initial.refreshToken, retained.refreshToken)
+        val reopened = SdkSessionPersistence(f.store, f.codec, retained)
+        val rejected = assertIs<AppResult.Failed>(reopened.session())
+        assertEquals("client.collaboration_sdk_unauthorized", rejected.failure.code)
+        assertEquals(rejected, reopened.retryPending())
+        assertEquals(rejected, reopened.markInitialized())
+        assertEquals(rejected, save(reopened, retained))
+    }
+
+    @Test
+    fun failedRejectionPersistenceKeepsTheCredentialOwnerAvailableForClosingRetry() = runTest {
+        val f = fixture()
+        var failWrites = true
+        var closes = 0
+        val store =
+            object : CredentialStore by f.store {
+                override suspend fun write(value: String?) {
+                    if (failWrites) error("Fictional storage failure")
+                    f.store.write(value)
+                }
+
+                override fun close() {
+                    closes++
+                }
+            }
+        val writer = SdkSessionPersistence(store, f.codec, f.initial)
+        writer.reportAuthenticationFailure()
+        assertIs<AppResult.Failed>(writer.close())
+        assertEquals(0, closes)
+        assertEquals("client.collaboration_sdk_unauthorized", writer.failures.value?.code)
+        failWrites = false
+        assertEquals(AppResult.Success(Unit), writer.close())
+        assertEquals(AppResult.Success(Unit), writer.close())
+        assertEquals(1, closes)
+        val reopened =
+            SdkSessionPersistence(f.store, f.codec, f.codec.decode(assertNotNull(f.store.read())))
+        assertEquals(
+            "client.collaboration_sdk_unauthorized",
+            assertIs<AppResult.Failed>(reopened.session()).failure.code,
+        )
+    }
+
+    @Test
     fun successfulRotationIsPublishedOnlyAfterTheProtectedWriteCompletes() = runTest {
         val f = fixture()
         val entered = CompletableDeferred<Unit>()

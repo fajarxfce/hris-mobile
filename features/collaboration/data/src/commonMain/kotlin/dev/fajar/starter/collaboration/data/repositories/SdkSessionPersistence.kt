@@ -24,8 +24,20 @@ internal class SdkSessionPersistence(
     private var current = initial
     private var pending: CollaborationSdkRecord? = null
     private var closed = false
-    private val failure = MutableStateFlow<Failure?>(null)
-    private val terminalFailure = MutableStateFlow<Failure?>(null)
+    private val initialFailure =
+        when (namespace) {
+                SdkCredentialNamespace.Original ->
+                    initial.authenticationRejected && initial.schema == 1
+                is SdkCredentialNamespace.Adopted ->
+                    initial.adoption?.let {
+                        it.bootstrapOperationId == namespace.operationId &&
+                            it.authenticationRejected
+                    } == true
+            }
+            .takeIf { it }
+            ?.let { collaborationSdkFailure("M_UNKNOWN_TOKEN", null) }
+    private val failure = MutableStateFlow(initialFailure)
+    private val terminalFailure = MutableStateFlow(initialFailure)
     val failures = failure.asStateFlow()
 
     suspend fun snapshot(): AppResult<CollaborationSdkRecord> =
@@ -152,10 +164,36 @@ internal class SdkSessionPersistence(
         writes.withLock {
             if (closed) AppResult.Success(Unit)
             else {
+                val retained = persistRejection()
+                if (retained is AppResult.Failed) return@withLock retained
                 closed = true
                 safeStorageCall { credentials.close() }
             }
         }
+
+    /** Durably gate the exact namespace before releasing its native/directory owner. */
+    suspend fun persistAuthenticationFailure(): AppResult<Unit> =
+        writes.withLock { persistRejection() }
+
+    private suspend fun persistRejection(): AppResult<Unit> {
+        if (terminalFailure.value?.code != "client.collaboration_sdk_unauthorized")
+            return AppResult.Success(Unit)
+        return safeStorageCall {
+            check(!closed) { "SDK credential owner is closed." }
+            val selected =
+                when (val owned = namespace) {
+                    SdkCredentialNamespace.Original -> codec.rejectCredentials(pending ?: current)
+                    is SdkCredentialNamespace.Adopted ->
+                        codec.rejectAdoptedCredentials(pending ?: current, owned.operationId)
+                }
+            if (selected != current || pending != null) {
+                pending = selected
+                credentials.write(codec.encode(selected))
+                current = selected
+                pending = null
+            }
+        }
+    }
 
     /** A failed synchronous bridge cannot safely acknowledge any further SDK refresh. */
     fun reportCallbackFailure() {

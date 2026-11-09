@@ -93,6 +93,34 @@ internal class CollaborationSdkRecordCodec(private val scope: CollaborationSdkSc
             .also(::validate)
     }
 
+    fun rejectCredentials(previous: CollaborationSdkRecord): CollaborationSdkRecord {
+        validate(previous)
+        require(previous.handover == null) { "SDK ownership is being transferred." }
+        if (previous.authenticationRejected) return previous
+        return previous
+            .copy(
+                authenticationRejected = true,
+                credentialRevision = previous.credentialRevision + 1,
+            )
+            .also(::validate)
+    }
+
+    fun rejectAdoptedCredentials(
+        previous: CollaborationSdkRecord,
+        operationId: String,
+    ): CollaborationSdkRecord {
+        validate(previous)
+        val retained = requireNotNull(previous.adoption)
+        require(retained.bootstrapOperationId == operationId)
+        if (retained.authenticationRejected) return previous
+        return previous
+            .copy(
+                adoption = retained.copy(authenticationRejected = true),
+                credentialRevision = previous.credentialRevision + 1,
+            )
+            .also(::validate)
+    }
+
     fun initialized(previous: CollaborationSdkRecord): CollaborationSdkRecord {
         validate(previous)
         require(previous.handover == null) { "SDK ownership is being transferred." }
@@ -166,6 +194,7 @@ internal class CollaborationSdkRecordCodec(private val scope: CollaborationSdkSc
                     accessToken = retained.accessToken,
                     refreshToken = retained.refreshToken,
                     initialized = retained.initialized,
+                    authenticationRejected = retained.authenticationRejected,
                 ) == retained
             )
             return previous

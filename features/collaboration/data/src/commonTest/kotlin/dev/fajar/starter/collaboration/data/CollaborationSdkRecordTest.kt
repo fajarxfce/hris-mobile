@@ -14,6 +14,33 @@ import kotlinx.serialization.json.Json
 
 class CollaborationSdkRecordTest {
     @Test
+    fun onlyNewAdmittedCredentialsClearRejectionWhileRetainingPrivateAndQueueIdentity() = runTest {
+        val codec = CollaborationSdkRecordCodec(scope())
+        val original = codec.create(command, gateway, passphrase)
+        val rejected = codec.rejectCredentials(original)
+        assertEquals(rejected, codec.rejectCredentials(rejected))
+        assertTrue(codec.initialized(rejected).authenticationRejected)
+        assertTrue(
+            codec
+                .withTokens(rejected, renewedGateway().accessToken, renewedGateway().refreshToken)
+                .authenticationRejected
+        )
+        val replaced =
+            codec.replaceCredentials(
+                rejected,
+                command.copy(
+                    id = SETUP_JOB,
+                    action = CollaborationSetupAction.Bootstrap(SETUP_DEVICE, 1, gateway.version),
+                ),
+                renewedGateway(),
+            )
+        assertFalse(replaced.authenticationRejected)
+        assertEquals(original.passphrase, replaced.passphrase)
+        assertEquals(original.messageOperationId, replaced.messageOperationId)
+        assertEquals(original.matrixDeviceId, replaced.matrixDeviceId)
+    }
+
+    @Test
     fun credentialReplacementKeepsQueueNamespaceWhileAdmissionUsesTheNewOperation() = runTest {
         val codec = CollaborationSdkRecordCodec(scope())
         for (legacy in listOf(false, true)) {

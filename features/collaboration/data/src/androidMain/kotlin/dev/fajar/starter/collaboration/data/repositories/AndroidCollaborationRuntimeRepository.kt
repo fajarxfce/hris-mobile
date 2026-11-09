@@ -962,6 +962,7 @@ class AndroidCollaborationRuntimeRepository(
                     installation,
                     spaceInstallation,
                     reservation,
+                    failed,
                 ) ?: return null
             persistence = prepared.persistence
             client =
@@ -1089,6 +1090,7 @@ class AndroidCollaborationRuntimeRepository(
         installation: Pair<CollaborationSetupCommand, CollaborationGateway>?,
         spaceInstallation: SdkSpaceRuntimeInstallation?,
         reservation: SdkRuntimeReservation<AndroidCollaborationRuntimeLease>,
+        failed: (Failure) -> Unit,
     ): AndroidSdkPreparedSession? {
         val record =
             if (spaceInstallation == null)
@@ -1100,7 +1102,10 @@ class AndroidCollaborationRuntimeRepository(
         val persistence = SdkSessionPersistence(credentials, codec, record, namespace)
         val session =
             when (val selected = persistence.session()) {
-                is AppResult.Failed -> error("SDK credentials are unavailable.")
+                is AppResult.Failed -> {
+                    failed(selected.failure)
+                    error("SDK credentials are unavailable.")
+                }
                 is AppResult.Success -> selected.value.toNativeSession()
             }
         return AndroidSdkPreparedSession(record, persistence, session)

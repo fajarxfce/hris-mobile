@@ -1,5 +1,26 @@
 # Agent continuation — HRIS Mobile
 
+## Durable rejected credentials pass81 focused cases — 9 November 2026, 01:25 UTC
+
+Candidate described below now passes81 fresh common-desktop/Android-host tests,
+format/architecture,0 failures/errors/skips,167.624s. Compiler7931 REAPED;4,521 source
+and82 inspector inputs unchanged. [Evidence](measurements/collaboration-credential-rejection-2026-11-09.json).
+Confirmed auth rejection survives protected-record close/reopen, both Android cold
+paths stop before SDK construction, failed writes retain their owner, and admitted
+replacement clears only its own original/adopted flag while retaining keys/queue.
+No compiler/emulator remains. No full combined gate or native recovery acceptance.
+
+NEXT implement late-rejection automatic recovery: owned runtime rejection/live-sync
+signals, domain policy permitting one automatic replacement until a successful live
+sync validates the successor, and serialized application activation observation.
+Duplicate callbacks and a rejected replacement cannot spawn an unbounded bootstrap
+chain. Existing selected-owner activation must explicitly drain/exclude a live rejected
+lease before its private-store inspection; do not reuse the ordinary read-only
+inspection contract to hide a drain. Current restore-time fallback is retained.
+See [remaining contract](collaboration-credential-recovery.md). Full gate/package/native
+proof follows that combined source. Preserve pending Recovery78, source77 and old keys.
+Phone70/no availability, Starter665b9cd and live Platform e558a686/116.4 unchanged.
+
 ## Durable rejection candidate under focused validation — 9 November 2026, 01:23 UTC
 
 Committed/pushed cfd7412e fixes premature credential close. Current UNCOMMITTED

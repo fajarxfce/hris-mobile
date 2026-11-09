@@ -7,6 +7,22 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationSdkAdoptionTest {
     @Test
+    fun admittedAdoptedReplacementClearsOnlyItsOwnRejection() = runTest {
+        val f = SdkAdoptionFixture.create()
+        val original = f.adopted.copy(authenticationRejected = true)
+        val rejected = f.codec.rejectAdoptedCredentials(original, f.command.id)
+        assertEquals(rejected, f.codec.rejectAdoptedCredentials(rejected, f.command.id))
+        val gateway = f.gateway.copy(version = 1)
+        val command =
+            f.command.copy(request = f.bootstrap.copy(operationId = SETUP_JOB, gatewayVersion = 0))
+        val replaced = f.codec.replaceAdoptedCredentials(rejected, command, gateway)
+        assertTrue(replaced.authenticationRejected)
+        assertFalse(assertNotNull(replaced.adoption).authenticationRejected)
+        assertEquals(original.passphrase, replaced.passphrase)
+        assertEquals(original.messageOperationId, replaced.messageOperationId)
+    }
+
+    @Test
     fun initializedAndInterruptedOriginalsKeepEveryOriginalFieldAndQueueIdentity() = runTest {
         val f = SdkAdoptionFixture.create()
         for (initialized in listOf(false, true)) {

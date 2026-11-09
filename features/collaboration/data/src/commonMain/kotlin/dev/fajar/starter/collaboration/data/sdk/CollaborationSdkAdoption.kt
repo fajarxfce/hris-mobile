@@ -22,6 +22,7 @@ internal data class CollaborationSdkAdoption(
     val accessToken: String,
     val refreshToken: String,
     val initialized: Boolean,
+    val authenticationRejected: Boolean = false,
 ) {
     override fun toString() = "CollaborationSdkAdoption([redacted])"
 }
