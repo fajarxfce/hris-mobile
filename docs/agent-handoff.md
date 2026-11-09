@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 15:25 UTC. Historical detail is retained in
+Updated 9 November 2026, 15:32 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -28,7 +28,7 @@ is required; Apple source/runtime, push and calling acceptance remain separate.
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | SDK6 distribution accepted; preserve unrelated gradlew.bat delta |
 | Starter | feat/network-inspector-20261107 /ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Platform original | feat/communications /691f3fc5 | Recovery verifier port accepted/pushed; runtime unchanged |
-| Platform group | feat/communication-space /bf6e176a | Merge of4d4df31f in progress; resolved source adaptations, not yet validated or committed |
+| Platform group | feat/communication-space /fa90ddcc | Reconciliation accepted/pushed; direct transport full38552 running |
 
 Isolated directories are under `/home/fajar/hris/.worktrees/`: `communication-space`,
 `mobile-inspector-ci-2026-11-09`, `inspector-sdk6-2026-11-09` and
@@ -46,7 +46,7 @@ mapping extraction; eight transport test methods and the application DI assertio
 [Contract](collaboration-space-direct-transport.md) records current scope and limits.
 Direct ktfmt0.59 parsing/formatting passed0.954s,0.866s and0.968s after stricter
 ID/time/encoded-identity validation;256MiB heap, no Kotlin/test acceptance yet.
-`.work/space-direct-transport-2026-11-09/check.py` is prepared, NOT RUN while Group33511
+`.work/space-direct-transport-2026-11-09/check.py` is prepared, NOT RUN while Group38552
 owns the local heavy slot. Its full/browser phases must select the new eight methods
 plus the existing room transport suite; do not inherit the previous binding filters.
 
@@ -55,8 +55,8 @@ user SPACE. A new HRISG_ crypto device may retain a LEGACY selected user/origina
 Tests include all valid combinations and reject a mismatched physical device/user.
 The backend `.work/space-direct-transport-2026-11-09/candidate` now has11 files including
 API, DI and tests (seven actual SQL methods, three pure policy methods, HTTP/OpenAPI).
-Formatter2.017s covers all11 files; it remains private, unapplied and uncompiled while33511 owns sources.
-Its base hashes must match before applying after the accepted reconciliation merge.
+Formatter2.017s covers all11 files; it remains private, applied after accepted/pushed fa90ddcc and exact base/source checks.
+Full38552 now validates it with actual SQL/API and FULL worker; no acceptance yet.
 
 Hosted42628449460 is complete SUCCESS on exact78076d4e. Both artifacts match GitHub
 digests and ZIP CRC. [Hosted evidence](measurements/collaboration-space-binding-hosted-2026-11-09.json)
@@ -134,7 +134,7 @@ retains source hashes, first failures and corrected proof. Private files are in
 and the Xcode simulator host are now accepted above. No new APK, SDK/worker/UI activation
 or signed iOS distribution is claimed by that proof.
 
-## Platform reconciliation in progress
+## Accepted Platform reconciliation and current transport gate
 
 Group bf6e176a and Root4d4df31f diverged171/85 commits since8bad394e. Eight conflict
 paths were resolved, retaining both runtime-transfer guards and current company
@@ -145,9 +145,8 @@ when an adopted group runtime keeps the same physical Matrix user/device.
 The merged default-key HTTP endpoint originally still dispatched only company
 credentials. A fixed group read now uses its existing native/provider request lifetime;
 missing, empty and present data stay distinct. Three new actual SQL/admission cases
-and one HTTP routing case cover this. The partial/focused results below are not yet
-full merge acceptance. Shared API and FULL worker
-contexts must run because DI changed. Do not deploy or commit the merge before its gate.
+and one HTTP routing case cover this. The full gate below accepts this source merge, including shared API and FULL worker
+contexts because DI changed. It does not deploy the organization schema or routing.
 
 The recovery verifier also rejected reviewed116.2–4 schemas. One new regression fails
 before the explicit-version correction;27 Python migration/recovery cases now pass.
@@ -164,14 +163,22 @@ maximum. Group keeps138; do not copy either branch's schema maximum to the other
  Only that live-operation fixture now follows system time, keeping all assertions.
 - 24065 REAPED PASS75.409s:both HTTP cases pass, zero failures/errors/skips; cached
  domain/data results are not recounted.
-- Full33511 is RUNNING on8,686 fixed inputs: database/collaboration/required API and
- FULL worker, plus quality/migration/recovery checks. It is the only heavy local job;
- Group source inputs remain frozen until reaped. No merge commit/deployment yet.
+- Full33511 is REAPED PASS5,607.828s:1,444 fresh cases, zero failures/errors and one
+ existing elapsed-retention opt-in skip,8,686 unchanged inputs. Database138/domain189/
+ data762/delivery25/API180/FULL worker150 plus quality/migration/recovery pass. Exact
+ archived XML and all five new regressions/both readiness contexts were audited.
+- Reconciliation fa90ddcc is committed and pushed;34015 is reaped. No live deployment.
+- Direct-transport full38552 is now the only heavy job. The eleven-file Group candidate
+ was applied with exact source/base/merge checks and stays frozen during the gate.
+ Actual SQL/API/OpenAPI and FULL worker tests are required before acceptance.
+ Full38552 found two fixture compile errors (override parameter id; Native has no copy).
+ Two private fixture-only corrections are formatted1.774s. Keep the running source
+ frozen until reaped, retain first failures and execute the missing actual SQL/API cases.
+ Worker runs under --continue; validate identical production inputs before retaining its proof.
 
-Eleven private, uncompiled Group direct-transport drafts are prepared under
-`.work/space-direct-transport-2026-11-09/candidate`, including API/DI/SQL/HTTP tests
-and exact base hashes; the guarded apply/check scripts remain unexecuted. They are not applied to the frozen source or
-accepted. Original message.get already returns archived immutable commands, verified
+The eleven Group direct-transport files are now applied and under test38552; their
+private preparation history remains under `.work/space-direct-transport-2026-11-09`.
+Do not reapply the guarded script or claim acceptance while this gate is running. Original message.get already returns archived immutable commands, verified
 by its actual encrypted storage contract; do not add an unnecessary archive fallback.
 
 ## Accepted phone and native proof
