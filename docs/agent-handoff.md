@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 16:38 UTC. Historical detail is retained in
+Updated 9 November 2026, 16:49 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -22,7 +22,7 @@ is required; Apple source/runtime, push and calling acceptance remain separate.
 
 | Checkout | Branch/source | State |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 /this commit | Original-only owning delivery accepted; no product activation |
+| Mobile original | feat/chat-send-timing-20261107 /69e639f8 | Original-only owning delivery accepted; no product activation |
 | Mobile isolated CI | feat/pinned-inspector-ci-20261109 /951cdbcf | Public consumer evidence accepted and integrated |
 | Inspector original | feat/matrix-rust-bindings-20261107 /f8ca3d6 | Verified public SDK6 integrated |
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | SDK6 distribution accepted; preserve unrelated gradlew.bat delta |
@@ -116,6 +116,35 @@ Actual SDK/SQL/HTTP/restart proof and group readiness wake/background/UI ownersh
 still required. `.work/space-original-delivery-native-2026-11-09/README.md` identifies
 existing real Synapse/SQL/HTTP/proof-app facilities and the new two-original, offline
 recipient, interrupted post-ACK projection/restart scenario. It is a plan, not code/proof. Preserve the stopped sender store and all eight originals below.
+
+## Current native experiment and hosted gate
+
+Accepted owning source69e639f8 is pushed;73237 is reaped. Hosted
+[42656803963](https://github.com/fajarxfce/hris-mobile/actions/runs/42656803963)
+runs exact69e639f8a7f35a92f8803e6297f443cf3f090e46: both portable and Apple jobs
+are in progress. Dispatch52753/status95133/56787 are reaped. Do not redispatch;
+reap/read its final jobs and audit artifacts before claiming hosted acceptance.
+
+Four proof-only Kotlin files are applied and UNCOMMITTED: HrisWorkerProofContainer,
+ProtectedHrisProofOwner, MatrixProofInstrumentation and new HrisSpaceOriginalDeliveryProbe.
+They use real app staging/storage/transport, a delegating pre-projection interruption,
+existing-only runtime adoption and four stage/interruption/recovery/offline scenarios.
+No server fixture or driver exists for this scenario yet; no native proof has run.
+Private `.work/space-original-delivery-native-2026-11-09` contains guarded base hashes,
+original candidates and runner. Do not reapply the four files. Formatter0.851s/0.827s.
+Source4649 (`source-1`) is RUNNING and owns frozen Mobile inputs: root check, proof unit
+ tests, x86_64 debug APK/lint and quality. It has reported one Detekt LongMethod in the
+new proof's deliver phase (129 vs100); wait for final compilation/result before editing,
+preserve the failure and extract the cohesive bootstrap/adoption phase without suppression.
+
+SDK6 AARa4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3 is verified.
+It contains FOUR ABIs, including x86_64; an earlier private ARM64-only assumption was
+wrong because phone packaging selected one ABI. `sdk6.json` records all unstripped
+library hashes. Packaged stripped hashes differ; verify against deterministic NDK
+stripping before native execution. x86_64 AAR library is143013400bytes/SHA256
+e9fd5a6556f54a8c0b68a7cae0ac7f2854c8e384ba756654b901e08880c0cf8c.
+The owned emulator stays stopped until all compilation is finished. APK87 remains on
+the phone; no APK88 or phone install. The new proof uses two fictional originals only.
 
 ## Current Mobile gate
 
@@ -263,9 +292,9 @@ Draft66 092041 must NEVER be sent. All native/emulator jobs are reaped and stopp
 
 ## Next work
 
-1. Commit/push accepted original delivery with evidence, then dispatch the existing
-   Collaboration control workflow for exact-source portable/Apple checks. Continue the
-   actual SDK/SQL/HTTP/restart scenario documented above; do not rerun accepted local gates.
+1. Reap source4649 and correct the isolated proof's delivery/adoption structure (plus
+   any compilation failures), then finish the real Group Synapse/SQL/HTTP fixture and
+   driver before running the SDK experiment. Track hosted42656803963 separately.
 2. Direct contracts ab17eadd/96d2d238 and reconciliationfa90ddcc are accepted/pushed;
    do not reapply or rerun those unchanged gates. No heavy job is active.
 3. Continue owning original SDK delivery/history, current recipient readiness, worker
