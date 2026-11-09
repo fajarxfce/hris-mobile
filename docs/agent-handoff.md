@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 18:42 UTC. Historical detail is retained in
+Updated 9 November 2026, 19:20 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -22,13 +22,13 @@ is required; Apple source/runtime, push and calling acceptance remain separate.
 
 | Checkout | Branch/source | State |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 /a14eea78 | Owning original delivery and native proof accepted; new key activation in progress |
+| Mobile original | feat/chat-send-timing-20261107 /a14eea78 | Owning original delivery/native proof accepted; key publication now owned by server completion |
 | Mobile isolated CI | feat/pinned-inspector-ci-20261109 /951cdbcf | Public consumer evidence accepted and integrated |
 | Inspector original | feat/matrix-rust-bindings-20261107 /f8ca3d6 | Verified public SDK6 integrated |
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | SDK6 distribution accepted; preserve unrelated gradlew.bat delta |
 | Starter | feat/network-inspector-20261107 /ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Platform original | feat/communications /691f3fc5 | Recovery verifier port accepted/pushed; runtime unchanged |
-| Platform group | feat/communication-space /61e8c2f5 | Atomic original-key publication and native proof accepted/pushed |
+| Platform group | feat/communication-space /7d4d7f1f | Original-key publication, readiness protocol and V139 storage accepted/pushed |
 
 Isolated directories are under `/home/fajar/hris/.worktrees/`: `communication-space`,
 `mobile-inspector-ci-2026-11-09`, `inspector-sdk6-2026-11-09` and
@@ -36,7 +36,7 @@ Isolated directories are under `/home/fajar/hris/.worktrees/`: `communication-sp
 its apparent gradlew.bat change is text/eol normalization, not a byte change.
 
 Live API/worker remains e558a6868399058a2dcdee97acfd0e7fa7f1ef07, schema116.4,
-readiness control ON. Group V117–138 and organization routing are not deployed.
+readiness control ON. Group V117–139 and organization routing are not deployed.
 
 ## Original-key worker publication accepted
 
@@ -76,11 +76,24 @@ Strict audit verifies every fresh report and the
 unchanged source/APK/native evidence. [Group61e8c2f5](https://github.com/fajarxfce/hris-platform/blob/61e8c2f5d62b0f7f6406972df7191e4b32638a5c/docs/collaboration/space-original-key-publication.md) is committed/pushed.
 There is no Mobile source change for this correction; it belongs to worker completion.
 
-Next is group readiness-control protocol/projection,then bounded publication fanout,
-Mobile signal consumption/background ownership and product routing. Group private
-`.work/space-readiness-control-2026-11-09` has unaccepted candidate files and an apply
-hash guard; consult the current Group handoff for subsequent work. Do not resurrect
-the retired explicit-confirmation endpoint or SDK7 work.
+Group [41c52145](https://github.com/fajarxfce/hris-platform/blob/41c52145/docs/collaboration/space-readiness-control.md)
+accepts the separate readiness protocol/projection:216 cases,including actual Synapse
+wake,replay,same-device bearer change and restart. Group [7d4d7f1f](https://github.com/fajarxfce/hris-platform/blob/7d4d7f1f/docs/collaboration/space-readiness-publications.md)
+now accepts V139 atomic publication/revision and independent Matrix/PUSH checkpoints.
+Final42132 passes335.110s:23 JVM cases,zero failures/errors/skips,plus40 Python
+migration/recovery cases. Normal-role concurrency,capacity,stale leases,rollback and
+actual dump/restore pass. Receiver commit-order regression first fails as expected,
+then passes with the revision fence. Both original worker and fresh SDK upload capture
+exactly two channels. Strict source/XML audit passes;8,708 stable inputs,no shared DI change.
+
+Next:typed repository,current-target admission/fanout,Mobile durable foreground/
+background ownership and group product routing. Eight successor repository/policy/
+datasource/test files have ALREADY been applied in the Group checkout after7d4d7f1f;
+their validation is separate and not accepted by the storage commit. Do not reapply
+`space-readiness-publication-2026-11-09/prepared`. Consult the Group current handoff
+and `.work/space-readiness-queue-2026-11-09` for the latest gate. No Mobile source,
+SDK7,APK88,live schema/runtime or phone change;all54 acceptance groups stay open.
+
 
 Mobilea14eea78 source remains unchanged; hosted42656803963 is fully accepted at
 69e639f8 with9,137 cases,including2,499 Apple simulator,and unsigned Xcode host.
