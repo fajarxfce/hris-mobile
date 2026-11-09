@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 20:14 UTC. Historical detail is retained in
+Updated 9 November 2026, 20:57 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -18,6 +18,54 @@ emulator uses2560MiB/two cores and is stopped. Announce each phone installation 
 No repeat IAM request: Crashlytics access is verified. No physical iPhone interaction
 is required; Apple source/runtime, push and calling acceptance remain separate.
 
+## Current: organization readiness protocol and storage accepted locally
+
+This increment is based onb061614a. Eleven Kotlin inputs are accepted locally under private `.work/space-readiness-protocol-2026-11-09`: exact V1
+organization control parsing, separate typed receipt scope/repository, encrypted
+codec/implementation, four pure protocol tests and eight shared storage cases with
+SQLite desktop, IndexedDB and Apple Room bindings. Existing company V2 stays separate;
+only the neutral monotone progress model and content-key ownership are reused.
+The ciphertext namespace and authenticated scope differ even when IDs match.
+
+Group full56826 is REAPED PASS325 in775.848s; worker integration is committed and
+pushed asd4246a08. Five Group source inputs are accepted (8,729 stable full inputs,
+174 API +151 complete worker cases,one existing opt-in skip). No Group gate remains.
+
+The eleven Kotlin inputs (ten new files plus an app singleton binding assertion)
+were formatted with pinned ktfmt0.59. Private `.work/space-readiness-protocol-2026-11-09`:
+- focused-1 /81916 REAPED PASS244.810s:24 cases,zero failures/errors/skips.
+- full-1 /50781 REAPED PASS588.489s:4,284 fresh cases=3,641 desktop+621 Android
+  host+22 forced Chrome browser. Zero failures/errors/skips. Required root check,
+  Android release compile/lint,shared Wasm/iOS source and quality checks pass.
+- Both gates retain exactly4,582 identical source hashes;Inspector bytes unchanged.
+  accept.py verifies all current source/library/report hashes and actual case counts.
+- [Contract](collaboration-space-readiness-receipts.md) and
+  [measurement](measurements/collaboration-space-readiness-receipts-2026-11-09.json).
+- No failed gate. No active local compiler/emulator. Next commit/push this increment,
+  then dispatch fresh collaboration-control workflow on that immutable SHA. Audit
+  using private hosted-audit.py with hosted.json run ID/source SHA after dispatch.
+  Do not rerun accepted42656803963. Expected additions to that full hosted baseline
+  are24 portable and12 Apple cases;actual reports/digests must be verified.
+
+Next runtime integration is documented in private runtime-ownership-next.md. Existing
+CollaborationRecoveryWorker still enumerates companies,so scheduling it alone cannot
+acknowledge organization readiness. Actual group wake processing is required first.
+Original group adoption also restores a paused client:its owning foreground flow must
+start the same client's sync after current admission. Listener attachment alone does
+not provide realtime delivery. Native source coordinates must come from the captured
+logical reservation;the actual Matrix sender remains the original physical client.
+
+Reuse the existing AndroidSdkReadinessRegistration handle lifecycle with explicit
+company/group factories. Avoid registry.findSpace inside the callback monitor:registry
+retirement calls lease deactivation while holding its own monitor,so this would invert
+locks. Keep atomic stop fencing in callbacks;exact registry/current-parent guards
+belong outside that monitor. Add late-return/close/mixed-identity tests. Successor
+native work may proceed while hosted jobs run against the immutable protocol commit.
+
+No SDK7,APK88,emulator,phone or live change. Phone87 remains installed. This is still
+one increment;all54 broader PRD acceptance groups remain open. Native callbacks,
+durable group wake ownership,background recovery and product routing remain required.
+
 ## Current checkouts and runtime
 
 | Checkout | Branch/source | State |
@@ -28,7 +76,7 @@ is required; Apple source/runtime, push and calling acceptance remain separate.
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | SDK6 distribution accepted; preserve unrelated gradlew.bat delta |
 | Starter | feat/network-inspector-20261107 /ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Platform original | feat/communications /691f3fc5 | Recovery verifier port accepted/pushed; runtime unchanged |
-| Platform group | feat/communication-space /99a0d8c5 | V140, current admission and Matrix fanout accepted/pushed |
+| Platform group | feat/communication-space /d4246a08 | V140, both fanout channels and complete worker integration accepted/pushed |
 
 Isolated directories are under `/home/fajar/hris/.worktrees/`: `communication-space`,
 `mobile-inspector-ci-2026-11-09`, `inspector-sdk6-2026-11-09` and
@@ -89,25 +137,18 @@ exactly two channels. Strict source/XML audit passes;8,708 stable inputs,no shar
 Group queuea182ebf5, target acknowledgement4a5dd90f and pure admissionbebe3138
 are accepted/pushed. V140 preserves the original V139 leases and allows exact target
 progress under its own current guards; publisher-only settlement remains separate.
-The latest accepted [99a0d8c5](https://github.com/fajarxfce/hris-platform/blob/99a0d8c5/docs/collaboration/space-readiness-control-fanout.md)
+The earlier accepted [99a0d8c5](https://github.com/fajarxfce/hris-platform/blob/99a0d8c5/docs/collaboration/space-readiness-control-fanout.md)
 adds bounded Matrix fanout. Final21572 passes221 cases in215.181s:205 domain and16
 real PostgreSQL queue/use-case cases,zero failures/errors/skips,8,725 stable inputs,
 format/architecture. Actual provider rotation waits on target guards until ACK commits.
 Prior9502 had one invalid expired-token fixture among220 cases; it is corrected and
 recorded. All pushes are reaped; no shared DI or worker activation is accepted yet.
 
-Current Group work is the independent PUSH handoff. The existing fanout is renamed
-FanOutCollaborationSpaceReadiness to share current-target admission across channels;
-PUSH atomically appends a quiet wake to the existing FCM queue with cursor progress.
-HandleCollaborationSpacePush remains the actual delivery/token/retry owner. This
-successor is NOT yet accepted. See the Group handoff and private
-`.work/space-readiness-push-handoff-2026-11-09` for its latest gate;95714/focused-1 was
-running when this note was written. Do not edit frozen Group inputs or start a second
-heavy job until it is reaped. Do not reapply old prepared candidates or replay accepted
-native/hosted gates. Next: full API/unfiltered worker integration, then Mobile durable
-group foreground/background ownership and product routing. No Mobile source,SDK7,
-APK88,phone or live rollout; all54 acceptance groups remain open. Group recovery max140
-must not be copied to Root/live schema116.4.
+The later Group806601d5 accepts PUSH handoff (256 cases), andd4246a08 accepts
+shared DI plus independent workers (325 API/unfiltered worker cases). Their pushes
+are reaped. Root76239258 records the current cross-repo checkpoint. The top section
+owns current Mobile work; prior statements about absent worker wiring are superseded.
+No live rollout;Group max140 remains separate from original/live max116.4.
 
 
 Mobilea14eea78 source remains unchanged; hosted42656803963 is fully accepted at

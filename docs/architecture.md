@@ -1,5 +1,9 @@
 # Architecture
 
+[Organization readiness receipts](collaboration-space-readiness-receipts.md) keep strict
+V1 control facts and encrypted revision storage separate from company controls,
+current native runtime ownership and actual recovery scheduling.
+
 [Owned original delivery](collaboration-space-original-delivery.md) coordinates current
 organization admission, the original physical writer and durable receipt projection in
 one bounded use case. Late acknowledgement storage and current UI publication remain
