@@ -1,0 +1,102 @@
+{
+  "recordedAt": "2026-11-09T00:12:00Z",
+  "productSource": "0fb27978",
+  "platformSource": "e558a686",
+  "versionCode": 77,
+  "phoneVersionUnchanged": 70,
+  "scope": "One retained fictional Android sender, separate first-device recipient, same product process; no phone or Apple execution.",
+  "readiness": {
+    "accepted": true,
+    "senderPushRegistrations": 0,
+    "original": "Control77 235408",
+    "sendGestures": 1,
+    "waitWithoutUserActionSeconds": 62.339581,
+    "publicationRecordedAt": "2026-11-08T23:55:29.136518Z",
+    "controlRevision": 1,
+    "controlCompletedAt": "2026-11-08T23:55:29.747648Z",
+    "schedulingDiagnostics": 1,
+    "encryptedEventsForOriginal": 1,
+    "serverReceivedAt": "2026-11-08T23:55:31.266Z",
+    "publicationToServerReceivedMillis": 2129.482,
+    "sameProductPid": true,
+    "noResend": true,
+    "networkQuietnessAccepted": false
+  },
+  "warmSend": {
+    "accepted": true,
+    "original": "Warm77 235728",
+    "sendGestures": 1,
+    "recipientProcessRemainedStopped": true,
+    "recipientKeysPreserved": true,
+    "tapToServerReceivedMillis": 1771.88,
+    "newEncryptedEvents": 1,
+    "sameProductPid": true,
+    "samples": 1
+  },
+  "requestCapture": {
+    "acceptedAsQuietWindow": false,
+    "limitReached": true,
+    "requestLimit": 1500,
+    "elapsedSeconds": 215.864,
+    "startedAt": "2026-11-08T23:49:13.192496+00:00",
+    "beforeFirstSend": true,
+    "counts": {
+      "secret_storage_default_key": 4,
+      "hris_device_setup": 517,
+      "sync": 21,
+      "other_hris": 196,
+      "hris_conversation_summaries": 86,
+      "hris_room": 291,
+      "other_matrix": 180,
+      "hris_conversation": 205
+    },
+    "forbiddenResponses": 0,
+    "defaultKeyResponses": {
+      "404": 4
+    },
+    "limitation": "Packet starts only; stopped on cap before message tests. No post-publication quiet-window claim."
+  },
+  "retainedSenderDirectory": {
+    "companiesWithDevices": 1,
+    "directConversations": 2,
+    "roomBindings": 2
+  },
+  "processLog": {
+    "loadSetupStages": 247,
+    "timelineBuildStages": 183,
+    "lastLoadSetupAtDeviceClock": "2026-11-08T23:58:08.056Z",
+    "observationEndedAfter": "2026-11-09T00:03:26Z",
+    "conclusion": "Excessive repeated metadata work, later settled. Investigate restart of completed sweeps; do not claim proven infinite execution."
+  },
+  "deviceClock": {
+    "behindHostMillis": 764.606,
+    "uncertaintyMillis": 9.84,
+    "limitation": "Do not compare uncorrected device diagnostic time with server publication timestamp."
+  },
+  "runtime": {
+    "schema": "116.4",
+    "readinessControlEnabled": true,
+    "migration117Through138Applied": false,
+    "emulatorStopped": true,
+    "ownerSessionReaped": 31111,
+    "emulatorMiB": 2560,
+    "emulatorCores": 2,
+    "originalDeviceFilesUnchanged": true
+  },
+  "proofPackage": {
+    "separateNamespace": "dev.fajar.hris.collaboration.readiness77",
+    "sha256": "19dedc86468e758d86f91f8da808e74a922b10386bda87eb77d793d79e53d2e4",
+    "errors": 0,
+    "warningOnlyAdvisories": 49,
+    "oldFirstActivationGuardPreserved": true,
+    "rejectedAttempts": "First bad isolation cancelled before install; second rejected relative instrumentation name; third corrected package verified. No production source changed."
+  },
+  "remaining": [
+    "Repeated metadata recovery work and request-count acceptance",
+    "Missed-hint/reconnect/interrupted activation recovery",
+    "New-room older-message affordance",
+    "Pending-to-sent display timestamp changes",
+    "Phone install when available",
+    "Native Apple execution and broader communications PRD"
+  ]
+}

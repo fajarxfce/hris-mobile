@@ -1,5 +1,42 @@
 # Agent continuation — HRIS Mobile
 
+## Native77 readiness succeeds; excessive metadata recovery remains — 9 November 2026
+
+Current dev API/worker source e558a686, schema116.4, readiness control **ON**.
+Only116.3/116.4 deployed;117–138 untouched. Worker14d8eb8b uses image3a86bd67;
+API f6022812/image5ce02e63 unchanged by controlled enablement. Enable39701 passed
+19.609s and is REAPED. Earlier dated OFF/native-pending checkpoints below are historical.
+
+Retained sender upgraded76→77 in place; same account/public key fingerprint and
+product PID3207. Separate fictional recipient first activation produced one V2
+control and one ChatReadinessScheduled while sender had ZERO enabled FCM registrations.
+Original `Control77 235408` sent once,2,129.482ms from recorded publication to encrypted
+server receipt. A distinct `Warm77 235728` sent once in1,771.880ms with recipient process
+stopped and keys retained. These are two emulator samples, not phone/p95 evidence.
+[Evidence](measurements/collaboration-readiness-control-native77-2026-11-09.json).
+
+IMPORTANT: passive counter hit its1,500-request cap in215.864s BEFORE first send.
+517 setup,291 room,205 conversation,196 other HRIS,180 other Matrix,86 summaries,
+21 sync and4 optional default-key reads (404, no403). Sender has ONE company and
+TWO conversations. Therefore no request-quietness acceptance. Closed product log
+has247 LoadSetup/183 TimelineBuild stages; repeats later settled after23:58, so
+infinite execution is not established. Trace recovery continuation/scheduler ownership:
+queued duplicate recovery starts currently ensure/create a fresh wake after prior ACK.
+Reproduce with both OS and foreground consumers before changing policy or timers.
+
+All native sessions reaped, emulator31111 stopped cleanly after969.320s, originals
+unchanged. No compiler/emulator active. Full retained stores and logs remain private
+under Mobile .work/readiness-control-native-2026-11-08. Do not resend either named
+original, Readiness76 211625, or Draft66; never reset keys/Bima74 metadata. Separate
+peer package verified x86_64 SDK5/16KiB with49 warning-only fixture/version advisories,
+zero errors; product77 release checks remain valid. Device clock ~764.606ms behind
+host; use server timestamps for publication comparison.
+
+Phone70 untouched/no new availability reply. Next fix and prove bounded recovery,
+then reconnect/interrupted activation, new-room Older messages, display timestamps
+and all54 communications PRD groups. Push every commit and keep going.
+
+
 ## Release77 package verified — 8 November 2026, 23:31 UTC
 
 Product source0fb27978 is pushed. APK77 build1239 passed123.393s; verifier19196
