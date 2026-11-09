@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 16:49 UTC. Historical detail is retained in
+Updated 9 November 2026, 17:06 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -121,29 +121,45 @@ recipient, interrupted post-ACK projection/restart scenario. It is a plan, not c
 
 Accepted owning source69e639f8 is pushed;73237 is reaped. Hosted
 [42656803963](https://github.com/fajarxfce/hris-mobile/actions/runs/42656803963)
-runs exact69e639f8a7f35a92f8803e6297f443cf3f090e46: both portable and Apple jobs
-are in progress. Dispatch52753/status95133/56787 are reaped. Do not redispatch;
-reap/read its final jobs and audit artifacts before claiming hosted acceptance.
+runs exact69e639f8a7f35a92f8803e6297f443cf3f090e46. Portable is ACCEPTED:6,638 tests
+(3,077 desktop+621 Android host+2,940 browser),zero failures/errors/skips. Artifact
+13695050253/3,293,572bytes has GitHub/ZIP digest
+c0378b3ebd3d5dc5a748962797687c489496be452148e431c90c64a4af42b6e6.
+All five new exact delivery/transport classes and24 owning cases are present on desktop
+and browser; transport8 also runs on Android. Audit61011 is reaped. Apple is still
+running; do not redispatch. [Hosted evidence](measurements/collaboration-space-original-delivery-hosted-2026-11-09.json).
 
 Four proof-only Kotlin files are applied and UNCOMMITTED: HrisWorkerProofContainer,
 ProtectedHrisProofOwner, MatrixProofInstrumentation and new HrisSpaceOriginalDeliveryProbe.
 They use real app staging/storage/transport, a delegating pre-projection interruption,
 existing-only runtime adoption and four stage/interruption/recovery/offline scenarios.
-No server fixture or driver exists for this scenario yet; no native proof has run.
-Private `.work/space-original-delivery-native-2026-11-09` contains guarded base hashes,
-original candidates and runner. Do not reapply the four files. Formatter0.851s/0.827s.
-Source4649 (`source-1`) is RUNNING and owns frozen Mobile inputs: root check, proof unit
- tests, x86_64 debug APK/lint and quality. It has reported one Detekt LongMethod in the
-new proof's deliver phase (129 vs100); wait for final compilation/result before editing,
-preserve the failure and extract the cohesive bootstrap/adoption phase without suppression.
+Group now has uncommitted NativeSpaceOriginalFixture/DeliveryTest, a bounded native
+request counter, provider encrypted-event inspection and an owned Python driver. Six
+ownership/SDK artifact guard tests pass. Its compilation31.843s failed only on Jackson
+JsonNode map overload selection; corrected compilation32.624s passes on8,697 stable
+inputs. Source-3 /21551 is REAPED PASS32.425s on8,698 stable inputs after review corrected
+nested room fields and added finite transport/bootstrap counters. Existing driver82
+and new ownership6 Python tests pass. Native61494 (`native-3`) is RUNNING with both
+Mobile and Group sources frozen. Fresh isolated x86_64 emulator booted40.882s,
+2560MiB/two cores. Earlier native-1/2 failed only emulator setup (absent initial image,
+then missing private encryption image); no server/test/message was started. Both are
+reaped and stopped; corrections use the SDK blank image, never retained sender data.
+Mobile source4649 failed192.054s solely on the new proof's LongMethod;20 tests passed.
+The cohesive bootstrap/adoption phase was extracted without suppression. Source89458
+(source-2) is REAPED PASS131.229s:20 fresh tests,zero failures/errors/skips,4,572 stable
+inputs and unchanged library. Root, proof APK/unit/lint,format/architecture/Detekt pass.
+Proof APK147699144bytes SHA256
+1b64c9eed71feebf9cfdebb6e7ec42991512d25e8f5d7a0e0601a7f726d96b7f.
+Do not reapply the four Mobile files or repeat these accepted source gates.
 
 SDK6 AARa4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3 is verified.
 It contains FOUR ABIs, including x86_64; an earlier private ARM64-only assumption was
 wrong because phone packaging selected one ABI. `sdk6.json` records all unstripped
-library hashes. Packaged stripped hashes differ; verify against deterministic NDK
-stripping before native execution. x86_64 AAR library is143013400bytes/SHA256
+library hashes. Deterministic NDK28.2 --strip-unneeded now exactly matches the APK
+x86_64 library111204848bytes/SHA256
+ecffbab72fd5dd29d656bc4757ea423bb4bccf0444140af0480684bc32761278. x86_64 AAR library is143013400bytes/SHA256
 e9fd5a6556f54a8c0b68a7cae0ac7f2854c8e384ba756654b901e08880c0cf8c.
-The owned emulator stays stopped until all compilation is finished. APK87 remains on
+All compilation finished before the isolated emulator started. APK87 remains on
 the phone; no APK88 or phone install. The new proof uses two fictional originals only.
 
 ## Current Mobile gate
@@ -292,11 +308,11 @@ Draft66 092041 must NEVER be sent. All native/emulator jobs are reaped and stopp
 
 ## Next work
 
-1. Reap source4649 and correct the isolated proof's delivery/adoption structure (plus
-   any compilation failures), then finish the real Group Synapse/SQL/HTTP fixture and
-   driver before running the SDK experiment. Track hosted42656803963 separately.
+1. Reap the running native61494 experiment and inspect exact checkpoints/failures.
+   Preserve failed fixture app data, original transactions and the stopped sender87.
+   Audit hosted42656803963 separately; no duplicate dispatch or phone install.
 2. Direct contracts ab17eadd/96d2d238 and reconciliationfa90ddcc are accepted/pushed;
-   do not reapply or rerun those unchanged gates. No heavy job is active.
+   do not reapply or rerun those unchanged gates.
 3. Continue owning original SDK delivery/history, current recipient readiness, worker
    lifetimes and group UI routing. Existing Room Prepare/Resolve/Replay use cases and
    immutable stores are accepted; do not recreate them or replace uncertain originals.

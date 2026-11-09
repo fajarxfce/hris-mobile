@@ -1,0 +1,204 @@
+{
+  "observedAt": "2026-11-09T17:06:49.424053+00:00",
+  "status": "Portable accepted; Apple job still running",
+  "sourceCommit": "69e639f8a7f35a92f8803e6297f443cf3f090e46",
+  "runId": 42656803963,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42656803963",
+  "portable": {
+    "sourceCommit": "69e639f8a7f35a92f8803e6297f443cf3f090e46",
+    "jobId": 129297349467,
+    "artifactId": 13695050253,
+    "bytes": 3293572,
+    "sha256": "c0378b3ebd3d5dc5a748962797687c489496be452148e431c90c64a4af42b6e6",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "desktopTest": {
+        "tests": 3077,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 333
+      },
+      "testAndroidHostTest": {
+        "tests": 621,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 86
+      },
+      "wasmJsBrowserTest": {
+        "tests": 2940,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 304
+      }
+    },
+    "originalDeliveryAndTransport": [
+      {
+        "class": "CollaborationSpaceDirectTransportTest",
+        "platform": "desktopTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceDirectTransportTest",
+        "platform": "testAndroidHostTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceDirectTransportTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationOriginalAcknowledgementTest",
+        "platform": "desktopTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationOriginalSenderMatchTest",
+        "platform": "desktopTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationOriginalTransportTest",
+        "platform": "desktopTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "SpaceOriginalDeliveryTest",
+        "platform": "desktopTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationOriginalAcknowledgementTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationOriginalSenderMatchTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationOriginalTransportTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "SpaceOriginalDeliveryTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "reportManifestSha256": "a1bbde3c0f9a0d47ae6d962017d79f2d3f3956cf6efc121b1a6e8c95adce0949",
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run android-actions/setup-android@v3",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-node@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check setup transport and ownership",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check application bindings and platform compilation",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/setup-node@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "limits": [
+    "No actual Matrix SDK delivery, process-death recovery, product routing or phone acceptance from this hosted gate.",
+    "Apple job is still running; no Apple success claimed.",
+    "Initial artifact audit rejected desktop display names with [desktop] suffix; parser now normalizes that test framework suffix and retains all five exact class/count assertions."
+  ]
+}
