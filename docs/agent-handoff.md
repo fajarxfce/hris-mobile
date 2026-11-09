@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Durable rejection candidate under focused validation — 9 November 2026, 01:23 UTC
+
+Committed/pushed cfd7412e fixes premature credential close. Current UNCOMMITTED
+candidate adds protected authenticationRejected flags to original/adopted namespaces.
+SdkSessionPersistence restores rejection, persists it on observation/close, retains
+failed writes for the same owner, and does not clear it through callbacks. New admitted
+credential replacement clears only its namespace. Android refuses cold SDK construction
+from a retained rejection, preserves its typed failure, and cannot release a failed
+rejection write before native/directory ownership ends. No automatic recredentialing
+signal/activation orchestration change yet; native78 is still pending.
+
+Red37775 REAPED:2 actual common desktop cases fail on unchanged production in62.216s
+(reopen loses denial; failed rejection write incorrectly closes). Earlier red82246
+REAPED45.925s failed to compile because the new fake close had an incorrect suspend
+modifier; it is not behavioral evidence. Formats23473/85950 REAPED36.240/37.489s.
+Sole compiler7931 runs credential-rejection-2026-11-09/check-focused.py focused-1
+(common desktop + Android host, format/architecture), started01:20:49. Do not edit
+source until it is reaped; inspect its actual reports. No emulator/counter/phone work.
+
+NEXT after source tests: confirm admitted original/adopted replacement isolation;
+then implement finite automatic recovery for late SDK auth rejection. Existing
+ActivateCollaborationDevice handles a rejection returned synchronously by restore,
+but returns early if isOpen reports rejection, and an async callback after READY is
+not observed by the one-attempt application activation owner. Its reserveInspection
+also cannot inspect a live rejected lease. Use explicit owned exclusion/drain and
+domain admission, preserve keys/queue, and avoid a new bootstrap-per-callback loop.
+Do not make API/token policy or native retry decisions in the inspector/ViewModel.
+SDK pause is database drain, not proof that every HTTP task has ended.
+
+Full gate, actual native78 recovery/quietness and Starter port remain pending. Reuse
+the full preserved78 store with `Recovery78 005634` exactly once; never resend it.
+Phone70 has no new availability reply. Platform50ce153c documents unchanged live
+e558a686/schema116.4/control ON. Continue all54 open PRD groups after this root fix.
+
 ## Credential writer survives native drain; rejected-session work next — 9 November 2026, 01:14 UTC
 
 Source now keeps the credential writer through child/E2EE/native drain and closes it
