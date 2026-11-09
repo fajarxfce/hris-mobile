@@ -1,25 +1,37 @@
 # Agent continuation — HRIS Mobile
 
-## Crashlytics access verified; historical71 publication failure recovered — 9 November 2026, 01:50 UTC
+## Crashlytics root recovered; real repository cancellation regressions running — 9 November 2026, 02:06 UTC
 
-User confirms IAM Viewer granted. Read-only topIssues and events:batchGet return200.
-Recovered the exact71 Storage event at14:38:29 UTC: AndroidCollaborationRuntimeRepository
-acquire:957 in source ff495af3, the registry.attach rejection after reservation retirement.
-[Sanitized evidence](measurements/collaboration-storage71-crashlytics-2026-11-09.json).
-This proves the failure site; it does not identify which concurrent ownership decision
-retired it. Existing73 renewal retention deliberately rejects unpublished acquisitions,
-and the current check still maps that expected lifecycle rejection to Storage. Follow up
-with typed publication rejection and repository regression; do not call this resolved.
-Private bounded API scripts/responses live in /home/fajar/hris/.work/crashlytics-storage-2026-11-08.
-Use report sampleEvent with events:batchGet; the attempted events.list queries returned400.
-Never commit raw events, credentials or app-owner identifiers.
+User granted Viewer. topIssues and events:batchGet return200; exact71 Storage event
+14:38:29 points to acquire:957 in source ff495af3: registry.attach returned false after
+ownership retirement. [Sanitized evidence](measurements/collaboration-storage71-crashlytics-2026-11-09.json).
+The concurrent retirement trigger is unknown; expected obsolete acquisition is wrongly
+mapped to Storage. Native private keys are not implicated by this trace. Private scoped
+API scripts/responses are in /home/fajar/hris/.work/crashlytics-storage-2026-11-08.
 
-Source7770b61a pushed; full79 compiler84732 remains the sole heavy process, started01:43.
-Inputs frozen until reaped. Package79 scripts are prepared with new recovery suite gates;
-not executed. Native79 scripts prepared for complete retained78 clone, no clone/boot yet.
-Must recover ORIGINAL Recovery78 005634 without resending before native acceptance.
-Phone freshly reset, ADB authorized, install-only after validation and prior notice.
-Continue native credential fix, historical publication regression, Starter port and PRD.
+Full84732 REAPED after intentional SIGTERM to its owned compiler group:1295.122s,
+6,015 fresh tests/0 failures/errors/skips,121 actual browser tests,4,524/82 inputs stable.
+Overall gate FAILED detekt LongMethod acquire114>100; remaining broad compilation was
+stopped to apply root regression and rerun the final gate. Do not count this as full
+acceptance. [Evidence](measurements/collaboration-credential-reactivation-2026-11-09.json).
+
+UNCOMMITTED raw AndroidCollaborationClientSource contract and two real repository tests
+are now under RED validation: sole compiler9393 runs retired-acquisition-2026-11-09/check.py
+red-1. No cancellation behavior changed yet. Tests delay native construction or restore,
+retire its owner, then require cancellation/full drain/original credential preservation.
+Current check should instead return Storage. Do not edit source until9393 is reaped.
+Prepared apply-fix.py changes only explicit retirement to cancellation and deduplicates
+reservation-fenced credential publication. Then format/focus, commit/push and combined
+full via retired-acquisition/check-full.py. Inspect tests rather than assuming RED.
+
+Package79 and ten native scripts are prepared, none executed. Their gates now require
+retired-acquisition/full-1. Preserve stopped78 keys and ORIGINAL Recovery78 005634; no
+resend, no new sender. Native recovery must prove one encrypted event and quiet traffic.
+Phone is freshly reset/authorized; prepared79 installer supports fresh install and
+install-only, requires accepted exact APK. Announce before installation; no phone UI.
+No emulator. Platform9551cbbb/runtime e558a686/schema116.4/controlON unchanged. Starter
+SyncTrigger port and all54 PRD groups remain. Continue source fix, native proof/install,
+Starter and the communications work; do not mark the full project complete.
 
 ## Automatic recovery focused gates pass; full79 next — 9 November 2026, 01:43 UTC
 
