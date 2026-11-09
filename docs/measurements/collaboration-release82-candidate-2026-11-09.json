@@ -1,0 +1,83 @@
+{
+  "at": "2026-11-09T05:48:08.746913+00:00",
+  "scope": "Build82 candidate and exact SDK6 verification before retained81 runtime proof",
+  "accepted": false,
+  "phoneInstalled": false,
+  "source": {
+    "baseCommit": "087d55d27763200034978ce5d86078c90bb820ba",
+    "applicationGate": "sdk-shared-borrow/full-1",
+    "readinessBrowserGate": "sdk-shared-borrow/full-1",
+    "recipientObservationBrowserGate": "sdk-shared-borrow/full-1",
+    "applicationGateExecutedIn": "/home/fajar/hris/hris-mobile",
+    "sourceBranch": "feat/chat-send-timing-20261107",
+    "sourceManifestSha256": "a1efc3512541bb1037f2bc3031f1419900a2d7e90b48b55d9fd859f435282536",
+    "sourcesUnchanged": true,
+    "candidateOnly": true,
+    "sdkCandidate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.6",
+    "inspectorCommit": "2b8492170ff30915f9a6694d7d1bf8f076e74e3c",
+    "inspectorGate": "sdk-shared-borrow/full-1",
+    "librarySourceManifestSha256": "3838706d98dd25b412d1ac7adbcadba8e231f764878a1586d50916fe015f0758",
+    "librarySourcesUnchanged": true
+  },
+  "build": {
+    "startedAt": "2026-11-09T05:44:49.569568+00:00",
+    "elapsedSeconds": 102.33,
+    "exitCode": 0
+  },
+  "artifact": {
+    "candidateOnly": true,
+    "diagnosticMarkersAbsent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-09-build82/hris-mobile-dev-release-1.0.0-82-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 82,
+    "versionName": "1.0.0",
+    "bytes": 123465103,
+    "sha256": "925dd3b25bcae8c5448aae79fcd4516c90a5a54d69c2dee8fa759a48ca03d4d5",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+  },
+  "sdkVerification": {
+    "nativeSha256": "4e15c92398521f5f5cd9fbb30cf327019faf32abe5302b64d8b4bdc07d75e9d4",
+    "nativeBytes": 97547344,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "aarSha256": "a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.6",
+    "published": false,
+    "strippedNativeMatchesVerifiedSdk": true,
+    "stripToolNdkVersion": "28.2.13676358",
+    "queueApisAndUseCaseInDex": true,
+    "actualNativeObserverSymbolsPresent": true
+  },
+  "lint": {
+    "issues": 0,
+    "reportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "limitations": [
+    "Native82 acceptance in progress; no phone installation",
+    "No actual Apple SDK6 binary or runtime acceptance",
+    "SDK6 remains unpublished",
+    "No communications PRD group completed"
+  ]
+}

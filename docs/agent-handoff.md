@@ -1,6 +1,24 @@
 # Agent continuation — HRIS Mobile
 
 
+## APK82 verified; retained81 runtime proof started — 9 November 2026, 05:48 UTC
+
+Build79353 REAPED PASS102.330s; APK29337/SDK60559 verifiers PASS. Source087d55d2
+(pushed), nondebug devRelease ARM64 v82,123465103B,
+SHA925dd3b25bcae8c5448aae79fcd4516c90a5a54d69c2dee8fa759a48ca03d4d5.
+Same signer, Firebase/API,16KiB and backup exclusions verified; lint0.
+Native4e15c923… exactly matches stripped SDK6. [Candidate](measurements/collaboration-release82-candidate-2026-11-09.json).
+
+Clone48646 REAPED PASS from latest complete81, all4 userdata/encryption files and
+complete AVD preserved; source unchanged, no reset or send. Target
+.work/sdk-shared-borrow-native-2026-11-09/sender must not be overwritten after boot.
+Only owned heavy process: emulator28646,2560MiB/2cores; passive counter88599 and
+paired credential observer95196 running before boot. NEXT reap boot readiness,
+run-phases.py once, then reap every process and accept-quietness.py only after all
+phases. InitialHome remains before room entry. Originals never resent; single
+new Registry82 sample only after retained/history/lifecycle acceptance.
+Phone ADB reachable05:46; NO phone install/UI. SDK6 unpublished, Starter not ported.
+
 ## SDK6 full source validation passes; APK82 next — 9 November 2026, 05:44 UTC
 
 Full63567 REAPED PASS1000.016s on pushed d13a6d0d:5476 fresh tests
