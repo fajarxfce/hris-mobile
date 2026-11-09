@@ -109,11 +109,74 @@
       },
       "resultSha256": "6861a008c877841e7cac41d425e0076fee5ee954c70ebebc11d8679382b4f9bb",
       "scope": "21 current application lifetime/binding tests, format, architecture74 and detekt pass;73 identity tests retain unchanged focused-3 inputs"
+    },
+    "full-1": {
+      "startedAt": "2026-11-09T06:24:32.637837+00:00",
+      "elapsedSeconds": 406.826,
+      "exitCode": -15,
+      "sourceFiles": 4529,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5868,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "5109905c31059e8ce0d1e0349f427ee549efee848f41041806f43f34928016d8",
+      "scope": "Deliberately terminated406.826s to address a newly identified immediate-refresh loop;5868 tests pass but full gate is NOT accepted"
+    },
+    "red-progress-1": {
+      "startedAt": "2026-11-09T06:31:45.863878+00:00",
+      "elapsedSeconds": 33.365,
+      "exitCode": 1,
+      "sourceFiles": 4529,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "5239aa251cf3b8b4fec596c3f000c26ea435106be4c7c7c94c861bb889e87ad7",
+      "scope": "Real maintenance flow: expected1 refresh, observed3 under bounded short-deadline response;1failed regression"
+    },
+    "format-4": {
+      "startedAt": "2026-11-09T06:32:57.581716+00:00",
+      "elapsedSeconds": 35.282,
+      "exitCode": 0,
+      "sourceFiles": 4529,
+      "sourcesUnchanged": false,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "51874559bb9bd40223b8432459ea09e486ce6f6f3a7fe2d24c1a5938a6364f62"
+    },
+    "focused-progress-1": {
+      "startedAt": "2026-11-09T06:34:24.318192+00:00",
+      "elapsedSeconds": 64.591,
+      "exitCode": 0,
+      "sourceFiles": 4529,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 74,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "2be1d39675652d35d0a3c30487cac9c6decceaa4f32327803623f15be8fe29bd",
+      "scope": "74 identity tests including10 maintenance cases, format, architecture74 and detekt pass; inputs unchanged"
     }
   },
   "native82Evidence": "collaboration-release82-candidate-2026-11-09.json",
   "pending": [
-    "Full SDK6 application and actual browser tests",
+    "Complete full-2 after advancing-deadline guard",
     "Retained82 to83 runtime with four originals, HRIS-parent deadlines and paired Matrix renewals",
     "Phone install-only, immutable SDK distribution and generic Starter port"
   ],

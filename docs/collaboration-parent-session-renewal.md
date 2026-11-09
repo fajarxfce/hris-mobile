@@ -28,12 +28,19 @@ expired parent cannot start maintenance. The core identity use case owns renewal
 policy; the application only binds the lifetime. No SDK, inspector or ViewModel
 owns token policy.
 
-Nine domain regressions cover deadlines, successive and competing refreshes,
+Ten domain regressions cover deadlines, successive and competing refreshes,
 self-publication, failure without retry loops, external rotation, replacement,
 disposal and recovery of the original operation. Two application tests cover one
-parent observer through rotation, logout and application shutdown. All 73 identity tests and 21 application lifetime/binding cases pass. The final
+parent observer through rotation, logout and application shutdown. All 74 identity tests and 21 application lifetime/binding cases pass. The final
 focused run repeats 21 application cases and passes format, architecture and detekt;
 identity inputs remain unchanged from their passing run. Earlier compile and method
 length failures remain in [the evidence](measurements/collaboration-parent-session-renewal-2026-11-09.json).
-Full validation is next. Native83 must retain the four original messages from complete82
+A regression also exposes repeated immediate refresh when a returned token has an
+already-due deadline: the old flow makes three bounded attempts instead of one.
+Maintenance now consumes deadlines through the completed attempt's refresh margin.
+It retains the returned credentials and waits for a useful advancing deadline;
+an external successful acquisition can resume normal maintenance. Both short and
+already-expired responses are covered. The 74-case identity/quality recheck passes.
+The earlier full run was deliberately stopped with 5,868 passing tests and is not
+accepted as complete. Full validation must run again on this correction. Native83 must retain the four original messages from complete82
 and observe both native and Matrix renewal before release acceptance.

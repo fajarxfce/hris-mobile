@@ -16,6 +16,39 @@ import kotlinx.coroutines.test.*
 
 class SessionTokenMaintenanceTest {
     @Test
+    fun alreadyDueRotatedTokensCannotCreateAnotherAutomaticRefresh() = runTest {
+        for (remaining in listOf(10_000L, -10_000L)) {
+            val f = RenewalFixture(testScheduler)
+            f.expiresAfterMillis = remaining
+            // Bound a faulty implementation so the regression fails instead of hanging.
+            f.beforeReply = {
+                if (f.calls.size >= 3)
+                    f.failure = AppResult.Failed(Failure(FailureKind.Network, "Stop probe"))
+            }
+            val job = backgroundScope.launch { f.acquire.maintain(f.original.id).collect() }
+            runCurrent()
+            advanceTimeBy(570_000)
+            runCurrent()
+            assertEquals(1, f.calls.size)
+            assertEquals("access-1", f.current().tokens.accessToken)
+            advanceTimeBy(60_000)
+            runCurrent()
+            assertEquals(1, f.calls.size)
+            // An externally acquired, useful deadline may schedule future maintenance.
+            f.expiresAfterMillis = 600_000
+            f.beforeReply = {}
+            assertIs<AppResult.Success<SessionTokens?>>(f.acquire(f.original.id))
+            runCurrent()
+            assertEquals(2, f.calls.size)
+            advanceTimeBy(570_000)
+            runCurrent()
+            assertEquals(3, f.calls.size)
+            assertNull(f.current().pendingRefreshOperationId)
+            job.cancelAndJoin()
+        }
+    }
+
+    @Test
     fun renewsBeforeEachExpiryWithoutRequestsBetweenCredentialDeadlines() = runTest {
         val f = RenewalFixture(testScheduler)
         val job = backgroundScope.launch { f.acquire.maintain(f.original.id).collect() }
@@ -194,6 +227,7 @@ private class RenewalFixture(scheduler: TestCoroutineScheduler) {
             )
     val sessions = TestSessions(original)
     val calls = mutableListOf<Pair<String, String>>()
+    var expiresAfterMillis = 600_000L
     var beforeReply: suspend () -> Unit = {}
     var failure: AppResult.Failed? = null
 
@@ -225,7 +259,7 @@ private class RenewalFixture(scheduler: TestCoroutineScheduler) {
                             SessionTokens(
                                 "access-${calls.size}",
                                 "refresh-${calls.size}",
-                                clock.now().toEpochMilliseconds() + 600_000,
+                                clock.now().toEpochMilliseconds() + expiresAfterMillis,
                             ),
                             session.binding,
                         )

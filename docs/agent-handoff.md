@@ -1,6 +1,38 @@
 # Agent continuation — HRIS Mobile
 
 
+## Advancing-deadline loop regression passes; full-2 next — 9 November 2026, 06:36 UTC
+
+New review found maintain could immediately refresh each changed token when its
+returned deadline was already due. Full58303 was deliberately stopped at406.826s,
+5868 passing tests/no failures but incomplete browser/build/quality, exit-15; REAPED.
+Owned group3484531 only; no compiler remained before edits. Do NOT accept full-1.
+RED76919 REAPED33.365s: actual bounded flow expected1 refresh but made3;1test/1failure.
+Production now consumes deadlines through the completed attempt's existing30s margin,
+retaining returned credentials while rejecting immediate follow-up deadlines. A useful
+external acquisition may resume scheduling. No debounce timer, credential discard,
+server authorization change or additional ViewModel/helper component.
+Format58224 REAPED35.282s. Focused12327 REAPED PASS64.591s:74identity tests including10
+maintenance cases (short+expired response and later resumption),0fail/errors/skips,
+format/architecture74/detekt PASS; all4529 app/82library inputs unchanged.
+Application lifetime/DI files remain at their accepted21-case focused76718 inputs.
+
+NEXT commit+push, then .work/native-parent-renewal-2026-11-09/check.py full-2.
+No owned compiler/emulator active at checkpoint. Freeze inputs until reaped.
+Prepared83 build-arm64/run-sender now require full-2 and10 maintenance cases for
+desktop+actual browser.83 has NOT been packaged, booted, accepted or installed.
+Latest COMPLETE store remains sdk-shared-borrow-native-2026-11-09/sender at82,
+FOUR original events including Registry82; never restore81 over82 or resend originals.
+New Parent83 sample only after original/history/lifecycle intervals pass.
+
+Starter .work/session-maintenance-port-2026-11-09 contains DRAFT generic adaptation
+files/port/check scripts from4df9da09 (8cases, no native SessionBinding). They are now
+STALE relative to the advancing-deadline correction and must be regenerated/reviewed
+with9 generic cases and new source hashes BEFORE applying, after later native acceptance.
+Neither that port nor existing sync-trigger port ran. SDK6 publisher remains gated to
+failed82, not run. No phone install/UI; last ADB reachable06:12. Platform docs8833a609,
+runtimee558a686/schema116.4/controlON unchanged;117–138 undeployed, all54PRD groups open.
+
 ## Parent token maintenance passes focused checks; full next — 9 November 2026, 06:24 UTC
 
 Mobile core AcquireSessionTokens now exposes maintain(sessionId): one attempt at its

@@ -28,12 +28,13 @@ class AcquireSessionTokens(
 
     /**
      * A live transport owner keeps its parent access current without making probe requests. Each
-     * credential revision schedules one attempt. Failed attempts retain the normal durable refresh
-     * operation; observation alone never retries the same revision. Refresh stays in the collector
-     * so persisting its own operation cannot cancel the in-flight exchange.
+     * advancing credential deadline schedules one attempt. Failed attempts retain the durable
+     * refresh operation; observation alone never retries the same revision. Refresh stays in the
+     * collector so persisting its own operation cannot cancel the in-flight exchange.
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     fun maintain(sessionId: String): Flow<AppResult<SessionTokens?>> = flow {
+        var attemptedThrough = Long.MIN_VALUE
         sessions
             .observe()
             .map { observed ->
@@ -61,17 +62,27 @@ class AcquireSessionTokens(
                             return@transformLatest
                         val due = current.tokens.expiresAtEpochMillis - REFRESH_MARGIN_MILLIS
                         delay((due - clock.now().toEpochMilliseconds()).coerceAtLeast(0))
-                        emit(AppResult.Success(Unit))
+                        emit(AppResult.Success(current.tokens.expiresAtEpochMillis))
                     }
                 }
             }
             .collect { due ->
-                emit(
-                    when (due) {
-                        is AppResult.Failed -> due
-                        is AppResult.Success -> invoke(sessionId)
+                when (due) {
+                    is AppResult.Failed -> emit(due)
+                    is AppResult.Success -> {
+                        if (due.value <= attemptedThrough) return@collect
+                        val result = invoke(sessionId)
+                        // Keep returned credentials, including a short-lived or clock-skewed
+                        // response, without turning its publication into another immediate retry.
+                        attemptedThrough =
+                            maxOf(
+                                attemptedThrough,
+                                due.value,
+                                clock.now().toEpochMilliseconds() + REFRESH_MARGIN_MILLIS,
+                            )
+                        emit(result)
                     }
-                )
+                }
             }
     }
 
