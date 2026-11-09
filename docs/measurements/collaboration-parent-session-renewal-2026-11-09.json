@@ -229,11 +229,12 @@
   },
   "native82Evidence": "collaboration-release82-candidate-2026-11-09.json",
   "pending": [
-    "Resolve strict quietness failure against observed periodic WorkManager and bounded continuation; reduce startup metadata",
-    "Later accepted phone install-only, immutable SDK distribution and generic Starter ports"
+    "Phone install-only, immutable SDK distribution and generic Starter ports",
+    "Reduce repeated startup metadata while preserving admission and bounded history"
   ],
-  "nativeAccepted": false,
+  "nativeAccepted": true,
   "phoneInstalled": false,
   "nativeRenewalVerified": true,
-  "nativeEvidence": "collaboration-release83-candidate-2026-11-09.json"
+  "nativeEvidence": "collaboration-release83-candidate-2026-11-09.json",
+  "acceptanceScope": "Retained-store functional and renewal proof with independently attributed scheduled work; strict zero-metadata result preserved as failed, startup cost still open"
 }

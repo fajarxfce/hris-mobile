@@ -60,3 +60,17 @@ bin. The other three idle intervals pass, with no bootstrap across the run.
 The original failed check remains recorded; startup metadata and the continuation's
 exact cause are still under investigation. No phone installation or SDK publication.
 Source compilation does not establish Apple runtime acceptance.
+
+The periodic-work review verifies the existing fifteen-minute WorkManager schedule,
+one periodic SUCCESS followed by one collapsed continuation SUCCESS in 3.095 seconds,
+and two successful Sync traces carrying 22 HTTP reads each. The 42 collaboration
+metadata reads occur in their same ten-second packet bin. Three other idle intervals
+have no unexpected setup. Removing scheduling evidence, adding a rejection, extra
+metadata in another interval, a bootstrap or a failed renewal all reject the review;
+the original failed native82 run also remains rejected. Packet bins alone do not
+attribute individual requests; the independent WorkManager and trace records
+corroborate this bounded sequence.
+
+Build83 is accepted as a progress update for preserved data and token renewal.
+The original strict zero-metadata failure remains intact. Startup request volume,
+send latency p95, Apple runtime and broader communications delivery remain open.

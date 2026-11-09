@@ -1,7 +1,7 @@
 {
-  "status": "native_functional_pass_strict_quietness_failed",
+  "status": "validated_progress_update_startup_optimization_open",
   "versionCode": 83,
-  "nativeAccepted": false,
+  "nativeAccepted": true,
   "phoneInstalled": false,
   "phoneUiTouched": false,
   "latestCompleteStore": "native-parent-renewal-native-2026-11-09/sender at83; preserve all4 userdata/encryption files and full AVD",
@@ -422,6 +422,184 @@
       "One message sample is not p95",
       "Startup metadata cost remains high",
       "Apple SDK6 runtime and all54 communications groups remain open"
+    ]
+  },
+  "originalStrictTrafficAccepted": false,
+  "periodicTrafficReview": {
+    "at": "2026-11-09T07:20:31.740210+00:00",
+    "accepted": true,
+    "originalStrictAccepted": false,
+    "originalStrictSha256": "dec526cbcfc458939922961547979a50770bac16ff0cf8852cfb11cbd0f335f1",
+    "basis": "Existing15-minute WorkManager contract, independent periodic/continuation SUCCESS records and two successful Sync traces with22 HTTP reads each;42 collaboration metadata reads fall in their same10s bin. No zero-traffic claim for scheduled synchronization.",
+    "periodicIntervalMinutes": 15,
+    "schedulerSourceSha256": "d45340f7a499407dbc81df94fa085959005cccf81e072f1fd94cbffef41f6906",
+    "bin": 310,
+    "periodicStartEpochSeconds": 1794207823.105,
+    "periodicSuccessEpochSeconds": 1794207825.222,
+    "continuationStartEpochSeconds": 1794207825.223,
+    "continuationSuccessEpochSeconds": 1794207826.2,
+    "boundedSequenceSeconds": 3.095,
+    "httpCallsBySuccessfulSyncTrace": [
+      22,
+      22
+    ],
+    "collaborationMetadataCalls": 42,
+    "negativeControls": [
+      "missing scheduling evidence",
+      "new403",
+      "metadata in another idle interval",
+      "bootstrap",
+      "failed renewal",
+      "original native82 failure"
+    ],
+    "tokensOwnersWorkIdsOrTraceIdsRetained": false,
+    "sourceOrScheduleChanged": false,
+    "limitations": [
+      "Packet bins cannot independently attribute each packet to a coroutine; WM timestamps and application traces corroborate the bounded sequence",
+      "Startup metadata volume remains open",
+      "This does not establish latency p95 or whole PRD completion"
+    ],
+    "classifiedTraffic": {
+      "at": "2026-11-09T07:12:03.019529+00:00",
+      "accepted": true,
+      "pairedRefreshFailures": [],
+      "pairedRefreshStatuses": [
+        200,
+        200,
+        200
+      ],
+      "settledIntervals": [
+        {
+          "phase": "home",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "other_hris": 9,
+            "sync": 11
+          },
+          "unexpectedSetupTraffic": {},
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 0,
+          "accepted": true
+        },
+        {
+          "phase": "room",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "sync": 14,
+            "hris_conversation": 10,
+            "hris_conversation_summaries": 2,
+            "hris_device_admission": 2,
+            "hris_device_setup": 16,
+            "hris_room": 12,
+            "other_hris": 12,
+            "other_matrix": 6,
+            "refresh": 1
+          },
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 1,
+          "accepted": true,
+          "scheduledMetadataTraffic": {
+            "hris_conversation": 10,
+            "hris_conversation_summaries": 2,
+            "hris_device_admission": 2,
+            "hris_device_setup": 16,
+            "hris_room": 12
+          },
+          "unexpectedSetupTraffic": {}
+        },
+        {
+          "phase": "resumed",
+          "completeBinSeconds": 120,
+          "requestCounts": {
+            "sync": 12,
+            "other_hris": 10
+          },
+          "unexpectedSetupTraffic": {},
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 0,
+          "accepted": true
+        },
+        {
+          "phase": "cold",
+          "completeBinSeconds": 110,
+          "requestCounts": {
+            "sync": 14,
+            "refresh": 1,
+            "other_hris": 9
+          },
+          "unexpectedSetupTraffic": {},
+          "rejectedRequests": {},
+          "normalExpiredSyncResponses": 1,
+          "accepted": true
+        }
+      ],
+      "bootstrapRequestsAcrossRun": 0,
+      "samePublicIdentity": true,
+      "sameGatewayHead": true,
+      "requestCount": 572,
+      "limitation": "Packet starts, not full HTTP reconstruction. Single owned emulator gateway; aggregate bins only.",
+      "phoneTouched": false,
+      "scope": "No unexpected settled traffic after attribution of the independently logged periodic sweep and its single completed continuation. Original strict zero-metadata result remains failed."
+    }
+  },
+  "progressAcceptance": {
+    "at": "2026-11-09T07:21:12.476381+00:00",
+    "accepted": true,
+    "scope": "Validated progress update: retained82 to83 runtime, identity, original messages and three renewals; periodic work independently attributed; startup metadata and whole PRD remain open",
+    "apkSha256": "1acea7f495a0250970793fdd24aa9e7fa89a33eec1b4a4089d0b17684d01aad5",
+    "versionCode": 83,
+    "requestCounts": {
+      "hris_conversation_summaries": 14,
+      "hris_device_admission": 14,
+      "hris_device_setup": 128,
+      "hris_room": 101,
+      "hris_session_refresh": 2,
+      "other_hris": 82,
+      "hris_conversation": 82,
+      "other_matrix": 54,
+      "refresh": 3,
+      "secret_storage_default_key": 8,
+      "sync": 80,
+      "encrypted_room_send": 1,
+      "hris_direct_transport": 3
+    },
+    "responseCounts": {
+      "hris_conversation_summaries:200": 14,
+      "hris_device_admission:200": 14,
+      "hris_device_setup:200": 127,
+      "hris_room:200": 101,
+      "hris_session_refresh:200": 2,
+      "other_hris:200": 64,
+      "hris_conversation:200": 82,
+      "other_matrix:200": 54,
+      "refresh:200": 3,
+      "secret_storage_default_key:401": 2,
+      "secret_storage_default_key:404": 6,
+      "sync:200": 76,
+      "sync:401": 2,
+      "sync:503": 1,
+      "encrypted_room_send:200": 1,
+      "hris_direct_transport:200": 3
+    },
+    "gatewayVersionBefore": 20,
+    "gatewayVersionAfter": 23,
+    "samePublicIdentity": true,
+    "originalServerEventsRetained": 4,
+    "newServerEvents": 1,
+    "newSendGestures": 1,
+    "tapToServerReceivedMillis": 2895.24365234375,
+    "recipientRemainedStopped": true,
+    "phoneInstalled": false,
+    "phoneUiTouched": false,
+    "emulatorStopped": true,
+    "latestCompleteStore": "native-parent-renewal-native-2026-11-09/sender at83; preserve all4 userdata/encryption files and AVD",
+    "originalStrictTrafficAccepted": false,
+    "limitations": [
+      "Startup metadata volume remains high and under investigation",
+      "Original strict quietness failed; attributed periodic work does not constitute a zero-traffic claim",
+      "One new message sample is not a p95 latency measurement",
+      "Startup metadata cost remains distinct from settled traffic",
+      "Apple SDK6 runtime and all54 communications PRD groups remain open"
     ]
   }
 }
