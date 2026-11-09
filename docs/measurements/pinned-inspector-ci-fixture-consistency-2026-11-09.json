@@ -1,0 +1,66 @@
+{
+  "run": 42604884828,
+  "source": "3657ada9c14f600f53921849e484cd16c2cdcdb6",
+  "artifact": 13668726726,
+  "digest": "5fad8ab4370e7a8daf153a89fb4cab4732bf38eaf00f96f2766402d31e3911cd",
+  "counts": {
+    "tests": 5969,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0
+  },
+  "failures": [
+    {
+      "class": "dev.fajar.starter.AppFlowTest",
+      "test": "metadataDenialAlsoRedactsTheCatalogAfterReturningFromDetails[desktop]",
+      "message": "androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 15000 ms"
+    },
+    {
+      "class": "dev.fajar.starter.NativeLinkAppFlowTest",
+      "test": "typedNativeTapWaitsForResumeThenOpensTheThreadWithChatAsItsBackDestination[desktop]",
+      "message": "androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 15000 ms"
+    }
+  ],
+  "selectedReports": {
+    "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml": {
+      "tests": 90,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativeLinkAppFlowTest.xml": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "findings": [
+    "NotificationPublisherFixture seeded three conversations, then published only one; the UI could legitimately converge to one while the test always required three. The prior bounded-wait fix alone was insufficient.",
+    "Document refresh ignored an action during its still-active initial acquisition. Fixture HTTP active=0 precedes local publication and final refreshing=false. The original failure screenshot still shows the unchanged document, not a server denial."
+  ],
+  "candidateChanges": [
+    "Make fixture list explicit with default unchanged; the navigation test requests all three originally retained targets, keeping its exact three-row assertion.",
+    "Wait on enabled Refresh semantics before injecting/clicking the denial action; retain all redaction and recovery assertions."
+  ],
+  "candidateSourceSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/AppFlowTest.kt": "d034593794047b24b6aa6c6e7aebcb735f278412299569e3f3d560ccf3988676",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/NativeLinkAppFlowTest.kt": "71ecabc61344272da33341bbff9614b4c479e98e68a74877ff2adbb4744369eb",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/NotificationPublisherFixture.kt": "bc2fea2a0cafb3a5f7252625e3fb7bd5aeea6055403add0665cd16f02b0f159b"
+  },
+  "validation": "Pinned formatter passes; focused fixture callers and complete verify remain pending. No product source changed.",
+  "reportTotalsMayBePartial": true,
+  "countScope": "Downloaded artifact XML totals; not a claim that the entire requested Gradle graph completed"
+}

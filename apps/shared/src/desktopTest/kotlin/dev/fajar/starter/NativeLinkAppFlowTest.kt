@@ -39,7 +39,8 @@ class NativeLinkAppFlowTest {
         var visible by mutableStateOf(true)
         try {
             runBlocking {
-                f.initialize()
+                // Keep the published list consistent with the three retained navigation targets.
+                f.initialize(f.app.server.collaboration.ids)
                 f.app.koin.loadModules(
                     listOf(
                         module {

@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 11:03 UTC. This file describes current work. Historical
+Updated 9 November 2026, 11:30 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -24,12 +24,12 @@ Do not restart jobs or reapply candidates from that history without checking cur
 
 | Checkout | Branch/source | Current state |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 / 1f3b9e8d | Native86 installed; Room full gate passed |
-| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 3657ada9 | Pushed; verify42604884828 active |
+| Mobile original | feat/chat-send-timing-20261107 / 4e7be081 | Room dispatch pushed; joined-room build87 gate active |
+| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 16df4260 + fixture WIP | Fifth verify failed; next focused gate prepared |
 | Inspector original | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Verified SDK6 integrated/pushed |
 | Inspector isolated | feat/sdk6-distribution-20261109 / a6b8236 | Pushed; SDK6 distribution accepted |
 | Starter | feat/network-inspector-20261107 / 6157db1 | Pushed; generic worker/identity ports accepted |
-| Platform original | feat/communications / 43a7c0c8 | Pushed; runtime unchanged |
+| Platform original | feat/communications / 85e5fe8f | Pushed; runtime unchanged |
 | Platform group worktree | feat/communication-space / fdcd783e | Separate unshipped group implementation |
 
 The isolated directories are under `/home/fajar/hris/.worktrees/`:
@@ -104,7 +104,7 @@ a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3;
 Ivy SHA25669ea030963275ce080991e658172934441b73558e9de4d8e7ae3976b2f18558a.
 APK stripped ARM64 SHA2564e15c92398521f5f5cd9fbb30cf327019faf32abe5302b64d8b4bdc07d75e9d4.
 Do not rebuild or overwrite release assets. APK86 was built with the verified local mirror while its root inspector still used
-SDK5. Root inspector nowf8ca3d6 integrates verified publicSDK6; frozen for the current Room browser gate.
+SDK5. Root inspector nowf8ca3d6 integrates verified publicSDK6; frozen for the current joined-room build87 full gate.
 
 Inspector742a2d1 uses publicSDK6/strict checksums. CI42591111996 succeeds:226 portable/
 Android host cases and69 actual Apple simulator cases, zero failures/errors/skips;
@@ -144,7 +144,10 @@ three rows. Candidate now includes those exact rows in its existing bounded Comp
 wait, retaining count/display/pending-link/no-send checks. Pinned single-file ktfmt
 passes0.649s/128MiB. Focused68751 PASS95.455s: one fresh integration case,
 4528 unchanged app/library inputs; format/architecture/Detekt pass. Fifth public verify
-42604884828/job129118204113 at3657ada9 is active. No product change. [Evidence](measurements/pinned-inspector-notification-navigation-test-2026-11-09.json).
+42604884828/job129118204113 at3657ada9 FAILED two integration assertions, despite
+the focused pass. Its artifact13668726726 SHA5fad8ab4370e7a8daf153a89fb4cab4732bf38eaf00f96f2766402d31e3911cd
+is verified:5,969 cases,2 failures,0 errors/skips. Read the subsequent finding below.
+No product change. [Evidence](measurements/pinned-inspector-notification-navigation-test-2026-11-09.json).
 Root Room changes are NOT included in these hosted CI runs.
 [Exact failed/successful scope](measurements/pinned-inspector-ci-test-recovery-2026-11-09.json). No production retry/cancellation behavior was changed. Web-only CI42597096435 also shut down at Wasm optimization; no final artifact
 survived. Cause remains unproved. Next web job bounds Binaryen2cores, Gradle1worker/
@@ -156,6 +159,37 @@ The time wrapper's175,188KiB RSS measures only the launcher, NOT compiler/Binary
 Original shutdown cause remains unproved. [Web evidence](measurements/pinned-inspector-web-distribution-2026-11-09.json).
 No distribution workflow was dispatched.
 Audit actual completed jobs and artifacts; do not infer success from compilation alone.
+
+## Current CI fixture correction
+
+Fifth CI shows one valid chat row, not a stuck Loading screen. Notification fixture
+initialized three local conversations but changed the published list to one; the test
+always expected three and raced synchronization. The prior wait-only correction was
+insufficient. Candidate makes the fixture's listed conversations explicit (old default
+unchanged); this navigation case publishes all three retained targets and retains its
+three-row assertion. Its other11 fixture callers will be covered.
+
+The document denial case clicked Refresh after mock HTTP active=0 but before the
+ViewModel finished acquisition; the action is disabled/ignored during that interval.
+The preserved screenshot still shows the original record. Candidate waits for enabled
+Refresh semantics and keeps all denial/redaction/recovery assertions. No production
+code or timeout changed. Pinned formatting passes; focused `fixtures-1` is prepared
+in `.work/consumer-ci-test-recovery-2026-11-09/check.py`, not yet run. All source edits
+are confined to this isolated worktree. Fifth audit/private artifact is in
+`.work/pinned-inspector-ci-2026-11-09/fifth`; public draft evidence is
+[fixture consistency](measurements/pinned-inspector-ci-fixture-consistency-2026-11-09.json).
+Source review and pinned formatting pass. Run the sixth hosted verify for this
+candidate while the root compiler remains active; local fixture validation is next
+when that compiler is reaped. Neither check is claimed complete before its result.
+
+Root joined-room source is independently uncommitted: new raw room datasource reuses
+known Joined state, preserves one join for other states, and closes cancelled/failed
+acquisitions. The preserved equivalent unconditional-join RED fails one case; final
+611 Android host cases pass71.209s, including10 raw and2 parent/child cases,4,535 fixed
+inputs and quality checks. Root full3347 is active for version87; do not edit its app
+or inspector sources. Build87 and retained-native87 scripts are prepared only; APK86
+is still installed, native86 remains the latest complete stopped store with7 originals.
+Only one heavy local compiler/emulator; run isolated fixtures after3347 is reaped.
 
 ## Next implementation work
 
@@ -171,7 +205,8 @@ Audit actual completed jobs and artifacts; do not infer success from compilation
    Format15207 PASS35.511s; focused34481 PASS263.919s/76 fresh cases including18 new
    domain and11 shared real-storage cases.4532 app/library inputs unchanged. Full30025 PASS902.068s with5963 fresh cases (5364 desktop,599 Android host),
    zero failures/errors/skips or release lint findings, fixed4532 inputs. Wasm/iOS
-   source and quality pass. Browser97424 is active in the root browser-1 directory.
+   source and quality pass. Browser97424 PASS115.038s/74 actual cases. Root4e7be081 is committed/pushed. All
+   Room jobs are reaped. Current root work is the joined-room acquisition gate above.
    No product route or rollout. Then durable published binding/projection, exact LEGACY metadata validation,
    original SDK delivery/history, workers and product routing. Existing Prepare and
    Resolve room use cases are accepted; do not recreate them. The group backend is in

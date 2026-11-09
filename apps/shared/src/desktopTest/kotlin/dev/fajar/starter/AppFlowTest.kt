@@ -1376,8 +1376,15 @@ class AppFlowTest {
             openDocumentDetails()
             waitFor("PASSPORT-21")
             compose.waitUntil { server.documents.metadata.active.get() == 0 }
+            // HTTP completion can precede publication and the end of the owning acquisition.
+            compose.waitUntil(15_000) {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .size == 1
+            }
             server.documents.metadata.denial = "document_access_denied"
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            compose.onNodeWithContentDescription("Refresh").assertIsEnabled().performClick()
             waitForAction("Try again")
             compose.onAllNodesWithText("PASSPORT-21").assertCountEquals(0)
             compose.onNodeWithContentDescription("Back").performClick()

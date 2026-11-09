@@ -48,7 +48,7 @@
   ],
   "rootCause": "The navigation integration test observed New chat shell then asserted three rows while the independently acquired list still rendered Loading; the recorded semantics show Chat selected and Conversations selected.",
   "change": "Wait for the same required three colleague nodes inside the existing bounded Compose wait; preserve exact count, display, pending-link and no-send assertions.",
-  "validation": "Focused integration, formatting, architecture and Detekt pass; fifth full public verify remains active",
+  "validation": "Focused integration/quality passed, but fifth full CI failed: the published fixture list can legitimately converge to one while this test requires three. Preserve this first wait-only attempt; subsequent fixture correction is not yet validated.",
   "priorFailures": [
     "Transport cancellation now passed",
     "Prior desktop SIGABRT not reproduced; cause still unclassified and diagnostics retained"
@@ -84,5 +84,7 @@
   },
   "candidateSource": "3657ada9c14f600f53921849e484cd16c2cdcdb6",
   "nextRun": 42604884828,
-  "nextJob": 129118204113
+  "nextJob": 129118204113,
+  "nextRunConclusion": "failure",
+  "followup": "pinned-inspector-ci-fixture-consistency-2026-11-09.json"
 }
