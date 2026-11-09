@@ -1,5 +1,28 @@
 # Agent continuation — HRIS Mobile
 
+## Stale refresh token proven; native78 safely stopped — 9 November 2026, 01:08 UTC
+
+Passive comparison at01:04:27 proves the SDK sends a refresh token matching NEITHER
+the current nor previous hash in its sole gateway head(version8/not revoked). No raw
+token/hash/body retained, no replay or mutation performed. Comparison59667 REAPED.
+The token is stale; this is not missing E2EE keys. Historical loss timing remains
+unproven. Code review found credential persistence closes BEFORE SDK initialization,
+children and pause finish, allowing a late successful refresh callback to be rejected.
+
+Native78 emulator80866 REAPED after825.316s; original77 files unchanged, full78 store
+and pending `Recovery78 005634` preserved. Final server count2, same product PID3105.
+Do not resend it, reset keys or recopy77 over78. No active emulator/counter/proof.
+All earlier active-process notes below are historical.
+
+Current sole compiler45539 runs credential-drain-2026-11-09/check.py red-1 against
+unchanged production: actual Android lease fixture receives refreshed tokens during
+pause and must persist them before release. Tests/fixture are uncommitted; no production
+edit yet. Reap it and inspect the exact failure. Then correct credential lifetime and
+test failed/cancelled drain. Separately close the rejected-session reopen loop through
+existing admitted credential replacement; a shutdown fix alone cannot repair the
+already-stale retained78 session. No Starter port/phone update/full native acceptance.
+Updated [evidence](measurements/collaboration-recovery-native78-2026-11-09.json).
+
 ## Native78 scheduling passes; retained session repeatedly rejected — 9 November 2026, 01:04 UTC
 
 Native acceptance FAILED despite the accepted source/package gates below. Actual

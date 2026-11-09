@@ -66,8 +66,26 @@
     "lastRotation": "2026-11-09T00:03:33.807589Z",
     "accessExpiresAt": "2026-11-09T00:08:33.807589Z",
     "expiresAt": "2026-12-08T19:04:45.587789Z",
-    "causeEstablished": false,
-    "hypothesis": "Refresh rotation immediately before prior emulator shutdown may have left stale persisted credentials. Must verify token-head comparison/admission before claiming this cause."
+    "staleRefreshTokenProven": true,
+    "tokenLossMechanismEstablished": false,
+    "passiveComparison": {
+      "at": "2026-11-09T01:04:27.729519Z",
+      "scopedGatewayHeads": 1,
+      "matchesCurrent": false,
+      "matchesPrevious": false,
+      "rawCredentialRetained": false,
+      "readOnly": true
+    },
+    "hypothesis": "Refresh rotation immediately before prior emulator shutdown may have left stale persisted credentials. Current code closes credential persistence before draining native work; regression is being written. The exact historical loss instant is not yet established."
+  },
+  "emulatorLifetime": {
+    "stopped": true,
+    "reaped": true,
+    "elapsedSeconds": 825.316,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "original77FilesUnchanged": true,
+    "pending78StorePreserved": true
   },
   "conclusion": "Actual WorkManager scheduling passes. Repeated SDK soft logout, request quietness and new-message delivery remain unresolved; retained private keys are present. Do not port trigger changes to Starter or distribute release78 as a complete fix."
 }
