@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Pinned inspector consumer CI prepared — 9 November 2026, 09:33 UTC
+
+This isolated branch is based on accepted runtime source2293ff05. Five workflows
+now check out public inspector742a2d1c2285c720cef80ea3913195f3ece388cc in all nine
+consumer jobs through the existing networkInspectorDirectory property. SDK6 uses
+published assets and strict checksums; no local mirror or snapshot package registry.
+CI/control explicitly run collaboration Android host tests and CI retains test XML.
+Distribution configuration is changed, but no distribution workflow was dispatched.
+Native-protocol and application acceptance remain independent.
+
+Static YAML audit verifies all nine jobs use the exact source/setting and no SDK
+mirror. Existing tooling suite:60 tests PASS3.673s; git diff --check passes. Hosted
+application CI is NEXT, not accepted yet. The dependency's own CI42591111996 passes
+226 portable/Android host and69 Apple simulator cases with verified artifact hashes;
+its source/CI evidence lives in inspector docs commit a6b8236, already pushed.
+
+Original Mobile2293ff05 and inspector2b849217 are frozen during APK86 validation;
+do not merge this branch into that checkout while a compiler/emulator is running.
+Build86 attempt1 session94519 REAPED: Java heap exhaustion at packageDevRelease
+after475.303s, preserved in attempt-1. Packaging retries with3072MiB/one worker,
+no emulator overlap. Phone remains83. Latest complete retained sender is diagnostic85
+with SIX original messages; native86 scripts must clone only that store and never
+resend originals. After genuine native86 acceptance, notify/install-only on phone.
+Then integrate this CI branch and verified library source, and port generic workflow
+distribution to Starter after actual Mobile CI passes. All54 PRD groups remain open.
+
 ## Selected runtime publication source accepted;86 next — 9 November 2026, 09:23 UTC
 
 Two deterministic registry regressions prove that either ordering of foreground

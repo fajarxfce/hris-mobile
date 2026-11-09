@@ -18,6 +18,9 @@ on:
         description: 'Release notes for testers'
         required: false
 
+env:
+  ORG_GRADLE_PROJECT_networkInspectorDirectory: ${{ github.workspace }}/.work/network-inspector
+
 permissions:
   contents: read
 
@@ -40,6 +43,13 @@ jobs:
       API_BASE_URL: ${{ vars.API_BASE_URL }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Check out verified network inspector
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: fajarxfce/kmp-network-inspector
+          ref: 742a2d1c2285c720cef80ea3913195f3ece388cc
+          path: .work/network-inspector
+          persist-credentials: false
       - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
         with:
           distribution: temurin

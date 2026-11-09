@@ -40,6 +40,9 @@ on:
       - '.github/workflows/collaboration-control.yml'
   workflow_dispatch:
 
+env:
+  ORG_GRADLE_PROJECT_networkInspectorDirectory: ${{ github.workspace }}/.work/network-inspector
+
 permissions:
   contents: read
 
@@ -54,6 +57,13 @@ jobs:
     timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
+      - name: Check out verified network inspector
+        uses: actions/checkout@v4
+        with:
+          repository: fajarxfce/kmp-network-inspector
+          ref: 742a2d1c2285c720cef80ea3913195f3ece388cc
+          path: .work/network-inspector
+          persist-credentials: false
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -72,6 +82,7 @@ jobs:
           :core:worker:desktopTest :core:network:desktopTest :core:observability:desktopTest :core:worker:wasmJsBrowserTest :core:network:wasmJsBrowserTest :core:observability:wasmJsBrowserTest
           :core:workspace:domain:desktopTest :core:workspace:domain:wasmJsBrowserTest
           :features:collaboration:domain:desktopTest :features:collaboration:data:desktopTest
+          :features:collaboration:data:testAndroidHostTest
           :features:collaboration:domain:wasmJsBrowserTest :features:collaboration:data:wasmJsBrowserTest
           :features:collaboration:presentation:desktopTest :features:collaboration:presentation:wasmJsBrowserTest
           :features:collaboration:data:assemble :features:collaboration:presentation:assemble
@@ -100,6 +111,13 @@ jobs:
       ORG_GRADLE_PROJECT_appLinksConfigDirectory: .work/app-links-check
     steps:
       - uses: actions/checkout@v4
+      - name: Check out verified network inspector
+        uses: actions/checkout@v4
+        with:
+          repository: fajarxfce/kmp-network-inspector
+          ref: 742a2d1c2285c720cef80ea3913195f3ece388cc
+          path: .work/network-inspector
+          persist-credentials: false
       - name: Select Xcode 26.3
         run: sudo xcode-select -s /Applications/Xcode_26.3.app/Contents/Developer
       - uses: actions/setup-java@v4

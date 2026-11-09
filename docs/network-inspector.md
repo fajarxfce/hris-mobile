@@ -4,10 +4,24 @@ This integration candidate uses the separate [KMP Network Inspector](https://git
 repository. The repository is now public with explicit owner approval; no library package is published.
 Do not copy its source into this repository or change its visibility to make CI pass.
 
-**Build 60 is installed on the authorized Android phone after actual emulator acceptance.**
+The consumer workflows now check out inspector commit
+`742a2d1c2285c720cef80ea3913195f3ece388cc` and select it through
+`networkInspectorDirectory`. Android, web, desktop, Apple and distribution jobs use
+the same immutable source. The native protocol fixture receives the same setting
+even though its application checkout is nested. No credentials are persisted in
+the dependency checkout. SDK `26.10.23-hris.6` resolves from its published release
+with strict checksum verification; no private SDK mirror is configured in CI.
+The library's [verified CI run](https://github.com/fajarxfce/kmp-network-inspector/actions/runs/42591111996)
+passed 226 portable/Android host cases and 69 Apple simulator cases. Application CI
+for this integration is pending; native Android fixture compilation is separate
+from device execution, and the Apple Matrix native binding remains unverified.
+Both application verification workflows explicitly run the Android collaboration
+host tests, including native runtime ownership regressions.
+
+**Historical build 60 device acceptance:**
 Ktor/API and Rust Matrix HTTP capture, filters, detail/back, Clear and cold offline chat
-continuity passed. This branch selects the unpublished, paired four-ABI SDK5 candidate;
-immutable SDK4 release assets are unchanged. [Device/package evidence](measurements/network-inspector-host-device-2026-11-07.json).
+continuity passed. That candidate selected SDK5; current builds use published SDK6.
+[Device/package evidence](measurements/network-inspector-host-device-2026-11-07.json).
 
 The development app opens the viewer from a silent Android notification after network
 activity, or through Account → Settings → Network inspector. The notification opens the
@@ -37,27 +51,30 @@ selection; the recorder keys the composition so a reused request ID cannot selec
 detail. The library viewer owns no DI, navigation, ViewModel or transport. App placement
 uses a bounded column around its lazy list, with safe bottom insets and Fluent colors.
 
-Build the candidate with the separately authorized checkout and verified SDK artifact
-mirror, for example:
+For a fresh local build, clone the public library, check out the same commit as CI,
+and pass its absolute location. The SDK comes from the public release:
 
 ```sh
 ./gradlew :apps:shared:desktopTest --tests '*NetworkInspection*' \
   -PnetworkInspectorDirectory=/absolute/path/to/kmp-network-inspector \
-  -PmatrixSdkRepository=/absolute/path/to/verified/sdk-repository \
   --dependency-verification strict
 ```
 
-Catalog versions and exact checksums are retained. Public source is available; CI still needs explicit source/dependency distribution for the
-unpublished library and SDK5. Do not merge this candidate into the primary branch
-until distribution is ready. The library targets Android, iOS, JVM and Wasm. Portable
+Catalog versions and exact checksums are retained. The library remains a source
+composite until its packages are published. Validate the application CI before
+merging this integration into the primary branch. The library targets Android, iOS,
+JVM and Wasm. Portable
 core/Ktor/viewer tests and Apple klib compilation are separate from platform acceptance:
 Android's actual JNI observer passes six loopback scenarios. Four Swift/native observer
 cases pass on macOS against the same verified SDK candidate. Apple library binding,
 Apple simulator tests, a capture-overhead comparison and reusable Starter integration
-were separate acceptance targets. The generic Starter integration is now accepted and
+were separate acceptance targets. The library simulator tests now pass as recorded
+above. The generic Starter integration is accepted and
 pushed asb4d6aa4, with independent root/Android/browser/production web/iOS source checks;
-the other targets remain pending. Android host runtime is accepted separately below.
-Private-repository CI currently cannot run because of GitHub billing.
+the native Apple binding and overhead targets remain pending. Android host runtime
+is accepted separately below.
+The former private-repository billing block was removed when the owner authorized
+the public library repository; the current accepted CI evidence is linked above.
 
 The first host check stopped before compilation on an inherited plugin checksum missing
 from Mobile. The follow-up imports32 exact entries already verified in the separate

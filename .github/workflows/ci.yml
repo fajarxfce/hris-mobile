@@ -12,6 +12,9 @@ on:
         default: all
         options: [all, apple, verify]
 
+env:
+  ORG_GRADLE_PROJECT_networkInspectorDirectory: ${{ github.workspace }}/.work/network-inspector
+
 permissions:
   contents: read
 
@@ -25,6 +28,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check out verified network inspector
+        uses: actions/checkout@v4
+        with:
+          repository: fajarxfce/kmp-network-inspector
+          ref: 742a2d1c2285c720cef80ea3913195f3ece388cc
+          path: .work/network-inspector
+          persist-credentials: false
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -36,6 +46,7 @@ jobs:
       - run: python3 -m unittest discover -s tool -p 'test_*.py'
       - run: >-
           xvfb-run -a ./gradlew :check
+          :features:collaboration:data:testAndroidHostTest
           :core:presentation:wasmJsBrowserTest :core:datastore:wasmJsBrowserTest :core:database:wasmJsBrowserTest
           :core:fileio:wasmJsBrowserTest
           :core:sync:data:wasmJsBrowserTest :core:workspace:domain:wasmJsBrowserTest :core:workspace:data:wasmJsBrowserTest
@@ -77,12 +88,20 @@ jobs:
           name: reports-and-android
           path: |
             **/build/reports/
+            **/build/test-results/
             apps/android/build/outputs/apk/**/*.apk
   web:
     if: github.event_name != 'workflow_dispatch' || inputs.scope == 'all'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check out verified network inspector
+        uses: actions/checkout@v4
+        with:
+          repository: fajarxfce/kmp-network-inspector
+          ref: 742a2d1c2285c720cef80ea3913195f3ece388cc
+          path: .work/network-inspector
+          persist-credentials: false
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -104,6 +123,13 @@ jobs:
       ORG_GRADLE_PROJECT_appLinksConfigDirectory: .work/app-links-check
     steps:
       - uses: actions/checkout@v4
+      - name: Check out verified network inspector
+        uses: actions/checkout@v4
+        with:
+          repository: fajarxfce/kmp-network-inspector
+          ref: 742a2d1c2285c720cef80ea3913195f3ece388cc
+          path: .work/network-inspector
+          persist-credentials: false
       - name: Select Xcode 26.3
         run: sudo xcode-select -s /Applications/Xcode_26.3.app/Contents/Developer
       - name: Verify native push envelope extraction
@@ -167,6 +193,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check out verified network inspector
+        uses: actions/checkout@v4
+        with:
+          repository: fajarxfce/kmp-network-inspector
+          ref: 742a2d1c2285c720cef80ea3913195f3ece388cc
+          path: .work/network-inspector
+          persist-credentials: false
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
