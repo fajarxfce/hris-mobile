@@ -1,5 +1,9 @@
 # Architecture
 
+[Initial synchronization](collaboration-initial-sync.md) requests an immediate SDK
+delta before long polling and preserves classified acquisition failures without
+inventing storage exceptions.
+
 [Obsolete native acquisition](collaboration-acquisition-cancellation.md) cancels retired
 SDK owners, joins activation replacement and preserves credential-recovery observation.
 

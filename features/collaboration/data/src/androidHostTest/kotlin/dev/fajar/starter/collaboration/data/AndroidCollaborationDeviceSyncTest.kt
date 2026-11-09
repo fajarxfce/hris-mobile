@@ -10,6 +10,61 @@ import kotlinx.coroutines.test.*
 /** Real Android ownership and sync adapter, inert FFI; native publication is proved separately. */
 class AndroidCollaborationDeviceSyncTest {
     @Test
+    fun anUnchangedRoomCompletesInitialSyncBeforeTheReadinessDeadline() = runTest {
+        val f = runtimeLeaseFixture(StandardTestDispatcher(testScheduler))
+        val laterResponse = CompletableDeferred<Unit>()
+        f.beforeSync = {
+            if (f.syncRequests == 1) {
+                // An idle server answers just after the requested long-poll duration.
+                delay(requireNotNull(f.syncSettings.last().timeoutMs).toLong() + 1)
+            } else laterResponse.await()
+        }
+        f.lease.completeAcquisition()
+        assertIs<AppResult.Success<Unit>>(f.lease.publish())
+        try {
+            val ready = async { f.lease.synchronizeDevice() }
+            runCurrent()
+            advanceTimeBy(10_001)
+            runCurrent()
+            assertEquals(AppResult.Success(Unit), ready.await())
+            assertEquals(listOf(0uL, 10_000uL), f.syncSettings.map { it.timeoutMs })
+            assertTrue(f.calls.isEmpty())
+        } finally {
+            laterResponse.complete(Unit)
+            f.close()
+        }
+        f.assertReleased()
+    }
+
+    @Test
+    fun interruptedInitialSyncRemainsImmediateUntilTheFirstResponseArrives() = runTest {
+        val f = runtimeLeaseFixture(StandardTestDispatcher(testScheduler))
+        val laterResponse = CompletableDeferred<Unit>()
+        f.beforeSync = {
+            when (f.syncRequests) {
+                1 -> error("Fixture interrupted request")
+                2 -> delay(requireNotNull(f.syncSettings.last().timeoutMs).toLong() + 1)
+                else -> laterResponse.await()
+            }
+        }
+        f.lease.completeAcquisition()
+        assertIs<AppResult.Success<Unit>>(f.lease.publish())
+        try {
+            val ready = async { f.lease.synchronizeDevice() }
+            runCurrent()
+            advanceTimeBy(10_001)
+            runCurrent()
+            assertEquals(AppResult.Success(Unit), ready.await())
+            assertEquals(listOf(0uL, 0uL, 10_000uL), f.syncSettings.map { it.timeoutMs })
+            assertTrue(f.calls.isEmpty())
+        } finally {
+            laterResponse.complete(Unit)
+            f.close()
+        }
+        f.assertReleased()
+    }
+
+    @Test
     fun aDeviceWithoutRoomsWaitsForItsSyncResponseWithoutEnablingMessageQueues() = runTest {
         val f = runtimeLeaseFixture(StandardTestDispatcher(testScheduler))
         val response = CompletableDeferred<Unit>()

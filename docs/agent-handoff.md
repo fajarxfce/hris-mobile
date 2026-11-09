@@ -1,5 +1,34 @@
 # Agent continuation — HRIS Mobile
 
+## Classified acquisition and immediate initial delta pass — 9 November 2026, 03:10 UTC
+
+RED34197 REAPED100.173s:3 reproduced failures,1 genuine-storage control PASS. Final
+focused5288 REAPED PASS77.576s:592 fresh Android-host cases,0 failures/errors/skips;
+format/architecture/detekt pass. Sources4,526 and inspector82 inputs unchanged.
+First focused77177 had592 tests PASS but LongMethod101/100 failure; final source
+simplifies the initialization success branch and retains that failed gate as evidence.
+Format91960 REAPED39.842s. No compiler or emulator remains.
+
+The repository no longer invents exceptions for already-classified session or
+initialization failures. Handover preserves failure even with a null resource,
+maps only successful acquisition and closes resources on failed/cancelled mapping.
+Genuine storage exceptions still report. Android first delta uses timeout0 until
+its first successful response, then existing10000ms long polling; SDK cursor and
+fullState=false stay unchanged. Idle-server, interrupted-first-response, mapping
+cancellation/cleanup and existing lifetime tests pass. [Design](collaboration-initial-sync.md)
+and [exact results](measurements/collaboration-initial-sync-2026-11-09.json).
+
+NEXT reproduce older-history one-read failure with actual thread/domain fixtures,
+then implement bounded discovery in the owning domain layer. Do not add ViewModel
+retry loops. Current screen pager requests only one provider page; metadata/already
+retained originals can require a further terminal page. This is the candidate, not
+complete native causality yet. Run full cross-platform/source checks after the next
+necessary changes, then package80 and native room/background/history/paired refresh
+using LATEST token-rotation-native-2026-11-09/sender complete79 store. Never overwrite
+it with78 or earlier79. Original Recovery78 remains one accepted third event; no
+resend/new key/reset. Build79 remains unaccepted/uninstalled. Phone fresh after stock
+flash, install-only after announcing. Starter port gated/unexecuted;54PRD groups open.
+
 ## Paired refresh succeeds on Home; idle-sync RED running — 9 November 2026, 03:01 UTC
 
 Second native79 trace preserved/cloned the complete first79 store. Emulator20258 REAPED

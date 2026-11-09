@@ -89,6 +89,7 @@ internal class RuntimeLeaseFixture(
     var beforeReadinessSubscribe: () -> Unit = {}
     var failReadinessSubscribe = false
     var syncRequests = 0
+    val syncSettings = mutableListOf<SyncSettingsV2>()
     var signingKey: String? = Base64.encode(ByteArray(32) { it.toByte() })
     private val http = HttpClient(MockEngine { error("Publication never sends HTTP requests") })
     private val sdk =
@@ -121,9 +122,9 @@ internal class RuntimeLeaseFixture(
             override fun deviceId(): String = "PROOF_NATIVE"
 
             override suspend fun syncOnceV2(settings: SyncSettingsV2): SyncResponseV2 {
-                assertEquals(10_000uL, settings.timeoutMs)
                 assertFalse(settings.fullState)
                 syncRequests++
+                syncSettings += settings
                 beforeSync()
                 return SyncResponseV2(
                     "fixture-next",

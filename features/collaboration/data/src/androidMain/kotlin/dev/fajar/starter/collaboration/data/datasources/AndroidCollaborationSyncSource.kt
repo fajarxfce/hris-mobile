@@ -15,12 +15,19 @@ import org.matrix.rustcomponents.sdk.SyncSettingsV2
 internal fun createAndroidCollaborationSync(
     client: Client,
     lifetime: CoroutineScope,
-): CollaborationSdkSyncConnection =
-    SdkSyncPump(
+): CollaborationSdkSyncConnection {
+    var receivedInitialSync = false
+    return SdkSyncPump(
         lifetime,
         synchronize = {
             try {
-                client.syncOnceV2(SyncSettingsV2(timeoutMs = 10_000uL, fullState = false))
+                client.syncOnceV2(
+                    SyncSettingsV2(
+                        timeoutMs = if (receivedInitialSync) 10_000uL else 0uL,
+                        fullState = false,
+                    )
+                )
+                receivedInitialSync = true
                 null
             } catch (cancelled: CancellationException) {
                 throw cancelled
@@ -62,3 +69,4 @@ internal fun createAndroidCollaborationSync(
             }
         },
     )
+}

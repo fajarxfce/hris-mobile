@@ -296,14 +296,10 @@ class AndroidCollaborationRuntimeRepository(
             val selected = registry.reserveSpaceAdoption(gate)
             if (selected is AppResult.Failed) return selected
             val reservation = (selected as AppResult.Success).value
-            when (
-                val opened = handoverAndroidSdkRuntime { failed ->
-                    requireNotNull(acquire(reservation, scope, null, failed, installation))
-                }
-            ) {
-                is AppResult.Failed -> opened
-                is AppResult.Success ->
-                    AppResult.Success(AndroidCollaborationSpaceRuntimeLease(identity, opened.value))
+            handoverAndroidSdkRuntime(
+                map = { AndroidCollaborationSpaceRuntimeLease(identity, requireNotNull(it)) }
+            ) { failed ->
+                acquire(reservation, scope, null, failed, installation)
             }
         } finally {
             registry.endHandover(gate)
@@ -591,10 +587,11 @@ class AndroidCollaborationRuntimeRepository(
                 return AppResult.Failed(it)
             }
             if (borrow.creating) {
-                val acquired = handoverAndroidSdkRuntime { failed ->
-                    acquisitionStarted = true
-                    acquire(borrow.reservation, scope, null, failed)
-                }
+                val acquired =
+                    handoverAndroidSdkRuntime(map = { it }) { failed ->
+                        acquisitionStarted = true
+                        acquire(borrow.reservation, scope, null, failed)
+                    }
                 if (acquired is AppResult.Failed) return acquired
                 if ((acquired as AppResult.Success).value == null) return AppResult.Success(null)
             }
@@ -946,8 +943,8 @@ class AndroidCollaborationRuntimeRepository(
             else reserveInstallation(scope, owner, deviceId, installation)
         if (reserved is AppResult.Failed) return reserved
         val reservation = (reserved as AppResult.Success).value
-        return handoverAndroidSdkRuntime { failed ->
-            result(acquire(reservation, scope, installation, failed))
+        return handoverAndroidSdkRuntime(map = result) { failed ->
+            acquire(reservation, scope, installation, failed)
         }
     }
 
@@ -1062,13 +1059,18 @@ class AndroidCollaborationRuntimeRepository(
                 }
             if (!registry.attach(reservation, lease))
                 throw CancellationException("SDK acquisition was retired.")
-            initializeRuntime(
-                lease,
-                client,
-                prepared,
-                reservation,
-                spaceInstallation?.original?.original?.identity,
-            )
+            val initialized =
+                initializeRuntime(
+                    lease,
+                    client,
+                    prepared,
+                    reservation,
+                    spaceInstallation?.original?.original?.identity,
+                )
+            if (initialized is AppResult.Failed) {
+                failed(initialized.failure)
+                return null
+            }
             handedOver = true
             return lease
         } catch (failure: Throwable) {
@@ -1104,7 +1106,7 @@ class AndroidCollaborationRuntimeRepository(
         prepared: AndroidSdkPreparedSession,
         reservation: SdkRuntimeReservation<AndroidCollaborationRuntimeLease>,
         expectedIdentity: CollaborationLocalDeviceIdentity?,
-    ) {
+    ): AppResult<Unit> {
         lease.startHttpObservation(httpObservation)
         lease.startReadinessObservation(clients) { readiness.tryEmit(it) }
         clients.restorePaused(client, prepared.session)
@@ -1116,12 +1118,13 @@ class AndroidCollaborationRuntimeRepository(
                 throw CancellationException("SDK acquisition was retired.")
         }
         lease.startMonitoring()
-        when (prepared.persistence.markInitialized()) {
-            is AppResult.Failed -> error("SDK initialization could not be persisted.")
+        when (val initialized = prepared.persistence.markInitialized()) {
+            is AppResult.Failed -> return initialized
             is AppResult.Success -> Unit
         }
         currentCoroutineContext().ensureActive()
         lease.completeAcquisition()
+        return AppResult.Success(Unit)
     }
 
     private suspend fun closeUnattached(
@@ -1176,7 +1179,7 @@ class AndroidCollaborationRuntimeRepository(
                             record,
                             CollaborationCredentialState.Rejected,
                         )
-                    error("SDK credentials are unavailable.")
+                    return null
                 }
                 is AppResult.Success -> selected.value.toNativeSession()
             }

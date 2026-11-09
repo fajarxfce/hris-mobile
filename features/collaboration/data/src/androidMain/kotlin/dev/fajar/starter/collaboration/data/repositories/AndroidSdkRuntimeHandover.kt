@@ -6,10 +6,11 @@ import dev.fajar.starter.storage.safeStorageCall
 import kotlinx.coroutines.CancellationException
 
 /** Keep a known SDK rejection through failing cleanup without converting cancellation. */
-internal suspend fun <T : AndroidCollaborationRuntimeLease?> handoverAndroidSdkRuntime(
-    block: suspend ((Failure) -> Unit) -> T
+internal suspend fun <T> handoverAndroidSdkRuntime(
+    map: (AndroidCollaborationRuntimeLease?) -> T,
+    block: suspend ((Failure) -> Unit) -> AndroidCollaborationRuntimeLease?,
 ): AppResult<T> {
-    var opened: T? = null
+    var opened: AndroidCollaborationRuntimeLease? = null
     var received: Failure? = null
     try {
         val result = safeStorageCall {
@@ -21,9 +22,16 @@ internal suspend fun <T : AndroidCollaborationRuntimeLease?> handoverAndroidSdkR
                 }
                 .also { opened = it }
         }
-        return if (result is AppResult.Failed && received != null)
-            AppResult.Failed(requireNotNull(received))
-        else result
+        received?.let {
+            opened?.close()
+            return AppResult.Failed(it)
+        }
+        return when (result) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                safeStorageCall { map(result.value) }
+                    .also { if (it is AppResult.Failed) opened?.close() }
+        }
     } catch (cancelled: CancellationException) {
         opened?.close()
         throw cancelled

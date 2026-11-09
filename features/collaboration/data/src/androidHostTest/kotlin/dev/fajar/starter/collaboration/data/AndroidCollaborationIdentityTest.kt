@@ -10,6 +10,7 @@ import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeI
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.network.*
+import dev.fajar.starter.observability.*
 import dev.fajar.starter.securestorage.*
 import io.ktor.client.engine.mock.MockEngine
 import kotlin.io.encoding.Base64
@@ -120,6 +121,8 @@ class AndroidCollaborationIdentityTest {
     @Test
     fun retainedRejectionStopsBothColdEntryPathsBeforeNativeClientConstruction() = runTest {
         val f = Fixture()
+        val diagnostics = mutableListOf<Diagnostic>()
+        Diagnostics.install { event, _ -> diagnostics += event }
         try {
             val record = f.store(authenticationRejected = true)
             f.allowDirectory = true
@@ -155,8 +158,15 @@ class AndroidCollaborationIdentityTest {
             assertEquals(6, f.directoryCloses)
             assertEquals(6, f.closes)
             assertEquals(AppResult.Success(false), f.runtime.isOpen(setupOwner, SETUP_DEVICE))
+            assertFalse(
+                diagnostics.any {
+                    it.area == DiagnosticArea.Storage && it.kind == DiagnosticKind.OperationFailed
+                },
+                "An already classified authentication rejection is not a storage exception.",
+            )
         } finally {
             f.close()
+            Diagnostics.install(ConsoleDiagnosticSink)
         }
     }
 
