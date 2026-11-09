@@ -1,0 +1,441 @@
+{
+  "at": "2026-11-09T11:59:12.536734+00:00",
+  "accepted": true,
+  "scope": "Retained product87 joined-room acquisition and runtime/credential/original-message continuity; whole PRD remains open",
+  "source": {
+    "baseCommit": "d8383438aa3d49377bf94cf801f2cb2eb86efc39",
+    "applicationGate": "joined-room-entry/full-1",
+    "applicationGateExecutedIn": "/home/fajar/hris/hris-mobile",
+    "sourceBranch": "feat/chat-send-timing-20261107",
+    "sourceManifestSha256": "414d73a9966b09a6056ff1d96d59aafc3c680320a839c85e280e186dcb19f87c",
+    "sourcesUnchanged": true,
+    "validationVersionCode": 87,
+    "packagedVersionCode": 87,
+    "candidateOnly": true,
+    "sdkCandidate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.6",
+    "inspectorCommit": "f8ca3d6535a875ce8a832326746026f8b86e2602",
+    "inspectorGate": "joined-room-entry/full-1",
+    "librarySourceManifestSha256": "749285efdd9c5430eacc584799caabbd92a9f66ef59bfecc7cd4809686e773f8",
+    "librarySourcesUnchanged": true
+  },
+  "artifact": {
+    "candidateOnly": true,
+    "privateTestProbeMarkersAbsent": true,
+    "closedActivationDiagnosticsPresent": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-09-build87/hris-mobile-dev-release-1.0.0-87-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 87,
+    "versionName": "1.0.0",
+    "bytes": 123481487,
+    "sha256": "43373c6c4e6335149138630e7c2c9d6daa05edc1f76729ff01dae1023916ce8b",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66"
+  },
+  "packaging": {
+    "startedAt": "2026-11-09T11:37:57.227259+00:00",
+    "elapsedSeconds": 110.858,
+    "exitCode": 0
+  },
+  "lint": {
+    "issues": 0,
+    "reportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "sdk": {
+    "nativeSha256": "4e15c92398521f5f5cd9fbb30cf327019faf32abe5302b64d8b4bdc07d75e9d4",
+    "nativeBytes": 97547344,
+    "elfClass": "ELF64",
+    "requiredElfAlignment": 16384,
+    "loadAlignments": [
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "requiredSymbolsPresent": true,
+    "aarSha256": "a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.6",
+    "published": true,
+    "publicationReleaseId": 438835525,
+    "strippedNativeMatchesVerifiedSdk": true,
+    "stripToolNdkVersion": "28.2.13676358",
+    "queueApisAndUseCaseInDex": true,
+    "actualNativeObserverSymbolsPresent": true
+  },
+  "native": {
+    "versionCode": 87,
+    "requestCounts": {
+      "hris_conversation_summaries": 6,
+      "hris_device_admission": 6,
+      "hris_device_setup": 38,
+      "hris_room": 22,
+      "hris_session_refresh": 2,
+      "other_hris": 65,
+      "hris_conversation": 11,
+      "hris_direct_transport": 49,
+      "other_matrix": 27,
+      "refresh": 3,
+      "secret_storage_default_key": 6,
+      "sync": 75,
+      "encrypted_room_send": 1
+    },
+    "responseCounts": {
+      "hris_conversation_summaries:200": 6,
+      "hris_device_admission:200": 6,
+      "hris_device_setup:200": 37,
+      "hris_room:200": 22,
+      "hris_session_refresh:200": 2,
+      "other_hris:200": 52,
+      "hris_conversation:200": 11,
+      "hris_direct_transport:200": 49,
+      "other_matrix:200": 27,
+      "refresh:200": 3,
+      "secret_storage_default_key:401": 2,
+      "secret_storage_default_key:404": 4,
+      "sync:200": 70,
+      "sync:401": 3,
+      "sync:503": 1,
+      "encrypted_room_send:200": 1
+    },
+    "gatewayVersionBefore": 35,
+    "gatewayVersionAfter": 38,
+    "samePublicIdentity": true,
+    "preservedOriginalUpgradeAccepted": true,
+    "originalServerEventsRetained": 7,
+    "newServerEvents": 1,
+    "newSendGestures": 1,
+    "roomJoinsDuringSend": 0,
+    "roomJoinsAcrossRun": 0,
+    "tapToServerReceivedMillis": 2066.68359375,
+    "recipientRemainedStopped": true,
+    "emulatorStopped": true,
+    "latestCompleteStore": "joined-room-entry-native-2026-11-09/sender at87; preserve all4 userdata/encryption files and AVD",
+    "originalStrictTrafficAccepted": true
+  },
+  "traffic": {
+    "at": "2026-11-09T11:59:06.636438+00:00",
+    "accepted": true,
+    "pairedRefreshFailures": [],
+    "pairedRefreshStatuses": [
+      200,
+      200,
+      200
+    ],
+    "settledIntervals": [
+      {
+        "phase": "home",
+        "completeBinSeconds": 110,
+        "requestCounts": {
+          "sync": 11,
+          "other_hris": 9
+        },
+        "unexpectedSetupTraffic": {},
+        "rejectedRequests": {},
+        "normalExpiredSyncResponses": 0,
+        "accepted": true
+      },
+      {
+        "phase": "room",
+        "completeBinSeconds": 110,
+        "requestCounts": {
+          "sync": 14,
+          "other_hris": 8,
+          "refresh": 1
+        },
+        "unexpectedSetupTraffic": {},
+        "rejectedRequests": {},
+        "normalExpiredSyncResponses": 1,
+        "accepted": true
+      },
+      {
+        "phase": "resumed",
+        "completeBinSeconds": 110,
+        "requestCounts": {
+          "sync": 11,
+          "other_hris": 9
+        },
+        "unexpectedSetupTraffic": {},
+        "rejectedRequests": {},
+        "normalExpiredSyncResponses": 0,
+        "accepted": true
+      },
+      {
+        "phase": "cold",
+        "completeBinSeconds": 110,
+        "requestCounts": {
+          "sync": 14,
+          "other_hris": 9,
+          "hris_session_refresh": 1,
+          "refresh": 1
+        },
+        "unexpectedSetupTraffic": {},
+        "rejectedRequests": {},
+        "normalExpiredSyncResponses": 1,
+        "accepted": true
+      }
+    ],
+    "bootstrapRequestsAcrossRun": 0,
+    "samePublicIdentity": true,
+    "sameGatewayHead": true,
+    "requestCount": 311,
+    "limitation": "Packet starts, not full HTTP reconstruction. Single owned emulator gateway; aggregate bins only.",
+    "phoneTouched": false
+  },
+  "sendTiming": {
+    "at": "2026-11-09T11:59:12.613881+00:00",
+    "tapToServerMillis": 2066.68359375,
+    "clockRoundTripMillis": 9.972769,
+    "clockUncertaintyMillis": 4.9863845,
+    "stages": [
+      {
+        "event": "CommandHandoff",
+        "durationMillis": 67,
+        "endAfterTapMillis": 160.951
+      },
+      {
+        "event": "CommandQueue",
+        "durationMillis": 254,
+        "endAfterTapMillis": 264.951
+      },
+      {
+        "event": "ChatDeliveryStage_RecoverComposer",
+        "durationMillis": 278,
+        "endAfterTapMillis": 499.951
+      },
+      {
+        "event": "ChatDeliveryStage_RecoverLegacyDrafts",
+        "durationMillis": 45,
+        "endAfterTapMillis": 545.951
+      },
+      {
+        "event": "ChatDeliveryStage_RecoverDrafts",
+        "durationMillis": 324,
+        "endAfterTapMillis": 545.951
+      },
+      {
+        "event": "ChatDeliveryStage_DiscoverWork",
+        "durationMillis": 38,
+        "endAfterTapMillis": 584.951
+      },
+      {
+        "event": "ChatDeliveryStage_LoadSetup",
+        "durationMillis": 520,
+        "endAfterTapMillis": 1105.951
+      },
+      {
+        "event": "ChatDeliveryStage_EnsureRuntime",
+        "durationMillis": 4,
+        "endAfterTapMillis": 1110.951
+      },
+      {
+        "event": "ChatDeliveryStage_Reconcile",
+        "durationMillis": 30,
+        "endAfterTapMillis": 1154.951
+      },
+      {
+        "event": "ChatDeliveryStage_ReadPending",
+        "durationMillis": 5,
+        "endAfterTapMillis": 1160.951
+      },
+      {
+        "event": "ChatDeliveryStage_PrepareRoom",
+        "durationMillis": 63,
+        "endAfterTapMillis": 1224.951
+      },
+      {
+        "event": "ChatSdkAcquisition_TimelineRoom",
+        "durationMillis": 1,
+        "endAfterTapMillis": 1308.951
+      },
+      {
+        "event": "ChatSdkAcquisition_TimelineEncryption",
+        "durationMillis": 0,
+        "endAfterTapMillis": 1309.951
+      },
+      {
+        "event": "ChatSdkAcquisition_TimelineBuild",
+        "durationMillis": 43,
+        "endAfterTapMillis": 1352.951
+      },
+      {
+        "event": "ChatSdkAcquisition_TimelineListener",
+        "durationMillis": 15,
+        "endAfterTapMillis": 1368.951
+      },
+      {
+        "event": "ChatDeliveryStage_EnterTimeline",
+        "durationMillis": 154,
+        "endAfterTapMillis": 1378.951
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueRoom",
+        "durationMillis": 0,
+        "endAfterTapMillis": 1384.951
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueInitialize",
+        "durationMillis": 2,
+        "endAfterTapMillis": 1387.951
+      },
+      {
+        "event": "ChatDeliveryStage_SettleCompletedQueue",
+        "durationMillis": 34,
+        "endAfterTapMillis": 1413.951
+      },
+      {
+        "event": "ChatDeliveryStage_ReadPrepared",
+        "durationMillis": 4,
+        "endAfterTapMillis": 1417.951
+      },
+      {
+        "event": "ChatDeliveryStage_Flush",
+        "durationMillis": 0,
+        "endAfterTapMillis": 1417.951
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueRoom",
+        "durationMillis": 0,
+        "endAfterTapMillis": 1485.951
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueInitialize",
+        "durationMillis": 2,
+        "endAfterTapMillis": 1488.951
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueBuild",
+        "durationMillis": 55,
+        "endAfterTapMillis": 1600.951
+      },
+      {
+        "event": "ChatDeliveryStage_StageMessage",
+        "durationMillis": 297,
+        "endAfterTapMillis": 1715.951
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueRoom",
+        "durationMillis": 0,
+        "endAfterTapMillis": 1723.951
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueInitialize",
+        "durationMillis": 2,
+        "endAfterTapMillis": 1726.951
+      },
+      {
+        "event": "ChatSdkAcquisition_QueueBuild",
+        "durationMillis": 40,
+        "endAfterTapMillis": 1870.951
+      },
+      {
+        "event": "ChatDeliveryStage_DeliverMessages",
+        "durationMillis": 825,
+        "endAfterTapMillis": 2541.951
+      },
+      {
+        "event": "ChatDeliveryStage_Retire",
+        "durationMillis": 0,
+        "endAfterTapMillis": 2541.951
+      },
+      {
+        "event": "ChatDeliveryStage_AcquireRetirementHistory",
+        "durationMillis": 476,
+        "endAfterTapMillis": 3018.951
+      },
+      {
+        "event": "ChatDeliveryStage_RetireCommands",
+        "durationMillis": 127,
+        "endAfterTapMillis": 3145.951
+      },
+      {
+        "event": "ChatDeliveryStage_ProcessRooms",
+        "durationMillis": 2048,
+        "endAfterTapMillis": 3159.951
+      }
+    ],
+    "singleSampleOnly": true,
+    "notPhysicalPhoneLatency": true,
+    "sourceLogSha256": "8e8cb075ef091dcfae68070c47b723856048db218fc267477ed70a491a93ebb0"
+  },
+  "pairedRefresh": {
+    "statuses": [
+      200,
+      200,
+      200
+    ],
+    "returnedCredentialsMatched": true,
+    "otherAccess": 0,
+    "nativeParentVersions": [
+      26,
+      26,
+      27
+    ],
+    "parentAccessExpiredAtRequest": false
+  },
+  "newOriginal": {
+    "label": "Joined87 115837",
+    "sha256": "f29bcfcabe98d1c6182ad817aecdd652d1b18f2b0c8b4d38e234561daca655e7",
+    "sendGestures": 1,
+    "sevenPreviousOriginalsNotResent": true
+  },
+  "reviewedScreenshot": {
+    "path": ".work/release-phone-2026-11-09-build87/new-sent-review.png",
+    "sha256": "bb079063734e6696445e5db382b6dc57499d01b0a19ee2dcb01a0b28d11fb847",
+    "findings": "Final frame shows the new Sent bubble above the empty composer and keyboard; no interrupted-saving or history-end action is shown. This final frame is not a first-render timing measurement."
+  },
+  "phoneInstalled": true,
+  "jobs": {
+    "build25852": "reaped PASS",
+    "packageVerifier97255": "reaped PASS; durable artifact/lint recovered after context transition",
+    "sdkVerifier21568": "reaped PASS",
+    "emulator8719": "reaped PASS",
+    "phases46256": "reaped PASS670.401s",
+    "counter28538": "reaped PASS",
+    "paired78071": "reaped PASS",
+    "phone33957": "reaped PASS210.86s after prior-package signature capture"
+  },
+  "limitations": [
+    "One new message sample is not a p95 latency measurement",
+    "Startup metadata cost remains distinct from settled traffic",
+    "Apple SDK6 runtime and all54 communications PRD groups remain open",
+    "2,066.684ms versus prior2,983.114ms are individual emulator samples; other local stage timings also vary, so do not attribute the whole difference to one fix",
+    "Startup metadata requests remain an independent optimization target",
+    "Existing native84 and interrupted/resumed86 failures remain preserved in their original measurements"
+  ],
+  "installerPreflight": {
+    "at": "2026-11-09T11:51:35.675257+00:00",
+    "oldGuardVersion": 86,
+    "correctedGuardVersion": 87,
+    "foundBeforeAnyPhoneInstallation": true,
+    "noAcceptanceCheckRemoved": true
+  },
+  "installation": {
+    "startedAt": "2026-11-09T12:01:14.776237+00:00",
+    "confirmed": true,
+    "serial": "10.77.77.3:5555",
+    "phoneUiTouched": false,
+    "freshInstall": false,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "versionCode": 87,
+    "installedSha256": "43373c6c4e6335149138630e7c2c9d6daa05edc1f76729ff01dae1023916ce8b",
+    "installedBytesMatch": true,
+    "verificationMethod": "Device SHA-256 equals validated local APK",
+    "existingIdentityPreserved": true,
+    "elapsedSeconds": 210.86
+  },
+  "artifactRecordStage": "Static candidate record before the separately accepted native and phone gates"
+}

@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 11:36 UTC. This file describes current work. Historical
+Updated 9 November 2026, 12:05 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -24,13 +24,13 @@ Do not restart jobs or reapply candidates from that history without checking cur
 
 | Checkout | Branch/source | Current state |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 / Room4e7be081 + current joined-room change | Both source gates passed; native87 pending |
-| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / db9287a9 | Pushed; verify42609635524 active |
+| Mobile original | feat/chat-send-timing-20261107 / d8383438 | Joined-room source/native87/phone87 accepted; typed original-reference WIP |
+| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 21101489 | Focused66 pass; seventh verify42611795210 active |
 | Inspector original | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Verified public SDK6 integrated/pushed |
 | Inspector isolated | feat/sdk6-distribution-20261109 / a6b8236 | Pushed; SDK6 distribution accepted |
 | Starter | feat/network-inspector-20261107 / 6157db1 | Pushed; generic worker/identity ports accepted |
 | Platform original | feat/communications / 85e5fe8f | Pushed; runtime unchanged |
-| Platform group worktree | feat/communication-space / fdcd783e | Separate unshipped group implementation |
+| Platform group worktree | feat/communication-space / fdcd783e + original-reference WIP | Focused backend gate71857 active; not deployed |
 
 The isolated directories are under `/home/fajar/hris/.worktrees/`:
 `mobile-inspector-ci-2026-11-09`, `inspector-sdk6-2026-11-09`, and
@@ -82,10 +82,11 @@ independent review and release acceptance all PASS; no exemptions were used.365 
 request starts across startup/phase work,0 bootstrap/403. Setup during startup remains
 a separate cost; one send sample is not p95. Phone installation53784 reaped PASS25.499s.
 
-Latest COMPLETE STOPPED store is `.work/selected-runtime-auth-trace-native-2026-11-09/sender`
-at86, all four userdata/encryption files and full AVD. NEVER recreate from85/84/83,
-resend Selected86/the six old originals, or send Draft66 092041. Preserve Bima74 too.
-Original Mobile/inspector input freeze is released. Check owned-heavy-processes.py before new work.
+That86 store remains preserved as a prior baseline. Latest COMPLETE STOPPED store is
+now `.work/joined-room-entry-native-2026-11-09/sender` at87, with EIGHT originals.
+Preserve all four userdata/encryption files and the full AVD. Never resend any of the
+eight originals or send Draft66 092041. Bima74 remains preserved. Root/Inspector
+source freeze is released; the sole local compiler is now Group backend71857.
 
 The first native86 upgrade retained identity before a turn interruption. Its resumed
 follow-up had one unclassified otherAccess observation and a stale preflight expecting
@@ -123,15 +124,19 @@ three conversations but published one and raced synchronization; the first wait-
 correction was insufficient. A document denial test clicked while Refresh was disabled
 because mock HTTP completion preceded the owning acquisition's completion.
 
-Isolated db9287a9 makes the navigation fixture's three-row list explicit while retaining
-the other callers' default, and waits for enabled Refresh before the denial action.
-All exact row/redaction/recovery assertions remain. Pinned formatting/source review
-pass; local `fixtures-1` is running in that checkout (session68869). Sixth full hosted
-verify42609635524/job129134456501 is active. No production behavior or timeout changed.
-[Isolated checkpoint and evidence](https://github.com/fajarxfce/hris-mobile/blob/db9287a9/docs/agent-handoff.md).
-These hosted runs do not contain root Room dispatch or the joined-room change. No
-application distribution workflow was dispatched. Integration/Starter ports follow
-completed job and artifact review, after the current87 source/artifact proof is stable.
+The first db9287a9 fixture correction failed locally:66 cases/1 failure during
+initialization because only one incoming room is prepared. Sixth hosted42609635524
+was cancelled on that evidence. The accepted21101489 correction restores the original
+fixture and asserts its exact published one-room list, message preview and selected
+Chat tab. Original typed link/resume/pending-clear/no-send assertions remain. The
+document test waits for enabled Refresh after acquisition. No production timeout or
+behavior change. Focused69722 PASS97.855s/66 fresh cases,0 failures/errors/skips,4,528
+fixed inputs and quality checks. Commit/push8185 is reaped. Seventh verify42611795210
+at21101489c2d371bf04dd00bd3648f8acec0e96d2/job129141795434 is running.
+[Isolated evidence](https://github.com/fajarxfce/hris-mobile/blob/21101489/docs/measurements/pinned-inspector-ci-fixture-consistency-2026-11-09.json).
+Do not merge or claim the hosted graph complete before artifact/XML review. These
+hosted runs do not contain root Room dispatch/joined-room source. No application
+distribution workflow was dispatched. Starter receives only the proven generic port.
 
 ## Current Room dispatch
 
@@ -148,7 +153,7 @@ actual IndexedDB storage cases. Root check, Android release compile, Wasm/iOS so
 format/architecture/Detekt pass. All4,532 app inputs and inspector inputs stayed fixed.
 These new cases have not yet executed on Apple. The Room increment is pushed as4e7be081.
 
-## Joined-room acquisition and next APK87
+## Joined-room acquisition and accepted APK87
 
 The current source moves raw joined-room acquisition into its datasource. SDK-local
 Joined rooms retain their returned handle; other states close their lookup before
@@ -164,34 +169,54 @@ in1,290.936s; zero failures/errors/skips/lint. Root check, Android release compi
 Wasm/iOS source and quality pass. All4,535 app and inspector inputs stay fixed; all
 jobs reaped. Focused uses build86 parameters, full uses87. No native speedup claimed yet.
 
-Packaging scripts are prepared in `.work/release-phone-2026-11-09-build87`; they require
-this accepted source pushed, exact full fingerprints and public SDK6. No APK87 built
-yet. `.work/joined-room-entry-native-2026-11-09` holds22 parsed prepared scripts and6
-classifier checks. It will clone the COMPLETE STOPPED native86 sender, preserve7
-originals, upgrade86→87, run the retained four-phase/paired-refresh gate, and send only
-one new Joined87 original. New passive room_join classification must show no join
-between the new Send and observed completion. Current worker control ON is checked
-separately from the historical deployment's OFF record. No clone, boot or Send yet.
+APK87 build25852 PASS110.858s fromd8383438; static verifier97255 and exactSDK21568
+pass. Nondebug devRelease, same development signer,16KiB alignment, Firebase/API and
+compiled backup exclusions verified; lint0. SHA256
+43373c6c4e6335149138630e7c2c9d6daa05edc1f76729ff01dae1023916ce8b,123481487 bytes.
 
-Keep root app/inspector inputs fixed through packaging and native acceptance. The
-current one-heavy slot is the isolated CI fixture gate68869; after it is reaped,
-package87, verify its SDK/signature/backup rules, run native proof, then notify and
-install-only to the authorized phone. Phone86 and latest stopped native86 remain
-current until those checks actually finish. Never resend originals or Draft66.
+Retained-native87 PASS670.401s through actual86→87 in-place upgrade, Home/room/resumed/
+cold observations and one new Joined87 115837. Seven previous originals remain Sent
+without Send/Retry gestures; history exhaustion survives reentry. Four120s phases
+provide110 complete quiet seconds each with active sync, no setup traffic/rejected
+admissions. Paired refresh200×3 keeps returned credentials; otherAccess0, parent26→27
+renews before expiry. No room_join across the full run or new send;311 total classified
+starts include startup/phase work. Original strict gate passes with NO exemptions.
+Native emulator8719/phases46256/counter28538/paired78071 all completed and reaped.
+
+One new original reached the server in2,066.684ms (prior86 sample2,983.114ms), recipient
+process stopped. Room acquisition1ms versus509ms; timeline entry154ms versus704ms.
+Setup still520ms and delivery825ms. Other local timings also vary; these are individual
+emulator samples, not physical-phone latency or p95. Final screenshot confirms the
+Sent bubble above the empty composer/keyboard; it is not first-frame evidence.
+New original SHA f29bcfcabe98d1c6182ad817aecdd652d1b18f2b0c8b4d38e234561daca655e7.
+
+[Exact release evidence](measurements/collaboration-release87-accepted-2026-11-09.json).
+Phone install33957 is reaped PASS210.86s; exact installed APK digest and existing
+app ID/first-install identity match. No launch/UI automation, uninstall or data clear. The copied installer had an86 version assertion;
+review corrected it to87 BEFORE any installation, retaining all signature/native/
+acceptance checks. Root app/Inspector freeze is now released. Group backend71857 is
+the only heavy local compiler. No emulator is running; do not restart87 or send again.
 
 ## Next implementation work
 
-1. Native86 is accepted and installed. Preserve its seven originals and record latency
-   work separately. One message sample is not a p95 measurement. One observed send takes2,983ms to server; the encrypted send HTTP header takes145ms.
-   Stage traces show setup522ms and timeline entry704ms including room acquisition509ms.
-   The SDK join method always sends HTTP. The new raw-room reuse source now passes
-   its host/full gates above; actual before/after native measurement remains required.
-2. Finish public consumer CI, preserve first failures and fix actual causes. Once86
-   is complete, integrate verified inspector/CI source into the original checkout.
+1. Phone87 and native87 are accepted; preserve all eight originals. Remaining send latency includes
+   setup/acquisition and local command recovery. Measure the next owning change before
+   claiming further improvement; startup cost remains separate.
+2. Finish public consumer CI, preserve first failures and fix actual causes. After the hosted graph
+   succeeds, integrate the verified inspector/CI source into the original checkout.
    Port the generic pinned workflow setup/checksums to Starter after Mobile proof.
    HRIS selected-runtime registry policy does not belong in Starter.
 3. Continue organization chat after the accepted original Room dispatch: durable
-   published binding/projection and exact LEGACY metadata validation,
+   published binding/projection and exact LEGACY metadata validation. Group backend
+   has an uncommitted original-reference increment (five Kotlin files, three new native
+   cases plus actual LEGACY worker/OpenAPI checks); gate71857 is active in
+   `.work/published-room-reference-2026-11-09/focused-1`. No migration/DI/rollout change.
+   Mobile has an untested seven-file DTO/domain-policy/transport-fixture increment,
+   including two new transport regressions and the existing LEGACY preparation case.
+   Pinned formatting passes. Its `.work/published-room-reference-2026-11-09/check.py`
+   focused-1/full-1 are prepared; start only after backend71857 is reaped. No local
+   binding persistence or product routing changed. Encrypted published binding follows,
+   then
    original SDK delivery/history, workers and product routing. Existing Prepare and
    Resolve room use cases are accepted; do not recreate them. The group backend is in
    the separate worktree; original Platform does not contain V117–138.

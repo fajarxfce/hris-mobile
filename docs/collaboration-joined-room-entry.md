@@ -35,5 +35,10 @@ check, release compilation, Wasm/iOS source and all quality checks pass with the
 fixed inputs. Reused reports are recorded separately, never added to fresh counts.
 [Exact source and gate evidence](measurements/collaboration-joined-room-entry-2026-11-09.json).
 
-Actual retained-emulator latency/HTTP comparison is still pending. This source does
-not establish a physical-phone or Apple runtime improvement.
+Actual APK87 retained-upgrade evidence is now [accepted](measurements/collaboration-release87-accepted-2026-11-09.json).
+Four settled lifecycle phases retain originals with no join requests across the run.
+One new original reached the server in2,066.684ms; measured room acquisition is1ms and
+timeline entry154ms. Prior86 sample was2,983.114ms/509ms/704ms respectively. Other stages
+also vary; these individual emulator samples do not establish p95 or physical-device
+latency. Setup remains520ms. Seven originals are preserved and one new original was
+sent once; the stopped87 store now has eight. No queue/key reset or new provider identity.
