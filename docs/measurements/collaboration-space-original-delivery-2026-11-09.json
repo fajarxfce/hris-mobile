@@ -1,0 +1,132 @@
+{
+  "date": "2026-11-09",
+  "status": "Accepted owning original-delivery source; no product activation",
+  "sourceBase": "ab17eadd",
+  "finalPhase": "full-4",
+  "sourceManifestSha256": "69bebb1b5be0601d55579053416d977769b0b368ff65719388d050f0f9d42bc2",
+  "libraryManifestSha256": "b8b64e4922b3270bc1151247617f614ea79a6a40c67cee0167ae52e330cc2e5d",
+  "focused": {
+    "startedAt": "2026-11-09T16:24:22.389373+00:00",
+    "elapsedSeconds": 151.954,
+    "exitCode": 0,
+    "sourceFiles": 4571,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 56,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "full": {
+    "startedAt": "2026-11-09T16:27:01.548455+00:00",
+    "elapsedSeconds": 561.986,
+    "exitCode": 0,
+    "sourceFiles": 4571,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 4304,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "scopes": {
+      "desktopTest": {
+        "suites": 416,
+        "tests": 3629,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testAndroidHostTest": {
+        "suites": 86,
+        "tests": 621,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 6,
+        "tests": 54,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "initScriptSha256": "76e8be5d7c6f7f715a71272fced0529b0bd0e94fd15e38ddb0a2eea28938e534",
+    "browserClasses": {
+      "CollaborationOriginalQueueMatchTest": 10,
+      "CollaborationOriginalQueueReadTest": 10,
+      "CollaborationOriginalSenderMatchTest": 3,
+      "CollaborationOriginalTransportTest": 3,
+      "SpaceOriginalDeliveryTest": 24,
+      "CollaborationOriginalAcknowledgementTest": 4
+    }
+  },
+  "initialFocused": {
+    "startedAt": "2026-11-09T16:18:27.100098+00:00",
+    "elapsedSeconds": 226.041,
+    "exitCode": 0,
+    "sourceFiles": 4571,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 49,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "regressionBeforeCorrection": {
+    "startedAt": "2026-11-09T16:22:28.557294+00:00",
+    "elapsedSeconds": 62.397,
+    "exitCode": 1,
+    "sourceFiles": 4571,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 24,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failedTests": [
+      "reorderingPausedInventoryDoesNotInvalidateItsExactOriginalSet[desktop]",
+      "hangingPostAckProjectionIsCancelledWithinTheOwningDeliveryDeadline[desktop]"
+    ],
+    "testOnlyChanges": [
+      "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceOriginalDeliveryTest.kt"
+    ]
+  },
+  "correctionFiles": [
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/DeliverCollaborationSpaceOriginalMessages.kt"
+  ],
+  "requiredTasks": [
+    ":check",
+    ":features:collaboration:data:testAndroidHostTest",
+    ":apps:android:compileDevReleaseKotlin",
+    ":apps:android:lintDevRelease",
+    ":apps:shared:compileKotlinWasmJs",
+    ":apps:shared:compileKotlinIosArm64",
+    ":formatCheck",
+    ":architectureCheck",
+    ":detekt",
+    ":features:collaboration:domain:wasmJsBrowserTest"
+  ],
+  "reportManifestSha256": {
+    "focused-1": "77a028247cd360b40ffd54580f04c4ff3e7aeefef622c3c68d66679b879ebe72",
+    "red-2": "636f2c75ac696ffb76ded8d9826f775f6d24dd39c4b46741836eb6c4c1779ad4",
+    "focused-3": "6f7fc43d19e38b6d65e99f797ea5120f76353353e8e065bfb98200e756e757ae",
+    "full-4": "97c1551c9c82ebfaa894d62cb8b491d24fe29d10aad2ca0e9a8bbfac10909c94"
+  },
+  "limits": [
+    "No UI, worker or SDK caller activated",
+    "No actual original SDK/SQL/HTTP/restart delivery proof",
+    "No new APK or phone installation",
+    "Linux iOS source/configuration only; no Apple native execution",
+    "No organization deployment or routing change",
+    "No message, key or replacement transaction created"
+  ]
+}

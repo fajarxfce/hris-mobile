@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 16:14 UTC. Historical detail is retained in
+Updated 9 November 2026, 16:38 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -22,7 +22,7 @@ is required; Apple source/runtime, push and calling acceptance remain separate.
 
 | Checkout | Branch/source | State |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 /78076d4e | Binding preparation accepted; no product activation |
+| Mobile original | feat/chat-send-timing-20261107 /this commit | Original-only owning delivery accepted; no product activation |
 | Mobile isolated CI | feat/pinned-inspector-ci-20261109 /951cdbcf | Public consumer evidence accepted and integrated |
 | Inspector original | feat/matrix-rust-bindings-20261107 /f8ca3d6 | Verified public SDK6 integrated |
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | SDK6 distribution accepted; preserve unrelated gradlew.bat delta |
@@ -75,25 +75,47 @@ Apple13684362715 is479,237 bytes/SHA25609f40e77dffdb4db8b777ee38fb0169d294616433
 Audit67988 is reaped PASS; private evidence is the prior binding preparation's
 `hosted-42628449460` directory. Do not redispatch or reaudit this accepted source.
 
-## Prepared original matching follow-up
+## Accepted owning original delivery
 
-`.work/space-original-delivery-2026-11-09/candidate` contains seven PRIVATE UNVALIDATED
-files: pure matching/acknowledgement/transport policies, fixtures and ten common test methods. The active domain source
-is unchanged. Existing full-identity inspection APIs keep their validation/output;
-`matchCollaborationOriginalMessages` accepts the exact canonical original sender facts
-and retains the existing whole-inventory/command/completion checks, avoiding a made-up
-identity-selection timestamp. Formatter passes0.680s initially,0.718s for four files and0.917s for all seven;
-no compiler/test/SDK proof.
-Do not apply before both direct-transport contracts are accepted. base.json pins the
-copied policy source. Existing original match/read regressions remain required, plus
-owning current admission, actual writer acquisition, durable receipt/archive recovery,
-late callback journaling and pause/drain. This is not a delivery implementation.
+Mobile direct transport ab17eadd is accepted/pushed;56681 is reaped. Both source
+contracts and clean source manifests passed the guarded original-policy apply. Do not
+repeat `.work/space-original-delivery-2026-11-09/apply.py`: the seven files are applied.
 
-The acknowledgement policy derives exact completion facts from a persisted Sent command
-and durable journal before archive retirement; actual archive aliases remain supported.
-It does not write an archive or infer an ACK from SDK absence. The transport policy matches
-retained room and complete original queue to current logical/physical device coordinates.
-A false recipientReady is not send authority and does not erase previously retained ACKs.
+This commit contains12 validated Kotlin files: three pure policies (including the
+narrow original-sender overload), their ten common test methods/fixture, the owning
+`DeliverCollaborationSpaceOriginalMessages`,24 new owning-flow tests/fixture and DI/app
+resolution. [Contract](collaboration-space-original-delivery.md) documents actual scope.
+The new use case directly coordinates repositories, owns one exclusive invocation and
+original-only writer, reconciles journal/archive evidence and uncertain CAS, settles
+only proven originals, preserves missing SDK work as unresolved, and journals late ACKs
+before separately gated projection. It starts no setup or transport/readiness loop.
+
+Direct ktfmt0.59 passes0.999s for all12 Kotlin files. Focused39005 is REAPED PASS226.041s:49 fresh cases (47 domain+2 app DI),
+zero failures/errors/skips;4,571 fixed application inputs and unchanged Inspector.
+Formatting/architecture/Detekt pass. This is not full acceptance or product activation.
+Review then added seven owning-flow regressions (24 methods total) without changing
+production. Red10514 is REAPED FAILED62.397s:24 tests, exactly two failures, zero errors/skips
+and fixed application/library sources. It tests reordered complete
+inventory, post-ACK storage deadline, denial during callback, unrelated archived
+receipts, missing ACK, native clock limits and SDK rejection scope. Preserve this
+expected-failure proof. Both expected failures are corrected in the owning use case
+only: compare exact transaction/content maps independently of list order, and wrap
+SDK delivery plus projection in its own30s deadline. Focused82764 is REAPED PASS151.954s:56 fresh cases (54 domain+2 app DI),
+zero failures/errors/skips,4,571 unchanged inputs and unchanged Inspector; quality
+passes. Full88367 (`full-4`) is REAPED PASS561.986s:4,304 fresh cases (3,629 desktop,
+621 Android host,54 browser), zero failures/errors/skips;4,571 unchanged application
+inputs and unchanged Inspector. Root/release compile-lint/Wasm/Linux iOS source/
+format/architecture/Detekt pass. Publisher29124 is REAPED PASS: exact current/focused/
+full manifests, every archived report, all six browser classes and both red assertions
+verified. [Accepted evidence](measurements/collaboration-space-original-delivery-2026-11-09.json).
+All local heavy jobs are reaped. No new APK, actual SDK delivery or native Apple proof. No new APK/phone installation.
+The SDK's25s delivery ownership is separate from15s preparation; current hard native
+expiry and captured denial remain gated. Final close must pause/drain before release.
+
+Actual SDK/SQL/HTTP/restart proof and group readiness wake/background/UI ownership are
+still required. `.work/space-original-delivery-native-2026-11-09/README.md` identifies
+existing real Synapse/SQL/HTTP/proof-app facilities and the new two-original, offline
+recipient, interrupted post-ACK projection/restart scenario. It is a plan, not code/proof. Preserve the stopped sender store and all eight originals below.
 
 ## Current Mobile gate
 
@@ -241,10 +263,11 @@ Draft66 092041 must NEVER be sent. All native/emulator jobs are reaped and stopp
 
 ## Next work
 
-1. Commit/push the accepted Mobile direct contract with its exact evidence. Backend
-   reconciliation and direct transport are already accepted/pushed; do not reapply them.
-2. Apply the seven guarded original matching files only from clean accepted checkouts,
-   then implement the owning original delivery operation and its cancellation/recovery tests.
+1. Commit/push accepted original delivery with evidence, then dispatch the existing
+   Collaboration control workflow for exact-source portable/Apple checks. Continue the
+   actual SDK/SQL/HTTP/restart scenario documented above; do not rerun accepted local gates.
+2. Direct contracts ab17eadd/96d2d238 and reconciliationfa90ddcc are accepted/pushed;
+   do not reapply or rerun those unchanged gates. No heavy job is active.
 3. Continue owning original SDK delivery/history, current recipient readiness, worker
    lifetimes and group UI routing. Existing Room Prepare/Resolve/Replay use cases and
    immutable stores are accepted; do not recreate them or replace uncertain originals.

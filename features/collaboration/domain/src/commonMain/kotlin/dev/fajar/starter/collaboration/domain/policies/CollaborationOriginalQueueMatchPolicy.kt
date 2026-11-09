@@ -19,6 +19,31 @@ fun collaborationOriginalQueueLogicalIds(
     identity: CollaborationSpaceIdentity,
     snapshot: CollaborationSpaceOriginalQueueSnapshot,
 ): AppResult<List<String>> {
+    val room = conversation.room ?: return mismatch("scope")
+    if (
+        !validCollaborationSpaceIdentity(runtime.owner, identity) ||
+            identity.origin != CollaborationSpaceIdentityOrigin.LEGACY ||
+            identity.legacyCompanyId != conversation.conversation.position.companyId ||
+            identity.serverName != room.serverName
+    )
+        return mismatch("scope")
+    return collaborationOriginalQueueLogicalIds(
+        runtime,
+        conversation,
+        identity.matrixUserId,
+        snapshot,
+    )
+}
+
+/**
+ * Exact original sender facts, without inventing an identity-selection timestamp or observation.
+ */
+fun collaborationOriginalQueueLogicalIds(
+    runtime: CollaborationSpaceRuntimeReady,
+    conversation: CollaborationSpaceOriginalConversation,
+    matrixUserId: String,
+    snapshot: CollaborationSpaceOriginalQueueSnapshot,
+): AppResult<List<String>> {
     val position = conversation.conversation.position
     val room = conversation.room ?: return mismatch("scope")
     val physical = snapshot.original
@@ -28,10 +53,8 @@ fun collaborationOriginalQueueLogicalIds(
         !validCollaborationOriginalQueueRequest(runtime, position) ||
             snapshot.runtime != runtime ||
             !validCollaborationSpaceOriginalConversation(conversation, runtime.owner) ||
-            !validCollaborationSpaceIdentity(runtime.owner, identity) ||
-            identity.origin != CollaborationSpaceIdentityOrigin.LEGACY ||
-            identity.legacyCompanyId != position.companyId ||
-            identity.serverName != room.serverName ||
+            matrixUserId !=
+                "@hris_${position.companyId.replace("-", "")}_${runtime.owner.parent.accountId.replace("-", "")}:${room.serverName}" ||
             binding.audience != runtime.owner.parent.audience ||
             binding.accountId != runtime.owner.parent.accountId ||
             binding.companyId != position.companyId ||
@@ -51,7 +74,7 @@ fun collaborationOriginalQueueLogicalIds(
                     !validCollaborationQueuedOriginal(it) ||
                     it.logicalId == null ||
                     !originalQueueId(it.logicalId) ||
-                    it.origin.sender != identity.matrixUserId
+                    it.origin.sender != matrixUserId
             } ||
             originals.map { it.transactionId }.distinct().size != originals.size ||
             originals.map { it.logicalId }.distinct().size != originals.size
@@ -69,7 +92,45 @@ fun matchCollaborationOriginalQueue(
     records: List<CollaborationMessageRecord>,
     completions: List<CollaborationMessageCompletion>,
 ): AppResult<CollaborationOriginalQueueMatch> {
-    val requested = collaborationOriginalQueueLogicalIds(runtime, conversation, identity, snapshot)
+    val checked = collaborationOriginalQueueLogicalIds(runtime, conversation, identity, snapshot)
+    if (checked is AppResult.Failed) return checked
+    return when (
+        val matched =
+            matchCollaborationOriginalMessages(
+                runtime,
+                conversation,
+                identity.matrixUserId,
+                snapshot,
+                records,
+                completions,
+            )
+    ) {
+        is AppResult.Failed -> matched
+        is AppResult.Success ->
+            AppResult.Success(
+                CollaborationOriginalQueueMatch(
+                    runtime,
+                    conversation,
+                    identity,
+                    snapshot.original.binding,
+                    snapshot.original.device,
+                    matched.value,
+                )
+            )
+    }
+}
+
+/** Matches every captured original command and receipt; no permission or SDK side effect. */
+fun matchCollaborationOriginalMessages(
+    runtime: CollaborationSpaceRuntimeReady,
+    conversation: CollaborationSpaceOriginalConversation,
+    matrixUserId: String,
+    snapshot: CollaborationSpaceOriginalQueueSnapshot,
+    records: List<CollaborationMessageRecord>,
+    completions: List<CollaborationMessageCompletion>,
+): AppResult<List<CollaborationMatchedOriginalMessage>> {
+    val requested =
+        collaborationOriginalQueueLogicalIds(runtime, conversation, matrixUserId, snapshot)
     if (requested is AppResult.Failed) return requested
     val logicalIds = (requested as AppResult.Success).value
     val position = conversation.conversation.position
@@ -142,16 +203,7 @@ fun matchCollaborationOriginalQueue(
         matched += CollaborationMatchedOriginalMessage(original, record, completion)
     }
     if (!validCollaborationReceiptLedger(receipts)) return mismatch("completion")
-    return AppResult.Success(
-        CollaborationOriginalQueueMatch(
-            runtime,
-            conversation,
-            identity,
-            binding,
-            device,
-            matched.toList(),
-        )
-    )
+    return AppResult.Success(matched.toList())
 }
 
 private fun originalQueueId(value: String) =

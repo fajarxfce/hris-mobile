@@ -100,6 +100,33 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun deliverSpaceOriginalMessages(
+        bindings: CollaborationSpaceRoomBindingRepository,
+        transport: CollaborationSpaceDirectTransportRepository,
+        runtimes: CollaborationSpaceRuntimeRepository,
+        messages: CollaborationMessageRepository,
+        receipts: CollaborationReceiptRepository,
+        completions: CollaborationMessageCompletionRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        DeliverCollaborationSpaceOriginalMessages(
+            bindings,
+            transport,
+            runtimes,
+            messages,
+            receipts,
+            completions,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun prepareSpaceRoomBinding(
         bindings: CollaborationSpaceRoomBindingRepository,
         metadata: CollaborationSpaceConversationMetadataRepository,

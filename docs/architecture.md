@@ -1,5 +1,10 @@
 # Architecture
 
+[Owned original delivery](collaboration-space-original-delivery.md) coordinates current
+organization admission, the original physical writer and durable receipt projection in
+one bounded use case. Late acknowledgement storage and current UI publication remain
+separate; no missing SDK transaction becomes a new message or inferred acknowledgement.
+
 [Joined native room acquisition](collaboration-joined-room-entry.md) reuses the current
 SDK membership through raw I/O while the admitted runtime retains child ownership.
 
