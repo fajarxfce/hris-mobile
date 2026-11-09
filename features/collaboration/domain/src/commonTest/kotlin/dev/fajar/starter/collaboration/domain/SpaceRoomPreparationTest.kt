@@ -85,6 +85,14 @@ class SpaceRoomPreparationTest {
                                 "example.test",
                                 CollaborationSpaceRoomOrigin.LEGACY,
                                 f.conversation.createdAt,
+                                CollaborationSpaceOriginalRoom(
+                                    CollaborationOriginalConversationPosition(
+                                        "60000000-0000-4000-8000-000000000001",
+                                        "60000000-0000-4000-8000-000000000002",
+                                    ),
+                                    "!fixture:example.test",
+                                    f.conversation.createdAt,
+                                ),
                             )
                     )
             assertIs<AppResult.Success<CollaborationSpaceConversationCommandRecord>>(

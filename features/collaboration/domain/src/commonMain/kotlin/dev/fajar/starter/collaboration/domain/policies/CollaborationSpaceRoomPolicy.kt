@@ -24,12 +24,25 @@ fun validCollaborationSpaceRoomView(value: CollaborationSpaceRoomView): Boolean 
     if ((value.room != null) != (status?.state == CollaborationProvisioningState.SUCCEEDED))
         return false
     val room = value.room ?: return true
-    return validCollaborationSpaceServerName(room.serverName) &&
-        room.roomId.length in 2..255 &&
-        room.roomId.startsWith('!') &&
-        room.roomId.none { it.isWhitespace() || it.code in 0..31 || it.code in 127..159 } &&
-        spaceRoomTime(room.publishedAt) &&
-        room.publishedAt >= conversation.createdAt
+    if (
+        !validCollaborationSpaceServerName(room.serverName) ||
+            room.roomId.length !in 2..255 ||
+            !room.roomId.startsWith('!') ||
+            room.roomId.any { it.isWhitespace() || it.code in 0..31 || it.code in 127..159 } ||
+            !spaceRoomTime(room.publishedAt) ||
+            room.publishedAt < conversation.createdAt
+    )
+        return false
+    val original = room.original
+    return when (room.origin) {
+        CollaborationSpaceRoomOrigin.SPACE -> original == null
+        CollaborationSpaceRoomOrigin.LEGACY ->
+            original != null &&
+                validCollaborationOriginalConversationPosition(original.position) &&
+                original.roomId == room.roomId &&
+                spaceRoomTime(original.boundAt) &&
+                original.boundAt <= room.publishedAt
+    }
 }
 
 fun validCollaborationSpaceRoomStatus(

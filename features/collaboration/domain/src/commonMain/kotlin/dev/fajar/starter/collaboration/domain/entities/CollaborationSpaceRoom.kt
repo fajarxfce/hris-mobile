@@ -42,6 +42,16 @@ data class CollaborationSpacePublishedRoom(
     val serverName: String,
     val origin: CollaborationSpaceRoomOrigin,
     val publishedAt: Instant,
+    val original: CollaborationSpaceOriginalRoom? = null,
+)
+
+/**
+ * Exact retained coordinates; original content and current SDK authority are acquired separately.
+ */
+data class CollaborationSpaceOriginalRoom(
+    val position: CollaborationOriginalConversationPosition,
+    val roomId: String,
+    val boundAt: Instant,
 )
 
 enum class CollaborationSpaceRoomOrigin {

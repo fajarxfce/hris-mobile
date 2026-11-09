@@ -52,6 +52,77 @@ class CollaborationSpaceRoomTransportTest {
             assertEquals(f.published.roomId, ready.room?.roomId)
             assertEquals(CollaborationSpaceRoomOrigin.LEGACY, ready.room?.origin)
             assertEquals(123456000, ready.room?.publishedAt?.nanosecondsOfSecond)
+            val original = assertNotNull(ready.room?.original)
+            val expectedOriginal = assertNotNull(f.published.original)
+            assertEquals(expectedOriginal.companyId, original.position.companyId)
+            assertEquals(expectedOriginal.conversationId, original.position.conversationId)
+            assertEquals(f.published.roomId, original.roomId)
+            assertEquals(f.conversation.createdAt, original.boundAt)
+            assertNotEquals(f.owner.spaceId, original.position.companyId)
+            assertNotEquals(f.id, original.position.conversationId)
+        }
+    }
+
+    @Test
+    fun spacePublicationHasNoOriginalAndLegacyRequiresAnExactCompleteReference() = runTest {
+        val original = assertNotNull(f.published.original)
+        val invalid =
+            listOf(
+                f.published.copy(original = null),
+                f.published.copy(origin = "SPACE"),
+                f.published.copy(original = original.copy(companyId = "bad")),
+                f.published.copy(
+                    original = original.copy(companyId = "00000000-0000-0000-0000-000000000000")
+                ),
+                f.published.copy(original = original.copy(conversationId = "bad")),
+                f.published.copy(
+                    original =
+                        original.copy(conversationId = "00000000-0000-0000-0000-000000000000")
+                ),
+                f.published.copy(original = original.copy(roomId = "!different:other.test")),
+                f.published.copy(original = original.copy(boundAt = "2026-11-08T00:00:00Z")),
+                f.published.copy(
+                    original = original.copy(boundAt = "2026-11-07T00:00:00.123456789Z")
+                ),
+                f.published.copy(original = original.copy(boundAt = "not-an-instant")),
+            )
+        var calls = 0
+        val views =
+            invalid.map { f.view.copy(room = it) } +
+                f.view.copy(room = f.published.copy(origin = "SPACE", original = null)) +
+                f.view
+        f.withRepositories(
+            MockEngine { respond(Json.encodeToString(views[calls++]), headers = f.headers) }
+        ) { _, repo ->
+            repeat(invalid.size) { assertIs<AppResult.Failed>(repo.get(f.conversation)) }
+            val fresh =
+                assertIs<AppResult.Success<CollaborationSpaceRoomView>>(repo.get(f.conversation))
+                    .value
+            assertEquals(CollaborationSpaceRoomOrigin.SPACE, fresh.room?.origin)
+            assertNull(fresh.room?.original)
+            val retained =
+                assertIs<AppResult.Success<CollaborationSpaceRoomView>>(repo.get(f.conversation))
+                    .value
+            assertNotNull(retained.room?.original)
+            assertEquals(views.size, calls)
+        }
+    }
+
+    @Test
+    fun partialOriginalWireObjectCannotBeTreatedAsAbsentOrInferredFromSelectedCompany() = runTest {
+        val valid = Json.encodeToString(f.view)
+        val original = assertNotNull(f.published.original)
+        val partial = valid.replace("\"companyId\":\"${original.companyId}\",", "")
+        assertNotEquals(valid, partial)
+        var calls = 0
+        f.withRepositories(
+            MockEngine {
+                calls++
+                respond(partial, headers = f.headers)
+            }
+        ) { _, repo ->
+            assertIs<AppResult.Failed>(repo.get(f.conversation))
+            assertEquals(1, calls)
         }
     }
 

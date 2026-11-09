@@ -48,4 +48,13 @@ data class CollaborationSpacePublishedRoomDto(
     val serverName: String,
     val origin: String,
     val publishedAt: String,
+    val original: CollaborationSpaceOriginalRoomDto? = null,
+)
+
+@Serializable
+data class CollaborationSpaceOriginalRoomDto(
+    val companyId: String,
+    val conversationId: String,
+    val roomId: String,
+    val boundAt: String,
 )

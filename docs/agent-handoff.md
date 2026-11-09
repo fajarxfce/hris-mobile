@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 12:17 UTC. This file describes current work. Historical
+Updated 9 November 2026, 12:24 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -24,8 +24,8 @@ Do not restart jobs or reapply candidates from that history without checking cur
 
 | Checkout | Branch/source | Current state |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 / d8383438 | Joined-room source/native87/phone87 accepted; typed original-reference WIP |
-| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 21101489 | Focused66 pass; seventh verify42611795210 active |
+| Mobile original | feat/chat-send-timing-20261107 / d8383438 | Joined-room/native87/phone87 and typed original-reference source accepted |
+| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 21101489 | Hosted verify42611795210 passed; artifact audit30078 active |
 | Inspector original | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Verified public SDK6 integrated/pushed |
 | Inspector isolated | feat/sdk6-distribution-20261109 / a6b8236 | Pushed; SDK6 distribution accepted |
 | Starter | feat/network-inspector-20261107 / 6157db1 | Pushed; generic worker/identity ports accepted |
@@ -194,8 +194,8 @@ New original SHA f29bcfcabe98d1c6182ad817aecdd652d1b18f2b0c8b4d38e234561daca655e
 Phone install33957 is reaped PASS210.86s; exact installed APK digest and existing
 app ID/first-install identity match. No launch/UI automation, uninstall or data clear. The copied installer had an86 version assertion;
 review corrected it to87 BEFORE any installation, retaining all signature/native/
-acceptance checks. Root app/Inspector freeze is now released. Mobile original-reference full89590 is
-the only heavy local compiler. No emulator is running; do not restart87 or send again.
+acceptance checks. Root app/Inspector freeze is released. Full89590 is reaped PASS; no owned compiler or
+emulator is running. Do not restart87 or send again.
 
 ## Next implementation work
 
@@ -216,8 +216,10 @@ the only heavy local compiler. No emulator is running; do not restart87 or send 
    host transport), no failures/errors/skips,4,535 fixed app inputs/library and quality
    checks. One repeated non-null test assertion was then replaced with an asserted
    expected value; pre-full-cleanup.json records this only intervening source change.
-   Full89590 is RUNNING in `.work/published-room-reference-2026-11-09/full-1`; app and
-   Inspector sources are FROZEN. Do not rerun focused or start another compiler/emulator.
+   Full89590 is reaped PASS536.843s:4,162 fresh cases (3,549 desktop,613 Android host),
+   zero failures/errors/skips/lint; root/Android/Wasm/iOS source and quality pass.
+   All4,535 app/library inputs stayed fixed;445 preexisting suites are separate.
+   No compiler/emulator remains. Do not repeat the accepted gate.
    [Current evidence](measurements/collaboration-space-published-room-reference-2026-11-09.json).
    No local binding persistence or product routing changed. Encrypted binding follows,
    then
@@ -234,5 +236,5 @@ full history. Commit measurements with implementation; historical details stay i
 Starter remains6157db1 and unchanged. Its `.work/pinned-inspector-ci-2026-11-09` holds
 only a prepared patch: five pinned dependency checkouts across three workflows and
 nine verified shared SBOM artifacts. Static YAML/XML review passes; application is
-waiting for Mobile public verify42611795210 and artifact audit. No Starter compiler,
+waiting for artifact audit of successful Mobile public verify42611795210. No Starter compiler,
 workflow dispatch or source mutation has happened. Preserve that prerequisite.

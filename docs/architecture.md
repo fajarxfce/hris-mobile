@@ -110,6 +110,10 @@ setup results remain separate from published room access and SDK delivery.
 original proof under the current native owner. Initial durable proof capture and
 stable owning dispatch remain separate; receipt absence does not fence late work.
 
+[Published original-room references](collaboration-space-published-room-reference.md)
+retain exact company/conversation coordinates in typed metadata; current content
+admission and encrypted local binding adoption remain separate.
+
 [Organization conversations and room transport](collaboration-space-conversations-and-rooms.md)
 separate immutable pair intent from published room status. Native transport preserves
 account-local request revisions and exact group identity; live admission and durable

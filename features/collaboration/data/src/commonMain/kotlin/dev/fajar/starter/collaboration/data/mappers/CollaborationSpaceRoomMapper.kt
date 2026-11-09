@@ -19,6 +19,16 @@ fun CollaborationSpaceRoomViewDto.toSpaceRoomView(
                     it.serverName,
                     CollaborationSpaceRoomOrigin.valueOf(it.origin),
                     Instant.parse(it.publishedAt),
+                    it.original?.let { original ->
+                        CollaborationSpaceOriginalRoom(
+                            CollaborationOriginalConversationPosition(
+                                collaborationId(original.companyId),
+                                collaborationId(original.conversationId),
+                            ),
+                            original.roomId,
+                            Instant.parse(original.boundAt),
+                        )
+                    },
                 )
             },
         )

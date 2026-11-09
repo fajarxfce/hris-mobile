@@ -66,6 +66,12 @@ internal class SpaceConversationTransportFixture {
             "matrix.example.test:8448",
             "LEGACY",
             completed,
+            CollaborationSpaceOriginalRoomDto(
+                "60000000-0000-4000-8000-000000000001",
+                "60000000-0000-4000-8000-000000000002",
+                "!original:other.test",
+                created,
+            ),
         )
     val view = CollaborationSpaceRoomViewDto(owner.spaceId, id, success, published)
     val headers = headersOf(HttpHeaders.ContentType, "application/json")

@@ -1,6 +1,6 @@
 {
-  "at": "2026-11-09T12:16:21.247545+00:00",
-  "accepted": false,
+  "at": "2026-11-09T12:22:46.519129+00:00",
+  "accepted": true,
   "scope": "Typed published original-room reference and validation only; durable encrypted binding remains separate",
   "backendSource": "8d5724e2",
   "sourceSha256": {
@@ -58,14 +58,72 @@
     "fullGateRequired": true
   },
   "fullGate": {
-    "state": "running",
-    "session": 89590,
+    "startedAt": "2026-11-09T12:13:06.563514+00:00",
+    "elapsedSeconds": 536.843,
+    "exitCode": 0,
     "sourceFiles": 4535,
-    "artifact": "not a new APK; phone87 remains accepted"
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 4162,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "state": "passed",
+    "session": 89590,
+    "sessionReaped": true,
+    "freshSuites": 493,
+    "freshTargets": {
+      "desktopTest": 3549,
+      "testAndroidHostTest": 613
+    },
+    "preexistingSuites": 445,
+    "preexistingReportsCountedAsFresh": false,
+    "resultSha256": "3a49690e71d472952415e4e3467f5d33bc4baac66fd39b7a7df9410aaf51ba80",
+    "lint": {
+      "errors": 0,
+      "warnings": 0,
+      "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+    },
+    "tasks": [
+      ":check",
+      ":features:collaboration:data:testAndroidHostTest",
+      ":apps:android:compileDevReleaseKotlin",
+      ":apps:android:lintDevRelease",
+      ":apps:shared:compileKotlinWasmJs",
+      ":apps:shared:compileKotlinIosArm64",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt"
+    ],
+    "specificReports": {
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRoomTransportTest.xml": {
+        "sha256": "838378f79dd5009b4b6687eaa8ce08feea3eb332416c45059f1b6b19d6f231af",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRoomTransportTest.xml": {
+        "sha256": "28b34f7a7980b722091d9dd4b85e8e4598264108b2de38e31ae20f315e9451b3",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceRoomPreparationTest.xml": {
+        "sha256": "110d838e3d0675b4bd8a158c4bbc8d453394113e2bfb1d3b2a109904a21254d3",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
   },
   "limits": [
-    "Full root/Android/Wasm/iOS source checks are not complete",
-    "No new Apple runtime execution",
-    "No local binding persistence, group routing or live deployment"
+    "No new Apple runtime execution; iOS source compilation passed",
+    "No local binding persistence, group routing or live deployment",
+    "No new APK; accepted phone87 is unchanged"
   ]
 }
