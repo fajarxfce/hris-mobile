@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 11:30 UTC. This file describes current work. Historical
+Updated 9 November 2026, 11:48 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -24,8 +24,8 @@ Do not restart jobs or reapply candidates from that history without checking cur
 
 | Checkout | Branch/source | Current state |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 / 4e7be081 | Room dispatch pushed; joined-room build87 gate active |
-| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 16df4260 + fixture WIP | Fifth verify failed; next focused gate prepared |
+| Mobile original | feat/chat-send-timing-20261107 / d8383438 | Joined-room source pushed; APK87 static checks pass, native87 next |
+| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / db9287a9 + accepted fixture correction | 66 focused cases pass; seventh hosted verify next |
 | Inspector original | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Verified SDK6 integrated/pushed |
 | Inspector isolated | feat/sdk6-distribution-20261109 / a6b8236 | Pushed; SDK6 distribution accepted |
 | Starter | feat/network-inspector-20261107 / 6157db1 | Pushed; generic worker/identity ports accepted |
@@ -85,9 +85,8 @@ a separate cost; one send sample is not p95. Phone installation53784 reaped PASS
 Latest COMPLETE STOPPED store is `.work/selected-runtime-auth-trace-native-2026-11-09/sender`
 at86, all four userdata/encryption files and full AVD. NEVER recreate from85/84/83,
 resend Selected86/the six old originals, or send Draft66 092041. Preserve Bima74 too.
-Original Mobile/inspector input freeze is released. Local desktop reproduction48148 is reaped PASS448.118s/one actual case;4528 app/library
-inputs unchanged. It did not reproduce the abort. Root Mobile now owns format/check
-of the new Room dispatch flow; do not start another heavy local job.
+Original Mobile/inspector inputs are frozen again for APK87/native87. Local desktop reproduction48148 is reaped PASS448.118s/one actual case;4528 app/library
+inputs unchanged. It did not reproduce the abort. Root now owns retained-native87; do not start another heavy local job.
 
 The first native86 upgrade retained identity before a turn interruption. Its resumed
 follow-up had one unclassified otherAccess observation and a stale preflight expecting
@@ -162,34 +161,38 @@ Audit actual completed jobs and artifacts; do not infer success from compilation
 
 ## Current CI fixture correction
 
-Fifth CI shows one valid chat row, not a stuck Loading screen. Notification fixture
-initialized three local conversations but changed the published list to one; the test
-always expected three and raced synchronization. The prior wait-only correction was
-insufficient. Candidate makes the fixture's listed conversations explicit (old default
-unchanged); this navigation case publishes all three retained targets and retains its
-three-row assertion. Its other11 fixture callers will be covered.
+Fifth verify42604884828 failed with two fixture timing/contract mismatches. The
+notification fixture publishes only one prepared incoming room, though its server
+has three possible IDs. The wait-only correction still incorrectly required three.
+The first fixture correction at db9287a9 published all three, which its incoming
+fake cannot recover: local fixtures-1/68869 FAILED111.366s,66 cases/1 failure during
+initialization (Retry rather than Complete). Sixth hosted42609635524 was CANCELLED
+on that evidence. Neither failed candidate is accepted.
 
-The document denial case clicked Refresh after mock HTTP active=0 but before the
-ViewModel finished acquisition; the action is disabled/ignored during that interval.
-The preserved screenshot still shows the original record. Candidate waits for enabled
-Refresh semantics and keeps all denial/redaction/recovery assertions. No production
-code or timeout changed. Pinned formatting passes; focused `fixtures-1` is prepared
-in `.work/consumer-ci-test-recovery-2026-11-09/check.py`, not yet run. All source edits
-are confined to this isolated worktree. Fifth audit/private artifact is in
-`.work/pinned-inspector-ci-2026-11-09/fifth`; public draft evidence is
-[fixture consistency](measurements/pinned-inspector-ci-fixture-consistency-2026-11-09.json).
-Source review and pinned formatting pass. Run the sixth hosted verify for this
-candidate while the root compiler remains active; local fixture validation is next
-when that compiler is reaped. Neither check is claimed complete before its result.
+The revised test restores NotificationPublisherFixture byte-for-byte to16df4260,
+asserts its exact one-room published list, then checks that count, the original
+message preview and selected Chat tab after back navigation. Original typed link,
+resume behavior, pending-link clearance and no SDK enqueue assertions remain.
+The document denial test separately waits for the existing Refresh action to become
+enabled; HTTP active=0 alone precedes local publication and acquisition completion.
+Its redaction and recovery assertions remain. No product source or timeout changed.
 
-Root joined-room source is independently uncommitted: new raw room datasource reuses
-known Joined state, preserves one join for other states, and closes cancelled/failed
-acquisitions. The preserved equivalent unconditional-join RED fails one case; final
-611 Android host cases pass71.209s, including10 raw and2 parent/child cases,4,535 fixed
-inputs and quality checks. Root full3347 is active for version87; do not edit its app
-or inspector sources. Build87 and retained-native87 scripts are prepared only; APK86
-is still installed, native86 remains the latest complete stopped store with7 originals.
-Only one heavy local compiler/emulator; run isolated fixtures after3347 is reaped.
+Second focused fixtures-2/69722 PASS97.855s:66 fresh cases, zero failures/errors/skips,
+including all11 fixture caller classes and the affected document denial case;
+format/architecture/Detekt pass,4,528 app/library inputs fixed. Job is reaped.
+[Exact evidence](measurements/pinned-inspector-ci-fixture-consistency-2026-11-09.json).
+Commit/push this correction, then dispatch seventh public verify. Do not count that
+hosted graph complete before its artifact/XML audit. Prior native abort is still
+unclassified; local and subsequent runs did not reproduce it.
+
+Root d8383438 joined-room source is independently committed/pushed: raw datasource
+reuses an already Joined room and retains one join for other membership states.
+Full3347 PASS1290.936s:5,975 fresh cases (5,364 desktop +611 Android host), zero
+failures/errors/skips,lint0,format/architecture/Detekt,Wasm/iOS source,4,535 app and
+library inputs fixed. APK87 build25852 PASS110.858s; static package and exactSDK6
+native verifiers pass. Retained-native87 is prepared from the stopped accepted86
+store; execution is next. Phone still86. Root app/Inspector inputs stay frozen
+through native87; no emulator and local compiler overlap.
 
 ## Next implementation work
 
@@ -200,7 +203,7 @@ Only one heavy local compiler/emulator; run isolated fixtures after3347 is reape
    is complete, integrate verified inspector/CI source into the original checkout.
    Port the generic pinned workflow setup/checksums to Starter after Mobile proof.
    HRIS selected-runtime registry policy does not belong in Starter.
-3. Root Mobile has uncommitted bounded original Room dispatch,18 domain cases, four
+3. Root Mobile has accepted bounded original Room dispatch,18 domain cases, four
    additional real-storage contract cases, data DI and its assembled binding assertion.
    Format15207 PASS35.511s; focused34481 PASS263.919s/76 fresh cases including18 new
    domain and11 shared real-storage cases.4532 app/library inputs unchanged. Full30025 PASS902.068s with5963 fresh cases (5364 desktop,599 Android host),

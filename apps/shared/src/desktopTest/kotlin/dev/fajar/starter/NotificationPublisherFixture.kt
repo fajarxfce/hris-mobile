@@ -43,9 +43,9 @@ internal class NotificationPublisherFixture {
     val publisher
         get() = app.koin.get<CollaborationNotificationPublisher> { parametersOf(owner) }
 
-    suspend fun initialize(listedConversations: List<String> = listOf(app.first)) {
+    suspend fun initialize() {
         app.initialize()
-        app.server.collaboration.listedIds = listedConversations.toList()
+        app.server.collaboration.listedIds = listOf(app.first)
         app.sdk.backgroundEnabled = true
         app.withoutIncomingSelection()
         val event = app.sdk.incoming(app.first, "Fictional original for notification")

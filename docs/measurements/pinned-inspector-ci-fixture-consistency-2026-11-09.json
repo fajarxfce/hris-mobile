@@ -60,7 +60,143 @@
     "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/NativeLinkAppFlowTest.kt": "71ecabc61344272da33341bbff9614b4c479e98e68a74877ff2adbb4744369eb",
     "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/NotificationPublisherFixture.kt": "bc2fea2a0cafb3a5f7252625e3fb7bd5aeea6055403add0665cd16f02b0f159b"
   },
-  "validation": "Pinned formatter passes; focused fixture callers and complete verify remain pending. No product source changed.",
+  "validation": "First candidate failed locally and its hosted run was cancelled; revised candidate passes the focused gate. Complete hosted verify remains pending.",
   "reportTotalsMayBePartial": true,
-  "countScope": "Downloaded artifact XML totals; not a claim that the entire requested Gradle graph completed"
+  "countScope": "Downloaded artifact XML totals; not a claim that the entire requested Gradle graph completed",
+  "firstCandidateLocal": {
+    "startedAt": "2026-11-09T11:35:01.024986+00:00",
+    "elapsedSeconds": 111.366,
+    "exitCode": 1,
+    "sourceFiles": 4528,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 66,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "firstCandidateFailure": "The incoming-recovery fake only supplies the notification room; publishing all three makes initialization return Retry(failure=null), before UI. Document denial and the other64 cases pass.",
+  "cancelledHostedCandidate": {
+    "run": 42609635524,
+    "source": "db9287a9ca0560eb3f53b5aaf45acf46cf2f8681",
+    "conclusion": "cancelled",
+    "reason": "Stopped after local reproduction of the candidate fixture failure; not accepted"
+  },
+  "revisedCandidate": {
+    "fixtureRestoredExactlyTo": "16df4260",
+    "reasonForAssertionCorrection": "Navigation returns to the published notification conversation. Requiring every possible server ID incorrectly asserts inventory that this fixture explicitly does not publish.",
+    "changes": [
+      "Retain the original one-room fixture and assert its exact published list before UI",
+      "Wait for and assert the published row count; additionally assert the notification message preview and Chat selected",
+      "Preserve pending-link clearance, original thread navigation and no SDK enqueue",
+      "Keep the separately passing enabled Refresh change"
+    ],
+    "sourceSha256": {
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/NativeLinkAppFlowTest.kt": "81e282a473f5b8ada9002e88fba305109f1d41d0433f18f2604843e0c2ccee33",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/NotificationPublisherFixture.kt": "bb0f326e52620b63fe1a1913cb1bb1f6cec3511fc9912fddd3827a5259b8747e"
+    },
+    "validation": "PASS: 66 fresh desktop cases, zero failures/errors/skips; formatCheck, architectureCheck and detekt; 4,528 app inputs and library sources unchanged. Full hosted verify is still required.",
+    "localGate": {
+      "startedAt": "2026-11-09T11:41:20.121142+00:00",
+      "elapsedSeconds": 97.855,
+      "exitCode": 0,
+      "sourceFiles": 4528,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 66,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml": {
+          "sha256": "c25c72461f94c58ad0273aeebdbcf696be45080a8f985d65654d31d3ad09a175",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ApplicationNotificationHostIntegrationTest.xml": {
+          "sha256": "04abb4868c81a1bcc1e8e15b8c9d12d8281259b50d132e5f2a99b9b2f6318e51",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationMutedNotificationIntegrationTest.xml": {
+          "sha256": "560e509b8de888b7a3a091c1f2a53c48efaedbe03fa7308023798dfb8459ee79",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationActionsTest.xml": {
+          "sha256": "1831f93b44d822f45206eb06d8cebd28c8f9d1054c9a2569342b84abe7e98516",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationChangesIntegrationTest.xml": {
+          "sha256": "3d5fb2fab6a1e453d87e8891d0a104233fa74366af0640f052d79840cf8d86d0",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationFocusIntegrationTest.xml": {
+          "sha256": "32484dd585bda71e6c1b3f083f3c9f407e49486d2be67ec9fe63d9ee79c1f92e",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationProcessIntegrationTest.xml": {
+          "sha256": "da2e9619701541e494bbab77429a9b260206df3763546958577bbf5b2ecc5155",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationPublisherIntegrationTest.xml": {
+          "sha256": "e8e8381627b2382f05a5eead25aa71078eb1448d96f57d0b1ed83d3d16b69f28",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationReconciliationIntegrationTest.xml": {
+          "sha256": "340169aa1899c83fc2327b7d649738ad177f48feb17c555ecaa111b8827e2932",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationRetirementIntegrationTest.xml": {
+          "sha256": "3d1a43fe0ceb88d57729fe5b3e3a15de48e1f8ea36cd9ccc20a89f0b4af14e83",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativeNotificationNavigationIntegrationTest.xml": {
+          "sha256": "01308ec7cd15de4293a80f4938552a657364dc69101ba0899b6ccbd6b272095f",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativeLinkAppFlowTest.xml": {
+          "sha256": "6cdb11369123c9231782574d64bf2e3f4ab8fd6428a146576ad1da68daf8bd2c",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  }
 }

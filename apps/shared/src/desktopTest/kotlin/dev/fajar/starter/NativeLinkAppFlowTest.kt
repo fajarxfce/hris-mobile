@@ -39,8 +39,8 @@ class NativeLinkAppFlowTest {
         var visible by mutableStateOf(true)
         try {
             runBlocking {
-                // Keep the published list consistent with the three retained navigation targets.
-                f.initialize(f.app.server.collaboration.ids)
+                f.initialize()
+                assertEquals(listOf(f.app.first), f.app.server.collaboration.listedIds)
                 f.app.koin.loadModules(
                     listOf(
                         module {
@@ -102,14 +102,16 @@ class NativeLinkAppFlowTest {
                     .fetchSemanticsNodes()
                     .isNotEmpty() &&
                     compose.onAllNodesWithText("Fictional colleague").fetchSemanticsNodes().size ==
-                        f.app.server.collaboration.ids.size
+                        f.app.server.collaboration.listedIds.size
             }
             compose.onNodeWithContentDescription("New chat").assertIsDisplayed()
             compose.onNodeWithText("Saved replies").assertDoesNotExist()
             compose
                 .onAllNodesWithText("Fictional colleague")
-                .assertCountEquals(f.app.server.collaboration.ids.size)
+                .assertCountEquals(f.app.server.collaboration.listedIds.size)
             compose.onAllNodesWithText("Fictional colleague")[0].assertIsDisplayed()
+            compose.onNodeWithText("Fictional original for notification").assertIsDisplayed()
+            compose.onNode(hasText("Chat") and isSelectable()).assertIsSelected()
             compose.runOnIdle {
                 assertNull(owner.app()?.state?.value?.pendingLink)
                 assertTrue(f.app.sdk.enqueued.isEmpty())
