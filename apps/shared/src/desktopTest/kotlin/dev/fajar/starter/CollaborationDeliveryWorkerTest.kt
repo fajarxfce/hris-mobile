@@ -404,12 +404,22 @@ class CollaborationDeliveryWorkerTest {
                     while (QueueCollaborationText.DELIVERY_KEY !in f.scheduled) yield()
                 }
                 assertEquals(
-                    listOf(CollaborationRecoveryWake.WORK_KEY, QueueCollaborationText.DELIVERY_KEY),
+                    listOf(
+                        CollaborationRecoveryWake.WORK_KEY,
+                        CollaborationSpaceRecoveryWake.WORK_KEY,
+                        QueueCollaborationText.DELIVERY_KEY,
+                    ),
                     f.scheduled,
                 )
                 assertNotNull(
                     assertIs<AppResult.Success<CollaborationRecoveryWake?>>(
                             f.koin.get<ReadCollaborationRecoveryWake>()()
+                        )
+                        .value
+                )
+                assertNotNull(
+                    assertIs<AppResult.Success<CollaborationSpaceRecoveryWake?>>(
+                            f.koin.get<ReadCollaborationSpaceRecoveryWake>()()
                         )
                         .value
                 )

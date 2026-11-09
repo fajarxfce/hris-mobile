@@ -30,6 +30,8 @@ class ApplicationCollaborationLifetime(
     private val observeReadiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() },
     private val observeCredentialRecovery: (CollaborationOwner) -> Flow<Unit> = { emptyFlow() },
     private val maintainSession: (String) -> Flow<AppResult<SessionTokens?>> = { emptyFlow() },
+    private val observeSpaceReadiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() },
+    private val requestSpaceRecovery: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) },
 ) : AutoCloseable {
     private val lifetime = SupervisorJob()
     private val scope = CoroutineScope(lifetime + dispatcher)
@@ -59,10 +61,22 @@ class ApplicationCollaborationLifetime(
             }
         }
 
-    fun start() {
-        if (!started.compareAndSet(false, true)) return
-        sessionMaintenance.start()
-        // Subscribe before activation can start syncing. This child never opens another SDK.
+    /** Lazy creation subscribes undispatched; the application lifetime owns cancellation. */
+    private val spaceReadinessSubscription = lazy {
+        scope.launch(start = CoroutineStart.UNDISPATCHED) {
+            if (build.platform !in setOf(AppPlatform.Android, AppPlatform.Ios)) return@launch
+            try {
+                observeSpaceReadiness().collect()
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                // The independent durable group wake and startup discovery retain recovery.
+            }
+        }
+    }
+
+    /** Created before activation; this subscription never opens another SDK. */
+    private val readinessSubscription = lazy {
         scope.launch(start = CoroutineStart.UNDISPATCHED) {
             if (build.platform !in setOf(AppPlatform.Android, AppPlatform.Ios)) return@launch
             try {
@@ -82,6 +96,14 @@ class ApplicationCollaborationLifetime(
                 // Durable originals and startup/network recovery own a missed signal, not a timer.
             }
         }
+    }
+
+    fun start() {
+        if (!started.compareAndSet(false, true)) return
+        sessionMaintenance.start()
+        spaceReadinessSubscription.value
+        readinessSubscription.value
+
         scope.launch {
             if (build.platform !in setOf(AppPlatform.Android, AppPlatform.Ios)) return@launch
             try {
@@ -113,6 +135,13 @@ class ApplicationCollaborationLifetime(
                         ) {
                             currentCoroutineContext().ensureActive()
                             withTimeoutOrNull(1_500) { requestRecovery() }
+                            try {
+                                withTimeoutOrNull(1_500) { requestSpaceRecovery() }
+                            } catch (cancelled: CancellationException) {
+                                throw cancelled
+                            } catch (_: Exception) {
+                                // An independent scheduling failure cannot stop native ownership.
+                            }
                         }
                     }
                     // Expiring live admission does not create new delivery intent. Its renewal

@@ -30,7 +30,7 @@ import org.koin.dsl.module
 
 /** App entry points share one instance with the scheduler; feature use cases keep their own DI. */
 fun applicationWorkerModule() = module {
-    includes(applicationNotificationModule())
+    includes(applicationNotificationModule(), applicationCollaborationSpaceWorkerModule())
     single {
         val inbox = inject<InboxPushWorker>()
         val chat = inject<CollaborationRecoveryWorker>()

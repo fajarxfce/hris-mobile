@@ -1221,6 +1221,73 @@ class CollaborationDataModule {
         EnsureCollaborationRecoveryWake(wakes)
 
     @Factory
+    fun finishSpaceRecovery(
+        progress: CollaborationSpaceRecoveryProgressRepository,
+        inventory: CollaborationSpaceRoomBindingInventoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = FinishCollaborationSpaceRecovery(progress, inventory, sessions, server)
+
+    @Factory
+    fun loadSpaceRecoveryDevice(
+        roots: CollaborationSpaceRootRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        commands: CollaborationSpaceSetupCommandRepository,
+        originals: CollaborationRuntimeRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        LoadCollaborationSpaceRecoveryDevice(
+            roots,
+            registrations,
+            commands,
+            originals,
+            sessions,
+            server,
+            build,
+        )
+
+    @Factory
+    fun loadSpaceRecoveryPage(
+        inventory: CollaborationSpaceRoomBindingInventoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = LoadCollaborationSpaceRecoveryPage(inventory, sessions, server)
+
+    @Factory
+    fun loadSpaceRecoveryRoom(
+        bindings: CollaborationSpaceRoomBindingRepository,
+        inventory: CollaborationSpaceRoomBindingInventoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = LoadCollaborationSpaceRecoveryRoom(bindings, inventory, sessions, server)
+
+    @Factory
+    fun ensureSpaceRecoveryWake(wakes: CollaborationSpaceRecoveryWakeRepository) =
+        EnsureCollaborationSpaceRecoveryWake(wakes)
+
+    @Factory
+    fun readSpaceRecoveryWake(wakes: CollaborationSpaceRecoveryWakeRepository) =
+        ReadCollaborationSpaceRecoveryWake(wakes)
+
+    @Factory
+    fun completeSpaceRecoveryWake(wakes: CollaborationSpaceRecoveryWakeRepository) =
+        CompleteCollaborationSpaceRecoveryWake(wakes)
+
+    @Factory
+    fun requestSpaceRecovery(
+        wakes: CollaborationSpaceRecoveryWakeRepository,
+        schedules: SyncScheduleRepository,
+    ) = RequestCollaborationSpaceRecovery(wakes, schedules)
+
+    @Factory
+    fun resumeSpaceRecovery(
+        wakes: CollaborationSpaceRecoveryWakeRepository,
+        schedules: SyncScheduleRepository,
+    ) = ResumeCollaborationSpaceRecovery(wakes, schedules)
+
+    @Factory
     fun readSpaceRecoveryProgress(
         progress: CollaborationSpaceRecoveryProgressRepository,
         sessions: SessionRepository,

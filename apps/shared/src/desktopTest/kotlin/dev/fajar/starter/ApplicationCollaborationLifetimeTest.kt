@@ -27,6 +27,73 @@ import kotlinx.coroutines.test.*
 
 class ApplicationCollaborationLifetimeTest {
     @Test
+    fun groupReadinessSubscribesBeforeActivationAndClosesWithTheApplication() = runBlocking {
+        withFixture { f ->
+            var starts = 0
+            var active = 0
+            f.spaceReadiness = {
+                flow {
+                    starts++
+                    active++
+                    try {
+                        awaitCancellation()
+                    } finally {
+                        active--
+                    }
+                }
+            }
+            f.activate = { flow { assertEquals(1, active) } }
+            f.lifetime.start()
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertEquals(1, starts)
+            assertEquals(1, f.spaceRecoveryRequests)
+            f.lifetime.close()
+            f.scheduler.runCurrent()
+            assertEquals(0, active)
+        }
+    }
+
+    @Test
+    fun groupStartupWakeFollowsNativeParentWithoutFollowingCompanyChanges() = runBlocking {
+        withFixture { f ->
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertEquals(1, f.spaceRecoveryRequests)
+            f.workspace.value = AppResult.Success(null)
+            f.scheduler.runCurrent()
+            assertEquals(1, f.spaceRecoveryRequests)
+            f.session.value = AppResult.Success(null)
+            f.scheduler.runCurrent()
+            f.session.value = AppResult.Success(f.app.session)
+            f.scheduler.runCurrent()
+            assertEquals(2, f.spaceRecoveryRequests)
+        }
+    }
+
+    @Test
+    fun failedGroupCollectorAndSchedulingCannotStopNativeOwnershipOrLoop() = runBlocking {
+        withFixture { f ->
+            var starts = 0
+            f.spaceReadiness = {
+                flow {
+                    starts++
+                    error("Fixture group observer failure")
+                }
+            }
+            f.onSpaceRecovery = { error("Fixture group schedule failure") }
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            f.scheduler.advanceTimeBy(10_000)
+            f.scheduler.runCurrent()
+            assertEquals(1, starts)
+            assertEquals(1, f.spaceRecoveryRequests)
+            assertIs<ApplicationCollaborationState.Observed>(f.lifetime.state.value)
+            assertNotNull(f.published().retention.parent)
+        }
+    }
+
+    @Test
     fun activationDiagnosticsKeepOnlyClosedFailureCategoriesWithoutRetrying() = runBlocking {
         val diagnostics = mutableListOf<Diagnostic>()
         Diagnostics.install { event, error ->
@@ -834,6 +901,9 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
         }
     val activated = mutableListOf<CollaborationOwner>()
     var readiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() }
+    var spaceReadiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() }
+    var spaceRecoveryRequests = 0
+    var onSpaceRecovery: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) }
     var maintainSession:
         (String) -> Flow<AppResult<dev.fajar.starter.identity.domain.entities.SessionTokens?>> =
         {
@@ -879,6 +949,11 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
             { activate(it) },
             StandardTestDispatcher(scheduler),
             observeReadiness = { readiness() },
+            observeSpaceReadiness = { spaceReadiness() },
+            requestSpaceRecovery = {
+                spaceRecoveryRequests++
+                onSpaceRecovery()
+            },
             observeCredentialRecovery = { credentialRecovery(it) },
             maintainSession = { maintainSession(it) },
         )

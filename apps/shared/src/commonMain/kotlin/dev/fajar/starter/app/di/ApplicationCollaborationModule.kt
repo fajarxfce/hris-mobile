@@ -7,6 +7,8 @@ import dev.fajar.starter.collaboration.domain.repositories.CollaborationSdkPosse
 import dev.fajar.starter.collaboration.domain.usecases.ActivateCollaborationDevice
 import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationCredentialRecovery
 import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationReadinessSignal
+import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationSpaceReadinessSignal
+import dev.fajar.starter.collaboration.domain.usecases.RequestCollaborationSpaceRecovery
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.push.usecases.ObserveNativePushStatus
 import dev.fajar.starter.identity.domain.usecases.AcquireSessionTokens
@@ -36,6 +38,8 @@ internal fun applicationCollaborationModule(
             val push = inject<ObserveNativePushStatus>()
             val activate = inject<ActivateCollaborationDevice>()
             val readiness = inject<QueueCollaborationReadinessSignal>()
+            val spaceReadiness = inject<QueueCollaborationSpaceReadinessSignal>()
+            val spaceRecovery = inject<RequestCollaborationSpaceRecovery>()
             val credentialRecovery = inject<ObserveCollaborationCredentialRecovery>()
             val tokens = inject<AcquireSessionTokens>()
             ApplicationCollaborationLifetime(
@@ -46,6 +50,8 @@ internal fun applicationCollaborationModule(
                 { push.value(it) },
                 { activate.value(it) },
                 observeReadiness = { readiness.value.observe() },
+                observeSpaceReadiness = { spaceReadiness.value.observe() },
+                requestSpaceRecovery = { spaceRecovery.value() },
                 observeCredentialRecovery = { credentialRecovery.value(it) },
                 maintainSession = { tokens.value.maintain(it) },
             )

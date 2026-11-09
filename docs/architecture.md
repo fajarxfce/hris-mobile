@@ -1,5 +1,9 @@
 # Architecture
 
+[Organization recovery](collaboration-space-recovery-worker.md) uses the current native
+parent, independent durable wake and claimed raw pages. Original-only delivery owns
+provider work; faults retain bounded retries and clean completion alone discharges a wake.
+
 [Local organization room inventory](collaboration-space-room-inventory.md) reads bounded
 authenticated binding pages with stable revision cursors and explicit exhaustion;
 worker progress and live delivery admission remain separate owning responsibilities.

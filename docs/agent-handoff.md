@@ -119,41 +119,44 @@ or emulator remains active. [Contract](collaboration-space-recovery-progress.md)
 [measurement](measurements/collaboration-space-recovery-progress-2026-11-09.json).
 Accepted as8bc952fe and pushed;57676 reaped. This progress is
 not a worker or product activation. No APK,emulator,phone or live changes.
-## Active: original organization recovery worker — unaccepted
+## Latest: original organization recovery worker — accepted locally
 
-Private `.work/space-recovery-worker-2026-11-09` pins8bc952fe. All11 prepared files
-were applied and extended;prepared copies are archived initial drafts,never reapply.
-Current22 Kotlin inputs add group wake commands,local original-device/page/room
-selection,final current-inventory recheck,the actual SyncTask and application wiring.
-One processor/one waiter owns at most4 raw pages per90-second turn (180-second queued
-budget). Claims precede delivery;faults back off and never become healthy immediate
-continuations. Only clean finished progress can discharge its captured wake. Current
-native-parent cancellation is reused;no global owner or alternate SDK is introduced.
-Readiness subscribes before startup recovery,and group observer/scheduling failures
-cannot stop the existing native lifetime. Resume is Lazy to break the scheduler's
-getAll<SyncTask> dependency cycle;that was corrected during review before validation.
+Private `.work/space-recovery-worker-2026-11-09` pins8bc952fe (495dd81b adds only
+hosted evidence). Twenty-three Kotlin inputs and one CI workflow add independent group
+wake commands,local original selection,final inventory recheck,the actual SyncTask
+and application wiring. One processor/one waiter,four raw pages per90-second turn,
+180-second admission bound. Exact claims survive interruption;unresolved work backs
+off. Only clean finished progress can discharge its captured wake. Readiness subscribes
+before activation;owned subscriptions stop with the application. Lazy Resume prevents
+the scheduler/task construction cycle. Domain bindings stay in the feature module.
 
-Tests:37 domain (13 wake+14 selection+10 finish),12 app worker,3 added application
-lifetime cases (24 total),2 graph. First focused91375 REAPED FAIL213.555s:all38 app
-cases pass,zero failures/errors/skips;domain37 did not run because new top-level
-WakeFixture collided with the existing company fixture. Detekt also rejected two
-LongMethod boundaries in application start and the worker DI module. All4,626 inputs
-and Inspector bytes stayed unchanged. After reaping,renamed only the new fixture,
-made the group subscription an explicitly owned lazy undispatched job,and gave the
-group SyncTask its own included application DI module. No suppression or relaxed rule.
+Focused85180 is REAPED PASS85.225s:97 cases across7 suites,including all22 old delivery
+worker cases. Full89627 is REAPED PASS253.361s:4,439 validated cases=3,773 desktop
++629 Android host+37 browser,zero failures/errors/skips. Root check,Android release/
+lint,shared Wasm/iOS source and quality pass. Both4,627-input manifests and every current
+source/library/XML hash agree. Final2,489 cases are fresh;1,950 passing cases across
+240 suites reuse byte-identical first-full XML and unchanged production inputs. Only
+the workflow and old startup test changed;that suite reran successfully. [Contract](collaboration-space-recovery-worker.md) and
+[measurement](measurements/collaboration-space-recovery-worker-2026-11-09.json).
 
-Formatter41660 REAPED. Focused37708 is REAPED FAIL141.468s: all75 cases pass,
-zero failures/errors/skips; one LongMethod remains (start102 >100). All4,627 inputs
-and Inspector bytes stayed unchanged. The existing company readiness observer now
-also has an explicitly owned lazy undispatched subscription, preserving start order
-and disposal. No check was suppressed. Formatting completed; focused-3 /56790 is
-RUNNING with22 corrected Kotlin inputs frozen. Full gate has not started. Private
-README/progress retain both failed gates. Prepared files are archival; never restore.
+Failed candidates are retained:91375 new fixture collision/two LongMethod issues;
+37708 all75 cases pass/one LongMethod;83939 all4,439 run/one old startup-key expectation.
+The corrected integration test preserves company/delivery assertions and adds group
+key+durable wake. CI now runs group worker and app lifetime cases. No suppression.
+No APK,emulator,phone or live change. Native proof is next;source alone is not rollout.
 
-No APK/emulator/phone/live change. Worker uses conservative original-only delivery;
-local SDK+app-ledger no-work optimization,producer wakes after end reads,group push/
-legacy routing and actual provider/process-loss proof remain before rollout. Never
-claim generic Queued/new SPACE enqueue or history retirement is implemented here.
+Prepared native proof is separate at `.work/space-recovery-native-2026-11-09` in Mobile
+and Group:three Mobile Kotlin,two Group Kotlin,driver and four driver tests. None has
+been applied/compiled. Keep the accepted old native scenario intact. This draft uses
+actual Matrix control -> durable wake -> registered task -> original ACK,then kills only
+its isolated proof process before projection. It checks exact retained claim/wake,
+two provider events,offline reads and bounded Matrix/native traffic without401/403.
+One fresh2560MiB/two-core emulator;never use protected employee originals. Apply next
+only after this worker commit/push completes. Worker prepared copies are archival.
+
+Producer wakes after end reads,complete SDK+app-ledger idle checks,group FCM/product
+routing,new SPACE enqueue and native/Apple runtime acceptance remain. All54 PRD groups
+remain open. Phone87,SDK6 and live group-OFF/schema116.4 are unchanged.
 
 ## Accepted readiness increments
 
