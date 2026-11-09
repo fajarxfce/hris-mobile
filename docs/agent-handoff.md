@@ -44,8 +44,8 @@ Thirteen Mobile Kotlin files are uncommitted: finite native direct-transport API
 datasource/repository/DTO, public domain facts and pure validation; published-room
 mapping extraction; eight transport test methods and the application DI assertion.
 [Contract](collaboration-space-direct-transport.md) records current scope and limits.
-Direct ktfmt0.59 parsing/formatting passed0.954s, then0.866s after stricter ID/time
-validation;256MiB heap, no Kotlin/test acceptance yet.
+Direct ktfmt0.59 parsing/formatting passed0.954s,0.866s and0.968s after stricter
+ID/time/encoded-identity validation;256MiB heap, no Kotlin/test acceptance yet.
 `.work/space-direct-transport-2026-11-09/check.py` is prepared, NOT RUN while Group33511
 owns the local heavy slot. Its full/browser phases must select the new eight methods
 plus the existing room transport suite; do not inherit the previous binding filters.
@@ -68,6 +68,19 @@ Portable artifact13682061569 is3,273,813 bytes/SHA2560998f1decd370cfc32c08ed8806
 Apple13684362715 is479,237 bytes/SHA25609f40e77dffdb4db8b777ee38fb0169d2946164333fddde80a9fec88a281e53f.
 Audit67988 is reaped PASS; private evidence is the prior binding preparation's
 `hosted-42628449460` directory. Do not redispatch or reaudit this accepted source.
+
+## Prepared original matching follow-up
+
+`.work/space-original-delivery-2026-11-09/candidate` contains two PRIVATE UNVALIDATED
+files: a pure matching refactor and three common test methods. The active domain source
+is unchanged. Existing full-identity inspection APIs keep their validation/output;
+`matchCollaborationOriginalMessages` accepts the exact canonical original sender facts
+and retains the existing whole-inventory/command/completion checks, avoiding a made-up
+identity-selection timestamp. Formatter passes0.680s only; no compiler/test/SDK proof.
+Do not apply before both direct-transport contracts are accepted. base.json pins the
+copied policy source. Existing original match/read regressions remain required, plus
+owning current admission, actual writer acquisition, durable receipt/archive recovery,
+late callback journaling and pause/drain. This is not a delivery implementation.
 
 ## Current Mobile gate
 
