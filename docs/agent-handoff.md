@@ -1,6 +1,39 @@
 # Agent continuation — HRIS Mobile
 
 
+## APK81 verified; retained80 native run starting — 9 November 2026, 05:06 UTC
+
+SDK6 source/dependency57831966 is pushed. Main checkout build53900 REAPED PASS151.400s;
+APK84540/SDK68644 verifiers PASS. Nondebug devRelease ARM64,1.0.0/81,123465103 bytes,
+SHA728d2aa43a3c58e8e42f7d3a9564334c66433234cf69a1f31c5a7e09d7328539;
+existing signeraca5ce6a…, correct Firebase/private API,16KiB and backup exclusions.
+APK native4e15c923… matches exactly stripped SDK6; lint0.
+[Candidate evidence](measurements/collaboration-release81-candidate-2026-11-09.json).
+Not release-accepted or phone-installed. Full/consumer source gates are below.
+
+Complete retained80 store clone69173 REAPED PASS; source4 files unchanged, complete
+AVD metadata copied, no key reads/reset or send. Target is .work/refresh-coalescing-
+native-2026-11-09/sender; do NOT overwrite it after boot. Source80 still preserved.
+prepare-counter verifies live API image/revision/bridge; schema116.4/controlON unchanged.
+ACTIVE at checkpoint: passive counter18811, paired-refresh81660, ONLY heavy emulator
+88455 (2560MiB,2cores), boot in progress. Native work/native-1 holds owners/stop files.
+Do not compile while emulator runs. After owned80 boot, execute run-phases.py once;
+its finally writes stop markers. Keep1080s observer and1200s emulator limits.
+No native81 acceptance yet; no fresh phone installation or phone UI.
+
+After phases REAP all sessions; inspect final counts/paired tokens, all120s intervals,
+three-original Sent/history/identity and one NEW Refresh81 timing sample. Never resend
+any original or the new sample if failed. Evaluate accept-quietness.py; it now records
+failed refresh facts before failing. Preserve failures and latest complete store.
+If accepted, review screenshots, record exact release acceptance, announce and run
+build81/install.py --install-only on10.77.77.3:5555. Continue remaining work afterwards.
+
+Starter .work/sync-trigger-port-2026-11-09/port.py is now PREPARED against full c1 source
+and native81 acceptance. It remains UNEXECUTED; no Starter source changed. SDK6
+publication is still pending; preserve SDK4 assets/SDK5 binaries. Platform117–138
+remain undeployed. All54 communications PRD groups remain open.
+
+
 ## SDK6 Android consumer accepted; build81 next — 9 November 2026, 05:00 UTC
 
 Original SDK CI42561531330, all4ABIs, attempt1 SUCCESS. Download1350 REAPED PASS:
