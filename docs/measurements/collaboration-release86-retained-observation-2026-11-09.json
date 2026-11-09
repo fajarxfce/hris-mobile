@@ -1,0 +1,82 @@
+{
+  "source": "2293ff05",
+  "versionCode": 86,
+  "accepted": false,
+  "phoneInstalled": false,
+  "scope": "Retained native86 lifecycle and credential observation; send blocked by stale test precondition before any gesture",
+  "lifecycleIntervals": [
+    {
+      "phase": "home",
+      "completeBinSeconds": 110,
+      "requestCounts": {
+        "sync": 11,
+        "other_hris": 9
+      },
+      "unexpectedSetupTraffic": {},
+      "rejectedRequests": {},
+      "normalExpiredSyncResponses": 0,
+      "accepted": true
+    },
+    {
+      "phase": "room",
+      "completeBinSeconds": 110,
+      "requestCounts": {
+        "sync": 14,
+        "other_hris": 4,
+        "refresh": 1
+      },
+      "unexpectedSetupTraffic": {},
+      "rejectedRequests": {},
+      "normalExpiredSyncResponses": 1,
+      "accepted": true
+    },
+    {
+      "phase": "resumed",
+      "completeBinSeconds": 110,
+      "requestCounts": {
+        "sync": 11,
+        "other_hris": 9
+      },
+      "unexpectedSetupTraffic": {},
+      "rejectedRequests": {},
+      "normalExpiredSyncResponses": 0,
+      "accepted": true
+    },
+    {
+      "phase": "cold",
+      "completeBinSeconds": 110,
+      "requestCounts": {
+        "sync": 14,
+        "hris_session_refresh": 1,
+        "other_hris": 10,
+        "refresh": 1
+      },
+      "unexpectedSetupTraffic": {},
+      "rejectedRequests": {},
+      "normalExpiredSyncResponses": 1,
+      "accepted": true
+    }
+  ],
+  "bootstrapRequests": 0,
+  "httpRequests": 301,
+  "forbiddenResponses": 0,
+  "refreshStatuses": [
+    200,
+    200,
+    200
+  ],
+  "pairedRefreshFailures": [
+    {
+      "sample": 1,
+      "status": 200,
+      "credentialContinuityAccepted": false
+    }
+  ],
+  "unclassifiedOtherAccessCount": 1,
+  "originalMessagesRetained": 6,
+  "newSendGestures": 0,
+  "scriptFailure": "send-new-once preflight still expected5 final server events; actual6. Corrected only in next preserved test run.",
+  "next": "Detailed passive authentication trace; strict gates unchanged; latest stopped sender is selected-runtime-publication-resumed-native-2026-11-09/sender",
+  "sameKeysAndAccount": true,
+  "ownedJobsStopped": true
+}

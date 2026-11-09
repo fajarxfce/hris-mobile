@@ -1,0 +1,115 @@
+{
+  "scope": "Strict Android SBOM dependency resolution; same-input BOM task output reused from cache",
+  "strict": {
+    "startedAt": "2026-11-09T10:06:13.543405+00:00",
+    "exitCode": 0,
+    "elapsedSeconds": 46.014,
+    "metadataUnchanged": true,
+    "sbomSha256": "d1504447cf1cbde560936eb607d1b60ff6bad190d12da6889f16493282153fff",
+    "sbomComponents": 393
+  },
+  "sourceCandidateArtifacts": [
+    {
+      "group": "androidx.compose.material",
+      "name": "material-ripple",
+      "version": "1.9.3",
+      "artifact": "material-ripple-1.9.3.pom",
+      "sha256": [
+        "8f35e20566f01bd4cbdc44cccdae54f6a59388fb23e0d0e23dae3f6640768f50"
+      ],
+      "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-ripple/1.9.3/material-ripple-1.9.3.pom",
+      "bytes": 2288,
+      "publisherSha1Matched": true
+    },
+    {
+      "group": "androidx.compose.material",
+      "name": "material-ripple-android",
+      "version": "1.9.3",
+      "artifact": "material-ripple-android-1.9.3.pom",
+      "sha256": [
+        "bdecf5e6e99f8d48238ff4d9287fbe66a8714df3db115b7dd8e136818e3ddd53"
+      ],
+      "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-ripple-android/1.9.3/material-ripple-android-1.9.3.pom",
+      "bytes": 3162,
+      "publisherSha1Matched": true
+    },
+    {
+      "group": "androidx.compose.material3",
+      "name": "material3",
+      "version": "1.4.0",
+      "artifact": "material3-1.4.0.pom",
+      "sha256": [
+        "672b431f59c8e0a8522690b2f46f1b7966710638893c60c31c5f19f8472d62cc"
+      ],
+      "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material3/material3/1.4.0/material3-1.4.0.pom",
+      "bytes": 3667,
+      "publisherSha1Matched": true
+    },
+    {
+      "group": "androidx.compose.material3",
+      "name": "material3-android",
+      "version": "1.4.0",
+      "artifact": "material3-android-1.4.0.pom",
+      "sha256": [
+        "cc0362653240708a010de50fee8caf884a610fbb10b6013e86694d77c43febc7"
+      ],
+      "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material3/material3-android/1.4.0/material3-android-1.4.0.pom",
+      "bytes": 5391,
+      "publisherSha1Matched": true
+    },
+    {
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-common-java8",
+      "version": "2.9.4",
+      "artifact": "lifecycle-common-java8-2.9.4.pom",
+      "sha256": [
+        "f7a0077f2b20312c30ea74c9fe77626fbe2ad09bb48922851cde20bcd1a33266"
+      ],
+      "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-java8/2.9.4/lifecycle-common-java8-2.9.4.pom",
+      "bytes": 5425,
+      "publisherSha1Matched": true
+    },
+    {
+      "group": "org.jetbrains.compose.material",
+      "name": "material-ripple",
+      "version": "1.9.1",
+      "artifact": "material-ripple-1.9.1.pom",
+      "sha256": [
+        "f52f382ae8b918be5236761410ba7d8dd12e0b6ac99230797c53b240ba1a31e8"
+      ],
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/material/material-ripple/1.9.1/material-ripple-1.9.1.pom",
+      "bytes": 3673,
+      "publisherSha1Matched": true
+    },
+    {
+      "group": "org.jetbrains.kotlinx",
+      "name": "atomicfu",
+      "version": "0.21.0",
+      "artifact": "atomicfu-0.21.0.module",
+      "sha256": [
+        "c4aba64788420b0b54c877900f27ba385c3d170e878ca2faf378ec315cfcb076"
+      ],
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/atomicfu/0.21.0/atomicfu-0.21.0.module",
+      "bytes": 41142,
+      "publisherSha1Matched": true
+    },
+    {
+      "group": "org.jetbrains.kotlinx",
+      "name": "kotlinx-coroutines-test",
+      "version": "1.8.0",
+      "artifact": "kotlinx-coroutines-test-metadata-1.8.0.jar",
+      "sha256": [
+        "337f24af1c61fc47d278a9be26fd1754b9933b0681f185eb9be0aa9e09067219"
+      ],
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-test/1.8.0/kotlinx-coroutines-test-1.8.0.jar",
+      "bytes": 15126,
+      "publisherSha1Matched": true
+    }
+  ],
+  "discoveryWasNotAcceptance": true,
+  "existingChecksumsUnchanged": true,
+  "firstVerificationFailure": "Material31.9.0 POM absent",
+  "secondVerificationFailure": "Lifecycle common-java8 2.9.4 POM absent",
+  "localAttempt1": "Metadata insertion stopped at new atomicfu component before writing; subsequent strict check failed unchanged metadata. Preserved, not accepted.",
+  "officialDownloadAttempt1": "Kotlin metadata filename is a module alias; initial guessed URL404. Correct URL and digests read from publisher module, then verified."
+}

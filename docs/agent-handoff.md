@@ -66,45 +66,47 @@ Initial packaging94519 exhausted its2GiB heap after475.303s; preserved in attemp
 Retry7551 with3GiB/one worker passes88.189s; verifiers47872/8311 pass. All reaped.
 Phone remains83. No86 phone installation or full native acceptance yet.
 
-## Active native86 proof — preserve the retained store
+## Current native86 observation — no phone acceptance yet
 
-Original run `.work/selected-runtime-publication-native-2026-11-09` upgraded85→86
-in place, retaining account/public keys and all SIX original messages. Home/room idle,
-reentry/history end and resumed old-message observations pass. Closed diagnostics
-observe RuntimeOpening during startup while Home sync continues. The turn was
-interrupted during resumed-idle; emulator stopped, final native acceptance is absent.
-No new send occurred. Partial results, logs and interruption-audit.json are preserved.
-Do not label the interrupted run accepted or reset/reclone it from an older store.
+Original `.work/selected-runtime-publication-native-2026-11-09` upgraded85→86,
+retaining account/public keys and six originals, then its resumed phase was interrupted.
+The full follow-up `.work/selected-runtime-publication-resumed-native-2026-11-09`
+retains the same exact APK. All four120s lifecycle intervals pass:110 complete seconds
+per phase, active sync, no setup traffic, no bootstrap, no forbidden responses. All six
+old Sent messages and history exhaustion survive route/resume/cold. Three refreshes200;
+native parent22→23 renews before expiry. Closed startup diagnostics reproduce
+RuntimeOpening while published background sync continues.
 
-Current proof `.work/selected-runtime-publication-resumed-native-2026-11-09` clones
-that complete stopped86 store, including all four userdata/encryption files and full
-AVD metadata with checksums. It qualifies the already installed exact86 APK without
-another installation; original85→86 upgrade evidence is checked separately.
-Self-test preserves baseline83 and rejects all seven traffic negative controls.
+The overall gate is STILL FAILED: paired sample1 has one unclassified otherAccess
+request. The old observer retained only its count, not route/timing/status. Also, the
+new-send script still expected5 server events at its first assertion despite actual6,
+so it stopped BEFORE input/send. No Selected86 message exists and no old message was
+resent. These are separate observation/harness findings, not a claim of application
+success or a proved authentication root cause.
+[Recorded observation](measurements/collaboration-release86-retained-observation-2026-11-09.json).
 
-Active sessions: emulator92677 (PID645928, serial emulator-5562), phases47713,
-passive counter36194, paired-refresh71793. Inputs and original inspector stay frozen.
-Reap each after completion; sessions may disappear after turn interruption, so also
-inspect owner/lifetime/phases records and actual owned processes before continuing.
-The full proof covers Home, room, resumed and cold120-second idle intervals, six old
-Sent messages/history exhaustion, current credentials and one distinct Selected86
-message only at the end. Before any continuation, inspect new-send.json. Never repeat
-that send or any original. Preserve the latest store even if a gate fails.
+All jobs47713/92677/36194/71793 are reaped/stopped. Latest COMPLETE STOPPED store is
+`.work/selected-runtime-publication-resumed-native-2026-11-09/sender` at86, all four
+userdata/encryption files and full AVD. Never clone an older85/84/83 baseline.
 
-After normal completion: run accept-quietness.py, then review-traffic.py preserving
-its strict result. Only the predeclared bounded periodic-work classification is allowed;
-never excuse a startup loop or stopped sync. Run accept-release.py only after genuine
-success and stopped owned jobs. Notify, then run build86/install.py --install-only.
-No phone launch/UI. Record the exact installed digest and update this checkpoint.
+Next proof `.work/selected-runtime-auth-trace-native-2026-11-09` is PREPARED, not
+booted. Clone3488 already completed from latest86 and prepare-counter.py already ran;
+do not repeat either. Its corrected send preflight expects6. Added passive fields
+record only closed request route/method, relative timing, known-initial/previously-
+returned access classification and response status. Token hashes stay volatile.
+Existing strict credential/traffic acceptance is unchanged; seven negative controls
+still fail and baseline83 passes. No approval or product policy change is implied.
 
-Earlier native84 FAILED Home:26 metadata calls and121.661s sync gap. Diagnostic85
-observed healthy startup but did not clear84's failure. Their evidence remains valid.
-The current registry fix is deterministic; do not retroactively claim84's precise cause
-was captured. Latest new sample before86 is History84 083059, SHA256
-7edec0cc1b267193ed7d855fb01d805dcc6f6bdeeb2a23214727f3dc276979c9.
-Other originals: Control77 235408, Warm77 235728, Recovery78 005634,
-Registry82 055959, Parent83 071123. Never resend them or Draft66 092041.
-The original Bima74 store has missing AVD version metadata; preserve it without reset.
+After the local SBOM compiler is reaped, start count-http.py and paired-refresh.py as
+root, run-sender.py, then run-phases.py after owner boot. Preserve input/library freeze.
+Inspect all evidence and reaped jobs before accept-quietness.py, review-traffic.py and
+accept-release.py. Do not rerun a successful new-send.json. Only actual accepted86
+permits the notified build86/install.py --install-only phone update; phone remains83.
+
+Native84's Home failure remains preserved; diagnostic85 did not clear it. The six
+originals are Control77 235408, Warm77 235728, Recovery78 005634, Registry82 055959,
+Parent83 071123 and History84 083059. Never resend them or Draft66 092041. Preserve
+the original Bima74 store even though its AVD version metadata is incomplete.
 
 ## Published dependencies and current CI
 
@@ -124,14 +126,21 @@ Apple Matrix native binding and capture overhead remain open. a6b8236 records ev
 Mobile0c771fc5 pins that exact library in all nine consumer jobs across five workflows;
 no mirror, no persisted dependency-checkout credentials. CI/control explicitly run
 Android collaboration host tests. Existing tooling60 cases and static YAML checks pass.
-First application CI42594287486: Windows succeeds; Apple app build still running.
+First application CI42594287486: Windows and Apple succeed. Verified Apple artifact
+13664276449 contains1777 tests/195 suites, zero failures/errors/skips, plus successful
+Xcode app build. This is not native Matrix Apple binding acceptance.
 Web failed when the runner received a shutdown signal during Wasm optimization.
 The log does not establish its cause. The new web-only scope repeats no other job
 and records /usr/bin/time resource evidence without changing compilation settings.
 Verify failed before tests at SBOM resolution: Material3 1.9.0 POM checksum was missing.
 Only its official Maven Central/publisher-SHA1-verified POM hash is added in b1630963;
 [exact failure evidence](measurements/pinned-inspector-ci-material3-pom-2026-11-09.json).
-Corrected verify CI42596014241 also failed; its exact log is being inspected.
+Corrected verify CI42596014241 failed on the next missing Lifecycle POM. Complete
+local inventory66020 passed70.759s and restored metadata; all8 added artifacts were
+then verified against official bytes/publisher SHA-1. Strict63401 passes46.014s with
+unchanged metadata; the393-component BOM is same-input cache reuse, not fresh execution.
+Initial local insertion/strict failure and alias-URL404 are preserved in its measurement.
+Commit/push then dispatch verify again. Web-only CI42597096435 is still running.
 No distribution workflow was dispatched.
 Audit actual completed jobs and artifacts; do not infer success from compilation alone.
 
