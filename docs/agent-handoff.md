@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 15:32 UTC. Historical detail is retained in
+Updated 9 November 2026, 15:51 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -28,7 +28,7 @@ is required; Apple source/runtime, push and calling acceptance remain separate.
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | SDK6 distribution accepted; preserve unrelated gradlew.bat delta |
 | Starter | feat/network-inspector-20261107 /ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Platform original | feat/communications /691f3fc5 | Recovery verifier port accepted/pushed; runtime unchanged |
-| Platform group | feat/communication-space /fa90ddcc | Reconciliation accepted/pushed; direct transport full38552 running |
+| Platform group | feat/communication-space /fa90ddcc | Reconciliation accepted/pushed; direct transport targeted43271 running |
 
 Isolated directories are under `/home/fajar/hris/.worktrees/`: `communication-space`,
 `mobile-inspector-ci-2026-11-09`, `inspector-sdk6-2026-11-09` and
@@ -46,17 +46,18 @@ mapping extraction; eight transport test methods and the application DI assertio
 [Contract](collaboration-space-direct-transport.md) records current scope and limits.
 Direct ktfmt0.59 parsing/formatting passed0.954s,0.866s and0.968s after stricter
 ID/time/encoded-identity validation;256MiB heap, no Kotlin/test acceptance yet.
-`.work/space-direct-transport-2026-11-09/check.py` is prepared, NOT RUN while Group38552
+`.work/space-direct-transport-2026-11-09/check.py` is prepared, NOT RUN while Group43271
 owns the local heavy slot. Its full/browser phases must select the new eight methods
 plus the existing room transport suite; do not inherit the previous binding filters.
 
 Review corrected one draft assumption before compilation: device SPACE does not mean
 user SPACE. A new HRISG_ crypto device may retain a LEGACY selected user/original room.
 Tests include all valid combinations and reject a mismatched physical device/user.
-The backend `.work/space-direct-transport-2026-11-09/candidate` now has11 files including
+The backend `.work/space-direct-transport-2026-11-09/candidate` now has12 files including
 API, DI and tests (seven actual SQL methods, three pure policy methods, HTTP/OpenAPI).
 Formatter2.017s covers all11 files; it remains private, applied after accepted/pushed fa90ddcc and exact base/source checks.
-Full38552 now validates it with actual SQL/API and FULL worker; no acceptance yet.
+Full38552 and focused34852 retained fixture failures; targeted43271 now retries
+the nine SQL/HTTP cases after exact test corrections. No contract acceptance yet.
 
 Hosted42628449460 is complete SUCCESS on exact78076d4e. Both artifacts match GitHub
 digests and ZIP CRC. [Hosted evidence](measurements/collaboration-space-binding-hosted-2026-11-09.json)
@@ -168,18 +169,26 @@ maximum. Group keeps138; do not copy either branch's schema maximum to the other
  data762/delivery25/API180/FULL worker150 plus quality/migration/recovery pass. Exact
  archived XML and all five new regressions/both readiness contexts were audited.
 - Reconciliation fa90ddcc is committed and pushed;34015 is reaped. No live deployment.
-- Direct-transport full38552 is now the only heavy job. The eleven-file Group candidate
- was applied with exact source/base/merge checks and stays frozen during the gate.
- Actual SQL/API/OpenAPI and FULL worker tests are required before acceptance.
- Full38552 found two fixture compile errors (override parameter id; Native has no copy).
- Two private fixture-only corrections are formatted1.774s. Keep the running source
- frozen until reaped, retain first failures and execute the missing actual SQL/API cases.
- Worker runs under --continue; validate identical production inputs before retaining its proof.
+- Direct-transport full38552 is REAPED FAILED459.946s:342 fresh domain/worker cases,
+ zero test failures/errors and one existing opt-in skip. SQL/API compilation failed on
+ two fixture mistakes; production/DI and the complete150-case worker task passed.
+- Focused34852 is REAPED FAILED591.639s:302 cases/eight failures. Seven new SQL cases
+ used an active pre-V122 fixture with no provisioning head; the new HTTP fixture queried
+ room_id instead of matrix_room_id. The30 existing room cases, actual retained LEGACY
+ publication/direct transport,70 OpenAPI cases and existing group HTTP case passed.
+- Test-only corrections now create valid provisioning history through actual enqueue/
+ worker claim/finish and retain explicit missing-head rejection. The HTTP query uses
+ the actual schema column. Formatter1.467s; production/schema/DI are unchanged.
+- Targeted43271 (`targeted-3`) is RUNNING for those nine SQL/HTTP cases plus quality.
+ It is the only heavy local job and owns frozen Group source. The strict evidence
+ publisher must verify exact source/report hashes before retaining unchanged broad
+ domain/room/LEGACY/OpenAPI and full-worker proof. No cached/failed case counts as new
+ success. Reconciliation33511/fa90ddcc and hosted42628449460 must not be rerun.
 
-The eleven Group direct-transport files are now applied and under test38552; their
-private preparation history remains under `.work/space-direct-transport-2026-11-09`.
-Do not reapply the guarded script or claim acceptance while this gate is running. Original message.get already returns archived immutable commands, verified
-by its actual encrypted storage contract; do not add an unnecessary archive fallback.
+The Group increment now contains twelve Kotlin files, including the actual LEGACY
+publication regression. Its guarded initial apply must not be repeated. All private
+attempts/corrections remain under `.work/space-direct-transport-2026-11-09`. Original
+message.get already returns archived immutable commands; no archive fallback is needed.
 
 ## Accepted phone and native proof
 
