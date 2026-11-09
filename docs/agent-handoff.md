@@ -1,37 +1,41 @@
 # Agent continuation — HRIS Mobile
 
-## Crashlytics root recovered; real repository cancellation regressions running — 9 November 2026, 02:06 UTC
+## Retired acquisition and joined recovery pass605 focused cases — 9 November 2026, 02:18 UTC
 
-User granted Viewer. topIssues and events:batchGet return200; exact71 Storage event
-14:38:29 points to acquire:957 in source ff495af3: registry.attach returned false after
-ownership retirement. [Sanitized evidence](measurements/collaboration-storage71-crashlytics-2026-11-09.json).
-The concurrent retirement trigger is unknown; expected obsolete acquisition is wrongly
-mapped to Storage. Native private keys are not implicated by this trace. Private scoped
-API scripts/responses are in /home/fajar/hris/.work/crashlytics-storage-2026-11-08.
+Focused80286 REAPED PASS110.419s:605 fresh cases,0 failures/errors/skips; format,
+architecture and detekt pass,4,526 source/82 inspector inputs stable.
+[Exact evidence](measurements/collaboration-acquisition-cancellation-2026-11-09.json).
+The real repository now cancels explicit owner retirement, drains the original native/
+credential/directory owners and preserves records. Android raw SDK operations have a
+contract; authentication registration owns its attachment/failure cleanup. Cold/live
+credential publication shares the same reservation fence. No new key, timer or message.
 
-Full84732 REAPED after intentional SIGTERM to its owned compiler group:1295.122s,
-6,015 fresh tests/0 failures/errors/skips,121 actual browser tests,4,524/82 inputs stable.
-Overall gate FAILED detekt LongMethod acquire114>100; remaining broad compilation was
-stopped to apply root regression and rerun the final gate. Do not count this as full
-acceptance. [Evidence](measurements/collaboration-credential-reactivation-2026-11-09.json).
+Application recovery now joins old activation before replacement. Fresh admitted
+publication can resume an already cancelled activation without recreating its credential
+observer/rejection guard; completed activation/renewal does not create new delivery work.
+Two native regressions RED9393 (2 actual failures) and two app regressions RED36459
+(2 actual failures) prove the previous Storage misclassification, overlapping replacement
+and missed readmission. Both reaped. Focus38963 (586 tests/2 failures) was superseded:
+new tests now use the real dispatcher for native close deadlines; adopted-store ownership
+loss correctly asserts cancellation. No production timeout was relaxed. Format5655,
+4099 and92225 are reaped. No current compiler or emulator.
 
-UNCOMMITTED raw AndroidCollaborationClientSource contract and two real repository tests
-are now under RED validation: sole compiler9393 runs retired-acquisition-2026-11-09/check.py
-red-1. No cancellation behavior changed yet. Tests delay native construction or restore,
-retire its owner, then require cancellation/full drain/original credential preservation.
-Current check should instead return Storage. Do not edit source until9393 is reaped.
-Prepared apply-fix.py changes only explicit retirement to cancellation and deduplicates
-reservation-fenced credential publication. Then format/focus, commit/push and combined
-full via retired-acquisition/check-full.py. Inspect tests rather than assuming RED.
+User's Crashlytics grant is verified200; exact71 event at14:38:29 points to ff495af3
+acquire:957 registry.attach after retirement. Concurrent historical retirement trigger
+remains unknown. Full84732 was stopped/reaped after its known LongMethod failure:
+6,015 tests/121 browser tests passed, but it is NOT a full accepted gate. Those results
+and the failed gate are retained. New candidate fixes that quality failure.
 
-Package79 and ten native scripts are prepared, none executed. Their gates now require
-retired-acquisition/full-1. Preserve stopped78 keys and ORIGINAL Recovery78 005634; no
-resend, no new sender. Native recovery must prove one encrypted event and quiet traffic.
-Phone is freshly reset/authorized; prepared79 installer supports fresh install and
-install-only, requires accepted exact APK. Announce before installation; no phone UI.
-No emulator. Platform9551cbbb/runtime e558a686/schema116.4/controlON unchanged. Starter
-SyncTrigger port and all54 PRD groups remain. Continue source fix, native proof/install,
-Starter and the communications work; do not mark the full project complete.
+NEXT commit/push this combined snapshot, then run retired-acquisition-2026-11-09/check-full.py
+full-1. Source must stay frozen until reaped. Browser tasks explicitly rerun against the
+final source without forcing all dependencies. Package79 and ten native scripts require
+this combined full gate; neither package79 nor native clone/boot has run. Recover ORIGINAL
+Recovery78 005634 from complete stopped78 metadata, no resend/new sender/key reset, and
+prove one encrypted event plus quiet Home/room/resume/cold traffic. Verify exact APK.
+Phone was reset to stock ROM and authorized; prepared79 installer supports fresh install,
+requires accepted exact APK and --install-only. Announce first, never drive phone UI.
+Platform9551cbbb/runtime e558a686/schema116.4/controlON unchanged. Starter SyncTrigger
+port and all54 PRD groups remain; continue implementation after source/native/install.
 
 ## Automatic recovery focused gates pass; full79 next — 9 November 2026, 01:43 UTC
 

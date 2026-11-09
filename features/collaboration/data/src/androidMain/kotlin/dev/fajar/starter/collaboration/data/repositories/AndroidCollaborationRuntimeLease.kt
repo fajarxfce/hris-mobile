@@ -2,8 +2,8 @@ package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.api.CollaborationPusherApi
+import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationClientSource
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationHttpObservation
-import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationSdkClientSource
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationTimelineSource
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLease
 import dev.fajar.starter.collaboration.data.datasources.createAndroidCollaborationSync
@@ -143,7 +143,7 @@ internal constructor(
 
     /** Acquisition owns registration before restore/sync; shutdown joins acquisition first. */
     internal fun startReadinessObservation(
-        source: AndroidCollaborationSdkClientSource,
+        source: AndroidCollaborationClientSource,
         offer: (CollaborationReadinessSignal) -> Unit,
     ) {
         if (closingRequested || !readinessStarted.compareAndSet(false, true)) return
@@ -246,7 +246,7 @@ internal constructor(
 
     /** Native readiness precedes the owning use case's separate admission/publication step. */
     internal fun completeAcquisition() {
-        check(!stopRequested.get())
+        if (stopRequested.get()) throw CancellationException("SDK acquisition was retired.")
         check(acquisitionComplete.compareAndSet(false, true))
         finishAcquisition()
     }
@@ -461,7 +461,7 @@ internal constructor(
 
     /** The child owner prevents client destruction while the local FFI observation is pending. */
     internal suspend fun localDeviceIdentity(
-        source: AndroidCollaborationSdkClientSource
+        source: AndroidCollaborationClientSource
     ): AppResult<CollaborationLocalDeviceIdentity> {
         if (!availableForEntry) return syncStopped()
         credentialFailures.value?.let {

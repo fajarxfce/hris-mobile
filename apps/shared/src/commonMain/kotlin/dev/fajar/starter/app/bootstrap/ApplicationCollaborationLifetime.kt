@@ -147,9 +147,17 @@ class ApplicationCollaborationLifetime(
     /** Ownership and admitted recovery are serialized; token age creates neither. */
     private suspend fun retainActivation(owner: CollaborationOwner?) =
         activationChanges.withLock {
-            if (owner == activatedOwner) return@withLock
-            activation?.cancel()
-            credentialRecovery?.cancel()
+            if (owner == activatedOwner) {
+                // A new admitted publication can resume a retired acquisition. Keep its
+                // credential observer so an unvalidated replacement cannot reset retry policy.
+                if (owner != null && activation?.isCancelled == true) {
+                    activation?.join()
+                    activation = startActivation(owner)
+                }
+                return@withLock
+            }
+            activation?.cancelAndJoin()
+            credentialRecovery?.cancelAndJoin()
             activatedOwner = owner
             credentialRecovery =
                 owner?.let { retained ->
@@ -158,7 +166,7 @@ class ApplicationCollaborationLifetime(
                             observeCredentialRecovery(retained).collect {
                                 activationChanges.withLock {
                                     if (activatedOwner == retained) {
-                                        activation?.cancel()
+                                        activation?.cancelAndJoin()
                                         activation = startActivation(retained)
                                     }
                                 }

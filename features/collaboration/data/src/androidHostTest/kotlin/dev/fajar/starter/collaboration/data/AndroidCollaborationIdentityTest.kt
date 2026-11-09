@@ -21,6 +21,103 @@ import kotlinx.serialization.json.Json
 
 class AndroidCollaborationIdentityTest {
     @Test
+    fun lateNativeConstructionAfterOwnerRetirementCancelsAndDrainsItsOriginalStore() = runTest {
+        withContext(Dispatchers.Default) {
+            val native = PendingRuntimeClientSource()
+            val entered = CompletableDeferred<Unit>()
+            val release = CompletableDeferred<Unit>()
+            native.beforeCreate = {
+                entered.complete(Unit)
+                release.await()
+            }
+            val f = Fixture(native)
+            try {
+                val original = f.store()
+                f.allowDirectory = true
+                f.privateIdentityRead = {
+                    CollaborationSdkIdentityData(
+                        original.matrixUserId,
+                        original.matrixDeviceId,
+                        Base64.encode(ByteArray(32) { 1 }).trimEnd('='),
+                        Base64.encode(ByteArray(32) { 2 }).trimEnd('='),
+                    )
+                }
+                val values = f.values.toMap()
+                val opening = async { f.runtime.restore(setupOwner, SETUP_DEVICE) }
+                entered.await()
+                assertEquals(AppResult.Success(Unit), f.runtime.closeOtherOwners(null))
+                assertEquals(0, f.directoryCloses)
+                release.complete(Unit)
+                assertFailsWith<CancellationException> { opening.await() }
+                assertEquals(values, f.values)
+                assertEquals(0, f.writes)
+                assertEquals(1, f.directoryCloses)
+                assertEquals(1, f.closes)
+                assertEquals(1, native.calls.count { it == "native.close" })
+                assertFalse("native.restore" in native.calls)
+                val inspection =
+                    assertIs<CollaborationRuntimeInspection.Reserved>(
+                        assertIs<AppResult.Success<CollaborationRuntimeInspection>>(
+                                f.runtime.reserveInspection(setupOwner, SETUP_DEVICE)
+                            )
+                            .value
+                    )
+                inspection.close()
+            } finally {
+                release.complete(Unit)
+                f.close()
+            }
+        }
+    }
+
+    @Test
+    fun retiredOwnerDuringRestoreCancelsBeforePublishingOrWritingReadiness() = runTest {
+        withContext(Dispatchers.Default) {
+            val native = PendingRuntimeClientSource()
+            val entered = CompletableDeferred<Unit>()
+            val release = CompletableDeferred<Unit>()
+            native.beforeRestore = {
+                entered.complete(Unit)
+                release.await()
+            }
+            val f = Fixture(native)
+            try {
+                val original = f.store()
+                f.allowDirectory = true
+                f.privateIdentityRead = {
+                    CollaborationSdkIdentityData(
+                        original.matrixUserId,
+                        original.matrixDeviceId,
+                        Base64.encode(ByteArray(32) { 1 }).trimEnd('='),
+                        Base64.encode(ByteArray(32) { 2 }).trimEnd('='),
+                    )
+                }
+                val values = f.values.toMap()
+                val opening = async { f.runtime.restore(setupOwner, SETUP_DEVICE) }
+                entered.await()
+                val retirement =
+                    async(start = CoroutineStart.UNDISPATCHED) { f.runtime.closeOtherOwners(null) }
+                assertFalse(retirement.isCompleted)
+                assertEquals(0, f.directoryCloses)
+                release.complete(Unit)
+                assertFailsWith<CancellationException> { opening.await() }
+                assertEquals(AppResult.Success(Unit), retirement.await())
+                assertEquals(values, f.values)
+                assertEquals(0, f.writes)
+                assertEquals(1, f.directoryCloses)
+                assertEquals(1, f.closes)
+                assertEquals(1, native.calls.count { it == "native.close" })
+                assertEquals(1, native.calls.count { it == "authentication.close" })
+                assertEquals(1, native.calls.count { it == "readiness.close" })
+                assertEquals(AppResult.Success(false), f.runtime.isOpen(setupOwner, SETUP_DEVICE))
+            } finally {
+                release.complete(Unit)
+                f.close()
+            }
+        }
+    }
+
+    @Test
     fun retainedRejectionStopsBothColdEntryPathsBeforeNativeClientConstruction() = runTest {
         val f = Fixture()
         try {
@@ -561,7 +658,9 @@ class AndroidCollaborationIdentityTest {
             }
         }
 
-    private class Fixture {
+    private class Fixture(
+        clients: AndroidCollaborationClientSource = AndroidCollaborationSdkClientSource()
+    ) {
         val server = IdentityServer(SETUP_BASE, "Fictional phone")
         val endpoint = CollaborationSdkEndpoint("https://hris.example.test/")
         val command =
@@ -670,7 +769,7 @@ class AndroidCollaborationIdentityTest {
                         }
                     }
                 },
-                AndroidCollaborationSdkClientSource(),
+                clients,
                 AesGcmContentCipher(),
                 server,
                 endpoint,

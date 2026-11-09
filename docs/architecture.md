@@ -1,5 +1,8 @@
 # Architecture
 
+[Obsolete native acquisition](collaboration-acquisition-cancellation.md) cancels retired
+SDK owners, joins activation replacement and preserves credential-recovery observation.
+
 [Recovery scheduling](collaboration-recovery-scheduling.md) keeps scheduled discovery
 separate from duplicate delivery of durable requests; feature policy owns wake creation.
 

@@ -27,6 +27,101 @@ import kotlinx.coroutines.test.*
 
 class ApplicationCollaborationLifetimeTest {
     @Test
+    fun credentialRecoveryJoinsTheOldActivationBeforeStartingItsReplacement() = runBlocking {
+        withFixture { f ->
+            val recovery = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+            val enteredDrain = CompletableDeferred<Unit>()
+            val releaseDrain = f.gate()
+            var drained = false
+            var replacementBeforeDrain = false
+            f.credentialRecovery = { recovery }
+            f.activate = { owner ->
+                flow {
+                    f.activated += owner
+                    if (f.activated.size == 1) {
+                        try {
+                            awaitCancellation()
+                        } finally {
+                            withContext(NonCancellable) {
+                                enteredDrain.complete(Unit)
+                                releaseDrain.await()
+                                drained = true
+                            }
+                        }
+                    } else {
+                        replacementBeforeDrain = !drained
+                    }
+                }
+            }
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            recovery.emit(Unit)
+            f.scheduler.runCurrent()
+            assertTrue(enteredDrain.isCompleted)
+            assertEquals(1, f.activated.size)
+            releaseDrain.complete(Unit)
+            f.scheduler.runCurrent()
+            assertTrue(drained)
+            assertFalse(replacementBeforeDrain)
+            assertEquals(2, f.activated.size)
+        }
+    }
+
+    @Test
+    fun readmissionResumesCancelledActivationWithoutReplacingItsCredentialObserver() = runBlocking {
+        withFixture { f ->
+            val retired = f.gate()
+            var observers = 0
+            var observerStarts = 0
+            f.credentialRecovery = {
+                flow {
+                    observers++
+                    observerStarts++
+                    try {
+                        awaitCancellation()
+                    } finally {
+                        observers--
+                    }
+                }
+            }
+            f.activate = { owner ->
+                flow {
+                    f.activated += owner
+                    if (f.activated.size == 1) {
+                        retired.await()
+                        throw CancellationException("Original acquisition retired")
+                    }
+                }
+            }
+            f.onRetention = { retention ->
+                if (retention.foreground == null && f.activated.isNotEmpty()) retired.complete(Unit)
+                AppResult.Success(Unit)
+            }
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            val initialSchedules = f.scheduled.toList()
+            f.workspace.value =
+                AppResult.Success(
+                    f.selected.copy(
+                        admission = f.selected.admission.copy(expiresAt = f.clock.now() + 1.seconds)
+                    )
+                )
+            f.scheduler.runCurrent()
+            f.scheduler.advanceTimeBy(1_000)
+            f.scheduler.runCurrent()
+            assertNull(f.published().retention.foreground)
+            assertEquals(1, f.activated.size)
+            f.workspace.value = AppResult.Success(f.selected)
+            f.scheduler.runCurrent()
+            assertEquals(2, f.activated.size)
+            assertEquals(f.activated.first(), f.activated.last())
+            assertEquals(1, observers)
+            assertEquals(1, observerStarts)
+            assertEquals(initialSchedules, f.scheduled)
+        }
+    }
+
+    @Test
     fun domainRecoveryReplacesOnlyTheSelectedOwnersActivationAndClosesItsObserver() = runBlocking {
         withFixture { f ->
             val recovery = MutableSharedFlow<Unit>(extraBufferCapacity = 1)

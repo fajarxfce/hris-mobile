@@ -74,3 +74,13 @@ present the entire feature as complete.
 The17:15 UTC phone preflight timed out at the authorized WireGuard ADB address. No
 installation occurred and phone70 is unchanged. Once available, use the exact73
 progress installer with `--install-only`, notify first, and never drive the phone UI.
+
+## Recovered historical71 failure
+
+Crashlytics Viewer access now recovers the exact14:38:29 build71 event. Its source
+line rejects native attachment after reservation retirement. The specific concurrent
+retirement trigger remains unknown. [Obsolete acquisition handling](collaboration-acquisition-cancellation.md)
+now preserves cancellation through the repository and drains the original resources;
+application replacement joins the old activation and can resume a cancelled acquisition
+on a fresh admission without restarting its credential-recovery observer. Focused
+regressions pass; combined full and native79 acceptance remain pending.

@@ -1,0 +1,86 @@
+{
+  "status": "focused-pass-full-native-pending",
+  "historicalFailure": "collaboration-storage71-crashlytics-2026-11-09.json",
+  "checks": {
+    "red-1": {
+      "startedAt": "2026-11-09T02:05:28.367535+00:00",
+      "elapsedSeconds": 53.886,
+      "exitCode": 1,
+      "sourceFiles": 4526,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "meaning": "Both late native creation and late restoration return Storage instead of cancellation under unchanged retirement handling."
+    },
+    "focused-1": {
+      "startedAt": "2026-11-09T02:09:43.884919+00:00",
+      "elapsedSeconds": 85.913,
+      "exitCode": 1,
+      "sourceFiles": 4526,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 586,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "meaning": "Quality passes; 586 host tests include two failures: a virtual-clock/real-dispatcher close race in the new fixture, and the old adopted-store expectation of AppResult rather than cancellation. Both expectations/dispatchers were corrected; no production timeout changed."
+    },
+    "red-app-1": {
+      "startedAt": "2026-11-09T02:12:22.831893+00:00",
+      "elapsedSeconds": 54.372,
+      "exitCode": 1,
+      "sourceFiles": 4526,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "meaning": "Application starts a replacement before prior cancellation cleanup joins, and does not resume a cancelled activation after fresh admission."
+    },
+    "focused-2": {
+      "startedAt": "2026-11-09T02:15:24.846191+00:00",
+      "elapsedSeconds": 110.419,
+      "exitCode": 0,
+      "sourceFiles": 4526,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 605,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "quality": [
+        "formatCheck",
+        "architectureCheck",
+        "detekt"
+      ]
+    }
+  },
+  "nativeAccepted": false,
+  "phoneInstalled": false,
+  "originalCredentialIdentityPreservedInRegressions": true,
+  "changedSourceHashes": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/bootstrap/ApplicationCollaborationLifetime.kt": "326b5a8aeeb4d1cae48618fdc801befb97bc156a25d839478509fbe35d18f1d3",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/ApplicationCollaborationLifetimeTest.kt": "c69ecc281a6e1474f98abb3cb6405447f679d4ac86d1d97299db466fe41831ea",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationIdentityTest.kt": "dde5056e3f696c0d39aa667e452a3cb40420d0b0fd5185728c48d978ee02672d",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidSdkAuthDelegateTest.kt": "205541744a4e6d5d86c068f14d15c5fcc52c76c5ae55ff9c9764be240bd83cf4",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidSpaceRuntimeAdoptionTest.kt": "b866da1d7c6c2ce4ac603460fda184442689b17036ca59e1defce955cc7aadae",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationSdkClientSource.kt": "54c41e4e02151a897cafff93f196ea22a02dbe2f61b5ecec9e38893eef4af1b0",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeLease.kt": "8cbf36dda6226760f7be9b1537f3f4ac321210b886320431c40e74c70ea0978f",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "aab368ddf093f30adda293cbee216bececc4401e308b80796d1b1c0e8a793c5f",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidSdkAuthRegistration.kt": "9629ee5fcf23b98701e23485661ef075a5b407dd61e2d0a7d785d026eb72ddf5",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/PendingRuntimeClientSource.kt": "882d6cd9ab2ae61e6f62e82af5cd48933f24ed05ed8cc6e5eb23a7eb5c2cc8d4",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationClientSource.kt": "b42cd3905d3cf7d188533a3b3a08dcae5ab50091810e3332882c8a40a46c9fe4"
+  }
+}

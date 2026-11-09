@@ -32,7 +32,7 @@ import org.matrix.rustcomponents.sdk.Client
 class AndroidCollaborationRuntimeRepository(
     private val stores: CollaborationSdkStoreSource,
     private val credentialFactory: (String) -> AtomicCredentialStore,
-    private val clients: AndroidCollaborationSdkClientSource,
+    private val clients: AndroidCollaborationClientSource,
     private val cipher: ContentCipher,
     private val server: IdentityServer,
     private val endpoint: CollaborationSdkEndpoint,
@@ -979,6 +979,25 @@ class AndroidCollaborationRuntimeRepository(
         }
     }
 
+    /** Cold and live credential reports share one original-owner publication fence. */
+    private fun publishCredentialState(
+        reservation: SdkRuntimeReservation<AndroidCollaborationRuntimeLease>,
+        record: CollaborationSdkRecord,
+        state: CollaborationCredentialState,
+    ) {
+        if (reservation.space != null) return
+        registry.publishSignal(reservation) {
+            credentialStates.tryEmit(
+                CollaborationCredentialSignal(
+                    reservation.owner,
+                    reservation.deviceId,
+                    record.bootstrapOperationId,
+                    state,
+                )
+            )
+        }
+    }
+
     private suspend fun acquire(
         reservation: SdkRuntimeReservation<AndroidCollaborationRuntimeLease>,
         scope: CollaborationSdkScope,
@@ -991,12 +1010,12 @@ class AndroidCollaborationRuntimeRepository(
         var credentials: AtomicCredentialStore? = null
         var client: Client? = null
         var persistence: SdkSessionPersistence? = null
-        var authenticationDelegate: AndroidSdkAuthDelegate? = null
         var authentication: AndroidSdkAuthRegistration? = null
         var handedOver = false
         var primary: Throwable? = null
         try {
-            check(registry.accepts(reservation)) { "SDK acquisition is no longer retained." }
+            if (!registry.accepts(reservation))
+                throw CancellationException("SDK acquisition was retired.")
             check((reservation.space == null) == (spaceInstallation == null))
             directory =
                 if (spaceInstallation == null) stores.acquire(scope.storeId)
@@ -1017,6 +1036,8 @@ class AndroidCollaborationRuntimeRepository(
                     failed,
                 ) ?: return null
             persistence = prepared.persistence
+            if (!registry.accepts(reservation))
+                throw CancellationException("SDK acquisition was retired.")
             client =
                 clients.create(
                     directory,
@@ -1024,14 +1045,7 @@ class AndroidCollaborationRuntimeRepository(
                     prepared.session,
                     AndroidSdkSessionDelegate(persistence),
                 )
-            authenticationDelegate = AndroidSdkAuthDelegate(persistence)
-            authentication =
-                AndroidSdkAuthRegistration(
-                    authenticationDelegate,
-                    checkNotNull(clients.observeAuthentication(client, authenticationDelegate)) {
-                        "SDK authentication observer is already installed."
-                    },
-                )
+            authentication = AndroidSdkAuthRegistration.attach(clients, client, persistence)
             lease =
                 AndroidCollaborationRuntimeLease(
                     reservation.owner,
@@ -1041,24 +1055,13 @@ class AndroidCollaborationRuntimeRepository(
                     prepared.record,
                     CollaborationHistoryApi(http, endpoint),
                     CollaborationPusherApi(http, endpoint),
-                    credentialState = { state ->
-                        if (reservation.space == null)
-                            registry.publishSignal(reservation) {
-                                credentialStates.tryEmit(
-                                    CollaborationCredentialSignal(
-                                        reservation.owner,
-                                        reservation.deviceId,
-                                        prepared.record.bootstrapOperationId,
-                                        state,
-                                    )
-                                )
-                            }
-                    },
+                    credentialState = { publishCredentialState(reservation, prepared.record, it) },
                     authentication = authentication,
                 ) {
                     registry.released(reservation)
                 }
-            check(registry.attach(reservation, lease)) { "SDK acquisition is no longer retained." }
+            if (!registry.attach(reservation, lease))
+                throw CancellationException("SDK acquisition was retired.")
             initializeRuntime(
                 lease,
                 client,
@@ -1079,13 +1082,7 @@ class AndroidCollaborationRuntimeRepository(
                     if (lease != null) lease.close()
                     else {
                         try {
-                            closeUnattached(
-                                authenticationDelegate,
-                                authentication,
-                                client,
-                                credentials,
-                                directory,
-                            )
+                            closeUnattached(authentication, client, credentials, directory)
                         } finally {
                             registry.released(reservation)
                         }
@@ -1111,9 +1108,12 @@ class AndroidCollaborationRuntimeRepository(
         lease.startHttpObservation(httpObservation)
         lease.startReadinessObservation(clients) { readiness.tryEmit(it) }
         clients.restorePaused(client, prepared.session)
+        if (!registry.accepts(reservation))
+            throw CancellationException("SDK acquisition was retired.")
         if (expectedIdentity != null) {
             require(clients.identity(client).toLocalDeviceIdentity() == expectedIdentity)
-            check(registry.accepts(reservation)) { "SDK acquisition is no longer retained." }
+            if (!registry.accepts(reservation))
+                throw CancellationException("SDK acquisition was retired.")
         }
         lease.startMonitoring()
         when (prepared.persistence.markInitialized()) {
@@ -1125,13 +1125,11 @@ class AndroidCollaborationRuntimeRepository(
     }
 
     private suspend fun closeUnattached(
-        authenticationDelegate: AndroidSdkAuthDelegate?,
         authentication: AndroidSdkAuthRegistration?,
         client: Client?,
         credentials: AtomicCredentialStore?,
         directory: CollaborationSdkStoreLease?,
     ) {
-        authenticationDelegate?.close()
         try {
             try {
                 try {
@@ -1173,16 +1171,11 @@ class AndroidCollaborationRuntimeRepository(
                         namespace == SdkCredentialNamespace.Original &&
                             selected.failure.code == "client.collaboration_sdk_unauthorized"
                     )
-                        registry.publishSignal(reservation) {
-                            credentialStates.tryEmit(
-                                CollaborationCredentialSignal(
-                                    reservation.owner,
-                                    reservation.deviceId,
-                                    record.bootstrapOperationId,
-                                    CollaborationCredentialState.Rejected,
-                                )
-                            )
-                        }
+                        publishCredentialState(
+                            reservation,
+                            record,
+                            CollaborationCredentialState.Rejected,
+                        )
                     error("SDK credentials are unavailable.")
                 }
                 is AppResult.Success -> selected.value.toNativeSession()
@@ -1219,10 +1212,12 @@ class AndroidCollaborationRuntimeRepository(
             )
                 codec.stageAdoption(stored, installation.command, installation.gateway)
             else codec.replaceAdoptedCredentials(stored, installation.command, installation.gateway)
-        check(registry.accepts(reservation)) { "SDK acquisition is no longer retained." }
+        if (!registry.accepts(reservation))
+            throw CancellationException("SDK acquisition was retired.")
         if (selected != stored) credentials.write(codec.encode(selected))
         currentCoroutineContext().ensureActive()
-        check(registry.accepts(reservation)) { "SDK acquisition is no longer retained." }
+        if (!registry.accepts(reservation))
+            throw CancellationException("SDK acquisition was retired.")
         return selected
     }
 

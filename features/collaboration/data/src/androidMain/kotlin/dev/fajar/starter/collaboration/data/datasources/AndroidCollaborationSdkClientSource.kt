@@ -17,19 +17,19 @@ import org.matrix.rustcomponents.sdk.ToDeviceMessageListener
 /**
  * Raw SDK construction. Its caller owns admission, protected credentials and the directory lease.
  */
-class AndroidCollaborationSdkClientSource {
+class AndroidCollaborationSdkClientSource : AndroidCollaborationClientSource {
     /** The exact client owner retains and releases this native registration. */
-    fun observeCustomToDevice(
+    override fun observeCustomToDevice(
         client: Client,
         eventType: String,
         listener: ToDeviceMessageListener,
     ): TaskHandle = client.subscribeToCustomToDeviceMessages(listOf(eventType), listener)
 
     /** Install once, before restoring a session. The caller owns and cancels the handle. */
-    fun observeAuthentication(client: Client, delegate: ClientDelegate): TaskHandle? =
+    override fun observeAuthentication(client: Client, delegate: ClientDelegate): TaskHandle? =
         client.setDelegate(delegate)
 
-    suspend fun create(
+    override suspend fun create(
         directory: CollaborationSdkStoreLease,
         passphrase: String,
         initialSession: Session,
@@ -41,7 +41,7 @@ class AndroidCollaborationSdkClientSource {
         return build(directory, passphrase, initialSession.homeserverUrl, delegate)
     }
 
-    suspend fun restorePaused(client: Client, initialSession: Session) {
+    override suspend fun restorePaused(client: Client, initialSession: Session) {
         require(initialSession.slidingSyncVersion == SlidingSyncVersion.NONE)
         require(initialSession.oauthData == null)
         // The repository already owns this client before any restore/cancellation can occur.
@@ -51,7 +51,7 @@ class AndroidCollaborationSdkClientSource {
     }
 
     /** The caller owns this opened client and must keep its directory lease until it closes. */
-    suspend fun identity(client: Client): CollaborationSdkIdentityData {
+    override suspend fun identity(client: Client): CollaborationSdkIdentityData {
         currentCoroutineContext().ensureActive()
         val value =
             client.encryption().use { encryption ->

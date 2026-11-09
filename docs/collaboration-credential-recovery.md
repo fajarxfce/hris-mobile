@@ -57,7 +57,10 @@ live Matrix sync. Duplicate rejection, a response from the rejected generation a
 unvalidated rejected replacement cannot manufacture another bootstrap. Retired or
 replaced runtime reservations cannot publish a late signal. Observation opens no SDK.
 
-Application composition serializes selected-owner activation and recovery signals.
+Application composition serializes selected-owner activation and recovery signals,
+and joins the old activation before starting its replacement. A fresh admitted
+publication can resume a cancelled acquisition without recreating its credential
+observer or resetting the domain rejection guard.
 Owner changes cancel old activation and its observer. A rejected live lease gets an
 explicit exclusive drain/inspection before original private identity checks; ordinary
 healthy inspection remains read-only. Other denials and inspection-only activation do

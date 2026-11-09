@@ -103,7 +103,7 @@ class AndroidSpaceRuntimeAdoptionTest {
             entered.await()
             f.repo.updateRetention(CollaborationRuntimeRetention(null, null))
             resume.complete(Unit)
-            assertIs<AppResult.Failed>(pending.await())
+            assertFailsWith<CancellationException> { pending.await() }
             assertEquals(0, f.writes)
             assertEquals(retained, f.saved)
             assertFalse(f.leased)

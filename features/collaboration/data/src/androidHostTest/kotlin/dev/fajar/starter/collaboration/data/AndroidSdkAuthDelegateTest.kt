@@ -1,5 +1,6 @@
 package dev.fajar.starter.collaboration.data
 
+import dev.fajar.starter.collaboration.data.datasources.*
 import dev.fajar.starter.collaboration.data.repositories.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.observability.*
@@ -7,11 +8,42 @@ import kotlin.test.*
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.TaskHandle
 import uniffi.matrix_sdk_common.BackgroundTaskFailureReason
 
 class AndroidSdkAuthDelegateTest {
+    @Test
+    fun failedAttachmentDeactivatesTheUnregisteredDelegate() = runTest {
+        for (throws in listOf(false, true)) {
+            val f = runtimeLeaseFixture(StandardTestDispatcher(testScheduler))
+            f.lease.finishAcquisition()
+            var observed: ClientDelegate? = null
+            val source =
+                object : AndroidCollaborationClientSource by AndroidCollaborationSdkClientSource() {
+                    override fun observeAuthentication(
+                        client: Client,
+                        delegate: ClientDelegate,
+                    ): TaskHandle? {
+                        observed = delegate
+                        if (throws) error("Fixture registration failure")
+                        return null
+                    }
+                }
+            try {
+                assertFailsWith<IllegalStateException> {
+                    AndroidSdkAuthRegistration.attach(source, f.lease.nativeClient, f.persistence)
+                }
+                assertNotNull(observed).didReceiveAuthError(false)
+                assertNull(f.persistence.failures.value)
+            } finally {
+                f.close()
+            }
+        }
+    }
+
     @Test
     fun authSignalIsTypedAndReportsOnlyOneClosedCategory() = runTest {
         val f = runtimeLeaseFixture(StandardTestDispatcher(testScheduler))
