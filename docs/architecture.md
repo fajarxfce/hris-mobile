@@ -1,5 +1,9 @@
 # Architecture
 
+[Local organization room inventory](collaboration-space-room-inventory.md) reads bounded
+authenticated binding pages with stable revision cursors and explicit exhaustion;
+worker progress and live delivery admission remain separate owning responsibilities.
+
 [Organization recovery wakes](collaboration-space-readiness-wake.md) retain independent
 work generations and hand off encrypted readiness revisions through current local
 parent/runtime guards; actual worker completion remains a separate responsibility.

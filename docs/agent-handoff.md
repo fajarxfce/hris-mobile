@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 21:56 UTC. Historical contracts, failed experiments and
+Updated 9 November 2026, 22:00 UTC. Historical contracts, failed experiments and
 accepted evidence are retained in
 [a877c088](https://github.com/fajarxfce/hris-mobile/blob/a877c088/docs/agent-handoff.md).
 This file owns current work. Do not restart jobs from historical notes.
@@ -41,7 +41,7 @@ organization recovery worker is bound. Collector activation alone is incomplete.
   No SDK, APK, emulator, phone or live change. Commit and push before editing
   successor Kotlin inputs.
 
-## Active successor: bounded local room inventory — unaccepted
+## Current successor: bounded local room inventory accepted locally
 
 Private `.work/space-room-binding-inventory-2026-11-09` pins accepted 01544c26.
 Five Kotlin inputs add a separate paged-read contract implemented by the existing
@@ -51,9 +51,12 @@ No original ciphertext, schema, network, key creation, worker or app activation 
 
 Pinned formatting has completed. focused-1 /51195 is REAPED PASS208.1s:25 cases,
 23 storage +2 graph,zero failures/errors/skips,4,595 stable inputs and strict current
-source/library/XML audit. full-1 /11069 RUNNING owns the only heavy compiler;
-expected4,328 fresh cases under required root/platform/forced browser/quality checks.
-Keep five Kotlin source inputs frozen until reaped. No emulator or phone change. The reader
+source/library/XML audit. full-1 /11069 is REAPED PASS575.815s:4,328 fresh cases,
+3,679 desktop+626 Android host+23 browser,zero failures/errors/skips. Required root,
+Android release/lint,shared Wasm/iOS source and quality checks pass. Focused/full
+manifests match;strict current source/library/XML audit passes. No local compiler,
+emulator or phone change. [Contract](collaboration-space-room-inventory.md) and
+[measurement](measurements/collaboration-space-room-inventory-2026-11-09.json). The reader
 returns explicit continuation even for room-index-only empty projections, authenticates
 both immutable indexes, and reports concurrent appends for a later fresh sweep.
 Its local inventory is not content permission or completed recovery.
@@ -87,15 +90,14 @@ inventory successors or native Apple Matrix/APNs/calling behavior.
 
 ## Next implementation
 
-1. Wake01544c26 is committed/pushed;18367 reaped. Protocol CI42697887863 is accepted;
-   both audits are reaped. Finish inventory full11069 and its exact acceptance audit.
-2. Add bounded local enumeration of encrypted room bindings. There are two immutable
-   HMAC indexes per conversation; authenticate both and emit one binding. Advance
-   past room-index-only pages without mistaking an empty projection for exhaustion.
-   Bind the cursor to owned namespace generation and an explicit revision boundary;
-   concurrent append can sort behind a cursor. Account changes and corrupt pairs
-   must not become successful progress. Raw pages already exist; no schema is needed
-   merely to enumerate. Private `inventory-next.md` is design, not accepted source.
+1. Wake01544c26 and protocolevidence dd15a4fd are committed/pushed;all pushes and
+   audits are reaped. Inventory focused/full and exact audits now pass;commit/push it.
+2. Dispatch one fresh collaboration-control CI on the accepted inventory commit to
+   cover cumulative native source,wake and inventory changes. Private inventory
+   hosted-audit.py/hosted-plan.json are prepared against accepted42697887863 baseline;
+   expected6,743 portable+2,549 Apple=9,292 cases. This is not yet dispatched/accepted.
+   Do not repeat the earlier immutable protocol run. Local inventory is accepted;
+   do not reimplement its cursor or reset existing encrypted binding records.
 3. Implement actual group recovery with independent persisted progress and exact wake
    completion. Company-only CollaborationRecoveryWorker cannot discharge group work.
    Startup/reconnect must discover original commands without relying on a bounded
@@ -126,8 +128,8 @@ The explicit vendor key-confirmation endpoint was retired. Never reapply archive
 
 | Checkout | Branch / accepted source | State |
 | --- | --- | --- |
-| Mobile | feat/chat-send-timing-20261107 / 01544c26 | Wake accepted/pushed; inventory successor under validation |
-| Platform original | feat/communications / 604dffc6 | Handoff current; recovery verifier remains schema116.4 |
+| Mobile | feat/chat-send-timing-20261107 / 01544c26 | Wake accepted/pushed; inventory successor accepted locally |
+| Platform original | feat/communications / de908c55 | Handoff current; recovery verifier remains schema116.4 |
 | Platform group | feat/communication-space / d4246a08 | Separate worktree; V140 workers accepted/pushed |
 | Starter | feat/network-inspector-20261107 / ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Inspector | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Public SDK6 integrated |

@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.data.history.CollaborationHistoryKeys
 import dev.fajar.starter.collaboration.data.identity.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceRoomBindingInventoryRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceRoomBindingRepository
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
@@ -21,7 +22,7 @@ class EncryptedCollaborationSpaceRoomBindingRepository(
     private val replicas: ReplicaStore,
     private val cipher: ContentCipher,
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
-) : CollaborationSpaceRoomBindingRepository {
+) : CollaborationSpaceRoomBindingRepository, CollaborationSpaceRoomBindingInventoryRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
 
     override suspend fun getByConversation(
@@ -85,6 +86,105 @@ class EncryptedCollaborationSpaceRoomBindingRepository(
                 payload,
                 documents,
                 publish = true,
+            )
+        }
+    }
+
+    override suspend fun page(
+        access: CollaborationSpaceLocalAccess,
+        after: CollaborationSpaceRoomBindingCursor?,
+        limit: Int,
+    ) = safeStorageCall {
+        val scope = spaceRoomBindingScope(access)
+        val partition = spaceRoomBindingPartition(access)
+        require(limit in 1..50)
+        after?.let {
+            val boundary = it.boundary
+            require(
+                boundary.audience == access.audience &&
+                    boundary.accountId == access.accountId &&
+                    boundary.spaceId == access.spaceId &&
+                    validCollaborationSpaceConversationId(boundary.generation) &&
+                    boundary.revision in 0..9_007_199_254_740_991L &&
+                    it.afterId.matches(Regex("b-[0-9a-f]{64}"))
+            )
+        }
+        val raw = replicas.observe(scope, partition, after?.afterId, limit + 1).first()
+        val checkpoint = raw.checkpoint
+        if (checkpoint == null) {
+            check(after == null && raw.documents.isEmpty())
+            return@safeStorageCall CollaborationSpaceRoomBindingPage(null, emptyList(), null, false)
+        }
+        keys.use { content, index ->
+            val codec = CollaborationSpaceRoomBindingCodec(access, cipher, content, index)
+            codec.validate(checkpoint)
+            val boundary =
+                after?.boundary
+                    ?: CollaborationSpaceRoomBindingBoundary(
+                        access.audience,
+                        access.accountId,
+                        access.spaceId,
+                        checkpoint.handle.generation,
+                        checkpoint.revision,
+                    )
+            check(
+                checkpoint.handle.generation == boundary.generation &&
+                    checkpoint.revision >= boundary.revision
+            )
+            val ids = raw.documents.map { it.id }
+            require(
+                raw.documents.size <= limit + 1 &&
+                    ids == ids.sorted() &&
+                    ids.distinct() == ids &&
+                    ids.all { after == null || it > after.afterId }
+            )
+            // Authenticate lookahead too; a malformed row must not invent another page.
+            val decoded = raw.documents.map { codec.decode(checkpoint, it) }
+            val bindings = mutableListOf<CollaborationSpaceRoomBinding>()
+            var observedRevision = checkpoint.revision
+            for ((position, document) in raw.documents.take(limit).withIndex()) {
+                val value = decoded[position]
+                val pairIds = codec.ids(value)
+                val pair =
+                    replicas
+                        .observeQueries(
+                            scope,
+                            partition,
+                            pairIds.map { ReplicaQuery(tag = it, limit = 2) },
+                        )
+                        .first()
+                val current = requireNotNull(pair.checkpoint)
+                codec.validate(current)
+                check(
+                    current.handle.generation == boundary.generation &&
+                        current.revision >= observedRevision
+                )
+                require(pair.pages.size == 2 && pair.pages.all { it.size == 1 })
+                val documents = pair.pages.flatten()
+                require(documents.map { it.id } == pairIds && document in documents)
+                require(codec.pair(current, documents) == value)
+                observedRevision = current.revision
+                if (document.version <= boundary.revision && document.id == pairIds.first()) {
+                    bindings += value
+                }
+            }
+            val current =
+                requireNotNull(replicas.observePublishedCheckpoint(scope, partition).first())
+            codec.validate(current)
+            check(
+                current.handle.generation == boundary.generation &&
+                    current.revision >= observedRevision
+            )
+            check(replicas.observePublishedCheckpoint(scope, partition).first() == current)
+            val next =
+                if (raw.documents.size > limit) {
+                    CollaborationSpaceRoomBindingCursor(boundary, raw.documents[limit - 1].id)
+                } else null
+            CollaborationSpaceRoomBindingPage(
+                boundary,
+                bindings.toList(),
+                next,
+                current.revision > boundary.revision,
             )
         }
     }

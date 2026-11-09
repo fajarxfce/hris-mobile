@@ -5,6 +5,8 @@ import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationS
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
+import dev.fajar.starter.securestorage.ContentCipher
+import kotlin.io.encoding.Base64
 import kotlin.test.*
 import kotlin.time.Instant
 import kotlinx.coroutines.*
@@ -697,6 +699,374 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
             assertIs<AppResult.Failed>(f.bindings().retain(access, value))
         }
         assertNull(f.keys.read())
+    }
+
+    @Test
+    fun inventoryStartsKeylessAndRejectsInvalidBoundsBeforeReadingStorage() = withDatabase { f ->
+        assertEquals(
+            AppResult.Success(CollaborationSpaceRoomBindingPage(null, emptyList(), null, false)),
+            f.bindings().page(f.local()),
+        )
+        val unread =
+            object : ReplicaStore by f.database.replicas {
+                override fun observe(
+                    scope: ReplicaScope,
+                    partition: String,
+                    after: String?,
+                    limit: Int,
+                ): Flow<ReplicaPage> = error("Invalid input reached storage")
+            }
+        for (limit in listOf(0, -1, 51, Int.MAX_VALUE)) {
+            assertIs<AppResult.Failed>(f.bindings(unread).page(f.local(), limit = limit))
+        }
+        val boundary =
+            CollaborationSpaceRoomBindingBoundary(
+                f.local().audience,
+                f.local().accountId,
+                f.local().spaceId,
+                historyId(14000),
+                0,
+            )
+        val cursor = CollaborationSpaceRoomBindingCursor(boundary, "b-" + "0".repeat(64))
+        val invalid =
+            listOf(
+                cursor.copy(afterId = "invalid"),
+                cursor.copy(boundary = boundary.copy(audience = "https://foreign.example/")),
+                cursor.copy(boundary = boundary.copy(accountId = historyId(14001))),
+                cursor.copy(boundary = boundary.copy(spaceId = historyId(14002))),
+                cursor.copy(boundary = boundary.copy(generation = "invalid")),
+                cursor.copy(boundary = boundary.copy(revision = -1)),
+                cursor.copy(boundary = boundary.copy(revision = 9_007_199_254_740_992L)),
+            )
+        for (after in invalid) assertIs<AppResult.Failed>(f.bindings(unread).page(f.local(), after))
+        assertNull(f.keys.read())
+    }
+
+    @Test
+    fun inventoryAdvancesOverRoomOnlyPagesAndReturnsEachImmutableBindingOnce() = withDatabase { f ->
+        val values = (1..6).map { binding(f.local(), it, legacy = it % 2 == 0) }
+        for (value in values) assertEquals(
+            AppResult.Success(true),
+            f.bindings().retain(f.local(), value),
+        )
+        val before = f.rawBindings()
+        val found = mutableListOf<CollaborationSpaceRoomBinding>()
+        var after: CollaborationSpaceRoomBindingCursor? = null
+        var pages = 0
+        var empty = 0
+        do {
+            val page =
+                assertIs<AppResult.Success<CollaborationSpaceRoomBindingPage>>(
+                        f.bindings().page(f.local(), after, limit = 1)
+                    )
+                    .value
+            assertEquals(5, page.boundary?.revision)
+            assertFalse(page.hasNewerBindings)
+            found += page.bindings
+            if (page.bindings.isEmpty()) empty++
+            page.next?.let { next -> after?.let { assertTrue(next.afterId > it.afterId) } }
+            after = page.next
+            pages++
+            assertTrue(pages <= 12)
+        } while (after != null)
+        assertEquals(12, pages)
+        assertEquals(6, empty)
+        assertEquals(values.toSet(), found.toSet())
+        assertEquals(values.size, found.size)
+        assertEquals(before, f.rawBindings())
+    }
+
+    @Test
+    fun inventoryCursorSurvivesReopenAndSameAccountLoginReplacement() = withDatabase { f ->
+        val values = (1..4).map { binding(f.local(), it, legacy = true) }
+        for (value in values) assertEquals(
+            AppResult.Success(true),
+            f.bindings().retain(f.local(), value),
+        )
+        val first =
+            assertIs<AppResult.Success<CollaborationSpaceRoomBindingPage>>(
+                    f.bindings().page(f.local(), limit = 3)
+                )
+                .value
+        val cursor = assertNotNull(first.next)
+        val before = f.rawBindings()
+        val renewed = f.access.copy(sessionId = "inventory-renewed", companyId = historyId(14003))
+        f.reopen(renewed)
+        val rest =
+            assertIs<AppResult.Success<CollaborationSpaceRoomBindingPage>>(
+                    f.bindings().page(f.local(renewed), cursor, limit = 50)
+                )
+                .value
+        assertEquals(first.boundary, rest.boundary)
+        assertNull(rest.next)
+        assertFalse(rest.hasNewerBindings)
+        assertEquals(values.toSet(), (first.bindings + rest.bindings).toSet())
+        assertEquals(values.size, first.bindings.size + rest.bindings.size)
+        assertEquals(before.documents, f.rawBindings(f.local(renewed)).documents)
+    }
+
+    @Test
+    fun inventoryLookaheadRecognizesAnExactlyFullTailWithoutAnotherPage() = withDatabase { f ->
+        val value = binding(f.local(), legacy = true)
+        assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), value))
+        var scans = 0
+        var pairs = 0
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override fun observe(
+                    scope: ReplicaScope,
+                    partition: String,
+                    after: String?,
+                    limit: Int,
+                ): Flow<ReplicaPage> {
+                    scans++
+                    assertEquals(3, limit)
+                    return f.database.replicas.observe(scope, partition, after, limit)
+                }
+
+                override fun observeQueries(
+                    scope: ReplicaScope,
+                    partition: String,
+                    queries: List<ReplicaQuery>,
+                ): Flow<ReplicaQueryPage> {
+                    pairs++
+                    assertEquals(2, queries.size)
+                    assertTrue(queries.all { it.limit == 2 && it.tag != null })
+                    return f.database.replicas.observeQueries(scope, partition, queries)
+                }
+            }
+        val result =
+            assertIs<AppResult.Success<CollaborationSpaceRoomBindingPage>>(
+                    f.bindings(store).page(f.local(), limit = 2)
+                )
+                .value
+        assertEquals(listOf(value), result.bindings)
+        assertNull(result.next)
+        assertEquals(1, scans)
+        assertEquals(2, pairs)
+    }
+
+    @Test
+    fun inventorySeparatesConcurrentAppendsOnBothSidesOfTheOpaqueCursor() = withDatabase { f ->
+        // Fictional fixed key makes index ordering reproducible across all database platforms.
+        f.keys.write(Base64.encode(ByteArray(64) { it.toByte() }))
+        val original = (1..4).map { binding(f.local(), it, legacy = true) }
+        for (value in original) assertEquals(
+            AppResult.Success(true),
+            f.bindings().retain(f.local(), value),
+        )
+        val first =
+            assertIs<AppResult.Success<CollaborationSpaceRoomBindingPage>>(
+                    f.bindings().page(f.local(), limit = 3)
+                )
+                .value
+        val firstCursor = assertNotNull(first.next)
+        val added = (5..12).map { binding(f.local(), it, legacy = it % 2 == 0) }
+        for (value in added) assertEquals(
+            AppResult.Success(true),
+            f.bindings().retain(f.local(), value),
+        )
+        val newerRows = f.rawBindings().documents.filter { it.version > 3 }
+        assertTrue(newerRows.any { it.id < firstCursor.afterId })
+        assertTrue(newerRows.any { it.id > firstCursor.afterId })
+        var after: CollaborationSpaceRoomBindingCursor? = firstCursor
+        val found = first.bindings.toMutableList()
+        var pages = 0
+        do {
+            val page =
+                assertIs<AppResult.Success<CollaborationSpaceRoomBindingPage>>(
+                        f.bindings().page(f.local(), after, limit = 3)
+                    )
+                    .value
+            assertEquals(first.boundary, page.boundary)
+            assertTrue(page.hasNewerBindings)
+            found += page.bindings
+            after = page.next
+            assertTrue(++pages <= 8)
+        } while (after != null)
+        assertEquals(original.toSet(), found.toSet())
+        assertEquals(original.size, found.size)
+        val fresh =
+            assertIs<AppResult.Success<CollaborationSpaceRoomBindingPage>>(
+                    f.bindings().page(f.local(), limit = 50)
+                )
+                .value
+        assertEquals((original + added).toSet(), fresh.bindings.toSet())
+        assertEquals(11, fresh.boundary?.revision)
+        assertFalse(fresh.hasNewerBindings)
+        assertNull(fresh.next)
+    }
+
+    @Test
+    fun inventoryRejectsADeletedOrReplacedContinuationNamespaceWithoutRestartingIt() =
+        withDatabase { f ->
+            val original = binding(f.local(), legacy = true)
+            assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), original))
+            val first =
+                assertIs<AppResult.Success<CollaborationSpaceRoomBindingPage>>(
+                        f.bindings().page(f.local(), limit = 1)
+                    )
+                    .value
+            val cursor = assertNotNull(first.next)
+            assertTrue(
+                f.database.replicas.clear(
+                    spaceRoomBindingScope(f.local()),
+                    spaceRoomBindingPartition(f.local()),
+                )
+            )
+            assertIs<AppResult.Failed>(f.bindings().page(f.local(), cursor))
+            val replacement = binding(f.local(), 2)
+            assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), replacement))
+            assertIs<AppResult.Failed>(f.bindings().page(f.local(), cursor))
+            val fresh =
+                assertIs<AppResult.Success<CollaborationSpaceRoomBindingPage>>(
+                        f.bindings().page(f.local())
+                    )
+                    .value
+            assertNotEquals(first.boundary?.generation, fresh.boundary?.generation)
+            assertEquals(listOf(replacement), fresh.bindings)
+        }
+
+    @Test
+    fun inventoryRejectsMalformedRawPagesPairsAndLostKeysWithoutRepairingThem() =
+        withDatabase { f ->
+            val value = binding(f.local(), legacy = true)
+            assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), value))
+            val before = f.rawBindings()
+            for (change in 0..5) {
+                val store =
+                    object : ReplicaStore by f.database.replicas {
+                        override fun observe(
+                            scope: ReplicaScope,
+                            partition: String,
+                            after: String?,
+                            limit: Int,
+                        ) =
+                            f.database.replicas.observe(scope, partition, after, limit).map { raw ->
+                                when (change) {
+                                    0 -> raw.copy(documents = raw.documents.reversed())
+                                    1 ->
+                                        raw.copy(
+                                            documents =
+                                                listOf(raw.documents.first(), raw.documents.first())
+                                        )
+                                    2 ->
+                                        raw.copy(
+                                            documents =
+                                                raw.documents.map { it.copy(payload = "corrupt") }
+                                        )
+                                    else -> raw
+                                }
+                            }
+
+                        override fun observeQueries(
+                            scope: ReplicaScope,
+                            partition: String,
+                            queries: List<ReplicaQuery>,
+                        ) =
+                            f.database.replicas.observeQueries(scope, partition, queries).map { raw
+                                ->
+                                when (change) {
+                                    3 -> raw.copy(pages = listOf(raw.pages[0], emptyList()))
+                                    4 ->
+                                        raw.copy(
+                                            pages =
+                                                listOf(
+                                                    raw.pages[0],
+                                                    raw.pages[1].map { it.copy(version = 1) },
+                                                )
+                                        )
+                                    5 -> raw.copy(pages = listOf(raw.pages[0], raw.pages[0]))
+                                    else -> raw
+                                }
+                            }
+                    }
+                assertIs<AppResult.Failed>(f.bindings(store).page(f.local()))
+            }
+            f.keys.write(null)
+            assertIs<AppResult.Failed>(f.bindings().page(f.local()))
+            assertNull(f.keys.read())
+            assertEquals(before, f.rawBindings())
+        }
+
+    @Test
+    fun inventoryPropagatesCancellationAndRejectsAccountReplacementDuringPairReads() =
+        withDatabase { f ->
+            val value = binding(f.local(), legacy = true)
+            assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), value))
+            val entered = CompletableDeferred<Unit>()
+            val blocked =
+                object : ReplicaStore by f.database.replicas {
+                    override fun observeQueries(
+                        scope: ReplicaScope,
+                        partition: String,
+                        queries: List<ReplicaQuery>,
+                    ): Flow<ReplicaQueryPage> = flow {
+                        entered.complete(Unit)
+                        awaitCancellation()
+                    }
+                }
+            val job =
+                CoroutineScope(currentCoroutineContext()).async {
+                    f.bindings(blocked).page(f.local())
+                }
+            entered.await()
+            job.cancelAndJoin()
+            assertFailsWith<CancellationException> { job.await() }
+            val replaced =
+                object : ReplicaStore by f.database.replicas {
+                    override fun observeQueries(
+                        scope: ReplicaScope,
+                        partition: String,
+                        queries: List<ReplicaQuery>,
+                    ) = flow {
+                        val raw =
+                            f.database.replicas.observeQueries(scope, partition, queries).first()
+                        f.activate(
+                            f.access.copy(sessionId = "foreign", accountId = historyId(14004))
+                        )
+                        emit(raw)
+                    }
+                }
+            assertIs<AppResult.Failed>(f.bindings(replaced).page(f.local()))
+            f.activate()
+            f.assertBinding(value)
+        }
+
+    @Test
+    fun inventoryRechecksOwnershipAfterDecryptingItsFinalCheckpoint() = withDatabase { f ->
+        val value = binding(f.local(), legacy = true)
+        assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), value))
+        var finalCheckpoint = false
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override fun observePublishedCheckpoint(scope: ReplicaScope, partition: String) =
+                    flow {
+                        val raw =
+                            f.database.replicas.observePublishedCheckpoint(scope, partition).first()
+                        finalCheckpoint = true
+                        emit(raw)
+                    }
+            }
+        val cipher =
+            object : ContentCipher by f.cipher {
+                override suspend fun decrypt(
+                    key: ByteArray,
+                    associatedData: ByteArray,
+                    ciphertext: ByteArray,
+                ): ByteArray {
+                    val bytes = f.cipher.decrypt(key, associatedData, ciphertext)
+                    if (finalCheckpoint)
+                        f.activate(
+                            f.access.copy(sessionId = "late-foreign", accountId = historyId(14005))
+                        )
+                    return bytes
+                }
+            }
+        val reader = EncryptedCollaborationSpaceRoomBindingRepository(store, cipher, f.keys)
+        assertIs<AppResult.Failed>(reader.page(f.local()))
+        f.activate()
+        f.assertBinding(value)
     }
 
     private fun withDatabase(block: suspend (CollaborationHistoryFixture) -> Unit) = runTest {
