@@ -1,6 +1,31 @@
 # Agent continuation — HRIS Mobile
 
 
+## Parent renewal full validation passes; package83 next — 9 November 2026, 06:55 UTC
+
+c0b645d05299f42f30d4e8e28de7f394e2d7e405 is pushed. Full23728 REAPED PASS948.946s:
+5837 fresh tests (5082desktop,595Android host,160actual browser),0fail/errors/skips.
+All4529 app/82library inputs unchanged.74identity desktop cases retain current
+focused-progress-1 inputs; all10 maintenance cases also pass actual browser.
+Root check, proof/release compilation, lint, shared Wasm/iOS Arm64 source compilation,
+format/architecture74/detekt pass. No Apple runtime claim. Owned-heavy preflight [].
+[Evidence](measurements/collaboration-parent-session-renewal-2026-11-09.json).
+
+NEXT commit+push docs; run release-phone-2026-11-09-build83/build-arm64.py,
+verify-arm64.py and verify-sdk.py, then native-parent-renewal-native-2026-11-09
+prepare-sender/prepare-counter and bounded counter/paired/run-sender/run-phases.
+Do not accept or install before all native phases AND quiet-traffic acceptance pass.
+Latest COMPLETE store is still sdk-shared-borrow-native-2026-11-09/sender at82,
+FOUR original events; preserve all4 userdata/encryption files and AVD. Never resend.
+83 NOT built/booted/accepted/installed. No phone UI; ADB reachable06:41.
+
+Prepared Starter session-maintenance adaptation is regenerated from c0b645d0,
+9 generic cases; native binding policy remains HRIS. Both Starter port scripts and
+SDK6 publisher now require full-2/accepted83; none executed. SDK6 unpublished.
+Platform runtimee558a686/schema116.4/controlON unchanged;117–138 undeployed.
+All54 communications PRD groups remain open. Continue after native proof/install.
+
+
 ## Advancing-deadline loop regression passes; full-2 next — 9 November 2026, 06:36 UTC
 
 New review found maintain could immediately refresh each changed token when its

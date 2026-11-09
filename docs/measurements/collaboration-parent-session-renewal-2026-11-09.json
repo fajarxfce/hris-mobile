@@ -172,11 +172,63 @@
       },
       "resultSha256": "2be1d39675652d35d0a3c30487cac9c6decceaa4f32327803623f15be8fe29bd",
       "scope": "74 identity tests including10 maintenance cases, format, architecture74 and detekt pass; inputs unchanged"
+    },
+    "full-2": {
+      "startedAt": "2026-11-09T06:39:02.353193+00:00",
+      "elapsedSeconds": 948.946,
+      "exitCode": 0,
+      "sourceFiles": 4529,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5837,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "a4429e6e010efa7c92fb45d6bc5b2f17c7c63056f2cc6a0a492114ffb9ed3122",
+      "reaped": true,
+      "groups": {
+        "desktopTest": {
+          "tests": 5082,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "wasmJsBrowserTest": {
+          "tests": 160,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "testAndroidHostTest": {
+          "tests": 595,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "scope": "Root check, actual browser regressions, Android host tests, proof/release compilation, release lint, shared Wasm/iOS Arm64 source compilation, format, architecture74 and detekt pass; no Apple runtime claim.",
+      "maintenanceTests": {
+        "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.SessionTokenMaintenanceTest.xml": {
+          "sha256": "d2d1cba628bc6ec6a385a85210cf6a5565b3fc81cd323ecfbfc01899d3057f9e",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/identity/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.identity.domain.SessionTokenMaintenanceTest.xml": {
+          "sha256": "8a54c515ed00525723913b11cb604e46e12ff80ee0d80f9e51e527b1487187f0",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
     }
   },
   "native82Evidence": "collaboration-release82-candidate-2026-11-09.json",
   "pending": [
-    "Complete full-2 after advancing-deadline guard",
     "Retained82 to83 runtime with four originals, HRIS-parent deadlines and paired Matrix renewals",
     "Phone install-only, immutable SDK distribution and generic Starter port"
   ],
