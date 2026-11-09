@@ -42,6 +42,18 @@ Three shared actual-database cases now cover both uncertain publications, a canc
 committed binding followed by database/login reopening, and a persisted directory denial
 after binding publication. Desktop SQLite, browser IndexedDB and Apple SQLite wrappers
 share that contract. The actual application resolves the new use case through feature DI.
-Formatter43522 passes; focused92982 is running with the20 domain, three database and two
-application binding cases. Required full/browser/source checks remain pending. No new
-Apple execution, APK, SDK adoption or product activation is claimed.
+Focused92982 is reaped PASS239.944s:25 cases (20 domain,3 actual SQLite,2 app DI).
+Full36351 is reaped PASS586.604s:4,222 fresh cases (3,586 desktop,613 Android host,
+23 actual browser), no failures/errors/skips. Browser XML confirms the exact20 domain
+and3 IndexedDB cases; all4,551 app/library inputs are unchanged. This source also
+passes root/release/Wasm/iOS-source and quality checks.
+
+A subsequent review found a coincident-expiry race. The directory returned a valid
+confirmed denial, but the native session check returned first, replacing that denial.
+Regression10100 fails once on the unchanged production source: AccessDenied becomes
+client.session_changed. The correction retains that captured denial before checking
+native expiry. No local ownership or content reopening behavior changes.
+Formatter63867 passes. Corrected focused61497 is running with21 domain,3 database and
+2 app cases; the final full gate must also execute24 actual browser cases. Earlier full
+proof is retained separately and does not validate this correction. No new Apple
+execution, APK, SDK adoption or product activation is claimed.
