@@ -1,0 +1,374 @@
+{
+  "at": "2026-11-09T04:11:32.615679+00:00",
+  "accepted": false,
+  "reason": "Strict evaluator rejects the second refresh429; cold interval additionally has 42 repeated setup/room/admission/conversation requests. Home, room and resumed complete bins contain no such metadata requests.",
+  "scope": "Native80 retained79 upgrade, original encrypted messages, one-read history and lifecycle",
+  "requestCount": 491,
+  "elapsedSeconds": 860.243,
+  "phases": [
+    {
+      "phase": "home",
+      "binSeconds": 110,
+      "range": [
+        150,
+        260
+      ],
+      "metadataRequests": {},
+      "sync200": 11,
+      "rejected": {},
+      "allRequestCounts": {
+        "sync": 11,
+        "other_hris": 9
+      }
+    },
+    {
+      "phase": "room",
+      "binSeconds": 110,
+      "range": [
+        380,
+        490
+      ],
+      "metadataRequests": {},
+      "sync200": 12,
+      "rejected": {
+        "sync:401": 1
+      },
+      "allRequestCounts": {
+        "refresh": 1,
+        "sync": 13,
+        "other_hris": 4
+      }
+    },
+    {
+      "phase": "resumed",
+      "binSeconds": 110,
+      "range": [
+        540,
+        650
+      ],
+      "metadataRequests": {},
+      "sync200": 11,
+      "rejected": {},
+      "allRequestCounts": {
+        "sync": 11,
+        "other_hris": 8
+      }
+    },
+    {
+      "phase": "cold",
+      "binSeconds": 110,
+      "range": [
+        730,
+        840
+      ],
+      "metadataRequests": {
+        "hris_conversation_summaries": 2,
+        "hris_device_admission": 2,
+        "hris_device_setup": 16,
+        "hris_room": 12,
+        "hris_conversation": 10
+      },
+      "sync200": 11,
+      "rejected": {},
+      "allRequestCounts": {
+        "sync": 11,
+        "hris_conversation": 10,
+        "hris_conversation_summaries": 2,
+        "hris_device_admission": 2,
+        "hris_device_setup": 16,
+        "hris_room": 12,
+        "other_hris": 12,
+        "other_matrix": 7
+      }
+    }
+  ],
+  "refreshStatuses": [
+    200,
+    429,
+    200,
+    200
+  ],
+  "refreshOffsetsSeconds": [
+    80.152,
+    80.362,
+    380.211,
+    680.264
+  ],
+  "noWrongReturnedAccess": true,
+  "bootstrapCount": 0,
+  "forbiddenResponses": 0,
+  "firstSyncRequests": [
+    {
+      "offsetSeconds": 81.313,
+      "timeoutMillis": 0,
+      "hasPersistedCursor": true
+    },
+    {
+      "offsetSeconds": 91.499,
+      "timeoutMillis": 0,
+      "hasPersistedCursor": true
+    },
+    {
+      "offsetSeconds": 92.499,
+      "timeoutMillis": 10000,
+      "hasPersistedCursor": true
+    },
+    {
+      "offsetSeconds": 102.551,
+      "timeoutMillis": 10000,
+      "hasPersistedCursor": true
+    }
+  ],
+  "initialZeroSyncs": [
+    {
+      "offsetSeconds": 81.313,
+      "timeoutMillis": 0,
+      "hasPersistedCursor": true
+    },
+    {
+      "offsetSeconds": 91.499,
+      "timeoutMillis": 0,
+      "hasPersistedCursor": true
+    },
+    {
+      "offsetSeconds": 660.665,
+      "timeoutMillis": 0,
+      "hasPersistedCursor": true
+    },
+    {
+      "offsetSeconds": 667.168,
+      "timeoutMillis": 0,
+      "hasPersistedCursor": true
+    },
+    {
+      "offsetSeconds": 672.906,
+      "timeoutMillis": 0,
+      "hasPersistedCursor": true
+    }
+  ],
+  "threeOriginalEventsPreserved": true,
+  "newSendGestures": 0,
+  "phoneTouched": false,
+  "releaseAccepted": false,
+  "evaluatorFailure": "AssertionError on sample status200 at accept-quietness.py:17",
+  "pairedProbeEndedAtOwn780SecondDeadline": true,
+  "classifierAudit": "Include the actual singular classifier hris_conversation; the prepared evaluator used the nonexistent hris_conversation_summary. Corrected for future runs without changing failed evidence.",
+  "upgrade": {
+    "accepted": true,
+    "startedAt": "2026-11-09T03:57:24.546992+00:00",
+    "versionCode": 80,
+    "phoneTouched": false,
+    "newSendGestures": 0,
+    "dataCleared": false,
+    "privateKeysReadOrReset": false,
+    "scope": "Retained account/package and immutable public-key identity through native upgrade; actual original encrypted delivery is a subsequent gate.",
+    "launchEpochMillis": 1794196667046.8225,
+    "launchMonotonic": 1873359.695370598,
+    "updateInPlace": true,
+    "sameAppIdentity": true,
+    "retainedAccountHomeVisible": true,
+    "retainedPublicIdentityPreserved": true,
+    "confirmedDevices": 1,
+    "artifactSha256": "88e0f09646d7d7df857d3e2142e11e4fe4955c137834090931e4b1947761041d",
+    "sdkDeliveryAccepted": false,
+    "elapsedSeconds": 31.652
+  },
+  "historyEnd": {
+    "at": "2026-11-09T04:01:46.743560+00:00",
+    "accepted": true,
+    "sendGestures": 0,
+    "retryMessageGestures": 0,
+    "olderReadGestures": 1,
+    "phoneTouched": false,
+    "initialOlderVisible": true,
+    "olderHiddenAfterRead": true,
+    "olderVisibleOnReentry": false,
+    "elapsedSeconds": 28.115
+  },
+  "retainedOriginal": {
+    "at": "2026-11-09T04:01:43.701090+00:00",
+    "phase": "recovered",
+    "accepted": true,
+    "sendGestures": 0,
+    "retryGestures": 0,
+    "phoneTouched": false,
+    "originalSentSemantics": true,
+    "visibleOriginalCount": 3,
+    "sameProcess": true,
+    "composerEmpty": true,
+    "olderAffordanceVisible": true,
+    "elapsedSeconds": 2.839
+  },
+  "resumedOriginal": {
+    "at": "2026-11-09T04:05:07.166971+00:00",
+    "phase": "resumed",
+    "accepted": true,
+    "sendGestures": 0,
+    "retryGestures": 0,
+    "phoneTouched": false,
+    "originalSentSemantics": true,
+    "visibleOriginalCount": 3,
+    "sameProcess": true,
+    "composerEmpty": true,
+    "olderAffordanceVisible": false,
+    "elapsedSeconds": 2.402
+  },
+  "coldOriginal": {
+    "at": "2026-11-09T04:07:49.602542+00:00",
+    "phase": "cold",
+    "accepted": true,
+    "sendGestures": 0,
+    "retryGestures": 0,
+    "phoneTouched": false,
+    "originalSentSemantics": true,
+    "visibleOriginalCount": 3,
+    "sameProcess": true,
+    "composerEmpty": true,
+    "olderAffordanceVisible": false,
+    "elapsedSeconds": 2.673
+  },
+  "lifetime": {
+    "startedAt": "2026-11-09T03:56:44.763724+00:00",
+    "accepted": true,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "phoneTouched": false,
+    "productInstalled": false,
+    "pid": 2499875,
+    "startTicks": "187329741",
+    "bootSeconds": 30.615,
+    "stopped": true,
+    "elapsedSeconds": 859.345,
+    "originalFilesUnchanged": true,
+    "scope": "Owned emulator lifetime only. Native message/wake acceptance is recorded separately."
+  },
+  "pairedRefresh": {
+    "startedAt": "2026-11-09T03:56:43.473495+00:00",
+    "acceptedTrace": true,
+    "passiveOnly": true,
+    "tokensOrHashesRetained": false,
+    "maxSeconds": 780,
+    "samples": [
+      {
+        "offsetSeconds": 80.152,
+        "matchesPriorReturnedRefresh": null,
+        "accessUsageSincePriorResponse": {
+          "matchingReturnedAccess": 0,
+          "otherAccess": 0
+        },
+        "status": 200,
+        "requestCredentialAfterResponse": {
+          "heads": 1,
+          "matchesCurrentRefresh": false,
+          "matchesPreviousRefresh": true,
+          "matchesCurrentAccess": null,
+          "maxVersion": 14,
+          "allRevoked": false,
+          "sessionExpired": false
+        },
+        "responseHasRefreshToken": true,
+        "returnedCredentialAfterResponse": {
+          "heads": 1,
+          "matchesCurrentRefresh": true,
+          "matchesPreviousRefresh": false,
+          "matchesCurrentAccess": true,
+          "maxVersion": 14,
+          "allRevoked": false,
+          "sessionExpired": false
+        },
+        "newRefreshDiffersFromRequest": true
+      },
+      {
+        "offsetSeconds": 80.362,
+        "matchesPriorReturnedRefresh": true,
+        "accessUsageSincePriorResponse": {
+          "matchingReturnedAccess": 2,
+          "otherAccess": 0
+        },
+        "status": 429,
+        "requestCredentialAfterResponse": {
+          "heads": 1,
+          "matchesCurrentRefresh": true,
+          "matchesPreviousRefresh": false,
+          "matchesCurrentAccess": null,
+          "maxVersion": 14,
+          "allRevoked": false,
+          "sessionExpired": false
+        },
+        "responseHasRefreshToken": false,
+        "matrixErrorCode": "M_LIMIT_EXCEEDED"
+      },
+      {
+        "offsetSeconds": 380.211,
+        "matchesPriorReturnedRefresh": true,
+        "accessUsageSincePriorResponse": {
+          "matchingReturnedAccess": 56,
+          "otherAccess": 0
+        },
+        "status": 200,
+        "requestCredentialAfterResponse": {
+          "heads": 1,
+          "matchesCurrentRefresh": false,
+          "matchesPreviousRefresh": true,
+          "matchesCurrentAccess": null,
+          "maxVersion": 15,
+          "allRevoked": false,
+          "sessionExpired": false
+        },
+        "responseHasRefreshToken": true,
+        "returnedCredentialAfterResponse": {
+          "heads": 1,
+          "matchesCurrentRefresh": true,
+          "matchesPreviousRefresh": false,
+          "matchesCurrentAccess": true,
+          "maxVersion": 15,
+          "allRevoked": false,
+          "sessionExpired": false
+        },
+        "newRefreshDiffersFromRequest": true
+      },
+      {
+        "offsetSeconds": 680.264,
+        "matchesPriorReturnedRefresh": true,
+        "accessUsageSincePriorResponse": {
+          "matchingReturnedAccess": 47,
+          "otherAccess": 0
+        },
+        "status": 200,
+        "requestCredentialAfterResponse": {
+          "heads": 1,
+          "matchesCurrentRefresh": false,
+          "matchesPreviousRefresh": true,
+          "matchesCurrentAccess": null,
+          "maxVersion": 16,
+          "allRevoked": false,
+          "sessionExpired": false
+        },
+        "responseHasRefreshToken": true,
+        "returnedCredentialAfterResponse": {
+          "heads": 1,
+          "matchesCurrentRefresh": true,
+          "matchesPreviousRefresh": false,
+          "matchesCurrentAccess": true,
+          "maxVersion": 16,
+          "allRevoked": false,
+          "sessionExpired": false
+        },
+        "newRefreshDiffersFromRequest": true
+      }
+    ],
+    "interrupted": false,
+    "elapsedSeconds": 780.104,
+    "finishedAt": "2026-11-09T04:09:43.577529+00:00"
+  },
+  "gatewayVersions": [
+    13,
+    14,
+    15,
+    16
+  ],
+  "sourceCommit": "4c8adbb1",
+  "apkSha256": "88e0f09646d7d7df857d3e2142e11e4fe4955c137834090931e4b1947761041d",
+  "preservedLatestStore": ".work/initial-sync-native-2026-11-09/sender; preserve complete AVD and all userdata/encryption sidecars",
+  "next": "Reproduce and fix the delayed401 redundant SDK refresh; trace distinct cold startup retry causes. No new phone installation or Starter port yet."
+}

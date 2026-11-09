@@ -1,6 +1,45 @@
 # Agent continuation — HRIS Mobile
 
 
+## Native80 preserves history but fails traffic; SDK race reproduced — 9 November 2026, 04:14 UTC
+
+All native processes REAPED: emulator87958 859.345s,counter96051 860.243s/491requests,
+paired24897 780.104s at its deadline; phase driver20035 completed. Original79 source
+files unchanged. LATEST COMPLETE STORE is initial-sync-native-2026-11-09/sender,
+now80: preserve ALL userdata/encryption files and entire AVD metadata. Never overwrite
+it with79/78 or resend the3 original encrypted messages.
+
+Upgrade53484, original48546/history, resumed/cold source20035 all pass. One Older
+read reaches end; no Older on route reentry, resumed entry or cold process. Screenshots
+reviewed. Three original bubbles are Sent; Recovery78 never resent. Zero bootstrap,
+zero403, same public identity; gateway13→14→15→16. Real requests confirm first sync
+uses timeout0 and persisted cursor, then10000ms long polling. No Storage diagnostic
+in captured80 process logs. Source checks and package remain as below.
+
+Native traffic NOT accepted. Paired statuses200,429,200,200: redundant second refresh
+uses newly returned current refresh token only210ms after first. Actual3 successful
+rotations have exact token continuity. Home/room/resumed110s complete bins are quiet;
+cold interval contains42 metadata requests despite the prior20s quiet observation.
+Strict evaluator stops at refresh429. Its singular conversation classifier key was
+wrong; audited against actual hris_conversation and corrected for future runs. Do not
+accept80/install/port based only on preserved data. [Evidence](measurements/collaboration-initial-sync-native80-2026-11-09.json).
+
+New isolated SDK checkout: ../.worktrees/matrix-sdk-refresh-coalescing-2026-11-09,
+1218 sources exactly copied from unchanged SDK5 checkout. No new SDK binary exists.
+RED73255 REAPED72.419s: actual HTTP delayed-old401 test fails with second refresh429.
+Current candidate uses explicit-vs-expired refresh reason checked UNDER each Matrix/
+OAuth rotation lock, preserving explicit public refresh behavior and existing error
+handling. Six changed files, no generated/public binding API change. Only compiler
+80224 is running refresh-coalescing-2026-11-09/check.py refresh-1 refresh (19 expected
+refresh tests). Do not edit its inputs until reaped. Uses2 Rust jobs and existing target
+cache; emulator is stopped. Changes are not yet in a versioned patch/manifest or APK.
+
+NEXT inspect SDK refresh suite, then Wasm/FFI checks and reproducible new-version SDK
+patch/build. Preserve immutable SDK4 publication and SDK5 binaries. Cold recovery
+metadata is a separate open cause; do not claim fixing delayed401 resolves it. Native
+first cold sync200 still has repeated runtime initialization/recovery turns. Phone fresh
+stock-ROM, no install this turn. Starter port unexecuted; all54PRD groups still open.
+
 ## Full checks and package80 pass; native upgrade active — 9 November 2026, 03:57 UTC
 
 Full51408 REAPED PASS1278.304s:4,158 fresh tests (3,430 desktop,592 Android-host,

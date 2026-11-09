@@ -94,5 +94,5 @@
     "librarySourceManifestSha256": "3838706d98dd25b412d1ac7adbcadba8e231f764878a1586d50916fe015f0758",
     "librarySourcesUnchanged": true
   },
-  "nativeAcceptance": "Pending retained79 upgrade/room/background/cold trace; no release acceptance or phone installation"
+  "nativeAcceptance": "FAILED redundant refresh429 and cold startup metadata; retained identity/original messages/one-read history pass. See collaboration-initial-sync-native80-2026-11-09.json. Not installed."
 }
