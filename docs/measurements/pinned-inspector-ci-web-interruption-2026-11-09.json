@@ -1,0 +1,12 @@
+{
+  "run": 42594287486,
+  "head": "0c771fc5ed06d0328e3803b1bbccdd5c9e75277a",
+  "job": 129083071435,
+  "conclusion": "failure",
+  "lastBuildTask": ":apps:shared:compileProductionExecutableKotlinWasmJsOptimize",
+  "observedFailure": "GitHub runner received a shutdown signal; operation canceled",
+  "cause": "Not determined by the retained log; no application compiler error reported at shutdown",
+  "logSha256": "d8bd585ff3969e7865af83c83e2ac12fe8738e2af30087f2c9f8810579c25c68",
+  "next": "Repeat only web with unchanged compilation settings and /usr/bin/time resource evidence",
+  "accepted": false
+}

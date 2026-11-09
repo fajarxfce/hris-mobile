@@ -10,7 +10,7 @@ on:
         description: Verification scope
         type: choice
         default: all
-        options: [all, apple, verify]
+        options: [all, apple, verify, web]
 
 env:
   ORG_GRADLE_PROJECT_networkInspectorDirectory: ${{ github.workspace }}/.work/network-inspector
@@ -24,7 +24,7 @@ concurrency:
 
 jobs:
   verify:
-    if: github.event_name != 'workflow_dispatch' || inputs.scope != 'apple'
+    if: github.event_name != 'workflow_dispatch' || inputs.scope == 'all' || inputs.scope == 'verify'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -91,8 +91,9 @@ jobs:
             **/build/test-results/
             apps/android/build/outputs/apk/**/*.apk
   web:
-    if: github.event_name != 'workflow_dispatch' || inputs.scope == 'all'
+    if: github.event_name != 'workflow_dispatch' || inputs.scope == 'all' || inputs.scope == 'web'
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Check out verified network inspector
@@ -110,13 +111,23 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: ./gradlew :apps:shared:wasmJsBrowserDistribution
+      - name: Build web distribution and record resource usage
+        run: /usr/bin/time -v -o .work/web-build-resources.txt ./gradlew :apps:shared:wasmJsBrowserDistribution
+      - name: Retain web build diagnostics
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: web-build-diagnostics
+          include-hidden-files: true
+          path: |
+            .work/web-build-resources.txt
+            build/reports/problems/
       - uses: actions/upload-artifact@v4
         with:
           name: web
           path: apps/shared/build/dist/wasmJs/productionExecutable/
   apple:
-    if: github.event_name != 'workflow_dispatch' || inputs.scope != 'verify'
+    if: github.event_name != 'workflow_dispatch' || inputs.scope == 'all' || inputs.scope == 'apple'
     runs-on: macos-15
     timeout-minutes: 75
     env:

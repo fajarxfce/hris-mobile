@@ -124,11 +124,15 @@ Apple Matrix native binding and capture overhead remain open. a6b8236 records ev
 Mobile0c771fc5 pins that exact library in all nine consumer jobs across five workflows;
 no mirror, no persisted dependency-checkout credentials. CI/control explicitly run
 Android collaboration host tests. Existing tooling60 cases and static YAML checks pass.
-First application CI42594287486: Windows succeeds; Apple app build/web still running.
+First application CI42594287486: Windows succeeds; Apple app build still running.
+Web failed when the runner received a shutdown signal during Wasm optimization.
+The log does not establish its cause. The new web-only scope repeats no other job
+and records /usr/bin/time resource evidence without changing compilation settings.
 Verify failed before tests at SBOM resolution: Material3 1.9.0 POM checksum was missing.
 Only its official Maven Central/publisher-SHA1-verified POM hash is added in b1630963;
 [exact failure evidence](measurements/pinned-inspector-ci-material3-pom-2026-11-09.json).
-Corrected verify CI42596014241 is running; no distribution workflow was dispatched.
+Corrected verify CI42596014241 also failed; its exact log is being inspected.
+No distribution workflow was dispatched.
 Audit actual completed jobs and artifacts; do not infer success from compilation alone.
 
 ## Next implementation work
