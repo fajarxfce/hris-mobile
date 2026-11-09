@@ -23,7 +23,11 @@ Three regressions fail against the previous registry: both release orders,
 competing joins at the reference limit, and revocation of a shared client. The
 focused validation passes all 661 tests: 595 Android host tests and 66 company,
 incoming and recovery-worker integration cases. Format, architecture and detekt
-also pass on unchanged inputs. Full release validation remains in progress. Native82 must repeat the initial
-Home scenario, retained-message/history checks, lifecycle and credential renewal
+also pass on unchanged inputs. Full SDK6 validation passes 5,476 fresh tests
+(5,326 desktop and 150 browser); the 595 Android host results remain current from
+the focused run. Root check, release/proof compilation, lint, Wasm/iOS Arm64 source
+compilation and quality checks pass with all application/library inputs unchanged.
+Native82 must repeat the initial Home scenario, retained-message/history checks,
+lifecycle and credential renewal
 before phone installation. Native81 remains rejected; its failure is preserved in
 [the candidate record](measurements/collaboration-release81-candidate-2026-11-09.json).

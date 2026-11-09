@@ -45,6 +45,25 @@
         "skipped": 0
       },
       "resultSha256": "069d489d2eea9067fa1ebe9cb39bded7b58d20693af424779a0703b59e9dbb3f"
+    },
+    "full-1": {
+      "startedAt": "2026-11-09T05:26:43.527816+00:00",
+      "elapsedSeconds": 1000.016,
+      "exitCode": 0,
+      "sourceFiles": 4528,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 5476,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "5cb391da2c3f960b87543d1fe01ea1876a8de2dd1f60a2b1812c496045e411b1",
+      "freshDesktopTests": 5326,
+      "freshBrowserTests": 150,
+      "retainedAndroidHostTests": 595,
+      "sourceCommit": "d13a6d0d"
     }
   },
   "registryLimits": {
@@ -52,7 +71,6 @@
     "backgroundReferences": 2
   },
   "pending": [
-    "Full application validation under SDK6",
     "Native82 from the complete retained81 store; initial Home loop must remain observable",
     "Phone install-only, immutable SDK distribution and generic Starter port"
   ],

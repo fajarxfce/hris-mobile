@@ -1,6 +1,26 @@
 # Agent continuation — HRIS Mobile
 
 
+## SDK6 full source validation passes; APK82 next — 9 November 2026, 05:44 UTC
+
+Full63567 REAPED PASS1000.016s on pushed d13a6d0d:5476 fresh tests
+(5326 desktop +150 actual browser),0 failures/errors/skips. Android-host595
+remain current from focused6587. Root check, release/proof compilation, lint,
+shared Wasm/iOS Arm64 source compilation, format/architecture74/detekt PASS;
+all4528 application/82 library inputs unchanged. Existing duplicate KLIB names
+remain warnings. Source compilation does not establish Apple runtime acceptance.
+[Evidence](measurements/collaboration-shared-runtime-borrows-2026-11-09.json).
+
+No local compiler/emulator active at checkpoint. NEXT build82/build-arm64.py,
+verify-arm64.py, verify-sdk.py, then sdk-shared-borrow-native-2026-11-09 scripts.
+Native82 must clone latest COMPLETE81 store, observe initial Home before room entry,
+retain3 original events and only then send its single Registry82 timing sample.
+Never restore80/79 over81 or resend originals. No82 package/native run yet.
+No phone installation/UI this turn; SDK6 unpublished; Starter remains gated to
+failed81 until a later native run passes. Platform116.4/controlON unchanged;
+117–138 undeployed and all54 communications PRD groups remain open.
+
+
 ## Shared native borrowing passes focused checks; full next — 9 November 2026, 05:26 UTC
 
 RED72291 REAPED86.638s:3 real registry tests all fail with old second-borrow rejection.
