@@ -3,6 +3,13 @@
 This infrastructure module executes domain `SyncTask` implementations. It does not own
 feature repositories, HTTP calls, permission policy, or database transactions.
 
+Hosts pass `SyncTrigger.Requested` for durable requests and their retries, and
+`SyncTrigger.Scheduled` for startup/periodic discovery. A feature that retains its
+own wake must not turn a duplicated requested invocation into a new intent after
+another consumer finished it. Existing `SyncTask.invoke()` implementations continue
+to work through the default trigger overload. Android periodic requests are tagged;
+updating old registrations installs the tag without replacing their identity.
+
 - Android: `SyncWorkerFactory` supplies registered tasks to WorkManager. The application
   implements `Configuration.Provider` and removes only the default WorkManager initializer.
   `AndroidWorkScheduler` persists one-time requests and registers unique periodic requests.

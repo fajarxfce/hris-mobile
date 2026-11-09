@@ -35,7 +35,9 @@ class CollaborationRecoveryWorker(
     private val processing = Mutex()
     private val waiting = MutableStateFlow(0)
 
-    override suspend fun invoke(): SyncResult {
+    override suspend fun invoke(): SyncResult = invoke(SyncTrigger.Requested)
+
+    override suspend fun invoke(trigger: SyncTrigger): SyncResult {
         currentCoroutineContext().ensureActive()
         if (build.platform !in setOf(AppPlatform.Android, AppPlatform.Ios))
             return SyncResult.Complete
@@ -47,7 +49,7 @@ class CollaborationRecoveryWorker(
                 processing.withLock {
                     waiting.update { it - 1 }
                     queued = false
-                    withTimeoutOrNull(90.seconds) { processCurrentParent() }
+                    withTimeoutOrNull(90.seconds) { processCurrentParent(trigger) }
                         ?: SyncResult.Retry(failure("timeout", FailureKind.Timeout))
                 }
             } ?: SyncResult.Retry(failure("timeout", FailureKind.Timeout))
@@ -57,7 +59,7 @@ class CollaborationRecoveryWorker(
         }
     }
 
-    private suspend fun processCurrentParent(): SyncResult {
+    private suspend fun processCurrentParent(trigger: SyncTrigger): SyncResult {
         val currentStates = states.value
         val observed =
             withTimeoutOrNull(5.seconds) {
@@ -66,12 +68,18 @@ class CollaborationRecoveryWorker(
         val parent =
             observed.recoveryParent()
                 ?: return SyncResult.Blocked(collaborationRecoveryParentChanged())
-        return withCollaborationRecoveryParent(currentStates, parent) { process(parent) }
+        return withCollaborationRecoveryParent(currentStates, parent) { process(parent, trigger) }
     }
 
-    private suspend fun process(parent: CollaborationNativeParent): SyncResult {
-        val wake = ensureWake()
-        if (wake is AppResult.Failed) return retry(wake)
+    private suspend fun process(
+        parent: CollaborationNativeParent,
+        trigger: SyncTrigger,
+    ): SyncResult {
+        val found = if (trigger == SyncTrigger.Scheduled) ensureWake() else readWake()
+        if (found is AppResult.Failed) return retry(found)
+        // Both foreground and OS consumers may receive the same continuation. A late delivery
+        // cannot create a fresh sweep after another consumer acknowledged its durable intent.
+        val wake = (found as AppResult.Success).value ?: return SyncResult.Complete
         val inputs =
             withTimeoutOrNull(4.seconds) { recoverInputs(parent) }
                 ?: SyncResult.Retry(failure("input_timeout", FailureKind.Timeout))
@@ -85,11 +93,7 @@ class CollaborationRecoveryWorker(
             withTimeoutOrNull(20.seconds) { recoverPriority(parent) }
                 ?: SyncResult.Retry(failure("priority_timeout", FailureKind.Timeout))
         currentCoroutineContext().ensureActive()
-        return companies(
-            parent,
-            (wake as AppResult.Success).value,
-            independent(inputs, replies, priority),
-        )
+        return companies(parent, wake, independent(inputs, replies, priority))
     }
 
     private suspend fun companies(

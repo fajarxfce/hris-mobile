@@ -13,6 +13,12 @@ import kotlinx.coroutines.*
 suspend fun runSyncTask(
     task: SyncTask,
     onException: (Exception) -> Unit = { Diagnostics.failure(DiagnosticArea.Worker, it) },
+): SyncResult = runSyncTask(task, SyncTrigger.Requested, onException)
+
+suspend fun runSyncTask(
+    task: SyncTask,
+    trigger: SyncTrigger,
+    onException: (Exception) -> Unit = { Diagnostics.failure(DiagnosticArea.Worker, it) },
 ): SyncResult =
     measureOperation(
         PerformanceOperation.Sync,
@@ -24,7 +30,7 @@ suspend fun runSyncTask(
     ) {
         try {
             currentCoroutineContext().ensureActive()
-            val result = task()
+            val result = task(trigger)
             currentCoroutineContext().ensureActive()
             result
         } catch (cancelled: CancellationException) {

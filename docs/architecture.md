@@ -1,5 +1,8 @@
 # Architecture
 
+[Recovery scheduling](collaboration-recovery-scheduling.md) keeps scheduled discovery
+separate from duplicate delivery of durable requests; feature policy owns wake creation.
+
 [Recipient readiness controls](collaboration-readiness-controls.md) use encrypted
 revision receipts and an owned domain wake flow, independently of message delivery.
 

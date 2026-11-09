@@ -26,19 +26,29 @@ class ForegroundSyncWorker(
                     launch {
                         val requests = scheduler.requests(task.key)
                         var wait: Duration? = Duration.ZERO
+                        var timedTrigger = SyncTrigger.Scheduled
                         var backoff = retryDelay
                         while (isActive) {
                             // Coalesce a wake retained while stopped with the startup scan.
-                            if (requests.tryReceive().isFailure) {
-                                if (wait == null) requests.receive()
-                                else withTimeoutOrNull(wait) { requests.receive() }
-                            }
-                            when (val result = runSyncTask(task)) {
+                            val requested =
+                                if (requests.tryReceive().isSuccess) true
+                                else if (wait == null) {
+                                    requests.receive()
+                                    true
+                                } else
+                                    withTimeoutOrNull(wait) {
+                                        requests.receive()
+                                        true
+                                    } == true
+                            val trigger = if (requested) SyncTrigger.Requested else timedTrigger
+                            when (val result = runSyncTask(task, trigger)) {
                                 SyncResult.Complete -> {
                                     wait = interval
+                                    timedTrigger = SyncTrigger.Scheduled
                                     backoff = retryDelay
                                 }
                                 is SyncResult.Retry -> {
+                                    timedTrigger = SyncTrigger.Requested
                                     if (result.failure == null) {
                                         // A completed bounded batch has more work, without a failed
                                         // request.

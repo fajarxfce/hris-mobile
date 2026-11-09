@@ -74,6 +74,7 @@ class AndroidWorkScheduler(
             val request =
                 PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
                     .setInputData(workDataOf(SyncWorker.TASK_KEY to key))
+                    .addTag(SyncWorker.PERIODIC_TAG)
                     .setConstraints(
                         Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
                     )
@@ -82,7 +83,8 @@ class AndroidWorkScheduler(
                     .build()
             workManager.enqueueUniquePeriodicWork(
                 "$key-periodic",
-                ExistingPeriodicWorkPolicy.KEEP,
+                // Update also marks jobs installed by older versions, preserving their cadence.
+                ExistingPeriodicWorkPolicy.UPDATE,
                 request,
             )
         }

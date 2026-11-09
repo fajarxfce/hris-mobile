@@ -9,6 +9,7 @@ import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.fixtures.*
 import dev.fajar.starter.sync.domain.SyncResult
+import dev.fajar.starter.sync.domain.SyncTrigger
 import dev.fajar.starter.worker.ForegroundWorkScheduler
 import dev.fajar.starter.worker.RequestedSyncWorker
 import kotlin.test.*
@@ -765,20 +766,20 @@ class CollaborationRecoveryWorkerTest {
 
     @Test
     fun missingParentsAndUnsupportedPlatformsCannotCaptureOrAcknowledgeWork() = runTest {
-        val f = RecoveryWorkerFixture(testScheduler, 0)
+        val f = RecoveryWorkerFixture(testScheduler, 0, retainedRequest = false)
         f.states.value = ApplicationCollaborationState.Pending
         for (platform in listOf(AppPlatform.Desktop, AppPlatform.Web)) {
-            assertEquals(SyncResult.Complete, f.worker(platform)())
+            assertEquals(SyncResult.Complete, f.worker(platform)(SyncTrigger.Scheduled))
         }
         assertEquals(0, f.wakeWrites)
         val worker = f.worker()
-        assertIs<SyncResult.Retry>(worker())
+        assertIs<SyncResult.Retry>(worker(SyncTrigger.Scheduled))
         assertEquals(5_000L, testScheduler.currentTime)
         assertEquals(0, f.wakeWrites)
         f.states.value = f.publication(null)
-        assertIs<SyncResult.Blocked>(worker())
+        assertIs<SyncResult.Blocked>(worker(SyncTrigger.Scheduled))
         f.states.value = f.publication()
-        assertEquals(SyncResult.Complete, worker())
+        assertEquals(SyncResult.Complete, worker(SyncTrigger.Scheduled))
         assertEquals(1, f.wakeWrites)
         assertEquals(1, f.acknowledgments)
     }

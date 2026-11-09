@@ -1,0 +1,73 @@
+{
+  "status": "Candidate source validated by focused checks; full and native gates pending",
+  "reproduction": {
+    "session": 45404,
+    "reaped": true,
+    "exitCode": 1,
+    "elapsedSeconds": 55.773,
+    "freshCounts": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourcesUnchanged": true,
+    "failure": "Three stale requested invocations added three remote directory reads after both companies were covered."
+  },
+  "focused": {
+    "session": 54280,
+    "reaped": true,
+    "gradleExitCode": 0,
+    "harnessExitCode": 1,
+    "elapsedSeconds": 470.35,
+    "freshCounts": {
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceInputs": 4521,
+    "allInputsUnchanged": false,
+    "documentationDelta": {
+      "onlyChangedInput": "core/worker/README.md",
+      "kind": "documentation",
+      "executableInputsUnchanged": true,
+      "gradleExitCode": 0,
+      "freshTests": 64,
+      "originalAllInputsAssertionPassed": false,
+      "scope": "Audited documentation-only delta; do not relabel full-input fingerprint as unchanged. Full gate must bind final inputs."
+    },
+    "librarySourcesUnchanged": true,
+    "checks": [
+      "core worker desktop tests",
+      "application recovery/scheduling/bindings desktop tests",
+      "Android devRelease compile",
+      "Android proof compile",
+      "format",
+      "architecture"
+    ]
+  },
+  "formatterSessions": [
+    {
+      "session": 67722,
+      "reaped": true,
+      "elapsedSeconds": 36.05
+    },
+    {
+      "session": 9701,
+      "reaped": true,
+      "elapsedSeconds": 36.84
+    }
+  ],
+  "rootCause": "Requested consumers ensured a new wake even after another consumer acknowledged the previous sweep. Continuations could feed both OS and foreground execution repeatedly.",
+  "change": "Generic Scheduled/Requested trigger; feature-owned wake creation only for scheduled discovery, requested consumers stop at absent durable wake. Periodic WorkManager registrations update their tag while preserving identity.",
+  "pending": [
+    "Required root/full and actual browser gate",
+    "Release78 package",
+    "Real WorkManager dispatch probe",
+    "Retained sender request-count and original-message proof",
+    "Generic Starter port after Mobile acceptance"
+  ],
+  "phoneVersion": 70,
+  "newPhoneAvailability": false
+}

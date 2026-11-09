@@ -23,7 +23,11 @@ internal fun recoveryId(index: Int) =
 /**
  * Real domain operations, explicit in-memory raw outcomes; storage has separate SQLite coverage.
  */
-internal class RecoveryWorkerFixture(val scheduler: TestCoroutineScheduler, count: Int = 5) {
+internal class RecoveryWorkerFixture(
+    val scheduler: TestCoroutineScheduler,
+    count: Int = 5,
+    retainedRequest: Boolean = true,
+) {
     val clock =
         object : Clock {
             override fun now() =
@@ -82,10 +86,12 @@ internal class RecoveryWorkerFixture(val scheduler: TestCoroutineScheduler, coun
     val scheduled = mutableListOf<String>()
     val denied = mutableListOf<String>()
     var pages = 0
-    var wakeWrites = 0
+    // Most worker cases consume one already durable request; scheduling tests start empty.
+    var wakeWrites = if (retainedRequest) 1 else 0
     var progressWrites = 0
     var acknowledgments = 0
-    var wake: CollaborationRecoveryWake? = null
+    var wake: CollaborationRecoveryWake? =
+        if (retainedRequest) CollaborationRecoveryWake(recoveryId(10_001)) else null
     var progress: CollaborationRecoveryProgress? = null
     var ackFailure: Failure? = null
     var pageFailure: Failure? = null

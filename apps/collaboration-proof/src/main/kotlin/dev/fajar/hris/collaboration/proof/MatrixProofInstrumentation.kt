@@ -94,6 +94,7 @@ class MatrixProofInstrumentation : Instrumentation() {
         when (scenario) {
             "workspace-read-cost" -> WorkspaceReadCostProbe(targetContext, directory).run()
             "foreground-scheduling" -> ForegroundSchedulingProbe(targetContext, directory).run()
+            "sync-trigger" -> SyncTriggerProbe(targetContext, directory).run()
             "hris-product-peer" -> HrisProductNotificationPeer(targetContext, directory).run()
             "hris-readiness-peer" -> HrisReadinessPeer(targetContext, directory).run()
             "notification-input-verify" -> {

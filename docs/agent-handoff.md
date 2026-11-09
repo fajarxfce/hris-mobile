@@ -1,5 +1,43 @@
 # Agent continuation — HRIS Mobile
 
+## Recovery consumers no longer create fresh wakes — 9 November 2026, 00:19 UTC
+
+Candidate source separates SyncTrigger.Scheduled discovery from Requested delivery.
+CollaborationRecoveryWorker now reads existing intent for requested executions and
+returns before remote work if another consumer already acknowledged it. Scheduled
+startup/periodic discovery can still retain a wake. Android periodic jobs receive a
+fixed tag through UPDATE (identity/cadence retained); explicit jobs and foreground
+retry/continuation remain Requested. Existing tasks keep their default invocation.
+[Contract](collaboration-recovery-scheduling.md),
+[evidence](measurements/collaboration-recovery-scheduling-2026-11-09.json).
+
+The pre-fix regression FAILED as intended: after two companies finished, three stale
+requests raised remote discovery from2 to5. Red45404 REAPED55.773s. Candidate focused
+54280 Gradle passes64 fresh cases, zero failures/errors/skips, Android/proof compile,
+format/architecture in470.350s. Wrapper exits1 because core/worker README was edited
+during the run; audit proves it is the ONLY changed input, all executable inputs and
+82 inspector inputs unchanged. Do not relabel the all-input hash assertion as passed.
+Full gate must bind the final4,521 inputs. Format67722/9701 REAPED36.050/36.840s.
+
+NEXT push source, then run .work/recovery-scheduling-2026-11-09/check-full.py full-1
+(one owned compiler,2GiB, one worker, no emulator). It includes required :check,
+actual core worker/readiness/recipient Chrome tests, Android compile/lint, proof,
+Wasm/iOS-source/quality. No native Apple execution. No full78/native acceptance yet.
+
+Private release-phone-2026-11-09-build78 scripts prepare signed same-ID ARM6478 and
+actual byte/manifest/SDK5 verification. recovery-scheduling-native-2026-11-09 contains
+UNEXECUTED complete77 sender clone, bounded emulator, upgrade, separate scheduling78
+proof package, aggregate-only passive counter and acceptance-plan.md. Review scripts
+before running; native orchestration/sends are not complete yet. Full source/push/
+package gates precede emulator. Preserve Control77, Warm77, Readiness76 and Draft66;
+never reset keys. Source77 sender stays stopped/preserved. Phone70 has no availability
+reply; do not poll or drive its UI. Generic Starter665b9cd unchanged until consumer proof.
+
+Dev Platform05b54ff5 documents e558a686/schema116.4/control ON; no server source change
+for this fix. Continue native request counts, missed-hint/reconnect/interrupted
+activation, Older messages/display timestamps, then the remaining54 PRD groups.
+
+
 ## Native77 readiness succeeds; excessive metadata recovery remains — 9 November 2026
 
 Current dev API/worker source e558a686, schema116.4, readiness control **ON**.
