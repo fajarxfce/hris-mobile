@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 18:04 UTC. Historical detail is retained in
+Updated 9 November 2026, 18:26 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -28,7 +28,7 @@ is required; Apple source/runtime, push and calling acceptance remain separate.
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | SDK6 distribution accepted; preserve unrelated gradlew.bat delta |
 | Starter | feat/network-inspector-20261107 /ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Platform original | feat/communications /691f3fc5 | Recovery verifier port accepted/pushed; runtime unchanged |
-| Platform group | feat/communication-space /e2c61dad | Native original-delivery proof accepted; key confirmation in progress |
+| Platform group | feat/communication-space /67def551 | Worker-only key publication passes native proof; full gate62503 running |
 
 Isolated directories are under `/home/fajar/hris/.worktrees/`: `communication-space`,
 `mobile-inspector-ci-2026-11-09`, `inspector-sdk6-2026-11-09` and
@@ -55,13 +55,31 @@ publish their own keys. No readiness guard, original key, store or message chang
 
 Retired candidate gates:213 focused and2 HTTP cases pass. Its full61608 was deliberately
 terminated/reaped after1,231.719s; only192 domain cases completed, no full acceptance.
-The verified process group is stopped and the heavy-process guard is empty. Group's
-new regression30751 runs in `.work/space-original-key-publication-2026-11-09/red-1`;
-expect the missing publication to fail before implementing the worker correction.
-Because the worker constructor will change, validate the full API AND worker contexts.
-Then remove native31328's explicit fixture keys/upload precondition and prove original
-SDK delivery using worker-confirmed publication. Mobilea14eea78 source remains accepted
-and unchanged; hosted Apple evidencea945220c is accepted/pushed. No APK88 or phone install.
+The retired candidate's verified process group is stopped. The replacement worker
+regression first fails as expected on missing publication (96766/red-2,one test),
+after a fixture-only compilation correction (30751/red-1). Production correction
+now passes97011/focused-1:11 cases/164.148s,including atomic rollback,competing workers
+and actual Synapse signed-key continuity. Group29647/source-1 passes compilation/
+quality in31.698s with8,698 stable inputs.
+
+Group71915/native-1 passes139.231s on the unchanged accepted Mobile proof APK/source.
+The old explicit fixture keys/upload is removed: worker completion alone confirms
+the original keys before bootstrap. Two original messages survive process loss
+between durable ACK and Sent projection,produce exactly two encrypted provider
+events,and are read offline in a later process. Ten native requests remain exactly
+two bootstrap/two direct reads. The2560MiB/two-core emulator is stopped.
+
+Group62503/full-1 is RUNNING:complete domain,relevant SQL/provider/delivery/native API
+and FULL unfiltered worker tests/quality. Its source is frozen. The192 domain cases
+pass so far; do not count the pending gate as accepted. Audit manifests/XML/native
+results after completion,then commit implementation/tests/docs. Group67def551 records
+this checkpoint. `.work/space-readiness-control-2026-11-09` holds private successor
+protocol candidates only; no signal source/worker/consumer has been accepted yet.
+
+Mobilea14eea78 source remains unchanged; hosted42656803963 is fully accepted at
+69e639f8 with9,137 cases,including2,499 Apple simulator,and unsigned Xcode host.
+Mobilea945220c records audited Apple evidence. No Mobile compiler,SDK7,APK88,phone
+install or live rollout is active. Next:group readiness/background ownership/routing.
 
 ## Accepted direct transport
 
