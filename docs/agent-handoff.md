@@ -1,6 +1,30 @@
 # Agent continuation — HRIS Mobile
 
 
+## Verified83 now running retained-store acceptance — 9 November 2026, 07:01 UTC
+
+Build22621 REAPED PASS97.697s from pushed ddb3d058. Verifiers23196/88182 REAPED:
+nondebug devRelease83 ARM64,123465103B, same development signer,
+SHA1acea7f495a0250970793fdd24aa9e7fa89a33eec1b4a4089d0b17684d01aad5.
+Firebase/API,16KiB,backup exclusions and SDK6 exact stripped native verified; lint0.
+[Candidate](measurements/collaboration-release83-candidate-2026-11-09.json).
+Clone16820 REAPED: latest COMPLETE82 all4 userdata/encryption files and AVD preserved,
+source unchanged. Never restore older source over the new83 target after its boot.
+
+ACTIVE only emulator46665 (PID3712426,2560MiB/2cores), passive counter3624,
+paired80385, phases15283 in .work/native-parent-renewal-native-2026-11-09/native-1.
+Native in-place82→83 passes14.681s; same app/account/public identity. First Matrix
+refresh200 with fresh native parent. Home settled after42.546s. Startup metadata
+cost remains high (52setup/38room/30conversation at131s counter); keep it visible,
+separate from settled traffic. Finish ALL phases/renewals then reap all four sessions
+and run accept-quietness.py/accept-release.py. No native acceptance yet.
+Four originals must remain Sent; one new Parent83 sample only after lifecycle proof.
+No phone install/UI. SDK6 publisher and both Starter ports remain gated to accepted83.
+Prepared Starter maintenance port may follow only exact recorded worker-port files,
+allowing one final combined regression gate/atomic commit; no arbitrary dirty inputs.
+Platform runtime/schema116.4/controlON unchanged; all54 PRD groups remain open.
+
+
 ## Parent renewal full validation passes; package83 next — 9 November 2026, 06:55 UTC
 
 c0b645d05299f42f30d4e8e28de7f394e2d7e405 is pushed. Full23728 REAPED PASS948.946s:
