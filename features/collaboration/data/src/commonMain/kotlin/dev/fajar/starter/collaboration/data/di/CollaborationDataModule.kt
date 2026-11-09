@@ -1624,6 +1624,35 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun acquireOlderHistory(
+        traversal: CollaborationHistoryTraversalRepository,
+        history: CollaborationHistoryRepository,
+        edits: CollaborationMessageEditRepository,
+        lists: CollaborationListRepository,
+        conversations: CollaborationConversationRepository,
+        setup: CollaborationSetupRepository,
+        runtimes: CollaborationRuntimeRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        AcquireOlderCollaborationHistory(
+            traversal,
+            history,
+            edits,
+            lists,
+            conversations,
+            setup,
+            runtimes,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun acquireProviderHistory(
         history: CollaborationHistoryTraversalRepository,
         lists: CollaborationListRepository,

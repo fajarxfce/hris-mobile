@@ -878,12 +878,10 @@ class ChatThreadViewModelTest {
             advanceUntilIdle()
             vm.onEvent(ChatThreadEvent.OlderRequested)
             advanceUntilIdle()
-            assertTrue(vm.state.value.hasOlder)
-            assertTrue(f.past.anchors.isEmpty())
-            vm.onEvent(ChatThreadEvent.OlderRequested)
-            advanceUntilIdle()
             assertEquals("Older message 1", vm.state.value.rows.single().text)
             assertFalse(vm.state.value.hasOlder)
+            assertEquals(2, f.past.requestedPositions.size)
+            assertEquals(listOf("\$older-1"), f.past.anchors)
         }
     }
 

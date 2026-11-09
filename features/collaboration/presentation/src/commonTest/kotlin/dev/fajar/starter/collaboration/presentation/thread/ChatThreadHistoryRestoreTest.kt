@@ -11,6 +11,49 @@ import kotlinx.coroutines.test.*
 
 class ChatThreadHistoryRestoreTest {
     @Test
+    fun oneOlderRequestPassesRetainedMessagesAndMetadataToTheTerminalProviderPage() = runTest {
+        withRoom { f, store ->
+            val known = (100..102).map { f.past.event(it) }
+            f.past.merge(known.map { f.past.originals.getValue(it.eventId) })
+            f.past.pages.add(metadata(f, 9) + known)
+            f.past.pages.add(emptyList())
+            val room = enter(f, store)
+            assertEquals(3, room.state.value.rows.size)
+            room.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertFalse(room.state.value.hasOlder)
+            assertEquals(2, f.past.requestedPositions.size)
+            assertTrue(f.past.anchors.isEmpty())
+            assertEquals(3, room.state.value.rows.size)
+            store.clear()
+            runCurrent()
+            val reopened = enter(f, store)
+            assertFalse(reopened.state.value.hasOlder)
+            assertEquals(2, f.past.requestedPositions.size)
+            assertEquals(3, reopened.state.value.rows.size)
+        }
+    }
+
+    @Test
+    fun oneOlderRequestPassesSeveralMetadataPagesWithoutAdvertisingMissingMessages() = runTest {
+        withRoom { f, store ->
+            f.past.pages.addAll(metadata(f, 45).chunked(20))
+            f.past.pages.add(emptyList())
+            val room = enter(f, store)
+            room.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertFalse(room.state.value.hasOlder)
+            assertEquals(4, f.past.requestedPositions.size)
+            assertTrue(f.past.anchors.isEmpty())
+            assertTrue(room.state.value.rows.isEmpty())
+            store.clear()
+            runCurrent()
+            assertFalse(enter(f, store).state.value.hasOlder)
+            assertEquals(4, f.past.requestedPositions.size)
+        }
+    }
+
+    @Test
     fun metadataAcrossSeveralPagesDoesNotBringBackOlderAfterRoomRecreation() = runTest {
         withRoom { f, store ->
             val events = metadata(f, 45) + f.past.event(46)

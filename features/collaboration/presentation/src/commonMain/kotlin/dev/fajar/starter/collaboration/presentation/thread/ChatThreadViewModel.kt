@@ -41,10 +41,8 @@ class ChatThreadViewModel(
     private val enter: EnterCollaborationConversation,
     private val acquireHistory: AcquireCollaborationHistory,
     private val reopenHistory: ReopenCollaborationHistory,
-    acquireProviderHistory: AcquireCollaborationProviderHistory,
-    readHistoryReferences: ReadCollaborationHistoryReferences,
+    private val acquireOlderHistory: AcquireOlderCollaborationHistory,
     private val readHistoryEnd: ReadCollaborationHistoryEnd,
-    reconcileHistoryReferences: ReconcileCollaborationHistoryReferences,
     private val observeDraft: ObserveCollaborationDraft,
     private val editDraft: EditCollaborationDraft,
     private val submitComposer: SubmitCollaborationComposer,
@@ -174,17 +172,10 @@ class ChatThreadViewModel(
     private var pulse: Channel<Unit>? = null
     private var wakeRequested = false
     private var olderRequested = false
-    private var olderPosition = ChatThreadHistoryPosition()
+    private var olderPosition = CollaborationOlderHistoryPosition()
     private var olderScanned = false
     private var olderKey: CollaborationHistoryTraversal? = null
     private var olderRecoveryAnchor: String? = null
-    private val olderHistory =
-        ChatThreadHistoryPager(
-            acquireProviderHistory,
-            acquireHistory,
-            readHistoryReferences,
-            reconcileHistoryReferences,
-        )
 
     init {
         on<ChatThreadEvent.UnsentReplySelected> {
@@ -469,7 +460,7 @@ class ChatThreadViewModel(
         pulse = null
         wakeRequested = false
         olderRequested = false
-        olderPosition = ChatThreadHistoryPosition()
+        olderPosition = CollaborationOlderHistoryPosition()
         olderScanned = false
         olderKey = null
         olderRecoveryAnchor = null
@@ -1219,7 +1210,7 @@ class ChatThreadViewModel(
             connect(retryRoom = true, recoverHistory = true)
         } else {
             if (state.value.historyIncomplete || state.value.historyFailure != null) {
-                olderPosition = ChatThreadHistoryPosition()
+                olderPosition = CollaborationOlderHistoryPosition()
                 olderScanned = false
                 olderRequested = true
                 updateState { it.copy(historyIncomplete = false, historyFailure = null) }
@@ -1622,7 +1613,7 @@ class ChatThreadViewModel(
                     lease.device.deviceId,
                 )
             if (olderKey != key) {
-                olderPosition = ChatThreadHistoryPosition()
+                olderPosition = CollaborationOlderHistoryPosition()
                 olderScanned = false
                 olderRecoveryAnchor = null
                 olderKey = key
@@ -1743,16 +1734,19 @@ class ChatThreadViewModel(
 
     private suspend fun loadOlder(device: CollaborationMessageDevice): AppResult<Unit> {
         val key = CollaborationHistoryTraversal(conversationId, device.roomId, device.deviceId)
-        val result = olderHistory.load(workspaceId, key, olderPosition)
+        olderRecoveryAnchor = null
+        val result = acquireOlderHistory(workspaceId, key, olderPosition)
         currentCoroutineContext().ensureActive()
-        if (result is AppResult.Failed) {
-            olderRecoveryAnchor = olderHistory.recoveryAnchor
-            return result
-        }
+        if (result is AppResult.Failed) return result
         val batch = (result as AppResult.Success).value
+        if (batch is CollaborationOlderHistoryOutcome.ReopenRequired) {
+            olderRecoveryAnchor = batch.anchorEventId
+            return AppResult.Failed(batch.failure)
+        }
+        batch as CollaborationOlderHistoryOutcome.Loaded
         olderRecoveryAnchor = null
         olderPosition = batch.position
-        olderScanned = batch.scanned
+        olderScanned = batch.exhausted
         updateState { it.copy(historyIncomplete = it.historyIncomplete || batch.unresolved) }
         return AppResult.Success(Unit)
     }

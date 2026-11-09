@@ -1,5 +1,50 @@
 # Agent continuation — HRIS Mobile
 
+## Domain-owned older history passes1,892 feature cases — 9 November 2026, 03:30 UTC
+
+Focused84644 REAPED PASS163.326s:1,892 fresh tests,0 failures/errors/skips;format,
+architecture/detekt pass;4,528 source/82 inspector inputs unchanged. Main source
+replaces screen ChatThreadHistoryPager with AcquireOlderCollaborationHistory,
+repository coordination and finite discovery (10 local slices/5 provider pages).
+Positions carry generation and attempted-original boundary; unavailable originals
+remain unresolved without starving later pages. Changed traversal is reread before
+reconciliation. ViewModel keeps screen outcomes and explicit window-reopen handling.
+[Design](collaboration-older-history-discovery.md),
+[exact evidence](measurements/collaboration-older-history-discovery-2026-11-09.json).
+
+RED4357 REAPED87.981s,2 actual failures; RED88184 REAPED61.804s,1 actual stale-position
+failure. First focused4358 intentionally stopped/reaped377.698s after1891 cases/3
+failures, before more app metadata compilation. Preserve failed gate. Two were real
+starvation/stale-reconciliation defects now fixed; one expected a second gesture for
+an empty page, replaced with one-gesture content/end assertions. Format15261,79976,
+56573 all REAPED. No compiler/emulator remains at this checkpoint.
+
+NEXT push this source, then older-history-discovery-2026-11-09/check.py full-1.
+Full includes root, full Android-host, actual Chrome history15+credential/readiness/
+worker contracts, Android/proof compile/lint, sharedWasm/iOSArm64 source and quality.
+Do not edit compiler inputs until reaped. Five release-phone-2026-11-09-build80 scripts
+are prepared/gated to this full result and pushed HEAD; none run. Required host
+handover7/deviceSync5, historyRestore8 and OlderHistoryAcquisition7 cases are checked.
+
+Native80 scripts prepared under initial-sync-native-2026-11-09, NOT executed. Clone
+LATEST token-rotation-native-2026-11-09/sender including entire AVD/encryption metadata;
+its stopped79 store follows successful paired refreshes11→12→13. Never overwrite it
+with78/earlier79. Counter and paired probe must precede boot/upgrade. Preserve original
+three messages/one private identity; Recovery78 is SENT once and must never be resent.
+New proof must cover Home/room, at most one Older read and route reentry, background/
+resume, cold, all original Sent bubbles and two actual refresh responses. The paired
+probe now continues until its stop file/780s, so explicitly stop/reap it along with
+900s counter and1200s emulator. await-settled.py records startup cost and fails after75s
+of repeated metadata; subsequent120s windows require sync200 plus no setup loops.
+Traffic acceptance allows normal sync401 followed by verified renewal, rejects failed
+refresh/403/new bootstrap and checks token continuity without saving tokens/hashes.
+All scripts still need review against actual native run; no acceptance exists yet.
+
+Current pushed prior production c9d63160 fixes classified acquisition/immediate initial
+sync (592 host cases accepted). Build79 remains unaccepted/uninstalled. Phone is fresh
+stock-ROM; announce before accepted install-only, no phone UI. Starter port gated and
+unexecuted; Platform runtime/schema116.4/controlON unchanged;54PRD groups remain open.
+
 ## Classified acquisition and immediate initial delta pass — 9 November 2026, 03:10 UTC
 
 RED34197 REAPED100.173s:3 reproduced failures,1 genuine-storage control PASS. Final

@@ -729,10 +729,8 @@ internal class ChatThreadFixture {
                 createEnterCollaborationConversation(),
                 createAcquireCollaborationHistory(),
                 createReopenCollaborationHistory(),
-                createAcquireCollaborationProviderHistory(),
-                createReadCollaborationHistoryReferences(),
+                createAcquireOlderCollaborationHistory(),
                 createReadCollaborationHistoryEnd(),
-                createReconcileCollaborationHistoryReferences(),
                 createObserveCollaborationDraft(),
                 EditCollaborationDraft(drafts, local, sessions, workspaces, server, build, clock),
                 createSubmitComposer(),
@@ -1123,27 +1121,16 @@ internal class ChatThreadFixture {
             )
         }
 
-    private fun createAcquireCollaborationProviderHistory() =
+    fun createAcquireOlderCollaborationHistory() =
         with(base) {
-            AcquireCollaborationProviderHistory(
+            AcquireOlderCollaborationHistory(
                 past.traversal,
+                history,
+                emptyEditHistory(),
                 local,
                 this@ChatThreadFixture.remote,
                 setup.remote,
                 runtimes,
-                sessions,
-                workspaces,
-                server,
-                build,
-                clock,
-            )
-        }
-
-    private fun createReadCollaborationHistoryReferences() =
-        with(base) {
-            ReadCollaborationHistoryReferences(
-                past.traversal,
-                local,
                 sessions,
                 workspaces,
                 server,
@@ -1162,21 +1149,6 @@ internal class ChatThreadFixture {
                 server,
                 build,
                 clock,
-            )
-        }
-
-    private fun createReconcileCollaborationHistoryReferences() =
-        with(base) {
-            ReconcileCollaborationHistoryReferences(
-                past.traversal,
-                history,
-                local,
-                sessions,
-                workspaces,
-                server,
-                build,
-                clock,
-                emptyEditHistory(),
             )
         }
 }

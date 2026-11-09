@@ -1,5 +1,9 @@
 # Architecture
 
+[Older-message discovery](collaboration-older-history-discovery.md) belongs to a
+bounded domain use case; generation-bound continuation and unavailable originals
+stay separate from provider exhaustion and screen state.
+
 [Initial synchronization](collaboration-initial-sync.md) requests an immediate SDK
 delta before long polling and preserves classified acquisition failures without
 inventing storage exceptions.
