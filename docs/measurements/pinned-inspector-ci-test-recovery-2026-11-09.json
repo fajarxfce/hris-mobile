@@ -25,7 +25,7 @@
       "skipped": 0
     }
   },
-  "nativeAbortCause": "Unclassified; bounded core/backtrace capture added to CI, local reproduction pending",
+  "nativeAbortCause": "Unclassified; isolated catalog recovery passes once on version1 like CI. Full CI retains native core/backtrace diagnostics.",
   "limitations": [
     "10 focused tests on Android host and Desktop, not full application acceptance",
     "Prior native86 proof/install remains separately accepted",
@@ -64,5 +64,28 @@
       "skipped": 1
     }
   ],
-  "ciXmlTotalsArePartial": true
+  "ciXmlTotalsArePartial": true,
+  "isolatedDesktopReproduction": {
+    "startedAt": "2026-11-09T10:31:52.642604+00:00",
+    "elapsedSeconds": 448.118,
+    "exitCode": 0,
+    "sourceFiles": 4528,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml": {
+        "sha256": "5934e392d06a9b3482bdd00db179b0bb6eb6b045d2bea3a13edc0ae18f8f431d",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  }
 }

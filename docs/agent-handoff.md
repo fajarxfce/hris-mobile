@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 10:32 UTC. This file describes current work. Historical
+Updated 9 November 2026, 10:40 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -24,12 +24,12 @@ Do not restart jobs or reapply candidates from that history without checking cur
 
 | Checkout | Branch/source | Current state |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 / 2293ff05 | Pushed; native86 accepted/installed |
-| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 6c6aa4ca | Pushed; verify failure under investigation |
-| Inspector original | feat/matrix-rust-bindings-20261107 / 2b849217 | Native freeze released; still SDK5 catalog |
+| Mobile original | feat/chat-send-timing-20261107 / b0d4cd6e | Native86 installed; Room dispatch WIP |
+| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 2d7770c0 | Pushed; verify42601572510 active |
+| Inspector original | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Verified SDK6 integrated/pushed |
 | Inspector isolated | feat/sdk6-distribution-20261109 / a6b8236 | Pushed; SDK6 distribution accepted |
 | Starter | feat/network-inspector-20261107 / 6157db1 | Pushed; generic worker/identity ports accepted |
-| Platform original | feat/communications / 8769b0d0 | Pushed; runtime unchanged |
+| Platform original | feat/communications / 43a7c0c8 | Pushed; runtime unchanged |
 | Platform group worktree | feat/communication-space / fdcd783e | Separate unshipped group implementation |
 
 The isolated directories are under `/home/fajar/hris/.worktrees/`:
@@ -85,7 +85,9 @@ a separate cost; one send sample is not p95. Phone installation53784 reaped PASS
 Latest COMPLETE STOPPED store is `.work/selected-runtime-auth-trace-native-2026-11-09/sender`
 at86, all four userdata/encryption files and full AVD. NEVER recreate from85/84/83,
 resend Selected86/the six old originals, or send Draft66 092041. Preserve Bima74 too.
-Original Mobile/inspector input freeze is released. Local desktop reproduction is active in this CI worktree; check owned processes.
+Original Mobile/inspector input freeze is released. Local desktop reproduction48148 is reaped PASS448.118s/one actual case;4528 app/library
+inputs unchanged. It did not reproduce the abort. Root Mobile now owns format/check
+of the new Room dispatch flow; do not start another heavy local job.
 
 The first native86 upgrade retained identity before a turn interruption. Its resumed
 follow-up had one unclassified otherAccess observation and a stale preflight expecting
@@ -101,8 +103,8 @@ in immutable release438835525. AAR SHA256
 a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3;
 Ivy SHA25669ea030963275ce080991e658172934441b73558e9de4d8e7ae3976b2f18558a.
 APK stripped ARM64 SHA2564e15c92398521f5f5cd9fbb30cf327019faf32abe5302b64d8b4bdc07d75e9d4.
-Do not rebuild or overwrite release assets. Original inspector's SDK5 descriptor404
-still requires the verified local mirror for the frozen86 build; that is not public CI.
+Do not rebuild or overwrite release assets. APK86 was built with the verified local mirror while its root inspector still used
+SDK5. Root inspector nowf8ca3d6 integrates verified publicSDK6; no longer frozen.
 
 Inspector742a2d1 uses publicSDK6/strict checksums. CI42591111996 succeeds:226 portable/
 Android host cases and69 actual Apple simulator cases, zero failures/errors/skips;
@@ -133,7 +135,9 @@ Artifact13665023876 SHA0f71440f50071349dd9779628da761f8ea7c108e164d38d65faf63366
 verified. The transport test now awaits explicit engine finalization. Local18685 passes10 focused
 Android host/Desktop cases in206.420s, format/architecture/detekt and4528 app/library
 inputs unchanged. Native abort diagnostics retain bounded cores only until backtraces
-are captured. Local desktop reproduction is running; abort cause remains unclassified.
+are captured. Local desktop reproduction48148 passes once,448.118s; abort cause remains unclassified.
+Verify42601572510 at2d7770c0 is running with native diagnostics. No root-source feature
+changes are included in that CI run.
 [Exact failed/successful scope](measurements/pinned-inspector-ci-test-recovery-2026-11-09.json). No production retry/cancellation behavior was changed. Web-only CI42597096435 also shut down at Wasm optimization; no final artifact
 survived. Cause remains unproved. Next web job bounds Binaryen2cores, Gradle1worker/
 3GiB/in-process Kotlin and samples closed kernel memory numbers every15s to console.
@@ -150,8 +154,10 @@ Audit actual completed jobs and artifacts; do not infer success from compilation
    is complete, integrate verified inspector/CI source into the original checkout.
    Port the generic pinned workflow setup/checksums to Starter after Mobile proof.
    HRIS selected-runtime registry policy does not belong in Starter.
-3. Resume organization chat from the current prepared Room intent: bounded original
-   dispatch, durable published binding/projection, exact LEGACY metadata validation,
+3. Root Mobile has uncommitted bounded original Room dispatch,18 domain cases, four
+   additional real-storage contract cases, data DI and its assembled binding assertion.
+   Format/focused/full/browser gates are next in .work/room-request-dispatch-2026-11-09.
+   No product route or rollout. Then durable published binding/projection, exact LEGACY metadata validation,
    original SDK delivery/history, workers and product routing. Existing Prepare and
    Resolve room use cases are accepted; do not recreate them. The group backend is in
    the separate worktree; original Platform does not contain V117–138.
