@@ -94,8 +94,10 @@ without generating another key. Local session replacement does not change its
 audience/account/company/native-family/device namespace.
 
 The lease owns credential callbacks, their failure collector and the one wait for
-native E2EE initialization. Closing pauses queues, rejects late credential access
-and waits for that initialization before releasing client/directory resources.
+native E2EE initialization. Closing gates new entry, pauses queues and waits for that
+initialization. The credential writer stays open through child/native draining so an
+already-running refresh can persist its result. It closes after the native handle,
+before directory release. See [credential continuity](collaboration-credential-recovery.md).
 Cancellation of a caller's wait cannot detach native initialization and unlock its
 SQLite files. Close reports pending after five seconds; the application repository
 retains the lease until cleanup completes, with a capacity of five. SDK request

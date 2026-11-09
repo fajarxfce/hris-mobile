@@ -497,7 +497,6 @@ internal constructor(
         }
         httpObservationJob?.cancelAndJoin()
         authentication?.deactivate()
-        val credentialResult = persistence.close()
         credentialWatcher.cancelAndJoin()
         syncWatcher.cancelAndJoin()
         safeStorageCall { nativeClient.enableAllSendQueues(false) }
@@ -513,6 +512,7 @@ internal constructor(
         // the SDK store pools so delayed native work cannot write after our unlock.
         val drained = safeStorageCall { nativeClient.pause() }
         if (drained is AppResult.Failed) return SdkShutdownAttempt(drained, released = false)
+        var credentialResult: AppResult<Unit> = AppResult.Success(Unit)
         val result = safeStorageCall {
             try {
                 try {
@@ -521,7 +521,14 @@ internal constructor(
                     nativeClient.close()
                 }
             } finally {
-                directory.close()
+                // A refresh already in flight may finish while children/initialization/native
+                // stores drain. Its synchronous session callback still owns this protected
+                // record. Close that writer only after the native handle is released.
+                try {
+                    credentialResult = persistence.close()
+                } finally {
+                    directory.close()
+                }
             }
         }
         released(this)

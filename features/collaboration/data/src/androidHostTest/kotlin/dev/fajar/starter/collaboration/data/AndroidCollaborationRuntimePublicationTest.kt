@@ -10,6 +10,77 @@ import kotlinx.coroutines.test.*
 /** Real Android lease lifecycle with inert FFI handles; no provider or JNI claim. */
 class AndroidCollaborationRuntimePublicationTest {
     @Test
+    fun failedNativeDrainRetainsCredentialWriterUntilTheSameOwnerFinishesClosing() = runBlocking {
+        val f = runtimeLeaseFixture()
+        var pauses = 0
+        f.beforePause = {
+            pauses++
+            if (pauses == 1) error("Fictional pending native drain")
+        }
+        try {
+            f.lease.completeAcquisition()
+            assertIs<AppResult.Failed>(f.lease.close())
+            assertFalse("directory.close" in f.calls)
+            assertFalse("released" in f.calls)
+            val access = "hris_mx_a_" + "a".repeat(43)
+            val refresh = "hris_mx_r_" + "r".repeat(43)
+            assertEquals(
+                AppResult.Success(Unit),
+                f.persistence.saveTokens(
+                    f.initial.matrixUserId,
+                    f.initial.matrixDeviceId,
+                    f.initial.homeserverUrl,
+                    access,
+                    refresh,
+                ),
+            )
+            assertEquals(AppResult.Success(Unit), f.lease.close())
+            val retained = f.codec.decode(requireNotNull(f.store.read()))
+            assertEquals(refresh, retained.refreshToken)
+            assertEquals(f.initial.messageOperationId, retained.messageOperationId)
+            assertEquals(1, f.calls.count { it == "directory.close" })
+            assertEquals(1, f.calls.count { it == "released" })
+            assertIs<AppResult.Failed>(f.persistence.session())
+            Unit
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
+    fun refreshCompletingDuringNativeDrainIsDurableBeforeReleasingItsCredentialOwner() =
+        runBlocking {
+            val f = runtimeLeaseFixture()
+            var saved: AppResult<Unit>? = null
+            val access = "hris_mx_a_" + "a".repeat(43)
+            val refresh = "hris_mx_r_" + "r".repeat(43)
+            f.beforePause = {
+                saved =
+                    f.persistence.saveTokens(
+                        f.initial.matrixUserId,
+                        f.initial.matrixDeviceId,
+                        f.initial.homeserverUrl,
+                        access,
+                        refresh,
+                    )
+            }
+            try {
+                f.lease.completeAcquisition()
+                assertEquals(AppResult.Success(Unit), f.lease.close())
+                assertEquals(AppResult.Success(Unit), saved)
+                val retained = f.codec.decode(requireNotNull(f.store.read()))
+                assertEquals(access, retained.accessToken)
+                assertEquals(refresh, retained.refreshToken)
+                assertEquals(f.initial.passphrase, retained.passphrase)
+                assertEquals(f.initial.messageOperationId, retained.messageOperationId)
+                assertIs<AppResult.Failed>(f.persistence.session())
+            } finally {
+                f.close()
+            }
+            f.assertReleased()
+        }
+
+    @Test
     fun pendingRestorationMustFinishBeforeAnyShutdownIoOrDirectoryRelease() = runTest {
         val f = runtimeLeaseFixture(StandardTestDispatcher(testScheduler))
         try {

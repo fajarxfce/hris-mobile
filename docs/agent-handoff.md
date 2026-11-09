@@ -1,5 +1,25 @@
 # Agent continuation — HRIS Mobile
 
+## Credential writer survives native drain; rejected-session work next — 9 November 2026, 01:14 UTC
+
+Source now keeps the credential writer through child/E2EE/native drain and closes it
+after the native handle, before directory release. A failed drain retains that writer.
+Red45539 REAPED: original production fails the late refresh write (1 case,54.476s).
+Focused28396 REAPED:31 Android host cases pass,0 failures/errors/skips,51.033s;
+overall task exit1 was formatCheck. After test-layout formatting, quality98243 REAPED
+passes format/architecture in35.247s.4,521 source/82 inspector inputs stable per run.
+Earlier focused-1 JUnit initialization failure is not behavior evidence. No full gate
+or native acceptance for this source yet. [Evidence](measurements/collaboration-credential-drain-2026-11-09.json),
+[contract and remaining work](collaboration-credential-recovery.md).
+
+No compiler/emulator active. Next persist exact-namespace confirmed rejection, prevent
+reopening stale credentials, and drive finite admitted replacement using the existing
+Bootstrap command. The close fix alone does not recover native78. Do not assume SDK
+pause joins every HTTP task: it drains database operations; queue disablement does
+not abort in-flight sends. Refresh response loss must be recoverable regardless.
+Preserve full native78 store/original `Recovery78 005634`; no resend or key reset.
+Phone70 unchanged/no new availability. Starter awaits complete consumer acceptance.
+
 ## Stale refresh token proven; native78 safely stopped — 9 November 2026, 01:08 UTC
 
 Passive comparison at01:04:27 proves the SDK sends a refresh token matching NEITHER

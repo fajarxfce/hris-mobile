@@ -63,16 +63,20 @@ internal suspend fun runtimeLeaseFixture(
         dispatcher,
         released,
         httpObservation,
+        store,
+        codec,
     )
 }
 
 internal class RuntimeLeaseFixture(
-    initial: CollaborationSdkRecord,
+    val initial: CollaborationSdkRecord,
     endpoint: CollaborationSdkEndpoint,
     val persistence: SdkSessionPersistence,
     dispatcher: CoroutineDispatcher,
     private val released: (AndroidCollaborationRuntimeLease) -> Unit,
     val httpObservation: AndroidCollaborationHttpObservation?,
+    val store: MemoryCredentialStore,
+    val codec: CollaborationSdkRecordCodec,
 ) {
     val calls: MutableList<String> = Collections.synchronizedList(mutableListOf())
     var beforePause: suspend () -> Unit = {}
