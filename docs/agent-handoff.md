@@ -1,5 +1,26 @@
 # Agent continuation — HRIS Mobile
 
+## Crashlytics access verified; historical71 publication failure recovered — 9 November 2026, 01:50 UTC
+
+User confirms IAM Viewer granted. Read-only topIssues and events:batchGet return200.
+Recovered the exact71 Storage event at14:38:29 UTC: AndroidCollaborationRuntimeRepository
+acquire:957 in source ff495af3, the registry.attach rejection after reservation retirement.
+[Sanitized evidence](measurements/collaboration-storage71-crashlytics-2026-11-09.json).
+This proves the failure site; it does not identify which concurrent ownership decision
+retired it. Existing73 renewal retention deliberately rejects unpublished acquisitions,
+and the current check still maps that expected lifecycle rejection to Storage. Follow up
+with typed publication rejection and repository regression; do not call this resolved.
+Private bounded API scripts/responses live in /home/fajar/hris/.work/crashlytics-storage-2026-11-08.
+Use report sampleEvent with events:batchGet; the attempted events.list queries returned400.
+Never commit raw events, credentials or app-owner identifiers.
+
+Source7770b61a pushed; full79 compiler84732 remains the sole heavy process, started01:43.
+Inputs frozen until reaped. Package79 scripts are prepared with new recovery suite gates;
+not executed. Native79 scripts prepared for complete retained78 clone, no clone/boot yet.
+Must recover ORIGINAL Recovery78 005634 without resending before native acceptance.
+Phone freshly reset, ADB authorized, install-only after validation and prior notice.
+Continue native credential fix, historical publication regression, Starter port and PRD.
+
 ## Automatic recovery focused gates pass; full79 next — 9 November 2026, 01:43 UTC
 
 Focus65493 REAPED PASS137.400s:81 fresh tests,0 failures/errors/skips, format/architecture,

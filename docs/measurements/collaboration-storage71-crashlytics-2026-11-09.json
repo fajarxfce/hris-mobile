@@ -1,0 +1,37 @@
+{
+  "at": "2026-11-09T01:48:34.771709+00:00",
+  "apiReadVerified": true,
+  "eventsRetrieved": 1,
+  "version": "1.0.0 (71)",
+  "eventTime": "2026-11-08T14:38:29Z",
+  "releaseSource": "ff495af3b1550bf2ce0396b121ef0c421c4861c4",
+  "sourceLine": 957,
+  "sourceExpression": "check(registry.attach(reservation, lease)) { \"SDK acquisition is no longer retained.\" }",
+  "frames": [
+    {
+      "line": "957",
+      "file": "AndroidCollaborationRuntimeRepository.kt",
+      "symbol": "dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeRepository.acquire",
+      "blamed": true
+    },
+    {
+      "line": "29",
+      "file": "AndroidCollaborationRuntimeRepository.kt",
+      "symbol": "dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeRepository.access$acquire"
+    },
+    {
+      "line": "19",
+      "symbol": "dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeRepository$acquire$1.invokeSuspend"
+    }
+  ],
+  "finding": "A late SDK acquisition reached publication after its registry reservation was retired. The IllegalStateException was mapped to generic Storage by the repository boundary.",
+  "limits": [
+    "The sanitized report copies the original stack, but omits original exception text/causes.",
+    "The trace identifies the failed publication fence, not which concurrent lifecycle decision retired that reservation.",
+    "Admission renewal retention in 0f4f0039 reduces churn, but intentionally rejects unpublished acquisitions; expected retirement still needs typed repository classification and regression coverage."
+  ],
+  "readOnly": true,
+  "rawResponseCommitted": false,
+  "responseSha256": "4830aef67ac87578c7cbd3393eb525db5b7407ab34f7e3fe4db9e468054a4512",
+  "privateEvidence": "/home/fajar/hris/.work/crashlytics-storage-2026-11-08"
+}
