@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 22:48 UTC. Historical contracts, failed experiments and
+Updated 9 November 2026, 23:05 UTC. Historical contracts, failed experiments and
 accepted evidence are retained in
 [a877c088](https://github.com/fajarxfce/hris-mobile/blob/a877c088/docs/agent-handoff.md).
 This file owns current work. Do not restart jobs from historical notes.
@@ -117,13 +117,43 @@ Android release/lint,shared Wasm/iOS source and quality pass. Focused/full manif
 match;strict current source/library/XML audit passes. No gate failed. No compiler
 or emulator remains active. [Contract](collaboration-space-recovery-progress.md) and
 [measurement](measurements/collaboration-space-recovery-progress-2026-11-09.json).
-Commit/push before applying successor files. This progress is
+Accepted as8bc952fe and pushed;57676 reaped. This progress is
 not a worker or product activation. No APK,emulator,phone or live changes.
-Private `.work/space-recovery-worker-2026-11-09/prepared` contains eleven UNAPPLIED
-successor files (wake commands + local device/page/claimed-room readers and27 domain tests). They need
-review/tests and must not be applied until progress is accepted,committed and pushed.
-The README records the first-page concurrent-append distinction and remaining final
-inventory/wake handoff. No actual app worker source or binding is prepared yet.
+## Active: original organization recovery worker — unaccepted
+
+Private `.work/space-recovery-worker-2026-11-09` pins8bc952fe. All11 prepared files
+were applied and extended;prepared copies are archived initial drafts,never reapply.
+Current22 Kotlin inputs add group wake commands,local original-device/page/room
+selection,final current-inventory recheck,the actual SyncTask and application wiring.
+One processor/one waiter owns at most4 raw pages per90-second turn (180-second queued
+budget). Claims precede delivery;faults back off and never become healthy immediate
+continuations. Only clean finished progress can discharge its captured wake. Current
+native-parent cancellation is reused;no global owner or alternate SDK is introduced.
+Readiness subscribes before startup recovery,and group observer/scheduling failures
+cannot stop the existing native lifetime. Resume is Lazy to break the scheduler's
+getAll<SyncTask> dependency cycle;that was corrected during review before validation.
+
+Tests:37 domain (13 wake+14 selection+10 finish),12 app worker,3 added application
+lifetime cases (24 total),2 graph. First focused91375 REAPED FAIL213.555s:all38 app
+cases pass,zero failures/errors/skips;domain37 did not run because new top-level
+WakeFixture collided with the existing company fixture. Detekt also rejected two
+LongMethod boundaries in application start and the worker DI module. All4,626 inputs
+and Inspector bytes stayed unchanged. After reaping,renamed only the new fixture,
+made the group subscription an explicitly owned lazy undispatched job,and gave the
+group SyncTask its own included application DI module. No suppression or relaxed rule.
+
+Formatter41660 REAPED. Focused37708 is REAPED FAIL141.468s: all75 cases pass,
+zero failures/errors/skips; one LongMethod remains (start102 >100). All4,627 inputs
+and Inspector bytes stayed unchanged. The existing company readiness observer now
+also has an explicitly owned lazy undispatched subscription, preserving start order
+and disposal. No check was suppressed. Formatting completed; focused-3 /56790 is
+RUNNING with22 corrected Kotlin inputs frozen. Full gate has not started. Private
+README/progress retain both failed gates. Prepared files are archival; never restore.
+
+No APK/emulator/phone/live change. Worker uses conservative original-only delivery;
+local SDK+app-ledger no-work optimization,producer wakes after end reads,group push/
+legacy routing and actual provider/process-loss proof remain before rollout. Never
+claim generic Queued/new SPACE enqueue or history retirement is implemented here.
 
 ## Accepted readiness increments
 
@@ -156,17 +186,15 @@ inventory successors or native Apple Matrix/APNs/calling behavior.
 
 1. Wake01544c26,protocolevidence dd15a4fd and inventory eba05a9c are committed/pushed;
    all pushes and audits are reaped. Inventory push38798 is reaped.
-2. Fresh [CI42707758241](https://github.com/fajarxfce/hris-mobile/actions/runs/42707758241)
-   is running on immutable eba05a9c253aa7fe7f0cf816b49c128b4f3003a6;dispatch9340 reaped.
-   Portable is accepted; artifact audit75963 is REAPED PASS6,743 cases,zero failures/
-   errors/skips. Exact baseline+81 report cases,GitHub digest,ZIP CRC and all XML pass.
-   Apple has passed its simulator step and is building the unsigned host.
-   Its artifact acceptance remains pending. It does not cover the newer admitted sync source.
-   It covers cumulative native source,wake and inventory changes. Private inventory
-   hosted.json and hosted-audit.py pin it against accepted42697887863 baseline;
-   expected6,743 portable+2,549 Apple=9,292 cases. Apple acceptance pending. Do not repeat
-   earlier protocol execution. New successor work may proceed without changing its
-   immutable evidence attribution. Local inventory is accepted;do not recreate it.
+2. [CI42707758241](https://github.com/fajarxfce/hris-mobile/actions/runs/42707758241)
+   is fully accepted on immutable eba05a9c253aa7fe7f0cf816b49c128b4f3003a6.
+   Portable6,743 +Apple simulator2,549 =9,292 cases,zero failures/errors/skips.
+   Unsigned Xcode host succeeds. Audits75963 and66359 are reaped;GitHub SHA256,
+   ZIP CRC,every XML and full prior report set plus119 cases pass.
+   [Hosted measurement](measurements/collaboration-space-inventory-hosted-2026-11-09.json)
+   retains exact artifacts and report manifests. This covers cumulative source/listener,
+   wake and inventory; it does not cover newer sync/progress/worker changes or native
+   Apple Matrix/APNs/calling behavior. Do not repeat accepted immutable CI.
 3. Implement actual group recovery with independent persisted progress and exact wake
    completion. Company-only CollaborationRecoveryWorker cannot discharge group work.
    Startup/reconnect must discover original commands without relying on a bounded
@@ -176,7 +204,7 @@ inventory successors or native Apple Matrix/APNs/calling behavior.
    Empty active commands or retired receipts do not prove the native SDK has no
    settlement work. Require local SDK inventory or a correctly retired durable work
    index before skipping recovery for a room. Private inventory worker-next.md records
-   the verified command/receipt/SDK boundaries;no worker source is applied yet.
+   the verified command/receipt/SDK boundaries;worker source is now applied under the active gate above.
 4. Group adoption restores a paused original SDK client. Currently admitted sync on
    that same client now passes local acceptance; bind app collector/worker lifetimes and product
    routing. Never acquire the registry lock inside the native callback monitor:
@@ -202,8 +230,8 @@ The explicit vendor key-confirmation endpoint was retired. Never reapply archive
 
 | Checkout | Branch / accepted source | State |
 | --- | --- | --- |
-| Mobile | feat/chat-send-timing-20261107 / b51e70d8 | Sync accepted/pushed; progress accepted locally; EBA Apple host build running |
-| Platform original | feat/communications / 51d25bea | Handoff current; recovery verifier remains schema116.4 |
+| Mobile | feat/chat-send-timing-20261107 / 8bc952fe | Progress8bc952fe accepted/pushed; worker focused37708 active; EBA Apple host building |
+| Platform original | feat/communications / 3ec4579e | Handoff current; recovery verifier remains schema116.4 |
 | Platform group | feat/communication-space / d4246a08 | Separate worktree; V140 workers accepted/pushed |
 | Starter | feat/network-inspector-20261107 / ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Inspector | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Public SDK6 integrated |
