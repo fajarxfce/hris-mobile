@@ -6,15 +6,17 @@
 `refresh-coalescing.patch`. Matrix and OAuth reuse an already refreshed token when
 a delayed old-token rejection arrives, under the existing rotation lock. All20
 refresh tests, FFI/Wasm compilation and1218-file clean reconstruction pass. ABI
-binaries, new-version packaging and native acceptance are still pending.
+binaries, packaging as `26.10.23-hris.6`, and592 Android consumer tests now pass;
+native acceptance and publication remain pending.
 [Contract and evidence](../../docs/collaboration-sdk-refresh-coalescing.md). The
 historical publication statements below do not describe this candidate.
 
-The current published dependency is `26.10.23-hris.3`. See the
+The last published prerelease is `26.10.23-hris.4`; the application currently pins
+the local SDK6 candidate. See the
 [distribution contract](../../docs/collaboration-sdk-distribution.md) and
 [ARM64 acceptance](../../docs/measurements/collaboration-sdk-arm64-baseline-2026-11-06.json).
-Earlier candidate sections below retain their original scope and failures; they
-do not override the current distribution status.
+Earlier sections below retain their historical scope and failures; they do not
+override the current candidate status above.
 
 ## Existing private-account reader candidate
 

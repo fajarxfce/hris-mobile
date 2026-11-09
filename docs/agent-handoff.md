@@ -1,6 +1,48 @@
 # Agent continuation — HRIS Mobile
 
 
+## SDK6 Android consumer accepted; build81 next — 9 November 2026, 05:00 UTC
+
+Original SDK CI42561531330, all4ABIs, attempt1 SUCCESS. Download1350 REAPED PASS:
+GitHub archive digests,32 source/7 patch pins,9 generated Kotlin files and every
+actual native ELF/API match. Isolated wrapper c1664f7 packaged SDK6;13839 REAPED
+PASS111.937s. AAR185968960 bytes,SHA256
+a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3;
+Ivy69ea030963275ce080991e658172934441b73558e9de4d8e7ae3976b2f18558a.
+Evidence/package: .work/sdk-refresh-ci-2026-11-09/{download-1,package-1}.
+
+SDK6 adoption changes ONLY gradle/libs.versions.toml and verification-metadata.xml;
+consumer-change.json pins both deltas. Android87624 REAPED PASS492.999s:592 fresh
+host tests,0 failures/errors/skips; release/proof compilation,lint and all quality
+checks. All4528 app/82 library inputs unchanged. Metadata compilation emits existing
+KLIB duplicate-name warnings; no suppression/change introduced. Full c1dde603 gate
+is4261 tests/591.032s on SDK5, with byte-identical common/browser sources. Do not claim
+full or Apple SDK6 native execution. [SDK evidence](measurements/collaboration-sdk-refresh-coalescing-2026-11-09.json).
+
+Current dependency26.10.23-hris.6 is an UNPUBLISHED local candidate in the existing
+Ivy repository. SDK4 published prerelease confirmed; SDK5 untouched. Distribution
+docs now distinguish present candidate from historical SDK1–3 statements. Commit
+and push current dependency/docs before .work/release-phone-2026-11-09-build81/build-arm64.py.
+No local compiler/emulator active at checkpoint. Build/verify81 NOT RUN.
+
+Prepared native81 work: .work/refresh-coalescing-native-2026-11-09. Read the previous
+checkpoint; all scripts remain NOT RUN. Latest complete store is still initial-sync-
+native-2026-11-09/sender build80; traffic FAILED there, but all3 originals Sent/history
+retained. Clone the complete store; never reset keys or resend originals. After build81
+verify APK, run prepare-sender.py and prepare-counter.py, start count-http.py and
+paired-refresh.py with sudo, then run-sender.py; after owned boot, run-phases.py.
+It stops owned processes through stop files in finally. Retention phases precede
+ONE new Refresh81 timing message; its durable latch records even a failed send.
+Updated evaluator records rejected paired refresh evidence before asserting failure.
+Both passive budgets1080s; emulator budget1200s. Reap ALL processes and inspect actual
+results/screenshots before acceptance or phone installation.
+
+Phone ADB10.77.77.3:5555 confirmed device at04:52; fresh stock-ROM, no app installation
+this turn. Announce accepted install-only first; do not launch/drive phone UI. Starter
+SyncTrigger port remains UNEXECUTED and its native80 gate is stale. Platform source/
+runtime/schema116.4/controlON unchanged; all54 PRD groups remain open.
+
+
 ## Full application accepted; SDK6 binaries downloading — 9 November 2026, 04:47 UTC
 
 Full15918 REAPED PASS591.032s on c1dde603:4261 fresh tests,0 failures/errors/skips;

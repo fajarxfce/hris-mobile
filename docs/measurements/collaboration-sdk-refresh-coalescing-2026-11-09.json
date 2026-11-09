@@ -139,13 +139,204 @@
   "patchSha256": "c9e4ece410f457d55476159dc1baa0d1e4a95401c26a48a1c6759b1942cd2ed3",
   "observerBuildToolsSource": "6866251a",
   "publicBindingApiChanged": false,
-  "sdkBinaryBuilt": false,
+  "sdkBinaryBuilt": true,
   "published": false,
   "phoneInstalled": false,
   "remaining": [
-    "Android ABI binaries and exact generated-binding verification",
-    "Packaging under a new immutable coordinate",
-    "Native retained80 runtime acceptance and phone installation",
-    "Separate domain background-acquisition contention fix and validation"
-  ]
+    "Native retained80 upgrade, original messages, settled traffic and one new-message timing sample",
+    "Phone install-only and immutable SDK6 distribution",
+    "Generic Starter port and remaining communications acceptance"
+  ],
+  "androidCi": {
+    "at": "2026-11-09T04:47:58.354371+00:00",
+    "accepted": true,
+    "runId": 42561531330,
+    "sourceCommit": "dc6ed11e596857fc5a452cff6d48a6b30f321cff",
+    "attempt": 1,
+    "manifestSha256": "810a1f9a24784b0d7f68a9b87f450842f35afa30559db007672309c2dbcb441a",
+    "artifacts": [
+      {
+        "abi": "arm64-v8a",
+        "artifactId": 13650666434,
+        "archiveSha256": "3f9312457a21b9b944df310a1d363effaeb21e6736c0a02f5c7e28f25c6f360b",
+        "ciElapsedSeconds": 1408.656,
+        "generatedFiles": 9,
+        "nativeSha256": "d5353a6a8b5be6ab9e255ed812dff37dbc5609cc5911ca7565b985bfafec79e1",
+        "nativeBytes": 138956152,
+        "elfClass": "ELF64",
+        "requiredElfAlignment": 16384,
+        "loadAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "requiredSymbolsPresent": true
+      },
+      {
+        "abi": "armeabi-v7a",
+        "artifactId": 13649494787,
+        "archiveSha256": "f82bb8bec6aec5c92ace5f8e2893abe3bf76d7c409af5abaaf37eaeba3eafb01",
+        "ciElapsedSeconds": 1274.868,
+        "generatedFiles": 9,
+        "nativeSha256": "b7ffff9b04f06726720765bbb12dd48583472ce13ab1cacbb11f2861ec1910e5",
+        "nativeBytes": 98618684,
+        "elfClass": "ELF32",
+        "requiredElfAlignment": 4096,
+        "loadAlignments": [
+          4096,
+          4096,
+          4096,
+          4096
+        ],
+        "requiredSymbolsPresent": true
+      },
+      {
+        "abi": "x86",
+        "artifactId": 13649967943,
+        "archiveSha256": "0e82bfdd663d7eb6ae4b9056b26f31b8c5aa074d7b775c3ffa5e614a6234d462",
+        "ciElapsedSeconds": 1362.035,
+        "generatedFiles": 9,
+        "nativeSha256": "dbbb1fc91bf008eab117a4fce2ff42467e0396bdcc2f40812b190a4d8008e713",
+        "nativeBytes": 148277516,
+        "elfClass": "ELF32",
+        "requiredElfAlignment": 4096,
+        "loadAlignments": [
+          4096,
+          4096,
+          4096,
+          4096
+        ],
+        "requiredSymbolsPresent": true
+      },
+      {
+        "abi": "x86_64",
+        "artifactId": 13650053478,
+        "archiveSha256": "0aebd3b5ed28ed61c0f238740b9d858ee856b9194f42cdad89ee130a2e347de7",
+        "ciElapsedSeconds": 1132.233,
+        "generatedFiles": 9,
+        "nativeSha256": "e9fd5a6556f54a8c0b68a7cae0ac7f2854c8e384ba756654b901e08880c0cf8c",
+        "nativeBytes": 143013400,
+        "elfClass": "ELF64",
+        "requiredElfAlignment": 16384,
+        "loadAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "requiredSymbolsPresent": true
+      }
+    ],
+    "scope": "CI ABI binaries and exact generated-binding/source manifests, before AAR or runtime acceptance",
+    "published": false
+  },
+  "androidPackaging": {
+    "startedAt": "2026-11-09T04:48:24.621197+00:00",
+    "version": "26.10.23-hris.6",
+    "passed": true,
+    "inputsUnchanged": true,
+    "aarSha256": "a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3",
+    "aarBytes": 185968960,
+    "ivySha256": "69ea030963275ce080991e658172934441b73558e9de4d8e7ae3976b2f18558a",
+    "classesSha256": "2718b789a1ac4ad1ffbe840fbb2addf7ef1a0efd22a43c215b891047a4bcd1a2",
+    "sourcesSha256": "36b26aa15c2a295dd8d9428b2a17aa0844b090e322b44b8ea161e2f87c8d2098",
+    "elapsedSeconds": 111.937,
+    "androidBuildManifestSha256": "810a1f9a24784b0d7f68a9b87f450842f35afa30559db007672309c2dbcb441a",
+    "wrapperCommit": "c1664f712bed33488b10f33232fb424faf257d49",
+    "native": {
+      "arm64-v8a": {
+        "nativeSha256": "d5353a6a8b5be6ab9e255ed812dff37dbc5609cc5911ca7565b985bfafec79e1",
+        "nativeBytes": 138956152,
+        "elfClass": "ELF64",
+        "requiredElfAlignment": 16384,
+        "loadAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "requiredSymbolsPresent": true
+      },
+      "armeabi-v7a": {
+        "nativeSha256": "b7ffff9b04f06726720765bbb12dd48583472ce13ab1cacbb11f2861ec1910e5",
+        "nativeBytes": 98618684,
+        "elfClass": "ELF32",
+        "requiredElfAlignment": 4096,
+        "loadAlignments": [
+          4096,
+          4096,
+          4096,
+          4096
+        ],
+        "requiredSymbolsPresent": true
+      },
+      "x86": {
+        "nativeSha256": "dbbb1fc91bf008eab117a4fce2ff42467e0396bdcc2f40812b190a4d8008e713",
+        "nativeBytes": 148277516,
+        "elfClass": "ELF32",
+        "requiredElfAlignment": 4096,
+        "loadAlignments": [
+          4096,
+          4096,
+          4096,
+          4096
+        ],
+        "requiredSymbolsPresent": true
+      },
+      "x86_64": {
+        "nativeSha256": "e9fd5a6556f54a8c0b68a7cae0ac7f2854c8e384ba756654b901e08880c0cf8c",
+        "nativeBytes": 143013400,
+        "elfClass": "ELF64",
+        "requiredElfAlignment": 16384,
+        "loadAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "requiredSymbolsPresent": true
+      }
+    },
+    "recordSha256": "8d6604bf3d178ea5f466d12b733aa620f60e158d6be2d2ce690b86d1ffb714e2"
+  },
+  "consumerChange": {
+    "at": "2026-11-09T04:50:55.921610+00:00",
+    "coordinate": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.6",
+    "priorApplicationGate": "/home/fajar/hris/hris-mobile/.work/background-runtime-contention-2026-11-09/full-1",
+    "changedInputs": {
+      "gradle/libs.versions.toml": {
+        "beforeSha256": "990c50bd52ebb46748ae08c6c250b22419b82bde7877019db3088d4cab063ddc",
+        "afterSha256": "b82289f50ff44fbc3b31e688d61bb792e06edc3cba91bd96073323ff9b203c2c"
+      },
+      "gradle/verification-metadata.xml": {
+        "beforeSha256": "f1eb9d873492f3b79f4ccdd5be8a34f068f2e2d8e322ae982bf79b7b6174b973",
+        "afterSha256": "84ab897b1976de18f08b18650993deede241549c9b801c1a00033e09514bd8ac"
+      }
+    },
+    "aarSha256": "a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3",
+    "ivySha256": "69ea030963275ce080991e658172934441b73558e9de4d8e7ae3976b2f18558a",
+    "ciRun": 42561531330,
+    "published": false,
+    "nativeRuntimeAccepted": false
+  },
+  "androidConsumer": {
+    "startedAt": "2026-11-09T04:51:04.068283+00:00",
+    "elapsedSeconds": 492.999,
+    "exitCode": 0,
+    "sourceFiles": 4528,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 592,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "resultSha256": "a49b13c3b31c03dd91a53b93d245e58eea19976413b7ad913d40a48411577506",
+    "sdkCoordinate": "26.10.23-hris.6",
+    "priorUnchangedCommonBrowserSource": "c1dde603",
+    "priorFullTests": 4261,
+    "fullSuiteRepeatedOnSdk6": false
+  }
 }

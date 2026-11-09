@@ -1,6 +1,23 @@
 # Android Matrix SDK distribution
 
-The application uses `dev.fajar.hris.matrix:sdk-android:26.10.23-hris.3` through an
+The application currently pins the local candidate
+`dev.fajar.hris.matrix:sdk-android:26.10.23-hris.6`, built from the separate
+`android-refresh-coalescing-build.json` manifest. Its four original CI artifacts,
+matching Kotlin bindings, source hashes and packaged native libraries are verified.
+[SDK6 evidence and outstanding acceptance](collaboration-sdk-refresh-coalescing.md).
+Android consumer checks pass; native validation and publication are pending; a clean remote consumer
+cannot resolve SDK6 from GitHub yet. Use `-PmatrixSdkRepository=PATH` with the verified
+local Ivy candidate repository until that exact version is published.
+
+The last published prerelease is
+[SDK4](https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.4).
+SDK5 added optional HTTP observation and remains a retained local candidate. Existing
+published files and SDK5 binaries must not be replaced. The sections below record
+historical SDK1–3 acceptance, not SDK6 runtime or publication status.
+
+## Historical distribution acceptance
+
+SDK 3 used `dev.fajar.hris.matrix:sdk-android:26.10.23-hris.3` through an
 exclusive Ivy repository and strict checksum verification. The [SDK release](https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.3)
 contains the AAR, descriptor, source bundle, license, build record and checksums.
 SDK 3 preserves retryable token-refresh failures and their Retry-After information;
@@ -65,6 +82,6 @@ above is separate. Physical phone send latency, physical 32-bit execution and R8
 execution are not claimed. Existing application release variants do not enable
 R8, and Apple's SDK dependency is unchanged.
 
-The current build manifest includes the published SDK 3 refresh-backoff patch.
+The historical default build manifest includes the SDK 3 refresh-backoff patch.
 Every version retains its own source and acceptance evidence; SDK 1 and 2 assets
 remain unchanged.

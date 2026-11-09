@@ -15223,5 +15223,16 @@
             <sha256 value="1d2d1973a2f41a8c0c1263e60b25e7792f638b8c55d7ca1c6d0673b64be57da7" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
          </artifact>
       </component>
+      <component group="dev.fajar.hris.matrix" name="sdk-android" version="26.10.23-hris.6">
+         <artifact name="sdk-android-26.10.23-hris.6.aar">
+            <sha256 value="a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3" origin="Original four-ABI CI refresh-coalescing candidate; pinned sources and Kotlin pair; unpublished" />
+         </artifact>
+         <artifact name="sdk-android-26.10.23-hris.6.ivy.xml">
+            <sha256 value="69ea030963275ce080991e658172934441b73558e9de4d8e7ae3976b2f18558a" origin="Original four-ABI CI refresh-coalescing candidate; pinned sources and Kotlin pair; unpublished" />
+         </artifact>
+         <artifact name="ivy-26.10.23-hris.6.xml">
+            <sha256 value="69ea030963275ce080991e658172934441b73558e9de4d8e7ae3976b2f18558a" origin="Original four-ABI CI refresh-coalescing candidate; pinned sources and Kotlin pair; unpublished" />
+         </artifact>
+      </component>
    </components>
 </verification-metadata>
