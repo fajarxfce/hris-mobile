@@ -2,7 +2,9 @@
 
 The staging and delivery use cases acquire native device, conversation and published
 room coordinates through one current `/direct-conversations/{id}/transport` read per
-admission point. Timeline entry and history acquisition retain their existing readers.
+admission point. [Original-window and provider history](collaboration-history-transport.md)
+use the same snapshot with their own readmission and recipient-independent metadata
+policy. Timeline entry and older-message discovery retain their existing readers.
 There is no cached grant or fallback to three requests if the new endpoint is unavailable.
 Backend deployment must precede this application's release.
 

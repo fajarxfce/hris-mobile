@@ -1,5 +1,8 @@
 # Architecture
 
+[History metadata admission](collaboration-history-transport.md) separates current
+room ownership from sending readiness and preserves independent post-I/O admission.
+
 [Native parent renewal](collaboration-parent-session-renewal.md) keeps credential deadlines
 inside identity acquisition and binds observation to the application-owned chat parent.
 

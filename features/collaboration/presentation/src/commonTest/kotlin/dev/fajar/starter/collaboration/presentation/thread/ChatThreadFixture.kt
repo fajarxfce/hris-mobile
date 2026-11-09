@@ -526,6 +526,35 @@ internal class ChatThreadFixture {
                 return sendRoom(command)
             }
         }
+    val transport = CollaborationTransportRepository { owner, conversationId ->
+        val configured = setup.read()
+        beforeRoom()
+        if (configured is AppResult.Failed) return@CollaborationTransportRepository configured
+        val device = (configured as AppResult.Success).value
+        if (device == null || device.state != CollaborationDeviceState.ACTIVE)
+            return@CollaborationTransportRepository AppResult.Failed(
+                Failure(FailureKind.Unavailable, "Device unavailable")
+            )
+        val roomId = room.matrixRoomId
+        if (room.state != CollaborationDirectRoomState.READY || roomId == null)
+            return@CollaborationTransportRepository AppResult.Failed(
+                Failure(FailureKind.Unavailable, "Room unavailable")
+            )
+        AppResult.Success(
+            CollaborationDirectTransport(
+                owner,
+                device.id,
+                device.version,
+                device.platform,
+                conversationId,
+                summary.conversation.firstAccountId,
+                summary.conversation.secondAccountId,
+                roomId,
+                room.version ?: 0,
+                false,
+            )
+        )
+    }
     val runtimes =
         object : CollaborationRuntimeRepository by setup.runtimes {
             override suspend fun selfIdentity(owner: CollaborationOwner, deviceId: String) =
@@ -1094,8 +1123,7 @@ internal class ChatThreadFixture {
             AcquireCollaborationHistory(
                 history,
                 local,
-                this@ChatThreadFixture.remote,
-                setup.remote,
+                transport,
                 runtimes,
                 sessions,
                 workspaces,

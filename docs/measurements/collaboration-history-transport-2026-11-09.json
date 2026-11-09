@@ -1,0 +1,262 @@
+{
+  "at": "2026-11-09T08:11:08.013014+00:00",
+  "baseCommit": "6633f2f894310609d6543dfd0b622fdc6e8d3a20",
+  "acceptedSource": true,
+  "native84Accepted": false,
+  "scope": "Original-window and provider-page history current transport snapshot; retain before/after ownership and denial checks; reader independent of send-only recipient readiness.",
+  "changedSources": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProductQueueProof.kt": "802bcc1b94e7cb1527896518eed4151219f026dc58d4d4e1a5068fc77c0ab687",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "a648e1b26ffd8c4fe812139ac1d2ccda0b21a60c82451edf8c39e3188562c362",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationTransportRoom.kt": "5fcf5faa35cf545c3955d8d4540b4237024de9be25a553a9e24534f0d3756333",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AcquireCollaborationHistory.kt": "b99cda12750056143279fab4ec39a1057dceecd6578a863e295b04f6a177914d",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AcquireCollaborationProviderHistory.kt": "4104d5aa6f87ccc9ddc1bdd4943ad564736bd266d6a4a7b2acb3c69cbd831ec2",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/AcquireCollaborationHistoryTest.kt": "0696096d4106eda0fe67859a55b823c9be41d4ecb01dab8c7be18bf79dbffc7e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/AcquireCollaborationProviderHistoryTest.kt": "b790f04a2bea7361c0d2b518f5d7bf0438302cdc80e564b25f28feb664416920",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDeliveryFixture.kt": "23447d567e8d2b9a545fd15b315a83451139c9e786eb3f6d41b326806e8bbd00",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationTransportRoomTest.kt": "51058532c27f3f627ae143d06666820934310b55a9997fca25e687f96c53cede",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ProviderHistoryAcquisitionFixture.kt": "7c6a74aeda39343304db4fc56e0b43ca48aa2d36299520b3e4f1ab0a847d8219",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/RestartCollaborationProviderHistoryTest.kt": "da41ab1a646317f31129b4200dba3ae8fc97631b071ad995445c456448b237d8",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "eb9826d7f1644ff776bd8cc1a0109e46482c8d2ceadeb1e44b45a37c0186a358"
+  },
+  "runs": {
+    "red-1": {
+      "startedAt": "2026-11-09T07:39:28.754513+00:00",
+      "elapsedSeconds": 62.493,
+      "exitCode": 1,
+      "sourceFiles": 4529,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "8386aa9cc06e5f151fe05db23d735dfcfcedb7bc7cde89a8a4082912f86e721e",
+      "freshTargetCounts": {
+        "/desktopTest/": 2,
+        "/testAndroidHostTest/": 0,
+        "/wasmJsBrowserTest/": 0
+      },
+      "selectedReports": {
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.AcquireCollaborationHistoryTest.xml": {
+          "sha256": "0501f1bc265cfa09c7bb757d2017f4ce9ecba1b431fac0bde01f402369b5a47f",
+          "tests": 1,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.AcquireCollaborationProviderHistoryTest.xml": {
+          "sha256": "ae7669576317bfff835017ab126d77f9e10d25ffe9005d006450abd385925c28",
+          "tests": 1,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "format-1": {
+      "startedAt": "2026-11-09T07:42:32.694691+00:00",
+      "elapsedSeconds": 34.594,
+      "exitCode": 0,
+      "sourceFiles": 4529,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": false,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "fb96c08a8f17de77f8733de886c7ecb7bc9a6b1f38f66c1f6c4eb01f4ef7b49f",
+      "freshTargetCounts": {
+        "/desktopTest/": 0,
+        "/testAndroidHostTest/": 0,
+        "/wasmJsBrowserTest/": 0
+      },
+      "selectedReports": {}
+    },
+    "focused-1": {
+      "startedAt": "2026-11-09T07:43:23.409850+00:00",
+      "elapsedSeconds": 42.726,
+      "exitCode": 1,
+      "sourceFiles": 4529,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "a336a3a8c1a1112f439ccf822513c70e6ccf6e46b84b283b09d675a32887bf77",
+      "freshTargetCounts": {
+        "/desktopTest/": 0,
+        "/testAndroidHostTest/": 0,
+        "/wasmJsBrowserTest/": 0
+      },
+      "selectedReports": {}
+    },
+    "focused-cached-2": {
+      "startedAt": "2026-11-09T07:46:03.259339+00:00",
+      "elapsedSeconds": 590.198,
+      "exitCode": 0,
+      "sourceFiles": 4529,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 2180,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "521a40077f371393102a4549f3fb49db466fb9430ae9ea21e0884874d9e6857b",
+      "freshTargetCounts": {
+        "/desktopTest/": 1585,
+        "/testAndroidHostTest/": 595,
+        "/wasmJsBrowserTest/": 0
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationIncomingHistoryRecoveryTest.xml": {
+          "sha256": "50784b8899410c124bb72175af198999386f072008e8960153db41f542446526",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "b9622078959300327269dc213bb0bdb8a1327bcf7cb9f8effae954a9927e258e",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.AcquireCollaborationHistoryTest.xml": {
+          "sha256": "f3efddfe6d54ecaa2371c370a17bc006fcdaf3ada8a7319e58448d2a24fca287",
+          "tests": 22,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.AcquireCollaborationProviderHistoryTest.xml": {
+          "sha256": "a92ebe5759759080474c9616270d725d067f4fd57455b8a59b8ffbe5198cc0e4",
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationTransportRoomTest.xml": {
+          "sha256": "e94a9d518ee270000e0ed01fc4db743b75fb6ba73ede37ee994f433958da4001",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.RestartCollaborationProviderHistoryTest.xml": {
+          "sha256": "b0607e3b94c4c615de4ac9ba8ad352cf720611e61065bc42ce82d963689d9a89",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "full-cached-1": {
+      "startedAt": "2026-11-09T07:56:01.528991+00:00",
+      "elapsedSeconds": 897.873,
+      "exitCode": 0,
+      "sourceFiles": 4529,
+      "librarySourcesUnchanged": true,
+      "sourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3804,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "d2ebbc72fd035d6aa251bc32c711c083609f0fcf206cf78c678d69279e5b591d",
+      "freshTargetCounts": {
+        "/desktopTest/": 3760,
+        "/testAndroidHostTest/": 0,
+        "/wasmJsBrowserTest/": 44
+      },
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "5e9d1c90fc8b8717520fbe1f694efe85e1be6fbbcb44c1866366459aba99e82c",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationIncomingHistoryRecoveryTest.xml": {
+          "sha256": "350fec5bd7fab2c81c8e026ab22e0e723a2e9ac3d19fab5222492cd3e18063de",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatLocalEntryTest.xml": {
+          "sha256": "30ceed96facd1db568b164108984450e2e5a4ed3ee5ede137041986ebd4926fd",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadHistoryRestoreTest.xml": {
+          "sha256": "a8122894fbe290e94558226fffb515af40d8f9da3c18af5589bcfba58b20f17c",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.AcquireCollaborationProviderHistoryTest.xml": {
+          "sha256": "f63768fa3c77aff0b632373bcaff21b3c08d1659bb362120a0cee907ad6a2586",
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationTransportRoomTest.xml": {
+          "sha256": "001cfc07bc2daecea1f99632b16ab1241a9464184dadf0911e203018439e1125",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.RestartCollaborationProviderHistoryTest.xml": {
+          "sha256": "fa5de7835afaef7ce234b3984cdaac16633a92da6525bfd87db66433470774f1",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.AcquireCollaborationHistoryTest.xml": {
+          "sha256": "cc08481b008d423a6112bc88c7902c4bb5fe1637bfe576dad7a07a22085f19c1",
+          "tests": 22,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "sourceManifestSha256": "b2167505025c6eacf7d10063053ce12373604f5154dbd7b589cde77d156b0711",
+  "publicSdkResolution": {
+    "accepted": false,
+    "failure": "GitHub release descriptor returned504 before tests, also on an unauthenticated follow-up read. Public API confirms repository visibility and published exact asset digests.",
+    "verifiedLocalMirror": {
+      "reason": "Public GitHub release download returned504 before tests; API confirms published asset digests",
+      "publishedDigests": {
+        "sdk-android-26.10.23-hris.6.aar": "a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3",
+        "sdk-android-26.10.23-hris.6.ivy.xml": "69ea030963275ce080991e658172934441b73558e9de4d8e7ae3976b2f18558a"
+      },
+      "publicDependencyResolutionAccepted": false
+    }
+  },
+  "starterPort": "6157db1 (generic prior worker/identity port), independently passed and pushed",
+  "remaining": [
+    "Native84 retained-store proof, traffic and clock-aligned timing, build and install",
+    "Other timeline/reopen/older-history/receipt readers retain separate admission; review measured costs before changing their lifetimes",
+    "Apple SDK6 runtime, latency p95 and all54 communications groups remain open"
+  ]
+}

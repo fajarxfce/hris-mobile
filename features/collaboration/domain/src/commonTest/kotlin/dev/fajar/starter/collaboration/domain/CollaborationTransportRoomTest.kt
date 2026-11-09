@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.collaborationTransportMetadataRoom
 import dev.fajar.starter.collaboration.domain.policies.collaborationTransportRoom
 import dev.fajar.starter.common.result.*
 import kotlin.test.*
@@ -24,6 +25,10 @@ class CollaborationTransportRoomTest {
 
     @Test
     fun unreadyRecipientBlocksDeliveryWithoutRevokingOwnedContent() {
+        assertEquals(
+            AppResult.Success(value.matrixRoomId),
+            read(value.copy(recipientReady = false)),
+        )
         val failure = assertIs<AppResult.Failed>(match(value.copy(recipientReady = false))).failure
         assertEquals(FailureKind.Conflict, failure.kind)
         assertEquals("client.collaboration_recipient_unavailable", failure.code)
@@ -44,6 +49,7 @@ class CollaborationTransportRoomTest {
             val failure = assertIs<AppResult.Failed>(match(value.copy(owner = wrongOwner))).failure
             assertEquals(FailureKind.Unauthorized, failure.kind)
             assertEquals("client.collaboration_queue_owner_changed", failure.code)
+            assertEquals(AppResult.Failed(failure), read(value.copy(owner = wrongOwner)))
         }
     }
 
@@ -85,10 +91,17 @@ class CollaborationTransportRoomTest {
                 val failure = assertIs<AppResult.Failed>(match(candidate)).failure
                 assertEquals(kind, failure.kind)
                 assertEquals(code, failure.code)
+                assertEquals(
+                    AppResult.Failed(failure),
+                    read(candidate.copy(recipientReady = false)),
+                )
             }
         }
     }
 
     private fun match(candidate: CollaborationDirectTransport) =
         collaborationTransportRoom(candidate, owner, "device", "conversation", "ANDROID")
+
+    private fun read(candidate: CollaborationDirectTransport) =
+        collaborationTransportMetadataRoom(candidate, owner, "device", "conversation", "ANDROID")
 }

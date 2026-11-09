@@ -13,12 +13,23 @@ import kotlinx.coroutines.test.runTest
 
 class AcquireCollaborationHistoryTest {
     @Test
+    fun originalHistoryUsesCombinedAdmissionWithoutDependingOnRecipientReadiness() = runTest {
+        val f = HistoryAcquisitionFixture()
+        f.delivery.recipientReady = false
+        assertIs<AppResult.Success<CollaborationHistoryAcquisition>>(f.acquire())
+        assertEquals(2, f.delivery.transportReads)
+        assertEquals(0, f.local.setup.calls)
+        assertEquals(listOf("transport", "transport"), f.admissions)
+        assertEquals(f.window.changes, f.retained)
+    }
+
+    @Test
     fun latestAcquisitionUsesTheReturnedHeadAndExplicitAnchorsDoNotReadIt() = runTest {
         val f = HistoryAcquisitionFixture()
         assertEquals(AppResult.Success(CollaborationHistoryAcquisition(20, 0)), f.latest())
         assertEquals(1, f.headReads)
         assertEquals(1, f.reads)
-        assertEquals(2, f.local.setup.calls)
+        assertEquals(2, f.delivery.transportReads)
         assertIs<AppResult.Success<*>>(f.acquire())
         assertEquals(1, f.headReads)
     }
@@ -31,7 +42,7 @@ class AcquireCollaborationHistoryTest {
         assertEquals(AppResult.Success(CollaborationHistoryAcquisition(0, 0)), f.latest())
         assertEquals(f.window.changes, f.retained)
         assertEquals(0, f.reads)
-        assertEquals(2, f.local.setup.calls)
+        assertEquals(2, f.delivery.transportReads)
         assertTrue(f.batches.isEmpty())
     }
 
@@ -130,8 +141,8 @@ class AcquireCollaborationHistoryTest {
         assertEquals(AppResult.Success(CollaborationHistoryAcquisition(20, 0)), f.acquire())
         assertEquals(listOf(16, 4), f.batches.map { it.size })
         assertEquals(f.window.changes, f.retained)
-        assertEquals(2, f.local.setup.calls)
-        assertEquals(listOf("get", "room", "get", "room"), f.admissions)
+        assertEquals(2, f.delivery.transportReads)
+        assertEquals(listOf("transport", "transport"), f.admissions)
         assertEquals(1, f.reads)
         assertEquals(0, f.delivery.acquisitions)
         assertEquals(0, f.delivery.windows)
@@ -192,7 +203,7 @@ class AcquireCollaborationHistoryTest {
                 f.delivery.control.room.copy(matrixRoomId = "!changed:example.test")
         }
         assertIs<AppResult.Failed>(f.acquire())
-        assertEquals(2, f.local.setup.calls)
+        assertEquals(2, f.delivery.transportReads)
         assertTrue(f.batches.isEmpty())
     }
 
@@ -265,7 +276,7 @@ class AcquireCollaborationHistoryTest {
             )
         assertEquals(AppResult.Success(CollaborationHistoryAcquisition(0, 2)), f.acquire())
         assertTrue(f.batches.isEmpty())
-        assertEquals(2, f.local.setup.calls)
+        assertEquals(2, f.delivery.transportReads)
     }
 
     @Test
@@ -311,6 +322,7 @@ class AcquireCollaborationHistoryTest {
             f.useCase("selection", f.delivery.device.deviceId, f.delivery.conversation, "bad")
         )
         assertEquals(0, f.local.setup.calls)
+        assertEquals(0, f.delivery.transportReads)
         assertEquals(0, f.reads)
     }
 }
@@ -530,8 +542,7 @@ internal class HistoryAcquisitionFixture {
         AcquireCollaborationHistory(
             history,
             delivery.lists,
-            delivery.control.remote,
-            local.setup.remote,
+            delivery.transport,
             runtimes,
             local.setup.sessions,
             local.setup.workspaces,

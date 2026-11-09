@@ -1,5 +1,49 @@
 # Agent continuation — HRIS Mobile
 
+## History transport source accepted; native84 next — 9 November 2026, 08:11 UTC
+
+Original-window and provider-page history use the existing combined transport read
+before SDK I/O and fresh readmission before publication. The pure metadata policy
+preserves owner/device/platform/membership/room checks independently of recipient
+send readiness. Stage/Deliver still require readiness. API/repository/SDK, schedules,
+ViewModels and local history ownership are unchanged. DI, proof app and fixtures
+follow the new dependency; remaining older/reopen/timeline/receipt readers are not
+blindly converted because their lifetimes and privacy policy differ.
+
+RED red-1/session83627:2 intended failures. Format57704 passes34.594s. Public SDK
+attempt focused-1/session33799 fails before tests on GitHub descriptor504; unauthenticated
+retry also504, API confirms public published assets. Verified local AAR/Ivy hashes
+match SDK6; no dependency weakening or production fallback. Focused-cached-2/session43377
+passes590.198s:2180 fresh (1585desktop/595Android), no failures/errors/skips. Full-cached-1
+session67163 passes897.873s:3804 fresh, no failures/errors/skips;
+44 actual Chrome cases cover all four affected history/policy suites. Root checks,
+Android release/proof compilation/lint, Wasm/iOS source, format/architecture/detekt pass.
+4529 app inputs and all library inputs unchanged. Initial Kotlin incremental
+cache recovery falls back to full compilation and succeeds; it is not a source failure.
+[Exact evidence](measurements/collaboration-history-transport-2026-11-09.json).
+
+Starter6157db1 is committed/pushed: eight exact worker files plus optional generic
+maintenance,9 tests adapted to Starter. Full75.282s/62fresh passes, then corrected
+browser selection runs9 identity cases in Chrome24.332s; initial fixture compile
+failure and browser zero-selection retained. Mobile template update links the port.
+
+NEXT commit/push this source, then build84 via .work/release-phone-2026-11-09-build84/
+build-arm64.py and verify-arm64.py/verify-sdk.py. Build uses the exact verified local
+SDK6 mirror while public download is unavailable. No APK84 exists yet. Prepared native
+.work/history-transport-native-2026-11-09 scripts are not executed. Clone ONLY the latest
+COMPLETE native-parent-renewal-native-2026-11-09/sender at83 (all4 userdata/encryption
+files+AVD), preserve FIVE originals incl Parent83 071123; never reset/resend. The planned
+reviewed traffic contract is bounded and prepared before84, tests prior83 plus seven
+negative controls, preserves strict results and independently attributes scheduled
+work. Per-phase clock calibration is new; do not compare raw device epoch to host
+for subsecond timing without it. No emulator active; full build is reaped.
+
+Phone remains installed83, install-only. Announce next installation only after native
+acceptance; use explicit10.77.77.3:5555 and never launch/drive phone UI. Backend remains
+e558a686/schema116.4/controlON,117–138 undeployed. SDK6 release438835525 stays published
+with unchanged assets. Startup volume, native Apple and all54 feature groups remain.
+
+
 
 ## Phone83 installed; SDK6 published; Starter ports testing — 9 November 2026, 07:27 UTC
 

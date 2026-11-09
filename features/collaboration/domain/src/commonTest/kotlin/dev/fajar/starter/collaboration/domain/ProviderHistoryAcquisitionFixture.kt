@@ -169,8 +169,7 @@ internal class ProviderHistoryAcquisitionFixture(
         AcquireCollaborationProviderHistory(
             history,
             delivery.lists,
-            delivery.control.remote,
-            local.setup.remote,
+            delivery.transport,
             runtime,
             local.setup.sessions,
             local.setup.workspaces,

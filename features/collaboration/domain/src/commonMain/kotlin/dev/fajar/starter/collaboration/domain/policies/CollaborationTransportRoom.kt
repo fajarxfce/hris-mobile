@@ -3,8 +3,26 @@ package dev.fajar.starter.collaboration.domain.policies
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.*
 
-/** Match the completed transport read to the current operation before borrowing or resuming. */
+/** Sending also requires the recipient's published encryption readiness. */
 fun collaborationTransportRoom(
+    value: CollaborationDirectTransport,
+    owner: CollaborationOwner,
+    deviceId: String,
+    conversationId: String,
+    platform: String,
+): AppResult<String> {
+    val room = collaborationTransportMetadataRoom(value, owner, deviceId, conversationId, platform)
+    if (room is AppResult.Failed) return room
+    if (!value.recipientReady)
+        return collaborationSetupFailure(
+            "client.collaboration_recipient_unavailable",
+            FailureKind.Conflict,
+        )
+    return room
+}
+
+/** Match current device, membership and room facts independently of permission to send. */
+fun collaborationTransportMetadataRoom(
     value: CollaborationDirectTransport,
     owner: CollaborationOwner,
     deviceId: String,
@@ -39,11 +57,6 @@ fun collaborationTransportRoom(
         return collaborationSetupFailure(
             "client.collaboration_room_not_ready",
             FailureKind.Unavailable,
-        )
-    if (!value.recipientReady)
-        return collaborationSetupFailure(
-            "client.collaboration_recipient_unavailable",
-            FailureKind.Conflict,
         )
     return AppResult.Success(value.matrixRoomId)
 }

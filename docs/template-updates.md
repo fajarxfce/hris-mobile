@@ -1,5 +1,18 @@
 # Template updates
 
+
+## Session maintenance and worker triggers — port complete
+
+[Starter6157db1](https://github.com/fajarxfce/compose-fluent-starter/commit/6157db1)
+ports Mobilea1f2cfe9's eight exact worker files and c0b645d0's generic identity
+maintenance, adapted to Starter's session contract. Starter independently passes
+root, Android build/lint, production Web and iOS source checks; all nine maintenance
+cases run on desktop and actual Chrome, with four trigger cases on both platforms.
+The initial fixture compilation failure and a browser filter that selected no
+identity cases remain recorded alongside the corrected passing runs. No HRIS
+binding policy or application maintenance activation is copied.
+[Evidence](https://github.com/fajarxfce/compose-fluent-starter/blob/6157db1/docs/measurements/session-maintenance-trigger-port-2026-11-09.json).
+
 ## Requested foreground worker — port complete
 
 The three exact generic files from Mobile `60d1de23` are now in

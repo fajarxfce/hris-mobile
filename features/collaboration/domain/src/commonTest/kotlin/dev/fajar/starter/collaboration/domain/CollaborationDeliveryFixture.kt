@@ -363,7 +363,7 @@ internal class CollaborationDeliveryFixture {
     var recipientReady = true
     var transportReads = 0
     var afterTransport: suspend () -> Unit = {}
-    private val transport = CollaborationTransportRepository { captured, conversationId ->
+    val transport = CollaborationTransportRepository { captured, conversationId ->
         transportReads++
         val registered = base.setup.onRead()
         control.beforeRemote("transport")

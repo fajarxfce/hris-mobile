@@ -22,7 +22,7 @@ class RestartCollaborationProviderHistoryTest {
             assertEquals(before!!.generation, f.progress!!.generation)
             assertEquals(before.revision + 1, f.progress!!.revision)
             assertEquals("next", f.progress!!.next)
-            assertEquals(listOf("get", "room", "get", "room"), f.admissions)
+            assertEquals(listOf("transport", "transport"), f.admissions)
             assertEquals(0, f.delivery.acquisitions)
         }
     }
@@ -42,7 +42,7 @@ class RestartCollaborationProviderHistoryTest {
         assertIs<AppResult.Success<*>>(f.acquire(CollaborationHistoryPageOrigin.Latest))
         assertEquals(listOf("retired-position", null), f.positions)
         assertEquals(1, f.stages)
-        assertEquals(3, f.local.setup.calls)
+        assertEquals(3, f.delivery.transportReads)
     }
 
     @Test

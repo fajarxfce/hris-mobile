@@ -9,6 +9,17 @@ import kotlinx.coroutines.test.runTest
 
 class AcquireCollaborationProviderHistoryTest {
     @Test
+    fun historyUsesCombinedAdmissionWithoutDependingOnRecipientReadiness() = runTest {
+        val f = ProviderHistoryAcquisitionFixture()
+        f.delivery.recipientReady = false
+        assertIs<AppResult.Success<CollaborationProviderHistoryAcquisition>>(f.acquire())
+        assertEquals(2, f.delivery.transportReads)
+        assertEquals(0, f.local.setup.calls)
+        assertEquals(listOf("transport", "transport"), f.admissions)
+        assertEquals(listOf(f.page), f.saved)
+    }
+
+    @Test
     fun onePageIsReadmittedAndStagedWithoutStartingDecryptionOrDelivery() = runTest {
         val f = ProviderHistoryAcquisitionFixture()
         assertEquals(
@@ -17,8 +28,8 @@ class AcquireCollaborationProviderHistoryTest {
         )
         assertEquals(listOf(f.page), f.saved)
         assertEquals("next", f.progress!!.next)
-        assertEquals(2, f.local.setup.calls)
-        assertEquals(listOf("get", "room", "get", "room"), f.admissions)
+        assertEquals(2, f.delivery.transportReads)
+        assertEquals(listOf("transport", "transport"), f.admissions)
         assertEquals(1, f.reads)
         assertEquals(1, f.stages)
         assertEquals(0, f.delivery.acquisitions)
@@ -60,7 +71,7 @@ class AcquireCollaborationProviderHistoryTest {
                 f.acquire(),
             )
             assertEquals(listOf(f.page), f.saved)
-            assertEquals(2, f.local.setup.calls)
+            assertEquals(2, f.delivery.transportReads)
         }
     }
 
@@ -83,6 +94,7 @@ class AcquireCollaborationProviderHistoryTest {
             assertIs<AppResult.Failed>(result)
             assertEquals(0, f.reads)
             assertEquals(0, f.local.setup.calls)
+            assertEquals(0, f.delivery.transportReads)
         }
     }
 
@@ -143,7 +155,7 @@ class AcquireCollaborationProviderHistoryTest {
                 assertIs<AppResult.Failed>(f.acquire()).failure.code,
             )
             assertEquals(0, f.stages)
-            assertEquals(1, f.local.setup.calls)
+            assertEquals(1, f.delivery.transportReads)
         }
     }
 
