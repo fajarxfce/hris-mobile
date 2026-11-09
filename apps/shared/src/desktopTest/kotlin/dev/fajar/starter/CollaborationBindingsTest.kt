@@ -325,6 +325,7 @@ class CollaborationBindingsTest {
                     container.koin.get<CollaborationSpaceConversationMetadataRepository>()
                 )
                 assertNotNull(container.koin.get<CollaborationSpaceRoomBindingRepository>())
+                assertNotNull(container.koin.get<PrepareCollaborationSpaceRoomBinding>())
                 assertNotNull(container.koin.get<PrepareCollaborationSpaceConversation>())
                 assertNotNull(container.koin.get<ReplayCollaborationSpaceConversationOpen>())
                 assertNotNull(container.koin.get<ResolveCollaborationSpaceRoomRequest>())

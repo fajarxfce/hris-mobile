@@ -113,6 +113,10 @@ stable owning dispatch remain separate; receipt absence does not fence late work
 [Encrypted published-room bindings](collaboration-space-room-binding.md) retain exact immutable
 conversation/provider/original facts independently of current content or SDK authority.
 
+[Owned room binding preparation](collaboration-space-room-binding-preparation.md) reads
+complete owned local facts before any live acquisition. Only absence admits one bounded
+published-room/original read and immutable readback; it never opens an SDK or queue.
+
 [Published original-room references](collaboration-space-published-room-reference.md)
 retain exact company/conversation coordinates in typed metadata; current content
 admission and encrypted local binding adoption remain separate.

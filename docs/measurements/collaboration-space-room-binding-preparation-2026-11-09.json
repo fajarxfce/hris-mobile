@@ -1,0 +1,251 @@
+{
+  "at": "2026-11-09T13:45:18.857757+00:00",
+  "accepted": true,
+  "scope": "Owned published-room binding preparation, exact original/canonical retention and readback; no SDK/worker/UI activation",
+  "sourceSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "9e63d2bd988fa044293d8c2bd92ee9301a6cba8b39087e5bd279c85bf87f9d9e",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "ee61c26e8a27bceb6892120b1b80d2f0bf76b0334fe49b69749a7330690df88e",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingPreparationStorageContract.kt": "9f5146ed48ebdefdda7275470bf4ea1fc05f733cc34485c780089299f6472917",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingPreparationStorageTest.kt": "e5f83a726b02b95490e068a5495851b586ad06d1bb2ddd134c4d685446110dca",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceRoomBindingPreparationStorageTest.kt": "b9770b997bda5fd1050871c784af9f757fd02da43e61103bbd12bb7f5d2f5acc",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceRoomBindingPreparationStorageTest.kt": "b1366a2c43496bf3af98f526541dd98a7b90b3fab196192926523fc5e494bab3",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationSpaceRoomBinding.kt": "2e1d337ce1455cda0ef180cf4ffe8c03ffddd76760fb518b311a39111b006837",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRoomBindingPreparationFixture.kt": "06ce2f245df929822f42e3c6fad8f38109c42eb0698efc0a850ec58ed759e1d8",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRoomBindingPreparationTest.kt": "7ec983780ab2a8dd2081a4cb88f24bd624d9fbab20a2ffcedde6084fcd2ad08f"
+  },
+  "initialQualityFailure": {
+    "startedAt": "2026-11-09T12:58:36.917026+00:00",
+    "elapsedSeconds": 112.911,
+    "exitCode": 1,
+    "sourceFiles": 4547,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "session": 71916,
+    "reaped": true,
+    "resultSha256": "b187a64522a6f70ecb60c273cdf480f0225a254b76354b95526f82142a42d316",
+    "sourceManifestSha256": "f79f57e600432177455962d9906d28eb70cbe8531b6dd296c511cfbac2a5d93d",
+    "freshSuites": 1,
+    "preexistingSuites": 787
+  },
+  "initialFocused": {
+    "startedAt": "2026-11-09T13:04:33.100104+00:00",
+    "elapsedSeconds": 239.944,
+    "exitCode": 0,
+    "sourceFiles": 4551,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 25,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "session": 92982,
+    "reaped": true,
+    "resultSha256": "0ffac921c3c2d693d202107ef35b15f28dfb42c25183bda77c1cbb31496c0cab",
+    "sourceManifestSha256": "8886c8c13150c43549d1d12dec5bfd569c7ed8316754a7fbe9bad165b752544e",
+    "freshSuites": 3,
+    "preexistingSuites": 576
+  },
+  "preCorrectionFull": {
+    "startedAt": "2026-11-09T13:11:52.352151+00:00",
+    "elapsedSeconds": 586.604,
+    "exitCode": 0,
+    "sourceFiles": 4551,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 4222,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "session": 36351,
+    "reaped": true,
+    "resultSha256": "6a2fa223820e2309dcdc99b0d41d4616c20316df9916121d2e85ff1688130d83",
+    "sourceManifestSha256": "8886c8c13150c43549d1d12dec5bfd569c7ed8316754a7fbe9bad165b752544e",
+    "freshSuites": 498,
+    "preexistingSuites": 441
+  },
+  "denialRegression": {
+    "startedAt": "2026-11-09T13:23:40.087884+00:00",
+    "elapsedSeconds": 62.204,
+    "exitCode": 1,
+    "sourceFiles": 4551,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "session": 10100,
+    "reaped": true,
+    "resultSha256": "b62ebf0122deffbd312ba4e8dc6fc8556df68ff6eaefcd361d6f4d076c7385c3",
+    "sourceManifestSha256": "a8ec1dd9ef257f540f05dada729171685dc5fe7a679b1b9864ff2cdd44a7bb91",
+    "freshSuites": 1,
+    "preexistingSuites": 785,
+    "expectedFailure": true,
+    "reports": {
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceRoomBindingPreparationTest.xml": {
+        "sha256": "8f80cfc84e5c903e244893a63e05d0ded5839964849e06a96c3ebab944b08962",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "review": {
+      "preCorrectionFull": "full-1",
+      "red": "red-denial-1",
+      "redSession": 10100,
+      "reason": "A valid directory denial was read, then overwritten by coincident native expiry before it was retained.",
+      "correction": "Retain the valid captured denial before rechecking the native deadline; local owned reads and caller ownership remain separate.",
+      "newFocusedExpected": 26,
+      "newBrowserExpected": 24,
+      "firstCorrection": {
+        "session": 61497,
+        "exitCode": 1,
+        "tests": 26,
+        "failures": 1,
+        "reason": "Both the stored denial and local expiry are classified as directory-closing. The general response-precedence policy therefore still selected the later local session failure.",
+        "secondCorrection": "Native validation failure now preserves an already captured global directory denial. A prior transport failure still yields the current native rejection; global response precedence remains in the remote rejection path."
+      }
+    }
+  },
+  "insufficientFirstCorrection": {
+    "startedAt": "2026-11-09T13:26:09.464574+00:00",
+    "elapsedSeconds": 144.234,
+    "exitCode": 1,
+    "sourceFiles": 4551,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 26,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "session": 61497,
+    "reaped": true,
+    "resultSha256": "c737fa9a85ac4a637781f51fea7c1fae69a3ccb832023801c5e767a884de3934",
+    "sourceManifestSha256": "200b4ceaa11f6ccd0cce271cb8d716295feea2d038fc5c7a07767f19a7994592",
+    "freshSuites": 3,
+    "preexistingSuites": 573,
+    "accepted": false
+  },
+  "finalFocused": {
+    "startedAt": "2026-11-09T13:32:33.704130+00:00",
+    "elapsedSeconds": 142.545,
+    "exitCode": 0,
+    "sourceFiles": 4551,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "session": 50366,
+    "reaped": true,
+    "resultSha256": "fd59e0e9a0c5686d69d50b99ea80ed2dbe3698cb2e4c1b2ddc634b44f3c34f00",
+    "sourceManifestSha256": "10bbad75090cca92dabfba0baf0ef03d406770fa37d2de3b4e7583847bbc600e",
+    "freshSuites": 3,
+    "preexistingSuites": 573,
+    "reports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+        "sha256": "de52083d54f7078b9f3c7e46971c1ff55adb2a2c6851b9c93bb34a5b98c8cb96",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRoomBindingPreparationStorageTest.xml": {
+        "sha256": "98fa8da2c02e1269a4c73cd698989f68dab67ee0d6c998bf068c5cb7c42df908",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceRoomBindingPreparationTest.xml": {
+        "sha256": "fbcec5b86c6bff5880fdb6859b444b13972990eb75ccefb521a5fe2e15d2861d",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "finalFull": {
+    "startedAt": "2026-11-09T13:35:26.605419+00:00",
+    "elapsedSeconds": 511.375,
+    "exitCode": 0,
+    "sourceFiles": 4551,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 4224,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "session": 81742,
+    "reaped": true,
+    "resultSha256": "5c65fbc167d463e5efb57cde256b9274ce922c5dba67d56857894bc24d04e34f",
+    "sourceManifestSha256": "10bbad75090cca92dabfba0baf0ef03d406770fa37d2de3b4e7583847bbc600e",
+    "freshSuites": 498,
+    "preexistingSuites": 441,
+    "freshTargets": {
+      "desktop": 3587,
+      "browser": 24,
+      "androidHost": 613
+    },
+    "browserReports": {
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-w-19O8R9NUHAAC8.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceRoomBindingPreparationStorageTest.xml": {
+        "sha256": "d7b64f40a89334beaeae5896c8863402260da46317d706074737525242ab30c0",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.SpaceRoomBindingPreparationTest.xml": {
+        "sha256": "770d69203866629c44830df1daa5b72b145dccc334e3a7b343328bc4068f76ba",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "sameSourceAsFinalFocused": true,
+    "changedSincePreCorrectionFull": [
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationSpaceRoomBinding.kt",
+      "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRoomBindingPreparationTest.kt"
+    ],
+    "lintErrors": 0,
+    "lintReportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "requiredChecks": [
+    "root check",
+    "Android host tests",
+    "Android devRelease compile and lint",
+    "Wasm and iOS source compilation",
+    "actual domain and IndexedDB browser tests",
+    "format",
+    "architecture",
+    "Detekt"
+  ],
+  "limits": [
+    "Apple wrappers are supplied but their database cases have not executed on Apple.",
+    "No SDK open/send/key/queue capability, worker/UI caller, new APK or deployment is activated.",
+    "Local immutable metadata is not current content or sending authority.",
+    "All54 communications acceptance groups remain open."
+  ]
+}

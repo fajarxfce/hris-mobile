@@ -1,6 +1,6 @@
 # Owned room binding preparation
 
-`PrepareCollaborationSpaceRoomBinding` is a candidate owning use case for resolving
+`PrepareCollaborationSpaceRoomBinding` is an owning use case for resolving
 published room metadata. It coordinates repositories and pure policies; it does not
 invoke another use case, open an SDK, request a provider room, enqueue messages, change
 keys or reopen content admission. No UI or worker caller is activated yet.
@@ -31,7 +31,7 @@ after an uncertain local response, without issuing another write. A missing or c
 readback cannot become success. A committed binding interrupted by cancellation is available
 through the local path next time, including after login replacement and native expiry.
 
-## Verification in progress
+## Verification
 
 The initial focused gate71916 ran20 domain cases successfully but FAILED Detekt's
 LongMethod rule (invoke105 logical lines, maximum100). This was not accepted. The local
@@ -53,7 +53,20 @@ confirmed denial, but the native session check returned first, replacing that de
 Regression10100 fails once on the unchanged production source: AccessDenied becomes
 client.session_changed. The correction retains that captured denial before checking
 native expiry. No local ownership or content reopening behavior changes.
-Formatter63867 passes. Corrected focused61497 is running with21 domain,3 database and
-2 app cases; the final full gate must also execute24 actual browser cases. Earlier full
-proof is retained separately and does not validate this correction. No new Apple
-execution, APK, SDK adoption or product activation is claimed.
+The first correction still failed focused61497 (26 cases, one failure): the general
+response-precedence policy classified both the stored denial and local session expiry
+as directory-closing, so the later local failure still replaced the denial. The final
+correction preserves a captured global denial specifically at local native validation;
+a prior network error still yields a later native rejection. No global response policy
+was weakened. The expanded regression checks both cases.
+
+Formatter12973 passes36.991s. Final focused50366 is reaped PASS142.545s:26 cases,
+zero failures/errors/skips, unchanged4,551 app/library inputs and quality checks.
+Final full81742 is reaped PASS511.375s: 4,224 fresh cases (3,587 desktop,
+613 Android host and24 browser), zero failures/errors/skips. Browser XML verifies
+the exact21 domain and3 IndexedDB cases, including the coincident-denial regression.
+All4,551 application/library inputs match the final focused manifest. Root checks,
+release compilation/lint, Wasm/iOS source and quality pass. Earlier failed attempts
+remain in the [accepted evidence](measurements/collaboration-space-room-binding-preparation-2026-11-09.json).
+Actual Apple execution is still separate; no APK, SDK adoption or product activation
+is claimed by this change.

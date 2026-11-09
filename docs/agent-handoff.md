@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 13:27 UTC. Historical detail is retained in
+Updated 9 November 2026, 13:49 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -22,7 +22,7 @@ is required; Apple source/runtime, push and calling acceptance remain separate.
 
 | Checkout | Branch/source | State |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 /02e61220 | Nine source files for binding preparation under test |
+| Mobile original | feat/chat-send-timing-20261107 /this commit | Binding preparation accepted; no product activation |
 | Mobile isolated CI | feat/pinned-inspector-ci-20261109 /951cdbcf | Public consumer evidence accepted and integrated |
 | Inspector original | feat/matrix-rust-bindings-20261107 /f8ca3d6 | Verified public SDK6 integrated |
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | SDK6 distribution accepted; preserve unrelated gradlew.bat delta |
@@ -67,13 +67,22 @@ Desktop/browser/Apple wrappers and actual application DI resolution.
   one expected failure (AccessDenied replaced by client.session_changed); production
   source exactly matches the earlier full gate. The correction retains the captured
   denial before checking native expiry, leaving local ownership separate.
-- Formatter63867 is REAPED PASS34.308s. Corrected focused61497 is RUNNING; expect26
-  cases=21 domain+3 SQLite+2 app. Root Mobile/Inspector sources are FROZEN while it runs.
-  Reap it, audit the regression and run the required final full/browser gate (24 browser
-  cases). Do not count the earlier4,222-case gate as validation of this correction.
+- First correction focused61497 FAILED144.234s:26 cases/one failure. The shared
+  response policy still preferred the later local expiry; preserve this failure.
+- Final correction keeps captured global denial specifically at local native checking;
+  a prior network error still yields current native rejection. No global policy changed.
+  Formatter12973 PASS36.991s; final focused50366 REAPED PASS142.545s,26 cases.
+- Final full81742 REAPED PASS511.375s:4,224 fresh=3,587 desktop+613 Android host+24
+  browser. Browser XML verifies21 domain+3 IndexedDB cases. Zero failures/errors/skips;
+  root/release/Wasm/iOS-source/quality pass and4,551 application/library sources match
+  the final focused manifest. All Mobile local compiler jobs are reaped.
 
-Private runners/evidence: `.work/space-room-binding-preparation-2026-11-09`. No final
-acceptance/commit or new Apple execution/APK/product activation is claimed yet.
+[Accepted evidence](measurements/collaboration-space-room-binding-preparation-2026-11-09.json)
+retains source hashes, first failures and corrected proof. Private files are in
+`.work/space-room-binding-preparation-2026-11-09`. Actual Apple execution remains
+separate; no new APK or SDK/worker/UI activation is claimed. The existing hosted
+collaboration-control workflow includes the new Apple database contract; dispatch
+once on this accepted source after push, checking for an already active run first.
 
 ## Platform reconciliation in progress
 
@@ -94,7 +103,8 @@ before the explicit-version correction;27 Python migration/recovery cases now pa
 Only reviewed versions are allowed; encrypted envelope projection is unchanged. This
 is verifier proof, not a live recovery. Its later minimal port to original Platform is
 still required. Details/scripts live under the group checkout's
-`.work/space-root-reconciliation-2026-11-09`; no group compiler is running yet.
+`.work/space-root-reconciliation-2026-11-09`. Focused49700 is RUNNING; this is the
+only heavy local job. Group source inputs are frozen until it is reaped.
 
 ## Accepted phone and native proof
 
@@ -140,7 +150,7 @@ Draft66 092041 must NEVER be sent. All native/emulator jobs are reaped and stopp
 
 ## Next work
 
-1. Reap Mobile61497, finish corrected binding preparation, commit/push exact evidence.
+1. Dispatch/audit actual hosted Apple preparation coverage on this accepted source.
 2. Validate/finish the Platform source merge with shared API/FULL worker and actual
    SQL/RLS/migration/projection checks. Keep live runtime unchanged during source work.
 3. Continue owning original SDK delivery/history, current recipient readiness, worker

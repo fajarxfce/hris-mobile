@@ -100,6 +100,29 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun prepareSpaceRoomBinding(
+        bindings: CollaborationSpaceRoomBindingRepository,
+        metadata: CollaborationSpaceConversationMetadataRepository,
+        rooms: CollaborationSpaceRoomRepository,
+        originals: CollaborationSpaceOriginalConversationRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        PrepareCollaborationSpaceRoomBinding(
+            bindings,
+            metadata,
+            rooms,
+            originals,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun resolveSpaceRoomRequest(
         commands: CollaborationSpaceConversationCommandRepository,
         rooms: CollaborationSpaceRoomRepository,
