@@ -1,0 +1,164 @@
+{
+  "base": "1f3b9e8d80f835eda4cbf77379f18c06244e7709",
+  "scope": "One bounded explicit original organization Room dispatch with durable receipt capture; no product route, SDK delivery or backend rollout",
+  "sourceSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "cc48c13ca3bb563ef0a84486446ed7d576ae71b07226053b030fe9c7340602ca",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "bef834e741e56775423145be2937064a4f7bb63caeb8b8910606d877184b3140",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomResolutionStorageContract.kt": "7da2b0fc720bee687106aa487b786e53d889394a26fad72a6800fa35e87a3312",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReplayCollaborationSpaceRoomRequest.kt": "cb2a9d590a85eefb38dc83805e8a4ecf268da2a145b13761b2d7e243e640aa99",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRoomRequestReplayFixture.kt": "576196c6d634cb25a184209abcf9c5fc662ed2bba5d2c0f19c676bbdc228f3cb",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRoomRequestReplayTest.kt": "f6b2e9d094b5deebe293cd2c30cca2fe6258209aa91e3bfe4d263e00449e6695"
+  },
+  "validation": {
+    "focused-1": {
+      "elapsedSeconds": 263.919,
+      "sourceFiles": 4532,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "fresh": {
+        "tests": 76,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 5,
+      "reusedSuites": 579,
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "80e67f8947b362c0f8f68066ad43f7e3d3dd95283ba8ee94bc6565d3999d1eb6",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRoomResolutionStorageTest.xml": {
+          "sha256": "93c3d824db676bac2034d7f5f58da25884944e74b4d6e4f171822d440fba385d",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceRoomRequestReplayTest.xml": {
+          "sha256": "2fcab9c53fd87a89fd0093949b01e66153d3ca4a5e02a12c768f1ad70cadd9d9",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceRoomRequestResolutionTest.xml": {
+          "sha256": "b7da11f9aea80794dcb8b8f23ef81f046d538c4bee16ad528642103ab5afc887",
+          "tests": 22,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceRoomPreparationTest.xml": {
+          "sha256": "647b5084cc485b5a6a81e352fe44e9e4c01c4b41e88c7a941c2f957d8030dcc7",
+          "tests": 23,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "full-1": {
+      "elapsedSeconds": 902.068,
+      "sourceFiles": 4532,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "fresh": {
+        "tests": 5963,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 790,
+      "reusedSuites": 152,
+      "selectedReports": {
+        "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+          "sha256": "33a4fae81c6902f9923a41ae3d90a0619f9f4413e09c767b4269055c776ac328",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRoomResolutionStorageTest.xml": {
+          "sha256": "9d5cd49f916019c17ab274949bc72b9f271da458f57a2184bfccf61b30a38536",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceRoomPreparationTest.xml": {
+          "sha256": "fb7662424adfbb02145659067fe42f4a47e5c4185d5746f4b6b030d59b68b802",
+          "tests": 23,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceRoomRequestReplayTest.xml": {
+          "sha256": "a592f54d16a074dc40a26308e694f9f2331af8a1c8038db3e0aa984b9a1e9b62",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceRoomRequestResolutionTest.xml": {
+          "sha256": "2f0651634f7a22e024a668775e946d0bc0eeb35a6b2c9751644affa37740a2ec",
+          "tests": 22,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "browser-1": {
+      "startedAt": "2026-11-09T11:02:37.434391+00:00",
+      "elapsedSeconds": 115.038,
+      "sourceFiles": 4532,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 74,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reports": {
+        "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBro-D01HDM7C9P54U.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceRoomResolutionStorageTest.xml": {
+          "sha256": "7fd187ef8bbe2877a0f2a56e00b2cc1a18dbeba45a494a34424898b7bffe3455",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.SpaceRoomRequestReplayTest.xml": {
+          "sha256": "f3b23da08f0ad1e1b158b8383f7a660ef698307a5c44b2ecbe0cb12ea6c904c0",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.SpaceRoomRequestResolutionTest.xml": {
+          "sha256": "b5735399ca00c038bcd8b1d8918ff8549f9b011bbd7244f336f1b6a9ff5c0694",
+          "tests": 22,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.SpaceRoomPreparationTest.xml": {
+          "sha256": "dafe95c44f1356ffc3e6ba8d9c096cc53e326a88c21656f5d380346818b02b38",
+          "tests": 23,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  },
+  "androidReleaseLintIssues": 0,
+  "browser": "74 actual Chromium Wasm tests: 18 replay,22 resolution,23 preparation,11 shared IndexedDB storage cases",
+  "apple": "Shared source compilation only; new exact-source Apple execution remains pending",
+  "phone": "No new APK; release86 remains installed",
+  "accepted": true
+}

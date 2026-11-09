@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.data.repositories.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.PrepareCollaborationSpaceRoomRequest
+import dev.fajar.starter.collaboration.domain.usecases.ReplayCollaborationSpaceRoomRequest
 import dev.fajar.starter.collaboration.domain.usecases.ResolveCollaborationSpaceRoomRequest
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
@@ -24,6 +25,125 @@ import kotlinx.coroutines.test.runTest
 
 abstract class CollaborationSpaceRoomResolutionStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
+
+    @Test
+    fun originalDispatchKeepsCiphertextAndDirectoryDenialAfterRecordedReceiptAndReopen() =
+        withDatabase { f ->
+            val denial =
+                Failure(
+                    FailureKind.AccessDenied,
+                    "Server detail",
+                    code = "collaboration_access_denied",
+                )
+            assertEquals(AppResult.Success(true), f.directory().restrict(f.access, denial))
+            val originalRequest = f.raw().request
+            val keys = listOf(f.commandKey.read(), f.directoryKey.read())
+            val record =
+                assertIs<AppResult.Success<CollaborationSpaceConversationCommandRecord>>(
+                        f.replay()(f.conversation(), f.command.id)
+                    )
+                    .value
+            assertEquals(CollaborationSpaceConversationOutcome.Recorded(f.receipt), record.outcome)
+            assertEquals(2, record.attempts)
+            assertEquals(originalRequest, f.raw().request)
+            val saved = f.raw()
+            f.reopen()
+            assertEquals(AppResult.Success(record), f.replay()(f.conversation(), f.command.id))
+            assertEquals(saved, f.raw())
+            assertEquals(keys, listOf(f.commandKey.read(), f.directoryKey.read()))
+            assertEquals(
+                denial.code,
+                assertIs<AppResult.Success<CollaborationSpaceDirectoryAdmission>>(
+                        f.directory().admission(f.access)
+                    )
+                    .value
+                    .denial
+                    ?.code,
+            )
+            assertEquals(1, f.requests)
+            assertEquals(0, f.resolutions)
+        }
+
+    @Test
+    fun lostDispatchResponseReopensOriginalCiphertextAndRetriesUnderCurrentParent() =
+        withDatabase { f ->
+            val originalRequest = f.raw().request
+            f.onRequest = { throw CancellationException("Lost original response") }
+            assertFailsWith<CancellationException> { f.replay()(f.conversation(), f.command.id) }
+            assertIs<CollaborationSpaceConversationOutcome.Unconfirmed>(f.retained().outcome)
+            f.reopen(expired = false)
+            f.onRequest = { AppResult.Success(f.receipt) }
+            val record =
+                assertIs<AppResult.Success<CollaborationSpaceConversationCommandRecord>>(
+                        f.replay()(f.conversation(), f.command.id)
+                    )
+                    .value
+            assertEquals(f.command, record.command)
+            assertEquals(3, record.attempts)
+            assertEquals(originalRequest, f.raw().request)
+            assertEquals(2, f.requests)
+            assertEquals(0, f.resolutions)
+        }
+
+    @Test
+    fun dispatchReceiptWithLostCommittedStorageReplyRecoversExactEncryptedOutcome() =
+        withDatabase { f ->
+            var writes = 0
+            val store =
+                object : CommandStore by f.history.database.commands {
+                    override suspend fun update(
+                        scope: CommandScope,
+                        partition: String,
+                        id: String,
+                        expectedRevision: Long,
+                        state: String,
+                    ): Boolean {
+                        val committed =
+                            f.history.database.commands.update(
+                                scope,
+                                partition,
+                                id,
+                                expectedRevision,
+                                state,
+                            )
+                        writes++
+                        if (writes == 2) error("Lost response after actual receipt commit")
+                        return committed
+                    }
+                }
+            val record =
+                assertIs<AppResult.Success<CollaborationSpaceConversationCommandRecord>>(
+                        f.replay(f.commands(store))(f.conversation(), f.command.id)
+                    )
+                    .value
+            assertEquals(CollaborationSpaceConversationOutcome.Recorded(f.receipt), record.outcome)
+            val saved = f.raw()
+            f.reopen()
+            assertEquals(record, f.retained())
+            assertEquals(saved, f.raw())
+            assertEquals(2, writes)
+            assertEquals(1, f.requests)
+        }
+
+    @Test
+    fun dispatchReceiptIsDurableThroughCallerCancellationAndExpiredParentReopen() =
+        withDatabase { f ->
+            f.onRequest = {
+                currentCoroutineContext().cancel()
+                AppResult.Success(f.receipt)
+            }
+            supervisorScope {
+                val work = async { f.replay()(f.conversation(), f.command.id) }
+                assertFailsWith<CancellationException> { work.await() }
+            }
+            val record = f.retained()
+            assertEquals(CollaborationSpaceConversationOutcome.Recorded(f.receipt), record.outcome)
+            val saved = f.raw()
+            f.reopen()
+            assertEquals(AppResult.Success(record), f.replay()(f.conversation(), f.command.id))
+            assertEquals(saved, f.raw())
+            assertEquals(1, f.requests)
+        }
 
     @Test
     fun normalizedDirectoryMarkCapturesExactFenceAndReopensWithExpiredReplacementParent() =
@@ -525,6 +645,37 @@ abstract class CollaborationSpaceRoomResolutionStorageContract {
                                 ),
                             )
                         )
+                    }
+                },
+                directory(),
+                sessions,
+                IdentityServer(access.audience, "Fictional server"),
+                AppBuild(AppPlatform.Android, 5, "test", null),
+                clock,
+            )
+
+        var requests = 0
+        var onRequest: suspend () -> AppResult<CollaborationSetupReceipt> = {
+            AppResult.Success(receipt)
+        }
+
+        fun replay(commands: CollaborationSpaceConversationCommandRepository = commands()) =
+            ReplayCollaborationSpaceRoomRequest(
+                commands,
+                object : CollaborationSpaceRoomRepository by remote {
+                    override suspend fun request(
+                        conversation: CollaborationSpaceConversation,
+                        operation: String,
+                        request: CollaborationSpaceRoomRequest,
+                    ): AppResult<CollaborationSetupReceipt> {
+                        assertEquals(this@Scenario.conversation(), conversation)
+                        assertEquals(command.id, operation)
+                        assertEquals(command.intent.request, request)
+                        assertIs<CollaborationSpaceConversationOutcome.Unconfirmed>(
+                            retained().outcome
+                        )
+                        requests++
+                        return onRequest()
                     }
                 },
                 directory(),

@@ -49,15 +49,17 @@ rotation with the original body and idempotency key. Explicit replay keeps those
 same values. Fresh-operation preparation, cooldown policy and durable recovery still
 belong in owning use cases and encrypted storage.
 
-The existing Group room operation fingerprint also includes native parent ID/version
-and actual platform/build, unlike the direct-open fingerprint. Ordinary native token
-rotation increments that version. After an earlier uncertain commit, replay with a
-new version/build can therefore conflict despite an unchanged JSON body. Transport
-must preserve that conflict and original operation; it cannot report a recovered
-receipt or mint a replacement operation. Durable room work must retain the original
-proof descriptor, and explicit receipt recovery across changed proof remains a
-server/client prerequisite before product delivery. The mocked rotation tests prove
-wire preservation, not receipt recovery across an already committed server fingerprint.
+Current Room dispatch uses the [stable `/room/requests` intent](collaboration-space-room-stable-intent.md):
+operation, account/space/conversation, device/version and observed participant/revision
+remain its business identity. Current native proof and platform/build are repeated
+admission checks. The original native binding stays retained as provenance for exact
+receipt/fence resolution. [Owned dispatch](collaboration-space-room-dispatch.md) marks
+uncertainty before one attempt and never changes the original on retry.
+
+The earlier room-operation fingerprint included native parent/version and platform/
+build. Its original-proof receipt adapter remains separate for historical recovery;
+it is not the contract used by new stable Room requests. Neither a missing receipt
+nor a changed credential permits silently replacing an uncertain original.
 
 ## Safe room metadata
 

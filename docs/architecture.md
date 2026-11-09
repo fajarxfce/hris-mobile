@@ -99,6 +99,10 @@ replacement. Owning dispatch, projection and replacement fencing remain separate
 immutable business intent separate from rotating native proof. Receipt absence
 remains uncertain; durable dispatch and explicit replacement fencing are separate.
 
+[Original Room dispatch](collaboration-space-room-dispatch.md) makes one bounded
+attempt of a retained command, captures exact receipts and preserves uncertainty;
+setup results remain separate from published room access and SDK delivery.
+
 [Original room request receipts](collaboration-space-room-receipts.md) read complete
 original proof under the current native owner. Initial durable proof capture and
 stable owning dispatch remain separate; receipt absence does not fence late work.

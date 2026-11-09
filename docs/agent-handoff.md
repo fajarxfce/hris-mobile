@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 10:28 UTC. This file describes current work. Historical
+Updated 9 November 2026, 11:05 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -24,12 +24,12 @@ Do not restart jobs or reapply candidates from that history without checking cur
 
 | Checkout | Branch/source | Current state |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 / 2293ff05 | Pushed; native86 accepted/installed |
-| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 6c6aa4ca | Pushed; verify failure under investigation |
-| Inspector original | feat/matrix-rust-bindings-20261107 / 2b849217 | Native freeze released; still SDK5 catalog |
+| Mobile original | feat/chat-send-timing-20261107 / 1f3b9e8d + current Room dispatch | Full and browser gates passed |
+| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 16df4260 | Pushed; verify 42604884828 active |
+| Inspector original | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Verified public SDK6 integrated/pushed |
 | Inspector isolated | feat/sdk6-distribution-20261109 / a6b8236 | Pushed; SDK6 distribution accepted |
 | Starter | feat/network-inspector-20261107 / 6157db1 | Pushed; generic worker/identity ports accepted |
-| Platform original | feat/communications / 8769b0d0 | Pushed; runtime unchanged |
+| Platform original | feat/communications / 43a7c0c8 | Pushed; runtime unchanged |
 | Platform group worktree | feat/communication-space / fdcd783e | Separate unshipped group implementation |
 
 The isolated directories are under `/home/fajar/hris/.worktrees/`:
@@ -101,55 +101,60 @@ in immutable release438835525. AAR SHA256
 a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3;
 Ivy SHA25669ea030963275ce080991e658172934441b73558e9de4d8e7ae3976b2f18558a.
 APK stripped ARM64 SHA2564e15c92398521f5f5cd9fbb30cf327019faf32abe5302b64d8b4bdc07d75e9d4.
-Do not rebuild or overwrite release assets. Original inspector's SDK5 descriptor404
-still requires the verified local mirror for the frozen86 build; that is not public CI.
+Do not rebuild or overwrite release assets. APK86 used the verified local mirror while
+its original inspector still had the SDK5 catalog. The original inspector now f8ca3d6
+integrates the verified public SDK6 source; current Room gates use that public catalog.
 
-Inspector742a2d1 uses publicSDK6/strict checksums. CI42591111996 succeeds:226 portable/
-Android host cases and69 actual Apple simulator cases, zero failures/errors/skips;
-artifact digests/XML verified. Android native fixture compiled, not executed there.
-Apple Matrix native binding and capture overhead remain open. a6b8236 records evidence.
+Inspector source742a2d1: CI42591111996 passes226 portable/Android host and69 Apple
+simulator cases; downloaded artifact digests and XML verified. Apple Matrix native
+binding and capture overhead remain open. Mobile consumer jobs pin that exact source
+in all nine jobs across five workflows in the isolated CI worktree. First consumer
+Apple CI42594287486 passed1,777 cases and Xcode app build; Windows also passed.
+Web42599865437 at6c6aa4ca now passes the optimized production distribution in23m35.39s.
+Its two artifacts, all26 web file hashes and95 memory samples are verified. Earlier
+runner shutdown causes remain unclassified; launcher RSS is not compiler/Binaryen RSS.
 
-Mobile0c771fc5 pins that exact library in all nine consumer jobs across five workflows;
-no mirror, no persisted dependency-checkout credentials. CI/control explicitly run
-Android collaboration host tests. Existing tooling60 cases and static YAML checks pass.
-First application CI42594287486: Windows and Apple succeed. Verified Apple artifact
-13664276449 contains1777 tests/195 suites, zero failures/errors/skips, plus successful
-Xcode app build. This is not native Matrix Apple binding acceptance.
-Web failed when the runner received a shutdown signal during Wasm optimization.
-The log does not establish its cause. The new web-only scope repeats no other job
-and records /usr/bin/time resource evidence without changing compilation settings.
-Verify failed before tests at SBOM resolution: Material3 1.9.0 POM checksum was missing.
-Only its official Maven Central/publisher-SHA1-verified POM hash is added in b1630963;
-[exact failure evidence](measurements/pinned-inspector-ci-material3-pom-2026-11-09.json).
-Corrected verify CI42596014241 failed on the next missing Lifecycle POM. Complete
-local inventory66020 passed70.759s and restored metadata; all8 added artifacts were
-then verified against official bytes/publisher SHA-1. Strict63401 passes46.014s with
-unchanged metadata; the393-component BOM is same-input cache reuse, not fresh execution.
-Initial local insertion/strict failure and alias-URL404 are preserved in its measurement.
-a5d74fa3 verify CI42598801511 passed dependency resolution then FAILED: one Android
-cancellation test read a shared Boolean before the separately owned MockEngine coroutine
-finished; desktop test process aborted134 during AppFlowTest's catalog recovery case.
-Artifact13665023876 SHA0f71440f50071349dd9779628da761f8ea7c108e164d38d65faf63366cbba2b3
-verified. The transport test now awaits explicit engine finalization (uncommitted,
-checks pending). Desktop abort cause is NOT established; preserve binary logs and
-collect native diagnostics. No production retry/cancellation behavior was changed. Web-only CI42597096435 also shut down at Wasm optimization; no final artifact
-survived. Cause remains unproved. Next web job bounds Binaryen2cores, Gradle1worker/
-3GiB/in-process Kotlin and samples closed kernel memory numbers every15s to console.
-The exact125 Binaryen source confirms BINARYEN_CORES. 6c6aa4ca web CI42599865437 is running with those bounded resources and live evidence.
-No distribution workflow was dispatched.
-Audit actual completed jobs and artifacts; do not infer success from compilation alone.
+Full verify failures were traced to strict SBOM checksums (eight official artifacts
+verified), a cancellation test observing a separately owned coroutine too early,
+and a notification navigation assertion reading the list before its initial state.
+No product retry or navigation behavior changed. Transport focused10 cases pass;
+notification focused1 case passes95.455s with format/architecture/Detekt and4,528
+unchanged inputs. A prior desktop SIGABRT is not reproduced but still unclassified;
+CI retains bounded native backtraces. Fifth full verify42604884828/job129118204113
+at3657ada9 is active. Current isolated source16df4260 records exact failures and checks
+in [its handoff](https://github.com/fajarxfce/hris-mobile/blob/16df4260/docs/agent-handoff.md).
+These hosted runs do not contain the new root Room dispatch. No distribution workflow
+was dispatched. Integrate consumer source only after completed job/artifact review.
+
+## Current Room dispatch
+
+The current increment adds one bounded original Room attempt through existing domain
+repositories, exact durable uncertainty before HTTP, normalized mark readback,
+cancellation-independent receipt capture and retained global denial. No replacement,
+poll loop, SDK delivery or product route is introduced. Preparation and resolution
+remain separate accepted operations. [Contract and evidence](collaboration-space-room-dispatch.md).
+
+All jobs are reaped: focused34481 passes76 fresh cases in263.919s; full30025 passes5,963
+fresh cases (5,364 desktop,599 Android host) in902.068s, zero failures/errors/skips and
+release lint0; actual Chromium97424 passes74 cases in115.038s, including18 replay and11
+actual IndexedDB storage cases. Root check, Android release compile, Wasm/iOS source,
+format/architecture/Detekt pass. All4,532 app inputs and inspector inputs stayed fixed.
+These new cases have not yet executed on Apple. Source freeze is released.
 
 ## Next implementation work
 
 1. Native86 is accepted and installed. Preserve its seven originals and record latency
-   work separately. One message sample is not a p95 measurement. Startup request cost and
-   duplicate local acquisition still need measured review; no arbitrary retry patches.
+   work separately. One message sample is not a p95 measurement. One observed send takes2,983ms to server; the encrypted send HTTP header takes145ms.
+   Stage traces show setup522ms and timeline entry704ms including room acquisition509ms.
+   The SDK join method always sends HTTP; the current worker calls it even for known
+   joined rooms. Investigate safe raw-room reuse with native ownership/cancellation
+   tests before claiming an improvement. No latency source change is made yet.
 2. Finish public consumer CI, preserve first failures and fix actual causes. Once86
    is complete, integrate verified inspector/CI source into the original checkout.
    Port the generic pinned workflow setup/checksums to Starter after Mobile proof.
    HRIS selected-runtime registry policy does not belong in Starter.
-3. Resume organization chat from the current prepared Room intent: bounded original
-   dispatch, durable published binding/projection, exact LEGACY metadata validation,
+3. Continue organization chat after the accepted original Room dispatch: durable
+   published binding/projection and exact LEGACY metadata validation,
    original SDK delivery/history, workers and product routing. Existing Prepare and
    Resolve room use cases are accepted; do not recreate them. The group backend is in
    the separate worktree; original Platform does not contain V117–138.

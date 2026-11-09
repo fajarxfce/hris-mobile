@@ -119,6 +119,25 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun replaySpaceRoomRequest(
+        commands: CollaborationSpaceConversationCommandRepository,
+        rooms: CollaborationSpaceRoomRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReplayCollaborationSpaceRoomRequest(
+            commands,
+            rooms,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun replaySpaceConversationOpen(
         commands: CollaborationSpaceConversationCommandRepository,
         conversations: CollaborationSpaceConversationRepository,
