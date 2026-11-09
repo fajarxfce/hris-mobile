@@ -1,0 +1,57 @@
+{
+  "at": "2026-11-09T09:11:48.208539+00:00",
+  "sourceCommit": "f9cdc708",
+  "versionCode": 85,
+  "scope": "Internal activation observation, no phone/native release acceptance",
+  "nativeReleaseAccepted": false,
+  "phoneInstalledVersion": 83,
+  "apkSha256": "dc94b92ff493451cf41e8a7b2612290a89303f26b8e5349c3da43932fa392bda",
+  "buildSeconds": 97.971,
+  "buildSession": 31550,
+  "upgradeAccepted": true,
+  "sameAppAndPublicIdentity": true,
+  "activation": [
+    {
+      "area": "Application",
+      "event": "OperationCompleted",
+      "category": "ChatActivationStarted"
+    },
+    {
+      "area": "Application",
+      "event": "OperationCompleted",
+      "category": "ChatActivation_BOOTSTRAP"
+    },
+    {
+      "area": "Application",
+      "event": "OperationCompleted",
+      "category": "ChatActivation_READY"
+    },
+    {
+      "area": "Application",
+      "event": "OperationCompleted",
+      "category": "ChatActivation_READY"
+    }
+  ],
+  "startupFailureReproduced": false,
+  "noNewMessages": true,
+  "encryptedOriginalsRetained": 6,
+  "sdkBootstrapRequests": 0,
+  "http403Responses": 0,
+  "sdkSyncRequests": 16,
+  "totalRequests": 203,
+  "trailingCompleteSecondsWithoutSetup": 80,
+  "trailingRequests": {
+    "sync": 8,
+    "other_hris": 5
+  },
+  "allOwnedJobsReaped": true,
+  "latestStoppedStore": ".work/activation-startup-native-2026-11-09/sender",
+  "source84StorePreserved": true,
+  "phoneTouched": false,
+  "limitations": [
+    "This successful observation cannot clear native84 failed Home gate",
+    "Startup still makes repeated metadata calls; no latency/quietness acceptance",
+    "A deterministic registry test is investigating background completion versus selected application ownership",
+    "No Apple native Matrix or full54-group acceptance"
+  ]
+}

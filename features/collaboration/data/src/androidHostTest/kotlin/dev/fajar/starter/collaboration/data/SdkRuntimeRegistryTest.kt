@@ -10,10 +10,111 @@ import kotlin.test.*
 
 class SdkRuntimeRegistryTest {
     @Test
+    fun admittedSelectionRetainsTheClientWhenForegroundEntryMeetsBackgroundConstruction() {
+        val f = RegistryFixture()
+        f.select()
+        val creating = f.background()
+        val blocked =
+            assertIs<AppResult.Failed>(f.registry.reserveInspection("store", f.owner, "device"))
+        assertEquals("client.collaboration_runtime_opening", blocked.failure.code)
+        val resource = RegistryResource()
+        assertTrue(f.registry.attach(creating.reservation, resource))
+        assertEquals(
+            AppResult.Success(Unit),
+            f.registry.publish(creating) {
+                it.ready = true
+                AppResult.Success(Unit)
+            },
+        )
+        val incoming = f.background()
+        assertSame(creating.reservation, incoming.reservation)
+        assertNull(f.registry.releaseBorrow(creating, f.finished))
+        assertNull(f.registry.releaseBorrow(incoming, f.finished))
+        assertEquals(0, resource.stops)
+        assertSame(resource, f.registry.find(f.owner, "device"))
+        assertEquals(
+            listOf(resource),
+            f.registry.update(CollaborationRuntimeRetention(f.parent, f.parent.owner("other"))),
+        )
+        assertEquals(1, resource.stops)
+        f.registry.released(creating.reservation)
+        assertTrue(f.registry.resources().isEmpty())
+    }
+
+    @Test
+    fun freshSelectionRetainsAnAlreadyPublishedBorrowBeforeForegroundEntryRuns() {
+        val f = RegistryFixture()
+        f.registry.update(CollaborationRuntimeRetention(f.parent, null))
+        val borrow = f.background()
+        val resource = RegistryResource()
+        f.registry.attach(borrow.reservation, resource)
+        assertEquals(
+            AppResult.Success(Unit),
+            f.registry.publish(borrow) {
+                it.ready = true
+                AppResult.Success(Unit)
+            },
+        )
+        f.select()
+        assertNull(f.registry.releaseBorrow(borrow, f.finished))
+        assertEquals(0, resource.stops)
+        assertSame(resource, f.registry.find(f.owner, "device"))
+        assertEquals(listOf(resource), f.registry.update(CollaborationRuntimeRetention(null, null)))
+        assertEquals(1, resource.stops)
+    }
+
+    @Test
+    fun expiredSelectionCannotPromoteAPublishedOrStillOpeningIndependentBorrow() {
+        for (publishFirst in listOf(false, true)) {
+            val f = RegistryFixture()
+            f.registry.update(CollaborationRuntimeRetention(f.parent, null))
+            val borrow = f.background()
+            val resource = RegistryResource()
+            f.registry.attach(borrow.reservation, resource)
+            if (publishFirst)
+                assertEquals(
+                    AppResult.Success(Unit),
+                    f.registry.publish(borrow) {
+                        it.ready = true
+                        AppResult.Success(Unit)
+                    },
+                )
+            f.registry.update(
+                CollaborationRuntimeRetention(f.parent, null, retainedForeground = f.owner)
+            )
+            if (!publishFirst)
+                assertEquals(
+                    AppResult.Success(Unit),
+                    f.registry.publish(borrow) {
+                        it.ready = true
+                        AppResult.Success(Unit)
+                    },
+                )
+            assertSame(resource, f.registry.releaseBorrow(borrow, f.finished))
+            assertEquals(1, resource.stops)
+        }
+    }
+
+    @Test
+    fun failedPublicationCannotTransferAnUnpublishedBorrowToTheSelectedOwner() {
+        val f = RegistryFixture()
+        f.select()
+        val borrow = f.background()
+        val resource = RegistryResource()
+        f.registry.attach(borrow.reservation, resource)
+        assertEquals(
+            AppResult.Failed(f.finished),
+            f.registry.publish(borrow) { AppResult.Failed(f.finished) },
+        )
+        assertSame(resource, f.registry.releaseBorrow(borrow, f.finished))
+        assertEquals(1, resource.stops)
+    }
+
+    @Test
     fun publishedBackgroundRuntimeServesBothLanesUntilTheirLastReferenceCloses() {
         repeat(2) { firstToClose ->
             val f = RegistryFixture()
-            f.select()
+            f.registry.update(CollaborationRuntimeRetention(f.parent, null))
             val device = f.background()
             val resource = RegistryResource()
             assertTrue(f.registry.attach(device.reservation, resource))
@@ -49,7 +150,7 @@ class SdkRuntimeRegistryTest {
     @Test
     fun competingLanesCanBorrowAPublishedClientWithoutExceedingTheReferenceLimit() {
         val f = RegistryFixture()
-        f.select()
+        f.registry.update(CollaborationRuntimeRetention(f.parent, null))
         val device = f.background()
         val resource = RegistryResource(ready = true)
         f.registry.attach(device.reservation, resource)

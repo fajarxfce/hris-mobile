@@ -1,0 +1,73 @@
+{
+  "at": "2026-11-09T09:23:00.835675+00:00",
+  "scope": "Transfer published background resources to the already admitted selected application owner",
+  "native84FailureDirectlyAttributed": false,
+  "native85Observation": "Activation succeeded and sync remained active; native84 failure is preserved separately",
+  "deterministicRegression": "Both ordering cases lose the available selected resource when its last background reference closes",
+  "red1": {
+    "session": 32554,
+    "seconds": 39.682,
+    "failures": 2,
+    "limitation": "One test first expected the wrong opening failure code; second already reached the ownership failure"
+  },
+  "red2": {
+    "session": 46681,
+    "seconds": 38.184,
+    "tests": 2,
+    "failures": 2,
+    "bothFailAtSelectedResourceRelease": true
+  },
+  "format": {
+    "session": 65121,
+    "seconds": 34.965,
+    "accepted": true
+  },
+  "focused": {
+    "startedAt": "2026-11-09T09:13:30.650543+00:00",
+    "elapsedSeconds": 87.215,
+    "exitCode": 0,
+    "sourceFiles": 4529,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 620,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "full": {
+    "startedAt": "2026-11-09T09:15:27.950748+00:00",
+    "elapsedSeconds": 116.823,
+    "exitCode": 0,
+    "sourceFiles": 4529,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 693,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "focusedSession": 90173,
+  "fullSession": 26267,
+  "registryTests": 31,
+  "newRegistryTests": 4,
+  "androidHostCases": 599,
+  "applicationLifetimeCases": 21,
+  "allCompilerSessionsReaped": true,
+  "validationVersionCode": 85,
+  "plannedApkVersionCode": 86,
+  "sourceManifestSha256": "209127cf0cd4c178dc4546e3b158a77d7d92bde70e8fbe09c7c94dc0fb13aa67",
+  "libraryManifestSha256": "b346eac84c446f82f4801886f1be25f9d3e10fdf0e2f97375bd0010164d947f4",
+  "native86Accepted": false,
+  "phoneInstalledVersion": 83,
+  "retentionDoesNotStartIo": true,
+  "authorityOrRetryPolicyChanged": false,
+  "limitations": [
+    "Native86 lifecycle, healthy idle sync and credential continuity still required",
+    "Startup metadata and latency remain separate work",
+    "Only an already admitted matching owner can retain an available published resource; stale retention alone cannot promote it"
+  ]
+}

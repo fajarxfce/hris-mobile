@@ -1,5 +1,53 @@
 # Agent continuation — HRIS Mobile
 
+## Selected runtime publication source accepted;86 next — 9 November 2026, 09:23 UTC
+
+Two deterministic registry regressions prove that either ordering of foreground
+selection/background publication could lose the available selected client on the
+last finite borrow release. Publication and fresh retention now promote only an
+available client to the already admitted matching foreground owner. No authority,
+SDK opening, sync or retry policy change. Stale retainedForeground cannot promote;
+failed/unpublished work and denial/logout retain existing cleanup. Four added cases
+plus27 existing registry cases pass. Background-only test fixtures now explicitly
+observe parent-only admission. [Source evidence](measurements/collaboration-selected-runtime-publication-2026-11-09.json).
+
+RED32554 failed39.682s: one wrong opening-code expectation, one intended lifetime
+failure. Corrected RED46681 fails BOTH intended lifetime assertions38.184s. Format65121
+PASS34.965s. Focus90173 PASS87.215s/620 fresh (599Android+21app). Full26267
+PASS116.823s/693 fresh; current host cases reused, not summed. All4529 app/82 root
+library inputs fixed, no failures/errors/skips, Android compile/lint, Wasm/iOS source
+and quality pass. All jobs REAPED. Checks retain appVersion85 to avoid changing shared
+build metadata; packaging86 and native validation explicitly exercise86.
+
+Diagnostic85 build31550 PASS97.971s, verify95632/74895 PASS; APK SHA
+dc94b92ff493451cf41e8a7b2612290a89303f26b8e5349c3da43932fa392bda,123465103bytes,
+exactSDK6. Clone41733 and native14574/23324/69174 all REAPED. Upgrade13.347s, Home
+150sec observation: activation READY,16 syncs,203 total requests,0 bootstrap/403,
+80 final complete seconds without setup. SIX originals retained, no new send.
+This success DOES NOT clear native84's failed Home gate or prove its precise cause.
+[Diagnostic evidence](measurements/collaboration-release85-diagnostic-2026-11-09.json).
+
+LATEST COMPLETE STOPPED store: .work/activation-startup-native-2026-11-09/sender at85,
+all4userdata/encryption files+fullAVD; preserve all SIX originals. Sixth is
+History84 083059, SHA7edec0cc1b267193ed7d855fb01d805dcc6f6bdeeb2a23214727f3dc276979c9.
+Never overwrite/reclone from84/83 or resend originals. Prepared build86 scripts in
+.work/release-phone-2026-11-09-build86: commit/push then remove HOLD_FOR_SOURCE_ACCEPTANCE.txt,
+build-arm64.py/verify-arm64.py/verify-sdk.py. Native86 scripts prepared/unexecuted in
+.work/selected-runtime-publication-native-2026-11-09: clone ONLY85, all6 old messages;
+one distinct Selected86 sample only after lifecycle/idle/refresh phases. Review
+self-test passes83 and seven negative controls; strict failures must stay preserved.
+Only accept-release.py after genuine native acceptance permits the notified install-only
+phone86 update. Phone remains83;84/85 not installed. No active local heavy process.
+
+Inspector worktree742a2d1 pushed (unrelated gradlew.bat delta preserved); publicCI
+42591111996 nowSUCCESS, artifacts not yet audited. First run42589272966 failed only
+portable missing-coroutine-BOM trust; downloaded artifact hashes prove213 portable
+and69 Apple cases/0failed. The13 Android adapter cases were blocked then. The exact
+new BOM bytes match Maven Central and Mobile/Starter. Audit new226 portable+69 Apple
+reports next; root inspector2b849217 remains frozen for86. No local library compiler.
+Platform1c0cb482/Starter6157db1 pushed; livee558a686/schema116.4/controlON unchanged.
+All54 PRD groups, startup cost/p95, native Apple Matrix and inspector distribution remain.
+
 ## Activation diagnostics source accepted; diagnostic85 next — 9 November 2026, 08:57 UTC
 
 Format87428 REAPED PASS36.623s; full60632 REAPED PASS1255.393s,5937 fresh tests,

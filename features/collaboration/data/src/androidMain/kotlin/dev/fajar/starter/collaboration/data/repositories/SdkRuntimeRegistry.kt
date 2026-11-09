@@ -128,9 +128,20 @@ internal class SdkRuntimeRegistry<T : Any>(
             )
                 return@synchronized stopped()
             val resource = entry.resource ?: return@synchronized busy()
-            if (!borrow.creating || borrow.published)
-                return@synchronized if (available(resource)) AppResult.Success(Unit) else stopped()
-            publish(resource).also { if (it is AppResult.Success) borrow.published = true }
+            val published =
+                if (!borrow.creating || borrow.published) {
+                    if (available(resource)) AppResult.Success(Unit) else stopped()
+                } else
+                    publish(resource).also { if (it is AppResult.Success) borrow.published = true }
+            // The admitted application owner outlives a finite recovery lane. Foreground entry
+            // may have encountered this same client before construction/publication completed.
+            if (
+                published is AppResult.Success &&
+                    available(resource) &&
+                    retention?.foreground == entry.owner
+            )
+                entry.foreground = true
+            published
         }
 
     /** Successful foreground entry promotes an already published background-created client. */
@@ -213,7 +224,9 @@ internal class SdkRuntimeRegistry<T : Any>(
                     if (next.parent != space.owner.parent) retire(entry)
                 } else if (!retainsParent(entry.owner)) retire(entry)
                 else {
-                    if (
+                    if (next.foreground == entry.owner && entry.resource?.let(available) == true)
+                        entry.foreground = true
+                    else if (
                         next.foreground != entry.owner &&
                             !(retained == entry.owner && entry.resource?.let(available) == true)
                     )
