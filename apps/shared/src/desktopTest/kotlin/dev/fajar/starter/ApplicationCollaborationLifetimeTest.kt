@@ -27,6 +27,104 @@ import kotlinx.coroutines.test.*
 
 class ApplicationCollaborationLifetimeTest {
     @Test
+    fun activationDiagnosticsKeepOnlyClosedFailureCategoriesWithoutRetrying() = runBlocking {
+        val diagnostics = mutableListOf<Diagnostic>()
+        Diagnostics.install { event, error ->
+            if (event.category?.startsWith("ChatActivation") == true) {
+                assertNull(error)
+                diagnostics += event
+            }
+        }
+        try {
+            for ((code, reason) in
+                listOf(
+                    "client.collaboration_runtime_opening" to "RuntimeOpening",
+                    "client.collaboration_runtime_busy" to "RuntimeBusy",
+                    "Fictional private code" to "Other",
+                )) {
+                diagnostics.clear()
+                withFixture { f ->
+                    var starts = 0
+                    f.activate = {
+                        flow {
+                            starts++
+                            emit(
+                                AppResult.Failed(
+                                    Failure(
+                                        FailureKind.Unavailable,
+                                        "Fictional private details",
+                                        code = code,
+                                    )
+                                )
+                            )
+                        }
+                    }
+                    f.lifetime.start()
+                    f.scheduler.runCurrent()
+                    f.scheduler.advanceTimeBy(5_000)
+                    f.scheduler.runCurrent()
+                    assertEquals(1, starts)
+                    assertEquals(
+                        listOf(
+                            Diagnostic(
+                                DiagnosticArea.Application,
+                                DiagnosticKind.OperationCompleted,
+                                "ChatActivationStarted",
+                            ),
+                            Diagnostic(
+                                DiagnosticArea.Application,
+                                DiagnosticKind.OperationFailed,
+                                "ChatActivation_${reason}_Unavailable",
+                            ),
+                        ),
+                        diagnostics,
+                    )
+                }
+            }
+        } finally {
+            Diagnostics.install(ConsoleDiagnosticSink)
+        }
+    }
+
+    @Test
+    fun activationExceptionAndCancellationDoNotExposeDetailsOrStartAnotherAttempt() = runBlocking {
+        val diagnostics = mutableListOf<Diagnostic>()
+        Diagnostics.install { event, error ->
+            if (event.category?.startsWith("ChatActivation") == true) {
+                assertNull(error)
+                diagnostics += event
+            }
+        }
+        try {
+            for (cancelled in listOf(false, true)) {
+                diagnostics.clear()
+                withFixture { f ->
+                    var starts = 0
+                    f.activate = {
+                        flow {
+                            starts++
+                            if (cancelled) throw CancellationException("Fictional private details")
+                            else error("Fictional private details")
+                        }
+                    }
+                    f.lifetime.start()
+                    f.scheduler.runCurrent()
+                    f.scheduler.advanceTimeBy(5_000)
+                    f.scheduler.runCurrent()
+                    assertEquals(1, starts)
+                    assertEquals(
+                        if (cancelled) listOf("ChatActivationStarted")
+                        else listOf("ChatActivationStarted", "ChatActivationUnexpected"),
+                        diagnostics.map { it.category },
+                    )
+                }
+            }
+        } finally {
+            Diagnostics.install(ConsoleDiagnosticSink)
+        }
+    }
+
+    @Test
     fun parentTokenMaintenanceSurvivesRotationAndClosesOnLogout() = runBlocking {
         withFixture { f ->
             var starts = 0

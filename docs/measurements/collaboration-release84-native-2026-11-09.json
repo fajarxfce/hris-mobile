@@ -1,0 +1,170 @@
+{
+  "recordedAt": "2026-11-09T08:34:27.034494+00:00",
+  "sourceCommit": "b0e4079e",
+  "apkVersion": 84,
+  "apkSha256": "5f64e156b00696d3914fd2ebf4286230baf5db2f22306277899d4a3d271580c3",
+  "nativeReleaseAccepted": false,
+  "phoneInstalled": false,
+  "phoneStillInstalledVersion": 83,
+  "phaseExecutionAccepted": true,
+  "strictTrafficAccepted": false,
+  "strictTrafficSha256": "e69d8764b12bf34d91295eabe2602490a75c63236d513ad68a7cc08ea0478df1",
+  "reviewedTrafficAccepted": false,
+  "reviewFailure": "Home metadata did not meet the previously declared periodic-work evidence; strict record is preserved",
+  "traffic": {
+    "at": "2026-11-09T08:31:31.706539+00:00",
+    "accepted": false,
+    "pairedRefreshFailures": [],
+    "pairedRefreshStatuses": [
+      200,
+      200,
+      200
+    ],
+    "settledIntervals": [
+      {
+        "phase": "home",
+        "completeBinSeconds": 110,
+        "requestCounts": {
+          "hris_conversation": 2,
+          "hris_conversation_summaries": 1,
+          "hris_device_admission": 1,
+          "hris_device_setup": 7,
+          "hris_direct_transport": 8,
+          "hris_room": 3,
+          "other_hris": 9,
+          "other_matrix": 8,
+          "secret_storage_default_key": 4,
+          "sync": 2
+        },
+        "unexpectedSetupTraffic": {
+          "hris_conversation": 2,
+          "hris_conversation_summaries": 1,
+          "hris_device_admission": 1,
+          "hris_device_setup": 7,
+          "hris_direct_transport": 8,
+          "hris_room": 3,
+          "secret_storage_default_key": 4
+        },
+        "rejectedRequests": {},
+        "normalExpiredSyncResponses": 0,
+        "accepted": false
+      },
+      {
+        "phase": "room",
+        "completeBinSeconds": 110,
+        "requestCounts": {
+          "other_hris": 8,
+          "sync": 14,
+          "refresh": 1
+        },
+        "unexpectedSetupTraffic": {},
+        "rejectedRequests": {},
+        "normalExpiredSyncResponses": 1,
+        "accepted": true
+      },
+      {
+        "phase": "resumed",
+        "completeBinSeconds": 110,
+        "requestCounts": {
+          "sync": 11,
+          "other_hris": 9
+        },
+        "unexpectedSetupTraffic": {},
+        "rejectedRequests": {},
+        "normalExpiredSyncResponses": 0,
+        "accepted": true
+      },
+      {
+        "phase": "cold",
+        "completeBinSeconds": 110,
+        "requestCounts": {
+          "sync": 13,
+          "refresh": 1,
+          "other_hris": 9
+        },
+        "unexpectedSetupTraffic": {},
+        "rejectedRequests": {},
+        "normalExpiredSyncResponses": 1,
+        "accepted": true
+      }
+    ],
+    "bootstrapRequestsAcrossRun": 0,
+    "samePublicIdentity": true,
+    "sameGatewayHead": true,
+    "requestCount": 359,
+    "limitation": "Packet starts, not full HTTP reconstruction. Single owned emulator gateway; aggregate bins only.",
+    "phoneTouched": false
+  },
+  "sameAppAndPublicIdentity": true,
+  "oldOriginals": 5,
+  "oldOriginalsNotResent": true,
+  "newOriginals": 1,
+  "newOriginalSha256": "7edec0cc1b267193ed7d855fb01d805dcc6f6bdeeb2a23214727f3dc276979c9",
+  "encryptedEventsAfter": 6,
+  "recipientStopped": true,
+  "tapToServerMillis": 3017.4375,
+  "sentVisible": true,
+  "clocksCalibrated": true,
+  "allOwnedNativeJobsReaped": true,
+  "latestCompleteStoppedSender": ".work/history-transport-native-2026-11-09/sender",
+  "source83Preserved": true,
+  "resetOrKeysReplaced": false,
+  "realtimeGap": {
+    "lastStartupSyncOffsetSeconds": 147.143,
+    "nextSyncAfterOpeningChatOffsetSeconds": 268.804,
+    "gapSeconds": 121.661
+  },
+  "next": "Trace application activation outcomes during startup before changing retry or resource ownership policy. Never overwrite this retained84 store with83. All six originals must be retained in the next clone.",
+  "limitations": [
+    "One controlled send is not a latency percentile",
+    "App activation failure reason is not yet recorded; construction contention and admission refresh are hypotheses",
+    "No release84 phone acceptance; all54 communications feature groups remain open"
+  ],
+  "sendStageTiming": {
+    "hostDeviceClockUncertaintyMillis": 5.22651,
+    "stages": [
+      {
+        "event": "CommandQueue",
+        "durationMillis": 359,
+        "endAfterTapMillis": 394.0
+      },
+      {
+        "event": "ChatDeliveryStage_RecoverDrafts",
+        "durationMillis": 402,
+        "endAfterTapMillis": 738.0
+      },
+      {
+        "event": "ChatDeliveryStage_LoadSetup",
+        "durationMillis": 527,
+        "endAfterTapMillis": 1312.0
+      },
+      {
+        "event": "ChatDeliveryStage_EnterTimeline",
+        "durationMillis": 731,
+        "endAfterTapMillis": 2160.0
+      },
+      {
+        "event": "ChatDeliveryStage_StageMessage",
+        "durationMillis": 302,
+        "endAfterTapMillis": 2559.0
+      },
+      {
+        "event": "ChatDeliveryStage_DeliverMessages",
+        "durationMillis": 874,
+        "endAfterTapMillis": 3434.0
+      },
+      {
+        "event": "ChatDeliveryStage_AcquireRetirementHistory",
+        "durationMillis": 635,
+        "endAfterTapMillis": 4071.0
+      },
+      {
+        "event": "ChatDeliveryStage_RetireCommands",
+        "durationMillis": 171,
+        "endAfterTapMillis": 4243.0
+      }
+    ],
+    "singleSampleOnly": true,
+    "interpretation": "Intervals overlap; do not sum. Server acknowledgement precedes retirement history. This identifies remaining preparation cost, not a latency percentile."
+  }
+}

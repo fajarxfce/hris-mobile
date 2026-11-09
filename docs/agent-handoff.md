@@ -1,5 +1,68 @@
 # Agent continuation — HRIS Mobile
 
+## Activation diagnostics source accepted; diagnostic85 next — 9 November 2026, 08:57 UTC
+
+Format87428 REAPED PASS36.623s; full60632 REAPED PASS1255.393s,5937 fresh tests,
+zero failures/errors/skips. All4529 app and82 original inspector inputs unchanged.
+21 actual ApplicationCollaborationLifetime tests include two privacy/cancellation/
+no-self-retry cases. Root check, Android release compile/lint0, Wasm/iOS source and
+quality checks pass. Only closed activation step/failure categories are added; no
+SDK ownership, retry, key or command behavior changed. [Source evidence](measurements/collaboration-activation-diagnostics-2026-11-09.json).
+
+Commit/push now, then run .work/release-phone-2026-11-09-build85/build-arm64.py,
+verify-arm64.py and verify-sdk.py. This is an INTERNAL diagnostic, not a phone-ready
+release. No active local compiler/emulator. Native scripts are prepared, unexecuted,
+in .work/activation-startup-native-2026-11-09: prepare-sender.py must clone ONLY the
+latest complete stopped history-transport-native-2026-11-09/sender at84, all4data/
+encryption files+fullAVD. It contains SIX originals; no reset/resend/new send allowed.
+Prepare/start passive counter, start run-sender.py, then run-diagnosis.py observes
+150sec Home and captures actual activation categories. Reap all owned jobs and
+preserve the upgraded85 store even on failure. Phone stays83/install-only; never
+install84 or85 based on these internal source/diagnostic checks.
+
+Native84 strict/reviewed traffic FAIL Home remains authoritative; local/history/
+lifecycle retain5 old originals and1 new,3017.438ms server receipt with peer stopped.
+Closed clock-aligned send stages identify separate remaining prep/timeline cost.
+No runtime-startup cause is proven yet; RuntimeOpening/Busy is a code-path hypothesis.
+
+Separate inspector worktree /home/fajar/hris/.worktrees/inspector-sdk6-2026-11-09:
+b8b46b3d6b44a3201499667d0dbb085af95dd20c committed/pushed, CI42589272966 RUNNING
+(public portable+Apple jobs). It updates catalog/checksums to publishedSDK6 and
+adds13 Android adapter host cases+fixture compilation. Config/provenance checked;
+new target tests pending. Preserve unrelated gradlew.bat delta. Do not change root
+inspector2b849217 during85 proof. Its unpublishedSDK5 descriptor404 still requires
+local mirror despite publicSDK6 descriptor200/verified digest at08:37:29.
+All54 PRD groups, Apple native Matrix binding, latency p95 remain open.
+
+## Native84 preserved, startup failure under investigation — 9 November 2026, 08:34 UTC
+
+All four native jobs REAPED: phases94735 PASS754.329s, emulator37100 stopped,
+counter7443 and paired26263 normal stop811.342s. Upgrade, Home/local account,
+room/history end, resume/cold and all FIVE original Sent observations pass.
+One distinct History84 message SHA7edec0cc1b267193ed7d855fb01d805dcc6f6bdeeb2a23214727f3dc276979c9
+sent once, peer stopped,3017.438ms tap→server. Server now SIX originals; no resends.
+SDK refresh200×3 preserves returned credentials; parent18→19 before expiry.
+
+Strict traffic gate FAILS Home.26 metadata calls in its complete bins include4
+secret-storage reads; SDK sync stops for121.661s until chat is opened. Other three
+idle phases pass. review-traffic.py also REJECTS; do not weaken/exempt this failure.
+No release-acceptance.json or phone84 install. Phone remains83, install-only.
+[Native84 evidence](measurements/collaboration-release84-native-2026-11-09.json).
+
+LATEST COMPLETE STOPPED sender is .work/history-transport-native-2026-11-09/sender
+at84, containing SIX originals. Preserve its all4userdata/encryption files+fullAVD;
+never overwrite it from83 even though its traffic gate failed.83 source is intact.
+No active emulator. Product now adds closed application-activation diagnostics and
+privacy/cancellation/no-retry tests to identify startup failure; activation result
+was previously discarded. Hypotheses are background construction contention or
+admission refresh, neither yet proven in the native trace. No retry policy changed.
+Private work root .work/activation-startup-2026-11-09; format87428 running. Finish
+checks, commit/push, then prepare diagnostic85 and test only owned retained emulator.
+Do not start another heavy process or change inspector while checks run.
+
+All54 PRD groups, startup cost/p95, Apple SDK6 runtime remain open. Platform runtime
+e558a686/schema116.4/controlON, Starter6157db1, Inspector2b849217 unchanged.
+
 ## APK84 verified; retained upgrade running — 9 November 2026, 08:20 UTC
 
 Source b0e4079e is pushed. Build65762 REAPED PASS110.286s; verify18843/6288/47855

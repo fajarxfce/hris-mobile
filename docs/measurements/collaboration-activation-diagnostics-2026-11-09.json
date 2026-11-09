@@ -1,0 +1,47 @@
+{
+  "at": "2026-11-09T08:57:31.595655+00:00",
+  "scope": "Closed application-owned activation diagnostics; activation, retry and SDK ownership behavior unchanged",
+  "baseCommit": "8621f4d2",
+  "format": {
+    "accepted": true,
+    "elapsedSeconds": 36.623,
+    "session": 87428
+  },
+  "full": {
+    "startedAt": "2026-11-09T08:34:44.089411+00:00",
+    "elapsedSeconds": 1255.393,
+    "exitCode": 0,
+    "sourceFiles": 4529,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 5937,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "fullSession": 60632,
+  "allOwnedCompilerSessionsReaped": true,
+  "lifetimeSuite": {
+    "tests": 21,
+    "newTests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "androidLintIssues": 0,
+  "compiled": [
+    "Android dev release",
+    "Web Wasm",
+    "iOS Arm64 source"
+  ],
+  "nativeAppleRuntimeAccepted": false,
+  "sourceManifestSha256": "a5a1d7e73a704dd7761170235f1fe315524c2c8432d724507699ead11712cb70",
+  "libraryManifestSha256": "b346eac84c446f82f4801886f1be25f9d3e10fdf0e2f97375bd0010164d947f4",
+  "publicDependencyResolutionAccepted": false,
+  "dependencyResolution": "Verified local SDK mirror; SDK6 public descriptor has recovered, but unchanged inspector checkout still declares unpublishedSDK5",
+  "native85Accepted": false,
+  "phoneInstalledVersion": 83,
+  "next": "Build/verify diagnostic85 and observe retained84 upgrade Home without sending any message. Determine exact activation failure before changing ownership/retry."
+}

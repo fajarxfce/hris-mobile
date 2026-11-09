@@ -203,12 +203,57 @@ class ApplicationCollaborationLifetime(
 
     private fun startActivation(owner: CollaborationOwner): Job =
         scope.launch {
+            Diagnostics.record(
+                Diagnostic(
+                    DiagnosticArea.Application,
+                    DiagnosticKind.OperationCompleted,
+                    "ChatActivationStarted",
+                )
+            )
             try {
-                activate(owner).collect()
+                activate(owner).collect { result ->
+                    val category =
+                        when (result) {
+                            is AppResult.Success -> "ChatActivation_${result.value.step.name}"
+                            is AppResult.Failed -> {
+                                val reason =
+                                    when (result.failure.code) {
+                                        "client.collaboration_runtime_busy" -> "RuntimeBusy"
+                                        "client.collaboration_runtime_opening" -> "RuntimeOpening"
+                                        "client.collaboration_runtime_not_retained" -> "NotRetained"
+                                        "client.collaboration_runtime_capacity" -> "Capacity"
+                                        "client.collaboration_handover_pending" -> "Handover"
+                                        "client.workspace_expired" -> "WorkspaceExpired"
+                                        "client.company_policy_expired" -> "PolicyExpired"
+                                        "client.collaboration_revalidation_required" ->
+                                            "Revalidation"
+                                        "client.collaboration_sdk_unauthorized" -> "SdkRejected"
+                                        "client.session_changed" -> "SessionChanged"
+                                        else -> "Other"
+                                    }
+                                "ChatActivation_${reason}_${result.failure.kind.name}"
+                            }
+                        }
+                    Diagnostics.record(
+                        Diagnostic(
+                            DiagnosticArea.Application,
+                            if (result is AppResult.Failed) DiagnosticKind.OperationFailed
+                            else DiagnosticKind.OperationCompleted,
+                            category,
+                        )
+                    )
+                }
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (_: Exception) {
                 // Another attempt requires an owned domain recovery signal.
+                Diagnostics.record(
+                    Diagnostic(
+                        DiagnosticArea.Application,
+                        DiagnosticKind.OperationFailed,
+                        "ChatActivationUnexpected",
+                    )
+                )
             }
         }
 
