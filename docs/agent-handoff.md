@@ -1,5 +1,35 @@
 # Agent continuation — HRIS Mobile
 
+## Native79 failed continuity; all processes reaped — 9 November 2026, 02:50 UTC
+
+Native1675 REAPED908.341s; original78 files unchanged, updated79 complete store preserved in
+credential-recovery-native-2026-11-09/sender (userdata plus entire AVD/encryption metadata).
+Counter37624 REAPED836.110s/566requests. Original Recovery78 remains SENT exactly once;
+three encrypted server events, one public identity, zero new send/retry gestures throughout.
+Never resend or restore the old78 queue over the updated79 store.
+
+Acceptance FAILED: refresh200 once then refresh401 at~02:43:21, a second bootstrap under
+same process, startup metadata132setup/90room200 responses. No403 observed. Normal Matrix
+sync401 followed by successful refresh is not itself a failure; the strict evaluator flags
+this too, so do not treat every401 as erroneous. Genuine later refresh rejection and second
+bootstrap independently fail continuity. Initial/cold startup windows were not quiet.
+History probe66349 failed after52.597s: one explicit Older read did not hide the control;
+provider has12total events including3encrypted. No new request error. Exact pagination cause
+still unproved. Cold96701/Sent99617 and120s19589 retain messages, but do not accept the release.
+
+Crashlytics issue/sample reads55646/6632 REAPED200. Actual79 event02:43:23 identifies
+readRuntimeSession:1179 on abb4b924: retained SDK auth rejection is converted to error(),
+then safeStorageCall emits misleading Storage; handover later restores typed failure.
+Fix that known-result boundary without suppressing genuine storage or cancellation errors.
+Private responses remain under root .work/crashlytics-storage-2026-11-08; no token output.
+
+NEXT passive paired refresh-response/request trace on the preserved79 sender, tracking only
+boolean credential continuity and scoped server comparisons. Prove whether the new token
+was returned/used before changing SDK/server logic. No compiler/emulator remains. No new
+source edits, phone install, release acceptance or Starter port. All54PRD groups still open.
+[Evidence](measurements/collaboration-credential-recovery-native79-2026-11-09.json).
+
+
 ## Original78 automatically recovered on79; acceptance still open — 9 November 2026, 02:41 UTC
 
 APK79/SDK verification passed; complete stopped78 cloned/hashed without changing source.
