@@ -1,6 +1,6 @@
 {
-  "at": "2026-11-09T12:39:26.526890+00:00",
-  "accepted": false,
+  "at": "2026-11-09T12:49:44.085063+00:00",
+  "accepted": true,
   "scope": "Immutable encrypted published-room binding and exact LEGACY metadata matching; owning acquisition/product routing remain separate",
   "sourceSha256": {
     "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "436761be124c908e7510f7d3fc78b45911beb2382a89d73c8745da65e086e838",
@@ -90,12 +90,122 @@
     "sha256": "436761be124c908e7510f7d3fc78b45911beb2382a89d73c8745da65e086e838"
   },
   "fullGate": {
-    "state": "running",
+    "startedAt": "2026-11-09T12:36:34.609645+00:00",
+    "elapsedSeconds": 598.096,
+    "exitCode": 0,
+    "sourceFiles": 4544,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 4187,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "state": "passed; correct browser coverage supplied by the separate browser gate",
     "session": 45444,
-    "includes": "root check, all Android host, release compile/lint, Wasm/iOS source, quality and both new/old IndexedDB storage contracts"
+    "reaped": true,
+    "freshTargets": {
+      "desktopTest": 3563,
+      "testAndroidHostTest": 613,
+      "wasmJsBrowserTest": 11
+    },
+    "browserReports": {
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBro-D01HDM7C9P54U.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceRoomResolutionStorageTest.xml": {
+        "sha256": "486dce01ba04b0ebb4d1a1688c4ee42c9b0c8ac8f141f71e5abbebfefb5531dd",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "resultSha256": "098856aa8e3a14b9f2ea423e04d37892fcf19a9785d2d0d5fecb49defaca3d8e",
+    "freshSuites": 495,
+    "preexistingSuites": 444,
+    "preexistingReportsCountedAsFresh": false,
+    "lint": {
+      "errors": 0,
+      "warnings": 0,
+      "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+    },
+    "specificReports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+        "sha256": "243ddba27e2fd4110d846ced6240a146f10f828f692a873eab8c176a452f480f",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceConversationMetadataStorageTest.xml": {
+        "sha256": "555610d809a56caea32a8cdf60c77e603b14e06aaa4dacad94f5c273cafc5230",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRoomBindingStorageTest.xml": {
+        "sha256": "6c06aa530e4cfa1a3ec01b0a50b86a83279d87f8184020159b0c31273db8dcf8",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
   },
   "limits": [
     "No new Apple execution; wrapper source is present",
     "No owning acquisition, SDK delivery, product route, new APK or live deployment"
-  ]
+  ],
+  "browserCorrection": {
+    "at": "2026-11-09T12:47:35.718917+00:00",
+    "fullGateSession": 45444,
+    "reaped": true,
+    "fullBuildPassed": true,
+    "bindingBrowserCoverageAccepted": false,
+    "actualReports": {
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBro-D01HDM7C9P54U.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceRoomResolutionStorageTest.xml": {
+        "sha256": "486dce01ba04b0ebb4d1a1688c4ee42c9b0c8ac8f141f71e5abbebfefb5531dd",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "cause": "Copied init script explicitly included RoomResolutionStorageTest. CLI --tests did not replace Kotlin browser include filters. The intended binding contracts were not executed.",
+    "correction": "Own init script includes exactly the two binding/metadata browser storage classes, forces actual execution and disables test-output cache. Browser-only gate asserts exactly28 fresh cases and both14-case reports; no product source changes."
+  },
+  "browserGate": {
+    "startedAt": "2026-11-09T12:47:35.951454+00:00",
+    "elapsedSeconds": 33.104,
+    "exitCode": 0,
+    "sourceFiles": 4544,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowse-F9N5O6HNJCGGE.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceRoomBindingStorageTest.xml": {
+        "sha256": "bb96a4d00b057f7115d9e0069c6185900dd3c15ba550cd8bc781461b9666d2ff",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-was-U1RRNEFO91SNG.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceConversationMetadataStorageTest.xml": {
+        "sha256": "8130aa06462d51317c20f3a62f2474ade5ed4b431e2b0ce6217399823d54df0d",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "session": 45197,
+    "sessionReaped": true,
+    "sameSourcesAsFull": true,
+    "resultSha256": "c465eaf8729c8edb2b11637c009b52ce72a6eb5dc4277b849389b58510b87f56"
+  }
 }

@@ -26,26 +26,36 @@ fun validCollaborationSpaceOriginalConversation(
     owner: CollaborationSpaceOwner,
     expected: CollaborationOriginalConversationPosition? = null,
 ): Boolean {
-    val c = value.conversation
+    return value.owner == owner &&
+        validCollaborationOriginalConversationOwner(owner) &&
+        (expected == null || value.conversation.position == expected) &&
+        validCollaborationOriginalConversationFacts(
+            owner.parent.accountId,
+            value.conversation,
+            value.room,
+        )
+}
+
+/** Historical facts have no native session; an owning read validates live authority separately. */
+fun validCollaborationOriginalConversationFacts(
+    accountId: String,
+    conversation: CollaborationOriginalConversation,
+    room: CollaborationOriginalRoom?,
+): Boolean {
+    val c = conversation
     val pair = listOf(c.firstAccountId, c.secondAccountId)
     if (
-        value.owner != owner ||
-            !validCollaborationOriginalConversationOwner(owner) ||
-            !validCollaborationOriginalConversationPosition(c.position) ||
-            (expected != null && c.position != expected) ||
+        !validCollaborationOriginalConversationPosition(c.position) ||
             pair.any { !originalConversationId(it) } ||
             c.firstAccountId >= c.secondAccountId ||
-            owner.parent.accountId !in pair ||
+            accountId !in pair ||
             c.createdBy !in pair ||
             c.version != 0L ||
             !originalConversationTime(c.createdAt)
     )
         return false
-    val room = value.room ?: return true
-    return validCollaborationSpaceServerName(room.serverName) &&
-        room.roomId.length in 2..255 &&
-        room.roomId.startsWith('!') &&
-        room.roomId.none { it.isWhitespace() || it.code in 0..31 || it.code in 127..159 } &&
+    if (room == null) return true
+    return validCollaborationSpaceRoomIdentity(room.serverName, room.roomId) &&
         room.createdBy in pair &&
         originalConversationTime(room.boundAt) &&
         room.boundAt >= c.createdAt

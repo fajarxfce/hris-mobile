@@ -1,6 +1,6 @@
 # Immutable encrypted published-room bindings
 
-The candidate `CollaborationSpaceRoomBinding` retains the complete canonical Space
+`CollaborationSpaceRoomBinding` retains the complete canonical Space
 conversation facts, published provider room and, for LEGACY, the complete original
 conversation/room metadata. It contains no login, native parent, credentials, SDK
 handle, current directory admission or mutable provisioning status.
@@ -36,7 +36,7 @@ A missing exact index returns absence; this is not a full-partition corruption s
 Canonical pair uniqueness is retained by the separate conversation-metadata repository;
 the owning acquisition must match that metadata before it persists a room binding.
 
-## Validation in progress
+## Validation
 
 Fourteen common storage cases have actual desktop SQLite, browser IndexedDB and Apple
 SQLite wrappers. They exercise both origins, keyless absence, reopen/login replacement,
@@ -45,8 +45,20 @@ lost responses, account changes, shared-key loss, corrupted rows/checkpoints and
 cancellation. Apple execution is separate from source compilation. Focused82526 is reaped PASS183.123s:85 fresh cases, zero failures/errors/skips;
 format/architecture/Detekt pass and4,544 app/library inputs stayed fixed. All14 new
 SQLite cases ran. The sole post-focused source change adds actual application DI
-resolution. Full root/Android/Wasm/iOS-source and browser storage checks are next;
-no storage acceptance, new APK or product activation is claimed yet.
+resolution. Full45444 is reaped PASS598.096s:4,187 fresh cases (3,563 desktop,
+613 Android host,11 browser room-resolution), no failures/errors/skips/lint. Root
+checks, Android release compilation, Wasm/iOS source and quality pass;4,544 app and
+library inputs stay fixed. The actual application repository binding resolves.
+
+The full runner inherited an old browser include filter, so its11 browser cases
+were not the intended binding proof. This selection failure is retained in the
+measurement. An owned corrected filter runs only the two intended storage classes;
+browser45197 is reaped PASS33.104s,28 fresh cases (14 binding,14 canonical metadata),
+no failures/errors/skips and exactly the same inputs as the full gate. No production
+change or repeated full graph was needed. The metadata and room-resolution cases are
+reported separately rather than added as unique new binding cases.
+[Source hashes, exact reports and correction](measurements/collaboration-space-room-binding-2026-11-09.json).
+No new Apple execution, APK or product activation is claimed.
 
 ## Owning flow follows
 

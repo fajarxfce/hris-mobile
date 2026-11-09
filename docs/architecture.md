@@ -110,6 +110,9 @@ setup results remain separate from published room access and SDK delivery.
 original proof under the current native owner. Initial durable proof capture and
 stable owning dispatch remain separate; receipt absence does not fence late work.
 
+[Encrypted published-room bindings](collaboration-space-room-binding.md) retain exact immutable
+conversation/provider/original facts independently of current content or SDK authority.
+
 [Published original-room references](collaboration-space-published-room-reference.md)
 retain exact company/conversation coordinates in typed metadata; current content
 admission and encrypted local binding adoption remain separate.

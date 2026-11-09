@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 12:39 UTC. This file describes current work. Historical
+Updated 9 November 2026, 12:49 UTC. This file describes current work.
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -221,9 +221,8 @@ emulator is running. Do not restart87 or send again.
    All4,535 app/library inputs stayed fixed;445 preexisting suites are separate.
    No compiler/emulator remains. Do not repeat the accepted gate.
    [Current evidence](measurements/collaboration-space-published-room-reference-2026-11-09.json).
-   No local binding persistence or product routing changed. Encrypted binding follows,
-   then
-   original SDK delivery/history, workers and product routing. Existing Prepare and
+   The subsequent encrypted binding storage is accepted below. Its owning acquisition
+   follows, then original SDK delivery/history, workers and product routing. Existing Prepare and
    Resolve room use cases are accepted; do not recreate them. The group backend is in
    the separate worktree; original Platform does not contain V117–138.
 4. Continue rich message actions/media/stickers/voice, encrypted Drive/iCloud recovery,
@@ -255,26 +254,38 @@ errors/skips; format/architecture/Detekt pass,4,541 app and library inputs fixed
 [Integration evidence](measurements/pinned-inspector-root-integration-2026-11-09.json). No new production app behavior or
 phone update is included. This integration is committed/pushed as57ebc77a; no repeated CI graph is needed.
 
-## Encrypted room binding candidate
+## Encrypted room binding accepted
 
-Mobile now has12 uncommitted source files: immutable binding entities/repository contract,
-exact original/published-room policies, encrypted dual-index storage/codec and14
-shared storage cases with desktop/browser/Apple wrappers and actual app DI resolution. No owning acquisition,
-SDK delivery, queue, UI route or deployment has changed. The original metadata
-policy refactor preserves current native-owner checks. [Contract](collaboration-space-room-binding.md).
+This increment includes12 source files: immutable binding entities/repository contract,
+exact original/published-room policies, encrypted dual-index storage/codec,14 shared
+storage cases with desktop/browser/Apple wrappers and actual application DI resolution.
+No owning acquisition, SDK delivery, queue, UI route or deployment changed. Existing
+native-owner/provisioning validation remains. [Contract](collaboration-space-room-binding.md).
 
-Formatter40488 is reaped PASS36.878s. Focused82526 is reaped PASS183.123s:85 fresh
-cases (14 new SQLite binding,14 existing metadata,23 room preparation,14 original
-policy/read,20 original/room transport), zero failures/errors/skips; quality passes
-and4,544 inputs/library fixed. The sole subsequent source change resolves the new
-repository in CollaborationBindingsTest. Full45444 is RUNNING; app/Inspector source
-inputs are FROZEN. It includes root/Android-host/release compile/lint, Wasm/iOS source,
-quality and28 actual browser storage cases (14 new and14 existing). The exact browser
-count must still be verified in completed XML; do not treat this selection as a pass.
-[Current evidence](measurements/collaboration-space-room-binding-2026-11-09.json).
-Do not start another compiler/emulator or edit frozen inputs until it is reaped.
+Formatter40488 and focused82526 are reaped PASS; focused85 cases in183.123s include
+14 new SQLite,14 existing metadata,23 room preparation,14 original policy/read and
+20 original/room transport cases. The sole following source change resolves the
+new repository in the actual application. Full45444 is reaped PASS598.096s:4,187
+fresh cases (3,563 desktop,613 Android host,11 browser room-resolution), zero failures/
+errors/skips/lint; root/release/Wasm/iOS-source/quality pass,4,544 fixed app/library
+inputs. The full runner inherited an old browser filter and did NOT execute the
+intended binding classes. That selection failure is preserved, not called a pass.
+Corrected browser45197 is reaped PASS33.104s:28 cases,14 binding and14 existing
+metadata, zero failures/errors/skips, identical source inputs. No full rerun needed.
+[Exact accepted evidence](measurements/collaboration-space-room-binding-2026-11-09.json).
+No owned compiler/emulator remains; source freeze is released. Apple execution and
+all54 PRD groups remain separate open work. Phone87 remains installed unchanged.
 
 The next owning flow must acquire the exact published original position, match owned
 canonical metadata and retain/read back the immutable binding under current admission.
 Local facts remain separate from content authority. Preserve all eight originals and
 Draft66. All54 PRD acceptance groups and the remaining communication work stay open.
+
+Next design is prepared only in `.work/space-room-binding-2026-11-09/next-flow-plan.md`:
+PrepareCollaborationSpaceRoomBinding reads a matching owned binding first without
+native expiry/API/SDK work. Only absence enters finite current-admission acquisition,
+one published room read and, for LEGACY, one exact original read. The use case must
+match canonical metadata, retain/read back uncertain writes and preserve all denials
+without granting content/SDK authority. No prototype or DI for that flow exists yet.
+Do not blindly reuse the metadata recovery helper: it permits an already-denied
+metadata read and is not the fresh-preparation contract.
