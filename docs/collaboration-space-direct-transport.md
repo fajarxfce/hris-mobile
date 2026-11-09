@@ -43,3 +43,25 @@ executed). Group full reconciliation33511 owns the heavy slot. Do not turn draft
 or a formatter result into a feature, Apple runtime or phone acceptance claim. Continue
 with the owning original SDK queue delivery and group recipient-ready wake after the
 backend and Mobile contract are validated. HRIS-specific policy is not a Starter port.
+
+## Original delivery integration still required
+
+An active Sent record may precede archive retirement: message `update` and
+`archiveCompletion` are separate. The owning original-delivery operation must reconcile
+exact durable receipt-journal evidence and archived completions before settling or
+resuming the captured SDK inventory. Preserve active history/UI facts; do not archive
+or resend merely to satisfy the current inspection path. A missing SDK transaction
+alone remains unresolved. The existing receipt projection and original transaction
+policies remain the basis of reconciliation.
+
+This response carries no original identity-selection timestamp. Do not synthesize a
+`CollaborationSpaceIdentity` observation to satisfy an inspection signature. Use actual
+admitted metadata or narrow the pure matching input to its real owner/user/server facts.
+The15-second preparation budget and25-second physical queue wait have different owners;
+late native receipts still need bounded captured-original journaling and separately
+gated current projection.
+
+Backend group key publication already atomically journals
+`collaboration.space_device_keys_published` once at version0-to1. Group readiness needs
+an owned consumer of that event. Group sync must continue to reject company readiness
+controls as a different scope; no client polling loop is introduced by this draft.

@@ -1,6 +1,6 @@
 {
-  "observedAt": "2026-11-09T14:22:14.943071+00:00",
-  "status": "Portable accepted; Apple still running",
+  "observedAt": "2026-11-09T14:51:27.574905+00:00",
+  "status": "Portable and Apple simulator/host build accepted",
   "sourceCommit": "78076d4e1e81749f68e30c6220e2c28aea799196",
   "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/42628449460",
   "portableJobId": 129198214912,
@@ -133,9 +133,104 @@
     }
   ],
   "limits": [
-    "Portable feature/ownership/storage and application compilation only; current direct-transport candidate is not part of source78076d4e.",
-    "Apple job must finish and its actual simulator XML and Xcode steps must be audited separately.",
+    "Both hosted jobs test source78076d4e. The pending direct-transport candidate is outside this source and has no test acceptance yet.",
+    "Actual Apple simulator storage/domain tests and unsigned Xcode simulator host build; no physical iPhone, APNs, call admission, SDK6 native Matrix delivery or signed distribution proof.",
     "No new APK or phone installation, live schema change, organization routing, or original SDK delivery integration is accepted by this artifact.",
     "All54 communications acceptance groups remain open."
-  ]
+  ],
+  "apple": {
+    "jobId": 129198215428,
+    "artifactId": 13684362715,
+    "artifactBytes": 479237,
+    "artifactSha256": "09f40e77dffdb4db8b777ee38fb0169d2946164333fddde80a9fec88a281e53f",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "iosSimulatorArm64Test": {
+        "tests": 2457,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 264
+      }
+    },
+    "bindingPreparation": [
+      {
+        "name": "features/collaboration/data/build/test-results/iosSimulatorArm64Test/TEST-ios-8OB5JUA072NB0.dev.fajar.starter.collaboration.data.AppleCollaborationSpaceRoomBindingPreparationStorageTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "features/collaboration/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.SpaceRoomBindingPreparationTest.xml",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "reportHashManifestSha256": "f64214b9f1013e069c2f7baa0a1910be73c99fd3ab067ba0419962c813fa73cc",
+    "steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Select Xcode 26.3",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Prepare public app-link test registrations",
+        "conclusion": "success"
+      },
+      {
+        "name": "Check Apple setup adapter",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build iOS application host",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Check out verified network inspector",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success"
+      }
+    ]
+  }
 }

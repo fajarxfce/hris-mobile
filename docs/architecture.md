@@ -116,6 +116,7 @@ conversation/provider/original facts independently of current content or SDK aut
 [Owned room binding preparation](collaboration-space-room-binding-preparation.md) reads
 complete owned local facts before any live acquisition. Only absence admits one bounded
 published-room/original read and immutable readback; it never opens an SDK or queue.
+Its shared storage/domain contract is verified on desktop, browser and Apple simulator.
 
 [Published original-room references](collaboration-space-published-room-reference.md)
 retain exact company/conversation coordinates in typed metadata; current content

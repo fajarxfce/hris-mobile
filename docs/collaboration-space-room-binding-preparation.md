@@ -68,5 +68,10 @@ the exact21 domain and3 IndexedDB cases, including the coincident-denial regress
 All4,551 application/library inputs match the final focused manifest. Root checks,
 release compilation/lint, Wasm/iOS source and quality pass. Earlier failed attempts
 remain in the [accepted evidence](measurements/collaboration-space-room-binding-preparation-2026-11-09.json).
-Actual Apple execution is still separate; no APK, SDK adoption or product activation
-is claimed by this change.
+Hosted run42628449460 succeeds on source78076d4e. Verified artifacts contain9,003 cases:
+3,035 desktop,613 Android host,2,898 browser and2,457 Apple simulator, with zero failures,
+errors or skips. The21 preparation cases and3 actual storage cases are present on all
+three shared targets, including Apple SQLite. Xcode builds the unsigned simulator host.
+[Hosted evidence](measurements/collaboration-space-binding-hosted-2026-11-09.json) records
+both artifact digests and precise scope. No physical iPhone, native SDK6 Matrix delivery,
+APNs/calling, signed distribution, APK or product activation is implied.

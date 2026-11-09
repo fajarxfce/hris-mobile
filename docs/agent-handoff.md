@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 14:21 UTC. Historical detail is retained in
+Updated 9 November 2026, 14:52 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -44,7 +44,8 @@ Thirteen Mobile Kotlin files are uncommitted: finite native direct-transport API
 datasource/repository/DTO, public domain facts and pure validation; published-room
 mapping extraction; eight transport test methods and the application DI assertion.
 [Contract](collaboration-space-direct-transport.md) records current scope and limits.
-Direct ktfmt0.59 parsing/formatting passed0.954s at256MiB; no Kotlin/test acceptance yet.
+Direct ktfmt0.59 parsing/formatting passed0.954s, then0.866s after stricter ID/time
+validation;256MiB heap, no Kotlin/test acceptance yet.
 `.work/space-direct-transport-2026-11-09/check.py` is prepared, NOT RUN while Group33511
 owns the local heavy slot. Its full/browser phases must select the new eight methods
 plus the existing room transport suite; do not inherit the previous binding filters.
@@ -53,16 +54,20 @@ Review corrected one draft assumption before compilation: device SPACE does not 
 user SPACE. A new HRISG_ crypto device may retain a LEGACY selected user/original room.
 Tests include all valid combinations and reject a mismatched physical device/user.
 The backend `.work/space-direct-transport-2026-11-09/candidate` now has11 files including
-API, DI and tests; it remains private, unapplied and uncompiled while33511 owns sources.
+API, DI and tests (seven actual SQL methods, three pure policy methods, HTTP/OpenAPI).
+Formatter2.017s covers all11 files; it remains private, unapplied and uncompiled while33511 owns sources.
 Its base hashes must match before applying after the accepted reconciliation merge.
 
-Hosted42628449460 remains on exact78076d4e. Portable is SUCCESS: the downloaded artifact
-13682061569 (3,273,813 bytes, SHA2560998f1decd370cfc32c08ed8806c1f104ab1ae57458aeaefe25a56a7ef9085b9)
-matches GitHub's digest and ZIP CRC. [Portable evidence](measurements/collaboration-space-binding-hosted-2026-11-09.json) records6,546 passing cases:3,035 desktop,
-613 Android host,2,898 browser; zero failures/errors/skips. Includes21+3 binding
-preparation cases on both desktop and actual IndexedDB. Apple is still running and
-must be reaped/audited separately. Private portable audit is under the prior binding
-preparation `hosted-42628449460` directory. Do not dispatch a duplicate.
+Hosted42628449460 is complete SUCCESS on exact78076d4e. Both artifacts match GitHub
+digests and ZIP CRC. [Hosted evidence](measurements/collaboration-space-binding-hosted-2026-11-09.json)
+records9,003 cases:3,035 desktop,613 Android host,2,898 browser and2,457 Apple simulator,
+zero failures/errors/skips. The21 domain+3 actual storage binding-preparation cases
+are present on desktop, IndexedDB and Apple SQLite. Xcode's unsigned simulator host
+build passes. No physical iPhone/APNs/calling or SDK6 native Matrix delivery acceptance.
+Portable artifact13682061569 is3,273,813 bytes/SHA2560998f1decd370cfc32c08ed8806c1f104ab1ae57458aeaefe25a56a7ef9085b9;
+Apple13684362715 is479,237 bytes/SHA25609f40e77dffdb4db8b777ee38fb0169d2946164333fddde80a9fec88a281e53f.
+Audit67988 is reaped PASS; private evidence is the prior binding preparation's
+`hosted-42628449460` directory. Do not redispatch or reaudit this accepted source.
 
 ## Current Mobile gate
 
@@ -105,10 +110,9 @@ Desktop/browser/Apple wrappers and actual application DI resolution.
 
 [Accepted evidence](measurements/collaboration-space-room-binding-preparation-2026-11-09.json)
 retains source hashes, first failures and corrected proof. Private files are in
-`.work/space-room-binding-preparation-2026-11-09`. Actual Apple execution remains
-separate; no new APK or SDK/worker/UI activation is claimed. Hosted collaboration-control42628449460 is RUNNING on exact78076d4e, including
-the new Apple database contract and portable checks. No duplicate dispatch.
-[CI run](https://github.com/fajarxfce/hris-mobile/actions/runs/42628449460).
+`.work/space-room-binding-preparation-2026-11-09`. Hosted Apple storage/domain execution
+and the Xcode simulator host are now accepted above. No new APK, SDK/worker/UI activation
+or signed iOS distribution is claimed by that proof.
 
 ## Platform reconciliation in progress
 
@@ -194,7 +198,7 @@ Draft66 092041 must NEVER be sent. All native/emulator jobs are reaped and stopp
 
 ## Next work
 
-1. Audit hosted collaboration-control42628449460 at78076d4e; do not dispatch again.
+1. Hosted42628449460 is accepted/reaped; preserve its proof and continue the pending direct-transport candidate.
 2. Validate/finish the Platform source merge with shared API/FULL worker and actual
    SQL/RLS/migration/projection checks. Keep live runtime unchanged during source work.
 3. Continue owning original SDK delivery/history, current recipient readiness, worker
