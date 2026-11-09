@@ -1,0 +1,61 @@
+{
+  "scope": "Sharing a published native client between finite admitted background references",
+  "runs": {
+    "red-1": {
+      "startedAt": "2026-11-09T05:13:31.142570+00:00",
+      "elapsedSeconds": 86.638,
+      "exitCode": 1,
+      "sourceFiles": 4528,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "032a9ce83560d43296c3bd4d709d7d136bf0dfe0f78af31f5c05af47e49df4e1"
+    },
+    "format-1": {
+      "startedAt": "2026-11-09T05:16:52.816940+00:00",
+      "elapsedSeconds": 35.023,
+      "exitCode": 0,
+      "sourceFiles": 4528,
+      "sourcesUnchanged": false,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "5b89e1adb5419c2f2c220afd62285445f64f89946df22b5e33a3ab1fdfe4d786"
+    },
+    "focused-1": {
+      "startedAt": "2026-11-09T05:17:51.179181+00:00",
+      "elapsedSeconds": 421.962,
+      "exitCode": 0,
+      "sourceFiles": 4528,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 661,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "069d489d2eea9067fa1ebe9cb39bded7b58d20693af424779a0703b59e9dbb3f"
+    }
+  },
+  "registryLimits": {
+    "clients": 5,
+    "backgroundReferences": 2
+  },
+  "pending": [
+    "Full application validation under SDK6",
+    "Native82 from the complete retained81 store; initial Home loop must remain observable",
+    "Phone install-only, immutable SDK distribution and generic Starter port"
+  ],
+  "phoneInstalled": false,
+  "nativeAccepted": false
+}

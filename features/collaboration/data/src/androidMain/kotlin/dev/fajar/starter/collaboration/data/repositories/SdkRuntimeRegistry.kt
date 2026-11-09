@@ -87,10 +87,11 @@ internal class SdkRuntimeRegistry<T : Any>(
                         existing.deviceId != deviceId ||
                         existing.retired ||
                         existing.historyReopening ||
-                        existing.resource?.let(available) != true ||
-                        borrowers.any { it.reservation === existing })
+                        existing.resource?.let(available) != true)
             )
                 return@synchronized busy()
+            // Publication fences construction. Admitted lanes may then share this one client;
+            // each finite reference still counts toward BORROW_LIMIT and owns its own release.
             if (existing == null && entries.size >= CLIENT_LIMIT) return@synchronized capacity()
             val entry =
                 existing

@@ -1,6 +1,38 @@
 # Agent continuation — HRIS Mobile
 
 
+## Shared native borrowing passes focused checks; full next — 9 November 2026, 05:26 UTC
+
+RED72291 REAPED86.638s:3 real registry tests all fail with old second-borrow rejection.
+Production now removes only the blanket borrowers.any rejection from reserveBackground;
+existing published availability/owner/device/store/history/handover fences and global
+BORROW_LIMIT2/CLIENT_LIMIT5 remain. Closing either reference preserves the other;
+last close retires background-only client; confirmed denial invalidates both and
+requests one native stop. Domain acquisition wait remains independently necessary.
+Format20373 REAPED35.023s. Focused6587 REAPED PASS421.962s:661 fresh tests
+(Android-host595 + application company/incoming/recovery66),0 failures/errors/skips,
+format/architecture74/detekt PASS, all4528 app/82 library inputs unchanged.
+[Contract](collaboration-shared-runtime-borrows.md), [evidence](measurements/collaboration-shared-runtime-borrows-2026-11-09.json).
+
+No local compiler/emulator active at checkpoint. Commit+push registry/tests/docs;
+NEXT .work/sdk-shared-borrow-2026-11-09/check.py full-1. Freeze inputs until reaped.
+Current SDK6 is unchanged (AARa4aa1e2c…). No new native SDK compilation required.
+Prepared but NOT RUN: .work/release-phone-2026-11-09-build82 build/verify/install-only
+scripts and .work/sdk-shared-borrow-native-2026-11-09 complete clone/probes/phases.
+They require the new full gate and preserve all earlier native acceptance criteria,
+including Home before opening a room. No criterion was relaxed after native81 failed.
+
+LATEST COMPLETE STORE remains refresh-coalescing-native-2026-11-09/sender at81.
+All native81 processes reaped; failed Home metadata154requests retained, gateway17,
+server3originals, no new sends. Do NOT restore80/79 over81. New82 clone must include
+all4 userdata/encryption files and full AVD. Its single new timing sample is named
+Registry82 and is prepared only after original retention/lifecycle intervals; never
+resend originals or a failed sample. Build81 NOT accepted/installed; SDK6 unpublished.
+No phone installation/UI this turn. Starter port remains unexecuted, currently gated
+to failed81 and needs a later accepted version. Platform116.4/controlON unchanged;
+117–138 undeployed and all54 communications PRD groups remain open.
+
+
 ## Native81 rejected; real registry sharing regression under test — 9 November 2026, 05:15 UTC
 
 Native81 phases74344 REAPED FAIL85.876s: initial Home never reached20s quiet within

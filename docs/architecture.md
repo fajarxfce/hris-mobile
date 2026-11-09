@@ -1,5 +1,9 @@
 # Architecture
 
+[Shared background runtime references](collaboration-shared-runtime-borrows.md) let admitted
+lanes borrow one published native client while the data registry preserves bounded
+reference counts, revocation and final-release ownership.
+
 [Older-message discovery](collaboration-older-history-discovery.md) belongs to a
 bounded domain use case; generation-bound continuation and unavailable originals
 stay separate from provider exhaustion and screen state.

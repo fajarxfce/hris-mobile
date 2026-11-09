@@ -10,6 +10,111 @@ import kotlin.test.*
 
 class SdkRuntimeRegistryTest {
     @Test
+    fun publishedBackgroundRuntimeServesBothLanesUntilTheirLastReferenceCloses() {
+        repeat(2) { firstToClose ->
+            val f = RegistryFixture()
+            f.select()
+            val device = f.background()
+            val resource = RegistryResource()
+            assertTrue(f.registry.attach(device.reservation, resource))
+            assertIs<AppResult.Failed>(f.registry.reserveBackground("store", f.owner, "device"))
+            assertEquals(
+                AppResult.Success(Unit),
+                f.registry.publish(device) {
+                    it.ready = true
+                    AppResult.Success(Unit)
+                },
+            )
+            val incoming = f.background()
+            assertSame(device.reservation, incoming.reservation)
+            assertFalse(incoming.creating)
+            assertEquals(
+                AppResult.Success(Unit),
+                f.registry.publish(incoming) { error("The existing client is already published") },
+            )
+            assertEquals(listOf(resource), f.registry.resources())
+            val references = listOf(device, incoming)
+            assertNull(f.registry.releaseBorrow(references[firstToClose], f.finished))
+            assertNull(references[1 - firstToClose].failures.value)
+            assertSame(resource, f.registry.find(f.owner, "device"))
+            assertEquals(0, resource.stops)
+            assertSame(resource, f.registry.releaseBorrow(references[1 - firstToClose], f.finished))
+            assertEquals(1, resource.stops)
+            assertNull(f.registry.find(f.owner, "device"))
+            f.registry.released(device.reservation)
+            assertTrue(f.registry.resources().isEmpty())
+        }
+    }
+
+    @Test
+    fun competingLanesCanBorrowAPublishedClientWithoutExceedingTheReferenceLimit() {
+        val f = RegistryFixture()
+        f.select()
+        val device = f.background()
+        val resource = RegistryResource(ready = true)
+        f.registry.attach(device.reservation, resource)
+        assertEquals(
+            AppResult.Success(Unit),
+            f.registry.publish(device) { AppResult.Success(Unit) },
+        )
+        val threads = Executors.newFixedThreadPool(2)
+        try {
+            val start = CountDownLatch(1)
+            val attempts =
+                List(2) {
+                    threads.submit<AppResult<SdkRuntimeBorrow<RegistryResource>>> {
+                        check(start.await(2, TimeUnit.SECONDS))
+                        f.registry.reserveBackground("store", f.owner, "device")
+                    }
+                }
+            start.countDown()
+            val results = attempts.map { it.get(3, TimeUnit.SECONDS) }
+            assertEquals(1, results.count { it is AppResult.Success })
+            assertEquals(1, results.count { it is AppResult.Failed })
+            val incoming =
+                assertIs<AppResult.Success<SdkRuntimeBorrow<RegistryResource>>>(
+                        results.single { it is AppResult.Success }
+                    )
+                    .value
+            assertSame(device.reservation, incoming.reservation)
+            assertNull(f.registry.releaseBorrow(device, f.finished))
+            assertEquals(0, resource.stops)
+            assertSame(resource, f.registry.releaseBorrow(incoming, f.finished))
+            assertEquals(1, resource.stops)
+        } finally {
+            threads.shutdownNow()
+            assertTrue(threads.awaitTermination(3, TimeUnit.SECONDS))
+        }
+    }
+
+    @Test
+    fun denyingTheCompanyInvalidatesBothSharedReferencesAndStopsTheClientOnce() {
+        val f = RegistryFixture()
+        f.select()
+        val device = f.background()
+        val resource = RegistryResource(ready = true)
+        f.registry.attach(device.reservation, resource)
+        assertEquals(
+            AppResult.Success(Unit),
+            f.registry.publish(device) { AppResult.Success(Unit) },
+        )
+        val incoming = f.background()
+        assertEquals(
+            listOf(resource),
+            f.registry.update(CollaborationRuntimeRetention(f.parent, null, f.owner.companyId)),
+        )
+        assertNotNull(device.failures.value)
+        assertNotNull(incoming.failures.value)
+        assertEquals(1, resource.stops)
+        assertIs<AppResult.Failed>(f.registry.publish(incoming) { error("Denied") })
+        f.registry.releaseBorrow(device, f.finished)
+        f.registry.releaseBorrow(incoming, f.finished)
+        assertEquals(1, resource.stops)
+        f.registry.released(device.reservation)
+        assertIs<AppResult.Failed>(f.registry.reserveBackground("store", f.owner, "device"))
+    }
+
+    @Test
     fun retiredOrReplacedReservationsCannotPublishCredentialSignals() {
         val registry = SdkRuntimeRegistry<String>({ true }, {})
         val first =
