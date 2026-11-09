@@ -1,5 +1,33 @@
 # Agent continuation — HRIS Mobile
 
+## Original78 automatically recovered on79; acceptance still open — 9 November 2026, 02:41 UTC
+
+APK79/SDK verification passed; complete stopped78 cloned/hashed without changing source.
+Native1675/PID1937353 is the ONLY heavy process (emulator5562,2560MiB/2cores); counter37624
+counts only closed route buckets. Both are active in credential-recovery-native-2026-11-09/
+native-1. Upgrade13221 passed retained account/app/public identity. Recovery28796 REAPED:
+ORIGINAL Recovery78 005634 became exactly one third encrypted event21321.768ms after cold
+launch, same process, zero send/retry gestures, original public keys. NEVER resend it.
+Sent89147 and resumed78745 pass; screenshots actually reviewed. Home34654 and room42938
+complete120s with unchanged server event count, but that alone is NOT traffic acceptance.
+
+Initial Home window still includes repeated metadata during startup; settled counts stopped
+at setup61/room37 before opening room. One bootstrap only. Two Storage/IllegalState diagnostics
+at02:33:46.098 and02:33:48.059 remain to trace (do not assume corrupt/missing keys). Current
+source deliberately throws error on persistence/session AppResult.Failed; exact historical79
+frame is not yet known. Prepared Firebase read-storage-issues79.py waits for cold upload.
+Older messages was visible on first connected79 entry. Prior78 was disconnected, so absence
+there is not proof of exhaustion. One explicit older-history read/re-entry probe66349 is
+running; no message retry. Read its result before deciding whether this is a regression.
+
+[Partial evidence](measurements/collaboration-credential-recovery-native79-2026-11-09.json).
+Next finish history probe, resumed120s, cold restart/Sent/120s and final server/key/counter
+facts. Counter has900s cap from02:33:21; emulator1200s lifetime. Stop via counter-stop.json
+and stop.json and REAP both wrappers. Preserve all userdata+AVD metadata. No source edits,
+compiler, phone installation or Starter port yet. Build79 is NOT release accepted. Prepared
+Starter sync-trigger port/check scripts are gated to native acceptance; not executed.
+
+
 ## Combined79 full source gate accepted — 9 November 2026, 02:29 UTC
 
 Full46501 REAPED PASS539.089s on pushed abb4b924:810 fresh cases,0 failures/errors/
