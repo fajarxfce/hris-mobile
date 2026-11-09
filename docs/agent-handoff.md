@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 12:05 UTC. This file describes current work. Historical
+Updated 9 November 2026, 12:17 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -29,8 +29,8 @@ Do not restart jobs or reapply candidates from that history without checking cur
 | Inspector original | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Verified public SDK6 integrated/pushed |
 | Inspector isolated | feat/sdk6-distribution-20261109 / a6b8236 | Pushed; SDK6 distribution accepted |
 | Starter | feat/network-inspector-20261107 / 6157db1 | Pushed; generic worker/identity ports accepted |
-| Platform original | feat/communications / 85e5fe8f | Pushed; runtime unchanged |
-| Platform group worktree | feat/communication-space / fdcd783e + original-reference WIP | Focused backend gate71857 active; not deployed |
+| Platform original | feat/communications / 4acbc3f9 | Pushed; runtime unchanged |
+| Platform group worktree | feat/communication-space / 8d5724e2 | Exact original-reference backend accepted/pushed; not deployed |
 
 The isolated directories are under `/home/fajar/hris/.worktrees/`:
 `mobile-inspector-ci-2026-11-09`, `inspector-sdk6-2026-11-09`, and
@@ -86,7 +86,7 @@ That86 store remains preserved as a prior baseline. Latest COMPLETE STOPPED stor
 now `.work/joined-room-entry-native-2026-11-09/sender` at87, with EIGHT originals.
 Preserve all four userdata/encryption files and the full AVD. Never resend any of the
 eight originals or send Draft66 092041. Bima74 remains preserved. Root/Inspector
-source freeze is released; the sole local compiler is now Group backend71857.
+source freeze is released; the sole local compiler is now Mobile full89590.
 
 The first native86 upgrade retained identity before a turn interruption. Its resumed
 follow-up had one unclassified otherAccess observation and a stale preflight expecting
@@ -194,7 +194,7 @@ New original SHA f29bcfcabe98d1c6182ad817aecdd652d1b18f2b0c8b4d38e234561daca655e
 Phone install33957 is reaped PASS210.86s; exact installed APK digest and existing
 app ID/first-install identity match. No launch/UI automation, uninstall or data clear. The copied installer had an86 version assertion;
 review corrected it to87 BEFORE any installation, retaining all signature/native/
-acceptance checks. Root app/Inspector freeze is now released. Group backend71857 is
+acceptance checks. Root app/Inspector freeze is now released. Mobile original-reference full89590 is
 the only heavy local compiler. No emulator is running; do not restart87 or send again.
 
 ## Next implementation work
@@ -207,15 +207,19 @@ the only heavy local compiler. No emulator is running; do not restart87 or send 
    Port the generic pinned workflow setup/checksums to Starter after Mobile proof.
    HRIS selected-runtime registry policy does not belong in Starter.
 3. Continue organization chat after the accepted original Room dispatch: durable
-   published binding/projection and exact LEGACY metadata validation. Group backend
-   has an uncommitted original-reference increment (five Kotlin files, three new native
-   cases plus actual LEGACY worker/OpenAPI checks); gate71857 is active in
-   `.work/published-room-reference-2026-11-09/focused-1`. No migration/DI/rollout change.
-   Mobile has an untested seven-file DTO/domain-policy/transport-fixture increment,
-   including two new transport regressions and the existing LEGACY preparation case.
-   Pinned formatting passes. Its `.work/published-room-reference-2026-11-09/check.py`
-   focused-1/full-1 are prepared; start only after backend71857 is reaped. No local
-   binding persistence or product routing changed. Encrypted published binding follows,
+   published binding/projection and exact LEGACY metadata validation. Group backend8d5724e2
+   is accepted/pushed:266 fresh cases pass513.312s, zero failures/errors/skips,8,637 fixed
+   inputs, native admission/actual LEGACY worker/HTTP/OpenAPI/format/architecture pass.
+   Shared DI is unchanged; no full worker rerun, migration or rollout.
+   Mobile has a seven-file DTO/domain-policy/transport-fixture increment. Focused16289
+   is reaped PASS225.769s:49 fresh cases (23 preparation,13 Desktop transport,13 Android
+   host transport), no failures/errors/skips,4,535 fixed app inputs/library and quality
+   checks. One repeated non-null test assertion was then replaced with an asserted
+   expected value; pre-full-cleanup.json records this only intervening source change.
+   Full89590 is RUNNING in `.work/published-room-reference-2026-11-09/full-1`; app and
+   Inspector sources are FROZEN. Do not rerun focused or start another compiler/emulator.
+   [Current evidence](measurements/collaboration-space-published-room-reference-2026-11-09.json).
+   No local binding persistence or product routing changed. Encrypted binding follows,
    then
    original SDK delivery/history, workers and product routing. Existing Prepare and
    Resolve room use cases are accepted; do not recreate them. The group backend is in
@@ -226,3 +230,9 @@ the only heavy local compiler. No emulator is running; do not restart87 or send 
 
 Keep this current file concise and replace stale status instead of appending another
 full history. Commit measurements with implementation; historical details stay in Git.
+
+Starter remains6157db1 and unchanged. Its `.work/pinned-inspector-ci-2026-11-09` holds
+only a prepared patch: five pinned dependency checkouts across three workflows and
+nine verified shared SBOM artifacts. Static YAML/XML review passes; application is
+waiting for Mobile public verify42611795210 and artifact audit. No Starter compiler,
+workflow dispatch or source mutation has happened. Preserve that prerequisite.

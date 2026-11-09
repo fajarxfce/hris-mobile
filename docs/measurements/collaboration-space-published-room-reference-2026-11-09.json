@@ -1,0 +1,71 @@
+{
+  "at": "2026-11-09T12:16:21.247545+00:00",
+  "accepted": false,
+  "scope": "Typed published original-room reference and validation only; durable encrypted binding remains separate",
+  "backendSource": "8d5724e2",
+  "sourceSha256": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationSpaceRoomDto.kt": "bff7f41c9c48cad3d1d45e1732ee077bbe1a15625bb48dadd6bbf55e7e018b80",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationSpaceRoomMapper.kt": "2190482192192841d00cd5807eaf8852cc251234a3cd240a05cc66282a845a4c",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomTransportTest.kt": "490b8e67e8712406c8fb3449f9f901be0185e6f23b02d72098c7b6da5695b491",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/SpaceConversationTransportFixture.kt": "2f2319d33966a57075075aad28f02c5f32e6a3bb959f603f06c80b1c4bd23f50",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceRoom.kt": "457e466e09102baf38001a4ac6ebe38104cc8b1e6c257298063f3acf9829937c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceRoomPolicy.kt": "e8c566dba0c23e7647b20d5afef80e224ffd926e6c54a628646e2a445ee9a14b",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRoomPreparationTest.kt": "6785de04dee3c028d641f9e9c6833adde9ccadf977ef0174ef48253c3a06dd99"
+  },
+  "focused": {
+    "startedAt": "2026-11-09T12:08:25.862905+00:00",
+    "elapsedSeconds": 225.769,
+    "exitCode": 0,
+    "sourceFiles": 4535,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 49,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRoomTransportTest.xml": {
+        "sha256": "668f8f8acd7952fed9fa731e20ea5a61acb8dbed2cfc22ccded7c0c4ec598bf2",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRoomTransportTest.xml": {
+        "sha256": "703a80fbb426528fe4351b52e817df6cb8e74012ad6b186dfbd25ec44b19ea54",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.SpaceRoomPreparationTest.xml": {
+        "sha256": "ac801b51ef37db2cb68b35fde1b33229aa0f3440013b5174f88de6adc286c809",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "afterFocused": {
+    "at": "2026-11-09T12:13:06.319850+00:00",
+    "file": "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomTransportTest.kt",
+    "reason": "Replace repeated test non-null assertions with one asserted expected value; same assertions and behavior",
+    "focusedBeforeCleanupPassed": true,
+    "finalSha256": "490b8e67e8712406c8fb3449f9f901be0185e6f23b02d72098c7b6da5695b491",
+    "fullGateRequired": true
+  },
+  "fullGate": {
+    "state": "running",
+    "session": 89590,
+    "sourceFiles": 4535,
+    "artifact": "not a new APK; phone87 remains accepted"
+  },
+  "limits": [
+    "Full root/Android/Wasm/iOS source checks are not complete",
+    "No new Apple runtime execution",
+    "No local binding persistence, group routing or live deployment"
+  ]
+}
