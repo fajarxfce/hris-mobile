@@ -14,9 +14,28 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.TestTimeSource
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.*
 
 class CollaborationBackgroundRuntimeTest {
+    @Test
+    fun aDeadlineAtPublicationCannotDiscardTheOwnedRuntimeReference() = runTest {
+        val f = BackgroundRuntimeFixture()
+        f.onAcquire = {
+            delay(1)
+            AppResult.Success(f.lease)
+        }
+        f.onPublication = { advanceTimeBy(1_001) }
+        val short =
+            f.grant.copy(
+                expiresAt = f.base.setup.now + 1.seconds,
+                monotonicDeadline = f.time.markNow() + 1.seconds,
+            )
+        val result = f.acquire(short)
+        if (result is AppResult.Success) result.value?.close()
+        assertEquals(1, f.publications)
+        assertEquals(1, f.closes, "A published reference must reach its caller or be released")
+    }
+
     @Test
     fun currentCompanyWorkBorrowsOnlyItsRemainingBudgetWithoutSelectingAWorkspace() = runTest {
         val f = BackgroundRuntimeFixture()
@@ -151,7 +170,7 @@ class CollaborationBackgroundRuntimeTest {
     }
 
     @Test
-    fun anotherAcquisitionDoesNotWaitWhileItsAdmissionBudgetExpires() = runTest {
+    fun concurrentAdmittedLanesWaitForTheOpeningRuntimeInsteadOfRestartingRecovery() = runTest {
         val f = BackgroundRuntimeFixture()
         val entered = CompletableDeferred<Unit>()
         val release = CompletableDeferred<Unit>()
@@ -162,14 +181,117 @@ class CollaborationBackgroundRuntimeTest {
         }
         val first = async { f.acquire() }
         entered.await()
-        assertEquals(
-            "client.collaboration_runtime_busy",
-            assertIs<AppResult.Failed>(f.acquire()).failure.code,
-        )
-        assertEquals(1, f.acquisitions)
-        release.complete(Unit)
+        val second = async { f.acquire() }
+        try {
+            runCurrent()
+            assertFalse(second.isCompleted, "A healthy competing lane must not fail as busy")
+            assertEquals(1, f.acquisitions)
+        } finally {
+            release.complete(Unit)
+        }
+        assertIs<AppResult.Success<*>>(first.await())
+        assertIs<AppResult.Success<*>>(second.await())
+        assertEquals(2, f.acquisitions)
+        assertEquals(2, f.publications)
+        f.lease.close()
+        f.lease.close()
+    }
+
+    @Test
+    fun cancelledWaiterDoesNotCancelTheOtherLaneOrAcquireAnotherReference() = runTest {
+        val f = BackgroundRuntimeFixture()
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        f.onAcquire = {
+            entered.complete(Unit)
+            release.await()
+            AppResult.Success(f.lease)
+        }
+        val first = async { f.acquire() }
+        entered.await()
+        val second = async { f.acquire() }
+        try {
+            runCurrent()
+            assertFalse(second.isCompleted)
+            second.cancelAndJoin()
+            assertTrue(first.isActive)
+            assertEquals(1, f.acquisitions)
+            assertEquals(0, f.closes)
+        } finally {
+            release.complete(Unit)
+        }
         assertIs<AppResult.Success<*>>(first.await())
         assertEquals(1, f.publications)
+        f.lease.close()
+    }
+
+    @Test
+    fun accountLossWhileQueuedClosesTheFirstReferenceAndPreventsTheSecondAcquisition() = runTest {
+        val f = BackgroundRuntimeFixture()
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        f.onAcquire = {
+            entered.complete(Unit)
+            release.await()
+            AppResult.Success(f.lease)
+        }
+        val first = async { f.acquire() }
+        entered.await()
+        val second = async { f.acquire() }
+        try {
+            runCurrent()
+            assertFalse(second.isCompleted)
+            f.base.setup.session = null
+        } finally {
+            release.complete(Unit)
+        }
+        assertEquals(
+            FailureKind.Unauthorized,
+            assertIs<AppResult.Failed>(first.await()).failure.kind,
+        )
+        assertEquals(
+            FailureKind.Unauthorized,
+            assertIs<AppResult.Failed>(second.await()).failure.kind,
+        )
+        assertEquals(1, f.acquisitions)
+        assertEquals(1, f.closes)
+        assertEquals(0, f.publications)
+    }
+
+    @Test
+    fun waitingConsumesItsOwnAdmissionBudgetWithoutCallingTheRuntimeAfterExpiry() = runTest {
+        val f = BackgroundRuntimeFixture()
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        f.onAcquire = {
+            entered.complete(Unit)
+            release.await()
+            AppResult.Success(f.lease)
+        }
+        val first = async { f.acquire() }
+        entered.await()
+        val short =
+            f.grant.copy(
+                expiresAt = f.base.setup.now + 1.seconds,
+                monotonicDeadline = f.time.markNow() + 1.seconds,
+            )
+        val second = async { f.acquire(short) }
+        try {
+            runCurrent()
+            f.time += 1.seconds
+            f.base.setup.now += 1.seconds
+            advanceTimeBy(1_000)
+            runCurrent()
+            assertEquals(
+                "client.collaboration_revalidation_required",
+                assertIs<AppResult.Failed>(second.await()).failure.code,
+            )
+            assertEquals(1, f.acquisitions)
+            assertTrue(first.isActive)
+        } finally {
+            release.complete(Unit)
+        }
+        assertIs<AppResult.Success<*>>(first.await())
         f.lease.close()
     }
 }
@@ -218,6 +340,7 @@ private class BackgroundRuntimeFixture {
     val credentials = MutableStateFlow<Failure?>(null)
     val interruptions = MutableStateFlow<Failure?>(null)
     var publishFailure: Failure? = null
+    var onPublication: () -> Unit = {}
     var closeFailure: Failure? = null
     val lease =
         object : CollaborationBackgroundRuntimeLease {
@@ -232,6 +355,7 @@ private class BackgroundRuntimeFixture {
 
             override fun publish(): AppResult<Unit> {
                 publications++
+                onPublication()
                 return publishFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(Unit)
             }
 
@@ -277,5 +401,5 @@ private class BackgroundRuntimeFixture {
             },
         )
 
-    suspend fun acquire() = useCase(grant)
+    suspend fun acquire(admission: CollaborationBackgroundAdmission = grant) = useCase(admission)
 }

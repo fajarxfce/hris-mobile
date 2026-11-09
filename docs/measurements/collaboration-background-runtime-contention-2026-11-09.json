@@ -1,0 +1,105 @@
+{
+  "scope": "Cancellable admission-budgeted waiting for a shared background runtime",
+  "runs": {
+    "red-1": {
+      "startedAt": "2026-11-09T04:19:34.593494+00:00",
+      "elapsedSeconds": 76.163,
+      "exitCode": 1,
+      "sourceFiles": 4528,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 3,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "5379dff0163490fc7b372b990a4eb2fb79c81acbdddd086ab4bc33dea64c00fc"
+    },
+    "format-1": {
+      "startedAt": "2026-11-09T04:21:23.998778+00:00",
+      "elapsedSeconds": 44.979,
+      "exitCode": 0,
+      "sourceFiles": 4528,
+      "sourcesUnchanged": false,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "e54fc12fa99b539ee0ae8b538819d07346ba9909f8817d440d5532356d825abd"
+    },
+    "focused-1": {
+      "startedAt": "2026-11-09T04:22:52.310571+00:00",
+      "elapsedSeconds": 253.97,
+      "exitCode": 1,
+      "sourceFiles": 4528,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 105,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "b728e51b5f88a3827688129fd22dda8b867a6c301953d47ab57353098455644a",
+      "limitation": "All105 fresh tests pass; formatCheck fails on newly added test layout. Not accepted as a complete gate."
+    },
+    "red-handover-1": {
+      "startedAt": "2026-11-09T04:27:58.204073+00:00",
+      "elapsedSeconds": 69.944,
+      "exitCode": 1,
+      "sourceFiles": 4528,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "8c19ecb0ec78b8d16938808e0f5c2eafe751f5e6e065048148a451a176f6f131"
+    },
+    "format-2": {
+      "startedAt": "2026-11-09T04:29:24.172840+00:00",
+      "elapsedSeconds": 36.119,
+      "exitCode": 0,
+      "sourceFiles": 4528,
+      "sourcesUnchanged": false,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "d6bc8dc7bf12b88cff4a6efdc5a0ef9d1bbf05786154c1ba71d9a842c88d09e2"
+    },
+    "focused-2": {
+      "startedAt": "2026-11-09T04:30:51.407212+00:00",
+      "elapsedSeconds": 272.194,
+      "exitCode": 0,
+      "sourceFiles": 4528,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 106,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "b809d867a55f430620bc18a3aca53280a7b28074f2718e0551e6e9922c1b258d"
+    }
+  },
+  "rootCause": "Single AcquireCollaborationBackgroundRuntime rejects one of concurrently invoked device/incoming lanes as busy, causing redundant recovery work",
+  "handoverRegression": "An outer withTimeout around acquisition can discard an already published reference; bound only lock waiting, retaining lock ownership through cancellation",
+  "acceptedScope": "106 fresh focused tests with format, architecture and detekt on unchanged source",
+  "pending": [
+    "Final application check including browser history/acquisition and platform source compilation",
+    "Four-ABI SDK6 CI42561531330 and verified AAR",
+    "Native upgrade of complete80 store, original messages and settled traffic",
+    "Phone install-only and generic Starter port"
+  ]
+}

@@ -1,6 +1,80 @@
 # Agent continuation — HRIS Mobile
 
 
+## Background acquisition waits safely; focused checks pass — 9 November 2026, 04:35 UTC
+
+Focused40143 REAPED PASS272.194s:106 fresh tests,0 failures/errors/skips; format,
+architecture74modules and detekt PASS. All4528 source/82 library inputs unchanged.
+The SINGLE background-acquisition use case now waits for the other lane within its
+admission budget and revalidates before I/O. Mutex ownership survives timeout/cancel;
+only lock waiting is timed, so a published resource cannot be discarded. Domain14,
+host registry/identity and company/recovery worker cases pass. [Contract](collaboration-background-runtime-contention.md),
+[evidence](measurements/collaboration-background-runtime-contention-2026-11-09.json).
+
+Preserve RED64719 76.163s/3 failures, first focused14860 253.970s/105 tests pass but
+format failure, and RED67056 69.944s/1 real published-reference leak. Format99699
+44.979s and73299 36.119s REAPED. No local compiler/emulator remains at checkpoint.
+NEXT push this source, then background-runtime-contention-2026-11-09/check.py full-1;
+prepared full now includes the actual browser BackgroundRuntime14 plus history15,
+root/Android-host/Android release and proof/lint/Wasm/iOS-source/quality checks.
+Freeze inputs until reaped. Current application still consumes SDK5.
+
+SDK refresh candidate dc6ed11e is pushed and independently accepted in20 HTTP cases,
+FFI/Wasm and1218-file reconstruction. FIRST four-ABI CI42561531330 remains in progress
+on exactdc6ed11e. .work/sdk-refresh-ci-2026-11-09/download.py is prepared, NOT RUN:
+it requires original successful run1, verifies archive digests/source manifests,
+all9 generated binding hashes and actual ELF/API symbols. Then package under a NEW
+SDK6 coordinate and verify the consumer; never overwrite SDK4 publication/SDK5.
+No SDK6 binary or phone installation yet.
+
+Latest COMPLETE store: initial-sync-native-2026-11-09/sender build80. Preserve all
+userdata/encryption files and AVD; all3 original messages are Sent and never resent.
+Native80 still fails traffic despite retained history; see earlier evidence. Use this
+store for native81 with final source+SDK. Announce before accepted phone install-only;
+phone is fresh stock-ROM, no phone UI. Starter SyncTrigger port remains unexecuted.
+Platform runtime/schema116.4/controlON unchanged. All54PRD groups remain open.
+
+## SDK refresh candidate pushed; background contention checks — 9 November 2026, 04:28 UTC
+
+Pushed dc6ed11e contains the six-file SDK refresh patch, reconstructed manifest,
+validated observer build-tool adoption from6866251a and explicit CI manifest choice.
+SDK RED73255 failed1 actual delayed401 case in72.419s. Final1220 PASS24.262s/20 HTTP
+refresh tests including Matrix+OAuth delayed401, explicit calls and existing auth/
+transient errors. FFI3548 PASS57.271s then Wasm PASS15.194s, all REAPED, unchanged
+sources. Reconstruction1218 files matches; build-driver5 tests PASS. Sources/limits:
+[SDK contract](collaboration-sdk-refresh-coalescing.md),
+[evidence](measurements/collaboration-sdk-refresh-coalescing-2026-11-09.json).
+
+First four-ABI CI run42561531330 is IN PROGRESS on exactdc6ed11e596857fc5a452cff6d48a6b30f321cff;
+manifest android-refresh-coalescing-build.json, abi=all. Original snapshot is
+.work/sdk-refresh-ci-2026-11-09/first-run.json. Do not cancel/retry or overwrite its
+first evidence. No SDK6 binaries packaged yet, no phone install, no Starter port.
+
+Actual source candidate for cold metadata: CollaborationCompanyRecovery runs
+synchronizeDevice and incoming concurrently; both use the SINGLE
+AcquireCollaborationBackgroundRuntime whose tryLock immediately returns busy.
+Domain RED64719 REAPED76.163s/3 real failures. Candidate waits cancellably within
+remaining admission and revalidates ownership. Focused14860 REAPED253.970s:105 tests
+PASS (domain13, registry24 plus other host/worker cases); only formatCheck fails due
+new test formatting. No accepted focused/full application gate yet.
+
+ONLY LOCAL compiler67056 is background-runtime-contention-2026-11-09/check.py
+red-handover-1. It tests a newly found boundary: wrapping runtime acquisition itself
+in withTimeout can discard a published reference when timeout wins at handover.
+Candidate Kotlin files (usecase + tests) are UNCOMMITTED; do not edit until reaped.
+If reproduced, bound ONLY lock waiting, track lock ownership through timeout/cancel,
+then call existing acquire outside that timeout and always unlock in finally. Test
+waiting expiry, cancellation, account loss, and publication ownership; format and
+rerun focused checks. No production fix for that boundary has been made yet.
+
+Latest complete native store remains initial-sync-native-2026-11-09/sender build80,
+all3 original messages Sent and Older exhausted across reentry/resume/cold. Never
+resend, reset, or restore79/78 over it. Native80 traffic fails (details below); first
+Home/room/resume settled bins actually quiet, cold has42 metadata reads. All native
+processes stopped. Phone fresh stock-ROM and no installation this turn. Continue
+native81 with the eventual new SDK/current domain fix before release/Starter port.
+Platform runtime/schema116.4/controlON unchanged; all54PRD groups remain open.
+
 ## Native80 preserves history but fails traffic; SDK race reproduced — 9 November 2026, 04:14 UTC
 
 All native processes REAPED: emulator87958 859.345s,counter96051 860.243s/491requests,

@@ -25,11 +25,29 @@ class AcquireCollaborationBackgroundRuntime(
     suspend operator fun invoke(
         admission: CollaborationBackgroundAdmission
     ): AppResult<CollaborationBackgroundRuntimeLease?> {
-        if (!acquisition.tryLock()) return failed("client.collaboration_runtime_busy")
+        val remaining =
+            minOf(
+                (admission.expiresAt - clock.now()).inWholeMilliseconds,
+                (-admission.monotonicDeadline.elapsedNow()).inWholeMilliseconds,
+            )
+        if (remaining !in 1..60_000) return failed("client.collaboration_revalidation_required")
+        // Device sync and incoming recovery share this admission boundary. A healthy caller
+        // waits for acquisition instead of turning contention into a new recovery sweep.
+        // Waiting consumes its own grant, and acquire revalidates ownership before any I/O.
+        var locked = false
         try {
+            val ready =
+                withTimeoutOrNull(remaining) {
+                    acquisition.lock()
+                    locked = true
+                    true
+                }
+            if (ready != true) return failed("client.collaboration_revalidation_required")
+            // Only waiting is timed here. The admitted repository owns the runtime's deadline;
+            // an outer timeout must not discard a resource after acquire transfers it.
             return acquire(admission)
         } finally {
-            acquisition.unlock()
+            if (locked) acquisition.unlock()
         }
     }
 
