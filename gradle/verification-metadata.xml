@@ -15145,6 +15145,9 @@
          </artifact>
       </component>
       <component group="org.jetbrains.compose.material3" name="material3" version="1.9.0">
+         <artifact name="material3-1.9.0.pom">
+            <sha256 value="9728f08703824e04fac8f84e66e1e7f286ee430890f327ff8b1e75431ddf1ada" origin="Maven Central POM checked against publisher SHA-1 for Android SBOM resolution" />
+         </artifact>
          <artifact name="material3-1.9.0.module">
             <sha256 value="fa7a745df9170591d98f3773303bcf53829313acfb43c72c1aa4f8fb99ba45a4" origin="Maven Central artifact checked against published SHA-1; pinned SHA-256" />
          </artifact>

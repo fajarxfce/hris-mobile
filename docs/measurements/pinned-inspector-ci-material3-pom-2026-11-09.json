@@ -1,0 +1,11 @@
+{
+  "source": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/material3/material3/1.9.0/material3-1.9.0.pom",
+  "sha256": "9728f08703824e04fac8f84e66e1e7f286ee430890f327ff8b1e75431ddf1ada",
+  "bytes": 5463,
+  "publisherSha1Matched": true,
+  "ciFailure": "Missing POM checksum; Gradle module/jar already trusted",
+  "ciReportArtifact": 13662779010,
+  "ciReportSha256": "50174edbb728b4cb8acac75ba1bc8bf79ee47b709165c556d2f4a93f7be62bd5",
+  "ciRun": 42594287486,
+  "ciHead": "0c771fc5ed06d0328e3803b1bbccdd5c9e75277a"
+}

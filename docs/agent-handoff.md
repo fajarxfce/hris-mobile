@@ -12,7 +12,12 @@ Native-protocol and application acceptance remain independent.
 
 Static YAML audit verifies all nine jobs use the exact source/setting and no SDK
 mirror. Existing tooling suite:60 tests PASS3.673s; git diff --check passes. Hosted
-application CI is NEXT, not accepted yet. The dependency's own CI42591111996 passes
+application CI42594287486 (source0c771fc5) failed verify before execution at SBOM
+dependency resolution: material3-1.9.0 POM had no checksum. Its exact official Maven
+Central bytes match publisher SHA-1; only that POM SHA-256 is now added. Verified
+first artifact13662779010 distinguishes missing metadata from a hash mismatch.
+Apple/web/Windows first jobs still run. Push and dispatch scope=verify for this
+metadata correction; application CI is not accepted yet. The dependency's own CI42591111996 passes
 226 portable/Android host and69 Apple simulator cases with verified artifact hashes;
 its source/CI evidence lives in inspector docs commit a6b8236, already pushed.
 
