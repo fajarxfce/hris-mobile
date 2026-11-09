@@ -1,0 +1,156 @@
+{
+  "at": "2026-11-09T12:26:40.895674+00:00",
+  "accepted": true,
+  "source": "951cdbcf4c726a0941ab9ef5eb69ecb7d03fcfd1",
+  "mobilePrerequisite": "run42611795210/artifact13672363171",
+  "before": {
+    ".github/workflows/ci.yml": "8277e95a43686ea7d0bec9b11b02b2b6825efde33d79740fed83b136006d78e2",
+    ".github/workflows/collaboration-control.yml": "889df56b815e0b79c9f57353fe84350bf2c6f2714a066f4f72ff981a48bdf526",
+    ".github/workflows/collaboration-protocol.yml": "fbe4d559881a165b0d4ecf71e1bdcdc38da7a758dc2c5c4a19e488174b10533c",
+    ".github/workflows/distribute-android.yml": "2ad5e2be4455f0d874df11237705ba4b412081dc2eb93a1437eeb8e228c8ab46",
+    ".github/workflows/distribute-ios.yml": "37c4069c6ca4c01d16b2780de7ecbfc0b589a2a5c6209c2c95bdffc22ae29024",
+    "gradle/verification-metadata.xml": "84ab897b1976de18f08b18650993deede241549c9b801c1a00033e09514bd8ac",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/AppFlowTest.kt": "78806d6c5c92182ccc3f86bbb41a9d414065f1ee36e13167c005ab62d83fedee",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/NativeLinkAppFlowTest.kt": "7075333c0d3b4f4d4c501fcfea2fcd6ef544833160089ebac5042339c3ed2be5",
+    "docs/network-inspector.md": "c6e53bfb535c5bc9a91b0b4d90bfde4ea1913f591be40bd4d68e211bf30ed29b",
+    "docs/measurements/pinned-inspector-apple-consumer-2026-11-09.json": null,
+    "docs/measurements/pinned-inspector-ci-fixture-consistency-2026-11-09.json": null,
+    "docs/measurements/pinned-inspector-ci-material3-pom-2026-11-09.json": null,
+    "docs/measurements/pinned-inspector-ci-test-recovery-2026-11-09.json": "54cd5950497b4d315965348d65aa6a293fb4377537ea7ef650324cddce54e4e1",
+    "docs/measurements/pinned-inspector-ci-web-interruption-2026-11-09.json": null,
+    "docs/measurements/pinned-inspector-ci-web-resources-2026-11-09.json": null,
+    "docs/measurements/pinned-inspector-consumer-ci-2026-11-09.json": null,
+    "docs/measurements/pinned-inspector-notification-navigation-test-2026-11-09.json": null,
+    "docs/measurements/pinned-inspector-sbom-verification-2026-11-09.json": null,
+    "docs/measurements/pinned-inspector-web-distribution-2026-11-09.json": null
+  },
+  "after": {
+    ".github/workflows/ci.yml": "e36df497d48b0357e627a96309325e41b7a02619cad0aea60e17ca6d219b297c",
+    ".github/workflows/collaboration-control.yml": "71621c86ca9983cec64e5077fffbccf0dcb43a3b1b309f81734f073e9448f78d",
+    ".github/workflows/collaboration-protocol.yml": "048c4976b7ab538fd0c15ab59623a1a73f0f00c5e3ad1dfc1a5602aca7e02f45",
+    ".github/workflows/distribute-android.yml": "a60dbd326f4d1e309cfde62c634acce98efc32cfa23a675960e2c0d4780cdf6c",
+    ".github/workflows/distribute-ios.yml": "24f71424b696253049bc2c14e7708f00b0df4b3e2661bc5f1539eb9194d2a28e",
+    "gradle/verification-metadata.xml": "943a4771056227cfd2ac8c93d3d87b01750a84ada1e1c25ca2baa5e75d4d5655",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/AppFlowTest.kt": "d034593794047b24b6aa6c6e7aebcb735f278412299569e3f3d560ccf3988676",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/NativeLinkAppFlowTest.kt": "81e282a473f5b8ada9002e88fba305109f1d41d0433f18f2604843e0c2ccee33",
+    "docs/network-inspector.md": "4f86cc7da95dc085ebc50df0c6bdfbd3200d93779c3c3b19c25929d58f48203e",
+    "docs/measurements/pinned-inspector-apple-consumer-2026-11-09.json": "c858ef2a5891c84aef1621293ce736a1a13dda4f8254ac0f6550647082527d1a",
+    "docs/measurements/pinned-inspector-ci-fixture-consistency-2026-11-09.json": "df5015d6e6ecea05ce736af0d2039546da75b7e0cb27a88c910961f6e1e8789c",
+    "docs/measurements/pinned-inspector-ci-material3-pom-2026-11-09.json": "386809675dadc74cec0a0daa34e41b6b9f601ea0ff92969da6aed17e950da4ee",
+    "docs/measurements/pinned-inspector-ci-test-recovery-2026-11-09.json": "54cd5950497b4d315965348d65aa6a293fb4377537ea7ef650324cddce54e4e1",
+    "docs/measurements/pinned-inspector-ci-web-interruption-2026-11-09.json": "f1daba022c37b10b6ce24605dab6b3ae77cc08cfcb703c3badfa582d14522a0b",
+    "docs/measurements/pinned-inspector-ci-web-resources-2026-11-09.json": "22dbafeca47f1d1cb1a75bf7c0fc0cc2cad54f8224f168fc8155eddc24e8b2ba",
+    "docs/measurements/pinned-inspector-consumer-ci-2026-11-09.json": "da7debb4dce0438f80983de5b9f5f5b0d20afc8c6099b710d33c410bc00bc40f",
+    "docs/measurements/pinned-inspector-notification-navigation-test-2026-11-09.json": "e5a5dfbaba1774e4738ad6cd379826bd59681e8970ac0cd40ac8ae5b37e79146",
+    "docs/measurements/pinned-inspector-sbom-verification-2026-11-09.json": "f812674463f77b310fe6cb1770468179b0721a101f0a4d816694bd895c07075d",
+    "docs/measurements/pinned-inspector-web-distribution-2026-11-09.json": "1e445d6269cd32c2cbfe061fc1fed37f6299d97497abd3c7b2ebaeb9c67b3d92"
+  },
+  "focused": {
+    "startedAt": "2026-11-09T12:24:20.703230+00:00",
+    "elapsedSeconds": 100.523,
+    "exitCode": 0,
+    "sourceFiles": 4541,
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 66,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ApplicationNotificationHostIntegrationTest.xml": {
+        "sha256": "778f47367645f61dccf02b8ca4653da2f44d85e4a8395f6834f8c22945524802",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationMutedNotificationIntegrationTest.xml": {
+        "sha256": "e598f13686af08ba0c8bd303834b6226988eab095de457de3b617625444ab6cb",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationActionsTest.xml": {
+        "sha256": "9fb32f5f36643850730bebd485d80cf8034ad214d51c20ba116d70970f9577ea",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationChangesIntegrationTest.xml": {
+        "sha256": "561e88f743ec290e093a3a613facd42a417695b5859c9c66324b84c06e1e7cfb",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationFocusIntegrationTest.xml": {
+        "sha256": "b8f2913cee842107c293deecaab900a41a1242acf2d3bd1e176c8480346554d7",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationProcessIntegrationTest.xml": {
+        "sha256": "f2daf04b33819c5ae2b477bc7a3eb1c6b988055ab473238ac86cc8070eb62d2e",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationPublisherIntegrationTest.xml": {
+        "sha256": "8edb29854b01f8c608f0981caf885ceeb00006ad53b6d874fa590407c9f3d9db",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationReconciliationIntegrationTest.xml": {
+        "sha256": "21529b5702ce608e65ef78b15df28550fde785244655ecec9be153cbde04ea8f",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationNotificationRetirementIntegrationTest.xml": {
+        "sha256": "1d5908cfaf9b2436238182b30834cf4f86d555eef3138876cbc296393ce11d1e",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativeLinkAppFlowTest.xml": {
+        "sha256": "e5df35c1465ab88410aa7e47e2b39e1834899dcf6f5465a6d1388cf35e3e396d",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativeNotificationNavigationIntegrationTest.xml": {
+        "sha256": "51a3ad91d4f743148286abdaabc8e62f014b8f06cc96c71fa7973e9269faba9c",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml": {
+        "sha256": "5eae41ece7867a9c70ff7ebeaa303be13b93e4dde2caeb6f759b8bc20d5a1054",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "session": 87699,
+  "sessionReaped": true,
+  "scope": "Exact already-hosted workflow/checksum/fixture integration after newer Root room source; no production behavior change",
+  "limits": [
+    "No repeated full CI graph after integration; hosted exact-source7950 and Root focused66 remain distinct",
+    "Earlier Root original-reference full4162 precedes only these CI/fixture changes",
+    "No new APK or Starter acceptance in this commit"
+  ]
+}

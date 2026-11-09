@@ -10,7 +10,10 @@ on:
         description: Verification scope
         type: choice
         default: all
-        options: [all, apple, verify]
+        options: [all, apple, verify, web]
+
+env:
+  ORG_GRADLE_PROJECT_networkInspectorDirectory: ${{ github.workspace }}/.work/network-inspector
 
 permissions:
   contents: read
@@ -21,10 +24,17 @@ concurrency:
 
 jobs:
   verify:
-    if: github.event_name != 'workflow_dispatch' || inputs.scope != 'apple'
+    if: github.event_name != 'workflow_dispatch' || inputs.scope == 'all' || inputs.scope == 'verify'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check out verified network inspector
+        uses: actions/checkout@v4
+        with:
+          repository: fajarxfce/kmp-network-inspector
+          ref: 742a2d1c2285c720cef80ea3913195f3ece388cc
+          path: .work/network-inspector
+          persist-credentials: false
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -34,55 +44,109 @@ jobs:
         with:
           node-version: '22'
       - run: python3 -m unittest discover -s tool -p 'test_*.py'
-      - run: >-
-          xvfb-run -a ./gradlew :check
-          :core:presentation:wasmJsBrowserTest :core:datastore:wasmJsBrowserTest :core:database:wasmJsBrowserTest
-          :core:fileio:wasmJsBrowserTest
-          :core:sync:data:wasmJsBrowserTest :core:workspace:domain:wasmJsBrowserTest :core:workspace:data:wasmJsBrowserTest
-          :features:inbox:domain:wasmJsBrowserTest :features:inbox:data:wasmJsBrowserTest
-          :features:home:presentation:wasmJsBrowserTest
-          :features:workforce:domain:wasmJsBrowserTest :features:workforce:data:wasmJsBrowserTest
-          :features:workforce:presentation:wasmJsBrowserTest
-          :features:leave:domain:wasmJsBrowserTest :features:leave:data:wasmJsBrowserTest
-          :core:common:wasmJsBrowserTest
-          :features:payroll:domain:wasmJsBrowserTest :features:payroll:data:wasmJsBrowserTest
-          :features:payroll:presentation:wasmJsBrowserTest
-          :features:expenses:domain:wasmJsBrowserTest :features:expenses:data:wasmJsBrowserTest
-          :features:expenses:presentation:wasmJsBrowserTest
-          :features:leave:presentation:wasmJsBrowserTest :core:location:data:wasmJsBrowserTest
-          :features:people:domain:wasmJsBrowserTest :features:people:data:wasmJsBrowserTest
-          :features:people:presentation:wasmJsBrowserTest
-          :core:documents:domain:wasmJsBrowserTest :core:documents:data:wasmJsBrowserTest
-          :core:transfers:domain:wasmJsBrowserTest :core:transfers:data:wasmJsBrowserTest
-          :features:files:presentation:wasmJsBrowserTest :core:worker:wasmJsBrowserTest
-          :core:featureflags:domain:wasmJsBrowserTest :core:featureflags:data:wasmJsBrowserTest
-          :core:identity:domain:wasmJsBrowserTest :core:identity:data:wasmJsBrowserTest
-          :core:network:wasmJsBrowserTest :core:storage:wasmJsBrowserTest :core:securestorage:wasmJsBrowserTest
-          :core:notifications:data:wasmJsBrowserTest :features:notifications:presentation:wasmJsBrowserTest
-          :core:settings:data:wasmJsBrowserTest :core:localization:wasmJsBrowserTest :core:observability:wasmJsBrowserTest
-          :core:security:domain:wasmJsBrowserTest :core:security:data:wasmJsBrowserTest :features:security:presentation:wasmJsBrowserTest
-          :core:availability:domain:wasmJsBrowserTest :core:availability:data:wasmJsBrowserTest
-          :apps:shared:wasmJsBrowserTest
-          :apps:android:assembleDevDebug :apps:android:assembleStagingDebug :apps:android:assembleProdRelease
-          :apps:android:lintDevDebug
+      - name: Prepare bounded native crash diagnostics
+        run: |
+          mkdir -p .work/native-crashes
+          sudo sysctl -w "kernel.core_pattern=$GITHUB_WORKSPACE/.work/native-crashes/core.%e.%p"
+      - name: Verify application and Android builds
+        run: |
+          ulimit -c 2097152
+          xvfb-run -a ./gradlew \
+          :check \
+          :features:collaboration:data:testAndroidHostTest \
+          :core:presentation:wasmJsBrowserTest \
+          :core:datastore:wasmJsBrowserTest \
+          :core:database:wasmJsBrowserTest \
+          :core:fileio:wasmJsBrowserTest \
+          :core:sync:data:wasmJsBrowserTest \
+          :core:workspace:domain:wasmJsBrowserTest \
+          :core:workspace:data:wasmJsBrowserTest \
+          :features:inbox:domain:wasmJsBrowserTest \
+          :features:inbox:data:wasmJsBrowserTest \
+          :features:home:presentation:wasmJsBrowserTest \
+          :features:workforce:domain:wasmJsBrowserTest \
+          :features:workforce:data:wasmJsBrowserTest \
+          :features:workforce:presentation:wasmJsBrowserTest \
+          :features:leave:domain:wasmJsBrowserTest \
+          :features:leave:data:wasmJsBrowserTest \
+          :core:common:wasmJsBrowserTest \
+          :features:payroll:domain:wasmJsBrowserTest \
+          :features:payroll:data:wasmJsBrowserTest \
+          :features:payroll:presentation:wasmJsBrowserTest \
+          :features:expenses:domain:wasmJsBrowserTest \
+          :features:expenses:data:wasmJsBrowserTest \
+          :features:expenses:presentation:wasmJsBrowserTest \
+          :features:leave:presentation:wasmJsBrowserTest \
+          :core:location:data:wasmJsBrowserTest \
+          :features:people:domain:wasmJsBrowserTest \
+          :features:people:data:wasmJsBrowserTest \
+          :features:people:presentation:wasmJsBrowserTest \
+          :core:documents:domain:wasmJsBrowserTest \
+          :core:documents:data:wasmJsBrowserTest \
+          :core:transfers:domain:wasmJsBrowserTest \
+          :core:transfers:data:wasmJsBrowserTest \
+          :features:files:presentation:wasmJsBrowserTest \
+          :core:worker:wasmJsBrowserTest \
+          :core:featureflags:domain:wasmJsBrowserTest \
+          :core:featureflags:data:wasmJsBrowserTest \
+          :core:identity:domain:wasmJsBrowserTest \
+          :core:identity:data:wasmJsBrowserTest \
+          :core:network:wasmJsBrowserTest \
+          :core:storage:wasmJsBrowserTest \
+          :core:securestorage:wasmJsBrowserTest \
+          :core:notifications:data:wasmJsBrowserTest \
+          :features:notifications:presentation:wasmJsBrowserTest \
+          :core:settings:data:wasmJsBrowserTest \
+          :core:localization:wasmJsBrowserTest \
+          :core:observability:wasmJsBrowserTest \
+          :core:security:domain:wasmJsBrowserTest \
+          :core:security:data:wasmJsBrowserTest \
+          :features:security:presentation:wasmJsBrowserTest \
+          :core:availability:domain:wasmJsBrowserTest \
+          :core:availability:data:wasmJsBrowserTest \
+          :apps:shared:wasmJsBrowserTest \
+          :apps:android:assembleDevDebug \
+          :apps:android:assembleStagingDebug \
+          :apps:android:assembleProdRelease \
+          :apps:android:lintDevDebug \
           :apps:android:cyclonedxDirectBom -PsbomConfiguration=prodReleaseRuntimeClasspath
       - name: Verify configured Android app-link manifests and domain files
         run: |
           python3 tool/check_app_links.py prepare --application-id dev.fajar.hris.mobile
           ./gradlew :core:common:generateAppLinks :apps:android:processDevDebugManifestForPackage :apps:android:processStagingDebugManifestForPackage :apps:android:processProdReleaseManifestForPackage -PappLinksConfigDirectory=.work/app-links-check --no-daemon
           python3 tool/check_app_links.py verify --application-id dev.fajar.hris.mobile
+      - name: Capture native crash backtraces
+        if: always()
+        run: |
+          for crash in .work/native-crashes/core.*; do
+            [ -f "$crash" ] || continue
+            timeout 60s gdb --batch -ex 'set pagination off' -ex 'thread apply all bt' "$JAVA_HOME/bin/java" "$crash" > "$crash.backtrace.txt" 2>&1 || true
+            rm -- "$crash"
+          done
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: reports-and-android
+          include-hidden-files: true
           path: |
             **/build/reports/
+            **/build/test-results/
+            **/hs_err_pid*.log
+            .work/native-crashes/*.backtrace.txt
             apps/android/build/outputs/apk/**/*.apk
   web:
-    if: github.event_name != 'workflow_dispatch' || inputs.scope == 'all'
+    if: github.event_name != 'workflow_dispatch' || inputs.scope == 'all' || inputs.scope == 'web'
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+      - name: Check out verified network inspector
+        uses: actions/checkout@v4
+        with:
+          repository: fajarxfce/kmp-network-inspector
+          ref: 742a2d1c2285c720cef80ea3913195f3ece388cc
+          path: .work/network-inspector
+          persist-credentials: false
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -91,19 +155,81 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: ./gradlew :apps:shared:wasmJsBrowserDistribution
+      - name: Build web distribution and record resource usage
+        env:
+          BINARYEN_CORES: '2'
+        run: |
+          python3 - <<'PY'
+          import json, os, signal, subprocess, time
+          from pathlib import Path
+
+          def interrupted(_signal, _frame):
+              raise KeyboardInterrupt()
+
+          for event in (signal.SIGINT, signal.SIGTERM):
+              signal.signal(event, interrupted)
+          command = [
+              '/usr/bin/time', '-v', '-o', '.work/web-build-resources.txt',
+              './gradlew', ':apps:shared:wasmJsBrowserDistribution',
+              '--no-daemon', '--no-parallel', '--max-workers=1',
+              '-Pkotlin.compiler.execution.strategy=in-process',
+              '-Dorg.gradle.jvmargs=-Xmx3072m',
+          ]
+          process = subprocess.Popen(command, start_new_session=True)
+          started = time.monotonic()
+          try:
+              while process.poll() is None:
+                  memory = dict(line.split(':', 1) for line in Path('/proc/meminfo').read_text().splitlines())
+                  sample = {'elapsedSeconds': round(time.monotonic() - started),
+                            'availableMemory': memory['MemAvailable'].strip(),
+                            'totalMemory': memory['MemTotal'].strip()}
+                  for name in ('memory.current', 'memory.peak', 'memory.max', 'memory.events'):
+                      path = Path('/sys/fs/cgroup') / name
+                      if path.is_file():
+                          sample[name] = path.read_text().strip()
+                  print('WEB_BUILD_RESOURCE ' + json.dumps(sample), flush=True)
+                  try:
+                      process.wait(timeout=15)
+                  except subprocess.TimeoutExpired:
+                      pass
+          finally:
+              if process.poll() is None:
+                  os.killpg(process.pid, signal.SIGTERM)
+                  try:
+                      process.wait(timeout=20)
+                  except subprocess.TimeoutExpired:
+                      os.killpg(process.pid, signal.SIGKILL)
+                      process.wait(timeout=5)
+          raise SystemExit(process.returncode)
+          PY
+      - name: Retain web build diagnostics
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: web-build-diagnostics
+          include-hidden-files: true
+          path: |
+            .work/web-build-resources.txt
+            build/reports/problems/
       - uses: actions/upload-artifact@v4
         with:
           name: web
           path: apps/shared/build/dist/wasmJs/productionExecutable/
   apple:
-    if: github.event_name != 'workflow_dispatch' || inputs.scope != 'verify'
+    if: github.event_name != 'workflow_dispatch' || inputs.scope == 'all' || inputs.scope == 'apple'
     runs-on: macos-15
     timeout-minutes: 75
     env:
       ORG_GRADLE_PROJECT_appLinksConfigDirectory: .work/app-links-check
     steps:
       - uses: actions/checkout@v4
+      - name: Check out verified network inspector
+        uses: actions/checkout@v4
+        with:
+          repository: fajarxfce/kmp-network-inspector
+          ref: 742a2d1c2285c720cef80ea3913195f3ece388cc
+          path: .work/network-inspector
+          persist-credentials: false
       - name: Select Xcode 26.3
         run: sudo xcode-select -s /Applications/Xcode_26.3.app/Contents/Developer
       - name: Verify native push envelope extraction
@@ -167,6 +293,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check out verified network inspector
+        uses: actions/checkout@v4
+        with:
+          repository: fajarxfce/kmp-network-inspector
+          ref: 742a2d1c2285c720cef80ea3913195f3ece388cc
+          path: .work/network-inspector
+          persist-credentials: false
       - uses: actions/setup-java@v4
         with:
           distribution: temurin

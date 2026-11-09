@@ -15025,11 +15025,17 @@
          </artifact>
       </component>
       <component group="androidx.compose.material" name="material-ripple" version="1.9.3">
+         <artifact name="material-ripple-1.9.3.pom">
+            <sha256 value="8f35e20566f01bd4cbdc44cccdae54f6a59388fb23e0d0e23dae3f6640768f50" origin="Official repository artifact and publisher SHA-1 verified during consumer SBOM inventory" />
+         </artifact>
          <artifact name="material-ripple-1.9.3.module">
             <sha256 value="e45fd0a4df617462edadf92206889935793fbe1c07958f3d5856ba3986403395" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
          </artifact>
       </component>
       <component group="androidx.compose.material" name="material-ripple-android" version="1.9.3">
+         <artifact name="material-ripple-android-1.9.3.pom">
+            <sha256 value="bdecf5e6e99f8d48238ff4d9287fbe66a8714df3db115b7dd8e136818e3ddd53" origin="Official repository artifact and publisher SHA-1 verified during consumer SBOM inventory" />
+         </artifact>
          <artifact name="material-ripple-android-1.9.3.module">
             <sha256 value="13b29394ffdf4cabe5d32901dbc921c1a54d56896c4b42d0223192a2c350b0e7" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
          </artifact>
@@ -15038,11 +15044,17 @@
          </artifact>
       </component>
       <component group="androidx.compose.material3" name="material3" version="1.4.0">
+         <artifact name="material3-1.4.0.pom">
+            <sha256 value="672b431f59c8e0a8522690b2f46f1b7966710638893c60c31c5f19f8472d62cc" origin="Official repository artifact and publisher SHA-1 verified during consumer SBOM inventory" />
+         </artifact>
          <artifact name="material3-1.4.0.module">
             <sha256 value="757081d128daf8801c1dd9acc431fa5269e656b28a0a490ae98ccee68e9c3452" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
          </artifact>
       </component>
       <component group="androidx.compose.material3" name="material3-android" version="1.4.0">
+         <artifact name="material3-android-1.4.0.pom">
+            <sha256 value="cc0362653240708a010de50fee8caf884a610fbb10b6013e86694d77c43febc7" origin="Official repository artifact and publisher SHA-1 verified during consumer SBOM inventory" />
+         </artifact>
          <artifact name="material3-android-1.4.0.module">
             <sha256 value="fccd6a8d0d33fcf7c3277bc43eb452c73803ec620597c81dbc4a79e290a71a97" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
          </artifact>
@@ -15056,6 +15068,9 @@
          </artifact>
       </component>
       <component group="androidx.lifecycle" name="lifecycle-common-java8" version="2.9.4">
+         <artifact name="lifecycle-common-java8-2.9.4.pom">
+            <sha256 value="f7a0077f2b20312c30ea74c9fe77626fbe2ad09bb48922851cde20bcd1a33266" origin="Official repository artifact and publisher SHA-1 verified during consumer SBOM inventory" />
+         </artifact>
          <artifact name="lifecycle-common-java8-2.9.4.jar">
             <sha256 value="497dd84de9f2fd46324f25f9a3af032d3a23d087e87af515c4b19435f6d6a651" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
          </artifact>
@@ -15099,6 +15114,9 @@
          </artifact>
       </component>
       <component group="org.jetbrains.compose.material" name="material-ripple" version="1.9.1">
+         <artifact name="material-ripple-1.9.1.pom">
+            <sha256 value="f52f382ae8b918be5236761410ba7d8dd12e0b6ac99230797c53b240ba1a31e8" origin="Official repository artifact and publisher SHA-1 verified during consumer SBOM inventory" />
+         </artifact>
          <artifact name="material-ripple-1.9.1.module">
             <sha256 value="898dbe9a0e62c9ca391b375ec1a27b49965743b74a06ad85f6e710a0bbb4a3da" origin="Maven Central artifact checked against published SHA-1; pinned SHA-256" />
          </artifact>
@@ -15145,6 +15163,9 @@
          </artifact>
       </component>
       <component group="org.jetbrains.compose.material3" name="material3" version="1.9.0">
+         <artifact name="material3-1.9.0.pom">
+            <sha256 value="9728f08703824e04fac8f84e66e1e7f286ee430890f327ff8b1e75431ddf1ada" origin="Maven Central POM checked against publisher SHA-1 for Android SBOM resolution" />
+         </artifact>
          <artifact name="material3-1.9.0.module">
             <sha256 value="fa7a745df9170591d98f3773303bcf53829313acfb43c72c1aa4f8fb99ba45a4" origin="Maven Central artifact checked against published SHA-1; pinned SHA-256" />
          </artifact>
@@ -15214,6 +15235,9 @@
          </artifact>
       </component>
       <component group="org.jetbrains.kotlinx" name="kotlinx-coroutines-test" version="1.8.0">
+         <artifact name="kotlinx-coroutines-test-metadata-1.8.0.jar">
+            <sha256 value="337f24af1c61fc47d278a9be26fd1754b9933b0681f185eb9be0aa9e09067219" origin="Official repository artifact and publisher SHA-1 verified during consumer SBOM inventory" />
+         </artifact>
          <artifact name="kotlinx-coroutines-test-1.8.0.module">
             <sha256 value="0ec3c75ffd99a6a2dfb68f307f2f2f73141c933e58b77b104f1c8cac3afd5394" origin="Official repository artifact checked against published SHA-1; pinned SHA-256" />
          </artifact>
@@ -15232,6 +15256,11 @@
          </artifact>
          <artifact name="ivy-26.10.23-hris.6.xml">
             <sha256 value="69ea030963275ce080991e658172934441b73558e9de4d8e7ae3976b2f18558a" origin="Original four-ABI CI refresh-coalescing candidate; pinned sources and Kotlin pair; unpublished" />
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlinx" name="atomicfu" version="0.21.0">
+         <artifact name="atomicfu-0.21.0.module">
+            <sha256 value="c4aba64788420b0b54c877900f27ba385c3d170e878ca2faf378ec315cfcb076" origin="Official repository artifact and publisher SHA-1 verified during consumer SBOM inventory" />
          </artifact>
       </component>
    </components>

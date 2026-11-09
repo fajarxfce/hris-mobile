@@ -40,6 +40,7 @@ class NativeLinkAppFlowTest {
         try {
             runBlocking {
                 f.initialize()
+                assertEquals(listOf(f.app.first), f.app.server.collaboration.listedIds)
                 f.app.koin.loadModules(
                     listOf(
                         module {
@@ -99,14 +100,18 @@ class NativeLinkAppFlowTest {
                 compose
                     .onAllNodesWithContentDescription("New chat")
                     .fetchSemanticsNodes()
-                    .isNotEmpty()
+                    .isNotEmpty() &&
+                    compose.onAllNodesWithText("Fictional colleague").fetchSemanticsNodes().size ==
+                        f.app.server.collaboration.listedIds.size
             }
             compose.onNodeWithContentDescription("New chat").assertIsDisplayed()
             compose.onNodeWithText("Saved replies").assertDoesNotExist()
             compose
                 .onAllNodesWithText("Fictional colleague")
-                .assertCountEquals(f.app.server.collaboration.ids.size)
+                .assertCountEquals(f.app.server.collaboration.listedIds.size)
             compose.onAllNodesWithText("Fictional colleague")[0].assertIsDisplayed()
+            compose.onNodeWithText("Fictional original for notification").assertIsDisplayed()
+            compose.onNode(hasText("Chat") and isSelectable()).assertIsSelected()
             compose.runOnIdle {
                 assertNull(owner.app()?.state?.value?.pendingLink)
                 assertTrue(f.app.sdk.enqueued.isEmpty())

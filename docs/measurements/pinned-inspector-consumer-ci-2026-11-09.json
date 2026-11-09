@@ -1,0 +1,114 @@
+{
+  "run": 42611795210,
+  "source": "21101489c2d371bf04dd00bd3648f8acec0e96d2",
+  "artifact": 13672363171,
+  "bytes": 669691953,
+  "sha256": "2223b17a73684b9a151cbb6117ac80d6da3ab1d8d61391c264bc2b5e40c4335b",
+  "auditedAt": "2026-11-09T12:22:16.819962+00:00",
+  "counts": {
+    "tests": 7950,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "targets": {
+    "desktopTest": {
+      "tests": 5429,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "tests": 1912,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "test": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 599,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "apks": [
+    {
+      "path": "apps/android/build/outputs/apk/dev/debug/android-dev-debug.apk",
+      "bytes": 569489155,
+      "sha256": "ad6fe4e857c3bdc2ecb830d200de4ce790faa1590d7b7387cdc2f67255c6d3bc"
+    },
+    {
+      "path": "apps/android/build/outputs/apk/prod/release/android-prod-release-unsigned.apk",
+      "bytes": 559615247,
+      "sha256": "fad907e7e71a323d40bee0412c242de9b2bd3988dc3805c947bfd6176162aad2"
+    },
+    {
+      "path": "apps/android/build/outputs/apk/staging/debug/android-staging-debug.apk",
+      "bytes": 569488586,
+      "sha256": "468ec8cf616e89a2ca37920ecedbeeb760cd14e309640e24f7251b65be6ef33a"
+    }
+  ],
+  "lint": [
+    {
+      "path": "apps/android/build/reports/lint-results-devDebug.xml",
+      "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+      "severities": {}
+    }
+  ],
+  "boms": [
+    {
+      "path": "apps/android/build/reports/sbom/android.cdx.json",
+      "sha256": "14d08fbc9e3e0eff4f0e33b13cf98ed34a076d8e96812176383926c23e30167b",
+      "components": 393
+    }
+  ],
+  "accepted": true,
+  "auditSessionReaped": 30078,
+  "reportSuites": 1117,
+  "specificReports": {
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml": {
+      "sha256": "01d621486b63bb5e67f97dc02d613855a282b26238846d580b56303e1740eded",
+      "tests": 90,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativeLinkAppFlowTest.xml": {
+      "sha256": "9a8110cf7af48a7e61bd0aa78e44b34272ddc29f0de17b5c74154ddcd3ad6f2d",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+      "sha256": "3fe2e4b40895195267e8825444babd8cc9aa5e85913a71f1af252235b9d19ed1",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationDirectTransportTest.xml": {
+      "sha256": "3ec84dbd024ae8bf4d55d4fcf842cb70bae585cc39c49ac98f040ace49c52a84",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "scope": "Hosted verify at the exact isolated consumer source, not later Root room changes",
+  "inspectorSource": "742a2d1c2285c720cef80ea3913195f3ece388cc",
+  "matrixSdk": "26.10.23-hris.6",
+  "limits": [
+    "This run skipped Apple, Windows and web distribution jobs; earlier exact evidence remains separate",
+    "Browser tests ran in verify; production web distribution has separate successful run42599865437",
+    "Generated CI APKs are not signed/accepted phone updates; phone87 remains installed",
+    "Previous five failures and cancelled sixth candidate remain historical evidence; no retry-only acceptance",
+    "Native Apple Matrix binding, capture overhead and package publication remain open"
+  ]
+}

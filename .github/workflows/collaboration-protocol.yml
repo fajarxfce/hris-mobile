@@ -16,6 +16,9 @@ on:
       - gradle/verification-metadata.xml
       - .github/workflows/collaboration-protocol.yml
 
+env:
+  ORG_GRADLE_PROJECT_networkInspectorDirectory: ${{ github.workspace }}/.work/network-inspector
+
 permissions:
   contents: read
 
@@ -31,6 +34,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: mobile
+      - name: Check out verified network inspector
+        uses: actions/checkout@v4
+        with:
+          repository: fajarxfce/kmp-network-inspector
+          ref: 742a2d1c2285c720cef80ea3913195f3ece388cc
+          path: .work/network-inspector
+          persist-credentials: false
       - uses: actions/checkout@v4
         with:
           repository: fajarxfce/hris-platform

@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 12:24 UTC. This file describes current work. Historical
+Updated 9 November 2026, 12:27 UTC. This file describes current work. Historical
 checkpoints are preserved in [Git at b1630963](https://github.com/fajarxfce/hris-mobile/blob/b1630963/docs/agent-handoff.md).
 Do not restart jobs or reapply candidates from that history without checking current state.
 
@@ -24,8 +24,8 @@ Do not restart jobs or reapply candidates from that history without checking cur
 
 | Checkout | Branch/source | Current state |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 / d8383438 | Joined-room/native87/phone87 and typed original-reference source accepted |
-| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 21101489 | Hosted verify42611795210 passed; artifact audit30078 active |
+| Mobile original | feat/chat-send-timing-20261107 / d8383438 | Joined-room/native87/phone87 and typed original-reference5b63b498 accepted; CI integration accepted |
+| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 21101489 | Hosted verify42611795210/artifact13672363171 audited PASS;951cdbcf pushed |
 | Inspector original | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Verified public SDK6 integrated/pushed |
 | Inspector isolated | feat/sdk6-distribution-20261109 / a6b8236 | Pushed; SDK6 distribution accepted |
 | Starter | feat/network-inspector-20261107 / 6157db1 | Pushed; generic worker/identity ports accepted |
@@ -233,8 +233,23 @@ emulator is running. Do not restart87 or send again.
 Keep this current file concise and replace stale status instead of appending another
 full history. Commit measurements with implementation; historical details stay in Git.
 
-Starter remains6157db1 and unchanged. Its `.work/pinned-inspector-ci-2026-11-09` holds
-only a prepared patch: five pinned dependency checkouts across three workflows and
-nine verified shared SBOM artifacts. Static YAML/XML review passes; application is
-waiting for artifact audit of successful Mobile public verify42611795210. No Starter compiler,
-workflow dispatch or source mutation has happened. Preserve that prerequisite.
+Starter now has the reviewed four-file port applied: five pinned dependency
+checkouts and nine shared SBOM artifacts. Static YAML/XML and before/after checks
+pass. Its bounded full gate will use exact742a2d1 library bytes in a separate
+worktree. The fresh worktree reports a gradlew.bat normalization delta even though
+all85 tracked files match their committed blobs; nothing was reset or staged.
+No Starter compiler or distribution dispatch has run yet.
+
+## Public inspector consumer integrated candidate
+
+The exact eight workflow/checksum/fixture paths from951cdbcf are now in Root after
+confirming no intervening edits since common base2293ff05. Their pinned inspector
+source is742a2d1; the transport cancellation fix was already identical in Root.
+Consumer CI42611795210 passed7,950 cases, zero failures/errors/skips/lint. Artifact
+13672363171 was independently hashed and audited, including three APKs and the
+393-component SBOM. [Evidence](measurements/pinned-inspector-consumer-ci-2026-11-09.json).
+Earlier failures are retained. This CI source predates Root's newer room increments.
+Focused Root integration87699 is reaped PASS100.523s:66 fresh cases, zero failures/
+errors/skips; format/architecture/Detekt pass,4,541 app and library inputs fixed.
+[Integration evidence](measurements/pinned-inspector-root-integration-2026-11-09.json). No new production app behavior or
+phone update is included. No owned compiler/emulator remains; Starter validation is next.
