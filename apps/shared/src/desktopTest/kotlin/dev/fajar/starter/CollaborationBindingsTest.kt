@@ -402,6 +402,11 @@ class CollaborationBindingsTest {
                 )
                 assertNotNull(container.koin.get<RequestCollaborationRecovery>())
                 assertNotNull(container.koin.get<QueueCollaborationReadinessSignal>())
+                assertNotNull(container.koin.get<QueueCollaborationSpaceReadinessSignal>())
+                assertSame(
+                    container.koin.get<CollaborationSpaceRecoveryWakeRepository>(),
+                    container.koin.get<CollaborationSpaceRecoveryWakeRepository>(),
+                )
                 assertSame(
                     container.koin.get<CollaborationReadinessReceiptRepository>(),
                     container.koin.get<CollaborationReadinessReceiptRepository>(),

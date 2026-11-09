@@ -1115,6 +1115,26 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun queueSpaceReadinessSignal(
+        sessions: SessionRepository,
+        receipts: CollaborationSpaceReadinessReceiptRepository,
+        wakes: CollaborationSpaceRecoveryWakeRepository,
+        schedules: SyncScheduleRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        runtimes: CollaborationSpaceRuntimeRepository,
+    ) =
+        QueueCollaborationSpaceReadinessSignal(
+            sessions,
+            receipts,
+            wakes,
+            schedules,
+            server,
+            build,
+            runtimes,
+        )
+
+    @Factory
     fun observeCredentialRecovery(runtimes: CollaborationRuntimeRepository) =
         ObserveCollaborationCredentialRecovery(runtimes)
 

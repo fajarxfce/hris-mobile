@@ -1,5 +1,9 @@
 # Architecture
 
+[Organization recovery wakes](collaboration-space-readiness-wake.md) retain independent
+work generations and hand off encrypted readiness revisions through current local
+parent/runtime guards; actual worker completion remains a separate responsibility.
+
 [Organization readiness listeners](collaboration-space-readiness-listener.md) preserve
 logical runtime provenance and original Matrix sender identity through one owned
 native subscription lifetime; durable recovery remains a separate owning flow.
