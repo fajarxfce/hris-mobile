@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 17:23 UTC. Historical detail is retained in
+Updated 9 November 2026, 17:49 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -22,13 +22,13 @@ is required; Apple source/runtime, push and calling acceptance remain separate.
 
 | Checkout | Branch/source | State |
 | --- | --- | --- |
-| Mobile original | feat/chat-send-timing-20261107 /69e639f8 | Original-only owning delivery accepted; no product activation |
+| Mobile original | feat/chat-send-timing-20261107 /a14eea78 | Owning original delivery and native proof accepted; new key activation in progress |
 | Mobile isolated CI | feat/pinned-inspector-ci-20261109 /951cdbcf | Public consumer evidence accepted and integrated |
 | Inspector original | feat/matrix-rust-bindings-20261107 /f8ca3d6 | Verified public SDK6 integrated |
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | SDK6 distribution accepted; preserve unrelated gradlew.bat delta |
 | Starter | feat/network-inspector-20261107 /ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Platform original | feat/communications /691f3fc5 | Recovery verifier port accepted/pushed; runtime unchanged |
-| Platform group | feat/communication-space /96d2d238 | Reconciliation and current direct transport accepted/pushed |
+| Platform group | feat/communication-space /e2c61dad | Native original-delivery proof accepted; key confirmation in progress |
 
 Isolated directories are under `/home/fajar/hris/.worktrees/`: `communication-space`,
 `mobile-inspector-ci-2026-11-09`, `inspector-sdk6-2026-11-09` and
@@ -37,6 +37,22 @@ its apparent gradlew.bat change is text/eol normalization, not a byte change.
 
 Live API/worker remains e558a6868399058a2dcdee97acfd0e7fa7f1ef07, schema116.4,
 readiness control ON. Group V117–138 and organization routing are not deployed.
+
+## Original-key activation in progress (unaccepted source)
+
+Twenty Mobile Kotlin files add one original-identity confirmation to the owning
+AdoptCollaborationSpaceRuntime flow, a bounded SDK-owned Android request, portable
+request/response mapping, and domain/transport/lifetime tests. They are not compiled
+or accepted yet. The new operation never uploads or regenerates keys, refreshes or
+retries implicitly. No UI/worker activation, APK88 or Starter port is claimed.
+
+Group worktree has the matching explicit vendor endpoint. Its focused213 cases and
+HTTP2 cases pass. Full regression61608 is running at
+`.work/space-original-key-confirmation-2026-11-09/full-1`; do not edit its source or
+start another heavy compiler/emulator before reaping it. Next: Mobile compilation,
+quality and platform tests, then actual native confirmation/delivery proof with the
+sender's group publication initially absent. Existing native31328 remains historical
+acceptance only; it used an explicit fixture keys/upload precondition.
 
 ## Accepted direct transport
 
@@ -108,12 +124,12 @@ inputs and unchanged Inspector. Root/release compile-lint/Wasm/Linux iOS source/
 format/architecture/Detekt pass. Publisher29124 is REAPED PASS: exact current/focused/
 full manifests, every archived report, all six browser classes and both red assertions
 verified. [Accepted evidence](measurements/collaboration-space-original-delivery-2026-11-09.json).
-All local heavy jobs are reaped. No new APK, actual SDK delivery or native Apple proof. No new APK/phone installation.
+That source gate is reaped. Actual Android proof is accepted below; no new product APK or native Apple Matrix proof.
 The SDK's25s delivery ownership is separate from15s preparation; current hard native
 expiry and captured denial remain gated. Final close must pause/drain before release.
 
-Actual SDK/SQL/HTTP/restart proof and group readiness wake/background/UI ownership are
-now covered by the accepted native experiment. Its private README identifies
+Actual Android SDK/SQL/HTTP/restart proof is covered by the accepted native experiment.
+Group readiness wake/background/UI ownership remains required. Its private README identifies
 existing real Synapse/SQL/HTTP/proof-app facilities and the new two-original, offline
 recipient, interrupted post-ACK projection/restart scenario. Native31328 is accepted below. Preserve the stopped sender store and all eight originals below.
 
@@ -121,13 +137,16 @@ recipient, interrupted post-ACK projection/restart scenario. Native31328 is acce
 
 Accepted owning source69e639f8 is pushed;73237 is reaped. Hosted
 [42656803963](https://github.com/fajarxfce/hris-mobile/actions/runs/42656803963)
-runs exact69e639f8a7f35a92f8803e6297f443cf3f090e46. Portable is ACCEPTED:6,638 tests
+completed SUCCESS at exact69e639f8a7f35a92f8803e6297f443cf3f090e46. Portable is ACCEPTED:6,638 tests
 (3,077 desktop+621 Android host+2,940 browser),zero failures/errors/skips. Artifact
 13695050253/3,293,572bytes has GitHub/ZIP digest
 c0378b3ebd3d5dc5a748962797687c489496be452148e431c90c64a4af42b6e6.
 All five new exact delivery/transport classes and24 owning cases are present on desktop
-and browser; transport8 also runs on Android. Audit61011 is reaped. Apple is still
-running; do not redispatch. [Hosted evidence](measurements/collaboration-space-original-delivery-hosted-2026-11-09.json).
+and browser; transport8 also runs on Android. Audit61011 is reaped. Apple audit19534
+is REAPED PASS:2,499 simulator cases/269 suites,zero failures/errors/skips,all five
+exact classes and unsigned Xcode host build pass. Artifact13697591769 is491,785bytes,
+SHA256ece26643539a7892b04916620dbc7620ff38b71fa061e145be10ebe1f80bacf2.
+Total9,137 cases. Do not redispatch or reaudit. [Hosted evidence](measurements/collaboration-space-original-delivery-hosted-2026-11-09.json).
 
 Four proof-only Kotlin files are accepted with this native evidence: HrisWorkerProofContainer,
 ProtectedHrisProofOwner, MatrixProofInstrumentation and new HrisSpaceOriginalDeliveryProbe.
@@ -327,8 +346,8 @@ Draft66 092041 must NEVER be sent. All native/emulator jobs are reaped and stopp
 ## Next work
 
 1. Native31328 is accepted/reaped; do not repeat its unchanged gates. Preserve failed
-   fixture data and stopped sender87. Audit the still-running Apple job42656803963;
-   portable is accepted. No duplicate dispatch or phone install.
+   fixture data and stopped sender87. Both jobs42656803963 and their artifact audits
+   are accepted; no duplicate dispatch, audit or phone install.
 2. Direct contracts ab17eadd/96d2d238 and reconciliationfa90ddcc are accepted/pushed;
    do not reapply or rerun those unchanged gates.
 3. Implement automatic original-key publication activation, then continue SDK delivery/history,

@@ -59,7 +59,10 @@ Root, release compilation/lint, Wasm, Linux iOS source/configuration, formatting
 architecture and Detekt pass. The strict source/report audit verifies all six browser
 classes and both initial failing assertions. No failures, errors or skips remain.
 [Accepted evidence](measurements/collaboration-space-original-delivery-2026-11-09.json).
-Actual Android SDK delivery now has separate accepted evidence; native Apple execution remains open.
+Actual Android SDK delivery now has separate accepted evidence. The exact69e639f8
+[hosted gate](measurements/collaboration-space-original-delivery-hosted-2026-11-09.json)
+passes9,137 cases across desktop,Android host,browser and Apple simulator, plus the
+unsigned Xcode host build. Actual native Apple Matrix SDK6 delivery remains open.
 Private runner/evidence: `.work/space-original-delivery-2026-11-09`.
 
 Still required: automatic original-key publication activation, owned group
