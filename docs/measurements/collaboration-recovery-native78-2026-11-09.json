@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-09",
+  "source": "a1f2cfe93ac08e4c46967143d3a33e7feb6c784f",
+  "versionCode": 78,
+  "artifactSha256": "421fde200058dfb790fe7b0a66a6750cb1af3938f15d5570914c30386732ab6c",
+  "phoneTouched": false,
+  "nativeAcceptance": false,
+  "upgrade": {
+    "inPlace": true,
+    "retainedAccount": true,
+    "retainedPublicIdentity": true,
+    "dataCleared": false,
+    "keyReset": false,
+    "elapsedSeconds": 20.305
+  },
+  "workManager": {
+    "accepted": true,
+    "oldPeriodicIdPreserved": true,
+    "legacyTagMigrated": true,
+    "periodicDispatchScheduled": true,
+    "oneTimeDispatchRequested": true,
+    "cleanup": true,
+    "providerRequests": 0,
+    "messagesSent": 0,
+    "elapsedSeconds": 5.801
+  },
+  "homeIdle": {
+    "elapsedSeconds": 120.306,
+    "sameProcess": true,
+    "noAdditionalEncryptedEvents": true,
+    "trafficQuietnessAccepted": false
+  },
+  "passiveCounter": {
+    "requestCount": 417,
+    "elapsedSeconds": 328.536,
+    "normalStop": true,
+    "capReached": false,
+    "rawTrafficRetained": false,
+    "responses": [
+      {"route": "hris_conversation", "status": 200, "count": 1},
+      {"route": "hris_conversation_summaries", "status": 200, "count": 36},
+      {"route": "hris_device_setup", "status": 200, "count": 118},
+      {"route": "hris_room", "status": 200, "count": 38},
+      {"route": "other_hris", "status": 200, "count": 99},
+      {"route": "refresh", "status": 401, "count": 42},
+      {"route": "secret_storage_default_key", "status": 401, "count": 72},
+      {"route": "sync", "status": 401, "count": 5}
+    ],
+    "limitation": "Packet starts, not full HTTP reconstruction; one owned emulator gateway. Not a controlled before/after performance comparison."
+  },
+  "originalMessage": {
+    "name": "Recovery78 005634",
+    "sha256": "604b7a8a17e9b2e09c1b95fff573b525a565060ade7b5a86031836ac69fa1e7e",
+    "sendGestures": 1,
+    "senderRestarted": false,
+    "recipientProcessStopped": true,
+    "accepted": false,
+    "serverWaitSeconds": 30,
+    "encryptedEventsBeforeAndAfter": 2,
+    "pendingScreenshotReviewed": true,
+    "instruction": "Preserve original queue/store; never resend this text."
+  },
+  "gatewayObservation": {
+    "version": 8,
+    "revoked": false,
+    "lastRotation": "2026-11-09T00:03:33.807589Z",
+    "accessExpiresAt": "2026-11-09T00:08:33.807589Z",
+    "expiresAt": "2026-12-08T19:04:45.587789Z",
+    "causeEstablished": false,
+    "hypothesis": "Refresh rotation immediately before prior emulator shutdown may have left stale persisted credentials. Must verify token-head comparison/admission before claiming this cause."
+  },
+  "conclusion": "Actual WorkManager scheduling passes. Repeated SDK soft logout, request quietness and new-message delivery remain unresolved; retained private keys are present. Do not port trigger changes to Starter or distribute release78 as a complete fix."
+}

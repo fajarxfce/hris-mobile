@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Native78 scheduling passes; retained session repeatedly rejected — 9 November 2026, 01:04 UTC
+
+Native acceptance FAILED despite the accepted source/package gates below. Actual
+WorkManager migration preserves the old periodic ID, adds its tag, dispatches Scheduled
+and Requested correctly, cleans up, and sends no provider requests/messages (5.801s).
+Product77→78 upgrade retains account and public-key identity. Both old messages render;
+the restored room has no Older messages affordance. Home idle keeps one PID for120s.
+However,417 requests/328.536s include42 refresh401 and72 default-key401. These are
+authentication failures, not evidence that encryption keys are missing. Repeated
+ChatAuthSoftLogout callbacks come from successive SDK instances. No quietness acceptance.
+[Closed evidence](measurements/collaboration-recovery-native78-2026-11-09.json).
+
+ONE new `Recovery78 005634` was sent at00:56:40.313 and remains pending after the30s
+server gate; screenshot reviewed at01:01. NEVER resend it. Server encrypted-event
+count remains2. Gateway head stays version8, not revoked, expires8 December; last
+rotation00:03:33.807589 was just before77 shutdown. Lost refresh response/persistence
+is a hypothesis, not yet proven. Trace SDK credential ownership, rejected-client
+reopening and existing admitted Bootstrap replacement; preserve private keys/queue.
+Current rejection only lives in SdkSessionPersistence's per-lease terminal StateFlow.
+
+ONE owned emulator remains: session80866/PID1256902, serial5562,2,560MiB/two cores,
+private recovery-scheduling-native-2026-11-09/sender; product PID3105. Stop via
+native-1/stop.json and REAP80866 before its~01:12 deadline. Original77 source preserved.
+Counter83474 and proof81909 REAPED. Proof scheduling78 and recipient readiness77 are
+force-stopped, their data retained. No compiler. Passive first refresh comparison
+9462 found no request during60s and is REAPED; second59667 watches at most300s from
+01:02:44, returns only current/previous token-head match booleans, never raw credentials.
+Reap it. No phone availability reply; phone70 unchanged. No Starter port yet.
+
+NEXT establish refresh rejection reason without changing tokens, stop/preserve native78,
+write regression for rejected-session recovery across resource lifetimes, then fix at
+the persistence/domain ownership boundary. No new timers, key reset or TTL workaround.
+Keep runtime Platform e558a686/schema116.4/control ON; all54 PRD groups remain open.
+
 ## Recovery source and release78 accepted; native proof next — 9 November 2026, 00:49 UTC
 
 Source a1f2cfe9 passes the full gate:5,949 fresh cases/795 suites including77 actual
