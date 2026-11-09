@@ -1,0 +1,1220 @@
+diff --git a/bindings/matrix-sdk-ffi/src/http_observer.rs b/bindings/matrix-sdk-ffi/src/http_observer.rs
+new file mode 100644
+index 0000000..3f3f1d3
+--- /dev/null
++++ b/bindings/matrix-sdk-ffi/src/http_observer.rs
+@@ -0,0 +1,148 @@
++// Copyright 2026 Fajar HRIS contributors.
++// SPDX-License-Identifier: Apache-2.0
++
++use std::sync::Arc;
++
++use matrix_sdk::http_observer as sdk;
++
++use crate::client::Client;
++
++/// Bounded native metadata. No body, query value, URL credential or header value.
++#[derive(uniffi::Record)]
++pub struct HttpObservedRequest {
++    pub method: String,
++    pub scheme: String,
++    pub host: String,
++    pub port: Option<u16>,
++    pub path: String,
++    pub query_names: Vec<String>,
++    pub header_names: Vec<String>,
++    pub truncated: bool,
++}
++
++impl std::fmt::Debug for HttpObservedRequest {
++    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
++        f.write_str("HttpObservedRequest([redacted])")
++    }
++}
++
++#[derive(Debug, uniffi::Enum)]
++pub enum HttpObservedFailure {
++    Timeout,
++    Connection,
++    Cancelled,
++    Other,
++}
++
++#[derive(Debug, uniffi::Enum)]
++pub enum HttpObservationEvent {
++    Started {
++        id: u64,
++        attempt: u64,
++        started_at_epoch_millis: u64,
++        request: HttpObservedRequest,
++    },
++    Response {
++        id: u64,
++        status: u16,
++        elapsed_millis: u64,
++        header_names: Vec<String>,
++        truncated: bool,
++    },
++    Finished {
++        id: u64,
++        elapsed_millis: u64,
++        response_bytes: Option<u64>,
++        failure: Option<HttpObservedFailure>,
++    },
++}
++
++#[derive(Debug, uniffi::Record)]
++pub struct HttpObservationBatch {
++    pub events: Vec<HttpObservationEvent>,
++    pub dropped_events: u64,
++    pub missed_attempt_starts: u64,
++    pub closed: bool,
++}
++
++/// A pull-based owner. No foreign callback executes on the HTTP request path.
++#[derive(uniffi::Object)]
++pub struct HttpObservationSubscription {
++    inner: sdk::HttpObservationSubscription,
++}
++
++#[matrix_sdk_ffi_macros::export]
++impl HttpObservationSubscription {
++    /// At most 32 observations; close wakes a pending read with an empty closed batch.
++    pub async fn next_batch(&self) -> HttpObservationBatch {
++        let batch = self.inner.next_batch().await;
++        HttpObservationBatch {
++            events: batch.events.into_iter().map(Into::into).collect(),
++            dropped_events: batch.dropped_events,
++            missed_attempt_starts: batch.missed_attempt_starts,
++            closed: batch.closed,
++        }
++    }
++
++    /// Erase buffered metadata and reject late observations. Safe to call repeatedly.
++    /// Named separately from Kotlin's generated AutoCloseable::close (handle disposal).
++    pub fn stop(&self) {
++        self.inner.close();
++    }
++}
++
++#[matrix_sdk_ffi_macros::export]
++impl Client {
++    /// Observe SDK Matrix HTTP attempts. Does not include the separate OAuth client,
++    /// raw reqwest calls, or redirects performed internally by the HTTP engine.
++    pub fn observe_http_requests(&self) -> Arc<HttpObservationSubscription> {
++        Arc::new(HttpObservationSubscription { inner: self.inner.observe_http_requests() })
++    }
++}
++
++impl From<sdk::HttpObservationEvent> for HttpObservationEvent {
++    fn from(value: sdk::HttpObservationEvent) -> Self {
++        match value {
++            sdk::HttpObservationEvent::Started {
++                id,
++                attempt,
++                started_at_epoch_millis,
++                request,
++            } => Self::Started {
++                id,
++                attempt,
++                started_at_epoch_millis,
++                request: HttpObservedRequest {
++                    method: request.method,
++                    scheme: request.scheme,
++                    host: request.host,
++                    port: request.port,
++                    path: request.path,
++                    query_names: request.query_names,
++                    header_names: request.header_names,
++                    truncated: request.truncated,
++                },
++            },
++            sdk::HttpObservationEvent::Response {
++                id,
++                status,
++                elapsed_millis,
++                header_names,
++                truncated,
++            } => Self::Response { id, status, elapsed_millis, header_names, truncated },
++            sdk::HttpObservationEvent::Finished { id, elapsed_millis, response_bytes, failure } => {
++                Self::Finished {
++                    id,
++                    elapsed_millis,
++                    response_bytes,
++                    failure: failure.map(|failure| match failure {
++                        sdk::HttpObservedFailure::Timeout => HttpObservedFailure::Timeout,
++                        sdk::HttpObservedFailure::Connection => HttpObservedFailure::Connection,
++                        sdk::HttpObservedFailure::Cancelled => HttpObservedFailure::Cancelled,
++                        sdk::HttpObservedFailure::Other => HttpObservedFailure::Other,
++                    }),
++                }
++            }
++        }
++    }
++}
+diff --git a/bindings/matrix-sdk-ffi/src/lib.rs b/bindings/matrix-sdk-ffi/src/lib.rs
+index b17533c..d8e969b 100644
+--- a/bindings/matrix-sdk-ffi/src/lib.rs
++++ b/bindings/matrix-sdk-ffi/src/lib.rs
+@@ -16,6 +16,7 @@ mod event;
+ #[cfg(feature = "sqlite")]
+ mod existing_crypto_store;
+ mod helpers;
++mod http_observer;
+ mod identity_status_change;
+ mod live_locations_observer;
+ mod notification;
+diff --git a/crates/matrix-sdk/src/client/mod.rs b/crates/matrix-sdk/src/client/mod.rs
+index 76d5f3e..230aad7 100644
+--- a/crates/matrix-sdk/src/client/mod.rs
++++ b/crates/matrix-sdk/src/client/mod.rs
+@@ -654,6 +654,16 @@ impl Client {
+         &self.inner.http_client.inner
+     }
+ 
++    /// Observe bounded, sanitized metadata for SDK Matrix HTTP attempts.
++    ///
++    /// The owning collector must close the subscription on disposal/account change.
++    /// A replacement closes and erases the previous capture. This does not capture
++    /// direct calls through [`Self::http_client`], OAuth's separate client, or
++    /// engine-internal redirects. It never changes message delivery or authentication.
++    pub fn observe_http_requests(&self) -> crate::http_observer::HttpObservationSubscription {
++        self.inner.http_client.observations.subscribe()
++    }
++
+     pub(crate) fn locks(&self) -> &ClientLocks {
+         &self.inner.locks
+     }
+diff --git a/crates/matrix-sdk/src/http_client/http_observer_tests.rs b/crates/matrix-sdk/src/http_client/http_observer_tests.rs
+new file mode 100644
+index 0000000..4b7d266
+--- /dev/null
++++ b/crates/matrix-sdk/src/http_client/http_observer_tests.rs
+@@ -0,0 +1,248 @@
++// Copyright 2026 Fajar HRIS contributors.
++// SPDX-License-Identifier: Apache-2.0
++
++use std::time::Duration;
++
++use tokio::{
++    io::{AsyncReadExt, AsyncWriteExt},
++    net::TcpListener,
++    sync::oneshot,
++};
++use wiremock::{
++    Mock, MockServer, ResponseTemplate,
++    matchers::{method, path},
++};
++
++use super::*;
++use crate::http_observer::{HttpObservationEvent, HttpObservedFailure};
++
++fn client() -> HttpClient {
++    HttpClient::new(reqwest::Client::new(), RequestConfig::default())
++}
++
++#[tokio::test]
++async fn http_status_and_original_bytes_survive_observation() {
++    let server = MockServer::start().await;
++    Mock::given(method("POST"))
++        .and(path("/request"))
++        .respond_with(
++            ResponseTemplate::new(401)
++                .insert_header("set-cookie", "private-cookie")
++                .set_body_string("original-response"),
++        )
++        .expect(1)
++        .mount(&server)
++        .await;
++    let client = client();
++    let subscription = client.observations.subscribe();
++    let request = client
++        .inner
++        .post(format!("{}/request?access_token=private-query", server.uri()))
++        .header("authorization", "Bearer private-token")
++        .body("original-request")
++        .build()
++        .unwrap();
++    let response = client.execute_observed(request, 1).await.unwrap();
++    assert_eq!(response.status().as_u16(), 401);
++    assert_eq!(response.body().as_ref(), b"original-response");
++    let received = server.received_requests().await.unwrap();
++    assert_eq!(received.len(), 1);
++    assert_eq!(received[0].body.as_slice(), b"original-request");
++    assert_eq!(received[0].headers.get("authorization").unwrap(), "Bearer private-token");
++    let batch = subscription.next_batch().await;
++    assert_eq!(batch.events.len(), 3);
++    assert!(matches!(batch.events[1], HttpObservationEvent::Response { status: 401, .. }));
++    assert!(matches!(
++        batch.events[2],
++        HttpObservationEvent::Finished { response_bytes: Some(17), failure: None, .. }
++    ));
++    assert!(!format!("{batch:?}").contains("private-"));
++}
++
++#[tokio::test]
++async fn sdk_retry_has_distinct_attempts_and_actual_server_count() {
++    use ruma::api::client::discovery::get_supported_versions;
++    let server = MockServer::start().await;
++    Mock::given(method("GET"))
++        .respond_with(ResponseTemplate::new(429).insert_header("retry-after", "0").set_body_json(
++            serde_json::json!({"errcode":"M_LIMIT_EXCEEDED","error":"retry","retry_after_ms":1}),
++        ))
++        .up_to_n_times(1)
++        .with_priority(1)
++        .expect(1)
++        .mount(&server)
++        .await;
++    Mock::given(method("GET"))
++        .respond_with(
++            ResponseTemplate::new(200).set_body_json(serde_json::json!({"versions":["v1.11"]})),
++        )
++        .with_priority(2)
++        .expect(1)
++        .mount(&server)
++        .await;
++    let client = client();
++    let subscription = client.observations.subscribe();
++    let request = http::Request::builder().uri(server.uri()).body(Bytes::new()).unwrap();
++    client
++        .send_request::<get_supported_versions::Request>(
++            request,
++            RequestConfig::default().retry_limit(2).max_retry_time(Duration::from_millis(5)),
++            SharedObservable::default(),
++        )
++        .await
++        .unwrap();
++    let batch = subscription.next_batch().await;
++    assert_eq!(batch.events.len(), 6);
++    let starts: Vec<_> = batch
++        .events
++        .iter()
++        .filter_map(|e| match e {
++            HttpObservationEvent::Started { id, attempt, .. } => Some((*id, *attempt)),
++            _ => None,
++        })
++        .collect();
++    assert_eq!(starts.len(), 2);
++    assert_eq!(starts[0].1, 1);
++    assert_eq!(starts[1].1, 2);
++    assert_ne!(starts[0].0, starts[1].0);
++    let statuses: Vec<_> = batch
++        .events
++        .iter()
++        .filter_map(|e| match e {
++            HttpObservationEvent::Response { status, .. } => Some(*status),
++            _ => None,
++        })
++        .collect();
++    assert_eq!(statuses, vec![429, 200]);
++    assert_eq!(server.received_requests().await.unwrap().len(), 2);
++}
++
++#[tokio::test]
++async fn cancellation_before_headers_is_not_a_response() {
++    let server = MockServer::start().await;
++    Mock::given(method("GET"))
++        .respond_with(ResponseTemplate::new(200).set_delay(Duration::from_millis(250)))
++        .mount(&server)
++        .await;
++    let client = client();
++    let subscription = client.observations.subscribe();
++    let request = client.inner.get(server.uri()).build().unwrap();
++    let result =
++        tokio::time::timeout(Duration::from_millis(50), client.execute_observed(request, 1)).await;
++    assert!(result.is_err());
++    let batch = subscription.next_batch().await;
++    assert_eq!(batch.events.len(), 2);
++    assert!(matches!(
++        batch.events[1],
++        HttpObservationEvent::Finished {
++            failure: Some(HttpObservedFailure::Cancelled),
++            response_bytes: None,
++            ..
++        }
++    ));
++}
++
++// The server sends real headers and an incomplete body, then awaits explicit release.
++async fn partial_body_server() -> (String, oneshot::Sender<()>, tokio::task::JoinHandle<()>) {
++    let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
++    let address = listener.local_addr().unwrap();
++    let (release, closed) = oneshot::channel();
++    let task = tokio::spawn(async move {
++        let (mut socket, _) = listener.accept().await.unwrap();
++        let mut request = [0u8; 2048];
++        assert!(socket.read(&mut request).await.unwrap() > 0);
++        socket
++            .write_all(b"HTTP/1.1 200 OK\r\nContent-Length: 1024\r\nConnection: close\r\n\r\nabc")
++            .await
++            .unwrap();
++        socket.flush().await.unwrap();
++        let _ = closed.await;
++    });
++    (format!("http://{address}/body"), release, task)
++}
++
++#[tokio::test]
++async fn cancellation_during_body_retains_real_response_status() {
++    let (url, release, server) = partial_body_server().await;
++    let client = client();
++    let subscription = client.observations.subscribe();
++    let request = client.inner.get(url).build().unwrap();
++    let request_client = client.clone();
++    let task = tokio::spawn(async move { request_client.execute_observed(request, 1).await });
++    let mut events = Vec::new();
++    tokio::time::timeout(Duration::from_secs(2), async {
++        loop {
++            events.extend(subscription.next_batch().await.events);
++            if events
++                .iter()
++                .any(|e| matches!(e, HttpObservationEvent::Response { status: 200, .. }))
++            {
++                break;
++            }
++        }
++    })
++    .await
++    .unwrap();
++    task.abort();
++    assert!(task.await.unwrap_err().is_cancelled());
++    events.extend(subscription.next_batch().await.events);
++    assert_eq!(events.len(), 3);
++    assert!(matches!(
++        events[2],
++        HttpObservationEvent::Finished {
++            failure: Some(HttpObservedFailure::Cancelled),
++            response_bytes: None,
++            ..
++        }
++    ));
++    drop(release);
++    server.await.unwrap();
++}
++
++#[tokio::test]
++async fn broken_body_preserves_headers_and_original_error() {
++    let (url, release, server) = partial_body_server().await;
++    let client = client();
++    let subscription = client.observations.subscribe();
++    let request = client.inner.get(url).build().unwrap();
++    drop(release);
++    assert!(client.execute_observed(request, 1).await.unwrap_err().is_decode());
++    server.await.unwrap();
++    let batch = subscription.next_batch().await;
++    assert_eq!(batch.events.len(), 3);
++    assert!(matches!(batch.events[1], HttpObservationEvent::Response { status: 200, .. }));
++    assert!(matches!(
++        batch.events[2],
++        HttpObservationEvent::Finished {
++            response_bytes: None,
++            failure: Some(HttpObservedFailure::Other),
++            ..
++        }
++    ));
++}
++
++#[tokio::test]
++async fn saturated_unconsumed_capture_cannot_stall_http() {
++    let server = MockServer::start().await;
++    Mock::given(method("GET"))
++        .respond_with(ResponseTemplate::new(200).set_body_string("ok"))
++        .expect(1)
++        .mount(&server)
++        .await;
++    let client = client();
++    let subscription = client.observations.subscribe();
++    let request = client.inner.get(server.uri()).build().unwrap();
++    for _ in 0..300 {
++        drop(client.observations.begin(&request, 1));
++    }
++    let response =
++        tokio::time::timeout(Duration::from_secs(2), client.execute_observed(request, 1))
++            .await
++            .unwrap()
++            .unwrap();
++    assert_eq!(response.body().as_ref(), b"ok");
++    let batch = subscription.next_batch().await;
++    assert!(batch.dropped_events > 0);
++    assert_eq!(batch.events.len(), 32);
++    assert_eq!(server.received_requests().await.unwrap().len(), 1);
++}
+diff --git a/crates/matrix-sdk/src/http_client/mod.rs b/crates/matrix-sdk/src/http_client/mod.rs
+index 9224c88..562c085 100644
+--- a/crates/matrix-sdk/src/http_client/mod.rs
++++ b/crates/matrix-sdk/src/http_client/mod.rs
+@@ -45,6 +45,9 @@ mod native;
+ #[cfg(target_family = "wasm")]
+ mod wasm;
+ 
++#[cfg(all(test, not(target_family = "wasm")))]
++mod http_observer_tests;
++
+ #[cfg(not(target_family = "wasm"))]
+ pub(crate) use native::HttpSettings;
+ 
+@@ -77,6 +80,7 @@ impl MaybeSemaphore {
+ #[derive(Clone, Debug)]
+ pub(crate) struct HttpClient {
+     pub(crate) inner: reqwest::Client,
++    pub(crate) observations: Arc<crate::http_observer::HttpObservationRegistry>,
+     pub(crate) request_config: RequestConfig,
+     concurrent_request_semaphore: MaybeSemaphore,
+     next_request_id: Arc<AtomicU64>,
+@@ -86,6 +90,7 @@ impl HttpClient {
+     pub(crate) fn new(inner: reqwest::Client, request_config: RequestConfig) -> Self {
+         HttpClient {
+             inner,
++            observations: Arc::default(),
+             request_config,
+             concurrent_request_semaphore: MaybeSemaphore::new(
+                 request_config.max_concurrent_requests,
+@@ -99,6 +104,37 @@ impl HttpClient {
+         format!("REQ-{request_id}")
+     }
+ 
++    /// Observe exactly the existing engine execution and body conversion. Parsing,
++    /// retries, TLS and the request/response payload remain outside this observer.
++    async fn execute_observed(
++        &self,
++        request: reqwest::Request,
++        attempt: u64,
++    ) -> Result<http::Response<Bytes>, reqwest::Error> {
++        let mut observation = self.observations.begin(&request, attempt);
++        let response = match self.inner.execute(request).await {
++            Ok(response) => response,
++            Err(error) => {
++                if let Some(observation) = &mut observation {
++                    observation.fail(&error);
++                }
++                return Err(error);
++            }
++        };
++        if let Some(observation) = &observation {
++            observation.response(&response);
++        }
++        let result = response_to_http_response(response).await;
++        if let Some(observation) = &mut observation {
++            match &result {
++                Ok(response) => observation
++                    .finish(Some(response.body().len().try_into().unwrap_or(u64::MAX)), None),
++                Err(error) => observation.fail(error),
++            }
++        }
++        result
++    }
++
+     fn serialize_request<R>(
+         &self,
+         request: R,
+diff --git a/crates/matrix-sdk/src/http_client/native.rs b/crates/matrix-sdk/src/http_client/native.rs
+index dc57b0e..6e0c633 100644
+--- a/crates/matrix-sdk/src/http_client/native.rs
++++ b/crates/matrix-sdk/src/http_client/native.rs
+@@ -30,7 +30,7 @@ use reqwest::tls;
+ use ruma::api::{IncomingResponseExt as _, OutgoingRequest, error::FromHttpResponseError};
+ use tracing::{debug, info, warn};
+ 
+-use super::{DEFAULT_REQUEST_TIMEOUT, HttpClient, TransmissionProgress, response_to_http_response};
++use super::{DEFAULT_REQUEST_TIMEOUT, HttpClient, TransmissionProgress};
+ use crate::{
+     HttpResult,
+     config::RequestConfig,
+@@ -75,7 +75,7 @@ impl HttpClient {
+             backoff
+         }
+         async fn send_request_inner(
+-            http_client: &reqwest::Client,
++            http_client: &HttpClient,
+             request: &http::Request<Bytes>,
+             timeout: Option<Duration>,
+             retry_count: &AtomicU64,
+@@ -85,7 +85,8 @@ impl HttpClient {
+             debug!(num_attempt, "Sending request");
+             let before = ruma::time::Instant::now();
+ 
+-            let response = execute_request(http_client, request, timeout, send_progress).await?;
++            let response =
++                execute_request(http_client, request, timeout, send_progress, num_attempt).await?;
+ 
+             let request_duration = ruma::time::Instant::now().saturating_duration_since(before);
+ 
+@@ -149,14 +150,9 @@ impl HttpClient {
+         let send_request = || {
+             let send_progress = send_progress.clone();
+             async {
+-                let response = send_request_inner(
+-                    &self.inner,
+-                    &request,
+-                    config.timeout,
+-                    &retry_count,
+-                    send_progress,
+-                )
+-                .await?;
++                let response =
++                    send_request_inner(self, &request, config.timeout, &retry_count, send_progress)
++                        .await?;
+                 let (parts, body) = response.into_parts();
+                 let response: http::Response<&[u8]> = http::Response::from_parts(parts, &body);
+                 R::IncomingResponse::try_from_http_response(response).map_err(HttpError::from)
+@@ -245,10 +241,11 @@ impl HttpSettings {
+ }
+ 
+ pub(super) async fn execute_request(
+-    client: &reqwest::Client,
++    client: &HttpClient,
+     request: &http::Request<Bytes>,
+     timeout: Option<Duration>,
+     send_progress: SharedObservable<TransmissionProgress>,
++    attempt: u64,
+ ) -> Result<http::Response<Bytes>, HttpError> {
+     use std::convert::Infallible;
+ 
+@@ -289,8 +286,7 @@ pub(super) async fn execute_request(
+         request
+     };
+ 
+-    let response = client.execute(request).await?;
+-    Ok(response_to_http_response(response).await?)
++    Ok(client.execute_observed(request, attempt).await?)
+ }
+ 
+ struct BytesChunks {
+diff --git a/crates/matrix-sdk/src/http_client/wasm.rs b/crates/matrix-sdk/src/http_client/wasm.rs
+index f08346b..3b78fa5 100644
+--- a/crates/matrix-sdk/src/http_client/wasm.rs
++++ b/crates/matrix-sdk/src/http_client/wasm.rs
+@@ -19,7 +19,7 @@ use bytesize::ByteSize;
+ use eyeball::SharedObservable;
+ use ruma::api::{IncomingResponseExt as _, OutgoingRequest, error::FromHttpResponseError};
+ 
+-use super::{HttpClient, TransmissionProgress, response_to_http_response};
++use super::{HttpClient, TransmissionProgress};
+ use crate::{config::RequestConfig, error::HttpError};
+ 
+ impl HttpClient {
+@@ -39,7 +39,7 @@ impl HttpClient {
+ 
+         let before = ruma::time::Instant::now();
+ 
+-        let response = response_to_http_response(self.inner.execute(request).await?).await?;
++        let response = self.execute_observed(request, 1).await?;
+ 
+         let request_duration = ruma::time::Instant::now().saturating_duration_since(before);
+         let status_code = response.status();
+diff --git a/crates/matrix-sdk/src/http_observer.rs b/crates/matrix-sdk/src/http_observer.rs
+new file mode 100644
+index 0000000..469fda8
+--- /dev/null
++++ b/crates/matrix-sdk/src/http_observer.rs
+@@ -0,0 +1,440 @@
++// Copyright 2026 Fajar HRIS contributors.
++// SPDX-License-Identifier: Apache-2.0
++
++//! Optional bounded metadata observation of SDK HTTP attempts.
++//!
++//! No body, URL credentials, query value or header value enters this channel. A
++//! slow reader loses observations, never delays the HTTP transport. Request IDs
++//! are diagnostic IDs, not Matrix event or transaction IDs.
++
++use std::{
++    collections::VecDeque,
++    fmt,
++    sync::{
++        Arc, Mutex, Weak,
++        atomic::{AtomicBool, AtomicU64, Ordering},
++    },
++};
++
++use ruma::{MilliSecondsSinceUnixEpoch, time::Instant};
++use tokio::sync::Notify;
++
++const CAPACITY: usize = 256;
++const BATCH_SIZE: usize = 32;
++
++/// Sanitized metadata captured immediately before executing an HTTP attempt.
++#[derive(Clone)]
++pub struct HttpObservedRequest {
++    /// HTTP method, at most 16 bytes.
++    pub method: String,
++    /// Parsed URL scheme, at most 16 bytes.
++    pub scheme: String,
++    /// Parsed host without URL credentials, at most 253 bytes.
++    pub host: String,
++    /// Explicit or protocol-default port.
++    pub port: Option<u16>,
++    /// Encoded path, at most 1024 bytes. Endpoint-specific path data remains visible.
++    pub path: String,
++    /// At most 32 encoded query names of at most 64 bytes each. No values.
++    pub query_names: Vec<String>,
++    /// At most 32 header names of at most 64 bytes each. No values.
++    pub header_names: Vec<String>,
++    /// Whether any field exceeded observation limits.
++    pub truncated: bool,
++}
++
++impl fmt::Debug for HttpObservedRequest {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        f.write_str("HttpObservedRequest([redacted])")
++    }
++}
++
++/// A transport failure category without the potentially sensitive error string.
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub enum HttpObservedFailure {
++    /// The request timed out.
++    Timeout,
++    /// Connection establishment failed; no unverified DNS/TLS distinction is inferred.
++    Connection,
++    /// The caller dropped the in-flight future.
++    Cancelled,
++    /// Another transport/body error occurred.
++    Other,
++}
++
++/// One stage of a real HTTP attempt. Headers and body completion are separate.
++#[derive(Clone, Debug)]
++pub enum HttpObservationEvent {
++    /// An SDK attempt is about to enter the HTTP engine.
++    Started {
++        /// Diagnostic identity shared by this attempt's observations.
++        id: u64,
++        /// One-based SDK retry attempt; engine-internal redirects are not counted.
++        attempt: u64,
++        /// Wall-clock start time captured at the transport boundary.
++        started_at_epoch_millis: u64,
++        /// Bounded request metadata.
++        request: HttpObservedRequest,
++    },
++    /// Real response headers arrived; a later body failure does not erase this status.
++    Response {
++        /// Diagnostic attempt identity.
++        id: u64,
++        /// Actual HTTP status.
++        status: u16,
++        /// Monotonic time to headers.
++        elapsed_millis: u64,
++        /// Bounded header names, with all values excluded.
++        header_names: Vec<String>,
++        /// Whether header names exceeded observation limits.
++        truncated: bool,
++    },
++    /// The existing response-body conversion finished or the future ended.
++    Finished {
++        /// Diagnostic attempt identity.
++        id: u64,
++        /// Monotonic time to termination.
++        elapsed_millis: u64,
++        /// Bytes actually read by the original body consumer, if it completed.
++        response_bytes: Option<u64>,
++        /// None means transport/body completion, not a successful Matrix operation.
++        failure: Option<HttpObservedFailure>,
++    },
++}
++
++/// A bounded batch. Counters are cumulative within this subscription.
++#[derive(Debug)]
++pub struct HttpObservationBatch {
++    /// At most 32 observations in producer order.
++    pub events: Vec<HttpObservationEvent>,
++    /// Dropped events caused by a full queue or momentary queue contention.
++    pub dropped_events: u64,
++    /// Attempts whose subscription could not be acquired without waiting.
++    pub missed_attempt_starts: u64,
++    /// Closing erases queued observations and wakes pending readers.
++    pub closed: bool,
++}
++
++/// The caller owns the subscription. Close it on account change or collector disposal.
++///
++/// Creating a replacement closes the previous subscription. Old in-flight attempts
++/// keep their original generation and cannot write into the replacement.
++pub struct HttpObservationSubscription {
++    queue: Arc<Queue>,
++}
++
++impl fmt::Debug for HttpObservationSubscription {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        f.write_str("HttpObservationSubscription([redacted])")
++    }
++}
++
++impl HttpObservationSubscription {
++    /// Wait for a bounded batch. Canceling a suspended read does not consume observations.
++    /// A single owning collector should call this method until the batch is closed.
++    pub async fn next_batch(&self) -> HttpObservationBatch {
++        loop {
++            // Register before inspecting the queue to avoid losing an intervening wake.
++            let ready = self.queue.ready.notified();
++            tokio::pin!(ready);
++            ready.as_mut().enable();
++            {
++                let mut state = self.queue.state.lock().unwrap_or_else(|e| e.into_inner());
++                let dropped = self.queue.dropped.load(Ordering::Relaxed);
++                let missed = state.missed_at_close.unwrap_or_else(|| {
++                    self.queue
++                        .missed
++                        .load(Ordering::Relaxed)
++                        .saturating_sub(self.queue.missed_at_start)
++                });
++                let closed = self.queue.closed.load(Ordering::Acquire);
++                if closed || !state.events.is_empty() || state.reported != (dropped, missed) {
++                    state.reported = (dropped, missed);
++                    let count = state.events.len().min(BATCH_SIZE);
++                    let events = state.events.drain(..count).collect();
++                    return HttpObservationBatch {
++                        events,
++                        dropped_events: dropped,
++                        missed_attempt_starts: missed,
++                        closed,
++                    };
++                }
++            }
++            ready.await;
++        }
++    }
++
++    /// Immediately stop ingress, erase queued metadata and wake readers. Idempotent.
++    pub fn close(&self) {
++        self.queue.close();
++    }
++}
++
++impl Drop for HttpObservationSubscription {
++    fn drop(&mut self) {
++        self.close();
++    }
++}
++
++#[derive(Default)]
++struct QueueState {
++    events: VecDeque<HttpObservationEvent>,
++    reported: (u64, u64),
++    missed_at_close: Option<u64>,
++}
++
++struct Queue {
++    state: Mutex<QueueState>,
++    closed: AtomicBool,
++    ready: Notify,
++    capacity: usize,
++    dropped: AtomicU64,
++    missed: Arc<AtomicU64>,
++    missed_at_start: u64,
++}
++
++impl Queue {
++    fn emit(&self, event: HttpObservationEvent) -> bool {
++        if self.closed.load(Ordering::Acquire) {
++            return false;
++        }
++        let Ok(mut state) = self.state.try_lock() else {
++            if !self.closed.load(Ordering::Acquire) {
++                increment(&self.dropped);
++            }
++            self.ready.notify_one();
++            return false;
++        };
++        if self.closed.load(Ordering::Acquire) {
++            return false;
++        }
++        if state.events.len() == self.capacity {
++            increment(&self.dropped);
++            self.ready.notify_one();
++            return false;
++        }
++        state.events.push_back(event);
++        drop(state);
++        self.ready.notify_one();
++        true
++    }
++
++    fn close(&self) {
++        let mut state = self.state.lock().unwrap_or_else(|e| e.into_inner());
++        if self.closed.load(Ordering::Acquire) {
++            return;
++        }
++        state.missed_at_close =
++            Some(self.missed.load(Ordering::Relaxed).saturating_sub(self.missed_at_start));
++        self.closed.store(true, Ordering::Release);
++        state.events.clear();
++        drop(state);
++        self.ready.notify_waiters();
++    }
++}
++
++/// Client-owned registry. Only a weak reference to the collector is retained.
++#[derive(Default)]
++pub(crate) struct HttpObservationRegistry {
++    current: Mutex<Weak<Queue>>,
++    active: AtomicBool,
++    next_id: AtomicU64,
++    missed: Arc<AtomicU64>,
++}
++
++impl fmt::Debug for HttpObservationRegistry {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        f.write_str("HttpObservationRegistry([redacted])")
++    }
++}
++
++impl Drop for HttpObservationRegistry {
++    fn drop(&mut self) {
++        if let Some(queue) = self.current.get_mut().unwrap_or_else(|e| e.into_inner()).upgrade() {
++            queue.close();
++        }
++    }
++}
++
++impl HttpObservationRegistry {
++    pub(crate) fn subscribe(&self) -> HttpObservationSubscription {
++        let mut current = self.current.lock().unwrap_or_else(|e| e.into_inner());
++        if let Some(old) = current.upgrade() {
++            old.close();
++        }
++        let queue = Arc::new(Queue {
++            state: Mutex::default(),
++            closed: AtomicBool::new(false),
++            ready: Notify::new(),
++            capacity: CAPACITY,
++            dropped: AtomicU64::new(0),
++            missed: self.missed.clone(),
++            missed_at_start: self.missed.load(Ordering::Relaxed),
++        });
++        *current = Arc::downgrade(&queue);
++        self.active.store(true, Ordering::Release);
++        HttpObservationSubscription { queue }
++    }
++
++    pub(crate) fn begin(
++        &self,
++        request: &reqwest::Request,
++        attempt: u64,
++    ) -> Option<ObservedAttempt> {
++        if !self.active.load(Ordering::Acquire) {
++            return None;
++        }
++        let current = match self.current.try_lock() {
++            Ok(current) => current.upgrade(),
++            Err(_) => {
++                increment(&self.missed);
++                return None;
++            }
++        }?;
++        if current.closed.load(Ordering::Acquire) {
++            return None;
++        }
++        let id = self
++            .next_id
++            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |id| id.checked_add(1))
++            .ok()?;
++        let started = Instant::now();
++        let event = HttpObservationEvent::Started {
++            id,
++            attempt,
++            started_at_epoch_millis: MilliSecondsSinceUnixEpoch::now().get().into(),
++            request: request_metadata(request),
++        };
++        // A missing start cannot produce a misleading response-only row.
++        if !current.emit(event) {
++            return None;
++        }
++        Some(ObservedAttempt { queue: current, id, started, finished: false })
++    }
++}
++
++pub(crate) struct ObservedAttempt {
++    queue: Arc<Queue>,
++    id: u64,
++    started: Instant,
++    finished: bool,
++}
++
++impl ObservedAttempt {
++    fn elapsed(&self) -> u64 {
++        Instant::now()
++            .saturating_duration_since(self.started)
++            .as_millis()
++            .try_into()
++            .unwrap_or(u64::MAX)
++    }
++
++    pub(crate) fn response(&self, response: &reqwest::Response) {
++        let mut truncated = false;
++        let header_names = header_names(response.headers(), &mut truncated);
++        self.queue.emit(HttpObservationEvent::Response {
++            id: self.id,
++            status: response.status().as_u16(),
++            elapsed_millis: self.elapsed(),
++            header_names,
++            truncated,
++        });
++    }
++
++    pub(crate) fn finish(
++        &mut self,
++        response_bytes: Option<u64>,
++        failure: Option<HttpObservedFailure>,
++    ) {
++        self.finished = true;
++        self.queue.emit(HttpObservationEvent::Finished {
++            id: self.id,
++            elapsed_millis: self.elapsed(),
++            response_bytes,
++            failure,
++        });
++    }
++
++    pub(crate) fn fail(&mut self, error: &reqwest::Error) {
++        let category = if error.is_timeout() {
++            HttpObservedFailure::Timeout
++        } else {
++            #[cfg(not(target_family = "wasm"))]
++            if error.is_connect() {
++                self.finish(None, Some(HttpObservedFailure::Connection));
++                return;
++            }
++            HttpObservedFailure::Other
++        };
++        self.finish(None, Some(category));
++    }
++}
++
++impl Drop for ObservedAttempt {
++    fn drop(&mut self) {
++        if !self.finished {
++            self.finish(None, Some(HttpObservedFailure::Cancelled));
++        }
++    }
++}
++
++fn increment(value: &AtomicU64) {
++    let _ = value.fetch_update(Ordering::Relaxed, Ordering::Relaxed, |v| Some(v.saturating_add(1)));
++}
++
++fn bounded(value: &str, limit: usize, truncated: &mut bool) -> String {
++    let mut end = value.len().min(limit);
++    while !value.is_char_boundary(end) {
++        end -= 1;
++    }
++    *truncated |= end < value.len();
++    value[..end].to_owned()
++}
++
++fn header_names(headers: &http::HeaderMap, truncated: &mut bool) -> Vec<String> {
++    let mut result = Vec::new();
++    for name in headers.keys().take(33) {
++        if result.len() == 32 {
++            *truncated = true;
++            break;
++        }
++        result.push(bounded(name.as_str(), 64, truncated));
++    }
++    result
++}
++
++fn request_metadata(request: &reqwest::Request) -> HttpObservedRequest {
++    let url = request.url();
++    let mut truncated = false;
++    let mut query_names = Vec::new();
++    if let Some(query) = url.query() {
++        // Limit scan work as well as retained names, including a huge value without '&'.
++        let mut end = query.len().min(8192);
++        while !query.is_char_boundary(end) {
++            end -= 1;
++        }
++        truncated |= end < query.len();
++        let query = &query[..end];
++        for entry in query.split('&').take(33) {
++            if query_names.len() == 32 {
++                truncated = true;
++                break;
++            }
++            let name = entry.split_once('=').map_or(entry, |(name, _)| name);
++            query_names.push(bounded(name, 64, &mut truncated));
++        }
++    }
++    HttpObservedRequest {
++        method: bounded(request.method().as_str(), 16, &mut truncated),
++        scheme: bounded(url.scheme(), 16, &mut truncated),
++        host: bounded(url.host_str().unwrap_or_default(), 253, &mut truncated),
++        port: url.port_or_known_default(),
++        path: bounded(url.path(), 1024, &mut truncated),
++        query_names,
++        header_names: header_names(request.headers(), &mut truncated),
++        truncated,
++    }
++}
++
++#[cfg(test)]
++mod tests;
+diff --git a/crates/matrix-sdk/src/http_observer/tests.rs b/crates/matrix-sdk/src/http_observer/tests.rs
+new file mode 100644
+index 0000000..fbd855a
+--- /dev/null
++++ b/crates/matrix-sdk/src/http_observer/tests.rs
+@@ -0,0 +1,152 @@
++// Copyright 2026 Fajar HRIS contributors.
++// SPDX-License-Identifier: Apache-2.0
++
++use futures_util::FutureExt;
++
++use super::*;
++
++fn request() -> reqwest::Request {
++    reqwest::Client::new().get("https://example.test/_matrix/client/versions").build().unwrap()
++}
++
++#[test]
++fn disabled_registry_does_not_create_an_attempt() {
++    let registry = HttpObservationRegistry::default();
++    assert!(registry.begin(&request(), 1).is_none());
++    assert_eq!(registry.next_id.load(Ordering::Relaxed), 0);
++}
++
++#[tokio::test]
++async fn metadata_is_bounded_before_buffering_and_excludes_credentials() {
++    let registry = HttpObservationRegistry::default();
++    let subscription = registry.subscribe();
++    let path = "x".repeat(100_000);
++    let query = (0..100).map(|i| format!("name{i}=private-query")).collect::<Vec<_>>().join("&");
++    let request = reqwest::Client::new()
++        .get(format!("https://private-user:private-password@example.test/{path}?{query}"))
++        .header("authorization", "Bearer private-token")
++        .header("cookie", "private-cookie")
++        .build()
++        .unwrap();
++    let mut attempt = registry.begin(&request, 1).unwrap();
++    attempt.finish(Some(23), None);
++    let batch = subscription.next_batch().await;
++    assert_eq!(batch.events.len(), 2);
++    let HttpObservationEvent::Started { request, .. } = &batch.events[0] else { panic!() };
++    assert_eq!(request.host, "example.test");
++    assert_eq!(request.path.len(), 1024);
++    assert_eq!(request.query_names.len(), 32);
++    assert_eq!(request.query_names[0], "name0");
++    assert!(request.truncated);
++    assert!(request.header_names.contains(&"authorization".to_owned()));
++    assert!(!format!("{batch:?}").contains("private-"));
++}
++
++#[tokio::test]
++async fn replacement_erases_old_queue_and_fences_inflight_completions() {
++    let registry = HttpObservationRegistry::default();
++    let old = registry.subscribe();
++    let mut original = registry.begin(&request(), 1).unwrap();
++    let replacement = registry.subscribe();
++    original.finish(Some(10), None);
++    let closed = old.next_batch().await;
++    assert!(closed.closed);
++    assert!(closed.events.is_empty());
++    assert!(replacement.next_batch().now_or_never().is_none());
++    let mut next = registry.begin(&request(), 1).unwrap();
++    next.finish(Some(11), None);
++    let batch = replacement.next_batch().await;
++    assert_eq!(batch.events.len(), 2);
++    assert!(matches!(
++        batch.events[1],
++        HttpObservationEvent::Finished { response_bytes: Some(11), .. }
++    ));
++}
++
++#[tokio::test]
++async fn dropped_attempt_is_cancelled_not_successful() {
++    let registry = HttpObservationRegistry::default();
++    let subscription = registry.subscribe();
++    drop(registry.begin(&request(), 2));
++    let batch = subscription.next_batch().await;
++    assert!(matches!(batch.events[0], HttpObservationEvent::Started { attempt: 2, .. }));
++    assert!(matches!(
++        batch.events[1],
++        HttpObservationEvent::Finished {
++            response_bytes: None,
++            failure: Some(HttpObservedFailure::Cancelled),
++            ..
++        }
++    ));
++}
++
++#[tokio::test]
++async fn slow_reader_is_bounded_and_reports_loss_instead_of_waiting() {
++    let registry = HttpObservationRegistry::default();
++    let subscription = registry.subscribe();
++    for _ in 0..CAPACITY {
++        if let Some(mut attempt) = registry.begin(&request(), 1) {
++            attempt.finish(Some(1), None);
++        }
++    }
++    assert_eq!(subscription.queue.state.lock().unwrap().events.len(), CAPACITY);
++    let batch = subscription.next_batch().await;
++    assert_eq!(batch.events.len(), BATCH_SIZE);
++    assert_eq!(batch.dropped_events, CAPACITY as u64 / 2);
++    subscription.close();
++    let batch = subscription.next_batch().await;
++    assert!(batch.closed);
++    assert!(batch.events.is_empty());
++}
++
++#[tokio::test]
++async fn canceled_read_does_not_consume_and_close_wakes_registered_reader() {
++    let registry = HttpObservationRegistry::default();
++    let subscription = registry.subscribe();
++    assert!(subscription.next_batch().now_or_never().is_none());
++    let read = subscription.next_batch();
++    tokio::pin!(read);
++    assert!(read.as_mut().now_or_never().is_none());
++    subscription.close();
++    let batch = read.await;
++    assert!(batch.closed);
++    assert!(batch.events.is_empty());
++    assert!(registry.begin(&request(), 1).is_none());
++}
++
++#[tokio::test]
++async fn busy_reader_and_registry_never_block_http_producer() {
++    let registry = HttpObservationRegistry::default();
++    let subscription = registry.subscribe();
++    {
++        let _held = subscription.queue.state.lock().unwrap();
++        assert!(registry.begin(&request(), 1).is_none());
++    }
++    {
++        let _held = registry.current.lock().unwrap();
++        assert!(registry.begin(&request(), 1).is_none());
++    }
++    let batch = subscription.next_batch().await;
++    assert_eq!(batch.dropped_events, 1);
++    assert_eq!(batch.missed_attempt_starts, 1);
++    assert!(batch.events.is_empty());
++}
++
++#[test]
++fn string_bounds_keep_utf8_valid() {
++    let mut truncated = false;
++    assert_eq!(bounded("a🦀z", 4, &mut truncated), "a");
++    assert!(truncated);
++}
++
++#[tokio::test]
++async fn dropping_client_registry_erases_capture_and_releases_reader() {
++    let registry = HttpObservationRegistry::default();
++    let subscription = registry.subscribe();
++    let original = registry.begin(&request(), 1).unwrap();
++    drop(registry);
++    drop(original);
++    let batch = subscription.next_batch().await;
++    assert!(batch.closed);
++    assert!(batch.events.is_empty());
++}
+diff --git a/crates/matrix-sdk/src/lib.rs b/crates/matrix-sdk/src/lib.rs
+index eb88e78..c5ae858 100644
+--- a/crates/matrix-sdk/src/lib.rs
++++ b/crates/matrix-sdk/src/lib.rs
+@@ -44,6 +44,7 @@ mod error;
+ pub mod event_cache;
+ pub mod event_handler;
+ mod http_client;
++pub mod http_observer;
+ pub mod latest_events;
+ pub mod media;
+ pub mod notification_settings;

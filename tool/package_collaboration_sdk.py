@@ -95,7 +95,7 @@ def package(args):
     require({str(p.relative_to(main)) for p in main.glob("jniLibs/**/*.so")} == expected,
             "Exactly four native ABI libraries are required")
     native = {abi: verify_native_library(main / "jniLibs" / abi / "libmatrix_sdk_ffi.so", abi, ndk,
-                                       manifest.get("requiredFunctions", []))
+                                       manifest.get("requiredFunctions", []), manifest.get("requiredMethods", []))
               for abi in TARGETS}
     tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=wrapper).decode().split("\0")
     fingerprint = lambda: {name: sha(wrapper / name) for name in tracked if name and (wrapper / name).is_file()}

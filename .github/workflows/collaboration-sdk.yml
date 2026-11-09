@@ -14,6 +14,10 @@ on:
       - tool/collaboration-sdk-patches/confirmed-queue.patch
       - tool/collaboration-sdk-patches/android-arm64-baseline.patch
       - tool/collaboration-sdk-patches/refresh-retry.patch
+      - tool/collaboration-sdk-patches/android-http-observer-build.json
+      - tool/collaboration-sdk-patches/http-observer.patch
+      - tool/collaboration-sdk-patches/android-refresh-coalescing-build.json
+      - tool/collaboration-sdk-patches/refresh-coalescing.patch
   workflow_dispatch:
     inputs:
       abi:
@@ -22,6 +26,15 @@ on:
         required: true
         default: arm64-v8a
         options: [arm64-v8a, x86, armeabi-v7a, x86_64, all]
+      manifest:
+        description: Pinned candidate source manifest
+        type: choice
+        required: true
+        default: android-existing-identity-build.json
+        options:
+          - android-existing-identity-build.json
+          - android-http-observer-build.json
+          - android-refresh-coalescing-build.json
 
 permissions:
   contents: read
@@ -63,7 +76,7 @@ jobs:
             --output "$GITHUB_WORKSPACE/artifact/${{ matrix.abi }}" \
             --tools-dir "$RUNNER_TEMP/matrix-sdk-tools" \
             --android-sdk "$ANDROID_HOME" \
-            --manifest android-existing-identity-build.json \
+            --manifest '${{ inputs.manifest || 'android-existing-identity-build.json' }}' \
             --abi '${{ matrix.abi }}' --bootstrap
       - uses: actions/upload-artifact@v4
         if: always()

@@ -1,0 +1,42 @@
+{
+  "status": "Observer source and FFI stop rename compile. First generated Android pair rejected for close() collision; replacement ARM64 generation is still running. Not a released SDK.",
+  "upstream": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+  "baseManifest": "android-existing-identity-build.json",
+  "baseManifestSha256": "63c132544e66492ae7b51c54d080ace572bff31d8091636904a317fb83c2fbbf",
+  "patch": "http-observer.patch",
+  "patchSha256": "7e4cd8d2b251ce9fd2a7025e3d40ea9965aa806fd34b56c168549f3552a9cee6",
+  "baselineSources": {
+    "bindings/matrix-sdk-ffi/src/http_observer.rs": null,
+    "bindings/matrix-sdk-ffi/src/lib.rs": "94ec4be7577f2fa63f697136f3cf38b65e016a2f3edd04c27303c1dc33c748e3",
+    "crates/matrix-sdk/src/client/mod.rs": "e4fc3ee55bb7ce1601e1437ad9e420cf99f2fd4768dc7bc7d4eda98cf1b44aa1",
+    "crates/matrix-sdk/src/http_client/http_observer_tests.rs": null,
+    "crates/matrix-sdk/src/http_client/mod.rs": "fb4c042ce52c7399f8cca47d75cafcd32a8d5f704c7f312970b9467519061e81",
+    "crates/matrix-sdk/src/http_client/native.rs": "9763c43d6e2c33e4f29764bf9e03aa5fb0999a3e05fc3a555b26603c3ab86c11",
+    "crates/matrix-sdk/src/http_client/wasm.rs": "8b0ce8b9f869d46fbe7eee231d01d9546902eb59d09739cd31eb98bc8c3adf98",
+    "crates/matrix-sdk/src/http_observer.rs": null,
+    "crates/matrix-sdk/src/http_observer/tests.rs": null,
+    "crates/matrix-sdk/src/lib.rs": "ff90d2109796330eac90b428e20e6fc53f37b7888f902b4630034b353b456505"
+  },
+  "patchedSources": {
+    "bindings/matrix-sdk-ffi/src/http_observer.rs": "9d8e1ab1c51ab1de6d44432b30166db09b4539fc5b3efeaf347e26cc2fafac21",
+    "bindings/matrix-sdk-ffi/src/lib.rs": "ba50c540c73f2c62e5c687237feaa985bbd235e515ac7ea1627da05b56a372e1",
+    "crates/matrix-sdk/src/client/mod.rs": "957ecc90d35f5617d3fb78a6dbd2c4cfd1c4d0dea8e8f04f20a1cd19490a06b4",
+    "crates/matrix-sdk/src/http_client/http_observer_tests.rs": "f48e58a8c67b4998377383c80b8601ed39f8b90b3d8ac4eec71ac30fb1f22c71",
+    "crates/matrix-sdk/src/http_client/mod.rs": "dd6757ddc1d869f9670add6c2f7cad597b3fe9cea30cb4d4f73f986bb5e1c154",
+    "crates/matrix-sdk/src/http_client/native.rs": "e2cf93b6c4d4c09176bd543b122eceb2a4c0c08eaea533fa1e7561de0bc49b85",
+    "crates/matrix-sdk/src/http_client/wasm.rs": "f1bd32acfa72d9532f31ec2d46b8905f969f34998e4ff4e445bb42db296fffee",
+    "crates/matrix-sdk/src/http_observer.rs": "5be709cfab3206978060905643895e0a861cdb435d7b21cc730e68fe1cc11e96",
+    "crates/matrix-sdk/src/http_observer/tests.rs": "0814af2d7ac05a3e3e7e703df117ec531694302bbb2bd093875ca20aff27ff62",
+    "crates/matrix-sdk/src/lib.rs": "7275d07fb3f29e18e1a39953a54e0f74d488723c30d0a4ee5a0ea9d69f4fb2c3"
+  },
+  "patchAppliesAndMatches": true,
+  "patchVerificationInitialIssue": "First git apply invoked in a subdirectory of the parent repository skipped paths. No acceptance inferred; retried in a dedicated initialized temporary repository and compared all10 output hashes.",
+  "sdk4Unchanged": true,
+  "generatedBindings": false,
+  "androidAbiAccepted": false,
+  "appleRuntimeAccepted": false,
+  "applicationIntegrated": false,
+  "wasmCoreCompiled": true,
+  "nativeFfiCompiled": true,
+  "exportedStopMethod": "HttpObservationSubscription.stop"
+}

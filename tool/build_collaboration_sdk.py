@@ -19,7 +19,7 @@ TARGETS = {
     "x86": ("i686-linux-android", "Intel 80386", "ELF32"),
     "x86_64": ("x86_64-linux-android", "Advanced Micro Devices X86-64", "ELF64"),
 }
-BUILD_MANIFESTS = ("android-build.json", "android-existing-identity-build.json")
+BUILD_MANIFESTS = ("android-build.json", "android-existing-identity-build.json", "android-http-observer-build.json", "android-refresh-coalescing-build.json")
 
 
 def sha(path):
@@ -47,7 +47,7 @@ def run(command, *, cwd, env, log, timeout=4800):
             raise subprocess.CalledProcessError(code, command)
 
 
-def verify_native_library(native, abi, ndk, required_functions=()):
+def verify_native_library(native, abi, ndk, required_functions=(), required_methods=()):
     """Validate the ELF ABI and Android's page alignment requirement for that ABI."""
     _, machine, elf_class = TARGETS[abi]
     if not 1 <= native.stat().st_size <= 512 * 1024 * 1024:
@@ -68,6 +68,8 @@ def verify_native_library(native, abi, ndk, required_functions=()):
         raise ValueError("Missing SDK entry point")
     if not all("uniffi_matrix_sdk_ffi_fn_func_" + name in symbol_names for name in required_functions):
         raise ValueError("Missing SDK function entry point")
+    if not all("uniffi_matrix_sdk_ffi_fn_method_" + name in symbol_names for name in required_methods):
+        raise ValueError("Missing SDK method entry point")
     return {"nativeSha256": sha(native), "nativeBytes": native.stat().st_size,
             "elfClass": elf_class, "requiredElfAlignment": minimum,
             "loadAlignments": alignments, "requiredSymbolsPresent": True}
@@ -150,7 +152,7 @@ def build(args):
         native = main / "jniLibs" / args.abi / "libmatrix_sdk_ffi.so"
         if libraries != [native]:
             raise ValueError("Unexpected native library output")
-        inspected = verify_native_library(native, args.abi, ndk, manifest.get("requiredFunctions", []))
+        inspected = verify_native_library(native, args.abi, ndk, manifest.get("requiredFunctions", []), manifest.get("requiredMethods", []))
         shutil.copy2(sdk / "LICENSE", out / "LICENSE")
         shutil.copy2(sdk / "Cargo.lock", out / "Cargo.lock")
         record.update(passed=True, sourcesUnchanged=True, sourceSha256=manifest["patchedSources"],

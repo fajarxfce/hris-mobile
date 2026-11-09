@@ -1,0 +1,308 @@
+diff --git a/crates/matrix-sdk/src/authentication/matrix/mod.rs b/crates/matrix-sdk/src/authentication/matrix/mod.rs
+--- a/crates/matrix-sdk/src/authentication/matrix/mod.rs
++++ b/crates/matrix-sdk/src/authentication/matrix/mod.rs
+@@ -41,7 +41,7 @@
+ 
+ use crate::{
+     Client, Error, RefreshTokenError, Result,
+-    authentication::AuthData,
++    authentication::{AuthData, RefreshTokenReason},
+     client::SessionChange,
+     error::{HttpError, HttpResult},
+     utils::UrlOrQuery,
+@@ -508,6 +508,13 @@
+     /// [restore the session]: Client::restore_session
+     /// [`ClientBuilder::handle_refresh_tokens()`]: crate::ClientBuilder::handle_refresh_tokens
+     pub async fn refresh_access_token(&self) -> Result<(), RefreshTokenError> {
++        self.refresh_access_token_with_reason(RefreshTokenReason::Explicit).await
++    }
++
++    pub(crate) async fn refresh_access_token_with_reason(
++        &self,
++        reason: RefreshTokenReason,
++    ) -> Result<(), RefreshTokenError> {
+         macro_rules! fail {
+             ($lock:expr, $err:expr) => {
+                 let error = $err;
+@@ -522,6 +529,17 @@
+             // finish first.
+             return refresh_token_lock.lock().await.clone();
+         };
++
++        // send_inner marks only the exact rejected access token as expired. A delayed
++        // response from an older token cannot invalidate a token another caller installed.
++        // Check while holding the rotation lock so concurrent renewals cannot slip between
++        // this decision and acquiring the refresh token.
++        if reason == RefreshTokenReason::ExpiredAccessToken
++            && self.client.auth_ctx().has_valid_access_token()
++        {
++            *guard = Ok(());
++            return Ok(());
++        }
+ 
+         let Some(mut session_tokens) = self.client.session_tokens() else {
+             fail!(guard, RefreshTokenError::RefreshTokenRequired);
+diff --git a/crates/matrix-sdk/src/authentication/mod.rs b/crates/matrix-sdk/src/authentication/mod.rs
+--- a/crates/matrix-sdk/src/authentication/mod.rs
++++ b/crates/matrix-sdk/src/authentication/mod.rs
+@@ -62,6 +62,13 @@
+     access_token_expired: bool,
+ }
+ 
++/// Explicit renewal may rotate a valid token; a failed request only renews an expired one.
++#[derive(Clone, Copy, PartialEq, Eq)]
++pub(crate) enum RefreshTokenReason {
++    Explicit,
++    ExpiredAccessToken,
++}
++
+ pub(crate) type SessionCallbackError = Box<dyn std::error::Error + Send + Sync>;
+ 
+ #[cfg(not(target_family = "wasm"))]
+diff --git a/crates/matrix-sdk/src/authentication/oauth/mod.rs b/crates/matrix-sdk/src/authentication/oauth/mod.rs
+--- a/crates/matrix-sdk/src/authentication/oauth/mod.rs
++++ b/crates/matrix-sdk/src/authentication/oauth/mod.rs
+@@ -223,7 +223,7 @@
+     http_client::OAuthHttpClient,
+     registration::{ClientMetadata, ClientRegistrationResponse, register_client},
+ };
+-use super::{AuthData, SessionTokens};
++use super::{AuthData, RefreshTokenReason, SessionTokens};
+ use crate::{
+     Client, RefreshTokenError, Result,
+     client::{SessionChange, caches::CachedValue},
+@@ -1248,6 +1248,14 @@
+     /// [`ClientBuilder::handle_refresh_tokens()`]: crate::ClientBuilder::handle_refresh_tokens()
+     #[instrument(skip_all)]
+     pub async fn refresh_access_token(&self) -> Result<(), RefreshTokenError> {
++        self.refresh_access_token_with_reason(RefreshTokenReason::Explicit).await
++    }
++
++    #[instrument(skip_all)]
++    pub(crate) async fn refresh_access_token_with_reason(
++        &self,
++        reason: RefreshTokenReason,
++    ) -> Result<(), RefreshTokenError> {
+         macro_rules! fail {
+             ($lock:expr, $err:expr) => {
+                 let error = $err;
+@@ -1268,6 +1276,13 @@
+             debug!("other refresh is a {}", if res.is_ok() { "success" } else { "failure " });
+             return res;
+         };
++
++        if reason == RefreshTokenReason::ExpiredAccessToken
++            && client.auth_ctx().has_valid_access_token()
++        {
++            *refresh_status_guard = Ok(());
++            return Ok(());
++        }
+ 
+         debug!("no other refresh happening in background, starting.");
+ 
+diff --git a/crates/matrix-sdk/src/client/futures.rs b/crates/matrix-sdk/src/client/futures.rs
+--- a/crates/matrix-sdk/src/client/futures.rs
++++ b/crates/matrix-sdk/src/client/futures.rs
+@@ -30,6 +30,7 @@
+ use super::super::Client;
+ use crate::{
+     Error, RefreshTokenError, TransmissionProgress,
++    authentication::RefreshTokenReason,
+     config::RequestConfig,
+     error::{HttpError, HttpResult},
+     http_client::{SupportedAuthScheme, SupportedPathBuilder},
+@@ -115,7 +116,10 @@
+             }
+ 
+             // Try to refresh the token and retry the request.
+-            if let Err(refresh_error) = client.refresh_access_token().await {
++            if let Err(refresh_error) = client
++                .refresh_access_token_with_reason(RefreshTokenReason::ExpiredAccessToken)
++                .await
++            {
+                 match &refresh_error {
+                     RefreshTokenError::RefreshTokenRequired => {
+                         trace!("Token refresh: The session doesn't have a refresh token.");
+diff --git a/crates/matrix-sdk/src/client/mod.rs b/crates/matrix-sdk/src/client/mod.rs
+--- a/crates/matrix-sdk/src/client/mod.rs
++++ b/crates/matrix-sdk/src/client/mod.rs
+@@ -100,8 +100,8 @@
+     Account, AuthApi, AuthSession, Error, HttpError, Media, Pusher, RefreshTokenError, Result,
+     Room, SessionTokens, TransmissionProgress,
+     authentication::{
+-        AuthCtx, AuthData, ReloadSessionCallback, SaveSessionCallback, matrix::MatrixAuth,
+-        oauth::OAuth,
++        AuthCtx, AuthData, RefreshTokenReason, ReloadSessionCallback, SaveSessionCallback,
++        matrix::MatrixAuth, oauth::OAuth,
+     },
+     client::{
+         homeserver_capabilities::HomeserverCapabilities,
+@@ -1822,6 +1822,13 @@
+     /// See the documentation of the authentication API's `refresh_access_token`
+     /// method for more information.
+     pub async fn refresh_access_token(&self) -> Result<(), RefreshTokenError> {
++        self.refresh_access_token_with_reason(RefreshTokenReason::Explicit).await
++    }
++
++    pub(crate) async fn refresh_access_token_with_reason(
++        &self,
++        reason: RefreshTokenReason,
++    ) -> Result<(), RefreshTokenError> {
+         let Some(auth_api) = self.auth_api() else {
+             return Err(RefreshTokenError::RefreshTokenRequired);
+         };
+@@ -1829,11 +1836,11 @@
+         match auth_api {
+             AuthApi::Matrix(api) => {
+                 trace!("Token refresh: Using the homeserver.");
+-                Box::pin(api.refresh_access_token()).await?;
++                Box::pin(api.refresh_access_token_with_reason(reason)).await?;
+             }
+             AuthApi::OAuth(api) => {
+                 trace!("Token refresh: Using OAuth 2.0.");
+-                Box::pin(api.refresh_access_token()).await?;
++                Box::pin(api.refresh_access_token_with_reason(reason)).await?;
+             }
+         }
+ 
+diff --git a/crates/matrix-sdk/tests/integration/refresh_token.rs b/crates/matrix-sdk/tests/integration/refresh_token.rs
+--- a/crates/matrix-sdk/tests/integration/refresh_token.rs
++++ b/crates/matrix-sdk/tests/integration/refresh_token.rs
+@@ -569,6 +569,78 @@
+ }
+ 
+ #[async_test]
++async fn test_late_unknown_token_retries_the_current_access_token_without_rotating_again() {
++    let (builder, server) = test_client_builder_with_server().await;
++    let client = builder
++        .request_config(RequestConfig::new().disable_retry())
++        .server_versions([MatrixVersion::V1_3])
++        .handle_refresh_tokens()
++        .build()
++        .await
++        .unwrap();
++    client.matrix_auth().restore_session(session(), RoomLoadSettings::default()).await.unwrap();
++    let mut changes = client.subscribe_to_session_changes();
++    let received_old_request = Arc::new(tokio::sync::Notify::new());
++
++    Mock::given(method("GET"))
++        .and(path("/_matrix/client/v3/account/whoami"))
++        .and(header(http::header::AUTHORIZATION, "Bearer 1234"))
++        .respond_with({
++            let received = received_old_request.clone();
++            move |_: &wiremock::Request| {
++                received.notify_one();
++                ResponseTemplate::new(401)
++                    .set_body_json(&*test_json::UNKNOWN_TOKEN_SOFT_LOGOUT)
++                    .set_delay(Duration::from_secs(2))
++            }
++        })
++        .expect(1)
++        .mount(&server)
++        .await;
++    Mock::given(method("POST"))
++        .and(path("/_matrix/client/v3/refresh"))
++        .and(body_partial_json(json!({"refresh_token": "abcd"})))
++        .respond_with(ResponseTemplate::new(200).set_body_json(json!({
++            "access_token": "5678", "refresh_token": "efgh", "expires_in_ms": 300000
++        })))
++        .expect(1)
++        .mount(&server)
++        .await;
++    Mock::given(method("POST"))
++        .and(path("/_matrix/client/v3/refresh"))
++        .and(body_partial_json(json!({"refresh_token": "efgh"})))
++        .respond_with(ResponseTemplate::new(429).set_body_json(json!({
++            "errcode": "M_LIMIT_EXCEEDED", "error": "Rotation too soon", "retry_after_ms": 10000
++        })))
++        .expect(0)
++        .mount(&server)
++        .await;
++    Mock::given(method("GET"))
++        .and(path("/_matrix/client/v3/account/whoami"))
++        .and(header(http::header::AUTHORIZATION, "Bearer 5678"))
++        .respond_with(ResponseTemplate::new(200).set_body_json(&*test_json::WHOAMI))
++        .expect(1)
++        .mount(&server)
++        .await;
++
++    // Complete another caller's refresh while this request's old-token rejection is in flight.
++    // The bounded refresh must finish before the delayed response is released.
++    let (response, ()) = tokio::join!(client.whoami(), async {
++        tokio::time::timeout(Duration::from_secs(1), received_old_request.notified())
++            .await
++            .unwrap();
++        tokio::time::timeout(Duration::from_secs(1), client.refresh_access_token())
++            .await
++            .unwrap()
++            .unwrap();
++    });
++    response.expect("A delayed rejection of an old token must retry the already refreshed session");
++    assert_eq!(client.access_token().as_deref(), Some("5678"));
++    assert_eq!(changes.try_recv(), Ok(SessionChange::TokensRefreshed));
++    assert_eq!(changes.try_recv(), Err(TryRecvError::Empty));
++}
++
++#[async_test]
+ async fn test_refresh_token_handled_multi_failure() {
+     let (builder, server) = test_client_builder_with_server().await;
+     let client = builder
+@@ -788,6 +860,58 @@
+ }
+ 
+ #[async_test]
++async fn test_oauth_late_unknown_token_does_not_rotate_the_new_session() {
++    let server = MatrixMockServer::new().await;
++    let received_old_request = Arc::new(tokio::sync::Notify::new());
++    server
++        .mock_who_am_i()
++        .expect_access_token("prev-access-token")
++        .respond_with({
++            let received = received_old_request.clone();
++            move |_: &wiremock::Request| {
++                received.notify_one();
++                ResponseTemplate::new(401)
++                    .set_body_json(&*test_json::UNKNOWN_TOKEN_SOFT_LOGOUT)
++                    .set_delay(Duration::from_secs(2))
++            }
++        })
++        .expect(1)
++        .mount()
++        .await;
++    server.mock_who_am_i().ok().expect(1).mount().await;
++    let oauth_server = server.oauth();
++    oauth_server.mock_server_metadata().ok().expect(1..).mount().await;
++    oauth_server.mock_token().ok().expect(1).mount().await;
++    let client = server
++        .client_builder()
++        .unlogged()
++        .on_builder(|builder| builder.handle_refresh_tokens())
++        .build()
++        .await;
++    client
++        .oauth()
++        .restore_session(
++            mock_session(mock_prev_session_tokens_with_refresh()),
++            RoomLoadSettings::default(),
++        )
++        .await
++        .unwrap();
++    let mut changes = client.subscribe_to_session_changes();
++    let (response, ()) = tokio::join!(client.whoami(), async {
++        tokio::time::timeout(Duration::from_secs(1), received_old_request.notified())
++            .await
++            .unwrap();
++        tokio::time::timeout(Duration::from_secs(1), client.refresh_access_token())
++            .await
++            .unwrap()
++            .unwrap();
++    });
++    response.expect("The delayed old-token error must use the current OAuth access token");
++    assert_eq!(changes.try_recv(), Ok(SessionChange::TokensRefreshed));
++    assert_eq!(changes.try_recv(), Err(TryRecvError::Empty));
++}
++
++#[async_test]
+ async fn test_oauth_handle_refresh_tokens() {
+     let server = MatrixMockServer::new().await;
+     let oauth_server = server.oauth();

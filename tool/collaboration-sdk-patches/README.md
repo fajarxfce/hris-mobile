@@ -1,5 +1,15 @@
 # Patched Matrix Android SDK
 
+## Concurrent-refresh candidate — 9 November 2026
+
+`android-refresh-coalescing-build.json` extends the verified observer source with
+`refresh-coalescing.patch`. Matrix and OAuth reuse an already refreshed token when
+a delayed old-token rejection arrives, under the existing rotation lock. All20
+refresh tests, FFI/Wasm compilation and1218-file clean reconstruction pass. ABI
+binaries, new-version packaging and native acceptance are still pending.
+[Contract and evidence](../../docs/collaboration-sdk-refresh-coalescing.md). The
+historical publication statements below do not describe this candidate.
+
 The current published dependency is `26.10.23-hris.3`. See the
 [distribution contract](../../docs/collaboration-sdk-distribution.md) and
 [ARM64 acceptance](../../docs/measurements/collaboration-sdk-arm64-baseline-2026-11-06.json).

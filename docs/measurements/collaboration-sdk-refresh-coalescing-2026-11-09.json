@@ -1,0 +1,151 @@
+{
+  "scope": "Matrix and OAuth refresh coalescing at the existing rotation lock",
+  "consumerSource": "Build80 with SDK5 reproduced refresh200 then429 on the newly returned token after210ms",
+  "runs": {
+    "red-1": {
+      "startedAt": "2026-11-09T04:11:11.264294+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "matrix-sdk",
+        "--features",
+        "testing",
+        "--test",
+        "integration",
+        "refresh_token::test_late_unknown_token_retries_the_current_access_token_without_rotating_again",
+        "--",
+        "--test-threads=1"
+      ],
+      "elapsedSeconds": 72.419,
+      "exitCode": 101,
+      "jobs": 2,
+      "sourcesUnchanged": true,
+      "sourceManifestSha256": "ca0eff4d697e8656cd096706030b06493b8cb5301437f198f59d019477029ca0",
+      "tests": {
+        "passed": 0,
+        "failed": 1,
+        "ignored": 0
+      }
+    },
+    "refresh-1": {
+      "startedAt": "2026-11-09T04:13:27.698480+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "matrix-sdk",
+        "--features",
+        "testing",
+        "--test",
+        "integration",
+        "refresh_token::",
+        "--",
+        "--test-threads=1"
+      ],
+      "elapsedSeconds": 52.317,
+      "exitCode": 0,
+      "jobs": 2,
+      "sourcesUnchanged": true,
+      "sourceManifestSha256": "5edc5856474e9e1eacf5cfea4df69060253448735b906fe11075b6024f5440b7",
+      "tests": {
+        "passed": 19,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "refresh-2": {
+      "startedAt": "2026-11-09T04:16:33.336988+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "matrix-sdk",
+        "--features",
+        "testing",
+        "--test",
+        "integration",
+        "refresh_token::",
+        "--",
+        "--test-threads=1"
+      ],
+      "elapsedSeconds": 24.262,
+      "exitCode": 0,
+      "jobs": 2,
+      "sourcesUnchanged": true,
+      "sourceManifestSha256": "06354110559ed56b1093c925a365d133196823ad4b17d8f7bf24edcc1abcae24",
+      "tests": {
+        "passed": 20,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "ffi-1": {
+      "startedAt": "2026-11-09T04:17:34.539443+00:00",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "-p",
+        "matrix-sdk-ffi",
+        "--features",
+        "sentry,experimental-x509-identity-verification"
+      ],
+      "elapsedSeconds": 57.271,
+      "exitCode": 0,
+      "jobs": 2,
+      "sourcesUnchanged": true,
+      "sourceManifestSha256": "06354110559ed56b1093c925a365d133196823ad4b17d8f7bf24edcc1abcae24"
+    },
+    "wasm-1": {
+      "startedAt": "2026-11-09T04:18:31.902866+00:00",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "-p",
+        "matrix-sdk",
+        "--no-default-features",
+        "--features",
+        "indexeddb",
+        "--target",
+        "wasm32-unknown-unknown"
+      ],
+      "elapsedSeconds": 15.194,
+      "exitCode": 0,
+      "jobs": 2,
+      "sourcesUnchanged": true,
+      "sourceManifestSha256": "06354110559ed56b1093c925a365d133196823ad4b17d8f7bf24edcc1abcae24"
+    }
+  },
+  "reconstruction": {
+    "at": "2026-11-09T04:19:35.326882+00:00",
+    "filesMatched": 1218,
+    "allPatchChecksPassed": true,
+    "sdkSourceUnchanged": true,
+    "manifestSha256": "810a1f9a24784b0d7f68a9b87f450842f35afa30559db007672309c2dbcb441a"
+  },
+  "buildDriverTests": {
+    "passed": 5
+  },
+  "patchSha256": "c9e4ece410f457d55476159dc1baa0d1e4a95401c26a48a1c6759b1942cd2ed3",
+  "observerBuildToolsSource": "6866251a",
+  "publicBindingApiChanged": false,
+  "sdkBinaryBuilt": false,
+  "published": false,
+  "phoneInstalled": false,
+  "remaining": [
+    "Android ABI binaries and exact generated-binding verification",
+    "Packaging under a new immutable coordinate",
+    "Native retained80 runtime acceptance and phone installation",
+    "Separate domain background-acquisition contention fix and validation"
+  ]
+}
