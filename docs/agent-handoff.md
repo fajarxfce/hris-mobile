@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 14:01 UTC. Historical detail is retained in
+Updated 9 November 2026, 14:21 UTC. Historical detail is retained in
 [02e61220](https://github.com/fajarxfce/hris-mobile/blob/02e61220/docs/agent-handoff.md).
 This file owns current work; do not restart old jobs from historical notes.
 
@@ -37,6 +37,32 @@ its apparent gradlew.bat change is text/eol normalization, not a byte change.
 
 Live API/worker remains e558a6868399058a2dcdee97acfd0e7fa7f1ef07, schema116.4,
 readiness control ON. Group V117–138 and organization routing are not deployed.
+
+## Active direct-transport candidate
+
+Thirteen Mobile Kotlin files are uncommitted: finite native direct-transport API,
+datasource/repository/DTO, public domain facts and pure validation; published-room
+mapping extraction; eight transport test methods and the application DI assertion.
+[Contract](collaboration-space-direct-transport.md) records current scope and limits.
+Direct ktfmt0.59 parsing/formatting passed0.954s at256MiB; no Kotlin/test acceptance yet.
+`.work/space-direct-transport-2026-11-09/check.py` is prepared, NOT RUN while Group33511
+owns the local heavy slot. Its full/browser phases must select the new eight methods
+plus the existing room transport suite; do not inherit the previous binding filters.
+
+Review corrected one draft assumption before compilation: device SPACE does not mean
+user SPACE. A new HRISG_ crypto device may retain a LEGACY selected user/original room.
+Tests include all valid combinations and reject a mismatched physical device/user.
+The backend `.work/space-direct-transport-2026-11-09/candidate` now has11 files including
+API, DI and tests; it remains private, unapplied and uncompiled while33511 owns sources.
+Its base hashes must match before applying after the accepted reconciliation merge.
+
+Hosted42628449460 remains on exact78076d4e. Portable is SUCCESS: the downloaded artifact
+13682061569 (3,273,813 bytes, SHA2560998f1decd370cfc32c08ed8806c1f104ab1ae57458aeaefe25a56a7ef9085b9)
+matches GitHub's digest and ZIP CRC. [Portable evidence](measurements/collaboration-space-binding-hosted-2026-11-09.json) records6,546 passing cases:3,035 desktop,
+613 Android host,2,898 browser; zero failures/errors/skips. Includes21+3 binding
+preparation cases on both desktop and actual IndexedDB. Apple is still running and
+must be reaped/audited separately. Private portable audit is under the prior binding
+preparation `hosted-42628449460` directory. Do not dispatch a duplicate.
 
 ## Current Mobile gate
 
