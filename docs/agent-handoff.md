@@ -1,6 +1,58 @@
 # Agent continuation — HRIS Mobile
 
 
+## Native81 rejected; real registry sharing regression under test — 9 November 2026, 05:15 UTC
+
+Native81 phases74344 REAPED FAIL85.876s: initial Home never reached20s quiet within
+75s. Upgrade accepted9.191s with same account/app/public identity, but incoming
+recovery returns Unavailable repeatedly. Counter18811 REAPED normal162.397s/154requests:
+42setup,14admission,14summaries,14room,28secret-default-key,14sync,1refresh (plus27otherHRIS).
+Responses: refresh200 once; secret401 twice/40426; sync20013/401once. All observed sync
+requests use timeout0, showing repeated initialization. No429/403/bootstrap, but only
+ONE renewal observed, so repeated-token acceptance is NOT established. Worker logs
+contain7 ChatRecovery_incoming_Unavailable and no Storage diagnostic. Full private
+log captured before normal shutdown. [Failure evidence](measurements/collaboration-release81-candidate-2026-11-09.json).
+
+All native processes stopped/reaped: emulator88455 150.773s, paired81660 154.163s,
+phase74344 and counter18811 above. Original80 source files unchanged. **LATEST COMPLETE
+STORE is refresh-coalescing-native-2026-11-09/sender at81**, all userdata/encryption
+files + AVD. Do not restore80/79 over it. Gateway16→17, same1head/public identity;
+final read-only server facts still3 encrypted events. Room/history/resume/cold/new
+Refresh81 timing sample were NOT reached. Zero new send gestures; never resend originals.
+Native81 NOT accepted, no phone install, no SDK6 publication, no Starter port.
+
+Root boundary found: SdkRuntimeRegistry.reserveBackground rejects ANY second borrower
+via borrowers.any even when the one native resource is already published and ready.
+The domain mutex fix serializes acquisition only; device-sync still holds its finite
+reference when incoming joins. This causes the latter to retry while each device
+turn closes/recreates a background client. The registry must allow up to its existing
+BORROW_LIMIT=2 references on the SAME published resource, retaining ownership until
+the last closes; pending acquisition, foreign ownership, handover, history reopen,
+revocation and global bounds still reject. availableForEntry already requires both
+acquisitionComplete and published and no stop; unpublished sharing stays fenced.
+No production registry fix has been made yet.
+
+UNCOMMITTED test-only change:3 real registry cases added to
+features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/SdkRuntimeRegistryTest.kt:
+both close orders; racing joins stay within2 references; denial invalidates both and
+stops once. ONLY local compiler72291 runs .work/sdk-shared-borrow-2026-11-09/check.py
+red-1 against unchanged registry. Do not edit inputs until reaped. Prepared focused
+runs full Android host plus actual company/incoming/recovery worker integration and
+quality; full retains root/browser/Android/proof/lint/platform source checks. SDK6 is
+already pinned and verified; no SDK rebuild is needed for this registry correction.
+
+NEXT reap RED, fix mechanical sharing, preserve all ownership/lifetime tests; format,
+focused/full, commit+push. Prepare82 from latest81 store. Important native-probe
+ordering difference:81 begins Home BEFORE opening any room;80's earlier manual Home
+observation followed room entry. Do not conceal the startup loop by moving observation
+after entry. Determine expected idle-sync ownership from the source before requiring
+continued long polling on Home with no foreground client; room/resume/cold still need
+actual sync/renewal proof. No acceptance criterion has been relaxed or81 accepted.
+Starter port script now requires native81 acceptance and is therefore unusable as-is;
+update only after a later accepted version. Platform116.4/controlON unchanged; all54
+PRD groups remain open. Phone was last reachable04:52; no UI or installation this turn.
+
+
 ## APK81 verified; retained80 native run starting — 9 November 2026, 05:06 UTC
 
 SDK6 source/dependency57831966 is pushed. Main checkout build53900 REAPED PASS151.400s;

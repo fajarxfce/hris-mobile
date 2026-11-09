@@ -75,11 +75,244 @@
     "reportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
   },
   "nativeAcceptance": {
-    "status": "not_yet_accepted",
-    "sourceStore": "Complete initial-sync-native-2026-11-09/sender at build80; all three originals retained, native80 traffic remains rejected",
-    "targetWorkDirectory": "refresh-coalescing-native-2026-11-09",
-    "oldOriginalsMustNotBeResent": true,
-    "newTimingSamplePrepared": true
+    "at": "2026-11-09T05:13:59.989907+00:00",
+    "accepted": false,
+    "scope": "Native81 retained80 upgrade; initial Home never settles",
+    "failure": "Incoming recovery keeps failing Unavailable; repeated runtime creation/setup while one admitted background lane is already borrowing",
+    "rootCauseStatus": "Registry still rejects any second borrower even after the existing client is published; actual registry regression tests are running, no production registry fix yet",
+    "upgrade": {
+      "accepted": true,
+      "startedAt": "2026-11-09T05:06:56.330406+00:00",
+      "versionCode": 81,
+      "phoneTouched": false,
+      "newSendGestures": 0,
+      "dataCleared": false,
+      "privateKeysReadOrReset": false,
+      "scope": "Retained account/package and immutable public-key identity through native upgrade; actual original encrypted delivery is a subsequent gate.",
+      "launchEpochMillis": 1794200819747.127,
+      "launchMonotonic": 1877512.395674854,
+      "updateInPlace": true,
+      "sameAppIdentity": true,
+      "retainedAccountHomeVisible": true,
+      "retainedPublicIdentityPreserved": true,
+      "confirmedDevices": 1,
+      "artifactSha256": "728d2aa43a3c58e8e42f7d3a9564334c66433234cf69a1f31c5a7e09d7328539",
+      "sdkDeliveryAccepted": false,
+      "elapsedSeconds": 9.191
+    },
+    "settlement": {
+      "startedAt": "2026-11-09T05:07:05.578696+00:00",
+      "accepted": false,
+      "phase": "home",
+      "phoneTouched": false,
+      "observations": [
+        {
+          "counterSeconds": 80.732,
+          "setupDelta": {}
+        },
+        {
+          "counterSeconds": 91.042,
+          "setupDelta": {
+            "hris_conversation_summaries": 1,
+            "hris_device_setup": 4,
+            "secret_storage_default_key": 4,
+            "hris_room": 1,
+            "hris_device_admission": 1
+          }
+        },
+        {
+          "counterSeconds": 101.092,
+          "setupDelta": {}
+        },
+        {
+          "counterSeconds": 111.269,
+          "setupDelta": {
+            "hris_conversation_summaries": 2,
+            "hris_device_setup": 4,
+            "secret_storage_default_key": 2,
+            "hris_room": 2,
+            "hris_device_admission": 2
+          }
+        },
+        {
+          "counterSeconds": 122.218,
+          "setupDelta": {
+            "hris_conversation_summaries": 3,
+            "hris_device_setup": 9,
+            "secret_storage_default_key": 6,
+            "hris_room": 3,
+            "hris_device_admission": 3
+          }
+        },
+        {
+          "counterSeconds": 132.725,
+          "setupDelta": {
+            "hris_conversation_summaries": 2,
+            "hris_device_setup": 6,
+            "secret_storage_default_key": 4,
+            "hris_room": 2,
+            "hris_device_admission": 2
+          }
+        },
+        {
+          "counterSeconds": 143.046,
+          "setupDelta": {
+            "hris_conversation_summaries": 2,
+            "hris_device_setup": 6,
+            "secret_storage_default_key": 4,
+            "hris_room": 2,
+            "hris_device_admission": 2
+          }
+        },
+        {
+          "counterSeconds": 153.436,
+          "setupDelta": {
+            "hris_conversation_summaries": 2,
+            "hris_device_setup": 6,
+            "secret_storage_default_key": 4,
+            "hris_room": 2,
+            "hris_device_admission": 2
+          }
+        }
+      ],
+      "deadlineSeconds": 75,
+      "elapsedSeconds": 75.959
+    },
+    "traffic": {
+      "elapsedSeconds": 162.397,
+      "requestCount": 154,
+      "normalStop": true,
+      "requests": {
+        "hris_conversation_summaries": 14,
+        "hris_device_admission": 14,
+        "hris_device_setup": 42,
+        "hris_room": 14,
+        "other_hris": 27,
+        "refresh": 1,
+        "secret_storage_default_key": 28,
+        "sync": 14
+      },
+      "responses": {
+        "hris_conversation_summaries:200": 14,
+        "hris_device_admission:200": 14,
+        "hris_device_setup:200": 42,
+        "hris_room:200": 14,
+        "other_hris:200": 27,
+        "refresh:200": 1,
+        "secret_storage_default_key:401": 2,
+        "secret_storage_default_key:404": 26,
+        "sync:200": 13,
+        "sync:401": 1
+      },
+      "syncTimeouts": [
+        {
+          "offsetSeconds": 89.593,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        },
+        {
+          "offsetSeconds": 89.671,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        },
+        {
+          "offsetSeconds": 106.588,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        },
+        {
+          "offsetSeconds": 111.315,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        },
+        {
+          "offsetSeconds": 116.125,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        },
+        {
+          "offsetSeconds": 120.827,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        },
+        {
+          "offsetSeconds": 125.588,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        },
+        {
+          "offsetSeconds": 130.39,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        },
+        {
+          "offsetSeconds": 135.067,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        },
+        {
+          "offsetSeconds": 139.737,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        },
+        {
+          "offsetSeconds": 144.413,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        },
+        {
+          "offsetSeconds": 149.032,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        },
+        {
+          "offsetSeconds": 153.722,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        },
+        {
+          "offsetSeconds": 158.391,
+          "timeoutMillis": 0,
+          "hasPersistedCursor": true
+        }
+      ]
+    },
+    "pairedRefresh": {
+      "statuses": [
+        200
+      ],
+      "observedRotations": 1,
+      "gatewayVersionBefore": 16,
+      "gatewayVersionAfter": 17,
+      "pairedRenewalAccepted": false,
+      "returnedCurrentPairMatched": true
+    },
+    "samePublicIdentity": true,
+    "serverEncryptedEvents": 3,
+    "newSendGestures": 0,
+    "originalsResent": false,
+    "phoneTouched": false,
+    "latestCompleteStore": "refresh-coalescing-native-2026-11-09/sender at81, preserving all four userdata/encryption files and AVD; do not restore80 over it",
+    "emulator": {
+      "elapsedSeconds": 150.773,
+      "stopped": true,
+      "source80FilesUnchanged": true
+    },
+    "phasesCompleted": [
+      [
+        "gateway-facts.py",
+        "before"
+      ],
+      [
+        "install-and-qualify.py"
+      ]
+    ],
+    "newTimingSampleRun": false,
+    "limitations": [
+      "Only one token rotation observed; zero429 does not establish repeated-renewal acceptance",
+      "History/room/resume/cold/sample phases were not reached",
+      "Native81 is not accepted for phone installation or Starter port"
+    ]
   },
   "limitations": [
     "SDK6 Android consumer592 plus unchanged common/browser full4261 source evidence; no full suite rerun on SDK6",
