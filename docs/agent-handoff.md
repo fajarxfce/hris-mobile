@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## Combined recovery focus2 running; Crashlytics IAM instructions given — 9 November 2026, 01:40 UTC
+
+Focus28468 REAPED353.542s:96 fresh cases, one failed domain replacement case, no
+errors/skips; source4,524/inspector82 stable. Failure was an invalid fixture with
+gateway session expiry at epoch2. Corrected to expired ACCESS and future session
+expiry relative to fixture clock; added failure-code assertion. New tests also verify
+successful live-sync validation, durable rejection before signal, no signals after
+close, and retirement/replacement fencing of old registry signal publishers.
+No production relaxation for expired gateway sessions.
+
+Format91888 REAPED38.082s. Sole current compiler65493 runs
+credential-reactivation-2026-11-09/check.py focused-2 since~01:39:50. Do not edit inputs
+until reaped. Automatic-recovery source remains UNCOMMITTED; full gate/native proof
+and release79 package/install still pending. No emulator/counter. Preserve Recovery78.
+
+Phone read-only probe confirms authorized ADB and HRIS package absent after stock-ROM
+flash at01:36:19; no installation/UI operation yet. User additionally reports enabling
+Firebase Crashlytics API but does not know how to assign IAM role. Gave IAM link for
+cmp-fajar, Grant access principal firebase-adminsdk-fbsvc@cmp-fajar.iam.gserviceaccount.com,
+role Firebase Crashlytics Viewer, Save (or edit existing entry/Add another role).
+Role grant is NOT confirmed; do not claim Crashlytics read access. This does not block
+local testing/implementation. Mobile a6c87a87 and Platform9551cbbb documentation pushed;
+source cbacb8af remains latest committed functional change.
+
 ## Automatic recovery candidate; phone flashed to stock ROM — 9 November 2026, 01:36 UTC
 
 USER UPDATE: phone was flashed to stock ROM; HRIS is no longer installed. User says
