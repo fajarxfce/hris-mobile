@@ -1,0 +1,122 @@
+{
+  "scope": "Application-owned proactive native HRIS parent renewal through existing identity acquisition",
+  "runs": {
+    "format-1": {
+      "startedAt": "2026-11-09T06:07:26.276924+00:00",
+      "elapsedSeconds": 36.272,
+      "exitCode": 0,
+      "sourceFiles": 4529,
+      "sourcesUnchanged": false,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "5b71fc3b03f4feff45ac86fb50c415289a4b0e05835eb6a0b2e4f93b26901be5"
+    },
+    "focused-1": {
+      "startedAt": "2026-11-09T06:08:20.834816+00:00",
+      "elapsedSeconds": 165.231,
+      "exitCode": 1,
+      "sourceFiles": 4529,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "16e8613b317df3a62156304f8e5b58d3248cd72c19a08143a8214a8ffa9438ab",
+      "failure": "Missing AppResult.map extension; production mapping corrected to exhaustive when"
+    },
+    "format-2": {
+      "startedAt": "2026-11-09T06:11:22.828573+00:00",
+      "elapsedSeconds": 35.558,
+      "exitCode": 0,
+      "sourceFiles": 4529,
+      "sourcesUnchanged": false,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "23b0472a161028167ef15dded1d07c38cb60e6de67b8b342622206461c1fe0d8"
+    },
+    "focused-2": {
+      "startedAt": "2026-11-09T06:12:16.415031+00:00",
+      "elapsedSeconds": 204.454,
+      "exitCode": -15,
+      "sourceFiles": 4529,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "7e0b2bd153f408d8e8ad991297cb9d377e6f6ed2d1f8c5468d409338bc274650",
+      "failure": "Assertion type inference in new test; owned process group terminated after compile failure and reaped; corrected assertion uses explicit AppResult type"
+    },
+    "focused-3": {
+      "startedAt": "2026-11-09T06:15:58.755073+00:00",
+      "elapsedSeconds": 230.463,
+      "exitCode": 1,
+      "sourceFiles": 4529,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 94,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "0123d5dc72e43616d55dce4af6270b187904c130c77df482289d37ebb4905f89",
+      "failure": "All94 tests passed; detekt rejected start method length108 over100"
+    },
+    "format-3": {
+      "startedAt": "2026-11-09T06:20:55.211690+00:00",
+      "elapsedSeconds": 34.309,
+      "exitCode": 0,
+      "sourceFiles": 4529,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "d6aafd57f02e0a6cd548e285af91ba9a43601aceb03a14a3c4815647758aeba5"
+    },
+    "focused-4": {
+      "startedAt": "2026-11-09T06:22:00.964351+00:00",
+      "elapsedSeconds": 95.221,
+      "exitCode": 0,
+      "sourceFiles": 4529,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "6861a008c877841e7cac41d425e0076fee5ee954c70ebebc11d8679382b4f9bb",
+      "scope": "21 current application lifetime/binding tests, format, architecture74 and detekt pass;73 identity tests retain unchanged focused-3 inputs"
+    }
+  },
+  "native82Evidence": "collaboration-release82-candidate-2026-11-09.json",
+  "pending": [
+    "Full SDK6 application and actual browser tests",
+    "Retained82 to83 runtime with four originals, HRIS-parent deadlines and paired Matrix renewals",
+    "Phone install-only, immutable SDK distribution and generic Starter port"
+  ],
+  "nativeAccepted": false,
+  "phoneInstalled": false
+}

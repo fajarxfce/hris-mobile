@@ -27,6 +27,64 @@ import kotlinx.coroutines.test.*
 
 class ApplicationCollaborationLifetimeTest {
     @Test
+    fun parentTokenMaintenanceSurvivesRotationAndClosesOnLogout() = runBlocking {
+        withFixture { f ->
+            var starts = 0
+            var active = 0
+            f.maintainSession = { sessionId ->
+                flow {
+                    assertEquals(f.app.session.id, sessionId)
+                    starts++
+                    active++
+                    try {
+                        awaitCancellation()
+                    } finally {
+                        active--
+                    }
+                }
+            }
+            f.lifetime.start()
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertEquals(1, starts)
+            assertEquals(1, active)
+            f.session.value =
+                AppResult.Success(
+                    f.app.session.copy(tokens = f.app.session.tokens.copy(accessToken = "rotated"))
+                )
+            f.scheduler.runCurrent()
+            assertEquals(1, starts)
+            f.session.value = AppResult.Success(null)
+            f.scheduler.runCurrent()
+            assertEquals(0, active)
+        }
+    }
+
+    @Test
+    fun stoppingTheApplicationJoinsParentTokenMaintenance() = runBlocking {
+        withFixture { f ->
+            var active = false
+            f.maintainSession = {
+                flow {
+                    active = true
+                    try {
+                        awaitCancellation()
+                    } finally {
+                        active = false
+                    }
+                }
+            }
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            assertTrue(active)
+            f.lifetime.close()
+            f.scheduler.runCurrent()
+            f.lifetime.closeAndJoin()
+            assertFalse(active)
+        }
+    }
+
+    @Test
     fun credentialRecoveryJoinsTheOldActivationBeforeStartingItsReplacement() = runBlocking {
         withFixture { f ->
             val recovery = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
@@ -678,6 +736,11 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
         }
     val activated = mutableListOf<CollaborationOwner>()
     var readiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() }
+    var maintainSession:
+        (String) -> Flow<AppResult<dev.fajar.starter.identity.domain.entities.SessionTokens?>> =
+        {
+            emptyFlow()
+        }
     var credentialRecovery: (CollaborationOwner) -> Flow<Unit> = { emptyFlow() }
     var activate: (CollaborationOwner) -> Flow<AppResult<CollaborationActivationProgress>> =
         { owner ->
@@ -719,6 +782,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, val selected:
             StandardTestDispatcher(scheduler),
             observeReadiness = { readiness() },
             observeCredentialRecovery = { credentialRecovery(it) },
+            maintainSession = { maintainSession(it) },
         )
 
     fun published() =

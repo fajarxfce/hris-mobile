@@ -1,5 +1,9 @@
 # Architecture
 
+[Native parent renewal](collaboration-parent-session-renewal.md) keeps credential deadlines
+inside identity acquisition and binds observation to the application-owned chat parent.
+
+
 [Shared background runtime references](collaboration-shared-runtime-borrows.md) let admitted
 lanes borrow one published native client while the data registry preserves bounded
 reference counts, revocation and final-release ownership.

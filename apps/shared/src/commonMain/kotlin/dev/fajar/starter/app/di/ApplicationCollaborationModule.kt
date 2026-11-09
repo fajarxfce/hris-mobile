@@ -9,6 +9,7 @@ import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationCrede
 import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationReadinessSignal
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.push.usecases.ObserveNativePushStatus
+import dev.fajar.starter.identity.domain.usecases.AcquireSessionTokens
 import dev.fajar.starter.securestorage.AtomicCredentialStore
 import io.ktor.client.HttpClient
 import org.koin.core.qualifier.named
@@ -36,6 +37,7 @@ internal fun applicationCollaborationModule(
             val activate = inject<ActivateCollaborationDevice>()
             val readiness = inject<QueueCollaborationReadinessSignal>()
             val credentialRecovery = inject<ObserveCollaborationCredentialRecovery>()
+            val tokens = inject<AcquireSessionTokens>()
             ApplicationCollaborationLifetime(
                 get(),
                 get(),
@@ -45,6 +47,7 @@ internal fun applicationCollaborationModule(
                 { activate.value(it) },
                 observeReadiness = { readiness.value.observe() },
                 observeCredentialRecovery = { credentialRecovery.value(it) },
+                maintainSession = { tokens.value.maintain(it) },
             )
         }
         .onClose { it?.close() }

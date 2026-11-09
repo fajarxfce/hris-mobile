@@ -9,6 +9,7 @@ import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationText
 import dev.fajar.starter.collaboration.domain.usecases.RequestCollaborationRecovery
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.identity.domain.entities.SessionTokens
 import dev.fajar.starter.identity.domain.push.entities.NativePushStatus
 import dev.fajar.starter.observability.*
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
@@ -28,6 +29,7 @@ class ApplicationCollaborationLifetime(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
     private val observeReadiness: () -> Flow<AppResult<Boolean>> = { emptyFlow() },
     private val observeCredentialRecovery: (CollaborationOwner) -> Flow<Unit> = { emptyFlow() },
+    private val maintainSession: (String) -> Flow<AppResult<SessionTokens?>> = { emptyFlow() },
 ) : AutoCloseable {
     private val lifetime = SupervisorJob()
     private val scope = CoroutineScope(lifetime + dispatcher)
@@ -40,8 +42,26 @@ class ApplicationCollaborationLifetime(
     private var credentialRecovery: Job? = null
     private val activationChanges = Mutex()
 
+    private val sessionMaintenance =
+        scope.launch(start = CoroutineStart.LAZY) {
+            if (build.platform !in setOf(AppPlatform.Android, AppPlatform.Ios)) return@launch
+            try {
+                state
+                    .map { it.recoveryParent() }
+                    .distinctUntilChanged()
+                    .collectLatest { parent ->
+                        if (parent != null) maintainSession(parent.sessionId).collect()
+                    }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                // Session acquisition retains its own durable refresh; no host retry timer.
+            }
+        }
+
     fun start() {
         if (!started.compareAndSet(false, true)) return
+        sessionMaintenance.start()
         // Subscribe before activation can start syncing. This child never opens another SDK.
         scope.launch(start = CoroutineStart.UNDISPATCHED) {
             if (build.platform !in setOf(AppPlatform.Android, AppPlatform.Ios)) return@launch

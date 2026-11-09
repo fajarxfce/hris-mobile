@@ -1,6 +1,46 @@
 # Agent continuation — HRIS Mobile
 
 
+## Parent token maintenance passes focused checks; full next — 9 November 2026, 06:24 UTC
+
+Mobile core AcquireSessionTokens now exposes maintain(sessionId): one attempt at its
+existing30s refresh margin per credential revision, using the SAME serialized durable
+acquisition as HTTP. Pending-operation writes do not replace the observation; invocation
+runs in the downstream collector so its own publication cannot cancel the exchange.
+Failed revision does not loop. ApplicationCollaborationLifetime owns one lazy child for
+the current native parent; rotation keeps it, logout/replacement/disposal cancel it.
+No server admission change, SDK change, inspector policy or ViewModel orchestration.
+[Contract](collaboration-parent-session-renewal.md), [evidence](measurements/collaboration-parent-session-renewal-2026-11-09.json).
+
+ALL REAPED: format95440 PASS36.272s; focused94195 FAIL165.231s (missing AppResult.map,
+corrected with exhaustive when); format86743 PASS35.558s; focused34517 deliberately
+terminated204.454s after test generic assertion compile failure, owned group3403649
+only, no remaining compiler. Corrected explicit assertion. Focused48113 completed
+230.463s:94tests PASS (73identity +21application), but detekt rejected start length108.
+Declared session-maintenance lazy child alongside owned jobs; no helper extraction.
+Format30531 PASS34.309s. Final focused76718 PASS95.221s:21fresh app cases,0fail/error/skip;
+73identity cases retain unchanged inputs (including9 new maintenance regressions).
+Format,architecture74,detekt PASS; all4529 app/82 library inputs unchanged.
+
+No local compiler/emulator active at checkpoint. Commit+push source/tests/docs, then
+.work/native-parent-renewal-2026-11-09/check.py full-1; freeze inputs until reaped.
+Prepared but NOT RUN: release-phone-2026-11-09-build83 build/verify/install-only,
+native-parent-renewal-native-2026-11-09 clone/probes/phases/acceptance. They require
+new full gate and latest COMPLETE82 store, preserve all4 original Sent bubbles, and
+send only one new Parent83 sample AFTER lifecycle/history. Paired probe now captures
+closed native-parent deadline snapshots and allowlisted HRIS rejection reason;
+counter distinguishes auth/native/refresh. No acceptance criteria weakened.
+
+LATEST COMPLETE STORE remains sdk-shared-borrow-native-2026-11-09/sender at82,
+with all4 userdata/encryption files+AVD and FOUR encrypted events. The fourth Registry82 message
+is retained in new-send.json; use its exact recorded message (do not infer suffix).
+Never restore81 over82 or resend any original. Native82 is FAILED; SDK6 publisher and
+Starter port remain gated to failed82, unexecuted, and must target a later accepted run.
+Native parent access expiry is supported by timing/policy evidence; old exact HRIS
+rejection code remains unconfirmed. No phone install/UI; ADB last reachable06:12.
+Platform docs8833a609 pushed; runtimee558a686/schema116.4/controlON unchanged;
+117–138 undeployed and all54 PRD groups remain open.
+
 ## Native82 fails third refresh; latest COMPLETE store82 — 9 November 2026, 06:01 UTC
 
 ALL REAPED: phases6384 PASS703.520s (individual message/lifecycle phases only),
