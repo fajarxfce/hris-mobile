@@ -1,0 +1,110 @@
+{
+  "date": "2026-11-10",
+  "failedNativeSession": 51720,
+  "inspection": {
+    "session": 33282,
+    "seconds": 31.34,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "appStarted": false,
+    "apkInstalled": false,
+    "phoneTouched": false,
+    "emulatorStopped": true,
+    "originalImagesUnchanged": true,
+    "originalImageHashes": {
+      "userdata.img": "686e872867548b54e7b12e4e161ddc1c3d16312ae51e0e3c203e5deb92ba82d5",
+      "userdata.img.qcow2": "2fbff2f8a8c0df85220d0e40b07ee9f08be11099779b6d11470114fe0b3b8b5c",
+      "encryptionkey.img": "522bd0b6a2c92e37de465059bb9487bb9597a9aae032b469a8ebe0b38146d8c3",
+      "encryptionkey.img.qcow2": "c60135146bb78c9242a6541dfbb841c74b210683eb03ee2cd99052f5162f2ddc"
+    },
+    "rawArchiveSha256": "a03451fe2e7a21000494935a1a891b27bf5969a802a5fb989de1d4ad5f9a6c04",
+    "validatedArchiveSha256": "8e46ebb99e872c37e6fbaa074866d9ea1594056d0abdf5df456d2c621ab82d40",
+    "archiveMemberCount": 43,
+    "archiveHeadersAndEndValidated": true,
+    "sqliteQuickCheckPassed": true,
+    "mergedDiagnosticsRemoved": [
+      {
+        "bytes": 45,
+        "block": 411
+      },
+      {
+        "bytes": 16,
+        "block": 2311
+      }
+    ]
+  },
+  "appMetadata": {
+    "commands": 2,
+    "receiptDocuments": 1,
+    "commandRevisions": [
+      3,
+      2
+    ],
+    "replicaKinds": [
+      {
+        "kind": "collaboration-history",
+        "count": 2
+      },
+      {
+        "kind": "collaboration-history",
+        "count": 2
+      },
+      {
+        "kind": "collaboration-list",
+        "count": 1
+      },
+      {
+        "kind": "collaboration-receipt",
+        "count": 1
+      }
+    ]
+  },
+  "sdkStoreMetadata": [
+    {
+      "store": "matrix-sdk-event-cache.sqlite3",
+      "tables": {
+        "events": 10
+      }
+    },
+    {
+      "store": "matrix-sdk-crypto.sqlite3",
+      "tables": {
+        "outbound_group_session": 0
+      }
+    },
+    {
+      "store": "matrix-sdk-state.sqlite3",
+      "tables": {
+        "send_queue_events": 0,
+        "dependent_send_queue_events": 0
+      }
+    },
+    {
+      "store": "matrix-sdk-event-cache.sqlite3",
+      "tables": {
+        "events": 12
+      }
+    },
+    {
+      "store": "matrix-sdk-crypto.sqlite3",
+      "tables": {
+        "outbound_group_session": 1
+      }
+    },
+    {
+      "store": "matrix-sdk-state.sqlite3",
+      "tables": {
+        "send_queue_events": 0,
+        "dependent_send_queue_events": 0
+      }
+    }
+  ],
+  "finding": "Two immutable application commands, one receipt, no remaining SDK originals after hard process death. Group delivery lacked original-history receipt recovery after the SDK removed a sent request before its asynchronous callback was journaled.",
+  "limits": [
+    "Read-only metadata inspection; no original plaintext, IDs or credentials published.",
+    "Original native failure outcome reason was not logged. The retained storage gap and missing recovery path are now established; the deterministic successor experiment has not run yet.",
+    "First clone omitted emulator QEMU version metadata and reset only its copied overlay. Original image hashes remained unchanged.",
+    "Two known tar stderr diagnostics were removed only at block boundaries; raw archive retained, all cleaned headers/end and SQLite quick checks passed.",
+    "No product release, phone install, live flag or SDK artifact changed."
+  ]
+}

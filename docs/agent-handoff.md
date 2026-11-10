@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 02:03 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 02:26 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -18,6 +18,34 @@ emulator uses2,560MiB/two cores and is stopped. Phone10.77.77.3:5555 is install-
 announce each installation; never launch, drive, uninstall or clear its app.
 Crashlytics IAM is verified; do not ask again. Physical iPhone interaction is waived,
 not Apple source/runtime, push or calling acceptance. Continue work after checkpoints.
+
+## Active: lost original callback recovery
+
+The prior unexplained failure is traced: [root cause](collaboration-original-lost-callback.md)
+and [read-only evidence](measurements/collaboration-original-lost-callback-2026-11-10.json).
+Two app commands,one receipt,zero SDK originals; original images hash-identical.
+SDK dequeue precedes async callback storage, and group recovery lacked original-history
+receipt repair. No SDK7,new keys or resend is proposed. Forensic emulators are stopped.
+
+Current implementation/tests are UNCOMMITTED in this workspace. Domain recovery first
+reads exact local evidence and otherwise one original SDK window through a new exact
+installed-runtime port. It runs only for disappeared pending originals. New pure
+provenance/content policy, unavailable-host behavior and actual Android lookup are
+included. The native fixture now has an explicit second-send barrier and read-only
+SDK-row checkpoint before hard process death. Full native acceptance is still pending.
+
+Red46986 REAPED expected FAIL87.46s:2 assertions,0errors/skips,4,651 stable inputs.
+Restored recovery passes15 new +24 old domain cases. ACTIVE focused89708 is compiling
+remaining Android/app/proof/quality checks; expected70 tests total. Do not edit source
+until reaped. Private .work/space-original-receipt-recovery-2026-11-10/README.md records
+runners, frozen source, next full/source/native gates and preserved forensic data.
+NEVER restore private delivery-green.kt; it predates the foreign-command guard.
+Group changes only native test/driver source;14 Python cases pass0.006s.
+
+Pusher CI42739907129 remains running on95195319; it does not cover these changes.
+Phone87 unchanged; ADB5209 timed out15s around02:19. Release88 remains accepted but
+uninstalled; one availability question is pending,do not repeat it. All54 PRD groups
+remain open. After this fix, continue atomic producer wakes and the remaining plan.
 
 ## Current: managed group pusher and native recovery investigation
 
