@@ -40,6 +40,7 @@ pass. All 4,797 source inputs and the inspector library remain unchanged during 
 [Focused evidence](measurements/collaboration-space-incoming-references-focused-2026-11-10.json)
 and [full evidence](measurements/collaboration-space-incoming-references-full-2026-11-10.json).
 
-Actual SDK acceptance of these new local owners remains next. The previously accepted
-[admitted page proof](collaboration-space-page-native.md) and its original-message recovery
-controls are retained. Phone latency and Apple Matrix execution are not measured here.
+[Actual SDK acceptance](collaboration-space-incoming-references-native.md) now verifies all
+pending references resolved, an empty repeated completion and identical offline reopening.
+The previous admitted-page and original-message recovery controls remain. Automatic incoming
+consumption is separate work; phone latency and Apple Matrix execution are not measured here.

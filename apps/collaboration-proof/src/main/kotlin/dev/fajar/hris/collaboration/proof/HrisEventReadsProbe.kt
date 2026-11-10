@@ -332,11 +332,40 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
             )
         check(original == again)
         check(app.receipts() == journal)
-        return JSONObject()
-            .put("retained", retained)
-            .put("providerPages", providerPages)
-            .put("replayUnchanged", true)
-            .put("originalJournalUnchanged", true)
+        val result =
+            JSONObject()
+                .put("retained", retained)
+                .put("providerPages", providerPages)
+                .put("replayUnchanged", true)
+                .put("originalJournalUnchanged", true)
+        if (files.fixture.optBoolean("completePendingIncoming", false)) {
+            val completed = host.completePending(runtime, conversation, files.roomId)
+            val after =
+                host.read(
+                    access,
+                    conversation.id,
+                    files.roomId,
+                    runtime.deviceId,
+                    ids.getString("original"),
+                    ids.getString("latestEdit"),
+                    ids.getString("peer"),
+                )
+            check(app.receipts() == journal)
+            result.put(
+                "completed",
+                JSONObject()
+                    .put("resolved", completed.resolved)
+                    .put("unresolved", completed.unresolved)
+                    .put("more", completed.more)
+                    .put("retryRequired", completed.retryRequired)
+                    .put("emptyRepeatUnchanged", true)
+                    .put(
+                        "retained",
+                        evidence.retained(after, staged, sender, pendingCompleted = true),
+                    ),
+            )
+        }
+        return result
     }
 
     private suspend fun reopened() {
@@ -389,11 +418,12 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                             ids.getString("latestEdit"),
                             ids.getString("peer"),
                         )
-                val stored = evidence.retained(snapshot, staged, sender)
-                check(
-                    stored.toString() ==
-                        adopted.getJSONObject("incoming").getJSONObject("retained").toString()
-                )
+                val incoming = adopted.getJSONObject("incoming")
+                val completed = files.fixture.optBoolean("completePendingIncoming", false)
+                val stored =
+                    evidence.retained(snapshot, staged, sender, pendingCompleted = completed)
+                val expected = if (completed) incoming.getJSONObject("completed") else incoming
+                check(stored.toString() == expected.getJSONObject("retained").toString())
                 check(
                     !expect(
                         runtime.isSpaceOpen(

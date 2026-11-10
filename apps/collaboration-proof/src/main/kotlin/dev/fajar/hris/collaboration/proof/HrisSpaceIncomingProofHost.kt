@@ -53,6 +53,36 @@ internal class HrisSpaceIncomingProofHost(private val koin: Koin) {
         error("Fictional provider history exceeded four pages")
     }
 
+    /** Uses the registered local owners and one current-admitted acquisition for a whole page. */
+    suspend fun completePending(
+        runtime: CollaborationSpaceRuntimeReady,
+        conversation: CollaborationSpaceConversation,
+        roomId: String,
+    ): CollaborationSpaceIncomingReferenceCompletion {
+        val access = runtime.owner.localDirectoryAccess()
+        val key =
+            CollaborationHistoryTraversal(
+                conversation.id,
+                roomId,
+                runtime.deviceId,
+                CollaborationHistoryPurpose.Incoming,
+            )
+        val read = koin.get<ReadCollaborationSpaceIncomingReferences>()
+        val complete = koin.get<CompleteCollaborationSpaceIncomingReferences>()
+        val source = expect(read(access, key))
+        check(source.events.size in 1..16 && source.after == null)
+        val batch = acquire(runtime, conversation, source.events.map { it.event.eventId })
+        val result = expect(complete(access, key, source, batch))
+        check(result.resolved == source.events.size && result.unresolved == 0)
+        check(!result.more && !result.retryRequired)
+        val drained = expect(read(access, key))
+        check(drained.events.isEmpty() && drained.after == null)
+        val empty = expect(complete(access, key, drained, null))
+        check(empty == CollaborationSpaceIncomingReferenceCompletion(0, 0, false, false))
+        check(expect(read(access, key)) == drained)
+        return result
+    }
+
     suspend fun resolveRetainedSources(
         runtime: CollaborationSpaceRuntimeReady,
         conversationId: String,

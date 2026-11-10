@@ -111,6 +111,7 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
         snapshot: HrisSpaceIncomingProofHost.Snapshot,
         staged: JSONObject,
         owner: ProtectedHrisProofOwner,
+        pendingCompleted: Boolean = false,
     ): JSONObject {
         val ids = staged.getJSONObject("events")
         val originalId = ids.getString("original")
@@ -141,7 +142,7 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
                 CollaborationReplacementEventFact(editId, sender, edit.timestamp, false)
         )
         check(snapshot.redacted == CollaborationHistoryEventFact(redactedId, recipient, null, true))
-        return frontier(snapshot.references, staged, owner)
+        return frontier(snapshot.references, staged, owner, pendingCompleted)
             .put("messages", 1)
             .put("originalEventId", originalId)
             .put("replacementEventId", editId)
@@ -160,6 +161,7 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
         references: CollaborationHistoryReferences,
         staged: JSONObject,
         owner: ProtectedHrisProofOwner,
+        pendingCompleted: Boolean,
     ): JSONObject {
         val ids = staged.getJSONObject("events")
         val progress = requireNotNull(references.progress)
@@ -172,7 +174,8 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
                     owner.registeredDeviceId,
                 )
         )
-        check(progress.references == references.events.size.toLong() + 2)
+        if (pendingCompleted) check(references.events.isEmpty())
+        else check(progress.references == references.events.size.toLong() + 2)
         check(
             position.until == null &&
                 position.pendingAfter == null &&
@@ -180,10 +183,12 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
                 !position.pendingRetryRequired
         )
         val pending = references.events.map { it.event.eventId }.toSet()
-        check(
-            listOf(ids.getString("original"), ids.getString("firstEdit"), ids.getString("peer"))
-                .all { it in pending }
-        )
+        if (!pendingCompleted) {
+            check(
+                listOf(ids.getString("original"), ids.getString("firstEdit"), ids.getString("peer"))
+                    .all { it in pending }
+            )
+        }
         check(ids.getString("latestEdit") !in pending && ids.getString("redaction") !in pending)
         val frontier =
             JSONArray(
@@ -223,7 +228,7 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
             .put("frontierHash", hash(frontier.toString()))
             .put("pendingHash", hash(pendingFacts.toString()))
             .put("physicalProviderPreserved", true)
-            .put("providerExhaustedWithPending", true)
+            .put("providerExhaustedWithPending", !pendingCompleted)
     }
 
     fun window(

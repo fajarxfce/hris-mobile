@@ -1,33 +1,40 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 17:59 UTC. Follow AGENTS.md. Earlier checkpoints below are historical;
+Updated 10 November 2026, 18:06 UTC. Follow AGENTS.md. Earlier checkpoints below are historical;
 this opening section owns current work. All 54 communications PRD groups remain OPEN.
 
-## Active native pending-reference acceptance
+## Current pending-reference native acceptance
 
-Mobile product7a27214ff033ae809e7a828f1fa3c2b748ee435e is committed/pushed (38741 REAPED).
-Its focused296/full10447 acceptance is complete. Mobile3 proof files and Group3 fixture/protocol
-files are now APPLIED/UNCOMMITTED and FROZEN. Private space-pending-reference-native-2026-11-10
-in both repos owns exact candidates, accepted bases, protocol and native runners/auditors.
+Mobile product7a27214ff033ae809e7a828f1fa3c2b748ee435e is committed/pushed. Product full10447
+and focused296 accepted. Mobile3 proof files and Group3 fixture/protocol files are now ACCEPTED
+and ready for their proof commits/pushes. Native4/230.275s passes strict audit.
+Old event Matrix32/native9; completed13-reference scenario
+Matrix32/native10, one extra direct transport.
+Both retain4encrypted/3sync/2secret/2providerPage. Empty completion and another offline PID add
+zeroHTTP. Exact content/provider/pending facts reopen; all three old native case identities and
+the exact2/3original transaction/process-loss/Sent controls are retained. Emulator STOPPED.
+
 Mobile6654 REAPED/ACCEPTED20/107.635s,4797inputs,manifest
 99b96f3a08efe9e40d85b65860c445c20f9cbc1afed479fbf9499e3e7c91da95.
-ProofAPK150657733B SHAb7ad29214a8ca5f3c6195291182698d388307a36d5854ac6806e9d10611e1b2d.
-Group58041 REAPED/ACCEPTED79.871s,8740inputs,manifest
-326a6c1cead9c2b35f1e2ae96b50642cfa845de120813d049ce39905281e156a;39Python cases pass.
-Native-1/64426 RUNNING, fresh2560MiB/2core emulator,boot42.134s. No heavy compiler remains.
+Current proofAPK150657733B SHAb7ad29214a8ca5f3c6195291182698d388307a36d5854ac6806e9d10611e1b2d.
+Group58041 REAPED/ACCEPTED79.871s/zeroJVM(compilation),8740inputs,manifest
+326a6c1cead9c2b35f1e2ae96b50642cfa845de120813d049ce39905281e156a;39Pythonprotocolcases pass. Both private
+space-pending-reference-native-2026-11-10 folders own exact sources/reports/accepted audits.
+No local heavy job remains. All source/library/APK inputs stayed fixed during actual execution.
 
-Next reap/accept native-1. Expected4 native cases across
-2reports/4isolated fixtures, preserving all three previous case identities. Old event control
-stays Matrix32/native9; new completed13-reference pass permits Matrix32..45/native10/direct5.
-The upper bound was derived BEFORE execution from SDK6 load_or_fetch_event's existing cache
-path; source request-budget.md records it. Empty completion and offline reopen add zeroHTTP.
-No completed native result exists yet. Do not edit source/library/APK during emulator execution.
-Hosted42865846045 portable is REAPED/AUDITED8399; artifact13790445364/3574868B,
-SHAe3ce27f1ac20e11c7614e78b960baa081f91968abd54e8602f23fac93d49dd7e,
-reportManifest165e73b2a25898f6feb6dfbfcec327a967d36eca6612d491778880b5100852de.
-Apple remains RUNNING; full hosted acceptance not claimed.
-After acceptance commit/push both proof changes and continue independent incoming wake/worker.
-All54PRD groups remain OPEN. No phone/live change; release89 still not installed.
+Next implement independent incoming durable wake, finite room claims and worker, then current
+parent-owned SDK hints. Use existing original SDK/runtime and typed local stores; do not use
+outgoing SpaceRecoveryWorker completion for incoming work. Aggregate missing-key retry durably
+before room/pass completion, including without new events. SDK callback captures IDs only;
+bounded overflow retains rescan, and startup covers persistence before callback delivery.
+Private NEXT.md records design constraints, not an implemented consumer. All54PRD groups OPEN.
+
+Hosted42865846045 exact669908384da244d285cb21e93040cffcee3207ef remains separately monitored;
+no duplicate dispatch. Expected11621=8399portable+3222Apple,+16Swift/unsignedhost,job90/host30.
+It predates the current pending-reference product changes. Release89 accepted/NOT INSTALLED;
+phone87 last known, ADB78638 timeout REAPED. Install-only when reachable, never launch/reset UI.
+Original live90163/schema116.4 unchanged; Group117–140 undeployed. ImmutableSDK6, preserved
+original sender/keys/transactions and dirty Inspector/SDK worktrees remain unchanged.
 
 
 ## Current pending-reference product acceptance
