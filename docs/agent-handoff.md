@@ -1,38 +1,42 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 19:23 UTC. Follow AGENTS.md. This opening section owns current
+Updated 10 November 2026, 19:39 UTC. Follow AGENTS.md. This opening section owns current
 work; checkpoints below are historical. All 54 communications PRD groups remain OPEN.
 
-## Active incoming completion and provider evidence
+## Active incoming completion verification
 
-Source/request7e36df3f is committed/pushed,36686 REAPED. Focused204/352.143s and full10565=
-8546fresh+2019exact controls/656.1s accepted.4814inputs,manifest
-4e8356861e4d1bb0238591bb3336c577fa646eeffbb279252dd0803d9d478979. Storage795f11c2 also accepted.
+The 13 completion/retained-provider files remain applied, uncommitted and frozen during full1,
+session **69242 RUNNING**. Focused2/95152 is REAPED and strictly accepted: 336 JVM/Chromium cases,
+337.890 seconds, 4,821 inputs, source manifest
+`d0ede4e7ca20c4bb7737f92c847e28d80ee85b6f1014b164e21c4633d9b19bce`.
+Focused1/75627 failed 17 of 103 cases. Bytecode confirmed that initial revision zero became a boxed
+Int in comparison with Long. Explicit `0L` corrects that policy; all original case identities remain.
+Source/library inputs are unchanged during focused2. Full expected count: 10,649.
 
-Current13Kotlin files are APPLIED/UNCOMMITTED and FROZEN under focused1/75627 RUNNING.
-Expected336focused/10649full/4821inputs; full1 NOT STARTED. Prepare48981 REAPED. Private
-space-incoming-completion-2026-11-10 owns exact accepted base/candidate/prior reports/runners.
-16new clean-completion cases,21phase cases,5new acquisition cases (prior24preserved). Data DI
-and app resolution assertions included. The actual proof host checks the typed retained receipt.
+Private `.work/space-incoming-completion-2026-11-10` contains exact candidates, runners, audits,
+and a publication script that requires full and actual native acceptance. Reap full, audit it,
+then run the Group `.work/space-incoming-completion-native-2026-11-10/native.py native-1` with
+no other heavy job. Its exact compiled backend baseline is reused only if unchanged. Four previous
+actual Matrix case identities, original/mixed controls and request budgets must remain. Native has
+NOT STARTED. SDK6 unchanged; no incoming worker or hint consumer enabled by these 13 files.
 
-Space provider acquisition now returns runtime/traversal/origin/before/after/count, validated by
-exact post-commit readback and a pure transition policy. Company acquisition summary unchanged.
-Phase advancement requires matching retained checkpoint and explicit Latest/SavedPosition phase;
-exact applied phase is idempotent, late newer work survives. Clean Pending completion requires
-provider EOF, no pending references and resolved exact captured head when non-null. Both retain
-the independent wake. One incoming worker must serialize provider writes/completion. No product
-worker, SDK hint/callback, phone UI or generic Starter delta is enabled yet.
+Prepared hosted auditor compares against complete 66990838/run42865846045. After local/native
+acceptance and push, dispatch once on an immutable ref. Expected 11,993 cases (8,647 portable,
+3,346 Apple), plus 16 Swift cases and unsigned iOS host. No new dispatch yet.
 
-Reap/audit focused then full; fix actual failures before accepting. After local acceptance run
-actual native4 controls with immutableSDK6, exact original/mixed2/3control transactions, and prior
-Matrix/native budgets. New receipt checks add local I/O only; that remains a native measurement
-requirement. Next fair deferral/read owners, finite scan claim/cursor, bounded incoming worker,
-collapsed scheduling and parent-owned SDK hints. All54PRD groups remain OPEN.
+Next integrated worker draft is private and NOT APPLIED in `.work/space-incoming-worker-2026-11-10`.
+Use one encrypted demand document for scan cursor AND discovered queued rooms in the same CAS;
+this supersedes the separate cross-store claim design. Draft includes scan policy, DTO compatibility,
+admitted discovery/read/deferral, 14 scan policy and 14 discovery cases. These are UNTESTED. More
+read/deferral/storage/worker tests and wake/hint integration are still required. Preserve existing
+pending phases during startup scan, newer rescan generations, finite inventory boundaries and fair
+four-room turns. One worker serializes provider completion; existing collapsed scheduler owns OS work.
 
-Phone ADB17704 timeout REAPED19:17; release89 NOT INSTALLED, phone87 last known. Install-only
-when reachable; no launch/reset/UI drive. Hosted6699/42865846045 complete11621+16Swift/unsigned
-host but predates newer additions; no new dispatch. Original live90163/schema116.4 unchanged;
-Group117–140 undeployed. SDK6/private originals/dirty SDK/Inspector worktrees preserved.
+Last ADB check46266 was REAPED after an18-second timeout. Release89 NOT INSTALLED; phone87 last known.
+Existing availability question stays pending. Install-only when reachable; no launch/reset/UI drive.
+Live backend90163/schema116.4 unchanged; Group117–140 undeployed. Accepted source/request7e36df3f,
+storage795f11c2 and prior native7174557d/Group0ce34b92 remain pushed. Dirty SDK/Inspector and original
+sender transactions preserved. No generic Starter delta. All54 communications PRD groups remain OPEN.
 
 ## Historical checkpoints
 
