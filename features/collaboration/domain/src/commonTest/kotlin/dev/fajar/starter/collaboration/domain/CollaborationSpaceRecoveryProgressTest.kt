@@ -1,7 +1,7 @@
 package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceRecoveryProgressRepository
+import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
@@ -287,6 +287,212 @@ class CollaborationSpaceRecoveryProgressTest {
         )
     }
 
+    @Test
+    fun genericUpdaterCannotBypassFinalInventoryBeforeWakeCompletion() = runTest {
+        val f = Fixture()
+        f.begin()
+        f.change(CollaborationSpaceRecoveryChange.Attempt(f.page(1, end = true)))
+        f.complete()
+        val before = f.snapshot()
+        assertEquals(
+            FailureKind.Validation,
+            assertIs<AppResult.Failed>(f.update(before, CollaborationSpaceRecoveryChange.Finish))
+                .failure
+                .kind,
+        )
+        assertEquals(before, f.snapshot())
+        assertEquals(f.wake, f.change(CollaborationSpaceRecoveryChange.Finish).completedWake)
+    }
+
+    @Test
+    fun commandIsClaimedDurablyBeforeAnyRoomBindingExists() = runTest {
+        val f = Fixture()
+        f.begin()
+        val record = f.command(1)
+        val claimed = f.change(CollaborationSpaceRecoveryChange.AttemptMessages(listOf(record)))
+        assertNull(claimed.completedWake)
+        val sweep = f.snapshot().progress!!.sweep!!
+        assertNull(sweep.boundary)
+        assertNull(sweep.pending)
+        assertEquals(record.intent.id, sweep.messages!!.pending!!.position.messageId)
+        assertEquals(record.intent.conversationId, sweep.messages.pending!!.conversationId)
+        assertEquals(record.intent.createdAt, sweep.messages.pending!!.position.createdAt)
+    }
+
+    @Test
+    fun failedCommandAdvancesItsCursorWithoutAcknowledgingOrStarvingLaterWork() = runTest {
+        val f = Fixture()
+        f.begin()
+        val first = f.command(1)
+        val second = f.command(2)
+        f.change(CollaborationSpaceRecoveryChange.AttemptMessages(listOf(second, first)))
+        val completed = f.change(CollaborationSpaceRecoveryChange.CompleteMessage(true))
+        assertNull(completed.completedWake)
+        assertTrue(completed.snapshot.progress!!.sweep!!.retryRequired)
+        f.change(CollaborationSpaceRecoveryChange.AttemptMessages(listOf(first, second)))
+        assertEquals(
+            second.intent.id,
+            f.snapshot().progress!!.sweep!!.messages!!.pending!!.position.messageId,
+        )
+        assertEquals(
+            CollaborationMessageState.Queued,
+            f.local.records.getValue(first.intent.id).state,
+        )
+    }
+
+    @Test
+    fun exactInstantOrderingPreservesSubmillisecondMessagesBeforeIdOrder() = runTest {
+        val f = Fixture()
+        f.begin()
+        val first = f.command(2, Instant.parse("2026-11-10T00:00:00.000000001Z"))
+        val second = f.command(1, Instant.parse("2026-11-10T00:00:00.000000002Z"))
+        assertEquals(
+            first.intent.createdAt.toEpochMilliseconds(),
+            second.intent.createdAt.toEpochMilliseconds(),
+        )
+        f.change(CollaborationSpaceRecoveryChange.AttemptMessages(listOf(second, first)))
+        assertEquals(
+            first.intent.id,
+            f.snapshot().progress!!.sweep!!.messages!!.pending!!.position.messageId,
+        )
+        f.change(CollaborationSpaceRecoveryChange.CompleteMessage(false))
+        f.change(CollaborationSpaceRecoveryChange.AttemptMessages(listOf(first, second)))
+        assertEquals(
+            second.intent.id,
+            f.snapshot().progress!!.sweep!!.messages!!.pending!!.position.messageId,
+        )
+    }
+
+    @Test
+    fun oldPendingBindingCannotBeReplacedByNewCommandDiscovery() = runTest {
+        val f = Fixture()
+        f.begin()
+        f.change(CollaborationSpaceRecoveryChange.Attempt(f.page(1)))
+        val before = f.snapshot()
+        assertIs<AppResult.Failed>(
+            f.update(before, CollaborationSpaceRecoveryChange.AttemptMessages(listOf(f.command(1))))
+        )
+        assertEquals(before, f.snapshot())
+        f.complete()
+        f.change(CollaborationSpaceRecoveryChange.AttemptMessages(listOf(f.command(1))))
+        assertNotNull(f.snapshot().progress!!.sweep!!.messages!!.pending)
+    }
+
+    @Test
+    fun pendingCommandCannotBeOverwrittenByAnotherCommandOrBindingClaim() = runTest {
+        val f = Fixture()
+        f.begin()
+        val records = listOf(f.command(1))
+        f.change(CollaborationSpaceRecoveryChange.AttemptMessages(records))
+        val before = f.snapshot()
+        assertIs<AppResult.Failed>(
+            f.update(before, CollaborationSpaceRecoveryChange.AttemptMessages(records))
+        )
+        assertIs<AppResult.Failed>(
+            f.update(before, CollaborationSpaceRecoveryChange.Attempt(f.page(1)))
+        )
+        assertIs<AppResult.Failed>(
+            f.update(before, CollaborationSpaceRecoveryChange.Complete(false))
+        )
+        assertEquals(before, f.snapshot())
+    }
+
+    @Test
+    fun duplicateOverflowForeignAndMalformedTerminalRecordsCannotCreateAClaim() = runTest {
+        val f = Fixture()
+        f.begin()
+        val record = f.command(1)
+        val before = f.snapshot()
+        for (records in
+            listOf(
+                listOf(record, record),
+                List(129) { record },
+                listOf(
+                    record.copy(
+                        intent =
+                            record.intent.copy(owner = record.intent.owner.copy(spaceId = id(99)))
+                    )
+                ),
+                listOf(record.copy(revision = 1, state = CollaborationMessageState.Cancelled)),
+            )) assertIs<AppResult.Failed>(
+            f.update(before, CollaborationSpaceRecoveryChange.AttemptMessages(records))
+        )
+        assertEquals(before, f.snapshot())
+    }
+
+    @Test
+    fun emptyCommandPageHasExplicitExhaustionButCannotCompleteUnvisitedBindings() = runTest {
+        val f = Fixture()
+        f.begin()
+        f.change(CollaborationSpaceRecoveryChange.AttemptMessages(emptyList()))
+        assertTrue(f.snapshot().progress!!.sweep!!.messages!!.reachedEnd)
+        assertIs<AppResult.Failed>(f.finish(f.snapshot()))
+        assertNotNull(f.snapshot().progress!!.sweep)
+    }
+
+    @Test
+    fun staleCommandCompletionCannotAdvanceTheNextOriginalClaim() = runTest {
+        val f = Fixture()
+        f.begin()
+        val records = listOf(f.command(1), f.command(2))
+        val old = f.change(CollaborationSpaceRecoveryChange.AttemptMessages(records)).snapshot
+        f.change(CollaborationSpaceRecoveryChange.CompleteMessage(false))
+        f.change(CollaborationSpaceRecoveryChange.AttemptMessages(records))
+        val next = f.snapshot()
+        assertIs<AppResult.Failed>(
+            f.update(old, CollaborationSpaceRecoveryChange.CompleteMessage(false))
+        )
+        assertEquals(next, f.snapshot())
+    }
+
+    @Test
+    fun newerWakeDoesNotResetOriginalMessagePosition() = runTest {
+        val f = Fixture()
+        f.begin()
+        f.change(CollaborationSpaceRecoveryChange.AttemptMessages(listOf(f.command(1))))
+        val original = f.snapshot().progress!!.sweep
+        f.change(CollaborationSpaceRecoveryChange.Begin(CollaborationSpaceRecoveryWake(id(999))))
+        assertEquals(original, f.snapshot().progress!!.sweep)
+    }
+
+    @Test
+    fun cancellationAfterMessageClaimCommitRetainsItsOriginalForRecovery() = runTest {
+        val f = Fixture()
+        f.begin()
+        val record = f.command(1)
+        val committed = CompletableDeferred<Unit>()
+        val released = CompletableDeferred<Unit>()
+        f.afterWrite = {
+            withContext(NonCancellable) {
+                committed.complete(Unit)
+                released.await()
+            }
+        }
+        val task = async {
+            f.change(CollaborationSpaceRecoveryChange.AttemptMessages(listOf(record)))
+        }
+        committed.await()
+        task.cancel()
+        released.complete(Unit)
+        task.join()
+        assertTrue(task.isCancelled)
+        assertEquals(record.intent.id, f.stored!!.sweep!!.messages!!.pending!!.position.messageId)
+    }
+
+    @Test
+    fun commandAppendedBeforeFinalInventoryKeepsTheCapturedWakePending() = runTest {
+        val f = Fixture()
+        f.begin()
+        f.change(CollaborationSpaceRecoveryChange.AttemptMessages(emptyList()))
+        f.change(CollaborationSpaceRecoveryChange.Attempt(f.page(1, end = true)))
+        f.complete()
+        f.command(1)
+        val result = f.change(CollaborationSpaceRecoveryChange.Finish)
+        assertNull(result.completedWake)
+        assertEquals(f.wake.generation, result.snapshot.progress!!.sweep!!.wakeGeneration)
+        assertNull(result.snapshot.progress!!.sweep!!.messages)
+    }
+
     private class Fixture {
         val setup =
             CollaborationSetupFixture().apply {
@@ -347,19 +553,70 @@ class CollaborationSpaceRecoveryProgressTest {
         val server = IdentityServer(owner.parent.audience, "Fictional")
         val read = ReadCollaborationSpaceRecoveryProgress(repository, setup.sessions, server)
         val update = UpdateCollaborationSpaceRecoveryProgress(repository, setup.sessions, server)
+        val local = SpaceRecoveryLocalStorageFixture(owner)
+        private val inventory =
+            object : CollaborationSpaceRoomBindingInventoryRepository {
+                override suspend fun page(
+                    access: CollaborationSpaceLocalAccess,
+                    after: CollaborationSpaceRoomBindingCursor?,
+                    limit: Int,
+                ): AppResult<CollaborationSpaceRoomBindingPage> {
+                    assertEquals(owner.localDirectoryAccess(), access)
+                    assertNull(after)
+                    assertEquals(1, limit)
+                    return AppResult.Success(
+                        CollaborationSpaceRoomBindingPage(
+                            stored?.sweep?.boundary,
+                            emptyList(),
+                            null,
+                            false,
+                        )
+                    )
+                }
+            }
+        val finish =
+            FinishCollaborationSpaceRecovery(
+                repository,
+                inventory,
+                local.messages,
+                local.directory,
+                setup.sessions,
+                server,
+            )
 
         suspend fun snapshot() =
             assertIs<AppResult.Success<CollaborationSpaceRecoverySnapshot>>(read(owner)).value
 
         suspend fun change(change: CollaborationSpaceRecoveryChange) =
             assertIs<AppResult.Success<CollaborationSpaceRecoveryUpdate>>(
-                    update(snapshot(), change)
+                    if (change == CollaborationSpaceRecoveryChange.Finish) finish(snapshot())
+                    else update(snapshot(), change)
                 )
                 .value
 
         suspend fun begin() = change(CollaborationSpaceRecoveryChange.Begin(wake))
 
         suspend fun complete() = change(CollaborationSpaceRecoveryChange.Complete(false))
+
+        fun command(
+            index: Int,
+            createdAt: Instant = Instant.parse("2026-11-10T00:00:00Z"),
+        ): CollaborationSpaceMessageRecord {
+            val record =
+                CollaborationSpaceMessageRecord(
+                    CollaborationSpaceMessageIntent(
+                        id(9000 + index),
+                        owner.localDirectoryAccess().messageOwner(),
+                        id(9500 + index),
+                        createdAt,
+                        "Fictional pending",
+                    ),
+                    0,
+                    CollaborationMessageState.Queued,
+                )
+            local.records[record.intent.id] = record
+            return record
+        }
 
         fun page(index: Int, end: Boolean = false): CollaborationSpaceRoomBindingPage {
             val time = Instant.parse("2026-11-07T00:00:00Z")

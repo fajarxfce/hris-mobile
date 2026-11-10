@@ -198,10 +198,28 @@ class StageCollaborationSpaceTextTest {
     fun unavailableRecipientKeepsQueuedIntentWithoutAcquiringAnSdkWriter() = runTest {
         val f = SpaceMessageStagingFixture()
         f.base.observed = f.base.observed.copy(recipientReady = false)
-        assertEquals(FailureKind.Conflict, assertIs<AppResult.Failed>(f.stage()).failure.kind)
+        assertEquals(FailureKind.Unavailable, assertIs<AppResult.Failed>(f.stage()).failure.kind)
         assertEquals(f.initial, f.current())
         assertEquals(0, f.base.count("stage-acquire"))
         assertEquals(0, f.base.count("stage-enqueue"))
+    }
+
+    @Test
+    fun missingUncertainOriginalWaitsForRecipientWithoutAnotherEnqueue() = runTest {
+        val f = SpaceMessageStagingFixture()
+        f.commitEnqueue = false
+        f.enqueueResponse = AppResult.Failed(f.base.directory.storageFailure)
+        assertIs<AppResult.Failed>(f.stage())
+        val original = f.current()
+        assertIs<CollaborationMessageState.Staging>(original.state)
+        f.base.observed = f.base.observed.copy(recipientReady = false)
+        val failure = assertIs<AppResult.Failed>(f.stage()).failure
+        assertEquals(FailureKind.Unavailable, failure.kind)
+        assertEquals("client.collaboration_recipient_unavailable", failure.code)
+        assertEquals(original, f.current())
+        assertEquals(1, f.base.count("stage-enqueue"))
+        assertFalse(f.activeWriter)
+        f.noDelivery()
     }
 
     @Test

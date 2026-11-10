@@ -13,7 +13,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withLock
 
-/** One original group sweep processor, one bounded waiter, and four raw pages per turn. */
+/** One bounded recovery processor; each turn attempts at most four original commands or rooms. */
 class CollaborationSpaceRecoveryWorker(
     private val states: Lazy<StateFlow<ApplicationCollaborationState>>,
     private val ensureWake: EnsureCollaborationSpaceRecoveryWake,
@@ -30,6 +30,15 @@ class CollaborationSpaceRecoveryWorker(
     private val page: LoadCollaborationSpaceRecoveryPage,
     private val room: LoadCollaborationSpaceRecoveryRoom,
     private val finishSweep: FinishCollaborationSpaceRecovery,
+    private val pendingMessages:
+        suspend (CollaborationSpaceOwner) -> AppResult<List<CollaborationSpaceMessageRecord>>,
+    private val message: LoadCollaborationSpaceRecoveryMessage,
+    private val prepareRoom:
+        suspend (CollaborationSpaceConversation) -> AppResult<CollaborationSpaceRoomBinding>,
+    private val stageMessage:
+        suspend (
+            CollaborationSpaceRuntimeReady, CollaborationSpaceConversation, String,
+        ) -> AppResult<CollaborationSpaceMessageRecord>,
     private val demand:
         suspend (CollaborationSpaceRuntimeReady, CollaborationSpaceConversation) -> AppResult<
                 Boolean
@@ -98,10 +107,36 @@ class CollaborationSpaceRecoveryWorker(
             if (begun is AppResult.Failed) return failed(begun)
             snapshot = (begun as AppResult.Success).value.snapshot
         }
+        return sweep(runtime, snapshot)
+    }
+
+    /** Old claimed rooms resume first; fresh command work then precedes the remaining room scan. */
+    private suspend fun sweep(
+        runtime: CollaborationSpaceRuntimeReady,
+        initial: CollaborationSpaceRecoverySnapshot,
+    ): SyncResult {
+        var snapshot = initial
         repeat(4) {
             currentCoroutineContext().ensureActive()
-            if (snapshot.progress?.sweep?.reachedEnd == true) return finish(snapshot)
-            if (snapshot.progress?.sweep?.pending == null) {
+            val progress = requireNotNull(snapshot.progress?.sweep)
+            var messageTurn = progress.pending == null && progress.messages?.reachedEnd != true
+            if (messageTurn && progress.messages?.pending == null) {
+                val local = pendingMessages(runtime.owner)
+                if (local is AppResult.Failed) return failed(local)
+                val claimed =
+                    updateProgress(
+                        snapshot,
+                        CollaborationSpaceRecoveryChange.AttemptMessages(
+                            (local as AppResult.Success).value
+                        ),
+                    )
+                if (claimed is AppResult.Failed) return failed(claimed)
+                snapshot = (claimed as AppResult.Success).value.snapshot
+                if (snapshot.progress?.sweep?.messages?.reachedEnd == true) messageTurn = false
+            }
+            if (!messageTurn && snapshot.progress?.sweep?.reachedEnd == true)
+                return finish(snapshot)
+            if (!messageTurn && snapshot.progress?.sweep?.pending == null) {
                 val next = page(snapshot)
                 if (next is AppResult.Failed) return failed(next)
                 val claimed =
@@ -113,22 +148,56 @@ class CollaborationSpaceRecoveryWorker(
                 snapshot = (claimed as AppResult.Success).value.snapshot
             }
             val result =
-                withTimeoutOrNull(50.seconds) { recoverRoom(runtime, snapshot) }
-                    ?: AppResult.Failed(pending("room_timeout", FailureKind.Timeout))
+                withTimeoutOrNull(50.seconds) {
+                    if (messageTurn) recoverMessage(runtime, snapshot)
+                    else recoverRoom(runtime, snapshot)
+                } ?: AppResult.Failed(pending("room_timeout", FailureKind.Timeout))
             currentCoroutineContext().ensureActive()
-            val completed =
-                updateProgress(
-                    snapshot,
-                    CollaborationSpaceRecoveryChange.Complete(result is AppResult.Failed),
-                )
+            val change =
+                if (messageTurn)
+                    CollaborationSpaceRecoveryChange.CompleteMessage(result is AppResult.Failed)
+                else CollaborationSpaceRecoveryChange.Complete(result is AppResult.Failed)
+            val completed = updateProgress(snapshot, change)
             if (completed is AppResult.Failed) return failed(completed)
             snapshot = (completed as AppResult.Success).value.snapshot
-            // Faults retain the wake and use the scheduler's backoff. They are not immediate
-            // healthy continuations, even when the native queue returned an ordinary report.
+            // Retain failures and advance the original cursor before scheduler backoff.
             if (result is AppResult.Failed) return failed(result)
         }
-        return if (snapshot.progress?.sweep?.reachedEnd == true) finish(snapshot)
+        val progress = requireNotNull(snapshot.progress?.sweep)
+        return if (progress.reachedEnd && progress.messages?.reachedEnd == true) finish(snapshot)
         else continuePending()
+    }
+
+    private suspend fun recoverMessage(
+        runtime: CollaborationSpaceRuntimeReady,
+        snapshot: CollaborationSpaceRecoverySnapshot,
+    ): AppResult<Unit> {
+        val found = message(snapshot)
+        if (found is AppResult.Failed) return found
+        val claimed = (found as AppResult.Success).value ?: return AppResult.Success(Unit)
+        val prepared = prepareRoom(claimed.conversation)
+        if (prepared is AppResult.Failed) return prepared
+        when (claimed.record.state) {
+            CollaborationMessageState.Queued,
+            is CollaborationMessageState.Staging -> {
+                val staged = stageMessage(runtime, claimed.conversation, claimed.record.intent.id)
+                if (staged is AppResult.Failed) return staged
+                if (
+                    (staged as AppResult.Success).value.state == CollaborationMessageState.Cancelled
+                )
+                    return AppResult.Success(Unit)
+            }
+            else -> Unit
+        }
+        val sent = deliver(runtime, claimed.conversation)
+        if (sent is AppResult.Failed) return sent
+        val report = (sent as AppResult.Success).value
+        return if (
+            claimed.record.intent.id in report.confirmed &&
+                claimed.record.intent.id !in report.unresolved
+        )
+            AppResult.Success(Unit)
+        else AppResult.Failed(pending("messages_pending"))
     }
 
     private suspend fun recoverRoom(

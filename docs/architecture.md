@@ -1,5 +1,10 @@
 # Architecture
 
+[Durable pending Space recovery](collaboration-space-pending-recovery.md) gives the existing
+application worker one authenticated original-message claim before binding/staging/delivery.
+The dedicated Finish owner checks the complete pending partition; unready recipients retain
+their original intent and use bounded retries. Actual native worker proof remains separate.
+
 [Mixed/new-room recovery demand](collaboration-mixed-recovery-demand.md) uses invocation-owned
 Company/Space ledger captures and exact original proof before idle. Both live ledgers are
 rechecked after their initial reads; new SPACE rooms need no Company I/O. Read-only demand

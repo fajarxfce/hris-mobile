@@ -5,7 +5,10 @@ import dev.fajar.starter.app.work.CollaborationSpaceRecoveryWorker
 import dev.fajar.starter.collaboration.domain.usecases.AdoptCollaborationSpaceRuntime
 import dev.fajar.starter.collaboration.domain.usecases.DeliverCollaborationSpaceOriginalMessages
 import dev.fajar.starter.collaboration.domain.usecases.LoadCollaborationSpaceRecoveryDevice
+import dev.fajar.starter.collaboration.domain.usecases.PrepareCollaborationSpaceRoomBinding
+import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationSpacePendingMessages
 import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationSpaceRecoveryDemand
+import dev.fajar.starter.collaboration.domain.usecases.StageCollaborationSpaceText
 import dev.fajar.starter.collaboration.domain.usecases.SynchronizeCollaborationSpaceDevice
 import dev.fajar.starter.sync.domain.SyncTask
 import org.koin.dsl.bind
@@ -20,6 +23,9 @@ internal fun applicationCollaborationSpaceWorkerModule() = module {
         val sync = inject<SynchronizeCollaborationSpaceDevice>()
         val demand = inject<ReadCollaborationSpaceRecoveryDemand>()
         val deliver = inject<DeliverCollaborationSpaceOriginalMessages>()
+        val pending = inject<ReadCollaborationSpacePendingMessages>()
+        val prepare = inject<PrepareCollaborationSpaceRoomBinding>()
+        val stage = inject<StageCollaborationSpaceText>()
         CollaborationSpaceRecoveryWorker(
             states = lazy { parent.value.state },
             ensureWake = get(),
@@ -34,6 +40,10 @@ internal fun applicationCollaborationSpaceWorkerModule() = module {
             page = get(),
             room = get(),
             finishSweep = get(),
+            pendingMessages = { pending.value(it) },
+            message = get(),
+            prepareRoom = { prepare.value(it) },
+            stageMessage = { runtime, conversation, id -> stage.value(runtime, conversation, id) },
             demand = { runtime, conversation -> demand.value(runtime, conversation) },
             deliver = { runtime, conversation -> deliver.value(runtime, conversation) },
             build = get(),

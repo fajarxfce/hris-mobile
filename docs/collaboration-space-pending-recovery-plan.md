@@ -1,7 +1,7 @@
 # Pending Space recovery — implementation handoff
 
-This is the next increment, not accepted worker behavior. The existing application worker
-still scans retained room bindings. Complete pending inventory is accepted in b03f591d;
+The pending-worker source increment is locally accepted with10,010 verified cases;
+actual native pending-worker acceptance remains required. Complete pending inventory is accepted in b03f591d;
 mixed/new-room demand is now locally accepted (9,932 verified cases). Source acceptance and phone/live activation
 are separate. All54 communications PRD groups remain open.
 
@@ -68,10 +68,10 @@ is install-only. Apple shared tests and unsigned host do not implement the missi
 Matrix runtime. Incoming/history/edit routing and the larger media/backup/call/meeting work
 remain separate.
 
-Current22-input candidate is applied and frozen for focused2; it is not accepted yet.
+The22-input source passed focused251 and full10010; both runs completed.
 Focused1 failed test compilation after67 domain cases; its exact candidate is retained.
 The corrected candidate also fixes owning unready-recipient classification to Unavailable
-and skips delivery after a concurrent cancellation. Expected focused251/full10010; actual
+and skips delivery after a concurrent cancellation. Validated focused251/full10010; actual
 native pending-worker proof remains required. Private .work/space-pending-recovery-2026-11-10
 contains the current runner and candidate, while older worker-draft files are stale.
 The current agent handoff records results and remaining work.

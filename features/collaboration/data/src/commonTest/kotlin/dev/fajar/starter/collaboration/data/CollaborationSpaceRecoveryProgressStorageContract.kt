@@ -8,6 +8,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
 import kotlin.io.encoding.Base64
 import kotlin.test.*
+import kotlin.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -337,6 +338,7 @@ abstract class CollaborationSpaceRecoveryProgressStorageContract {
                 }
             for (bad in
                 listOf(
+                    original.replace("\"schema\":1", "\"schema\":99"),
                     original.replace("\"schema\":1", "\"schema\":2"),
                     original.replace("\"revision\":\"7\"", "\"revision\":\"07\""),
                 )) {
@@ -352,6 +354,200 @@ abstract class CollaborationSpaceRecoveryProgressStorageContract {
             }
         }
         assertEquals(AppResult.Success(first), f.progress().current(f.owner()))
+    }
+
+    private fun messageSweep(f: CollaborationHistoryFixture) =
+        sweep(f)
+            .copy(
+                pending = null,
+                messages =
+                    CollaborationSpaceMessageRecoverySweep(
+                        after =
+                            CollaborationSpaceMessageRecoveryPosition(
+                                Instant.parse("2026-11-10T00:00:00.000000001Z"),
+                                historyId(1001),
+                            ),
+                        pending =
+                            CollaborationSpaceMessageRecoveryClaim(
+                                CollaborationSpaceMessageRecoveryPosition(
+                                    Instant.parse("2026-11-10T00:00:00.000000002Z"),
+                                    historyId(1002),
+                                ),
+                                historyId(1003),
+                            ),
+                    ),
+            )
+
+    @Test
+    fun legacyBindingClaimUpgradesWithoutChangingItsNamespaceOrHistoryKey() = withDatabase { f ->
+        val legacy = value(f.progress().replace(f.owner(), null, sweep(f)))
+        val key = f.keys.read()
+        f.reopen()
+        assertEquals(legacy, value(f.progress().current(f.owner())))
+        val legacySweep = requireNotNull(legacy.sweep)
+        assertNull(legacySweep.messages)
+        assertEquals(sweep(f).pending, legacySweep.pending)
+        val next = value(f.progress().replace(f.owner(), legacy, messageSweep(f)))
+        f.reopen()
+        assertEquals(next, value(f.progress().current(f.owner())))
+        assertEquals(key, f.keys.read())
+        assertEquals(
+            "collaboration-history/space-recovery/v1/",
+            spaceRecoveryPartition(f.owner()).substringBefore(f.owner().parent.nativeSessionId),
+        )
+    }
+
+    @Test
+    fun exactNanosecondClaimCursorAndExhaustionSurviveReopen() = withDatabase { f ->
+        var previous: CollaborationSpaceRecoveryProgress? = null
+        val active = messageSweep(f)
+        val phase = active.messages!!
+        for (next in
+            listOf(
+                active,
+                active.copy(
+                    messages = phase.copy(after = phase.pending!!.position, pending = null)
+                ),
+                active.copy(
+                    messages =
+                        phase.copy(
+                            after = phase.pending!!.position,
+                            pending = null,
+                            reachedEnd = true,
+                        )
+                ),
+            )) {
+            previous = value(f.progress().replace(f.owner(), previous, next))
+            f.reopen()
+            assertEquals(previous, value(f.progress().current(f.owner())))
+        }
+    }
+
+    @Test
+    fun messageClaimSurvivesLostCommitResponseWithItsOriginalCoordinates() = withDatabase { f ->
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun replace(
+                    scope: ReplicaScope,
+                    partition: String,
+                    expected: ReplicaCheckpoint?,
+                    snapshot: ReplicaSnapshot?,
+                    wake: WorkWakeRequest?,
+                ): Boolean {
+                    check(f.database.replicas.replace(scope, partition, expected, snapshot, wake))
+                    throw CancellationException("Fictional response loss")
+                }
+            }
+        assertFailsWith<CancellationException> {
+            f.progress(store).replace(f.owner(), null, messageSweep(f))
+        }
+        f.reopen()
+        val saved = value(f.progress().current(f.owner()))
+        assertEquals(messageSweep(f), saved.sweep)
+        assertEquals(
+            AppResult.Success(null),
+            f.progress().replace(f.owner(), null, messageSweep(f)),
+        )
+    }
+
+    @Test
+    fun malformedOrOverlappingMessageClaimsCannotCreateAnyProtectedState() = withDatabase { f ->
+        val good = messageSweep(f)
+        val phase = good.messages!!
+        val claim = phase.pending!!
+        for (bad in
+            listOf(
+                good.copy(pending = sweep(f).pending),
+                good.copy(messages = phase.copy(reachedEnd = true)),
+                good.copy(messages = phase.copy(after = claim.position)),
+                good.copy(messages = phase.copy(pending = claim.copy(conversationId = "invalid"))),
+                good.copy(
+                    messages =
+                        phase.copy(
+                            pending =
+                                claim.copy(position = claim.position.copy(messageId = "invalid"))
+                        )
+                ),
+            )) assertIs<AppResult.Failed>(f.progress().replace(f.owner(), null, bad))
+        assertNull(f.keys.read())
+        assertEquals(AppResult.Success(null), f.progress().current(f.owner()))
+    }
+
+    @Test
+    fun schemaTwoRejectsRelabelingNoncanonicalTimeAndOversizedPlaintext() = withDatabase { f ->
+        val first = value(f.progress().replace(f.owner(), null, messageSweep(f)))
+        val scope = spaceRecoveryScope(f.owner())
+        val partition = spaceRecoveryPartition(f.owner())
+        val raw = assertNotNull(f.database.replicas.checkpoint(scope, partition))
+        val aad =
+            Json.encodeToString(
+                    listOf(
+                        "hris-collaboration-space-recovery-v1",
+                        f.access.audience,
+                        f.access.accountId,
+                        f.owner().parent.nativeSessionId,
+                        f.owner().spaceId,
+                        raw.handle.generation,
+                        "0",
+                    )
+                )
+                .encodeToByteArray()
+        CollaborationHistoryKeys(f.database.replicas, f.cipher, f.keys).use { key, _ ->
+            val bytes = f.cipher.decrypt(key, aad, Base64.decode(raw.payload))
+            val original =
+                try {
+                    bytes.decodeToString()
+                } finally {
+                    bytes.fill(0)
+                }
+            assertTrue(original.contains("\"schema\":2"))
+            for (bad in
+                listOf(
+                    original.replace("\"schema\":2", "\"schema\":1"),
+                    original.replace("\"schema\":2", "\"schema\":99"),
+                    original.replace(".000000002Z", ".000000002+00:00"),
+                    original
+                        .replace(".000000002Z", ".000000001Z")
+                        .replace(historyId(1002), historyId(1001)),
+                    original + " ".repeat(4096),
+                )) {
+                assertNotEquals(original, bad)
+                val payload = Base64.encode(f.cipher.encrypt(key, aad, bad.encodeToByteArray()))
+                val store =
+                    object : ReplicaStore by f.database.replicas {
+                        override suspend fun checkpoint(scope: ReplicaScope, partition: String) =
+                            raw.copy(payload = payload)
+                    }
+                assertIs<AppResult.Failed>(f.progress(store).current(f.owner()))
+                assertIs<AppResult.Failed>(f.progress(store).replace(f.owner(), first, null))
+            }
+        }
+        assertEquals(first, value(f.progress().current(f.owner())))
+    }
+
+    @Test
+    fun messagePhaseCiphertextCannotCrossItsNativeParentOrSpace() = withDatabase { f ->
+        val first = value(f.progress().replace(f.owner(), null, messageSweep(f)))
+        val raw =
+            assertNotNull(
+                f.database.replicas.checkpoint(
+                    spaceRecoveryScope(f.owner()),
+                    spaceRecoveryPartition(f.owner()),
+                )
+            )
+        for (other in
+            listOf(
+                f.owner().copy(spaceId = historyId(1100)),
+                f.owner().copy(parent = f.owner().parent.copy(nativeSessionId = historyId(1101))),
+            )) {
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override suspend fun checkpoint(scope: ReplicaScope, partition: String) =
+                        raw.copy(handle = raw.handle.copy(scope = scope, partition = partition))
+                }
+            assertIs<AppResult.Failed>(f.progress(store).current(other))
+        }
+        assertEquals(first, value(f.progress().current(f.owner())))
     }
 
     private fun withDatabase(block: suspend (CollaborationHistoryFixture) -> Unit) = runTest {

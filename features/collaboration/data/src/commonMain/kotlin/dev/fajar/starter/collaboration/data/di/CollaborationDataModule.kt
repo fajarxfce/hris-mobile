@@ -124,6 +124,15 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun loadSpaceRecoveryMessage(
+        messages: CollaborationSpaceMessageRepository,
+        metadata: CollaborationSpaceConversationMetadataRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = LoadCollaborationSpaceRecoveryMessage(messages, metadata, directory, sessions, server)
+
+    @Factory
     fun readSpacePendingMessages(
         messages: CollaborationSpaceMessageRepository,
         directory: CollaborationSpaceDirectoryRepository,
@@ -1438,9 +1447,11 @@ class CollaborationDataModule {
     fun finishSpaceRecovery(
         progress: CollaborationSpaceRecoveryProgressRepository,
         inventory: CollaborationSpaceRoomBindingInventoryRepository,
+        messages: CollaborationSpaceMessageRepository,
+        directory: CollaborationSpaceDirectoryRepository,
         sessions: SessionRepository,
         server: IdentityServer,
-    ) = FinishCollaborationSpaceRecovery(progress, inventory, sessions, server)
+    ) = FinishCollaborationSpaceRecovery(progress, inventory, messages, directory, sessions, server)
 
     @Factory
     fun loadSpaceRecoveryDevice(

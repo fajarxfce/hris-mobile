@@ -1,0 +1,118 @@
+{
+  "acceptedAt": "2026-11-10T10:44:41.413948+00:00",
+  "baseCommit": "9830397d2e71ec741616cccea7f0fb4e6977f609",
+  "scope": "Durable fair pending Space recovery in the existing application worker. Authenticated compatible progress, original exact-Instant claims, owning staging and full pending inventory before wake completion. Unready recipients use bounded retry; cancellation ends only its attempt. Local/source acceptance only; actual native pending-worker proof remains required.",
+  "sourceFiles": 4732,
+  "sourceManifestSha256": "fad9f11cebc53e7e60444da4341dc9b18fca16d688872ecf2aceef1d0f21d920",
+  "changedSourceHashes": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationSpaceWorkerModule.kt": "463e88d62edbdc841801c0b2723a422b7f87109a7fc13c84607c1855f717007a",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationSpaceRecoveryWorker.kt": "3c70f5450abd9868c0ae2d98d75cfd4a1ee4254a0b2100ee2ea57c1aae2df1a4",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "454005924e07bfc5891e63f9c1e395a13b75d28e7ca6276d32d8d6176a4ff3a5",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceRecoveryWorkerTest.kt": "ec6434a8655f933e1e50202649a3f29371a6426e2323353af83c55cb9b0f43f6",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/SpaceRecoveryLocalStorageFixture.kt": "66fdd44a193dae61fa585b2637836edfaac174232686db0f80c62bcf4261fa07",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "dd80561308bf148ac62a58caf2377a17e6b7fe1f6e34331660d93ab90071b6a6",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/recovery/CollaborationSpaceRecoveryProgressCodec.kt": "5288dcc004c1f8cff730e4f2c34ee8d0b876c34e60f2048e2da177c4fb03cdbb",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRecoveryProgressStorageContract.kt": "03198b05f1e448f9cc2432e169c2d19faaaef50fc12ec4c25738374832d86bfa",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceMessageRecovery.kt": "7c9a88fef81c892467c0adc36a243ad54000d562e85ea73a9bbd9b8c31f6ea51",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceRecoveryProgress.kt": "369f7fe6dcd2ffd2e4a3b6b53a4733b958a71d4bfb9da528ad976577d1c5b318",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceMessageRecoveryPolicy.kt": "b460d0ba7a35efa918ec630faee2666d2a725758b78cdcc3467419427005c1df",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceRecoveryProgressPolicy.kt": "15820ca697da0c9a9d68d98c862e97456c428ddbcb135d62d27472ae82e49c5f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/FinishCollaborationSpaceRecovery.kt": "a05a9c31f66a0e6dfa53f4072f24f36332483ee65b578832d1b39e686e4aa523",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/LoadCollaborationSpaceRecoveryMessage.kt": "2b1b80e2ec8acf28b3c0e7e5d775e73473c932017c52c2ff775eadce95753f29",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/StageCollaborationSpaceText.kt": "54f49084d37d0e8c464a08789a654fb461bddb69c978d6bb8b93ee5bee77d3e0",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/UpdateCollaborationSpaceRecoveryProgress.kt": "7df730463a25570ccb93be6eb65425af5ef7b33b21699d164ef77d7eba2b36c7",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceRecoveryProgressTest.kt": "243fc3aa6f0633d94e401866187d02f5fc692b0b6710c64e365ff9b0d3da2c2f",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/FinishCollaborationSpaceRecoveryTest.kt": "284beaf599451afe5b564e9f56fe4b6e51ff8f12d43e943ce8d28df07d442e4f",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/LoadCollaborationSpaceRecoveryMessageTest.kt": "bfb262285ce6b254b420dfe28be7ed88aa2d69b97033802c05415297237b3da6",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceDeliveryStorageFixture.kt": "336ba1e8a08d341db2f41790526cd549551a966c428f852eae28839fbb0d6cf0",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRecoveryLocalStorageFixture.kt": "ab074eb48b6c18a630d0f0eefe77bd1719e37842015c657ca913dabda293f6a3",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationSpaceTextTest.kt": "df5d57e4066ae26e89677dc00f2fb3d564fcfa277eef91d0ef2378b74feee649"
+  },
+  "deletedSources": [],
+  "focused": {
+    "startedAt": "2026-11-10T10:27:09.296230+00:00",
+    "elapsedSeconds": 435.576,
+    "sourceFiles": 4732,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 251,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "fad9f11cebc53e7e60444da4341dc9b18fca16d688872ecf2aceef1d0f21d920"
+  },
+  "full": {
+    "startedAt": "2026-11-10T10:34:42.413515+00:00",
+    "elapsedSeconds": 581.55,
+    "sourceFiles": 4732,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7991,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "fad9f11cebc53e7e60444da4341dc9b18fca16d688872ecf2aceef1d0f21d920",
+    "validatedTests": 10010,
+    "validatedReusedTests": 2019,
+    "validatedDatabaseCases": {
+      "desktopTest": 102,
+      "wasmJsBrowserTest": 100
+    }
+  },
+  "fullReportManifestSha256": "8b67324cd2818c6180d45311df43a380b6f09f8589936c637915e105e956959a",
+  "contracts": {
+    "newDomainCasesPerPlatform": 28,
+    "newStorageCasesPerPlatform": 6,
+    "newWorkerCases": 10,
+    "focusedCases": 251,
+    "completePendingInventoryBound": 128,
+    "maximumAttemptsPerTurn": 4,
+    "workerDeadlineSeconds": 90,
+    "claimLoadDeadlineSeconds": 5,
+    "originalInstantPrecisionPreserved": true,
+    "existingPartitionAndAadPreserved": true,
+    "schema1Readable": true,
+    "schema2Strict": true,
+    "genericFinishBypassRejected": true,
+    "unreadyRecipientFailure": "Unavailable",
+    "workerNativeProofRequired": true
+  },
+  "checks": [
+    "root check",
+    "Android host tests",
+    "Android release compilation and lint",
+    "Wasm and iOS source compilation",
+    "actual Chromium collaboration tests",
+    "proof APK compilation and unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "nonIncrementalKotlin": true,
+  "nativeRuntimeClaim": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "remaining": [
+    "Actual native pending-worker proof after unbound local queueing and process loss, preserving original/mixed/group controls",
+    "Pinned hosted acceptance; actual Apple Matrix runtime still unavailable",
+    "Incoming history/edits/retirement, product routing, media, backup, calls and meetings; all54 PRD groups open"
+  ],
+  "initialCandidateFailure": {
+    "session": 40918,
+    "reaped": true,
+    "status": "failed-compilation",
+    "elapsedSeconds": 156.483,
+    "passedDomainDesktop": 67,
+    "testFailure": "Cross-module nullable sweep smart cast in storage contract line388; no storage tests ran.",
+    "reviewFinding": "Stage recipient-not-ready is classified Conflict, so worker would block instead of backing off. Change the owning Stage classification to Unavailable, retain original intent, and test it plus cancellation racing staging."
+  },
+  "initialCandidateSourceManifestSha256": "090b17ecbb79fbfa015a71880c3b3b0f0884136fa0ff80c34adfe478cb9f3754",
+  "focusedRunnerExited": true,
+  "focusedWrapperSessionUnavailable": true,
+  "fullSession": 19057,
+  "fullReaped": true
+}

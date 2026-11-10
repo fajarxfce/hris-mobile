@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.ContentCipher
 import kotlin.io.encoding.Base64
+import kotlin.time.Instant
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -47,7 +48,10 @@ internal class CollaborationSpaceRecoveryProgressCodec(
                 Json.decodeFromString<SpaceProgressDto>(
                     bytes.decodeToString(throwOnInvalidSequence = true)
                 )
-            require(dto.schema == 1)
+            require(
+                (dto.schema == 1 && dto.sweep?.messages == null) ||
+                    (dto.schema == 2 && dto.sweep?.messages != null)
+            )
             val sweep =
                 dto.sweep?.let { s ->
                     val boundary =
@@ -73,6 +77,18 @@ internal class CollaborationSpaceRecoveryProgressCodec(
                         s.retryRequired,
                         s.continuationRequired,
                         s.hasNewerBindings,
+                        s.messages?.let { m ->
+                            CollaborationSpaceMessageRecoverySweep(
+                                m.after?.position(),
+                                m.pending?.let {
+                                    CollaborationSpaceMessageRecoveryClaim(
+                                        it.position.position(),
+                                        it.conversationId,
+                                    )
+                                },
+                                m.reachedEnd,
+                            )
+                        },
                     )
                 }
             CollaborationSpaceRecoveryProgress(raw.handle.generation, sweep).also {
@@ -87,7 +103,7 @@ internal class CollaborationSpaceRecoveryProgressCodec(
         require(validCollaborationSpaceRecoveryProgress(owner, value))
         val dto =
             SpaceProgressDto(
-                1,
+                if (value.sweep?.messages == null) 1 else 2,
                 value.sweep?.let { s ->
                     SpaceSweepDto(
                         s.wakeGeneration,
@@ -98,6 +114,23 @@ internal class CollaborationSpaceRecoveryProgressCodec(
                         s.retryRequired,
                         s.continuationRequired,
                         s.hasNewerBindings,
+                        s.messages?.let { m ->
+                            SpaceMessagesDto(
+                                m.after?.let {
+                                    SpaceMessagePositionDto(it.createdAt.toString(), it.messageId)
+                                },
+                                m.pending?.let {
+                                    SpaceMessageClaimDto(
+                                        SpaceMessagePositionDto(
+                                            it.position.createdAt.toString(),
+                                            it.position.messageId,
+                                        ),
+                                        it.conversationId,
+                                    )
+                                },
+                                m.reachedEnd,
+                            )
+                        },
                     )
                 },
             )
@@ -144,4 +177,30 @@ private data class SpaceSweepDto(
     val retryRequired: Boolean,
     val continuationRequired: Boolean,
     val hasNewerBindings: Boolean,
+    val messages: SpaceMessagesDto? = null,
+)
+
+@Serializable
+private data class SpaceMessagePositionDto(val createdAt: String, val messageId: String) {
+    fun position(): CollaborationSpaceMessageRecoveryPosition {
+        require(createdAt.length in 1..40)
+        val instant = Instant.parse(createdAt)
+        require(instant.toString() == createdAt)
+        return CollaborationSpaceMessageRecoveryPosition(instant, messageId).also {
+            require(validCollaborationSpaceMessageRecoveryPosition(it))
+        }
+    }
+}
+
+@Serializable
+private data class SpaceMessageClaimDto(
+    val position: SpaceMessagePositionDto,
+    val conversationId: String,
+)
+
+@Serializable
+private data class SpaceMessagesDto(
+    val after: SpaceMessagePositionDto?,
+    val pending: SpaceMessageClaimDto?,
+    val reachedEnd: Boolean,
 )

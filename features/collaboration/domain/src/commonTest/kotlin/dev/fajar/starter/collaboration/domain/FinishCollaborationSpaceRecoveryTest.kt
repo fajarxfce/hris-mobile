@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.domain.usecases.FinishCollaborationSpaceR
 import dev.fajar.starter.common.result.*
 import kotlin.test.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 
 class FinishCollaborationSpaceRecoveryTest {
@@ -130,6 +131,74 @@ class FinishCollaborationSpaceRecoveryTest {
         assertNull(f.stored!!.sweep)
     }
 
+    @Test
+    fun legacyFinishedBindingSweepCannotHidePendingUnboundCommand() = runTest {
+        val f = Fixture()
+        f.original = f.original.copy(sweep = f.original.sweep!!.copy(boundary = null))
+        f.stored = f.original
+        f.page = f.page.copy(boundary = null)
+        val command = f.pending()
+        val result = f.finish()
+        assertNull(result.completedWake)
+        assertNotNull(result.snapshot.progress!!.sweep)
+        assertEquals(command, f.base.space.records[command.intent.id])
+    }
+
+    @Test
+    fun invalidTerminalMessagePreventsFinalProgressWrite() = runTest {
+        val f = Fixture()
+        val command = f.pending()
+        f.base.space.records[command.intent.id] =
+            command.copy(revision = 1, state = CollaborationMessageState.Cancelled)
+        assertIs<AppResult.Failed>(f.useCase(f.snapshot()))
+        assertEquals(0, f.writes)
+        assertEquals(f.original, f.stored)
+    }
+
+    @Test
+    fun denialOrParentReplacementDuringFinalCommandReadPreventsCompletion() = runTest {
+        for (denied in listOf(false, true)) {
+            val f = Fixture()
+            f.base.hooks["space-observe"] = {
+                if (denied) f.base.directory.deny() else f.native.setup.session = null
+            }
+            val failure = assertIs<AppResult.Failed>(f.useCase(f.snapshot())).failure
+            if (denied) assertEquals(f.base.directory.denied, failure)
+            assertEquals(0, f.writes)
+            assertEquals(f.original, f.stored)
+        }
+    }
+
+    @Test
+    fun emptyCompletedCommandFlowIsNotProofOfAnEmptyPartition() = runTest {
+        val f = Fixture()
+        f.commandFlow = { emptyFlow() }
+        assertIs<AppResult.Failed>(f.useCase(f.snapshot()))
+        assertEquals(0, f.writes)
+    }
+
+    @Test
+    fun unavailableFinalCommandObservationIsBoundedAndClosed() = runTest {
+        val f = Fixture()
+        var closed = false
+        f.commandFlow = {
+            flow {
+                try {
+                    awaitCancellation()
+                } finally {
+                    closed = true
+                }
+            }
+        }
+        assertEquals(
+            FailureKind.Timeout,
+            assertIs<AppResult.Failed>(f.useCase(f.snapshot())).failure.kind,
+        )
+        assertTrue(closed)
+        assertEquals(0, f.writes)
+        assertEquals(f.original, f.stored)
+    }
+
     private class Fixture {
         val base = SpaceOriginalDeliveryFixture()
         val native = base.native
@@ -193,10 +262,39 @@ class FinishCollaborationSpaceRecoveryTest {
                     return AppResult.Success(saved)
                 }
             }
+        var commandFlow: (() -> Flow<AppResult<List<CollaborationSpaceMessageRecord>>>)? = null
+        private val messages =
+            object : CollaborationSpaceMessageRepository by base.space.messages {
+                override fun observe(
+                    access: CollaborationSpaceLocalAccess,
+                    conversationId: String?,
+                ) = commandFlow?.invoke() ?: base.space.messages.observe(access, conversationId)
+            }
+
+        fun pending(): CollaborationSpaceMessageRecord {
+            val original = base.queue.record.intent
+            val record =
+                CollaborationSpaceMessageRecord(
+                    CollaborationSpaceMessageIntent(
+                        original.id,
+                        owner.localDirectoryAccess().messageOwner(),
+                        base.model.conversation.id,
+                        original.createdAt,
+                        original.text,
+                    ),
+                    0,
+                    CollaborationMessageState.Queued,
+                )
+            base.space.records[record.intent.id] = record
+            return record
+        }
+
         val useCase =
             FinishCollaborationSpaceRecovery(
                 repository,
                 inventory,
+                messages,
+                base.directory.directory,
                 native.setup.sessions,
                 native.server,
             )

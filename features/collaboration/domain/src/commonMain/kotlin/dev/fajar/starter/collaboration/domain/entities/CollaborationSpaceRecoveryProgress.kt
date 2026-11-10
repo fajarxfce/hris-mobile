@@ -14,6 +14,7 @@ data class CollaborationSpaceRecoverySweep(
     val retryRequired: Boolean = false,
     val continuationRequired: Boolean = false,
     val hasNewerBindings: Boolean = false,
+    val messages: CollaborationSpaceMessageRecoverySweep? = null,
 ) {
     val cursor: CollaborationSpaceRoomBindingCursor?
         get() = afterId?.let { CollaborationSpaceRoomBindingCursor(requireNotNull(boundary), it) }
@@ -39,6 +40,13 @@ sealed interface CollaborationSpaceRecoveryChange {
 
     data class Complete(val retryRequired: Boolean, val continuationRequired: Boolean = false) :
         CollaborationSpaceRecoveryChange
+
+    /** The owning read supplied a complete validated local partition, independent of bindings. */
+    data class AttemptMessages(val records: List<CollaborationSpaceMessageRecord>) :
+        CollaborationSpaceRecoveryChange
+
+    /** Advance only the claimed original ordering position, including an unsuccessful attempt. */
+    data class CompleteMessage(val retryRequired: Boolean) : CollaborationSpaceRecoveryChange
 
     data object Finish : CollaborationSpaceRecoveryChange
 }

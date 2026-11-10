@@ -166,7 +166,7 @@ class StageCollaborationSpaceText(
             if (record.state == CollaborationMessageState.Queued && !observed.recipientReady)
                 return collaborationSetupFailure(
                     "client.collaboration_recipient_unavailable",
-                    FailureKind.Conflict,
+                    FailureKind.Unavailable,
                 )
             val acquired = queues.acquireSpaceMessageQueue(runtime, binding.room.roomId)
             if (acquired is AppResult.Success) writer = acquired.value
@@ -581,7 +581,7 @@ class StageCollaborationSpaceText(
                         if (!observed.recipientReady)
                             return collaborationSetupFailure(
                                 "client.collaboration_recipient_unavailable",
-                                FailureKind.Conflict,
+                                FailureKind.Unavailable,
                             )
                         val sent =
                             queue.enqueue(

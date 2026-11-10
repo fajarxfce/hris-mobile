@@ -22,10 +22,16 @@ internal class SpaceDeliveryStorageFixture(private val f: SpaceOriginalDeliveryF
             override fun observe(access: CollaborationSpaceLocalAccess, conversationId: String?) =
                 flow {
                     assertEquals(this@SpaceDeliveryStorageFixture.access, access)
-                    assertEquals(f.model.conversation.id, conversationId)
+                    if (conversationId != null)
+                        assertEquals(f.model.conversation.id, conversationId)
                     emit(
                         f.read("space-observe") {
-                            records.values.filterNot { it.intent.id in archived }
+                            records.values
+                                .filterNot { it.intent.id in archived }
+                                .filter {
+                                    conversationId == null ||
+                                        it.intent.conversationId == conversationId
+                                }
                         }
                     )
                 }

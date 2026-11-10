@@ -19,6 +19,9 @@ class UpdateCollaborationSpaceRecoveryProgress(
         change: CollaborationSpaceRecoveryChange,
     ): AppResult<CollaborationSpaceRecoveryUpdate> {
         currentCoroutineContext().ensureActive()
+        // Only the dedicated Finish owner rechecks both complete local inventories.
+        if (change == CollaborationSpaceRecoveryChange.Finish)
+            return changedSpaceProgress(FailureKind.Validation)
         val next = nextCollaborationSpaceRecoverySweep(snapshot, change)
         if (next is AppResult.Failed) return next
         val sweep = (next as AppResult.Success).value
@@ -33,14 +36,8 @@ class UpdateCollaborationSpaceRecoveryProgress(
         val value = (result as AppResult.Success).value ?: return changedSpaceProgress()
         if (!validCollaborationSpaceRecoveryProgress(snapshot.owner, value) || value.sweep != sweep)
             return changedSpaceProgress(FailureKind.Unexpected)
-        val completed =
-            if (change == CollaborationSpaceRecoveryChange.Finish && sweep == null)
-                CollaborationSpaceRecoveryWake(
-                    requireNotNull(snapshot.progress?.sweep).wakeGeneration
-                )
-            else null
         return AppResult.Success(
-            CollaborationSpaceRecoveryUpdate(snapshot.copy(progress = value), completed)
+            CollaborationSpaceRecoveryUpdate(snapshot.copy(progress = value), null)
         )
     }
 }

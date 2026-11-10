@@ -9,9 +9,11 @@ import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.fixtures.RecoveryWorkerFixture
+import dev.fajar.starter.fixtures.SpaceRecoveryLocalStorageFixture
 import dev.fajar.starter.sync.domain.*
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import kotlin.test.*
+import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
@@ -238,9 +240,195 @@ class CollaborationSpaceRecoveryWorkerTest {
         assertEquals(SyncResult.Complete, f.worker())
     }
 
+    @Test
+    fun pendingMessageWithoutBindingPreparesStagesAndSendsItsOriginal() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.enablePendingDelivery()
+        val original = f.pending(0)
+        assertTrue(f.retained.isEmpty())
+        assertEquals(SyncResult.Complete, f.worker())
+        assertEquals(listOf(original.intent.conversationId), f.preparedMessages)
+        assertEquals(listOf(original.intent.id), f.stagedMessages)
+        assertIs<CollaborationMessageState.Sent>(f.local.records.getValue(original.intent.id).state)
+        assertNull(f.wake)
+    }
+
+    @Test
+    fun mappedOriginalRecoversWithoutAnotherStagingAttempt() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.enablePendingDelivery()
+        val original = f.pending(0, staged = true)
+        assertEquals(SyncResult.Complete, f.worker())
+        assertTrue(f.stagedMessages.isEmpty())
+        val sent =
+            f.local.records.getValue(original.intent.id).state as CollaborationMessageState.Sent
+        assertEquals(
+            (original.state as CollaborationMessageState.Staged).transactionId,
+            sent.transactionId,
+        )
+    }
+
+    @Test
+    fun unreadyFirstRecipientDoesNotStarveTheSecondAcrossBackoff() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.enablePendingDelivery()
+        val first = f.pending(0)
+        val second = f.pending(1)
+        f.unready += first.intent.conversationId
+        assertIs<SyncResult.Retry>(f.worker())
+        assertEquals(first.intent.id, f.progress!!.sweep!!.messages!!.after!!.messageId)
+        assertIs<SyncResult.Retry>(f.worker())
+        assertIs<CollaborationMessageState.Sent>(f.local.records.getValue(second.intent.id).state)
+        assertEquals(
+            CollaborationMessageState.Queued,
+            f.local.records.getValue(first.intent.id).state,
+        )
+        assertTrue(f.scheduled.isEmpty())
+        f.unready.clear()
+        assertEquals(SyncResult.Complete, f.worker())
+        assertEquals(listOf(first.intent.id, second.intent.id, first.intent.id), f.stagedMessages)
+        assertNull(f.wake)
+    }
+
+    @Test
+    fun interruptionAfterStagingRetainsClaimAndOriginalTransactionForNextProcessor() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.enablePendingDelivery()
+        val original = f.pending(0)
+        val entered = CompletableDeferred<Unit>()
+        f.beforeDelivery = {
+            entered.complete(Unit)
+            awaitCancellation()
+        }
+        val job = launch { f.worker() }
+        entered.await()
+        job.cancelAndJoin()
+        val staged = f.local.records.getValue(original.intent.id)
+        val claim = f.progress!!.sweep!!.messages!!.pending!!
+        assertEquals(original.intent.id, claim.position.messageId)
+        val originalState = assertIs<CollaborationMessageState.Staged>(staged.state)
+        f.beforeDelivery = {}
+        assertEquals(SyncResult.Complete, f.createWorker()())
+        val sent =
+            f.local.records.getValue(original.intent.id).state as CollaborationMessageState.Sent
+        assertEquals(originalState.transactionId, sent.transactionId)
+        assertEquals(listOf(original.intent.id), f.stagedMessages)
+    }
+
+    @Test
+    fun fourPendingAttemptsPerTurnPreserveTheFifthOriginal() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.enablePendingDelivery()
+        val originals = List(5) { f.pending(it) }
+        assertEquals(SyncResult.Complete, f.worker())
+        assertEquals(originals.take(4).map { it.intent.id }, f.stagedMessages)
+        assertEquals(
+            CollaborationMessageState.Queued,
+            f.local.records.getValue(originals.last().intent.id).state,
+        )
+        assertNotNull(f.wake)
+        assertEquals(1, f.scheduled.size)
+        assertEquals(SyncResult.Complete, f.worker())
+        assertEquals(originals.map { it.intent.id }, f.stagedMessages)
+        assertNull(f.wake)
+    }
+
+    @Test
+    fun lateNewCommandAndWakeSurviveEarlierCompletion() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.enablePendingDelivery()
+        val first = f.pending(0)
+        f.beforeAck = {
+            f.pending(1)
+            f.wake = CollaborationSpaceRecoveryWake(id(999))
+        }
+        assertEquals(SyncResult.Complete, f.worker())
+        assertNotNull(f.wake)
+        assertIs<CollaborationMessageState.Sent>(f.local.records.getValue(first.intent.id).state)
+        f.beforeAck = {}
+        assertEquals(SyncResult.Complete, f.worker())
+        assertEquals(2, f.stagedMessages.size)
+        assertNull(f.wake)
+    }
+
+    @Test
+    fun failedPendingInventoryDoesNotSkipToEmptyBindingCompletion() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.enablePendingDelivery()
+        f.pending(0)
+        f.local.failure = Failure(FailureKind.Storage, "Fictional unavailable store")
+        assertIs<SyncResult.Retry>(f.worker())
+        assertNotNull(f.wake)
+        assertTrue(f.preparedMessages.isEmpty())
+        assertTrue(f.delivered.isEmpty())
+        f.local.failure = null
+        assertEquals(SyncResult.Complete, f.worker())
+        assertNull(f.wake)
+    }
+
+    @Test
+    fun denialDuringClaimedReadBlocksSendingAndKeepsTheOriginal() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.enablePendingDelivery()
+        val original = f.pending(0)
+        f.local.beforeGet = {
+            f.local.gate =
+                AppResult.Success(
+                    CollaborationSpaceDirectoryAdmission(
+                        id(9999),
+                        Failure(FailureKind.AccessDenied, "Fictional denial"),
+                    )
+                )
+        }
+        assertIs<SyncResult.Blocked>(f.worker())
+        assertEquals(original, f.local.records.getValue(original.intent.id))
+        assertNotNull(f.wake)
+        assertTrue(f.preparedMessages.isEmpty())
+        assertTrue(f.scheduled.isEmpty())
+    }
+
+    @Test
+    fun cancellationBeforeClaimedReadIsNotAnInferredMessageAcknowledgement() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.enablePendingDelivery()
+        val original = f.pending(0)
+        f.local.beforeGet = {
+            f.local.records[original.intent.id] =
+                original.copy(state = CollaborationMessageState.Cancelled)
+        }
+        assertEquals(SyncResult.Complete, f.worker())
+        assertEquals(
+            CollaborationMessageState.Cancelled,
+            f.local.records.getValue(original.intent.id).state,
+        )
+        assertTrue(f.stagedMessages.isEmpty())
+        assertTrue(f.delivered.isEmpty())
+    }
+
+    @Test
+    fun cancellationRacingStagingEndsTheAttemptWithoutInvokingDelivery() = runTest {
+        val f = Fixture(testScheduler, count = 0)
+        f.enablePendingDelivery()
+        val original = f.pending(0)
+        f.stagePending = { _, _, id ->
+            assertEquals(original.intent.id, id)
+            val cancelled = original.copy(state = CollaborationMessageState.Cancelled)
+            f.local.records[id] = cancelled
+            AppResult.Success(cancelled)
+        }
+        assertEquals(SyncResult.Complete, f.worker())
+        assertTrue(f.delivered.isEmpty())
+        assertEquals(
+            CollaborationMessageState.Cancelled,
+            f.local.records.getValue(original.intent.id).state,
+        )
+        assertNull(f.wake)
+    }
+
     private class Fixture(scheduler: TestCoroutineScheduler, val count: Int = 8) {
         val base = RecoveryWorkerFixture(scheduler, count = 0)
         val owner = CollaborationSpaceOwner(base.parent, id(100))
+        val local = SpaceRecoveryLocalStorageFixture(owner)
         var original: CollaborationSpaceRecoveryDevice? =
             CollaborationSpaceRecoveryDevice(owner, id(101), id(102))
         val runtime = CollaborationSpaceRuntimeReady(owner, id(103), id(102))
@@ -272,6 +460,25 @@ class CollaborationSpaceRecoveryWorkerTest {
         var beforeAck: suspend () -> Unit = {}
         var scheduleFailure: Failure? = null
         var syncFailure: Failure? = null
+        val published = linkedMapOf<String, CollaborationSpaceRoomBinding>()
+        val preparedMessages = mutableListOf<String>()
+        val stagedMessages = mutableListOf<String>()
+        val unready = mutableSetOf<String>()
+        var prepareMessage:
+            suspend (CollaborationSpaceConversation) -> AppResult<CollaborationSpaceRoomBinding> =
+            {
+                error("No pending message")
+            }
+        var stagePending:
+            suspend (
+                CollaborationSpaceRuntimeReady, CollaborationSpaceConversation, String,
+            ) -> AppResult<CollaborationSpaceMessageRecord> =
+            { _, _, _ ->
+                error("No pending message")
+            }
+        var deliverPending:
+            (suspend (CollaborationSpaceConversation) -> AppResult<CollaborationDeliveryReport>)? =
+            null
         var report =
             CollaborationDeliveryReport(
                 emptySet(),
@@ -408,9 +615,31 @@ class CollaborationSpaceRecoveryWorkerTest {
                     FinishCollaborationSpaceRecovery(
                         checkpoints,
                         inventory,
+                        local.messages,
+                        local.directory,
                         base.sessions,
                         base.server,
                     ),
+                pendingMessages = {
+                    ReadCollaborationSpacePendingMessages(
+                        local.messages,
+                        local.directory,
+                        base.sessions,
+                        base.server,
+                    )(it)
+                },
+                message =
+                    LoadCollaborationSpaceRecoveryMessage(
+                        local.messages,
+                        local.metadata,
+                        local.directory,
+                        base.sessions,
+                        base.server,
+                    ),
+                prepareRoom = { prepareMessage(it) },
+                stageMessage = { runtime, conversation, id ->
+                    stagePending(runtime, conversation, id)
+                },
                 demand = { _, _ ->
                     beforeDemand()
                     demandFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(needsDelivery)
@@ -418,10 +647,129 @@ class CollaborationSpaceRecoveryWorkerTest {
                 deliver = { _, conversation ->
                     delivered += conversation.id
                     beforeDelivery()
-                    AppResult.Success(report)
+                    deliverPending?.invoke(conversation) ?: AppResult.Success(report)
                 },
                 build = base.build.copy(platform = platform),
             )
+
+        fun pending(index: Int, staged: Boolean = false): CollaborationSpaceMessageRecord {
+            val bound =
+                binding(index).let {
+                    it.copy(
+                        room =
+                            it.room.copy(
+                                origin = CollaborationSpaceRoomOrigin.SPACE,
+                                original = null,
+                            ),
+                        original = null,
+                    )
+                }
+            published[bound.conversation.id] = bound
+            local.conversations[bound.conversation.id] = bound.conversation
+            val intent =
+                CollaborationSpaceMessageIntent(
+                    id(9000 + index),
+                    local.access.messageOwner(),
+                    bound.conversation.id,
+                    bindingTime + index.nanoseconds,
+                    "Fictional pending $index",
+                )
+            val device =
+                CollaborationMessageDevice(
+                    owner.parent.nativeSessionId,
+                    runtime.deviceId,
+                    runtime.operationId,
+                    bound.room.roomId,
+                )
+            val state =
+                CollaborationMessageState.Staged(
+                    device,
+                    "original-${intent.id}",
+                    CollaborationMessageOrigin("@fixture:matrix.example.test", "1".repeat(64)),
+                )
+            val record =
+                CollaborationSpaceMessageRecord(
+                    intent,
+                    if (staged) 2 else 0,
+                    if (staged) state else CollaborationMessageState.Queued,
+                )
+            local.records[intent.id] = record
+            return record
+        }
+
+        fun enablePendingDelivery() {
+            prepareMessage = { conversation ->
+                preparedMessages += conversation.id
+                AppResult.Success(published.getValue(conversation.id))
+            }
+            stagePending = { ready, conversation, id ->
+                assertEquals(runtime, ready)
+                stagedMessages += id
+                if (conversation.id in unready)
+                    AppResult.Failed(
+                        Failure(
+                            FailureKind.Unavailable,
+                            "Fictional recipient not ready",
+                            code = "client.collaboration_recipient_unavailable",
+                        )
+                    )
+                else {
+                    val previous = local.records.getValue(id)
+                    val device =
+                        CollaborationMessageDevice(
+                            owner.parent.nativeSessionId,
+                            runtime.deviceId,
+                            runtime.operationId,
+                            published.getValue(conversation.id).room.roomId,
+                        )
+                    val staged =
+                        previous.copy(
+                            revision = 2,
+                            state =
+                                CollaborationMessageState.Staged(
+                                    device,
+                                    "original-$id",
+                                    CollaborationMessageOrigin(
+                                        "@fixture:matrix.example.test",
+                                        "1".repeat(64),
+                                    ),
+                                ),
+                        )
+                    local.records[id] = staged
+                    AppResult.Success(staged)
+                }
+            }
+            deliverPending = { conversation ->
+                val sent = mutableSetOf<String>()
+                for (record in local.records.values.toList()) {
+                    val state = record.state
+                    if (
+                        record.intent.conversationId == conversation.id &&
+                            state is CollaborationMessageState.Staged
+                    ) {
+                        local.records[record.intent.id] =
+                            record.copy(
+                                revision = 3,
+                                state =
+                                    CollaborationMessageState.Sent(
+                                        state.device,
+                                        state.transactionId,
+                                        "\$event-${record.intent.id}",
+                                        state.origin,
+                                    ),
+                            )
+                        sent += record.intent.id
+                    }
+                }
+                AppResult.Success(
+                    CollaborationDeliveryReport(
+                        sent,
+                        emptySet(),
+                        CollaborationQueueDeliveryReason.DRAINED,
+                    )
+                )
+            }
+        }
 
         private fun binding(index: Int): CollaborationSpaceRoomBinding {
             val pair = listOf(owner.parent.accountId, id(6000)).sorted()
