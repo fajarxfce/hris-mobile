@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 05:05 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 05:24 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -54,12 +54,30 @@ was shadowed by the existing fixture member. Only the test reader names changed;
 production and assertions were unchanged. Nine policy cases passed before that failure.
 Failed logs/source manifest are preserved. No old failing process remains.
 
-Since accepted43, two usecases,22 new domain cases,one fixture and constructor/DI
-assertions were added. These additions are NOT compiled/accepted yet. Private
-.work/space-message-storage-2026-11-10 retains source manifests and runners. Format
-session57528 is being reaped. Next run focused policy/storage/usecase/DI checks after
-Starter61949 ends, then required full platform checks before committing source.
-No phone/product acceptance is inferred from storage or compilation.
+After that storage proof, the implementation added local queue/observation usecases,
+23 domain cases,constructor DI,full timestamp ordering and an actual same-millisecond
+reopen case. Nineteen Kotlin source/test files remain uncommitted. Focused-3/session17154
+failed a missing explicit Flow result type; focused-4/session96716 failed test-only
+nullable/list/success type inference. Both are REAPED with zero executed tests. Exact
+failed inputs/logs remain; assertions were retained. Review additionally keeps confirmed
+denial per flow collector across temporary session-read failure,until valid admission.
+
+Focused-5/session6481 is REAPED PASS382.076s:68 fresh cases (9 policy,15 queue,8
+observation,17 SQLite,17 actual Chromium,2 app DI),zero failures/errors/skips,Apple
+source and format/architecture/detekt. Strict accept-focused.py passed all4,677 source
+and library/current/archive checks. Manifest SHA
+0ff251cd3098f6097863d6a5745190c804ef1714badc6ab59c637e9789b398dc.
+Private .work/space-message-storage-2026-11-10/runner.py full-1/session16809 is RUNNING
+on this frozen source with required root,Android host/release/lint,Wasm/iOS source,
+browser,proof APK/unit and quality tasks. One heavy compiler/no emulator. Do not edit
+Mobile source or start another compiler until it ends. accept-full.py is prepared
+against the exact command foundation predecessor. Source commit/push follows acceptance.
+[Current contract and integration boundaries](collaboration-space-messages.md).
+
+No new native/worker/UI route is activated. Complete mixed old/new queue matching and
+explicit staging/receipt delivery first. Recovery inventory must include new commands
+whose conversation has no local binding; a binding-only scan cannot discharge them.
+Original-only leases keep no enqueue capability. Never reinterpret companyId as spaceId.
 
 ## Fully accepted generic replica foundation; Starter validation running
 
@@ -71,16 +89,15 @@ Local proof and prior stale generated delegate diagnosis remain in
 [local evidence](measurements/replica-work-wakes-2026-11-10.json). Non-incremental Kotlin
 fixed that build-cache mismatch without changing AppFlow assertions or UI behavior.
 
-After full Mobile acceptance, the exact nine generic core files from7a6fe534 were
-applied to Starter HEADffd0ac5. This is the accepted ReplicaWakeRequest version,
-not the newer command API. All nine bytes match Mobile Git. Starter private
-.work/replica-commit-wake-port-2026-11-10/check.py full-1/session61949 RUNNING:
-root check, database/worker/identity/app browser tests, Android dev/staging/prod
-builds, lint,production web,iOS source,strict SBOM and quality. Dependency stays pinned
-at inspector742a2d1 in the preserved isolated checkout. One heavy compiler/no emulator.
-Do not edit Starter source or run another compiler until61949 ends. No port acceptance,
-Starter commit or phone installation yet. Initial private preflight referenced a missing
-metadata field; it stopped before any compiler and was corrected to appliedAt.
+After full Mobile acceptance, the exact nine generic files were independently tested
+and committed/pushed to Starter30c4d72 (61101 reaped). Full61949 is REAPED PASS588.178s:
+332 fresh cases/85 suites,zero failures/errors/skips,all three Android builds,lint,
+production web,iOS source,strict SBOM/quality. Exact1,057 inputs/library49 remained fixed;
+new11 SQLite/11 browser cases pass,lint0errors/45 existing advisories,SBOM366 components,
+26 web files and three APKs are hashed. Source bytes matchMobile7a6fe534. Starter is
+clean and has no compiler. It retains ReplicaWakeRequest; the newer command API is a
+separate future port after its own Mobile platform proof. Starter evidence:
+docs/measurements/replica-work-wake-port-2026-11-10.json.
 
 ## Accepted binding producer; hosted proof running
 
@@ -91,11 +108,16 @@ focused62815 passed87,full77826 passed9,294,native46744 passed2 original/group s
 All are reaped/audited,with unchanged sources and the emulator stopped. Actual callback
 loss/process-death/original transaction recovery remains accepted. No backend/schema change.
 [Contract](collaboration-space-binding-producer-wake.md),[evidence](measurements/collaboration-space-binding-producer-wake-2026-11-10.json).
-Control42753380451 now RUNNING atd89e6b5d,dispatch14839 reaped. Expected7,292 portable+
-2,717 Apple=10,009 plusSwift/host. Private producer hosted.json/audit.py compare against
-now-complete generic42749839268. Do not supersede this run.
+Control42753380451 pinsd89e6b5d,dispatch14839 reaped. Portable29517 is REAPED PASS:
+7,292 tests (3,423 desktop,635 host,3,234 browser),zero failures/errors/skips.
+Artifact13738205902,3438539bytes,SHA9cd0d5734a559bd82935284075c616a3bb7fcd449a8343cd2555ba9569d44b8e;
+manifest SHAb14a64db0d0bafbd04fc8c6b753ef61092a7f030ef01edbbd3856f0c7c313661.
+Exact source,digest/CRC and predecessor case identities verified. Apple is still running;
+expected2,717+16Swift/host,total10,009. [Partial hosted evidence](measurements/collaboration-space-binding-producer-hosted-2026-11-10.json).
+Command42758828055 also remains running; its portable audit can use this accepted
+producer baseline when complete. Do not redispatch/cancel either job.
 
-Phone remains87. Availability question is already pending; do not ask it again.
+Phone remains87. ADB62446 timed out after15s around05:21 UTC and is reaped. Availability question is already pending; do not ask it again.
 Accepted88 is retained but not installed; use the install-only runbook if reachable,
 and announce each installation. Live remains e558a686/schema116.4/readinessON/groupOFF.
 All54 PRD acceptance groups remain open. Continue after each checkpoint.

@@ -1,0 +1,47 @@
+{
+  "sourceCommit": "d89e6b5dcb0c0463916628ecd10a9bae946e5a1a",
+  "runId": 42753380451,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42753380451",
+  "portable": {
+    "sourceCommit": "d89e6b5dcb0c0463916628ecd10a9bae946e5a1a",
+    "runId": 42753380451,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42753380451",
+    "jobId": 129638766945,
+    "artifactId": 13738205902,
+    "bytes": 3438539,
+    "sha256": "9cd0d5734a559bd82935284075c616a3bb7fcd449a8343cd2555ba9569d44b8e",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "desktopTest": {
+        "tests": 3423,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 374
+      },
+      "testAndroidHostTest": {
+        "tests": 635,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 89
+      },
+      "wasmJsBrowserTest": {
+        "tests": 3234,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 335
+      }
+    },
+    "reportManifestSha256": "b14a64db0d0bafbd04fc8c6b753ef61092a7f030ef01edbbd3856f0c7c313661"
+  },
+  "apple": {
+    "status": "pending",
+    "expectedTests": 2717,
+    "expectedSwiftChecks": 16,
+    "unsignedHostRequired": true
+  },
+  "phoneInstalled": false,
+  "liveChanged": false
+}
