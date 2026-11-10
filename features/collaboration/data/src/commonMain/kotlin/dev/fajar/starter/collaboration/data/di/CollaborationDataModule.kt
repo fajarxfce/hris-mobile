@@ -751,6 +751,26 @@ class CollaborationDataModule {
     ) = RequestCollaborationSpaceIncomingScan(demands, directory, sessions, server, schedules)
 
     @Factory
+    fun observeSpaceIncomingStartup(
+        roots: CollaborationSpaceRootRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        setups: CollaborationSpaceSetupCommandRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ObserveCollaborationSpaceIncomingStartup(
+            roots,
+            registrations,
+            setups,
+            directory,
+            sessions,
+            server,
+            build,
+        )
+
+    @Factory
     fun readSpaceIncomingWake(wakes: CollaborationSpaceIncomingWakeRepository) =
         ReadCollaborationSpaceIncomingWake(wakes)
 

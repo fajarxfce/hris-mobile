@@ -1,5 +1,9 @@
 # Architecture
 
+[Local incoming startup observation](collaboration-space-incoming-startup.md) follows the
+current parent, root and completed bootstrap without transport. One final owner boundary
+cancels stale emissions; the application startup consumer remains separate.
+
 [Application incoming processing](collaboration-space-incoming-application.md) registers one
 bounded task. Domain recovery distinguishes missing current-device progress from failed reads;
 content retention precedes provider EOF. [Native acceptance](collaboration-space-incoming-application-native.md)

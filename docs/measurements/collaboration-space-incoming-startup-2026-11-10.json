@@ -1,0 +1,78 @@
+{
+  "startedAt": "2026-11-10T22:25:30.971299+00:00",
+  "elapsedSeconds": 596.854,
+  "sourceFiles": 4857,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 8921,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 150731352,
+    "sha256": "15db38c54405cb5390b59d20cf992598209dae16fb5af2f278e19cded1434c59"
+  },
+  "sourceManifestSha256": "709946d699eb37645d87b79d6bb4d3a37ae84a6edc946d1c5c0eaac179e9dd44",
+  "validatedTests": 10940,
+  "validatedReusedTests": 2019,
+  "focused": {
+    "startedAt": "2026-11-10T22:17:02.622691+00:00",
+    "elapsedSeconds": 454.16,
+    "sourceFiles": 4857,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 156,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "run": "focused2",
+    "sourceManifestSha256": "709946d699eb37645d87b79d6bb4d3a37ae84a6edc946d1c5c0eaac179e9dd44",
+    "applicationConsumer": false,
+    "existingNativeAcceptanceCommit": "9ec0cdca7e352806c1b7fd8b8863822d45900ae3"
+  },
+  "newDomainCases": 19,
+  "sourceDeltaFiles": 7,
+  "applicationConsumer": false,
+  "nativeExecution": false,
+  "phoneInstalled": false,
+  "liveDeployed": false,
+  "appleExecution": false,
+  "failedRuns": [
+    {
+      "run": "focused1",
+      "session": 89474,
+      "tests": 0,
+      "reason": "Two test assertion type-inference errors"
+    },
+    {
+      "run": "red1",
+      "session": 58464,
+      "tests": 19,
+      "failures": 3,
+      "seconds": 66.315,
+      "reason": "Two invalid readmission fixtures and one stale-root output"
+    },
+    {
+      "run": "red2",
+      "session": 2515,
+      "tests": 19,
+      "failures": 1,
+      "seconds": 90.648,
+      "reason": "Queued old bootstrap survived root removal while consumer was suspended"
+    }
+  ],
+  "baselineTests": 10902,
+  "priorNativeCommit": "9ec0cdca7e352806c1b7fd8b8863822d45900ae3",
+  "remaining": [
+    "Application startup collector and durable enqueue",
+    "Native automatic-startup proof",
+    "Apple execution of the new observer",
+    "Unknown-conversation inventory/change feed",
+    "Raw SDK event/key hints and incoming push handoff"
+  ]
+}

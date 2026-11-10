@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 22:25 UTC. Follow AGENTS.md. This opening section owns current work.
+Updated 10 November 2026, 22:35 UTC. Follow AGENTS.md. This opening section owns current work.
 
 ## Application incoming worker accepted; native proof next
 
@@ -52,35 +52,29 @@ only the portable portion is accepted. Compact hosted measurements are in both r
 This immutable worker commit predates the new startup observer. Do not count its results as
 startup-observer Apple validation. Local startup full1 remains the separate active gate.
 
-Next increment is APPLIED, UNCOMMITTED:7 Mobile files in private
-space-incoming-startup-2026-11-10 (entity, pure admission policy, local observer, data DI,
-fixture and2common test classes). It observes current native parent, root, registration,
-bootstrap and directory admission without network/clock/SDK/scheduling. Stable coordinates
-exclude ordinary token/journal revisions. No application subscriber is connected yet.
-Source4857; expected focused156 and full10940 against10902 prior cases (product full10901
-plus accepted proof diagnostic1). Full baseline report identities and native proof21 are
-preserved in prior-reports.json. No full/hosted/native acceptance of this startup increment.
+Startup domain observer ACCEPTED:7 Mobile files; focused156/454.16s,
+full10940/596.854s,4857 inputs. Source manifest
+709946d699eb37645d87b79d6bb4d3a37ae84a6edc946d1c5c0eaac179e9dd44. Prior10902 case identities remain, including native proof21.
+Contract: collaboration-space-incoming-startup.md (Group:collaboration/space-incoming-startup.md).
+No application subscriber is connected. Apple execution/new native startup acceptance remain.
 
-Focused1/89474 REAPED failed compilation:two Kotlin test assertion inference errors;0 tests.
-Red1/58464 REAPED19/3 failures/66.315s. Two fixtures incorrectly kept denial revision after
-readmission; existing storage requires open=(null,null), now corrected. The third case
-exposed queued old-root output across nested flatMapLatest under consumer backpressure.
-Red2/session2515 REAPED19/1 failure/90.648s:valid changed-bootstrap/root-removal regression
-proved a queued Ready escaped after root removal. Fixed by flattening the owner stream before
-one final bootstrap flatMapLatest; root replacement cancels the pending old-owner emission.
-Focused2/session68155 REAPED ACCEPTED156/454.160s,4857 inputs, source manifest
-709946d699eb37645d87b79d6bb4d3a37ae84a6edc946d1c5c0eaac179e9dd44.
-Both JVM/Chromium19 new cases pass, plus preserved root/setup/registration/scan, encrypted
-storage22 per target, worker20/DI2, format/architecture/detekt and iOS module compilation.
+Focused1/89474 failed before tests on2 assertion type errors. Red1/58464 failed19/3:two invalid
+readmission fixtures plus queued stale-root output. Red2/2515 reproduced19/1 with valid changed
+bootstrap. Final observer flattens the owner stream before one bootstrap flatMapLatest so root
+removal cancels a suspended old-owner emission.19 new domain cases per JVM/Chromium cover this,
+parent replacement, disposal, denial/readmission, no token/journal churn and no transport.
+All failed reports remain private; startup domain policy and data DI only, no SDK mutation.
 
-Current startup full1/session52569 RUNNING. Freeze all product/library inputs; emulator OFF.
-Expect10940=10902 prior +38 new JVM/Chromium cases. Reap, then accept-full.py full1 compares
-all prior identities and exact unchanged reports, source/library manifests and proof APK.
-Do not call publish.py until accepted; it is prepared but UNEXECUTED. Domain observer only,
-no application subscriber; no new native or Apple runtime execution is claimed. Private
-APPLICATION-NEXT.md owns next collector/generation/cancellation and automatic native proof
-plan. Do not disable the real subscriber to preserve manual fixture assumptions. SDK raw
-hints, first-root application enqueue, unknown conversations, push and keys remain separate.
+Next wire the application-owned startup collector to ObserveIncomingStartup and RequestScan,
+retaining a request generation until acknowledgement. Resume unfinished durable work without
+starting a new rescan on every background process start. The owning lifetime cancels on parent
+replacement; token refresh is not a startup. Private APPLICATION-NEXT.md records the proposed
+automatic native fixture: await the existing fake scheduler's first incoming enqueue, remove
+its manual QueueIncomingRoom seed, then exercise the actual registered worker. Do not disable
+real startup merely to preserve fixture assumptions. Preserve old manual/original controls.
+Current server conversation list is UUID keyset, NOT a delta feed. Unknown room discovery and
+raw SDK event/key hints remain separate. No generic Starter delta or phone release for these
+unused domain-only classes. Commit/push this increment with its evidence, then application work.
 
 User phone remains unreachable (ADB17234 timeout/reaped), release89 uninstalled. Existing
 availability question remains pending; notify before install-only, never launch/reset/UI.
