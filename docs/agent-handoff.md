@@ -49,9 +49,11 @@ exited; exec session ID was lost in compaction. Do not rerun or erase either old
 pusher/native-1 or receipt/native-1 stores. Source/native acceptance is complete;
 private .work/space-original-receipt-recovery-2026-11-10 retains frozen inputs/audits.
 
-Next: commit/push cross-repo evidence,dispatch one pinned collaboration-control run
-for this Mobile source,then atomic replica mutation+producer wake. Hosted expected
-7,100 portable+2,698 Apple,16 Swift checks,unsigned iOS host; not yet dispatched.
+Mobile76a143b6 and Group401c6d56 are committed/pushed (85826/7722 reaped). Hosted
+42745403043 pins76a143b6c8fc81c6920658797f127dcf4a92e7b5 and is pending behind
+pusher42739907129; dispatch69781 reaped. Do not redispatch. Expected7,100 portable
++2,698 Apple,16 Swift checks,unsigned iOS host. Private hosted.json/audit.py retain
+the pin and predecessor archive comparison. Next: atomic replica mutation+producer wake.
 Do not claim predecessor CI covers this source. The reusable database contract must
 prove Mobile SQLite/browser/Apple before Starter. Read-only design and133 raw override
 inventory are in .work/replica-commit-wake-2026-11-10; no code yet. Same-current wake
