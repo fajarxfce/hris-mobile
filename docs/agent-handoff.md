@@ -12,14 +12,20 @@ in both repos owns exact candidates, accepted bases, protocol and native runners
 Mobile6654 REAPED/ACCEPTED20/107.635s,4797inputs,manifest
 99b96f3a08efe9e40d85b65860c445c20f9cbc1afed479fbf9499e3e7c91da95.
 ProofAPK150657733B SHAb7ad29214a8ca5f3c6195291182698d388307a36d5854ac6806e9d10611e1b2d.
-Group source-1/58041 RUNNING, sole heavy compiler;39 applied Python cases pass.
+Group58041 REAPED/ACCEPTED79.871s,8740inputs,manifest
+326a6c1cead9c2b35f1e2ae96b50642cfa845de120813d049ce39905281e156a;39Python cases pass.
+Native-1/64426 RUNNING, fresh2560MiB/2core emulator,boot42.134s. No heavy compiler remains.
 
-Next reap/accept Group source, run native-1, then strict audit. Expected4 native cases across
+Next reap/accept native-1. Expected4 native cases across
 2reports/4isolated fixtures, preserving all three previous case identities. Old event control
 stays Matrix32/native9; new completed13-reference pass permits Matrix32..45/native10/direct5.
 The upper bound was derived BEFORE execution from SDK6 load_or_fetch_event's existing cache
 path; source request-budget.md records it. Empty completion and offline reopen add zeroHTTP.
-No native result exists yet. Do not edit source/library/APK during compile/emulator execution.
+No completed native result exists yet. Do not edit source/library/APK during emulator execution.
+Hosted42865846045 portable is REAPED/AUDITED8399; artifact13790445364/3574868B,
+SHAe3ce27f1ac20e11c7614e78b960baa081f91968abd54e8602f23fac93d49dd7e,
+reportManifest165e73b2a25898f6feb6dfbfcec327a967d36eca6612d491778880b5100852de.
+Apple remains RUNNING; full hosted acceptance not claimed.
 After acceptance commit/push both proof changes and continue independent incoming wake/worker.
 All54PRD groups remain OPEN. No phone/live change; release89 still not installed.
 
