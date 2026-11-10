@@ -1,0 +1,83 @@
+{
+  "acceptedAt": "2026-11-10T06:35:39.601223+00:00",
+  "baseCommit": "32ed82813d29c67c9d05c5157e8035cdd74e293b",
+  "scope": "Typed whole native queue matching across distinct company and space ledgers; bounded local reader with per-I/O parent/admission guards, immutable completion, final inventory checks and explicit cancellation/deadline. No sending or product routing.",
+  "sourceFiles": 4695,
+  "sourceManifestSha256": "c33622c793135609fda86a24f21d6ba66dd81dd58d58867f4eff3437a1003deb",
+  "changedSourceHashes": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "7f407bdfeb788045d97a10886e6a46e3fa4476bc4d9e98edba1b6ae5f2bc9263",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "1805405aa7923e8d1ac948a4b48e1254a82527299f5157b3da93978412929162",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationMixedOriginalQueueMatch.kt": "7a3f1abbcb66878d7d1804b232722076b18651336485a2928097d50acaf6b47b",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationMixedOriginalQueuePolicy.kt": "450da38955a716b9aeb0397c4abf75fddcfe3015839e8866250d47528153b832",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationMixedOriginalQueue.kt": "f84af42f7d3885dc39723e10f0b82831f4f22f417980ae65a2129500c1ff4355",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationMixedOriginalQueueMatchTest.kt": "05805d448b47965f1c24fa7bec773c131d84531e5353ef8fd0e28bb2c45453b4",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/MixedOriginalQueueReadFixture.kt": "c1615590f53192f69b93e24085963ef4a3ab60e68e70947256a390d78469c507",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationMixedOriginalQueueTest.kt": "2c376b32d71f12c087a13d07dc90eaea4a0904e823a9f0dea05f8a7a0761abf5"
+  },
+  "deletedSources": [],
+  "focused": {
+    "startedAt": "2026-11-10T06:17:34.254158+00:00",
+    "elapsedSeconds": 339.49,
+    "sourceFiles": 4695,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 70,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "c33622c793135609fda86a24f21d6ba66dd81dd58d58867f4eff3437a1003deb"
+  },
+  "full": {
+    "startedAt": "2026-11-10T06:23:23.899264+00:00",
+    "elapsedSeconds": 662.207,
+    "sourceFiles": 4695,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7537,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "c33622c793135609fda86a24f21d6ba66dd81dd58d58867f4eff3437a1003deb",
+    "validatedTests": 9556,
+    "validatedReusedTests": 2019,
+    "validatedDatabaseCases": {
+      "desktopTest": 102,
+      "wasmJsBrowserTest": 100
+    }
+  },
+  "fullReportManifestSha256": "5966463ca0c1565860e0a66e80624c7fb4af3fca7d7252c8957e6bfc077d07dd",
+  "mixedQueueContracts": {
+    "matchingPoliciesPerPlatform": 17,
+    "readerCasesPerPlatform": 17,
+    "desktopCases": 34,
+    "chromiumCases": 34,
+    "appDi": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "checks": [
+    "root check",
+    "Android host tests",
+    "Android release compilation and lint",
+    "Wasm and iOS source compilation",
+    "real Chromium collaboration tests",
+    "proof APK compilation and unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "nonIncrementalKotlin": true,
+  "nativeRuntimeClaim": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "remaining": [
+    "Pinned Apple execution for these matching/reader contracts",
+    "Typed acknowledgement projection and native delivery of both ledgers",
+    "Explicit new-message staging and complete recovery inventory before product routing"
+  ]
+}

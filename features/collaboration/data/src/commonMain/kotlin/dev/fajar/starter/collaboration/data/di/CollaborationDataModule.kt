@@ -100,6 +100,30 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun readMixedOriginalQueue(
+        bindings: CollaborationSpaceRoomBindingRepository,
+        runtimes: CollaborationSpaceRuntimeRepository,
+        companyMessages: CollaborationMessageRepository,
+        companyCompletions: CollaborationMessageCompletionRepository,
+        spaceMessages: CollaborationSpaceMessageRepository,
+        spaceCompletions: CollaborationSpaceMessageCompletionRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        ReadCollaborationMixedOriginalQueue(
+            bindings,
+            runtimes,
+            companyMessages,
+            companyCompletions,
+            spaceMessages,
+            spaceCompletions,
+            directory,
+            sessions,
+            server,
+        )
+
+    @Factory
     fun readSpaceRecoveryDemand(
         bindings: CollaborationSpaceRoomBindingRepository,
         runtimes: CollaborationSpaceRuntimeRepository,

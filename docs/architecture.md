@@ -1,5 +1,10 @@
 # Architecture
 
+[Mixed original queue matching](collaboration-mixed-original-queue.md) retains separate
+company and organization command ownership. A bounded local use case validates the
+whole capture, admission and immutable completion evidence before publishing facts;
+matching grants no native sending capability.
+
 [Organization message receipts](collaboration-space-message-receipts.md) bind immutable
 intent/device/transaction/origin to bounded event aliases. Repositories own encrypted
 journal I/O and atomic recovery wakes; exact replay leaves both unchanged. The owning
