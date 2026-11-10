@@ -1,43 +1,41 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 18:44 UTC. Follow AGENTS.md. This opening section owns current
+Updated 10 November 2026, 18:55 UTC. Follow AGENTS.md. This opening section owns current
 work; checkpoints below are historical. All 54 communications PRD groups remain OPEN.
 
-## Current incoming-demand storage full gate
+## Current incoming-demand storage acceptance
 
-Policy7197a803 is committed/pushed. Current11Kotlin storage files are APPLIED/UNCOMMITTED,
-FROZEN under full1/82562 RUNNING. Focused2/84063 REAPED/ACCEPTED118/290.724s,
-4810inputs,manifestc08386dad0b82bccc0d8b6e1f65d7d330bea8115ca018c72122aec21e14a7106.
-SQLite/actualChromium16newstorage cases each plus43existing controls each, iOSdata compile,
-format/architecture/detekt PASS. Expectedfull10511. Private space-incoming-demand-storage-2026-11-10
-owns source/library/prior-report snapshots, failed focused1 and strict acceptance runners.
+11Kotlin files are ACCEPTED, ready for this commit/push. Focused84063 and full82562 REAPED,
+strict audits pass. Focused118/290.724s; full10511=8492fresh+
+2019exact controls/644.393s.4810inputs,
+manifestc08386dad0b82bccc0d8b6e1f65d7d330bea8115ca018c72122aec21e14a7106. Source/library unchanged.
+Root/Androidhost/release/lint/Wasm/iOSsource/actualChromium/proof20/quality PASS. No local heavy
+job remains. Contract: collaboration-space-incoming-demand-storage.md. Private
+space-incoming-demand-storage-2026-11-10 owns candidates/base/prior reports and strict audits.
 
-One encrypted document (65536plaintext/131072encoded) and small validated checkpoint retain
-account/space demand plus a DISTINCT incoming work wake in one ReplicaStore replacement.
-Consistent observeDocument reads reject missing/substituted metadata; immutable expected/desired
-captures, atomic capacity rollback, stale CAS, cancellation after commit, login replacement,
-max64UTF8IDs and wake independence are covered. Generic store limits/formats remain unchanged.
-Focused1/83498 was REAPED exit1/169.707s: checkpoint32768 capacity and old-session test caller
-failed; both root causes corrected before focused2. No consumer, runtime or UI behavior enabled.
+One encrypted demand document and small validated checkpoint commit with the distinct incoming
+wake. Exact CAS, scope/generation/document AAD, consistent reads, max64UTF8IDs, cancellation,
+capacity rollback, concurrent producers and reauthentication are covered by16real-store cases
+on each platform. Empty/phase writes never discharge the wake. Generic limits/formats unchanged.
+Failed focused1/83498 retained: checkpoint32768 capacity and old-session caller were corrected.
+No product consumer, SDK callback, worker or UI behavior enabled by this storage capability.
 
-Hosted42865846045 exact669908384da244d285cb21e93040cffcee3207ef COMPLETE/ACCEPTED11621=
-8399portable+3222Apple,16Swift checks/unsignediOS host PASS. Both artifacts/digests/CRC/previous
-case identities audited (53259/49767 REAPED). Public measurements/collaboration-space-page-hosted-
-2026-11-10.json. This source predates pending-reference/policy/storage. No duplicate run.
+Next review/format/apply PRIVATE space-incoming-source-2026-11-10.11Kotlin files NOT APPLIED:
+exact authenticated source+checkpoint lookup through the existing HMAC index, one admitted
+QueueCollaborationSpaceIncomingRoom, DI and21queue/6real-store cases. Provider incoming.head is
+an opaque pagination token, NOT an event ID. Known acquired sources continue saved Provider or
+Pending work; an idle acquired source creates no demand; late old-source hints cannot replace
+newer work. Request retains an independent wake and verifies exact readback before scheduling.
+Review private candidates and prepare runners against this accepted storage base before use.
+Then implement clean completion/phase owners, finite scan claims and bounded incoming worker.
 
-PRIVATE space-incoming-source-2026-11-10 contains6UNAPPLIED files for exact authenticated source
-lookup through the existing HMAC document index, with six real-store cases. No source/schema
-change applied. Provider incoming.head is a pagination token, NOT an event ID. Consistent source
-reference plus provider EOF and zero pending references can exclude an idle hint; never compare
-that token to demand.headEventId or infer provider coverage from displayed messages/ACKs.
-Next admitted Queue/Completion usecases, bounded worker and current-parent SDK hints. Private
-storage NEXT.md and collaboration-space-incoming-plan.md own the still-unimplemented design.
-
-Phone ADB76668 timeout REAPED18:39; release89 NOT INSTALLED, phone87 last known. Existing
-availability question pending; no new question. Install-only when reachable; no phone UI drive.
-No emulator active. Original live90163/schema116.4 unchanged; Group117–140 undeployed. SDK6,
-retained sender/private keys/eight original transactions and dirty Inspector/SDK worktrees
-preserved. No generic Starter delta. All54PRD groups remain OPEN.
+Hosted42865846045 exact66990838 COMPLETE/ACCEPTED11621=8399portable+3222Apple,+16Swift and
+unsignedhost. Predates pending-reference/policy/storage/current private source work. No duplicate.
+Original native4/64426 accepted230.275s, emulatorSTOPPED; Mobile7174557d/Group0ce34b92 pushed.
+ADB76668 timeout REAPED18:39; release89 NOT INSTALLED, phone87 last known. Install-only when
+reachable; no launch/reset/UI drive. Existing availability question pending. Original live90163/
+schema116.4 unchanged; Group117–140 undeployed. SDK6, original sender/private keys/transactions,
+dirty Inspector/SDK worktrees preserved. No generic Starter delta. All54PRD groups remain OPEN.
 
 ## Historical checkpoints
 

@@ -469,6 +469,14 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<ReadCollaborationSpaceRecoveryProgress>())
                 assertNotNull(container.koin.get<UpdateCollaborationSpaceRecoveryProgress>())
                 assertNotNull(container.koin.get<CollaborationSpaceRecoveryProgressRepository>())
+                assertSame(
+                    container.koin.get<CollaborationSpaceIncomingDemandRepository>(),
+                    container.koin.get<CollaborationSpaceIncomingDemandRepository>(),
+                )
+                assertSame(
+                    container.koin.get<CollaborationSpaceIncomingWakeRepository>(),
+                    container.koin.get<CollaborationSpaceIncomingWakeRepository>(),
+                )
                 assertNotNull(container.koin.get<EnsureCollaborationRecoveryWake>())
                 val recovery =
                     container.koin.get<dev.fajar.starter.app.work.CollaborationRecoveryWorker>()

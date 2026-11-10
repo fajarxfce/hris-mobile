@@ -32,7 +32,8 @@ actual Chromium, proof build/unit tests and quality checks pass with 4,800 stabl
 [Focused evidence](measurements/collaboration-space-incoming-demand-focused-2026-11-10.json)
 and [full evidence](measurements/collaboration-space-incoming-demand-full-2026-11-10.json).
 
-Encrypted atomic demand/wake storage and admitted queue/worker integration remain next.
+[Encrypted atomic demand/wake storage](collaboration-space-incoming-demand-storage.md) is validated.
+Admitted queue/worker integration remains next.
 An owning request must exclude an already-retained idle provider head before queuing it.
 Startup scanning requires its own durable cursor/claim and must consume work when the queue
 is full. Missing-key retries must not start an all-room metadata scan. SDK hints retain the
