@@ -8,6 +8,10 @@ fun validCollaborationHistoryProgress(progress: CollaborationHistoryProgress): B
         progress.revision in 0 until 9_007_199_254_740_991L &&
         progress.references in 0..9_007_199_254_740_991L &&
         (next == null || validCollaborationProviderPosition(next)) &&
+        (progress.provider?.let {
+            validCollaborationSpaceConversationId(it.companyId) &&
+                validCollaborationSpaceConversationId(it.deviceId)
+        } ?: true) &&
         (progress.incoming?.let { incoming ->
             validCollaborationProviderPosition(incoming.head) &&
                 (incoming.until == null || validCollaborationProviderPosition(incoming.until)) &&

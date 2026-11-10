@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 16:36 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 16:39 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -18,26 +18,33 @@ Current proofAPK150633118B SHA73106a2f39a4aabdf5e0041e1842f38dbfbd0844eafbdf5f52
 immutable SDK6. This newer wrapper has NOT yet had actual SDK execution; prior native batch
 acceptance remains scoped to487e042c/Group603cf587. No product incoming consumer is enabled.
 
-Current15Kotlin-file Space traversal storage changes are APPLIED, still UNCOMMITTED/FROZEN.
-[Storage contract](collaboration-space-history-progress.md). Focused1/39028 REAPED PASS94/278.191s
-(13new+34old)*Desktop/actualChromium; exact source/library/prior-case audit passes,4787inputs,
-manifest ba7fa2c4c67a7f13c6b12e341a03557281141f5e998433e8c91525dff2c757a6. Format/architecture/
-detekt/iOS data-source compile pass. Full1/92521 is RUNNING, expected10353=10327prior+26new.
-Do not modify source/library/APK, start another compiler or emulator until this job is reaped.
-Private space-history-progress-2026-11-10 owns exact candidate/, files.json, base-sources.json,
-prior-reports/, run.py, accept-focused.py and accept-full.py. Source parent6b445302 is accepted/
-pushed43447(REAPED). Candidate preserves Company schemas1/2 and old fixed frames, adds Space
-schema3 with physical provider identity, shares a raw transaction component without repository
-calls, and preserves malformed-record observation recovery.13new cases include fixed HMAC/AEAD,
-login/process reopen, provider mismatch, CAS/response loss, pending-pass bounds, encrypted
-isolation and competing writers. Do not rerun prepare.py; it resets the private candidate list.
+This commit ACCEPTS15Kotlin files for durable Space traversal storage. [Contract](collaboration-space-history-progress.md).
+Focused1/39028 REAPED PASS94/278.191s=(13new+34old)*Desktop/actualChromium. Full1/92521
+REAPED PASS10353=8334fresh+2019exact accepted reused/746.742s; zero failures/errors/skips.
+Both strict source/library/prior-case audits pass,4787inputs,manifest
+ba7fa2c4c67a7f13c6b12e341a03557281141f5e998433e8c91525dff2c757a6. Required root/Androidhost/
+release/lint/Wasm/iOS application source/proof/format/architecture/detekt gates pass. Current
+proofAPK150634868B SHA3e12c04ded9a3028cfa4b68df11c01df2d127e0c1dd83369aebf135742f1c72a,
+immutableSDK6. No local heavy job remains; actual native execution of this capability is pending.
+Private space-history-progress-2026-11-10 owns exact candidates, runners, source/report/library
+manifests, focused/full auditors and accepted results. Do not rerun accepted gates blindly.
 
-After full acceptance, commit/push these15Kotlin files and evidence, then actual native provider/
-storage proof. native-next.md details bounded metadata pages, retained unresolved references,
-original/mixed controls and different-process offline comparison. Then owning admitted provider
-page acquisition and independent incoming worker; acquired IDs alone never discharge outgoing
-work or permanently suppress redaction/decryption changes. All54 PRD groups remain OPEN. No
-generic Starter delta or native Apple Matrix implementation. Release89 remains INSTALL-ONLY.
+Company schemas1/2 and fixed HMAC/AEAD frames remain exact; Space schema3 keeps the original
+physical provider identity while native/local sessions can renew. Shared raw transaction storage
+has no repository-to-repository dependency. Malformed-record observation can recover on the
+next update.13new storage cases cover real restart/login, cursor/provider mismatch, response
+loss/cancellation, pending-pass bounds, encrypted isolation and competing writers.
+
+Next apply the prepared Mobile3/Group4 native fixture candidates after this source commit is
+pushed. Both space-frontier-native-2026-11-10 folders own candidate/base-sources/runners/auditors.
+Capture current product-base/prior-proof reports, compile proof and Group classes sequentially,
+then run three actual native cases with the fresh isolated2560MiB2core emulator and768MiB
+precompiled harness. The fixture must reopen identical frontier/pending references in another
+process without a backend reverse or Space runtime. Strict matrix counts are30+1..4pages,
+providerPage==page count, unchanged4encrypted/3sync/2secret-storage; native7/2direct transports.
+No phone, original-resend, SDK artifact or live server change. After native acceptance implement
+owning admitted page acquisition and the independent incoming consumer/worker. All54 PRD groups
+remain OPEN; no generic Starter delta or native Apple Matrix implementation.
 
 Hosted incoming producte1ab run42849335674 portable is COMPLETE/audited8316=3900desktop+
 715Androidhost+3701actualChromium.14943 REAPED; artifact13782391948/3569949B,
@@ -54,8 +61,8 @@ Group protocol candidates pass35Pythoncases=13event(4new+9old)+22original/mixed 
 New providerPage counter must equal the actual1..4 requested pages; totalMatrix30+pages with
 unchanged4encrypted/3sync/2secret-storage. Exact physical owner/device, unresolved references
 and frontier hashes must survive different-process offline reopening. Native/source/APK gates
-are NOT run for these candidates; storage full1/92521 still owns the compiler. Partial runners
-are prepared; native driver/auditors still need the new phase paths/artifact/counter contracts.
+are NOT run for these candidates. Storage full1/92521 is now REAPED and accepted. Native/source/
+proof runners and auditors are prepared; capture accepted product/prior-proof inputs before use.
 
 Original live90163c32/API+worker schema116.4 unchanged. Release89 remains accepted/NOT INSTALLED;
 ADB52030 timed out15s(REAPED) at16:14. Phone87 last known. Existing availability question stays

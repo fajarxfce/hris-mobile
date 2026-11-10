@@ -2,6 +2,7 @@ package dev.fajar.starter.collaboration.data.history
 
 import dev.fajar.starter.collaboration.data.messages.spaceMessageScope
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationHistoryTraversal
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationSpaceConversationId
 import dev.fajar.starter.database.ReplicaScope
 
@@ -54,6 +55,40 @@ internal sealed class CollaborationHistoryCoordinates(
 
     fun contentFrame(roomId: String) =
         listOf("$namespace-content-v1", audience, accountId, ownerId, conversationId, roomId)
+
+    fun traversalPartition(traversal: CollaborationHistoryTraversal): String {
+        require(validCollaborationHistoryTraversal(traversal))
+        require(traversal.conversationId == conversationId)
+        val lane =
+            when (traversal.purpose) {
+                CollaborationHistoryPurpose.Browse -> "/pages/"
+                CollaborationHistoryPurpose.Incoming -> "/incoming-pages/"
+            }
+        return partition + lane + traversal.deviceId
+    }
+
+    fun traversalFrame(traversal: CollaborationHistoryTraversal): List<String> {
+        traversalPartition(traversal)
+        val prefix =
+            when (this) {
+                is Company -> "hris"
+                is Space -> "hris-space"
+            }
+        val topic =
+            when (traversal.purpose) {
+                CollaborationHistoryPurpose.Browse -> "history"
+                CollaborationHistoryPurpose.Incoming -> "incoming-history"
+            }
+        return listOf(
+            "$prefix-$topic-pages-v1",
+            audience,
+            accountId,
+            ownerId,
+            conversationId,
+            traversal.roomId,
+            traversal.deviceId,
+        )
+    }
 
     override fun toString() = "CollaborationHistoryCoordinates([redacted])"
 }

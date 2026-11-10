@@ -33,5 +33,9 @@ response loss/cancellation, caller mutation, observation recovery, encrypted iso
 keys and concurrent writes. Focused1/39028 completed94 cases in278.191s:13new+34old on each of desktop and actual Chromium.
 The strict source/library/prior-case audit, formatting, architecture, detekt and iOS data-source
 compilation pass. [Focused measurement](measurements/collaboration-space-history-progress-focused-2026-11-10.json).
-Full application validation is running; actual native provider/storage acceptance remains pending.
-No product incoming consumer is enabled.
+Full1/92521 passed in746.742s. The strict audit verifies10,353 cases:8,334 freshly executed and
+2,019 exact accepted controls, with no failures, errors or skips. Root check, Android host/release
+compilation/lint, actual Chromium, iOS application source, proof APK/unit tests and quality checks
+pass against the same4,787 source/library inputs as the focused gate.
+[Full measurement](measurements/collaboration-space-history-progress-2026-11-10.json).
+Actual native provider/storage acceptance remains pending. No product incoming consumer is enabled.

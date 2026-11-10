@@ -1,5 +1,9 @@
 # Architecture
 
+[Space provider progress](collaboration-space-history-progress.md) keeps physical provider identity,
+provider frontier and unresolved references in authenticated local storage. Typed repositories share
+a raw transaction component; current admission and the incoming worker remain separate owners.
+
 [Installed-runtime event reads](collaboration-runtime-event-reads.md) preserve separate logical
 and physical ownership under the existing native parent. Finite raw acquisition grants no
 content admission, retention, progress or sending authority.

@@ -18,15 +18,16 @@ internal val historyReferenceCursor = Regex("[0-9]{16}/r-[0-9a-f]{64}")
 internal fun traversalPartition(
     access: CollaborationLocalAccess,
     traversal: CollaborationHistoryTraversal,
-): String {
-    require(validCollaborationHistoryTraversal(traversal))
-    val lane =
-        when (traversal.purpose) {
-            CollaborationHistoryPurpose.Browse -> "/pages/"
-            CollaborationHistoryPurpose.Incoming -> "/incoming-pages/"
-        }
-    return historyPartition(access, traversal.conversationId) + lane + traversal.deviceId
-}
+): String =
+    CollaborationHistoryCoordinates.Company(access, traversal.conversationId)
+        .traversalPartition(traversal)
+
+internal fun traversalPartition(
+    access: CollaborationSpaceLocalAccess,
+    traversal: CollaborationHistoryTraversal,
+): String =
+    CollaborationHistoryCoordinates.Space(access, traversal.conversationId)
+        .traversalPartition(traversal)
 
 @Serializable
 private data class HistoryProgressDto(
@@ -35,7 +36,11 @@ private data class HistoryProgressDto(
     val references: Long,
     val schema: Int = 1,
     val incoming: IncomingHistoryPositionDto? = null,
+    val provider: HistoryProviderIdentityDto? = null,
 )
+
+@Serializable
+private data class HistoryProviderIdentityDto(val companyId: String, val deviceId: String)
 
 @Serializable
 private data class IncomingHistoryPositionDto(
@@ -58,20 +63,33 @@ private data class HistoryReferenceDto(
 
 /** Device/room-bound AEAD with separate keyed indexes; no provider IDs or cursors in plaintext. */
 internal class CollaborationHistoryTraversalCodec(
-    private val access: CollaborationLocalAccess,
+    private val coordinates: CollaborationHistoryCoordinates,
     private val traversal: CollaborationHistoryTraversal,
     private val cipher: ContentCipher,
     private val key: ByteArray,
     private val indexKey: ByteArray,
 ) {
+    constructor(
+        access: CollaborationLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        cipher: ContentCipher,
+        key: ByteArray,
+        indexKey: ByteArray,
+    ) : this(
+        CollaborationHistoryCoordinates.Company(access, traversal.conversationId),
+        traversal,
+        cipher,
+        key,
+        indexKey,
+    )
+
     init {
-        historyScope(access)
-        traversalPartition(access, traversal)
+        coordinates.traversalPartition(traversal)
     }
 
     suspend fun progress(raw: ReplicaCheckpoint): CollaborationHistoryProgress {
-        require(raw.published && raw.handle.scope == historyScope(access))
-        require(raw.handle.partition == traversalPartition(access, traversal))
+        require(raw.published && raw.handle.scope == coordinates.scope)
+        require(raw.handle.partition == coordinates.traversalPartition(traversal))
         require(
             validCollaborationMessageId(raw.handle.generation) &&
                 raw.revision in 0 until 9_007_199_254_740_991L
@@ -80,8 +98,13 @@ internal class CollaborationHistoryTraversalCodec(
             Json.decodeFromString<HistoryProgressDto>(
                 open(raw.handle.generation, "checkpoint", raw.revision, "", raw.payload)
             )
-        require(value.schema in 1..2 && value.roomId == traversal.roomId)
-        require((value.schema == 1) == (value.incoming == null))
+        require(value.roomId == traversal.roomId)
+        if (coordinates is CollaborationHistoryCoordinates.Space) {
+            require(value.schema == 3 && value.provider != null)
+        } else {
+            require(value.schema in 1..2 && value.provider == null)
+            require((value.schema == 1) == (value.incoming == null))
+        }
         require(traversal.purpose == CollaborationHistoryPurpose.Incoming || value.incoming == null)
         require(value.incoming?.pendingAfter?.let(historyReferenceCursor::matches) != false)
         require(value.references in 0..9_007_199_254_740_991L)
@@ -99,12 +122,18 @@ internal class CollaborationHistoryTraversalCodec(
                         it.pendingRetryRequired,
                     )
                 },
+                value.provider?.let {
+                    CollaborationHistoryProviderIdentity(it.companyId, it.deviceId)
+                },
             )
             .also { require(validCollaborationHistoryProgress(it)) }
     }
 
     suspend fun checkpoint(progress: CollaborationHistoryProgress): String {
         require(validCollaborationHistoryProgress(progress))
+        val space = coordinates is CollaborationHistoryCoordinates.Space
+        require(space == (progress.provider != null))
+        val schema = if (space) 3 else if (progress.incoming == null) 1 else 2
         require(
             traversal.purpose == CollaborationHistoryPurpose.Incoming || progress.incoming == null
         )
@@ -126,11 +155,9 @@ internal class CollaborationHistoryTraversalCodec(
             Json.encodeToString(
                 HistoryProgressDto(
                     traversal.roomId,
-                    progress.next?.let {
-                        if (progress.incoming == null) it else encodedPosition(it)
-                    },
+                    progress.next?.let { if (schema == 1) it else encodedPosition(it) },
                     progress.references,
-                    schema = if (progress.incoming == null) 1 else 2,
+                    schema = schema,
                     incoming =
                         progress.incoming?.let {
                             IncomingHistoryPositionDto(
@@ -140,6 +167,10 @@ internal class CollaborationHistoryTraversalCodec(
                                 it.pendingThrough,
                                 it.pendingRetryRequired,
                             )
+                        },
+                    provider =
+                        progress.provider?.let {
+                            HistoryProviderIdentityDto(it.companyId, it.deviceId)
                         },
                 )
             ),
@@ -232,19 +263,7 @@ internal class CollaborationHistoryTraversalCodec(
 
     private fun sort(sequence: Long, id: String) = sequence.toString().padStart(16, '0') + "/" + id
 
-    private fun context() =
-        listOf(
-            when (traversal.purpose) {
-                CollaborationHistoryPurpose.Browse -> "hris-history-pages-v1"
-                CollaborationHistoryPurpose.Incoming -> "hris-incoming-history-pages-v1"
-            },
-            access.audience,
-            access.accountId,
-            access.companyId,
-            traversal.conversationId,
-            traversal.roomId,
-            traversal.deviceId,
-        )
+    private fun context() = coordinates.traversalFrame(traversal)
 
     private fun aad(generation: String, id: String, revision: Long, sort: String) =
         Json.encodeToString(context() + listOf(generation, id, revision.toString(), sort))

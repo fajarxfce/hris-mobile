@@ -32,6 +32,8 @@ data class CollaborationHistoryProgress(
     val next: String?,
     val references: Long,
     val incoming: CollaborationIncomingHistoryPosition? = null,
+    /** Original physical device for Space cursors; Company keeps its established keyed scope. */
+    val provider: CollaborationHistoryProviderIdentity? = null,
 ) {
     val exhausted: Boolean
         get() = next == null
@@ -79,4 +81,11 @@ data class CollaborationHistoryReferences(
     val after: String?,
 ) {
     override fun toString() = "CollaborationHistoryReferences([redacted])"
+}
+
+/**
+ * Stable provider identity; rotating native and local sessions do not change the physical store.
+ */
+data class CollaborationHistoryProviderIdentity(val companyId: String, val deviceId: String) {
+    override fun toString() = "CollaborationHistoryProviderIdentity([redacted])"
 }
