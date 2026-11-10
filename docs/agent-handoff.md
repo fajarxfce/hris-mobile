@@ -35,12 +35,14 @@ Initial99688:45 tests passed but detekt rejected106-line worker DI; moved comple
 push composition into owning ApplicationPushReceiverModule, no suppression. Only
 workflow artifact location changed after focused2; full validates final source.
 Swift unavailable locally;16-case checker and app push11 cases added to pinned CI.
-Hosted successor not dispatched yet; wait for42728686367 then dispatch current pushed
-source. Expected7,026portable+2,664Apple plus16Swift and unsigned iOS host.
+Hosted successor42733595170 pins cd4fb78b78f8122075e8a30690acac0670052f74 and is
+pending behind42728686367; dispatch30581 reaped. Prior run is not cancelled. Do not
+replace this pending run with another dispatch. Expected7,026portable+2,664Apple
+plus16Swift and unsigned iOS host. Private hosted.json/audit script are prepared.
 
 [Contract](collaboration-space-push-receiver.md), [measurement](measurements/collaboration-space-push-receiver-2026-11-10.json).
 Private `.work/space-push-receiver-2026-11-10` retains runners,failed/accepted gates and
-source/report audits. Current increment must be committed/pushed atomically. Next:
+source/report audits. Source cd4fb78b is committed/pushed;51430 reaped. Next:
 managed group pusher under exact installed runtime/current device admission; read-only
 notes in `.work/space-pusher-2026-11-10`. No product activation until incoming group
 routing/dedup acceptance. Producer wakes,new SPACE enqueue,rich media/calls/meetings
@@ -135,7 +137,7 @@ key-confirmation candidates are retired;never restore them.
 
 | Checkout | Branch / source | State |
 | --- | --- | --- |
-| Mobile | feat/chat-send-timing-20261107 /6a8b4f61 | Demand/native accepted and pushed;release88 packaged |
+| Mobile | feat/chat-send-timing-20261107 /cd4fb78b | Group push receiver accepted/pushed;release88 precedes it |
 | Platform original | feat/communications /4750d6c4 | Cross-handoff pushed;schema116.4 verifier |
 | Platform group | feat/communication-space /7ae66f89 | Idle/native proof pushed;V140 |
 | Starter | feat/network-inspector-20261107 /ffd0ac5 | Generic pinned workflow/checksum port accepted |
@@ -168,7 +170,7 @@ SHA142082381ed2eff87d50dbbeb01538229ac7c1491ccf70d46ef0ce73519b5c51.
 Signer/16KiB/backup/Firebase/privateAPI/lint/SDK6 bytes verified;audits14571/27599 reaped.
 No native product88 startup or phone runtime claim: dedicated recovery proof is separate.
 Private `.work/release-phone-2026-11-10-build88` preserves all inputs and accepted APK.
-Phone ADB connect52260 reaped timeout00:37UTC;availability question pending. No installation
+Phone ADB connects52260 and4060 reaped timeout00:37/01:08UTC;availability question pending. No installation
 attempt yet. Announce then use `python3 .../install.py --install-only` when reachable.
 Application source and HEAD freeze for packaging has ended; next implementation may proceed.
 
