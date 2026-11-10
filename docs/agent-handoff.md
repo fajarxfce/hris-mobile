@@ -1,37 +1,50 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 13:58 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 14:15 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
 
-## Current history repair validation
+## Current history repair — focused accepted, full running
 
-Mobile14Kotlin files are UNCOMMITTED/frozen in focused1/53935 RUNNING, expected176cases.
-Private history-anchor-2026-11-10 owns source/runners/report baselines. The runtime reads
-an exact raw anchor only when the presentation window folds it away, preserving all originals;
-physical owner/membership checks stay in domain policy and original ACKs remain separate.
-SDK decoding now uses the API failure boundary; late Company publication rechecks the same
-lease. Six new common policy cases, four host parent cases, and Company/Space owning cases
-cover complete retention, false ACK rejection, cancellation and denial. Actual native proof
-now requires successful history and correct original/edit hashes; not yet built/run.
-One Mobile compiler3GiB, no emulator. No phone/live/SDK/Starter change.
+Mobile14Kotlin files are UNCOMMITTED/frozen in full1/64837 RUNNING,10224expected/4766inputs.
+Focused3/71222 REAPED PASS176/203.280s; strict source/report/prior-case audit passes, manifest
+e8b00e9b35dee633c9813c8cd505fc738731c6e74209fec8d8a1e4f8a8a41a63. [Contract](collaboration-history-anchor.md)
+and focused measurement are published with this checkpoint. Private history-anchor-2026-11-10
+owns runners/auditors/results. One3GiB compiler,no emulator; no source edits until reaped.
 
-Group trace9d072639 is pushed16439(REAPED); native-trace2/75697 PASS136.487s confirmed one
-context503, collaboration_provider_invalid_response. Group redaction mapping initially
-reproduced5failed of9cases in red1/60288(45.413s). Green1/18068 REAPED PASS41/178.546s.
-Review added preservation of own redaction transactions and a tenth case; green2 not run yet.
-Group source-fixed3/29615 REAPED PASS81.396s (compile only), now superseded by that small
-mapper/test review. No Group compile may overlap Mobile53935; next run green2, then Mobile
-full platform gate and new isolated native regression on both final sources.
+The runtime acquires raw anchor evidence only when SDK presentation folds the requested event
+away, preserving the complete original window and separate original ACK identity. Source raw
+snapshot has no presentation-anchor policy; API decoding classification and Company post-read
+publication guards are fixed. Six common policy cases,four host parent cases,one mapping failure
+case and Company/Space owning cases add21 local cases,155 previous controls preserved.
+
+Focused1/53935 REAPED45cases/1fixture failure/92.595s: mock expected original anchor. Focused2/
+36860 REAPED131cases/1fixture failure/185.786s: runCurrent did not await real Default decoding.
+Only independent fixture expectation and explicit raw-entry barrier changed. Both exact14-file
+candidates archived; final production source is unchanged across those fixture repairs.
+
+Group82f2c817 is committed/pushed17355(REAPED), accepting valid redacted encrypted events,
+matched redaction metadata and own original/redaction transactions. Green2/91392 REAPED
+PASS42/137.027s,8740stableinputs,all12suites/prior case identities,format/architecture and
+server test-source compilation. Initial red1/60288 had9cases/5failures; first repair41pass is
+retained. Follow-up trace9d072639 native75697 proved context503/invalid provider response.
+
+After full1 passes and its strict auditor accepts, run Group private runtime-event-native-2026-11-10/
+native-fixed.py native-fixed-3. It owns one2560MiB/two-core fresh emulator and precompiled768MiB
+harness. Config points to Group ../room-redaction-mapping-2026-11-10/green-2 and Mobile
+../history-anchor-2026-11-10/full-1. Three expected native cases: new event/history regression plus
+unchanged original-only and mixed original recovery after process loss. Both final sources/APK
+are verified before starting; no compiler overlap or phone UI. Original branch mapper matches
+Group's pre-fix bytes exactly; after native acceptance port the fix/tests there for the live-compatible
+server without group migrations. Originalf690df97 docs push75854 is REAPED.
 
 Hosted classifier42819170095 COMPLETE11295=8170portable+3125Apple,16Swift/unsignedhost.
-Apple63577 REAPED/audited artifact13769184632,574811B,
-SHA9a768ddc4624c227b43ef6899f791a536a992507371ef3cd1c2ce4e68b88173b,
-manifest946d750b96b63b091b7359e64fc8eb01939327291f51373542204f94b0006b9d.
-Measurement is published with this checkpoint. Runtime42824039795 portable49173 REAPED/
-audited8201; Apple still running. Preserve predecessor case identities, no duplicate dispatch.
-Native proof5b15c2fe push17410 and Group49a60dea push1442 are REAPED.
+Apple63577 and portable1908 REAPED/audited; measurement publishedc08cf834(push55285 REAPED).
+Runtime42824039795 portable49173 REAPED/audited8201; Apple still building the unsigned host.
+No native Apple Matrix implementation claim. No phone/live/SDK/Starter source change.
+ADB64277 timed out15s near14:00(REAPED); existing availability question stays pending.
+Phone87 remains last known,88uninstalled,89unbuilt. Deliver validated updates INSTALL-ONLY.
 
 ## Native event proof accepted; old history failures remain
 

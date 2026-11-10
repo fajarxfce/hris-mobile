@@ -1,0 +1,51 @@
+{
+  "startedAt": "2026-11-10T14:06:44.459192+00:00",
+  "elapsedSeconds": 203.28,
+  "sourceFiles": 4766,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 176,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sourceManifestSha256": "e8b00e9b35dee633c9813c8cd505fc738731c6e74209fec8d8a1e4f8a8a41a63",
+  "changedKotlinFiles": 14,
+  "newKotlinFiles": 2,
+  "newLocalCases": 21,
+  "existingLocalCases": 155,
+  "firstFixtureRepair": {
+    "session": 53935,
+    "reaped": true,
+    "elapsedSeconds": 92.595,
+    "counts": {
+      "tests": 45,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cause": "The test datasource independently expected the original anchor rather than the new requested edit anchor. The new case now sets an independent expectedAnchorEventId; default and prior assertions remain unchanged.",
+    "repairSourceFiles": [
+      "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/AcquireCollaborationHistoryTest.kt"
+    ],
+    "productionSourcesUnchanged": true
+  },
+  "secondFixtureRepair": {
+    "session": 36860,
+    "reaped": true,
+    "elapsedSeconds": 185.786,
+    "counts": {
+      "tests": 131,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cause": "The cancellation test assumed runCurrent also finished the real Default dispatcher used by history decoding. The raw read had not entered yet; assertion expected one call, got zero. Use an explicit entered barrier before cancellation.",
+    "productionSourcesUnchanged": true
+  },
+  "fullValidationPending": true,
+  "nativeValidationPending": true,
+  "phoneInstalled": false,
+  "liveChanged": false
+}
