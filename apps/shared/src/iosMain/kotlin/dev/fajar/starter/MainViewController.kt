@@ -2,6 +2,7 @@ package dev.fajar.starter
 
 import androidx.compose.ui.window.ComposeUIViewController
 import dev.fajar.starter.app.StarterApp
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.navigation.AppLinkChannel
 import dev.fajar.starter.app.work.ApplicationPushReceiver
@@ -112,6 +113,10 @@ class AppleAppHost(
             fileInputs = fileInputs,
             fileOutputs = fileOutputs,
         )
+
+    init {
+        container.koin.get<ApplicationCollaborationLifetime>().start()
+    }
 
     private var foregroundWorker: Job? = null
 

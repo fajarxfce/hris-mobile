@@ -27,9 +27,11 @@ import dev.fajar.starter.sync.data.datasources.WorkScheduler
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import org.json.JSONObject
 import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
@@ -52,6 +54,7 @@ internal class HrisWorkerProofContainer(
     private val database = createAppDatabase(context)
     private val access = owner.localListAccess()
     private val requests = mutableListOf<String>()
+    private val incomingEnqueued = CompletableDeferred<Unit>()
     private var priorityNotifications: HrisPriorityNotificationHost? = null
     val scheduledKeys: List<String>
         get() = synchronized(requests) { requests.toList() }
@@ -103,6 +106,8 @@ internal class HrisWorkerProofContainer(
                                         )
                                 )
                                 synchronized(requests) { requests += key }
+                                if (key == CollaborationSpaceIncomingWake.WORK_KEY)
+                                    incomingEnqueued.complete(Unit)
                             }
                         },
                 http =
@@ -187,7 +192,12 @@ internal class HrisWorkerProofContainer(
 
     fun incomingHistory() = HrisSpaceIncomingProofHost(container.koin)
 
-    fun incomingWorker() = HrisSpaceIncomingWorkerProofHost(container.koin) { scheduledKeys }
+    fun incomingWorker() =
+        HrisSpaceIncomingWorkerProofHost(
+            container.koin,
+            scheduled = { scheduledKeys },
+            awaitStartup = { withTimeout(6_000) { incomingEnqueued.await() } },
+        )
 
     fun spaceRecoverySeed(
         original: ProtectedHrisProofOwner,

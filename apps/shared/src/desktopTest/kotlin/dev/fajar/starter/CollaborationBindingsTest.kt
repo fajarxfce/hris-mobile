@@ -1,6 +1,7 @@
 package dev.fajar.starter
 
 import androidx.lifecycle.ViewModelStore
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationIncomingStartup
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.notifications.CollaborationNotificationCommands
@@ -300,6 +301,11 @@ class CollaborationBindingsTest {
                 )
             val lifetime = container.koin.get<ApplicationCollaborationLifetime>()
             try {
+                assertSame(
+                    container.koin.get<ApplicationCollaborationIncomingStartup>(),
+                    container.koin.get<ApplicationCollaborationIncomingStartup>(),
+                )
+                assertNotNull(container.koin.get<ObserveCollaborationSpaceIncomingStartup>())
                 assertSame(runtime, container.koin.get<CollaborationRuntimeRepository>())
                 assertSame(
                     runtime,

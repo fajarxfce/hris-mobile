@@ -2,7 +2,8 @@
 
 [Local incoming startup observation](collaboration-space-incoming-startup.md) follows the
 current parent, root and completed bootstrap without transport. One final owner boundary
-cancels stale emissions; the application startup consumer remains separate.
+cancels stale emissions. [Foreground startup](collaboration-space-incoming-foreground.md) owns
+the application collector and resumes retained work without creating a scan on warm return.
 
 [Application incoming processing](collaboration-space-incoming-application.md) registers one
 bounded task. Domain recovery distinguishes missing current-device progress from failed reads;

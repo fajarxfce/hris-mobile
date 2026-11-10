@@ -1,0 +1,105 @@
+{
+  "recordedAt": "2026-11-10T23:24:51.853379+00:00",
+  "mobileBaseline": "4ca6d98fbe1a291c834ddeadf03e07929434e152",
+  "groupBaseline": "06578d1d6ffdebd62353e014bf70808b58885656",
+  "mobileChangedFiles": 15,
+  "groupChangedFiles": 3,
+  "focused": {
+    "run": "focused2",
+    "elapsedSeconds": 460.56,
+    "freshCounts": {
+      "tests": 198,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceFiles": 4863,
+    "sourceManifestSha256": "4d176120cc3453c61834a3343f57e00e4ac84adc3becd20b792f9fd314a4a3e4",
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true
+  },
+  "full": {
+    "elapsedSeconds": 585.519,
+    "sourceFiles": 4863,
+    "sourceManifestSha256": "4d176120cc3453c61834a3343f57e00e4ac84adc3becd20b792f9fd314a4a3e4",
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 8963,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedTests": 10982,
+    "validatedReusedTests": 2019,
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 150734425,
+      "sha256": "a273f402579334f51c4af85ef62fd1d133f217e5d9eab265208675d5faa30470"
+    }
+  },
+  "groupSource": {
+    "startedAt": "2026-11-10T23:18:11.058549+00:00",
+    "elapsedSeconds": 78.691,
+    "sourceFiles": 8740,
+    "sourcesUnchanged": true,
+    "counts": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "c5543ce6e9c7078bda57a4e8dfc190f77244f9fd890c8d43f77918befd2ea884",
+    "protocolCases": 43,
+    "nativeExecution": false
+  },
+  "native": {
+    "elapsedSeconds": 249.258,
+    "bootSeconds": 29.429,
+    "counts": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "memoryMiB": 2560,
+    "cores": 2,
+    "phoneTouched": false,
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true
+  },
+  "worker": {
+    "turns": 2,
+    "firstTurnMessages": 1,
+    "contentBeforeProviderEof": true,
+    "registeredTask": true,
+    "emptyRepeatUnchanged": true,
+    "coveredHintUnchanged": true,
+    "automaticStartup": true
+  },
+  "matrixRequests": {
+    "requests": 31,
+    "encryptedSend": 4,
+    "sync": 3,
+    "secretStorage": 2,
+    "providerPage": 2
+  },
+  "nativeRequests": {
+    "requests": 14,
+    "registration": 1,
+    "bootstrapReplay": 1,
+    "directTransport": 3
+  },
+  "offlineHistoryPreserved": true,
+  "originalDeliveryControlsPreserved": true,
+  "warmResumeCreatesNoIdleScan": true,
+  "backgroundProcessCreatesNoStartupScan": true,
+  "sdkChanged": false,
+  "liveDeployed": false,
+  "phoneInstalled": false,
+  "appleNativeMatrixVerified": false,
+  "realtimeHintsIntegrated": false,
+  "prdGroupsStillOpen": 54
+}

@@ -1,5 +1,6 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationIncomingStartup
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.work.CollaborationSpaceIncomingWorker
 import dev.fajar.starter.collaboration.domain.usecases.*
@@ -9,6 +10,17 @@ import org.koin.dsl.module
 
 /** Application task binding; feature policy and repository construction remain in data DI. */
 internal fun applicationCollaborationSpaceIncomingWorkerModule() = module {
+    single {
+        val parent = inject<ApplicationCollaborationLifetime>()
+        val observe = inject<ObserveCollaborationSpaceIncomingStartup>()
+        val request = inject<RequestCollaborationSpaceIncomingScan>()
+        ApplicationCollaborationIncomingStartup(
+            states = lazy { parent.value.state },
+            observe = { observe.value(it) },
+            request = { access, generation, reason -> request.value(access, generation, reason) },
+            build = get(),
+        )
+    }
     single {
         val parent = inject<ApplicationCollaborationLifetime>()
         val ensureWake = inject<EnsureCollaborationSpaceIncomingWake>()

@@ -19,10 +19,14 @@ class RequestCollaborationSpaceIncomingScan(
     private val server: IdentityServer,
     private val schedules: SyncScheduleRepository,
 ) {
-    /** The caller retains this generation until the request is durably confirmed. */
+    /**
+     * Retain the generation until confirmation. True means requested demand is durable, or a
+     * Startup resumed existing durable demand; it does not claim that content has arrived.
+     */
     suspend operator fun invoke(
         access: CollaborationSpaceLocalAccess,
         generation: String,
+        reason: CollaborationSpaceIncomingScanReason = CollaborationSpaceIncomingScanReason.Refresh,
     ): AppResult<Boolean> {
         currentCoroutineContext().ensureActive()
         if (!validCollaborationMessageId(generation)) return changed(FailureKind.Validation)
@@ -44,6 +48,18 @@ class RequestCollaborationSpaceIncomingScan(
             val current = previous?.demand ?: CollaborationSpaceIncomingDemand()
             if (!validCollaborationSpaceIncomingDemand(access, current))
                 return@withTimeoutOrNull changed()
+            if (
+                reason != CollaborationSpaceIncomingScanReason.Refresh &&
+                    (current.rooms.isNotEmpty() ||
+                        current.scan != null ||
+                        current.rescanGeneration != null)
+            ) {
+                // Demand and wake were committed together. A foreground restart only repairs
+                // scheduling; it cannot replace a scan or bypass a room's missing-key backoff.
+                return@withTimeoutOrNull scheduleRetainedDemand(access)
+            }
+            if (reason == CollaborationSpaceIncomingScanReason.Resume)
+                return@withTimeoutOrNull AppResult.Success(true)
             val planned =
                 nextCollaborationSpaceIncomingDemand(
                     current,
@@ -81,7 +97,14 @@ class RequestCollaborationSpaceIncomingScan(
                 retained.demand != next
         )
             return if (saved is AppResult.Failed) saved else changed()
-        // The durable wake survives a failed scheduler; startup and the owning worker recover it.
+        return scheduleRetainedDemand(access)
+    }
+
+    private suspend fun scheduleRetainedDemand(
+        access: CollaborationSpaceLocalAccess
+    ): AppResult<Boolean> {
+        admission(access).let { if (it is AppResult.Failed) return it }
+        // The durable wake survives a failed scheduler; foreground entry and the worker recover it.
         withTimeoutOrNull(1_500) { schedules.request(CollaborationSpaceIncomingWake.WORK_KEY) }
         admission(access).let { if (it is AppResult.Failed) return it }
         return AppResult.Success(true)

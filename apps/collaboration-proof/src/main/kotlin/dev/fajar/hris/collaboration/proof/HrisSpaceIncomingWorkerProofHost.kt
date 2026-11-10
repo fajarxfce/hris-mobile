@@ -1,5 +1,6 @@
 package dev.fajar.hris.collaboration.proof
 
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationIncomingStartup
 import dev.fajar.starter.app.work.CollaborationSpaceIncomingWorker
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
@@ -7,6 +8,7 @@ import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.sync.domain.*
 import java.util.UUID
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import org.json.JSONObject
 import org.koin.core.Koin
@@ -15,6 +17,7 @@ import org.koin.core.Koin
 internal class HrisSpaceIncomingWorkerProofHost(
     private val koin: Koin,
     private val scheduled: () -> List<String>,
+    private val awaitStartup: suspend () -> Unit,
 ) {
     private val worker = koin.get<CollaborationSpaceIncomingWorker>()
     private val readWake = koin.get<ReadCollaborationSpaceIncomingWake>()
@@ -23,6 +26,22 @@ internal class HrisSpaceIncomingWorkerProofHost(
     private val request = koin.get<QueueCollaborationSpaceIncomingRoom>()
 
     suspend fun consume(
+        runtime: CollaborationSpaceRuntimeReady,
+        conversation: CollaborationSpaceConversation,
+        roomId: String,
+        headId: String,
+    ): JSONObject = coroutineScope {
+        check(expect(readWake()) == null)
+        check(scheduled().none { it == worker.key })
+        val foreground = koin.get<ApplicationCollaborationIncomingStartup>().start(this)
+        try {
+            consumeScheduled(runtime, conversation, roomId, headId).put("automaticStartup", true)
+        } finally {
+            foreground.cancelAndJoin()
+        }
+    }
+
+    private suspend fun consumeScheduled(
         runtime: CollaborationSpaceRuntimeReady,
         conversation: CollaborationSpaceConversation,
         roomId: String,
@@ -38,20 +57,7 @@ internal class HrisSpaceIncomingWorkerProofHost(
                 CollaborationHistoryPurpose.Incoming,
             )
         check(expect(history.progress(access, key)) == null)
-        check(expect(readWake()) == null)
-        check(
-            expect(
-                request(
-                    access,
-                    key,
-                    CollaborationSpaceIncomingDemandChange.Request(
-                        conversation.id,
-                        UUID.randomUUID().toString(),
-                        headId,
-                    ),
-                )
-            )
-        )
+        awaitStartup()
         check(expect(readWake()) != null)
         check(scheduled().count { it == worker.key } == 1)
         // The manual fixture scheduler invokes only the real registered task; no acquisition

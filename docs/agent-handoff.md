@@ -1,60 +1,64 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 23:04 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 10 November 2026, 23:26 UTC. This opening section owns current work; older checkpoints below are historical.
 
-## Current work: foreground incoming startup
+## Foreground incoming startup accepted
 
-Mobile15 source/workflow files and Group3 fixture/protocol files are uncommitted and under
-validation. Baselines: Mobile4ca6d98f, Group06578d1d, both already pushed. Private directories in
-both repositories: `.work/space-incoming-foreground-2026-11-10`. Their files.json/candidate,
-source manifests, DECISIONS.md (Mobile) and preserved reports describe the exact work.
+The 15-file Mobile increment and three Group fixture/protocol changes are accepted and included
+with this checkpoint. Domain Startup resumes retained demand without changing the scan, FIFO,
+provider phase, backoff or durable wake. Warm foreground Resume never creates an absent/idle
+scan; explicit content/overflow Refresh keeps its existing semantics. The application collector
+owns one credential-free confirmed bootstrap capture for the process and follows foreground
+lifetime. Android uses its existing requested-worker lane; Apple owns the collector inside
+foreground work. Application.onCreate owns only the native parent, not a new incoming scan.
 
-Application-owned startup now follows foreground lifetime, not Application.onCreate. Android
-adds the incoming key to its existing conflated requested worker lane; Apple starts its native
-parent lifetime and includes startup in its foreground job. Domain Startup resumes existing
-demand without replacing its scan/FIFO/provider phase/backoff. A process-owned confirmed
-bootstrap capture makes later warm entries use Resume, which never creates an absent/idle scan.
-Explicit content/overflow Refresh keeps its existing semantics. No application repository/SDK
-access or new retry timer. The native fixture awaits the actual collector's automatic enqueue;
-it no longer manually seeds the registered worker's demand.
+Focused2: 198 passed / 460.56s. Full1: 10,982 = 8,963 fresh + 2,019 exact unchanged controls /
+585.519s. Source 4,863, manifest 4d176120cc3453c61834a3343f57e00e4ac84adc3becd20b792f9fd314a4a3e4.
+Group source-1 compiled / 78.691s; all 43 protocol cases preserved and passed.
+Native-1: five passed / 249.258s, all sessions reaped; fresh 2560 MiB, two-core emulator stopped.
+The actual foreground collector automatically enqueued the registered worker without a manual
+initial seed. Exactly two turns/two schedules, Matrix 31/native 14 requests, content before EOF,
+covered-head no-op and unchanged offline history after process death. Old manual incoming and
+interrupted-original-delivery controls passed. APK a273f402579334f51c4af85ef62fd1d133f217e5d9eab265208675d5faa30470,
+SDK 26.10.23-hris.6 unchanged. No compiler ran during native execution. No phone interaction.
 
-Red1/session88494 reaped PASS38/224.745s. Focused1/session41599 reaped ACCEPTED192/351.123s,
-source4863/manifest460424a1f53b9ba8abeef929a379b6e7694f19ea7a0f4f8090d79cce8d4d00de.
-Warm-entry refinement follows that archived candidate. Focused2/session54463 is RUNNING and
-expects198; current full expected10982. Its12 domain startup cases and16 application collector
-cases have passed JVM; the whole focused gate is not accepted yet. Then run full1, Group
-source-1 and native-1 sequentially, accepting each before the next. No compiler during native.
-All43 Group protocol cases pass with old case identities and required automaticStartup evidence.
-The old proof APK is NOT this new native candidate; full1 must build/validate the new APK first.
+Contract and compact evidence: collaboration-space-incoming-foreground.md (Mobile),
+collaboration/space-incoming-foreground.md (Group), and shared measurements filename
+collaboration-space-incoming-foreground-2026-11-10.json. Private directories in both repositories:
+`.work/space-incoming-foreground-2026-11-10`; every accepted report and source snapshot is retained.
+The initial focused candidate passed 192 cases; a warm-entry review added six cases before
+final acceptance. No performance improvement on the user phone is claimed.
 
-## Accepted worker CI
+## Hosted validation
 
-Run42911090770 at exact9ec0cdca7e352806c1b7fd8b8863822d45900ae3 is COMPLETE and audited:
-12361 =8899portable +3462Apple, plus16 Swift push-envelope cases and unsigned Apple host build.
-Apple audit74568 reaped; both artifact digests/ZIP CRCs/prior case identities verified.
-See measurements/collaboration-space-incoming-application-hosted-2026-11-10.json.
+Previous run 42911090770 at 9ec0cdca7e352806c1b7fd8b8863822d45900ae3 is COMPLETE and audited:
+12,361 = 8,899 portable + 3,462 Apple, plus 16 Swift push-envelope cases and an unsigned Apple host.
+Both archive digests/ZIP CRCs/prior case identities verified. Do not redispatch the old run.
 https://github.com/fajarxfce/hris-mobile/actions/runs/42911090770
-Do NOT redispatch it. This immutable commit excludes the later domain startup observer and
-current foreground integration. Their combined future run is prepared, NOT dispatched, in
-foreground/hosted-next.json:12472 =8979portable +3493Apple, plus16Swift/unsigned host.
+Its immutable revision excludes the startup observer and this foreground integration.
+The combined new run is prepared, NOT dispatched yet: 12,472 = 8,979 portable + 3,493 Apple,
+plus 16 Swift/unsigned host. Commit/push the accepted increment, create its immutable validation
+ref, dispatch once, then record run/head and audit both artifacts with foreground/hosted-audit.py.
 
 ## Next integration and protected state
 
-A separate SDK6 baseline was reconstructed at
+Continue realtime raw event/key hints, physical unknown-room admission and incoming push routing.
+The separate SDK6 reconstruction is at
 `/home/fajar/hris/.worktrees/matrix-sdk-incoming-hints-2026-11-10`, branch
-feat/hris-incoming-hints-20261110. Upstream8de215a plus the seven pinned SDK6 patches;32 patched
-hashes/1218 inputs verified, manifest7c11dd909d664632dc9cf507dd5f8ea6463c9a3d600648a77dfb44ada3cf3a6f.
-No new SDK feature, build, dependency, version or publication. Protected dirty SDK tree unchanged.
-Mobile foreground/sdk6-reconstruction/NEXT.md records the next raw-hint decision: the existing
+feat/hris-incoming-hints-20261110. Upstream 8de215a plus seven pinned SDK6 patches; 32 patched
+hashes/1,218 inputs verified, manifest 7c11dd909d664632dc9cf507dd5f8ea6463c9a3d600648a77dfb44ada3cf3a6f.
+No new SDK feature/build/version/publication. The protected dirty SDK worktree is unchanged.
+Private foreground/sdk6-reconstruction/NEXT.md records the next raw-hint decision: the existing
 32-slot room-update broadcast runs after SDK/EventCache persistence, but lacks an exact cursor.
-Never pair an old queued update with a later sync_token read. Preserve lag/overflow/crash gaps.
-Server push locators are physical matrixRoomId/matrixEventId. Space logical UUID listing is not
-a delta feed; investigate the existing admitted rooms.boundRoom lookup for unknown physical rooms.
+Never pair queued updates with a later sync_token read; preserve lag/overflow/crash gaps.
+Server push locators are physical matrixRoomId/matrixEventId. Logical UUID listing is not a delta
+feed. The existing admitted rooms.boundRoom lookup can locate an unknown physical room; preserve
+the room-first, sorted-account, native-session guard order of ReadNativeCollaborationSpaceRoom.
 
-Phone ADB23863 timed out/reaped. Validated release89 remains uninstalled; existing availability
-question is pending. Notify before install-only; never launch, reset or drive the phone UI.
-No live deployment or generic Starter delta. SDK6, live90163c/schema116.4 and original sender
-keys/messages remain protected. All54 communications PRD groups remain OPEN. Continue the work.
+Phone ADB23863 timed out/reaped; validated release 89 is still uninstalled. Existing availability
+question remains pending. Notify before install-only; do not launch, reset or drive phone UI.
+No live deployment or generic Starter delta. SDK6, live 90163c/schema 116.4 and original sender
+keys/messages remain protected. All 54 communications PRD groups remain OPEN. Continue work.
 
 ## Earlier checkpoints (superseded by current state above)
 

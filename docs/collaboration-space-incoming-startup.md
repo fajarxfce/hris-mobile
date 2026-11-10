@@ -16,8 +16,8 @@ denial revision under the existing storage contract; no redundant revision field
 The focused gate passes 156 tests and the full gate passes 10,940 tests, including 19 new
 domain cases on JVM and Chromium. The previous 10,902 case identities remain. Source and
 library fingerprints stayed fixed. This observer performs no network, SDK, scheduling or
-clock acquisition. No application subscriber is connected yet; automatic startup still
-requires its owning application collector and native acceptance. Apple execution of this
-increment remains separate from the earlier native-worker CI. All 54 PRD groups remain open.
+clock acquisition. Its application subscriber and native acceptance are recorded separately in
+[foreground incoming startup](collaboration-space-incoming-foreground.md). Apple execution of
+these later increments remains separate from the earlier native-worker CI. All 54 PRD groups remain open.
 
 [Measurements](measurements/collaboration-space-incoming-startup-2026-11-10.json).
