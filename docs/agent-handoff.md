@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 06:10 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 06:21 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -29,19 +29,26 @@ validation/space-message-receipts-20261110 pins that exact commit. New control
 16Swift and unsignedhost. Private receipt hosted.json/audit.py retain exact state.
 No receipt hosted or new native/phone acceptance is claimed yet.
 
-Three new UNCOMMITTED domain files now implement typed Company/Space matching of a
-complete original native queue,with17 common test cases. They were reviewed/formatted
-as private drafts,then copied into source only after receipt commit/push. They are NOT
-compiled or accepted. .work/space-mixed-original-queue-2026-11-10/applied.json records
-exact files/base/hashes. Next implement the owning bounded reader with session/directory
-admission and dual-ledger lookups,then validate this increment. Matching alone grants
-no resume,settlement or enqueue. Keep original-only native lease unchanged.
+The next increment has six new UNCOMMITTED Kotlin files plus owning data-module DI
+and app DI assertions:typed Company/Space matching, a bounded local reader,fixtures
+and34 domain cases. Pure matching preserves both ownership types and rejects missing/
+ambiguous IDs,unresolved states and conflicting completion aliases. The reader checks
+local parent/directory admission after each I/O,detaches captures/proofs,and rechecks
+binding/native inventory before returning. No new native capability or product routing.
+Focused-1/session19427 is RUNNING as the only heavy local compiler; freeze Mobile
+source. Expect70 fresh cases (17 policy+17 reader on Desktop and actual Chromium,
+2 app DI),plus Apple source and quality. No focused/full acceptance is claimed yet.
+Private .work/space-mixed-original-queue-2026-11-10 retains check.py,accept-focused.py
+and prepared accept-full.py. The source was formatted69695,reaped. Next reap/audit
+focused19427,run required full validation,then commit/push the complete increment.
 
-Starter command patch is applied/uncommitted; independent full-1/session32816 is
-RUNNING as the only heavy local compiler. Starter source is frozen. Do not launch a
-Mobile compiler or emulator until32816 is reaped. Mobile source edits may continue.
-Message control42763070460 portable7,416 is audited; Apple remains running. Producer
-42753380451 and command42758828055 are fully accepted. Preserve all running controls.
+Starter command sourcea7ff417c33cbbffb9b44a84e489a2fbce7be5bb2 is committed/pushed,
+54242 reaped. Independent32816 REAPED PASS518.812s:358 fresh cases/87 suites,zero
+failures/errors/skips. All configured Android/web/iOS-source/SBOM/quality gates pass;
+source1,061/library49 fixed. Exact15 generic files match Mobileb1adfd82; no HRIS policy
+copied. No Starter compiler remains. Message42763070460 portable7,416 is audited;
+Apple is building the unsigned host. Producer42753380451 and command42758828055 are
+fully accepted. Receipt42766554589 remains running; preserve both current controls.
 
 ## Accepted local messages and receipt implementation
 
@@ -439,6 +446,6 @@ Eight originals must NEVER be resent: Control77 235408, Warm77 235728, Recovery7
 Registry82 055959, Parent83 071123, History84 083059, Selected86 102110, Joined87 115837.
 Draft66 092041 must NEVER be sent. All native/emulator jobs are reaped and stopped.
 
-The private mixed-queue draft has now been copied into the three domain source files
-recorded in applied.json. It remains uncompiled/uncommitted and activates no reader,
-worker,UI or native enqueue. Continue from the active checkpoint at the top.
+The mixed-queue draft is now extended in source with the owning reader and DI. Its
+focused19427 gate is active; do not reapply drafts or edit frozen Mobile source. No
+worker,UI or native enqueue is activated. Follow the active checkpoint at the top.
