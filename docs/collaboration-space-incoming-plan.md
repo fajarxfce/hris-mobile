@@ -3,8 +3,8 @@
 STORAGE/LOCAL OBSERVATION ACCEPTED: focused112 and full10060 pass; strict auditors and
 publisher pass. [Storage contract](collaboration-space-history-storage.md) owns that completed
 increment. Native incoming collection and product routing are not implemented. Next retain
-replacement edits before incoming progress; a private seven-file candidate is prepared but
-not applied or tested. See current handoff for exact commands, boundaries and remaining work.
+replacement edits before incoming progress; a seven-file candidate is applied and focused1/72288 is running96expected cases.
+That edit-storage candidate remains unaccepted. See current handoff for exact commands, boundaries and remaining work.
 Native1/45886 is REAPED PASS269.304s/four cases;
 strict acceptance and publisher passed. Preserve that exact evidence and original stores. Core8c76f92c/full10010
 is accepted; mobile proof2/34855 PASS20 and Group source1/72318 PASS3+28Python are reaped.

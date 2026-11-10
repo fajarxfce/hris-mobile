@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 11:33 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 11:36 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -12,8 +12,8 @@ HRIS policy stays in Mobile. No subagents. Usecases coordinate repositories and 
 never other usecases; repositories coordinate their own datasource I/O, and ViewModels own
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
-One heavy compiler OR emulator. All listed local runs are finished/reaped; no heavy job.
-The emulator is stopped. Start the next compiler only after the source checkpoint is pushed.
+One heavy compiler OR emulator. Current edit-storage focused1/72288 is RUNNING; freeze compiled source until reaped.
+Earlier storage/native runs are finished/reaped; emulator stopped.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
 Phone10.77.77.3:5555 is INSTALL-ONLY: announce each install, never launch/drive/uninstall/
@@ -24,7 +24,8 @@ not Apple compilation/runtime/notification/call acceptance. Apple Matrix runtime
 
 ## Accepted owned Space history
 
-The accompanying14-file increment adds typed account/Space/conversation history storage and
+Accepted Mobile0b84f0dcc90969b36fb82b2cc7bb9416b6ed2c6d is committed/pushed72460(REAPED).
+This14-file increment adds typed account/Space/conversation history storage and
 locally admitted observation. No native incoming stream or product route is activated.
 [Contract](collaboration-space-history-storage.md), [measurement](measurements/collaboration-space-history-storage-2026-11-10.json).
 Shared codec/key/batch mechanics preserve the original Company authenticated byte frames;
@@ -44,12 +45,11 @@ Current proofAPK150602743bytes SHA9d0e7ddafdd92fbb784db8d9fb4478724cae21576d0d9e
 This is newer than the accepted historical native run; no native repeat or phone latency claim.
 Private .work/space-history-storage-2026-11-10 holds source/results/auditors and exact file list.
 
-Hosted storage control NOT dispatched yet. After source commit/push, set hosted.json exact
-source/ref and dispatch existing collaboration-control.yml on validation/space-history-storage-
-20261110. Expected8058portable(3803Desktop+651Androidhost+3604Chromium)+3087Apple=11145,
-16Swift/unsignedhost. Strict hosted auditor is prepared against worker42801929551; audit its
-Apple predecessor first when complete. Never substitute newer source or call source compile
-actual Apple Matrix runtime acceptance.
+Hosted storage control42808577683 RUNNING on exact0b84f0dc,refvalidation/space-history-storage-
+20261110. Source72460/ref82114/dispatch40835 REAPED. Expected8058portable(3803Desktop+
+651Androidhost+3604Chromium)+3087Apple=11145,16Swift/unsignedhost. Private hosted.json and
+strict auditor are prepared against worker42801929551; audit that Apple predecessor first
+when complete. Never substitute newer source or claim native Apple Matrix runtime acceptance.
 
 ## Accepted registered pending-worker native proof
 
@@ -135,14 +135,17 @@ handoff/measurements. Shared Apple tests/unsigned hosts do not implement its nat
 ## Next work — continue implementation
 
 [Incoming/history plan](collaboration-space-incoming-plan.md) continues from accepted storage.
-Next is retaining replacement edits before an incoming traversal may advance. PRIVATE draft
-.work/space-history-edits-2026-11-10 is NOT APPLIED:7planned Kotlin files/5new, typed Space edit
+Next is retaining replacement edits before an incoming traversal may advance. UNACCEPTED current candidate
+.work/space-history-edits-2026-11-10 is APPLIED:7Kotlin files/5new, typed Space edit
 repository and existing codec/batch operations,17new storage cases, three platform wrappers,
 and existing DI identity check.13existing core edit scenarios are adapted plus4new scope/
 uncertain-commit/mutation cases. Company14case contract stays unchanged; Space quote/hide APIs
 remain separate. Guarded apply.py, focused96/full10094 runners and auditors are prepared.
-Only apply after current accepted source is committed/pushed. Then format, review, run focused
-and full gates; record actual results. This draft is uncompiled and unaccepted.
+Applied after predecessor source push, reviewed and formatted. Focused1/72288 RUNNING96
+expected cases plus iOS source/format/architecture/detekt; freeze source until reaped. Next
+strict focused audit, required full10094 expected, accepted source/evidence commit and push.
+No product incoming or UI activation. Never rerun accepted storage/native gates against this
+changed tree. Private applied-files.txt is authoritative.
 
 Next incoming acquisition must independently prove original physical ownership through the
 retained runtime setup and admitted immutable room binding. Do not acquire a queue writer merely
