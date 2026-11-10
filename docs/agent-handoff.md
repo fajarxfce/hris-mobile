@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 11:56 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 12:08 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -12,7 +12,7 @@ HRIS policy stays in Mobile. No subagents. Usecases coordinate repositories and 
 never other usecases; repositories coordinate their own datasource I/O, and ViewModels own
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
-One heavy compiler OR emulator. All listed local gates are finished/reaped; no heavy job.
+One heavy compiler OR emulator. New raw-event focused1/2142 is RUNNING; prior gates are reaped.
 The emulator is stopped. Preserve the one-compiler OR one-emulator boundary.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
@@ -76,8 +76,10 @@ Private .work/space-history-storage-2026-11-10 holds source/results/auditors and
 Hosted storage control42808577683 RUNNING on exact0b84f0dc,refvalidation/space-history-storage-
 20261110. Source72460/ref82114/dispatch40835 REAPED. Expected8058portable(3803Desktop+
 651Androidhost+3604Chromium)+3087Apple=11145,16Swift/unsignedhost. Private hosted.json and
-strict auditor are prepared against worker42801929551; audit that Apple predecessor first
-when complete. Never substitute newer source or claim native Apple Matrix runtime acceptance.
+strict auditor uses completed/audited worker42801929551. Portable60998 REAPED PASS8058,
+artifact13762536589 SHAa0a21941750820e24452d7521134e4e12e14ca44c03a51948a29055a2bce04f4,
+manifestca4a3d017f080a7e9a3a84eac386f6e723e0017a4ede4dd8aab2f92fa239e9f7. Apple still running.
+Portable measurement is published; do not rerun this audit. Never substitute newer source or claim native Apple Matrix runtime acceptance.
 
 ## Accepted registered pending-worker native proof
 
@@ -163,7 +165,15 @@ handoff/measurements. Shared Apple tests/unsigned hosts do not implement its nat
 ## Next work — continue implementation
 
 [Incoming/history plan](collaboration-space-incoming-plan.md) now continues from accepted
-original AND replacement storage. No next production source is applied. Private
+original AND replacement storage. Four unaccepted Kotlin files now add internal raw-event DTO/
+datasource contract/Android implementation and15Android host tests. Focused1/2142 RUNNING,
+26expected(15new+11existing history source),Desktop/Wasm/iOS data compilation and quality.
+No source edits until this gate ends. Private raw-event-source-2026-11-10 records exact files/
+baseline/runners. No DI/runtime activation, incoming collection, native execution or phone claim.
+The adapter performs one exact raw read through the supplied existing client, owns/closes its
+room handle, retains separate SDK decryption and room facts, bounds96KBUTF8, clears mutable
+raw result, preserves exceptions and handles cancellation/concurrent requests. Owning client
+lease integration and content classification remain NEXT. Private
 space-original-acquisition-2026-11-10 is design/read-only evidence, including inspected immutable
 SDK6 AAR/Javap API; preserve the dirty SDK source worktree and exact immutable library.
 

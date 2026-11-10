@@ -67,4 +67,6 @@ physical registration/setup/room identity across all I/O. Require actual SDK dec
 for encrypted message content; room encryption state alone is insufficient, and decryption does
 not imply verified sender trust. Control/redaction metadata needs separate explicit policy.
 Retain both original and edit facts before advancing any traversal; local reading stays separate.
-Private space-original-acquisition-2026-11-10 contains read-only evidence, no applied next source.
+Private space-original-acquisition-2026-11-10 contains the read-only SDK evidence. An internal
+raw-event adapter candidate and15Android host cases are now under validation; the current
+handoff records its exact status. It has no runtime binding or incoming activation yet.
