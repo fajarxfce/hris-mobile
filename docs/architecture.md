@@ -1,5 +1,9 @@
 # Architecture
 
+[Independent incoming demand](collaboration-space-incoming-demand.md) coalesces room work,
+preserves recovery phase and newer generations, and retains bounded overflow rescan demand.
+Atomic storage and admitted worker completion remain separate owning capabilities.
+
 [Owned incoming references](collaboration-space-incoming-references.md) separate finite local
 pending reads, exact acquisition outcomes and seek advancement. Missing keys retain retry demand;
 the independent incoming worker owns scheduling and completion.

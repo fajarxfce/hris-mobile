@@ -1,40 +1,48 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 18:14 UTC. Follow AGENTS.md. Earlier checkpoints below are historical;
+Updated 10 November 2026, 18:31 UTC. Follow AGENTS.md. Earlier checkpoints below are historical;
 this opening section owns current work. All 54 communications PRD groups remain OPEN.
 
-## Active independent incoming-demand policy
+## Current incoming-demand policy acceptance
 
-Mobile3 new domain/entity/policy/test files are APPLIED/UNCOMMITTED and FROZEN under
-full1/14905 RUNNING. Private space-incoming-demand-2026-11-10 owns the exact4797-input
-accepted native base, candidate,10447prior reports, runners and strict audits. New4800inputs;
-expectedfocused124/full10479.16new scenarios cover per-room deduplication, phase-preserving
-retry, FIFO yielding, newer requests surviving late completion, overflow rescan, generation
-collision, immutable capture and ordering bounds. No storage, DI, wake or worker integration.
+Three new domain/entity/policy/test files are ACCEPTED, ready for this commit/push.
+Focused81529 and full14905 REAPED/ACCEPTED. Focused124/213.856s;
+full10479=8460fresh+2019exact controls/749.875s.
+4800inputs,manifestb7edc2b47c8594581f8f048ca39910b143783e1d72cbef972b5e412aedddab77. Source/library unchanged.
+Root/Androidhost/release/lint/Wasm/iOSsource/Chromium/proof20/quality pass. Private
+space-incoming-demand-2026-11-10 owns exact candidate, accepted bases, reports and strict audits.
+[Contract](collaboration-space-incoming-demand.md) links public measurements. No heavy job remains.
 
-The model caps current room demand at64 and retains independent rescan generation on overflow.
-Same known head never restarts Pending; new unknown scan generation does request Latest. Retry
-keeps Provider/Pending phase and moves beyond the current FIFO boundary. Only an admitted owning
-completion may dispatch Complete after verifying provider EOF and no unresolved local sources.
-Focused81529 REAPED/ACCEPTED124/213.856s, manifest
-b7edc2b47c8594581f8f048ca39910b143783e1d72cbef972b5e412aedddab77.
-Next reap/accept full14905, commit/push, then implement encrypted demand+wake atomic storage,
-current-owner queue usecases and the bounded worker. A repeated already-retained idle head must
-be excluded by the owning request usecase before queuing; this pure policy alone cannot do it.
-Private space-incoming-demand-storage-2026-11-10 contains11 UNAPPLIED Kotlin files: encrypted
-checkpoint/wake storage, domain contracts/entities,15common real-store cases,3platform harnesses,
-and2DI assertions. No source integration/compilation yet. NEXT.md records exact uncertain-response
-readback, saved-head no-HTTP path, dedicated clean completion and scan claim/queue/cursor order.
-Maximum valid UTF8 event IDs require plaintext65536/Base64131072 limits. Current full14905 freezes
-all product source/library/APK inputs; only private drafts/docs may change.
-Startup/rescan traversal remains separately owned and durable; new overflow cannot be cleared
-by an old scan. Missing keys must not restart metadata acquisition for every quiet room.
+The policy retains at most64 room tasks, independent rescan generation, exact capture identity,
+FIFO yielding and Latest/Provider/Pending phases. Same known head does not restart Pending.
+Newer request survives older completion. New unknown scan generation explicitly requests Latest;
+same unknown attempt stays idempotent. Overflow cannot silently drop work or clear room tasks.
+No storage, DI, worker, SDK hint or product consumer is enabled by this policy alone.
 
-Previous native4/64426 is REAPED/ACCEPTED230.275s, emulatorSTOPPED. Mobile7174557d and
-Group0ce34b92 are committed/pushed (50387/76848 REAPED). Both event scenarios usedMatrix32;
-new13-reference completion added zeroMatrix requests from actual SDK cache and one native
-transport (10/direct5). Original2/3controls and offline hashes remain exact. All54PRD groups OPEN.
-Phone ADB7195 timed out/REAPED at18:08; release89 NOT INSTALLED. Original live90163 unchanged.
+Next review/format/apply PRIVATE space-incoming-demand-storage-2026-11-10.11Kotlin files,
+NOT APPLIED/COMPILED: checkpoint/wake entities,2contracts,encrypted checkpoint codec/repository,
+standalone incoming-wake repository,15real-store common cases+3platform harnesses+2DI assertions.
+Atomic ReplicaStore replace retains demand plus a DISTINCT incoming WorkWakeRequest; phase
+writes retain existing wake. Owner scope is account/space, independent of native credential age.
+Plaintext65536/Base64131072 bounds include64maximum valid UTF8 event IDs. Existing formats,
+ReplicaStore/WorkWakeStore and Starter stay unchanged. Private NEXT.md owns integration decisions.
+Capture accepted source/reports before applying. Validate real storage, root/platform/DI gates.
+
+Then current-owner queue usecases must exclude identical retained idle heads before writes;
+worker may satisfy Latest from saved exhausted progress when a requested non-null head matches.
+Clean room completion must independently verify provider EOF and no unresolved sources. Generic
+updates cannot blindly accept Complete. Keep four-room FIFO turn bounds and phase-preserving
+retry; no all-room HTTP scan for a single missing key. Rescan needs durable room/operation claim,
+enqueue readback before cursor advance, and one worker owning scan production/consumption.
+Stop self-scanning at capacity instead of creating fresh overflow. Startup covers missed callbacks.
+
+Previous native4/64426 REAPED/ACCEPTED230.275s, emulatorSTOPPED; Mobile7174557d/Group0ce34b92
+pushed. Both event scenariosMatrix32;13-reference completion reused cache, adding only one
+native transport (10/direct5). Exact original2/3controls/offline hashes preserved. All54PRD OPEN.
+Hosted42865846045 older66990838 source has AUDITEDportable8399; Apple host still monitored.
+No duplicate dispatch. Release89 NOT INSTALLED; ADB7195 timeoutREAPED18:08, phone87 last known.
+Original live90163/schema116.4 unchanged; Group117–140 undeployed. ImmutableSDK6 and retained
+sender/private keys/original transactions preserved; no generic Starter source delta.
 
 
 ## Current pending-reference native acceptance
