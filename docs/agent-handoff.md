@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 12:21 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 12:29 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -12,7 +12,7 @@ HRIS policy stays in Mobile. No subagents. Usecases coordinate repositories and 
 never other usecases; repositories coordinate their own datasource I/O, and ViewModels own
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
-One heavy compiler OR emulator. Raw-event focused2142/full92524 are reaped; no heavy job.
+One heavy compiler OR emulator. Raw classification focused1/49881 RUNNING; prior gates reaped.
 The emulator is stopped. Preserve the one-compiler OR one-emulator boundary.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
@@ -24,6 +24,7 @@ not Apple compilation/runtime/notification/call acceptance. Apple Matrix runtime
 
 ## Accepted raw event I/O
 
+Mobile99c7be198ecdab8dd9f6d8185de160dee184bdff is committed/pushed93173(REAPED).
 Four new Kotlin files add an internal raw-event DTO/contract/Android datasource plus15host
 cases. It reads one exact event through the supplied SDK6 client and closes its own room
 handle on success/failure/cancellation. Detached JSON retains unknown fields and actual SDK
@@ -40,9 +41,11 @@ accepted reused,zero failures/errors/skips. Root check,Android host/release comp
 iOS app source,actualChromium,proofAPK/unit/quality pass. Strict full auditor/publisher passed.
 4752source/library inputs fixed,manifest19fc3bd37896f5618a11df1a542e1fe78b75f8acff6a21d364d8a3d2bb22f036.
 Current proofAPK150602468B SHA5d0d280316aa07cb97644e28746bc6b8cec9a7274d39a28bb3d78c82d4e04cac.
-Private raw-event-source-2026-11-10 contains exact files/runners/auditors/results. Hosted config
-and auditor prepared:8107portable+3104Apple=11211+16Swift/host, baselineedit42811675228. Source
-commit/push and dispatch are next; never claim pending hosted checks or rerun accepted gates.
+Private raw-event-source-2026-11-10 contains exact files/runners/auditors/results. Hosted
+42815332867 RUNNING exact99c7be19,refvalidation/raw-event-source-20261110,expected8107portable+
+3104Apple=11211+16Swift/host, baselineedit42811675228. Source93173/ref87991/dispatch78335
+REAPED. Auditor/config prepared; predecessor must finish/audit per platform first.
+Never claim pending hosted checks or rerun accepted gates.
 
 ## Accepted Space message edits
 
@@ -188,7 +191,16 @@ handoff/measurements. Shared Apple tests/unsigned hosts do not implement its nat
 
 [Incoming/history plan](collaboration-space-incoming-plan.md) now continues from accepted
 original AND replacement storage and the accepted internal raw-event I/O primitive above.
-No next source is applied yet. Private space-original-acquisition-2026-11-10 retains the
+Three new UNACCEPTED Kotlin files now add CollaborationAcquiredEvent, the common raw mapper
+and21common tests. Focused1/49881 RUNNING:105expected=(21new+7old original+7old edit)*Desktop/
+Androidhost/actualChromium,iOS source/quality. Private raw-event-classification-2026-11-10 has
+files/runners/expected cases, six exact old mapper XML baselines and prepared strict auditors.
+Expected4755source/full10172; no full run yet. Do not mutate source until this gate ends.
+Mapping separates original/replacement/redaction trigger/redacted target/unresolved/unsupported;
+SDK decryption never follows room flags. Redaction actors cannot establish original sender,
+ambiguous targets/invalid metadata fail, original/edit hashes reuse existing mappers. No runtime
+binding, owning usecase retention or native activation. Actual SDK6 redaction equivalence and
+parent-owned finite reads remain required before activation. Private space-original-acquisition-2026-11-10 retains the
 classification/parent-ownership review and inspected immutable
 SDK6 AAR/Javap API; preserve the dirty SDK source worktree and exact immutable library.
 
