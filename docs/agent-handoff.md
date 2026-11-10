@@ -1,7 +1,40 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 19:19 UTC. Follow AGENTS.md. This opening section owns current
+Updated 10 November 2026, 19:23 UTC. Follow AGENTS.md. This opening section owns current
 work; checkpoints below are historical. All 54 communications PRD groups remain OPEN.
+
+## Active incoming completion and provider evidence
+
+Source/request7e36df3f is committed/pushed,36686 REAPED. Focused204/352.143s and full10565=
+8546fresh+2019exact controls/656.1s accepted.4814inputs,manifest
+4e8356861e4d1bb0238591bb3336c577fa646eeffbb279252dd0803d9d478979. Storage795f11c2 also accepted.
+
+Current13Kotlin files are APPLIED/UNCOMMITTED and FROZEN under focused1/75627 RUNNING.
+Expected336focused/10649full/4821inputs; full1 NOT STARTED. Prepare48981 REAPED. Private
+space-incoming-completion-2026-11-10 owns exact accepted base/candidate/prior reports/runners.
+16new clean-completion cases,21phase cases,5new acquisition cases (prior24preserved). Data DI
+and app resolution assertions included. The actual proof host checks the typed retained receipt.
+
+Space provider acquisition now returns runtime/traversal/origin/before/after/count, validated by
+exact post-commit readback and a pure transition policy. Company acquisition summary unchanged.
+Phase advancement requires matching retained checkpoint and explicit Latest/SavedPosition phase;
+exact applied phase is idempotent, late newer work survives. Clean Pending completion requires
+provider EOF, no pending references and resolved exact captured head when non-null. Both retain
+the independent wake. One incoming worker must serialize provider writes/completion. No product
+worker, SDK hint/callback, phone UI or generic Starter delta is enabled yet.
+
+Reap/audit focused then full; fix actual failures before accepting. After local acceptance run
+actual native4 controls with immutableSDK6, exact original/mixed2/3control transactions, and prior
+Matrix/native budgets. New receipt checks add local I/O only; that remains a native measurement
+requirement. Next fair deferral/read owners, finite scan claim/cursor, bounded incoming worker,
+collapsed scheduling and parent-owned SDK hints. All54PRD groups remain OPEN.
+
+Phone ADB17704 timeout REAPED19:17; release89 NOT INSTALLED, phone87 last known. Install-only
+when reachable; no launch/reset/UI drive. Hosted6699/42865846045 complete11621+16Swift/unsigned
+host but predates newer additions; no new dispatch. Original live90163/schema116.4 unchanged;
+Group117–140 undeployed. SDK6/private originals/dirty SDK/Inspector worktrees preserved.
+
+## Historical checkpoints
 
 ## Current incoming source/request acceptance
 
