@@ -223,9 +223,21 @@ internal class HrisWorkerProofContainer(
                     .get<CollaborationSpaceConversationRepository>()
                     .get(owner, canonicalId)
             )
+        val bindings = container.koin.get<CollaborationSpaceRoomBindingRepository>()
+        val readWake = container.koin.get<ReadCollaborationSpaceRecoveryWake>()
+        val previous = expect(bindings.getByConversation(owner.localDirectoryAccess(), canonicalId))
+        val previousWake = expect(readWake())
+        val previousRequests = scheduledKeys.count { it == CollaborationSpaceRecoveryWake.WORK_KEY }
         val retained =
             expect(container.koin.get<PrepareCollaborationSpaceRoomBinding>()(conversation))
         check(retained.original?.conversation?.position?.conversationId == conversationId)
+        val wake = expect(readWake())
+        val requests = scheduledKeys.count { it == CollaborationSpaceRecoveryWake.WORK_KEY }
+        if (previous == null) {
+            check(wake != null && wake != previousWake && requests == previousRequests + 1)
+        } else {
+            check(retained == previous && wake == previousWake && requests == previousRequests)
+        }
         return conversation
     }
 

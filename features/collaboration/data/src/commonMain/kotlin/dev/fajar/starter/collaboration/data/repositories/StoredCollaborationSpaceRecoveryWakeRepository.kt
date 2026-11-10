@@ -11,6 +11,9 @@ import dev.fajar.starter.storage.safeStorageCall
 import kotlin.uuid.Uuid
 import org.koin.core.annotation.Single
 
+/** Shared physical capacity for standalone recovery hints and atomic binding producers. */
+internal const val SPACE_RECOVERY_WAKE_MAX_KEYS = 32
+
 @Single
 class StoredCollaborationSpaceRecoveryWakeRepository(private val store: WorkWakeStore) :
     CollaborationSpaceRecoveryWakeRepository {
@@ -24,11 +27,16 @@ class StoredCollaborationSpaceRecoveryWakeRepository(private val store: WorkWake
     override suspend fun request(): AppResult<CollaborationSpaceRecoveryWake> {
         val retained = safeStorageCall {
             val generation = Uuid.random().toString()
-            store.request(CollaborationSpaceRecoveryWake.WORK_KEY, generation, MAX_KEYS)?.let { raw
-                ->
-                check(raw.generation == generation && raw.pending)
-                raw.toWake()
-            }
+            store
+                .request(
+                    CollaborationSpaceRecoveryWake.WORK_KEY,
+                    generation,
+                    SPACE_RECOVERY_WAKE_MAX_KEYS,
+                )
+                ?.let { raw ->
+                    check(raw.generation == generation && raw.pending)
+                    raw.toWake()
+                }
         }
         if (retained is AppResult.Failed) return retained
         return (retained as AppResult.Success).value?.let { AppResult.Success(it) }
@@ -50,9 +58,5 @@ class StoredCollaborationSpaceRecoveryWakeRepository(private val store: WorkWake
         check(key == CollaborationSpaceRecoveryWake.WORK_KEY)
         check(Uuid.parse(generation).toString() == generation)
         return CollaborationSpaceRecoveryWake(generation)
-    }
-
-    private companion object {
-        const val MAX_KEYS = 32
     }
 }

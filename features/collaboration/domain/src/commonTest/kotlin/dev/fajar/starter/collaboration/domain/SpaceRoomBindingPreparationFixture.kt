@@ -4,6 +4,7 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.PrepareCollaborationSpaceRoomBinding
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.days
 
@@ -61,6 +62,8 @@ internal class SpaceRoomBindingPreparationFixture(legacy: Boolean = false) {
         )
     var retained: AppResult<CollaborationSpaceRoomBinding?> = AppResult.Success(null)
     var canonical: AppResult<CollaborationSpaceConversationMetadata?> = AppResult.Success(null)
+    val scheduleRequests = mutableListOf<String>()
+    var onSchedule: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) }
     var bindingReads = 0
     var canonicalReads = 0
     var admissionReads = 0
@@ -174,6 +177,14 @@ internal class SpaceRoomBindingPreparationFixture(legacy: Boolean = false) {
             }
         }
 
+    private val schedules =
+        object : SyncScheduleRepository {
+            override suspend fun request(key: String): AppResult<Unit> {
+                scheduleRequests += key
+                return onSchedule()
+            }
+        }
+
     fun prepare() =
         PrepareCollaborationSpaceRoomBinding(
             bindings,
@@ -184,6 +195,7 @@ internal class SpaceRoomBindingPreparationFixture(legacy: Boolean = false) {
             source.local.sessions,
             native.server,
             source.local.build,
+            schedules,
             native.clock,
             native.time,
         )

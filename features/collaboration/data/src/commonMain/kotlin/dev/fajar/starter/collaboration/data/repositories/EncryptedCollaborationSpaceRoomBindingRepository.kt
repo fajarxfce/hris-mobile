@@ -65,7 +65,17 @@ class EncryptedCollaborationSpaceRoomBindingRepository(
                         codec.documents(generation, 0, binding),
                     )
                 currentCoroutineContext().ensureActive()
-                return@use replicas.replace(scope, partition, null, snapshot)
+                return@use replicas.replace(
+                    scope,
+                    partition,
+                    null,
+                    snapshot,
+                    ReplicaWakeRequest(
+                        CollaborationSpaceRecoveryWake.WORK_KEY,
+                        Uuid.random().toString(),
+                        SPACE_RECOVERY_WAKE_MAX_KEYS,
+                    ),
+                )
             }
             codec.validate(checkpoint)
             require(page.documents.all { it.id in ids })
@@ -86,6 +96,12 @@ class EncryptedCollaborationSpaceRoomBindingRepository(
                 payload,
                 documents,
                 publish = true,
+                wake =
+                    ReplicaWakeRequest(
+                        CollaborationSpaceRecoveryWake.WORK_KEY,
+                        Uuid.random().toString(),
+                        SPACE_RECOVERY_WAKE_MAX_KEYS,
+                    ),
             )
         }
     }

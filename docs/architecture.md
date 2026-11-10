@@ -1,5 +1,7 @@
 # Architecture
 
+[Atomic binding producers](collaboration-space-binding-producer-wake.md) retain encrypted room indexes and recovery work in one replica transaction. The repository owns atomic I/O; the preparation use case owns bounded scheduling after exact readback. Existing local bindings never create new work.
+
 [Missing original receipts](collaboration-original-lost-callback.md) are recovered by the owning delivery use case from exact local facts or one bounded original SDK window. Data only acquires through the installed lease; pure domain policy verifies provenance and content before durable acknowledgement.
 
 [Organization managed push](collaboration-space-pusher.md) admits the current installed original runtime and native device before one owned provider request. Sync shares the pure installed-device policy; each use case keeps its own orchestration. Actual native registration and remaining recovery uncertainty are recorded separately.

@@ -1,0 +1,179 @@
+{
+  "acceptedAt": "2026-11-10T03:58:43.676092+00:00",
+  "mobileBase": "ce6ef47464d692530bbf64821af92f1af542b54d",
+  "groupBase": "8be99b0424e707844de182a7d73a02b9e1730a8d",
+  "scope": "Atomic new binding and recovery wake; bounded post-readback scheduling. Native fixture checks fresh wake/one scheduling request for new binding and unchanged wake/no request on retained reads through the actual SDK recovery scenarios.",
+  "sources": {
+    "mobile": {
+      "count": 4656,
+      "manifestSha256": "f651ee545c99b4b7617ca0450d0ce4f6b3f983f11a17874211f9de3fc333da87",
+      "files": {
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofContainer.kt": "3c756f44c0eb5dcf096f15a5a67ae4760114c6242b3bd63f5d1349ea8abddc8d",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "4f85e2861b4ee4fa29cc64e5b16894d76d6d454695cb49efef7e7750e2f162ae",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceRoomBindingRepository.kt": "74b091842f22dc11bceb9af6283697a219ea2c5e2ff889f90ee0e7c06d9f4f75",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/StoredCollaborationSpaceRecoveryWakeRepository.kt": "78d90a5ad84259cb272d89d3e44740d862f19c25628d433619a38b99f5ade353",
+        "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingPreparationStorageContract.kt": "38e89f0b96c7b821f4c142eb6d13f8dc7c416fcbbdb850794c6d225d0b9bfcb2",
+        "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceRoomBindingStorageContract.kt": "236f77a4d9a764909a5d5a96b1dc73b72b1a7e121c67a6d89b2451214a406af5",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceRoomBindingRepository.kt": "584624eb739317cb4ad46d4082788953cdc60b36f2bbc629a47dfb158e60f418",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationSpaceRoomBinding.kt": "29205e3ddd81fbdd92c3435cee3a3a8e67a7fbd265f09c6751f19d4e7caef1de",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRoomBindingPreparationFixture.kt": "5ba248e26503fb32e904e97e6c0886f3f3d7392a1474e1e7ec194a10e58afff4",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceRoomBindingPreparationTest.kt": "40bc93d89fcb591e3fb7eb80a838f7a65dd0cd36710b9b41d3800ab756e4e3b6"
+      },
+      "deleted": []
+    },
+    "group": {
+      "count": 8734,
+      "manifestSha256": "f89ebc38d9cf34a416ec2982a49f1585ac1a6ab227a147c875565ff22f34de4a",
+      "unchangedAcceptedSource": true
+    }
+  },
+  "redRegression": {
+    "elapsedSeconds": 66.155,
+    "counts": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceFiles": 4656,
+    "productionMatchesAcceptedFoundation": true,
+    "failure": "No recovery wake after successfully retaining a binding",
+    "report": {
+      "features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSpaceRoomBindingStorageTest.xml": {
+        "sha256": "d82920a776ae537c14bc58b6d5e4edcf05c4a5f0641bfa3afb3ce30aec37ab61",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "focused": {
+    "elapsedSeconds": 372.923,
+    "freshCounts": {
+      "tests": 87,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceFiles": 4656
+  },
+  "full": {
+    "elapsedSeconds": 682.233,
+    "freshCounts": {
+      "tests": 7301,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedTests": 9294,
+    "validatedReusedTests": 1993
+  },
+  "native": {
+    "startedAt": "2026-11-10T03:54:14.966261+00:00",
+    "elapsedSeconds": 193.275,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "bootSeconds": 30.576,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "TEST-dev.fajar.hris.NativeSpaceRecoveryWorkerTest.xml": {
+        "sha256": "b0d5c481661b292e935bb4e67350555a372642ad9e13f7dbafa6c5139ba6401a",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": {
+        "sha256": "5a8ad25c81ab3f8e62458e108cdb09590db3867dfa72d7ff34f2a4e56f3e242f",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true,
+    "phoneTouched": false
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 150470250,
+    "sha256": "de897799fc7e0eb4c8751915aa4a02a7a1a7fd14b83447426dd8a0556322a686"
+  },
+  "scenarios": {
+    "originalDelivery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 10,
+        "bootstrapReplay": 2,
+        "directTransport": 2
+      },
+      "secondProviderAckLostBeforeAppJournal": true,
+      "matrixRequests": {
+        "requests": 11,
+        "secretStorage": 4,
+        "encryptedSend": 2
+      },
+      "delivery": {
+        "reason": "DRAINED",
+        "confirmed": 2,
+        "unresolved": 0,
+        "receiptCount": 2,
+        "states": [
+          "SENT",
+          "SENT"
+        ],
+        "elapsedMillis": 582
+      }
+    },
+    "groupRecovery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 25,
+        "registration": 1,
+        "bootstrapReplay": 1,
+        "directTransport": 2
+      },
+      "actualGroupControl": true,
+      "consumerReplayDeduplicated": true,
+      "claimedBeforeDelivery": true,
+      "recoveredWithoutFcm": true,
+      "idleRecoveryCompleted": true,
+      "managedPusherActivatedOnce": true,
+      "managedPusherRetainedAfterProcessLoss": true,
+      "matrixRequests": {
+        "requests": 17,
+        "secretStorage": 4,
+        "sync": 6,
+        "managedPusher": 1,
+        "encryptedSend": 3
+      },
+      "idleSweepAdditionalDirectTransport": 0
+    }
+  },
+  "limits": [
+    "New fictional originals and manual fixture OS scheduling; no physical-phone latency or throughput claim.",
+    "Existing callback-loss, group control, claim, pusher and idle-recovery assertions are retained. Actual FCM/APNs and visible notification coexistence remain separate.",
+    "New SPACE command enqueue and complete incoming/older history are not part of this binding producer increment.",
+    "Generic Apple proof and Starter port are tracked separately. No product release, live rollout or SDK artifact change.",
+    "All 54 PRD acceptance groups remain open."
+  ]
+}

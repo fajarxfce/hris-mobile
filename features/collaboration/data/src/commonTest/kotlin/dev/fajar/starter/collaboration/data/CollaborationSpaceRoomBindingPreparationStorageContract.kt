@@ -12,6 +12,7 @@ import dev.fajar.starter.database.*
 import dev.fajar.starter.identity.domain.entities.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.securestorage.MemoryCredentialStore
+import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import kotlin.test.*
 import kotlin.time.*
 import kotlin.time.Duration.Companion.days
@@ -52,6 +53,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                 }
             assertEquals(AppResult.Success(f.binding()), f.prepare(store)(f.conversation()))
             assertEquals(2, publications)
+            assertEquals(1, f.scheduledWakes.size)
             assertEquals(1, f.roomReads)
             assertEquals(1, f.originalReads)
             assertEquals(
@@ -62,6 +64,10 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
             assertEquals(2, raw.documents.size)
             assertEquals(AppResult.Success(f.binding()), f.prepare()(f.conversation()))
             assertEquals(raw, f.rawBindings())
+            assertEquals(
+                listOf(f.history.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY)),
+                f.scheduledWakes,
+            )
             assertEquals(1, f.roomReads)
         }
 
@@ -92,12 +98,23 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                 }
             assertFailsWith<CancellationException> { f.prepare(store)(f.conversation()) }
             val before = f.rawBindings()
+            val pending =
+                assertNotNull(
+                    f.history.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY)
+                )
+            assertTrue(pending.pending)
+            assertTrue(f.scheduledWakes.isEmpty())
             val key = f.history.keys.read()
             f.reopen()
             assertEquals(AppResult.Success(f.binding()), f.prepare()(f.conversation()))
             assertEquals(before.documents, f.rawBindings().documents)
             assertEquals(before.checkpoint?.payload, f.rawBindings().checkpoint?.payload)
             assertEquals(key, f.history.keys.read())
+            assertEquals(
+                pending,
+                f.history.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY),
+            )
+            assertTrue(f.scheduledWakes.isEmpty())
             assertEquals(1, f.roomReads)
             assertEquals(1, f.originalReads)
         }
@@ -154,6 +171,27 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
             )
             assertEquals(1, f.roomReads)
         }
+
+    @Test
+    fun failedSchedulingLeavesAtomicWorkForLifecycleRecoveryAcrossReopen() = withDatabase { f ->
+        f.onSchedule = {
+            AppResult.Failed(Failure(FailureKind.Unavailable, "Scheduler unavailable"))
+        }
+        assertEquals(AppResult.Success(f.binding()), f.prepare()(f.conversation()))
+        val wake = f.scheduledWakes.single()
+        val before = f.rawBindings()
+        f.reopen()
+        assertEquals(AppResult.Success(f.binding()), f.prepare()(f.conversation()))
+        assertEquals(
+            wake,
+            f.history.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY),
+        )
+        assertTrue(wake.pending)
+        assertEquals(before.documents, f.rawBindings().documents)
+        assertEquals(1, f.scheduledWakes.size)
+        assertEquals(1, f.roomReads)
+        assertEquals(1, f.originalReads)
+    }
 
     private fun withDatabase(block: suspend (Scenario) -> Unit) = runTest {
         withContext(Dispatchers.Default) {
@@ -233,6 +271,22 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
             )
         var roomReads = 0
         var originalReads = 0
+        val scheduledWakes = mutableListOf<WorkWakeRecord>()
+        var onSchedule: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) }
+        private val schedules =
+            object : SyncScheduleRepository {
+                override suspend fun request(key: String): AppResult<Unit> {
+                    assertEquals(CollaborationSpaceRecoveryWake.WORK_KEY, key)
+                    val wake = assertNotNull(history.database.workWakes.get(key))
+                    assertTrue(wake.pending)
+                    assertEquals(
+                        AppResult.Success(binding()),
+                        bindings().getByConversation(access, conversation().id),
+                    )
+                    scheduledWakes += wake
+                    return onSchedule()
+                }
+            }
         private val sessions =
             object : SessionRepository {
                 override val persistent = true
@@ -374,6 +428,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                 sessions,
                 IdentityServer(access.audience, "Fictional server"),
                 AppBuild(AppPlatform.Android, 5, "test", null),
+                schedules,
                 clock,
             )
 

@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 03:43 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 03:59 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -19,68 +19,66 @@ announce each installation; never launch, drive, uninstall or clear its app.
 Crashlytics IAM is verified; do not ask again. Physical iPhone interaction is waived,
 not Apple source/runtime, push or calling acceptance. Continue work after checkpoints.
 
-## Active: atomic replica mutation accepted locally; producer integration next
+## Active: binding producer accepted; generic Apple proof and new sends next
 
-This commit contains the generic `ReplicaWakeRequest` API and optional wake argument
-for raw replace/commit. SQLite and IndexedDB retain the fresh pending marker in the
-same account/checkpoint-guarded transaction as the replica. Reused current generations
-(pending or acknowledged) and full new-key capacity reject both changes. No scheduler,
-HRIS policy, content, identity or schema change. Existing raw test decorators forward
-the new argument and preserve fault injection. [Contract](replica-work-wakes.md),
-[measurement](measurements/replica-work-wakes-2026-11-10.json).
+This commit contains atomic recovery work for newly retained immutable room bindings.
+The repository writes both encrypted indexes and fresh work in the same transaction.
+The owning preparation use case schedules after exact readback; lost write responses
+are reconciled without another wake write. Scheduling failure/timeouts preserve local
+data and its marker; cancellation and late ownership/denial retain their prior behavior.
+Existing owned bindings and identical retention create no work or scheduler requests.
+[Contract](collaboration-space-binding-producer-wake.md),
+[evidence](measurements/collaboration-space-binding-producer-wake-2026-11-10.json).
 
-Red41381 expected failure proves the generation guard. Focused25113/84232 pass
-11 desktop and 11 actual browser cases; the earlier empty browser filter was not
-counted. All 89 desktop and 87 browser database cases pass. Full38641 initially
-failed one unchanged AppFlow test because a generated Kotlin delegate retained the
-old interface ABI. Exact javap/class evidence is retained. Repair2593 passes all
-714 app tests on identical source after non-incremental compilation; all 90 AppFlow
-identities remain. No UI/assertion/timeout edit. Applied compose-ui-testing-patterns
-for that review; the existing DI/lifecycle integration test is appropriate.
+Red43490 proves the original missing wake (one exact null assertion,66.155s). Focused
+62815 passes87 fresh cases/372.923s (25 domain,30 SQLite,30 browser,2 app DI). Full77826
+passes682.233s:9,294 validated=7,301 fresh+1,993 exact accepted reused; zero failures,
+errors/skips. All4,656 source/library inputs and current/archive XML match. Root,
+Android host/release compilation/lint,Wasm/iOS source,browsers,proof APK/tests and
+quality pass. Only one native fixture file was added after focused; production remained
+identical. New proof APK150470250bytes SHAde897799fc7e0eb4c8751915aa4a02a7a1a7fd14b83447426dd8a0556322a686.
 
-Final full60400 REAPED PASS303.454s with 4,656 stable source inputs. Strict audit
-accepts 7,468 results: 4,012 passing same-source full/repair results plus 3,456 exact
-accepted predecessor results; the final command reused them, no failed report accepted.
-Root check, Android host/release compilation/lint, shared Wasm/iOS source, database
-and collaboration-data browser, proof compilation and quality gates pass. The audit
-was corrected for the actual browser XML filename prefix; test assertions/counts
-were unchanged. Private `.work/replica-commit-wake-2026-11-10` retains all evidence. Existing native APK predates this API; do not claim its
-runtime validation. Mobile7a6fe534 is committed/pushed (50848 reaped). Control42749839268 pins
-7a6fe534fc2e86064be9f60509f7befcc6afbf31 (dispatch56359 reaped), pending behind
-receipt42745403043. Expected 7,276 portable + 2,709 Apple = 9,985 cases, plus 16 Swift
-checks and unsigned host. Private hosted.json/audit.py retain pin and exact predecessor
-report comparison. Do not redispatch or cancel either proof.
+Native46744 REAPED PASS193.275s,two cases,zero failures/errors/skips. Actual new binding
+verifies a fresh wake and one schedule; retained reads verify unchanged wake/schedule.
+Both SDK callbacks/process-death/original transaction scenarios remain. Original has
+2 provider events,10 native/11 Matrix requests; group has2 events,25 native/17 Matrix,
+one pusher,zero rejects/server errors and zero extra idle direct requests. Sources/APK
+match; no compilation during the 2,560MiB/two-core emulator,now stopped. No local heavy
+job remains. Exact unchanged Group source-2 compilation was reused,not rerun. No backend
+source/schema/DI change. Private `.work/space-binding-producer-wake-2026-11-10` in Mobile
+and Group retains runners,red/focused/full/native acceptance and source manifests.
 
-Next: audit both pinned runs on completion, continue Mobile producer integration,
-and port generic database API/implementation/tests to Starter
-only after real Apple contracts pass. Starter AGENTS/README/architecture/handoff and
-downstream-development were read; HEADffd0ac5 is clean and four existing generic files
-exactly match Mobile76a143b6 baseline. No Starter edits/compile yet.
+Generic foundation7a6fe534 is committed/pushed (50848 reaped). Its independent
+control42749839268 pins7a6fe534fc2e86064be9f60509f7befcc6afbf31,still pending behind
+receipt42745403043. Do not redispatch or supersede this pending run. Expected generic
+7,276 portable+2,709 Apple=9,985 cases,16 Swift checks,unsigned host. Auditors/config are
+in `.work/replica-commit-wake-2026-11-10`. This generic CI excludes the producer above.
+After producer commit/push, dispatch its control only when generic is running (no
+other pending run); expected7,292 portable+2,717 Apple=10,009,plus Swift/host. Current
+branch has no open PR,so code push does not automatically enqueue that workflow.
 
-Producer design: newly retained immutable room bindings atomically retain recovery
-work as an explicit domain repository invariant. The owning preparation use case
-schedules after exact committed readback, including a lost write response. Ordinary
-retained reads remain no-op. Never append a separate wake request after writing data.
-Scheduling failure/cancellation must preserve the owned binding and durable marker.
-Producer red43490 REAPED expected FAIL66.155s: one exact null-wake assertion;
-production equals the accepted foundation. Nine Kotlin files now implement atomic
-binding+wake and bounded post-readback scheduling. Focused62815 REAPED PASS372.923s:
-87 fresh cases (25 domain, 30 SQLite, 30 browser, 2 app DI), zero failures/errors/skips;
-strict current/archive/source/library audit passes with 4,656 inputs.
+Generic local evidence:22 focused cases; full core89 desktop/87 browser. Final60400
+passes303.454s with7,468 validated results,including4,012 same-source full/repair and
+3,456 exact predecessor results. Earlier AppFlow failure was a proven stale generated
+Kotlin delegate; non-incremental repair2593 passes714 app cases with unchanged90AppFlow
+identities. No UI/timeout/assertion workaround. Existing failed class/XML are retained.
+[Generic contract](replica-work-wakes.md),[evidence](measurements/replica-work-wakes-2026-11-10.json).
 
-ACTIVE producer full77826. Sources are UNCOMMITTED and frozen through reap/audit.
-The only delta after focused is one native fixture assertion in HrisWorkerProofContainer:
-new binding must retain a new wake and schedule once; existing binding keeps both
-unchanged. Full builds a new proof APK; previous APK does not cover this source.
-Private `.work/space-binding-producer-wake-2026-11-10` retains runners, red/focused
-acceptance, draft contract and full auditor. After reap use accept-full.py, then Group
-native.py native-1. Group backend source is unchanged and its exact accepted receipt
-source-2 compile can be reused; do not start an unnecessary second compiler. One fresh
-2,560MiB/two-core emulator only after full completion; retain all prior failed images.
-After actual proof, commit/push producer source and evidence. Generic Apple acceptance
-and Starter port remain separate; do not supersede its queued CI with another pending run.
-New SPACE messages/history, notifications/replies, media, backup, calls and meetings
-remain in the long run; all 54 PRD groups are open.
+Starter remains clean HEADffd0ac5. AGENTS/README/architecture/handoff/downstream guide
+were read. Nine-file core-only patch from76a143b6..7a6fe534 passes `git apply --check`;
+exact input/output hashes are in starter-port-preparation.json beside starter-core.patch.
+No Starter source/build changed. Apply/verify/commit/push after actual generic Apple
+acceptance; no HRIS policy belongs in the template.
+
+Next new SPACE messages require explicit account/space ownership; never put a spaceId
+into legacy companyId or rewrite existing command envelopes. CommandStore owns durable
+commands separately from disposable replica caches and still needs atomic command+wake
+insertion for a new producer. An adopted physical SDK queue may contain old company and
+new organization commands together. Reconcile the complete mixed ledger before resume;
+never ignore unmatched IDs or treat a partial queue as complete. Original-only leases
+must not silently gain new enqueue capability. Continue local observation,receipts,
+incoming/older history,notifications/replies,rich media,backup,calls and meetings.
+All54 PRD groups remain open; no product release,phone or live group activation here.
 
 ## Accepted: original callback-loss recovery; continue producer wakes
 

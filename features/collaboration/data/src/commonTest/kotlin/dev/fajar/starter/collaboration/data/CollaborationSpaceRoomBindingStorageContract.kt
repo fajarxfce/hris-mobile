@@ -98,6 +98,95 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
     }
 
     @Test
+    fun newBindingRearmsRecoveryAfterTheConsumerFinalInventoryRead() = withDatabase { f ->
+        val key = CollaborationSpaceRecoveryWake.WORK_KEY
+        val first = binding(f.local())
+        assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), first))
+        val consumed = assertNotNull(f.database.workWakes.get(key))
+        assertTrue(consumed.pending)
+        val inventory =
+            assertIs<AppResult.Success<CollaborationSpaceRoomBindingPage>>(
+                    f.bindings().page(f.local())
+                )
+                .value
+        assertEquals(listOf(first), inventory.bindings)
+        assertNull(inventory.next)
+
+        val second = binding(f.local(), 2, legacy = true)
+        assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), second))
+        val pending = assertNotNull(f.database.workWakes.get(key))
+        assertTrue(pending.pending)
+        assertNotEquals(consumed.generation, pending.generation)
+        assertFalse(f.database.workWakes.acknowledge(key, consumed.generation))
+        assertEquals(pending, f.database.workWakes.get(key))
+        f.assertBinding(first)
+        f.assertBinding(second)
+
+        assertTrue(f.database.workWakes.acknowledge(key, pending.generation))
+        val third = binding(f.local(), 3)
+        assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), third))
+        val latest = assertNotNull(f.database.workWakes.get(key))
+        assertTrue(latest.pending)
+        assertNotEquals(pending.generation, latest.generation)
+        val raw = f.rawBindings()
+        for (value in listOf(first, second, third)) {
+            f.assertBinding(value)
+            assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), value))
+        }
+        assertEquals(latest, f.database.workWakes.get(key))
+        assertEquals(raw, f.rawBindings())
+    }
+
+    @Test
+    fun fullRecoveryCapacityCannotPublishTheFirstBinding() = withDatabase { f ->
+        repeat(32) { index ->
+            assertNotNull(f.database.workWakes.request("occupied.$index", "generation-$index", 32))
+        }
+        val value = binding(f.local())
+        assertEquals(AppResult.Success(false), f.bindings().retain(f.local(), value))
+        assertNull(f.rawBindings().checkpoint)
+        assertTrue(f.rawBindings().documents.isEmpty())
+        assertNull(f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY))
+        repeat(32) { index ->
+            assertEquals(
+                "generation-$index",
+                f.database.workWakes.get("occupied.$index")?.generation,
+            )
+        }
+    }
+
+    @Test
+    fun fullRecoveryCapacityPreservesBindingsCreatedBeforeProducerWakes() = withDatabase { f ->
+        val historicalStore =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun replace(
+                    scope: ReplicaScope,
+                    partition: String,
+                    expected: ReplicaCheckpoint?,
+                    snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
+                ) = f.database.replicas.replace(scope, partition, expected, snapshot)
+            }
+        val historical = binding(f.local(), legacy = true)
+        assertEquals(
+            AppResult.Success(true),
+            f.bindings(historicalStore).retain(f.local(), historical),
+        )
+        val before = f.rawBindings()
+        repeat(32) { index ->
+            assertNotNull(f.database.workWakes.request("occupied.$index", "generation-$index", 32))
+        }
+        assertEquals(
+            AppResult.Success(false),
+            f.bindings().retain(f.local(), binding(f.local(), 2)),
+        )
+        assertEquals(before, f.rawBindings())
+        f.assertBinding(historical)
+        assertEquals(AppResult.Success(true), f.bindings().retain(f.local(), historical))
+        assertNull(f.database.workWakes.get(CollaborationSpaceRecoveryWake.WORK_KEY))
+    }
+
+    @Test
     fun emptyReadsAreKeylessAndBothOriginsSurviveReopenWithoutLoginOrCompanyCoordinates() =
         withDatabase { f ->
             val first = binding(f.local())

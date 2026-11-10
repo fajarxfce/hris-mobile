@@ -12,6 +12,84 @@ import kotlinx.coroutines.test.*
 
 class SpaceRoomBindingPreparationTest {
     @Test
+    fun newBindingSchedulesOnlyAfterExactReadbackAndRepeatedLocalReadsDoNoWork() = runTest {
+        for (legacy in listOf(false, true)) {
+            val f = SpaceRoomBindingPreparationFixture(legacy)
+            f.onSchedule = {
+                assertEquals(AppResult.Success(f.binding), f.retained)
+                assertEquals(2, f.bindingReads)
+                assertEquals(listOf(f.binding), f.bindingWrites)
+                AppResult.Success(Unit)
+            }
+            assertEquals(AppResult.Success(f.binding), f.prepare()(f.conversation))
+            assertEquals(listOf(CollaborationSpaceRecoveryWake.WORK_KEY), f.scheduleRequests)
+            repeat(3) { assertEquals(AppResult.Success(f.binding), f.prepare()(f.conversation)) }
+            advanceTimeBy(60_000)
+            assertEquals(1, f.scheduleRequests.size)
+            assertEquals(1, f.bindingWrites.size)
+            assertEquals(1, f.source.roomReads)
+        }
+    }
+
+    @Test
+    fun scheduleFailureOrTimeoutKeepsTheConfirmedBindingWithoutImmediateRetry() = runTest {
+        for (timeout in listOf(false, true)) {
+            val f = SpaceRoomBindingPreparationFixture()
+            f.onSchedule = {
+                if (timeout) awaitCancellation() else AppResult.Failed(f.base.unavailable)
+            }
+            val started = testScheduler.currentTime
+            assertEquals(AppResult.Success(f.binding), f.prepare()(f.conversation))
+            assertEquals(if (timeout) 1_500L else 0L, testScheduler.currentTime - started)
+            assertEquals(listOf(CollaborationSpaceRecoveryWake.WORK_KEY), f.scheduleRequests)
+            assertEquals(AppResult.Success(f.binding), f.prepare()(f.conversation))
+            advanceTimeBy(60_000)
+            assertEquals(1, f.bindingWrites.size)
+            assertEquals(1, f.scheduleRequests.size)
+        }
+    }
+
+    @Test
+    fun cancellationDuringSchedulingReleasesTheRequestAndPreservesOwnedBinding() = runTest {
+        val f = SpaceRoomBindingPreparationFixture()
+        val entered = CompletableDeferred<Unit>()
+        val stopped = CompletableDeferred<Unit>()
+        f.onSchedule = {
+            try {
+                entered.complete(Unit)
+                awaitCancellation()
+            } finally {
+                stopped.complete(Unit)
+            }
+        }
+        val job = async { f.prepare()(f.conversation) }
+        entered.await()
+        job.cancelAndJoin()
+        stopped.await()
+        assertFailsWith<CancellationException> { job.await() }
+        assertEquals(AppResult.Success(f.binding), f.retained)
+        assertEquals(AppResult.Success(f.binding), f.prepare()(f.conversation))
+        assertEquals(1, f.scheduleRequests.size)
+        assertEquals(1, f.bindingWrites.size)
+    }
+
+    @Test
+    fun lateOwnershipOrDirectoryDenialDuringSchedulingCannotReturnAdmittedSuccess() = runTest {
+        for (denied in listOf(false, true)) {
+            val f = SpaceRoomBindingPreparationFixture()
+            f.onSchedule = {
+                if (denied) f.base.deny() else f.native.setup.session = null
+                AppResult.Success(Unit)
+            }
+            val result = assertIs<AppResult.Failed>(f.prepare()(f.conversation))
+            if (denied) assertEquals(f.base.denied, result.failure)
+            assertEquals(AppResult.Success(f.binding), f.retained)
+            assertEquals(1, f.scheduleRequests.size)
+            assertEquals(1, f.bindingWrites.size)
+        }
+    }
+
+    @Test
     fun bothOwnedOriginsRemainReadableAfterNativeExpiryAndPriorDenialWithoutRemoteWork() = runTest {
         for (legacy in listOf(false, true)) {
             val f = SpaceRoomBindingPreparationFixture(legacy)
@@ -31,6 +109,7 @@ class SpaceRoomBindingPreparationTest {
             assertEquals(AppResult.Success(f.binding), f.prepare()(rebound))
             assertEquals(1, f.bindingReads)
             assertEquals(0, f.source.roomReads)
+            assertTrue(f.scheduleRequests.isEmpty())
             assertEquals(0, f.admissionReads)
             assertEquals(0, f.canonicalReads)
             assertTrue(
@@ -360,6 +439,7 @@ class SpaceRoomBindingPreparationTest {
         advanceTimeBy(60_000)
         assertEquals(1, f.source.roomReads)
         assertTrue(f.bindingWrites.isEmpty() && f.canonicalWrites.isEmpty())
+        assertTrue(f.scheduleRequests.isEmpty())
     }
 
     @Test
@@ -393,6 +473,7 @@ class SpaceRoomBindingPreparationTest {
         assertEquals(1, f.bindingWrites.size)
         assertEquals(2, f.canonicalReads)
         assertEquals(2, f.bindingReads)
+        assertEquals(listOf(CollaborationSpaceRecoveryWake.WORK_KEY), f.scheduleRequests)
         assertEquals(1, f.source.roomReads)
         assertEquals(1, f.originalReads.size)
     }
@@ -465,6 +546,7 @@ class SpaceRoomBindingPreparationTest {
         assertEquals(1, f.source.roomReads)
         assertEquals(1, f.originalReads.size)
         assertEquals(1, f.bindingWrites.size)
+        assertTrue(f.scheduleRequests.isEmpty())
     }
 
     @Test

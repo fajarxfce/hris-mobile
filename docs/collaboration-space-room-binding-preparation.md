@@ -31,6 +31,16 @@ after an uncertain local response, without issuing another write. A missing or c
 readback cannot become success. A committed binding interrupted by cancellation is available
 through the local path next time, including after login replacement and native expiry.
 
+## Recovery scheduling after new binding retention
+
+New binding retention now atomically stores fresh recovery work with its encrypted
+indexes. Only the absent-to-retained path requests bounded scheduling after exact
+readback. Scheduling failure leaves both local data and durable work; it does not
+turn a confirmed binding into an uncertain write or start a retry loop. Existing
+owned reads and identical retention do not schedule or rotate work. See the
+[current producer contract](collaboration-space-binding-producer-wake.md) for its
+separate validation; the original proof below remains historical evidence.
+
 ## Verification
 
 The initial focused gate71916 ran20 domain cases successfully but FAILED Detekt's

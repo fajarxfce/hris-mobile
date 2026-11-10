@@ -162,6 +162,7 @@ class CollaborationDataModule {
         sessions: SessionRepository,
         server: IdentityServer,
         build: AppBuild,
+        schedules: SyncScheduleRepository,
     ) =
         PrepareCollaborationSpaceRoomBinding(
             bindings,
@@ -172,6 +173,7 @@ class CollaborationDataModule {
             sessions,
             server,
             build,
+            schedules,
             Clock.System,
         )
 

@@ -7,13 +7,15 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
+import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import kotlin.time.*
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
 
 /**
  * Recovers owned immutable facts before finite native acquisition. Never opens or authorizes an
- * SDK.
+ * SDK. A new binding retains recovery work atomically; scheduling is a bounded hint, independent of
+ * the confirmed local binding returned here.
  */
 class PrepareCollaborationSpaceRoomBinding(
     private val bindings: CollaborationSpaceRoomBindingRepository,
@@ -24,6 +26,7 @@ class PrepareCollaborationSpaceRoomBinding(
     private val sessions: SessionRepository,
     private val server: IdentityServer,
     private val build: AppBuild,
+    private val schedules: SyncScheduleRepository,
     private val clock: Clock,
     private val timeSource: TimeSource = TimeSource.Monotonic,
 ) {
@@ -181,6 +184,12 @@ class PrepareCollaborationSpaceRoomBinding(
                 return@withTimeoutOrNull if (written is AppResult.Failed) failed(written.failure)
                 else failed(conflict().failure)
             }
+            // The repository already retained recovery work with the binding. A failed or lost
+            // scheduling response leaves that marker for lifecycle recovery, not another write.
+            withTimeoutOrNull(1_500) { schedules.request(CollaborationSpaceRecoveryWake.WORK_KEY) }
+            currentCoroutineContext().ensureActive()
+            val afterSchedule = gate()
+            if (afterSchedule is AppResult.Failed) return@withTimeoutOrNull afterSchedule
             AppResult.Success(binding)
         }
             ?: failed(

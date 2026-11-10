@@ -67,6 +67,8 @@ fault. Non-incremental recompilation regenerated both methods; all 714 applicati
 tests then passed, preserving all 90 AppFlow case identities. No UI change, timeout
 extension or weaker assertion was needed. The failed run and old class are retained.
 
-Apple execution and the downstream Starter port remain pending. No HRIS producer
-is wired, and no release/live change is claimed here. The existing native proof APK
-predates this interface change and does not establish its runtime acceptance.
+Apple execution and the downstream Starter port remain pending. The separate
+[HRIS binding producer](collaboration-space-binding-producer-wake.md) uses this primitive;
+its acceptance does not belong to the generic database contract. No release/live
+change is claimed here. The original native proof APK predates this interface change
+and does not establish its runtime acceptance.
