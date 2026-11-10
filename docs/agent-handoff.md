@@ -84,8 +84,8 @@ pusher/native-1 or receipt/native-1 stores. Source/native acceptance is complete
 private .work/space-original-receipt-recovery-2026-11-10 retains frozen inputs/audits.
 
 Mobile76a143b6 and Group401c6d56 are committed/pushed (85826/7722 reaped). Hosted
-42745403043 pins76a143b6c8fc81c6920658797f127dcf4a92e7b5 and is pending behind
-pusher42739907129; dispatch69781 reaped. Do not redispatch. Expected7,100 portable
+42745403043 pins76a143b6c8fc81c6920658797f127dcf4a92e7b5 and is running after
+pusher42739907129 completed; dispatch69781 reaped. Do not redispatch. Expected7,100 portable
 +2,698 Apple,16 Swift checks,unsigned iOS host. Private hosted.json/audit.py retain
 the pin and predecessor archive comparison. Next: atomic replica mutation+producer wake.
 Do not claim predecessor CI covers this source. The reusable database contract must
@@ -102,8 +102,9 @@ Pusher source95195319,Group9c3014e3 are accepted/pushed. Native55319 passed206.2
 with one actual managed pusher and process recovery; the earlier unexplained original
 failure is now traced and repaired above. [Contract](collaboration-space-pusher.md).
 Hosted42739907129 pins951953193c73d555d57218d1bf20a202067ec03c: portable7,063
-accepted (audit3789,artifact13728979615); Apple is building the unsigned host.
-Expected2,681 Apple plus16 Swift checks. Do not redispatch. Auditor/config are in
+accepted (audit3789,artifact13728979615); Apple2,681 accepted(audit30631,artifact
+13731975537),plus16 Swift checks and unsigned iOS host. Total9,744,zero failures,
+errors or skips. Digests/ZIP CRC/previous testcase identities verified. [Hosted evidence](measurements/collaboration-space-pusher-hosted-2026-11-10.json). Do not rerun. Auditor/config are in
 .work/space-pusher-2026-11-10. Its success excludes the current receipt recovery source.
 
 Phone remains87. ADB67480 timed out15s around02:44; no install/UI/data change.

@@ -1,0 +1,462 @@
+{
+  "acceptedAt": "2026-11-10T03:03:50.756767+00:00",
+  "sourceCommit": "951953193c73d555d57218d1bf20a202067ec03c",
+  "runId": 42739907129,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42739907129",
+  "counts": {
+    "portable": 7063,
+    "apple": 2681,
+    "total": 9744,
+    "swiftEnvelopeCases": 16
+  },
+  "unsignedIosHostBuilt": true,
+  "jobs": {
+    "portable": {
+      "sourceCommit": "951953193c73d555d57218d1bf20a202067ec03c",
+      "runId": 42739907129,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42739907129",
+      "jobId": 129578107054,
+      "artifactId": 13728979615,
+      "bytes": 3397800,
+      "sha256": "78d8a9c5ffc6f64d6566d409831f50726ee8b2290942c5419bfc62e3ad75f335",
+      "githubDigestAndZipCrcVerified": true,
+      "totals": {
+        "desktopTest": {
+          "tests": 3309,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 353
+        },
+        "testAndroidHostTest": {
+          "tests": 632,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 88
+        },
+        "wasmJsBrowserTest": {
+          "tests": 3122,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 320
+        }
+      },
+      "recoveryPolicyAndApplicationCases": [
+        {
+          "class": "CollaborationSpacePusherAvailabilityTest",
+          "platform": "desktopTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "AndroidCollaborationPusherTest",
+          "platform": "testAndroidHostTest",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "AndroidSpaceRuntimeAdoptionTest",
+          "platform": "testAndroidHostTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpacePusherAvailabilityTest",
+          "platform": "testAndroidHostTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpacePusherAvailabilityTest",
+          "platform": "wasmJsBrowserTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "ActivateCollaborationSpacePusherTest",
+          "platform": "desktopTest",
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpacePushSignalTest",
+          "platform": "desktopTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpaceRecoveryDemandTest",
+          "platform": "desktopTest",
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpaceRecoverySelectionTest",
+          "platform": "desktopTest",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpaceRecoveryWakeTest",
+          "platform": "desktopTest",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "FinishCollaborationSpaceRecoveryTest",
+          "platform": "desktopTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "QueueCollaborationSpacePushSignalTest",
+          "platform": "desktopTest",
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "ActivateCollaborationSpacePusherTest",
+          "platform": "wasmJsBrowserTest",
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpacePushSignalTest",
+          "platform": "wasmJsBrowserTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpaceRecoveryDemandTest",
+          "platform": "wasmJsBrowserTest",
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpaceRecoverySelectionTest",
+          "platform": "wasmJsBrowserTest",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpaceRecoveryWakeTest",
+          "platform": "wasmJsBrowserTest",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "FinishCollaborationSpaceRecoveryTest",
+          "platform": "wasmJsBrowserTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "QueueCollaborationSpacePushSignalTest",
+          "platform": "wasmJsBrowserTest",
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "ApplicationCollaborationLifetimeTest",
+          "platform": "desktopTest",
+          "tests": 24,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "ApplicationPushIntegrationTest",
+          "platform": "desktopTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "ApplicationPushReceiverTest",
+          "platform": "desktopTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpaceRecoveryWorkerTest",
+          "platform": "desktopTest",
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "reportManifestSha256": "1cf0422674e160dc70721fa02139515f5845441704cda1e39fa09d346e46bd3f",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check out verified network inspector",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-java@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run gradle/actions/setup-gradle@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run android-actions/setup-android@v3",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check setup transport and ownership",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check application bindings and platform compilation",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run gradle/actions/setup-gradle@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-java@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Check out verified network inspector",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    "apple": {
+      "sourceCommit": "951953193c73d555d57218d1bf20a202067ec03c",
+      "runId": 42739907129,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42739907129",
+      "jobId": 129578106957,
+      "artifactId": 13731975537,
+      "bytes": 517762,
+      "sha256": "4c225ff65ce3a3e1591076a0749123c10ddac0afb916e1373f0ac60241a79c30",
+      "githubDigestAndZipCrcVerified": true,
+      "totals": {
+        "iosSimulatorArm64Test": {
+          "tests": 2681,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 285
+        }
+      },
+      "recoveryPolicyAndApplicationCases": [
+        {
+          "class": "CollaborationSpacePusherAvailabilityTest",
+          "platform": "iosSimulatorArm64Test",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpaceRecoverySelectionTest",
+          "platform": "iosSimulatorArm64Test",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "QueueCollaborationSpacePushSignalTest",
+          "platform": "iosSimulatorArm64Test",
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "ActivateCollaborationSpacePusherTest",
+          "platform": "iosSimulatorArm64Test",
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpacePushSignalTest",
+          "platform": "iosSimulatorArm64Test",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpaceRecoveryDemandTest",
+          "platform": "iosSimulatorArm64Test",
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "CollaborationSpaceRecoveryWakeTest",
+          "platform": "iosSimulatorArm64Test",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "FinishCollaborationSpaceRecoveryTest",
+          "platform": "iosSimulatorArm64Test",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "reportManifestSha256": "763af62d2a3ef0ad70315f8600f0dccd4d3caa5653545817d161f1b07b16cd43",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check out verified network inspector",
+          "conclusion": "success"
+        },
+        {
+          "name": "Select Xcode 26.3",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-java@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run gradle/actions/setup-gradle@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Prepare public app-link test registrations",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check Apple push envelope routing",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check Apple setup adapter",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build iOS application host",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run gradle/actions/setup-gradle@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-java@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Check out verified network inspector",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    }
+  },
+  "limits": [
+    "This pinned source precedes original receipt recovery and atomic replica wake changes.",
+    "The unsigned Apple host and Swift envelope checks do not prove FCM/APNs delivery or a native iOS Matrix runtime.",
+    "No product release, live group activation or phone change; all54 PRD acceptance groups remain open."
+  ]
+}

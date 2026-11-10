@@ -50,3 +50,13 @@ only strict metadata diagnostics and transport counters, without a retry, larger
 budget or relaxed assertion. It passes, but the earlier failure remains unexplained
 and requires further investigation. A Gradle scheduling failure also preceded the
 unchanged successful final build. Both are retained in the evidence.
+
+
+## Pinned hosted validation
+
+[42739907129](https://github.com/fajarxfce/hris-mobile/actions/runs/42739907129)
+validates95195319:7,063 portable and2,681 Apple cases,zero failures/errors/skips,
+16 Swift envelope checks and an unsigned iOS host build. Artifact digests,ZIP CRCs
+and previous testcase identities are verified. [Evidence](measurements/collaboration-space-pusher-hosted-2026-11-10.json).
+This source predates the subsequent original receipt recovery; no actual cloud
+callback,product release or new iOS Matrix runtime is implied by these checks.
