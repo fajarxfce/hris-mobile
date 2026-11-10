@@ -18,6 +18,23 @@ import org.junit.Test
 
 class AndroidSpaceRuntimeAdoptionTest {
     @Test
+    fun neitherQueueCapabilityCreatesAnAbsentInstalledRuntime() = runTest {
+        val f = SpaceAdoptionStorageFixture.create()
+        try {
+            f.select()
+            val runtime = CollaborationSpaceRuntimeReady(f.owner, SETUP_DEVICE, SETUP_JOB)
+            val originals = f.repo.acquireOriginalQueue(runtime, "!room:test")
+            val staging = f.repo.acquireSpaceMessageQueue(runtime, "!room:test")
+            assertEquals(assertIs<AppResult.Failed>(originals), assertIs<AppResult.Failed>(staging))
+            assertEquals(0, f.acquisitions)
+            assertEquals(0, f.writes)
+            assertEquals(0, f.privateReads)
+        } finally {
+            f.close()
+        }
+    }
+
+    @Test
     fun unconfirmedRetiredOrForeignSetupCannotAcquireAnOriginalDirectory() = runTest {
         val f = SpaceAdoptionStorageFixture.create()
         try {

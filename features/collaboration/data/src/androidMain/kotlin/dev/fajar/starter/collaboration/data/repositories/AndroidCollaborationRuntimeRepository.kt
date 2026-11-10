@@ -45,6 +45,7 @@ class AndroidCollaborationRuntimeRepository(
     CollaborationRuntimeRepository,
     CollaborationLocalDeviceIdentityRepository,
     CollaborationSpaceRuntimeRepository,
+    CollaborationSpaceMessageQueueRepository,
     CollaborationSpaceSyncRepository,
     CollaborationSpacePusherRepository,
     CollaborationSpaceOriginalHistoryRepository {
@@ -154,7 +155,52 @@ class AndroidCollaborationRuntimeRepository(
     override suspend fun acquireOriginalQueue(
         runtime: CollaborationSpaceRuntimeReady,
         matrixRoomId: String,
-    ): AppResult<CollaborationSpaceOriginalQueueLease> {
+    ): AppResult<CollaborationSpaceOriginalQueueLease> =
+        when (val acquired = acquireSpaceWriter(runtime, matrixRoomId)) {
+            is AppResult.Failed -> acquired
+            is AppResult.Success ->
+                acquired.value.let {
+                    AppResult.Success(
+                        AndroidCollaborationSpaceOriginalQueueLease(
+                            runtime,
+                            it.original,
+                            it.read,
+                            it.currentFailure,
+                        )
+                    )
+                }
+        }
+
+    override suspend fun acquireSpaceMessageQueue(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+    ): AppResult<CollaborationSpaceMessageQueueLease> =
+        when (val acquired = acquireSpaceWriter(runtime, matrixRoomId)) {
+            is AppResult.Failed -> acquired
+            is AppResult.Success ->
+                acquired.value.let {
+                    AppResult.Success(
+                        AndroidCollaborationSpaceMessageQueueLease(
+                            runtime,
+                            it.original,
+                            it.read,
+                            it.currentFailure,
+                        )
+                    )
+                }
+        }
+
+    /** One acquired child is transferred to exactly one capability wrapper, which owns close. */
+    private class AcquiredSpaceWriter(
+        val original: CollaborationMessageQueueLease,
+        val read: suspend () -> AppResult<CollaborationOriginalQueueSnapshot>,
+        val currentFailure: () -> Failure?,
+    )
+
+    private suspend fun acquireSpaceWriter(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+    ): AppResult<AcquiredSpaceWriter> {
         currentCoroutineContext().ensureActive()
         val lease =
             registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
@@ -187,8 +233,7 @@ class AndroidCollaborationRuntimeRepository(
             )
                 return handoverPending()
             return AppResult.Success(
-                    AndroidCollaborationSpaceOriginalQueueLease(
-                        runtime,
+                    AcquiredSpaceWriter(
                         original,
                         { lease.readHeldOriginalQueue(original) },
                         restriction,

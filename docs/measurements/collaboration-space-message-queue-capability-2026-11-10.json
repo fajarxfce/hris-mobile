@@ -1,0 +1,84 @@
+{
+  "acceptedAt": "2026-11-10T07:28:36.958007+00:00",
+  "baseCommit": "7b2bc43cf34d8a9ca7bcd29f6780a65d75aa6b84",
+  "scope": "Distinct installed Space staging-only capability with complete paused queue comparison, shared exclusive physical writer acquisition and owned close/drain. Existing original-only capability remains separate. No staging usecase, native FFI enqueue acceptance, resume, product routing or live changes.",
+  "sourceFiles": 4705,
+  "sourceManifestSha256": "51fafe9eea915ed9ed581145341f1b9c4b981790f9a977b4d10e96eb33b06bac",
+  "changedSourceHashes": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "68ef4566902388b5728e4abe516ed7203f86d13d02291469f3044219cb6a5f0e",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidSpaceMessageQueueLeaseTest.kt": "f96a13b3a306ec44b8232d157b1e915fe2ac473fcc69efb9e24d995f282e615a",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidSpaceRuntimeAdoptionTest.kt": "513330a86b1579c85a8bf9b97699c1fdb66eeccc8ea4c18fe61912620fd6176c",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "4420b19ace3b287f4e8092c58f205109923f82802ef12d7948ace81ec0072377",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationSpaceMessageQueueLease.kt": "f7169650ec451abd0d2b8683d78baf394fb4639320d9c8dc9cb673c6600fb548",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "2a6e5b3482c7a60946be90b6477eebb279b317a727b06241d8571ea55084f8cb",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/UnavailableCollaborationRuntimeRepository.kt": "84a5e803e41616d6eddfd9577712e9fee632fe4121e5007075c4ee6dcf9d8331",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceMessageQueueAvailabilityTest.kt": "cf80262dd5b9713a13de77adaeaabcb28f5fd660d1abffc132879f4faf9afb31",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceMessageQueueRepository.kt": "304f3d7250f162d1ad1febb18c5af28b0bb2acf69a405afcc6149f80b72df90f"
+  },
+  "deletedSources": [],
+  "focused": {
+    "startedAt": "2026-11-10T07:09:48.722516+00:00",
+    "elapsedSeconds": 408.119,
+    "sourceFiles": 4705,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 41,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "51fafe9eea915ed9ed581145341f1b9c4b981790f9a977b4d10e96eb33b06bac"
+  },
+  "full": {
+    "startedAt": "2026-11-10T07:18:11.299156+00:00",
+    "elapsedSeconds": 607.515,
+    "sourceFiles": 4705,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7631,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "51fafe9eea915ed9ed581145341f1b9c4b981790f9a977b4d10e96eb33b06bac",
+    "validatedTests": 9650,
+    "validatedReusedTests": 2019,
+    "validatedDatabaseCases": {
+      "desktopTest": 102,
+      "wasmJsBrowserTest": 100
+    }
+  },
+  "fullReportManifestSha256": "b71a50aecf20ba0e4c24a136ded5c5a3f23c48f2b5bcceae760b860a8823027b",
+  "queueCapabilityContracts": {
+    "androidWrapper": 13,
+    "unchangedOriginalWrapper": 10,
+    "adoption": 10,
+    "fallbackEachPortablePlatform": 2,
+    "appDi": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "checks": [
+    "root check",
+    "Android host tests",
+    "Android release compilation and lint",
+    "Wasm and iOS source compilation",
+    "real Chromium collaboration tests",
+    "proof APK compilation and unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "nonIncrementalKotlin": true,
+  "nativeRuntimeClaim": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "remaining": [
+    "Pinned Apple fallback execution for this raw capability; actual Apple Matrix runtime binding still unavailable",
+    "Owning staging usecase and actual native staging proof; host fixture only fakes raw FFI enqueue",
+    "New SPACE-origin room admission, mixed delivery and complete recovery inventory before product routing"
+  ]
+}

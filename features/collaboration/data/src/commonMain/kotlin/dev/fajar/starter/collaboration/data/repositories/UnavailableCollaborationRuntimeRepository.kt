@@ -10,6 +10,7 @@ import kotlinx.coroutines.ensureActive
 class UnavailableCollaborationRuntimeRepository :
     CollaborationRuntimeRepository,
     CollaborationSpaceRuntimeRepository,
+    CollaborationSpaceMessageQueueRepository,
     CollaborationSpaceSyncRepository,
     CollaborationSpacePusherRepository,
     CollaborationSpaceOriginalHistoryRepository,
@@ -38,6 +39,14 @@ class UnavailableCollaborationRuntimeRepository :
         runtime: CollaborationSpaceRuntimeReady,
         matrixRoomId: String,
     ): AppResult<CollaborationSpaceOriginalQueueLease> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
+    override suspend fun acquireSpaceMessageQueue(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+    ): AppResult<CollaborationSpaceMessageQueueLease> {
         currentCoroutineContext().ensureActive()
         return unavailable()
     }

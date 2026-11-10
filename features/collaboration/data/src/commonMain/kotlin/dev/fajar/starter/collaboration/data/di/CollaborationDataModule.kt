@@ -444,6 +444,13 @@ class CollaborationDataModule {
             ?: UnavailableCollaborationRuntimeRepository()
 
     @Single
+    fun spaceMessageQueues(
+        runtime: CollaborationRuntimeRepository
+    ): CollaborationSpaceMessageQueueRepository =
+        runtime as? CollaborationSpaceMessageQueueRepository
+            ?: UnavailableCollaborationRuntimeRepository()
+
+    @Single
     fun spaceSync(runtime: CollaborationRuntimeRepository): CollaborationSpaceSyncRepository =
         runtime as? CollaborationSpaceSyncRepository ?: UnavailableCollaborationRuntimeRepository()
 

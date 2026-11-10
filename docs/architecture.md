@@ -186,6 +186,12 @@ separate immutable pair intent from published room status. Native transport pres
 account-local request revisions and exact group identity; live admission and durable
 command orchestration remain with the owning use cases.
 
+[Installed Space staging capability](collaboration-space-message-queue-capability.md)
+keeps canonical text preparation and guarded enqueue separate from the original-only
+resume/settlement lease. One shared raw acquisition owns the physical writer; adapters
+validate complete paused inventory and drain native work on close. Owning usecases retain
+staging facts and admission policy. Host FFI fixtures do not prove native delivery.
+
 [Original organization message writer](collaboration-space-original-writer.md) preserves
 the physical queue namespace under exact logical runtime ownership. Current logical
 device identity remains separate from the device recorded in original messages.
