@@ -1,7 +1,36 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 18:55 UTC. Follow AGENTS.md. This opening section owns current
+Updated 10 November 2026, 18:56 UTC. Follow AGENTS.md. This opening section owns current
 work; checkpoints below are historical. All 54 communications PRD groups remain OPEN.
+
+## Active admitted incoming-room request
+
+Storage795f11c2 committed/pushed,31792 REAPED; focused118/full10511 accepted. Its exact source
+manifestc08386dad0b82bccc0d8b6e1f65d7d330bea8115ca018c72122aec21e14a7106 remains the base.
+Current11Kotlin source/request files are APPLIED/UNCOMMITTED, FROZEN under focused1/97107
+RUNNING. Expected204focused/10565full/4814inputs. Full1 NOT STARTED. Prepare11076 REAPED;
+private space-incoming-source-2026-11-10 holds base/candidate/prior reports/runners/strict audits.
+
+The increment reads exact pending or resolved source references with their consistent checkpoint
+through existing HMAC document indexing, without schema changes. The owning request admits
+current account/directory/binding; pagination tokens grant no event coverage. A known idle source
+creates no demand. Known incomplete coverage resumes Provider/Pending, and late old-source hints
+leave newer queued work intact. Changed work commits with a distinct incoming wake; exact
+readback precedes bounded best-effort scheduling. Repeated queued hints do not write/reschedule.
+21new domain scenarios and6new real-store cases are implemented, not yet accepted. DI factory
+and application resolution assertion included. No product worker, SDK callback or phone delta.
+
+After focused/full acceptance commit/push, then implement dedicated clean completion, proven
+provider-phase advancement, finite rescan claim/cursor and bounded incoming worker. Private
+NEXT.md owns these decisions. Register the independent key with the existing collapsed scheduler;
+do not use unrestricted APPEND_OR_REPLACE for repeated hints. No arbitrary caller EOF boolean
+may discharge work. Retain original SDK6 and native2/3/4controls; existing source is frozen now.
+
+Hosted6699/42865846045 complete11621+16Swift/unsignedhost; it predates this increment and the
+storage/pending additions. No new hosted dispatch yet. Phone release89 uninstalled; ADB76668
+timeout REAPED18:39; original live90163/schema116.4 unchanged. All54PRD groups remain OPEN.
+
+## Historical checkpoints
 
 ## Current incoming-demand storage acceptance
 
