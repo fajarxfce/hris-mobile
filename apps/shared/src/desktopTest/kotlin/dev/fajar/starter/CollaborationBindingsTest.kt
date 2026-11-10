@@ -505,6 +505,10 @@ class CollaborationBindingsTest {
                     container.koin.get<CollaborationSpaceMessageCancellationRepository>(),
                 )
                 assertNotNull(container.koin.get<CollaborationReceiptRepository>())
+                assertSame<Any>(
+                    container.koin.get<CollaborationSpaceReceiptRepository>(),
+                    container.koin.get<CollaborationSpaceReceiptRetirementRepository>(),
+                )
                 assertNotNull(container.koin.get<RetireCollaborationMessages>())
                 assertSame<Any>(
                     container.koin.get<CollaborationReceiptRepository>(),

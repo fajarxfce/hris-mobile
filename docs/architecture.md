@@ -1,5 +1,10 @@
 # Architecture
 
+[Organization message receipts](collaboration-space-message-receipts.md) bind immutable
+intent/device/transaction/origin to bounded event aliases. Repositories own encrypted
+journal I/O and atomic recovery wakes; exact replay leaves both unchanged. The owning
+use case must admit acknowledgement projection and retirement before native activation.
+
 [Local organization message intents](collaboration-space-messages.md) retain explicit account/space ownership, authenticated terminal proof and recovery work. Use cases own offline admission, exact uncertain-response readback and bounded scheduling; repositories own encrypted I/O. New native and mixed-ledger delivery remain separate capabilities.
 
 [Atomic command insertion](command-work-wakes.md) retains new pending commands and

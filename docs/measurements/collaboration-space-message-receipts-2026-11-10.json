@@ -1,0 +1,108 @@
+{
+  "acceptedAt": "2026-11-10T06:07:28.365922+00:00",
+  "baseCommit": "fbbf96a23bd2366406838bf4ceb0015a7b171609",
+  "scope": "Explicit SPACE receipt journal with immutable intent/device/transaction/origin, bounded aliases, encrypted independent namespace, shared protected-key loss guards, atomic append plus recovery wake and exact no-op replay. No new native or product routing.",
+  "sourceFiles": 4689,
+  "sourceManifestSha256": "04d47a938a3e3529dc4fb654f857f8937f577c3f603be2e079709f1b64a86bc4",
+  "changedSourceHashes": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "d8912b69abdd4860dbba8d71d06de4cd90d98a8ffe8ac6d690e65ad5634e46d2",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/messages/CollaborationSpaceReceiptCodec.kt": "d12ccf964cc82edee5012c7aa2767c24631d448c6ff50731de6ca452f6394f45",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceReceiptRepository.kt": "5e9e35472698b5ab93feae205f94f543b7500995066c5ee02a0fbc12db575f59",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceReceiptFixture.kt": "6a9f0372ee4b00f897805ed44341e4c56d55d03b4a82a2a1c656a5e3d5d2215c",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceReceiptStorageContract.kt": "7b4bbba36863ba2cb97549cacc0fb3903b798db8fd5ed592ed0afbb4709ccd8e",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceReceiptStorageTest.kt": "491fd6b4a3593b88fdffd9cfa4025730a784dab51b7143f5610a602c8468b62f",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceReceiptStorageTest.kt": "7fe45a0b5ba023362e18abcb4e8f15bc833eab17d7e673f46e506ebdd45fff72",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceReceiptStorageTest.kt": "3afa0918b7adc0b084d81305362d1fc4f94228257d4dac7bf8332c030555e14d",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceMessageReceipt.kt": "4afb68edaf9fa9ff00271457e692f13a56f019cee4dd239a7906d24ac76e4925",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceReceiptPolicy.kt": "67a29c62e260f13322ae7072ee261e7a5a04a1197ac38cac55fade94dd8edd77",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceReceiptRepository.kt": "5eead40428d9942623108c7442fadaf313b7080898ebc473389b1a0ce06e47d7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceReceiptRetirementRepository.kt": "dcc90be2854d991a83a76e4b8b85b0d5029c7fec44959a07229099746ff26a74",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceReceiptPolicyTest.kt": "537eb350231ecdb1dadc0984f544e01eb549259d89abfd5f5fa853cb3094b4c2"
+  },
+  "deletedSources": [],
+  "focused": {
+    "startedAt": "2026-11-10T05:54:13.310586+00:00",
+    "elapsedSeconds": 121.152,
+    "sourceFiles": 4689,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 62,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "04d47a938a3e3529dc4fb654f857f8937f577c3f603be2e079709f1b64a86bc4"
+  },
+  "full": {
+    "startedAt": "2026-11-10T05:56:34.460295+00:00",
+    "elapsedSeconds": 628.986,
+    "sourceFiles": 4689,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7469,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "04d47a938a3e3529dc4fb654f857f8937f577c3f603be2e079709f1b64a86bc4",
+    "validatedTests": 9488,
+    "validatedReusedTests": 2019,
+    "validatedDatabaseCases": {
+      "desktopTest": 102,
+      "wasmJsBrowserTest": 100
+    }
+  },
+  "fullReportManifestSha256": "dbb74a118f0673411933770b5f4463a36a0d00838b3acd03edf0729b93002994",
+  "receiptContracts": {
+    "domainPolicies": 10,
+    "sqliteStorage": 25,
+    "chromiumStorage": 25,
+    "appDi": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "checks": [
+    "root check",
+    "Android host tests",
+    "Android dev release compilation and lint",
+    "Wasm and iOS source compilation",
+    "real Chromium collaboration tests",
+    "proof APK compilation and unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "nonIncrementalKotlin": true,
+  "retainedCompilationFailures": [
+    {
+      "startedAt": "2026-11-10T05:47:11.419158+00:00",
+      "elapsedSeconds": 393.251,
+      "exitCode": 1,
+      "sourceFiles": 4689,
+      "sourcesUnchanged": true,
+      "librarySourcesUnchanged": true,
+      "freshCounts": {
+        "tests": 60,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "session": 37385,
+      "reaped": true,
+      "sourceManifestSha256": "6f6d98d69f52f160fe9b5b8d584304cf9322acec248a5be5f7883af7000c041c",
+      "cause": "New app DI assertSame compares unrelated interface types without explicit common Any type; Kotlin test type inference fails. Production, ten domain and fifty SQLite/Chromium cases pass.",
+      "correction": "Explicit assertSame<Any>; preserve singleton identity assertion and both contracts."
+    }
+  ],
+  "nativeRuntimeClaim": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "remaining": [
+    "Pinned Apple execution for these receipt contracts",
+    "Complete typed mixed-ledger matching and acknowledgement projection",
+    "Explicit new-message staging/delivery and complete recovery inventory before product routing"
+  ]
+}
