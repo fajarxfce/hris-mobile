@@ -1,43 +1,43 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 18:41 UTC. Follow AGENTS.md. This opening section owns current
+Updated 10 November 2026, 18:44 UTC. Follow AGENTS.md. This opening section owns current
 work; checkpoints below are historical. All 54 communications PRD groups remain OPEN.
 
-## Current incoming-demand storage correction
+## Current incoming-demand storage full gate
 
-Policy7197a803 is committed/pushed. Its focused124/full10479 are accepted. The next11Kotlin
-storage files are APPLIED/UNCOMMITTED, not accepted. Focused83498 REAPED exit1/169.707s:
-58 desktop cases,2failures. Corrected11files are FROZEN under focused2/84063 RUNNING;
-expected118cases/4810inputs, then full10511. Full1 has NOT STARTED.
-Private space-incoming-demand-storage-2026-11-10 holds exact candidate/base/reports and runners.
+Policy7197a803 is committed/pushed. Current11Kotlin storage files are APPLIED/UNCOMMITTED,
+FROZEN under full1/82562 RUNNING. Focused2/84063 REAPED/ACCEPTED118/290.724s,
+4810inputs,manifestc08386dad0b82bccc0d8b6e1f65d7d330bea8115ca018c72122aec21e14a7106.
+SQLite/actualChromium16newstorage cases each plus43existing controls each, iOSdata compile,
+format/architecture/detekt PASS. Expectedfull10511. Private space-incoming-demand-storage-2026-11-10
+owns source/library/prior-report snapshots, failed focused1 and strict acceptance runners.
 
-The maximum64-room UTF8 case exposed the raw checkpoint32768 limit. Storage now uses one
- encrypted document (existing131072 bound), a small validated checkpoint, and a consistent
-checkpoint/document read. Atomic ReplicaStore replacement+wake and generic limits are unchanged.
-The reopen test used the expired login handle after activating renewed login; its caller is
-corrected and explicitly asserts the old handle cannot read. A16th case rejects missing/substituted
-checkpoint/document metadata. Preserve focused1 reports. No app consumer exists.
+One encrypted document (65536plaintext/131072encoded) and small validated checkpoint retain
+account/space demand plus a DISTINCT incoming work wake in one ReplicaStore replacement.
+Consistent observeDocument reads reject missing/substituted metadata; immutable expected/desired
+captures, atomic capacity rollback, stale CAS, cancellation after commit, login replacement,
+max64UTF8IDs and wake independence are covered. Generic store limits/formats remain unchanged.
+Focused1/83498 was REAPED exit1/169.707s: checkpoint32768 capacity and old-session test caller
+failed; both root causes corrected before focused2. No consumer, runtime or UI behavior enabled.
 
-Integration review: incoming provider.head is a pagination token, NOT an event ID. Next use
-an authenticated exact-source-reference lookup with its consistent provider checkpoint, through
-existing HMAC indexing; do not compare provider.head to demand.headEventId. Known source plus
-provider EOF and zero pending references excludes idle hints without HTTP or format changes.
+Hosted42865846045 exact669908384da244d285cb21e93040cffcee3207ef COMPLETE/ACCEPTED11621=
+8399portable+3222Apple,16Swift checks/unsignediOS host PASS. Both artifacts/digests/CRC/previous
+case identities audited (53259/49767 REAPED). Public measurements/collaboration-space-page-hosted-
+2026-11-10.json. This source predates pending-reference/policy/storage. No duplicate run.
 
-Hosted42865846045 at exact669908384da244d285cb21e93040cffcee3207ef is COMPLETE/ACCEPTED:
-11621=8399portable+3222Apple,16Swift checks and unsignediOS host PASS. Both artifacts/digests,
-CRC, previous case identities and expected totals audited (53259/49767 REAPED). Compact public
-measurement: measurements/collaboration-space-page-hosted-2026-11-10.json. This source predates
-pending-reference/policy/storage; do not attribute the current changes to it or rerun it.
+PRIVATE space-incoming-source-2026-11-10 contains6UNAPPLIED files for exact authenticated source
+lookup through the existing HMAC document index, with six real-store cases. No source/schema
+change applied. Provider incoming.head is a pagination token, NOT an event ID. Consistent source
+reference plus provider EOF and zero pending references can exclude an idle hint; never compare
+that token to demand.headEventId or infer provider coverage from displayed messages/ACKs.
+Next admitted Queue/Completion usecases, bounded worker and current-parent SDK hints. Private
+storage NEXT.md and collaboration-space-incoming-plan.md own the still-unimplemented design.
 
-Next after storage: current-owner Queue/Completion usecases and bounded independent incoming
-worker, following private NEXT.md and collaboration-space-incoming-plan.md. No all-room HTTP
-polling for one missing key; startup and bounded overflow retain durable rescan. Generic
-Complete must not bypass actual provider EOF/unresolved-reference admission.
-
-Release89 accepted/NOT INSTALLED; phone87 last known, ADB7195 timeout REAPED18:08.
-Install-only when reachable; never launch/reset/drive phone UI. No emulator active. Original
-live90163/schema116.4 unchanged; Group117–140 undeployed. SDK6, retained sender/private keys,
-eight original transactions, dirty Inspector/SDK worktrees preserved. No generic Starter delta.
+Phone ADB76668 timeout REAPED18:39; release89 NOT INSTALLED, phone87 last known. Existing
+availability question pending; no new question. Install-only when reachable; no phone UI drive.
+No emulator active. Original live90163/schema116.4 unchanged; Group117–140 undeployed. SDK6,
+retained sender/private keys/eight original transactions and dirty Inspector/SDK worktrees
+preserved. No generic Starter delta. All54PRD groups remain OPEN.
 
 ## Historical checkpoints
 
