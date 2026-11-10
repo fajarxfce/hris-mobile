@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 16:27 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 16:36 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -39,10 +39,24 @@ page acquisition and independent incoming worker; acquired IDs alone never disch
 work or permanently suppress redaction/decryption changes. All54 PRD groups remain OPEN. No
 generic Starter delta or native Apple Matrix implementation. Release89 remains INSTALL-ONLY.
 
-Hosted incoming producte1ab run42849335674 remains RUNNING (last checked16:17): portable
-application binding/platform compilation, Apple setup adapter. Auditor's copied prior-delta
-arithmetic was corrected from21/8 to the actual94/47 new policy/acquisition cases BEFORE auditing;
-expected totals remain11500=8316portable+3184Apple plus16Swift/unsignedhost. No acceptance claimed.
+Hosted incoming producte1ab run42849335674 portable is COMPLETE/audited8316=3900desktop+
+715Androidhost+3701actualChromium.14943 REAPED; artifact13782391948/3569949B,
+SHAeb982deef8b12b98f10a00ea602a40ea5f4660df6734d45c2d66de1209c1fb03,
+reportmanifest5dfa496fafd374592583bab5647a3c82ff22b0b8f6bba0472097ede1c3bbd22d.
+Exact prior-case/digest/ZIP audits pass. Apple remains RUNNING,expected3184+16Swift/unsignedhost;
+no Apple acceptance of this source claimed yet. [Hosted measurement](measurements/collaboration-space-incoming-hosted-2026-11-10.json).
+This hosted source predates provider6b445302 and current15-file progress WIP. Do not duplicate it.
+
+Next native fixture candidates are prepared, NOT APPLIED: Mobile3Kotlin files and Group4files
+in space-frontier-native-2026-11-10. Both candidate/ and base-sources.json are authoritative.
+Mobile frontier evidence was split coherently after prepare.py; do not overwrite it blindly.
+Group protocol candidates pass35Pythoncases=13event(4new+9old)+22original/mixed controls.
+New providerPage counter must equal the actual1..4 requested pages; totalMatrix30+pages with
+unchanged4encrypted/3sync/2secret-storage. Exact physical owner/device, unresolved references
+and frontier hashes must survive different-process offline reopening. Native/source/APK gates
+are NOT run for these candidates; storage full1/92521 still owns the compiler. Partial runners
+are prepared; native driver/auditors still need the new phase paths/artifact/counter contracts.
+
 Original live90163c32/API+worker schema116.4 unchanged. Release89 remains accepted/NOT INSTALLED;
 ADB52030 timed out15s(REAPED) at16:14. Phone87 last known. Existing availability question stays
 pending; INSTALL-ONLY, announce installation, no launch/reset/drive UI.

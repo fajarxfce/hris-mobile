@@ -42,3 +42,8 @@ process-reopened local storage. Product consumer integration and native Apple Ma
 separate work.
 
 [Measurement](measurements/collaboration-space-incoming-acquisition-2026-11-10.json).
+
+Hosted exact producte1ab46e4 run42849335674 has passed and audited8,316 portable cases:
+3,900desktop+715Androidhost+3,701actualChromium, with all prior case identities preserved.
+Apple execution remains running; this predates provider-page/progress source.
+[Hosted measurement](measurements/collaboration-space-incoming-hosted-2026-11-10.json).
