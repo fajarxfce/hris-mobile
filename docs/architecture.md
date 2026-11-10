@@ -6,7 +6,7 @@ process-loss recovery and offline projection through the registered task.
 [Durable pending Space recovery](collaboration-space-pending-recovery.md) gives the existing
 application worker one authenticated original-message claim before binding/staging/delivery.
 The dedicated Finish owner checks the complete pending partition; unready recipients retain
-their original intent and use bounded retries. Actual native worker proof remains separate.
+their original intent and use bounded retries. The actual pending-worker proof is linked above.
 
 [Mixed/new-room recovery demand](collaboration-mixed-recovery-demand.md) uses invocation-owned
 Company/Space ledger captures and exact original proof before idle. Both live ledgers are

@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 10:58 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 11:14 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -12,7 +12,8 @@ HRIS policy stays in Mobile. No subagents. Usecases coordinate repositories and 
 never other usecases; repositories coordinate their own datasource I/O, and ViewModels own
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
-One heavy compiler OR emulator. All local runs below are finished/reaped; no heavy job.
+One heavy compiler OR emulator. Current focused history gate41593 is RUNNING; freeze compiled
+source until reaped. Earlier native/core runs below are finished/reaped; emulator stopped.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
 Phone10.77.77.3:5555 is INSTALL-ONLY: announce each install, never launch/drive/uninstall/
@@ -83,12 +84,12 @@ Current worker control42801929551 RUNNING on exact8c76f92c,refvalidation/space-p
 20261110;ref61718/dispatch14028 reaped. Expected8008portable+3062Apple=11070,16Swift/unsignedhost.
 Private .work/space-pending-recovery-2026-11-10/hosted.json and auditor are complete.
 
-Mixed-demand42796816133 RUNNING on1d18e232. Portable90228 is REAPED PASS7930 (3734Desktop,
-651Androidhost,3545Chromium),artifact13756830729,
-SHA97d61d4309bc4a6716c38b949a2e9c5d20945b1c02a45f54d74cfe6576cf0e37,
-report manifesta0396dc8939ec3b1d7e69f0892264a744c4013a84a398a51ca7f2bbc1e86d5f0.
-Apple3028 still building its host at10:55. Partial measurement is tracked. Audit Apple once
-complete; never redispatch or substitute a newer source.
+Mixed-demand42796816133 COMPLETE10958=7930portable+3028Apple,16Swift/unsignedhost on exact
+1d18e232. Portable90228 and Apple91937 are REAPED/audited; GitHub digest/ZIP CRC/exact source/
+previous case identities pass. Appleartifact13757163037,
+SHA0fce8ccaa4bbb6b4dabb1c5397b4220d1087cf367827812ba8cd0890cf790d6b,
+manifestca8a83ea5718c8e008197b492b9eea0e45f7fc834e913aec3f8864c815eed2c2.
+Complete measurement accompanies this checkpoint. Do not redispatch accepted runs.
 
 Pending-inventory42792315555 COMPLETE10862=7866portable+2996Apple,16Swift/host. Audits31108/
 87521 reaped. Appleartifact13756512123,
@@ -101,13 +102,23 @@ handoff/measurements. Shared Apple tests/unsigned hosts do not implement its nat
 
 ## Next work — continue implementation
 
-[Incoming/history plan](collaboration-space-incoming-plan.md) is tracked, NOT implemented.
-Current SpaceOriginalHistoryRepository only reads a bounded provider/SDK snapshot for original
-ACK recovery; it is not a live incoming stream or owned Space history projection. Next define
-explicit Space history scope, raw encrypted storage and locally admitted observation. Reuse
-verified message/alias shapes and storage primitives where ownership remains explicit; never
-reinterpret Space IDs as Company IDs or silently re-key old history. Company history remains
-originally scoped, joined only through an admitted immutable legacy room binding.
+[Incoming/history plan](collaboration-space-incoming-plan.md) now has an UNACCEPTED14-file
+storage/local-observation candidate in the Mobile worktree. Focused1/41593 RUNNING, expected
+112cases:9new admission+8old Space message on Desktop/Chromium;16new Space history+22old
+Company storage on both real databases;2existing DI cases. iOS source/format/architecture/
+detekt included. Private .work/space-history-storage-2026-11-10 has exact file list, runner,
+expected cases and strict auditor. Source14 includes11new files; no product incoming route.
+Do not call it accepted before gates. Next reap/fix focused, strict audit, required full check;
+then atomic source/evidence commit+push. No native SDK change in this candidate.
+
+The explicit Space history namespace reuses original message/alias/tombstone codec and atomic
+batch primitives; typed Company/Space coordinates preserve old authenticated byte frames.
+Fixed HMAC/AAD vectors, >500-message traversal/restart, replay/no-op revisions, competing writers,
+key loss, ciphertext tampering and cross-owner isolation are covered. Locally admitted history
+observation is independent of credential age; confirmed denial stays gated through failures.
+Usecases coordinate repositories, not usecases. Company history stays originally scoped and
+must only join Space through an admitted immutable legacy binding. SpaceOriginalHistoryRepository
+is still a bounded original SDK/provider snapshot, not the future owned live incoming stream.
 
 Then own bounded native incoming collection, deduplication/edits/redaction, local persistence,
 older-cursor exhaustion, notifications/replies and product routing. Preserve instant cached
