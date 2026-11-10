@@ -6,7 +6,7 @@ this opening section owns current work. All 54 communications PRD groups remain 
 ## Active independent incoming-demand policy
 
 Mobile3 new domain/entity/policy/test files are APPLIED/UNCOMMITTED and FROZEN under
-focused1/81529 RUNNING. Private space-incoming-demand-2026-11-10 owns the exact4797-input
+full1/14905 RUNNING. Private space-incoming-demand-2026-11-10 owns the exact4797-input
 accepted native base, candidate,10447prior reports, runners and strict audits. New4800inputs;
 expectedfocused124/full10479.16new scenarios cover per-room deduplication, phase-preserving
 retry, FIFO yielding, newer requests surviving late completion, overflow rescan, generation
@@ -16,9 +16,17 @@ The model caps current room demand at64 and retains independent rescan generatio
 Same known head never restarts Pending; new unknown scan generation does request Latest. Retry
 keeps Provider/Pending phase and moves beyond the current FIFO boundary. Only an admitted owning
 completion may dispatch Complete after verifying provider EOF and no unresolved local sources.
-Next reap/accept focused/full, commit/push, then implement encrypted demand+wake atomic storage,
+Focused81529 REAPED/ACCEPTED124/213.856s, manifest
+b7edc2b47c8594581f8f048ca39910b143783e1d72cbef972b5e412aedddab77.
+Next reap/accept full14905, commit/push, then implement encrypted demand+wake atomic storage,
 current-owner queue usecases and the bounded worker. A repeated already-retained idle head must
 be excluded by the owning request usecase before queuing; this pure policy alone cannot do it.
+Private space-incoming-demand-storage-2026-11-10 contains11 UNAPPLIED Kotlin files: encrypted
+checkpoint/wake storage, domain contracts/entities,15common real-store cases,3platform harnesses,
+and2DI assertions. No source integration/compilation yet. NEXT.md records exact uncertain-response
+readback, saved-head no-HTTP path, dedicated clean completion and scan claim/queue/cursor order.
+Maximum valid UTF8 event IDs require plaintext65536/Base64131072 limits. Current full14905 freezes
+all product source/library/APK inputs; only private drafts/docs may change.
 Startup/rescan traversal remains separately owned and durable; new overflow cannot be cleared
 by an old scan. Missing keys must not restart metadata acquisition for every quiet room.
 
