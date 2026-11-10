@@ -1,7 +1,33 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 18:06 UTC. Follow AGENTS.md. Earlier checkpoints below are historical;
+Updated 10 November 2026, 18:14 UTC. Follow AGENTS.md. Earlier checkpoints below are historical;
 this opening section owns current work. All 54 communications PRD groups remain OPEN.
+
+## Active independent incoming-demand policy
+
+Mobile3 new domain/entity/policy/test files are APPLIED/UNCOMMITTED and FROZEN under
+focused1/81529 RUNNING. Private space-incoming-demand-2026-11-10 owns the exact4797-input
+accepted native base, candidate,10447prior reports, runners and strict audits. New4800inputs;
+expectedfocused124/full10479.16new scenarios cover per-room deduplication, phase-preserving
+retry, FIFO yielding, newer requests surviving late completion, overflow rescan, generation
+collision, immutable capture and ordering bounds. No storage, DI, wake or worker integration.
+
+The model caps current room demand at64 and retains independent rescan generation on overflow.
+Same known head never restarts Pending; new unknown scan generation does request Latest. Retry
+keeps Provider/Pending phase and moves beyond the current FIFO boundary. Only an admitted owning
+completion may dispatch Complete after verifying provider EOF and no unresolved local sources.
+Next reap/accept focused/full, commit/push, then implement encrypted demand+wake atomic storage,
+current-owner queue usecases and the bounded worker. A repeated already-retained idle head must
+be excluded by the owning request usecase before queuing; this pure policy alone cannot do it.
+Startup/rescan traversal remains separately owned and durable; new overflow cannot be cleared
+by an old scan. Missing keys must not restart metadata acquisition for every quiet room.
+
+Previous native4/64426 is REAPED/ACCEPTED230.275s, emulatorSTOPPED. Mobile7174557d and
+Group0ce34b92 are committed/pushed (50387/76848 REAPED). Both event scenarios usedMatrix32;
+new13-reference completion added zeroMatrix requests from actual SDK cache and one native
+transport (10/direct5). Original2/3controls and offline hashes remain exact. All54PRD groups OPEN.
+Phone ADB7195 timed out/REAPED at18:08; release89 NOT INSTALLED. Original live90163 unchanged.
+
 
 ## Current pending-reference native acceptance
 
