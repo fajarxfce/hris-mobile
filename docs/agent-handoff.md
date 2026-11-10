@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 05:52 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 05:57 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -30,20 +30,22 @@ Both are reaped and strict auditors passed. All90 AppFlow cases passed unchanged
 [Contract](command-work-wakes.md),[local evidence](measurements/command-work-wakes-2026-11-10.json).
 
 Fixed validation branch validation/command-work-wakes-20261110 pinsb1adfd82, pushed
-and reaped22905. Control42758828055 is RUNNING at that immutable source, dispatch73995
+and reaped22905. Control42758828055 is COMPLETE at that immutable source, dispatch73995
 reaped. Expected7,318 portable+2,730 Apple=10,048,16 Swift checks,unsigned host. Config
 and auditor are in .work/command-commit-wake-2026-11-10/hosted.json and hosted-audit.py.
 Portable93083 is REAPED PASS7,318 (3,436 desktop,635 host,3,247 browser),zero failures/
 errors/skips. Artifact13737947225,3443364bytes,SHA41f9c1bb361dbe1d6490cbc524a1f58087a102cb0ad99dc897ed3246bef7818f;
 manifest SHA7172899910b6106a945cc571dd7c511221891f0b42a448300dc0384b2b383723.
-Digest/CRC and all predecessor case identities verified. Apple remains in progress;
-expected2,730+16Swift/host. [Partial hosted evidence](measurements/command-work-wakes-hosted-2026-11-10.json).
-Starter's database-only patch fromd89e6b5d..b1adfd82 passes dry apply against30c4d72,
-15 file changes including the request rename. It is NOT applied and waits for Apple
-acceptance. Private Starter .work/command-work-wake-port-2026-11-10/prepared.json;
-patch SHA72622f3e6ef58712089ab81d223d538102bf2cdd9840e08574dddda33995f164.
-Initial core-wide dry apply also included two HRIS document fixtures absent in Starter;
-it stopped without mutation. Database-only scope needs no such fixtures.
+Digest/CRC and all predecessor case identities verified. Apple9004 is REAPED PASS:
+2,730 tests/289 suites,zero failures/errors/skips. Artifact13738993527,523932bytes,
+SHA6ce5cf5d0d949ba4a76f4a8b1d022c710a2ac0834dcf1d14193b529bc033b492;
+manifest SHAe749ede6a94266a3c1ce0b30907ca51a4029ccbbf0bc7201462a57b9765a8534.
+Control42758828055 completed success:10,048 tests,16Swift checks,unsigned iOS host.
+[Complete hosted evidence](measurements/command-work-wakes-hosted-2026-11-10.json).
+After this proof, Starter's exact database-only patch is APPLIED but UNCOMMITTED;
+private .work/command-work-wake-port-2026-11-10/port.json verifies15 current files and
+one removed rename source againstb1adfd82. It changes no HRIS policy. Its independent
+full gate must wait for the one active Mobile compiler. No Starter gate has run yet.
 
 This accepted increment contains nineteen Kotlin files implementing explicit account/space message intent,
 state/completion/cancellation policy/contracts, separate encrypted namespace and AAD,
@@ -90,8 +92,8 @@ validation/space-local-messages-20261110 pins that exact commit. Control42763070
 is RUNNING; dispatch35930 is reaped. Expected7,416 portable+2,779 Apple=10,195,
 16Swift and unsigned host; no hosted acceptance yet. Private hosted.json/audit.py
 retain exact configuration. Keep producer42753380451 and command42758828055 intact;
-producer Apple is now accepted below; command Apple is still building the unsigned host. Starter command patch remains
-unapplied pending command Apple proof.
+producer and command Apple are now accepted below. Starter command patch is applied
+and awaits its independent gate after the current Mobile compiler.
 
 The next receipt increment is UNCOMMITTED source under features/collaboration.
 Twelve new Kotlin files plus the existing app DI assertion implement explicit SPACE
@@ -100,9 +102,16 @@ atomic append+wake and exact replay no-op. Ten domain cases and25 shared real-st
 cases cover immutable originals/aliases, response loss, cancellation, owner replacement,
 capacity, tampering, retirement, old/new namespace separation and both key-loss guards.
 SQLite,Chromium and Apple wrappers share the storage contract. No native/worker/UI
-routing or backend change is enabled. Receipt focused-1/session37385 is RUNNING and
-is the only local heavy compiler; freeze Mobile source until reaped. Expected62
-fresh cases plus Apple source/quality; no receipt acceptance is claimed yet. Private
+routing or backend change is enabled. Receipt focused-1/session37385 is REAPED after393.251s:60 fresh domain/SQLite/Chromium
+cases passed,zero failures/errors/skips. App DI test compilation failed because the
+new assertSame across two interfaces lacked explicit Any. Only that test declaration
+changed; no production code/assertion weakened. Failure inputs/logs retained under
+.work/space-message-receipts-2026-11-10/di-test-compile-failure.json. Focused-2/session46078 is REAPED PASS121.152s:62 fresh cases (10 policy,25 SQLite,
+25 Chromium,2 DI),zero failures/errors/skips,Apple source and quality. Strict focused
+source/library/current/archive audit passes4,689 inputs; source manifest SHA
+04d47a938a3e3529dc4fb654f857f8937f577c3f603be2e079709f1b64a86bc4.
+Full-1/session39948 is RUNNING as the only local heavy compiler. Mobile source stays
+frozen. Receipt source is still uncommitted; no full/native/phone acceptance yet. Private
 .work/space-message-receipts-2026-11-10/check.py and accept-focused.py retain the run,
 source/library fingerprints and strict case-count audit. Next finish focused/full
 acceptance,commit/push the increment,then implement complete mixed-ledger matching
@@ -155,10 +164,10 @@ manifest SHA41ad34913de10f42b4d5a6dafbd1c8ad570a31daa5562ee16598719afb95e5be.
 Control42753380451 completed successfully:10,009 total tests,16Swift checks and
 unsigned iOS host. Source,digest/CRC and all predecessor identities verified.
 [Complete hosted evidence](measurements/collaboration-space-binding-producer-hosted-2026-11-10.json).
-Command42758828055 remains running; its Apple auditor now has this accepted producer
-baseline. Do not redispatch/cancel the command or newer message job.
+Command42758828055 is fully accepted above. Newer message42763070460 remains running;
+do not redispatch/cancel it.
 
-Phone remains87. ADB62446 timed out after15s around05:21 UTC and is reaped. Availability question is already pending; do not ask it again.
+Phone remains87. Latest ADB8250 timed out after15s around05:56 UTC and is reaped. Availability question is already pending; do not ask it again.
 Accepted88 is retained but not installed; use the install-only runbook if reachable,
 and announce each installation. Live remains e558a686/schema116.4/readinessON/groupOFF.
 All54 PRD acceptance groups remain open. Continue after each checkpoint.
