@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 14:36 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 14:34 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -27,11 +27,13 @@ Original has now copied exactly the Group mapper and its ten-case regression. It
 is RUNNING:24expected Company protocol/history/sync cases, format/architecture, API/worker
 boot JARs. No schemas/DI change. One2GiB compiler, no emulator. Next audit/commit/push that
 port, then prepare the compatible live update. Live remains e558a686/schema116.4/readinessON/
-groupOFF. No Group schema reaches Original. Current source needs its own hosted platform run.
+groupOFF. No Group schema reaches Original. Current6334c0c4 hosted run is being dispatched on validation/history-anchor-20261110;
+ref push40325 REAPED. Expected11359=8222portable+3137Apple, plus16Swift/unsignedhost.
+Group6f7c7380 docs push58321 REAPED publishes the three-case native acceptance.
 
 Runtime hosted42824039795 is COMPLETE and audited:8201portable+3129Apple=11330, plus16Swift
 and unsigned iOS host. Apple45856 REAPED; classifier42819170095 also complete11295+16.
-A separate hosted measurement follows. Phone87 remains last known,88uninstalled,89unbuilt;
+[Hosted measurement](measurements/collaboration-runtime-event-reads-hosted-2026-11-10.json) is published. Phone87 remains last known,88uninstalled,89unbuilt;
 ADB64277 timed out at14:00. Existing availability question stays pending. INSTALL-ONLY;
 no phone launch, data reset, retries of retained original messages, or Draft66 send.
 Continue bounded Space incoming retention/progress and the full PRD; all54 groups remain open.

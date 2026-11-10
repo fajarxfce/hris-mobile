@@ -29,3 +29,9 @@ handles establish ownership behavior without loading the native library. [Actual
 original/edit/redacted-target/missing-key equivalence and reproduces failures in the old
 edit-at-head history reader. That reader still requires a fix; incoming product routing
 remains inactive.
+
+Hosted validation of source f64e47136a309453ab9d6ea67993ed8e5200b611 is complete:
+8,201 portable plus 3,129 Apple simulator cases pass, with 16 Swift push-envelope cases and
+an unsigned iOS host build. GitHub artifact digests, ZIP CRCs, report hashes and previous case
+identities are verified. This does not implement or accept a native Apple Matrix runtime.
+[Hosted measurement](measurements/collaboration-runtime-event-reads-hosted-2026-11-10.json).

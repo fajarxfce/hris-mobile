@@ -1,0 +1,66 @@
+{
+  "runId": 42824039795,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42824039795",
+  "expectedTotal": 11330,
+  "sourceCommit": "f64e47136a309453ab9d6ea67993ed8e5200b611",
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "nativeAppleMatrixRuntimeClaim": false,
+  "portable": {
+    "sourceCommit": "f64e47136a309453ab9d6ea67993ed8e5200b611",
+    "runId": 42824039795,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42824039795",
+    "jobId": 129856519812,
+    "artifactId": 13770680209,
+    "bytes": 3548977,
+    "sha256": "ff363eb865aa1ecbf177925687ae49ea82ae7dad1864da3fa9cbc63b63878d0d",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "desktopTest": {
+        "tests": 3845,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 399
+      },
+      "testAndroidHostTest": {
+        "tests": 710,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 96
+      },
+      "wasmJsBrowserTest": {
+        "tests": 3646,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 360
+      }
+    },
+    "reportManifestSha256": "f720ebb06fa6f97437ddc77f17ea526a91e76c9939da349711a897c3580ffcdf"
+  },
+  "apple": {
+    "sourceCommit": "f64e47136a309453ab9d6ea67993ed8e5200b611",
+    "runId": 42824039795,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42824039795",
+    "jobId": 129856520347,
+    "artifactId": 13772248976,
+    "bytes": 575273,
+    "sha256": "49da01dc9ac233176219bd56330a3479c51950fd76348ab27959e1685cc8de23",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "iosSimulatorArm64Test": {
+        "tests": 3129,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 313
+      }
+    },
+    "reportManifestSha256": "c08753a5f1e4b36d6a0ba229f419a382c8d710bf63dda1f23d32c5dc70385f94"
+  },
+  "swiftPushEnvelopeCases": 16,
+  "unsignedIosHostBuilt": true,
+  "priorCaseIdentitiesPreserved": true
+}
