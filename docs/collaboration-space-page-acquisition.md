@@ -44,6 +44,7 @@ failure and the audit correction for ktfmt's collapsed signature are retained.
 [Focused measurement](measurements/collaboration-space-page-acquisition-focused-2026-11-10.json)
 and [full measurement](measurements/collaboration-space-page-acquisition-full-2026-11-10.json).
 
-Actual SDK validation of the admitted page orchestration is next. The earlier
+[Actual SDK validation](collaboration-space-page-native.md) now verifies both admitted pages
+and a repeated exhausted acquisition that adds no HTTP. The earlier
 [provider and storage proof](collaboration-space-frontier-native.md) remains accepted.
 No product incoming consumer is enabled, and phone latency has not been measured here.

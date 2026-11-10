@@ -15,10 +15,10 @@ internal class HrisSpaceIncomingProofHost(private val koin: Koin) {
         events: List<String>,
     ) = expect(koin.get<AcquireCollaborationSpaceEvents>()(runtime, conversation, events))
 
-    /** Finite raw-page/storage acceptance; this proof is not a product incoming consumer. */
+    /** Actual admitted acquisition; an exhausted repeat must not acquire transport again. */
     suspend fun stageProviderPages(
         runtime: CollaborationSpaceRuntimeReady,
-        conversationId: String,
+        conversation: CollaborationSpaceConversation,
         roomId: String,
         physicalOwner: CollaborationOwner,
         physicalDeviceId: String,
@@ -26,32 +26,29 @@ internal class HrisSpaceIncomingProofHost(private val koin: Koin) {
         val access = runtime.owner.localDirectoryAccess()
         val traversal =
             CollaborationHistoryTraversal(
-                conversationId,
+                conversation.id,
                 roomId,
                 runtime.deviceId,
                 CollaborationHistoryPurpose.Incoming,
             )
         val storage = koin.get<CollaborationSpaceHistoryTraversalRepository>()
-        val provider = koin.get<CollaborationSpaceProviderHistoryRepository>()
-        var previous = expect(storage.progress(access, traversal))
-        check(previous == null)
+        val acquire = koin.get<AcquireCollaborationSpaceProviderHistory>()
+        check(expect(storage.progress(access, traversal)) == null)
         repeat(4) { index ->
-            val page =
-                expect(
-                    provider.readPage(runtime, roomId, previous?.next, previous?.incoming?.until)
-                )
+            val result = expect(acquire(runtime, conversation))
+            val retained = requireNotNull(expect(storage.progress(access, traversal)))
             check(
-                page.runtime == runtime &&
-                    page.physical.owner == physicalOwner &&
-                    page.physical.deviceId == physicalDeviceId
-            )
-            check(expect(storage.stage(access, traversal, previous, page)))
-            previous = requireNotNull(expect(storage.progress(access, traversal)))
-            check(
-                previous!!.provider ==
+                retained.provider ==
                     CollaborationHistoryProviderIdentity(physicalOwner.companyId, physicalDeviceId)
             )
-            if (previous!!.exhausted) return index + 1
+            check(result.exhausted == retained.exhausted)
+            if (result.exhausted) {
+                val before = retained
+                val exhausted = expect(acquire(runtime, conversation))
+                check(exhausted == CollaborationProviderHistoryAcquisition(0, true))
+                check(expect(storage.progress(access, traversal)) == before)
+                return index + 1
+            }
         }
         error("Fictional provider history exceeded four pages")
     }

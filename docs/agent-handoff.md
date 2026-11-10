@@ -1,43 +1,45 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 17:22 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 17:28 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
 
-## Active admitted-page native proof
+## Current admitted-page native acceptance
 
-Mobile810363597f5718087cc4d91d52fa467a9b309b99 is committed/pushed (25404 REAPED).
-Six-file product full74094 REAPED/ACCEPTED10401=8382fresh+2019exact reused/909.618s,
-4790inputs,manifest976c58ec47e8adbc0dd9d3a8ff92fb86587e08dc8024cd0486e08893013e5336.
-Focused32791 accepted136/188.325s. Lost commit responses reread durable progress; saved
-exhaustion performs no transport. Product incoming consumer is not enabled.
+Mobile product810363597f5718087cc4d91d52fa467a9b309b99 is committed/pushed; full74094
+REAPED/ACCEPTED10401=8382fresh+2019exact reused/909.618s. Focused32791 PASS136/188.325s.
+Current Mobile2proof files and Group1fixture file are now ACCEPTED by actual SDK execution.
+Native82534 REAPED/PASS3/226.299s; strict audit passes. Matrix32 unchanged (4encrypted,
+3sync,2secretStorage,2providerPages); native9/direct4 adds only two page admissions. A repeated
+exhausted acquisition adds ZERO HTTP. Identical provider/pending hashes and content reopen
+in another offline process without a Space runtime. Original/mixed controls retain exactly
+2/3provider events, old transactions, offline recipient, process loss and offline Sent projection.
+Emulator STOPPED; no local heavy job remains. No phone/live/SDK changes or original resend.
 
-Mobile2proof files and Group1fixture file are now APPLIED/UNCOMMITTED and FROZEN.
 Mobileproof74972 REAPED/ACCEPTED20/112.270s,4790inputs,manifest
 d85c685ae8db51ab6530581cafc68a91fd3b5d6dd5e953dd87c4b3f04df91c72.
 Current proofAPK150647097B SHA78c7d6b355adb95c44bf995d47afc645e90dc5b02abcfa602f35c5ebfe8e5387.
-Group source-1/95612 RUNNING; do not start an emulator or another heavy compiler until reaped.
-Both .work/space-page-native-2026-11-10 directories own exact candidate/base/prior-proof
-reports, runners and strict audits. After Group acceptance run/audit native-1: three unchanged
-cases,2560MiB2core isolated emulator/precompiled768MiBharness. Matrix30+pages unchanged;
-native7+pages/direct2+pages accounts for one current transport per provider page. An additional
-exhausted usecase invocation must add ZERO HTTP. Keep all frontier/pending/offline-restart and
-original/mixed controls exact. No phone, live service, SDK artifact or original resend.
+Group source95612 REAPED/ACCEPTED79.817s/zero JVM cases,8740inputs,manifest
+f53cf610b0cf408ff59d5f5a89835bf7c3594c41406b1a64b4684b37f1b1c1af.
+Unchanged Python protocol retains35accepted cases. Both space-page-native-2026-11-10 folders
+own reproducible candidates, reports, source/library/APK manifests, runners and strict audits.
 
-After native acceptance commit/push both proof increments. Then apply only the prepared Apple
-CI job70->90minute adjustment (host step stays30), commit/push, dispatch ONE latest-source
-hosted run with expected11621=8399portable+3222Apple,+16Swift/unsignedhost. Prior e1ab run
-42849335674 has audited11500 tests but its Apple host was cancelled at the70-minute job limit;
-do not claim full Apple acceptance. Mobile handoff/private page-acquisition folder owns details.
+After these proof commits are pushed, apply only prepared Apple CI job70->90minutes (host
+step remains30), commit/push, dispatch ONE latest-source hosted run. Mobile page-acquisition
+folder owns workflow candidate/base hash/hosted config/auditor. Expected11621=8399portable+
+3222Apple,+16Swift/unsignedhost. Previous e1ab run42849335674 has audited11500tests but its
+Apple host hit the70-minute job deadline; complete Apple acceptance is NOT claimed.
 
-Continue independent incoming pending recovery. Mobile private space-pending-incoming-2026-11-10
-holds15 draft Kotlin files, NOT APPLIED/FORMATTED/COMPILED: physical provider on batch outcomes,
-pure16-reference resolution, local read/completion, explicit Space/raw16limit (Company20 stays),
-DI, fixture and eight policy tests. Still needs usecase/real-storage tests and review. No product
-worker or callbacks/durable incoming wake yet. All54 PRD groups OPEN; no generic Starter delta.
-Release89 accepted/NOT INSTALLED; ADB54053 timeout REAPED, phone87 last known. INSTALL-ONLY,
-no UI launch/reset. Original live90163/schema116.4 unchanged. No new question needed.
+Next apply/review/test the private space-pending-incoming-2026-11-10 drafts.17Kotlin files,
+NOT APPLIED/FORMATTED/COMPILED: physical provider on batch outcomes, pure16-reference
+resolution, local read/completion, explicit Space/raw16limit (Company20 stays), DI and tests.
+Prepared8policy+12usecase+3real-storage cases. New raw advance guard must reject a different
+physical provider even when generation/position/reference rows match. Review before use.
+No product incoming consumer, callback adapter or independent durable wake/worker yet.
+All54PRD groups OPEN; continue the long run. No generic Starter source delta/native Apple Matrix.
+Release89 accepted/NOT INSTALLED; phone87 last known, ADB54053 timeout REAPED. INSTALL-ONLY,
+no phone UI launch/reset. Original live90163/schema116.4 unchanged. No new question needed.
 
 ## Current admitted page acquisition — product accepted
 

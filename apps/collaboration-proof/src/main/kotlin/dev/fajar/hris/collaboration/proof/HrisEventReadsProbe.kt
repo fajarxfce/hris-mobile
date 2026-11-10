@@ -291,7 +291,7 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
         val providerPages =
             host.stageProviderPages(
                 runtime,
-                conversation.id,
+                conversation,
                 files.roomId,
                 sender.currentOwner,
                 sender.registeredDeviceId,
