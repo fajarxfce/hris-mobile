@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 09:36 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 09:41 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -45,15 +45,18 @@ checks pass. Full auditor preserves all prior core/proof3 case identities and ha
 [measurement](measurements/collaboration-space-pending-inventory-2026-11-10.json).
 ProofAPK150576700B SHA91a650ee0a7633a5e9d3b504899b6d11926ec8d2711020dc384fee4de9e8408b,
 compiled only; no native/phone claim. Private .work/space-pending-inventory-2026-11-10
-retains exact inputs/evidence/auditors. Source freeze ends after acceptance. Commit/push
-then pin the prepared hosted control; do not rerun accepted gates.
+retains exact inputs/evidence/auditors. Source freeze ends after acceptance. Sourceb03f591d57012a062dff7a2044190e8ccdc5711d is committed/pushed83579 (reaped).
+Do not rerun accepted gates.
 
 No worker routing changed. After acceptance extend both-ledger/new-room idle demand,
 then authenticated durable/fair command claims and staging. Current binding-only progress
 schema1 and existing wake-generation completion must remain compatible. No usecase may
-call another usecase; application worker owns orchestration. Hosted pending-inventory
-control is NOT dispatched; prepare only after accepted source commit/push. Expected7866
-portable+2996Apple=10862,16Swift/unsignedhost, baseline mixed control42785697360.
+call another usecase; application worker owns orchestration. Pinned validation/space-pending-inventory-20261110 control42792315555 is RUNNING onb03f591d;
+ref83367/dispatch78364 are reaped. Expected7866portable+2996Apple=10862,16Swift/unsignedhost,
+baseline mixed control42785697360. Private hosted config is complete; preserve this run.
+No product source WIP/heavy process. An unapplied, untested mixed idle-receipt policy draft
+is in .work/mixed-recovery-demand-2026-11-10; its README and sibling next-demand-notes describe
+required owning flow/tests. Do not mistake the draft for accepted worker integration.
 
 ## Current accepted increment — mixed original delivery
 
@@ -215,7 +218,7 @@ another. Demand must never mutate or acquire transport, and false requires both 
 Incoming/dedup/older/edit history, product routing, media, backups, calls/meetings and actual
 Apple Matrix runtime remain. Group-worker native control still sends Company originals.
 All54 PRD groups remain open; no HRIS-domain port to Starter. Phone87 unchanged;88uninstalled;
-ADB68089 timed out15s09:07 and is reaped. Existing availability question remains pending.
+ADB7776 timed out15s09:37 and is reaped. Existing availability question remains pending.
 
 ## Recent accepted dependencies
 
