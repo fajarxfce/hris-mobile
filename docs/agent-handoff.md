@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 11:45 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 11:56 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -12,8 +12,8 @@ HRIS policy stays in Mobile. No subagents. Usecases coordinate repositories and 
 never other usecases; repositories coordinate their own datasource I/O, and ViewModels own
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
-One heavy compiler OR emulator. Current edit-storage full1/31487 is RUNNING; freeze compiled source until reaped.
-Earlier storage/native runs are finished/reaped; emulator stopped.
+One heavy compiler OR emulator. All listed local gates are finished/reaped; no heavy job.
+The emulator is stopped. Preserve the one-compiler OR one-emulator boundary.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
 Phone10.77.77.3:5555 is INSTALL-ONLY: announce each install, never launch/drive/uninstall/
@@ -21,6 +21,33 @@ clear its UI or data. ADB97574 timed out15s at11:17 and is reaped; existing avai
 question stays pending. Phone87 last known;88 uninstalled. No new phone build yet.
 Crashlytics IAM is verified; no repeated question. Physical iPhone testing is waived,
 not Apple compilation/runtime/notification/call acceptance. Apple Matrix runtime is missing.
+
+## Accepted Space message edits
+
+The accompanying7-file increment adds typed Space replacement storage to the same owned
+history repository instance. Original aliases/order and send-acknowledgement identity stay
+separate from edits. Exact replay changes no revision; redactions fall back through eligible
+revisions. Company source/namespace unchanged; no incoming acquisition or UI activated.
+[Contract](collaboration-space-history-edits.md), [measurement](measurements/collaboration-space-history-edits-2026-11-10.json).
+
+Focused1/72288 REAPED exit1/335.481s:94SQLite/Chromium storage cases passed, then DI test
+compilation failed on inferred assertSame between two interfaces. All7candidate files archived.
+Only that assertion gained explicit<Any>; production/storage source unchanged. Focused2/8330
+REAPED PASS2fresh/115.724s plus iOS source/format/architecture/detekt. Strict repair auditor
+verifies exact one-test-file delta and all94completed unchanged cases:96total,not96fresh.
+17new Space edits+14existing Company edits+16existing Space history run on both actual stores;
+2DI checks preserve one bound repository instance. Full1/31487 REAPED PASS660.201s:
+10094verified=8075fresh+2019exact accepted reused,zero failures/errors/skips. Root check,Android
+host/release compile/lint,Wasm/iOS app source,actualChromium,proofAPK/unit/quality pass. Strict
+full auditor/publisher passed.4748source/library inputs fixed,manifest
+d7cf45325f9349e1fefbb8e0bbf7277ba865370b7501de33176ebb943759e45d.
+Current proofAPK150602468bytes SHA5ae67e42e3d0b6fc468d9a495e8395229178a85d428af5ce6fea9d87ef33b5c1.
+Private .work/space-history-edits-2026-11-10 contains exact source/archive/runners/auditors.
+
+After this source commit/push, pin and dispatch the existing collaboration-control workflow on
+validation/space-history-edits-20261110. Prepared expected8092portable(3820Desktop+651Androidhost+
+3621Chromium)+3104Apple=11196,16Swift/host. Config/auditor prepared,NOT yet dispatched. Baseline
+history42808577683 must finish/audit per platform before auditing this successor; no redispatch.
 
 ## Accepted owned Space history
 
@@ -134,33 +161,27 @@ handoff/measurements. Shared Apple tests/unsigned hosts do not implement its nat
 
 ## Next work — continue implementation
 
-[Incoming/history plan](collaboration-space-incoming-plan.md) continues from accepted storage.
-Next is retaining replacement edits before an incoming traversal may advance. UNACCEPTED current candidate
-.work/space-history-edits-2026-11-10 is APPLIED:7Kotlin files/5new, typed Space edit
-repository and existing codec/batch operations,17new storage cases, three platform wrappers,
-and existing DI identity check.13existing core edit scenarios are adapted plus4new scope/
-uncertain-commit/mutation cases. Company14case contract stays unchanged; Space quote/hide APIs
-remain separate. Guarded apply.py, focused96/full10094 runners and auditors are prepared.
-Applied after predecessor source push and formatted. Focused1/72288 REAPED exit1/335.481s:
-all94storage cases passed, then application DI test compilation failed on inferred assertSame
-type between two interfaces. Seven candidate files are archived. Only that test changed to
-assertSame<Any>; production/storage source and all assertions retained. Focused2/8330 REAPED
-PASS2fresh/115.724s with iOS source/format/architecture/detekt. Strict repair auditor verifies
-exact one-test-file delta and94unchanged completed storage cases:96verified,not96fresh.
-Current4748input manifestd7cf45325f9349e1fefbb8e0bbf7277ba865370b7501de33176ebb943759e45d.
-Full1/31487 RUNNING,expected10094; source frozen. Next reap, strict full audit/publisher, then
-source/evidence commit+push and exact hosted dispatch11196(8092portable+3104Apple)+16Swift/host.
-Scripts/config prepared, NOT dispatched. No product incoming or UI activation. Never rerun
-accepted predecessor gates against this changed tree. Private applied-files.txt is authoritative.
+[Incoming/history plan](collaboration-space-incoming-plan.md) now continues from accepted
+original AND replacement storage. No next production source is applied. Private
+space-original-acquisition-2026-11-10 is design/read-only evidence, including inspected immutable
+SDK6 AAR/Javap API; preserve the dirty SDK source worktree and exact immutable library.
 
-Next incoming acquisition must independently prove original physical ownership through the
-retained runtime setup and admitted immutable room binding. Do not acquire a queue writer merely
-to reuse acknowledgement-recovery validation. The current SpaceOriginalHistoryRepository reads
-a finite original SDK/provider window; it is not a live stream. Detach all bounded original/edit/
-unresolved lists before suspension; preserve unpersisted edits before advancing any cursor.
-The private space-original-acquisition-2026-11-10 review is design-only; no next source applied.
-Recipient readiness gates sending, not local reading. Company history stays originally scoped;
-never reinterpret Space IDs as Company IDs. No generic Starter delta.
+Provider Head requests Matrix/messages dir=b limit1; the current original reader requires that
+anchor in an event-focused UI timeline. Rust treats edits as aggregations on originals, so a
+latest-edit head needs a real SDK regression before reusing that contract. Do not weaken its
+checks or pretend the edit ID is an original. Room.loadOrFetchRawEvent exists in actual SDK6,
+returns original JSON plus NOT_DECRYPTED/DECRYPTED/UNABLE_TO_DECRYPT, and preserves HRIS fields.
+Prefer explicitly owned raw event acquisition/classification and one bounded replacement-target
+read for incoming. Availability is verified,not current native execution. Historical November6
+raw consumer patch/evidence is a different candidate; never blindly reapply it or claim coverage.
+
+The owning usecase must verify current logical runtime and immutable physical registration/
+setup/room provenance across every I/O, retain bounded original/edit captures before progress,
+and distinguish SDK decryption from sender trust. Require actual decryption for encrypted
+message content; room state alone is insufficient. Redaction/control metadata needs separate
+policy. Never acquire a queue writer merely to reuse ACK recovery validation. Local owned
+history remains independent of live transport/recipient readiness. Company IDs and Space IDs
+remain distinct; do not call usecases from usecases. No generic Starter delta.
 
 Then own bounded native incoming collection, deduplication/edits/redaction, local persistence,
 older-cursor exhaustion, notifications/replies and product routing. Preserve instant cached

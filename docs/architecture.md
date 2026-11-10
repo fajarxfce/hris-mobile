@@ -1,5 +1,9 @@
 # Architecture
 
+[Organization message revisions](collaboration-space-history-edits.md) retain replacement
+evidence separately from original receipt identity. The typed raw repository shares owned
+history storage; acquisition/admission and incoming progress remain usecase responsibilities.
+
 [Owned organization history](collaboration-space-history-storage.md) separates typed Space and
 Company coordinates while reusing authenticated storage primitives. Local observation owns
 account/directory admission and starts no transport. Incoming streaming remains separate.

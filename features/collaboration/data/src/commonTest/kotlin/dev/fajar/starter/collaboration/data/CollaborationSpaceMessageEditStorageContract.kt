@@ -1,0 +1,637 @@
+package dev.fajar.starter.collaboration.data
+
+import dev.fajar.starter.collaboration.data.history.*
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.CollaborationMessageEditWindowMillis
+import dev.fajar.starter.common.result.AppResult
+import dev.fajar.starter.database.*
+import kotlin.test.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.runTest
+
+/** Actual encrypted storage, checkpoint races and restart on SQLite and IndexedDB. */
+abstract class CollaborationSpaceMessageEditStorageContract {
+    protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
+
+    @Test
+    fun replacementFactsRetainTheirOwnIdentityAcrossRestartAndRedactionWithoutCreatingMissingKeys() =
+        withDatabase { f ->
+            val original = f.event()
+            val revision = edit(original)
+            assertNull(f.keys.read())
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.getReplacementFact(f.access, f.conversation, f.room, revision.eventId),
+            )
+            assertNull(f.keys.read())
+            f.merge(original)
+            f.edits(revision)
+            val fact =
+                CollaborationReplacementEventFact(
+                    revision.eventId,
+                    revision.sender,
+                    revision.timestamp,
+                    false,
+                )
+            val checkpoint = f.raw()
+            assertEquals(
+                AppResult.Success(fact),
+                f.repository.getReplacementFact(f.access, f.conversation, f.room, revision.eventId),
+            )
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.getReplacementFact(f.access, f.conversation, f.room, original.eventId),
+            )
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.getEventFact(f.access, f.conversation, f.room, revision.eventId),
+            )
+            assertEquals(checkpoint, f.raw())
+            f.reopen()
+            assertEquals(
+                AppResult.Success(fact),
+                f.repository.getReplacementFact(f.access, f.conversation, f.room, revision.eventId),
+            )
+            assertIs<AppResult.Failed>(
+                f.repository.getReplacementFact(
+                    f.access,
+                    f.conversation,
+                    "!other:test",
+                    revision.eventId,
+                )
+            )
+            f.merge(CollaborationHistoryChange.Redacted(revision.eventId, revision.sender))
+            f.reopen()
+            assertEquals(
+                AppResult.Success(fact.copy(redacted = true)),
+                f.repository.getReplacementFact(f.access, f.conversation, f.room, revision.eventId),
+            )
+        }
+
+    @Test
+    fun replacementFactReadCannotMixCheckpointsOrPublishAfterLogoutOrCancellation() =
+        withDatabase { f ->
+            val original = f.event()
+            val revision = edit(original)
+            f.merge(original)
+            f.edits(revision)
+            val entered = CompletableDeferred<Unit>()
+            val waiting =
+                object : ReplicaStore by f.database.replicas {
+                    override suspend fun document(
+                        scope: ReplicaScope,
+                        partition: String,
+                        id: String,
+                    ): ReplicaDocument? {
+                        entered.complete(Unit)
+                        awaitCancellation()
+                    }
+                }
+            coroutineScope {
+                val job = async {
+                    f.repository(waiting)
+                        .getReplacementFact(f.access, f.conversation, f.room, revision.eventId)
+                }
+                entered.await()
+                job.cancelAndJoin()
+            }
+            for (logout in listOf(false, true)) {
+                var reads = 0
+                val changed =
+                    object : ReplicaStore by f.database.replicas {
+                        override suspend fun checkpoint(
+                            scope: ReplicaScope,
+                            partition: String,
+                        ): ReplicaCheckpoint? {
+                            if (++reads == 2) {
+                                if (logout)
+                                    f.activate(
+                                        f.access.copy(
+                                            sessionId = "replaced",
+                                            accountId = historyId(888),
+                                        )
+                                    )
+                                else f.merge(f.event(3))
+                            }
+                            return f.database.replicas.checkpoint(scope, partition)
+                        }
+                    }
+                assertIs<AppResult.Failed>(
+                    f.repository(changed)
+                        .getReplacementFact(f.access, f.conversation, f.room, revision.eventId)
+                )
+                f.activate()
+            }
+            assertNotNull(f.lookup())
+        }
+
+    @Test
+    fun revisionsSurviveRestartWithoutChangingOriginalReceiptIdentityOrOrdering() =
+        withDatabase { f ->
+            val original = f.event().copy(replyToEventId = "\$quoted", forwarded = true)
+            val alias = original.copy(eventId = "\$retry", timestamp = original.timestamp + 1)
+            f.merge(original, alias, f.event(2))
+            val before = f.read(limit = 1)
+            val identity = assertNotNull(f.lookup())
+            val revision = edit(original).copy(targetEventId = alias.eventId)
+            f.edits(revision)
+            val edited = assertNotNull(f.lookup(alias.eventId))
+            assertEquals(identity, edited.copy(latestEdit = null))
+            assertEquals(revision, edited.latestEdit?.edit)
+            assertEquals(alias.timestamp, edited.latestEdit?.targetAcceptedAt)
+            val after = f.read(limit = 1)
+            assertNotNull(before.revision)
+            assertNotEquals(before.revision, after.revision)
+            assertEquals(before.copy(revision = null), after.copy(revision = null))
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.getEventFact(f.access, f.conversation, f.room, revision.eventId),
+            )
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.getByEvent(f.access, f.conversation, f.room, revision.eventId),
+            )
+            val raw = f.raw()
+            f.edits(revision)
+            assertEquals(raw, f.raw())
+            val key = f.keys.read()
+            f.reopen()
+            assertEquals(edited, f.lookup())
+            assertEquals(after, f.read(limit = 1))
+            assertEquals(key, f.keys.read())
+            assertTrue(
+                f.raw().documents.all {
+                    original.text !in (it.payload ?: "") &&
+                        revision.text !in (it.payload ?: "") &&
+                        revision.eventId !in it.sortKey
+                }
+            )
+        }
+
+    @Test
+    fun olderAndIneligibleRevisionsDoNotReplaceTheNewestAndConflictsRollbackEveryWrite() =
+        withDatabase { f ->
+            val original = f.event()
+            f.merge(original)
+            val newest = edit(original, 3)
+            f.edits(newest, edit(original, 1), edit(original, 2))
+            assertEquals(newest, f.lookup()?.latestEdit?.edit)
+            val displayed = f.lookup()
+            f.edits(
+                edit(original, 4)
+                    .copy(timestamp = original.timestamp + CollaborationMessageEditWindowMillis),
+                edit(original, 5).copy(sender = "@other:example.test"),
+            )
+            assertEquals(displayed, f.lookup())
+            val raw = f.raw()
+            assertIs<AppResult.Failed>(
+                f.repository.mergeEdits(
+                    f.access,
+                    f.conversation,
+                    f.room,
+                    listOf(edit(original, 6), newest.copy(text = "Conflicting reuse")),
+                )
+            )
+            assertEquals(raw, f.raw())
+            assertIs<AppResult.Failed>(
+                f.repository.mergeEdits(
+                    f.access,
+                    f.conversation,
+                    f.room,
+                    listOf(edit(original, 6).copy(eventId = original.eventId)),
+                )
+            )
+            assertEquals(raw, f.raw())
+        }
+
+    @Test
+    fun redactionFallsBackAcrossRetainedRevisionsAndNeverBecomesOriginalSendEvidence() =
+        withDatabase { f ->
+            val original = f.event()
+            f.merge(original)
+            val edits = (1..3).map { edit(original, it) }
+            f.edits(*edits.toTypedArray())
+            f.merge(CollaborationHistoryChange.Redacted(edits[2].eventId, original.sender))
+            assertEquals(edits[1], f.lookup()?.latestEdit?.edit)
+            f.reopen()
+            f.edits(edits[2])
+            assertEquals(edits[1], f.lookup()?.latestEdit?.edit)
+            f.merge(
+                CollaborationHistoryChange.Redacted(edits[1].eventId, original.sender),
+                CollaborationHistoryChange.Redacted(edits[0].eventId, original.sender),
+            )
+            assertNull(f.lookup()?.latestEdit)
+            assertEquals(original.text, f.lookup()?.text)
+            f.reopen()
+            f.edits(*edits.toTypedArray())
+            assertNull(f.lookup()?.latestEdit)
+            assertEquals(listOf(original.eventId), f.lookup()?.eventIds)
+        }
+
+    @Test
+    fun redactionBeforeReplacementAndOriginalRedactionRemainClosedAcrossReplayAndRestart() =
+        withDatabase { f ->
+            val original = f.event()
+            val early = edit(original)
+            f.merge(CollaborationHistoryChange.Redacted(early.eventId, original.sender))
+            f.merge(original)
+            f.edits(early)
+            assertNull(f.lookup()?.latestEdit)
+            f.edits(edit(original, 2))
+            f.merge(CollaborationHistoryChange.Redacted(original.eventId, original.sender))
+            f.reopen()
+            f.edits(edit(original, 3), edit(original, 2))
+            val deleted = assertNotNull(f.lookup())
+            assertTrue(deleted.redacted)
+            assertNull(deleted.latestEdit)
+            assertNull(deleted.text)
+        }
+
+    @Test
+    fun checkpointCompetitorWinsWithoutHalfOfTheLosingRevisionOrPointer() = withDatabase { f ->
+        val original = f.event()
+        f.merge(original)
+        val winner = edit(original, 2)
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                    wake: WorkWakeRequest?,
+                ): Boolean {
+                    f.edits(winner)
+                    return f.database.replicas.commit(
+                        handle,
+                        expectedRevision,
+                        checkpoint,
+                        documents,
+                        publish,
+                        wake,
+                    )
+                }
+            }
+        assertEquals(
+            AppResult.Success(false),
+            f.repository(store).mergeEdits(f.access, f.conversation, f.room, listOf(edit(original))),
+        )
+        assertEquals(winner, f.lookup()?.latestEdit?.edit)
+        val revisions = f.raw().documents.filter { it.id.startsWith("r-") }
+        assertEquals(1, revisions.size)
+        f.edits(edit(original))
+        assertEquals(winner, f.lookup()?.latestEdit?.edit)
+    }
+
+    @Test
+    fun cancellationAndOwnerReplacementBeforeCommitCannotPublishARevision() = withDatabase { f ->
+        val original = f.event()
+        f.merge(original)
+        val before = f.raw()
+        val cancelled =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                    wake: WorkWakeRequest?,
+                ): Boolean {
+                    throw CancellationException("Cancel before admission")
+                }
+            }
+        assertFailsWith<CancellationException> {
+            f.repository(cancelled)
+                .mergeEdits(f.access, f.conversation, f.room, listOf(edit(original)))
+        }
+        assertEquals(before, f.raw())
+        val switched =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                    wake: WorkWakeRequest?,
+                ): Boolean {
+                    f.activate(
+                        f.access.copy(sessionId = "foreign-login", accountId = historyId(1234))
+                    )
+                    return f.database.replicas.commit(
+                        handle,
+                        expectedRevision,
+                        checkpoint,
+                        documents,
+                        publish,
+                        wake,
+                    )
+                }
+            }
+        assertEquals(
+            AppResult.Success(false),
+            f.repository(switched)
+                .mergeEdits(f.access, f.conversation, f.room, listOf(edit(original))),
+        )
+        f.activate()
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun tiedServerTimesRecoverByEventIdentityAcrossOpaqueIndexPages() = withDatabase { f ->
+        val original = f.event()
+        f.merge(original)
+        val edits = (1..65).map { edit(original, it).copy(timestamp = original.timestamp + 100) }
+        for (chunk in edits.chunked(16)) f.edits(*chunk.toTypedArray())
+        val ordered = edits.sortedByDescending { it.eventId }
+        assertEquals(ordered[0], f.lookup()?.latestEdit?.edit)
+        f.merge(
+            CollaborationHistoryChange.Redacted(ordered[0].eventId, original.sender),
+            CollaborationHistoryChange.Redacted(ordered[1].eventId, original.sender),
+        )
+        assertEquals(ordered[2], f.lookup()?.latestEdit?.edit)
+        f.reopen()
+        assertEquals(ordered[2], f.lookup()?.latestEdit?.edit)
+    }
+
+    @Test
+    fun absentTargetWrongRoomAndMalformedBatchesDoNotCreateOrOverwriteOwnedFacts() =
+        withDatabase { f ->
+            val original = f.event()
+            assertIs<AppResult.Failed>(
+                f.repository.mergeEdits(f.access, f.conversation, f.room, listOf(edit(original)))
+            )
+            assertNull(f.keys.read())
+            f.merge(original)
+            val before = f.raw()
+            for (room in listOf("!foreign:example.test", "malformed")) assertIs<AppResult.Failed>(
+                f.repository.mergeEdits(f.access, f.conversation, room, listOf(edit(original)))
+            )
+            for (edits in
+                listOf(
+                    emptyList(),
+                    (1..17).map { edit(original, it) },
+                    listOf(edit(original).copy(targetEventId = "\$absent")),
+                )) assertIs<AppResult.Failed>(
+                f.repository.mergeEdits(f.access, f.conversation, f.room, edits)
+            )
+            assertEquals(before, f.raw())
+        }
+
+    private fun edit(original: CollaborationHistoryChange.Text, index: Int = 1) =
+        CollaborationMessageEdit(
+            "\$revision-" + index,
+            original.sender,
+            original.eventId,
+            original.timestamp + index * 100L,
+            "Revised fictional text " + index,
+            (index + 100).toString(16).padStart(64, '0'),
+            historyId(1000 + index),
+            original.logicalId,
+            original.replyToEventId,
+            original.forwarded,
+        )
+
+    @Test
+    fun firstObservedRetryKeepsItsOrderingWhileAnEarlierTargetsEditRemainsValid() =
+        withDatabase { f ->
+            val early = f.event()
+            val late = early.copy(eventId = "\$late", timestamp = early.timestamp + 600_000)
+            f.merge(late, early)
+            val accepted = edit(early).copy(timestamp = early.timestamp + 1_000)
+            f.edits(accepted)
+            val stored = assertNotNull(f.lookup())
+            assertEquals(late.timestamp, stored.timestamp)
+            assertEquals(late.eventId, stored.primaryEventId)
+            assertEquals(early.timestamp, stored.firstAcceptedAt)
+            assertEquals(accepted, stored.latestEdit?.edit)
+            f.reopen()
+            assertEquals(stored, f.lookup())
+        }
+
+    @Test
+    fun newlyAcquiredEarlierAliasesNarrowTheWindowAndReprojectRetainedRevisions() =
+        withDatabase { f ->
+            val early = f.event()
+            val middle = early.copy(eventId = "\$middle", timestamp = early.timestamp + 300_000)
+            val late = early.copy(eventId = "\$late", timestamp = early.timestamp + 600_000)
+            f.merge(late, middle)
+            val safe = edit(middle, 1).copy(timestamp = early.timestamp + 500_000)
+            val narrowedOut = edit(late, 2).copy(timestamp = early.timestamp + 1_100_000)
+            f.edits(safe, narrowedOut)
+            assertEquals(narrowedOut, f.lookup(late.eventId)?.latestEdit?.edit)
+            f.merge(early)
+            val narrowed = assertNotNull(f.lookup())
+            assertEquals(early.timestamp, narrowed.firstAcceptedAt)
+            assertEquals(late.timestamp, narrowed.timestamp)
+            assertEquals(safe, narrowed.latestEdit?.edit)
+            f.edits(narrowedOut, edit(late, 3).copy(timestamp = early.timestamp + 1_000_000))
+            f.reopen()
+            assertEquals(narrowed, f.lookup())
+            val earliest = early.copy(eventId = "\$earliest", timestamp = early.timestamp - 800_000)
+            f.merge(earliest)
+            assertNull(f.lookup()?.latestEdit)
+            assertEquals(earliest.timestamp, f.lookup()?.firstAcceptedAt)
+            assertEquals(late.timestamp, f.lookup()?.timestamp)
+        }
+
+    @Test
+    fun olderEncodedMessagesIndexEveryRetainedAliasBeforeApplyingAnEdit() = withDatabase { f ->
+        val early = f.event()
+        val late = early.copy(eventId = "\$late", timestamp = early.timestamp + 600_000)
+        f.merge(late, early)
+        val original = assertNotNull(f.lookup())
+        val raw = assertNotNull(f.raw().checkpoint)
+        val key = f.keys.read()
+        CollaborationHistoryKeys(f.database.replicas, f.cipher, f.keys).use { content, index ->
+            val codec =
+                CollaborationHistoryCodec(
+                    f.access,
+                    f.conversation,
+                    f.room,
+                    f.cipher,
+                    content,
+                    index,
+                )
+            val checkpoint = codec.checkpoint(raw)
+            val revision = raw.revision + 1
+            assertTrue(
+                f.database.replicas.commit(
+                    raw.handle,
+                    raw.revision,
+                    codec.checkpoint(
+                        raw.handle.generation,
+                        revision,
+                        checkpoint.count,
+                        checkpoint.hiddenRules,
+                    ),
+                    listOf(
+                        codec.message(
+                            raw.handle.generation,
+                            revision,
+                            original.copy(firstAcceptedAt = null),
+                        )
+                    ),
+                    true,
+                )
+            )
+        }
+        f.reopen()
+        assertNull(f.lookup()?.firstAcceptedAt)
+        f.edits(edit(late).copy(timestamp = early.timestamp + 1_000_000))
+        assertEquals(original, f.lookup())
+        assertNull(f.lookup()?.latestEdit)
+        assertEquals(key, f.keys.read())
+    }
+
+    @Test
+    fun companyAndSpaceReplacementsWithTheSameIdsRemainIndependent() = withDatabase { f ->
+        val original = f.event()
+        f.merge(original)
+        val legacy = f.legacyRepository()
+        assertEquals(
+            AppResult.Success(true),
+            legacy.merge(f.legacyAccess, f.conversation, f.room, listOf(original)),
+        )
+        val spaceEdit = edit(original).copy(text = "Space revision")
+        val companyEdit =
+            edit(original).copy(text = "Company revision", contentHash = "b".repeat(64))
+        f.edits(spaceEdit)
+        val spaceCheckpoint = f.raw()
+        assertEquals(
+            AppResult.Success(null),
+            legacy.getReplacementFact(f.legacyAccess, f.conversation, f.room, spaceEdit.eventId),
+        )
+        assertEquals(
+            AppResult.Success(true),
+            legacy.mergeEdits(f.legacyAccess, f.conversation, f.room, listOf(companyEdit)),
+        )
+        assertEquals(spaceCheckpoint, f.raw())
+        f.reopen()
+        assertEquals(spaceEdit, f.lookup()?.latestEdit?.edit)
+        val company =
+            assertIs<AppResult.Success<CollaborationHistoryMessage?>>(
+                    f.legacyRepository()
+                        .getByEvent(f.legacyAccess, f.conversation, f.room, original.eventId)
+                )
+                .value
+        assertEquals(companyEdit, assertNotNull(company).latestEdit?.edit)
+    }
+
+    @Test
+    fun anotherSpaceCannotReadOrApplyTheRetainedReplacement() = withDatabase { f ->
+        val original = f.event()
+        val replacement = edit(original)
+        f.merge(original)
+        f.edits(replacement)
+        val before = f.raw()
+        val other = f.access.copy(spaceId = historyId(9700))
+        assertEquals(
+            AppResult.Success(null),
+            f.repository.getReplacementFact(other, f.conversation, f.room, replacement.eventId),
+        )
+        assertIs<AppResult.Failed>(
+            f.repository.mergeEdits(other, f.conversation, f.room, listOf(replacement))
+        )
+        assertEquals(before, f.raw())
+        assertEquals(replacement, f.lookup()?.latestEdit?.edit)
+    }
+
+    @Test
+    fun lostCommitResponseAndCancellationKeepOneRevisionAcrossRestartAndReplay() =
+        withDatabase { f ->
+            val original = f.event()
+            f.merge(original)
+            for (cancel in listOf(false, true)) {
+                val replacement = edit(original, if (cancel) 2 else 1)
+                val store =
+                    object : ReplicaStore by f.database.replicas {
+                        override suspend fun commit(
+                            handle: ReplicaHandle,
+                            expectedRevision: Long,
+                            checkpoint: String,
+                            documents: List<ReplicaDocument>,
+                            publish: Boolean,
+                            wake: WorkWakeRequest?,
+                        ): Boolean {
+                            assertTrue(
+                                f.database.replicas.commit(
+                                    handle,
+                                    expectedRevision,
+                                    checkpoint,
+                                    documents,
+                                    publish,
+                                    wake,
+                                )
+                            )
+                            if (cancel) throw CancellationException("Lost successful response")
+                            error("Lost successful response")
+                        }
+                    }
+                if (cancel)
+                    assertFailsWith<CancellationException> {
+                        f.repository(store)
+                            .mergeEdits(f.access, f.conversation, f.room, listOf(replacement))
+                    }
+                else
+                    assertIs<AppResult.Failed>(
+                        f.repository(store)
+                            .mergeEdits(f.access, f.conversation, f.room, listOf(replacement))
+                    )
+                val retained = f.raw()
+                f.reopen()
+                assertEquals(replacement, f.lookup()?.latestEdit?.edit)
+                f.edits(replacement)
+                assertEquals(retained, f.raw())
+                assertEquals(listOf(original.eventId), f.lookup()?.eventIds)
+            }
+        }
+
+    @Test
+    fun callerMutationAfterCaptureCannotReplaceTheSubmittedRevision() = withDatabase { f ->
+        val original = f.event()
+        f.merge(original)
+        val replacement = edit(original)
+        val submitted = mutableListOf(replacement)
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun checkpoint(
+                    scope: ReplicaScope,
+                    partition: String,
+                ): ReplicaCheckpoint? {
+                    submitted.clear()
+                    submitted +=
+                        replacement.copy(sender = "@foreign:example.test", text = "Changed later")
+                    return f.database.replicas.checkpoint(scope, partition)
+                }
+            }
+        assertEquals(
+            AppResult.Success(true),
+            f.repository(store).mergeEdits(f.access, f.conversation, f.room, submitted),
+        )
+        assertEquals(replacement, f.lookup()?.latestEdit?.edit)
+        f.reopen()
+        assertEquals(replacement, f.lookup()?.latestEdit?.edit)
+    }
+
+    private suspend fun CollaborationSpaceHistoryFixture.edits(
+        vararg edits: CollaborationMessageEdit
+    ) {
+        assertEquals(
+            AppResult.Success(true),
+            repository.mergeEdits(access, conversation, room, edits.toList()),
+        )
+    }
+
+    private fun withDatabase(block: suspend (CollaborationSpaceHistoryFixture) -> Unit) = runTest {
+        val fixture = CollaborationSpaceHistoryFixture(databaseOwner())
+        try {
+            fixture.activate()
+            block(fixture)
+        } finally {
+            fixture.close()
+        }
+    }
+}

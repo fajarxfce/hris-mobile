@@ -124,8 +124,12 @@ wait for completed boot before invoking it. Fresh consumer userdata was used and
 the owned emulator is stopped. The raw-read assertions execute inside the proof APK;
 the standard runner does not retain the additional numeric result marker.
 
-This patch cannot compile against the shipping SDK. Use only the paired candidate AAR, with an
-isolated local Maven coordinate and exact artifact/POM verification hashes; keep
+At this November6 checkpoint the patch could not compile against the then-shipping SDK.
+Current26.10.23-hris.6 includes the raw API; its immutable AAR was inspected on November10.
+See the [current acquisition review](../../docs/collaboration-space-incoming-plan.md) before
+using this historical patch. That API inspection is not new native edit-recovery acceptance.
+For reproducing this historical candidate, use its paired AAR, isolated local Maven coordinate
+and exact artifact/POM verification hashes; keep
 shipping dependency verification enabled. Run the existing provider driver with
 `--android-sync-mode classic` on the explicitly owned emulator. Passing this
 probe alone will not accept HRIS edit recovery, cold-cache completeness, remaining

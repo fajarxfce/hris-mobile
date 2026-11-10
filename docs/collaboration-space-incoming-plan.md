@@ -2,9 +2,9 @@
 
 STORAGE/LOCAL OBSERVATION ACCEPTED: focused112 and full10060 pass; strict auditors and
 publisher pass. [Storage contract](collaboration-space-history-storage.md) owns that completed
-increment. Native incoming collection and product routing are not implemented. Next retain
-replacement edits before incoming progress; a seven-file candidate has96verified focused cases (94storage +2DI after a test-only
-type correction). Full1/31487 is running10094expected cases; edit storage remains unaccepted. See current handoff for exact commands, boundaries and remaining work.
+increment. Native incoming collection and product routing are not implemented. Replacement storage is also accepted:96verified focused cases (94storage +2DI after a test-only
+type correction) and full10094 pass; [edit contract](collaboration-space-history-edits.md).
+Next implement and prove explicit raw-event acquisition before incoming progress. See current handoff for exact commands, boundaries and remaining work.
 Native1/45886 is REAPED PASS269.304s/four cases;
 strict acceptance and publisher passed. Preserve that exact evidence and original stores. Core8c76f92c/full10010
 is accepted; mobile proof2/34855 PASS20 and Group source1/72318 PASS3+28Python are reaped.
@@ -44,3 +44,27 @@ notifications/replies and product navigation with offline-first measurements. Ac
 SPACE-origin room proof and missing Apple Matrix runtime remain open; all54 PRD groups open.
 Storage/local-observation passed focused/full gates. This plan does not claim
 incoming, UI, native runtime or PRD acceptance.
+
+## Acquisition review after local storage
+
+The current provider head requests Matrix/messages dir=b limit=1. The original reader then
+uses an event-focused presentation timeline and requires that exact anchor among displayed
+items. Rust handles replacements as aggregations onto originals. An edit head therefore needs
+a real SDK regression case before this contract is reused for incoming persistence; do not
+relax provenance checks or relabel the edit as the original.
+
+The immutable26.10.23-hris.6 AAR was inspected directly: Room.loadOrFetchRawEvent and
+RawTimelineEvent(json,encryption) exist, with NOT_DECRYPTED/DECRYPTED/UNABLE_TO_DECRYPT.
+This supplies a better raw I/O boundary for explicit event acquisition, preserving custom HRIS
+fields and SDK decryption provenance without a UI timeline. Availability is verified against
+AAR SHAa4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3; this review has
+not executed a new native raw-event case. Historical November6 raw consumer patches target an
+older isolated candidate and must not be applied blindly or interpreted as current acceptance.
+
+Next review exact original/replacement/redaction/unsupported/unavailable classification and
+one bounded replacement-target acquisition. Admit the current logical runtime and immutable
+physical registration/setup/room identity across all I/O. Require actual SDK decryption evidence
+for encrypted message content; room encryption state alone is insufficient, and decryption does
+not imply verified sender trust. Control/redaction metadata needs separate explicit policy.
+Retain both original and edit facts before advancing any traversal; local reading stays separate.
+Private space-original-acquisition-2026-11-10 contains read-only evidence, no applied next source.

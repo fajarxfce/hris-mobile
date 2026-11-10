@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceHistoryRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceMessageEditRepository
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
@@ -22,7 +23,7 @@ class EncryptedCollaborationSpaceHistoryRepository(
     private val replicas: ReplicaStore,
     private val cipher: ContentCipher,
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
-) : CollaborationSpaceHistoryRepository {
+) : CollaborationSpaceHistoryRepository, CollaborationSpaceMessageEditRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
 
     override fun observe(
@@ -254,6 +255,126 @@ class EncryptedCollaborationSpaceHistoryRepository(
             currentCoroutineContext().ensureActive()
             message
         }
+    }
+
+    override suspend fun getReplacementFact(
+        access: CollaborationSpaceLocalAccess,
+        conversationId: String,
+        roomId: String,
+        eventId: String,
+    ) = safeStorageCall {
+        val scope = spaceHistoryScope(access)
+        val partition = spaceHistoryPartition(access, conversationId)
+        val raw = replicas.checkpoint(scope, partition) ?: return@safeStorageCall null
+        withKey(access, conversationId, roomId) { codec ->
+            codec.checkpoint(raw)
+            CollaborationEditEvidenceReader(replicas, raw, codec).get(eventId)?.let { value ->
+                require(replicas.checkpoint(scope, partition) == raw)
+                return@withKey CollaborationReplacementEventFact(
+                    value.eventId,
+                    value.sender,
+                    value.timestamp,
+                    value.redacted,
+                )
+            }
+            val aliasId = codec.aliasId(eventId)
+            val alias =
+                replicas.document(scope, partition, aliasId)?.let {
+                    require(it.id == aliasId)
+                    codec.alias(raw, it)
+                }
+            val fact =
+                alias
+                    ?.takeIf { it.replacement }
+                    ?.let {
+                        val id = requireNotNull(it.messageId)
+                        val original =
+                            codec.message(
+                                raw,
+                                requireNotNull(replicas.document(scope, partition, id)).also { found
+                                    ->
+                                    require(found.id == id)
+                                },
+                            )
+                        require(
+                            original.sender == it.sender &&
+                                it.replacementTarget in original.eventIds
+                        )
+                        if (!it.redacted) {
+                            val revisionId = codec.revisionId(eventId)
+                            val revision =
+                                codec.revision(
+                                    raw,
+                                    requireNotNull(replicas.document(scope, partition, revisionId))
+                                        .also { found -> require(found.id == revisionId) },
+                                )
+                            require(revision.messageId == id)
+                            val edit = revision.revision.toDomain().edit
+                            require(
+                                edit.eventId == eventId &&
+                                    edit.sender == it.sender &&
+                                    edit.timestamp == it.timestamp
+                            )
+                            require(
+                                edit.contentHash == it.replacementHash &&
+                                    edit.targetEventId == it.replacementTarget
+                            )
+                        }
+                        CollaborationReplacementEventFact(
+                            it.eventId,
+                            it.sender,
+                            requireNotNull(it.timestamp),
+                            it.redacted || original.redacted,
+                        )
+                    }
+            require(replicas.checkpoint(scope, partition) == raw)
+            fact
+        }
+    }
+
+    override suspend fun mergeEdits(
+        access: CollaborationSpaceLocalAccess,
+        conversationId: String,
+        roomId: String,
+        edits: List<CollaborationMessageEdit>,
+    ) = safeStorageCall {
+        require(edits.size in 1..16)
+        val selected = edits.toList()
+        val scope = spaceHistoryScope(access)
+        val partition = spaceHistoryPartition(access, conversationId)
+        // Retry only an uncommitted read plan whose checkpoint changed. Transport and
+        // commit uncertainty remain with the caller; never reinterpret corrupt ciphertext.
+        repeat(3) {
+            currentCoroutineContext().ensureActive()
+            val raw = requireNotNull(replicas.checkpoint(scope, partition))
+            try {
+                return@safeStorageCall withKey(access, conversationId, roomId) { codec ->
+                    val previous = codec.checkpoint(raw)
+                    val batch = CollaborationHistoryBatch(replicas, scope, partition, raw, codec)
+                    batch.applyEdits(selected)
+                    val revision = raw.revision + 1
+                    val documents = batch.documents(raw.handle.generation, revision)
+                    currentCoroutineContext().ensureActive()
+                    if (documents.isEmpty()) replicas.checkpoint(scope, partition) == raw
+                    else
+                        replicas.commit(
+                            raw.handle,
+                            raw.revision,
+                            codec.checkpoint(
+                                raw.handle.generation,
+                                revision,
+                                previous.count,
+                                previous.hiddenRules,
+                            ),
+                            documents,
+                            true,
+                        )
+                }
+            } catch (_: CollaborationHistoryPreparationChanged) {
+                currentCoroutineContext().ensureActive()
+            }
+        }
+        false
     }
 
     private suspend fun <T> withKey(
