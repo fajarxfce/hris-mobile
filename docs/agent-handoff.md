@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 14:53 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 15:02 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -40,16 +40,23 @@ nondebuggable devRelease, existing signer,0lint,exact SDK6 and Firebase/API/back
 owns the verified APK/INSTALL-ONLY runner. ADB30354 timed out15s(REAPED); no install attempt.
 Phone87 last known,88/89notinstalled. Keep pending availability question; no phone UI or reset.
 
-Next incoming policy candidate has3newKotlin files/22newdomain tests staged under private
-space-incoming-2026-11-10/candidate. Planning is pure: original/edit mutations stay distinct,
-local targets avoid another read, at most one acquired target, redaction uses original sender,
-and unresolved/missing originals cannot claim retention or EOF. No usecase/admission/I/O/UI
-integration yet. Apply only after this accepted packaging; focused144expected (44new across
-Desktop/Chromium+100controls), then owning admission/retention and durable progress integration.
-No heavy job remains; source freeze may now end. Do not claim this candidate is accepted.
+Current incoming policy:3newKotlin files are UNCOMMITTED/frozen during full1/12044 RUNNING,
+expected10268=previous10224+44newcases. Focused1/30508 REAPED PASS144/373.676s; strict
+source/report/prior-case audit passes,4,769inputs,
+manifest0410ae91d868f678fafe7bcf6d3adab655961b827c1fe67db3af5158158c854d.44newcases across
+Desktop/actualChromium+100controls; iOSsource/format/architecture/detekt pass. [Contract](collaboration-incoming-history-planning.md).
+Private space-incoming-2026-11-10 owns candidates, design, focused/full runners and auditors.
+One3GiB compiler,no emulator. No source changes until12044 is reaped; docs/private planning only.
+After full acceptance commit/push the3sourcefiles with final evidence, then implement the owning
+admitted batch and durable incoming progress. Pure policy alone starts no I/O or cursor work.
+Use1..16event batches with at most one target each and one transport observation per batch;
+no repeated per-bubble transport, recursion, or ViewModel orchestration. Preserve original
+physical versus logical Space scope, source/edit identity and explicit unresolved outcomes.
 
 Current6334c0c4 hosted42835309631 RUNNING,expected11359=8222portable+3137Apple plus16Swift/
-unsignedhost. Ref40325/dispatch42308 REAPED; strict auditor uses accepted runtime baseline.
+unsignedhost. Ref40325/dispatch42308 REAPED; portable25969 REAPED/audited8222, Apple running. Portable artifact13775670420/3551202B/
+SHA2361052bd57c58badc04e0f2d219c75ee02f0c179d61c5f4254e6806453debcd,
+manifest560d48bc1e951cdcbb61e05bf77b265cbd0c4f8f14ec4716f7722aab80913027.
 Groupf88abd24 push55922 REAPED records current live/package continuation.
 
 Runtime hosted42824039795 is COMPLETE and audited:8201portable+3129Apple=11330, plus16Swift
