@@ -1,0 +1,96 @@
+{
+  "acceptedAt": "2026-11-10T08:15:45.913430+00:00",
+  "baseCommit": "7e71b46a350e116b7ac7ce63e7a150f2b74be77f",
+  "scope": "Owning Space staging coordinates current admission, typed whole-inventory validation, durable Staging before paused enqueue, exact native transaction recovery and CAS readback. No resume, acknowledgements, archival, new client/key/room, worker/product routing or actual native enqueue acceptance.",
+  "sourceFiles": 4712,
+  "sourceManifestSha256": "81e08d95924901a1c1fed27bb96486d1ef2fc8692035cf74094ebc8af0566a8f",
+  "changedSourceHashes": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "f991cfe3c0ba0c7716ad0fb3a83b5e14d6803be844b6a27a51b971769950faa8",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "c8b8acd01ef9ab547579b0b4a0214625eb44b6c47d1f0a7a6f371519f2541484",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceStagingRecoveryPolicy.kt": "1345e839a089c579fc7c24d5d9efc3f8df0fafd4a45b259b65043e6241df7ec6",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/StageCollaborationSpaceText.kt": "5e141334aa40562d3b4cff0382d13cf00696120662710b6ac5a46f937ca1e23c",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceStagingRecoveryTest.kt": "a245167b01f5fa30ba2b5aee74cbb624cde28021c1bf9015f178ffe3c73ffb3e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceMessageStagingFixture.kt": "baf14acad28f59863d015e82e20554cf4562eda8e3e4e934e5107e9bb74eb572",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationSpaceTextTest.kt": "dbe5419ddf5ea308dc090fa40bb0182bde30e4941da501e3850067b676aa899d"
+  },
+  "deletedSources": [],
+  "focused": {
+    "startedAt": "2026-11-10T07:57:34.196058+00:00",
+    "elapsedSeconds": 330.446,
+    "sourceFiles": 4712,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 70,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "81e08d95924901a1c1fed27bb96486d1ef2fc8692035cf74094ebc8af0566a8f"
+  },
+  "full": {
+    "startedAt": "2026-11-10T08:04:07.982068+00:00",
+    "elapsedSeconds": 664.833,
+    "sourceFiles": 4712,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7725,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "81e08d95924901a1c1fed27bb96486d1ef2fc8692035cf74094ebc8af0566a8f",
+    "validatedTests": 9744,
+    "validatedReusedTests": 2019,
+    "validatedDatabaseCases": {
+      "desktopTest": 102,
+      "wasmJsBrowserTest": 100
+    }
+  },
+  "fullReportManifestSha256": "cca06264d8e1d9e62eecf1c879a33f146be86e9812f4a8f91641b0287a6362e5",
+  "stagingContracts": {
+    "recoveryPolicyPerPlatform": 9,
+    "owningStagingPerPlatform": 25,
+    "desktopCases": 34,
+    "chromiumCases": 34,
+    "appDi": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "checks": [
+    "root check",
+    "Android host tests",
+    "Android release compilation and lint",
+    "Wasm and iOS source compilation",
+    "real Chromium collaboration tests",
+    "proof APK compilation and unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "initialQualityFailure": {
+    "session": 63537,
+    "reaped": true,
+    "elapsedSeconds": 336.85,
+    "freshCounts": {
+      "tests": 70,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "f43947c1b1f3118d2bafd0a5140e57c062218894c83b73975062dfcd1c68ea7d",
+    "failure": "detekt LongMethod: inspectCommands 141 lines, limit100",
+    "resolution": "Separate original company command/journal inspection by its optional admitted company access. Preserve all policy guards, request ordering, assertions and tests."
+  },
+  "nonIncrementalKotlin": true,
+  "nativeRuntimeClaim": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "remaining": [
+    "Pinned Apple execution of staging contracts; actual Apple Matrix runtime binding remains unavailable",
+    "Mixed native delivery/callback-loss recovery and actual staging acceptance",
+    "Complete pending-command inventory, incoming history and original transaction proof before product routing"
+  ]
+}

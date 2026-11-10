@@ -330,6 +330,10 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceConversationCommands>())
                 assertNotNull(container.koin.get<QueueCollaborationSpaceText>())
                 assertSame(
+                    container.koin.get<StageCollaborationSpaceText>(),
+                    container.koin.get<StageCollaborationSpaceText>(),
+                )
+                assertSame(
                     container.koin.get<ReconcileCollaborationSpaceMessages>(),
                     container.koin.get<ReconcileCollaborationSpaceMessages>(),
                 )

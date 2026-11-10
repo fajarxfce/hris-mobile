@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 07:57 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 08:16 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -11,15 +11,40 @@ updates. All 54 acceptance groups remain open. Mobile proves reusable foundation
 Starter. Usecases own policy/repository orchestration; repositories coordinate raw I/O;
 ViewModels own screen state. No subagent delegation.
 
-One heavy compiler OR emulator. New-room focused 48502/full 7378 completed and are reaped. Staging focused-2 session 67472 is
-the ONLY heavy compiler; seven source inputs are FROZEN. No emulator is running. Never kill live API/worker JVMs. Owned emulator uses 2,560 MiB/two cores.
-Phone 10.77.77.3:5555 is install-only: announce each installation; never launch, drive,
-uninstall or clear it. ADB 14496 timed out after 15 seconds at 07:28 UTC and was reaped.
-Existing availability question remains pending. Phone 87 unchanged; 88 remains uninstalled.
+One heavy compiler OR emulator. Staging focused-2/67472 and full-1/14508 are REAPED,
+PASS; no local heavy compiler or emulator is running. Never kill live API/worker JVMs.
+Owned emulator uses 2,560 MiB/two cores. Phone 10.77.77.3:5555 is install-only: announce
+each installation; never launch, drive, uninstall or clear it. ADB 52244 timed out after
+15 seconds around 08:04 UTC and is reaped. Existing availability question remains pending.
+Phone 87 unchanged; 88 remains uninstalled.
 Crashlytics IAM is verified. Physical iPhone interaction is waived, not Apple source/runtime
 acceptance. Actual Apple Matrix runtime binding remains unavailable and must be implemented.
 
-## Current accepted increment — new Space-room queues
+## Current accepted increment — owning Space staging
+
+Seven Kotlin inputs add StageCollaborationSpaceText, exact complete-inventory recovery,
+9 pure + 25 owning regressions and singleton DI. The usecase persists Staging before one
+paused enqueue, requires exact CAS readback, and recovers the original mapping after lost
+responses. Other same-device Staging blocks enqueue; unready queued work stays local.
+Owned terminal records remain local without renewed transport. No native resume, receipt
+projection, new client/key/room, worker or product routing is activated.
+[Contract](collaboration-space-message-staging.md),
+[evidence](measurements/collaboration-space-message-staging-2026-11-10.json).
+
+Focused-1/63537 had 70 passing cases but failed LongMethod on command inspection. Its
+source/SARIF/reports remain retained. Only the optional company inspection phase was
+separated in the same invocation; no suppression/assertion change. Focused-2/67472 is
+reaped PASS 330.446s/70 fresh. Full-1/14508 is reaped PASS 664.833s: 9,744 verified =
+7,725 fresh + 2,019 exact accepted reused, zero failures/errors/skips. Root, Android host,
+release/lint, Wasm/iOS source, actual Chromium, proof APK/unit and quality all pass.
+All 4,712 source inputs and library bytes remained fixed. Manifest
+81e08d95924901a1c1fed27bb96486d1ef2fc8692035cf74094ebc8af0566a8f.
+Strict auditors and publisher pass. Proof APK 150,548,965 bytes, SHA
+098cbd530b4486673fafd0d6761ddc6df0c5a85fb08b85281b89717ae62a1561; compiled only.
+Private .work/space-message-staging-2026-11-10 retains canonical inputs/evidence. Do not
+recopy stale Stage files from mixed-original-delivery. Pin hosted validation after commit.
+
+## Accepted dependency — new Space-room queues
 
 Five Kotlin inputs add complete provenance and transport matching for newly published
 SPACE rooms, typed matching/local reading without company command access, and 13 new
@@ -73,46 +98,30 @@ Preserve mixed 42769825037 and projection 42772661276 controls.
 
 ## Immediate implementation continuation
 
-Seven APPLIED, uncommitted Kotlin inputs in `.work/space-message-staging-2026-11-10` now prepare
-StageCollaborationSpaceText, exact staging recovery policy, fixture, 9 policy + 25 owning
-cases, singleton DI and app binding assertion. Focused-1/session 63537 is REAPED:
-70 fresh cases pass with no failures/errors/skips, but detekt rejects inspectCommands
-(141 lines; limit 100). Duration 336.85s, failed source manifest
-f43947c1b1f3118d2bafd0a5140e57c062218894c83b73975062dfcd1c68ea7d. Failed reports/source/
-SARIF and quality-failure.json are retained. Original company command/journal inspection
-now has its own optional-scope phase within the same invocation; guards, request order
-and tests are preserved. No lint suppression or assertion change. Focused-2/session
-67472 is RUNNING for 70 fresh cases; all seven inputs are FROZEN. No acceptance yet. This is the canonical staging draft directory; older
-copies under mixed-original-delivery are stale. Source application and formatting 60415
-completed and are reaped; the accepted new-room source is committed/pushed and pinned.
-The owning draft handles exact CAS readback, lost enqueue responses, original recovery,
-recipient readiness, admission after I/O, cancellation and native close. Unready recipients
-reuse the existing Conflict code; recovery of an already stored original remains separate.
-Review/tests must verify those claims before actual native acceptance.
+Extend the EXISTING DeliverCollaborationSpaceOriginalMessages window to typed Company/Space
+ledgers; no parallel sender and no usecase-to-usecase orchestration. Private unapplied drafts
+and integration notes are in .work/mixed-original-delivery-2026-11-10. They are NOT compiled
+or accepted. The new owning draft uses optional original-company and mandatory Space ledger
+phases: read complete pending/journal/native inventory, load exact archive records, validate
+both plans and cross-ledger physical transaction/event ownership BEFORE either CAS. Other
+same-device Staging, including absent SDK originals, must block resume. Retain immutable
+callback mapping, exact CAS readback, scoped late callback storage, pause/drain ownership.
+Complete the draft, meaningful failure/cancellation tests and actual native proof next.
 
-Finish validating StageCollaborationSpaceText, then extend the existing owning delivery window
-to typed Company/Space ledgers. Reuse pure policies; never call another usecase or create a
-parallel sender. Retain exact Staging before enqueue, recover original logical ID/content/
-device/transaction after response loss, and verify every false/failed CAS by exact readback.
-A complete paused inventory and other unresolved Staging records must gate both staging
-and delivery. Empty SDK inventory never implies acknowledgement. Keep native operations
-parent-owned through cancelled waiters; close drains them before another writer acquires.
-
-`.work/mixed-original-delivery-2026-11-10` retains four unapplied mixed receipt/policy/test
-drafts plus integration/staging notes. Its queue contract is already applied; do not copy
-it again. Native proof must author a NEW fictional Space intent through the real owning
-staging usecase beside unchanged original fixture intents. Never reassign a real command
-between owner partitions. Complete pending-command inventory (including no room binding),
-incoming routing/dedup/history, media, backups, calls and meetings before PRD acceptance.
+Native proof must author a NEW fictional Space intent through accepted StageCollaborationSpaceText
+beside unchanged original fixture intents. Never reassign a real command between partitions.
+Complete pending-command inventory (including no room binding), incoming routing/dedup/history,
+media, backups, calls and meetings before PRD acceptance. Apple domain tests/unsigned host do
+not implement the missing actual Apple Matrix runtime binding. All 54 PRD groups remain open.
 
 ## Recent accepted dependencies
 
 - Projection e99c71046079734113d6e95906137d22f0d125d4 is pushed: focused 76/full 9,630,
   exact acknowledgements and offline whole-journal CAS/readback. Initial test-only generic
   compile failure is retained; production/assertions were preserved. Pinned control
-  [42772661276](https://github.com/fajarxfce/hris-mobile/actions/runs/42772661276) is running
-  (expected 7,628 portable + 2,885 Apple). Portable audit 63880 is reaped and passes
-  7,628; Apple is building the host. Partial public evidence is retained.
+  [42772661276](https://github.com/fajarxfce/hris-mobile/actions/runs/42772661276) is complete: 7,628 portable + 2,885 Apple = 10,513, plus 16 Swift and unsigned host.
+  Audits 63880/67314 are reaped; digests, CRC, exact source and predecessor identities pass.
+  Complete public evidence is retained; do not rerun.
 - Mixed matching 18e0d371b68e3e36c3be5bfdb1b91eb3e439de99 is pushed: focused 70/full 9,556.
   [42769825037](https://github.com/fajarxfce/hris-mobile/actions/runs/42769825037) portable
   audit 18071 completed/reaped: 7,554, artifact 13742801947, SHA

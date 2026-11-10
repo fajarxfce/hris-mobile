@@ -1,5 +1,9 @@
 # Architecture
 
+[Owning Space staging](collaboration-space-message-staging.md) retains exact Staging before
+one paused enqueue and recovers its original mapping after response loss. The usecase owns
+whole-inventory admission and CAS readback; the separate raw staging lease cannot resume.
+
 [Offline organization acknowledgement projection](collaboration-space-receipt-projection.md)
 uses immutable journal/completion evidence and exact CAS readback. The owning usecase
 serializes bounded projection and local admission; repositories perform storage I/O.

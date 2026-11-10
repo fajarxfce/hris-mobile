@@ -520,6 +520,41 @@ class CollaborationDataModule {
             ?: UnavailableCollaborationRuntimeRepository()
 
     @Single
+    fun stageSpaceText(
+        messages: CollaborationSpaceMessageRepository,
+        companyMessages: CollaborationMessageRepository,
+        receipts: CollaborationSpaceReceiptRepository,
+        companyReceipts: CollaborationReceiptRepository,
+        completions: CollaborationSpaceMessageCompletionRepository,
+        companyCompletions: CollaborationMessageCompletionRepository,
+        bindings: CollaborationSpaceRoomBindingRepository,
+        transport: CollaborationSpaceDirectTransportRepository,
+        queues: CollaborationSpaceMessageQueueRepository,
+        runtimes: CollaborationSpaceRuntimeRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        StageCollaborationSpaceText(
+            messages,
+            companyMessages,
+            receipts,
+            companyReceipts,
+            completions,
+            companyCompletions,
+            bindings,
+            transport,
+            queues,
+            runtimes,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
     fun reconcileSpaceMessages(
         messages: CollaborationSpaceMessageRepository,
         receipts: CollaborationSpaceReceiptRepository,
