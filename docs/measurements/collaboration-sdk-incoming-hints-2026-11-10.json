@@ -1,0 +1,160 @@
+{
+  "scope": "SDK response-owned timeline hints; local source validation",
+  "recordedAt": "2026-11-10T23:37:40.062204+00:00",
+  "runs": {
+    "focused-2": {
+      "startedAt": "2026-11-10T23:32:37.890640+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "matrix-sdk-ffi",
+        "--features",
+        "sentry,experimental-x509-identity-verification",
+        "sync_hints",
+        "--",
+        "--test-threads=1"
+      ],
+      "jobs": 2,
+      "sourceFiles": 1219,
+      "sourceManifestSha256": "cf5aee51053e0c1593728ec64346f830322bb89267c1d775ca594352cb1385fb",
+      "exitCode": 0,
+      "elapsedSeconds": 33.179,
+      "sourcesUnchanged": true,
+      "summaries": [
+        "test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 59 filtered out; finished in 0.64s"
+      ]
+    },
+    "ffi-full-1": {
+      "startedAt": "2026-11-10T23:33:38.021904+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "matrix-sdk-ffi",
+        "--features",
+        "sentry,experimental-x509-identity-verification",
+        "",
+        "--",
+        "--test-threads=1"
+      ],
+      "jobs": 2,
+      "sourceFiles": 1219,
+      "sourceManifestSha256": "cf5aee51053e0c1593728ec64346f830322bb89267c1d775ca594352cb1385fb",
+      "exitCode": 0,
+      "elapsedSeconds": 6.778,
+      "sourcesUnchanged": true,
+      "summaries": [
+        "test result: ok. 78 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.38s"
+      ]
+    },
+    "core-client-1": {
+      "startedAt": "2026-11-10T23:34:08.478472+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "matrix-sdk",
+        "--features",
+        "testing",
+        "--test",
+        "integration",
+        "client::",
+        "--",
+        "--test-threads=1"
+      ],
+      "jobs": 2,
+      "sourceFiles": 1219,
+      "sourceManifestSha256": "cf5aee51053e0c1593728ec64346f830322bb89267c1d775ca594352cb1385fb",
+      "exitCode": 0,
+      "elapsedSeconds": 69.703,
+      "sourcesUnchanged": true,
+      "summaries": [
+        "test result: ok. 44 passed; 0 failed; 0 ignored; 0 measured; 405 filtered out; finished in 5.76s"
+      ]
+    },
+    "core-refresh-1": {
+      "startedAt": "2026-11-10T23:35:58.755298+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "matrix-sdk",
+        "--features",
+        "testing",
+        "--test",
+        "integration",
+        "refresh_token::",
+        "--",
+        "--test-threads=1"
+      ],
+      "jobs": 2,
+      "sourceFiles": 1219,
+      "sourceManifestSha256": "cf5aee51053e0c1593728ec64346f830322bb89267c1d775ca594352cb1385fb",
+      "exitCode": 0,
+      "elapsedSeconds": 7.678,
+      "sourcesUnchanged": true,
+      "summaries": [
+        "test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 429 filtered out; finished in 7.36s"
+      ]
+    },
+    "wasm-1": {
+      "startedAt": "2026-11-10T23:36:30.322271+00:00",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "-p",
+        "matrix-sdk",
+        "--no-default-features",
+        "--features",
+        "indexeddb",
+        "--target",
+        "wasm32-unknown-unknown"
+      ],
+      "jobs": 2,
+      "sourceFiles": 1219,
+      "sourceManifestSha256": "cf5aee51053e0c1593728ec64346f830322bb89267c1d775ca594352cb1385fb",
+      "exitCode": 0,
+      "elapsedSeconds": 44.906,
+      "sourcesUnchanged": true,
+      "summaries": []
+    }
+  },
+  "uniquePassingTests": 142,
+  "newTests": 19,
+  "patch": {
+    "patchSha256": "d946c290f6577b784af3f4499826ff3e7d3163736f724894d748eceefa3b824a",
+    "files": {
+      "bindings/matrix-sdk-ffi/src/client.rs": "b54de4dc015ef850d7a2a771cab1421d4827ca724a401dba2f101dfa82216955",
+      "bindings/matrix-sdk-ffi/src/sync_v2.rs": "7a6c2436d8669024c2463d37290c2f8c0e2a2eb863bb00aebc5a30d406524b62",
+      "bindings/matrix-sdk-ffi/src/sync_v2/tests.rs": "7bb2f18221ffaf98428ace3a00e4ddd49d9211968c4df15beac557c937c479d9",
+      "crates/matrix-sdk/src/client/mod.rs": "d8ac51e906b4c2474544beb54e6c6e982cf24c669e981d6cb3ccc6f46fe3792e",
+      "crates/matrix-sdk/src/sync.rs": "c50b0f14110b43b4d1190ac8696d04bdec7576f14a9c4cd4d854fa17f5e7f848"
+    },
+    "appliedAgainstExactSdk6": true,
+    "artifactPublished": false
+  },
+  "baseManifestSha256": "810a1f9a24784b0d7f68a9b87f450842f35afa30559db007672309c2dbcb441a",
+  "upstream": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+  "sourceFiles": 1219,
+  "sourceManifestSha256": "cf5aee51053e0c1593728ec64346f830322bb89267c1d775ca594352cb1385fb",
+  "limits": {
+    "rooms": 64,
+    "eventsInspectedPerRoom": 64,
+    "eventsPerBatch": 256,
+    "locatorUtf8Bytes": 1024
+  },
+  "additionalConnection": false,
+  "messageBodiesExported": false,
+  "applicationConsumerIntegrated": false,
+  "keyHintsIntegrated": false,
+  "androidNativeExecuted": false,
+  "appleNativeExecuted": false,
+  "published": false,
+  "phoneTouched": false
+}

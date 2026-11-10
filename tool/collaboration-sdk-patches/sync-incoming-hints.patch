@@ -1,0 +1,597 @@
+diff --git a/bindings/matrix-sdk-ffi/src/client.rs b/bindings/matrix-sdk-ffi/src/client.rs
+--- a/bindings/matrix-sdk-ffi/src/client.rs
++++ b/bindings/matrix-sdk-ffi/src/client.rs
+@@ -1863,6 +1863,12 @@
+         Ok(response.into())
+     }
+ 
++    /// Read the local SDK sync position for detecting interrupted application handoffs.
++    /// Does not synchronize or confer authority on an older response.
++    pub async fn stored_sync_position_v2(&self) -> Option<String> {
++        self.inner.sync_token().await
++    }
++
+     pub async fn space_service(&self) -> Arc<SpaceService> {
+         let inner = UISpaceService::new((*self.inner).clone()).await;
+         Arc::new(SpaceService::new(inner))
+diff --git a/bindings/matrix-sdk-ffi/src/sync_v2.rs b/bindings/matrix-sdk-ffi/src/sync_v2.rs
+--- a/bindings/matrix-sdk-ffi/src/sync_v2.rs
++++ b/bindings/matrix-sdk-ffi/src/sync_v2.rs
+@@ -12,7 +12,9 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-use std::time::Duration;
++use std::{collections::BTreeSet, time::Duration};
++
++use matrix_sdk::sync::{RoomUpdates, Timeline};
+ 
+ use matrix_sdk_common::{SendOutsideWasm, SyncOutsideWasm};
+ 
+@@ -54,11 +56,16 @@
+ /// The response from a sync v2 call.
+ #[derive(uniffi::Record)]
+ pub struct SyncResponseV2 {
++    /// Exact `since` used for this response, captured before its request.
++    pub previous_batch: Option<String>,
+     /// The batch token to supply in the `since` param of the next `/sync`
+     /// request.
+     pub next_batch: String,
+     /// Updates to rooms.
+     pub rooms: SyncResponseRoomsV2,
++    /// Bounded timeline locators from this response after SDK processing.
++    /// These hints are not durable application acknowledgement.
++    pub timeline_changes: SyncTimelineChangesV2,
+ }
+ 
+ /// Room updates from a sync v2 response.
+@@ -76,8 +83,11 @@
+ 
+ impl From<matrix_sdk::sync::SyncResponse> for SyncResponseV2 {
+     fn from(value: matrix_sdk::sync::SyncResponse) -> Self {
++        let timeline_changes = timeline_changes(&value.rooms);
+         Self {
++            previous_batch: value.previous_batch,
+             next_batch: value.next_batch,
++            timeline_changes,
+             rooms: SyncResponseRoomsV2 {
+                 invited: value.rooms.invited.keys().map(ToString::to_string).collect(),
+                 joined: value.rooms.joined.keys().map(ToString::to_string).collect(),
+@@ -87,3 +97,98 @@
+         }
+     }
+ }
++
++/// Bounded changes in the same successful response as the previous/next cursor pair.
++/// Ephemeral updates, presence and account data never produce timeline locators.
++#[derive(Clone, Debug, PartialEq, Eq, uniffi::Record)]
++pub struct SyncTimelineChangesV2 {
++    pub rooms: Vec<SyncRoomTimelineChangeV2>,
++    /// At least one room could not be represented. Reconcile the admitted inventory.
++    pub rescan_required: bool,
++}
++
++#[derive(Clone, Debug, PartialEq, Eq, uniffi::Enum)]
++pub enum SyncTimelineMembershipV2 {
++    Joined,
++    Left,
++}
++
++#[derive(Clone, Debug, PartialEq, Eq, uniffi::Record)]
++pub struct SyncRoomTimelineChangeV2 {
++    pub room_id: String,
++    pub membership: SyncTimelineMembershipV2,
++    /// Ordered unique IDs only, including encrypted, redacted and unknown event types.
++    pub event_ids: Vec<String>,
++    /// The provider or this bounded projection omitted timeline events for this room.
++    /// Recover this room even when event_ids is empty.
++    pub limited: bool,
++}
++
++const TIMELINE_ROOM_LIMIT: usize = 64;
++const TIMELINE_EVENT_LIMIT: usize = 64;
++const TIMELINE_BATCH_EVENT_LIMIT: usize = 256;
++const TIMELINE_LOCATOR_BYTES: usize = 1024;
++
++fn timeline_changes(updates: &RoomUpdates) -> SyncTimelineChangesV2 {
++    let mut changes = SyncTimelineChangesV2 { rooms: Vec::new(), rescan_required: false };
++    let mut remaining_events = TIMELINE_BATCH_EVENT_LIMIT;
++    let mut retained_rooms = BTreeSet::new();
++    let timelines = updates
++        .joined
++        .iter()
++        .map(|(id, room)| (id, &room.timeline, SyncTimelineMembershipV2::Joined))
++        .chain(
++            updates
++                .left
++                .iter()
++                .map(|(id, room)| (id, &room.timeline, SyncTimelineMembershipV2::Left)),
++        );
++    for (id, timeline, membership) in timelines {
++        if timeline.events.is_empty() && !timeline.limited {
++            continue;
++        }
++        if changes.rooms.len() == TIMELINE_ROOM_LIMIT {
++            changes.rescan_required = true;
++            break;
++        }
++        if id.as_str().len() > TIMELINE_LOCATOR_BYTES || !retained_rooms.insert(id) {
++            changes.rescan_required = true;
++            continue;
++        }
++        let (event_ids, limited) = timeline_locators(timeline, &mut remaining_events);
++        changes.rooms.push(SyncRoomTimelineChangeV2 {
++            room_id: id.to_string(),
++            membership,
++            event_ids,
++            limited,
++        });
++    }
++    changes
++}
++
++fn timeline_locators(timeline: &Timeline, remaining: &mut usize) -> (Vec<String>, bool) {
++    let mut ids = Vec::new();
++    let mut seen = BTreeSet::new();
++    let mut limited = timeline.limited || timeline.events.len() > TIMELINE_EVENT_LIMIT;
++    // Inspect a bounded prefix even if a malicious batch repeats or omits every ID.
++    for event in timeline.events.iter().take(TIMELINE_EVENT_LIMIT) {
++        let Some(id) = event.event_id().filter(|id| id.as_str().len() <= TIMELINE_LOCATOR_BYTES)
++        else {
++            limited = true;
++            continue;
++        };
++        if !seen.insert(id) {
++            continue;
++        }
++        if *remaining == 0 {
++            limited = true;
++            break;
++        }
++        ids.push(id.to_string());
++        *remaining -= 1;
++    }
++    (ids, limited)
++}
++
++#[cfg(test)]
++mod tests;
+diff --git a/bindings/matrix-sdk-ffi/src/sync_v2/tests.rs b/bindings/matrix-sdk-ffi/src/sync_v2/tests.rs
+new file mode 100644
+--- /dev/null
++++ b/bindings/matrix-sdk-ffi/src/sync_v2/tests.rs
+@@ -0,0 +1,369 @@
++// Copyright 2026 Fajar HRIS contributors.
++// SPDX-License-Identifier: Apache-2.0
++
++use super::*;
++use matrix_sdk::{
++    config::{SyncSettings, SyncToken},
++    sync::{JoinedRoomUpdate, LeftRoomUpdate, SyncResponse},
++    test_utils::mocks::MatrixMockServer,
++};
++use matrix_sdk_common::deserialized_responses::TimelineEvent;
++use matrix_sdk_test::JoinedRoomBuilder;
++use ruma::{events::AnySyncTimelineEvent, room_id, serde::Raw};
++use serde_json::json;
++use tokio::time::{sleep, timeout};
++
++fn event(id: &str) -> TimelineEvent {
++    TimelineEvent::from_plaintext(
++        Raw::new(&json!({
++            "event_id": id, "type": "m.room.message", "sender": "@a:example.org",
++            "origin_server_ts": 1, "content": {"msgtype": "m.text", "body": "private body"}
++        }))
++        .unwrap()
++        .cast_unchecked(),
++    )
++}
++
++fn joined(ids: &[&str]) -> SyncResponse {
++    let mut response = SyncResponse {
++        previous_batch: Some("before".into()),
++        next_batch: "after".into(),
++        ..Default::default()
++    };
++    response.rooms.joined.insert(
++        room_id!("!a:example.org").to_owned(),
++        JoinedRoomUpdate {
++            timeline: Timeline {
++                events: ids.iter().map(|id| event(id)).collect(),
++                ..Default::default()
++            },
++            ..Default::default()
++        },
++    );
++    response
++}
++
++#[test]
++fn sync_hints_keep_the_exact_producer_cursor_pair() {
++    let response: SyncResponseV2 = joined(&["$one"]).into();
++    assert_eq!(response.previous_batch.as_deref(), Some("before"));
++    assert_eq!(response.next_batch, "after");
++    assert_eq!(response.timeline_changes.rooms[0].event_ids, ["$one"]);
++    assert_eq!(response.rooms.joined, ["!a:example.org"]);
++}
++
++#[test]
++fn sync_hints_initial_position_remains_absent() {
++    let response: SyncResponseV2 = SyncResponse::default().into();
++    assert!(response.previous_batch.is_none());
++    assert!(response.timeline_changes.rooms.is_empty());
++    assert!(!response.timeline_changes.rescan_required);
++}
++
++#[test]
++fn sync_hints_ignore_ephemeral_receipts_typing_and_account_data() {
++    let mut response = joined(&[]);
++    let room = response.rooms.joined.values_mut().next().unwrap();
++    room.ephemeral = vec![
++        Raw::new(&json!({"type":"m.typing","content":{"user_ids":["@a:example.org"]}}))
++            .unwrap()
++            .cast_unchecked(),
++        Raw::new(&json!({"type":"m.receipt","content":{}})).unwrap().cast_unchecked(),
++    ];
++    room.account_data =
++        vec![Raw::new(&json!({"type":"m.tag","content":{"tags":{}}})).unwrap().cast_unchecked()];
++    let response: SyncResponseV2 = response.into();
++    assert!(response.timeline_changes.rooms.is_empty());
++    assert!(!response.timeline_changes.rescan_required);
++    assert_eq!(response.rooms.joined.len(), 1);
++}
++
++#[test]
++fn sync_hints_retain_unknown_encrypted_redacted_and_state_event_ids_without_bodies() {
++    let mut response = joined(&[]);
++    let room = response.rooms.joined.values_mut().next().unwrap();
++    for (index, kind) in
++        ["m.room.encrypted", "m.room.redaction", "m.sticker", "com.example.future", "m.room.member"]
++            .iter()
++            .enumerate()
++    {
++        let raw = Raw::new(&json!({"event_id":format!("$id{index}"),"type":kind,"content":{"private":"never export"}})).unwrap().cast_unchecked();
++        room.timeline.events.push(TimelineEvent::from_plaintext(raw));
++    }
++    let changes = timeline_changes(&response.rooms);
++    assert_eq!(changes.rooms[0].event_ids, ["$id0", "$id1", "$id2", "$id3", "$id4"]);
++    assert!(!format!("{changes:?}").contains("private"));
++}
++
++#[test]
++fn sync_hints_keep_order_and_deduplicate_only_within_this_room_and_batch() {
++    let first = timeline_changes(&joined(&["$z", "$a", "$z", "$b"]).rooms);
++    assert_eq!(first.rooms[0].event_ids, ["$z", "$a", "$b"]);
++    assert!(!first.rooms[0].limited);
++    let next = timeline_changes(&joined(&["$z"]).rooms);
++    assert_eq!(next.rooms[0].event_ids, ["$z"]);
++}
++
++#[test]
++fn sync_hints_retain_left_room_timeline_and_membership() {
++    let mut response = joined(&["$joined"]);
++    response.rooms.left.insert(
++        room_id!("!b:example.org").to_owned(),
++        LeftRoomUpdate {
++            timeline: Timeline { events: vec![event("$left")], ..Default::default() },
++            ..Default::default()
++        },
++    );
++    let changes = timeline_changes(&response.rooms);
++    assert_eq!(changes.rooms.len(), 2);
++    assert_eq!(changes.rooms[0].membership, SyncTimelineMembershipV2::Joined);
++    assert_eq!(changes.rooms[1].membership, SyncTimelineMembershipV2::Left);
++    assert_eq!(changes.rooms[1].event_ids, ["$left"]);
++}
++
++#[test]
++fn sync_hints_empty_limited_room_still_requires_room_recovery() {
++    let mut response = joined(&[]);
++    response.rooms.joined.values_mut().next().unwrap().timeline.limited = true;
++    let changes = timeline_changes(&response.rooms);
++    assert_eq!(changes.rooms.len(), 1);
++    assert!(changes.rooms[0].limited);
++    assert!(!changes.rescan_required);
++}
++
++#[test]
++fn sync_hints_missing_id_does_not_silently_advance_past_content() {
++    let mut response = joined(&["$before"]);
++    let timeline = &mut response.rooms.joined.values_mut().next().unwrap().timeline;
++    timeline.events.push(TimelineEvent::from_plaintext(
++        Raw::new(&json!({"type":"m.room.message"})).unwrap().cast_unchecked(),
++    ));
++    timeline.events.push(event("$after"));
++    let changes = timeline_changes(&response.rooms);
++    assert_eq!(changes.rooms[0].event_ids, ["$before", "$after"]);
++    assert!(changes.rooms[0].limited);
++}
++
++#[test]
++fn sync_hints_locator_limit_counts_utf8_bytes() {
++    let accepted = format!("$a{}", "é".repeat(511));
++    let rejected = format!("${}", "é".repeat(512));
++    assert_eq!(accepted.len(), 1024);
++    let response = joined(&[&accepted, &rejected, "$after"]);
++    let changes = timeline_changes(&response.rooms);
++    assert_eq!(changes.rooms[0].event_ids, [accepted, "$after".to_owned()]);
++    assert!(changes.rooms[0].limited);
++}
++
++#[test]
++fn sync_hints_room_event_bound_marks_exactly_the_omitted_suffix() {
++    for count in [64, 65] {
++        let mut response = joined(&[]);
++        response.rooms.joined.values_mut().next().unwrap().timeline.events =
++            (0..count).map(|i| event(&format!("$e{i}"))).collect();
++        let changes = timeline_changes(&response.rooms);
++        assert_eq!(changes.rooms[0].event_ids.len(), 64);
++        assert_eq!(changes.rooms[0].limited, count == 65);
++        assert!(!changes.rescan_required);
++    }
++}
++
++#[test]
++fn sync_hints_duplicate_flood_cannot_make_projection_unbounded() {
++    let mut response = joined(&[]);
++    let timeline = &mut response.rooms.joined.values_mut().next().unwrap().timeline;
++    timeline.events = (0..128).map(|_| event("$same")).collect();
++    timeline.events.push(event("$last"));
++    let changes = timeline_changes(&response.rooms);
++    assert_eq!(changes.rooms[0].event_ids, ["$same"]);
++    assert!(changes.rooms[0].limited);
++}
++
++#[test]
++fn sync_hints_global_event_bound_preserves_affected_room_recovery() {
++    let mut response = SyncResponse::default();
++    for i in 0..5 {
++        response.rooms.joined.insert(
++            format!("!room{i}:example.org").try_into().unwrap(),
++            JoinedRoomUpdate {
++                timeline: Timeline {
++                    events: (0..64).map(|j| event(&format!("$r{i}e{j}"))).collect(),
++                    ..Default::default()
++                },
++                ..Default::default()
++            },
++        );
++    }
++    let changes = timeline_changes(&response.rooms);
++    assert_eq!(changes.rooms.iter().map(|r| r.event_ids.len()).sum::<usize>(), 256);
++    assert!(changes.rooms[..4].iter().all(|r| !r.limited));
++    assert!(changes.rooms[4].limited);
++    assert!(changes.rooms[4].event_ids.is_empty());
++    assert!(!changes.rescan_required);
++}
++
++#[test]
++fn sync_hints_room_overflow_requires_inventory_recovery() {
++    for count in [64, 65] {
++        let mut response = SyncResponse::default();
++        for i in 0..count {
++            response.rooms.joined.insert(
++                format!("!r{i:03}:example.org").try_into().unwrap(),
++                JoinedRoomUpdate {
++                    timeline: Timeline { events: vec![event("$event")], ..Default::default() },
++                    ..Default::default()
++                },
++            );
++        }
++        let changes = timeline_changes(&response.rooms);
++        assert_eq!(changes.rooms.len(), 64);
++        assert_eq!(changes.rescan_required, count == 65);
++    }
++}
++
++#[test]
++fn sync_hints_conflicting_memberships_cannot_silently_duplicate_room() {
++    let mut response = joined(&["$joined"]);
++    response.rooms.left.insert(
++        room_id!("!a:example.org").to_owned(),
++        LeftRoomUpdate {
++            timeline: Timeline { events: vec![event("$left")], ..Default::default() },
++            ..Default::default()
++        },
++    );
++    let changes = timeline_changes(&response.rooms);
++    assert_eq!(changes.rooms.len(), 1);
++    assert!(changes.rescan_required);
++}
++
++#[tokio::test]
++async fn sync_hints_actual_requests_capture_their_own_position_before_later_sync() {
++    let server = MatrixMockServer::new().await;
++    let client = server.client_builder().build().await;
++    assert!(client.sync_token().await.is_none());
++    let guard = server.mock_sync().ok(|_| {}).mock_once().mount_as_scoped().await;
++    let first = client.sync_once(SyncSettings::default()).await.unwrap();
++    drop(guard);
++    let first_position = first.next_batch.clone();
++    let guard = server.mock_sync().ok(|_| {}).mock_once().mount_as_scoped().await;
++    let second: SyncResponseV2 = client.sync_once(SyncSettings::default()).await.unwrap().into();
++    drop(guard);
++    assert_eq!(second.previous_batch.as_deref(), Some(first_position.as_str()));
++    assert_ne!(second.next_batch, first_position);
++    assert_eq!(client.sync_token().await.as_deref(), Some(second.next_batch.as_str()));
++    // Convert the retained older response only after the SDK has advanced again.
++    let first: SyncResponseV2 = first.into();
++    assert!(first.previous_batch.is_none());
++    assert_eq!(first.next_batch, first_position);
++    let requests = server.server().received_requests().await.unwrap();
++    let syncs: Vec<_> = requests.iter().filter(|r| r.url.path().ends_with("/sync")).collect();
++    assert_eq!(syncs.len(), 2);
++    assert!(!syncs[0].url.query_pairs().any(|(k, _)| k == "since"));
++    assert!(syncs[1].url.query_pairs().any(|(k, v)| k == "since" && v == first_position));
++}
++
++#[tokio::test]
++async fn sync_hints_explicit_and_initial_requests_preserve_actual_since() {
++    let server = MatrixMockServer::new().await;
++    let client = server.client_builder().build().await;
++    for token in [SyncToken::Specific("explicit".into()), SyncToken::NoToken] {
++        let expected = match &token {
++            SyncToken::Specific(s) => Some(s.clone()),
++            _ => None,
++        };
++        let guard = server.mock_sync().ok(|_| {}).mock_once().mount_as_scoped().await;
++        let response: SyncResponseV2 =
++            client.sync_once(SyncSettings::default().token(token)).await.unwrap().into();
++        drop(guard);
++        assert_eq!(response.previous_batch, expected);
++    }
++}
++
++#[tokio::test]
++async fn sync_hints_sdk_position_survives_response_loss_and_sqlite_reopen() {
++    let server = MatrixMockServer::new().await;
++    let dir = tempfile::tempdir().unwrap();
++    let client =
++        server.client_builder().on_builder(|b| b.sqlite_store(dir.path(), None)).build().await;
++    let guard = server.mock_sync().ok(|_| {}).mock_once().mount_as_scoped().await;
++    let response = client.sync_once(SyncSettings::default()).await.unwrap();
++    drop(guard);
++    let committed = response.next_batch.clone();
++    drop(response); // No application consumer received or acknowledged this response.
++    drop(client);
++    let before = server.server().received_requests().await.unwrap().len();
++    let restored =
++        server.client_builder().on_builder(|b| b.sqlite_store(dir.path(), None)).build().await;
++    assert_eq!(restored.sync_token().await, Some(committed));
++    assert_eq!(server.server().received_requests().await.unwrap().len(), before);
++}
++
++#[tokio::test]
++async fn sync_hints_cancellation_before_response_keeps_previous_position() {
++    let server = MatrixMockServer::new().await;
++    let client = server.client_builder().build().await;
++    let guard = server.mock_sync().ok(|_| {}).mock_once().mount_as_scoped().await;
++    let previous = client.sync_once(SyncSettings::default()).await.unwrap().next_batch;
++    drop(guard);
++    let guard = server
++        .mock_sync()
++        .with_delay(Duration::from_secs(20))
++        .ok(|_| {})
++        .mock_once()
++        .mount_as_scoped()
++        .await;
++    let read = client.clone();
++    let pending = tokio::spawn(async move { read.sync_once(SyncSettings::default()).await });
++    timeout(Duration::from_secs(5), async {
++        loop {
++            if server
++                .server()
++                .received_requests()
++                .await
++                .unwrap()
++                .iter()
++                .filter(|r| r.url.path().ends_with("/sync"))
++                .count()
++                == 2
++            {
++                break;
++            }
++            sleep(Duration::from_millis(5)).await;
++        }
++    })
++    .await
++    .unwrap();
++    pending.abort();
++    assert!(pending.await.unwrap_err().is_cancelled());
++    assert_eq!(client.sync_token().await, Some(previous));
++    drop(guard);
++}
++
++#[tokio::test]
++async fn sync_hints_actual_timeline_is_retained_before_response_projection() {
++    let server = MatrixMockServer::new().await;
++    let client = server.client_builder().build().await;
++    let id = room_id!("!actual:example.org");
++    server.sync_joined_room(&client, id).await;
++    let (cache, handles) = client.event_cache().unwrap().room(id).await.unwrap();
++    let raw: Raw<AnySyncTimelineEvent> = event("$persisted").raw().clone();
++    let guard = server
++        .mock_sync()
++        .ok(|s| {
++            s.add_joined_room(JoinedRoomBuilder::new(id).add_timeline_event(raw));
++        })
++        .mock_once()
++        .mount_as_scoped()
++        .await;
++    let response: SyncResponseV2 = client.sync_once(SyncSettings::default()).await.unwrap().into();
++    drop(guard);
++    assert_eq!(response.timeline_changes.rooms[0].event_ids, ["$persisted"]);
++    assert!(cache.find_event(ruma::event_id!("$persisted")).await.unwrap().is_some());
++    let requests = server.server().received_requests().await.unwrap();
++    assert!(
++        !requests
++            .iter()
++            .any(|r| r.url.path().contains("/event/") || r.url.path().ends_with("/messages"))
++    );
++    drop(handles);
++}
+diff --git a/crates/matrix-sdk/src/client/mod.rs b/crates/matrix-sdk/src/client/mod.rs
+--- a/crates/matrix-sdk/src/client/mod.rs
++++ b/crates/matrix-sdk/src/client/mod.rs
+@@ -3435,7 +3435,7 @@
+ 
+         let request = assign!(sync_events::v3::Request::new(), {
+             filter: sync_settings.filter.map(|f| *f),
+-            since: token,
++            since: token.clone(),
+             full_state: sync_settings.full_state,
+             set_presence: sync_settings.set_presence.unwrap_or_else(|| self.sync_presence()),
+             timeout: sync_settings.timeout,
+@@ -3458,7 +3458,7 @@
+ 
+         self.inner.sync_beat.notify(usize::MAX);
+ 
+-        Ok(SyncResponse::new(next_batch, response))
++        Ok(SyncResponse::new(token, next_batch, response))
+     }
+ 
+     /// Repeatedly synchronize the client state with the server.
+@@ -3761,7 +3761,11 @@
+ 
+     /// Get the current, if any, sync token of the client. This will be None if
+     /// the client didn't sync at least once.
+-    pub(crate) async fn sync_token(&self) -> Option<String> {
++    /// The locally retained sync position, without making a server request.
++    ///
++    /// This may be newer than a previously returned or queued response. Consumers
++    /// must use that response's own previous/next pair when acknowledging it.
++    pub async fn sync_token(&self) -> Option<String> {
+         self.inner.base_client.sync_token().await
+     }
+ 
+diff --git a/crates/matrix-sdk/src/sync.rs b/crates/matrix-sdk/src/sync.rs
+--- a/crates/matrix-sdk/src/sync.rs
++++ b/crates/matrix-sdk/src/sync.rs
+@@ -48,6 +48,9 @@
+ /// The processed response of a `/sync` request.
+ #[derive(Clone, Default)]
+ pub struct SyncResponse {
++    /// The exact `since` sent by this request. None means an initial sync.
++    /// Captured before I/O, never inferred from the later stored sync position.
++    pub previous_batch: Option<String>,
+     /// The batch token to supply in the `since` param of the next `/sync`
+     /// request.
+     pub next_batch: String,
+@@ -64,11 +67,15 @@
+ }
+ 
+ impl SyncResponse {
+-    pub(crate) fn new(next_batch: String, base_response: BaseSyncResponse) -> Self {
++    pub(crate) fn new(
++        previous_batch: Option<String>,
++        next_batch: String,
++        base_response: BaseSyncResponse,
++    ) -> Self {
+         let BaseSyncResponse { rooms, presence, account_data, to_device, notifications } =
+             base_response;
+ 
+-        Self { next_batch, rooms, presence, account_data, to_device, notifications }
++        Self { previous_batch, next_batch, rooms, presence, account_data, to_device, notifications }
+     }
+ }
+ 

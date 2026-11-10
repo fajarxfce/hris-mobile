@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 23:36 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 10 November 2026, 23:38 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Foreground incoming startup accepted
 
@@ -55,13 +55,22 @@ inventory gaps, and stored_sync_position_v2 reads the SDK's local position witho
 No extra listener or connection is required for successful response hints. Ephemeral receipt/
 typing-only changes emit no content locators. Timeline state/unknown/encrypted event IDs remain
 available for the owning domain consumer. No message bodies cross this new interface.
-19 candidate tests are compiling/running in private Mobile `.work/sdk-incoming-hints-2026-11-10`
-(focused-1/session44270); no result accepted yet. Rust 1.96, two compiler jobs, no emulator.
-The runner records all SDK source hashes; do not edit those files during the gate. Its candidate,
-original four files and exact SDK6 reconstruction manifest are archived in that directory.
+SDK source candidate is now ACCEPTED: 19 new cases, all 78 FFI cases, 44 core client cases,
+20 refresh cases, and WebAssembly/IndexedDB compilation. Unique tests: 142. All sessions reaped.
+The 1,219-file source manifest stayed fixed at
+cf5aee51053e0c1593728ec64346f830322bb89267c1d775ca594352cb1385fb.
+Patch d946c290f6577b784af3f4499826ff3e7d3163736f724894d748eceefa3b824a
+replays against exact SDK6 into the same five files. Source patch/manifest are tracked in Mobile
+`tool/collaboration-sdk-patches/sync-incoming-hints{.patch,-source.json}`; this is deliberately
+not a distributable Android build manifest yet. Contract: collaboration-sdk-incoming-hints.md
+(Mobile), collaboration/sdk-incoming-hints.md (Group), shared measurement filename
+collaboration-sdk-incoming-hints-2026-11-10.json. Private sdk-incoming-hints-2026-11-10 retains
+reports, complete input hashes and the rejected compile-only JSON-fixture attempt.
 No SDK version, artifact, runtime dependency or live change. The protected old dirty SDK worktree
-and original private stores remain unchanged. Next: accept tests, preserve prior SDK cases,
-export a reproducible incremental patch, then implement the owned app consumer and key/room routing.
+and original private stores remain unchanged. Next implement the owned key-arrival hint, generate
+paired bindings, then connect the application consumer and unknown physical-room admission.
+The current incoming scanner sees local bindings only; it cannot cover unknown server rooms
+when a batch is lost. Cold/gap recovery must include admitted provider/server inventory coverage.
 Never infer the cursor of queued content from a later local position read.
 Server push locators are physical matrixRoomId/matrixEventId. Logical UUID listing is not a delta
 feed. The existing admitted rooms.boundRoom lookup can locate an unknown physical room; preserve

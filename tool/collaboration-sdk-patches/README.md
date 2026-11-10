@@ -1,5 +1,14 @@
 # Patched Matrix Android SDK
 
+## Current source candidate — 10 November 2026
+
+`sync-incoming-hints.patch` applies after all seven SDK6 patches. The source-only manifest
+`sync-incoming-hints-source.json` pins the exact reconstruction. 142 unique tests and
+WebAssembly compilation pass; generated binding pairs and native distribution remain separate.
+[Contract and evidence](../../docs/collaboration-sdk-incoming-hints.md).
+The application still pins published SDK6. Earlier candidate/publication statements below
+are historical; [distribution status](../../docs/collaboration-sdk-distribution.md) owns shipping facts.
+
 ## Concurrent-refresh candidate — 9 November 2026
 
 `android-refresh-coalescing-build.json` extends the verified observer source with
