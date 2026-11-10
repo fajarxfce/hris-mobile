@@ -78,6 +78,6 @@ read its target and confirm a tombstone before changing retained history.
 The next actual SDK regression also covers the current Company/Space acknowledgement reader:
 its provider-head anchor may be an edit aggregated out of the presentation timeline. Preserve
 explicit acquired-anchor provenance separately from original send evidence when fixing that
-contract. The raw I/O primitive is accepted, and common acquired-event classification is
-under its full gate; current handoff records exact status. Finite reads must remain owned by
+contract. The raw I/O primitive and [common acquired-event classification](collaboration-raw-event-classification.md)
+are locally accepted; native integration/equivalence remain next. Current handoff records exact status. Finite reads must remain owned by
 the same native parent and registry across cancellation, closure and late callbacks.

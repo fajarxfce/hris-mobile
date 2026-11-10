@@ -1,5 +1,9 @@
 # Architecture
 
+[Acquired event classification](collaboration-raw-event-classification.md) keeps original,
+replacement, redaction and unresolved facts distinct. Mapping validates provider metadata;
+native lifetime, current admission and retention remain with their owning layers.
+
 [Raw Matrix event I/O](collaboration-raw-event-source.md) reads exact SDK event JSON and
 separate decryption facts without a presentation timeline. Each invocation owns its room
 handle; the existing runtime must own the parent client. Classification and admission remain

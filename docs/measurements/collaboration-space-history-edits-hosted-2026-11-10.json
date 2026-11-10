@@ -40,6 +40,28 @@
     },
     "reportManifestSha256": "0a9fc5b1ca981bdf6b0b827eb8fbe6f3dd770a6a8aa6be9416b4eff3e285fd8b"
   },
-  "tests": 8092,
-  "status": "portable-passed-apple-pending"
+  "apple": {
+    "sourceCommit": "5da6cb95678f8e1493e245d42ac2a76f6f4d00ee",
+    "runId": 42811675228,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42811675228",
+    "jobId": 129814408665,
+    "artifactId": 13765577688,
+    "bytes": 570922,
+    "sha256": "d0a4ca69f122424af4287bdaaa73ec74f41152ad4794fd27182e26a041d30475",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "iosSimulatorArm64Test": {
+        "tests": 3104,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 311
+      }
+    },
+    "reportManifestSha256": "eb0e1b77ddc9bd8f5259f982b47b87afc616c7761a193fd59590cf119288746a"
+  },
+  "tests": 11196,
+  "status": "complete",
+  "swiftPushFieldCases": 16,
+  "unsignedIosHostBuilt": true
 }

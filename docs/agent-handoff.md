@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 12:41 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 12:46 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -12,7 +12,7 @@ HRIS policy stays in Mobile. No subagents. Usecases coordinate repositories and 
 never other usecases; repositories coordinate their own datasource I/O, and ViewModels own
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
-One heavy compiler OR emulator. Raw classification full1/34957 RUNNING; focused49881 reaped.
+One heavy compiler OR emulator. Raw classification focused49881/full34957 are reaped; no heavy job.
 The emulator is stopped. Preserve the one-compiler OR one-emulator boundary.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
@@ -21,6 +21,28 @@ clear its UI or data. ADB82255 timed out15s near12:14 and is reaped; existing av
 question stays pending. Phone87 last known;88 uninstalled. No new phone build yet.
 Crashlytics IAM is verified; no repeated question. Physical iPhone testing is waived,
 not Apple compilation/runtime/notification/call acceptance. Apple Matrix runtime is missing.
+
+## Accepted acquired-event classification
+
+Three new Kotlin files add typed acquired facts, a common raw-event mapper and21common
+cases. Original/replacement hashes reuse unchanged existing mappers. SDK decryption is
+independent of room state; redaction actors only trigger target reads, while matching target
+metadata preserves original sender/event identity. Invalid identity/metadata/content and
+ambiguous targets cannot publish a partial original. Unresolved/unsupported are never text
+or exhaustion. [Contract](collaboration-raw-event-classification.md),
+[measurement](measurements/collaboration-raw-event-classification-2026-11-10.json).
+
+Focused1/49881 REAPED PASS105/302.286s=(21new+7old original+7old edit)*Desktop/Androidhost/
+actualChromium,plus iOS source/quality. Strict auditor preserved all six old mapper report/case
+identities. Full1/34957 REAPED PASS695.005s,10172verified=8153fresh+2019exact accepted reused,
+zero failures/errors/skips. Root check,Android host/release compile/lint,Wasm/iOS app source,
+actualChromium,proofAPK/unit/quality pass. Strict full auditor/publisher passed.4755source/library
+inputs fixed,manifestf56484e626ceb0d012e9cca86f628150b7863dca87a3dc20ab6ed4ea7e69ff3c.
+Current proofAPK150605511B SHA24e8cef1c2319a00c2378495f9552f8a4c0f127cecdb86ff24edd64745ca685e.
+Private raw-event-classification-2026-11-10 contains source/results/auditors. No native binding,
+retention usecase, incoming activation, phone/live/SDK change or native redaction equivalence
+claim. Source commit/push is next. Hosted controls are prepared,not dispatched:8170portable+
+3125Apple=11295+16Swift/host,baseline raw source42815332867; no premature hosted acceptance.
 
 ## Accepted raw event I/O
 
@@ -40,7 +62,7 @@ previous case identities. Full1/92524 REAPED PASS597.577s,10109verified=3562fres
 accepted reused,zero failures/errors/skips. Root check,Android host/release compile/lint,Wasm/
 iOS app source,actualChromium,proofAPK/unit/quality pass. Strict full auditor/publisher passed.
 4752source/library inputs fixed,manifest19fc3bd37896f5618a11df1a542e1fe78b75f8acff6a21d364d8a3d2bb22f036.
-Current proofAPK150602468B SHA5d0d280316aa07cb97644e28746bc6b8cec9a7274d39a28bb3d78c82d4e04cac.
+Historical raw-I/O proofAPK150602468B SHA5d0d280316aa07cb97644e28746bc6b8cec9a7274d39a28bb3d78c82d4e04cac.
 Private raw-event-source-2026-11-10 contains exact files/runners/auditors/results. Hosted
 42815332867 RUNNING exact99c7be19,refvalidation/raw-event-source-20261110,expected8107portable+
 3104Apple=11211+16Swift/host, baselineedit42811675228. Source93173/ref87991/dispatch78335
@@ -70,12 +92,12 @@ d7cf45325f9349e1fefbb8e0bbf7277ba865370b7501de33176ebb943759e45d.
 Historical edit-gate proofAPK150602468bytes SHA5ae67e42e3d0b6fc468d9a495e8395229178a85d428af5ce6fea9d87ef33b5c1.
 Private .work/space-history-edits-2026-11-10 contains exact source/archive/runners/auditors.
 
-Hosted edit control42811675228 RUNNING on exact5da6cb95,refvalidation/space-history-edits-
-20261110. Source96465/ref10060/dispatch12225 REAPED. Expected8092portable(3820Desktop+
-651Androidhost+3621Chromium)+3104Apple=11196,16Swift/host. Config/auditor prepared. Portable59554 REAPED PASS8092,artifact13765960448,
-SHAa158b087f122f81296fc5d4ca621c1cf17f75341b45d2f1f0ae030e996274bf8,
-manifest0a9fc5b1ca981bdf6b0b827eb8fbe6f3dd770a6a8aa6be9416b4eff3e285fd8b.
-Portable measurement is published. Apple still building its host; predecessor history42808577683 is complete and fully audited. No redispatch.
+Hosted edit control42811675228 COMPLETE11196=8092portable+3104Apple,16Swift/unsignedhost
+on exact5da6cb95. Source96465/ref10060/dispatch12225 REAPED. Portable59554 and Apple69605
+REAPED; strict source/GitHub digest/ZIP CRC/previous case identity checks pass. Appleartifact
+13765577688,570922bytes SHAd0a4ca69f122424af4287bdaaa73ec74f41152ad4794fd27182e26a041d30475,
+manifesteb0e1b77ddc9bd8f5259f982b47b87afc616c7761a193fd59590cf119288746a. Complete measurement
+is published. No native Apple Matrix runtime claim; do not rerun accepted controls.
 
 ## Accepted owned Space history
 
@@ -192,17 +214,13 @@ handoff/measurements. Shared Apple tests/unsigned hosts do not implement its nat
 
 [Incoming/history plan](collaboration-space-incoming-plan.md) now continues from accepted
 original AND replacement storage and the accepted internal raw-event I/O primitive above.
-Three new UNACCEPTED Kotlin files now add CollaborationAcquiredEvent, the common raw mapper
-and21common tests. Focused1/49881 REAPED PASS105/302.286s=(21new+7old original+7old edit)*
-Desktop/Androidhost/actualChromium,iOS source/quality; strict audit passed. Private raw-event-classification-2026-11-10 has
-files/runners/expected cases, six exact old mapper XML baselines and prepared strict auditors.
-4755source manifestf56484e626ceb0d012e9cca86f628150b7863dca87a3dc20ab6ed4ea7e69ff3c.
-Full1/34957 RUNNING,10172expected. Do not mutate source until this gate ends.
-Mapping separates original/replacement/redaction trigger/redacted target/unresolved/unsupported;
-SDK decryption never follows room flags. Redaction actors cannot establish original sender,
-ambiguous targets/invalid metadata fail, original/edit hashes reuse existing mappers. No runtime
-binding, owning usecase retention or native activation. Actual SDK6 redaction equivalence and
-parent-owned finite reads remain required before activation. Private space-original-acquisition-2026-11-10 retains the
+The raw classifier is now locally accepted above. No next production source applied yet.
+Next integrate a finite raw read under the existing native parent, explicit physical snapshot
+and logical Space wrapper, same registry/credential ownership before and after I/O. Then prove
+actual original/edit/redaction/missing-key behavior through public repository capabilities in
+the isolated SDK6 native fixture. Do not make an internal datasource public for tests or create
+a second client/registry. Raw I/O alone does not admit content or advance progress.
+Private space-original-acquisition-2026-11-10 retains the
 classification/parent-ownership review and inspected immutable
 SDK6 AAR/Javap API; preserve the dirty SDK source worktree and exact immutable library.
 
