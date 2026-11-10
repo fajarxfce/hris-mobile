@@ -671,6 +671,31 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun acquireSpaceProviderHistory(
+        bindings: CollaborationSpaceRoomBindingRepository,
+        transport: CollaborationSpaceDirectTransportRepository,
+        runtimes: CollaborationSpaceRuntimeRepository,
+        provider: CollaborationSpaceProviderHistoryRepository,
+        history: CollaborationSpaceHistoryTraversalRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        AcquireCollaborationSpaceProviderHistory(
+            bindings,
+            transport,
+            runtimes,
+            provider,
+            history,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun observeSpaceHistory(
         history: CollaborationSpaceHistoryRepository,
         directory: CollaborationSpaceDirectoryRepository,

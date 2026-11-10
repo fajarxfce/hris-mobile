@@ -1,0 +1,29 @@
+{
+  "startedAt": "2026-11-10T17:01:12.535216+00:00",
+  "elapsedSeconds": 909.618,
+  "sourceFiles": 4790,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 8382,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 150647097,
+    "sha256": "084271de912567634320216c668f037d149a4e4d98ce0bba635e4823c42a8d5d"
+  },
+  "sourceManifestSha256": "976c58ec47e8adbc0dd9d3a8ff92fb86587e08dc8024cd0486e08893013e5336",
+  "focusedSourceManifestSha256": "5a5f2953eb7581ae24b4d1885309bdabad8f96100fc46459650417d6d52624b3",
+  "focusedDelta": "Removed unused false-only remote flag; full gate executes all new cases again",
+  "validatedTests": 10401,
+  "validatedReusedTests": 2019,
+  "priorCaseIdentitiesPreserved": true,
+  "newCasesPerExecutedTarget": 24,
+  "actualChromium": true,
+  "physicalAppleSdkTest": false,
+  "productConsumerEnabled": false,
+  "phoneLatencyMeasured": false
+}

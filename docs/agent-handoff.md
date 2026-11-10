@@ -1,19 +1,25 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 17:09 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 17:17 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
 
-## Active page-acquisition work
+## Current admitted page acquisition — product accepted
 
-Six Kotlin files are APPLIED/UNCOMMITTED and FROZEN under full1/74094 RUNNING.
-Focused2/32791 is REAPED/ACCEPTED136 cases in188.325s, zero failures/errors/skips;
-4790inputs,manifest5a5f2953eb7581ae24b4d1885309bdabad8f96100fc46459650417d6d52624b3.
+This commit accepts six Kotlin files. Full1/74094 is REAPED/ACCEPTED10401 cases in909.618s:
+8382fresh+2019exact accepted controls, zero failures/errors/skips. Root/Androidhost/release/
+lint/Wasm/iOS application source/actualChromium/proofAPK+20unit/quality gates pass.
+4790inputs,manifest976c58ec47e8adbc0dd9d3a8ff92fb86587e08dc8024cd0486e08893013e5336.
+Focused2/32791 REAPED/ACCEPTED136 cases in188.325s,manifest
+5a5f2953eb7581ae24b4d1885309bdabad8f96100fc46459650417d6d52624b3.
 The first7032 attempt failed test compilation on five nullable Pair assertion types; fixed,
 original candidate preserved. Before full, one unused false-only private remote flag was removed.
-The full auditor permits exactly that token-equivalent cleanup and requires all24new cases again;
-do not claim identical focused/full hashes. Full expected10401, not accepted yet.
+The full auditor verifies the exact signature/branch removal and all24new cases run again.
+The first audit comparison missed ktfmt dropping the collapsed signature's trailing comma;
+it was corrected to a stronger full-byte comparison, with no Kotlin/report changes.
+Current product proofAPK150647097B SHA084271de912567634320216c668f037d149a4e4d98ce0bba635e4823c42a8d5d.
+[Contract and evidence](collaboration-space-page-acquisition.md). No heavy job remains.
 
 `AcquireCollaborationSpaceProviderHistory` owns one current-admitted finite page, immutable
 physical provenance and atomic reference/position staging. Saved exhaustion returns without
@@ -48,7 +54,7 @@ plus16Swift/unsignedhost. Use current Apple TESTS artifact as prior case baselin
 pretend the cancelled host passed. No duplicate run of old source is needed.
 
 ADB54053 timed out15s(REAPED); release89 remains NOT INSTALLED, phone87 last known.
-All54 PRD groups OPEN. Current full gate owns the only heavy compiler; no emulator active.
+All54 PRD groups OPEN. Full74094 is accepted/reaped; no compiler or emulator remains active.
 
 ## Current continuation — native Space frontier accepted
 

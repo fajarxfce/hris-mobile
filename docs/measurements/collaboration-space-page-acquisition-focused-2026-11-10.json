@@ -1,0 +1,21 @@
+{
+  "startedAt": "2026-11-10T16:57:03.136231+00:00",
+  "elapsedSeconds": 188.325,
+  "sourceFiles": 4790,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 136,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sourceManifestSha256": "5a5f2953eb7581ae24b4d1885309bdabad8f96100fc46459650417d6d52624b3",
+  "run": "focused2",
+  "priorCaseIdentitiesPreserved": true,
+  "newCasesPerExecutedTarget": 24,
+  "actualChromium": true,
+  "physicalAppleSdkTest": false,
+  "productConsumerEnabled": false,
+  "phoneLatencyMeasured": false
+}

@@ -1,5 +1,9 @@
 # Architecture
 
+[Admitted Space provider pages](collaboration-space-page-acquisition.md) separate current access,
+finite metadata acquisition and durable progress. Saved exhaustion performs no network I/O;
+independent pending-content recovery remains with its own usecases and worker.
+
 [Space provider progress](collaboration-space-history-progress.md) keeps physical provider identity,
 provider frontier and unresolved references in authenticated local storage. Typed repositories share
 a raw transaction component; current admission and the incoming worker remain separate owners.
