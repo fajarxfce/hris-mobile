@@ -1,19 +1,20 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 17:39 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 17:47 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
 
 ## Active pending-reference integration
 
-18Kotlin files are APPLIED/UNCOMMITTED and FROZEN under focused1/83751 RUNNING. Private
+18Kotlin files are APPLIED/UNCOMMITTED and FROZEN under full1/81989 RUNNING. Private
 space-pending-incoming-2026-11-10 owns exact candidate, base files, accepted-base sources,
 prior XML reports, expected counts, runners and focused/full auditors. Source4797inputs;
 focused expected296, full expected10447. Do not edit source/library/APK during the gate.
 New coverage is8pure policy+12local-usecase+3real-storage scenarios; old acquisition provider
-provenance assertion is strengthened without removing any case. JVM has progressed into
-browser compilation, no failures reported; full/native acceptance is NOT claimed yet.
+provenance assertion is strengthened without removing any case. Focused83751 is REAPED/PASS296 in367.275s, strict audit accepted manifest
+bd0e5efaa051927a26cdfbca979e80f45089b4e17b17ac3f728bfc5421d31048.
+Actual JVM/Chromium cases pass; full/native acceptance is NOT claimed yet.
 
 The incoming batch now carries its physical provider identity. New owning local usecases read
 16pending references and resolve/advance exact completed source outcomes. Missing keys,
@@ -23,8 +24,8 @@ provider as well as generation/position/rows. Same-account credential age does n
 owned progress; current account/directory denial still gates reads and writes. No consumer,
 SDK callback or independent durable incoming worker/wake is enabled by this source.
 
-Next accept focused, run required full application/platform gates, then commit/push and extend
-actual native proof to use the new pending read/completion instead of fixture-owned resolution.
+Next reap/audit full1, then commit/push and extend actual native proof with a separate pending
+read/completion case. Preserve all three old native cases and their exact case identities.
 Existing exact encrypted content/frontier/pending hashes and2/3original controls must remain.
 After that implement the independent durable incoming wake/worker and parent-owned SDK hints;
 startup/rescan must cover SDK persistence before app callback. All54PRD groups remain OPEN.
@@ -35,7 +36,7 @@ https://github.com/fajarxfce/hris-mobile/actions/runs/42865846045 . Source/ref/d
 Apple job90minutes, host step30. Page-acquisition folder owns config/auditor. This hosted
 source predates current18-file pending integration; no duplicate dispatch. Old e1ab test-only
 Apple acceptance remains partial because its host exceeded the former70-minute job limit.
-No local emulator remains; focused83751 owns the sole heavy compiler. Release89 uninstalled.
+No local emulator remains; full81989 owns the sole heavy compiler. Release89 uninstalled.
 
 ## Current admitted-page native acceptance
 
