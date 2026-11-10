@@ -1,9 +1,41 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 17:30 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 17:39 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
+
+## Active pending-reference integration
+
+18Kotlin files are APPLIED/UNCOMMITTED and FROZEN under focused1/83751 RUNNING. Private
+space-pending-incoming-2026-11-10 owns exact candidate, base files, accepted-base sources,
+prior XML reports, expected counts, runners and focused/full auditors. Source4797inputs;
+focused expected296, full expected10447. Do not edit source/library/APK during the gate.
+New coverage is8pure policy+12local-usecase+3real-storage scenarios; old acquisition provider
+provenance assertion is strengthened without removing any case. JVM has progressed into
+browser compilation, no failures reported; full/native acceptance is NOT claimed yet.
+
+The incoming batch now carries its physical provider identity. New owning local usecases read
+16pending references and resolve/advance exact completed source outcomes. Missing keys,
+unconfirmed redactions and missing originals retain independent retry. The Space/raw pending
+advance limit is explicit; Company remains20 by default. Raw advancement must match physical
+provider as well as generation/position/rows. Same-account credential age does not hide local
+owned progress; current account/directory denial still gates reads and writes. No consumer,
+SDK callback or independent durable incoming worker/wake is enabled by this source.
+
+Next accept focused, run required full application/platform gates, then commit/push and extend
+actual native proof to use the new pending read/completion instead of fixture-owned resolution.
+Existing exact encrypted content/frontier/pending hashes and2/3original controls must remain.
+After that implement the independent durable incoming wake/worker and parent-owned SDK hints;
+startup/rescan must cover SDK persistence before app callback. All54PRD groups remain OPEN.
+
+Hosted latest669908384da244d285cb21e93040cffcee3207ef run42865846045 is RUNNING:
+https://github.com/fajarxfce/hris-mobile/actions/runs/42865846045 . Source/ref/dispatch sessions
+18489/79687/74435 are REAPED. Expected11621=8399portable+3222Apple,+16Swift/unsignedhost.
+Apple job90minutes, host step30. Page-acquisition folder owns config/auditor. This hosted
+source predates current18-file pending integration; no duplicate dispatch. Old e1ab test-only
+Apple acceptance remains partial because its host exceeded the former70-minute job limit.
+No local emulator remains; focused83751 owns the sole heavy compiler. Release89 uninstalled.
 
 ## Current admitted-page native acceptance
 

@@ -1,0 +1,13 @@
+{
+  "headSha": "669908384da244d285cb21e93040cffcee3207ef",
+  "runId": 42865846045,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42865846045",
+  "status": "in_progress",
+  "expectedPortable": 8399,
+  "expectedApple": 3222,
+  "expectedTotal": 11621,
+  "accepted": false,
+  "appleJobMinutes": 90,
+  "appleHostMinutes": 30,
+  "pendingReferenceIntegrationIncluded": false
+}
