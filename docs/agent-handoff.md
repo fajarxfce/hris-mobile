@@ -1,17 +1,23 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 14:15 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 14:23 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
 
-## Current history repair — focused accepted, full running
+## Current history repair — full accepted, native running
 
-Mobile14Kotlin files are UNCOMMITTED/frozen in full1/64837 RUNNING,10224expected/4766inputs.
-Focused3/71222 REAPED PASS176/203.280s; strict source/report/prior-case audit passes, manifest
-e8b00e9b35dee633c9813c8cd505fc738731c6e74209fec8d8a1e4f8a8a41a63. [Contract](collaboration-history-anchor.md)
-and focused measurement are published with this checkpoint. Private history-anchor-2026-11-10
-owns runners/auditors/results. One3GiB compiler,no emulator; no source edits until reaped.
+Mobile14Kotlin files remain UNCOMMITTED/frozen during Group native-fixed3/5268 RUNNING.
+Full1/64837 REAPED PASS686.844s; strict auditor verifies10224=8205fresh+2019exact accepted
+reused,zero failures/errors/skips. Required rootcheck/Androidhost/release compile/lint/Wasm/iOS
+app source/actualChromium/proofAPK+unit/quality pass.4766sources remain fixed,manifest
+e8b00e9b35dee633c9813c8cd505fc738731c6e74209fec8d8a1e4f8a8a41a63. Current proofAPK150607445B
+SHAee5cc170630afa0c51402a26a9997c1c8bf348e1ee4556f2022f9bb813ab10fc, unchanged SDK6 verified.
+Focused3/71222 REAPED PASS176/203.280s; source/report/prior-case audit passed. [Contract](collaboration-history-anchor.md)
+and measurement are in Git; private history-anchor-2026-11-10 owns exact runners/results.
+One isolated2560MiB/two-core emulator plus precompiled768MiB harness; no compiler, no source
+edits until native5268 is reaped. Three expected cases: event/history regression, original-only
+and mixed recovery after process death. Group backend82f2c817 is pushed17355(REAPED).
 
 The runtime acquires raw anchor evidence only when SDK presentation folds the requested event
 away, preserving the complete original window and separate original ACK identity. Source raw

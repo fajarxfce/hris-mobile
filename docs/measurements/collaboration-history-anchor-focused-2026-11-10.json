@@ -44,8 +44,29 @@
     "cause": "The cancellation test assumed runCurrent also finished the real Default dispatcher used by history decoding. The raw read had not entered yet; assertion expected one call, got zero. Use an explicit entered barrier before cancellation.",
     "productionSourcesUnchanged": true
   },
-  "fullValidationPending": true,
+  "fullValidationPending": false,
   "nativeValidationPending": true,
   "phoneInstalled": false,
-  "liveChanged": false
+  "liveChanged": false,
+  "full": {
+    "startedAt": "2026-11-10T14:10:35.851235+00:00",
+    "elapsedSeconds": 686.844,
+    "freshCounts": {
+      "tests": 8205,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedTests": 10224,
+    "validatedReusedTests": 2019,
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 150607445,
+      "sha256": "ee5cc170630afa0c51402a26a9997c1c8bf348e1ee4556f2022f9bb813ab10fc"
+    },
+    "validatedDatabaseCases": {
+      "desktopTest": 102,
+      "wasmJsBrowserTest": 100
+    }
+  }
 }
