@@ -1,7 +1,28 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 17:55 UTC. Follow AGENTS.md. Earlier checkpoints below are historical;
+Updated 10 November 2026, 17:59 UTC. Follow AGENTS.md. Earlier checkpoints below are historical;
 this opening section owns current work. All 54 communications PRD groups remain OPEN.
+
+## Active native pending-reference acceptance
+
+Mobile product7a27214ff033ae809e7a828f1fa3c2b748ee435e is committed/pushed (38741 REAPED).
+Its focused296/full10447 acceptance is complete. Mobile3 proof files and Group3 fixture/protocol
+files are now APPLIED/UNCOMMITTED and FROZEN. Private space-pending-reference-native-2026-11-10
+in both repos owns exact candidates, accepted bases, protocol and native runners/auditors.
+Mobile6654 REAPED/ACCEPTED20/107.635s,4797inputs,manifest
+99b96f3a08efe9e40d85b65860c445c20f9cbc1afed479fbf9499e3e7c91da95.
+ProofAPK150657733B SHAb7ad29214a8ca5f3c6195291182698d388307a36d5854ac6806e9d10611e1b2d.
+Group source-1/58041 RUNNING, sole heavy compiler;39 applied Python cases pass.
+
+Next reap/accept Group source, run native-1, then strict audit. Expected4 native cases across
+2reports/4isolated fixtures, preserving all three previous case identities. Old event control
+stays Matrix32/native9; new completed13-reference pass permits Matrix32..45/native10/direct5.
+The upper bound was derived BEFORE execution from SDK6 load_or_fetch_event's existing cache
+path; source request-budget.md records it. Empty completion and offline reopen add zeroHTTP.
+No native result exists yet. Do not edit source/library/APK during compile/emulator execution.
+After acceptance commit/push both proof changes and continue independent incoming wake/worker.
+All54PRD groups remain OPEN. No phone/live change; release89 still not installed.
+
 
 ## Current pending-reference product acceptance
 
