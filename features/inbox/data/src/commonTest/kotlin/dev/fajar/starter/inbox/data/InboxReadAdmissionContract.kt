@@ -55,7 +55,7 @@ suspend fun checkInboxDenialRemainsKnownAfterFailedStorage(f: InboxReadAdmission
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 if (unavailable && partition == inboxAdmissionPartition(f.access))
                     error("Fixture storage failure")
@@ -100,7 +100,7 @@ suspend fun checkLateInboxAdmissionCannotClearANewerDenial(f: InboxReadAdmission
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     if (snapshot == null && partition == inboxAdmissionPartition(f.access)) {
                         entered.complete(Unit)

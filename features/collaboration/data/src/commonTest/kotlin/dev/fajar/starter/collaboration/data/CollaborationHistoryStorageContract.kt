@@ -76,7 +76,7 @@ abstract class CollaborationHistoryStorageContract {
                             checkpoint: String,
                             documents: List<ReplicaDocument>,
                             publish: Boolean,
-                            wake: ReplicaWakeRequest?,
+                            wake: WorkWakeRequest?,
                         ): Boolean = error("Replayed history must not commit")
                     }
                 val replay = suspend {
@@ -602,7 +602,7 @@ abstract class CollaborationHistoryStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     arrived++
                     if (arrived == 2) ready.complete(Unit)
@@ -652,7 +652,7 @@ abstract class CollaborationHistoryStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         assertTrue(
                             f.database.replicas.commit(
@@ -693,7 +693,7 @@ abstract class CollaborationHistoryStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(other)
                     return f.database.replicas.commit(

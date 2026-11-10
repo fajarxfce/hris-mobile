@@ -106,7 +106,7 @@ abstract class CollaborationReceiptStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     arrived++
                     if (arrived == 2) ready.complete(Unit)
@@ -157,7 +157,7 @@ abstract class CollaborationReceiptStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         assertTrue(
                             f.database.replicas.commit(
@@ -201,7 +201,7 @@ abstract class CollaborationReceiptStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(other)
                     return f.database.replicas.commit(
@@ -431,7 +431,7 @@ abstract class CollaborationReceiptStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         entered.complete(Unit)
                         release.await()
@@ -474,7 +474,7 @@ abstract class CollaborationReceiptStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(f.access.copy(sessionId = "other", accountId = receiptId(8001)))
                     return store.commit(
@@ -509,7 +509,7 @@ abstract class CollaborationReceiptStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     entered.complete(Unit)
                     awaitCancellation()
@@ -542,7 +542,7 @@ abstract class CollaborationReceiptStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     assertTrue(
                         store.commit(handle, expectedRevision, checkpoint, documents, publish, wake)

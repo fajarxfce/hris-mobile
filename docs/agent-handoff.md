@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 04:15 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 04:34 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -19,9 +19,9 @@ announce each installation; never launch, drive, uninstall or clear its app.
 Crashlytics IAM is verified; do not ask again. Physical iPhone interaction is waived,
 not Apple source/runtime, push or calling acceptance. Continue work after checkpoints.
 
-## Active: atomic command insertion; binding producer accepted
+## Active: command storage accepted locally; SPACE message producer next
 
-Uncommitted command foundation follows pushed7b032633. `ReplicaWakeRequest` is renamed
+The command foundation follows pushed7b032633/a86ae506. `ReplicaWakeRequest` is renamed
 `WorkWakeRequest` for both raw mutation types. New explicit
 `CommandStore.insertBatchAndWake` retains new commands and fresh work in the owning
 SQLite/IndexedDB transaction. Old insertion APIs and result enums stay unchanged.
@@ -31,13 +31,36 @@ Thirteen shared cases per platform cover batch/archive replay, generation/capaci
 ownership/identity/resource conflicts, actual late unique-constraint rollback,
 consumer/capacity races, lost response, cancellation, bounds, compatibility and reopen.
 
-Private `.work/command-commit-wake-2026-11-10/runner.py focused-2` is running; source
-is frozen for database JVM/browser tests, Apple source and quality checks. Exactly one
-local compiler; no emulator. Initial focused-1/session20937 was reaped with zero tests:
+Private `.work/command-commit-wake-2026-11-10/runner.py focused-2` passed126.140s;
+session99243 was reaped and accept-focused.py verified202 fresh cases (102 SQLite,
+100 real Chromium), zero failures/errors/skips, Apple source and quality checks.
+All4,660 source inputs and the library match; source manifest SHA
+ed60ebcb63b731cfbe898ae0f8e08f22edbc735352e0b7af3895ad3232cc74a1.
+Full-1/session44596 REAPED PASS939.564s on the same frozen source, with non-incremental
+Kotlin compilation to avoid the previously proven stale delegate issue. Strict
+accept-full.py verifies9,320 results:3,864 fresh+5,456 exact accepted reused, no
+failures/errors/skips. All90 AppFlow cases pass unchanged. Required root, Android
+host/release/lint,Wasm/iOS source,browsers,proof APK/unit tests and quality pass.
+New proof APK150470250bytes SHAa71da4218d67520f9184f84b6e98c2bbbe919697801ff73bb9905516c3338e6f;
+compiled only, no new native execution or phone installation claimed. No local heavy
+job remains. [Contract](command-work-wakes.md),
+[evidence](measurements/command-work-wakes-2026-11-10.json).
+Initial focused-1/session20937 was reaped with zero tests:
 its private init script incorrectly used Gradle.project in an included build. Only
 that runner configuration was corrected; retain the failed logs. No source/test
-workaround and no accepted new result yet. Required full application checks, pinned
-Apple execution and downstream port remain. Do not port this unproven source.
+workaround. Pinned Apple execution and downstream port remain. Do not port this
+version before its Mobile platform proof. hosted-audit.py expects7,318 portable+
+2,730 Apple=10,048 tests, plus16 Swift checks and unsigned host; no new command job
+dispatched while producer42753380451 remains pending.
+
+Next producer preparation is in private `.work/space-message-intent-design-2026-11-10`.
+Three uncompiled drafts cover explicit account/space intent/record, pure ownership/
+state policy and a local repository contract. They are outside production source;
+review before applying. No next-capability datasource,usecase,DI or tests exist yet.
+New nonqueued SPACE states require exact physical origin; never use the legacy
+nullable-origin exception or encode spaceId in companyId. Add encrypted local
+retention/observation, then complete mixed-ledger reconciliation and explicit new
+enqueue capability before product routing. Original-only leases remain unchanged.
 
 Generic42749839268 is running; producer42753380451 is pending. Do not supersede it.
 Receipt42745403043 is fully accepted:9,798 tests plus16 Swift checks/unsigned Apple

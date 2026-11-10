@@ -132,7 +132,7 @@ abstract class CollaborationSpaceOpenReplayStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     val result =
                         f.history.database.replicas.replace(

@@ -63,7 +63,7 @@ suspend fun checkOvertimePlanWorkingAcknowledgementAndCompetingEdits(f: Overtime
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 val committed = f.db.replicas.replace(scope, partition, expected, snapshot, wake)
                 if (committed && loseAcknowledgement) {

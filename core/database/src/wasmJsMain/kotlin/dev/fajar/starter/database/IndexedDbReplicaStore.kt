@@ -70,12 +70,12 @@ internal class IndexedDbReplicaStore(
         partition: String,
         expected: ReplicaCheckpoint?,
         snapshot: ReplicaSnapshot?,
-        wake: ReplicaWakeRequest?,
+        wake: WorkWakeRequest?,
     ): Boolean {
         val retained =
             snapshot?.copy(documents = snapshot.documents.map { it.copy(tags = it.tags.toSet()) })
         validateReplicaReplacement(scope, partition, expected, retained)
-        validateReplicaWake(wake)
+        validateWorkWakeRequest(wake)
         val db = database()
         currentCoroutineContext().ensureActive()
         return withContext(NonCancellable) {
@@ -174,14 +174,14 @@ internal class IndexedDbReplicaStore(
         checkpoint: String,
         documents: List<ReplicaDocument>,
         publish: Boolean,
-        wake: ReplicaWakeRequest?,
+        wake: WorkWakeRequest?,
     ): Boolean {
         validateReplicaKey(handle.scope, handle.partition)
         validateReplicaGeneration(handle.generation)
         validateReplicaCheckpoint(checkpoint)
         val batch = documents.map { it.copy(tags = it.tags.toSet()) }
         validateReplicaBatch(expectedRevision, batch)
-        validateReplicaWake(wake)
+        validateWorkWakeRequest(wake)
         val db = database()
         currentCoroutineContext().ensureActive()
         return withContext(NonCancellable) {

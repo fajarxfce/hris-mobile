@@ -65,7 +65,7 @@ abstract class CollaborationRecipientObservationStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     assertTrue(
                         f.database.replicas.replace(scope, partition, expected, snapshot, wake)
@@ -91,7 +91,7 @@ abstract class CollaborationRecipientObservationStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     entered.complete(Unit)
                     awaitCancellation()

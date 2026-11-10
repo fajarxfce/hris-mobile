@@ -70,7 +70,7 @@ class EncryptedCollaborationSpaceRoomBindingRepository(
                     partition,
                     null,
                     snapshot,
-                    ReplicaWakeRequest(
+                    WorkWakeRequest(
                         CollaborationSpaceRecoveryWake.WORK_KEY,
                         Uuid.random().toString(),
                         SPACE_RECOVERY_WAKE_MAX_KEYS,
@@ -97,7 +97,7 @@ class EncryptedCollaborationSpaceRoomBindingRepository(
                 documents,
                 publish = true,
                 wake =
-                    ReplicaWakeRequest(
+                    WorkWakeRequest(
                         CollaborationSpaceRecoveryWake.WORK_KEY,
                         Uuid.random().toString(),
                         SPACE_RECOVERY_WAKE_MAX_KEYS,

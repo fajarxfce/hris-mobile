@@ -49,7 +49,7 @@ abstract class CollaborationNotificationInputRecoveryStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         assertTrue(
                             f.database.replicas.replace(scope, partition, expected, snapshot, wake)
@@ -79,7 +79,7 @@ abstract class CollaborationNotificationInputRecoveryStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     val result =
                         f.database.replicas.replace(scope, partition, expected, snapshot, wake)
@@ -110,7 +110,7 @@ abstract class CollaborationNotificationInputRecoveryStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(other)
                     return f.database.replicas.replace(scope, partition, expected, snapshot, wake)

@@ -301,7 +301,7 @@ abstract class CollaborationMessageEditStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.edits(winner)
                     return f.database.replicas.commit(
@@ -338,7 +338,7 @@ abstract class CollaborationMessageEditStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     throw CancellationException("Cancel before admission")
                 }
@@ -356,7 +356,7 @@ abstract class CollaborationMessageEditStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(
                         f.access.copy(sessionId = "foreign-login", accountId = historyId(1234))

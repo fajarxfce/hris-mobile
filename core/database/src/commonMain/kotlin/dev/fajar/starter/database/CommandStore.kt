@@ -33,6 +33,20 @@ interface CommandStore {
      */
     suspend fun insertBatch(scope: CommandScope, records: List<CommandRecord>): CommandInsertResult
 
+    /**
+     * Retains new commands and fresh recovery work in one transaction. A single command is a batch
+     * of one. AlreadyStored leaves the existing wake untouched, including when all IDs are
+     * archived. Null is a wake capacity/current-generation conflict; no command or wake changes.
+     * Other results preserve insertBatch's account/resource/command-capacity contract. Constraint
+     * failures roll back both stores. A lost response needs exact command readback; never assume it
+     * did not commit.
+     */
+    suspend fun insertBatchAndWake(
+        scope: CommandScope,
+        records: List<CommandRecord>,
+        wake: WorkWakeRequest,
+    ): CommandInsertResult?
+
     suspend fun update(
         scope: CommandScope,
         partition: String,

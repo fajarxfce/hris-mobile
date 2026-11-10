@@ -2,9 +2,13 @@
 
 `ReplicaStore.replace` and `commit` can retain a pending work marker in the same
 transaction as the replica mutation. Callers supply an optional immutable
-`ReplicaWakeRequest(key, generation, maxKeys)`. Omitting it preserves existing
+`WorkWakeRequest(key, generation, maxKeys)`. Omitting it preserves existing
 replica behavior. The raw database does not choose task keys, create generations,
 schedule work, retry, or decide account/content authorization.
+
+The request was introduced as `ReplicaWakeRequest` in7a6fe534. The shared name also
+supports [durable command insertion](command-work-wakes.md); its fields and stored
+representation are unchanged. The rename requires recompiling source consumers.
 
 The marker contains only a registered task key and a fresh, non-reused caller
 generation. It carries no account identity, credentials or document content.

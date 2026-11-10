@@ -20,7 +20,7 @@ suspend fun checkSelfProfilePendingDenialSurvivesReauthentication(f: SelfProfile
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean = error("Fixture storage unavailable")
         }
     val repository = EncryptedSelfProfileReplicaRepository(store, f.cipher, f.keys, f.admissions)
@@ -95,7 +95,7 @@ suspend fun checkSelfProfileReadDenialRemainsVisibleWhenStorageFails(f: SelfProf
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 if (unavailable && partition == selfProfileAdmissionPartition(f.access))
                     error("Fixture storage failure")
@@ -133,7 +133,7 @@ suspend fun checkSelfProfileReadDenialCannotBeClearedByAnOlderPendingAdmission(
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 if (snapshot == null && partition == selfProfileAdmissionPartition(f.access)) {
                     entered.complete(Unit)

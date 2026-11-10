@@ -196,7 +196,7 @@ abstract class CollaborationNotificationSettingsStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     assertTrue(
                         f.database.replicas.replace(scope, partition, expected, snapshot, wake)
@@ -224,7 +224,7 @@ abstract class CollaborationNotificationSettingsStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     if (++entered == 2) both.complete(Unit)
                     release.await()
@@ -279,7 +279,7 @@ abstract class CollaborationNotificationSettingsStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(other)
                     return f.database.replicas.commit(
@@ -317,7 +317,7 @@ abstract class CollaborationNotificationSettingsStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     try {
                         entered.complete(Unit)

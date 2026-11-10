@@ -36,7 +36,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         check(
                             f.history.database.replicas.replace(
@@ -81,7 +81,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         val saved =
                             f.history.database.replicas.replace(
@@ -135,7 +135,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         val saved =
                             f.history.database.replicas.replace(

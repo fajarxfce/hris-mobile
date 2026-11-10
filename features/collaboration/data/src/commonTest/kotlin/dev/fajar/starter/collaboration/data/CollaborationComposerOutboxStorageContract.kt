@@ -98,7 +98,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         assertNull(expected)
                         assertEquals(2, assertNotNull(snapshot).documents.size)
@@ -234,7 +234,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     assertEquals(2, documents.size)
                     assertTrue(
@@ -360,7 +360,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(nextOwner)
                     return f.database.replicas.commit(
@@ -454,7 +454,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         assertTrue(
                             f.database.replicas.commit(
@@ -500,7 +500,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     attempts++
                     return false
@@ -714,7 +714,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     assertTrue(
                         f.database.replicas.commit(

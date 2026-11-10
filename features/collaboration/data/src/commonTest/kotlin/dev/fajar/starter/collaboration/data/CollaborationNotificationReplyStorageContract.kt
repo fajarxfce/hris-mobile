@@ -297,7 +297,7 @@ abstract class CollaborationNotificationReplyStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     commits++
                     check(
@@ -336,7 +336,7 @@ abstract class CollaborationNotificationReplyStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     check(
                         actual.commit(
@@ -386,7 +386,7 @@ abstract class CollaborationNotificationReplyStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         f.activate(other)
                         return actual.commit(

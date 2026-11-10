@@ -57,7 +57,7 @@ suspend fun checkOvertimeDenialRemainsKnownAfterFailedStorage(f: OvertimeReplica
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 if (unavailable && partition == overtimeAdmissionPartition(f.access))
                     error("Fixture storage failure")
@@ -110,7 +110,7 @@ suspend fun checkLateOvertimeAdmissionCannotClearANewerDenial(f: OvertimeReplica
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     if (snapshot == null && partition == overtimeAdmissionPartition(f.access)) {
                         entered.complete(Unit)

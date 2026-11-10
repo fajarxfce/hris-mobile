@@ -61,7 +61,7 @@ suspend fun checkWorkforceReadDenialRemainsVisibleWhenStorageFails(f: WorkforceR
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 if (unavailable && partition == workforceAdmissionPartition(f.access))
                     error("Fixture storage failure")
@@ -99,7 +99,7 @@ suspend fun checkWorkforceReadDenialCannotBeClearedByAnOlderPendingAdmission(
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 if (snapshot == null && partition == workforceAdmissionPartition(f.access)) {
                     entered.complete(Unit)

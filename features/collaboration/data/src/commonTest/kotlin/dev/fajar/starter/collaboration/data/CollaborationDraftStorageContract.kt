@@ -76,7 +76,7 @@ abstract class CollaborationDraftStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     barrier.withLock { if (++arrived == 2) release.complete(Unit) }
                     release.await()
@@ -112,7 +112,7 @@ abstract class CollaborationDraftStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     assertTrue(
                         f.database.replicas.replace(scope, partition, expected, snapshot, wake)
@@ -443,7 +443,7 @@ abstract class CollaborationDraftStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     barrier.withLock { if (++commits == 2) release.complete(Unit) }
                     release.await()
@@ -486,7 +486,7 @@ abstract class CollaborationDraftStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     commits++
                     assertTrue(
@@ -527,7 +527,7 @@ abstract class CollaborationDraftStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     commits++
                     return if (rejectCommit) false

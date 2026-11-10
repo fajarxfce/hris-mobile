@@ -42,7 +42,7 @@ interface ReplicaStore {
         partition: String,
         expected: ReplicaCheckpoint?,
         snapshot: ReplicaSnapshot?,
-        wake: ReplicaWakeRequest? = null,
+        wake: WorkWakeRequest? = null,
     ): Boolean
 
     /** Starts a replacement without exposing its incomplete documents to readers. */
@@ -85,7 +85,7 @@ interface ReplicaStore {
         checkpoint: String,
         documents: List<ReplicaDocument>,
         publish: Boolean,
-        wake: ReplicaWakeRequest? = null,
+        wake: WorkWakeRequest? = null,
     ): Boolean
 
     fun observe(

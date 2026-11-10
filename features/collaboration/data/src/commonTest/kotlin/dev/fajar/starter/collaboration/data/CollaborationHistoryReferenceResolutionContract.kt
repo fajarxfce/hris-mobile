@@ -157,7 +157,7 @@ abstract class CollaborationHistoryReferenceResolutionContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         assertTrue(
                             f.local.database.replicas.commit(
@@ -243,7 +243,7 @@ abstract class CollaborationHistoryReferenceResolutionContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.local.activate(other)
                     return f.local.database.replicas.commit(

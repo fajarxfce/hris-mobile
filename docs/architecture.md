@@ -1,5 +1,10 @@
 # Architecture
 
+[Atomic command insertion](command-work-wakes.md) retains new pending commands and
+their recovery generation in the owning database transaction. Replaying retained
+active/archive identities creates no new work. Business admission, exact readback
+after response loss and OS scheduling belong to the consuming use case.
+
 [Atomic binding producers](collaboration-space-binding-producer-wake.md) retain encrypted room indexes and recovery work in one replica transaction. The repository owns atomic I/O; the preparation use case owns bounded scheduling after exact readback. Existing local bindings never create new work.
 
 [Missing original receipts](collaboration-original-lost-callback.md) are recovered by the owning delivery use case from exact local facts or one bounded original SDK window. Data only acquires through the installed lease; pure domain policy verifies provenance and content before durable acknowledgement.

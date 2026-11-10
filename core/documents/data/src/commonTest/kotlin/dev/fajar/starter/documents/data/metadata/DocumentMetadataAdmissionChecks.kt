@@ -60,7 +60,7 @@ suspend fun checkMetadataPendingAndFailedAdmissionWritesRemainClosed(
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 entered.complete(Unit)
                 resume.await()
@@ -115,7 +115,7 @@ suspend fun checkMetadataOlderAdmissionCannotClearLaterDenial(f: DocumentMetadat
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     if (snapshot == null) {
                         entered.complete(Unit)

@@ -20,7 +20,7 @@ suspend fun checkCatalogPendingDenialSurvivesReauthentication(f: DocumentCatalog
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean = error("Fixture storage unavailable")
         }
     val repository = EncryptedDocumentCatalogRepository(store, f.cipher, f.keys, f.admissions)
@@ -94,7 +94,7 @@ suspend fun checkCatalogReadDenialRemainsVisibleWhenStorageFails(f: DocumentCata
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 if (unavailable && partition == documentCatalogAdmissionPartition(f.access))
                     error("Fixture storage failure")
@@ -132,7 +132,7 @@ suspend fun checkCatalogReadDenialCannotBeClearedByAnOlderPendingAdmission(
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 if (snapshot == null && partition == documentCatalogAdmissionPartition(f.access)) {
                     entered.complete(Unit)

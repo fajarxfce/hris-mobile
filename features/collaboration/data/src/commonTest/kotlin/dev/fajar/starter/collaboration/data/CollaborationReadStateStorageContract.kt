@@ -190,7 +190,7 @@ abstract class CollaborationReadStateStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         if (++writes == 2) both.complete(Unit)
                         release.await()
@@ -239,7 +239,7 @@ abstract class CollaborationReadStateStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         assertTrue(
                             f.database.replicas.replace(scope, partition, expected, snapshot, wake)
@@ -261,7 +261,7 @@ abstract class CollaborationReadStateStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         assertTrue(
                             f.database.replicas.commit(
@@ -318,7 +318,7 @@ abstract class CollaborationReadStateStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(other)
                     return f.database.replicas.commit(
@@ -432,7 +432,7 @@ abstract class CollaborationReadStateStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     entered.complete(Unit)
                     awaitCancellation()

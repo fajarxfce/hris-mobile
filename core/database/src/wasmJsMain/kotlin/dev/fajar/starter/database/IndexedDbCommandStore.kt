@@ -111,20 +111,49 @@ internal class IndexedDbCommandStore(
         records: List<CommandRecord>,
     ): CommandInsertResult {
         val detached = commandBatch(scope, records)
+        val encoded = codec.encodeToString(detached)
         val db = database()
         currentCoroutineContext().ensureActive()
         return withContext(NonCancellable) {
             val outcome =
                 CommandInsertResult.valueOf(
-                    insertCommandBatch(
-                            db,
-                            scope.sessionId,
-                            scope.accountKey,
-                            codec.encodeToString(detached),
-                        )
-                        .await<JsString>()
-                        .toString()
+                    codec.decodeFromString<String>(
+                        insertCommandBatch(db, scope.sessionId, scope.accountKey, encoded, "null")
+                            .await<JsString>()
+                            .toString()
+                    )
                 )
+            if (outcome == CommandInsertResult.Stored) changes.tryEmit(Unit)
+            outcome
+        }
+    }
+
+    override suspend fun insertBatchAndWake(
+        scope: CommandScope,
+        records: List<CommandRecord>,
+        wake: WorkWakeRequest,
+    ): CommandInsertResult? {
+        val detached = commandBatch(scope, records)
+        validateWorkWakeRequest(wake)
+        val encoded = codec.encodeToString(detached)
+        val encodedWake = codec.encodeToString(wake)
+        val db = database()
+        currentCoroutineContext().ensureActive()
+        return withContext(NonCancellable) {
+            val outcome =
+                codec
+                    .decodeFromString<String?>(
+                        insertCommandBatch(
+                                db,
+                                scope.sessionId,
+                                scope.accountKey,
+                                encoded,
+                                encodedWake,
+                            )
+                            .await<JsString>()
+                            .toString()
+                    )
+                    ?.let(CommandInsertResult::valueOf)
             if (outcome == CommandInsertResult.Stored) changes.tryEmit(Unit)
             outcome
         }

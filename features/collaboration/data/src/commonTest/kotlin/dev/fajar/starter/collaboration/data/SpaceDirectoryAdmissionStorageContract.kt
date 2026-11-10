@@ -88,7 +88,7 @@ abstract class SpaceDirectoryAdmissionStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         if (throws) error("Fixture persistence unavailable")
                         return false
@@ -128,7 +128,7 @@ abstract class SpaceDirectoryAdmissionStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     if (snapshot == null) {
                         entered.complete(Unit)

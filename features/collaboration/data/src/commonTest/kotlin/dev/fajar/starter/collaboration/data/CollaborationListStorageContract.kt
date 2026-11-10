@@ -245,7 +245,7 @@ abstract class CollaborationListStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean = error("Fixture storage unavailable")
             }
         val repository = f.repository(store)
@@ -281,7 +281,7 @@ abstract class CollaborationListStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ) = false
             }
         val repository = f.repository(store)
@@ -315,7 +315,7 @@ abstract class CollaborationListStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     if (snapshot == null) {
                         entered.complete(Unit)

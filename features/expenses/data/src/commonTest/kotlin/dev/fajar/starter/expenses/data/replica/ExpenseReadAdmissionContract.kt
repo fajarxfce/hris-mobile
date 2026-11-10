@@ -61,7 +61,7 @@ suspend fun checkExpenseReadDenialRemainsVisibleWhenStorageFails(f: ExpenseRepli
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 if (unavailable && partition == expenseAdmissionPartition(f.access))
                     error("Fixture storage failure")
@@ -99,7 +99,7 @@ suspend fun checkExpenseReadDenialCannotBeClearedByAnOlderPendingAdmission(
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 if (snapshot == null && partition == expenseAdmissionPartition(f.access)) {
                     entered.complete(Unit)

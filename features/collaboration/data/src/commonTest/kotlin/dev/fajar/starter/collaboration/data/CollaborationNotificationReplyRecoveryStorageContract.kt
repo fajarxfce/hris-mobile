@@ -136,7 +136,7 @@ abstract class CollaborationNotificationReplyRecoveryStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     assertTrue(actual.replace(scope, partition, expected, snapshot, wake))
                     try {
@@ -257,7 +257,7 @@ abstract class CollaborationNotificationReplyRecoveryStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     assertTrue(actual.replace(scope, partition, expected, snapshot, wake))
                     try {

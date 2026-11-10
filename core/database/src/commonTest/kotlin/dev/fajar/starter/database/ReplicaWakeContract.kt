@@ -8,7 +8,7 @@ private val wakeScope = ReplicaScope("replica-wake-session", "replica-wake-accou
 private const val wakePartition = "replica-wake/records"
 private val initialWakeSnapshot =
     ReplicaSnapshot("original", "original", listOf(ReplicaDocument("first", 0, "01", "sealed")))
-private val initialMutationWake = ReplicaWakeRequest("replica.recovery", "original", 2)
+private val initialMutationWake = WorkWakeRequest("replica.recovery", "original", 2)
 
 private suspend fun seedReplicaWake(database: AppDatabase): ReplicaCheckpoint {
     database.accounts.activate(wakeScope.sessionId, wakeScope.accountKey)
@@ -159,7 +159,7 @@ suspend fun verifyReplicaWakeGenerationReuse(database: AppDatabase) {
 
 suspend fun verifyReplicaWakeCapacity(database: AppDatabase) {
     val before = seedReplicaWake(database)
-    val full = ReplicaWakeRequest("another.recovery", "new", 1)
+    val full = WorkWakeRequest("another.recovery", "new", 1)
     assertFalse(database.replicas.replace(wakeScope, wakePartition, before, null, full))
     assertFalse(
         database.replicas.commit(before.handle, before.revision, "blocked", emptyList(), true, full)
@@ -302,7 +302,7 @@ suspend fun verifyReplicaWakeConcurrentCapacity(database: AppDatabase) = corouti
                     "race/$id",
                     null,
                     initialWakeSnapshot,
-                    ReplicaWakeRequest("race.$id", "first", 1),
+                    WorkWakeRequest("race.$id", "first", 1),
                 )
             }
         }

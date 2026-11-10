@@ -115,7 +115,7 @@ abstract class CollaborationHistoryTraversalRestartContract {
                             checkpoint: String,
                             documents: List<ReplicaDocument>,
                             publish: Boolean,
-                            wake: ReplicaWakeRequest?,
+                            wake: WorkWakeRequest?,
                         ): Boolean {
                             assertTrue(
                                 f.local.database.replicas.commit(

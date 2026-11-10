@@ -1,6 +1,8 @@
 package dev.fajar.starter.database
 
 import dev.fajar.starter.database.entities.CommandEntity
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -90,21 +92,23 @@ internal class RoomCommandStore(private val database: StarterDatabase) : Command
         scope: CommandScope,
         records: List<CommandRecord>,
     ): CommandInsertResult =
-        dao.insertBatch(
-            scope.sessionId,
-            commandBatch(scope, records).map {
-                CommandEntity(
-                    scope.accountKey,
-                    it.partition,
-                    it.id,
-                    it.resourceId,
-                    it.sortKey,
-                    it.request,
-                    it.state,
-                    it.revision,
-                )
-            },
+        requireNotNull(
+            dao.insertBatch(
+                scope.sessionId,
+                commandBatch(scope, records).map { it.toEntity(scope.accountKey) },
+            )
         )
+
+    override suspend fun insertBatchAndWake(
+        scope: CommandScope,
+        records: List<CommandRecord>,
+        wake: WorkWakeRequest,
+    ): CommandInsertResult? {
+        val detached = commandBatch(scope, records).map { it.toEntity(scope.accountKey) }
+        validateWorkWakeRequest(wake)
+        currentCoroutineContext().ensureActive()
+        return dao.insertBatch(scope.sessionId, detached, wake)
+    }
 
     override suspend fun update(
         scope: CommandScope,
@@ -236,3 +240,6 @@ internal class RoomCommandStore(private val database: StarterDatabase) : Command
 
 private fun CommandEntity.toRecord() =
     CommandRecord(partition, id, resourceId, sortKey, request, state, revision)
+
+private fun CommandRecord.toEntity(accountKey: String) =
+    CommandEntity(accountKey, partition, id, resourceId, sortKey, request, state, revision)

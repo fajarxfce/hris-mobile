@@ -96,7 +96,7 @@ abstract class ReplicaDao {
     @Upsert protected abstract suspend fun write(wake: WorkWakeEntity)
 
     /** Called only inside the owning replica write transaction, before any document mutation. */
-    private suspend fun retainMutationWake(wake: ReplicaWakeRequest?): Boolean {
+    private suspend fun retainMutationWake(wake: WorkWakeRequest?): Boolean {
         if (wake == null) return true
         val current = mutationWake(wake.key)
         if (current?.generation == wake.generation) return false
@@ -210,7 +210,7 @@ abstract class ReplicaDao {
         partition: String,
         expected: ReplicaCheckpoint?,
         snapshot: ReplicaSnapshot?,
-        wake: ReplicaWakeRequest?,
+        wake: WorkWakeRequest?,
     ): Boolean {
         if (!owns(scope.sessionId, scope.accountKey) || checkpoint(scope, partition) != expected)
             return false
@@ -343,7 +343,7 @@ abstract class ReplicaDao {
         payload: String,
         documents: List<ReplicaDocument>,
         publish: Boolean,
-        wake: ReplicaWakeRequest?,
+        wake: WorkWakeRequest?,
     ): Boolean {
         if (!owns(handle.scope.sessionId, handle.scope.accountKey)) return false
         val ownerKey = handle.scope.accountKey.orEmpty()

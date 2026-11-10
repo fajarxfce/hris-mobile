@@ -74,7 +74,7 @@ abstract class CollaborationNotificationPublicationStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     assertTrue(
                         actual.commit(
@@ -450,7 +450,7 @@ abstract class CollaborationNotificationPublicationStorageContract {
                             partition: String,
                             expected: ReplicaCheckpoint?,
                             snapshot: ReplicaSnapshot?,
-                            wake: ReplicaWakeRequest?,
+                            wake: WorkWakeRequest?,
                         ): Boolean {
                             assertTrue(actual.replace(scope, partition, expected, snapshot, wake))
                             return pause()
@@ -462,7 +462,7 @@ abstract class CollaborationNotificationPublicationStorageContract {
                             checkpoint: String,
                             documents: List<ReplicaDocument>,
                             publish: Boolean,
-                            wake: ReplicaWakeRequest?,
+                            wake: WorkWakeRequest?,
                         ): Boolean {
                             assertTrue(
                                 actual.commit(
@@ -504,7 +504,7 @@ abstract class CollaborationNotificationPublicationStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     commits++
                     assertTrue(

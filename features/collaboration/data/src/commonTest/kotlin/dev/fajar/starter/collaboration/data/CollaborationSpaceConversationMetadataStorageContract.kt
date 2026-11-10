@@ -210,7 +210,7 @@ abstract class CollaborationSpaceConversationMetadataStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         assertEquals(
                             AppResult.Success(true),
@@ -249,7 +249,7 @@ abstract class CollaborationSpaceConversationMetadataStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         calls++
                         assertEquals(2, documents.size)
@@ -285,7 +285,7 @@ abstract class CollaborationSpaceConversationMetadataStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     check(f.database.replicas.replace(scope, partition, expected, snapshot, wake))
                     throw CancellationException("Lost first publication response")
@@ -297,7 +297,7 @@ abstract class CollaborationSpaceConversationMetadataStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     check(
                         f.database.replicas.commit(
@@ -335,7 +335,7 @@ abstract class CollaborationSpaceConversationMetadataStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(foreign)
                     return f.database.replicas.replace(scope, partition, expected, snapshot, wake)
@@ -347,7 +347,7 @@ abstract class CollaborationSpaceConversationMetadataStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(foreign)
                     return f.database.replicas.commit(

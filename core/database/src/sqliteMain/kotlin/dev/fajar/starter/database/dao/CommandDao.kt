@@ -2,8 +2,10 @@ package dev.fajar.starter.database.dao
 
 import androidx.room.*
 import dev.fajar.starter.database.CommandInsertResult
+import dev.fajar.starter.database.WorkWakeRequest
 import dev.fajar.starter.database.entities.CommandArchiveEntity
 import dev.fajar.starter.database.entities.CommandEntity
+import dev.fajar.starter.database.entities.WorkWakeEntity
 
 @Dao
 abstract class CommandDao {
@@ -63,6 +65,14 @@ abstract class CommandDao {
     @Insert protected abstract suspend fun retain(record: CommandArchiveEntity)
 
     @Insert protected abstract suspend fun create(record: CommandEntity)
+
+    @Query("SELECT * FROM work_wakes WHERE `key` = :key")
+    protected abstract suspend fun mutationWake(key: String): WorkWakeEntity?
+
+    @Query("SELECT COUNT(*) FROM work_wakes")
+    protected abstract suspend fun mutationWakeCount(): Int
+
+    @Upsert protected abstract suspend fun write(wake: WorkWakeEntity)
 
     @Query(
         "UPDATE durable_commands SET state = :state, revision = revision + 1 WHERE accountKey = :account AND partition = :partition AND id = :id AND revision = :revision"
@@ -152,7 +162,8 @@ abstract class CommandDao {
     open suspend fun insertBatch(
         session: String,
         entries: List<CommandEntity>,
-    ): CommandInsertResult {
+        wake: WorkWakeRequest? = null,
+    ): CommandInsertResult? {
         val account = entries.first().accountKey
         require(entries.size in 1..128 && entries.all { it.accountKey == account })
         if (!admitted(session, account)) return CommandInsertResult.ScopeChanged
@@ -178,6 +189,12 @@ abstract class CommandDao {
         if (missing.isEmpty()) return CommandInsertResult.AlreadyStored
         if (countAll() + missing.size > 512 || countAccount(account) + missing.size > 128)
             return CommandInsertResult.CapacityExceeded
+        if (wake != null) {
+            val current = mutationWake(wake.key)
+            if (current?.generation == wake.generation) return null
+            if (current == null && mutationWakeCount() >= wake.maxKeys) return null
+            write(WorkWakeEntity(wake.key, wake.generation, true))
+        }
         for (entry in missing) create(entry)
         return CommandInsertResult.Stored
     }

@@ -119,7 +119,7 @@ abstract class CollaborationSpaceReadinessReceiptStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     check(f.database.replicas.replace(scope, partition, expected, snapshot, wake))
                     throw CancellationException("Fictional process lost after commit")
@@ -149,7 +149,7 @@ abstract class CollaborationSpaceReadinessReceiptStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(other)
                     return f.database.replicas.replace(scope, partition, expected, snapshot, wake)

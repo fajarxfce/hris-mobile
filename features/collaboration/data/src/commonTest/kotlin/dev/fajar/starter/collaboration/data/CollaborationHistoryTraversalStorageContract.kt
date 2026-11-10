@@ -208,7 +208,7 @@ abstract class CollaborationHistoryTraversalStorageContract {
                             checkpoint: String,
                             documents: List<ReplicaDocument>,
                             publish: Boolean,
-                            wake: ReplicaWakeRequest?,
+                            wake: WorkWakeRequest?,
                         ): Boolean {
                             assertTrue(
                                 f.local.database.replicas.commit(
@@ -253,7 +253,7 @@ abstract class CollaborationHistoryTraversalStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         assertTrue(
                             f.local.database.replicas.replace(
@@ -293,7 +293,7 @@ abstract class CollaborationHistoryTraversalStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.local.activate(replacement)
                     return f.local.database.replicas.commit(

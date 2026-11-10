@@ -107,7 +107,7 @@ abstract class CollaborationLocalVisibilityStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
-                        wake: ReplicaWakeRequest?,
+                        wake: WorkWakeRequest?,
                     ): Boolean {
                         assertTrue(documents.size <= 150)
                         assertTrue(
@@ -172,7 +172,7 @@ abstract class CollaborationLocalVisibilityStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.merge(f.event(2))
                     return f.database.replicas.commit(
@@ -288,7 +288,7 @@ abstract class CollaborationLocalVisibilityStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     entered.complete(Unit)
                     awaitCancellation()
@@ -316,7 +316,7 @@ abstract class CollaborationLocalVisibilityStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     f.activate(f.access.copy(sessionId = "another", accountId = historyId(777)))
                     return f.database.replicas.commit(

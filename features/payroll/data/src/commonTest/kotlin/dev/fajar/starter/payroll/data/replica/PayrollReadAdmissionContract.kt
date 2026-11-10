@@ -60,7 +60,7 @@ suspend fun checkPayrollReadDenialRemainsVisibleWhenStorageFails(f: PayrollRepli
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 if (unavailable && partition == payrollAdmissionPartition(f.access))
                     error("Fixture storage failure")
@@ -98,7 +98,7 @@ suspend fun checkPayrollReadDenialCannotBeClearedByAnOlderPendingAdmission(
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 if (snapshot == null && partition == payrollAdmissionPartition(f.access)) {
                     entered.complete(Unit)

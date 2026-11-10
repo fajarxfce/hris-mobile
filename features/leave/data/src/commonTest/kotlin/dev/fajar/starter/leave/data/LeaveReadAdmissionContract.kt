@@ -57,7 +57,7 @@ suspend fun checkLeaveDenialRemainsKnownAfterFailedStorage(f: LeaveRequestReplic
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
-                wake: ReplicaWakeRequest?,
+                wake: WorkWakeRequest?,
             ): Boolean {
                 if (unavailable && partition == leaveAdmissionPartition(f.access))
                     error("Fixture storage failure")
@@ -102,7 +102,7 @@ suspend fun checkLateLeaveAdmissionCannotClearANewerDenial(f: LeaveRequestReplic
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
-                    wake: ReplicaWakeRequest?,
+                    wake: WorkWakeRequest?,
                 ): Boolean {
                     if (snapshot == null && partition == leaveAdmissionPartition(f.access)) {
                         entered.complete(Unit)
