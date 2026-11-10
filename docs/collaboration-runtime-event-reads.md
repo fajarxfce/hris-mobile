@@ -25,6 +25,7 @@ separately; one SDK call is not a claim of one HTTP request.
 
 The regression cases exercise independent concurrent reads, pre/post-I/O denial, cancellation,
 wait expiry, parent shutdown ordering, mapping failures and unsupported platforms. Host FFI
-handles establish ownership behavior without loading the native library. Actual encrypted
-original/edit/redacted-target/missing-key equivalence and the edit-at-head ACK recovery case
-remain the next SDK6 proof. This increment does not activate incoming product routing.
+handles establish ownership behavior without loading the native library. [Actual SDK6 acceptance](collaboration-runtime-event-native.md) now verifies encrypted
+original/edit/redacted-target/missing-key equivalence and reproduces failures in the old
+edit-at-head history reader. That reader still requires a fix; incoming product routing
+remains inactive.

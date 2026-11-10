@@ -1,0 +1,155 @@
+{
+  "productSource": "f64e47136a309453ab9d6ea67993ed8e5200b611",
+  "productTestsUnchanged": 10203,
+  "proofCompilation": {
+    "startedAt": "2026-11-10T13:26:08.553340+00:00",
+    "elapsedSeconds": 109.339,
+    "exitCode": 0,
+    "sourceFiles": 4764,
+    "initScriptSha256": "dda59e069405febb641c732e8b4559f136e6b2c64689b0d66fa4f4e112ea35df",
+    "librarySourcesUnchanged": true,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofFailureTest.xml": {
+        "sha256": "43b13ff13bc44d1dad713c9caac051cebd9f4e83238f1ab35ed6f9f7ce5cc914",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofObservationTest.xml": {
+        "sha256": "5945c037a66715e9531e2da8aa0a4cb95cf61653bf467497bc735cf0c6cfaa93",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofStorageDiagnosticsTest.xml": {
+        "sha256": "f8a47de81ff433fb090af34c770cf0856577b7fb06be0f101e7da3f81ca72715",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisReadReceiptBarrierTest.xml": {
+        "sha256": "f956573a80f0366b08077be95fe97c7e51ba7d877591808786d3c0f7441f9588",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.NotificationInputCheckpointTest.xml": {
+        "sha256": "392cf85496e8a3a2a9d75067c8201b6bffae5301377697ab05e6d1d4a7c3bc19",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": {
+        "sha256": "49a9fd11215d6a180811bb16fe5096115a9a214dee38f7bc36898ad83cc53230",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 150606837,
+      "sha256": "60f7fafe65480e989cf26855aec46bd9525ede27625619b8a2f594a56bda0f95"
+    },
+    "sourceManifestSha256": "ad29ef0af969e6333270b2e7d0d5b13a056ff2dfb4daa9785d2b2ceb9731952c",
+    "productBaseCommit": "f64e47136a309453ab9d6ea67993ed8e5200b611",
+    "productTestsUnchanged": 10203,
+    "proofSourceChanges": {
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisEventReadEvidence.kt": "c101126ea75a1d27df6fb82db4e5fdb780bae47e655571abe9c007dcf2bf42d4",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisEventReadsProbe.kt": "12ae57cc13696cd7f82e87728c3f56f1d5a562ce07dd9bf7b46e1110483212cc",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "56734968a99c2dec45dd2fe41d10d4d78f1adfacb8d0b665962e457d1ca5a5e2"
+    }
+  },
+  "serverCompilation": {
+    "startedAt": "2026-11-10T13:22:22.942131+00:00",
+    "elapsedSeconds": 84.146,
+    "sourceFiles": 8738,
+    "sourcesUnchanged": true,
+    "counts": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "18ef0db2a4c5b58bd42b5c9c132937e75da6e6223c0a1d5b31e0ad37e7ce2526",
+    "pythonNewCases": 4,
+    "pythonUnchangedOwnershipCases": 18,
+    "compiledOnly": true
+  },
+  "native": {
+    "startedAt": "2026-11-10T13:28:32.558997+00:00",
+    "elapsedSeconds": 125.992,
+    "bootSeconds": 40.727,
+    "counts": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "memoryMiB": 2560,
+    "cores": 2,
+    "phoneTouched": false,
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true,
+    "groupSourceManifestSha256": "18ef0db2a4c5b58bd42b5c9c132937e75da6e6223c0a1d5b31e0ad37e7ce2526",
+    "mobileSourceManifestSha256": "ad29ef0af969e6333270b2e7d0d5b13a056ff2dfb4daa9785d2b2ceb9731952c",
+    "artifact": {
+      "apkSha256": "60f7fafe65480e989cf26855aec46bd9525ede27625619b8a2f594a56bda0f95",
+      "sdkVersion": "26.10.23-hris.6",
+      "abi": "x86_64",
+      "librarySha256": "ecffbab72fd5dd29d656bc4757ea423bb4bccf0444140af0480684bc32761278"
+    },
+    "encryptedEvents": 4,
+    "native": {
+      "requests": 2,
+      "bootstrapReplay": 1
+    },
+    "matrix": {
+      "requests": 26,
+      "encryptedSend": 4,
+      "sync": 3,
+      "secretStorage": 2,
+      "serverError": 1
+    },
+    "oldHistoryReaderFailureReproduced": true,
+    "serverErrorCauseStillUnresolved": true
+  },
+  "observations": {
+    "companyWindow": {
+      "kind": "Storage",
+      "code": "none",
+      "originals": 0,
+      "anchorIncluded": false
+    },
+    "spaceWindow": {
+      "kind": "Unexpected",
+      "code": "none",
+      "originals": 0,
+      "anchorIncluded": false
+    },
+    "originalAndReplacementHashesPreserved": true,
+    "unknownNestedContentFieldPreserved": true,
+    "missingKeyObservedBeforeExplicitSync": true,
+    "decryptedAfterExplicitSync": true,
+    "redactedTargetOriginalSenderPreserved": true,
+    "logicalRuntimeAndPhysicalOwnerPreserved": true,
+    "foreignAndOldRuntimeReadRejected": true,
+    "runtimeReleased": true,
+    "oldHistoryReaderFixed": false
+  }
+}

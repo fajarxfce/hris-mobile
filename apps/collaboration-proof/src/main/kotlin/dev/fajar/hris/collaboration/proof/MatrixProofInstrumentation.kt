@@ -156,6 +156,8 @@ class MatrixProofInstrumentation : Instrumentation() {
             "local-identity-stage" -> LocalSdkIdentityProbe(directory).stage()
             "local-identity-resume" -> LocalSdkIdentityProbe(directory).resume()
             "provider" -> NativeMatrixProbe(directory).run()
+            "event-reads-stage",
+            "event-reads-space" -> HrisEventReadsProbe(targetContext, directory).run(scenario)
             "space-original-stage",
             "space-original-interrupt",
             "space-original-recover",

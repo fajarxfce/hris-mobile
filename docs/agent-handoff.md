@@ -1,8 +1,33 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 13:29 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 13:38 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
+
+
+## Native event proof accepted; old history failures remain
+
+[Actual SDK6 result](collaboration-runtime-event-native.md) and its checked-in measurement supersede the running
+checkpoint below. Native1/44424 REAPED PASS1/125.992s, four encrypted provider events,
+missing-key then explicit sync, exact original/edit/hash/redaction identity across original
+physical runtime adoption. Emulator stopped, no compiler overlap, phone untouched.
+Mobile proof1/1607 PASS20/109.339s,4764inputs/ad29ef0af969e6333270b2e7d0d5b13a056ff2dfb4daa9785d2b2ceb9731952c.
+Group source1/73206 PASS84.146s/zero JVM tests (compile only),8738inputs/
+18ef0db2a4c5b58bd42b5c9c132937e75da6e6223c0a1d5b31e0ad37e7ce2526,4new+18old Python cases.
+Both gates and native audit passed; all sessions reaped. Current proofAPK150606837B
+SHA60f7fafe65480e989cf26855aec46bd9525ede27625619b8a2f594a56bda0f95, unchanged immutable SDK6.
+Productf64e4713 is committed/pushed; full47121 PASS10203/625.307s, focused7075 PASS77.
+No local job/emulator remains. Hosted classifier42819170095 Apple and runtime42824039795
+continue remotely. Classifier portable1908 is reaped/audited8170; do not rerun it.
+
+Next fix the OLD history reader using acquired anchor evidence: Company returns Storage and
+Space Unexpected when the latest event is a replacement. Do not remove identity checks or
+reinterpret edits as original ACKs. Keep the bounded surrounding window for multiple lost
+callbacks. One Matrix5xx is recorded but route/cause remains unproven; trace it before claiming
+a cause. Native PASS accepts the new capability and reproduces failures, not a fixed reader.
+The provider-only same-device redaction is fixture setup; production has no redaction route.
+All54 PRD groups stay open. No phone/live/SDK/Starter change or native Apple implementation.
+
 
 ## Authorization and boundaries
 
@@ -13,8 +38,8 @@ never other usecases; repositories coordinate their own datasource I/O, and View
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
 One heavy compiler OR emulator. Runtime-event focused7075/full47121 are REAPED and accepted;
-Native1/44424 RUNNING on isolated2560MiB/two-core emulator with precompiled768MiB server
-harness. Mobile3proof files and Group3test/driver files are frozen; no heavy compilation.
+Native1/44424 REAPED PASS; isolated emulator is stopped. Mobile3proof files and
+Group3test/driver files are accepted; the next implementation may now proceed.
 Private runtime-event-native-2026-11-10 in both repos owns source/results/runners.
 Private runtime-event-reads-2026-11-10 owns accepted production gates. Preserve the one-compiler OR one-emulator boundary.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
@@ -46,8 +71,8 @@ Historical production-gate proofAPK150606837B SHAe81c81c14e390914e2d976962f6498c
 Sourcef64e47136a309453ab9d6ea67993ed8e5200b611 is committed/pushed76754(REAPED).
 Hosted42824039795 RUNNING exactf64e,11330=8201portable+3129Apple+16Swift/host;
 refvalidation/runtime-event-reads-20261110 push24994/dispatch70436 REAPED. Configuration
-recorded; baseline classifier42819170095 portable audit passed,Apple remains running. No actual native event equivalence, incoming
-activation, phone/live/SDK/Starter change or native Apple implementation claim.
+recorded; baseline classifier42819170095 portable audit passed,Apple remains running. Actual native equivalence is now verified above; incoming activation, phone/live/SDK/Starter
+changes and native Apple implementation remain outside this increment.
 
 ## Accepted acquired-event classification
 
