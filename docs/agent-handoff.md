@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 03:30 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 03:43 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -62,10 +62,23 @@ work as an explicit domain repository invariant. The owning preparation use case
 schedules after exact committed readback, including a lost write response. Ordinary
 retained reads remain no-op. Never append a separate wake request after writing data.
 Scheduling failure/cancellation must preserve the owned binding and durable marker.
-ACTIVE producer red43490 runs the first new storage regression on unchanged
-production code: appending after the consumer final inventory must retain a new wake.
-Three storage tests are uncommitted; no producer code yet. Sources frozen through
-reap; private `.work/space-binding-producer-wake-2026-11-10` retains the runner.
+Producer red43490 REAPED expected FAIL66.155s: one exact null-wake assertion;
+production equals the accepted foundation. Nine Kotlin files now implement atomic
+binding+wake and bounded post-readback scheduling. Focused62815 REAPED PASS372.923s:
+87 fresh cases (25 domain, 30 SQLite, 30 browser, 2 app DI), zero failures/errors/skips;
+strict current/archive/source/library audit passes with 4,656 inputs.
+
+ACTIVE producer full77826. Sources are UNCOMMITTED and frozen through reap/audit.
+The only delta after focused is one native fixture assertion in HrisWorkerProofContainer:
+new binding must retain a new wake and schedule once; existing binding keeps both
+unchanged. Full builds a new proof APK; previous APK does not cover this source.
+Private `.work/space-binding-producer-wake-2026-11-10` retains runners, red/focused
+acceptance, draft contract and full auditor. After reap use accept-full.py, then Group
+native.py native-1. Group backend source is unchanged and its exact accepted receipt
+source-2 compile can be reused; do not start an unnecessary second compiler. One fresh
+2,560MiB/two-core emulator only after full completion; retain all prior failed images.
+After actual proof, commit/push producer source and evidence. Generic Apple acceptance
+and Starter port remain separate; do not supersede its queued CI with another pending run.
 New SPACE messages/history, notifications/replies, media, backup, calls and meetings
 remain in the long run; all 54 PRD groups are open.
 
@@ -101,8 +114,9 @@ private .work/space-original-receipt-recovery-2026-11-10 retains frozen inputs/a
 
 Mobile76a143b6 and Group401c6d56 are committed/pushed (85826/7722 reaped). Hosted
 42745403043 pins76a143b6c8fc81c6920658797f127dcf4a92e7b5 and is running after
-pusher42739907129 completed; dispatch69781 reaped. Do not redispatch. Expected7,100 portable
-+2,698 Apple,16 Swift checks,unsigned iOS host. Private hosted.json/audit.py retain
+pusher42739907129 completed; dispatch69781 reaped. Portable85032 accepted7,100 cases,
+artifact13732619273 SHA bb615bd38b9c6ce45d51aaf6f3e8b036671278e9f2279c07efd519026f603976.
+Apple still running, expected2,698 cases plus16 Swift checks and unsigned host. Do not redispatch. Private hosted.json/audit.py retain
 the pin and predecessor archive comparison. Next: atomic replica mutation+producer wake.
 Do not claim predecessor CI covers this source. The reusable database contract must
 prove Mobile SQLite/browser/Apple before Starter. Read-only design and133 raw override
@@ -123,7 +137,7 @@ accepted (audit3789,artifact13728979615); Apple2,681 accepted(audit30631,artifac
 errors or skips. Digests/ZIP CRC/previous testcase identities verified. [Hosted evidence](measurements/collaboration-space-pusher-hosted-2026-11-10.json). Do not rerun. Auditor/config are in
 .work/space-pusher-2026-11-10. Its success excludes the current receipt recovery source.
 
-Phone remains87. ADB49516 timed out15s around03:09; no install/UI/data change.
+Phone remains87. ADB6953 timed out15s around03:37; no install/UI/data change.
 Accepted release88 (6a8b4f61,before receiver/pusher/recovery) remains uninstalled;
 one availability question remains pending,do not repeat. Use its accepted install.py
 --install-only after announcing when reachable. Live remains e558a686/schema116.4,
