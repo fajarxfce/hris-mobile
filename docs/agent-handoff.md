@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 00:25 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 00:38 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -78,13 +78,18 @@ Desktop+629 Android host+3,069 browser,zero failures/errors/skips. Audit71793 re
 GitHub digest/ZIP CRC/full prior testcase identity and new cases verified. Artifact
 13720089441,3,385,094 bytes,SHA2ea99a2369cd5ff6a6af84dc10a68d103900f464750d83b3b75385614f34ee7b.
 Private `.work/space-recovery-worker-2026-11-09/hosted-42721024887/portable-audit.json`.
-Apple still running/unaccepted;expected2,628. Run hosted-audit.py apple only after job
-success. Do not redispatch. It does not cover later native proof or current demand.
+Apple accepted2,628 cases,zero failures/errors/skips; unsigned iOS application host built.
+Audit38111 reaped;artifact13722169419/SHA dc61fea6c530fc8e1f540e13adede75baaee2f66ce088da752b97e94f08962e3.
+Total9,568 accepted; [hosted evidence](measurements/collaboration-space-recovery-worker-hosted-2026-11-10.json).
+It does not cover later native proof or current demand. Successor42728686367 on6a8b4f61 is running;
+expected6,975portable+2,644Apple. Audit only after successful jobs; do not redispatch.
 Earlier42707758241 is fully accepted9,292 cases+unsigned Xcode host;do not repeat.
 
 ## Next implementation
 
-Complete and validate current idle integration. Producer wakes after final inventory
+Current idle integration is accepted and pushed as6a8b4f61/7ae66f89. Implement the
+organization push receiver next (strict group packet, matching local account/family/root
+and logical device, durable wake before group scheduling). Producer wakes after final inventory
 reads remain necessary; the legacy QueueText/Edit/Forward scheduler alone does not
 wake organization recovery. Group FCM/product routing and new SPACE enqueue remain
 before rollout. Company-only runtime access deliberately cannot reach adopted group
@@ -102,9 +107,9 @@ key-confirmation candidates are retired;never restore them.
 
 | Checkout | Branch / source | State |
 | --- | --- | --- |
-| Mobile | feat/chat-send-timing-20261107 /78145d78 | Current demand/native evidence accepted;commit and push this increment |
-| Platform original | feat/communications /29a10aca | Cross-handoff pushed;schema116.4 verifier |
-| Platform group | feat/communication-space /450fd51d | Native recovery proof pushed;V140 |
+| Mobile | feat/chat-send-timing-20261107 /6a8b4f61 | Demand/native accepted and pushed;release88 packaged |
+| Platform original | feat/communications /4750d6c4 | Cross-handoff pushed;schema116.4 verifier |
+| Platform group | feat/communication-space /7ae66f89 | Idle/native proof pushed;V140 |
 | Starter | feat/network-inspector-20261107 /ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Inspector | feat/matrix-rust-bindings-20261107 /f8ca3d6 | Public SDK6 integrated |
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | Accepted;preserve gradlew.bat normalization delta |
@@ -126,7 +131,18 @@ APK87 is ALREADY INSTALLED. Product source d8383438; evidence ff1adeca.
 Nondebug devRelease ARM64, same signer, version87,123481487bytes, SHA256
 43373c6c4e6335149138630e7c2c9d6daa05edc1f76729ff01dae1023916ce8b.
 Install33957 is REAPED PASS210.86s, exact installed digest/first-install identity;
-no UI launch, uninstall or clearing. No APK88 exists. Do not reinstall87.
+no UI launch, uninstall or clearing. Do not reinstall87.
+
+Release88 is packaged and accepted for a progress update; phone is STILL87.
+[Artifact/source evidence](measurements/collaboration-release88-accepted-2026-11-10.json).
+Source6a8b4f61,build51256 reaped PASS573.355s,ARM64 nondebug devRelease,123596175bytes,
+SHA142082381ed2eff87d50dbbeb01538229ac7c1491ccf70d46ef0ce73519b5c51.
+Signer/16KiB/backup/Firebase/privateAPI/lint/SDK6 bytes verified;audits14571/27599 reaped.
+No native product88 startup or phone runtime claim: dedicated recovery proof is separate.
+Private `.work/release-phone-2026-11-10-build88` preserves all inputs and accepted APK.
+Phone ADB connect52260 reaped timeout00:37UTC;availability question pending. No installation
+attempt yet. Announce then use `python3 .../install.py --install-only` when reachable.
+Application source and HEAD freeze for packaging has ended; next implementation may proceed.
 
 Actual retained86→87 native proof passes670.401s. Home/room/resume/cold phases each
 provide110 complete quiet seconds with active sync, zero setup/rejected admissions,

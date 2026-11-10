@@ -1,0 +1,158 @@
+{
+  "accepted": true,
+  "sourceCommit": "efa700bbb5a2b7a75af392afb5add8b642eb2ba0",
+  "runId": 42721024887,
+  "totalTests": 9568,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "unsignedIosHostBuilt": true,
+  "portable": {
+    "sourceCommit": "efa700bbb5a2b7a75af392afb5add8b642eb2ba0",
+    "runId": 42721024887,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42721024887",
+    "jobId": 129514722190,
+    "artifactId": 13720089441,
+    "bytes": 3385094,
+    "sha256": "2ea99a2369cd5ff6a6af84dc10a68d103900f464750d83b3b75385614f34ee7b",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "desktopTest": {
+        "tests": 3242,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 346
+      },
+      "testAndroidHostTest": {
+        "tests": 629,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 87
+      },
+      "wasmJsBrowserTest": {
+        "tests": 3069,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 315
+      }
+    },
+    "recoveryPolicyAndApplicationCases": [
+      {
+        "class": "CollaborationSpaceRecoverySelectionTest",
+        "platform": "desktopTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoveryWakeTest",
+        "platform": "desktopTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "FinishCollaborationSpaceRecoveryTest",
+        "platform": "desktopTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoverySelectionTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoveryWakeTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "FinishCollaborationSpaceRecoveryTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "ApplicationCollaborationLifetimeTest",
+        "platform": "desktopTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoveryWorkerTest",
+        "platform": "desktopTest",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "reportManifestSha256": "d035fa1619c77fcdd0c99cc59279c27bbf509c25866e3764a02a72f5098dd602"
+  },
+  "apple": {
+    "sourceCommit": "efa700bbb5a2b7a75af392afb5add8b642eb2ba0",
+    "runId": 42721024887,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42721024887",
+    "jobId": 129514722603,
+    "artifactId": 13722169419,
+    "bytes": 510282,
+    "sha256": "dc61fea6c530fc8e1f540e13adede75baaee2f66ce088da752b97e94f08962e3",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "iosSimulatorArm64Test": {
+        "tests": 2628,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 280
+      }
+    },
+    "recoveryPolicyAndApplicationCases": [
+      {
+        "class": "CollaborationSpaceRecoverySelectionTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoveryWakeTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "FinishCollaborationSpaceRecoveryTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "reportManifestSha256": "77da78b9bc6a91b452a690790bd753bd2fc3361f2682987af18d075d52ee440a"
+  },
+  "scope": "Original group sync/progress/recovery worker and expanded app tests at efa700bb. Native proof and later local-demand source have separate validation.",
+  "limits": "No physical iPhone,Apple native Matrix runtime,APNs/calls or live group rollout claim."
+}

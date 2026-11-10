@@ -1,0 +1,33 @@
+{
+  "at": "2026-11-10T00:37:47.635710+00:00",
+  "accepted": true,
+  "scope": "Validated progress APK: organization original recovery and local idle-demand integration; no live group activation",
+  "sourceCommit": "6a8b4f616ac7d330e2addc3710c65fc09eaa55b6",
+  "apkSha256": "142082381ed2eff87d50dbbeb01538229ac7c1491ccf70d46ef0ce73519b5c51",
+  "versionCode": 88,
+  "bytes": 123596175,
+  "buildElapsedSeconds": 573.355,
+  "nonDebuggable": true,
+  "samePreviouslyInstalledSigner": true,
+  "lintIssues": 0,
+  "publishedSdk": "dev.fajar.hris.matrix:sdk-android:26.10.23-hris.6",
+  "publishedSdkNativeBytesMatch": true,
+  "fullSourceTests": 4457,
+  "freshSourceTests": 4437,
+  "exactReusedProofTests": 20,
+  "nativeProofCases": 2,
+  "nativeProofSdkSame": true,
+  "sourceManifestSha256": "b5c764cf7036116fef584e5b7482841c365c72789debf28e8af609d99e2f3f0f",
+  "artifactAuditSha256": "b0dda375a0c31347e4d126637feddf36fa276b5659397cc89df63e91d8bd10c4",
+  "sdkAuditSha256": "7cdd5d172c67341811a42a5f76c4e9e3a522f615c8c66820de37f324501bd2c7",
+  "nativeAuditSha256": "386d91692acd8293268922bbceb6b8c322f7d38f124412df36121331977c3d42",
+  "phoneInstalled": false,
+  "phoneUiTouched": false,
+  "phonePreflight": "ADB connect timeout; no installation attempted",
+  "limitations": [
+    "Native recovery proof uses its dedicated x86_64 host, not this ARM64 product APK.",
+    "No product88 emulator startup/retained-account upgrade or physical phone runtime claim.",
+    "Earlier hosted worker run pins efa700bb; demand successor CI 42728686367 remains separate.",
+    "Live server remains e558a686/schema116.4; group features remain disabled; all54 PRD acceptance groups remain open."
+  ]
+}
