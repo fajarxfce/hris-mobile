@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 08:16 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 08:23 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -12,10 +12,11 @@ Starter. Usecases own policy/repository orchestration; repositories coordinate r
 ViewModels own screen state. No subagent delegation.
 
 One heavy compiler OR emulator. Staging focused-2/67472 and full-1/14508 are REAPED,
-PASS; no local heavy compiler or emulator is running. Never kill live API/worker JVMs.
+PASS. Mixed delivery focused-1/85670 is the ONLY heavy compiler; eleven source inputs
+are FROZEN. No emulator is running. Never kill live API/worker JVMs.
 Owned emulator uses 2,560 MiB/two cores. Phone 10.77.77.3:5555 is install-only: announce
-each installation; never launch, drive, uninstall or clear it. ADB 52244 timed out after
-15 seconds around 08:04 UTC and is reaped. Existing availability question remains pending.
+each installation; never launch, drive, uninstall or clear it. ADB 7150 timed out after
+15 seconds at 08:22 UTC and is reaped. Existing availability question remains pending.
 Phone 87 unchanged; 88 remains uninstalled.
 Crashlytics IAM is verified. Physical iPhone interaction is waived, not Apple source/runtime
 acceptance. Actual Apple Matrix runtime binding remains unavailable and must be implemented.
@@ -42,7 +43,10 @@ All 4,712 source inputs and library bytes remained fixed. Manifest
 Strict auditors and publisher pass. Proof APK 150,548,965 bytes, SHA
 098cbd530b4486673fafd0d6761ddc6df0c5a85fb08b85281b89717ae62a1561; compiled only.
 Private .work/space-message-staging-2026-11-10 retains canonical inputs/evidence. Do not
-recopy stale Stage files from mixed-original-delivery. Pin hosted validation after commit.
+recopy stale Stage files from mixed-original-delivery. Source507224a3c3e4cb4c87cc3a7ba8b4f8be9535bd54
+is committed/pushed (46472 reaped). Immutable validation/space-message-staging-20261110
+control42781554618 is running; ref14911/dispatch44288 reaped, expected7,742 portable+
+2,934 Apple=10,676,16Swift/unsigned host. Preserve this control.
 
 ## Accepted dependency — new Space-room queues
 
@@ -99,9 +103,12 @@ Preserve mixed 42769825037 and projection 42772661276 controls.
 ## Immediate implementation continuation
 
 Extend the EXISTING DeliverCollaborationSpaceOriginalMessages window to typed Company/Space
-ledgers; no parallel sender and no usecase-to-usecase orchestration. Private unapplied drafts
-and integration notes are in .work/mixed-original-delivery-2026-11-10. They are NOT compiled
-or accepted. The new owning draft uses optional original-company and mandatory Space ledger
+ledgers; no parallel sender and no usecase-to-usecase orchestration. Eleven Kotlin inputs
+are now APPLIED, UNCOMMITTED/FROZEN. Focused-1/85670 is running for226 fresh cases (13 pure,
+26 new owning,73 existing domain/platform +2 DI). Production Desktop compiled; no acceptance
+yet. Runners/integration notes are in .work/mixed-original-delivery-2026-11-10; tracked source
+is canonical after application, so never recopy stale private drafts. The owning implementation
+uses optional original-company and mandatory Space ledger
 phases: read complete pending/journal/native inventory, load exact archive records, validate
 both plans and cross-ledger physical transaction/event ownership BEFORE either CAS. Other
 same-device Staging, including absent SDK originals, must block resume. Retain immutable
