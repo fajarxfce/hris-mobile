@@ -124,6 +124,7 @@ internal class SpaceProviderHistoryFixture(
                 traversal: CollaborationHistoryTraversal,
                 source: CollaborationHistoryReferences,
                 retryRequired: Boolean,
+                limit: Int,
             ): AppResult<Boolean> = error("No pending seek")
         }
     val useCase =

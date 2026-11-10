@@ -100,11 +100,12 @@ fun validCollaborationHistoryReferenceCursor(value: String?) =
  * Later appends cannot extend a pending pass indefinitely. At most one final empty page is needed.
  */
 fun boundedCollaborationIncomingReferences(
-    page: CollaborationHistoryReferences
+    page: CollaborationHistoryReferences,
+    limit: Int = 20,
 ): CollaborationHistoryReferences? {
     val progress = page.progress ?: return null
     val incoming = progress.incoming ?: return null
-    if (!validCollaborationPendingHistoryReferences(page, incoming.pendingAfter, 20)) return null
+    if (!validCollaborationPendingHistoryReferences(page, incoming.pendingAfter, limit)) return null
     val through = incoming.pendingThrough ?: progress.references
     val events = page.events.takeWhile { it.sequence < through }
     val after =

@@ -59,5 +59,6 @@ interface CollaborationSpaceHistoryTraversalRepository {
         traversal: CollaborationHistoryTraversal,
         source: CollaborationHistoryReferences,
         retryRequired: Boolean,
+        limit: Int = 20,
     ): AppResult<Boolean>
 }

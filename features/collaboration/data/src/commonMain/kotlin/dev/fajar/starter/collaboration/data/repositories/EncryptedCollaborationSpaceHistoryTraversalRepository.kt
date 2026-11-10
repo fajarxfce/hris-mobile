@@ -101,12 +101,14 @@ class EncryptedCollaborationSpaceHistoryTraversalRepository(
         traversal: CollaborationHistoryTraversal,
         source: CollaborationHistoryReferences,
         retryRequired: Boolean,
+        limit: Int,
     ) = safeStorageCall {
         storage.advanceIncomingReferences(
             CollaborationHistoryCoordinates.Space(access, traversal.conversationId),
             traversal,
             source,
             retryRequired,
+            limit,
         )
     }
 }

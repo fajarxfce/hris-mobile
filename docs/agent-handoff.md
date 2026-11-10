@@ -1,42 +1,49 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 17:47 UTC. Follow AGENTS.md. Detailed prior evidence is retained
-in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
-This file owns current work; private .work notes supplement it. Do not restart old gates.
+Updated 10 November 2026, 17:55 UTC. Follow AGENTS.md. Earlier checkpoints below are historical;
+this opening section owns current work. All 54 communications PRD groups remain OPEN.
 
+## Current pending-reference product acceptance
 
-## Active pending-reference integration
+18 Kotlin files are ACCEPTED, ready for this product commit/push. Focused83751 and full81989
+are REAPED; strict audits pass. Focused296/367.275s, full10447=
+8428fresh+2019exact controls/654.605s.
+4797 source inputs; full manifest bd0e5efaa051927a26cdfbca979e80f45089b4e17b17ac3f728bfc5421d31048.
+Source/library unchanged. Root/Androidhost/release/lint/Wasm/iOSsource/Chromium/proof20/quality pass.
+[Contract](collaboration-space-incoming-references.md) links public measurements. Private
+space-pending-incoming-2026-11-10 owns exact candidate/base/prior reports and audits.
 
-18Kotlin files are APPLIED/UNCOMMITTED and FROZEN under full1/81989 RUNNING. Private
-space-pending-incoming-2026-11-10 owns exact candidate, base files, accepted-base sources,
-prior XML reports, expected counts, runners and focused/full auditors. Source4797inputs;
-focused expected296, full expected10447. Do not edit source/library/APK during the gate.
-New coverage is8pure policy+12local-usecase+3real-storage scenarios; old acquisition provider
-provenance assertion is strengthened without removing any case. Focused83751 is REAPED/PASS296 in367.275s, strict audit accepted manifest
-bd0e5efaa051927a26cdfbca979e80f45089b4e17b17ac3f728bfc5421d31048.
-Actual JVM/Chromium cases pass; full/native acceptance is NOT claimed yet.
+Batch outcomes now retain physical provider identity. New Read/Complete owners coordinate
+16-reference local passes and exact resolution/seek advancement. Missing keys/redactions/originals
+keep retry demand. Raw advancement checks provider identity; Company limit20/formats preserved.
+No product incoming consumer, callback, independent incoming wake/worker or phone delta yet.
 
-The incoming batch now carries its physical provider identity. New owning local usecases read
-16pending references and resolve/advance exact completed source outcomes. Missing keys,
-unconfirmed redactions and missing originals retain independent retry. The Space/raw pending
-advance limit is explicit; Company remains20 by default. Raw advancement must match physical
-provider as well as generation/position/rows. Same-account credential age does not hide local
-owned progress; current account/directory denial still gates reads and writes. No consumer,
-SDK callback or independent durable incoming worker/wake is enabled by this source.
+Next: review/format/apply private space-pending-reference-native-2026-11-10 in Mobile and Group.
+Mobile3 proof files; Group1 Kotlin fixture+2 Python files. NOT APPLIED/NATIVE ACCEPTED yet.
+Draft protocol checks39 cases pass. Retain all three prior native cases and add a fourth for
+registered Read/Acquire/Complete over13 remaining references, then offline reopen in another PID.
+Expected old event Matrix32/native9; new Matrix45/native10, no extra encrypted sends/sync/secret
+requests. Empty completion adds zero HTTP. Preserve exact2/3original recovery controls.
+Draft runner/auditors must be reviewed; capture product/prior proof reports before building.
+After actual pending acceptance implement independent incoming durable wake/claims/worker and
+parent-owned SDK hints. Startup rescan covers SDK DB commit before callback; overflow must retain
+rescan. Missing-key retry survives end-of-pass without needing a new event. Never use outgoing
+SpaceRecoveryWorker completion to discharge incoming work.
 
-Next reap/audit full1, then commit/push and extend actual native proof with a separate pending
-read/completion case. Preserve all three old native cases and their exact case identities.
-Existing exact encrypted content/frontier/pending hashes and2/3original controls must remain.
-After that implement the independent durable incoming wake/worker and parent-owned SDK hints;
-startup/rescan must cover SDK persistence before app callback. All54PRD groups remain OPEN.
+Hosted42865846045 exact669908384da244d285cb21e93040cffcee3207ef is still RUNNING:
+https://github.com/fajarxfce/hris-mobile/actions/runs/42865846045 . No duplicate dispatch.
+Page-acquisition folder owns its audit/config; expected11621=8399portable+3222Apple,+16Swift/host.
+Apple job90/host30. This source predates current18-file pending product integration.
+Previous e1ab Apple tests3184 pass; its unsigned host was cancelled at the old70-minute limit.
 
-Hosted latest669908384da244d285cb21e93040cffcee3207ef run42865846045 is RUNNING:
-https://github.com/fajarxfce/hris-mobile/actions/runs/42865846045 . Source/ref/dispatch sessions
-18489/79687/74435 are REAPED. Expected11621=8399portable+3222Apple,+16Swift/unsignedhost.
-Apple job90minutes, host step30. Page-acquisition folder owns config/auditor. This hosted
-source predates current18-file pending integration; no duplicate dispatch. Old e1ab test-only
-Apple acceptance remains partial because its host exceeded the former70-minute job limit.
-No local emulator remains; full81989 owns the sole heavy compiler. Release89 uninstalled.
+No emulator active. Release89 accepted/NOT INSTALLED, phone87 last known; ADB78638 timed out
+at17:47 and is REAPED. Existing phone-availability question remains pending; no new question.
+When reachable announce install and use --install-only; never launch/reset/drive the user's UI.
+Original live90163/schema116.4 unchanged; Group117–140 remain undeployed. ImmutableSDK6 unchanged.
+Preserve private original sender/keys and all eight original transactions; never resend Draft66.
+Inspector dirty gradlew.bat and dirtySDK worktree preserved. No reusable Starter delta here.
+
+## Historical checkpoints
 
 ## Current admitted-page native acceptance
 

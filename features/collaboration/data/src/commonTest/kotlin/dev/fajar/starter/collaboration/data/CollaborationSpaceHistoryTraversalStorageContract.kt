@@ -594,6 +594,97 @@ abstract class CollaborationSpaceHistoryTraversalStorageContract {
         assertEquals(page, f.read())
     }
 
+    @Test
+    fun sixteenReferenceSeekSurvivesResolutionReopenAndLaterProviderAppends() = withDatabase { f ->
+        f.stage((1..20).map(f::event))
+        f.stage((21..25).map(f::event), null)
+        val first = f.read(limit = 16)
+        val before = f.raw()
+        assertIs<AppResult.Failed>(
+            f.repository().advanceIncomingReferences(f.access, f.traversal, first, true)
+        )
+        assertEquals(before, f.raw())
+        assertEquals(
+            AppResult.Success(true),
+            f.repository().resolve(f.access, f.traversal, first.progress!!, first.events.take(8)),
+        )
+        assertEquals(
+            AppResult.Success(true),
+            f.repository().advanceIncomingReferences(f.access, f.traversal, first, true, limit = 16),
+        )
+        assertEquals(25, f.progress()!!.incoming!!.pendingThrough)
+        f.local.reopen()
+        f.stage((26..30).map(f::event), null, CollaborationHistoryPageOrigin.Latest, "new-head")
+        val final =
+            boundedCollaborationIncomingReferences(
+                f.read(f.progress()!!.incoming!!.pendingAfter, 16),
+                16,
+            )!!
+        assertEquals((17..25).map(f::event), final.events.map { it.event })
+        assertNull(final.after)
+        assertTrue(final.progress!!.incoming!!.pendingRetryRequired)
+        assertEquals(
+            AppResult.Success(true),
+            f.repository().resolve(f.access, f.traversal, final.progress!!, final.events),
+        )
+        assertEquals(
+            AppResult.Success(true),
+            f.repository()
+                .advanceIncomingReferences(f.access, f.traversal, final, false, limit = 16),
+        )
+        f.local.reopen()
+        assertNull(f.progress()!!.incoming!!.pendingAfter)
+        assertEquals(((9..16) + (26..30)).map(f::event), f.read().events.map { it.event })
+    }
+
+    @Test
+    fun wrongBoundAndCopiedSeekNeverSkipAnUnattemptedReference() = withDatabase { f ->
+        f.stage((1..20).map(f::event))
+        val first = f.read(limit = 16)
+        val before = f.raw()
+        for (limit in listOf(0, 15, 21)) {
+            assertIs<AppResult.Failed>(
+                f.repository().advanceIncomingReferences(f.access, f.traversal, first, false, limit)
+            )
+            assertEquals(before, f.raw())
+        }
+        for (page in
+            listOf(
+                first.copy(after = "unowned-cursor"),
+                first.copy(events = first.events.dropLast(1)),
+                first.copy(
+                    events =
+                        first.events.toMutableList().also {
+                            it[0] = it[0].copy(event = it[0].event.copy(timestamp = 1))
+                        }
+                ),
+            )) {
+            assertIs<AppResult.Failed>(
+                f.repository().advanceIncomingReferences(f.access, f.traversal, page, false, 16)
+            )
+            assertEquals(before, f.raw())
+        }
+    }
+
+    @Test
+    fun unchangedPendingCoordinatesCannotAdvanceForAnotherPhysicalProvider() = withDatabase { f ->
+        f.stage((1..20).map(f::event))
+        val first = f.read(limit = 16)
+        val before = f.raw()
+        for (provider in
+            listOf(
+                f.provider.copy(companyId = historyId(9981)),
+                f.provider.copy(deviceId = historyId(9982)),
+            )) {
+            val source = first.copy(progress = first.progress!!.copy(provider = provider))
+            assertEquals(
+                AppResult.Success(false),
+                f.repository().advanceIncomingReferences(f.access, f.traversal, source, false, 16),
+            )
+            assertEquals(before, f.raw())
+        }
+    }
+
     private fun withDatabase(block: suspend (CollaborationSpaceHistoryTraversalFixture) -> Unit) =
         runTest {
             val f = CollaborationSpaceHistoryTraversalFixture(databaseOwner())

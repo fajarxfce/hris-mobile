@@ -45,7 +45,11 @@ class AcquireCollaborationSpaceEventsTest {
         f.base.observed = f.base.observed.copy(recipientReady = false)
         assertNotEquals(f.physical.nativeSessionId, f.runtime.owner.parent.nativeSessionId)
         f.put(f.source())
-        success(f)
+        val result = success(f)
+        assertEquals(
+            CollaborationHistoryProviderIdentity(f.physical.companyId, f.queue.device.deviceId),
+            result.provider,
+        )
         assertEquals(listOf(f.original()), f.originalWrites.single())
     }
 

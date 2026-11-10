@@ -6,6 +6,7 @@ data class CollaborationSpaceIncomingBatch(
     val conversationId: String,
     val roomId: String,
     val items: List<CollaborationIncomingHistoryResult>,
+    val provider: CollaborationHistoryProviderIdentity,
 ) {
     override fun toString() = "CollaborationSpaceIncomingBatch([redacted])"
 }

@@ -153,6 +153,7 @@ class AcquireCollaborationSpaceEvents(
             }
             val latest = current()
             if (latest is AppResult.Failed) return latest
+            val identity = requireNotNull(physicalIdentity)
             return AppResult.Success(
                 CollaborationSpaceIncomingBatch(
                     runtime,
@@ -161,6 +162,7 @@ class AcquireCollaborationSpaceEvents(
                     plans.map { (id, plan) ->
                         CollaborationIncomingHistoryResult(id, outcome(plan))
                     },
+                    CollaborationHistoryProviderIdentity(identity.first.companyId, identity.second),
                 )
             )
         }

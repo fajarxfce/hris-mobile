@@ -1,5 +1,9 @@
 # Architecture
 
+[Owned incoming references](collaboration-space-incoming-references.md) separate finite local
+pending reads, exact acquisition outcomes and seek advancement. Missing keys retain retry demand;
+the independent incoming worker owns scheduling and completion.
+
 [Admitted Space provider pages](collaboration-space-page-acquisition.md) separate current access,
 finite metadata acquisition and durable progress. Saved exhaustion performs no network I/O;
 independent pending-content recovery remains with its own usecases and worker.

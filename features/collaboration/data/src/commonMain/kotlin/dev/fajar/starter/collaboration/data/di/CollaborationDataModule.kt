@@ -671,6 +671,22 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun readSpaceIncomingReferences(
+        history: CollaborationSpaceHistoryTraversalRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceIncomingReferences(history, directory, sessions, server)
+
+    @Factory
+    fun completeSpaceIncomingReferences(
+        history: CollaborationSpaceHistoryTraversalRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = CompleteCollaborationSpaceIncomingReferences(history, directory, sessions, server)
+
+    @Factory
     fun acquireSpaceProviderHistory(
         bindings: CollaborationSpaceRoomBindingRepository,
         transport: CollaborationSpaceDirectTransportRepository,

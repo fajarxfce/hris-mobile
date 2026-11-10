@@ -197,6 +197,7 @@ internal class CollaborationHistoryTraversalStore(
         traversal: CollaborationHistoryTraversal,
         source: CollaborationHistoryReferences,
         retryRequired: Boolean,
+        limit: Int = 20,
     ): Boolean {
         require(
             traversal.purpose == CollaborationHistoryPurpose.Incoming && source.events.size <= 20
@@ -205,7 +206,7 @@ internal class CollaborationHistoryTraversalStore(
         val expected = requireNotNull(captured.progress)
         val position = requireNotNull(expected.incoming)
         val through = position.pendingThrough ?: expected.references
-        require(validCollaborationPendingHistoryReferences(captured, position.pendingAfter, 20))
+        require(validCollaborationPendingHistoryReferences(captured, position.pendingAfter, limit))
         require(captured.events.all { it.sequence < through })
         val scope = coordinates.scope
         val partition = coordinates.traversalPartition(traversal)
@@ -214,6 +215,7 @@ internal class CollaborationHistoryTraversalStore(
             val current = codec.progress(raw)
             if (
                 current.generation != expected.generation ||
+                    current.provider != expected.provider ||
                     current.revision < expected.revision ||
                     current.references < expected.references ||
                     current.incoming != position
