@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 05:53 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 05:52 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -90,7 +90,7 @@ validation/space-local-messages-20261110 pins that exact commit. Control42763070
 is RUNNING; dispatch35930 is reaped. Expected7,416 portable+2,779 Apple=10,195,
 16Swift and unsigned host; no hosted acceptance yet. Private hosted.json/audit.py
 retain exact configuration. Keep producer42753380451 and command42758828055 intact;
-both Apple jobs are still building the unsigned host. Starter command patch remains
+producer Apple is now accepted below; command Apple is still building the unsigned host. Starter command patch remains
 unapplied pending command Apple proof.
 
 The next receipt increment is UNCOMMITTED source under features/collaboration.
@@ -148,10 +148,15 @@ Control42753380451 pinsd89e6b5d,dispatch14839 reaped. Portable29517 is REAPED PA
 7,292 tests (3,423 desktop,635 host,3,234 browser),zero failures/errors/skips.
 Artifact13738205902,3438539bytes,SHA9cd0d5734a559bd82935284075c616a3bb7fcd449a8343cd2555ba9569d44b8e;
 manifest SHAb14a64db0d0bafbd04fc8c6b753ef61092a7f030ef01edbbd3856f0c7c313661.
-Exact source,digest/CRC and predecessor case identities verified. Apple is still running;
-expected2,717+16Swift/host,total10,009. [Partial hosted evidence](measurements/collaboration-space-binding-producer-hosted-2026-11-10.json).
-Command42758828055 also remains running; its portable audit can use this accepted
-producer baseline when complete. Do not redispatch/cancel either job.
+Exact source,digest/CRC and predecessor case identities verified. Apple71981 is
+REAPED PASS2,717/288 suites,zero failures/errors/skips; artifact13739082344,
+523264bytes,SHAeed9a86f5953ad2de259e9e594bfe6c722831e9bb4c84f24eb130cba72327093;
+manifest SHA41ad34913de10f42b4d5a6dafbd1c8ad570a31daa5562ee16598719afb95e5be.
+Control42753380451 completed successfully:10,009 total tests,16Swift checks and
+unsigned iOS host. Source,digest/CRC and all predecessor identities verified.
+[Complete hosted evidence](measurements/collaboration-space-binding-producer-hosted-2026-11-10.json).
+Command42758828055 remains running; its Apple auditor now has this accepted producer
+baseline. Do not redispatch/cancel the command or newer message job.
 
 Phone remains87. ADB62446 timed out after15s around05:21 UTC and is reaped. Availability question is already pending; do not ask it again.
 Accepted88 is retained but not installed; use the install-only runbook if reachable,
