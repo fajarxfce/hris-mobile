@@ -1,9 +1,43 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 15:56 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 16:20 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
+
+## Current continuation — Space provider metadata accepted
+
+This commit accepts10Kotlin files for typed Space provider pages through the installed original
+runtime. [Contract](collaboration-space-provider-history.md). Full1/97602 REAPED PASS10327=
+8308fresh+2019exact accepted reused/933.751s, zero failures/errors/skips. Strict source/library/
+prior-case audit passes;4778inputs,manifest ea4845feb3065475e1f80f7ec292e7823f3c5ff4ee4400fb4d929c755993db14.
+Six new Android parent/child cases plus one availability case on Desktop/Androidhost/Chromium;
+existing finite reader/adoption/lifetime/DI cases remain. Required root/Android/release/lint/Wasm/
+iOS application source/proof/format/architecture/detekt gates pass. No local heavy job remains.
+Current proofAPK150633118B SHA73106a2f39a4aabdf5e0041e1842f38dbfbd0844eafbdf5f5206129f449e9e49,
+immutable SDK6. This newer wrapper has NOT yet had actual SDK execution; prior native batch
+acceptance remains scoped to487e042c/Group603cf587. No product incoming consumer is enabled.
+
+Next15Kotlin-file Space traversal storage candidate is prepared/formatted privately in
+space-history-progress-2026-11-10, NOT APPLIED OR COMPILED. Its base-sources.json and candidate/
+are authoritative; next.txt explains reproducible sequencing and warns that prepare.py resets
+its file list. It preserves Company schemas1/2 and exact frames, adds Space schema3 with physical
+provider identity, shares a raw transaction component without repository-to-repository calls,
+and preserves malformed-record observation recovery.13new real-storage cases target Desktop,
+Chromium and Apple; fixed old HMAC/AEAD frames, login/process reopen, page/CAS/response loss,
+pending-pass bounds, namespace isolation and concurrent writers. Apply only after this commit
+is pushed and current source hashes match the saved base. Then focused/full gates, actual native
+provider/storage proof, admitted page acquisition and independent incoming worker. All54 PRD
+acceptance groups remain OPEN. Keep current content admission and provider/pending/outgoing work
+separate. No generic Starter delta or native Apple Matrix implementation.
+
+Hosted incoming producte1ab run42849335674 remains RUNNING (last checked16:17): portable
+application binding/platform compilation, Apple setup adapter. Auditor's copied prior-delta
+arithmetic was corrected from21/8 to the actual94/47 new policy/acquisition cases BEFORE auditing;
+expected totals remain11500=8316portable+3184Apple plus16Swift/unsignedhost. No acceptance claimed.
+Original live90163c32/API+worker schema116.4 unchanged. Release89 remains accepted/NOT INSTALLED;
+ADB52030 timed out15s(REAPED) at16:14. Phone87 last known. Existing availability question stays
+pending; INSTALL-ONLY, announce installation, no launch/reset/drive UI.
 
 ## Current history repair — full and actual SDK accepted
 

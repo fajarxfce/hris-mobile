@@ -65,7 +65,16 @@ class CollaborationBindingsTest {
                     CollaborationSpaceRuntimeRepository,
                     CollaborationSpaceSyncRepository,
                     CollaborationEventRepository,
-                    CollaborationSpaceEventRepository {
+                    CollaborationSpaceEventRepository,
+                    CollaborationSpaceProviderHistoryRepository {
+                    override suspend fun readPage(
+                        runtime: CollaborationSpaceRuntimeReady,
+                        matrixRoomId: String,
+                        position: String?,
+                        untilPosition: String?,
+                    ): AppResult<CollaborationSpaceProviderHistoryPage> =
+                        error("No implicit Space provider page read")
+
                     override suspend fun read(
                         owner: CollaborationOwner,
                         deviceId: String,
@@ -301,6 +310,10 @@ class CollaborationBindingsTest {
                 assertSame<Any>(runtime, container.koin.get<CollaborationSpaceSyncRepository>())
                 assertSame<Any>(runtime, container.koin.get<CollaborationEventRepository>())
                 assertSame<Any>(runtime, container.koin.get<CollaborationSpaceEventRepository>())
+                assertSame<Any>(
+                    runtime,
+                    container.koin.get<CollaborationSpaceProviderHistoryRepository>(),
+                )
                 assertSame(
                     container.koin.get<SynchronizeCollaborationSpaceDevice>(),
                     container.koin.get<SynchronizeCollaborationSpaceDevice>(),

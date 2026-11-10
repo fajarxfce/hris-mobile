@@ -16,6 +16,7 @@ class UnavailableCollaborationRuntimeRepository :
     CollaborationSpaceOriginalHistoryRepository,
     CollaborationEventRepository,
     CollaborationSpaceEventRepository,
+    CollaborationSpaceProviderHistoryRepository,
     CollaborationLocalDeviceIdentityRepository,
     CollaborationSdkInventoryRepository,
     CollaborationSdkPossessionRepository {
@@ -50,6 +51,16 @@ class UnavailableCollaborationRuntimeRepository :
         runtime: CollaborationSpaceRuntimeReady,
         matrixRoomId: String,
     ): AppResult<CollaborationSpaceOriginalHistorySnapshot> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
+    override suspend fun readPage(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+        position: String?,
+        untilPosition: String?,
+    ): AppResult<CollaborationSpaceProviderHistoryPage> {
         currentCoroutineContext().ensureActive()
         return unavailable()
     }

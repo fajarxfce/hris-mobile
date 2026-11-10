@@ -50,7 +50,8 @@ class AndroidCollaborationRuntimeRepository(
     CollaborationSpacePusherRepository,
     CollaborationSpaceOriginalHistoryRepository,
     CollaborationEventRepository,
-    CollaborationSpaceEventRepository {
+    CollaborationSpaceEventRepository,
+    CollaborationSpaceProviderHistoryRepository {
     override val supportsDeviceActivation = true
 
     private val readiness =
@@ -466,6 +467,32 @@ class AndroidCollaborationRuntimeRepository(
             is AppResult.Failed -> read
             is AppResult.Success ->
                 AppResult.Success(CollaborationSpaceEventSnapshot(runtime, read.value))
+        }
+    }
+
+    override suspend fun readPage(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+        position: String?,
+        untilPosition: String?,
+    ): AppResult<CollaborationSpaceProviderHistoryPage> {
+        currentCoroutineContext().ensureActive()
+        val lease =
+            registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
+                ?: return handoverPending()
+        val read = lease.readProviderHistory(matrixRoomId, position, untilPosition)
+        currentCoroutineContext().ensureActive()
+        lease.credentialFailures.value?.let {
+            return AppResult.Failed(collaborationSdkAcquisitionFailure(read, it))
+        }
+        if (registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId) !== lease)
+            return AppResult.Failed(
+                collaborationSdkAcquisitionFailure(read, handoverPending().failure)
+            )
+        return when (read) {
+            is AppResult.Failed -> read
+            is AppResult.Success ->
+                AppResult.Success(CollaborationSpaceProviderHistoryPage(runtime, read.value))
         }
     }
 

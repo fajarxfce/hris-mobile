@@ -28,6 +28,8 @@ class AndroidSpaceRuntimeAdoptionTest {
             assertEquals(assertIs<AppResult.Failed>(originals), assertIs<AppResult.Failed>(staging))
             assertEquals(originals, f.repo.findHead(runtime, "!room:test"))
             assertEquals(originals, f.repo.read(runtime, "!room:test", "\$event"))
+            assertEquals(originals, f.repo.readPage(runtime, "!room:test", null))
+            assertEquals(originals, f.repo.readPage(runtime, "!room:test", "next", "until"))
             assertIs<AppResult.Failed>(
                 f.repo.read(setupOwner, SETUP_DEVICE, "!room:test", "\$event")
             )

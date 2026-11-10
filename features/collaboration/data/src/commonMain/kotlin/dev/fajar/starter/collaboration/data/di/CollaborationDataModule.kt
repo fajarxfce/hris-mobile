@@ -504,6 +504,13 @@ class CollaborationDataModule {
         runtime as? CollaborationSpaceEventRepository ?: UnavailableCollaborationRuntimeRepository()
 
     @Single
+    fun spaceProviderHistory(
+        runtime: CollaborationRuntimeRepository
+    ): CollaborationSpaceProviderHistoryRepository =
+        runtime as? CollaborationSpaceProviderHistoryRepository
+            ?: UnavailableCollaborationRuntimeRepository()
+
+    @Single
     fun activateSpacePusher(
         commands: CollaborationSpaceSetupCommandRepository,
         devices: CollaborationSpaceDeviceRepository,

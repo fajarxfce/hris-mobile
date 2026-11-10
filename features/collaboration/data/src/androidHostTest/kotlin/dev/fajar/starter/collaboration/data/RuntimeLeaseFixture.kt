@@ -13,6 +13,9 @@ import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.securestorage.MemoryCredentialStore
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.MockRequestHandleScope
+import io.ktor.client.request.HttpRequestData
+import io.ktor.client.request.HttpResponseData
 import java.util.Collections
 import kotlin.io.encoding.Base64
 import kotlin.test.*
@@ -23,6 +26,8 @@ import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.Encryption
 import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.Session
+import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.SyncResponseRoomsV2
 import org.matrix.rustcomponents.sdk.SyncResponseV2
 import org.matrix.rustcomponents.sdk.SyncSettingsV2
@@ -95,9 +100,35 @@ internal class RuntimeLeaseFixture(
     var syncRequests = 0
     val syncSettings = mutableListOf<SyncSettingsV2>()
     var signingKey: String? = Base64.encode(ByteArray(32) { it.toByte() })
-    private val http = HttpClient(MockEngine { error("Publication never sends HTTP requests") })
+    var providerRequest: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData = {
+        error("Publication never sends HTTP requests")
+    }
+    var providerRequests = 0
+    var sessionReads = 0
+    var currentSession =
+        Session(
+            initial.accessToken,
+            initial.refreshToken,
+            initial.matrixUserId,
+            initial.matrixDeviceId,
+            initial.homeserverUrl,
+            null,
+            SlidingSyncVersion.NONE,
+        )
+    private val http =
+        HttpClient(
+            MockEngine {
+                providerRequests++
+                providerRequest(this, it)
+            }
+        )
     private val sdk =
         object : Client(NoHandle) {
+            override fun session(): Session {
+                sessionReads++
+                return currentSession.copy()
+            }
+
             override fun getRoom(roomId: String): Room? {
                 calls += "room.lookup"
                 return readRoom(roomId)

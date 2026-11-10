@@ -49,12 +49,28 @@ class CollaborationEventAvailabilityTest {
     }
 
     @Test
+    fun absentNativeBindingCannotClaimAnExhaustedSpacePage() = runTest {
+        val history: CollaborationSpaceProviderHistoryRepository = repository
+        assertEquals(
+            FailureKind.Unavailable,
+            assertIs<AppResult.Failed>(history.readPage(runtime, "!room:test", null)).failure.kind,
+        )
+        assertEquals(
+            FailureKind.Unavailable,
+            assertIs<AppResult.Failed>(history.readPage(runtime, "!room:test", "next", "until"))
+                .failure
+                .kind,
+        )
+    }
+
+    @Test
     fun unavailableOperationsPreserveCallerCancellation() = runTest {
         val operations: List<suspend () -> AppResult<*>> =
             listOf(
                 { repository.read(owner, ID, "!room:test", "\$event") },
                 { repository.read(runtime, "!room:test", "\$event") },
                 { repository.findHead(runtime, "!room:test") },
+                { repository.readPage(runtime, "!room:test", null) },
             )
         for (operation in operations) {
             val caller = launch {
