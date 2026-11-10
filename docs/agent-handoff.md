@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 07:29 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 07:31 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -11,8 +11,8 @@ updates. All 54 acceptance groups remain open. Mobile proves reusable foundation
 Starter. Usecases own policy/repository orchestration; repositories coordinate raw I/O;
 ViewModels own screen state. No subagent delegation.
 
-One heavy compiler OR emulator. The capability full process completed; no compiler or
-emulator remains. Never kill live API/worker JVMs. Owned emulator uses 2,560 MiB/two cores.
+One heavy compiler OR emulator. The capability full process completed. New-room focused session 48502 is the only
+heavy compiler; its five source inputs are FROZEN. No emulator is running. Never kill live API/worker JVMs. Owned emulator uses 2,560 MiB/two cores.
 Phone 10.77.77.3:5555 is install-only: announce each installation; never launch, drive,
 uninstall or clear it. ADB 14496 timed out after 15 seconds at 07:28 UTC and was reaped.
 Existing availability question remains pending. Phone 87 unchanged; 88 remains uninstalled.
@@ -41,18 +41,19 @@ b4ebcd64c7d925e26f633b29ffe80486a35fba1e74ed9a17b2ab8a0cad92dd5a,
 [evidence](measurements/collaboration-space-message-queue-capability-2026-11-10.json).
 Private `.work/space-message-queue-capability-2026-11-10` retains the exact runners/reports.
 
-After this source commit/push, pin an immutable validation ref and dispatch the hosted
-control: expected 7,648 portable + 2,887 Apple = 10,535, 16 Swift checks and unsigned host.
+Source 31a0ed9ac4a9ab78ea5eec6edcc48643ec0b9934 is committed/pushed (32638 reaped).
+Immutable validation/space-message-queue-capability-20261110 and hosted 42775719615 are
+running; ref 34796/dispatch 87677 reaped. Expected 7,648 portable + 2,887 Apple = 10,535,
+16 Swift checks and unsigned host.
 Preserve mixed 42769825037 and projection 42772661276 controls.
 
 ## Immediate implementation continuation
 
-Five unapplied drafts in `.work/space-new-room-queue-2026-11-10` add new SPACE-origin room
+Five APPLIED, uncommitted inputs in `.work/space-new-room-queue-2026-11-10` add new SPACE-origin room
 provenance, typed matching/local reading, and 13 regression cases. They preserve physical
 SDK identity without fabricating company conversation coordinates. SPACE rooms query only
-the Space command namespace; LEGACY rooms retain exact two-ledger matching. The focused
-runner is prepared for 96 fresh cases; no acceptance yet. Apply only after the capability
-source is committed/pushed. Do not expose a new product route before native proof.
+the Space command namespace; LEGACY rooms retain exact two-ledger matching. Focused session 48502 is running for 96 fresh cases,
+as the only local heavy compiler. All five source inputs are FROZEN; no acceptance yet. Do not expose a new product route before native proof.
 
 Then implement StageCollaborationSpaceText and extend the existing owning delivery window
 to typed Company/Space ledgers. Reuse pure policies; never call another usecase or create a
