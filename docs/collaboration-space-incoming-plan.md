@@ -4,7 +4,12 @@ STORAGE/LOCAL OBSERVATION ACCEPTED: focused112 and full10060 pass; strict audito
 publisher pass. [Storage contract](collaboration-space-history-storage.md) owns that completed
 increment. Native incoming collection and product routing are not implemented. Replacement storage is also accepted:96verified focused cases (94storage +2DI after a test-only
 type correction) and full10094 pass; [edit contract](collaboration-space-history-edits.md).
-Next implement and prove explicit raw-event acquisition before incoming progress. See current handoff for exact commands, boundaries and remaining work.
+[Installed-runtime event reads](collaboration-runtime-event-reads.md) are accepted on product
+f64e4713. [Actual SDK6 proof](collaboration-runtime-event-native.md) verifies encrypted original,
+replacement, missing-key and redacted-target identity across adoption. It also reproduces old
+Company/Space history failures at an edit head and one unresolved server5xx. Fix these with
+explicit acquired-anchor provenance before implementing incoming progress. Current handoff
+owns the exact running diagnostics and gates.
 Native1/45886 is REAPED PASS269.304s/four cases;
 strict acceptance and publisher passed. Preserve that exact evidence and original stores. Core8c76f92c/full10010
 is accepted; mobile proof2/34855 PASS20 and Group source1/72318 PASS3+28Python are reaped.
@@ -57,8 +62,7 @@ The immutable26.10.23-hris.6 AAR was inspected directly: Room.loadOrFetchRawEven
 RawTimelineEvent(json,encryption) exist, with NOT_DECRYPTED/DECRYPTED/UNABLE_TO_DECRYPT.
 This supplies a better raw I/O boundary for explicit event acquisition, preserving custom HRIS
 fields and SDK decryption provenance without a UI timeline. Availability is verified against
-AAR SHAa4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3; this review has
-not executed a new native raw-event case. Historical November6 raw consumer patches target an
+AAR SHAa4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3; the later native proof above now executes those capabilities. Historical November6 raw consumer patches target an
 older isolated candidate and must not be applied blindly or interpreted as current acceptance.
 
 Next review exact original/replacement/redaction/unsupported/unavailable classification and
@@ -69,9 +73,8 @@ not imply verified sender trust. Control/redaction metadata needs separate expli
 Retain both original and edit facts before advancing any traversal; local reading stays separate.
 Private space-original-acquisition-2026-11-10 contains the read-only SDK evidence. The internal
 [raw-event adapter](collaboration-raw-event-source.md) has passed focused26/full10109 validation.
-It has no runtime binding or incoming activation yet. Next register finite reads under the
-existing native parent and map exact original/replacement/redaction/unresolved facts before
-owning usecase admission and persistence. A redaction actor is never the original sender;
+The installed-runtime binding and acquired-event classification are now accepted. Owning
+usecase admission, persistence and incoming activation remain next. A redaction actor is never the original sender;
 read its target and confirm a tombstone before changing retained history.
 
 
@@ -79,5 +82,6 @@ The next actual SDK regression also covers the current Company/Space acknowledge
 its provider-head anchor may be an edit aggregated out of the presentation timeline. Preserve
 explicit acquired-anchor provenance separately from original send evidence when fixing that
 contract. The raw I/O primitive and [common acquired-event classification](collaboration-raw-event-classification.md)
-are locally accepted; native integration/equivalence remain next. Current handoff records exact status. Finite reads must remain owned by
+and native integration/equivalence are accepted. The old history reader still needs the
+reproduced edit-head fix. Current handoff records exact status. Finite reads must remain owned by
 the same native parent and registry across cancellation, closure and late callbacks.

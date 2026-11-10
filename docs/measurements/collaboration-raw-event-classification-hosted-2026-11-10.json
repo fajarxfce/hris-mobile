@@ -1,0 +1,66 @@
+{
+  "runId": 42819170095,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42819170095",
+  "expectedTotal": 11295,
+  "sourceCommit": "5c276a2fcc472260245ea56ba6db7b50c537bd59",
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "nativeMatrixRuntimeClaim": false,
+  "portable": {
+    "sourceCommit": "5c276a2fcc472260245ea56ba6db7b50c537bd59",
+    "runId": 42819170095,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42819170095",
+    "jobId": 129839951789,
+    "artifactId": 13767609123,
+    "bytes": 3549549,
+    "sha256": "2cd312775e66b51e0854f6a2238d568a14da7d2b0e30d2b13cd4cfb7af57246a",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "desktopTest": {
+        "tests": 3841,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 398
+      },
+      "testAndroidHostTest": {
+        "tests": 687,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 93
+      },
+      "wasmJsBrowserTest": {
+        "tests": 3642,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 359
+      }
+    },
+    "reportManifestSha256": "90230399fd5bb0221a74cd5e8cdeb9e08845eac418df7e3c4e8998a46c58ba6f"
+  },
+  "apple": {
+    "sourceCommit": "5c276a2fcc472260245ea56ba6db7b50c537bd59",
+    "runId": 42819170095,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42819170095",
+    "jobId": 129839952261,
+    "artifactId": 13769184632,
+    "bytes": 574811,
+    "sha256": "9a768ddc4624c227b43ef6899f791a536a992507371ef3cd1c2ce4e68b88173b",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "iosSimulatorArm64Test": {
+        "tests": 3125,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 312
+      }
+    },
+    "reportManifestSha256": "946d750b96b63b091b7359e64fc8eb01939327291f51373542204f94b0006b9d"
+  },
+  "swiftPushEnvelopeCases": 16,
+  "unsignedIosHostBuilt": true,
+  "priorCaseIdentitiesPreserved": true
+}

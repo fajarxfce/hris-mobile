@@ -1,9 +1,37 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 13:38 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 13:58 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
+
+## Current history repair validation
+
+Mobile14Kotlin files are UNCOMMITTED/frozen in focused1/53935 RUNNING, expected176cases.
+Private history-anchor-2026-11-10 owns source/runners/report baselines. The runtime reads
+an exact raw anchor only when the presentation window folds it away, preserving all originals;
+physical owner/membership checks stay in domain policy and original ACKs remain separate.
+SDK decoding now uses the API failure boundary; late Company publication rechecks the same
+lease. Six new common policy cases, four host parent cases, and Company/Space owning cases
+cover complete retention, false ACK rejection, cancellation and denial. Actual native proof
+now requires successful history and correct original/edit hashes; not yet built/run.
+One Mobile compiler3GiB, no emulator. No phone/live/SDK/Starter change.
+
+Group trace9d072639 is pushed16439(REAPED); native-trace2/75697 PASS136.487s confirmed one
+context503, collaboration_provider_invalid_response. Group redaction mapping initially
+reproduced5failed of9cases in red1/60288(45.413s). Green1/18068 REAPED PASS41/178.546s.
+Review added preservation of own redaction transactions and a tenth case; green2 not run yet.
+Group source-fixed3/29615 REAPED PASS81.396s (compile only), now superseded by that small
+mapper/test review. No Group compile may overlap Mobile53935; next run green2, then Mobile
+full platform gate and new isolated native regression on both final sources.
+
+Hosted classifier42819170095 COMPLETE11295=8170portable+3125Apple,16Swift/unsignedhost.
+Apple63577 REAPED/audited artifact13769184632,574811B,
+SHA9a768ddc4624c227b43ef6899f791a536a992507371ef3cd1c2ce4e68b88173b,
+manifest946d750b96b63b091b7359e64fc8eb01939327291f51373542204f94b0006b9d.
+Measurement is published with this checkpoint. Runtime42824039795 portable49173 REAPED/
+audited8201; Apple still running. Preserve predecessor case identities, no duplicate dispatch.
+Native proof5b15c2fe push17410 and Group49a60dea push1442 are REAPED.
 
 ## Native event proof accepted; old history failures remain
 
