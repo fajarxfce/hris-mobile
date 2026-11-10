@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 09:41 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 09:58 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -14,7 +14,7 @@ ViewModels own screen state. No subagent delegation.
 One heavy compiler OR emulator. Mixed delivery full-1/27233 completed and is REAPED,
 PASS. Mobile proof2/37351 also reaped PASS20; Group source1 completed PASS3. Native1/92077
 failed and is reaped/stopped; repaired proof3/35974 and native2/73904 are REAPED PASS.
-Pending inventory full1/59690 is REAPED PASS; no compiler/emulator. Focused1/51383 is REAPED PASS116. Focused1/85670,2/31280,3/3636 are reaped. Never kill live API/worker JVMs.
+Pending inventory full1/59690 is REAPED PASS. Mixed-demand full1/2861 is the only active compiler; no emulator. Focused1/51383 is REAPED PASS116. Focused1/85670,2/31280,3/3636 are reaped. Never kill live API/worker JVMs.
 Owned emulator uses 2,560 MiB/two cores. Phone 10.77.77.3:5555 is install-only: announce
 each installation; never launch, drive, uninstall or clear it. ADB 7150 timed out after
 15 seconds at 08:22 UTC and is reaped. Existing availability question remains pending.
@@ -54,9 +54,18 @@ schema1 and existing wake-generation completion must remain compatible. No useca
 call another usecase; application worker owns orchestration. Pinned validation/space-pending-inventory-20261110 control42792315555 is RUNNING onb03f591d;
 ref83367/dispatch78364 are reaped. Expected7866portable+2996Apple=10862,16Swift/unsignedhost,
 baseline mixed control42785697360. Private hosted config is complete; preserve this run.
-No product source WIP/heavy process. An unapplied, untested mixed idle-receipt policy draft
-is in .work/mixed-recovery-demand-2026-11-10; its README and sibling next-demand-notes describe
-required owning flow/tests. Do not mistake the draft for accepted worker integration.
+Nine Kotlin inputs now extend mixed/new-room recovery demand; UNACCEPTED source WIP.
+Invocation-owned optional Company and mandatory Space ledger reads capture aliases before
+suspension, recheck both live ledgers, reject shared logical/physical/event identities and
+require final empty original SDK/exact binding/current runtime before idle. Valid SPACE room
+claims no longer require Company originals. No transport/write/staging/worker schema change.
+Original16 demand cases retained; new30 mixed demand+2 selection cases, DI resolution updated.
+Focused1/77984 is REAPED PASS162/337.721s,zero failures/errors/skips,Desktop/actualChromium
+and2DI; iOS source,format,architecture/detekt pass. Strict focused audit passes;4726source
+manifest12b6aedbe631cb22bfe623b5b708057291ba0169922932af56e6930e418a4047.
+Full1/2861 is RUNNING,one3GiB compiler. All9 inputs and dependencies FROZEN until acceptance. Private
+.work/mixed-recovery-demand-2026-11-10 contains runner/auditors/applied-files.txt and a separate
+UNAPPLIED worker-next.md. Source base b03f591d remains the accepted pending inventory.
 
 ## Current accepted increment — mixed original delivery
 
@@ -82,11 +91,14 @@ Strict auditors/publisher pass. Proof APK150,572,753 bytes, SHA
 d7c02e4b624ca8d41a007f04d09eeeef9b06ebf1f3e181a10a7438fecd02e83f; compiled only.
 Private .work/mixed-original-delivery-2026-11-10 retains canonical frozen inputs/evidence.
 Source3f5716b61bdcca043a3978e8643591511c117ad1 is committed/pushed86917 (reaped).
-Pinned validation/mixed-original-delivery-20261110 control42785697360 is running;
+Pinned validation/mixed-original-delivery-20261110 control42785697360 is COMPLETE;
 ref50606/dispatch71585 reaped. Portable37305 is REAPED PASS7,830, artifact13751367514,
 SHA6e28af3697cc54f0006384c29216656c6605c11121ac16d5ca4977850251b99b,
 report manifest a17e0e04c7ff6d56526fbe2389df4ae52bac6667c82313070eefa9d157c3835f.
-Apple2,978 pending, total10,808+16Swift/host. [Prepared hosted evidence](measurements/collaboration-mixed-original-delivery-hosted-2026-11-10.json).
+Apple90383 is REAPED PASS2,978 (305suites),artifact13752028936,
+SHA2040fed130a5ac4d725f33f87e8798f53888d6e0ba2fb82d0ffbfe729b219798,
+manifest115d9ca3b1be43bb2bfafce41e912d821753fb176b55c1e13f0d8290d2c5d900.
+Control COMPLETE10,808+16Swift/unsignedhost; source/digest/CRC/prior-case identities checked. [Prepared hosted evidence](measurements/collaboration-mixed-original-delivery-hosted-2026-11-10.json).
 Native acceptance remains separate.
 
 ## Accepted dependency — owning Space staging
