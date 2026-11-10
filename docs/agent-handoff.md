@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 05:35 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 05:53 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -84,14 +84,30 @@ proof APK/unit and quality pass. All90 AppFlow cases pass unchanged. New proof A
 150484836bytes SHAfe92a71243d166021bf044e50e01f5752fc3d3d6e923e817dbf73328695bdc1b;
 compiled only,no new native execution or phone installation. No local heavy job remains.
 [Local evidence](measurements/collaboration-space-local-messages-2026-11-10.json).
-Next commit/push this exact accepted source,create immutable validation branch
-validation/space-local-messages-20261110 and dispatch its control workflow. Private
-hosted-pending.json/audit.py expect7,416 portable+2,779 Apple=10,195 plus16Swift/host;
-no new hosted message run dispatched yet. Keep existing producer/command jobs intact.
-Then implement SPACE-specific receipt journal and complete mixed-ledger matching;
-private next-integration.md records reviewed receipt/key-loss and recovery-inventory
-boundaries. Receipt source is not written yet. Starter command patch waits for its
-pending Mobile Apple proof and remains unapplied.
+Accepted source b9db0bd98fa935ebe04d2db90d59871456b39305 is committed and pushed;
+source push7312 and validation-ref push96192 are reaped. Fixed validation branch
+validation/space-local-messages-20261110 pins that exact commit. Control42763070460
+is RUNNING; dispatch35930 is reaped. Expected7,416 portable+2,779 Apple=10,195,
+16Swift and unsigned host; no hosted acceptance yet. Private hosted.json/audit.py
+retain exact configuration. Keep producer42753380451 and command42758828055 intact;
+both Apple jobs are still building the unsigned host. Starter command patch remains
+unapplied pending command Apple proof.
+
+The next receipt increment is UNCOMMITTED source under features/collaboration.
+Twelve new Kotlin files plus the existing app DI assertion implement explicit SPACE
+receipt contracts/policy, encrypted namespace/AAD, shared protected-key ownership,
+atomic append+wake and exact replay no-op. Ten domain cases and25 shared real-storage
+cases cover immutable originals/aliases, response loss, cancellation, owner replacement,
+capacity, tampering, retirement, old/new namespace separation and both key-loss guards.
+SQLite,Chromium and Apple wrappers share the storage contract. No native/worker/UI
+routing or backend change is enabled. Receipt focused-1/session37385 is RUNNING and
+is the only local heavy compiler; freeze Mobile source until reaped. Expected62
+fresh cases plus Apple source/quality; no receipt acceptance is claimed yet. Private
+.work/space-message-receipts-2026-11-10/check.py and accept-focused.py retain the run,
+source/library fingerprints and strict case-count audit. Next finish focused/full
+acceptance,commit/push the increment,then implement complete mixed-ledger matching
+and explicitly admitted new staging. Never add enqueue to an original-only lease.
+
 [Current contract and integration boundaries](collaboration-space-messages.md).
 
 No new native/worker/UI route is activated. Complete mixed old/new queue matching and
@@ -99,7 +115,7 @@ explicit staging/receipt delivery first. Recovery inventory must include new com
 whose conversation has no local binding; a binding-only scan cannot discharge them.
 Original-only leases keep no enqueue capability. Never reinterpret companyId as spaceId.
 
-## Fully accepted generic replica foundation; Starter validation running
+## Fully accepted generic replica foundation and Starter port
 
 Mobile7a6fe534fc2e86064be9f60509f7befcc6afbf31 now has complete hosted proof:
 control42749839268 passed9,985 tests (7,276 portable+2,709 Apple),16 Swift checks and
