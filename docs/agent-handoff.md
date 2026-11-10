@@ -1,35 +1,54 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 16:59 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 17:09 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
 
 ## Active page-acquisition work
 
-Six Kotlin files are APPLIED/UNCOMMITTED and FROZEN under focused2/32791 RUNNING.
+Six Kotlin files are APPLIED/UNCOMMITTED and FROZEN under full1/74094 RUNNING.
+Focused2/32791 is REAPED/ACCEPTED136 cases in188.325s, zero failures/errors/skips;
+4790inputs,manifest5a5f2953eb7581ae24b4d1885309bdabad8f96100fc46459650417d6d52624b3.
+The first7032 attempt failed test compilation on five nullable Pair assertion types; fixed,
+original candidate preserved. Before full, one unused false-only private remote flag was removed.
+The full auditor permits exactly that token-equivalent cleanup and requires all24new cases again;
+do not claim identical focused/full hashes. Full expected10401, not accepted yet.
+
 `AcquireCollaborationSpaceProviderHistory` owns one current-admitted finite page, immutable
 physical provenance and atomic reference/position staging. Saved exhaustion returns without
 transport; Latest uses the last completed provider head. Recipient readiness never gates
-receiving. Lost commit responses remain failures and the next invocation rereads durable
-progress. No automatic incoming worker or UI is enabled.
+receiving. Lost commit responses remain failures; next invocation rereads durable progress.
+Private space-page-acquisition-2026-11-10 owns exact candidate/base/prior reports and audits.
 
-Twenty-four new JVM cases and44existing JVM controls have passed; actual Chromium/iOS-source/
-quality checks are still running. Focused expected136; full expected10401 on4790inputs.
-The first attempt7032 REAPED failed compilation before tests because five test assertions
-needed explicit nullable Pair type arguments; production compiled and the candidate is retained.
-Private space-page-acquisition-2026-11-10 owns candidate/base/prior reports, runners and strict
-focused/full auditors. Do not edit sources/library/APK during the gate or claim full acceptance.
+Private space-page-native-2026-11-10 contains NOT APPLIED Mobile2/Group1 candidates/runners.
+After product acceptance/push, actual native must keep Matrix30+pages and add only one direct
+transport per page: native7+pages/direct2+pages. A repeated exhausted acquisition must add zero
+HTTP. Preserve frontier hashes and all original/mixed controls. Capture product/prior-proof
+reports before the proof build. No phone/live/SDK changes; no heavy compiler during emulator.
 
-Private space-page-native-2026-11-10 contains prepared, NOT APPLIED Mobile2/Group1 proof
-candidates/runners. After product acceptance and push, actual native must keep Matrix30+pages
-and add only one direct transport per page: native7+pages/direct2+pages. A repeated exhausted
-acquisition must add zero HTTP. Preserve frontier hashes and all original/mixed controls.
-Provider-page worker integration and independent durable incoming work remain next; detailed
-bounds/ownership are in consumer-next.md. Current Apple42849335674 builds the iOS host;
-portable8316 audited, Apple still pending. No duplicate hosted run. Next hosted source can
-include page acquisition with provider/storage: expected11621=8399portable+3222Apple,+16Swift.
+Private space-pending-incoming-2026-11-10 contains uncompiled drafts for typed physical-provider
+batch provenance,16-reference resolution policy, local pending read/completion usecases.
+These are NOT APPLIED/ACCEPTED. Still need explicit16limit in Space/raw pending advancement
+(Company default20 unchanged), data DI, semantic tests and real storage controls. Follow
+space-page-acquisition-2026-11-10/consumer-next.md for bounded passes, source/target distinctions,
+uncertain writes and independent durable incoming wake/worker. No product consumer enabled.
+
+Hosted42849335674/e1ab is CANCELLED at the70-minute Apple job limit. Portable8316 audited;
+Apple3184+16Swift are now strictly audited from artifact13784278519/582203B,
+SHA29879e1e4f0625ac301e05273969acc0b254a8a48c95c3165cbbf0a5adb25e6e,
+manifest7612c5d958b15a9a6a019ef4c9b31d520c77eff2191b7a1dde9fd0ebd615eb95.
+11500 test cases pass, but iOS application-host acceptance is NOT complete. Partial auditor
+45147 REAPED retains prior case identities; first86628 failed only on a copied prior-report
+filename and is preserved. GitHub annotation explicitly confirms maximum execution1h10m0s.
+The setup/test step took48m38s; host ran~21m before total-job cancellation, below its30-minute
+step budget. After current product/native gates, raise only Apple job70->90minutes, keep
+host30, commit/push, dispatch one latest-source run. Expected11621=8399portable+3222Apple,
+plus16Swift/unsignedhost. Use current Apple TESTS artifact as prior case baseline; do not
+pretend the cancelled host passed. No duplicate run of old source is needed.
+
 ADB54053 timed out15s(REAPED); release89 remains NOT INSTALLED, phone87 last known.
+All54 PRD groups OPEN. Current full gate owns the only heavy compiler; no emulator active.
 
 ## Current continuation — native Space frontier accepted
 
@@ -62,8 +81,8 @@ including after provider exhaustion. SDK callbacks alone cannot cover process de
 all prior original controls. All54 PRD acceptance groups remain OPEN; continue the long run.
 No generic Starter source delta or native Apple Matrix implementation is claimed.
 
-Hosted incoming producte1ab run42849335674 portable is audited8316; Apple3184+16Swift/unsigned
-host remains RUNNING. Mobile space-incoming-acquisition-2026-11-10/hosted-audit.py owns the
+Hosted incoming producte1ab run42849335674 portable is audited8316; Apple3184+16Swift test reports pass; the unsigned
+host was cancelled at the70-minute job limit, as recorded above. Mobile space-incoming-acquisition-2026-11-10/hosted-audit.py owns the
 remaining audit. No duplicate dispatch. Hosted source predates provider6b445/storage81d4;
 a later exact-product hosted validation remains necessary.
 

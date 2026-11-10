@@ -45,5 +45,7 @@ separate work.
 
 Hosted exact producte1ab46e4 run42849335674 has passed and audited8,316 portable cases:
 3,900desktop+715Androidhost+3,701actualChromium, with all prior case identities preserved.
-Apple execution remains running; this predates provider-page/progress source.
+Apple test reports also pass and are audited:3,184 cases plus16 Swift push cases. GitHub
+cancelled the application-host build at its70-minute job limit; complete Apple acceptance
+is still pending. This source predates provider pages, progress and admitted page acquisition.
 [Hosted measurement](measurements/collaboration-space-incoming-hosted-2026-11-10.json).

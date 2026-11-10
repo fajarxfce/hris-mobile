@@ -39,10 +39,33 @@
   "portableCases": 8316,
   "priorCaseIdentitiesPreserved": true,
   "apple": {
-    "status": "running",
-    "expectedCases": 3184,
-    "expectedSwiftCases": 16,
-    "unsignedIosHostRequired": true
+    "sourceCommit": "e1ab46e4bb1eeb1dc077e62cd3ecc8bcf7f4ae80",
+    "runId": 42849335674,
+    "jobId": 129945353881,
+    "artifactId": 13784278519,
+    "bytes": 582203,
+    "sha256": "29879e1e4f0625ac301e05273969acc0b254a8a48c95c3165cbbf0a5adb25e6e",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "iosSimulatorArm64Test": {
+        "tests": 3184,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 316
+      }
+    },
+    "reportManifestSha256": "7612c5d958b15a9a6a019ef4c9b31d520c77eff2191b7a1dde9fd0ebd615eb95",
+    "jobConclusion": "cancelled",
+    "iosApplicationHostBuilt": false,
+    "testReportsAccepted": true,
+    "swiftPushCases": 16,
+    "jobTimeoutMinutes": 70,
+    "reason": "GitHub: The job has exceeded the maximum execution time of 1h10m0s",
+    "applicationHostAcceptance": false
   },
-  "providerProgressSourceIncluded": false
+  "providerProgressSourceIncluded": false,
+  "appleCases": 3184,
+  "totalTestCases": 11500,
+  "hostedAcceptanceComplete": false
 }
