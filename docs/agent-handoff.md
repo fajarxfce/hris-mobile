@@ -1,54 +1,59 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 20:50 UTC. Follow AGENTS.md. This opening section owns current work.
+Updated 10 November 2026, 21:02 UTC. Follow AGENTS.md. This opening section owns current work.
 
-## Incoming scheduling accepted; application worker next
+## Application incoming worker in progress
 
-The 32-file Mobile scheduling increment is accepted in this implementation checkpoint.
-Focused tests: 536 in 295.214 seconds. Full validation: 10847
-cases (8828 fresh plus 2019 exact retained controls)
-in 607.692 seconds. All source/library fingerprints stayed fixed during each run.
-There are 4,844 inputs; the accepted manifest is b6671417212692b961c89536c96bc08c0a80c0970ff2e94f1f99f7163995305d.
-Mobile contract: `docs/collaboration-space-incoming-scheduling.md`; compact focused/full evidence
-lives under `docs/measurements`. Private `space-incoming-worker-2026-11-10` owns exact sources,
-reports, failed attempts, runners and acceptance audits. No new native-worker proof is claimed.
+Mobile scheduling baseline 274d8f8a41d18253dcf142569b5f558f1017fe53 is committed/pushed.
+Group handoff 26c949c5 is pushed. The 32-file baseline passed 536 focused and 10,847 full cases
+(8,828 fresh + 2,019 exact controls), with 4,844 inputs. Its contract and compact measurements
+are committed as collaboration-space-incoming-scheduling.*. Original SDK/source history is intact.
 
-Domain now owns immutable four-room FIFO selection, retry eligibility, atomic binding scan,
-fair deferral and exact empty-work wake completion. Schema 1/2 compatibility and the existing
-64-room/storage capacity limits remain intact. The application worker is NOT enabled yet.
-Full1/34641 caught the missing Koin Clock dependency (724 tests, one failure); Read/Defer
-factories now follow the module's existing Clock.System composition. Earlier focused failures
-are retained in private evidence. Focused and full acceptance includes real application bindings.
+Current Mobile work is 12 applied, UNCOMMITTED Kotlin files in
+`space-incoming-application-2026-11-10`. Focused2/session31627 is RUNNING; freeze source/library.
+Expected 615 focused / 10,901 full cases, 4,850 inputs. No full or actual native-worker gate has
+started. Initial focused1/17560 is REAPED: all603 cases passed, then detekt rejected the fixture's
+204-line worker factory. The fixture now owns one worker, matching application singleton lifetime;
+its platform is a constructor input. Initial candidate and reports remain archived privately.
 
-Next apply PRIVATE `space-incoming-application-2026-11-10` only after committing/pushing these
-32 accepted files. Its prepare-apply.py validates the clean accepted base, archives reports,
-then applies 12 candidate Kotlin files (six new). Runners expect 603 focused / 10,889 full cases
-and 4,850 source inputs. Candidate adds the registered incoming task, independent collapsed OS
-key, per-page content before provider EOF, and exact delayed head revisit. Twelve new domain
-and 18 app cases cover missing provider visibility, fairness, missing keys, bounded/concurrent
-turns, parent replacement, timeout and cancellation. The earlier 25 SpaceRecovery task cases
-and two binding tests remain controls. Candidate is formatted but UNCOMPILED/UNTESTED.
+The current candidate adds the registered incoming task, independent collapsed OS key, bounded
+four-room turns, content retention before provider EOF, and owned provider recovery. There are
+17 new domain and20 new app cases, plus25 prior SpaceRecovery cases and2 binding controls.
+RecoverCollaborationSpaceIncomingProvider replaces the NEW/uncommitted Revisit owner. History
+positions include logical device ID, while incoming demand survives account reauthentication.
+If the new current-device position is absent, a retained Pending room must restart Latest once
+without erasing old device history. Storage failure is not absence. A separate known-head/EOF
+case still retains a delayed restart. Late progress, response loss, replay, unknown heads and
+missing-key fairness are covered by the new cases; none has been claimed accepted yet.
 
-After those gates, add an actual native-worker scenario using registered application ownership
-and real SDK/storage. HrisSpaceRecoveryProofHost and HrisSpaceIncomingProofHost already provide
-admitted native fixtures; preserve all four prior native scenarios and original transactions.
-Realtime SDK and push handoff are still absent. syncOnceV2 owns the current sync and reports
-changed joined-room IDs, but not event IDs; room-info previews do not cover all edits/redactions.
-Verify SDK 6 capabilities before choosing bounded raw hints. Keep callbacks free of Registry/I/O,
-retain overflow rescan and startup recovery, and keep incoming/outgoing wake authority distinct.
-The existing group push usecase currently retains only an outgoing wake despite having optional
-roomId/matrixEventId fields. Do not claim end-to-end incoming delivery until these paths pass.
+After focused2 succeeds, run accept-focused.py focused2, then the full runner/auditor. Keep
+source/fixtures/reports fixed during gates. Do not rerun prepare-apply.py: candidate is already
+applied. files.json/expected.json describe the current12 files; candidate-initial and focused1
+retain the earlier Revisit implementation. Preserve all32 baseline case identities. App helpers
+own task lifetime; domain owners coordinate repositories and policy. No generic Starter delta.
 
-Hosted completion run 42889565705 targets prior 07e22182. Portable is independently accepted:
-8,647 tests, artifact 13799302654; compact digest and report metadata are already committed.
-Apple job 130086786070 is separately monitored (3,346 expected plus 16 Swift cases/unsigned host).
-Do not redispatch or attribute those results to this newer scheduling increment.
+Actual native-worker and realtime/push integration remain required. Preserve four existing
+native controls and every original transaction. Use registered app ownership plus real SDK/store;
+manual acquisition is not worker proof. SDK6 syncOnceV2 reports joined-room IDs, not event IDs,
+and those updates include typing/receipts/state. History-head lookup is HTTP; room previews miss
+some edits/redactions. Verify an appropriate bounded raw-hint capability rather than triggering
+history requests for every update. Default foreground cadence is15 minutes, so add durable first
+root/native registration and push handoff; periodic work alone is not realtime. The existing group
+push owner only retains outgoing recovery, despite optional roomId/matrixEventId. Verified new
+room keys should reactivate only the relevant pending work once; unrelated wakes preserve retry.
+Current callback, root/push and key handoffs are still absent. See private NEXT.md/source notes.
 
-Release 89 is still uninstalled; phone 87 last known. Latest ADB 97409 timed out and was reaped;
-the availability question remains pending. Notify before install-only; do not launch/reset/drive
-the phone. Live 90163/schema 116.4 is unchanged, Group 117–140 undeployed, emulator stopped.
-SDK 6, retained original controls/sender keys and dirty SDK/Inspector trees are preserved.
-No generic Starter delta. All 54 communications PRD groups remain OPEN.
+Hosted completion run42889565705 at PRIOR07e22182 is COMPLETE and independently ACCEPTED:
+11,993 tests =8,647portable +3,346Apple, plus16 Swift envelope cases and unsigned iOS host.
+Portable audit61001 and Apple audit47182 are reaped. Both artifact digests/ZIP CRCs and prior
+case identities were verified. Compact combined and Apple measurements are committed under
+`docs/measurements/collaboration-space-incoming-completion-hosted*-2026-11-10.json`.
+These CI results predate the32 scheduling and current12 application files. Do not redispatch.
+
+Release89 remains uninstalled; phone87 last known. ADB97409 timed out/reaped; the existing
+availability question stays pending. Notify before install-only, no launch/reset/UI drive.
+Live90163/schema116.4 unchanged; Group117–140 undeployed; emulator stopped. SDK6, original
+controls/sender keys, and dirty SDK/Inspector trees are preserved. All54 PRD groups remain OPEN.
 
 ## Prior completion checkpoint
 
