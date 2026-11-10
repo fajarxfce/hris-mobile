@@ -2,12 +2,16 @@
 
 ## Current source candidate — 10 November 2026
 
-`sync-incoming-hints.patch` applies after all seven SDK6 patches. The source-only manifest
-`sync-incoming-hints-source.json` pins the exact reconstruction. 142 unique tests and
-WebAssembly compilation pass; generated binding pairs and native distribution remain separate.
-[Contract and evidence](../../docs/collaboration-sdk-incoming-hints.md).
-The application still pins published SDK6. Earlier candidate/publication statements below
-are historical; [distribution status](../../docs/collaboration-sdk-distribution.md) owns shipping facts.
+`sync-incoming-hints.patch` and `stored-key-hints.patch` apply after the seven SDK6 patches.
+The latest source-only manifest `stored-key-hints-source.json` pins all nine patches and the
+exact reconstruction. Final full FFI passes 88 cases, including 29 new sync/key cases. Native
+feature graphs are unchanged by correcting optional search activation. Core WebAssembly passes;
+full FFI WebAssembly is still blocked by its existing filesystem logging dependencies.
+[Sync contract](../../docs/collaboration-sdk-incoming-hints.md),
+[key contract and evidence](../../docs/collaboration-sdk-key-hints.md).
+The application still pins published SDK6. Generated binding pairs, new native distribution and
+application consumers remain separate. Earlier candidate/publication statements below are
+historical; [distribution status](../../docs/collaboration-sdk-distribution.md) owns shipping facts.
 
 ## Concurrent-refresh candidate — 9 November 2026
 

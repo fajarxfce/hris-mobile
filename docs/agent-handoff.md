@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 23:38 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 10 November 2026, 23:55 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Foreground incoming startup accepted
 
@@ -36,11 +36,18 @@ Previous run 42911090770 at 9ec0cdca7e352806c1b7fd8b8863822d45900ae3 is COMPLETE
 Both archive digests/ZIP CRCs/prior case identities verified. Do not redispatch the old run.
 https://github.com/fajarxfce/hris-mobile/actions/runs/42911090770
 Its immutable revision excludes the startup observer and this foreground integration.
-Combined run 42923369580 is RUNNING at exact c11e053972253b952b84baae23b6eb764107082d,
-ref validation/space-incoming-foreground-20261110. Expected 12,472 = 8,979 portable + 3,493
-Apple, plus 16 Swift/unsigned host. Do not redispatch. Both foreground product commits are pushed:
-Mobile c11e0539, Group e1c1e7b8. Private foreground/hosted.json and hosted-audit.py own artifact audit.
+Combined run 42923369580 at exact c11e053972253b952b84baae23b6eb764107082d now has
+portable ACCEPTED: 8,979 = 4,247 desktop + 722 Android host + 4,010 Chromium.
+Artifact 13815095327 / 3,642,179 bytes, SHA 41d75b2b6956f2baa3dce0a75671c68089e7b3bf1714232d3f068cf76ae2444f;
+report manifest 7b0564f122305189924edc4b9599432115b4ca428b6bd078fc3706d71e314ea5.
+Apple attempt 1 failed before collaboration tests because Maven downloads lost routing/DNS;
+log and failed artifact 13814560056 are preserved. Only that failed job was rerun at 23:54 UTC,
+on the same immutable commit. Do not redispatch the workflow or repeat portable validation.
+Apple retry remains unverified. Expected 3,493 Apple + 16 Swift/unsigned host; total 12,472.
+Private foreground/hosted-retry.json owns retry state; hosted-audit.py now selects the latest
+job and only its artifact by creation time, excluding preserved failed-attempt archives.
 https://github.com/fajarxfce/hris-mobile/actions/runs/42923369580
+Compact partial evidence: collaboration-space-incoming-foreground-hosted-2026-11-10.json.
 
 ## Next integration and protected state
 
@@ -67,8 +74,23 @@ not a distributable Android build manifest yet. Contract: collaboration-sdk-inco
 collaboration-sdk-incoming-hints-2026-11-10.json. Private sdk-incoming-hints-2026-11-10 retains
 reports, complete input hashes and the rejected compile-only JSON-fixture attempt.
 No SDK version, artifact, runtime dependency or live change. The protected old dirty SDK worktree
-and original private stores remain unchanged. Next implement the owned key-arrival hint, generate
-paired bindings, then connect the application consumer and unknown physical-room admission.
+and original private stores remain unchanged. Stored-key hint source is now ACCEPTED in this checkpoint: four candidate files include the
+new listener/10 tests and correct optional-search feature ownership. Final full FFI passes 88
+cases, preserving all 78 prior cases; source 1,221 / manifest
+a6c1990cc99b0d8efdf1a13dcc22cd7966ee341577ee713b053f5ca0424913a5.
+Patch 1965e91ad1deaa1d97ad56c5dfb1d717a20d9e64ea059a7c0a7983d3c7d44939
+and source manifest are tracked as stored-key-hints{.patch,-source.json}. Native default feature
+graphs are byte-identical before/after the optional-search correction. Actual stored-key lag,
+improved same-session key imports (indices 10 then 0), SQLite reopen, cancellation, reference
+release and zero extra requests after SDK initialization all pass. Earlier invalid test imports,
+MultiProcess fixture mismatch and initialization-counter failure are preserved privately.
+Full FFI WebAssembly remains UNACCEPTED: upstream tracing-appender/symlink needs native filesystem.
+The previously accepted core IndexedDB/Wasm result remains scoped to core, not the whole FFI.
+Private Mobile `.work/sdk-key-hints-2026-11-10` owns final reports/patches and this next build:
+host-bindings-1/session25598 is RUNNING to produce a host library for Kotlin/Swift generation.
+Do not edit SDK source during it. No Android artifact/version/dependency/publication exists yet.
+Next accept the host build, generate/verify paired APIs, prepare the next immutable native SDK
+candidate, then connect the owned application consumer, pending-key and physical-room routing.
 The current incoming scanner sees local bindings only; it cannot cover unknown server rooms
 when a batch is lost. Cold/gap recovery must include admitted provider/server inventory coverage.
 Never infer the cursor of queued content from a later local position read.
@@ -76,7 +98,7 @@ Server push locators are physical matrixRoomId/matrixEventId. Logical UUID listi
 feed. The existing admitted rooms.boundRoom lookup can locate an unknown physical room; preserve
 the room-first, sorted-account, native-session guard order of ReadNativeCollaborationSpaceRoom.
 
-Phone ADB23863 timed out/reaped; validated release 89 is still uninstalled. Existing availability
+Phone ADB32274 timed out/reaped; validated release 89 is still uninstalled. Existing availability
 question remains pending. Notify before install-only; do not launch, reset or drive phone UI.
 No live deployment or generic Starter delta. SDK6, live 90163c/schema 116.4 and original sender
 keys/messages remain protected. All 54 communications PRD groups remain OPEN. Continue work.

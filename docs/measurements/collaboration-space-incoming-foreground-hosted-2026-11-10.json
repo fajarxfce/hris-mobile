@@ -1,0 +1,61 @@
+{
+  "sourceCommit": "c11e053972253b952b84baae23b6eb764107082d",
+  "runId": 42923369580,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42923369580",
+  "complete": false,
+  "verifiedTests": 8979,
+  "expectedTotal": 12472,
+  "portable": {
+    "jobId": 130203526506,
+    "artifactId": 13815095327,
+    "bytes": 3642179,
+    "sha256": "41d75b2b6956f2baa3dce0a75671c68089e7b3bf1714232d3f068cf76ae2444f",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "desktopTest": {
+        "tests": 4247,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 425
+      },
+      "testAndroidHostTest": {
+        "tests": 722,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 98
+      },
+      "wasmJsBrowserTest": {
+        "tests": 4010,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 383
+      }
+    },
+    "reportManifestSha256": "7b0564f122305189924edc4b9599432115b4ca428b6bd078fc3706d71e314ea5"
+  },
+  "appleAttempt1": {
+    "runId": 42923369580,
+    "headSha": "c11e053972253b952b84baae23b6eb764107082d",
+    "failedJob": 130203526310,
+    "scope": "Apple attempt 1 infrastructure failure before collaboration tests",
+    "reason": [
+      "Maven Central Ktor download: No route to host",
+      "Maven Central KSP download: DNS name not known",
+      "Artifact service timed out four times before upload"
+    ],
+    "logSha256": "870e8a841ce09efb3f0f6847979556a4cbda529c1d8be96f24d3414df407498c",
+    "codeChangedForRetry": false,
+    "plannedRetry": "Rerun only failed Apple job after preserving the first attempt",
+    "retrySubmitted": true,
+    "recordedAt": "2026-11-10T23:44:53.042657+00:00",
+    "retryRequestedAt": "2026-11-10T23:54:18.998805+00:00"
+  },
+  "appleVerified": false,
+  "verifiedSwiftCases": 0,
+  "unsignedAppleHostBuilt": false,
+  "phoneTouched": false,
+  "liveDeployment": false
+}

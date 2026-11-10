@@ -1,0 +1,431 @@
+diff --git a/bindings/matrix-sdk-ffi/Cargo.toml b/bindings/matrix-sdk-ffi/Cargo.toml
+--- a/bindings/matrix-sdk-ffi/Cargo.toml
++++ b/bindings/matrix-sdk-ffi/Cargo.toml
+@@ -66,7 +66,6 @@
+     "socks",
+     "uniffi",
+     "federation-api",
+-    "experimental-search"
+ ] }
+ matrix-sdk-base.workspace = true
+ matrix-sdk-common.workspace = true
+diff --git a/bindings/matrix-sdk-ffi/src/encryption.rs b/bindings/matrix-sdk-ffi/src/encryption.rs
+--- a/bindings/matrix-sdk-ffi/src/encryption.rs
++++ b/bindings/matrix-sdk-ffi/src/encryption.rs
+@@ -11,6 +11,10 @@
+ // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ // See the License for that specific language governing permissions and
+ // limitations under the License.
++
++mod room_key_changes;
++
++use room_key_changes::{RoomKeyChangeBatch, RoomKeyChangesListener};
+ 
+ use std::{str::FromStr, sync::Arc};
+ 
+@@ -832,6 +836,33 @@
+         Ok(result?)
+     }
+ 
++    /// Observe already-stored room-key changes on this existing client.
++    ///
++    /// None means the encryption machine is not available. Registration and lag
++    /// emit reconciliation hints because this broadcast has no durable replay.
++    /// The caller owns the TaskHandle, fences callbacks during disposal, and waits
++    /// for is_finished before retiring the native registration. No transport starts.
++    pub async fn subscribe_to_room_key_changes(
++        self: Arc<Self>,
++        listener: Box<dyn RoomKeyChangesListener>,
++    ) -> Option<Arc<TaskHandle>> {
++        let stream = self.inner.room_keys_received_stream().await?;
++        Some(Arc::new(TaskHandle::new(get_runtime_handle().spawn(async move {
++            let _owner = self;
++            let mut stream = Box::pin(stream);
++            listener.on_update(RoomKeyChangeBatch::reconciliation());
++            while let Some(update) = stream.next().await {
++                let changes = match update {
++                    Ok(keys) => RoomKeyChangeBatch::from_stored_keys(&keys),
++                    Err(_) => RoomKeyChangeBatch::reconciliation(),
++                };
++                if changes.reconcile_required || !changes.room_ids.is_empty() {
++                    listener.on_update(changes);
++                }
++            }
++        }))))
++    }
++
+     pub fn verification_state(&self) -> VerificationState {
+         self.inner.verification_state().get().into()
+     }
+diff --git a/bindings/matrix-sdk-ffi/src/encryption/room_key_changes.rs b/bindings/matrix-sdk-ffi/src/encryption/room_key_changes.rs
+new file mode 100644
+--- /dev/null
++++ b/bindings/matrix-sdk-ffi/src/encryption/room_key_changes.rs
+@@ -0,0 +1,52 @@
++// Copyright 2026 Fajar HRIS contributors.
++// SPDX-License-Identifier: Apache-2.0
++
++use std::collections::BTreeSet;
++
++use matrix_sdk_base::crypto::store::types::RoomKeyInfo;
++use matrix_sdk_common::{SendOutsideWasm, SyncOutsideWasm};
++
++/// Stored-key notifications only. This does not grant access to a room or report delivery.
++#[matrix_sdk_ffi_macros::export(callback_interface)]
++pub trait RoomKeyChangesListener: SendOutsideWasm + SyncOutsideWasm {
++    /// Hand off this bounded snapshot promptly; do not perform network/storage work here.
++    fn on_update(&self, changes: RoomKeyChangeBatch);
++}
++
++#[derive(Clone, Debug, PartialEq, Eq, uniffi::Record)]
++pub struct RoomKeyChangeBatch {
++    /// Unique physical room IDs in this notification. No session/key material is exported.
++    pub room_ids: Vec<String>,
++    /// Registration, lag or capacity loss requires reconciling retained missing-key work.
++    /// This is not an instruction to rescan all chat history or to open a second client.
++    pub reconcile_required: bool,
++}
++
++impl RoomKeyChangeBatch {
++    pub(super) fn reconciliation() -> Self {
++        Self { room_ids: Vec::new(), reconcile_required: true }
++    }
++
++    pub(super) fn from_stored_keys(keys: &[RoomKeyInfo]) -> Self {
++        let mut result = Self { room_ids: Vec::new(), reconcile_required: keys.len() > 256 };
++        let mut seen = BTreeSet::new();
++        for key in keys.iter().take(256) {
++            if key.room_id.as_str().len() > 1024 {
++                result.reconcile_required = true;
++                continue;
++            }
++            if !seen.insert(&key.room_id) {
++                continue;
++            }
++            if result.room_ids.len() == 64 {
++                result.reconcile_required = true;
++                break;
++            }
++            result.room_ids.push(key.room_id.to_string());
++        }
++        result
++    }
++}
++
++#[cfg(test)]
++mod tests;
+diff --git a/bindings/matrix-sdk-ffi/src/encryption/room_key_changes/tests.rs b/bindings/matrix-sdk-ffi/src/encryption/room_key_changes/tests.rs
+new file mode 100644
+--- /dev/null
++++ b/bindings/matrix-sdk-ffi/src/encryption/room_key_changes/tests.rs
+@@ -0,0 +1,310 @@
++// Copyright 2026 Fajar HRIS contributors.
++// SPDX-License-Identifier: Apache-2.0
++
++use super::*;
++use crate::{client::Client, encryption::Encryption};
++use matrix_sdk::test_utils::mocks::MatrixMockServer;
++use matrix_sdk_base::crypto::{
++    encrypt_room_key_export,
++    olm::ExportedRoomKey,
++    types::EventEncryptionAlgorithm,
++    vodozemac::{
++        Curve25519PublicKey, Ed25519SecretKey,
++        megolm::{GroupSession, InboundGroupSession, SessionConfig},
++    },
++};
++use matrix_sdk_common::cross_process_lock::CrossProcessLockConfig;
++use ruma::DeviceKeyAlgorithm;
++use std::{
++    sync::{Arc, Mutex, mpsc as std_mpsc},
++    time::Duration,
++};
++use tokio::{
++    sync::mpsc,
++    time::{sleep, timeout},
++};
++
++fn key(room: &str) -> RoomKeyInfo {
++    RoomKeyInfo {
++        algorithm: EventEncryptionAlgorithm::MegolmV1AesSha2,
++        room_id: room.try_into().unwrap(),
++        sender_key: Curve25519PublicKey::from_bytes([7; 32]),
++        session_id: "private-session-id".into(),
++    }
++}
++
++#[test]
++fn key_hints_empty_success_is_not_a_gap() {
++    assert_eq!(
++        RoomKeyChangeBatch::from_stored_keys(&[]),
++        RoomKeyChangeBatch { room_ids: vec![], reconcile_required: false }
++    );
++}
++
++#[test]
++fn key_hints_gap_is_explicit_even_without_room_ids() {
++    assert_eq!(
++        RoomKeyChangeBatch::reconciliation(),
++        RoomKeyChangeBatch { room_ids: vec![], reconcile_required: true }
++    );
++}
++
++#[test]
++fn key_hints_deduplicate_rooms_only_within_one_batch() {
++    let first = RoomKeyChangeBatch::from_stored_keys(&[
++        key("!b:example.org"),
++        key("!a:example.org"),
++        key("!b:example.org"),
++    ]);
++    assert_eq!(first.room_ids, ["!b:example.org", "!a:example.org"]);
++    let later = RoomKeyChangeBatch::from_stored_keys(&[key("!b:example.org")]);
++    assert_eq!(later.room_ids, ["!b:example.org"]);
++    assert!(!format!("{first:?}").contains("private-session-id"));
++}
++
++#[test]
++fn key_hints_keep_exact_room_capacity_and_signal_lost_rooms() {
++    for count in [64, 65] {
++        let keys: Vec<_> = (0..count).map(|i| key(&format!("!r{i}:example.org"))).collect();
++        let changes = RoomKeyChangeBatch::from_stored_keys(&keys);
++        assert_eq!(changes.room_ids.len(), 64);
++        assert_eq!(changes.reconcile_required, count == 65);
++    }
++}
++
++#[test]
++fn key_hints_duplicate_flood_has_bounded_inspection_and_recovery() {
++    let mut keys = vec![key("!a:example.org"); 256];
++    let full = RoomKeyChangeBatch::from_stored_keys(&keys);
++    assert_eq!(full.room_ids, ["!a:example.org"]);
++    assert!(!full.reconcile_required);
++    keys.push(key("!other:example.org"));
++    let overflow = RoomKeyChangeBatch::from_stored_keys(&keys);
++    assert_eq!(overflow.room_ids, ["!a:example.org"]);
++    assert!(overflow.reconcile_required);
++}
++
++struct Listener(mpsc::Sender<RoomKeyChangeBatch>);
++impl RoomKeyChangesListener for Listener {
++    fn on_update(&self, changes: RoomKeyChangeBatch) {
++        self.0.try_send(changes).unwrap();
++    }
++}
++
++async fn next(rx: &mut mpsc::Receiver<RoomKeyChangeBatch>) -> RoomKeyChangeBatch {
++    timeout(Duration::from_secs(5), rx.recv()).await.unwrap().unwrap()
++}
++
++async fn encryption(client: &matrix_sdk::Client) -> Arc<Encryption> {
++    let ffi = Arc::new(Client::new(client.clone(), None, None).await.unwrap());
++    ffi.encryption()
++}
++
++fn export(room: &str, session: &GroupSession, at: u32) -> ExportedRoomKey {
++    let mut inbound = InboundGroupSession::new(&session.session_key(), SessionConfig::version_1());
++    ExportedRoomKey {
++        algorithm: EventEncryptionAlgorithm::MegolmV1AesSha2,
++        room_id: room.try_into().unwrap(),
++        sender_key: Curve25519PublicKey::from_bytes([7; 32]),
++        session_id: session.session_id(),
++        session_key: inbound.export_at(at).unwrap(),
++        sender_claimed_keys: [(
++            DeviceKeyAlgorithm::Ed25519,
++            Ed25519SecretKey::from_slice(&[3; 32]).public_key().into(),
++        )]
++        .into(),
++        forwarding_curve25519_key_chain: vec![],
++        shared_history: false,
++    }
++}
++
++async fn import(client: &matrix_sdk::Client, key: ExportedRoomKey) {
++    let file = tempfile::NamedTempFile::new().unwrap();
++    // Test-only work factor; no exported fixture or production key material is retained.
++    std::fs::write(file.path(), encrypt_room_key_export(&[key], "test-only", 1).unwrap()).unwrap();
++    let result =
++        client.encryption().import_room_keys(file.path().to_path_buf(), "test-only").await.unwrap();
++    assert_eq!(result.imported_count, 1);
++}
++
++async fn finished(handle: &crate::task_handle::TaskHandle) {
++    timeout(Duration::from_secs(5), async {
++        while !handle.is_finished() {
++            sleep(Duration::from_millis(5)).await;
++        }
++    })
++    .await
++    .unwrap();
++}
++
++#[tokio::test]
++async fn key_hints_subscription_without_crypto_is_explicitly_unavailable() {
++    let server = MatrixMockServer::new().await;
++    let client = matrix_sdk::Client::builder()
++        .homeserver_url(server.server().uri())
++        .cross_process_store_config(CrossProcessLockConfig::SingleProcess)
++        .build()
++        .await
++        .unwrap();
++    let encryption = encryption(&client).await;
++    let before = server.server().received_requests().await.unwrap().len();
++    let (tx, mut rx) = mpsc::channel(8);
++    assert!(encryption.subscribe_to_room_key_changes(Box::new(Listener(tx))).await.is_none());
++    assert!(rx.recv().await.is_none());
++    assert_eq!(server.server().received_requests().await.unwrap().len(), before);
++}
++
++#[tokio::test]
++async fn key_hints_registration_reconciles_without_network_and_cancel_releases_callback() {
++    let server = MatrixMockServer::new().await;
++    let client = server
++        .client_builder()
++        .on_builder(|b| b.cross_process_store_config(CrossProcessLockConfig::SingleProcess))
++        .build()
++        .await;
++    let encryption = encryption(&client).await;
++    let weak = Arc::downgrade(&encryption);
++    // Finish the SDK builder's own crypto initialization before measuring this subscription.
++    timeout(Duration::from_secs(5), client.encryption().wait_for_e2ee_initialization_tasks())
++        .await
++        .unwrap();
++    let before = server.server().received_requests().await.unwrap().len();
++    let (tx, mut rx) = mpsc::channel(8);
++    let task = encryption.subscribe_to_room_key_changes(Box::new(Listener(tx))).await.unwrap();
++    assert_eq!(next(&mut rx).await, RoomKeyChangeBatch::reconciliation());
++    assert!(weak.upgrade().is_some()); // The active task owns the Encryption/client lease.
++    task.cancel();
++    finished(&task).await;
++    assert!(timeout(Duration::from_secs(5), rx.recv()).await.unwrap().is_none());
++    assert!(weak.upgrade().is_none());
++    assert_eq!(server.server().received_requests().await.unwrap().len(), before);
++}
++
++#[tokio::test]
++async fn key_hints_task_drop_releases_the_registration() {
++    let server = MatrixMockServer::new().await;
++    let client = server
++        .client_builder()
++        .on_builder(|b| b.cross_process_store_config(CrossProcessLockConfig::SingleProcess))
++        .build()
++        .await;
++    let (tx, mut rx) = mpsc::channel(8);
++    let task = encryption(&client)
++        .await
++        .subscribe_to_room_key_changes(Box::new(Listener(tx)))
++        .await
++        .unwrap();
++    next(&mut rx).await;
++    drop(task);
++    assert!(timeout(Duration::from_secs(5), rx.recv()).await.unwrap().is_none());
++}
++
++#[tokio::test]
++async fn key_hints_improved_same_session_import_emits_again_and_survives_sqlite_reopen() {
++    let server = MatrixMockServer::new().await;
++    let dir = tempfile::tempdir().unwrap();
++    let client = server
++        .client_builder()
++        .on_builder(|b| {
++            b.sqlite_store(dir.path(), None)
++                .cross_process_store_config(CrossProcessLockConfig::SingleProcess)
++        })
++        .build()
++        .await;
++    let (tx, mut rx) = mpsc::channel(8);
++    let task = encryption(&client)
++        .await
++        .subscribe_to_room_key_changes(Box::new(Listener(tx)))
++        .await
++        .unwrap();
++    next(&mut rx).await;
++    let session = GroupSession::new(SessionConfig::version_1());
++    let room = "!keys:example.org";
++    let late = export(room, &session, 10);
++    let early = export(room, &session, 0);
++    assert_eq!(late.session_id, early.session_id);
++    import(&client, late).await;
++    assert_eq!(next(&mut rx).await.room_ids, [room]);
++    import(&client, early).await;
++    assert_eq!(next(&mut rx).await.room_ids, [room]);
++    task.cancel();
++    finished(&task).await;
++    drop(task);
++    drop(client);
++    let restored = server
++        .client_builder()
++        .on_builder(|b| {
++            b.sqlite_store(dir.path(), None)
++                .cross_process_store_config(CrossProcessLockConfig::SingleProcess)
++        })
++        .build()
++        .await;
++    let (tx, mut rx) = mpsc::channel(8);
++    let task = encryption(&restored)
++        .await
++        .subscribe_to_room_key_changes(Box::new(Listener(tx)))
++        .await
++        .unwrap();
++    assert_eq!(next(&mut rx).await, RoomKeyChangeBatch::reconciliation());
++    let export_file = tempfile::NamedTempFile::new().unwrap();
++    restored
++        .encryption()
++        .export_room_keys(export_file.path().to_path_buf(), "test-only", |_| true)
++        .await
++        .unwrap();
++    let exported = matrix_sdk_base::crypto::decrypt_room_key_export(
++        std::fs::File::open(export_file.path()).unwrap(),
++        "test-only",
++    )
++    .unwrap();
++    assert_eq!(exported.len(), 1);
++    assert_eq!(exported[0].session_id, session.session_id());
++    // A restored SDK has retained the broader key, not just a transient callback.
++    let inbound = InboundGroupSession::import(&exported[0].session_key, SessionConfig::version_1());
++    assert_eq!(inbound.first_known_index(), 0);
++    task.cancel();
++    finished(&task).await;
++}
++
++struct PausedListener {
++    tx: mpsc::Sender<RoomKeyChangeBatch>,
++    release: Mutex<Option<std_mpsc::Receiver<()>>>,
++}
++impl RoomKeyChangesListener for PausedListener {
++    fn on_update(&self, changes: RoomKeyChangeBatch) {
++        self.tx.try_send(changes).unwrap();
++        if let Some(release) = self.release.lock().unwrap().take() {
++            release.recv_timeout(Duration::from_secs(10)).unwrap();
++        }
++    }
++}
++
++#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
++async fn key_hints_actual_store_broadcast_lag_emits_reconciliation() {
++    let server = MatrixMockServer::new().await;
++    let client = server
++        .client_builder()
++        .on_builder(|b| b.cross_process_store_config(CrossProcessLockConfig::SingleProcess))
++        .build()
++        .await;
++    let (tx, mut rx) = mpsc::channel(64);
++    let (release, wait) = std_mpsc::channel();
++    let task = encryption(&client)
++        .await
++        .subscribe_to_room_key_changes(Box::new(PausedListener {
++            tx,
++            release: Mutex::new(Some(wait)),
++        }))
++        .await
++        .unwrap();
++    next(&mut rx).await; // The callback is now paused while stored-key broadcasts accumulate.
++    for i in 0..32 {
++        let session = GroupSession::new(SessionConfig::version_1());
++        import(&client, export(&format!("!r{i}:example.org"), &session, 0)).await;
++    }
++    release.send(()).unwrap();
++    assert_eq!(next(&mut rx).await, RoomKeyChangeBatch::reconciliation());
++    assert!(!next(&mut rx).await.room_ids.is_empty());
++    task.cancel();
++    finished(&task).await;
++}

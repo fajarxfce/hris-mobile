@@ -1,0 +1,87 @@
+{
+  "scope": "SDK stored room-key hints; source-only validation",
+  "recordedAt": "2026-11-10T23:54:03.693654+00:00",
+  "runs": {
+    "focused-5": {
+      "startedAt": "2026-11-10T23:45:41.072284+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "matrix-sdk-ffi",
+        "--features",
+        "sentry,experimental-x509-identity-verification",
+        "key_hints",
+        "--",
+        "--test-threads=1"
+      ],
+      "jobs": 2,
+      "sourceFiles": 1221,
+      "sourceManifestSha256": "e47b9f5600d386e05b83af95f9ced3b3a96c74fa24850da3cc43490dc12854de",
+      "exitCode": 0,
+      "elapsedSeconds": 37.936,
+      "sourcesUnchanged": true,
+      "summaries": [
+        "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 78 filtered out; finished in 5.09s"
+      ]
+    },
+    "ffi-full-2": {
+      "startedAt": "2026-11-10T23:53:05.915741+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "-p",
+        "matrix-sdk-ffi",
+        "--features",
+        "sentry,experimental-x509-identity-verification",
+        "",
+        "--",
+        "--test-threads=1"
+      ],
+      "jobs": 2,
+      "sourceFiles": 1221,
+      "sourceManifestSha256": "a6c1990cc99b0d8efdf1a13dcc22cd7966ee341577ee713b053f5ca0424913a5",
+      "exitCode": 0,
+      "elapsedSeconds": 43.997,
+      "sourcesUnchanged": true,
+      "summaries": [
+        "test result: ok. 88 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.24s"
+      ]
+    }
+  },
+  "fullFfiTests": 88,
+  "newTests": 10,
+  "priorFfiCasesPreserved": 78,
+  "sourceFiles": 1221,
+  "sourceManifestSha256": "a6c1990cc99b0d8efdf1a13dcc22cd7966ee341577ee713b053f5ca0424913a5",
+  "patch": {
+    "patchSha256": "1965e91ad1deaa1d97ad56c5dfb1d717a20d9e64ea059a7c0a7983d3c7d44939",
+    "files": {
+      "bindings/matrix-sdk-ffi/Cargo.toml": "6fb5bec0ee6babf7175a6324afaad46a03383abdfb77604d9ad2263e24d23352",
+      "bindings/matrix-sdk-ffi/src/encryption.rs": "1067eb456bf46073c227d521a4569eafd215551ff54c000a4bdf0760450bff40",
+      "bindings/matrix-sdk-ffi/src/encryption/room_key_changes.rs": "2687e8e4ff0acf3eded2c0185a68506f3620947d4a07d99dc0db6cee79173b96",
+      "bindings/matrix-sdk-ffi/src/encryption/room_key_changes/tests.rs": "35691220a3ae29492d2395fdeb785cc810bbecd4eb231b53305947a5e33255c6"
+    },
+    "appliedAgainstExactIncomingHintCandidate": true,
+    "artifactPublished": false
+  },
+  "bounds": {
+    "inspectedKeys": 256,
+    "retainedRoomIds": 64,
+    "roomIdUtf8Bytes": 1024
+  },
+  "actualSdkBroadcastLag": true,
+  "improvedSameSessionKeyRetainedAfterReopen": true,
+  "networkRequestsAfterSdkInitialization": 0,
+  "fullFfiWasmAccepted": false,
+  "fullFfiWasmRemaining": "Upstream native filesystem tracing-appender/symlink dependency",
+  "nativeFeatureGraphUnchanged": true,
+  "nativeFeatureGraphSha256": "bb78daee649ec07296a6b3f4fdeba2c2faed3190226ef60f2eaf70c704501445",
+  "applicationConsumerIntegrated": false,
+  "androidNativeExecuted": false,
+  "appleNativeExecuted": false,
+  "artifactPublished": false,
+  "phoneTouched": false
+}
