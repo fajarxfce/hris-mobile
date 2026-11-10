@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 13:21 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 13:29 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -13,9 +13,10 @@ never other usecases; repositories coordinate their own datasource I/O, and View
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
 One heavy compiler OR emulator. Runtime-event focused7075/full47121 are REAPED and accepted;
-no heavy job currently. Native test source is next. Private runtime-event-reads-2026-11-10
-owns exact files, runners, strict auditors and accepted results.
-The emulator is stopped. Preserve the one-compiler OR one-emulator boundary.
+Native1/44424 RUNNING on isolated2560MiB/two-core emulator with precompiled768MiB server
+harness. Mobile3proof files and Group3test/driver files are frozen; no heavy compilation.
+Private runtime-event-native-2026-11-10 in both repos owns source/results/runners.
+Private runtime-event-reads-2026-11-10 owns accepted production gates. Preserve the one-compiler OR one-emulator boundary.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
 Phone10.77.77.3:5555 is INSTALL-ONLY: announce each install, never launch/drive/uninstall/
@@ -41,9 +42,11 @@ Full1/47121 REAPED PASS625.307s:10203verified=8184fresh+2019exact accepted reuse
 failures/errors/skips. Rootcheck,Androidhost/releasecompile/lint,Wasm/iOSappsource,Chromium,
 proofAPK/unit/format/architecture/detekt pass. Both auditors/publisher passed.4762source/library
 inputs fixed,manifest6705f5c8117dbf3231d1ab58ffc32d42bb5ec00487c4a196d3db236b45afddc8.
-Current proofAPK150606837B SHAe81c81c14e390914e2d976962f6498c1d466d43fae8083648a2b99993d3502a0.
-Source commit/push next. Hosted11330=8201portable+3129Apple+16Swift/host prepared,not dispatched;
-baseline classifier42819170095 remains running. No actual native event equivalence, incoming
+Historical production-gate proofAPK150606837B SHAe81c81c14e390914e2d976962f6498c1d466d43fae8083648a2b99993d3502a0.
+Sourcef64e47136a309453ab9d6ea67993ed8e5200b611 is committed/pushed76754(REAPED).
+Hosted42824039795 RUNNING exactf64e,11330=8201portable+3129Apple+16Swift/host;
+refvalidation/runtime-event-reads-20261110 push24994/dispatch70436 REAPED. Configuration
+recorded; baseline classifier42819170095 portable audit passed,Apple remains running. No actual native event equivalence, incoming
 activation, phone/live/SDK/Starter change or native Apple implementation claim.
 
 ## Accepted acquired-event classification
@@ -243,14 +246,28 @@ handoff/measurements. Shared Apple tests/unsigned hosts do not implement its nat
 
 [Incoming/history plan](collaboration-space-incoming-plan.md) now continues from accepted
 original AND replacement storage and the accepted internal raw-event I/O primitive above.
-Runtime event ownership is now accepted above. Group has3UNCOMMITTED test files:
-NativeEventReadsTest.kt,tool/collaboration_event_reads_native.py and its test.4new Python
-plus18unchanged driver ownership cases pass; JVM/native not yet compiled/run. Group handoff
-893ad337 is pushed57214(REAPED) and private runtime-event-native-2026-11-10 owns the protocol.
-Next implement/register Mobile `event-reads-stage` and `event-reads-space` probes to establish
-actual original/edit/redaction/missing-key behavior through public repository capabilities in
-the isolated SDK6 native fixture. Do not make an internal datasource public for tests or create
-a second client/registry. Raw I/O alone does not admit content or advance progress.
+Runtime event ownership is acceptedf64e above. Current UNCOMMITTED native proof has3Mobile
+files: HrisEventReadsProbe.kt,HrisEventReadEvidence.kt,MatrixProofInstrumentation.kt.
+Group3files: NativeEventReadsTest.kt,tool/collaboration_event_reads_native.py and its test.
+Mobile proof1/1607 REAPED PASS20/109.339s,format/architecture/detekt; strict3-file delta from
+accepted4762-source product verified.4764inputs,manifestad29ef0af969e6333270b2e7d0d5b13a056ff2dfb4daa9785d2b2ceb9731952c.
+Current proofAPK150606837B SHA60f7fafe65480e989cf26855aec46bd9525ede27625619b8a2f594a56bda0f95;
+DEX contains both new probe/evidence classes and event-reads-stage route. Native execution
+remains unaccepted. Group source1/73206 REAPED PASS84.146s,8738fixedinputs,
+manifest18ef0db2a4c5b58bd42b5c9c132937e75da6e6223c0a1d5b31e0ad37e7ce2526;
+JVM test compilation/format/architecture only (zero JVM tests),4new+18old Python cases pass.
+Both source auditors pass. Native1/44424 RUNNING; expect1actual SDK6 case,not yet a pass.
+
+Stage uses new fictional original/peer messages and two edits; first exact read before sync
+must remain unresolved, then actual decryption. Existing Company/Space UI-window behavior is
+observed without presuming a failure. Gateway has no production redaction mutation route;
+the server fixture seeds a real Synapse redaction under the SAME existing user/device and
+original public fingerprint is checked again at adoption. No extra HRIS endpoint or SDK key.
+Five separate event IDs (four encrypted+one redaction), hashes including unknown nested fields,
+original sender on redacted target, exact logical/physical runtime identity and no extra sends
+are asserted through PUBLIC event repository capabilities. No internal datasource exposure or
+reflection. After native1, audit real result before claiming equivalence or fixing old ACK-head
+handling. Group handoff893ad337 is pushed57214(REAPED); this Mobile checkpoint owns newer gates.
 Private space-original-acquisition-2026-11-10 retains the
 classification/parent-ownership review and inspected immutable
 SDK6 AAR/Javap API; preserve the dirty SDK source worktree and exact immutable library.
