@@ -1,5 +1,10 @@
 # Owned original queue delivery
 
+The current [mixed delivery owner](collaboration-mixed-original-delivery.md) extends this
+original-only behavior to separately owned Space commands. The evidence below records
+the earlier original-only increment; its native acceptance remains distinct from the new
+mixed staging/delivery proof.
+
 Status: accepted owning source contract; focused and full local checks passed. No product
 routing, product APK or deployment is claimed here. The subsequent
 [actual SDK experiment](collaboration-space-original-delivery-native.md) is accepted separately.

@@ -321,8 +321,7 @@ class StageCollaborationSpaceText(
                     active.singleOrNull { it.intent.id == messageId } != target ||
                     active.any {
                         it.intent.id != messageId &&
-                            (it.state as? CollaborationMessageState.Staging)?.device ==
-                                snapshot.original.device
+                            blocksCollaborationPhysicalQueue(it.state, snapshot.original.device)
                     }
             )
                 return failure("command_inventory_changed")
@@ -428,8 +427,7 @@ class StageCollaborationSpaceText(
                 missingCollaborationReceiptIds(oldAccess, oldId, oldActive, oldKnown) == null ||
                     oldActive.any {
                         !validCollaborationMessageState(it.state) ||
-                            (it.state as? CollaborationMessageState.Staging)?.device ==
-                                snapshot.original.device
+                            blocksCollaborationPhysicalQueue(it.state, snapshot.original.device)
                     }
             )
                 return failure("command_inventory_changed")

@@ -249,6 +249,7 @@ internal class SpaceOriginalDeliveryFixture {
                 completion: CollaborationMessageCompletion,
             ): AppResult<Boolean> = error("Keep history; separate retirement")
         }
+    val space = SpaceDeliveryStorageFixture(this)
     val history = SpaceOriginalReceiptHistoryFixture(this)
     val useCase =
         DeliverCollaborationSpaceOriginalMessages(
@@ -260,6 +261,9 @@ internal class SpaceOriginalDeliveryFixture {
             messages,
             receipts,
             completions,
+            space.messages,
+            space.receipts,
+            space.completions,
             directory.directory,
             native.setup.sessions,
             native.server,

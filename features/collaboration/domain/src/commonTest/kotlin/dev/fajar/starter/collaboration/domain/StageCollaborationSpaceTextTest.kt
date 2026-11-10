@@ -10,6 +10,33 @@ import kotlinx.coroutines.test.*
 
 class StageCollaborationSpaceTextTest {
     @Test
+    fun olderBootstrapStagingStillExcludesTheSamePhysicalQueue() = runTest {
+        for (company in listOf(false, true)) {
+            val f = SpaceMessageStagingFixture()
+            val id = f.base.queue.id(999)
+            val state =
+                CollaborationMessageState.Staging(
+                    f.base.queue.device.copy(
+                        bootstrapOperationId = f.base.queue.id(998),
+                        nativeSessionId = f.base.queue.id(997),
+                    ),
+                    emptySet(),
+                    f.base.queue.origin,
+                )
+            if (company) {
+                val previous = f.base.queue.record
+                f.base.records[id] =
+                    previous.copy(intent = previous.intent.copy(id = id), state = state)
+            } else
+                f.records[id] =
+                    f.initial.copy(intent = f.intent.copy(id = id), revision = 1, state = state)
+            assertIs<AppResult.Failed>(f.stage())
+            assertEquals(0, f.base.count("stage-enqueue"))
+            assertEquals(f.initial, f.current())
+        }
+    }
+
+    @Test
     fun queuedIntentIsRetainedBeforeOnePausedEnqueueAndKeepsOriginalIdentity() = runTest {
         val f = SpaceMessageStagingFixture()
         val before = f.base.snapshot.original.messages.toList()

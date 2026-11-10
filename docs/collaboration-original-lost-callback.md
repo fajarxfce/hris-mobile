@@ -1,5 +1,10 @@
 # Original receipt lost after SDK dequeue
 
+The current [mixed delivery owner](collaboration-mixed-original-delivery.md) extends this
+original-only behavior to separately owned Space commands. The evidence below records
+the earlier original-only increment; its native acceptance remains distinct from the new
+mixed staging/delivery proof.
+
 The earlier native51720 failure is traced to a retained-storage gap. A read-only clone
 contains two original application commands, one receipt and zero pending or dependent
 SDK transactions in both original stores. Command revisions are3 and2. Original image

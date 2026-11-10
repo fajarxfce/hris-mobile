@@ -1,0 +1,116 @@
+{
+  "acceptedAt": "2026-11-10T08:46:40.806200+00:00",
+  "baseCommit": "7643221d211d8327d6ac3b5919272d2ae32312fb",
+  "scope": "Extend the existing original delivery owner to separate Company/Space ledgers, validate complete inventory and both projection plans before writes, preserve scoped late receipts and recover missing text acknowledgements from one bounded native window. Shared physical Staging exclusion survives bootstrap aliases; exact mapping recovery remains strict.",
+  "sourceFiles": 4720,
+  "sourceManifestSha256": "b0218b8f5b184e4a46c63bd7767c20786e0dbd59e6d58812ea4c7aef4e63960d",
+  "changedSourceHashes": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationMixedDeliveryReceipts.kt": "3f91d900c6e207a70342c8b34555474caeecb34b81d1d5e29779b9d7bac4a29f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceDeliveryReceiptPolicy.kt": "af986b83130c869d925a95dae0e3ab64f088054a6444976018c16671360274ef",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationMixedDeliveryReceiptPolicy.kt": "3dc94fad4cebdcab927bf60782f179fd3c7a885d5fbd7428babfb91bc4597756",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationMixedReceiptOwnershipPolicy.kt": "2684b72be3b50d409c0e119bd2c5eb8f202d245459ceae739c72922fab8c6250",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/DeliverCollaborationSpaceOriginalMessages.kt": "1f363adfdab6269b1a7c55f3bc8f689278b02bb5e23a53ea6223297b28cea037",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationMixedDeliveryReceiptTest.kt": "aea8a094ea43e1ad92114f98f378669191a42c718c4b83ca07ff75d8a7edbb45",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceDeliveryStorageFixture.kt": "90c5726ff11cfc25a5cbb9d4562604569f1a8083696379f68834faccc5ecd9e2",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceOriginalDeliveryFixture.kt": "043186d3ec9668657ef53244830e2024687a892e9186b6975374f72ea0754724",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "96e7ecd5946b82013829aec52a0c59d740864295a6fa46fc308f14bedb6da095",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/MixedSpaceDeliveryFixture.kt": "95f702dc50477c68f188fa2e64d2a9fb0acf9eb3ae3119d2fbdb1a6ed2f3ccfa",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/MixedSpaceOriginalDeliveryTest.kt": "0619f5da76f3b3e9c208775e8b99729fdfced16c3f2f690243c426f9a5edaa9c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceStagingRecoveryPolicy.kt": "d6bcfbf513fd02d16de3627fdb991d51eb8a0728c3537f9b97818c720685eff7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/StageCollaborationSpaceText.kt": "32966c47ab6889f3345478f8a14e3209b069f68270ef321d9bc154a2ed462c54",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationSpaceTextTest.kt": "c476c7e2d9f18e1ab7f4e86bcda5f17367228a0ce1d4545e11ff19473a10c6bb",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceStagingRecoveryTest.kt": "2af5d2c897bfdc316be536fb1707d14f5d4c37295853b886d94e81e283fe2164"
+  },
+  "deletedSources": [],
+  "focused": {
+    "startedAt": "2026-11-10T08:29:07.875431+00:00",
+    "elapsedSeconds": 312.607,
+    "sourceFiles": 4720,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 236,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "b0218b8f5b184e4a46c63bd7767c20786e0dbd59e6d58812ea4c7aef4e63960d"
+  },
+  "full": {
+    "startedAt": "2026-11-10T08:35:19.149762+00:00",
+    "elapsedSeconds": 668.498,
+    "sourceFiles": 4720,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7813,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "b0218b8f5b184e4a46c63bd7767c20786e0dbd59e6d58812ea4c7aef4e63960d",
+    "validatedTests": 9832,
+    "validatedReusedTests": 2019,
+    "validatedDatabaseCases": {
+      "desktopTest": 102,
+      "wasmJsBrowserTest": 100
+    }
+  },
+  "fullReportManifestSha256": "65210a276e069224264488ba9849313f1822cd3027853ed258ff2b47274c9b5e",
+  "contracts": {
+    "newMixedReceiptCasesPerPlatform": 13,
+    "newMixedOwningCasesPerPlatform": 27,
+    "additionalPhysicalStagingPolicyCasesPerPlatform": 3,
+    "additionalOwningStageCasesPerPlatform": 1,
+    "existingOwningDeliveryAndHistoryCasesPerPlatform": 39,
+    "focusedCases": 236
+  },
+  "initialFocused": {
+    "startedAt": "2026-11-10T08:21:05.711009+00:00",
+    "elapsedSeconds": 329.739,
+    "sourceFiles": 4720,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 226,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "12c2fdde99ebb371443fab9fbd9eccde10e5a0415bede96929a81f3e21986c31"
+  },
+  "reviewTestCompileFailure": {
+    "phase": "focused-2",
+    "elapsedSeconds": 75.509,
+    "sourceManifestSha256": "58ef7ec402fce284f41bafb5116af712091361a82b892f8a3a809f496d2d0f9a",
+    "freshCounts": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cause": "Missing explicit import of blocksCollaborationPhysicalQueue in three new pure policy test cases; production compiled.",
+    "repair": "Add only the missing import; production and assertions unchanged."
+  },
+  "checks": [
+    "root check",
+    "Android host tests",
+    "Android release compilation and lint",
+    "Wasm and iOS source compilation",
+    "actual Chromium collaboration tests",
+    "proof APK compilation and unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "nonIncrementalKotlin": true,
+  "nativeRuntimeClaim": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "remaining": [
+    "Actual SDK mixed staging/delivery and callback-loss proof using new fictional Space intents",
+    "Complete pending-command inventory including commands without bindings",
+    "Incoming Space history and edits/retirement, product routing",
+    "Actual Apple Matrix runtime binding, media, backup, calls and meetings; all54 PRD groups open"
+  ]
+}

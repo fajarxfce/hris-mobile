@@ -1,10 +1,62 @@
 package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.blocksCollaborationPhysicalQueue
 import dev.fajar.starter.collaboration.domain.policies.recoverCollaborationSpaceStaging
 import kotlin.test.*
 
 class CollaborationSpaceStagingRecoveryTest {
+    @Test
+    fun physicalQueueExclusionSurvivesBootstrapAndNativeSessionAliases() {
+        val f = SpaceMessageStagingFixture()
+        val device = f.base.queue.device
+        for (alias in
+            listOf(
+                device,
+                device.copy(bootstrapOperationId = f.base.queue.id(990)),
+                device.copy(nativeSessionId = f.base.queue.id(991)),
+            )) {
+            assertTrue(
+                blocksCollaborationPhysicalQueue(
+                    CollaborationMessageState.Staging(alias, emptySet(), f.base.queue.origin),
+                    device,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun aDifferentPhysicalDeviceOrRoomDoesNotBlockThisQueue() {
+        val f = SpaceMessageStagingFixture()
+        val device = f.base.queue.device
+        for (other in
+            listOf(
+                device.copy(deviceId = f.base.queue.id(990)),
+                device.copy(roomId = "!other:matrix.test"),
+            )) {
+            assertFalse(
+                blocksCollaborationPhysicalQueue(
+                    CollaborationMessageState.Staging(other, emptySet(), f.base.queue.origin),
+                    device,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun mappedAndUnstartedCommandsDoNotCreateAnUnresolvedStagingBarrier() {
+        val f = SpaceMessageStagingFixture()
+        for (state in
+            listOf(
+                CollaborationMessageState.Queued,
+                CollaborationMessageState.Cancelled,
+                f.base.queue.record.state,
+                f.base.queue.sent().state,
+            )) {
+            assertFalse(blocksCollaborationPhysicalQueue(state, f.base.queue.device))
+        }
+    }
+
     @Test
     fun exactOriginalIsRecoveredWithoutAllocatingAnotherTransaction() {
         val f = Fixture()

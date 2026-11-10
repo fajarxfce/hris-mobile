@@ -47,3 +47,15 @@ fun recoverCollaborationSpaceStaging(
         return CollaborationQueueRecovery.Ambiguous
     return CollaborationQueueRecovery.Found(target.transactionId)
 }
+
+/**
+ * A changed bootstrap or native session does not release an unresolved physical SDK queue. This
+ * exclusion grants no recovery authority: mapping recovery still requires the full device.
+ */
+fun blocksCollaborationPhysicalQueue(
+    state: CollaborationMessageState,
+    device: CollaborationMessageDevice,
+): Boolean =
+    state is CollaborationMessageState.Staging &&
+        state.device.deviceId == device.deviceId &&
+        state.device.roomId == device.roomId

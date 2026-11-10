@@ -1,5 +1,10 @@
 # Architecture
 
+[Mixed original delivery](collaboration-mixed-original-delivery.md) keeps one native writer
+and invocation-owned Company/Space ledger phases. Both complete projections and physical
+receipt ownership are checked before writes; callbacks retain immutable typed mappings.
+The owning flows share a pure unresolved-Staging exclusion across bootstrap aliases.
+
 [Owning Space staging](collaboration-space-message-staging.md) retains exact Staging before
 one paused enqueue and recovers its original mapping after response loss. The usecase owns
 whole-inventory admission and CAS readback; the separate raw staging lease cannot resume.

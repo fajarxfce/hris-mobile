@@ -24,6 +24,9 @@ class DeliverCollaborationSpaceOriginalMessages(
     private val messages: CollaborationMessageRepository,
     private val receipts: CollaborationReceiptRepository,
     private val completions: CollaborationMessageCompletionRepository,
+    private val spaceMessages: CollaborationSpaceMessageRepository,
+    private val spaceReceipts: CollaborationSpaceReceiptRepository,
+    private val spaceCompletions: CollaborationSpaceMessageCompletionRepository,
     private val directory: CollaborationSpaceDirectoryRepository,
     private val sessions: SessionRepository,
     private val server: IdentityServer,
@@ -67,12 +70,14 @@ class DeliverCollaborationSpaceOriginalMessages(
         lateinit var retained: CollaborationSpaceRoomBinding
         lateinit var observed: CollaborationSpaceDirectTransport
         lateinit var snapshot: CollaborationSpaceOriginalQueueSnapshot
-        lateinit var original: CollaborationSpaceOriginalConversation
-        lateinit var access: CollaborationLocalAccess
+        var companyAccess: CollaborationLocalAccess? = null
         var preparing = true
         val projection = Mutex()
-        var records = emptyList<CollaborationMessageRecord>()
-        var matched = emptyList<CollaborationMatchedOriginalMessage>()
+        val receiptRetention = Mutex()
+        var observedReceipts = CollaborationMixedDeliveryReceipts(emptyList(), emptyList())
+        var company: CompanyLedger? = null
+        lateinit var space: SpaceLedger
+        lateinit var matched: CollaborationMixedOriginalQueueMatch
 
         suspend fun run(): AppResult<CollaborationDeliveryReport> {
             var result: AppResult<CollaborationDeliveryReport>? = null
@@ -84,7 +89,12 @@ class DeliverCollaborationSpaceOriginalMessages(
                 if (
                     result is AppResult.Success &&
                         observed.recipientReady &&
-                        matched.any { it.completion == null }
+                        matched.messages.any {
+                            when (it) {
+                                is CollaborationMatchedQueueMessage.Company -> it.completion == null
+                                is CollaborationMatchedQueueMessage.Space -> it.completion == null
+                            }
+                        }
                 )
                     result =
                         withTimeoutOrNull(30_000) { deliver() }
@@ -122,8 +132,7 @@ class DeliverCollaborationSpaceOriginalMessages(
             retained = (binding as AppResult.Success).value ?: return failure("binding_missing")
             if (
                 !validCollaborationSpaceRoomBinding(owner.localDirectoryAccess(), retained) ||
-                    retained.conversation != conversation.localMetadata() ||
-                    retained.original == null
+                    retained.conversation != conversation.localMetadata()
             )
                 return failure("binding_changed")
             val read = transport.read(conversation)
@@ -142,11 +151,7 @@ class DeliverCollaborationSpaceOriginalMessages(
                     observed.room != retained.room ||
                     observed.device.id != runtime.deviceId ||
                     observed.device.origin != CollaborationSpaceDeviceOrigin.LEGACY ||
-                    observed.device.platform != platform ||
-                    !validCollaborationOriginalQueueRequest(
-                        runtime,
-                        requireNotNull(retained.original).conversation.position,
-                    )
+                    observed.device.platform != platform
             )
                 return failure("transport_changed")
             val acquired = runtimes.acquireOriginalQueue(runtime, retained.room.roomId)
@@ -159,7 +164,7 @@ class DeliverCollaborationSpaceOriginalMessages(
             if (captured is AppResult.Failed) return captured
             snapshot = (captured as AppResult.Success).value
             val mapping =
-                matchCollaborationOriginalTransport(
+                matchCollaborationSpaceQueueTransport(
                     runtime,
                     conversation,
                     retained,
@@ -168,21 +173,16 @@ class DeliverCollaborationSpaceOriginalMessages(
                     platform,
                 )
             if (mapping is AppResult.Failed) return mapping
-            original = (mapping as AppResult.Success).value
+            val scope =
+                collaborationMixedQueueCompanyAccess(runtime, conversation, retained, snapshot)
+            if (scope is AppResult.Failed) return scope
+            companyAccess = (scope as AppResult.Success).value
             if (
                 queue.runtime != runtime ||
                     queue.binding != snapshot.original.binding ||
                     queue.device != snapshot.original.device
             )
                 return failure("writer_changed")
-            val bindingOwner = queue.binding
-            access =
-                CollaborationLocalAccess(
-                    owner.parent.sessionId,
-                    bindingOwner.audience,
-                    bindingOwner.accountId,
-                    bindingOwner.companyId,
-                )
             val repaired = reconcile()
             if (repaired is AppResult.Failed) return repaired
             val recovered = recoverMissingReceipts()
@@ -190,10 +190,9 @@ class DeliverCollaborationSpaceOriginalMessages(
             val settled = settle()
             if (settled is AppResult.Failed) return settled
             return AppResult.Success(
-                collaborationDeliveryReport(
-                    records,
-                    if (matched.isEmpty()) CollaborationQueueDeliveryReason.DRAINED
-                    else CollaborationQueueDeliveryReason.STOPPED,
+                report(
+                    if (matched.messages.isEmpty()) CollaborationQueueDeliveryReason.DRAINED
+                    else CollaborationQueueDeliveryReason.STOPPED
                 )
             )
         }
@@ -245,6 +244,8 @@ class DeliverCollaborationSpaceOriginalMessages(
         }
 
         suspend fun <T> checked(operation: suspend () -> AppResult<T>): AppResult<T> {
+            val before = current()
+            if (before is AppResult.Failed) return before
             val value = operation()
             val latest = current()
             return if (latest is AppResult.Failed) latest else value
@@ -286,84 +287,79 @@ class DeliverCollaborationSpaceOriginalMessages(
         /** Read the whole bounded ledger before projecting; a journal may precede archival. */
         suspend fun reconcile(): AppResult<Unit> = projection.withLock { reconcileOriginals() }
 
-        /** Recover only disappeared originals; ordinary queued sends never acquire history. */
+        /** One bounded original history acquisition, only for disappeared retained transactions. */
         suspend fun recoverMissingReceipts(): AppResult<Unit> {
-            val missing = collaborationSpaceMissingOriginalReceipts(snapshot, records)
-            if (missing.isEmpty()) return AppResult.Success(Unit)
-            if (
-                missing.any {
-                    val state = it.state as CollaborationMessageState.Staged
-                    it.intent.owner != access.messageOwner() ||
-                        it.intent.conversationId != original.conversation.position.conversationId ||
-                        !validCollaborationMessageState(state) ||
-                        state.origin?.sender != observed.matrixUserId
+            val old = company
+            val missingCompany =
+                collaborationSpaceMissingOriginalReceipts(
+                    snapshot,
+                    old?.all.orEmpty().values.toList(),
+                )
+            val queued = snapshot.original.messages.mapNotNull { it.logicalId }.toSet()
+            val missingSpace =
+                space.all.values.filter {
+                    val state = it.state as? CollaborationMessageState.Staged
+                    it.intent.id !in queued &&
+                        it.intent.editTarget == null &&
+                        state != null &&
+                        state.device == snapshot.original.device &&
+                        state.origin != null
                 }
+            if (missingCompany.isEmpty() && missingSpace.isEmpty()) return AppResult.Success(Unit)
+            if (
+                (missingCompany.map { it.state.origin } + missingSpace.map { it.state.origin })
+                    .any { it?.sender != observed.matrixUserId }
             )
                 return failure("history_command_changed")
-            val recovered = mutableListOf<CollaborationMessageReceipt>()
-            val absent = mutableListOf<CollaborationMessageRecord>()
-            for (record in missing) {
+            val recoveredCompany = mutableListOf<CollaborationMessageReceipt>()
+            val recoveredSpace = mutableListOf<CollaborationSpaceMessageReceipt>()
+            val absentCompany = mutableListOf<CollaborationMessageRecord>()
+            for (record in missingCompany) {
                 val state = record.state as CollaborationMessageState.Staged
                 val local = checked {
-                    when (
-                        val read =
-                            history.getByLogicalId(
-                                access,
-                                original.conversation.position.conversationId,
-                                state.device.roomId,
-                                requireNotNull(state.origin).sender,
-                                record.intent.id,
-                            )
-                    ) {
-                        is AppResult.Failed -> read
-                        is AppResult.Success ->
-                            if (read.value?.eventIds?.size?.let { it > 128 } == true)
-                                failure("receipt_bounds")
-                            else
-                                AppResult.Success(
-                                    read.value?.let { it.copy(eventIds = it.eventIds.toList()) }
-                                )
-                    }
+                    history.getByLogicalId(
+                        requireNotNull(old).access,
+                        old.conversationId,
+                        state.device.roomId,
+                        requireNotNull(state.origin).sender,
+                        record.intent.id,
+                    )
                 }
                 if (local is AppResult.Failed) return local
                 val found = (local as AppResult.Success).value
-                if (found == null) absent += record
-                else
-                    recovered +=
-                        recoverCollaborationOriginalReceipt(record, found)
-                            ?: return failure("history_receipt_changed")
+                if (found == null) absentCompany += record
+                else {
+                    if (found.eventIds.size > 128) return failure("receipt_bounds")
+                    recoveredCompany +=
+                        recoverCollaborationOriginalReceipt(
+                            record,
+                            found.copy(eventIds = found.eventIds.toList()),
+                        ) ?: return failure("history_receipt_changed")
+                }
             }
-            if (absent.isNotEmpty()) {
+            if (absentCompany.isNotEmpty() || missingSpace.isNotEmpty()) {
                 val acquired = captureRecoveryHistory()
                 if (acquired is AppResult.Failed) return acquired
                 val observedHistory = (acquired as AppResult.Success).value
                 if (!validCollaborationSpaceOriginalHistory(observedHistory, snapshot))
                     return failure("history_changed")
                 val changes = observedHistory.window?.changes.orEmpty()
-                for (record in absent) {
-                    collaborationSpaceOriginalHistoryReceipt(record, changes)?.let {
-                        recovered += it
-                    }
-                }
+                for (record in absentCompany) collaborationSpaceOriginalHistoryReceipt(
+                        record,
+                        changes,
+                    )
+                    ?.let { recoveredCompany += it }
+                for (record in missingSpace) collaborationSpaceMessageHistoryReceipt(
+                        space.access,
+                        record,
+                        changes,
+                    )
+                    ?.let { recoveredSpace += it }
             }
-            if (recovered.isEmpty()) return AppResult.Success(Unit)
+            if (recoveredCompany.isEmpty() && recoveredSpace.isEmpty())
+                return AppResult.Success(Unit)
             val retained =
-                withContext(NonCancellable) {
-                    withTimeoutOrNull(5_000) {
-                        for (batch in recovered.chunked(32)) {
-                            val saved =
-                                receipts.append(
-                                    access,
-                                    original.conversation.position.conversationId,
-                                    batch,
-                                )
-                            if (saved is AppResult.Failed) return@withTimeoutOrNull saved
-                            if (!(saved as AppResult.Success).value)
-                                return@withTimeoutOrNull failure("receipt_write_changed")
-                        }
-                        AppResult.Success(Unit)
-                    } ?: failure("receipt_pending", FailureKind.Storage)
-                }
+                retainBatch(CollaborationMixedDeliveryReceipts(recoveredCompany, recoveredSpace))
             val latest = current()
             if (latest is AppResult.Failed) return latest
             if (retained is AppResult.Failed) return retained
@@ -399,158 +395,413 @@ class DeliverCollaborationSpaceOriginalMessages(
                 }
             }
 
+        /** Both complete ledgers are validated and planned before either can change. */
         suspend fun reconcileOriginals(): AppResult<Unit> {
-            val active = checked {
-                when (
-                    val read =
-                        messages
-                            .observe(access, original.conversation.position.conversationId)
-                            .first()
-                ) {
-                    is AppResult.Failed -> read
-                    is AppResult.Success ->
-                        if (read.value.size > 128) failure("command_bounds")
-                        else AppResult.Success(read.value.toList())
+            val old =
+                companyAccess?.let {
+                    CompanyLedger(
+                        it,
+                        requireNotNull(retained.original).conversation.position.conversationId,
+                    )
                 }
-            }
-            if (active is AppResult.Failed) return active
-            val journal = checked {
-                when (
-                    val read = receipts.read(access, original.conversation.position.conversationId)
-                ) {
-                    is AppResult.Failed -> read
-                    is AppResult.Success ->
-                        if (!validCollaborationReceiptLedger(read.value)) failure("receipt_bounds")
-                        else
-                            AppResult.Success(
-                                read.value.map { it.copy(eventIds = it.eventIds.toList()) }
-                            )
-                }
-            }
-            if (journal is AppResult.Failed) return journal
-            val known = (journal as AppResult.Success).value
-            val retainedRecords = (active as AppResult.Success).value
-            if (
-                missingCollaborationReceiptIds(
-                    access,
-                    original.conversation.position.conversationId,
-                    retainedRecords,
-                    known,
-                ) == null
-            )
-                return failure("receipt_owner")
-            val all = retainedRecords.associateBy { it.intent.id }.toMutableMap()
+            val next = SpaceLedger()
+            val oldRead = old?.readPending()
+            if (oldRead is AppResult.Failed) return oldRead
+            val nextRead = next.readPending()
+            if (nextRead is AppResult.Failed) return nextRead
             val ids =
-                snapshot.original.messages.map { requireNotNull(it.logicalId) } +
-                    known.map { it.intent.id }
-            for (id in ids.distinct().filterNot { it in all }) {
-                val read = checked { messages.get(access, id) }
-                if (read is AppResult.Failed) return read
-                val record = (read as AppResult.Success).value ?: return failure("command_missing")
-                if (record.intent.id != id) return failure("command_changed")
-                all[id] = record
-            }
-            val evidence = mutableMapOf<String, CollaborationMessageCompletion>()
-            for (record in all.values.filter { it.state is CollaborationMessageState.Sent }) {
-                val read = checked {
-                    when (val value = completions.readCompletion(access, record.intent.id)) {
-                        is AppResult.Failed -> value
-                        is AppResult.Success ->
-                            if (value.value?.eventIds?.size?.let { it > 128 } == true)
-                                failure("receipt_bounds")
-                            else
-                                AppResult.Success(
-                                    value.value?.let { it.copy(eventIds = it.eventIds.toList()) }
-                                )
-                    }
+                (snapshot.original.messages.map { requireNotNull(it.logicalId) } +
+                        old?.all.orEmpty().keys +
+                        next.all.keys +
+                        old?.known.orEmpty().map { it.intent.id } +
+                        next.known.map { it.intent.id })
+                    .toSet()
+            if (ids.size > 128) return failure("command_bounds")
+            val oldLoaded = old?.load(ids)
+            if (oldLoaded is AppResult.Failed) return oldLoaded
+            val nextLoaded = next.load(ids)
+            if (nextLoaded is AppResult.Failed) return nextLoaded
+            if (old?.all.orEmpty().keys.intersect(next.all.keys).isNotEmpty())
+                return failure("command_owner")
+            val states =
+                old?.all.orEmpty().values.map { it.state } + next.all.values.map { it.state }
+            if (states.any { blocksCollaborationPhysicalQueue(it, snapshot.original.device) })
+                return failure("staging_unresolved")
+            val oldPlan = old?.plan()
+            if (oldPlan is AppResult.Failed) return oldPlan
+            val nextPlan = next.plan()
+            if (nextPlan is AppResult.Failed) return nextPlan
+            if (!validCollaborationMixedReceiptOwnership(old?.effective.orEmpty(), next.effective))
+                return failure("receipt_owner")
+            val retainedProof =
+                receiptRetention.withLock {
+                    mergeCollaborationMixedDeliveryReceipts(
+                            observedReceipts,
+                            CollaborationMixedDeliveryReceipts(
+                                old?.effective.orEmpty(),
+                                next.effective,
+                            ),
+                        )
+                        ?.also { observedReceipts = it }
                 }
-                if (read is AppResult.Failed) return read
-                val proof =
-                    collaborationOriginalAcknowledgement(
-                        record,
-                        known.find { it.intent.id == record.intent.id },
-                        (read as AppResult.Success).value,
-                    ) ?: return failure("acknowledgement_missing")
-                evidence[record.intent.id] = proof
-            }
-            val beforeProjection = matchCaptured(all.values.toList(), evidence.values.toList())
-            if (beforeProjection is AppResult.Failed) return beforeProjection
-            val projected = project(all, known, evidence)
-            if (projected is AppResult.Failed) return projected
-            records = all.values.toList()
-            val matching = matchCaptured(records, evidence.values.toList())
-            if (matching is AppResult.Failed) return matching
-            matched = (matching as AppResult.Success).value
+            if (retainedProof == null) return failure("receipt_owner")
+            val before = matchCaptured(old, next)
+            if (before is AppResult.Failed) return before
+            val oldSaved = old?.applyProjection()
+            if (oldSaved is AppResult.Failed) return oldSaved
+            val nextSaved = next.applyProjection()
+            if (nextSaved is AppResult.Failed) return nextSaved
+            val after = matchCaptured(old, next)
+            if (after is AppResult.Failed) return after
+            company = old
+            space = next
+            matched = (after as AppResult.Success).value
             return AppResult.Success(Unit)
         }
 
         fun matchCaptured(
-            values: List<CollaborationMessageRecord>,
-            proofs: List<CollaborationMessageCompletion>,
-        ): AppResult<List<CollaborationMatchedOriginalMessage>> {
+            old: CompanyLedger?,
+            next: SpaceLedger,
+        ): AppResult<CollaborationMixedOriginalQueueMatch> {
             val ids = snapshot.original.messages.map { it.logicalId }.toSet()
-            return matchCollaborationOriginalMessages(
+            return matchCollaborationMixedOriginalQueue(
                 runtime,
-                original,
-                observed.matrixUserId,
+                conversation,
+                retained,
                 snapshot,
-                values.filter { it.intent.id in ids },
-                proofs.filter { it.record.intent.id in ids },
+                old?.all.orEmpty().values.filter { it.intent.id in ids },
+                old?.evidence.orEmpty().values.filter { it.record.intent.id in ids },
+                next.all.values.filter { it.intent.id in ids },
+                next.evidence.values.filter { it.record.intent.id in ids },
             )
         }
 
-        suspend fun project(
-            all: MutableMap<String, CollaborationMessageRecord>,
-            known: List<CollaborationMessageReceipt>,
-            evidence: MutableMap<String, CollaborationMessageCompletion>,
-        ): AppResult<Unit> {
+        /** Captured original-company storage scope, never allocated for a SPACE-only room. */
+        inner class CompanyLedger(
+            val access: CollaborationLocalAccess,
+            val conversationId: String,
+        ) {
+            val all = linkedMapOf<String, CollaborationMessageRecord>()
+            var known = emptyList<CollaborationMessageReceipt>()
+            val evidence = linkedMapOf<String, CollaborationMessageCompletion>()
             val changes =
                 mutableListOf<Pair<CollaborationMessageRecord, CollaborationMessageState.Sent>>()
-            for (receipt in known) {
-                val record = all[receipt.intent.id] ?: return failure("command_missing")
-                val state =
-                    evidence[receipt.intent.id]?.let {
-                        collaborationCompletedReceiptState(it, receipt)
+            var effective = emptyList<CollaborationMessageReceipt>()
+
+            suspend fun readPending(): AppResult<Unit> {
+                val pending = checked {
+                    when (val read = messages.observe(access, conversationId).first()) {
+                        is AppResult.Failed -> read
+                        is AppResult.Success ->
+                            if (read.value.size > 128) failure("command_bounds")
+                            else
+                                AppResult.Success(
+                                    read.value.map { record ->
+                                        record.copy(
+                                            state =
+                                                (record.state as? CollaborationMessageState.Staging)
+                                                    ?.let { it.copy(before = it.before.toSet()) }
+                                                    ?: record.state
+                                        )
+                                    }
+                                )
                     }
-                        ?: collaborationReceiptState(record, receipt)
-                        ?: return failure("receipt_changed")
-                changes += record to state
+                }
+                if (pending is AppResult.Failed) return pending
+                val journal = checked {
+                    when (val read = receipts.read(access, conversationId)) {
+                        is AppResult.Failed -> read
+                        is AppResult.Success ->
+                            if (read.value.size > 128 || read.value.any { it.eventIds.size > 128 })
+                                failure("receipt_bounds")
+                            else
+                                AppResult.Success(
+                                    read.value.map { it.copy(eventIds = it.eventIds.toList()) }
+                                )
+                    }
+                }
+                if (journal is AppResult.Failed) return journal
+                val records = (pending as AppResult.Success).value
+                val values = (journal as AppResult.Success).value
+                if (missingCollaborationReceiptIds(access, conversationId, records, values) == null)
+                    return failure("receipt_owner")
+                if (records.any { !validRecord(it) }) return failure("command_changed")
+                for (record in records) all[record.intent.id] =
+                    record.copy(
+                        state =
+                            (record.state as? CollaborationMessageState.Staging)?.let {
+                                it.copy(before = it.before.toSet())
+                            } ?: record.state
+                    )
+                known = values.map { it.copy(eventIds = it.eventIds.toList()) }
+                return AppResult.Success(Unit)
             }
-            for ((record, state) in changes) {
-                if (record.state == state) continue
-                val saved = checked { messages.update(access, record, state) }
-                // Read back a possibly committed CAS, including false or a lost write response.
-                val read = checked { messages.get(access, record.intent.id) }
-                if (read is AppResult.Failed) return read
-                val confirmed = (read as AppResult.Success).value
-                if (confirmed != record.copy(revision = record.revision + 1, state = state))
-                    return if (saved is AppResult.Failed) saved else failure("projection_changed")
-                all[record.intent.id] = confirmed
-                evidence[record.intent.id] =
-                    collaborationOriginalAcknowledgement(
-                        confirmed,
-                        known.first { it.intent.id == record.intent.id },
-                        null,
+
+            suspend fun load(ids: Set<String>): AppResult<Unit> {
+                for (id in ids.filterNot { it in all }) {
+                    val read = checked { messages.get(access, id) }
+                    if (read is AppResult.Failed) return read
+                    val record = (read as AppResult.Success).value ?: continue
+                    if (record.intent.id != id || !validRecord(record))
+                        return failure("command_changed")
+                    all[id] =
+                        record.copy(
+                            state =
+                                (record.state as? CollaborationMessageState.Staging)?.let {
+                                    it.copy(before = it.before.toSet())
+                                } ?: record.state
+                        )
+                }
+                return AppResult.Success(Unit)
+            }
+
+            fun validRecord(record: CollaborationMessageRecord) =
+                record.intent.owner == access.messageOwner() &&
+                    record.intent.conversationId == conversationId &&
+                    record.revision in 0..9_007_199_254_740_991L &&
+                    validCollaborationEditRecord(record) &&
+                    validCollaborationMessageState(record.state)
+
+            suspend fun plan(): AppResult<Unit> {
+                for (record in all.values.filter { it.state is CollaborationMessageState.Sent }) {
+                    val read = checked { completions.readCompletion(access, record.intent.id) }
+                    if (read is AppResult.Failed) return read
+                    val archived = (read as AppResult.Success).value
+                    if (archived?.eventIds?.size?.let { it > 128 } == true)
+                        return failure("receipt_bounds")
+                    evidence[record.intent.id] =
+                        collaborationOriginalAcknowledgement(
+                            record,
+                            known.find { it.intent.id == record.intent.id },
+                            archived?.copy(eventIds = archived.eventIds.toList()),
+                        ) ?: return failure("acknowledgement_missing")
+                }
+                for (receipt in known) {
+                    val record = all[receipt.intent.id] ?: return failure("command_missing")
+                    val state =
+                        evidence[receipt.intent.id]?.let {
+                            collaborationCompletedReceiptState(it, receipt)
+                        }
+                            ?: collaborationReceiptState(record, receipt)
+                            ?: return failure("receipt_changed")
+                    if (state != record.state && record.revision == 9_007_199_254_740_991L)
+                        return failure("command_bounds")
+                    changes += record to state
+                }
+                effective =
+                    known.filterNot { it.intent.id in evidence } +
+                        evidence.values.map {
+                            collaborationCompletionReceipt(it) ?: return failure("receipt_changed")
+                        }
+                if (!validCollaborationReceiptLedger(effective)) return failure("receipt_owner")
+                return AppResult.Success(Unit)
+            }
+
+            suspend fun applyProjection(): AppResult<Unit> {
+                for ((record, state) in changes) {
+                    if (record.state == state) continue
+                    val saved = checked { messages.update(access, record, state) }
+                    val read = checked { messages.get(access, record.intent.id) }
+                    if (read is AppResult.Failed) return read
+                    val confirmed = (read as AppResult.Success).value
+                    if (confirmed != record.copy(revision = record.revision + 1, state = state))
+                        return if (saved is AppResult.Failed) saved
+                        else failure("projection_changed")
+                    all[record.intent.id] = confirmed
+                    evidence[record.intent.id] =
+                        collaborationOriginalAcknowledgement(
+                            confirmed,
+                            known.first { it.intent.id == record.intent.id },
+                            null,
+                        ) ?: return failure("receipt_changed")
+                }
+                return AppResult.Success(Unit)
+            }
+        }
+
+        /** Captured Space scope; its journal, active commands and archive never use company I/O. */
+        inner class SpaceLedger {
+            val access = owner.localDirectoryAccess()
+            val all = linkedMapOf<String, CollaborationSpaceMessageRecord>()
+            var known = emptyList<CollaborationSpaceMessageReceipt>()
+            val evidence = linkedMapOf<String, CollaborationSpaceMessageCompletion>()
+            var changes =
+                emptyList<Pair<CollaborationSpaceMessageRecord, CollaborationMessageState.Sent>>()
+            var effective = emptyList<CollaborationSpaceMessageReceipt>()
+
+            suspend fun readPending(): AppResult<Unit> {
+                val pending = checked {
+                    when (val read = spaceMessages.observe(access, conversation.id).first()) {
+                        is AppResult.Failed -> read
+                        is AppResult.Success ->
+                            if (read.value.size > 128) failure("command_bounds")
+                            else
+                                AppResult.Success(
+                                    read.value.map { record ->
+                                        record.copy(
+                                            state =
+                                                (record.state as? CollaborationMessageState.Staging)
+                                                    ?.let { it.copy(before = it.before.toSet()) }
+                                                    ?: record.state
+                                        )
+                                    }
+                                )
+                    }
+                }
+                if (pending is AppResult.Failed) return pending
+                val journal = checked {
+                    when (val read = spaceReceipts.read(access, conversation.id)) {
+                        is AppResult.Failed -> read
+                        is AppResult.Success ->
+                            if (read.value.size > 128 || read.value.any { it.eventIds.size > 128 })
+                                failure("receipt_bounds")
+                            else
+                                AppResult.Success(
+                                    read.value.map { it.copy(eventIds = it.eventIds.toList()) }
+                                )
+                    }
+                }
+                if (journal is AppResult.Failed) return journal
+                val records = (pending as AppResult.Success).value
+                val values = (journal as AppResult.Success).value
+                if (
+                    records.size > 128 ||
+                        records.map { it.intent.id }.distinct().size != records.size ||
+                        records.any { !validRecord(it) } ||
+                        !validCollaborationSpaceReceiptLedger(access, conversation.id, values)
+                )
+                    return failure("receipt_owner")
+                for (record in records) all[record.intent.id] =
+                    record.copy(
+                        state =
+                            (record.state as? CollaborationMessageState.Staging)?.let {
+                                it.copy(before = it.before.toSet())
+                            } ?: record.state
+                    )
+                known = values.map { it.copy(eventIds = it.eventIds.toList()) }
+                return AppResult.Success(Unit)
+            }
+
+            suspend fun load(ids: Set<String>): AppResult<Unit> {
+                for (id in ids.filterNot { it in all }) {
+                    val read = checked { spaceMessages.get(access, id) }
+                    if (read is AppResult.Failed) return read
+                    val record = (read as AppResult.Success).value ?: continue
+                    if (record.intent.id != id || !validRecord(record))
+                        return failure("command_changed")
+                    all[id] =
+                        record.copy(
+                            state =
+                                (record.state as? CollaborationMessageState.Staging)?.let {
+                                    it.copy(before = it.before.toSet())
+                                } ?: record.state
+                        )
+                }
+                return AppResult.Success(Unit)
+            }
+
+            fun validRecord(record: CollaborationSpaceMessageRecord) =
+                validCollaborationSpaceMessageRecord(access, record) &&
+                    record.intent.conversationId == conversation.id
+
+            suspend fun plan(): AppResult<Unit> {
+                for (record in all.values.filter { it.state is CollaborationMessageState.Sent }) {
+                    val read = checked { spaceCompletions.readCompletion(access, record.intent.id) }
+                    if (read is AppResult.Failed) return read
+                    val archived = (read as AppResult.Success).value
+                    if (archived?.eventIds?.size?.let { it > 128 } == true)
+                        return failure("receipt_bounds")
+                    evidence[record.intent.id] =
+                        collaborationSpaceOriginalAcknowledgement(
+                            access,
+                            record,
+                            known.find { it.intent.id == record.intent.id },
+                            archived?.copy(eventIds = archived.eventIds.toList()),
+                        ) ?: return failure("acknowledgement_missing")
+                }
+                val records = known.map { all[it.intent.id] ?: return failure("command_missing") }
+                val ids = records.map { it.intent.id }.toSet()
+                changes =
+                    collaborationSpaceReceiptProjection(
+                        access,
+                        conversation.id,
+                        records,
+                        known,
+                        evidence.values.filter { it.record.intent.id in ids },
                     ) ?: return failure("receipt_changed")
+                effective =
+                    known.filterNot { it.intent.id in evidence } +
+                        evidence.values.map {
+                            collaborationSpaceCompletionReceipt(access, it)
+                                ?: return failure("receipt_changed")
+                        }
+                if (!validCollaborationSpaceReceiptLedger(access, conversation.id, effective))
+                    return failure("receipt_owner")
+                return AppResult.Success(Unit)
             }
-            return AppResult.Success(Unit)
+
+            suspend fun applyProjection(): AppResult<Unit> {
+                for ((record, state) in changes) {
+                    if (record.state == state) continue
+                    val saved = checked { spaceMessages.update(access, record, state) }
+                    val read = checked { spaceMessages.get(access, record.intent.id) }
+                    if (read is AppResult.Failed) return read
+                    val confirmed = (read as AppResult.Success).value
+                    if (confirmed != record.copy(revision = record.revision + 1, state = state))
+                        return if (saved is AppResult.Failed) saved
+                        else failure("projection_changed")
+                    all[record.intent.id] = confirmed
+                    evidence[record.intent.id] =
+                        collaborationSpaceOriginalAcknowledgement(
+                            access,
+                            confirmed,
+                            known.first { it.intent.id == record.intent.id },
+                            null,
+                        ) ?: return failure("receipt_changed")
+                }
+                return AppResult.Success(Unit)
+            }
         }
 
         suspend fun settle(): AppResult<Unit> {
             val queue = requireNotNull(writer)
-            for (value in matched.filter { it.completion != null }) {
+            val remaining = mutableListOf<CollaborationMatchedQueueMessage>()
+            for (value in matched.messages) {
                 val event =
-                    collaborationQueueCompletionEvent(
-                        access,
-                        original.conversation.position.conversationId,
-                        queue.device,
-                        value.original,
-                        requireNotNull(value.completion),
-                    ) ?: return failure("receipt_changed")
-                val result = checked { queue.settleConfirmed(value.original, event) }
-                if (result is AppResult.Failed) return result
+                    when (value) {
+                        is CollaborationMatchedQueueMessage.Company -> {
+                            val proof = value.completion
+                            if (proof == null) {
+                                remaining += value
+                                continue
+                            }
+                            val old = requireNotNull(company)
+                            collaborationQueueCompletionEvent(
+                                old.access,
+                                old.conversationId,
+                                queue.device,
+                                value.original,
+                                proof,
+                            )
+                        }
+                        is CollaborationMatchedQueueMessage.Space -> {
+                            val proof = value.completion
+                            if (proof == null) {
+                                remaining += value
+                                continue
+                            }
+                            collaborationSpaceQueueCompletionEvent(
+                                space.access,
+                                conversation.id,
+                                queue.device,
+                                value.original,
+                                proof,
+                            )
+                        }
+                    } ?: return failure("receipt_changed")
+                val settled = checked { queue.settleConfirmed(value.original, event) }
+                if (settled is AppResult.Failed) return settled
             }
-            val remaining = matched.filter { it.completion == null }
             val expected =
                 snapshot.copy(
                     original = snapshot.original.copy(messages = remaining.map { it.original })
@@ -568,20 +819,23 @@ class DeliverCollaborationSpaceOriginalMessages(
             )
                 return failure("inventory_changed")
             snapshot = actual
-            matched = remaining
+            matched = matched.copy(messages = remaining.toList())
             return AppResult.Success(Unit)
         }
 
         suspend fun deliver(): AppResult<CollaborationDeliveryReport> {
             val admitted = current()
             if (admitted is AppResult.Failed) return admitted
+            val binding = checked {
+                bindings.getByConversation(owner.localDirectoryAccess(), conversation.id)
+            }
+            if (binding is AppResult.Failed) return binding
+            if ((binding as AppResult.Success).value != retained) return failure("binding_changed")
             val invocation = currentCoroutineContext()
-            val mapped = matched.associate { it.original.transactionId to it.record }
-            val queue = requireNotNull(writer)
-            val captured = snapshot.original.messages.map { it.transactionId }.toSet()
+            val captured = matched
             val result =
-                queue.resume(snapshot) { progress ->
-                    val saved = retainObserved(progress, mapped, captured)
+                requireNotNull(writer).resume(snapshot) { progress ->
+                    val saved = retainObserved(progress, captured)
                     if (saved is AppResult.Failed) return@resume saved
                     if (!invocation.isActive || !currentCoroutineContext().isActive)
                         return@resume AppResult.Success(Unit)
@@ -600,44 +854,74 @@ class DeliverCollaborationSpaceOriginalMessages(
                 return if (latest is AppResult.Failed) latest else result
             }
             val outcome = (result as AppResult.Success).value
-            val saved = retainObserved(outcome, mapped, captured)
+            val saved = retainObserved(outcome, captured)
             val latest = current()
             if (latest is AppResult.Failed) return latest
             if (saved is AppResult.Failed) return saved
             val repaired = reconcile()
             if (repaired is AppResult.Failed) return repaired
-            return AppResult.Success(collaborationDeliveryReport(records, outcome.reason))
+            return AppResult.Success(report(outcome.reason))
         }
 
         suspend fun retainObserved(
             progress: CollaborationQueueDelivery,
-            mapped: Map<String, CollaborationMessageRecord>,
-            captured: Set<String>,
+            captured: CollaborationMixedOriginalQueueMatch,
         ): AppResult<Unit> {
             val batch =
-                collaborationDeliveryReceipts(
-                    progress,
-                    mapped,
-                    requireNotNull(writer).device,
-                    captured,
-                ) ?: return failure("receipt_changed")
-            return withContext(NonCancellable) {
+                collaborationMixedDeliveryReceipts(retained, captured, progress)
+                    ?: return failure("receipt_changed")
+            return retainBatch(batch)
+        }
+
+        /**
+         * Factual callback storage retains its original scope even after the caller is cancelled.
+         */
+        suspend fun retainBatch(batch: CollaborationMixedDeliveryReceipts): AppResult<Unit> =
+            withContext(NonCancellable) {
                 withTimeoutOrNull(5_000) {
-                    for (portion in batch.chunked(32)) {
-                        val saved =
-                            receipts.append(
-                                access,
-                                original.conversation.position.conversationId,
-                                portion,
-                            )
-                        if (saved is AppResult.Failed) return@withTimeoutOrNull saved
-                        if (!(saved as AppResult.Success).value)
-                            return@withTimeoutOrNull failure("receipt_write_changed")
+                    receiptRetention.withLock {
+                        val merged =
+                            mergeCollaborationMixedDeliveryReceipts(observedReceipts, batch)
+                                ?: return@withLock failure("receipt_owner")
+                        // Keep factual ownership even if only the first journal commits before
+                        // response loss.
+                        observedReceipts = merged
+                        val old = company
+                        if (batch.company.isNotEmpty() && old == null)
+                            return@withLock failure("receipt_owner")
+                        for (portion in batch.company.chunked(32)) {
+                            val saved =
+                                receipts.append(
+                                    requireNotNull(old).access,
+                                    old.conversationId,
+                                    portion,
+                                )
+                            if (saved is AppResult.Failed) return@withLock saved
+                            if (!(saved as AppResult.Success).value)
+                                return@withLock failure("receipt_write_changed")
+                        }
+                        for (portion in batch.space.chunked(32)) {
+                            val saved =
+                                spaceReceipts.append(
+                                    owner.localDirectoryAccess(),
+                                    conversation.id,
+                                    portion,
+                                )
+                            if (saved is AppResult.Failed) return@withLock saved
+                            if (!(saved as AppResult.Success).value)
+                                return@withLock failure("receipt_write_changed")
+                        }
+                        AppResult.Success(Unit)
                     }
-                    AppResult.Success(Unit)
                 } ?: failure("receipt_pending", FailureKind.Storage)
             }
-        }
+
+        fun report(reason: CollaborationQueueDeliveryReason?) =
+            collaborationMixedDeliveryReport(
+                company?.all.orEmpty().values.toList(),
+                space.all.values.toList(),
+                reason,
+            )
 
         fun failure(code: String, kind: FailureKind = FailureKind.Conflict) =
             restriction?.let { AppResult.Failed(it) } ?: originalDeliveryFailure(code, kind)

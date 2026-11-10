@@ -42,3 +42,8 @@ an attempt absent from the SDK queue. Complete pending-command inventory, typed 
 callback-loss recovery, native proof and incoming history are required before product
 routing. Actual Apple Matrix runtime binding remains required. This increment enables no
 new UI route or worker sender.
+
+The subsequent [mixed delivery increment](collaboration-mixed-original-delivery.md) also
+excludes unresolved attempts that name the same physical device/room through an older
+bootstrap or native session. This shared pure exclusion grants no recovery authority;
+recovering a mapping still requires the complete original device identity.

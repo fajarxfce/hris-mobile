@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 08:35 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 08:47 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -11,9 +11,9 @@ updates. All 54 acceptance groups remain open. Mobile proves reusable foundation
 Starter. Usecases own policy/repository orchestration; repositories coordinate raw I/O;
 ViewModels own screen state. No subagent delegation.
 
-One heavy compiler OR emulator. Staging focused-2/67472 and full-1/14508 are REAPED,
-PASS. Mixed delivery full-1/27233 is the ONLY heavy compiler; fifteen source inputs
-are FROZEN. Focused1/85670,2/31280,3/3636 are reaped. No emulator is running. Never kill live API/worker JVMs.
+One heavy compiler OR emulator. Mixed delivery full-1/27233 completed and is REAPED,
+PASS; no local heavy compiler or emulator is running. Focused1/85670,2/31280,3/3636 are
+reaped. Never kill live API/worker JVMs.
 Owned emulator uses 2,560 MiB/two cores. Phone 10.77.77.3:5555 is install-only: announce
 each installation; never launch, drive, uninstall or clear it. ADB 7150 timed out after
 15 seconds at 08:22 UTC and is reaped. Existing availability question remains pending.
@@ -21,7 +21,33 @@ Phone 87 unchanged; 88 remains uninstalled.
 Crashlytics IAM is verified. Physical iPhone interaction is waived, not Apple source/runtime
 acceptance. Actual Apple Matrix runtime binding remains unavailable and must be implemented.
 
-## Current accepted increment — owning Space staging
+## Current accepted increment — mixed original delivery
+
+Fifteen Kotlin inputs extend the EXISTING DeliverCollaborationSpaceOriginalMessages owner
+to optional Company and mandatory Space ledger phases. One complete native capture and both
+complete projection plans are validated before writes; physical transactions/event aliases
+cannot be shared. New rooms perform no company I/O. Late callbacks keep immutable typed
+mapping and original storage scope. Partial journal/projection commits survive response
+loss; exact CAS readback and one bounded missing-original TEXT window permit recovery.
+A shared pure staging exclusion covers physical device/room aliases across bootstraps,
+while mapping recovery still requires the full device. No new product/worker route.
+[Contract](collaboration-mixed-original-delivery.md),
+[evidence](measurements/collaboration-mixed-original-delivery-2026-11-10.json).
+
+Focused1/85670 PASS226/329.739s. Review added five shared cases; focused2/31280 failed
+75.509s on one missing test import (no fresh tests). Only that import changed; failed
+source/logs retained. Focused3/3636 PASS236/312.607s. Full1/27233 PASS668.498s:9,832 verified=
+7,813 fresh+2,019 exact accepted reused, zero failures/errors/skips. All are reaped. Required
+root/Android host/release/lint/Wasm/iOS/actual Chromium/proof APK/unit/quality pass, all prior
+case identities remain. Source4720/library bytes fixed; manifest
+b0218b8f5b184e4a46c63bd7767c20786e0dbd59e6d58812ea4c7aef4e63960d.
+Strict auditors/publisher pass. Proof APK150,572,753 bytes, SHA
+d7c02e4b624ca8d41a007f04d09eeeef9b06ebf1f3e181a10a7438fecd02e83f; compiled only.
+Private .work/mixed-original-delivery-2026-11-10 retains canonical frozen inputs/evidence.
+Commit/push then pin a new hosted control, expected7,830 portable+2,978 Apple=10,808,
+16 Swift and unsigned host. Native acceptance remains separate.
+
+## Accepted dependency — owning Space staging
 
 Seven Kotlin inputs add StageCollaborationSpaceText, exact complete-inventory recovery,
 9 pure + 25 owning regressions and singleton DI. The usecase persists Staging before one
@@ -68,9 +94,10 @@ Proof APK 150,518,107 bytes, SHA
 76329f626ef1aec5dde12d044e10f8e4759a74095efb5706bfc15a1b08ec51ac; compiled only.
 Private `.work/space-new-room-queue-2026-11-10` retains exact inputs/reports/runners.
 Source 0aaaf786ef0fcf4c6ce591fe2a118263d548020f is committed/pushed (57239 reaped).
-Pinned validation/space-new-room-queue-20261110 and control 42777934754 are running
-(ref 61884/dispatch 58063 reaped), expected 7,674 portable + 2,900 Apple = 10,574,
-16 Swift checks and unsigned host.
+Pinned validation/space-new-room-queue-20261110/control42777934754 are COMPLETE.
+Portable61280/Apple27301 audits are reaped and pass7,674+2,900=10,574,16Swift/unsigned host.
+Source, artifact digests, CRC and predecessor identities verified; complete hosted evidence
+is published with mixed delivery. Do not redispatch.
 
 ## Accepted dependency — distinct Space staging capability
 
@@ -103,39 +130,29 @@ Preserve mixed 42769825037 and projection 42772661276 controls.
 
 ## Immediate implementation continuation
 
-Extend the EXISTING DeliverCollaborationSpaceOriginalMessages window to typed Company/Space
-ledgers; no parallel sender and no usecase-to-usecase orchestration. Fifteen Kotlin inputs
-are now APPLIED, UNCOMMITTED/FROZEN. Focused1/85670 passed226 fresh/329.739s. Review added
-physical Staging exclusion across bootstrap/native-session aliases to both owning flows,
-with three policy + two owning cases. Focused2/31280 failed after75.509s because the new
-policy test lacked an import; production compiled, no fresh tests. Its exact source/logs
-are retained. Only the missing test import changed. Focused3/3636 PASS236/312.607s is
-reaped and strictly audited: no failure/error/skip, production/Desktop/Chromium/iOS source,
-DI and quality all pass. Source4720 manifest
-b0218b8f5b184e4a46c63bd7767c20786e0dbd59e6d58812ea4c7aef4e63960d.
-Full1/27233 is RUNNING, expected9,832 verified. Source/library inputs remain FROZEN.
-Runners/auditors/publisher/contract are in .work/mixed-original-delivery-2026-11-10;
-tracked source is canonical. The owning implementation
-uses optional original-company and mandatory Space ledger
-phases: read complete pending/journal/native inventory, load exact archive records, validate
-both plans and cross-ledger physical transaction/event ownership BEFORE either CAS. Other
-same-device Staging, including absent SDK originals, must block resume. Retain immutable
-callback mapping, exact CAS readback, scoped late callback storage, pause/drain ownership.
-Finish full validation, publish/commit/push and pin hosted control, then actual native proof.
+Apply the three reviewed Mobile proof drafts from .work/mixed-space-native-2026-11-10
+and five Group drafts from its same relative directory AFTER this accepted source is
+committed/pushed and pinned. These are still UNAPPLIED/uncompiled. Group private parser
+suite passes18 cases; three new Kotlin barrier cases are uncompiled. Generators do not
+include later manual fixes: use canonical draft files, read their READMEs first.
 
-Three UNAPPLIED Mobile proof drafts are in .work/mixed-space-native-2026-11-10,
-plus an UNAPPLIED Group driver draft at the same relative Group directory. These are NOT
-compiled/tested. Extend the existing original experiment with an opt-in third Space intent;
-preserve original-only defaults, two old messages, keys and device, and one real process
-death after all three SDK transactions disappear with only the first company ACK retained.
-Strict parser tests/server fixture assertions, proof-only compile and isolated native run
-remain. No native draft should be applied during this full source freeze.
+The new opt-in case authors one fictional Space intent through real Queue/Stage beside
+the two unchanged original-company messages. It requires all three exact SDK originals,
+only first company receipt persisted and zero Space receipts after all SDK transactions
+are removed, then one real process death. Recovery must keep namespace, intent, content,
+transaction/device/keys and exactly three provider events; recipient remains offline.
+Read both local stores after an offline restart. Original-only defaults and group-worker
+case remain. The test barrier still defaults to two transactions; opt-in three is bounded,
+and Spring contexts are isolated per method because the barrier can arm only once.
 
-Native proof must author a NEW fictional Space intent through accepted StageCollaborationSpaceText
-beside unchanged original fixture intents. Never reassign a real command between partitions.
-Complete pending-command inventory (including no room binding), incoming routing/dedup/history,
-media, backups, calls and meetings before PRD acceptance. Apple domain tests/unsigned host do
-not implement the missing actual Apple Matrix runtime binding. All 54 PRD groups remain open.
+Compile the changed Mobile proof host with accepted production bytes fixed, compile Group
+fixture/test source with emulator stopped, then run one fresh isolated2560MiB/two-core
+emulator against precompiled tests (three cases, two XML reports, three fixture directories).
+No phone UI. Preserve all failed stores. Update strict source/artifact/native auditors.
+The group worker still needs Space pending-demand integration; do not claim it sends new
+Space commands yet. Complete pending inventory (including no binding), incoming history/
+dedup/edit evidence and routing, media, backups, calls/meetings and actual Apple Matrix
+runtime binding remain. All54 PRD groups stay open; this domain increment is not a Starter port.
 
 ## Recent accepted dependencies
 
