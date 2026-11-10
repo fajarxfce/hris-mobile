@@ -1,9 +1,35 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 16:51 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 16:59 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
+
+## Active page-acquisition work
+
+Six Kotlin files are APPLIED/UNCOMMITTED and FROZEN under focused2/32791 RUNNING.
+`AcquireCollaborationSpaceProviderHistory` owns one current-admitted finite page, immutable
+physical provenance and atomic reference/position staging. Saved exhaustion returns without
+transport; Latest uses the last completed provider head. Recipient readiness never gates
+receiving. Lost commit responses remain failures and the next invocation rereads durable
+progress. No automatic incoming worker or UI is enabled.
+
+Twenty-four new JVM cases and44existing JVM controls have passed; actual Chromium/iOS-source/
+quality checks are still running. Focused expected136; full expected10401 on4790inputs.
+The first attempt7032 REAPED failed compilation before tests because five test assertions
+needed explicit nullable Pair type arguments; production compiled and the candidate is retained.
+Private space-page-acquisition-2026-11-10 owns candidate/base/prior reports, runners and strict
+focused/full auditors. Do not edit sources/library/APK during the gate or claim full acceptance.
+
+Private space-page-native-2026-11-10 contains prepared, NOT APPLIED Mobile2/Group1 proof
+candidates/runners. After product acceptance and push, actual native must keep Matrix30+pages
+and add only one direct transport per page: native7+pages/direct2+pages. A repeated exhausted
+acquisition must add zero HTTP. Preserve frontier hashes and all original/mixed controls.
+Provider-page worker integration and independent durable incoming work remain next; detailed
+bounds/ownership are in consumer-next.md. Current Apple42849335674 builds the iOS host;
+portable8316 audited, Apple still pending. No duplicate hosted run. Next hosted source can
+include page acquisition with provider/storage: expected11621=8399portable+3222Apple,+16Swift.
+ADB54053 timed out15s(REAPED); release89 remains NOT INSTALLED, phone87 last known.
 
 ## Current continuation — native Space frontier accepted
 
