@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 01:58 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 02:03 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -56,9 +56,11 @@ Full33875 failed only Gradle scheduler progress (88.349s); unchanged full76349 p
 
 [Contract](collaboration-space-pusher.md), [measurement](measurements/collaboration-space-pusher-2026-11-10.json).
 Private `.work/space-pusher-2026-11-10` preserves every run and strict audit. All jobs
-above are reaped. Hosted pusher successor is NOT dispatched yet; dispatch this pushed
-source once and record its pin. Expected7,063 portable +2,681 Apple plus16 Swift and
-unsigned iOS host. Current receiver CI below does not cover pusher source.
+above are reaped. Product source95195319 is committed and pushed (39299 reaped).
+Hosted42739907129 pins951953193c73d555d57218d1bf20a202067ec03c and is running;
+dispatch91392 reaped. Do not dispatch again. Expected7,063 portable +2,681 Apple
+plus16 Swift and unsigned iOS host. Its audit is pending; prior receiver CI does not
+cover pusher source. Private hosted.json records the exact pin.
 
 Next after the original-recovery investigation: atomic room-binding write plus durable
 recovery wake, then new SPACE commands/incoming routing. Read-only planning is in
