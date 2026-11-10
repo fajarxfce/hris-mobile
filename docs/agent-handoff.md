@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 06:38 UTC. Historical evidence, failures and prior controls:
+Updated 10 November 2026, 06:46 UTC. Historical evidence, failures and prior controls:
 [32ed8281](https://github.com/fajarxfce/hris-mobile/blob/32ed8281/docs/agent-handoff.md).
 Do not restart completed runs. Private `.work` files supplement the tracked contracts.
 
@@ -11,10 +11,23 @@ updates. All 54 acceptance groups remain open. Mobile proves reusable foundation
 Starter. Usecases own policy and repository orchestration; repositories coordinate raw
 I/O; ViewModels own screen state. No subagent delegation. Follow AGENTS.md.
 
-One heavy compiler OR emulator; none currently running. Never kill live API/worker JVMs.
+One heavy compiler OR emulator; current focused43366 is the only heavy job. Never kill live API/worker JVMs.
 Owned emulator uses 2,560 MiB/two cores and is stopped. Phone 10.77.77.3:5555 is install-only:
 announce every install; never launch, drive, uninstall or clear it. Crashlytics IAM is
 verified. Physical iPhone interaction is waived, not Apple source/runtime acceptance.
+
+## Active: acknowledgement projection
+
+Eight Kotlin inputs are UNCOMMITTED: exact Space acknowledgement/completion policy,
+bounded whole-journal projection and an owning local reconcile usecase with CAS readback.
+The shared singleton serializes projection; per-I/O local admission,15s total deadline,
+cancellation and lost/false-write responses preserve original facts. No sender,archive
+or journal retirement is activated. Tests add14 policy+23 usecase cases and app DI.
+Focused-1/session43366 RUNNING as the only heavy job; freeze these inputs. Production
+Desktop compilation passes. Three test assertions have generic type inference errors;
+wait/reap the continuing gate before changing only those declarations. Private
+.work/space-receipt-projection-2026-11-10 retains runner,frozen sources and failure logs.
+No focused/full/new native acceptance claimed yet.
 
 ## Current accepted increment
 
@@ -35,16 +48,17 @@ compiled only, no new native or phone acceptance.
 [Contract](collaboration-mixed-original-queue.md),
 [evidence](measurements/collaboration-mixed-original-queue-2026-11-10.json).
 
-This source is ready for commit/push, then immutable validation/mixed-original-queue-20261110
-and collaboration-control dispatch. Private .work/space-mixed-original-queue-2026-11-10
-contains gates, accepted reports and prepared hosted-audit.py/hosted-pending.json.
-Expected hosted7,554 portable+2,848 Apple=10,402,16 Swift,unsigned host. Not dispatched yet.
+Accepted source18e0d371b68e3e36c3be5bfdb1b91eb3e439de99 is committed/pushed72891,
+reaped. Immutable validation/mixed-original-queue-20261110 pins that exact source,
+ref94349 reaped. Hosted42769825037 is RUNNING;dispatch1269 reaped. Private
+.work/space-mixed-original-queue-2026-11-10/hosted.json/audit.py retain exact state.
+Expected7,554 portable+2,848 Apple=10,402,16Swift,unsigned host. Preserve both this
+control and receipt42766554589. No mixed hosted acceptance yet.
 
-Next implement exact Space acknowledgement projection, owning local CAS/readback and
-immutable archive proof. Private .work/space-receipt-projection-2026-11-10 has an unapplied,
-unformatted pure-policy draft; review and test it before using. Then mixed native delivery,
-explicit new-message capability and complete recovery inventory including commands with
-no binding. Original-only leases cannot enqueue. Empty SDK inventory never means ACK.
+The acknowledgement draft is now APPLIED and under focused validation above. After
+acceptance, continue mixed native delivery,explicit new-message capability and complete
+recovery inventory including commands without bindings. Original-only leases cannot
+enqueue; empty SDK inventory never means ACK. Follow tracked contracts,not obsolete drafts.
 
 ## Accepted dependencies and active hosted controls
 
@@ -133,3 +147,5 @@ Preserve the whole AVD and all userdata/encryption files, plus the stopped Bima7
 Eight originals must NEVER be resent: Control77 235408, Warm77 235728, Recovery78 005634,
 Registry82 055959, Parent83 071123, History84 083059, Selected86 102110, Joined87 115837.
 Draft66 092041 must NEVER be sent. All native/emulator jobs are reaped and stopped.
+
+Latest ADB44597 REAPED timeout15s around06:45 UTC; phone87 unchanged. Availability question remains pending.
