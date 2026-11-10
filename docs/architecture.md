@@ -2,7 +2,9 @@
 
 [Application incoming processing](collaboration-space-incoming-application.md) registers one
 bounded task. Domain recovery distinguishes missing current-device progress from failed reads;
-content retention precedes provider EOF. Native acceptance and realtime handoffs remain required.
+content retention precedes provider EOF. [Native acceptance](collaboration-space-incoming-application-native.md)
+checks the registered task, exact request counts and offline process reopen. Realtime handoffs
+remain separate work.
 
 [Durable incoming scheduling](collaboration-space-incoming-scheduling.md) retains scan cursor and
 room demand atomically. Domain owns bounded FIFO selection, per-room retry eligibility and exact

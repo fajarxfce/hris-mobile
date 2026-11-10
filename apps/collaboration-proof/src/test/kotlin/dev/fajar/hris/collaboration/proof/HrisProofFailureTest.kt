@@ -6,6 +6,22 @@ import org.junit.Test
 
 class HrisProofFailureTest {
     @Test
+    fun incomingWorkerFailureKeepsOnlyItsControlledCode() {
+        val marker = "fictional-private-source"
+        val failure =
+            HrisProofFailure(
+                Failure(
+                    FailureKind.Conflict,
+                    marker,
+                    code = "client.collaboration_incoming_references_changed",
+                )
+            )
+        assertEquals("HrisProof_Conflict_IncomingReferencesChanged", failure.category)
+        assertFalse(failure.toString().contains(marker))
+        assertNull(failure.cause)
+    }
+
+    @Test
     fun notificationSourceFailureHasAControlledCategoryWithoutProviderDetail() {
         val failed =
             HrisProofFailure(

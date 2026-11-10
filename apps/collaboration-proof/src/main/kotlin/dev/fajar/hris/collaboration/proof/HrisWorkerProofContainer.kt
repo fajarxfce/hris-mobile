@@ -99,6 +99,7 @@ internal class HrisWorkerProofContainer(
                                             QueueCollaborationText.DELIVERY_KEY,
                                             CollaborationRecoveryWake.WORK_KEY,
                                             CollaborationSpaceRecoveryWake.WORK_KEY,
+                                            CollaborationSpaceIncomingWake.WORK_KEY,
                                         )
                                 )
                                 synchronized(requests) { requests += key }
@@ -185,6 +186,8 @@ internal class HrisWorkerProofContainer(
             }
 
     fun incomingHistory() = HrisSpaceIncomingProofHost(container.koin)
+
+    fun incomingWorker() = HrisSpaceIncomingWorkerProofHost(container.koin) { scheduledKeys }
 
     fun spaceRecoverySeed(
         original: ProtectedHrisProofOwner,

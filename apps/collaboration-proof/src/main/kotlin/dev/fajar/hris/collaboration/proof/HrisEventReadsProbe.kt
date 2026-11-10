@@ -162,6 +162,10 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
     }
 
     private suspend fun adopted() {
+        if (files.fixture.optBoolean("incomingWorker", false)) {
+            adoptedWithWorker()
+            return
+        }
         val staged = files.read("original-staged", 16_384)
         val ready = files.read("original-ready", 16_384)
         val group = files.read("original-group", 16_384)
@@ -196,6 +200,74 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                     primary,
                     listOf({ lease?.close()?.let { expect(it) } }, { app.close() }),
                 )
+            }
+        files.write("original-events", result.put("runtimeReleased", true))
+    }
+
+    private suspend fun adoptedWithWorker() {
+        val staged = files.read("original-staged", 16_384)
+        val ready = files.read("original-ready", 16_384)
+        val group = files.read("original-group", 16_384)
+        val app =
+            HrisWorkerProofContainer(
+                context,
+                sender.currentOwner,
+                files.conversationId,
+                files.fixture.getJSONObject("sender").getString("hrisAccessToken"),
+                sender.repository,
+                http,
+            )
+        var parent: HrisSpaceRecoveryProofHost? = null
+        var primary: Exception? = null
+        val result =
+            try {
+                app.activate()
+                val seed = app.spaceRecoverySeed(sender, ready, group)
+                seed.prepare()
+                parent = app.spaceRecovery(seed)
+                parent.start()
+                val conversation =
+                    app.prepareOriginalRoom(seed.owner, group.getString("conversationId"))
+                val runtime =
+                    CollaborationSpaceRuntimeReady(
+                        seed.owner,
+                        group.getString("deviceId"),
+                        seed.operationId,
+                    )
+                val journal = app.receipts()
+                check(journal.isEmpty())
+                val ids = staged.getJSONObject("events")
+                val worker =
+                    app.incomingWorker()
+                        .consume(runtime, conversation, files.roomId, ids.getString("latestEdit"))
+                val snapshot =
+                    app.incomingHistory()
+                        .read(
+                            runtime.owner.localDirectoryAccess(),
+                            conversation.id,
+                            files.roomId,
+                            runtime.deviceId,
+                            ids.getString("original"),
+                            ids.getString("latestEdit"),
+                            ids.getString("peer"),
+                        )
+                check(app.receipts() == journal)
+                captureAdopted(runtime, staged)
+                    .put(
+                        "incoming",
+                        JSONObject()
+                            .put("worker", worker)
+                            .put(
+                                "retained",
+                                evidence.retained(snapshot, staged, sender, pendingCompleted = true),
+                            )
+                            .put("originalJournalUnchanged", true),
+                    )
+            } catch (failure: Exception) {
+                primary = failure
+                throw failure
+            } finally {
+                closeHrisProofResources(primary, listOf({ parent?.close() }, { app.close() }))
             }
         files.write("original-events", result.put("runtimeReleased", true))
     }
@@ -420,8 +492,14 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                         )
                 val incoming = adopted.getJSONObject("incoming")
                 val completed = files.fixture.optBoolean("completePendingIncoming", false)
+                val worker = files.fixture.optBoolean("incomingWorker", false)
                 val stored =
-                    evidence.retained(snapshot, staged, sender, pendingCompleted = completed)
+                    evidence.retained(
+                        snapshot,
+                        staged,
+                        sender,
+                        pendingCompleted = completed || worker,
+                    )
                 val expected = if (completed) incoming.getJSONObject("completed") else incoming
                 check(stored.toString() == expected.getJSONObject("retained").toString())
                 check(

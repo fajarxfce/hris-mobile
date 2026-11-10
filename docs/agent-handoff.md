@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 21:57 UTC. Follow AGENTS.md. This opening section owns current work.
+Updated 10 November 2026, 22:02 UTC. Follow AGENTS.md. This opening section owns current work.
 
 ## Application incoming worker accepted; native proof next
 
@@ -17,53 +17,32 @@ delayed recovery.17new domain cases per JVM/Chromium and20app cases; prior case 
 Focused1/17560 passed603 but failed detekt on fixture factory; focused2/31627 REAPED accepted615.
 Full1/72582 REAPED accepted. Private space-incoming-application-2026-11-10 holds exact reports.
 
-Actual native worker proof is applied but not fully accepted: five Mobile proof files and
-four Group fixture/protocol files. Product f46567f4 is already pushed; no production code has
-changed since that accepted increment. Private space-incoming-application-native-2026-11-10
-in both repositories owns current candidates, reports and runners. Do not rerun prepare/apply.
+Actual native-worker proof ACCEPTED: 5 cases / 259.102s; native-3/session15872 REAPED, emulator stopped.
+5 Mobile proof files and4 Group fixture/protocol files remain to commit with these records.
+The one-line hosted CI filter now includes the incoming application task; no product behavior
+changed after f46567f4. Mobile build3/1421 reaped accepted21/105.157s,4851 inputs,
+manifest 6c00735bc853733e7b0944acbfaf897659a8987f40b2d2f52c425cf10255036c. Group source-3/session53372 reaped8740inputs/79.185s,
+protocol43. No compiler ran during native execution. Exact artifact/request counts and preserved
+old controls are in collaboration-space-incoming-application-native-2026-11-10.json.
 
-Mobile build3/session1421 REAPED ACCEPTED:21 cases/105.157s,4851 inputs; manifest
-6c00735bc853733e7b0944acbfaf897659a8987f40b2d2f52c425cf10255036c.
-Proof APK150724590 bytes SHA
-b47058e971234b452c4c7b4aef701b58dd2311909ca77447d78262be5ce42481.
-First native80513 failed5/4; diagnostic4829 exposed the fixture scheduler's missing incoming
-WORK_KEY. The fixture now admits that key and checks exact schedule counts1/2/2. No product
-workaround. Failed package data was retained, so later fixtures correctly refused replacement.
+First native80513 failed5/4:the fixture scheduler omitted incoming WORK_KEY, blocking continuation.
+Diagnostic4829 failed1/1 and exposed the unavailable scheduling boundary. The failed package
+was preserved, explaining later fixture startup refusals. The fixture now admits the key and
+asserts exactly two schedules, unchanged by idle replay/covered-head hints. No guessed product
+fix. Native-2 then passed the actual registered worker, but the third scenario exhausted the
+shared provider login budget. Provider-1/64224 traced UNAVAILABLE/provider_busy to provider429;
+first two drivers passed but the new trace had mixed startup/readiness503s with post-ready
+assertions. Each scenario now closes its provider; the next context starts fresh storage and
+budget without raising limits. Startup failures are retained separately. All five scenarios
+now pass, with exact worker Matrix31/native14 and original controls unchanged.
+Original transactions, private sender keys and live service remain intact. All failures
+and source snapshots are preserved in the private application-native directories.
 
-Native-2/session39274 REAPED:5 cases/3 failures/208.023s. The existing manual scenario AND
-new actual registered incoming worker passed. Worker retains one visible message before EOF,
-finishes in two turns, schedules exactly twice, and performs no extra work on idle/covered
-head. Matrix31 (encrypted4/sync3/secretStorage2/providerPage2), native14 (registration1,
-bootstrapReplay1/directTransport3), pending0. A second offline process reads identical content.
-The third scenario failed during startup; two later original controls retained the failed
-package and refused replacement. This is not full native acceptance.
-
-After daemon restart, source-2 was found complete:82.607s/8740 inputs, manifest
-5ce3adf4f836d338178d3049d7b25f96c019505fac238c58fb0dc73ccaad7776; protocol43 accepted.
-Provider diagnostic64224 REAPED FAILED3/3/156.265s; both first drivers passed. The new trace
-had mixed startup recipient-readiness503s into the post-ready assertion. Third scenario
-failed sender login for fixture redaction with UNAVAILABLE/collaboration_provider_busy:
-SafeMatrixProviderCall maps this exact pair from provider429, not local capacity exhaustion.
-All three scenarios shared one provider's finite address login budget. No guessed product fix.
-
-Current Group source-3/session53372 RUNNING: each scenario now closes its fictional provider,
-so the next Spring context starts fresh provider storage/budget. Existing login limit stays32.
-Startup failures are retained separately from post-ready assertions. New worker request counts
-are exact in JUnit and worker-request-budget.json. Mobile build3/APK are unchanged.
-Reap source-3, accept-source.py source-3, then native.py native-3 runs all5 actual controls.
-Only accept-native.py after all5 pass can publish native-accepted.json. The emulator owns fresh
-2560MiB/2core data and must stop; never compile concurrently or replace failed sender stores.
-
-Prepared publish.py still needs updating for four Group files/source-3 and complete failure
-history. It has NOT run. The hosted CI filter addition is private/unapplied; add incoming worker
-to the existing collaboration-control selection after native acceptance. Then commit/push and
-dispatch ONE immutable hosted run; hosted-next.json expects12361=8899portable+3462Apple plus
-16Swift/unsigned host. hosted-audit.py checks prior42889565705 case identities. No new hosted
-run yet. Live90163/schema116.4 and personal sender/SDK stores remain unchanged.
-
-ADB55679 timeout/reaped after restart; release89 remains uninstalled, phone87 last known.
-Keep the existing availability question pending. Install-only when reachable, announce first;
-no launch/reset/UI driving. No new phone APK is needed for unused proof-only changes.
+Next commit/push these native records, then dispatch ONE collaboration-control run against
+the immutable accepted commit. Private hosted-next.json expects12361=8899portable+3462Apple,
+plus16Swift/unsigned host. hosted-audit.py preserves all prior42889565705 case identities and
+checks incoming scheduling/recovery/task additions. Workflow delta adds only the missing task
+filter. Hosted results are not yet claimed. Realtime integration follows after this checkpoint.
 
 Realtime SDK/root/push/key handoffs remain absent. ImmutableSDK6 syncOnceV2 returns room IDs,
 including ephemeral/state updates, without raw event IDs. Shipped AAR hash and javap confirm
@@ -75,7 +54,7 @@ preserve retry.15minute periodic fallback is not realtime. All54 PRD groups rema
 
 Hosted42889565705 at prior07e22182 accepted11993=8647portable+3346Apple,+16Swift/unsigned host;
 predates32scheduling and12application changes. Artifacts/digests/identity checks already published.
-Do not redispatch. Release89 remains uninstalled, phone87 last known; ADB2836 timeout/reaped.
+Do not redispatch. Release89 remains uninstalled, phone87 last known; latest ADB55679 timeout/reaped.
 Existing availability question remains pending. Notify before install-only; no launch/reset/UI.
 Live90163/schema116.4 unchanged, Group117–140 undeployed. Emulator stopped. SDK6, original
 transactions/sender keys, dirty SDK and Inspector trees remain preserved.

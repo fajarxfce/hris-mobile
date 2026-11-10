@@ -1,0 +1,163 @@
+{
+  "startedAt": "2026-11-10T21:58:10.715261+00:00",
+  "elapsedSeconds": 259.102,
+  "bootSeconds": 28.411,
+  "counts": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "memoryMiB": 2560,
+  "cores": 2,
+  "phoneTouched": false,
+  "sourcesUnchanged": true,
+  "apkUnchanged": true,
+  "noCompilationDuringEmulator": true,
+  "emulatorStopped": true,
+  "artifact": {
+    "apkSha256": "b47058e971234b452c4c7b4aef701b58dd2311909ca77447d78262be5ce42481",
+    "sdkVersion": "26.10.23-hris.6",
+    "abi": "x86_64",
+    "librarySha256": "ecffbab72fd5dd29d656bc4757ea423bb4bccf0444140af0480684bc32761278"
+  },
+  "encryptedEventsPerScenario": 4,
+  "originalControls": [
+    {
+      "actualProviderEvents": 3,
+      "confirmedOriginals": 3,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "secondProviderAckLostBeforeAppJournal": true,
+      "localReadBeforeTransport": true,
+      "spaceAckLostBeforeAppJournal": true,
+      "newSpaceOriginal": true,
+      "nativeRequests": {
+        "requests": 11,
+        "bootstrapReplay": 2,
+        "directTransport": 3
+      },
+      "actualProcessDeaths": 1,
+      "offlineRestart": true,
+      "recoveryMillis": 806
+    },
+    {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "secondProviderAckLostBeforeAppJournal": true,
+      "localReadBeforeTransport": true,
+      "spaceAckLostBeforeAppJournal": false,
+      "newSpaceOriginal": false,
+      "nativeRequests": {
+        "requests": 10,
+        "bootstrapReplay": 2,
+        "directTransport": 2
+      },
+      "actualProcessDeaths": 1,
+      "offlineRestart": true,
+      "recoveryMillis": 769
+    }
+  ],
+  "worker": {
+    "matrix": {
+      "requests": 31,
+      "encryptedSend": 4,
+      "sync": 3,
+      "secretStorage": 2,
+      "providerPage": 2
+    },
+    "native": {
+      "requests": 14,
+      "registration": 1,
+      "bootstrapReplay": 1,
+      "directTransport": 3
+    },
+    "turns": 2,
+    "firstTurnMessages": 1,
+    "contentBeforeProviderEof": true,
+    "registeredTask": true,
+    "emptyRepeatUnchanged": true,
+    "coveredHintUnchanged": true,
+    "retainedMessages": 1,
+    "pendingReferences": 0,
+    "offlineReopenSameRevision": true,
+    "offlineRuntimeNeverOpened": true,
+    "scheduledRequests": 2
+  },
+  "previousManualControls": [
+    {
+      "completed": false,
+      "matrix": {
+        "requests": 32,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "native": {
+        "requests": 9,
+        "bootstrapReplay": 1,
+        "directTransport": 4
+      }
+    },
+    {
+      "completed": true,
+      "matrix": {
+        "requests": 32,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "native": {
+        "requests": 10,
+        "bootstrapReplay": 1,
+        "directTransport": 5
+      }
+    }
+  ],
+  "mobileProofBuild": {
+    "startedAt": "2026-11-10T21:37:22.461106+00:00",
+    "elapsedSeconds": 105.157,
+    "sourceFiles": 4851,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 150724590,
+      "sha256": "b47058e971234b452c4c7b4aef701b58dd2311909ca77447d78262be5ce42481"
+    },
+    "sourceManifestSha256": "6c00735bc853733e7b0944acbfaf897659a8987f40b2d2f52c425cf10255036c",
+    "nativeExecution": false
+  },
+  "serverFixtureBuild": {
+    "startedAt": "2026-11-10T21:56:30.377537+00:00",
+    "elapsedSeconds": 79.185,
+    "sourceFiles": 8740,
+    "sourcesUnchanged": true,
+    "counts": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "cca5ea08714a0146c6a19c5429ebb18478746449e72fa310df405de5539f06f5",
+    "protocolCases": 43,
+    "nativeExecution": false
+  },
+  "productBase": "f46567f4",
+  "sdk": "26.10.23-hris.6",
+  "realtimeHintsIntegrated": false,
+  "phoneLatencyMeasured": false,
+  "liveDeployed": false
+}
