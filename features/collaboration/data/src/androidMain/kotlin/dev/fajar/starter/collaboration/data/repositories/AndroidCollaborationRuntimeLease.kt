@@ -411,7 +411,23 @@ internal constructor(
     suspend fun readOriginalHistory(
         roomId: String,
         anchorEventId: String,
-    ): AppResult<AndroidCollaborationHistoryWindow> = historyWindows.read(roomId, anchorEventId)
+    ): AppResult<AndroidCollaborationHistoryWindow> {
+        currentCoroutineContext().ensureActive()
+        val read = historyWindows.read(roomId, anchorEventId)
+        if (read is AppResult.Failed) return read
+        val window = (read as AppResult.Success).value
+        if (
+            window.originals.any { it.eventId == anchorEventId } ||
+                anchorEventId in window.unavailableEventIds
+        )
+            return read
+        // The presentation timeline aggregates edits. Acquire the actual anchor separately;
+        // it proves focus identity but never becomes an original send acknowledgement.
+        return when (val anchor = eventReads.read(roomId, anchorEventId)) {
+            is AppResult.Failed -> anchor
+            is AppResult.Success -> AppResult.Success(window.copy(acquiredAnchor = anchor.value))
+        }
+    }
 
     internal suspend fun readEvent(
         roomId: String,

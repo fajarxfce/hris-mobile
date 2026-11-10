@@ -1,6 +1,7 @@
 package dev.fajar.hris.collaboration.proof
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationOriginalWindow
 import dev.fajar.starter.common.result.*
 import java.security.MessageDigest
 import java.util.UUID
@@ -104,29 +105,42 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
         )
     }
 
-    fun window(result: AppResult<CollaborationOriginalWindow>): JSONObject =
-        when (result) {
-            is AppResult.Failed ->
-                JSONObject()
-                    .put("kind", result.failure.kind.name)
-                    .put(
-                        "code",
-                        result.failure.code?.takeIf { it.matches(Regex("[a-z][a-z0-9_.]{0,95}")) }
-                            ?: "none",
-                    )
-                    .put("originals", 0)
-                    .put("anchorIncluded", false)
-            is AppResult.Success ->
-                JSONObject()
-                    .put("kind", "Success")
-                    .put("code", "none")
-                    .put("originals", result.value.changes.size)
-                    .put(
-                        "anchorIncluded",
-                        result.value.changes.any { it.eventId == result.value.anchorEventId } ||
-                            result.value.anchorEventId in result.value.unresolvedEventIds,
-                    )
-        }
+    fun window(
+        result: AppResult<CollaborationOriginalWindow>,
+        owner: ProtectedHrisProofOwner,
+        originalId: String,
+        editId: String,
+        latest: Boolean,
+    ): JSONObject {
+        val window = (result as AppResult.Success).value
+        check(
+            validCollaborationOriginalWindow(
+                window,
+                owner.currentOwner,
+                owner.registeredDeviceId,
+                files.roomId,
+                editId,
+            )
+        )
+        val anchor = requireNotNull(window.acquiredAnchor)
+        val editHash = edit(anchor, owner, editId, originalId, latest)
+        val message =
+            window.changes.filterIsInstance<CollaborationHistoryChange.Text>().single {
+                it.eventId == originalId
+            }
+        check(message.sender == sender && message.logicalId == files.logicalId)
+        check(
+            message.text == files.body + "-original" &&
+                message.contentHash == hash(originalContent())
+        )
+        check(window.edits.any { it.eventId == editId && it.contentHash == editHash })
+        check(window.changes.none { it.eventId == editId } && editId !in window.unresolvedEventIds)
+        return JSONObject()
+            .put("kind", "Success")
+            .put("code", "none")
+            .put("originals", window.changes.size)
+            .put("anchorIncluded", false)
+    }
 
     private fun canonical(name: String) =
         files.fixture.getString(name).also {

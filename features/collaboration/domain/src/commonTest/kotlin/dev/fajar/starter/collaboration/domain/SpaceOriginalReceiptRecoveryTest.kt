@@ -10,6 +10,62 @@ import kotlinx.coroutines.test.*
 
 class SpaceOriginalReceiptRecoveryTest {
     @Test
+    fun acquiredEditHeadConfirmsOnlyTheMatchingOriginalAndCannotForgeItsReceipt() = runTest {
+        for (originalPresent in listOf(true, false)) {
+            val f = SpaceOriginalDeliveryFixture()
+            f.history.loseSdkOriginals()
+            val original = f.history.event()
+            f.history.publish(
+                listOf(
+                    if (originalPresent) original
+                    else original.copy(eventId = "\$other", logicalId = f.queue.id(300))
+                )
+            )
+            val snapshot = f.history.snapshot
+            val window = assertNotNull(snapshot.window)
+            val edit =
+                CollaborationMessageEdit(
+                    "\$edit",
+                    original.sender,
+                    original.eventId,
+                    2,
+                    "Edited",
+                    "b".repeat(64),
+                    originalLogicalId = original.logicalId,
+                )
+            f.history.snapshot =
+                snapshot.copy(
+                    head = snapshot.head.copy(eventId = edit.eventId),
+                    window =
+                        window.copy(
+                            anchorEventId = edit.eventId,
+                            acquiredAnchor =
+                                CollaborationEventSnapshot(
+                                    window.owner,
+                                    window.deviceId,
+                                    window.roomId,
+                                    true,
+                                    true,
+                                    CollaborationAcquiredEvent(
+                                        edit.eventId,
+                                        edit.sender,
+                                        edit.timestamp,
+                                        "m.room.message",
+                                        CollaborationAcquiredEventContent.Replacement(edit),
+                                    ),
+                                ),
+                        ),
+                )
+            val report = assertIs<AppResult.Success<CollaborationDeliveryReport>>(f.deliver()).value
+            assertEquals(originalPresent, f.queue.record.intent.id in report.confirmed)
+            assertEquals(!originalPresent, f.queue.record.intent.id in report.unresolved)
+            assertEquals(if (originalPresent) listOf(f.receipt()) else emptyList(), f.journal)
+            assertEquals(0, f.count("resume"))
+            assertEquals(1, f.count("originalHistory"))
+        }
+    }
+
+    @Test
     fun foreignCommandProvenanceIsRejectedBeforeAnyHistoryRead() = runTest {
         for (variant in 0..2) {
             val f = SpaceOriginalDeliveryFixture()

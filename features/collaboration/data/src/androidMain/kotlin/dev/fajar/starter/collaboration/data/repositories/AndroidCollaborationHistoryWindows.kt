@@ -1,14 +1,15 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationHistorySource
+import dev.fajar.starter.collaboration.data.mappers.collaborationSdkAcquisitionFailure
 import dev.fajar.starter.collaboration.data.mappers.toMessageEdit
 import dev.fajar.starter.collaboration.data.mappers.toOriginalHistory
+import dev.fajar.starter.collaboration.domain.entities.CollaborationEventSnapshot
 import dev.fajar.starter.collaboration.domain.entities.CollaborationHistoryChange
 import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageEdit
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationEventId
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.network.RequestFailureException
-import dev.fajar.starter.storage.safeStorageCall
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
@@ -17,7 +18,8 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 
 /** A finite original snapshot, not a live stream, complete provider history or sync cursor. */
-class AndroidCollaborationHistoryWindow
+@ConsistentCopyVisibility
+data class AndroidCollaborationHistoryWindow
 internal constructor(
     val originals: List<CollaborationHistoryChange>,
     val unavailableEventIds: List<String>,
@@ -26,6 +28,7 @@ internal constructor(
     val originalCharacters: Long,
     val edits: List<CollaborationMessageEdit> = emptyList(),
     val replacementCharacters: Long = 0L,
+    val acquiredAnchor: CollaborationEventSnapshot? = null,
 ) {
     override fun toString() = "AndroidCollaborationHistoryWindow([redacted])"
 }
@@ -77,7 +80,12 @@ internal class AndroidCollaborationHistoryWindows(
                 },
                 { it.stop() },
             )
-        if (acquired is AppResult.Failed) return acquired
+        if (acquired is AppResult.Failed) {
+            currentCoroutineContext().ensureActive()
+            return failure()?.let {
+                AppResult.Failed(collaborationSdkAcquisitionFailure(acquired, it))
+            } ?: acquired
+        }
         val child = (acquired as AppResult.Success).value
         val disposed: AppResult<Unit>
         val result =
@@ -86,7 +94,7 @@ internal class AndroidCollaborationHistoryWindows(
                 failure()?.let {
                     return AppResult.Failed(it)
                 }
-                safeStorageCall {
+                safeAndroidCollaborationCall(AndroidCollaborationOperation.HistoryWindow) {
                     withContext(decodingDispatcher) {
                         val snapshot = source.snapshot()
                         val originals = mutableListOf<CollaborationHistoryChange>()

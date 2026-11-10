@@ -20,10 +20,26 @@ fun validCollaborationOriginalWindow(
     )
         return false
     val ids = window.changes.map { it.eventId } + window.unresolvedEventIds
+    val acquired = window.acquiredAnchor
+    if (
+        acquired != null &&
+            (acquired.owner != owner ||
+                acquired.deviceId != deviceId ||
+                acquired.roomId != roomId ||
+                !acquired.roomJoined ||
+                !acquired.roomEncrypted ||
+                acquired.event.eventId != anchorEventId ||
+                !validCollaborationEventId(acquired.event.eventId) ||
+                !validCollaborationHistorySender(acquired.event.sender) ||
+                acquired.event.timestamp !in 0..9_007_199_254_740_991L ||
+                acquired.event.type.length !in 1..128 ||
+                acquired.event.type.any { it.code !in 33..126 })
+    )
+        return false
     if (
         ids.size !in 1..128 ||
             ids.distinct().size != ids.size ||
-            anchorEventId !in ids ||
+            (anchorEventId !in ids && acquired == null) ||
             ids.any { !validCollaborationEventId(it) }
     )
         return false

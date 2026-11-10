@@ -361,6 +361,7 @@ class AndroidCollaborationRuntimeRepository(
                     value.originals.toList(),
                     value.unavailableEventIds.toList(),
                     value.edits.toList(),
+                    value.acquiredAnchor,
                 )
             }
         return AppResult.Success(
@@ -1043,6 +1044,7 @@ class AndroidCollaborationRuntimeRepository(
         matrixRoomId: String,
         anchorEventId: String,
     ): AppResult<CollaborationOriginalWindow> {
+        currentCoroutineContext().ensureActive()
         val runtime =
             legacyLeases.singleOrNull {
                 it.owner == owner && it.deviceId == deviceId && it.availableForEntry
@@ -1055,6 +1057,21 @@ class AndroidCollaborationRuntimeRepository(
                     )
                 )
         val result = runtime.readOriginalHistory(matrixRoomId, anchorEventId)
+        currentCoroutineContext().ensureActive()
+        runtime.credentialFailures.value?.let {
+            return AppResult.Failed(collaborationSdkAcquisitionFailure(result, it))
+        }
+        if (legacyLeases.none { it === runtime && it.availableForEntry })
+            return AppResult.Failed(
+                collaborationSdkAcquisitionFailure(
+                    result,
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Chat runtime is not open.",
+                        code = "client.collaboration_runtime_not_open",
+                    ),
+                )
+            )
         if (result is AppResult.Failed) return result
         val window = (result as AppResult.Success).value
         return AppResult.Success(
@@ -1066,6 +1083,7 @@ class AndroidCollaborationRuntimeRepository(
                 window.originals.toList(),
                 window.unavailableEventIds.toList(),
                 window.edits.toList(),
+                window.acquiredAnchor,
             )
         )
     }

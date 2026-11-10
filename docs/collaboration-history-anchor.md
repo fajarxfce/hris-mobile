@@ -30,10 +30,24 @@ one hardcoded the original anchor, and one assumed the test scheduler had comple
 Default-dispatcher decode. Their independent expectation and explicit entry barrier repairs
 change no production source. All14 exact candidate files from both failed attempts are archived.
 
-Full application/platform validation and the new three-case SDK6 proof are still running or
-pending. The native proof requires successful Company/Space windows with independent original
-and replacement hashes, and checks existing original/mixed queue recovery after process loss.
-The Group gateway redaction repair is separately accepted by42 protocol/consumer cases and
-must be used for that proof. No employee-phone installation or live rollout is claimed here.
+Full validation passes 10,224 cases (8,205 fresh plus 2,019 hash-verified accepted controls)
+in 686.844s. Android host/release compilation/lint, actual Chromium, Wasm/iOS shared app
+compilation, proof APK/unit tests and required quality checks pass. This is local validation;
+the current source still needs its own hosted Apple execution.
+
+The actual SDK6 proof passes all three cases in 214.303s with the accepted Group gateway
+redaction fix. Company and adopted Space windows succeed even though the edit head is
+absent from the displayed originals. Independent original/edit hashes, acquired identity,
+and domain validity are asserted. No 5xx occurs. The event scenario makes 28 Matrix requests
+(including four encrypted sends, three syncs and two optional secret-storage reads), versus
+26 and one context503 before the fix. The two additional reads acquire the absent edit head.
+This is a bounded fixture observation, not a phone latency measurement.
+
+Both original-only and mixed Company/Space recovery retain the original transactions after
+process loss, confirming exactly two and three provider events respectively while the peer
+stays offline. A subsequent offline restart reads all confirmations locally. No new send
+replaces an uncertain original. Source/APK/SDK fingerprints and old case identities match;
+the isolated 2,560 MiB emulator is stopped. No employee-phone installation or live rollout
+is claimed by this increment.
 
 [Focused measurement](measurements/collaboration-history-anchor-focused-2026-11-10.json).

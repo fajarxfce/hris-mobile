@@ -58,7 +58,6 @@ internal class AndroidCollaborationHistorySource(
     fun snapshot() =
         synchronized(lock) {
             check(captured && !failed && !closed)
-            require(events.any { it.eventId == anchor })
             AndroidHistoryRawSnapshot(
                 events.toList(),
                 extractionNanos,

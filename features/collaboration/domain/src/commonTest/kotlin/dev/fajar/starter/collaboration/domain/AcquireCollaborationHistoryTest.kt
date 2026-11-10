@@ -13,6 +13,39 @@ import kotlinx.coroutines.test.runTest
 
 class AcquireCollaborationHistoryTest {
     @Test
+    fun acquiredEditHeadRetainsEveryOriginalBeforeItsSeparateReplacements() = runTest {
+        val f = HistoryAcquisitionFixture()
+        f.includeEdits()
+        val edit = f.window.edits.last()
+        f.expectedAnchorEventId = edit.eventId
+        f.head = f.head.copy(eventId = edit.eventId)
+        f.window =
+            f.window.copy(
+                anchorEventId = edit.eventId,
+                acquiredAnchor =
+                    CollaborationEventSnapshot(
+                        f.window.owner,
+                        f.window.deviceId,
+                        f.window.roomId,
+                        true,
+                        true,
+                        CollaborationAcquiredEvent(
+                            edit.eventId,
+                            edit.sender,
+                            edit.timestamp,
+                            "m.room.message",
+                            CollaborationAcquiredEventContent.Replacement(edit),
+                        ),
+                    ),
+            )
+        assertEquals(AppResult.Success(CollaborationHistoryAcquisition(20, 0)), f.latest())
+        assertEquals(f.window.changes, f.retained)
+        assertEquals(f.window.edits, f.editBatches.flatten())
+        assertTrue(f.retained.none { it.eventId == edit.eventId })
+        assertEquals(1, f.reads)
+    }
+
+    @Test
     fun originalHistoryUsesCombinedAdmissionWithoutDependingOnRecipientReadiness() = runTest {
         val f = HistoryAcquisitionFixture()
         f.delivery.recipientReady = false
@@ -350,6 +383,7 @@ internal class HistoryAcquisitionFixture {
             emptyList(),
         )
     var headReads = 0
+    var expectedAnchorEventId = "\$event-0"
 
     fun includeEdits() {
         window =
@@ -471,7 +505,7 @@ internal class HistoryAcquisitionFixture {
                 assertEquals(delivery.owner, owner)
                 assertEquals(delivery.device.deviceId, deviceId)
                 assertEquals(delivery.device.roomId, matrixRoomId)
-                assertEquals("\$event-0", anchorEventId)
+                assertEquals(expectedAnchorEventId, anchorEventId)
                 reads++
                 active++
                 try {

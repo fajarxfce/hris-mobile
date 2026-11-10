@@ -115,7 +115,11 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                     sender.registeredDeviceId,
                     files.roomId,
                     firstEdit,
-                )
+                ),
+                sender,
+                original,
+                firstEdit,
+                latest = false,
             )
         files.write("original-redaction-request", checkpoint().put("targetEventId", peerOriginal))
         val redacted = waitFor("original-redaction-completed")
@@ -240,19 +244,22 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
             repository.findHead(runtime.copy(deviceId = UUID.randomUUID().toString()), files.roomId)
                 is AppResult.Failed
         )
-        val old =
-            (sender.repository as CollaborationSpaceOriginalHistoryRepository).read(
-                runtime,
-                files.roomId,
+        val history =
+            expect(
+                (sender.repository as CollaborationSpaceOriginalHistoryRepository).read(
+                    runtime,
+                    files.roomId,
+                )
             )
+        check(history.runtime == runtime && history.head.eventId == latest)
         val window =
-            when (old) {
-                is AppResult.Failed -> evidence.window(old)
-                is AppResult.Success -> {
-                    check(old.value.runtime == runtime && old.value.head.eventId == latest)
-                    evidence.window(AppResult.Success(requireNotNull(old.value.window)))
-                }
-            }
+            evidence.window(
+                AppResult.Success(requireNotNull(history.window)),
+                sender,
+                original,
+                latest,
+                latest = true,
+            )
         return checkpoint()
             .put("headEventId", latest)
             .put("originalHash", originalHash)

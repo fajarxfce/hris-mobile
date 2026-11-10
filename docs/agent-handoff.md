@@ -1,56 +1,41 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 14:23 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 14:36 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
 
-## Current history repair — full accepted, native running
+## Current history repair — full and actual SDK accepted
 
-Mobile14Kotlin files remain UNCOMMITTED/frozen during Group native-fixed3/5268 RUNNING.
-Full1/64837 REAPED PASS686.844s; strict auditor verifies10224=8205fresh+2019exact accepted
-reused,zero failures/errors/skips. Required rootcheck/Androidhost/release compile/lint/Wasm/iOS
-app source/actualChromium/proofAPK+unit/quality pass.4766sources remain fixed,manifest
-e8b00e9b35dee633c9813c8cd505fc738731c6e74209fec8d8a1e4f8a8a41a63. Current proofAPK150607445B
-SHAee5cc170630afa0c51402a26a9997c1c8bf348e1ee4556f2022f9bb813ab10fc, unchanged SDK6 verified.
-Focused3/71222 REAPED PASS176/203.280s; source/report/prior-case audit passed. [Contract](collaboration-history-anchor.md)
-and measurement are in Git; private history-anchor-2026-11-10 owns exact runners/results.
-One isolated2560MiB/two-core emulator plus precompiled768MiB harness; no compiler, no source
-edits until native5268 is reaped. Three expected cases: event/history regression, original-only
-and mixed recovery after process death. Group backend82f2c817 is pushed17355(REAPED).
+This commit accepts the 14 Kotlin history-anchor/proof files. Focused3/71222 REAPED
+PASS176/203.280s; full1/64837 REAPED PASS10224=8205fresh+2019exact accepted reused/686.844s,
+zero failures/errors/skips. Strict report/source/prior-case audits pass. 4,766 fixed inputs,
+manifest e8b00e9b35dee633c9813c8cd505fc738731c6e74209fec8d8a1e4f8a8a41a63.
+ProofAPK150607445B SHAee5cc170630afa0c51402a26a9997c1c8bf348e1ee4556f2022f9bb813ab10fc,
+immutable SDK6. [Contract and full/native evidence](collaboration-history-anchor.md).
 
-The runtime acquires raw anchor evidence only when SDK presentation folds the requested event
-away, preserving the complete original window and separate original ACK identity. Source raw
-snapshot has no presentation-anchor policy; API decoding classification and Company post-read
-publication guards are fixed. Six common policy cases,four host parent cases,one mapping failure
-case and Company/Space owning cases add21 local cases,155 previous controls preserved.
+Group82f2c817 is committed/pushed (17355 REAPED). Native-fixed3/5268 REAPED PASS3/214.303s;
+strict audit confirms Company/Space Success, exact original/edit hashes and missing-key/
+redaction/adoption assertions, zero5xx, four encrypted provider events. Matrix28/native2
+versus baseline26/native2; only two finite missing-anchor reads added. Both original recovery
+controls preserve transactions, recipient offline and process loss: exactly2/3 provider events,
+subsequent offline restart reads2/3 Sent. No performance claim for the employee phone.
+Emulator stopped; no compiler overlap, source/library/APK unchanged. Private Group
+runtime-event-native-2026-11-10/accept-fixed.py owns the reproducible strict audit.
 
-Focused1/53935 REAPED45cases/1fixture failure/92.595s: mock expected original anchor. Focused2/
-36860 REAPED131cases/1fixture failure/185.786s: runCurrent did not await real Default decoding.
-Only independent fixture expectation and explicit raw-entry barrier changed. Both exact14-file
-candidates archived; final production source is unchanged across those fixture repairs.
+Original has now copied exactly the Group mapper and its ten-case regression. Its full1/49822
+is RUNNING:24expected Company protocol/history/sync cases, format/architecture, API/worker
+boot JARs. No schemas/DI change. One2GiB compiler, no emulator. Next audit/commit/push that
+port, then prepare the compatible live update. Live remains e558a686/schema116.4/readinessON/
+groupOFF. No Group schema reaches Original. Current source needs its own hosted platform run.
 
-Group82f2c817 is committed/pushed17355(REAPED), accepting valid redacted encrypted events,
-matched redaction metadata and own original/redaction transactions. Green2/91392 REAPED
-PASS42/137.027s,8740stableinputs,all12suites/prior case identities,format/architecture and
-server test-source compilation. Initial red1/60288 had9cases/5failures; first repair41pass is
-retained. Follow-up trace9d072639 native75697 proved context503/invalid provider response.
-
-After full1 passes and its strict auditor accepts, run Group private runtime-event-native-2026-11-10/
-native-fixed.py native-fixed-3. It owns one2560MiB/two-core fresh emulator and precompiled768MiB
-harness. Config points to Group ../room-redaction-mapping-2026-11-10/green-2 and Mobile
-../history-anchor-2026-11-10/full-1. Three expected native cases: new event/history regression plus
-unchanged original-only and mixed original recovery after process loss. Both final sources/APK
-are verified before starting; no compiler overlap or phone UI. Original branch mapper matches
-Group's pre-fix bytes exactly; after native acceptance port the fix/tests there for the live-compatible
-server without group migrations. Originalf690df97 docs push75854 is REAPED.
-
-Hosted classifier42819170095 COMPLETE11295=8170portable+3125Apple,16Swift/unsignedhost.
-Apple63577 and portable1908 REAPED/audited; measurement publishedc08cf834(push55285 REAPED).
-Runtime42824039795 portable49173 REAPED/audited8201; Apple still building the unsigned host.
-No native Apple Matrix implementation claim. No phone/live/SDK/Starter source change.
-ADB64277 timed out15s near14:00(REAPED); existing availability question stays pending.
-Phone87 remains last known,88uninstalled,89unbuilt. Deliver validated updates INSTALL-ONLY.
+Runtime hosted42824039795 is COMPLETE and audited:8201portable+3129Apple=11330, plus16Swift
+and unsigned iOS host. Apple45856 REAPED; classifier42819170095 also complete11295+16.
+A separate hosted measurement follows. Phone87 remains last known,88uninstalled,89unbuilt;
+ADB64277 timed out at14:00. Existing availability question stays pending. INSTALL-ONLY;
+no phone launch, data reset, retries of retained original messages, or Draft66 send.
+Continue bounded Space incoming retention/progress and the full PRD; all54 groups remain open.
+No generic Starter delta, SDK artifact change or native Apple Matrix implementation.
 
 ## Native event proof accepted; old history failures remain
 

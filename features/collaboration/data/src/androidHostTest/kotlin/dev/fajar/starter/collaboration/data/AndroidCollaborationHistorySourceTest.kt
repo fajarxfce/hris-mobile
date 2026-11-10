@@ -14,6 +14,25 @@ import uniffi.matrix_sdk_ui.TimelineReadReceiptTracking
 @OptIn(ExperimentalCoroutinesApi::class)
 class AndroidCollaborationHistorySourceTest {
     @Test
+    fun malformedSdkSnapshotIsAnAcquisitionFailureRatherThanAStorageFailure() = runTest {
+        val room = HistoryRoom()
+        room.item.json = "{invalid-json"
+        val children = SdkChildResources(this)
+        val windows =
+            AndroidCollaborationHistoryWindows(
+                client(room),
+                children,
+                StandardTestDispatcher(testScheduler),
+            ) {
+                null
+            }
+        val failure = assertIs<AppResult.Failed>(windows.read("!room:test", "\$original")).failure
+        assertEquals(FailureKind.Unexpected, failure.kind)
+        assertEquals(1, room.calls.count { it == "room.close" })
+        assertEquals(AppResult.Success(Unit), children.close())
+    }
+
+    @Test
     fun focusedSnapshotCopiesOriginalOnceAndClosesBeforeReturning() = runTest {
         val room = HistoryRoom()
         val children = SdkChildResources(this)

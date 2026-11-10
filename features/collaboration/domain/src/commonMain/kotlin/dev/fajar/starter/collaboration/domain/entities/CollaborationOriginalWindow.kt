@@ -12,6 +12,8 @@ data class CollaborationOriginalWindow(
     val unresolvedEventIds: List<String>,
     /** Separately detached replacements; never original send/receipt evidence. */
     val edits: List<CollaborationMessageEdit> = emptyList(),
+    /** Exact acquisition when the SDK folds the anchor out of its presentation window. */
+    val acquiredAnchor: CollaborationEventSnapshot? = null,
 ) {
     override fun toString() = "CollaborationOriginalWindow([redacted])"
 }
