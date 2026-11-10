@@ -14,9 +14,38 @@ class UnavailableCollaborationRuntimeRepository :
     CollaborationSpaceSyncRepository,
     CollaborationSpacePusherRepository,
     CollaborationSpaceOriginalHistoryRepository,
+    CollaborationEventRepository,
+    CollaborationSpaceEventRepository,
     CollaborationLocalDeviceIdentityRepository,
     CollaborationSdkInventoryRepository,
     CollaborationSdkPossessionRepository {
+    override suspend fun read(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        eventId: String,
+    ): AppResult<CollaborationEventSnapshot> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
+    override suspend fun findHead(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+    ): AppResult<CollaborationSpaceEventHead> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
+    override suspend fun read(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+        eventId: String,
+    ): AppResult<CollaborationSpaceEventSnapshot> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
     override suspend fun read(
         runtime: CollaborationSpaceRuntimeReady,
         matrixRoomId: String,

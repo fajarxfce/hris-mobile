@@ -1,5 +1,9 @@
 # Architecture
 
+[Installed-runtime event reads](collaboration-runtime-event-reads.md) preserve separate logical
+and physical ownership under the existing native parent. Finite raw acquisition grants no
+content admission, retention, progress or sending authority.
+
 [Acquired event classification](collaboration-raw-event-classification.md) keeps original,
 replacement, redaction and unresolved facts distinct. Mapping validates provider metadata;
 native lifetime, current admission and retention remain with their owning layers.

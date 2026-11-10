@@ -496,6 +496,14 @@ class CollaborationDataModule {
             ?: UnavailableCollaborationRuntimeRepository()
 
     @Single
+    fun events(runtime: CollaborationRuntimeRepository): CollaborationEventRepository =
+        runtime as? CollaborationEventRepository ?: UnavailableCollaborationRuntimeRepository()
+
+    @Single
+    fun spaceEvents(runtime: CollaborationRuntimeRepository): CollaborationSpaceEventRepository =
+        runtime as? CollaborationSpaceEventRepository ?: UnavailableCollaborationRuntimeRepository()
+
+    @Single
     fun activateSpacePusher(
         commands: CollaborationSpaceSetupCommandRepository,
         devices: CollaborationSpaceDeviceRepository,

@@ -63,7 +63,28 @@ class CollaborationBindingsTest {
                     CollaborationRuntimeRepository,
                     CollaborationLocalDeviceIdentityRepository,
                     CollaborationSpaceRuntimeRepository,
-                    CollaborationSpaceSyncRepository {
+                    CollaborationSpaceSyncRepository,
+                    CollaborationEventRepository,
+                    CollaborationSpaceEventRepository {
+                    override suspend fun read(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                        matrixRoomId: String,
+                        eventId: String,
+                    ): AppResult<CollaborationEventSnapshot> = error("No implicit event read")
+
+                    override suspend fun read(
+                        runtime: CollaborationSpaceRuntimeReady,
+                        matrixRoomId: String,
+                        eventId: String,
+                    ): AppResult<CollaborationSpaceEventSnapshot> =
+                        error("No implicit Space event read")
+
+                    override suspend fun findHead(
+                        runtime: CollaborationSpaceRuntimeReady,
+                        matrixRoomId: String,
+                    ): AppResult<CollaborationSpaceEventHead> = error("No implicit Space head read")
+
                     override suspend fun synchronize(
                         runtime: CollaborationSpaceRuntimeReady
                     ): AppResult<Unit> = error("No implicit organization synchronization")
@@ -278,6 +299,8 @@ class CollaborationBindingsTest {
                 assertSame(runtime, container.koin.get<CollaborationRuntimeRepository>())
                 assertSame(runtime, container.koin.get<CollaborationSpaceRuntimeRepository>())
                 assertSame<Any>(runtime, container.koin.get<CollaborationSpaceSyncRepository>())
+                assertSame<Any>(runtime, container.koin.get<CollaborationEventRepository>())
+                assertSame<Any>(runtime, container.koin.get<CollaborationSpaceEventRepository>())
                 assertSame(
                     container.koin.get<SynchronizeCollaborationSpaceDevice>(),
                     container.koin.get<SynchronizeCollaborationSpaceDevice>(),

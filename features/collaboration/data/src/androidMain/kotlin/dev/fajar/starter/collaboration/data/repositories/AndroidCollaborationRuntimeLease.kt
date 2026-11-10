@@ -4,6 +4,7 @@ import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.api.CollaborationPusherApi
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationClientSource
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationHttpObservation
+import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationRawEventSource
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationRoomSource
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationTimelineSource
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLease
@@ -12,6 +13,7 @@ import dev.fajar.starter.collaboration.data.mappers.collaborationSdkAcquisitionF
 import dev.fajar.starter.collaboration.data.mappers.toLocalDeviceIdentity
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkRecord
 import dev.fajar.starter.collaboration.domain.entities.CollaborationCredentialState
+import dev.fajar.starter.collaboration.domain.entities.CollaborationEventSnapshot
 import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalDeviceIdentity
 import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageDevice
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOriginalQueueSnapshot
@@ -100,6 +102,19 @@ internal constructor(
         }
     private val historyWindows =
         AndroidCollaborationHistoryWindows(nativeClient, children) {
+            credentialFailures.value
+                ?: sync.failures.value?.takeIf {
+                    it.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied)
+                }
+                ?: if (stopRequested.get()) syncStopped().failure else null
+        }
+    private val eventReads =
+        AndroidCollaborationEventReads(
+            owner,
+            deviceId,
+            AndroidCollaborationRawEventSource(nativeClient),
+            children,
+        ) {
             credentialFailures.value
                 ?: sync.failures.value?.takeIf {
                     it.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied)
@@ -397,6 +412,11 @@ internal constructor(
         roomId: String,
         anchorEventId: String,
     ): AppResult<AndroidCollaborationHistoryWindow> = historyWindows.read(roomId, anchorEventId)
+
+    internal suspend fun readEvent(
+        roomId: String,
+        eventId: String,
+    ): AppResult<CollaborationEventSnapshot> = eventReads.read(roomId, eventId)
 
     private suspend fun acquireTimeline(
         roomId: String,

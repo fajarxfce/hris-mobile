@@ -48,7 +48,9 @@ class AndroidCollaborationRuntimeRepository(
     CollaborationSpaceMessageQueueRepository,
     CollaborationSpaceSyncRepository,
     CollaborationSpacePusherRepository,
-    CollaborationSpaceOriginalHistoryRepository {
+    CollaborationSpaceOriginalHistoryRepository,
+    CollaborationEventRepository,
+    CollaborationSpaceEventRepository {
     override val supportsDeviceActivation = true
 
     private val readiness =
@@ -368,6 +370,102 @@ class AndroidCollaborationRuntimeRepository(
                 window,
             )
         )
+    }
+
+    override suspend fun read(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        eventId: String,
+    ): AppResult<CollaborationEventSnapshot> {
+        currentCoroutineContext().ensureActive()
+        val lease =
+            legacyLeases.singleOrNull {
+                it.owner == owner && it.deviceId == deviceId && it.availableForEntry
+            }
+                ?: return AppResult.Failed(
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Chat runtime is not open.",
+                        code = "client.collaboration_runtime_not_open",
+                    )
+                )
+        val read = lease.readEvent(matrixRoomId, eventId)
+        currentCoroutineContext().ensureActive()
+        lease.credentialFailures.value?.let {
+            return AppResult.Failed(collaborationSdkAcquisitionFailure(read, it))
+        }
+        if (legacyLeases.none { it === lease && it.availableForEntry })
+            return AppResult.Failed(
+                collaborationSdkAcquisitionFailure(
+                    read,
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Chat runtime is not open.",
+                        code = "client.collaboration_runtime_not_open",
+                    ),
+                )
+            )
+        return read
+    }
+
+    override suspend fun findHead(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+    ): AppResult<CollaborationSpaceEventHead> {
+        currentCoroutineContext().ensureActive()
+        val lease =
+            registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
+                ?: return handoverPending()
+        val read = lease.findHistoryHead(matrixRoomId)
+        currentCoroutineContext().ensureActive()
+        lease.credentialFailures.value?.let {
+            return AppResult.Failed(collaborationSdkAcquisitionFailure(read, it))
+        }
+        if (registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId) !== lease)
+            return AppResult.Failed(
+                collaborationSdkAcquisitionFailure(read, handoverPending().failure)
+            )
+        return when (read) {
+            is AppResult.Failed -> read
+            is AppResult.Success ->
+                AppResult.Success(
+                    CollaborationSpaceEventHead(
+                        runtime,
+                        CollaborationHistoryHead(
+                            lease.owner,
+                            lease.deviceId,
+                            matrixRoomId,
+                            read.value,
+                        ),
+                    )
+                )
+        }
+    }
+
+    override suspend fun read(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+        eventId: String,
+    ): AppResult<CollaborationSpaceEventSnapshot> {
+        currentCoroutineContext().ensureActive()
+        val lease =
+            registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
+                ?: return handoverPending()
+        val read = lease.readEvent(matrixRoomId, eventId)
+        currentCoroutineContext().ensureActive()
+        lease.credentialFailures.value?.let {
+            return AppResult.Failed(collaborationSdkAcquisitionFailure(read, it))
+        }
+        if (registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId) !== lease)
+            return AppResult.Failed(
+                collaborationSdkAcquisitionFailure(read, handoverPending().failure)
+            )
+        return when (read) {
+            is AppResult.Failed -> read
+            is AppResult.Success ->
+                AppResult.Success(CollaborationSpaceEventSnapshot(runtime, read.value))
+        }
     }
 
     override suspend fun isSpaceOpen(

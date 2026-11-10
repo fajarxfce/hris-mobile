@@ -26,6 +26,11 @@ class AndroidSpaceRuntimeAdoptionTest {
             val originals = f.repo.acquireOriginalQueue(runtime, "!room:test")
             val staging = f.repo.acquireSpaceMessageQueue(runtime, "!room:test")
             assertEquals(assertIs<AppResult.Failed>(originals), assertIs<AppResult.Failed>(staging))
+            assertEquals(originals, f.repo.findHead(runtime, "!room:test"))
+            assertEquals(originals, f.repo.read(runtime, "!room:test", "\$event"))
+            assertIs<AppResult.Failed>(
+                f.repo.read(setupOwner, SETUP_DEVICE, "!room:test", "\$event")
+            )
             assertEquals(0, f.acquisitions)
             assertEquals(0, f.writes)
             assertEquals(0, f.privateReads)

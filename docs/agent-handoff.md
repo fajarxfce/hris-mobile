@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 13:10 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 13:21 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -12,11 +12,9 @@ HRIS policy stays in Mobile. No subagents. Usecases coordinate repositories and 
 never other usecases; repositories coordinate their own datasource I/O, and ViewModels own
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
-One heavy compiler OR emulator. Native event-read full1/47121 is RUNNING, source frozen.
-Private runtime-event-reads-2026-11-10 owns runner,14-file list and acceptance scripts.
-Focused1/7075 REAPED PASS77/409.620s, strict audit passed. Full expects10203 cases;
-4762source inputs,manifest6705f5c8117dbf3231d1ab58ffc32d42bb5ec00487c4a196d3db236b45afddc8.
-No whole-application acceptance or product commit yet.
+One heavy compiler OR emulator. Runtime-event focused7075/full47121 are REAPED and accepted;
+no heavy job currently. Native test source is next. Private runtime-event-reads-2026-11-10
+owns exact files, runners, strict auditors and accepted results.
 The emulator is stopped. Preserve the one-compiler OR one-emulator boundary.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
@@ -25,6 +23,28 @@ clear its UI or data. ADB82255 timed out15s near12:14 and is reaped; existing av
 question stays pending. Phone87 last known;88 uninstalled. No new phone build yet.
 Crashlytics IAM is verified; no repeated question. Physical iPhone testing is waived,
 not Apple compilation/runtime/notification/call acceptance. Apple Matrix runtime is missing.
+
+## Accepted installed-runtime event reads
+
+Fourteen Kotlin files bind physical and logical Space event contracts to the existing runtime
+owner. Each finite read is registered under its original parent before raw I/O and mapping;
+cancellation/timeouts retain late work until disposal. Exact runtime/credential guards run
+before/after I/O, physical identity is never relabeled, and unsupported hosts stay Unavailable.
+No client, timeline, join, sync, writer, send or retry is started by this capability.
+[Contract](collaboration-runtime-event-reads.md),
+[measurement](measurements/collaboration-runtime-event-reads-2026-11-10.json).
+
+Focused1/7075 REAPED PASS77/409.620s:15new child-lifetime +4parent-integration host cases,
+4availability cases on each of Desktop/Androidhost/actualChromium,46existing lifetime/raw/DI
+controls. Strict audit preserves all6old report/case identities and exact14-file change set.
+Full1/47121 REAPED PASS625.307s:10203verified=8184fresh+2019exact accepted reused,zero
+failures/errors/skips. Rootcheck,Androidhost/releasecompile/lint,Wasm/iOSappsource,Chromium,
+proofAPK/unit/format/architecture/detekt pass. Both auditors/publisher passed.4762source/library
+inputs fixed,manifest6705f5c8117dbf3231d1ab58ffc32d42bb5ec00487c4a196d3db236b45afddc8.
+Current proofAPK150606837B SHAe81c81c14e390914e2d976962f6498c1d466d43fae8083648a2b99993d3502a0.
+Source commit/push next. Hosted11330=8201portable+3129Apple+16Swift/host prepared,not dispatched;
+baseline classifier42819170095 remains running. No actual native event equivalence, incoming
+activation, phone/live/SDK/Starter change or native Apple implementation claim.
 
 ## Accepted acquired-event classification
 
@@ -42,7 +62,7 @@ identities. Full1/34957 REAPED PASS695.005s,10172verified=8153fresh+2019exact ac
 zero failures/errors/skips. Root check,Android host/release compile/lint,Wasm/iOS app source,
 actualChromium,proofAPK/unit/quality pass. Strict full auditor/publisher passed.4755source/library
 inputs fixed,manifestf56484e626ceb0d012e9cca86f628150b7863dca87a3dc20ab6ed4ea7e69ff3c.
-Current proofAPK150605511B SHA24e8cef1c2319a00c2378495f9552f8a4c0f127cecdb86ff24edd64745ca685e.
+Historical classifier proofAPK150605511B SHA24e8cef1c2319a00c2378495f9552f8a4c0f127cecdb86ff24edd64745ca685e.
 Private raw-event-classification-2026-11-10 contains source/results/auditors. No native binding,
 retention usecase, incoming activation, phone/live/SDK change or native redaction equivalence
 claim. Source5c276a2fcc472260245ea56ba6db7b50c537bd59 is committed/pushed39983(REAPED).
@@ -223,15 +243,11 @@ handoff/measurements. Shared Apple tests/unsigned hosts do not implement its nat
 
 [Incoming/history plan](collaboration-space-incoming-plan.md) now continues from accepted
 original AND replacement storage and the accepted internal raw-event I/O primitive above.
-The raw classifier is accepted above. Current UNCOMMITTED14-file native integration adds
-physical and logical typed event contracts/snapshots, parent-owned finite reads, exact runtime
-lookup before/after I/O, unavailable-host bindings,15child-lifetime +4parent-integration host
-cases and4portable availability cases. Existing DI/absent-runtime cases cover same-instance
-bindings and no implicit acquisition. No second client/registry or repository delegation.
-Focused1/7075 REAPED PASS77/409.620s, strict audit verifies all14changed files and6existing
-control reports/case identities. Full1/47121 RUNNING; accept it before committing product.
-Auditors/publisher prepared, source frozen. Hosted runtime control11330expected is prepared,
-not dispatched; baseline classifier42819170095 remains running. No live/phone/source-compatibility claim. Then prove
+Runtime event ownership is now accepted above. Group has3UNCOMMITTED test files:
+NativeEventReadsTest.kt,tool/collaboration_event_reads_native.py and its test.4new Python
+plus18unchanged driver ownership cases pass; JVM/native not yet compiled/run. Group handoff
+893ad337 is pushed57214(REAPED) and private runtime-event-native-2026-11-10 owns the protocol.
+Next implement/register Mobile `event-reads-stage` and `event-reads-space` probes to establish
 actual original/edit/redaction/missing-key behavior through public repository capabilities in
 the isolated SDK6 native fixture. Do not make an internal datasource public for tests or create
 a second client/registry. Raw I/O alone does not admit content or advance progress.

@@ -23,6 +23,7 @@ internal enum class AndroidCollaborationOperation {
     QueueOpen,
     HistorySession,
     HistoryWindow,
+    RawEvent,
 }
 
 /** Preserve SDK rejections without retaining provider bodies or exception text. */
