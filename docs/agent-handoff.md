@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 03:01 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 03:16 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -37,9 +37,21 @@ current/archive/source/library evidence. Tests cover actual unique-constraint ro
 old-consumer/new-writer races,capacity,owner/checkpoint denial,cancel,lost results,
 staging/removal,no-wake compatibility and real file/IDB reopen.
 
-ACTIVE full38641:required root,Android host/release/lint,shared Wasm+iOS,all database
-browser and collaboration-data browser contracts,proof compilation and quality.
-Source is frozen through reap/audit. Portable hosted workflow now explicitly runs
+Full38641 REAPED FAIL840.58s:4,012 fresh cases,one failure,zero errors/skips;
+all89SQLite/87browser database cases and971browser collaboration-data cases pass.
+The one AppFlow catalog test fails before its injected fault: a stale generated
+ReplicaStore delegate lacks the new mutation parameter (AbstractMethodError). javap
+proves old replace/commit signatures; its source is unchanged since76a143b6. Exact
+classSHA07d582e55bfec1d6d4e162271d73afa3fd0a37cc3c46fbaaee1b6e46ed662762 is retained.
+No UI/source/assertion/timeout workaround is warranted. Applied local
+compose-ui-testing-patterns skill for review; existing DI/lifecycle integration is valid.
+
+ACTIVE repair2593 recompiles shared desktop tests non-incrementally,then runs all714
+app tests on the SAME source. After reap use accept-repair.py to verify new delegate
+ABI and unchanged testcase identities; then run full-2 and accept-full.py full-2.
+The final audit supports exact same-source full-1/repair report reuse,never unresolved
+failure reuse. Required root/Android host/release/lint,Wasm+iOS/browsers/proof/quality
+remain the final gate. Source is frozen through reap/audit. Portable hosted workflow now explicitly runs
 both database platforms and retains their XML; this workflow-only delta follows the
 focused gate. Private .work/replica-commit-wake-2026-11-10 contains runners,red/focused
 acceptance,55 Kotlin changes and raw-delegate review (no unforwarded same-argument
