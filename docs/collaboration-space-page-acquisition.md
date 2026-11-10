@@ -48,3 +48,10 @@ and [full measurement](measurements/collaboration-space-page-acquisition-full-20
 and a repeated exhausted acquisition that adds no HTTP. The earlier
 [provider and storage proof](collaboration-space-frontier-native.md) remains accepted.
 No product incoming consumer is enabled, and phone latency has not been measured here.
+
+The exact `669908384da244d285cb21e93040cffcee3207ef` source also passed
+[hosted validation](https://github.com/fajarxfce/hris-mobile/actions/runs/42865846045):
+8,399 portable and 3,222 Apple simulator tests, 16 Swift envelope checks, and the unsigned
+iOS application host build. Artifact digests and previous case identities were verified; see
+the [measurement](measurements/collaboration-space-page-hosted-2026-11-10.json).
+This run predates the later pending-reference and incoming-demand increments.

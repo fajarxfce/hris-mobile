@@ -1,7 +1,39 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 18:31 UTC. Follow AGENTS.md. Earlier checkpoints below are historical;
-this opening section owns current work. All 54 communications PRD groups remain OPEN.
+Updated 10 November 2026, 18:40 UTC. Follow AGENTS.md. This opening section owns current
+work; checkpoints below are historical. All 54 communications PRD groups remain OPEN.
+
+## Current incoming-demand storage correction
+
+Policy7197a803 is committed/pushed. Its focused124/full10479 are accepted. The next11Kotlin
+storage files are APPLIED/UNCOMMITTED, not accepted. Focused83498 REAPED exit1/169.707s:
+58 desktop cases,2failures. No heavy process remains; full1 has NOT STARTED.
+Private space-incoming-demand-storage-2026-11-10 holds exact candidate/base/reports and runners.
+
+The maximum64-room UTF8 case exposed the raw checkpoint32768 limit. Correct storage to use
+one encrypted document (existing131072 bound), a small validated checkpoint, and a consistent
+checkpoint/document read. Keep atomic ReplicaStore replacement+wake; do not enlarge generic
+storage limits. The reopen test used the expired login handle after activating renewed login;
+correct its caller while preserving current-session account admission. No app consumer exists.
+Re-run focused then full after these corrections and preserve the failed reports.
+
+Hosted42865846045 at exact669908384da244d285cb21e93040cffcee3207ef is COMPLETE/ACCEPTED:
+11621=8399portable+3222Apple,16Swift checks and unsignediOS host PASS. Both artifacts/digests,
+CRC, previous case identities and expected totals audited (53259/49767 REAPED). Compact public
+measurement: measurements/collaboration-space-page-hosted-2026-11-10.json. This source predates
+pending-reference/policy/storage; do not attribute the current changes to it or rerun it.
+
+Next after storage: current-owner Queue/Completion usecases and bounded independent incoming
+worker, following private NEXT.md and collaboration-space-incoming-plan.md. No all-room HTTP
+polling for one missing key; startup and bounded overflow retain durable rescan. Generic
+Complete must not bypass actual provider EOF/unresolved-reference admission.
+
+Release89 accepted/NOT INSTALLED; phone87 last known, ADB7195 timeout REAPED18:08.
+Install-only when reachable; never launch/reset/drive phone UI. No emulator active. Original
+live90163/schema116.4 unchanged; Group117–140 undeployed. SDK6, retained sender/private keys,
+eight original transactions, dirty Inspector/SDK worktrees preserved. No generic Starter delta.
+
+## Historical checkpoints
 
 ## Current incoming-demand policy acceptance
 
