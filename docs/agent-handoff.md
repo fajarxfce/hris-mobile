@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 22:15 UTC. Follow AGENTS.md. This opening section owns current work.
+Updated 10 November 2026, 22:25 UTC. Follow AGENTS.md. This opening section owns current work.
 
 ## Application incoming worker accepted; native proof next
 
@@ -58,13 +58,24 @@ Focused1/89474 REAPED failed compilation:two Kotlin test assertion inference err
 Red1/58464 REAPED19/3 failures/66.315s. Two fixtures incorrectly kept denial revision after
 readmission; existing storage requires open=(null,null), now corrected. The third case
 exposed queued old-root output across nested flatMapLatest under consumer backpressure.
-Red2/session2515 RUNNING with19 cases and a valid changed-bootstrap regression, source fixed.
-Reap before editing. Flatten ownership observation before the final bootstrap flatMapLatest;
-merely adding another buffer does not cancel an already-forwarded old root. Preserve root,
-parent replacement, disposal and storage/admission tests. Then focused2 and full1; auditors
-and exact prior report manifests are private. Root/app integration follows accepted policy.
+Red2/session2515 REAPED19/1 failure/90.648s:valid changed-bootstrap/root-removal regression
+proved a queued Ready escaped after root removal. Fixed by flattening the owner stream before
+one final bootstrap flatMapLatest; root replacement cancels the pending old-owner emission.
+Focused2/session68155 REAPED ACCEPTED156/454.160s,4857 inputs, source manifest
+709946d699eb37645d87b79d6bb4d3a37ae84a6edc946d1c5c0eaac179e9dd44.
+Both JVM/Chromium19 new cases pass, plus preserved root/setup/registration/scan, encrypted
+storage22 per target, worker20/DI2, format/architecture/detekt and iOS module compilation.
 
-User phone remains unreachable (ADB55679 timeout/reaped), release89 uninstalled. Existing
+Current startup full1/session52569 RUNNING. Freeze all product/library inputs; emulator OFF.
+Expect10940=10902 prior +38 new JVM/Chromium cases. Reap, then accept-full.py full1 compares
+all prior identities and exact unchanged reports, source/library manifests and proof APK.
+Do not call publish.py until accepted; it is prepared but UNEXECUTED. Domain observer only,
+no application subscriber; no new native or Apple runtime execution is claimed. Private
+APPLICATION-NEXT.md owns next collector/generation/cancellation and automatic native proof
+plan. Do not disable the real subscriber to preserve manual fixture assumptions. SDK raw
+hints, first-root application enqueue, unknown conversations, push and keys remain separate.
+
+User phone remains unreachable (ADB17234 timeout/reaped), release89 uninstalled. Existing
 availability question remains pending; notify before install-only, never launch/reset/UI.
 No live deployment, generic Starter delta or SDK mutation. All54 PRD groups remain OPEN.
 
@@ -78,7 +89,7 @@ preserve retry.15minute periodic fallback is not realtime. All54 PRD groups rema
 
 Hosted42889565705 at prior07e22182 accepted11993=8647portable+3346Apple,+16Swift/unsigned host;
 predates32scheduling and12application changes. Artifacts/digests/identity checks already published.
-Do not redispatch. Release89 remains uninstalled, phone87 last known; latest ADB55679 timeout/reaped.
+Do not redispatch. Release89 remains uninstalled, phone87 last known; latest ADB17234 timeout/reaped.
 Existing availability question remains pending. Notify before install-only; no launch/reset/UI.
 Live90163/schema116.4 unchanged, Group117–140 undeployed. Emulator stopped. SDK6, original
 transactions/sender keys, dirty SDK and Inspector trees remain preserved.
