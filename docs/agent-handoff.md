@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 09:11 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 09:36 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -14,13 +14,46 @@ ViewModels own screen state. No subagent delegation.
 One heavy compiler OR emulator. Mixed delivery full-1/27233 completed and is REAPED,
 PASS. Mobile proof2/37351 also reaped PASS20; Group source1 completed PASS3. Native1/92077
 failed and is reaped/stopped; repaired proof3/35974 and native2/73904 are REAPED PASS.
-No local heavy compiler or emulator remains. Focused1/85670,2/31280,3/3636 are reaped. Never kill live API/worker JVMs.
+Pending inventory full1/59690 is REAPED PASS; no compiler/emulator. Focused1/51383 is REAPED PASS116. Focused1/85670,2/31280,3/3636 are reaped. Never kill live API/worker JVMs.
 Owned emulator uses 2,560 MiB/two cores. Phone 10.77.77.3:5555 is install-only: announce
 each installation; never launch, drive, uninstall or clear it. ADB 7150 timed out after
 15 seconds at 08:22 UTC and is reaped. Existing availability question remains pending.
 Phone 87 unchanged; 88 remains uninstalled.
 Crashlytics IAM is verified. Physical iPhone interaction is waived, not Apple source/runtime
 acceptance. Actual Apple Matrix runtime binding remains unavailable and must be implemented.
+
+## Accepted complete pending inventory
+
+This increment accepts five Kotlin inputs: complete local inventory policy,
+ReadCollaborationSpacePendingMessages,18 new owning cases, owning factory DI and existing
+DI resolution assertion. Source base009c681f is accepted/pushed; this commit records its next bounded local owner. The usecase reads existing
+SpaceMessageRepository.observe(access,null), validates ALL up to128 unique scoped records,
+detaches Staging.before before another suspend, orders by createdAt/ID, then excludes valid
+Sent/Cancelled records. Native parent/session/directory checks bracket the read; no expiry/
+selected-company requirement, metadata/binding lookup, SDK/HTTP/write/schedule/acknowledgement.
+Empty completed flow is Conflict, unavailable flow bounded5s, cancellation propagates.
+
+Focused1/51383 is REAPED PASS340.79s/116fresh, zero failure/error/skip: new18+Observe8+
+Queue15+Demand16 on Desktop/actualChromium,2DI. iOS source/format/architecture/detekt pass.
+All4724source/library inputs fixed; manifest
+0f5676b37b54248b7b02843c8298ee0eb6362c063619b41ccd2a2344f48ff7e2.
+Strict focused auditor passed. Full1/59690 is REAPED PASS674.306s:9868verified=7849fresh+
+2019exact accepted reused,zero failures/errors/skips. All4724source/library bytes fixed;
+required root/Android host/release compile/lint/Wasm/iOS/actualChromium/proofAPK/unit/quality
+checks pass. Full auditor preserves all prior core/proof3 case identities and hashes.
+[Contract](collaboration-space-pending-inventory.md),
+[measurement](measurements/collaboration-space-pending-inventory-2026-11-10.json).
+ProofAPK150576700B SHA91a650ee0a7633a5e9d3b504899b6d11926ec8d2711020dc384fee4de9e8408b,
+compiled only; no native/phone claim. Private .work/space-pending-inventory-2026-11-10
+retains exact inputs/evidence/auditors. Source freeze ends after acceptance. Commit/push
+then pin the prepared hosted control; do not rerun accepted gates.
+
+No worker routing changed. After acceptance extend both-ledger/new-room idle demand,
+then authenticated durable/fair command claims and staging. Current binding-only progress
+schema1 and existing wake-generation completion must remain compatible. No usecase may
+call another usecase; application worker owns orchestration. Hosted pending-inventory
+control is NOT dispatched; prepare only after accepted source commit/push. Expected7866
+portable+2996Apple=10862,16Swift/unsignedhost, baseline mixed control42785697360.
 
 ## Current accepted increment — mixed original delivery
 
@@ -47,7 +80,10 @@ d7c02e4b624ca8d41a007f04d09eeeef9b06ebf1f3e181a10a7438fecd02e83f; compiled only.
 Private .work/mixed-original-delivery-2026-11-10 retains canonical frozen inputs/evidence.
 Source3f5716b61bdcca043a3978e8643591511c117ad1 is committed/pushed86917 (reaped).
 Pinned validation/mixed-original-delivery-20261110 control42785697360 is running;
-ref50606/dispatch71585 reaped, expected7,830 portable+2,978 Apple=10,808,16Swift/host.
+ref50606/dispatch71585 reaped. Portable37305 is REAPED PASS7,830, artifact13751367514,
+SHA6e28af3697cc54f0006384c29216656c6605c11121ac16d5ca4977850251b99b,
+report manifest a17e0e04c7ff6d56526fbe2389df4ae52bac6667c82313070eefa9d157c3835f.
+Apple2,978 pending, total10,808+16Swift/host. [Prepared hosted evidence](measurements/collaboration-mixed-original-delivery-hosted-2026-11-10.json).
 Native acceptance remains separate.
 
 ## Accepted dependency — owning Space staging
@@ -74,9 +110,10 @@ Strict auditors and publisher pass. Proof APK 150,548,965 bytes, SHA
 Private .work/space-message-staging-2026-11-10 retains canonical inputs/evidence. Do not
 recopy stale Stage files from mixed-original-delivery. Source507224a3c3e4cb4c87cc3a7ba8b4f8be9535bd54
 is committed/pushed (46472 reaped). Immutable validation/space-message-staging-20261110
-control42781554618 is running; ref14911/dispatch44288 reaped. Portable7101 is REAPED
-PASS7,742; digest/CRC/predecessor identities verified. Apple2,934 pending; total10,676
-plus16Swift/unsigned host. Preserve this control.
+control42781554618 is COMPLETE; ref14911/dispatch44288 reaped. Portable7101 and Apple90429
+are REAPED PASS7,742+2,934=10,676 plus16Swift/unsigned host. Digests/CRC/source/predecessor
+identities verified. [Prepared complete evidence](measurements/collaboration-space-message-staging-hosted-2026-11-10.json).
+Do not rerun.
 
 ## Accepted dependency — new Space-room queues
 
@@ -134,8 +171,9 @@ Preserve mixed 42769825037 and projection 42772661276 controls.
 
 ## Accepted native mixed queue — implementation continuation
 
-Four Mobile proof sources and five Group fixture/driver sources are accepted, pending
-atomic commit/push. Canonical tracked source; stale private generators must not be recopied.
+Four Mobile proof sources and five Group fixture/driver sources are accepted/committed/pushed:
+Mobile009c681f3eb20b5e90032c05e9448a6be6bd6088 and Group3d0a2cb5206f84332fe8a06b45519568fe1a2407.
+Push88275 is REAPED; Original7878ac60 and Starter1b0ec3d checkpoints also pushed. Canonical tracked source; stale private generators must not be recopied.
 [Native contract](collaboration-mixed-space-native.md),
 [measurement](measurements/collaboration-mixed-space-native-2026-11-10.json).
 
@@ -163,7 +201,7 @@ proof package. Only that reader changed to bounded2..3 unique IDs/matching place
 no product/SDK/timeout/assertion removal. Failed userdata/source retained. Proof1LongMethod
 and explicit interruption-phase repair also retained. No repeat of accepted native2 needed.
 
-NEXT: complete local Space pending inventory independent of room bindings, extend existing
+NEXT: the local pending inventory is now accepted above; extend existing
 read-only recovery demand to optional Company +mandatory Space ledgers/new rooms, then
 integrate bounded durable worker claims/staging before product routing. Current worker scans
 room-binding inventory only and LoadCollaborationSpaceRecoveryRoom still rejects original==null.
@@ -238,8 +276,8 @@ builds,production web,iOS source,SBOM/quality. Source1,061/library49 fixed. No S
 source WIP or compiler. Previous replica port30c4d72 is included. WorkWakeRequest is now
 shared by replica/command API. HRIS-specific policy stays here.
 
-Platform Group .worktrees/communication-space branchfeat/communication-space HEAD dbad108e;
-Original hris-platform branchfeat/communications HEAD 92ec9243. Both checkpoints pushed.
+Platform Group .worktrees/communication-space branchfeat/communication-space HEAD 3d0a2cb5;
+Original hris-platform branchfeat/communications HEAD 7878ac60. Both checkpoints pushed.
 Inspector f8ca3d6,isolated Inspector a6b8236,isolated Mobile CI951cdbcf unchanged. Preserve
 dirty SDK refresh worktree and Inspector gradlew.bat normalization delta. SDK6 is immutable:
 AAR SHAa4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3.

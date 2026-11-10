@@ -1,5 +1,11 @@
 # Architecture
 
+[Complete local pending inventory](collaboration-space-pending-inventory.md) validates the
+whole Space command partition before terminal filtering, including commands without room
+bindings. The usecase brackets immutable capture with current local admission; discovery
+never acquires transport, writes, schedules or acknowledges work. Worker orchestration and
+durable claims remain separate.
+
 [Mixed original delivery](collaboration-mixed-original-delivery.md) keeps one native writer
 and invocation-owned Company/Space ledger phases. Both complete projections and physical
 receipt ownership are checked before writes; callbacks retain immutable typed mappings.

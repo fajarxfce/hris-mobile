@@ -1,0 +1,67 @@
+{
+  "sourceCommit": "507224a3c3e4cb4c87cc3a7ba8b4f8be9535bd54",
+  "runId": 42781554618,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42781554618",
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "nativeMatrixRuntimeClaim": false,
+  "expectedTotal": 10676,
+  "portable": {
+    "sourceCommit": "507224a3c3e4cb4c87cc3a7ba8b4f8be9535bd54",
+    "runId": 42781554618,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42781554618",
+    "jobId": 129712559154,
+    "artifactId": 13748911633,
+    "bytes": 3505470,
+    "sha256": "f78ad9f3f8abbb03e17b1882671fa62cb03cf2f91c27b83d432e4bc7ee114fa0",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "desktopTest": {
+        "tests": 3640,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 389
+      },
+      "testAndroidHostTest": {
+        "tests": 651,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 91
+      },
+      "wasmJsBrowserTest": {
+        "tests": 3451,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 350
+      }
+    },
+    "reportManifestSha256": "90531d8528de586271a1f5b6bcd9d858bd9b897573e79c4439c52e4f784e2d6c"
+  },
+  "apple": {
+    "sourceCommit": "507224a3c3e4cb4c87cc3a7ba8b4f8be9535bd54",
+    "runId": 42781554618,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42781554618",
+    "jobId": 129712558713,
+    "artifactId": 13750048922,
+    "bytes": 552115,
+    "sha256": "e3b1bb118d71c4ebade37ab9b76830876cd668c9ee90dc4f828a4cc3d1d399df",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "iosSimulatorArm64Test": {
+        "tests": 2934,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 303
+      }
+    },
+    "reportManifestSha256": "e7138aca1a211a42e1851d182752cde611d99236d3d6ae87c95f2db73dc72216"
+  },
+  "tests": 10676,
+  "status": "complete",
+  "swiftPushFieldCases": 16,
+  "unsignedIosHostBuilt": true
+}

@@ -124,6 +124,14 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun readSpacePendingMessages(
+        messages: CollaborationSpaceMessageRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpacePendingMessages(messages, directory, sessions, server)
+
+    @Factory
     fun readSpaceRecoveryDemand(
         bindings: CollaborationSpaceRoomBindingRepository,
         runtimes: CollaborationSpaceRuntimeRepository,

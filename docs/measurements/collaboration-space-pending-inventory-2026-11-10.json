@@ -1,0 +1,79 @@
+{
+  "acceptedAt": "2026-11-10T09:35:13.691898+00:00",
+  "baseCommit": "009c681f3eb20b5e90032c05e9448a6be6bd6088",
+  "scope": "Complete bounded local Space pending inventory independent of bindings, native-parent/session/directory guards, full validation before terminal filtering, stable original order and detached staging baselines. No transport, mutation, scheduling, acknowledgement or worker activation.",
+  "sourceFiles": 4724,
+  "sourceManifestSha256": "0f5676b37b54248b7b02843c8298ee0eb6362c063619b41ccd2a2344f48ff7e2",
+  "changedSourceHashes": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceMessageInventoryPolicy.kt": "1aa2257578b5c7635a08e90fb875ab8296e81652b185d6d8f0a802c564a47fa6",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpacePendingMessages.kt": "0ca277b26a4bde0c72c1a6184af587bef93f38ee3e7cfef678a905908af5f2a1",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationSpacePendingMessagesTest.kt": "8e0b204ca046e808775cf62a3e3152755bbcb3fe33807658689eef4d9dcb8737",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "1d103982c0594541b06d942793eec4a36ef98b95c5bf24599cc35afb74a93484",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "243b1782b03022cb2ee67b00e91bcfde452179e9c5d01875b8fc5fbe71b3f4cf"
+  },
+  "deletedSources": [],
+  "focused": {
+    "startedAt": "2026-11-10T09:17:34.457399+00:00",
+    "elapsedSeconds": 340.79,
+    "sourceFiles": 4724,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 116,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "0f5676b37b54248b7b02843c8298ee0eb6362c063619b41ccd2a2344f48ff7e2"
+  },
+  "full": {
+    "startedAt": "2026-11-10T09:23:29.021802+00:00",
+    "elapsedSeconds": 674.306,
+    "sourceFiles": 4724,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7849,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "0f5676b37b54248b7b02843c8298ee0eb6362c063619b41ccd2a2344f48ff7e2",
+    "validatedTests": 9868,
+    "validatedReusedTests": 2019,
+    "validatedDatabaseCases": {
+      "desktopTest": 102,
+      "wasmJsBrowserTest": 100
+    }
+  },
+  "fullReportManifestSha256": "9ba6f68477acec747f8ce13083c63d1625d496da060535902714b4b39b2b4774",
+  "contracts": {
+    "newPendingInventoryCasesPerPlatform": 18,
+    "focusedCases": 116,
+    "completeAccountCommandBound": 128,
+    "deadlineMillis": 5000,
+    "metadataOrBindingReads": 0,
+    "mutations": 0,
+    "nativeAcquisitions": 0
+  },
+  "checks": [
+    "root check",
+    "Android host tests",
+    "Android release compilation and lint",
+    "Wasm and iOS source compilation",
+    "actual Chromium collaboration tests",
+    "proof APK compilation and unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "nonIncrementalKotlin": true,
+  "nativeRuntimeClaim": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "remaining": [
+    "Pinned hosted platform acceptance; actual Apple Matrix runtime still unavailable",
+    "Mixed/new-room read-only recovery demand and authenticated durable fair pending command claims/staging",
+    "Incoming history/edits/retirement, product routing, media, backup, calls and meetings; all54 PRD groups open"
+  ]
+}
