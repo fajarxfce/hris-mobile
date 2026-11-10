@@ -105,6 +105,52 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
         )
     }
 
+    /** Independent body/hash assertions over encrypted app storage, including its exact aliases. */
+    fun retained(snapshot: HrisSpaceIncomingProofHost.Snapshot, staged: JSONObject): JSONObject {
+        val ids = staged.getJSONObject("events")
+        val originalId = ids.getString("original")
+        val editId = ids.getString("latestEdit")
+        val redactedId = ids.getString("peer")
+        val message = snapshot.page.messages.single()
+        check(message.sender == sender && message.logicalId == files.logicalId)
+        check(message.primaryEventId == originalId && message.eventIds == listOf(originalId))
+        check(!message.redacted && message.text == files.body + "-original")
+        check(
+            message.contentHash == hash(originalContent()) &&
+                message.contentHash == staged.getString("originalHash")
+        )
+        check(
+            snapshot.original ==
+                CollaborationHistoryEventFact(originalId, sender, message.timestamp, false)
+        )
+        val edit = requireNotNull(message.latestEdit).edit
+        check(edit.eventId == editId && edit.targetEventId == originalId && edit.sender == sender)
+        check(edit.originalLogicalId == files.logicalId && edit.operationId == latestEditId)
+        check(
+            edit.text == files.body + "-latest" &&
+                edit.contentHash == hash(editContent(originalId, latest = true))
+        )
+        check(edit.contentHash == staged.getString("latestEditHash"))
+        check(
+            snapshot.replacement ==
+                CollaborationReplacementEventFact(editId, sender, edit.timestamp, false)
+        )
+        check(snapshot.redacted == CollaborationHistoryEventFact(redactedId, recipient, null, true))
+        return JSONObject()
+            .put("messages", 1)
+            .put("originalEventId", originalId)
+            .put("replacementEventId", editId)
+            .put("redactedEventId", redactedId)
+            .put("originalHash", message.contentHash)
+            .put("replacementHash", edit.contentHash)
+            .put("revisionHash", hash(requireNotNull(snapshot.page.revision)))
+            .put("originalTextPreserved", true)
+            .put("replacementTextPreserved", true)
+            .put("originalSenderTombstone", true)
+            .put("noOriginalFactForEdit", true)
+            .put("noSpaceSendWork", true)
+    }
+
     fun window(
         result: AppResult<CollaborationOriginalWindow>,
         owner: ProtectedHrisProofOwner,

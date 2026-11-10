@@ -1,0 +1,121 @@
+{
+  "startedAt": "2026-11-10T15:50:35.292963+00:00",
+  "elapsedSeconds": 208.285,
+  "bootSeconds": 40.9,
+  "counts": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "memoryMiB": 2560,
+  "cores": 2,
+  "phoneTouched": false,
+  "sourcesUnchanged": true,
+  "apkUnchanged": true,
+  "noCompilationDuringEmulator": true,
+  "emulatorStopped": true,
+  "artifact": {
+    "apkSha256": "4975867aab691df8c5c753fcfd20036e3d8da37ef069e563ee6f136ff63a51eb",
+    "sdkVersion": "26.10.23-hris.6",
+    "abi": "x86_64",
+    "librarySha256": "ecffbab72fd5dd29d656bc4757ea423bb4bccf0444140af0480684bc32761278"
+  },
+  "companyWindow": {
+    "kind": "Success",
+    "code": "none",
+    "originals": 2,
+    "anchorIncluded": false
+  },
+  "spaceWindow": {
+    "kind": "Success",
+    "code": "none",
+    "originals": 2,
+    "anchorIncluded": false
+  },
+  "encryptedEvents": 4,
+  "native": {
+    "requests": 7,
+    "bootstrapReplay": 1,
+    "directTransport": 2
+  },
+  "matrix": {
+    "requests": 30,
+    "encryptedSend": 4,
+    "sync": 3,
+    "secretStorage": 2
+  },
+  "failures": [],
+  "oldHistoryReaderFixed": true,
+  "incomingBatchRetained": true,
+  "offlineTransportRemoved": true,
+  "providerProgressImplemented": false,
+  "productConsumerIntegrated": false,
+  "phoneLatencyMeasured": false,
+  "incoming": {
+    "messages": 1,
+    "originalTextPreserved": true,
+    "replacementTextPreserved": true,
+    "originalSenderTombstone": true,
+    "noOriginalFactForEdit": true,
+    "noSpaceSendWork": true,
+    "replayUnchanged": true,
+    "originalJournalUnchanged": true,
+    "reopenedInDifferentProcess": true,
+    "sameRevision": true,
+    "runtimeNeverOpened": true,
+    "databaseReleased": true
+  },
+  "originalControls": [
+    {
+      "actualProviderEvents": 3,
+      "confirmedOriginals": 3,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "secondProviderAckLostBeforeAppJournal": true,
+      "localReadBeforeTransport": true,
+      "spaceAckLostBeforeAppJournal": true,
+      "newSpaceOriginal": true,
+      "nativeRequests": {
+        "requests": 11,
+        "bootstrapReplay": 2,
+        "directTransport": 3
+      },
+      "actualProcessDeaths": 1,
+      "offlineRestart": true
+    },
+    {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "secondProviderAckLostBeforeAppJournal": true,
+      "localReadBeforeTransport": true,
+      "spaceAckLostBeforeAppJournal": false,
+      "newSpaceOriginal": false,
+      "nativeRequests": {
+        "requests": 10,
+        "bootstrapReplay": 2,
+        "directTransport": 2
+      },
+      "actualProcessDeaths": 1,
+      "offlineRestart": true
+    }
+  ],
+  "productBaseCommit": "e1ab46e4bb1eeb1dc077e62cd3ecc8bcf7f4ae80",
+  "mobileProof": {
+    "sourceFiles": 4775,
+    "sourceManifestSha256": "3133cabf811fefa9650a1f17737fc8b957d363cab4569f4bb59b1801b6da9d3e",
+    "tests": 20,
+    "elapsedSeconds": 111.123
+  },
+  "backendFixture": {
+    "sourceFiles": 8740,
+    "sourceManifestSha256": "7c4f1fc40aeebfee4b2ed3f959cfc7965614cba4dab5a9a23a640cda62c20d67",
+    "compileElapsedSeconds": 80.918,
+    "compileTests": 0,
+    "protocolCases": 27
+  }
+}

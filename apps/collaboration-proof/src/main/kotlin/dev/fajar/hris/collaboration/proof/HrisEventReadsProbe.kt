@@ -35,6 +35,7 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                     when (scenario) {
                         "event-reads-stage" -> stage()
                         "event-reads-space" -> adopted()
+                        "event-reads-local" -> reopened()
                         else -> error("Unknown event-read scenario")
                     }
                 }
@@ -186,6 +187,7 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                         installed.installedOperationId,
                     )
                 captureAdopted(runtime, staged)
+                    .put("incoming", retainIncoming(app, runtime, group, staged))
             } catch (failure: Exception) {
                 primary = failure
                 throw failure
@@ -272,6 +274,133 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
             .put("oldCompanyReadRejected", true)
             .put("foreignRuntimeReadRejected", true)
             .put("redactedTargetSenderPreserved", true)
+    }
+
+    private suspend fun retainIncoming(
+        app: HrisWorkerProofContainer,
+        runtime: CollaborationSpaceRuntimeReady,
+        group: JSONObject,
+        staged: JSONObject,
+    ): JSONObject {
+        val conversation = app.prepareOriginalRoom(runtime.owner, group.getString("conversationId"))
+        val host = app.incomingHistory()
+        val ids = staged.getJSONObject("events")
+        val selected = listOf(ids.getString("latestEdit"), ids.getString("redaction"))
+        val journal = app.receipts()
+        check(journal.isEmpty())
+        val first = host.acquire(runtime, conversation, selected)
+        check(
+            first.runtime == runtime &&
+                first.roomId == files.roomId &&
+                first.conversationId == conversation.id
+        )
+        check(first.items.map { it.sourceEventId } == selected)
+        check(first.items.all { it.outcome is CollaborationIncomingHistoryOutcome.Retained })
+        val access = runtime.owner.localDirectoryAccess()
+        val original =
+            host.read(
+                access,
+                conversation.id,
+                files.roomId,
+                ids.getString("original"),
+                ids.getString("latestEdit"),
+                ids.getString("peer"),
+            )
+        val retained = evidence.retained(original, staged)
+        val replay = host.acquire(runtime, conversation, selected)
+        check(replay.items.map { it.sourceEventId } == selected)
+        check(replay.items.all { it.outcome is CollaborationIncomingHistoryOutcome.Retained })
+        val again =
+            host.read(
+                access,
+                conversation.id,
+                files.roomId,
+                ids.getString("original"),
+                ids.getString("latestEdit"),
+                ids.getString("peer"),
+            )
+        check(original == again)
+        check(app.receipts() == journal)
+        return JSONObject()
+            .put("retained", retained)
+            .put("replayUnchanged", true)
+            .put("originalJournalUnchanged", true)
+    }
+
+    private suspend fun reopened() {
+        val staged = files.read("original-staged", 16_384)
+        val adopted = files.read("original-events", 16_384)
+        val group = files.read("original-group", 16_384)
+        check(adopted.getInt("processId") != Process.myPid())
+        val parent =
+            sender.currentOwner.let {
+                CollaborationNativeParent(
+                    it.sessionId,
+                    it.audience,
+                    it.accountId,
+                    it.nativeSessionId,
+                )
+            }
+        val owner = CollaborationSpaceOwner(parent, group.getString("spaceId"))
+        val app =
+            HrisWorkerProofContainer(
+                context,
+                sender.currentOwner,
+                files.conversationId,
+                files.fixture.getJSONObject("sender").getString("hrisAccessToken"),
+                sender.repository,
+                http,
+            )
+        var primary: Exception? = null
+        val result =
+            try {
+                app.activate()
+                val runtime = sender.repository as CollaborationSpaceRuntimeRepository
+                check(
+                    !expect(
+                        runtime.isSpaceOpen(
+                            owner,
+                            group.getString("deviceId"),
+                            group.getString("registrationId"),
+                        )
+                    )
+                )
+                val ids = staged.getJSONObject("events")
+                val snapshot =
+                    app.incomingHistory()
+                        .read(
+                            owner.localDirectoryAccess(),
+                            group.getString("conversationId"),
+                            files.roomId,
+                            ids.getString("original"),
+                            ids.getString("latestEdit"),
+                            ids.getString("peer"),
+                        )
+                val stored = evidence.retained(snapshot, staged)
+                check(
+                    stored.toString() ==
+                        adopted.getJSONObject("incoming").getJSONObject("retained").toString()
+                )
+                check(
+                    !expect(
+                        runtime.isSpaceOpen(
+                            owner,
+                            group.getString("deviceId"),
+                            group.getString("registrationId"),
+                        )
+                    )
+                )
+                checkpoint()
+                    .put("incoming", stored)
+                    .put("sameRevision", true)
+                    .put("runtimeNeverOpened", true)
+            } catch (failure: Exception) {
+                primary = failure
+                throw failure
+            } finally {
+                closeHrisProofResources(primary, listOf({ app.close() }))
+            }
+        files.write("original-local", result.put("databaseReleased", true))
     }
 
     private suspend fun installOriginal(

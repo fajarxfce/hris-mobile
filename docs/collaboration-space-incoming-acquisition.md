@@ -37,7 +37,8 @@ iOS shared compilation, formatting, architecture and detekt pass. Source/library
 and the earlier case identities are audited. Full application validation passes10,318cases
 in659.239s:8,299fresh plus2,019hash-bound accepted controls. Required root check, Android
 host/release compilation and lint, shared application Wasm/iOS source, actual Chromium, proof
-APK/unit tests, formatting, architecture and detekt pass on the same4,774fixed inputs. Actual SDK batch retention, UI integration and native
-Apple Matrix support are not accepted by these tests.
+APK/unit tests, formatting, architecture and detekt pass on the same4,774fixed inputs. The later [actual SDK proof](collaboration-space-incoming-native.md) also accepts replay and
+process-reopened local storage. Product consumer integration and native Apple Matrix remain
+separate work.
 
 [Measurement](measurements/collaboration-space-incoming-acquisition-2026-11-10.json).

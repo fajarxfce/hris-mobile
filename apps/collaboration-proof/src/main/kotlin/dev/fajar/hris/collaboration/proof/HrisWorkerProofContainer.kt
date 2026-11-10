@@ -184,6 +184,8 @@ internal class HrisWorkerProofContainer(
                 }
             }
 
+    fun incomingHistory() = HrisSpaceIncomingProofHost(container.koin)
+
     fun spaceRecoverySeed(
         original: ProtectedHrisProofOwner,
         previous: JSONObject,
