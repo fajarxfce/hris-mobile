@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 07:31 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 07:48 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -11,15 +11,37 @@ updates. All 54 acceptance groups remain open. Mobile proves reusable foundation
 Starter. Usecases own policy/repository orchestration; repositories coordinate raw I/O;
 ViewModels own screen state. No subagent delegation.
 
-One heavy compiler OR emulator. The capability full process completed. New-room focused session 48502 is the only
-heavy compiler; its five source inputs are FROZEN. No emulator is running. Never kill live API/worker JVMs. Owned emulator uses 2,560 MiB/two cores.
+One heavy compiler OR emulator. New-room focused 48502 and full 7378 completed and are reaped. No compiler or
+emulator remains; new-room source freeze ended after full acceptance. Never kill live API/worker JVMs. Owned emulator uses 2,560 MiB/two cores.
 Phone 10.77.77.3:5555 is install-only: announce each installation; never launch, drive,
 uninstall or clear it. ADB 14496 timed out after 15 seconds at 07:28 UTC and was reaped.
 Existing availability question remains pending. Phone 87 unchanged; 88 remains uninstalled.
 Crashlytics IAM is verified. Physical iPhone interaction is waived, not Apple source/runtime
 acceptance. Actual Apple Matrix runtime binding remains unavailable and must be implemented.
 
-## Current accepted increment — distinct Space staging capability
+## Current accepted increment — new Space-room queues
+
+Five Kotlin inputs add complete provenance and transport matching for newly published
+SPACE rooms, typed matching/local reading without company command access, and 13 new
+regression cases. Physical SDK identity remains distinct from the logical Space owner.
+LEGACY room matching and reading preserve their existing behavior. No native enqueue,
+room creation, mixed sender or UI routing is activated by this increment.
+[Contract](collaboration-space-new-room-queue.md),
+[evidence](measurements/collaboration-space-new-room-queue-2026-11-10.json).
+
+Focused 48502 is reaped: PASS 328.257s, 96 fresh cases (13 new + 34 existing cases on
+Desktop/Chromium, two app DI). Full 7378 is reaped: PASS 647.309s, 9,676 verified = 7,657
+fresh + 2,019 exact accepted reused, zero failures/errors/skips. All 90 AppFlow cases
+remain. Required root/Android host/release/lint/Wasm/iOS/browser/proof APK/unit/quality
+pass. All 4,707 source inputs and library bytes stayed fixed. Strict auditors/publisher
+pass. Source manifest 57adc26664e998567fe2f1906ce236cc7fffae6de5bd45548715e33f79c689e4.
+Proof APK 150,518,107 bytes, SHA
+76329f626ef1aec5dde12d044e10f8e4759a74095efb5706bfc15a1b08ec51ac; compiled only.
+Private `.work/space-new-room-queue-2026-11-10` retains exact inputs/reports/runners.
+Commit/push this source, then pin the hosted control (expected 7,674 portable + 2,900
+Apple = 10,574, 16 Swift checks and unsigned host) before applying the next source.
+
+## Accepted dependency — distinct Space staging capability
 
 Nine Kotlin inputs add a separate staging-only lease/repository, Android wrapper, shared
 private raw writer acquisition, explicit unsupported fallback, owning DI and regressions.
@@ -49,11 +71,16 @@ Preserve mixed 42769825037 and projection 42772661276 controls.
 
 ## Immediate implementation continuation
 
-Five APPLIED, uncommitted inputs in `.work/space-new-room-queue-2026-11-10` add new SPACE-origin room
-provenance, typed matching/local reading, and 13 regression cases. They preserve physical
-SDK identity without fabricating company conversation coordinates. SPACE rooms query only
-the Space command namespace; LEGACY rooms retain exact two-ledger matching. Focused session 48502 is running for 96 fresh cases,
-as the only local heavy compiler. All five source inputs are FROZEN; no acceptance yet. Do not expose a new product route before native proof.
+Seven UNAPPLIED Kotlin drafts in `.work/space-message-staging-2026-11-10` now prepare
+StageCollaborationSpaceText, exact staging recovery policy, fixture, 9 policy + 25 owning
+cases, singleton DI and app binding assertion. Its focused runner expects 70 fresh cases.
+No compilation or acceptance yet. This is the canonical staging draft directory; older
+copies under mixed-original-delivery are stale. Apply after the accepted new-room source
+is committed/pushed and pinned. Format the seven applied inputs before freezing them.
+The owning draft handles exact CAS readback, lost enqueue responses, original recovery,
+recipient readiness, admission after I/O, cancellation and native close. Unready recipients
+reuse the existing Conflict code; recovery of an already stored original remains separate.
+Review/tests must verify those claims before actual native acceptance.
 
 Then implement StageCollaborationSpaceText and extend the existing owning delivery window
 to typed Company/Space ledgers. Reuse pure policies; never call another usecase or create a
@@ -76,13 +103,15 @@ incoming routing/dedup/history, media, backups, calls and meetings before PRD ac
   exact acknowledgements and offline whole-journal CAS/readback. Initial test-only generic
   compile failure is retained; production/assertions were preserved. Pinned control
   [42772661276](https://github.com/fajarxfce/hris-mobile/actions/runs/42772661276) is running
-  (expected 7,628 portable + 2,885 Apple). No hosted projection audit yet.
+  (expected 7,628 portable + 2,885 Apple). Portable audit 63880 is reaped and passes
+  7,628; Apple is building the host. Partial public evidence is retained.
 - Mixed matching 18e0d371b68e3e36c3be5bfdb1b91eb3e439de99 is pushed: focused 70/full 9,556.
   [42769825037](https://github.com/fajarxfce/hris-mobile/actions/runs/42769825037) portable
   audit 18071 completed/reaped: 7,554, artifact 13742801947, SHA
   2a570b5d3232750d1b7fd4a6c23ee894ee164064ffe9fe48d74808693d8f3f9a.
-  Apple was building the unsigned host at 07:28; expected 2,848 and 16 Swift checks.
-  Public complete hosted evidence remains pending. Do not redispatch either control.
+  Apple audit 55977 is reaped and passes 2,848; total 10,402 plus 16 Swift/unsigned host.
+  [Complete hosted evidence](measurements/collaboration-mixed-original-queue-hosted-2026-11-10.json)
+  verifies artifacts, CRC, digests and predecessor test identities. Do not redispatch.
 - Receipt db4fc4f0 is accepted locally and hosted: 10,300, 16 Swift, unsigned host.
   Message b9db0bd9 is accepted locally and hosted: 10,195, 16 Swift, unsigned host.
 - Starter source a7ff417c33cbbffb9b44a84e489a2fbce7be5bb2 is pushed and accepted: 15 exact

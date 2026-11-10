@@ -1,0 +1,81 @@
+{
+  "acceptedAt": "2026-11-10T07:48:20.247244+00:00",
+  "baseCommit": "b0746d7154acab7258f5661871c5700bc0cc74ce",
+  "scope": "Complete queue provenance and current transport matching for SPACE-origin rooms on an installed original SDK. Typed matcher and local reader query only the Space command ledger in new rooms while preserving LEGACY two-ledger behavior. No native acquisition, enqueue, sending or product routing activation.",
+  "sourceFiles": 4707,
+  "sourceManifestSha256": "57adc26664e998567fe2f1906ce236cc7fffae6de5bd45548715e33f79c689e4",
+  "changedSourceHashes": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationMixedOriginalQueuePolicy.kt": "b3f8696f983135b8088a8b24b1d2c116b390f59ba81b6cdb54b5e4757e91ad8f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationMixedQueueScopePolicy.kt": "9b53d7672298f485e242b8b7962b18f896b7b443be54e4b613cdcc997f5dcf55",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationMixedOriginalQueue.kt": "1a5701bcceabc1d3dafe950c161b661a608495ffdbc7e5d982b8c134c18ecc3d",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceNewRoomQueueTest.kt": "bda16798d7a1a5ea4b96b4a62f20bd91fa6a44fbe9315c55fa4dd65d38cb1dbc",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/MixedOriginalQueueReadFixture.kt": "b3cc0edd509e322dda458177bb3bc018484ebb1f4484fec7972b674753579a3e"
+  },
+  "deletedSources": [],
+  "focused": {
+    "startedAt": "2026-11-10T07:30:38.588335+00:00",
+    "elapsedSeconds": 328.257,
+    "sourceFiles": 4707,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 96,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "57adc26664e998567fe2f1906ce236cc7fffae6de5bd45548715e33f79c689e4"
+  },
+  "full": {
+    "startedAt": "2026-11-10T07:36:26.523434+00:00",
+    "elapsedSeconds": 647.309,
+    "sourceFiles": 4707,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7657,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "57adc26664e998567fe2f1906ce236cc7fffae6de5bd45548715e33f79c689e4",
+    "validatedTests": 9676,
+    "validatedReusedTests": 2019,
+    "validatedDatabaseCases": {
+      "desktopTest": 102,
+      "wasmJsBrowserTest": 100
+    }
+  },
+  "fullReportManifestSha256": "906a69970ac32ab2d4c376d724ed50b5edc56975d25b09f01f4b4b2a64b2ed0d",
+  "newRoomQueueContracts": {
+    "newRoomCasesPerPlatform": 13,
+    "existingMixedPolicyPerPlatform": 17,
+    "existingMixedReaderPerPlatform": 17,
+    "desktopCases": 47,
+    "chromiumCases": 47,
+    "appDi": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "checks": [
+    "root check",
+    "Android host tests",
+    "Android release compilation and lint",
+    "Wasm and iOS source compilation",
+    "real Chromium collaboration tests",
+    "proof APK compilation and unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "nonIncrementalKotlin": true,
+  "nativeRuntimeClaim": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "remaining": [
+    "Pinned Apple execution of new-room matching and reading; native Matrix binding remains unavailable",
+    "Owning Space staging and mixed native delivery/callback-loss recovery",
+    "Complete pending-command inventory and incoming history before product routing"
+  ]
+}

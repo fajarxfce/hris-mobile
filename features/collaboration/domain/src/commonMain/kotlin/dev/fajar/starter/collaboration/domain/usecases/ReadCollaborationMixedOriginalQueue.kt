@@ -52,8 +52,7 @@ class ReadCollaborationMixedOriginalQueue(
         val binding = (retained as AppResult.Success).value ?: return changed()
         if (
             !validCollaborationSpaceRoomBinding(runtime.owner.localDirectoryAccess(), binding) ||
-                binding.conversation != conversation.localMetadata() ||
-                binding.original == null
+                binding.conversation != conversation.localMetadata()
         )
             return changed()
         val captured = runtimes.inspectOriginalQueue(runtime, binding.room.roomId)
@@ -69,7 +68,7 @@ class ReadCollaborationMixedOriginalQueue(
         if (captured is AppResult.Failed) return captured
         if (snapshot == null) return changed()
         val originalAccess =
-            collaborationSpaceRecoveryQueueAccess(runtime, conversation, binding, snapshot)
+            collaborationMixedQueueCompanyAccess(runtime, conversation, binding, snapshot)
         if (originalAccess is AppResult.Failed) return originalAccess
         val matched =
             matchMessages(
@@ -89,12 +88,14 @@ class ReadCollaborationMixedOriginalQueue(
         conversation: CollaborationSpaceConversation,
         binding: CollaborationSpaceRoomBinding,
         snapshot: CollaborationSpaceOriginalQueueSnapshot,
-        companyAccess: CollaborationLocalAccess,
+        companyAccess: CollaborationLocalAccess?,
     ): AppResult<CollaborationMixedOriginalQueueMatch> {
         val company = mutableListOf<CollaborationMatchedQueueMessage.Company>()
         val space = mutableListOf<CollaborationMatchedQueueMessage.Space>()
         for (original in snapshot.original.messages) {
-            val old = readCompanyOriginal(runtime.owner, companyAccess, original)
+            val old =
+                if (companyAccess == null) AppResult.Success(null)
+                else readCompanyOriginal(runtime.owner, companyAccess, original)
             if (old is AppResult.Failed) return old
             val next = readSpaceOriginal(runtime.owner, original)
             if (next is AppResult.Failed) return next

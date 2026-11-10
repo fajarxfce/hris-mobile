@@ -18,7 +18,7 @@ fun matchCollaborationMixedOriginalQueue(
     spaceCompletions: List<CollaborationSpaceMessageCompletion>,
 ): AppResult<CollaborationMixedOriginalQueueMatch> {
     if (!validCollaborationSpaceConversation(conversation, runtime.owner)) return mismatch("scope")
-    val access = collaborationSpaceRecoveryQueueAccess(runtime, conversation, binding, snapshot)
+    val access = collaborationMixedQueueCompanyAccess(runtime, conversation, binding, snapshot)
     if (access is AppResult.Failed) return access
     if (
         companyRecords.size > 128 ||
@@ -39,32 +39,38 @@ fun matchCollaborationMixedOriginalQueue(
     ) {
         return mismatch("inventory")
     }
-    val oldIds = companyRecords.map { it.intent.id }.toSet()
-    val originalMetadata = requireNotNull(binding.original)
-    val oldConversation =
-        CollaborationSpaceOriginalConversation(
-            runtime.owner,
-            originalMetadata.conversation,
-            originalMetadata.room,
-        )
-    val sender =
-        "@hris_${originalMetadata.conversation.position.companyId.replace("-", "")}_${runtime.owner.parent.accountId.replace("-", "")}:${originalMetadata.room.serverName}"
-    val oldSnapshot =
-        snapshot.copy(
-            original =
-                snapshot.original.copy(
-                    messages = snapshot.original.messages.filter { it.logicalId in oldIds }
+    val originalMetadata = binding.original
+    val old: AppResult<List<CollaborationMatchedOriginalMessage>> =
+        if (originalMetadata == null) {
+            if (companyRecords.isNotEmpty() || companyCompletions.isNotEmpty())
+                return mismatch("scope")
+            AppResult.Success(emptyList())
+        } else {
+            val oldIds = companyRecords.map { it.intent.id }.toSet()
+            val oldConversation =
+                CollaborationSpaceOriginalConversation(
+                    runtime.owner,
+                    originalMetadata.conversation,
+                    originalMetadata.room,
                 )
-        )
-    val old =
-        matchCollaborationOriginalMessages(
-            runtime,
-            oldConversation,
-            sender,
-            oldSnapshot,
-            companyRecords,
-            companyCompletions,
-        )
+            val sender =
+                "@hris_${originalMetadata.conversation.position.companyId.replace("-", "")}_${runtime.owner.parent.accountId.replace("-", "")}:${originalMetadata.room.serverName}"
+            val oldSnapshot =
+                snapshot.copy(
+                    original =
+                        snapshot.original.copy(
+                            messages = snapshot.original.messages.filter { it.logicalId in oldIds }
+                        )
+                )
+            matchCollaborationOriginalMessages(
+                runtime,
+                oldConversation,
+                sender,
+                oldSnapshot,
+                companyRecords,
+                companyCompletions,
+            )
+        }
     if (old is AppResult.Failed) return old
     val space =
         matchSpaceCommandsToOriginals(

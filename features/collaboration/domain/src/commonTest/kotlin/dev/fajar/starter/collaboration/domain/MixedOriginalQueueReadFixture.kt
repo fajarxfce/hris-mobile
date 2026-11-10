@@ -49,7 +49,7 @@ internal class MixedOriginalQueueReadFixture {
                 matrixRoomId: String,
             ): AppResult<CollaborationSpaceOriginalQueueSnapshot> {
                 assertEquals(base.queue.runtime, runtime)
-                assertEquals(base.queue.device.roomId, matrixRoomId)
+                assertEquals(base.snapshot.original.device.roomId, matrixRoomId)
                 return base.read("inspect") { base.snapshot }
             }
         }

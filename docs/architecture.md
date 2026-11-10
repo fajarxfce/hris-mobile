@@ -186,6 +186,12 @@ separate immutable pair intent from published room status. Native transport pres
 account-local request revisions and exact group identity; live admission and durable
 command orchestration remain with the owning use cases.
 
+[New Space-room queue provenance](collaboration-space-new-room-queue.md) validates
+new published rooms against the retained physical SDK without inventing a company
+conversation. Typed matching and local reads use only the Space ledger for these rooms;
+adopted LEGACY rooms keep two-ledger matching. Pure transport matching does not grant
+recipient readiness or permission to enqueue/resume.
+
 [Installed Space staging capability](collaboration-space-message-queue-capability.md)
 keeps canonical text preparation and guarded enqueue separate from the original-only
 resume/settlement lease. One shared raw acquisition owns the physical writer; adapters
