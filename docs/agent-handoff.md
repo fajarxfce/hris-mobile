@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 10:45 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 10:49 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -14,7 +14,7 @@ ViewModels own screen state. No subagent delegation.
 One heavy compiler OR emulator. Mixed delivery full-1/27233 completed and is REAPED,
 PASS. Mobile proof2/37351 also reaped PASS20; Group source1 completed PASS3. Native1/92077
 failed and is reaped/stopped; repaired proof3/35974 and native2/73904 are REAPED PASS.
-Pending inventory full1/59690 is REAPED PASS. Mixed-demand full1/2861 is REAPED PASS; pending-worker full1/19057 is REAPED PASS (see current checkpoint), no heavy job. Focused1/51383 is REAPED PASS116. Focused1/85670,2/31280,3/3636 are reaped. Never kill live API/worker JVMs.
+Pending inventory full1/59690 is REAPED PASS. Mixed-demand full1/2861 is REAPED PASS; pending-worker full1/19057 is REAPED PASS; native proof2/34855 is the only compiler. Focused1/51383 is REAPED PASS116. Focused1/85670,2/31280,3/3636 are reaped. Never kill live API/worker JVMs.
 Owned emulator uses 2,560 MiB/two cores. Phone 10.77.77.3:5555 is install-only: announce
 each installation; never launch, drive, uninstall or clear it. ADB76351 timed out after15 seconds at10:10 UTC and is REAPED. Existing availability question remains pending.
 Phone 87 unchanged; 88 remains uninstalled.
@@ -85,7 +85,7 @@ Apple2996 pending. [Partial hosted measurement](measurements/collaboration-space
 
 ## Current pending-worker source — 10 November, 10:45 UTC
 
-The accompanying Mobile source increment is locally accepted:22 Kotlin inputs give the
+Mobile8c76f92c5c92cdf88d6827f3678e005c581fa8ab is committed/pushed17014 (REAPED):22 Kotlin inputs give the
 registered worker an authenticated schema2 message phase in the existing schema1-compatible
 partition, exact Instant/ID ordering and one durable claim. Old binding claims resume first;
 new pending commands use owning preparation/staging/delivery. Failed attempts advance before
@@ -105,25 +105,37 @@ All4732 source/library inputs fixed,manifest
 fad9f11cebc53e7e60444da4341dc9b18fca16d688872ecf2aceef1d0f21d920.
 Strict focused/full auditors and publisher pass. ProofAPK150599939bytes,
 SHA50cb5b5b249663df1168f58f60fce02fccbecc8da97edca8006a9a307db14766,compiled only.
-No native or phone behavior claim. Source freeze ended after acceptance; no heavy job.
+No native or phone behavior claim. Core source freeze ended after acceptance; the separate
+proof2/34855 compile is now the only heavy job (3GiB, no emulator).
 
-NEXT: apply reviewed private native-draft (3Mobile Kotlin,1Group Kotlin,3Python) from
-.work/space-pending-recovery-2026-11-10/native-draft, then run prepared sequential proof and
-Group compilation under .work/space-pending-native-2026-11-10. Private24 Python cases passed;
-Kotlin drafts are formatted but UNAPPLIED/UNCOMPILED. Actual four native scenarios NOT RUN.
+Current native WIP is APPLIED:3 Mobile proof Kotlin inputs and4 Group test/driver inputs.
+Core10010 remains unchanged. Private proof1 stopped before compilation because its copied
+runner compared the obsolete baseline; no tests/compiler started. Corrected proof2/34855
+is RUNNING and Mobile sources are FROZEN. Group test source is not compiled yet. All28 Python
+cases pass, retaining18 original-delivery +4 prior recovery +6 new ordering/evidence cases.
+An initial merged test run missed two imports (10 subtest errors); corrected before compile.
+Do not overwrite prior cases with the older24-case subset draft. Group/native runners and
+exact gates are under .work/space-pending-native-2026-11-10 in Mobile/Group.
+
+NEXT: finish/audit Mobile proof2, compile Group tests, then invoke four actual native cases.
 New case queues an unbound Space command; real worker claims/stages/delivers it beside two
 unchanged Company originals, interrupts receipt projection and recovers after process loss.
 Driver forwards listening/control before waiting for staging; retained app-count evidence
-is distinct from direct SDK inventory. Preserve the original-only/mixed/group controls.
-[Tracked plan](collaboration-space-pending-recovery-plan.md). No SDK read while staging lease held.
+is distinct from direct SDK inventory. Preserve original-only/mixed/group controls. Actual
+native four cases NOT RUN. Never inspect SDK while staging lease is held. No phone build.
 
 Host controls:42796816133 on1d18e232 has audited7930 portable (90228 REAPED),artifact13756830729,
 SHA97d61d4309bc4a6716c38b949a2e9c5d20945b1c02a45f54d74cfe6576cf0e37,
 report manifesta0396dc8939ec3b1d7e69f0892264a744c4013a84a398a51ca7f2bbc1e86d5f0;
 Apple3028 pending host completion. [Partial hosted evidence](measurements/collaboration-mixed-recovery-demand-hosted-2026-11-10.json).
-Pending-inventory42792315555 has audited7866 portable; Apple2996 is finishing. Do not rerun.
-New worker hosted config/auditor prepared:8008 portable +3062 Apple =11070 +16Swift/host;
-not dispatched until this exact source is committed/pushed.
+Pending-inventory42792315555 COMPLETE10862=7866portable+2996Apple,16Swift/unsignedhost.
+Apple87521 is REAPED PASS2996/306suites,artifact13756512123,
+SHA0aaa2c1e87f6aaa1e891e8f6ff5199f9bdee5ab1ec8d95431adcaec1077dd31e,
+manifest8d3b847f0d6992894ff983bbf0bbddedf7b7d5f50f27f8b550469cd6052ebba4.
+Source/digest/CRC/predecessor identities verified. Complete measurement accompanies this checkpoint.
+New worker control42801929551 is RUNNING on8c76f92c,validation/space-pending-recovery-20261110;
+ref61718/dispatch14028 REAPED. Expected8008 portable +3062Apple=11070 +16Swift/host.
+Private hosted config and predecessor-case auditor are complete; do not redispatch.
 
 Phone87 last known;88 uninstalled;ADB34894 timeout15s at10:39 REAPED,availability question
 pending. Phone remains install-only; announce installations,never drive/clear UI. Live
