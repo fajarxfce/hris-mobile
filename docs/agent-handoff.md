@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 06:07 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 06:10 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -19,7 +19,31 @@ announce each installation; never launch, drive, uninstall or clear its app.
 Crashlytics IAM is verified; do not ask again. Physical iPhone interaction is waived,
 not Apple source/runtime, push or calling acceptance. Continue work after checkpoints.
 
-## Active: local SPACE messages and independent Starter port
+## Active: mixed queue matching and independent Starter command gate
+
+Receipt source db4fc4f04115322e230386b4ed74166ed1b4b5ce is accepted locally and pushed
+(source70061/ref94887 reaped). Focused46078 passes62 cases; full39948 passes9,488
+verified results,zero failures/errors/skips,both reaped/audited. Fixed branch
+validation/space-message-receipts-20261110 pins that exact commit. New control
+42766554589 is RUNNING; dispatch43822 reaped. Expected7,486 portable+2,814 Apple,
+16Swift and unsignedhost. Private receipt hosted.json/audit.py retain exact state.
+No receipt hosted or new native/phone acceptance is claimed yet.
+
+Three new UNCOMMITTED domain files now implement typed Company/Space matching of a
+complete original native queue,with17 common test cases. They were reviewed/formatted
+as private drafts,then copied into source only after receipt commit/push. They are NOT
+compiled or accepted. .work/space-mixed-original-queue-2026-11-10/applied.json records
+exact files/base/hashes. Next implement the owning bounded reader with session/directory
+admission and dual-ledger lookups,then validate this increment. Matching alone grants
+no resume,settlement or enqueue. Keep original-only native lease unchanged.
+
+Starter command patch is applied/uncommitted; independent full-1/session32816 is
+RUNNING as the only heavy local compiler. Starter source is frozen. Do not launch a
+Mobile compiler or emulator until32816 is reaped. Mobile source edits may continue.
+Message control42763070460 portable7,416 is audited; Apple remains running. Producer
+42753380451 and command42758828055 are fully accepted. Preserve all running controls.
+
+## Accepted local messages and receipt implementation
 
 The committed command foundation is b1adfd820e5e560bf3d689a6bee09a88d1f67a9a.
 Explicit CommandStore.insertBatchAndWake retains new commands and work atomically;
@@ -101,7 +125,7 @@ Private hosted.json/audit.py retain exact configuration. Keep producer4275338045
 producer and command Apple are now accepted below. Starter command patch is applied
 and awaits its independent gate after the current Mobile compiler.
 
-The receipt increment is locally ACCEPTED and ready for an atomic source/docs commit.
+The receipt increment is locally ACCEPTED and committed/pushed as db4fc4f0.
 Twelve new Kotlin files plus the existing app DI assertion implement explicit SPACE
 receipt contracts/policy, encrypted namespace/AAD, shared protected-key ownership,
 atomic append+wake and exact replay no-op. Ten domain cases and25 shared real-storage
@@ -123,12 +147,12 @@ Wasm/iOS source,browser,proof APK/unit and quality pass;90 AppFlow cases pass un
 Proof APK150487253bytes SHA868995aab21e9c6783936b60ab28160da555fb96c5df08b0c13d95073850d066
 was compiled only; no new native execution or phone install. [Receipt contract](collaboration-space-message-receipts.md),
 [accepted local evidence](measurements/collaboration-space-message-receipts-2026-11-10.json).
-Commit/push this exact source and immutable validation/space-message-receipts-20261110
-before dispatch. Hosted-pending.json expects7,486 portable+2,814 Apple=10,300,16Swift/
-unsignedhost. No receipt workflow has been dispatched yet. Next complete typed mixed
+The exact source and immutable validation/space-message-receipts-20261110 are pushed.
+Control42766554589 is running,expecting7,486 portable+2,814 Apple=10,300,16Swift/
+unsignedhost. See the active checkpoint above; do not redispatch. Next complete typed mixed
 queue matching; private draft is described below and has no runtime activation. Private
 .work/space-message-receipts-2026-11-10/check.py and accept-focused.py retain the run,
-source/library fingerprints and strict case-count audit. Next commit/push the accepted increment,then implement complete mixed-ledger matching
+source/library fingerprints and strict case-count audit. Next implement complete mixed-ledger matching
 and explicitly admitted new staging. Never add enqueue to an original-only lease.
 
 [Current contract and integration boundaries](collaboration-space-messages.md).
@@ -415,9 +439,6 @@ Eight originals must NEVER be resent: Control77 235408, Warm77 235728, Recovery7
 Registry82 055959, Parent83 071123, History84 083059, Selected86 102110, Joined87 115837.
 Draft66 092041 must NEVER be sent. All native/emulator jobs are reaped and stopped.
 
-Private next-increment draft .work/space-mixed-original-queue-2026-11-10 contains two
-production policy/entity drafts and17 common test cases. It is outside source and
-has only been formatted,not compiled/applied/committed. Whole native inventory must
-match exactly one typed company/space ledger; no partial resume or owner conversion.
-Apply only after receipt full acceptance and source commit/push. This draft does not
-activate a reader,worker,UI or native enqueue capability.
+The private mixed-queue draft has now been copied into the three domain source files
+recorded in applied.json. It remains uncompiled/uncommitted and activates no reader,
+worker,UI or native enqueue. Continue from the active checkpoint at the top.
