@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 23:26 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 10 November 2026, 23:36 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Foreground incoming startup accepted
 
@@ -36,9 +36,11 @@ Previous run 42911090770 at 9ec0cdca7e352806c1b7fd8b8863822d45900ae3 is COMPLETE
 Both archive digests/ZIP CRCs/prior case identities verified. Do not redispatch the old run.
 https://github.com/fajarxfce/hris-mobile/actions/runs/42911090770
 Its immutable revision excludes the startup observer and this foreground integration.
-The combined new run is prepared, NOT dispatched yet: 12,472 = 8,979 portable + 3,493 Apple,
-plus 16 Swift/unsigned host. Commit/push the accepted increment, create its immutable validation
-ref, dispatch once, then record run/head and audit both artifacts with foreground/hosted-audit.py.
+Combined run 42923369580 is RUNNING at exact c11e053972253b952b84baae23b6eb764107082d,
+ref validation/space-incoming-foreground-20261110. Expected 12,472 = 8,979 portable + 3,493
+Apple, plus 16 Swift/unsigned host. Do not redispatch. Both foreground product commits are pushed:
+Mobile c11e0539, Group e1c1e7b8. Private foreground/hosted.json and hosted-audit.py own artifact audit.
+https://github.com/fajarxfce/hris-mobile/actions/runs/42923369580
 
 ## Next integration and protected state
 
@@ -47,10 +49,20 @@ The separate SDK6 reconstruction is at
 `/home/fajar/hris/.worktrees/matrix-sdk-incoming-hints-2026-11-10`, branch
 feat/hris-incoming-hints-20261110. Upstream 8de215a plus seven pinned SDK6 patches; 32 patched
 hashes/1,218 inputs verified, manifest 7c11dd909d664632dc9cf507dd5f8ea6463c9a3d600648a77dfb44ada3cf3a6f.
-No new SDK feature/build/version/publication. The protected dirty SDK worktree is unchanged.
-Private foreground/sdk6-reconstruction/NEXT.md records the next raw-hint decision: the existing
-32-slot room-update broadcast runs after SDK/EventCache persistence, but lacks an exact cursor.
-Never pair queued updates with a later sync_token read; preserve lag/overflow/crash gaps.
+The separate SDK worktree now contains a five-file candidate: the actual sync request captures
+previous_batch, the existing response exports bounded room/event locators and explicit room or
+inventory gaps, and stored_sync_position_v2 reads the SDK's local position without network.
+No extra listener or connection is required for successful response hints. Ephemeral receipt/
+typing-only changes emit no content locators. Timeline state/unknown/encrypted event IDs remain
+available for the owning domain consumer. No message bodies cross this new interface.
+19 candidate tests are compiling/running in private Mobile `.work/sdk-incoming-hints-2026-11-10`
+(focused-1/session44270); no result accepted yet. Rust 1.96, two compiler jobs, no emulator.
+The runner records all SDK source hashes; do not edit those files during the gate. Its candidate,
+original four files and exact SDK6 reconstruction manifest are archived in that directory.
+No SDK version, artifact, runtime dependency or live change. The protected old dirty SDK worktree
+and original private stores remain unchanged. Next: accept tests, preserve prior SDK cases,
+export a reproducible incremental patch, then implement the owned app consumer and key/room routing.
+Never infer the cursor of queued content from a later local position read.
 Server push locators are physical matrixRoomId/matrixEventId. Logical UUID listing is not a delta
 feed. The existing admitted rooms.boundRoom lookup can locate an unknown physical room; preserve
 the room-first, sorted-account, native-session guard order of ReadNativeCollaborationSpaceRoom.
