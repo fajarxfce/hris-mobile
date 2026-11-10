@@ -469,6 +469,216 @@ abstract class CollaborationSpaceIncomingDemandStorageContract {
         assertEquals(AppResult.Success(first), f.demands().current(f.local()))
     }
 
+    @Test
+    fun legacyDemandUpgradesToScanAndRetryThenReopensWithoutChangingItsWake() = withDatabase { f ->
+        val wake = CollaborationSpaceIncomingWake(historyId(5000))
+        val first = saved(f.demands().replace(f.local(), null, demand(), wake))
+        val upgraded = saved(f.demands().replace(f.local(), first, scanDemand(f)))
+        f.reopen()
+        assertEquals(AppResult.Success(upgraded), f.demands().current(f.local()))
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+        val clean =
+            saved(f.demands().replace(f.local(), upgraded, CollaborationSpaceIncomingDemand()))
+        f.reopen()
+        assertEquals(AppResult.Success(clean), f.demands().current(f.local()))
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+    }
+
+    @Test
+    fun maximumUtf8QueueScanAndRetryFitTheExistingDocumentLimit() = withDatabase { f ->
+        val base = scanDemand(f, 64)
+        val maximum =
+            base.copy(
+                nextPosition = 9_007_199_254_740_991,
+                rooms =
+                    base.rooms.mapIndexed { i, room ->
+                        room.copy(
+                            position = 9_007_199_254_740_000L + i,
+                            headEventId = "$" + "猫".repeat(254),
+                            retry =
+                                CollaborationSpaceIncomingRetry(
+                                    9_007_199_254_440_991,
+                                    9_007_199_254_740_991,
+                                    5,
+                                ),
+                        )
+                    },
+            )
+        val saved =
+            saved(
+                f.demands()
+                    .replace(
+                        f.local(),
+                        null,
+                        maximum,
+                        CollaborationSpaceIncomingWake(historyId(5000)),
+                    )
+            )
+        f.reopen()
+        assertEquals(AppResult.Success(saved), f.demands().current(f.local()))
+    }
+
+    @Test
+    fun scanCursorCannotBeRetainedUnderAnotherNamespace() = withDatabase { f ->
+        val first = saved(f.demands().replace(f.local(), null, demand()))
+        val good = scanDemand(f)
+        val cursor = good.scan!!.cursor!!
+        for (boundary in
+            listOf(
+                cursor.boundary.copy(audience = "https://other.example"),
+                cursor.boundary.copy(accountId = historyId(9998)),
+                cursor.boundary.copy(spaceId = historyId(9998)),
+            )) {
+            val invalid =
+                good.copy(scan = good.scan!!.copy(cursor = cursor.copy(boundary = boundary)))
+            assertIs<AppResult.Failed>(f.demands().replace(f.local(), first, invalid))
+        }
+        assertEquals(AppResult.Success(first), f.demands().current(f.local()))
+    }
+
+    @Test
+    fun cancellationAfterScanCommitCannotSeparateTheCursorFromItsRoomTasks() = withDatabase { f ->
+        val wake = CollaborationSpaceIncomingWake(historyId(5000))
+        val next = scanDemand(f)
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun replace(
+                    scope: ReplicaScope,
+                    partition: String,
+                    expected: ReplicaCheckpoint?,
+                    snapshot: ReplicaSnapshot?,
+                    wake: WorkWakeRequest?,
+                ): Boolean {
+                    val saved =
+                        f.database.replicas.replace(scope, partition, expected, snapshot, wake)
+                    if (saved) throw CancellationException("Fictional lost scan commit response")
+                    return saved
+                }
+            }
+        coroutineScope {
+            val job = launch { f.demands(store).replace(f.local(), null, next, wake) }
+            job.join()
+            assertTrue(job.isCancelled)
+        }
+        f.reopen()
+        assertEquals(next, value(f.demands().current(f.local()))!!.demand)
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+    }
+
+    @Test
+    fun competingScanTransactionsRetainOneWholeCursorAndRoomQueue() = withDatabase { f ->
+        val before = saved(f.demands().replace(f.local(), null, demand()))
+        val candidates =
+            (1..4).map { count ->
+                scanDemand(f, count).let { value ->
+                    value.copy(
+                        scan =
+                            value.scan!!.copy(
+                                cursor =
+                                    value.scan!!
+                                        .cursor!!
+                                        .copy(afterId = "b-" + count.toString().padStart(64, '0'))
+                            )
+                    )
+                }
+            }
+        val results = coroutineScope {
+            candidates
+                .map { candidate ->
+                    async { value(f.demands().replace(f.local(), before, candidate)) }
+                }
+                .awaitAll()
+        }
+        val winner = results.filterNotNull().single()
+        f.reopen()
+        assertEquals(AppResult.Success(winner), f.demands().current(f.local()))
+        assertTrue(winner.demand in candidates)
+    }
+
+    private fun scanDemand(
+        f: CollaborationHistoryFixture,
+        count: Int = 2,
+    ): CollaborationSpaceIncomingDemand {
+        val local = f.local()
+        val base = demand(count)
+        return base.copy(
+            rooms =
+                base.rooms.map {
+                    it.copy(retry = CollaborationSpaceIncomingRetry(1_000_000, 1_030_000, 1))
+                },
+            scan =
+                CollaborationSpaceIncomingScan(
+                    historyId(8999),
+                    CollaborationSpaceRoomBindingCursor(
+                        CollaborationSpaceRoomBindingBoundary(
+                            local.audience,
+                            local.accountId,
+                            local.spaceId,
+                            historyId(9001),
+                            4,
+                        ),
+                        "b-" + "0".repeat(63) + "1",
+                    ),
+                    true,
+                ),
+        )
+    }
+
+    @Test
+    fun authenticatedScanAndRetryPayloadRejectsAmbiguousOrUnboundedValues() = withDatabase { f ->
+        val first = saved(f.demands().replace(f.local(), null, scanDemand(f)))
+        val scope = incomingDemandScope(f.local())
+        val partition = incomingDemandPartition(f.local())
+        val raw = assertNotNull(f.database.replicas.checkpoint(scope, partition))
+        val aad =
+            Json.encodeToString(
+                    listOf(
+                        "hris-collaboration-space-incoming-demand-v1",
+                        f.access.audience,
+                        f.access.accountId,
+                        f.local().spaceId,
+                        raw.handle.generation,
+                        INCOMING_DEMAND_DOCUMENT,
+                        "0",
+                    )
+                )
+                .encodeToByteArray()
+        val page =
+            f.database.replicas.observeDocument(scope, partition, INCOMING_DEMAND_DOCUMENT).first()
+        val document = page.documents.single()
+        CollaborationHistoryKeys(f.database.replicas, f.cipher, f.keys).use { key, _ ->
+            val bytes = f.cipher.decrypt(key, aad, Base64.decode(requireNotNull(document.payload)))
+            val original =
+                try {
+                    bytes.decodeToString()
+                } finally {
+                    bytes.fill(0)
+                }
+            for (bad in
+                listOf(
+                    original.replace("\"schema\":2", "\"schema\":1"),
+                    original.replace("\"revision\":\"4\"", "\"revision\":\"04\""),
+                    original.replace("\"n\":1", "\"n\":0"),
+                    original.replace("\"after\":\"1030000\"", "\"after\":\"9999999\""),
+                    original.replace("\"afterId\":\"b-", "\"afterId\":\"invalid-"),
+                )) {
+                assertNotEquals(original, bad)
+                val payload = Base64.encode(f.cipher.encrypt(key, aad, bad.encodeToByteArray()))
+                val store =
+                    object : ReplicaStore by f.database.replicas {
+                        override fun observeDocument(
+                            scope: ReplicaScope,
+                            partition: String,
+                            id: String,
+                        ) = flowOf(page.copy(documents = listOf(document.copy(payload = payload))))
+                    }
+                assertIs<AppResult.Failed>(f.demands(store).current(f.local()))
+                assertIs<AppResult.Failed>(f.demands(store).replace(f.local(), first, demand(3)))
+            }
+        }
+        assertEquals(AppResult.Success(first), f.demands().current(f.local()))
+    }
+
     private fun CollaborationHistoryFixture.local() =
         CollaborationSpaceLocalAccess(
             access.sessionId,

@@ -58,7 +58,8 @@ class AdvanceCollaborationSpaceIncomingProvider(
                 captured.copy(
                     phase =
                         if (acquired.exhausted) CollaborationSpaceIncomingPhase.Pending
-                        else CollaborationSpaceIncomingPhase.Provider
+                        else CollaborationSpaceIncomingPhase.Provider,
+                    retry = null,
                 )
             if (current != captured)
                 return@withTimeoutOrNull if (current == applied) AppResult.Success(true)

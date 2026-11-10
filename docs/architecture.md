@@ -1,5 +1,9 @@
 # Architecture
 
+[Durable incoming scheduling](collaboration-space-incoming-scheduling.md) retains scan cursor and
+room demand atomically. Domain owns bounded FIFO selection, per-room retry eligibility and exact
+empty-work acknowledgement; application task and SDK hint integration remain separate.
+
 [Incoming completion](collaboration-space-incoming-completion.md) requires exact retained provider
 evidence and clean source completion. Phase changes and room removal preserve the independent
 wake; one incoming worker must serialize provider writes and completion.

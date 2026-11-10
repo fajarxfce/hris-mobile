@@ -698,6 +698,73 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun readSpaceIncomingDemand(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationSpaceIncomingDemand(demands, directory, sessions, server, Clock.System)
+
+    @Factory
+    fun deferSpaceIncomingRoom(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = DeferCollaborationSpaceIncomingRoom(demands, directory, sessions, server, Clock.System)
+
+    @Factory
+    fun discoverSpaceIncomingRooms(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        inventory: CollaborationSpaceRoomBindingInventoryRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = DiscoverCollaborationSpaceIncomingRooms(demands, inventory, directory, sessions, server)
+
+    @Factory
+    fun requestSpaceIncomingScan(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        schedules: SyncScheduleRepository,
+    ) = RequestCollaborationSpaceIncomingScan(demands, directory, sessions, server, schedules)
+
+    @Factory
+    fun readSpaceIncomingWake(wakes: CollaborationSpaceIncomingWakeRepository) =
+        ReadCollaborationSpaceIncomingWake(wakes)
+
+    @Factory
+    fun ensureSpaceIncomingWake(wakes: CollaborationSpaceIncomingWakeRepository) =
+        EnsureCollaborationSpaceIncomingWake(wakes)
+
+    @Factory
+    fun resumeSpaceIncomingRecovery(
+        wakes: CollaborationSpaceIncomingWakeRepository,
+        schedules: SyncScheduleRepository,
+    ) = ResumeCollaborationSpaceIncomingRecovery(wakes, schedules)
+
+    @Factory
+    fun finishSpaceIncomingWork(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        wakes: CollaborationSpaceIncomingWakeRepository,
+        roots: CollaborationSpaceRootRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = FinishCollaborationSpaceIncomingWork(demands, wakes, roots, directory, sessions, server)
+
+    @Factory
+    fun loadSpaceIncomingRoom(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        bindings: CollaborationSpaceRoomBindingRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = LoadCollaborationSpaceIncomingRoom(demands, bindings, directory, sessions, server)
+
+    @Factory
     fun queueSpaceIncomingRoom(
         demands: CollaborationSpaceIncomingDemandRepository,
         bindings: CollaborationSpaceRoomBindingRepository,

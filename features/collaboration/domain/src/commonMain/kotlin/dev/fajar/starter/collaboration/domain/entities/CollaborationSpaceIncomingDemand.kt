@@ -14,6 +14,7 @@ data class CollaborationSpaceIncomingRoomDemand(
     val position: Long,
     val headEventId: String?,
     val phase: CollaborationSpaceIncomingPhase,
+    val retry: CollaborationSpaceIncomingRetry? = null,
 ) {
     override fun toString() = "CollaborationSpaceIncomingRoomDemand([redacted])"
 }
@@ -26,6 +27,7 @@ data class CollaborationSpaceIncomingDemand(
     val nextPosition: Long = 0,
     val rooms: List<CollaborationSpaceIncomingRoomDemand> = emptyList(),
     val rescanGeneration: String? = null,
+    val scan: CollaborationSpaceIncomingScan? = null,
 ) {
     override fun toString() = "CollaborationSpaceIncomingDemand([redacted])"
 }
@@ -45,8 +47,10 @@ sealed interface CollaborationSpaceIncomingDemandChange {
     ) : CollaborationSpaceIncomingDemandChange
 
     /** Preserve the current phase and move behind the captured turn's FIFO boundary. */
-    data class Defer(val captured: CollaborationSpaceIncomingRoomDemand) :
-        CollaborationSpaceIncomingDemandChange
+    data class Defer(
+        val captured: CollaborationSpaceIncomingRoomDemand,
+        val retry: CollaborationSpaceIncomingRetry? = null,
+    ) : CollaborationSpaceIncomingDemandChange
 
     /** Only the owning completion usecase may admit clean provider EOF and no pending sources. */
     data class Complete(val captured: CollaborationSpaceIncomingRoomDemand) :

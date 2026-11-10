@@ -54,9 +54,9 @@ class EncryptedCollaborationSpaceIncomingDemandRepository(
         require(
             expected == null ||
                 (validCollaborationMessageId(expected.generation) &&
-                    validCollaborationSpaceIncomingDemand(expected.demand))
+                    validCollaborationSpaceIncomingDemand(access, expected.demand))
         )
-        require(validCollaborationSpaceIncomingDemand(demand))
+        require(validCollaborationSpaceIncomingDemand(access, demand))
         require(wake == null || validCollaborationMessageId(wake.generation))
         val captured = demand.copy(rooms = demand.rooms.toList())
         val previous =

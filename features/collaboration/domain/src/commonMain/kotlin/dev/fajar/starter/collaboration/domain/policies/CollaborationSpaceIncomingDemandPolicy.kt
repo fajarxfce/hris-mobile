@@ -7,13 +7,19 @@ private const val MAX_INCOMING_ROOMS = 64
 private const val MAX_INCOMING_POSITION = 9_007_199_254_740_991L
 
 fun validCollaborationSpaceIncomingRoomDemand(room: CollaborationSpaceIncomingRoomDemand): Boolean =
-    validCollaborationMessageId(room.conversationId) &&
+    (room.retry == null || validCollaborationSpaceIncomingRetry(room.retry)) &&
+        validCollaborationMessageId(room.conversationId) &&
         validCollaborationMessageId(room.generation) &&
         room.position in 0 until MAX_INCOMING_POSITION &&
         (room.headEventId == null || validCollaborationEventId(room.headEventId))
 
 fun validCollaborationSpaceIncomingDemand(value: CollaborationSpaceIncomingDemand): Boolean {
     if (value.nextPosition !in 0..MAX_INCOMING_POSITION || value.rooms.size > MAX_INCOMING_ROOMS)
+        return false
+    if (
+        value.scan != null &&
+            (value.rescanGeneration == null || !validCollaborationSpaceIncomingScan(value.scan))
+    )
         return false
     if (value.rescanGeneration != null && !validCollaborationMessageId(value.rescanGeneration))
         return false
@@ -55,7 +61,8 @@ fun nextCollaborationSpaceIncomingDemand(
                                         phase =
                                             if (change.exhausted)
                                                 CollaborationSpaceIncomingPhase.Pending
-                                            else CollaborationSpaceIncomingPhase.Provider
+                                            else CollaborationSpaceIncomingPhase.Provider,
+                                        retry = null,
                                     )
                                 else it
                             }
@@ -70,7 +77,7 @@ fun nextCollaborationSpaceIncomingDemand(
                             nextPosition = current.nextPosition + 1,
                             rooms =
                                 current.rooms.filterNot { it == room } +
-                                    room.copy(position = current.nextPosition),
+                                    room.copy(position = current.nextPosition, retry = change.retry),
                         )
                 }
             is CollaborationSpaceIncomingDemandChange.Complete -> {
@@ -86,6 +93,7 @@ fun nextCollaborationSpaceIncomingDemand(
             }
             is CollaborationSpaceIncomingDemandChange.CompleteRescan -> {
                 if (!validCollaborationMessageId(change.generation)) return invalidIncomingDemand()
+                if (current.scan != null) return invalidIncomingDemand()
                 AppResult.Success(
                     if (current.rescanGeneration == change.generation)
                         current.copy(rescanGeneration = null)

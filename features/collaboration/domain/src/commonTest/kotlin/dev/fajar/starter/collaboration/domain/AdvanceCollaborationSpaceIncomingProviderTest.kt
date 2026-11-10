@@ -314,6 +314,25 @@ class AdvanceCollaborationSpaceIncomingProviderTest {
         assertEquals(f.base.originalWake, f.request.wake)
     }
 
+    @Test
+    fun retainedProviderReceiptClearsAnEarlierRetryEvenWithoutChangingProviderPhase() = runTest {
+        for (phase in
+            listOf(
+                CollaborationSpaceIncomingPhase.Latest,
+                CollaborationSpaceIncomingPhase.Provider,
+            )) {
+            val f = Fixture(exhausted = false, phase = phase)
+            val delayed =
+                f.captured.copy(retry = CollaborationSpaceIncomingRetry(1_000_000, 1_030_000, 1))
+            f.setRoom(delayed)
+            assertEquals(AppResult.Success(true), f.useCase(f.base.access, delayed, f.receipt))
+            assertNull(f.room().retry)
+            assertEquals(CollaborationSpaceIncomingPhase.Provider, f.room().phase)
+            assertEquals(1, f.request.writes)
+            assertEquals(f.base.originalWake, f.request.wake)
+        }
+    }
+
     private class Fixture(
         exhausted: Boolean = true,
         phase: CollaborationSpaceIncomingPhase = CollaborationSpaceIncomingPhase.Latest,

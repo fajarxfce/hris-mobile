@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.ContentCipher
 import kotlin.io.encoding.Base64
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -54,7 +55,11 @@ internal class CollaborationSpaceIncomingDemandCodec(
                 Json.decodeFromString<IncomingDemandDto>(
                     bytes.decodeToString(throwOnInvalidSequence = true)
                 )
-            require(dto.schema == 1 && dto.rooms.size <= 64)
+            require(
+                dto.schema in 1..2 &&
+                    dto.rooms.size <= 64 &&
+                    (dto.schema == 2 || (dto.scan == null && dto.rooms.none { it.retry != null }))
+            )
             val value =
                 CollaborationSpaceIncomingDemand(
                     position(dto.nextPosition),
@@ -65,11 +70,36 @@ internal class CollaborationSpaceIncomingDemandCodec(
                             position(room.position),
                             room.headEventId,
                             CollaborationSpaceIncomingPhase.valueOf(room.phase),
+                            room.retry?.let { retry ->
+                                CollaborationSpaceIncomingRetry(
+                                    position(retry.attemptedAt),
+                                    position(retry.eligibleAt),
+                                    retry.failures,
+                                )
+                            },
                         )
                     },
                     dto.rescanGeneration,
+                    dto.scan?.let { scan ->
+                        CollaborationSpaceIncomingScan(
+                            scan.generation,
+                            scan.cursor?.let { cursor ->
+                                CollaborationSpaceRoomBindingCursor(
+                                    CollaborationSpaceRoomBindingBoundary(
+                                        access.audience,
+                                        access.accountId,
+                                        access.spaceId,
+                                        cursor.generation,
+                                        position(cursor.revision),
+                                    ),
+                                    cursor.afterId,
+                                )
+                            },
+                            scan.hasNewerBindings,
+                        )
+                    },
                 )
-            require(validCollaborationSpaceIncomingDemand(value))
+            require(validCollaborationSpaceIncomingDemand(access, value))
             CollaborationSpaceIncomingDemandSnapshot(raw.handle.generation, value)
         } finally {
             bytes.fill(0)
@@ -79,10 +109,10 @@ internal class CollaborationSpaceIncomingDemandCodec(
     suspend fun encode(snapshot: CollaborationSpaceIncomingDemandSnapshot): String {
         require(validCollaborationMessageId(snapshot.generation))
         val value = snapshot.demand
-        require(validCollaborationSpaceIncomingDemand(value))
+        require(validCollaborationSpaceIncomingDemand(access, value))
         val dto =
             IncomingDemandDto(
-                1,
+                if (value.scan == null && value.rooms.none { it.retry != null }) 1 else 2,
                 value.nextPosition.toString(),
                 value.rooms.map {
                     IncomingRoomDemandDto(
@@ -91,9 +121,30 @@ internal class CollaborationSpaceIncomingDemandCodec(
                         it.position.toString(),
                         it.headEventId,
                         it.phase.name,
+                        it.retry?.let { retry ->
+                            IncomingRetryDto(
+                                retry.attemptedAtEpochMillis.toString(),
+                                retry.eligibleAtEpochMillis.toString(),
+                                retry.failures,
+                            )
+                        },
                     )
                 },
                 value.rescanGeneration,
+                value.scan?.let { scan ->
+                    IncomingScanDto(
+                        scan.generation,
+                        scan.cursor?.let { cursor ->
+                            val boundary = cursor.boundary
+                            IncomingScanCursorDto(
+                                boundary.generation,
+                                boundary.revision.toString(),
+                                cursor.afterId,
+                            )
+                        },
+                        scan.hasNewerBindings,
+                    )
+                },
             )
         val bytes = Json.encodeToString(dto).encodeToByteArray(throwOnInvalidSequence = true)
         return try {
@@ -132,6 +183,7 @@ private data class IncomingDemandDto(
     val nextPosition: String,
     val rooms: List<IncomingRoomDemandDto>,
     val rescanGeneration: String?,
+    val scan: IncomingScanDto? = null,
 )
 
 @Serializable
@@ -141,4 +193,26 @@ private data class IncomingRoomDemandDto(
     val position: String,
     val headEventId: String?,
     val phase: String,
+    val retry: IncomingRetryDto? = null,
+)
+
+@Serializable
+private data class IncomingScanDto(
+    val generation: String,
+    val cursor: IncomingScanCursorDto?,
+    val hasNewerBindings: Boolean,
+)
+
+@Serializable
+private data class IncomingScanCursorDto(
+    val generation: String,
+    val revision: String,
+    val afterId: String,
+)
+
+@Serializable
+private data class IncomingRetryDto(
+    @SerialName("at") val attemptedAt: String,
+    @SerialName("after") val eligibleAt: String,
+    @SerialName("n") val failures: Int,
 )

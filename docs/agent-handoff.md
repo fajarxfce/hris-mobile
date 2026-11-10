@@ -1,57 +1,54 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 20:39 UTC. Follow AGENTS.md. This opening section owns current work.
+Updated 10 November 2026, 20:50 UTC. Follow AGENTS.md. This opening section owns current work.
 
-## Incoming scan and retry integration in progress
+## Incoming scheduling accepted; application worker next
 
-Mobile has 32 applied, uncommitted Kotlin files for atomic incoming scan, retained per-room
-retry, fair deferral, exact wake completion and domain-owned four-room FIFO selection. The
-application worker and SDK hints remain disabled. Accepted product baseline is 07e22182;
-Mobile docs ffbbea60 and Group docs c7c02f45 are pushed. No active emulator.
+The 32-file Mobile scheduling increment is accepted in this implementation checkpoint.
+Focused tests: 536 in 295.214 seconds. Full validation: 10847
+cases (8828 fresh plus 2019 exact retained controls)
+in 607.692 seconds. All source/library fingerprints stayed fixed during each run.
+There are 4,844 inputs; the accepted manifest is b6671417212692b961c89536c96bc08c0a80c0970ff2e94f1f99f7163995305d.
+Mobile contract: `docs/collaboration-space-incoming-scheduling.md`; compact focused/full evidence
+lives under `docs/measurements`. Private `space-incoming-worker-2026-11-10` owns exact sources,
+reports, failed attempts, runners and acceptance audits. No new native-worker proof is claimed.
 
-Current local run: `space-incoming-worker-2026-11-10/full2`, session 26163 RUNNING. Source and
-library must stay frozen. Expected full total 10,847; 4,844 inputs. Focused7/56727 is REAPED and
-ACCEPTED: 536 tests in 295.214 seconds, including application bindings, actual Chromium and
-platform/quality checks. Its exact source manifest is
-b6671417212692b961c89536c96bc08c0a80c0970ff2e94f1f99f7163995305d.
-Earlier focused6/10905 passed 534 cases, but full1/34641 caught a missing Koin Clock dependency
-(724 tests, one failure). Read/Defer factories now follow the existing Clock.System composition.
-All earlier failed focused attempts and full1 are retained/reaped; do not erase or call them passes.
+Domain now owns immutable four-room FIFO selection, retry eligibility, atomic binding scan,
+fair deferral and exact empty-work wake completion. Schema 1/2 compatibility and the existing
+64-room/storage capacity limits remain intact. The application worker is NOT enabled yet.
+Full1/34641 caught the missing Koin Clock dependency (724 tests, one failure); Read/Defer
+factories now follow the module's existing Clock.System composition. Earlier focused failures
+are retained in private evidence. Focused and full acceptance includes real application bindings.
 
-Next reap full2 and run `accept-full.py full2` in the private worker directory. Its acceptance
-checks exact prior case identities and source/library hashes. Only after acceptance run publish.py,
-review/commit the 32 implementation files plus compact evidence/contract/handoff, then PUSH.
-The publication script also updates Group handoff; commit/push that separately. Do not publish
-before acceptance or claim native execution for these local scheduling tests.
+Next apply PRIVATE `space-incoming-application-2026-11-10` only after committing/pushing these
+32 accepted files. Its prepare-apply.py validates the clean accepted base, archives reports,
+then applies 12 candidate Kotlin files (six new). Runners expect 603 focused / 10,889 full cases
+and 4,850 source inputs. Candidate adds the registered incoming task, independent collapsed OS
+key, per-page content before provider EOF, and exact delayed head revisit. Twelve new domain
+and 18 app cases cover missing provider visibility, fairness, missing keys, bounded/concurrent
+turns, parent replacement, timeout and cancellation. The earlier 25 SpaceRecovery task cases
+and two binding tests remain controls. Candidate is formatted but UNCOMPILED/UNTESTED.
 
-After that accepted commit/push, continue PRIVATE `space-incoming-application-2026-11-10`.
-Its prepare-apply.py checks the clean accepted base, saves source/report controls and applies
-12 Kotlin files (six new). Expect 603 focused / 10,889 full cases and 4,850 inputs. Candidate
-is formatted but UNCOMPILED/UNTESTED. It registers the incoming task and independent collapsed
-OS key, interleaves content with each provider page, and adds an admitted delayed head revisit.
-A requested event can be absent even when a provider page reports EOF; otherwise a Pending room
-would spin or never acquire it. Revisit preserves content/wake/newer generations before retaining
-Latest with backoff. There are 12 new domain and 18 new application tests, with prior 25 outgoing
-SpaceRecovery cases and two application binding cases retained. No additional sync/client.
+After those gates, add an actual native-worker scenario using registered application ownership
+and real SDK/storage. HrisSpaceRecoveryProofHost and HrisSpaceIncomingProofHost already provide
+admitted native fixtures; preserve all four prior native scenarios and original transactions.
+Realtime SDK and push handoff are still absent. syncOnceV2 owns the current sync and reports
+changed joined-room IDs, but not event IDs; room-info previews do not cover all edits/redactions.
+Verify SDK 6 capabilities before choosing bounded raw hints. Keep callbacks free of Registry/I/O,
+retain overflow rescan and startup recovery, and keep incoming/outgoing wake authority distinct.
+The existing group push usecase currently retains only an outgoing wake despite having optional
+roomId/matrixEventId fields. Do not claim end-to-end incoming delivery until these paths pass.
 
-Actual native worker acceptance and realtime/push handoff remain required. Preserve all four
-old native controls and original transaction identities. Use the registered application task
-with real storage/SDK; old manual provider acquisition does not prove the worker. Existing proof
-hosts are named in the private NEXT.md. syncOnceV2 reports changed joined-room IDs but lacks event
-IDs and includes ephemeral/state changes; a room preview cannot represent every edit/redaction.
-Verify SDK 6 capabilities before choosing bounded raw hints. Keep callback I/O and Registry calls
-outside native monitors, retain overflow/startup recovery, and separate incoming/outgoing wakes.
-The current group push owner only retains outgoing recovery despite optional room/event fields.
+Hosted completion run 42889565705 targets prior 07e22182. Portable is independently accepted:
+8,647 tests, artifact 13799302654; compact digest and report metadata are already committed.
+Apple job 130086786070 is separately monitored (3,346 expected plus 16 Swift cases/unsigned host).
+Do not redispatch or attribute those results to this newer scheduling increment.
 
-Hosted completion run 42889565705 targets PRIOR 07e22182, not these 32 files. Portable is accepted
-8,647 tests, artifact 13799302654; compact digest/report metadata is in the committed measurements.
-Apple job 130086786070 passed setup tests and is building the unsigned iOS host; final artifact
-is not yet audited. Expect 3,346 Apple tests plus 16 Swift cases. Do not redispatch this run.
-
-Release 89 remains uninstalled; phone 87 last known. ADB 97409 timed out/reaped; availability
-question stays pending. Notify before install-only, no launch/reset/UI driving. Live 90163 and
-schema 116.4 unchanged; Group 117–140 undeployed. SDK 6, sender keys/original controls, and dirty
-SDK/Inspector trees are preserved. No Starter delta. All 54 communications PRD groups remain OPEN.
+Release 89 is still uninstalled; phone 87 last known. Latest ADB 97409 timed out and was reaped;
+the availability question remains pending. Notify before install-only; do not launch/reset/drive
+the phone. Live 90163/schema 116.4 is unchanged, Group 117–140 undeployed, emulator stopped.
+SDK 6, retained original controls/sender keys and dirty SDK/Inspector trees are preserved.
+No generic Starter delta. All 54 communications PRD groups remain OPEN.
 
 ## Prior completion checkpoint
 

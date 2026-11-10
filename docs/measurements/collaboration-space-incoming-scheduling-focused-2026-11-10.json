@@ -1,0 +1,19 @@
+{
+  "startedAt": "2026-11-10T20:33:53.423128+00:00",
+  "elapsedSeconds": 295.214,
+  "sourceFiles": 4844,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 536,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sourceManifestSha256": "b6671417212692b961c89536c96bc08c0a80c0970ff2e94f1f99f7163995305d",
+  "priorCaseIdentitiesPreserved": true,
+  "newDomainCasesPerTarget": 93,
+  "newStorageCasesPerTarget": 6,
+  "productWorkerEnabled": false,
+  "nativeWorkerAcceptance": false
+}
