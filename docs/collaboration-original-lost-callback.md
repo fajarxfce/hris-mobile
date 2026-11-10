@@ -61,3 +61,11 @@ Apple acceptance for this source remains separate. No product APK, live group ro
 cloud callback or new iOS native runtime is established. Complete older/group incoming
 history, producer wakes, rich media, backup, calls and meetings remain. All54
 communications acceptance groups remain open.
+
+## Pinned cross-platform validation
+
+Run [42745403043](https://github.com/fajarxfce/hris-mobile/actions/runs/42745403043)
+passes on `76a143b6`: 7,100 portable and 2,698 Apple simulator cases, plus 16 Swift
+push-field cases and the unsigned iOS host. Artifact digests, ZIP CRCs and predecessor
+testcase identities are verified. This source precedes the atomic binding producer.
+[Hosted evidence](measurements/collaboration-space-original-receipt-hosted-2026-11-10.json).

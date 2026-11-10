@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 03:59 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 04:05 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -21,7 +21,7 @@ not Apple source/runtime, push or calling acceptance. Continue work after checkp
 
 ## Active: binding producer accepted; generic Apple proof and new sends next
 
-This commit contains atomic recovery work for newly retained immutable room bindings.
+Mobile d89e6b5d is committed/pushed (79200 reaped) and contains atomic recovery work for newly retained immutable room bindings.
 The repository writes both encrypted indexes and fresh work in the same transaction.
 The owning preparation use case schedules after exact readback; lost write responses
 are reconciled without another wake write. Scheduling failure/timeouts preserve local
@@ -49,13 +49,14 @@ source/schema/DI change. Private `.work/space-binding-producer-wake-2026-11-10` 
 and Group retains runners,red/focused/full/native acceptance and source manifests.
 
 Generic foundation7a6fe534 is committed/pushed (50848 reaped). Its independent
-control42749839268 pins7a6fe534fc2e86064be9f60509f7befcc6afbf31,still pending behind
-receipt42745403043. Do not redispatch or supersede this pending run. Expected generic
+control42749839268 pins7a6fe534fc2e86064be9f60509f7befcc6afbf31,now running after
+receipt42745403043 completed. Do not redispatch or cancel this proof. Expected generic
 7,276 portable+2,709 Apple=9,985 cases,16 Swift checks,unsigned host. Auditors/config are
 in `.work/replica-commit-wake-2026-11-10`. This generic CI excludes the producer above.
-After producer commit/push, dispatch its control only when generic is running (no
-other pending run); expected7,292 portable+2,717 Apple=10,009,plus Swift/host. Current
-branch has no open PR,so code push does not automatically enqueue that workflow.
+Producer control42753380451 pinsd89e6b5dcb0c0463916628ecd10a9bae946e5a1a (dispatch14839
+reaped), now pending behind generic. Expected7,292 portable+2,717 Apple=10,009,plus
+Swift/host; private producer hosted.json/audit.py compare exact generic predecessor
+archives. Do not supersede this pending run. Current branch has no open PR.
 
 Generic local evidence:22 focused cases; full core89 desktop/87 browser. Final60400
 passes303.454s with7,468 validated results,including4,012 same-source full/repair and
@@ -114,7 +115,9 @@ Mobile76a143b6 and Group401c6d56 are committed/pushed (85826/7722 reaped). Hoste
 42745403043 pins76a143b6c8fc81c6920658797f127dcf4a92e7b5 and is running after
 pusher42739907129 completed; dispatch69781 reaped. Portable85032 accepted7,100 cases,
 artifact13732619273 SHA bb615bd38b9c6ce45d51aaf6f3e8b036671278e9f2279c07efd519026f603976.
-Apple still running, expected2,698 cases plus16 Swift checks and unsigned host. Do not redispatch. Private hosted.json/audit.py retain
+Apple18663 accepted2,698 cases,artifact13733719359 SHA1497d79c277a5dc0ae781fd15332b8d9e90a9b0b3837d9f5f726bad60b5c0af3.
+Total9,798 plus16Swift/unsignedhost; both archives/previous case identities verified.
+[Hosted evidence](measurements/collaboration-space-original-receipt-hosted-2026-11-10.json). Do not rerun. Private hosted.json/audit.py retain
 the pin and predecessor archive comparison. Next: atomic replica mutation+producer wake.
 Do not claim predecessor CI covers this source. The reusable database contract must
 prove Mobile SQLite/browser/Apple before Starter. Read-only design and133 raw override
