@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 07:51 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 07:57 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -11,7 +11,7 @@ updates. All 54 acceptance groups remain open. Mobile proves reusable foundation
 Starter. Usecases own policy/repository orchestration; repositories coordinate raw I/O;
 ViewModels own screen state. No subagent delegation.
 
-One heavy compiler OR emulator. New-room focused 48502/full 7378 completed and are reaped. Staging focused 63537 is
+One heavy compiler OR emulator. New-room focused 48502/full 7378 completed and are reaped. Staging focused-2 session 67472 is
 the ONLY heavy compiler; seven source inputs are FROZEN. No emulator is running. Never kill live API/worker JVMs. Owned emulator uses 2,560 MiB/two cores.
 Phone 10.77.77.3:5555 is install-only: announce each installation; never launch, drive,
 uninstall or clear it. ADB 14496 timed out after 15 seconds at 07:28 UTC and was reaped.
@@ -75,8 +75,14 @@ Preserve mixed 42769825037 and projection 42772661276 controls.
 
 Seven APPLIED, uncommitted Kotlin inputs in `.work/space-message-staging-2026-11-10` now prepare
 StageCollaborationSpaceText, exact staging recovery policy, fixture, 9 policy + 25 owning
-cases, singleton DI and app binding assertion. Focused session 63537 is RUNNING for
-70 fresh cases; all seven source inputs are FROZEN. No acceptance yet. This is the canonical staging draft directory; older
+cases, singleton DI and app binding assertion. Focused-1/session 63537 is REAPED:
+70 fresh cases pass with no failures/errors/skips, but detekt rejects inspectCommands
+(141 lines; limit 100). Duration 336.85s, failed source manifest
+f43947c1b1f3118d2bafd0a5140e57c062218894c83b73975062dfcd1c68ea7d. Failed reports/source/
+SARIF and quality-failure.json are retained. Original company command/journal inspection
+now has its own optional-scope phase within the same invocation; guards, request order
+and tests are preserved. No lint suppression or assertion change. Focused-2/session
+67472 is RUNNING for 70 fresh cases; all seven inputs are FROZEN. No acceptance yet. This is the canonical staging draft directory; older
 copies under mixed-original-delivery are stale. Source application and formatting 60415
 completed and are reaped; the accepted new-room source is committed/pushed and pinned.
 The owning draft handles exact CAS readback, lost enqueue responses, original recovery,
