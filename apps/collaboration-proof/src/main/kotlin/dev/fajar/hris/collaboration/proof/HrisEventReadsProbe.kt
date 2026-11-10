@@ -288,6 +288,14 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
         val selected = listOf(ids.getString("latestEdit"), ids.getString("redaction"))
         val journal = app.receipts()
         check(journal.isEmpty())
+        val providerPages =
+            host.stageProviderPages(
+                runtime,
+                conversation.id,
+                files.roomId,
+                sender.currentOwner,
+                sender.registeredDeviceId,
+            )
         val first = host.acquire(runtime, conversation, selected)
         check(
             first.runtime == runtime &&
@@ -296,17 +304,19 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
         )
         check(first.items.map { it.sourceEventId } == selected)
         check(first.items.all { it.outcome is CollaborationIncomingHistoryOutcome.Retained })
+        host.resolveRetainedSources(runtime, conversation.id, files.roomId, selected)
         val access = runtime.owner.localDirectoryAccess()
         val original =
             host.read(
                 access,
                 conversation.id,
                 files.roomId,
+                runtime.deviceId,
                 ids.getString("original"),
                 ids.getString("latestEdit"),
                 ids.getString("peer"),
             )
-        val retained = evidence.retained(original, staged)
+        val retained = evidence.retained(original, staged, sender)
         val replay = host.acquire(runtime, conversation, selected)
         check(replay.items.map { it.sourceEventId } == selected)
         check(replay.items.all { it.outcome is CollaborationIncomingHistoryOutcome.Retained })
@@ -315,6 +325,7 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                 access,
                 conversation.id,
                 files.roomId,
+                runtime.deviceId,
                 ids.getString("original"),
                 ids.getString("latestEdit"),
                 ids.getString("peer"),
@@ -323,6 +334,7 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
         check(app.receipts() == journal)
         return JSONObject()
             .put("retained", retained)
+            .put("providerPages", providerPages)
             .put("replayUnchanged", true)
             .put("originalJournalUnchanged", true)
     }
@@ -372,11 +384,12 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                             owner.localDirectoryAccess(),
                             group.getString("conversationId"),
                             files.roomId,
+                            group.getString("deviceId"),
                             ids.getString("original"),
                             ids.getString("latestEdit"),
                             ids.getString("peer"),
                         )
-                val stored = evidence.retained(snapshot, staged)
+                val stored = evidence.retained(snapshot, staged, sender)
                 check(
                     stored.toString() ==
                         adopted.getJSONObject("incoming").getJSONObject("retained").toString()

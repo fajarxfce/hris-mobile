@@ -5,6 +5,7 @@ import dev.fajar.starter.collaboration.domain.policies.validCollaborationOrigina
 import dev.fajar.starter.common.result.*
 import java.security.MessageDigest
 import java.util.UUID
+import org.json.JSONArray
 import org.json.JSONObject
 
 /** Independent fictional payloads and comparisons; never exposes event content in checkpoints. */
@@ -106,7 +107,11 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
     }
 
     /** Independent body/hash assertions over encrypted app storage, including its exact aliases. */
-    fun retained(snapshot: HrisSpaceIncomingProofHost.Snapshot, staged: JSONObject): JSONObject {
+    fun retained(
+        snapshot: HrisSpaceIncomingProofHost.Snapshot,
+        staged: JSONObject,
+        owner: ProtectedHrisProofOwner,
+    ): JSONObject {
         val ids = staged.getJSONObject("events")
         val originalId = ids.getString("original")
         val editId = ids.getString("latestEdit")
@@ -136,7 +141,7 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
                 CollaborationReplacementEventFact(editId, sender, edit.timestamp, false)
         )
         check(snapshot.redacted == CollaborationHistoryEventFact(redactedId, recipient, null, true))
-        return JSONObject()
+        return frontier(snapshot.references, staged, owner)
             .put("messages", 1)
             .put("originalEventId", originalId)
             .put("replacementEventId", editId)
@@ -149,6 +154,76 @@ internal class HrisEventReadEvidence(private val files: HrisWorkerProofFiles) {
             .put("originalSenderTombstone", true)
             .put("noOriginalFactForEdit", true)
             .put("noSpaceSendWork", true)
+    }
+
+    private fun frontier(
+        references: CollaborationHistoryReferences,
+        staged: JSONObject,
+        owner: ProtectedHrisProofOwner,
+    ): JSONObject {
+        val ids = staged.getJSONObject("events")
+        val progress = requireNotNull(references.progress)
+        val position = requireNotNull(progress.incoming)
+        check(progress.exhausted && references.after == null && progress.references in 5..50)
+        check(
+            progress.provider ==
+                CollaborationHistoryProviderIdentity(
+                    owner.currentOwner.companyId,
+                    owner.registeredDeviceId,
+                )
+        )
+        check(progress.references == references.events.size.toLong() + 2)
+        check(
+            position.until == null &&
+                position.pendingAfter == null &&
+                position.pendingThrough == null &&
+                !position.pendingRetryRequired
+        )
+        val pending = references.events.map { it.event.eventId }.toSet()
+        check(
+            listOf(ids.getString("original"), ids.getString("firstEdit"), ids.getString("peer"))
+                .all { it in pending }
+        )
+        check(ids.getString("latestEdit") !in pending && ids.getString("redaction") !in pending)
+        val frontier =
+            JSONArray(
+                listOf(
+                    progress.generation,
+                    progress.revision,
+                    progress.next,
+                    progress.references,
+                    position.head,
+                    position.until,
+                    position.pendingAfter,
+                    position.pendingThrough,
+                    position.pendingRetryRequired,
+                    progress.provider!!.companyId,
+                    progress.provider!!.deviceId,
+                )
+            )
+        val pendingFacts = JSONArray()
+        for (reference in references.events) {
+            check(!reference.resolved)
+            pendingFacts.put(
+                JSONArray(
+                    listOf(
+                        reference.sequence,
+                        reference.event.eventId,
+                        reference.event.sender,
+                        reference.event.timestamp,
+                        reference.event.type,
+                        reference.resolved,
+                    )
+                )
+            )
+        }
+        return JSONObject()
+            .put("providerReferences", progress.references)
+            .put("pendingReferences", references.events.size)
+            .put("frontierHash", hash(frontier.toString()))
+            .put("pendingHash", hash(pendingFacts.toString()))
+            .put("physicalProviderPreserved", true)
+            .put("providerExhaustedWithPending", true)
     }
 
     fun window(

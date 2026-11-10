@@ -1,72 +1,49 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 16:39 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 16:51 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
 
-## Current continuation — Space provider metadata accepted
+## Current continuation — native Space frontier accepted
 
-This commit accepts10Kotlin files for typed Space provider pages through the installed original
-runtime. [Contract](collaboration-space-provider-history.md). Full1/97602 REAPED PASS10327=
-8308fresh+2019exact accepted reused/933.751s, zero failures/errors/skips. Strict source/library/
-prior-case audit passes;4778inputs,manifest ea4845feb3065475e1f80f7ec292e7823f3c5ff4ee4400fb4d929c755993db14.
-Six new Android parent/child cases plus one availability case on Desktop/Androidhost/Chromium;
-existing finite reader/adoption/lifetime/DI cases remain. Required root/Android/release/lint/Wasm/
-iOS application source/proof/format/architecture/detekt gates pass. No local heavy job remains.
-Current proofAPK150633118B SHA73106a2f39a4aabdf5e0041e1842f38dbfbd0844eafbdf5f5206129f449e9e49,
-immutable SDK6. This newer wrapper has NOT yet had actual SDK execution; prior native batch
-acceptance remains scoped to487e042c/Group603cf587. No product incoming consumer is enabled.
+[Contract](collaboration-space-frontier-native.md). Mobile product81d4a869 is accepted/pushed: provider6b445302 plus durable Space traversal.
+Product full92521 REAPED PASS10353 (8334fresh+2019exact accepted controls); focused39028
+PASS94. Company schemas1/2 and fixed authenticated frames are preserved; Space schema3 keeps
+original physical provider identity, separate provider positions and pending-reference progress.
+No automatic incoming product consumer is enabled.
 
-This commit ACCEPTS15Kotlin files for durable Space traversal storage. [Contract](collaboration-space-history-progress.md).
-Focused1/39028 REAPED PASS94/278.191s=(13new+34old)*Desktop/actualChromium. Full1/92521
-REAPED PASS10353=8334fresh+2019exact accepted reused/746.742s; zero failures/errors/skips.
-Both strict source/library/prior-case audits pass,4787inputs,manifest
-ba7fa2c4c67a7f13c6b12e341a03557281141f5e998433e8c91525dff2c757a6. Required root/Androidhost/
-release/lint/Wasm/iOS application source/proof/format/architecture/detekt gates pass. Current
-proofAPK150634868B SHA3e12c04ded9a3028cfa4b68df11c01df2d127e0c1dd83369aebf135742f1c72a,
-immutableSDK6. No local heavy job remains; actual native execution of this capability is pending.
-Private space-history-progress-2026-11-10 owns exact candidates, runners, source/report/library
-manifests, focused/full auditors and accepted results. Do not rerun accepted gates blindly.
+Current Mobile3 proof files and Group4 fixture files are ACCEPTED by actual SDK execution.
+Native26170 REAPED PASS3/212.283s; strict accept-native.py passes. Two provider pages,
+15references/13pending; identical encrypted progress and pending hashes reopen in another
+process without backend transport or a Space runtime. Matrix32=prior30+2pages, unchanged
+4encrypted/3sync/2secretStorage; native7/2direct transports. Both original/mixed recovery
+controls retain exactly2/3provider events, original transactions, offline recipient, process
+loss and offline Sent projection. No new original resend, SDK artifact, phone or live change.
+Mobileproof65046 PASS20/108.612s,4787inputs,manifest
+691332d8ec90383067691d29e9d3a63850ebb2725ca052cb5f41d88bad4b7a7e.
+Group1689 compile PASS81.671s/zero JVM cases,8740inputs,manifest
+6f472c7de2186ddac2cc5b7fb9b51a7bc096c463b7909d3e30120629cd7b0efb;
+35Python protocol cases pass. All sessions REAPED; owned emulator STOPPED. Current proof APK
+150634868B SHAde06e534ced74ac7e88a121340c75582cb85f9307edf4758f00610e5f51adaed.
+Both .work/space-frontier-native-2026-11-10 directories preserve exact candidates, reports,
+runners and strict accepted audits. No local heavy job remains.
 
-Company schemas1/2 and fixed HMAC/AEAD frames remain exact; Space schema3 keeps the original
-physical provider identity while native/local sessions can renew. Shared raw transaction storage
-has no repository-to-repository dependency. Malformed-record observation can recover on the
-next update.13new storage cases cover real restart/login, cursor/provider mismatch, response
-loss/cancellation, pending-pass bounds, encrypted isolation and competing writers.
+Next implement the owning admitted provider-page usecase, then independent incoming recovery:
+current parent/directory/binding/runtime around I/O; finite pages and event batches; durable
+rescan wake independent of outgoing work; unresolved references retried when keys arrive,
+including after provider exhaustion. SDK callbacks alone cannot cover process death. Preserve
+all prior original controls. All54 PRD acceptance groups remain OPEN; continue the long run.
+No generic Starter source delta or native Apple Matrix implementation is claimed.
 
-Next apply the prepared Mobile3/Group4 native fixture candidates after this source commit is
-pushed. Both space-frontier-native-2026-11-10 folders own candidate/base-sources/runners/auditors.
-Capture current product-base/prior-proof reports, compile proof and Group classes sequentially,
-then run three actual native cases with the fresh isolated2560MiB2core emulator and768MiB
-precompiled harness. The fixture must reopen identical frontier/pending references in another
-process without a backend reverse or Space runtime. Strict matrix counts are30+1..4pages,
-providerPage==page count, unchanged4encrypted/3sync/2secret-storage; native7/2direct transports.
-No phone, original-resend, SDK artifact or live server change. After native acceptance implement
-owning admitted page acquisition and the independent incoming consumer/worker. All54 PRD groups
-remain OPEN; no generic Starter delta or native Apple Matrix implementation.
+Hosted incoming producte1ab run42849335674 portable is audited8316; Apple3184+16Swift/unsigned
+host remains RUNNING. Mobile space-incoming-acquisition-2026-11-10/hosted-audit.py owns the
+remaining audit. No duplicate dispatch. Hosted source predates provider6b445/storage81d4;
+a later exact-product hosted validation remains necessary.
 
-Hosted incoming producte1ab run42849335674 portable is COMPLETE/audited8316=3900desktop+
-715Androidhost+3701actualChromium.14943 REAPED; artifact13782391948/3569949B,
-SHAeb982deef8b12b98f10a00ea602a40ea5f4660df6734d45c2d66de1209c1fb03,
-reportmanifest5dfa496fafd374592583bab5647a3c82ff22b0b8f6bba0472097ede1c3bbd22d.
-Exact prior-case/digest/ZIP audits pass. Apple remains RUNNING,expected3184+16Swift/unsignedhost;
-no Apple acceptance of this source claimed yet. [Hosted measurement](measurements/collaboration-space-incoming-hosted-2026-11-10.json).
-This hosted source predates provider6b445302 and current15-file progress WIP. Do not duplicate it.
-
-Next native fixture candidates are prepared, NOT APPLIED: Mobile3Kotlin files and Group4files
-in space-frontier-native-2026-11-10. Both candidate/ and base-sources.json are authoritative.
-Mobile frontier evidence was split coherently after prepare.py; do not overwrite it blindly.
-Group protocol candidates pass35Pythoncases=13event(4new+9old)+22original/mixed controls.
-New providerPage counter must equal the actual1..4 requested pages; totalMatrix30+pages with
-unchanged4encrypted/3sync/2secret-storage. Exact physical owner/device, unresolved references
-and frontier hashes must survive different-process offline reopening. Native/source/APK gates
-are NOT run for these candidates. Storage full1/92521 is now REAPED and accepted. Native/source/
-proof runners and auditors are prepared; capture accepted product/prior-proof inputs before use.
-
-Original live90163c32/API+worker schema116.4 unchanged. Release89 remains accepted/NOT INSTALLED;
-ADB52030 timed out15s(REAPED) at16:14. Phone87 last known. Existing availability question stays
-pending; INSTALL-ONLY, announce installation, no launch/reset/drive UI.
+Original live90163c32/API+worker schema116.4 unchanged. Release89 accepted/NOT INSTALLED;
+ADB62820 timed out15s(REAPED) near16:39. Phone87 last known; existing availability question
+stays pending. INSTALL-ONLY, announce installation, no launch/reset/drive UI or original resend.
 
 ## Current history repair — full and actual SDK accepted
 

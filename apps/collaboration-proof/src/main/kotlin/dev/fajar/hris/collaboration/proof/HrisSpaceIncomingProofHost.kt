@@ -15,11 +15,79 @@ internal class HrisSpaceIncomingProofHost(private val koin: Koin) {
         events: List<String>,
     ) = expect(koin.get<AcquireCollaborationSpaceEvents>()(runtime, conversation, events))
 
+    /** Finite raw-page/storage acceptance; this proof is not a product incoming consumer. */
+    suspend fun stageProviderPages(
+        runtime: CollaborationSpaceRuntimeReady,
+        conversationId: String,
+        roomId: String,
+        physicalOwner: CollaborationOwner,
+        physicalDeviceId: String,
+    ): Int {
+        val access = runtime.owner.localDirectoryAccess()
+        val traversal =
+            CollaborationHistoryTraversal(
+                conversationId,
+                roomId,
+                runtime.deviceId,
+                CollaborationHistoryPurpose.Incoming,
+            )
+        val storage = koin.get<CollaborationSpaceHistoryTraversalRepository>()
+        val provider = koin.get<CollaborationSpaceProviderHistoryRepository>()
+        var previous = expect(storage.progress(access, traversal))
+        check(previous == null)
+        repeat(4) { index ->
+            val page =
+                expect(
+                    provider.readPage(runtime, roomId, previous?.next, previous?.incoming?.until)
+                )
+            check(
+                page.runtime == runtime &&
+                    page.physical.owner == physicalOwner &&
+                    page.physical.deviceId == physicalDeviceId
+            )
+            check(expect(storage.stage(access, traversal, previous, page)))
+            previous = requireNotNull(expect(storage.progress(access, traversal)))
+            check(
+                previous!!.provider ==
+                    CollaborationHistoryProviderIdentity(physicalOwner.companyId, physicalDeviceId)
+            )
+            if (previous!!.exhausted) return index + 1
+        }
+        error("Fictional provider history exceeded four pages")
+    }
+
+    suspend fun resolveRetainedSources(
+        runtime: CollaborationSpaceRuntimeReady,
+        conversationId: String,
+        roomId: String,
+        sources: List<String>,
+    ) {
+        val access = runtime.owner.localDirectoryAccess()
+        val traversal =
+            CollaborationHistoryTraversal(
+                conversationId,
+                roomId,
+                runtime.deviceId,
+                CollaborationHistoryPurpose.Incoming,
+            )
+        val storage = koin.get<CollaborationSpaceHistoryTraversalRepository>()
+        val references = expect(storage.observeReferences(access, traversal, limit = 50).first())
+        check(references.after == null)
+        val retained = sources.map { id -> references.events.single { it.event.eventId == id } }
+        check(retained.size == 2)
+        check(
+            expect(
+                storage.resolve(access, traversal, requireNotNull(references.progress), retained)
+            )
+        )
+    }
+
     /** Local observation admits the owner before any separate raw evidence/journal read. */
     suspend fun read(
         access: CollaborationSpaceLocalAccess,
         conversationId: String,
         roomId: String,
+        deviceId: String,
         originalId: String,
         editId: String,
         redactedId: String,
@@ -49,7 +117,24 @@ internal class HrisSpaceIncomingProofHost(private val koin: Koin) {
             expect(koin.get<CollaborationSpaceReceiptRepository>().read(access, conversationId))
                 .isEmpty()
         )
-        return Snapshot(page, original, replacement, redacted)
+        val references =
+            expect(
+                koin
+                    .get<CollaborationSpaceHistoryTraversalRepository>()
+                    .observeReferences(
+                        access,
+                        CollaborationHistoryTraversal(
+                            conversationId,
+                            roomId,
+                            deviceId,
+                            CollaborationHistoryPurpose.Incoming,
+                        ),
+                        limit = 50,
+                    )
+                    .first()
+            )
+        check(references.after == null && references.progress?.exhausted == true)
+        return Snapshot(page, original, replacement, redacted, references)
     }
 
     data class Snapshot(
@@ -57,6 +142,7 @@ internal class HrisSpaceIncomingProofHost(private val koin: Koin) {
         val original: CollaborationHistoryEventFact,
         val replacement: CollaborationReplacementEventFact,
         val redacted: CollaborationHistoryEventFact,
+        val references: CollaborationHistoryReferences,
     ) {
         override fun toString() = "SpaceIncomingProofSnapshot([redacted])"
     }

@@ -29,3 +29,6 @@ proof APK/unit tests, formatting, architecture and detekt pass. Source and libra
 fixed throughout. [Measurement](measurements/collaboration-space-provider-history-2026-11-10.json).
 The proof APK is an acceptance artifact, not a phone installation or actual native execution of
 this new wrapper. Durable Space provider progress and its consumer are the next implementation.
+
+[Actual native acceptance](collaboration-space-frontier-native.md) verifies two finite pages through
+this installed-runtime capability and their encrypted progress after offline process reopening.

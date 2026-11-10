@@ -38,4 +38,5 @@ Full1/92521 passed in746.742s. The strict audit verifies10,353 cases:8,334 fresh
 compilation/lint, actual Chromium, iOS application source, proof APK/unit tests and quality checks
 pass against the same4,787 source/library inputs as the focused gate.
 [Full measurement](measurements/collaboration-space-history-progress-2026-11-10.json).
-Actual native provider/storage acceptance remains pending. No product incoming consumer is enabled.
+[Actual SDK execution](collaboration-space-frontier-native.md) now verifies the identical frontier
+and pending references after another process reopens offline. No product incoming consumer is enabled.
