@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 07:01 UTC. Historical evidence, failures and prior controls:
+Updated 10 November 2026, 07:10 UTC. Historical evidence, failures and prior controls:
 [32ed8281](https://github.com/fajarxfce/hris-mobile/blob/32ed8281/docs/agent-handoff.md).
 Do not restart completed runs. Private `.work` files supplement the tracked contracts.
 
@@ -11,10 +11,47 @@ updates. All 54 acceptance groups remain open. Mobile proves reusable foundation
 Starter. Usecases own policy and repository orchestration; repositories coordinate raw
 I/O; ViewModels own screen state. No subagent delegation. Follow AGENTS.md.
 
-One heavy compiler OR emulator; no local heavy job remains. Never kill live API/worker JVMs.
+One heavy compiler OR emulator; focused60165 is the only heavy local job. Never kill live API/worker JVMs.
 Owned emulator uses 2,560 MiB/two cores and is stopped. Phone 10.77.77.3:5555 is install-only:
 announce every install; never launch, drive, uninstall or clear it. Crashlytics IAM is
 verified. Physical iPhone interaction is waived, not Apple source/runtime acceptance.
+
+## Mobile checkpoint — 10 November, 07:10 UTC
+
+Mobilee99c71046079734113d6e95906137d22f0d125d4 is committed/pushed31291,reaped.
+Exact Space receipt projection and owning offline reconciliation preserve original
+intent/device/transaction/origin,immutable completion aliases,and exact CAS readback.
+Focused11486 REAPED PASS167.668s:76 fresh cases. Full16645 REAPED PASS640.612s:
+9,630 verified=7,611 fresh+2,019 exact accepted reused,zero failures/errors/skips.
+All90 AppFlow cases pass unchanged;4,701 source/library inputs stayed fixed. Auditors
+and publication passed. Initial43366 test-only generic compile failure is retained;
+only expected assertion types changed. No native or product routing was activated.
+Pinned validation/space-receipt-projection-20261110 and hosted42772661276 are RUNNING;
+ref34899/dispatch51514 reaped. Expected7,628portable+2,885Apple,16Swift,unsignedhost.
+
+Next Mobile source has nine UNCOMMITTED Kotlin inputs: distinct staging-only queue
+contract,Android wrapper,shared raw writer acquisition,explicit unsupported fallback,
+owning DI,13 host cases,two portable fallback cases andone acquisition regression.
+Focused-1/session60165 RUNNING as the ONLY heavy compiler; source FROZEN. Expected41
+fresh selected tests including unchanged original-only lease tests and app DI. No
+capability acceptance yet. No staging usecase,new product route or native delivery is
+implemented by this raw handle. Mobile .work/space-message-queue-capability-2026-11-10
+owns the runner. Follow Mobile's latest handoff for subsequent execution changes.
+
+Receipt42766554589 is COMPLETE:7,486portable+2,814Apple=10,300,16Swift,unsignedhost.
+Apple98580 is REAPED/audited,artifact13742850380 SHA0936bef0e3f545f2ecfb09c7a4e39e118bbe19a5ba5eca6cf1489b2ae4f743b8.
+Source/digest/CRC/predecessor identities verified. Mixed queue18e0d371 is locally accepted
+(focused70/full9,556);its pinned control42769825037 remains running. Message42763070460
+COMPLETE10,195,producer42753380451 COMPLETE10,009,command42758828055 COMPLETE10,048.
+Preserve current mixed/projection controls; do not redispatch completed proof.
+
+Starter a7ff417c33cbbffb9b44a84e489a2fbce7be5bb2 remains accepted/pushed:15 exact generic
+command-wake files,358 fresh independent tests/all platform-source and distribution build
+gates. No Starter code WIP or compiler. New HRIS-specific policy is not a generic port.
+Phone87 unchanged,88 uninstalled;last ADB44597 timed out15s at06:45,reaped. Existing
+availability question stays pending. Live e558a686/schema116.4/readinessON/groupOFF
+unchanged. Continue staging+mixed native delivery,complete recovery inventory,incoming
+routing/media/backup/calls/meetings. All54 acceptance groups remain open.
 
 ## Accepted: acknowledgement projection; continue mixed staging and delivery
 
@@ -43,7 +80,7 @@ compiled only,no new native/phone claim. No local compiler remains. Private
 
 After this atomic source commit/push,pin validation/space-receipt-projection-20261110 and dispatch the
 prepared hosted control;expected7,628 portable+2,885 Apple=10,513,16Swift/unsignedhost.
-No projection hosted dispatch yet. Preserve existing mixed42769825037 and receipt42766554589.
+Projection control42772661276 is dispatched at e99c7104; source/ref/dispatch all pushed and reaped. Preserve existing mixed42769825037 and receipt42766554589.
 Private .work/mixed-original-delivery-2026-11-10 contains five unapplied,untested Kotlin drafts (policies,typed batch,11 cases,
 new staging contract),integration.md and staging-capability.md. Extend the existing owning writer to typed ledgers; do not
 activate a second sender or broaden original-only leases to enqueue. A distinct native staging capability must precede actual native proof,which
@@ -86,7 +123,7 @@ enqueue; empty SDK inventory never means ACK. Follow tracked contracts,not obsol
   Encrypted Space journal, immutable mapping/origin, atomic append+wake, replay no-op,
  25 shared storage cases and exact retirement. Hosted42766554589 pins that source;
  portable7,486 audited (artifact13740274465,SHA1b42f1a5f831d9c65a326ba9842733c30adbcefdd8681b6e44f8099134e2c4d7).
- Apple still running; expected2,814,16 Swift,unsigned host. Preserve this control.
+ Apple98580 REAPED PASS2,814; total10,300 plus16Swift/unsignedhost. Complete evidence below.
  [Contract](collaboration-space-message-receipts.md),
  [hosted state](measurements/collaboration-space-message-receipts-hosted-2026-11-10.json).
  Private .work/space-message-receipts-2026-11-10/hosted.json and hosted-audit.py.
