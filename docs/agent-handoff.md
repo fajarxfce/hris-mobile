@@ -1,267 +1,114 @@
 # Agent continuation — HRIS Mobile
 
-Updated 9 November 2026, 23:57 UTC. Historical contracts, failed experiments and
-accepted evidence are retained in
-[a877c088](https://github.com/fajarxfce/hris-mobile/blob/a877c088/docs/agent-handoff.md).
-This file owns current work. Do not restart jobs from historical notes.
+Updated 10 November 2026, 00:25 UTC. Historical checkpoints, failures and accepted measurements remain in
+[78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
+Use this file for active jobs; do not restart historical runs.
 
 ## Authorization and boundaries
 
-The user authorized continued implementation of the entire communications PRD,
+The user authorized the entire communications PRD, long-running implementation,
 atomic commits with pushes, and validated phone updates. All 54 acceptance groups
-remain open. Mobile proves generic foundations before Starter. Use cases own policy
-and repository orchestration; repositories coordinate datasource I/O; ViewModels own
-screen state. Preserve accounts, original native identities, keys, queues and messages.
+remain open. Mobile proves reusable foundations before Starter. Preserve accounts,
+original native/SDK identities, keys, stores, transactions and retained messages.
+Use cases own policy/repository orchestration; repositories coordinate datasource I/O;
+ViewModels own screen state. Follow AGENTS.md. No sub-agent delegation is authorized.
 
-Run one heavy local compiler OR emulator. Never kill live API/worker JVMs. The owned
-emulator uses 2,560 MiB/two cores and is stopped. Announce each phone installation to
-10.77.77.3:5555 and use install-only; never launch, drive, uninstall or clear the phone.
-Crashlytics IAM access is verified; do not ask again. Physical iPhone interaction is
-waived, but Apple source/runtime, push and calling acceptance remain separate.
+One heavy local compiler OR emulator. Never kill live API/worker JVMs. The owned
+emulator uses2,560MiB/two cores and is stopped. Phone10.77.77.3:5555 is install-only:
+announce each installation; never launch, drive, uninstall or clear its app.
+Crashlytics IAM is verified; do not ask again. Physical iPhone interaction is waived,
+not Apple source/runtime, push or calling acceptance. Continue work after checkpoints.
 
-## Current: durable organization wake handoff accepted locally
+## Accepted: skip idle original-room transport
 
-Based on accepted/pushed native listener a877c088. Private evidence:
-`.work/space-readiness-wake-2026-11-09`. Eleven Kotlin inputs add the dedicated group
-WorkWakeStore key, exact-generation acknowledgement, the owning receipt/wake/schedule
-handoff, current local parent/runtime guards, sixteen domain cases and nine shared
-actual-database storage cases. The application does not collect this flow, and no
-organization recovery worker is bound. Collector activation alone is incomplete.
+This increment adds a bounded read-only domain demand check before per-room delivery.
+SDK inventory,active commands,ACK journal and immutable completions must agree before
+the worker skips transport. ACK-before-Sent,missing proof,unsettled SDK originals and
+changed inventories remain work. Current local family/directory denial/runtime guards
+remain. No enqueue,resume,settlement,message projection or retirement occurs in this read.
+Global adopted sync is unchanged;producer wakes after final observations remain next.
 
-- focused-1 /20856 REAPED PASS, 237.198 seconds, 44 cases; no failures/errors/skips.
-- full-1 /70424 REAPED PASS, 593.165 seconds, 4,338 fresh cases =3,670 desktop
-  +626 Android host +42 forced browser; zero failures/errors/skips. Required root
-  check, Android release/lint, shared Wasm/iOS source and quality checks pass.
-- Strict source/library/XML audits pass, with identical 4,593-input manifests for
-  focused/full gates and unchanged Inspector inputs. Every report/count is verified.
-  Runner preparation corrected an old test-count assumption before Gradle;
-  no source/test gate has failed. No local compiler or emulator remains active.
-- [Contract](collaboration-space-readiness-wake.md) and
-  [measurement](measurements/collaboration-space-readiness-wake-2026-11-09.json).
-  No SDK, APK, emulator, phone or live change. Commit and push before editing
-  successor Kotlin inputs.
+Focused89418 REAPED PASS170.44s:123 cases. Full48682 REAPED PASS483.891s:4,437 fresh
+plus20 exact reused proof cases,4,457 validated,zero failures/errors/skips. Required
+root/Android host+release/lint/shared Wasm+iOS/browser/proof/quality pass. Both4,633-input
+manifests and all current source/library/XML checks agree. Source gate34803 passes
+30.759s,8,733 stable backend inputs,format/architecture. Native77040 REAPED PASS
+203.279s:2 actual cases,zero failures/errors/skips. Group has2 provider
+events,24 native/16 Matrix requests,
+zero401/403/server errors;exactly2 required direct transport reads,and no additional
+direct transport for the explicit fresh idle sweep. Original scenario retains2 events/
+10 native requests. Manual scheduler,actual registered task;later offline Sent reads
+follow online recovery. No OS timing or phone/p95 claim.
 
-## Current successor: bounded local room inventory accepted locally
+First focused99095 failed only the new8-page fixture assertion (worker limit4/turn).
+The corrected test verifies retained wake after turn one and completion after turn two;
+production was unchanged. Native gate passed first attempt for this increment. Failed
+prior native userdata remains retained. No compiler/emulator remains active.
+Private `.work/space-recovery-demand-2026-11-10` holds exact audits and runners.
+Proof APK150450270 bytes,SHA2d3e323b055123cbbfc3e17bbf1b375d59291be31994089fa19270434129115a.
+No product88,phone or live rollout. All54 PRD acceptance groups remain open.
 
-Private `.work/space-room-binding-inventory-2026-11-09` pins accepted 01544c26.
-Five Kotlin inputs add a separate paged-read contract implemented by the existing
-binding repository, stable account/generation/revision cursors, nine actual database
-regressions in the existing shared storage contract, and a same-instance DI assertion.
-No original ciphertext, schema, network, key creation, worker or app activation changes.
+[Contract](collaboration-space-recovery-demand.md) and[measurement](measurements/collaboration-space-recovery-demand-2026-11-10.json).
 
-Pinned formatting has completed. focused-1 /51195 is REAPED PASS208.1s:25 cases,
-23 storage +2 graph,zero failures/errors/skips,4,595 stable inputs and strict current
-source/library/XML audit. full-1 /11069 is REAPED PASS575.815s:4,328 fresh cases,
-3,679 desktop+626 Android host+23 browser,zero failures/errors/skips. Required root,
-Android release/lint,shared Wasm/iOS source and quality checks pass. Focused/full
-manifests match;strict current source/library/XML audit passes. No local compiler,
-emulator or phone change. [Contract](collaboration-space-room-inventory.md) and
-[measurement](measurements/collaboration-space-room-inventory-2026-11-09.json). The reader
-returns explicit continuation even for room-index-only empty projections, authenticates
-both immutable indexes, and reports concurrent appends for a later fresh sweep.
-Its local inventory is not content permission or completed recovery.
+## Accepted dependencies
 
-## Current successor: admitted original group sync — accepted locally
+- [Native proof](collaboration-space-recovery-native.md): Mobile78145d78 and
+  backend450fd51d accepted/pushed;push15951/83711 reaped. Actual Matrix readiness ->
+  encrypted receipt/durable wake -> actual registered group task -> original ACK/claim
+  -> process death before Sent -> recovery without new hint/FCM. Two native cases pass
+  196.262s,each exactly2 provider events. Group22 native/16 Matrix requests,zero401/403
+  or server errors. Captured-signal replay explicitly tests consumer dedup. Manual
+  scheduler and later offline Sent reads are separate from real OS/offline-ACK timing.
+  Source/APK/library hashes match; emulator stopped. Do not rerun unchanged proof.
+- [Worker](collaboration-space-recovery-worker.md): efa700bb,97 focused cases and
+  4,439 validated full cases (2,489 fresh +1,950 exact reused). One processor/one
+  waiter,four raw pages/bounded turn;durable claim before SDK,finite backoff,exact wake
+  ACK. Domain binding + app lifetime subscriptions and independent registered SyncTask.
+- [Progress](collaboration-space-recovery-progress.md):8bc952fe,encrypted native-family/
+  account/space cursor and one pending claim. New wakes cannot erase an old sweep.
+- [Sync](collaboration-space-device-sync.md):b51e70d8,same original SDK/parent/pump/cursor.
+- [Inventory](collaboration-space-room-inventory.md):eba05a9c,complete HMAC indexes,
+  explicit raw continuation including empty projected pages,concurrent append detection.
+- [Wake](collaboration-space-readiness-wake.md):01544c26,receipt -> durable wake ->
+  OS schedule -> exact publication ACK;bounded native hints alone are not recovery.
 
-Private `.work/space-device-sync-2026-11-09` pins eba05a9c. Ten Kotlin inputs add a
-narrow group sync port implemented by the same Android runtime repository,explicit
-unsupported-platform behavior,pure exact device/bootstrap/gateway interval policy,
-and an owning bounded sync use case. It reads current local admission and one remote
-device status;no store/registration/room/message is created. Native first-sync I/O
-keeps its original parent lifetime and cancellation/drain ownership.
-
-Sixteen domain cases and three added Android cases cover current identity,denial,
-expiry,concurrent/cancelled waiters,closed runtime,group controls during actual owned
-sync with inert FFI,and late shutdown. Existing five device-sync cases remain included;
-app graph asserts the same runtime instance supplies the new port. Pinned formatter
-85341 is reaped. focused-1 /9832 REAPED FAIL242.225s:18 desktop cases,one app DI
-fixture assertion failure,and missing Android data-mapper import before Android
-execution. Domain16 pass;source/library hashes stayed unchanged. Corrected the import
-and added the new port to the existing runtime fake. Read-only review also corrected
-only two new group-native cleanup assertions to include their readiness callbacks;
-these were not observed Android failures. Old company helpers/tests are unchanged.
-
-focused-2 /85631 REAPED PASS152.816s:37 cases=16 domain+19 Android host+2 app
-bindings,zero failures/errors/skips,4,599 stable source inputs and unchanged Inspector
-bytes. Exact source/library/XML audit passes. full-1 /51820 is REAPED PASS526.554s:
-4,340 fresh cases=3,695 desktop+629 Android host+16 browser,zero failures/errors/skips.
-Required root/Android release/lint/shared Wasm/iOS source/browser/quality checks pass.
-Focused/full manifests match and strict current source/library/XML audit passes.
-Private review.md records actual first-gate failures and separate review findings.
-[Contract](collaboration-space-device-sync.md) and
-[measurement](measurements/collaboration-space-device-sync-2026-11-09.json).
-No collector,actual group recovery worker or product activation is included.
-Accepted as b51e70d8 and pushed;9895 reaped. No phone/live change.
-Successor progress now owns the only compiler as recorded below.
-
-## Latest: independent recovery progress — accepted locally
-
-Private `.work/space-recovery-progress-2026-11-09` pins b51e70d8. Fourteen Kotlin
-inputs add native-family/account/space encrypted progress over the existing replica
-store/key. The exact raw boundary, continuation and at most one claimed conversation
-are persisted before SDK work;empty projected pages still advance. A pending claim
-must be completed before advancing or finishing. New wakes preserve the finite sweep;
-failed work,healthy continuation and newer binding revisions separately require a
-fresh sweep without ACK. Only a clean exhausted sweep returns its original wake.
-Local owning read/update use cases guard session/account/native family around I/O,
-without token age or selected-company dependencies. No use-case/repository cross-calls.
-
-Fourteen domain cases,twelve shared actual-storage cases with SQLite/IndexedDB/Apple
-Room bindings,and app DI cover process loss,late completion,CAS,owner changes,
-key loss,tampering,exact cursors and independent retry reasons. Pinned formatting is
-complete. Focused31161 is REAPED PASS244.986s:28 cases=14 domain+12 SQLite+2 app,
-zero failures/errors/skips. Exact source/library/XML audit passes;4,611 source inputs
-and Inspector bytes unchanged. Full35632 is REAPED PASS597.698s:4,376 fresh cases
-=3,721 desktop+629 Android host+26 browser,zero failures/errors/skips. Root check,
-Android release/lint,shared Wasm/iOS source and quality pass. Focused/full manifests
-match;strict current source/library/XML audit passes. No gate failed. No compiler
-or emulator remains active. [Contract](collaboration-space-recovery-progress.md) and
-[measurement](measurements/collaboration-space-recovery-progress-2026-11-09.json).
-Accepted as8bc952fe and pushed;57676 reaped. This progress is
-not a worker or product activation. No APK,emulator,phone or live changes.
-## Latest: original organization recovery worker — accepted locally
-
-Private `.work/space-recovery-worker-2026-11-09` pins8bc952fe (495dd81b adds only
-hosted evidence). Twenty-three Kotlin inputs and one CI workflow add independent group
-wake commands,local original selection,final inventory recheck,the actual SyncTask
-and application wiring. One processor/one waiter,four raw pages per90-second turn,
-180-second admission bound. Exact claims survive interruption;unresolved work backs
-off. Only clean finished progress can discharge its captured wake. Readiness subscribes
-before activation;owned subscriptions stop with the application. Lazy Resume prevents
-the scheduler/task construction cycle. Domain bindings stay in the feature module.
-
-Focused85180 is REAPED PASS85.225s:97 cases across7 suites,including all22 old delivery
-worker cases. Full89627 is REAPED PASS253.361s:4,439 validated cases=3,773 desktop
-+629 Android host+37 browser,zero failures/errors/skips. Root check,Android release/
-lint,shared Wasm/iOS source and quality pass. Both4,627-input manifests and every current
-source/library/XML hash agree. Final2,489 cases are fresh;1,950 passing cases across
-240 suites reuse byte-identical first-full XML and unchanged production inputs. Only
-the workflow and old startup test changed;that suite reran successfully. [Contract](collaboration-space-recovery-worker.md) and
-[measurement](measurements/collaboration-space-recovery-worker-2026-11-09.json).
-
-Failed candidates are retained:91375 new fixture collision/two LongMethod issues;
-37708 all75 cases pass/one LongMethod;83939 all4,439 run/one old startup-key expectation.
-The corrected integration test preserves company/delivery assertions and adds group
-key+durable wake. CI now runs group worker and app lifetime cases. No suppression.
-Accepted as efa700bb and pushed;12097 reaped. No APK,emulator,phone or live change.
-[CI42721024887](https://github.com/fajarxfce/hris-mobile/actions/runs/42721024887) runs
-on immutable efa700bbb5a2b7a75af392afb5add8b642eb2ba0;99990 reaped. Expected6,940
-portable+2,628 Apple=9,568,unaccepted. It excludes the following native proof.
-
-## Accepted: actual organization recovery proof
-
-Mobile worker efa700bb is accepted/pushed. The native proof is now accepted locally:
-Mobile6044 passes20 fresh proof unit cases/131.926s; final73682 is REAPED PASS68.001s
-with required root/Android-host/quality checks. Tests are up-to-date in the final gate:
-4,439 predecessor cases plus20 proof cases have exact archived/current passing XML.
-No production Mobile source changed; all4,630 source inputs and Inspector hashes match.
-
-Group source89294 passes34.055s with8,733 stable inputs and format/architecture.
-Eleven Python driver cases pass0.005s. Native98504 is REAPED PASS196.262s:2 actual
-native cases,zero failures/errors/skips. Original scenario has2 provider events and10
-native requests. Group recovery has2 provider events,22 native and16 Matrix requests,
-zero401/403/server errors. Actual control -> durable wake -> actual registered task ->
-persisted claim/ACK -> process death -> original recovery without new hint/FCM passes.
-Consumer dedup uses an explicit replay of the captured real signal. Offline Sent reads
-occur after online recovery. Manual scheduling is explicit; no OS timing claim.
-
-APK150,441,529 bytes,SHA227cdc9211dd5415cb76c8167a10016acc3d50fc4753518b374250f2850a77a1.
-SDK6 is unchanged. Strict cross-source/APK/XML/driver audit passes; no compilation
-during emulator and emulator stopped. Failed native34069 correctly had no eligible
-target because its room was created after publication; only fixture ordering changed.
-Private `.work/space-recovery-native-2026-11-09` retains failed data and accepted.json.
-Prepared files are archival. Do not repeat unchanged accepted gates.
-
-Next: complete SDK+app-ledger idle checks, producer durable wakes after final reads,
-group FCM/product routing, new SPACE enqueue and remaining rich messaging/calls/meetings.
-No product88,phone or live change; all54 PRD groups remain open. Hosted42721024887
-is pinned to worker efa700bb and audited separately; it excludes native proof edits.
-
-[Native contract](collaboration-space-recovery-native.md) and
-[measurement](measurements/collaboration-space-recovery-native-2026-11-09.json).
-
-## Accepted readiness increments
-
-- Group d4246a08: independent MATRIX/PUSH workers and complete application wiring.
-  Full 56826 is reaped: 325 cases in 775.848 seconds, 174 API +151 full worker,
-  zero failures/errors and one pre-existing opt-in skip. Both manifests retain 8,729
-  identical inputs. V140 and live group OFF are unchanged; no repeat gate required.
-- Mobile da248173: strict V1 control and separate encrypted monotone receipts.
-  Full 50781 is reaped: 4,284 cases in 588.489 seconds, no failures/errors/skips,
-  4,582 stable inputs. [Contract](collaboration-space-readiness-receipts.md).
-- Mobile a877c088: trusted logical signal source and original physical Matrix sender
-  through one native registration lifetime. Focused 30283: 84 cases; full 45533:
-  4,297 cases in 630.629 seconds; no failures/errors/skips, 4,584 stable inputs.
-  Source/library/XML audit passes. [Contract](collaboration-space-readiness-listener.md).
-  Tests use inert FFI handles; actual provider delivery remains separate.
-
-Hosted run [42697887863](https://github.com/fajarxfce/hris-mobile/actions/runs/42697887863)
-is pinned to da2481732e51132fac7249fc31d732f037c2222c, not successor source.
-Portable is accepted: 6,662 cases =3,089 desktop +621 Android host +2,952 browser,
-zero failures/errors/skips; exact artifact/report completeness and digest audit pass.
-Apple is also accepted: 2,511 simulator cases, zero failures/errors/skips, and
-successful unsigned Xcode host. Audit30032 is reaped; SHA256, GitHub digest, ZIP CRC,
-every XML and the full baseline report set plus12 new cases pass. Combined9173 cases.
-[Hosted measurement](measurements/collaboration-space-readiness-protocol-hosted-2026-11-09.json).
-This protocol run is complete. Do not rerun unchanged42697887863 or accepted older
-42656803963 (9137 cases). This immutable protocol evidence does not cover native/wake/
-inventory successors or native Apple Matrix/APNs/calling behavior.
+Hosted [42721024887](https://github.com/fajarxfce/hris-mobile/actions/runs/42721024887)
+pins efa700bbb5a2b7a75af392afb5add8b642eb2ba0. Portable accepted6,940 cases=3,242
+Desktop+629 Android host+3,069 browser,zero failures/errors/skips. Audit71793 reaped;
+GitHub digest/ZIP CRC/full prior testcase identity and new cases verified. Artifact
+13720089441,3,385,094 bytes,SHA2ea99a2369cd5ff6a6af84dc10a68d103900f464750d83b3b75385614f34ee7b.
+Private `.work/space-recovery-worker-2026-11-09/hosted-42721024887/portable-audit.json`.
+Apple still running/unaccepted;expected2,628. Run hosted-audit.py apple only after job
+success. Do not redispatch. It does not cover later native proof or current demand.
+Earlier42707758241 is fully accepted9,292 cases+unsigned Xcode host;do not repeat.
 
 ## Next implementation
 
-1. Wake01544c26,protocolevidence dd15a4fd and inventory eba05a9c are committed/pushed;
-   all pushes and audits are reaped. Inventory push38798 is reaped.
-2. [CI42707758241](https://github.com/fajarxfce/hris-mobile/actions/runs/42707758241)
-   is fully accepted on immutable eba05a9c253aa7fe7f0cf816b49c128b4f3003a6.
-   Portable6,743 +Apple simulator2,549 =9,292 cases,zero failures/errors/skips.
-   Unsigned Xcode host succeeds. Audits75963 and66359 are reaped;GitHub SHA256,
-   ZIP CRC,every XML and full prior report set plus119 cases pass.
-   [Hosted measurement](measurements/collaboration-space-inventory-hosted-2026-11-09.json)
-   retains exact artifacts and report manifests. This covers cumulative source/listener,
-   wake and inventory; it does not cover newer sync/progress/worker changes or native
-   Apple Matrix/APNs/calling behavior. Do not repeat accepted immutable CI.
-3. Implement actual group recovery with independent persisted progress and exact wake
-   completion. Company-only CollaborationRecoveryWorker cannot discharge group work.
-   Startup/reconnect must discover original commands without relying on a bounded
-   callback stream. New commands in existing bindings need their own durable wake;
-   binding revision does not indicate message arrival. The original-only writer has
-   no enqueue capability;Queued/new SPACE sends need their own owning workflow.
-   Empty active commands or retired receipts do not prove the native SDK has no
-   settlement work. Require local SDK inventory or a correctly retired durable work
-   index before skipping recovery for a room. Private inventory worker-next.md records
-   the verified command/receipt/SDK boundaries;worker source is now applied under the active gate above.
-4. Group adoption restores a paused original SDK client. Currently admitted sync on
-   that same client now passes local acceptance; bind app collector/worker lifetimes and product
-   routing. Never acquire the registry lock inside the native callback monitor:
-   registry retirement already deactivates callbacks while holding its lock.
-5. Existing registry retention already preserves logical group entries by exact native
-   parent, independently of the selected company. Reuse the application parent state;
-   do not add another global native owner. Review legacy activation/delivery routing
-   before rollout, because legacy operations deliberately cannot reach adopted entries.
-   Private inventory `worker-next.md` records the grounded remaining design.
-6. Prove actual group control -> durable wake -> one original provider delivery,
-   including duplicates/process loss without FCM dependence, before product rollout.
-7. Continue rich message actions/media/stickers/voice, encrypted Drive/iCloud recovery,
-   MatrixRTC native calls, LiveKit meetings and the remaining PRD/delivery.json scope.
+Complete and validate current idle integration. Producer wakes after final inventory
+reads remain necessary; the legacy QueueText/Edit/Forward scheduler alone does not
+wake organization recovery. Group FCM/product routing and new SPACE enqueue remain
+before rollout. Company-only runtime access deliberately cannot reach adopted group
+entries. Keep logical group and original physical sender identities distinct. Never
+look up the runtime registry while holding the native callback monitor (reverse lock
+order during retirement). Then rich media/stickers/voice,encrypted Drive/iCloud recovery,
+MatrixRTC calling,LiveKit meetings and the remaining PRD/delivery acceptance.
 
-Original key activation is already fixed and accepted in Group 61e8c2f5: completion
-of original LEGACY provisioning atomically publishes verified signed-key readiness.
-Full 62503 passes 616 cases; native 71915 confirms two originals become two provider
-events and survive process loss without fixture key upload. Do not repeat this work.
-The explicit vendor key-confirmation endpoint was retired. Never reapply archived
-`retired-*` or `native-prepared` candidates, or introduce SDK7 for this boundary.
+Original key publication is already owned by provisioning in Group61e8c2f5; it verifies
+and commits existing signed original identity atomically with LEGACY transfer. No
+extra Mobile confirmation endpoint,private-key change or SDK7. The discarded vendor
+key-confirmation candidates are retired;never restore them.
 
-## Checkouts and runtime
+## Checkouts
 
-| Checkout | Branch / accepted source | State |
+| Checkout | Branch / source | State |
 | --- | --- | --- |
-| Mobile | feat/chat-send-timing-20261107 / 8bc952fe | Progress8bc952fe accepted/pushed; worker focused37708 active; EBA Apple host building |
-| Platform original | feat/communications / 3ec4579e | Handoff current; recovery verifier remains schema116.4 |
-| Platform group | feat/communication-space / d4246a08 | Separate worktree; V140 workers accepted/pushed |
-| Starter | feat/network-inspector-20261107 / ffd0ac5 | Generic pinned workflow/checksum port accepted |
-| Inspector | feat/matrix-rust-bindings-20261107 / f8ca3d6 | Public SDK6 integrated |
-| Inspector isolated | feat/sdk6-distribution-20261109 / a6b8236 | Distribution accepted; preserve gradlew.bat normalization delta |
-| Mobile isolated CI | feat/pinned-inspector-ci-20261109 / 951cdbcf | Public consumer evidence integrated |
+| Mobile | feat/chat-send-timing-20261107 /78145d78 | Current demand/native evidence accepted;commit and push this increment |
+| Platform original | feat/communications /29a10aca | Cross-handoff pushed;schema116.4 verifier |
+| Platform group | feat/communication-space /450fd51d | Native recovery proof pushed;V140 |
+| Starter | feat/network-inspector-20261107 /ffd0ac5 | Generic pinned workflow/checksum port accepted |
+| Inspector | feat/matrix-rust-bindings-20261107 /f8ca3d6 | Public SDK6 integrated |
+| Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | Accepted;preserve gradlew.bat normalization delta |
+| Mobile isolated CI | feat/pinned-inspector-ci-20261109 /951cdbcf | Consumer evidence integrated |
 
 Worktrees live under `/home/fajar/hris/.worktrees/`. Preserve the dirty isolated SDK
 refresh worktree. SDK 26.10.23-hris.6 is immutable; never overwrite release assets.

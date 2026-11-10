@@ -5,6 +5,7 @@ import dev.fajar.starter.app.work.CollaborationSpaceRecoveryWorker
 import dev.fajar.starter.collaboration.domain.usecases.AdoptCollaborationSpaceRuntime
 import dev.fajar.starter.collaboration.domain.usecases.DeliverCollaborationSpaceOriginalMessages
 import dev.fajar.starter.collaboration.domain.usecases.LoadCollaborationSpaceRecoveryDevice
+import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationSpaceRecoveryDemand
 import dev.fajar.starter.collaboration.domain.usecases.SynchronizeCollaborationSpaceDevice
 import dev.fajar.starter.sync.domain.SyncTask
 import org.koin.dsl.bind
@@ -17,6 +18,7 @@ internal fun applicationCollaborationSpaceWorkerModule() = module {
         val device = inject<LoadCollaborationSpaceRecoveryDevice>()
         val adopt = inject<AdoptCollaborationSpaceRuntime>()
         val sync = inject<SynchronizeCollaborationSpaceDevice>()
+        val demand = inject<ReadCollaborationSpaceRecoveryDemand>()
         val deliver = inject<DeliverCollaborationSpaceOriginalMessages>()
         CollaborationSpaceRecoveryWorker(
             states = lazy { parent.value.state },
@@ -32,6 +34,7 @@ internal fun applicationCollaborationSpaceWorkerModule() = module {
             page = get(),
             room = get(),
             finishSweep = get(),
+            demand = { runtime, conversation -> demand.value(runtime, conversation) },
             deliver = { runtime, conversation -> deliver.value(runtime, conversation) },
             build = get(),
         )

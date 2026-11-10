@@ -1,0 +1,169 @@
+{
+  "acceptedAt": "2026-11-10T00:25:08.885954+00:00",
+  "mobileBase": "78145d78b79852b2b868b094d5c24d994690e664",
+  "groupBase": "450fd51de496fc1f674c77a2a7b76a28f7a35b53",
+  "scope": "Read-only exact original SDK plus app-ledger demand before per-room delivery; actual fresh idle recovery sweep completes without another direct transport request.",
+  "sources": {
+    "mobile": {
+      "files": 4633,
+      "sha256": "b5c764cf7036116fef584e5b7482841c365c72789debf28e8af609d99e2f3f0f",
+      "changed": {
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceRecoveryProbe.kt": "f83a8de1f4634ff19dd38dc9987cf6603811ffd5c09f805a5f332720ac70ca8a",
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceRecoveryProofHost.kt": "7ecd9c21ee33c8cf06edcc12a91efd6bba59bf510ffde4e696b268aa44bc2f62",
+        "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationSpaceWorkerModule.kt": "4a8681d2ee9618688ae80c448633561313ee4382ae5a1eda096e5d261fcf7ecc",
+        "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationSpaceRecoveryWorker.kt": "95058ad12f4a643ff04eaeacf67141003e10616a898d320c2d7b2da3a8f4d148",
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationSpaceRecoveryWorkerTest.kt": "b587b2edc0b09acc28605b80fbfdbec4b76e673ba172ec15be42519cc3a3c585",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "e12fb3c1151f17b53c01566a1e157ce0d940780b18c31afc06c660de0243ccb7",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceRecoveryDemandPolicy.kt": "40ada589728fa694ef77817a8c1ed1ba9f03414662dd6b534377f4097a856ab3",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceRecoveryDemand.kt": "ea02fe62b987e36e2db619ade5a9e2c54b7c5db99a9caa62be5a758440e036e6",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceRecoveryDemandTest.kt": "914d99200316334de724522f5da8960ffc47e71cae6f5dcf049879e1dd74d6b8"
+      }
+    },
+    "group": {
+      "files": 8733,
+      "sha256": "812d8c8a98d96b886ec9a57a33f4e484b54722705dafd0927aef46afd181c47a",
+      "changed": {
+        "apps/server/src/test/kotlin/dev/fajar/hris/NativeSpaceRecoveryWorkerTest.kt": "07899c051e12585eaebf04078a3be5b5a6c2dda4f28673a779173526eadf5fae"
+      }
+    }
+  },
+  "focused": {
+    "elapsedSeconds": 170.44,
+    "freshCounts": {
+      "tests": 123,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedTests": 123
+  },
+  "full": {
+    "elapsedSeconds": 483.891,
+    "freshCounts": {
+      "tests": 4437,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedTests": 4457,
+    "validatedReusedTests": 20,
+    "sourceManifestSha256": "b5c764cf7036116fef584e5b7482841c365c72789debf28e8af609d99e2f3f0f"
+  },
+  "fullScope": [
+    "Required root check",
+    "Android host tests",
+    "Android devRelease compilation/lint",
+    "Shared Wasm/iOS source",
+    "16 browser demand cases",
+    "Proof APK and unit cases",
+    "Format/architecture/detekt"
+  ],
+  "groupSource": {
+    "seconds": 30.759,
+    "formatAndArchitecture": true
+  },
+  "native": {
+    "startedAt": "2026-11-10T00:20:54.569678+00:00",
+    "elapsedSeconds": 203.279,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "bootSeconds": 34.589,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "TEST-dev.fajar.hris.NativeSpaceRecoveryWorkerTest.xml": {
+        "sha256": "5f17baae9b533b1a3c6f8026a419c1448196e0e00ecf39b4ffd4dfb76663e495",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": {
+        "sha256": "40f73781c37f4c43d22e899e86ead550faad787792e0832975ad4837ea1f753d",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true,
+    "phoneTouched": false
+  },
+  "artifact": {
+    "apkSha256": "2d3e323b055123cbbfc3e17bbf1b375d59291be31994089fa19270434129115a",
+    "sdkVersion": "26.10.23-hris.6",
+    "abi": "x86_64",
+    "librarySha256": "ecffbab72fd5dd29d656bc4757ea423bb4bccf0444140af0480684bc32761278",
+    "apkBytes": 150450270
+  },
+  "scenarios": {
+    "originalDelivery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 10,
+        "bootstrapReplay": 2,
+        "directTransport": 2
+      }
+    },
+    "groupRecovery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 24,
+        "registration": 1,
+        "bootstrapReplay": 1,
+        "directTransport": 2
+      },
+      "actualGroupControl": true,
+      "consumerReplayDeduplicated": true,
+      "claimedBeforeDelivery": true,
+      "recoveredWithoutFcm": true,
+      "idleRecoveryCompleted": true,
+      "matrixRequests": {
+        "requests": 16,
+        "secretStorage": 4,
+        "sync": 6,
+        "encryptedSend": 3
+      },
+      "idleSweepAdditionalDirectTransport": 0,
+      "rejected401or403": 0,
+      "serverErrors": 0
+    }
+  },
+  "failedCandidates": [
+    {
+      "phase": "focused-1",
+      "seconds": 232.221,
+      "tests": 103,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "cause": "New worker assertion incorrectly expected an eight-page fixture to finish within one four-page turn. Corrected test asserts retained wake after first turn and completion after second; production unchanged."
+    }
+  ],
+  "limits": [
+    "Only per-room transport is skipped; adopted global device sync still runs.",
+    "Snapshots are rechecked, but producer wakes remain necessary for writes after the last observation.",
+    "Manual fixture scheduler invokes the actual registered task; no OS scheduling guarantee.",
+    "Initial actual native control, followed by explicit captured-signal consumer replay for deduplication.",
+    "Recovery reconnects before later offline Sent reads; immediate offline ACK projection after process death is not established.",
+    "Whole-scenario counters are not per-message or phone/p95 latency.",
+    "No product88, phone update, live group rollout or new Apple native runtime claim."
+  ]
+}

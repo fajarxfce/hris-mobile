@@ -104,6 +104,7 @@ internal class HrisSpaceRecoveryProbe(private val context: Context, directory: F
                         .put("events", JSONArray(receipt.eventIds))
                 }
             check(recovery.pendingWake() == null && recovery.checkpoint().progress?.sweep == null)
+            recovery.verifyIdleRecovery()
             files.write(
                 "original-recovered",
                 checkpoint()
@@ -112,6 +113,7 @@ internal class HrisSpaceRecoveryProbe(private val context: Context, directory: F
                     .put("recipientStayedOffline", true)
                     .put("groupTaskCompleted", true)
                     .put("progressAndWakeCompleted", true)
+                    .put("idleRecoveryCompleted", true)
                     .put("recoveredWithoutNewControl", true),
             )
         } catch (failure: Exception) {

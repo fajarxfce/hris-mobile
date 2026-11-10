@@ -18,6 +18,47 @@ import kotlinx.coroutines.test.*
 
 class CollaborationSpaceRecoveryWorkerTest {
     @Test
+    fun locallyIdleRoomCompletesItsClaimWithoutDeliveryTransport() = runTest {
+        val f = Fixture(testScheduler)
+        f.needsDelivery = false
+        assertEquals(SyncResult.Complete, f.worker())
+        assertTrue(f.delivered.isEmpty())
+        assertNotNull(f.wake)
+        assertNotNull(f.progress?.sweep)
+        assertEquals(SyncResult.Complete, f.worker())
+        assertTrue(f.delivered.isEmpty())
+        assertNull(f.wake)
+        assertNull(f.progress?.sweep)
+    }
+
+    @Test
+    fun failedDemandRetainsWakeAndBacksOffWithoutDelivery() = runTest {
+        val f = Fixture(testScheduler)
+        f.demandFailure = Failure(FailureKind.Storage, "fixture")
+        assertIs<SyncResult.Retry>(f.worker())
+        assertTrue(f.delivered.isEmpty())
+        assertNotNull(f.wake)
+        assertTrue(f.progress!!.sweep!!.retryRequired)
+        assertTrue(f.scheduled.isEmpty())
+    }
+
+    @Test
+    fun cancelledDemandRetainsClaimBeforeAnyDelivery() = runTest {
+        val f = Fixture(testScheduler)
+        val entered = CompletableDeferred<Unit>()
+        f.beforeDemand = {
+            entered.complete(Unit)
+            awaitCancellation()
+        }
+        val job = launch { f.worker() }
+        entered.await()
+        job.cancelAndJoin()
+        assertNotNull(f.progress!!.sweep!!.pending)
+        assertNotNull(f.wake)
+        assertTrue(f.delivered.isEmpty())
+    }
+
+    @Test
     fun fourRawPagesPerTurnRetainTheSeekAndLateDuplicateRequestsDoNoWork() = runTest {
         val f = Fixture(testScheduler)
         assertEquals(SyncResult.Complete, f.worker())
@@ -224,6 +265,9 @@ class CollaborationSpaceRecoveryWorkerTest {
         val scheduled = mutableListOf<String>()
         var beforeDevice: suspend () -> Unit = {}
         var beforeAdopt: suspend () -> Unit = {}
+        var beforeDemand: suspend () -> Unit = {}
+        var needsDelivery = true
+        var demandFailure: Failure? = null
         var beforeDelivery: suspend () -> Unit = {}
         var beforeAck: suspend () -> Unit = {}
         var scheduleFailure: Failure? = null
@@ -367,6 +411,10 @@ class CollaborationSpaceRecoveryWorkerTest {
                         base.sessions,
                         base.server,
                     ),
+                demand = { _, _ ->
+                    beforeDemand()
+                    demandFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(needsDelivery)
+                },
                 deliver = { _, conversation ->
                     delivered += conversation.id
                     beforeDelivery()

@@ -151,6 +151,14 @@ internal class HrisSpaceRecoveryProofHost(
         error("Fictional recovery did not exhaust its bounded inventory")
     }
 
+    suspend fun verifyIdleRecovery() {
+        check(expect(wake()) == null)
+        expect(koin.get<RequestCollaborationSpaceRecovery>()())
+        check(expect(wake()) != null)
+        recover()
+        check(expect(wake()) == null && expect(progress(seed.owner)).progress?.sweep == null)
+    }
+
     suspend fun close() =
         withContext(NonCancellable) {
             process.closeAndJoin()

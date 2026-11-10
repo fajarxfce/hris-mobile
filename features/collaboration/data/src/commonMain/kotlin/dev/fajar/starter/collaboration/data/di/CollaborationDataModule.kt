@@ -100,6 +100,28 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun readSpaceRecoveryDemand(
+        bindings: CollaborationSpaceRoomBindingRepository,
+        runtimes: CollaborationSpaceRuntimeRepository,
+        messages: CollaborationMessageRepository,
+        receipts: CollaborationReceiptRepository,
+        completions: CollaborationMessageCompletionRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        ReadCollaborationSpaceRecoveryDemand(
+            bindings,
+            runtimes,
+            messages,
+            receipts,
+            completions,
+            directory,
+            sessions,
+            server,
+        )
+
+    @Factory
     fun deliverSpaceOriginalMessages(
         bindings: CollaborationSpaceRoomBindingRepository,
         transport: CollaborationSpaceDirectTransportRepository,

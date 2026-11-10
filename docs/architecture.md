@@ -1,5 +1,9 @@
 # Architecture
 
+[Local recovery demand](collaboration-space-recovery-demand.md) combines complete original SDK inventory with
+commands and ACK/completion evidence before skipping per-room transport. The owning
+read performs no send or projection; actual native idle recovery is separately verified.
+
 [Organization recovery](collaboration-space-recovery-worker.md) uses the current native
 parent, independent durable wake and claimed raw pages. Original-only delivery owns
 provider work; faults retain bounded retries and clean completion alone discharges a wake.

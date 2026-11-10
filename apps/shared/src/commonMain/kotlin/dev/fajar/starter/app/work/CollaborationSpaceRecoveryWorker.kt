@@ -30,6 +30,10 @@ class CollaborationSpaceRecoveryWorker(
     private val page: LoadCollaborationSpaceRecoveryPage,
     private val room: LoadCollaborationSpaceRecoveryRoom,
     private val finishSweep: FinishCollaborationSpaceRecovery,
+    private val demand:
+        suspend (CollaborationSpaceRuntimeReady, CollaborationSpaceConversation) -> AppResult<
+                Boolean
+            >,
     private val deliver:
         suspend (CollaborationSpaceRuntimeReady, CollaborationSpaceConversation) -> AppResult<
                 CollaborationDeliveryReport
@@ -134,6 +138,9 @@ class CollaborationSpaceRecoveryWorker(
         val found = room(snapshot)
         if (found is AppResult.Failed) return found
         val conversation = (found as AppResult.Success).value ?: return AppResult.Success(Unit)
+        val needed = demand(runtime, conversation)
+        if (needed is AppResult.Failed) return needed
+        if (!(needed as AppResult.Success).value) return AppResult.Success(Unit)
         val result = deliver(runtime, conversation)
         if (result is AppResult.Failed) return result
         return if ((result as AppResult.Success).value.unresolved.isEmpty()) AppResult.Success(Unit)
