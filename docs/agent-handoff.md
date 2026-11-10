@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 11:14 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 11:33 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -12,15 +12,44 @@ HRIS policy stays in Mobile. No subagents. Usecases coordinate repositories and 
 never other usecases; repositories coordinate their own datasource I/O, and ViewModels own
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
-One heavy compiler OR emulator. Current focused history gate41593 is RUNNING; freeze compiled
-source until reaped. Earlier native/core runs below are finished/reaped; emulator stopped.
+One heavy compiler OR emulator. All listed local runs are finished/reaped; no heavy job.
+The emulator is stopped. Start the next compiler only after the source checkpoint is pushed.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
 Phone10.77.77.3:5555 is INSTALL-ONLY: announce each install, never launch/drive/uninstall/
-clear its UI or data. ADB34894 timed out15s at10:39 and is reaped; existing availability
+clear its UI or data. ADB97574 timed out15s at11:17 and is reaped; existing availability
 question stays pending. Phone87 last known;88 uninstalled. No new phone build yet.
 Crashlytics IAM is verified; no repeated question. Physical iPhone testing is waived,
 not Apple compilation/runtime/notification/call acceptance. Apple Matrix runtime is missing.
+
+## Accepted owned Space history
+
+The accompanying14-file increment adds typed account/Space/conversation history storage and
+locally admitted observation. No native incoming stream or product route is activated.
+[Contract](collaboration-space-history-storage.md), [measurement](measurements/collaboration-space-history-storage-2026-11-10.json).
+Shared codec/key/batch mechanics preserve the original Company authenticated byte frames;
+Space has explicit distinct coordinates. Same UUIDs cannot cross-read/decrypt Company/Space
+facts. Replay leaves revisions/ciphertext unchanged; key loss never regenerates over owned data.
+
+Focused1/41593 REAPED PASS112/466.361s:9new local-admission +8existing Space-message cases on
+Desktop/Chromium,16new Space history +22existing Company history on both real databases,2DI.
+Fixed HMAC/AAD vectors, >500-message traversal/restart, alias/tombstone replay, competing writers,
+uncertain commit/cancellation, account changes, missing keys and tampering are covered. iOS
+source/format/architecture/detekt pass. Full1/63357 REAPED PASS603.865s:10060verified=8041fresh+
+2019exact accepted reused,zero failures/errors/skips. Root check,Android host/release compile/
+lint,Wasm/iOS app source,actualChromium,proofAPK/unit and quality pass. Both strict auditors and
+publisher passed.4743source/library inputs fixed,manifest
+eb43c7e4cbf14e211a050ea90dd545cd0eff70a25b290e4b159fb5b470a3e26a.
+Current proofAPK150602743bytes SHA9d0e7ddafdd92fbb784db8d9fb4478724cae21576d0d9eff15bc2e977f574996.
+This is newer than the accepted historical native run; no native repeat or phone latency claim.
+Private .work/space-history-storage-2026-11-10 holds source/results/auditors and exact file list.
+
+Hosted storage control NOT dispatched yet. After source commit/push, set hosted.json exact
+source/ref and dispatch existing collaboration-control.yml on validation/space-history-storage-
+20261110. Expected8058portable(3803Desktop+651Androidhost+3604Chromium)+3087Apple=11145,
+16Swift/unsignedhost. Strict hosted auditor is prepared against worker42801929551; audit its
+Apple predecessor first when complete. Never substitute newer source or call source compile
+actual Apple Matrix runtime acceptance.
 
 ## Accepted registered pending-worker native proof
 
@@ -82,7 +111,10 @@ The current native proof APK is newer than this core build; do not claim old art
 
 Current worker control42801929551 RUNNING on exact8c76f92c,refvalidation/space-pending-recovery-
 20261110;ref61718/dispatch14028 reaped. Expected8008portable+3062Apple=11070,16Swift/unsignedhost.
-Private .work/space-pending-recovery-2026-11-10/hosted.json and auditor are complete.
+Portable74895 REAPED/audited8008,artifact13759026115,
+SHA595c4322abf64de4709a9b404f1fa862449df89883c4b628e7d8c22e8ed7bdaf,
+manifestfe1d3c17f6d4909e39211c89b3f586aeb9b47bb990f27e00c4ae248272d1a35b.
+Apple3062 still running. Private .work/space-pending-recovery-2026-11-10/hosted.json records it.
 
 Mixed-demand42796816133 COMPLETE10958=7930portable+3028Apple,16Swift/unsignedhost on exact
 1d18e232. Portable90228 and Apple91937 are REAPED/audited; GitHub digest/ZIP CRC/exact source/
@@ -102,23 +134,23 @@ handoff/measurements. Shared Apple tests/unsigned hosts do not implement its nat
 
 ## Next work — continue implementation
 
-[Incoming/history plan](collaboration-space-incoming-plan.md) now has an UNACCEPTED14-file
-storage/local-observation candidate in the Mobile worktree. Focused1/41593 RUNNING, expected
-112cases:9new admission+8old Space message on Desktop/Chromium;16new Space history+22old
-Company storage on both real databases;2existing DI cases. iOS source/format/architecture/
-detekt included. Private .work/space-history-storage-2026-11-10 has exact file list, runner,
-expected cases and strict auditor. Source14 includes11new files; no product incoming route.
-Do not call it accepted before gates. Next reap/fix focused, strict audit, required full check;
-then atomic source/evidence commit+push. No native SDK change in this candidate.
+[Incoming/history plan](collaboration-space-incoming-plan.md) continues from accepted storage.
+Next is retaining replacement edits before an incoming traversal may advance. PRIVATE draft
+.work/space-history-edits-2026-11-10 is NOT APPLIED:7planned Kotlin files/5new, typed Space edit
+repository and existing codec/batch operations,17new storage cases, three platform wrappers,
+and existing DI identity check.13existing core edit scenarios are adapted plus4new scope/
+uncertain-commit/mutation cases. Company14case contract stays unchanged; Space quote/hide APIs
+remain separate. Guarded apply.py, focused96/full10094 runners and auditors are prepared.
+Only apply after current accepted source is committed/pushed. Then format, review, run focused
+and full gates; record actual results. This draft is uncompiled and unaccepted.
 
-The explicit Space history namespace reuses original message/alias/tombstone codec and atomic
-batch primitives; typed Company/Space coordinates preserve old authenticated byte frames.
-Fixed HMAC/AAD vectors, >500-message traversal/restart, replay/no-op revisions, competing writers,
-key loss, ciphertext tampering and cross-owner isolation are covered. Locally admitted history
-observation is independent of credential age; confirmed denial stays gated through failures.
-Usecases coordinate repositories, not usecases. Company history stays originally scoped and
-must only join Space through an admitted immutable legacy binding. SpaceOriginalHistoryRepository
-is still a bounded original SDK/provider snapshot, not the future owned live incoming stream.
+Next incoming acquisition must independently prove original physical ownership through the
+retained runtime setup and admitted immutable room binding. Do not acquire a queue writer merely
+to reuse acknowledgement-recovery validation. The current SpaceOriginalHistoryRepository reads
+a finite original SDK/provider window; it is not a live stream. Detach all bounded original/edit/
+unresolved lists before suspension; preserve unpersisted edits before advancing any cursor.
+Recipient readiness gates sending, not local reading. Company history stays originally scoped;
+never reinterpret Space IDs as Company IDs. No generic Starter delta.
 
 Then own bounded native incoming collection, deduplication/edits/redaction, local persistence,
 older-cursor exhaustion, notifications/replies and product routing. Preserve instant cached

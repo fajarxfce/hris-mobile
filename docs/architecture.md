@@ -1,5 +1,9 @@
 # Architecture
 
+[Owned organization history](collaboration-space-history-storage.md) separates typed Space and
+Company coordinates while reusing authenticated storage primitives. Local observation owns
+account/directory admission and starts no transport. Incoming streaming remains separate.
+
 [Actual pending-worker recovery](collaboration-space-pending-native.md) verifies unbound Space discovery, original staging,
 process-loss recovery and offline projection through the registered task.
 

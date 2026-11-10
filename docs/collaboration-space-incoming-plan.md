@@ -1,12 +1,15 @@
 # After actual pending-worker acceptance — incoming/history boundary
 
-IN PROGRESS: storage and local observation are an unaccepted14-file candidate. Focused1/41593
-is running112expected cases plus iOS source and quality checks. Native incoming collection and
-product routing are not implemented. Native1/45886 is REAPED PASS269.304s/four cases;
+STORAGE/LOCAL OBSERVATION ACCEPTED: focused112 and full10060 pass; strict auditors and
+publisher pass. [Storage contract](collaboration-space-history-storage.md) owns that completed
+increment. Native incoming collection and product routing are not implemented. Next retain
+replacement edits before incoming progress; a private seven-file candidate is prepared but
+not applied or tested. See current handoff for exact commands, boundaries and remaining work.
+Native1/45886 is REAPED PASS269.304s/four cases;
 strict acceptance and publisher passed. Preserve that exact evidence and original stores. Core8c76f92c/full10010
 is accepted; mobile proof2/34855 PASS20 and Group source1/72318 PASS3+28Python are reaped.
 
-The candidate adds explicit Space history storage and observation; no incoming or product route.
+The accepted increment adds explicit Space history storage and observation; no incoming or product route.
 CollaborationSpaceOriginalHistoryRepository.read supplies a finite original SDK/provider
 snapshot for acknowledgement recovery; it is not a live incoming stream or retained Space
 history. SpaceRuntimeRepository currently exposes readiness callbacks and original queue
@@ -15,7 +18,7 @@ local observation and bounded merges; none may be reached by reinterpreting spac
 companyId. Existing page/message value shapes have no owner field, so reuse can be reviewed
 without duplicating the entire UI or silently relabeling an old encrypted namespace.
 
-The storage candidate specifies explicit Space history scope and durable local ownership,
+The accepted storage specifies explicit Space history scope and durable local ownership,
 then raw encrypted storage and local read admission. Preserve stable original sender/event/
 logical-ID aliases and immutable content hashes; duplicate retained evidence must not create
 new revisions, reorder bubbles or refresh the entire list. Capture original provider facts,
@@ -39,5 +42,5 @@ local history or re-enable an exhausted pagination button.
 After local read/storage and incoming projection, wire actual existing app parent/worker,
 notifications/replies and product navigation with offline-first measurements. Actual fresh
 SPACE-origin room proof and missing Apple Matrix runtime remain open; all54 PRD groups open.
-Accept storage/local-observation only after focused and full gates. This plan does not claim
+Storage/local-observation passed focused/full gates. This plan does not claim
 incoming, UI, native runtime or PRD acceptance.

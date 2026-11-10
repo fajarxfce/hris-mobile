@@ -30,17 +30,45 @@ internal fun historyPartition(access: CollaborationLocalAccess, conversationId: 
 }
 
 /** Every visible index is recomputed and authenticated; no sender, text or event ID in indexes. */
-internal class CollaborationHistoryCodec(
-    private val access: CollaborationLocalAccess,
-    private val conversationId: String,
+internal class CollaborationHistoryCodec
+private constructor(
+    private val coordinates: CollaborationHistoryCoordinates,
     private var roomId: String?,
     private val cipher: ContentCipher,
     private val key: ByteArray,
     private val indexKey: ByteArray,
 ) {
+    constructor(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String?,
+        cipher: ContentCipher,
+        key: ByteArray,
+        indexKey: ByteArray,
+    ) : this(
+        CollaborationHistoryCoordinates.Company(access, conversationId),
+        roomId,
+        cipher,
+        key,
+        indexKey,
+    )
+
+    constructor(
+        access: CollaborationSpaceLocalAccess,
+        conversationId: String,
+        roomId: String?,
+        cipher: ContentCipher,
+        key: ByteArray,
+        indexKey: ByteArray,
+    ) : this(
+        CollaborationHistoryCoordinates.Space(access, conversationId),
+        roomId,
+        cipher,
+        key,
+        indexKey,
+    )
+
     init {
-        historyScope(access)
-        historyPartition(access, conversationId)
         roomId?.let(::validateHistoryRoom)
     }
 
@@ -203,8 +231,8 @@ internal class CollaborationHistoryCodec(
     }
 
     suspend fun checkpoint(raw: ReplicaCheckpoint): HistoryCheckpointDto {
-        require(raw.published && raw.handle.scope == historyScope(access))
-        require(raw.handle.partition == historyPartition(access, conversationId))
+        require(raw.published && raw.handle.scope == coordinates.scope)
+        require(raw.handle.partition == coordinates.partition)
         require(validCollaborationMessageId(raw.handle.generation))
         require(raw.revision in 0 until 9_007_199_254_740_991L)
         return Json.decodeFromString<HistoryCheckpointDto>(
@@ -373,16 +401,7 @@ internal class CollaborationHistoryCodec(
 
     private suspend fun index(parts: List<String>): String {
         val bytes =
-            Json.encodeToString(
-                    listOf(
-                        "hris-history-index-v1",
-                        access.audience,
-                        access.accountId,
-                        access.companyId,
-                        conversationId,
-                        requireNotNull(roomId),
-                    ) + parts
-                )
+            Json.encodeToString(coordinates.indexFrame(requireNotNull(roomId)) + parts)
                 .encodeToByteArray()
         return try {
             CryptographyProvider.Default.get(HMAC)
@@ -398,18 +417,8 @@ internal class CollaborationHistoryCodec(
 
     private fun aad(generation: String, id: String, revision: Long, sort: String) =
         Json.encodeToString(
-                listOf(
-                    "hris-history-content-v1",
-                    access.audience,
-                    access.accountId,
-                    access.companyId,
-                    conversationId,
-                    if (id == "checkpoint") "" else requireNotNull(roomId),
-                    generation,
-                    id,
-                    revision.toString(),
-                    sort,
-                )
+                coordinates.contentFrame(if (id == "checkpoint") "" else requireNotNull(roomId)) +
+                    listOf(generation, id, revision.toString(), sort)
             )
             .encodeToByteArray()
 

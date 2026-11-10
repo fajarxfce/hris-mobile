@@ -1,0 +1,60 @@
+{
+  "baseAcceptedSource": "2828b88b4de8fd70c596375b8349e075ba173091",
+  "sourceFiles": 4743,
+  "sourceManifestSha256": "eb43c7e4cbf14e211a050ea90dd545cd0eff70a25b290e4b159fb5b470a3e26a",
+  "changedKotlinFiles": 14,
+  "focused": {
+    "startedAt": "2026-11-10T11:13:59.962853+00:00",
+    "elapsedSeconds": 466.361,
+    "freshCounts": {
+      "tests": 112,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "full": {
+    "startedAt": "2026-11-10T11:22:08.505001+00:00",
+    "elapsedSeconds": 603.865,
+    "freshCounts": {
+      "tests": 8041,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedTests": 10060,
+    "validatedReusedTests": 2019,
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 150602743,
+      "sha256": "9d0e7ddafdd92fbb784db8d9fb4478724cae21576d0d9eff15bc2e977f574996"
+    }
+  },
+  "checks": [
+    "root check",
+    "SQLite Desktop",
+    "real Chromium IndexedDB",
+    "Android host tests",
+    "Android release compile and lint",
+    "Wasm application compilation",
+    "iOS source compilation",
+    "proof APK and unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "cases": {
+    "newLocalObservation": 9,
+    "existingSpaceMessageObservation": 8,
+    "newSpaceHistoryStorage": 16,
+    "existingCompanyHistoryStorage": 22,
+    "existingApplicationBindings": 2
+  },
+  "unchangedCompanyAuthenticatedFrames": true,
+  "newSpaceAuthenticatedNamespace": true,
+  "nativeIncomingRoutingActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "appleRuntimeClaim": false,
+  "priorNativeProofRerun": false
+}

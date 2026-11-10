@@ -629,6 +629,14 @@ class CollaborationDataModule {
     ) = ObserveCollaborationSpaceMessages(messages, directory, sessions, server)
 
     @Factory
+    fun observeSpaceHistory(
+        history: CollaborationSpaceHistoryRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceHistory(history, directory, sessions, server)
+
+    @Factory
     fun observeSpaceConversationCommands(
         commands: CollaborationSpaceConversationCommandRepository,
         sessions: SessionRepository,
