@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 11:36 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 11:45 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -12,7 +12,7 @@ HRIS policy stays in Mobile. No subagents. Usecases coordinate repositories and 
 never other usecases; repositories coordinate their own datasource I/O, and ViewModels own
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
-One heavy compiler OR emulator. Current edit-storage focused1/72288 is RUNNING; freeze compiled source until reaped.
+One heavy compiler OR emulator. Current edit-storage full1/31487 is RUNNING; freeze compiled source until reaped.
 Earlier storage/native runs are finished/reaped; emulator stopped.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
@@ -109,12 +109,12 @@ The current native proof APK is newer than this core build; do not claim old art
 
 ## Hosted platform checks
 
-Current worker control42801929551 RUNNING on exact8c76f92c,refvalidation/space-pending-recovery-
-20261110;ref61718/dispatch14028 reaped. Expected8008portable+3062Apple=11070,16Swift/unsignedhost.
-Portable74895 REAPED/audited8008,artifact13759026115,
-SHA595c4322abf64de4709a9b404f1fa862449df89883c4b628e7d8c22e8ed7bdaf,
-manifestfe1d3c17f6d4909e39211c89b3f586aeb9b47bb990f27e00c4ae248272d1a35b.
-Apple3062 still running. Private .work/space-pending-recovery-2026-11-10/hosted.json records it.
+Worker control42801929551 COMPLETE11070=8008portable+3062Apple,16Swift/unsignedhost on
+exact8c76f92c. Portable74895/Apple10663 REAPED and strictly audited (source,GitHub digest,ZIP CRC,
+previous case identities). Appleartifact13761991889,
+SHA94bd39afe5319bd67ecef746e202857848f40f2e86920af33acaeccbec25b8af,
+manifest92a73e3175da70c9afcb22751dac57e069a19d37851e5a5e57a5d1ca1ab36f53. Complete
+measurement accompanies this checkpoint. Native Apple Matrix implementation still missing.
 
 Mixed-demand42796816133 COMPLETE10958=7930portable+3028Apple,16Swift/unsignedhost on exact
 1d18e232. Portable90228 and Apple91937 are REAPED/audited; GitHub digest/ZIP CRC/exact source/
@@ -141,17 +141,24 @@ repository and existing codec/batch operations,17new storage cases, three platfo
 and existing DI identity check.13existing core edit scenarios are adapted plus4new scope/
 uncertain-commit/mutation cases. Company14case contract stays unchanged; Space quote/hide APIs
 remain separate. Guarded apply.py, focused96/full10094 runners and auditors are prepared.
-Applied after predecessor source push, reviewed and formatted. Focused1/72288 RUNNING96
-expected cases plus iOS source/format/architecture/detekt; freeze source until reaped. Next
-strict focused audit, required full10094 expected, accepted source/evidence commit and push.
-No product incoming or UI activation. Never rerun accepted storage/native gates against this
-changed tree. Private applied-files.txt is authoritative.
+Applied after predecessor source push and formatted. Focused1/72288 REAPED exit1/335.481s:
+all94storage cases passed, then application DI test compilation failed on inferred assertSame
+type between two interfaces. Seven candidate files are archived. Only that test changed to
+assertSame<Any>; production/storage source and all assertions retained. Focused2/8330 REAPED
+PASS2fresh/115.724s with iOS source/format/architecture/detekt. Strict repair auditor verifies
+exact one-test-file delta and94unchanged completed storage cases:96verified,not96fresh.
+Current4748input manifestd7cf45325f9349e1fefbb8e0bbf7277ba865370b7501de33176ebb943759e45d.
+Full1/31487 RUNNING,expected10094; source frozen. Next reap, strict full audit/publisher, then
+source/evidence commit+push and exact hosted dispatch11196(8092portable+3104Apple)+16Swift/host.
+Scripts/config prepared, NOT dispatched. No product incoming or UI activation. Never rerun
+accepted predecessor gates against this changed tree. Private applied-files.txt is authoritative.
 
 Next incoming acquisition must independently prove original physical ownership through the
 retained runtime setup and admitted immutable room binding. Do not acquire a queue writer merely
 to reuse acknowledgement-recovery validation. The current SpaceOriginalHistoryRepository reads
 a finite original SDK/provider window; it is not a live stream. Detach all bounded original/edit/
 unresolved lists before suspension; preserve unpersisted edits before advancing any cursor.
+The private space-original-acquisition-2026-11-10 review is design-only; no next source applied.
 Recipient readiness gates sending, not local reading. Company history stays originally scoped;
 never reinterpret Space IDs as Company IDs. No generic Starter delta.
 
