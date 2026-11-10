@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 04:05 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 04:15 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -19,7 +19,30 @@ announce each installation; never launch, drive, uninstall or clear its app.
 Crashlytics IAM is verified; do not ask again. Physical iPhone interaction is waived,
 not Apple source/runtime, push or calling acceptance. Continue work after checkpoints.
 
-## Active: binding producer accepted; generic Apple proof and new sends next
+## Active: atomic command insertion; binding producer accepted
+
+Uncommitted command foundation follows pushed7b032633. `ReplicaWakeRequest` is renamed
+`WorkWakeRequest` for both raw mutation types. New explicit
+`CommandStore.insertBatchAndWake` retains new commands and fresh work in the owning
+SQLite/IndexedDB transaction. Old insertion APIs and result enums stay unchanged.
+Null means wake capacity/current-generation conflict; all-retained active/archive
+replay returns AlreadyStored without changing any wake. No new domain producer yet.
+Thirteen shared cases per platform cover batch/archive replay, generation/capacity,
+ownership/identity/resource conflicts, actual late unique-constraint rollback,
+consumer/capacity races, lost response, cancellation, bounds, compatibility and reopen.
+
+Private `.work/command-commit-wake-2026-11-10/runner.py focused-2` is running; source
+is frozen for database JVM/browser tests, Apple source and quality checks. Exactly one
+local compiler; no emulator. Initial focused-1/session20937 was reaped with zero tests:
+its private init script incorrectly used Gradle.project in an included build. Only
+that runner configuration was corrected; retain the failed logs. No source/test
+workaround and no accepted new result yet. Required full application checks, pinned
+Apple execution and downstream port remain. Do not port this unproven source.
+
+Generic42749839268 is running; producer42753380451 is pending. Do not supersede it.
+Receipt42745403043 is fully accepted:9,798 tests plus16 Swift checks/unsigned Apple
+host, recorded in7b032633. Continue the PRD after this foundation and keep handoffs
+in Git. Phone remains87; pending availability question need not be repeated.
 
 Mobile d89e6b5d is committed/pushed (79200 reaped) and contains atomic recovery work for newly retained immutable room bindings.
 The repository writes both encrypted indexes and fresh work in the same transaction.
