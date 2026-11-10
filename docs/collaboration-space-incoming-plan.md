@@ -67,6 +67,9 @@ physical registration/setup/room identity across all I/O. Require actual SDK dec
 for encrypted message content; room encryption state alone is insufficient, and decryption does
 not imply verified sender trust. Control/redaction metadata needs separate explicit policy.
 Retain both original and edit facts before advancing any traversal; local reading stays separate.
-Private space-original-acquisition-2026-11-10 contains the read-only SDK evidence. An internal
-raw-event adapter candidate and15Android host cases are now under validation; the current
-handoff records its exact status. It has no runtime binding or incoming activation yet.
+Private space-original-acquisition-2026-11-10 contains the read-only SDK evidence. The internal
+[raw-event adapter](collaboration-raw-event-source.md) has passed focused26/full10109 validation.
+It has no runtime binding or incoming activation yet. Next register finite reads under the
+existing native parent and map exact original/replacement/redaction/unresolved facts before
+owning usecase admission and persistence. A redaction actor is never the original sender;
+read its target and confirm a tombstone before changing retained history.

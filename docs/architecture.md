@@ -1,5 +1,10 @@
 # Architecture
 
+[Raw Matrix event I/O](collaboration-raw-event-source.md) reads exact SDK event JSON and
+separate decryption facts without a presentation timeline. Each invocation owns its room
+handle; the existing runtime must own the parent client. Classification and admission remain
+outside this datasource, and native runtime integration is separate.
+
 [Organization message revisions](collaboration-space-history-edits.md) retain replacement
 evidence separately from original receipt identity. The typed raw repository shares owned
 history storage; acquisition/admission and incoming progress remain usecase responsibilities.

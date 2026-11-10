@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 12:08 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 12:21 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -12,15 +12,37 @@ HRIS policy stays in Mobile. No subagents. Usecases coordinate repositories and 
 never other usecases; repositories coordinate their own datasource I/O, and ViewModels own
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
-One heavy compiler OR emulator. New raw-event focused1/2142 is RUNNING; prior gates are reaped.
+One heavy compiler OR emulator. Raw-event focused2142/full92524 are reaped; no heavy job.
 The emulator is stopped. Preserve the one-compiler OR one-emulator boundary.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
 Phone10.77.77.3:5555 is INSTALL-ONLY: announce each install, never launch/drive/uninstall/
-clear its UI or data. ADB80163 timed out15s near11:44 and is reaped; existing availability
+clear its UI or data. ADB82255 timed out15s near12:14 and is reaped; existing availability
 question stays pending. Phone87 last known;88 uninstalled. No new phone build yet.
 Crashlytics IAM is verified; no repeated question. Physical iPhone testing is waived,
 not Apple compilation/runtime/notification/call acceptance. Apple Matrix runtime is missing.
+
+## Accepted raw event I/O
+
+Four new Kotlin files add an internal raw-event DTO/contract/Android datasource plus15host
+cases. It reads one exact event through the supplied SDK6 client and closes its own room
+handle on success/failure/cancellation. Detached JSON retains unknown fields and actual SDK
+NOT_DECRYPTED/DECRYPTED/UNABLE_TO_DECRYPT independently of membership/encryption facts.
+Bound96KBUTF8, cleared mutable SDK result, redacted diagnostics, exact exception preservation
+and independent overlapping reads. No new client/join/sync/retry/send, runtime binding,
+native execution, incoming activation or phone claim. [Contract](collaboration-raw-event-source.md),
+[measurement](measurements/collaboration-raw-event-source-2026-11-10.json).
+
+Focused1/2142 REAPED PASS26/191.306s:15new and11unchanged history-source cases, Desktop/Wasm/
+iOS data compilation,format/architecture/detekt. Strict auditor checks all4new source files and
+previous case identities. Full1/92524 REAPED PASS597.577s,10109verified=3562fresh+6547exact
+accepted reused,zero failures/errors/skips. Root check,Android host/release compile/lint,Wasm/
+iOS app source,actualChromium,proofAPK/unit/quality pass. Strict full auditor/publisher passed.
+4752source/library inputs fixed,manifest19fc3bd37896f5618a11df1a542e1fe78b75f8acff6a21d364d8a3d2bb22f036.
+Current proofAPK150602468B SHA5d0d280316aa07cb97644e28746bc6b8cec9a7274d39a28bb3d78c82d4e04cac.
+Private raw-event-source-2026-11-10 contains exact files/runners/auditors/results. Hosted config
+and auditor prepared:8107portable+3104Apple=11211+16Swift/host, baselineedit42811675228. Source
+commit/push and dispatch are next; never claim pending hosted checks or rerun accepted gates.
 
 ## Accepted Space message edits
 
@@ -42,7 +64,7 @@ verifies exact one-test-file delta and all94completed unchanged cases:96total,no
 host/release compile/lint,Wasm/iOS app source,actualChromium,proofAPK/unit/quality pass. Strict
 full auditor/publisher passed.4748source/library inputs fixed,manifest
 d7cf45325f9349e1fefbb8e0bbf7277ba865370b7501de33176ebb943759e45d.
-Current proofAPK150602468bytes SHA5ae67e42e3d0b6fc468d9a495e8395229178a85d428af5ce6fea9d87ef33b5c1.
+Historical edit-gate proofAPK150602468bytes SHA5ae67e42e3d0b6fc468d9a495e8395229178a85d428af5ce6fea9d87ef33b5c1.
 Private .work/space-history-edits-2026-11-10 contains exact source/archive/runners/auditors.
 
 Hosted edit control42811675228 RUNNING on exact5da6cb95,refvalidation/space-history-edits-
@@ -69,8 +91,8 @@ source/format/architecture/detekt pass. Full1/63357 REAPED PASS603.865s:10060ver
 lint,Wasm/iOS app source,actualChromium,proofAPK/unit and quality pass. Both strict auditors and
 publisher passed.4743source/library inputs fixed,manifest
 eb43c7e4cbf14e211a050ea90dd545cd0eff70a25b290e4b159fb5b470a3e26a.
-Current proofAPK150602743bytes SHA9d0e7ddafdd92fbb784db8d9fb4478724cae21576d0d9eff15bc2e977f574996.
-This is newer than the accepted historical native run; no native repeat or phone latency claim.
+Historical storage-gate proofAPK150602743bytes SHA9d0e7ddafdd92fbb784db8d9fb4478724cae21576d0d9eff15bc2e977f574996.
+No native repeat or phone latency claim; the raw-source proofAPK above now supersedes it.
 Private .work/space-history-storage-2026-11-10 holds source/results/auditors and exact file list.
 
 Hosted storage control42808577683 RUNNING on exact0b84f0dc,refvalidation/space-history-storage-
@@ -165,16 +187,9 @@ handoff/measurements. Shared Apple tests/unsigned hosts do not implement its nat
 ## Next work — continue implementation
 
 [Incoming/history plan](collaboration-space-incoming-plan.md) now continues from accepted
-original AND replacement storage. Four unaccepted Kotlin files now add internal raw-event DTO/
-datasource contract/Android implementation and15Android host tests. Focused1/2142 RUNNING,
-26expected(15new+11existing history source),Desktop/Wasm/iOS data compilation and quality.
-No source edits until this gate ends. Private raw-event-source-2026-11-10 records exact files/
-baseline/runners. No DI/runtime activation, incoming collection, native execution or phone claim.
-The adapter performs one exact raw read through the supplied existing client, owns/closes its
-room handle, retains separate SDK decryption and room facts, bounds96KBUTF8, clears mutable
-raw result, preserves exceptions and handles cancellation/concurrent requests. Owning client
-lease integration and content classification remain NEXT. Private
-space-original-acquisition-2026-11-10 is design/read-only evidence, including inspected immutable
+original AND replacement storage and the accepted internal raw-event I/O primitive above.
+No next source is applied yet. Private space-original-acquisition-2026-11-10 retains the
+classification/parent-ownership review and inspected immutable
 SDK6 AAR/Javap API; preserve the dirty SDK source worktree and exact immutable library.
 
 Provider Head requests Matrix/messages dir=b limit1; the current original reader requires that

@@ -1,0 +1,45 @@
+{
+  "baseAcceptedSource": "5da6cb95678f8e1493e245d42ac2a76f6f4d00ee",
+  "sourceFiles": 4752,
+  "sourceManifestSha256": "19fc3bd37896f5618a11df1a542e1fe78b75f8acff6a21d364d8a3d2bb22f036",
+  "newKotlinFiles": 4,
+  "focused": {
+    "startedAt": "2026-11-10T12:07:22.652573+00:00",
+    "elapsedSeconds": 191.306,
+    "freshCounts": {
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "full": {
+    "startedAt": "2026-11-10T12:10:49.899561+00:00",
+    "elapsedSeconds": 597.577,
+    "freshCounts": {
+      "tests": 3562,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedTests": 10109,
+    "validatedReusedTests": 6547,
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 150602468,
+      "sha256": "5d0d280316aa07cb97644e28746bc6b8cec9a7274d39a28bb3d78c82d4e04cac"
+    }
+  },
+  "cases": {
+    "newAndroidRawEventSource": 15,
+    "unchangedAndroidHistorySource": 11
+  },
+  "sdkDistributionChanged": false,
+  "rawEventNativeExecutionClaim": false,
+  "runtimeBindingActivated": false,
+  "nativeIncomingRoutingActivated": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "appleNativeRuntimeClaim": false,
+  "priorNativeProofRerun": false
+}
