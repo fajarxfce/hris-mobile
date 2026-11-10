@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 12:46 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 13:03 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -12,7 +12,9 @@ HRIS policy stays in Mobile. No subagents. Usecases coordinate repositories and 
 never other usecases; repositories coordinate their own datasource I/O, and ViewModels own
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
-One heavy compiler OR emulator. Raw classification focused49881/full34957 are reaped; no heavy job.
+One heavy compiler OR emulator. Native event-read focused1/7075 is RUNNING, source frozen.
+Private runtime-event-reads-2026-11-10 owns runner,14-file list and acceptance scripts.
+Expected77focused/10203full cases,4762source inputs; no new acceptance yet.
 The emulator is stopped. Preserve the one-compiler OR one-emulator boundary.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
@@ -41,8 +43,10 @@ inputs fixed,manifestf56484e626ceb0d012e9cca86f628150b7863dca87a3dc20ab6ed4ea7e6
 Current proofAPK150605511B SHA24e8cef1c2319a00c2378495f9552f8a4c0f127cecdb86ff24edd64745ca685e.
 Private raw-event-classification-2026-11-10 contains source/results/auditors. No native binding,
 retention usecase, incoming activation, phone/live/SDK change or native redaction equivalence
-claim. Source commit/push is next. Hosted controls are prepared,not dispatched:8170portable+
-3125Apple=11295+16Swift/host,baseline raw source42815332867; no premature hosted acceptance.
+claim. Source5c276a2fcc472260245ea56ba6db7b50c537bd59 is committed/pushed39983(REAPED).
+Hosted42819170095 RUNNING exact5c276a2f,refvalidation/raw-event-classification-20261110,
+8170portable+3125Apple=11295+16Swift/host. Ref67054/dispatch33180 REAPED; configuration
+recorded. Baseline raw source42815332867 is now fully audited. Do not claim pending checks.
 
 ## Accepted raw event I/O
 
@@ -64,10 +68,13 @@ iOS app source,actualChromium,proofAPK/unit/quality pass. Strict full auditor/pu
 4752source/library inputs fixed,manifest19fc3bd37896f5618a11df1a542e1fe78b75f8acff6a21d364d8a3d2bb22f036.
 Historical raw-I/O proofAPK150602468B SHA5d0d280316aa07cb97644e28746bc6b8cec9a7274d39a28bb3d78c82d4e04cac.
 Private raw-event-source-2026-11-10 contains exact files/runners/auditors/results. Hosted
-42815332867 RUNNING exact99c7be19,refvalidation/raw-event-source-20261110,expected8107portable+
-3104Apple=11211+16Swift/host, baselineedit42811675228. Source93173/ref87991/dispatch78335
-REAPED. Auditor/config prepared; predecessor must finish/audit per platform first.
-Never claim pending hosted checks or rerun accepted gates.
+42815332867 COMPLETE exact99c7be19,11211=8107portable+3104Apple,16Swift/unsignedhost.
+Source93173/ref87991/dispatch78335 REAPED. Portable85411 and Apple96085 REAPED, strict source/
+GitHub digest/ZIP CRC/previous case identities pass. Appleartifact13765474866,570249B,
+SHA8092f10d0c1fc370b2961455ec43a87fc14f93efa2c750dcdf6f04cc5d5dfb0e,
+manifest1ff25793ac0f7294494a9fc3da35c2d1b92eac9909b1c2c7a0df0907fafa4421.
+Complete measurement published alongside this checkpoint. No native Apple Matrix claim.
+Never rerun accepted gates.
 
 ## Accepted Space message edits
 
@@ -214,9 +221,13 @@ handoff/measurements. Shared Apple tests/unsigned hosts do not implement its nat
 
 [Incoming/history plan](collaboration-space-incoming-plan.md) now continues from accepted
 original AND replacement storage and the accepted internal raw-event I/O primitive above.
-The raw classifier is now locally accepted above. No next production source applied yet.
-Next integrate a finite raw read under the existing native parent, explicit physical snapshot
-and logical Space wrapper, same registry/credential ownership before and after I/O. Then prove
+The raw classifier is accepted above. Current UNCOMMITTED14-file native integration adds
+physical and logical typed event contracts/snapshots, parent-owned finite reads, exact runtime
+lookup before/after I/O, unavailable-host bindings,15child-lifetime +4parent-integration host
+cases and4portable availability cases. Existing DI/absent-runtime cases cover same-instance
+bindings and no implicit acquisition. No second client/registry or repository delegation.
+Formatted; focused1/7075 RUNNING, not accepted. Prepare strict focused/full auditors and
+accept source before committing product. No live/phone/source-compatibility claim. Then prove
 actual original/edit/redaction/missing-key behavior through public repository capabilities in
 the isolated SDK6 native fixture. Do not make an internal datasource public for tests or create
 a second client/registry. Raw I/O alone does not admit content or advance progress.
