@@ -1,13 +1,13 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 18:56 UTC. Follow AGENTS.md. This opening section owns current
+Updated 10 November 2026, 19:03 UTC. Follow AGENTS.md. This opening section owns current
 work; checkpoints below are historical. All 54 communications PRD groups remain OPEN.
 
 ## Active admitted incoming-room request
 
 Storage795f11c2 committed/pushed,31792 REAPED; focused118/full10511 accepted. Its exact source
 manifestc08386dad0b82bccc0d8b6e1f65d7d330bea8115ca018c72122aec21e14a7106 remains the base.
-Current11Kotlin source/request files are APPLIED/UNCOMMITTED, FROZEN under focused1/97107
+Current11Kotlin source/request files are APPLIED/UNCOMMITTED, FROZEN under focused2/64580
 RUNNING. Expected204focused/10565full/4814inputs. Full1 NOT STARTED. Prepare11076 REAPED;
 private space-incoming-source-2026-11-10 holds base/candidate/prior reports/runners/strict audits.
 
@@ -17,8 +17,18 @@ current account/directory/binding; pagination tokens grant no event coverage. A 
 creates no demand. Known incomplete coverage resumes Provider/Pending, and late old-source hints
 leave newer queued work intact. Changed work commits with a distinct incoming wake; exact
 readback precedes bounded best-effort scheduling. Repeated queued hints do not write/reschedule.
+Focused1/97107 REAPED exit1/171.513s:102desktop cases,1failed test expectation. A substituted
+room ID must fail authentication within the conversation/device partition; other account/space/
+conversation/device partitions remain absent. Corrected that expectation without weakening
+storage. Also reject an unresolved exact source paired with an empty pending index; the fixture
+now preserves an existing wake on a null optional wake. Same204/10565 expected cases.
 21new domain scenarios and6new real-store cases are implemented, not yet accepted. DI factory
 and application resolution assertion included. No product worker, SDK callback or phone delta.
+
+PRIVATE space-incoming-completion-2026-11-10 has5UNAPPLIED files: dedicated clean Pending-room
+completion, DI and16domain scenarios. Depends on current request fixture/DI acceptance. No
+arbitrary EOF boolean, wake acknowledgement or runtime consumption is enabled. Review first;
+no runner/base reports captured yet. Single worker must serialize provider writes/completion.
 
 After focused/full acceptance commit/push, then implement dedicated clean completion, proven
 provider-phase advancement, finite rescan claim/cursor and bounded incoming worker. Private
