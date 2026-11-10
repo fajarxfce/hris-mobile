@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 15:21 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 15:34 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -40,20 +40,29 @@ nondebuggable devRelease, existing signer,0lint,exact SDK6 and Firebase/API/back
 owns the verified APK/INSTALL-ONLY runner. ADB30354 timed out15s(REAPED); no install attempt.
 Phone87 last known,88/89notinstalled. Keep pending availability question; no phone UI or reset.
 
-Current incoming policy:3newKotlin files are accepted with this commit. Full1/12044 REAPED
-PASS10268=10066fresh+202exact accepted database cases/1147.415s, zero failures/errors/skips.
-Focused1/30508 REAPED PASS144/373.676s; strict source/report/prior-case audits pass,4,769inputs,
-manifest0410ae91d868f678fafe7bcf6d3adab655961b827c1fe67db3af5158158c854d.44newcases across
-Desktop/actualChromium+100controls; all required application/quality gates pass.
-[Contract and measurement](collaboration-incoming-history-planning.md). ProofAPK150612950B
-SHAde9e4cbd50694a7d0075fac6897c54ac162d77d2c284d21ef7df74a876fc31fb.
-Private space-incoming-2026-11-10 owns design, runners and strict auditors. No local heavy
-job or emulator remains. New policy starts no I/O; no application/cursor integration yet.
-Next implement owning admitted1..16-event acquisition/retention, then durable incoming progress.
-One current transport observation per batch, at most one target each, local original lookup
-before target acquisition; preserve original physical versus logical Space scope and explicit
-unresolved outcomes. No per-bubble transport, recursive target traversal or ViewModel I/O.
-Release89 predates this unused policy and remains accepted/uninstalled; keep INSTALL-ONLY.
+Current incoming pure policy0dd21612 is accepted/pushed (23004 REAPED). Full1/12044
+PASS10268/1147.415s; focused1/30508 PASS144/373.676s, all audited. [Pure contract](collaboration-incoming-history-planning.md).
+
+Owning acquisition WIP:7Kotlin files (5new+data factory+app binding assertion) are UNCOMMITTED
+and FROZEN under full1/76109 RUNNING, expected10318cases. Focused1/9279 REAPED
+PASS194/352.684s; strict audit passes,4,774inputs,
+manifestf8a241d9dfec31dd4d49e8a1e97f5e6f0930287fdeaf720b618d74722e468762.
+25new cases each Desktop/actualChromium plus144controls; iOSsource/format/architecture/detekt pass.
+[Acquisition contract/measurement](collaboration-space-incoming-acquisition.md). Private
+space-incoming-acquisition-2026-11-10 owns exact7-file candidate copies, files.json, focused/full
+runners/auditors and next-progress.md. One3GiB compiler, no emulator. No source edits until
+76109 is reaped/audited. If PASS finalize docs and commit/push all7sourcefiles atomically.
+Then extend actual SDK proof before claiming native batch retention; HrisEventReadsProbe with
+HrisWorkerProofContainer can use real admitted transport and encrypted Space storage. Build
+only proof/app-binding checks for a test-harness-only change; do not rerun old full gates blindly.
+Continue durable incoming provider frontier/pending-reference progress and its independent worker.
+Do not conflate incoming completion with outgoing demand or suppress changed events by ID forever.
+Current acquisition starts no new sync/join/send and no product consumer yet. No native Apple
+Matrix implementation or generic Starter delta. All54 PRD groups remain open.
+
+Release89 predates unused incoming policy/acquisition and is accepted/uninstalled; INSTALL-ONLY.
+Phone59976 timed out15s at15:27 (REAPED). Existing availability question stays pending; do not
+reask or launch/reset phone UI. Original live90163c32 remains healthy, no further backend changes.
 
 Current6334c0c4 hosted42835309631 RUNNING,expected11359=8222portable+3137Apple plus16Swift/
 unsignedhost. Ref40325/dispatch42308 REAPED; portable25969 REAPED/audited8222, Apple running. Portable artifact13775670420/3551202B/

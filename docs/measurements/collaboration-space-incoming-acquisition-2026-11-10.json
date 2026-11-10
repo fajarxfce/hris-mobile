@@ -1,0 +1,23 @@
+{
+  "startedAt": "2026-11-10T15:27:04.795005+00:00",
+  "elapsedSeconds": 352.684,
+  "sourceFiles": 4774,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 194,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sourceManifestSha256": "f8a241d9dfec31dd4d49e8a1e97f5e6f0930287fdeaf720b618d74722e468762",
+  "changedKotlinFiles": 7,
+  "newKotlinFiles": 5,
+  "newLocalCases": 50,
+  "existingLocalCases": 144,
+  "fullValidationPending": true,
+  "applicationConsumerIntegrated": false,
+  "cursorProgressImplemented": false,
+  "actualNativeBatchAccepted": false,
+  "phoneInstalled": false
+}
