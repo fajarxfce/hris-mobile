@@ -249,11 +249,14 @@ internal class SpaceOriginalDeliveryFixture {
                 completion: CollaborationMessageCompletion,
             ): AppResult<Boolean> = error("Keep history; separate retirement")
         }
+    val history = SpaceOriginalReceiptHistoryFixture(this)
     val useCase =
         DeliverCollaborationSpaceOriginalMessages(
             bindings,
             transport,
             runtimes,
+            history.stored,
+            history.provider,
             messages,
             receipts,
             completions,

@@ -196,19 +196,36 @@ internal class HrisSpaceOriginalDeliveryProbe(private val context: Context, dire
             application(
                 if (interrupt)
                     { record ->
-                        val journal = host.receipts().single { it.intent.id == record.intent.id }
+                        val retainedReceipts = host.receipts()
+                        check(retainedReceipts.size == 1)
+                        val journal = retainedReceipts.single { it.intent.id == record.intent.id }
                         check(journal.intent == record.intent && journal.eventIds.isNotEmpty())
                         check(
                             host.message(record.intent.id)?.state
                                 is CollaborationMessageState.Staged
                         )
-                        files.write(
-                            "original-ack",
+                        val acknowledged =
                             checkpoint()
                                 .put("logicalId", record.intent.id)
                                 .put("journalDurable", true)
                                 .put("projectionNotWritten", true)
-                                .put("events", JSONArray(journal.eventIds)),
+                                .put("receiptCount", retainedReceipts.size)
+                                .put("events", JSONArray(journal.eventIds))
+                        files.write("original-first-ack", acknowledged)
+                        val originals = previous.getJSONArray("originals")
+                        val transactions =
+                            (0 until originals.length()).map {
+                                originals.getJSONObject(it).getString("transactionId")
+                            }
+                        withTimeout(15_000) {
+                            while (sender.countRetainedOriginals(transactions) != 0) delay(25)
+                        }
+                        check(host.receipts().size == 1)
+                        files.write(
+                            "original-ack",
+                            acknowledged
+                                .put("queuedOriginalCount", 0)
+                                .put("interruptedAfterSdkRemoval", true),
                         )
                         awaitCancellation()
                     }

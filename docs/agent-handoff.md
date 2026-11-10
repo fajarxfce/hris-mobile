@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 02:26 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 02:49 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -19,83 +19,62 @@ announce each installation; never launch, drive, uninstall or clear its app.
 Crashlytics IAM is verified; do not ask again. Physical iPhone interaction is waived,
 not Apple source/runtime, push or calling acceptance. Continue work after checkpoints.
 
-## Active: lost original callback recovery
+## Accepted: original callback-loss recovery; continue producer wakes
 
-The prior unexplained failure is traced: [root cause](collaboration-original-lost-callback.md)
-and [read-only evidence](measurements/collaboration-original-lost-callback-2026-11-10.json).
-Two app commands,one receipt,zero SDK originals; original images hash-identical.
-SDK dequeue precedes async callback storage, and group recovery lacked original-history
-receipt repair. No SDK7,new keys or resend is proposed. Forensic emulators are stopped.
+This commit contains the owning receipt recovery and deterministic native proof.
+[Root cause and contract](collaboration-original-lost-callback.md),
+[acceptance](measurements/collaboration-space-original-receipt-recovery-2026-11-10.json).
+The preserved earlier failure has2 app commands,1 receipt and0 SDK originals: SDK
+dequeue precedes the async app callback. Exact local facts or one finite original
+window repair only disappeared pending originals. Same runtime/physical keys/device,
+sender/logical ID/content hash/text; no new enqueue, transaction, key or inferred ACK.
+Ordinary queued sends never acquire history. Complete group/older history remains open.
 
-Current implementation/tests are UNCOMMITTED in this workspace. Domain recovery first
-reads exact local evidence and otherwise one original SDK window through a new exact
-installed-runtime port. It runs only for disappeared pending originals. New pure
-provenance/content policy, unavailable-host behavior and actual Android lookup are
-included. The native fixture now has an explicit second-send barrier and read-only
-SDK-row checkpoint before hard process death. Full native acceptance is still pending.
+Red46986 fails2 assertions as intended. Focused89708 passes70 fresh cases/318.638s.
+Full50072 passes6,338 validated=4,521 fresh+1,817 exact reused/578.408s;4,651 stable
+inputs and all current/archive/library checks agree. Required root/Android release,
+host/lint/shared Wasm+iOS/browser/proof/quality checks pass. Group source22157 passes
+25.556s with8,734 inputs;15 driver cases pass0.006s. No production backend/DI/schema change.
+Native93669 is REAPED PASS208.523s,two cases,zero failures/errors/skips. Original:
+exactly1 app receipt after both SDK rows disappear,hard death,then2 receipts/Sent from
+exactly2 provider events; recovery544ms in fixture only. Later offline reads succeed.
+Group:25 native/17 Matrix requests,one pusher,no rejects/server errors,idle adds0direct.
+Source/APK unchanged,no compilation during emulator;emulator stopped.
+Proof APK150469403bytes SHAa1a89e3c1e228fdb82349599c48471767c4c6c2bdfe43071d1cf4e97f8b1e351.
 
-Red46986 REAPED expected FAIL87.46s:2 assertions,0errors/skips,4,651 stable inputs.
-Restored recovery passes15 new +24 old domain cases. ACTIVE focused89708 is compiling
-remaining Android/app/proof/quality checks; expected70 tests total. Do not edit source
-until reaped. Private .work/space-original-receipt-recovery-2026-11-10/README.md records
-runners, frozen source, next full/source/native gates and preserved forensic data.
-NEVER restore private delivery-green.kt; it predates the foreign-command guard.
-Group changes only native test/driver source;14 Python cases pass0.006s.
+First native-1 FAIL265.004s: original case passed,but shared driver waited first-ACK
+before group listening/control handshake. Scenario-owned interruption now preserves
+both exact assertions; same Mobile APK. Failed data retained. Its launcher3535717
+exited; exec session ID was lost in compaction. Do not rerun or erase either old
+pusher/native-1 or receipt/native-1 stores. Source/native acceptance is complete;
+private .work/space-original-receipt-recovery-2026-11-10 retains frozen inputs/audits.
 
-Pusher CI42739907129 remains running on95195319; it does not cover these changes.
-Phone87 unchanged; ADB5209 timed out15s around02:19. Release88 remains accepted but
-uninstalled; one availability question is pending,do not repeat it. All54 PRD groups
-remain open. After this fix, continue atomic producer wakes and the remaining plan.
+Next: commit/push cross-repo evidence,dispatch one pinned collaboration-control run
+for this Mobile source,then atomic replica mutation+producer wake. Hosted expected
+7,100 portable+2,698 Apple,16 Swift checks,unsigned iOS host; not yet dispatched.
+Do not claim predecessor CI covers this source. The reusable database contract must
+prove Mobile SQLite/browser/Apple before Starter. Read-only design and133 raw override
+inventory are in .work/replica-commit-wake-2026-11-10; no code yet. Same-current wake
+generation must be rejected even when pending. No consumer reread can close the writer
+race. Then bind new immutable room writes to a durable wake and schedule after commit;
+identical retained bindings remain no-op. Continue new SPACE commands/incoming routing,
+notifications/replies,media,backup,calls,meetings; all54 PRD groups remain open.
 
-## Current: managed group pusher and native recovery investigation
+## Managed pusher / device / live status
 
-This commit adds one 15-second owning pusher attempt, shared installed-device policy,
-exact Android group-runtime lookup and unavailable-platform fallback. It reuses the
-original SDK client and latest bearer, with existing 10-second provider child lifetime.
-No automatic product activation, new keys, second client, retries or HRIS namespace
-alias. Incoming group notifications/replies and old/group callback dedup still gate rollout.
+Pusher source95195319,Group9c3014e3 are accepted/pushed. Native55319 passed206.26s,
+with one actual managed pusher and process recovery; the earlier unexplained original
+failure is now traced and repaired above. [Contract](collaboration-space-pusher.md).
+Hosted42739907129 pins951953193c73d555d57218d1bf20a202067ec03c: portable7,063
+accepted (audit3789,artifact13728979615); Apple is building the unsigned host.
+Expected2,681 Apple plus16 Swift checks. Do not redispatch. Auditor/config are in
+.work/space-pusher-2026-11-10. Its success excludes the current receipt recovery source.
 
-Focused74373 passes 50 cases/293.244s. Full22642 passes 6,318 validated cases/608.015s;
-annotation-only final62941 passes 1,812 fresh +4,506 exact reused/182.644s, same APK.
-Diagnostic successor full76349 passes 37 fresh +6,281 exact reused/90.241s. All 4,645
-source inputs, Inspector hashes and archived/current reports agree. Required root,
-Android host/release/lint, shared Wasm/iOS, 17 browser and proof checks pass. Python
-metadata/driver tests:13 pass/0.006s. Backend source54367 passes31.194s/8,733 inputs;
-only test fixtures/drivers change, no shared product DI or live schema change.
-
-Native55319 is REAPED PASS206.26s:two cases, zero failures/errors/skips, source/APK
-stable, no compilation during emulator; emulator stopped. Group:25 native +17 Matrix
-requests, exactly one managed-pusher request, zero401/403/server errors, two original
-provider events and two required direct transport reads. Pusher hash/original physical
-identity match HRIS and Synapse before/after process death. Fresh idle sweep adds zero
-direct transport. Original baseline:two events/10 native requests. No cloud callback.
-Proof APK150,463,167bytes SHA b888f543105a7f0f662f6dd1170ab58a68bc1be378d61eae01fd7908c7b149e9.
-
-**Unresolved first native failure:**51720 failed169.29s at original recovery after a
-durable ACK/process death (HrisSpaceOriginalDeliveryProbe:207). The old log had no
-native outcome reason; no storage failure was recorded. Group then refused to replace
-the retained failed proof package. Preserve native-1 userdata, do not erase it. The
-successor only adds metadata diagnostics and first-case traffic capture; no retry,
-timeout, assertion or production change. Its success is not a proven fix. Inspect
-original queued/receipt recovery and reproduce with these diagnostics. Initial replay
-is synchronous in the inspected SDK FFI, so the delayed-initial-callback hypothesis is
-not supported. Do not seed pending IDs or add sleeps on that unconfirmed hypothesis.
-Full33875 failed only Gradle scheduler progress (88.349s); unchanged full76349 passes.
-
-[Contract](collaboration-space-pusher.md), [measurement](measurements/collaboration-space-pusher-2026-11-10.json).
-Private `.work/space-pusher-2026-11-10` preserves every run and strict audit. All jobs
-above are reaped. Product source95195319 is committed and pushed (39299 reaped).
-Hosted42739907129 pins951953193c73d555d57218d1bf20a202067ec03c and is running;
-dispatch91392 reaped. Do not dispatch again. Expected7,063 portable +2,681 Apple
-plus16 Swift and unsigned iOS host. Its audit is pending; prior receiver CI does not
-cover pusher source. Private hosted.json records the exact pin.
-
-Next after the original-recovery investigation: atomic room-binding write plus durable
-recovery wake, then new SPACE commands/incoming routing. Read-only planning is in
-`.work/replica-commit-wake-2026-11-10`. This is not implemented: another consumer reread
-cannot close a writer race after the last read. Generic database changes must prove
-Mobile native/browser/Apple contracts before returning to Starter. All54 PRD groups
-remain open, including media, secure backup, calls and meetings. No product rollout.
+Phone remains87. ADB67480 timed out15s around02:44; no install/UI/data change.
+Accepted release88 (6a8b4f61,before receiver/pusher/recovery) remains uninstalled;
+one availability question remains pending,do not repeat. Use its accepted install.py
+--install-only after announcing when reachable. Live remains e558a686/schema116.4,
+groupOFF; GroupV140 not deployed. SDK6 immutable; no Starter port for HRIS-specific repair.
 
 ## Accepted: organization push receiver
 

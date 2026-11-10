@@ -1,0 +1,304 @@
+{
+  "acceptedAt": "2026-11-10T02:48:18.913308+00:00",
+  "mobileBase": "8bc726515c07f2d734b9f98c2d5c7f9c616a445b",
+  "groupBase": "3a4ecda1a320fbc9461825ff755e1a10fa34fa2e",
+  "scope": "Recover a disappeared original whose provider acknowledgement was lost before the app journal. Exact original history supplies evidence without reenqueue, new keys or replacement transactions; ordinary queued originals do not acquire history.",
+  "sources": {
+    "mobile": {
+      "count": 4651,
+      "manifestSha256": "4c672d14c7672f4c1dae8637fc8d7abd8316ac77a705693cdf8bcd66f15d5f45",
+      "files": {
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceOriginalDeliveryProbe.kt": "19d82752f44ceec2843455c82d7455ec0188bc23a2412f3d8c3027f0764d1bb2",
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProtectedHrisProofOwner.kt": "4278d9ed17c7e0ffa46431060e6e6e21a74c1baecd26ba919bae3bdf9fa40e9b",
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "ac8c73f865a3f12e8735d89d49142d01a348f5f525511d145e59368772d23f25",
+        "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidSpaceRuntimeAdoptionTest.kt": "cf6936a74f67ed07e4c38bff8af639303dad3790e279732229c5aa569dbf59b6",
+        "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "b1ff0419725c62ec1b492e5edac1fc61bc1563d122cb9e921b754c2dc7a4c7fe",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "f762d63c531da351cb432bcd97d9e5d5120f568445eaad7ab61489ca89792edc",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/UnavailableCollaborationRuntimeRepository.kt": "21e6ec28614697873102e44dda07ec7d1028638a13c9b653338c074cea3579fa",
+        "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceOriginalHistoryAvailabilityTest.kt": "04002b4b0d449ed5c77c93063016ebd95c8d6b9a28ff223a1f12255792e78937",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceOriginalHistorySnapshot.kt": "0b778ff2cb64dfdac44a295c2ffd75694798d171c16e2220231e4c0486ce1a32",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceOriginalReceiptPolicy.kt": "b5b93e2e304b457b286fb9e84a5c781ca7dcd7ccd23ea6378c73f0988d79ea30",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceOriginalHistoryRepository.kt": "99841a080dc578b8c2db5b591fc376f111d7302dce070d69bda895984c5fea31",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/DeliverCollaborationSpaceOriginalMessages.kt": "6f07d7fc474df7e8f61b7f804f0a82c99bbf95b37f07abc217987c330a522a69",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceOriginalDeliveryFixture.kt": "21476c8306f24dc27d298ab885b274a1beca74441dd09acf1d7f8dce3ccd2d88",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceOriginalReceiptHistoryFixture.kt": "bc19cd8c276d2c662a38a41de44373f51025becb7d144b6a57489940e62684ef",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceOriginalReceiptRecoveryTest.kt": "e0770553f061b3795bbf1c15c1e78d0d834e14719a904b3925541984152c7049"
+      },
+      "deleted": []
+    },
+    "group": {
+      "count": 8734,
+      "manifestSha256": "f89ebc38d9cf34a416ec2982a49f1585ac1a6ab227a147c875565ff22f34de4a",
+      "files": {
+        "apps/server/src/test/kotlin/dev/fajar/hris/NativeOriginalAckBarrier.kt": "3fcc8d552d2b918f2a9723ff94f30aa7e3092fb3e6cd8864cf58028bb7895cb9",
+        "apps/server/src/test/kotlin/dev/fajar/hris/NativeSpaceOriginalDeliveryTest.kt": "57856fe1ba68c455edc08414a9883449cb9bdc18a88812594a852631e874ea06",
+        "tool/collaboration_space_original.py": "e0ab7917c5a564add2abc08232f98a78f6e006bcfd9d5b5dacc920b620e1dc8a",
+        "tool/collaboration_space_recovery.py": "945ba7c0f13e9549123a0e491078bd3b8fb744b3ec6066350af3548b0692101e",
+        "tool/test_collaboration_space_original.py": "cb666cbf1959b73147178762b50724d76f6d09a211b5e53874139809f91b55e3",
+        "tool/test_collaboration_space_recovery.py": "ad85ef723ed6c6781c3cfeb9461d462a383d263cc560fce7d225981de36c6337"
+      },
+      "deleted": []
+    }
+  },
+  "redRegression": {
+    "session": 46986,
+    "elapsedSeconds": 87.46,
+    "counts": {
+      "tests": 2,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceStable": true,
+    "failureCases": [
+      "disappearedOriginalWithServerEvidenceRecoversWithoutReenqueueOrResume[desktop]",
+      "retainedOriginalAvoidsProviderReadAndDoesNotRequireRecipientReadiness[desktop]"
+    ]
+  },
+  "forensicEvidence": {
+    "date": "2026-11-10",
+    "failedNativeSession": 51720,
+    "inspection": {
+      "session": 33282,
+      "seconds": 31.34,
+      "memoryMiB": 2560,
+      "cores": 2,
+      "appStarted": false,
+      "apkInstalled": false,
+      "phoneTouched": false,
+      "emulatorStopped": true,
+      "originalImagesUnchanged": true,
+      "originalImageHashes": {
+        "userdata.img": "686e872867548b54e7b12e4e161ddc1c3d16312ae51e0e3c203e5deb92ba82d5",
+        "userdata.img.qcow2": "2fbff2f8a8c0df85220d0e40b07ee9f08be11099779b6d11470114fe0b3b8b5c",
+        "encryptionkey.img": "522bd0b6a2c92e37de465059bb9487bb9597a9aae032b469a8ebe0b38146d8c3",
+        "encryptionkey.img.qcow2": "c60135146bb78c9242a6541dfbb841c74b210683eb03ee2cd99052f5162f2ddc"
+      },
+      "rawArchiveSha256": "a03451fe2e7a21000494935a1a891b27bf5969a802a5fb989de1d4ad5f9a6c04",
+      "validatedArchiveSha256": "8e46ebb99e872c37e6fbaa074866d9ea1594056d0abdf5df456d2c621ab82d40",
+      "archiveMemberCount": 43,
+      "archiveHeadersAndEndValidated": true,
+      "sqliteQuickCheckPassed": true,
+      "mergedDiagnosticsRemoved": [
+        {
+          "bytes": 45,
+          "block": 411
+        },
+        {
+          "bytes": 16,
+          "block": 2311
+        }
+      ]
+    },
+    "appMetadata": {
+      "commands": 2,
+      "receiptDocuments": 1,
+      "commandRevisions": [
+        3,
+        2
+      ],
+      "replicaKinds": [
+        {
+          "kind": "collaboration-history",
+          "count": 2
+        },
+        {
+          "kind": "collaboration-history",
+          "count": 2
+        },
+        {
+          "kind": "collaboration-list",
+          "count": 1
+        },
+        {
+          "kind": "collaboration-receipt",
+          "count": 1
+        }
+      ]
+    },
+    "sdkStoreMetadata": [
+      {
+        "store": "matrix-sdk-event-cache.sqlite3",
+        "tables": {
+          "events": 10
+        }
+      },
+      {
+        "store": "matrix-sdk-crypto.sqlite3",
+        "tables": {
+          "outbound_group_session": 0
+        }
+      },
+      {
+        "store": "matrix-sdk-state.sqlite3",
+        "tables": {
+          "send_queue_events": 0,
+          "dependent_send_queue_events": 0
+        }
+      },
+      {
+        "store": "matrix-sdk-event-cache.sqlite3",
+        "tables": {
+          "events": 12
+        }
+      },
+      {
+        "store": "matrix-sdk-crypto.sqlite3",
+        "tables": {
+          "outbound_group_session": 1
+        }
+      },
+      {
+        "store": "matrix-sdk-state.sqlite3",
+        "tables": {
+          "send_queue_events": 0,
+          "dependent_send_queue_events": 0
+        }
+      }
+    ],
+    "finding": "Two immutable application commands, one receipt, no remaining SDK originals after hard process death. Group delivery lacked original-history receipt recovery after the SDK removed a sent request before its asynchronous callback was journaled.",
+    "limits": [
+      "Read-only metadata inspection; no original plaintext, IDs or credentials published.",
+      "Original native failure outcome reason was not logged. The retained storage gap and missing recovery path are now established; the deterministic successor experiment has not run yet.",
+      "First clone omitted emulator QEMU version metadata and reset only its copied overlay. Original image hashes remained unchanged.",
+      "Two known tar stderr diagnostics were removed only at block boundaries; raw archive retained, all cleaned headers/end and SQLite quick checks passed.",
+      "No product release, phone install, live flag or SDK artifact changed."
+    ]
+  },
+  "focused": {
+    "elapsedSeconds": 318.638,
+    "freshCounts": {
+      "tests": 70,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedTests": 70
+  },
+  "full": {
+    "elapsedSeconds": 578.408,
+    "freshCounts": {
+      "tests": 4521,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedTests": 6338,
+    "validatedReusedTests": 1817
+  },
+  "groupCompileSeconds": 25.556,
+  "native": {
+    "startedAt": "2026-11-10T02:44:40.461815+00:00",
+    "elapsedSeconds": 208.523,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "bootSeconds": 30.361,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": {
+        "sha256": "f156467f9952a6177cb06f5081ce4ac879b91280b58652d041eaaa0dcb3173e8",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "TEST-dev.fajar.hris.NativeSpaceRecoveryWorkerTest.xml": {
+        "sha256": "54cb90c215d271481465e7b61532e90164f0fec8955711100a45e24922b61927",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true,
+    "phoneTouched": false
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 150469403,
+    "sha256": "a1a89e3c1e228fdb82349599c48471767c4c6c2bdfe43071d1cf4e97f8b1e351"
+  },
+  "scenarios": {
+    "originalDelivery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 10,
+        "bootstrapReplay": 2,
+        "directTransport": 2
+      },
+      "secondProviderAckLostBeforeAppJournal": true,
+      "matrixRequests": {
+        "requests": 11,
+        "secretStorage": 4,
+        "encryptedSend": 2
+      },
+      "delivery": {
+        "reason": "DRAINED",
+        "confirmed": 2,
+        "unresolved": 0,
+        "receiptCount": 2,
+        "states": [
+          "SENT",
+          "SENT"
+        ],
+        "elapsedMillis": 544
+      }
+    },
+    "groupRecovery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 25,
+        "registration": 1,
+        "bootstrapReplay": 1,
+        "directTransport": 2
+      },
+      "actualGroupControl": true,
+      "consumerReplayDeduplicated": true,
+      "claimedBeforeDelivery": true,
+      "recoveredWithoutFcm": true,
+      "idleRecoveryCompleted": true,
+      "managedPusherActivatedOnce": true,
+      "managedPusherRetainedAfterProcessLoss": true,
+      "matrixRequests": {
+        "requests": 17,
+        "secretStorage": 4,
+        "sync": 6,
+        "managedPusher": 1,
+        "encryptedSend": 3
+      },
+      "idleSweepAdditionalDirectTransport": 0
+    }
+  },
+  "priorNativeFailure": {
+    "phase": "native-1",
+    "elapsedSeconds": 265.004,
+    "originalCasePassed": true,
+    "groupCaseFailedBeforeControl": true,
+    "cause": "Original shared driver waited for first-ack before invoking the group control/claim handshake; its unrelayed listening marker prevented server publication. Each scenario now owns its interruption checkpoint. Mobile source/APK unchanged; 15 Python cases pass."
+  },
+  "limits": [
+    "Current native proof uses two new fictional originals and a controlled second-send barrier; it is not a physical-phone latency or broad throughput measurement.",
+    "Recovery uses acquired local facts and one finite recent original window. Complete older/group incoming history remains separate before product rollout.",
+    "Original group worker/pusher proof is retained, but no actual cloud callback or visible notification dedup is established.",
+    "No new iOS native Matrix runtime, SDK artifact, product release or live group activation.",
+    "All54 PRD acceptance groups remain open."
+  ]
+}

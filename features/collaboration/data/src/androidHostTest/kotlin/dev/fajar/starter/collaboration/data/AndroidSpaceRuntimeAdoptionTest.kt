@@ -199,6 +199,28 @@ class AndroidSpaceRuntimeAdoptionTest {
             f.close()
         }
     }
+
+    @Test
+    fun groupHistoryCannotRestoreAnAbsentRuntimeOrWriteOriginalCredentials() = runTest {
+        val f = SpaceAdoptionStorageFixture.create()
+        try {
+            f.select()
+            val before = f.saved
+            val runtime =
+                CollaborationSpaceRuntimeReady(
+                    f.owner,
+                    f.original.intent.deviceId,
+                    f.setup.command.id,
+                )
+            repeat(3) { assertIs<AppResult.Failed>(f.repo.read(runtime, "!original:example.test")) }
+            assertEquals(0, f.acquisitions)
+            assertEquals(0, f.writes)
+            assertEquals(0, f.privateReads)
+            assertEquals(before, f.saved)
+        } finally {
+            f.close()
+        }
+    }
 }
 
 private class SpaceAdoptionStorageFixture(

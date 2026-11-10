@@ -46,7 +46,8 @@ class AndroidCollaborationRuntimeRepository(
     CollaborationLocalDeviceIdentityRepository,
     CollaborationSpaceRuntimeRepository,
     CollaborationSpaceSyncRepository,
-    CollaborationSpacePusherRepository {
+    CollaborationSpacePusherRepository,
+    CollaborationSpaceOriginalHistoryRepository {
     override val supportsDeviceActivation = true
 
     private val readiness =
@@ -267,6 +268,61 @@ class AndroidCollaborationRuntimeRepository(
             )
         }
         return result
+    }
+
+    override suspend fun read(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+    ): AppResult<CollaborationSpaceOriginalHistorySnapshot> {
+        currentCoroutineContext().ensureActive()
+        val lease =
+            registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
+                ?: return handoverPending()
+        val head = lease.findHistoryHead(matrixRoomId)
+        currentCoroutineContext().ensureActive()
+        lease.credentialFailures.value?.let {
+            return AppResult.Failed(it)
+        }
+        if (registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId) !== lease)
+            return AppResult.Failed(
+                collaborationSdkAcquisitionFailure(head, handoverPending().failure)
+            )
+        if (head is AppResult.Failed) return head
+        val anchor = (head as AppResult.Success).value
+        val window =
+            if (anchor == null) null
+            else {
+                val read = lease.readOriginalHistory(matrixRoomId, anchor)
+                currentCoroutineContext().ensureActive()
+                lease.credentialFailures.value?.let {
+                    return AppResult.Failed(it)
+                }
+                if (
+                    registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId) !==
+                        lease
+                )
+                    return AppResult.Failed(
+                        collaborationSdkAcquisitionFailure(read, handoverPending().failure)
+                    )
+                if (read is AppResult.Failed) return read
+                val value = (read as AppResult.Success).value
+                CollaborationOriginalWindow(
+                    lease.owner,
+                    lease.deviceId,
+                    matrixRoomId,
+                    anchor,
+                    value.originals.toList(),
+                    value.unavailableEventIds.toList(),
+                    value.edits.toList(),
+                )
+            }
+        return AppResult.Success(
+            CollaborationSpaceOriginalHistorySnapshot(
+                runtime,
+                CollaborationHistoryHead(lease.owner, lease.deviceId, matrixRoomId, anchor),
+                window,
+            )
+        )
     }
 
     override suspend fun isSpaceOpen(

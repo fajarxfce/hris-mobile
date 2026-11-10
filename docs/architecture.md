@@ -1,5 +1,7 @@
 # Architecture
 
+[Missing original receipts](collaboration-original-lost-callback.md) are recovered by the owning delivery use case from exact local facts or one bounded original SDK window. Data only acquires through the installed lease; pure domain policy verifies provenance and content before durable acknowledgement.
+
 [Organization managed push](collaboration-space-pusher.md) admits the current installed original runtime and native device before one owned provider request. Sync shares the pure installed-device policy; each use case keeps its own orchestration. Actual native registration and remaining recovery uncertainty are recorded separately.
 
 [Organization push reception](collaboration-space-push-receiver.md) validates the local account/native family and registered logical device before retaining a group wake. Native entry points share routing; application DI owns lazy worker references and domain owns the bounded handoff.

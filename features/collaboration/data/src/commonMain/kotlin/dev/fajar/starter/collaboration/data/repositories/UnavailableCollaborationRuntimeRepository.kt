@@ -12,9 +12,18 @@ class UnavailableCollaborationRuntimeRepository :
     CollaborationSpaceRuntimeRepository,
     CollaborationSpaceSyncRepository,
     CollaborationSpacePusherRepository,
+    CollaborationSpaceOriginalHistoryRepository,
     CollaborationLocalDeviceIdentityRepository,
     CollaborationSdkInventoryRepository,
     CollaborationSdkPossessionRepository {
+    override suspend fun read(
+        runtime: CollaborationSpaceRuntimeReady,
+        matrixRoomId: String,
+    ): AppResult<CollaborationSpaceOriginalHistorySnapshot> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
     override suspend fun activate(runtime: CollaborationSpaceRuntimeReady): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
         return unavailable()

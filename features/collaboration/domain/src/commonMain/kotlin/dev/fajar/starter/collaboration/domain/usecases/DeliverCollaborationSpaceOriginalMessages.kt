@@ -19,6 +19,8 @@ class DeliverCollaborationSpaceOriginalMessages(
     private val bindings: CollaborationSpaceRoomBindingRepository,
     private val transport: CollaborationSpaceDirectTransportRepository,
     private val runtimes: CollaborationSpaceRuntimeRepository,
+    private val history: CollaborationHistoryRepository,
+    private val originalHistory: CollaborationSpaceOriginalHistoryRepository,
     private val messages: CollaborationMessageRepository,
     private val receipts: CollaborationReceiptRepository,
     private val completions: CollaborationMessageCompletionRepository,
@@ -183,6 +185,8 @@ class DeliverCollaborationSpaceOriginalMessages(
                 )
             val repaired = reconcile()
             if (repaired is AppResult.Failed) return repaired
+            val recovered = recoverMissingReceipts()
+            if (recovered is AppResult.Failed) return recovered
             val settled = settle()
             if (settled is AppResult.Failed) return settled
             return AppResult.Success(
@@ -281,6 +285,119 @@ class DeliverCollaborationSpaceOriginalMessages(
 
         /** Read the whole bounded ledger before projecting; a journal may precede archival. */
         suspend fun reconcile(): AppResult<Unit> = projection.withLock { reconcileOriginals() }
+
+        /** Recover only disappeared originals; ordinary queued sends never acquire history. */
+        suspend fun recoverMissingReceipts(): AppResult<Unit> {
+            val missing = collaborationSpaceMissingOriginalReceipts(snapshot, records)
+            if (missing.isEmpty()) return AppResult.Success(Unit)
+            if (
+                missing.any {
+                    val state = it.state as CollaborationMessageState.Staged
+                    it.intent.owner != access.messageOwner() ||
+                        it.intent.conversationId != original.conversation.position.conversationId ||
+                        !validCollaborationMessageState(state) ||
+                        state.origin?.sender != observed.matrixUserId
+                }
+            )
+                return failure("history_command_changed")
+            val recovered = mutableListOf<CollaborationMessageReceipt>()
+            val absent = mutableListOf<CollaborationMessageRecord>()
+            for (record in missing) {
+                val state = record.state as CollaborationMessageState.Staged
+                val local = checked {
+                    when (
+                        val read =
+                            history.getByLogicalId(
+                                access,
+                                original.conversation.position.conversationId,
+                                state.device.roomId,
+                                requireNotNull(state.origin).sender,
+                                record.intent.id,
+                            )
+                    ) {
+                        is AppResult.Failed -> read
+                        is AppResult.Success ->
+                            if (read.value?.eventIds?.size?.let { it > 128 } == true)
+                                failure("receipt_bounds")
+                            else
+                                AppResult.Success(
+                                    read.value?.let { it.copy(eventIds = it.eventIds.toList()) }
+                                )
+                    }
+                }
+                if (local is AppResult.Failed) return local
+                val found = (local as AppResult.Success).value
+                if (found == null) absent += record
+                else
+                    recovered +=
+                        recoverCollaborationOriginalReceipt(record, found)
+                            ?: return failure("history_receipt_changed")
+            }
+            if (absent.isNotEmpty()) {
+                val acquired = captureRecoveryHistory()
+                if (acquired is AppResult.Failed) return acquired
+                val observedHistory = (acquired as AppResult.Success).value
+                if (!validCollaborationSpaceOriginalHistory(observedHistory, snapshot))
+                    return failure("history_changed")
+                val changes = observedHistory.window?.changes.orEmpty()
+                for (record in absent) {
+                    collaborationSpaceOriginalHistoryReceipt(record, changes)?.let {
+                        recovered += it
+                    }
+                }
+            }
+            if (recovered.isEmpty()) return AppResult.Success(Unit)
+            val retained =
+                withContext(NonCancellable) {
+                    withTimeoutOrNull(5_000) {
+                        for (batch in recovered.chunked(32)) {
+                            val saved =
+                                receipts.append(
+                                    access,
+                                    original.conversation.position.conversationId,
+                                    batch,
+                                )
+                            if (saved is AppResult.Failed) return@withTimeoutOrNull saved
+                            if (!(saved as AppResult.Success).value)
+                                return@withTimeoutOrNull failure("receipt_write_changed")
+                        }
+                        AppResult.Success(Unit)
+                    } ?: failure("receipt_pending", FailureKind.Storage)
+                }
+            val latest = current()
+            if (latest is AppResult.Failed) return latest
+            if (retained is AppResult.Failed) return retained
+            return reconcile()
+        }
+
+        suspend fun captureRecoveryHistory(): AppResult<CollaborationSpaceOriginalHistorySnapshot> =
+            checked {
+                when (val read = originalHistory.read(runtime, retained.room.roomId)) {
+                    is AppResult.Failed -> read
+                    is AppResult.Success -> {
+                        val value = read.value
+                        val window = value.window
+                        if (
+                            window != null &&
+                                (window.changes.size > 128 ||
+                                    window.unresolvedEventIds.size > 128 ||
+                                    window.edits.size > 128)
+                        )
+                            failure("history_bounds")
+                        else
+                            AppResult.Success(
+                                value.copy(
+                                    window =
+                                        window?.copy(
+                                            changes = window.changes.toList(),
+                                            unresolvedEventIds = window.unresolvedEventIds.toList(),
+                                            edits = window.edits.toList(),
+                                        )
+                                )
+                            )
+                    }
+                }
+            }
 
         suspend fun reconcileOriginals(): AppResult<Unit> {
             val active = checked {

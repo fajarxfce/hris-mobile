@@ -126,6 +126,8 @@ class CollaborationDataModule {
         bindings: CollaborationSpaceRoomBindingRepository,
         transport: CollaborationSpaceDirectTransportRepository,
         runtimes: CollaborationSpaceRuntimeRepository,
+        history: CollaborationHistoryRepository,
+        originalHistory: CollaborationSpaceOriginalHistoryRepository,
         messages: CollaborationMessageRepository,
         receipts: CollaborationReceiptRepository,
         completions: CollaborationMessageCompletionRepository,
@@ -138,6 +140,8 @@ class CollaborationDataModule {
             bindings,
             transport,
             runtimes,
+            history,
+            originalHistory,
             messages,
             receipts,
             completions,
@@ -420,6 +424,13 @@ class CollaborationDataModule {
     @Single
     fun spacePushers(runtime: CollaborationRuntimeRepository): CollaborationSpacePusherRepository =
         runtime as? CollaborationSpacePusherRepository
+            ?: UnavailableCollaborationRuntimeRepository()
+
+    @Single
+    fun spaceOriginalHistory(
+        runtime: CollaborationRuntimeRepository
+    ): CollaborationSpaceOriginalHistoryRepository =
+        runtime as? CollaborationSpaceOriginalHistoryRepository
             ?: UnavailableCollaborationRuntimeRepository()
 
     @Single

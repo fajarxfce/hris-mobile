@@ -1,6 +1,7 @@
 package dev.fajar.hris.collaboration.proof
 
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import dev.fajar.starter.collaboration.data.di.androidCollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
@@ -18,7 +19,9 @@ import java.security.MessageDigest
 import java.util.UUID
 import kotlin.io.encoding.Base64
 import kotlin.time.Instant
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 /** Only fictional emulator data. Deliberate record faults never touch the employee application. */
@@ -274,6 +277,34 @@ internal class ProtectedHrisProofOwner(
             if (JSONObject(value).getString("deviceId") == deviceId) matches.add(file to value)
         }
         return matches.single()
+    }
+
+    /**
+     * Read-only SDK6 fixture barrier; no second client, queue writer or secret leaves this owner.
+     */
+    suspend fun countRetainedOriginals(transactions: List<String>): Int {
+        check(transactions.size == 2 && transactions.distinct().size == 2)
+        check(transactions.all { it.length in 1..255 && it.all { char -> char.code in 33..126 } })
+        val (_, encoded) = retainedRecord()
+        val record = JSONObject(encoded)
+        val root = File(context.noBackupFilesDir, "collaboration").canonicalFile
+        val database =
+            File(root, "${record.getString("storeId")}/database/matrix-sdk-state.sqlite3")
+                .canonicalFile
+        check(database.path.startsWith(root.path + File.separator) && database.isFile)
+        return withContext(Dispatchers.IO) {
+            SQLiteDatabase.openDatabase(database.path, null, SQLiteDatabase.OPEN_READONLY).use { db
+                ->
+                db.rawQuery(
+                        "SELECT count(*) FROM send_queue_events WHERE transaction_id IN (?, ?)",
+                        transactions.toTypedArray(),
+                    )
+                    .use { cursor ->
+                        check(cursor.moveToFirst())
+                        cursor.getInt(0).also { check(it in 0..2) }
+                    }
+            }
+        }
     }
 
     private suspend fun identity(lease: AndroidCollaborationRuntimeLease) =
