@@ -68,7 +68,10 @@ is install-only. Apple shared tests and unsigned host do not implement the missi
 Matrix runtime. Incoming/history/edit routing and the larger media/backup/call/meeting work
 remain separate.
 
-Private exploratory drafts currently live under .work/mixed-recovery-demand-2026-11-10/
-worker-draft, but this tracked plan is sufficient to reconstruct the intended boundaries.
-Draft code is unapplied and untested; review it before adoption, especially progress policy
-method size, completion bypass handling, DI and old fixture constructor updates.
+Current22-input candidate is applied and frozen for focused2; it is not accepted yet.
+Focused1 failed test compilation after67 domain cases; its exact candidate is retained.
+The corrected candidate also fixes owning unready-recipient classification to Unavailable
+and skips delivery after a concurrent cancellation. Expected focused251/full10010; actual
+native pending-worker proof remains required. Private .work/space-pending-recovery-2026-11-10
+contains the current runner and candidate, while older worker-draft files are stale.
+The current agent handoff records results and remaining work.
