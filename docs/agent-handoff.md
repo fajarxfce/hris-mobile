@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 06:46 UTC. Historical evidence, failures and prior controls:
+Updated 10 November 2026, 06:53 UTC. Historical evidence, failures and prior controls:
 [32ed8281](https://github.com/fajarxfce/hris-mobile/blob/32ed8281/docs/agent-handoff.md).
 Do not restart completed runs. Private `.work` files supplement the tracked contracts.
 
@@ -11,23 +11,38 @@ updates. All 54 acceptance groups remain open. Mobile proves reusable foundation
 Starter. Usecases own policy and repository orchestration; repositories coordinate raw
 I/O; ViewModels own screen state. No subagent delegation. Follow AGENTS.md.
 
-One heavy compiler OR emulator; current focused43366 is the only heavy job. Never kill live API/worker JVMs.
+One heavy compiler OR emulator; current full16645 is the only heavy job. Never kill live API/worker JVMs.
 Owned emulator uses 2,560 MiB/two cores and is stopped. Phone 10.77.77.3:5555 is install-only:
 announce every install; never launch, drive, uninstall or clear it. Crashlytics IAM is
 verified. Physical iPhone interaction is waived, not Apple source/runtime acceptance.
 
 ## Active: acknowledgement projection
 
-Eight Kotlin inputs are UNCOMMITTED: exact Space acknowledgement/completion policy,
-bounded whole-journal projection and an owning local reconcile usecase with CAS readback.
-The shared singleton serializes projection; per-I/O local admission,15s total deadline,
-cancellation and lost/false-write responses preserve original facts. No sender,archive
-or journal retirement is activated. Tests add14 policy+23 usecase cases and app DI.
-Focused-1/session43366 RUNNING as the only heavy job; freeze these inputs. Production
-Desktop compilation passes. Three test assertions have generic type inference errors;
-wait/reap the continuing gate before changing only those declarations. Private
-.work/space-receipt-projection-2026-11-10 retains runner,frozen sources and failure logs.
-No focused/full/new native acceptance claimed yet.
+Eight Kotlin inputs remain UNCOMMITTED: exact Space acknowledgement/completion policy,
+whole-journal projection, owning offline CAS/readback reconciliation,37 domain cases and
+singleton DI. External cancellation,late denial/account change,false/lost write response,
+partial completion,concurrent projection and immutable aliases retain original facts.
+No sender,archive or journal retirement is activated. Source is FROZEN for the full gate.
+
+Focused-1/session43366 REAPED FAIL293.188s:two app DI cases pass,three new test assertions
+failed Kotlin generic type inference. Production Desktop/Wasm/iOS source and quality
+pass. Only expected assertion types changed; assertions and production were preserved.
+Failure manifest28387ddb8c73f6812e0e962a6ff177c30e9353637ddc5ad453b2155760613582.
+Focused-2/session11486 REAPED PASS167.668s:76 fresh (14policy+23usecase on Desktop and
+actual Chromium,two DI),zero failures/errors/skips. Strict source/library/current/archive
+audit passes4,701 inputs; manifest936dbd1eb068e46be4d1f37c082e6686bb5dd897bd642a7520ba0d86fa1deec6.
+Full-1/session16645 RUNNING as the only heavy local compiler. Reap,run accept-full.py
+then publish.py before commit/push. Private .work/space-receipt-projection-2026-11-10
+owns all runners,audits and failed inputs. New runner fails fast after compilation failure.
+No full/new native/phone acceptance claimed yet.
+
+After local acceptance,pin validation/space-receipt-projection-20261110 and dispatch the
+prepared hosted control;expected7,628 portable+2,885 Apple=10,513,16Swift/unsignedhost.
+No projection hosted dispatch yet. Preserve existing mixed42769825037 and receipt42766554589.
+Private .work/mixed-original-delivery-2026-11-10 contains unapplied,untested next policy
+files and integration.md. Extend the existing owning writer to typed ledgers; do not
+activate a second sender or broaden original-only leases to enqueue. Actual native proof
+must author separate new fixture intents; never reassign a real original's ownership.
 
 ## Current accepted increment
 
