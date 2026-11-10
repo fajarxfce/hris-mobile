@@ -76,6 +76,7 @@ internal class HrisSpaceRecoveryProbe(private val context: Context, directory: F
                     "original-listening",
                     checkpoint()
                         .put("nativeSyncActive", true)
+                        .put("managedPusherActivated", true)
                         .put("startupWakeCleared", true)
                         .put("noMessagesDelivered", true),
                 )

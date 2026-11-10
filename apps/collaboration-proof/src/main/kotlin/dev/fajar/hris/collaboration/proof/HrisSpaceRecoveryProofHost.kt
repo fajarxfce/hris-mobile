@@ -97,6 +97,7 @@ internal class HrisSpaceRecoveryProofHost(
                 )
             )
         expect(koin.get<SynchronizeCollaborationSpaceDevice>()(ready))
+        expect(koin.get<ActivateCollaborationSpacePusher>()(ready))
         val startup = requireNotNull(expect(wake()))
         expect(koin.get<CompleteCollaborationSpaceRecoveryWake>()(startup))
         check(expect(wake()) == null && signals.get() == 0)

@@ -312,7 +312,14 @@ class SynchronizeCollaborationSpaceDeviceTest {
             observed: CollaborationSpaceDeviceObservation,
             elapsed: Duration = Duration.ZERO,
             platform: CollaborationNativePlatform = CollaborationNativePlatform.ANDROID,
-        ) = admitCollaborationSpaceDeviceSync(runtime, original.record, observed, platform, elapsed)
+        ) =
+            admitCollaborationSpaceInstalledDevice(
+                runtime,
+                original.record,
+                observed,
+                platform,
+                elapsed,
+            )
     }
 
     private companion object {

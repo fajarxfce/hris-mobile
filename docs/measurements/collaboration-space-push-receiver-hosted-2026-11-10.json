@@ -1,0 +1,246 @@
+{
+  "accepted": true,
+  "sourceCommit": "cd4fb78b78f8122075e8a30690acac0670052f74",
+  "runId": 42733595170,
+  "totalTests": 9690,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "swiftEnvelopeChecks": 16,
+  "unsignedIosHostBuilt": true,
+  "portable": {
+    "sourceCommit": "cd4fb78b78f8122075e8a30690acac0670052f74",
+    "runId": 42733595170,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42733595170",
+    "jobId": 129559402030,
+    "artifactId": 13728130271,
+    "bytes": 3393590,
+    "sha256": "0df59db589ec136c90218bfdfba0b3c543f904e38a86a0f8078089f2729984bc",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "desktopTest": {
+        "tests": 3292,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 351
+      },
+      "testAndroidHostTest": {
+        "tests": 629,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 87
+      },
+      "wasmJsBrowserTest": {
+        "tests": 3105,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 318
+      }
+    },
+    "recoveryPolicyAndApplicationCases": [
+      {
+        "class": "CollaborationSpacePushSignalTest",
+        "platform": "desktopTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoveryDemandTest",
+        "platform": "desktopTest",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoverySelectionTest",
+        "platform": "desktopTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoveryWakeTest",
+        "platform": "desktopTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "FinishCollaborationSpaceRecoveryTest",
+        "platform": "desktopTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "QueueCollaborationSpacePushSignalTest",
+        "platform": "desktopTest",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpacePushSignalTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoveryDemandTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoverySelectionTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoveryWakeTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "FinishCollaborationSpaceRecoveryTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "QueueCollaborationSpacePushSignalTest",
+        "platform": "wasmJsBrowserTest",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "ApplicationCollaborationLifetimeTest",
+        "platform": "desktopTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "ApplicationPushReceiverTest",
+        "platform": "desktopTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "ApplicationPushIntegrationTest",
+        "platform": "desktopTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoveryWorkerTest",
+        "platform": "desktopTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "reportManifestSha256": "b84ee68863fc7ec283234e570099a47518ec25c1d79c131f34a1b3cf28b4e92c"
+  },
+  "apple": {
+    "sourceCommit": "cd4fb78b78f8122075e8a30690acac0670052f74",
+    "runId": 42733595170,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42733595170",
+    "jobId": 129559402426,
+    "artifactId": 13727023418,
+    "bytes": 513428,
+    "sha256": "e2ab9228d5a285ced3d396d6bf2593d14790dec049e269c5018dbe574151ce27",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "iosSimulatorArm64Test": {
+        "tests": 2664,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 283
+      }
+    },
+    "recoveryPolicyAndApplicationCases": [
+      {
+        "class": "CollaborationSpaceRecoverySelectionTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "QueueCollaborationSpacePushSignalTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpacePushSignalTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoveryDemandTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "CollaborationSpaceRecoveryWakeTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "FinishCollaborationSpaceRecoveryTest",
+        "platform": "iosSimulatorArm64Test",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "reportManifestSha256": "cc939583e5870897c0edc2f22c1b29ff7f17d7886d91508da54c6c93f05f0001"
+  },
+  "scope": "Organization push receiver at the pinned source. Later managed-pusher implementation and original-recovery diagnostics are separate."
+}

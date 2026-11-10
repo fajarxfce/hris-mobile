@@ -5,9 +5,11 @@ import dev.fajar.starter.common.result.*
 import kotlin.time.Duration
 
 /**
- * Current remote family interval, charged against local elapsed time rather than wall-clock skew.
+ * Current installed device and remote family interval, shared by sync and managed push
+ * registration. Local elapsed time is charged against the observed server interval, not phone
+ * wall-clock skew.
  */
-fun admitCollaborationSpaceDeviceSync(
+fun admitCollaborationSpaceInstalledDevice(
     runtime: CollaborationSpaceRuntimeReady,
     setup: CollaborationSpaceSetupRecord,
     observed: CollaborationSpaceDeviceObservation,
@@ -32,16 +34,16 @@ fun admitCollaborationSpaceDeviceSync(
             setup.command.request.bootstrapEffect() == null ||
             observed.owner != owner
     )
-        return spaceDeviceSyncChanged()
+        return spaceInstalledDeviceChanged()
     val expected =
         when (val outcome = setup.outcome) {
             is CollaborationSpaceSetupOutcome.Bootstrapped -> outcome.gateway
             is CollaborationSpaceSetupOutcome.BootstrapReplaced -> outcome.receipt.gateway
-            else -> return spaceDeviceSyncChanged()
+            else -> return spaceInstalledDeviceChanged()
         }
-    val device = observed.device ?: return spaceDeviceSyncChanged()
+    val device = observed.device ?: return spaceInstalledDeviceChanged()
     if (!validCollaborationSpaceDeviceStatus(device) || device.id != runtime.deviceId)
-        return spaceDeviceSyncChanged()
+        return spaceInstalledDeviceChanged()
     val gateway = device.gateway
     if (
         device.state == CollaborationDeviceState.REVOKED ||
@@ -61,9 +63,12 @@ fun admitCollaborationSpaceDeviceSync(
             elapsed < Duration.ZERO ||
             elapsed >= gateway.expiresAt - device.observedAt
     )
-        return spaceDeviceSyncChanged()
+        return spaceInstalledDeviceChanged()
     return AppResult.Success(Unit)
 }
 
-internal fun spaceDeviceSyncChanged() =
-    collaborationRecoveryFailure("client.collaboration_space_sync_changed", FailureKind.Unavailable)
+internal fun spaceInstalledDeviceChanged() =
+    collaborationRecoveryFailure(
+        "client.collaboration_space_device_changed",
+        FailureKind.Unavailable,
+    )

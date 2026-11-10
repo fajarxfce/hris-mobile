@@ -45,7 +45,8 @@ class AndroidCollaborationRuntimeRepository(
     CollaborationRuntimeRepository,
     CollaborationLocalDeviceIdentityRepository,
     CollaborationSpaceRuntimeRepository,
-    CollaborationSpaceSyncRepository {
+    CollaborationSpaceSyncRepository,
+    CollaborationSpacePusherRepository {
     override val supportsDeviceActivation = true
 
     private val readiness =
@@ -238,6 +239,24 @@ class AndroidCollaborationRuntimeRepository(
             registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
                 ?: return handoverPending()
         val result = lease.synchronizeDevice()
+        currentCoroutineContext().ensureActive()
+        lease.credentialFailures.value?.let {
+            return AppResult.Failed(it)
+        }
+        if (registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId) !== lease) {
+            return AppResult.Failed(
+                collaborationSdkAcquisitionFailure(result, handoverPending().failure)
+            )
+        }
+        return result
+    }
+
+    override suspend fun activate(runtime: CollaborationSpaceRuntimeReady): AppResult<Unit> {
+        currentCoroutineContext().ensureActive()
+        val lease =
+            registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
+                ?: return handoverPending()
+        val result = lease.activatePusher()
         currentCoroutineContext().ensureActive()
         lease.credentialFailures.value?.let {
             return AppResult.Failed(it)

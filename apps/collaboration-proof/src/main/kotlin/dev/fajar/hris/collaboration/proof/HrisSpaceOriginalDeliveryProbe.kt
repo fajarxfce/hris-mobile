@@ -11,6 +11,7 @@ import java.io.File
 import java.security.MessageDigest
 import java.util.UUID
 import kotlin.time.Instant
+import kotlin.time.TimeSource
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -159,6 +160,32 @@ internal class HrisSpaceOriginalDeliveryProbe(private val context: Context, dire
         }
     }
 
+    /** Bounded test evidence only: no identity, payload, event ID or credential is written. */
+    private suspend fun retainDeliveryDiagnostic(
+        host: HrisWorkerProofContainer,
+        report: CollaborationDeliveryReport,
+        elapsedMillis: Long,
+    ) {
+        val states =
+            ids.map { id ->
+                when (host.message(id)?.state) {
+                    is CollaborationMessageState.Sent -> "SENT"
+                    is CollaborationMessageState.Staged -> "STAGED"
+                    else -> "OTHER"
+                }
+            }
+        files.write(
+            "original-delivery-result",
+            JSONObject()
+                .put("reason", report.nativeReason?.name ?: "NONE")
+                .put("confirmed", report.confirmed.size)
+                .put("unresolved", report.unresolved.size)
+                .put("receiptCount", host.receipts().size)
+                .put("states", JSONArray(states))
+                .put("elapsedMillis", elapsedMillis),
+        )
+    }
+
     private suspend fun deliver(interrupt: Boolean) {
         val previous = files.read("original-staged", 16_384)
         val group = files.read("original-group", 16_384)
@@ -200,7 +227,9 @@ internal class HrisSpaceOriginalDeliveryProbe(private val context: Context, dire
                 )
             val conversation =
                 host.prepareOriginalRoom(restored.owner, canonical(group, "conversationId"))
+            val started = TimeSource.Monotonic.markNow()
             val result = expect(host.deliverOriginals(ready, conversation))
+            retainDeliveryDiagnostic(host, result, started.elapsedNow().inWholeMilliseconds)
             check(!interrupt) { "The owned process was not interrupted before projection" }
             check(
                 result.confirmed.containsAll(ids) &&

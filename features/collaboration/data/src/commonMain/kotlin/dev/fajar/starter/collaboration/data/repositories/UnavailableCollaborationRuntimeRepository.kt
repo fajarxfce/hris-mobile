@@ -11,9 +11,15 @@ class UnavailableCollaborationRuntimeRepository :
     CollaborationRuntimeRepository,
     CollaborationSpaceRuntimeRepository,
     CollaborationSpaceSyncRepository,
+    CollaborationSpacePusherRepository,
     CollaborationLocalDeviceIdentityRepository,
     CollaborationSdkInventoryRepository,
     CollaborationSdkPossessionRepository {
+    override suspend fun activate(runtime: CollaborationSpaceRuntimeReady): AppResult<Unit> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
     override suspend fun synchronize(runtime: CollaborationSpaceRuntimeReady): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
         return unavailable()

@@ -1,0 +1,177 @@
+{
+  "acceptedAt": "2026-11-10T01:56:42.638654+00:00",
+  "mobileBase": "21b4427edc115fb0d76580c80828a69cc3f8efc7",
+  "groupBase": "2c2e7db9807382ffd139ca1a8be693bfa4d3aece",
+  "scope": "One admitted group managed-pusher request uses the installed original SDK client and retains exact provider/HRIS identity after process death. Product automatic activation and actual cloud delivery remain separate.",
+  "sources": {
+    "mobile": {
+      "count": 4645,
+      "manifestSha256": "2529af9e45e94a1315de0f8a3ec623dae9324395e50dd8f853f0fef936d210d2",
+      "files": {
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceOriginalDeliveryProbe.kt": "1d81f4082c272c969ee6b558e7361300b70d083d378bbab18b2406efbf624772",
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceRecoveryProbe.kt": "6d0082665f37916004faebcb9667736ecd6b439f450d82b696b104ef730dd695",
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceRecoveryProofHost.kt": "e66f60dee18bbc847402b2b38538dbe69d3fd8332e2578145d183adfcf587a80",
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "f496cbbb08a3aca66ce71d83e140e4fac6775bbcb5ca5f6a91f22da4c6ebfa8b",
+        "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidSpaceRuntimeAdoptionTest.kt": "e44bca31d5ace3be1b3a89ec8ac8541047f338fc8d22ec79beca31106b55a3c4",
+        "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "66473c4941b37b62a2ce27fcb4f3e9c28654e6d63ba793fbd0bb0a3575df304f",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "e9c34f1bd8492f0b9f3d6d2880306e1a33470f0950d6c170718d5c3f73b3397b",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/UnavailableCollaborationRuntimeRepository.kt": "6d39db8f7bcb9c658f38726dfa293b1323e5461a1276453d40bdb9bf610f9ae7",
+        "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpacePusherAvailabilityTest.kt": "93e4e7f220116faaf5fb769386dcf4a93ac300ee7dd28100a4de7d77b51f35de",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceInstalledDevicePolicy.kt": "5b6f357e0d10acb29a5edf433016bc120e79c8da0ad9adc83a5cbfb981a49592",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpacePusherRepository.kt": "0e5a655ec032dc5677e23a1030ec5ba12f3c5cf363103f4e4c10483e2fd90c80",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ActivateCollaborationSpacePusher.kt": "405f985e6ccf72c4cde71e181cbf3c266b9e2e579bb2cfd6c13371df97808272",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/SynchronizeCollaborationSpaceDevice.kt": "abe0494c6e4e8c3da4b9d6b8faf73e94bc95c0618fb72e2f799c474ad0073136",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ActivateCollaborationSpacePusherTest.kt": "4d5276c3f42f13f6852e6c9b7ac7c68db4b40627753c79f2dfd60401a482ff51",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SynchronizeCollaborationSpaceDeviceTest.kt": "203290d786adba0a05405ab0655f04c133f722d5d7598435c5461cee9702f3c5"
+      },
+      "deleted": [
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceDeviceSyncPolicy.kt"
+      ]
+    },
+    "group": {
+      "count": 8733,
+      "manifestSha256": "3421249d5dbb14ac796c5986c3ad66815df9e74c14f1f4ef5d1da912348d0554",
+      "files": {
+        "apps/server/src/test/kotlin/dev/fajar/hris/NativeSdkMatrixServer.kt": "b2bd8721eb94667aa2304a76aa08f5f9a3c38455a6c93a343cd36fe3a1cc4dd1",
+        "apps/server/src/test/kotlin/dev/fajar/hris/NativeSpaceOriginalDeliveryTest.kt": "566c6b87c49aca69bc3e4aeac1f5a5a69a0c20834211268283474f3af4771ead",
+        "apps/server/src/test/kotlin/dev/fajar/hris/NativeSpaceOriginalFixture.kt": "72cb9ed463a9a6c210c83c5bb2aab4bb885b66d6b9bd798b0faa9e9ca85f9452",
+        "apps/server/src/test/kotlin/dev/fajar/hris/NativeSpaceRecoveryTrace.kt": "78ed6f3bb3f4458fefab63a2b9e5ed3b81afea0bfd6813abcc67a90a059c4152",
+        "apps/server/src/test/kotlin/dev/fajar/hris/NativeSpaceRecoveryWorkerTest.kt": "7f33df6f1a928dfed658d51f9c225d3f110ad77eb245dd7cf407febecbb68222"
+      },
+      "deleted": []
+    }
+  },
+  "focused": {
+    "elapsedSeconds": 293.244,
+    "freshCounts": {
+      "tests": 50,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedTests": 50
+  },
+  "full": {
+    "elapsedSeconds": 90.241,
+    "freshCounts": {
+      "tests": 37,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedTests": 6318,
+    "validatedReusedTests": 6281
+  },
+  "groupCompileSeconds": 31.194,
+  "native": {
+    "startedAt": "2026-11-10T01:52:25.387132+00:00",
+    "elapsedSeconds": 206.26,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "bootSeconds": 36.665,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "TEST-dev.fajar.hris.NativeSpaceRecoveryWorkerTest.xml": {
+        "sha256": "e8683ddfb515ac5f6363fbcb555908980bd53882a9916c223fc57d9b1846c700",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": {
+        "sha256": "052f261970b5a37b3dfa1c1977fc0ce92880c8937bec40907de93370b80aa150",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true,
+    "phoneTouched": false
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 150463167,
+    "sha256": "b888f543105a7f0f662f6dd1170ab58a68bc1be378d61eae01fd7908c7b149e9"
+  },
+  "scenarios": {
+    "originalDelivery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 10,
+        "bootstrapReplay": 2,
+        "directTransport": 2
+      }
+    },
+    "groupRecovery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 25,
+        "registration": 1,
+        "bootstrapReplay": 1,
+        "directTransport": 2
+      },
+      "actualGroupControl": true,
+      "consumerReplayDeduplicated": true,
+      "claimedBeforeDelivery": true,
+      "recoveredWithoutFcm": true,
+      "idleRecoveryCompleted": true,
+      "managedPusherActivatedOnce": true,
+      "managedPusherRetainedAfterProcessLoss": true,
+      "matrixRequests": {
+        "requests": 17,
+        "secretStorage": 4,
+        "sync": 6,
+        "managedPusher": 1,
+        "encryptedSend": 3
+      },
+      "idleSweepAdditionalDirectTransport": 0
+    }
+  },
+  "limits": [
+    "Fictional non-deliverable native push token and configured callback; no FCM/APNs delivery or callback availability tested.",
+    "Exactly one explicit activation before process death; this is not automatic reactivation after restart.",
+    "No simultaneous old/company pusher in this isolated proof; visible notification dedup remains required.",
+    "Original recovery retains its manual OS scheduler and current read/transport distinction.",
+    "No new iOS Matrix runtime, product release or live group activation. Phone remains87; accepted88 awaits connectivity.",
+    "All54 PRD acceptance groups remain open.",
+    "Earlier original native recovery failure remains unexplained; this passing run does not establish a fix for it. Initial SDK replay is synchronous by the inspected FFI contract; delayed-initial-callback speculation was not confirmed."
+  ],
+  "failedCandidates": [
+    {
+      "phase": "native-1",
+      "elapsedSeconds": 169.29,
+      "primary": "Original recovery returned unresolved messages after the first durable ACK and process death. Strict assertion failed before group-pusher exercise. The report reason was not retained by the old diagnostic.",
+      "secondary": "Group scenario refused to replace the deliberately retained failed proof package. This was not an independent pusher failure.",
+      "status": "Unexplained; retained original userdata and source evidence remain. No retry, timeout or production change was made. Diagnostic-only successor passes."
+    },
+    {
+      "phase": "full-3",
+      "elapsedSeconds": 88.349,
+      "cause": "Gradle task scheduler could not make progress. No compiler/test failure or source change. The same command and source passed in full-4."
+    }
+  ],
+  "driverValidation": {
+    "tests": 13,
+    "failures": 0,
+    "seconds": 0.006
+  }
+}

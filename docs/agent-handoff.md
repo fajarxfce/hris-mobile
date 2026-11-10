@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 01:06 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 01:58 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -19,6 +19,54 @@ announce each installation; never launch, drive, uninstall or clear its app.
 Crashlytics IAM is verified; do not ask again. Physical iPhone interaction is waived,
 not Apple source/runtime, push or calling acceptance. Continue work after checkpoints.
 
+## Current: managed group pusher and native recovery investigation
+
+This commit adds one 15-second owning pusher attempt, shared installed-device policy,
+exact Android group-runtime lookup and unavailable-platform fallback. It reuses the
+original SDK client and latest bearer, with existing 10-second provider child lifetime.
+No automatic product activation, new keys, second client, retries or HRIS namespace
+alias. Incoming group notifications/replies and old/group callback dedup still gate rollout.
+
+Focused74373 passes 50 cases/293.244s. Full22642 passes 6,318 validated cases/608.015s;
+annotation-only final62941 passes 1,812 fresh +4,506 exact reused/182.644s, same APK.
+Diagnostic successor full76349 passes 37 fresh +6,281 exact reused/90.241s. All 4,645
+source inputs, Inspector hashes and archived/current reports agree. Required root,
+Android host/release/lint, shared Wasm/iOS, 17 browser and proof checks pass. Python
+metadata/driver tests:13 pass/0.006s. Backend source54367 passes31.194s/8,733 inputs;
+only test fixtures/drivers change, no shared product DI or live schema change.
+
+Native55319 is REAPED PASS206.26s:two cases, zero failures/errors/skips, source/APK
+stable, no compilation during emulator; emulator stopped. Group:25 native +17 Matrix
+requests, exactly one managed-pusher request, zero401/403/server errors, two original
+provider events and two required direct transport reads. Pusher hash/original physical
+identity match HRIS and Synapse before/after process death. Fresh idle sweep adds zero
+direct transport. Original baseline:two events/10 native requests. No cloud callback.
+Proof APK150,463,167bytes SHA b888f543105a7f0f662f6dd1170ab58a68bc1be378d61eae01fd7908c7b149e9.
+
+**Unresolved first native failure:**51720 failed169.29s at original recovery after a
+durable ACK/process death (HrisSpaceOriginalDeliveryProbe:207). The old log had no
+native outcome reason; no storage failure was recorded. Group then refused to replace
+the retained failed proof package. Preserve native-1 userdata, do not erase it. The
+successor only adds metadata diagnostics and first-case traffic capture; no retry,
+timeout, assertion or production change. Its success is not a proven fix. Inspect
+original queued/receipt recovery and reproduce with these diagnostics. Initial replay
+is synchronous in the inspected SDK FFI, so the delayed-initial-callback hypothesis is
+not supported. Do not seed pending IDs or add sleeps on that unconfirmed hypothesis.
+Full33875 failed only Gradle scheduler progress (88.349s); unchanged full76349 passes.
+
+[Contract](collaboration-space-pusher.md), [measurement](measurements/collaboration-space-pusher-2026-11-10.json).
+Private `.work/space-pusher-2026-11-10` preserves every run and strict audit. All jobs
+above are reaped. Hosted pusher successor is NOT dispatched yet; dispatch this pushed
+source once and record its pin. Expected7,063 portable +2,681 Apple plus16 Swift and
+unsigned iOS host. Current receiver CI below does not cover pusher source.
+
+Next after the original-recovery investigation: atomic room-binding write plus durable
+recovery wake, then new SPACE commands/incoming routing. Read-only planning is in
+`.work/replica-commit-wake-2026-11-10`. This is not implemented: another consumer reread
+cannot close a writer race after the last read. Generic database changes must prove
+Mobile native/browser/Apple contracts before returning to Starter. All54 PRD groups
+remain open, including media, secure backup, calls and meetings. No product rollout.
+
 ## Accepted: organization push receiver
 
 Strict schema1 group signal -> local account/native family/root -> exact registered
@@ -35,16 +83,14 @@ Initial99688:45 tests passed but detekt rejected106-line worker DI; moved comple
 push composition into owning ApplicationPushReceiverModule, no suppression. Only
 workflow artifact location changed after focused2; full validates final source.
 Swift unavailable locally;16-case checker and app push11 cases added to pinned CI.
-Hosted successor42733595170 pins cd4fb78b78f8122075e8a30690acac0670052f74 and is
-pending behind42728686367; dispatch30581 reaped. Prior run is not cancelled. Do not
-replace this pending run with another dispatch. Expected7,026portable+2,664Apple
-plus16Swift and unsigned iOS host. Private hosted.json/audit script are prepared.
+Hosted42733595170 pins cd4fb78b and is fully accepted:9,690 cases,16 Swift envelope
+checks and unsigned iOS host. Portable audit6770 and Apple14390 are reaped. Artifact
+hashes/ZIP CRCs and previous testcase identities verified. [Hosted evidence](measurements/collaboration-space-push-receiver-hosted-2026-11-10.json).
 
 [Contract](collaboration-space-push-receiver.md), [measurement](measurements/collaboration-space-push-receiver-2026-11-10.json).
 Private `.work/space-push-receiver-2026-11-10` retains runners,failed/accepted gates and
-source/report audits. Source cd4fb78b is committed/pushed;51430 reaped. Next:
-managed group pusher under exact installed runtime/current device admission; read-only
-notes in `.work/space-pusher-2026-11-10`. No product activation until incoming group
+source/report audits. Source cd4fb78b is committed/pushed;51430 reaped. The managed
+group pusher is validated in the current checkpoint above. No product activation until incoming group
 routing/dedup acceptance. Producer wakes,new SPACE enqueue,rich media/calls/meetings
 and all54 PRD groups remain open. No compiler/emulator active after full reap.
 
@@ -113,13 +159,12 @@ Total9,568 accepted; [hosted evidence](measurements/collaboration-space-recovery
 It does not cover later native proof or current demand. Successor42728686367 on6a8b4f61: portable accepted6,975 cases; audit94614 reaped,
 artifact13724609514/3,391,825bytes/SHA8aaa646239cc22cf09ff6bfd606ec1c8df27a19c8e3cda338b9a529316cbafd9.
 [Portable evidence](measurements/collaboration-space-recovery-demand-portable-2026-11-10.json).
-Apple is building the iOS host,expected2,644. Audit after success; do not redispatch.
+Apple audit54325 is reaped and accepted:2,644 cases plus unsigned iOS host. Total9,619 cases are accepted; [hosted evidence](measurements/collaboration-space-recovery-demand-hosted-2026-11-10.json). Do not repeat.
 Earlier42707758241 is fully accepted9,292 cases+unsigned Xcode host;do not repeat.
 
 ## Next implementation
 
-Current idle and push receiver increments are accepted above. Implement the managed
-group pusher with current installed runtime/device admission next. Producer wakes after final inventory
+The managed group pusher is implemented and validated above; investigate the unexplained first native original-recovery failure next. Producer wakes after final inventory
 reads remain necessary; the legacy QueueText/Edit/Forward scheduler alone does not
 wake organization recovery. Group FCM/product routing and new SPACE enqueue remain
 before rollout. Company-only runtime access deliberately cannot reach adopted group
@@ -137,9 +182,9 @@ key-confirmation candidates are retired;never restore them.
 
 | Checkout | Branch / source | State |
 | --- | --- | --- |
-| Mobile | feat/chat-send-timing-20261107 /cd4fb78b | Group push receiver accepted/pushed;release88 precedes it |
-| Platform original | feat/communications /4750d6c4 | Cross-handoff pushed;schema116.4 verifier |
-| Platform group | feat/communication-space /7ae66f89 | Idle/native proof pushed;V140 |
+| Mobile | feat/chat-send-timing-20261107 /this commit | Guarded group pusher and native diagnostics; release88 precedes them |
+| Platform original | feat/communications /9ff6bd90 | Cross-handoff pushed;schema116.4 verifier |
+| Platform group | feat/communication-space /2c2e7db9 + current test increment | Idle/native proof pushed;V140 |
 | Starter | feat/network-inspector-20261107 /ffd0ac5 | Generic pinned workflow/checksum port accepted |
 | Inspector | feat/matrix-rust-bindings-20261107 /f8ca3d6 | Public SDK6 integrated |
 | Inspector isolated | feat/sdk6-distribution-20261109 /a6b8236 | Accepted;preserve gradlew.bat normalization delta |
@@ -170,7 +215,7 @@ SHA142082381ed2eff87d50dbbeb01538229ac7c1491ccf70d46ef0ce73519b5c51.
 Signer/16KiB/backup/Firebase/privateAPI/lint/SDK6 bytes verified;audits14571/27599 reaped.
 No native product88 startup or phone runtime claim: dedicated recovery proof is separate.
 Private `.work/release-phone-2026-11-10-build88` preserves all inputs and accepted APK.
-Phone ADB connects52260 and4060 reaped timeout00:37/01:08UTC;availability question pending. No installation
+Phone ADB connects52260/4060/82811/84775 reaped timeout00:37/01:08/01:24/01:48UTC; availability question pending. No installation
 attempt yet. Announce then use `python3 .../install.py --install-only` when reachable.
 Application source and HEAD freeze for packaging has ended; next implementation may proceed.
 

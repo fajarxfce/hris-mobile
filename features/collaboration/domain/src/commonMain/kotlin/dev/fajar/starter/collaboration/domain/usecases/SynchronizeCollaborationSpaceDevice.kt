@@ -82,7 +82,7 @@ class SynchronizeCollaborationSpaceDevice(
         val platform =
             CollaborationNativePlatform.entries.firstOrNull {
                 it.name == build.platform.name.uppercase()
-            } ?: return spaceDeviceSyncChanged()
+            } ?: return spaceInstalledDeviceChanged()
         val admitted = attempt.admission()
         if (admitted is AppResult.Failed) return admitted
         val gate = (admitted as AppResult.Success).value
@@ -92,7 +92,7 @@ class SynchronizeCollaborationSpaceDevice(
         val retained = commands.current(attempt.access, runtime.owner.parent.nativeSessionId)
         attempt.unchangedAdmission(gate).let { if (it is AppResult.Failed) return it }
         if (retained is AppResult.Failed) return attempt.failed(retained.failure)
-        val setup = (retained as AppResult.Success).value ?: return spaceDeviceSyncChanged()
+        val setup = (retained as AppResult.Success).value ?: return spaceInstalledDeviceChanged()
         val before = current(attempt, runtime, setup, gate)
         if (before is AppResult.Failed) return before
         val statusStarted = timeSource.markNow()
@@ -103,7 +103,7 @@ class SynchronizeCollaborationSpaceDevice(
         if (received is AppResult.Failed) return attempt.failed(received.failure)
         val observed = (received as AppResult.Success).value
         val allowed =
-            admitCollaborationSpaceDeviceSync(
+            admitCollaborationSpaceInstalledDevice(
                 runtime,
                 setup,
                 observed,
@@ -118,7 +118,7 @@ class SynchronizeCollaborationSpaceDevice(
         if (afterSync is AppResult.Failed) return afterSync
         if (result is AppResult.Failed) return attempt.failed(result.failure)
         val stillFresh =
-            admitCollaborationSpaceDeviceSync(
+            admitCollaborationSpaceInstalledDevice(
                 runtime,
                 setup,
                 observed,
@@ -147,12 +147,12 @@ class SynchronizeCollaborationSpaceDevice(
                 setup.command.request.deviceId != runtime.deviceId ||
                 setup.successorId != null
         )
-            return spaceDeviceSyncChanged()
+            return spaceInstalledDeviceChanged()
         val open = runtimes.isSpaceOpen(runtime.owner, runtime.deviceId, runtime.operationId)
         attempt.unchangedAdmission(gate).let { if (it is AppResult.Failed) return it }
         if (open is AppResult.Failed) return attempt.failed(open.failure)
         return if ((open as AppResult.Success).value) AppResult.Success(Unit)
-        else spaceDeviceSyncChanged()
+        else spaceInstalledDeviceChanged()
     }
 
     private fun timeout() =

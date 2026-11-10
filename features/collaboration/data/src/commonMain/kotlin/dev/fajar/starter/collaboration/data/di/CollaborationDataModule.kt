@@ -418,6 +418,34 @@ class CollaborationDataModule {
         runtime as? CollaborationSpaceSyncRepository ?: UnavailableCollaborationRuntimeRepository()
 
     @Single
+    fun spacePushers(runtime: CollaborationRuntimeRepository): CollaborationSpacePusherRepository =
+        runtime as? CollaborationSpacePusherRepository
+            ?: UnavailableCollaborationRuntimeRepository()
+
+    @Single
+    fun activateSpacePusher(
+        commands: CollaborationSpaceSetupCommandRepository,
+        devices: CollaborationSpaceDeviceRepository,
+        runtimes: CollaborationSpaceRuntimeRepository,
+        pushers: CollaborationSpacePusherRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ActivateCollaborationSpacePusher(
+            commands,
+            devices,
+            runtimes,
+            pushers,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
     fun synchronizeSpaceDevice(
         commands: CollaborationSpaceSetupCommandRepository,
         devices: CollaborationSpaceDeviceRepository,
