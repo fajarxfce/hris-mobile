@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 21:23 UTC. Follow AGENTS.md. This opening section owns current work.
+Updated 10 November 2026, 21:35 UTC. Follow AGENTS.md. This opening section owns current work.
 
 ## Application incoming worker accepted; native proof next
 
@@ -17,26 +17,35 @@ delayed recovery.17new domain cases per JVM/Chromium and20app cases; prior case 
 Focused1/17560 passed603 but failed detekt on fixture factory; focused2/31627 REAPED accepted615.
 Full1/72582 REAPED accepted. Private space-incoming-application-2026-11-10 holds exact reports.
 
-Actual native-worker proof is APPLIED, uncommitted:3 Mobile proof files and3 Group fixture/
-protocol files. Mobile baseline f46567f4 pushed98121/reaped; Group a65b5063 pushed13012/reaped.
-Private space-incoming-application-native-2026-11-10 holds candidates/runners/accepted baselines.
-Mobile build1/session89268 REAPED ACCEPTED:20 proof cases,112.061s,4851 source inputs, format/
-architecture/detekt. Manifest61e7215b1f87603721bbd7bfa87b81950d95e1b0129944b42bc4d6cf91d9ec63.
-Proof APK150724590bytes SHA16a8ad316a88f30778933cefbffb847567c3dec97b58be30388c123d17b54c33.
-NOT a phone APK. Group source-1/session80396 RUNNING; all product/fixture/library bytes frozen.
-Protocol43 accepted, all39 prior identities retained. Then accept-source.py source-1, followed
-by native.py native-1 in Group with isolated2560MiB/2core emulator and precompiled768MiB harness.
-Five native cases expected:four previous controls plus registered incoming worker. Do not claim
-native acceptance before actual execution. Exact new-path counters must be reviewed and stored
-in worker-request-budget.json before accept-native.py can pass. Initial exploratory assertions
-remain bounded; preserve established exact old-control counters. Native run has NOT started.
+Actual native-worker proof is APPLIED, UNCOMMITTED:5 Mobile proof files and3 Group fixture/
+protocol files. Product baseline f46567f4 pushed98121/reaped; Group a65b5063 pushed13012/reaped.
+Private space-incoming-application-native-2026-11-10 owns exact candidates/runners/baselines.
+Native1/session80513 REAPED FAILED:5cases,4failures,191.303s, emulator stopped. The first old
+manual event control passed. Registered incoming worker failed at its first actual invocation,
+consume:55, after one provider page/two direct transports; HRIS failure trace and recent storage
+failures were empty. Retained failed proof-package data correctly prevented the other3 fixtures
+from replacing it. They failed at startup; do not misdiagnose them as three product regressions.
+No native worker acceptance exists. Personal sender/private SDK stores and live API unchanged.
 
-Initial draft protocol missed one reused fixture alias (4errors), fixed before application.
-Apply preflight found private Python bytecode in Group candidate list. Mobile3 were already
-applied; Group was then restricted to the intended3 sources and applied after exact baseline
-hash verification. No bytecode/product corruption; private failed list and note retained.
-Do not rerun apply/prepare scripts; files are already applied and formatted. No production
-changes beyond accepted12 worker files, no starter delta, no deployment or phone install.
+Mobile build1/89268 accepted20 cases/112.061s. New controlled diagnostics expose the worker's
+bounded failure category, preserving the actual registered task; no guessed product fix.
+Build2/26219 REAPED ACCEPTED21/109.089s,4851 inputs; manifest
+153e29b0ac1264e6f816b99bb570361b1e0d61ccadd4f2b728252bec460d5fc1.
+Current proof APK150724590bytes SHA7dc348b59a9197d269cdd45bf55aa79b59162b94dfa66b5ab7ca79c213e19aa5.
+Group source-1/80396 accepted8740inputs/82.952s; Group source unchanged, no recompilation needed.
+Protocol43 accepted, original39 identities preserved. Current diagnostic-1/session4829 RUNNING
+in Group:ONLY the registered incoming test, fresh isolated2560MiB/2core emulator. All source/
+library/APK bytes frozen. Reap it, inspect sanitized result/diagnostic, then fix the actual cause.
+Default native.py still runs all5 controls; diagnostic runs do not count as full acceptance.
+Exact new-path counters remain unreviewed; worker-request-budget.json intentionally absent.
+
+Earlier private draft omitted one fixture alias (4errors), fixed before application. Initial
+apply preflight found Python bytecode in Group candidate file list after Mobile3 applied;
+Group explicitly restricted to intended3 sources and applied after baseline verification.
+No bytecode/product corruption; failed preflight and source manifests retained privately.
+Do not rerun apply/prepare: current formatted5 Mobile/3 Group candidates are already applied.
+No live rollout, phone install or generic Starter change. ADB29164 timeout/reaped; release89
+still uninstalled. Keep existing phone availability question, do not ask again.
 
 Realtime SDK/root/push/key handoffs remain absent. ImmutableSDK6 syncOnceV2 returns room IDs,
 including ephemeral/state updates, without raw event IDs. Shipped AAR hash and javap confirm
