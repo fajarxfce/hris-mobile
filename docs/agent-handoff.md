@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 08:47 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 09:05 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -12,8 +12,8 @@ Starter. Usecases own policy/repository orchestration; repositories coordinate r
 ViewModels own screen state. No subagent delegation.
 
 One heavy compiler OR emulator. Mixed delivery full-1/27233 completed and is REAPED,
-PASS; no local heavy compiler or emulator is running. Focused1/85670,2/31280,3/3636 are
-reaped. Never kill live API/worker JVMs.
+PASS. Mobile proof2/37351 also reaped PASS20; Group source1 completed PASS3. Native1/92077
+failed and is reaped/stopped; Mobile proof3/35974 is the ONLY active local compiler. No emulator. Focused1/85670,2/31280,3/3636 are reaped. Never kill live API/worker JVMs.
 Owned emulator uses 2,560 MiB/two cores. Phone 10.77.77.3:5555 is install-only: announce
 each installation; never launch, drive, uninstall or clear it. ADB 7150 timed out after
 15 seconds at 08:22 UTC and is reaped. Existing availability question remains pending.
@@ -44,8 +44,10 @@ b0218b8f5b184e4a46c63bd7767c20786e0dbd59e6d58812ea4c7aef4e63960d.
 Strict auditors/publisher pass. Proof APK150,572,753 bytes, SHA
 d7c02e4b624ca8d41a007f04d09eeeef9b06ebf1f3e181a10a7438fecd02e83f; compiled only.
 Private .work/mixed-original-delivery-2026-11-10 retains canonical frozen inputs/evidence.
-Commit/push then pin a new hosted control, expected7,830 portable+2,978 Apple=10,808,
-16 Swift and unsigned host. Native acceptance remains separate.
+Source3f5716b61bdcca043a3978e8643591511c117ad1 is committed/pushed86917 (reaped).
+Pinned validation/mixed-original-delivery-20261110 control42785697360 is running;
+ref50606/dispatch71585 reaped, expected7,830 portable+2,978 Apple=10,808,16Swift/host.
+Native acceptance remains separate.
 
 ## Accepted dependency — owning Space staging
 
@@ -71,8 +73,9 @@ Strict auditors and publisher pass. Proof APK 150,548,965 bytes, SHA
 Private .work/space-message-staging-2026-11-10 retains canonical inputs/evidence. Do not
 recopy stale Stage files from mixed-original-delivery. Source507224a3c3e4cb4c87cc3a7ba8b4f8be9535bd54
 is committed/pushed (46472 reaped). Immutable validation/space-message-staging-20261110
-control42781554618 is running; ref14911/dispatch44288 reaped, expected7,742 portable+
-2,934 Apple=10,676,16Swift/unsigned host. Preserve this control.
+control42781554618 is running; ref14911/dispatch44288 reaped. Portable7101 is REAPED
+PASS7,742; digest/CRC/predecessor identities verified. Apple2,934 pending; total10,676
+plus16Swift/unsigned host. Preserve this control.
 
 ## Accepted dependency — new Space-room queues
 
@@ -130,29 +133,42 @@ Preserve mixed 42769825037 and projection 42772661276 controls.
 
 ## Immediate implementation continuation
 
-Apply the three reviewed Mobile proof drafts from .work/mixed-space-native-2026-11-10
-and five Group drafts from its same relative directory AFTER this accepted source is
-committed/pushed and pinned. These are still UNAPPLIED/uncompiled. Group private parser
-suite passes18 cases; three new Kotlin barrier cases are uncompiled. Generators do not
-include later manual fixes: use canonical draft files, read their READMEs first.
+Four Mobile proof sources and five Group fixture/driver sources are APPLIED/FROZEN,
+uncommitted. Tracked sources are canonical; private draft generators are stale. Both
+.work/mixed-space-native-2026-11-10 directories retain runners and exact evidence.
 
-The new opt-in case authors one fictional Space intent through real Queue/Stage beside
-the two unchanged original-company messages. It requires all three exact SDK originals,
-only first company receipt persisted and zero Space receipts after all SDK transactions
-are removed, then one real process death. Recovery must keep namespace, intent, content,
-transaction/device/keys and exactly three provider events; recipient remains offline.
-Read both local stores after an offline restart. Original-only defaults and group-worker
-case remain. The test barrier still defaults to two transactions; opt-in three is bounded,
-and Spring contexts are isolated per method because the barrier can arm only once.
+Mobile proof1/54494 failed LongMethod only; the explicit interruption phase was extracted
+without assertion/order changes. Proof2/37351 is reaped PASS106.783s/20fresh, all quality
+checks. Source4721 manifest ef4c24e7b2fd142e61034eb014672b83991cbbfa2729498c51057b5bbfda6661.
+Only three proof files differ from accepted core3f5716b6; all9832 product tests are unchanged.
+APK150572753B SHA2a81a2f10d58999fe14ec760afbcadeb7c1d186e454ddd07fe6ebaa658e3dd8a.
+DEX proof class/checkpoints and exact immutable SDK6 x86 library are verified.
 
-Compile the changed Mobile proof host with accepted production bytes fixed, compile Group
-fixture/test source with emulator stopped, then run one fresh isolated2560MiB/two-core
-emulator against precompiled tests (three cases, two XML reports, three fixture directories).
-No phone UI. Preserve all failed stores. Update strict source/artifact/native auditors.
-The group worker still needs Space pending-demand integration; do not claim it sends new
-Space commands yet. Complete pending inventory (including no binding), incoming history/
-dedup/edit evidence and routing, media, backups, calls/meetings and actual Apple Matrix
-runtime binding remain. All54 PRD groups stay open; this domain increment is not a Starter port.
+Group source1 completed PASS155.768s/3fresh bounds cases,18Python driver cases pass.
+8735source manifest2e75c6fcf7f2bdee7cde1a98221b6e90a728d493ff93f404e75d153c4892b9e3.
+Native1/92077 is REAPED FAILED155.675s; source/APK fixed, no compilation during emulator,
+emulator stopped. The test-only SQLite count reader still required exactly two transaction
+IDs/placeholders and threw before waiting for the new third original. Later cases could not
+start because the failed proof package was deliberately retained. No product defect shown.
+Exact failed source, userdata, checkpoints and classification retained in native-failure.json.
+Only ProtectedHrisProofOwner now permits exactly2..3 distinct validated IDs with matching
+bound placeholders/count; no timeout/assertion removed. Four proof files now differ from core.
+Mobile proof3/35974 is the ONLY compiler, then audit proof-3/binary and run a fresh native-2.
+Group source1 is unchanged. Native config now uses proof-3; do not reuse failed userdata.
+Expect three cases/two XML reports/three fixture directories; all inputs frozen.
+
+The opt-in case authors one fictional Space intent through real Queue/Stage beside the
+two unchanged Company originals. All three exact SDK originals must be removed with only
+first Company receipt persisted and zero Space receipts, then one real process death.
+Recovery must retain namespaces, intent/content, transaction/device/keys and exactly three
+provider events; recipient stays offline. Original-only and group-worker controls remain.
+Read both local stores after offline restart. Audit via Mobile accept-native.py native-1;
+preserve failed stores and fix causes before acceptance. No native claim until it passes.
+
+Complete Space pending inventory (including no binding), worker demand, incoming history/
+dedup/edit evidence and product routing, media, backups, calls/meetings and actual Apple
+Matrix runtime binding remain. The group-worker fixture currently sends Company originals.
+All54 PRD groups stay open; this domain increment is not a Starter port.
 
 ## Recent accepted dependencies
 
@@ -213,8 +229,8 @@ builds,production web,iOS source,SBOM/quality. Source1,061/library49 fixed. No S
 source WIP or compiler. Previous replica port30c4d72 is included. WorkWakeRequest is now
 shared by replica/command API. HRIS-specific policy stays here.
 
-Platform Group .worktrees/communication-space branchfeat/communication-space HEAD e122a077;
-Original hris-platform branchfeat/communications HEAD b3f5dd59. Both checkpoints pushed.
+Platform Group .worktrees/communication-space branchfeat/communication-space HEAD dbad108e;
+Original hris-platform branchfeat/communications HEAD 92ec9243. Both checkpoints pushed.
 Inspector f8ca3d6,isolated Inspector a6b8236,isolated Mobile CI951cdbcf unchanged. Preserve
 dirty SDK refresh worktree and Inspector gradlew.bat normalization delta. SDK6 is immutable:
 AAR SHAa4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3.
