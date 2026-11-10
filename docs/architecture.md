@@ -1,5 +1,10 @@
 # Architecture
 
+[Mixed/new-room recovery demand](collaboration-mixed-recovery-demand.md) uses invocation-owned
+Company/Space ledger captures and exact original proof before idle. Both live ledgers are
+rechecked after their initial reads; new SPACE rooms need no Company I/O. Read-only demand
+and durable pending-worker orchestration remain separate.
+
 [Complete local pending inventory](collaboration-space-pending-inventory.md) validates the
 whole Space command partition before terminal filtering, including commands without room
 bindings. The usecase brackets immutable capture with current local admission; discovery

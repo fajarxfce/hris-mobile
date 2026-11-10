@@ -7,7 +7,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 
-/** Resolves an already claimed original without advancing or acknowledging it. */
+/** Resolves an already claimed room without advancing or acknowledging it. */
 class LoadCollaborationSpaceRecoveryRoom(
     private val bindings: CollaborationSpaceRoomBindingRepository,
     private val inventory: CollaborationSpaceRoomBindingInventoryRepository,
@@ -53,11 +53,6 @@ class LoadCollaborationSpaceRecoveryRoom(
                 current.revision < expected.revision
         )
             return changedSpaceProgress()
-        if (binding.original == null)
-            return collaborationRecoveryFailure(
-                "client.collaboration_space_recovery_original_required",
-                FailureKind.Conflict,
-            )
         val c = binding.conversation
         return AppResult.Success(
             CollaborationSpaceConversation(

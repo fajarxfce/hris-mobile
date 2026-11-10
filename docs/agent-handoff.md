@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 09:58 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 10:08 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -14,7 +14,7 @@ ViewModels own screen state. No subagent delegation.
 One heavy compiler OR emulator. Mixed delivery full-1/27233 completed and is REAPED,
 PASS. Mobile proof2/37351 also reaped PASS20; Group source1 completed PASS3. Native1/92077
 failed and is reaped/stopped; repaired proof3/35974 and native2/73904 are REAPED PASS.
-Pending inventory full1/59690 is REAPED PASS. Mixed-demand full1/2861 is the only active compiler; no emulator. Focused1/51383 is REAPED PASS116. Focused1/85670,2/31280,3/3636 are reaped. Never kill live API/worker JVMs.
+Pending inventory full1/59690 is REAPED PASS. Mixed-demand full1/2861 is REAPED PASS; no compiler or emulator. Focused1/51383 is REAPED PASS116. Focused1/85670,2/31280,3/3636 are reaped. Never kill live API/worker JVMs.
 Owned emulator uses 2,560 MiB/two cores. Phone 10.77.77.3:5555 is install-only: announce
 each installation; never launch, drive, uninstall or clear it. ADB 7150 timed out after
 15 seconds at 08:22 UTC and is reaped. Existing availability question remains pending.
@@ -48,24 +48,47 @@ compiled only; no native/phone claim. Private .work/space-pending-inventory-2026
 retains exact inputs/evidence/auditors. Source freeze ends after acceptance. Sourceb03f591d57012a062dff7a2044190e8ccdc5711d is committed/pushed83579 (reaped).
 Do not rerun accepted gates.
 
-No worker routing changed. After acceptance extend both-ledger/new-room idle demand,
-then authenticated durable/fair command claims and staging. Current binding-only progress
+No pending-worker routing changed. Mixed/new-room idle demand is now accepted below;
+continue authenticated durable/fair command claims and staging. Current binding-only progress
 schema1 and existing wake-generation completion must remain compatible. No usecase may
 call another usecase; application worker owns orchestration. Pinned validation/space-pending-inventory-20261110 control42792315555 is RUNNING onb03f591d;
 ref83367/dispatch78364 are reaped. Expected7866portable+2996Apple=10862,16Swift/unsignedhost,
 baseline mixed control42785697360. Private hosted config is complete; preserve this run.
-Nine Kotlin inputs now extend mixed/new-room recovery demand; UNACCEPTED source WIP.
-Invocation-owned optional Company and mandatory Space ledger reads capture aliases before
-suspension, recheck both live ledgers, reject shared logical/physical/event identities and
-require final empty original SDK/exact binding/current runtime before idle. Valid SPACE room
-claims no longer require Company originals. No transport/write/staging/worker schema change.
-Original16 demand cases retained; new30 mixed demand+2 selection cases, DI resolution updated.
+## Accepted mixed/new-room recovery demand
+
+Nine Kotlin inputs extend the existing read-only demand: invocation-owned optional Company
+and mandatory Space ledger captures, exact ACK/archive aliases, cross-ledger identity bounds,
+recheck both live ledgers, final empty original SDK/exact binding/current runtime. Valid new
+SPACE room claims require no Company originals. No transport/write/staging or worker schema
+change. Original16 demand cases remain;30 new mixed demand+2selection, DI resolution updated.
+[Contract](collaboration-mixed-recovery-demand.md),
+[measurement](measurements/collaboration-mixed-recovery-demand-2026-11-10.json).
+
 Focused1/77984 is REAPED PASS162/337.721s,zero failures/errors/skips,Desktop/actualChromium
-and2DI; iOS source,format,architecture/detekt pass. Strict focused audit passes;4726source
+and2DI; iOS source,format,architecture/detekt pass. Full1/2861 is REAPED PASS667.649s:
+9932verified=7913fresh+2019exact accepted reused,zero failures/errors/skips. Required root,
+Android host/release compile/lint,Wasm/iOS source,actualChromium,proofAPK/unit/quality pass.
+Strict auditors/publisher preserve all previous case identities and4726source/library inputs;
 manifest12b6aedbe631cb22bfe623b5b708057291ba0169922932af56e6930e418a4047.
-Full1/2861 is RUNNING,one3GiB compiler. All9 inputs and dependencies FROZEN until acceptance. Private
-.work/mixed-recovery-demand-2026-11-10 contains runner/auditors/applied-files.txt and a separate
-UNAPPLIED worker-next.md. Source base b03f591d remains the accepted pending inventory.
+ProofAPK150590081B SHA7b3681073455f1784e2acacfd552b396e4557f84ebff26da51b15152a639b26c,
+compiled only; no new native/phone claim. Source freeze ends after acceptance. No heavy job.
+Private .work/mixed-recovery-demand-2026-11-10 retains exact inputs/runners/auditors. Future
+validation/mixed-recovery-demand-20261110 is prepared, NOT dispatched; expected7930portable+
+3028Apple=10958+16Swift/host. Set exact accepted commit only after source push.
+
+Pending-inventory control42792315555 remains active onb03f591d. Portable31108 is REAPED
+PASS7866 (3702Desktop+651Androidhost+3513Chromium),artifact13753484843,
+SHA4a1770095dc10ca72fad166cbfe89fa4cfb12cae56b1327a4c7d6b3b1342fe46,
+manifestc783e52c38779a79802f6f9e21d1f6ac04f80819de84eef8109c9e9f31779092.
+Apple2996 pending. [Partial hosted measurement](measurements/collaboration-space-pending-inventory-hosted-2026-11-10.json).
+
+NEXT: [tracked pending-worker plan](collaboration-space-pending-recovery-plan.md) preserves
+schema1 pending bindings, adds exact-Instant/ID cursor and one claim, advances failed attempts
+before backoff, and rechecks full pending inventory before exact wake completion. Usecases
+never call each other. Private worker-draft contains UNAPPLIED/UNTESTED entities/policy/codec,
+claim loader, worker/Finish and10 loader test drafts. DI, progress tests, storage/native
+acceptance and generic UpdateProgress Finish bypass decision still need work. Review policy
+method size before applying. No source from that draft is included in this accepted increment.
 
 ## Current accepted increment — mixed original delivery
 

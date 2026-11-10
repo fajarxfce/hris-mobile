@@ -1,5 +1,9 @@
 # Skip original-room transport only after local work is complete
 
+The [mixed/new-room extension](collaboration-mixed-recovery-demand.md) now applies this
+owning read to separate Company/Space ledgers and valid new SPACE rooms. The native evidence
+below remains the original-only control; it does not establish new pending-worker routing.
+
 The organization recovery worker now checks local demand before per-room delivery.
 An empty SDK queue alone is insufficient: a retained command or receipt may still
 need its Sent projection, and a confirmed app message may still exist in the native

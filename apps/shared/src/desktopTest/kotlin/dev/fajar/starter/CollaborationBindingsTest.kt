@@ -413,6 +413,7 @@ class CollaborationBindingsTest {
                 )
                 assertNotNull(container.koin.get<LoadCollaborationSpaceRecoveryPage>())
                 assertNotNull(container.koin.get<LoadCollaborationSpaceRecoveryRoom>())
+                assertNotNull(container.koin.get<ReadCollaborationSpaceRecoveryDemand>())
                 assertNotNull(container.koin.get<EnsureCollaborationSpaceRecoveryWake>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceRecoveryWake>())
                 assertNotNull(container.koin.get<CompleteCollaborationSpaceRecoveryWake>())

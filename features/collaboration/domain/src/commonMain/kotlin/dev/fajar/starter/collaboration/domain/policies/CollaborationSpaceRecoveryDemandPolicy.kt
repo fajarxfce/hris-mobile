@@ -42,36 +42,6 @@ fun collaborationSpaceRecoveryQueueAccess(
     )
 }
 
-/** An empty SDK is checked separately. Every retained ACK must already have its Sent projection. */
-fun collaborationSpaceRecoveryLedgerIdle(
-    records: List<CollaborationMessageRecord>,
-    receipts: List<CollaborationMessageReceipt>,
-    completions: List<CollaborationMessageCompletion>,
-): Boolean {
-    val completed = completions.associateBy { it.record.intent.id }
-    if (completed.size != completions.size) return false
-    for (record in records) {
-        if (record.state == CollaborationMessageState.Cancelled) continue
-        if (
-            record.state !is CollaborationMessageState.Sent ||
-                collaborationOriginalAcknowledgement(
-                    record,
-                    receipts.find { it.intent.id == record.intent.id },
-                    completed[record.intent.id],
-                ) == null
-        )
-            return false
-    }
-    val active = records.associateBy { it.intent.id }
-    return receipts.all { receipt ->
-        val record =
-            active[receipt.intent.id] ?: completed[receipt.intent.id]?.record ?: return@all false
-        record.state is CollaborationMessageState.Sent &&
-            collaborationOriginalAcknowledgement(record, receipt, completed[receipt.intent.id]) !=
-                null
-    }
-}
-
 internal fun invalidCollaborationSpaceRecoveryDemand() =
     collaborationRecoveryFailure(
         "client.collaboration_space_recovery_demand_changed",

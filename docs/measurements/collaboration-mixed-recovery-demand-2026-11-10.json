@@ -1,0 +1,87 @@
+{
+  "acceptedAt": "2026-11-10T10:08:03.627022+00:00",
+  "baseCommit": "d83f1549a43db7f96e1759c18d062789f05c5b69",
+  "scope": "Read-only mixed Company/Space recovery demand with exact acknowledgement and archive aliases, immutable capture, post-read rechecks and new SPACE room resolution. No transport, mutation, staging, pending-worker activation or inferred message acknowledgement.",
+  "sourceFiles": 4726,
+  "sourceManifestSha256": "12b6aedbe631cb22bfe623b5b708057291ba0169922932af56e6930e418a4047",
+  "changedSourceHashes": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "c38d0bdcd5c0382f7b5d685c7bf4f1cf3a885f00fa59bcb1d547013d85025544",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "8b504bce44232f41381435d890284c0f0db7eaebf99a8ad488ea283c09deb2bd",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationMixedRecoveryDemandPolicy.kt": "a4425e726f88563c1120d60cafb32c83d8501f7ff82f452512288408d75734c6",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceRecoveryDemandPolicy.kt": "ce3aef05a53c25939ef9f181bada835334cd1adede08afeb81950f847f58e7b3",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/LoadCollaborationSpaceRecoveryRoom.kt": "6a1db99c6fd4767ac29cded823873eea81684d8f3e0d6a581a1ee29835e61341",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceRecoveryDemand.kt": "e9cbc75c44d614acdc4a6eb2bb2e7e23330208aca67f8d658d5fda7f1c90f396",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationMixedRecoveryDemandTest.kt": "a646d1888576886f6e5a4cfc429bd8207c1931e219b13f27369a4b517bd33517",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceRecoveryDemandTest.kt": "8837be67aac7b7461329fd467aafaa7101823925e29c786afef3ce328a7ff051",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceRecoverySelectionTest.kt": "7bc4f1dc6e3228debf94d5e5f71c8e320749ca8e60d6e833395fbceeb2ee871e"
+  },
+  "deletedSources": [],
+  "focused": {
+    "startedAt": "2026-11-10T09:50:42.365924+00:00",
+    "elapsedSeconds": 337.721,
+    "sourceFiles": 4726,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 162,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "12b6aedbe631cb22bfe623b5b708057291ba0169922932af56e6930e418a4047"
+  },
+  "full": {
+    "startedAt": "2026-11-10T09:56:47.139347+00:00",
+    "elapsedSeconds": 667.649,
+    "sourceFiles": 4726,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7913,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "12b6aedbe631cb22bfe623b5b708057291ba0169922932af56e6930e418a4047",
+    "validatedTests": 9932,
+    "validatedReusedTests": 2019,
+    "validatedDatabaseCases": {
+      "desktopTest": 102,
+      "wasmJsBrowserTest": 100
+    }
+  },
+  "fullReportManifestSha256": "751975931e2600fdd2b3fea01191513152b0e21e6d9675376b03367d92f8c3ce",
+  "contracts": {
+    "newMixedDemandCasesPerPlatform": 30,
+    "newRoomSelectionCasesPerPlatform": 2,
+    "preservedOriginalDemandCasesPerPlatform": 16,
+    "focusedCases": 162,
+    "completeQueueBound": 128,
+    "combinedLedgerBound": 128,
+    "combinedAliasBound": 512,
+    "deadlineMillis": 5000,
+    "mutations": 0,
+    "nativeAcquisitions": 0,
+    "newRoomCompanyReads": 0
+  },
+  "checks": [
+    "root check",
+    "Android host tests",
+    "Android release compilation and lint",
+    "Wasm and iOS source compilation",
+    "actual Chromium collaboration tests",
+    "proof APK compilation and unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "nonIncrementalKotlin": true,
+  "nativeRuntimeClaim": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "remaining": [
+    "Pinned hosted platform acceptance; actual Apple Matrix runtime still unavailable",
+    "Authenticated durable fair pending command claims and worker staging; preserve old recovery progress",
+    "Incoming history/edits/retirement, product routing, media, backup, calls and meetings; all54 PRD groups open"
+  ]
+}

@@ -146,6 +146,36 @@ class CollaborationSpaceRecoverySelectionTest {
     }
 
     @Test
+    fun exactClaimResolvesANewSpaceRoomWithoutCompanyOriginals() = runTest {
+        val f = RoomFixture()
+        val binding = f.original.model.binding
+        f.original.retained =
+            binding.copy(
+                room =
+                    binding.room.copy(origin = CollaborationSpaceRoomOrigin.SPACE, original = null),
+                original = null,
+            )
+        assertEquals(AppResult.Success(f.original.model.conversation), f.loadRoom(f.snapshot))
+        assertEquals(listOf("binding"), f.original.calls)
+        assertEquals(1, f.reads.size)
+    }
+
+    @Test
+    fun newSpaceRoomStillRejectsAReplacedInventoryNamespace() = runTest {
+        val f = RoomFixture()
+        val binding = f.original.model.binding
+        f.original.retained =
+            binding.copy(
+                room =
+                    binding.room.copy(origin = CollaborationSpaceRoomOrigin.SPACE, original = null),
+                original = null,
+            )
+        f.page = f.page.copy(boundary = f.boundary.copy(generation = id(900)))
+        assertIs<AppResult.Failed>(f.loadRoom(f.snapshot))
+        assertEquals(listOf("binding"), f.original.calls)
+    }
+
+    @Test
     fun firstPageClaimAllowsANewerSameGenerationInventory() = runTest {
         val f = RoomFixture()
         f.page = f.page.copy(boundary = f.boundary.copy(revision = 8))

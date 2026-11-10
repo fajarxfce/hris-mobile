@@ -27,8 +27,9 @@ deadline. Existing observing, queueing and recovery-demand cases plus DI give116
 Desktop/actual-Chromium checks. The full measurement records all required platform gates.
 
 This increment exposes discovery; it does not yet route the worker to new Space commands.
-Both-ledger/new-room idle demand, fair durable command claims, binding preparation and
-staging must be integrated into the application worker while preserving authenticated old
+[Mixed/new-room idle demand](collaboration-mixed-recovery-demand.md) is now locally accepted.
+Fair durable command claims, binding preparation and staging still require integration into
+the application worker while preserving authenticated old
 progress and exact wake generations. Incoming history/edits, media, backups, calls, meetings
 and the actual Apple Matrix runtime remain separate. All54 PRD acceptance groups remain open.
 
