@@ -1,6 +1,46 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 19:50 UTC. Follow AGENTS.md. This opening section owns current work.
+Updated 10 November 2026, 20:13 UTC. Follow AGENTS.md. This opening section owns current work.
+
+## Incoming scan and retry integration in progress
+
+Mobile accepted baseline is `07e221828d99d2302a358757f859de5dc6fcc3d0`, pushed; Group evidence
+`20a0444c` is pushed. Their completion acceptance is unchanged: focused336, full10649,
+actual native4. The current mobile increment has31 applied, uncommitted Kotlin files:
+atomic scan cursor plus room queue, schema1/2 compatibility, per-room30–300second retry,
+local read/discovery/deferral/wake completion owners, DI and tests. App worker and SDK hint
+consumer are NOT enabled. Private `space-incoming-worker-2026-11-10` owns exact candidates,
+source manifests, runners and all failed evidence. Expected528focused/10841full,4843inputs.
+
+Focused1/66231 failed compilation (three test typing mistakes, corrected). Focused2/48454
+ran193 JVM domain tests with one failure: a fixture marked provider EOF while asserting a
+continuation. Focused3/7213 repeated that failure because a patch preflight assertion stopped
+the edit; its evidence is retained. Both are reaped. The specifically scoped fixture now uses
+non-EOF; focused4/35879 is running. Full/native gates for this increment have NOT started.
+Do not describe these31 files as accepted. No product source/library mutation while the gate runs.
+
+Next finish application integration using the private `application-candidate` draft. Move
+bounded FIFO eligibility into the owning local Read usecase; app worker owns task/parent
+lifetime, not retry policy. One serialized incoming worker processes at most four rooms and
+one provider/pending page per room, fairly defers unfinished work, preserves newer generations,
+and acknowledges only exact wake after owned empty demand/scan. All producers commit a fresh
+wake atomically with new demand. Wire bounded current-parent SDK hints outside callback monitors,
+retain overflow rescan, and use existing collapsed OS scheduling. Add app lifecycle/concurrency
+and actual native worker tests before activation. Generic ReplicaStore limits remain unchanged.
+
+Hosted completion validation is already dispatched: run42889565705 at exact07e22182,
+https://github.com/fajarxfce/hris-mobile/actions/runs/42889565705 . Portable and Apple are running;
+expected11993=8647portable+3346Apple,+16Swift/unsignedhost. Audit existing artifacts with the
+private completion hosted auditor; DO NOT redispatch. It predates the31 current scan/retry files.
+Prior run42865846045 remains separately accepted11621+16Swift/host.
+
+Release89 remains uninstalled; phone87 last known, latest ADB9732 timed out/reaped. Existing
+availability question stays pending. Install validated89 with `--install-only` if reachable,
+notify first; no launch/reset/UI drive. Live90163/schema116.4 unchanged, Group117–140 undeployed.
+SDK6, original transaction controls, retained sender keys and dirty SDK/Inspector trees preserved.
+No generic Starter source delta. All54 communications PRD groups remain OPEN.
+
+## Prior completion checkpoint
 
 ## Current incoming completion acceptance
 
