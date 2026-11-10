@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 17:28 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 17:30 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -25,11 +25,15 @@ f53cf610b0cf408ff59d5f5a89835bf7c3594c41406b1a64b4684b37f1b1c1af.
 Unchanged Python protocol retains35accepted cases. Both space-page-native-2026-11-10 folders
 own reproducible candidates, reports, source/library/APK manifests, runners and strict audits.
 
-After these proof commits are pushed, apply only prepared Apple CI job70->90minutes (host
-step remains30), commit/push, dispatch ONE latest-source hosted run. Mobile page-acquisition
-folder owns workflow candidate/base hash/hosted config/auditor. Expected11621=8399portable+
-3222Apple,+16Swift/unsignedhost. Previous e1ab run42849335674 has audited11500tests but its
-Apple host hit the70-minute job deadline; complete Apple acceptance is NOT claimed.
+Mobile c6528399 and Group3e3efc7c proof commits are pushed (64433/62635 REAPED).
+This commit changes ONLY the Apple CI job limit from70 to90minutes; the application-host
+step remains separately bounded to30minutes. Previous e1ab42849335674 setup/tests took48m38s,
+then the total70-minute limit cancelled the host after~21m. GitHub's annotation confirms it.
+No application source or previous proof artifact changes. Dispatch ONE exact latest-source
+hosted run after this commit is pushed. Page-acquisition folder owns hosted config/auditor;
+expected11621=8399portable+3222Apple,+16Swift/unsignedhost. Old e1ab has audited11500tests
+but no accepted Apple host. Current Kotlin/native gates are already accepted; don't rerun them
+for this workflow-only budget change.
 
 Next apply/review/test the private space-pending-incoming-2026-11-10 drafts.17Kotlin files,
 NOT APPLIED/FORMATTED/COMPILED: physical provider on batch outcomes, pure16-reference
