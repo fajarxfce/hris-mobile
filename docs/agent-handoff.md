@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 14:40 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 14:53 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -32,16 +32,29 @@ and WireGuard health pass. Readiness and readiness-control ON; Group features OF
 First activation78190 restored old images after overly strict dynamic-IP equality; final
 check validates configured staticIPs and published endpoints. No application failure or migration.
 
-Release89 packaging is next from this accepted source and pushed docs. Private
-release-phone-2026-11-10-build89 owns build/manifest/lint/SDK audits and INSTALL-ONLY runner.
-Freeze Mobile source AND HEAD during packaging. Sourcefull10224 and actual SDK3 are accepted;
-ARM64 product artifact still needs build/audits. ADB87583 timed out15s, no phone installation.
-Current6334c0c4 hosted42835309631 RUNNING, expected11359=8222portable+3137Apple plus16Swift/
+Release89 is ACCEPTED, NOT INSTALLED. Build44473 REAPED PASS665.727s; artifact97497 and
+SDK38740 REAPED, acceptance script passes. Sourcef837897fc17b3264d1d46fc47e4deff25e20250f,
+123809167B SHA4c790d2314f53c37bfdc3108ac4b801ab33aa9fc177904001fd16793fd0ef52d. ARM64
+nondebuggable devRelease, existing signer,0lint,exact SDK6 and Firebase/API/backup checks.
+[Measurement](measurements/release89-2026-11-10.json). Private release-phone-2026-11-10-build89
+owns the verified APK/INSTALL-ONLY runner. ADB30354 timed out15s(REAPED); no install attempt.
+Phone87 last known,88/89notinstalled. Keep pending availability question; no phone UI or reset.
+
+Next incoming policy candidate has3newKotlin files/22newdomain tests staged under private
+space-incoming-2026-11-10/candidate. Planning is pure: original/edit mutations stay distinct,
+local targets avoid another read, at most one acquired target, redaction uses original sender,
+and unresolved/missing originals cannot claim retention or EOF. No usecase/admission/I/O/UI
+integration yet. Apply only after this accepted packaging; focused144expected (44new across
+Desktop/Chromium+100controls), then owning admission/retention and durable progress integration.
+No heavy job remains; source freeze may now end. Do not claim this candidate is accepted.
+
+Current6334c0c4 hosted42835309631 RUNNING,expected11359=8222portable+3137Apple plus16Swift/
 unsignedhost. Ref40325/dispatch42308 REAPED; strict auditor uses accepted runtime baseline.
+Groupf88abd24 push55922 REAPED records current live/package continuation.
 
 Runtime hosted42824039795 is COMPLETE and audited:8201portable+3129Apple=11330, plus16Swift
 and unsigned iOS host. Apple45856 REAPED; classifier42819170095 also complete11295+16.
-[Hosted measurement](measurements/collaboration-runtime-event-reads-hosted-2026-11-10.json) is published. Phone87 remains last known,88uninstalled,89packaging next;
+[Hosted measurement](measurements/collaboration-runtime-event-reads-hosted-2026-11-10.json) is published. Phone87 remains last known,88uninstalled,89accepted/uninstalled;
 ADB64277 timed out at14:00. Existing availability question stays pending. INSTALL-ONLY;
 no phone launch, data reset, retries of retained original messages, or Draft66 send.
 Continue bounded Space incoming retention/progress and the full PRD; all54 groups remain open.
