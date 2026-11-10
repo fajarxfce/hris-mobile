@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 21:20 UTC. Follow AGENTS.md. This opening section owns current work.
+Updated 10 November 2026, 21:23 UTC. Follow AGENTS.md. This opening section owns current work.
 
 ## Application incoming worker accepted; native proof next
 
@@ -17,16 +17,26 @@ delayed recovery.17new domain cases per JVM/Chromium and20app cases; prior case 
 Focused1/17560 passed603 but failed detekt on fixture factory; focused2/31627 REAPED accepted615.
 Full1/72582 REAPED accepted. Private space-incoming-application-2026-11-10 holds exact reports.
 
-Next actual native-worker proof: private space-incoming-application-native-2026-11-10 in Mobile
-and Group has3candidate files each, UNAPPLIED/UNCOMPILED. Mobile candidates register a proof
-entry point using the real application parent/task/SDK/store; Group adds a fifth native case
-and distinct worker evidence. Prior4manual/original controls remain unchanged. Protocol draft
-passes21 cases after an initial missing fixture alias (4errors). Do not run prepare scripts
-again after formatting; candidate contains current formatted bytes. Compile Mobile proof and
-Group fixture sequentially, then run the isolated2560MiB/2core emulator. Capture exact native
-request counts, first-page visibility, empty/covered-hint no-op and offline process reopen.
-Initial new-path request bounds are exploratory; establish exact counters before acceptance.
-Do not attribute old manual native4 acceptance to this worker. No native proof run started yet.
+Actual native-worker proof is APPLIED, uncommitted:3 Mobile proof files and3 Group fixture/
+protocol files. Mobile baseline f46567f4 pushed98121/reaped; Group a65b5063 pushed13012/reaped.
+Private space-incoming-application-native-2026-11-10 holds candidates/runners/accepted baselines.
+Mobile build1/session89268 REAPED ACCEPTED:20 proof cases,112.061s,4851 source inputs, format/
+architecture/detekt. Manifest61e7215b1f87603721bbd7bfa87b81950d95e1b0129944b42bc4d6cf91d9ec63.
+Proof APK150724590bytes SHA16a8ad316a88f30778933cefbffb847567c3dec97b58be30388c123d17b54c33.
+NOT a phone APK. Group source-1/session80396 RUNNING; all product/fixture/library bytes frozen.
+Protocol43 accepted, all39 prior identities retained. Then accept-source.py source-1, followed
+by native.py native-1 in Group with isolated2560MiB/2core emulator and precompiled768MiB harness.
+Five native cases expected:four previous controls plus registered incoming worker. Do not claim
+native acceptance before actual execution. Exact new-path counters must be reviewed and stored
+in worker-request-budget.json before accept-native.py can pass. Initial exploratory assertions
+remain bounded; preserve established exact old-control counters. Native run has NOT started.
+
+Initial draft protocol missed one reused fixture alias (4errors), fixed before application.
+Apply preflight found private Python bytecode in Group candidate list. Mobile3 were already
+applied; Group was then restricted to the intended3 sources and applied after exact baseline
+hash verification. No bytecode/product corruption; private failed list and note retained.
+Do not rerun apply/prepare scripts; files are already applied and formatted. No production
+changes beyond accepted12 worker files, no starter delta, no deployment or phone install.
 
 Realtime SDK/root/push/key handoffs remain absent. ImmutableSDK6 syncOnceV2 returns room IDs,
 including ephemeral/state updates, without raw event IDs. Shipped AAR hash and javap confirm
