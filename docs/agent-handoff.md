@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 07:48 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 07:51 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -11,8 +11,8 @@ updates. All 54 acceptance groups remain open. Mobile proves reusable foundation
 Starter. Usecases own policy/repository orchestration; repositories coordinate raw I/O;
 ViewModels own screen state. No subagent delegation.
 
-One heavy compiler OR emulator. New-room focused 48502 and full 7378 completed and are reaped. No compiler or
-emulator remains; new-room source freeze ended after full acceptance. Never kill live API/worker JVMs. Owned emulator uses 2,560 MiB/two cores.
+One heavy compiler OR emulator. New-room focused 48502/full 7378 completed and are reaped. Staging focused 63537 is
+the ONLY heavy compiler; seven source inputs are FROZEN. No emulator is running. Never kill live API/worker JVMs. Owned emulator uses 2,560 MiB/two cores.
 Phone 10.77.77.3:5555 is install-only: announce each installation; never launch, drive,
 uninstall or clear it. ADB 14496 timed out after 15 seconds at 07:28 UTC and was reaped.
 Existing availability question remains pending. Phone 87 unchanged; 88 remains uninstalled.
@@ -38,8 +38,10 @@ pass. Source manifest 57adc26664e998567fe2f1906ce236cc7fffae6de5bd45548715e33f79
 Proof APK 150,518,107 bytes, SHA
 76329f626ef1aec5dde12d044e10f8e4759a74095efb5706bfc15a1b08ec51ac; compiled only.
 Private `.work/space-new-room-queue-2026-11-10` retains exact inputs/reports/runners.
-Commit/push this source, then pin the hosted control (expected 7,674 portable + 2,900
-Apple = 10,574, 16 Swift checks and unsigned host) before applying the next source.
+Source 0aaaf786ef0fcf4c6ce591fe2a118263d548020f is committed/pushed (57239 reaped).
+Pinned validation/space-new-room-queue-20261110 and control 42777934754 are running
+(ref 61884/dispatch 58063 reaped), expected 7,674 portable + 2,900 Apple = 10,574,
+16 Swift checks and unsigned host.
 
 ## Accepted dependency — distinct Space staging capability
 
@@ -71,18 +73,18 @@ Preserve mixed 42769825037 and projection 42772661276 controls.
 
 ## Immediate implementation continuation
 
-Seven UNAPPLIED Kotlin drafts in `.work/space-message-staging-2026-11-10` now prepare
+Seven APPLIED, uncommitted Kotlin inputs in `.work/space-message-staging-2026-11-10` now prepare
 StageCollaborationSpaceText, exact staging recovery policy, fixture, 9 policy + 25 owning
-cases, singleton DI and app binding assertion. Its focused runner expects 70 fresh cases.
-No compilation or acceptance yet. This is the canonical staging draft directory; older
-copies under mixed-original-delivery are stale. Apply after the accepted new-room source
-is committed/pushed and pinned. Format the seven applied inputs before freezing them.
+cases, singleton DI and app binding assertion. Focused session 63537 is RUNNING for
+70 fresh cases; all seven source inputs are FROZEN. No acceptance yet. This is the canonical staging draft directory; older
+copies under mixed-original-delivery are stale. Source application and formatting 60415
+completed and are reaped; the accepted new-room source is committed/pushed and pinned.
 The owning draft handles exact CAS readback, lost enqueue responses, original recovery,
 recipient readiness, admission after I/O, cancellation and native close. Unready recipients
 reuse the existing Conflict code; recovery of an already stored original remains separate.
 Review/tests must verify those claims before actual native acceptance.
 
-Then implement StageCollaborationSpaceText and extend the existing owning delivery window
+Finish validating StageCollaborationSpaceText, then extend the existing owning delivery window
 to typed Company/Space ledgers. Reuse pure policies; never call another usecase or create a
 parallel sender. Retain exact Staging before enqueue, recover original logical ID/content/
 device/transaction after response loss, and verify every false/failed CAS by exact readback.
