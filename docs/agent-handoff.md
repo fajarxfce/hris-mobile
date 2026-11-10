@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 03:16 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 03:30 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -19,51 +19,49 @@ announce each installation; never launch, drive, uninstall or clear its app.
 Crashlytics IAM is verified; do not ask again. Physical iPhone interaction is waived,
 not Apple source/runtime, push or calling acceptance. Continue work after checkpoints.
 
-## Active: atomic replica mutation and producer wake foundation
+## Active: atomic replica mutation accepted locally; producer integration next
 
-Receipt recovery is committed/pushed below. Current UNCOMMITTED generic changes add
-ReplicaWakeRequest and one optional argument to raw replace/commit. SQLite and IDB
-write the fresh pending wake in the same account/checkpoint-guarded transaction as
-the replica. Same-current generation reuse (pending or acknowledged) and full new-key
-capacity reject both mutations. No scheduler,HRIS policy,key,payload or schema change.
-Existing raw test decorators retain their failure boundaries and forward wake metadata.
+This commit contains the generic `ReplicaWakeRequest` API and optional wake argument
+for raw replace/commit. SQLite and IndexedDB retain the fresh pending marker in the
+same account/checkpoint-guarded transaction as the replica. Reused current generations
+(pending or acknowledged) and full new-key capacity reject both changes. No scheduler,
+HRIS policy, content, identity or schema change. Existing raw test decorators forward
+the new argument and preserve fault injection. [Contract](replica-work-wakes.md),
+[measurement](measurements/replica-work-wakes-2026-11-10.json).
 
-Red41381 REAPED expected FAIL50.323s:removing only the generation guard makes the
-same-current mutation succeed incorrectly. Exact assertion/source/XML verified.
-Restored source4656 inputs:11desktop cases pass112.493s plus iOS source/format/
-architecture/detekt. Initial browser filter produced no XML and is not counted;
-corrected browser84232 passes11actual cases/28.168s. Combined22 cases have exact
-current/archive/source/library evidence. Tests cover actual unique-constraint rollback,
-old-consumer/new-writer races,capacity,owner/checkpoint denial,cancel,lost results,
-staging/removal,no-wake compatibility and real file/IDB reopen.
+Red41381 expected failure proves the generation guard. Focused25113/84232 pass
+11 desktop and 11 actual browser cases; the earlier empty browser filter was not
+counted. All 89 desktop and 87 browser database cases pass. Full38641 initially
+failed one unchanged AppFlow test because a generated Kotlin delegate retained the
+old interface ABI. Exact javap/class evidence is retained. Repair2593 passes all
+714 app tests on identical source after non-incremental compilation; all 90 AppFlow
+identities remain. No UI/assertion/timeout edit. Applied compose-ui-testing-patterns
+for that review; the existing DI/lifecycle integration test is appropriate.
 
-Full38641 REAPED FAIL840.58s:4,012 fresh cases,one failure,zero errors/skips;
-all89SQLite/87browser database cases and971browser collaboration-data cases pass.
-The one AppFlow catalog test fails before its injected fault: a stale generated
-ReplicaStore delegate lacks the new mutation parameter (AbstractMethodError). javap
-proves old replace/commit signatures; its source is unchanged since76a143b6. Exact
-classSHA07d582e55bfec1d6d4e162271d73afa3fd0a37cc3c46fbaaee1b6e46ed662762 is retained.
-No UI/source/assertion/timeout workaround is warranted. Applied local
-compose-ui-testing-patterns skill for review; existing DI/lifecycle integration is valid.
+Final full60400 REAPED PASS303.454s with 4,656 stable source inputs. Strict audit
+accepts 7,468 results: 4,012 passing same-source full/repair results plus 3,456 exact
+accepted predecessor results; the final command reused them, no failed report accepted.
+Root check, Android host/release compilation/lint, shared Wasm/iOS source, database
+and collaboration-data browser, proof compilation and quality gates pass. The audit
+was corrected for the actual browser XML filename prefix; test assertions/counts
+were unchanged. Private `.work/replica-commit-wake-2026-11-10` retains all evidence.
+No local heavy job remains. Existing native APK predates this API; do not claim its
+runtime validation. One pinned Apple/control proof must follow commit/push; none has
+been dispatched for this generic source yet. Do not repeat predecessor CI.
 
-ACTIVE repair2593 recompiles shared desktop tests non-incrementally,then runs all714
-app tests on the SAME source. After reap use accept-repair.py to verify new delegate
-ABI and unchanged testcase identities; then run full-2 and accept-full.py full-2.
-The final audit supports exact same-source full-1/repair report reuse,never unresolved
-failure reuse. Required root/Android host/release/lint,Wasm+iOS/browsers/proof/quality
-remain the final gate. Source is frozen through reap/audit. Portable hosted workflow now explicitly runs
-both database platforms and retains their XML; this workflow-only delta follows the
-focused gate. Private .work/replica-commit-wake-2026-11-10 contains runners,red/focused
-acceptance,55 Kotlin changes and raw-delegate review (no unforwarded same-argument
-calls). Do not claim full/Apple acceptance,commit source or port Starter yet.
+Next: dispatch one pinned control proof (or Apple scope, not both), continue Mobile
+producer integration, and port generic database API/implementation/tests to Starter
+only after real Apple contracts pass. Starter AGENTS/README/architecture/handoff and
+downstream-development were read; HEADffd0ac5 is clean and four existing generic files
+exactly match Mobile76a143b6 baseline. No Starter edits/compile yet.
 
-After full acceptance:commit/push Mobile foundation and pinned CI; validate real Apple
-contracts before porting generic API/implementation/tests to Starter. Read Starter
-AGENTS/architecture/handoff; README remains required before porting. Then attach wake
-to newly retained immutable original-room bindings and schedule after committed
-readback. Ordinary retained reads remain no-op; never append a separate wake request
-after the database write. New SPACE messages/history,notification coexistence,media,
-backup,calls and meetings remain part of the authorized long run;all54 groups open.
+Producer design: newly retained immutable room bindings atomically retain recovery
+work as an explicit domain repository invariant. The owning preparation use case
+schedules after exact committed readback, including a lost write response. Ordinary
+retained reads remain no-op. Never append a separate wake request after writing data.
+Scheduling failure/cancellation must preserve the owned binding and durable marker.
+New SPACE messages/history, notifications/replies, media, backup, calls and meetings
+remain in the long run; all 54 PRD groups are open.
 
 ## Accepted: original callback-loss recovery; continue producer wakes
 
@@ -102,7 +100,7 @@ pusher42739907129 completed; dispatch69781 reaped. Do not redispatch. Expected7,
 the pin and predecessor archive comparison. Next: atomic replica mutation+producer wake.
 Do not claim predecessor CI covers this source. The reusable database contract must
 prove Mobile SQLite/browser/Apple before Starter. Read-only design and133 raw override
-inventory are in .work/replica-commit-wake-2026-11-10; no code yet. Same-current wake
+inventory are in .work/replica-commit-wake-2026-11-10; generic code is accepted locally above. Same-current wake
 generation must be rejected even when pending. No consumer reread can close the writer
 race. Then bind new immutable room writes to a durable wake and schedule after commit;
 identical retained bindings remain no-op. Continue new SPACE commands/incoming routing,
@@ -119,7 +117,7 @@ accepted (audit3789,artifact13728979615); Apple2,681 accepted(audit30631,artifac
 errors or skips. Digests/ZIP CRC/previous testcase identities verified. [Hosted evidence](measurements/collaboration-space-pusher-hosted-2026-11-10.json). Do not rerun. Auditor/config are in
 .work/space-pusher-2026-11-10. Its success excludes the current receipt recovery source.
 
-Phone remains87. ADB67480 timed out15s around02:44; no install/UI/data change.
+Phone remains87. ADB49516 timed out15s around03:09; no install/UI/data change.
 Accepted release88 (6a8b4f61,before receiver/pusher/recovery) remains uninstalled;
 one availability question remains pending,do not repeat. Use its accepted install.py
 --install-only after announcing when reachable. Live remains e558a686/schema116.4,

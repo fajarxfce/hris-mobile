@@ -83,6 +83,7 @@ jobs:
           xvfb-run -a ./gradlew --no-daemon --no-parallel --max-workers=2
           :core:worker:desktopTest :core:network:desktopTest :core:observability:desktopTest :core:worker:wasmJsBrowserTest :core:network:wasmJsBrowserTest :core:observability:wasmJsBrowserTest
           :core:workspace:domain:desktopTest :core:workspace:domain:wasmJsBrowserTest
+          :core:database:desktopTest :core:database:wasmJsBrowserTest
           :features:collaboration:domain:desktopTest :features:collaboration:data:desktopTest
           :features:collaboration:data:testAndroidHostTest
           :features:collaboration:domain:wasmJsBrowserTest :features:collaboration:data:wasmJsBrowserTest
@@ -101,6 +102,7 @@ jobs:
           path: |
             features/collaboration/**/build/test-results/
             core/workspace/domain/build/test-results/
+            core/database/build/test-results/
             core/worker/build/test-results/
             core/network/build/test-results/
             core/observability/build/test-results/

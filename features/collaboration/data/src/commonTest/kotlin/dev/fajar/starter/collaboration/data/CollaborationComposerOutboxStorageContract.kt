@@ -98,11 +98,12 @@ abstract class CollaborationComposerOutboxStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         assertNull(expected)
                         assertEquals(2, assertNotNull(snapshot).documents.size)
                         assertTrue(
-                            f.database.replicas.replace(scope, partition, expected, snapshot)
+                            f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                         )
                         error("Simulated lost initial commit reply")
                     }
@@ -233,6 +234,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     assertEquals(2, documents.size)
                     assertTrue(
@@ -242,6 +244,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                             checkpoint,
                             documents,
                             publish,
+                            wake,
                         )
                     )
                     error("Simulated lost local commit response")
@@ -357,6 +360,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(nextOwner)
                     return f.database.replicas.commit(
@@ -365,6 +369,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }
@@ -449,6 +454,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         assertTrue(
                             f.database.replicas.commit(
@@ -457,6 +463,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                                 checkpoint,
                                 documents,
                                 publish,
+                                wake,
                             )
                         )
                         committed.complete(Unit)
@@ -493,6 +500,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     attempts++
                     return false
@@ -706,6 +714,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     assertTrue(
                         f.database.replicas.commit(
@@ -714,6 +723,7 @@ abstract class CollaborationComposerOutboxStorageContract {
                             checkpoint,
                             documents,
                             publish,
+                            wake,
                         )
                     )
                     error("Lost hold response")

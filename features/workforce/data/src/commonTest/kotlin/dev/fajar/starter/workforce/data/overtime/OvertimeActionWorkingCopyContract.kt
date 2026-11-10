@@ -87,8 +87,9 @@ suspend fun checkOvertimeActionWorkingAcknowledgementAndCompetingEdits(f: Overti
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
+                wake: ReplicaWakeRequest?,
             ): Boolean {
-                val committed = f.db.replicas.replace(scope, partition, expected, snapshot)
+                val committed = f.db.replicas.replace(scope, partition, expected, snapshot, wake)
                 if (committed && loseAcknowledgement) {
                     loseAcknowledgement = false
                     error("Fixture acknowledgement lost")

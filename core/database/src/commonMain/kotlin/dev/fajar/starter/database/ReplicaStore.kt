@@ -32,13 +32,17 @@ interface ReplicaStore {
 
     /**
      * Publishes a complete snapshot, or removes it, only if the current checkpoint still matches.
-     * Account ownership, documents and checkpoint change in the same transaction.
+     * Account ownership, documents, checkpoint and an optional wake change in the same transaction.
+     * A wake requires a fresh generation; capacity or current-generation conflicts return false
+     * without changing either store. Cancellation may lose a committed response, never half a
+     * write.
      */
     suspend fun replace(
         scope: ReplicaScope,
         partition: String,
         expected: ReplicaCheckpoint?,
         snapshot: ReplicaSnapshot?,
+        wake: ReplicaWakeRequest? = null,
     ): Boolean
 
     /** Starts a replacement without exposing its incomplete documents to readers. */
@@ -72,7 +76,8 @@ interface ReplicaStore {
     ): ReplicaPage
 
     /**
-     * Documents and the next checkpoint commit together, conditional on the observed generation.
+     * Documents, the next checkpoint and an optional wake commit together, conditional on the
+     * observed generation/revision. The wake has the same conflict/rollback contract as replace.
      */
     suspend fun commit(
         handle: ReplicaHandle,
@@ -80,6 +85,7 @@ interface ReplicaStore {
         checkpoint: String,
         documents: List<ReplicaDocument>,
         publish: Boolean,
+        wake: ReplicaWakeRequest? = null,
     ): Boolean
 
     fun observe(

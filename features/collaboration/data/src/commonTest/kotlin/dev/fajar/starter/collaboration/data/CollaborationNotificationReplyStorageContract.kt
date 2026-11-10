@@ -297,9 +297,19 @@ abstract class CollaborationNotificationReplyStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     commits++
-                    check(actual.commit(handle, expectedRevision, checkpoint, documents, publish))
+                    check(
+                        actual.commit(
+                            handle,
+                            expectedRevision,
+                            checkpoint,
+                            documents,
+                            publish,
+                            wake,
+                        )
+                    )
                     error("Simulated lost storage reply")
                 }
             }
@@ -326,8 +336,18 @@ abstract class CollaborationNotificationReplyStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
-                    check(actual.commit(handle, expectedRevision, checkpoint, documents, publish))
+                    check(
+                        actual.commit(
+                            handle,
+                            expectedRevision,
+                            checkpoint,
+                            documents,
+                            publish,
+                            wake,
+                        )
+                    )
                     try {
                         committed.complete(Unit)
                         awaitCancellation()
@@ -366,6 +386,7 @@ abstract class CollaborationNotificationReplyStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         f.activate(other)
                         return actual.commit(
@@ -374,6 +395,7 @@ abstract class CollaborationNotificationReplyStorageContract {
                             checkpoint,
                             documents,
                             publish,
+                            wake,
                         )
                     }
                 }

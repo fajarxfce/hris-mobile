@@ -190,10 +190,17 @@ abstract class CollaborationReadStateStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         if (++writes == 2) both.complete(Unit)
                         release.await()
-                        return f.database.replicas.replace(scope, partition, expected, snapshot)
+                        return f.database.replicas.replace(
+                            scope,
+                            partition,
+                            expected,
+                            snapshot,
+                            wake,
+                        )
                     }
                 }
             coroutineScope {
@@ -232,9 +239,10 @@ abstract class CollaborationReadStateStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         assertTrue(
-                            f.database.replicas.replace(scope, partition, expected, snapshot)
+                            f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                         )
                         error("Injected lost response")
                     }
@@ -253,6 +261,7 @@ abstract class CollaborationReadStateStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         assertTrue(
                             f.database.replicas.commit(
@@ -261,6 +270,7 @@ abstract class CollaborationReadStateStorageContract {
                                 checkpoint,
                                 documents,
                                 publish,
+                                wake,
                             )
                         )
                         error("Injected lost response")
@@ -308,6 +318,7 @@ abstract class CollaborationReadStateStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(other)
                     return f.database.replicas.commit(
@@ -316,6 +327,7 @@ abstract class CollaborationReadStateStorageContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }
@@ -420,6 +432,7 @@ abstract class CollaborationReadStateStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     entered.complete(Unit)
                     awaitCancellation()

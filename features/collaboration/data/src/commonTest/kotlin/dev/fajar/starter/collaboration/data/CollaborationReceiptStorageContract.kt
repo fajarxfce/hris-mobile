@@ -106,6 +106,7 @@ abstract class CollaborationReceiptStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     arrived++
                     if (arrived == 2) ready.complete(Unit)
@@ -116,6 +117,7 @@ abstract class CollaborationReceiptStorageContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }
@@ -155,6 +157,7 @@ abstract class CollaborationReceiptStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         assertTrue(
                             f.database.replicas.commit(
@@ -163,6 +166,7 @@ abstract class CollaborationReceiptStorageContract {
                                 checkpoint,
                                 documents,
                                 publish,
+                                wake,
                             )
                         )
                         if (cancel) throw CancellationException("Fixture cancellation")
@@ -197,6 +201,7 @@ abstract class CollaborationReceiptStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(other)
                     return f.database.replicas.commit(
@@ -205,6 +210,7 @@ abstract class CollaborationReceiptStorageContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }
@@ -425,6 +431,7 @@ abstract class CollaborationReceiptStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         entered.complete(Unit)
                         release.await()
@@ -434,6 +441,7 @@ abstract class CollaborationReceiptStorageContract {
                             checkpoint,
                             documents,
                             publish,
+                            wake,
                         )
                     }
                 }
@@ -466,9 +474,17 @@ abstract class CollaborationReceiptStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(f.access.copy(sessionId = "other", accountId = receiptId(8001)))
-                    return store.commit(handle, expectedRevision, checkpoint, documents, publish)
+                    return store.commit(
+                        handle,
+                        expectedRevision,
+                        checkpoint,
+                        documents,
+                        publish,
+                        wake,
+                    )
                 }
             }
         assertEquals(
@@ -493,6 +509,7 @@ abstract class CollaborationReceiptStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     entered.complete(Unit)
                     awaitCancellation()
@@ -525,9 +542,10 @@ abstract class CollaborationReceiptStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     assertTrue(
-                        store.commit(handle, expectedRevision, checkpoint, documents, publish)
+                        store.commit(handle, expectedRevision, checkpoint, documents, publish, wake)
                     )
                     error("Fixture lost cleanup response")
                 }

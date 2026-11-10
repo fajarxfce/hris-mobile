@@ -76,10 +76,11 @@ abstract class CollaborationDraftStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     barrier.withLock { if (++arrived == 2) release.complete(Unit) }
                     release.await()
-                    return f.database.replicas.replace(scope, partition, expected, snapshot)
+                    return f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         val one = f.draft()
@@ -111,8 +112,11 @@ abstract class CollaborationDraftStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
-                    assertTrue(f.database.replicas.replace(scope, partition, expected, snapshot))
+                    assertTrue(
+                        f.database.replicas.replace(scope, partition, expected, snapshot, wake)
+                    )
                     error("Lost local reply")
                 }
             }
@@ -439,6 +443,7 @@ abstract class CollaborationDraftStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     barrier.withLock { if (++commits == 2) release.complete(Unit) }
                     release.await()
@@ -448,6 +453,7 @@ abstract class CollaborationDraftStorageContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }
@@ -480,6 +486,7 @@ abstract class CollaborationDraftStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     commits++
                     assertTrue(
@@ -489,6 +496,7 @@ abstract class CollaborationDraftStorageContract {
                             checkpoint,
                             documents,
                             publish,
+                            wake,
                         )
                     )
                     error("Lost commit reply")
@@ -519,6 +527,7 @@ abstract class CollaborationDraftStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     commits++
                     return if (rejectCommit) false
@@ -529,6 +538,7 @@ abstract class CollaborationDraftStorageContract {
                             checkpoint,
                             documents,
                             publish,
+                            wake,
                         )
                 }
 

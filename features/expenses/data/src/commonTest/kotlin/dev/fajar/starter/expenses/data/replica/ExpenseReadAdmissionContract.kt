@@ -61,10 +61,11 @@ suspend fun checkExpenseReadDenialRemainsVisibleWhenStorageFails(f: ExpenseRepli
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
+                wake: ReplicaWakeRequest?,
             ): Boolean {
                 if (unavailable && partition == expenseAdmissionPartition(f.access))
                     error("Fixture storage failure")
-                return f.db.replicas.replace(scope, partition, expected, snapshot)
+                return f.db.replicas.replace(scope, partition, expected, snapshot, wake)
             }
         }
     val repository = EncryptedExpenseReplicaRepository(store, f.cipher, f.keys, f.admissions)
@@ -98,12 +99,13 @@ suspend fun checkExpenseReadDenialCannotBeClearedByAnOlderPendingAdmission(
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
+                wake: ReplicaWakeRequest?,
             ): Boolean {
                 if (snapshot == null && partition == expenseAdmissionPartition(f.access)) {
                     entered.complete(Unit)
                     release.await()
                 }
-                return f.db.replicas.replace(scope, partition, expected, snapshot)
+                return f.db.replicas.replace(scope, partition, expected, snapshot, wake)
             }
         }
     val repository = EncryptedExpenseReplicaRepository(store, f.cipher, f.keys, f.admissions)

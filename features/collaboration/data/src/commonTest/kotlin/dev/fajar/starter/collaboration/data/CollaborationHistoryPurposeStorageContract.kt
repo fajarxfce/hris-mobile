@@ -204,6 +204,7 @@ abstract class CollaborationHistoryPurposeStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         if (++count == 2) arrived.complete(Unit)
                         released.await()
@@ -213,6 +214,7 @@ abstract class CollaborationHistoryPurposeStorageContract {
                             checkpoint,
                             documents,
                             publish,
+                            wake,
                         )
                     }
                 }

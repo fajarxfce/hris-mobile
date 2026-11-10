@@ -208,6 +208,7 @@ abstract class CollaborationHistoryTraversalStorageContract {
                             checkpoint: String,
                             documents: List<ReplicaDocument>,
                             publish: Boolean,
+                            wake: ReplicaWakeRequest?,
                         ): Boolean {
                             assertTrue(
                                 f.local.database.replicas.commit(
@@ -216,6 +217,7 @@ abstract class CollaborationHistoryTraversalStorageContract {
                                     checkpoint,
                                     documents,
                                     publish,
+                                    wake,
                                 )
                             )
                             if (cancel)
@@ -251,9 +253,16 @@ abstract class CollaborationHistoryTraversalStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         assertTrue(
-                            f.local.database.replicas.replace(scope, partition, expected, snapshot)
+                            f.local.database.replicas.replace(
+                                scope,
+                                partition,
+                                expected,
+                                snapshot,
+                                wake,
+                            )
                         )
                         error("Fixture lost initial commit response")
                     }
@@ -284,6 +293,7 @@ abstract class CollaborationHistoryTraversalStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.local.activate(replacement)
                     return f.local.database.replicas.commit(
@@ -292,6 +302,7 @@ abstract class CollaborationHistoryTraversalStorageContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }

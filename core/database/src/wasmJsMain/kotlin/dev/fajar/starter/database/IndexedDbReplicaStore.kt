@@ -70,10 +70,12 @@ internal class IndexedDbReplicaStore(
         partition: String,
         expected: ReplicaCheckpoint?,
         snapshot: ReplicaSnapshot?,
+        wake: ReplicaWakeRequest?,
     ): Boolean {
         val retained =
             snapshot?.copy(documents = snapshot.documents.map { it.copy(tags = it.tags.toSet()) })
         validateReplicaReplacement(scope, partition, expected, retained)
+        validateReplicaWake(wake)
         val db = database()
         currentCoroutineContext().ensureActive()
         return withContext(NonCancellable) {
@@ -84,6 +86,7 @@ internal class IndexedDbReplicaStore(
                         partition,
                         Json.encodeToString(expected),
                         Json.encodeToString(retained),
+                        Json.encodeToString(wake),
                     )
                     .await<JsBoolean>()
                     .toBoolean()
@@ -171,12 +174,14 @@ internal class IndexedDbReplicaStore(
         checkpoint: String,
         documents: List<ReplicaDocument>,
         publish: Boolean,
+        wake: ReplicaWakeRequest?,
     ): Boolean {
         validateReplicaKey(handle.scope, handle.partition)
         validateReplicaGeneration(handle.generation)
         validateReplicaCheckpoint(checkpoint)
         val batch = documents.map { it.copy(tags = it.tags.toSet()) }
         validateReplicaBatch(expectedRevision, batch)
+        validateReplicaWake(wake)
         val db = database()
         currentCoroutineContext().ensureActive()
         return withContext(NonCancellable) {
@@ -188,6 +193,7 @@ internal class IndexedDbReplicaStore(
                         checkpoint,
                         Json.encodeToString(batch),
                         publish,
+                        Json.encodeToString(wake),
                     )
                     .await<JsBoolean>()
                     .toBoolean()
@@ -366,10 +372,10 @@ private external fun replicaPublishedCheckpoints(
 ): Promise<JsString>
 
 @JsFun(
-    """(db, scopeJson, partition, expectedJson, snapshotJson) => new Promise((resolve, reject) => {
+    """(db, scopeJson, partition, expectedJson, snapshotJson, wakeJson) => new Promise((resolve, reject) => {
     const scope = JSON.parse(scopeJson), {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
-    const expected = JSON.parse(expectedJson), snapshot = JSON.parse(snapshotJson);
-    const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents'], 'readwrite');
+    const expected = JSON.parse(expectedJson), snapshot = JSON.parse(snapshotJson), wake = JSON.parse(wakeJson);
+    const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents', ...(wake == null ? [] : ['work_wakes'])], 'readwrite');
     const heads = tx.objectStore('replica_heads'), generations = tx.objectStore('replica_generations'), documents = tx.objectStore('replica_documents');
     let changed = false;
     const replace = current => {
@@ -379,6 +385,7 @@ private external fun replicaPublishedCheckpoints(
             expected.revision !== current.revision || expected.payload !== current.checkpoint ||
             expected.published !== current.published) return;
         const write = () => {
+            if (wake != null) tx.objectStore('work_wakes').put({key:wake.key, generation:wake.generation, pending:true});
             heads.delete([ownerKey, partition]);
             generations.delete(IDBKeyRange.bound([ownerKey, partition, ''], [ownerKey, partition, '\uffff']));
             documents.delete(IDBKeyRange.bound([ownerKey, partition, '', ''], [ownerKey, partition, '\uffff', '\uffff']));
@@ -393,10 +400,20 @@ private external fun replicaPublishedCheckpoints(
             }
             changed = true;
         };
-        if (snapshot == null) write();
+        const admitWake = () => {
+            if (wake == null) { write(); return; }
+            const store = tx.objectStore('work_wakes'), current = store.get(wake.key);
+            current.onsuccess = () => {
+                if (current.result?.generation === wake.generation) return;
+                if (current.result) { write(); return; }
+                const count = store.count();
+                count.onsuccess = () => { if (count.result < wake.maxKeys) write(); };
+            };
+        };
+        if (snapshot == null) admitWake();
         else {
             const existing = generations.get([ownerKey, partition, snapshot.generation]);
-            existing.onsuccess = () => { if (!existing.result) write(); };
+            existing.onsuccess = () => { if (!existing.result) admitWake(); };
         }
     };
     const owner = tx.objectStore('account_scope').get('current');
@@ -423,6 +440,7 @@ private external fun replaceReplica(
     partition: String,
     expected: String,
     snapshot: String,
+    wake: String,
 ): Promise<JsBoolean>
 
 @JsFun(
@@ -466,11 +484,11 @@ private external fun beginReplica(
 ): Promise<JsBoolean>
 
 @JsFun(
-    """(db, handleJson, expected, checkpoint, documentsJson, publish) => new Promise((resolve, reject) => {
-    const handle = JSON.parse(handleJson), incoming = JSON.parse(documentsJson);
+    """(db, handleJson, expected, checkpoint, documentsJson, publish, wakeJson) => new Promise((resolve, reject) => {
+    const handle = JSON.parse(handleJson), incoming = JSON.parse(documentsJson), wake = JSON.parse(wakeJson);
     const {scope, partition, generation} = handle;
     const {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
-    const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents'], 'readwrite');
+    const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents', ...(wake == null ? [] : ['work_wakes'])], 'readwrite');
     const heads = tx.objectStore('replica_heads'), generations = tx.objectStore('replica_generations'), documents = tx.objectStore('replica_documents');
     let changed = false;
     const owner = tx.objectStore('account_scope').get('current');
@@ -507,7 +525,18 @@ private external fun beginReplica(
                         writeNext(index + 1);
                     };
                 };
-                writeNext(0);
+                const write = () => {
+                    if (wake != null) tx.objectStore('work_wakes').put({key:wake.key, generation:wake.generation, pending:true});
+                    writeNext(0);
+                };
+                if (wake == null) { write(); return; }
+                const store = tx.objectStore('work_wakes'), currentWake = store.get(wake.key);
+                currentWake.onsuccess = () => {
+                    if (currentWake.result?.generation === wake.generation) return;
+                    if (currentWake.result) { write(); return; }
+                    const count = store.count();
+                    count.onsuccess = () => { if (count.result < wake.maxKeys) write(); };
+                };
             };
         };
     };
@@ -522,6 +551,7 @@ private external fun commitReplica(
     checkpoint: String,
     documents: String,
     publish: Boolean,
+    wake: String,
 ): Promise<JsBoolean>
 
 @JsFun(

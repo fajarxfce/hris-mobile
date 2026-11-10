@@ -107,6 +107,7 @@ abstract class CollaborationLocalVisibilityStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         assertTrue(documents.size <= 150)
                         assertTrue(
@@ -116,6 +117,7 @@ abstract class CollaborationLocalVisibilityStorageContract {
                                 checkpoint,
                                 documents,
                                 publish,
+                                wake,
                             )
                         )
                         error("Lost local commit response")
@@ -170,6 +172,7 @@ abstract class CollaborationLocalVisibilityStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.merge(f.event(2))
                     return f.database.replicas.commit(
@@ -178,6 +181,7 @@ abstract class CollaborationLocalVisibilityStorageContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }
@@ -284,6 +288,7 @@ abstract class CollaborationLocalVisibilityStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     entered.complete(Unit)
                     awaitCancellation()
@@ -311,6 +316,7 @@ abstract class CollaborationLocalVisibilityStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(f.access.copy(sessionId = "another", accountId = historyId(777)))
                     return f.database.replicas.commit(
@@ -319,6 +325,7 @@ abstract class CollaborationLocalVisibilityStorageContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }

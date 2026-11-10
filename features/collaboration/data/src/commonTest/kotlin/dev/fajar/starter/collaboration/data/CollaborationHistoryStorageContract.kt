@@ -76,6 +76,7 @@ abstract class CollaborationHistoryStorageContract {
                             checkpoint: String,
                             documents: List<ReplicaDocument>,
                             publish: Boolean,
+                            wake: ReplicaWakeRequest?,
                         ): Boolean = error("Replayed history must not commit")
                     }
                 val replay = suspend {
@@ -601,6 +602,7 @@ abstract class CollaborationHistoryStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     arrived++
                     if (arrived == 2) ready.complete(Unit)
@@ -611,6 +613,7 @@ abstract class CollaborationHistoryStorageContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }
@@ -649,6 +652,7 @@ abstract class CollaborationHistoryStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         assertTrue(
                             f.database.replicas.commit(
@@ -657,6 +661,7 @@ abstract class CollaborationHistoryStorageContract {
                                 checkpoint,
                                 documents,
                                 publish,
+                                wake,
                             )
                         )
                         if (cancel) throw CancellationException("Fixture cancellation")
@@ -688,6 +693,7 @@ abstract class CollaborationHistoryStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(other)
                     return f.database.replicas.commit(
@@ -696,6 +702,7 @@ abstract class CollaborationHistoryStorageContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }

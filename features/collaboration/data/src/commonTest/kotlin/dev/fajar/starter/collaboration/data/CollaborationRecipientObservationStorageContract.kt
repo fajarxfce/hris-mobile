@@ -65,8 +65,11 @@ abstract class CollaborationRecipientObservationStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
-                    assertTrue(f.database.replicas.replace(scope, partition, expected, snapshot))
+                    assertTrue(
+                        f.database.replicas.replace(scope, partition, expected, snapshot, wake)
+                    )
                     error("Lost storage reply")
                 }
             }
@@ -88,6 +91,7 @@ abstract class CollaborationRecipientObservationStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     entered.complete(Unit)
                     awaitCancellation()

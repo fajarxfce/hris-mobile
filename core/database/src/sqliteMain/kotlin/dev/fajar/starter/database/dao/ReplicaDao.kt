@@ -87,6 +87,24 @@ abstract class ReplicaDao {
 
     @Upsert protected abstract suspend fun write(head: ReplicaHeadEntity)
 
+    @Query("SELECT * FROM work_wakes WHERE `key` = :key")
+    protected abstract suspend fun mutationWake(key: String): WorkWakeEntity?
+
+    @Query("SELECT COUNT(*) FROM work_wakes")
+    protected abstract suspend fun mutationWakeCount(): Int
+
+    @Upsert protected abstract suspend fun write(wake: WorkWakeEntity)
+
+    /** Called only inside the owning replica write transaction, before any document mutation. */
+    private suspend fun retainMutationWake(wake: ReplicaWakeRequest?): Boolean {
+        if (wake == null) return true
+        val current = mutationWake(wake.key)
+        if (current?.generation == wake.generation) return false
+        if (current == null && mutationWakeCount() >= wake.maxKeys) return false
+        write(WorkWakeEntity(wake.key, wake.generation, true))
+        return true
+    }
+
     @Query(
         "SELECT g.* FROM replica_heads AS h JOIN replica_generations AS g ON g.ownerKey = h.ownerKey AND g.partition = h.partition AND g.generation = h.activeGeneration WHERE h.ownerKey = :ownerKey AND h.partition >= :prefix AND h.partition < :upperBound AND (:after IS NULL OR h.partition > :after) ORDER BY h.partition LIMIT :limit"
     )
@@ -192,12 +210,14 @@ abstract class ReplicaDao {
         partition: String,
         expected: ReplicaCheckpoint?,
         snapshot: ReplicaSnapshot?,
+        wake: ReplicaWakeRequest?,
     ): Boolean {
         if (!owns(scope.sessionId, scope.accountKey) || checkpoint(scope, partition) != expected)
             return false
         val ownerKey = scope.accountKey.orEmpty()
         if (snapshot != null && generation(ownerKey, partition, snapshot.generation) != null)
             return false
+        if (!retainMutationWake(wake)) return false
         deleteHead(ownerKey, partition)
         deleteGenerations(ownerKey, partition)
         if (snapshot != null) {
@@ -323,6 +343,7 @@ abstract class ReplicaDao {
         payload: String,
         documents: List<ReplicaDocument>,
         publish: Boolean,
+        wake: ReplicaWakeRequest?,
     ): Boolean {
         if (!owns(handle.scope.sessionId, handle.scope.accountKey)) return false
         val ownerKey = handle.scope.accountKey.orEmpty()
@@ -330,6 +351,7 @@ abstract class ReplicaDao {
         if ((head.stagingGeneration ?: head.activeGeneration) != handle.generation) return false
         val current = generation(ownerKey, handle.partition, handle.generation) ?: return false
         if (current.revision != expectedRevision) return false
+        if (!retainMutationWake(wake)) return false
         for (document in documents) {
             val previous = record(ownerKey, handle.partition, handle.generation, document.id)
             if (

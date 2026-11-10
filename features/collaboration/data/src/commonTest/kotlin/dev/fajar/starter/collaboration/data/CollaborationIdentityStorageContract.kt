@@ -66,8 +66,9 @@ abstract class CollaborationIdentityStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
-                    check(f.database.replicas.replace(scope, partition, expected, snapshot))
+                    check(f.database.replicas.replace(scope, partition, expected, snapshot, wake))
                     throw CancellationException("Fixture lost response")
                 }
             }
@@ -87,9 +88,10 @@ abstract class CollaborationIdentityStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     assertEquals(AppResult.Success(true), f.identities().retain(f.access, rival))
-                    return f.database.replicas.replace(scope, partition, expected, snapshot)
+                    return f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         assertEquals(AppResult.Success(false), f.identities(store).retain(f.access, identity))
@@ -159,9 +161,10 @@ abstract class CollaborationIdentityStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(other)
-                    return f.database.replicas.replace(scope, partition, expected, snapshot)
+                    return f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         assertEquals(AppResult.Success(false), f.identities(store).retain(f.access, identity))

@@ -74,9 +74,17 @@ abstract class CollaborationNotificationPublicationStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     assertTrue(
-                        actual.commit(handle, expectedRevision, checkpoint, documents, publish)
+                        actual.commit(
+                            handle,
+                            expectedRevision,
+                            checkpoint,
+                            documents,
+                            publish,
+                            wake,
+                        )
                     )
                     error("Simulated lost response")
                 }
@@ -442,8 +450,9 @@ abstract class CollaborationNotificationPublicationStorageContract {
                             partition: String,
                             expected: ReplicaCheckpoint?,
                             snapshot: ReplicaSnapshot?,
+                            wake: ReplicaWakeRequest?,
                         ): Boolean {
-                            assertTrue(actual.replace(scope, partition, expected, snapshot))
+                            assertTrue(actual.replace(scope, partition, expected, snapshot, wake))
                             return pause()
                         }
 
@@ -453,6 +462,7 @@ abstract class CollaborationNotificationPublicationStorageContract {
                             checkpoint: String,
                             documents: List<ReplicaDocument>,
                             publish: Boolean,
+                            wake: ReplicaWakeRequest?,
                         ): Boolean {
                             assertTrue(
                                 actual.commit(
@@ -461,6 +471,7 @@ abstract class CollaborationNotificationPublicationStorageContract {
                                     checkpoint,
                                     documents,
                                     publish,
+                                    wake,
                                 )
                             )
                             return pause()
@@ -493,10 +504,18 @@ abstract class CollaborationNotificationPublicationStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     commits++
                     assertTrue(
-                        actual.commit(handle, expectedRevision, checkpoint, documents, publish)
+                        actual.commit(
+                            handle,
+                            expectedRevision,
+                            checkpoint,
+                            documents,
+                            publish,
+                            wake,
+                        )
                     )
                     return false
                 }

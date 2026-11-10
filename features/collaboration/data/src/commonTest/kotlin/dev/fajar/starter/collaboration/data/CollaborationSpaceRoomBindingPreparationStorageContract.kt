@@ -35,6 +35,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         check(
                             f.history.database.replicas.replace(
@@ -42,6 +43,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                                 partition,
                                 expected,
                                 snapshot,
+                                wake,
                             )
                         )
                         publications++
@@ -73,6 +75,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         val saved =
                             f.history.database.replicas.replace(
@@ -80,6 +83,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                                 partition,
                                 expected,
                                 snapshot,
+                                wake,
                             )
                         if (partition == spaceRoomBindingPartition(f.access) && saved)
                             throw CancellationException("Lost binding response")
@@ -114,6 +118,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         val saved =
                             f.history.database.replicas.replace(
@@ -121,6 +126,7 @@ abstract class CollaborationSpaceRoomBindingPreparationStorageContract {
                                 partition,
                                 expected,
                                 snapshot,
+                                wake,
                             )
                         if (saved && partition == spaceRoomBindingPartition(f.access))
                             assertEquals(

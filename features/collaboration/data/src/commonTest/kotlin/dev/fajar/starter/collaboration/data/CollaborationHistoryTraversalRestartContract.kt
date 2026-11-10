@@ -115,6 +115,7 @@ abstract class CollaborationHistoryTraversalRestartContract {
                             checkpoint: String,
                             documents: List<ReplicaDocument>,
                             publish: Boolean,
+                            wake: ReplicaWakeRequest?,
                         ): Boolean {
                             assertTrue(
                                 f.local.database.replicas.commit(
@@ -123,6 +124,7 @@ abstract class CollaborationHistoryTraversalRestartContract {
                                     checkpoint,
                                     documents,
                                     publish,
+                                    wake,
                                 )
                             )
                             if (cancel) throw CancellationException("Fixture lost response")

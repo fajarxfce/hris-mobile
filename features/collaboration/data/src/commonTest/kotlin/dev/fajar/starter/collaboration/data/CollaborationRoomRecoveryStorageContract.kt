@@ -110,8 +110,9 @@ abstract class CollaborationRoomRecoveryStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
-                    check(f.database.replicas.replace(scope, partition, expected, snapshot))
+                    check(f.database.replicas.replace(scope, partition, expected, snapshot, wake))
                     throw CancellationException("Fixture lost response")
                 }
             }
@@ -187,9 +188,10 @@ abstract class CollaborationRoomRecoveryStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(other)
-                    return f.database.replicas.replace(scope, partition, expected, snapshot)
+                    return f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         assertEquals(

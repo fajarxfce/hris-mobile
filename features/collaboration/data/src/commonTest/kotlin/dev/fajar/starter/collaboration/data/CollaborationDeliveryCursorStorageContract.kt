@@ -60,9 +60,10 @@ abstract class CollaborationDeliveryCursorStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     winner = cursor(f.cursors().advance(f.access, null, historyId(22)))
-                    return f.database.replicas.replace(scope, partition, expected, snapshot)
+                    return f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         assertEquals(
@@ -81,8 +82,9 @@ abstract class CollaborationDeliveryCursorStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
-                    check(f.database.replicas.replace(scope, partition, expected, snapshot))
+                    check(f.database.replicas.replace(scope, partition, expected, snapshot, wake))
                     throw CancellationException("Fixture lost response")
                 }
             }
@@ -158,9 +160,10 @@ abstract class CollaborationDeliveryCursorStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(other)
-                    return f.database.replicas.replace(scope, partition, expected, snapshot)
+                    return f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         assertEquals(

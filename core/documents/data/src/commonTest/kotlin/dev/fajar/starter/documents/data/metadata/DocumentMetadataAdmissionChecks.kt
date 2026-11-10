@@ -60,6 +60,7 @@ suspend fun checkMetadataPendingAndFailedAdmissionWritesRemainClosed(
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
+                wake: ReplicaWakeRequest?,
             ): Boolean {
                 entered.complete(Unit)
                 resume.await()
@@ -114,12 +115,13 @@ suspend fun checkMetadataOlderAdmissionCannotClearLaterDenial(f: DocumentMetadat
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     if (snapshot == null) {
                         entered.complete(Unit)
                         resume.await()
                     }
-                    return f.db.replicas.replace(scope, partition, expected, snapshot)
+                    return f.db.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         val admissions =

@@ -90,9 +90,10 @@ abstract class CollaborationSpaceRootStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     assertEquals(AppResult.Success(true), f.roots().retain(f.access(), otherRoot))
-                    return f.database.replicas.replace(scope, partition, expected, snapshot)
+                    return f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         assertEquals(AppResult.Success(false), f.roots(store).retain(f.access(), root))
@@ -108,8 +109,9 @@ abstract class CollaborationSpaceRootStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
-                    check(f.database.replicas.replace(scope, partition, expected, snapshot))
+                    check(f.database.replicas.replace(scope, partition, expected, snapshot, wake))
                     throw CancellationException("Fixture lost response")
                 }
             }
@@ -194,9 +196,10 @@ abstract class CollaborationSpaceRootStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(foreign)
-                    return f.database.replicas.replace(scope, partition, expected, snapshot)
+                    return f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         assertEquals(AppResult.Success(false), f.roots(store).retain(f.access(), root))

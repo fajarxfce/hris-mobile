@@ -191,6 +191,7 @@ abstract class CollaborationIncomingHistoryWaveStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         check(
                             f.local.database.replicas.commit(
@@ -199,6 +200,7 @@ abstract class CollaborationIncomingHistoryWaveStorageContract {
                                 checkpoint,
                                 documents,
                                 publish,
+                                wake,
                             )
                         )
                         throw CancellationException(
@@ -232,6 +234,7 @@ abstract class CollaborationIncomingHistoryWaveStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.local.activate(other)
                     return f.local.database.replicas.commit(
@@ -240,6 +243,7 @@ abstract class CollaborationIncomingHistoryWaveStorageContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }

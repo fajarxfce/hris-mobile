@@ -55,11 +55,14 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
         partition: String,
         expected: ReplicaCheckpoint?,
         snapshot: ReplicaSnapshot?,
+        wake: ReplicaWakeRequest?,
     ): Boolean {
         val retained =
             snapshot?.copy(documents = snapshot.documents.map { it.copy(tags = it.tags.toSet()) })
         validateReplicaReplacement(scope, partition, expected, retained)
-        return dao.replace(scope, partition, expected, retained)
+        validateReplicaWake(wake)
+        currentCoroutineContext().ensureActive()
+        return dao.replace(scope, partition, expected, retained, wake)
     }
 
     override suspend fun begin(
@@ -103,13 +106,16 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
         checkpoint: String,
         documents: List<ReplicaDocument>,
         publish: Boolean,
+        wake: ReplicaWakeRequest?,
     ): Boolean {
         validateReplicaKey(handle.scope, handle.partition)
         validateReplicaGeneration(handle.generation)
         validateReplicaCheckpoint(checkpoint)
         val batch = documents.map { it.copy(tags = it.tags.toSet()) }
         validateReplicaBatch(expectedRevision, batch)
-        return dao.commit(handle, expectedRevision, checkpoint, batch, publish)
+        validateReplicaWake(wake)
+        currentCoroutineContext().ensureActive()
+        return dao.commit(handle, expectedRevision, checkpoint, batch, publish, wake)
     }
 
     override fun observe(scope: ReplicaScope, partition: String, after: String?, limit: Int) =

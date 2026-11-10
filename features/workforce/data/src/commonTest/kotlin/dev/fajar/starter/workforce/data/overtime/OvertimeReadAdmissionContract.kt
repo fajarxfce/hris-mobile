@@ -57,10 +57,11 @@ suspend fun checkOvertimeDenialRemainsKnownAfterFailedStorage(f: OvertimeReplica
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
+                wake: ReplicaWakeRequest?,
             ): Boolean {
                 if (unavailable && partition == overtimeAdmissionPartition(f.access))
                     error("Fixture storage failure")
-                return f.db.replicas.replace(scope, partition, expected, snapshot)
+                return f.db.replicas.replace(scope, partition, expected, snapshot, wake)
             }
         }
     val repository =
@@ -109,12 +110,13 @@ suspend fun checkLateOvertimeAdmissionCannotClearANewerDenial(f: OvertimeReplica
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     if (snapshot == null && partition == overtimeAdmissionPartition(f.access)) {
                         entered.complete(Unit)
                         release.await()
                     }
-                    return f.db.replicas.replace(scope, partition, expected, snapshot)
+                    return f.db.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         val repository =

@@ -57,10 +57,11 @@ suspend fun checkLeaveDenialRemainsKnownAfterFailedStorage(f: LeaveRequestReplic
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
+                wake: ReplicaWakeRequest?,
             ): Boolean {
                 if (unavailable && partition == leaveAdmissionPartition(f.access))
                     error("Fixture storage failure")
-                return f.db.replicas.replace(scope, partition, expected, snapshot)
+                return f.db.replicas.replace(scope, partition, expected, snapshot, wake)
             }
         }
     val repository =
@@ -101,12 +102,13 @@ suspend fun checkLateLeaveAdmissionCannotClearANewerDenial(f: LeaveRequestReplic
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     if (snapshot == null && partition == leaveAdmissionPartition(f.access)) {
                         entered.complete(Unit)
                         release.await()
                     }
-                    return f.db.replicas.replace(scope, partition, expected, snapshot)
+                    return f.db.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         val repository =

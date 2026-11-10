@@ -20,6 +20,7 @@ suspend fun checkDirectoryPendingDenialSurvivesReauthentication(f: DirectoryRepl
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
+                wake: ReplicaWakeRequest?,
             ): Boolean = error("Fixture storage unavailable")
         }
     val repository = EncryptedDirectoryReplicaRepository(store, f.cipher, f.keys, f.admissions)
@@ -91,10 +92,11 @@ suspend fun checkDirectoryReadDenialRemainsVisibleWhenStorageFails(f: DirectoryR
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
+                wake: ReplicaWakeRequest?,
             ): Boolean {
                 if (unavailable && partition == directoryAdmissionPartition(f.access))
                     error("Fixture storage failure")
-                return f.db.replicas.replace(scope, partition, expected, snapshot)
+                return f.db.replicas.replace(scope, partition, expected, snapshot, wake)
             }
         }
     val repository = EncryptedDirectoryReplicaRepository(store, f.cipher, f.keys, f.admissions)
@@ -128,12 +130,13 @@ suspend fun checkDirectoryReadDenialCannotBeClearedByAnOlderPendingAdmission(
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
+                wake: ReplicaWakeRequest?,
             ): Boolean {
                 if (snapshot == null && partition == directoryAdmissionPartition(f.access)) {
                     entered.complete(Unit)
                     release.await()
                 }
-                return f.db.replicas.replace(scope, partition, expected, snapshot)
+                return f.db.replicas.replace(scope, partition, expected, snapshot, wake)
             }
         }
     val repository = EncryptedDirectoryReplicaRepository(store, f.cipher, f.keys, f.admissions)

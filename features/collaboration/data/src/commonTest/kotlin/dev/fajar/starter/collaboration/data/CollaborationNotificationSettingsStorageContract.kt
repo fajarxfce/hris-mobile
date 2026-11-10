@@ -196,8 +196,11 @@ abstract class CollaborationNotificationSettingsStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
-                    assertTrue(f.database.replicas.replace(scope, partition, expected, snapshot))
+                    assertTrue(
+                        f.database.replicas.replace(scope, partition, expected, snapshot, wake)
+                    )
                     error("Injected reply loss")
                 }
             }
@@ -221,10 +224,11 @@ abstract class CollaborationNotificationSettingsStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     if (++entered == 2) both.complete(Unit)
                     release.await()
-                    return f.database.replicas.replace(scope, partition, expected, snapshot)
+                    return f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         coroutineScope {
@@ -275,6 +279,7 @@ abstract class CollaborationNotificationSettingsStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(other)
                     return f.database.replicas.commit(
@@ -283,6 +288,7 @@ abstract class CollaborationNotificationSettingsStorageContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }
@@ -311,6 +317,7 @@ abstract class CollaborationNotificationSettingsStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     try {
                         entered.complete(Unit)

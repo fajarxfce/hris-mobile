@@ -157,6 +157,7 @@ abstract class CollaborationHistoryReferenceResolutionContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         assertTrue(
                             f.local.database.replicas.commit(
@@ -165,6 +166,7 @@ abstract class CollaborationHistoryReferenceResolutionContract {
                                 checkpoint,
                                 documents,
                                 publish,
+                                wake,
                             )
                         )
                         if (cancel) throw CancellationException("Fixture lost response")
@@ -241,6 +243,7 @@ abstract class CollaborationHistoryReferenceResolutionContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.local.activate(other)
                     return f.local.database.replicas.commit(
@@ -249,6 +252,7 @@ abstract class CollaborationHistoryReferenceResolutionContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }

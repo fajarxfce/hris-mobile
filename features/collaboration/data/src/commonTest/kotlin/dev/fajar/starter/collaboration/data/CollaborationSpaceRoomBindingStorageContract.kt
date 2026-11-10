@@ -335,13 +335,20 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         writes++
                         assertEquals(
                             AppResult.Success(true),
                             f.bindings().retain(f.local(), second),
                         )
-                        return f.database.replicas.replace(scope, partition, expected, snapshot)
+                        return f.database.replicas.replace(
+                            scope,
+                            partition,
+                            expected,
+                            snapshot,
+                            wake,
+                        )
                     }
                 }
             assertEquals(AppResult.Success(false), f.bindings(firstRace).retain(f.local(), first))
@@ -355,6 +362,7 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         writes++
                         assertEquals(2, documents.size)
@@ -366,6 +374,7 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
                             checkpoint,
                             documents,
                             publish,
+                            wake,
                         )
                     }
                 }
@@ -390,8 +399,11 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
-                        check(f.database.replicas.replace(scope, partition, expected, snapshot))
+                        check(
+                            f.database.replicas.replace(scope, partition, expected, snapshot, wake)
+                        )
                         throw CancellationException("Lost publication response")
                     }
 
@@ -401,6 +413,7 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
                         checkpoint: String,
                         documents: List<ReplicaDocument>,
                         publish: Boolean,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         check(
                             f.database.replicas.commit(
@@ -409,6 +422,7 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
                                 checkpoint,
                                 documents,
                                 publish,
+                                wake,
                             )
                         )
                         throw CancellationException("Lost append response")
@@ -438,9 +452,10 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(foreign)
-                    return f.database.replicas.replace(scope, partition, expected, snapshot)
+                    return f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
 
                 override suspend fun commit(
@@ -449,6 +464,7 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
                     checkpoint: String,
                     documents: List<ReplicaDocument>,
                     publish: Boolean,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(foreign)
                     return f.database.replicas.commit(
@@ -457,6 +473,7 @@ abstract class CollaborationSpaceRoomBindingStorageContract {
                         checkpoint,
                         documents,
                         publish,
+                        wake,
                     )
                 }
             }

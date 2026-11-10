@@ -49,9 +49,10 @@ abstract class CollaborationNotificationInputRecoveryStorageContract {
                         partition: String,
                         expected: ReplicaCheckpoint?,
                         snapshot: ReplicaSnapshot?,
+                        wake: ReplicaWakeRequest?,
                     ): Boolean {
                         assertTrue(
-                            f.database.replicas.replace(scope, partition, expected, snapshot)
+                            f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                         )
                         throw IllegalStateException("Controlled lost cursor response")
                     }
@@ -78,8 +79,10 @@ abstract class CollaborationNotificationInputRecoveryStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
-                    val result = f.database.replicas.replace(scope, partition, expected, snapshot)
+                    val result =
+                        f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                     assertTrue(result)
                     committed = true
                     currentCoroutineContext().cancel()
@@ -107,9 +110,10 @@ abstract class CollaborationNotificationInputRecoveryStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     f.activate(other)
-                    return f.database.replicas.replace(scope, partition, expected, snapshot)
+                    return f.database.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         assertEquals(

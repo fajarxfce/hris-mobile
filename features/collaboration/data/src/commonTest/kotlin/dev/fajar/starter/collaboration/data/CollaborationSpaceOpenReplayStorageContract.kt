@@ -132,9 +132,16 @@ abstract class CollaborationSpaceOpenReplayStorageContract {
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     val result =
-                        f.history.database.replicas.replace(scope, partition, expected, snapshot)
+                        f.history.database.replicas.replace(
+                            scope,
+                            partition,
+                            expected,
+                            snapshot,
+                            wake,
+                        )
                     if (result && partition == spaceConversationMetadataPartition(f.access)) {
                         interrupted = true
                         error("Lost real metadata publication reply")

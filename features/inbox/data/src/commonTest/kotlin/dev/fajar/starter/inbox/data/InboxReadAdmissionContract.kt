@@ -55,10 +55,11 @@ suspend fun checkInboxDenialRemainsKnownAfterFailedStorage(f: InboxReadAdmission
                 partition: String,
                 expected: ReplicaCheckpoint?,
                 snapshot: ReplicaSnapshot?,
+                wake: ReplicaWakeRequest?,
             ): Boolean {
                 if (unavailable && partition == inboxAdmissionPartition(f.access))
                     error("Fixture storage failure")
-                return f.db.replicas.replace(scope, partition, expected, snapshot)
+                return f.db.replicas.replace(scope, partition, expected, snapshot, wake)
             }
         }
     val repository = EncryptedInboxCacheRepository(store, f.cipher, f.keys, f.admissions)
@@ -99,12 +100,13 @@ suspend fun checkLateInboxAdmissionCannotClearANewerDenial(f: InboxReadAdmission
                     partition: String,
                     expected: ReplicaCheckpoint?,
                     snapshot: ReplicaSnapshot?,
+                    wake: ReplicaWakeRequest?,
                 ): Boolean {
                     if (snapshot == null && partition == inboxAdmissionPartition(f.access)) {
                         entered.complete(Unit)
                         release.await()
                     }
-                    return f.db.replicas.replace(scope, partition, expected, snapshot)
+                    return f.db.replicas.replace(scope, partition, expected, snapshot, wake)
                 }
             }
         val repository = EncryptedInboxCacheRepository(store, f.cipher, f.keys, f.admissions)
