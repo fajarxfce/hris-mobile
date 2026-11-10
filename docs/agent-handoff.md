@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 04:34 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 04:36 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -21,7 +21,8 @@ not Apple source/runtime, push or calling acceptance. Continue work after checkp
 
 ## Active: command storage accepted locally; SPACE message producer next
 
-The command foundation follows pushed7b032633/a86ae506. `ReplicaWakeRequest` is renamed
+Command foundation b1adfd820e5e560bf3d689a6bee09a88d1f67a9a is committed/pushed
+(13201 reaped). `ReplicaWakeRequest` is renamed
 `WorkWakeRequest` for both raw mutation types. New explicit
 `CommandStore.insertBatchAndWake` retains new commands and fresh work in the owning
 SQLite/IndexedDB transaction. Old insertion APIs and result enums stay unchanged.
@@ -52,6 +53,10 @@ workaround. Pinned Apple execution and downstream port remain. Do not port this
 version before its Mobile platform proof. hosted-audit.py expects7,318 portable+
 2,730 Apple=10,048 tests, plus16 Swift checks and unsigned host; no new command job
 dispatched while producer42753380451 remains pending.
+Immutable validation branch `validation/command-work-wakes-20261110` also pinsb1adfd82
+and is pushed/reaped22905. Once producer42753380451 is running, dispatch the control
+workflow on that fixed ref, not the moving implementation branch. Config is in
+hosted-pending.json; hosted-audit.py is prepared. Do not supersede the pending producer.
 
 Next producer preparation is in private `.work/space-message-intent-design-2026-11-10`.
 Three uncompiled drafts cover explicit account/space intent/record, pure ownership/
@@ -99,6 +104,12 @@ control42749839268 pins7a6fe534fc2e86064be9f60509f7befcc6afbf31,now running afte
 receipt42745403043 completed. Do not redispatch or cancel this proof. Expected generic
 7,276 portable+2,709 Apple=9,985 cases,16 Swift checks,unsigned host. Auditors/config are
 in `.work/replica-commit-wake-2026-11-10`. This generic CI excludes the producer above.
+Portable audit20231 is REAPED PASS:7,276 tests (3,415 desktop,635 Android host,3,226
+browser),zero failures/errors/skips. Job129621324944,artifact13735936500,3445933bytes,
+SHA96d215a265827595459de3f048e529e0c49bea1a6323fd4d9ba9374c7376f053;
+manifest SHAae8f318c0e42ac9b3b68c52d9f94137b860ae8e8937d548612ac16c37449f66f.
+GitHub digest/ZIP CRC and every predecessor case identity verified. Apple remains
+in progress. [Partial hosted evidence](measurements/replica-work-wakes-hosted-2026-11-10.json).
 Producer control42753380451 pinsd89e6b5dcb0c0463916628ecd10a9bae946e5a1a (dispatch14839
 reaped), now pending behind generic. Expected7,292 portable+2,717 Apple=10,009,plus
 Swift/host; private producer hosted.json/audit.py compare exact generic predecessor
