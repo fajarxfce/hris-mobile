@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 04:36 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 04:51 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -19,7 +19,7 @@ announce each installation; never launch, drive, uninstall or clear its app.
 Crashlytics IAM is verified; do not ask again. Physical iPhone interaction is waived,
 not Apple source/runtime, push or calling acceptance. Continue work after checkpoints.
 
-## Active: command storage accepted locally; SPACE message producer next
+## Active: encrypted SPACE message storage and local producer
 
 Command foundation b1adfd820e5e560bf3d689a6bee09a88d1f67a9a is committed/pushed
 (13201 reaped). `ReplicaWakeRequest` is renamed
@@ -58,14 +58,26 @@ and is pushed/reaped22905. Once producer42753380451 is running, dispatch the con
 workflow on that fixed ref, not the moving implementation branch. Config is in
 hosted-pending.json; hosted-audit.py is prepared. Do not supersede the pending producer.
 
-Next producer preparation is in private `.work/space-message-intent-design-2026-11-10`.
-Three uncompiled drafts cover explicit account/space intent/record, pure ownership/
-state policy and a local repository contract. They are outside production source;
-review before applying. No next-capability datasource,usecase,DI or tests exist yet.
-New nonqueued SPACE states require exact physical origin; never use the legacy
-nullable-origin exception or encode spaceId in companyId. Add encrypted local
-retention/observation, then complete mixed-ledger reconciliation and explicit new
-enqueue capability before product routing. Original-only leases remain unchanged.
+New uncommitted SPACE storage followsc2b47bd5/b1adfd82. Thirteen Kotlin files now
+cover explicit account/space intent/record/completion, pure state/ownership policy,
+primary/completion/cancellation contracts, versioned encrypted codec/repository,
+9 domain cases,16 shared actual-storage cases with JVM/browser/Apple runners, and
+app DI singleton assertions. No usecase/native/worker/UI route is enabled yet.
+New commands atomically retain work; exact active/completed/cancelled replay creates
+no wake. New physical states require non-null origin; key loss never replaces a key
+over ciphertext. Completion/cancellation proof binds the exact raw ciphertext and
+ordering metadata. Coherent active/archive lookups keep terminal facts out of pending
+observation. Company and SPACE commands have separate encrypted namespaces.
+
+Private `.work/space-message-storage-2026-11-10/runner.py focused-1`,session90715,
+is running on frozen source: expected43 fresh cases (9 domain,16 SQLite,16 browser,
+2 app DI),Apple source and quality. One compiler/no emulator. Do not edit source
+until it ends; no new accepted storage result yet. The private README lists the
+current files and remaining checks. Earlier design drafts are supplementary.
+Next add local queue/observation usecases and constructor DI, with actual local
+ownership/denial, exact response-loss readback and bounded scheduling tests, then
+required full gate. Complete mixed old/new ledger matching and explicit enqueue
+before product routing; original-only leases cannot acquire new send capability.
 
 Generic42749839268 is running; producer42753380451 is pending. Do not supersede it.
 Receipt42745403043 is fully accepted:9,798 tests plus16 Swift checks/unsigned Apple
