@@ -26,6 +26,188 @@ abstract class CollaborationSpaceHistoryTraversalStorageContract {
     }
 
     @Test
+    fun exactSourceAbsenceCreatesNoKeysOrFrontier() = withDatabase { f ->
+        assertEquals(
+            AppResult.Success(CollaborationHistorySource(null, null)),
+            f.repository().source(f.access, f.traversal, f.event().eventId),
+        )
+        assertNull(f.local.keys.read())
+        assertNull(f.progress())
+    }
+
+    @Test
+    fun exactSourceLookupPreservesResolvedFactsAcrossReopenAndNewerWaves() = withDatabase { f ->
+        f.stage(listOf(f.event(), f.event(2)), null)
+        val pending = f.read()
+        assertEquals(
+            AppResult.Success(CollaborationHistorySource(pending.progress, pending.events.first())),
+            f.repository().source(f.access, f.traversal, f.event().eventId),
+        )
+        assertEquals(
+            AppResult.Success(true),
+            f.repository()
+                .resolve(f.access, f.traversal, pending.progress!!, listOf(pending.events.first())),
+        )
+        val resolved = pending.events.first().copy(resolved = true)
+        val afterResolution = f.progress()
+        val unchanged = f.raw()
+        assertEquals(
+            AppResult.Success(CollaborationHistorySource(afterResolution, resolved)),
+            f.repository().source(f.access, f.traversal, f.event().eventId),
+        )
+        assertEquals(unchanged, f.raw())
+        f.local.reopen()
+        assertEquals(
+            AppResult.Success(CollaborationHistorySource(afterResolution, resolved)),
+            f.repository().source(f.access, f.traversal, f.event().eventId),
+        )
+        f.stage(listOf(f.event(3)), null, CollaborationHistoryPageOrigin.Latest, "newer-position")
+        assertEquals(
+            AppResult.Success(CollaborationHistorySource(f.progress(), resolved)),
+            f.repository().source(f.access, f.traversal, f.event().eventId),
+        )
+        assertEquals(
+            AppResult.Success(CollaborationHistorySource(f.progress(), null)),
+            f.repository().source(f.access, f.traversal, "\$never-acquired"),
+        )
+    }
+
+    @Test
+    fun paginationTokenCannotBeMistakenForAnAcquiredEventId() = withDatabase { f ->
+        f.stage(listOf(f.event()), null, head = "\$looks-like-an-event")
+        assertEquals("\$looks-like-an-event", f.progress()!!.incoming!!.head)
+        assertEquals(
+            AppResult.Success(CollaborationHistorySource(f.progress(), null)),
+            f.repository().source(f.access, f.traversal, "\$looks-like-an-event"),
+        )
+        assertNotNull(
+            f.success(f.repository().source(f.access, f.traversal, f.event().eventId)).reference
+        )
+    }
+
+    @Test
+    fun exactSourceLookupRejectsSubstitutedRowsAndCheckpointGenerations() = withDatabase { f ->
+        f.stage(listOf(f.event(), f.event(2)), null)
+        val raw = f.raw()
+        val requested = f.repository().source(f.access, f.traversal, f.event().eventId)
+        for (substitution in 0..4) {
+            val store =
+                object : ReplicaStore by f.local.database.replicas {
+                    override fun observeDocument(
+                        scope: ReplicaScope,
+                        partition: String,
+                        id: String,
+                    ) = flow {
+                        val original =
+                            f.local.database.replicas.observeDocument(scope, partition, id).first()
+                        val checkpoint = requireNotNull(original.checkpoint)
+                        emit(
+                            when (substitution) {
+                                0 ->
+                                    original.copy(
+                                        documents = raw.documents.filter { it.id != id }.take(1)
+                                    )
+                                1 ->
+                                    original.copy(
+                                        documents = original.documents + original.documents
+                                    )
+                                2 -> original.copy(checkpoint = null)
+                                3 ->
+                                    original.copy(
+                                        checkpoint =
+                                            checkpoint.copy(
+                                                handle =
+                                                    checkpoint.handle.copy(
+                                                        generation = historyId(9876)
+                                                    )
+                                            )
+                                    )
+                                else ->
+                                    original.copy(
+                                        documents =
+                                            listOf(original.documents.single().copy(payload = null))
+                                    )
+                            }
+                        )
+                    }
+                }
+            assertIs<AppResult.Failed>(
+                f.repository(store).source(f.access, f.traversal, f.event().eventId)
+            )
+        }
+        assertEquals(requested, f.repository().source(f.access, f.traversal, f.event().eventId))
+        assertEquals(raw, f.raw())
+    }
+
+    @Test
+    fun exactSourceKeepsAccountSpaceRoomAndLogicalDeviceBoundaries() = withDatabase { f ->
+        f.stage(listOf(f.event()), null)
+        val missing = AppResult.Success(CollaborationHistorySource(null, null))
+        assertEquals(
+            missing,
+            f.repository()
+                .source(f.access.copy(spaceId = historyId(9870)), f.traversal, f.event().eventId),
+        )
+        assertEquals(
+            missing,
+            f.repository()
+                .source(f.access.copy(accountId = historyId(9871)), f.traversal, f.event().eventId),
+        )
+        for (key in
+            listOf(
+                f.traversal.copy(deviceId = historyId(9872)),
+                f.traversal.copy(conversationId = historyId(9873)),
+                f.traversal.copy(purpose = CollaborationHistoryPurpose.Browse),
+            )) {
+            assertEquals(missing, f.repository().source(f.access, key, f.event().eventId))
+        }
+        // Room identity is authenticated inside the existing conversation/device partition.
+        assertIs<AppResult.Failed>(
+            f.repository()
+                .source(
+                    f.access,
+                    f.traversal.copy(roomId = "!other:example.test"),
+                    f.event().eventId,
+                )
+        )
+        val current = f.success(f.repository().source(f.access, f.traversal, f.event().eventId))
+        assertEquals(f.provider, current.progress!!.provider)
+        assertNotNull(current.reference)
+    }
+
+    @Test
+    fun sourceReadUsesTheFinalAtomicPageWhenProgressChangesDuringIndexAcquisition() =
+        withDatabase { f ->
+            f.stage(listOf(f.event()), null)
+            var reads = 0
+            val store =
+                object : ReplicaStore by f.local.database.replicas {
+                    override fun observeDocument(
+                        scope: ReplicaScope,
+                        partition: String,
+                        id: String,
+                    ) = flow {
+                        reads++
+                        f.stage(
+                            listOf(f.event(2)),
+                            null,
+                            CollaborationHistoryPageOrigin.Latest,
+                            "newer-position",
+                        )
+                        emit(
+                            f.local.database.replicas.observeDocument(scope, partition, id).first()
+                        )
+                    }
+                }
+            val result =
+                f.success(f.repository(store).source(f.access, f.traversal, f.event().eventId))
+            assertEquals(1, reads)
+            assertEquals(f.progress(), result.progress)
+            assertEquals(f.event(), result.reference!!.event)
+            assertEquals(0, result.reference!!.sequence)
+        }
+
+    @Test
     fun exhaustedFrontierAndPendingReferencesSurviveAReopenAndANewWave() = withDatabase { f ->
         f.stage((1..20).map(f::event))
         f.stage(listOf(f.event(21)), null)

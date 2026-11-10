@@ -1,0 +1,26 @@
+{
+  "startedAt": "2026-11-10T19:01:00.999393+00:00",
+  "elapsedSeconds": 352.143,
+  "sourceFiles": 4814,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 204,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sourceManifestSha256": "4e8356861e4d1bb0238591bb3336c577fa646eeffbb279252dd0803d9d478979",
+  "run": "focused2",
+  "priorCaseIdentitiesPreserved": true,
+  "newDomainCasesPerTarget": 21,
+  "newRealStorageCasesPerTarget": 6,
+  "actualChromium": true,
+  "providerCoverageFromExactSource": true,
+  "providerCursorIsNotEventId": true,
+  "independentAtomicWake": true,
+  "duplicatesDoNotWriteOrSchedule": true,
+  "productConsumerEnabled": false,
+  "genericStorageFormatsUnchanged": true,
+  "phoneLatencyMeasured": false
+}

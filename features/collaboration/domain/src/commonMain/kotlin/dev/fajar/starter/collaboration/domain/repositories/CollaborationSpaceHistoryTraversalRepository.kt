@@ -15,6 +15,17 @@ interface CollaborationSpaceHistoryTraversalRepository {
         traversal: CollaborationHistoryTraversal,
     ): AppResult<CollaborationHistoryProgress?>
 
+    /**
+     * Reads one exact source (pending or resolved) with its checkpoint. A source is provider
+     * coverage evidence, not a displayed message, delivery receipt or content-read permission.
+     * Absence never creates a key, checkpoint, cursor or provider request.
+     */
+    suspend fun source(
+        access: CollaborationSpaceLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        eventId: String,
+    ): AppResult<CollaborationHistorySource>
+
     /** Indexed bounded pending references; no network, decryption retry or deletion. */
     fun observeReferences(
         access: CollaborationSpaceLocalAccess,

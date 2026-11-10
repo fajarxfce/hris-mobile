@@ -105,6 +105,13 @@ internal class SpaceProviderHistoryFixture(
                 return if (replied is AppResult.Failed) replied else response
             }
 
+            override suspend fun source(
+                access: CollaborationSpaceLocalAccess,
+                traversal: CollaborationHistoryTraversal,
+                eventId: String,
+            ): AppResult<CollaborationHistorySource> =
+                error("No exact source lookup during page acquisition")
+
             override fun observeReferences(
                 access: CollaborationSpaceLocalAccess,
                 traversal: CollaborationHistoryTraversal,

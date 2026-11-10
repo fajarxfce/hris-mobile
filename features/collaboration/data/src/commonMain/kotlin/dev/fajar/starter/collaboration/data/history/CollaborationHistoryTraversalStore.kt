@@ -35,6 +35,41 @@ internal class CollaborationHistoryTraversalStore(
         }
     }
 
+    suspend fun source(
+        coordinates: CollaborationHistoryCoordinates,
+        traversal: CollaborationHistoryTraversal,
+        eventId: String,
+    ): CollaborationHistorySource {
+        require(validCollaborationEventId(eventId))
+        val scope = coordinates.scope
+        val partition = coordinates.traversalPartition(traversal)
+        // Avoid key acquisition for an absent partition. The final page still owns one transaction.
+        if (replicas.checkpoint(scope, partition) == null)
+            return CollaborationHistorySource(null, null)
+        return withCodec(coordinates, traversal) { codec ->
+            val id = codec.id(eventId)
+            val page = replicas.observeDocument(scope, partition, id).first()
+            val raw = page.checkpoint
+            if (raw == null) {
+                require(page.documents.isEmpty())
+                CollaborationHistorySource(null, null)
+            } else {
+                require(page.documents.size <= 1)
+                val progress = codec.progress(raw)
+                val reference =
+                    page.documents.singleOrNull()?.let { document ->
+                        require(document.id == id)
+                        codec.reference(raw, document).also {
+                            require(
+                                it.event.eventId == eventId && it.sequence < progress.references
+                            )
+                        }
+                    }
+                CollaborationHistorySource(progress, reference)
+            }
+        }
+    }
+
     fun observeReferencePages(
         coordinates: CollaborationHistoryCoordinates,
         traversal: CollaborationHistoryTraversal,

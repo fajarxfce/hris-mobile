@@ -1,0 +1,32 @@
+{
+  "startedAt": "2026-11-10T19:07:22.762548+00:00",
+  "elapsedSeconds": 656.1,
+  "sourceFiles": 4814,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 8546,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 150672828,
+    "sha256": "0185bf375946f2ac0116ee0d09018df5fd7ec37c62f963f4fe70d0d97306cb8b"
+  },
+  "sourceManifestSha256": "4e8356861e4d1bb0238591bb3336c577fa646eeffbb279252dd0803d9d478979",
+  "validatedTests": 10565,
+  "validatedReusedTests": 2019,
+  "priorCaseIdentitiesPreserved": true,
+  "newDomainCasesPerTarget": 21,
+  "newRealStorageCasesPerTarget": 6,
+  "actualChromium": true,
+  "providerCoverageFromExactSource": true,
+  "providerCursorIsNotEventId": true,
+  "independentAtomicWake": true,
+  "duplicatesDoNotWriteOrSchedule": true,
+  "productConsumerEnabled": false,
+  "genericStorageFormatsUnchanged": true,
+  "phoneLatencyMeasured": false
+}

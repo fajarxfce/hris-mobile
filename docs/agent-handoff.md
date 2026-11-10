@@ -1,46 +1,42 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 19:07 UTC. Follow AGENTS.md. This opening section owns current
+Updated 10 November 2026, 19:19 UTC. Follow AGENTS.md. This opening section owns current
 work; checkpoints below are historical. All 54 communications PRD groups remain OPEN.
 
-## Active admitted incoming-room request
+## Current incoming source/request acceptance
 
-Storage795f11c2 committed/pushed,31792 REAPED; focused118/full10511 accepted. Its exact source
-manifestc08386dad0b82bccc0d8b6e1f65d7d330bea8115ca018c72122aec21e14a7106 remains the base.
-Current11Kotlin source/request files are APPLIED/UNCOMMITTED, FROZEN under full1/3669 RUNNING. Expected10565full/4814inputs.
-Focused2/64580 REAPED/ACCEPTED204/352.143s,manifest
-4e8356861e4d1bb0238591bb3336c577fa646eeffbb279252dd0803d9d478979.
-JVM/actualChromium/iOSdata/format/architecture/detekt PASS. Prepare11076 REAPED;
-private space-incoming-source-2026-11-10 holds base/candidate/prior reports/runners/strict audits.
+11Kotlin files ACCEPTED, ready for commit/push. Focused64580 and full3669 REAPED;
+strict audits PASS. Focused204/352.143s; full10565=8546fresh+
+2019exact controls/656.1s.4814inputs,
+manifest4e8356861e4d1bb0238591bb3336c577fa646eeffbb279252dd0803d9d478979. Source/library unchanged. Root/Androidhost/release/lint/
+Wasm/iOSsource/actualChromium/proof20/quality PASS. Private space-incoming-source-2026-11-10
+owns exact candidate/base/prior reports/runners/audits. Contract: collaboration-space-incoming-source.md.
 
-The increment reads exact pending or resolved source references with their consistent checkpoint
-through existing HMAC document indexing, without schema changes. The owning request admits
-current account/directory/binding; pagination tokens grant no event coverage. A known idle source
-creates no demand. Known incomplete coverage resumes Provider/Pending, and late old-source hints
-leave newer queued work intact. Changed work commits with a distinct incoming wake; exact
-readback precedes bounded best-effort scheduling. Repeated queued hints do not write/reschedule.
-Focused1/97107 REAPED exit1/171.513s:102desktop cases,1failed test expectation. A substituted
-room ID must fail authentication within the conversation/device partition; other account/space/
-conversation/device partitions remain absent. Corrected that expectation without weakening
-storage. Also reject an unresolved exact source paired with an empty pending index; the fixture
-now preserves an existing wake on a null optional wake. Focused2 accepted204; full10565 expected.
-21new domain scenarios and6new real-store cases pass focused validation; full gate pending. DI factory
-and application resolution assertion included. No product worker, SDK callback or phone delta.
+Exact HMAC-indexed source+checkpoint lookup preserves existing formats and strong room AAD.
+Owning Queue admits local scope/binding, excludes idle acquired hints, resumes Provider/Pending,
+preserves newer work against late older-source hints, and confirms atomic wake+queue before
+scheduling. Repeated queued hints do not write/reschedule.21domain/6real-store new cases pass.
+Initial97107 failed wrong-room test expectation; fixed without weakening storage. Also reject
+unresolved-source/empty-pending inconsistency.16-case demand storage795f11c2 remains accepted.
 
-PRIVATE space-incoming-completion-2026-11-10 has5UNAPPLIED files: dedicated clean Pending-room
-completion, DI and16domain scenarios. Depends on current request fixture/DI acceptance. No
-arbitrary EOF boolean, wake acknowledgement or runtime consumption is enabled. Private runners
-prepared for236focused/10597full/4817inputs; no accepted base/reports captured yet. Single worker must serialize provider writes/completion.
+Next review/format/apply PRIVATE space-incoming-completion-2026-11-10:13UNAPPLIED files,
+16completion+21phase scenarios and5new acquisition cases (prior24preserved). Space provider
+acquisition gains typed runtime/traversal/origin/before/after evidence and exact post-commit
+readback; Company summary unchanged. Pure receipt policy validates monotonic revision/count,
+provider/generation and incoming wave/seek. Phase advancement checks retained evidence and
+preserves exact applied replay/newer work; clean completion requires Pending, real EOF, no
+unresolved references and resolved known head. Both retain the independent wake. Proof host
+checks typed receipts with previous native request budgets; actual native4 rerun required.
+Private runners expect336focused/10649full/4821inputs; no base/reports captured yet. Capture
+this accepted source before applying. Single worker must serialize provider writes/completion.
+Then finite scan claim/cursor, fair deferral, bounded worker and current-parent SDK hints.
+No product worker, callback, native SDK change, phone behavior or generic Starter delta here.
 
-After focused/full acceptance commit/push, then implement dedicated clean completion, proven
-provider-phase advancement, finite rescan claim/cursor and bounded incoming worker. Private
-NEXT.md owns these decisions. Register the independent key with the existing collapsed scheduler;
-do not use unrestricted APPEND_OR_REPLACE for repeated hints. No arbitrary caller EOF boolean
-may discharge work. Retain original SDK6 and native2/3/4controls; existing source is frozen now.
-
-Hosted6699/42865846045 complete11621+16Swift/unsignedhost; it predates this increment and the
-storage/pending additions. No new hosted dispatch yet. Phone release89 uninstalled; ADB76668
-timeout REAPED18:39; original live90163/schema116.4 unchanged. All54PRD groups remain OPEN.
+Hosted6699/42865846045 remains complete11621+16Swift/unsignedhost but predates new increments.
+No duplicate/new dispatch. Previous native4/64426 accepted230.275s with original2/3controls,
+emulatorSTOPPED. Release89 uninstalled; ADB76668 timeout REAPED18:39, phone87 last known.
+Install-only when reachable, no UI drive/reset. Original live90163/schema116.4 unchanged; Group
+117–140 undeployed. SDK6/private originals/dirty SDK/Inspector preserved. All54PRD groups OPEN.
 
 ## Historical checkpoints
 

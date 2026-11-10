@@ -1,5 +1,9 @@
 # Architecture
 
+[Admitted incoming requests](collaboration-space-incoming-source.md) use exact retained source
+coverage to coalesce hints, retain unfinished phases and atomically schedule changed demand.
+Provider pagination tokens, source references and outgoing receipts remain distinct.
+
 [Independent incoming demand](collaboration-space-incoming-demand.md) coalesces room work,
 preserves recovery phase and newer generations, and retains bounded overflow rescan demand.
 [Atomic encrypted storage](collaboration-space-incoming-demand-storage.md) retains demand and an
