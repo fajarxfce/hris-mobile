@@ -1,51 +1,57 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 20:13 UTC. Follow AGENTS.md. This opening section owns current work.
+Updated 10 November 2026, 20:39 UTC. Follow AGENTS.md. This opening section owns current work.
 
 ## Incoming scan and retry integration in progress
 
-Mobile accepted product baseline07e22182 and Group evidence20a0444c are pushed. Their prior
-completion acceptance stays focused336/full10649/native4. Current Mobile increment has32applied,
-uncommitted Kotlin files,4844inputs. It adds atomic cursor+room scan, schema1/2 compatibility,
-per-room30–300second retry, local scheduling/wake owners, and owned Read selection (four eligible
-FIFO rooms at one captured time). App worker and SDK hint consumer remain NOT ENABLED.
+Mobile has 32 applied, uncommitted Kotlin files for atomic incoming scan, retained per-room
+retry, fair deferral, exact wake completion and domain-owned four-room FIFO selection. The
+application worker and SDK hints remain disabled. Accepted product baseline is 07e22182;
+Mobile docs ffbbea60 and Group docs c7c02f45 are pushed. No active emulator.
 
-Private `space-incoming-worker-2026-11-10` owns exact32-file candidate/base/reports/runners.
-Focused1/66231 failed test compilation;2/48454 and3/7213 failed one non-EOF fixture assertion;
-4/35879 passed193domain JVM but failed two data-test smart casts. All corrected and reaped.
-Focused5/54974 passed528 JVM/actualChromium cases and iOS source compilation, then formatCheck
-caught the test nullability edit's wrapping. Formatting is corrected. Local Read now additionally
-owns eligibility/turn selection with three tests; focused6/10905 runs534expected cases.
-Full10847expected and native gates for this increment have NOT started. Preserve source/library
-while running; no accepted claim for the32 files yet. Docs commitsb2731284/c36dcb13 are pushed.
+Current local run: `space-incoming-worker-2026-11-10/full2`, session 26163 RUNNING. Source and
+library must stay frozen. Expected full total 10,847; 4,844 inputs. Focused7/56727 is REAPED and
+ACCEPTED: 536 tests in 295.214 seconds, including application bindings, actual Chromium and
+platform/quality checks. Its exact source manifest is
+b6671417212692b961c89536c96bc08c0a80c0970ff2e94f1f99f7163995305d.
+Earlier focused6/10905 passed 534 cases, but full1/34641 caught a missing Koin Clock dependency
+(724 tests, one failure). Read/Defer factories now follow the existing Clock.System composition.
+All earlier failed focused attempts and full1 are retained/reaped; do not erase or call them passes.
 
-Separate PRIVATE `application-candidate` is unapplied/uncompiled: worker, DI/scheduler drafts,
-12head-revisit domain tests,18application task tests and fixtures. A known requested event may be
-absent from a provider page reporting EOF; simply keeping Pending would spin or never acquire it.
-Draft RevisitHead admits exact EOF+empty pending+absent source, preserves content/wake/newer work,
-then retains Latest with delay. Worker must retain content per page BEFORE all older metadata is
-finished, and finish a bounded pending pass before backing off missing keys. Owned Read already
-handles selection, so worker keeps only task/parent lifetime. Still require application compilation,
-actual native worker tests and current-parent bounded SDK room/key hints before activation.
-SDK syncOnceV2 is already owned by AndroidCollaborationSyncSource; inspect its joined-room response
-outside the SDK monitor, without another sync loop/client. Overflow must retain durable rescan.
-All producers atomically commit fresh wake with new demand; current worker alone serializes
-provider writes/completion/revisit. Existing common ReplicaStore capacities remain unchanged.
+Next reap full2 and run `accept-full.py full2` in the private worker directory. Its acceptance
+checks exact prior case identities and source/library hashes. Only after acceptance run publish.py,
+review/commit the 32 implementation files plus compact evidence/contract/handoff, then PUSH.
+The publication script also updates Group handoff; commit/push that separately. Do not publish
+before acceptance or claim native execution for these local scheduling tests.
 
-Hosted completion run42889565705 at exact07e22182 has PORTABLE ACCEPTED8647=
-4062desktop+722Androidhost+3863Chromium. Artifact13799302654,3603279bytes,
-SHA1164b99c15c9916c260789244c4eaba16cb9621b5d0001f860d1a286d263486f;
-reportmanifest50cb2807fef34bb174374ea2e0b76ba274ac7f34f4729aae306b55fb2e34d556.
-Digest/ZIP CRC/prior identities verified; auditor61001 reaped. Compact metadata lives in
-`docs/measurements/collaboration-space-incoming-completion-hosted-portable-2026-11-10.json`.
-Apple job130086786070 still runs; expect3346+16Swift/unsignedhost. DO NOT redispatch.
-https://github.com/fajarxfce/hris-mobile/actions/runs/42889565705 . This CI predates current32files.
+After that accepted commit/push, continue PRIVATE `space-incoming-application-2026-11-10`.
+Its prepare-apply.py checks the clean accepted base, saves source/report controls and applies
+12 Kotlin files (six new). Expect 603 focused / 10,889 full cases and 4,850 inputs. Candidate
+is formatted but UNCOMPILED/UNTESTED. It registers the incoming task and independent collapsed
+OS key, interleaves content with each provider page, and adds an admitted delayed head revisit.
+A requested event can be absent even when a provider page reports EOF; otherwise a Pending room
+would spin or never acquire it. Revisit preserves content/wake/newer generations before retaining
+Latest with backoff. There are 12 new domain and 18 new application tests, with prior 25 outgoing
+SpaceRecovery cases and two application binding cases retained. No additional sync/client.
 
-Release89 remains uninstalled; phone87 last known, ADB94350 timed out/reaped20:17. Existing
-availability question remains pending. Notify before install validated89 with `--install-only`;
-no launch/reset/UI drive. Live90163/schema116.4 unchanged; Group117–140 undeployed. Emulator off.
-SDK6/original transactions/sender keys/dirty SDK and Inspector trees preserved. No Starter delta.
-All54 communications PRD groups remain OPEN.
+Actual native worker acceptance and realtime/push handoff remain required. Preserve all four
+old native controls and original transaction identities. Use the registered application task
+with real storage/SDK; old manual provider acquisition does not prove the worker. Existing proof
+hosts are named in the private NEXT.md. syncOnceV2 reports changed joined-room IDs but lacks event
+IDs and includes ephemeral/state changes; a room preview cannot represent every edit/redaction.
+Verify SDK 6 capabilities before choosing bounded raw hints. Keep callback I/O and Registry calls
+outside native monitors, retain overflow/startup recovery, and separate incoming/outgoing wakes.
+The current group push owner only retains outgoing recovery despite optional room/event fields.
+
+Hosted completion run 42889565705 targets PRIOR 07e22182, not these 32 files. Portable is accepted
+8,647 tests, artifact 13799302654; compact digest/report metadata is in the committed measurements.
+Apple job 130086786070 passed setup tests and is building the unsigned iOS host; final artifact
+is not yet audited. Expect 3,346 Apple tests plus 16 Swift cases. Do not redispatch this run.
+
+Release 89 remains uninstalled; phone 87 last known. ADB 97409 timed out/reaped; availability
+question stays pending. Notify before install-only, no launch/reset/UI driving. Live 90163 and
+schema 116.4 unchanged; Group 117–140 undeployed. SDK 6, sender keys/original controls, and dirty
+SDK/Inspector trees are preserved. No Starter delta. All 54 communications PRD groups remain OPEN.
 
 ## Prior completion checkpoint
 
