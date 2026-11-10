@@ -119,7 +119,12 @@ class StarterApplication : Application(), Configuration.Provider, AndroidCollabo
         AndroidWorkScheduler(
             WorkManager.getInstance(this),
             collapsedKeys =
-                setOf(CollaborationRecoveryWake.WORK_KEY, QueueCollaborationText.DELIVERY_KEY),
+                setOf(
+                    CollaborationRecoveryWake.WORK_KEY,
+                    QueueCollaborationText.DELIVERY_KEY,
+                    dev.fajar.starter.collaboration.domain.entities.CollaborationSpaceIncomingWake
+                        .WORK_KEY,
+                ),
             onRequested = { foregroundRequests.notify(it) },
         )
     }

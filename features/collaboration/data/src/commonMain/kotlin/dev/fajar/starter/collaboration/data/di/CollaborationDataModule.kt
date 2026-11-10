@@ -698,6 +698,25 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun recoverSpaceIncomingProvider(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        bindings: CollaborationSpaceRoomBindingRepository,
+        history: CollaborationSpaceHistoryTraversalRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        RecoverCollaborationSpaceIncomingProvider(
+            demands,
+            bindings,
+            history,
+            directory,
+            sessions,
+            server,
+            Clock.System,
+        )
+
+    @Factory
     fun readSpaceIncomingDemand(
         demands: CollaborationSpaceIncomingDemandRepository,
         directory: CollaborationSpaceDirectoryRepository,

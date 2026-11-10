@@ -52,6 +52,12 @@ sealed interface CollaborationSpaceIncomingDemandChange {
         val retry: CollaborationSpaceIncomingRetry? = null,
     ) : CollaborationSpaceIncomingDemandChange
 
+    /** Current provider absence restarts immediately; an unseen known head retains a delay. */
+    data class RestartProvider(
+        val captured: CollaborationSpaceIncomingRoomDemand,
+        val retry: CollaborationSpaceIncomingRetry?,
+    ) : CollaborationSpaceIncomingDemandChange
+
     /** Only the owning completion usecase may admit clean provider EOF and no pending sources. */
     data class Complete(val captured: CollaborationSpaceIncomingRoomDemand) :
         CollaborationSpaceIncomingDemandChange

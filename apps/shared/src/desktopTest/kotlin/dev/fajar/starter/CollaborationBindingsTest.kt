@@ -457,6 +457,17 @@ class CollaborationBindingsTest {
                         it.key == groupRecovery.key
                     },
                 )
+                val incoming =
+                    container.koin.get<
+                        dev.fajar.starter.app.work.CollaborationSpaceIncomingWorker
+                    >()
+                assertSame(
+                    incoming,
+                    container.koin.getAll<dev.fajar.starter.sync.domain.SyncTask>().single {
+                        it.key == incoming.key
+                    },
+                )
+                assertNotNull(container.koin.get<RecoverCollaborationSpaceIncomingProvider>())
                 assertNotNull(container.koin.get<LoadCollaborationSpaceRecoveryPage>())
                 assertNotNull(container.koin.get<LoadCollaborationSpaceRecoveryRoom>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceRecoveryDemand>())

@@ -1,0 +1,29 @@
+{
+  "startedAt": "2026-11-10T21:09:51.943716+00:00",
+  "elapsedSeconds": 617.44,
+  "sourceFiles": 4850,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 8882,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 150724590,
+    "sha256": "e66ffc52fbc0f77fcba555946b31cf0ac611b3180a5b2141d2ea8815b36ddce0"
+  },
+  "sourceManifestSha256": "9ce21c0c6d07699461beac8d8950c3ee1762845066df75f46e9973065e0a2ac7",
+  "validatedTests": 10901,
+  "validatedReusedTests": 2019,
+  "priorCaseIdentitiesPreserved": true,
+  "newDomainCasesPerTarget": 17,
+  "newApplicationCases": 20,
+  "incomingWorkerRegistered": true,
+  "nativeWorkerAccepted": false,
+  "realtimeHintsIntegrated": false,
+  "phoneTouched": false,
+  "liveDeployed": false
+}

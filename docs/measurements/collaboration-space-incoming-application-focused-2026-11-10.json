@@ -1,0 +1,22 @@
+{
+  "startedAt": "2026-11-10T21:01:31.641904+00:00",
+  "elapsedSeconds": 471.483,
+  "sourceFiles": 4850,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 615,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sourceManifestSha256": "9ce21c0c6d07699461beac8d8950c3ee1762845066df75f46e9973065e0a2ac7",
+  "priorCaseIdentitiesPreserved": true,
+  "newDomainCasesPerTarget": 17,
+  "newApplicationCases": 20,
+  "incomingWorkerRegistered": true,
+  "nativeWorkerAccepted": false,
+  "realtimeHintsIntegrated": false,
+  "phoneTouched": false,
+  "liveDeployed": false
+}

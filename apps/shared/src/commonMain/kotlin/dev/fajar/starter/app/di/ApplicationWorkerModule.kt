@@ -28,6 +28,7 @@ fun applicationWorkerModule() = module {
     includes(
         applicationNotificationModule(),
         applicationCollaborationSpaceWorkerModule(),
+        applicationCollaborationSpaceIncomingWorkerModule(),
         applicationPushReceiverModule(),
     )
     // Koin annotations 2.3.1 metadata for an app-level SyncTask bind collides with dependency

@@ -80,6 +80,29 @@ fun nextCollaborationSpaceIncomingDemand(
                                     room.copy(position = current.nextPosition, retry = change.retry),
                         )
                 }
+            is CollaborationSpaceIncomingDemandChange.RestartProvider -> {
+                if (
+                    change.captured.phase != CollaborationSpaceIncomingPhase.Pending ||
+                        (change.retry != null &&
+                            (change.captured.headEventId == null ||
+                                !validCollaborationSpaceIncomingRetry(change.retry)))
+                )
+                    return invalidIncomingDemand()
+                changeIncomingRoom(current, change.captured) { room ->
+                    if (current.nextPosition == MAX_INCOMING_POSITION) null
+                    else
+                        current.copy(
+                            nextPosition = current.nextPosition + 1,
+                            rooms =
+                                current.rooms.filterNot { it == room } +
+                                    room.copy(
+                                        position = current.nextPosition,
+                                        phase = CollaborationSpaceIncomingPhase.Latest,
+                                        retry = change.retry,
+                                    ),
+                        )
+                }
+            }
             is CollaborationSpaceIncomingDemandChange.Complete -> {
                 if (change.captured.phase != CollaborationSpaceIncomingPhase.Pending)
                     return invalidIncomingDemand()

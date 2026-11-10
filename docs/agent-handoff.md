@@ -1,59 +1,47 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 21:02 UTC. Follow AGENTS.md. This opening section owns current work.
+Updated 10 November 2026, 21:20 UTC. Follow AGENTS.md. This opening section owns current work.
 
-## Application incoming worker in progress
+## Application incoming worker accepted; native proof next
 
-Mobile scheduling baseline 274d8f8a41d18253dcf142569b5f558f1017fe53 is committed/pushed.
-Group handoff 26c949c5 is pushed. The 32-file baseline passed 536 focused and 10,847 full cases
-(8,828 fresh + 2,019 exact controls), with 4,844 inputs. Its contract and compact measurements
-are committed as collaboration-space-incoming-scheduling.*. Original SDK/source history is intact.
+The12-file Mobile application increment is accepted. Focused615/471.483s;
+full10901=8882fresh+2019exact controls/617.44s.
+Source4850, manifest 9ce21c0c6d07699461beac8d8950c3ee1762845066df75f46e9973065e0a2ac7. Source/library fingerprints stayed fixed.
+32-file scheduling base274d8f8a is committed/pushed. Current contract and compact measurements:
+docs/collaboration-space-incoming-application.md and matching measurements. No Starter delta.
 
-Current Mobile work is 12 applied, UNCOMMITTED Kotlin files in
-`space-incoming-application-2026-11-10`. Focused2/session31627 is RUNNING; freeze source/library.
-Expected 615 focused / 10,901 full cases, 4,850 inputs. No full or actual native-worker gate has
-started. Initial focused1/17560 is REAPED: all603 cases passed, then detekt rejected the fixture's
-204-line worker factory. The fixture now owns one worker, matching application singleton lifetime;
-its platform is a constructor input. Initial candidate and reports remain archived privately.
+Registered incoming task owns bounded four-room turns and task lifetime, with per-page content
+before EOF. Domain Recover distinguishes absent current-device progress from storage failure,
+preserves previous device history and resets Latest exactly once. Known-head omission retains
+delayed recovery.17new domain cases per JVM/Chromium and20app cases; prior case identities remain.
+Focused1/17560 passed603 but failed detekt on fixture factory; focused2/31627 REAPED accepted615.
+Full1/72582 REAPED accepted. Private space-incoming-application-2026-11-10 holds exact reports.
 
-The current candidate adds the registered incoming task, independent collapsed OS key, bounded
-four-room turns, content retention before provider EOF, and owned provider recovery. There are
-17 new domain and20 new app cases, plus25 prior SpaceRecovery cases and2 binding controls.
-RecoverCollaborationSpaceIncomingProvider replaces the NEW/uncommitted Revisit owner. History
-positions include logical device ID, while incoming demand survives account reauthentication.
-If the new current-device position is absent, a retained Pending room must restart Latest once
-without erasing old device history. Storage failure is not absence. A separate known-head/EOF
-case still retains a delayed restart. Late progress, response loss, replay, unknown heads and
-missing-key fairness are covered by the new cases; none has been claimed accepted yet.
+Next actual native-worker proof: private space-incoming-application-native-2026-11-10 in Mobile
+and Group has3candidate files each, UNAPPLIED/UNCOMPILED. Mobile candidates register a proof
+entry point using the real application parent/task/SDK/store; Group adds a fifth native case
+and distinct worker evidence. Prior4manual/original controls remain unchanged. Protocol draft
+passes21 cases after an initial missing fixture alias (4errors). Do not run prepare scripts
+again after formatting; candidate contains current formatted bytes. Compile Mobile proof and
+Group fixture sequentially, then run the isolated2560MiB/2core emulator. Capture exact native
+request counts, first-page visibility, empty/covered-hint no-op and offline process reopen.
+Initial new-path request bounds are exploratory; establish exact counters before acceptance.
+Do not attribute old manual native4 acceptance to this worker. No native proof run started yet.
 
-After focused2 succeeds, run accept-focused.py focused2, then the full runner/auditor. Keep
-source/fixtures/reports fixed during gates. Do not rerun prepare-apply.py: candidate is already
-applied. files.json/expected.json describe the current12 files; candidate-initial and focused1
-retain the earlier Revisit implementation. Preserve all32 baseline case identities. App helpers
-own task lifetime; domain owners coordinate repositories and policy. No generic Starter delta.
+Realtime SDK/root/push/key handoffs remain absent. ImmutableSDK6 syncOnceV2 returns room IDs,
+including ephemeral/state updates, without raw event IDs. Shipped AAR hash and javap confirm
+this ABI (private sdk6-api/accepted.json), not just the dirty SDK checkout. History-head lookup is HTTP; previews
+miss some edits/redactions. Verify bounded raw hints; callbacks must not do Registry/storage I/O.
+Current group push only retains outgoing wake. Add separately admitted incoming demand+wake and
+first-root startup. Verified new room keys may reactivate that room once; unrelated wakes must
+preserve retry.15minute periodic fallback is not realtime. All54 PRD groups remain OPEN.
 
-Actual native-worker and realtime/push integration remain required. Preserve four existing
-native controls and every original transaction. Use registered app ownership plus real SDK/store;
-manual acquisition is not worker proof. SDK6 syncOnceV2 reports joined-room IDs, not event IDs,
-and those updates include typing/receipts/state. History-head lookup is HTTP; room previews miss
-some edits/redactions. Verify an appropriate bounded raw-hint capability rather than triggering
-history requests for every update. Default foreground cadence is15 minutes, so add durable first
-root/native registration and push handoff; periodic work alone is not realtime. The existing group
-push owner only retains outgoing recovery, despite optional roomId/matrixEventId. Verified new
-room keys should reactivate only the relevant pending work once; unrelated wakes preserve retry.
-Current callback, root/push and key handoffs are still absent. See private NEXT.md/source notes.
-
-Hosted completion run42889565705 at PRIOR07e22182 is COMPLETE and independently ACCEPTED:
-11,993 tests =8,647portable +3,346Apple, plus16 Swift envelope cases and unsigned iOS host.
-Portable audit61001 and Apple audit47182 are reaped. Both artifact digests/ZIP CRCs and prior
-case identities were verified. Compact combined and Apple measurements are committed under
-`docs/measurements/collaboration-space-incoming-completion-hosted*-2026-11-10.json`.
-These CI results predate the32 scheduling and current12 application files. Do not redispatch.
-
-Release89 remains uninstalled; phone87 last known. ADB97409 timed out/reaped; the existing
-availability question stays pending. Notify before install-only, no launch/reset/UI drive.
-Live90163/schema116.4 unchanged; Group117–140 undeployed; emulator stopped. SDK6, original
-controls/sender keys, and dirty SDK/Inspector trees are preserved. All54 PRD groups remain OPEN.
+Hosted42889565705 at prior07e22182 accepted11993=8647portable+3346Apple,+16Swift/unsigned host;
+predates32scheduling and12application changes. Artifacts/digests/identity checks already published.
+Do not redispatch. Release89 remains uninstalled, phone87 last known; ADB2836 timeout/reaped.
+Existing availability question remains pending. Notify before install-only; no launch/reset/UI.
+Live90163/schema116.4 unchanged, Group117–140 undeployed. Emulator stopped. SDK6, original
+transactions/sender keys, dirty SDK and Inspector trees remain preserved.
 
 ## Prior completion checkpoint
 
