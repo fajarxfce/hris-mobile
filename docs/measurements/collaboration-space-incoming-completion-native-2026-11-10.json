@@ -1,0 +1,234 @@
+{
+  "startedAt": "2026-11-10T19:46:17.975645+00:00",
+  "elapsedSeconds": 228.267,
+  "bootSeconds": 41.992,
+  "counts": {
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "memoryMiB": 2560,
+  "cores": 2,
+  "phoneTouched": false,
+  "sourcesUnchanged": true,
+  "apkUnchanged": true,
+  "noCompilationDuringEmulator": true,
+  "emulatorStopped": true,
+  "artifact": {
+    "apkSha256": "d281dd3f2dc263d0baab7ad909ab64407468b7ccf59732932f41da526f3f3267",
+    "sdkVersion": "26.10.23-hris.6",
+    "abi": "x86_64",
+    "librarySha256": "ecffbab72fd5dd29d656bc4757ea423bb4bccf0444140af0480684bc32761278"
+  },
+  "encryptedEventsPerScenario": 4,
+  "failures": [],
+  "originalControls": [
+    {
+      "actualProviderEvents": 3,
+      "confirmedOriginals": 3,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "secondProviderAckLostBeforeAppJournal": true,
+      "localReadBeforeTransport": true,
+      "spaceAckLostBeforeAppJournal": true,
+      "newSpaceOriginal": true,
+      "nativeRequests": {
+        "requests": 11,
+        "bootstrapReplay": 2,
+        "directTransport": 3
+      },
+      "actualProcessDeaths": 1,
+      "offlineRestart": true,
+      "recoveryMillis": 814
+    },
+    {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "secondProviderAckLostBeforeAppJournal": true,
+      "localReadBeforeTransport": true,
+      "spaceAckLostBeforeAppJournal": false,
+      "newSpaceOriginal": false,
+      "nativeRequests": {
+        "requests": 10,
+        "bootstrapReplay": 2,
+        "directTransport": 2
+      },
+      "actualProcessDeaths": 1,
+      "offlineRestart": true,
+      "recoveryMillis": 761
+    }
+  ],
+  "incomingScenarios": [
+    {
+      "completed": false,
+      "native": {
+        "requests": 9,
+        "bootstrapReplay": 1,
+        "directTransport": 4
+      },
+      "matrix": {
+        "requests": 32,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "incoming": {
+        "retained": {
+          "providerReferences": 15,
+          "pendingReferences": 13,
+          "frontierHash": "7d8247f6e9a8a02396c92d23c0f6aea3f475cc7b68d8cf0a13a9ad08e8b976f6",
+          "pendingHash": "072bea87ed9f6f9add7753c331a27cbb3ce78f8cde6f016dbcb6fc03572c6205",
+          "physicalProviderPreserved": true,
+          "providerExhaustedWithPending": true,
+          "messages": 1,
+          "originalEventId": "$jSx_7VX4L-GqLHjJngdpv_OYGnXuF3damdiBv4hKtHs",
+          "replacementEventId": "$eiRHeAEIUBTfSfi_I9nOfNmFYlyWcT1M3PBjTKPxEoQ",
+          "redactedEventId": "$N5lqdk0H3Jmql31b3J_bvghoA_dmfoAYtEARwyEBxJk",
+          "originalHash": "429ca84f7d2ac87d7846f88d4383a26fcd40a09ae009b0487c932372aa2f2272",
+          "replacementHash": "08197e240b7080ad58e1bedd2ef5fe0a63a33d2bbf5105f56bbcba13bb68d3d5",
+          "revisionHash": "5016dfe35b337294e74ce2493164763c30b3e4ef72635e5a5c3309f416c5a27f",
+          "originalTextPreserved": true,
+          "replacementTextPreserved": true,
+          "originalSenderTombstone": true,
+          "noOriginalFactForEdit": true,
+          "noSpaceSendWork": true
+        },
+        "providerPages": 2,
+        "replayUnchanged": true,
+        "originalJournalUnchanged": true
+      },
+      "reopened": {
+        "processId": 4981,
+        "incoming": {
+          "providerReferences": 15,
+          "pendingReferences": 13,
+          "frontierHash": "7d8247f6e9a8a02396c92d23c0f6aea3f475cc7b68d8cf0a13a9ad08e8b976f6",
+          "pendingHash": "072bea87ed9f6f9add7753c331a27cbb3ce78f8cde6f016dbcb6fc03572c6205",
+          "physicalProviderPreserved": true,
+          "providerExhaustedWithPending": true,
+          "messages": 1,
+          "originalEventId": "$jSx_7VX4L-GqLHjJngdpv_OYGnXuF3damdiBv4hKtHs",
+          "replacementEventId": "$eiRHeAEIUBTfSfi_I9nOfNmFYlyWcT1M3PBjTKPxEoQ",
+          "redactedEventId": "$N5lqdk0H3Jmql31b3J_bvghoA_dmfoAYtEARwyEBxJk",
+          "originalHash": "429ca84f7d2ac87d7846f88d4383a26fcd40a09ae009b0487c932372aa2f2272",
+          "replacementHash": "08197e240b7080ad58e1bedd2ef5fe0a63a33d2bbf5105f56bbcba13bb68d3d5",
+          "revisionHash": "5016dfe35b337294e74ce2493164763c30b3e4ef72635e5a5c3309f416c5a27f",
+          "originalTextPreserved": true,
+          "replacementTextPreserved": true,
+          "originalSenderTombstone": true,
+          "noOriginalFactForEdit": true,
+          "noSpaceSendWork": true
+        },
+        "sameRevision": true,
+        "runtimeNeverOpened": true,
+        "databaseReleased": true
+      }
+    },
+    {
+      "completed": true,
+      "native": {
+        "requests": 10,
+        "bootstrapReplay": 1,
+        "directTransport": 5
+      },
+      "matrix": {
+        "requests": 32,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "incoming": {
+        "retained": {
+          "providerReferences": 15,
+          "pendingReferences": 13,
+          "frontierHash": "51e499c6646b4203e71e7ddb6d757072a25ec1a81db08b7a412e165387f387df",
+          "pendingHash": "ce535e80d8d4200df43000bc0fdef80732012a37bdaa49d4bfa57f90f0993c59",
+          "physicalProviderPreserved": true,
+          "providerExhaustedWithPending": true,
+          "messages": 1,
+          "originalEventId": "$7hzGIVtFclcROxKZiIyX9p46n_ucR8Jbw2fo_YDzkzc",
+          "replacementEventId": "$4cPYyExPtLv1w9AzdIeRsBkKIot19jj4yz8LreXR4YE",
+          "redactedEventId": "$fDtbR6x4m7XDjTCv3BIZahRCZK_RAAC_mH-4GQuZYQQ",
+          "originalHash": "519c02470e2dba47f0add3bf7e7d0863780f9904efbe9f1f6c89cc4d0779254f",
+          "replacementHash": "51f240ad715b047fb7a9303987a3429384e6dda188a4b32466701f1392eb01f5",
+          "revisionHash": "a3be8d62ea04982a719b204da2de502a3038fb8dae773a3281bacc4e28a415b5",
+          "originalTextPreserved": true,
+          "replacementTextPreserved": true,
+          "originalSenderTombstone": true,
+          "noOriginalFactForEdit": true,
+          "noSpaceSendWork": true
+        },
+        "providerPages": 2,
+        "replayUnchanged": true,
+        "originalJournalUnchanged": true,
+        "completed": {
+          "resolved": 13,
+          "unresolved": 0,
+          "more": false,
+          "retryRequired": false,
+          "emptyRepeatUnchanged": true,
+          "retained": {
+            "providerReferences": 15,
+            "pendingReferences": 0,
+            "frontierHash": "3c3022a15959fd3a31d56d0df166c2a8dfa2dc0ec46d80a58cb3a9bc30210edc",
+            "pendingHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "physicalProviderPreserved": true,
+            "providerExhaustedWithPending": false,
+            "messages": 1,
+            "originalEventId": "$7hzGIVtFclcROxKZiIyX9p46n_ucR8Jbw2fo_YDzkzc",
+            "replacementEventId": "$4cPYyExPtLv1w9AzdIeRsBkKIot19jj4yz8LreXR4YE",
+            "redactedEventId": "$fDtbR6x4m7XDjTCv3BIZahRCZK_RAAC_mH-4GQuZYQQ",
+            "originalHash": "519c02470e2dba47f0add3bf7e7d0863780f9904efbe9f1f6c89cc4d0779254f",
+            "replacementHash": "51f240ad715b047fb7a9303987a3429384e6dda188a4b32466701f1392eb01f5",
+            "revisionHash": "1dba925b75f6affc253a9006ff522879929909035e9cfdee2c7682f2289c135c",
+            "originalTextPreserved": true,
+            "replacementTextPreserved": true,
+            "originalSenderTombstone": true,
+            "noOriginalFactForEdit": true,
+            "noSpaceSendWork": true
+          }
+        }
+      },
+      "reopened": {
+        "processId": 6039,
+        "incoming": {
+          "providerReferences": 15,
+          "pendingReferences": 0,
+          "frontierHash": "3c3022a15959fd3a31d56d0df166c2a8dfa2dc0ec46d80a58cb3a9bc30210edc",
+          "pendingHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "physicalProviderPreserved": true,
+          "providerExhaustedWithPending": false,
+          "messages": 1,
+          "originalEventId": "$7hzGIVtFclcROxKZiIyX9p46n_ucR8Jbw2fo_YDzkzc",
+          "replacementEventId": "$4cPYyExPtLv1w9AzdIeRsBkKIot19jj4yz8LreXR4YE",
+          "redactedEventId": "$fDtbR6x4m7XDjTCv3BIZahRCZK_RAAC_mH-4GQuZYQQ",
+          "originalHash": "519c02470e2dba47f0add3bf7e7d0863780f9904efbe9f1f6c89cc4d0779254f",
+          "replacementHash": "51f240ad715b047fb7a9303987a3429384e6dda188a4b32466701f1392eb01f5",
+          "revisionHash": "1dba925b75f6affc253a9006ff522879929909035e9cfdee2c7682f2289c135c",
+          "originalTextPreserved": true,
+          "replacementTextPreserved": true,
+          "originalSenderTombstone": true,
+          "noOriginalFactForEdit": true,
+          "noSpaceSendWork": true
+        },
+        "sameRevision": true,
+        "runtimeNeverOpened": true,
+        "databaseReleased": true
+      }
+    }
+  ],
+  "offlineTransportRemoved": true,
+  "providerProgressImplemented": true,
+  "admittedProviderPageUsecase": true,
+  "admittedPendingCompletion": true,
+  "typedRetainedProviderReceipt": true,
+  "productConsumerIntegrated": false,
+  "phoneLatencyMeasured": false
+}

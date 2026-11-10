@@ -41,11 +41,18 @@ internal class HrisSpaceIncomingProofHost(private val koin: Koin) {
                 retained.provider ==
                     CollaborationHistoryProviderIdentity(physicalOwner.companyId, physicalDeviceId)
             )
+            check(
+                result.progress == retained &&
+                    result.traversal == traversal &&
+                    result.runtime == runtime
+            )
             check(result.exhausted == retained.exhausted)
             if (result.exhausted) {
                 val before = retained
                 val exhausted = expect(acquire(runtime, conversation))
-                check(exhausted == CollaborationProviderHistoryAcquisition(0, true))
+                check(exhausted.references == 0 && exhausted.exhausted)
+                check(exhausted.previous == before && exhausted.progress == before)
+                check(exhausted.origin == CollaborationHistoryPageOrigin.SavedPosition)
                 check(expect(storage.progress(access, traversal)) == before)
                 return index + 1
             }

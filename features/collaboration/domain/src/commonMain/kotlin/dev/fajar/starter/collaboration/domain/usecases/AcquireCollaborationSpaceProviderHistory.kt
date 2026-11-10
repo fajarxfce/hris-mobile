@@ -30,7 +30,7 @@ class AcquireCollaborationSpaceProviderHistory(
         conversation: CollaborationSpaceConversation,
         origin: CollaborationHistoryPageOrigin = CollaborationHistoryPageOrigin.SavedPosition,
         purpose: CollaborationHistoryPurpose = CollaborationHistoryPurpose.Incoming,
-    ): AppResult<CollaborationProviderHistoryAcquisition> {
+    ): AppResult<CollaborationSpaceProviderHistoryAcquisition> {
         currentCoroutineContext().ensureActive()
         if (
             !validCollaborationSpaceConversation(conversation, runtime.owner) ||
@@ -58,7 +58,7 @@ class AcquireCollaborationSpaceProviderHistory(
         var observed: CollaborationSpaceDirectTransport? = null
         var transportStarted: TimeMark? = null
 
-        suspend fun run(): AppResult<CollaborationProviderHistoryAcquisition> {
+        suspend fun run(): AppResult<CollaborationSpaceProviderHistoryAcquisition> {
             try {
                 return withTimeoutOrNull(15_000) { acquire() }
                     ?: failed(pageFailure("timeout", FailureKind.Timeout).failure)
@@ -112,7 +112,7 @@ class AcquireCollaborationSpaceProviderHistory(
             return current()
         }
 
-        suspend fun acquire(): AppResult<CollaborationProviderHistoryAcquisition> {
+        suspend fun acquire(): AppResult<CollaborationSpaceProviderHistoryAcquisition> {
             bindRoom().let { if (it is AppResult.Failed) return it }
             val binding = requireNotNull(retained)
             val traversal =
@@ -135,7 +135,16 @@ class AcquireCollaborationSpaceProviderHistory(
                 return pageFailure("invalid_progress")
             val latest = origin == CollaborationHistoryPageOrigin.Latest
             if (!latest && previous?.exhausted == true)
-                return AppResult.Success(CollaborationProviderHistoryAcquisition(0, true))
+                return AppResult.Success(
+                    CollaborationSpaceProviderHistoryAcquisition(
+                        runtime,
+                        traversal,
+                        origin,
+                        previous,
+                        previous,
+                        0,
+                    )
+                )
             admitTransport().let { if (it is AppResult.Failed) return it }
             val position = if (latest) null else previous?.next
             val until = collaborationHistoryUntilPosition(traversal, previous, origin)
@@ -162,17 +171,50 @@ class AcquireCollaborationSpaceProviderHistory(
                     )
             )
                 return pageFailure("invalid_page")
+            return retainPage(traversal, previous, snapshot)
+        }
+
+        suspend fun retainPage(
+            traversal: CollaborationHistoryTraversal,
+            previous: CollaborationHistoryProgress?,
+            snapshot: CollaborationSpaceProviderHistoryPage,
+        ): AppResult<CollaborationSpaceProviderHistoryAcquisition> {
             val saved = checked { history.stage(access, traversal, previous, snapshot, origin) }
             if (saved is AppResult.Failed) return saved
             if (!(saved as AppResult.Success).value) return pageFailure("progress_changed")
-            // A lost commit response remains uncertain. The next invocation reads durable progress;
-            // it never reconstructs a cursor from event timestamps or retries a captured old page.
-            return AppResult.Success(
-                CollaborationProviderHistoryAcquisition(
-                    snapshot.physical.events.size,
-                    snapshot.physical.next == null,
+            // Counts or an EOF boolean alone cannot prove a retained provider transition.
+            val loaded = checked { history.progress(access, traversal) }
+            if (loaded is AppResult.Failed) return loaded
+            val progress =
+                (loaded as AppResult.Success).value ?: return pageFailure("progress_changed")
+            val physical = snapshot.physical
+            val result =
+                CollaborationSpaceProviderHistoryAcquisition(
+                    runtime,
+                    traversal,
+                    origin,
+                    previous,
+                    progress,
+                    physical.events.size,
                 )
+            if (
+                !validCollaborationSpaceProviderAcquisition(result) ||
+                    progress.next != physical.next ||
+                    progress.incoming !=
+                        collaborationIncomingHistoryPosition(
+                            traversal,
+                            previous,
+                            physical,
+                            origin,
+                        ) ||
+                    progress.provider !=
+                        CollaborationHistoryProviderIdentity(
+                            physical.owner.companyId,
+                            physical.deviceId,
+                        )
             )
+                return pageFailure("progress_changed")
+            return AppResult.Success(result)
         }
 
         suspend fun admission(): AppResult<Unit> {

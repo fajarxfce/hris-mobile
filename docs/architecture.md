@@ -1,5 +1,9 @@
 # Architecture
 
+[Incoming completion](collaboration-space-incoming-completion.md) requires exact retained provider
+evidence and clean source completion. Phase changes and room removal preserve the independent
+wake; one incoming worker must serialize provider writes and completion.
+
 [Admitted incoming requests](collaboration-space-incoming-source.md) use exact retained source
 coverage to coalesce hints, retain unfinished phases and atomically schedule changed demand.
 Provider pagination tokens, source references and outgoing receipts remain distinct.

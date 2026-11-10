@@ -1,0 +1,22 @@
+{
+  "startedAt": "2026-11-10T19:28:39.389545+00:00",
+  "elapsedSeconds": 337.89,
+  "sourceFiles": 4821,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 336,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sourceManifestSha256": "d0ede4e7ca20c4bb7737f92c847e28d80ee85b6f1014b164e21c4633d9b19bce",
+  "priorCaseIdentitiesPreserved": true,
+  "newCompletionCasesPerTarget": 16,
+  "newProviderPhaseCasesPerTarget": 21,
+  "newAcquisitionCasesPerTarget": 5,
+  "actualChromium": true,
+  "typedRetainedProviderReceipt": true,
+  "completionKeepsIndependentWake": true,
+  "productConsumerEnabled": false
+}

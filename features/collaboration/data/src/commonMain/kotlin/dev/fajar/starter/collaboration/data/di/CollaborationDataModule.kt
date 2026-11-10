@@ -671,6 +671,33 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun advanceSpaceIncomingProvider(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        history: CollaborationSpaceHistoryTraversalRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = AdvanceCollaborationSpaceIncomingProvider(demands, history, directory, sessions, server)
+
+    @Factory
+    fun completeSpaceIncomingRoom(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        bindings: CollaborationSpaceRoomBindingRepository,
+        history: CollaborationSpaceHistoryTraversalRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        CompleteCollaborationSpaceIncomingRoom(
+            demands,
+            bindings,
+            history,
+            directory,
+            sessions,
+            server,
+        )
+
+    @Factory
     fun queueSpaceIncomingRoom(
         demands: CollaborationSpaceIncomingDemandRepository,
         bindings: CollaborationSpaceRoomBindingRepository,

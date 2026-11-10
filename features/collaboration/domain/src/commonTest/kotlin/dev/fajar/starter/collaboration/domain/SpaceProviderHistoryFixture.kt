@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.collaborationIncomingHistoryPosition
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.AcquireCollaborationSpaceProviderHistory
 import dev.fajar.starter.common.config.*
@@ -54,7 +55,15 @@ internal class SpaceProviderHistoryFixture(
             ),
         )
     var progress: CollaborationHistoryProgress? = null
-    var afterCommit = checkpoint()
+    private var explicitCommit = false
+    private var retainedCommit = checkpoint()
+    var afterCommit: CollaborationHistoryProgress
+        get() = retainedCommit
+        set(value) {
+            explicitCommit = true
+            retainedCommit = value
+        }
+
     var commit = true
     var response: AppResult<Boolean> = AppResult.Success(true)
     val requests = mutableListOf<Pair<String?, String?>>()
@@ -100,7 +109,24 @@ internal class SpaceProviderHistoryFixture(
                 saved += page
                 origins += origin
                 if (expected != progress) return AppResult.Success(false)
-                if (commit) progress = afterCommit
+                if (commit) {
+                    if (!explicitCommit)
+                        retainedCommit =
+                            CollaborationHistoryProgress(
+                                expected?.generation ?: queue.id(950),
+                                expected?.revision?.plus(1) ?: 0,
+                                page.physical.next,
+                                (expected?.references ?: 0) + page.physical.events.size,
+                                collaborationIncomingHistoryPosition(
+                                    traversal,
+                                    expected,
+                                    page.physical,
+                                    origin,
+                                ),
+                                identity,
+                            )
+                    progress = afterCommit
+                }
                 val replied = base.read("committed") { Unit }
                 return if (replied is AppResult.Failed) replied else response
             }

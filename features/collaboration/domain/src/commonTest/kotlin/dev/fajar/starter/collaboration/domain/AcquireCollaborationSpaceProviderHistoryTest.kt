@@ -344,10 +344,113 @@ class AcquireCollaborationSpaceProviderHistoryTest {
         assertEquals(2, f.requests.size)
     }
 
+    @Test
+    fun successfulCasWithoutRetainedProgressCannotProduceAcquisitionEvidence() = runTest {
+        val f = SpaceProviderHistoryFixture()
+        f.commit = false
+        assertIs<AppResult.Failed>(f.acquire())
+        assertNull(f.progress)
+        assertEquals(1, f.requests.size)
+        assertEquals(1, f.saved.size)
+    }
+
+    @Test
+    fun retainedReceiptMustMatchTheActualPageRevisionPositionProviderAndPendingWave() = runTest {
+        val base = SpaceProviderHistoryFixture()
+        for (changed in
+            listOf(
+                base.checkpoint().copy(revision = 4),
+                base.checkpoint().copy(next = "unrelated"),
+                base.checkpoint().copy(references = 21),
+                base
+                    .checkpoint()
+                    .copy(provider = base.identity.copy(deviceId = base.queue.id(990))),
+                base
+                    .checkpoint()
+                    .copy(incoming = base.checkpoint().incoming!!.copy(head = "unrelated")),
+            )) {
+            val f = SpaceProviderHistoryFixture()
+            f.afterCommit = changed
+            assertIs<AppResult.Failed>(f.acquire())
+            assertEquals(changed, f.progress)
+            assertEquals(1, f.requests.size)
+        }
+    }
+
+    @Test
+    fun failedReadbackKeepsTheCommittedPageAndTheNextInvocationResumesItsPosition() = runTest {
+        val f = SpaceProviderHistoryFixture()
+        f.base.hooks["committed"] = {
+            f.base.failures["progress"] = f.base.directory.storageFailure
+        }
+        assertIs<AppResult.Failed>(f.acquire())
+        assertNotNull(f.progress)
+        assertEquals(1, f.requests.size)
+        f.base.hooks.remove("committed")
+        f.base.failures.remove("progress")
+        f.page =
+            f.page.copy(
+                physical =
+                    f.page.physical.copy(requestedPosition = "next", start = "next", next = null)
+            )
+        success(f)
+        assertEquals(listOf<Pair<String?, String?>>(null to null, "next" to null), f.requests)
+    }
+
+    @Test
+    fun cancellationDuringPostCommitReadbackCannotPublishAReceiptOrRepeatThePage() = runTest {
+        val f = SpaceProviderHistoryFixture()
+        val entered = CompletableDeferred<Unit>()
+        f.base.hooks["committed"] = {
+            f.base.hooks["progress"] = {
+                entered.complete(Unit)
+                awaitCancellation()
+            }
+        }
+        val job = async { f.acquire() }
+        entered.await()
+        job.cancelAndJoin()
+        assertTrue(job.isCancelled)
+        assertNotNull(f.progress)
+        assertEquals(1, f.saved.size)
+        assertEquals(1, f.requests.size)
+    }
+
+    @Test
+    fun postCommitReadbackCannotEscapeALateAccountDenialOrRuntimeChange() = runTest {
+        for (mode in 0..2) {
+            val f = SpaceProviderHistoryFixture()
+            f.base.hooks["committed"] = {
+                f.base.hooks["progress"] = {
+                    when (mode) {
+                        0 -> f.base.native.setup.session = null
+                        1 -> f.base.directory.deny()
+                        else -> f.base.open = false
+                    }
+                }
+            }
+            assertIs<AppResult.Failed>(f.acquire())
+            assertNotNull(f.progress)
+            assertEquals(1, f.requests.size)
+            assertEquals(1, f.saved.size)
+        }
+    }
+
     private suspend fun success(
         f: SpaceProviderHistoryFixture,
         origin: CollaborationHistoryPageOrigin = CollaborationHistoryPageOrigin.SavedPosition,
-    ) =
-        assertIs<AppResult.Success<CollaborationProviderHistoryAcquisition>>(f.acquire(origin))
-            .value
+    ): CollaborationProviderHistoryAcquisition {
+        val previous = f.progress
+        val result =
+            assertIs<AppResult.Success<CollaborationSpaceProviderHistoryAcquisition>>(
+                    f.acquire(origin)
+                )
+                .value
+        assertEquals(f.runtime, result.runtime)
+        assertEquals(f.traversal, result.traversal)
+        assertEquals(origin, result.origin)
+        assertEquals(previous, result.previous)
+        assertEquals(f.progress, result.progress)
+        return CollaborationProviderHistoryAcquisition(result.references, result.exhausted)
+    }
 }
