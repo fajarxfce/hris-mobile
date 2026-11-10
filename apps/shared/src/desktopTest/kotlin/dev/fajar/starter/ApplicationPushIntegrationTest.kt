@@ -2,7 +2,7 @@ package dev.fajar.starter
 
 import dev.fajar.starter.app.work.*
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.collaboration.domain.repositories.CollaborationRecoveryWakeRepository
+import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.CompleteCollaborationPushPriority
 import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationPushPriority
 import dev.fajar.starter.common.result.*
@@ -16,9 +16,140 @@ import dev.fajar.starter.inbox.domain.push.usecases.QueueInboxPushSignal
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import java.util.UUID
 import kotlin.test.*
+import kotlin.time.Clock
 import kotlinx.coroutines.runBlocking
 
 class ApplicationPushIntegrationTest {
+    @Test
+    fun realGroupReceiverRetainsOnlyGroupWakeAcrossReopenWithoutOpeningSdk() = runBlocking {
+        val f = CollaborationWorkerFixture()
+        try {
+            val session = signIn(f)
+            val parent =
+                CollaborationNativeParent(
+                    session.id,
+                    session.binding.audience,
+                    session.user.id,
+                    session.binding.serverId,
+                )
+            val space = UUID.randomUUID().toString()
+            val owner = CollaborationSpaceOwner(parent, space)
+            val device = UUID.randomUUID().toString()
+            val command =
+                CollaborationSpaceRegistrationCommand(
+                    UUID.randomUUID().toString(),
+                    CollaborationSpaceDeviceBinding(
+                        parent.audience,
+                        parent.accountId,
+                        space,
+                        parent.nativeSessionId,
+                    ),
+                    CollaborationNativePlatform.ANDROID,
+                    5,
+                    Clock.System.now(),
+                    CollaborationSpaceIdentity(
+                        space,
+                        parent.accountId,
+                        "matrix.hris.internal",
+                        "@hris_${NativeUiServer.COMPANY_ONE.replace("-", "")}_${parent.accountId.replace("-", "")}:matrix.hris.internal",
+                        CollaborationSpaceIdentityOrigin.LEGACY,
+                        NativeUiServer.COMPANY_ONE,
+                        0,
+                        Clock.System.now(),
+                    ),
+                    "Fictional group phone",
+                    CollaborationSpaceDeviceOrigin.SPACE,
+                    null,
+                )
+            assertEquals(
+                AppResult.Success(true),
+                f.koin
+                    .get<CollaborationSpaceRootRepository>()
+                    .retain(parent.localSpaceAccountAccess(), CollaborationSpaceRoot(space)),
+            )
+            val registrations = f.koin.get<CollaborationSpaceRegistrationCommandRepository>()
+            val access = owner.localDirectoryAccess()
+            assertEquals(
+                AppResult.Success(CollaborationSetupInsertion.STORED),
+                registrations.insert(access, command),
+            )
+            val pending =
+                assertNotNull(
+                    (registrations.current(access, parent.nativeSessionId) as AppResult.Success)
+                        .value
+                )
+            assertEquals(
+                AppResult.Success(true),
+                registrations.update(
+                    access,
+                    pending,
+                    CollaborationSpaceRegistrationOutcome.Unconfirmed(),
+                    1,
+                ),
+            )
+            val unconfirmed =
+                assertNotNull(
+                    (registrations.current(access, parent.nativeSessionId) as AppResult.Success)
+                        .value
+                )
+            assertEquals(
+                AppResult.Success(true),
+                registrations.update(
+                    access,
+                    unconfirmed,
+                    CollaborationSpaceRegistrationOutcome.Registered(
+                        CollaborationSetupReceipt(device, 0)
+                    ),
+                    1,
+                ),
+            )
+            val fields =
+                (chatFields(session) - "companyId") +
+                    mapOf(
+                        "eventCode" to "collaboration.space_chat_available",
+                        "spaceId" to space,
+                        "deviceId" to device,
+                    )
+            f.scheduled.clear()
+            val receiver = f.koin.get<ApplicationPushReceiver>()
+            assertEquals(
+                AppResult.Success(null),
+                receiver.queue(fields + ("deviceId" to command.id)),
+            )
+            assertTrue(f.scheduled.isEmpty())
+            assertEquals(AppResult.Success(ApplicationPush.SpaceChat), receiver.queue(fields))
+            val wakes = f.koin.get<CollaborationSpaceRecoveryWakeRepository>()
+            val first = assertNotNull((wakes.pending() as AppResult.Success).value)
+            assertEquals(listOf(CollaborationSpaceRecoveryWake.WORK_KEY), f.scheduled)
+            assertEquals(
+                AppResult.Success(null),
+                f.koin.get<CollaborationRecoveryWakeRepository>().pending(),
+            )
+            assertTrue(
+                (f.koin.get<InboxPushQueueRepository>().read() as AppResult.Success)
+                    .value
+                    .pending
+                    .isEmpty()
+            )
+            f.reopen()
+            val reopened = f.koin.get<CollaborationSpaceRecoveryWakeRepository>()
+            assertEquals(AppResult.Success(first), reopened.pending())
+            assertEquals(
+                AppResult.Success(ApplicationPush.SpaceChat),
+                f.koin.get<ApplicationPushReceiver>().queue(fields + ("revision" to "2")),
+            )
+            assertEquals(AppResult.Success(false), reopened.acknowledge(first))
+            assertNotEquals(first, (reopened.pending() as AppResult.Success).value)
+            assertEquals(0, f.sdk.restores)
+            assertEquals(0, f.sdk.backgroundAcquisitions)
+            assertEquals(0, f.sdk.historyReads)
+            assertTrue(f.sdk.enqueued.isEmpty())
+            assertTrue(f.server.unexpectedPaths.isEmpty())
+        } finally {
+            f.close()
+        }
+    }
+
     @Test
     fun realContainerRetainsChatWakeAcrossReopenWithoutWorkspaceOrSdk() = runBlocking {
         val f = CollaborationWorkerFixture()

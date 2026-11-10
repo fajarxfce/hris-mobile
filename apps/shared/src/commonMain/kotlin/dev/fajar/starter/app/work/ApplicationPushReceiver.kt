@@ -10,12 +10,14 @@ import kotlinx.coroutines.withTimeoutOrNull
 enum class ApplicationPush {
     Inbox,
     Chat,
+    SpaceChat,
 }
 
 /** Native entry points share routing; neither packet content nor a packet work key is executed. */
 class ApplicationPushReceiver(
     private val inbox: suspend (Map<String, String>) -> AppResult<Boolean>,
     private val chat: suspend (Map<String, String>) -> AppResult<Boolean>,
+    private val spaceChat: suspend (Map<String, String>) -> AppResult<Boolean>,
     private val run: suspend (ApplicationPush) -> SyncResult,
 ) {
     suspend fun queue(fields: Map<String, String>): AppResult<ApplicationPush?> {
@@ -24,12 +26,14 @@ class ApplicationPushReceiver(
             when (fields["eventCode"]) {
                 "communications.inbox_available" -> ApplicationPush.Inbox
                 "collaboration.chat_available" -> ApplicationPush.Chat
+                "collaboration.space_chat_available" -> ApplicationPush.SpaceChat
                 else -> return AppResult.Success(null)
             }
         val queued =
             when (target) {
                 ApplicationPush.Inbox -> inbox(fields)
                 ApplicationPush.Chat -> chat(fields)
+                ApplicationPush.SpaceChat -> spaceChat(fields)
             }
         currentCoroutineContext().ensureActive()
         return when (queued) {

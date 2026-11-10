@@ -9,6 +9,8 @@ func applicationPushFields(_ userInfo: [AnyHashable: Any]) -> [String: String]? 
         names = ["schemaVersion", "eventCode", "eventId", "accountId", "companyId", "inboxId"]
     case "collaboration.chat_available":
         names = ["schemaVersion", "eventCode", "eventId", "accountId", "companyId", "nativeSessionId", "deviceId", "revision", "issuedAt", "expiresAt", "matrixRoomId", "matrixEventId"]
+    case "collaboration.space_chat_available":
+        names = ["schemaVersion", "eventCode", "eventId", "accountId", "spaceId", "nativeSessionId", "deviceId", "revision", "issuedAt", "expiresAt", "matrixRoomId", "matrixEventId"]
     default:
         return nil
     }

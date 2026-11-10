@@ -1,0 +1,75 @@
+{
+  "acceptedAt": "2026-11-10T01:06:29.128452+00:00",
+  "baseCommit": "9d832b91e171278f7c736d6581e8fe3fbff09c3d",
+  "scope": "Strict group push parsing and local registered-device routing to durable group recovery, including real application container storage reopen",
+  "sourceInputs": 4641,
+  "sourceManifestSha256": "f015ea01f85d16f127f071ca2f7f73ff23f95faa9b432bd895cd53e97dfcf14d",
+  "changedInputs": {
+    ".github/workflows/collaboration-control.yml": "e34f8a5a9adabd73d41a68e9bf1ad16d534e071f3847b19211d64b34581710d7",
+    "apps/ios/ApplicationPushFields.swift": "485c1e5c4806e0eb342e6a08e2fa6771ff2664da4904f7e8a61342d76519b574",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationPushReceiverModule.kt": "505f8adbd038f05919c58581602499f3935bf1e43e591242f7a8a473bb10a5df",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt": "ca6f4fba6009b4f96e0cf9906ee2a4f8d172b909eb5753a211593e29ade211b7",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/ApplicationPushReceiver.kt": "6cec80e552282aa565631ab796a93777947678fe03a1a561e12b773f51bd1cdb",
+    "apps/shared/src/commonTest/kotlin/dev/fajar/starter/ApplicationPushReceiverTest.kt": "ac58481932a10e8e901c63ec98d4efb09a3a38f8138fb383051dc29adf52c122",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/ApplicationPushIntegrationTest.kt": "a40a96a6f3b653664c40fc22eca1f34c0d9caefd13845c4966cdb78aa4f2a3da",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "daaecb7527a5d4175acbfdfac8038f88bbe62065a720d7ba614cdbd526e832eb",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpacePushSignal.kt": "33695fe7b6ae26d631ee7e33e1a0895fecbe82d0fb666b7dd1fd56e1f172cd3e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpacePushSignalPolicy.kt": "1c41fc72cc5ca961574b752335642c492a7555903b1a1f8be8ba50fcec8ddd87",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationSpacePushSignal.kt": "f0e70b0358a808eb4c0c96b5e2743c1892e9493fdb9f103b45c6b5d736394ae1",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpacePushSignalTest.kt": "60bc2e017cd7cebcbb0d7b833c8ce59b1238f6df6d14f9e256906f6c322d163f",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/QueueCollaborationSpacePushSignalTest.kt": "deb375f0a211696021f69749068134ba7166c120877d20c7aff555103334ea09",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpacePushFixture.kt": "839f7da2e124eb5770f4023190afa42cbe0e2b5a4406b9b3a9ece5ff02ee3721",
+    "tool/test_application_push_fields.swift": "15c64bb4566e9b083affc8fa87441de42dafec6eaeb4700366bc13ff05e74c45"
+  },
+  "focused": {
+    "elapsedSeconds": 100.7,
+    "freshCounts": {
+      "tests": 45,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedTests": 45
+  },
+  "full": {
+    "elapsedSeconds": 954.348,
+    "freshCounts": {
+      "tests": 6301,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "validatedTests": 6301,
+    "validatedReusedTests": 0
+  },
+  "requiredChecks": [
+    "Root check",
+    "Android host tests",
+    "Android devRelease source/lint",
+    "Shared Wasm and iOS source compilation",
+    "20 browser parser/owning cases",
+    "Proof host compilation and unit tests",
+    "Format,architecture,detekt"
+  ],
+  "initialFailure": {
+    "phase": "focused-1",
+    "seconds": 255.457,
+    "tests": 45,
+    "testFailures": 0,
+    "cause": "The expanded applicationWorkerModule exceeded LongMethod at106 lines. Moved native push composition into its own owning DI module; no suppression."
+  },
+  "localSwiftExecution": false,
+  "hostedSwiftCasesExpected": 16,
+  "preparedPhoneRelease": 88,
+  "lastInstalledPhoneRelease": 87,
+  "phoneReleaseContainsThisIncrement": false,
+  "phoneInstalled": false,
+  "limits": [
+    "Current phone remains87; accepted88 APK precedes this group receiver; ADB availability pending.",
+    "No actual FCM/APNs/NSE or incoming group notification/reply acceptance.",
+    "Duplicate OS packets may request new work generations; the receiver owns no retry loop.",
+    "Missing/unconfirmed local registration is ignored; this flow cannot enroll a device.",
+    "PUSH revision is separate from Matrix readiness receipts and neither grants content or message status.",
+    "Native runtime and cloud proof require separate gates; live group remains disabled; all54 PRD groups remain open."
+  ]
+}

@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 00:38 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 01:06 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -18,6 +18,33 @@ emulator uses2,560MiB/two cores and is stopped. Phone10.77.77.3:5555 is install-
 announce each installation; never launch, drive, uninstall or clear its app.
 Crashlytics IAM is verified; do not ask again. Physical iPhone interaction is waived,
 not Apple source/runtime, push or calling acceptance. Continue work after checkpoints.
+
+## Accepted: organization push receiver
+
+Strict schema1 group signal -> local account/native family/root -> exact registered
+logical device (`Registered.receipt.id`,not command/original SDK ID) -> durable group
+wake -> bounded fixed-key scheduling. Shared Android/Apple router has explicit group
+lane; Swift adapter includes group fields. No SDK,API or display in receiver; no
+company/Inbox fallback. Expired transport credentials do not erase local ownership.
+Cancellation/late owner changes prevent success, retaining any committed wake.
+
+Focused30082 reaped PASS100.7s:45 fresh cases; full5687 reaped PASS954.348s:
+6,301 validated,6,301 fresh+0 exact reused,zero failures/errors/skips.
+All4,641 inputs stable; current/archive XML and Inspector checks accepted.
+Initial99688:45 tests passed but detekt rejected106-line worker DI; moved complete
+push composition into owning ApplicationPushReceiverModule, no suppression. Only
+workflow artifact location changed after focused2; full validates final source.
+Swift unavailable locally;16-case checker and app push11 cases added to pinned CI.
+Hosted successor not dispatched yet; wait for42728686367 then dispatch current pushed
+source. Expected7,026portable+2,664Apple plus16Swift and unsigned iOS host.
+
+[Contract](collaboration-space-push-receiver.md), [measurement](measurements/collaboration-space-push-receiver-2026-11-10.json).
+Private `.work/space-push-receiver-2026-11-10` retains runners,failed/accepted gates and
+source/report audits. Current increment must be committed/pushed atomically. Next:
+managed group pusher under exact installed runtime/current device admission; read-only
+notes in `.work/space-pusher-2026-11-10`. No product activation until incoming group
+routing/dedup acceptance. Producer wakes,new SPACE enqueue,rich media/calls/meetings
+and all54 PRD groups remain open. No compiler/emulator active after full reap.
 
 ## Accepted: skip idle original-room transport
 
@@ -81,15 +108,16 @@ Private `.work/space-recovery-worker-2026-11-09/hosted-42721024887/portable-audi
 Apple accepted2,628 cases,zero failures/errors/skips; unsigned iOS application host built.
 Audit38111 reaped;artifact13722169419/SHA dc61fea6c530fc8e1f540e13adede75baaee2f66ce088da752b97e94f08962e3.
 Total9,568 accepted; [hosted evidence](measurements/collaboration-space-recovery-worker-hosted-2026-11-10.json).
-It does not cover later native proof or current demand. Successor42728686367 on6a8b4f61 is running;
-expected6,975portable+2,644Apple. Audit only after successful jobs; do not redispatch.
+It does not cover later native proof or current demand. Successor42728686367 on6a8b4f61: portable accepted6,975 cases; audit94614 reaped,
+artifact13724609514/3,391,825bytes/SHA8aaa646239cc22cf09ff6bfd606ec1c8df27a19c8e3cda338b9a529316cbafd9.
+[Portable evidence](measurements/collaboration-space-recovery-demand-portable-2026-11-10.json).
+Apple is building the iOS host,expected2,644. Audit after success; do not redispatch.
 Earlier42707758241 is fully accepted9,292 cases+unsigned Xcode host;do not repeat.
 
 ## Next implementation
 
-Current idle integration is accepted and pushed as6a8b4f61/7ae66f89. Implement the
-organization push receiver next (strict group packet, matching local account/family/root
-and logical device, durable wake before group scheduling). Producer wakes after final inventory
+Current idle and push receiver increments are accepted above. Implement the managed
+group pusher with current installed runtime/device admission next. Producer wakes after final inventory
 reads remain necessary; the legacy QueueText/Edit/Forward scheduler alone does not
 wake organization recovery. Group FCM/product routing and new SPACE enqueue remain
 before rollout. Company-only runtime access deliberately cannot reach adopted group

@@ -42,6 +42,25 @@ enum ApplicationPushFieldsChecks {
         invalid = chat
         invalid["gcm." + String(repeating: "x", count: 65)] = "transport"
         precondition(applicationPushFields(invalid) == nil)
-        print("Application push fields: 10 cases passed")
+        var group = chat.filter { $0.key != "companyId" && $0.key != "matrixRoomId" && $0.key != "matrixEventId" }
+        group["eventCode"] = "collaboration.space_chat_available"
+        group["spaceId"] = "space"
+        precondition(applicationPushFields(group) == group)
+        group["matrixRoomId"] = "!room:example.test"
+        group["matrixEventId"] = "$event"
+        precondition(applicationPushFields(group) == group)
+        var remoteGroup: [AnyHashable: Any] = group
+        remoteGroup["aps"] = ["alert": "Untrusted provider content"]
+        remoteGroup["gcm.message_id"] = "transport"
+        precondition(applicationPushFields(remoteGroup) == group)
+        remoteGroup["companyId"] = "company"
+        precondition(applicationPushFields(remoteGroup) == nil)
+        invalid = chat
+        invalid["spaceId"] = "space"
+        precondition(applicationPushFields(invalid) == nil)
+        invalid = group
+        invalid["revision"] = 1
+        precondition(applicationPushFields(invalid) == nil)
+        print("Application push fields: 16 cases passed")
     }
 }

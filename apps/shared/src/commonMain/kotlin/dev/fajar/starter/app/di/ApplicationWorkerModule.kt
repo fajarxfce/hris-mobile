@@ -1,8 +1,6 @@
 package dev.fajar.starter.app.di
 
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
-import dev.fajar.starter.app.work.ApplicationPush
-import dev.fajar.starter.app.work.ApplicationPushReceiver
 import dev.fajar.starter.app.work.CollaborationCompanyRecovery
 import dev.fajar.starter.app.work.CollaborationDeliveryWorker
 import dev.fajar.starter.app.work.CollaborationDraftRecovery
@@ -19,30 +17,19 @@ import dev.fajar.starter.collaboration.domain.entities.CollaborationLocalScope
 import dev.fajar.starter.collaboration.domain.usecases.AcquireCollaborationBackgroundRuntime
 import dev.fajar.starter.collaboration.domain.usecases.ActivateCollaborationPusher
 import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationAccess
-import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationPushSignal
 import dev.fajar.starter.identity.domain.push.usecases.ObserveNativePushStatus
-import dev.fajar.starter.inbox.domain.push.usecases.QueueInboxPushSignal
 import dev.fajar.starter.sync.domain.SyncTask
-import dev.fajar.starter.worker.runSyncTask
 import org.koin.core.scope.Scope
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 /** App entry points share one instance with the scheduler; feature use cases keep their own DI. */
 fun applicationWorkerModule() = module {
-    includes(applicationNotificationModule(), applicationCollaborationSpaceWorkerModule())
-    single {
-        val inbox = inject<InboxPushWorker>()
-        val chat = inject<CollaborationRecoveryWorker>()
-        val queueInbox = inject<QueueInboxPushSignal>()
-        val queueChat = inject<QueueCollaborationPushSignal>()
-        ApplicationPushReceiver({ queueInbox.value(it) }, { queueChat.value(it) }) { target ->
-            when (target) {
-                ApplicationPush.Inbox -> runSyncTask(inbox.value)
-                ApplicationPush.Chat -> runSyncTask(chat.value)
-            }
-        }
-    }
+    includes(
+        applicationNotificationModule(),
+        applicationCollaborationSpaceWorkerModule(),
+        applicationPushReceiverModule(),
+    )
     // Koin annotations 2.3.1 metadata for an app-level SyncTask bind collides with dependency
     // metadata
     // when Kotlin/Native links the framework. Direct app composition emits no such marker.

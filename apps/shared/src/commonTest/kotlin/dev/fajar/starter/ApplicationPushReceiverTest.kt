@@ -22,6 +22,7 @@ class ApplicationPushReceiverTest {
                     queued++
                     AppResult.Success(true)
                 },
+                { error("Wrong group feature") },
                 { error("No worker") },
             )
         assertTrue(receive.receive(fields, process = false))
@@ -36,6 +37,7 @@ class ApplicationPushReceiverTest {
                 ApplicationPushReceiver(
                     { error("Wrong feature") },
                     { result },
+                    { error("Wrong group feature") },
                     { error("No worker") },
                 )
             assertFalse(receive.receive(fields, process = true))
@@ -57,14 +59,20 @@ class ApplicationPushReceiverTest {
                     ApplicationPushReceiver(
                         { AppResult.Success(true) },
                         { AppResult.Success(true) },
+                        { AppResult.Success(true) },
                         {
                             calls += it
                             result
                         },
                     )
                 val event =
-                    if (target == ApplicationPush.Chat) fields
-                    else mapOf("eventCode" to "communications.inbox_available")
+                    when (target) {
+                        ApplicationPush.Chat -> fields
+                        ApplicationPush.Inbox ->
+                            mapOf("eventCode" to "communications.inbox_available")
+                        ApplicationPush.SpaceChat ->
+                            mapOf("eventCode" to "collaboration.space_chat_available")
+                    }
                 assertEquals(
                     result == SyncResult.Complete || result == SyncResult.Retry(),
                     receive.receive(event, process = true),
@@ -82,6 +90,7 @@ class ApplicationPushReceiverTest {
             ApplicationPushReceiver(
                 { error("Wrong feature") },
                 { AppResult.Success(true) },
+                { error("Wrong group feature") },
                 {
                     entered.complete(Unit)
                     try {
@@ -107,6 +116,7 @@ class ApplicationPushReceiverTest {
             ApplicationPushReceiver(
                 { error("Wrong feature") },
                 { AppResult.Success(true) },
+                { error("Wrong group feature") },
                 {
                     try {
                         awaitCancellation()
@@ -131,6 +141,7 @@ class ApplicationPushReceiverTest {
                         if (cancelQueue) currentCoroutineContext().cancel()
                         AppResult.Success(true)
                     },
+                    { error("Wrong group feature") },
                     {
                         runs++
                         currentCoroutineContext().cancel()
@@ -145,5 +156,56 @@ class ApplicationPushReceiverTest {
             assertTrue(job.isCancelled)
             assertEquals(if (cancelQueue) 0 else 1, runs)
         }
+    }
+
+    @Test
+    fun groupHintsQueueOnlyTheirOwnLaneWithoutRunningTheWorker() = runTest {
+        val fields = mapOf("eventCode" to "collaboration.space_chat_available")
+        var calls = 0
+        val receiver =
+            ApplicationPushReceiver(
+                { error("No inbox") },
+                { error("No company chat") },
+                {
+                    assertEquals(fields, it)
+                    calls++
+                    AppResult.Success(true)
+                },
+                { error("No foreground worker") },
+            )
+        assertEquals(AppResult.Success(ApplicationPush.SpaceChat), receiver.queue(fields))
+        assertTrue(receiver.receive(fields, false))
+        assertEquals(2, calls)
+    }
+
+    @Test
+    fun rejectedOrCancelledGroupHintsCannotRunOrFallBackToCompanyChat() = runTest {
+        val fields = mapOf("eventCode" to "collaboration.space_chat_available")
+        for (result in listOf(AppResult.Success(false), AppResult.Failed(unavailable))) {
+            val receiver =
+                ApplicationPushReceiver(
+                    { error("No inbox") },
+                    { error("No company chat") },
+                    { result },
+                    { error("No worker") },
+                )
+            assertFalse(receiver.receive(fields, true))
+        }
+        val receiver =
+            ApplicationPushReceiver(
+                { error("No inbox") },
+                { error("No company chat") },
+                {
+                    currentCoroutineContext().cancel()
+                    AppResult.Success(true)
+                },
+                { error("No worker") },
+            )
+        val job = launch {
+            receiver.receive(fields, true)
+            error("Cancelled result")
+        }
+        job.join()
+        assertTrue(job.isCancelled)
     }
 }

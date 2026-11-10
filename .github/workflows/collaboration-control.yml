@@ -8,6 +8,7 @@ on:
       - 'apps/shared/**'
       - 'apps/android/**'
       - 'apps/ios/**'
+      - 'tool/test_application_push_fields.swift'
       - 'core/network/**'
       - 'core/observability/**'
       - 'core/database/**'
@@ -26,6 +27,7 @@ on:
       - 'apps/shared/**'
       - 'apps/android/**'
       - 'apps/ios/**'
+      - 'tool/test_application_push_fields.swift'
       - 'core/network/**'
       - 'core/observability/**'
       - 'core/database/**'
@@ -90,7 +92,7 @@ jobs:
       - name: Check application bindings and platform compilation
         run: >-
           xvfb-run -a ./gradlew --no-daemon --no-parallel --max-workers=2
-          :apps:shared:desktopTest --tests '*CollaborationBindingsTest' --tests '*CollaborationDeliveryWorkerTest' --tests '*CollaborationSpaceRecoveryWorkerTest' --tests '*ApplicationCollaborationLifetimeTest' --tests '*AppLocalWorkspaceTest'
+          :apps:shared:desktopTest --tests '*CollaborationBindingsTest' --tests '*CollaborationDeliveryWorkerTest' --tests '*CollaborationSpaceRecoveryWorkerTest' --tests '*ApplicationCollaborationLifetimeTest' --tests '*AppLocalWorkspaceTest' --tests '*ApplicationPushReceiverTest' --tests '*ApplicationPushIntegrationTest'
           :apps:android:assembleDevDebug :apps:android:lintDevDebug :apps:shared:compileKotlinWasmJs
       - uses: actions/upload-artifact@v4
         if: always()
@@ -127,6 +129,11 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Prepare public app-link test registrations
         run: python3 tool/check_app_links.py prepare --application-id dev.fajar.hris.mobile
+      - name: Check Apple push envelope routing
+        run: |
+          mkdir -p apps/ios/build
+          swiftc apps/ios/ApplicationPushFields.swift tool/test_application_push_fields.swift -o "$RUNNER_TEMP/hris-push-fields"
+          "$RUNNER_TEMP/hris-push-fields" | tee apps/ios/build/push-fields.txt
       - name: Check Apple setup adapter
         run: >-
           ./gradlew --no-daemon --no-parallel --max-workers=2
@@ -153,6 +160,7 @@ jobs:
         with:
           name: collaboration-control-apple
           path: |
+            apps/ios/build/push-fields.txt
             features/collaboration/**/build/test-results/
             core/workspace/domain/build/test-results/
             core/worker/build/test-results/

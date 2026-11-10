@@ -1,0 +1,118 @@
+{
+  "sourceCommit": "6a8b4f616ac7d330e2addc3710c65fc09eaa55b6",
+  "runId": 42728686367,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42728686367",
+  "jobId": 129540857484,
+  "artifactId": 13724609514,
+  "bytes": 3391825,
+  "sha256": "8aaa646239cc22cf09ff6bfd606ec1c8df27a19c8e3cda338b9a529316cbafd9",
+  "githubDigestAndZipCrcVerified": true,
+  "totals": {
+    "desktopTest": {
+      "tests": 3261,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 347
+    },
+    "testAndroidHostTest": {
+      "tests": 629,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 87
+    },
+    "wasmJsBrowserTest": {
+      "tests": 3085,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 316
+    }
+  },
+  "recoveryPolicyAndApplicationCases": [
+    {
+      "class": "CollaborationSpaceRecoveryDemandTest",
+      "platform": "desktopTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "CollaborationSpaceRecoverySelectionTest",
+      "platform": "desktopTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "CollaborationSpaceRecoveryWakeTest",
+      "platform": "desktopTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "FinishCollaborationSpaceRecoveryTest",
+      "platform": "desktopTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "CollaborationSpaceRecoveryDemandTest",
+      "platform": "wasmJsBrowserTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "CollaborationSpaceRecoverySelectionTest",
+      "platform": "wasmJsBrowserTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "CollaborationSpaceRecoveryWakeTest",
+      "platform": "wasmJsBrowserTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "FinishCollaborationSpaceRecoveryTest",
+      "platform": "wasmJsBrowserTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "ApplicationCollaborationLifetimeTest",
+      "platform": "desktopTest",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "CollaborationSpaceRecoveryWorkerTest",
+      "platform": "desktopTest",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "reportManifestSha256": "edb0a033ba79f06893bc8060796fe157474c9ea40791c4103c6a70da61f6e0a1",
+  "accepted": true,
+  "scope": "Portable only at6a8b4f61; Apple job and later group receiver remain separately pending."
+}
