@@ -4,41 +4,48 @@ Updated 10 November 2026, 20:13 UTC. Follow AGENTS.md. This opening section owns
 
 ## Incoming scan and retry integration in progress
 
-Mobile accepted baseline is `07e221828d99d2302a358757f859de5dc6fcc3d0`, pushed; Group evidence
-`20a0444c` is pushed. Their completion acceptance is unchanged: focused336, full10649,
-actual native4. The current mobile increment has31 applied, uncommitted Kotlin files:
-atomic scan cursor plus room queue, schema1/2 compatibility, per-room30–300second retry,
-local read/discovery/deferral/wake completion owners, DI and tests. App worker and SDK hint
-consumer are NOT enabled. Private `space-incoming-worker-2026-11-10` owns exact candidates,
-source manifests, runners and all failed evidence. Expected528focused/10841full,4843inputs.
+Mobile accepted product baseline07e22182 and Group evidence20a0444c are pushed. Their prior
+completion acceptance stays focused336/full10649/native4. Current Mobile increment has32applied,
+uncommitted Kotlin files,4844inputs. It adds atomic cursor+room scan, schema1/2 compatibility,
+per-room30–300second retry, local scheduling/wake owners, and owned Read selection (four eligible
+FIFO rooms at one captured time). App worker and SDK hint consumer remain NOT ENABLED.
 
-Focused1/66231 failed compilation (three test typing mistakes, corrected). Focused2/48454
-ran193 JVM domain tests with one failure: a fixture marked provider EOF while asserting a
-continuation. Focused3/7213 repeated that failure because a patch preflight assertion stopped
-the edit; its evidence is retained. Both are reaped. The specifically scoped fixture now uses
-non-EOF; focused4/35879 is running. Full/native gates for this increment have NOT started.
-Do not describe these31 files as accepted. No product source/library mutation while the gate runs.
+Private `space-incoming-worker-2026-11-10` owns exact32-file candidate/base/reports/runners.
+Focused1/66231 failed test compilation;2/48454 and3/7213 failed one non-EOF fixture assertion;
+4/35879 passed193domain JVM but failed two data-test smart casts. All corrected and reaped.
+Focused5/54974 passed528 JVM/actualChromium cases and iOS source compilation, then formatCheck
+caught the test nullability edit's wrapping. Formatting is corrected. Local Read now additionally
+owns eligibility/turn selection with three tests; focused6/10905 runs534expected cases.
+Full10847expected and native gates for this increment have NOT started. Preserve source/library
+while running; no accepted claim for the32 files yet. Docs commitsb2731284/c36dcb13 are pushed.
 
-Next finish application integration using the private `application-candidate` draft. Move
-bounded FIFO eligibility into the owning local Read usecase; app worker owns task/parent
-lifetime, not retry policy. One serialized incoming worker processes at most four rooms and
-one provider/pending page per room, fairly defers unfinished work, preserves newer generations,
-and acknowledges only exact wake after owned empty demand/scan. All producers commit a fresh
-wake atomically with new demand. Wire bounded current-parent SDK hints outside callback monitors,
-retain overflow rescan, and use existing collapsed OS scheduling. Add app lifecycle/concurrency
-and actual native worker tests before activation. Generic ReplicaStore limits remain unchanged.
+Separate PRIVATE `application-candidate` is unapplied/uncompiled: worker, DI/scheduler drafts,
+12head-revisit domain tests,18application task tests and fixtures. A known requested event may be
+absent from a provider page reporting EOF; simply keeping Pending would spin or never acquire it.
+Draft RevisitHead admits exact EOF+empty pending+absent source, preserves content/wake/newer work,
+then retains Latest with delay. Worker must retain content per page BEFORE all older metadata is
+finished, and finish a bounded pending pass before backing off missing keys. Owned Read already
+handles selection, so worker keeps only task/parent lifetime. Still require application compilation,
+actual native worker tests and current-parent bounded SDK room/key hints before activation.
+SDK syncOnceV2 is already owned by AndroidCollaborationSyncSource; inspect its joined-room response
+outside the SDK monitor, without another sync loop/client. Overflow must retain durable rescan.
+All producers atomically commit fresh wake with new demand; current worker alone serializes
+provider writes/completion/revisit. Existing common ReplicaStore capacities remain unchanged.
 
-Hosted completion validation is already dispatched: run42889565705 at exact07e22182,
-https://github.com/fajarxfce/hris-mobile/actions/runs/42889565705 . Portable and Apple are running;
-expected11993=8647portable+3346Apple,+16Swift/unsignedhost. Audit existing artifacts with the
-private completion hosted auditor; DO NOT redispatch. It predates the31 current scan/retry files.
-Prior run42865846045 remains separately accepted11621+16Swift/host.
+Hosted completion run42889565705 at exact07e22182 has PORTABLE ACCEPTED8647=
+4062desktop+722Androidhost+3863Chromium. Artifact13799302654,3603279bytes,
+SHA1164b99c15c9916c260789244c4eaba16cb9621b5d0001f860d1a286d263486f;
+reportmanifest50cb2807fef34bb174374ea2e0b76ba274ac7f34f4729aae306b55fb2e34d556.
+Digest/ZIP CRC/prior identities verified; auditor61001 reaped. Compact metadata lives in
+`docs/measurements/collaboration-space-incoming-completion-hosted-portable-2026-11-10.json`.
+Apple job130086786070 still runs; expect3346+16Swift/unsignedhost. DO NOT redispatch.
+https://github.com/fajarxfce/hris-mobile/actions/runs/42889565705 . This CI predates current32files.
 
-Release89 remains uninstalled; phone87 last known, latest ADB9732 timed out/reaped. Existing
-availability question stays pending. Install validated89 with `--install-only` if reachable,
-notify first; no launch/reset/UI drive. Live90163/schema116.4 unchanged, Group117–140 undeployed.
-SDK6, original transaction controls, retained sender keys and dirty SDK/Inspector trees preserved.
-No generic Starter source delta. All54 communications PRD groups remain OPEN.
+Release89 remains uninstalled; phone87 last known, ADB94350 timed out/reaped20:17. Existing
+availability question remains pending. Notify before install validated89 with `--install-only`;
+no launch/reset/UI drive. Live90163/schema116.4 unchanged; Group117–140 undeployed. Emulator off.
+SDK6/original transactions/sender keys/dirty SDK and Inspector trees preserved. No Starter delta.
+All54 communications PRD groups remain OPEN.
 
 ## Prior completion checkpoint
 
