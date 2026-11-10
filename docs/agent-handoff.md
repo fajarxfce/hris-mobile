@@ -44,6 +44,13 @@ reaped. Hosted42911090770 is RUNNING at exact Mobile9ec0cdca on
 validation/space-incoming-application-20261110. Do not redispatch. Private application-native/
 hosted.json and hosted-audit.py expect12361=8899portable+3462Apple, plus16Swift/unsigned host.
 https://github.com/fajarxfce/hris-mobile/actions/runs/42911090770
+Portable audit59370 REAPED ACCEPTED8899=4198desktop+722Android host+3979Chromium.
+Artifact13809660352,3629446bytes,SHA003ce8ebc430a87df28c69188e6a91a5ecd3e89f61c989050fd1f3aa55ac650e;
+report manifest0085edbe3141b8bfb0fe75045d4550bf234ba930087f9bde589d0a2ec6477b9c.
+GitHub digest/ZIP CRC and prior case identities verified. Apple still unverified/running;
+only the portable portion is accepted. Compact hosted measurements are in both repositories.
+This immutable worker commit predates the new startup observer. Do not count its results as
+startup-observer Apple validation. Local startup full1 remains the separate active gate.
 
 Next increment is APPLIED, UNCOMMITTED:7 Mobile files in private
 space-incoming-startup-2026-11-10 (entity, pure admission policy, local observer, data DI,
