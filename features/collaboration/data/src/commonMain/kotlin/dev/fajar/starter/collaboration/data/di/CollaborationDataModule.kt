@@ -637,6 +637,33 @@ class CollaborationDataModule {
     ) = ObserveCollaborationSpaceMessages(messages, directory, sessions, server)
 
     @Factory
+    fun acquireSpaceEvents(
+        bindings: CollaborationSpaceRoomBindingRepository,
+        transport: CollaborationSpaceDirectTransportRepository,
+        runtimes: CollaborationSpaceRuntimeRepository,
+        events: CollaborationSpaceEventRepository,
+        history: CollaborationSpaceHistoryRepository,
+        edits: CollaborationSpaceMessageEditRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        AcquireCollaborationSpaceEvents(
+            bindings,
+            transport,
+            runtimes,
+            events,
+            history,
+            edits,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun observeSpaceHistory(
         history: CollaborationSpaceHistoryRepository,
         directory: CollaborationSpaceDirectoryRepository,

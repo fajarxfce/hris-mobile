@@ -34,8 +34,10 @@ Focused validation passes194cases in352.684s:25new cases on Desktop and actual C
 room/runtime changes, denials through failed writes/cleanup, finite target acquisition, uncertain
 second commits, original bootstrap aliases, cancellation, expiry and immutable caller input.
 iOS shared compilation, formatting, architecture and detekt pass. Source/library/report digests
-and the earlier case identities are audited. Full application validation is running; seven Kotlin
-files remain uncommitted until it completes. Actual SDK batch retention, UI integration and native
+and the earlier case identities are audited. Full application validation passes10,318cases
+in659.239s:8,299fresh plus2,019hash-bound accepted controls. Required root check, Android
+host/release compilation and lint, shared application Wasm/iOS source, actual Chromium, proof
+APK/unit tests, formatting, architecture and detekt pass on the same4,774fixed inputs. Actual SDK batch retention, UI integration and native
 Apple Matrix support are not accepted by these tests.
 
 [Measurement](measurements/collaboration-space-incoming-acquisition-2026-11-10.json).

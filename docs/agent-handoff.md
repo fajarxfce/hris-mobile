@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 15:37 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 15:45 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -43,22 +43,34 @@ Phone87 last known,88/89notinstalled. Keep pending availability question; no pho
 Current incoming pure policy0dd21612 is accepted/pushed (23004 REAPED). Full1/12044
 PASS10268/1147.415s; focused1/30508 PASS144/373.676s, all audited. [Pure contract](collaboration-incoming-history-planning.md).
 
-Owning acquisition WIP:7Kotlin files (5new+data factory+app binding assertion) are UNCOMMITTED
-and FROZEN under full1/76109 RUNNING, expected10318cases. Focused1/9279 REAPED
-PASS194/352.684s; strict audit passes,4,774inputs,
-manifestf8a241d9dfec31dd4d49e8a1e97f5e6f0930287fdeaf720b618d74722e468762.
-25new cases each Desktop/actualChromium plus144controls; iOSsource/format/architecture/detekt pass.
-[Acquisition contract/measurement](collaboration-space-incoming-acquisition.md). Private
-space-incoming-acquisition-2026-11-10 owns exact7-file candidate copies, files.json, focused/full
-runners/auditors and next-progress.md. One3GiB compiler, no emulator. No source edits until
-76109 is reaped/audited. If PASS finalize docs and commit/push all7sourcefiles atomically.
-Then extend actual SDK proof before claiming native batch retention; HrisEventReadsProbe with
-HrisWorkerProofContainer can use real admitted transport and encrypted Space storage. Build
-only proof/app-binding checks for a test-harness-only change; do not rerun old full gates blindly.
-Continue durable incoming provider frontier/pending-reference progress and its independent worker.
-Do not conflate incoming completion with outgoing demand or suppress changed events by ID forever.
-Current acquisition starts no new sync/join/send and no product consumer yet. No native Apple
-Matrix implementation or generic Starter delta. All54 PRD groups remain open.
+Owning incoming acquisition is ACCEPTED with this7Kotlin-file commit (5new+data factory+app
+binding assertion). Full1/76109 REAPED PASS10318=8299fresh+2019exact accepted controls/659.239s.
+Focused1/9279 REAPED PASS194/352.684s; all strict source/library/report/prior-case audits pass.
+4,774inputs,manifestf8a241d9dfec31dd4d49e8a1e97f5e6f0930287fdeaf720b618d74722e468762.
+ProofAPK150632212B SHAca1ad851886b31d13e30e9f1d154ed236e7bc96329f143ec366519c01937d57a.
+[Contract and measurement](collaboration-space-incoming-acquisition.md). This supplies one15s,
+1..16-event admitted retention batch, one current transport, local originals before target reads,
+immutable original physical identity and explicit incomplete outcomes. No new sync/join/send,
+ViewModel I/O, cursor progression or product incoming consumer is enabled yet.
+
+NEXT actual SDK batch proof is staged privately in BOTH Mobile and Group
+.work/space-incoming-native-2026-11-10. No local heavy job or emulator remains. Mobile candidate/
+contains5proof Kotlin files (1new host+4existing); base-sources.json pins the4oldfiles. Group
+candidate/ contains NativeEventReadsTest and2Python files; base-sources.json pins those3.
+Apply only after this acquisition commit/push and verify base hashes first. Mobile run-proof.py
+and accept-proof.py need product-base.json/source SHA and copied prior-proof-reports before start.
+Group compile.py, native.py and native-config.json are prepared. Group candidate Python9cases
+PASS (5new+4prior); Kotlin candidates are formatted. Tests are not yet compiled/applied/native-run.
+The added phase keeps existing encrypted fixtures, invokes real DI acquisition twice, verifies
+exact original/edit/tombstone storage and unchanged revision/journals, then starts a DIFFERENT
+instrumentation process with its owned backend reverse removed for strictly local reopen.
+Driver/server reject changed IDs/hashes, missing flags and outgoing-event changes; exactly2direct
+transport calls are expected for the two batches. Keep prior3native tests and frozenSDK6.
+No phone use. Run proof-only APK/unit/quality, then Group testClasses/quality sequentially; then
+native3 with isolated2560MiB2core emulator and precompiled768MiB harness, no compiler overlap.
+Continue independent incoming provider frontier/pending references and worker after acceptance;
+private acquisition/next-progress.md records design. All54 PRD groups remain open. No native
+Apple Matrix implementation or generic Starter source delta.
 
 Release89 predates unused incoming policy/acquisition and is accepted/uninstalled; INSTALL-ONLY.
 Phone59976 timed out15s at15:27 (REAPED). Existing availability question stays pending; do not
