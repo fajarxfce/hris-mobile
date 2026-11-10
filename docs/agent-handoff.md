@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 06:53 UTC. Historical evidence, failures and prior controls:
+Updated 10 November 2026, 07:01 UTC. Historical evidence, failures and prior controls:
 [32ed8281](https://github.com/fajarxfce/hris-mobile/blob/32ed8281/docs/agent-handoff.md).
 Do not restart completed runs. Private `.work` files supplement the tracked contracts.
 
@@ -11,18 +11,18 @@ updates. All 54 acceptance groups remain open. Mobile proves reusable foundation
 Starter. Usecases own policy and repository orchestration; repositories coordinate raw
 I/O; ViewModels own screen state. No subagent delegation. Follow AGENTS.md.
 
-One heavy compiler OR emulator; current full16645 is the only heavy job. Never kill live API/worker JVMs.
+One heavy compiler OR emulator; no local heavy job remains. Never kill live API/worker JVMs.
 Owned emulator uses 2,560 MiB/two cores and is stopped. Phone 10.77.77.3:5555 is install-only:
 announce every install; never launch, drive, uninstall or clear it. Crashlytics IAM is
 verified. Physical iPhone interaction is waived, not Apple source/runtime acceptance.
 
-## Active: acknowledgement projection
+## Accepted: acknowledgement projection; continue mixed staging and delivery
 
-Eight Kotlin inputs remain UNCOMMITTED: exact Space acknowledgement/completion policy,
+This increment contains eight accepted Kotlin inputs: exact Space acknowledgement/completion policy,
 whole-journal projection, owning offline CAS/readback reconciliation,37 domain cases and
 singleton DI. External cancellation,late denial/account change,false/lost write response,
 partial completion,concurrent projection and immutable aliases retain original facts.
-No sender,archive or journal retirement is activated. Source is FROZEN for the full gate.
+No sender,archive or journal retirement is activated. Source freeze ended after full acceptance.
 
 Focused-1/session43366 REAPED FAIL293.188s:two app DI cases pass,three new test assertions
 failed Kotlin generic type inference. Production Desktop/Wasm/iOS source and quality
@@ -31,18 +31,23 @@ Failure manifest28387ddb8c73f6812e0e962a6ff177c30e9353637ddc5ad453b2155760613582
 Focused-2/session11486 REAPED PASS167.668s:76 fresh (14policy+23usecase on Desktop and
 actual Chromium,two DI),zero failures/errors/skips. Strict source/library/current/archive
 audit passes4,701 inputs; manifest936dbd1eb068e46be4d1f37c082e6686bb5dd897bd642a7520ba0d86fa1deec6.
-Full-1/session16645 RUNNING as the only heavy local compiler. Reap,run accept-full.py
-then publish.py before commit/push. Private .work/space-receipt-projection-2026-11-10
-owns all runners,audits and failed inputs. New runner fails fast after compilation failure.
-No full/new native/phone acceptance claimed yet.
+Full-1/session16645 REAPED PASS640.612s:9,630 verified=7,611 fresh+2,019 exact accepted
+reused,zero failures/errors/skips. Root,Android host/release/lint,Wasm/iOS source,browser,
+proof APK/unit and quality pass; all90 AppFlow tests pass unchanged. Strict accept-full.py
+and publish.py verify the same4,701 source/library inputs and report identities.
+Proof APK150514962bytes SHAbeadd3248fcb85afcafc5a1364c125e6267a7b8b47517b339833331a29ad563f;
+compiled only,no new native/phone claim. No local compiler remains. Private
+.work/space-receipt-projection-2026-11-10 retains all failed/accepted gates and auditors.
+[Contract](collaboration-space-receipt-projection.md),
+[evidence](measurements/collaboration-space-receipt-projection-2026-11-10.json).
 
-After local acceptance,pin validation/space-receipt-projection-20261110 and dispatch the
+After this atomic source commit/push,pin validation/space-receipt-projection-20261110 and dispatch the
 prepared hosted control;expected7,628 portable+2,885 Apple=10,513,16Swift/unsignedhost.
 No projection hosted dispatch yet. Preserve existing mixed42769825037 and receipt42766554589.
-Private .work/mixed-original-delivery-2026-11-10 contains unapplied,untested next policy
-files and integration.md. Extend the existing owning writer to typed ledgers; do not
-activate a second sender or broaden original-only leases to enqueue. Actual native proof
-must author separate new fixture intents; never reassign a real original's ownership.
+Private .work/mixed-original-delivery-2026-11-10 contains five unapplied,untested Kotlin drafts (policies,typed batch,11 cases,
+new staging contract),integration.md and staging-capability.md. Extend the existing owning writer to typed ledgers; do not
+activate a second sender or broaden original-only leases to enqueue. A distinct native staging capability must precede actual native proof,which
+must author separate new fixture intents through that owning path; never reassign a real original's ownership.
 
 ## Current accepted increment
 

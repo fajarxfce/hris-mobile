@@ -1,0 +1,83 @@
+{
+  "acceptedAt": "2026-11-10T07:01:28.446034+00:00",
+  "baseCommit": "075d65a1908c9caae7440f625329847fef325771",
+  "scope": "Exact organization acknowledgement proofs and whole-journal state projection, owned offline reconciliation with per-I/O admission, bounded serialization, CAS readback and cancellation. No sending, archival, retirement or product routing.",
+  "sourceFiles": 4701,
+  "sourceManifestSha256": "936dbd1eb068e46be4d1f37c082e6686bb5dd897bd642a7520ba0d86fa1deec6",
+  "changedSourceHashes": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "5d052e7363e0846c32b95d85c6e735839e345e0fcbd7060588af72763fef5877",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "de4b2e1a6c94943d7071cf7a3df811f92d3baad5f45192c0c1a6612621ba3827",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceAcknowledgementPolicy.kt": "737c76fa68ffb2117b9584c7a7fdbd2e1eb34ab651783046c45710213494ae4a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceReceiptProjection.kt": "7d51f989394fbcfb3038c06d7c05734441db03a23115506c5fea687f1b1ccbb9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReconcileCollaborationSpaceMessages.kt": "94b18d7e13ca8b0a89a9f455f47d2928cbffe523666795d4ce7e15510fdd977f",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceReceiptProjectionTest.kt": "783c679cd4cddbe3551c32137847adf8a8848fffcb5616f9ac5869c4695606d1",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReconcileCollaborationSpaceMessagesTest.kt": "a38eaab5cf3170bcdb24e854ea8aada887236f0b627fcfa6dcda76683308688e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceReceiptProjectionFixture.kt": "06b4952510b6ee2c306a950d67801b6a8e07cf4bd4968bd21eb2155e84c88724"
+  },
+  "deletedSources": [],
+  "focused": {
+    "startedAt": "2026-11-10T06:47:29.118396+00:00",
+    "elapsedSeconds": 167.668,
+    "sourceFiles": 4701,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 76,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "936dbd1eb068e46be4d1f37c082e6686bb5dd897bd642a7520ba0d86fa1deec6"
+  },
+  "full": {
+    "startedAt": "2026-11-10T06:50:33.413422+00:00",
+    "elapsedSeconds": 640.612,
+    "sourceFiles": 4701,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7611,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "936dbd1eb068e46be4d1f37c082e6686bb5dd897bd642a7520ba0d86fa1deec6",
+    "validatedTests": 9630,
+    "validatedReusedTests": 2019,
+    "validatedDatabaseCases": {
+      "desktopTest": 102,
+      "wasmJsBrowserTest": 100
+    }
+  },
+  "fullReportManifestSha256": "4b28649e0677d82692441b8e8ea418c19963feaa9c1aab92dd7cb437427c6855",
+  "receiptProjectionContracts": {
+    "policiesPerPlatform": 14,
+    "reconciliationCasesPerPlatform": 23,
+    "desktopCases": 37,
+    "chromiumCases": 37,
+    "appDi": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "checks": [
+    "root check",
+    "Android host tests",
+    "Android release compilation and lint",
+    "Wasm and iOS source compilation",
+    "real Chromium collaboration tests",
+    "proof APK compilation and unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "nonIncrementalKotlin": true,
+  "nativeRuntimeClaim": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "remaining": [
+    "Pinned Apple execution for these acknowledgement/projection contracts",
+    "Native delivery and callback-loss recovery for both typed ledgers",
+    "Explicit new-message staging and complete recovery inventory before product routing"
+  ]
+}

@@ -512,6 +512,24 @@ class CollaborationDataModule {
         runtime as? CollaborationLocalDeviceIdentityRepository
             ?: UnavailableCollaborationRuntimeRepository()
 
+    @Single
+    fun reconcileSpaceMessages(
+        messages: CollaborationSpaceMessageRepository,
+        receipts: CollaborationSpaceReceiptRepository,
+        completions: CollaborationSpaceMessageCompletionRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) =
+        ReconcileCollaborationSpaceMessages(
+            messages,
+            receipts,
+            completions,
+            directory,
+            sessions,
+            server,
+        )
+
     @Factory
     fun queueSpaceText(
         messages: CollaborationSpaceMessageRepository,

@@ -1,5 +1,10 @@
 # Architecture
 
+[Offline organization acknowledgement projection](collaboration-space-receipt-projection.md)
+uses immutable journal/completion evidence and exact CAS readback. The owning usecase
+serializes bounded projection and local admission; repositories perform storage I/O.
+Sending, history archival and journal retirement have separate admission requirements.
+
 [Mixed original queue matching](collaboration-mixed-original-queue.md) retains separate
 company and organization command ownership. A bounded local use case validates the
 whole capture, admission and immutable completion evidence before publishing facts;
