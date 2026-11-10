@@ -44,13 +44,15 @@ accepted predecessor results; the final command reused them, no failed report ac
 Root check, Android host/release compilation/lint, shared Wasm/iOS source, database
 and collaboration-data browser, proof compilation and quality gates pass. The audit
 was corrected for the actual browser XML filename prefix; test assertions/counts
-were unchanged. Private `.work/replica-commit-wake-2026-11-10` retains all evidence.
-No local heavy job remains. Existing native APK predates this API; do not claim its
-runtime validation. One pinned Apple/control proof must follow commit/push; none has
-been dispatched for this generic source yet. Do not repeat predecessor CI.
+were unchanged. Private `.work/replica-commit-wake-2026-11-10` retains all evidence. Existing native APK predates this API; do not claim its
+runtime validation. Mobile7a6fe534 is committed/pushed (50848 reaped). Control42749839268 pins
+7a6fe534fc2e86064be9f60509f7befcc6afbf31 (dispatch56359 reaped), pending behind
+receipt42745403043. Expected 7,276 portable + 2,709 Apple = 9,985 cases, plus 16 Swift
+checks and unsigned host. Private hosted.json/audit.py retain pin and exact predecessor
+report comparison. Do not redispatch or cancel either proof.
 
-Next: dispatch one pinned control proof (or Apple scope, not both), continue Mobile
-producer integration, and port generic database API/implementation/tests to Starter
+Next: audit both pinned runs on completion, continue Mobile producer integration,
+and port generic database API/implementation/tests to Starter
 only after real Apple contracts pass. Starter AGENTS/README/architecture/handoff and
 downstream-development were read; HEADffd0ac5 is clean and four existing generic files
 exactly match Mobile76a143b6 baseline. No Starter edits/compile yet.
@@ -60,6 +62,10 @@ work as an explicit domain repository invariant. The owning preparation use case
 schedules after exact committed readback, including a lost write response. Ordinary
 retained reads remain no-op. Never append a separate wake request after writing data.
 Scheduling failure/cancellation must preserve the owned binding and durable marker.
+ACTIVE producer red43490 runs the first new storage regression on unchanged
+production code: appending after the consumer final inventory must retain a new wake.
+Three storage tests are uncommitted; no producer code yet. Sources frozen through
+reap; private `.work/space-binding-producer-wake-2026-11-10` retains the runner.
 New SPACE messages/history, notifications/replies, media, backup, calls and meetings
 remain in the long run; all 54 PRD groups are open.
 
