@@ -1,5 +1,8 @@
 # Architecture
 
+[Actual pending-worker recovery](collaboration-space-pending-native.md) verifies unbound Space discovery, original staging,
+process-loss recovery and offline projection through the registered task.
+
 [Durable pending Space recovery](collaboration-space-pending-recovery.md) gives the existing
 application worker one authenticated original-message claim before binding/staging/delivery.
 The dedicated Finish owner checks the complete pending partition; unready recipients retain

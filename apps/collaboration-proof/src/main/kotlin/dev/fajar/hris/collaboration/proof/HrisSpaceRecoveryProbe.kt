@@ -23,6 +23,8 @@ internal class HrisSpaceRecoveryProbe(private val context: Context, directory: F
     private val sender =
         ProtectedHrisProofOwner(context, files.fixture.getJSONObject("sender"), files.home, http)
 
+    private val mixed = HrisSpaceMixedMessageProof(files) { sender.currentOwner }
+
     suspend fun run(interrupt: Boolean) =
         withContext(Dispatchers.IO) {
             try {
@@ -51,6 +53,10 @@ internal class HrisSpaceRecoveryProbe(private val context: Context, directory: F
                     if (interrupt)
                         { record -> retainInterruptedAcknowledgment(app, recovery, record, group) }
                     else null,
+                afterSpaceStaging =
+                    if (interrupt && mixed.enabled)
+                        { record -> mixed.retainWorkerStaged(app, record) }
+                    else null,
             )
         try {
             app.activate()
@@ -58,7 +64,14 @@ internal class HrisSpaceRecoveryProbe(private val context: Context, directory: F
             val seed = app.spaceRecoverySeed(sender, previous, group)
             if (interrupt) {
                 seed.prepare()
-                app.prepareOriginalRoom(seed.owner, canonical(group, "conversationId"))
+                if (mixed.enabled) {
+                    val conversation =
+                        app.retainUnboundSpaceConversation(
+                            seed.owner,
+                            canonical(group, "conversationId"),
+                        )
+                    mixed.queueForWorker(app, conversation)
+                } else app.prepareOriginalRoom(seed.owner, canonical(group, "conversationId"))
             }
             recovery = app.spaceRecovery(seed)
             recoveryCreated = true
@@ -66,29 +79,11 @@ internal class HrisSpaceRecoveryProbe(private val context: Context, directory: F
                 val interrupted = files.read("original-ack", 16_384)
                 val saved = requireNotNull(recovery.checkpoint().progress)
                 check(saved.generation == interrupted.getString("recoveryGeneration"))
-                check(saved.sweep?.pending?.conversationId == canonical(group, "conversationId"))
+                assertRetainedClaim(saved, group)
                 check(recovery.pendingWake()?.generation == interrupted.getString("wakeGeneration"))
             }
             recovery.start()
-            if (interrupt) {
-                recovery.awaitReadyForControl()
-                files.write(
-                    "original-listening",
-                    checkpoint()
-                        .put("nativeSyncActive", true)
-                        .put("managedPusherActivated", true)
-                        .put("startupWakeCleared", true)
-                        .put("noMessagesDelivered", true),
-                )
-                val revision = recovery.awaitControl()
-                files.write(
-                    "original-control",
-                    checkpoint()
-                        .put("publicationRevision", revision)
-                        .put("durableWake", true)
-                        .put("capturedReplayDeduplicated", true),
-                )
-            }
+            if (interrupt) awaitNativeControl(recovery)
             recovery.recover()
             check(!interrupt) { "The registered worker did not reach its durable ACK boundary" }
             verifyOriginals(app, previous)
@@ -104,12 +99,14 @@ internal class HrisSpaceRecoveryProbe(private val context: Context, directory: F
                         .put("transactionId", state.transactionId)
                         .put("events", JSONArray(receipt.eventIds))
                 }
+            val space = mixed.confirmed(app)
+            val allSent = if (space == null) sent else sent + space
             check(recovery.pendingWake() == null && recovery.checkpoint().progress?.sweep == null)
             recovery.verifyIdleRecovery()
             files.write(
                 "original-recovered",
                 checkpoint()
-                    .put("confirmed", JSONArray(sent))
+                    .put("confirmed", JSONArray(allSent))
                     .put("originalsRetained", true)
                     .put("recipientStayedOffline", true)
                     .put("groupTaskCompleted", true)
@@ -128,6 +125,27 @@ internal class HrisSpaceRecoveryProbe(private val context: Context, directory: F
         }
     }
 
+    private suspend fun awaitNativeControl(recovery: HrisSpaceRecoveryProofHost) {
+        recovery.awaitReadyForControl()
+        files.write(
+            "original-listening",
+            checkpoint()
+                .put("nativeSyncActive", true)
+                .put("managedPusherActivated", true)
+                .put("startupWakeCleared", true)
+                .put("noMessagesDelivered", true)
+                .put("queuedSpaceWithoutBinding", mixed.enabled),
+        )
+        val revision = recovery.awaitControl()
+        files.write(
+            "original-control",
+            checkpoint()
+                .put("publicationRevision", revision)
+                .put("durableWake", true)
+                .put("capturedReplayDeduplicated", true),
+        )
+    }
+
     /** Interruption is permitted only after both the real receipt and group claim are durable. */
     private suspend fun retainInterruptedAcknowledgment(
         app: HrisWorkerProofContainer,
@@ -139,7 +157,7 @@ internal class HrisSpaceRecoveryProbe(private val context: Context, directory: F
         check(receipt.intent == record.intent && receipt.eventIds.isNotEmpty())
         check(app.message(record.intent.id)?.state is CollaborationMessageState.Staged)
         val snapshot = requireNotNull(recovery.checkpoint().progress)
-        check(snapshot.sweep?.pending?.conversationId == canonical(group, "conversationId"))
+        assertRetainedClaim(snapshot, group)
         val wake = requireNotNull(recovery.pendingWake())
         files.write(
             "original-ack",
@@ -150,9 +168,26 @@ internal class HrisSpaceRecoveryProbe(private val context: Context, directory: F
                 .put("events", JSONArray(receipt.eventIds))
                 .put("recoveryGeneration", snapshot.generation)
                 .put("wakeGeneration", wake.generation)
-                .put("claimedBeforeDelivery", true),
+                .put("claimedBeforeDelivery", true)
+                .put("pendingMessageClaim", mixed.enabled),
         )
         awaitCancellation()
+    }
+
+    private fun assertRetainedClaim(
+        progress: CollaborationSpaceRecoveryProgress,
+        group: JSONObject,
+    ) {
+        if (!mixed.enabled) {
+            check(progress.sweep?.pending?.conversationId == canonical(group, "conversationId"))
+            return
+        }
+        val queued = files.read("original-space-queued", 16_384)
+        val claim = requireNotNull(progress.sweep?.messages?.pending)
+        check(progress.sweep?.pending == null)
+        check(claim.conversationId == canonical(group, "conversationId"))
+        check(claim.position.messageId == canonical(queued, "logicalId"))
+        check(claim.position.createdAt.toString() == queued.getString("createdAt"))
     }
 
     private suspend fun verifyOriginals(host: HrisWorkerProofContainer, previous: JSONObject) {

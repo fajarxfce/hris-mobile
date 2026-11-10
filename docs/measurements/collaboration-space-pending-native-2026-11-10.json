@@ -1,0 +1,384 @@
+{
+  "acceptedAt": "2026-11-10T10:56:23.099500+00:00",
+  "productSource": "8c76f92c5c92cdf88d6827f3678e005c581fa8ab",
+  "scope": "Actual registered worker discovers one unbound queued Space message, claims and stages it beside two unchanged Company originals, then recovers original transactions and its durable claim after process loss. Original-only, direct-mixed and prior group-worker controls remain verified.",
+  "sources": {
+    "mobile": {
+      "count": 4732,
+      "manifestSha256": "5dc57501601ab9c083ab61d822c600b12d7b583fad0edffe5a7cf5037caffcc6",
+      "files": {
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceMixedMessageProof.kt": "f5eaefb61ed83aac7e606969a21a734fe7b5e856bfb2ecaecaa16ca865fcbf31",
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceRecoveryProbe.kt": "6dd600647c5450722a182cbec374e742519c754f90d455b80843738bb2cd0f4b",
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofContainer.kt": "7f61fb1ca1e07b2d3c8ccfabe4ad818733cbb8dc173de0456819bb8f1268ced1"
+      }
+    },
+    "group": {
+      "count": 8735,
+      "manifestSha256": "d37166610c7b8300220d33d98514f950d01c9e38f51e813f1811711d54a4819d",
+      "files": {
+        "apps/server/src/test/kotlin/dev/fajar/hris/NativeSpaceRecoveryWorkerTest.kt": "c288105a354f532bc25dfb9a17a6dd0a910061ee8cf9d5baea66cdd27dfd7b8b",
+        "tool/collaboration_space_original.py": "a3c9d35e7d04ae966c06007bdb84a2a3599b91d055b8297eb2bfa23b2a942eb3",
+        "tool/collaboration_space_recovery.py": "7c7e149523d6206919e2d8c8ce2a522cb8cfa5434aec163692ea80667c2b0669",
+        "tool/test_collaboration_space_recovery.py": "06022e268e7b2b569ad88972f8fe3eb1051409f7ece798a9f752143561d3d6b5"
+      }
+    }
+  },
+  "proofBuild": {
+    "elapsedSeconds": 107.923,
+    "freshCounts": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "productTestsUnchanged": 10010
+  },
+  "fixtureBuild": {
+    "startedAt": "2026-11-10T10:49:23.351518+00:00",
+    "elapsedSeconds": 83.808,
+    "sourceFiles": 8735,
+    "sourcesUnchanged": true,
+    "counts": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeOriginalAckBarrierTest.xml": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "a69ae9ffd16c6904349fd4f4b8d2c63e24f619ba1e7734049f22f099f691e66e"
+      }
+    },
+    "sourceManifestSha256": "d37166610c7b8300220d33d98514f950d01c9e38f51e813f1811711d54a4819d",
+    "driverTests": 28,
+    "driverTestIdentities": {
+      "tool/test_collaboration_space_original.py": [
+        [
+          "MixedOriginalCheckpointTest",
+          "test_extra_payload_fields_missing_fields_and_false_queue_proof_are_rejected"
+        ],
+        [
+          "MixedOriginalCheckpointTest",
+          "test_mixed_interruption_requires_no_durable_space_receipt"
+        ],
+        [
+          "MixedOriginalCheckpointTest",
+          "test_new_space_original_preserves_physical_scope_and_distinct_logical_owner"
+        ],
+        [
+          "MixedOriginalCheckpointTest",
+          "test_old_logical_id_and_wrong_space_or_conversation_are_rejected"
+        ],
+        [
+          "MixedOriginalCheckpointTest",
+          "test_replaced_physical_device_session_or_bootstrap_is_rejected"
+        ],
+        [
+          "MixedOriginalCheckpointTest",
+          "test_reused_transaction_and_changed_sender_or_content_are_rejected"
+        ],
+        [
+          "MixedOriginalCheckpointTest",
+          "test_third_diagnostic_requires_explicit_opt_in_and_keeps_strict_bounds"
+        ],
+        [
+          "OriginalDeliveryOwnershipTest",
+          "test_boolean_and_out_of_range_pids_are_rejected"
+        ],
+        [
+          "OriginalDeliveryOwnershipTest",
+          "test_checkpoint_published_between_poll_and_completion_is_read_before_failure"
+        ],
+        [
+          "OriginalDeliveryOwnershipTest",
+          "test_delivery_diagnostic_rejects_payload_fields_and_invalid_counts"
+        ],
+        [
+          "OriginalDeliveryOwnershipTest",
+          "test_failed_experiment_preserves_package_and_releases_ownership"
+        ],
+        [
+          "OriginalDeliveryOwnershipTest",
+          "test_failed_recovery_retains_only_validated_outcome_and_still_fails"
+        ],
+        [
+          "OriginalDeliveryOwnershipTest",
+          "test_failed_stop_still_disconnects_and_releases_without_uninstalling"
+        ],
+        [
+          "OriginalDeliveryOwnershipTest",
+          "test_lost_callback_requires_missing_receipt_and_empty_sdk_before_death"
+        ],
+        [
+          "OriginalDeliveryOwnershipTest",
+          "test_original_interruption_releases_first_ack_then_requires_lost_second_callback"
+        ],
+        [
+          "OriginalDeliveryOwnershipTest",
+          "test_process_replacement_is_not_killed"
+        ],
+        [
+          "OriginalDeliveryOwnershipTest",
+          "test_unowned_package_is_never_stopped_or_removed"
+        ],
+        [
+          "OriginalDeliveryOwnershipTest",
+          "test_wrong_missing_duplicate_or_truncated_native_library_is_rejected"
+        ]
+      ],
+      "tool/test_collaboration_space_recovery.py": [
+        [
+          "PendingSpaceRecoveryProofTest",
+          "test_control_is_forwarded_before_staging_and_ack_does_not_wait_for_it_again"
+        ],
+        [
+          "PendingSpaceRecoveryProofTest",
+          "test_old_binding_control_preserves_its_two_original_handshake"
+        ],
+        [
+          "PendingSpaceRecoveryProofTest",
+          "test_pending_ack_requires_a_message_claim_and_control_revision_is_strict"
+        ],
+        [
+          "PendingSpaceRecoveryProofTest",
+          "test_pending_case_rejects_prebound_start_without_forwarding_control"
+        ],
+        [
+          "PendingSpaceRecoveryProofTest",
+          "test_worker_evidence_preserves_coordinates_without_claiming_sdk_inventory"
+        ],
+        [
+          "PendingSpaceRecoveryProofTest",
+          "test_worker_evidence_rejects_missing_claim_bounds_extra_payload_and_changed_original"
+        ],
+        [
+          "SpaceRecoveryDriverTest",
+          "test_invalid_or_unacknowledged_control_never_allows_durable_ack_read"
+        ],
+        [
+          "SpaceRecoveryDriverTest",
+          "test_missing_startup_isolation_never_allows_ack_to_reach_kill_owner"
+        ],
+        [
+          "SpaceRecoveryDriverTest",
+          "test_unclaimed_ack_and_incomplete_recovery_are_not_accepted"
+        ],
+        [
+          "SpaceRecoveryDriverTest",
+          "test_valid_control_is_published_before_ack_becomes_eligible_for_interruption"
+        ]
+      ]
+    },
+    "changedSources": {
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeSpaceRecoveryWorkerTest.kt": "c288105a354f532bc25dfb9a17a6dd0a910061ee8cf9d5baea66cdd27dfd7b8b",
+      "tool/collaboration_space_original.py": "a3c9d35e7d04ae966c06007bdb84a2a3599b91d055b8297eb2bfa23b2a942eb3",
+      "tool/collaboration_space_recovery.py": "7c7e149523d6206919e2d8c8ce2a522cb8cfa5434aec163692ea80667c2b0669",
+      "tool/test_collaboration_space_recovery.py": "06022e268e7b2b569ad88972f8fe3eb1051409f7ece798a9f752143561d3d6b5"
+    }
+  },
+  "native": {
+    "startedAt": "2026-11-10T10:51:27.147572+00:00",
+    "elapsedSeconds": 269.304,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "bootSeconds": 37.723,
+    "counts": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "TEST-dev.fajar.hris.NativeSpaceRecoveryWorkerTest.xml": {
+        "sha256": "23d030e325613c7c48acdf7c2b590ba92ff9a6fbbbd310e65c3ab0d2adb3f32b",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": {
+        "sha256": "c93d4606201900d1042ee9e3653cb50cad9a0fa9e7173c379cb87c2d15167ef1",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true,
+    "phoneTouched": false
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 150599939,
+    "sha256": "61ae98f267ce3b53cf95d4667b66ae1d78fc0427839161383264e954fbd0f3cb"
+  },
+  "sdk": {
+    "apkSha256": "61ae98f267ce3b53cf95d4667b66ae1d78fc0427839161383264e954fbd0f3cb",
+    "sdkVersion": "26.10.23-hris.6",
+    "abi": "x86_64",
+    "librarySha256": "ecffbab72fd5dd29d656bc4757ea423bb4bccf0444140af0480684bc32761278",
+    "mixedProofClassAndCheckpointsPackaged": true,
+    "pendingWorkerProofPackaged": true
+  },
+  "scenarios": {
+    "mixedDelivery": {
+      "actualProviderEvents": 3,
+      "confirmedOriginals": 3,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 11,
+        "bootstrapReplay": 2,
+        "directTransport": 3
+      },
+      "secondProviderAckLostBeforeAppJournal": true,
+      "delivery": {
+        "reason": "DRAINED",
+        "confirmed": 3,
+        "unresolved": 0,
+        "receiptCount": 3,
+        "states": [
+          "SENT",
+          "SENT",
+          "SENT"
+        ],
+        "elapsedMillis": 1135
+      },
+      "newSpaceOriginal": true,
+      "spaceAckLostBeforeAppJournal": true,
+      "originalNamespacesRetained": true,
+      "completePausedOriginals": 3,
+      "companyJournalBeforeDeath": 1,
+      "spaceJournalBeforeDeath": 0,
+      "matrixRequests": {
+        "requests": 12,
+        "secretStorage": 4,
+        "encryptedSend": 3
+      }
+    },
+    "originalDelivery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 10,
+        "bootstrapReplay": 2,
+        "directTransport": 2
+      },
+      "secondProviderAckLostBeforeAppJournal": true,
+      "delivery": {
+        "reason": "DRAINED",
+        "confirmed": 2,
+        "unresolved": 0,
+        "receiptCount": 2,
+        "states": [
+          "SENT",
+          "SENT"
+        ],
+        "elapsedMillis": 728
+      },
+      "matrixRequests": {
+        "requests": 11,
+        "secretStorage": 4,
+        "encryptedSend": 2
+      }
+    },
+    "groupRecovery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 25,
+        "registration": 1,
+        "bootstrapReplay": 1,
+        "directTransport": 2
+      },
+      "actualGroupControl": true,
+      "consumerReplayDeduplicated": true,
+      "claimedBeforeDelivery": true,
+      "recoveredWithoutFcm": true,
+      "idleRecoveryCompleted": true,
+      "managedPusherActivatedOnce": true,
+      "managedPusherRetainedAfterProcessLoss": true,
+      "idleSweepAdditionalDirectTransport": 0,
+      "matrixRequests": {
+        "requests": 17,
+        "secretStorage": 4,
+        "sync": 6,
+        "managedPusher": 1,
+        "encryptedSend": 3
+      }
+    },
+    "pendingWorker": {
+      "actualProviderEvents": 3,
+      "confirmedOriginals": 3,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 26,
+        "registration": 1,
+        "bootstrapReplay": 1,
+        "directTransport": 3
+      },
+      "actualGroupControl": true,
+      "consumerReplayDeduplicated": true,
+      "claimedBeforeDelivery": true,
+      "recoveredWithoutFcm": true,
+      "idleRecoveryCompleted": true,
+      "managedPusherActivatedOnce": true,
+      "managedPusherRetainedAfterProcessLoss": true,
+      "idleSweepAdditionalDirectTransport": 0,
+      "pendingSpaceWorker": true,
+      "queuedWithoutBinding": true,
+      "originalMessageClaimRecovered": true,
+      "originalNamespacesRetained": true,
+      "retainedApplicationOriginals": 3,
+      "matrixRequests": {
+        "requests": 19,
+        "secretStorage": 4,
+        "sync": 7,
+        "managedPusher": 1,
+        "encryptedSend": 4
+      }
+    }
+  },
+  "limits": [
+    "New fictional messages and manual fixture scheduling; no phone latency or load claim.",
+    "Pending-worker proof uses an adopted legacy physical room; fresh SPACE-origin room runtime and product routing remain separate.",
+    "Actual FCM/APNs delivery, incoming history/edit recovery, media, backup, calls and meetings remain separate.",
+    "Hosted Apple shared-code tests do not implement the unavailable Apple Matrix runtime.",
+    "No live deployment, SDK artifact change or Starter domain port. All54 PRD acceptance groups remain open."
+  ],
+  "fixturePreparation": {
+    "preflight": {
+      "status": "preflight-failed",
+      "compiled": false,
+      "tests": 0,
+      "reason": "Private runner still compared against obsolete mixed-core baseline and old four-file allowance; no compiler started. Corrected baseline to accepted8c76f92c/full10010 with exact3 proof changes."
+    },
+    "driverImportReview": {
+      "initialPrivateSubsetPassed": 24,
+      "preservedOriginalDriverCases": 4,
+      "mergedAttemptTests": 28,
+      "mergedAttemptErrors": 10,
+      "mergedAttemptFailure": "Two newly referenced validators were missing imports after retaining original driver cases. Two cases/ten subtest errors; no production behavior failure. Imports corrected before source compilation."
+    }
+  }
+}

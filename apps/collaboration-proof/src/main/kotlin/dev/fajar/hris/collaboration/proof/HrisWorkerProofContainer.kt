@@ -46,6 +46,7 @@ internal class HrisWorkerProofContainer(
     platformScheduler: WorkScheduler? = null,
     private val backgroundOnly: Boolean = false,
     beforeOriginalProjection: (suspend (CollaborationMessageRecord) -> Unit)? = null,
+    afterSpaceStaging: (suspend (CollaborationSpaceMessageRecord) -> Unit)? = null,
 ) {
     private val application = HrisProofApplicationAccess(owner, hrisAccessToken, backgroundOnly)
     private val database = createAppDatabase(context)
@@ -137,6 +138,43 @@ internal class HrisWorkerProofContainer(
                                             if (state is CollaborationMessageState.Sent)
                                                 beforeOriginalProjection(expected)
                                             return original.update(access, expected, state)
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    )
+                }
+                if (afterSpaceStaging != null) {
+                    val original = it.koin.get<CollaborationSpaceMessageRepository>()
+                    it.koin.loadModules(
+                        listOf(
+                            module {
+                                single<CollaborationSpaceMessageRepository> {
+                                    object : CollaborationSpaceMessageRepository by original {
+                                        override suspend fun update(
+                                            access: CollaborationSpaceLocalAccess,
+                                            expected: CollaborationSpaceMessageRecord,
+                                            state: CollaborationMessageState,
+                                        ): AppResult<Boolean> {
+                                            val result = original.update(access, expected, state)
+                                            if (
+                                                state is CollaborationMessageState.Staged &&
+                                                    result == AppResult.Success(true)
+                                            ) {
+                                                val retained =
+                                                    requireNotNull(
+                                                        expect(
+                                                            original.get(access, expected.intent.id)
+                                                        )
+                                                    )
+                                                check(
+                                                    retained.intent == expected.intent &&
+                                                        retained.state == state
+                                                )
+                                                afterSpaceStaging(retained)
+                                            }
+                                            return result
                                         }
                                     }
                                 }
@@ -238,6 +276,30 @@ internal class HrisWorkerProofContainer(
         } else {
             check(retained == previous && wake == previousWake && requests == previousRequests)
         }
+        return conversation
+    }
+
+    /** Canonical API facts only: new worker coverage starts without any local room binding. */
+    suspend fun retainUnboundSpaceConversation(
+        owner: CollaborationSpaceOwner,
+        canonicalId: String,
+    ): CollaborationSpaceConversation {
+        check(
+            owner.parent.sessionId == access.sessionId && owner.parent.accountId == access.accountId
+        )
+        val local = owner.localDirectoryAccess()
+        val bindings = container.koin.get<CollaborationSpaceRoomBindingRepository>()
+        check(expect(bindings.getByConversation(local, canonicalId)) == null)
+        val conversation =
+            expect(
+                container.koin
+                    .get<CollaborationSpaceConversationRepository>()
+                    .get(owner, canonicalId)
+            )
+        val metadata = container.koin.get<CollaborationSpaceConversationMetadataRepository>()
+        check(expect(metadata.retain(local, conversation)))
+        check(expect(metadata.getById(local, canonicalId)) == conversation.localMetadata())
+        check(expect(bindings.getByConversation(local, canonicalId)) == null)
         return conversation
     }
 

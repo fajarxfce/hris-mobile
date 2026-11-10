@@ -1,7 +1,7 @@
 # Pending Space recovery — implementation handoff
 
 The pending-worker source increment is locally accepted with10,010 verified cases;
-actual native pending-worker acceptance remains required. Complete pending inventory is accepted in b03f591d;
+actual native pending-worker acceptance now passes four cases. Complete pending inventory is accepted in b03f591d;
 mixed/new-room demand is now locally accepted (9,932 verified cases). Source acceptance and phone/live activation
 are separate. All54 communications PRD groups remain open.
 
@@ -75,3 +75,7 @@ and skips delivery after a concurrent cancellation. Validated focused251/full100
 native pending-worker proof remains required. Private .work/space-pending-recovery-2026-11-10
 contains the current runner and candidate, while older worker-draft files are stale.
 The current agent handoff records results and remaining work.
+
+[Accepted native worker proof](collaboration-space-pending-native.md) covers original transactions,
+claim recovery after process loss and offline restart. Continue with the
+[incoming/history plan](collaboration-space-incoming-plan.md).

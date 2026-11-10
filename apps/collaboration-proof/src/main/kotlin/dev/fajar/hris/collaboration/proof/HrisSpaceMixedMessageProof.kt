@@ -89,21 +89,91 @@ internal class HrisSpaceMixedMessageProof(
         assertIsolation(host)
         files.write(
             "original-space-staged",
+            stagingCheckpoint(record).put("completeOriginalCount", capture.original.messages.size),
+        )
+    }
+
+    /** Leave the original intent Queued; only the registered worker may prepare and stage it. */
+    suspend fun queueForWorker(
+        host: HrisWorkerProofContainer,
+        conversation: CollaborationSpaceConversation,
+    ) {
+        val logical = requireNotNull(id)
+        check(conversation.owner == scope() && conversation.id == conversationId())
+        val record =
+            host.queueSpace(
+                scope().localDirectoryAccess(),
+                conversation.id,
+                logical,
+                files.body + "-2",
+            )
+        check(record.state == CollaborationMessageState.Queued)
+        check(record.intent.owner == scope().localDirectoryAccess().messageOwner())
+        assertIsolation(host)
+        files.write(
+            "original-space-queued",
             JSONObject()
                 .put("processId", Process.myPid())
                 .put("logicalId", logical)
-                .put("spaceId", ready.owner.spaceId)
                 .put("conversationId", conversation.id)
-                .put("transactionId", state.transactionId)
-                .put("originHash", requireNotNull(state.origin).contentHash)
-                .put("sender", requireNotNull(state.origin).sender)
-                .put("textHash", hash(record.intent.text))
-                .put("nativeSessionId", state.device.nativeSessionId)
-                .put("deviceId", state.device.deviceId)
-                .put("bootstrapOperationId", state.device.bootstrapOperationId)
-                .put("companyPartitionEmpty", true)
-                .put("completeOriginalCount", capture.original.messages.size),
+                .put("createdAt", record.intent.createdAt.toString())
+                .put("textHash", hash(record.intent.text)),
         )
+    }
+
+    /** Runs after actual committed staging; storage only while the SDK writer is held. */
+    suspend fun retainWorkerStaged(
+        host: HrisWorkerProofContainer,
+        record: CollaborationSpaceMessageRecord,
+    ) {
+        val logical = requireNotNull(id)
+        val queued = files.read("original-space-queued", 16_384)
+        check(
+            record.intent.id == logical &&
+                record.intent.owner == scope().localDirectoryAccess().messageOwner()
+        )
+        check(
+            record.intent.conversationId == conversationId() &&
+                record.state is CollaborationMessageState.Staged
+        )
+        check(record.intent.createdAt.toString() == queued.getString("createdAt"))
+        check(hash(record.intent.text) == queued.getString("textHash"))
+        check(host.spaceMessage(scope().localDirectoryAccess(), logical) == record)
+        val previous = files.read("original-staged", 16_384).getJSONArray("originals")
+        check(previous.length() == 2)
+        for (index in 0 until previous.length()) {
+            val old = previous.getJSONObject(index)
+            val retained = requireNotNull(host.message(old.getString("logicalId")))
+            val state = retained.state as CollaborationMessageState.Staged
+            check(state.transactionId == old.getString("transactionId"))
+            check(state.origin?.contentHash == old.getString("originHash"))
+        }
+        check(host.spaceReceipts(scope().localDirectoryAccess(), conversationId()).isEmpty())
+        assertIsolation(host)
+        files.write(
+            "original-space-staged",
+            stagingCheckpoint(record)
+                .put("retainedOriginalCount", 3)
+                .put("workerStaged", true)
+                .put("unboundQueued", true),
+        )
+    }
+
+    private fun stagingCheckpoint(record: CollaborationSpaceMessageRecord): JSONObject {
+        val state = record.state as CollaborationMessageState.Staged
+        return JSONObject()
+            .put("processId", Process.myPid())
+            .put("logicalId", record.intent.id)
+            .put("spaceId", scope().spaceId)
+            .put("conversationId", conversationId())
+            .put("transactionId", state.transactionId)
+            .put("originHash", requireNotNull(state.origin).contentHash)
+            .put("sender", requireNotNull(state.origin).sender)
+            .put("textHash", hash(record.intent.text))
+            .put("nativeSessionId", state.device.nativeSessionId)
+            .put("deviceId", state.device.deviceId)
+            .put("bootstrapOperationId", state.device.bootstrapOperationId)
+            .put("companyPartitionEmpty", true)
     }
 
     fun transaction(): String? = id?.let { retained().getString("transactionId") }

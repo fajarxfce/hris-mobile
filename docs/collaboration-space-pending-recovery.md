@@ -61,9 +61,10 @@ zero failures/errors/skips,581.55 seconds. Required root checks, Android host/re
 lint, Wasm/iOS source, actual Chromium and proof APK/unit/quality checks passed. All4,732
 source/library inputs stayed fixed. [Measurement](measurements/collaboration-space-pending-recovery-2026-11-10.json).
 
-Required next validation invokes the actual registered worker for a new unbound Space
-command and interrupts receipt projection, then recovers original transactions after process
-loss. The previous mixed native proof invoked delivery directly and is not evidence for this
-worker path. Hosted Apple shared checks and an unsigned host do not implement the still-missing
+[Actual native acceptance](collaboration-space-pending-native.md) now verifies the registered
+worker for a new unbound Space command, durable claim recovery after process loss, exact
+original transactions and offline restart. Original-only, direct-mixed and group controls
+remain verified. Fresh SPACE-origin rooms and product routing remain separate.
+Hosted Apple shared checks and an unsigned host do not implement the still-missing
 Apple Matrix runtime. Product routing, incoming/history/edits, media, backup, calling and
 meetings remain separate; all54 communications acceptance groups remain open.
