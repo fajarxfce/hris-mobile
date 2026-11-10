@@ -1,0 +1,246 @@
+{
+  "acceptedAt": "2026-11-10T09:10:26.333380+00:00",
+  "productSource": "3f5716b61bdcca043a3978e8643591511c117ad1",
+  "scope": "Actual immutable SDK6 mixed original queue: one newly authored Space original beside two Company originals, lost app receipts after SDK dequeue, process death, exact history recovery and offline projection.",
+  "sources": {
+    "mobile": {
+      "count": 4721,
+      "manifestSha256": "de4dd0fdc4ef051dbde565573c7398977dba6e7de597827b18869ed6ebed7ebd",
+      "files": {
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceMixedMessageProof.kt": "940284c49d88882487f87b8edbc83fc96e7838f976511ef529db5055bc605236",
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisSpaceOriginalDeliveryProbe.kt": "4f4d94e6842b298d7019cf5be955804a5a88fd414bc3ec460b3f47debed24110",
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofContainer.kt": "334e8382f232aa3a3ad06045bac56911a26ee98caf2e0308b82525dcfee91894",
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProtectedHrisProofOwner.kt": "516e755001de514ea23da6a2122588acfbdc9872c8bf73c68e634678787ff761"
+      }
+    },
+    "group": {
+      "count": 8735,
+      "manifestSha256": "2e75c6fcf7f2bdee7cde1a98221b6e90a728d493ff93f404e75d153c4892b9e3",
+      "files": {
+        "apps/server/src/test/kotlin/dev/fajar/hris/NativeOriginalAckBarrier.kt": "dbcf724c5a7b6c42a2c1c9b124b4e6b2ceb6f168a88d462bdcdc50e63cb7bf72",
+        "apps/server/src/test/kotlin/dev/fajar/hris/NativeOriginalAckBarrierTest.kt": "f65d09895961a660a9946c687afc575c9078076813bf3ccd4af6abdd2c4b10b0",
+        "apps/server/src/test/kotlin/dev/fajar/hris/NativeSpaceOriginalDeliveryTest.kt": "4a34b05ddbaf8c8b9c077a24de47a3d3ff299b3442b02f2f96c486f6d949b26b",
+        "tool/collaboration_space_original.py": "c516894bab401aa3de4bd611d2fc532f639da37af34403178d4b5bda270e0f50",
+        "tool/test_collaboration_space_original.py": "795ce90d85d2b12cc28806cd7853297fc4c428c430d0d5b860fc1300fcd5c64d"
+      }
+    }
+  },
+  "proofBuild": {
+    "elapsedSeconds": 100.254,
+    "freshCounts": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "qualityFailure": {
+      "phase": "proof-1",
+      "elapsedSeconds": 71.82,
+      "sourceManifestSha256": "b95120b582a5447784fc579e764be0d2e63178e223eb99f922e80fa28367fd6a",
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cause": "Expanded native fixture deliver method is105 lines against100 limit. Product source unchanged.",
+      "repair": "Extract the original callback interruption checkpoint as an explicit fixture phase; assertions/order retained, no suppression."
+    },
+    "productTestsUnchanged": 9832,
+    "nativeFixtureFailure": {
+      "startedAt": "2026-11-10T08:59:28.434247+00:00",
+      "elapsedSeconds": 155.675,
+      "counts": {
+        "tests": 3,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "sourcesUnchanged": true,
+      "apkUnchanged": true,
+      "noCompilationDuringEmulator": true,
+      "emulatorStopped": true,
+      "phoneTouched": false,
+      "cause": "Test-only countRetainedOriginals required exactly two transactions and two SQL placeholders; the new three-original callback threw before waiting. Subsequent cases retained the failed proof package and could not start. No product defect established.",
+      "repair": "Allow exactly two or three distinct validated transaction IDs and bind that exact number of SQLite placeholders; retained count bounded by supplied count. Same SQL read-only original-store proof, no timeout change.",
+      "oldSourceSha256": "4278d9ed17c7e0ffa46431060e6e6e21a74c1baecd26ba919bae3bdf9fa40e9b",
+      "processSession": 92077,
+      "reaped": true
+    }
+  },
+  "fixtureBuild": {
+    "startedAt": "2026-11-10T08:55:12.464373+00:00",
+    "elapsedSeconds": 155.768,
+    "sourceFiles": 8735,
+    "sourcesUnchanged": true,
+    "counts": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeOriginalAckBarrierTest.xml": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "ff7593a6cb386f1081f0424694e2576280984201aea4ff61a2f071fff6e0db03"
+      }
+    },
+    "sourceManifestSha256": "2e75c6fcf7f2bdee7cde1a98221b6e90a728d493ff93f404e75d153c4892b9e3",
+    "driverTests": 18,
+    "completedProcessObserved": true
+  },
+  "native": {
+    "startedAt": "2026-11-10T09:06:00.548035+00:00",
+    "elapsedSeconds": 233.312,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "bootSeconds": 36.721,
+    "counts": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": {
+      "TEST-dev.fajar.hris.NativeSpaceRecoveryWorkerTest.xml": {
+        "sha256": "95b5060a92cd8981ed814cbfc4bde50c465de2d6ce7b7b8a13c2cfd0555376c9",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "TEST-dev.fajar.hris.NativeSpaceOriginalDeliveryTest.xml": {
+        "sha256": "b8b6603ac497a4347e752367b3a83b3166fc82f2ba169752a1d71dc6d24a0d2d",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true,
+    "phoneTouched": false
+  },
+  "apk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 150572753,
+    "sha256": "d8b013e74afc11f71c26e1c4a90148908cfc57b2d9cfaa8abb88b308ec259085"
+  },
+  "sdk": {
+    "apkSha256": "d8b013e74afc11f71c26e1c4a90148908cfc57b2d9cfaa8abb88b308ec259085",
+    "sdkVersion": "26.10.23-hris.6",
+    "abi": "x86_64",
+    "librarySha256": "ecffbab72fd5dd29d656bc4757ea423bb4bccf0444140af0480684bc32761278",
+    "mixedProofClassAndCheckpointsPackaged": true
+  },
+  "scenarios": {
+    "mixedDelivery": {
+      "actualProviderEvents": 3,
+      "confirmedOriginals": 3,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 11,
+        "bootstrapReplay": 2,
+        "directTransport": 3
+      },
+      "secondProviderAckLostBeforeAppJournal": true,
+      "delivery": {
+        "reason": "DRAINED",
+        "confirmed": 3,
+        "unresolved": 0,
+        "receiptCount": 3,
+        "states": [
+          "SENT",
+          "SENT",
+          "SENT"
+        ],
+        "elapsedMillis": 988
+      },
+      "newSpaceOriginal": true,
+      "spaceAckLostBeforeAppJournal": true,
+      "originalNamespacesRetained": true,
+      "completePausedOriginals": 3,
+      "companyJournalBeforeDeath": 1,
+      "spaceJournalBeforeDeath": 0,
+      "matrixRequests": {
+        "requests": 12,
+        "secretStorage": 4,
+        "encryptedSend": 3
+      }
+    },
+    "originalDelivery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 10,
+        "bootstrapReplay": 2,
+        "directTransport": 2
+      },
+      "secondProviderAckLostBeforeAppJournal": true,
+      "delivery": {
+        "reason": "DRAINED",
+        "confirmed": 2,
+        "unresolved": 0,
+        "receiptCount": 2,
+        "states": [
+          "SENT",
+          "SENT"
+        ],
+        "elapsedMillis": 827
+      },
+      "matrixRequests": {
+        "requests": 11,
+        "secretStorage": 4,
+        "encryptedSend": 2
+      }
+    },
+    "groupRecovery": {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "localReadBeforeTransport": true,
+      "nativeRequests": {
+        "requests": 25,
+        "registration": 1,
+        "bootstrapReplay": 1,
+        "directTransport": 2
+      },
+      "actualGroupControl": true,
+      "consumerReplayDeduplicated": true,
+      "claimedBeforeDelivery": true,
+      "recoveredWithoutFcm": true,
+      "idleRecoveryCompleted": true,
+      "managedPusherActivatedOnce": true,
+      "managedPusherRetainedAfterProcessLoss": true,
+      "idleSweepAdditionalDirectTransport": 0,
+      "matrixRequests": {
+        "requests": 17,
+        "secretStorage": 4,
+        "sync": 6,
+        "managedPusher": 1,
+        "encryptedSend": 3
+      }
+    }
+  },
+  "limits": [
+    "New fictional messages and manual fixture scheduling; no phone latency or load claim.",
+    "New Space command demand/inventory and product routing remain unimplemented; the group worker control retains Company originals.",
+    "Actual FCM/APNs delivery, incoming history/edit recovery, media, backup, calls and meetings remain separate.",
+    "Hosted Apple shared-code tests do not implement the unavailable Apple Matrix runtime.",
+    "No live deployment, SDK artifact change or Starter domain port. All54 PRD acceptance groups remain open."
+  ]
+}

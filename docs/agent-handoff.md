@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 09:05 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 09:11 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -13,7 +13,8 @@ ViewModels own screen state. No subagent delegation.
 
 One heavy compiler OR emulator. Mixed delivery full-1/27233 completed and is REAPED,
 PASS. Mobile proof2/37351 also reaped PASS20; Group source1 completed PASS3. Native1/92077
-failed and is reaped/stopped; Mobile proof3/35974 is the ONLY active local compiler. No emulator. Focused1/85670,2/31280,3/3636 are reaped. Never kill live API/worker JVMs.
+failed and is reaped/stopped; repaired proof3/35974 and native2/73904 are REAPED PASS.
+No local heavy compiler or emulator remains. Focused1/85670,2/31280,3/3636 are reaped. Never kill live API/worker JVMs.
 Owned emulator uses 2,560 MiB/two cores. Phone 10.77.77.3:5555 is install-only: announce
 each installation; never launch, drive, uninstall or clear it. ADB 7150 timed out after
 15 seconds at 08:22 UTC and is reaped. Existing availability question remains pending.
@@ -131,44 +132,52 @@ complete; ref34796/dispatch87677 reaped. Portable44925 and Apple91345 audits are
 [Complete evidence](measurements/collaboration-space-message-queue-capability-hosted-2026-11-10.json).
 Preserve mixed 42769825037 and projection 42772661276 controls.
 
-## Immediate implementation continuation
+## Accepted native mixed queue — implementation continuation
 
-Four Mobile proof sources and five Group fixture/driver sources are APPLIED/FROZEN,
-uncommitted. Tracked sources are canonical; private draft generators are stale. Both
-.work/mixed-space-native-2026-11-10 directories retain runners and exact evidence.
+Four Mobile proof sources and five Group fixture/driver sources are accepted, pending
+atomic commit/push. Canonical tracked source; stale private generators must not be recopied.
+[Native contract](collaboration-mixed-space-native.md),
+[measurement](measurements/collaboration-mixed-space-native-2026-11-10.json).
 
-Mobile proof1/54494 failed LongMethod only; the explicit interruption phase was extracted
-without assertion/order changes. Proof2/37351 is reaped PASS106.783s/20fresh, all quality
-checks. Source4721 manifest ef4c24e7b2fd142e61034eb014672b83991cbbfa2729498c51057b5bbfda6661.
-Only three proof files differ from accepted core3f5716b6; all9832 product tests are unchanged.
-APK150572753B SHA2a81a2f10d58999fe14ec760afbcadeb7c1d186e454ddd07fe6ebaa658e3dd8a.
-DEX proof class/checkpoints and exact immutable SDK6 x86 library are verified.
+Proof3/35974 is REAPED PASS100.254s/20fresh; source4721 manifest
+de4dd0fdc4ef051dbde565573c7398977dba6e7de597827b18869ed6ebed7ebd.
+Only four proof files differ from core3f5716b6; all9832 product tests/source remain unchanged.
+APK150572753B SHAd8b013e74afc11f71c26e1c4a90148908cfc57b2d9cfaa8abb88b308ec259085.
+Packaged proof/checkpoints and immutable SDK6 library verified. Group source1 remains
+PASS155.768s/3fresh plus18Python driver cases;8735manifest
+2e75c6fcf7f2bdee7cde1a98221b6e90a728d493ff93f404e75d153c4892b9e3.
 
-Group source1 completed PASS155.768s/3fresh bounds cases,18Python driver cases pass.
-8735source manifest2e75c6fcf7f2bdee7cde1a98221b6e90a728d493ff93f404e75d153c4892b9e3.
-Native1/92077 is REAPED FAILED155.675s; source/APK fixed, no compilation during emulator,
-emulator stopped. The test-only SQLite count reader still required exactly two transaction
-IDs/placeholders and threw before waiting for the new third original. Later cases could not
-start because the failed proof package was deliberately retained. No product defect shown.
-Exact failed source, userdata, checkpoints and classification retained in native-failure.json.
-Only ProtectedHrisProofOwner now permits exactly2..3 distinct validated IDs with matching
-bound placeholders/count; no timeout/assertion removed. Four proof files now differ from core.
-Mobile proof3/35974 is the ONLY compiler, then audit proof-3/binary and run a fresh native-2.
-Group source1 is unchanged. Native config now uses proof-3; do not reuse failed userdata.
-Expect three cases/two XML reports/three fixture directories; all inputs frozen.
+Native2/73904 is REAPED PASS233.312s,three cases/two XML reports/three fixture directories.
+Fresh2560MiB/two-core emulator, precompiled768MiB server; no compilation during emulator,
+source/APK/library fixed, emulator stopped. Mixed new Space +two Company originals require
+all3SDK rows gone with only1Company/0Space receipts before process death. Recovery retains
+exact namespaces/content/device/keys/transactions, all3Sent and exactly3provider events;
+recipient offline, subsequent offline restart passes. Mixed recovery988ms in this fixture
+only; original-only827ms. Group control retains25native/17Matrix/1pusher/0extra idle transport.
+No rejected Matrix/server errors. Strict native/source/artifact auditor and publisher pass.
+Private .work/mixed-space-native-2026-11-10 in both repos holds exact evidence.
 
-The opt-in case authors one fictional Space intent through real Queue/Stage beside the
-two unchanged Company originals. All three exact SDK originals must be removed with only
-first Company receipt persisted and zero Space receipts, then one real process death.
-Recovery must retain namespaces, intent/content, transaction/device/keys and exactly three
-provider events; recipient stays offline. Original-only and group-worker controls remain.
-Read both local stores after offline restart. Audit via Mobile accept-native.py native-1;
-preserve failed stores and fix causes before acceptance. No native claim until it passes.
+Native1/92077 failed155.675s because test-only SQLite reader still asserted exactly2IDs and
+placeholders; it threw before waiting for3. Later scenarios refused the retained failed
+proof package. Only that reader changed to bounded2..3 unique IDs/matching placeholders;
+no product/SDK/timeout/assertion removal. Failed userdata/source retained. Proof1LongMethod
+and explicit interruption-phase repair also retained. No repeat of accepted native2 needed.
 
-Complete Space pending inventory (including no binding), worker demand, incoming history/
-dedup/edit evidence and product routing, media, backups, calls/meetings and actual Apple
-Matrix runtime binding remain. The group-worker fixture currently sends Company originals.
-All54 PRD groups stay open; this domain increment is not a Starter port.
+NEXT: complete local Space pending inventory independent of room bindings, extend existing
+read-only recovery demand to optional Company +mandatory Space ledgers/new rooms, then
+integrate bounded durable worker claims/staging before product routing. Current worker scans
+room-binding inventory only and LoadCollaborationSpaceRecoveryRoom still rejects original==null.
+CommandStore.observeAll already gives complete bounded128-command inventory; use the existing
+SpaceMessageRepository.observe(access,null), do not add truncated/paged fake completeness.
+Existing immutable progress codec schema1 has binding cursor/claim only; any command phase
+must preserve authenticated old progress/response-loss/claim-before-I/O and wake-generation
+completion. Worker orchestrates usecases; usecases coordinate repos/policy, no usecase calls
+another. Demand must never mutate or acquire transport, and false requires both ledgers idle.
+
+Incoming/dedup/older/edit history, product routing, media, backups, calls/meetings and actual
+Apple Matrix runtime remain. Group-worker native control still sends Company originals.
+All54 PRD groups remain open; no HRIS-domain port to Starter. Phone87 unchanged;88uninstalled;
+ADB68089 timed out15s09:07 and is reaped. Existing availability question remains pending.
 
 ## Recent accepted dependencies
 

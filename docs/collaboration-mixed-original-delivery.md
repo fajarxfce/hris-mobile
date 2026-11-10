@@ -38,7 +38,8 @@ Local tests cover mixed/new-room delivery, complete-ledger collisions, Staging b
 response loss, partial commits, exact readback, missing callbacks, bounded history,
 late aliases, cancellation, denial, deadlines and writer release. Fixtures use a synthetic
 queue. [Local evidence](measurements/collaboration-mixed-original-delivery-2026-11-10.json)
-records actual checks and limitations. Native proof must author a NEW fictional Space
-intent through the real Queue/Stage usecases beside unchanged company originals. Complete
-pending-command inventory and incoming routing are required before product activation.
+records actual checks and limitations. [Native acceptance](collaboration-mixed-space-native.md)
+now proves one NEW fictional Space intent through real Queue/Stage beside the unchanged
+Company originals, SDK-dequeue/app-receipt loss, exact recovery and offline restart.
+Complete pending-command inventory and incoming routing remain required before activation.
 Actual Apple Matrix runtime binding and all communications PRD acceptance remain open.

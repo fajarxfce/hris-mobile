@@ -241,6 +241,34 @@ internal class HrisWorkerProofContainer(
         return conversation
     }
 
+    suspend fun queueSpace(
+        access: CollaborationSpaceLocalAccess,
+        conversationId: String,
+        id: String,
+        body: String,
+    ) = expect(container.koin.get<QueueCollaborationSpaceText>()(access, conversationId, id, body))
+
+    suspend fun stageSpace(
+        ready: CollaborationSpaceRuntimeReady,
+        conversation: CollaborationSpaceConversation,
+        id: String,
+    ) = expect(container.koin.get<StageCollaborationSpaceText>()(ready, conversation, id))
+
+    suspend fun spaceMessage(access: CollaborationSpaceLocalAccess, id: String) =
+        expect(container.koin.get<CollaborationSpaceMessageRepository>().get(access, id))
+
+    suspend fun spaceReceipts(access: CollaborationSpaceLocalAccess, conversationId: String) =
+        expect(
+            container.koin.get<CollaborationSpaceReceiptRepository>().read(access, conversationId)
+        )
+
+    suspend fun originalQueue(ready: CollaborationSpaceRuntimeReady, roomId: String) =
+        expect(
+            container.koin
+                .get<CollaborationSpaceRuntimeRepository>()
+                .inspectOriginalQueue(ready, roomId)
+        )
+
     suspend fun deliverOriginals(
         ready: CollaborationSpaceRuntimeReady,
         conversation: CollaborationSpaceConversation,

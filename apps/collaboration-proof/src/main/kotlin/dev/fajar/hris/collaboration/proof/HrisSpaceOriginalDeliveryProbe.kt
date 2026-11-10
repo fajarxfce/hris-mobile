@@ -34,6 +34,8 @@ internal class HrisSpaceOriginalDeliveryProbe(private val context: Context, dire
     private val receiver =
         ProtectedHrisProofOwner(context, files.fixture.getJSONObject("recipient"), files.home, http)
 
+    private val mixed = HrisSpaceMixedMessageProof(files) { sender.currentOwner }
+
     suspend fun run(scenario: String) =
         withContext(Dispatchers.IO) {
             try {
@@ -173,17 +175,58 @@ internal class HrisSpaceOriginalDeliveryProbe(private val context: Context, dire
                     is CollaborationMessageState.Staged -> "STAGED"
                     else -> "OTHER"
                 }
-            }
+            } + listOfNotNull(mixed.state(host))
         files.write(
             "original-delivery-result",
             JSONObject()
                 .put("reason", report.nativeReason?.name ?: "NONE")
                 .put("confirmed", report.confirmed.size)
                 .put("unresolved", report.unresolved.size)
-                .put("receiptCount", host.receipts().size)
+                .put("receiptCount", host.receipts().size + mixed.receiptCount(host))
                 .put("states", JSONArray(states))
                 .put("elapsedMillis", elapsedMillis),
         )
+    }
+
+    /** Keep the first receipt durable while the SDK removes all originals before process death. */
+    private suspend fun interruptBeforeProjection(
+        host: HrisWorkerProofContainer,
+        record: CollaborationMessageRecord,
+        previous: JSONObject,
+    ) {
+        val retainedReceipts = host.receipts()
+        check(retainedReceipts.size == 1)
+        val journal = retainedReceipts.single { it.intent.id == record.intent.id }
+        check(journal.intent == record.intent && journal.eventIds.isNotEmpty())
+        check(host.message(record.intent.id)?.state is CollaborationMessageState.Staged)
+        mixed.assertUnacknowledged(host)
+        val acknowledged =
+            checkpoint()
+                .put("logicalId", record.intent.id)
+                .put("journalDurable", true)
+                .put("projectionNotWritten", true)
+                .put("receiptCount", retainedReceipts.size)
+                .put("events", JSONArray(journal.eventIds))
+        if (mixed.enabled) acknowledged.put("spaceReceiptCount", 0)
+        files.write("original-first-ack", acknowledged)
+        val originals = previous.getJSONArray("originals")
+        val transactions =
+            (0 until originals.length()).map {
+                originals.getJSONObject(it).getString("transactionId")
+            }
+        withTimeout(15_000) {
+            while (
+                sender.countRetainedOriginals(transactions + listOfNotNull(mixed.transaction())) !=
+                    0
+            ) delay(25)
+        }
+        check(host.receipts().size == 1)
+        mixed.assertUnacknowledged(host)
+        files.write(
+            "original-ack",
+            acknowledged.put("queuedOriginalCount", 0).put("interruptedAfterSdkRemoval", true),
+        )
+        awaitCancellation()
     }
 
     private suspend fun deliver(interrupt: Boolean) {
@@ -194,41 +237,7 @@ internal class HrisSpaceOriginalDeliveryProbe(private val context: Context, dire
         var primary: Exception? = null
         host =
             application(
-                if (interrupt)
-                    { record ->
-                        val retainedReceipts = host.receipts()
-                        check(retainedReceipts.size == 1)
-                        val journal = retainedReceipts.single { it.intent.id == record.intent.id }
-                        check(journal.intent == record.intent && journal.eventIds.isNotEmpty())
-                        check(
-                            host.message(record.intent.id)?.state
-                                is CollaborationMessageState.Staged
-                        )
-                        val acknowledged =
-                            checkpoint()
-                                .put("logicalId", record.intent.id)
-                                .put("journalDurable", true)
-                                .put("projectionNotWritten", true)
-                                .put("receiptCount", retainedReceipts.size)
-                                .put("events", JSONArray(journal.eventIds))
-                        files.write("original-first-ack", acknowledged)
-                        val originals = previous.getJSONArray("originals")
-                        val transactions =
-                            (0 until originals.length()).map {
-                                originals.getJSONObject(it).getString("transactionId")
-                            }
-                        withTimeout(15_000) {
-                            while (sender.countRetainedOriginals(transactions) != 0) delay(25)
-                        }
-                        check(host.receipts().size == 1)
-                        files.write(
-                            "original-ack",
-                            acknowledged
-                                .put("queuedOriginalCount", 0)
-                                .put("interruptedAfterSdkRemoval", true),
-                        )
-                        awaitCancellation()
-                    }
+                if (interrupt) { record -> interruptBeforeProjection(host, record, previous) }
                 else null
             )
         try {
@@ -244,6 +253,7 @@ internal class HrisSpaceOriginalDeliveryProbe(private val context: Context, dire
                 )
             val conversation =
                 host.prepareOriginalRoom(restored.owner, canonical(group, "conversationId"))
+            if (interrupt) mixed.stage(host, ready, conversation)
             val started = TimeSource.Monotonic.markNow()
             val result = expect(host.deliverOriginals(ready, conversation))
             retainDeliveryDiagnostic(host, result, started.elapsedNow().inWholeMilliseconds)
@@ -264,7 +274,8 @@ internal class HrisSpaceOriginalDeliveryProbe(private val context: Context, dire
                         .put("logicalId", id)
                         .put("transactionId", state.transactionId)
                         .put("events", JSONArray(receipt.eventIds))
-                }
+                } + listOfNotNull(mixed.confirmed(host))
+            check(result.confirmed.containsAll(sent.map { it.getString("logicalId") }))
             files.write(
                 "original-recovered",
                 checkpoint()
@@ -362,7 +373,9 @@ internal class HrisSpaceOriginalDeliveryProbe(private val context: Context, dire
             )
             files.write(
                 "original-offline",
-                checkpoint().put("localBeforeTransport", true).put("confirmedCount", ids.size),
+                checkpoint()
+                    .put("localBeforeTransport", true)
+                    .put("confirmedCount", ids.size + mixed.offline(host)),
             )
         } catch (failure: Exception) {
             primary = failure

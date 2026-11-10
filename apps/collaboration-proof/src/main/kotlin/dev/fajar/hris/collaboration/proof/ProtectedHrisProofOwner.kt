@@ -283,7 +283,7 @@ internal class ProtectedHrisProofOwner(
      * Read-only SDK6 fixture barrier; no second client, queue writer or secret leaves this owner.
      */
     suspend fun countRetainedOriginals(transactions: List<String>): Int {
-        check(transactions.size == 2 && transactions.distinct().size == 2)
+        check(transactions.size in 2..3 && transactions.distinct().size == transactions.size)
         check(transactions.all { it.length in 1..255 && it.all { char -> char.code in 33..126 } })
         val (_, encoded) = retainedRecord()
         val record = JSONObject(encoded)
@@ -293,15 +293,16 @@ internal class ProtectedHrisProofOwner(
                 .canonicalFile
         check(database.path.startsWith(root.path + File.separator) && database.isFile)
         return withContext(Dispatchers.IO) {
+            val placeholders = List(transactions.size) { "?" }.joinToString()
             SQLiteDatabase.openDatabase(database.path, null, SQLiteDatabase.OPEN_READONLY).use { db
                 ->
                 db.rawQuery(
-                        "SELECT count(*) FROM send_queue_events WHERE transaction_id IN (?, ?)",
+                        "SELECT count(*) FROM send_queue_events WHERE transaction_id IN ($placeholders)",
                         transactions.toTypedArray(),
                     )
                     .use { cursor ->
                         check(cursor.moveToFirst())
-                        cursor.getInt(0).also { check(it in 0..2) }
+                        cursor.getInt(0).also { check(it in 0..transactions.size) }
                     }
             }
         }
