@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 12:29 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 12:41 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -12,7 +12,7 @@ HRIS policy stays in Mobile. No subagents. Usecases coordinate repositories and 
 never other usecases; repositories coordinate their own datasource I/O, and ViewModels own
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
-One heavy compiler OR emulator. Raw classification focused1/49881 RUNNING; prior gates reaped.
+One heavy compiler OR emulator. Raw classification full1/34957 RUNNING; focused49881 reaped.
 The emulator is stopped. Preserve the one-compiler OR one-emulator boundary.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
@@ -72,8 +72,10 @@ Private .work/space-history-edits-2026-11-10 contains exact source/archive/runne
 
 Hosted edit control42811675228 RUNNING on exact5da6cb95,refvalidation/space-history-edits-
 20261110. Source96465/ref10060/dispatch12225 REAPED. Expected8092portable(3820Desktop+
-651Androidhost+3621Chromium)+3104Apple=11196,16Swift/host. Config/auditor prepared. Baseline
-history42808577683 must finish/audit per platform before auditing this successor; no redispatch.
+651Androidhost+3621Chromium)+3104Apple=11196,16Swift/host. Config/auditor prepared. Portable59554 REAPED PASS8092,artifact13765960448,
+SHAa158b087f122f81296fc5d4ca621c1cf17f75341b45d2f1f0ae030e996274bf8,
+manifest0a9fc5b1ca981bdf6b0b827eb8fbe6f3dd770a6a8aa6be9416b4eff3e285fd8b.
+Portable measurement is published. Apple still building its host; predecessor history42808577683 is complete and fully audited. No redispatch.
 
 ## Accepted owned Space history
 
@@ -98,13 +100,12 @@ Historical storage-gate proofAPK150602743bytes SHA9d0e7ddafdd92fbb784db8d9fb4478
 No native repeat or phone latency claim; the raw-source proofAPK above now supersedes it.
 Private .work/space-history-storage-2026-11-10 holds source/results/auditors and exact file list.
 
-Hosted storage control42808577683 RUNNING on exact0b84f0dc,refvalidation/space-history-storage-
-20261110. Source72460/ref82114/dispatch40835 REAPED. Expected8058portable(3803Desktop+
-651Androidhost+3604Chromium)+3087Apple=11145,16Swift/unsignedhost. Private hosted.json and
-strict auditor uses completed/audited worker42801929551. Portable60998 REAPED PASS8058,
-artifact13762536589 SHAa0a21941750820e24452d7521134e4e12e14ca44c03a51948a29055a2bce04f4,
-manifestca4a3d017f080a7e9a3a84eac386f6e723e0017a4ede4dd8aab2f92fa239e9f7. Apple still running.
-Portable measurement is published; do not rerun this audit. Never substitute newer source or claim native Apple Matrix runtime acceptance.
+Hosted storage control42808577683 COMPLETE11145=8058portable+3087Apple,16Swift/unsignedhost
+on exact0b84f0dc. Source72460/ref82114/dispatch40835 REAPED. Portable60998 and Apple27630
+REAPED; strict source/GitHub digest/ZIP CRC/previous case identity checks passed. Appleartifact
+13764254868,570354bytes SHA bbd2454f07a8d26c396c2365db4eb6b6019e46ffe6dc921d8119db1e4c22dfe6,
+manifest91d10e95e0d87995f112b911027e60e038874aabc228daa05321dd6d99df78fa. Complete hosted
+measurement is published. Do not redispatch/re-audit; no native Apple Matrix runtime claim.
 
 ## Accepted registered pending-worker native proof
 
@@ -192,10 +193,11 @@ handoff/measurements. Shared Apple tests/unsigned hosts do not implement its nat
 [Incoming/history plan](collaboration-space-incoming-plan.md) now continues from accepted
 original AND replacement storage and the accepted internal raw-event I/O primitive above.
 Three new UNACCEPTED Kotlin files now add CollaborationAcquiredEvent, the common raw mapper
-and21common tests. Focused1/49881 RUNNING:105expected=(21new+7old original+7old edit)*Desktop/
-Androidhost/actualChromium,iOS source/quality. Private raw-event-classification-2026-11-10 has
+and21common tests. Focused1/49881 REAPED PASS105/302.286s=(21new+7old original+7old edit)*
+Desktop/Androidhost/actualChromium,iOS source/quality; strict audit passed. Private raw-event-classification-2026-11-10 has
 files/runners/expected cases, six exact old mapper XML baselines and prepared strict auditors.
-Expected4755source/full10172; no full run yet. Do not mutate source until this gate ends.
+4755source manifestf56484e626ceb0d012e9cca86f628150b7863dca87a3dc20ab6ed4ea7e69ff3c.
+Full1/34957 RUNNING,10172expected. Do not mutate source until this gate ends.
 Mapping separates original/replacement/redaction trigger/redacted target/unresolved/unsupported;
 SDK decryption never follows room flags. Redaction actors cannot establish original sender,
 ambiguous targets/invalid metadata fail, original/edit hashes reuse existing mappers. No runtime
@@ -220,6 +222,12 @@ message content; room state alone is insufficient. Redaction/control metadata ne
 policy. Never acquire a queue writer merely to reuse ACK recovery validation. Local owned
 history remains independent of live transport/recipient readiness. Company IDs and Space IDs
 remain distinct; do not call usecases from usecases. No generic Starter delta.
+
+The existing Company/Space acknowledgement reader also needs a native regression for an edit
+head absent from the presentation timeline. Prove and address that boundary using exact acquired
+anchor evidence; never merely weaken its checks or relabel an edit as an original. Private
+runtime-integration-review.md records the next finite parent-owned read and separate logical/
+physical snapshots. No second client/registry or repository-to-repository delegation.
 
 Then own bounded native incoming collection, deduplication/edits/redaction, local persistence,
 older-cursor exhaustion, notifications/replies and product routing. Preserve instant cached
