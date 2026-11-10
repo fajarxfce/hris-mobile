@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 15:34 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 15:37 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -64,10 +64,13 @@ Release89 predates unused incoming policy/acquisition and is accepted/uninstalle
 Phone59976 timed out15s at15:27 (REAPED). Existing availability question stays pending; do not
 reask or launch/reset phone UI. Original live90163c32 remains healthy, no further backend changes.
 
-Current6334c0c4 hosted42835309631 RUNNING,expected11359=8222portable+3137Apple plus16Swift/
-unsignedhost. Ref40325/dispatch42308 REAPED; portable25969 REAPED/audited8222, Apple running. Portable artifact13775670420/3551202B/
-SHA2361052bd57c58badc04e0f2d219c75ee02f0c179d61c5f4254e6806453debcd,
-manifest560d48bc1e951cdcbb61e05bf77b265cbd0c4f8f14ec4716f7722aab80913027.
+History6334c0c4 hosted42835309631 is COMPLETE/audited11359=8222portable+3137Apple,
+plus16Swift/unsignediOS host. Portable25969 and Apple60813 REAPED. Apple artifact13777486874,
+577663B SHA5bcf09eeec7609def4ff631913b4233206b4458c6f0662295f57db56bd80be84,
+manifest8cddffdf3816ed20b7911d180d75832e4371ed1564e1d8018ac2291c54643853.
+[Hosted measurement](measurements/collaboration-history-anchor-hosted-2026-11-10.json).
+No hosted Apple execution of newer incoming policy/acquisition source is claimed yet.
+
 Groupf88abd24 push55922 REAPED records current live/package continuation.
 
 Runtime hosted42824039795 is COMPLETE and audited:8201portable+3129Apple=11330, plus16Swift

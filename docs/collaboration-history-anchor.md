@@ -32,8 +32,13 @@ change no production source. All14 exact candidate files from both failed attemp
 
 Full validation passes 10,224 cases (8,205 fresh plus 2,019 hash-verified accepted controls)
 in 686.844s. Android host/release compilation/lint, actual Chromium, Wasm/iOS shared app
-compilation, proof APK/unit tests and required quality checks pass. This is local validation;
-the current source still needs its own hosted Apple execution.
+compilation, proof APK/unit tests and required quality checks pass.
+
+Hosted run42835309631 on exact source6334c0c4 also passes11,359cases:8,222portable and
+3,137Apple simulator cases, plus16Swift push-envelope cases and the unsigned iOS application
+host build. Artifact digests, ZIP integrity, report totals and prior case identities are audited.
+[Hosted measurement](measurements/collaboration-history-anchor-hosted-2026-11-10.json).
+This validates shared/platform contracts; the native Apple Matrix runtime remains separate work.
 
 The actual SDK6 proof passes all three cases in 214.303s with the accepted Group gateway
 redaction fix. Company and adopted Space windows succeed even though the edit head is
