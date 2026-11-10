@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 14:34 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 14:40 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -23,17 +23,25 @@ subsequent offline restart reads2/3 Sent. No performance claim for the employee 
 Emulator stopped; no compiler overlap, source/library/APK unchanged. Private Group
 runtime-event-native-2026-11-10/accept-fixed.py owns the reproducible strict audit.
 
-Original has now copied exactly the Group mapper and its ten-case regression. Its full1/49822
-is RUNNING:24expected Company protocol/history/sync cases, format/architecture, API/worker
-boot JARs. No schemas/DI change. One2GiB compiler, no emulator. Next audit/commit/push that
-port, then prepare the compatible live update. Live remains e558a686/schema116.4/readinessON/
-groupOFF. No Group schema reaches Original. Current6334c0c4 hosted run is being dispatched on validation/history-anchor-20261110;
-ref push40325 REAPED. Expected11359=8222portable+3137Apple, plus16Swift/unsignedhost.
-Group6f7c7380 docs push58321 REAPED publishes the three-case native acceptance.
+Original90163c32 accepts the exact Group mapper/test port. Full1/49822 REAPED PASS23/158.561s
+plus format/architecture/API+worker JARs. Planned24 included Group's fresh-namespace case,
+which does not exist in unchanged Original; all23 applicable case identities remain verified.
+Live API/worker90163c32 activation2/96306 REAPED PASS25.060s: schema116.4,11confirmedkey
+publications, config/mounts/staticIPs/publishedports/other services preserved. Both localhost
+and WireGuard health pass. Readiness and readiness-control ON; Group features OFF.
+First activation78190 restored old images after overly strict dynamic-IP equality; final
+check validates configured staticIPs and published endpoints. No application failure or migration.
+
+Release89 packaging is next from this accepted source and pushed docs. Private
+release-phone-2026-11-10-build89 owns build/manifest/lint/SDK audits and INSTALL-ONLY runner.
+Freeze Mobile source AND HEAD during packaging. Sourcefull10224 and actual SDK3 are accepted;
+ARM64 product artifact still needs build/audits. ADB87583 timed out15s, no phone installation.
+Current6334c0c4 hosted42835309631 RUNNING, expected11359=8222portable+3137Apple plus16Swift/
+unsignedhost. Ref40325/dispatch42308 REAPED; strict auditor uses accepted runtime baseline.
 
 Runtime hosted42824039795 is COMPLETE and audited:8201portable+3129Apple=11330, plus16Swift
 and unsigned iOS host. Apple45856 REAPED; classifier42819170095 also complete11295+16.
-[Hosted measurement](measurements/collaboration-runtime-event-reads-hosted-2026-11-10.json) is published. Phone87 remains last known,88uninstalled,89unbuilt;
+[Hosted measurement](measurements/collaboration-runtime-event-reads-hosted-2026-11-10.json) is published. Phone87 remains last known,88uninstalled,89packaging next;
 ADB64277 timed out at14:00. Existing availability question stays pending. INSTALL-ONLY;
 no phone launch, data reset, retries of retained original messages, or Draft66 send.
 Continue bounded Space incoming retention/progress and the full PRD; all54 groups remain open.
