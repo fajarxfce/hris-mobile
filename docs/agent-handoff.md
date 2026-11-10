@@ -1,21 +1,27 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 18:40 UTC. Follow AGENTS.md. This opening section owns current
+Updated 10 November 2026, 18:41 UTC. Follow AGENTS.md. This opening section owns current
 work; checkpoints below are historical. All 54 communications PRD groups remain OPEN.
 
 ## Current incoming-demand storage correction
 
 Policy7197a803 is committed/pushed. Its focused124/full10479 are accepted. The next11Kotlin
 storage files are APPLIED/UNCOMMITTED, not accepted. Focused83498 REAPED exit1/169.707s:
-58 desktop cases,2failures. No heavy process remains; full1 has NOT STARTED.
+58 desktop cases,2failures. Corrected11files are FROZEN under focused2/84063 RUNNING;
+expected118cases/4810inputs, then full10511. Full1 has NOT STARTED.
 Private space-incoming-demand-storage-2026-11-10 holds exact candidate/base/reports and runners.
 
-The maximum64-room UTF8 case exposed the raw checkpoint32768 limit. Correct storage to use
-one encrypted document (existing131072 bound), a small validated checkpoint, and a consistent
-checkpoint/document read. Keep atomic ReplicaStore replacement+wake; do not enlarge generic
-storage limits. The reopen test used the expired login handle after activating renewed login;
-correct its caller while preserving current-session account admission. No app consumer exists.
-Re-run focused then full after these corrections and preserve the failed reports.
+The maximum64-room UTF8 case exposed the raw checkpoint32768 limit. Storage now uses one
+ encrypted document (existing131072 bound), a small validated checkpoint, and a consistent
+checkpoint/document read. Atomic ReplicaStore replacement+wake and generic limits are unchanged.
+The reopen test used the expired login handle after activating renewed login; its caller is
+corrected and explicitly asserts the old handle cannot read. A16th case rejects missing/substituted
+checkpoint/document metadata. Preserve focused1 reports. No app consumer exists.
+
+Integration review: incoming provider.head is a pagination token, NOT an event ID. Next use
+an authenticated exact-source-reference lookup with its consistent provider checkpoint, through
+existing HMAC indexing; do not compare provider.head to demand.headEventId. Known source plus
+provider EOF and zero pending references excludes idle hints without HTTP or format changes.
 
 Hosted42865846045 at exact669908384da244d285cb21e93040cffcee3207ef is COMPLETE/ACCEPTED:
 11621=8399portable+3222Apple,16Swift checks and unsignediOS host PASS. Both artifacts/digests,
