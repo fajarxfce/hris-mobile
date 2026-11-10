@@ -1,14 +1,16 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 19:03 UTC. Follow AGENTS.md. This opening section owns current
+Updated 10 November 2026, 19:07 UTC. Follow AGENTS.md. This opening section owns current
 work; checkpoints below are historical. All 54 communications PRD groups remain OPEN.
 
 ## Active admitted incoming-room request
 
 Storage795f11c2 committed/pushed,31792 REAPED; focused118/full10511 accepted. Its exact source
 manifestc08386dad0b82bccc0d8b6e1f65d7d330bea8115ca018c72122aec21e14a7106 remains the base.
-Current11Kotlin source/request files are APPLIED/UNCOMMITTED, FROZEN under focused2/64580
-RUNNING. Expected204focused/10565full/4814inputs. Full1 NOT STARTED. Prepare11076 REAPED;
+Current11Kotlin source/request files are APPLIED/UNCOMMITTED, FROZEN under full1/3669 RUNNING. Expected10565full/4814inputs.
+Focused2/64580 REAPED/ACCEPTED204/352.143s,manifest
+4e8356861e4d1bb0238591bb3336c577fa646eeffbb279252dd0803d9d478979.
+JVM/actualChromium/iOSdata/format/architecture/detekt PASS. Prepare11076 REAPED;
 private space-incoming-source-2026-11-10 holds base/candidate/prior reports/runners/strict audits.
 
 The increment reads exact pending or resolved source references with their consistent checkpoint
@@ -21,14 +23,14 @@ Focused1/97107 REAPED exit1/171.513s:102desktop cases,1failed test expectation. 
 room ID must fail authentication within the conversation/device partition; other account/space/
 conversation/device partitions remain absent. Corrected that expectation without weakening
 storage. Also reject an unresolved exact source paired with an empty pending index; the fixture
-now preserves an existing wake on a null optional wake. Same204/10565 expected cases.
-21new domain scenarios and6new real-store cases are implemented, not yet accepted. DI factory
+now preserves an existing wake on a null optional wake. Focused2 accepted204; full10565 expected.
+21new domain scenarios and6new real-store cases pass focused validation; full gate pending. DI factory
 and application resolution assertion included. No product worker, SDK callback or phone delta.
 
 PRIVATE space-incoming-completion-2026-11-10 has5UNAPPLIED files: dedicated clean Pending-room
 completion, DI and16domain scenarios. Depends on current request fixture/DI acceptance. No
-arbitrary EOF boolean, wake acknowledgement or runtime consumption is enabled. Review first;
-no runner/base reports captured yet. Single worker must serialize provider writes/completion.
+arbitrary EOF boolean, wake acknowledgement or runtime consumption is enabled. Private runners
+prepared for236focused/10597full/4817inputs; no accepted base/reports captured yet. Single worker must serialize provider writes/completion.
 
 After focused/full acceptance commit/push, then implement dedicated clean completion, proven
 provider-phase advancement, finite rescan claim/cursor and bounded incoming worker. Private
