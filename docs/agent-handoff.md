@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 08:23 UTC. Follow AGENTS.md. Historical detailed evidence:
+Updated 10 November 2026, 08:35 UTC. Follow AGENTS.md. Historical detailed evidence:
 [7b2bc43c](https://github.com/fajarxfce/hris-mobile/blob/7b2bc43c/docs/agent-handoff.md).
 Private `.work` files supplement these tracked contracts; do not restart accepted runs.
 
@@ -12,8 +12,8 @@ Starter. Usecases own policy/repository orchestration; repositories coordinate r
 ViewModels own screen state. No subagent delegation.
 
 One heavy compiler OR emulator. Staging focused-2/67472 and full-1/14508 are REAPED,
-PASS. Mixed delivery focused-1/85670 is the ONLY heavy compiler; eleven source inputs
-are FROZEN. No emulator is running. Never kill live API/worker JVMs.
+PASS. Mixed delivery full-1/27233 is the ONLY heavy compiler; fifteen source inputs
+are FROZEN. Focused1/85670,2/31280,3/3636 are reaped. No emulator is running. Never kill live API/worker JVMs.
 Owned emulator uses 2,560 MiB/two cores. Phone 10.77.77.3:5555 is install-only: announce
 each installation; never launch, drive, uninstall or clear it. ADB 7150 timed out after
 15 seconds at 08:22 UTC and is reaped. Existing availability question remains pending.
@@ -96,24 +96,40 @@ Private `.work/space-message-queue-capability-2026-11-10` retains the exact runn
 
 Source 31a0ed9ac4a9ab78ea5eec6edcc48643ec0b9934 is committed/pushed (32638 reaped).
 Immutable validation/space-message-queue-capability-20261110 and hosted 42775719615 are
-running; ref 34796/dispatch 87677 reaped. Expected 7,648 portable + 2,887 Apple = 10,535,
-16 Swift checks and unsigned host.
+complete; ref34796/dispatch87677 reaped. Portable44925 and Apple91345 audits are reaped:
+7,648+2,887=10,535,16Swift/unsigned host. Source/artifact/CRC/predecessor checks pass.
+[Complete evidence](measurements/collaboration-space-message-queue-capability-hosted-2026-11-10.json).
 Preserve mixed 42769825037 and projection 42772661276 controls.
 
 ## Immediate implementation continuation
 
 Extend the EXISTING DeliverCollaborationSpaceOriginalMessages window to typed Company/Space
-ledgers; no parallel sender and no usecase-to-usecase orchestration. Eleven Kotlin inputs
-are now APPLIED, UNCOMMITTED/FROZEN. Focused-1/85670 is running for226 fresh cases (13 pure,
-26 new owning,73 existing domain/platform +2 DI). Production Desktop compiled; no acceptance
-yet. Runners/integration notes are in .work/mixed-original-delivery-2026-11-10; tracked source
-is canonical after application, so never recopy stale private drafts. The owning implementation
+ledgers; no parallel sender and no usecase-to-usecase orchestration. Fifteen Kotlin inputs
+are now APPLIED, UNCOMMITTED/FROZEN. Focused1/85670 passed226 fresh/329.739s. Review added
+physical Staging exclusion across bootstrap/native-session aliases to both owning flows,
+with three policy + two owning cases. Focused2/31280 failed after75.509s because the new
+policy test lacked an import; production compiled, no fresh tests. Its exact source/logs
+are retained. Only the missing test import changed. Focused3/3636 PASS236/312.607s is
+reaped and strictly audited: no failure/error/skip, production/Desktop/Chromium/iOS source,
+DI and quality all pass. Source4720 manifest
+b0218b8f5b184e4a46c63bd7767c20786e0dbd59e6d58812ea4c7aef4e63960d.
+Full1/27233 is RUNNING, expected9,832 verified. Source/library inputs remain FROZEN.
+Runners/auditors/publisher/contract are in .work/mixed-original-delivery-2026-11-10;
+tracked source is canonical. The owning implementation
 uses optional original-company and mandatory Space ledger
 phases: read complete pending/journal/native inventory, load exact archive records, validate
 both plans and cross-ledger physical transaction/event ownership BEFORE either CAS. Other
 same-device Staging, including absent SDK originals, must block resume. Retain immutable
 callback mapping, exact CAS readback, scoped late callback storage, pause/drain ownership.
-Complete the draft, meaningful failure/cancellation tests and actual native proof next.
+Finish full validation, publish/commit/push and pin hosted control, then actual native proof.
+
+Three UNAPPLIED Mobile proof drafts are in .work/mixed-space-native-2026-11-10,
+plus an UNAPPLIED Group driver draft at the same relative Group directory. These are NOT
+compiled/tested. Extend the existing original experiment with an opt-in third Space intent;
+preserve original-only defaults, two old messages, keys and device, and one real process
+death after all three SDK transactions disappear with only the first company ACK retained.
+Strict parser tests/server fixture assertions, proof-only compile and isolated native run
+remain. No native draft should be applied during this full source freeze.
 
 Native proof must author a NEW fictional Space intent through accepted StageCollaborationSpaceText
 beside unchanged original fixture intents. Never reassign a real command between partitions.
