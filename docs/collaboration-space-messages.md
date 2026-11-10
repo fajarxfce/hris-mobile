@@ -1,6 +1,6 @@
 # Local organization message intents
 
-Status: implementation and focused validation in progress. Product routing and native
+Status: local source validation accepted. Product routing and native
 delivery of these new intents are not enabled. Existing company message envelopes keep
 their original ownership and storage format.
 
@@ -44,3 +44,13 @@ matches. Preserve distinct ownership types and exact original transactions, devi
 sender, content origin and completion proof. Original-only queue leases must not silently
 gain an enqueue operation. New staging, durable receipt journals, callback-loss recovery
 and complete mixed-ledger delivery require separate implementation and native acceptance.
+
+Focused validation passes68 fresh cases across domain policy,local queue/observation,
+actual SQLite/Chromium storage and app DI,plus Apple source and quality checks.
+Full validation passes9,418 verified results:7,399 fresh and2,019 exactly matching
+accepted predecessor reports,zero failures/errors/skips. All4,677 source inputs and
+library files stayed fixed; all90 AppFlow cases pass unchanged. Required root checks,
+Android host/release compilation/lint,Wasm/iOS source,browser,proof APK/unit tests and
+quality pass. The proof APK was compiled; no new native execution or phone installation
+is inferred. [Accepted local evidence](measurements/collaboration-space-local-messages-2026-11-10.json).
+Pinned Apple execution for these new contracts remains separate required work.

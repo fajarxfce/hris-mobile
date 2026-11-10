@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 05:26 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 05:35 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -45,7 +45,7 @@ patch SHA72622f3e6ef58712089ab81d223d538102bf2cdd9840e08574dddda33995f164.
 Initial core-wide dry apply also included two HRIS document fixtures absent in Starter;
 it stopped without mutation. Database-only scope needs no such fixtures.
 
-Nineteen uncommitted Kotlin files implement explicit account/space message intent,
+This accepted increment contains nineteen Kotlin files implementing explicit account/space message intent,
 state/completion/cancellation policy/contracts, separate encrypted namespace and AAD,
 coherent active/archive reads, immutable terminal proof, atomic command+wake insertion,
 new local queue/observation usecases and owning-module DI. Queueing reads back the
@@ -66,7 +66,7 @@ Failed logs/source manifest are preserved. No old failing process remains.
 
 After that storage proof, the implementation added local queue/observation usecases,
 23 domain cases,constructor DI,full timestamp ordering and an actual same-millisecond
-reopen case. Nineteen Kotlin source/test files remain uncommitted. Focused-3/session17154
+reopen case. The nineteen Kotlin source/test files are included in this accepted increment. Focused-3/session17154
 failed a missing explicit Flow result type; focused-4/session96716 failed test-only
 nullable/list/success type inference. Both are REAPED with zero executed tests. Exact
 failed inputs/logs remain; assertions were retained. Review additionally keeps confirmed
@@ -77,11 +77,21 @@ observation,17 SQLite,17 actual Chromium,2 app DI),zero failures/errors/skips,Ap
 source and format/architecture/detekt. Strict accept-focused.py passed all4,677 source
 and library/current/archive checks. Manifest SHA
 0ff251cd3098f6097863d6a5745190c804ef1714badc6ab59c637e9789b398dc.
-Private .work/space-message-storage-2026-11-10/runner.py full-1/session16809 is RUNNING
-on this frozen source with required root,Android host/release/lint,Wasm/iOS source,
-browser,proof APK/unit and quality tasks. One heavy compiler/no emulator. Do not edit
-Mobile source or start another compiler until it ends. accept-full.py is prepared
-against the exact command foundation predecessor. Source commit/push follows acceptance.
+Full-1/session16809 is REAPED PASS628.512s on the identical frozen source. Strict
+accept-full.py verifies9,418 results (7,399 fresh+2,019 exact accepted reused),zero
+failures/errors/skips. Required root,Android host/release/lint,Wasm/iOS source,browser,
+proof APK/unit and quality pass. All90 AppFlow cases pass unchanged. New proof APK
+150484836bytes SHAfe92a71243d166021bf044e50e01f5752fc3d3d6e923e817dbf73328695bdc1b;
+compiled only,no new native execution or phone installation. No local heavy job remains.
+[Local evidence](measurements/collaboration-space-local-messages-2026-11-10.json).
+Next commit/push this exact accepted source,create immutable validation branch
+validation/space-local-messages-20261110 and dispatch its control workflow. Private
+hosted-pending.json/audit.py expect7,416 portable+2,779 Apple=10,195 plus16Swift/host;
+no new hosted message run dispatched yet. Keep existing producer/command jobs intact.
+Then implement SPACE-specific receipt journal and complete mixed-ledger matching;
+private next-integration.md records reviewed receipt/key-loss and recovery-inventory
+boundaries. Receipt source is not written yet. Starter command patch waits for its
+pending Mobile Apple proof and remains unapplied.
 [Current contract and integration boundaries](collaboration-space-messages.md).
 
 No new native/worker/UI route is activated. Complete mixed old/new queue matching and

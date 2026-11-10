@@ -1,0 +1,129 @@
+{
+  "acceptedAt": "2026-11-10T05:34:05.054844+00:00",
+  "baseCommit": "f17b6294a6076b400803e2e93c44a400b8a2633f",
+  "scope": "Explicit account-owned SPACE message storage, immutable terminal proof, atomic recovery work, local queue/observation, exact response-loss readback and bounded scheduling. No native or product routing enabled.",
+  "sourceFiles": 4677,
+  "sourceManifestSha256": "0ff251cd3098f6097863d6a5745190c804ef1714badc6ab59c637e9789b398dc",
+  "changedSourceHashes": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "efa44111f128318890cae59657bc35bde0b157c023d98d87eac860efd63a2265",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "1d5ed2805e536dc4cd13f669b6b74833efa001384137d242b5aba8159e5542d4",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/messages/CollaborationSpaceMessageCodec.kt": "c78a03579da8dda8a395008df623145dd2d5c04a9a8b17a2b2342e88fb0c6ee4",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceMessageRepository.kt": "eec22fd8295373c220d7c46e31fd7eecca442ff4a0be6d6aa5ccf4d2a6408e3b",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceMessageStorageContract.kt": "cb1eb565e8f63fdf16683a817ea998e83b28b743c73eacdefe294330ba34a253",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceMessageStorageTest.kt": "9a19db2d0756389901dc9b788f4bebc03ec5b315d5aed348e7eeaad93d29bc99",
+    "features/collaboration/data/src/iosTest/kotlin/dev/fajar/starter/collaboration/data/AppleCollaborationSpaceMessageStorageTest.kt": "4533bbf5e8c08c0e7b32d6c63a81d341568af0f299160da61f1648ebbc1f9b67",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationSpaceMessageStorageTest.kt": "3ffd343a11fae5ddc00043add1df08cef4d2a464d4e8cc6e79ba273f87942835",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceMessageIntent.kt": "3b0af7dc9cf282bb73dc9c6518e1a39fa325009c82db735dc1e9b76b5df9f1ec",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceMessagePolicy.kt": "7b615235c8b694dcc2ee4bf444f6cc23e31a42c7476c006a7c99fbeef65988de",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceMessageCancellationRepository.kt": "1be833e922c5af57149fd5648778d6f990455bc65b8505d8cbeaa01758f65a41",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceMessageCompletionRepository.kt": "79249d1671166e96bbb3f43b522d82e1ecea09c59d9da260c1a38e04455cdda6",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSpaceMessageRepository.kt": "f60de922df5491b6f5f9d426236b017583eb858270e9e4b1b379c53da4a888bc",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSpaceMessages.kt": "4b04b6dab00852b364fd0ed011d9ea02cf92d29cd050c2d8c9bae019d34d2d78",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationSpaceText.kt": "ced7381cdc40e2558c174562de27803b3940490305e54da8057db20cb4c5358e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceMessagePolicyTest.kt": "54be78328541b5c7cfc08d301291a565e2ae0273cb184becea4934a952970634",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveCollaborationSpaceMessagesTest.kt": "8795e373c42744be6b90bf5b6c18cf1d9d66002e485d535c34a38414d5800f60",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/QueueCollaborationSpaceTextTest.kt": "be1900a6cef69443b4d7b14f1570504fce067fb6896b08f1dcb1ca7bb8890666",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/SpaceMessageUseCaseFixture.kt": "0a49d8453f9f3b16b1bf1a43b298b0d46c91b32d0a05c6f19dc73f32d37a3011"
+  },
+  "deletedSources": [],
+  "focused": {
+    "startedAt": "2026-11-10T05:15:55.991708+00:00",
+    "elapsedSeconds": 382.076,
+    "sourceFiles": 4677,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 68,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "0ff251cd3098f6097863d6a5745190c804ef1714badc6ab59c637e9789b398dc"
+  },
+  "full": {
+    "startedAt": "2026-11-10T05:23:23.159329+00:00",
+    "elapsedSeconds": 628.512,
+    "sourceFiles": 4677,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 7399,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "0ff251cd3098f6097863d6a5745190c804ef1714badc6ab59c637e9789b398dc",
+    "validatedTests": 9418,
+    "validatedReusedTests": 2019,
+    "validatedDatabaseCases": {
+      "desktopTest": 102,
+      "wasmJsBrowserTest": 100
+    }
+  },
+  "fullReportManifestSha256": "601fe37bccb8708df8bc5c06be27545d02dfcc53b0c690706c33482ea18ca255",
+  "messageContracts": {
+    "domainPolicies": 9,
+    "queueUsecase": 15,
+    "observationUsecase": 8,
+    "sqliteStorage": 17,
+    "chromiumStorage": 17,
+    "appDi": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "checks": [
+    "root check",
+    "Android host tests",
+    "Android dev release compilation and lint",
+    "Wasm and iOS source compilation",
+    "real Chromium collaboration tests",
+    "proof APK compilation and unit tests",
+    "format",
+    "architecture",
+    "detekt"
+  ],
+  "nonIncrementalKotlin": true,
+  "retainedCompilationFailures": [
+    {
+      "failedSession": 90715,
+      "reaped": true,
+      "exitCode": -15,
+      "elapsedSeconds": 237.677,
+      "domainCasesPassed": 9,
+      "storageCasesRan": 0,
+      "reason": "New test raw() extension shadowed by existing CollaborationHistoryFixture.raw() member; renamed test readers to rawMessages/readMessage.",
+      "changedSource": [
+        "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceMessageStorageContract.kt"
+      ],
+      "productionUnchanged": true,
+      "newSession": 54152,
+      "newRun": "focused-2"
+    },
+    {
+      "session": 17154,
+      "reaped": true,
+      "elapsedSeconds": 73.597,
+      "tests": 0,
+      "ownedBuildGroup": 362362,
+      "cause": "Kotlin inferred the admission Flow as AppResult.Failed; add its explicit AppResult<CollaborationSpaceLocalAccess> type. No test or runtime policy change."
+    },
+    {
+      "session": 96716,
+      "reaped": true,
+      "elapsedSeconds": 140.238,
+      "ownedBuildGroup": 373329,
+      "tests": 0,
+      "cause": "New test assertions needed explicit list/nullable/success types. All assertions retained.",
+      "reviewChange": "Retain directory denial per observation collector across temporary session-read failure; one new regression case. No deployed routing change."
+    }
+  ],
+  "nativeRuntimeClaim": false,
+  "phoneInstalled": false,
+  "liveChanged": false,
+  "remaining": [
+    "Pinned Apple execution for these message contracts",
+    "Complete mixed-ledger receipts and native queue matching",
+    "Explicit new-message staging/delivery and recovery inventory before product routing"
+  ]
+}

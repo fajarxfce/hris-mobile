@@ -489,6 +489,33 @@ class CollaborationDataModule {
             ?: UnavailableCollaborationRuntimeRepository()
 
     @Factory
+    fun queueSpaceText(
+        messages: CollaborationSpaceMessageRepository,
+        conversations: CollaborationSpaceConversationMetadataRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        schedules: SyncScheduleRepository,
+    ) =
+        QueueCollaborationSpaceText(
+            messages,
+            conversations,
+            directory,
+            sessions,
+            server,
+            schedules,
+            Clock.System,
+        )
+
+    @Factory
+    fun observeSpaceMessages(
+        messages: CollaborationSpaceMessageRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ObserveCollaborationSpaceMessages(messages, directory, sessions, server)
+
+    @Factory
     fun observeSpaceConversationCommands(
         commands: CollaborationSpaceConversationCommandRepository,
         sessions: SessionRepository,

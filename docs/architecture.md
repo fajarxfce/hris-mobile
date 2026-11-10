@@ -1,5 +1,7 @@
 # Architecture
 
+[Local organization message intents](collaboration-space-messages.md) retain explicit account/space ownership, authenticated terminal proof and recovery work. Use cases own offline admission, exact uncertain-response readback and bounded scheduling; repositories own encrypted I/O. New native and mixed-ledger delivery remain separate capabilities.
+
 [Atomic command insertion](command-work-wakes.md) retains new pending commands and
 their recovery generation in the owning database transaction. Replaying retained
 active/archive identities creates no new work. Business admission, exact readback
