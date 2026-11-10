@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 02:49 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 03:01 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -18,6 +18,40 @@ emulator uses2,560MiB/two cores and is stopped. Phone10.77.77.3:5555 is install-
 announce each installation; never launch, drive, uninstall or clear its app.
 Crashlytics IAM is verified; do not ask again. Physical iPhone interaction is waived,
 not Apple source/runtime, push or calling acceptance. Continue work after checkpoints.
+
+## Active: atomic replica mutation and producer wake foundation
+
+Receipt recovery is committed/pushed below. Current UNCOMMITTED generic changes add
+ReplicaWakeRequest and one optional argument to raw replace/commit. SQLite and IDB
+write the fresh pending wake in the same account/checkpoint-guarded transaction as
+the replica. Same-current generation reuse (pending or acknowledged) and full new-key
+capacity reject both mutations. No scheduler,HRIS policy,key,payload or schema change.
+Existing raw test decorators retain their failure boundaries and forward wake metadata.
+
+Red41381 REAPED expected FAIL50.323s:removing only the generation guard makes the
+same-current mutation succeed incorrectly. Exact assertion/source/XML verified.
+Restored source4656 inputs:11desktop cases pass112.493s plus iOS source/format/
+architecture/detekt. Initial browser filter produced no XML and is not counted;
+corrected browser84232 passes11actual cases/28.168s. Combined22 cases have exact
+current/archive/source/library evidence. Tests cover actual unique-constraint rollback,
+old-consumer/new-writer races,capacity,owner/checkpoint denial,cancel,lost results,
+staging/removal,no-wake compatibility and real file/IDB reopen.
+
+ACTIVE full38641:required root,Android host/release/lint,shared Wasm+iOS,all database
+browser and collaboration-data browser contracts,proof compilation and quality.
+Source is frozen through reap/audit. Portable hosted workflow now explicitly runs
+both database platforms and retains their XML; this workflow-only delta follows the
+focused gate. Private .work/replica-commit-wake-2026-11-10 contains runners,red/focused
+acceptance,55 Kotlin changes and raw-delegate review (no unforwarded same-argument
+calls). Do not claim full/Apple acceptance,commit source or port Starter yet.
+
+After full acceptance:commit/push Mobile foundation and pinned CI; validate real Apple
+contracts before porting generic API/implementation/tests to Starter. Read Starter
+AGENTS/architecture/handoff; README remains required before porting. Then attach wake
+to newly retained immutable original-room bindings and schedule after committed
+readback. Ordinary retained reads remain no-op; never append a separate wake request
+after the database write. New SPACE messages/history,notification coexistence,media,
+backup,calls and meetings remain part of the authorized long run;all54 groups open.
 
 ## Accepted: original callback-loss recovery; continue producer wakes
 
