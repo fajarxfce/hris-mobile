@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 13:03 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 13:10 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -12,9 +12,11 @@ HRIS policy stays in Mobile. No subagents. Usecases coordinate repositories and 
 never other usecases; repositories coordinate their own datasource I/O, and ViewModels own
 screen state. Preserve original messages, transactions, keys, stores and physical identities.
 
-One heavy compiler OR emulator. Native event-read focused1/7075 is RUNNING, source frozen.
+One heavy compiler OR emulator. Native event-read full1/47121 is RUNNING, source frozen.
 Private runtime-event-reads-2026-11-10 owns runner,14-file list and acceptance scripts.
-Expected77focused/10203full cases,4762source inputs; no new acceptance yet.
+Focused1/7075 REAPED PASS77/409.620s, strict audit passed. Full expects10203 cases;
+4762source inputs,manifest6705f5c8117dbf3231d1ab58ffc32d42bb5ec00487c4a196d3db236b45afddc8.
+No whole-application acceptance or product commit yet.
 The emulator is stopped. Preserve the one-compiler OR one-emulator boundary.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
@@ -226,8 +228,10 @@ physical and logical typed event contracts/snapshots, parent-owned finite reads,
 lookup before/after I/O, unavailable-host bindings,15child-lifetime +4parent-integration host
 cases and4portable availability cases. Existing DI/absent-runtime cases cover same-instance
 bindings and no implicit acquisition. No second client/registry or repository delegation.
-Formatted; focused1/7075 RUNNING, not accepted. Prepare strict focused/full auditors and
-accept source before committing product. No live/phone/source-compatibility claim. Then prove
+Focused1/7075 REAPED PASS77/409.620s, strict audit verifies all14changed files and6existing
+control reports/case identities. Full1/47121 RUNNING; accept it before committing product.
+Auditors/publisher prepared, source frozen. Hosted runtime control11330expected is prepared,
+not dispatched; baseline classifier42819170095 remains running. No live/phone/source-compatibility claim. Then prove
 actual original/edit/redaction/missing-key behavior through public repository capabilities in
 the isolated SDK6 native fixture. Do not make an internal datasource public for tests or create
 a second client/registry. Raw I/O alone does not admit content or advance progress.
