@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 21:35 UTC. Follow AGENTS.md. This opening section owns current work.
+Updated 10 November 2026, 21:57 UTC. Follow AGENTS.md. This opening section owns current work.
 
 ## Application incoming worker accepted; native proof next
 
@@ -17,35 +17,53 @@ delayed recovery.17new domain cases per JVM/Chromium and20app cases; prior case 
 Focused1/17560 passed603 but failed detekt on fixture factory; focused2/31627 REAPED accepted615.
 Full1/72582 REAPED accepted. Private space-incoming-application-2026-11-10 holds exact reports.
 
-Actual native-worker proof is APPLIED, UNCOMMITTED:5 Mobile proof files and3 Group fixture/
-protocol files. Product baseline f46567f4 pushed98121/reaped; Group a65b5063 pushed13012/reaped.
-Private space-incoming-application-native-2026-11-10 owns exact candidates/runners/baselines.
-Native1/session80513 REAPED FAILED:5cases,4failures,191.303s, emulator stopped. The first old
-manual event control passed. Registered incoming worker failed at its first actual invocation,
-consume:55, after one provider page/two direct transports; HRIS failure trace and recent storage
-failures were empty. Retained failed proof-package data correctly prevented the other3 fixtures
-from replacing it. They failed at startup; do not misdiagnose them as three product regressions.
-No native worker acceptance exists. Personal sender/private SDK stores and live API unchanged.
+Actual native worker proof is applied but not fully accepted: five Mobile proof files and
+four Group fixture/protocol files. Product f46567f4 is already pushed; no production code has
+changed since that accepted increment. Private space-incoming-application-native-2026-11-10
+in both repositories owns current candidates, reports and runners. Do not rerun prepare/apply.
 
-Mobile build1/89268 accepted20 cases/112.061s. New controlled diagnostics expose the worker's
-bounded failure category, preserving the actual registered task; no guessed product fix.
-Build2/26219 REAPED ACCEPTED21/109.089s,4851 inputs; manifest
-153e29b0ac1264e6f816b99bb570361b1e0d61ccadd4f2b728252bec460d5fc1.
-Current proof APK150724590bytes SHA7dc348b59a9197d269cdd45bf55aa79b59162b94dfa66b5ab7ca79c213e19aa5.
-Group source-1/80396 accepted8740inputs/82.952s; Group source unchanged, no recompilation needed.
-Protocol43 accepted, original39 identities preserved. Current diagnostic-1/session4829 RUNNING
-in Group:ONLY the registered incoming test, fresh isolated2560MiB/2core emulator. All source/
-library/APK bytes frozen. Reap it, inspect sanitized result/diagnostic, then fix the actual cause.
-Default native.py still runs all5 controls; diagnostic runs do not count as full acceptance.
-Exact new-path counters remain unreviewed; worker-request-budget.json intentionally absent.
+Mobile build3/session1421 REAPED ACCEPTED:21 cases/105.157s,4851 inputs; manifest
+6c00735bc853733e7b0944acbfaf897659a8987f40b2d2f52c425cf10255036c.
+Proof APK150724590 bytes SHA
+b47058e971234b452c4c7b4aef701b58dd2311909ca77447d78262be5ce42481.
+First native80513 failed5/4; diagnostic4829 exposed the fixture scheduler's missing incoming
+WORK_KEY. The fixture now admits that key and checks exact schedule counts1/2/2. No product
+workaround. Failed package data was retained, so later fixtures correctly refused replacement.
 
-Earlier private draft omitted one fixture alias (4errors), fixed before application. Initial
-apply preflight found Python bytecode in Group candidate file list after Mobile3 applied;
-Group explicitly restricted to intended3 sources and applied after baseline verification.
-No bytecode/product corruption; failed preflight and source manifests retained privately.
-Do not rerun apply/prepare: current formatted5 Mobile/3 Group candidates are already applied.
-No live rollout, phone install or generic Starter change. ADB29164 timeout/reaped; release89
-still uninstalled. Keep existing phone availability question, do not ask again.
+Native-2/session39274 REAPED:5 cases/3 failures/208.023s. The existing manual scenario AND
+new actual registered incoming worker passed. Worker retains one visible message before EOF,
+finishes in two turns, schedules exactly twice, and performs no extra work on idle/covered
+head. Matrix31 (encrypted4/sync3/secretStorage2/providerPage2), native14 (registration1,
+bootstrapReplay1/directTransport3), pending0. A second offline process reads identical content.
+The third scenario failed during startup; two later original controls retained the failed
+package and refused replacement. This is not full native acceptance.
+
+After daemon restart, source-2 was found complete:82.607s/8740 inputs, manifest
+5ce3adf4f836d338178d3049d7b25f96c019505fac238c58fb0dc73ccaad7776; protocol43 accepted.
+Provider diagnostic64224 REAPED FAILED3/3/156.265s; both first drivers passed. The new trace
+had mixed startup recipient-readiness503s into the post-ready assertion. Third scenario
+failed sender login for fixture redaction with UNAVAILABLE/collaboration_provider_busy:
+SafeMatrixProviderCall maps this exact pair from provider429, not local capacity exhaustion.
+All three scenarios shared one provider's finite address login budget. No guessed product fix.
+
+Current Group source-3/session53372 RUNNING: each scenario now closes its fictional provider,
+so the next Spring context starts fresh provider storage/budget. Existing login limit stays32.
+Startup failures are retained separately from post-ready assertions. New worker request counts
+are exact in JUnit and worker-request-budget.json. Mobile build3/APK are unchanged.
+Reap source-3, accept-source.py source-3, then native.py native-3 runs all5 actual controls.
+Only accept-native.py after all5 pass can publish native-accepted.json. The emulator owns fresh
+2560MiB/2core data and must stop; never compile concurrently or replace failed sender stores.
+
+Prepared publish.py still needs updating for four Group files/source-3 and complete failure
+history. It has NOT run. The hosted CI filter addition is private/unapplied; add incoming worker
+to the existing collaboration-control selection after native acceptance. Then commit/push and
+dispatch ONE immutable hosted run; hosted-next.json expects12361=8899portable+3462Apple plus
+16Swift/unsigned host. hosted-audit.py checks prior42889565705 case identities. No new hosted
+run yet. Live90163/schema116.4 and personal sender/SDK stores remain unchanged.
+
+ADB55679 timeout/reaped after restart; release89 remains uninstalled, phone87 last known.
+Keep the existing availability question pending. Install-only when reachable, announce first;
+no launch/reset/UI driving. No new phone APK is needed for unused proof-only changes.
 
 Realtime SDK/root/push/key handoffs remain absent. ImmutableSDK6 syncOnceV2 returns room IDs,
 including ephemeral/state updates, without raw event IDs. Shipped AAR hash and javap confirm
