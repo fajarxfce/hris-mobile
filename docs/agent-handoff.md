@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 16:20 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 16:27 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -18,18 +18,26 @@ Current proofAPK150633118B SHA73106a2f39a4aabdf5e0041e1842f38dbfbd0844eafbdf5f52
 immutable SDK6. This newer wrapper has NOT yet had actual SDK execution; prior native batch
 acceptance remains scoped to487e042c/Group603cf587. No product incoming consumer is enabled.
 
-Next15Kotlin-file Space traversal storage candidate is prepared/formatted privately in
-space-history-progress-2026-11-10, NOT APPLIED OR COMPILED. Its base-sources.json and candidate/
-are authoritative; next.txt explains reproducible sequencing and warns that prepare.py resets
-its file list. It preserves Company schemas1/2 and exact frames, adds Space schema3 with physical
-provider identity, shares a raw transaction component without repository-to-repository calls,
-and preserves malformed-record observation recovery.13new real-storage cases target Desktop,
-Chromium and Apple; fixed old HMAC/AEAD frames, login/process reopen, page/CAS/response loss,
-pending-pass bounds, namespace isolation and concurrent writers. Apply only after this commit
-is pushed and current source hashes match the saved base. Then focused/full gates, actual native
-provider/storage proof, admitted page acquisition and independent incoming worker. All54 PRD
-acceptance groups remain OPEN. Keep current content admission and provider/pending/outgoing work
-separate. No generic Starter delta or native Apple Matrix implementation.
+Current15Kotlin-file Space traversal storage changes are APPLIED, still UNCOMMITTED/FROZEN.
+[Storage contract](collaboration-space-history-progress.md). Focused1/39028 REAPED PASS94/278.191s
+(13new+34old)*Desktop/actualChromium; exact source/library/prior-case audit passes,4787inputs,
+manifest ba7fa2c4c67a7f13c6b12e341a03557281141f5e998433e8c91525dff2c757a6. Format/architecture/
+detekt/iOS data-source compile pass. Full1/92521 is RUNNING, expected10353=10327prior+26new.
+Do not modify source/library/APK, start another compiler or emulator until this job is reaped.
+Private space-history-progress-2026-11-10 owns exact candidate/, files.json, base-sources.json,
+prior-reports/, run.py, accept-focused.py and accept-full.py. Source parent6b445302 is accepted/
+pushed43447(REAPED). Candidate preserves Company schemas1/2 and old fixed frames, adds Space
+schema3 with physical provider identity, shares a raw transaction component without repository
+calls, and preserves malformed-record observation recovery.13new cases include fixed HMAC/AEAD,
+login/process reopen, provider mismatch, CAS/response loss, pending-pass bounds, encrypted
+isolation and competing writers. Do not rerun prepare.py; it resets the private candidate list.
+
+After full acceptance, commit/push these15Kotlin files and evidence, then actual native provider/
+storage proof. native-next.md details bounded metadata pages, retained unresolved references,
+original/mixed controls and different-process offline comparison. Then owning admitted provider
+page acquisition and independent incoming worker; acquired IDs alone never discharge outgoing
+work or permanently suppress redaction/decryption changes. All54 PRD groups remain OPEN. No
+generic Starter delta or native Apple Matrix implementation. Release89 remains INSTALL-ONLY.
 
 Hosted incoming producte1ab run42849335674 remains RUNNING (last checked16:17): portable
 application binding/platform compilation, Apple setup adapter. Auditor's copied prior-delta

@@ -1,0 +1,26 @@
+{
+  "startedAt": "2026-11-10T16:21:00.360441+00:00",
+  "elapsedSeconds": 278.191,
+  "sourceFiles": 4787,
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 94,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sourceManifestSha256": "ba7fa2c4c67a7f13c6b12e341a03557281141f5e998433e8c91525dff2c757a6",
+  "run": "focused1",
+  "sourceParent": "6b445302",
+  "newStorageCasesPerPlatform": 13,
+  "oldCasesPerPlatform": 34,
+  "platforms": [
+    "desktopSqlite",
+    "actualChromiumIndexedDb"
+  ],
+  "appleDataSourceCompiled": true,
+  "fullApplicationAcceptance": "running",
+  "actualNativeProviderProgressTested": false,
+  "productIncomingConsumerEnabled": false
+}
