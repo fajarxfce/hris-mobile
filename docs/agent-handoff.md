@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 15:02 UTC. Follow AGENTS.md. Detailed prior evidence is retained
+Updated 10 November 2026, 15:21 UTC. Follow AGENTS.md. Detailed prior evidence is retained
 in [65850051](https://github.com/fajarxfce/hris-mobile/blob/65850051/docs/agent-handoff.md).
 This file owns current work; private .work notes supplement it. Do not restart old gates.
 
@@ -40,18 +40,20 @@ nondebuggable devRelease, existing signer,0lint,exact SDK6 and Firebase/API/back
 owns the verified APK/INSTALL-ONLY runner. ADB30354 timed out15s(REAPED); no install attempt.
 Phone87 last known,88/89notinstalled. Keep pending availability question; no phone UI or reset.
 
-Current incoming policy:3newKotlin files are UNCOMMITTED/frozen during full1/12044 RUNNING,
-expected10268=previous10224+44newcases. Focused1/30508 REAPED PASS144/373.676s; strict
-source/report/prior-case audit passes,4,769inputs,
+Current incoming policy:3newKotlin files are accepted with this commit. Full1/12044 REAPED
+PASS10268=10066fresh+202exact accepted database cases/1147.415s, zero failures/errors/skips.
+Focused1/30508 REAPED PASS144/373.676s; strict source/report/prior-case audits pass,4,769inputs,
 manifest0410ae91d868f678fafe7bcf6d3adab655961b827c1fe67db3af5158158c854d.44newcases across
-Desktop/actualChromium+100controls; iOSsource/format/architecture/detekt pass. [Contract](collaboration-incoming-history-planning.md).
-Private space-incoming-2026-11-10 owns candidates, design, focused/full runners and auditors.
-One3GiB compiler,no emulator. No source changes until12044 is reaped; docs/private planning only.
-After full acceptance commit/push the3sourcefiles with final evidence, then implement the owning
-admitted batch and durable incoming progress. Pure policy alone starts no I/O or cursor work.
-Use1..16event batches with at most one target each and one transport observation per batch;
-no repeated per-bubble transport, recursion, or ViewModel orchestration. Preserve original
-physical versus logical Space scope, source/edit identity and explicit unresolved outcomes.
+Desktop/actualChromium+100controls; all required application/quality gates pass.
+[Contract and measurement](collaboration-incoming-history-planning.md). ProofAPK150612950B
+SHAde9e4cbd50694a7d0075fac6897c54ac162d77d2c284d21ef7df74a876fc31fb.
+Private space-incoming-2026-11-10 owns design, runners and strict auditors. No local heavy
+job or emulator remains. New policy starts no I/O; no application/cursor integration yet.
+Next implement owning admitted1..16-event acquisition/retention, then durable incoming progress.
+One current transport observation per batch, at most one target each, local original lookup
+before target acquisition; preserve original physical versus logical Space scope and explicit
+unresolved outcomes. No per-bubble transport, recursive target traversal or ViewModel I/O.
+Release89 predates this unused policy and remains accepted/uninstalled; keep INSTALL-ONLY.
 
 Current6334c0c4 hosted42835309631 RUNNING,expected11359=8222portable+3137Apple plus16Swift/
 unsignedhost. Ref40325/dispatch42308 REAPED; portable25969 REAPED/audited8222, Apple running. Portable artifact13775670420/3551202B/

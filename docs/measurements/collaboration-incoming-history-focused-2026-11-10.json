@@ -14,8 +14,33 @@
   "newKotlinFiles": 3,
   "newLocalCases": 44,
   "existingLocalCases": 100,
-  "fullValidationPending": true,
+  "fullValidationPending": false,
   "applicationIntegration": false,
   "cursorProgressImplemented": false,
-  "phoneInstalled": false
+  "phoneInstalled": false,
+  "fullValidation": {
+    "startedAt": "2026-11-10T15:01:21.887521+00:00",
+    "elapsedSeconds": 1147.415,
+    "sourceFiles": 4769,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 10066,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 150612950,
+      "sha256": "de9e4cbd50694a7d0075fac6897c54ac162d77d2c284d21ef7df74a876fc31fb"
+    },
+    "sourceManifestSha256": "0410ae91d868f678fafe7bcf6d3adab655961b827c1fe67db3af5158158c854d",
+    "validatedTests": 10268,
+    "validatedReusedTests": 202,
+    "validatedDatabaseCases": {
+      "desktopTest": 102,
+      "wasmJsBrowserTest": 100
+    }
+  }
 }

@@ -21,7 +21,11 @@ Focused validation passes144 cases in373.676s:22new cases on both Desktop and ac
 plus100existing original-receipt, anchor, edit-eligibility and raw-classification controls.
 The exact earlier case identities, source/library fingerprints and report digests are audited.
 iOS shared compilation, formatting, architecture and detekt pass. Full application validation
-is running; the three Kotlin files remain uncommitted until that gate completes.
+passes10,268 cases in1147.415s:10,066fresh plus202exact previously accepted database cases.
+Android host/release compilation and lint, application Wasm and iOS source compilation, actual
+Chromium tests, proof APK/unit tests, root check, formatting, architecture and detekt all pass.
+The three Kotlin files share the focused gate's unchanged4,769-input source fingerprint.
+No hosted Apple execution of this new policy or application integration is claimed.
 
 Next implement one admitted1..16-event batch, with one current transport observation per batch,
 explicit ownership around I/O, local target reads before transport, and at most one referenced
