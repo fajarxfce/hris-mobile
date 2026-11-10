@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 22:02 UTC. Follow AGENTS.md. This opening section owns current work.
+Updated 10 November 2026, 22:15 UTC. Follow AGENTS.md. This opening section owns current work.
 
 ## Application incoming worker accepted; native proof next
 
@@ -18,7 +18,7 @@ Focused1/17560 passed603 but failed detekt on fixture factory; focused2/31627 RE
 Full1/72582 REAPED accepted. Private space-incoming-application-2026-11-10 holds exact reports.
 
 Actual native-worker proof ACCEPTED: 5 cases / 259.102s; native-3/session15872 REAPED, emulator stopped.
-5 Mobile proof files and4 Group fixture/protocol files remain to commit with these records.
+5 Mobile proof files and4 Group fixture/protocol files are committed with these records.
 The one-line hosted CI filter now includes the incoming application task; no product behavior
 changed after f46567f4. Mobile build3/1421 reaped accepted21/105.157s,4851 inputs,
 manifest 6c00735bc853733e7b0944acbfaf897659a8987f40b2d2f52c425cf10255036c. Group source-3/session53372 reaped8740inputs/79.185s,
@@ -38,11 +38,35 @@ now pass, with exact worker Matrix31/native14 and original controls unchanged.
 Original transactions, private sender keys and live service remain intact. All failures
 and source snapshots are preserved in the private application-native directories.
 
-Next commit/push these native records, then dispatch ONE collaboration-control run against
-the immutable accepted commit. Private hosted-next.json expects12361=8899portable+3462Apple,
-plus16Swift/unsigned host. hosted-audit.py preserves all prior42889565705 case identities and
-checks incoming scheduling/recovery/task additions. Workflow delta adds only the missing task
-filter. Hosted results are not yet claimed. Realtime integration follows after this checkpoint.
+Native acceptance is committed/pushed: Mobile9ec0cdca7e352806c1b7fd8b8863822d45900ae3
+and Group9f2645ab. Sessions13135/86158 reaped. Validation ref push1376 and dispatch79945
+reaped. Hosted42911090770 is RUNNING at exact Mobile9ec0cdca on
+validation/space-incoming-application-20261110. Do not redispatch. Private application-native/
+hosted.json and hosted-audit.py expect12361=8899portable+3462Apple, plus16Swift/unsigned host.
+https://github.com/fajarxfce/hris-mobile/actions/runs/42911090770
+
+Next increment is APPLIED, UNCOMMITTED:7 Mobile files in private
+space-incoming-startup-2026-11-10 (entity, pure admission policy, local observer, data DI,
+fixture and2common test classes). It observes current native parent, root, registration,
+bootstrap and directory admission without network/clock/SDK/scheduling. Stable coordinates
+exclude ordinary token/journal revisions. No application subscriber is connected yet.
+Source4857; expected focused156 and full10940 against10902 prior cases (product full10901
+plus accepted proof diagnostic1). Full baseline report identities and native proof21 are
+preserved in prior-reports.json. No full/hosted/native acceptance of this startup increment.
+
+Focused1/89474 REAPED failed compilation:two Kotlin test assertion inference errors;0 tests.
+Red1/58464 REAPED19/3 failures/66.315s. Two fixtures incorrectly kept denial revision after
+readmission; existing storage requires open=(null,null), now corrected. The third case
+exposed queued old-root output across nested flatMapLatest under consumer backpressure.
+Red2/session2515 RUNNING with19 cases and a valid changed-bootstrap regression, source fixed.
+Reap before editing. Flatten ownership observation before the final bootstrap flatMapLatest;
+merely adding another buffer does not cancel an already-forwarded old root. Preserve root,
+parent replacement, disposal and storage/admission tests. Then focused2 and full1; auditors
+and exact prior report manifests are private. Root/app integration follows accepted policy.
+
+User phone remains unreachable (ADB55679 timeout/reaped), release89 uninstalled. Existing
+availability question remains pending; notify before install-only, never launch/reset/UI.
+No live deployment, generic Starter delta or SDK mutation. All54 PRD groups remain OPEN.
 
 Realtime SDK/root/push/key handoffs remain absent. ImmutableSDK6 syncOnceV2 returns room IDs,
 including ephemeral/state updates, without raw event IDs. Shipped AAR hash and javap confirm
