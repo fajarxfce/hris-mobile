@@ -17,14 +17,15 @@ The emulator is stopped. Preserve the one-compiler OR one-emulator boundary.
 Do not kill live API/worker JVMs. Native proofs use2560MiB/two-core isolated emulator plus
 768MiB precompiled harness; local Mobile compiler3GiB, Group2GiB, one worker.
 Phone10.77.77.3:5555 is INSTALL-ONLY: announce each install, never launch/drive/uninstall/
-clear its UI or data. ADB97574 timed out15s at11:17 and is reaped; existing availability
+clear its UI or data. ADB80163 timed out15s near11:44 and is reaped; existing availability
 question stays pending. Phone87 last known;88 uninstalled. No new phone build yet.
 Crashlytics IAM is verified; no repeated question. Physical iPhone testing is waived,
 not Apple compilation/runtime/notification/call acceptance. Apple Matrix runtime is missing.
 
 ## Accepted Space message edits
 
-The accompanying7-file increment adds typed Space replacement storage to the same owned
+Accepted Mobile5da6cb95678f8e1493e245d42ac2a76f6f4d00ee is committed/pushed96465(REAPED).
+This7-file increment adds typed Space replacement storage to the same owned
 history repository instance. Original aliases/order and send-acknowledgement identity stay
 separate from edits. Exact replay changes no revision; redactions fall back through eligible
 revisions. Company source/namespace unchanged; no incoming acquisition or UI activated.
@@ -44,9 +45,9 @@ d7cf45325f9349e1fefbb8e0bbf7277ba865370b7501de33176ebb943759e45d.
 Current proofAPK150602468bytes SHA5ae67e42e3d0b6fc468d9a495e8395229178a85d428af5ce6fea9d87ef33b5c1.
 Private .work/space-history-edits-2026-11-10 contains exact source/archive/runners/auditors.
 
-After this source commit/push, pin and dispatch the existing collaboration-control workflow on
-validation/space-history-edits-20261110. Prepared expected8092portable(3820Desktop+651Androidhost+
-3621Chromium)+3104Apple=11196,16Swift/host. Config/auditor prepared,NOT yet dispatched. Baseline
+Hosted edit control42811675228 RUNNING on exact5da6cb95,refvalidation/space-history-edits-
+20261110. Source96465/ref10060/dispatch12225 REAPED. Expected8092portable(3820Desktop+
+651Androidhost+3621Chromium)+3104Apple=11196,16Swift/host. Config/auditor prepared. Baseline
 history42808577683 must finish/audit per platform before auditing this successor; no redispatch.
 
 ## Accepted owned Space history
