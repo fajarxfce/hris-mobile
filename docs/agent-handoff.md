@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 10 November 2026, 05:24 UTC. Historical checkpoints, failures and accepted measurements remain in
+Updated 10 November 2026, 05:26 UTC. Historical checkpoints, failures and accepted measurements remain in
 [78145d78](https://github.com/fajarxfce/hris-mobile/blob/78145d78/docs/agent-handoff.md).
 Use this file for active jobs; do not restart historical runs.
 
@@ -33,7 +33,17 @@ Fixed validation branch validation/command-work-wakes-20261110 pinsb1adfd82, pus
 and reaped22905. Control42758828055 is RUNNING at that immutable source, dispatch73995
 reaped. Expected7,318 portable+2,730 Apple=10,048,16 Swift checks,unsigned host. Config
 and auditor are in .work/command-commit-wake-2026-11-10/hosted.json and hosted-audit.py.
-Its predecessor is producer42753380451; audit that first. Do not redispatch/cancel.
+Portable93083 is REAPED PASS7,318 (3,436 desktop,635 host,3,247 browser),zero failures/
+errors/skips. Artifact13737947225,3443364bytes,SHA41f9c1bb361dbe1d6490cbc524a1f58087a102cb0ad99dc897ed3246bef7818f;
+manifest SHA7172899910b6106a945cc571dd7c511221891f0b42a448300dc0384b2b383723.
+Digest/CRC and all predecessor case identities verified. Apple remains in progress;
+expected2,730+16Swift/host. [Partial hosted evidence](measurements/command-work-wakes-hosted-2026-11-10.json).
+Starter's database-only patch fromd89e6b5d..b1adfd82 passes dry apply against30c4d72,
+15 file changes including the request rename. It is NOT applied and waits for Apple
+acceptance. Private Starter .work/command-work-wake-port-2026-11-10/prepared.json;
+patch SHA72622f3e6ef58712089ab81d223d538102bf2cdd9840e08574dddda33995f164.
+Initial core-wide dry apply also included two HRIS document fixtures absent in Starter;
+it stopped without mutation. Database-only scope needs no such fixtures.
 
 Nineteen uncommitted Kotlin files implement explicit account/space message intent,
 state/completion/cancellation policy/contracts, separate encrypted namespace and AAD,
