@@ -1,0 +1,62 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "cc12b936562eac068dbcc2e0ad5cbecf0209ab84",
+  "sourceFiles": 5017,
+  "changedSourceFiles": 5,
+  "sourceManifestSha256": "6d73098b1ec7177d7bc2b00815eff82bee448b06d56f365745593397386b9519",
+  "focused": {
+    "tests": 200,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused1",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 12796,
+    "fresh": {
+      "tests": 10758,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 579.773,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151769649,
+    "sha256": "b8413d2dae73669b756c879bf34543ae553a70609b22326bed5ed8bcefef6fc6"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "originalKeyHistoryResolutionAccepted": true,
+  "newDomainCasesPerTarget": 24,
+  "explicitCompanyAndHistoricalDevice": true,
+  "currentRegistrationAndSourceFenced": true,
+  "missingMetadataRemainsUnresolved": true,
+  "missingMetadataFinalRegistrationReadback": true,
+  "oneLocalDeadlineSeconds": 5,
+  "primaryQueueDependency": false,
+  "usecaseCallsUsecase": false,
+  "historyWrites": false,
+  "providerOrKeyRequests": false,
+  "newCollector": false,
+  "fullKeyBlockedQueueLivenessProven": false,
+  "nativeSdkExecution": false,
+  "oldDeviceNativeDecryptionProven": false,
+  "keysOnlyBackpressureImplemented": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "starterChanged": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [],
+  "freezeBookkeepingFailure": {
+    "exitCode": 1,
+    "reason": "formatSessionReaped state field missing; no source mutation",
+    "focusedRunnerCapturedOwnSourceManifest": true
+  },
+  "focusInitialSourceManifestMatchesCandidate": true
+}

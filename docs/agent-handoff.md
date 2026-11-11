@@ -1,6 +1,83 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 17:48 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 17:58 UTC. This opening owns current work; older sections are historical.
+
+## Original key-history accepted; continue Space history without namespace redirection
+
+Five-file local resolver ACCEPTED:3 new+2 existing Kotlin. Explicit Company/conversation/device
+locator plus current source resolves through registered Original provenance and owned metadata.
+Historical device stays separate from current Group and Original IDs. Missing metadata returns
+MetadataUnavailable, never empty/completed. Current directory/session/native/source checks fence
+every suspension; final exact registration readback also fences absence. One5-second deadline,
+cancellation propagation and preserved failure classification. No primary task fabrication,
+UC-to-UC, selected-Company inference, key/provider requests, writes, scheduler or new collector.
+Company list has no room/server identity and cannot be an inferred fallback. Native old-device
+decryption remains separate; this resolver supplies exact local coordinates only.
+
+format1/84739 REAPED PASS36.698s; focused1/98953 REAPED PASS414.909s/101;
+browser1/41469 REAPED PASS150.765s/99. Exact200 focused accepted.24 new common cases; existing
+Original incoming loader24, actual encrypted Original-metadata18/traversal18/locator15 and
+appBindings2 remain controls. Full1/88620 REAPED PASS579.773s;
+audit75073 REAPED,12,796 accepted = 10758 fresh+
+2038 exact unchanged controls. Prior IDs/source/library/dependency closures
+verified.5,017-input manifest6d73098b1ec7177d7bc2b00815eff82bee448b06d56f365745593397386b9519.
+Proof APK151769649 bytes/SHAb8413d2dae73669b756c879bf34543ae553a70609b22326bed5ed8bcefef6fc6. No native execution implied.
+
+No failed Gradle/test runs. Initial freeze bookkeeping command failed because formatSessionReaped
+was not recorded. It changed no source; corrected freeze succeeded, and the runner's initial
+source manifest exactly matched the candidate. Both captures and the procedural failure remain
+recorded. Do not mislabel it as a failed test or omit it from provenance.
+
+Workspace .work/space-original-key-history-2026-11-11 owns accepted evidence. Publisher and this
+writer HAVE EXECUTED. Commit/push, then dispatch ONCE on validation/original-key-history-20261111;
+expected15,100=10,774 portable+4,326 Apple. NOT dispatched yet. Fairness43069542685 attached,
+expected15,028; prior inventory43066807577 portable10,718 accepted/Apple pending. Locator
+43062334365 portable10,666 accepted/Apple pending. Scheduling43057055642 FULL14,849, retention43053179213
+FULL14,719, progress43049052938 FULL14,584, owned43044913726 FULL14,527, raw43040652714
+FULL14,458, alias43037578170 FULL14,434. Apple includes16 Swift/unsigned-host cases, not
+native SDK8. Application43031231253 remains historically incomplete; never redispatch unchanged
+source to erase missing proof.
+
+Next Space key-history draft5 files,2 guarded existing+3 new, UNAPPLIED/UNTESTED. Typed local
+binding/result and owning usecase preserve Space conversation/device coordinates even when the
+physical room is a LEGACY alias. Complete Original provenance remains in the binding; do not
+redirect retained Space traversal into Company history or substitute a current device. Same
+registration/source/admission/deadline fences; missing binding explicitly unresolved. No Company
+fallback or primary queue read.26 common cases include native/registration/account/source races,
+old devices, both room origins, damaged aliases and provider-server/owner isolation. Existing
+Company key-loader24, Published incoming-loader14, encrypted binding26/Original-metadata18/
+locator15 and appBindings2 are controls. Read next-space-key-history-review.md.
+
+prepare/configure-next-space-key-history.py PREPARED NOT EXECUTED. Require accepted clean pushed
+source and current single hosted dispatch. Expected12,848 local/5,020 inputs;125 focused+123
+browser;15,178 hosted=10,826 portable+4,352 Apple. Continue directly through apply, format,
+state-recording BEFORE freeze, checks, exact acceptance and push. Do not rerun this publisher,
+writer or prior preparation scripts.
+
+Keys ledger remains an open design decision. Real key signals can arrive offline before any
+real sync position; do not invent a position to fit IncomingSourceProgress. Prefer reviewing
+stable account-owned Company/Space passes with current native source captured per operation,
+so source replacement does not strand old-store rows. Native-source-bound records are only a
+provisional alternative. Read next-keys-pass-ledger-review.md including its final ownership
+section. Settle bounds, inactive-lane wake behavior and source retirement before a new codec.
+Active/requested cursor/retry must preserve finite progress and unresolved metadata. Actual new
+keys differ from repeated startup reconcile, which cannot reset retry. Demotion removes only
+exact provider-complete primary work with reviewed unresolved-outcome evidence and retains wake
+atomically; no reference deletion or second64-room queue. retryRequired/keys_pending are not
+proof of a missing key: AwaitDecryption may include malformed ciphertext; Unsupported, AwaitRedaction
+and MissingOriginal have different triggers. Review broader unresolved-content recovery. Exact
+write/readback and sole pending
+seek ownership require proof. Existing SDK8 listener has no app consumer yet. Full blocked64-room
+drainage, native allocation/performance, authoritative absence, Apple SDK8 and combined old
+Company/new Group native execution remain. Raw collector/Original producer OFF; all54 PRD groups
+OPEN. No Starter/live change.
+
+Phone64143 REAPED timeout17:58:11UTC/20.019s, no install attempted. Current workspace/
+phone-connect-1758.json has authoritative timestamp. Retry no earlier18:29UTC. Release89 SDK6
+awaits install. Notify first, explicit serial/install-only, never drive UI. No emulator. Preserve
+original intents, Draft66, keys/stores/SDK assets, inspector gradlew.bat and live90163c3/schema116.4
+Group OFF. Continue long run and push every commit.
+
 
 ## Original key-history applied; full validation running
 

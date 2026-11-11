@@ -950,6 +950,26 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun loadSpaceOriginalKeyHistory(
+        metadata: CollaborationSpaceOriginalRoomMetadataRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        build: AppBuild,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        sync: CollaborationSpaceSyncRepository,
+    ) =
+        LoadCollaborationSpaceOriginalKeyHistory(
+            metadata,
+            registrations,
+            build,
+            directory,
+            sessions,
+            server,
+            sync,
+        )
+
+    @Factory
     fun loadSpaceIncomingRoom(
         demands: CollaborationSpaceIncomingDemandRepository,
         bindings: CollaborationSpaceRoomBindingRepository,

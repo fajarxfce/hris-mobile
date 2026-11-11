@@ -1,5 +1,8 @@
 # Architecture
 
+[Original key-history coordinates](collaboration-space-original-key-history.md) preserve Company and historical device under current source admission.
+Durable keys passes and native content acquisition remain separate.
+
 [Fair incoming turns](collaboration-space-incoming-fairness.md) use existing zero-backoff FIFO rotation and reserve inventory service.
 Keys-only recovery remains separate.
 

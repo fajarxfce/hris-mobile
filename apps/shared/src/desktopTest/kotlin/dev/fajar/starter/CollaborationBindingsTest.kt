@@ -761,6 +761,7 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<FinishCollaborationSpaceIncomingWork>())
                 assertNotNull(container.koin.get<LoadCollaborationSpaceIncomingRoom>())
                 assertNotNull(container.koin.get<LoadCollaborationSpaceOriginalIncomingRoom>())
+                assertNotNull(container.koin.get<LoadCollaborationSpaceOriginalKeyHistory>())
                 assertNotNull(container.koin.get<CompleteCollaborationSpaceIncomingRoom>())
                 assertNotNull(container.koin.get<AdvanceCollaborationSpaceIncomingProvider>())
                 assertNotNull(
