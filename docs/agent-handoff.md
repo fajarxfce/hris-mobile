@@ -1,6 +1,54 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 15:54 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 15:57 UTC. This opening owns current work; older sections are historical.
+
+## Serialized inventory scheduling applied; focused validation running
+
+Inventory-retention source b1ad41c49d16e23e85cbbb4a7cc7ec1aaf32b48c and Group docs048f8992
+PUSHED,95231/25532 reaped. Local12,530 accepted (full20488/audit54019 reaped),298 focused.
+Hosted43053179213 dispatched ONCE at15:55:32UTC on validation/inventory-retention-20261111;
+40829 reaped. Expected14,719=10,508 portable+4,211 Apple. Existing run stays attached.
+Raw43040652714 FULL14,458 accepted, owned43044913726 portable10,380 accepted/Apple pending;
+source-progress43049052938 pending, expected14,584. Prior application43031231253 remains
+historically incomplete. Never redispatch unchanged source or rewrite missing-case history.
+
+Current16-file scheduling change APPLIED, NOT ACCEPTED (15 Kotlin+workflow,10 existing+6 new).
+Both previous prepare/configure scripts HAVE EXECUTED at15:56:06UTC. Workspace
+.work/space-inventory-scheduling-2026-11-11 owns baseline, frozen candidate and reports.
+format1/49396 REAPED PASS37.307s. focused1/25347 RUNNING, expected254; browser186/full12,622
+follow. Frozen5,001-input manifestca53da7eb5ea79cbe2195652b484b41376b656c1b2a0836a59ae72b3d40b7db3.
+Do not edit candidate source while tests run. Hosted scripts PREPARED NOT DISPATCHED;
+expected14,849=10,600 portable (5,041 desktop/823 Android/4,736 browser)+4,249 Apple.
+Explicit workflow filter includes all16 new app-worker cases and preserves old filters.
+
+Eligibility and retry policy are domain-owned. The owning deferral usecase validates full
+original registration/source/parent/directory before and after suspended I/O; one CAS and
+one readback preserve the independent wake and continuous source position. Replays cannot
+extend retry or postpone a newer loss. Known queue contention stays1 second; ordinary
+failures persist existing30/60/120/240/300-second backoff. Backward clocks remain eligible.
+The application uses its existing worker/mutex/parent: four primary FIFO tasks then at most
+one inventory page. Full64 combined capacity or future retry suppresses enumeration.
+Waiting/Capacity reloads the same generation's current cursor before deferral. No new client,
+store, sync loop or worker.11 retry-policy+6 selection+21 owner and16 app cases are unaccepted
+until checks finish; existing47 actual encrypted storage and worker controls retained.
+
+Next: reap focused25347; inspect any failure without weakening expectations. Run browser,
+audit selected440, then full12,622 and exact-source/case/dependency acceptance. Prepare the
+scheduling contract/publisher/handoff only with actual evidence. Then commit/push and dispatch
+hosted ONCE. Keys-only discovery/demotion remains required before activation: existing prefix
+paging may avoid another catalog, but typed room metadata and independent active/requested
+scan generations still need implementation. Read next-keys-discovery-review.md. Do not drop
+pending refs to free primary slots. Authoritative absence and combined Company-storage/Group-
+native acceptance remain. SDK Client.rooms allocates all native handles; finite returned pages
+are not native memory or whole-inventory performance proof. Raw observation/Original producer
+OFF; all54 PRD groups OPEN. No Starter or live change.
+
+Phone59554 REAPED timeout124 at15:55:22UTC/20.02s. No installation attempted. Evidence:
+.work/space-inventory-retention-2026-11-11/phone-connect-1555.json; next retry no earlier16:26UTC.
+Release89 SDK6 awaits install. Notify first, explicit serial/install-only, never drive phone UI.
+No emulator. Preserve original intents, Draft66, keys/stores/SDK assets, inspector gradlew.bat,
+and live90163c3/schema116.4 Group OFF. Continue long run and push every commit.
+
 
 ## Finite inventory retention accepted — continue serialized scheduling
 
