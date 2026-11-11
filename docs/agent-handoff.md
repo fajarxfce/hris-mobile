@@ -1,5 +1,23 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 22:06 UTC. Current checkpoint; previous openings are historical.
+
+## Admitted local recovery content applied; focused validation running
+
+Atomic completion adf06b0e and Group9caa0e78 PUSHED;49212/24474 REAPED.13,300 local accepted.
+Hosted43108578825 dispatched ONCE22:04:14UTC/14784 REAPED; expected15,845, not audited.
+Next four-file local-content draft is NOW APPLIED in .work/original-local-key-page-content-2026-11-11.
+Baselineadf06b0e/13,300/5,046;5,047 inputs, manifest690b5657198cf5dfa14b192791118fb79f8cfb67f12dc7258b44004aa3c1db03.
+Format1/2095 REAPED PASS36.736s. Focused1/90850 RUNNING (128 expected), browser126 and full13,358
+NOT STARTED. Do not edit source during validation. Previous prepare/configure HAVE EXECUTED;
+do not rerun stale draft generators. New29 common cases are unaccepted until checks/audit finish.
+Original content43099618359 FULL15,695 audited (11,178 portable+4,517 Apple);10603/83865 REAPED.
+The current measurement now marks artifactAuditCompleted=true; prior false dispatch flag was stale.
+Ancestor bridge preserves failed intervening runs and all case IDs; no native SDK8 Apple claim.
+Next leaf completion contract is in next-historical-completion-owner-review.md, still unimplemented.
+Keep one compiler OR emulator. Phone47970 timeout21:42:13UTC, next retry no earlier22:14UTC;
+Release89/install-only and all protected stores/intents/live bounds remain. All54 PRD groups OPEN.
+
 Updated 11 November 2026, 22:03 UTC. This opening owns current work; earlier sections are historical.
 
 ## Atomic historical page completion accepted; admitted local content next

@@ -124,7 +124,7 @@
       "iosSimulatorArm64Test": 4517
     },
     "expectedTotal": 15695,
-    "artifactAuditCompleted": false
+    "artifactAuditCompleted": true
   },
   "hostedPortable": {
     "sourceCommit": "f0ba9847bf323eaf4b9999683474686c2f5608ef",

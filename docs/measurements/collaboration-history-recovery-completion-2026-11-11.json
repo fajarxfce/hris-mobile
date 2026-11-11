@@ -61,5 +61,21 @@
   "starterChanged": false,
   "liveDeploymentChanged": false,
   "all54PrdGroupsRemainOpen": true,
-  "preservedFailedRuns": []
+  "preservedFailedRuns": [],
+  "hostedDispatch": {
+    "runId": 43108578825,
+    "sourceCommit": "adf06b0e82db427bd4d8a642e1eea7330bd0d8d0",
+    "ref": "validation/history-recovery-completion-20261111",
+    "dispatchedAt": "2026-11-11T22:04:14.363968+00:00",
+    "expectedPortable": {
+      "desktopTest": 5367,
+      "testAndroidHostTest": 857,
+      "wasmJsBrowserTest": 5054
+    },
+    "expectedApple": {
+      "iosSimulatorArm64Test": 4567
+    },
+    "expectedTotal": 15845,
+    "artifactAuditCompleted": false
+  }
 }
