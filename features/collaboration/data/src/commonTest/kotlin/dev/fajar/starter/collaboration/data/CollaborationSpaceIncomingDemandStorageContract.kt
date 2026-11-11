@@ -4,6 +4,7 @@ import dev.fajar.starter.collaboration.data.history.CollaborationHistoryKeys
 import dev.fajar.starter.collaboration.data.recovery.*
 import dev.fajar.starter.collaboration.data.repositories.*
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
 import kotlin.io.encoding.Base64
@@ -15,6 +16,144 @@ import kotlinx.serialization.json.Json
 
 abstract class CollaborationSpaceIncomingDemandStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
+
+    @Test
+    fun interruptedAliasHandoffReopensTheFreshOriginalAndPreservesItsWakeAndSource() =
+        withDatabase { f ->
+            val source =
+                physicalDemand().sources.single().copy(inventoryGeneration = historyId(8600))
+            val before = demand(1).copy(sources = listOf(source))
+            val wake = CollaborationSpaceIncomingWake(historyId(8601))
+            val first = saved(f.demands().replace(f.local(), null, before, wake))
+            val captured = before.rooms.single()
+            val proposed =
+                value(
+                        routeCollaborationSpaceIncomingAlias(
+                            before,
+                            captured,
+                            source.source,
+                            CollaborationSpaceIncomingTarget.Original(
+                                CollaborationOriginalConversationPosition(
+                                    historyId(7100),
+                                    historyId(1000),
+                                )
+                            ),
+                            historyId(8602),
+                        )
+                    )
+                    .demand
+            var attempts = 0
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override suspend fun replace(
+                        scope: ReplicaScope,
+                        partition: String,
+                        expected: ReplicaCheckpoint?,
+                        snapshot: ReplicaSnapshot?,
+                        wake: WorkWakeRequest?,
+                    ): Boolean {
+                        attempts++
+                        check(
+                            f.database.replicas.replace(scope, partition, expected, snapshot, wake)
+                        )
+                        throw CancellationException("Fictional alias handoff reply loss")
+                    }
+                }
+            assertFailsWith<CancellationException> {
+                f.demands(store).replace(f.local(), first, proposed)
+            }
+            assertEquals(1, attempts)
+            f.reopen()
+            val retained = saved(f.demands().current(f.local())).demand
+            assertEquals(proposed, retained)
+            assertEquals(
+                AppResult.Success(CollaborationSpaceIncomingBindingResolution.Queued),
+                confirmCollaborationSpaceIncomingAliasRouting(
+                    source.source,
+                    captured,
+                    proposed.rooms.single(),
+                    retained,
+                    false,
+                ),
+            )
+            assertEquals(before.sources, retained.sources)
+            assertEquals(before.rescanGeneration, retained.rescanGeneration)
+            assertEquals(AppResult.Success(wake), f.wakes().pending())
+        }
+
+    @Test
+    fun staleAliasHandoffCannotOverwriteACommittedNewProducerHead() = withDatabase { f ->
+        val source = physicalDemand().sources.single()
+        val before = demand(1).copy(sources = listOf(source))
+        val wake = CollaborationSpaceIncomingWake(historyId(8610))
+        val first = saved(f.demands().replace(f.local(), null, before, wake))
+        val captured = before.rooms.single()
+        val proposed =
+            value(
+                    routeCollaborationSpaceIncomingAlias(
+                        before,
+                        captured,
+                        source.source,
+                        CollaborationSpaceIncomingTarget.Original(
+                            CollaborationOriginalConversationPosition(
+                                historyId(7100),
+                                historyId(1000),
+                            )
+                        ),
+                        historyId(8611),
+                    )
+                )
+                .demand
+        val newer =
+            before.copy(
+                rooms =
+                    listOf(captured.copy(generation = historyId(8612), headEventId = "\$new-head"))
+            )
+        val producer = saved(f.demands().replace(f.local(), first, newer))
+        assertNull(value(f.demands().replace(f.local(), first, proposed)))
+        f.reopen()
+        assertEquals(AppResult.Success(producer), f.demands().current(f.local()))
+        assertEquals(
+            AppResult.Success(CollaborationSpaceIncomingBindingResolution.Obsolete),
+            confirmCollaborationSpaceIncomingAliasRouting(
+                source.source,
+                captured,
+                proposed.rooms.single(),
+                producer.demand,
+                true,
+            ),
+        )
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+    }
+
+    @Test
+    fun aReopenedUnsourcedAliasStillWaitsForActualSourceProgress() = withDatabase { f ->
+        val before = demand(1)
+        val wake = CollaborationSpaceIncomingWake(historyId(8620))
+        val first = saved(f.demands().replace(f.local(), null, before, wake))
+        f.reopen()
+        val retained = saved(f.demands().current(f.local()))
+        val planned =
+            value(
+                routeCollaborationSpaceIncomingAlias(
+                    retained.demand,
+                    retained.demand.rooms.single(),
+                    physicalDemand().sources.single().source,
+                    CollaborationSpaceIncomingTarget.Original(
+                        CollaborationOriginalConversationPosition(historyId(7100), historyId(1000))
+                    ),
+                    historyId(8621),
+                )
+            )
+        assertEquals(
+            CollaborationSpaceIncomingBindingResolution.WaitingForOriginalSource,
+            planned.outcome,
+        )
+        assertEquals(first.demand, planned.demand)
+        assertTrue(planned.demand.sources.isEmpty())
+        assertEquals(AppResult.Success(first), f.demands().current(f.local()))
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+    }
 
     @Test
     fun authenticatedUnknownOrAmbiguousTargetsAndMixedVersionMarkersAreRejected() =

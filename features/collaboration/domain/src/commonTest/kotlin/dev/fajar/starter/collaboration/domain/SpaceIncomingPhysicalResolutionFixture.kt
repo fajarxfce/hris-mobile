@@ -412,5 +412,23 @@ internal class SpaceIncomingPhysicalResolutionFixture(
     suspend fun resolve(captured: CollaborationSpaceIncomingPhysicalRoomDemand = physical) =
         useCase(runtime, captured)
 
+    fun logicalAlias(sourceBound: Boolean = false): CollaborationSpaceIncomingRoomDemand {
+        val captured =
+            CollaborationSpaceIncomingRoomDemand(
+                base.model.conversation.id,
+                id(720),
+                0,
+                "\$new",
+                CollaborationSpaceIncomingPhase.Pending,
+                sourceId = if (sourceBound) source.storeId else null,
+            )
+        val old = assertNotNull(request.snapshot)
+        request.snapshot =
+            old.copy(
+                demand = old.demand.copy(rooms = listOf(captured), physicalRooms = emptyList())
+            )
+        return captured
+    }
+
     fun id(value: Int) = base.queue.id(value)
 }

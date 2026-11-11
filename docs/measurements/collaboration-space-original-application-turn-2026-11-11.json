@@ -68,5 +68,47 @@
   "newAppleExecutionAccepted": false,
   "phoneInstalled": false,
   "liveDeploymentChanged": false,
-  "all54PrdGroupsRemainOpen": true
+  "all54PrdGroupsRemainOpen": true,
+  "hostedPortableIncomplete": {
+    "sourceCommit": "3d9fb9217a6cf25ab7835fa85ecd62701782905d",
+    "runId": 43031231253,
+    "jobId": 130558503933,
+    "jobConclusion": "cancelled",
+    "completeAcceptance": false,
+    "artifactId": 13863198153,
+    "bytes": 3798306,
+    "sha256": "da78da6a90259fcdc72d2949403b835752634b0f9e85c951e15ee9fcece3fa24",
+    "githubDigestAndZipCrcVerified": true,
+    "counts": {
+      "desktopTest": {
+        "tests": 4826,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testAndroidHostTest": {
+        "tests": 769,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "tests": 4575,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "missingRequiredApplicationClasses": {
+      "CollaborationSpaceOriginalIncomingTurnTest": 22,
+      "CollaborationSpaceOriginalIncomingWorkerTest": 8
+    },
+    "plannedPortable": 10200,
+    "actualTestReports": 10170,
+    "plannedFullAcceptance": 14288,
+    "jobTimeoutMinutes": 35,
+    "originalExpectationsUnchanged": true,
+    "jobLogSha256": "14aa9a6046e556724c831b101b5455f7e36aee21c8e86129b0d794555f2f43a4",
+    "reportManifestSha256": "5b98c87c79d55713339b7a6bd368888e9e8e0f927809c54ba725ec3ceabec753"
+  }
 }

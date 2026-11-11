@@ -1,3 +1,5 @@
+@file:OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 package dev.fajar.starter.collaboration.domain.usecases
 
 import dev.fajar.starter.collaboration.domain.entities.*
@@ -9,6 +11,7 @@ import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import kotlin.time.*
 import kotlin.time.Duration.Companion.seconds
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.*
 
 /** The incoming worker resolves owned bindings locally before any remote metadata acquisition. */
@@ -89,6 +92,191 @@ class ResolveCollaborationSpaceIncomingBinding(
                         MetadataAcquisition(runtime, captured, result).run()
                 }
         }
+    }
+
+    /**
+     * Routes an exact logical alias before Published provider work. The worker owns serialization;
+     * this local operation never acquires a provider page or restarts an old Space traversal.
+     */
+    suspend operator fun invoke(
+        runtime: CollaborationSpaceRuntimeReady,
+        captured: CollaborationSpaceIncomingRoomDemand,
+    ): AppResult<CollaborationSpaceIncomingBindingResolution> {
+        currentCoroutineContext().ensureActive()
+        val target =
+            captured.target as? CollaborationSpaceIncomingTarget.Published
+                ?: return changed(FailureKind.Validation)
+        if (
+            !validCollaborationSpaceIncomingRoomDemand(captured) ||
+                !validCollaborationMessageId(runtime.deviceId) ||
+                !validCollaborationMessageId(runtime.operationId)
+        )
+            return changed(FailureKind.Validation)
+        return withTimeoutOrNull(5_000) {
+            val access = runtime.owner.localDirectoryAccess()
+            admission(runtime).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            val loaded = demands.current(access)
+            val snapshot =
+                (loaded as? AppResult.Success)
+                    ?.value
+                    ?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
+            admission(runtime).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            if (loaded is AppResult.Failed) return@withTimeoutOrNull loaded
+            if ((loaded as AppResult.Success).value == null)
+                return@withTimeoutOrNull AppResult.Success(
+                    CollaborationSpaceIncomingBindingResolution.Obsolete
+                )
+            if (
+                snapshot == null ||
+                    !validCollaborationMessageId(snapshot.generation) ||
+                    !validCollaborationSpaceIncomingDemand(access, snapshot.demand)
+            )
+                return@withTimeoutOrNull changed()
+            val current = snapshot.demand.rooms.singleOrNull { it.target == target }
+            if (current == null || current.generation != captured.generation)
+                return@withTimeoutOrNull AppResult.Success(
+                    CollaborationSpaceIncomingBindingResolution.Obsolete
+                )
+            if (current != captured) return@withTimeoutOrNull changed()
+            val source = if (captured.sourceId != null) sync.incomingSource(runtime) else null
+            if (
+                captured.sourceId != null &&
+                    (source == null ||
+                        !validCollaborationSpaceIncomingSource(source) ||
+                        source.storeId != captured.sourceId ||
+                        snapshot.demand.sources.none { it.source == source })
+            )
+                return@withTimeoutOrNull changed(FailureKind.Unavailable)
+            val found = bindings.getByConversation(access, target.conversationId)
+            admission(runtime, source).let {
+                if (it is AppResult.Failed) return@withTimeoutOrNull it
+            }
+            if (found is AppResult.Failed) return@withTimeoutOrNull found
+            val binding =
+                (found as AppResult.Success).value
+                    ?: return@withTimeoutOrNull AppResult.Success(
+                        CollaborationSpaceIncomingBindingResolution.BindingMissing
+                    )
+            if (
+                !validCollaborationSpaceRoomBinding(access, binding) ||
+                    binding.conversation.id != target.conversationId
+            )
+                return@withTimeoutOrNull changed()
+            if (binding.room.origin == CollaborationSpaceRoomOrigin.SPACE)
+                return@withTimeoutOrNull AppResult.Success(
+                    CollaborationSpaceIncomingBindingResolution.Published
+                )
+            resolveAlias(runtime, captured, snapshot, binding)
+        } ?: changed(FailureKind.Timeout)
+    }
+
+    /** Retains canonical Company metadata before proposing an independently identified turn. */
+    private suspend fun resolveAlias(
+        runtime: CollaborationSpaceRuntimeReady,
+        captured: CollaborationSpaceIncomingRoomDemand,
+        snapshot: CollaborationSpaceIncomingDemandSnapshot,
+        binding: CollaborationSpaceRoomBinding,
+    ): AppResult<CollaborationSpaceIncomingBindingResolution> {
+        val source = sync.incomingSource(runtime)
+        if (source == null || !validCollaborationSpaceIncomingSource(source))
+            return AppResult.Success(
+                CollaborationSpaceIncomingBindingResolution.WaitingForOriginalSource
+            )
+        if (captured.sourceId != null && captured.sourceId != source.storeId) return changed()
+        val progress =
+            snapshot.demand.sources.singleOrNull { it.source.storeId == source.storeId }
+                ?: return AppResult.Success(
+                    CollaborationSpaceIncomingBindingResolution.WaitingForOriginalSource
+                )
+        if (progress.source != source) return changed()
+        val registered = readRegistration(runtime, source)
+        if (registered is AppResult.Failed) return registered
+        val registration = (registered as AppResult.Success).value
+        val legacy =
+            registeredCollaborationSpaceOriginalIncomingSdk(
+                runtime,
+                source,
+                registration,
+                registration.command.platform,
+            )
+                ?: return AppResult.Success(
+                    CollaborationSpaceIncomingBindingResolution.WaitingForOriginalSource
+                )
+        val original = binding.original ?: return changed()
+        if (original.conversation.position.companyId != legacy.binding.companyId)
+            return AppResult.Success(
+                CollaborationSpaceIncomingBindingResolution.WaitingForOriginalSource
+            )
+        if (binding.room.serverName != registration.command.provider.serverName) return changed()
+        val access = runtime.owner.localDirectoryAccess()
+        val gate: suspend () -> AppResult<Unit> = {
+            val checked = readRegistration(runtime, source, registration)
+            if (checked is AppResult.Failed) checked
+            else {
+                val alias = bindings.getByConversation(access, binding.conversation.id)
+                val admitted = admission(runtime, source)
+                when {
+                    admitted is AppResult.Failed -> admitted
+                    alias is AppResult.Failed -> alias
+                    (alias as AppResult.Success).value != binding -> changed()
+                    else -> AppResult.Success(Unit)
+                }
+            }
+        }
+        gate().let { if (it is AppResult.Failed) return it }
+        val planned =
+            routeCollaborationSpaceIncomingAlias(
+                snapshot.demand,
+                captured,
+                source,
+                CollaborationSpaceIncomingTarget.Original(original.conversation.position),
+                Uuid.random().toString(),
+            )
+        if (planned is AppResult.Failed) return planned
+        val next = (planned as AppResult.Success).value
+        if (next.demand == snapshot.demand) return AppResult.Success(next.outcome)
+        val retained = retainOriginalMetadata(access, original, gate)
+        if (retained is AppResult.Failed) return retained
+        return retainAlias(runtime, source, captured, snapshot, next, gate)
+    }
+
+    /** The one CAS removes only the alias capture and schedules a fresh Original turn. */
+    private suspend fun retainAlias(
+        runtime: CollaborationSpaceRuntimeReady,
+        source: CollaborationSpaceIncomingSource,
+        captured: CollaborationSpaceIncomingRoomDemand,
+        previous: CollaborationSpaceIncomingDemandSnapshot,
+        next: CollaborationSpaceIncomingAliasResolution,
+        gate: suspend () -> AppResult<Unit>,
+    ): AppResult<CollaborationSpaceIncomingBindingResolution> {
+        val access = runtime.owner.localDirectoryAccess()
+        val converted = next.demand.rooms.single { it.position == captured.position }
+        gate().let { if (it is AppResult.Failed) return it }
+        val written = demands.replace(access, previous, next.demand)
+        gate().let { if (it is AppResult.Failed) return it }
+        val loaded = demands.current(access)
+        val retained =
+            (loaded as? AppResult.Success)
+                ?.value
+                ?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
+        gate().let { if (it is AppResult.Failed) return it }
+        if (loaded is AppResult.Failed) return loaded
+        if (
+            retained == null ||
+                !validCollaborationMessageId(retained.generation) ||
+                !validCollaborationSpaceIncomingDemand(access, retained.demand)
+        )
+            return if (written is AppResult.Failed) written else changed()
+        val confirmed =
+            confirmCollaborationSpaceIncomingAliasRouting(
+                source,
+                captured,
+                converted,
+                retained.demand,
+                casRejected = written is AppResult.Success && written.value == null,
+            )
+        return if (confirmed is AppResult.Failed && written is AppResult.Failed) written
+        else confirmed
     }
 
     /**

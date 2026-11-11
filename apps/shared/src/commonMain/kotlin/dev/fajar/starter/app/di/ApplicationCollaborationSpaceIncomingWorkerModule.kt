@@ -61,6 +61,7 @@ internal fun applicationCollaborationSpaceIncomingWorkerModule() = module {
             device = { a -> device.value(a) },
             adopt = { a -> adopt.value(a.owner, a.registrationId, a.operationId) },
             room = { a, b -> room.value(a, b) },
+            resolveLogicalBinding = { a, b -> resolveBinding.value(a, b) },
             originalRoom = { a, b -> originalRoom.value(a, b) },
             acquirePage = { a, b, c -> acquirePage.value(a, b, c) },
             advance = { a, b, c -> advance.value(a, b, c) },

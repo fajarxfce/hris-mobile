@@ -1,0 +1,118 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "3d9fb9217a6cf25ab7835fa85ecd62701782905d",
+  "sourceFiles": 4978,
+  "changedSourceFiles": 12,
+  "sourceManifestSha256": "8b2dda9185cb8f2c8c3f026a63cce37da6428df4ab66d97c12960e99b9eed203",
+  "focused": {
+    "tests": 772,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused3",
+  "focusedBrowserRun": "browser2",
+  "full": {
+    "validated": 12322,
+    "fresh": {
+      "tests": 9945,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2377
+  },
+  "fullElapsedSeconds": 157.736,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151740955,
+    "sha256": "38c5ca7d289397ca7c8d3f7d5b7d4dd09ef54e93816837b974a63070eae3b5c9"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "originalLogicalAliasRoutingAccepted": true,
+  "existingBindingResolverOwnsHandoff": true,
+  "trueSpaceRoutePreserved": true,
+  "freshOriginalGenerationAndLatestPhase": true,
+  "savedSpaceProgressNeverRelabeled": true,
+  "originalCompanyAndRegisteredPhysicalDevicePreserved": true,
+  "originalIndexesConfirmedBeforeQueue": true,
+  "realSourceProgressRequired": true,
+  "noSyntheticSourcePosition": true,
+  "unfinishedOriginalPreservesBothRequirements": true,
+  "unchangedHeadIncludingUnknown": true,
+  "sameFifoPosition": true,
+  "newOperationClearsOldRetry": true,
+  "independentWakePreserved": true,
+  "oneQueueCasWithExactReadback": true,
+  "newerProducerAndInventoryLossPreserved": true,
+  "waitingUsesExistingDomainBackoff": true,
+  "successfulPaginationSemanticsUnchanged": true,
+  "fullRegistrationSourceAliasAccountAndNativeFenced": true,
+  "confirmedDenialWins": true,
+  "localDeadlineMillis": 5000,
+  "existingWorkerRoomDeadlineMillis": 40000,
+  "newPolicyCases": 18,
+  "newResolverCases": 25,
+  "newWorkerCases": 8,
+  "newDatabaseCasesPerTarget": 3,
+  "incomingDemandStorageControlCases": 40,
+  "originalMetadataStorageControlCases": 18,
+  "roomBindingStorageControlCases": 26,
+  "companyIncomingStorageControlCases": 18,
+  "companyIncomingWaveStorageControlCases": 12,
+  "physicalWorkerCases": 13,
+  "realInterruptedHandoffReopenTested": true,
+  "realCompetingProducerCasTested": true,
+  "realUnsourcedAliasReopenTested": true,
+  "fixtureIsNotNativeProof": true,
+  "preservedFailedRuns": [
+    {
+      "exitCode": 1,
+      "elapsedSeconds": 309.471,
+      "freshCounts": {
+        "tests": 423,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "run": "focused1"
+    }
+  ],
+  "initialWaitingOutcomeProductionBugCorrected": true,
+  "originalFailingTestUnchanged": true,
+  "applicationBindingVerified": true,
+  "createsSdkClient": false,
+  "startsProviderOrContentAcquisition": false,
+  "performsRemoteMetadataLookup": false,
+  "createsIndependentTaskOrCollector": false,
+  "sendsMessage": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "originalIncomingLiveActivation": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true,
+  "reusedPreWorkflowCorrectionCases": 339,
+  "reusedPreWorkflowCorrectionSourceManifestSha256": "db4fcb130643e83f225f4520d5fec785290754318e95495d3580603db11e2f64",
+  "preservedAuditProvenanceFailure": {
+    "run": "full2",
+    "session": 91471,
+    "testFailure": false
+  },
+  "workflowCoverageCorrected": true,
+  "previouslyOmittedApplicationClasses": {
+    "CollaborationSpaceOriginalIncomingTurnTest": 22,
+    "CollaborationSpaceOriginalIncomingWorkerTest": 8
+  },
+  "historicalApplicationHostedRun": 43031231253,
+  "historicalApplicationHostedFullAcceptance": false,
+  "addedAliasWorkerFilterCases": 8,
+  "preWorkflowCorrectionLocalAcceptance": {
+    "focused": 772,
+    "full": 12322,
+    "archive": "before-workflow-correction"
+  }
+}

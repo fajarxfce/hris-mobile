@@ -1,5 +1,8 @@
 # Architecture
 
+[Canonical alias handoff](collaboration-space-logical-alias-routing.md) converts retained LEGACY demand into fresh Original work
+through the existing resolver and worker, preserving source progress and independent producer demand.
+
 [Original application turns](collaboration-space-original-application-turn.md) run Company-backed incoming work inside the existing
 worker lifetime, reconciling retained facts before finite acquisition and independent completion.
 

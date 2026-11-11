@@ -56,6 +56,13 @@ internal class SpaceIncomingWorkerFixture(
             error("No Original turn configured")
         }
     var missingBindingOutcome = CollaborationSpaceIncomingBindingResolution.BindingMissing
+    var logicalRoute:
+        suspend (CollaborationSpaceIncomingRoomDemand) -> AppResult<
+                CollaborationSpaceIncomingBindingResolution
+            > =
+        {
+            AppResult.Success(CollaborationSpaceIncomingBindingResolution.Published)
+        }
     var nextPosition = count.toLong()
     val rooms =
         (0 until count)
@@ -251,6 +258,11 @@ internal class SpaceIncomingWorkerFixture(
                         )
                     }
                 )
+            },
+            resolveLogicalBinding = { actual, captured ->
+                check(actual == runtime)
+                step("logical-binding")
+                logicalRoute(captured)
             },
             originalRoom = { actual, captured ->
                 check(actual == runtime)

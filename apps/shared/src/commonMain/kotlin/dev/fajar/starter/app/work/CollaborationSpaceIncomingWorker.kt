@@ -44,6 +44,10 @@ class CollaborationSpaceIncomingWorker(
         suspend (CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingRoomDemand) -> AppResult<
                 CollaborationSpaceIncomingRoom?
             >,
+    private val resolveLogicalBinding:
+        suspend (CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingRoomDemand) -> AppResult<
+                CollaborationSpaceIncomingBindingResolution
+            >,
     private val originalRoom:
         suspend (CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingRoomDemand) -> AppResult<
                 Boolean
@@ -197,8 +201,20 @@ class CollaborationSpaceIncomingWorker(
         captured: CollaborationSpaceIncomingRoomDemand,
     ): AppResult<Boolean> {
         val received =
-            withTimeoutOrNull(40.seconds) { receiveRoom(runtime, captured) }
-                ?: AppResult.Failed(pending("room_timeout", FailureKind.Timeout))
+            withTimeoutOrNull(40.seconds) {
+                if (captured.target is CollaborationSpaceIncomingTarget.Original)
+                    return@withTimeoutOrNull receiveRoom(runtime, captured)
+                val routed = resolveLogicalBinding(runtime, captured)
+                if (routed is AppResult.Failed) return@withTimeoutOrNull routed
+                when ((routed as AppResult.Success).value) {
+                    CollaborationSpaceIncomingBindingResolution.Published ->
+                        receiveRoom(runtime, captured)
+                    CollaborationSpaceIncomingBindingResolution.Queued,
+                    CollaborationSpaceIncomingBindingResolution.Obsolete -> AppResult.Success(true)
+                    // Waiting did not advance work; the domain deferral owner must retain backoff.
+                    else -> AppResult.Failed(pending("binding_pending"))
+                }
+            } ?: AppResult.Failed(pending("room_timeout", FailureKind.Timeout))
         if (received is AppResult.Failed && blocked(received.failure)) return received
         if ((received as? AppResult.Success)?.value == true) return received
         // Provider phase may already have committed even if its response was lost.

@@ -1,6 +1,62 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 14:13 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 14:20 UTC. This opening owns current work; older sections are historical.
+
+## Logical alias routing accepted — continue raw room inventory
+
+Twelve-file candidate ACCEPTED: eleven Kotlin files and corrected collaboration-control workflow.
+Final format3/96222 PASS36.163s, focused3/44916 PASS66.247s/423 and browser2/55561
+PASS39.936s/349. Focused772 accepted. full2/27105 REAPED PASS157.736s;
+audit accepts12,322=9945 fresh+2377 exact unchanged controls.
+Audit92977 REAPED; prior case IDs, dependency closures and source/library hashes verified.
+Of reused controls,339 are exact accepted pre-workflow reports with unchanged dependency closures;
+2,038 are exact original baseline controls. Original single-baseline audit91471 failed on provenance
+and remains preserved under full2/audit-original*. No test or source was changed for this correction. Required formatting,
+architecture, detekt, Android host/release compilation/lint, shared Wasm/browser, iOS metadata and
+proof APK/unit checks pass. Frozen4,978-input manifest8b2dda9185cb8f2c8c3f026a63cce37da6428df4ab66d97c12960e99b9eed203.
+Proof APK151740955 bytes/SHA38c5ca7d289397ca7c8d3f7d5b7d4dd09ef54e93816837b974a63070eae3b5c9.
+
+The existing binding resolver routes retained LEGACY aliases through immutable Original metadata
+confirmation, then one CAS creates a new UUID Company task in Latest phase with its original FIFO
+position and real registered source. Old Space phases/cursors are never relabeled. Genuine source
+progress is required; missing progress or existing unfinished Original work preserves waiting demand.
+Exact new task and removal of the old alias generation must be read back; independent later producer
+work, source position/loss and wake survive. True SPACE work keeps its Published path. The existing
+worker owns dispatch, mutex, parent and40s deadline; resolver5s includes retention/confirmation.
+No new client, scheduled task, remote metadata or provider/content acquisition in this resolver.
+
+Preserve focused1/3501 exit1/309.471s,423 cases/1 production failure and failed-candidate-1.
+A waiting result was mapped to successful unfinished work, allowing immediate rescheduling.
+Only that new adapter mapping now enters existing domain backoff; the failing test and pagination
+rules remain unchanged. Kotlin-only focused772/full12,322 passed before the independent CI correction;
+before-workflow-correction preserves that exact source/evidence. Final checks reran on corrected source.
+
+The prior application hosted43031231253 omitted Original turn22+Original worker8 from explicit filters.
+Its planned14,288 cannot be accepted. Portable job130558503933 was also cancelled at14:16:08UTC
+while compiling the app, under its35-minute job limit. Its artifact is recorded as incomplete only. Preserve original audit expectations and any partial artifact;
+do not redispatch unchanged source or rewrite history. Final workflow includes both classes plus
+alias worker8. One corrected alias dispatch on validation/logical-alias-routing-20261111 must use
+canonical43028172483 baseline, prove all38 application cases and total14,434=10,300 portable+4,134 Apple.
+Canonical portable10,170 is accepted; inspect its existing Apple job before audit. No alias dispatch yet.
+Queue43022213294 FULL14,161, reference43018627791 FULL14,089, content43011629455 FULL13,912 and
+reconciliation43015359541 FULL14,002 are accepted. Hosted checks do not prove native SDK8 Apple.
+
+Private .work/space-logical-alias-routing-2026-11-11 holds exact evidence/scripts. publish.py and
+this writer HAVE EXECUTED. Commit/push source/docs, dispatch hosted ONCE, then prepare-next-raw-room-
+inventory.py and configure-next-raw-room-inventory.py (not yet executed). Next four NEW Kotlin files
+and24 Android host cases remain PRIVATE UNAPPLIED/UNTESTED. Raw local enumeration preserves five
+memberships and closes every acquired Room handle under success, failure and cancellation. SDK8
+Client.rooms still allocates ALL handles: finite selected/output storage is not a native allocation
+bound. No runtime binding/whole-inventory proof yet. Read both next-raw-room-inventory-review.md and
+next-source-inventory-review.md. Expected51 focused/12,346 full/4,982 inputs; no new browser tests.
+
+Raw collector and Original producer remain OFF. Source/generation/cursor retention, bounded inventory
+worker turns, keys-only recovery and combined old-Company storage/new-Group native proof remain before
+activation. All54 communications PRD groups OPEN. No generic Starter delta or live deployment change.
+Phone latest state remains in state.json/phone-connect logs; release89 SDK6 awaits install-only.
+Notify first, explicit serial, never launch/drive phone UI. Preserve eight original intents, Draft66,
+keys/stores/SDK assets, inspector gradlew.bat and live90163c3/schema116.4 Group OFF. Continue and push each commit.
+
 
 ## Current: alias CI coverage correction under validation
 
