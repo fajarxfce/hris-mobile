@@ -317,6 +317,291 @@ abstract class CollaborationIncomingHistoryLocatorStorageContract {
             assertFalse(f.local.database.replicas.containsRecords(COLLABORATION_HISTORY_PREFIX))
         }
 
+    @Test
+    fun accountDiscoveryDoesNotCreateHistoryOrKeysWhenNoMetadataExists() = withDatabase { f ->
+        assertEquals(
+            CollaborationAccountIncomingHistoryLocatorPage(emptyList(), null),
+            f.readAccount(),
+        )
+        assertFalse(f.local.database.replicas.containsRecords(COLLABORATION_HISTORY_PREFIX))
+        assertNull(f.local.keys.read())
+    }
+
+    @Test
+    fun accountDiscoveryPreservesEveryExplicitCompanyAndSpaceOwner() = withDatabase { f ->
+        val owners = listOf(f.access.companyId, historyId(999))
+        for (space in listOf(false, true)) for (owner in owners) {
+            f.publish(
+                f.partition(10, space = space).replace(f.prefix(space), f.prefix(space, owner))
+            )
+        }
+        val history = CollaborationIncomingHistoryLocator(historyId(10), historyId(99))
+        val expected =
+            owners.flatMap { owner ->
+                listOf(
+                    CollaborationAccountIncomingHistoryLocator.Company(owner, history),
+                    CollaborationAccountIncomingHistoryLocator.Space(owner, history),
+                )
+            }
+        val page = f.readAccount()
+        assertEquals(expected.toSet(), page.locators.toSet())
+        assertEquals(4, page.locators.size)
+        assertNull(page.next)
+        assertEquals(1, f.read().locators.size)
+        assertEquals(1, f.read(space = true).locators.size)
+        assertNull(f.local.keys.read())
+    }
+
+    @Test
+    fun accountDiscoveryPagesMoreThanSixtyFourHistoricalDevicesWithoutAQueue() = withDatabase { f ->
+        val expected = mutableListOf<CollaborationAccountIncomingHistoryLocator>()
+        for (space in listOf(false, true)) for (owner in 1..4) for (device in 1..10) {
+            val ownerId = historyId(owner)
+            f.publish(
+                f.partition(10, device = device, space = space)
+                    .replace(f.prefix(space), f.prefix(space, ownerId))
+            )
+            val history = CollaborationIncomingHistoryLocator(historyId(10), historyId(device))
+            expected +=
+                if (space) CollaborationAccountIncomingHistoryLocator.Space(ownerId, history)
+                else CollaborationAccountIncomingHistoryLocator.Company(ownerId, history)
+        }
+        val found = mutableListOf<CollaborationAccountIncomingHistoryLocator>()
+        var after: String? = null
+        var calls = 0
+        do {
+            val page = f.readAccount(after)
+            assertTrue(page.locators.size <= 16)
+            found += page.locators
+            after = page.next
+            calls++
+        } while (after != null && calls < 10)
+        assertEquals(5, calls)
+        assertNull(after)
+        assertEquals(expected, found)
+        assertNull(f.local.keys.read())
+    }
+
+    @Test
+    fun accountPageOfInternalRecordsAdvancesBeforeLaterSpaceHistory() = withDatabase { f ->
+        for (index in 1..16) f.publish(
+            COLLABORATION_HISTORY_PREFIX + "recipient-observation/" + historyId(index)
+        )
+        f.publish(f.partition(20, space = true))
+        val first = f.readAccount()
+        assertTrue(first.locators.isEmpty())
+        assertNotNull(first.next)
+        val last = f.readAccount(first.next)
+        assertEquals(
+            listOf(
+                CollaborationAccountIncomingHistoryLocator.Space(
+                    f.space.spaceId,
+                    CollaborationIncomingHistoryLocator(historyId(20), historyId(99)),
+                )
+            ),
+            last.locators,
+        )
+        assertNull(last.next)
+    }
+
+    @Test
+    fun accountDiscoveryExcludesStagingGenerationsAcrossReopen() = withDatabase { f ->
+        val committed = f.publish(f.partition(10))
+        val store = f.local.database.replicas
+        store.begin(
+            f.scope,
+            f.partition(10),
+            historyId(300_001),
+            "staging replacement",
+            committed.handle.generation,
+        )
+        store.begin(
+            f.scope,
+            f.partition(11, space = true),
+            historyId(300_002),
+            "staging only",
+            null,
+        )
+        f.local.reopen()
+        assertEquals(
+            listOf(
+                CollaborationAccountIncomingHistoryLocator.Company(
+                    f.access.companyId,
+                    CollaborationIncomingHistoryLocator(historyId(10), historyId(99)),
+                )
+            ),
+            f.readAccount().locators,
+        )
+        assertNull(f.local.keys.read())
+    }
+
+    @Test
+    fun accountDiscoveryResumesAnExactMetadataCursorAfterRestart() = withDatabase { f ->
+        for (index in 1..17) f.publish(f.partition(index, space = true))
+        val first = f.readAccount()
+        f.local.reopen()
+        val last = f.readAccount(assertNotNull(first.next))
+        assertEquals(16, first.locators.size)
+        assertEquals(
+            listOf(
+                CollaborationAccountIncomingHistoryLocator.Space(
+                    f.space.spaceId,
+                    CollaborationIncomingHistoryLocator(historyId(17), historyId(99)),
+                )
+            ),
+            last.locators,
+        )
+        assertNull(last.next)
+    }
+
+    @Test
+    fun accountDiscoveryKeepsOwnedCoordinatesAcrossReauthentication() = withDatabase { f ->
+        f.publish(f.partition(10))
+        f.publish(f.partition(11, space = true))
+        val before = f.readAccount()
+        f.local.activate(f.access.copy(sessionId = "renewed"))
+        assertEquals(
+            CollaborationAccountIncomingHistoryLocatorPage(emptyList(), null),
+            f.readAccount(),
+        )
+        assertEquals(before, f.readAccount(owner = f.account.copy(sessionId = "renewed")))
+    }
+
+    @Test
+    fun accountAndAudienceReplacementExposeNoForeignCoordinates() = withDatabase { f ->
+        f.publish(f.partition(10))
+        val before = f.readAccount()
+        for (other in
+            listOf(
+                f.access.copy(accountId = historyId(800_000)),
+                f.access.copy(audience = "https://another.example.test/"),
+            )) {
+            f.local.activate(other)
+            assertTrue(f.readAccount().locators.isEmpty())
+            val account =
+                CollaborationSpaceAccountAccess(other.sessionId, other.audience, other.accountId)
+            assertTrue(f.readAccount(owner = account).locators.isEmpty())
+        }
+        f.local.activate()
+        assertEquals(before, f.readAccount())
+    }
+
+    @Test
+    fun removedAccountCursorAndNewRowsBehindItDoNotRewindTheCurrentPass() = withDatabase { f ->
+        val firstRow = f.publish(f.partition(10))
+        f.publish(f.partition(20))
+        val first = f.readAccount(limit = 1)
+        f.publish(f.partition(9))
+        assertTrue(
+            f.local.database.replicas.replace(f.scope, firstRow.handle.partition, firstRow, null)
+        )
+        val last = f.readAccount(assertNotNull(first.next), limit = 1)
+        assertEquals(
+            listOf(
+                CollaborationAccountIncomingHistoryLocator.Company(
+                    f.access.companyId,
+                    CollaborationIncomingHistoryLocator(historyId(20), historyId(99)),
+                )
+            ),
+            last.locators,
+        )
+        assertNull(last.next)
+        assertEquals(
+            listOf(historyId(9), historyId(20)),
+            f.readAccount().locators.map { it.history.conversationId },
+        )
+    }
+
+    @Test
+    fun accountDiscoveryRequestsOnlyOneBoundedMetadataPageAndClosesObservation() =
+        withDatabase { f ->
+            f.publish(f.partition(10))
+            var requested = 0
+            var released = false
+            val original = f.local.database.replicas
+            val measured =
+                object : ReplicaStore by original {
+                    override fun observePublishedCheckpoints(
+                        scope: ReplicaScope,
+                        partitionPrefix: String,
+                        afterPartition: String?,
+                        limit: Int,
+                    ): Flow<List<ReplicaCheckpoint>> = flow {
+                        assertEquals(f.scope, scope)
+                        assertEquals(COLLABORATION_HISTORY_PREFIX, partitionPrefix)
+                        requested = limit
+                        try {
+                            emit(
+                                original
+                                    .observePublishedCheckpoints(
+                                        scope,
+                                        partitionPrefix,
+                                        afterPartition,
+                                        limit,
+                                    )
+                                    .first()
+                            )
+                            awaitCancellation()
+                        } finally {
+                            released = true
+                        }
+                    }
+                }
+            assertIs<AppResult.Failed>(f.repository(measured).read(f.account, limit = 17))
+            assertEquals(0, requested)
+            assertEquals(1, f.readAccount(store = measured).locators.size)
+            assertEquals(17, requested)
+            assertTrue(released)
+            assertNull(f.local.keys.read())
+        }
+
+    @Test
+    fun cancelledAccountDiscoveryReleasesItsPendingRawObserver() = withDatabase { f ->
+        val entered = CompletableDeferred<Unit>()
+        var released = false
+        val waiting =
+            object : ReplicaStore by f.local.database.replicas {
+                override fun observePublishedCheckpoints(
+                    scope: ReplicaScope,
+                    partitionPrefix: String,
+                    afterPartition: String?,
+                    limit: Int,
+                ): Flow<List<ReplicaCheckpoint>> = flow {
+                    try {
+                        entered.complete(Unit)
+                        awaitCancellation()
+                    } finally {
+                        released = true
+                    }
+                }
+            }
+        coroutineScope {
+            val pending = async { f.repository(waiting).read(f.account) }
+            entered.await()
+            pending.cancelAndJoin()
+            assertTrue(pending.isCancelled)
+            assertTrue(released)
+            assertFailsWith<CancellationException> { pending.await() }
+        }
+        assertFalse(f.local.database.replicas.containsRecords(COLLABORATION_HISTORY_PREFIX))
+    }
+
+    @Test
+    fun failedAccountMetadataAcquisitionRemainsAFailureWithoutKeyFallback() = withDatabase { f ->
+        val failed =
+            object : ReplicaStore by f.local.database.replicas {
+                override fun observePublishedCheckpoints(
+                    scope: ReplicaScope,
+                    partitionPrefix: String,
+                    afterPartition: String?,
+                    limit: Int,
+                ): Flow<List<ReplicaCheckpoint>> = flow { error("fixture metadata unavailable") }
+            }
+        assertIs<AppResult.Failed>(f.repository(failed).read(f.account))
+        assertFalse(f.local.database.replicas.containsRecords(COLLABORATION_HISTORY_PREFIX))
+        assertNull(f.local.keys.read())
+    }
+
     private fun withDatabase(block: suspend (CollaborationIncomingHistoryLocatorFixture) -> Unit) =
         runTest {
             val f = CollaborationIncomingHistoryLocatorFixture(databaseOwner())

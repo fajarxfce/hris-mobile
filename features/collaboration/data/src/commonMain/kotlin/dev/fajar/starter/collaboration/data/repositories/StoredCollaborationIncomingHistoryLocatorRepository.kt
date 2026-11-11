@@ -2,8 +2,11 @@ package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationSpaceAccountAccess
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationIncomingHistoryLocatorRepository
+import dev.fajar.starter.database.ReplicaScope
 import dev.fajar.starter.database.ReplicaStore
+import dev.fajar.starter.identity.domain.policies.accountStorageKey
 import dev.fajar.starter.storage.safeStorageCall
 import kotlinx.coroutines.flow.first
 import org.koin.core.annotation.Single
@@ -29,6 +32,24 @@ class StoredCollaborationIncomingHistoryLocatorRepository(private val replicas: 
             val mapper = CollaborationIncomingHistoryLocatorPageMapper(scope, prefix, after, limit)
             mapper.map(
                 replicas.observePublishedCheckpoints(scope, prefix, after, limit + 1).first()
+            )
+        }
+
+    override suspend fun read(access: CollaborationSpaceAccountAccess, after: String?, limit: Int) =
+        safeStorageCall {
+            require(validCollaborationSpaceAccountAccess(access))
+            val scope =
+                ReplicaScope(access.sessionId, accountStorageKey(access.audience, access.accountId))
+            val mapper = CollaborationAccountIncomingHistoryLocatorPageMapper(scope, after, limit)
+            mapper.map(
+                replicas
+                    .observePublishedCheckpoints(
+                        scope,
+                        COLLABORATION_HISTORY_PREFIX,
+                        after,
+                        limit + 1,
+                    )
+                    .first()
             )
         }
 }

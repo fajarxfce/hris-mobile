@@ -20,4 +20,15 @@ interface CollaborationIncomingHistoryLocatorRepository {
         after: String? = null,
         limit: Int = 16,
     ): AppResult<CollaborationIncomingHistoryLocatorPage>
+
+    /**
+     * Discovers existing Company and Space history across this account, including old devices.
+     * Retains explicit owner IDs; no selected Company, root substitution, content grant or writes.
+     * Other internal history-prefix metadata is skipped while the bounded cursor still advances.
+     */
+    suspend fun read(
+        access: CollaborationSpaceAccountAccess,
+        after: String? = null,
+        limit: Int = 16,
+    ): AppResult<CollaborationAccountIncomingHistoryLocatorPage>
 }

@@ -56,6 +56,20 @@ internal class CollaborationIncomingHistoryLocatorFixture(
         return assertNotNull(store.checkpoint(scope, partition))
     }
 
+    val account
+        get() = CollaborationSpaceAccountAccess(access.sessionId, access.audience, access.accountId)
+
+    suspend fun readAccount(
+        after: String? = null,
+        limit: Int = 16,
+        owner: CollaborationSpaceAccountAccess = account,
+        store: ReplicaStore = local.database.replicas,
+    ) =
+        assertIs<AppResult.Success<CollaborationAccountIncomingHistoryLocatorPage>>(
+                repository(store).read(owner, after, limit)
+            )
+            .value
+
     suspend fun read(
         after: String? = null,
         limit: Int = 16,

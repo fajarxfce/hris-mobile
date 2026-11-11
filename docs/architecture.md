@@ -1,5 +1,8 @@
 # Architecture
 
+[Account history discovery](collaboration-account-history-locators.md) reads bounded published metadata across actual Company/Space owners and historical devices.
+Native authority and global recovery scheduling remain separate.
+
 [Finite history recovery turns](collaboration-history-recovery-turn.md) advance a bounded retained-reference pass while preserving primary work and later requests.
 Admitted content and global scheduling remain separate owners.
 

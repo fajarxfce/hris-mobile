@@ -1,5 +1,77 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 19:58 UTC. This opening owns current work; earlier sections are historical.
+
+## Account history discovery accepted; constant recovery state next
+
+Seven Kotlin files ACCEPTED (3 new, 4 existing). A new account-owned read discovers explicit
+Company/Space conversation/device coordinates through existing published metadata. At most17
+raw rows/16 consumed; actual160-character ASCII partition, publication, account/session,
+generation/revision and strict cursor/lookahead ordering validated. Internal-only pages still
+advance; malformed recognized history fails. Narrow Company/Space APIs remain. No native grant,
+content read, key creation or second catalog.14 common mapper and12 added DB cases (27 total)
+cover80 old-device locations, staging, restart, account/audience isolation, reauthentication,
+removed/behind-cursor rows, cancellation and errors. Repository acquisition/mapping stays inside
+safeStorageCall; existing generated graph binding retained.
+
+format1/24057 REAPED PASS36.742s. focused1/23625 REAPED FAILED182.299s after50 domain cases
+passed: missing ReplicaScope import. Only the import changed, no test/behavior/case ID change.
+Preserve failed-candidate-1/compile-failure-review.json and manifest
+21e61e591771452a7ae6159278b3a75c74fa15248c3dfe60755d93a78ae1d30f.
+format2/18816 REAPED PASS36.226s; focused2/40980 REAPED PASS334.038s/149;
+browser1/6021 REAPED PASS142.316s/147. Exact296 focused accepted.
+Full1/95959 REAPED PASS589.794s; audit25360 REAPED.
+13,068 accepted = 11030 fresh+2038 exact unchanged controls.
+Prior identities/source/library/dependency closures and the failed run's50 completed IDs verified.
+5,036 inputs; final manifest 3bba129136a341a6e4aa1aab5266634efc08f7468179044f22c8bacf84176b84.
+Proof APK 151776001 bytes/SHA ecfd3a85ed51665dda31ff0de9db4f87d2df6e0b691b30a33fd181401686d520; not native execution proof.
+
+Workspace .work/account-history-locators-2026-11-11 owns evidence. Publisher and this writer
+HAVE EXECUTED. Commit/push, then dispatch ONCE on validation/account-history-locators-20261111;
+expected15,497=11,046 portable+4,451 Apple. NOT DISPATCHED yet. Prior43087494327 attached15,405.
+Position43083225746 portable10,910 accepted/Apple pending;55829 REAPED. Space43077651832 now
+FULL15,178=10,826 portable+4,352 Apple;68084/24077 REAPED and public evidence updated.
+Fairness43069542685 FULL15,028, Original43073411916 FULL15,100, Inventory43066807577 FULL15,020.
+Historical application43031231253 remains incomplete; do not redispatch unchanged source to erase it.
+
+Next9-file next-account-history-recovery-draft REVIEWED, UNAPPLIED/UNTESTED;3 new+6 guarded existing.
+One optional account/root-owned recovery record shares the incoming-demand header. Active and
+requested generations coalesce; a monotonically increasing turn revision prevents stale captures
+from matching after a metadata round resets its cursor. Histories with more finite reference
+pages request another round of the SAME generation; unresolved content alone finishes and waits
+for a new relevant trigger. A later request is promoted only after current finite passes finish.
+Operational deferral preserves progress and newer demand. No provider position is invented.
+
+Explicit schema7 only with the record; prior1..6 remain readable/encodable. Old multipart headers
+reject a recovery record, new7 requires one, and old monolithic JSON stays strict. Same AAD,
+65,536 plaintext bytes/part,131,072 encoded chars,129 parts/130 sentinel,4MiB bounds. Finish refuses
+active recovery wake acknowledgement but permits completed-unresolved work to sleep; existing
+admission/wake CAS protects races. Primary/source/demand copies preserve the record.24 new pure
+policy cases,4 wake cases (19 total),12 DB cases (65 total), including actual cipher corruption,
+max129 parts, Original/inventory preservation, competing writes, response loss/cancellation,
+root isolation and reauthentication. Draft generators executed; do not rerun over reviewed files.
+
+prepare/configure-next-account-history-recovery.py PREPARED NOT EXECUTED: require accepted clean
+pushed current source and its one dispatch. Next workspace account-history-recovery-2026-11-11
+expects5,039 inputs/13,148 local/207 focused+205 browser;15,617 hosted=11,126 portable+4,491 Apple.
+Read next-account-history-recovery-review.md and next-key-request-receipt-review.md. Apply only after current commit/push/dispatch, then
+format, freeze, focused/browser/full, source/identity audit, publication and push. Continue long run.
+
+The proposed state has no activated global consumer, key producer or listener. Do not attach a
+producer before bounded worker service exists: the wake guard alone would retain idle work. Whole-catalog
+snapshot stability under continuous insertion is not claimed. Admitted explicit historical content
+owners, per-history/global readback after partial commits, trigger classification, primary provider
+EOF demotion with recovery demand/wake in one CAS, scheduling fairness, SDK key listener ownership/
+loss and full64-room blocked-queue liveness remain. Do not invent a source position, substitute a
+selected Company/current root, or poll unsupported/unavailable content forever. Raw collector/
+Original producer OFF; all54 PRD groups OPEN. No Starter/live change; push every commit.
+
+Phone66597 REAPED timeout19:31:10UTC/20.022s, no install. Retry no earlier20:02UTC. Release89 SDK6
+awaits install; notify first, explicit serial/install-only, never drive UI. No compiler/emulator
+now. Preserve original intents/Draft66/keys/stores/SDK assets/inspector gradlew.bat and
+live90163c3/schema116.4 Group OFF. Host Kotlin/Swift checks are not native SDK8 Apple proof.
+
+
 Updated 11 November 2026, 19:38 UTC. This opening owns current work; earlier sections are historical.
 
 ## Account history locators applied; corrected focused validation running

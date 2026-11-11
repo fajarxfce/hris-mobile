@@ -1,0 +1,80 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "7598dece8ebf41cbbf12a5f57e4f59376a2ebf3f",
+  "sourceFiles": 5036,
+  "changedSourceFiles": 7,
+  "sourceManifestSha256": "3bba129136a341a6e4aa1aab5266634efc08f7468179044f22c8bacf84176b84",
+  "focused": {
+    "tests": 296,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused2",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 13068,
+    "fresh": {
+      "tests": 11030,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 589.794,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151776001,
+    "sha256": "ecfd3a85ed51665dda31ff0de9db4f87d2df6e0b691b30a33fd181401686d520"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "accountHistoryLocatorsAccepted": true,
+  "explicitCompanyAndSpaceOwner": true,
+  "historicalDeviceRetained": true,
+  "accountReadRequiresNoFakeRoot": true,
+  "existingScopedApisPreserved": true,
+  "rawMetadataRows": 17,
+  "consumedMetadataRows": 16,
+  "rawPartitionAsciiBound": 160,
+  "lookaheadScopeAndOrderChecked": true,
+  "internalOnlyPageCanContinue": true,
+  "recognizedMalformedHistoryRejected": true,
+  "contentRead": false,
+  "contentKeyCreation": false,
+  "newCatalog": false,
+  "newMapperCasesPerCommonTarget": 14,
+  "newDatabaseCasesPerTarget": 12,
+  "databaseCasesPerTarget": 27,
+  "historicalDeviceLocationsInDatabaseCase": 80,
+  "hiddenRetry": false,
+  "newCollector": false,
+  "globalRecoverySchedulingImplemented": false,
+  "snapshotStableWholeCatalogClaim": false,
+  "admittedHistoricalContentImplemented": false,
+  "nativeSdkExecution": false,
+  "fullKeyBlockedQueueLivenessProven": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "starterChanged": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "run": "focused1",
+      "exitCode": 1,
+      "elapsedSeconds": 182.299,
+      "freshCounts": {
+        "tests": 50,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "failedCandidateSourceManifestSha256": "21e61e591771452a7ae6159278b3a75c74fa15248c3dfe60755d93a78ae1d30f",
+  "compileFixOnlyMissingImport": true,
+  "failedRunCompletedCaseIdsPreserved": true
+}
