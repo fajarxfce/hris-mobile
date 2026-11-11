@@ -1,0 +1,102 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "e0a00be5834979536c06a70f5d72a093c0b27d15",
+  "sourceFiles": 5013,
+  "changedSourceFiles": 12,
+  "sourceManifestSha256": "642534f6e5d1650e72667528399742a3ead2b0b95c409cd2e5f478a836c0ac7d",
+  "focused": {
+    "tests": 544,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused2",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 12740,
+    "fresh": {
+      "tests": 10702,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 578.043,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151765036,
+    "sha256": "a17955518b6bcb4c2cc5adc4b17b6c23d55615829835a38a02a784967088d183"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "activeRequestedInventoryAccepted": true,
+  "newPolicyCasesPerTarget": 12,
+  "newOwnerCasesPerTarget": 8,
+  "newEncryptedStorageCasesPerTarget": 6,
+  "incomingDemandStorageCasesPerTarget": 53,
+  "activeCursorAndRetryPreservedAcrossLoss": true,
+  "requestedPassCoalesced": true,
+  "requestedGenerationIsDistinctAndReserved": true,
+  "eofPromotesLatestRequestedPass": true,
+  "onlyNoLaterRequestReportsComplete": true,
+  "continuousSourcePositionAndOtherSourcesPreserved": true,
+  "independentWakePreserved": true,
+  "oneCasAndReadbackOwnersReused": true,
+  "requestsSurviveSuspensionAndLateReply": true,
+  "cancelledCommittedProgressAndRetryRetained": true,
+  "fourFinitePagesWithRepeatedLossTested": true,
+  "fullKeyBlockedQueueLivenessProven": false,
+  "encryptedSchema": 6,
+  "marker": "incoming-demand/v6",
+  "olderSchemasReadable": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "olderAuthenticatedHeadersRejectRequestedField": true,
+  "maximumStoredParts": 129,
+  "maximumEncodedPartCharacters": 131072,
+  "maximumEncodedTotalCharacters": 4194304,
+  "additionalUsecaseCreated": false,
+  "additionalWorkerCreated": false,
+  "additionalCollectorCreated": false,
+  "nativeSdkExecution": false,
+  "nativeAllocationBoundProven": false,
+  "keysOnlyBackpressureImplemented": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "starterChanged": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "exitCode": 1,
+      "elapsedSeconds": 141.969,
+      "freshCounts": {
+        "tests": 195,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "run": "focused1"
+    }
+  ],
+  "failedFixtureReview": {
+    "failedRun": "focused1",
+    "failedSession": 29218,
+    "reaped": true,
+    "originalTests": 195,
+    "originalFailures": 1,
+    "sourceSnapshot": "failed-candidate-1",
+    "productionBehaviorChanged": false,
+    "caseIdsRemoved": false,
+    "expectedCountsChanged": false,
+    "failingCase": "CollaborationSpaceInventoryProgressPolicyTest.oneSourceCannotResetAnotherSourcesCursorOrRetry",
+    "cause": "The fourth existing progress test still expected immediate cursor/retry reset after loss. The new protocol retains active progress until EOF, then promotes the requested pass.",
+    "correction": "Assert exact active cursor/retry/position/request after loss, then consume active EOF and assert promotion clears only that source; preserve the other source exactly before and after."
+  }
+}

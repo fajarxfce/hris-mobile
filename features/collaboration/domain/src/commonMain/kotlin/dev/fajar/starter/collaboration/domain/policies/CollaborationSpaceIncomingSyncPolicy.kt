@@ -33,8 +33,13 @@ fun validCollaborationSpaceIncomingSourceProgress(
             validCollaborationSpaceIncomingRoomId(progress.inventoryAfterRoomId)) &&
         (progress.inventoryRetry == null ||
             validCollaborationSpaceIncomingRetry(progress.inventoryRetry)) &&
+        (progress.inventoryRequestedGeneration == null ||
+            (validCollaborationMessageId(progress.inventoryRequestedGeneration) &&
+                progress.inventoryRequestedGeneration != progress.inventoryGeneration)) &&
         (progress.inventoryGeneration != null ||
-            (progress.inventoryAfterRoomId == null && progress.inventoryRetry == null))
+            (progress.inventoryAfterRoomId == null &&
+                progress.inventoryRetry == null &&
+                progress.inventoryRequestedGeneration == null))
 
 fun validCollaborationSpaceIncomingPhysicalRoom(
     room: CollaborationSpaceIncomingPhysicalRoomDemand

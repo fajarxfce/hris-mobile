@@ -110,9 +110,15 @@ class CollaborationSpaceInventoryProgressPolicyTest {
     fun aResponseGapCreatesANewGenerationAndClearsItsOldProgress() {
         val next = retain(demand(), batch().copy(previousPosition = "missed"))
         assertEquals(
-            CollaborationSpaceIncomingSourceProgress(source, "after", id(900)),
+            progress().copy(position = "after", inventoryRequestedGeneration = id(900)),
             next.demand.sources.single(),
         )
+        val completed = finishActivePass(next.demand)
+        assertEquals(
+            CollaborationSpaceIncomingSourceProgress(source, "after", id(900)),
+            completed.sources.single(),
+        )
+        assertEquals(next.demand.physicalRooms, completed.physicalRooms)
         assertTrue(next.wakeRequired)
     }
 
@@ -120,9 +126,15 @@ class CollaborationSpaceInventoryProgressPolicyTest {
     fun explicitNativeLossRestartsEvenAContinuousPass() {
         val next = retain(demand(), batch().copy(inventoryRequired = true))
         assertEquals(
-            CollaborationSpaceIncomingSourceProgress(source, "after", id(900)),
+            progress().copy(position = "after", inventoryRequestedGeneration = id(900)),
             next.demand.sources.single(),
         )
+        val completed = finishActivePass(next.demand)
+        assertEquals(
+            CollaborationSpaceIncomingSourceProgress(source, "after", id(900)),
+            completed.sources.single(),
+        )
+        assertEquals(next.demand.physicalRooms, completed.physicalRooms)
         assertTrue(next.wakeRequired)
     }
 
@@ -159,9 +171,15 @@ class CollaborationSpaceInventoryProgressPolicyTest {
             )
         assertEquals(existing, next.demand.physicalRooms)
         assertEquals(
-            CollaborationSpaceIncomingSourceProgress(source, "after", id(900)),
+            progress().copy(position = "after", inventoryRequestedGeneration = id(900)),
             next.demand.sources.single(),
         )
+        val completed = finishActivePass(next.demand)
+        assertEquals(
+            CollaborationSpaceIncomingSourceProgress(source, "after", id(900)),
+            completed.sources.single(),
+        )
+        assertEquals(next.demand.physicalRooms, completed.physicalRooms)
         assertTrue(next.wakeRequired)
     }
 
@@ -181,8 +199,17 @@ class CollaborationSpaceInventoryProgressPolicyTest {
         val before = demand().copy(sources = listOf(progress(), other))
         val next = retain(before, batch().copy(inventoryRequired = true))
         assertEquals(other, next.demand.sources[1])
-        assertNull(next.demand.sources[0].inventoryAfterRoomId)
-        assertNull(next.demand.sources[0].inventoryRetry)
+        assertEquals(
+            progress().copy(position = "after", inventoryRequestedGeneration = id(900)),
+            next.demand.sources[0],
+        )
+        val completed = finishActivePass(next.demand)
+        assertEquals(
+            CollaborationSpaceIncomingSourceProgress(source, "after", id(900)),
+            completed.sources[0],
+        )
+        assertEquals(other, completed.sources[1])
+        assertTrue(next.wakeRequired)
     }
 
     private val source =
@@ -219,6 +246,27 @@ class CollaborationSpaceInventoryProgressPolicyTest {
                 )
             )
             .value
+
+    private fun finishActivePass(
+        current: CollaborationSpaceIncomingDemand
+    ): CollaborationSpaceIncomingDemand {
+        val active = current.sources.single { it.source == source }
+        val page =
+            CollaborationSpaceRoomInventoryPage(
+                runtime,
+                source,
+                active.inventoryAfterRoomId,
+                emptyList(),
+                null,
+            )
+        val retained =
+            assertIs<AppResult.Success<CollaborationSpaceInventoryRetention>>(
+                    retainCollaborationSpaceInventoryPage(current, active, page, emptyList())
+                )
+                .value
+        assertEquals(CollaborationSpaceInventoryOutcome.Advanced, retained.outcome)
+        return retained.demand
+    }
 
     private fun id(value: Int) = "10000000-0000-4000-8000-" + value.toString().padStart(12, '0')
 }

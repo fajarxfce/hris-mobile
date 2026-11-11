@@ -11,7 +11,9 @@ data class CollaborationSpaceIncomingSource(
 
 /**
  * A position is retained only with the work it describes. An unresolved inventory generation
- * survives later responses; an owning inventory pass must explicitly discharge it.
+ * survives later responses; an owning inventory pass must explicitly discharge it. New loss
+ * coalesces a distinct requested generation without rewinding the active cursor/retry. Only active
+ * EOF promotes that later request; null means no additional pass is requested.
  */
 data class CollaborationSpaceIncomingSourceProgress(
     val source: CollaborationSpaceIncomingSource,
@@ -19,6 +21,7 @@ data class CollaborationSpaceIncomingSourceProgress(
     val inventoryGeneration: String? = null,
     val inventoryAfterRoomId: String? = null,
     val inventoryRetry: CollaborationSpaceIncomingRetry? = null,
+    val inventoryRequestedGeneration: String? = null,
 ) {
     override fun toString() = "CollaborationSpaceIncomingSourceProgress([redacted])"
 }

@@ -18,6 +18,307 @@ abstract class CollaborationSpaceIncomingDemandStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
     @Test
+    fun requestedInventoryPassReopensWithActiveCursorRetryOriginalTargetsAndWake() =
+        withDatabase { f ->
+            val requested =
+                typedDemand().let { before ->
+                    before.copy(
+                        sources =
+                            before.sources.map {
+                                it.copy(
+                                    inventoryGeneration = historyId(8800),
+                                    inventoryRequestedGeneration = historyId(9100),
+                                    inventoryAfterRoomId = "!kept:test",
+                                    inventoryRetry =
+                                        CollaborationSpaceIncomingRetry(1_000, 31_000, 1),
+                                )
+                            }
+                    )
+                }
+            val wake = CollaborationSpaceIncomingWake(historyId(8801))
+            val retained = saved(f.demands().replace(f.local(), null, requested, wake))
+            val page =
+                f.database.replicas
+                    .observe(
+                        incomingDemandScope(f.local()),
+                        incomingDemandPartition(f.local()),
+                        limit = INCOMING_DEMAND_READ_LIMIT,
+                    )
+                    .first()
+            assertEquals(INCOMING_DEMAND_REQUESTED_INVENTORY_CHECKPOINT, page.checkpoint?.payload)
+            f.reopen()
+            assertEquals(AppResult.Success(retained), f.demands().current(f.local()))
+            assertEquals(AppResult.Success(wake), f.wakes().pending())
+            assertEquals("before", retained.demand.sources.single().position)
+        }
+
+    @Test
+    fun promotingAndCompletingARequestedPassPreservesOriginalTargetsAndWake() = withDatabase { f ->
+        val before =
+            typedDemand().let { value ->
+                value.copy(
+                    sources =
+                        value.sources.map {
+                            it.copy(
+                                inventoryGeneration = historyId(8820),
+                                inventoryRequestedGeneration = historyId(9101),
+                                inventoryAfterRoomId = "!before:test",
+                                inventoryRetry = CollaborationSpaceIncomingRetry(1_000, 31_000, 1),
+                            )
+                        }
+                )
+            }
+        val wake = CollaborationSpaceIncomingWake(historyId(9150))
+        val initial = saved(f.demands().replace(f.local(), null, before, wake))
+        val cleared =
+            before.copy(
+                sources =
+                    before.sources.map {
+                        it.copy(
+                            inventoryGeneration = it.inventoryRequestedGeneration,
+                            inventoryRequestedGeneration = null,
+                            inventoryAfterRoomId = null,
+                            inventoryRetry = null,
+                        )
+                    }
+            )
+        val retained = saved(f.demands().replace(f.local(), initial, cleared))
+        val page =
+            f.database.replicas
+                .observe(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                    limit = INCOMING_DEMAND_READ_LIMIT,
+                )
+                .first()
+        assertEquals(INCOMING_DEMAND_TARGETS_CHECKPOINT, page.checkpoint?.payload)
+        f.reopen()
+        assertEquals(AppResult.Success(retained), f.demands().current(f.local()))
+        assertEquals(historyId(9101), retained.demand.sources.single().inventoryGeneration)
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+        assertEquals(before.rooms, retained.demand.rooms)
+        val completed =
+            cleared.copy(sources = cleared.sources.map { it.copy(inventoryGeneration = null) })
+        val final = saved(f.demands().replace(f.local(), retained, completed))
+        f.reopen()
+        assertEquals(AppResult.Success(final), f.demands().current(f.local()))
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+        assertEquals(before.sources.single().position, retained.demand.sources.single().position)
+    }
+
+    @Test
+    fun invalidRequestedGenerationsCannotReplaceAValidStoredQueueOrItsWake() = withDatabase { f ->
+        val before = physicalDemand()
+        val wake = CollaborationSpaceIncomingWake(historyId(8830))
+        val initial = saved(f.demands().replace(f.local(), null, before, wake))
+        val active = before.sources.single().copy(inventoryGeneration = historyId(9120))
+        for (source in
+            listOf(
+                active.copy(
+                    inventoryGeneration = null,
+                    inventoryRequestedGeneration = historyId(9121),
+                ),
+                active.copy(inventoryRequestedGeneration = historyId(9120)),
+                active.copy(
+                    inventoryRequestedGeneration = before.physicalRooms.single().generation
+                ),
+                active.copy(inventoryRequestedGeneration = "invalid"),
+            )) assertIs<AppResult.Failed>(
+            f.demands().replace(f.local(), initial, before.copy(sources = listOf(source)))
+        )
+        f.reopen()
+        assertEquals(AppResult.Success(initial), f.demands().current(f.local()))
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+    }
+
+    @Test
+    fun olderAuthenticatedHeadersCannotHideTheRequestedInventoryField() = withDatabase { f ->
+        val before =
+            physicalDemand().let { value ->
+                value.copy(
+                    sources =
+                        value.sources.map {
+                            it.copy(
+                                inventoryGeneration = historyId(8840),
+                                inventoryRequestedGeneration = historyId(9102),
+                            )
+                        }
+                )
+            }
+        val initial = saved(f.demands().replace(f.local(), null, before))
+        val page =
+            f.database.replicas
+                .observe(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                    limit = INCOMING_DEMAND_READ_LIMIT,
+                )
+                .first()
+        val raw = assertNotNull(page.checkpoint)
+        val header = page.documents.single { it.id == INCOMING_DEMAND_DOCUMENT }
+        val aad =
+            Json.encodeToString(
+                    listOf(
+                        "hris-collaboration-space-incoming-demand-v1",
+                        f.access.audience,
+                        f.access.accountId,
+                        f.local().spaceId,
+                        raw.handle.generation,
+                        header.id,
+                        "0",
+                    )
+                )
+                .encodeToByteArray()
+        CollaborationHistoryKeys(f.database.replicas, f.cipher, f.keys).use { key, _ ->
+            val bytes = f.cipher.decrypt(key, aad, Base64.decode(assertNotNull(header.payload)))
+            val original =
+                try {
+                    bytes.decodeToString()
+                } finally {
+                    bytes.fill(0)
+                }
+            for ((marker, schema) in
+                listOf(
+                    INCOMING_DEMAND_PARTS_CHECKPOINT to 3,
+                    INCOMING_DEMAND_TARGETS_CHECKPOINT to 4,
+                    INCOMING_DEMAND_INVENTORY_CHECKPOINT to 5,
+                )) {
+                val old = original.replace("\"schema\":6", "\"schema\":$schema")
+                assertNotEquals(original, old)
+                val payload = Base64.encode(f.cipher.encrypt(key, aad, old.encodeToByteArray()))
+                val store =
+                    object : ReplicaStore by f.database.replicas {
+                        override fun observe(
+                            scope: ReplicaScope,
+                            partition: String,
+                            after: String?,
+                            limit: Int,
+                        ) =
+                            flowOf(
+                                page.copy(
+                                    checkpoint = raw.copy(payload = marker),
+                                    documents =
+                                        page.documents.map {
+                                            if (it.id == header.id) it.copy(payload = payload)
+                                            else it
+                                        },
+                                )
+                            )
+                    }
+                assertIs<AppResult.Failed>(f.demands(store).current(f.local()))
+                assertIs<AppResult.Failed>(f.demands(store).replace(f.local(), initial, before))
+            }
+        }
+        assertEquals(AppResult.Success(initial), f.demands().current(f.local()))
+    }
+
+    @Test
+    fun interruptedCommitRetainsActiveAndRequestedPassesWithPhysicalWorkAndWake() =
+        withDatabase { f ->
+            val before =
+                physicalDemand().let { value ->
+                    value.copy(
+                        sources =
+                            value.sources.map {
+                                it.copy(
+                                    inventoryGeneration = historyId(8850),
+                                    inventoryRequestedGeneration = historyId(9103),
+                                    inventoryAfterRoomId = "!before:test",
+                                )
+                            }
+                    )
+                }
+            val first =
+                saved(
+                    f.demands()
+                        .replace(
+                            f.local(),
+                            null,
+                            before,
+                            CollaborationSpaceIncomingWake(historyId(8851)),
+                        )
+                )
+            val after =
+                before.copy(
+                    sources =
+                        before.sources.map {
+                            it.copy(
+                                inventoryAfterRoomId = "!next:test",
+                                inventoryRequestedGeneration = historyId(9104),
+                            )
+                        },
+                    physicalRooms =
+                        before.physicalRooms.map {
+                            it.copy(
+                                generation = historyId(8852),
+                                headEventId = null,
+                                limited = true,
+                            )
+                        },
+                )
+            val wake = CollaborationSpaceIncomingWake(historyId(8853))
+            var attempts = 0
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override suspend fun replace(
+                        scope: ReplicaScope,
+                        partition: String,
+                        expected: ReplicaCheckpoint?,
+                        snapshot: ReplicaSnapshot?,
+                        wake: WorkWakeRequest?,
+                    ): Boolean {
+                        attempts++
+                        check(
+                            f.database.replicas.replace(scope, partition, expected, snapshot, wake)
+                        )
+                        throw CancellationException("Fixture inventory commit reply loss")
+                    }
+                }
+            assertFailsWith<CancellationException> {
+                f.demands(store).replace(f.local(), first, after, wake)
+            }
+            assertEquals(1, attempts)
+            f.reopen()
+            assertEquals(after, saved(f.demands().current(f.local())).demand)
+            assertEquals(AppResult.Success(wake), f.wakes().pending())
+        }
+
+    @Test
+    fun maximumRequestedPassesRemainInsideExistingEncryptedSnapshotBounds() = withDatabase { f ->
+        val before = physicalDemand(64)
+        val requested =
+            before.copy(
+                sources =
+                    before.sources.mapIndexed { index, source ->
+                        source.copy(
+                            position = "\u0000".repeat(4096),
+                            inventoryGeneration = historyId(8900 + index),
+                            inventoryRequestedGeneration = historyId(9200 + index),
+                            inventoryAfterRoomId = "!" + "漢".repeat(254),
+                            inventoryRetry = CollaborationSpaceIncomingRetry(1_000, 31_000, 1),
+                        )
+                    }
+            )
+        val retained = saved(f.demands().replace(f.local(), null, requested))
+        val page =
+            f.database.replicas
+                .observe(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                    limit = INCOMING_DEMAND_READ_LIMIT,
+                )
+                .first()
+        assertEquals(INCOMING_DEMAND_REQUESTED_INVENTORY_CHECKPOINT, page.checkpoint?.payload)
+        assertEquals(129, page.documents.size)
+        assertTrue(page.documents.all { requireNotNull(it.payload).length <= 131072 })
+        assertTrue(
+            page.documents.sumOf { requireNotNull(it.payload).length.toLong() } <= 4_194_304L
+        )
+        f.reopen()
+        assertEquals(AppResult.Success(retained), f.demands().current(f.local()))
+    }
+
+    @Test
     fun inventoryCursorAndRetryReopenWithOriginalTargetsAndTheirIndependentWake() =
         withDatabase { f ->
             val requested =

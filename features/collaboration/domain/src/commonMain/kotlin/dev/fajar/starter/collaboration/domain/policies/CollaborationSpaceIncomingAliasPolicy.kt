@@ -58,7 +58,9 @@ fun routeCollaborationSpaceIncomingAlias(
     val retainedGenerations =
         current.rooms.map { it.generation } +
             current.physicalRooms.map { it.generation } +
-            current.sources.mapNotNull { it.inventoryGeneration } +
+            current.sources.flatMap {
+                listOfNotNull(it.inventoryGeneration, it.inventoryRequestedGeneration)
+            } +
             listOfNotNull(current.rescanGeneration, current.scan?.generation)
     if (generation in retainedGenerations) return invalidAliasRouting()
     val converted =

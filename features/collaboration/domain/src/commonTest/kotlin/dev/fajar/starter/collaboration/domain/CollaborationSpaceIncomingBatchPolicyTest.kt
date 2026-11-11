@@ -193,7 +193,8 @@ class CollaborationSpaceIncomingBatchPolicyTest {
                     sources = listOf(progress().copy(inventoryGeneration = id(43))),
                 )
         val result = retain(before, batch().copy(inventoryRequired = true))
-        assertEquals(id(200), result.demand.sources.single().inventoryGeneration)
+        assertEquals(id(43), result.demand.sources.single().inventoryGeneration)
+        assertEquals(id(200), result.demand.sources.single().inventoryRequestedGeneration)
         assertEquals(before.scan, result.demand.scan)
         assertEquals(before.rescanGeneration, result.demand.rescanGeneration)
         assertEquals(before.physicalRooms, result.demand.physicalRooms)

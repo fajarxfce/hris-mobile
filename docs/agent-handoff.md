@@ -1,6 +1,73 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 17:10 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 17:17 UTC. This opening owns current work; older sections are historical.
+
+## Active/requested inventory accepted — continue minimal application fairness fix
+
+Twelve-file protocol ACCEPTED:10 existing+2 new Kotlin. format1/42984 PASS36.279s;
+focused1/29218 FAILED141.969s,195 cases/1 failure. A fourth old progress case still expected
+immediate cursor reset. It now verifies exact active retention, EOF promotion and unchanged
+other-source progress before/after. No production change for this correction; no case/count
+removed. failed-candidate-1/focused1/cross-source-test-review.json preserve the failure.
+format2/32320 PASS36.901s; focused2/75295 PASS387.745s/281;
+browser1/16005 PASS141.862s/263. Exact544 focused accepted, all sessions REAPED.
+full1/56947 REAPED PASS578.043s; audit27255 REAPED,
+12,740 accepted: 10702 fresh+2038 exact unchanged controls.
+Prior case IDs, dependency closures, source/library hashes and required checks verified.
+Frozen5,013-input manifest642534f6e5d1650e72667528399742a3ead2b0b95c409cd2e5f478a836c0ac7d.
+Proof APK151765036 bytes/SHAa17955518b6bcb4c2cc5adc4b17b6c23d55615829835a38a02a784967088d183. No native execution implied.
+
+New loss preserves active generation/cursor/retry and coalesces one distinct later pass.
+EOF promotes it and reports Advanced; only no later request reports Complete. Real source
+positions, other sources and work/wake remain. Requested UUIDs stay reserved. Schema6 and
+incoming-demand/v6 explicitly encode the new field, preserving older reads and rejecting it
+under authenticated older headers. Limits129 parts/131072 encoded chars per part/4MiB remain.
+12 policy+8 owner+6 actual encrypted-storage cases per desktop/browser; old47 storage cases
+retained (now53). Repeated loss across four16-room pages progresses while capacity exists;
+full key-blocked queue drainage remains unproven. Existing CAS/readback owners are reused.
+
+Workspace .work/space-inventory-active-request-2026-11-11 owns accepted evidence. Publisher
+and this writer HAVE EXECUTED. Commit/push, then dispatch ONCE on
+validation/inventory-active-request-20261111; expected15,020=10,718 portable+4,302 Apple.
+NOT dispatched yet. Locator43062334365 remains attached, expected14,942. Scheduling
+43057055642 portable10,600 accepted, Apple pending. Retention43053179213 FULL14,719
+(52628 reaped), progress43049052938 FULL14,584, owned43044913726 FULL14,527,
+raw43040652714 FULL14,458, alias43037578170 FULL14,434. Apple includes16 Swift/unsigned-host
+cases, not native SDK8. Prior application43031231253 remains historically incomplete.
+
+Next fairness draft:7 files,6 guarded existing+1 new, UNAPPLIED/UNTESTED. Existing
+DeferCollaborationSpaceIncomingRoom already rotates exact unfinished work with NO retry
+deadline when failure is null. Published continuation already uses it. Earlier notes suggesting
+successful Published work gains backoff were incorrect. OriginalIncomingTurn bypasses that
+rotation by returning true for more provider/reference pages. Draft returns false for those
+unfinished states; the worker already reloads the exact retained capture before deferral.
+Inventory moves before the primary loop so slow work cannot consume the whole90-second
+budget first. No new usecase/repository/claim/DI surface/dispatch transaction is needed.
+The three pre-dispatch prototype files are superseded in rejected-pre-dispatch-draft and
+were never applied or compiled. Read next-incoming-fairness-review.md, overriding older options.
+
+Eight new app cases connect the real worker and existing queue policy: long provider/pending
+histories, ongoing new work,35-second tasks/90-second timeout, cancellation, inventory backoff,
+denial and genuine room failures. Four old case identities retain full safety/order assertions
+with the updated continuation semantics. Workflow explicitly selects the new class. Domain
+scheduling19/retry15/Original-advance24 and actual demand storage53 remain focused controls.
+Expected12,748 local/5,014 inputs,209 focused+111 browser;15,028 hosted. Prepare/configure
+scripts PREPARED NOT EXECUTED; require accepted clean pushed source and one hosted dispatch.
+Continue directly through apply, formatting, frozen validation, acceptance and push.
+
+Remaining: typed key-recovery metadata resolution, durable active/requested keys passes,
+atomic primary demotion and the existing SDK8 room-key signal consumer. Bind one listener to
+installed runtime, never each worker adoption. Never drop pending refs to free slots. Keys
+recovery needs service even when primary capacity64 is full. Native allocation/performance,
+authoritative absence and combined Company-storage/Group-native proof remain. Raw observation/
+Original producer OFF; all54 PRD groups OPEN. No Starter/live change.
+
+Phone59101 REAPED timeout at16:57:16UTC/20.02s, no install attempted. Current workspace owns
+phone-connect-1657.json; retry no earlier17:28UTC. Release89 SDK6 awaits install. Notify first,
+explicit serial/install-only, never drive UI. No emulator. Preserve original intents, Draft66,
+keys/stores/SDK assets, inspector gradlew.bat and live90163c3/schema116.4 Group OFF.
+Continue long run and push every commit.
+
 
 ## Active/requested inventory passes — full validation running; fair scheduling draft ready
 

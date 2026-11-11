@@ -1,5 +1,8 @@
 # Architecture
 
+[Active and requested inventory](collaboration-space-inventory-active-request.md) preserves a running cursor while retaining one later pass.
+Fair worker scheduling and keys-only demotion remain separate.
+
 [Local incoming history locators](collaboration-incoming-history-locators.md) enumerate bounded published Company/Space metadata.
 Keys recovery retains admission and completion authority separately.
 

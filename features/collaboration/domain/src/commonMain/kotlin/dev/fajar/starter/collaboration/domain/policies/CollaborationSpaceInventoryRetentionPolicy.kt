@@ -87,9 +87,13 @@ fun retainCollaborationSpaceInventoryPage(
     val complete = work.blocked == null && page.nextAfterRoomId == null
     val updated =
         progress.copy(
-            inventoryGeneration = if (complete) null else progress.inventoryGeneration,
+            inventoryGeneration =
+                if (complete) progress.inventoryRequestedGeneration
+                else progress.inventoryGeneration,
             inventoryAfterRoomId = if (complete) null else page.rooms[work.accepted - 1].roomId,
             inventoryRetry = null,
+            inventoryRequestedGeneration =
+                if (complete) null else progress.inventoryRequestedGeneration,
         )
     val next =
         current.copy(
@@ -102,7 +106,8 @@ fun retainCollaborationSpaceInventoryPage(
         CollaborationSpaceInventoryRetention(
             next,
             work.blocked
-                ?: if (complete) CollaborationSpaceInventoryOutcome.Complete
+                ?: if (complete && updated.inventoryGeneration == null)
+                    CollaborationSpaceInventoryOutcome.Complete
                 else CollaborationSpaceInventoryOutcome.Advanced,
             work.accepted,
         )
@@ -128,7 +133,9 @@ private fun planInventoryRoomPrefix(
     val existing =
         current.rooms.map { it.generation } +
             current.physicalRooms.map { it.generation } +
-            current.sources.mapNotNull { it.inventoryGeneration } +
+            current.sources.flatMap {
+                listOfNotNull(it.inventoryGeneration, it.inventoryRequestedGeneration)
+            } +
             listOfNotNull(current.rescanGeneration, current.scan?.generation)
     if (
         generations.size != page.rooms.size ||

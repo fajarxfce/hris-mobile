@@ -76,13 +76,16 @@ fun retainCollaborationSpaceSyncBatch(
             previous.position != batch.previousPosition ||
             batch.inventoryRequired ||
             work.omitted
+    val active = previous?.takeIf { it.inventoryGeneration != null }
     val progress =
         CollaborationSpaceIncomingSourceProgress(
             batch.source,
             batch.nextPosition,
-            if (loss) inventoryGeneration else previous.inventoryGeneration,
-            if (loss) null else previous.inventoryAfterRoomId,
-            if (loss) null else previous.inventoryRetry,
+            active?.inventoryGeneration ?: if (loss) inventoryGeneration else null,
+            active?.inventoryAfterRoomId,
+            active?.inventoryRetry,
+            if (loss && active != null) inventoryGeneration
+            else active?.inventoryRequestedGeneration,
         )
     if (previous == null) sources += progress else sources[sources.indexOf(previous)] = progress
     val next =
@@ -112,7 +115,9 @@ private fun validBatchGenerations(
     val retained =
         current.rooms.map { it.generation } +
             current.physicalRooms.map { it.generation } +
-            current.sources.mapNotNull { it.inventoryGeneration } +
+            current.sources.flatMap {
+                listOfNotNull(it.inventoryGeneration, it.inventoryRequestedGeneration)
+            } +
             listOfNotNull(current.rescanGeneration, current.scan?.generation)
     return allocated.all(::validCollaborationMessageId) &&
         allocated.distinct().size == allocated.size &&

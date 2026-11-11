@@ -74,6 +74,14 @@ fun validCollaborationSpaceIncomingDemand(value: CollaborationSpaceIncomingDeman
     )
         return false
     val generations = value.rooms.map { it.generation } + value.physicalRooms.map { it.generation }
+    val requested = value.sources.mapNotNull { it.inventoryRequestedGeneration }
+    val retained =
+        (generations +
+                value.sources.mapNotNull { it.inventoryGeneration } +
+                listOfNotNull(value.rescanGeneration, value.scan?.generation))
+            .toSet()
+    if (requested.distinct().size != requested.size || requested.any { it in retained })
+        return false
     val positions = value.rooms.map { it.position } + value.physicalRooms.map { it.position }
     if (
         generations.distinct().size != generations.size ||

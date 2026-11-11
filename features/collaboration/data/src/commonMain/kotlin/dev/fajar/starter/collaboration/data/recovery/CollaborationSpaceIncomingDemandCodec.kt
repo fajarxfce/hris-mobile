@@ -15,6 +15,7 @@ internal const val INCOMING_DEMAND_CHECKPOINT = "incoming-demand/v1"
 internal const val INCOMING_DEMAND_PARTS_CHECKPOINT = "incoming-demand/v3"
 internal const val INCOMING_DEMAND_TARGETS_CHECKPOINT = "incoming-demand/v4"
 internal const val INCOMING_DEMAND_INVENTORY_CHECKPOINT = "incoming-demand/v5"
+internal const val INCOMING_DEMAND_REQUESTED_INVENTORY_CHECKPOINT = "incoming-demand/v6"
 // One header, at most 64 room parts and 64 source parts, plus an over-capacity sentinel.
 internal const val INCOMING_DEMAND_READ_LIMIT = 130
 
@@ -50,6 +51,7 @@ internal class CollaborationSpaceIncomingDemandCodec(
                     INCOMING_DEMAND_PARTS_CHECKPOINT,
                     INCOMING_DEMAND_TARGETS_CHECKPOINT,
                     INCOMING_DEMAND_INVENTORY_CHECKPOINT,
+                    INCOMING_DEMAND_REQUESTED_INVENTORY_CHECKPOINT,
                 )
         )
         require(
@@ -83,10 +85,12 @@ internal class CollaborationSpaceIncomingDemandCodec(
                 )
             } else {
                 val dto = decodePart<IncomingDemandPartsDto>(raw.handle.generation, header)
-                val inventory = raw.payload == INCOMING_DEMAND_INVENTORY_CHECKPOINT
+                val requested = raw.payload == INCOMING_DEMAND_REQUESTED_INVENTORY_CHECKPOINT
+                val inventory = requested || raw.payload == INCOMING_DEMAND_INVENTORY_CHECKPOINT
                 val typed = inventory || raw.payload == INCOMING_DEMAND_TARGETS_CHECKPOINT
                 require(
-                    dto.schema == (if (inventory) 5 else if (typed) 4 else 3) &&
+                    dto.schema ==
+                        (if (requested) 6 else if (inventory) 5 else if (typed) 4 else 3) &&
                         dto.roomCount in 0..64
                 )
                 require(dto.physicalCount in 0..(64 - dto.roomCount) && dto.sourceCount in 0..64)
@@ -115,7 +119,7 @@ internal class CollaborationSpaceIncomingDemandCodec(
                                 raw.handle.generation,
                                 indexed.getValue(partId("s", it)),
                             )
-                            .toProgress(inventory)
+                            .toProgress(inventory, requested)
                     },
                     (0 until dto.physicalCount).map {
                         decodePart<IncomingPhysicalRoomDto>(
@@ -134,8 +138,10 @@ internal class CollaborationSpaceIncomingDemandCodec(
         require(validCollaborationMessageId(snapshot.generation))
         val value = snapshot.demand
         require(validCollaborationSpaceIncomingDemand(access, value))
+        val requested = value.sources.any { it.inventoryRequestedGeneration != null }
         val inventory =
-            value.sources.any { it.inventoryAfterRoomId != null || it.inventoryRetry != null }
+            requested ||
+                value.sources.any { it.inventoryAfterRoomId != null || it.inventoryRetry != null }
         val typed =
             inventory || value.rooms.any { it.target is CollaborationSpaceIncomingTarget.Original }
         val rooms = if (typed) emptyList() else value.rooms.map { it.toDto() }
@@ -166,7 +172,7 @@ internal class CollaborationSpaceIncomingDemandCodec(
                     snapshot.generation,
                     INCOMING_DEMAND_DOCUMENT,
                     IncomingDemandPartsDto(
-                        if (inventory) 5 else if (typed) 4 else 3,
+                        if (requested) 6 else if (inventory) 5 else if (typed) 4 else 3,
                         value.nextPosition.toString(),
                         value.rooms.size,
                         value.physicalRooms.size,
@@ -204,7 +210,8 @@ internal class CollaborationSpaceIncomingDemandCodec(
         val result =
             ReplicaSnapshot(
                 snapshot.generation,
-                if (inventory) INCOMING_DEMAND_INVENTORY_CHECKPOINT
+                if (requested) INCOMING_DEMAND_REQUESTED_INVENTORY_CHECKPOINT
+                else if (inventory) INCOMING_DEMAND_INVENTORY_CHECKPOINT
                 else if (typed) INCOMING_DEMAND_TARGETS_CHECKPOINT
                 else INCOMING_DEMAND_PARTS_CHECKPOINT,
                 parts.sortedBy { it.id },
@@ -358,13 +365,16 @@ internal class CollaborationSpaceIncomingDemandCodec(
             inventoryGeneration,
             inventoryAfterRoomId,
             inventoryRetry?.toDto(),
+            inventoryRequestedGeneration,
         )
     }
 
     private fun IncomingSourceProgressDto.toProgress(
-        inventory: Boolean
+        inventory: Boolean,
+        requested: Boolean,
     ): CollaborationSpaceIncomingSourceProgress {
         require(inventory || (inventoryAfterRoomId == null && inventoryRetry == null))
+        require(requested || inventoryRequestedGeneration == null)
         require(position.length in 1..5464)
         val bytes = Base64.decode(position)
         val decoded =
@@ -380,6 +390,7 @@ internal class CollaborationSpaceIncomingDemandCodec(
             inventoryGeneration,
             inventoryAfterRoomId,
             inventoryRetry?.toRetry(),
+            inventoryRequestedGeneration,
         )
     }
 
@@ -508,6 +519,7 @@ private data class IncomingSourceProgressDto(
     val inventoryGeneration: String?,
     val inventoryAfterRoomId: String? = null,
     val inventoryRetry: IncomingRetryDto? = null,
+    val inventoryRequestedGeneration: String? = null,
 )
 
 @Serializable
