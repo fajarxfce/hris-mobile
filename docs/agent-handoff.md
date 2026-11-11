@@ -1,24 +1,32 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 10:44 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 10:50 UTC. This opening owns current work; older sections are historical.
 
-## Company pending limit — full validation in progress
+## Company pending limit — presentation fixture corrected — focused validation in progress
 
-Mobile HEAD9b366ed53256c1bad575a44ac3e39f9288220006 and Group0c9a711e are PUSHED.
-The next eight-file Company page-size increment is applied but NOT accepted or committed.
+Mobile documentation d314f171 and Group96b6e00c are PUSHED; source baseline is9b366ed5.
+The next nine-file Company page-size increment is applied but NOT accepted or committed.
 It exposes/forwards limit:Int=20 to the existing raw store, preserving legacy callers and cursor/key
 bytes. Original16-row pending continuations can use their actual attempted page size. Four new common
 storage cases cover finite seeks, resolution/reopen/appends, invalid limits/cursors/frames/devices and
 changing page sizes. A new Apple wave wrapper covers12 cases; Linux cannot claim its execution.
 
 Private .work/company-pending-limit-2026-11-11 holds baseline9b366ed5/11,887 cases, candidate snapshots,
-runners/audits, prepared publisher/contract and hosted plan/audit/dispatch. Format1/session26322 REAPED
-PASS36.597s. Focused1/session32087 REAPED PASS300.067s/136. Browser1/session77153 REAPED PASS171.871s/134; focused audit270 ACCEPTED.
-Frozen4,948-input manifest a74763b5645f6400a4a0c80e90cdecfbb270678633b884f29ab07d67f076e6c3.
-Full1/session93941 RUNNING, expected11,895. Next reap full, run accept-full.py full1, then publish only if accepted.
-Do not edit frozen source during checks. Full audit/publisher NOT executed. Hosted NOT dispatched:
-validation/company-pending-limit-20261111 expects13,813=9,873 portable+3,940 Apple,16 Swift,unsigned host.
-Unlike prior domain-only changes, portable delta8 and Apple delta12; explicitly audit the new wave class.
+runners/audits, prepared publisher/contract and hosted plan/audit/dispatch. Initial8-file candidate
+passed format1/session26322 (36.597s), focused1/session32087 (300.067s/136), browser1/session77153
+(171.871s/134), audit270. All REAPED. Full1/session93941 then FAILED presentation common-test compilation
+at351.885s after5549 passed cases: ChatThreadHistoryFixture was an omitted fifth Company fake. It still
+had the old repository signature. No production defect/fix was inferred from this compile failure.
+
+Added only the unused limit:Int to that fixture. Format2/session42032 REAPED PASS35.718s. Revised9-file,
+4,948-input manifest008ae215b58bbddb8e5038e84ef0bf13cb7dd872979a1116d5abcef0c8aa2d8c is frozen.
+Focused2/session16507 RUNNING, expected136, now explicitly compiling presentation tests. Next browser2
+(expected134), accept-focused.py focused2 browser2 (270), then full2 (11,895) and accept-full.py full2.
+Original candidate1 preserves manifest a74763b5645f6400a4a0c80e90cdecfbb270678633b884f29ab07d67f076e6c3
+and prior focused evidence; full1-review.md/logs/result preserve the failed full. Never count it as pass.
+Publisher/full acceptance NOT executed. Hosted NOT dispatched: validation/company-pending-limit-20261111
+expects13,813=9,873 portable+3,940 Apple,16 Swift,unsigned host. Portable delta8, Apple delta12; audit the
+new12-case Apple wave wrapper explicitly. No activation or phone install is claimed by these checks.
 
 Original pending reader is already locally accepted11,887; source9b366ed5 PUSHED and hosted43003600252
 RUNNING (dispatch54962 REAPED), expected13,793. Its earlier two test type-inference failures are retained.
@@ -38,7 +46,7 @@ content and committed retention remain separate. Original completion, canonical 
 bounded Client.rooms inventory, keys-only recovery and actual native proof precede raw activation.
 Raw collector/Original producer OFF; all54 PRD groups OPEN. No generic Starter delta. Continue long run.
 
-Phone26946 REAPED timeout124, connect started10:44 UTC. Next bounded retry no earlier11:15.
+Phone26946 REAPED timeout124, connect started10:50 UTC. Next bounded retry no earlier11:15.
 Release89 validated SDK6 APK remains pending install, no install-result or attempt. No emulator.
 Notify before explicit-serial install-only, never launch/drive the user's phone. Eight protected original
 intents, Draft66, keys/stores, SDK6/7/8 assets and live90163c3/schema116.4 Group-OFF remain unchanged.
