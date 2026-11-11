@@ -1,0 +1,100 @@
+{
+  "at": "2026-11-11T00:22:20.863217+00:00",
+  "accepted": true,
+  "runId": 42928136481,
+  "sourceCommit": "b94f6fa79fc1e22b1ded081af03237603fca6f65",
+  "attempt": 1,
+  "manifestSha256": "5f93684eac1c1e26f95f250d87ec34b91bdd22ad34a2a8af5659f8a210623b3f",
+  "artifacts": [
+    {
+      "abi": "arm64-v8a",
+      "artifactId": 13815049259,
+      "archiveSha256": "e1958a8abafcbe3126b5854c8679a780ec02aaca623457e430d9188bb83820c2",
+      "ciElapsedSeconds": 930.026,
+      "generatedFiles": 9,
+      "nativeSha256": "9c1cec1edfd7f30d8d18ec509f9480c5376f80bb4b40c832868a3fdf53b21936",
+      "nativeBytes": 138978744,
+      "elfClass": "ELF64",
+      "requiredElfAlignment": 16384,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "requiredSymbolsPresent": true
+    },
+    {
+      "abi": "armeabi-v7a",
+      "artifactId": 13815454091,
+      "archiveSha256": "89687809ef7413b65f4a386220541f4abbd78da606c28f58b88f8baefb359e18",
+      "ciElapsedSeconds": 1068.205,
+      "generatedFiles": 9,
+      "nativeSha256": "53fa76d42a4db5e05f1a650a1d0066e0f42d69057ac33e5d9de5787c85efd199",
+      "nativeBytes": 98664404,
+      "elfClass": "ELF32",
+      "requiredElfAlignment": 4096,
+      "loadAlignments": [
+        4096,
+        4096,
+        4096,
+        4096
+      ],
+      "requiredSymbolsPresent": true
+    },
+    {
+      "abi": "x86",
+      "artifactId": 13814993620,
+      "archiveSha256": "7c7c53c7c986ca9fcbc58322a8e2b9e9eaa5a77423219235d10c232c019c09a4",
+      "ciElapsedSeconds": 1008.71,
+      "generatedFiles": 9,
+      "nativeSha256": "6774ba6a40b27707e0075d2bed171424a40e4aad2bd35f5966fd1080af762ff9",
+      "nativeBytes": 148372012,
+      "elfClass": "ELF32",
+      "requiredElfAlignment": 4096,
+      "loadAlignments": [
+        4096,
+        4096,
+        4096,
+        4096
+      ],
+      "requiredSymbolsPresent": true
+    },
+    {
+      "abi": "x86_64",
+      "artifactId": 13814634380,
+      "archiveSha256": "0eabc3ce9fab87fa271834ab5f0cd53321afed0cddedd7b8aef47a88fef9b1a6",
+      "ciElapsedSeconds": 1091.258,
+      "generatedFiles": 9,
+      "nativeSha256": "e7b8e9a465dca4a94149aa452efded35e99ae7b4bda1af161344aeaf14ce2de0",
+      "nativeBytes": 143250584,
+      "elfClass": "ELF64",
+      "requiredElfAlignment": 16384,
+      "loadAlignments": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "requiredSymbolsPresent": true
+    }
+  ],
+  "scope": "CI ABI binaries and exact generated-binding/source manifests, before AAR or runtime acceptance",
+  "published": false,
+  "githubArchiveDigestsVerified": true,
+  "zipCrcAndUniqueSafePathsVerified": true,
+  "generatedKotlinIdenticalAcrossAbis": true,
+  "sourceFiles": 1221,
+  "patchedSources": 40,
+  "patches": 9,
+  "candidateVersion": "26.10.23-hris.8",
+  "aarPackaged": false,
+  "applicationDependencyChanged": false,
+  "nativeRuntimeAccepted": false,
+  "appleNativeAccepted": false,
+  "rawArm64Bytes": {
+    "previousSdk6": 138956152,
+    "incomingCandidate": 138978744,
+    "difference": 22592
+  }
+}

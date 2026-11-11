@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 00:10 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 00:25 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Foreground incoming startup accepted
 
@@ -99,9 +99,15 @@ collaboration/sdk-incoming-hints-bindings.md (Group), and shared measurement fil
 collaboration-sdk-incoming-hints-bindings-2026-11-11.json. Candidate all-ABI run 42928136481 is RUNNING at immutable b94f6fa79fc1e22b1ded081af03237603fca6f65,
 ref validation/sdk-incoming-hints-20261111. Dispatch15115 and all pushes are reaped. Do not
 redispatch. Private Mobile sdk-incoming-hints-ci-2026-11-11 owns hosted.json, pinned download.py
-and prepared (not executed) packaging scripts. All four ABI jobs are compiling; none accepted.
-A fresh wrapper at /home/fajar/hris/.worktrees/matrix-kotlin-incoming-hints-2026-11-11 is clean
-at c1664f7. SDK8 is the next candidate version; no SDK8 binary/dependency/publication exists.
+and prepared (not executed) packaging scripts. All four ABI jobs are now ACCEPTED after download73482 REAPED: exact GitHub digests/CRC,
+source and Kotlin pairs, symbols and ELF alignments verified. Manifest
+5f93684eac1c1e26f95f250d87ec34b91bdd22ad34a2a8af5659f8a210623b3f. Android evidence:
+collaboration-sdk-incoming-hints-android-2026-11-11.json (both repos). Raw ARM64 differs from
+raw SDK6 by only22,592 bytes; APK-stripped and AAR-raw binaries are distinct comparisons.
+A fresh wrapper at /home/fajar/hris/.worktrees/matrix-kotlin-incoming-hints-2026-11-11 is now
+staged at pinned c1664f7 with all four verified libraries and nine generated Kotlin files.
+prepare-package.py EXECUTED; do not repeat. SDK8 native candidates exist, but no AAR/runtime
+dependency/publication exists. Run package.py only after the local Group compiler is reaped.
 SDK7 is retired; never reuse it. Then integrate the owned incoming application consumer.
 The current incoming scanner sees local bindings only; it cannot cover unknown server rooms
 when a batch is lost. Cold/gap recovery must include admitted provider/server inventory coverage.
@@ -110,8 +116,15 @@ Server push locators are physical matrixRoomId/matrixEventId. Logical UUID listi
 feed. The existing admitted rooms.boundRoom lookup can locate an unknown physical room; preserve
 the room-first, sorted-account, native-session guard order of ReadNativeCollaborationSpaceRoom.
 
-Group physical-room resolution is under active validation: ten source/test files in
-.work/space-physical-room-2026-11-11, full-1/session43391 RUNNING with 8,743 inputs.
+Group physical-room resolution is under active validation: eleven source/test files in
+.work/space-physical-room-2026-11-11. Full-1/session43391 REAPED failed after872.418s with
+8,743 inputs unchanged: all205domain+51data cases passed; two HTTP test assumptions failed
+(POST read incorrectly expected idempotency and domain validation expected400 instead of422),
+and three worker fixture calls still passed UUID instead of the typed query. Only those three
+test files changed afterward; product code and all256 domain/data control inputs are unchanged.
+Format2/39912 REAPED /20.432s. Final-1/session71990 RUNNING: HTTP/contract/full worker and static
+checks; retained exact controls are recorded in final-controls.json. Do not rerun the14-minute
+database suite unless relevant inputs change or a new concern requires it.
 ReadNativeCollaborationSpaceRoom now accepts a typed logical/physical query; immutable selection
 precedes its room guard, sorted account guards and native lock. Exact binding readback and
 current denial fence both success and failed/missing lookup. New native POST /spaces/{spaceId}/
@@ -119,7 +132,7 @@ rooms/read returns the existing metadata view. Eight storage/admission cases plu
 HTTP isolation case, contract and prior readers are included. No SDK/network I/O in this read.
 Do not edit Group code during its gate. No Group source commit or deployment yet.
 
-Phone ADB2791 timed out/reaped; validated release 89 is still uninstalled. Existing availability
+Phone ADB93824 timed out/reaped; validated release 89 is still uninstalled. Existing availability
 question remains pending. Notify before install-only; do not launch, reset or drive phone UI.
 No live deployment or generic Starter delta. SDK6, live 90163c/schema 116.4 and original sender
 keys/messages remain protected. All 54 communications PRD groups remain OPEN. Continue work.

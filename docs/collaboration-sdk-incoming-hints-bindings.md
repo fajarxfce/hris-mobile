@@ -29,5 +29,10 @@ The five build-driver process/environment/native-symbol tests pass. Full source 
 are recorded in the [sync](collaboration-sdk-incoming-hints.md) and
 [key](collaboration-sdk-key-hints.md) contracts. Exact generation inputs and output
 hashes: [binding evidence](measurements/collaboration-sdk-incoming-hints-bindings-2026-11-11.json).
-Android builds, packaging, Apple compilation, application consumers and actual incoming
-event/key recovery remain separate acceptance work.
+Four Android ABI builds are now accepted from immutable b94f6fa79fc1e22b1ded081af03237603fca6f65,
+[run 42928136481](https://github.com/fajarxfce/hris-mobile/actions/runs/42928136481). All nine
+binding hashes agree across targets; archive digests/CRC, exact source hashes, native entry
+points and required ELF alignment were independently checked after download.
+See [Android evidence](measurements/collaboration-sdk-incoming-hints-android-2026-11-11.json).
+The fresh pinned wrapper is staged for SDK8 packaging. Packaging, Apple compilation, application
+consumers and actual incoming event/key recovery remain separate acceptance work.
