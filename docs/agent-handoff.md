@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 00:01 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 00:10 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Foreground incoming startup accepted
 
@@ -96,9 +96,13 @@ compiled/native APIs; all five build-driver tests pass. No Android artifact/vers
 publication exists yet. Host generation is NOT Apple compilation or Android acceptance.
 Binding contract/evidence: collaboration-sdk-incoming-hints-bindings.md (Mobile),
 collaboration/sdk-incoming-hints-bindings.md (Group), and shared measurement filename
-collaboration-sdk-incoming-hints-bindings-2026-11-11.json. Next dispatch the candidate all-ABI
-workflow once on this immutable revision, accept its exact native pair, then integrate the owned
-application consumer, pending-key and physical-room routing. SDK7 is retired; never reuse it.
+collaboration-sdk-incoming-hints-bindings-2026-11-11.json. Candidate all-ABI run 42928136481 is RUNNING at immutable b94f6fa79fc1e22b1ded081af03237603fca6f65,
+ref validation/sdk-incoming-hints-20261111. Dispatch15115 and all pushes are reaped. Do not
+redispatch. Private Mobile sdk-incoming-hints-ci-2026-11-11 owns hosted.json, pinned download.py
+and prepared (not executed) packaging scripts. All four ABI jobs are compiling; none accepted.
+A fresh wrapper at /home/fajar/hris/.worktrees/matrix-kotlin-incoming-hints-2026-11-11 is clean
+at c1664f7. SDK8 is the next candidate version; no SDK8 binary/dependency/publication exists.
+SDK7 is retired; never reuse it. Then integrate the owned incoming application consumer.
 The current incoming scanner sees local bindings only; it cannot cover unknown server rooms
 when a batch is lost. Cold/gap recovery must include admitted provider/server inventory coverage.
 Never infer the cursor of queued content from a later local position read.
@@ -106,7 +110,16 @@ Server push locators are physical matrixRoomId/matrixEventId. Logical UUID listi
 feed. The existing admitted rooms.boundRoom lookup can locate an unknown physical room; preserve
 the room-first, sorted-account, native-session guard order of ReadNativeCollaborationSpaceRoom.
 
-Phone ADB32274 timed out/reaped; validated release 89 is still uninstalled. Existing availability
+Group physical-room resolution is under active validation: ten source/test files in
+.work/space-physical-room-2026-11-11, full-1/session43391 RUNNING with 8,743 inputs.
+ReadNativeCollaborationSpaceRoom now accepts a typed logical/physical query; immutable selection
+precedes its room guard, sorted account guards and native lock. Exact binding readback and
+current denial fence both success and failed/missing lookup. New native POST /spaces/{spaceId}/
+rooms/read returns the existing metadata view. Eight storage/admission cases plus one actual
+HTTP isolation case, contract and prior readers are included. No SDK/network I/O in this read.
+Do not edit Group code during its gate. No Group source commit or deployment yet.
+
+Phone ADB2791 timed out/reaped; validated release 89 is still uninstalled. Existing availability
 question remains pending. Notify before install-only; do not launch, reset or drive phone UI.
 No live deployment or generic Starter delta. SDK6, live 90163c/schema 116.4 and original sender
 keys/messages remain protected. All 54 communications PRD groups remain OPEN. Continue work.
