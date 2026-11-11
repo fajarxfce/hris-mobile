@@ -92,5 +92,21 @@
       "listOf(\"cursor-15\" to 16)": "listOf<Pair<String?, Int>>(\"cursor-15\" to 16)"
     },
     "failedManifestSha256": "a366cb871a7d462c2fea7ec3f8df3f051b57503669b80b2810dfe8f4b76fb46f"
+  },
+  "hostedDispatch": {
+    "runId": 43104067759,
+    "sourceCommit": "a7cfdcf66c91a5b2a824bc7c8eae2c63f7904232",
+    "ref": "validation/original-key-reference-read-20261111",
+    "dispatchedAt": "2026-11-11T21:33:16.931038+00:00",
+    "expectedPortable": {
+      "desktopTest": 5346,
+      "testAndroidHostTest": 857,
+      "wasmJsBrowserTest": 5033
+    },
+    "expectedApple": {
+      "iosSimulatorArm64Test": 4546
+    },
+    "expectedTotal": 15782,
+    "artifactAuditCompleted": false
   }
 }

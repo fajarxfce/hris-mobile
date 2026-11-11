@@ -4,6 +4,7 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.AtomicCredentialStore
+import dev.fajar.starter.securestorage.ContentCipher
 import kotlin.test.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.emitAll
@@ -692,6 +693,503 @@ abstract class CollaborationHistoryRecoveryStorageContract {
             assertEquals(before, f.raw())
             assertEquals(listOf(f.event(2), f.event(3)), f.recoveryPage().events.map { it.event })
         }
+
+    @Test
+    fun completionCommitsAllReferenceFlagsAndRecoveryInOneRevision() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage()
+        val before = f.progress()!!
+        val rows = f.raw().documents
+        assertEquals(AppResult.Success(true), f.completeRecovery(page))
+        val current = f.progress()!!
+        assertEquals(before.revision + 1, current.revision)
+        assertEquals(before.references, current.references)
+        assertEquals(before.incoming, current.incoming)
+        assertEquals(before.next, current.next)
+        assertEquals(before.provider, current.provider)
+        assertEquals(f.recovery().copy(complete = true), current.recovery)
+        assertTrue(f.read().events.isEmpty())
+        for (reference in page.events) assertEquals(
+            reference.copy(resolved = true),
+            f.source(reference.event.eventId).reference,
+        )
+        assertEquals(rows.map { it.id }.toSet(), f.raw().documents.map { it.id }.toSet())
+        assertFalse(f.raw().checkpoint!!.payload.contains(f.recovery().generation))
+    }
+
+    @Test
+    fun partialCompletionLeavesUnresolvedSourcesBehindItsFiniteCursor() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(2)
+        assertEquals(
+            AppResult.Success(true),
+            f.completeRecovery(page, listOf(page.events.first()), 2),
+        )
+        assertEquals(
+            f.recovery().copy(after = page.after, unresolved = true),
+            f.progress()!!.recovery,
+        )
+        assertEquals(listOf(f.event(2), f.event(3)), f.read().events.map { it.event })
+        assertEquals(listOf(f.event(3)), f.recoveryPage().events.map { it.event })
+        assertTrue(f.source(f.event(1).eventId).reference!!.resolved)
+        assertFalse(f.source(f.event(2).eventId).reference!!.resolved)
+    }
+
+    @Test
+    fun completionWithNoResolvedOutcomesAdvancesWithoutRewritingSources() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage()
+        val rows = f.raw().documents
+        assertEquals(AppResult.Success(true), f.completeRecovery(page, emptyList()))
+        assertEquals(rows, f.raw().documents)
+        assertEquals(f.recovery().copy(complete = true, unresolved = true), f.progress()!!.recovery)
+        assertEquals(3, f.read().events.size)
+    }
+
+    @Test
+    fun completionPreservesIndependentPrimaryAppendsAndPendingSeek() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage()
+        f.stage(listOf(f.event(4)), "new-primary")
+        assertEquals(AppResult.Success(true), f.advance(f.read(limit = 1)))
+        val primary = f.progress()!!
+        assertEquals(AppResult.Success(true), f.completeRecovery(page))
+        val current = f.progress()!!
+        assertEquals(primary.incoming, current.incoming)
+        assertEquals(primary.next, current.next)
+        assertEquals(primary.references, current.references)
+        assertEquals(primary.provider, current.provider)
+        assertEquals(listOf(f.event(4)), f.read().events.map { it.event })
+        assertEquals(f.recovery().copy(complete = true), current.recovery)
+    }
+
+    @Test
+    fun completionPromotesTheLatestRequestWithItsNewReferenceBoundary() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage()
+        f.stage(listOf(f.event(4)), "new-primary")
+        assertEquals(
+            AppResult.Success(true),
+            f.replace(f.progress()!!, f.recovery().copy(requestedGeneration = historyId(9810))),
+        )
+        assertEquals(AppResult.Success(true), f.completeRecovery(page))
+        assertEquals(
+            CollaborationHistoryRecoveryPosition(historyId(9810), 4),
+            f.progress()!!.recovery,
+        )
+        assertEquals(listOf(f.event(4)), f.recoveryPage().events.map { it.event })
+        assertTrue(f.source(f.event(1).eventId).reference!!.resolved)
+    }
+
+    @Test
+    fun completionAcceptsAnIdenticalSourceResolvedByConcurrentPrimaryWork() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage()
+        assertEquals(
+            AppResult.Success(true),
+            f.resolve(page.copy(events = listOf(page.events.first()))),
+        )
+        val current = f.progress()!!
+        assertEquals(AppResult.Success(true), f.completeRecovery(page))
+        assertEquals(current.revision + 1, f.progress()!!.revision)
+        assertTrue(f.read().events.isEmpty())
+        for (reference in page.events) assertEquals(
+            reference.copy(resolved = true),
+            f.source(reference.event.eventId).reference,
+        )
+    }
+
+    @Test
+    fun completedPageReplayDoesNotRewriteOrClaimAnotherCompletion() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage()
+        assertEquals(AppResult.Success(true), f.completeRecovery(page))
+        f.local.reopen()
+        val before = f.raw()
+        assertEquals(AppResult.Success(false), f.completeRecovery(page))
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun completingAbsentHistoryDoesNotReadKeysOrAllocateARecord() = withDatabases { f ->
+        var reads = 0
+        val keys =
+            object : AtomicCredentialStore by f.local.keys {
+                override suspend fun read(): String? {
+                    reads++
+                    error("unexpected key read")
+                }
+
+                override suspend fun writeIfAbsent(value: String): String {
+                    reads++
+                    error("unexpected key allocation")
+                }
+            }
+        val progress =
+            CollaborationHistoryProgress(
+                historyId(9802),
+                0,
+                null,
+                3,
+                CollaborationIncomingHistoryPosition("head", null),
+                if (f.space) f.provider else null,
+                f.recovery(),
+            )
+        val page = CollaborationHistoryReferences(progress, emptyList(), null)
+        val repo = f.repository(credentials = keys)
+        val result =
+            if (f.space) repo.complete(f.spaceAccess, f.traversal, page, emptyList(), 16)
+            else repo.complete(f.access, f.traversal, page, emptyList(), 16)
+        assertEquals(AppResult.Success(false), result)
+        assertEquals(0, reads)
+        assertNull(f.raw().checkpoint)
+        assertTrue(f.raw().documents.isEmpty())
+    }
+
+    @Test
+    fun invalidResolvedSubsetsAndLimitsCannotChangeAnyReference() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage()
+        val before = f.raw()
+        val first = page.events.first()
+        for (resolved in
+            listOf(
+                List(17) { first },
+                listOf(first, first),
+                listOf(first.copy(resolved = true)),
+                listOf(first.copy(sequence = 90)),
+            )) {
+            assertIs<AppResult.Failed>(f.completeRecovery(page, resolved))
+            assertEquals(before, f.raw())
+        }
+        assertIs<AppResult.Failed>(f.completeRecovery(page, limit = 0))
+        assertIs<AppResult.Failed>(f.completeRecovery(page, limit = 17))
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun forgedSourceMetadataCannotBeMadeValidByMatchingItsResolvedSubset() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage()
+        val before = f.raw()
+        val changed =
+            page.events
+                .first()
+                .copy(event = page.events.first().event.copy(sender = "@other:example.test"))
+        val forged = page.copy(events = listOf(changed) + page.events.drop(1))
+        assertIs<AppResult.Failed>(f.completeRecovery(forged, listOf(changed)))
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun completionCannotSkipAnUnattemptedPendingSourceAtEof() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage()
+        val before = f.raw()
+        val omitted = page.copy(events = listOf(page.events.first(), page.events.last()))
+        assertIs<AppResult.Failed>(f.completeRecovery(omitted))
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun completionRejectsChangedCoverageWithoutResolvingTheCapturedRows() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(1)
+        val racing =
+            object : ReplicaStore by f.local.database.replicas {
+                override fun observeQueries(
+                    scope: ReplicaScope,
+                    partition: String,
+                    queries: List<ReplicaQuery>,
+                ) = flow {
+                    f.stage(listOf(f.event(4)), "query-race")
+                    emitAll(f.local.database.replicas.observeQueries(scope, partition, queries))
+                }
+            }
+        assertEquals(AppResult.Success(false), f.completeRecovery(page, limit = 1, store = racing))
+        assertFalse(f.source(page.events.first().event.eventId).reference!!.resolved)
+        assertEquals(f.recovery(), f.progress()!!.recovery)
+        assertEquals(4, f.read().events.size)
+    }
+
+    @Test
+    fun completionLosingItsCommitCannotLeavePartiallyResolvedReferences() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(1)
+        val racing =
+            object : ReplicaStore by f.local.database.replicas {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                    wake: WorkWakeRequest?,
+                ): Boolean {
+                    f.stage(listOf(f.event(4)), "commit-race")
+                    return f.local.database.replicas.commit(
+                        handle,
+                        expectedRevision,
+                        checkpoint,
+                        documents,
+                        publish,
+                        wake,
+                    )
+                }
+            }
+        assertEquals(AppResult.Success(false), f.completeRecovery(page, limit = 1, store = racing))
+        assertFalse(f.source(page.events.first().event.eventId).reference!!.resolved)
+        assertEquals(f.recovery(), f.progress()!!.recovery)
+        assertEquals(4, f.read().events.size)
+    }
+
+    @Test
+    fun cancellationBeforeAtomicCompletionKeepsBothProgressAndReferences() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(1)
+        val before = f.raw()
+        val entered = CompletableDeferred<Unit>()
+        val waiting =
+            object : ReplicaStore by f.local.database.replicas {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                    wake: WorkWakeRequest?,
+                ): Boolean {
+                    entered.complete(Unit)
+                    awaitCancellation()
+                }
+            }
+        coroutineScope {
+            val job = async { f.completeRecovery(page, limit = 1, store = waiting) }
+            entered.await()
+            job.cancelAndJoin()
+            assertTrue(job.isCancelled)
+        }
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun aLostCompletionReplyRetainsBothChangesAcrossReopen() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(1)
+        val lost =
+            object : ReplicaStore by f.local.database.replicas {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                    wake: WorkWakeRequest?,
+                ): Boolean {
+                    assertTrue(
+                        f.local.database.replicas.commit(
+                            handle,
+                            expectedRevision,
+                            checkpoint,
+                            documents,
+                            publish,
+                            wake,
+                        )
+                    )
+                    error("reply lost after atomic completion")
+                }
+            }
+        assertIs<AppResult.Failed>(f.completeRecovery(page, limit = 1, store = lost))
+        f.local.reopen()
+        val before = f.raw()
+        assertTrue(f.source(page.events.first().event.eventId).reference!!.resolved)
+        assertEquals(page.after, f.progress()!!.recovery!!.after)
+        assertEquals(listOf(f.event(2), f.event(3)), f.recoveryPage().events.map { it.event })
+        assertEquals(AppResult.Success(false), f.completeRecovery(page, limit = 1))
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun cancellationAfterAtomicCommitPreservesBothChangesForRecovery() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(1)
+        val committed = CompletableDeferred<Unit>()
+        val waiting =
+            object : ReplicaStore by f.local.database.replicas {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                    wake: WorkWakeRequest?,
+                ): Boolean {
+                    assertTrue(
+                        f.local.database.replicas.commit(
+                            handle,
+                            expectedRevision,
+                            checkpoint,
+                            documents,
+                            publish,
+                            wake,
+                        )
+                    )
+                    committed.complete(Unit)
+                    awaitCancellation()
+                }
+            }
+        coroutineScope {
+            val job = async { f.completeRecovery(page, limit = 1, store = waiting) }
+            committed.await()
+            job.cancelAndJoin()
+            assertTrue(job.isCancelled)
+        }
+        f.local.reopen()
+        assertTrue(f.source(page.events.first().event.eventId).reference!!.resolved)
+        assertEquals(page.after, f.progress()!!.recovery!!.after)
+        assertEquals(listOf(f.event(2), f.event(3)), f.recoveryPage().events.map { it.event })
+    }
+
+    @Test
+    fun completionCannotCrossAccountAudienceCompanyOrSpaceNamespace() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage()
+        val before = f.raw()
+        val results =
+            if (f.space)
+                listOf(
+                        f.spaceAccess.copy(accountId = historyId(9897)),
+                        f.spaceAccess.copy(audience = "https://other.example.test/"),
+                        f.spaceAccess.copy(spaceId = historyId(9897)),
+                    )
+                    .map { f.repository().complete(it, f.traversal, page, page.events, 16) }
+            else
+                listOf(
+                        f.access.copy(accountId = historyId(9897)),
+                        f.access.copy(audience = "https://other.example.test/"),
+                        f.access.copy(companyId = historyId(9897)),
+                    )
+                    .map { f.repository().complete(it, f.traversal, page, page.events, 16) }
+        assertTrue(results.all { it == AppResult.Success(false) })
+        val namespace =
+            if (f.space) f.repository().complete(f.access, f.traversal, page, page.events, 16)
+            else f.repository().complete(f.spaceAccess, f.traversal, page, page.events, 16)
+        assertEquals(AppResult.Success(false), namespace)
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun replacedPassOrDisappearingKnownRequestCannotResolveTheOldPage() = withDatabases { f ->
+        f.stage()
+        val requested = f.recovery().copy(requestedGeneration = historyId(9810))
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, requested))
+        val page = f.recoveryPage()
+        for (next in listOf(f.recovery(), f.recovery().copy(generation = historyId(9811)))) {
+            assertEquals(AppResult.Success(true), f.replace(f.progress()!!, next))
+            val before = f.raw()
+            assertEquals(AppResult.Success(false), f.completeRecovery(page))
+            assertEquals(before, f.raw())
+            assertEquals(3, f.read().events.size)
+        }
+    }
+
+    @Test
+    fun mutableAttemptedAndResolvedListsAreCapturedBeforeStorageSuspends() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val original = f.recoveryPage()
+        val attempted = original.events.toMutableList()
+        val resolved = original.events.toMutableList()
+        val store =
+            object : ReplicaStore by f.local.database.replicas {
+                override suspend fun checkpoint(
+                    scope: ReplicaScope,
+                    partition: String,
+                ): ReplicaCheckpoint? {
+                    attempted.clear()
+                    resolved.clear()
+                    return f.local.database.replicas.checkpoint(scope, partition)
+                }
+            }
+        assertEquals(
+            AppResult.Success(true),
+            f.completeRecovery(original.copy(events = attempted), resolved, store = store),
+        )
+        assertTrue(f.read().events.isEmpty())
+        assertEquals(f.recovery().copy(complete = true), f.progress()!!.recovery)
+    }
+
+    @Test
+    fun sixteenResolvedSourcesDoNotConsumeTheFollowingPage() = withDatabases { f ->
+        f.stage((1..20).map { f.event(it) })
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery(20)))
+        val first = f.recoveryPage()
+        assertEquals(16, first.events.size)
+        assertEquals(AppResult.Success(true), f.completeRecovery(first))
+        assertEquals(first.after, f.progress()!!.recovery!!.after)
+        assertEquals(false, f.progress()!!.recovery!!.complete)
+        assertEquals((17..20).map { f.event(it) }, f.read().events.map { it.event })
+        val last = f.recoveryPage()
+        assertEquals(4, last.events.size)
+        assertEquals(AppResult.Success(true), f.completeRecovery(last))
+        assertTrue(f.read().events.isEmpty())
+        assertEquals(f.recovery(20).copy(complete = true), f.progress()!!.recovery)
+    }
+
+    @Test
+    fun failedOrCancelledReferenceEncodingCannotPublishPartOfACompletion() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage()
+        val before = f.raw()
+        for (cancel in listOf(false, true)) {
+            var encryptions = 0
+            val cipher =
+                object : ContentCipher by f.local.cipher {
+                    override suspend fun encrypt(
+                        key: ByteArray,
+                        associatedData: ByteArray,
+                        plaintext: ByteArray,
+                    ): ByteArray {
+                        encryptions++
+                        if (encryptions == 3 && !cancel)
+                            error("reference encryption failed after earlier entries were encoded")
+                        val encoded = f.local.cipher.encrypt(key, associatedData, plaintext)
+                        if (encryptions == 3 && cancel) currentCoroutineContext().cancel()
+                        return encoded
+                    }
+                }
+            val repo = f.repository(cipher = cipher)
+            suspend fun complete() =
+                if (f.space) repo.complete(f.spaceAccess, f.traversal, page, page.events, 16)
+                else repo.complete(f.access, f.traversal, page, page.events, 16)
+            if (cancel)
+                coroutineScope {
+                    val job = async { complete() }
+                    job.join()
+                    assertTrue(job.isCancelled)
+                }
+            else assertIs<AppResult.Failed>(complete())
+            assertTrue(encryptions >= 3)
+            assertEquals(before, f.raw())
+        }
+    }
 
     private fun withDatabases(block: suspend (CollaborationHistoryRecoveryFixture) -> Unit) =
         runTest {

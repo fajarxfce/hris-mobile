@@ -68,7 +68,8 @@ internal class CollaborationHistoryRecoveryFixture(
     fun repository(
         store: ReplicaStore = local.database.replicas,
         credentials: AtomicCredentialStore = local.keys,
-    ) = EncryptedCollaborationHistoryRecoveryRepository(store, local.cipher, credentials)
+        cipher: ContentCipher = local.cipher,
+    ) = EncryptedCollaborationHistoryRecoveryRepository(store, cipher, credentials)
 
     fun event(index: Int = 1) =
         CollaborationProviderHistoryEvent(
@@ -171,6 +172,21 @@ internal class CollaborationHistoryRecoveryFixture(
     ) =
         if (space) repository(store).advance(spaceAccess, traversal, page, unresolved, limit)
         else repository(store).advance(access, traversal, page, unresolved, limit)
+
+    suspend fun completeRecovery(
+        page: CollaborationHistoryReferences,
+        resolved: List<CollaborationHistoryReference> = page.events,
+        limit: Int = 16,
+        store: ReplicaStore = local.database.replicas,
+    ) =
+        if (space) repository(store).complete(spaceAccess, traversal, page, resolved, limit)
+        else repository(store).complete(access, traversal, page, resolved, limit)
+
+    suspend fun source(eventId: String) =
+        success(
+            if (space) spaces().source(spaceAccess, traversal, eventId)
+            else company().source(access, traversal, eventId)
+        )
 
     suspend fun raw() =
         local.database.replicas

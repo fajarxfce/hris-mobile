@@ -131,6 +131,22 @@ internal class SpaceOriginalKeyReferenceReadFixture {
                 unresolved: Int,
                 limit: Int,
             ): AppResult<Boolean> = error("Reading cannot acknowledge a pass")
+
+            override suspend fun complete(
+                access: CollaborationLocalAccess,
+                traversal: CollaborationHistoryTraversal,
+                attempted: CollaborationHistoryReferences,
+                resolved: List<CollaborationHistoryReference>,
+                limit: Int,
+            ): AppResult<Boolean> = error("Reading cannot complete references or recovery")
+
+            override suspend fun complete(
+                access: CollaborationSpaceLocalAccess,
+                traversal: CollaborationHistoryTraversal,
+                attempted: CollaborationHistoryReferences,
+                resolved: List<CollaborationHistoryReference>,
+                limit: Int,
+            ): AppResult<Boolean> = error("Reading cannot complete references or recovery")
         }
 
     val read =

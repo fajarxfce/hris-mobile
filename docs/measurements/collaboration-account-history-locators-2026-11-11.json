@@ -104,5 +104,23 @@
     },
     "expectedTotal": 15497,
     "artifactAuditCompleted": false
+  },
+  "hostedArtifactUploadFinalEvidence": {
+    "runId": 43092246512,
+    "jobId": 130772532026,
+    "recordedAt": "2026-11-11T21:43:29.042513+00:00",
+    "logBytes": 873083,
+    "logSha256": "347f362bdeeb9dfa5c95e7abfce04e230de5e150ad502eece87428c4a3134b7e",
+    "errors": [
+      "2026-11-11T20:47:09.0906717Z ##[error]Failed to CreateArtifact: Failed to make request after 5 attempts: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    ]
+  },
+  "hostedFailedJobRetry": {
+    "requestedAt": "2026-11-11T21:44:02.949800+00:00",
+    "run": 43092246512,
+    "job": 130772532026,
+    "scope": "one failed job only",
+    "reason": "Artifact service returned HTML instead of JSON after five attempts; build/test steps passed; preserve missing artifact outcome.",
+    "exitCode": 0
   }
 }

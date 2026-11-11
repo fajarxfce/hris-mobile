@@ -217,10 +217,41 @@ internal class CollaborationHistoryTraversalStore(
         attempted: CollaborationHistoryReferences,
         unresolved: Int,
         limit: Int,
+    ): Boolean =
+        updateRecoveryPage(coordinates, traversal, attempted, unresolved, limit, emptyList())
+
+    suspend fun completeRecovery(
+        coordinates: CollaborationHistoryCoordinates,
+        traversal: CollaborationHistoryTraversal,
+        attempted: CollaborationHistoryReferences,
+        resolved: List<CollaborationHistoryReference>,
+        limit: Int,
+    ): Boolean {
+        require(limit in 1..16 && resolved.size <= limit)
+        val captured = resolved.toList()
+        return updateRecoveryPage(
+            coordinates,
+            traversal,
+            attempted,
+            attempted.events.size - captured.size,
+            limit,
+            captured,
+        )
+    }
+
+    private suspend fun updateRecoveryPage(
+        coordinates: CollaborationHistoryCoordinates,
+        traversal: CollaborationHistoryTraversal,
+        attempted: CollaborationHistoryReferences,
+        unresolved: Int,
+        limit: Int,
+        resolved: List<CollaborationHistoryReference>,
     ): Boolean {
         require(traversal.purpose == CollaborationHistoryPurpose.Incoming && limit in 1..16)
         require(attempted.events.size <= limit)
         val captured = attempted.copy(events = attempted.events.toList())
+        require(resolved.size <= limit && resolved.distinct().size == resolved.size)
+        require(resolved.all { it in captured.events })
         val expected = requireNotNull(captured.progress)
         val position = requireNotNull(expected.recovery)
         require(boundedCollaborationHistoryRecoveryReferences(captured, limit) == captured)
@@ -233,13 +264,16 @@ internal class CollaborationHistoryTraversalStore(
             val next =
                 planCollaborationHistoryRecoveryAdvance(current, captured, unresolved, limit)
                     ?: return@withCodec false
+            val toResolve = mutableListOf<CollaborationHistoryReference>()
             var last: ReplicaDocument? = null
             for (reference in captured.events) {
                 val row =
                     requireNotNull(
                         replicas.document(scope, partition, codec.id(reference.event.eventId))
                     )
-                require(codec.reference(raw, row).copy(resolved = false) == reference)
+                val stored = codec.reference(raw, row)
+                require(stored.copy(resolved = false) == reference)
+                if (reference in resolved && !stored.resolved) toResolve += reference
                 last = row
             }
             val after = captured.after
@@ -275,8 +309,9 @@ internal class CollaborationHistoryTraversalStore(
             }
             val updated = current.copy(revision = current.revision + 1, recovery = next)
             val checkpoint = codec.checkpoint(updated)
+            val updates = toResolve.map { codec.reference(updated, it.copy(resolved = true)) }
             currentCoroutineContext().ensureActive()
-            replicas.commit(raw.handle, raw.revision, checkpoint, emptyList(), true)
+            replicas.commit(raw.handle, raw.revision, checkpoint, updates, true)
         }
     }
 

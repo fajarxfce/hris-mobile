@@ -1,5 +1,74 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 22:03 UTC. This opening owns current work; earlier sections are historical.
+
+## Atomic historical page completion accepted; admitted local content next
+
+Six existing Kotlin files accepted. Company/Space recovery.complete atomically records a supplied
+resolved subset and the finite recovery cursor in ONE checkpoint CAS. The raw store proves exact
+source identity and17-row indexed coverage for up to16 attempted references. It preserves primary
+appends/seek, provider identity, reference order/count, matching already-resolved sources and a
+later requested pass. Strict primary resolve remains unchanged. Both lists are copied before
+storage suspension; cancellation is checked AFTER encryption and before commit. Lost replies
+leave both changes durable; replay after advancement returns false, not an invented receipt.
+Admitted callers still own content outcomes and global completion. No provider/key calls or worker.
+
+Workspace .work/history-recovery-completion-2026-11-11; baselinea7cfdcf66c91a5b2a824bc7c8eae2c63f7904232,13,258/5,046.
+Source manifest eb6d48d82c1db0fd27b052e6c79353f45ff82edade7487633bf0a48baceb1256;5,046 inputs.
+Format38446 closed/PASS39.179s; resumed session was already closed and persisted success verified.
+Focused1/46384 REAPED PASS424.843s/143; browser1/38679 REAPED PASS146.232s/141. Exact284 accepted.
+All35 earlier database cases remain, plus21 new cases per platform (56 each); each exercises both
+Company and Space, including failed/cancelled encryption and before/after-commit interruption.
+Full1/44270 REAPED PASS594.421s; audit63807 REAPED.
+13,300 accepted=11,262 fresh+2,038 exact unchanged controls.
+Prior case IDs/dependency closures verified. Proof APK151790756B/4415d1e8b07510161ca6d70502302020908482086bfef90ea3d3b9e228660bd4.
+No failed local attempt in this stage. Native execution is not claimed. Publisher and this writer
+HAVE EXECUTED. Commit/push, dispatch ONCE validation/history-recovery-completion-20261111,
+expected15,845=11,278 portable+4,567 Apple. Attach actual run/source before next prepare.
+
+Prior local reader a7cfdcf6 and Group62495a67 PUSHED;56826/34935 REAPED. Hosted43104067759 was
+actually dispatched21:33:16UTC/40103 REAPED; expected15,782, last observed running. Original
+content43099618359 portable audit10603 REAPED ACCEPTED11,178. Its immediate predecessor
+account43096361337 failed before jobs twice, so hosted-audit-from-position.py compares current
+artifacts to fully audited Position43083225746, retaining ALL ancestor case IDs and current exact
+class/platform expectations. hosted-baseline-bridge.json records268 portable/127 Apple delta and
+intervening runs. The failed runs stay failed; this is current-source coverage, not retroactive
+acceptance. Original content Apple83865 REAPED ACCEPTED4,517; FULL15,695 audited. These are
+portable/Apple host contracts, not native SDK8 Apple execution.
+
+Turn43087494327 Apple and Locator43092246512 portable upload failures now have final logs: GitHub
+CreateArtifact returned HTML instead of JSON after five attempts. Logs/hash/error saved as
+*-final-failure-2. ONE targeted failed-job retry each requested21:44:01/02UTC,25587 REAPED; no further
+retries. Account startup internal-error evidence and one failed retry remain; no more blind retry.
+Never mark absent artifacts complete. Later per-run measurements own current audit status.
+
+Next four-file draft next-local-key-page-content-draft REVIEWED, UNAPPLIED/UNTESTED (3 existing,
+1 new). Existing AcquireCollaborationSpaceOriginalEvents gains a typed recovery-page overload.
+Shared admission/content lifetime remains; sealed explicit-ID/page origins retain old primary and
+historical-ID APIs. Exact local original/edit facts produce ordered outcomes without rewrites.
+Only unknown sources get SDK attempts; raw sender/timestamp must match captured references.
+No source type equality across encrypted/decrypted envelopes. No reference/global completion.
+Empty active pages represent already-resolved existing rows; zero-reference histories are complete.
+
+New29 common cases cover16-row bounds/mixed ordering, local identity/tombstones, lost content
+responses, raw mismatch, failure/cancellation/denial, source/account/metadata/registration changes,
+mutable input, deadlines, missing-key later attempts and existing explicit-ID behavior. Existing33
+primary and26 historical-ID cases remain controls. Review next-local-key-page-content-review.md.
+Original draft generator/snippets are STALE after private type/empty-page corrections; use guarded
+prepare-next-local-key-page-content.py then configure-next-local-key-page-content.py. Both PREPARED,
+NOT EXECUTED. Next workspace original-local-key-page-content-2026-11-11;5,047 inputs,13,358 local,
+128 focused+126 browser;15,932 hosted=11,336 portable+4,596 Apple. Do not claim draft acceptance.
+
+Then implement admitted historical outcome completion, Space/Original-alias projection, bounded
+global service, precise source/key/content triggers, primary EOF demotion/request/wake and native
+loss-aware key listener ownership/receipts. Local-fact inspection alone MUST NOT advance past
+unknown references before their new-key attempt. Consumer/liveness precede producer activation.
+All54 PRD groups remain OPEN. No Starter/live changes. Phone47970 REAPED timeout21:42:13UTC/
+20.024s; no install. Next retry no earlier22:14UTC. Release89SDK6 ready; notify before install,
+explicit serial/install-only, never launch or drive UI. Preserve original intents, Draft66, stores,
+keys, SDK assets, inspector gradlew.bat and live90163c3/schema116.4/Group OFF. One compiler OR
+emulator; push every commit and continue authorized long run.
+
 Updated 11 November 2026, 21:31 UTC. This opening owns current work; earlier sections are historical.
 
 ## Original local recovery reference reading accepted; atomic page completion next

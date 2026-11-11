@@ -47,4 +47,27 @@ interface CollaborationHistoryRecoveryRepository {
         unresolved: Int,
         limit: Int = 16,
     ): AppResult<Boolean>
+
+    /**
+     * Atomically resolves an admitted subset and advances one exact finite recovery page. The
+     * caller proves content outcomes and owns live admission. Immutable source identities, indexed
+     * interval coverage and the active pass are verified before one checkpoint CAS. Independent
+     * primary progress and later requests remain. A replay after advancement returns false; callers
+     * own readback/reselection after unknown replies. No global work is completed.
+     */
+    suspend fun complete(
+        access: CollaborationLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        attempted: CollaborationHistoryReferences,
+        resolved: List<CollaborationHistoryReference>,
+        limit: Int = 16,
+    ): AppResult<Boolean>
+
+    suspend fun complete(
+        access: CollaborationSpaceLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        attempted: CollaborationHistoryReferences,
+        resolved: List<CollaborationHistoryReference>,
+        limit: Int = 16,
+    ): AppResult<Boolean>
 }

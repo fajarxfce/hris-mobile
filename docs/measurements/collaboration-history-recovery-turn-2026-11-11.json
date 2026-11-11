@@ -7618,5 +7618,23 @@
       "logFetchExitCode": 1,
       "targetedRetryDispatched": false
     }
-  ]
+  ],
+  "hostedArtifactUploadFinalEvidence": {
+    "runId": 43087494327,
+    "jobId": 130755637532,
+    "recordedAt": "2026-11-11T21:43:26.075877+00:00",
+    "logBytes": 4926766,
+    "logSha256": "e6b898628585c3daf22129b561fadb8fb8119701040eb7aed8489cb9142815f9",
+    "errors": [
+      "2026-11-11T20:34:35.2275830Z ##[error]Failed to CreateArtifact: Failed to make request after 5 attempts: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    ]
+  },
+  "hostedFailedJobRetry": {
+    "requestedAt": "2026-11-11T21:44:01.997789+00:00",
+    "run": 43087494327,
+    "job": 130755637532,
+    "scope": "one failed job only",
+    "reason": "Artifact service returned HTML instead of JSON after five attempts; build/test steps passed; preserve missing artifact outcome.",
+    "exitCode": 0
+  }
 }

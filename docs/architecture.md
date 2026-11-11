@@ -1,5 +1,7 @@
 # Architecture
 
+[Atomic recovery completion](collaboration-history-recovery-completion.md) commits reference outcomes and finite recovery progress together while preserving primary work. Admitted content and whole-account completion remain separate.
+
 [Original recovery reference reading](collaboration-original-key-reference-read.md) admits one existing historical pass and reads a bounded local page, independently of primary queue and content/global completion.
 
 [Original historical content](collaboration-original-key-content.md) uses the existing bounded Company content pipeline with current native admission and preserved historical device coordinates. Reference/global completion remains separate.
