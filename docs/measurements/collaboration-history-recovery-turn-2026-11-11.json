@@ -7604,5 +7604,19 @@
         "conclusion": "success"
       }
     ]
-  }
+  },
+  "hostedArtifactUploadFailures": [
+    {
+      "recordedAt": "2026-11-11T20:45:44.490392+00:00",
+      "runId": 43087494327,
+      "jobId": 130755637532,
+      "reportedJobStatus": "in_progress",
+      "reportedConclusion": null,
+      "failedStep": "Run actions/upload-artifact@v4",
+      "iosBuildStep": "success",
+      "appleArtifactPresent": false,
+      "logFetchExitCode": 1,
+      "targetedRetryDispatched": false
+    }
+  ]
 }

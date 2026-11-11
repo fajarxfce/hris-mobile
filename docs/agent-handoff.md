@@ -1,5 +1,68 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 20:51 UTC. This opening owns current work; earlier sections are historical.
+
+## Original historical content focused/browser accepted; full validation running
+
+Account recovery sourcea3bc8a649fd1e8e5970f25051717f4c30e1e74f9 and Group24a735f2 PUSHED.
+Hosted43096361337 dispatched ONCE20:29:29UTC on validation/account-history-recovery-20261111;
+91441 REAPED, expected15,617, not audited. Its dispatch and prior locator dispatch now recorded
+in public measurements. Prior Turn43087494327 has10,980 portable accepted, but Apple job130755637532
+FAILED artifact upload; no Apple artifact, stale API in_progress, log fetch404/58995 REAPED.
+Locator43092246512 portable job130772532026 also FAILED artifact upload without artifact;
+73048 REAPED. Public measurements preserve both failures. Do not mark them complete or redispatch
+whole workflows. Inspect finalized job status/reason before a targeted retry. Position43083225746
+FULL15,300 remains accepted; preserve all earlier provenance and historical incomplete43031231253.
+
+Current5 Kotlin files APPLIED, NOT FULLY ACCEPTED. Workspace original-key-content-2026-11-11;
+baselinea3bc8a64/13,148/5,039. Typed Original historical acquisition shares the existing Company
+content/edit pipeline, admits current native Company/device and keeps historical coordinates.
+No fake primary task or primary-demand read for historical content. Primary overload keeps its
+exact Pending/source/device guards. No reference/global acknowledgement or producer activation.
+26 new common domain cases and33 old primary acquisition controls. Source frozen5,042 inputs;
+manifest0168e12b76440ec2433511bd6b3602cc7b7c6ee7cae6cd9015698aff8d91e877.
+
+focused-3/61879 REAPED PASS390.264s/212; browser-1/68018 REAPED PASS142.418s/210.
+Exact422 accepted, prior identities/source/library verified. Full-1/5600 RUNNING, expected13,200;
+no full acceptance yet. Keep source frozen. Failed focused1/79904 REAPED118.018s: new assertion
+used eventId instead of sourceEventId, no tests ran. Failed focused2/51177 REAPED118.206s:
+149 cases/one new fixture failure because a queue-removal helper had no initial queue. That case
+now explicitly starts with and asserts its primary queue before removing it during acquisition.
+Only the new test file changed; all149 case IDs must remain. Both candidate snapshots/reviews
+preserved. Formats47902/80781/23001 REAPED passed; final36.544s. No production fix to force green.
+
+Publisher, contract and accepted writer PREPARED NOT EXECUTED. After full pass, reap5600, run
+accept-full.py full-1, reap audit and record its session, then publish and write accepted handoff.
+Commit/push accepted work; dispatch ONCE validation/original-key-content-20261111, expected15,695
+=11,178 portable+4,517 Apple. NOT DISPATCHED. Attach actual run/source and hosted state before
+executing the next prepared apply/configuration scripts. These checks are not native SDK execution.
+
+Next6-file next-original-key-reference-read-draft STATICALLY REVIEWED but UNAPPLIED/UNTESTED;
+4 new+2 guarded existing. One admitted usecase starts/coalesces an existing Company recovery pass,
+confirms a changed section by exact local readback and reads at most16 local references. Absent
+history creates nothing. Active/requested identities, cursor, finite through and unresolved state
+are preserved; completed current generation stays idle. New primary appends cannot extend the
+captured boundary. One write maximum, no hidden retry,5s lifetime, no key/transport/provider calls.
+29 new common cases cover source/access/metadata/registration races, lost/lying writes, contention,
+regressions, bounds, replay/coalescing, cancellation after commit/reopen and old credentials.
+Existing feature DI and both graph checks gain the usecase. No worker/listener is attached.
+
+Read next-original-key-reference-read-review.md AND draft-notes.md. Generators EXECUTED and STALE:
+the29th old-credentials case was added, and the fake CAS now increments checkpoint revision like
+the raw store; the append race uses revision2. Do not rerun generators over corrections. Prepare/
+configure-next-original-key-reference-read.py PREPARED NOT EXECUTED. Next workspace expects5,046
+inputs/13,258 local,202 focused+200 browser,15,782 hosted=11,236 portable+4,546 Apple. Continue
+apply/format/freeze/tests/full/audit/publication/push immediately after current acceptance.
+
+No global consumer/key producer/listener enabled. Historical reference confirmation/advancement,
+Space/Original alias content routing, whole-account finite service, primary EOF demotion and
+request/wake, trigger-specific retry, full64-room blocked-queue liveness, loss-aware key callbacks,
+producer receipts and native listener drain remain. Read inherited receipt/ownership reviews.
+All54 PRD groups OPEN; no Starter/live change. Phone43486 REAPED timeout20:34:11UTC/20.003s, no
+install; next retry no earlier21:06UTC. Release89 SDK6 waits. Notify before explicit serial/install-
+only; never drive phone UI. One compiler OR emulator. Preserve original intents/Draft66, keys,
+stores, SDK assets, inspector gradlew.bat and live90163c3/schema116.4/Group OFF. Continue long run.
+
 Updated 11 November 2026, 20:24 UTC. This opening owns current work; earlier sections are historical.
 
 ## Constant account/root recovery state accepted; Original historical content next
