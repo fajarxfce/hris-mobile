@@ -50,3 +50,6 @@ Published consumers reject Original before I/O; the original consumer and raw co
 
 [Original metadata and Company history source storage](collaboration-space-original-room-metadata.md) are now locally validated.
 The original consumer and its current-source/content admission remain pending before raw activation.
+
+[Original local room resolution](collaboration-space-original-incoming-load.md) is validated against current source/registration
+and historical metadata. The original provider/content owner remains next; no raw activation yet.

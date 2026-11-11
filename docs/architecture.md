@@ -1,5 +1,9 @@
 # Architecture
 
+[Local original incoming resolution](collaboration-space-original-incoming-load.md) derives Company
+and physical device from current registered provenance and owned metadata. Local resolution creates
+no provider work or content grant; the original acquisition consumer remains separate.
+
 [Original incoming storage](collaboration-space-original-room-metadata.md) preserves Company-qualified
 metadata and exact history sources. Historical facts have no native-parent/credential lifetime and
 create no wake; original content admission and consumer activation remain separate.

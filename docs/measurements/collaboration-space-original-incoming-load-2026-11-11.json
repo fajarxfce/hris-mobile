@@ -1,0 +1,54 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "878d5120eaa7307cbf9615e38d62126be9ce74a4",
+  "sourceFiles": 4930,
+  "changedSourceFiles": 7,
+  "sourceManifestSha256": "d24153000fd4b7192b443a8c492b800c6989141b65bd9fd26dd89c19f4ea1154",
+  "focused": {
+    "tests": 214,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused1",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 11669,
+    "fresh": {
+      "tests": 9631,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 631.369,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151651986,
+    "sha256": "acbc9e75bce814aedb962556cb0f974db00984f10bd3404b6fe55d29b1a2e430"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "originalIncomingLocalLoaderAccepted": true,
+  "originalDeviceDerivedFromRegisteredLegacy": true,
+  "groupReceiptNotPhysicalDevice": true,
+  "exactCapturedTargetAndSourceChecked": true,
+  "immutableMetadataChecked": true,
+  "registrationReadBack": true,
+  "currentNativeAndSourceCheckedAroundLocalIo": true,
+  "localDeadlineMillis": 5000,
+  "historicalFactsIgnoreCredentialAge": true,
+  "createsNetworkRequest": false,
+  "createsWake": false,
+  "newDomainCases": 24,
+  "preservedFailedRuns": [],
+  "applicationBindingVerified": true,
+  "originalIncomingConsumerEnabled": false,
+  "rawCollectorEnabled": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true
+}

@@ -1,46 +1,65 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 08:41 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 09:02 UTC. This opening section owns current work; older checkpoints below are historical.
 
-## Active original incoming local resolution — focused validation
+## Original incoming local resolution accepted — continue provider acquisition
 
-Accepted original storage source878d5120eaa7307cbf9615e38d62126be9ce74a4 and Group docs8b82148c are PUSHED.
-Current .work/space-original-incoming-load-2026-11-11 owns SEVEN APPLIED but UNACCEPTED files. Both
-prepare-next-load.py and configure-next-load.py HAVE EXECUTED; do not apply them again. Baseline4,925
-inputs/11,621 cases and all verified XML archives were preserved before any source changes.
+The seven-file local loader increment is ACCEPTED. Full1/session39579 REAPED PASS631.369s; audit62783
+REAPED ACCEPTED11,669=9,631 fresh+2,038 exact accepted unchanged controls. Source/library fingerprints,
+all prior case IDs and unchanged dependency closures verified. No failures/errors/skips. Focused1/
+session98964 PASS299.840s/108; browser1/session49964 PASS180.790s/106; focused audit214. Format1/session82598
+PASS36.620s. All are REAPED. Format, architecture74/detekt, Android host/release compile/lint, browser/
+Wasm, iOS metadata and proof APK assembly/unit checks pass. No failed runs in this increment.
 
-Format1/session82598 REAPED PASS36.620s. Frozen4,930-input manifest
-d24153000fd4b7192b443a8c492b800c6989141b65bd9fd26dd89c19f4ea1154. Focused1/session98964 RUNNING,
-expected108; browser106/full11,669 NOT run yet. No source/library mutation until reaped. No failures
-known yet. The seven files are original incoming room entity, pure registered-source policy, local
-loader,24 common cases plus fixture, owning data DI and existing application binding assertion.
+Frozen4,930-input manifestd24153000fd4b7192b443a8c492b800c6989141b65bd9fd26dd89c19f4ea1154.
+Proof APK151,651,986 bytes/SHAacbc9e75bce814aedb962556cb0f974db00984f10bd3404b6fe55d29b1a2e430.
+The local loader checks full current task/source, registered LEGACY provenance, original Company and
+physical device, historical metadata, then registration readback. Current native/source/account/denial
+changes fence suspended reads; ordinary credential age/selected Company do not hide local facts.
+No API/provider/sync startup/queue write/wake or content permission is created. Original content
+consumer and raw collector remain OFF. Twenty-four new common cases and existing DI resolution pass.
 
-Local loader derives the original Company/device from exact registered LEGACY provenance and installed
-source, checks full captured target/current queue and immutable metadata, then rereads registration.
-It exposes no API/provider read, sync start, replacement SDK, queue write, wake or acknowledgement.
-Registration from another Company remains invalid even when independently well formed. Native/source/
-account/denial changes fence every suspended local read; cancellation and five-second timeout propagate.
-Metadata age and selected HR Company are independent. Current content authority still belongs to the
-actual provider consumer. Raw collector and Original producer/content consumer remain OFF.
+Private .work/space-original-incoming-load-2026-11-11 preserves baseline878d5120/11,621 cases and source
+snapshots/reports. publish.py HAS EXECUTED; do not overwrite or rerun publication. Shared measurement
+collaboration-space-original-incoming-load-2026-11-11.json and Mobile/Group contracts hold evidence.
+Next commit/push accepted source/docs, then prepared dispatch-hosted.py may dispatch ONCE on an
+immutable ref. It is NOT executed yet; expected13,466=9,647 portable+3,819 Apple,16 Swift,unsigned host.
+No new native SDK or Apple runtime execution is claimed by local validation.
 
-Next finish focus, inspect failures if any, then browser/full and the acceptance scripts. The new
-publish.py and contract.md are PREPARED, NOT executed. New hosted-plan/audit/dispatch are PREPARED,
-NOT dispatched, expected13,466=9,647 portable+3,819 Apple; require local acceptance and clean pushed
-source. Do not treat expected counts as results. Then continue original provider/content/pending/
-completion, bounded native inventory, keys-only recovery and actual native proof before activation.
-Gateway source review in next-original-consumer-review.md explains existing original-room content
-admission and why no per-page direct-transport request/new client is needed. No generic Starter delta.
-All54 PRD groups remain OPEN. Do not stop here; push every commit.
+Then execute prepare-next-provider.py/configure-next-provider.py, both PREPARED NOT executed. They
+require this exact accepted source and clean pushed HEAD, preserve11,669 cases, and apply11 UNVALIDATED
+proposals to .work/space-original-provider-history-2026-11-11. next-original-provider-draft now contains
+five new production types/policies/usecase, one existing Published policy delegation,27 acquisition
+and14 policy cases with fixture, owning DI and existing app binding assertion. Eight new inputs should
+total4,938; expected focus164/browser162/full11,751 are NOT results. Format/review/freeze/validate first.
 
-Original storage hosted42988568153 is RUNNING on immutable878d5120/refvalidation/original-incoming-storage-20261111.
-Its dispatch30429 was REAPED successful and private hosted-42988568153/state.json records the run.
-Expected13,394=9,599 portable+3,795 Apple,16 Swift,unsigned host. Do NOT redispatch. Old target control
-42983683780 has portable9,535 accepted; Apple still running, expected3,741. Metadata control42978769594
-is fully accepted13,189. No Apple native SDK8 execution claim; no live or SDK publication changes.
+Provider draft owns one original Company page through the existing Group client/gateway. Exact current
+native deadlines, source/registration, full demand, metadata, registry and unchanged physical page are
+checked around I/O. No per-page direct-transport request or new SDK. Shared domain cursor policy keeps
+Published Group-device/provider checks while Original uses Company provider=null. Phase derives origin;
+unfinished/finished wave bounds and pending seek remain. Unknown Storage replies may be confirmed by
+exact retained progress plus at most20 indexed sources; false CAS is not acknowledged. No provider replay,
+queue transition or content acknowledgement. Draft tests cover concurrency, native late cancellation,
+source/parent/registration changes, deadlines, foreign identity, mutable event lists and lost/empty replies.
+These41 cases HAVE NOT RUN. Do not activate this scope from the private draft.
 
-Phone26332 REAPED timeout124 at08:40:12 UTC, private phone-connect-0840.json. No release89 install-result
-and no install attempt. Next bounded retry no earlier09:11 UTC. No emulator. Protected native stores,
-eight original send intents, Draft66, SDK6/7/8 assets and live Group-OFF state are unchanged.
+Native-family review is explicit: RuntimeAdoptionPolicy, AdoptCollaborationSpaceRuntime (~130) and
+AdvanceCollaborationSpaceRuntimeTransfer (~83) require current original native family before installation.
+Raw historical registration validity alone is not installation authority. The new loader agrees with
+those admitted owners; Group receipt and original DEVICE remain distinct. No policy relaxation needed.
+See next-original-owner-contract.md and next-original-consumer-review.md for gateway/source findings.
+
+Continue original advance/recover/content/pending/completion, canonical published LEGACY alias routing,
+bounded native inventory, keys-only recovery and actual native proof before raw activation. All54 PRD
+groups remain OPEN; no generic Starter delta. Do not stop at this checkpoint. Push every commit.
+
+Storage hosted42988568153 RUNNING on immutable878d5120/refvalidation/original-incoming-storage-20261111,
+expected13,394. Target42983683780 portable9,535 accepted; Apple is building the iOS host after its tests,
+expected3,741 plus16 Swift/host. Audit only after completed success. Metadata42978769594 fully accepted
+13,189. Do not redispatch existing runs; no SDK8 Apple native execution claim. Live Group remains OFF.
+
+Phone26332 REAPED timeout124 at08:40:12 UTC. No release89 install-result/no installation attempt; next
+bounded retry no earlier09:11 UTC. No emulator. Protected stores/eight originals/Draft66/SDK6/7/8 unchanged.
 
 ## Original incoming storage accepted — continue local resolution and consumers
 
