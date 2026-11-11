@@ -1,0 +1,60 @@
+{
+  "failure": {
+    "recordedAt": "2026-11-11T23:22:15.872260+00:00",
+    "run": "full-2",
+    "session": 77316,
+    "reaped": true,
+    "exitCode": 1,
+    "elapsedSeconds": 713.378,
+    "freshCounts": {
+      "tests": 13237,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    },
+    "manifestSha256": "74adf28ea2fb3846848d84d383c0696d296ce466b0265200466b57ed7d61ea6d",
+    "cause": "The new root useConfigDirectory replaced KotlinKarma\u2019s default per-project config directory. Existing tracked data/karma.config.d/fixture-timeout.js (10000ms) was omitted; both 603-record storage cases hit Mocha default 2000ms. This regression was introduced by this reporter integration, not by storage changes.",
+    "existingModuleConfig": "features/collaboration/data/karma.config.d/fixture-timeout.js",
+    "existingModuleConfigSha256": "495ec71dff8d16e3c3e687bddeef74557b1d36f4f44a0021695fe304bd5a3839",
+    "existingTimeoutMillis": 10000,
+    "failureDetails": [
+      {
+        "file": "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationHistoryStorageTest.xml",
+        "case": "overlappingWindowsTraverseBeyondFiveHundredInBothDirectionsAcrossRestart[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "time": "0.008",
+        "type": "Error",
+        "message": "Error: Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves.",
+        "text": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves.\n\n"
+      },
+      {
+        "file": "features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTes-EGHL8H0CPEP8C.dev.fajar.starter.collaboration.data.BrowserCollaborationSpaceHistoryStorageTest.xml",
+        "case": "overlappingWindowsTraverseBeyondFiveHundredInBothDirectionsAcrossRestart[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "time": "0.0",
+        "type": "Error",
+        "message": "Error: Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves.",
+        "text": "Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves.\n\n"
+      }
+    ],
+    "fix": "Merge original module fragments and shared reporter into a generated directory through a Gradle Sync task; module fragments first, shared reporter last. Track task outputs as browser-test inputs. Preserve the existing module timeout and all test bodies."
+  },
+  "correctedWiring": {
+    "sourceManifestSha256": "690773f7f9678db804834d3eca55939d05cf61e7ffc7d918fa71dbfd9fc11b4b",
+    "run": "wiring-1",
+    "session": 46792,
+    "reaped": true,
+    "elapsedSeconds": 55.866,
+    "generatedFiles": {
+      "domain": {
+        "10-shared-kotlin-line-reporter.js": "0837b085e970d0b5cfb9a7255a0cbb4ca5a90d98d096f51eb89ae8375cda35b0"
+      },
+      "data": {
+        "00-module-fixture-timeout.js": "495ec71dff8d16e3c3e687bddeef74557b1d36f4f44a0021695fe304bd5a3839",
+        "10-shared-kotlin-line-reporter.js": "0837b085e970d0b5cfb9a7255a0cbb4ca5a90d98d096f51eb89ae8375cda35b0"
+      }
+    },
+    "existingModuleTimeoutPreservedMillis": 10000,
+    "sharedReporterFollowsModuleFragments": true,
+    "rootPythonAndNodeRegressionPassed": true
+  },
+  "scope": "Generated configuration and tool checks only; complete validation belongs to the local-key-page-content acceptance record."
+}

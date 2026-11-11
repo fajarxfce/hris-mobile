@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 11 November 2026, 23:16 UTC. The user authorized implementation through the full PRD, pushes after every commit
+Updated 11 November 2026, 23:32 UTC. The user authorized implementation through the full PRD, pushes after every commit
 and phone updates. **All54 acceptance groups remain OPEN.** Do not stop after one gate. No subagents.
 Read AGENTS.md and architecture. Datasource raw I/O; repositories map their own datasource results;
 usecases coordinate repositories/policies, never other usecases; ViewModels own screen state.
@@ -9,17 +9,30 @@ usecases coordinate repositories/policies, never other usecases; ViewModels own 
 
 Workspace `.work/original-local-key-page-content-2026-11-11`, baselineadf06b0e/13,300 cases.
 Eight uncommitted source files frozen:4 Kotlin historical-page acquisition/policy/test files and
-4 generic Karma build/reporting files.5,050 inputs, SHA74adf28ea2fb3846848d84d383c0696d296ce466b0265200466b57ed7d61ea6d.
+4 generic Karma build/reporting files.5,050 inputs, SHA690773f7f9678db804834d3eca55939d05cf61e7ffc7d918fa71dbfd9fc11b4b.
 format3/41168 REAPED PASS69.422s. focused3 PASS128 with5,050 unchanged inputs; original session67474
 was disconnected by the server restart. Its Python runner exited while Gradle/Xvfb survived.
 Observer3250 REAPED captured actual wrapper exit0 at23:03:20UTC; reconstruction58998 REAPED retained
 all original reports/hashes. Elapsed1182.802s is reconstructed from source-manifest time, not the lost
 runner timestamp. recover-focused-result.py HAS EXECUTED; do not repeat that test run.
-browser2/99609 REAPED PASS153.261s/126; accept-focused accepted exact254. full2/77316 is RUNNING
-(started23:08UTC), expected13,358. Its detached Python runner survives monitoring restarts. Read
-result.json before repeating anything. Reap, run accept-full, then publish/commit/push/dispatch.
-Because the shared build convention changed, full2 forces all JVM tests and the3 affected browser
-modules to run; unchanged-report acceptance is not weakened. No second compiler or emulator.
+browser2/99609 REAPED PASS153.261s/126; exact254 accepted for the first reporter candidate74adf28e.
+full2/77316 FAILED713.378s after13,237 cases:2 unchanged603-record browser fixtures hit2000ms.
+Root cause: useConfigDirectory(root) replaced the existing per-module10,000ms timeout fragment.
+This was an introduced integration regression. All failed reports and failed-full-candidate-2 remain.
+
+Corrected convention Sync-merges module fragments first and shared reporter last, preserving settings.
+format4/26815 REAPED PASS89.16s; wiring1/46792 REAPED PASS55.866s including root Python/Node checks.
+Generated data/domain config files exactly match module/shared source bytes. No test body or timeout
+value changed. Corrected manifest690773f7 has the same5,050 inputs/8 changed files. full3/87890 now
+RUNNING(started23:28UTC), expected13,358. Detached runner survives monitoring restarts. Read its
+result.json before repeating work. It forces all JVM tests and3 browsers because build logic changed.
+
+After success: run accept-focused-from-full.py full-3 (exact254 selected-class evidence from this
+same unfiltered run, not another claimed execution), then accept-full.py full-3. The latter also
+checks prepareKarmaConfig appears before each browser task and generated fragments match sources.
+Publish.py/write-accepted-handoff.py are updated for both failed runs, final derived evidence and
+old restarted execution. Do not run another focused cycle just to duplicate the full evidence.
+Then commit/push/dispatch ONCE. No second compiler or emulator.
 
 Historical-page acquisition first reuses exact scoped local original/edit facts; unknown sources
 use the existing bounded SDK/content path. Exact reference sender/timestamp and captured ordering
@@ -80,7 +93,7 @@ No native MatrixSDK8 Apple claim from shared Apple tests; physical iPhone testin
 
 ## Device and protected state
 
-Phone10.77.77.3:5555 timeout20617REAPED22:48:53UTC/20.003s; no install. Retry no earlier23:21UTC.
+Phone10.77.77.3:5555 timeout20959REAPED23:24:30UTC/20.005s; no install. Retry no earlier23:57UTC.
 Release89 SDK6 ready: `.work/release-phone-2026-11-10-build89/install.py --install-only`. Announce
 before installing. Explicit serial/signature/hash guards; **never launch, drive, reset or uninstall
 on the employee's phone**. APK123809167B/4c790d2314f53c37bfdc3108ac4b801ab33aa9fc177904001fd16793fd0ef52d.
