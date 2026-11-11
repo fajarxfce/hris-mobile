@@ -1,5 +1,8 @@
 # Architecture
 
+[Original application turns](collaboration-space-original-application-turn.md) run Company-backed incoming work inside the existing
+worker lifetime, reconciling retained facts before finite acquisition and independent completion.
+
 [Canonical Original physical resolution](collaboration-space-canonical-physical-binding.md) keeps registered Company/device provenance
 through immutable metadata confirmation and typed incoming queue conversion.
 

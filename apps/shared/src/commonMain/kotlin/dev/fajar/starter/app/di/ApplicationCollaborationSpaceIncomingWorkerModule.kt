@@ -3,6 +3,7 @@ package dev.fajar.starter.app.di
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationIncomingStartup
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.work.CollaborationSpaceIncomingWorker
+import dev.fajar.starter.app.work.CollaborationSpaceOriginalIncomingTurn
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.sync.domain.SyncTask
 import org.koin.dsl.bind
@@ -10,6 +11,7 @@ import org.koin.dsl.module
 
 /** Application task binding; feature policy and repository construction remain in data DI. */
 internal fun applicationCollaborationSpaceIncomingWorkerModule() = module {
+    includes(applicationCollaborationSpaceOriginalIncomingTurnModule())
     single {
         val parent = inject<ApplicationCollaborationLifetime>()
         val observe = inject<ObserveCollaborationSpaceIncomingStartup>()
@@ -35,6 +37,7 @@ internal fun applicationCollaborationSpaceIncomingWorkerModule() = module {
         val device = inject<LoadCollaborationSpaceRecoveryDevice>()
         val adopt = inject<AdoptCollaborationSpaceRuntime>()
         val room = inject<LoadCollaborationSpaceIncomingRoom>()
+        val originalRoom = inject<CollaborationSpaceOriginalIncomingTurn>()
         val acquirePage = inject<AcquireCollaborationSpaceProviderHistory>()
         val advance = inject<AdvanceCollaborationSpaceIncomingProvider>()
         val readReferences = inject<ReadCollaborationSpaceIncomingReferences>()
@@ -58,6 +61,7 @@ internal fun applicationCollaborationSpaceIncomingWorkerModule() = module {
             device = { a -> device.value(a) },
             adopt = { a -> adopt.value(a.owner, a.registrationId, a.operationId) },
             room = { a, b -> room.value(a, b) },
+            originalRoom = { a, b -> originalRoom.value(a, b) },
             acquirePage = { a, b, c -> acquirePage.value(a, b, c) },
             advance = { a, b, c -> advance.value(a, b, c) },
             readReferences = { a, b -> readReferences.value(a, b) },

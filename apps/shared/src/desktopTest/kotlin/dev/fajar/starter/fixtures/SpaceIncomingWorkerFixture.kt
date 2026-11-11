@@ -39,6 +39,7 @@ internal class SpaceIncomingWorkerFixture(
     val calls = mutableListOf<String>()
     val attempted = mutableListOf<String>()
     val deferred = mutableListOf<Pair<String, Failure?>>()
+    val deferredCaptures = mutableListOf<CollaborationSpaceIncomingRoomDemand>()
     val source = CollaborationSpaceIncomingSource("1".repeat(64), "@fixture:example.test", "DEVICE")
     var installed: CollaborationSpaceIncomingSource? = source
     val sources = mutableListOf(CollaborationSpaceIncomingSourceProgress(source, "position"))
@@ -47,6 +48,13 @@ internal class SpaceIncomingWorkerFixture(
     val physicalAttempts = mutableListOf<String>()
     val deferredPhysical = mutableListOf<CollaborationSpaceIncomingPhysicalRoomDemand>()
     var bindingFailure: Failure? = null
+    var originalTurn:
+        suspend (CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingRoomDemand) -> AppResult<
+                Boolean
+            > =
+        { _, _ ->
+            error("No Original turn configured")
+        }
     var missingBindingOutcome = CollaborationSpaceIncomingBindingResolution.BindingMissing
     var nextPosition = count.toLong()
     val rooms =
@@ -244,6 +252,11 @@ internal class SpaceIncomingWorkerFixture(
                     }
                 )
             },
+            originalRoom = { actual, captured ->
+                check(actual == runtime)
+                step("original-room")
+                originalTurn(actual, captured)
+            },
             acquirePage = { actual, conversation, origin ->
                 check(actual == runtime)
                 step("provider")
@@ -371,9 +384,14 @@ internal class SpaceIncomingWorkerFixture(
                     step("defer")
                     if (failure != null && isCollaborationSpaceIncomingQueueContention(failure))
                         return@defer AppResult.Failed(failure)
-                    deferred +=
-                        assertIs<CollaborationSpaceIncomingTarget.Published>(captured.target)
-                            .conversationId to failure
+                    deferredCaptures += captured
+                    val conversationId =
+                        when (val target = captured.target) {
+                            is CollaborationSpaceIncomingTarget.Published -> target.conversationId
+                            is CollaborationSpaceIncomingTarget.Original ->
+                                target.position.conversationId
+                        }
+                    deferred += conversationId to failure
                     val next =
                         nextCollaborationSpaceIncomingDemand(
                             work().snapshot!!.demand,

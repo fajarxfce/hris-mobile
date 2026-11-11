@@ -1,46 +1,61 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 13:27 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 13:39 UTC. This opening owns current work; older sections are historical.
 
-## Original application turn is applied; focused validation is running
+## Original application turn accepted — continue logical alias routing
 
-Canonical resolver source a027027ad9c62d522ea4c6dee928a652d8fa4d9d and Group docs aac99ff3
-are PUSHED. Its local acceptance is12,192 cases/4,969 inputs. Hosted43028172483 was dispatched
-ONCE at13:20:02UTC on validation/canonical-physical-binding-20261111; both jobs running at13:25.
-Expected14,258=10,170 portable+4,088 Apple. Inspect/audit existing run; DO NOT redispatch.
+Nine-file application integration ACCEPTED. full1/24092 REAPED PASS394.950s; audit86223
+REAPED accepted12,222=9,866 fresh+2,356 exact unchanged controls. Prior case IDs, unchanged dependency
+closures and source/library hashes verified. format1/64235 PASS36.743s; focused1/90607 PASS152.947s/
+219; browser1/46205 PASS37.972s/153. All sessions reaped. Focused372 accepted. Required formatting,
+architecture, detekt, Android host/release compilation/lint, Wasm/browser, iOS metadata and proof
+APK/unit checks pass. No failed runs in this increment.
+Frozen4,974-input manifest941e5e4bf69447465436455f8e881ec4a6ecb3419b8633e8268f39df5a3c7abe.
+Proof APK151,731,957 bytes/SHA58894b7734812309e8a9e7fb151b71bcc910d69a0bd8d509fb1d6d78bbd6a4c2.
 
-Next nine-file Original application turn is APPLIED, UNACCEPTED. Prepare/configure scripts executed.
-Private .work/space-original-application-turn-2026-11-11 owns exact baseline, source copies, runners
-and review notes. format1/64235 REAPED PASS36.743s. focused1/90607 RUNNING; expected219 focused,
-153 browser and12,222 full. Frozen4,974-input manifest
-941e5e4bf69447465436455f8e881ec4a6ecb3419b8633e8268f39df5a3c7abe.
-Do not edit the candidate while validation runs. No current browser/full acceptance yet.
+CollaborationSpaceOriginalIncomingTurn runs typed Original tasks in the EXISTING worker's mutex,
+combined FIFO, parent lifetime and40s room deadline. It reloads actual persisted phase after a
+provider transition, reconciles local content then rereads remaining finite refs before acquisition.
+One provider page/content page per turn. Reference completion and queue retirement remain separate.
+Proven provider/finite-seek continuation permits another turn; missing keys keep Pending phase and
+existing bounded deferral. Lost replies defer actual current task/phase. No new client/task/collector.
+Thirty new application cases:22 direct turns+8 worker cases. Existing21 Published/13 physical worker,
+18 Original metadata/37 queue/18 Company incoming/12 wave storage controls covered. App fixtures do
+not prove combined native/storage execution. Raw collector and Original producer remain OFF.
 
-The application adapter uses the existing incoming worker mutex, FIFO, parent lifetime and40s room
-deadline. It reloads persisted phase after provider advancement, reconciles local content before
-finite acquisition and completes references before queue retirement. One provider/content page per
-turn; missing keys retain pending phase. Thirty new app cases cover22 direct turns+8 worker cases.
-No independent client/task/collector. Current producer and raw collector remain OFF.
+Private .work/space-original-application-turn-2026-11-11 holds exact sources/reports/scripts.
+publish.py and this accepted-handoff writer HAVE EXECUTED. Commit/push accepted source/docs, then
+dispatch-hosted.py ONCE on validation/original-application-turn-20261111. Expected14,288=10,200
+portable+4,088 Apple;16 Swift/unsigned host. No application-turn hosted dispatch yet.
+Canonical43028172483 already dispatched on a027027a; DO NOT redispatch. Queue43022213294 portable
+10,105 accepted; Apple4,056 pending at13:38. Canonical jobs pending at13:38.
 
-Logical LEGACY aliases still need explicit new-generation scheduling handoff. Original source progress
-requires a real sync position; a registered source alone cannot fabricate it. Missing current source
-progress must remain bounded waiting work until a genuine batch is captured. Preserve source inventory
-loss/rescan, old facts, newer producer generations and independent wake. Read
-next-logical-alias-routing-review.md before implementing; no alias routing change is applied yet.
-Keys-only recovery, bounded Client.rooms inventory and combined old-Company storage/new-Group native
-proof also remain. Existing registry already drains old borrowers. All54 PRD groups OPEN.
+Next logical alias draft has11 PRIVATE UNAPPLIED/UNTESTED files,4 new inputs,7 guarded existing files.
+Read next-logical-alias-routing-review.md. Extend the existing binding resolver with a logical overload
+before Published acquisition; reuse registration and dual Original metadata-index confirmation.
+Create a NEW UUID Original Latest task at the old FIFO position with the actual source and unchanged
+head. Never relabel Space progress. Clear old retry for this new operation after old eligibility.
+Missing genuine source progress waits; never invent a sync position. Existing Original work preserves
+both requirements. Exact CAS/readback confirms new task and removal of the old alias generation,
+while preserving newer producer work, source positions/loss, rescan and independent wake.
 
-Reference43018627791 FULL14,089 accepted: portable10,057 + Apple4,032; Apple audit1736 REAPED,
-16 Swift push cases/unsigned host build. Content43011629455 FULL13,912 and reconciliation43015359541
-FULL14,002 accepted. Queue43022213294 portable10,105 accepted; Apple4,056 still pending at13:25.
-Preserve historical cancelled content attempt1 and targeted successful attempt2. No new SDK8 native
-Apple execution, phone or live-deployment claim from hosted control checks.
+Draft tests18 policy+25 owner+8 worker+3 real storage cases; queue storage37->40. Expected4,978 inputs,
+423 focused/349 browser/12,322 full;14,434 hosted=10,300 portable+4,134 Apple. Preserve existing
+canonical physical/metadata/binding controls. Draft not formatted/compiled/accepted. Preparation/apply
+scripts must require accepted source commit/push before replacing seven guarded files.
 
-Phone10187 REAPED timeout124, start13:20:31UTC/20.020s; phone-connect-1320.json.
-Next connection retry no earlier13:51UTC. Validated release89 SDK6 awaits install, no installation
-attempt/result. Notify first, explicit serial/install-only; never launch or drive phone UI.
-No emulator. Preserve eight original intents, Draft66, keys/stores, SDK assets, protected inspector
-gradlew.bat and live90163c3/schema116.4 Group OFF. No generic Starter delta. Continue and push every commit.
+Reference43018627791 FULL14,089 accepted (Apple audit1736 REAPED4,032); content43011629455
+FULL13,912 and reconciliation43015359541 FULL14,002 accepted. All include16 Swift/unsigned host.
+Preserve historical content cancelled attempt1 and targeted successful attempt2. Hosted control
+checks do not prove native SDK8 Apple execution. All54 communications PRD groups remain OPEN.
+Logical aliases, keys-only wake, bounded Client.rooms inventory and combined old-Company storage/
+new-Group worker native proof still precede activation. Existing registry already drains borrowers.
+
+Phone10187 REAPED timeout124, start13:20:31UTC/20.020s; phone-connect-1320.json. Next retry no earlier
+13:51UTC. Validated release89 SDK6 awaits install, no attempt/result. Notify first; explicit serial,
+install-only, never launch/drive phone UI. No emulator. Preserve eight original intents, Draft66,
+keys/stores/SDK assets, protected inspector gradlew.bat and live90163c3/schema116.4 Group OFF.
+No generic Starter delta. Continue long run and push every commit.
 
 ## Canonical Original physical routing accepted — continue application integration
 

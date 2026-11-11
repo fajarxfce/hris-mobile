@@ -44,6 +44,10 @@ class CollaborationSpaceIncomingWorker(
         suspend (CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingRoomDemand) -> AppResult<
                 CollaborationSpaceIncomingRoom?
             >,
+    private val originalRoom:
+        suspend (CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingRoomDemand) -> AppResult<
+                Boolean
+            >,
     private val acquirePage:
         suspend (
             CollaborationSpaceRuntimeReady,
@@ -216,6 +220,8 @@ class CollaborationSpaceIncomingWorker(
         runtime: CollaborationSpaceRuntimeReady,
         captured: CollaborationSpaceIncomingRoomDemand,
     ): AppResult<Boolean> {
+        if (captured.target is CollaborationSpaceIncomingTarget.Original)
+            return originalRoom(runtime, captured)
         val loaded = room(runtime, captured)
         if (loaded is AppResult.Failed) return loaded
         val local = (loaded as AppResult.Success).value ?: return AppResult.Success(true)
