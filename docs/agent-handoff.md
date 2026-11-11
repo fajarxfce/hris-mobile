@@ -1,6 +1,46 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 08:36 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 08:41 UTC. This opening section owns current work; older checkpoints below are historical.
+
+## Active original incoming local resolution — focused validation
+
+Accepted original storage source878d5120eaa7307cbf9615e38d62126be9ce74a4 and Group docs8b82148c are PUSHED.
+Current .work/space-original-incoming-load-2026-11-11 owns SEVEN APPLIED but UNACCEPTED files. Both
+prepare-next-load.py and configure-next-load.py HAVE EXECUTED; do not apply them again. Baseline4,925
+inputs/11,621 cases and all verified XML archives were preserved before any source changes.
+
+Format1/session82598 REAPED PASS36.620s. Frozen4,930-input manifest
+d24153000fd4b7192b443a8c492b800c6989141b65bd9fd26dd89c19f4ea1154. Focused1/session98964 RUNNING,
+expected108; browser106/full11,669 NOT run yet. No source/library mutation until reaped. No failures
+known yet. The seven files are original incoming room entity, pure registered-source policy, local
+loader,24 common cases plus fixture, owning data DI and existing application binding assertion.
+
+Local loader derives the original Company/device from exact registered LEGACY provenance and installed
+source, checks full captured target/current queue and immutable metadata, then rereads registration.
+It exposes no API/provider read, sync start, replacement SDK, queue write, wake or acknowledgement.
+Registration from another Company remains invalid even when independently well formed. Native/source/
+account/denial changes fence every suspended local read; cancellation and five-second timeout propagate.
+Metadata age and selected HR Company are independent. Current content authority still belongs to the
+actual provider consumer. Raw collector and Original producer/content consumer remain OFF.
+
+Next finish focus, inspect failures if any, then browser/full and the acceptance scripts. The new
+publish.py and contract.md are PREPARED, NOT executed. New hosted-plan/audit/dispatch are PREPARED,
+NOT dispatched, expected13,466=9,647 portable+3,819 Apple; require local acceptance and clean pushed
+source. Do not treat expected counts as results. Then continue original provider/content/pending/
+completion, bounded native inventory, keys-only recovery and actual native proof before activation.
+Gateway source review in next-original-consumer-review.md explains existing original-room content
+admission and why no per-page direct-transport request/new client is needed. No generic Starter delta.
+All54 PRD groups remain OPEN. Do not stop here; push every commit.
+
+Original storage hosted42988568153 is RUNNING on immutable878d5120/refvalidation/original-incoming-storage-20261111.
+Its dispatch30429 was REAPED successful and private hosted-42988568153/state.json records the run.
+Expected13,394=9,599 portable+3,795 Apple,16 Swift,unsigned host. Do NOT redispatch. Old target control
+42983683780 has portable9,535 accepted; Apple still running, expected3,741. Metadata control42978769594
+is fully accepted13,189. No Apple native SDK8 execution claim; no live or SDK publication changes.
+
+Phone26332 REAPED timeout124 at08:40:12 UTC, private phone-connect-0840.json. No release89 install-result
+and no install attempt. Next bounded retry no earlier09:11 UTC. No emulator. Protected native stores,
+eight original send intents, Draft66, SDK6/7/8 assets and live Group-OFF state are unchanged.
 
 ## Original incoming storage accepted — continue local resolution and consumers
 
