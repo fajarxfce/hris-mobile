@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 04:20 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 04:28 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Serial sync producer accepted — continue physical resolution
 
@@ -35,12 +35,27 @@ separate route. Preserve source positions/concurrent generations and independent
 Keep active inventory boundaries separate from newer loss. No producer/physical/inventory/key
 consumer is enabled. All54 PRD groups OPEN; continue after this increment.
 
-Hosted SOURCE-RETENTION control42951614097 on immutable5f678ed3feab2d24e3b97e5fc9b58159f15f785e
-has accepted9,039 portable cases (audit36473). Apple job130296974179 still building unsigned host;
-expected3,518 cases +16 Swift checks. Do not redispatch. Primary private source-retention directory
-owns hosted-audit.py and hosted-42951614097 state. Old raw run42943310515 fully accepted12,500.
-No Apple native SDK8 claim. Latest phone attempt34647 at04:01 REAPED timeout124; pending availability
-question unchanged, release89 validated/install-only. No local heavy process remains after full1.
+Hosted SOURCE-RETENTION control42951614097 is COMPLETE/ACCEPTED on immutable
+5f678ed3feab2d24e3b97e5fc9b58159f15f785e:12,557 cases =9,039 portable +3,518 Apple,
+16 Swift push checks and unsigned Apple host. Audit90489 REAPED PASS. Apple artifact13828242343,
+628,542bytes/SHA53747b808d7488558c6d74e3a7d83df59116a644de745d742102ad4aaec04474;
+report manifest768cd6f152bd3cdd990970a69a9738113207e6217ed3bde6f62b8cd882d30f96.
+All prior case IDs and remote SHA/ZIP CRC verified. Do not redispatch. Primary private retention
+work owns hosted-audit.py and hosted-42951614097 state. Old raw42943310515 fully accepted12,500.
+This remains storage control coverage, not Apple native SDK8 or current physical conversion.
+
+CURRENT PRIMARY WORK: .work/space-physical-resolution-2026-11-11, based on committed/pushed
+Mobile df16afbd93e266e0a0e7201dcd5a77750802f14e; Group evidence35063174 pushed.
+Seven source/test files add pure physical-to-logical transfer and ResolveCollaborationSpaceIncomingBinding.
+Usecase checks current source, owned registration/configured server and exact local binding; no
+provider/transport I/O or new wake. Existing logical work keeps its phase/source; physical work waits.
+Candidate is UNCOMMITTED/UNACCEPTED. Initial formatter89103 REAPED PASS36.244s; second formatter83956
+REAPED PASS35.044s. Focused1/session56976 is RUNNING; reap before another compiler/emulator.
+Frozen4,888-input candidate manifest:ed34a6bed6703d02fd4211caae0fe1c780b0fc4aae9e82bde4912a116d5a8add.
+Next: focused domain/browser validation, remote binding/physical worker
+selection/defer and inventory integration. No collector is enabled. Preserve all baseline11,196 cases.
+Latest phone attempt34647 at04:01 REAPED timeout124; availability question pending, release89
+validated/install-only. No phone install or live deployment change.
 
 ## Incoming source retention accepted — continue with the producer
 
