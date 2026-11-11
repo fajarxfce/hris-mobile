@@ -64,6 +64,20 @@ class CollaborationEventAvailabilityTest {
     }
 
     @Test
+    fun absentNativeBindingCannotClaimAnEmptyRoomInventory() = runTest {
+        val inventory: CollaborationSpaceRoomInventoryRepository = repository
+        val source = CollaborationSpaceIncomingSource("a".repeat(64), "@original:test", "ORIGINAL")
+        for (cursor in listOf(null, "!after:test")) {
+            assertEquals(
+                FailureKind.Unavailable,
+                assertIs<AppResult.Failed>(inventory.readInventory(runtime, source, cursor, 16))
+                    .failure
+                    .kind,
+            )
+        }
+    }
+
+    @Test
     fun unavailableOperationsPreserveCallerCancellation() = runTest {
         val operations: List<suspend () -> AppResult<*>> =
             listOf(
@@ -71,6 +85,18 @@ class CollaborationEventAvailabilityTest {
                 { repository.read(runtime, "!room:test", "\$event") },
                 { repository.findHead(runtime, "!room:test") },
                 { repository.readPage(runtime, "!room:test", null) },
+                {
+                    repository.readInventory(
+                        runtime,
+                        CollaborationSpaceIncomingSource(
+                            "a".repeat(64),
+                            "@original:test",
+                            "ORIGINAL",
+                        ),
+                        null,
+                        16,
+                    )
+                },
             )
         for (operation in operations) {
             val caller = launch {

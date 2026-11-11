@@ -47,6 +47,7 @@ class AndroidCollaborationRuntimeRepository(
     CollaborationSpaceRuntimeRepository,
     CollaborationSpaceMessageQueueRepository,
     CollaborationSpaceSyncRepository,
+    CollaborationSpaceRoomInventoryRepository,
     CollaborationSpacePusherRepository,
     CollaborationSpaceOriginalHistoryRepository,
     CollaborationEventRepository,
@@ -297,6 +298,29 @@ class AndroidCollaborationRuntimeRepository(
                 collaborationSdkAcquisitionFailure(result, handoverPending().failure)
             )
         }
+        return result
+    }
+
+    override suspend fun readInventory(
+        runtime: CollaborationSpaceRuntimeReady,
+        source: CollaborationSpaceIncomingSource,
+        afterRoomId: String?,
+        limit: Int,
+    ): AppResult<CollaborationSpaceRoomInventoryPage> {
+        currentCoroutineContext().ensureActive()
+        val lease =
+            registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
+                ?: return handoverPending()
+        if (lease.incomingSource != source) return handoverPending()
+        val result = lease.readInventory(runtime, afterRoomId, limit)
+        currentCoroutineContext().ensureActive()
+        lease.credentialFailures.value?.let {
+            return AppResult.Failed(collaborationSdkAcquisitionFailure(result, it))
+        }
+        if (registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId) !== lease)
+            return AppResult.Failed(
+                collaborationSdkAcquisitionFailure(result, handoverPending().failure)
+            )
         return result
     }
 

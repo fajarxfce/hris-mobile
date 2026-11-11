@@ -66,9 +66,18 @@ class CollaborationBindingsTest {
                     CollaborationLocalDeviceIdentityRepository,
                     CollaborationSpaceRuntimeRepository,
                     CollaborationSpaceSyncRepository,
+                    CollaborationSpaceRoomInventoryRepository,
                     CollaborationEventRepository,
                     CollaborationSpaceEventRepository,
                     CollaborationSpaceProviderHistoryRepository {
+                    override suspend fun readInventory(
+                        runtime: CollaborationSpaceRuntimeReady,
+                        source: CollaborationSpaceIncomingSource,
+                        afterRoomId: String?,
+                        limit: Int,
+                    ): AppResult<CollaborationSpaceRoomInventoryPage> =
+                        error("No implicit inventory read")
+
                     override fun incomingSource(
                         runtime: CollaborationSpaceRuntimeReady
                     ): CollaborationSpaceIncomingSource? = error("No implicit incoming source read")
@@ -328,6 +337,10 @@ class CollaborationBindingsTest {
                 assertSame(runtime, container.koin.get<CollaborationRuntimeRepository>())
                 assertSame(runtime, container.koin.get<CollaborationSpaceRuntimeRepository>())
                 assertSame<Any>(runtime, container.koin.get<CollaborationSpaceSyncRepository>())
+                assertSame<Any>(
+                    runtime,
+                    container.koin.get<CollaborationSpaceRoomInventoryRepository>(),
+                )
                 assertSame<Any>(runtime, container.koin.get<CollaborationEventRepository>())
                 assertSame<Any>(runtime, container.koin.get<CollaborationSpaceEventRepository>())
                 assertSame<Any>(

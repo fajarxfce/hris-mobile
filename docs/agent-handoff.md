@@ -1,6 +1,62 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 14:50 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 15:05 UTC. This opening owns current work; older sections are historical.
+
+## Owned room inventory accepted — continue durable source progress
+
+Fifteen-file owned runtime capability ACCEPTED. format1/20442 REAPED PASS36.073s;
+focused1/23123 REAPED PASS409.588s/97, browser1/28638 REAPED PASS88.773s/26. Combined123
+accepted. full1/4469 REAPED PASS603.782s; audit accepts12,402=10364
+fresh+2038 exact unchanged controls. Prior case IDs, dependency closures and
+source/library hashes verified. Required formatting/architecture/detekt, Android host/release compile/
+lint, shared Wasm/browser, iOS metadata and proof APK/unit targets pass. No failed runs.
+Frozen4,988-input manifest5755a8140758ebc442e6ea0e2ef44e43c5f1e06ec600be5ab5b847316f9fd9e4.
+Proof APK151742768 bytes/SHAd9920bfaaf1619c697857c1325f479c8f1015967ed521ec59da6a95b957eb470.
+
+The existing native parent/child owner runs finite raw inventory+mapping independently of its waiter.
+Timeout/cancellation retains ownership until I/O drains; actual registry/source fences reject foreign,
+unpublished or retired requests. All Room handles dispose before native/store release. SDK denials
+retain their classification. Data DI binds the capability; unsupported hosts return Unavailable,
+never an empty inventory. There is no new client, store, sync loop, transport request, independent
+worker or collector. Typed metadata grants no content access. Native/store fakes are not native SDK
+or SQLite proof. SDK8 still allocates all Room handles; finite output is not a native allocation bound.
+New13 common cases on desktop/Android/browser plus17 Android-only =56 local. Existing controls kept.
+
+Private .work/space-owned-room-inventory-2026-11-11 owns evidence/scripts. Publisher and this writer
+HAVE EXECUTED. Commit/push accepted source/docs, dispatch-hosted.py ONCE on
+validation/owned-room-inventory-20261111; expected14,527=10,380 portable+4,147 Apple. No owned hosted
+dispatch yet. Raw43040652714 on169f839d already dispatched; expected14,458. Alias43037578170
+portable10,300 accepted (audit83595 REAPED), including previously omitted30 Original cases and8 alias
+cases. Apple4,134 pending. Existing runs attached; never redispatch unchanged source unnecessarily.
+
+Next inventory-progress draft has6 Kotlin files:1 NEW domain test and5 guarded existing. UNAPPLIED/
+UNTESTED. Source progress adds optional cursor/retry tied to its inventory generation. Continuous
+batches keep them; new loss resets them. Codec uses explicit v5/schema5 typed parts for advanced
+state and retains v1/schema1..2,v3/schema3,v4/schema4 reads. Older markers reject advanced fields even
+with a matching authenticated old header. Source DTO/Base64 mapping has its own paired mapper role.
+Existing part/byte limits unchanged.12 domain tests plus7 actual database cases per desktop/browser;
+storage40->47, no old tests changed/removed. Expected12,440 local/4,989 inputs,104 focused/102 browser,
+14,584 hosted=10,418 portable+4,166 Apple. Preparation/configuration scripts prepared, NOT executed;
+require accepted clean pushed head, one owned hosted dispatch and five guarded hashes before apply.
+Read next-inventory-progress-review.md and next-inventory-continuity-review.md.
+
+Durable fields alone do not activate inventory. Actual page admission/atomic work retention,
+unknown-head coverage during concurrent sync, membership/authoritative absence, keys-only recovery
+and64-task backpressure remain required. Missing-key rooms must not starve new rooms, and pending
+refs must never be dropped to make a queue appear complete. Combined old-Company storage/new-Group
+native proof remains. Raw collector/Original producer OFF; all54 PRD groups OPEN. No Starter delta.
+
+Canonical43028172483 FULL14,258, queue43022213294 FULL14,161, reference43018627791 FULL14,089,
+content43011629455 FULL13,912, reconciliation43015359541 FULL14,002 accepted. Application43031231253
+Apple4,088 accepted (audit86395),16 Swift/unsigned host, but portable cancelled/incomplete10,170
+omitted30 required cases. Full acceptance stays FALSE, original expectations/history unchanged.
+Hosted checks do not prove native SDK8 Apple execution or native inventory capability on iPhone.
+
+Phone38857 REAPED timeout124 at14:53:14UTC/20.021s; phone-connect-1453.json. Next retry no earlier
+15:24UTC. Release89 SDK6 awaits install, no attempt/result. Notify first, explicit serial/install-only,
+never drive UI. No emulator/live deployment change. Preserve original intents, Draft66, keys/stores/
+SDK assets, inspector gradlew.bat and live90163c3/schema116.4 Group OFF. Continue and push every commit.
+
 
 ## Current: owned runtime inventory passes focused tests, browser validation running
 

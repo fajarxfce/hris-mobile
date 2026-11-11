@@ -14,6 +14,7 @@ class UnavailableCollaborationRuntimeRepository :
     CollaborationSpaceRuntimeRepository,
     CollaborationSpaceMessageQueueRepository,
     CollaborationSpaceSyncRepository,
+    CollaborationSpaceRoomInventoryRepository,
     CollaborationSpacePusherRepository,
     CollaborationSpaceOriginalHistoryRepository,
     CollaborationEventRepository,
@@ -73,6 +74,16 @@ class UnavailableCollaborationRuntimeRepository :
     }
 
     override suspend fun synchronize(runtime: CollaborationSpaceRuntimeReady): AppResult<Unit> {
+        currentCoroutineContext().ensureActive()
+        return unavailable()
+    }
+
+    override suspend fun readInventory(
+        runtime: CollaborationSpaceRuntimeReady,
+        source: CollaborationSpaceIncomingSource,
+        afterRoomId: String?,
+        limit: Int,
+    ): AppResult<CollaborationSpaceRoomInventoryPage> {
         currentCoroutineContext().ensureActive()
         return unavailable()
     }

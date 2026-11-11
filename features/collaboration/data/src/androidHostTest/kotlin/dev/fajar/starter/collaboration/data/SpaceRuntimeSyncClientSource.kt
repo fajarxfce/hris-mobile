@@ -14,6 +14,11 @@ internal class SpaceRuntimeSyncClientSource(
 ) : AndroidCollaborationClientSource by registrations {
     val entered = CompletableDeferred<Unit>()
     val responses = Channel<SyncResponseV2>(Channel.UNLIMITED)
+    var readRooms: () -> List<Room> = { error("No room inventory read expected") }
+    private val inventoryAttempts = AtomicInteger()
+    val inventoryRequests
+        get() = inventoryAttempts.get()
+
     private val attempts = AtomicInteger()
     private val releases = AtomicInteger()
     val requests
@@ -24,6 +29,11 @@ internal class SpaceRuntimeSyncClientSource(
 
     private val native =
         object : Client(NoHandle) {
+            override fun rooms(): List<Room> {
+                inventoryAttempts.incrementAndGet()
+                return readRooms()
+            }
+
             override fun userId() = identity.userId
 
             override fun deviceId() = identity.deviceId

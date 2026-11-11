@@ -484,6 +484,13 @@ class CollaborationDataModule {
         runtime as? CollaborationSpaceSyncRepository ?: UnavailableCollaborationRuntimeRepository()
 
     @Single
+    fun spaceRoomInventory(
+        runtime: CollaborationRuntimeRepository
+    ): CollaborationSpaceRoomInventoryRepository =
+        runtime as? CollaborationSpaceRoomInventoryRepository
+            ?: UnavailableCollaborationRuntimeRepository()
+
+    @Single
     fun spacePushers(runtime: CollaborationRuntimeRepository): CollaborationSpacePusherRepository =
         runtime as? CollaborationSpacePusherRepository
             ?: UnavailableCollaborationRuntimeRepository()

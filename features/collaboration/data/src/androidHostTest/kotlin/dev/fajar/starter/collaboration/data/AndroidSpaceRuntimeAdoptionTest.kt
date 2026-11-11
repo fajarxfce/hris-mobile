@@ -20,6 +20,185 @@ import org.junit.Test
 
 class AndroidSpaceRuntimeAdoptionTest {
     @Test
+    fun inventoryPagesUseTheInstalledOriginalClientWithoutStartingSync() = runBlocking {
+        lateinit var native: SpaceRuntimeSyncClientSource
+        val f =
+            SpaceAdoptionStorageFixture.create { identity ->
+                SpaceRuntimeSyncClientSource(identity).also { native = it }
+            }
+        val roomCloses = java.util.concurrent.atomic.AtomicInteger()
+        native.readRooms = {
+            listOf("!c:test", "!a:test", "!b:test").map { id ->
+                object :
+                    org.matrix.rustcomponents.sdk.Room(org.matrix.rustcomponents.sdk.NoHandle) {
+                    override fun id() = id
+
+                    override fun membership() = org.matrix.rustcomponents.sdk.Membership.JOINED
+
+                    override fun close() {
+                        roomCloses.incrementAndGet()
+                    }
+                }
+            }
+        }
+        try {
+            f.select()
+            val lease =
+                assertIs<AppResult.Success<CollaborationSpaceRuntimeLease>>(f.install()).value
+            val runtime =
+                CollaborationSpaceRuntimeReady(
+                    lease.owner,
+                    lease.deviceId,
+                    lease.installedOperationId,
+                )
+            assertEquals(AppResult.Success(Unit), lease.publish())
+            val source = requireNotNull(f.repo.incomingSource(runtime))
+            val first =
+                assertIs<AppResult.Success<CollaborationSpaceRoomInventoryPage>>(
+                        f.repo.readInventory(runtime, source, null, 2)
+                    )
+                    .value
+            val second =
+                assertIs<AppResult.Success<CollaborationSpaceRoomInventoryPage>>(
+                        f.repo.readInventory(runtime, source, first.nextAfterRoomId, 2)
+                    )
+                    .value
+            assertEquals(runtime, first.runtime)
+            assertEquals(source, first.source)
+            assertEquals(f.data.original.storeId, first.source.storeId)
+            assertEquals(f.data.original.matrixDeviceId, first.source.matrixDeviceId)
+            assertEquals(
+                listOf("!a:test", "!b:test", "!c:test"),
+                (first.rooms + second.rooms).map { it.roomId },
+            )
+            assertNull(second.nextAfterRoomId)
+            assertEquals(6, roomCloses.get())
+            assertEquals(2, native.inventoryRequests)
+            assertEquals(0, native.requests)
+            assertEquals(1, f.acquisitions)
+            assertEquals(0, native.closes)
+        } finally {
+            native.responses.close()
+            f.repo.closeSpace(f.owner)
+            f.close()
+        }
+        assertEquals(1, native.closes)
+    }
+
+    @Test
+    fun unpublishedForeignAndRetiredInventoryRequestsDoNotEnumerateRooms() = runBlocking {
+        lateinit var native: SpaceRuntimeSyncClientSource
+        val f =
+            SpaceAdoptionStorageFixture.create { identity ->
+                SpaceRuntimeSyncClientSource(identity).also { native = it }
+            }
+        native.readRooms = { error("A foreign inventory request cannot reach native IO") }
+        try {
+            f.select()
+            val lease =
+                assertIs<AppResult.Success<CollaborationSpaceRuntimeLease>>(f.install()).value
+            val runtime =
+                CollaborationSpaceRuntimeReady(
+                    lease.owner,
+                    lease.deviceId,
+                    lease.installedOperationId,
+                )
+            val source =
+                CollaborationSpaceIncomingSource(
+                    f.data.original.storeId,
+                    f.data.original.matrixUserId,
+                    f.data.original.matrixDeviceId,
+                )
+            assertIs<AppResult.Failed>(f.repo.readInventory(runtime, source, null, 16))
+            assertEquals(AppResult.Success(Unit), lease.publish())
+            for (foreign in
+                listOf(
+                    runtime.copy(deviceId = SETUP_JOB),
+                    runtime.copy(operationId = SETUP_DEVICE),
+                    runtime.copy(owner = runtime.owner.copy(spaceId = SETUP_JOB)),
+                )) assertIs<AppResult.Failed>(f.repo.readInventory(foreign, source, null, 16))
+            for (foreign in
+                listOf(
+                    source.copy(storeId = "b".repeat(64)),
+                    source.copy(matrixUserId = "@another:test"),
+                    source.copy(matrixDeviceId = "ANOTHER"),
+                )) assertIs<AppResult.Failed>(f.repo.readInventory(runtime, foreign, null, 16))
+            assertEquals(AppResult.Success(Unit), f.repo.closeSpace(f.owner))
+            assertIs<AppResult.Failed>(f.repo.readInventory(runtime, source, null, 16))
+            assertEquals(0, native.inventoryRequests)
+            assertEquals(0, native.requests)
+            assertEquals(1, f.acquisitions)
+        } finally {
+            native.responses.close()
+            f.repo.closeSpace(f.owner)
+            f.close()
+        }
+    }
+
+    @Test
+    fun retiringDuringInventoryKeepsTheNativeParentUntilEveryRoomIsDisposed() = runBlocking {
+        lateinit var native: SpaceRuntimeSyncClientSource
+        val f =
+            SpaceAdoptionStorageFixture.create { identity ->
+                SpaceRuntimeSyncClientSource(identity).also { native = it }
+            }
+        val entered = CompletableDeferred<Unit>()
+        val release = java.util.concurrent.CountDownLatch(1)
+        val roomCloses = java.util.concurrent.atomic.AtomicInteger()
+        native.readRooms = {
+            entered.complete(Unit)
+            check(release.await(10, java.util.concurrent.TimeUnit.SECONDS))
+            listOf("!a:test", "!b:test").map { id ->
+                object :
+                    org.matrix.rustcomponents.sdk.Room(org.matrix.rustcomponents.sdk.NoHandle) {
+                    override fun id() = id
+
+                    override fun membership() = org.matrix.rustcomponents.sdk.Membership.JOINED
+
+                    override fun close() {
+                        assertEquals(0, native.closes)
+                        assertTrue(f.leased)
+                        roomCloses.incrementAndGet()
+                    }
+                }
+            }
+        }
+        try {
+            f.select()
+            val lease =
+                assertIs<AppResult.Success<CollaborationSpaceRuntimeLease>>(f.install()).value
+            val runtime =
+                CollaborationSpaceRuntimeReady(
+                    lease.owner,
+                    lease.deviceId,
+                    lease.installedOperationId,
+                )
+            assertEquals(AppResult.Success(Unit), lease.publish())
+            val source = requireNotNull(f.repo.incomingSource(runtime))
+            val reading = async { f.repo.readInventory(runtime, source, null, 1) }
+            withTimeout(5_000) { entered.await() }
+            val closing = async(start = CoroutineStart.UNDISPATCHED) { f.repo.closeSpace(f.owner) }
+            assertFalse(closing.isCompleted)
+            assertEquals(0, native.closes)
+            assertEquals(0, f.directoryCloses)
+            assertTrue(f.leased)
+            release.countDown()
+            assertIs<AppResult.Failed>(withTimeout(5_000) { reading.await() })
+            assertEquals(AppResult.Success(Unit), withTimeout(5_000) { closing.await() })
+            assertEquals(2, roomCloses.get())
+            assertEquals(1, native.inventoryRequests)
+            assertEquals(1, native.closes)
+            assertFalse(f.leased)
+            assertEquals(0, native.requests)
+        } finally {
+            release.countDown()
+            native.responses.close()
+            f.repo.closeSpace(f.owner)
+            f.close()
+        }
+    }
+
+    @Test
     fun installedSpaceObservesItsOriginalSourceWithoutAnotherClientOrTransportRead() = runBlocking {
         lateinit var native: SpaceRuntimeSyncClientSource
         val f =

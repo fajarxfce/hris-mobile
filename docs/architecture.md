@@ -1,5 +1,8 @@
 # Architecture
 
+[Owned room inventory](collaboration-space-owned-room-inventory.md) runs finite metadata reads under the installed original
+client and its existing child lifetime. Durable inventory scheduling remains a separate owner.
+
 [Local SDK room enumeration](collaboration-space-raw-room-inventory.md) returns finite ordered metadata and disposes native room
 handles. Runtime binding and durable inventory coverage remain separate from this raw adapter.
 
