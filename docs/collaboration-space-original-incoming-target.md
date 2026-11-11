@@ -41,8 +41,9 @@ remain open; this is a completed prerequisite for the continuing incoming-sync w
 
 [Exact validation evidence](measurements/collaboration-space-original-incoming-target-2026-11-11.json).
 
-Portable hosted control [42983683780](https://github.com/fajarxfce/hris-mobile/actions/runs/42983683780)
-on immutable source854828ffb689dcbca3645a8b4de562b79a02c6ab is accepted: 9,535 cases, including all12
-physical-worker cases. Artifact digest, ZIP CRC, prior identities and selected original cases are
-verified. Apple is still running, expected3,741 plus16 Swift checks and unsigned host. Complete hosted
-acceptance remains pending; no SDK8 Apple native execution is claimed.
+Hosted control [42983683780](https://github.com/fajarxfce/hris-mobile/actions/runs/42983683780)
+on immutable854828ffb689dcbca3645a8b4de562b79a02c6ab is fully accepted: 13,276 cases comprise9,535
+portable and3,741 Apple. Sixteen Swift push checks and the unsigned iOS application host also pass.
+Artifact digests/ZIP CRC, every prior case identity, original target cases and all12 physical-worker
+cases are verified. This is Apple storage/domain/application validation, not SDK8 Apple native
+transport execution, phone installation or live activation.

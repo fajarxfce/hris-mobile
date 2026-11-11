@@ -53,5 +53,32 @@
   "newAppleExecutionAccepted": false,
   "phoneInstalled": false,
   "liveDeploymentChanged": false,
-  "all54PrdGroupsRemainOpen": true
+  "all54PrdGroupsRemainOpen": true,
+  "hostedControl": {
+    "sourceCommit": "878d5120eaa7307cbf9615e38d62126be9ce74a4",
+    "runId": 42988568153,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42988568153",
+    "portable": {
+      "sourceCommit": "878d5120eaa7307cbf9615e38d62126be9ce74a4",
+      "runId": 42988568153,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42988568153",
+      "jobId": 130415548351,
+      "artifactId": 13840999971,
+      "bytes": 3728464,
+      "sha256": "98938674bfd5136d02cf674a600fe877d9fba85ed910b0716666dca1f5eb937d",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreserved": true,
+      "counts": {
+        "desktopTest": 4540,
+        "testAndroidHostTest": 769,
+        "wasmJsBrowserTest": 4290
+      },
+      "reportManifestSha256": "53362ce44a8a585484c522442f2b02d848f8d76f104d3f486f90e99f32ba6323",
+      "jobLogSha256": "3126ebe7b578561161c978a48b05af13174e4b01af0a68b77c207ca6c0331d61"
+    },
+    "applePending": true,
+    "completeAcceptance": false,
+    "expectedAppleCases": 3795,
+    "nativeSdk8AppleExecutionAccepted": false
+  }
 }

@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 09:14 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 09:17 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Active original provider acquisition — focused revalidation
 
@@ -36,11 +36,13 @@ LEGACY alias routing, bounded native inventory, keys-only recovery and actual na
 activation. All54 PRD groups remain OPEN. No generic Starter delta. Do not stop here; push every commit.
 
 Loader hosted42991947262 RUNNING on immutablee29a9af6/refvalidation/original-incoming-load-20261111;
-dispatch32816 REAPED successful, private hosted-42991947262/state.json retained. Expected13,466.
-Storage hosted42988568153 RUNNING on immutable878d5120, expected13,394. Target42983683780 portable9,535
-accepted; Apple is building the iOS host after its tests, expected3,741 plus16 Swift/host. Audit only
-completed successful jobs. Metadata42978769594 fully accepted13,189. Do NOT redispatch existing runs.
-No SDK8 Apple native execution or live deployment claim. All previously published SDK assets unchanged.
+expected13,466. Storage42988568153 now has portable audit35562 REAPED ACCEPTED9,599 on immutable878d5120;
+artifact13840999971/SHA98938674bfd5136d02cf674a600fe877d9fba85ed910b0716666dca1f5eb937d. Apple is pending,
+expected3,795. Target42983683780 is now FULLY ACCEPTED13,276=9,535 portable+3,741 Apple,16 Swift and
+unsigned host. Apple audit83789 REAPED; artifact13842348243/SHAe5973fb41f5d0d4a8ead25b85a13caa9088cfa99bbc9d9c82350be48643c6fd5.
+Exact head/artifact/prior case identities verified. Metadata42978769594 fully accepted13,189. Do NOT
+redispatch existing runs. No SDK8 Apple native execution, phone installation or live activation claim.
+All previously published SDK assets unchanged.
 
 Phone83150 REAPED timeout124 at09:11:43 UTC (phone-connect-0911.json); no release89 install-result or
 installation attempt. Next bounded retry no earlier09:42 UTC. No emulator. Eight original intents,

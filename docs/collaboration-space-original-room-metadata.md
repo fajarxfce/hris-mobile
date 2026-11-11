@@ -50,3 +50,8 @@ native inventory, keys-only recovery and native proof remain before raw activati
 remain open. Continue with the owning original incoming path after this storage prerequisite.
 
 [Exact validation evidence](measurements/collaboration-space-original-room-metadata-2026-11-11.json).
+
+Portable hosted control [42988568153](https://github.com/fajarxfce/hris-mobile/actions/runs/42988568153)
+on immutable878d5120eaa7307cbf9615e38d62126be9ce74a4 accepts9,599 cases. Digest/ZIP CRC, prior IDs,
+original metadata, both Company history purposes and all12 physical-worker cases are verified. Apple
+remains pending, expected3,795 plus16 Swift checks and unsigned host; no SDK8 Apple native claim.
