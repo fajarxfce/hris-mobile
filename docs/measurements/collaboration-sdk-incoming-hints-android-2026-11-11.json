@@ -88,7 +88,7 @@
   "patchedSources": 40,
   "patches": 9,
   "candidateVersion": "26.10.23-hris.8",
-  "aarPackaged": false,
+  "aarPackaged": true,
   "applicationDependencyChanged": false,
   "nativeRuntimeAccepted": false,
   "appleNativeAccepted": false,
@@ -96,5 +96,20 @@
     "previousSdk6": 138956152,
     "incomingCandidate": 138978744,
     "difference": 22592
+  },
+  "packaging": {
+    "version": "26.10.23-hris.8",
+    "wrapperCommit": "c1664f712bed33488b10f33232fb424faf257d49",
+    "passed": true,
+    "published": false,
+    "elapsedSeconds": 118.225,
+    "aarSha256": "6eebe8dab124541783d2b1d746cf30ea4b8dd2a599980cccb823927780678717",
+    "aarBytes": 186095557,
+    "classesSha256": "307712f2acffefd4bd1a612bf941bdf567ad00c395fc4fd8aafa9a3cedafe238",
+    "ivySha256": "5cb8ccb96d382001c69affb86fa3b2c4ba8ab0482866536c562b7f5d57a46f7a",
+    "sourcesSha256": "20f41d66d03a03bb364db3afdb1892f1a200cdd679665cd4eba4dc85520c8f39",
+    "androidBuildManifestSha256": "5f93684eac1c1e26f95f250d87ec34b91bdd22ad34a2a8af5659f8a210623b3f",
+    "packagingDriverSha256": "31f200ff2e047b41083fd0b022dd0eed12fcc12c90293560a698a9ae11ee4b9f",
+    "nativeVerifierSha256": "e8deffe34b561a9ff844f21b5a793d80f2884d3d6fa7c4fef0b23cd9a32eb35a"
   }
 }

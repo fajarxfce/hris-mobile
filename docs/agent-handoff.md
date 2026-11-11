@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 00:35 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 00:40 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Foreground incoming startup accepted
 
@@ -134,11 +134,20 @@ collaboration/space-physical-room.md (Group); shared measurement filename
 collaboration-space-physical-room-2026-11-11.json. Private Group space-physical-room-2026-11-11
 owns both source snapshots, failures and reports. publish.py EXECUTED; never repeat it.
 
-SDK8 packaging session77349 is RUNNING in private Mobile sdk-incoming-hints-ci-2026-11-11.
-Group compiler is reaped; only this packaging compiler is active. Do not mutate staged wrapper,
-SDK source, build manifest or packaging tools during it. No consumer/version/publication change.
-Next inspect the actual compiled JVM APIs/AAR pair, then validate the application consumer and
-native runtime before publication. Private consumer-notes.md records unresolved atomic cursor/
+Group physical lookup is committed/pushed as828b3df8; Mobile evidence asb2aef564. Both pushes
+were reaped. SDK8 packaging77349 is REAPED accepted /118.225s. AAR186,095,557bytes,
+SHA6eebe8dab124541783d2b1d746cf30ea4b8dd2a599980cccb823927780678717. All compiled JVM APIs,
+exact JNI, source, runtime dependencies and consumer rules pass. Private Mobile
+sdk-incoming-hints-ci-2026-11-11 owns package-1 and the isolated local Ivy repository.
+A separate consumer checkout at /home/fajar/hris/.worktrees/hris-mobile-incoming-hints-consumer-2026-11-11
+is based on exactb2aef564; all4,863 prior accepted app inputs matched before changing only
+its SDK version, checksum entry and RuntimeLeaseFixture's new sync response fields. Main Mobile
+still pins SDK6. Consumer full1/session20385 is RUNNING from that checkout's private
+.work/sdk-incoming-consumer-2026-11-11 (full check/Android host/lint/proof APK/Wasm and metadata).
+Only this compiler is active. Do not mutate its three inputs or the inspector during the gate.
+The client Firebase file was copied only to its ignored location and checked against the old
+accepted input hash; no credential/configuration change. prepare-consumer.py EXECUTED; do not
+repeat it. SDK8 is unpublished; actual runtime/new callback acceptance remains next. Private consumer-notes.md records unresolved atomic cursor/
 physical-demand ownership, key-only pending retries, inventory gaps and original Company routing;
 it is investigation, not implemented consumer behavior. All54 PRD groups remain OPEN.
 

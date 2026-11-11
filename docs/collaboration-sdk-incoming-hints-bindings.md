@@ -34,5 +34,7 @@ Four Android ABI builds are now accepted from immutable b94f6fa79fc1e22b1ded081a
 binding hashes agree across targets; archive digests/CRC, exact source hashes, native entry
 points and required ELF alignment were independently checked after download.
 See [Android evidence](measurements/collaboration-sdk-incoming-hints-android-2026-11-11.json).
-The fresh pinned wrapper is staged for SDK8 packaging. Packaging, Apple compilation, application
-consumers and actual incoming event/key recovery remain separate acceptance work.
+SDK8 packaging now passes (118.225s). The 186,095,557-byte AAR preserves all four native hashes,
+consumer rules and runtime dependencies; compiled JVM APIs include the new sync/key methods
+and prior observer/queue recovery. An isolated application checkout is testing the candidate.
+Apple compilation, application/native runtime acceptance and publication remain separate work.
