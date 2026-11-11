@@ -1,5 +1,8 @@
 # Architecture
 
+[Space key-history coordinates](collaboration-space-key-history.md) preserve Space and historical device without alias redirection.
+Independent recovery checkpoints and native acquisition remain separate.
+
 [Original key-history coordinates](collaboration-space-original-key-history.md) preserve Company and historical device under current source admission.
 Durable keys passes and native content acquisition remain separate.
 

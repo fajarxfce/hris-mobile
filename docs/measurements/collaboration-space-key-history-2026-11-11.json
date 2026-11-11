@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "560010f1d03bd4cbcbe70d293cf2020514f135a0",
+  "sourceFiles": 5020,
+  "changedSourceFiles": 5,
+  "sourceManifestSha256": "97f198a6640930c26932d777829e2d3a3e5b8c55e11a69b6d381945eb9ccdf67",
+  "focused": {
+    "tests": 248,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused1",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 12848,
+    "fresh": {
+      "tests": 10810,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 567.561,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151773955,
+    "sha256": "c83a620eb560372a99a59758436ea83f5e71ac7782ae454fce5885a77cfc72e4"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "spaceKeyHistoryResolutionAccepted": true,
+  "newDomainCasesPerTarget": 26,
+  "spaceNamespaceAndHistoricalDevicePreserved": true,
+  "originalAliasProvenancePreserved": true,
+  "foreignCompanyMetadataIsNotNativeAuthority": true,
+  "currentRegistrationAndSourceFenced": true,
+  "missingMetadataRemainsUnresolved": true,
+  "missingMetadataFinalRegistrationReadback": true,
+  "oneLocalDeadlineSeconds": 5,
+  "primaryQueueDependency": false,
+  "companyFallback": false,
+  "usecaseCallsUsecase": false,
+  "historyWrites": false,
+  "providerOrKeyRequests": false,
+  "newCollector": false,
+  "fullKeyBlockedQueueLivenessProven": false,
+  "nativeSdkExecution": false,
+  "oldDeviceNativeDecryptionProven": false,
+  "keysOnlyBackpressureImplemented": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "starterChanged": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": []
+}

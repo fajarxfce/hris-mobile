@@ -1,5 +1,74 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 18:24 UTC. This opening owns current work; older sections are historical.
+
+## Space key-history accepted; independent recovery checkpoint next
+
+Five Kotlin files (3 new, 2 existing) ACCEPTED. Typed Space binding resolution preserves Space
+conversation and historical device, including LEGACY alias rooms; Original provenance remains
+in the binding. It never redirects stored Space history to Company/current-device history.
+Current registered Original/source/session/directory/native admission fences every suspension
+and final registration readback, including missing metadata. One5-second local deadline; no
+primary task dependency, Company fallback, UC-to-UC, history write, provider/key request or
+new collector. Cached foreign-Company alias metadata is not native acquisition authority.
+
+format1/82577 REAPED PASS36.621s; focused1/58357 REAPED PASS413.537s/125;
+browser1/77336 REAPED PASS150.673s/123. Exact248 focused, no failures/errors/skips.
+Full1/50424 REAPED PASS567.561s, audit72665 REAPED:12,848 accepted =10,810 fresh+
+2,038 exact unchanged controls.5,020 inputs; manifest97f198a6640930c26932d777829e2d3a3e5b8c55e11a69b6d381945eb9ccdf67.
+Prior case identities and dependency closures retained. Proof APK151773955 bytes,
+SHA c83a620eb560372a99a59758436ea83f5e71ac7782ae454fce5885a77cfc72e4.
+No failed Gradle/test runs. Native execution and old-device decryption remain unproven.
+
+Workspace .work/space-key-history-2026-11-11 owns accepted evidence. Publisher and this writer
+HAVE EXECUTED. Commit/push, then dispatch ONCE on validation/space-key-history-20261111;
+expected15,178=10,826 portable+4,352 Apple; not yet dispatched. Original43073411916 attached,
+expected15,100. Fairness43069542685 portable10,726 ACCEPTED (29116 reaped; public evidence
+updated), Apple pending. Inventory43066807577 portable10,718 accepted/Apple pending.
+Locator43062334365 FULL14,942; scheduling43057055642 FULL14,849; retention43053179213
+FULL14,719; progress43049052938 FULL14,584; owned43044913726 FULL14,527; raw43040652714
+FULL14,458; alias43037578170 FULL14,434. Apple includes16 Swift/unsigned-host cases, not native
+SDK8. Historical application43031231253 remains incomplete; never redispatch unchanged source
+just to erase a proof gap. Original stage's freeze-bookkeeping failure remains documented.
+
+Next draft: next-history-recovery-draft under current workspace, UNAPPLIED/UNTESTED.
+9 files currently (4 new, 5 guarded existing); tests/preparation still required. Independent
+active/requested recovery position extends the existing encrypted incoming checkpoint, sharing
+reference rows. Explicit schema4 keeps schemas1/2/3 readable and rejects new fields under old
+headers. A conditional section update preserves concurrent primary provider/reference progress;
+primary stage must preserve recovery. Exact persisted replay is a no-op; a competing recovery
+section returns false. A missing partition does not create keys or fabricate provider positions.
+This is structural storage, not semantic page acknowledgement or a running recovery worker.
+Review cursor bounds, reopen/reauth/device/Company/Space isolation, schema tamper, actual commit
+contention/cancellation/lost replies, and maximum existing provider cursors before applying.
+Private draft creation initially failed its app-binding replacement guard; only an uncompiled
+private draft existed. It was preserved under unapplied-draft-before-binding-guard-correction;
+corrected draft generation succeeded. Accepted app source was unchanged throughout validation.
+
+Read next-history-recovery-frontier-review.md, especially the active/requested refinement.
+A new key generation must not rewind an unfinished long-room pass. Global metadata rounds may
+repeat the same generation while each room advances a finite reference page. Missing metadata
+stays unresolved while later locators get service. retryRequired/keys_pending is not proof of
+missing keys: malformed ciphertext, Unsupported, AwaitRedaction and MissingOriginal differ.
+Global account-owned lane bounds/retirement/inactive-lane wakes, local request/page owners,
+exact primary EOF demotion plus recovery demand/wake, backoff and SDK key-signal lifecycle
+remain. Do not make another64-room queue, clone reference catalogs, invent a sync position,
+call one UC from another, or fabricate content to finish unknown references.
+
+SDK8 already exports subscribeToRoomKeyChanges and TaskHandle.isFinished. Attach once to the
+runtime lease, not each sync connection/adoption, after owning cancel/drain/store disposal.
+Equal key payloads can represent distinct keys; do not discard by payload-only distinct.
+Read next-keys-signal-review.md. No mobile key consumer is activated. Full blocked64-room
+liveness, native allocation/performance, authoritative absence, native SDK8 Apple and combined
+Company/Group native proof remain. Raw collector/Original producer OFF. All54 PRD groups OPEN.
+No Starter/live change. Continue long run and push every commit.
+
+Phone64143 REAPED timeout17:58:11UTC/20.019s; no installation attempted. Retry no earlier18:29UTC.
+Release89 SDK6 awaits install. Notify first, explicit serial/install-only, never drive UI. No
+emulator or compiler now. Preserve originals, Draft66, keys/stores/SDK assets, inspector
+modified gradlew.bat and live90163c3/schema116.4, Group OFF.
+
+
 Updated 11 November 2026, 18:02 UTC. This opening owns current work; older sections are historical.
 
 ## Space key-history applied; focused validation running
