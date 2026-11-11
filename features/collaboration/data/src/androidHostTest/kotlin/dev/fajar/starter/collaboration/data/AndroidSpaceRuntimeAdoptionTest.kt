@@ -5,6 +5,7 @@ import dev.fajar.starter.collaboration.data.mappers.toLocalDeviceIdentity
 import dev.fajar.starter.collaboration.data.repositories.*
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceRuntimeLease
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.securestorage.*
@@ -13,10 +14,154 @@ import io.ktor.client.engine.mock.MockEngine
 import kotlin.io.encoding.Base64
 import kotlin.test.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class AndroidSpaceRuntimeAdoptionTest {
+    @Test
+    fun installedSpaceObservesItsOriginalSourceWithoutAnotherClientOrTransportRead() = runBlocking {
+        lateinit var native: SpaceRuntimeSyncClientSource
+        val f =
+            SpaceAdoptionStorageFixture.create { identity ->
+                SpaceRuntimeSyncClientSource(identity).also { native = it }
+            }
+        try {
+            f.select()
+            val lease =
+                assertIs<AppResult.Success<CollaborationSpaceRuntimeLease>>(f.install()).value
+            val runtime =
+                CollaborationSpaceRuntimeReady(
+                    lease.owner,
+                    lease.deviceId,
+                    lease.installedOperationId,
+                )
+            assertNull(f.repo.incomingSource(runtime))
+            assertEquals(AppResult.Success(Unit), lease.publish())
+            val source =
+                CollaborationSpaceIncomingSource(
+                    f.data.original.storeId,
+                    f.data.original.matrixUserId,
+                    f.data.original.matrixDeviceId,
+                )
+            assertEquals(source, f.repo.incomingSource(runtime))
+            assertEquals(0, native.requests)
+            val received =
+                async(start = CoroutineStart.UNDISPATCHED) {
+                    f.repo.observeBatches(runtime).first()
+                }
+            assertEquals(0, native.requests)
+            native.responses.send(native.response())
+            assertEquals(
+                AppResult.Success(Unit),
+                withTimeout(5_000) { f.repo.synchronize(runtime) },
+            )
+            val batch =
+                assertIs<AppResult.Success<CollaborationSpaceSyncBatch>>(
+                        withTimeout(5_000) { received.await() }
+                    )
+                    .value
+            assertEquals(runtime, batch.runtime)
+            assertEquals(source, batch.source)
+            assertEquals("retained-response", batch.nextPosition)
+            assertEquals("\$event", batch.rooms.single().headEventId)
+            assertTrue(native.requests in 1..2)
+            assertEquals(1, f.acquisitions)
+            for (foreign in
+                listOf(
+                    runtime.copy(deviceId = SETUP_JOB),
+                    runtime.copy(operationId = SETUP_DEVICE),
+                    runtime.copy(owner = runtime.owner.copy(spaceId = SETUP_JOB)),
+                )) {
+                assertNull(f.repo.incomingSource(foreign))
+                assertIs<AppResult.Failed>(f.repo.observeBatches(foreign).single())
+            }
+            assertEquals(1, f.acquisitions)
+        } finally {
+            native.responses.close()
+            f.repo.closeSpace(f.owner)
+            f.close()
+        }
+        assertEquals(1, native.closes)
+    }
+
+    @Test
+    fun retiringBeforeFirstSyncEndsTheObserverWithoutAcquisition() = runBlocking {
+        lateinit var native: SpaceRuntimeSyncClientSource
+        val f =
+            SpaceAdoptionStorageFixture.create { identity ->
+                SpaceRuntimeSyncClientSource(identity).also { native = it }
+            }
+        try {
+            f.select()
+            val lease =
+                assertIs<AppResult.Success<CollaborationSpaceRuntimeLease>>(f.install()).value
+            val runtime =
+                CollaborationSpaceRuntimeReady(
+                    lease.owner,
+                    lease.deviceId,
+                    lease.installedOperationId,
+                )
+            assertNull(f.repo.incomingSource(runtime))
+            assertEquals(AppResult.Success(Unit), lease.publish())
+            val received =
+                async(start = CoroutineStart.UNDISPATCHED) {
+                    f.repo.observeBatches(runtime).single()
+                }
+            assertEquals(AppResult.Success(Unit), withTimeout(5_000) { f.repo.closeSpace(f.owner) })
+            assertIs<AppResult.Failed>(withTimeout(5_000) { received.await() })
+            assertNull(f.repo.incomingSource(runtime))
+            assertEquals(0, native.requests)
+        } finally {
+            native.responses.close()
+            f.repo.closeSpace(f.owner)
+            f.close()
+        }
+        assertEquals(1, native.closes)
+    }
+
+    @Test
+    fun retirementWhileNativeResponseIsPendingCannotPublishItToTheOldSpace() = runBlocking {
+        lateinit var native: SpaceRuntimeSyncClientSource
+        val f =
+            SpaceAdoptionStorageFixture.create { identity ->
+                SpaceRuntimeSyncClientSource(identity).also { native = it }
+            }
+        try {
+            f.select()
+            val lease =
+                assertIs<AppResult.Success<CollaborationSpaceRuntimeLease>>(f.install()).value
+            val runtime =
+                CollaborationSpaceRuntimeReady(
+                    lease.owner,
+                    lease.deviceId,
+                    lease.installedOperationId,
+                )
+            assertNull(f.repo.incomingSource(runtime))
+            assertEquals(AppResult.Success(Unit), lease.publish())
+            val received =
+                async(start = CoroutineStart.UNDISPATCHED) {
+                    f.repo.observeBatches(runtime).toList()
+                }
+            val syncing = async { f.repo.synchronize(runtime) }
+            withTimeout(5_000) { native.entered.await() }
+            val closing = async { f.repo.closeSpace(f.owner) }
+            val terminal = withTimeout(5_000) { received.await() }
+            assertEquals(1, terminal.size)
+            assertIs<AppResult.Failed>(terminal.single())
+            native.responses.send(native.response())
+            assertIs<AppResult.Failed>(withTimeout(5_000) { syncing.await() })
+            assertEquals(AppResult.Success(Unit), withTimeout(5_000) { closing.await() })
+            assertNull(f.repo.incomingSource(runtime))
+            assertEquals(1, native.requests)
+        } finally {
+            native.responses.close()
+            f.repo.closeSpace(f.owner)
+            f.close()
+        }
+        assertEquals(1, native.closes)
+    }
+
     @Test
     fun neitherQueueCapabilityCreatesAnAbsentInstalledRuntime() = runTest {
         val f = SpaceAdoptionStorageFixture.create()
@@ -30,6 +175,8 @@ class AndroidSpaceRuntimeAdoptionTest {
             assertEquals(originals, f.repo.read(runtime, "!room:test", "\$event"))
             assertEquals(originals, f.repo.readPage(runtime, "!room:test", null))
             assertEquals(originals, f.repo.readPage(runtime, "!room:test", "next", "until"))
+            assertNull(f.repo.incomingSource(runtime))
+            assertEquals(originals, f.repo.observeBatches(runtime).single())
             assertIs<AppResult.Failed>(
                 f.repo.read(setupOwner, SETUP_DEVICE, "!room:test", "\$event")
             )
@@ -251,6 +398,7 @@ private class SpaceAdoptionStorageFixture(
     val data: SdkAdoptionFixture,
     rawIdentity: CollaborationSdkIdentityData,
     expectedIdentity: CollaborationLocalDeviceIdentity,
+    clients: AndroidCollaborationClientSource,
 ) {
     val parent =
         CollaborationNativeParent(
@@ -338,7 +486,7 @@ private class SpaceAdoptionStorageFixture(
                     }
                 }
             },
-            clients = AndroidCollaborationSdkClientSource(),
+            clients = clients,
             cipher = AesGcmContentCipher(),
             server = IdentityServer(SETUP_BASE, "Fixture"),
             endpoint = CollaborationSdkEndpoint("https://hris.example.test/"),
@@ -369,7 +517,11 @@ private class SpaceAdoptionStorageFixture(
     }
 
     companion object {
-        suspend fun create(): SpaceAdoptionStorageFixture {
+        suspend fun create(
+            clients: (CollaborationSdkIdentityData) -> AndroidCollaborationClientSource = {
+                AndroidCollaborationSdkClientSource()
+            }
+        ): SpaceAdoptionStorageFixture {
             val data = SdkAdoptionFixture.create()
             val identity =
                 CollaborationSdkIdentityData(
@@ -378,7 +530,12 @@ private class SpaceAdoptionStorageFixture(
                     Base64.encode(ByteArray(32) { it.toByte() }),
                     Base64.encode(ByteArray(32) { (it + 32).toByte() }),
                 )
-            return SpaceAdoptionStorageFixture(data, identity, identity.toLocalDeviceIdentity())
+            return SpaceAdoptionStorageFixture(
+                data,
+                identity,
+                identity.toLocalDeviceIdentity(),
+                clients(identity),
+            )
         }
     }
 }

@@ -3,8 +3,10 @@ package dev.fajar.starter.collaboration.data.repositories
 import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.api.CollaborationPusherApi
 import dev.fajar.starter.collaboration.data.datasources.*
+import dev.fajar.starter.collaboration.data.dto.SdkSyncBatch
 import dev.fajar.starter.collaboration.data.mappers.collaborationSdkAcquisitionFailure
 import dev.fajar.starter.collaboration.data.mappers.toLocalDeviceIdentity
+import dev.fajar.starter.collaboration.data.mappers.toSpaceSyncBatch
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.collaborationGatewayMatchesCommand
@@ -22,9 +24,7 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.TimeSource
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.*
 import org.matrix.rustcomponents.sdk.Client
 
 /**
@@ -298,6 +298,45 @@ class AndroidCollaborationRuntimeRepository(
             )
         }
         return result
+    }
+
+    override fun incomingSource(
+        runtime: CollaborationSpaceRuntimeReady
+    ): CollaborationSpaceIncomingSource? =
+        registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)?.incomingSource
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun observeBatches(
+        runtime: CollaborationSpaceRuntimeReady
+    ): Flow<AppResult<CollaborationSpaceSyncBatch>> = flow {
+        val lease = registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId)
+        if (lease == null) {
+            emit(handoverPending())
+            return@flow
+        }
+        val batches =
+            lease
+                .observeSyncBatches()
+                .map<SdkSyncBatch, SdkSyncBatch?> { it }
+                .onStart { emit(null) }
+                .onCompletion { cause -> if (cause == null) emit(null) }
+        emitAll(
+            combine(batches, registry.handoverChanges, lease.credentialFailures) { batch, _, failure
+                    ->
+                    when {
+                        failure != null -> AppResult.Failed(failure)
+                        registry.findSpace(runtime.owner, runtime.deviceId, runtime.operationId) !==
+                            lease -> handoverPending()
+                        batch == null -> null
+                        else -> batch.toSpaceSyncBatch(runtime, lease.incomingSource)
+                    }
+                }
+                .distinctUntilChanged()
+                .transformWhile { result ->
+                    if (result != null) emit(result)
+                    result !is AppResult.Failed
+                }
+        )
     }
 
     override suspend fun activate(runtime: CollaborationSpaceRuntimeReady): AppResult<Unit> {

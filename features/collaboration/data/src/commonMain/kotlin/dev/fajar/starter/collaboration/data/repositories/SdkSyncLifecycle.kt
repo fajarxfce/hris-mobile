@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkSyncConnection
+import dev.fajar.starter.collaboration.data.dto.SdkSyncBatch
 import dev.fajar.starter.collaboration.data.dto.SdkSyncProblem
 import dev.fajar.starter.collaboration.data.mappers.collaborationSdkFailure
 import dev.fajar.starter.common.result.*
@@ -20,10 +21,25 @@ internal class SdkSyncLifecycle(
     private val mutation = Mutex()
     private val stopping = Mutex()
     private val stopped = MutableStateFlow(false)
+    private val batchConnection = MutableStateFlow<CollaborationSdkSyncConnection?>(null)
     private var observation: Job? = null
     private val mutableFailures = MutableStateFlow<Failure?>(null)
     val failures = mutableFailures.asStateFlow()
     private var opening: Deferred<AppResult<CollaborationSdkSyncConnection>>? = null
+
+    /** Reads the existing producer only. Collection never acquires, starts or retries sync. */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun observeBatches(): Flow<SdkSyncBatch> =
+        batchConnection
+            .flatMapLatest { connection -> connection?.batches ?: flowOf(null) }
+            .combine(stopped) { batch, closed -> batch to closed }
+            .transformWhile { (batch, closed) ->
+                if (closed || stopped.value) false
+                else {
+                    if (batch != null) emit(batch)
+                    true
+                }
+            }
 
     suspend fun start(): AppResult<Unit> {
         val pending =
@@ -39,13 +55,15 @@ internal class SdkSyncLifecycle(
                     ?: lifetime
                         .async {
                             val result = safeStorageCall { acquire() }
-                            if (result is AppResult.Success)
+                            if (result is AppResult.Success) {
+                                batchConnection.value = result.value
                                 observation =
                                     lifetime.launch {
                                         result.value.problems.collect {
                                             mutableFailures.value = it?.toFailure()
                                         }
                                     }
+                            }
                             result
                         }
                         .also { opening = it }
@@ -130,7 +148,10 @@ internal class SdkSyncLifecycle(
                         stopped
                     }
                 }
-            if (result is AppResult.Success) observation?.cancelAndJoin()
+            if (result is AppResult.Success) {
+                observation?.cancelAndJoin()
+                batchConnection.value = null
+            }
             result
         }
 

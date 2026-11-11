@@ -750,6 +750,26 @@ class CollaborationDataModule {
         schedules: SyncScheduleRepository,
     ) = RequestCollaborationSpaceIncomingScan(demands, directory, sessions, server, schedules)
 
+    @Single
+    fun retainSpaceSyncBatches(
+        sync: CollaborationSpaceSyncRepository,
+        demands: CollaborationSpaceIncomingDemandRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        schedules: SyncScheduleRepository,
+    ) =
+        RetainCollaborationSpaceSyncBatches(
+            sync,
+            demands,
+            directory,
+            sessions,
+            server,
+            build,
+            schedules,
+        )
+
     @Factory
     fun observeSpaceIncomingStartup(
         roots: CollaborationSpaceRootRepository,

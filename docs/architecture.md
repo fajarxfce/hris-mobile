@@ -1,5 +1,9 @@
 # Architecture
 
+[Serial sync batch retention](collaboration-space-sync-batch-producer.md) commits exact response
+positions, physical room work and inventory loss together. Observation reads the existing native
+owner; app activation awaits the physical/inventory consumers.
+
 [Raw SDK sync batches](collaboration-raw-sync-batches.md) preserve each response's own positions
 and bounded locators in the existing transport loop. Observation is process-local and conflated;
 atomic cursor/work retention and provider-inventory recovery remain with the incoming owner.

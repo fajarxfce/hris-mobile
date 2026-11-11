@@ -281,6 +281,16 @@ class SynchronizeCollaborationSpaceDeviceTest {
         var beforeSync: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) }
         private val sync =
             object : CollaborationSpaceSyncRepository {
+                override fun incomingSource(
+                    runtime: CollaborationSpaceRuntimeReady
+                ): CollaborationSpaceIncomingSource? =
+                    error("No incoming observation during synchronization")
+
+                override fun observeBatches(
+                    runtime: CollaborationSpaceRuntimeReady
+                ): kotlinx.coroutines.flow.Flow<AppResult<CollaborationSpaceSyncBatch>> =
+                    error("No incoming observation during synchronization")
+
                 override suspend fun synchronize(
                     runtime: CollaborationSpaceRuntimeReady
                 ): AppResult<Unit> {

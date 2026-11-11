@@ -1,55 +1,46 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 04:00 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 04:20 UTC. This opening section owns current work; older checkpoints below are historical.
 
-## Active serial sync producer and hosted storage validation
+## Serial sync producer accepted — continue physical resolution
 
-Source-retention5f678ed3 and Group evidence2e04f4e6 remain committed/pushed. Hosted run42951614097
-on immutable5f678ed3feab2d24e3b97e5fc9b58159f15f785e has ACCEPTED portable coverage:9,039 cases
-(4,272 desktop +732 Android host +4,035 browser). Audit36473 REAPED PASS; prior case IDs, remote
-SHA and ZIP CRC verified. Artifact13826467662,3,660,118bytes,
-SHA3659ba2894d62135e65aff29c18a854ad96b1c515a706e3af76bf62c2126af10;
-report manifesta5a17d36fad9e35d7552762d265bc103c097872c3c5b9ebb4e0587f3392d0ba2.
-Apple still IN PROGRESS, expected3,518 cases +16 Swift checks +unsigned host. Do not redispatch.
-Primary private space-incoming-sync-retention-2026-11-11/hosted-42951614097 owns state/audit files;
-public collaboration-space-incoming-retention-hosted-2026-11-11.json tracks partial acceptance.
-Earlier raw run42943310515 is fully accepted. No new Apple native SDK8 claim.
+The20-file Mobile source/test increment is ACCEPTED. Full1/session66312 REAPED PASS629.5s:
+11,196 cases =9,158 fresh +2,038 exact accepted unchanged controls; zero failures/errors/skips.
+Audit45354 REAPED ACCEPTED, all prior case IDs and unchanged dependency closures verified.
+Initial audit89991 expected11,178 because it omitted18 new common data cases also run on Android.
+The corrected audit verifies every added class and platform multiplicity; no source change/rerun.
+Focused bridge4/session80086 PASS168 and browser1/session93131 PASS130; combined298 ACCEPTED.
+Format/architecture74 modules/detekt, Android host/release compile/lint, browser/Wasm and iOS metadata
+pass. Frozen4,882-input manifest:b87a173aeba8d3cff62df1034d7565dd9926c317fe1c06b8eb243db854552b21.
+Proof APK151,603,793bytes/SHA323b5e7df88b4b1c36845ec83391f10e12666a5b04856f5392761316fc3c5b6c.
+No new native SDK execution, phone install or Apple execution acceptance for this increment.
 
-Current primary Mobile work: .work/space-sync-batch-producer-2026-11-11. Base is exact5f,
-4,872/ec278139e3a0e0685dd761ce0fae093305da1844c1a001562586c3d944f03351. Current4,882-input SOURCE
-IS UNCOMMITTED/UNACCEPTED. It adds existing-connection lifecycle observation, detached physical
-batch mapping with explicit loss, pure cursor/room retention, and singleton serial usecase
-RetainCollaborationSpaceSyncBatches. The sync repository reads original64-hex store identity
-synchronously from the exact installed registry entry; no per-batch transport/device-status I/O.
-Readback confirms the exact source position even if a worker advanced work after a lost reply.
-Cursor-only/replay is quiet; source replacement, parent change and confirmed denial fence writes.
-The DI binding creates no collector. App activation, physical resolution, inventory and key
-recovery are still REQUIRED before enabling this producer.
+Existing-connection observation never acquires/starts/retries native sync. The exact installed
+registry supplies original64-hex store +Matrix user/device. The serial domain owner captures
+bounded hints, fences current parent/denial/source across suspension and retains cursor+work in
+one encrypted transaction. Exact same-source response position confirms an uncertain write reply
+even when a worker has advanced work; worker policies MUST preserve positions. Cursor-only/replay
+is quiet. No per-batch transport/device-status request. DI starts no collector.
 
-READY TO RUN: bridge4, focused target168 cases (80 domain +50 data +38 Android). No local
-compiler/emulator is currently active; all earlier sessions reaped. Bridge2/session21769 FAIL
-209.794s and bridge3/session46694 FAIL104.566s each executed168 cases;130 JVM and35 Android
-passed,3 new positive repository fixtures failed. Cleanup initially used legacy closeOtherOwners
-which deliberately leaves adopted Space entries alive; corrected to closeSpace(exactOwner).
-That exposed the original fixture ClassCastException: installOriginal returns an unpublished
-CollaborationSpaceRuntimeLease, not RuntimeReady. Tests now publish the actual lease explicitly
-and construct Ready from its exact fields, also asserting incomingSource absent before publish.
-Diagnostic1/session23423 REAPED FAIL79.530s/1 case; temporary trace hook REMOVED byte-exact.
-Format5/session3803 REAPED PASS34.561s. No product lifecycle workaround was added for these fixture
-mistakes. Earlier lifecycle2/session78914 PASS42/126.556s; policy1/session67981 PASS91/197.409s.
-Bridge1/session76834 FAIL124.046s/80 domain,2 invalid denial fixtures (missing required revision),
-corrected. All formatters reaped:3838,33031,28571,39824,3803. Original raw tests remain byte-exact;
-new lifecycle test names are SdkSyncLifecycleBatchTest/AndroidCollaborationRuntimeSyncObservationTest.
-Lifecycle1/session11666 deliberately stopped/reaped at0 cases. Preserve all private evidence.
+Primary private .work/space-sync-batch-producer-2026-11-11 owns frozen20 files, all failed/reviewed
+fixtures, prior reports, runners, audits, full1/accepted-proof.apk and next-consumer-review.md.
+Both original raw test files are byte-exact. publish.py HAS EXECUTED; do not rerun/overwrite.
+Shared measurement:collaboration-space-sync-batch-producer-2026-11-11.json.
+Mobile contract:collaboration-space-sync-batch-producer.md. Group product/fixtures unchanged.
 
-NEXT: run/reap/review bridge4, then focused browser130 with the same source, audit298 combined; freeze
-candidate/candidate-files, then required full check/build (expected11,178 including exact unchanged
-controls). Private accept-focused.py/accept-full.py and1,259 accepted baseline XML archives are ready;
-no final source/full acceptance yet. Complete checks, commit and PUSH each commit. Continue physical
-resolution, provider inventory and stored-key recovery; do not stop at this increment. All54 PRD
-acceptance groups remain OPEN. No Group product/schema change, deployment or phone latency claim.
-Phone03:30 attempt18647 REAPED timeout124. Existing availability question stays pending. Validated
-release89 is still install-only delivery; no new phone install.
+NEXT: implement admitted physical-to-logical resolution and provider inventory, then stored-key
+recovery and actual-runtime-owned app collection. Read next-consumer-review.md. The Group physical
+room API resolves published Space/retained LEGACY only; unpublished Company originals require their
+separate route. Preserve source positions/concurrent generations and independent store coverage.
+Keep active inventory boundaries separate from newer loss. No producer/physical/inventory/key
+consumer is enabled. All54 PRD groups OPEN; continue after this increment.
+
+Hosted SOURCE-RETENTION control42951614097 on immutable5f678ed3feab2d24e3b97e5fc9b58159f15f785e
+has accepted9,039 portable cases (audit36473). Apple job130296974179 still building unsigned host;
+expected3,518 cases +16 Swift checks. Do not redispatch. Primary private source-retention directory
+owns hosted-audit.py and hosted-42951614097 state. Old raw run42943310515 fully accepted12,500.
+No Apple native SDK8 claim. Latest phone attempt34647 at04:01 REAPED timeout124; pending availability
+question unchanged, release89 validated/install-only. No local heavy process remains after full1.
 
 ## Incoming source retention accepted — continue with the producer
 

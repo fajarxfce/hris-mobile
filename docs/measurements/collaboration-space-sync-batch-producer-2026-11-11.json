@@ -1,0 +1,74 @@
+{
+  "date": "2026-11-11",
+  "description": "Serial locally admitted retention of exact SDK response positions with physical room work and inventory loss.",
+  "sourceBaseline": "5f678ed3feab2d24e3b97e5fc9b58159f15f785e",
+  "sourceFiles": 4882,
+  "changedSourceFiles": 20,
+  "sourceManifestSha256": "b87a173aeba8d3cff62df1034d7565dd9926c317fe1c06b8eb243db854552b21",
+  "sdk": "26.10.23-hris.8",
+  "focused": {
+    "desktopRun": "bridge4",
+    "browserRun": "browser1",
+    "counts": {
+      "tests": 298,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "desktopElapsedSeconds": 103.287,
+    "browserElapsedSeconds": 168.936,
+    "sourceFiles": 4882,
+    "sourceManifestSha256": "b87a173aeba8d3cff62df1034d7565dd9926c317fe1c06b8eb243db854552b21",
+    "sourcesAndLibraryUnchanged": true,
+    "priorCaseIdsPreserved": true
+  },
+  "full": {
+    "startedAt": "2026-11-11T04:06:57.146497+00:00",
+    "elapsedSeconds": 629.5,
+    "sourceFiles": 4882,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 9158,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 151603793,
+      "sha256": "323b5e7df88b4b1c36845ec83391f10e12666a5b04856f5392761316fc3c5b6c"
+    },
+    "sourceManifestSha256": "b87a173aeba8d3cff62df1034d7565dd9926c317fe1c06b8eb243db854552b21",
+    "validatedTests": 11196,
+    "validatedReusedTests": 2038,
+    "atomicSourceStorage": true,
+    "serialProducer": true,
+    "applicationCollectorEnabled": false
+  },
+  "fullRun": "full1",
+  "fullSession": 66312,
+  "priorCaseIdsPreserved": true,
+  "retainedControlDependencyClosuresVerified": true,
+  "originalRawTestsByteExact": true,
+  "rawObservationAcquiresOrStartsSync": false,
+  "perBatchTransportOrDeviceStatusCalls": false,
+  "sourceIdentity": "original full lowercase SHA-256 storeId plus Matrix user/device",
+  "cursorAndDemandTransaction": "same authenticated incoming-demand/v3 replacement with optional wake",
+  "cursorOnlyWakesWorker": false,
+  "commitReplyLossWitness": "exact retained source identity and response position; concurrent worker changes preserved",
+  "applicationCollectorEnabled": false,
+  "physicalResolutionConsumerEnabled": false,
+  "providerInventoryConsumerEnabled": false,
+  "storedKeyConsumerEnabled": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedReviewEvidence": [
+    "Existing raw test filenames were restored byte-exact; new tests use distinct lifecycle/runtime names before acceptance.",
+    "Bridge1 invalid denial fixtures corrected to include a valid retained revision.",
+    "Positive Android fixture cleanup corrected to the exact Space owner; installation now publishes its returned lease before constructing readiness.",
+    "Temporary diagnostic callback removed before accepted bridge/browser/full validation."
+  ]
+}

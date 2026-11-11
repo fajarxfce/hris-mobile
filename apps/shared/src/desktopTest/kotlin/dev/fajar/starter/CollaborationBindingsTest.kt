@@ -68,6 +68,15 @@ class CollaborationBindingsTest {
                     CollaborationEventRepository,
                     CollaborationSpaceEventRepository,
                     CollaborationSpaceProviderHistoryRepository {
+                    override fun incomingSource(
+                        runtime: CollaborationSpaceRuntimeReady
+                    ): CollaborationSpaceIncomingSource? = error("No implicit incoming source read")
+
+                    override fun observeBatches(
+                        runtime: CollaborationSpaceRuntimeReady
+                    ): kotlinx.coroutines.flow.Flow<AppResult<CollaborationSpaceSyncBatch>> =
+                        error("No implicit incoming batch subscription")
+
                     override suspend fun readPage(
                         runtime: CollaborationSpaceRuntimeReady,
                         matrixRoomId: String,
@@ -306,6 +315,10 @@ class CollaborationBindingsTest {
                     container.koin.get<ApplicationCollaborationIncomingStartup>(),
                 )
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceIncomingStartup>())
+                assertSame(
+                    container.koin.get<RetainCollaborationSpaceSyncBatches>(),
+                    container.koin.get<RetainCollaborationSpaceSyncBatches>(),
+                )
                 assertSame(runtime, container.koin.get<CollaborationRuntimeRepository>())
                 assertSame(
                     runtime,

@@ -22,6 +22,7 @@ import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.domain.entities.CollaborationProviderHistoryPage
 import dev.fajar.starter.collaboration.domain.entities.CollaborationReadReceiptVisibility
 import dev.fajar.starter.collaboration.domain.entities.CollaborationReadinessSignal
+import dev.fajar.starter.collaboration.domain.entities.CollaborationSpaceIncomingSource
 import dev.fajar.starter.collaboration.domain.entities.CollaborationSpaceReadinessSignal
 import dev.fajar.starter.collaboration.domain.entities.CollaborationSpaceRuntimeReady
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
@@ -71,9 +72,14 @@ internal constructor(
     private var httpObservationJob: Job? = null
     private val readinessStarted = AtomicBoolean()
     private val matrixUserId = record.matrixUserId
+    internal val incomingSource =
+        CollaborationSpaceIncomingSource(record.storeId, record.matrixUserId, record.matrixDeviceId)
     private var readiness: AndroidSdkReadinessRegistration<*>? = null
     private val sync =
         SdkSyncLifecycle(lifetime) { createAndroidCollaborationSync(nativeClient, lifetime) }
+
+    internal fun observeSyncBatches() = sync.observeBatches()
+
     private val children = SdkChildResources(lifetime)
     private val rooms = AndroidCollaborationRoomSource(nativeClient)
     private val pusher =

@@ -5,6 +5,8 @@ import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.common.result.*
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 /** Hosts without a native binding cannot create a substitute store or claim SDK readiness. */
 class UnavailableCollaborationRuntimeRepository :
@@ -74,6 +76,14 @@ class UnavailableCollaborationRuntimeRepository :
         currentCoroutineContext().ensureActive()
         return unavailable()
     }
+
+    override fun incomingSource(
+        runtime: CollaborationSpaceRuntimeReady
+    ): CollaborationSpaceIncomingSource? = null
+
+    override fun observeBatches(
+        runtime: CollaborationSpaceRuntimeReady
+    ): Flow<AppResult<CollaborationSpaceSyncBatch>> = flow { emit(unavailable()) }
 
     override suspend fun acquireOriginalQueue(
         runtime: CollaborationSpaceRuntimeReady,

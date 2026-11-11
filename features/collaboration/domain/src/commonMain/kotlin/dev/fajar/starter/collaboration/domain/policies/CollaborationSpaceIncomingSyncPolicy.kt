@@ -34,11 +34,14 @@ fun validCollaborationSpaceIncomingPhysicalRoom(
     room: CollaborationSpaceIncomingPhysicalRoomDemand
 ): Boolean =
     validCollaborationSpaceIncomingSourceId(room.sourceId) &&
-        room.roomId.startsWith('!') &&
-        room.roomId.length in 2..255 &&
-        room.roomId.none { it.isWhitespace() || it.isISOControl() } &&
-        runCatching { room.roomId.encodeToByteArray(throwOnInvalidSequence = true) }.isSuccess &&
+        validCollaborationSpaceIncomingRoomId(room.roomId) &&
         validCollaborationMessageId(room.generation) &&
         room.position in 0 until 9_007_199_254_740_991L &&
         (room.headEventId == null || validCollaborationEventId(room.headEventId)) &&
         (room.retry == null || validCollaborationSpaceIncomingRetry(room.retry))
+
+fun validCollaborationSpaceIncomingRoomId(roomId: String): Boolean =
+    roomId.startsWith('!') &&
+        roomId.length in 2..255 &&
+        roomId.none { it.isWhitespace() || it.isISOControl() } &&
+        runCatching { roomId.encodeToByteArray(throwOnInvalidSequence = true) }.isSuccess
