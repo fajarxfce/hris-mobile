@@ -29,12 +29,12 @@ The 4,897-input source manifest is b271c2e8fec511dc14f8f09b7c09d4c6a7efd169e66de
 Proof APK: 151,626,942 bytes; SHA-256 0a776eac82280283e872e7214e07877be02d5872e4e7a0553ec0368693afb829.
 This increment has no new native SDK execution, Apple execution or phone installation.
 
-Before starting serial raw collection: give the existing logical/scan writes operation-specific
-readback witnesses under concurrent producers; add finite remote published metadata acquisition and
-explicit original Company routing; complete bounded native room inventory and keys-only recovery.
-An unpublished Company original is not a Space conversation. The Group original physical metadata
-route is a separate unaccepted candidate. The app raw collector stays inactive; all 54 PRD groups
-remain open. There is no generic Starter change or live deployment in this increment.
+Before starting serial raw collection, complete finite remote published metadata acquisition,
+explicit original Company routing, bounded native room inventory and keys-only recovery. Logical/
+scan write confirmation and the Group original physical metadata route are now accepted in their
+linked increments. An unpublished Company original is not a Space conversation. The app raw
+collector stays inactive; all54 PRD groups remain open. No generic Starter or live deployment
+change is introduced by this increment.
 
 Evidence: [measurement](measurements/collaboration-space-physical-worker-2026-11-11.json).
 
