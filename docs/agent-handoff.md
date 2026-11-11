@@ -1,6 +1,53 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 11:50 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 11:53 UTC. This opening owns current work; older sections are historical.
+
+## Original finite-reference completion — focused validation in progress
+
+Reconciliation source89ee4e4a344c11dfc46e469f8326153766b81473 and Group docscf17f872 are PUSHED
+(push6348/68216 REAPED). Full1/40307 REAPED PASS634.377s; audit26924 REAPED accepted12,021
+(9,983 fresh+2,038 unchanged controls). Focused276 accepted, no failures. Publisher/accepted handoff
+executed. Hosted43015359541 dispatched once on that source; dispatch96432 REAPED. Expected14,002,
+no audit yet. Do not redispatch. Private evidence .work/space-original-reconciliation-2026-11-11.
+
+prepare-next-original-reference-completion.py/configure-next-original-reference-completion.py HAVE
+EXECUTED. Current nine-file completion increment is APPLIED/FROZEN, NOT accepted or committed.
+Private .work/space-original-reference-completion-2026-11-11 holds12,021-case/4,958-input baseline,
+4,964 current inputs,9 candidate files, source/report snapshots and runners. Manifest
+2f5b005160265e136fe159f03ecd642c749fa159d70da937827c3b6079dd1902.
+Format1/session84541 REAPED PASS35.795s; focused1/session77261 RUNNING, expected171.
+Then browser expected169, focused audit340, full expected12,079. Reap each before dependent mutation.
+Current source must stay frozen. No focused/browser/full acceptance yet.
+
+Original completion owns exact captured runtime/Company task/source/physical registration and local
+account/native family. Shared pure outcome policy retains Published frame validation. Retained and
+unsupported outcomes resolve before a finite16-row Company seek. Missing keys/redaction/targets stay
+pending and retain retry. Nested caller collections are detached before suspension. Known denial,
+false/lost replies, cancelled/stalled work and replaced ownership cannot publish success. No provider,
+client, content write, queue/wake retirement or activation.20 new owner+9 policy cases, scoped fixture,
+DI and separately wrapped app assertion. Preserve actual Company incoming/wave/reopen storage controls.
+Fixture records operations, not database behavior or native proof. No usecase calls another usecase.
+
+After acceptance prepare publisher/hosted scripts and next guarded queue-completion increment. Private
+next-original-queue-completion-draft currently has one production owner and one scoped fixture, no
+behavioral tests/DI/application/acceptance. Read next-original-queue-completion-review.md. It requires
+provider exhaustion, no pending references, completed finite seek/retry, exact resolved head and current
+checkpoint before retiring only the captured task via CAS/readback. Preserve source positions, other
+tasks, rescan/loss and independent wake. Canonical Published LEGACY aliases, bounded Client.rooms
+inventory, keys-only recovery and actual native proof still precede raw collector/Original activation.
+Both remain OFF; all54 PRD groups OPEN. No generic Starter delta. Continue long run/push every commit.
+
+Content43011629455 portable accepted9,939 (audit89061 REAPED). Its Applejob130492406895 cancelled before
+any runner/step due to hosted macOS capacity; immutable evidence/attempt1 metadata preserved. Targeted
+Apple retry28318 REAPED successfully requested11:52:11; no workflow redispatch or portable rerun. Inspect
+latest attempt before Apple audit; expected3,973, baselineCompany43008238149 Apple3,940 still pending.
+Company portable9,873 and reader43003600252 FULL13,793 accepted. Earlier complete hosted runs remain
+recorded below. No new native SDK8 Apple runtime claim from simulator/domain/unsigned-host checks.
+
+Phone76683 REAPED timeout124 at11:46:14 UTC; next bounded retry no earlier12:17. Evidence is in
+reconciliation/phone-connect-1146.json. Release89 validated SDK6 APK awaits install, no attempt/result.
+No emulator. Notify before explicit-serial install-only; never launch/drive the phone. Preserve eight
+original intents, Draft66, keys/stores, SDK assets and live90163c3/schema116.4 Group-OFF.
 
 ## Original retained-fact reconciliation accepted — continue finite batch completion
 

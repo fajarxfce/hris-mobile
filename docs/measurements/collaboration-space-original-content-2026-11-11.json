@@ -74,5 +74,41 @@
   "newAppleExecutionAccepted": false,
   "phoneInstalled": false,
   "liveDeploymentChanged": false,
-  "all54PrdGroupsRemainOpen": true
+  "all54PrdGroupsRemainOpen": true,
+  "hostedControl": {
+    "sourceCommit": "cb5c12dde31caca50545724d876fa3ff7ab1c444",
+    "runId": 43011629455,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43011629455",
+    "expectedPortable": 9939,
+    "expectedApple": 3973,
+    "completeAcceptance": false,
+    "nativeSdk8AppleExecution": false,
+    "portable": {
+      "sourceCommit": "cb5c12dde31caca50545724d876fa3ff7ab1c444",
+      "runId": 43011629455,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43011629455",
+      "jobId": 130492406467,
+      "artifactId": 13851404772,
+      "bytes": 3762277,
+      "sha256": "a2b4f7f46c508cc9b06bec2ff70ee4e093878fd5fb4729f669cd91a1452fb9a8",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreserved": true,
+      "counts": {
+        "desktopTest": 4710,
+        "testAndroidHostTest": 769,
+        "wasmJsBrowserTest": 4460
+      },
+      "reportManifestSha256": "4b9908592ae6ab0e063e75cd7d6c06ed8db05b417a202c8aeb8a293d12192134",
+      "jobLogSha256": "76179515300aaf550fad55d8f0a1b8ba4447c9880f931c9bf7314c4ff9c8dfd1"
+    },
+    "appleAccepted": false,
+    "appleFirstAttempt": {
+      "jobId": 130492406895,
+      "conclusion": "cancelled",
+      "runnerAssigned": false,
+      "executedSteps": 0,
+      "reason": "Hosted macOS arm64 capacity: no runner acquired"
+    },
+    "appleTargetedRetryRequestedAt": "2026-11-11T11:52:11.098302+00:00"
+  }
 }
