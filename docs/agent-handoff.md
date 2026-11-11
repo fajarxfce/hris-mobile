@@ -1,6 +1,57 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 04:52 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 05:16 UTC. This opening section owns current work; older checkpoints below are historical.
+
+## Physical worker integration in validation — continue the long run
+
+A 22-file Mobile candidate is frozen on source baseline aed49dcbc1bd430533f77cab09302f5c8ee68221.
+Its 4,897-input manifest is b271c2e8fec511dc14f8f09b7c09d4c6a7efd169e66de439de2ad0be06d54274.
+The existing single application task now takes one four-position logical/physical FIFO, rereads
+against the exact installed source after adoption, and uses that same selection for continuation.
+Foreign-source work remains retained without immediate resume. Physical dependency/binding failure
+keeps a bounded 30s–5min retry; known queue CAS contention remains a 1s retry without durable delay.
+Exact converted/deferred task readback tolerates later producer cursors/new generations. Confirmed
+denial, malformed state and uncertain write failure remain separate. No raw app collector is active.
+
+Status: format1/session48673 REAPED PASS35.976s. Focused1/session73472 REAPED PASS264.778s:395 cases (361 domain +34 app),zero failures/errors/skips.
+Browser1/session39560 REAPED PASS97.05s/361. Focused audit ACCEPTED756; all selected prior case IDs
+preserved and source/library fingerprints exact. Full1 is RUNNING; final/native acceptance remains.
+Format/architecture74 modules/detekt pass.
+Private .work/space-physical-worker-2026-11-11 owns frozen candidate, 1,274 baseline XMLs/11,264 cases,
+expected.json, source/library guarded runners, acceptance scripts, design-review.md and
+activation-review.md. Source must stay frozen while a validation job runs. At most one local compiler
+or emulator; no emulator is active. A failure requires review and a separately archived candidate.
+
+NEXT: reap Mobile full1/session41939, then exact prior-case/dependency audits. Focused1 and browser1
+are already reaped/accepted756; do not rerun them without a change/failure. Group now has an
+unformatted/UNTESTED8-file candidate on5a6fa038: native legacy-rooms/read with explicit Company/room
+input, configured provider, existing Direct metadata admission and30s budget. Eight new data cases
+and one new HTTP case cover current native ownership, absence/failure/denial/deadline/interrupt and
+no new Space publication. Shared DI requires server AND worker contexts. Private Group
+.work/space-original-physical-read-2026-11-11 owns baseline8743/9df6e8c32f1c832b11488e1c79a0ea261b17672b141dcfcf273589e7e5b54cc8,
+design-review.md,state.json and check.py. DO NOT run Group formatting/compiler until Mobile full1
+reaps; it owns the sole heavy slot. No Group live activation or acceptance is claimed. Keep working after committing/pushing the accepted increment.
+Before serial raw production, harden existing logical Advance/Recover/Defer/Complete and Discover
+readback against concurrent producer changes: they still compare entire demand and can falsely
+report Conflict. Keep typed operation witnesses and retry policy in domain; never broadly retry
+all app Conflicts. Remote published binding lookup, unpublished Company original routing/storage,
+provider inventory and keys-only recovery remain REQUIRED. RegistrationCommand.legacy supplies
+original Company provenance; never infer it from room/user IDs or invent a Space conversation for
+an unpublished original. Inventory must close all native handles and preserve later loss requests.
+
+Hosted physical control42962232337 is RUNNING on immutable aed49dcbc1bd430533f77cab09302f5c8ee68221,
+ref validation/physical-resolution-20261111, dispatched2026-11-11T04:54:20Z. DO NOT redispatch.
+It covers accepted producer/physical conversion, not this worker candidate. Portable audit8474
+REAPED ACCEPTED9,242 cases:4,361 desktop +757 Android host +4,124 browser. Job130331224483,
+artifact13831066404,3,679,842bytes/SHA32e244a88700c0e6c28af9921d61c4501bf3346da3533be3dc47922780d707b5;
+report manifest3ce7fa37c5dd50e450f9fea029ede5b38c4116d17eb450d3694aded945e9cebf. Remote digest/ZIP CRC
+and every prior case ID verified. Apple remains RUNNING; expected3,607 cases,16 Swift,unsigned host.
+Combined expected12,849; no overall Apple acceptance yet. Private prior physical-resolution work
+owns hosted-42962232337/state.json and hosted-audit.py. No Apple native SDK8 claim.
+Phone connect49929 at05:04 REAPED timeout124. Existing availability question remains pending;
+release89 is validated/install-only. No phone install/UI interaction here. Group source candidate is described above;
+live schema116.4 and deployment remain unchanged; Group117–140 stay undeployed. No Starter delta.
+All54 PRD groups remain OPEN. Do not end the long run at this checkpoint.
 
 ## Local physical resolution accepted — continue the worker
 
