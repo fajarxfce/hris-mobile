@@ -19,7 +19,7 @@ TARGETS = {
     "x86": ("i686-linux-android", "Intel 80386", "ELF32"),
     "x86_64": ("x86_64-linux-android", "Advanced Micro Devices X86-64", "ELF64"),
 }
-BUILD_MANIFESTS = ("android-build.json", "android-existing-identity-build.json", "android-http-observer-build.json", "android-refresh-coalescing-build.json")
+BUILD_MANIFESTS = ("android-build.json", "android-existing-identity-build.json", "android-http-observer-build.json", "android-refresh-coalescing-build.json", "android-incoming-hints-build.json")
 
 
 def sha(path):

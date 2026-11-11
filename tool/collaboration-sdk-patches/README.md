@@ -9,8 +9,12 @@ feature graphs are unchanged by correcting optional search activation. Core WebA
 full FFI WebAssembly is still blocked by its existing filesystem logging dependencies.
 [Sync contract](../../docs/collaboration-sdk-incoming-hints.md),
 [key contract and evidence](../../docs/collaboration-sdk-key-hints.md).
-The application still pins published SDK6. Generated binding pairs, new native distribution and
-application consumers remain separate. Earlier candidate/publication statements below are
+Host Kotlin/Swift generation now passes, and `android-incoming-hints-build.json` pins the
+expected native/Kotlin pair for four-ABI validation. Eight of nine Kotlin files are unchanged
+from SDK6. This is not Android or Apple native acceptance. See the
+[binding contract](../../docs/collaboration-sdk-incoming-hints-bindings.md).
+The application still pins published SDK6. New native distribution and application consumers
+remain separate. Earlier candidate/publication statements below are
 historical; [distribution status](../../docs/collaboration-sdk-distribution.md) owns shipping facts.
 
 ## Concurrent-refresh candidate — 9 November 2026

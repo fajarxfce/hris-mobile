@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 10 November 2026, 23:55 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 00:01 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Foreground incoming startup accepted
 
@@ -87,10 +87,18 @@ MultiProcess fixture mismatch and initialization-counter failure are preserved p
 Full FFI WebAssembly remains UNACCEPTED: upstream tracing-appender/symlink needs native filesystem.
 The previously accepted core IndexedDB/Wasm result remains scoped to core, not the whole FFI.
 Private Mobile `.work/sdk-key-hints-2026-11-10` owns final reports/patches and this next build:
-host-bindings-1/session25598 is RUNNING to produce a host library for Kotlin/Swift generation.
-Do not edit SDK source during it. No Android artifact/version/dependency/publication exists yet.
-Next accept the host build, generate/verify paired APIs, prepare the next immutable native SDK
-candidate, then connect the owned application consumer, pending-key and physical-room routing.
+host-bindings-1/session25598 is REAPED accepted / 33.592s on the same 1,221-file manifest.
+Generator91332 is completed / 49.764s. Host generation80383 REAPED accepted / 4.042s: nine Kotlin
+and 27 Swift/header/module-map files; eight Kotlin files byte-identical to SDK6, all old APIs
+preserved. New main Kotlin hash 6a61d743939fa0e3aaf7cba91e3ec5840d1a6ee7135f2acc2b08858af047041c.
+The new Android candidate manifest pins nine patches/40 sources/nine bindings and required
+compiled/native APIs; all five build-driver tests pass. No Android artifact/version/dependency/
+publication exists yet. Host generation is NOT Apple compilation or Android acceptance.
+Binding contract/evidence: collaboration-sdk-incoming-hints-bindings.md (Mobile),
+collaboration/sdk-incoming-hints-bindings.md (Group), and shared measurement filename
+collaboration-sdk-incoming-hints-bindings-2026-11-11.json. Next dispatch the candidate all-ABI
+workflow once on this immutable revision, accept its exact native pair, then integrate the owned
+application consumer, pending-key and physical-room routing. SDK7 is retired; never reuse it.
 The current incoming scanner sees local bindings only; it cannot cover unknown server rooms
 when a batch is lost. Cold/gap recovery must include admitted provider/server inventory coverage.
 Never infer the cursor of queued content from a later local position read.

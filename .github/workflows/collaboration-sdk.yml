@@ -18,6 +18,9 @@ on:
       - tool/collaboration-sdk-patches/http-observer.patch
       - tool/collaboration-sdk-patches/android-refresh-coalescing-build.json
       - tool/collaboration-sdk-patches/refresh-coalescing.patch
+      - tool/collaboration-sdk-patches/android-incoming-hints-build.json
+      - tool/collaboration-sdk-patches/sync-incoming-hints.patch
+      - tool/collaboration-sdk-patches/stored-key-hints.patch
   workflow_dispatch:
     inputs:
       abi:
@@ -35,6 +38,7 @@ on:
           - android-existing-identity-build.json
           - android-http-observer-build.json
           - android-refresh-coalescing-build.json
+          - android-incoming-hints-build.json
 
 permissions:
   contents: read

@@ -1,0 +1,135 @@
+{
+  "recordedAt": "2026-11-11T00:00:44.270001+00:00",
+  "scope": "Generated host bindings; Android and Apple native acceptance pending",
+  "hostBuild": {
+    "startedAt": "2026-11-10T23:54:03.837511+00:00",
+    "command": [
+      "cargo",
+      "build",
+      "--locked",
+      "-p",
+      "matrix-sdk-ffi",
+      "--features",
+      "sentry,experimental-x509-identity-verification"
+    ],
+    "jobs": 2,
+    "sourceFiles": 1221,
+    "sourceManifestSha256": "a6c1990cc99b0d8efdf1a13dcc22cd7966ee341577ee713b053f5ca0424913a5",
+    "exitCode": 0,
+    "elapsedSeconds": 33.592,
+    "sourcesUnchanged": true,
+    "summaries": []
+  },
+  "generatorBuild": {
+    "startedAt": "2026-11-10T23:55:58.857752+00:00",
+    "command": [
+      "cargo",
+      "build",
+      "--locked",
+      "-p",
+      "uniffi-bindgen"
+    ],
+    "jobs": 2,
+    "sourceFiles": 1221,
+    "sourceManifestSha256": "a6c1990cc99b0d8efdf1a13dcc22cd7966ee341577ee713b053f5ca0424913a5",
+    "exitCode": 0,
+    "elapsedSeconds": 49.764,
+    "sourcesUnchanged": true,
+    "summaries": []
+  },
+  "generation": {
+    "startedAt": "2026-11-10T23:59:30.881579+00:00",
+    "hostLibrarySha256": "2f5e954feb0546273ad8d90853aaeae9eebc04091a2494900458430367a04a8b",
+    "generatorSha256": "27384b67143daab1f8a9faba45c2cf7e0e32129841be93022b5787626ef4d092",
+    "sourceManifestSha256": "a6c1990cc99b0d8efdf1a13dcc22cd7966ee341577ee713b053f5ca0424913a5",
+    "languages": {
+      "kotlin": {
+        "command": [
+          "uniffi-bindgen",
+          "generate",
+          "--language",
+          "kotlin",
+          "--no-format",
+          "--out-dir",
+          "kotlin",
+          "libmatrix_sdk_ffi.so"
+        ],
+        "exitCode": 0,
+        "files": {
+          "org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt": "6a61d743939fa0e3aaf7cba91e3ec5840d1a6ee7135f2acc2b08858af047041c",
+          "uniffi/matrix_sdk_ui/matrix_sdk_ui.kt": "d91d9e1a8f040c8435673ad8dd12a41a1df0a90d9a5dd54b2c0de968c2046c28",
+          "uniffi/matrix_sdk/matrix_sdk.kt": "de44cd55bb6a1bd6888c2918df3f7974a8da6326f00192f96fef0b3bb859ea44",
+          "uniffi/matrix_sdk_contentscanner/matrix_sdk_contentscanner.kt": "db48b8b84f391c2205b3a6d7802cfd9f61aeb9d28cb2049d24518a4d98a22a24",
+          "uniffi/matrix_sdk_sqlite/matrix_sdk_sqlite.kt": "6738c2e65bd83217510f8b1bb5553827d9810c9e7add039f28ff8c9d75fb30ca",
+          "uniffi/matrix_sdk_base/matrix_sdk_base.kt": "ca64fbaf9aac400fa3b9d57036467968501138df313a8c07ed4af9ccf6cccb06",
+          "uniffi/matrix_sdk_common/matrix_sdk_common.kt": "301030a61a133f6e133457e3434d97ec3f92d32a91684b9e13e8c61c4ba3a1b1",
+          "uniffi/ruma_events/ruma_events.kt": "de0a855239a51a0bc959451d9d3bc408c3af027cdcea68fab4055df7b28d7e0c",
+          "uniffi/matrix_sdk_crypto/matrix_sdk_crypto.kt": "120a5d8db4b0ec3e609077b78832dd750e241fd5ea7c0ffb98647a19daade005"
+        }
+      },
+      "swift": {
+        "command": [
+          "uniffi-bindgen",
+          "generate",
+          "--language",
+          "swift",
+          "--no-format",
+          "--out-dir",
+          "swift",
+          "libmatrix_sdk_ffi.so"
+        ],
+        "exitCode": 0,
+        "files": {
+          "matrix_sdk.swift": "f0c56841297ab47b9eab06cb8a7325bf802f4594726e5fcf44d31363cda45c65",
+          "matrix_sdkFFI.h": "bfa73a44fbd901b9a1a919a58bf003ebeda38f666e223733e08ad3a47a7e6f20",
+          "matrix_sdkFFI.modulemap": "beb3f81e65318238b590d4188f490bc13cd31cc597691b89e74f56f20d3ab5c1",
+          "ruma_events.swift": "84b2f1c3a58ae470b247aa8ccdf3ace6c835cbf5d888ab778b2a7d2d669510eb",
+          "ruma_eventsFFI.h": "33ecaa3a2d17c3ec058983b5520143cf60c40a92a851a5c395c1f6f8f725ba2f",
+          "ruma_eventsFFI.modulemap": "6e7ece7c945689e83d099b06289ad4148d54d8ad6cad0d604d27491abd3de2be",
+          "matrix_sdk_common.swift": "4dac41e3ca436c9403c823ad23f42134d3206441a2adad985dc5b52c44bd5557",
+          "matrix_sdk_commonFFI.h": "3a22d33577ae8f12eca3458b5a1bab4ed2469e41420975a17be05f341ac2f20c",
+          "matrix_sdk_commonFFI.modulemap": "9188c2daff6b8b4cd706ca9b41bf1f05df6478dac96f6557e37a1f6305c6500c",
+          "matrix_sdk_ui.swift": "1a72345cef75251455e5eaecf9b78f3624febf4540ec5c28ff37911aa8447f32",
+          "matrix_sdk_uiFFI.h": "29dcb5e2708f164b2657ad02b9d4539de721b1e17919e0a93d5d3cce2dbae9ef",
+          "matrix_sdk_uiFFI.modulemap": "8748612f793a700e7efd5d39e2e8c40d5a01701adbb06a353d1c9d45510b9358",
+          "matrix_sdk_contentscanner.swift": "ed8afd927e8105676717f8e882a7b50f198209cc6658f98823a47f500b14c9d3",
+          "matrix_sdk_contentscannerFFI.h": "0ce37456c773a99486e69d5af33933b93abca6e1ca70b7a23895a5b1fb7e63dd",
+          "matrix_sdk_contentscannerFFI.modulemap": "961a233070440e067884a01d7f6a64ed56cbb49a1f263198bd1a06d31a2f4028",
+          "matrix_sdk_ffi.swift": "0dfb23d5f827eafd4b00e700c4d3f465dfcf3a4f0845b195dfb37d6cc543a356",
+          "matrix_sdk_ffiFFI.h": "7b5a99fa7f3479ef7ad62a9375441f03d3cb56a54ea5a5223681e86be7b1cd88",
+          "matrix_sdk_ffiFFI.modulemap": "22684009b5a83ba83255fc030aa8737b8ff7ef07201a4f4446c946311b9a23ad",
+          "matrix_sdk_base.swift": "f5c361a3878fb9fd890a88bef1e72e000465eb3117ddc9eba5fd6e40f9ee6820",
+          "matrix_sdk_baseFFI.h": "387c558d754b75bb98bc3f0905e5631db05a1666dc307e35de03ee115eaa44f6",
+          "matrix_sdk_baseFFI.modulemap": "50c5abbafe147ede6b2dd6447c5d13747f7a3e5fb2a8f8adb2eb7ed4b41b4b7f",
+          "matrix_sdk_crypto.swift": "3ab7be0e0c27917534d05cee45210ee67e422cb88bd726d9b034009907854fa6",
+          "matrix_sdk_cryptoFFI.h": "4821cdf9d356c98f211616feff4c506dae1b8c2238da4918c04ae34ecbf978de",
+          "matrix_sdk_cryptoFFI.modulemap": "a4326e0c2c33fe30f9a4589334f4196bde214fe1b04b88703a0dc44cf3dc8273",
+          "matrix_sdk_sqlite.swift": "204c54a20b725bde27efc71bd6e876538e3e55c18e982b313cb1d4091c7f0b02",
+          "matrix_sdk_sqliteFFI.h": "2bc2a579dc1410136bb579ac115e191689a27cca54d3089ae10dcc14d4db2e47",
+          "matrix_sdk_sqliteFFI.modulemap": "1b7436fa4eb85d2c7b3653181d2ed2fd655fc227c5691a6a0742ec7858facf4a"
+        }
+      }
+    },
+    "elapsedSeconds": 4.042,
+    "sourcesUnchanged": true,
+    "generated": true,
+    "nativeTarget": "x86_64-unknown-linux-gnu",
+    "androidValidated": false,
+    "swiftCompiled": false
+  },
+  "unchangedSdk6KotlinFiles": [
+    "kotlin/uniffi/matrix_sdk/matrix_sdk.kt",
+    "kotlin/uniffi/matrix_sdk_sqlite/matrix_sdk_sqlite.kt",
+    "kotlin/uniffi/matrix_sdk_base/matrix_sdk_base.kt",
+    "kotlin/uniffi/ruma_events/ruma_events.kt",
+    "kotlin/uniffi/matrix_sdk_crypto/matrix_sdk_crypto.kt",
+    "kotlin/uniffi/matrix_sdk_common/matrix_sdk_common.kt",
+    "kotlin/uniffi/matrix_sdk_ui/matrix_sdk_ui.kt",
+    "kotlin/uniffi/matrix_sdk_contentscanner/matrix_sdk_contentscanner.kt"
+  ],
+  "androidBuildManifest": "android-incoming-hints-build.json",
+  "androidBuildManifestSha256": "5f93684eac1c1e26f95f250d87ec34b91bdd22ad34a2a8af5659f8a210623b3f",
+  "shippingSdk": "26.10.23-hris.6",
+  "candidateVersion": null,
+  "published": false
+}
