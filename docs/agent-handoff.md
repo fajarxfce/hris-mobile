@@ -1,5 +1,60 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 19:38 UTC. This opening owns current work; earlier sections are historical.
+
+## Account history locators applied; corrected focused validation running
+
+Finite recovery turn source7598dece8ebf41cbbf12a5f57e4f59376a2ebf3f and Groupd1f628db PUSHED;
+29187/8289 REAPED.13,002 local accepted (full87030/audit81761 reaped),296 focused. Publisher,
+accepted writer and next prepare/configure HAVE EXECUTED. Hosted43087494327 dispatched ONCE
+19:28:16UTC/ref validation/history-recovery-turn-20261111;72648 REAPED, expected15,405.
+Prior position43083225746 portable10,910 ACCEPTED (55829 REAPED), Apple pending. Space43077651832
+portable10,826 ACCEPTED (68084 REAPED), Apple pending. Both public measurement files updated.
+Fairness43069542685 FULL15,028; Original43073411916 FULL15,100; earlier accepted runs below.
+
+Current7 Kotlin files APPLIED, NOT ACCEPTED;3 new+4 existing. Workspace
+.work/account-history-locators-2026-11-11, baseline7598dece /13,002 /5,033. Applied19:30:17UTC.
+format1/24057 REAPED PASS36.742s. focused1/23625 REAPED FAILED182.299s after50 domain cases
+passed: missing ReplicaScope import in StoredCollaborationIncomingHistoryLocatorRepository.
+Only that import was added; no behavior/assertion/case ID changed. Preserve failed-candidate-1,
+manifest21e61e591771452a7ae6159278b3a75c74fa15248c3dfe60755d93a78ae1d30f and compile-failure-review.json.
+format2/18816 REAPED PASS36.226s. Current5,036-input frozen manifest
+3bba129136a341a6e4aa1aab5266634efc08f7468179044f22c8bacf84176b84.
+focused2/40980 RUNNING expected149. Browser147/full13,068 NOT RUN. Keep source frozen.
+Hosted plan PREPARED NOT DISPATCHED: validation/account-history-locators-20261111,
+15,497=11,046 portable+4,451 Apple. Contract/publisher/accepted writer NOT prepared yet.
+
+The new account read discovers explicit Company/Space history across old devices through
+published metadata only. At most17 raw rows,16 consumed; actual160-character ASCII partition
+bound, scope/order/lookahead checked. Internal-only pages still advance; malformed recognized
+history fails. Existing narrow APIs remain.14 mapper and12 added DB cases (27 total) cover80
+locations, staging, restart, reauthentication, account/audience replacement, cursor deletion,
+cancellation and errors. No content read/key creation/native authority/new reference catalog.
+
+Next6-file next-account-history-recovery-draft is PRIVATE, UNAPPLIED, UNTESTED and UNREVIEWED;
+2 new+4 existing, no tests yet. Generator has executed once. It proposes one global recovery
+state in the existing incoming-demand header, explicit schema7 only when present, preserving
+1..6 and129 parts/130 sentinel/4MiB. Pure request/advance/defer policies retain active/requested
+identity and an incrementing turn revision; rounds revisit histories needing another finite
+page, while unresolved content alone completes and awaits a new trigger. Finish retains an
+active recovery wake. Review this design and add behavior/storage/wake tests before applying.
+No global acquisition consumer, producer, listener or scheduling activation exists. Metadata
+seek has bounded turns but no claim of a snapshot-stable full catalog under continuous insertion.
+
+Continue focused/browser/full plus exact source/identity audit, preserve compile failure, publish,
+commit/push and dispatch once. Then complete/review the next draft. Primary EOF demotion with
+recovery demand/wake, admitted historical content owners, trigger-specific retries, SDK key
+subscription lifecycle/loss and full64-room blocked-queue liveness remain. Never invent a sync
+position, substitute a selected Company/current root, or poll unsupported/unavailable content
+forever. Raw collector/Original producer OFF; all54 PRD groups OPEN. No Starter/live change.
+
+Phone66597 REAPED timeout19:31:10UTC/20.022s; no install attempted. Evidence current workspace
+phone-connect-1931.json. Retry no earlier20:02UTC. Release89 SDK6 awaits install; notify first,
+explicit serial/install-only, never drive UI. One compiler40980, no emulator. Preserve original
+intents/Draft66/keys/stores/SDK assets/inspector gradlew.bat/live90163c3/schema116.4 Group OFF.
+Continue long run, push every commit; host checks are not native SDK8 Apple proof.
+
+
 Updated 11 November 2026, 19:27 UTC. This opening owns current work; earlier sections are historical.
 
 ## Finite history recovery turns accepted; account history discovery next
