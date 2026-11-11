@@ -1,8 +1,17 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 02:01 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 02:04 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Current raw sync batches — accepted, continue with the durable owner
+
+Hosted control run42943310515 is IN PROGRESS on immutable6baa8acc82bcd95a22ab3bc342458292f789de99,
+ref validation/raw-sync-batches-20261111. This runs portable and Apple controls, not the old
+SDK4 native workflow. Expected portable9,001 and Apple3,499 cases,16 Swift push checks and
+an unsigned Apple host; none is accepted yet. Private Mobile raw-sync-batches-2026-11-11/
+hosted-42943310515 owns run state; public measurement is
+collaboration-raw-sync-batches-hosted-2026-11-11.json. Do not redispatch; audit exact source,
+remote archive digests, test IDs and build results when it finishes. Local source/native
+acceptance below remains valid. Continue the durable cursor/work owner while CI runs.
 
 Eleven Mobile source/test files expose exact SDK8 response batches from the existing
 SdkSyncPump. Native positions, Joined/Left room changes, event locators, limited flags
@@ -54,7 +63,7 @@ Known separate CI follow-up: the legacy collaboration-hris.yml/check_space_queue
 still pins SDK4 and must not be claimed or dispatched as current SDK8 native acceptance.
 Current Group native controls select immutable SDK8 explicitly. Preserve old artifact hashes
 when updating the old workflow/fixture together. The accepted hosted foreground control run
-42923369580 remains SDK6 coverage; no hosted raw-sync run is claimed yet.
+42923369580 remains SDK6 coverage; hosted raw-sync run42943310515 is pending, as recorded above.
 
 Phone attempt 44309 REAPED timeout 124 at 01:50. The existing availability question stays pending;
 Release 89 (SDK6) remains the latest validated phone APK, install-only. No new phone install,

@@ -1,0 +1,15 @@
+{
+  "runId": 42943310515,
+  "sourceCommit": "6baa8acc82bcd95a22ab3bc342458292f789de99",
+  "ref": "validation/raw-sync-batches-20261111",
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42943310515",
+  "createdAt": "2026-11-11T02:03:23Z",
+  "status": "in_progress",
+  "portableAccepted": false,
+  "appleAccepted": false,
+  "expectedPortableCases": 9001,
+  "expectedAppleCases": 3499,
+  "expectedSwiftPushChecks": 16,
+  "unsignedAppleHostRequired": true,
+  "previousAcceptedRun": 42923369580
+}
