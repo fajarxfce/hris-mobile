@@ -3,6 +3,7 @@
 package dev.fajar.starter.collaboration.data
 
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkSyncConnection
+import dev.fajar.starter.collaboration.data.dto.SdkSyncBatch
 import dev.fajar.starter.collaboration.data.dto.SdkSyncProblem
 import dev.fajar.starter.collaboration.data.repositories.SdkSyncLifecycle
 import dev.fajar.starter.common.result.*
@@ -115,6 +116,7 @@ class SdkFirstSyncTest {
 }
 
 private class FirstSyncConnection : CollaborationSdkSyncConnection {
+    override val batches = MutableStateFlow<SdkSyncBatch?>(null)
     override val completedFirstSync = MutableStateFlow(false)
     override val problems = MutableStateFlow<SdkSyncProblem?>(null)
     var releases = 0

@@ -1,8 +1,66 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 01:20 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 02:01 UTC. This opening section owns current work; older checkpoints below are historical.
 
-## Current SDK8 adoption — next work owns incoming hints
+## Current raw sync batches — accepted, continue with the durable owner
+
+Eleven Mobile source/test files expose exact SDK8 response batches from the existing
+SdkSyncPump. Native positions, Joined/Left room changes, event locators, limited flags
+and explicit inventory loss are detached from native mutable lists. The process-local
+StateFlow keeps only the latest response. No second client/loop was added; late success
+after stop is drained without publication, and failures preserve the previous success.
+This does not yet install an application hint collector or retain a durable cursor/work queue.
+
+Focused1/session10629 REAPED: 86 JVM/Android cases /257.689s. Its first browser filter selected
+no cases. Browser1/session49837 REAPED:32 cases /31.346s; combined 118 ACCEPTED. Full1/session77490
+REAPED PASS /542.343s: 11,023 = 3,819 fresh + 7,204 exact accepted unchanged controls, zero
+failures/errors/skips. The first audit required isolated report hashes; 293 retained reports
+instead match the accepted foreground archives exactly, with unchanged module/dependency
+inputs and all non-Matrix catalog entries. Audit59617 REAPED ACCEPTED. Source 4,868 /
+f32dde5343d0a862a49ff4f8bb7f28bfcf6d0480b28c9c8b652bbcce281cb92b. Format/architecture/detekt,
+release compile/lint, browser/Wasm and iOS metadata gates pass. Apple native SDK8 is unaccepted.
+
+Package1/session83115 REAPED PASS /44.361s; generated APK repackaging removed 113,527,072 bytes
+of unused incremental ZIP space, preserving all 633 ZIP entries exactly. Its first audit
+only rejected three SKIPPED metadata tasks; no Kotlin compilation ran. Compact proof APK
+148,551,112B /693aa91fa1ed19aca6b5fda929cd8b6d431c5c9a93bd06ddad7b4cb2848dc0a0,
+SDK8 stripped x86_64 /6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95.
+Full1/accepted-proof.apk preserves the original 262,078,184-byte package and its entry hashes.
+
+Native-1/session17920 REAPED ACCEPTED: 6 cases /288.308s, boot 33.494s, all old controls preserved.
+Sync/key Matrix 32/native 9 and automatic worker Matrix 31/native 14 remain exact; lost original
+ACKs, process death and offline reopen pass. Fresh 2560 MiB/two-core emulator stopped; no compiler
+ran beside it, phone untouched. Group source 8,743 still matches accepted source-control
+9df6e8c32f1c832b11488e1c79a0ea261b17672b141dcfcf273589e7e5b54cc8.
+
+Mobile private `.work/raw-sync-batches-2026-11-11` owns base/candidates, all audit scripts,
+full/packaging reports and accepted APKs. Its publish.py HAS EXECUTED; do not rerun it.
+Group private `.work/raw-sync-batches-native-2026-11-11` owns native-config, unchanged
+source-control, six real fixtures and audits. The shared public measurement is
+collaboration-raw-sync-batches-2026-11-11.json. Contract: collaboration-raw-sync-batches.md
+(Mobile), collaboration/raw-sync-batches.md (Group). No generic Starter delta is needed.
+
+Next: retain stable SDK source identity, each response's own cursor and bounded changed-room
+work atomically. Empty cursor-only updates must not wake a worker. Keep provider inventory
+recovery distinct from the existing local-binding scan, preserve unfinished phases/backoff
+and fence late callbacks across account/runtime replacement. The 65,536-byte document envelope
+needs an explicit worst-case capacity review when physical demand is added; do not copy every
+SDK event ID or silently discard existing work. Update all queue captures, startup/read/scan
+and wake-completion owners together. Follow with owned runtime observation, stored-key recovery
+and incoming push. Physical Group room resolution is accepted; unpublished Company originals
+still need their separate route. All 54 communications acceptance groups remain OPEN.
+
+Known separate CI follow-up: the legacy collaboration-hris.yml/check_space_queue_adoption.py
+still pins SDK4 and must not be claimed or dispatched as current SDK8 native acceptance.
+Current Group native controls select immutable SDK8 explicitly. Preserve old artifact hashes
+when updating the old workflow/fixture together. The accepted hosted foreground control run
+42923369580 remains SDK6 coverage; no hosted raw-sync run is claimed yet.
+
+Phone attempt 44309 REAPED timeout 124 at 01:50. The existing availability question stays pending;
+Release 89 (SDK6) remains the latest validated phone APK, install-only. No new phone install,
+latency claim, Group migration/live activation or PRD completion is included. Continue work.
+
+## SDK8 adoption baseline
 
 SDK8 is PUBLISHED and adopted in the primary Mobile source. Release 441121763 targets exact
 b94f6fa79fc1e22b1ded081af03237603fca6f65; six remote assets/downloaded hashes and unauthenticated

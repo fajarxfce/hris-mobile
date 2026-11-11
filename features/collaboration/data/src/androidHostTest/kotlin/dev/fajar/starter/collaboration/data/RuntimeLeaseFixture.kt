@@ -99,6 +99,7 @@ internal class RuntimeLeaseFixture(
     var beforeReadinessSubscribe: () -> Unit = {}
     var failReadinessSubscribe = false
     var syncRequests = 0
+    private var storedSyncPosition: String? = null
     val syncSettings = mutableListOf<SyncSettingsV2>()
     var signingKey: String? = Base64.encode(ByteArray(32) { it.toByte() })
     var providerRequest: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData = {
@@ -167,13 +168,17 @@ internal class RuntimeLeaseFixture(
 
             override fun deviceId(): String = "PROOF_NATIVE"
 
+            override suspend fun storedSyncPositionV2(): String? = storedSyncPosition
+
             override suspend fun syncOnceV2(settings: SyncSettingsV2): SyncResponseV2 {
                 assertFalse(settings.fullState)
                 syncRequests++
                 syncSettings += settings
                 beforeSync()
+                val previous = storedSyncPosition
+                storedSyncPosition = "fixture-next"
                 return SyncResponseV2(
-                    previousBatch = if (syncRequests == 1) null else "fixture-next",
+                    previousBatch = previous,
                     nextBatch = "fixture-next",
                     rooms = SyncResponseRoomsV2(emptyList(), emptyList(), emptyList(), emptyList()),
                     timelineChanges = SyncTimelineChangesV2(emptyList(), false),

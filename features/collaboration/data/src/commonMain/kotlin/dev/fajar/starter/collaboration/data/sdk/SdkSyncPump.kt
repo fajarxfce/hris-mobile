@@ -1,6 +1,8 @@
 package dev.fajar.starter.collaboration.data.sdk
 
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkSyncConnection
+import dev.fajar.starter.collaboration.data.dto.SdkSyncBatch
+import dev.fajar.starter.collaboration.data.dto.SdkSyncOutcome
 import dev.fajar.starter.collaboration.data.dto.SdkSyncProblem
 import kotlin.random.Random
 import kotlin.time.TimeSource
@@ -15,7 +17,7 @@ import kotlinx.coroutines.sync.withLock
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class SdkSyncPump(
     private val lifetime: CoroutineScope,
-    private val synchronize: suspend () -> SdkSyncProblem?,
+    private val synchronize: suspend () -> SdkSyncOutcome,
     private val nowMillis: () -> Long = elapsedClock(),
     private val jitterMillis: () -> Long = { Random.nextLong(251) },
 ) : CollaborationSdkSyncConnection {
@@ -27,6 +29,8 @@ internal class SdkSyncPump(
     override val problems = mutableProblems.asStateFlow()
     private val mutableCompletedFirstSync = MutableStateFlow(false)
     override val completedFirstSync = mutableCompletedFirstSync.asStateFlow()
+    private val mutableBatches = MutableStateFlow<SdkSyncBatch?>(null)
+    override val batches = mutableBatches.asStateFlow()
 
     override suspend fun start(): SdkSyncProblem? =
         mutation.withLock {
@@ -50,7 +54,8 @@ internal class SdkSyncPump(
             val began = nowMillis()
             // Never cancel a pending SDK call on disposal. The owning close waits for it;
             // the public parent close remains bounded and keeps its exclusive store lock.
-            val problem = synchronize()
+            val response = synchronize()
+            val problem = (response as? SdkSyncOutcome.Failed)?.problem
             if (stopping.isCompleted) {
                 // A received denial remains authoritative even if disposal began while waiting.
                 if (problem?.terminal == true) mutableProblems.value = problem
@@ -58,6 +63,7 @@ internal class SdkSyncPump(
             }
             mutableProblems.value = problem
             if (problem == null) {
+                mutableBatches.value = (response as SdkSyncOutcome.Received).batch
                 mutableCompletedFirstSync.value = true
                 failures = 0
                 mutation.withLock { retryNotBefore = 0 }

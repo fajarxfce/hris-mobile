@@ -1,0 +1,123 @@
+{
+  "date": "2026-11-11",
+  "mobileBaseCommit": "6406e5c7b06a496bab97e81a8f451c9f4402afa2",
+  "sourceFiles": 4868,
+  "sourceManifestSha256": "f32dde5343d0a862a49ff4f8bb7f28bfcf6d0480b28c9c8b652bbcce281cb92b",
+  "changedSourceFiles": [
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationSyncBatchTest.kt",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/RuntimeLeaseFixture.kt",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationSyncSource.kt",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/mappers/AndroidSdkSyncBatchMapper.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationSdkSyncConnection.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/SdkSyncBatch.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/sdk/SdkSyncPump.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/SdkFirstSyncTest.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/SdkSyncBatchObservationTest.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/SdkSyncLifecycleTest.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/SdkSyncPumpTest.kt"
+  ],
+  "sdkVersion": "26.10.23-hris.8",
+  "sdkAarSha256": "6eebe8dab124541783d2b1d746cf30ea4b8dd2a599980cccb823927780678717",
+  "focused": {
+    "freshCounts": {
+      "tests": 118,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "elapsedSeconds": 257.689,
+    "browserElapsedSeconds": 31.346,
+    "firstBrowserSelectionEmpty": true
+  },
+  "full": {
+    "validatedTests": 11023,
+    "freshCounts": {
+      "tests": 3819,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchangedTests": 7204,
+    "elapsedSeconds": 542.343,
+    "acceptedForegroundReportMatches": 293,
+    "nonMatrixCatalogEntriesUnchanged": true,
+    "format": true,
+    "architecture": true,
+    "detekt": true,
+    "androidReleaseCompileAndLint": true,
+    "wasmCompileAndBrowserTests": true,
+    "iosMetadataCompile": true
+  },
+  "packaging": {
+    "elapsedSeconds": 44.361,
+    "sourceManifestSha256": "f32dde5343d0a862a49ff4f8bb7f28bfcf6d0480b28c9c8b652bbcce281cb92b",
+    "sameAllZipEntries": true,
+    "entries": 633,
+    "sourceAndLibraryInputsUnchanged": true,
+    "removedApkBytes": 113527072,
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 148551112,
+      "sha256": "693aa91fa1ed19aca6b5fda929cd8b6d431c5c9a93bd06ddad7b4cb2848dc0a0"
+    },
+    "nativeLibrarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95",
+    "noCompilation": true,
+    "initialAuditOnlySkippedMetadataTasks": true
+  },
+  "native": {
+    "counts": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "elapsedSeconds": 288.308,
+    "bootSeconds": 33.494,
+    "memoryMiB": 2560,
+    "cores": 2,
+    "phoneTouched": false,
+    "sourcesUnchanged": true,
+    "apkUnchanged": true,
+    "noCompilationDuringEmulator": true,
+    "emulatorStopped": true
+  },
+  "requestControls": {
+    "syncAndStoredKeyScenario": {
+      "matrix": {
+        "requests": 32,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "native": {
+        "requests": 9,
+        "bootstrapReplay": 1,
+        "directTransport": 4
+      }
+    },
+    "incomingWorker": {
+      "matrix": {
+        "requests": 31,
+        "encryptedSend": 4,
+        "sync": 3,
+        "secretStorage": 2,
+        "providerPage": 2
+      },
+      "native": {
+        "requests": 14,
+        "registration": 1,
+        "bootstrapReplay": 1,
+        "directTransport": 3
+      }
+    }
+  },
+  "rawResponseObservationAccepted": true,
+  "atomicDurableCursorWorkIntegrated": false,
+  "applicationSyncHintCollectorIntegrated": false,
+  "applicationStoredKeyCollectorIntegrated": false,
+  "incomingPushRoutingIntegrated": false,
+  "appleNativeSdk8Accepted": false,
+  "phoneLatencyMeasured": false,
+  "communicationsAcceptanceGroupsClosed": 0
+}

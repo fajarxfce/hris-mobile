@@ -1,5 +1,7 @@
 package dev.fajar.starter.collaboration.data
 
+import dev.fajar.starter.collaboration.data.dto.SdkSyncBatch
+import dev.fajar.starter.collaboration.data.dto.SdkSyncOutcome
 import dev.fajar.starter.collaboration.data.dto.SdkSyncProblem
 import dev.fajar.starter.collaboration.data.sdk.SdkSyncPump
 import kotlin.test.*
@@ -247,5 +249,13 @@ class SdkSyncPumpTest {
     }
 
     private fun TestScope.pump(call: suspend () -> SdkSyncProblem?) =
-        SdkSyncPump(backgroundScope, call, { testScheduler.currentTime }, { 0 })
+        SdkSyncPump(
+            backgroundScope,
+            {
+                call()?.let { SdkSyncOutcome.Failed(it) }
+                    ?: SdkSyncOutcome.Received(SdkSyncBatch(null, "fixture", emptyList(), false))
+            },
+            { testScheduler.currentTime },
+            { 0 },
+        )
 }

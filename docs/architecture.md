@@ -1,5 +1,9 @@
 # Architecture
 
+[Raw SDK sync batches](collaboration-raw-sync-batches.md) preserve each response's own positions
+and bounded locators in the existing transport loop. Observation is process-local and conflated;
+atomic cursor/work retention and provider-inventory recovery remain with the incoming owner.
+
 [Local incoming startup observation](collaboration-space-incoming-startup.md) follows the
 current parent, root and completed bootstrap without transport. One final owner boundary
 cancels stale emissions. [Foreground startup](collaboration-space-incoming-foreground.md) owns
