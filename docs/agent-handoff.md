@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 16:21 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 16:28 UTC. This opening owns current work; older sections are historical.
 
 ## Local incoming-history locator discovery applied; focused validation running
 
@@ -8,16 +8,22 @@ Scheduling source23fd5a9bcc0089546c231d5c20adc1e1265ccc0e and Group docs5bdf4195
 90094/61936 reaped. Local12,622 accepted (full54856/audit86295 reaped),440 focused. Hosted
 43057055642 dispatched ONCE at16:18:41UTC on validation/inventory-scheduling-20261111;
 37910 reaped, expected14,849=10,600 portable+4,249 Apple. Existing run stays attached.
-Retention43053179213 pending, expected14,719; progress43049052938 portable10,418 accepted/
-Apple pending. Owned43044913726 FULL14,527, raw43040652714 FULL14,458 and alias43037578170
+Retention43053179213 portable10,508 accepted (7287 reaped), Apple pending; progress43049052938
+FULL14,584=10,418 portable+4,166 Apple accepted (8779 reaped). Owned43044913726 FULL14,527, raw43040652714 FULL14,458 and alias43037578170
 FULL14,434 accepted. Apple evidence includes16 Swift/unsigned-host cases, not native SDK8.
 Prior application43031231253 remains historically incomplete. Do not redispatch unchanged runs.
 
 Current11-file locator change APPLIED, NOT ACCEPTED:10 new Kotlin+1 existing app binding.
 Previous prepare/configure scripts HAVE EXECUTED at16:19:33UTC. Workspace
 .work/incoming-history-locators-2026-11-11 owns baseline, frozen candidate and reports.
-format1/67290 REAPED PASS36.019s. focused1/67038 RUNNING, expected163; browser161/full12,688
-follow. Frozen5,011-input manifest986a398ddcd13d7cf9a97dbd759536d79dc6e7a8b1bdbdf08539fc60f2cd138c.
+format1/67290 REAPED PASS36.019s. focused1/67038 REAPED FAILED219.761s/161 cases/3 failures.
+Three new fixture expectations incorrectly required Failed for inactive scope; the existing raw
+metadata contract returns empty. Exact empty-page assertions now replace those assumptions, with
+positive reauthentication and account/audience restoration checks. No production behavior changed;
+repository documentation clarifies empty-view/completion authority. Failed source/results retained
+in failed-candidate-1 and focused1; see inactive-scope-test-review.json. No cases or counts removed.
+format2/54511 REAPED PASS37.931s. focused2/32028 RUNNING, expected163; browser161/full12,688 follow.
+Frozen5,011-input manifestfb926e34e55e21d17ed894aa791d708c047cff4e0a4f4368f4d11bd544dff1ad.
 Do not edit source while tests run. Hosted scripts PREPARED NOT DISPATCHED; expected14,942:
 10,666 portable (5,068 desktop/835 Android/4,763 browser)+4,276 Apple. Publication scripts and
 next implementation draft are NOT prepared yet. Current source/test files are uncommitted.
@@ -33,7 +39,7 @@ Apple wrappers cover isolation, all devices, staging, reopen/reauthentication, r
 insertions before the cursor, bounded I/O and observation cancellation. Fixtures intentionally
 use opaque checkpoint payloads; this is not decryption/native proof. App DI graph is extended.
 
-Next: reap focused67038 and inspect any failure; keep failed evidence and expectations. Then
+Next: reap focused32028 and inspect any failure; keep failed evidence and expectations. Then
 browser, focused324 audit, full12,688 and exact source/case/dependency verification. Prepare
 contract/publisher/handoff against real results, commit/push, dispatch hosted once. Keep prior
 hosted runs attached. Resolve durable active/requested passes and scheduling liveness before
@@ -44,7 +50,8 @@ slow primary operations can exhaust the worker budget before appended work. Inve
 loss/work.omitted resets its generation/cursor/retry; sustained overflow can restart the first
 prefix indefinitely. Current tests prove retention/exact ownership, not progress under ongoing
 loss. Plan a coherent active/requested inventory pass and fair-turn protocol, preserving old v5
-meaning through explicit migration and exact completion/readback. Do not patch position alone:
+meaning through explicit migration and exact completion/readback. Read next-inventory-active-request-review.md for the proposed coalesced later-generation protocol
+(NOT implemented). Do not patch position alone:
 current Advance returns Boolean and the app retains captured position while updating phase.
 
 SDK8 already exports subscribeToRoomKeyChanges/RoomKeyChangesListener/RoomKeyChangeBatch through
@@ -55,8 +62,8 @@ global recovery and atomic primary demotion remain. Never drop unresolved refs t
 Native allocation/performance, authoritative absence and combined Company-storage/Group-native
 proof remain. Raw observation/Original producer OFF; all54 PRD groups OPEN. No Starter/live change.
 
-Phone59554 REAPED timeout at15:55:22UTC/20.02s; no install attempted. Evidence in retention
-workspace/phone-connect-1555.json, next retry no earlier16:26UTC. Release89 SDK6 awaits install.
+Phone10092 REAPED timeout at16:26:16UTC/20.016s; no install attempted. Evidence in current
+workspace/phone-connect-1626.json, next retry no earlier16:57UTC. Release89 SDK6 awaits install.
 Notify first, explicit serial/install-only, never drive phone UI. No emulator. Preserve original
 intents, Draft66, keys/stores/SDK assets, inspector gradlew.bat and live90163c3/schema116.4 Group OFF.
 Continue long run and push every commit.
