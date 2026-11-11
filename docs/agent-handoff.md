@@ -1,6 +1,47 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 14:39 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 14:50 UTC. This opening owns current work; older sections are historical.
+
+## Current: owned runtime inventory passes focused tests, browser validation running
+
+Raw adapter source169f839d9b46b956503d82a44ee6b420ad433a43 and Group docs90dcbf94 PUSHED;
+all pushes reaped. Raw local12,346 accepted. Hosted43040652714 dispatched ONCE at14:39:58UTC
+on validation/raw-room-inventory-20261111; dispatch89891 REAPED. Expected14,458, existing run
+attached; do not redispatch. Alias43037578170 still running at14:41; expected14,434. Canonical
+43028172483 FULL14,258 accepted. Application43031231253 Apple4,088 accepted (audit86395 REAPED,
+16 Swift/unsigned host); portable cancelled/incomplete10,170 omits30 cases. Full acceptance FALSE;
+original expectations preserved. Its Apple success does not fix the missing portable coverage.
+
+Fifteen-file owned inventory candidate APPLIED, NOT YET FULLY ACCEPTED:6 new files/9 modified.
+Preparation/configuration scripts from raw workspace HAVE EXECUTED. Current workspace
+.work/space-owned-room-inventory-2026-11-11 owns exact baseline/candidate/reports/scripts.
+format1/20442 REAPED PASS36.073s. focused1/23123 REAPED PASS409.588s/97 cases, no failures.
+browser1/28638 RUNNING, expected26. Then combined focused audit and full validation, expected12,402.
+Frozen4,988-input manifest5755a8140758ebc442e6ea0e2ef44e43c5f1e06ec600be5ab5b847316f9fd9e4.
+Do not edit source during validation. No current full acceptance/commit/hosted dispatch yet.
+
+Existing native parent/child owner now owns finite inventory read and mapping. Current registry and
+actual original source fence entry/readback. SDK failure classifications survive; no new client,
+store, sync, transport or independent job. Data DI exposes the capability; unavailable hosts return
+Unavailable instead of an empty inventory. Android read cancellation/timeout/denial and actual-registry
+adoption tests use native/store fakes, not native SDK/SQLite execution. Runtime retirement waits for
+all returned Room disposals before native/store release. All typed metadata stays detached.
+New cases13 common on desktop/Android/browser+17 Android-only =56 local;97 focused/26 browser.
+Expected hosted14,527=10,380 portable+4,147 Apple. Scripts prepared, NOT dispatched.
+
+No next inventory-cursor code is applied. Read next-inventory-continuity-review.md: retain generation/
+cursor/retry and work atomically with explicit codec versioning; prove unknown-head coverage amid
+concurrent sync; define membership/authoritative-absence handling. Current64-task capacity can fill
+with rooms waiting for keys. Durable keys-only recovery/backpressure must precede activation so new
+rooms cannot starve. Do not drop pending refs or create a parallel client/worker. Raw collector and
+Original producer OFF; all54 PRD groups OPEN. Combined old-Company storage/new-Group native proof,
+keys-only wake and whole-inventory consumer still pending. No generic Starter/live deployment change.
+
+Phone latest34046 timeout124 at14:22:24UTC; next retry no earlier14:53UTC. Release89 SDK6 awaits
+install, no attempt/result. Notify first, explicit serial/install-only, never drive UI. No emulator.
+Preserve originals, Draft66, keys/stores/SDK assets, inspector gradlew.bat and live90163c3/schema116.4
+Group OFF. Continue long run and push every commit.
+
 
 ## Raw inventory accepted — continue owned runtime binding
 
