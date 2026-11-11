@@ -1,6 +1,63 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 12:13 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 12:28 UTC. This opening owns current work; older sections are historical.
+
+## Original queue completion — full validation running
+
+Accepted reference completion source 41e98291e9ced05f7f3f02360e98c027afdd8445 and Group docs 96967109
+are PUSHED (32784/25383 reaped). Full 93560 passed 638.872s; audit 4739 accepted 12,079 cases
+(10,041 fresh + 2,038 unchanged controls). Focused 340 accepted. Its publisher/accepted handoff and
+prepare/configure-next-original-queue-completion scripts HAVE EXECUTED. Hosted run 43018627791 on
+that source was dispatched once (6878 reaped); expected 14,089. Do not redispatch.
+
+The current five-file queue completion increment is APPLIED/FROZEN, NOT accepted or committed.
+Private .work/space-original-queue-completion-2026-11-11 preserves baseline 12,079 / 4,964 inputs,
+4,967 current inputs, source/report snapshots and manifest
+317debe871a2c6c225b595e88460d94b9a20a4e646b9a2fda02c3768ed64c9c9.
+Format1 / 96397 reaped PASS 35.949s; focused1 / 46401 reaped PASS 304.050s / 161;
+browser1 / 64788 reaped PASS 187.335s / 159; focused audit 320 accepted. Full1 / 19106 RUNNING,
+expected 12,127. Reap then accept-full.py full1 before publication or source mutation. No failed runs.
+
+One local five-second Original owner requires exhausted Company progress, no pending references or
+active finite seek/retry, exact resolved head and current checkpoint. Exact task/source/metadata/
+registered physical device/account/native family and denial remain checked. CAS/readback retires only
+the captured task, keeping independent wake, source/rescan and newer work. No provider/client/content
+write or cursor restart. 24 new owner cases; existing Published/recovery/reference/policy controls,
+37 queue + 18 Company incoming + 12 wave storage cases and app bindings pass. Fixture records
+operations, not native/database behavior. Caller-owned provider-write serialization is explicit.
+
+Queue publish.py, contract.md, hosted-plan.json, hosted-audit.py and dispatch-hosted.py are PREPARED,
+NOT executed. An accepted-handoff writer still needs preparation after reviewing next implementation.
+After full acceptance publish/commit/push and dispatch once on validation/original-queue-completion-20261111;
+expected 14,161 = 10,105 portable + 4,056 Apple, 16 Swift/unsigned host; baseline 43018627791.
+
+Next source is NOT drafted/applied. Read next-canonical-physical-binding-review.md and
+next-original-routing-review.md. Extend the owning physical resolver with exact local Original metadata,
+registered LEGACY Company/device provenance, typed canonical target and bounded Original metadata
+fallback only after authoritative Published absence. Current convert always selects Published, and
+fallback is unwired. Correct explicit fixture roles: current fixture SPACE registration does not prove
+Original provenance for its LEGACY alias. Never relabel saved Space progress or invent source identity
+for old null-source logical tasks. Local immutable retention must be confirmed before queue conversion.
+
+Then finish logical alias routing and Original worker integration, keys-only recovery and bounded
+Client.rooms inventory. Existing registry adoption already drains/excludes the original native slot;
+Company recovery observes borrower interruption and cancelAndJoin()s its operation. Preserve this,
+then prove the combined suspended old-storage-write/new-Original-worker interleaving before activation.
+Separate worker mutexes alone do not establish it. Both raw collector and Original producer remain
+OFF; all 54 PRD groups OPEN. No generic Starter delta. Continue long run; push every commit.
+
+Reconciliation 43015359541 portable 9,999 accepted (audit 27124 reaped), Apple 4,003 pending. Reference
+completion 43018627791 runs on 41e98291. Content 43011629455 portable 9,939 accepted; its first Apple
+job was cancelled before runner/steps due to capacity, archived, then targeted retry requested once
+at 11:52:11 (28318 reaped). No portable rerun or workflow redispatch. Company 43008238149 fully
+accepted 13,813 (Apple audit 99420 reaped); reader 43003600252 fully accepted 13,793. Inspect exact
+latest audits before changing statuses. No native SDK8 Apple runtime claim from simulator/host checks.
+
+Phone 44127 reaped timeout 124, connect started 12:17:40 UTC; next retry no earlier 12:48.
+Evidence: queue-completion/phone-connect-1217.json. Release 89 SDK6 validated APK awaits install;
+no attempt/result. Notify before explicit-serial install-only; never launch/drive the phone. No emulator.
+Available RAM was about 20 GB at 12:14; use one compiler. Preserve eight originals, Draft66, keys/stores,
+SDK assets and live 90163c3 / schema 116.4, Group OFF.
 
 ## Original finite-reference completion accepted — continue queue completion
 
