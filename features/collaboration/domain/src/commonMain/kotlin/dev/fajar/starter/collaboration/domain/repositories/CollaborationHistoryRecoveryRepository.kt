@@ -25,4 +25,26 @@ interface CollaborationHistoryRecoveryRepository {
         expected: CollaborationHistoryProgress,
         recovery: CollaborationHistoryRecoveryPosition,
     ): AppResult<Boolean>
+
+    /**
+     * Advances one exact finite attempted page, permitting primary changes and a later request.
+     * Verifies the still-pending indexed interval before crossing it; a null cursor alone is not
+     * EOF evidence. The caller owns admission and the number of attempted unresolved outcomes.
+     * False means contention or a changed pass, for the operation owner to read back/reselect.
+     */
+    suspend fun advance(
+        access: CollaborationLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        attempted: CollaborationHistoryReferences,
+        unresolved: Int,
+        limit: Int = 16,
+    ): AppResult<Boolean>
+
+    suspend fun advance(
+        access: CollaborationSpaceLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        attempted: CollaborationHistoryReferences,
+        unresolved: Int,
+        limit: Int = 16,
+    ): AppResult<Boolean>
 }

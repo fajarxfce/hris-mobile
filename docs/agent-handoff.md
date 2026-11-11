@@ -1,5 +1,61 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 19:27 UTC. This opening owns current work; earlier sections are historical.
+
+## Finite history recovery turns accepted; account history discovery next
+
+Seven Kotlin files ACCEPTED (2 new, 5 existing). Request/page/advance policies keep a finite
+active boundary and cursor despite later requests, coalesce a later generation and promote it
+at EOF. Both Company and Space raw storage verify exact source rows and at most17 pending rows
+at the same checkpoint before CAS advancement. Omitted middle rows, forged partial/empty EOF,
+stale query checkpoints and disappearing requests are rejected. Concurrent resolution, primary
+appends and newer requests survive. No content acknowledgement, hidden retry or new schema.
+
+format1/50535 REAPED PASS36.528s; focused1/34548 REAPED PASS421.651s/149;
+browser1/95088 REAPED PASS144.224s/147. Exact296 focused accepted, no failed runs.
+full1/87030 REAPED PASS584.008s; audit81761 REAPED.13,002 accepted =10,964 fresh+2,038 exact
+unchanged controls. Prior case identities/source/library/dependency closures verified.
+5,033 inputs; manifest c09d036903751fac97eb5ee5e0d6475f1499fc12b3b30d88768a6c90e0f2ae57.
+Proof APK 151776340 bytes/SHA 53593ce675eb53093de75089a362faffc2279cb1594b01d92b053f95460dd281; not a native execution claim.
+New20 domain cases and15 DB cases (35 total per target, each both namespaces) cover finite
+progress, continuous requests, sparse references, coverage, concurrency, cancellation and reopen.
+
+Workspace .work/history-recovery-turn-2026-11-11 owns evidence. Publisher and this writer HAVE
+EXECUTED. Commit/push next, then dispatch ONCE on validation/history-recovery-turn-20261111;
+expected15,405=10,980 portable+4,425 Apple. NOT DISPATCHED yet. Prior43083225746 attached15,300;
+Space43077651832 attached15,178, neither audited yet. Fairness43069542685 FULL15,028 and
+Original43073411916 FULL15,100; public evidence includes both Apple audits. Inventory43066807577
+FULL15,020. Keep historical application43031231253 incomplete; never erase missing CI evidence.
+
+Next7-file next-account-history-locators-draft PREPARED, UNAPPLIED/UNTESTED, REVIEW INCOMPLETE;
+3 new+4 guarded existing. Separate account-owned metadata mapper recognizes Company/Space
+incoming-history partitions across historical devices; it advances over internal projection
+records without reading content or creating keys. Positive history grammar validates UUIDs,
+version, checkpoint scope/order and actual160-character ASCII raw partition bound. Existing
+scoped APIs remain narrow. New14 mapper and12 DB cases (27 total storage cases) are drafted,
+including80 historical device locations, staging, restart, reauthentication, account/audience
+isolation, removed cursors, cancellation and raw failures. Final draft includes a corrected
+store.begin generation argument; do not rerun draft generators over it. Review files listed in
+next-account-history-locators-files.json and next-account-recovery-discovery-review.md.
+Prepare/configure/expected files for this next stage are NOT prepared yet. Proposed totals:
+5,036 inputs,13,068 local,149 focused+147 browser;15,497 hosted=11,046 portable+4,451 Apple.
+
+Global recovery scheduling remains undecided. A constant pass in the account/root-owned
+incoming-demand header is a candidate; root migration and every codec constructor/copy must be
+explicit. Never invent a sync position or another64-room queue. Owned metadata is not native
+authority: historical Space roots and Original Company sources require admitted owners.
+Missing keys, unsupported payloads, absent Original metadata and awaiting redaction need distinct
+triggers; unresolved is not permission to timer-poll forever. Primary EOF demotion plus recovery
+demand/wake, final readback, key subscription ownership/loss reconciliation and native blocked
+queue liveness remain. Raw collector/Original producer OFF; all54 PRD groups OPEN.
+No Starter/live change. Continue authorized long run and push every commit.
+
+Phone63933 REAPED timeout19:00:14UTC/20.015s; no install attempted. Retry no earlier19:31UTC.
+Release89 SDK6 awaits install; notify first, explicit serial/install-only, never drive UI.
+No compiler/emulator now. Preserve original intents/Draft66/keys/stores/SDK assets/inspector
+gradlew.bat and live90163c3/schema116.4 Group OFF. Host Kotlin/Swift is not native SDK8 Apple proof.
+
+
 Updated 11 November 2026, 19:10 UTC. This opening owns current work; earlier sections are historical.
 
 ## Finite recovery turns applied; focused validation running

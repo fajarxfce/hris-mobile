@@ -1,5 +1,8 @@
 # Architecture
 
+[Finite history recovery turns](collaboration-history-recovery-turn.md) advance a bounded retained-reference pass while preserving primary work and later requests.
+Admitted content and global scheduling remain separate owners.
+
 [Independent recovery positions](collaboration-history-recovery-position.md) share encrypted references while preserving primary traversal.
 Semantic page ownership and recovery scheduling remain separate.
 

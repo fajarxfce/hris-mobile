@@ -3,6 +3,7 @@ package dev.fajar.starter.collaboration.data
 import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.data.repositories.*
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.boundedCollaborationHistoryRecoveryReferences
 import dev.fajar.starter.collaboration.domain.policies.collaborationHistoryUntilPosition
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.database.*
@@ -153,6 +154,23 @@ internal class CollaborationHistoryRecoveryFixture(
     ) =
         if (space) spaces().advanceIncomingReferences(spaceAccess, traversal, page, retry, limit)
         else company().advanceIncomingReferences(access, traversal, page, retry, limit)
+
+    suspend fun recoveryPage(limit: Int = 16) =
+        requireNotNull(
+            boundedCollaborationHistoryRecoveryReferences(
+                read(progress()!!.recovery!!.after, limit),
+                limit,
+            )
+        )
+
+    suspend fun advanceRecovery(
+        page: CollaborationHistoryReferences,
+        unresolved: Int = page.events.size,
+        limit: Int = 16,
+        store: ReplicaStore = local.database.replicas,
+    ) =
+        if (space) repository(store).advance(spaceAccess, traversal, page, unresolved, limit)
+        else repository(store).advance(access, traversal, page, unresolved, limit)
 
     suspend fun raw() =
         local.database.replicas

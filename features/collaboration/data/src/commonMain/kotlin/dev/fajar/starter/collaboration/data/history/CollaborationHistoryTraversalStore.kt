@@ -211,6 +211,75 @@ internal class CollaborationHistoryTraversalStore(
         }
     }
 
+    suspend fun advanceRecovery(
+        coordinates: CollaborationHistoryCoordinates,
+        traversal: CollaborationHistoryTraversal,
+        attempted: CollaborationHistoryReferences,
+        unresolved: Int,
+        limit: Int,
+    ): Boolean {
+        require(traversal.purpose == CollaborationHistoryPurpose.Incoming && limit in 1..16)
+        require(attempted.events.size <= limit)
+        val captured = attempted.copy(events = attempted.events.toList())
+        val expected = requireNotNull(captured.progress)
+        val position = requireNotNull(expected.recovery)
+        require(boundedCollaborationHistoryRecoveryReferences(captured, limit) == captured)
+        require(unresolved in 0..captured.events.size)
+        val scope = coordinates.scope
+        val partition = coordinates.traversalPartition(traversal)
+        val raw = replicas.checkpoint(scope, partition) ?: return false
+        return withCodec(coordinates, traversal) { codec ->
+            val current = codec.progress(raw)
+            val next =
+                planCollaborationHistoryRecoveryAdvance(current, captured, unresolved, limit)
+                    ?: return@withCodec false
+            var last: ReplicaDocument? = null
+            for (reference in captured.events) {
+                val row =
+                    requireNotNull(
+                        replicas.document(scope, partition, codec.id(reference.event.eventId))
+                    )
+                require(codec.reference(raw, row).copy(resolved = false) == reference)
+                last = row
+            }
+            val after = captured.after
+            val previousAfter = position.after
+            require(
+                after == null ||
+                    (after == last?.sortKey && (previousAfter == null || after > previousAfter))
+            )
+            val page =
+                replicas
+                    .observeQueries(
+                        scope,
+                        partition,
+                        listOf(ReplicaQuery(HISTORY_REFERENCES, previousAfter, limit + 1)),
+                    )
+                    .first()
+            if (page.checkpoint != raw) return@withCodec false
+            require(page.pages.size == 1)
+            val documents = page.pages.single().toList()
+            require(documents.size <= limit + 1)
+            require(documents.zipWithNext().all { (a, b) -> a.sortKey < b.sortKey })
+            require(documents.all { previousAfter == null || it.sortKey > previousAfter })
+            val pending = documents.map { codec.reference(raw, it) }
+            require(pending.all { !it.resolved && it.sequence < current.references })
+            require(pending.size.toLong() <= current.references)
+            require(pending.zipWithNext().all { (a, b) -> a.sequence < b.sequence })
+            val identities = captured.events.map { it.event.eventId }.toSet()
+            for ((row, reference) in documents.zip(pending)) {
+                if (
+                    reference.sequence < position.through && (after == null || row.sortKey <= after)
+                )
+                    require(reference.event.eventId in identities)
+            }
+            val updated = current.copy(revision = current.revision + 1, recovery = next)
+            val checkpoint = codec.checkpoint(updated)
+            currentCoroutineContext().ensureActive()
+            replicas.commit(raw.handle, raw.revision, checkpoint, emptyList(), true)
+        }
+    }
+
     suspend fun resolve(
         coordinates: CollaborationHistoryCoordinates,
         traversal: CollaborationHistoryTraversal,

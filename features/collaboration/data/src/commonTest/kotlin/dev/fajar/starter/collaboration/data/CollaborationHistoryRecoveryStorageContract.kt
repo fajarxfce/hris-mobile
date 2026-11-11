@@ -6,6 +6,8 @@ import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.AtomicCredentialStore
 import kotlin.test.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 
 abstract class CollaborationHistoryRecoveryStorageContract {
@@ -424,6 +426,272 @@ abstract class CollaborationHistoryRecoveryStorageContract {
         }
         assertEquals(before, f.raw())
     }
+
+    @Test
+    fun recoveryAdvancesAnExactIndexedPageWithoutChangingPrimaryPositions() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(1)
+        val before = f.progress()!!
+        val rows = f.raw().documents
+        assertEquals(AppResult.Success(true), f.advanceRecovery(page, limit = 1))
+        assertEquals(
+            before.copy(
+                revision = before.revision + 1,
+                recovery = f.recovery().copy(after = page.after, unresolved = true),
+            ),
+            f.progress(),
+        )
+        assertEquals(rows, f.raw().documents)
+    }
+
+    @Test
+    fun partialPageCannotClaimAnEmptyCursorWhilePendingRowsRemain() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(1)
+        val before = f.raw()
+        assertIs<AppResult.Failed>(f.advanceRecovery(page.copy(after = null), limit = 1))
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun emptyFabricatedPageCannotCompleteAnUnvisitedPendingInterval() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val before = f.raw()
+        assertIs<AppResult.Failed>(
+            f.advanceRecovery(CollaborationHistoryReferences(f.progress(), emptyList(), null))
+        )
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun omittedMiddleReferenceCannotBeCrossedByALaterCursor() = withDatabases { f ->
+        f.stage((1..4).map(f::event))
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery(4)))
+        val full = f.recoveryPage(3)
+        val forged = full.copy(events = listOf(full.events[0], full.events[2]))
+        val before = f.raw()
+        assertIs<AppResult.Failed>(f.advanceRecovery(forged, limit = 2))
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun lookaheadDetectsAnUnattemptedSeventeenthReferenceAtClaimedEof() = withDatabases { f ->
+        f.stage((1..20).map(f::event))
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery(20)))
+        val page = f.recoveryPage()
+        assertEquals(16, page.events.size)
+        val before = f.raw()
+        assertIs<AppResult.Failed>(f.advanceRecovery(page.copy(after = null)))
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun concurrentResolutionMayRemoveAttemptedRowsFromThePendingIndex() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(2)
+        assertEquals(AppResult.Success(true), f.resolve(f.read(limit = 1)))
+        assertEquals(AppResult.Success(true), f.advanceRecovery(page, unresolved = 1, limit = 2))
+        assertEquals(page.after, f.progress()!!.recovery!!.after)
+        assertEquals(listOf(f.event(3)), f.recoveryPage().events.map { it.event })
+    }
+
+    @Test
+    fun emptyRealPendingProjectionCanFinishAfterConcurrentResolution() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        assertEquals(AppResult.Success(true), f.resolve(f.read()))
+        val page = f.recoveryPage()
+        assertTrue(page.events.isEmpty())
+        assertEquals(AppResult.Success(true), f.advanceRecovery(page))
+        assertEquals(f.recovery().copy(complete = true), f.progress()!!.recovery)
+    }
+
+    @Test
+    fun recoveryPageCannotSubstituteReferenceMetadata() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(1)
+        val row = page.events.single()
+        val changed = row.copy(event = row.event.copy(timestamp = row.event.timestamp + 1))
+        val before = f.raw()
+        assertIs<AppResult.Failed>(
+            f.advanceRecovery(page.copy(events = listOf(changed)), limit = 1)
+        )
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun newerRequestIsPreservedWhenAnOlderCapturedPageAdvances() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(1)
+        assertEquals(
+            AppResult.Success(true),
+            f.replace(f.progress()!!, f.recovery().copy(requestedGeneration = historyId(9801))),
+        )
+        assertEquals(AppResult.Success(true), f.advanceRecovery(page, limit = 1))
+        assertEquals(
+            f.recovery()
+                .copy(after = page.after, unresolved = true, requestedGeneration = historyId(9801)),
+            f.progress()!!.recovery,
+        )
+    }
+
+    @Test
+    fun finalPagePromotesLatestRequestAndCapturesLaterPrimaryAppends() = withDatabases { f ->
+        f.stage()
+        assertEquals(
+            AppResult.Success(true),
+            f.replace(f.progress()!!, f.recovery().copy(requestedGeneration = historyId(9801))),
+        )
+        val page = f.recoveryPage()
+        f.stage(listOf(f.event(4)), "later")
+        assertEquals(
+            AppResult.Success(true),
+            f.replace(f.progress()!!, f.recovery().copy(requestedGeneration = historyId(9802))),
+        )
+        assertEquals(AppResult.Success(true), f.advanceRecovery(page))
+        assertEquals(
+            CollaborationHistoryRecoveryPosition(historyId(9802), 4),
+            f.progress()!!.recovery,
+        )
+        assertEquals(4, f.recoveryPage().events.size)
+    }
+
+    @Test
+    fun newPrimaryReferencesDoNotExtendTheCurrentFiniteAttempt() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        f.stage(listOf(f.event(4), f.event(5)), "later")
+        val page = f.recoveryPage(3)
+        assertEquals(3, page.events.size)
+        assertNull(page.after)
+        assertEquals(AppResult.Success(true), f.advanceRecovery(page, limit = 3))
+        assertEquals(f.recovery().copy(complete = true, unresolved = true), f.progress()!!.recovery)
+        assertEquals(5, f.read().events.size)
+    }
+
+    @Test
+    fun aChangedQueryCheckpointCannotBeAcceptedAsCoverage() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(1)
+        val racing =
+            object : ReplicaStore by f.local.database.replicas {
+                override fun observeQueries(
+                    scope: ReplicaScope,
+                    partition: String,
+                    queries: List<ReplicaQuery>,
+                ) = flow {
+                    f.stage(listOf(f.event(4)), "query-race")
+                    emitAll(f.local.database.replicas.observeQueries(scope, partition, queries))
+                }
+            }
+        assertEquals(AppResult.Success(false), f.advanceRecovery(page, limit = 1, store = racing))
+        assertEquals(f.recovery(), f.progress()!!.recovery)
+        assertEquals(4, f.progress()!!.references)
+    }
+
+    @Test
+    fun aPrimaryCommitAfterCoverageCheckWinsWithoutRecoveryOverwrite() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(1)
+        val racing =
+            object : ReplicaStore by f.local.database.replicas {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                    wake: WorkWakeRequest?,
+                ): Boolean {
+                    f.stage(listOf(f.event(4)), "commit-race")
+                    return f.local.database.replicas.commit(
+                        handle,
+                        expectedRevision,
+                        checkpoint,
+                        documents,
+                        publish,
+                        wake,
+                    )
+                }
+            }
+        assertEquals(AppResult.Success(false), f.advanceRecovery(page, limit = 1, store = racing))
+        assertEquals(f.recovery(), f.progress()!!.recovery)
+        assertEquals("commit-race", f.progress()!!.next)
+    }
+
+    @Test
+    fun cancelledPageCommitKeepsItsCursorAndPendingRows() = withDatabases { f ->
+        f.stage()
+        assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+        val page = f.recoveryPage(1)
+        val before = f.raw()
+        val entered = CompletableDeferred<Unit>()
+        val waiting =
+            object : ReplicaStore by f.local.database.replicas {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                    wake: WorkWakeRequest?,
+                ): Boolean {
+                    entered.complete(Unit)
+                    awaitCancellation()
+                }
+            }
+        coroutineScope {
+            val job = async { f.advanceRecovery(page, limit = 1, store = waiting) }
+            entered.await()
+            job.cancelAndJoin()
+        }
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun lostReplyKeepsAnAdvancedCursorAcrossReopenWithoutReplayingTheOldPage() =
+        withDatabases { f ->
+            f.stage()
+            assertEquals(AppResult.Success(true), f.replace(f.progress()!!, f.recovery()))
+            val page = f.recoveryPage(1)
+            val lost =
+                object : ReplicaStore by f.local.database.replicas {
+                    override suspend fun commit(
+                        handle: ReplicaHandle,
+                        expectedRevision: Long,
+                        checkpoint: String,
+                        documents: List<ReplicaDocument>,
+                        publish: Boolean,
+                        wake: WorkWakeRequest?,
+                    ): Boolean {
+                        assertTrue(
+                            f.local.database.replicas.commit(
+                                handle,
+                                expectedRevision,
+                                checkpoint,
+                                documents,
+                                publish,
+                                wake,
+                            )
+                        )
+                        error("reply lost after page advancement")
+                    }
+                }
+            assertIs<AppResult.Failed>(f.advanceRecovery(page, limit = 1, store = lost))
+            f.local.reopen()
+            val before = f.raw()
+            assertEquals(AppResult.Success(false), f.advanceRecovery(page, limit = 1))
+            assertEquals(before, f.raw())
+            assertEquals(listOf(f.event(2), f.event(3)), f.recoveryPage().events.map { it.event })
+        }
 
     private fun withDatabases(block: suspend (CollaborationHistoryRecoveryFixture) -> Unit) =
         runTest {

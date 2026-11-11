@@ -43,4 +43,36 @@ class EncryptedCollaborationHistoryRecoveryRepository(
             recovery,
         )
     }
+
+    override suspend fun advance(
+        access: CollaborationLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        attempted: CollaborationHistoryReferences,
+        unresolved: Int,
+        limit: Int,
+    ) = safeStorageCall {
+        storage.advanceRecovery(
+            CollaborationHistoryCoordinates.Company(access, traversal.conversationId),
+            traversal,
+            attempted,
+            unresolved,
+            limit,
+        )
+    }
+
+    override suspend fun advance(
+        access: CollaborationSpaceLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        attempted: CollaborationHistoryReferences,
+        unresolved: Int,
+        limit: Int,
+    ) = safeStorageCall {
+        storage.advanceRecovery(
+            CollaborationHistoryCoordinates.Space(access, traversal.conversationId),
+            traversal,
+            attempted,
+            unresolved,
+            limit,
+        )
+    }
 }
