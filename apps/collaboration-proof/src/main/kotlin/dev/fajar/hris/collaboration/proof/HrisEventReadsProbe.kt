@@ -28,6 +28,8 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
     private val receiver =
         ProtectedHrisProofOwner(context, files.fixture.getJSONObject("recipient"), files.home, http)
 
+    private var incomingHints: HrisSdkIncomingHintsProbe? = null
+
     suspend fun run(scenario: String) =
         withContext(Dispatchers.IO) {
             try {
@@ -63,7 +65,15 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
                     .put("recipient", identity(receiver.originalIdentity()))
             files.write("original-ready", ready)
             check(waitFor("original-stage-allowed").toString() == "{\"ready\":true}")
+            if (files.fixture.optBoolean("sdkIncomingHints", false)) {
+                val probe = HrisSdkIncomingHintsProbe(files.roomId).also { incomingHints = it }
+                probe.subscribe(peer.nativeClient)
+            }
             val staged = capturePhysical(source, peer)
+            incomingHints?.let { probe ->
+                staged.put("sdkIncomingHints", probe.complete(staged.getJSONObject("events")))
+                incomingHints = null
+            }
             peer.closeProofRuntime()
             peer = null
             source.closeProofRuntime()
@@ -75,7 +85,11 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
         } finally {
             closeHrisProofResources(
                 primary,
-                listOf({ source?.closeProofRuntime() }, { peer?.closeProofRuntime() }),
+                listOf(
+                    { incomingHints?.close() },
+                    { source?.closeProofRuntime() },
+                    { peer?.closeProofRuntime() },
+                ),
             )
         }
     }
@@ -609,7 +623,10 @@ internal class HrisEventReadsProbe(private val context: Context, directory: File
 
     private suspend fun sync(lease: AndroidCollaborationRuntimeLease) {
         withTimeout(30_000) {
-            lease.nativeClient.syncOnceV2(SyncSettingsV2(timeoutMs = 1uL, fullState = false))
+            val probe = incomingHints
+            if (probe == null) {
+                lease.nativeClient.syncOnceV2(SyncSettingsV2(timeoutMs = 1uL, fullState = false))
+            } else probe.sync(lease.nativeClient)
         }
     }
 

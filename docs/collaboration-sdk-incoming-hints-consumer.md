@@ -1,7 +1,9 @@
 # Isolated SDK8 application validation
 
 The Android candidate `26.10.23-hris.8` passes the isolated application build and checks.
-The shipping application still uses SDK6; native callback acceptance and publication remain pending.
+This records the isolated build before native acceptance/publication. SDK8 has since passed those
+follow-up gates and is adopted; see the matching native acceptance contract. This build record's
+publication flags describe its original checkpoint.
 
 Only the SDK version, verified artifact metadata and the Android test fixture's new sync response
 fields differ from the accepted application source. All 4,863 inputs stayed fixed during the run,

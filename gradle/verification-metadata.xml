@@ -15263,5 +15263,16 @@
             <sha256 value="c4aba64788420b0b54c877900f27ba385c3d170e878ca2faf378ec315cfcb076" origin="Official repository artifact and publisher SHA-1 verified during consumer SBOM inventory" />
          </artifact>
       </component>
+      <component group="dev.fajar.hris.matrix" name="sdk-android" version="26.10.23-hris.8">
+         <artifact name="sdk-android-26.10.23-hris.8.aar">
+            <sha256 value="6eebe8dab124541783d2b1d746cf30ea4b8dd2a599980cccb823927780678717" origin="Verified four-ABI incoming hint candidate; isolated consumer, unpublished" />
+         </artifact>
+         <artifact name="sdk-android-26.10.23-hris.8.ivy.xml">
+            <sha256 value="5cb8ccb96d382001c69affb86fa3b2c4ba8ab0482866536c562b7f5d57a46f7a" origin="Verified four-ABI incoming hint candidate; isolated consumer, unpublished" />
+         </artifact>
+         <artifact name="ivy-26.10.23-hris.8.xml">
+            <sha256 value="5cb8ccb96d382001c69affb86fa3b2c4ba8ab0482866536c562b7f5d57a46f7a" origin="Verified four-ABI incoming hint candidate; isolated consumer, unpublished" />
+         </artifact>
+      </component>
    </components>
 </verification-metadata>

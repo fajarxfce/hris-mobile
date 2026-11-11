@@ -1,6 +1,41 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 01:04 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 01:20 UTC. This opening section owns current work; older checkpoints below are historical.
+
+## Current SDK8 adoption — next work owns incoming hints
+
+SDK8 is PUBLISHED and adopted in the primary Mobile source. Release 441121763 targets exact
+b94f6fa79fc1e22b1ded081af03237603fca6f65; six remote assets/downloaded hashes and unauthenticated
+descriptor match. Publication 79738 REAPED; private sdk-incoming-hints-ci-2026-11-11/publication-1
+contains accepted.json. Do not rerun publish-release.py or replace any release asset. SDK7 stays retired.
+All 4,864 primary Mobile source inputs match the accepted isolated consumer/proof. Installed phone
+builds and pending phone 89 still use SDK6; no new phone APK or runtime installation is claimed.
+
+Native-1/session40642 REAPED ACCEPTED: 6 cases / 290.299s, no failures/errors/skips. New actual key import,
+exact sync/store positions and joined listener cancellation pass, with the same Matrix 32/native 9
+request budget as the old scenario. Five old controls remain, including automatic worker Matrix 31/
+native 14, lost original acknowledgements, process death and offline reopen. Fresh 2,560 MiB/two-core
+emulator stopped; no compiler ran beside it. Mobile proof1/session7704 REAPED: 21 cases / 127.682s,
+source 4,864 / c6020c6c98f408574e49173373f316dcb6572eea98aef6a429ab8a670fc5cd18.
+Group source1/session47736 REAPED / 140.562s, source 8,743 /
+9df6e8c32f1c832b11488e1c79a0ea261b17672b141dcfcf273589e7e5b54cc8; 42 Python protocol cases pass.
+Contract: collaboration-sdk-incoming-hints-native.md (Mobile), collaboration/sdk-incoming-hints-native.md
+(Group); both share measurement collaboration-sdk-incoming-hints-native-2026-11-11.json.
+Private Group sdk-incoming-native-2026-11-11 retains candidates, source/native reports and audits;
+isolated Mobile consumer remains in /home/fajar/hris/.worktrees/hris-mobile-incoming-hints-consumer-2026-11-11: its .work/sdk-incoming-consumer-2026-11-11 owns full/proof evidence.
+Public proof dependency selection passes in19.164s. Its private wrapper expected the inspector
+in the proof classpath and failed that extra assertion; source/Gradle resolution did not fail.
+Actual application/inspector selection is ACCEPTED: dependency-2/session96068 REAPED /17.910s,
+normal public repository, SDK8 selected and inspector SDK6 resolves to SDK8. No source change.
+
+Next: implement the existing runtime's raw sync/key handoff and atomic durable cursor/work owner.
+Do not add a second sync loop/client or per-hint transport requests. Keep provider-inventory gap
+coverage separate from the local-binding scan; the demand document has a 65,536-byte plaintext cap.
+Physical Group room resolution is accepted, but unpublished Company originals need separate routing.
+Key notifications must preserve pending phases and backoff. No runtime consumer, incoming push route,
+Apple native SDK8 or PRD group is complete by this SDK increment. Continue work.
+
+## Earlier validation context (SDK6 shipping statements below are historical)
 
 ## Foreground incoming startup accepted
 

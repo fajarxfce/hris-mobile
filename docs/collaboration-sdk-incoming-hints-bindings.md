@@ -1,8 +1,9 @@
-# Incoming SDK binding candidate
+# Incoming SDK bindings
 
 The accepted sync/key source changes now generate Kotlin and Swift APIs from a host
-library built with Android's exact native feature selection. No application dependency
-has changed. Shipping remains `26.10.23-hris.6`.
+library built with Android's exact native feature selection. The published Android dependency is
+now `26.10.23-hris.8`; [native acceptance](collaboration-sdk-incoming-hints-native.md) verifies the
+new callbacks and the previous delivery controls. The owning application hint consumer remains next.
 
 `Client.storedSyncPositionV2` reads the existing SDK position. `SyncResponseV2` carries
 its own previous/next positions and bounded timeline changes. Each room change retains
@@ -37,4 +38,5 @@ See [Android evidence](measurements/collaboration-sdk-incoming-hints-android-202
 SDK8 packaging now passes (118.225s). The 186,095,557-byte AAR preserves all four native hashes,
 consumer rules and runtime dependencies; compiled JVM APIs include the new sync/key methods
 and prior observer/queue recovery. An isolated application checkout is testing the candidate.
-Apple compilation, application/native runtime acceptance and publication remain separate work.
+The isolated application build, six Android native scenarios and publication are now accepted;
+see the native contract above. Apple native SDK8 compilation and application hint ownership remain separate work.

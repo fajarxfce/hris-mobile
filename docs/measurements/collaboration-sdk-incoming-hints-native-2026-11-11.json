@@ -1,0 +1,197 @@
+{
+  "startedAt": "2026-11-11T01:07:14.823675+00:00",
+  "elapsedSeconds": 290.299,
+  "bootSeconds": 32.613,
+  "counts": {
+    "tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "memoryMiB": 2560,
+  "cores": 2,
+  "phoneTouched": false,
+  "sourcesUnchanged": true,
+  "apkUnchanged": true,
+  "noCompilationDuringEmulator": true,
+  "emulatorStopped": true,
+  "artifact": {
+    "apkSha256": "464f7141ae92d79ea79c5f859e081003b3b878a958e25eaaf3d33b9c91c7ed30",
+    "sdkVersion": "26.10.23-hris.8",
+    "abi": "x86_64",
+    "librarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95"
+  },
+  "nativeSyncAndStoredKeyHintsAccepted": true,
+  "realtimeHintsIntegrated": false,
+  "phoneLatencyMeasured": false,
+  "recordedAt": "2026-11-11T01:17:14.045912+00:00",
+  "mobileBuild": {
+    "startedAt": "2026-11-11T01:01:46.676550+00:00",
+    "elapsedSeconds": 127.682,
+    "sourceFiles": 4864,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 149392128,
+      "sha256": "464f7141ae92d79ea79c5f859e081003b3b878a958e25eaaf3d33b9c91c7ed30"
+    },
+    "sourceManifestSha256": "c6020c6c98f408574e49173373f316dcb6572eea98aef6a429ab8a670fc5cd18",
+    "artifact": {
+      "apkSha256": "464f7141ae92d79ea79c5f859e081003b3b878a958e25eaaf3d33b9c91c7ed30",
+      "sdkVersion": "26.10.23-hris.8",
+      "abi": "x86_64",
+      "librarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95"
+    },
+    "nativeRuntimeAccepted": false
+  },
+  "groupBuild": {
+    "startedAt": "2026-11-11T01:04:21.222691+00:00",
+    "elapsedSeconds": 140.562,
+    "sourceFiles": 8743,
+    "sourcesUnchanged": true,
+    "counts": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceManifestSha256": "9df6e8c32f1c832b11488e1c79a0ea261b17672b141dcfcf273589e7e5b54cc8"
+  },
+  "protocolTests": 42,
+  "hints": {
+    "syncResponses": 3,
+    "observedEventKinds": 4,
+    "exactPositions": true,
+    "boundedHints": true,
+    "initialReconciliation": true,
+    "registrationPositionUnchanged": true,
+    "storedKeyObserved": true,
+    "listenerFinished": true
+  },
+  "hintRequests": {
+    "matrix": {
+      "requests": 32,
+      "encryptedSend": 4,
+      "sync": 3,
+      "secretStorage": 2,
+      "providerPage": 2
+    },
+    "native": {
+      "requests": 9,
+      "bootstrapReplay": 1,
+      "directTransport": 4
+    }
+  },
+  "originalControls": [
+    {
+      "actualProviderEvents": 3,
+      "confirmedOriginals": 3,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "secondProviderAckLostBeforeAppJournal": true,
+      "localReadBeforeTransport": true,
+      "spaceAckLostBeforeAppJournal": true,
+      "newSpaceOriginal": true,
+      "nativeRequests": {
+        "requests": 11,
+        "bootstrapReplay": 2,
+        "directTransport": 3
+      },
+      "actualProcessDeaths": 1,
+      "offlineRestart": true,
+      "recoveryMillis": 806
+    },
+    {
+      "actualProviderEvents": 2,
+      "confirmedOriginals": 2,
+      "recipientOffline": true,
+      "originalTransactionsRetained": true,
+      "interruptedBeforeProjection": true,
+      "secondProviderAckLostBeforeAppJournal": true,
+      "localReadBeforeTransport": true,
+      "spaceAckLostBeforeAppJournal": false,
+      "newSpaceOriginal": false,
+      "nativeRequests": {
+        "requests": 10,
+        "bootstrapReplay": 2,
+        "directTransport": 2
+      },
+      "actualProcessDeaths": 1,
+      "offlineRestart": true,
+      "recoveryMillis": 705
+    }
+  ],
+  "foregroundWorkerRequests": {
+    "matrix": {
+      "requests": 31,
+      "encryptedSend": 4,
+      "sync": 3,
+      "secretStorage": 2,
+      "providerPage": 2
+    },
+    "native": {
+      "requests": 14,
+      "registration": 1,
+      "bootstrapReplay": 1,
+      "directTransport": 3
+    }
+  },
+  "publication": {
+    "published": true,
+    "publishedAt": "2026-11-11T01:14:46Z",
+    "recordedAt": "2026-11-11T01:14:48.679262+00:00",
+    "releaseId": 441121763,
+    "tag": "matrix-sdk-26.10.23-hris.8",
+    "targetCommit": "b94f6fa79fc1e22b1ded081af03237603fca6f65",
+    "url": "https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.8",
+    "prerelease": true,
+    "githubDigestsVerified": true,
+    "downloadedHashesVerified": true,
+    "assets": {
+      "sdk-android-26.10.23-hris.8.aar": {
+        "bytes": 186095557,
+        "sha256": "6eebe8dab124541783d2b1d746cf30ea4b8dd2a599980cccb823927780678717"
+      },
+      "sdk-android-26.10.23-hris.8.ivy.xml": {
+        "bytes": 1196,
+        "sha256": "5cb8ccb96d382001c69affb86fa3b2c4ba8ab0482866536c562b7f5d57a46f7a"
+      },
+      "sdk-android-26.10.23-hris.8-sources.tar.gz": {
+        "bytes": 463180,
+        "sha256": "20f41d66d03a03bb364db3afdb1892f1a200cdd679665cd4eba4dc85520c8f39"
+      },
+      "LICENSE": {
+        "bytes": 10174,
+        "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+      },
+      "sdk-build.json": {
+        "bytes": 9574,
+        "sha256": "36d0a98ebd9ae4e98caff7fed378b4166770173fee5f7ef44a0a5e1c4b69bbcd"
+      },
+      "SHA256SUMS": {
+        "bytes": 464,
+        "sha256": "15e49d1d24747109cdd398da22ae71a35a1aaf7d744ad162969ef33d5dbd82e6"
+      }
+    }
+  },
+  "primarySourceFilesMatched": 4864,
+  "primaryDependencyAdopted": true,
+  "liveDeployment": false,
+  "appleNativeHintsAccepted": false,
+  "normalApplicationDependencySelection": {
+    "startedAt": "2026-11-11T01:18:29.384301+00:00",
+    "exitCode": 0,
+    "elapsedSeconds": 17.91,
+    "publicRepository": true,
+    "selectedSdk8": true,
+    "inspectorSdk6ResolvedToSdk8": true
+  }
+}

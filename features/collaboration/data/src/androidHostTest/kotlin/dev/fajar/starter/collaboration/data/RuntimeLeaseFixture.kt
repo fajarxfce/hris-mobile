@@ -31,6 +31,7 @@ import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.SyncResponseRoomsV2
 import org.matrix.rustcomponents.sdk.SyncResponseV2
 import org.matrix.rustcomponents.sdk.SyncSettingsV2
+import org.matrix.rustcomponents.sdk.SyncTimelineChangesV2
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.ToDeviceMessageListener
 
@@ -172,8 +173,10 @@ internal class RuntimeLeaseFixture(
                 syncSettings += settings
                 beforeSync()
                 return SyncResponseV2(
-                    "fixture-next",
-                    SyncResponseRoomsV2(emptyList(), emptyList(), emptyList(), emptyList()),
+                    previousBatch = if (syncRequests == 1) null else "fixture-next",
+                    nextBatch = "fixture-next",
+                    rooms = SyncResponseRoomsV2(emptyList(), emptyList(), emptyList(), emptyList()),
+                    timelineChanges = SyncTimelineChangesV2(emptyList(), false),
                 )
             }
 

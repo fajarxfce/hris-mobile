@@ -1,5 +1,23 @@
 # Android Matrix SDK distribution
 
+The application now pins `dev.fajar.hris.matrix:sdk-android:26.10.23-hris.8`, built from
+`android-incoming-hints-build.json`. [SDK8](https://github.com/fajarxfce/hris-mobile/releases/tag/matrix-sdk-26.10.23-hris.8)
+contains the AAR, descriptor, source bundle, license, build record and checksums. All four ABIs,
+generated Kotlin, source pins, compiled APIs and ELF alignment requirements are verified.
+Six remote asset digests and downloaded hashes match, as does the unauthenticated descriptor.
+
+[Native acceptance](collaboration-sdk-incoming-hints-native.md) covers actual stored-key callbacks,
+exact sync/store positions, joined cancellation and all five prior encrypted delivery/recovery
+controls. The new scenario adds no requests. The isolated application gate passes 10,901 fresh
+cases plus 100 exact unchanged database browser controls. The primary source matches all 4,864
+accepted inputs. Wiring these SDK hints into durable application recovery remains next.
+
+SDK7 stays retired; SDK6 and earlier published artifacts are immutable. Existing phone builds
+and the pending phone 89 APK remain on SDK6. Apple native SDK8 and phone latency acceptance
+remain separate. Reusable inspector source is unchanged.
+
+## Previous SDK6 acceptance
+
 The application pins the published
 `dev.fajar.hris.matrix:sdk-android:26.10.23-hris.6`, built from
 `android-refresh-coalescing-build.json`. Its four original CI artifacts, matching

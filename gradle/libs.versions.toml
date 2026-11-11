@@ -40,7 +40,7 @@ crashlytics = "3.0.8"
 detekt = "2.0.0-alpha.6"
 cyclonedx = "3.5.0"
 junit = "4.13.2"
-matrix-sdk = "26.10.23-hris.6"
+matrix-sdk = "26.10.23-hris.8"
 network-inspector = "0.1.0-SNAPSHOT"
 
 [libraries]
