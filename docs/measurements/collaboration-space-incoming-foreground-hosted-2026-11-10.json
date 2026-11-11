@@ -2,8 +2,8 @@
   "sourceCommit": "c11e053972253b952b84baae23b6eb764107082d",
   "runId": 42923369580,
   "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42923369580",
-  "complete": false,
-  "verifiedTests": 8979,
+  "complete": true,
+  "verifiedTests": 12472,
   "expectedTotal": 12472,
   "portable": {
     "jobId": 130203526506,
@@ -53,9 +53,27 @@
     "recordedAt": "2026-11-10T23:44:53.042657+00:00",
     "retryRequestedAt": "2026-11-10T23:54:18.998805+00:00"
   },
-  "appleVerified": false,
-  "verifiedSwiftCases": 0,
-  "unsignedAppleHostBuilt": false,
+  "appleVerified": true,
+  "verifiedSwiftCases": 16,
+  "unsignedAppleHostBuilt": true,
   "phoneTouched": false,
-  "liveDeployment": false
+  "liveDeployment": false,
+  "recordedAt": "2026-11-11T01:04:08.695033+00:00",
+  "apple": {
+    "jobId": 130216317308,
+    "artifactId": 13817454909,
+    "bytes": 622049,
+    "sha256": "313b0dbc8d2f8cc1352219b4a61f6da41df2817291417ffa568570ea1c6561df",
+    "githubDigestAndZipCrcVerified": true,
+    "totals": {
+      "iosSimulatorArm64Test": {
+        "tests": 3493,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 336
+      }
+    },
+    "reportManifestSha256": "efff1b4da968b7adb29bb0965804628e4e061dcaf74c8e6e0dc4185287661196"
+  }
 }

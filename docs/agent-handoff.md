@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 01:00 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 01:04 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Foreground incoming startup accepted
 
@@ -43,11 +43,15 @@ report manifest 7b0564f122305189924edc4b9599432115b4ca428b6bd078fc3706d71e314ea5
 Apple attempt 1 failed before collaboration tests because Maven downloads lost routing/DNS;
 log and failed artifact 13814560056 are preserved. Only that failed job was rerun at 23:54 UTC,
 on the same immutable commit. Do not redispatch the workflow or repeat portable validation.
-Apple retry remains unverified. Expected 3,493 Apple + 16 Swift/unsigned host; total 12,472.
-Private foreground/hosted-retry.json owns retry state; hosted-audit.py now selects the latest
-job and only its artifact by creation time, excluding preserved failed-attempt archives.
+Apple retry is ACCEPTED and audited:3,493 Apple +16 Swift cases and unsigned host; total12,472.
+Audit96983 REAPED. Apple job130216317308, artifact13817454909/622,049bytes,
+SHA313b0dbc8d2f8cc1352219b4a61f6da41df2817291417ffa568570ea1c6561df;
+report manifest efff1b4da968b7adb29bb0965804628e4e061dcaf74c8e6e0dc4185287661196.
+Both hosted lanes are COMPLETE. Do not redispatch. This is exactc11e0539/SDK6 foreground
+acceptance, not SDK8 native acceptance. Private foreground/hosted-retry.json preserves the retry;
+hosted-audit.py selected the latest job/artifact and excluded the preserved failed-attempt archive.
 https://github.com/fajarxfce/hris-mobile/actions/runs/42923369580
-Compact partial evidence: collaboration-space-incoming-foreground-hosted-2026-11-10.json.
+Complete evidence: collaboration-space-incoming-foreground-hosted-2026-11-10.json.
 
 ## Next integration and protected state
 
