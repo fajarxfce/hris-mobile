@@ -6,6 +6,13 @@ data class CollaborationSpaceIncomingWork(
     val ready: List<CollaborationSpaceIncomingRoomDemand>,
     val scanPending: Boolean,
     val roomsPending: Boolean,
+    val physicalReady: List<CollaborationSpaceIncomingPhysicalRoomDemand> = emptyList(),
 ) {
+    val turn: List<CollaborationSpaceIncomingTask>
+        get() =
+            (ready.map { CollaborationSpaceIncomingTask.Logical(it) } +
+                    physicalReady.map { CollaborationSpaceIncomingTask.Physical(it) })
+                .sortedBy { it.position }
+
     override fun toString() = "CollaborationSpaceIncomingWork([redacted])"
 }

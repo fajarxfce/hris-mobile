@@ -3,6 +3,7 @@ package dev.fajar.starter.collaboration.domain
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.*
+import dev.fajar.starter.collaboration.domain.usecases.DeferCollaborationSpaceIncomingPhysicalRoom
 import dev.fajar.starter.collaboration.domain.usecases.ResolveCollaborationSpaceIncomingBinding
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
@@ -107,6 +108,17 @@ internal class SpaceIncomingPhysicalResolutionFixture {
             base.native.setup.sessions,
             base.native.server,
             AppBuild(AppPlatform.Android, 5, "test", null),
+        )
+
+    val defer =
+        DeferCollaborationSpaceIncomingPhysicalRoom(
+            request.demands,
+            sync,
+            base.directory.directory,
+            base.native.setup.sessions,
+            base.native.server,
+            AppBuild(AppPlatform.Android, 5, "test", null),
+            base.native.clock,
         )
 
     init {

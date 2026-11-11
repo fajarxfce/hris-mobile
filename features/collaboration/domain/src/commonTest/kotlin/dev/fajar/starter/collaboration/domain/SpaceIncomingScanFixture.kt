@@ -124,7 +124,27 @@ internal class SpaceIncomingScanFixture {
             request.base.native.setup.sessions,
             request.base.native.server,
             request.base.native.clock,
+            object : CollaborationSpaceSyncRepository {
+                override fun incomingSource(
+                    runtime: CollaborationSpaceRuntimeReady
+                ): CollaborationSpaceIncomingSource? {
+                    assertEquals(request.provider.runtime, runtime)
+                    sourceReads++
+                    return installedSource
+                }
+
+                override suspend fun synchronize(
+                    runtime: CollaborationSpaceRuntimeReady
+                ): AppResult<Unit> = error("No implicit sync")
+
+                override fun observeBatches(
+                    runtime: CollaborationSpaceRuntimeReady
+                ): Flow<AppResult<CollaborationSpaceSyncBatch>> =
+                    error("No implicit batch observation")
+            },
         )
+    var installedSource: CollaborationSpaceIncomingSource? = null
+    var sourceReads = 0
     val defer =
         DeferCollaborationSpaceIncomingRoom(
             request.demands,

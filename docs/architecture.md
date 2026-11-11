@@ -1,8 +1,9 @@
 # Architecture
 
 [Local physical room resolution](collaboration-space-physical-resolution.md) transfers exact
-physical work through owned bindings and fences source-bound logical reads. Worker selection,
-ordinary CAS retry and provider inventory remain owning integration work.
+physical work through owned bindings and fences source-bound logical reads. The [single incoming
+worker](collaboration-space-physical-worker.md) now selects one combined source-owned FIFO and
+retains physical deferral. Remote binding/inventory/key consumers and raw activation remain next.
 
 [Serial sync batch retention](collaboration-space-sync-batch-producer.md) commits exact response
 positions, physical room work and inventory loss together. Observation reads the existing native

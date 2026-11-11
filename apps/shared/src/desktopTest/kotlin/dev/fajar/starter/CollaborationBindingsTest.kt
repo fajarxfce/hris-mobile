@@ -719,6 +719,7 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<QueueCollaborationSpaceIncomingRoom>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceIncomingDemand>())
                 assertNotNull(container.koin.get<DeferCollaborationSpaceIncomingRoom>())
+                assertNotNull(container.koin.get<DeferCollaborationSpaceIncomingPhysicalRoom>())
                 assertNotNull(container.koin.get<DiscoverCollaborationSpaceIncomingRooms>())
                 assertNotNull(container.koin.get<RequestCollaborationSpaceIncomingScan>())
                 assertNotNull(container.koin.get<ReadCollaborationSpaceIncomingWake>())

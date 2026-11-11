@@ -722,7 +722,16 @@ class CollaborationDataModule {
         directory: CollaborationSpaceDirectoryRepository,
         sessions: SessionRepository,
         server: IdentityServer,
-    ) = ReadCollaborationSpaceIncomingDemand(demands, directory, sessions, server, Clock.System)
+        sync: CollaborationSpaceSyncRepository,
+    ) =
+        ReadCollaborationSpaceIncomingDemand(
+            demands,
+            directory,
+            sessions,
+            server,
+            Clock.System,
+            sync,
+        )
 
     @Factory
     fun deferSpaceIncomingRoom(
@@ -731,6 +740,25 @@ class CollaborationDataModule {
         sessions: SessionRepository,
         server: IdentityServer,
     ) = DeferCollaborationSpaceIncomingRoom(demands, directory, sessions, server, Clock.System)
+
+    @Factory
+    fun deferSpaceIncomingPhysicalRoom(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        sync: CollaborationSpaceSyncRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        DeferCollaborationSpaceIncomingPhysicalRoom(
+            demands,
+            sync,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
 
     @Factory
     fun discoverSpaceIncomingRooms(

@@ -1,0 +1,72 @@
+{
+  "date": "2026-11-11",
+  "description": "One source-selected incoming worker with a combined four-task FIFO and bounded physical deferral.",
+  "sourceBaseline": "aed49dcbc1bd430533f77cab09302f5c8ee68221",
+  "sourceFiles": 4897,
+  "changedSourceFiles": 22,
+  "sourceManifestSha256": "b271c2e8fec511dc14f8f09b7c09d4c6a7efd169e66de439de2ad0be06d54274",
+  "sdk": "26.10.23-hris.8",
+  "focused": {
+    "desktopRun": "focused1",
+    "browserRun": "browser1",
+    "counts": {
+      "tests": 756,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceFiles": 4897,
+    "sourceManifestSha256": "b271c2e8fec511dc14f8f09b7c09d4c6a7efd169e66de439de2ad0be06d54274",
+    "priorSelectedCaseIdsPreserved": true,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true
+  },
+  "full": {
+    "startedAt": "2026-11-11T05:20:16.868313+00:00",
+    "elapsedSeconds": 716.467,
+    "sourceFiles": 4897,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 9324,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 151626942,
+      "sha256": "0a776eac82280283e872e7214e07877be02d5872e4e7a0553ec0368693afb829"
+    },
+    "sourceManifestSha256": "b271c2e8fec511dc14f8f09b7c09d4c6a7efd169e66de439de2ad0be06d54274",
+    "validatedTests": 11362,
+    "validatedReusedTests": 2038,
+    "physicalWorker": true,
+    "sourceBoundWorkSelection": true,
+    "applicationCollectorEnabled": false
+  },
+  "fullRun": "full1",
+  "fullSession": 41939,
+  "priorCaseIdsPreserved": true,
+  "retainedControlDependencyClosuresVerified": true,
+  "turn": "One combined four-position logical/physical FIFO, selected again against the actual source after runtime adoption.",
+  "continuation": "Same source selection as processing; foreign-source work stays pending without immediate continuation.",
+  "physicalDeferral": "Keeps generation, source, head, membership, limited and inventory; moves only the captured FIFO position and persists30s to5min backoff.",
+  "queueContention": "A known compare-and-set miss with valid retained capture returns1s retry; it neither blocks work nor creates durable per-room delay.",
+  "writeReplyLossWitness": "Exact converted/deferred task remains sufficient after producer cursor updates; uncertain writes without that witness preserve their failure.",
+  "physicalWorkerBoundInApplication": true,
+  "applicationRawCollectorEnabled": false,
+  "remotePhysicalBindingConsumerEnabled": false,
+  "providerInventoryConsumerEnabled": false,
+  "storedKeyConsumerEnabled": false,
+  "remaining": [
+    "Logical/scan write witnesses under concurrent producer changes",
+    "Finite remote published metadata and explicit original Company routing",
+    "Complete bounded native inventory and key-only recovery",
+    "Actual-runtime-owned raw collection and native acceptance"
+  ],
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "all54PrdGroupsRemainOpen": true
+}

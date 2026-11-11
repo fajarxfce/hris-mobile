@@ -20,6 +20,16 @@ class CollaborationSpaceIncomingWorker(
     private val requestScan: suspend (CollaborationSpaceLocalAccess, String) -> AppResult<Boolean>,
     private val readDemand:
         suspend (CollaborationSpaceLocalAccess) -> AppResult<CollaborationSpaceIncomingWork>,
+    private val readRuntimeDemand:
+        suspend (CollaborationSpaceRuntimeReady) -> AppResult<CollaborationSpaceIncomingWork>,
+    private val resolveBinding:
+        suspend (
+            CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingPhysicalRoomDemand,
+        ) -> AppResult<CollaborationSpaceIncomingBindingResolution>,
+    private val deferPhysical:
+        suspend (
+            CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingPhysicalRoomDemand, Failure?,
+        ) -> AppResult<Boolean>,
     private val discover: suspend (CollaborationSpaceLocalAccess) -> AppResult<Boolean>,
     private val finish:
         suspend (CollaborationSpaceLocalAccess, CollaborationSpaceIncomingWake) -> AppResult<
@@ -140,29 +150,65 @@ class CollaborationSpaceIncomingWorker(
         if (scanned is AppResult.Failed) return failed(scanned)
         val found = readDemand(access)
         if (found is AppResult.Failed) return failed(found)
-        val boundary = (found as AppResult.Success).value.ready
-        if (boundary.isEmpty()) return continueOrFinish(access, wake)
+        if ((found as AppResult.Success).value.turn.isEmpty()) return continueOrFinish(access, wake)
         val adopted = adopt(original)
         if (adopted is AppResult.Failed) return failed(adopted)
         val runtime = (adopted as AppResult.Success).value
-        for (captured in boundary) {
-            val received =
-                withTimeoutOrNull(40.seconds) { receiveRoom(runtime, captured) }
-                    ?: AppResult.Failed(pending("room_timeout", FailureKind.Timeout))
-            if (received is AppResult.Failed && blocked(received.failure)) return failed(received)
-            if ((received as? AppResult.Success)?.value == true) continue
-            // Provider phase may already have committed even if its response was lost.
-            val latest = readDemand(access)
-            if (latest is AppResult.Failed) return failed(latest)
-            val retained =
-                (latest as AppResult.Success).value.snapshot?.demand?.rooms?.singleOrNull {
-                    it.conversationId == captured.conversationId &&
-                        it.generation == captured.generation
-                } ?: continue
-            val deferred = defer(access, retained, (received as? AppResult.Failed)?.failure)
-            if (deferred is AppResult.Failed) return failed(deferred)
+        val selected = readRuntimeDemand(runtime)
+        if (selected is AppResult.Failed) return failed(selected)
+        for (task in (selected as AppResult.Success).value.turn) {
+            val processed =
+                when (task) {
+                    is CollaborationSpaceIncomingTask.Logical -> processRoom(runtime, task.captured)
+                    is CollaborationSpaceIncomingTask.Physical ->
+                        processPhysical(runtime, task.captured)
+                }
+            if (processed is AppResult.Failed) return failed(processed)
         }
-        return continueOrFinish(access, wake)
+        return continueOrFinish(access, wake, runtime)
+    }
+
+    private suspend fun processPhysical(
+        runtime: CollaborationSpaceRuntimeReady,
+        captured: CollaborationSpaceIncomingPhysicalRoomDemand,
+    ): AppResult<Boolean> {
+        val resolved =
+            withTimeoutOrNull(40.seconds) { resolveBinding(runtime, captured) }
+                ?: AppResult.Failed(pending("binding_timeout", FailureKind.Timeout))
+        if (resolved is AppResult.Failed && blocked(resolved.failure)) return resolved
+        if (
+            resolved is AppResult.Success &&
+                resolved.value in
+                    setOf(
+                        CollaborationSpaceIncomingBindingResolution.Queued,
+                        CollaborationSpaceIncomingBindingResolution.Obsolete,
+                    )
+        )
+            return AppResult.Success(true)
+        return deferPhysical(runtime, captured, (resolved as? AppResult.Failed)?.failure)
+    }
+
+    private suspend fun processRoom(
+        runtime: CollaborationSpaceRuntimeReady,
+        captured: CollaborationSpaceIncomingRoomDemand,
+    ): AppResult<Boolean> {
+        val received =
+            withTimeoutOrNull(40.seconds) { receiveRoom(runtime, captured) }
+                ?: AppResult.Failed(pending("room_timeout", FailureKind.Timeout))
+        if (received is AppResult.Failed && blocked(received.failure)) return received
+        if ((received as? AppResult.Success)?.value == true) return received
+        // Provider phase may already have committed even if its response was lost.
+        val latest = readRuntimeDemand(runtime)
+        if (latest is AppResult.Failed) return latest
+        val retained =
+            (latest as AppResult.Success).value.snapshot?.demand?.rooms?.singleOrNull {
+                it.conversationId == captured.conversationId && it.generation == captured.generation
+            } ?: return AppResult.Success(false)
+        return defer(
+            runtime.owner.localDirectoryAccess(),
+            retained,
+            (received as? AppResult.Failed)?.failure,
+        )
     }
 
     /** At most one metadata page and one pending page; the published parent owns ongoing sync. */
@@ -234,11 +280,12 @@ class CollaborationSpaceIncomingWorker(
     private suspend fun continueOrFinish(
         access: CollaborationSpaceLocalAccess,
         wake: CollaborationSpaceIncomingWake,
+        runtime: CollaborationSpaceRuntimeReady? = null,
     ): SyncResult {
-        val loaded = readDemand(access)
+        val loaded = if (runtime == null) readDemand(access) else readRuntimeDemand(runtime)
         if (loaded is AppResult.Failed) return failed(loaded)
         val current = (loaded as AppResult.Success).value
-        if (current.ready.isNotEmpty() || current.scanPending) return continueWork()
+        if (current.turn.isNotEmpty() || current.scanPending) return continueWork()
         if (current.roomsPending) return SyncResult.Retry(pending("deferred"))
         val finished = finish(access, wake)
         if (finished is AppResult.Failed) return failed(finished)

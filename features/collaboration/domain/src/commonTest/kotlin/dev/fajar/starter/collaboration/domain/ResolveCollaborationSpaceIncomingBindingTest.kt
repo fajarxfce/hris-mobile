@@ -180,10 +180,60 @@ class ResolveCollaborationSpaceIncomingBindingTest {
                         ),
                 )
         }
-        assertIs<AppResult.Failed>(f.resolve())
+        val failure = assertIs<AppResult.Failed>(f.resolve()).failure
+        assertEquals(FailureKind.Unavailable, failure.kind)
+        assertEquals("client.collaboration_incoming_queue_busy", failure.code)
+        assertEquals(1L, failure.retryAfterSeconds)
         assertEquals(1, f.request.writes)
         assertEquals("later", f.request.snapshot?.demand?.sources?.single()?.position)
         assertEquals(listOf(f.physical), f.request.snapshot?.demand?.physicalRooms)
+    }
+
+    @Test
+    fun aKnownCasMissWithANewerPhysicalGenerationLeavesThatGenerationForItsOwnTurn() = runTest {
+        val f = SpaceIncomingPhysicalResolutionFixture()
+        f.base.hooks["write"] = {
+            val retained = assertNotNull(f.request.snapshot)
+            f.request.snapshot =
+                retained.copy(
+                    generation = f.id(910),
+                    demand =
+                        retained.demand.copy(
+                            physicalRooms =
+                                listOf(
+                                    f.physical.copy(generation = f.id(911), headEventId = "\$later")
+                                )
+                        ),
+                )
+        }
+        assertEquals(
+            AppResult.Success(CollaborationSpaceIncomingBindingResolution.Obsolete),
+            f.resolve(),
+        )
+        assertEquals(f.id(911), f.request.snapshot?.demand?.physicalRooms?.single()?.generation)
+        assertEquals(1, f.request.writes)
+    }
+
+    @Test
+    fun uncertainWriteWithNoExactConvertedTaskKeepsItsStorageFailure() = runTest {
+        val f = SpaceIncomingPhysicalResolutionFixture()
+        f.base.hooks["write"] = {
+            val retained = assertNotNull(f.request.snapshot)
+            f.request.snapshot =
+                retained.copy(
+                    generation = f.id(910),
+                    demand =
+                        retained.demand.copy(
+                            physicalRooms = listOf(f.physical.copy(generation = f.id(911)))
+                        ),
+                )
+        }
+        f.base.failures["write"] = f.base.directory.storageFailure
+        assertEquals(
+            f.base.directory.storageFailure,
+            assertIs<AppResult.Failed>(f.resolve()).failure,
+        )
+        assertEquals(1, f.request.writes)
     }
 
     @Test

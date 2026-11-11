@@ -37,6 +37,14 @@ internal class SpaceIncomingWorkerFixture(
     val calls = mutableListOf<String>()
     val attempted = mutableListOf<String>()
     val deferred = mutableListOf<Pair<String, Failure?>>()
+    val source = CollaborationSpaceIncomingSource("1".repeat(64), "@fixture:example.test", "DEVICE")
+    var installed: CollaborationSpaceIncomingSource? = source
+    val sources = mutableListOf(CollaborationSpaceIncomingSourceProgress(source, "position"))
+    val physicalRooms = mutableListOf<CollaborationSpaceIncomingPhysicalRoomDemand>()
+    val bindingTargets = mutableMapOf<String, String>()
+    val physicalAttempts = mutableListOf<String>()
+    val deferredPhysical = mutableListOf<CollaborationSpaceIncomingPhysicalRoomDemand>()
+    var bindingFailure: Failure? = null
     var nextPosition = count.toLong()
     val rooms =
         (0 until count)
@@ -56,27 +64,47 @@ internal class SpaceIncomingWorkerFixture(
         before(name)
     }
 
-    fun work(): CollaborationSpaceIncomingWork {
+    fun work(
+        selectedSource: CollaborationSpaceIncomingSource? = null
+    ): CollaborationSpaceIncomingWork {
         val demand =
             CollaborationSpaceIncomingDemand(
                 nextPosition,
                 rooms.toList(),
                 if (scanning) recoveryId(805) else null,
+                sources = sources.toList(),
+                physicalRooms = physicalRooms.toList(),
             )
-        return CollaborationSpaceIncomingWork(
-            if (present) CollaborationSpaceIncomingDemandSnapshot(recoveryId(806), demand)
-            else null,
-            rooms
-                .filter {
-                    eligibleCollaborationSpaceIncomingRoom(
-                        it,
-                        base.clock.now().toEpochMilliseconds(),
-                    )
-                }
-                .take(4),
-            scanning && rooms.size < 64,
-            rooms.isNotEmpty(),
-        )
+        return (selectCollaborationSpaceIncomingWork(
+                if (present) CollaborationSpaceIncomingDemandSnapshot(recoveryId(806), demand)
+                else null,
+                base.clock.now().toEpochMilliseconds(),
+                selectedSource,
+            )
+                as AppResult.Success)
+            .value
+    }
+
+    fun queuePhysical(
+        index: Int,
+        conversationId: String? = null,
+        from: CollaborationSpaceIncomingSource = source,
+    ): CollaborationSpaceIncomingPhysicalRoomDemand {
+        if (sources.none { it.source == from })
+            sources += CollaborationSpaceIncomingSourceProgress(from, "other")
+        val physical =
+            CollaborationSpaceIncomingPhysicalRoomDemand(
+                from.storeId,
+                "!physical$index:example.test",
+                recoveryId(3000 + index),
+                nextPosition++,
+                "\$physical-$index",
+                CollaborationSpaceIncomingMembership.Joined,
+                false,
+            )
+        physicalRooms += physical
+        if (conversationId != null) bindingTargets[physical.roomId] = conversationId
+        return physical
     }
 
     val worker =
@@ -103,6 +131,60 @@ internal class SpaceIncomingWorkerFixture(
                 step("demand")
                 AppResult.Success(work())
             },
+            readRuntimeDemand = { actual ->
+                check(actual == runtime)
+                step("runtime-demand")
+                val selected = installed
+                if (selected == null)
+                    AppResult.Failed(Failure(FailureKind.Unavailable, "Fixture source missing"))
+                else AppResult.Success(work(selected))
+            },
+            resolveBinding = { actual, captured ->
+                check(actual == runtime)
+                physicalAttempts += captured.roomId
+                step("binding")
+                val target = bindingTargets[captured.roomId]
+                val failure = bindingFailure
+                if (failure != null) AppResult.Failed(failure)
+                else if (target == null)
+                    AppResult.Success(CollaborationSpaceIncomingBindingResolution.BindingMissing)
+                else {
+                    val planned =
+                        resolveCollaborationSpaceIncomingPhysicalRoom(
+                            work().snapshot!!.demand,
+                            captured,
+                            target,
+                        )
+                    if (planned is AppResult.Success) {
+                        rooms.clear()
+                        rooms.addAll(planned.value.demand.rooms)
+                        physicalRooms.clear()
+                        physicalRooms.addAll(planned.value.demand.physicalRooms)
+                        AppResult.Success(planned.value.outcome)
+                    } else planned as AppResult.Failed
+                }
+            },
+            deferPhysical = { actual, captured, failure ->
+                check(actual == runtime)
+                step("defer-physical")
+                if (isCollaborationSpaceIncomingQueueContention(failure))
+                    AppResult.Failed(requireNotNull(failure))
+                else {
+                    val planned =
+                        deferCollaborationSpaceIncomingPhysicalRoom(
+                            work().snapshot!!.demand,
+                            captured,
+                            base.clock.now().toEpochMilliseconds(),
+                        )
+                    if (planned is AppResult.Success) {
+                        deferredPhysical += captured
+                        physicalRooms.clear()
+                        physicalRooms.addAll(planned.value.physicalRooms)
+                        nextPosition = planned.value.nextPosition
+                        AppResult.Success(true)
+                    } else planned as AppResult.Failed
+                }
+            },
             discover = { actual ->
                 check(actual == access)
                 step("discover")
@@ -112,7 +194,7 @@ internal class SpaceIncomingWorkerFixture(
             finish = { actual, captured ->
                 check(actual == access)
                 step("finish")
-                val done = finishResult && rooms.isEmpty() && !scanning && wake == captured
+                val done = finishResult && !work().roomsPending && !scanning && wake == captured
                 if (done) wake = null
                 AppResult.Success(done)
             },

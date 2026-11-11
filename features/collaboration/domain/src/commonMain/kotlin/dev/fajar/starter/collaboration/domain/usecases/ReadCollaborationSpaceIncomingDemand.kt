@@ -16,16 +16,44 @@ class ReadCollaborationSpaceIncomingDemand(
     private val sessions: SessionRepository,
     private val server: IdentityServer,
     private val clock: Clock,
+    private val sync: CollaborationSpaceSyncRepository,
 ) {
     suspend operator fun invoke(
         access: CollaborationSpaceLocalAccess
+    ): AppResult<CollaborationSpaceIncomingWork> = read(access, null)
+
+    /** Selects only work compatible with the actual installed original, without acquiring one. */
+    suspend operator fun invoke(
+        runtime: CollaborationSpaceRuntimeReady
+    ): AppResult<CollaborationSpaceIncomingWork> =
+        read(runtime.owner.localDirectoryAccess(), runtime)
+
+    private suspend fun read(
+        access: CollaborationSpaceLocalAccess,
+        runtime: CollaborationSpaceRuntimeReady?,
     ): AppResult<CollaborationSpaceIncomingWork> =
         withTimeoutOrNull(5_000) {
-            admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            if (
+                runtime != null &&
+                    (!validCollaborationMessageId(runtime.deviceId) ||
+                        !validCollaborationMessageId(runtime.operationId))
+            )
+                return@withTimeoutOrNull changed(FailureKind.Validation)
+            admission(access, runtime).let {
+                if (it is AppResult.Failed) return@withTimeoutOrNull it
+            }
+            val source = runtime?.let(sync::incomingSource)
+            if (
+                runtime != null &&
+                    (source == null || !validCollaborationSpaceIncomingSource(source))
+            )
+                return@withTimeoutOrNull changed(FailureKind.Unavailable)
             val loaded = demands.current(access)
             val observed = (loaded as? AppResult.Success)?.value
             val snapshot = observed?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
-            admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            admission(access, runtime, source).let {
+                if (it is AppResult.Failed) return@withTimeoutOrNull it
+            }
             if (loaded is AppResult.Failed) return@withTimeoutOrNull loaded
             if (
                 observed != null &&
@@ -34,33 +62,18 @@ class ReadCollaborationSpaceIncomingDemand(
                         !validCollaborationSpaceIncomingDemand(access, snapshot.demand))
             )
                 return@withTimeoutOrNull changed()
-            val now = clock.now().toEpochMilliseconds()
-            if (now !in 0..9_007_199_254_440_991L)
-                return@withTimeoutOrNull changed(FailureKind.Validation)
-            val demand = snapshot?.demand
-            AppResult.Success(
-                CollaborationSpaceIncomingWork(
-                    snapshot = snapshot,
-                    ready =
-                        demand
-                            ?.rooms
-                            .orEmpty()
-                            .filter { eligibleCollaborationSpaceIncomingRoom(it, now) }
-                            .take(4),
-                    scanPending =
-                        demand != null &&
-                            (demand.rescanGeneration != null || demand.scan != null) &&
-                            demand.rooms.size + demand.physicalRooms.size < 64,
-                    roomsPending =
-                        demand != null &&
-                            (demand.rooms.isNotEmpty() ||
-                                demand.physicalRooms.isNotEmpty() ||
-                                demand.sources.any { it.inventoryGeneration != null }),
-                )
+            selectCollaborationSpaceIncomingWork(
+                snapshot,
+                clock.now().toEpochMilliseconds(),
+                source,
             )
         } ?: changed(FailureKind.Timeout)
 
-    private suspend fun admission(access: CollaborationSpaceLocalAccess): AppResult<Unit> {
+    private suspend fun admission(
+        access: CollaborationSpaceLocalAccess,
+        runtime: CollaborationSpaceRuntimeReady?,
+        source: CollaborationSpaceIncomingSource? = null,
+    ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
         val gate = directory.admission(access)
         val current = sessions.current()
@@ -72,14 +85,14 @@ class ReadCollaborationSpaceIncomingDemand(
             }
         }
         if (current is AppResult.Failed) return current
-        val owned =
-            localCollaborationSpaceAccess(
-                access,
-                (current as AppResult.Success).value,
-                server.audience,
-            )
+        val session = (current as AppResult.Success).value
+        val owned = localCollaborationSpaceAccess(access, session, server.audience)
         if (owned is AppResult.Failed) return owned
         if (gate is AppResult.Failed) return gate
+        if (runtime != null && session?.binding?.serverId != runtime.owner.parent.nativeSessionId)
+            return changed(FailureKind.Unauthorized)
+        if (source != null && sync.incomingSource(requireNotNull(runtime)) != source)
+            return changed(FailureKind.Unavailable)
         return AppResult.Success(Unit)
     }
 

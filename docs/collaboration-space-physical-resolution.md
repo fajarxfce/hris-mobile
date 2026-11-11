@@ -1,5 +1,8 @@
 # Local physical room resolution
 
+Follow-up: [the single incoming worker](collaboration-space-physical-worker.md) now consumes known physical bindings with
+source-aware selection and bounded deferral. Raw collection remains inactive.
+
 An incoming Matrix room locator can now be transferred to a retained logical room without
 acquiring provider metadata. This increment adds the local conversion and downstream source
 checks. The application worker and raw collector are not enabled by its DI registrations.

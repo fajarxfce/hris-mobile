@@ -86,7 +86,7 @@ class ResolveCollaborationSpaceIncomingBinding(
             val next = (planned as AppResult.Success).value
             if (next.demand == snapshot.demand)
                 return@withTimeoutOrNull AppResult.Success(next.outcome)
-            retain(runtime, source, snapshot, next)
+            retain(runtime, source, captured, snapshot, next)
         } ?: changed(FailureKind.Timeout)
     }
 
@@ -130,14 +130,12 @@ class ResolveCollaborationSpaceIncomingBinding(
     private suspend fun retain(
         runtime: CollaborationSpaceRuntimeReady,
         source: CollaborationSpaceIncomingSource,
+        captured: CollaborationSpaceIncomingPhysicalRoomDemand,
         previous: CollaborationSpaceIncomingDemandSnapshot,
         next: CollaborationSpaceIncomingPhysicalResolution,
     ): AppResult<CollaborationSpaceIncomingBindingResolution> {
         val access = runtime.owner.localDirectoryAccess()
-        val converted =
-            next.demand.rooms.single { room ->
-                previous.demand.rooms.none { it.generation == room.generation }
-            }
+        val converted = next.demand.rooms.single { it.generation == captured.generation }
         admission(runtime, source).let { if (it is AppResult.Failed) return it }
         // Keep the independent incoming wake. Conversion does not create another scheduling turn.
         val written = demands.replace(access, previous, next.demand)
@@ -149,18 +147,22 @@ class ResolveCollaborationSpaceIncomingBinding(
                 ?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
         admission(runtime, source).let { if (it is AppResult.Failed) return it }
         if (loaded is AppResult.Failed) return loaded
-        // A concurrent serial producer may advance cursors or request another physical generation.
-        // Confirm this exact transferred turn rather than equality of the unrelated mutable queue.
         if (
-            retained != null &&
-                validCollaborationMessageId(retained.generation) &&
-                validCollaborationSpaceIncomingDemand(access, retained.demand) &&
-                retained.demand.rooms.singleOrNull { it.generation == converted.generation } ==
-                    converted &&
-                retained.demand.sources.any { it.source == source }
+            retained == null ||
+                !validCollaborationMessageId(retained.generation) ||
+                !validCollaborationSpaceIncomingDemand(access, retained.demand)
         )
-            return AppResult.Success(CollaborationSpaceIncomingBindingResolution.Queued)
-        return if (written is AppResult.Failed) written else changed()
+            return if (written is AppResult.Failed) written else changed()
+        val confirmed =
+            confirmCollaborationSpaceIncomingPhysicalResolution(
+                source,
+                captured,
+                converted,
+                retained.demand,
+                casRejected = written is AppResult.Success && written.value == null,
+            )
+        return if (confirmed is AppResult.Failed && written is AppResult.Failed) written
+        else confirmed
     }
 
     private suspend fun admission(
