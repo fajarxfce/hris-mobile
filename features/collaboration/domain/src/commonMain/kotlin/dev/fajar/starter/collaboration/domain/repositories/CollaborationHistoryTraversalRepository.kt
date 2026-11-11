@@ -11,6 +11,16 @@ interface CollaborationHistoryTraversalRepository {
         traversal: CollaborationHistoryTraversal,
     ): AppResult<CollaborationHistoryProgress?>
 
+    /**
+     * Reads one pending or resolved provider source with its checkpoint from one transaction.
+     * Absence creates no key, cursor or request and is not a content/delivery acknowledgement.
+     */
+    suspend fun source(
+        access: CollaborationLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        eventId: String,
+    ): AppResult<CollaborationHistorySource>
+
     /** Indexed bounded pending references; no network, decryption retry or deletion. */
     fun observeReferences(
         access: CollaborationLocalAccess,

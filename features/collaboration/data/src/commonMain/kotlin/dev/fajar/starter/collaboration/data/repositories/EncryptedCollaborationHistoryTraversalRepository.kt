@@ -29,6 +29,18 @@ class EncryptedCollaborationHistoryTraversalRepository(
         )
     }
 
+    override suspend fun source(
+        access: CollaborationLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        eventId: String,
+    ) = safeStorageCall {
+        storage.source(
+            CollaborationHistoryCoordinates.Company(access, traversal.conversationId),
+            traversal,
+            eventId,
+        )
+    }
+
     override fun observeReferences(
         access: CollaborationLocalAccess,
         traversal: CollaborationHistoryTraversal,

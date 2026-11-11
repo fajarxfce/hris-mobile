@@ -47,3 +47,6 @@ conversation metadata and exact retained evidence, then converts freshly loaded 
 
 [Typed incoming targets](collaboration-space-original-incoming-target.md) now keep Published and Company-qualified Original tasks distinct.
 Published consumers reject Original before I/O; the original consumer and raw collection remain disabled.
+
+[Original metadata and Company history source storage](collaboration-space-original-room-metadata.md) are now locally validated.
+The original consumer and its current-source/content admission remain pending before raw activation.

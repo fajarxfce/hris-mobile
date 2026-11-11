@@ -56,6 +56,13 @@ internal class IncomingHistoryAdvanceFixture {
     var after: suspend () -> Unit = {}
     val repository =
         object : CollaborationHistoryTraversalRepository {
+            override suspend fun source(
+                access: CollaborationLocalAccess,
+                traversal: CollaborationHistoryTraversal,
+                eventId: String,
+            ): AppResult<CollaborationHistorySource> =
+                error("Exact source is not part of this fixture")
+
             override suspend fun advanceIncomingReferences(
                 access: CollaborationLocalAccess,
                 traversal: CollaborationHistoryTraversal,

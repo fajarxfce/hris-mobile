@@ -1,5 +1,9 @@
 # Architecture
 
+[Original incoming storage](collaboration-space-original-room-metadata.md) preserves Company-qualified
+metadata and exact history sources. Historical facts have no native-parent/credential lifetime and
+create no wake; original content admission and consumer activation remain separate.
+
 [Typed incoming targets](collaboration-space-original-incoming-target.md) retain original Company identity
 through encrypted scheduling and exact task confirmation. Original consumer activation remains pending.
 

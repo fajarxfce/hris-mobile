@@ -16,6 +16,208 @@ abstract class CollaborationHistoryTraversalStorageContract {
     protected open val purpose = CollaborationHistoryPurpose.Browse
 
     @Test
+    fun exactSourceAbsenceIsKeylessAndDoesNotCreateAProviderPosition() = withDatabase { f ->
+        assertEquals(
+            CollaborationHistorySource(null, null),
+            f.success(f.repository().source(f.access, f.traversal, f.event().eventId)),
+        )
+        assertIs<AppResult.Failed>(f.repository().source(f.access, f.traversal, "invalid event"))
+        assertNull(f.local.keys.read())
+        assertNull(f.progress())
+    }
+
+    @Test
+    fun exactSourceKeepsPendingAndResolvedIdentityBesideItsActualCheckpoint() = withDatabase { f ->
+        f.stage(listOf(f.event(2), f.event(1)), null)
+        val pending = f.success(f.repository().source(f.access, f.traversal, f.event(1).eventId))
+        assertEquals(f.progress(), pending.progress)
+        val reference = assertNotNull(pending.reference)
+        assertEquals(1L, reference.sequence)
+        assertEquals(f.event(1), reference.event)
+        assertFalse(reference.resolved)
+        assertTrue(
+            f.success(
+                f.repository()
+                    .resolve(
+                        f.access,
+                        f.traversal,
+                        assertNotNull(pending.progress),
+                        listOf(reference),
+                    )
+            )
+        )
+        val resolved = f.success(f.repository().source(f.access, f.traversal, f.event(1).eventId))
+        assertEquals(reference.copy(resolved = true), resolved.reference)
+        assertEquals(f.progress(), resolved.progress)
+        assertEquals(pending.progress!!.revision + 1, resolved.progress?.revision)
+        assertNull(resolved.progress?.provider)
+        assertEquals(listOf(f.event(2)), f.read().events.map { it.event })
+        val absent = f.success(f.repository().source(f.access, f.traversal, f.event(3).eventId))
+        assertEquals(resolved.progress, absent.progress)
+        assertNull(absent.reference)
+    }
+
+    @Test
+    fun exactSourceLookupUsesOneIndexedDocumentWithoutScanningPendingReferences() =
+        withDatabase { f ->
+            f.stage((1..20).map(f::event), null)
+            var points = 0
+            val indexed =
+                object : ReplicaStore by f.local.database.replicas {
+                    override fun observe(
+                        scope: ReplicaScope,
+                        partition: String,
+                        after: String?,
+                        limit: Int,
+                    ): Flow<ReplicaPage> = error("No partition scan")
+
+                    override fun observeQueries(
+                        scope: ReplicaScope,
+                        partition: String,
+                        queries: List<ReplicaQuery>,
+                    ): Flow<ReplicaQueryPage> = error("No pending-reference scan")
+
+                    override fun observeDocument(
+                        scope: ReplicaScope,
+                        partition: String,
+                        id: String,
+                    ): Flow<ReplicaPage> {
+                        points++
+                        return f.local.database.replicas.observeDocument(scope, partition, id)
+                    }
+                }
+            val found =
+                f.success(f.repository(indexed).source(f.access, f.traversal, f.event(17).eventId))
+            assertEquals(f.event(17), found.reference?.event)
+            assertEquals(16L, found.reference?.sequence)
+            assertEquals(f.progress(), found.progress)
+            assertEquals(1, points)
+        }
+
+    @Test
+    fun companyDevicePurposeAndRoomCannotShareAnExactSourceByEventIdAlone() = withDatabase { f ->
+        f.stage(listOf(f.event()), null)
+        assertEquals(
+            CollaborationHistorySource(null, null),
+            f.success(
+                f.repository()
+                    .source(
+                        f.access.copy(companyId = historyId(9200)),
+                        f.traversal,
+                        f.event().eventId,
+                    )
+            ),
+        )
+        for (other in
+            listOf(
+                f.traversal.copy(deviceId = historyId(9201)),
+                f.traversal.copy(conversationId = historyId(9202)),
+                f.traversal.copy(
+                    purpose =
+                        if (purpose == CollaborationHistoryPurpose.Browse)
+                            CollaborationHistoryPurpose.Incoming
+                        else CollaborationHistoryPurpose.Browse
+                ),
+            )) assertEquals(
+            CollaborationHistorySource(null, null),
+            f.success(f.repository().source(f.access, other, f.event().eventId)),
+        )
+        assertIs<AppResult.Failed>(
+            f.repository()
+                .source(
+                    f.access,
+                    f.traversal.copy(roomId = "!foreign:example.test"),
+                    f.event().eventId,
+                )
+        )
+        assertEquals(
+            f.event(),
+            f.success(f.repository().source(f.access, f.traversal, f.event().eventId))
+                .reference
+                ?.event,
+        )
+    }
+
+    @Test
+    fun exactSourceRejectsAlteredIdentityPayloadAndDuplicateDocuments() = withDatabase { f ->
+        f.stage(listOf(f.event()), null)
+        for (mode in 0..2) {
+            val damaged =
+                object : ReplicaStore by f.local.database.replicas {
+                    override fun observeDocument(
+                        scope: ReplicaScope,
+                        partition: String,
+                        id: String,
+                    ): Flow<ReplicaPage> =
+                        f.local.database.replicas.observeDocument(scope, partition, id).map { page
+                            ->
+                            val document = page.documents.single()
+                            page.copy(
+                                documents =
+                                    when (mode) {
+                                        0 -> listOf(document.copy(id = "other-source"))
+                                        1 -> listOf(document.copy(payload = "AAAA"))
+                                        else -> listOf(document, document)
+                                    }
+                            )
+                        }
+                }
+            assertIs<AppResult.Failed>(
+                f.repository(damaged).source(f.access, f.traversal, f.event().eventId)
+            )
+        }
+        assertEquals(
+            f.event(),
+            f.success(f.repository().source(f.access, f.traversal, f.event().eventId))
+                .reference
+                ?.event,
+        )
+    }
+
+    @Test
+    fun cancellationDuringExactSourceReadPropagatesWithoutChangingReferences() = withDatabase { f ->
+        f.stage(listOf(f.event()), null)
+        val before = f.raw()
+        val entered = CompletableDeferred<Unit>()
+        val blocked =
+            object : ReplicaStore by f.local.database.replicas {
+                override fun observeDocument(
+                    scope: ReplicaScope,
+                    partition: String,
+                    id: String,
+                ): Flow<ReplicaPage> = flow {
+                    entered.complete(Unit)
+                    awaitCancellation()
+                }
+            }
+        val job =
+            CoroutineScope(currentCoroutineContext()).async {
+                f.repository(blocked).source(f.access, f.traversal, f.event().eventId)
+            }
+        entered.await()
+        job.cancelAndJoin()
+        assertFailsWith<CancellationException> { job.await() }
+        assertEquals(before, f.raw())
+    }
+
+    @Test
+    fun exactSourceReopensWithItsOriginalDeviceAndCompanyUnderAReplacementLogin() =
+        withDatabase { f ->
+            f.stage(listOf(f.event()), null)
+            val before = f.success(f.repository().source(f.access, f.traversal, f.event().eventId))
+            val replacement = f.access.copy(sessionId = "replacement-source-session")
+            f.local.reopen(replacement)
+            assertEquals(
+                before,
+                f.success(f.repository().source(replacement, f.traversal, f.event().eventId)),
+            )
+            assertEquals(
+                CollaborationHistorySource(null, null),
+                f.success(f.repository().source(f.access, f.traversal, f.event().eventId)),
+            )
+        }
+
+    @Test
     fun emptyAdvancingAndTerminalPagesSurviveReopenWithoutAcknowledgingReferences() =
         withDatabase { f ->
             assertNull(f.progress())

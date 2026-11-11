@@ -1,50 +1,63 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 08:31 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 08:36 UTC. This opening section owns current work; older checkpoints below are historical.
 
-## Active original incoming storage — full validation
+## Original incoming storage accepted — continue local resolution and consumers
 
-Mobile accepted source854828ffb689dcbca3645a8b4de562b79a02c6ab remains the source baseline. Current
-.work/space-original-room-metadata-2026-11-11 has18 APPLIED, UNACCEPTED source files: immutable original
-Company metadata and exact Company history source reads. Frozen4,925 inputs, manifest
-5c79d78059c7e6391b6ce0a44253e0ba488fc438902b6bc3e200460aaf74f792. No source or library mutations until
-full1/session69268 is reaped. Started08:24 UTC; expected11,621 full cases. Collector/original consumer OFF.
+The18-file original storage increment is ACCEPTED. Full1/session69268 REAPED PASS621.219s; audit35604
+REAPED ACCEPTED11,621=9,583 fresh+2,038 exact accepted unchanged controls. No failures/errors/skips;
+all prior case identities, source/library hashes and retained dependency closures verified. Focused2/
+session38566 PASS296.457s/121; browser2/session97925 PASS172.120s/119; focused audit240. Format2/session4008
+PASS34.848s. All are REAPED. Initial metadata-only190 cases stay archived in candidate1, not combined
+acceptance. No failed runs in this increment. Format, architecture74/detekt, Android host/release
+compilation/lint, browser/Wasm, iOS metadata and proof APK assembly/unit checks pass.
 
-Focused2/session38566 REAPED PASS296.457s/121; browser2/session97925 REAPED PASS172.120s/119. Focused
-audit accepts240 and all prior selected IDs. Format2/session4008 PASS34.848s. Initial metadata-only
-candidate1 preserves earlier96+94 successful cases, not combined acceptance. No failures so far.
+Frozen4,925 inputs/18 source files, manifest5c79d78059c7e6391b6ce0a44253e0ba488fc438902b6bc3e200460aaf74f792.
+Proof APK151,646,070 bytes/SHA665d0bc60f3151f523ebb3853bbc81fc6594a7f93a446f6bbce29e67f60e4507.
+Original metadata has immutable encrypted Company/conversation and Company/server/room indexes,
+authenticated pair/checkpoint reads and no wake side effects. Historical metadata contains no native
+parent or expiry. Company traversal exposes exact indexed pending/resolved source through the existing
+raw store, preserving Company bytes/provider=null/original physical device. Eighteen metadata common
+cases and seven new common traversal cases run for Browse/Incoming on desktop/browser; two new Apple
+Company wrappers prepare18 cases each. No Original producer, content consumer or raw collector enabled.
 
-Metadata has18 new common storage cases and the existing DI assertion. Exact Company source extends
-the existing raw store; seven new common cases each run for Browse and Incoming desktop/browser.
-Two new Apple Company wrappers each prepare18 cases. Company history bytes/provider=null/original
-physical device are preserved. Metadata itself grants no content authority and creates no wake.
+Private .work/space-original-room-metadata-2026-11-11 owns baseline854828ff/11,557 cases/1,294 XML,
+combined candidate/snapshots/audits. publish.py HAS EXECUTED; do not overwrite or rerun publication.
+Shared measurement collaboration-space-original-room-metadata-2026-11-11.json and Mobile/Group contracts
+record exact evidence. Next commit/push this accepted source/docs, then dispatch-hosted.py may create
+its immutable ref and dispatch once (prepared NOT executed; expected13,394=9,599 portable+3,795 Apple,
+16 Swift,unsigned host). Preserve hosted-dispatch-attempt.json if a dispatch reply is lost; inspect
+Actions before retry. Do not claim Apple native SDK8 execution.
 
-Next reap full1 and accept-full.py; publish.py is prepared but NOT executed. Then commit/push source
-and dispatch the prepared combined hosted control (expected13,394; currently NOT dispatched). Do not
-repeat previous runs. Baseline archives preserve1,294 XML reports/11,557 cases and4,915 source inputs.
+Then run prepare-next-load.py and configure-next-load.py. Both are PREPARED, NOT executed; they require
+this accepted exact source plus clean pushed HEAD, then preserve all11,621 cases and apply seven
+UNVALIDATED proposals to .work/space-original-incoming-load-2026-11-11. next-original-load-draft contains
+original room entity, registered-source/Company policy, five-second local loader,24 common cases and
+fixture, owning DI and an existing application binding assertion. Expected4,930 inputs, focus108,
+browser106 and full11,669 are NOT results. Loader rechecks full task, installed source, exact current
+LEGACY registration, immutable metadata and registration after the read. Original Company/device
+never comes from selected HR company or the Group receipt. No API/provider/sync start/queue write.
 
-next-original-load-draft now contains SEVEN UNAPPLIED/UNVALIDATED proposals: original room entity,
-registered provenance policy, local five-second loader,24 common cases and fixture, DI and existing
-binding assertion. It matches the full task/source/current LEGACY registration, derives the original
-Company/device, checks immutable metadata and rereads registration. No provider, API, sync start,
-queue write, wake or acknowledgement. Tests cover original-vs-Group device, foreign Company, task
-namespace collisions, obsolete work, registration replacement, historical age, denial, cancellation
-and deadlines around every local suspension. Source authority for content remains separate.
+Gateway trace: Group AccessNativeCollaborationSpaceMatrixDevice.roomRead/prepareRoomRead already
+revalidates native/device/Group authority and exact published-or-original room around Matrix content
+reads. Original fallback requires a successful absent published lookup and uses the admitted device's
+Company. Mobile readPage preserves physical owner/device and checks exact registry plus credential
+failure afterward. isSpaceOpen only checks registry and is not remote admission. Original provider
+consumer should reuse this existing gateway/client, not call direct-transport metadata per history
+page. Still validate native credential deadlines, directory denial, source/registration/demand and
+unchanged provider page around suspended work. Group source/schema is UNDEPLOYED; this is source review.
 
-prepare-next-load.py/configure-next-load.py are prepared, NOT executed. After current acceptance,
-publication, commit and push they capture an exact clean pushed baseline and apply seven proposals
-to .work/space-original-incoming-load-2026-11-11. Expected4,930 inputs; focus108/browser106/full11,669.
-Do not treat those expected counts as results. Next implement original provider/content/pending/
-completion, bounded native inventory, keys-only recovery and actual native proof before raw activation.
-All54 PRD groups remain OPEN; no generic Starter delta. Keep working beyond this checkpoint.
+Continue original provider/content/pending/completion, bounded native inventory, keys-only recovery
+and actual native proof before activation. All54 PRD groups remain OPEN; no generic Starter delta.
+Do not stop at this checkpoint. Push every commit; retain install-only phone policy.
 
-Metadata hosted42978769594 remains fully accepted13,189=9,477 portable+3,712 Apple,16 Swift and unsigned
-host. Original-target42983683780 now has portable audit31525 REAPED ACCEPTED9,535 on immutable854828ffb.
-Artifact13840230476/SHA d42cf08fd601208dd88545518a07b036c83ba187a166df6f7e871a64d6aab431. Apple remains
-running, expected3,741; next use target hosted-audit.py apple after success. No redispatch and no SDK8
-Apple native execution claim. Older incoming-write42972222388 retains its documented portable gap.
+Metadata hosted42978769594 fully accepted13,189=9,477 portable+3,712 Apple,16 Swift,unsigned host.
+Original-target42983683780 portable audit31525 REAPED ACCEPTED9,535 on immutable854828ff; artifact
+13840230476/SHA d42cf08fd601208dd88545518a07b036c83ba187a166df6f7e871a64d6aab431. Apple still running,
+expected3,741; use target hosted-audit.py after success. No redispatch. Older incoming-write control
+retains its documented portable gap; metadata control closed coverage without rewriting old evidence.
 
-Phone52455 REAPED timeout124 at08:08:30 UTC. No release89 install-result and no install attempt. Next
+Phone52455 REAPED timeout124 at08:08:30 UTC. No release89 install-result/no installation attempt. Next
 bounded retry no earlier08:40 UTC. No emulator, live deployment, protected store or SDK asset changes.
 
 ## Original incoming targets accepted — continue original metadata and consumers

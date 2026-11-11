@@ -424,6 +424,10 @@ class CollaborationBindingsTest {
                     container.koin.get<CollaborationSpaceRoomBindingInventoryRepository>(),
                 )
                 assertSame(
+                    container.koin.get<CollaborationSpaceOriginalRoomMetadataRepository>(),
+                    container.koin.get<CollaborationSpaceOriginalRoomMetadataRepository>(),
+                )
+                assertSame(
                     container.koin.get<CollaborationSpaceReadinessReceiptRepository>(),
                     container.koin.get<CollaborationSpaceReadinessReceiptRepository>(),
                 )

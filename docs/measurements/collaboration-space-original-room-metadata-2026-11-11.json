@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "854828ffb689dcbca3645a8b4de562b79a02c6ab",
+  "sourceFiles": 4925,
+  "changedSourceFiles": 18,
+  "sourceManifestSha256": "5c79d78059c7e6391b6ce0a44253e0ba488fc438902b6bc3e200460aaf74f792",
+  "focused": {
+    "tests": 240,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused2",
+  "focusedBrowserRun": "browser2",
+  "full": {
+    "validated": 11621,
+    "fresh": {
+      "tests": 9583,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 621.219,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151646070,
+    "sha256": "665d0bc60f3151f523ebb3853bbc81fc6594a7f93a446f6bbce29e67f60e4507"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "originalCompanyMetadataIndexes": true,
+  "companyConversationAndPhysicalRoomIndexes": true,
+  "metadataContainsNoNativeParent": true,
+  "metadataIsNotContentAuthority": true,
+  "authenticatedTwoIndexReadback": true,
+  "immutableFactsCannotBeReplaced": true,
+  "historyKeyInventoryCoversOriginalMetadata": true,
+  "metadataCreatesWake": false,
+  "repositoryCallsNoProviderOrApi": true,
+  "originalIncomingConsumerEnabled": false,
+  "newCommonStorageCases": 18,
+  "newSharedCompanyTraversalCases": 7,
+  "companyExactSourceIsIndexed": true,
+  "companyHistoryByteProtocolUnchanged": true,
+  "newAppleCompanyWrappers": 2,
+  "applicationSingletonBindingVerified": true,
+  "preservedFailedRuns": [],
+  "portableCiSelectsPhysicalWorker": true,
+  "rawCollectorEnabled": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true
+}
