@@ -1,0 +1,72 @@
+{
+  "date": "2026-11-11",
+  "description": "Locally admitted physical-to-logical incoming conversion with downstream original-source fencing.",
+  "sourceBaseline": "df16afbd93e266e0a0e7201dcd5a77750802f14e",
+  "sourceFiles": 4888,
+  "changedSourceFiles": 9,
+  "sourceManifestSha256": "63696bfc1a20b78823f74371dcf8be24f642861feb1c081cddc9d29b160d1b94",
+  "sdk": "26.10.23-hris.8",
+  "focused": {
+    "desktopRun": "focused2",
+    "browserRun": "browser1",
+    "counts": {
+      "tests": 168,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sourceFiles": 4888,
+    "sourceManifestSha256": "63696bfc1a20b78823f74371dcf8be24f642861feb1c081cddc9d29b160d1b94",
+    "priorSelectedCaseIdsPreserved": true,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true
+  },
+  "full": {
+    "startedAt": "2026-11-11T04:37:12.985392+00:00",
+    "elapsedSeconds": 793.488,
+    "sourceFiles": 4888,
+    "sourcesUnchanged": true,
+    "librarySourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 9226,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "bytes": 151614366,
+      "sha256": "7cb29fdf7ccab43f7b9fec90bb84d3dd15b41a3fb6ed0f7d9c4ea18d7163f289"
+    },
+    "sourceManifestSha256": "63696bfc1a20b78823f74371dcf8be24f642861feb1c081cddc9d29b160d1b94",
+    "validatedTests": 11264,
+    "validatedReusedTests": 2038,
+    "physicalResolution": true,
+    "sourceBoundLogicalRead": true,
+    "applicationCollectorEnabled": false
+  },
+  "fullRun": "full1",
+  "fullSession": 84612,
+  "priorCaseIdsPreserved": true,
+  "retainedControlDependencyClosuresVerified": true,
+  "providerNameSource": "owned registered provider metadata; never inferred from room/user locators",
+  "sourceIdentity": "original full lowercase SHA-256 storeId plus Matrix user/device",
+  "conversion": "exact physical generation transfers its original FIFO/head/retry/source to Latest logical demand",
+  "unfinishedLogicalWork": "preserved separately; no assumed cross-source coverage",
+  "writeReplyLossWitness": "exact transferred logical task, independent of concurrent producer positions/new physical generations",
+  "sourceBoundLogicalReadsFenced": true,
+  "conversionProviderOrTransportRequests": false,
+  "conversionCreatesWakeOrSchedules": false,
+  "applicationCollectorEnabled": false,
+  "physicalWorkerEnabled": false,
+  "remotePhysicalBindingConsumerEnabled": false,
+  "providerInventoryConsumerEnabled": false,
+  "storedKeyConsumerEnabled": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedReviewEvidence": [
+    "Initial 70-case candidate preceded downstream source guards; final focused candidate preserves those controls."
+  ]
+}

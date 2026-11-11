@@ -15,6 +15,7 @@ class LoadCollaborationSpaceIncomingRoom(
     private val directory: CollaborationSpaceDirectoryRepository,
     private val sessions: SessionRepository,
     private val server: IdentityServer,
+    private val sync: CollaborationSpaceSyncRepository,
 ) {
     suspend operator fun invoke(
         runtime: CollaborationSpaceRuntimeReady,
@@ -27,11 +28,21 @@ class LoadCollaborationSpaceIncomingRoom(
             return changed(FailureKind.Validation)
         val access = runtime.owner.localDirectoryAccess()
         return withTimeoutOrNull(5_000) {
-            admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            admission(runtime).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            val source = if (captured.sourceId != null) sync.incomingSource(runtime) else null
+            if (
+                captured.sourceId != null &&
+                    (source == null ||
+                        !validCollaborationSpaceIncomingSource(source) ||
+                        source.storeId != captured.sourceId)
+            )
+                return@withTimeoutOrNull changed(FailureKind.Unavailable)
             val loaded = demands.current(access)
             val observed = (loaded as? AppResult.Success)?.value
             val snapshot = observed?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
-            admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            admission(runtime, source).let {
+                if (it is AppResult.Failed) return@withTimeoutOrNull it
+            }
             if (loaded is AppResult.Failed) return@withTimeoutOrNull loaded
             if (observed == null) return@withTimeoutOrNull AppResult.Success(null)
             if (
@@ -45,8 +56,12 @@ class LoadCollaborationSpaceIncomingRoom(
             if (current == null || current.generation != captured.generation)
                 return@withTimeoutOrNull AppResult.Success(null)
             if (current != captured) return@withTimeoutOrNull changed()
+            if (source != null && snapshot.demand.sources.none { it.source == source })
+                return@withTimeoutOrNull changed()
             val found = bindings.getByConversation(access, captured.conversationId)
-            admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            admission(runtime, source).let {
+                if (it is AppResult.Failed) return@withTimeoutOrNull it
+            }
             if (found is AppResult.Failed) return@withTimeoutOrNull found
             val binding = (found as AppResult.Success).value
             if (
@@ -79,7 +94,11 @@ class LoadCollaborationSpaceIncomingRoom(
         } ?: changed(FailureKind.Timeout)
     }
 
-    private suspend fun admission(access: CollaborationSpaceLocalAccess): AppResult<Unit> {
+    private suspend fun admission(
+        runtime: CollaborationSpaceRuntimeReady,
+        source: CollaborationSpaceIncomingSource? = null,
+    ): AppResult<Unit> {
+        val access = runtime.owner.localDirectoryAccess()
         currentCoroutineContext().ensureActive()
         val gate = directory.admission(access)
         val current = sessions.current()
@@ -91,14 +110,15 @@ class LoadCollaborationSpaceIncomingRoom(
             }
         }
         if (current is AppResult.Failed) return current
-        val owned =
-            localCollaborationSpaceAccess(
-                access,
-                (current as AppResult.Success).value,
-                server.audience,
-            )
+        val session = (current as AppResult.Success).value
+        val owned = localCollaborationSpaceAccess(access, session, server.audience)
         if (owned is AppResult.Failed) return owned
         if (gate is AppResult.Failed) return gate
+        if (source != null) {
+            if (session?.binding?.serverId != runtime.owner.parent.nativeSessionId)
+                return changed(FailureKind.Unauthorized)
+            if (sync.incomingSource(runtime) != source) return changed(FailureKind.Unavailable)
+        }
         return AppResult.Success(Unit)
     }
 

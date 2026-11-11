@@ -815,13 +815,36 @@ class CollaborationDataModule {
     ) = FinishCollaborationSpaceIncomingWork(demands, wakes, roots, directory, sessions, server)
 
     @Factory
+    fun resolveSpaceIncomingBinding(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        bindings: CollaborationSpaceRoomBindingRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        sync: CollaborationSpaceSyncRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ResolveCollaborationSpaceIncomingBinding(
+            demands,
+            bindings,
+            registrations,
+            sync,
+            directory,
+            sessions,
+            server,
+            build,
+        )
+
+    @Factory
     fun loadSpaceIncomingRoom(
         demands: CollaborationSpaceIncomingDemandRepository,
         bindings: CollaborationSpaceRoomBindingRepository,
         directory: CollaborationSpaceDirectoryRepository,
         sessions: SessionRepository,
         server: IdentityServer,
-    ) = LoadCollaborationSpaceIncomingRoom(demands, bindings, directory, sessions, server)
+        sync: CollaborationSpaceSyncRepository,
+    ) = LoadCollaborationSpaceIncomingRoom(demands, bindings, directory, sessions, server, sync)
 
     @Factory
     fun queueSpaceIncomingRoom(

@@ -1,14 +1,92 @@
 package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationSpaceSyncRepository
 import dev.fajar.starter.collaboration.domain.usecases.LoadCollaborationSpaceIncomingRoom
 import dev.fajar.starter.common.result.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
 
 class LoadCollaborationSpaceIncomingRoomTest {
+    @Test
+    fun sourceBoundRoomRequiresItsExactInstalledOriginalWithoutStartingSync() = runTest {
+        val f = Fixture()
+        f.attachSource()
+        val local =
+            assertNotNull(
+                assertIs<AppResult.Success<CollaborationSpaceIncomingRoom?>>(f.load()).value
+            )
+        assertEquals(f.source.storeId, local.captured.sourceId)
+        assertEquals(f.request.key, local.traversal)
+        assertEquals(listOf("demand", "binding"), f.request.base.calls)
+        assertTrue(f.sourceReads > 0)
+    }
+
+    @Test
+    fun absentOrDifferentInstalledStoreCannotReadSourceBoundRoom() = runTest {
+        for (missing in listOf(false, true)) {
+            val f = Fixture()
+            f.attachSource()
+            f.installed = if (missing) null else f.source.copy(storeId = "2".repeat(64))
+            assertEquals(FailureKind.Unavailable, assertIs<AppResult.Failed>(f.load()).failure.kind)
+            assertTrue(f.request.base.calls.isEmpty())
+        }
+    }
+
+    @Test
+    fun exactStoreNameDoesNotHideChangedMatrixIdentityInRetainedProgress() = runTest {
+        val f = Fixture()
+        f.attachSource()
+        val snapshot = assertNotNull(f.request.snapshot)
+        f.request.snapshot =
+            snapshot.copy(
+                demand =
+                    snapshot.demand.copy(
+                        sources =
+                            snapshot.demand.sources.map {
+                                it.copy(source = it.source.copy(matrixDeviceId = "OTHER"))
+                            }
+                    )
+            )
+        assertIs<AppResult.Failed>(f.load())
+        assertEquals(listOf("demand"), f.request.base.calls)
+    }
+
+    @Test
+    fun lateRuntimeOrNativeParentReplacementFencesSourceBoundRoomReads() = runTest {
+        for (stage in listOf("demand", "binding")) for (native in listOf(false, true)) {
+            val f = Fixture()
+            f.attachSource()
+            f.request.base.hooks[stage] = {
+                if (native) {
+                    val setup = f.request.base.native.setup
+                    val session = assertNotNull(setup.session)
+                    setup.session =
+                        session.copy(
+                            binding =
+                                session.binding.copy(serverId = f.request.provider.queue.id(999))
+                        )
+                } else f.installed = f.source.copy(matrixDeviceId = "OTHER")
+            }
+            assertEquals(
+                if (native) FailureKind.Unauthorized else FailureKind.Unavailable,
+                assertIs<AppResult.Failed>(f.load()).failure.kind,
+                stage,
+            )
+        }
+    }
+
+    @Test
+    fun olderUnscopedWorkStillReadsLocallyWithoutAcquiringAnIncomingSource() = runTest {
+        val f = Fixture()
+        f.installed = null
+        assertIs<AppResult.Success<*>>(f.load())
+        assertEquals(0, f.sourceReads)
+    }
+
     @Test
     fun capturedRoomResolvesCanonicalLocalCoordinatesWithoutTransport() = runTest {
         val f = Fixture()
@@ -121,7 +199,33 @@ class LoadCollaborationSpaceIncomingRoomTest {
 
     private class Fixture {
         val request = SpaceIncomingRequestFixture().also { it.queued() }
-        val captured = request.snapshot!!.demand.rooms.single()
+        var captured = request.snapshot!!.demand.rooms.single()
+        val source =
+            CollaborationSpaceIncomingSource(
+                "1".repeat(64),
+                request.base.queue.identity.matrixUserId,
+                request.base.model.transport.matrixDeviceId,
+            )
+        var installed: CollaborationSpaceIncomingSource? = source
+        var sourceReads = 0
+        private val sync =
+            object : CollaborationSpaceSyncRepository {
+                override fun incomingSource(
+                    runtime: CollaborationSpaceRuntimeReady
+                ): CollaborationSpaceIncomingSource? {
+                    assertEquals(request.provider.runtime, runtime)
+                    sourceReads++
+                    return installed
+                }
+
+                override suspend fun synchronize(
+                    runtime: CollaborationSpaceRuntimeReady
+                ): AppResult<Unit> = error("No sync start")
+
+                override fun observeBatches(
+                    runtime: CollaborationSpaceRuntimeReady
+                ): Flow<AppResult<CollaborationSpaceSyncBatch>> = error("No subscription")
+            }
         val useCase =
             LoadCollaborationSpaceIncomingRoom(
                 request.demands,
@@ -129,8 +233,23 @@ class LoadCollaborationSpaceIncomingRoomTest {
                 request.base.directory.directory,
                 request.base.native.setup.sessions,
                 request.base.native.server,
+                sync,
             )
 
         suspend fun load() = useCase(request.provider.runtime, captured)
+
+        fun attachSource() {
+            captured = captured.copy(sourceId = source.storeId)
+            val snapshot = assertNotNull(request.snapshot)
+            request.snapshot =
+                snapshot.copy(
+                    demand =
+                        snapshot.demand.copy(
+                            rooms = listOf(captured),
+                            sources =
+                                listOf(CollaborationSpaceIncomingSourceProgress(source, "position")),
+                        )
+                )
+        }
     }
 }
