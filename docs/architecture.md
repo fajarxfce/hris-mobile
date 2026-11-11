@@ -1,5 +1,8 @@
 # Architecture
 
+[Original reference completion](collaboration-space-original-reference-completion.md) resolves acquired outcomes before a finite Company
+pending seek. Missing content retains retry; queue retirement remains independently verified.
+
 [Original retained-fact reconciliation](collaboration-space-original-reconciliation.md) confirms Company event identities locally.
 Missing content stays pending; finite seek and queue completion remain separate owners.
 
