@@ -1,6 +1,46 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 13:42 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 14:13 UTC. This opening owns current work; older sections are historical.
+
+## Current: alias CI coverage correction under validation
+
+Twelve-file alias candidate is APPLIED, NOT YET ACCEPTED: eleven Kotlin files plus
+.github/workflows/collaboration-control.yml. The prior Kotlin-only candidate passed focused
+772 and full12,322 (full1/52805,562.803s; audit completed). Exact evidence and source snapshots
+are preserved under .work/space-logical-alias-routing-2026-11-11/before-workflow-correction.
+The final workflow adds three previously omitted application classes: Original turn22,
+Original worker8 and alias worker8. Original application hosted43031231253 cannot provide
+its planned14,288 acceptance: thirty application cases were omitted by its source workflow.
+Preserve its original audit expectations; archive any partial result separately. Do not redispatch.
+The corrected alias hosted run must use canonical43028172483 as its accepted baseline and
+prove all previously omitted30 cases plus this increment. No green-job-only acceptance.
+
+format3/96222 REAPED PASS36.163s. focused3/44916 RUNNING on final4,978-input manifest
+8b2dda9185cb8f2c8c3f026a63cce37da6428df4ab66d97c12960e99b9eed203.
+Then browser2 and full2; do not edit candidate during validation. Expected423 focused,
+349 browser,12,322 full. Existing focused1 production waiting-outcome failure and its exact
+source remain preserved; test unchanged. Publication and hosted dispatch now explicitly guard
+all three workflow filters. No final-source publication/commit/dispatch yet.
+
+Canonical43028172483 portable10,170 accepted, Apple4,088 still running at14:12UTC.
+Application43031231253 portable/Apple still running. Queue43022213294 FULL14,161,
+reference43018627791 FULL14,089, content43011629455 FULL13,912 and reconciliation43015359541
+FULL14,002 accepted. Hosted checks are not native SDK8 Apple proof.
+
+Next private draft next-raw-room-inventory-draft contains four NEW files and24 Android host
+cases; UNAPPLIED/UNTESTED. Common raw contract/DTO and Android Client.rooms adapter retain
+membership and close every acquired handle on success, failure and cancellation. SDK8 still
+allocates the whole native handle list; bounded output is not a native allocation bound.
+Read next-raw-room-inventory-review.md and next-source-inventory-review.md. Prepare/apply only
+after final alias acceptance, source push and one hosted dispatch. Expected next12,346 local/
+4,982 inputs; raw activation, inventory continuity/consumer, keys-only wake and combined
+old-Company storage/new-Group native proof remain unfinished. All54 PRD groups OPEN.
+
+Phone99606 REAPED timeout124,13:51:10UTC; next retry no earlier14:22UTC. Release89 SDK6
+awaits install, no attempt/result. Notify first, explicit serial/install-only, never drive UI.
+No emulator/live deployment change. Preserve protected originals, Draft66, keys/stores/SDK
+assets and inspector gradlew.bat. No Starter delta. Continue long run; push each commit.
+
 
 ## Logical alias routing applied — focused validation is running
 
