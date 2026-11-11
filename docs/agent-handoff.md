@@ -1,6 +1,45 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 10:25 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 10:38 UTC. This opening owns current work; older sections are historical.
+
+## Company pending limit — browser validation in progress
+
+Mobile HEAD9b366ed53256c1bad575a44ac3e39f9288220006 and Group0c9a711e are PUSHED.
+The next eight-file Company page-size increment is applied but NOT accepted or committed.
+It exposes/forwards limit:Int=20 to the existing raw store, preserving legacy callers and cursor/key
+bytes. Original16-row pending continuations can use their actual attempted page size. Four new common
+storage cases cover finite seeks, resolution/reopen/appends, invalid limits/cursors/frames/devices and
+changing page sizes. A new Apple wave wrapper covers12 cases; Linux cannot claim its execution.
+
+Private .work/company-pending-limit-2026-11-11 holds baseline9b366ed5/11,887 cases, candidate snapshots,
+runners/audits, prepared publisher/contract and hosted plan/audit/dispatch. Format1/session26322 REAPED
+PASS36.597s. Focused1/session32087 REAPED PASS300.067s/136. Browser1/session77153 RUNNING, expected134.
+Frozen4,948-input manifest a74763b5645f6400a4a0c80e90cdecfbb270678633b884f29ab07d67f076e6c3.
+Next reap browser, accept-focused.py focused1 browser1 (270), then run.py full1 (expected11,895).
+Do not edit frozen source during checks. Full audit/publisher NOT executed. Hosted NOT dispatched:
+validation/company-pending-limit-20261111 expects13,813=9,873 portable+3,940 Apple,16 Swift,unsigned host.
+Unlike prior domain-only changes, portable delta8 and Apple delta12; explicitly audit the new wave class.
+
+Original pending reader is already locally accepted11,887; source9b366ed5 PUSHED and hosted43003600252
+RUNNING (dispatch54962 REAPED), expected13,793. Its earlier two test type-inference failures are retained.
+Provider transitions42999833068 portable ACCEPTED9,817 (audit37152 REAPED); Apple3,904 still pending.
+Provider acquisition42996808183 FULLY ACCEPTED13,589=9,729 portable+3,860 Apple; Apple audit61194 REAPED.
+Loader42991947262 fully accepted13,466; storage42988568153 fully accepted13,394; target42983683780 fully
+accepted13,276; metadata42978769594 fully accepted13,189. Existing immutable CI runs must not be dispatched
+again. Public measurement JSON contains artifact hashes, exact case identities and job log hashes.
+SDK8 native Apple runtime execution remains unproved; simulator/domain checks are separate evidence.
+
+Continue Original content acquisition and retention using the installed Group runtime and original
+Company/device. Two PRIVATE UNAPPLIED draft types in next-original-content-draft carry an Original batch
+and validate exact physical snapshots. They have no tests/acceptance. Provider references, decrypted
+content and committed retention remain separate. Original completion, canonical Published LEGACY aliases,
+bounded Client.rooms inventory, keys-only recovery and actual native proof precede raw activation.
+Raw collector/Original producer OFF; all54 PRD groups OPEN. No generic Starter delta. Continue long run.
+
+Phone16392 REAPED timeout124, connect started10:13:18 UTC. Next bounded retry no earlier10:44.
+Release89 validated SDK6 APK remains pending install, no install-result or attempt. No emulator.
+Notify before explicit-serial install-only, never launch/drive the user's phone. Eight protected original
+intents, Draft66, keys/stores, SDK6/7/8 assets and live90163c3/schema116.4 Group-OFF remain unchanged.
 
 ## Original pending reader accepted — continue Company batch contract
 
