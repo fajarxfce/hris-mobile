@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 00:40 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 00:42 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Foreground incoming startup accepted
 
@@ -56,7 +56,7 @@ The separate SDK6 reconstruction is at
 `/home/fajar/hris/.worktrees/matrix-sdk-incoming-hints-2026-11-10`, branch
 feat/hris-incoming-hints-20261110. Upstream 8de215a plus seven pinned SDK6 patches; 32 patched
 hashes/1,218 inputs verified, manifest 7c11dd909d664632dc9cf507dd5f8ea6463c9a3d600648a77dfb44ada3cf3a6f.
-The separate SDK worktree now contains a five-file candidate: the actual sync request captures
+The sync patch changes five files in the separate SDK worktree: the actual sync request captures
 previous_batch, the existing response exports bounded room/event locators and explicit room or
 inventory gaps, and stored_sync_position_v2 reads the SDK's local position without network.
 No extra listener or connection is required for successful response hints. Ephemeral receipt/
@@ -73,7 +73,7 @@ not a distributable Android build manifest yet. Contract: collaboration-sdk-inco
 (Mobile), collaboration/sdk-incoming-hints.md (Group), shared measurement filename
 collaboration-sdk-incoming-hints-2026-11-10.json. Private sdk-incoming-hints-2026-11-10 retains
 reports, complete input hashes and the rejected compile-only JSON-fixture attempt.
-No SDK version, artifact, runtime dependency or live change. The protected old dirty SDK worktree
+These were source-only gates; current SDK8 artifact status is below. The protected old dirty SDK worktree
 and original private stores remain unchanged. Stored-key hint source is now ACCEPTED in this checkpoint: four candidate files include the
 new listener/10 tests and correct optional-search feature ownership. Final full FFI passes 88
 cases, preserving all 78 prior cases; source 1,221 / manifest
@@ -92,11 +92,10 @@ Generator91332 is completed / 49.764s. Host generation80383 REAPED accepted / 4.
 and 27 Swift/header/module-map files; eight Kotlin files byte-identical to SDK6, all old APIs
 preserved. New main Kotlin hash 6a61d743939fa0e3aaf7cba91e3ec5840d1a6ee7135f2acc2b08858af047041c.
 The new Android candidate manifest pins nine patches/40 sources/nine bindings and required
-compiled/native APIs; all five build-driver tests pass. No Android artifact/version/dependency/
-publication exists yet. Host generation is NOT Apple compilation or Android acceptance.
+compiled/native APIs; all five build-driver tests pass. Shipping dependency and publication remain unchanged; SDK8 Android acceptance is recorded below. Host generation is NOT Apple compilation or Android acceptance.
 Binding contract/evidence: collaboration-sdk-incoming-hints-bindings.md (Mobile),
 collaboration/sdk-incoming-hints-bindings.md (Group), and shared measurement filename
-collaboration-sdk-incoming-hints-bindings-2026-11-11.json. Candidate all-ABI run 42928136481 is RUNNING at immutable b94f6fa79fc1e22b1ded081af03237603fca6f65,
+collaboration-sdk-incoming-hints-bindings-2026-11-11.json. Candidate all-ABI run 42928136481 is ACCEPTED at immutable b94f6fa79fc1e22b1ded081af03237603fca6f65,
 ref validation/sdk-incoming-hints-20261111. Dispatch15115 and all pushes are reaped. Do not
 redispatch. Private Mobile sdk-incoming-hints-ci-2026-11-11 owns hosted.json, pinned download.py
 and prepared (not executed) packaging scripts. All four ABI jobs are now ACCEPTED after download73482 REAPED: exact GitHub digests/CRC,
@@ -106,8 +105,8 @@ collaboration-sdk-incoming-hints-android-2026-11-11.json (both repos). Raw ARM64
 raw SDK6 by only22,592 bytes; APK-stripped and AAR-raw binaries are distinct comparisons.
 A fresh wrapper at /home/fajar/hris/.worktrees/matrix-kotlin-incoming-hints-2026-11-11 is now
 staged at pinned c1664f7 with all four verified libraries and nine generated Kotlin files.
-prepare-package.py EXECUTED; do not repeat. SDK8 native candidates exist, but no AAR/runtime
-dependency/publication exists. Run package.py only after the local Group compiler is reaped.
+prepare-package.py EXECUTED; do not repeat. SDK8 AAR acceptance is recorded below; shipping runtime dependency/publication remain unchanged.
+Packaging is complete; do not repeat package.py.
 SDK7 is retired; never reuse it. Then integrate the owned incoming application consumer.
 The current incoming scanner sees local bindings only; it cannot cover unknown server rooms
 when a batch is lost. Cold/gap recovery must include admitted provider/server inventory coverage.
@@ -142,7 +141,11 @@ sdk-incoming-hints-ci-2026-11-11 owns package-1 and the isolated local Ivy repos
 A separate consumer checkout at /home/fajar/hris/.worktrees/hris-mobile-incoming-hints-consumer-2026-11-11
 is based on exactb2aef564; all4,863 prior accepted app inputs matched before changing only
 its SDK version, checksum entry and RuntimeLeaseFixture's new sync response fields. Main Mobile
-still pins SDK6. Consumer full1/session20385 is RUNNING from that checkout's private
+still pins SDK6. Consumer full1/session20385 REAPED failed before tests /28.406s, all4,863 inputs unchanged:
+its isolated Ivy repository initially lacked the inspector's unchanged SDK6 dependency metadata.
+The exact published SDK6 AAR (a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3)
+and descriptor were checked against the primary verification metadata and copied into that
+private repository; no source was changed. Full2/session84151 is now RUNNING from the consumer's
 .work/sdk-incoming-consumer-2026-11-11 (full check/Android host/lint/proof APK/Wasm and metadata).
 Only this compiler is active. Do not mutate its three inputs or the inspector during the gate.
 The client Firebase file was copied only to its ignored location and checked against the old
