@@ -1,8 +1,8 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 10:06 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 10:19 UTC. This opening section owns current work; older checkpoints below are historical.
 
-## Active Original pending reader — focused revalidation
+## Active Original pending reader — full validation
 
 Transition source26ade803e2ac5ff6321c14ef19e203af582eb737 is PUSHED (42959 REAPED); Group8d3f7a5b pushed
 (1560 REAPED). Full1/session7058 and audit87669 REAPED accepted11,839. publish.py HAS EXECUTED. Hosted
@@ -14,8 +14,10 @@ Next five-file Original pending reader is APPLIED, UNACCEPTED. Private
 exact baseline reports. prepare-next-pending-read.py and configure-next-pending-read.py HAVE EXECUTED.
 Current4,947-input manifest2804ad25868eec8dac0143874d05e56239ba1bf0c01022dca840cbaaabb6ea46 is FROZEN.
 Format1/session98886 REAPED PASS35.527s; format2/session38586 REAPED PASS36.046s. Focused2/session8387
-RUNNING, expected150. Browser expected148 and full11,887 have NOT run. No publisher or hosted dispatch
-for this reader scope yet.
+REAPED PASS274.407s/150; browser1/session15771 REAPED PASS183.427s/148. Focused audit ACCEPTED298 with
+prior selected case IDs and source/library hashes preserved. Full1/session61035 RUNNING, expected11,887.
+publish.py, contract.md, hosted-plan/audit and dispatch-hosted.py PREPARED, NOT executed/dispatched;
+future hosted expected13,793=9,865 portable+3,928 Apple,16 Swift,unsigned host.
 
 Focused1/session79618 REAPED exit1/111.969s during common test compilation; ZERO cases executed. Only two
 assertEquals calls had overly narrow inferred expected pair lists; they now explicitly use
@@ -26,25 +28,29 @@ The new local owner derives Original Company/device coordinates from its capture
 indexed pending references, preserves finite pendingThrough and rejects regressing revisions/counts,
 changed frame/wave/seek/task/source. Five-second local ownership/metadata/registration/native/denial
 fences ignore credential age/selected Company. No provider/API/write/wake. Twenty-four new domain
-cases and existing DI/app assertions are pending validation. Raw collector and Original producer OFF.
+cases and existing DI/app assertions passed focused validation; full acceptance is pending. Raw collector and Original producer OFF.
 
-Next reap focused2, then browser/focused audit and full/full audit. Continue Company pending-limit
-contract, Original content and completion. Private next-company-pending-limit-draft now has contract,
-implementation, four fake signatures and an Apple wave wrapper PREPARED NOT applied. Common storage
-tests are still to be written; no acceptance/run scripts for that later draft. Company must expose and
-forward limit:Int=20 to the existing raw store so16-reference completion is valid; preserve stored key/
-cursor bytes and default20. Existing Company wave8-case contract has desktop/browser wrappers only;
-new Apple wrapper must be counted explicitly. Hosted control runs whole data modules, so wrapper inclusion
-requires no workflow change, but exact audit coverage must be added. Read next-company-pending-limit-review.md.
+Next reap full1/audit, publish only after acceptance, commit/push and dispatch ONCE on an immutable ref.
+Then prepare-next-company-limit.py/configure-next-company-limit.py are PREPARED, NOT executed; they require
+accepted clean pushed source. Eight-file next-company-pending-limit-draft is PREPARED NOT applied: Company
+contract/implementation, four fake signatures, four new common storage cases and an Apple wave wrapper
+covering12 total cases. Expose/forward limit:Int=20 to the existing raw store so16-reference completion is
+valid; preserve stored cursor/key bytes and default20. Real storage cases cover resolution/reopen/later
+appends, invalid size/cursor/frame/device and varying page sizes with a fixed finite boundary. Expected
+next Linux full11,895, focused136/browser134,4,948 inputs. Hosted whole data modules include the new Apple
+wrapper; exact future audit must explicitly verify all12 cases. No limit source or test acceptance yet.
+Read next-company-pending-limit-review.md. Continue Original content acquisition and completion afterward;
+physical snapshots, decryption outcomes and committed content identities remain distinct from references.
 
 Original content/seek/queue completion, canonical Published LEGACY aliases, bounded Client.rooms inventory,
 keys-only recovery and native proof remain required before activation. All54 PRD groups OPEN. No generic
 Starter delta. Continue the long run; push every commit.
 
-Provider42996808183 RUNNING, expected13,589. Loader42991947262 portable accepted9,647; Apple pending3,819.
+Provider42996808183 portable audit91579 REAPED ACCEPTED9,729; Apple pending3,860; expected total13,589.
+Artifact13845772954/SHAd62cffc1a246bf3a6de67298cee97c0ae3f0d629ac36b04c03f0ca38b67b1d75. Loader42991947262 portable accepted9,647; Apple pending3,819.
 Storage42988568153 fully accepted13,394; target42983683780 fully accepted13,276; metadata42978769594 fully
 accepted13,189. Do not redispatch existing runs. SDK8 Apple native execution is not established.
-Phone26798 REAPED timeout124, connect started09:42:07; next retry no earlier10:13. No release89 install-result
+Phone16392 REAPED timeout124, connect started10:13:18 UTC; next retry no earlier10:44. No release89 install-result
 or installation attempt. No emulator. Notify before install-only and never launch/drive the user's phone.
 Protected eight original intents, Draft66, keys/stores, SDK assets and live Group-OFF remain unchanged.
 
