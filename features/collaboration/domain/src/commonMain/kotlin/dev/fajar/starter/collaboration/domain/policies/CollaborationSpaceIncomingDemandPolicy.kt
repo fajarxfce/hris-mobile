@@ -33,7 +33,8 @@ fun captureCollaborationSpaceIncomingDemandSnapshot(
 fun validCollaborationSpaceIncomingRoomDemand(room: CollaborationSpaceIncomingRoomDemand): Boolean =
     (room.retry == null || validCollaborationSpaceIncomingRetry(room.retry)) &&
         (room.sourceId == null || validCollaborationSpaceIncomingSourceId(room.sourceId)) &&
-        validCollaborationMessageId(room.conversationId) &&
+        validCollaborationSpaceIncomingTarget(room.target) &&
+        (room.target !is CollaborationSpaceIncomingTarget.Original || room.sourceId != null) &&
         validCollaborationMessageId(room.generation) &&
         room.position in 0 until MAX_INCOMING_POSITION &&
         (room.headEventId == null || validCollaborationEventId(room.headEventId))
@@ -88,7 +89,7 @@ fun validCollaborationSpaceIncomingDemand(value: CollaborationSpaceIncomingDeman
     )
         return false
     if (
-        value.rooms.map { it.conversationId }.distinct().size != value.rooms.size ||
+        value.rooms.map { it.target }.distinct().size != value.rooms.size ||
             value.rooms.map { it.generation }.distinct().size != value.rooms.size ||
             value.rooms.map { it.position }.distinct().size != value.rooms.size
     )
@@ -202,12 +203,9 @@ private fun requestIncomingRoom(
             (request.headEventId != null && !validCollaborationEventId(request.headEventId))
     )
         return invalidIncomingDemand()
-    val previous = current.rooms.singleOrNull { it.conversationId == request.conversationId }
-    if (
-        current.rooms.any {
-            it.generation == request.generation && it.conversationId != request.conversationId
-        }
-    )
+    val target = CollaborationSpaceIncomingTarget.Published(request.conversationId)
+    val previous = current.rooms.singleOrNull { it.target == target }
+    if (current.rooms.any { it.generation == request.generation && it.target != target })
         return invalidIncomingDemand()
     // Same-head signals cannot restart provider acquisition or move pending work out of its turn.
     if (
@@ -232,7 +230,7 @@ private fun requestIncomingRoom(
     return AppResult.Success(
         current.copy(
             nextPosition = current.nextPosition + 1,
-            rooms = current.rooms.filterNot { it.conversationId == request.conversationId } + room,
+            rooms = current.rooms.filterNot { it.target == target } + room,
         )
     )
 }
@@ -247,7 +245,7 @@ private fun changeIncomingRoom(
 ): AppResult<CollaborationSpaceIncomingDemand> {
     if (!validCollaborationSpaceIncomingRoomDemand(captured)) return invalidIncomingDemand()
     val currentRoom =
-        current.rooms.singleOrNull { it.conversationId == captured.conversationId }
+        current.rooms.singleOrNull { it.target == captured.target }
             ?: return AppResult.Success(current)
     if (currentRoom.generation != captured.generation) return AppResult.Success(current)
     if (currentRoom != captured) return invalidIncomingDemand()

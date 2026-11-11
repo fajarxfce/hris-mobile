@@ -42,7 +42,10 @@ class CollaborationSpaceIncomingDemandTest {
         val boundary = queued.nextPosition
         val deferred =
             change(queued, CollaborationSpaceIncomingDemandChange.Defer(queued.rooms.first()))
-        assertEquals(listOf(id(2), id(1)), deferred.rooms.map { it.conversationId })
+        assertEquals(
+            listOf(id(2), id(1)).map { CollaborationSpaceIncomingTarget.Published(it) },
+            deferred.rooms.map { it.target },
+        )
         val retry = deferred.rooms.last()
         assertEquals(CollaborationSpaceIncomingPhase.Pending, retry.phase)
         assertTrue(retry.position >= boundary)
@@ -119,7 +122,7 @@ class CollaborationSpaceIncomingDemandTest {
         assertEquals(64, updated.rooms.size)
         assertNull(updated.rescanGeneration)
         assertEquals(full.rooms.drop(1), updated.rooms.dropLast(1))
-        assertEquals(id(1), updated.rooms.last().conversationId)
+        assertEquals(CollaborationSpaceIncomingTarget.Published(id(1)), updated.rooms.last().target)
     }
 
     @Test
@@ -153,7 +156,7 @@ class CollaborationSpaceIncomingDemandTest {
         val second = two.rooms.last()
         val variants =
             listOf(
-                two.copy(rooms = listOf(first, second.copy(conversationId = first.conversationId))),
+                two.copy(rooms = listOf(first, second.copy(target = first.target))),
                 two.copy(rooms = listOf(first, second.copy(generation = first.generation))),
                 two.copy(rooms = listOf(first, second.copy(position = first.position))),
                 two.copy(rooms = two.rooms.reversed()),
@@ -166,7 +169,7 @@ class CollaborationSpaceIncomingDemandTest {
                         rooms =
                             full().rooms +
                                 second.copy(
-                                    conversationId = id(99),
+                                    target = CollaborationSpaceIncomingTarget.Published(id(99)),
                                     generation = id(9999),
                                     position = 64,
                                 ),
@@ -243,7 +246,10 @@ class CollaborationSpaceIncomingDemandTest {
         val second = request(first, 2)
         val capture = first.rooms.single()
         val done = change(second, CollaborationSpaceIncomingDemandChange.Complete(capture))
-        assertEquals(listOf(id(2)), done.rooms.map { it.conversationId })
+        assertEquals(
+            listOf(CollaborationSpaceIncomingTarget.Published(id(2))),
+            done.rooms.map { it.target },
+        )
         assertEquals(done, change(done, CollaborationSpaceIncomingDemandChange.Complete(capture)))
     }
 

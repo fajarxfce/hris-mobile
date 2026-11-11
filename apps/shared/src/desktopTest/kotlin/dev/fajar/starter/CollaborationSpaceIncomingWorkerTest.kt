@@ -73,10 +73,18 @@ class CollaborationSpaceIncomingWorkerTest {
     @Test
     fun oneTurnProcessesOnlyFourCapturedRoomsThenSchedulesTheRest() = runTest {
         val f = SpaceIncomingWorkerFixture(testScheduler, 6)
-        val original = f.rooms.map { it.conversationId }
+        val original =
+            f.rooms.map {
+                assertIs<CollaborationSpaceIncomingTarget.Published>(it.target).conversationId
+            }
         assertEquals(SyncResult.Complete, f.worker())
         assertEquals(original.take(4), f.attempted)
-        assertEquals(original.drop(4), f.rooms.map { it.conversationId })
+        assertEquals(
+            original.drop(4),
+            f.rooms.map {
+                assertIs<CollaborationSpaceIncomingTarget.Published>(it.target).conversationId
+            },
+        )
         assertEquals(1, f.calls.count { it == "resume" })
         assertFalse("finish" in f.calls)
         assertNotNull(f.wake)
@@ -109,11 +117,17 @@ class CollaborationSpaceIncomingWorkerTest {
     @Test
     fun missingKeysInOneRoomDoNotBlockLaterRoomsInTheSameTurn() = runTest {
         val f = SpaceIncomingWorkerFixture(testScheduler, 2)
-        val first = f.rooms.first().conversationId
+        val first =
+            assertIs<CollaborationSpaceIncomingTarget.Published>(f.rooms.first().target)
+                .conversationId
         f.before = { if (it == "content") f.missingKeys = f.attempted.last() == first }
         assertIs<SyncResult.Retry>(f.worker())
         assertEquals(2, f.attempted.size)
-        assertEquals(first, f.rooms.single().conversationId)
+        assertEquals(
+            first,
+            assertIs<CollaborationSpaceIncomingTarget.Published>(f.rooms.single().target)
+                .conversationId,
+        )
         assertNotNull(f.rooms.single().retry)
         assertEquals(1, f.calls.count { it == "defer" })
         assertFalse("resume" in f.calls)
@@ -182,12 +196,18 @@ class CollaborationSpaceIncomingWorkerTest {
     @Test
     fun stalledRoomGetsOneBoundedAttemptAndLetsTheNextRoomProceed() = runTest {
         val f = SpaceIncomingWorkerFixture(testScheduler, 2)
-        val first = f.rooms.first().conversationId
+        val first =
+            assertIs<CollaborationSpaceIncomingTarget.Published>(f.rooms.first().target)
+                .conversationId
         f.before = { if (it == "provider" && f.attempted.last() == first) awaitCancellation() }
         assertIs<SyncResult.Retry>(f.worker())
         assertEquals(40_000L, testScheduler.currentTime)
         assertEquals(2, f.attempted.size)
-        assertEquals(first, f.rooms.single().conversationId)
+        assertEquals(
+            first,
+            assertIs<CollaborationSpaceIncomingTarget.Published>(f.rooms.single().target)
+                .conversationId,
+        )
         assertEquals(FailureKind.Timeout, f.deferred.single().second!!.kind)
     }
 

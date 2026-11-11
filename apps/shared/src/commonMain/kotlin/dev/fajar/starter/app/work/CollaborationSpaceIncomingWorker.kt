@@ -202,7 +202,7 @@ class CollaborationSpaceIncomingWorker(
         if (latest is AppResult.Failed) return latest
         val retained =
             (latest as AppResult.Success).value.snapshot?.demand?.rooms?.singleOrNull {
-                it.conversationId == captured.conversationId && it.generation == captured.generation
+                it.target == captured.target && it.generation == captured.generation
             } ?: return AppResult.Success(false)
         return defer(
             runtime.owner.localDirectoryAccess(),

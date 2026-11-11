@@ -1,5 +1,8 @@
 # Architecture
 
+[Typed incoming targets](collaboration-space-original-incoming-target.md) retain original Company identity
+through encrypted scheduling and exact task confirmation. Original consumer activation remains pending.
+
 [Incoming physical metadata](collaboration-space-physical-metadata-consumer.md) resolves missing
 published bindings through one admitted operation, then confirms immutable facts and converts
 fresh source-owned demand. Original routing, inventory and keys-only recovery remain required.

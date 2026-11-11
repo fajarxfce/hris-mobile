@@ -128,7 +128,8 @@ class CollaborationSpaceIncomingSyncPolicyTest {
                     nextCollaborationSpaceIncomingDemand(
                         value,
                         CollaborationSpaceIncomingDemandChange.Request(
-                            logical(0).conversationId,
+                            assertIs<CollaborationSpaceIncomingTarget.Published>(logical(0).target)
+                                .conversationId,
                             id(951),
                             "$" + "changed",
                         ),

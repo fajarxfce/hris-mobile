@@ -50,7 +50,10 @@ class DiscoverCollaborationSpaceIncomingRooms(
             if (page == null) return@withTimeoutOrNull changed()
             val additions =
                 page.bindings.filter { binding ->
-                    current.rooms.none { it.conversationId == binding.conversation.id }
+                    current.rooms.none {
+                        it.target ==
+                            CollaborationSpaceIncomingTarget.Published(binding.conversation.id)
+                    }
                 }
             val planned =
                 discoverCollaborationSpaceIncomingRooms(

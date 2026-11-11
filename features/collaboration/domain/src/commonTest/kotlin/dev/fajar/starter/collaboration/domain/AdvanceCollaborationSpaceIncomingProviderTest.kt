@@ -11,6 +11,26 @@ import kotlinx.coroutines.test.runTest
 
 class AdvanceCollaborationSpaceIncomingProviderTest {
     @Test
+    fun originalTargetCannotUseAPublishedProviderAcquisition() = runTest {
+        val f = Fixture()
+        val target =
+            CollaborationSpaceIncomingTarget.Original(
+                CollaborationOriginalConversationPosition(
+                    "10000000-0000-4000-8000-000000007100",
+                    assertIs<CollaborationSpaceIncomingTarget.Published>(f.captured.target)
+                        .conversationId,
+                )
+            )
+        val captured = f.captured.copy(target = target, sourceId = "1".repeat(64))
+        val before = f.request.snapshot
+        val result = f.useCase(f.base.access, captured, f.receipt)
+        assertEquals(FailureKind.Validation, assertIs<AppResult.Failed>(result).failure.kind)
+        assertEquals(before, f.request.snapshot)
+        assertEquals(0, f.request.writes)
+        assertTrue(f.request.base.calls.isEmpty())
+    }
+
+    @Test
     fun producerBeforeCasRetriesOnceAndAfterCommitConfirmsLostReply() = runTest {
         for (stage in listOf("write", "committed")) {
             val f = Fixture()

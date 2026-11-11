@@ -57,8 +57,7 @@ class DeferCollaborationSpaceIncomingRoom(
                     !validCollaborationSpaceIncomingDemand(access, snapshot.demand)
             )
                 return@withTimeoutOrNull changed()
-            val current =
-                snapshot.demand.rooms.singleOrNull { it.conversationId == captured.conversationId }
+            val current = snapshot.demand.rooms.singleOrNull { it.target == captured.target }
             if (current == null || current.generation != captured.generation)
                 return@withTimeoutOrNull AppResult.Success(false)
             if (current != captured) {

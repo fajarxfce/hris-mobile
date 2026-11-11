@@ -27,10 +27,13 @@ class RecoverCollaborationSpaceIncomingProvider(
         captured: CollaborationSpaceIncomingRoomDemand,
     ): AppResult<Boolean> {
         currentCoroutineContext().ensureActive()
+        val target =
+            captured.target as? CollaborationSpaceIncomingTarget.Published
+                ?: return changed(FailureKind.Validation)
         if (
             key.purpose != CollaborationHistoryPurpose.Incoming ||
                 !validCollaborationHistoryTraversal(key) ||
-                key.conversationId != captured.conversationId ||
+                key.conversationId != target.conversationId ||
                 !validCollaborationSpaceIncomingRoomDemand(captured) ||
                 captured.phase != CollaborationSpaceIncomingPhase.Pending
         )
@@ -49,8 +52,7 @@ class RecoverCollaborationSpaceIncomingProvider(
                     !validCollaborationSpaceIncomingDemand(access, snapshot.demand)
             )
                 return@withTimeoutOrNull changed()
-            val room =
-                snapshot.demand.rooms.singleOrNull { it.conversationId == key.conversationId }
+            val room = snapshot.demand.rooms.singleOrNull { it.target == target }
             if (room == null || room.generation != captured.generation)
                 return@withTimeoutOrNull AppResult.Success(false)
             if (room != captured) {

@@ -118,7 +118,8 @@ class CollaborationSpaceIncomingRetryTest {
                     nextCollaborationSpaceIncomingDemand(
                         current,
                         CollaborationSpaceIncomingDemandChange.Request(
-                            delayed.conversationId,
+                            assertIs<CollaborationSpaceIncomingTarget.Published>(delayed.target)
+                                .conversationId,
                             f.id(805),
                             delayed.headEventId,
                         ),
@@ -131,7 +132,8 @@ class CollaborationSpaceIncomingRetryTest {
                     nextCollaborationSpaceIncomingDemand(
                         current,
                         CollaborationSpaceIncomingDemandChange.Request(
-                            delayed.conversationId,
+                            assertIs<CollaborationSpaceIncomingTarget.Published>(delayed.target)
+                                .conversationId,
                             f.id(805),
                             "\$new",
                         ),

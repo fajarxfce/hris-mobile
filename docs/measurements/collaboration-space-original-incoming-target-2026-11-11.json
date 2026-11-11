@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "8ae3d11e9b04d130c579614a6181c44bfcbe3b40",
+  "sourceFiles": 4915,
+  "changedSourceFiles": 31,
+  "sourceManifestSha256": "7791d5746c9121c31732a2f4f0c7b40623f729ff29f08a82c4df0da6ba5311d2",
+  "focused": {
+    "tests": 1173,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused2",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 11557,
+    "fresh": {
+      "tests": 9519,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 628.257,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151644921,
+    "sha256": "e016de8dc7c3797f2f9ad4a72d03f61e8f493a5389dcb562d571857a1f0f3344"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "typedPublishedAndOriginalTargets": true,
+  "companyQualifiedOriginalTargets": true,
+  "sourceRequiredForOriginal": true,
+  "legacyV1V2V3Readable": true,
+  "publishedOnlyEncodingUnchanged": true,
+  "typedPartsSchema": 4,
+  "roomCapacity": 64,
+  "sourceCapacity": 64,
+  "maximumDocuments": 129,
+  "readSentinel": 130,
+  "aggregateCiphertextLimit": 4194304,
+  "exactTargetWriteConfirmation": true,
+  "publishedConsumersRejectOriginalBeforeIo": true,
+  "originalIncomingConsumerEnabled": false,
+  "newDomainCases": 21,
+  "newCommonStorageCases": 8,
+  "preservedFailedRuns": [
+    {
+      "run": "focused1",
+      "elapsedSeconds": 216.183,
+      "exitCode": 1,
+      "freshCounts": {
+        "tests": 585,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "portableCiSelectsPhysicalWorker": true,
+  "rawCollectorEnabled": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true
+}

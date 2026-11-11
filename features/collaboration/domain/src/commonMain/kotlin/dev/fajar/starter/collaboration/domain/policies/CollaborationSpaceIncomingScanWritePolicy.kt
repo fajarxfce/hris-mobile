@@ -33,7 +33,8 @@ fun confirmCollaborationSpaceIncomingScanWrite(
         additions.size > 4 ||
             next.nextPosition != previous.nextPosition + additions.size ||
             additions.any {
-                it.phase != CollaborationSpaceIncomingPhase.Latest ||
+                it.target !is CollaborationSpaceIncomingTarget.Published ||
+                    it.phase != CollaborationSpaceIncomingPhase.Latest ||
                     it.sourceId != null ||
                     it.headEventId != null ||
                     it.retry != null
@@ -61,7 +62,7 @@ fun confirmCollaborationSpaceIncomingScanWrite(
         current.scan == next.scan &&
             requestRetained &&
             additions.all { wanted ->
-                current.rooms.singleOrNull { it.conversationId == wanted.conversationId } == wanted
+                current.rooms.singleOrNull { it.target == wanted.target } == wanted
             }
     )
         return AppResult.Success(true)

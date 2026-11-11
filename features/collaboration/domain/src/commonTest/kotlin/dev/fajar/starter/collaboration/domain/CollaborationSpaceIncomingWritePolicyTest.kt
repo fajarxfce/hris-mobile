@@ -159,7 +159,7 @@ class CollaborationSpaceIncomingWritePolicyTest {
         val p = plan(0)
         val other =
             p.captured.copy(
-                conversationId = id(91),
+                target = CollaborationSpaceIncomingTarget.Published(id(91)),
                 generation = id(92),
                 position = p.previous.nextPosition,
             )

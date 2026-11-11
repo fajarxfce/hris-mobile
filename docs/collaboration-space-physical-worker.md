@@ -44,3 +44,6 @@ requires original routing, inventory and keys-only consumers.
 
 [Physical metadata acquisition](collaboration-space-physical-metadata-consumer.md) resolves missing published bindings with real
 conversation metadata and exact retained evidence, then converts freshly loaded demand.
+
+[Typed incoming targets](collaboration-space-original-incoming-target.md) now keep Published and Company-qualified Original tasks distinct.
+Published consumers reject Original before I/O; the original consumer and raw collection remain disabled.

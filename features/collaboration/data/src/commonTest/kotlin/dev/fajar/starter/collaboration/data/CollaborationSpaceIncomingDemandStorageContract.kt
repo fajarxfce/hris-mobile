@@ -17,6 +17,319 @@ abstract class CollaborationSpaceIncomingDemandStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
     @Test
+    fun authenticatedUnknownOrAmbiguousTargetsAndMixedVersionMarkersAreRejected() =
+        withDatabase { f ->
+            val first = saved(f.demands().replace(f.local(), null, typedDemand()))
+            val page =
+                f.database.replicas
+                    .observe(
+                        incomingDemandScope(f.local()),
+                        incomingDemandPartition(f.local()),
+                        limit = INCOMING_DEMAND_READ_LIMIT,
+                    )
+                    .first()
+            val raw = assertNotNull(page.checkpoint)
+            val document = page.documents.single { it.id == "r-01" }
+            val aad =
+                Json.encodeToString(
+                        listOf(
+                            "hris-collaboration-space-incoming-demand-v1",
+                            f.access.audience,
+                            f.access.accountId,
+                            f.local().spaceId,
+                            raw.handle.generation,
+                            document.id,
+                            "0",
+                        )
+                    )
+                    .encodeToByteArray()
+            CollaborationHistoryKeys(f.database.replicas, f.cipher, f.keys).use { key, _ ->
+                val bytes =
+                    f.cipher.decrypt(key, aad, Base64.decode(assertNotNull(document.payload)))
+                val original =
+                    try {
+                        bytes.decodeToString()
+                    } finally {
+                        bytes.fill(0)
+                    }
+                val sourceId = typedDemand().sources.single().source.storeId
+                val invalid =
+                    listOf(
+                        original.replace("\"type\":\"original\"", "\"type\":\"unknown\""),
+                        original.replace("\"type\":\"original\"", "\"type\":\"published\""),
+                        original.replace(historyId(7100), "00000000-0000-0000-0000-000000000000"),
+                        original.replace(",\"sourceId\":\"$sourceId\"", ""),
+                    )
+                for (bad in invalid) {
+                    assertNotEquals(original, bad)
+                    val payload = Base64.encode(f.cipher.encrypt(key, aad, bad.encodeToByteArray()))
+                    val store =
+                        object : ReplicaStore by f.database.replicas {
+                            override fun observe(
+                                scope: ReplicaScope,
+                                partition: String,
+                                after: String?,
+                                limit: Int,
+                            ) =
+                                flowOf(
+                                    page.copy(
+                                        documents =
+                                            page.documents.map {
+                                                if (it.id == document.id) it.copy(payload = payload)
+                                                else it
+                                            }
+                                    )
+                                )
+                        }
+                    assertIs<AppResult.Failed>(f.demands(store).current(f.local()))
+                    assertIs<AppResult.Failed>(
+                        f.demands(store).replace(f.local(), first, typedDemand())
+                    )
+                }
+            }
+            for (marker in listOf(INCOMING_DEMAND_PARTS_CHECKPOINT, "incoming-demand/v5")) {
+                val store =
+                    object : ReplicaStore by f.database.replicas {
+                        override fun observe(
+                            scope: ReplicaScope,
+                            partition: String,
+                            after: String?,
+                            limit: Int,
+                        ) = flowOf(page.copy(checkpoint = raw.copy(payload = marker)))
+                    }
+                assertIs<AppResult.Failed>(f.demands(store).current(f.local()))
+            }
+            assertEquals(AppResult.Success(first), f.demands().current(f.local()))
+        }
+
+    @Test
+    fun originalTargetsUpgradeExistingPartsWithoutDiscardingPhysicalHintsOrSourcePositions() =
+        withDatabase { f ->
+            val wake = CollaborationSpaceIncomingWake(historyId(8400))
+            val before = physicalDemand(2)
+            val first = saved(f.demands().replace(f.local(), null, before, wake))
+            val next =
+                before.copy(
+                    nextPosition = 5,
+                    rooms =
+                        typedDemand().rooms.mapIndexed { index, room ->
+                            room.copy(position = 2L + index)
+                        },
+                )
+            val retained = saved(f.demands().replace(f.local(), first, next))
+            val raw =
+                f.database.replicas.checkpoint(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                )
+            assertEquals(INCOMING_DEMAND_TARGETS_CHECKPOINT, raw?.payload)
+            f.reopen()
+            assertEquals(AppResult.Success(retained), f.demands().current(f.local()))
+            assertEquals(before.physicalRooms, retained.demand.physicalRooms)
+            assertEquals(before.sources, retained.demand.sources)
+            assertEquals(AppResult.Success(wake), f.wakes().pending())
+        }
+
+    @Test
+    fun interruptedTypedCommitReopensItsOriginalTargetsAndSingleWakeWithoutReplay() =
+        withDatabase { f ->
+            var attempts = 0
+            val wake = CollaborationSpaceIncomingWake(historyId(8401))
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override suspend fun replace(
+                        scope: ReplicaScope,
+                        partition: String,
+                        expected: ReplicaCheckpoint?,
+                        snapshot: ReplicaSnapshot?,
+                        wake: WorkWakeRequest?,
+                    ): Boolean {
+                        attempts++
+                        check(
+                            f.database.replicas.replace(scope, partition, expected, snapshot, wake)
+                        )
+                        throw CancellationException("Fictional typed commit response loss")
+                    }
+                }
+            assertFailsWith<CancellationException> {
+                f.demands(store).replace(f.local(), null, typedDemand(), wake)
+            }
+            assertEquals(1, attempts)
+            f.reopen()
+            assertEquals(typedDemand(), saved(f.demands().current(f.local())).demand)
+            assertEquals(AppResult.Success(wake), f.wakes().pending())
+        }
+
+    @Test
+    fun completedOriginalTargetsReturnToLegacyPartsWithoutLosingPublishedWorkOrWake() =
+        withDatabase { f ->
+            val wake = CollaborationSpaceIncomingWake(historyId(8200))
+            val first = saved(f.demands().replace(f.local(), null, typedDemand(), wake))
+            val next =
+                first.demand.copy(
+                    rooms =
+                        first.demand.rooms.filter {
+                            it.target is CollaborationSpaceIncomingTarget.Published
+                        }
+                )
+            val retained = saved(f.demands().replace(f.local(), first, next))
+            val raw =
+                f.database.replicas.checkpoint(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                )
+            assertEquals(INCOMING_DEMAND_PARTS_CHECKPOINT, raw?.payload)
+            f.reopen()
+            assertEquals(AppResult.Success(retained), f.demands().current(f.local()))
+            assertEquals(first.demand.sources, retained.demand.sources)
+            assertEquals(AppResult.Success(wake), f.wakes().pending())
+        }
+
+    @Test
+    fun maximumTypedTargetsAndSourcesKeepTheExistingAtomicPartBudget() = withDatabase { f ->
+        val source = physicalDemand(64)
+        val requested =
+            demand(64)
+                .copy(
+                    rooms =
+                        demand(64).rooms.mapIndexed { index, room ->
+                            room.copy(
+                                target =
+                                    CollaborationSpaceIncomingTarget.Original(
+                                        CollaborationOriginalConversationPosition(
+                                            historyId(7200 + index),
+                                            historyId(7300 + index),
+                                        )
+                                    ),
+                                sourceId = source.sources[index].source.storeId,
+                            )
+                        },
+                    sources = source.sources,
+                )
+        val wake = CollaborationSpaceIncomingWake(historyId(8201))
+        val retained = saved(f.demands().replace(f.local(), null, requested, wake))
+        val page =
+            f.database.replicas
+                .observe(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                    limit = INCOMING_DEMAND_READ_LIMIT,
+                )
+                .first()
+        assertEquals(INCOMING_DEMAND_TARGETS_CHECKPOINT, page.checkpoint?.payload)
+        assertEquals(129, page.documents.size)
+        assertTrue(page.documents.sumOf { assertNotNull(it.payload).length.toLong() } <= 4_194_304L)
+        assertTrue(page.documents.all { it.tags.isEmpty() && it.id == it.sortKey })
+        f.reopen()
+        assertEquals(AppResult.Success(retained), f.demands().current(f.local()))
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+    }
+
+    @Test
+    fun originalTargetsWithoutAValidCompanyOrSourceCannotCreateStorageOrKeys() = withDatabase { f ->
+        val valid = typedDemand()
+        val original = valid.rooms[1]
+        val target = assertIs<CollaborationSpaceIncomingTarget.Original>(original.target)
+        val invalid =
+            listOf(
+                valid.copy(rooms = listOf(original.copy(sourceId = null))),
+                valid.copy(
+                    rooms =
+                        listOf(
+                            original.copy(
+                                target =
+                                    target.copy(
+                                        position =
+                                            target.position.copy(
+                                                companyId = "00000000-0000-0000-0000-000000000000"
+                                            )
+                                    )
+                            )
+                        )
+                ),
+                valid.copy(
+                    rooms =
+                        listOf(original, original.copy(generation = historyId(8300), position = 2))
+                ),
+            )
+        for (value in invalid) assertIs<AppResult.Failed>(
+            f.demands()
+                .replace(f.local(), null, value, CollaborationSpaceIncomingWake(historyId(8202)))
+        )
+        assertNull(f.keys.read())
+        assertEquals(AppResult.Success(null), f.demands().current(f.local()))
+        assertEquals(AppResult.Success(null), f.wakes().pending())
+    }
+
+    @Test
+    fun typedTargetsWithSameConversationIdReopenInTheirExactNamespaces() = withDatabase { f ->
+        val requested = typedDemand()
+        val wake = CollaborationSpaceIncomingWake(historyId(8100))
+        val retained = saved(f.demands().replace(f.local(), null, requested, wake))
+        val page =
+            f.database.replicas
+                .observe(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                    limit = INCOMING_DEMAND_READ_LIMIT,
+                )
+                .first()
+        assertEquals(INCOMING_DEMAND_TARGETS_CHECKPOINT, page.checkpoint?.payload)
+        assertEquals(5, page.documents.size)
+        val encrypted = page.documents.joinToString { it.payload.orEmpty() }
+        assertFalse(encrypted.contains(historyId(7100)))
+        assertFalse(encrypted.contains(historyId(7101)))
+        val replacement =
+            f.access.copy(sessionId = "replacement-native-parent", companyId = historyId(8101))
+        f.reopen(replacement)
+        assertEquals(
+            AppResult.Success(retained),
+            f.demands().current(f.local().copy(sessionId = replacement.sessionId)),
+        )
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+        assertEquals(requested.rooms.map { it.target }, retained.demand.rooms.map { it.target })
+    }
+
+    @Test
+    fun publishedDemandStillEncodesTheExactLegacyPayload() = withDatabase { f ->
+        saved(f.demands().replace(f.local(), null, demand()))
+        val page =
+            f.database.replicas
+                .observe(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                    limit = INCOMING_DEMAND_READ_LIMIT,
+                )
+                .first()
+        val raw = assertNotNull(page.checkpoint)
+        assertEquals(INCOMING_DEMAND_CHECKPOINT, raw.payload)
+        val document = page.documents.single()
+        val aad =
+            Json.encodeToString(
+                    listOf(
+                        "hris-collaboration-space-incoming-demand-v1",
+                        f.access.audience,
+                        f.access.accountId,
+                        f.local().spaceId,
+                        raw.handle.generation,
+                        document.id,
+                        "0",
+                    )
+                )
+                .encodeToByteArray()
+        CollaborationHistoryKeys(f.database.replicas, f.cipher, f.keys).use { key, _ ->
+            val bytes = f.cipher.decrypt(key, aad, Base64.decode(assertNotNull(document.payload)))
+            try {
+                val expected =
+                    """{"schema":1,"nextPosition":"2","rooms":[{"conversationId":"${historyId(1000)}","generation":"${historyId(2000)}","position":"0","headEventId":"${'$'}head-0","phase":"Latest"},{"conversationId":"${historyId(1001)}","generation":"${historyId(2001)}","position":"1","headEventId":"${'$'}head-1","phase":"Provider"}],"rescanGeneration":"${historyId(9000)}"}"""
+                assertEquals(expected, bytes.decodeToString())
+            } finally {
+                bytes.fill(0)
+            }
+        }
+    }
+
+    @Test
     fun sourcePositionAndPhysicalWorkReopenWithTheirLogicalWorkAndSingleWake() = withDatabase { f ->
         val source =
             CollaborationSpaceIncomingSource("a".repeat(64), "@original:proof.invalid", "ORIGINAL")
@@ -323,7 +636,14 @@ abstract class CollaborationSpaceIncomingDemandStorageContract {
                     )
                     ?.payload
             )
-        assertFalse(encrypted.contains(first.demand.rooms.first().conversationId))
+        assertFalse(
+            encrypted.contains(
+                assertIs<CollaborationSpaceIncomingTarget.Published>(
+                        first.demand.rooms.first().target
+                    )
+                    .conversationId
+            )
+        )
         assertFalse(encrypted.contains(first.demand.rooms.first().headEventId!!))
         val renewed = f.access.copy(sessionId = "renewed")
         f.reopen(renewed)
@@ -1005,6 +1325,29 @@ abstract class CollaborationSpaceIncomingDemandStorageContract {
                     )
                 },
         )
+
+    private fun typedDemand(): CollaborationSpaceIncomingDemand {
+        val source = physicalDemand().sources.single()
+        val id = historyId(1000)
+        val targets =
+            listOf(
+                CollaborationSpaceIncomingTarget.Published(id),
+                CollaborationSpaceIncomingTarget.Original(
+                    CollaborationOriginalConversationPosition(historyId(7100), id)
+                ),
+                CollaborationSpaceIncomingTarget.Original(
+                    CollaborationOriginalConversationPosition(historyId(7101), id)
+                ),
+            )
+        val base = demand(3)
+        return base.copy(
+            rooms =
+                base.rooms.mapIndexed { index, room ->
+                    room.copy(target = targets[index], sourceId = source.source.storeId)
+                },
+            sources = listOf(source),
+        )
+    }
 
     private fun demand(count: Int = 2) =
         CollaborationSpaceIncomingDemand(

@@ -10,6 +10,26 @@ import kotlinx.coroutines.test.runTest
 
 class RecoverCollaborationSpaceIncomingProviderTest {
     @Test
+    fun originalTargetCannotReadOrRequeuePublishedHistory() = runTest {
+        val f = Fixture()
+        val target =
+            CollaborationSpaceIncomingTarget.Original(
+                CollaborationOriginalConversationPosition(
+                    "10000000-0000-4000-8000-000000007100",
+                    assertIs<CollaborationSpaceIncomingTarget.Published>(f.captured.target)
+                        .conversationId,
+                )
+            )
+        val captured = f.captured.copy(target = target, sourceId = "1".repeat(64))
+        val before = f.base.request.snapshot
+        val result = f.useCase(f.base.access, f.base.key, captured)
+        assertEquals(FailureKind.Validation, assertIs<AppResult.Failed>(result).failure.kind)
+        assertEquals(before, f.base.request.snapshot)
+        assertEquals(0, f.base.request.writes)
+        assertTrue(f.base.request.base.calls.isEmpty())
+    }
+
+    @Test
     fun producerBeforeCasRetriesOnceAndAfterCommitConfirmsLostReply() = runTest {
         for (stage in listOf("write", "committed")) {
             val f = Fixture()

@@ -21,6 +21,10 @@ class LoadCollaborationSpaceIncomingRoom(
         runtime: CollaborationSpaceRuntimeReady,
         captured: CollaborationSpaceIncomingRoomDemand,
     ): AppResult<CollaborationSpaceIncomingRoom?> {
+        currentCoroutineContext().ensureActive()
+        val target =
+            captured.target as? CollaborationSpaceIncomingTarget.Published
+                ?: return changed(FailureKind.Validation)
         if (
             !validCollaborationSpaceIncomingRoomDemand(captured) ||
                 !validCollaborationMessageId(runtime.deviceId)
@@ -51,14 +55,13 @@ class LoadCollaborationSpaceIncomingRoom(
                     !validCollaborationSpaceIncomingDemand(access, snapshot.demand)
             )
                 return@withTimeoutOrNull changed()
-            val current =
-                snapshot.demand.rooms.singleOrNull { it.conversationId == captured.conversationId }
+            val current = snapshot.demand.rooms.singleOrNull { it.target == target }
             if (current == null || current.generation != captured.generation)
                 return@withTimeoutOrNull AppResult.Success(null)
             if (current != captured) return@withTimeoutOrNull changed()
             if (source != null && snapshot.demand.sources.none { it.source == source })
                 return@withTimeoutOrNull changed()
-            val found = bindings.getByConversation(access, captured.conversationId)
+            val found = bindings.getByConversation(access, target.conversationId)
             admission(runtime, source).let {
                 if (it is AppResult.Failed) return@withTimeoutOrNull it
             }
@@ -67,7 +70,7 @@ class LoadCollaborationSpaceIncomingRoom(
             if (
                 binding == null ||
                     !validCollaborationSpaceRoomBinding(access, binding) ||
-                    binding.conversation.id != captured.conversationId
+                    binding.conversation.id != target.conversationId
             )
                 return@withTimeoutOrNull changed()
             val metadata = binding.conversation

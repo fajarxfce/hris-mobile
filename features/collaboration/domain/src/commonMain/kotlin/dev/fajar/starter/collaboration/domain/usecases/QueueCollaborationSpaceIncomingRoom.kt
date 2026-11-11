@@ -37,6 +37,7 @@ class QueueCollaborationSpaceIncomingRoom(
                 (request.headEventId != null && !validCollaborationEventId(request.headEventId))
         )
             return changed(FailureKind.Validation)
+        val target = CollaborationSpaceIncomingTarget.Published(request.conversationId)
         return withTimeoutOrNull(5_000) {
             admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             val bound = bindings.getByConversation(access, key.conversationId)
@@ -72,10 +73,10 @@ class QueueCollaborationSpaceIncomingRoom(
             val covered = (coverage as AppResult.Success).value
             if (covered != Coverage.Unknown) {
                 // A late hint for an older acquired source must not replace newer queued demand.
-                if (current.rooms.any { it.conversationId == key.conversationId })
+                if (current.rooms.any { it.target == target })
                     return@withTimeoutOrNull AppResult.Success(true)
                 if (covered == Coverage.Clean) return@withTimeoutOrNull AppResult.Success(false)
-                val room = next.rooms.singleOrNull { it.conversationId == key.conversationId }
+                val room = next.rooms.singleOrNull { it.target == target }
                 if (room != null) {
                     val advanced =
                         nextCollaborationSpaceIncomingDemand(

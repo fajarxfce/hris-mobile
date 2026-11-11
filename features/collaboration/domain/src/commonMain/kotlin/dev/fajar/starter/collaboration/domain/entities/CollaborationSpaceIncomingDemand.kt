@@ -9,7 +9,7 @@ enum class CollaborationSpaceIncomingPhase {
 
 /** Immutable invocation capture. A later request for the same room has a different generation. */
 data class CollaborationSpaceIncomingRoomDemand(
-    val conversationId: String,
+    val target: CollaborationSpaceIncomingTarget,
     val generation: String,
     val position: Long,
     val headEventId: String?,
@@ -17,6 +17,24 @@ data class CollaborationSpaceIncomingRoomDemand(
     val retry: CollaborationSpaceIncomingRetry? = null,
     val sourceId: String? = null,
 ) {
+    constructor(
+        conversationId: String,
+        generation: String,
+        position: Long,
+        headEventId: String?,
+        phase: CollaborationSpaceIncomingPhase,
+        retry: CollaborationSpaceIncomingRetry? = null,
+        sourceId: String? = null,
+    ) : this(
+        CollaborationSpaceIncomingTarget.Published(conversationId),
+        generation,
+        position,
+        headEventId,
+        phase,
+        retry,
+        sourceId,
+    )
+
     override fun toString() = "CollaborationSpaceIncomingRoomDemand([redacted])"
 }
 

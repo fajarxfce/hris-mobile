@@ -13,6 +13,7 @@ import kotlinx.serialization.json.Json
 internal const val INCOMING_DEMAND_DOCUMENT = "demand"
 internal const val INCOMING_DEMAND_CHECKPOINT = "incoming-demand/v1"
 internal const val INCOMING_DEMAND_PARTS_CHECKPOINT = "incoming-demand/v3"
+internal const val INCOMING_DEMAND_TARGETS_CHECKPOINT = "incoming-demand/v4"
 // One header, at most 64 room parts and 64 source parts, plus an over-capacity sentinel.
 internal const val INCOMING_DEMAND_READ_LIMIT = 130
 
@@ -41,7 +42,14 @@ internal class CollaborationSpaceIncomingDemandCodec(
 ) {
     suspend fun decode(page: ReplicaPage): CollaborationSpaceIncomingDemandSnapshot {
         val raw = requireNotNull(page.checkpoint)
-        require(raw.payload in setOf(INCOMING_DEMAND_CHECKPOINT, INCOMING_DEMAND_PARTS_CHECKPOINT))
+        require(
+            raw.payload in
+                setOf(
+                    INCOMING_DEMAND_CHECKPOINT,
+                    INCOMING_DEMAND_PARTS_CHECKPOINT,
+                    INCOMING_DEMAND_TARGETS_CHECKPOINT,
+                )
+        )
         require(
             raw.published && raw.revision == 0L && raw.handle.scope == incomingDemandScope(access)
         )
@@ -73,7 +81,8 @@ internal class CollaborationSpaceIncomingDemandCodec(
                 )
             } else {
                 val dto = decodePart<IncomingDemandPartsDto>(raw.handle.generation, header)
-                require(dto.schema == 3 && dto.roomCount in 0..64)
+                val typed = raw.payload == INCOMING_DEMAND_TARGETS_CHECKPOINT
+                require(dto.schema == (if (typed) 4 else 3) && dto.roomCount in 0..64)
                 require(dto.physicalCount in 0..(64 - dto.roomCount) && dto.sourceCount in 0..64)
                 val expected =
                     listOf(INCOMING_DEMAND_DOCUMENT) +
@@ -85,11 +94,13 @@ internal class CollaborationSpaceIncomingDemandCodec(
                 CollaborationSpaceIncomingDemand(
                     position(dto.nextPosition),
                     (0 until dto.roomCount).map {
-                        decodePart<IncomingRoomDemandDto>(
-                                raw.handle.generation,
-                                indexed.getValue(partId("r", it)),
-                            )
-                            .toDemand()
+                        val document = indexed.getValue(partId("r", it))
+                        if (typed)
+                            decodePart<IncomingTargetRoomDemandDto>(raw.handle.generation, document)
+                                .toDemand()
+                        else
+                            decodePart<IncomingRoomDemandDto>(raw.handle.generation, document)
+                                .toDemand()
                     },
                     dto.rescanGeneration,
                     dto.scan?.toScan(),
@@ -117,9 +128,10 @@ internal class CollaborationSpaceIncomingDemandCodec(
         require(validCollaborationMessageId(snapshot.generation))
         val value = snapshot.demand
         require(validCollaborationSpaceIncomingDemand(access, value))
-        val rooms = value.rooms.map { it.toDto() }
+        val typed = value.rooms.any { it.target is CollaborationSpaceIncomingTarget.Original }
+        val rooms = if (typed) emptyList() else value.rooms.map { it.toDto() }
         val scan = value.scan?.toDto()
-        if (value.sources.isEmpty() && value.physicalRooms.isEmpty()) {
+        if (!typed && value.sources.isEmpty() && value.physicalRooms.isEmpty()) {
             return ReplicaSnapshot(
                 snapshot.generation,
                 INCOMING_DEMAND_CHECKPOINT,
@@ -145,9 +157,9 @@ internal class CollaborationSpaceIncomingDemandCodec(
                     snapshot.generation,
                     INCOMING_DEMAND_DOCUMENT,
                     IncomingDemandPartsDto(
-                        3,
+                        if (typed) 4 else 3,
                         value.nextPosition.toString(),
-                        rooms.size,
+                        value.rooms.size,
                         value.physicalRooms.size,
                         value.sources.size,
                         value.rescanGeneration,
@@ -155,8 +167,10 @@ internal class CollaborationSpaceIncomingDemandCodec(
                     ),
                 )
             )
-        rooms.forEachIndexed { index, room ->
-            parts += encodePart(snapshot.generation, partId("r", index), room)
+        value.rooms.forEachIndexed { index, room ->
+            parts +=
+                if (typed) encodePart(snapshot.generation, partId("r", index), room.toTargetDto())
+                else encodePart(snapshot.generation, partId("r", index), rooms[index])
         }
         value.physicalRooms.forEachIndexed { index, room ->
             parts +=
@@ -200,7 +214,7 @@ internal class CollaborationSpaceIncomingDemandCodec(
         val result =
             ReplicaSnapshot(
                 snapshot.generation,
-                INCOMING_DEMAND_PARTS_CHECKPOINT,
+                if (typed) INCOMING_DEMAND_TARGETS_CHECKPOINT else INCOMING_DEMAND_PARTS_CHECKPOINT,
                 parts.sortedBy { it.id },
             )
         validateReplicaReplacement(
@@ -250,12 +264,52 @@ internal class CollaborationSpaceIncomingDemandCodec(
 
     private fun CollaborationSpaceIncomingRoomDemand.toDto() =
         IncomingRoomDemandDto(
-            conversationId,
+            (target as CollaborationSpaceIncomingTarget.Published).conversationId,
             generation,
             position.toString(),
             headEventId,
             phase.name,
             retry?.toDto(),
+            sourceId,
+        )
+
+    private fun CollaborationSpaceIncomingRoomDemand.toTargetDto() =
+        IncomingTargetRoomDemandDto(
+            when (val destination = target) {
+                is CollaborationSpaceIncomingTarget.Published ->
+                    IncomingRoomTargetDto.Published(destination.conversationId)
+                is CollaborationSpaceIncomingTarget.Original ->
+                    IncomingRoomTargetDto.Original(
+                        destination.position.companyId,
+                        destination.position.conversationId,
+                    )
+            },
+            generation,
+            position.toString(),
+            headEventId,
+            phase.name,
+            retry?.toDto(),
+            sourceId,
+        )
+
+    private fun IncomingTargetRoomDemandDto.toDemand() =
+        CollaborationSpaceIncomingRoomDemand(
+            when (val destination = target) {
+                is IncomingRoomTargetDto.Published ->
+                    CollaborationSpaceIncomingTarget.Published(destination.conversationId)
+                is IncomingRoomTargetDto.Original ->
+                    CollaborationSpaceIncomingTarget.Original(
+                        CollaborationOriginalConversationPosition(
+                            destination.companyId,
+                            destination.conversationId,
+                        )
+                    )
+            },
+            generation,
+            position(position),
+            headEventId,
+            CollaborationSpaceIncomingPhase.valueOf(phase),
+            retry?.toRetry(),
             sourceId,
         )
 
@@ -386,6 +440,28 @@ private data class IncomingDemandPartsDto(
 @Serializable
 private data class IncomingRoomDemandDto(
     val conversationId: String,
+    val generation: String,
+    val position: String,
+    val headEventId: String?,
+    val phase: String,
+    val retry: IncomingRetryDto? = null,
+    val sourceId: String? = null,
+)
+
+@Serializable
+private sealed interface IncomingRoomTargetDto {
+    @Serializable
+    @SerialName("published")
+    data class Published(val conversationId: String) : IncomingRoomTargetDto
+
+    @Serializable
+    @SerialName("original")
+    data class Original(val companyId: String, val conversationId: String) : IncomingRoomTargetDto
+}
+
+@Serializable
+private data class IncomingTargetRoomDemandDto(
+    val target: IncomingRoomTargetDto,
     val generation: String,
     val position: String,
     val headEventId: String?,

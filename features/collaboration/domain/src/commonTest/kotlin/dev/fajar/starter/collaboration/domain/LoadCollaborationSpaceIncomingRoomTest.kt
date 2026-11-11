@@ -12,6 +12,25 @@ import kotlinx.coroutines.test.runTest
 
 class LoadCollaborationSpaceIncomingRoomTest {
     @Test
+    fun originalTargetCannotEnterPublishedBindingOrSourceReads() = runTest {
+        val f = Fixture()
+        val target =
+            CollaborationSpaceIncomingTarget.Original(
+                CollaborationOriginalConversationPosition(
+                    "10000000-0000-4000-8000-000000007100",
+                    assertIs<CollaborationSpaceIncomingTarget.Published>(f.captured.target)
+                        .conversationId,
+                )
+            )
+        f.captured = f.captured.copy(target = target, sourceId = f.source.storeId)
+        val before = f.request.snapshot
+        assertEquals(FailureKind.Validation, assertIs<AppResult.Failed>(f.load()).failure.kind)
+        assertEquals(before, f.request.snapshot)
+        assertEquals(0, f.sourceReads)
+        assertTrue(f.request.base.calls.isEmpty())
+    }
+
+    @Test
     fun sourceBoundRoomRequiresItsExactInstalledOriginalWithoutStartingSync() = runTest {
         val f = Fixture()
         f.attachSource()

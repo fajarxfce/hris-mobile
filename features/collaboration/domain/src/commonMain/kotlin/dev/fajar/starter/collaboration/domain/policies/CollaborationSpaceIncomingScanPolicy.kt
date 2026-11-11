@@ -67,7 +67,9 @@ fun discoverCollaborationSpaceIncomingRooms(
         return invalidIncomingScan()
     val additions =
         page.bindings.filter { binding ->
-            current.rooms.none { it.conversationId == binding.conversation.id }
+            current.rooms.none {
+                it.target == CollaborationSpaceIncomingTarget.Published(binding.conversation.id)
+            }
         }
     if (
         roomGenerations.size != additions.size ||

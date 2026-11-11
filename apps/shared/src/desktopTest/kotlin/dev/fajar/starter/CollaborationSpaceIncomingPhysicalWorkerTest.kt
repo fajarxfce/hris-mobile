@@ -56,7 +56,11 @@ class CollaborationSpaceIncomingPhysicalWorkerTest {
     fun earlierPhysicalHintWaitingForLogicalKeysCannotKeepTakingEveryTurn() = runTest {
         val f = SpaceIncomingWorkerFixture(testScheduler)
         f.rooms[0] = f.rooms[0].copy(position = 1)
-        f.queuePhysical(0, f.rooms.single().conversationId)
+        f.queuePhysical(
+            0,
+            assertIs<CollaborationSpaceIncomingTarget.Published>(f.rooms.single().target)
+                .conversationId,
+        )
         f.physicalRooms[0] = f.physicalRooms[0].copy(position = 0)
         f.missingKeys = true
         assertIs<SyncResult.Retry>(f.worker())

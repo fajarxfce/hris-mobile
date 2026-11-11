@@ -1,51 +1,58 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 07:49 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 07:59 UTC. This opening section owns current work; older checkpoints below are historical.
 
-## Active original-target foundation — validation in progress
+## Original incoming targets accepted — continue original metadata and consumers
 
-Mobile accepted source 8ae3d11e9b04d130c579614a6181c44bfcbe3b40 is pushed. New private
-.work/space-original-incoming-target-2026-11-11 owns the 4,912-input baseline, 1,292 verified XML
-archives/11,499 cases, applied draft, design review and exact runners. The earlier 16-file draft
-IS APPLIED; call sites and regressions are being completed. It is NOT accepted yet. New typed
-Published/Original(Company, conversation) room targets prevent ID-only matching. Original requires
-an installed source; encrypted v4 stores that target while v1/v2/v3 remain readable and published-only
-encoding stays unchanged. Published consumers reject Original before I/O. No original producer or
-consumer is enabled. Raw collector remains OFF. Do not activate before original metadata, Company
-history/provider/content/completion, bounded inventory, keys-only recovery and actual native proof.
+The31-file Mobile increment is ACCEPTED. Full1/session69578 REAPED PASS628.257s; audit27690 REAPED
+ACCEPTED11,557 cases =9,519 fresh+2,038 exact accepted unchanged controls. No failures/errors/skips;
+every prior case ID and retained dependency closure verified. Focused2/session8512 REAPED PASS194.054s/620;
+browser1/session38334 REAPED PASS170.42s/553; focused audit1,173. Format/architecture74/detekt,
+Android host/release compilation/lint, browser/Wasm, iOS metadata and proof APK assembly/unit checks pass.
+Frozen4,915-input manifest7791d5746c9121c31732a2f4f0c7b40623f729ff29f08a82c4df0da6ba5311d2.
+Proof APK151,644,921bytes/SHAe016de8dc7c3797f2f9ad4a72d03f61e8f493a5389dcb562d571857a1f0f3344.
+No new native SDK execution, Apple acceptance, phone installation or live deployment is claimed.
 
-Added tests: 17 domain target/transition cases, four published-owner guards and eight common storage
-contracts (desktop/browser/Apple). Focused2/session8512 REAPED PASS194.054s/620; browser1/session38334
-REAPED PASS170.42s/553; combined audit ACCEPTED1,173 with prior selected case IDs preserved.
-Current frozen4,915-input manifest:7791d5746c9121c31732a2f4f0c7b40623f729ff29f08a82c4df0da6ba5311d2.
-Full1/session69578 is RUNNING; expected11,557 cases. Do not change current source/library until reaped.
-No full acceptance, new APK or installation claim. Format1/session1805 and format2/session79222 are
-REAPED PASS. Focused1/session54234 REAPED FAIL216.183s:516 domain and69 data cases ran, one new
-reopen test used the old immutable fixture session after activating a replacement. Only that invocation
-was corrected. candidate1 and all failed evidence remain; no production fix or removed assertion.
+Room demand now has Published(conversationId) or Original(Company,conversation). Matching/uniqueness,
+physical conversion, FIFO and lost-write confirmation compare full targets. Original requires a concrete
+source; Company/conversation IDs cannot be zero. Encrypted v4 stores typed targets while v1/v2/v3 stay
+readable and published-only encoding remains exact. Original tasks never fall through published Load,
+Advance, Recover or Complete. No Original producer/consumer or raw collector is enabled. Current consumers
+continue Published behavior. No unqualified conversation ID getter or selected Company inference.
 
-Next private next-metadata-draft holds eight UNAPPLIED/UNVALIDATED files: original metadata repository/
-policy, encrypted repository/codec, 18-case common database contract and desktop/browser/Apple wrappers.
-Read next-original-metadata-review.md and next-original-consumer-review.md. The existing Company
-CollaborationHistoryTraversalRepository can be used by an owning use case; add its missing exact source
-operation rather than creating a duplicate Company repository. Its provider=null and original device
-cursor protocol differ from Space. Preserve real legacy registration Company/device, actual physical
-page owner and existing Company content; never relabel a foreign page or Group device as an original.
-Collector remains OFF. Continue original metadata/consumer/inventory/keys-only/native acceptance.
+Private .work/space-original-incoming-target-2026-11-11 owns baseline8ae3d11e,1,292 prior XML archives,
+candidate1 and final31 files, runners/audits and full1/accepted-proof.apk. publish.py HAS EXECUTED;
+do not rerun or overwrite. Shared measurement collaboration-space-original-incoming-target-2026-11-11.json;
+contracts Mobile collaboration-space-original-incoming-target.md and Group collaboration/space-original-incoming-target.md.
+Focused1/session54234 retains one test-only stale-session invocation failure:516 domain+69 data ran;
+only the new test's replacement-session invocation changed. Format1/2 and all sessions above REAPED.
 
-Incoming-write hosted42972222388 is complete: Apple3,675 +16 Swift and unsigned host accepted;
-portable9,379 remains explicitly partial due to old12-case workflow gap. Corrected metadata run42978769594
-on immutable8ae3d11e is still running Apple(expected3,712). Portable audit41728 REAPED ACCEPTED9,477
-(4,479 desktop+769 Android host+4,229 browser), including all12 physical-worker cases. Artifact13837787198
-SHA c48879f98d5e99e837a2e8c6842862832304d4f611fa85c94a1b38bc7d14cf0b. Prior IDs/digest/CRC verified.
-Do NOT redispatch either run or use legacy SDK4 native CI as SDK8 proof. New target hosted-plan/audit
-are prepared but NOT dispatched: after exact local acceptance and source commit expect13,276 total
-(9,535 portable+3,741 Apple). No Apple SDK8 native execution is claimed.
+NEXT: commit and push this accepted source/docs, then execute prepare-next-metadata.py and
+configure-next-metadata.py from this private work folder. They require a clean, pushed accepted baseline
+and apply nine UNVALIDATED proposals into new .work/space-original-room-metadata-2026-11-11. Draft:
+domain original metadata repository/policy, encrypted finite two-index repository/codec,18 common real
+storage cases, desktop/browser/Apple wrappers and an assertion in the existing app DI case. No metadata
+wake/scheduler side effects. Expected next focus96/browser94/full11,593; format/freeze/validate before
+acceptance. Read next-original-metadata-review.md, next-original-consumer-review.md and
+next-original-owner-contract.md. Original consumer must reuse actual Company history/provider=null and
+original physical device cursor, adding exact source read to the existing Company traversal repository.
+Validate unchanged Matrix page identity and current native/Group/source/registration around I/O; retain
+historical facts independently of credential age. Metadata grants no enduring content permission.
+Complete original provider/pending/content/completion, bounded native inventory, keys-only recovery and
+actual native proof before raw activation. All54 PRD groups remain OPEN. No generic Starter delta.
+Do not stop at this checkpoint. Push every commit and keep install-only phone work separate.
 
-Phone connect59767 REAPED timeout124 at07:37:14 UTC. Next bounded retry no earlier08:08; existing
-question remains pending. Validated release89 remains install-only, with prior notification and no UI
-driving. One3GiB compiler, no emulator. No Starter, live/schema or SDK publication changed. All54 PRD
-groups remain OPEN; continue beyond this prerequisite. Every commit must be pushed.
+Hosted metadata42978769594 remains on immutable8ae3d11e/refvalidation/physical-metadata-20261111.
+Portable audit41728 REAPED ACCEPTED9,477, including all12 physical-worker cases omitted by the older
+workflow. Apple is running, expected3,712 +16 Swift and unsigned host; no SDK8 Apple native claim.
+Incoming-write42972222388 finished: Apple3,675 accepted, old portable9,379 remains explicitly partial.
+Do not redispatch either. Original-target hosted-plan/audit are prepared but NOT dispatched; after
+source commit publish immutable validation/original-incoming-target-20261111 and run collaboration-control.yml.
+Expected13,276 =9,535 portable+3,741 Apple; preserve all prior IDs/digests. Legacy native CI is stillSDK4.
+
+Phone59767 REAPED timeout124 at07:37:14 UTC; next bounded retry no earlier08:08, existing question pending.
+Validated release89 remains install-only with prior notification/no UI driving. No local heavy process
+remains after full1/audit. No emulator, SDK publication, live/schema or Starter changes.
 
 ## Physical metadata accepted — continue original routing
 

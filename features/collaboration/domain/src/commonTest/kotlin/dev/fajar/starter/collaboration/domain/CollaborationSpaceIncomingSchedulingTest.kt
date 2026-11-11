@@ -263,7 +263,8 @@ class CollaborationSpaceIncomingSchedulingTest {
                     rooms =
                         List(64) { index ->
                             room.copy(
-                                conversationId = f.id(3000 + index),
+                                target =
+                                    CollaborationSpaceIncomingTarget.Published(f.id(3000 + index)),
                                 generation = f.id(4000 + index),
                                 position = index.toLong(),
                             )

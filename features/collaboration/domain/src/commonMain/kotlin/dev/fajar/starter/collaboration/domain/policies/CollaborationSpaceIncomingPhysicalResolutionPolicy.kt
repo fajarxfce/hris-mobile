@@ -32,16 +32,28 @@ fun selectCollaborationSpaceIncomingPhysicalSnapshot(
     return AppResult.Success(snapshot)
 }
 
-/** Transfer one exact physical turn without replacing unfinished work or source positions. */
+/** Existing published-conversation callers retain their explicit Space destination. */
 fun resolveCollaborationSpaceIncomingPhysicalRoom(
     observed: CollaborationSpaceIncomingDemand,
     captured: CollaborationSpaceIncomingPhysicalRoomDemand,
     conversationId: String,
+): AppResult<CollaborationSpaceIncomingPhysicalResolution> =
+    resolveCollaborationSpaceIncomingPhysicalRoom(
+        observed,
+        captured,
+        CollaborationSpaceIncomingTarget.Published(conversationId),
+    )
+
+/** Transfer one exact physical turn without replacing unfinished work or source positions. */
+fun resolveCollaborationSpaceIncomingPhysicalRoom(
+    observed: CollaborationSpaceIncomingDemand,
+    captured: CollaborationSpaceIncomingPhysicalRoomDemand,
+    target: CollaborationSpaceIncomingTarget,
 ): AppResult<CollaborationSpaceIncomingPhysicalResolution> {
     if (
         !validCollaborationSpaceIncomingDemand(observed) ||
             !validCollaborationSpaceIncomingPhysicalRoom(captured) ||
-            !validCollaborationMessageId(conversationId)
+            !validCollaborationSpaceIncomingTarget(target)
     )
         return invalidPhysicalResolution()
     val current =
@@ -64,7 +76,7 @@ fun resolveCollaborationSpaceIncomingPhysicalRoom(
     if (physical != captured) return invalidPhysicalResolution()
     // A null source on older logical work is not evidence that it covers this SDK source.
     // Even the same source can have an unfinished provider/key pass. Keep both requirements.
-    if (current.rooms.any { it.conversationId == conversationId })
+    if (current.rooms.any { it.target == target })
         return AppResult.Success(
             CollaborationSpaceIncomingPhysicalResolution(
                 current,
@@ -73,7 +85,7 @@ fun resolveCollaborationSpaceIncomingPhysicalRoom(
         )
     val room =
         CollaborationSpaceIncomingRoomDemand(
-            conversationId,
+            target,
             captured.generation,
             captured.position,
             captured.headEventId,

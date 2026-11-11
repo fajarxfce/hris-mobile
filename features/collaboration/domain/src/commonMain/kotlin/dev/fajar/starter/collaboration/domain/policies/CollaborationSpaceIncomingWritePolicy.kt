@@ -18,18 +18,17 @@ fun confirmCollaborationSpaceIncomingRoomWrite(
         !validCollaborationSpaceIncomingDemand(access, previous) ||
             !validCollaborationSpaceIncomingDemand(access, next) ||
             !validCollaborationSpaceIncomingRoomDemand(captured) ||
-            previous.rooms.singleOrNull { it.conversationId == captured.conversationId } !=
-                captured ||
+            previous.rooms.singleOrNull { it.target == captured.target } != captured ||
             next.copy(rooms = previous.rooms, nextPosition = previous.nextPosition) != previous ||
-            next.rooms.filterNot { it.conversationId == captured.conversationId } !=
-                previous.rooms.filterNot { it.conversationId == captured.conversationId } ||
+            next.rooms.filterNot { it.target == captured.target } !=
+                previous.rooms.filterNot { it.target == captured.target } ||
             retained == null ||
             !validCollaborationMessageId(retained.generation) ||
             !validCollaborationSpaceIncomingDemand(access, retained.demand) ||
             retained.demand.nextPosition < previous.nextPosition
     )
         return failedIncomingWrite(written)
-    val desired = next.rooms.singleOrNull { it.conversationId == captured.conversationId }
+    val desired = next.rooms.singleOrNull { it.target == captured.target }
     if (
         desired != null &&
             (desired.generation != captured.generation ||
@@ -37,8 +36,7 @@ fun confirmCollaborationSpaceIncomingRoomWrite(
                 desired.headEventId != captured.headEventId)
     )
         return failedIncomingWrite(written)
-    val current =
-        retained.demand.rooms.singleOrNull { it.conversationId == captured.conversationId }
+    val current = retained.demand.rooms.singleOrNull { it.target == captured.target }
     val sourceEvidenceLost =
         previous.sources.any { original ->
             val currentSource =
@@ -51,7 +49,7 @@ fun confirmCollaborationSpaceIncomingRoomWrite(
     if (sourceEvidenceLost) return failedIncomingWrite(written)
     val generationElsewhere =
         retained.demand.rooms.any {
-            it.generation == captured.generation && it.conversationId != captured.conversationId
+            it.generation == captured.generation && it.target != captured.target
         } || retained.demand.physicalRooms.any { it.generation == captured.generation }
     if (generationElsewhere) return failedIncomingWrite(written)
     if (desired != null && desired == current)

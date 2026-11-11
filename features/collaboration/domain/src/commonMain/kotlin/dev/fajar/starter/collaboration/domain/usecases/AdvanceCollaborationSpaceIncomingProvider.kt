@@ -22,11 +22,14 @@ class AdvanceCollaborationSpaceIncomingProvider(
         acquired: CollaborationSpaceProviderHistoryAcquisition,
     ): AppResult<Boolean> {
         currentCoroutineContext().ensureActive()
+        val target =
+            captured.target as? CollaborationSpaceIncomingTarget.Published
+                ?: return changed(FailureKind.Validation)
         if (
             !validCollaborationSpaceIncomingRoomDemand(captured) ||
                 !validCollaborationSpaceProviderAcquisition(acquired) ||
                 acquired.runtime.owner.localDirectoryAccess() != access ||
-                acquired.traversal.conversationId != captured.conversationId ||
+                acquired.traversal.conversationId != target.conversationId ||
                 acquired.traversal.purpose != CollaborationHistoryPurpose.Incoming ||
                 captured.phase == CollaborationSpaceIncomingPhase.Pending ||
                 (captured.phase == CollaborationSpaceIncomingPhase.Latest) !=
@@ -47,8 +50,7 @@ class AdvanceCollaborationSpaceIncomingProvider(
                     !validCollaborationSpaceIncomingDemand(snapshot.demand)
             )
                 return@withTimeoutOrNull changed()
-            val current =
-                snapshot.demand.rooms.singleOrNull { it.conversationId == captured.conversationId }
+            val current = snapshot.demand.rooms.singleOrNull { it.target == target }
             if (current == null || current.generation != captured.generation)
                 return@withTimeoutOrNull AppResult.Success(false)
             val applied =

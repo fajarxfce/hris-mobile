@@ -5,6 +5,7 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.result.*
+import kotlin.test.assertIs
 import kotlinx.coroutines.test.TestCoroutineScheduler
 
 /**
@@ -215,12 +216,15 @@ internal class SpaceIncomingWorkerFixture(
             room = { actual, captured ->
                 check(actual == runtime)
                 step("room")
-                attempted += captured.conversationId
+                attempted +=
+                    assertIs<CollaborationSpaceIncomingTarget.Published>(captured.target)
+                        .conversationId
                 val room = rooms.singleOrNull { it == captured }
                 val conversation =
                     CollaborationSpaceConversation(
                         owner,
-                        captured.conversationId,
+                        assertIs<CollaborationSpaceIncomingTarget.Published>(captured.target)
+                            .conversationId,
                         owner.parent.accountId,
                         recoveryId(810),
                         owner.parent.accountId,
@@ -229,7 +233,14 @@ internal class SpaceIncomingWorkerFixture(
                     )
                 AppResult.Success(
                     room?.let {
-                        CollaborationSpaceIncomingRoom(it, conversation, key(it.conversationId))
+                        CollaborationSpaceIncomingRoom(
+                            it,
+                            conversation,
+                            key(
+                                assertIs<CollaborationSpaceIncomingTarget.Published>(it.target)
+                                    .conversationId
+                            ),
+                        )
                     }
                 )
             },
@@ -360,7 +371,9 @@ internal class SpaceIncomingWorkerFixture(
                     step("defer")
                     if (failure != null && isCollaborationSpaceIncomingQueueContention(failure))
                         return@defer AppResult.Failed(failure)
-                    deferred += captured.conversationId to failure
+                    deferred +=
+                        assertIs<CollaborationSpaceIncomingTarget.Published>(captured.target)
+                            .conversationId to failure
                     val next =
                         nextCollaborationSpaceIncomingDemand(
                             work().snapshot!!.demand,
