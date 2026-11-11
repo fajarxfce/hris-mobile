@@ -1,5 +1,50 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 18:39 UTC. This opening owns current work; earlier sections are historical.
+
+## Independent recovery position applied; focused validation running
+
+Current16 Kotlin files APPLIED, NOT ACCEPTED;11 new+5 existing. Workspace
+.work/history-recovery-position-2026-11-11. Previous stage prepare/configure HAVE EXECUTED
+18:33:04UTC. Baseline d86cc5acf5fb5bfb94209f3f27655d371dfc5e12 /12,848 /5,020 inputs.
+Independent active/requested recovery section shares existing Company/Space history references;
+schema4 retains schemas1/2/3, bounds cursor encoding/sequence, preserves provider/primary state,
+and rechecks an exact replay's still-owned checkpoint. Missing history creates no key/position.
+No semantic page/pass owner, global ledger, primary demotion or SDK key consumer is activated.
+
+format1/5974 REAPED PASS36.040s. focused1/24234 REAPED FAILED182.540s after32 domain cases
+passed: Kotlin rejected nullable recovery.after smart-cast across modules in the codec. Corrected
+both codec directions to capture the immutable value locally before the null check. No policy
+or assertion weakened and no case removed. Original manifest943c084a0ad7a506757c07f596493f692039182bf9a4b3892833a7ec2cb6eb8b
+and candidate retained under failed-candidate-1, including cross-module-cursor-compile-review.json.
+format2/33911 REAPED PASS36.333s. focused2/71171 RUNNING expected114. Browser112/full12,932
+NOT RUN. Final frozen5,031-input manifest32647f5dae658283c7a8f1c6f05362d51108167cadc756b8b5de4aa0043dbf53.
+Keep source frozen.10 domain/8 common real-cipher/20 actual DB cases each testing both namespaces;
+existing primary wave/traversal and graph controls retained. Contract/publisher PREPARED NOT
+EXECUTED; publisher explicitly requires preserved compile-failure provenance. Hosted scripts
+PREPARED NOT DISPATCHED, validation/history-recovery-position-20261111,15,300 total.
+
+Next: reap71171; inspect exact errors without weakening acceptance. Browser, exact226 focused,
+full12,932 with identity/manifest/closure audit; publish/commit/push/dispatch once. Then implement
+semantic request/finite-page owners after reviewing next-history-recovery-owners-review.md.
+No next source draft yet. Active generation must progress despite later hints; preserve newer
+requests on page completion, verify attempted reference rows, and distinguish missing keys from
+malformed/unsupported/missing-original/redaction outcomes. Global bounds/retirement/wakes, key
+subscription ownership, full blocked64-room liveness and combined native proof remain separate.
+Raw collector/Original producer OFF; all54 PRD groups OPEN. No Starter/live change.
+
+Prior source878805dc and Group59dd529d pushed. Latest docs d86cc5ac/1ee29c28 pushed;
+51219/22828 REAPED. Hosted43077651832 dispatched once,15,178 expected; previous
+Original43073411916 attached15,100; fairness43069542685 portable10,726 accepted/Apple pending.
+Inventory43066807577 FULL15,020; locator43062334365 FULL14,942; other accepted runs below.
+Native SDK8 Apple is not proved by Kotlin/Swift host cases. Never erase prior partial/failed runs.
+
+Phone69750 timeout18:29:20UTC/20.021s REAPED, no install. Retry no earlier19:00UTC.
+Release89 SDK6 awaiting install; notify first/install-only/explicit serial, never drive UI.
+One compiler71171, no emulator. Preserve intents/Draft66/keys/stores/SDK assets/inspector
+modified gradlew.bat and live90163c3/schema116.4 Group OFF. Continue long run, push each commit.
+
+
 Updated 11 November 2026, 18:32 UTC. This opening owns current work; earlier sections are historical.
 
 ## Space coordinates pushed; recovery checkpoint ready to apply
