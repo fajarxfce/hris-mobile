@@ -1,6 +1,53 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 12:38 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 12:47 UTC. This opening owns current work; older sections are historical.
+
+## Canonical Original physical routing — focused validation running
+
+Original queue source 4789f959440990321a5b7e328f76e753d703b041 and Group docs 5650d9d3 are PUSHED
+(22720/48605 reaped). Full19106 passed627.291s; audit46834 REAPED accepted12,127=10,089 fresh+
+2,038 unchanged controls. Focused320 accepted. Queue publisher/accepted handoff and next canonical
+prepare/configure scripts HAVE EXECUTED. Hosted43022213294 dispatched ONCE at12:39:20 (49407 reaped),
+expected14,161. Attached hosted-43022213294 state. Do not redispatch.
+
+Current eleven-file canonical resolver increment is APPLIED/FROZEN, NOT accepted or committed.
+Private .work/space-canonical-physical-binding-2026-11-11 captures baseline12,127/4,967 inputs and
+4,969 current inputs. Manifest810381be206a6d82db1ab85a282732830985bb73b8507f53f8ceac457da8f93f.
+Format1/34060 REAPED PASS36.553s. Focused1/64228 RUNNING, expected220; browser205/full12,192 next.
+Reap before source edits; keep source frozen through each validation. No failures recorded yet.
+
+Resolver captures full current registration, validates the registered LEGACY Company/physical device,
+and maps known aliases or Company-qualified Original metadata to typed Original targets. No selected
+Company/source identity is inferred. Existing Published SPACE path remains explicit. Only authoritative
+Published absence permits one Original physical lookup within the same15s deadline. Both immutable
+Original indexes are confirmed before conversion. Full registration/current account/native/source and
+known denial remain checked around suspended I/O and queue CAS/readback. Local facts ignore ordinary
+credential age; remote operations retain live deadlines. No provider/client/content/progress rewrite.
+WaitingForOriginalSource preserves demand and takes existing bounded worker deferral, not an immediate loop.
+
+22 new resolver cases +10 pure provenance cases +1 desktop worker deferral case; existing21 local/25
+remote resolver case IDs retain their coverage and now assert typed targets. Focused controls include
+18 Original metadata,37 demand and26 binding storage cases, original loader/physical policy/deferral
+and app bindings. Fixtures simulate replies; they do not prove native/database behavior themselves.
+No new native SDK8 or Apple runtime execution, phone install or deployment claim.
+
+After canonical acceptance, finish logical LEGACY alias routing and Original worker integration.
+Use current Pending capture after provider advancement; don't copy Published phase assumptions.
+Then keys-only recovery, bounded Client.rooms inventory and combined old-Company/new-Group storage
+interleaving/native proof. Registry adoption already drains/excludes the old native slot and Company
+recovery cancels/joins borrower interruption. Preserve it. Raw collector/Original producer both OFF;
+all54 PRD groups OPEN. No generic Starter change; continue long run and push every commit.
+
+Reference43018627791 portable10,057 ACCEPTED (audit1007 reaped); Apple4,032 pending. Reconciliation
+43015359541 portable9,999 accepted; Apple4,003 building iOS host. Content43011629455 portable9,939
+accepted; targeted Apple attempt2 building host. Preserve cancelled attempt1 (no runner/steps, macOS
+capacity), no workflow redispatch/portable rerun. Company43008238149 full13,813 and reader43003600252
+full13,793 accepted. Inspect exact latest audits before changing status; never repeat created runs.
+
+Phone44127 reaped timeout124, start12:17:40UTC; next bounded retry no earlier12:48. Evidence in queue
+phone-connect-1217.json. Validated release89 SDK6 awaits install, no attempt/result. Notify first,
+explicit serial/install-only, never launch/drive phone UI. No emulator. Preserve eight original intents,
+Draft66, keys/stores, SDK assets and live90163c3/schema116.4 Group OFF.
 
 ## Original queue completion accepted — continue canonical physical routing
 

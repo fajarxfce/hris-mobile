@@ -67,5 +67,15 @@
   "newAppleExecutionAccepted": false,
   "phoneInstalled": false,
   "liveDeploymentChanged": false,
-  "all54PrdGroupsRemainOpen": true
+  "all54PrdGroupsRemainOpen": true,
+  "hostedControl": {
+    "sourceCommit": "4789f959440990321a5b7e328f76e753d703b041",
+    "runId": 43022213294,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43022213294",
+    "expectedPortable": 10105,
+    "expectedApple": 4056,
+    "completeAcceptance": false,
+    "nativeSdk8AppleExecution": false,
+    "appleAccepted": false
+  }
 }
