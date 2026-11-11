@@ -8,7 +8,8 @@ Alias sourceb944e928d5cc1f9c2f2affe49d003ee7e17f4792 and Group docs6f52a6d6 PUSH
 all source/docs push sessions reaped. Alias final12,322 local accepted. Hosted43037578170
 was dispatched ONCE at14:20:46UTC on validation/logical-alias-routing-20261111; dispatch1252
 REAPED. Expected14,434=10,300 portable+4,134 Apple,16 Swift/unsigned host. Existing run attached;
-DO NOT redispatch. Canonical43028172483 portable10,170 accepted; Apple still building at14:24.
+DO NOT redispatch. Canonical43028172483 FULL14,258 accepted:10,170 portable+4,088 Apple; audit51424 REAPED,
+16 Swift/unsigned host. This is not native SDK8 Apple execution.
 Application43031231253 portable CANCELLED; GitHub annotation explicitly confirms35-minute timeout.
 Its artifact contains10,170 cases and omits Original turn22/worker8: incomplete, never14,288 acceptance.
 Original audit expectations remain unchanged; public measurement records incomplete artifact/hash/log.
