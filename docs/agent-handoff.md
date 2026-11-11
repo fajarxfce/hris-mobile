@@ -1,6 +1,65 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 15:19 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 15:29 UTC. This opening owns current work; older sections are historical.
+
+## Durable inventory progress accepted — continue finite page retention
+
+Six-file source cursor/retry change ACCEPTED. format1/95325 REAPED PASS37.635s;
+focused1/31936 REAPED PASS409.185s/104 and browser1/17860 REAPED PASS141.350s/102.
+Combined206 accepted. full1/87854 REAPED PASS580.486s;
+audit accepts12,440=10402 fresh+2038 exact unchanged controls.
+Prior case IDs, module dependency closures and source/library hashes verified. Required format/
+architecture/detekt, Android host/release compilation/lint, shared Wasm/browser, iOS metadata and
+proof APK/unit checks pass. Frozen4,989-input manifest0e1d9043c3a0569faf47f4d04e24084ffa7e608ca5a34a68fed53d76a33c9a7b.
+Proof APK151742963 bytes/SHAc91b4c4499b81d103fab3463e1f4014de76f5fa77de9fc3f340c3527f1a5f642.
+See measurements for any preserved failed runs; do not infer native SDK or phone execution.
+
+Source progress retains an exclusive room cursor/retry under an inventory generation. Continuous
+responses preserve it and advance their real position; new loss resets it. Explicit v5/schema5
+typed encoding retains Published/Original targets and refuses advanced fields under old markers,
+including an authenticated matching older header. Prior formats remain readable;129-part/byte
+bounds unchanged.12 new domain and7 actual database cases per desktop/browser, storage40->47.
+Cursor, physical work and independent wake reopen together after an interrupted commit reply.
+
+Private .work/space-inventory-progress-2026-11-11 owns accepted evidence/scripts. Publisher and this
+writer HAVE EXECUTED. Commit/push source/docs, then dispatch-hosted.py ONCE on
+validation/inventory-progress-20261111. Expected14,584=10,418 portable+4,166 Apple. Not dispatched
+yet. Then prepare-next-inventory-retention.py and configure-next-inventory-retention.py, both
+PREPARED NOT EXECUTED. They require clean pushed accepted source, one hosted dispatch and two
+guarded source hashes. Do not rerun a preparation/dispatch after it has executed.
+
+Next inventory-retention draft:8 Kotlin files,6 new+2 guarded existing (data DI/app binding).
+UNAPPLIED/UNTESTED.18 prefix policy+26 owning-usecase cases, existing binding checks extended.
+Expected12,528 local/4,995 inputs;149 focused/147 browser;14,716 hosted=10,506 portable+4,210 Apple.
+One bounded16-room page, one atomic prefix/cursor/wake CAS, one readback, full original registration/
+source/parent fences and5s timeout. Future retry performs no I/O. Existing physical turns stop the
+prefix before that room; never relabel/drop old work. Logical demand and shared64 capacity stay
+intact. Non-Joined inventory grants no new content work and removes no local facts. Continuous
+source position updates survive; newer loss cannot confirm old coverage. Read
+next-inventory-retention-review.md. Worker wiring and durable failure/backpressure deferral are
+still separate remaining work. Do not activate from draft or test counts alone.
+
+Hosted43037578170: portable10300 accepted, apple4134 accepted.
+Hosted43040652714: portable10324 accepted, apple pending audit.
+Hosted43044913726: portable pending audit, apple pending audit.
+Existing hosted runs stay attached; never redispatch unchanged source unnecessarily. Prior
+application43031231253 remains incomplete: Apple4,088 accepted but portable cancelled/incomplete
+10,170 omits30 required app cases. Original expectations/history are unchanged. Later alias/raw
+portable checks include those cases. Canonical43028172483 FULL14,258 remains accepted.
+
+Keys-only recovery needs durable cross-room discovery/wake before64 blocked rooms can be retired
+or demoted. Existing published-checkpoint prefix paging may avoid a duplicate catalog; read
+next-keys-discovery-review.md (NOT implemented/accepted). Typed metadata is still required to
+authenticate traversal payloads. Pending refs must not be dropped. Authoritative absence and combined old-Company
+storage/new-Group native proof remain. Raw collector/Original producer OFF; all54 PRD groups OPEN.
+No generic Starter delta, live deployment change or native SDK8 Apple acceptance.
+
+Current phone evidence: phone-connect-1524.json. Read it and state.json before retrying/installing.
+Release89 SDK6 awaits install unless newer private installation evidence proves otherwise. Notify
+before install, explicit serial/install-only, never drive UI. No emulator. Preserve original intents,
+Draft66, keys/stores/SDK assets, inspector gradlew.bat and live90163c3/schema116.4 Group OFF.
+Continue the long run and push every commit.
+
 
 ## Durable inventory progress passes focused checks; full validation running
 

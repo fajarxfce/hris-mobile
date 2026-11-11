@@ -81,6 +81,8 @@ fun retainCollaborationSpaceSyncBatch(
             batch.source,
             batch.nextPosition,
             if (loss) inventoryGeneration else previous.inventoryGeneration,
+            if (loss) null else previous.inventoryAfterRoomId,
+            if (loss) null else previous.inventoryRetry,
         )
     if (previous == null) sources += progress else sources[sources.indexOf(previous)] = progress
     val next =

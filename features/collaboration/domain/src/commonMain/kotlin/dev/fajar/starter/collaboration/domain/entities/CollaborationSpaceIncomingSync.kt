@@ -17,6 +17,8 @@ data class CollaborationSpaceIncomingSourceProgress(
     val source: CollaborationSpaceIncomingSource,
     val position: String,
     val inventoryGeneration: String? = null,
+    val inventoryAfterRoomId: String? = null,
+    val inventoryRetry: CollaborationSpaceIncomingRetry? = null,
 ) {
     override fun toString() = "CollaborationSpaceIncomingSourceProgress([redacted])"
 }

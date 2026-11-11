@@ -1,5 +1,8 @@
 # Architecture
 
+[Durable inventory progress](collaboration-space-inventory-progress.md) retains source cursor/retry with explicit versioning
+and atomic demand storage. Admitted page retention and worker integration remain separate.
+
 [Owned room inventory](collaboration-space-owned-room-inventory.md) runs finite metadata reads under the installed original
 client and its existing child lifetime. Durable inventory scheduling remains a separate owner.
 

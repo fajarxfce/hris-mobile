@@ -121,7 +121,7 @@
     "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43037578170",
     "expectedPortable": 10300,
     "expectedApple": 4134,
-    "completeAcceptance": false,
+    "completeAcceptance": true,
     "nativeSdk8AppleExecution": false,
     "portable": {
       "sourceCommit": "b944e928d5cc1f9c2f2affe49d003ee7e17f4792",
@@ -141,7 +141,26 @@
       "reportManifestSha256": "95a160f0d57c6528cdddf4728cac08190af9850860b77335452f4925bf3acf48",
       "jobLogSha256": "2b66b5a7839827c58281a0699a731a7875be26a16157bf7a90dff95506a24b84"
     },
-    "appleAccepted": false,
-    "previouslyOmittedThirtyApplicationCasesNowExecuted": true
+    "appleAccepted": true,
+    "previouslyOmittedThirtyApplicationCasesNowExecuted": true,
+    "apple": {
+      "sourceCommit": "b944e928d5cc1f9c2f2affe49d003ee7e17f4792",
+      "runId": 43037578170,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43037578170",
+      "jobId": 130580416938,
+      "artifactId": 13868536943,
+      "bytes": 702210,
+      "sha256": "39b1a70093dc6f220559aad3ceeb486ed9ee63dea2afa81b80c048c9dce9f1d1",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreserved": true,
+      "counts": {
+        "iosSimulatorArm64Test": 4134
+      },
+      "reportManifestSha256": "32e0f418d4b6c05f617bfb87fc7b27ce024e8ddb735460e50dc5c0b0d9393b8c",
+      "jobLogSha256": "23fa0ca70943ab1486600b141c2558d64b38608aa16ecf23d231f144b29cb700"
+    },
+    "validatedTests": 14434,
+    "applePushFieldCases": 16,
+    "unsignedAppleHostBuilt": true
   }
 }

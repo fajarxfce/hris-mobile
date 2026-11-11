@@ -1,0 +1,67 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "54e0ddf090b2ce48ced1db7299bfbe01c061758a",
+  "sourceFiles": 4989,
+  "changedSourceFiles": 6,
+  "sourceManifestSha256": "0e1d9043c3a0569faf47f4d04e24084ffa7e608ca5a34a68fed53d76a33c9a7b",
+  "focused": {
+    "tests": 206,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused1",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 12440,
+    "fresh": {
+      "tests": 10402,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 580.486,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151742963,
+    "sha256": "c91b4c4499b81d103fab3463e1f4014de76f5fa77de9fc3f340c3527f1a5f642"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "inventoryProgressStorageAccepted": true,
+  "newDomainCasesPerTarget": 12,
+  "newDatabaseCasesPerTarget": 7,
+  "previousDemandStorageCasesPreserved": 40,
+  "currentDemandStorageCasesPerTarget": 47,
+  "sourceGenerationRequiredForCursorAndRetry": true,
+  "continuousResponsePreservesInventoryProgress": true,
+  "responseReplayDoesNotRewind": true,
+  "newLossClearsOldInventoryProgress": true,
+  "independentSourcesPreserved": true,
+  "explicitInventoryMarker": "incoming-demand/v5",
+  "explicitInventorySchema": 5,
+  "legacyMarkersReadable": [
+    "incoming-demand/v1",
+    "incoming-demand/v3",
+    "incoming-demand/v4"
+  ],
+  "oldMarkersRejectAdvancedFields": true,
+  "mixedAuthenticatedHeaderRejected": true,
+  "originalTargetsAndOpaqueSourcePositionsPreserved": true,
+  "interruptedCommitReopensCursorPhysicalWorkAndWakeTogether": true,
+  "maximumSourceCursorRetrySnapshotWithinExistingBounds": true,
+  "existingPartAndByteLimitsUnchanged": true,
+  "actualDesktopAndBrowserDatabaseTests": true,
+  "wholeInventoryConsumerImplemented": false,
+  "wholeInventoryContinuityProven": false,
+  "keysOnlyBackpressureImplemented": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "nativeSdkExecution": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": []
+}
