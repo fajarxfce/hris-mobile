@@ -1,5 +1,8 @@
 # Architecture
 
+[Local incoming history locators](collaboration-incoming-history-locators.md) enumerate bounded published Company/Space metadata.
+Keys recovery retains admission and completion authority separately.
+
 [Serialized inventory scheduling](collaboration-space-inventory-scheduling.md) retains retry under the existing incoming worker.
 Keys-only demotion and recovery remain separate owners.
 

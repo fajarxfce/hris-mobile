@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "23fd5a9bcc0089546c231d5c20adc1e1265ccc0e",
+  "sourceFiles": 5011,
+  "changedSourceFiles": 11,
+  "sourceManifestSha256": "fb926e34e55e21d17ed894aa791d708c047cff4e0a4f4368f4d11bd544dff1ad",
+  "focused": {
+    "tests": 324,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused2",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 12688,
+    "fresh": {
+      "tests": 10650,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 569.289,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151763741,
+    "sha256": "94a306c55185f622606c590014a2e8b8d734f0dd70e49dc49e78d1a7c0fcf2a7"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "incomingHistoryLocatorsAccepted": true,
+  "newCommonMapperCasesPerTarget": 12,
+  "newActualMetadataStorageCasesPerTarget": 15,
+  "maximumMetadataRowsPerRead": 17,
+  "maximumConsumedRowsPerRead": 16,
+  "exclusiveCursor": true,
+  "companyAndSpaceNamespacesSeparated": true,
+  "allRetainedDevicesDiscovered": true,
+  "stagingExcludedByExistingTransaction": true,
+  "orderingScopeShapesAndLookaheadValidated": true,
+  "emptyPageMayAdvanceCursor": true,
+  "deletedCursorCanContinue": true,
+  "insertionBehindCursorRequiresLaterPass": true,
+  "inactiveScopeReturnsEmptyView": true,
+  "inactiveEmptyViewGrantsCompletionAuthority": false,
+  "contentKeysOrNativeRead": false,
+  "createsCatalog": false,
+  "createsWake": false,
+  "locatorGrantsRoomOrContentAuthority": false,
+  "actualMetadataStorageReopenTested": true,
+  "storageObservationCancellationTested": true,
+  "appDependencyGraphResolvesRepository": true,
+  "opaqueMetadataFixturePayloads": true,
+  "contentDecryptionProven": false,
+  "nativeSdkExecution": false,
+  "nativeAllocationBoundProven": false,
+  "keysOnlyBackpressureImplemented": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "starterChanged": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "exitCode": 1,
+      "elapsedSeconds": 219.761,
+      "freshCounts": {
+        "tests": 161,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "run": "focused1"
+    }
+  ],
+  "failedFixtureReview": {
+    "failedRun": "focused1",
+    "failedSession": 67038,
+    "reaped": true,
+    "originalTests": 161,
+    "originalFailures": 3,
+    "sourceSnapshot": "failed-candidate-1",
+    "productionBehaviorChanged": false,
+    "sourceContractCommentClarified": true,
+    "caseIdsRemoved": false,
+    "expectedCountsChanged": false,
+    "evidence": [
+      "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/dao/ReplicaDao.kt:126",
+      "core/database/src/commonTest/kotlin/dev/fajar/starter/database/PublishedReplicaPageContract.kt:64"
+    ],
+    "correction": "Assert exact Success(empty locator page) for inactive scope, retain positive renewed-session reads and add restoration checks for account/audience replacement. Consumer must check admission before treating an empty local view as pass completion."
+  }
+}
