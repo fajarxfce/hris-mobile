@@ -1,6 +1,50 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 09:02 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 09:14 UTC. This opening section owns current work; older checkpoints below are historical.
+
+## Active original provider acquisition — focused revalidation
+
+Accepted local loader sourcee29a9af68113213fa35dad31d98b7bb44253d538 and Group docs858a05f6 are PUSHED.
+Current .work/space-original-provider-history-2026-11-11 owns11 APPLIED, UNACCEPTED source files;
+prepare-next-provider.py/configure-next-provider.py HAVE EXECUTED. Baseline4,930 inputs/11,669 cases
+and verified XML archives are retained. Current4,938-input manifest
+acc55a4a2351fe1d0466db2390d0e0579e1ba5c32d220866d69ca4a18af693a1 is FROZEN. Focused2/session32089 RUNNING,
+expected164. Browser162/full11,751 have NOT run. No code/library mutations until this run is reaped.
+
+Format1/session42102 REAPED PASS37.918s. Focused1/session72354 REAPED FAIL131.537s:108 domain cases,
+106 passed,2 new positives failed; data/application cases did not run. Both test setups supplied
+pendingThrough without its required pendingAfter. Existing validCollaborationHistoryProgress line19
+correctly rejects that malformed pair. Only those two new test setups changed: they now supply the
+paired cursor, assert initial checkpoint validity, preserve that cursor on acquisition and reject
+rewriting it. No production change or weakened assertion. candidate1 and focused1 preserve the original
+manifestf1a6ab73ff72104f541abf9b900f1704f4596b8fc770878179c824750f8fd157, sources and failed reports.
+Read focused1-review.md. Format2/session23856 REAPED PASS35.932s; only two test files differ from candidate1.
+
+The11 source files implement original acquisition receipt, structural capture/page policies, shared
+Company/Space cursor transition policy plus existing Published delegation, one-page original usecase,
+fixture,27 acquisition/14 policy cases, owning DI and an existing app binding assertion. Provider reads
+the already installed Group client; exact native/source/registration/demand/metadata/registry fences
+surround I/O. Physical page remains unchanged; Company progress.provider remains null. No per-page
+metadata/transport API, new client, queue transition, wake or content acknowledgement. Unknown Storage
+reply uses exact progress and at most20 indexed sources; false CAS cannot acknowledge. Denial after
+commit cannot roll back owned history or publish success. Raw collector/Original producer remain OFF.
+
+Next reap focused2, inspect failures if any, then browser1 and focused audit, full1/full audit. No
+publisher or hosted dispatch exists for this active provider scope yet; prepare only after focused
+validation settles. Continue original advance/recover/content/pending/completion, canonical published
+LEGACY alias routing, bounded native inventory, keys-only recovery and actual native proof before
+activation. All54 PRD groups remain OPEN. No generic Starter delta. Do not stop here; push every commit.
+
+Loader hosted42991947262 RUNNING on immutablee29a9af6/refvalidation/original-incoming-load-20261111;
+dispatch32816 REAPED successful, private hosted-42991947262/state.json retained. Expected13,466.
+Storage hosted42988568153 RUNNING on immutable878d5120, expected13,394. Target42983683780 portable9,535
+accepted; Apple is building the iOS host after its tests, expected3,741 plus16 Swift/host. Audit only
+completed successful jobs. Metadata42978769594 fully accepted13,189. Do NOT redispatch existing runs.
+No SDK8 Apple native execution or live deployment claim. All previously published SDK assets unchanged.
+
+Phone83150 REAPED timeout124 at09:11:43 UTC (phone-connect-0911.json); no release89 install-result or
+installation attempt. Next bounded retry no earlier09:42 UTC. No emulator. Eight original intents,
+Draft66, protected stores and live Group-OFF deployment remain unchanged.
 
 ## Original incoming local resolution accepted — continue provider acquisition
 
