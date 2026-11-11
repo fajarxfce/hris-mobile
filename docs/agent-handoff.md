@@ -1,6 +1,49 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 14:20 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 14:28 UTC. This opening owns current work; older sections are historical.
+
+## Current: raw room inventory passes focused gate, full validation running
+
+Alias sourceb944e928d5cc1f9c2f2affe49d003ee7e17f4792 and Group docs6f52a6d6 PUSHED;
+all source/docs push sessions reaped. Alias final12,322 local accepted. Hosted43037578170
+was dispatched ONCE at14:20:46UTC on validation/logical-alias-routing-20261111; dispatch1252
+REAPED. Expected14,434=10,300 portable+4,134 Apple,16 Swift/unsigned host. Existing run attached;
+DO NOT redispatch. Canonical43028172483 portable10,170 accepted; Apple still building at14:24.
+Application43031231253 portable CANCELLED; GitHub annotation explicitly confirms35-minute timeout.
+Its artifact contains10,170 cases and omits Original turn22/worker8: incomplete, never14,288 acceptance.
+Original audit expectations remain unchanged; public measurement records incomplete artifact/hash/log.
+Application Apple still building at14:24. Earlier queue/reference/content/reconciliation fully accepted.
+
+Five-file raw inventory candidate APPLIED, NOT YET FULLY ACCEPTED. Four NEW Kotlin files plus
+portable CI timeout35->60 (required tasks/filters unchanged). Private
+.work/space-raw-room-inventory-2026-11-11 owns baseline/candidate/reports/scripts.
+format1/86033 REAPED PASS35.644s. focused1/14088 REAPED PASS292.021s/51 cases; audit accepted.
+All24 new Android host inventory,15 raw-event,10 room-source and2 app-binding cases pass, as do
+format/architecture/detekt and shared Wasm/iOS metadata compilation. No failures in this increment.
+full1/20790 RUNNING; expected12,346 cases/4,982 inputs. Frozen manifest
+33c33b20ce1ad04e37069c9f4834e889cddb383341d2f473c72d62d7a0b44601.
+Do not edit source during the run. Publisher/hosted scripts prepared but NOT executed/dispatched.
+Expected hosted14,458=10,324 portable+4,134 Apple, Android769->793, using alias run as baseline.
+
+Raw adapter reads Client.rooms locally with an exclusive sorted cursor and finite metadata page,
+preserves all five memberships and attempts every returned Room close, even after failures or
+cancellation. Parent Client is never closed. SDK8 still allocates the complete native handle list;
+finite output is not a native allocation bound. NoHandle tests are not native SDK proof.
+Runtime binding, inventory continuity/cursor retention and admitted worker integration remain pending.
+
+Next owned-room draft currently has four NEW PRIVATE files: domain page/capability, DTO mapper and
+12 common mapper cases. UNAPPLIED/UNTESTED/INCOMPLETE; do not apply alone. Finish existing-parent
+child-resource reader, current-source repository/DI/fallback integration and cancellation/adoption
+checks first. Read next-owned-room-inventory-draft-status.md and both next-owned-room-inventory-review.md/
+next-source-inventory-review.md. No expected next totals or prepare/apply script yet.
+Raw collector/Original producer OFF; keys-only wake and combined old-Company storage/new-Group native
+proof still required. All54 PRD groups OPEN. No generic Starter delta or live deployment change.
+
+Phone34046 REAPED timeout124,14:22:24UTC/20.020s; phone-connect-1422.json. Next retry no earlier
+14:53UTC. Release89 SDK6 awaits install, no attempt/result; notify first, explicit serial/install-only,
+never drive UI. No emulator. Preserve originals, Draft66, keys/stores/SDK assets, inspector gradlew.bat
+and live90163c3/schema116.4 Group OFF. Continue long run and push every commit.
+
 
 ## Logical alias routing accepted — continue raw room inventory
 
