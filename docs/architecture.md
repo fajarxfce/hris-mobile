@@ -1,5 +1,8 @@
 # Architecture
 
+[Original queue completion](collaboration-space-original-queue-completion.md) retires an exact drained Company task after local
+reference and checkpoint confirmation, preserving independent source demand and wake.
+
 [Original reference completion](collaboration-space-original-reference-completion.md) resolves acquired outcomes before a finite Company
 pending seek. Missing content retains retry; queue retirement remains independently verified.
 
