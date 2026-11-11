@@ -1,6 +1,53 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 11:23 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 11:27 UTC. This opening owns current work; older sections are historical.
+
+## Original retained-fact reconciliation — focused validation in progress
+
+Original content sourcecb5c12dde31caca50545724d876fa3ff7ab1c444 and Group docs5145e45f are PUSHED.
+The next eight-file local reconciliation increment is APPLIED but NOT accepted/committed. Five new
+sources: Original reconciliation usecase, pure retained-identity policy, scoped fixture,23 usecase cases
+and7 policy cases. Three modified sources: Company reconciliation uses the same pure predicates, data
+DI and an independently wrapped app binding assertion. It reads exact Company original/replacement
+facts for a detached finite16-reference capture; matching committed identities resolve locally.
+Current task/source/metadata/registered LEGACY account/native ownership and denial remain checked.
+No native/provider read, client, content write, seek advancement, queue or wake completion. Local
+credential age does not hide owned facts. Fixture records commits; it does not prove real database reopen.
+
+Private .work/space-original-reconciliation-2026-11-11 holds baselinecb5c12dd/11,961 cases, exact source/
+report snapshots, candidate, runners and hosted plan/audit/dispatch. Format1/session85225 REAPED PASS35.005s.
+Frozen4,958-input manifestbdd71aa123e3018ac890f3e532a6297a1074dfa44629cc6d488092a45c220f33.
+Focused1/session52944 RUNNING, expected139. Next browser1 expected137, accept-focused.py focused1 browser1
+(276), then full1/accept-full.py full1 (12,021). Do not edit frozen source during checks. No current
+full acceptance/publisher. Hosted PREPARED NOT dispatched: validation/original-reconciliation-20261111
+expects14,002=9,999 portable+4,003 Apple,16 Swift,unsigned host; baseline43011629455. Preserve all12
+Company wave cases plus prior IDs. Next Original seek/batch and queue completion remains unimplemented.
+
+Previous Original content ACCEPTED11,961=9,923 fresh+2,038 verified unchanged controls. Full1/session28201
+REAPED PASS619.204s; audit73585 accepted. Focus70462/308.809s/151 and browser24502/191.754s/149 accepted300.
+Frozen4,953 manifest6b6471c42c067589c9fe68c492daac452f20b9a43597d50342adf516076787d8.
+Proof APK151,701,629 bytes/SHAba993bc7806ae1b7a3a6ae6d8800900de1f9e929abb29e95cfa87facb5689ff7.
+Initial formatter76601 failed only generated assertion syntax (36.495s, zero cases); original/partial
+source and logs are preserved. Format2/77220 PASS36.465s. No production behavior changed for the fix.
+Content publisher/accepted-handoff and prepare/configure reconciliation HAVE EXECUTED; do not repeat.
+
+Content hosted43011629455 oncb5c12dd dispatched once (78432 REAPED), expected13,912; no audit yet.
+Company43008238149 on7113b3f8 RUNNING, expected13,813. Reader43003600252 portable accepted9,865/Apple3,928
+pending. Transition42999833068 fully accepted13,721; provider42996808183 fully accepted13,589;
+loader42991947262 fully accepted13,466; storage42988568153 fully accepted13,394; target42983683780 fully
+accepted13,276; metadata42978769594 fully accepted13,189. Inspect exact immutable runs/audits for newer
+results; never redispatch existing runs. No native SDK8 Apple runtime claim from domain/simulator tests.
+
+After reconciliation, finish exact Original batch/seek and queue completion without treating provider
+references as decrypted or retained content. Read next-original-reference-completion-review.md. Preserve
+finite pendingThrough and confirmed denial. Canonical Published LEGACY aliases, bounded Client.rooms
+inventory, keys-only recovery and actual native proof precede raw collector/Original producer activation.
+Both remain OFF; all54 PRD groups OPEN. No generic Starter delta. Continue the long run; push every commit.
+
+Phone29977 REAPED timeout124, connect started11:15:38 UTC; next bounded retry no earlier11:46.
+Release89 validated SDK6 APK pending install, no install-result or attempt. No emulator. Notify before
+explicit-serial install-only; never launch/drive the user's phone. Eight protected original intents,
+Draft66, keys/stores, SDK assets and live90163c3/schema116.4 Group-OFF remain unchanged.
 
 ## Original content accepted — continue retained-fact reconciliation
 
