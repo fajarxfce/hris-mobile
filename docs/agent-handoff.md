@@ -29,8 +29,8 @@ App and domain fixtures do not constitute native proof. Raw collector and Origin
 all54 PRD groups OPEN. Keys-only wake, bounded Client.rooms inventory and combined old-Company storage/
 new-Group native proof remain before activation. Existing registry already drains original borrowers.
 
-Canonical43028172483 jobs pending at13:38. Queue43022213294 portable10,105 accepted; Apple4,056
-pending at13:38. Reference43018627791 FULL14,089, content43011629455 FULL13,912 and reconciliation
+Canonical43028172483 jobs running at13:45; portable compiling application, Apple checking adapter.
+Queue43022213294 FULL14,161 accepted:10,105 portable+4,056 Apple; audit6513 REAPED,16 Swift/unsigned host. Reference43018627791 FULL14,089, content43011629455 FULL13,912 and reconciliation
 43015359541 FULL14,002 accepted. Preserve all historical failures and content Apple cancellation/
 targeted retry; no redispatch. Hosted control checks do not prove native SDK8 Apple execution.
 
