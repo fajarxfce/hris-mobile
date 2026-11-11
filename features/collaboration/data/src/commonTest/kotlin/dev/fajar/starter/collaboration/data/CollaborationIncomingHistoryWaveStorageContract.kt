@@ -16,6 +16,140 @@ abstract class CollaborationIncomingHistoryWaveStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
     @Test
+    fun sixteenRowCompanySeekSurvivesResolutionReopenAndLaterAppends() = withDatabase { f ->
+        f.commit(1..20, "head-one", "next-one")
+        f.commit(21..25, "next-one", null)
+        val first = f.read(limit = 16)
+        val before = f.raw()
+        assertIs<AppResult.Failed>(
+            f.repository().advanceIncomingReferences(f.access, f.traversal, first, true)
+        )
+        assertEquals(before, f.raw())
+        assertEquals(
+            AppResult.Success(true),
+            f.repository().resolve(f.access, f.traversal, first.progress!!, first.events.take(8)),
+        )
+        assertEquals(
+            AppResult.Success(true),
+            f.repository().advanceIncomingReferences(f.access, f.traversal, first, true, limit = 16),
+        )
+        assertEquals(25L, f.progress()!!.incoming!!.pendingThrough)
+        f.local.reopen()
+        assertEquals(first.after, f.progress()!!.incoming!!.pendingAfter)
+        f.commit(26..30, "head-two", null, "head-one", CollaborationHistoryPageOrigin.Latest)
+        val last =
+            assertNotNull(
+                boundedCollaborationIncomingReferences(
+                    f.read(after = f.progress()!!.incoming!!.pendingAfter, limit = 16),
+                    16,
+                )
+            )
+        assertEquals((17..25).map(f::event), last.events.map { it.event })
+        assertNull(last.after)
+        assertTrue(last.progress!!.incoming!!.pendingRetryRequired)
+        assertEquals(
+            AppResult.Success(true),
+            f.repository().resolve(f.access, f.traversal, last.progress!!, last.events),
+        )
+        assertEquals(
+            AppResult.Success(true),
+            f.repository().advanceIncomingReferences(f.access, f.traversal, last, false, limit = 16),
+        )
+        f.local.reopen()
+        assertNull(f.progress()!!.incoming!!.pendingAfter)
+        assertNull(f.progress()!!.incoming!!.pendingThrough)
+        assertNull(f.progress()!!.provider)
+        assertEquals(((9..16) + (26..30)).map(f::event), f.read().events.map { it.event })
+    }
+
+    @Test
+    fun wrongCompanyPageLimitAndForgedCursorCannotSkipReferences() = withDatabase { f ->
+        f.commit(1..20, "head", null)
+        val first = f.read(limit = 16)
+        val before = f.raw()
+        for (limit in listOf(0, 15, 17, 21)) {
+            assertIs<AppResult.Failed>(
+                f.repository().advanceIncomingReferences(f.access, f.traversal, first, false, limit)
+            )
+            assertEquals(before, f.raw())
+        }
+        for (page in
+            listOf(
+                first.copy(after = "unowned-cursor"),
+                first.copy(events = first.events.dropLast(1)),
+                first.copy(
+                    events =
+                        first.events.toMutableList().also {
+                            it[0] = it[0].copy(event = it[0].event.copy(timestamp = 1))
+                        }
+                ),
+            )) {
+            assertIs<AppResult.Failed>(
+                f.repository().advanceIncomingReferences(f.access, f.traversal, page, false, 16)
+            )
+            assertEquals(before, f.raw())
+        }
+    }
+
+    @Test
+    fun companySeekCannotUseASpaceFrameOrAnotherPhysicalDevice() = withDatabase { f ->
+        f.commit(1..20, "head", null)
+        val first = f.read(limit = 16)
+        val before = f.raw()
+        val framed =
+            first.copy(
+                progress =
+                    first.progress!!.copy(
+                        provider =
+                            CollaborationHistoryProviderIdentity(
+                                f.access.companyId,
+                                f.traversal.deviceId,
+                            )
+                    )
+            )
+        assertEquals(
+            AppResult.Success(false),
+            f.repository().advanceIncomingReferences(f.access, f.traversal, framed, false, 16),
+        )
+        val other = f.traversal.copy(deviceId = "70000000-0000-4000-8000-000000009992")
+        assertEquals(
+            AppResult.Success(false),
+            f.repository().advanceIncomingReferences(f.access, other, first, false, 16),
+        )
+        assertEquals(before, f.raw())
+        assertEquals(20, f.read().events.size)
+    }
+
+    @Test
+    fun companyPageSizeCanChangeWithoutChangingThePersistedPassBoundary() = withDatabase { f ->
+        f.commit(1..20, "head", null)
+        val first = f.read(limit = 1)
+        assertEquals(
+            AppResult.Success(true),
+            f.repository().advanceIncomingReferences(f.access, f.traversal, first, false, 1),
+        )
+        f.local.reopen()
+        assertEquals(20L, f.progress()!!.incoming!!.pendingThrough)
+        val second = f.read(after = f.progress()!!.incoming!!.pendingAfter, limit = 16)
+        assertEquals((2..17).map(f::event), second.events.map { it.event })
+        assertEquals(
+            AppResult.Success(true),
+            f.repository().advanceIncomingReferences(f.access, f.traversal, second, false, 16),
+        )
+        val last = f.read(after = f.progress()!!.incoming!!.pendingAfter, limit = 20)
+        assertEquals((18..20).map(f::event), last.events.map { it.event })
+        assertEquals(
+            AppResult.Success(true),
+            f.repository().advanceIncomingReferences(f.access, f.traversal, last, false),
+        )
+        f.local.reopen()
+        assertNull(f.progress()!!.incoming!!.pendingAfter)
+        assertNull(f.progress()!!.incoming!!.pendingThrough)
+        assertEquals(20, f.read().events.size)
+        assertTrue(f.read().events.none { it.resolved })
+    }
+
+    @Test
     fun completedBoundsAdvanceWhilePartialWavesAndExplicitRestartsRetainTheirOldStop() =
         withDatabase { f ->
             f.commit(1..20, "head-one", "next-one")

@@ -1,5 +1,8 @@
 # Architecture
 
+[Company pending page sizes](collaboration-company-pending-limit.md) preserve finite16-row Original seeks through
+concurrent resolution and reopen. Content acknowledgement and incoming activation remain separate.
+
 [Local original incoming resolution](collaboration-space-original-incoming-load.md) derives Company
 and physical device from current registered provenance and owned metadata. Local resolution creates
 no provider work or content grant; the original acquisition consumer remains separate.

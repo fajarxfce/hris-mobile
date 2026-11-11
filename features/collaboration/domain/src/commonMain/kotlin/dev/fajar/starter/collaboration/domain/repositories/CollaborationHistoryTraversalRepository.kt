@@ -59,11 +59,13 @@ interface CollaborationHistoryTraversalRepository {
      * Advances only Incoming's pending-reference seek after a bounded page was attempted. Missing
      * originals stay pending. Concurrent resolution/page extension is allowed within the same wave;
      * changed owner, generation, wave or pending seek loses. Provider bounds and references remain.
+     * The caller supplies the attempted page size; existing Company consumers default to twenty.
      */
     suspend fun advanceIncomingReferences(
         access: CollaborationLocalAccess,
         traversal: CollaborationHistoryTraversal,
         source: CollaborationHistoryReferences,
         retryRequired: Boolean,
+        limit: Int = 20,
     ): AppResult<Boolean>
 }

@@ -1,0 +1,75 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "9b366ed53256c1bad575a44ac3e39f9288220006",
+  "sourceFiles": 4948,
+  "changedSourceFiles": 9,
+  "sourceManifestSha256": "008ae215b58bbddb8e5038e84ef0bf13cb7dd872979a1116d5abcef0c8aa2d8c",
+  "focused": {
+    "tests": 270,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused2",
+  "focusedBrowserRun": "browser2",
+  "full": {
+    "validated": 11895,
+    "fresh": {
+      "tests": 9857,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 352.118,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151687625,
+    "sha256": "ecd8861f3a0de2635e01a7f365b2b90cabd254f854f8356285fe61d56819a3a3"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "companyPendingLimitAccepted": true,
+  "defaultPageLimit": 20,
+  "explicitOriginalPendingLimit": 16,
+  "repositoryForwardsRawLimit": true,
+  "cursorAndKeyBytesUnchanged": true,
+  "companyProgressFramePreserved": true,
+  "concurrentResolutionReopenAndLaterAppendTested": true,
+  "invalidLimitAndForgedCursorRejected": true,
+  "foreignSpaceFrameAndPhysicalDeviceRejected": true,
+  "changingPageSizePreservesFiniteBoundary": true,
+  "newCommonStorageCases": 4,
+  "newAppleWaveWrapperCases": 12,
+  "correctedOmittedPresentationFakeSignature": true,
+  "productionChangedAfterFailedFull": false,
+  "preservedFailedRuns": [
+    {
+      "exitCode": 1,
+      "elapsedSeconds": 351.885,
+      "freshCounts": {
+        "tests": 5549,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "run": "full1"
+    }
+  ],
+  "presentationTestCompilationVerified": true,
+  "appleWaveWrapperExecutedLocally": false,
+  "expectedPortableHostedDelta": 8,
+  "expectedAppleHostedDelta": 12,
+  "createsNetworkRequest": false,
+  "createsSdkClient": false,
+  "createsWake": false,
+  "acknowledgesContent": false,
+  "originalIncomingConsumerEnabled": false,
+  "rawCollectorEnabled": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true
+}

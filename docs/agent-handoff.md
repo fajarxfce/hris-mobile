@@ -1,55 +1,59 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 10:50 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 10:59 UTC. This opening owns current work; older sections are historical.
 
-## Company pending limit — presentation fixture corrected — focused validation in progress
+## Company pending limit accepted — continue Original content retention
 
-Mobile documentation d314f171 and Group96b6e00c are PUSHED; source baseline is9b366ed5.
-The next nine-file Company page-size increment is applied but NOT accepted or committed.
-It exposes/forwards limit:Int=20 to the existing raw store, preserving legacy callers and cursor/key
-bytes. Original16-row pending continuations can use their actual attempted page size. Four new common
-storage cases cover finite seeks, resolution/reopen/appends, invalid limits/cursors/frames/devices and
-changing page sizes. A new Apple wave wrapper covers12 cases; Linux cannot claim its execution.
+The nine-file Company page-size increment is ACCEPTED. full2/session53510 REAPED
+PASS352.118s. Full audit accepted11,895=9,857 fresh+
+2,038 exact unchanged controls. Prior case IDs, dependency closures and source/library
+hashes verified. Corrected focused/browser audit270 passes and explicitly compiles presentation tests.
+Format, architecture/detekt, Android host/release compile/lint, browser/Wasm, iOS metadata and proof APK
+assembly/unit checks pass. Frozen4,948-input manifest008ae215b58bbddb8e5038e84ef0bf13cb7dd872979a1116d5abcef0c8aa2d8c.
+Proof APK151,687,625 bytes/SHAecd8861f3a0de2635e01a7f365b2b90cabd254f854f8356285fe61d56819a3a3.
 
-Private .work/company-pending-limit-2026-11-11 holds baseline9b366ed5/11,887 cases, candidate snapshots,
-runners/audits, prepared publisher/contract and hosted plan/audit/dispatch. Initial8-file candidate
-passed format1/session26322 (36.597s), focused1/session32087 (300.067s/136), browser1/session77153
-(171.871s/134), audit270. All REAPED. Full1/session93941 then FAILED presentation common-test compilation
-at351.885s after5549 passed cases: ChatThreadHistoryFixture was an omitted fifth Company fake. It still
-had the old repository signature. No production defect/fix was inferred from this compile failure.
+Company advanceIncomingReferences now accepts and forwards limit:Int=20 to raw storage. Original's16-row
+pending pass can use its actual attempted size; legacy20 behavior and stored cursor/key bytes remain.
+Four new common storage cases verify finite boundaries through resolution/reopen/later appends, invalid
+limits and forged cursors, foreign frames/devices and changing page sizes. Four domain and one presentation
+fake adopt the signature. New Apple wave wrapper covers12 cases but Linux did not execute it.
 
-Added only the unused limit:Int to that fixture. Format2/session42032 REAPED PASS35.718s. Revised9-file,
-4,948-input manifest008ae215b58bbddb8e5038e84ef0bf13cb7dd872979a1116d5abcef0c8aa2d8c is frozen.
-Focused2/session16507 RUNNING, expected136, now explicitly compiling presentation tests. Next browser2
-(expected134), accept-focused.py focused2 browser2 (270), then full2 (11,895) and accept-full.py full2.
-Original candidate1 preserves manifest a74763b5645f6400a4a0c80e90cdecfbb270678633b884f29ab07d67f076e6c3
-and prior focused evidence; full1-review.md/logs/result preserve the failed full. Never count it as pass.
-Publisher/full acceptance NOT executed. Hosted NOT dispatched: validation/company-pending-limit-20261111
-expects13,813=9,873 portable+3,940 Apple,16 Swift,unsigned host. Portable delta8, Apple delta12; audit the
-new12-case Apple wave wrapper explicitly. No activation or phone install is claimed by these checks.
+Initial full1/session93941 failed presentation-test compilation after351.885s and5549 passing cases.
+ChatThreadHistoryFixture still used the old signature. Only its unused limit parameter was added;
+production behavior was unchanged. candidate1 preserves initial8-file manifest
+a74763b5645f6400a4a0c80e90cdecfbb270678633b884f29ab07d67f076e6c3 and270 initial focused cases.
+full1 logs/result/review remain failed evidence. Corrected format2/session42032 PASS35.718s, REAPED.
 
-Original pending reader is already locally accepted11,887; source9b366ed5 PUSHED and hosted43003600252
-RUNNING (dispatch54962 REAPED), expected13,793. Its earlier two test type-inference failures are retained.
-Provider transitions42999833068 portable ACCEPTED9,817 (audit37152 REAPED); Apple3,904 still pending.
-Provider acquisition42996808183 FULLY ACCEPTED13,589=9,729 portable+3,860 Apple; Apple audit61194 REAPED.
-Loader42991947262 fully accepted13,466; storage42988568153 fully accepted13,394; target42983683780 fully
-accepted13,276; metadata42978769594 fully accepted13,189. Existing immutable CI runs must not be dispatched
-again. Public measurement JSON contains artifact hashes, exact case identities and job log hashes.
-SDK8 native Apple runtime execution remains unproved; simulator/domain checks are separate evidence.
+Private .work/company-pending-limit-2026-11-11 holds baseline9b366ed5/11,887 cases, exact snapshots/reports,
+publish/hosted scripts and next source draft. publish.py HAS EXECUTED; do not overwrite. Commit/push accepted
+source/docs, then dispatch-hosted.py ONCE on validation/company-pending-limit-20261111. NOT dispatched yet;
+expected13,813=9,873 portable+3,940 Apple,16 Swift,unsigned host. Portable delta8 and Apple delta12; the audit
+must verify all12 wave cases on Apple as well as retained prior controls. No native SDK8 Apple claim.
 
-Continue Original content acquisition and retention using the installed Group runtime and original
-Company/device. Nine PRIVATE UNAPPLIED draft sources in next-original-content-draft implement Original content acquisition,
-exact physical snapshot checks, shared outcome policy,33 common cases and DI. Expected next151 focused/149
-browser/11,961 full. prepare-next-original-content.py/configure-next-original-content.py PREPARED, NOT executed.
-No content source/test acceptance yet; next-original-content-review.md records ownership and remaining work. Provider references, decrypted
-content and committed retention remain separate. Original completion, canonical Published LEGACY aliases,
-bounded Client.rooms inventory, keys-only recovery and actual native proof precede raw activation.
-Raw collector/Original producer OFF; all54 PRD groups OPEN. No generic Starter delta. Continue long run.
+Then execute prepare-next-original-content.py/configure-next-original-content.py, PREPARED NOT executed.
+Nine-file draft (five new inputs) implements Original content acquisition, exact physical snapshot policy,
+shared outcome mapping,33 common tests and DI. Expected4,953 inputs,151 focused/149 browser/11,961 full.
+One15-second invocation uses the installed Group runtime but retains original Company/device identity.
+Original/tombstone facts commit before edits; false/uncertain writes cannot publish completion. Shared
+targets are read once and identical changes deduplicated. Missing keys/redactions/targets remain explicit.
+No content source/test acceptance yet. Read next-original-content-review.md and
+next-original-reference-completion-review.md before continuation.
 
-Phone26946 REAPED timeout124, connect started10:50 UTC. Next bounded retry no earlier11:15.
-Release89 validated SDK6 APK remains pending install, no install-result or attempt. No emulator.
-Notify before explicit-serial install-only, never launch/drive the user's phone. Eight protected original
-intents, Draft66, keys/stores, SDK6/7/8 assets and live90163c3/schema116.4 Group-OFF remain unchanged.
+Next Original local retained-fact reconciliation and completion must preserve exact source identities,
+finite pendingThrough, current task/source/registration and directory denial. Retained local facts need
+no provider retry after a lost acknowledgement. Canonical Published LEGACY aliases, bounded Client.rooms
+inventory, keys-only recovery and actual native proof still precede raw collector/Original producer
+activation. Both remain OFF; all54 PRD groups OPEN. No generic Starter delta. Continue the long run.
+
+Existing hosted runs are immutable: reader43003600252, transitions42999833068, provider42996808183,
+loader42991947262, storage42988568153, target42983683780 and metadata42978769594. Inspect their exact
+private audits/public measurements for latest acceptance; do not redispatch. Simulator/domain checks
+are not native SDK8 Apple runtime proof.
+
+Phone26946 REAPED timeout124, connect started10:44:11 UTC. Next retry no earlier11:15. Release89 validated
+SDK6 APK remains pending install; no install attempt or install-result. No emulator. Notify before
+explicit-serial install-only, never launch/drive the user's phone. Eight protected original intents,
+Draft66, keys/stores, SDK assets and live90163c3/schema116.4 Group-OFF remain unchanged.
 
 ## Original pending reader accepted — continue Company batch contract
 

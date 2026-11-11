@@ -68,9 +68,11 @@ internal class IncomingHistoryAdvanceFixture {
                 traversal: CollaborationHistoryTraversal,
                 source: CollaborationHistoryReferences,
                 retryRequired: Boolean,
+                limit: Int,
             ): AppResult<Boolean> {
                 assertEquals(this@IncomingHistoryAdvanceFixture.access, access)
                 assertEquals(key, traversal)
+                assertEquals(20, limit)
                 calls++
                 active++
                 try {

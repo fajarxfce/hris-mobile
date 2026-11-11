@@ -37,6 +37,7 @@ internal class ChatThreadHistoryFixture(private val thread: ChatThreadFixture) {
                 traversal: CollaborationHistoryTraversal,
                 source: CollaborationHistoryReferences,
                 retryRequired: Boolean,
+                limit: Int,
             ): AppResult<Boolean> = error("No implicit incoming seek advance")
 
             override suspend fun progress(
