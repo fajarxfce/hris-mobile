@@ -1,6 +1,76 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 16:54 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 17:10 UTC. This opening owns current work; older sections are historical.
+
+## Active/requested inventory passes — full validation running; fair scheduling draft ready
+
+Locator source e0a00be5834979536c06a70f5d72a093c0b27d15 and Group docs84e7124f PUSHED;
+99797/81253 reaped. Local12,688 accepted (full90643/audit72512 reaped),324 focused.
+Hosted43062334365 dispatched ONCE at16:50:52UTC, expected14,942;81539 reaped. Scheduling
+43057055642 portable10,600 accepted, Apple pending. Retention43053179213 now FULL14,719:
+10,508 portable+4,211 Apple (52628 reaped); report manifest2fe8cc64f47b10a82db8478a7611aca5cfb27e47bc2cfdc5ec9b3d15bbc3f15b.
+Progress43049052938 FULL14,584, owned43044913726 FULL14,527, raw43040652714 FULL14,458,
+alias43037578170 FULL14,434. Apple includes16 Swift/unsigned-host cases, not native SDK8.
+Prior application43031231253 stays historically incomplete. Never redispatch unchanged runs.
+
+Current12-file protocol is APPLIED, NOT ACCEPTED;10 existing+2 new Kotlin. Previous prepare/
+configure scripts EXECUTED at16:51:15UTC. Workspace .work/space-inventory-active-request-2026-11-11.
+format1/42984 REAPED PASS36.279s; focused1/29218 REAPED FAILED141.969s/195 cases/1 failure.
+The fourth old progress test still expected immediate cursor/retry reset after loss. It now
+asserts exact retained active progress, EOF promotion, and unchanged other-source progress
+before/after. No production behavior changed for this correction; no case IDs/counts removed.
+failed-candidate-1/focused1 and cross-source-test-review.json preserve the failure.
+format2/32320 REAPED PASS36.901s; focused2/75295 REAPED PASS387.745s/281;
+browser1/16005 REAPED PASS141.862s/263. Exact544 focused accepted. full1/56947 RUNNING,
+expected12,740; do not edit sources. Frozen5,013-input manifest
+642534f6e5d1650e72667528399742a3ead2b0b95c409cd2e5f478a836c0ac7d.
+Hosted scripts PREPARED NOT DISPATCHED, expected15,020=10,718 portable+4,302 Apple.
+contract.md/publish.py PREPARED NOT EXECUTED. Accepted-handoff writer not yet prepared.
+
+New loss keeps active generation/cursor/retry and coalesces one distinct later pass. EOF
+promotes it with fresh cursor/retry and reports Advanced; only no later request is Complete.
+Real source positions, other sources and independent work/wake remain. Requested UUIDs stay
+reserved. Explicit schema6/incoming-demand/v6 preserves older reads and rejects advanced fields
+under authenticated older headers. Limits129 parts/131072 encoded chars per part/4MiB remain.
+12 policy+8 owner+6 actual encrypted-storage cases per desktop/browser; old47 storage cases
+remain (now53). Four16-room pages progress despite loss while capacity exists. This does not
+prove drainage of a full key-blocked queue. No new usecase/worker/native I/O for this protocol.
+
+Important corrected fairness diagnosis: DeferCollaborationSpaceIncomingRoom ALREADY rotates
+unfinished work through one CAS/readback. Null failure means NO retry deadline. Published
+successful continuation already takes that path; previous notes suggesting added backoff were
+incorrect. OriginalIncomingTurn returns true while provider/reference pages remain, bypassing
+that existing rotation. The next fix returns false for those unfinished states so the worker
+reloads the current capture and yields through its existing domain owner. Inventory moves
+before the primary loop to receive service before slow primary work exhausts90 seconds.
+No new claim protocol, repository, usecase, DI surface or per-dispatch transaction is needed.
+The three private pre-dispatch prototype files are superseded in rejected-pre-dispatch-draft;
+never applied/compiled. Read next-incoming-fairness-review.md, which overrides earlier options.
+
+Next fairness draft is UNAPPLIED/UNTESTED:7 files (6 guarded existing+1 new), including explicit
+CI selection. Two production application files, three existing test classes, one new eight-case
+app class, workflow. Existing four case identities gain updated full transition/order checks.
+New tests join real worker and existing queue policy for long provider/pending histories,
+continuous new work,35-second tasks/90-second timeout, inventory before slow work, cancellation,
+independent inventory backoff, denial and real failures versus successful continuation.
+Expected12,748 local/5,014 inputs,209 focused+111 browser;15,028 hosted. Prepare/configure
+scripts PREPARED NOT EXECUTED; require current full acceptance, clean pushed commit and one CI
+dispatch first. Next: reap full56947, audit, publish actual evidence/handoff, commit/push,
+dispatch once, then apply this minimal fairness draft and validate it.
+
+Keys-only recovery/demotion remains: existing SDK8 has subscribeToRoomKeyChanges and bounded
+room hints; app consumer is absent and must bind once to installed runtime. Typed metadata
+resolution, active/requested key passes and atomic primary demotion must retain pending refs.
+Do not drop refs to free slots. Native allocation/performance, authoritative absence and
+combined Company-storage/Group-native proof remain. Raw observation/Original producer OFF;
+all54 PRD groups OPEN. No Starter/live change.
+
+Phone59101 REAPED timeout at16:57:16UTC/20.02s, no install attempted. Current workspace owns
+phone-connect-1657.json; next retry no earlier17:28UTC. Release89 SDK6 awaits install. Notify
+first, explicit serial/install-only, never drive UI. No emulator. Preserve original intents,
+Draft66, keys/stores/SDK assets, inspector gradlew.bat and live90163c3/schema116.4 Group OFF.
+Continue long run and push every commit.
+
 
 ## Active/requested inventory protocol applied; focused validation running
 
