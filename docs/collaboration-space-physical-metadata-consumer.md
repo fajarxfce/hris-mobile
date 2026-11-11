@@ -51,4 +51,6 @@ keys-only recovery and actual native proof remain required. All 54 PRD groups re
 
 Hosted control at immutable `8ae3d11e`/run42978769594 verifies 9,477 portable cases with all prior
 case identities and artifact digests. This includes all 12 physical-worker cases omitted by the
-previous workflow selection. Apple control remains running; native SDK8 execution is not claimed.
+previous workflow selection. Apple control now verifies 3,712 cases, 16 Swift push-field checks
+and the unsigned iOS application host. Total hosted acceptance is 13,189 cases. Native SDK8 Apple
+execution is not claimed.

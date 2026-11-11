@@ -1,44 +1,52 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 08:02 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 08:20 UTC. This opening section owns current work; older checkpoints below are historical.
 
-## Active original metadata storage — focused validation
+## Active original incoming storage — combined browser validation
 
-Mobile source854828ffb689dcbca3645a8b4de562b79a02c6ab is ACCEPTED/PUSHED; see the accepted target
-checkpoint below. New .work/space-original-room-metadata-2026-11-11 owns its4,915-input baseline,
-verified11,557 cases/1,294 XML archives and nine APPLIED but UNVALIDATED files. Repository/policy and
-dedicated encrypted Company/conversation +Company/server/room indexes,18 common real database cases,
-desktop/browser/Apple wrappers and an assertion in the existing app DI case. No scheduling wake,
-provider/API call, original producer/consumer or raw collector activation is added by this store.
+Mobile source854828ffb689dcbca3645a8b4de562b79a02c6ab is ACCEPTED/PUSHED; see target checkpoint below.
+Current .work/space-original-room-metadata-2026-11-11 now owns18 APPLIED but UNACCEPTED files. Combined
+scope: immutable Company metadata store plus exact Company history source reads, with no new provider
+or scheduling work. Frozen4,925-input manifest5c79d78059c7e6391b6ce0a44253e0ba488fc438902b6bc3e200460aaf74f792.
+Source baseline4,915 inputs/11,557 cases/1,294 XML archives remains exact. Collector and original consumer OFF.
 
-Format1/session88633 REAPED PASS34.918s. Frozen4,923-input manifest:
-530371edc1954db5e4e722d3c4256c3510578dba7a33c271a3e48391ab9a21b0.
-Focused1/session65478 is RUNNING (expected96). Browser expected94, full11,593. Do not change source
-or library until reaped. Existing old storage/history cases and app DI case remain selected. Runners,
-expected.json, candidate files and all baseline report archives are private. Original-target setup
-first stopped before mutation because this branch has no configured upstream; it now verifies the
-actual remote branch SHA via GitHub. The subsequent setup/format succeeded; no source work was lost.
+Focused2/session38566 REAPED PASS296.457s/121. Browser2/session97925 RUNNING, expected119. Full expected
+11,621. Do not mutate source/library until reaped. Initial metadata-only nine-file candidate passed
+focused1/session65478 PASS298.973s/96 and browser1/session66658 PASS179.115s/94; audit190 is preserved
+under candidate1 with its source snapshots/expected/initial init script. It is NOT combined acceptance.
+Format1/session88633 PASS34.918s, format2/session4008 PASS34.848s, all REAPED. No failures so far.
 
-Next: finish focused/browser/full audits, preserve prior case IDs, accept and commit/push this
-increment. Then implement actual Original provider/reference/content/completion consumers using the
-existing Company history namespace, original physical device ID and provider=null. Add exact source
-read to the Company traversal repository rather than a duplicate repository. Reviews copied into this
-work folder cover real Android lease identity, Group/native/registration admission, metadata-only
-server lookup, published LEGACY alias risks and the complete incoming owner capture. Bounded native
-inventory and keys-only recovery plus actual native proof still precede raw activation. All54 PRD
-groups remain OPEN. Continue beyond this storage prerequisite; no generic Starter delta.
+Metadata uses immutable encrypted Company/conversation and Company/server/room indexes, exact pair/
+checkpoint checks, no native-parent fields or wake side effects. Eighteen new common metadata cases
+plus the existing app DI case verify the store. Company traversal repository now exposes source through
+its existing raw Company storage; seven new common cases execute for Browse and Incoming on desktop/
+browser. Two missing Apple Company history wrappers each prepare18 cases (old11+new7). Four old
+fixtures implement the new method with an explicit unused-operation failure; no default empty result.
+Preserve original provider=null and physical device cursors, and never infer selected HR Company.
 
-Hosted original-target run42983683780 was dispatched on immutable854828ff/refvalidation/original-incoming-target-20261111;
-dispatch35465 REAPED. Expected13,276 =9,535 portable+3,741 Apple,16 Swift,unsigned host. Private target
-hosted-plan.json/hosted-42983683780/state.json and hosted-audit.py own exact evidence. Do NOT redispatch.
-Metadata run42978769594: portable9,477 accepted, Apple adapter tests passed and application host is
-building. Expected3,712 Apple+16 Swift,unsigned host; no Apple SDK8 native claim. Existing metadata
-hosted-audit.py takes apple hosted-42978769594 once complete. Prior incoming-write42972222388 finished
-with Apple3,675 accepted and portable9,379 explicitly partial due to the old12-case filter gap.
-The corrected metadata portable run closes that missing coverage; do not rewrite older evidence.
+Next finish browser/full audit and publish.py, then commit/push the combined storage increment. The
+acceptance-gated publisher/contract and hosted-plan/audit are prepared but NOT executed/dispatched.
+Expected hosted13,394=9,599 portable+3,795 Apple,16 Swift,unsigned host; require both new Apple Company
+wrappers. The original metadata-only scope was expanded before full acceptance to include its needed
+source capability; initial successful artifacts remain unchanged. next-company-source-draft HAS BEEN
+APPLIED. next-original-load-draft has THREE UNAPPLIED/UNVALIDATED proposals: three-field original room,
+pure registered-source/Company policy and local five-second Load use case with registration recheck.
+Tests/DI and actual original acquisition/content/completion still needed. Reviews describe actual
+Android immutable lease identity, metadata-only server access, canonical Company frames and alias risks.
+Finish original consumer, bounded native inventory, keys-only recovery and native proof before raw activation.
+All54 PRD groups remain OPEN; no generic Starter delta. Do not stop at this checkpoint; push every commit.
 
-Phone59767 REAPED timeout at07:37:14; next bounded retry no earlier08:08. Validated89 install-only,
-prior notification/no UI driving. One3GiB compiler, no emulator. No live/schema, SDK or Starter changes.
+Metadata hosted42978769594 on immutable8ae3d11e is FULLY ACCEPTED13,189: portable9,477 plus Apple3,712,
+16 Swift and unsigned host. Apple audit4423 REAPED; artifact13838424776 SHA
+b0727192fd3711cef8be02715eae9a497de445cfe3d3a924e0675bcbfc107b51. Exact head/prior IDs/digest/CRC verified.
+Do NOT redispatch. Original-target42983683780 runs on immutable854828ff/refvalidation/original-incoming-target-20261111;
+expected13,276; portable application build and Apple adapter tests are running. Private target hosted-audit.py
+owns next acceptance. Prior incoming-write42972222388 retains its documented portable12-case selection gap;
+corrected metadata run closes coverage without rewriting older evidence. No Apple SDK8 native execution claim.
+
+Phone52455 REAPED timeout124 at08:08:30 UTC. No install-result exists for validated release89; no installation
+was attempted. Next bounded retry no earlier08:40. Existing question remains pending. Install-only with prior
+notification/no UI driving. One3GiB compiler, no emulator. No live/schema, SDK publication or Starter changes.
 
 ## Original incoming targets accepted — continue original metadata and consumers
 
