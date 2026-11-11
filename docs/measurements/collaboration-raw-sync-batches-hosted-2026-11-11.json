@@ -5,11 +5,25 @@
   "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42943310515",
   "createdAt": "2026-11-11T02:03:23Z",
   "status": "in_progress",
-  "portableAccepted": false,
+  "portableAccepted": true,
   "appleAccepted": false,
   "expectedPortableCases": 9001,
   "expectedAppleCases": 3499,
   "expectedSwiftPushChecks": 16,
   "unsignedAppleHostRequired": true,
-  "previousAcceptedRun": 42923369580
+  "previousAcceptedRun": 42923369580,
+  "portable": {
+    "jobId": 130270030971,
+    "artifactId": 13822693072,
+    "bytes": 3643965,
+    "sha256": "c2fa2fa1400f9ec8ccd39ab1041e2afeb5ddc50fd422cf3d0692d286f813854c",
+    "counts": {
+      "desktopTest": 4253,
+      "testAndroidHostTest": 732,
+      "wasmJsBrowserTest": 4016
+    },
+    "reportManifestSha256": "6de40a2358339604b7f6b1dc7d455091c773b5689ba1601bb60dda3e884f65ac",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreserved": true
+  }
 }
