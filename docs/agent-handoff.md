@@ -11,8 +11,14 @@ c44e6fdb are PUSHED. Local acceptance12,222/4,974 inputs. Hosted43031231253 disp
 
 Eleven-file logical alias routing is APPLIED, UNACCEPTED. Preparation/configuration scripts executed.
 Private .work/space-logical-alias-routing-2026-11-11 owns exact baseline/reports/candidate/runners.
-format1/80805 REAPED PASS36.763s; focused1/3501 RUNNING. Expected423 focused/349 browser/12,322
-full. Frozen4,978-input manifestd4aa7bb4b03d6c3f4171e7770d593400cdb5fe4a510a45bd0142850131281ad1.
+format1/80805 REAPED PASS36.763s. focused1/3501 REAPED exit1/309.471s,423 cases/1 failure.
+The original unchanged worker test caught a PRODUCTION mapping error: a waiting routing result was
+mapped to successful unfinished work, allowing immediate rescheduling. Only the new adapter branch
+now carries Unavailable into the existing domain backoff owner. Pagination rules and tests unchanged.
+failed-candidate-1 preserves its exact source/manifest; focused1 preserves all reports. Read
+waiting-outcome-review.md. format2/49698 REAPED PASS34.951s; focused2/94364 RUNNING.
+Expected423 focused/349 browser/12,322 full. Frozen4,978-input manifest
+db4fcb130643e83f225f4520d5fec785290754318e95495d3580603db11e2f64.
 Do not edit candidate during the run. No browser/full acceptance for this increment yet.
 
 The existing binding resolver has a local logical overload. Its registration/source/alias checks
@@ -29,13 +35,14 @@ App and domain fixtures do not constitute native proof. Raw collector and Origin
 all54 PRD groups OPEN. Keys-only wake, bounded Client.rooms inventory and combined old-Company storage/
 new-Group native proof remain before activation. Existing registry already drains original borrowers.
 
-Canonical43028172483 jobs running at13:45; portable compiling application, Apple checking adapter.
+Canonical43028172483 portable10,170 accepted; audit39649 REAPED. Apple4,088 still pending.
+Application43031231253 remains running; inspect exact job state before any audit.
 Queue43022213294 FULL14,161 accepted:10,105 portable+4,056 Apple; audit6513 REAPED,16 Swift/unsigned host. Reference43018627791 FULL14,089, content43011629455 FULL13,912 and reconciliation
 43015359541 FULL14,002 accepted. Preserve all historical failures and content Apple cancellation/
 targeted retry; no redispatch. Hosted control checks do not prove native SDK8 Apple execution.
 
-Phone10187 REAPED timeout124 at13:20:31UTC/20.020s, original-application-turn workspace's
-phone-connect-1320.json. Next retry no earlier13:51UTC. Validated release89 SDK6 awaits install;
+Phone99606 REAPED timeout124 at13:51:10UTC/20.020s; current workspace phone-connect-1351.json.
+Next retry no earlier14:22UTC. Validated release89 SDK6 awaits install;
 no attempt/result. Notify first, explicit serial/install-only, never launch/drive phone UI.
 No emulator. Preserve eight original intents, Draft66, keys/stores/SDK assets, protected inspector
 gradlew.bat and live90163c3/schema116.4 Group OFF. No generic Starter delta. Continue and push every commit.
