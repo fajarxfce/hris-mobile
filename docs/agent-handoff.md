@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 00:25 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 00:35 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Foreground incoming startup accepted
 
@@ -116,21 +116,31 @@ Server push locators are physical matrixRoomId/matrixEventId. Logical UUID listi
 feed. The existing admitted rooms.boundRoom lookup can locate an unknown physical room; preserve
 the room-first, sorted-account, native-session guard order of ReadNativeCollaborationSpaceRoom.
 
-Group physical-room resolution is under active validation: eleven source/test files in
-.work/space-physical-room-2026-11-11. Full-1/session43391 REAPED failed after872.418s with
-8,743 inputs unchanged: all205domain+51data cases passed; two HTTP test assumptions failed
-(POST read incorrectly expected idempotency and domain validation expected400 instead of422),
-and three worker fixture calls still passed UUID instead of the typed query. Only those three
-test files changed afterward; product code and all256 domain/data control inputs are unchanged.
-Format2/39912 REAPED /20.432s. Final-1/session71990 RUNNING: HTTP/contract/full worker and static
-checks; retained exact controls are recorded in final-controls.json. Do not rerun the14-minute
-database suite unless relevant inputs change or a new concern requires it.
-ReadNativeCollaborationSpaceRoom now accepts a typed logical/physical query; immutable selection
-precedes its room guard, sorted account guards and native lock. Exact binding readback and
-current denial fence both success and failed/missing lookup. New native POST /spaces/{spaceId}/
-rooms/read returns the existing metadata view. Eight storage/admission cases plus one actual
-HTTP isolation case, contract and prior readers are included. No SDK/network I/O in this read.
-Do not edit Group code during its gate. No Group source commit or deployment yet.
+Group physical-room resolution is ACCEPTED: eleven source/test files, eight new admission/storage
+cases and one new native HTTP case. Total478 passed =222 fresh final HTTP/worker +256 exact
+unchanged controls (205 domain/51data); one unchanged opt-in real elapsed-hour report-retention
+case was skipped. All30 prior native room cases remain. Final-1/session71990 REAPED /561.679s,
+8,743 inputs, manifest9a8d6b737051eaa6633840ce5bfc53909d2b10883c4b6cd7f463e3da71682abe;
+report manifestcd38146ec8e493c0bdfe4f8c904ea1202a4e1e0832e7f9555fb5151a5b40a90a.
+Full-1/session43391 is preserved as FAILED /872.418s: two HTTP assertion errors and old UUID
+worker fixture calls. Only three test files changed afterward; all product source and 256
+passing domain/data controls stayed exact. No rerun of the unchanged 14-minute control suite.
+The native POST /spaces/{spaceId}/rooms/read shares ReadNativeCollaborationSpaceRoom and its typed
+logical/physical query. Immutable selection precedes room/account/native guard order; exact
+binding readback and current denial fence either acquisition result. It returns published SPACE
+or retained LEGACY metadata, not an invented unpublished original. No schema, shared use-case DI,
+SDK/provider I/O or deployment change. Contract: collaboration-space-physical-room.md (Mobile),
+collaboration/space-physical-room.md (Group); shared measurement filename
+collaboration-space-physical-room-2026-11-11.json. Private Group space-physical-room-2026-11-11
+owns both source snapshots, failures and reports. publish.py EXECUTED; never repeat it.
+
+SDK8 packaging session77349 is RUNNING in private Mobile sdk-incoming-hints-ci-2026-11-11.
+Group compiler is reaped; only this packaging compiler is active. Do not mutate staged wrapper,
+SDK source, build manifest or packaging tools during it. No consumer/version/publication change.
+Next inspect the actual compiled JVM APIs/AAR pair, then validate the application consumer and
+native runtime before publication. Private consumer-notes.md records unresolved atomic cursor/
+physical-demand ownership, key-only pending retries, inventory gaps and original Company routing;
+it is investigation, not implemented consumer behavior. All54 PRD groups remain OPEN.
 
 Phone ADB93824 timed out/reaped; validated release 89 is still uninstalled. Existing availability
 question remains pending. Notify before install-only; do not launch, reset or drive phone UI.
