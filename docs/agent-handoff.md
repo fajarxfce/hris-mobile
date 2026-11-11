@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 11 November 2026, 23:32 UTC. The user authorized implementation through the full PRD, pushes after every commit
+Updated 11 November 2026, 23:51 UTC. The user authorized implementation through the full PRD, pushes after every commit
 and phone updates. **All54 acceptance groups remain OPEN.** Do not stop after one gate. No subagents.
 Read AGENTS.md and architecture. Datasource raw I/O; repositories map their own datasource results;
 usecases coordinate repositories/policies, never other usecases; ViewModels own screen state.
@@ -8,8 +8,9 @@ usecases coordinate repositories/policies, never other usecases; ViewModels own 
 ## Active Mobile validation
 
 Workspace `.work/original-local-key-page-content-2026-11-11`, baselineadf06b0e/13,300 cases.
-Eight uncommitted source files frozen:4 Kotlin historical-page acquisition/policy/test files and
-4 generic Karma build/reporting files.5,050 inputs, SHA690773f7f9678db804834d3eca55939d05cf61e7ffc7d918fa71dbfd9fc11b4b.
+Nine uncommitted source files frozen:4 Kotlin historical-page acquisition/policy/test files,
+4 generic Karma build/reporting files and one existing AppFlow test synchronization fix.
+5,050 inputs, SHAcf23e510352c001c8d6c008550576f2e7a00fc0920ba22b50d0648f30084cc8a.
 format3/41168 REAPED PASS69.422s. focused3 PASS128 with5,050 unchanged inputs; original session67474
 was disconnected by the server restart. Its Python runner exited while Gradle/Xvfb survived.
 Observer3250 REAPED captured actual wrapper exit0 at23:03:20UTC; reconstruction58998 REAPED retained
@@ -23,14 +24,21 @@ This was an introduced integration regression. All failed reports and failed-ful
 Corrected convention Sync-merges module fragments first and shared reporter last, preserving settings.
 format4/26815 REAPED PASS89.16s; wiring1/46792 REAPED PASS55.866s including root Python/Node checks.
 Generated data/domain config files exactly match module/shared source bytes. No test body or timeout
-value changed. Corrected manifest690773f7 has the same5,050 inputs/8 changed files. full3/87890 now
-RUNNING(started23:28UTC), expected13,358. Detached runner survives monitoring restarts. Read its
-result.json before repeating work. It forces all JVM tests and3 browsers because build logic changed.
+value changed. Corrected manifest690773f7 had the same5,050 inputs/8 changed files. full3/87890
+REAPED FAILED861.499s/850 cases/one failure: AppFlow clicked Refresh after HTTP completion,
+before its owning acquisition enabled the button. Failure screenshot still shows the old document;
+the denial branch never appeared. Same test passed full2; adjacent test already synchronizes on
+enabled Refresh. Both clicks now wait for that semantic state, preserving the15s bound and all
+denial/retry/cancellation assertions. No production UI changed. failed-full-candidate-3 and
+ui-readiness-investigation retain all evidence. format5/76253 REAPED PASS36.71s; ui-readiness1/28849
+REAPED PASS79.041s/two cases. full4/21474 RUNNING since23:50:58UTC, rerunning all JVM tests and
+3 browsers on the final source. Expected13,358; no successful full run on this source yet.
+Detached runner survives monitoring restarts; read result.json before repeating work.
 
-After success: run accept-focused-from-full.py full-3 (exact254 selected-class evidence from this
-same unfiltered run, not another claimed execution), then accept-full.py full-3. The latter also
+After success: run accept-focused-from-full.py full-4 (exact254 selected-class evidence from this
+same unfiltered run, not another claimed execution), then accept-full.py full-4. The latter also
 checks prepareKarmaConfig appears before each browser task and generated fragments match sources.
-Publish.py/write-accepted-handoff.py are updated for both failed runs, final derived evidence and
+Publish.py/write-accepted-handoff.py are updated for all three failed runs, final derived evidence and
 old restarted execution. Do not run another focused cycle just to duplicate the full evidence.
 Then commit/push/dispatch ONCE. No second compiler or emulator.
 
@@ -68,9 +76,9 @@ IDs plus captured-reference assertion. Guards/hashes in next-original-key-comple
 Read its review. Guarded prepare/configure scripts PREPARED NOT EXECUTED. Old generators/snippets
 are STALE after page-type/bounds fixes. Nextworkspace original-key-reference-completion-2026-11-11:
 5,056 inputs,13,422local,166+164focused,16,028hosted. Preserve Karma source fingerprints/full refresh.
-The partial Space draft now has3 unreviewed/untested files in next-space-key-page-draft (policy,
-page-bound batch, reader). Read next-space-key-page-projection-review.md; preserve historical provider
-identity and no transport polling. No tests/DI/acquisition/completion added for it yet.
+The partial Space draft now has5 unreviewed/untested files in next-space-key-page-draft (policy,
+page-bound batch, reader, fixture and19 reader cases). Read next-space-key-page-projection-review.md;
+preserve historical provider identity and no transport polling. No DI/acquisition/completion yet.
 Then Space/Original-alias content, bounded global recovery, unavailable-source classification,
 primary EOF demotion/request/wake, loss-aware key listener ownership/receipts and64-room liveness.
 
