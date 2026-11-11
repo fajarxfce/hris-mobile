@@ -1,6 +1,75 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 17:58 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 18:02 UTC. This opening owns current work; older sections are historical.
+
+## Space key-history applied; focused validation running
+
+Original key-history source560010f1d03bd4cbcbe70d293cf2020514f135a0 and Group docsad99fc14
+PUSHED;34116/17939 REAPED. Local12,796 accepted (full88620/audit75073 reaped),200 focused.
+Hosted43073411916 dispatched ONCE17:59:23UTC on validation/original-key-history-20261111;
+5154 REAPED, expected15,100=10,774 portable+4,326 Apple. Fairness43069542685 remains attached,
+expected15,028. Inventory43066807577 portable10,718 accepted/Apple pending. Locator43062334365
+now FULL14,942: Apple32208 REAPED4,276, prior portable10,666. Public evidence updated.
+Scheduling43057055642 FULL14,849, retention43053179213 FULL14,719, progress43049052938
+FULL14,584, owned43044913726 FULL14,527, raw43040652714 FULL14,458, alias43037578170
+FULL14,434. Apple includes16 Swift/unsigned-host cases, not native SDK8. Prior application
+43031231253 remains historically incomplete. Keep attached runs; no unchanged-source redispatch.
+
+Current5-file Space key-history change APPLIED, NOT ACCEPTED.3 new+2 existing Kotlin.
+Previous prepare/configure scripts HAVE EXECUTED18:00:04UTC. Workspace
+.work/space-key-history-2026-11-11 owns baseline, candidate and reports.
+format1/82577 REAPED PASS36.621s. State was recorded before freeze; no procedural failure.
+focused1/58357 RUNNING, expected125. Browser123/full12,848 NOT RUN. Frozen5,020-input
+manifest97f198a6640930c26932d777829e2d3a3e5b8c55e11a69b6d381945eb9ccdf67.
+Do not change source during checks. Hosted scripts PREPARED NOT DISPATCHED:
+validation/space-key-history-20261111,15,178=10,826 portable+4,352 Apple.
+Publisher/contract/accepted-handoff not prepared; no next implementation draft yet.
+
+Typed Space binding resolution preserves its conversation and historical device, including when
+its physical room is a LEGACY alias. Complete Company provenance remains in the binding; no
+namespace redirection or substitution of current Original/Group device. Current source/registered
+Original and directory/session/native checks fence every suspension, with final registration
+readback even for MetadataUnavailable. One5-second local deadline; no primary queue read,
+Company fallback, UC-to-UC, history write, key/provider request or new collector. Cached foreign-
+Company alias metadata remains a local fact, not native content authority.26 new common cases
+cover both origins, old devices, malformed/foreign metadata, registration/source/account changes,
+denial, timeout and cancellation. Original key-loader24, Published incoming-loader14, actual
+encrypted binding26/Original-metadata18/locator15 and appBindings2 remain controls.
+
+Next: reap58357, inspect any failure without weakening assertions; browser, exact248 focused,
+full12,848 and source/case/dependency acceptance. Prepare actual contract/publisher/handoff,
+commit/push and dispatch once. Then settle and implement durable unresolved-content recovery.
+Original stage's publisher/writer/prepare/configure HAVE EXECUTED and must not be rerun.
+Its initial freeze bookkeeping failure remains recorded; it made no source change, and the
+runner's independently captured initial manifest matched the corrected candidate exactly.
+
+Read next-keys-pass-ledger-review.md, including its final ownership and pending-outcome sections.
+Key signals can arrive offline before any real sync position: never invent one. A stable
+account-owned Company/Space pass with current source captured per operation may avoid stranded
+old-native-store rows; source-bound ledger is only provisional. Settle lane bounds/retirement/
+unavailable-lane wakes before changing codec part bounds. Active/requested cursors and retry
+must preserve progress; missing metadata remains unresolved while later locators get service.
+Demotion+wake must be one exact transaction without dropping refs or creating another64-room
+queue. retryRequired/keys_pending do not prove missing keys: NotDecrypted includes malformed
+ciphertext, and Unsupported/AwaitRedaction/MissingOriginal have different recovery triggers.
+Review broader unresolved-content service and sole pending-seek ownership before activation.
+
+SDK8 already exports suspend subscribeToRoomKeyChanges and TaskHandle.isFinished. No new patch
+is needed. Read next-keys-signal-review.md: attach once to AndroidCollaborationRuntimeLease,
+not sync connection creation/worker adoption. Late acquisition and close must keep parent/store
+owned until task drainage; review generic8-child capacity before adding a permanent child.
+Repeated equal room-key payloads may represent distinct keys, so payload-only distinctUntilChanged
+is unsafe. Conflation/gaps need reconciliation; failed retention is not acknowledgement. These
+are inspected constraints, not implemented app behavior. Full blocked64-room drainage, native
+allocation/performance, authoritative absence, native SDK8 Apple and combined Company/native
+proof remain. Raw collector/Original producer OFF; all54 PRD groups OPEN. No Starter/live change.
+
+Phone64143 REAPED timeout17:58:11UTC/20.019s, no install attempted. Evidence in previous
+Original key-history workspace/phone-connect-1758.json; retry no earlier18:29UTC. Release89 SDK6
+awaits install. Notify first, explicit serial/install-only, never drive UI. No emulator. Preserve
+original intents, Draft66, keys/stores/SDK assets, inspector gradlew.bat and live90163c3/schema116.4
+Group OFF. Continue long run and push every commit.
+
 
 ## Original key-history accepted; continue Space history without namespace redirection
 
