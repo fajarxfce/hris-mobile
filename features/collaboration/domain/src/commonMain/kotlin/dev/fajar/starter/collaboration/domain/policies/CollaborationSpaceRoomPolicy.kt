@@ -36,11 +36,13 @@ fun validCollaborationSpaceRoomIdentity(serverName: String, roomId: String): Boo
 fun validCollaborationSpacePublishedRoom(
     room: CollaborationSpacePublishedRoom,
     conversationCreatedAt: Instant,
-): Boolean {
+): Boolean = validCollaborationSpacePublishedRoom(room) && room.publishedAt >= conversationCreatedAt
+
+/** Publication shape before real conversation metadata is acquired. */
+fun validCollaborationSpacePublishedRoom(room: CollaborationSpacePublishedRoom): Boolean {
     if (
         !validCollaborationSpaceRoomIdentity(room.serverName, room.roomId) ||
-            !spaceRoomTime(room.publishedAt) ||
-            room.publishedAt < conversationCreatedAt
+            !spaceRoomTime(room.publishedAt)
     )
         return false
     val original = room.original
@@ -58,10 +60,14 @@ fun validCollaborationSpacePublishedRoom(
 fun validCollaborationSpaceRoomStatus(
     status: CollaborationSpaceRoomStatus,
     conversation: CollaborationSpaceConversation,
-): Boolean {
+): Boolean =
+    status.attempt.accountId in listOf(conversation.firstAccountId, conversation.secondAccountId) &&
+        validCollaborationSpaceRoomStatus(status)
+
+/** Status shape; the owning binding operation separately admits its actual participants. */
+fun validCollaborationSpaceRoomStatus(status: CollaborationSpaceRoomStatus): Boolean {
     if (
-        status.attempt.accountId !in
-            listOf(conversation.firstAccountId, conversation.secondAccountId) ||
+        !validCollaborationMessageId(status.attempt.accountId) ||
             status.attempt.revision !in 0..999999 ||
             status.attempts !in 0..8 ||
             !listOfNotNull(

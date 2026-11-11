@@ -29,8 +29,8 @@ The 4,897-input source manifest is b271c2e8fec511dc14f8f09b7c09d4c6a7efd169e66de
 Proof APK: 151,626,942 bytes; SHA-256 0a776eac82280283e872e7214e07877be02d5872e4e7a0553ec0368693afb829.
 This increment has no new native SDK execution, Apple execution or phone installation.
 
-Before starting serial raw collection, complete finite remote published metadata acquisition,
-explicit original Company routing, bounded native room inventory and keys-only recovery. Logical/
+Finite remote published metadata acquisition now has its owning consumer. Before starting serial
+raw collection, complete original Company routing, bounded native room inventory and keys-only recovery. Logical/
 scan write confirmation and the Group original physical metadata route are now accepted in their
 linked increments. An unpublished Company original is not a Space conversation. The app raw
 collector stays inactive; all54 PRD groups remain open. No generic Starter or live deployment
@@ -40,4 +40,7 @@ Evidence: [measurement](measurements/collaboration-space-physical-worker-2026-11
 
 [Logical and scan write confirmation](collaboration-space-incoming-write-confirmation.md) now preserves independent producer progress
 without false conflicts or durable backoff for normal queue contention. Raw activation still
-requires the remaining metadata, original routing, inventory and keys-only consumers.
+requires original routing, inventory and keys-only consumers.
+
+[Physical metadata acquisition](collaboration-space-physical-metadata-consumer.md) resolves missing published bindings with real
+conversation metadata and exact retained evidence, then converts freshly loaded demand.

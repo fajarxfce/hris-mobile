@@ -7,6 +7,8 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
+import kotlin.time.*
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
 
 /** The incoming worker resolves owned bindings locally before any remote metadata acquisition. */
@@ -19,6 +21,12 @@ class ResolveCollaborationSpaceIncomingBinding(
     private val sessions: SessionRepository,
     private val server: IdentityServer,
     private val build: AppBuild,
+    private val physicalRooms: CollaborationSpacePhysicalRoomRepository,
+    private val conversations: CollaborationSpaceConversationRepository,
+    private val metadata: CollaborationSpaceConversationMetadataRepository,
+    private val originals: CollaborationSpaceOriginalConversationRepository,
+    private val clock: Clock,
+    private val timeSource: TimeSource = TimeSource.Monotonic,
 ) {
     /** The one incoming worker serializes conversions and logical progression/completion. */
     suspend operator fun invoke(
@@ -32,69 +40,87 @@ class ResolveCollaborationSpaceIncomingBinding(
                 !validCollaborationMessageId(runtime.operationId)
         )
             return changed(FailureKind.Validation)
-        val access = runtime.owner.localDirectoryAccess()
-        return withTimeoutOrNull(5_000) {
-            admission(runtime).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
-            val source = sync.incomingSource(runtime)
-            if (
-                source == null ||
-                    !validCollaborationSpaceIncomingSource(source) ||
-                    source.storeId != captured.sourceId
-            )
-                return@withTimeoutOrNull changed(FailureKind.Unavailable)
-            val loaded = demands.current(access)
-            val observed = (loaded as? AppResult.Success)?.value
-            val snapshot = observed?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
-            admission(runtime, source).let {
-                if (it is AppResult.Failed) return@withTimeoutOrNull it
-            }
-            if (loaded is AppResult.Failed) return@withTimeoutOrNull loaded
-            if (observed == null)
-                return@withTimeoutOrNull AppResult.Success(
-                    CollaborationSpaceIncomingBindingResolution.Obsolete
-                )
-            if (
-                snapshot == null ||
-                    !validCollaborationMessageId(snapshot.generation) ||
-                    !validCollaborationSpaceIncomingDemand(access, snapshot.demand)
-            )
-                return@withTimeoutOrNull changed()
-            val current =
-                snapshot.demand.physicalRooms.singleOrNull {
-                    it.sourceId == captured.sourceId && it.roomId == captured.roomId
+        val local =
+            withTimeoutOrNull(5_000) { resolveLocal(runtime, captured) }
+                ?: changed(FailureKind.Timeout)
+        return when (local) {
+            is AppResult.Failed -> local
+            is AppResult.Success ->
+                when (val result = local.value) {
+                    is LocalResolution.Completed -> AppResult.Success(result.value)
+                    is LocalResolution.Missing ->
+                        MetadataAcquisition(runtime, captured, result).run()
                 }
-            if (current == null || current.generation != captured.generation)
-                return@withTimeoutOrNull AppResult.Success(
-                    CollaborationSpaceIncomingBindingResolution.Obsolete
-                )
-            if (current != captured || snapshot.demand.sources.none { it.source == source })
-                return@withTimeoutOrNull changed()
-            val local = localBinding(runtime, source, captured.roomId)
-            if (local is AppResult.Failed) return@withTimeoutOrNull local
-            val binding =
-                (local as AppResult.Success).value
-                    ?: return@withTimeoutOrNull AppResult.Success(
-                        CollaborationSpaceIncomingBindingResolution.BindingMissing
-                    )
-            val planned =
-                resolveCollaborationSpaceIncomingPhysicalRoom(
-                    snapshot.demand,
-                    captured,
-                    binding.conversation.id,
-                )
-            if (planned is AppResult.Failed) return@withTimeoutOrNull planned
-            val next = (planned as AppResult.Success).value
-            if (next.demand == snapshot.demand)
-                return@withTimeoutOrNull AppResult.Success(next.outcome)
-            retain(runtime, source, captured, snapshot, next)
-        } ?: changed(FailureKind.Timeout)
+        }
     }
 
-    private suspend fun localBinding(
+    /**
+     * A missing local binding carries only the exact source and registered provider into live work.
+     */
+    private sealed interface LocalResolution {
+        data class Completed(val value: CollaborationSpaceIncomingBindingResolution) :
+            LocalResolution
+
+        data class Missing(
+            val source: CollaborationSpaceIncomingSource,
+            val provider: CollaborationSpaceIdentity,
+        ) : LocalResolution
+    }
+
+    private suspend fun resolveLocal(
+        runtime: CollaborationSpaceRuntimeReady,
+        captured: CollaborationSpaceIncomingPhysicalRoomDemand,
+    ): AppResult<LocalResolution> {
+        val access = runtime.owner.localDirectoryAccess()
+        admission(runtime).let { if (it is AppResult.Failed) return it }
+        val source = sync.incomingSource(runtime)
+        if (
+            source == null ||
+                !validCollaborationSpaceIncomingSource(source) ||
+                source.storeId != captured.sourceId
+        )
+            return changed(FailureKind.Unavailable)
+        val loaded = demands.current(access)
+        val snapshot =
+            (loaded as? AppResult.Success)
+                ?.value
+                ?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
+        admission(runtime, source).let { if (it is AppResult.Failed) return it }
+        if (loaded is AppResult.Failed) return loaded
+        if ((loaded as AppResult.Success).value != null && snapshot == null) return changed()
+        val selected =
+            selectCollaborationSpaceIncomingPhysicalSnapshot(access, source, captured, snapshot)
+        if (selected is AppResult.Failed) return selected
+        val current =
+            (selected as AppResult.Success).value
+                ?: return AppResult.Success(
+                    LocalResolution.Completed(CollaborationSpaceIncomingBindingResolution.Obsolete)
+                )
+        val registered = readRegistration(runtime, source)
+        if (registered is AppResult.Failed) return registered
+        val provider = (registered as AppResult.Success).value.command.provider
+        val found = bindings.findByRoom(access, provider.serverName, captured.roomId)
+        admission(runtime, source).let { if (it is AppResult.Failed) return it }
+        if (found is AppResult.Failed) return found
+        val binding =
+            (found as AppResult.Success).value
+                ?: return AppResult.Success(LocalResolution.Missing(source, provider))
+        if (
+            !validCollaborationSpaceRoomBinding(access, binding) ||
+                binding.room.serverName != provider.serverName ||
+                binding.room.roomId != captured.roomId
+        )
+            return changed()
+        return when (val result = convert(runtime, source, captured, current, binding)) {
+            is AppResult.Failed -> result
+            is AppResult.Success -> AppResult.Success(LocalResolution.Completed(result.value))
+        }
+    }
+
+    private suspend fun readRegistration(
         runtime: CollaborationSpaceRuntimeReady,
         source: CollaborationSpaceIncomingSource,
-        roomId: String,
-    ): AppResult<CollaborationSpaceRoomBinding?> {
+    ): AppResult<CollaborationSpaceRegistrationRecord> {
         val access = runtime.owner.localDirectoryAccess()
         val loaded = registrations.current(access, runtime.owner.parent.nativeSessionId)
         admission(runtime, source).let { if (it is AppResult.Failed) return it }
@@ -112,19 +138,187 @@ class ResolveCollaborationSpaceIncomingBinding(
                 registration.command.provider.matrixUserId != source.matrixUserId
         )
             return changed()
-        val provider = registration.command.provider
-        val found = bindings.findByRoom(access, provider.serverName, roomId)
-        admission(runtime, source).let { if (it is AppResult.Failed) return it }
-        if (found is AppResult.Failed) return found
-        val binding = (found as AppResult.Success).value
-        if (
-            binding != null &&
-                (!validCollaborationSpaceRoomBinding(access, binding) ||
-                    binding.room.serverName != provider.serverName ||
-                    binding.room.roomId != roomId)
-        )
-            return changed()
-        return AppResult.Success(binding)
+        return AppResult.Success(registration)
+    }
+
+    private suspend fun convert(
+        runtime: CollaborationSpaceRuntimeReady,
+        source: CollaborationSpaceIncomingSource,
+        captured: CollaborationSpaceIncomingPhysicalRoomDemand,
+        snapshot: CollaborationSpaceIncomingDemandSnapshot,
+        binding: CollaborationSpaceRoomBinding,
+    ): AppResult<CollaborationSpaceIncomingBindingResolution> {
+        val planned =
+            resolveCollaborationSpaceIncomingPhysicalRoom(
+                snapshot.demand,
+                captured,
+                binding.conversation.id,
+            )
+        if (planned is AppResult.Failed) return planned
+        val next = (planned as AppResult.Success).value
+        return if (next.demand == snapshot.demand) AppResult.Success(next.outcome)
+        else retain(runtime, source, captured, snapshot, next)
+    }
+
+    /** A live metadata operation owns its deadline and remembered denial for one invocation. */
+    private inner class MetadataAcquisition(
+        val runtime: CollaborationSpaceRuntimeReady,
+        val captured: CollaborationSpaceIncomingPhysicalRoomDemand,
+        val missing: LocalResolution.Missing,
+    ) {
+        val owner = runtime.owner
+        val access = owner.localDirectoryAccess()
+        val source = missing.source
+        val requestedAt = clock.now()
+        val started = timeSource.markNow()
+        var deadline: Instant? = null
+        var denial: Failure? = null
+
+        fun failed(failure: Failure) =
+            AppResult.Failed(retainCollaborationSpaceConversationFailure(denial, failure))
+
+        suspend fun run(): AppResult<CollaborationSpaceIncomingBindingResolution> =
+            withTimeoutOrNull(15_000) { acquire() } ?: failed(changed(FailureKind.Timeout).failure)
+
+        private suspend fun gate(): AppResult<Unit> {
+            val owned = admission(runtime, source)
+            if (owned is AppResult.Failed) return failed(owned.failure)
+            val parent =
+                sessions.captureCollaborationSpaceParent(owner.parent, server, build, clock)
+            if (parent is AppResult.Failed) return failed(parent.failure)
+            val currentDeadline =
+                Instant.fromEpochMilliseconds(
+                    (parent as AppResult.Success).value.binding.expiresAtEpochMillis
+                )
+            deadline = deadline?.let { minOf(it, currentDeadline) } ?: currentDeadline
+            val registration = readRegistration(runtime, source)
+            if (registration is AppResult.Failed) return failed(registration.failure)
+            if ((registration as AppResult.Success).value.command.provider != missing.provider)
+                return failed(changed().failure)
+            val now = clock.now()
+            if (
+                now < requestedAt ||
+                    now >= requireNotNull(deadline) ||
+                    now - requestedAt >= 15.seconds ||
+                    started.elapsedNow() >=
+                        minOf(15.seconds, requireNotNull(deadline) - requestedAt)
+            )
+                return failed(
+                    collaborationRecoveryFailure(
+                            "client.collaboration_revalidation_required",
+                            FailureKind.Unavailable,
+                        )
+                        .failure
+                )
+            return denial?.let { AppResult.Failed(it) } ?: AppResult.Success(Unit)
+        }
+
+        private suspend fun rejected(failure: Failure): AppResult.Failed {
+            denial = retainCollaborationSpaceConversationFailure(denial, failure)
+            if (collaborationSpaceConversationResponseClosesDirectory(failure)) {
+                withContext(NonCancellable) {
+                    withTimeoutOrNull(2_000) { directory.restrict(access, failure) }
+                }
+            }
+            currentCoroutineContext().ensureActive()
+            val current = gate()
+            return if (current is AppResult.Failed) current else failed(failure)
+        }
+
+        private suspend fun acquire(): AppResult<CollaborationSpaceIncomingBindingResolution> {
+            gate().let { if (it is AppResult.Failed) return it }
+            val found = physicalRooms.published(owner, missing.provider.serverName, captured.roomId)
+            if (found is AppResult.Failed) {
+                val checked = rejected(found.failure)
+                return if (
+                    checked.failure.kind == FailureKind.Unexpected &&
+                        checked.failure.code == "collaboration_conversation_not_found"
+                )
+                    AppResult.Success(CollaborationSpaceIncomingBindingResolution.BindingMissing)
+                else checked
+            }
+            gate().let { if (it is AppResult.Failed) return it }
+            val physical = (found as AppResult.Success).value
+            if (
+                !validCollaborationSpacePhysicalRoomView(
+                    physical,
+                    owner,
+                    missing.provider.serverName,
+                    captured.roomId,
+                )
+            )
+                return changed()
+            val received = conversations.get(owner, physical.conversationId)
+            if (received is AppResult.Failed) return rejected(received.failure)
+            gate().let { if (it is AppResult.Failed) return it }
+            val conversation = (received as AppResult.Success).value
+            val view =
+                CollaborationSpaceRoomView(conversation, physical.provisioning, physical.room)
+            if (
+                conversation.owner != owner ||
+                    conversation.id != physical.conversationId ||
+                    !validCollaborationSpaceRoomView(view)
+            )
+                return changed()
+            val original =
+                if (physical.room.origin == CollaborationSpaceRoomOrigin.LEGACY) {
+                    val position = requireNotNull(physical.room.original).position
+                    val read = originals.get(owner, position)
+                    if (read is AppResult.Failed) return rejected(read.failure)
+                    gate().let { if (it is AppResult.Failed) return it }
+                    val value = (read as AppResult.Success).value
+                    if (
+                        !validCollaborationSpaceOriginalConversation(value, owner, position) ||
+                            value.room == null
+                    )
+                        return changed()
+                    CollaborationSpaceOriginalRoomMetadata(value.conversation, value.room)
+                } else null
+            val binding =
+                CollaborationSpaceRoomBinding(conversation.localMetadata(), physical.room, original)
+            if (!validCollaborationSpaceRoomBinding(access, binding)) return changed()
+            val existing = metadata.getById(access, conversation.id)
+            gate().let { if (it is AppResult.Failed) return it }
+            if (existing is AppResult.Failed) return failed(existing.failure)
+            val previous = (existing as AppResult.Success).value
+            if (previous != null && previous != binding.conversation) return changed()
+            if (previous == null) {
+                val saved = metadata.retain(access, conversation)
+                gate().let { if (it is AppResult.Failed) return it }
+                val confirmed = metadata.getById(access, conversation.id)
+                gate().let { if (it is AppResult.Failed) return it }
+                if (confirmed is AppResult.Failed) return failed(confirmed.failure)
+                if ((confirmed as AppResult.Success).value != binding.conversation)
+                    return if (saved is AppResult.Failed) failed(saved.failure) else changed()
+            }
+            val saved = bindings.retain(access, binding)
+            gate().let { if (it is AppResult.Failed) return it }
+            val confirmed = bindings.getByConversation(access, conversation.id)
+            gate().let { if (it is AppResult.Failed) return it }
+            if (confirmed is AppResult.Failed) return failed(confirmed.failure)
+            if ((confirmed as AppResult.Success).value != binding)
+                return if (saved is AppResult.Failed) failed(saved.failure) else changed()
+            // Network reads may span many producer commits. Convert from a fresh owned snapshot.
+            val loaded = demands.current(access)
+            val snapshot =
+                (loaded as? AppResult.Success)
+                    ?.value
+                    ?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
+            gate().let { if (it is AppResult.Failed) return it }
+            if (loaded is AppResult.Failed) return failed(loaded.failure)
+            if ((loaded as AppResult.Success).value != null && snapshot == null) return changed()
+            val selected =
+                selectCollaborationSpaceIncomingPhysicalSnapshot(access, source, captured, snapshot)
+            if (selected is AppResult.Failed) return selected
+            val current =
+                (selected as AppResult.Success).value
+                    ?: return AppResult.Success(
+                        CollaborationSpaceIncomingBindingResolution.Obsolete
+                    )
+            val converted = convert(runtime, source, captured, current, binding)
+            gate().let { if (it is AppResult.Failed) return it }
+            return converted
+        }
     }
 
     private suspend fun retain(

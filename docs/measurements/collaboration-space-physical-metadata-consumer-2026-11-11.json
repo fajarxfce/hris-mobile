@@ -1,0 +1,99 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "840d115247b2da417014636529040b80cca38144",
+  "sourceFiles": 4912,
+  "changedSourceFiles": 20,
+  "sourceManifestSha256": "5efd5641392034856f337d1a0fa161dd056c8db7ec129d449635f1ed18aa7a97",
+  "focused": {
+    "tests": 1057,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused6",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 11499,
+    "fresh": {
+      "tests": 9461,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 686.211,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151643049,
+    "sha256": "81ee56188786b235860c4bc86af0baebe07acff0b93db6337b38e0c0caa32302"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "localBudgetMillis": 5000,
+  "metadataBudgetMillis": 15000,
+  "oneInvocationOwnsDeadlineAndDenial": true,
+  "publishedLookupThenRealConversation": true,
+  "publishedLegacyRequiresExactOriginal": true,
+  "localBindingHasNoCredentialAgeLimit": true,
+  "sourceAndRegistrationRecheckedAroundIo": true,
+  "canonicalAndBindingReadbackRequired": true,
+  "postNetworkConversionReloadsDemand": true,
+  "knownMissingPublicationRetainsPhysicalWork": true,
+  "originalPhysicalAdapterHasNoUnconsumedFallback": true,
+  "newDomainCases": 25,
+  "newCommonTransportCases": 12,
+  "preservedFailedRuns": [
+    {
+      "run": "focused1",
+      "elapsedSeconds": 60.208,
+      "exitCode": 1,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "focused2",
+      "elapsedSeconds": 60.604,
+      "exitCode": 1,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "focused3",
+      "elapsedSeconds": 77.535,
+      "exitCode": 1,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "focused4",
+      "elapsedSeconds": 206.213,
+      "exitCode": 1,
+      "freshCounts": {
+        "tests": 495,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "portableCiSelectsPhysicalWorker": true,
+  "rawCollectorEnabled": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true
+}

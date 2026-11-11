@@ -76,7 +76,10 @@ class ResolveCollaborationSpaceIncomingBindingTest {
         )
         assertEquals(before, f.request.snapshot)
         assertEquals(0, f.request.writes)
-        assertEquals(listOf("demand", "registration", "binding"), f.base.calls)
+        assertEquals(listOf("demand", "registration", "binding"), f.base.calls.take(3))
+        assertEquals(listOf("physical"), f.remoteReads)
+        assertTrue(f.metadataWrites.isEmpty() && f.bindingWrites.isEmpty())
+        assertEquals(1, f.base.calls.count { it == "remote-physical" })
     }
 
     @Test

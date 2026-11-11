@@ -1,13 +1,18 @@
 # Architecture
 
+[Incoming physical metadata](collaboration-space-physical-metadata-consumer.md) resolves missing
+published bindings through one admitted operation, then confirms immutable facts and converts
+fresh source-owned demand. Original routing, inventory and keys-only recovery remain required.
+
 [Incoming write confirmation](collaboration-space-incoming-write-confirmation.md) uses exact task
 and scan evidence across concurrent producer writes. Known queue contention remains a short
-worker retry without persistent room backoff; remote metadata and raw activation remain next.
+worker retry without persistent room backoff. Raw activation awaits the remaining consumers.
 
 [Local physical room resolution](collaboration-space-physical-resolution.md) transfers exact
 physical work through owned bindings and fences source-bound logical reads. The [single incoming
 worker](collaboration-space-physical-worker.md) now selects one combined source-owned FIFO and
-retains physical deferral. Remote binding/inventory/key consumers and raw activation remain next.
+retains physical deferral. Published metadata now has its owning consumer; original routing,
+inventory, keys-only recovery and raw activation remain next.
 
 [Serial sync batch retention](collaboration-space-sync-batch-producer.md) commits exact response
 positions, physical room work and inventory loss together. Observation reads the existing native

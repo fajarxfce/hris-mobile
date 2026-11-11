@@ -852,6 +852,11 @@ class CollaborationDataModule {
         sessions: SessionRepository,
         server: IdentityServer,
         build: AppBuild,
+        physicalRooms: CollaborationSpacePhysicalRoomRepository,
+        conversations: CollaborationSpaceConversationRepository,
+        metadata: CollaborationSpaceConversationMetadataRepository,
+        originals: CollaborationSpaceOriginalConversationRepository,
+        clock: Clock,
     ) =
         ResolveCollaborationSpaceIncomingBinding(
             demands,
@@ -862,6 +867,11 @@ class CollaborationDataModule {
             sessions,
             server,
             build,
+            physicalRooms,
+            conversations,
+            metadata,
+            originals,
+            clock,
         )
 
     @Factory

@@ -12,6 +12,21 @@ import org.koin.core.annotation.*
 
 @Single
 class CollaborationSpaceRoomApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun readPhysical(
+        sessionId: String,
+        spaceId: String,
+        roomId: String,
+    ): CollaborationSpaceRoomViewDto =
+        client.requestJson(
+            "collaboration/spaces/${Uuid.parse(spaceId)}/rooms/read",
+            HttpMethod.Post,
+            maximumBytes = 8192,
+        ) {
+            forSession(sessionId, AuthenticationReplay.ReadOnlyPost)
+            contentType(ContentType.Application.Json)
+            setBody(CollaborationSpacePhysicalRoomReadDto(roomId))
+        }
+
     suspend fun fenceRequest(
         sessionId: String,
         spaceId: String,

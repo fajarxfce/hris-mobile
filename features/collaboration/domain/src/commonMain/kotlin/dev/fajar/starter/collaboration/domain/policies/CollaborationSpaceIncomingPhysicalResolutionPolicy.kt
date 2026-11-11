@@ -3,6 +3,35 @@ package dev.fajar.starter.collaboration.domain.policies
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.*
 
+/** Select the captured turn from a current owned snapshot; a newer turn remains untouched. */
+fun selectCollaborationSpaceIncomingPhysicalSnapshot(
+    access: CollaborationSpaceLocalAccess,
+    source: CollaborationSpaceIncomingSource,
+    captured: CollaborationSpaceIncomingPhysicalRoomDemand,
+    snapshot: CollaborationSpaceIncomingDemandSnapshot?,
+): AppResult<CollaborationSpaceIncomingDemandSnapshot?> {
+    if (
+        !validCollaborationSpaceIncomingSource(source) ||
+            !validCollaborationSpaceIncomingPhysicalRoom(captured) ||
+            captured.sourceId != source.storeId
+    )
+        return invalidPhysicalResolution()
+    if (snapshot == null) return AppResult.Success(null)
+    if (
+        !validCollaborationMessageId(snapshot.generation) ||
+            !validCollaborationSpaceIncomingDemand(access, snapshot.demand)
+    )
+        return invalidPhysicalResolution()
+    val current =
+        snapshot.demand.physicalRooms.singleOrNull {
+            it.sourceId == captured.sourceId && it.roomId == captured.roomId
+        }
+    if (current == null || current.generation != captured.generation) return AppResult.Success(null)
+    if (current != captured || snapshot.demand.sources.none { it.source == source })
+        return invalidPhysicalResolution()
+    return AppResult.Success(snapshot)
+}
+
 /** Transfer one exact physical turn without replacing unfinished work or source positions. */
 fun resolveCollaborationSpaceIncomingPhysicalRoom(
     observed: CollaborationSpaceIncomingDemand,

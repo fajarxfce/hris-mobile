@@ -12,7 +12,7 @@ fun CollaborationSpaceRoomViewDto.toSpaceRoomView(
     require(collaborationId(conversationId) == conversation.id)
     return CollaborationSpaceRoomView(
             conversation,
-            provisioning?.toSpaceRoomStatus(conversation),
+            provisioning?.toSpaceRoomStatus(conversation.owner.spaceId, conversation.id),
             room?.toSpacePublishedRoom(),
         )
         .also { require(validCollaborationSpaceRoomView(it)) }
@@ -36,11 +36,12 @@ fun CollaborationSpacePublishedRoomDto.toSpacePublishedRoom(): CollaborationSpac
         },
     )
 
-private fun CollaborationSpaceRoomStatusDto.toSpaceRoomStatus(
-    conversation: CollaborationSpaceConversation
+internal fun CollaborationSpaceRoomStatusDto.toSpaceRoomStatus(
+    expectedSpaceId: String,
+    expectedConversationId: String,
 ): CollaborationSpaceRoomStatus {
-    require(collaborationId(spaceId) == conversation.owner.spaceId)
-    require(collaborationId(conversationId) == conversation.id)
+    require(collaborationId(spaceId) == expectedSpaceId)
+    require(collaborationId(conversationId) == expectedConversationId)
     return CollaborationSpaceRoomStatus(
         CollaborationSpaceRoomAttempt(collaborationId(accountId), revision),
         CollaborationProvisioningState.valueOf(state),

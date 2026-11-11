@@ -1,58 +1,61 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 07:05 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 07:18 UTC. This opening section owns current work; older checkpoints below are historical.
 
-## Active physical metadata consumer — full validation running
+## Physical metadata accepted — continue original routing
 
-Mobile full1/session61670 owns the only local heavy slot. Twenty source/test/workflow files are
-FROZEN and uncommitted; do not edit until the run is reaped. The 4,912-input manifest is
+The 20-file Mobile increment is ACCEPTED. Full1/session61670 REAPED PASS686.211s; audit7157 REAPED
+ACCEPTED 11,499 cases =9,461 fresh +2,038 exact accepted unchanged controls, zero failures/errors/skips.
+All prior case IDs and reused dependency closures are verified. Focused6/session10115 PASS61.469s/562;
+browser1/session43852 PASS98.45s/495; combined focused audit accepts1,057. Format, architecture74,
+detekt, Android host/release compilation/lint, browser/Wasm, iOS metadata and proof APK assembly/unit
+checks passed. Source/library fingerprints stayed exact. The 4,912-input manifest is
 5efd5641392034856f337d1a0fa161dd056c8db7ec129d449635f1ed18aa7a97.
-Focused6/session10115 REAPED PASS61.469s/562; browser1/session43852 REAPED PASS98.45s/495.
-Focused audit ACCEPTED 1,057 cases with every prior selected case ID, source and library fingerprint
-verified. Expected full: 11,499 cases. New coverage: 25 domain +12 common transport cases.
+Proof APK151,643,049 bytes/SHA81ee56188786b235860c4bc86af0baebe07acff0b93db6337b38e0c0caa32302.
+No new native SDK execution, Apple acceptance, phone installation or live activation is claimed.
 
-Private Mobile .work/space-physical-metadata-consumer-2026-11-11 owns accepted source baseline
-840d115247b2da417014636529040b80cca38144, 1,287 baseline XMLs/11,413 cases, candidate1–5 archives,
-runners, audits and expected.json. Full acceptance is NOT complete. After full passes, run
-accept-full.py full1, review exact evidence, then execute the prepared publish.py once. It is
-NOT executed yet. Commit/push implementation, contracts and measurement; continue required consumers.
+The owning Resolve use case reads complete owned bindings locally without credential-age expiry.
+Only absence opens a separate fifteen-second metadata invocation with a deadline and remembered
+denial. Physical publication then actual conversation and published LEGACY original metadata are
+validated before exact immutable metadata/binding readback. A fresh demand snapshot protects later
+producer generations before conversion. The pure current-capture policy is shared by local and
+post-network paths. False/true writes without durable witnesses, failed cleanup, cancellation and
+source/registration/native replacement are tested. There is no per-batch transport/device-status
+poll or scheduling loop. Known missing publication retains physical work; raw collection stays OFF.
 
-The Resolve use case keeps a five-second local path and a separate fifteen-second live operation
-only for missing bindings. Its invocation owns the deadline and remembered denial; the existing
-pure physical policy selects exact current source/captured generation before and after metadata.
-Domain owns admission, real conversation and published LEGACY original checks, exact immutable
-retention/readback, then conversion from fresh demand. No fake metadata, per-batch transport/device
-status read or scheduling loop. Known missing publication retains physical work. The raw original
-physical API remains prepared without a fetch-and-discard fallback. Raw collection stays OFF.
+Private Mobile .work/space-physical-metadata-consumer-2026-11-11 owns source baseline840d115247b2da417014636529040b80cca38144,
+1,287 prior XML archives, candidate1–5, final20 files, runners/audits and full1/accepted-proof.apk.
+publish.py HAS EXECUTED; do not rerun or overwrite. Contracts: Mobile collaboration-space-physical-metadata-consumer.md
+and Group collaboration/space-physical-metadata-consumer.md. Shared measurement:
+collaboration-space-physical-metadata-consumer-2026-11-11.json. Earlier failures remain archived:
+LongMethod ownership, invalid shared error enum, and test-only cross-module nullable smart cast.
+Final common transport confirms HTTP404 uses Unexpected plus the exact missing-publication API code.
 
-Earlier failures are preserved: focused1/2 stopped at LongMethod; ownership was clarified without
-suppression or reduced checks. Focused3 then found nonexistent FailureKind.NotFound; shared HTTP404
-classification is Unexpected plus the exact API code, with a transport regression. Focused4 passed
-495 domain cases then found a test-only cross-module nullable smart cast; the same assertions now
-use assertNotNull. Focused5 REAPED PASS203.364s/562. Candidate6 adds only the CI coverage correction
-below and reran the final focused set. Failed/timed-out denial cleanup and true/false replies without
-durable witnesses are explicitly tested. All original test IDs remain.
+NEXT: capture this accepted baseline, then complete/apply original-target-draft. It contains16
+UNAPPLIED/UNVALIDATED proposals with base hashes: sealed Published/Original target, demand constructors,
+five pure policies, v4 encrypted codec and seven consumer/matching adaptations. No unqualified ID
+getter. Original targets require concrete source ownership and complete nonzero Company/position.
+Existing Space-only consumers reject Original before I/O; original production creation/worker
+handling is NOT implemented by the draft. Keep all original test IDs while adapting copy/read sites;
+add namespace collision, original source/generation/CAS, legacy byte compatibility and malformed v4
+regressions. Review next-original-target-review.md for actual Company history frames, registration
+provenance, immutable original metadata indexes and published LEGACY alias/cursor risks. Complete
+original metadata/provider/pending/content/completion, bounded native inventory, keys-only recovery
+and actual native proof before raw activation. All 54 PRD groups remain OPEN. Do not stop here.
 
-Hosted incoming-write control42972222388 uses immutable840d115247b2da417014636529040b80cca38144,
-ref validation/incoming-write-confirmation-20261111; do NOT redispatch. Portable job is green but
-full audit83724 REAPED FAIL: 4,430 desktop rather than4,442, because the workflow omitted all12
-CollaborationSpaceIncomingPhysicalWorkerTest cases. Partial audit94770 REAPED verifies9,379 actual
-cases (4,430 desktop+757 Android host+4,192 browser), exact head/artifact digest/CRC and every prior
-case identity. Complete hosted acceptance remains OPEN. Current candidate explicitly adds that
-worker class to the workflow. Apple is still running, expected3,675 cases+16 Swift and unsigned host.
-Private parent .work/space-incoming-write-confirmation-2026-11-11 owns hosted-audit.py and separate
-hosted-partial-audit.py; hosted-42972222388 owns coverage-gap.md and portable-partial-audit.json.
-Tracked measurement/contracts record partial coverage honestly. No Apple native SDK8 claim.
+Hosted incoming-write control42972222388 remains on immutable840d115247b2da417014636529040b80cca38144,
+ref validation/incoming-write-confirmation-20261111; do NOT redispatch. Portable full audit83724
+failed because the workflow omitted12 physical-worker cases. Partial audit94770 verifies9,379
+actual cases (4,430 desktop+757 Android host+4,192 browser), artifact digest/CRC and all prior case
+identities; complete hosted acceptance remains OPEN. The accepted metadata increment adds that test
+class to CI. A new immutable metadata control is still required and has NOT been dispatched yet.
+Apple query35423 REAPED at07:15: adapter checks succeeded; iOS application host is building, expected
+3,675 cases+16 Swift and unsigned host. No Apple native SDK8 claim. Prior private hosted-audit.py,
+hosted-partial-audit.py and hosted-42972222388 preserve exact coverage-gap evidence.
 
-NEXT: typed Published/Original (Company+conversation) incoming targets and immutable original room
-metadata; use original Company history frames rather than relabeling cursors. Registration supplies
-Company provenance. Private next-original-target-review.md records actual codec/worker evidence,
-byte compatibility and original/published alias risks. Original provider/pending/content/completion,
-complete native inventory, keys-only recovery and actual native proof remain required before raw
-activation. All 54 PRD groups remain OPEN. This is an implementation checkpoint, not task completion.
-
-Phone connect3815 at06:36 REAPED timeout124; the existing question remains pending. Retry no earlier
-than07:06. Validated release89 is install-only; no phone UI interaction or active emulator.
+Phone connect89904 observed07:06 UTC REAPED timeout124; existing question remains pending. Next
+bounded retry no earlier than07:37. Validated release89 remains install-only; no phone UI or emulator.
+No local heavy process remains after full1/audit. No generic Starter delta or live deployment change.
 
 ## Physical worker accepted — continue original metadata and concurrent writes
 
