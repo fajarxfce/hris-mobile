@@ -1,6 +1,58 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 10:59 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 11:02 UTC. This opening owns current work; older sections are historical.
+
+## Original content acquisition — focused validation in progress
+
+Company limit source7113b3f842d6f74d9a9c1af2eabc9b1d13362003 and Group docs6a6674c8 are PUSHED.
+Next nine-file Original content increment is APPLIED, NOT accepted or committed. Five new files:
+batch, exact physical snapshot policy, acquisition usecase, fixture and33 common tests. Four modified:
+shared pure outcome mapping, Published acquisition mapping call, data DI and application binding assertion.
+One15-second invocation reads through the installed Group runtime while preserving original Company,
+physical device/room/native identity and Company storage. Exact source, typed Pending task, immutable
+metadata, registered LEGACY device, current native parent and denial are checked around suspension.
+Original/tombstone changes commit before edits; identical writes and target reads are deduplicated.
+False or uncertain storage responses do not publish a batch. Missing keys/redactions/targets stay explicit.
+No transport/metadata API call, client construction, provider/seek/queue/wake completion or raw activation.
+
+Private .work/space-original-content-2026-11-11 holds baseline7113b3f8/11,895 cases, exact reports,
+draft/candidate and runners. Frozen4,953-input manifest6b6471c42c067589c9fe68c492daac452f20b9a43597d50342adf516076787d8.
+Format2/session77220 REAPED PASS36.465s. Focused1/session70462 RUNNING, expected151; next browser1
+expected149, accept-focused.py focused1 browser1 (300), then full1/accept-full.py full1 (11,961).
+Do not edit frozen source. No content full acceptance or publisher yet. Hosted plan/audit/dispatch are
+PREPARED NOT executed: validation/original-content-20261111 expects13,912=9,939 portable+3,973 Apple,
+16 Swift,unsigned host. Baseline hosted43008238149, with all12 Apple Company wave cases preserved.
+
+Initial format1/session76601 REAPED exit1/36.495s, zero tests executed. Draft generation inserted a
+second Koin get expression inside the existing multiline assertNotNull in CollaborationBindingsTest.
+Corrected to two independent assertions; production behavior unchanged. draft plus format1/sources,
+partial-source and post-format-sources preserve original/partial formatting. format1-review.md records
+this failure. Never rewrite or describe the failed formatter as passed.
+
+Company nine-file limit increment is locally ACCEPTED11,895=9,857 fresh+2,038 verified unchanged controls.
+Full2/session53510 PASS352.118s, audit17353 accepted, all REAPED. Corrected focus16507/95.545s/136 and
+browser70249/36.507s/134 accepted270. Initial full1/93941 failed only the omitted presentation fake;
+candidate1 and failed evidence remain. Publisher HAS EXECUTED. Company hosted43008238149 RUNNING on
+7113b3f8, dispatch5732 REAPED, expected13,813. Do NOT redispatch or overwrite publication.
+
+Reader43003600252 portable ACCEPTED9,865 (audit47495 REAPED), Apple3,928 pending. Transition42999833068
+portable accepted9,817, Apple3,904 pending. Provider42996808183 FULLY ACCEPTED13,589; loader42991947262
+fully accepted13,466; storage42988568153 fully accepted13,394; target42983683780 fully accepted13,276;
+metadata42978769594 fully accepted13,189. Public measurements record exact artifacts and hashes.
+Hosted domain/simulator proof does not establish native SDK8 Apple runtime execution.
+
+After content acceptance, implement Original local retained-fact reconciliation and exact pending
+completion; read next-original-reference-completion-review.md. Original Company list admission cannot
+substitute for Group ownership, and usecases cannot call other usecases. Preserve finite pendingThrough
+and resolve only admitted committed outcomes. Source references, acquired/decrypted content, retained
+facts and queue completion remain distinct. Canonical Published LEGACY aliases, bounded Client.rooms
+inventory, keys-only recovery and actual native proof precede raw collector/Original producer activation.
+Both remain OFF; all54 PRD groups OPEN. No generic Starter delta. Continue long run and push every commit.
+
+Phone26946 REAPED timeout124, connect started10:44:11 UTC; next bounded retry no earlier11:15.
+Release89 validated SDK6 APK is pending install with no install-result or attempt. No emulator.
+Notify before explicit-serial install-only; never launch or drive the user's phone. Eight protected
+original intents, Draft66, keys/stores, SDK assets and live90163c3/schema116.4 Group-OFF remain unchanged.
 
 ## Company pending limit accepted — continue Original content retention
 
