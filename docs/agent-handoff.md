@@ -1,6 +1,57 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 15:05 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 15:19 UTC. This opening owns current work; older sections are historical.
+
+## Durable inventory progress passes focused checks; full validation running
+
+Owned source54e0ddf090b2ce48ced1db7299bfbe01c061758a and Group docs70bac6ea PUSHED;
+60714/89254 reaped. Owned local12,402 accepted. Hosted43044913726 was dispatched ONCE
+at15:05:53UTC on validation/owned-room-inventory-20261111; dispatch51406 REAPED.
+Expected14,527=10,380 portable+4,147 Apple. Existing run attached, do not redispatch.
+Raw43040652714 portable10,324 accepted (audit28206 REAPED); Apple pending. Alias43037578170
+portable10,300 accepted; Apple still building its host at15:14. All required application cases
+are included in both portable results. Earlier application43031231253 remains incomplete,
+even though its Apple4,088 passed; missing30 portable cases and cancellation are preserved.
+
+Six-file inventory-progress candidate APPLIED, NOT FULLY ACCEPTED. Previous prepare/configure
+scripts HAVE EXECUTED. Workspace .work/space-inventory-progress-2026-11-11 owns evidence.
+format1/95325 REAPED PASS37.635s. focused1/31936 REAPED PASS409.185s/104 cases;
+browser1/17860 REAPED PASS141.350s/102. Combined206 accepted, existing case IDs retained.
+full1/87854 RUNNING, expected12,440. Frozen4,989-input manifest
+0e1d9043c3a0569faf47f4d04e24084ffa7e608ca5a34a68fed53d76a33c9a7b.
+Do not change source during the run. Publisher/contract/hosted scripts prepared, NOT executed
+or dispatched. Expected hosted14,584=10,418 portable+4,166 Apple, based on owned43044913726.
+
+Source cursor/retry belongs to an inventory generation. Continuous actual responses preserve it;
+new loss resets it. Explicit v5/schema5 encoding keeps Published/Original typed targets and rejects
+advanced fields under an old marker even with a matching authenticated old header. Old versions
+remain readable; part/byte bounds unchanged.12 domain and7 actual database cases per desktop/browser
+added, existing40 storage cases kept. No inventory consumer/raw observation activated by these fields.
+
+Next private inventory-retention draft has8 Kotlin files:
+6 NEW and2 guarded existing (data DI/app binding assertion). UNAPPLIED/UNTESTED. Includes finite
+16-room prefix policy, result, exact-registration/source-fenced usecase and fixtures/tests:
+18 policy +23 owner cases. One native enumeration, one queue CAS and one readback; no inline retry.
+Continuous position updates survive, new loss is never overwritten. Existing physical work blocks
+before that room rather than being relabeled or discarded. Logical work stays independent and
+shared64 capacity is preserved. Non-Joined inventory creates no new incoming content work and
+removes no retained facts. Five-second invocation and captured full registration fence late results.
+Source-policy/owner tests and factory are DRAFT ONLY; no acceptance claims. Initial private binding
+preparation stopped at an assertion before writing the app fixture, corrected without source changes.
+Read next-inventory-retention-review.md; it is supplemented by the new owner draft. No prepare/apply
+script or next full/hosted counts yet. Worker integration, failure/backpressure deferral and full
+readback/liveness review remain before activation. Do not apply incomplete draft without review.
+
+Keys-only recovery still needs a durable cross-room index/wake: current pending refs are retained
+per traversal, and64 blocked rooms must not starve new rooms. Authoritative absence handling and
+combined old-Company storage/new-Group native proof remain. Raw collector/Original producer OFF;
+all54 PRD groups OPEN. No generic Starter delta/live deployment or native SDK8 Apple acceptance.
+
+Phone38857 REAPED timeout124 at14:53:14UTC; next retry no earlier15:24UTC. Release89 SDK6 awaits
+install, no attempt/result. Notify first, explicit serial/install-only, never drive UI. No emulator.
+Preserve original intents, Draft66, keys/stores/SDK assets, inspector gradlew.bat and live90163c3/
+schema116.4 Group OFF. Continue long run and push every commit.
+
 
 ## Owned room inventory accepted — continue durable source progress
 
