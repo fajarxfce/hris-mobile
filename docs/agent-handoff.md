@@ -1,6 +1,62 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 15:29 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 15:34 UTC. This opening owns current work; older sections are historical.
+
+## Finite inventory page retention applied; focused validation running
+
+Inventory-progress sourcea0257706b1e24300ea192d93a0aeb6f6dcaca77c and Group docs298161db PUSHED;
+61398/99010 reaped. Local12,440 accepted (full87854/audit97940 reaped),206 focused. Hosted43049052938
+was dispatched ONCE at15:30:34UTC on validation/inventory-progress-20261111; dispatch38544 REAPED.
+Expected14,584=10,418 portable+4,166 Apple; existing run attached, no redispatch. Prior alias43037578170
+FULL14,434 accepted:10,300 portable+4,134 Apple,16 Swift/unsigned host; Apple audit49485 REAPED.
+Public evidence uses hostedControl.portable/apple; two incorrect top-level field guards were corrected
+against the private audited portable manifest, without source/test changes. Raw43040652714 portable
+10,324 accepted, Apple pending; owned43044913726 pending, expected14,527. Earlier application43031231253
+remains incomplete despite Apple success; its omitted30 portable cases and cancelled job are preserved.
+
+Eight-file finite-page retention candidate APPLIED, NOT ACCEPTED:6 new+2 guarded existing. Previous
+prepare/configure scripts HAVE EXECUTED (31537 reaped). Workspace
+.work/space-inventory-retention-2026-11-11 owns baseline/candidate/reports/scripts. format1/49006
+REAPED PASS37.005s; review found future-retry guard must allow backward clock adjustments, matching
+existing incoming policy. Corrected before tests, added one regression; no failed test was hidden.
+format2/5953 REAPED PASS35.906s. focused1/15723 RUNNING, expected150; browser148/full12,530 follow.
+Frozen4,995-input manifest0923be56d9aece5293deed217c246bfba610b6f61ce34aba6d8fcbe07b3e825e.
+Do not edit source while tests run. Expected hosted14,719=10,508 portable+4,211 Apple; scripts
+PREPARED NOT DISPATCHED. Current stage has no publisher/contract yet and no next worker code applied.
+
+The pure policy consumes an ordered16-room prefix, retaining fresh unknown-head physical work with
+cursor/source generation in one proposed demand replacement. Existing physical work stops BEFORE
+that room and remains unchanged; existing logical tasks coexist. Capacity is64 combined, never64
+per collection. Non-Joined inventory creates no new content work and deletes no retained facts.
+The owning usecase validates original registration/source/parent/denials around I/O, enumerates once,
+reloads current demand, performs one CAS with an independent wake, then one readback within5s.
+Continuous positions survive; later loss cannot confirm old coverage. Future retry performs no I/O;
+backward clock adjustment remains eligible. Known SDK/storage denials survive later runtime loss.
+Data DI owns factory; existing app binding assertion checks the graph without starting I/O.
+18 new policy+27 owner cases (45 per desktop/browser) are NOT accepted until validation finishes.
+
+Next: durable inventory deferral and eligibility/worker integration, with no extra client, sync loop
+or independent worker. Current worker must serialize all inventory/logical/physical turns. Test
+repeated wakes, queue contention, late cancellation and room/metadata backpressure before activation.
+SDK8 Client.rooms still allocates the complete native Room list: finite output is not a native
+allocation bound, and repeated page enumeration cost is not yet a scale/performance proof.
+
+Keys-only recovery remains required to keep64 key-blocked rooms from starving new rooms. Existing
+ReplicaStore.observePublishedCheckpoints can page published Company/Space traversal partitions;
+this may avoid a duplicate catalog. Typed local metadata is still needed to authenticate room-bound
+checkpoint payloads. A future finite keys pass needs its own durable active cursor plus separately
+requested next pass, so new references before the cursor and frequent signals cannot be lost or
+starve later rooms. Primary task demotion must retain keys demand/wake atomically while leaving
+pending refs in history. This is design investigation, not implementation; read copied
+next-keys-discovery-review.md. Authoritative absence and combined old-Company storage/new-Group
+native proof remain. Raw collector/Original producer OFF; all54 PRD groups OPEN. No Starter delta.
+
+Phone55613 REAPED timeout124 at15:24:14UTC/20.024s, no installation attempt. Evidence in prior
+space-inventory-progress workspace/phone-connect-1524.json; next retry no earlier15:55UTC.
+Release89 SDK6 awaits install. Notify first, explicit serial/install-only, never drive phone UI.
+No emulator/live changes. Preserve original intents, Draft66, keys/stores/SDK assets, inspector
+gradlew.bat and live90163c3/schema116.4 Group OFF. Continue long run and push every commit.
+
 
 ## Durable inventory progress accepted — continue finite page retention
 
