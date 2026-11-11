@@ -1,6 +1,42 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 09:36 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 09:39 UTC. This opening section owns current work; older checkpoints below are historical.
+
+## Active original provider transitions — focused validation
+
+Accepted provider sourceb6665a12f5255bb27f450991dbf945cacd3593bb is PUSHED (84246 REAPED); Group evidence
+1d660073 PUSHED (16544 REAPED). Provider full1/session60974 and audit35146 REAPED accepted11,751;
+publish.py HAS EXECUTED. Hosted42996808183 RUNNING on that immutable source/ref
+validation/original-provider-history-20261111, expected13,589. Dispatch7340 REAPED; do not redispatch.
+
+Next eight-file transition draft is APPLIED but UNACCEPTED. Private
+.work/space-original-provider-transition-2026-11-11 holds4,938 baseline inputs and11,751 exact baseline
+cases/reports. prepare-next-transition.py and configure-next-transition.py HAVE EXECUTED; do not reapply.
+Frozen current4,944-input manifest410dbdb2546e520600cd498256f38bf8d1e9967bc2821c41e0ad2650e6084a5d.
+Format1/session81011 REAPED PASS36.188s. Focused1/session2135 RUNNING, expected180. Browser expected178;
+full expected11,839. No accepted test result or publisher/hosted dispatch for this new transition scope.
+
+Two owning use cases advance and recover Original tasks using Company checkpoints. Advance verifies
+retained progress even on replay, then confirms only the exact captured task transition. Recovery reads
+one pending reference and at most one exact head lookup; pending encrypted references never restart
+provider. Missing progress restarts without erasing history; unseen drained head retains30–300s backoff.
+Both have5s local deadlines, current source/native/account/metadata/registered original-device fences,
+uncertain-write confirmation and independent producer preservation. No API/provider/client creation,
+content acknowledgement, wake retirement or raw activation. Twenty-four advance and20 recovery common
+cases plus DI/application assertions are pending validation. Original collector and producer remain OFF.
+
+Next reap focused1, inspect failures, browser1 and focused audit, then full1/full audit. Prepare the
+publisher and hosted plan only after focused results settle. Continue original content, pending seek and
+completion using Company identities and Group admission, canonical Published LEGACY aliases, bounded
+Client.rooms inventory, keys-only recovery and actual native proof. Read private transition/content
+reviews. All54 PRD groups remain OPEN; no generic Starter delta. Continue the authorized long run.
+
+Loader42991947262 portable audit14251 REAPED accepted9,647; Apple pending3,819. Storage42988568153 portable
+accepted9,599; Apple pending3,795. Target42983683780 fully accepted13,276; metadata42978769594 fully accepted
+13,189. Existing SDK8 Apple native execution remains unproved; no new phone/live activation claim.
+Phone last83150 timeout124 at09:11:43 UTC; next bounded retry no earlier09:42. No release89 install-result
+or install attempt. No emulator. Notify before authorized install-only; never launch or drive the user's
+phone. Eight original intents, Draft66, protected stores and live Group-OFF remain unchanged.
 
 ## Original provider history accepted — continue local transitions
 
