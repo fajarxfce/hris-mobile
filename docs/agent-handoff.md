@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 06:02 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 06:10 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Physical worker accepted — continue original metadata and concurrent writes
 
@@ -41,17 +41,30 @@ reports and accept.py/accepted.json. No live/schema/SDK activation. Native POST 
 now reads explicit Company/original-room metadata with configured server and current native admission,
 without publication,provider I/O,device/job creation. Shared DI worker context was exercised.
 
-ACTIVE Mobile: focused1/session93547 RUNNING, sole local heavy slot.18 source/test files are FROZEN;
-no edits until reaped. Format1/session75188 REAPED PASS36.013s.4,902-input manifest
-88424b4a3ed9d4d28004032105d2cd911335641011d44759298598967ecccad1.
+ACTIVE Mobile: full1/session58222 RUNNING, sole local heavy slot.19 source/test files are FROZEN;
+no edits until reaped. Focused2/session88697 REAPED PASS234.684s/421; browser1/session23711 REAPED
+PASS97.689s/386. accept-focused.py ACCEPTED807, all selected prior case IDs retained. Format1/session75188
+REAPED PASS36.013s. Candidate2 has4,902 inputs/manifest
+9ff93b02a0c877cf3117cc1d1ae7bd6eb04273555be7383f29432839e36fcca9.
+Focused1/session93547 REAPED386 cases/1 old Defer supersession expectation; candidate1 and failure
+remain archived. The correction expects Success(false) for superseded work while preserving its
+new generation/wake assertions. No production change followed candidate1. All25 new common cases
+and1 app-worker case pass. Full validation must still pass; source is NOT yet accepted.
+
 .work/space-incoming-write-confirmation-2026-11-11 owns accepted b86 baseline4,897 inputs,
-1,283 XMLs/11,362 cases,candidate maps,design-review.md,runners/audits and expected.json.
-Pure policies confirm exact logical transitions/removal and scan cursor/tasks while preserving
-independent producer cursor/physical changes,later generations and inventory. Advance/Recover/Defer/
-Complete/Discover invoke them; logical Defer propagates1s known CAS busy after current admission,
-without durable30s delay. Tests add25 common cases and1 app-worker case including before-CAS versus
-after-commit/lost-reply. Expected focused421,browser386,full11,413. Source is NOT accepted yet.
-Continue focused/browser/full and preserve all baseline case IDs and dependency closures.
+1,283 XMLs/11,362 cases,both candidates,design-review.md,runners/audits,expected.json and
+next-metadata-review.md. Expected full11,413, no skipped tests; preserve all baseline case IDs and
+reused dependency closures. After reaping full1, run accept-full.py full1 and inspect failures rather
+than narrowing checks. Guarded publish.py is PREPARED but NOT executed. Do not rerun it after evidence
+is published. Pure domain policies confirm logical transitions/removal and scan cursor/tasks despite
+independent producer writes, preserving later tasks/inventory. Known CAS contention returns1s retry
+without durable30s delay; current denial and uncertain failure remain separate.
+
+Prepared hosted-plan.json/hosted-audit.py are NOT dispatched. After local acceptance and source commit,
+use immutable validation/incoming-write-confirmation-20261111 with collaboration-control.yml.
+Expected9,391 portable (4,442 desktop+757 Android host+4,192 browser) +3,675 Apple =13,066 cases,
+16 Swift checks and unsigned Apple host. Previous baseline42962232337 remains accepted. No Apple
+native SDK8 claim. Do not run the stale SDK4 adoption workflow as SDK8 validation.
 
 NEXT after these increments: finite remote published metadata, explicit original Company routing/
 storage, complete bounded native inventory, keys-only recovery and actual-runtime raw collection.
@@ -66,7 +79,7 @@ unsigned Apple host PASS. Portable audit8474 and Apple audit1493 REAPED ACCEPTED
 all prior case IDs and report manifests verified. Shared physical-resolution measurement now records
 both artifact/job IDs,digests and platform counts. Private hosted-42962232337 owns archived evidence.
 DO NOT redispatch. This excludes b86 worker/current writes; no Apple native SDK8 claim.
-Existing phone question pending; last connect80048 at05:35 REAPED timeout124; release89 validated
+Existing phone question pending; last connect26865 at06:05 REAPED timeout124; release89 validated
 for install-only. No phone UI interaction. Live116.4 unchanged; Group117–140 remain undeployed.
 
 ## Local physical resolution accepted — continue the worker
