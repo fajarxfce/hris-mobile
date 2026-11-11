@@ -1,53 +1,60 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 11:53 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 12:05 UTC. This opening owns current work; older sections are historical.
 
-## Original finite-reference completion — focused validation in progress
+## Original finite-reference completion — full validation running
 
-Reconciliation source89ee4e4a344c11dfc46e469f8326153766b81473 and Group docscf17f872 are PUSHED
-(push6348/68216 REAPED). Full1/40307 REAPED PASS634.377s; audit26924 REAPED accepted12,021
-(9,983 fresh+2,038 unchanged controls). Focused276 accepted, no failures. Publisher/accepted handoff
-executed. Hosted43015359541 dispatched once on that source; dispatch96432 REAPED. Expected14,002,
-no audit yet. Do not redispatch. Private evidence .work/space-original-reconciliation-2026-11-11.
+Reconciliation source89ee4e4a344c11dfc46e469f8326153766b81473 and Group docscf17f872 are PUSHED.
+Its full12,021/focused276 accepted; publisher/accepted handoff and next prepare/configure executed.
+Hosted43015359541 was dispatched once on that source; expected14,002, no audit yet. Do not redispatch.
 
-prepare-next-original-reference-completion.py/configure-next-original-reference-completion.py HAVE
-EXECUTED. Current nine-file completion increment is APPLIED/FROZEN, NOT accepted or committed.
-Private .work/space-original-reference-completion-2026-11-11 holds12,021-case/4,958-input baseline,
-4,964 current inputs,9 candidate files, source/report snapshots and runners. Manifest
-2f5b005160265e136fe159f03ecd642c749fa159d70da937827c3b6079dd1902.
-Format1/session84541 REAPED PASS35.795s; focused1/session77261 RUNNING, expected171.
-Then browser expected169, focused audit340, full expected12,079. Reap each before dependent mutation.
-Current source must stay frozen. No focused/browser/full acceptance yet.
+Current nine-file completion source is APPLIED/FROZEN, NOT accepted or committed. Private
+.work/space-original-reference-completion-2026-11-11 holds baseline12,021/4,958 inputs,4,964 current
+inputs and manifest2f5b005160265e136fe159f03ecd642c749fa159d70da937827c3b6079dd1902.
+Format1/84541 REAPED PASS35.795s; focused1/77261 REAPED PASS307.574s/171; browser1/41429 REAPED
+PASS188.900s/169; focused audit340 accepted. Full1/session93560 RUNNING, expected12,079. Reap then
+accept-full.py full1 before any source mutation/publication. One compiler/no emulator. No failed runs.
 
-Original completion owns exact captured runtime/Company task/source/physical registration and local
-account/native family. Shared pure outcome policy retains Published frame validation. Retained and
-unsupported outcomes resolve before a finite16-row Company seek. Missing keys/redaction/targets stay
-pending and retain retry. Nested caller collections are detached before suspension. Known denial,
-false/lost replies, cancelled/stalled work and replaced ownership cannot publish success. No provider,
-client, content write, queue/wake retirement or activation.20 new owner+9 policy cases, scoped fixture,
-DI and separately wrapped app assertion. Preserve actual Company incoming/wave/reopen storage controls.
-Fixture records operations, not database behavior or native proof. No usecase calls another usecase.
+Original completion resolves exact acquired retained/unsupported outcomes before one finite16-row
+Company seek. Missing keys/redaction/targets retain retry. Nested lists are detached before suspension;
+current task/source/physical registration/metadata/account/native family, nonregressing checkpoint and
+known denial remain checked. False/lost replies never infer completion or loop inline. Local credential
+age does not hide owned facts. Shared pure outcome policy preserves Published frame validation.
+20 owner+9 policy cases; actual Company incoming/wave/reopen controls and application bindings pass.
+No provider/client/content rewrite, queue/wake retirement or activation. Fixture records operations.
 
-After acceptance prepare publisher/hosted scripts and next guarded queue-completion increment. Private
-next-original-queue-completion-draft currently has one production owner and one scoped fixture, no
-behavioral tests/DI/application/acceptance. Read next-original-queue-completion-review.md. It requires
-provider exhaustion, no pending references, completed finite seek/retry, exact resolved head and current
-checkpoint before retiring only the captured task via CAS/readback. Preserve source positions, other
-tasks, rescan/loss and independent wake. Canonical Published LEGACY aliases, bounded Client.rooms
-inventory, keys-only recovery and actual native proof still precede raw collector/Original activation.
-Both remain OFF; all54 PRD groups OPEN. No generic Starter delta. Continue long run/push every commit.
+publish.py, contract.md, write-accepted-handoff.py, hosted-plan.json, hosted-audit.py and
+dispatch-hosted.py are PREPARED NOT EXECUTED for completion. After full acceptance: publish, accepted
+handoff, commit/push source/docs, dispatch ONCE on validation/original-reference-completion-20261111.
+Expected14,089=10,057 portable+4,032 Apple,16 Swift/unsigned host; baseline43015359541.
 
-Content43011629455 portable accepted9,939 (audit89061 REAPED). Its Applejob130492406895 cancelled before
-any runner/step due to hosted macOS capacity; immutable evidence/attempt1 metadata preserved. Targeted
-Apple retry28318 REAPED successfully requested11:52:11; no workflow redispatch or portable rerun. Inspect
-latest attempt before Apple audit; expected3,973, baselineCompany43008238149 Apple3,940 still pending.
-Company portable9,873 and reader43003600252 FULL13,793 accepted. Earlier complete hosted runs remain
-recorded below. No new native SDK8 Apple runtime claim from simulator/domain/unsigned-host checks.
+Next PRIVATE UNAPPLIED queue draft has5 files/3 new inputs: original queue owner, scoped fixture,
+24 owner tests, DI and independent app assertion. Two base hashes guard modified files. It verifies
+provider exhaustion, no pending content/active finite seek, resolved head and unchanged checkpoint,
+then retires only captured work via CAS/readback while preserving independent wake/source/rescan.
+Tests are UNCOMPILED/UNACCEPTED; current340 accepted tests do not cover this private next draft.
+prepare-next-original-queue-completion.py/configure-next-original-queue-completion.py PREPARED NOT
+executed; expected4,967 inputs,161 focused/159 browser/12,127 full. Keep37 queue+18 incoming+12 wave
+storage controls. Read next-original-queue-completion-review.md and next-original-routing-review.md.
 
-Phone76683 REAPED timeout124 at11:46:14 UTC; next bounded retry no earlier12:17. Evidence is in
-reconciliation/phone-connect-1146.json. Release89 validated SDK6 APK awaits install, no attempt/result.
-No emulator. Notify before explicit-serial install-only; never launch/drive the phone. Preserve eight
-original intents, Draft66, keys/stores, SDK assets and live90163c3/schema116.4 Group-OFF.
+Source trace: current worker loads Published targets only; Original readers/acquisition require current
+Pending capture. Physical binding convert always chooses Published, including LEGACY aliases. Original
+lookup fallback is not wired; explicit Published absence must precede it. Persist exact Original local
+metadata and registered-device provenance before canonical queue conversion. Old null-source logical
+tasks cannot be relabeled as current Original source work. Preserve single worker/FIFO and deadlines.
+Canonical routing, bounded Client.rooms inventory, keys-only recovery and actual native proof still
+precede raw collector/Original producer activation. Both OFF; all54 PRD groups OPEN. No Starter delta.
+
+Content43011629455 portable9,939 accepted; first Apple job130492406895 cancelled before runner/steps
+for macOS capacity. Targeted Apple retry28318 REAPED requested11:52:11; retry running. Attempt1 archive
+preserved; no portable rerun/workflow redispatch. Company43008238149 portable9,873 accepted/Apple3,940
+still running at last lookup; reader43003600252 FULL13,793 accepted. Inspect immutable latest audits;
+no native SDK8 Apple runtime claim from simulator/domain or unsigned-host compilation.
+
+Phone76683 REAPED timeout124 at11:46:14; next bounded retry no earlier12:17. Last connect evidence in
+reconciliation/phone-connect-1146.json. Release89 SDK6 validated APK awaits install, no attempt/result.
+Notify before explicit-serial install-only; never launch/drive phone. Preserve eight originals, Draft66,
+keys/stores, SDK assets and live90163c3/schema116.4 Group-OFF. Continue long run; push every commit.
 
 ## Original retained-fact reconciliation accepted — continue finite batch completion
 
