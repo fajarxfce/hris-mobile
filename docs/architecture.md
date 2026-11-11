@@ -1,5 +1,7 @@
 # Architecture
 
+[Original recovery reference reading](collaboration-original-key-reference-read.md) admits one existing historical pass and reads a bounded local page, independently of primary queue and content/global completion.
+
 [Original historical content](collaboration-original-key-content.md) uses the existing bounded Company content pipeline with current native admission and preserved historical device coordinates. Reference/global completion remains separate.
 
 [Account/root recovery state](collaboration-account-history-recovery.md) retains an independent pass and wake without a fabricated sync position.

@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "f0ba9847bf323eaf4b9999683474686c2f5608ef",
+  "sourceFiles": 5046,
+  "changedSourceFiles": 6,
+  "sourceManifestSha256": "056b531e1db696ae369dad66ceeb7e2c23106870f69e97fdb9110d3e288d57fc",
+  "focused": {
+    "tests": 402,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused-2",
+  "focusedBrowserRun": "browser-1",
+  "full": {
+    "validated": 13258,
+    "fresh": {
+      "tests": 11220,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 569.814,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151790352,
+    "sha256": "4b3c7c4b24b02eda09fb8bdd73ef2e95ce0d129ea2899922b91b2e31133e7359"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "originalKeyReferenceReadAccepted": true,
+  "newDomainCasesPerTarget": 29,
+  "typedLocalReadResult": true,
+  "historicalDevicePreserved": true,
+  "explicitCompanyScope": true,
+  "currentSourceRegistrationAndMetadataAdmitted": true,
+  "maximumSourceEvents": 16,
+  "maximumWritesPerInvocation": 1,
+  "localLifetimeSeconds": 5,
+  "changedSectionReadbackRequired": true,
+  "lostWriteResponseConfirmedLocally": true,
+  "activeRequestedProgressPreserved": true,
+  "completedGenerationReplayStaysIdle": true,
+  "capturedBoundaryExcludesPrimaryAppends": true,
+  "emptyFlowIsNotEof": true,
+  "returnedReferencesCopied": true,
+  "noPrimaryQueueDependency": true,
+  "expiredPreparationDoesNotHideLocalFacts": true,
+  "referenceAcknowledgement": false,
+  "globalAcknowledgement": false,
+  "contentAcquisition": false,
+  "providerRequest": false,
+  "keyProbe": false,
+  "hiddenRetry": false,
+  "globalConsumerEnabled": false,
+  "keysProducerEnabled": false,
+  "newCollector": false,
+  "nativeSdkExecution": false,
+  "fullKeyBlockedQueueLivenessProven": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "starterChanged": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "run": "focused-1",
+      "exitCode": 1,
+      "elapsedSeconds": 121.887,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "compileFailureReview": {
+    "run": "focused-1",
+    "session": 37231,
+    "sessionReaped": true,
+    "failure": "Three equality assertions need explicit Pair<String?, Int> list element types for Kotlin generic inference",
+    "productionChanged": false,
+    "assertionsRemoved": false,
+    "caseIdsRemoved": false,
+    "testFile": "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationSpaceOriginalKeyReferencesTest.kt",
+    "replacements": {
+      "listOf(null to 16)": "listOf<Pair<String?, Int>>(null to 16)",
+      "listOf(\"cursor-15\" to 16)": "listOf<Pair<String?, Int>>(\"cursor-15\" to 16)"
+    },
+    "failedManifestSha256": "a366cb871a7d462c2fea7ec3f8df3f051b57503669b80b2810dfe8f4b76fb46f"
+  }
+}

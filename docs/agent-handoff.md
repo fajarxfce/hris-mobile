@@ -1,5 +1,87 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 21:31 UTC. This opening owns current work; earlier sections are historical.
+
+## Original local recovery reference reading accepted; atomic page completion next
+
+Six Kotlin files ACCEPTED (4 new,2 existing). ReadCollaborationSpaceOriginalKeyReferences admits
+explicit Company/history/current Original source and immutable metadata, coalesces one existing
+recovery section and reads at most16 local references. Old traversal device remains. One write
+maximum and exact section/checkpoint readback after unknown responses; absence creates nothing.
+Active/requested cursor and finite boundary stay intact; completed generation replay stays idle.
+Later primary appends cannot extend that boundary. Returned references are copied. Empty Flow
+fails. An empty page is only attempted-page evidence, requiring later indexed coverage proof.
+No content, provider/key request, primary queue dependency, reference/global acknowledgement or
+worker/listener activation. Five-second cancellable lifetime; admission fences every I/O result.
+Old credentials and unrelated selected Company do not hide owned local reference facts.
+
+Workspace .work/original-key-reference-read-2026-11-11; baselinef0ba9847bf323eaf4b9999683474686c2f5608ef,
+13,200/5,042.5,046 inputs; manifest 056b531e1db696ae369dad66ceeb7e2c23106870f69e97fdb9110d3e288d57fc.
+29 new common cases and both graph checks. focused2/22747 REAPED PASS391.398s/202;
+browser1/85047 REAPED PASS152.352s/200. Exact402 accepted. Full1/7421 REAPED PASS
+569.814s; audit52553 REAPED.13,258 accepted=11,220 fresh+
+2,038 exact unchanged controls. IDs/dependency closures verified. Proof APK
+151790352 bytes/SHA 4b3c7c4b24b02eda09fb8bdd73ef2e95ce0d129ea2899922b91b2e31133e7359; no native execution claim.
+
+Preserve failed focused1/37231 REAPED121.887s, zero tests: three new cursor/limit equality
+assertions needed explicit Pair<String?, Int> element types. Only those declarations changed;
+production and all case IDs/old assertions stayed intact. failed-candidate-1 owns the full old
+snapshot and compile-failure-review.json. Formats8423/15855 REAPED38.476/36.254s. Do not rerun
+old generators over corrected source. Publisher and this accepted writer HAVE EXECUTED.
+Commit/push, dispatch ONCE validation/original-key-reference-read-20261111, expected15,782
+=11,236 portable+4,546 Apple. NOT DISPATCHED yet. Attach actual run/source before next prepare.
+
+Prior Original contentf0ba9847 and Groupbf6f3433 PUSHED;95622/6613 REAPED.13,200 local accepted;
+full5600/audit69539 REAPED, two preserved new-test failures. Hosted43099618359 dispatched ONCE
+21:02:08UTC,29999 REAPED; expected15,695, latest observed in_progress21:26UTC, not audited.
+Account recovery43096361337 originally startup_failure before any jobs, and its ONE same-run
+retry22546 requested20:56:20UTC also ended startup_failure (API run_attempt still1, updated20:59).
+No further retry. Public run annotation explicitly reports an unexpected internal error and asks
+to retry once service is restored; HTML/hash/request correlation saved in startup-public-annotation.
+The identical workflow had already passed Position. This is not a diagnosed YAML/source failure.
+
+Turn43087494327 portable10,980 accepted; Apple job130755637532 FAILED artifact upload with no
+artifact, API stale in_progress last observed. Locator43092246512 portable job130772532026 likewise
+FAILED artifact upload with no artifact. Failure job JSONs and public measurements preserve both;
+no targeted retries yet. Inspect final status/actual reason before one failed-job retry. Never
+mark missing artifacts complete. Position43083225746 FULL15,300; Space43077651832 FULL15,178;
+Fairness43069542685 FULL15,028; Original43073411916 FULL15,100. Preserve historical incomplete
+application43031231253 and all earlier failure provenance. Hosted checks are not native SDK8 Apple.
+
+Next6 EXISTING-file next-atomic-recovery-completion-draft STATICALLY REVIEWED, UNAPPLIED/UNTESTED.
+Repository contract gains typed Company/Space complete overloads. Existing strict resolve stays
+unchanged. Advance and completion share one raw updateRecoveryPage: completion captures an
+explicit resolved subset, validates immutable sources and17-row indexed coverage, then commits
+reference flags and recovery/revision in ONE existing checkpoint CAS. Preserves primary fields,
+provider identity, reference order/count, already-resolved matching sources and later request.
+Replay after advancement returns false; content/global authority and unknown-result confirmation
+remain with admitted callers. No fake queue, Boolean mode, new position or provider/key request.
+
+Existing35 actual encrypted storage cases stay;21 new cases (56 per target, both Company/Space)
+cover all/partial/no resolution,16-row bounds/next pages, concurrent primary appends/seek/resolution,
+request promotion, replay/reopen, absence without keys, malformed subsets/limits, forged sources,
+omitted coverage, query/commit races, cancellation before/after commit, lost response, namespaces,
+changed passes/known requests, mutable inputs and failed/cancelled encryption before commit.
+ensureActive must remain AFTER reference encoding, immediately before commit. Original generator
+is STALE relative to this correction and added test/helper changes. Read next-atomic-recovery-
+completion-review.md and draft-notes.md. Current reference-read fixture rejects completion calls.
+
+Prepare/configure-next-atomic-recovery-completion.py PREPARED NOT EXECUTED. Next workspace
+history-recovery-completion-2026-11-11:5,046 inputs (no new source files),13,300 local,143 focused+
+141 browser,15,845 hosted=11,278 portable+4,567 Apple;5367 desktop/857 Android/5054 browser.
+Continue directly through apply/format/freeze/checks/audit/publication/push; draft is not validated.
+
+Admitted historical reconciliation/completion owner, Space/Original alias content projection,
+bounded account-wide service, primary EOF demotion plus request/wake, precise unavailable-source/
+content triggers, full64-room blocked-queue liveness and loss-aware native key listeners/receipts
+remain. Read inherited completion/trigger/receipt/lifetime reviews. Never classify every conflict
+as a timer retry of the first locator or probe secret storage because the local machine is absent.
+No global consumer or key listener activated; all54 PRD groups OPEN. No Starter/live change.
+Phone26130 REAPED timeout21:06:49UTC/20.021s, no install; next retry no earlier21:38UTC. Release89
+SDK6 waits, notify first, explicit serial/install-only, never drive UI. Preserve original intents,
+Draft66, keys/stores, SDK assets, inspector gradlew.bat and live90163c3/schema116.4/Group OFF.
+Keep one compiler OR emulator, push every commit and continue authorized long run.
+
 Updated 11 November 2026, 21:28 UTC. This opening owns current work; earlier sections are historical.
 
 ## Original local reference reading focused accepted; full validation running
