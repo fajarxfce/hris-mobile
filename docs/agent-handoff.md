@@ -1,50 +1,58 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 09:50 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 09:59 UTC. This opening section owns current work; older checkpoints below are historical.
 
-## Active original provider transitions — full validation
+## Original provider transitions accepted — continue bounded pending reads
 
-Accepted provider sourceb6665a12f5255bb27f450991dbf945cacd3593bb is PUSHED (84246 REAPED); Group evidence
-1d660073 PUSHED (16544 REAPED). Provider full1/session60974 and audit35146 REAPED accepted11,751;
-publish.py HAS EXECUTED. Hosted42996808183 RUNNING on that immutable source/ref
-validation/original-provider-history-20261111, expected13,589. Dispatch7340 REAPED; do not redispatch.
+The eight-file transition increment is ACCEPTED. Full1/session7058 REAPED PASS625.210s;
+full audit ACCEPTED11,839=9,801 fresh+2,038 exact unchanged controls.
+Prior case IDs, dependency closures and source/library hashes verified. Focused1/session2135 REAPED
+PASS299.662s/180; browser1/session15844 REAPED PASS184.742s/178; focused audit358. Format1/session81011
+REAPED PASS36.188s. No failures/errors/skips in this increment. Full format, architecture74/detekt,
+Android host/release compilation/lint, browser/Wasm, iOS metadata and proof APK assembly/unit checks pass.
+Frozen4,944-input manifest410dbdb2546e520600cd498256f38bf8d1e9967bc2821c41e0ad2650e6084a5d.
+Proof APK151,682,665 bytes/SHA142095d89a0d0bf7edee51416ca4b0dd63da13d3d4b30ddcad627d8e78a42d76.
 
-Next eight-file transition draft is APPLIED but UNACCEPTED. Private
-.work/space-original-provider-transition-2026-11-11 holds4,938 baseline inputs and11,751 exact baseline
-cases/reports. prepare-next-transition.py and configure-next-transition.py HAVE EXECUTED; do not reapply.
-Frozen current4,944-input manifest410dbdb2546e520600cd498256f38bf8d1e9967bc2821c41e0ad2650e6084a5d.
-Format1/session81011 REAPED PASS36.188s. Focused1/session2135 REAPED PASS299.662s/180; browser1/session15844
-REAPED PASS184.742s/178. Focused audit ACCEPTED358, all prior selected identities and source/library hashes
-preserved. Full1/session7058 RUNNING, expected11,839. Source remains frozen; no full acceptance yet.
-publish.py, contract.md, hosted-plan/audit and dispatch-hosted.py PREPARED, NOT executed/dispatched.
-Future hosted expected13,721=9,817 portable+3,904 Apple,16 Swift,unsigned host on a future immutable commit.
+Original advance confirms the retained Company checkpoint, including replay, before acknowledging only
+the captured task phase. Original recovery reads one pending reference and at most one exact indexed
+head source. Unresolved encrypted references cannot restart provider; missing progress restarts without
+deleting history, while an unseen drained head retains30–300s backoff. Resolved heads and unfinished
+provider cursors remain unchanged. Five-second local ownership/source/metadata/registered physical-device
+fences ignore ordinary credential age/selected Company. Lost committed replies and independent producer
+progress are retained; cancellation propagates and confirmed denial cannot publish success after commit.
+No Matrix/HTTP/client creation, content acknowledgement or incoming wake retirement. Original producer
+and raw collector remain OFF. Twenty-four advance and20 recovery common cases plus DI resolution pass.
 
-Two owning use cases advance and recover Original tasks using Company checkpoints. Advance verifies
-retained progress even on replay, then confirms only the exact captured task transition. Recovery reads
-one pending reference and at most one exact head lookup; pending encrypted references never restart
-provider. Missing progress restarts without erasing history; unseen drained head retains30–300s backoff.
-Both have5s local deadlines, current source/native/account/metadata/registered original-device fences,
-uncertain-write confirmation and independent producer preservation. No API/provider/client creation,
-content acknowledgement, wake retirement or raw activation. Twenty-four advance and20 recovery common
-cases plus DI/application assertions are pending validation. Original collector and producer remain OFF.
+Private .work/space-original-provider-transition-2026-11-11 preserves baselineb6665a12/11,751 cases,
+source snapshots/reports and next drafts. publish.py HAS EXECUTED; do not overwrite. Shared measurement
+collaboration-space-original-provider-transition-2026-11-11.json and Mobile/Group contracts hold evidence.
+Next commit/push accepted source/docs, then dispatch-hosted.py ONCE on an immutable ref. It has NOT been
+executed yet; expected13,721=9,817 portable+3,904 Apple,16 Swift,unsigned host. No new Apple/native SDK
+runtime, phone installation or live activation is claimed by local validation.
 
-Next reap full1/audit; publish only after full acceptance, commit/push, then dispatch ONCE. Next five-file
-Original pending reader draft is PREPARED, NOT applied: usecase, fixture,24 domain tests and existing
-DI/application assertions. It reads at most16 Company references, preserves a finite pendingThrough,
-rejects changed frame/wave/seek/task/source, and performs no provider/API/write. Expected next full11,887,
-focused150/browser148. prepare-next-pending-read.py/configure-next-pending-read.py are PREPARED, NOT
-executed and require accepted clean pushed source. Read next-original-pending-read-review.md.
-Continue original content and completion using Company identities and Group admission, canonical
-Published LEGACY aliases, bounded Client.rooms inventory, keys-only recovery and actual native proof.
-All54 PRD groups remain OPEN; no generic Starter delta. Continue the authorized long run.
+Then execute prepare-next-pending-read.py and configure-next-pending-read.py, PREPARED NOT executed.
+Five-file draft: Original pending reader, fixture,24 common tests and DI/application assertion. It reads
+one indexed page of at most16 Company references, preserves finite pendingThrough and rejects regressing
+checkpoint/frame/wave/seek/task/source. It performs no provider/API/write. Expected next full11,887,
+focused150/browser148,4,947 inputs. Read next-original-pending-read-review.md and content review.
 
-Loader42991947262 portable audit14251 REAPED accepted9,647; Apple pending3,819. Storage42988568153 FULLY ACCEPTED13,394=9,599 portable+3,795 Apple,16 Swift,unsigned host.
-Apple audit56501 REAPED; artifact13843609142/SHA63ec3144bbc47af5d5f5d19ef30cc90ea673f0cedff0e0e26ded7e271cca42fc. Target42983683780 fully accepted13,276; metadata42978769594 fully accepted
-13,189. Existing SDK8 Apple native execution remains unproved; no new phone/live activation claim.
-Phone26798 REAPED timeout124, connect started09:42:07 UTC (phone-connect-0942.json); next bounded retry
-no earlier10:13 UTC. No release89 install-result or install attempt. No emulator. Notify before authorized
-install-only; never launch or drive the user's
-phone. Eight original intents, Draft66, protected stores and live Group-OFF remain unchanged.
+Required follow-up before Original completion: Company advanceIncomingReferences currently omits the
+raw store limit parameter and defaults20; expose/forward limit:Int=20 so the new16-row batch is validated
+correctly. Preserve default20 and stored cursor/key bytes; add actual Company restart/concurrent/finite
+boundary tests plus explicit Apple wave coverage. next-company-pending-limit-review.md traces the exact
+contracts and four Company test fakes; no limit patch applied yet. Complete Original content/seek/queue,
+canonical Published LEGACY aliases, bounded Client.rooms inventory, keys-only recovery and native proof
+before activation. All54 PRD groups remain OPEN. Continue the long run and push every commit.
+
+Provider hosted42996808183 RUNNING on immutableb6665a12, expected13,589. Loader42991947262 portable accepted
+9,647 and Apple pending3,819. Storage42988568153 FULLY ACCEPTED13,394=9,599 portable+3,795 Apple,16 Swift,
+unsigned host; Apple audit56501 REAPED. Target42983683780 fully accepted13,276; metadata42978769594 fully
+accepted13,189. Do NOT redispatch existing runs. SDK8 Apple native execution remains unproved.
+
+Phone26798 REAPED timeout124, connection started09:42:07 UTC; next bounded retry no earlier10:13. No
+release89 install-result or installation attempt. No emulator. Notify before install-only; never launch
+or drive the user's phone. Eight original intents, Draft66, protected stores, SDK assets and live
+Group-OFF deployment remain unchanged. No generic Starter delta.
 
 ## Original provider history accepted — continue local transitions
 

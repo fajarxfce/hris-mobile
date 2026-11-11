@@ -1,0 +1,15 @@
+# Original incoming provider transitions
+
+An Original task now has local owners for advancing a retained provider page and recovering missing progress. Both derive Company history access and the original physical device from the typed runtime/room capture. A Group registration receipt never substitutes for the original device, and Company checkpoints retain provider=null.
+
+Advance accepts only the original acquisition receipt and confirms the exact retained checkpoint, including replay. It moves the captured Latest/Provider task to Provider or Pending, clears only its retry, and retains the incoming wake and history. A saved exhausted checkpoint needs no additional provider read. Concurrent producer progress is preserved; a lost storage reply is confirmed only from the retained logical transition. A false CAS with unchanged work returns bounded queue contention.
+
+Recovery accepts Pending only. It reads at most one pending reference; unresolved encrypted references stay local and do not restart provider. After exhausted, drained history, one exact indexed lookup distinguishes a resolved head from an unseen hint. Missing progress or an unseen hint may restart the captured task without deleting history; unseen hints retain the existing 30–300 second retry policy. Changed progress, sources or task generations cannot recover obsolete work. A prior confirmed recovery can be replayed without reading the provider again.
+
+Each use case owns a five-second invocation, pins registered LEGACY provenance and immutable Original metadata, and checks current Group/account/native/source/denial around local I/O. Ordinary credential age and selected Company do not invalidate owned facts. Cancellation propagates; denial after a committed write cannot publish success or roll back retained history. These owners perform no Matrix/HTTP request, SDK creation, content acknowledgement or wake retirement.
+
+Validation: 180 selected desktop/application cases, 178 selected browser cases, and 11,839 full accepted cases. Forty-four new domain cases cover phase transitions, replay, Company/device scope, pending decryption, unknown/resolved heads, old credentials, late ownership changes, concurrent producer writes, uncertain replies, deadlines and cancellation. Existing Published transitions, storage and application bindings remain covered. Full validation includes format, architecture/detekt, Android host and release compilation/lint, browser/Wasm, iOS metadata and the proof APK/unit checks.
+
+This increment does not activate the Original incoming producer or raw collector. Original content acquisition, pending read/seek/completion, canonical Published LEGACY aliases, native inventory, keys-only recovery and native proof remain required. All 54 PRD groups remain open. No new native SDK execution, phone installation, Apple runtime execution or live deployment is claimed by local acceptance.
+
+[Exact validation evidence](measurements/collaboration-space-original-provider-transition-2026-11-11.json).
