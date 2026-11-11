@@ -1,0 +1,76 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "26ade803e2ac5ff6321c14ef19e203af582eb737",
+  "sourceFiles": 4947,
+  "changedSourceFiles": 5,
+  "sourceManifestSha256": "2804ad25868eec8dac0143874d05e56239ba1bf0c01022dca840cbaaabb6ea46",
+  "focused": {
+    "tests": 298,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused2",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 11887,
+    "fresh": {
+      "tests": 9849,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 629.17,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151687837,
+    "sha256": "2dfffe8f3ac21493cedea8ec4c908bb5c5ec1654f2e2597157db97656c06807c"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "originalPendingReaderAccepted": true,
+  "companyProgressFramePreserved": true,
+  "groupReceiptNotPhysicalDevice": true,
+  "originalSourceRegistrationMetadataAndTaskChecked": true,
+  "localDeadlineMillis": 5000,
+  "localFactsIgnoreCredentialAge": true,
+  "pendingReferenceLimit": 16,
+  "finitePendingThroughPreserved": true,
+  "regressingRevisionAndCountRejected": true,
+  "changedGenerationFrameWaveAndSeekRejected": true,
+  "mutableReferenceListDetached": true,
+  "obsoleteTaskReturnsNoReferences": true,
+  "emptyProgressRetainedForSeparateRecovery": true,
+  "readsOwnedIndexOnly": true,
+  "createsNetworkRequest": false,
+  "createsSdkClient": false,
+  "createsWake": false,
+  "writesQueue": false,
+  "acknowledgesContent": false,
+  "correctedTwoNewTestExpectationTypes": true,
+  "productionChangedForFailedCompile": false,
+  "newDomainCases": 24,
+  "preservedFailedRuns": [
+    {
+      "exitCode": 1,
+      "elapsedSeconds": 111.969,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "run": "focused1"
+    }
+  ],
+  "applicationBindingVerified": true,
+  "originalIncomingConsumerEnabled": false,
+  "rawCollectorEnabled": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true
+}
