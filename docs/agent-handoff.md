@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 06:00 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 06:02 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Physical worker accepted — continue original metadata and concurrent writes
 
@@ -28,29 +28,30 @@ EXECUTED; do not rerun/overwrite evidence. Shared measurement:collaboration-spac
 Contracts: Mobile collaboration-space-physical-worker.md and Group collaboration/space-physical-worker.md.
 No generic Starter delta. Do not dispatch old SDK4 native workflow as current SDK8 acceptance.
 
-ACTIVE: Group server2/session51285 is RUNNING on frozen candidate2 and owns the sole local heavy
-slot. Do not start another compiler/emulator until reaped. Full1/session12080 REAPED after1324.904s:
-492 scheduled =490 passed,1 failed fixture,1 unchanged explicit opt-in report-export elapsed-hour skip.
-The new HTTP fixture collided with the previous test's globally unique provider room. Candidate2
-parameterizes the existing seed and gives only the new test its own room; production is unchanged.
-Format2/session5942 REAPED PASS22.344s. Server2 repeats all75 affected HTTP cases,format/architecture/
-container checks; full1 domain205,data61,worker151 keep exact sources. Candidate2 has8 files/8,745
-inputs; compact manifest643f09cad7a0e5e6d02c8ecd894684a71c5241e30d1ace0a4aaa7ecc8f8694da.
-Group .work/space-original-physical-read-2026-11-11 preserves candidate/full1 and candidate2 maps,
-runners, prior XMLs and failures. Source NOT accepted yet. Native POST /spaces/{spaceId}/legacy-rooms/read
-reads explicit Company/original-room metadata with configured server and current native admission,
+Group original physical metadata8-file increment is ACCEPTED. Full1/session12080 and server2/session51285
+are REAPED. Final492 scheduled =491 passed +1 unchanged explicit opt-in report-export elapsed-hour
+skip:205 domain,61 data,75 HTTP,151 worker. Full1 fixture collision preserved; only the new fixture's
+room ID and seed parameter changed afterward. All75 server tests reran PASS112.316s; exact unchanged
+domain/data/worker results retained from full1/1324.904s. Format2 PASS22.344s; architecture/container
+checks passed. Audit accepted8,745 inputs/manifest e0b48a6b98fbd6b2616b34cea410e4f12d718fc3caf690c5a93d931e42b5f727,
+all prior selected case IDs plus205 prior domain cases preserved. Shared measurement:
+collaboration-space-original-physical-read-2026-11-11.json. Group contract:collaboration/space-original-physical-read.md.
+Private .work/space-original-physical-read-2026-11-11 preserves both candidates,failed/full/HTTP
+reports and accept.py/accepted.json. No live/schema/SDK activation. Native POST /spaces/{spaceId}/legacy-rooms/read
+now reads explicit Company/original-room metadata with configured server and current native admission,
 without publication,provider I/O,device/job creation. Shared DI worker context was exercised.
 
-ACTIVE Mobile:18 source/test files implement logical/scan write confirmation, UNFORMATTED/UNTESTED.
-.work/space-incoming-write-confirmation-2026-11-11 owns accepted b86d0c10eac451006810afb1dd457a3912dbc786
-baseline4,897 inputs,1,283 XMLs/11,362 cases,design-review.md,run.py,accept-focused.py,accept-full.py
-and expected.json. Pure policies confirm exact logical transitions/removal and scan cursor/tasks,
-allow independent producer cursor/physical changes, preserve later generations/inventory and separate
-known CAS contention from uncertain failure. Advance/Recover/Defer/Complete/Discover use them;
-logical Defer propagates1s busy after current admission without durable30s delay. Tests add25 common
-cases and1 app-worker case, including before-CAS versus after-commit/lost-reply interleavings.
-Expected focused421,browser386,full11,413; no acceptance claim yet. Format then freeze sources after
-Group heavy reaps; run focused/browser/full and preserve every baseline case ID and dependency closure.
+ACTIVE Mobile: focused1/session93547 RUNNING, sole local heavy slot.18 source/test files are FROZEN;
+no edits until reaped. Format1/session75188 REAPED PASS36.013s.4,902-input manifest
+88424b4a3ed9d4d28004032105d2cd911335641011d44759298598967ecccad1.
+.work/space-incoming-write-confirmation-2026-11-11 owns accepted b86 baseline4,897 inputs,
+1,283 XMLs/11,362 cases,candidate maps,design-review.md,runners/audits and expected.json.
+Pure policies confirm exact logical transitions/removal and scan cursor/tasks while preserving
+independent producer cursor/physical changes,later generations and inventory. Advance/Recover/Defer/
+Complete/Discover invoke them; logical Defer propagates1s known CAS busy after current admission,
+without durable30s delay. Tests add25 common cases and1 app-worker case including before-CAS versus
+after-commit/lost-reply. Expected focused421,browser386,full11,413. Source is NOT accepted yet.
+Continue focused/browser/full and preserve all baseline case IDs and dependency closures.
 
 NEXT after these increments: finite remote published metadata, explicit original Company routing/
 storage, complete bounded native inventory, keys-only recovery and actual-runtime raw collection.

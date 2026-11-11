@@ -1,0 +1,72 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "5a6fa03841eb026120609fbab836b8e944e9cac6",
+  "sourceFiles": 8745,
+  "changedSourceFiles": 8,
+  "sourceManifestSha256": "e0b48a6b98fbd6b2616b34cea410e4f12d718fc3caf690c5a93d931e42b5f727",
+  "candidate": 2,
+  "counts": {
+    "tests": 492,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1
+  },
+  "passed": 491,
+  "domain": 205,
+  "data": 61,
+  "server": 75,
+  "workerScheduled": 151,
+  "priorSelectedCaseIds": {
+    "NativeCollaborationSpaceDirectTest": 5,
+    "CollaborationSpaceConversationRepositoryTest": 10,
+    "NativeCollaborationSpaceRoomTest": 38,
+    "NativeCollaborationSpaceConfigurationTest": 1,
+    "NativeCollaborationSpaceDisabledConfigurationTest": 2,
+    "ApiContractHttpTest": 70
+  },
+  "previousDomainCasesPreserved": 205,
+  "full1": {
+    "session": 12080,
+    "elapsedSeconds": 1324.904,
+    "initialFailedNewFixtureCases": 1,
+    "retainedDomainDataWorkerScheduled": 417
+  },
+  "server2": {
+    "session": 51285,
+    "elapsedSeconds": 112.316,
+    "passed": 75,
+    "sourceChangeAfterFull1": "Only unique-room identity in the new HTTP fixture and its existing seed parameter."
+  },
+  "format2": {
+    "session": 5942,
+    "elapsedSeconds": 22.344
+  },
+  "requiredChecks": [
+    "formatCheck",
+    "architectureCheck",
+    "containerImageCheck",
+    "apps:worker:test"
+  ],
+  "skip": {
+    "class": "dev.fajar.hris.worker.ReportExportElapsedRetentionTest",
+    "test": "elapsedExpiryPreservesGraceAndQuotaUntilRealObjectsAndTheirLostDeletionReceiptAreRetired()",
+    "reason": "Existing real elapsed-hour report-export test is explicit opt-in and outside this change."
+  },
+  "route": "POST /api/v1/collaboration/spaces/{spaceId}/legacy-rooms/read",
+  "inputs": [
+    "companyId",
+    "matrixRoomId"
+  ],
+  "providerServerSource": "Configured policy; never inferred from room ID",
+  "result": "Existing original Company conversation and immutable bound-room metadata",
+  "nativeAdmissionBeforeAndAfterRead": true,
+  "currentDenialDominatesLateAcquisition": true,
+  "operationBudgetSeconds": 30,
+  "createsSpaceBinding": false,
+  "providerRequests": 0,
+  "newMigration": false,
+  "liveDeployment": false,
+  "mobileConsumerEnabled": false,
+  "nativeSdkExecution": false,
+  "all54PrdGroupsRemainOpen": true
+}
