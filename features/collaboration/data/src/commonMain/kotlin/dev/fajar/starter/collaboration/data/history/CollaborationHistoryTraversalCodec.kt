@@ -37,6 +37,7 @@ private data class HistoryProgressDto(
     val schema: Int = 1,
     val incoming: IncomingHistoryPositionDto? = null,
     val provider: HistoryProviderIdentityDto? = null,
+    val recovery: HistoryRecoveryPositionDto? = null,
 )
 
 @Serializable
@@ -49,6 +50,16 @@ private data class IncomingHistoryPositionDto(
     val pendingAfter: String? = null,
     val pendingThrough: Long? = null,
     val pendingRetryRequired: Boolean = false,
+)
+
+@Serializable
+private data class HistoryRecoveryPositionDto(
+    val generation: String,
+    val through: Long,
+    val after: String? = null,
+    val complete: Boolean = false,
+    val unresolved: Boolean = false,
+    val requestedGeneration: String? = null,
 )
 
 @Serializable
@@ -100,12 +111,20 @@ internal class CollaborationHistoryTraversalCodec(
             )
         require(value.roomId == traversal.roomId)
         if (coordinates is CollaborationHistoryCoordinates.Space) {
-            require(value.schema == 3 && value.provider != null)
+            require(value.schema in 3..4 && value.provider != null)
         } else {
-            require(value.schema in 1..2 && value.provider == null)
+            require(value.schema in setOf(1, 2, 4) && value.provider == null)
             require((value.schema == 1) == (value.incoming == null))
         }
+        require((value.schema == 4) == (value.recovery != null))
         require(traversal.purpose == CollaborationHistoryPurpose.Incoming || value.incoming == null)
+        require(value.recovery?.after?.let(historyReferenceCursor::matches) != false)
+        require(
+            value.recovery?.let {
+                val after = it.after
+                after == null || after.substringBefore('/').toLong() < it.through
+            } != false
+        )
         require(value.incoming?.pendingAfter?.let(historyReferenceCursor::matches) != false)
         require(value.references in 0..9_007_199_254_740_991L)
         return CollaborationHistoryProgress(
@@ -125,6 +144,16 @@ internal class CollaborationHistoryTraversalCodec(
                 value.provider?.let {
                     CollaborationHistoryProviderIdentity(it.companyId, it.deviceId)
                 },
+                value.recovery?.let {
+                    CollaborationHistoryRecoveryPosition(
+                        it.generation,
+                        it.through,
+                        it.after,
+                        it.complete,
+                        it.unresolved,
+                        it.requestedGeneration,
+                    )
+                },
             )
             .also { require(validCollaborationHistoryProgress(it)) }
     }
@@ -133,7 +162,16 @@ internal class CollaborationHistoryTraversalCodec(
         require(validCollaborationHistoryProgress(progress))
         val space = coordinates is CollaborationHistoryCoordinates.Space
         require(space == (progress.provider != null))
-        val schema = if (space) 3 else if (progress.incoming == null) 1 else 2
+        val schema =
+            if (progress.recovery != null) 4
+            else if (space) 3 else if (progress.incoming == null) 1 else 2
+        require(progress.recovery?.after?.let(historyReferenceCursor::matches) != false)
+        require(
+            progress.recovery?.let {
+                val after = it.after
+                after == null || after.substringBefore('/').toLong() < it.through
+            } != false
+        )
         require(
             traversal.purpose == CollaborationHistoryPurpose.Incoming || progress.incoming == null
         )
@@ -171,6 +209,17 @@ internal class CollaborationHistoryTraversalCodec(
                     provider =
                         progress.provider?.let {
                             HistoryProviderIdentityDto(it.companyId, it.deviceId)
+                        },
+                    recovery =
+                        progress.recovery?.let {
+                            HistoryRecoveryPositionDto(
+                                it.generation,
+                                it.through,
+                                it.after,
+                                it.complete,
+                                it.unresolved,
+                                it.requestedGeneration,
+                            )
                         },
                 )
             ),

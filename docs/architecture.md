@@ -1,5 +1,8 @@
 # Architecture
 
+[Independent recovery positions](collaboration-history-recovery-position.md) share encrypted references while preserving primary traversal.
+Semantic page ownership and recovery scheduling remain separate.
+
 [Space key-history coordinates](collaboration-space-key-history.md) preserve Space and historical device without alias redirection.
 Independent recovery checkpoints and native acquisition remain separate.
 

@@ -1,5 +1,75 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 18:59 UTC. This opening owns current work; earlier sections are historical.
+
+## Independent recovery position accepted; finite request/page advancement next
+
+Sixteen Kotlin files ACCEPTED (11 new, 5 existing). Independent active/requested recovery state
+shares existing encrypted Company/Space reference rows. Explicit schema4 preserves Company1/2
+and Space3 reads, rejects mismatched old headers, validates finite cursor encoding/sequence and
+keeps provider provenance. Primary stage/seek/resolution preserve recovery; conditional recovery
+updates preserve primary changes and lose to competing recovery/CAS. Exact persisted replay
+rechecks the still-owned checkpoint. Absent history creates no key, provider position or wake.
+Domain policy remains pure; repository maps raw storage failures and propagates cancellation.
+
+format1/5974 REAPED PASS36.040s. focused1/24234 REAPED FAILED182.540s after32 domain cases
+passed: cross-module nullable-property smart-cast in codec. Capturing recovery.after locally
+fixed compilation in both directions; no policy/assertion weakened and no case removed.
+Original candidate/manifest943c084a0ad7a506757c07f596493f692039182bf9a4b3892833a7ec2cb6eb8b
+and review remain in failed-candidate-1. Preserve this failed run, not a fabricated all-green
+history. format2/33911 REAPED PASS36.333s; focused2/71171 REAPED PASS335.693s/114;
+browser1/81091 REAPED PASS144.297s/112. Exact226 focused accepted.10 domain,8 common real-cipher,
+20 actual DB cases each exercising both namespaces, plus primary history/graph controls.
+
+Full1/70802 REAPED PASS587.521s; audit6065 REAPED.
+12,932 accepted = 10894 fresh+2038 exact unchanged controls.
+Prior identities/source/library/dependency closures verified.5,031 inputs; final manifest
+32647f5dae658283c7a8f1c6f05362d51108167cadc756b8b5de4aa0043dbf53.
+Proof APK151774752 bytes/SHAa2401786c857bc7f0aa7548e8fee0a3d8664182da9c4b9c623d06d0d3244bfc3. No native execution implied.
+
+Workspace .work/history-recovery-position-2026-11-11 owns evidence. Publisher and this writer
+HAVE EXECUTED. Commit/push, then dispatch ONCE on validation/history-recovery-position-20261111;
+expected15,300=10,910 portable+4,390 Apple. Not yet dispatched. Space43077651832 attached,
+expected15,178. Original43073411916 portable10,774 ACCEPTED/Apple pending;61265 REAPED and
+public evidence updated. Fairness43069542685 portable10,726 accepted/Apple pending.
+Inventory43066807577 FULL15,020; locator43062334365 FULL14,942; remaining accepted runs below.
+Kotlin/Swift host evidence is not native SDK8 Apple. Historical application43031231253 remains
+incomplete. Keep attached runs and their provenance; never redispatch unchanged source to erase it.
+
+Next7-file next-history-recovery-turn-draft REVIEWED, UNAPPLIED/UNTESTED;2 new+5 guarded existing.
+Pure request/bounded-page/advance policies preserve active progress, coalesce requests, promote
+the latest request at EOF and retain unresolved evidence. Exact raw advancement verifies source
+rows, last cursor and <=17 pending indexed rows from a matching query checkpoint. Every pending
+row in the crossed interval must have been attempted; null/partial EOF cannot skip rows.
+CAS protects coverage; late primary resolution/appends and newer requested generations survive.
+No content acknowledgement or implicit retry. Repeated old page loses and requires readback/
+fresh selection. Read next-history-recovery-turn-review.md and next-history-recovery-owners-review.md.
+
+20 new domain cases plus15 added actual DB cases (contract becomes35 each platform) cover
+continuous hints through37 references, coalescing/promotion, sparse bounds, omitted middle rows,
+forged EOF/lookahead, concurrency, cancellation and lost reply/reopen. Draft generators already
+executed; final draft includes later reviewed fixes. Do not rerun generators over final files.
+prepare/configure-next-history-recovery-turn.py PREPARED NOT EXECUTED: require accepted clean
+pushed current source and its one hosted dispatch. Next workspace history-recovery-turn-2026-11-11
+expects5,033 inputs/13,002 local/149 focused+147 browser;15,405 hosted=10,980 portable+4,425 Apple.
+Continue directly through apply, format, freeze, focused/browser/full, publication and push.
+
+This accepted slice is local storage, not a running recovery worker. Admitted content/outcome
+owners, global account-owned lane bounds/retirement/wakes, primary EOF demotion with recovery
+demand, trigger-specific retry and SDK key subscription lifecycle remain. Unsupported/malformed/
+missing-original/redaction states are not all missing keys. Do not fabricate content, clone
+reference catalogs, make another64-room queue or invent a sync position. Source-key events must
+retain equal-payload distinct occurrences and cancel/drain before parent/store release. Full
+blocked-queue liveness, authoritative native absence, native SDK8 Apple and combined Company/
+Group execution remain open. Raw collector/Original producer OFF; all54 PRD groups OPEN.
+No Starter/live change. Continue long run and push every commit.
+
+Phone69750 REAPED timeout18:29:20UTC/20.021s, no install; retry no earlier19:00UTC. Release89 SDK6
+awaits install. Notify first, explicit serial/install-only, never drive UI. No compiler/emulator
+now. Preserve original intents/Draft66/keys/stores/SDK assets/inspector gradlew.bat and
+live90163c3/schema116.4 Group OFF.
+
+
 Updated 11 November 2026, 18:39 UTC. This opening owns current work; earlier sections are historical.
 
 ## Independent recovery position applied; focused validation running

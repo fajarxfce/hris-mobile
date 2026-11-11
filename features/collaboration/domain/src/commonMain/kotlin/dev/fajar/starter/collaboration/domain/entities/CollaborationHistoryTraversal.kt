@@ -34,6 +34,7 @@ data class CollaborationHistoryProgress(
     val incoming: CollaborationIncomingHistoryPosition? = null,
     /** Original physical device for Space cursors; Company keeps its established keyed scope. */
     val provider: CollaborationHistoryProviderIdentity? = null,
+    val recovery: CollaborationHistoryRecoveryPosition? = null,
 ) {
     val exhausted: Boolean
         get() = next == null

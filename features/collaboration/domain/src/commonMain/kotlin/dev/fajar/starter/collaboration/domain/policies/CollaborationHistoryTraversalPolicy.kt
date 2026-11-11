@@ -20,6 +20,10 @@ fun validCollaborationHistoryProgress(progress: CollaborationHistoryProgress): B
                 (incoming.pendingThrough == null ||
                     incoming.pendingThrough in 1..progress.references) &&
                 (!incoming.pendingRetryRequired || incoming.pendingThrough != null)
+        } ?: true) &&
+        (progress.recovery?.let {
+            progress.incoming != null &&
+                validCollaborationHistoryRecoveryPosition(it, progress.references)
         } ?: true)
 }
 

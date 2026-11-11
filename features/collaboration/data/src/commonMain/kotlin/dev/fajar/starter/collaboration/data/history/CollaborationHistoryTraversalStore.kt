@@ -163,6 +163,7 @@ internal class CollaborationHistoryTraversalStore(
                     count,
                     collaborationIncomingHistoryPosition(traversal, previous, captured, origin),
                     provider,
+                    previous?.recovery,
                 )
             val documents = added.map { codec.reference(progress, it) }
             val checkpoint = codec.checkpoint(progress)
@@ -175,6 +176,38 @@ internal class CollaborationHistoryTraversalStore(
                     ReplicaSnapshot(progress.generation, checkpoint, documents),
                 )
             else replicas.commit(raw.handle, raw.revision, checkpoint, documents, true)
+        }
+    }
+
+    suspend fun replaceRecovery(
+        coordinates: CollaborationHistoryCoordinates,
+        traversal: CollaborationHistoryTraversal,
+        expected: CollaborationHistoryProgress,
+        recovery: CollaborationHistoryRecoveryPosition,
+    ): Boolean {
+        require(traversal.purpose == CollaborationHistoryPurpose.Incoming)
+        require(validCollaborationHistoryProgress(expected) && expected.incoming != null)
+        require(validCollaborationHistoryRecoveryPosition(recovery, expected.references))
+        val scope = coordinates.scope
+        val partition = coordinates.traversalPartition(traversal)
+        val raw = replicas.checkpoint(scope, partition) ?: return false
+        return withCodec(coordinates, traversal) { codec ->
+            val current = codec.progress(raw)
+            if (
+                current.generation != expected.generation ||
+                    current.provider != expected.provider ||
+                    current.incoming == null ||
+                    current.revision < expected.revision ||
+                    current.references < expected.references
+            )
+                return@withCodec false
+            if (current.recovery == recovery)
+                return@withCodec replicas.checkpoint(scope, partition) == raw
+            if (current.recovery != expected.recovery) return@withCodec false
+            val updated = current.copy(revision = current.revision + 1, recovery = recovery)
+            val checkpoint = codec.checkpoint(updated)
+            currentCoroutineContext().ensureActive()
+            replicas.commit(raw.handle, raw.revision, checkpoint, emptyList(), true)
         }
     }
 

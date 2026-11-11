@@ -718,6 +718,10 @@ class CollaborationBindingsTest {
                     container.koin.get<CollaborationHistoryTraversalRepository>(),
                     container.koin.get<CollaborationHistoryTraversalRepository>(),
                 )
+                assertSame(
+                    container.koin.get<CollaborationHistoryRecoveryRepository>(),
+                    container.koin.get<CollaborationHistoryRecoveryRepository>(),
+                )
                 assertNotNull(container.koin.get<CollaborationDraftRepository>())
                 assertNotNull(container.koin.get<CollaborationDraftRecoveryCursorRepository>())
                 assertNotNull(container.koin.get<ReadCollaborationDraftRecovery>())
