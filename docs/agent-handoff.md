@@ -1,6 +1,66 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 16:17 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 16:21 UTC. This opening owns current work; older sections are historical.
+
+## Local incoming-history locator discovery applied; focused validation running
+
+Scheduling source23fd5a9bcc0089546c231d5c20adc1e1265ccc0e and Group docs5bdf4195 PUSHED,
+90094/61936 reaped. Local12,622 accepted (full54856/audit86295 reaped),440 focused. Hosted
+43057055642 dispatched ONCE at16:18:41UTC on validation/inventory-scheduling-20261111;
+37910 reaped, expected14,849=10,600 portable+4,249 Apple. Existing run stays attached.
+Retention43053179213 pending, expected14,719; progress43049052938 portable10,418 accepted/
+Apple pending. Owned43044913726 FULL14,527, raw43040652714 FULL14,458 and alias43037578170
+FULL14,434 accepted. Apple evidence includes16 Swift/unsigned-host cases, not native SDK8.
+Prior application43031231253 remains historically incomplete. Do not redispatch unchanged runs.
+
+Current11-file locator change APPLIED, NOT ACCEPTED:10 new Kotlin+1 existing app binding.
+Previous prepare/configure scripts HAVE EXECUTED at16:19:33UTC. Workspace
+.work/incoming-history-locators-2026-11-11 owns baseline, frozen candidate and reports.
+format1/67290 REAPED PASS36.019s. focused1/67038 RUNNING, expected163; browser161/full12,688
+follow. Frozen5,011-input manifest986a398ddcd13d7cf9a97dbd759536d79dc6e7a8b1bdbdf08539fc60f2cd138c.
+Do not edit source while tests run. Hosted scripts PREPARED NOT DISPATCHED; expected14,942:
+10,666 portable (5,068 desktop/835 Android/4,763 browser)+4,276 Apple. Publication scripts and
+next implementation draft are NOT prepared yet. Current source/test files are uncommitted.
+
+Domain locator/page/repository values have separate Company/Space read overloads. The repository
+uses existing raw published-checkpoint paging and a named data mapper, without another catalog
+or repository nesting. At most17 rows read/16 consumed; non-incoming lanes may produce an empty
+page with a non-null cursor. Scope, publication, order, exclusive seek and coordinate shapes
+are validated. Staging is excluded by the existing account-checked transaction. No content,
+keys, native client, transport, write or wake. Locators do not authenticate rooms or pending refs.
+12 common mapper cases plus15 actual metadata storage cases per host drafted. Desktop/browser/
+Apple wrappers cover isolation, all devices, staging, reopen/reauthentication, removed cursors,
+insertions before the cursor, bounded I/O and observation cancellation. Fixtures intentionally
+use opaque checkpoint payloads; this is not decryption/native proof. App DI graph is extended.
+
+Next: reap focused67038 and inspect any failure; keep failed evidence and expectations. Then
+browser, focused324 audit, full12,688 and exact source/case/dependency verification. Prepare
+contract/publisher/handoff against real results, commit/push, dispatch hosted once. Keep prior
+hosted runs attached. Resolve durable active/requested passes and scheduling liveness before
+raw activation; read next-keys-fairness-review.md and next-keys-signal-review.md.
+
+Review found two liveness gaps: current provider Advance preserves FIFO position, and four
+slow primary operations can exhaust the worker budget before appended work. Inventory batch
+loss/work.omitted resets its generation/cursor/retry; sustained overflow can restart the first
+prefix indefinitely. Current tests prove retention/exact ownership, not progress under ongoing
+loss. Plan a coherent active/requested inventory pass and fair-turn protocol, preserving old v5
+meaning through explicit migration and exact completion/readback. Do not patch position alone:
+current Advance returns Boolean and the app retains captured position while updating phase.
+
+SDK8 already exports subscribeToRoomKeyChanges/RoomKeyChangesListener/RoomKeyChangeBatch through
+stored-key-hints.patch. Registration/lag emits reconciliation; changes contain at most64 room
+IDs, no key material. Mobile subscription/consumer remains absent; bind once to the installed
+runtime, not each worker turn. Typed metadata resolution, active/requested keys passes, targeted/
+global recovery and atomic primary demotion remain. Never drop unresolved refs to free slots.
+Native allocation/performance, authoritative absence and combined Company-storage/Group-native
+proof remain. Raw observation/Original producer OFF; all54 PRD groups OPEN. No Starter/live change.
+
+Phone59554 REAPED timeout at15:55:22UTC/20.02s; no install attempted. Evidence in retention
+workspace/phone-connect-1555.json, next retry no earlier16:26UTC. Release89 SDK6 awaits install.
+Notify first, explicit serial/install-only, never drive phone UI. No emulator. Preserve original
+intents, Draft66, keys/stores/SDK assets, inspector gradlew.bat and live90163c3/schema116.4 Group OFF.
+Continue long run and push every commit.
+
 
 ## Serialized inventory scheduling accepted — continue local locator discovery
 
