@@ -53,5 +53,71 @@
   "starterChanged": false,
   "liveDeploymentChanged": false,
   "all54PrdGroupsRemainOpen": true,
-  "preservedFailedRuns": []
+  "preservedFailedRuns": [],
+  "hostedRun": {
+    "workflow": "collaboration-control.yml",
+    "ref": "validation/incoming-fairness-20261111",
+    "dispatched": true,
+    "expectedPortable": {
+      "desktopTest": 5102,
+      "testAndroidHostTest": 835,
+      "wasmJsBrowserTest": 4789
+    },
+    "expectedApple": {
+      "iosSimulatorArm64Test": 4302
+    },
+    "expectedTotal": 15028,
+    "previousRun": 43066807577,
+    "requiredPhysicalWorkerCases": 13,
+    "expectedDomainClasses": {
+      "ReadCollaborationSpaceOriginalIncomingReferencesTest": 24,
+      "CompleteCollaborationSpaceOriginalIncomingReferencesTest": 20,
+      "CompleteCollaborationSpaceOriginalIncomingRoomTest": 24,
+      "CollaborationSpaceIncomingAliasPolicyTest": 18,
+      "ResolveCollaborationSpaceIncomingAliasTest": 25,
+      "CollaborationSpaceInventoryProgressPolicyTest": 12,
+      "CollaborationSpaceInventoryRetentionPolicyTest": 18,
+      "RetainCollaborationSpaceRoomInventoryTest": 27,
+      "CollaborationSpaceInventoryRetryPolicyTest": 11,
+      "CollaborationSpaceInventorySelectionTest": 6,
+      "DeferCollaborationSpaceInventoryTest": 21,
+      "CollaborationSpaceInventoryRequestPolicyTest": 12,
+      "CollaborationSpaceInventoryRequestOwnerTest": 8,
+      "CollaborationSpaceIncomingBatchPolicyTest": 22,
+      "RetainCollaborationSpaceSyncBatchesTest": 15,
+      "CollaborationSpaceIncomingSchedulingTest": 19,
+      "CollaborationSpaceIncomingRetryTest": 15,
+      "AdvanceCollaborationSpaceOriginalIncomingProviderTest": 24
+    },
+    "originalMetadataStorageCases": 18,
+    "companyTraversalStorageCases": 18,
+    "companyIncomingWaveCases": 12,
+    "incomingDemandStorageCases": 53,
+    "sourceScope": "Original successful continuation uses existing zero-backoff queue rotation; inventory precedes slow primary work; keys-only recovery remains separate",
+    "dispatchOnlyAfterLocalAcceptanceAndCommit": true,
+    "expectedApplicationClasses": {
+      "CollaborationSpaceOriginalIncomingTurnTest": 22,
+      "CollaborationSpaceOriginalIncomingWorkerTest": 8,
+      "CollaborationSpaceIncomingWorkerTest": 21,
+      "CollaborationSpaceIncomingPhysicalWorkerTest": 13,
+      "CollaborationSpaceIncomingAliasWorkerTest": 8,
+      "CollaborationSpaceInventoryWorkerTest": 16,
+      "CollaborationSpaceIncomingFairnessTest": 8
+    },
+    "requiredAndroidInventoryCases": 24,
+    "portableTimeoutMinutes": 60,
+    "requiredAndroidInventoryReadCases": 14,
+    "requiredAndroidAdoptionCases": 16,
+    "expectedCommonDataClasses": {
+      "CollaborationRoomInventoryMapperTest": 12,
+      "CollaborationEventAvailabilityTest": 6,
+      "SpaceSyncBatchMapperTest": 8,
+      "CollaborationIncomingHistoryLocatorPageMapperTest": 12
+    },
+    "incomingHistoryLocatorCases": 15,
+    "sourceCommit": "cc12b936562eac068dbcc2e0ad5cbecf0209ab84",
+    "dispatchedAt": "2026-11-11T17:34:52.065506+00:00",
+    "runId": 43069542685,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43069542685"
+  }
 }

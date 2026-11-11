@@ -1,6 +1,61 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 17:34 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 17:39 UTC. This opening owns current work; older sections are historical.
+
+## Original key-history applied; focused validation running
+
+Fair worker turns source cc12b936562eac068dbcc2e0ad5cbecf0209ab84 and Group docs4bd38882
+PUSHED;89574/59693 REAPED. Local12,748 accepted (10,392 fresh+2,356 controls),320 focused.
+Hosted43069542685 dispatched ONCE17:34:52UTC on validation/incoming-fairness-20261111;
+7275 REAPED, expected15,028=10,726 portable+4,302 Apple. Attached current workspace in prior
+fairness stage; never redispatch unchanged source. Inventory43066807577 still attached,
+expected15,020; locator43062334365 portable10,666 accepted/Apple pending. Scheduling43057055642
+FULL14,849 (Apple4219 REAPED4,249) public. Earlier accepted hosted evidence remains below;
+application43031231253 remains historically incomplete. Apple common/host != native SDK8.
+
+Current5-file Original key-history change APPLIED, NOT ACCEPTED.3 new+2 existing Kotlin.
+Previous prepare/configure scripts HAVE EXECUTED17:35:15UTC. Workspace
+.work/space-original-key-history-2026-11-11 owns baseline, source captures and reports.
+format1/84739 REAPED PASS36.698s. focused1/98953 RUNNING, expected101; new24 domain cases have
+reported zero failures, but focus compilation/checks are not yet complete. Browser99/full12,796
+NOT RUN.5,017-input manifest6d73098b1ec7177d7bc2b00815eff82bee448b06d56f365745593397386b9519.
+No source edits during checks. Initial freeze command failed because formatSessionReaped had
+not been recorded; no source changed. State corrected and freeze succeeded. Focus runner had
+already captured its own complete source manifest; it exactly matches the candidate. Preserve
+this procedural failure and both source captures; do not report a test failure or hide it.
+
+Typed Company history resolution accepts explicit Company+conversation/device locator and the
+current installed source, using existing registered Original policy. No primary task fabrication,
+UC-to-UC, selected-Company inference, network/key request, write or scheduler. Exact metadata
+checks and final registration readback fence successful and missing-metadata results. Historical
+device stays separate from current native/Group device IDs. MetadataUnavailable means unresolved,
+never empty/completed. Company list metadata has no room/server identity, so no safe fallback.
+24 new common domain cases reuse existing source/metadata fixtures; existing incoming-loader24,
+real Original-metadata18/traversal18/locator15 storage cases and appBindings2 are controls.
+
+Next: reap98953, inspect failures without weakening assertions; browser, exact200 focused
+acceptance, full12,796 and source/case/dependency audit. Hosted scripts PREPARED NOT DISPATCHED:
+validation/original-key-history-20261111,15,100=10,774 portable+4,326 Apple. Publisher/contract/
+accepted-handoff not prepared. No next implementation draft yet. Continue after acceptance/push.
+
+Keys ledger design uncovered a startup constraint: key signals can arrive offline BEFORE a real
+sync position exists. IncomingSourceProgress requires a nonempty real position; do not invent one
+or reset that protocol. Read next-keys-pass-ledger-review.md. A separate source-bound Company/Space
+pass record inside the same incoming transaction may be needed, independent of primary room
+capacity; this is not another room queue. Its source lifetime/retirement, schema/part bounds,
+active/requested cursor+retry, exact demotion readback and sole reference-seek ownership still
+need review/tests. Missing metadata must advance with unresolved-seen retry. Startup reconcile
+cannot reset retry; new refs behind the cursor need a later pass. Existing SDK8 stored-key
+listener has no mobile consumer yet. Full blocked64-room drainage, native allocation/performance,
+authoritative absence, Published history/LEGACY handling and combined Company/native proof remain.
+Raw collector/Original producer OFF; all54 PRD groups OPEN. No Starter/live change.
+
+Phone80713 REAPED timeout17:27:13UTC/20.022s, no install attempted. Evidence prior fairness
+workspace/phone-connect-1730.json; retry no earlier17:58UTC. Release89 SDK6 awaits install.
+Notify first, explicit serial/install-only, never drive UI. No emulator. Preserve original
+intents, Draft66, keys/stores/SDK assets, inspector gradlew.bat and live90163c3/schema116.4
+Group OFF. Continue long run and push every commit.
+
 
 ## Fair application turns accepted; continue Original key-history resolution
 
