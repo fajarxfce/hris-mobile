@@ -1,5 +1,96 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 21:00 UTC. This opening owns current work; earlier sections are historical.
+
+## Original historical content accepted; bounded local recovery reference reading next
+
+Five Kotlin files ACCEPTED (3 new,2 existing). The existing Original event usecase now has a typed
+historical overload alongside the unchanged primary API. Both use one Company content/edits
+pipeline,16-source bound and deduplicated target reads. Historical coordinates keep their old
+device; native snapshots must match the CURRENT registered Original Company/device/source.
+No fake primary task, primary-demand read for historical content, reference/global acknowledgement
+or new provider work. The primary overload still requires its Pending task and exact source/device.
+Admission, metadata, registration, runtime and preparation deadlines fence I/O and final outcomes.
+Missing keys return an unresolved outcome; explicit later acquisition can recover the same events.
+
+Current workspace .work/original-key-content-2026-11-11. Baseline a3bc8a649fd1e8e5970f25051717f4c30e1e74f9,
+13,148 cases/5,039 inputs.5,042 accepted inputs; manifest 0168e12b76440ec2433511bd6b3602cc7b7c6ee7cae6cd9015698aff8d91e877.
+26 new common domain cases; all33 old primary acquisition cases remain. Exact422 focused/browser
+accepted (focused-3/browser-1); full full-1/5600 REAPED PASS
+571.668s, audit69539 REAPED.13,200 accepted = 11,162
+fresh +2,038 exact unchanged controls. Case IDs/dependency closures verified.
+Proof APK 151783647 bytes/SHA fd172f645ba11218dc09ce8055370cec5e3b8cea0a7937beeb439e0de58f7e38; no native execution claim.
+
+Preserve both failed attempts. focused-1/79904 REAPED118.018s failed compilation before tests:
+new assertion eventId corrected to sourceEventId. focused-2/51177 REAPED118.206s ran149/one new
+fixture failure: a queue-change helper needed the initial queue which the fixture had cleared.
+That case now starts with and asserts a primary queue before removing it during acquisition.
+Only the new test file changed. All149 IDs remain; production and old assertions are unchanged.
+failed-candidate-1/compile-failure-review.json and failed-candidate-2/fixture-failure-review.json
+own exact prior manifests and corrections. Format runs47902/80781/23001 REAPED passed; current
+format3 took36.544s. Do not erase these failures or rerun old generators over corrected tests.
+
+Publisher and this accepted writer HAVE EXECUTED. Commit/push, then dispatch ONCE on
+validation/original-key-content-20261111, expected15,695=11,178 portable+4,517 Apple. Its plan is
+NOT DISPATCHED yet. Prior account recovery43096361337 was dispatched ONCE20:29:29UTC froma3bc8a64,
+91441 REAPED; expected15,617, not yet audited. Attempt1 ended startup_failure before any jobs.
+Workflow SHA cefd79c781d95db6a423be22708933b870219251ef0326053b721cf5e57c3019 exactly matches the accepted Position run. Exact cause unavailable; CLI
+workflow-error wording is heuristic. One bounded rerun of the same run requested20:56:20UTC,
+22546 REAPED success. Original attempt JSON and rerun record preserved/public. No further retry
+without inspecting this outcome. Account locator43092246512 expected15,497 attached; portable job130772532026 also FAILED artifact
+upload with no artifact and stale in_progress status (73048 REAPED). Its saved job metadata and
+portable-upload-failure-1.json preserve this failure; no retry dispatched.
+Turn43087494327 portable10,980 accepted. Its original Apple job130755637532 has successful build
+steps but FAILED artifact upload, no Apple artifact, stale API status in_progress. Evidence in
+history-recovery-turn-2026-11-11/hosted-43087494327/apple-upload-failure-1*.json; log fetch404/58995
+REAPED. Inspect completed status and actual failure before ONE targeted failed-job retry; never
+redispatch the entire unchanged workflow or mark partial evidence full. Position43083225746 FULL
+15,300; Space43077651832 FULL15,178; Fairness43069542685 FULL15,028; Original43073411916 FULL15,100.
+Historical application43031231253 remains incomplete. Preserve all earlier run provenance.
+
+Next6-file next-original-key-reference-read-draft STATICALLY REVIEWED, UNAPPLIED/UNTESTED;4 new+2
+existing. One usecase admits the explicit historical source/Company/metadata and current registered
+Original identity, starts/coalesces an EXISTING recovery section through its repository and reads
+16 local pending references. One write at most, exact checkpoint/section readback confirms lost
+responses. Absence creates nothing. Completed current generations stay visited; later requests
+preserve active cursor/boundary. Pending results must keep the same active pass, allowing a newer
+requested identity but not loss of a known one. Captured through excludes concurrent primary
+appends. Returned events copied. Empty Flow fails; an empty page is not itself indexed EOF proof.
+No queue/source-position fabrication, content acquisition, reference/global completion, key probe,
+remote transport, session renewal or selected-company dependency. Five-second local lifetime.
+
+29 new common cases plus old loader/content/read/recovery/storage and both graph checks cover
+source/account/registration/metadata races, denied access, response loss/lying success, contention,
+regressions, absent/empty/complete states, replay/coalescing, bounds, malformed pages, deadlines,
+cancellation after commit/reopen, old credentials and immutable results. Generators EXECUTED;
+read next-original-key-reference-read-review.md. Prepare/configure-next-original-key-reference-
+read.py PREPARED NOT EXECUTED and gated on clean pushed current acceptance plus its one dispatch.
+Next workspace original-key-reference-read-2026-11-11 expects5,046 inputs/13,258 local,202 focused
++200 browser. Hosted15,782=11,236 portable+4,546 Apple. Continue apply/format/freeze/focused/browser/
+full/exact audit/publication/push directly. Do not claim draft behavior validated.
+
+Read next-key-recovery-completion-review.md: existing resolve requires the entire checkpoint; a
+validated atomic recovery reference-completion CAS is a candidate to avoid a split resolve/advance
+gap. No API/source implementation yet; retain primary semantics and prove lost replies separately.
+
+Read next-history-recovery-trigger-review.md before global service: another retained Company may
+await a different eligible source. Treating all conflicts as a timer retry of the first locator
+would pin the catalog. Outcome/trigger typing remains required, not implemented.
+
+No key producer/listener/global consumer activated. Remaining owners: admitted historical
+reference confirmation and recovery advancement; Space/Original alias content projection routing;
+whole-account finite service; primary EOF demotion plus request/wake; trigger-specific retry;
+full64-room key-blocked queue liveness; loss-aware native callback retention and producer receipts;
+listener cancel/isFinished drain before parent/store closure. Read inherited receipt/ownership
+reviews. Never copy distinctUntilChanged for equal-payload key occurrences or probe remote secret
+storage because the local encryption machine is absent.
+
+All54 PRD groups OPEN. No Starter/live change. Phone43486 REAPED timeout20:34:11UTC/20.003s;
+phone-connect-2034.json, no install. Retry no earlier21:06UTC. Release89 SDK6 awaits installation;
+notify first, explicit10.77.77.3:5555/install-only, never drive UI. Preserve original intents,
+Draft66, keys/stores, SDK assets, inspector gradlew.bat and live90163c3/schema116.4/Group OFF.
+Keep one compiler OR emulator, push every commit and continue the authorized long run.
+
 Updated 11 November 2026, 20:51 UTC. This opening owns current work; earlier sections are historical.
 
 ## Original historical content focused/browser accepted; full validation running

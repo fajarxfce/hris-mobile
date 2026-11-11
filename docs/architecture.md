@@ -1,5 +1,7 @@
 # Architecture
 
+[Original historical content](collaboration-original-key-content.md) uses the existing bounded Company content pipeline with current native admission and preserved historical device coordinates. Reference/global completion remains separate.
+
 [Account/root recovery state](collaboration-account-history-recovery.md) retains an independent pass and wake without a fabricated sync position.
 Content owners and bounded worker service precede producer activation.
 

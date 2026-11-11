@@ -32,30 +32,63 @@ class AcquireCollaborationSpaceOriginalEvents(
         runtime: CollaborationSpaceRuntimeReady,
         room: CollaborationSpaceOriginalIncomingRoom,
         eventIds: List<String>,
-    ): AppResult<CollaborationSpaceOriginalIncomingBatch> {
+    ): AppResult<CollaborationSpaceOriginalIncomingBatch> =
+        when (val result = acquire(runtime, OriginalEventOrigin.Incoming(room), eventIds)) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                AppResult.Success(
+                    CollaborationSpaceOriginalIncomingBatch(runtime, room, result.value)
+                )
+        }
+
+    suspend operator fun invoke(
+        runtime: CollaborationSpaceRuntimeReady,
+        history: CollaborationSpaceOriginalKeyHistory,
+        eventIds: List<String>,
+    ): AppResult<CollaborationSpaceOriginalKeyHistoryBatch> =
+        when (val result = acquire(runtime, OriginalEventOrigin.KeyHistory(history), eventIds)) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                AppResult.Success(
+                    CollaborationSpaceOriginalKeyHistoryBatch(runtime, history, result.value)
+                )
+        }
+
+    private suspend fun acquire(
+        runtime: CollaborationSpaceRuntimeReady,
+        origin: OriginalEventOrigin,
+        eventIds: List<String>,
+    ): AppResult<List<CollaborationIncomingHistoryResult>> {
         currentCoroutineContext().ensureActive()
         if (eventIds.size !in 1..16)
             return originalIncomingFailure("invalid_request", FailureKind.Validation)
         val captured = eventIds.toList()
+        val validOrigin =
+            when (origin) {
+                is OriginalEventOrigin.Incoming ->
+                    validCollaborationSpaceOriginalIncomingRoom(runtime, origin.room) &&
+                        origin.room.captured.phase == CollaborationSpaceIncomingPhase.Pending
+                is OriginalEventOrigin.KeyHistory ->
+                    validCollaborationSpaceOriginalKeyHistory(runtime, origin.history)
+            }
         if (
-            !validCollaborationSpaceOriginalIncomingRoom(runtime, room) ||
-                room.captured.phase != CollaborationSpaceIncomingPhase.Pending ||
+            !validOrigin ||
                 captured.distinct().size != captured.size ||
                 captured.any { !validCollaborationEventId(it) }
         )
             return originalIncomingFailure("invalid_request", FailureKind.Validation)
-        return Acquisition(runtime, room, captured).run()
+        return Acquisition(runtime, origin, captured).run()
     }
 
     /** Registration, source, raw events and retention plans belong to this invocation. */
     private inner class Acquisition(
         val runtime: CollaborationSpaceRuntimeReady,
-        val room: CollaborationSpaceOriginalIncomingRoom,
+        val origin: OriginalEventOrigin,
         val ids: List<String>,
     ) {
         val owner = runtime.owner
         val access = owner.localDirectoryAccess()
-        val position = room.conversation.conversation.position
+        val position = origin.conversation.conversation.position
         val companyAccess =
             CollaborationLocalAccess(
                 access.sessionId,
@@ -65,8 +98,8 @@ class AcquireCollaborationSpaceOriginalEvents(
             )
         val expectedMetadata =
             CollaborationSpaceOriginalRoomMetadata(
-                room.conversation.conversation,
-                requireNotNull(room.conversation.room),
+                origin.conversation.conversation,
+                requireNotNull(origin.conversation.room),
             )
         val requestedAt = clock.now()
         val started = timeSource.markNow()
@@ -77,7 +110,7 @@ class AcquireCollaborationSpaceOriginalEvents(
         val acquired = mutableMapOf<String, CollaborationAcquiredEvent>()
         val plans = linkedMapOf<String, CollaborationIncomingHistoryPlan>()
 
-        suspend fun run(): AppResult<CollaborationSpaceOriginalIncomingBatch> {
+        suspend fun run(): AppResult<List<CollaborationIncomingHistoryResult>> {
             try {
                 return withTimeoutOrNull(15_000) {
                     captureOriginal().let {
@@ -99,7 +132,11 @@ class AcquireCollaborationSpaceOriginalEvents(
             if (
                 installed == null ||
                     !validCollaborationSpaceIncomingSource(installed) ||
-                    installed.storeId != room.captured.sourceId
+                    when (origin) {
+                        is OriginalEventOrigin.Incoming ->
+                            installed.storeId != origin.room.captured.sourceId
+                        is OriginalEventOrigin.KeyHistory -> installed != origin.history.source
+                    }
             )
                 return originalIncomingFailure("source_changed", FailureKind.Unavailable)
             source = installed
@@ -109,7 +146,7 @@ class AcquireCollaborationSpaceOriginalEvents(
             return current()
         }
 
-        suspend fun retain(): AppResult<CollaborationSpaceOriginalIncomingBatch> {
+        suspend fun retain(): AppResult<List<CollaborationIncomingHistoryResult>> {
             for (id in ids) {
                 val read = acquired[id]?.let { AppResult.Success(it) } ?: readEvent(id)
                 if (read is AppResult.Failed) return read
@@ -164,16 +201,12 @@ class AcquireCollaborationSpaceOriginalEvents(
             val latest = current()
             if (latest is AppResult.Failed) return latest
             return AppResult.Success(
-                CollaborationSpaceOriginalIncomingBatch(
-                    runtime,
-                    room,
-                    plans.map { (id, plan) ->
-                        CollaborationIncomingHistoryResult(
-                            id,
-                            collaborationIncomingHistoryOutcome(plan),
-                        )
-                    },
-                )
+                plans.map { (id, plan) ->
+                    CollaborationIncomingHistoryResult(
+                        id,
+                        collaborationIncomingHistoryOutcome(plan),
+                    )
+                }
             )
         }
 
@@ -242,16 +275,26 @@ class AcquireCollaborationSpaceOriginalEvents(
             current().let { if (it is AppResult.Failed) return it }
             if (read is AppResult.Failed) return failed(read.failure)
             val snapshot = (read as AppResult.Success).value
-            if (
-                !validCollaborationSpaceOriginalIncomingSnapshot(
-                    runtime,
-                    room,
-                    requireNotNull(source),
-                    snapshot,
-                    id,
-                )
-            )
-                return originalIncomingFailure("event_owner_changed")
+            val valid =
+                when (origin) {
+                    is OriginalEventOrigin.Incoming ->
+                        validCollaborationSpaceOriginalIncomingSnapshot(
+                            runtime,
+                            origin.room,
+                            requireNotNull(source),
+                            snapshot,
+                            id,
+                        )
+                    is OriginalEventOrigin.KeyHistory ->
+                        validCollaborationSpaceOriginalKeyHistorySnapshot(
+                            runtime,
+                            origin.history,
+                            requireNotNull(registered?.command?.legacy?.deviceId),
+                            snapshot,
+                            id,
+                        )
+                }
+            if (!valid) return originalIncomingFailure("event_owner_changed")
             acquired[id] = snapshot.physical.event
             return AppResult.Success(snapshot.physical.event)
         }
@@ -265,23 +308,35 @@ class AcquireCollaborationSpaceOriginalEvents(
                 CollaborationNativePlatform.entries.firstOrNull {
                     it.name == build.platform.name.uppercase()
                 } ?: return originalIncomingFailure("unsupported_platform", FailureKind.Unavailable)
-            if (
-                value == null ||
-                    !validCollaborationSpaceOriginalIncomingRegistration(
-                        runtime,
-                        room.captured,
-                        requireNotNull(source),
-                        value,
-                        platform,
-                    ) ||
-                    value.command.legacy?.deviceId != room.traversal.deviceId ||
-                    value.command.provider.serverName != expectedMetadata.room.serverName
-            )
+            if (value == null) return originalIncomingFailure("registration_changed")
+            val admitted =
+                when (origin) {
+                    is OriginalEventOrigin.Incoming ->
+                        validCollaborationSpaceOriginalIncomingRegistration(
+                            runtime,
+                            origin.room.captured,
+                            requireNotNull(source),
+                            value,
+                            platform,
+                        ) && value.command.legacy?.deviceId == origin.room.traversal.deviceId
+                    is OriginalEventOrigin.KeyHistory ->
+                        registeredCollaborationSpaceOriginalIncomingSdk(
+                                runtime,
+                                origin.history.source,
+                                value,
+                                platform,
+                            )
+                            ?.binding
+                            ?.companyId == position.companyId
+                }
+            if (!admitted || value.command.provider.serverName != expectedMetadata.room.serverName)
                 return originalIncomingFailure("registration_changed")
             return AppResult.Success(value)
         }
 
         suspend fun currentDemand(): AppResult<Unit> {
+            val room =
+                (origin as? OriginalEventOrigin.Incoming)?.room ?: return AppResult.Success(Unit)
             val loaded = demands.current(access)
             val observed = (loaded as? AppResult.Success)?.value
             val snapshot = observed?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
@@ -391,3 +446,17 @@ class AcquireCollaborationSpaceOriginalEvents(
 
 private fun originalIncomingFailure(reason: String, kind: FailureKind = FailureKind.Conflict) =
     collaborationRecoveryFailure("client.collaboration_original_incoming_$reason", kind)
+
+private sealed interface OriginalEventOrigin {
+    val conversation: CollaborationSpaceOriginalConversation
+
+    data class Incoming(val room: CollaborationSpaceOriginalIncomingRoom) : OriginalEventOrigin {
+        override val conversation
+            get() = room.conversation
+    }
+
+    data class KeyHistory(val history: CollaborationSpaceOriginalKeyHistory) : OriginalEventOrigin {
+        override val conversation
+            get() = history.conversation
+    }
+}

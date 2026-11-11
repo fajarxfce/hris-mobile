@@ -94,5 +94,29 @@
     },
     "expectedTotal": 15617,
     "artifactAuditCompleted": false
+  },
+  "hostedStartupFailure": {
+    "recordedAt": "2026-11-11T20:56:07.667591+00:00",
+    "runId": 43096361337,
+    "runAttempt": 1,
+    "status": "completed",
+    "conclusion": "startup_failure",
+    "jobsCreated": 0,
+    "preciseCauseUnavailable": true,
+    "ghCliSuggestionIsNotADiagnosis": "likely failed because of a workflow file issue",
+    "workflowIdenticalToPreviouslyAcceptedPositionRun": true,
+    "workflowSha256": "cefd79c781d95db6a423be22708933b870219251ef0326053b721cf5e57c3019",
+    "comparedSourceCommits": [
+      "a3bc8a649fd1e8e5970f25051717f4c30e1e74f9",
+      "fa6ca76b17e2fcabcefc7e00982259e605b9678b"
+    ],
+    "rerunDispatched": true
+  },
+  "hostedStartupRetry": {
+    "runId": 43096361337,
+    "originalAttempt": 1,
+    "startedAt": "2026-11-11T20:56:20.357550+00:00",
+    "reason": "Startup failure before jobs, exact workflow unchanged from an accepted full run; one bounded retry",
+    "exitCode": 0
   }
 }

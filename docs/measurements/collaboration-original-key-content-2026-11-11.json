@@ -1,0 +1,113 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "a3bc8a649fd1e8e5970f25051717f4c30e1e74f9",
+  "sourceFiles": 5042,
+  "changedSourceFiles": 5,
+  "sourceManifestSha256": "0168e12b76440ec2433511bd6b3602cc7b7c6ee7cae6cd9015698aff8d91e877",
+  "focused": {
+    "tests": 422,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused-3",
+  "focusedBrowserRun": "browser-1",
+  "full": {
+    "validated": 13200,
+    "fresh": {
+      "tests": 11162,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 571.668,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151783647,
+    "sha256": "fd172f645ba11218dc09ce8055370cec5e3b8cea0a7937beeb439e0de58f7e38"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "originalKeyContentAccepted": true,
+  "newDomainCasesPerTarget": 26,
+  "primaryAcquisitionCasesPerTarget": 33,
+  "typedHistoricalBatch": true,
+  "currentRegisteredNativeDeviceVerified": true,
+  "historicalDevicePreserved": true,
+  "primaryTaskRequiredForHistoricalContent": false,
+  "primaryTaskGuardsPreserved": true,
+  "primaryDemandReadForHistoricalContent": false,
+  "sharedCompanyContentRetention": true,
+  "maximumSourceEvents": 16,
+  "targetReadsDeduplicated": true,
+  "preparationTimeoutSeconds": 15,
+  "contentAdmissionAroundIo": true,
+  "referenceAcknowledgement": false,
+  "globalAcknowledgement": false,
+  "hiddenRetry": false,
+  "providerPositionInvented": false,
+  "globalConsumerEnabled": false,
+  "keysProducerEnabled": false,
+  "newCollector": false,
+  "nativeSdkExecution": false,
+  "fullKeyBlockedQueueLivenessProven": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "starterChanged": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": [
+    {
+      "run": "focused-1",
+      "exitCode": 1,
+      "elapsedSeconds": 118.018,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "run": "focused-2",
+      "exitCode": 1,
+      "elapsedSeconds": 118.206,
+      "freshCounts": {
+        "tests": 149,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "compileFailureReview": {
+    "run": "focused-1",
+    "session": 79904,
+    "sessionReaped": true,
+    "failure": "New test referenced eventId instead of the existing sourceEventId outcome field",
+    "productionChanged": false,
+    "assertionsRemoved": false,
+    "caseIdsRemoved": false,
+    "testFile": "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/AcquireCollaborationSpaceOriginalKeyHistoryEventsTest.kt",
+    "oldExpression": "result.items.map { it.eventId }",
+    "newExpression": "result.items.map { it.sourceEventId }",
+    "failedManifestSha256": "556ee369b248aa84c319089297e823b548120422582345e32b3e0dc84c10968a"
+  },
+  "fixtureFailureReview": {
+    "run": "focused-2",
+    "session": 51177,
+    "sessionReaped": true,
+    "failure": "Queue-change fixture called the existing-demand mutation helper after clearing its initial snapshot; it threw before exercising the asserted result",
+    "correction": "Start this queue-removal case with an actual primary task and explicitly assert that precondition. The native-read hook removes it while adding a global recovery request. Other historical cases still begin without any primary queue.",
+    "productionChanged": false,
+    "assertionsRemoved": false,
+    "caseIdsRemoved": false,
+    "testFile": "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/AcquireCollaborationSpaceOriginalKeyHistoryEventsTest.kt",
+    "oldExpression": "fun primaryQueueAndRecoveryStateChangesDoNotBecomeContentAuthority() = runTest {\n        val f = fixture()",
+    "newExpression": "fun primaryQueueAndRecoveryStateChangesDoNotBecomeContentAuthority() = runTest {\n        val f = SpaceOriginalIncomingContentFixture()\n        assertTrue(assertNotNull(f.local.snapshot).demand.rooms.isNotEmpty())",
+    "failedManifestSha256": "41e4b21f444fc3d0bed87b0633be138c2543ed964cad400c4fbe881fdbe7830d"
+  }
+}
