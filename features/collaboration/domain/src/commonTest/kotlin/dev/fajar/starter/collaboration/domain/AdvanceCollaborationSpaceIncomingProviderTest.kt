@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.usecases.AdvanceCollaborationSpaceIncomingProvider
 import dev.fajar.starter.common.result.*
 import kotlin.test.*
@@ -9,6 +10,30 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runTest
 
 class AdvanceCollaborationSpaceIncomingProviderTest {
+    @Test
+    fun producerBeforeCasRetriesOnceAndAfterCommitConfirmsLostReply() = runTest {
+        for (stage in listOf("write", "committed")) {
+            val f = Fixture()
+            val request = f.request
+            val wake = request.wake
+            request.responseLoss = stage == "committed"
+            request.base.hooks[stage] = { request.retainIndependentProducerWork() }
+            val result = f.advance()
+            if (stage == "write") {
+                val failure = assertIs<AppResult.Failed>(result).failure
+                assertTrue(isCollaborationSpaceIncomingQueueContention(failure))
+                assertEquals(1L, failure.retryAfterSeconds)
+            } else assertEquals(AppResult.Success(true), result)
+            val retained = request.snapshot!!.demand
+            assertEquals("later", retained.sources.single().position)
+            assertNotNull(retained.sources.single().inventoryGeneration)
+            assertEquals("!producer:test", retained.physicalRooms.single().roomId)
+            assertEquals(wake, request.wake)
+            assertEquals(1, request.writes)
+            assertEquals(0, request.schedules)
+        }
+    }
+
     @Test
     fun firstRetainedPageMovesLatestToProviderWithoutAcknowledgingTheWake() = runTest {
         val f = Fixture(exhausted = false)
@@ -206,7 +231,7 @@ class AdvanceCollaborationSpaceIncomingProviderTest {
             f.setRoom(f.captured.copy(generation = generation, headEventId = "\$newer"))
             f.request.wake = CollaborationSpaceIncomingWake(generation)
         }
-        assertIs<AppResult.Failed>(f.advance())
+        assertEquals(AppResult.Success(false), f.advance())
         assertEquals(generation, f.room().generation)
         assertEquals(CollaborationSpaceIncomingWake(generation), f.request.wake)
         assertEquals(1, f.request.writes)

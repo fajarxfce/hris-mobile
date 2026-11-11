@@ -71,13 +71,13 @@ class DiscoverCollaborationSpaceIncomingRooms(
                     ?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
             admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             if (reply is AppResult.Failed) return@withTimeoutOrNull reply
-            if (
-                retained != null &&
-                    validCollaborationMessageId(retained.generation) &&
-                    retained.demand == next
+            confirmCollaborationSpaceIncomingScanWrite(
+                access,
+                snapshot.demand,
+                next,
+                retained,
+                saved,
             )
-                AppResult.Success(true)
-            else if (saved is AppResult.Failed) saved else changed()
         } ?: changed(FailureKind.Timeout)
 
     private suspend fun admission(access: CollaborationSpaceLocalAccess): AppResult<Unit> {

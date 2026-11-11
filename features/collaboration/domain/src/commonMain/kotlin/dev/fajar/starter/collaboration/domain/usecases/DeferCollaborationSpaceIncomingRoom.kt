@@ -25,25 +25,26 @@ class DeferCollaborationSpaceIncomingRoom(
         currentCoroutineContext().ensureActive()
         if (!validCollaborationSpaceIncomingRoomDemand(captured))
             return changed(FailureKind.Validation)
-        if (
-            failure?.kind in
-                setOf(
-                    FailureKind.Unauthorized,
-                    FailureKind.AccessDenied,
-                    FailureKind.Validation,
-                    FailureKind.Conflict,
-                )
-        )
-            return AppResult.Failed(requireNotNull(failure))
-        val retry =
-            failure?.let {
-                nextCollaborationSpaceIncomingRetry(
-                    captured.retry,
-                    clock.now().toEpochMilliseconds(),
-                ) ?: return changed(FailureKind.Validation)
-            }
         return withTimeoutOrNull(5_000) {
             admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
+            if (
+                isCollaborationSpaceIncomingQueueContention(failure) ||
+                    failure?.kind in
+                        setOf(
+                            FailureKind.Unauthorized,
+                            FailureKind.AccessDenied,
+                            FailureKind.Validation,
+                            FailureKind.Conflict,
+                        )
+            )
+                return@withTimeoutOrNull AppResult.Failed(requireNotNull(failure))
+            val retry =
+                failure?.let {
+                    nextCollaborationSpaceIncomingRetry(
+                        captured.retry,
+                        clock.now().toEpochMilliseconds(),
+                    ) ?: return@withTimeoutOrNull changed(FailureKind.Validation)
+                }
             val loaded = demands.current(access)
             val observed = (loaded as? AppResult.Success)?.value
             val snapshot = observed?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
@@ -85,13 +86,23 @@ class DeferCollaborationSpaceIncomingRoom(
                     ?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
             admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             if (readback is AppResult.Failed) return@withTimeoutOrNull readback
-            if (
-                retained != null &&
-                    validCollaborationMessageId(retained.generation) &&
-                    retained.demand == next
-            )
-                AppResult.Success(true)
-            else if (saved is AppResult.Failed) saved else changed()
+            when (
+                val confirmed =
+                    confirmCollaborationSpaceIncomingRoomWrite(
+                        access,
+                        snapshot.demand,
+                        next,
+                        captured,
+                        retained,
+                        saved,
+                    )
+            ) {
+                is AppResult.Failed -> confirmed
+                is AppResult.Success ->
+                    AppResult.Success(
+                        confirmed.value == CollaborationSpaceIncomingRoomWrite.Applied
+                    )
+            }
         } ?: changed(FailureKind.Timeout)
     }
 

@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.common.result.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.days
@@ -8,6 +9,30 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runTest
 
 class DiscoverCollaborationSpaceIncomingRoomsTest {
+    @Test
+    fun producerBeforeCasRetriesOnceAndAfterCommitConfirmsLostReply() = runTest {
+        for (stage in listOf("write", "committed")) {
+            val f = SpaceIncomingScanFixture()
+            val request = f.request
+            val wake = request.wake
+            request.responseLoss = stage == "committed"
+            request.base.hooks[stage] = { request.retainIndependentProducerWork() }
+            val result = f.discover(f.access)
+            if (stage == "write") {
+                val failure = assertIs<AppResult.Failed>(result).failure
+                assertTrue(isCollaborationSpaceIncomingQueueContention(failure))
+                assertEquals(1L, failure.retryAfterSeconds)
+            } else assertEquals(AppResult.Success(true), result)
+            val retained = request.snapshot!!.demand
+            assertEquals("later", retained.sources.single().position)
+            assertNotNull(retained.sources.single().inventoryGeneration)
+            assertEquals("!producer:test", retained.physicalRooms.single().roomId)
+            assertEquals(wake, request.wake)
+            assertEquals(1, request.writes)
+            assertEquals(0, request.schedules)
+        }
+    }
+
     @Test
     fun onePageCommitsRoomsAndCursorWithoutSchedulingOrAcknowledging() = runTest {
         val f = SpaceIncomingScanFixture()

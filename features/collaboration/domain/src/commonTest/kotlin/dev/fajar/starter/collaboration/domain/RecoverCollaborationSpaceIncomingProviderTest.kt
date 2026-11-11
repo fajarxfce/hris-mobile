@@ -10,6 +10,30 @@ import kotlinx.coroutines.test.runTest
 
 class RecoverCollaborationSpaceIncomingProviderTest {
     @Test
+    fun producerBeforeCasRetriesOnceAndAfterCommitConfirmsLostReply() = runTest {
+        for (stage in listOf("write", "committed")) {
+            val f = Fixture()
+            val request = f.base.request
+            val wake = request.wake
+            request.responseLoss = stage == "committed"
+            request.base.hooks[stage] = { request.retainIndependentProducerWork() }
+            val result = f.revisit()
+            if (stage == "write") {
+                val failure = assertIs<AppResult.Failed>(result).failure
+                assertTrue(isCollaborationSpaceIncomingQueueContention(failure))
+                assertEquals(1L, failure.retryAfterSeconds)
+            } else assertEquals(AppResult.Success(true), result)
+            val retained = request.snapshot!!.demand
+            assertEquals("later", retained.sources.single().position)
+            assertNotNull(retained.sources.single().inventoryGeneration)
+            assertEquals("!producer:test", retained.physicalRooms.single().roomId)
+            assertEquals(wake, request.wake)
+            assertEquals(1, request.writes)
+            assertEquals(0, request.schedules)
+        }
+    }
+
+    @Test
     fun absentKnownHeadRechecksLatestAfterDurableDelayWithoutDiscardingFacts() = runTest {
         val f = Fixture()
         val provider = f.base.latest
@@ -101,7 +125,7 @@ class RecoverCollaborationSpaceIncomingProviderTest {
             f.replace(newer)
             f.base.request.wake = CollaborationSpaceIncomingWake(newer.generation)
         }
-        assertIs<AppResult.Failed>(f.revisit())
+        assertEquals(AppResult.Success(false), f.revisit())
         assertEquals(newer, f.base.request.snapshot!!.demand.rooms.single())
         assertEquals(newer.generation, f.base.request.wake!!.generation)
     }

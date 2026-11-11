@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 06:10 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 06:23 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Physical worker accepted — continue original metadata and concurrent writes
 
@@ -41,30 +41,44 @@ reports and accept.py/accepted.json. No live/schema/SDK activation. Native POST 
 now reads explicit Company/original-room metadata with configured server and current native admission,
 without publication,provider I/O,device/job creation. Shared DI worker context was exercised.
 
-ACTIVE Mobile: full1/session58222 RUNNING, sole local heavy slot.19 source/test files are FROZEN;
-no edits until reaped. Focused2/session88697 REAPED PASS234.684s/421; browser1/session23711 REAPED
-PASS97.689s/386. accept-focused.py ACCEPTED807, all selected prior case IDs retained. Format1/session75188
-REAPED PASS36.013s. Candidate2 has4,902 inputs/manifest
+Mobile incoming write confirmation19-file increment is ACCEPTED. Full1/session58222 REAPED
+PASS680.712s; audit39370 REAPED ACCEPTED11,413 =9,375 fresh +2,038 exact unchanged accepted controls,
+zero failures/errors/skips. Every baseline case ID and reused dependency closure preserved.
+Focused2/session88697 PASS234.684s/421; browser1/session23711 PASS97.689s/386; combined807 accepted.
+Format/architecture74 modules/detekt,Android host/release compile/lint,browser/Wasm,iOS metadata,
+proof APK assemble/unit all passed.4,902 inputs/manifest
 9ff93b02a0c877cf3117cc1d1ae7bd6eb04273555be7383f29432839e36fcca9.
-Focused1/session93547 REAPED386 cases/1 old Defer supersession expectation; candidate1 and failure
-remain archived. The correction expects Success(false) for superseded work while preserving its
-new generation/wake assertions. No production change followed candidate1. All25 new common cases
-and1 app-worker case pass. Full validation must still pass; source is NOT yet accepted.
+Proof APK151,630,432bytes/SHAfb43598d8a58e0a6abaa3516a008e33ead1dac2a4d509e4b6dd5449baf8cead2.
+No new native SDK execution,Apple execution acceptance or phone delivery for this increment.
 
-.work/space-incoming-write-confirmation-2026-11-11 owns accepted b86 baseline4,897 inputs,
-1,283 XMLs/11,362 cases,both candidates,design-review.md,runners/audits,expected.json and
-next-metadata-review.md. Expected full11,413, no skipped tests; preserve all baseline case IDs and
-reused dependency closures. After reaping full1, run accept-full.py full1 and inspect failures rather
-than narrowing checks. Guarded publish.py is PREPARED but NOT executed. Do not rerun it after evidence
-is published. Pure domain policies confirm logical transitions/removal and scan cursor/tasks despite
-independent producer writes, preserving later tasks/inventory. Known CAS contention returns1s retry
-without durable30s delay; current denial and uncertain failure remain separate.
+Exact logical transitions/removal and scan cursor/new tasks now confirm commits even when a producer
+changes unrelated source positions/physical work. Later generations,source identity and inventory
+remain protected. Known CAS contention returns1s retry without durable30s room backoff; uncertain
+write failure without evidence stays uncertain. Current admission surrounds storage. Domain owns
+policy; the app worker keeps its existing typed result handling. No raw app collector is enabled.
+First focused failure was an old Defer supersession expectation; its generation/wake assertions and
+all old test IDs remain. Private .work/space-incoming-write-confirmation-2026-11-11 owns both
+candidates,1,283 baseline XMLs,runners/audits,full1/accepted-proof.apk and next-metadata-review.md.
+publish.py HAS EXECUTED; do not rerun/overwrite evidence. Shared measurement:
+collaboration-space-incoming-write-confirmation-2026-11-11.json; Mobile contract:
+collaboration-space-incoming-write-confirmation.md; Group contract:collaboration/space-incoming-write-confirmation.md.
 
-Prepared hosted-plan.json/hosted-audit.py are NOT dispatched. After local acceptance and source commit,
+NEXT: proceed immediately with the finite physical metadata consumer. Private physical-metadata-draft
+under the same work directory contains13 UNAPPLIED/UNTESTED proposals:8 new adapter/entity/policy/DTO
+files,4 existing API/mapper/policy changes with base hashes,and11 common transport tests. Capture a
+fresh accepted baseline before applying. Draft is not the owning consumer: extend Resolve in domain,
+resolve complete local bindings first,open native admission only for missing metadata,and validate
+returned physical metadata against a real conversation before retaining anything. Never fabricate a
+conversation to reuse a mapper. Reload current incoming demand after slow metadata I/O; preserve
+later physical generations. Original typed routing/storage remains required; do not turn an
+unpublished Company original into a Space binding or repeatedly fetch an original only to discard it.
+
+Prepared hosted-plan.json/hosted-audit.py are NOT dispatched yet. After the accepted source commit,
 use immutable validation/incoming-write-confirmation-20261111 with collaboration-control.yml.
 Expected9,391 portable (4,442 desktop+757 Android host+4,192 browser) +3,675 Apple =13,066 cases,
 16 Swift checks and unsigned Apple host. Previous baseline42962232337 remains accepted. No Apple
-native SDK8 claim. Do not run the stale SDK4 adoption workflow as SDK8 validation.
+native SDK8 claim. Do not run the stale SDK4 adoption workflow as SDK8 validation. No local heavy
+process remains after audit; one compiler/emulator maximum when beginning the next candidate.
 
 NEXT after these increments: finite remote published metadata, explicit original Company routing/
 storage, complete bounded native inventory, keys-only recovery and actual-runtime raw collection.

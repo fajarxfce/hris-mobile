@@ -168,13 +168,21 @@ class RecoverCollaborationSpaceIncomingProvider(
                 ?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
         admission(access).let { if (it is AppResult.Failed) return it }
         if (loaded is AppResult.Failed) return loaded
-        if (
-            retained != null &&
-                validCollaborationMessageId(retained.generation) &&
-                retained.demand == next
-        )
-            return AppResult.Success(true)
-        return if (written is AppResult.Failed) written else changed()
+        return when (
+            val confirmed =
+                confirmCollaborationSpaceIncomingRoomWrite(
+                    access,
+                    snapshot.demand,
+                    next,
+                    captured,
+                    retained,
+                    written,
+                )
+        ) {
+            is AppResult.Failed -> confirmed
+            is AppResult.Success ->
+                AppResult.Success(confirmed.value == CollaborationSpaceIncomingRoomWrite.Applied)
+        }
     }
 
     private suspend fun admission(access: CollaborationSpaceLocalAccess): AppResult<Unit> {

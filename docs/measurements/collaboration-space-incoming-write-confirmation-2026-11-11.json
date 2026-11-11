@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "b86d0c10eac451006810afb1dd457a3912dbc786",
+  "sourceFiles": 4902,
+  "changedSourceFiles": 19,
+  "sourceManifestSha256": "9ff93b02a0c877cf3117cc1d1ae7bd6eb04273555be7383f29432839e36fcca9",
+  "candidate": 2,
+  "focused": {
+    "tests": 807,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused2",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 11413,
+    "fresh": {
+      "tests": 9375,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 680.712,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151630432,
+    "sha256": "fb43598d8a58e0a6abaa3516a008e33ead1dac2a4d509e4b6dd5449baf8cead2"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "logicalOwners": [
+    "Advance",
+    "Recover",
+    "Defer",
+    "Complete"
+  ],
+  "scanOwner": "Discover",
+  "knownCasContentionRetryHintSeconds": 1,
+  "persistsRoomDelayForQueueContention": false,
+  "uncertainWriteRequiresOwnedTransitionEvidence": true,
+  "sourceInventoryAndLaterRequestsPreserved": true,
+  "currentDenialWins": true,
+  "newDomainCases": 25,
+  "newAppWorkerCases": 1,
+  "rawCollectorEnabled": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRun": "focused1: one old Defer supersession expectation; unchanged generation/wake assertions remain"
+}

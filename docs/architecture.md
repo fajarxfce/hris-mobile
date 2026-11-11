@@ -1,5 +1,9 @@
 # Architecture
 
+[Incoming write confirmation](collaboration-space-incoming-write-confirmation.md) uses exact task
+and scan evidence across concurrent producer writes. Known queue contention remains a short
+worker retry without persistent room backoff; remote metadata and raw activation remain next.
+
 [Local physical room resolution](collaboration-space-physical-resolution.md) transfers exact
 physical work through owned bindings and fences source-bound logical reads. The [single incoming
 worker](collaboration-space-physical-worker.md) now selects one combined source-owned FIFO and

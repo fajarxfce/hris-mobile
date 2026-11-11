@@ -107,6 +107,37 @@ internal class SpaceIncomingRequestFixture {
     suspend fun queue(value: CollaborationSpaceIncomingDemandChange.Request = request) =
         useCase(access, key, value)
 
+    fun retainIndependentProducerWork() {
+        val current = snapshot!!.demand
+        val owner = CollaborationSpaceIncomingSource("1".repeat(64), "@producer:test", "DEVICE")
+        snapshot =
+            CollaborationSpaceIncomingDemandSnapshot(
+                provider.queue.id(850),
+                current.copy(
+                    nextPosition = current.nextPosition + 1,
+                    sources =
+                        listOf(
+                            CollaborationSpaceIncomingSourceProgress(
+                                owner,
+                                "later",
+                                provider.queue.id(851),
+                            )
+                        ),
+                    physicalRooms =
+                        current.physicalRooms +
+                            CollaborationSpaceIncomingPhysicalRoomDemand(
+                                owner.storeId,
+                                "!producer:test",
+                                provider.queue.id(852),
+                                current.nextPosition,
+                                "\$producer",
+                                CollaborationSpaceIncomingMembership.Joined,
+                                true,
+                            ),
+                ),
+            )
+    }
+
     fun covered(exhausted: Boolean = true, unresolved: Boolean = false) {
         val progress = provider.checkpoint(if (exhausted) null else "next")
         val reference =

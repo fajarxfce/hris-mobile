@@ -79,7 +79,7 @@ class CollaborationSpaceIncomingSchedulingTest {
             f.set(f.current().copy(rooms = listOf(old.copy(generation = f.id(991)))))
             f.request.wake = CollaborationSpaceIncomingWake(f.id(991))
         }
-        assertIs<AppResult.Failed>(f.defer(f.access, old))
+        assertEquals(AppResult.Success(false), f.defer(f.access, old))
         assertEquals(f.id(991), f.current().rooms.single().generation)
         assertEquals(f.id(991), f.request.wake!!.generation)
     }

@@ -31,6 +31,7 @@ internal class SpaceIncomingWorkerFixture(
     var missingProgress = false
     var referencesFailure: Failure? = null
     var pageFailure: Failure? = null
+    var advanceFailure: Failure? = null
     var resumeFailure: Failure? = null
     var finishResult = true
     var before: suspend (String) -> Unit = {}
@@ -247,21 +248,24 @@ internal class SpaceIncomingWorkerFixture(
                         )
                     )
             },
-            advance = { actual, captured, acquired ->
-                check(actual == access)
-                step("advance")
-                missingProgress = false
-                val index = rooms.indexOf(captured)
-                if (index >= 0)
-                    rooms[index] =
-                        captured.copy(
-                            phase =
-                                if (acquired.exhausted) CollaborationSpaceIncomingPhase.Pending
-                                else CollaborationSpaceIncomingPhase.Provider,
-                            retry = null,
-                        )
-                AppResult.Success(index >= 0)
-            },
+            advance = advance@{ actual, captured, acquired ->
+                    check(actual == access)
+                    step("advance")
+                    advanceFailure?.let {
+                        return@advance AppResult.Failed(it)
+                    }
+                    missingProgress = false
+                    val index = rooms.indexOf(captured)
+                    if (index >= 0)
+                        rooms[index] =
+                            captured.copy(
+                                phase =
+                                    if (acquired.exhausted) CollaborationSpaceIncomingPhase.Pending
+                                    else CollaborationSpaceIncomingPhase.Provider,
+                                retry = null,
+                            )
+                    AppResult.Success(index >= 0)
+                },
             readReferences = { actual, _ ->
                 check(actual == access)
                 step("references")
@@ -351,29 +355,31 @@ internal class SpaceIncomingWorkerFixture(
                 }
                 AppResult.Success(required)
             },
-            defer = { actual, captured, failure ->
-                check(actual == access)
-                step("defer")
-                deferred += captured.conversationId to failure
-                val next =
-                    nextCollaborationSpaceIncomingDemand(
-                        work().snapshot!!.demand,
-                        CollaborationSpaceIncomingDemandChange.Defer(
-                            captured,
-                            if (failure == null) null
-                            else
-                                nextCollaborationSpaceIncomingRetry(
-                                    captured.retry,
-                                    base.clock.now().toEpochMilliseconds(),
-                                ),
-                        ),
-                    )
-                        as AppResult.Success
-                rooms.clear()
-                rooms.addAll(next.value.rooms)
-                nextPosition = next.value.nextPosition
-                AppResult.Success(true)
-            },
+            defer = defer@{ actual, captured, failure ->
+                    check(actual == access)
+                    step("defer")
+                    if (failure != null && isCollaborationSpaceIncomingQueueContention(failure))
+                        return@defer AppResult.Failed(failure)
+                    deferred += captured.conversationId to failure
+                    val next =
+                        nextCollaborationSpaceIncomingDemand(
+                            work().snapshot!!.demand,
+                            CollaborationSpaceIncomingDemandChange.Defer(
+                                captured,
+                                if (failure == null) null
+                                else
+                                    nextCollaborationSpaceIncomingRetry(
+                                        captured.retry,
+                                        base.clock.now().toEpochMilliseconds(),
+                                    ),
+                            ),
+                        )
+                            as AppResult.Success
+                    rooms.clear()
+                    rooms.addAll(next.value.rooms)
+                    nextPosition = next.value.nextPosition
+                    AppResult.Success(true)
+                },
             build = base.build.copy(platform = platform),
         )
 

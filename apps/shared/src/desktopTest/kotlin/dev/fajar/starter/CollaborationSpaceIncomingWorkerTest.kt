@@ -3,6 +3,7 @@
 package dev.fajar.starter
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.fixtures.SpaceIncomingWorkerFixture
@@ -12,6 +13,23 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 
 class CollaborationSpaceIncomingWorkerTest {
+    @Test
+    fun logicalWriteContentionRetriesWithoutPersistingRoomBackoffOrSchedulingALoop() = runTest {
+        for (duringAdvance in listOf(false, true)) {
+            val f = SpaceIncomingWorkerFixture(testScheduler)
+            val original = f.rooms.toList()
+            val wake = f.wake
+            val busy = collaborationSpaceIncomingQueueContention().failure
+            if (duringAdvance) f.advanceFailure = busy else f.pageFailure = busy
+            assertEquals(SyncResult.Retry(busy), f.worker())
+            assertEquals(original, f.rooms)
+            assertEquals(wake, f.wake)
+            assertEquals(1, f.calls.count { it == "provider" })
+            assertTrue(f.deferred.isEmpty())
+            assertFalse("resume" in f.calls || "finish" in f.calls)
+        }
+    }
+
     @Test
     fun absentRequestDoesNotAcquireADeviceOrProvider() = runTest {
         val f = SpaceIncomingWorkerFixture(testScheduler)

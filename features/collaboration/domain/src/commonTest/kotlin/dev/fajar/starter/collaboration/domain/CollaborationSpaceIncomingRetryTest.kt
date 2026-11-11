@@ -8,6 +8,57 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationSpaceIncomingRetryTest {
     @Test
+    fun queueContentionDoesNotBecomeDurableThirtySecondBackoff() = runTest {
+        val f = SpaceIncomingScanFixture()
+        val captured = room(f)
+        f.set(f.current().copy(nextPosition = 1, rooms = listOf(captured)))
+        val before = f.current()
+        val busy = collaborationSpaceIncomingQueueContention()
+        assertEquals(busy, f.defer(f.access, captured, busy.failure))
+        assertEquals(before, f.current())
+        assertEquals(0, f.request.reads)
+        assertEquals(0, f.request.writes)
+        assertEquals(f.originalWake, f.request.wake)
+    }
+
+    @Test
+    fun currentDenialWinsOverAnEarlierQueueContentionWithoutStorageReads() = runTest {
+        val f = SpaceIncomingScanFixture()
+        f.request.base.directory.deny()
+        val result = f.defer(f.access, room(f), collaborationSpaceIncomingQueueContention().failure)
+        assertEquals(f.request.base.directory.denied, assertIs<AppResult.Failed>(result).failure)
+        assertEquals(0, f.request.reads)
+        assertEquals(0, f.request.writes)
+    }
+
+    @Test
+    fun producerBeforeCasRetriesOnceAndAfterCommitConfirmsLostReply() = runTest {
+        for (stage in listOf("write", "committed")) {
+            val f = SpaceIncomingScanFixture()
+            val captured = room(f)
+            f.set(f.current().copy(nextPosition = 1, rooms = listOf(captured)))
+            val request = f.request
+            val wake = request.wake
+            request.responseLoss = stage == "committed"
+            request.base.hooks[stage] = { request.retainIndependentProducerWork() }
+            val result =
+                f.defer(f.access, captured, Failure(FailureKind.Network, "Fictional offline"))
+            if (stage == "write") {
+                val failure = assertIs<AppResult.Failed>(result).failure
+                assertTrue(isCollaborationSpaceIncomingQueueContention(failure))
+                assertEquals(1L, failure.retryAfterSeconds)
+            } else assertEquals(AppResult.Success(true), result)
+            val retained = request.snapshot!!.demand
+            assertEquals("later", retained.sources.single().position)
+            assertNotNull(retained.sources.single().inventoryGeneration)
+            assertEquals("!producer:test", retained.physicalRooms.single().roomId)
+            assertEquals(wake, request.wake)
+            assertEquals(1, request.writes)
+            assertEquals(0, request.schedules)
+        }
+    }
+
+    @Test
     fun retryDelayGrowsPerRoomAndStopsAtFiveMinutes() {
         var retry: CollaborationSpaceIncomingRetry? = null
         val delays = listOf(30_000L, 60_000L, 120_000L, 240_000L, 300_000L, 300_000L)

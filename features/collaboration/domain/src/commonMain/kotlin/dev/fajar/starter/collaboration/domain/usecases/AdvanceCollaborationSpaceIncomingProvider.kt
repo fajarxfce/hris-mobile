@@ -86,13 +86,23 @@ class AdvanceCollaborationSpaceIncomingProvider(
                     ?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
             admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             if (readback is AppResult.Failed) return@withTimeoutOrNull readback
-            if (
-                retained != null &&
-                    validCollaborationMessageId(retained.generation) &&
-                    retained.demand == next
-            )
-                AppResult.Success(true)
-            else if (saved is AppResult.Failed) saved else changed()
+            when (
+                val confirmed =
+                    confirmCollaborationSpaceIncomingRoomWrite(
+                        access,
+                        snapshot.demand,
+                        next,
+                        captured,
+                        retained,
+                        saved,
+                    )
+            ) {
+                is AppResult.Failed -> confirmed
+                is AppResult.Success ->
+                    AppResult.Success(
+                        confirmed.value == CollaborationSpaceIncomingRoomWrite.Applied
+                    )
+            }
         } ?: changed(FailureKind.Timeout)
     }
 

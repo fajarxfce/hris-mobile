@@ -37,3 +37,7 @@ route is a separate unaccepted candidate. The app raw collector stays inactive; 
 remain open. There is no generic Starter change or live deployment in this increment.
 
 Evidence: [measurement](measurements/collaboration-space-physical-worker-2026-11-11.json).
+
+[Logical and scan write confirmation](collaboration-space-incoming-write-confirmation.md) now preserves independent producer progress
+without false conflicts or durable backoff for normal queue contention. Raw activation still
+requires the remaining metadata, original routing, inventory and keys-only consumers.
