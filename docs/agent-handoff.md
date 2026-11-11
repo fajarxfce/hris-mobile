@@ -1,6 +1,66 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 15:34 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 15:54 UTC. This opening owns current work; older sections are historical.
+
+## Finite inventory retention accepted — continue serialized scheduling
+
+Eight-file finite-page owner ACCEPTED:6 new Kotlin files and2 existing DI/graph files.
+format1/49006 PASS37.005s; backward-clock eligibility review corrected before tests,
+format2/5953 PASS35.906s. focused1/15723 PASS412.011s/150;
+browser1/28444 PASS147.430s/148; combined298 accepted. All sessions REAPED.
+full1/20488 REAPED PASS567.14s; audit accepts12,530:
+10492 fresh plus2038 exact unchanged controls.
+Prior case IDs, dependency closures and source/library hashes verified. Full check,
+format/architecture/detekt, Android host/release compilation/lint, Wasm/browser,
+iOS metadata and proof APK/unit checks pass. This is not native SDK execution.
+Frozen4,995-input manifest0923be56d9aece5293deed217c246bfba610b6f61ce34aba6d8fcbe07b3e825e.
+Proof APK151753339 bytes/SHAecef4a8c48bf6329f840c1838606e8fbf48f67920ce3ca4e43330b15813efe89.
+
+One ordered16-room prefix is retained with source generation/cursor, fresh physical
+work and independent wake in one CAS, followed by one readback. Existing physical
+work stops before that room and stays unchanged; logical work coexists under the
+combined64 limit. Non-Joined rows add no content work and remove no owned facts.
+The owning usecase checks exact original registration/source/parent/directory around
+I/O, with a5-second deadline. Continuous positions survive; later loss never confirms
+old coverage. Future retry performs no I/O; backward-clock adjustment remains eligible.
+Known SDK/storage denial survives runtime retirement.18 new policy+27 owner cases per
+desktop/browser accepted. Data DI owns the factory; app graph resolves it without I/O.
+
+Workspace .work/space-inventory-retention-2026-11-11 owns accepted evidence/scripts.
+Publisher and accepted-handoff writer HAVE EXECUTED. Commit/push, then dispatch hosted
+ONCE on validation/inventory-retention-20261111; expected14,719=10,508 portable+4,211
+Apple. No dispatch yet. Source-progress43049052938 stays attached, expected14,584;
+owned43044913726 portable10,380 accepted (34116 reaped), Apple pending. Raw43040652714
+FULL14,458=10,324 portable+4,134 Apple accepted (1510 reaped). Alias43037578170 FULL14,434
+accepted. Apple evidence includes16 Swift/unsigned host cases, not native SDK8 Apple.
+Earlier application43031231253 remains incomplete with its missing30 cases and cancelled
+portable job preserved. Never redispatch unchanged sources to erase historical gaps.
+
+Next scheduling draft is complete but UNAPPLIED/UNTESTED:16 files,15 Kotlin+workflow;
+10 guarded existing+6 new.11 retry-policy+6 selection+21 deferral-owner cases and16
+app-worker cases. Expected12,622 local/5,001 inputs;254 focused+186 browser. Planned
+hosted14,849=10,600 portable+4,249 Apple. Existing four-room FIFO runs first; at most
+one inventory page follows in the same worker/mutex/parent lifetime. Full64 primary
+queue and future retry suppress enumeration. Partial cursor is reloaded before durable
+deferral, new loss stays eligible, known CAS contention remains1 second, and uncertain
+storage reply requires exact retained retry. Independent wake survives. Read
+next-inventory-scheduling-review.md. prepare-next-inventory-scheduling.py and
+configure-next-inventory-scheduling.py are PREPARED NOT EXECUTED; require accepted,
+clean pushed source and hosted dispatch. Explicit workflow includes all16 new app cases.
+
+Keys-only recovery still needs durable discovery/demotion to avoid64 blocked rooms
+starving new work. Existing published-checkpoint prefix paging may avoid another catalog;
+typed metadata and independent active/requested scan generations need implementation.
+Read next-keys-discovery-review.md. Authoritative absence and combined Company-storage/
+Group-native proof remain. Client.rooms allocates the complete native handle list;
+finite output does not prove native allocation or whole-inventory performance bounds.
+Raw observation/Original producer OFF; all54 PRD groups OPEN. No Starter delta/live change.
+
+Phone last55613 timeout at15:24UTC, no install attempt; retry no earlier15:55UTC.
+Release89 SDK6 awaits install. Notify first, explicit serial/install-only, never drive
+phone UI. No emulator. Preserve original intents, Draft66, keys/stores/SDK assets,
+inspector gradlew.bat and live90163c3/schema116.4 Group OFF. Continue long run, push commits.
+
 
 ## Finite inventory page retention applied; focused validation running
 

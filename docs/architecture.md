@@ -1,5 +1,8 @@
 # Architecture
 
+[Finite inventory retention](collaboration-space-inventory-retention.md) stores ordered source coverage, physical work and wake together.
+Serialized scheduling and key backpressure remain separate.
+
 [Durable inventory progress](collaboration-space-inventory-progress.md) retains source cursor/retry with explicit versioning
 and atomic demand storage. Admitted page retention and worker integration remain separate.
 
