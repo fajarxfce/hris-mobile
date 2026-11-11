@@ -47,8 +47,7 @@ precede raw collector/Original producer activation. Both OFF; all54 PRD groups O
 
 Content43011629455 portable9,939 accepted; first Apple job130492406895 cancelled before runner/steps
 for macOS capacity. Targeted Apple retry28318 REAPED requested11:52:11; retry running. Attempt1 archive
-preserved; no portable rerun/workflow redispatch. Company43008238149 portable9,873 accepted/Apple3,940
-still running at last lookup; reader43003600252 FULL13,793 accepted. Inspect immutable latest audits;
+preserved; no portable rerun/workflow redispatch. Company43008238149 FULL13,813=9,873 portable+3,940 Apple accepted (audit99420 REAPED); reader43003600252 FULL13,793 accepted. Inspect immutable latest audits;
 no native SDK8 Apple runtime claim from simulator/domain or unsigned-host compilation.
 
 Phone76683 REAPED timeout124 at11:46:14; next bounded retry no earlier12:17. Last connect evidence in
