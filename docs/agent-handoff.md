@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 05:35 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 06:00 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Physical worker accepted — continue original metadata and concurrent writes
 
@@ -28,38 +28,45 @@ EXECUTED; do not rerun/overwrite evidence. Shared measurement:collaboration-spac
 Contracts: Mobile collaboration-space-physical-worker.md and Group collaboration/space-physical-worker.md.
 No generic Starter delta. Do not dispatch old SDK4 native workflow as current SDK8 acceptance.
 
-ACTIVE: Group full1/session12080 is RUNNING and owns the sole local heavy slot. Do not start another
-compiler or emulator until reaped. Group8-file candidate is frozen on source baseline5a6fa038, with
-8,745 inputs/12bb8dcd72469442354c7e0c7514abc6a82013d3ae2e9948bc9c1b3ae07eec1a. Format1/session65926
-REAPED PASS35.181s. Group .work/space-original-physical-read-2026-11-11 owns candidate/base maps,
-check.py,state.json,design-review.md and prior report archives. Source is NOT yet accepted.
-It adds native POST /spaces/{spaceId}/legacy-rooms/read with explicit companyId/matrixRoomId,
-configured Matrix server, existing original metadata admission and30s operation budget. Current
-denial wins over successful/absent/failed acquisition. No Space binding, provider request, device,
-receipt or job is created. Eight new data cases and one new HTTP case accompany existing published
-room/metadata controls. Shared DI requires actual server AND full worker tests. Preserve the one
-unchanged explicitly opt-in report-export elapsed-hour skip. No live/schema change is authorized by
-this candidate. Continue through failures, validation, commit and push; do not stop at this checkpoint.
+ACTIVE: Group server2/session51285 is RUNNING on frozen candidate2 and owns the sole local heavy
+slot. Do not start another compiler/emulator until reaped. Full1/session12080 REAPED after1324.904s:
+492 scheduled =490 passed,1 failed fixture,1 unchanged explicit opt-in report-export elapsed-hour skip.
+The new HTTP fixture collided with the previous test's globally unique provider room. Candidate2
+parameterizes the existing seed and gives only the new test its own room; production is unchanged.
+Format2/session5942 REAPED PASS22.344s. Server2 repeats all75 affected HTTP cases,format/architecture/
+container checks; full1 domain205,data61,worker151 keep exact sources. Candidate2 has8 files/8,745
+inputs; compact manifest643f09cad7a0e5e6d02c8ecd894684a71c5241e30d1ace0a4aaa7ecc8f8694da.
+Group .work/space-original-physical-read-2026-11-11 preserves candidate/full1 and candidate2 maps,
+runners, prior XMLs and failures. Source NOT accepted yet. Native POST /spaces/{spaceId}/legacy-rooms/read
+reads explicit Company/original-room metadata with configured server and current native admission,
+without publication,provider I/O,device/job creation. Shared DI worker context was exercised.
 
-NEXT Mobile: before raw collector activation, harden logical Advance/Recover/Defer/Complete and
-Discover post-write confirmation against producer cursor/physical changes. They still compare full
-demand and can falsely report Conflict. Add operation-specific witnesses/known-CAS retry in domain;
-never broadly retry every app Conflict. Then finite remote published metadata, explicit original
-Company routing/storage, complete bounded native inventory, keys-only recovery and actual-runtime
-raw collection. RegistrationCommand.legacy supplies Company provenance; an unpublished Company
-original is not a Space conversation. Never infer provider/Company authority from Matrix locators.
-Inventory must close every returned room handle and retain later loss generations. New native
-worker proof remains required before claiming native physical integration. All54 PRD groups OPEN.
+ACTIVE Mobile:18 source/test files implement logical/scan write confirmation, UNFORMATTED/UNTESTED.
+.work/space-incoming-write-confirmation-2026-11-11 owns accepted b86d0c10eac451006810afb1dd457a3912dbc786
+baseline4,897 inputs,1,283 XMLs/11,362 cases,design-review.md,run.py,accept-focused.py,accept-full.py
+and expected.json. Pure policies confirm exact logical transitions/removal and scan cursor/tasks,
+allow independent producer cursor/physical changes, preserve later generations/inventory and separate
+known CAS contention from uncertain failure. Advance/Recover/Defer/Complete/Discover use them;
+logical Defer propagates1s busy after current admission without durable30s delay. Tests add25 common
+cases and1 app-worker case, including before-CAS versus after-commit/lost-reply interleavings.
+Expected focused421,browser386,full11,413; no acceptance claim yet. Format then freeze sources after
+Group heavy reaps; run focused/browser/full and preserve every baseline case ID and dependency closure.
 
-Hosted previous physical control42962232337 stays on immutable aed49dcbc1bd430533f77cab09302f5c8ee68221,
-ref validation/physical-resolution-20261111. It excludes this worker increment. Portable audit8474
-REAPED ACCEPTED9,242 =4,361 desktop +757 Android host +4,124 browser. Artifact13831066404,
-3,679,842bytes/SHA32e244a88700c0e6c28af9921d61c4501bf3346da3533be3dc47922780d707b5;
-report manifest3ce7fa37c5dd50e450f9fea029ede5b38c4116d17eb450d3694aded945e9cebf. Remote digest/CRC
-and every prior case verified. Apple still RUNNING, expected3,607 cases +16 Swift +unsigned host.
-DO NOT redispatch. Prior physical-resolution work owns hosted-42962232337 state and hosted-audit.py.
-No Apple native SDK8 claim. Existing phone availability question pending; release89 validated for
-install-only. No phone UI interaction. Live schema116.4/deployment unchanged; Group117–140 undeployed.
+NEXT after these increments: finite remote published metadata, explicit original Company routing/
+storage, complete bounded native inventory, keys-only recovery and actual-runtime raw collection.
+RegistrationCommand.legacy supplies Company provenance; an unpublished Company original is not a
+Space conversation. Never infer provider/Company authority from Matrix locators. Inventory must close
+every returned room handle and preserve later loss generations. New native worker proof is required
+before claiming native physical integration. All54 PRD groups OPEN; continue, do not stop at checkpoint.
+
+Hosted previous physical control42962232337 is fully ACCEPTED on immutable aed49dcbc1bd430533f77cab09302f5c8ee68221,
+ref validation/physical-resolution-20261111. Portable9,242 +Apple3,607 =12,849 cases,16 Swift checks,
+unsigned Apple host PASS. Portable audit8474 and Apple audit1493 REAPED ACCEPTED; remote digest/CRC,
+all prior case IDs and report manifests verified. Shared physical-resolution measurement now records
+both artifact/job IDs,digests and platform counts. Private hosted-42962232337 owns archived evidence.
+DO NOT redispatch. This excludes b86 worker/current writes; no Apple native SDK8 claim.
+Existing phone question pending; last connect80048 at05:35 REAPED timeout124; release89 validated
+for install-only. No phone UI interaction. Live116.4 unchanged; Group117–140 remain undeployed.
 
 ## Local physical resolution accepted — continue the worker
 

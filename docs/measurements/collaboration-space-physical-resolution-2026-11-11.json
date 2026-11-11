@@ -63,10 +63,54 @@
   "providerInventoryConsumerEnabled": false,
   "storedKeyConsumerEnabled": false,
   "newNativeSdkExecution": false,
-  "newAppleExecutionAccepted": false,
+  "newAppleExecutionAccepted": true,
   "phoneInstalled": false,
   "all54PrdGroupsRemainOpen": true,
   "preservedReviewEvidence": [
     "Initial 70-case candidate preceded downstream source guards; final focused candidate preserves those controls."
-  ]
+  ],
+  "hostedControl": {
+    "status": "accepted",
+    "sourceCommit": "aed49dcbc1bd430533f77cab09302f5c8ee68221",
+    "runId": 42962232337,
+    "validatedTests": 12849,
+    "swiftChecks": 16,
+    "unsignedAppleHost": "passed",
+    "nativeSdk8AppleExecution": false,
+    "excludesLaterWorkerAndWriteConfirmation": true,
+    "portable": {
+      "sourceCommit": "aed49dcbc1bd430533f77cab09302f5c8ee68221",
+      "runId": 42962232337,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42962232337",
+      "jobId": 130331224483,
+      "artifactId": 13831066404,
+      "bytes": 3679842,
+      "sha256": "32e244a88700c0e6c28af9921d61c4501bf3346da3533be3dc47922780d707b5",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreserved": true,
+      "counts": {
+        "desktopTest": 4361,
+        "testAndroidHostTest": 757,
+        "wasmJsBrowserTest": 4124
+      },
+      "reportManifestSha256": "3ce7fa37c5dd50e450f9fea029ede5b38c4116d17eb450d3694aded945e9cebf",
+      "jobLogSha256": "fd8481a1227d2e8e93b5f7bebf4d0a03fafd81e33b731a35b13f4b258a1a6341"
+    },
+    "apple": {
+      "sourceCommit": "aed49dcbc1bd430533f77cab09302f5c8ee68221",
+      "runId": 42962232337,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42962232337",
+      "jobId": 130331224652,
+      "artifactId": 13831807756,
+      "bytes": 636923,
+      "sha256": "ed8772f5c1aee3023d51922815a562384b5d52186e9a1433469fc98ae4da9225",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreserved": true,
+      "counts": {
+        "iosSimulatorArm64Test": 3607
+      },
+      "reportManifestSha256": "cac817c31e01ec104a4e9db0b7c41df75cc341d0d653aa1f91bcccb469d32725",
+      "jobLogSha256": "03e14b6d0e78d7bba725a63ccc073bd6dee52d909befb36e51fb04c2987e31c7"
+    }
+  }
 }
