@@ -1,6 +1,6 @@
 # Agent continuation — communications long run
 
-Updated 11 November 2026, 22:53 UTC. The user authorized implementation through the full PRD, pushes after every commit
+Updated 11 November 2026, 23:16 UTC. The user authorized implementation through the full PRD, pushes after every commit
 and phone updates. **All54 acceptance groups remain OPEN.** Do not stop after one gate. No subagents.
 Read AGENTS.md and architecture. Datasource raw I/O; repositories map their own datasource results;
 usecases coordinate repositories/policies, never other usecases; ViewModels own screen state.
@@ -10,10 +10,16 @@ usecases coordinate repositories/policies, never other usecases; ViewModels own 
 Workspace `.work/original-local-key-page-content-2026-11-11`, baselineadf06b0e/13,300 cases.
 Eight uncommitted source files frozen:4 Kotlin historical-page acquisition/policy/test files and
 4 generic Karma build/reporting files.5,050 inputs, SHA74adf28ea2fb3846848d84d383c0696d296ce466b0265200466b57ed7d61ea6d.
-format3/41168 REAPED PASS69.422s. focused3/67474 RUNNING (started22:43UTC), expected128.
-Reap it, record state, run browser2(expected126), accept-focused focused3 browser2, full2(expected
-13,358), accept-full. Only then publish/commit/push/dispatch. No second compiler or emulator.
-Build convention change causes metadata recompilation. Do not kill the active compiler.
+format3/41168 REAPED PASS69.422s. focused3 PASS128 with5,050 unchanged inputs; original session67474
+was disconnected by the server restart. Its Python runner exited while Gradle/Xvfb survived.
+Observer3250 REAPED captured actual wrapper exit0 at23:03:20UTC; reconstruction58998 REAPED retained
+all original reports/hashes. Elapsed1182.802s is reconstructed from source-manifest time, not the lost
+runner timestamp. recover-focused-result.py HAS EXECUTED; do not repeat that test run.
+browser2/99609 REAPED PASS153.261s/126; accept-focused accepted exact254. full2/77316 is RUNNING
+(started23:08UTC), expected13,358. Its detached Python runner survives monitoring restarts. Read
+result.json before repeating anything. Reap, run accept-full, then publish/commit/push/dispatch.
+Because the shared build convention changed, full2 forces all JVM tests and the3 affected browser
+modules to run; unchanged-report acceptance is not weakened. No second compiler or emulator.
 
 Historical-page acquisition first reuses exact scoped local original/edit facts; unknown sources
 use the existing bounded SDK/content path. Exact reference sender/timestamp and captured ordering
@@ -49,6 +55,9 @@ IDs plus captured-reference assertion. Guards/hashes in next-original-key-comple
 Read its review. Guarded prepare/configure scripts PREPARED NOT EXECUTED. Old generators/snippets
 are STALE after page-type/bounds fixes. Nextworkspace original-key-reference-completion-2026-11-11:
 5,056 inputs,13,422local,166+164focused,16,028hosted. Preserve Karma source fingerprints/full refresh.
+The partial Space draft now has3 unreviewed/untested files in next-space-key-page-draft (policy,
+page-bound batch, reader). Read next-space-key-page-projection-review.md; preserve historical provider
+identity and no transport polling. No tests/DI/acquisition/completion added for it yet.
 Then Space/Original-alias content, bounded global recovery, unavailable-source classification,
 primary EOF demotion/request/wake, loss-aware key listener ownership/receipts and64-room liveness.
 
@@ -65,7 +74,7 @@ Locator43092246512 FULL15,497; original portable upload failure retained, one re
 OriginalContent43099618359 FULL15,695,10603/83865REAPED, documented Position-ancestor bridge
 preserves ancestor IDs without accepting failed Account43096361337. Account remains two startup
 failures/no jobs; no blind retry. Reader43104067759 FULL15,782,94501/30723REAPED. Atomic43108578825
-portable11,278 accepted37893REAPED; Apple130818313915 still pending. Audit when finished. Exact
+FULL15,845: portable11,278 accepted37893REAPED and Apple4,567 accepted29986REAPED. Exact
 artifact/log/report hashes are in each checked-in measurement. OriginalContent's audit flag true.
 No native MatrixSDK8 Apple claim from shared Apple tests; physical iPhone testing is waived only.
 
