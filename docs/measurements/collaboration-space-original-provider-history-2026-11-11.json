@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "e29a9af68113213fa35dad31d98b7bb44253d538",
+  "sourceFiles": 4938,
+  "changedSourceFiles": 11,
+  "sourceManifestSha256": "acc55a4a2351fe1d0466db2390d0e0579e1ba5c32d220866d69ca4a18af693a1",
+  "focused": {
+    "tests": 326,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused2",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 11751,
+    "fresh": {
+      "tests": 9713,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 618.067,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151667927,
+    "sha256": "689ff3c86e78bb75b485d9358366263dec660c5cd7bc61ab466f3efb9d0b6991"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "originalProviderHistoryOwnerAccepted": true,
+  "existingInstalledGroupClientOnly": true,
+  "unchangedPhysicalPageVerified": true,
+  "companyProgressFramePreserved": true,
+  "groupReceiptNotPhysicalDevice": true,
+  "originDerivedFromCapturedPhase": true,
+  "sharedCursorTransitionPolicy": true,
+  "sourceRegistrationMetadataDemandAndNativeChecked": true,
+  "invocationDeadlineMillis": 15000,
+  "confirmedDenialSurvivesFailedCleanup": true,
+  "uncertainStorageReplyConfirmed": true,
+  "indexedConfirmationSourceLimit": 20,
+  "falseCasIsNotAcknowledged": true,
+  "perPageMetadataOrTransportHttp": false,
+  "createsSdkClient": false,
+  "createsWake": false,
+  "acknowledgesContent": false,
+  "changesIncomingQueue": false,
+  "newDomainCases": 41,
+  "preservedFailedRuns": [
+    {
+      "exitCode": 1,
+      "elapsedSeconds": 131.537,
+      "freshCounts": {
+        "tests": 108,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "run": "focused1"
+    }
+  ],
+  "applicationBindingVerified": true,
+  "originalIncomingConsumerEnabled": false,
+  "rawCollectorEnabled": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true
+}
