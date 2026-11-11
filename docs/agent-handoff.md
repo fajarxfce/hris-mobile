@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 04:28 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 04:39 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Serial sync producer accepted — continue physical resolution
 
@@ -45,17 +45,32 @@ work owns hosted-audit.py and hosted-42951614097 state. Old raw42943310515 fully
 This remains storage control coverage, not Apple native SDK8 or current physical conversion.
 
 CURRENT PRIMARY WORK: .work/space-physical-resolution-2026-11-11, based on committed/pushed
-Mobile df16afbd93e266e0a0e7201dcd5a77750802f14e; Group evidence35063174 pushed.
-Seven source/test files add pure physical-to-logical transfer and ResolveCollaborationSpaceIncomingBinding.
-Usecase checks current source, owned registration/configured server and exact local binding; no
-provider/transport I/O or new wake. Existing logical work keeps its phase/source; physical work waits.
-Candidate is UNCOMMITTED/UNACCEPTED. Initial formatter89103 REAPED PASS36.244s; second formatter83956
-REAPED PASS35.044s. Focused1/session56976 is RUNNING; reap before another compiler/emulator.
-Frozen4,888-input candidate manifest:ed34a6bed6703d02fd4211caae0fe1c780b0fc4aae9e82bde4912a116d5a8add.
-Next: focused domain/browser validation, remote binding/physical worker
-selection/defer and inventory integration. No collector is enabled. Preserve all baseline11,196 cases.
-Latest phone attempt34647 at04:01 REAPED timeout124; availability question pending, release89
-validated/install-only. No phone install or live deployment change.
+Mobile df16afbd93e266e0a0e7201dcd5a77750802f14e; current docs43ad4cd9 and Group87870dba pushed.
+Nine source/test files add pure physical-to-logical transfer, ResolveCollaborationSpaceIncomingBinding
+and source fencing in LoadCollaborationSpaceIncomingRoom. Owned registration supplies configured
+server; no provider/transport I/O or new wake. Existing logical work keeps its phase/source; physical
+work waits. Source-bound logical reads reject a changed store, Matrix identity or native parent.
+No app collector/worker activation. Group source/fixtures are unchanged.
+
+Candidate2 is UNCOMMITTED, frozen4,888-input manifest:
+63696bfc1a20b78823f74371dcf8be24f642861feb1c081cddc9d29b160d1b94.
+Focused2/session72187 REAPED PASS124.207s/84; browser1/session79281 REAPED PASS94.326s/84.
+Focused audit REAPED ACCEPTED168, all prior selected cases and source/library hashes verified.
+Initial focused1/session56976 PASS122.47s/70 predates downstream source fences. All three formatter
+sessions reaped:89103/36.244s,83956/35.044s,1003/35.292s. No failed product test yet.
+Full1/session84612 is RUNNING; reap before another compiler/emulator. Expected11,264 cases,
+including all11,196 accepted baseline cases. accept-full.py is prepared but unexecuted. Do not
+publish/commit candidate code until full gates and exact evidence acceptance. No physical publication
+script has run. Read next-worker-review.md and design-review.md before integrating the worker.
+Mobile draft contract:collaboration-space-physical-resolution.md.
+
+NEXT: complete full acceptance, commit/push code/evidence, then physical worker selection/defer,
+remote binding resolution, provider inventory and stored-key integration. Do not stop at this
+increment. App worker selection/rescheduling must agree on the actual source to avoid immediate
+loops on another original's pending work. Group legacyOne metadata read differs from published
+room lookup; unpublished Company originals must keep their own coordinates and admission.
+Latest phone attempt6515 at04:30 REAPED timeout124; availability question pending, release89
+validated/install-only. No phone install or live deployment change. All54 PRD groups OPEN.
 
 ## Incoming source retention accepted — continue with the producer
 
