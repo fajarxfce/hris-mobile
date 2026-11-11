@@ -1,0 +1,49 @@
+{
+  "startedAt": "2026-11-11T00:40:58.084936+00:00",
+  "elapsedSeconds": 1024.659,
+  "sourceFiles": 4863,
+  "sourceManifestSha256": "1211c9bfb2f82d47d392a221326009663b14d66d1b4ebc31d85fdf825bf138a6",
+  "sourcesUnchanged": true,
+  "librarySourcesUnchanged": true,
+  "freshCounts": {
+    "tests": 10901,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "validatedTests": 11001,
+  "validatedReusedTests": 100,
+  "artifact": {
+    "apkSha256": "a6ff77c32c426cbe28f30f5a88ff991ecf1163e4310be8602340a9788393c8c4",
+    "sdkVersion": "26.10.23-hris.8",
+    "abi": "x86_64",
+    "librarySha256": "6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95"
+  },
+  "recordedAt": "2026-11-11T01:00:55.551504+00:00",
+  "sourceBase": "b2aef564",
+  "candidateFiles": {
+    "gradle/libs.versions.toml": "186563ff7d52c9e3b7df1831a03cf5dedc0558bb3b45e9f928a53af14ffab33e",
+    "gradle/verification-metadata.xml": "f75a8e4430c330e4b656a74b217ae8b9342766763097624406bfb639a16e93df",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/RuntimeLeaseFixture.kt": "c26e6c08c87541e21e9db43d78d2786b74b8ee5109f8eb94b97b7e43cb41d30b"
+  },
+  "sdkVersion": "26.10.23-hris.8",
+  "aarSha256": "6eebe8dab124541783d2b1d746cf30ea4b8dd2a599980cccb823927780678717",
+  "nativeRuntimeAccepted": false,
+  "primaryRuntimeChanged": false,
+  "published": false,
+  "archivedApk": {
+    "bytes": 148551112,
+    "sha256": "a6ff77c32c426cbe28f30f5a88ff991ecf1163e4310be8602340a9788393c8c4"
+  },
+  "reusedScope": "100 unchanged core/database browser controls; complete source/build and dependency versions verified",
+  "additionalExistingReports": 19,
+  "firstAttempt": {
+    "result": "dependency_resolution_failed_before_tests",
+    "elapsedSeconds": 28.406,
+    "sourceChanged": false
+  },
+  "consumerAudit": {
+    "initialResult": "missing_reports_in_fresh_checkout",
+    "resolution": "Exact archived database controls are explicitly reused, not counted as newly run."
+  }
+}

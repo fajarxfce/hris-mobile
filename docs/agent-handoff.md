@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 00:42 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 01:00 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Foreground incoming startup accepted
 
@@ -145,16 +145,28 @@ still pins SDK6. Consumer full1/session20385 REAPED failed before tests /28.406s
 its isolated Ivy repository initially lacked the inspector's unchanged SDK6 dependency metadata.
 The exact published SDK6 AAR (a4aa1e2cb3136c0531bb35f7f06df10582c84c1974ce4e5fda7099d0ab533bb3)
 and descriptor were checked against the primary verification metadata and copied into that
-private repository; no source was changed. Full2/session84151 is now RUNNING from the consumer's
-.work/sdk-incoming-consumer-2026-11-11 (full check/Android host/lint/proof APK/Wasm and metadata).
-Only this compiler is active. Do not mutate its three inputs or the inspector during the gate.
+private repository; no source was changed. Full2/session84151 is now REAPED ACCEPTED:
+10,901 fresh cases +100 exact unchanged database browser controls =11,001, zero failures/errors/skips,
+1,024.659s. All prior case identities are preserved, with19 additional existing reports now included.
+Source4,863 manifest1211c9bfb2f82d47d392a221326009663b14d66d1b4ebc31d85fdf825bf138a6.
+Actual x86_64 SDK8 library matches independently stripped hash6e4e177e2e9ec01df4a4b238bbefaeba6b228fed0d139224f2b0424484e2cd95.
+The accepted control APK is archived privately in full2/accepted-proof.apk. Audit21664 REAPED.
+Contract: collaboration-sdk-incoming-hints-consumer.md (Mobile), collaboration/sdk-incoming-hints-consumer.md (Group);
+both share measurement collaboration-sdk-incoming-hints-consumer-2026-11-11.json. Do not repeat full2.
+After acceptance, two proof-only files were added in the isolated Mobile consumer. Five Group
+fixture/protocol files are uncommitted in .work/sdk-incoming-native-2026-11-11. They add one explicit
+SDK8 opt-in scenario while preserving the five old native controls. Group format1 failed because
+the private runner used the wrong task name; format2 is REAPED PASS20.935s with unchanged source.
+42 Python protocol cases pass. Mobile proof formatting/build and Group fixture compilation precede
+six actual native scenarios on a fresh 2560MiB/two-core emulator. These native tests are NOT accepted yet.
+Never compile while the emulator is active. No phone UI or production runtime changes.
 The client Firebase file was copied only to its ignored location and checked against the old
 accepted input hash; no credential/configuration change. prepare-consumer.py EXECUTED; do not
 repeat it. SDK8 is unpublished; actual runtime/new callback acceptance remains next. Private consumer-notes.md records unresolved atomic cursor/
 physical-demand ownership, key-only pending retries, inventory gaps and original Company routing;
 it is investigation, not implemented consumer behavior. All54 PRD groups remain OPEN.
 
-Phone ADB93824 timed out/reaped; validated release 89 is still uninstalled. Existing availability
+Phone ADB26895 timed out/reaped at00:50; validated release 89 is still uninstalled. Existing availability
 question remains pending. Notify before install-only; do not launch, reset or drive phone UI.
 No live deployment or generic Starter delta. SDK6, live 90163c/schema 116.4 and original sender
 keys/messages remain protected. All 54 communications PRD groups remain OPEN. Continue work.
