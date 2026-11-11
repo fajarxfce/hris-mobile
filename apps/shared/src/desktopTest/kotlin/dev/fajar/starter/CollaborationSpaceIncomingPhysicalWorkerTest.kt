@@ -86,6 +86,23 @@ class CollaborationSpaceIncomingPhysicalWorkerTest {
     }
 
     @Test
+    fun waitingForTheOriginalDeviceDefersPhysicalWorkWithoutAnImmediateLoop() = runTest {
+        val f = SpaceIncomingWorkerFixture(testScheduler, 0)
+        val physical = f.queuePhysical(0)
+        f.missingBindingOutcome =
+            CollaborationSpaceIncomingBindingResolution.WaitingForOriginalSource
+        assertIs<SyncResult.Retry>(f.worker())
+        assertEquals(listOf(physical.roomId), f.physicalAttempts)
+        assertEquals(1, f.deferredPhysical.size)
+        assertNotNull(f.physicalRooms.single().retry)
+        assertNotNull(f.wake)
+        assertFalse(f.calls.any { it in setOf("provider", "content", "resume", "finish") })
+        f.calls.clear()
+        assertIs<SyncResult.Retry>(f.worker())
+        assertFalse(f.calls.any { it in setOf("binding", "adopt", "provider", "resume", "finish") })
+    }
+
+    @Test
     fun foreignOriginalWorkRemainsPendingWithoutImmediateContinuationOrProviderCalls() = runTest {
         for (physical in listOf(false, true)) {
             val f = SpaceIncomingWorkerFixture(testScheduler, 0)

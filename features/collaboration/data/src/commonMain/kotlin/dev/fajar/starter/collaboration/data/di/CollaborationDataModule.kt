@@ -856,6 +856,7 @@ class CollaborationDataModule {
         conversations: CollaborationSpaceConversationRepository,
         metadata: CollaborationSpaceConversationMetadataRepository,
         originals: CollaborationSpaceOriginalConversationRepository,
+        originalMetadata: CollaborationSpaceOriginalRoomMetadataRepository,
         clock: Clock,
     ) =
         ResolveCollaborationSpaceIncomingBinding(
@@ -871,6 +872,7 @@ class CollaborationDataModule {
             conversations,
             metadata,
             originals,
+            originalMetadata,
             clock,
         )
 

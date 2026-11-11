@@ -1,5 +1,8 @@
 # Architecture
 
+[Canonical Original physical resolution](collaboration-space-canonical-physical-binding.md) keeps registered Company/device provenance
+through immutable metadata confirmation and typed incoming queue conversion.
+
 [Original queue completion](collaboration-space-original-queue-completion.md) retires an exact drained Company task after local
 reference and checkpoint confirmation, preserving independent source demand and wake.
 

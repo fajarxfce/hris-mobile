@@ -29,8 +29,16 @@ class ResolveCollaborationSpaceIncomingBindingTest {
         assertEquals(1, f.request.writes)
         assertEquals(0, f.request.schedules)
         assertEquals(
-            listOf("demand", "registration", "binding", "write", "committed", "readback"),
-            f.base.calls,
+            CollaborationSpaceIncomingTarget.Original(f.originalPosition),
+            after.rooms.single().target,
+        )
+        assertEquals(listOf(requireNotNull(f.base.retained).original), f.originalMetadataWrites)
+        assertTrue(f.remoteReads.isEmpty())
+        assertEquals(
+            listOf("demand", "binding", "write", "committed", "readback"),
+            f.base.calls.filter {
+                it in setOf("demand", "binding", "write", "committed", "readback")
+            },
         )
     }
 
@@ -77,7 +85,7 @@ class ResolveCollaborationSpaceIncomingBindingTest {
         assertEquals(before, f.request.snapshot)
         assertEquals(0, f.request.writes)
         assertEquals(listOf("demand", "registration", "binding"), f.base.calls.take(3))
-        assertEquals(listOf("physical"), f.remoteReads)
+        assertEquals(listOf("physical", "original-physical"), f.remoteReads)
         assertTrue(f.metadataWrites.isEmpty() && f.bindingWrites.isEmpty())
         assertEquals(1, f.base.calls.count { it == "remote-physical" })
     }
@@ -114,11 +122,12 @@ class ResolveCollaborationSpaceIncomingBindingTest {
         val before = assertNotNull(f.request.snapshot)
         val logical =
             CollaborationSpaceIncomingRoomDemand(
-                f.base.model.conversation.id,
+                CollaborationSpaceIncomingTarget.Original(f.originalPosition),
                 f.id(800),
                 1,
                 "\$old",
                 CollaborationSpaceIncomingPhase.Pending,
+                sourceId = f.source.storeId,
             )
         f.request.snapshot =
             before.copy(demand = before.demand.copy(nextPosition = 2, rooms = listOf(logical)))

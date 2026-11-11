@@ -47,6 +47,7 @@ internal class SpaceIncomingWorkerFixture(
     val physicalAttempts = mutableListOf<String>()
     val deferredPhysical = mutableListOf<CollaborationSpaceIncomingPhysicalRoomDemand>()
     var bindingFailure: Failure? = null
+    var missingBindingOutcome = CollaborationSpaceIncomingBindingResolution.BindingMissing
     var nextPosition = count.toLong()
     val rooms =
         (0 until count)
@@ -148,8 +149,7 @@ internal class SpaceIncomingWorkerFixture(
                 val target = bindingTargets[captured.roomId]
                 val failure = bindingFailure
                 if (failure != null) AppResult.Failed(failure)
-                else if (target == null)
-                    AppResult.Success(CollaborationSpaceIncomingBindingResolution.BindingMissing)
+                else if (target == null) AppResult.Success(missingBindingOutcome)
                 else {
                     val planned =
                         resolveCollaborationSpaceIncomingPhysicalRoom(

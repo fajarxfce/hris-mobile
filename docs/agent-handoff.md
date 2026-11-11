@@ -1,66 +1,65 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 13:10 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 13:19 UTC. This opening owns current work; older sections are historical.
 
-## Canonical physical routing — full validation running
+## Canonical Original physical routing accepted — continue application integration
 
-Current eleven-file canonical resolver source is APPLIED/FROZEN, NOT accepted/committed.
-Private .work/space-canonical-physical-binding-2026-11-11: baseline4789f959/12,127/4,967 inputs;
-current4,969 inputs, manifest4066094157be0eca6004a1b0982c977b9b2defa89dc62eb2fc0c4a598ce14c84.
-Format4/89719 REAPED PASS35.945s. Focused4/58150 REAPED PASS273.224s/220; browser1/12014
-REAPED PASS185.239s/205. Focused425 accepted. Full1/59803 RUNNING, expected12,192.
-Reap every process before edits; acceptance requires the final frozen source and all relevant checks.
+Eleven-file canonical resolver ACCEPTED. full1 / 59803 REAPED PASS 634.477s;
+audit accepted12,192=10,154 fresh+2,038 exact unchanged controls.
+Prior case IDs, dependency closures and source/library hashes verified. format4/89719
+REAPED PASS35.945s. focused4/58150 REAPED PASS
+273.224s/220; browser1/12014 REAPED PASS
+185.239s/205. Focused425 accepted. Required format/architecture/detekt,
+Android host/release compilation/lint, browser/Wasm, iOS metadata and proof assembly/unit checks pass.
+Frozen4,969-input manifest4066094157be0eca6004a1b0982c977b9b2defa89dc62eb2fc0c4a598ce14c84.
+Proof APK151,731,957 bytes/SHAc609fe063285f992d089cb04a3ad929873e522964054f5640fe1563ae17d6294.
 
-Preserve ALL three failed attempts and candidates. Focused1/64228 REAPED exit1/62.272s/ZERO tests:
-detekt local resolver107>100. Focused2/38905 REAPED exit1/61.313s/ZERO tests: still106>100.
-Request/source/task capture now belongs in invoke's existing five-second operation; the existing
-retained-binding resolver owns metadata resolution. No new helper, suppression, timer or weaker gate.
-Format2/86009 PASS36.023s and format3/6753 PASS35.851s preceded focused3/76357 REAPED exit1/136.598s:
-124 domain cases,123 pass/1 inconsistent fixture. That fixture changed installed source without the
-corresponding captured demand/source progress, correctly failing before the intended routing boundary.
-Only the fixture was corrected to a coherent alternative source; production fences are unchanged.
-Initial format1/34060 passed36.553s. Read resolve-local-structure-review.md and physical-source-fixture-review.md.
+Resolver captures full registration and current source, keeps the registered LEGACY Company/physical
+device, and resolves typed Original work through existing aliases or Company-qualified Original indexes.
+Both immutable indexes are confirmed before queue conversion. Only authoritative Published absence
+permits one Original physical lookup under the same15s deadline; local5s resolution ignores ordinary
+credential age. Current registration/account/native/source/denial remain checked across I/O and queue
+CAS/readback. Newer generations, source positions, rescan/loss and independent wake are preserved.
+Unsupported sources use existing bounded worker deferral. No client/provider/content/progress rewrite.
 
-Resolver keeps full registered LEGACY Company/physical-device provenance, Company-qualified immutable
-Original indexes, typed canonical targets, exact source/task and current account/native/denial guards.
-Only authoritative Published absence permits one Original metadata fallback under the same15s deadline.
-Local facts ignore credential age. Both indexes and queue CAS/readback require exact confirmation;
-unsupported Original source uses bounded existing worker deferral. No client/provider/content/progress
-rewrite. 32 new common cases and1 desktop worker case; expected13 physical-worker cases,18 Original
-metadata/37 demand/26 binding storage controls. Owner fixtures do not themselves prove database/native behavior.
+32 new common cases+1 desktop worker case;13 physical worker cases and18 Original metadata/37 demand/
+26 binding storage controls covered. Fixtures model repository outcomes, not native/database execution.
+Preserved failed-run count:3. Focused1/64228 and focused2/38905 stopped
+at detekt with zero tests (107/106-line local function). Request/source/task capture now belongs in the
+invocation and the retained-binding resolver owns metadata resolution; no helper/rule suppression.
+Focused3/76357 ran124 domain cases with one inconsistent source fixture; that fixture alone was
+corrected to matching installed/captured source progress before testing mismatched registration.
+All failed candidates/reports remain in .work/space-canonical-physical-binding-2026-11-11.
 
-Canonical publisher, contract, hosted plan/audit/dispatch are PREPARED NOT executed. Hosted plan expects
-14,258=10,170 portable+4,088 Apple,16 Swift/unsigned host on validation/canonical-physical-binding-20261111;
-baseline43022213294. No canonical hosted dispatch. Accepted-handoff writer is PREPARED NOT executed.
+Publisher and this accepted-handoff writer HAVE EXECUTED. Commit/push source/docs, then dispatch-hosted.py
+ONCE on validation/canonical-physical-binding-20261111; expected14,258=10,170 portable+4,088 Apple,
+16 Swift/unsigned host. Baseline43022213294 on4789f959 already dispatched. No canonical dispatch yet.
+No phone/live/native SDK8 Apple runtime claim from these local checks.
 
-Next Original application turn has NINE PRIVATE UNAPPLIED/UNTESTED files and5 new inputs: typed
-turn adapter, owning DI module/inclusion, worker dispatch, app binding assertion, existing fixture
-hooks, one sequencing fixture and22 turn+8 existing-worker cases. Four existing-file hashes guarded.
-Read next-original-application-turn-review.md. Keep the existing worker mutex/FIFO/parent lifetime
-and40s room deadline. Reload actual Pending capture after provider commit, reconcile local facts,
-then reread the finite remaining page before content acquisition. Confirmed provider/seek progression
-can continue another bounded turn; keys retries never restart provider. No second scheduled task,
-client, collector or mutex. Tests cover exact capture, retained-content exclusion, lost replies,
-cancellation, parent replacement, shared mutex, timeout, current-phase deferral and independent wake.
-Prepare/configure-next-original-application-turn.py are PREPARED NOT executed. Expected4,974 inputs,
-219 focused (including app Wasm/iOS metadata compile),153 browser and12,222 full. Source/fixtures need
-review and actual compilation/testing; no acceptance claimed. Do not apply before canonical acceptance.
+Next Original application turn has9 PRIVATE UNAPPLIED/UNTESTED files,5 new inputs and30 app cases.
+Its four existing-file hashes are guarded. Prepare/configure scripts remain unexecuted; expected
+4,974 inputs/219 focused/153 browser/12,222 full. Read
+next-original-application-turn-review.md and its draft. Preserve the existing worker mutex, combined
+FIFO, parent lifetime and40s room deadline. Reload actual Pending capture after provider commit;
+reconcile retained facts then reread finite pending refs before content acquisition. Proven provider
+or finite-seek progress permits another bounded turn; keys retries never restart provider. Review
+DI/worker wiring and the22 turn+8 worker cases before applying/testing the draft. No new scheduled task/client/collector.
+
 Logical LEGACY alias handling, keys-only recovery, bounded Client.rooms inventory and combined old-Company
-storage/new-Group worker native proof remain required. Existing registry adoption already excludes and
-drains original borrowers. Raw collector/Original producer OFF; all54 PRD groups OPEN. No Starter delta.
+storage/new-Group worker native proof remain required. Existing registry adoption excludes/drains old
+borrowers and Company recovery joins cancellation. Raw collector/Original producer OFF; all54 PRD
+groups OPEN. No generic Starter delta. Continue long run and push every commit.
 
-Accepted queue source4789f959 and Group docs5650d9d3 are pushed; hosted43022213294 dispatched once
-(49407 reaped), expected14,161. Reference43018627791 portable10,057 accepted, Apple4,032 pending.
-Content43011629455 now FULL13,912 accepted (Apple audit56642 REAPED3,973). Reconciliation43015359541
-now FULL14,002 accepted (Apple audit10276 REAPED4,003). Both include16 Swift/unsigned host checks,
-not native SDK8 Apple runtime execution. Preserve Content cancelled attempt1 and successful targeted
-attempt2; no workflow redispatch/portable rerun. Earlier complete runs remain recorded below.
+Content43011629455 FULL13,912 accepted, Apple audit56642 REAPED3,973. Reconciliation43015359541
+FULL14,002 accepted, Apple audit10276 REAPED4,003. Both include16 Swift/unsigned host checks.
+Preserve Content cancelled attempt1 and targeted successful attempt2; no workflow redispatch/portable
+rerun. Reference43018627791 portable10,057 accepted; queue43022213294 portable10,105 accepted (audit49486 REAPED), Apple4,056 pending.
+Inspect latest exact hosted audit files before changing status or dispatching anything again.
 
-Phone94443 REAPED timeout124, start12:48:36UTC/20.016s; next retry no earlier13:20. Evidence current
-workspace/phone-connect-1248.json. Validated release89 SDK6 awaits install, no attempt/result. Notify
-before explicit-serial install-only; never launch/drive phone UI. No emulator. Preserve eight original
-intents, Draft66, keys/stores, SDK assets and live90163c3/schema116.4 Group OFF. Continue long run;
-push every commit.
+Phone94443 REAPED timeout124, start12:48:36UTC/20.016s; next bounded retry no earlier13:20. Evidence
+phone-connect-1248.json. Validated release89 SDK6 awaits install, no attempt/result. Notify first,
+explicit serial/install-only, never launch/drive phone UI. No emulator. Preserve eight original intents,
+Draft66, keys/stores, SDK assets and live90163c3/schema116.4 Group OFF.
 
 ## Original queue completion accepted — continue canonical physical routing
 

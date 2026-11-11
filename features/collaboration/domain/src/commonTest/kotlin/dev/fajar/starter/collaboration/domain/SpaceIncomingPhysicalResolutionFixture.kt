@@ -50,8 +50,16 @@ internal class SpaceIncomingPhysicalResolutionFixture(
                 base.native.setup.now,
                 base.queue.identity,
                 "Fixture device",
-                CollaborationSpaceDeviceOrigin.SPACE,
-                null,
+                CollaborationSpaceDeviceOrigin.LEGACY,
+                CollaborationSpaceLegacySdk(
+                    base.queue.binding.copy(nativeSessionId = runtime.owner.parent.nativeSessionId),
+                    base.queue.device.deviceId,
+                    CollaborationLocalDeviceIdentity(
+                        source.matrixUserId,
+                        source.matrixDeviceId,
+                        "a".repeat(64),
+                    ),
+                ),
             ),
             2,
             1,
@@ -106,6 +114,14 @@ internal class SpaceIncomingPhysicalResolutionFixture(
         )
     var remoteConversation = base.model.conversation
     var remoteOriginal = base.model.queue.conversation
+    val originalPosition = base.queue.position
+    var originalCanonical: CollaborationSpaceOriginalRoomMetadata? = null
+    var originalIndex: CollaborationSpaceOriginalRoomMetadata? = null
+    var originalPhysicalFailure: Failure? = missing
+    var originalMetadataCommit = true
+    var originalMetadataReply = true
+    var loseOriginalMetadataReply = false
+    val originalMetadataWrites = mutableListOf<CollaborationSpaceOriginalRoomMetadata>()
     var canonical: CollaborationSpaceConversationMetadata? = null
     var metadataReply = true
     var bindingReply = true
@@ -163,8 +179,16 @@ internal class SpaceIncomingPhysicalResolutionFixture(
                 companyId: String,
                 serverName: String,
                 roomId: String,
-            ): AppResult<CollaborationSpaceOriginalConversation> =
-                error("No unconsumed original fallback")
+            ): AppResult<CollaborationSpaceOriginalConversation> {
+                assertEquals(runtime.owner, owner)
+                assertEquals(originalPosition.companyId, companyId)
+                assertEquals(registered.command.provider.serverName, serverName)
+                assertEquals(physical.roomId, roomId)
+                remoteReads += "original-physical"
+                val read = base.read("remote-original-physical") { remoteOriginal }
+                return if (read is AppResult.Failed) read
+                else originalPhysicalFailure?.let { AppResult.Failed(it) } ?: read
+            }
         }
     private val conversations =
         object : CollaborationSpaceConversationRepository {
@@ -277,6 +301,48 @@ internal class SpaceIncomingPhysicalResolutionFixture(
                 return base.read("binding") { base.retained }
             }
         }
+    private val originalMetadata =
+        object : CollaborationSpaceOriginalRoomMetadataRepository {
+            override suspend fun getByConversation(
+                access: CollaborationSpaceLocalAccess,
+                position: CollaborationOriginalConversationPosition,
+            ): AppResult<CollaborationSpaceOriginalRoomMetadata?> {
+                assertEquals(request.access, access)
+                assertEquals(originalPosition, position)
+                return base.read("original-metadata") { originalCanonical }
+            }
+
+            override suspend fun findByRoom(
+                access: CollaborationSpaceLocalAccess,
+                companyId: String,
+                serverName: String,
+                roomId: String,
+            ): AppResult<CollaborationSpaceOriginalRoomMetadata?> {
+                assertEquals(request.access, access)
+                assertEquals(originalPosition.companyId, companyId)
+                assertEquals(registered.command.provider.serverName, serverName)
+                assertEquals(physical.roomId, roomId)
+                return base.read("original-index") { originalIndex }
+            }
+
+            override suspend fun retain(
+                access: CollaborationSpaceLocalAccess,
+                metadata: CollaborationSpaceOriginalRoomMetadata,
+            ): AppResult<Boolean> {
+                assertEquals(request.access, access)
+                val before = base.read("original-metadata-write") { Unit }
+                if (before is AppResult.Failed) return before
+                originalMetadataWrites += metadata
+                if (originalMetadataCommit) {
+                    originalCanonical = metadata
+                    originalIndex = metadata
+                }
+                val after = base.read("original-metadata-committed") { Unit }
+                return if (after is AppResult.Failed) after
+                else if (loseOriginalMetadataReply) AppResult.Failed(base.directory.storageFailure)
+                else AppResult.Success(originalMetadataReply)
+            }
+        }
     private val sync =
         object : CollaborationSpaceSyncRepository {
             override fun incomingSource(
@@ -308,6 +374,7 @@ internal class SpaceIncomingPhysicalResolutionFixture(
             conversations,
             metadata,
             originals,
+            originalMetadata,
             base.native.clock,
             timeSource,
         )

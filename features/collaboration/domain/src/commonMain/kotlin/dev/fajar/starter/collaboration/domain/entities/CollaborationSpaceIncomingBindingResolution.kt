@@ -4,6 +4,7 @@ package dev.fajar.starter.collaboration.domain.entities
 enum class CollaborationSpaceIncomingBindingResolution {
     Queued,
     BindingMissing,
+    WaitingForOriginalSource,
     WaitingForPrevious,
     Obsolete,
 }

@@ -35,6 +35,11 @@ class ResolveCollaborationSpacePhysicalMetadataTest {
             assertEquals(wake, f.request.wake)
             assertEquals(f.physical.generation, after.rooms.single().generation)
             assertEquals(f.physical.sourceId, after.rooms.single().sourceId)
+            val expectedTarget =
+                if (legacy) CollaborationSpaceIncomingTarget.Original(f.originalPosition)
+                else CollaborationSpaceIncomingTarget.Published(f.remoteConversation.id)
+            assertEquals(expectedTarget, after.rooms.single().target)
+            assertEquals(if (legacy) 1 else 0, f.originalMetadataWrites.size)
             assertTrue(after.physicalRooms.isEmpty())
             assertEquals(1, f.metadataWrites.size)
             assertEquals(1, f.bindingWrites.size)

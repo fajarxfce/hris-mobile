@@ -1,0 +1,107 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "4789f959440990321a5b7e328f76e753d703b041",
+  "sourceFiles": 4969,
+  "changedSourceFiles": 11,
+  "sourceManifestSha256": "4066094157be0eca6004a1b0982c977b9b2defa89dc62eb2fc0c4a598ce14c84",
+  "focused": {
+    "tests": 425,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused4",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 12192,
+    "fresh": {
+      "tests": 10154,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 634.477,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151731957,
+    "sha256": "c609fe063285f992d089cb04a3ad929873e522964054f5640fe1563ae17d6294"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "canonicalOriginalPhysicalResolutionAccepted": true,
+  "fullRegistrationFenced": true,
+  "registeredCompanyAndPhysicalDeviceRequired": true,
+  "typedOriginalTarget": true,
+  "localOriginalIndexWithoutPublishedAlias": true,
+  "localDeadlineMillis": 5000,
+  "combinedLiveDeadlineMillis": 15000,
+  "authoritativePublishedAbsenceOnly": true,
+  "maximumPublishedPhysicalLookups": 1,
+  "maximumOriginalPhysicalLookups": 1,
+  "bothImmutableIndexesConfirmed": true,
+  "failedReadbackDoesNotConvert": true,
+  "casReadbackAndNewerTasksPreserved": true,
+  "ordinaryCredentialAgeDoesNotHideOwnedFacts": true,
+  "independentWakePreserved": true,
+  "unsupportedSourceRetainedWithBoundedDeferral": true,
+  "unsourcedPublishedTasksNotRelabeled": true,
+  "sharedPureRegistrationPolicy": true,
+  "newDomainCases": 32,
+  "newDesktopWorkerCases": 1,
+  "physicalWorkerCases": 13,
+  "originalMetadataStorageControlCases": 18,
+  "incomingDemandStorageControlCases": 37,
+  "roomBindingStorageControlCases": 26,
+  "fixtureIsNotDatabaseOrNativeProof": true,
+  "preservedFailedRuns": [
+    {
+      "exitCode": 1,
+      "elapsedSeconds": 62.272,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "run": "focused1"
+    },
+    {
+      "exitCode": 1,
+      "elapsedSeconds": 61.313,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "run": "focused2"
+    },
+    {
+      "exitCode": 1,
+      "elapsedSeconds": 136.598,
+      "freshCounts": {
+        "tests": 124,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "run": "focused3"
+    }
+  ],
+  "applicationBindingVerified": true,
+  "readsSdkOrProvider": false,
+  "createsSdkClient": false,
+  "writesMessageContent": false,
+  "restartsProvider": false,
+  "acknowledgesIndependentWake": false,
+  "sendsMessage": false,
+  "rawCollectorEnabled": false,
+  "originalIncomingConsumerEnabled": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true
+}
