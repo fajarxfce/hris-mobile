@@ -1,38 +1,49 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 06:39 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 06:53 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Active physical metadata consumer — continue validation
 
-Mobile focused1/session59353 is RUNNING and owns the only local heavy slot.18 source/test files are
-FROZEN; do not edit until reaped. Format1/session30386 REAPED PASS36.269s.4,912-input manifest:
-5b894c5a70361d709e7e2beac4ed04e757a22690938ba369232a7375dd7fe174.
-.work/space-physical-metadata-consumer-2026-11-11 owns source baseline840d115247b2da417014636529040b80cca38144,
-1,287 baseline XMLs/11,413 cases,18 frozen files,run.py,accept-focused.py,accept-full.py and expected.json.
-Expected focused559 (493 domain+31 data+35 app),browser493,full11,492. New cases:23 domain and11
-common transport. No acceptance, native SDK execution, phone delivery or live activation yet.
+Mobile focused4/session19643 is RUNNING and owns the only local heavy slot. Nineteen source/test
+files are FROZEN; do not edit until reaped. Format4/session15789 REAPED PASS35.333s. The4,912-input
+manifest is0fb9a38fb6962ce28ad391978c42092774ee42157fe1741d54437c65ecf22444.
+Private Mobile .work/space-physical-metadata-consumer-2026-11-11 owns accepted source baseline
+840d115247b2da417014636529040b80cca38144,1,287 baseline XMLs/11,413 cases, candidate1/2/3 archives,
+runners/audits and expected.json. Expected focused562 (495 domain+32 data+35 app),browser495,
+full11,499. New cases:25 domain+12 common transport. No acceptance or live/native activation yet.
 
-The existing Resolve use case now has a bounded5s local path and a separate15s metadata path only
-for missing bindings. Domain owns native/directory/source/registration admission,physical metadata
-then real conversation acquisition,published LEGACY original checks,immutable metadata/binding
-retention with exact lost-reply readback,and conversion from a freshly reloaded demand snapshot.
-No fake conversation or per-batch transport/device status reads. Known missing publication keeps
-physical work pending; unpublished Company original routing remains a separate required consumer.
-The new raw original physical API adapter is prepared but never called just to discard its result.
-Data adapters preserve bounded native read-only POST,one credential replay,scope and cancellation.
-The worker invokes the same owning use case through updated data DI. Raw collection stays disabled.
+Focused1/session59353 REAPED FAIL60.208s at LongMethod118/100. Focused2/session88588 REAPED
+FAIL60.604s at108/100. A shared pure physical-snapshot policy now selects exact current source and
+captured generation before/after remote work; bounded capture failure stays distinct from absence.
+The owning use case's inner MetadataAcquisition explicitly owns one deadline and remembered denial.
+No generic helper, suppression or narrowed check was added. Focused3/session50516 REAPED FAIL77.535s:
+format/architecture74/detekt passed; compiler rejected nonexistent FailureKind.NotFound. HTTP404
+uses the existing Unexpected classification plus exact API code; a real transport regression checks
+that mapping. New regressions cover remote denial despite failed/timed-out cleanup and unreadable
+admission, plus true/false write replies without exact durable metadata/binding witnesses.
 
-Continue through compiler/test failures without narrowing controls. Once focused passes, run browser,
-accept-focused.py,full and accept-full.py. Then document/commit/push the accepted implementation and
-continue original typed routing,provider inventory and keys-only recovery. All54 PRD groups OPEN.
+The existing Resolve use case keeps a5s local path and a separate15s live path only for missing
+bindings. Domain owns native/directory/source/registration admission, physical lookup then real
+conversation metadata, published LEGACY original checks, exact immutable retention/readback and
+conversion from a freshly loaded demand snapshot. No fake conversation, per-batch transport/device
+status lookup, or scheduling loop. Raw original physical API is prepared but not called merely to
+discard its result. Known missing publication retains physical work. Raw collection stays OFF.
 
-Hosted previous incoming-write control42972222388 is RUNNING on immutable840d115247b2da417014636529040b80cca38144,
-ref validation/incoming-write-confirmation-20261111. Portable and Apple were in_progress at06:36;
-query33663 REAPED. Expected9,391 portable+3,675 Apple=13,066,16 Swift,unsigned Apple host. Do NOT
-redispatch. .work/space-incoming-write-confirmation-2026-11-11/hosted-42972222388 owns state/latest-run;
-its parent owns hosted-audit.py. This excludes current metadata source; no Apple native SDK8 claim.
-Latest phone connect3815 at06:36 REAPED timeout124; existing question remains pending. Release89
-is validated for install-only; no phone UI interaction. No emulator is active.
+Continue focused/browser audits, full checks and acceptance without narrowing controls. Then commit
+and push implementation plus evidence. Next original routing uses an explicit Published/Original
+(Company+conversation) target: never feed a bare original ID to Space storage. Existing Company
+history frames already preserve original content/cursors; registration supplies Company provenance.
+Private next-original-target-review.md records actual codec/worker evidence, compatibility and
+remaining consumers. Original metadata/traversal/content/completion, complete provider inventory,
+keys-only recovery and actual native proof remain required. All54 PRD groups remain OPEN.
+
+Hosted incoming-write control42972222388 remains RUNNING on immutable840d115247b2da417014636529040b80cca38144,
+ref validation/incoming-write-confirmation-20261111. Query77261 REAPED at06:52: portable is building
+app bindings/platforms; Apple is testing its setup adapter. Expected9,391 portable+3,675 Apple=
+13,066 cases,16 Swift,unsigned host. Do NOT redispatch. Parent .work/space-incoming-write-confirmation-2026-11-11
+owns hosted-audit.py; hosted-42972222388 owns state/latest-run. No Apple native SDK8 claim.
+Latest phone connect3815 at06:36 REAPED timeout124; existing question remains pending. Next bounded
+retry no earlier than07:06. Validated release89 is install-only; no phone UI interaction or emulator.
 
 ## Physical worker accepted — continue original metadata and concurrent writes
 
