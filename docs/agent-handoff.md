@@ -1,6 +1,52 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 09:59 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 10:06 UTC. This opening section owns current work; older checkpoints below are historical.
+
+## Active Original pending reader — focused revalidation
+
+Transition source26ade803e2ac5ff6321c14ef19e203af582eb737 is PUSHED (42959 REAPED); Group8d3f7a5b pushed
+(1560 REAPED). Full1/session7058 and audit87669 REAPED accepted11,839. publish.py HAS EXECUTED. Hosted
+42999833068 RUNNING on immutable26ade803/refvalidation/original-provider-transition-20261111;
+dispatch7902 REAPED, expected13,721. Do NOT redispatch.
+
+Next five-file Original pending reader is APPLIED, UNACCEPTED. Private
+.work/space-original-pending-read-2026-11-11 preserves baseline26ade803/4,944 inputs/11,839 cases and
+exact baseline reports. prepare-next-pending-read.py and configure-next-pending-read.py HAVE EXECUTED.
+Current4,947-input manifest2804ad25868eec8dac0143874d05e56239ba1bf0c01022dca840cbaaabb6ea46 is FROZEN.
+Format1/session98886 REAPED PASS35.527s; format2/session38586 REAPED PASS36.046s. Focused2/session8387
+RUNNING, expected150. Browser expected148 and full11,887 have NOT run. No publisher or hosted dispatch
+for this reader scope yet.
+
+Focused1/session79618 REAPED exit1/111.969s during common test compilation; ZERO cases executed. Only two
+assertEquals calls had overly narrow inferred expected pair lists; they now explicitly use
+listOf<Pair<String?,Int>>. No production code changed. candidate1/focused1 preserve initial manifest
+71af6dde4ecb8ef86699be90491da2c6ab477c6149bdb048a03269f635e04d23 and logs. Read focused1-review.md.
+
+The new local owner derives Original Company/device coordinates from its capture, reads at most16
+indexed pending references, preserves finite pendingThrough and rejects regressing revisions/counts,
+changed frame/wave/seek/task/source. Five-second local ownership/metadata/registration/native/denial
+fences ignore credential age/selected Company. No provider/API/write/wake. Twenty-four new domain
+cases and existing DI/app assertions are pending validation. Raw collector and Original producer OFF.
+
+Next reap focused2, then browser/focused audit and full/full audit. Continue Company pending-limit
+contract, Original content and completion. Private next-company-pending-limit-draft now has contract,
+implementation, four fake signatures and an Apple wave wrapper PREPARED NOT applied. Common storage
+tests are still to be written; no acceptance/run scripts for that later draft. Company must expose and
+forward limit:Int=20 to the existing raw store so16-reference completion is valid; preserve stored key/
+cursor bytes and default20. Existing Company wave8-case contract has desktop/browser wrappers only;
+new Apple wrapper must be counted explicitly. Hosted control runs whole data modules, so wrapper inclusion
+requires no workflow change, but exact audit coverage must be added. Read next-company-pending-limit-review.md.
+
+Original content/seek/queue completion, canonical Published LEGACY aliases, bounded Client.rooms inventory,
+keys-only recovery and native proof remain required before activation. All54 PRD groups OPEN. No generic
+Starter delta. Continue the long run; push every commit.
+
+Provider42996808183 RUNNING, expected13,589. Loader42991947262 portable accepted9,647; Apple pending3,819.
+Storage42988568153 fully accepted13,394; target42983683780 fully accepted13,276; metadata42978769594 fully
+accepted13,189. Do not redispatch existing runs. SDK8 Apple native execution is not established.
+Phone26798 REAPED timeout124, connect started09:42:07; next retry no earlier10:13. No release89 install-result
+or installation attempt. No emulator. Notify before install-only and never launch/drive the user's phone.
+Protected eight original intents, Draft66, keys/stores, SDK assets and live Group-OFF remain unchanged.
 
 ## Original provider transitions accepted — continue bounded pending reads
 
