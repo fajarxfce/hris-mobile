@@ -92,5 +92,25 @@
       "core/database/src/commonTest/kotlin/dev/fajar/starter/database/PublishedReplicaPageContract.kt:64"
     ],
     "correction": "Assert exact Success(empty locator page) for inactive scope, retain positive renewed-session reads and add restoration checks for account/audience replacement. Consumer must check admission before treating an empty local view as pass completion."
-  }
+  },
+  "hostedPortable": {
+    "sourceCommit": "e0a00be5834979536c06a70f5d72a093c0b27d15",
+    "runId": 43062334365,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/43062334365",
+    "jobId": 130667946529,
+    "artifactId": 13875482078,
+    "bytes": 3835048,
+    "sha256": "42043b04fc64c52d1203214f73e546a0f60147a61403c9b45b7132304322cf79",
+    "githubDigestAndZipCrcVerified": true,
+    "priorCaseIdsPreserved": true,
+    "counts": {
+      "desktopTest": 5068,
+      "testAndroidHostTest": 835,
+      "wasmJsBrowserTest": 4763
+    },
+    "reportManifestSha256": "ac6ffa7033103f393500a21953383d765ab4ecc0196d768692cde464171e1f6b",
+    "jobLogSha256": "dfeb955b76df1a67221c15304d092aa7b24dd4b66d37ea00ca2d2fe1e2bc49d2"
+  },
+  "hostedPortableAccepted": true,
+  "hostedCompleteAcceptance": false
 }

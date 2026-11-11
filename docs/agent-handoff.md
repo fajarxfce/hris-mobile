@@ -1,6 +1,69 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 17:17 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 17:21 UTC. This opening owns current work; older sections are historical.
+
+## Application fairness applied; focused validation running
+
+Active/requested inventory source f4c0b4d27b2b950f918980f569a330a812f50ddf and Group docs95f116a1
+PUSHED;51810/75480 reaped. Local12,740 accepted (full56947/audit27255 reaped),544 focused.
+Hosted43066807577 dispatched ONCE at17:18:04UTC on validation/inventory-active-request-20261111;
+25036 reaped, expected15,020=10,718 portable+4,302 Apple. Locator43062334365 portable10,666
+accepted (19629 reaped), Apple pending. Scheduling43057055642 portable10,600 accepted/Apple
+pending. Retention43053179213 FULL14,719, progress43049052938 FULL14,584,
+owned43044913726 FULL14,527, raw43040652714 FULL14,458, alias43037578170 FULL14,434.
+Apple totals include16 Swift/unsigned-host cases, not native SDK8. Prior application43031231253
+remains historically incomplete. Keep attached runs; never redispatch unchanged source.
+
+Current7-file fairness change APPLIED, NOT ACCEPTED:6 existing+1 new file (6 Kotlin+workflow).
+Previous prepare/configure scripts HAVE EXECUTED at17:18:27UTC. Workspace
+.work/space-incoming-fairness-2026-11-11 owns baseline, frozen candidate and reports.
+format1/60844 REAPED PASS37.256s. focused1/41848 RUNNING, expected209; browser111/full12,748
+follow. Frozen5,014-input manifestd22b1171791e475195fe90be50487b2decc94be91521648b54d153ecc12152e9.
+Do not edit source during checks. Hosted scripts PREPARED NOT DISPATCHED; expected15,028:
+10,726 portable (5,102 desktop/835 Android/4,789 browser)+4,302 Apple. Contract/publisher/
+accepted-handoff and next implementation are not prepared yet. Current source is uncommitted.
+
+Root correction uses existing domain ownership. DeferCollaborationSpaceIncomingRoom already
+rotates exact unfinished work with one CAS/readback and NO retry when failure is null.
+Published continuation already follows that path. OriginalIncomingTurn previously returned
+true for remaining provider/reference pages, bypassing rotation; it now returns false so the
+worker reloads the retained capture and calls the existing owner. Inventory executes once before
+the primary loop, preserving source/capacity/retry bounds and the10-second callback limit.
+No new usecase, repository, queue claim, DI surface or dispatch transaction. Earlier notes
+suggesting successful Published continuation gains backoff were incorrect. The three private
+pre-dispatch prototype files remain superseded/unapplied in the previous workspace's
+rejected-pre-dispatch-draft. Read next-incoming-fairness-review.md over older options.
+
+Eight new application cases connect the real worker and existing queue policy for long
+provider/pending histories, ongoing new work,35-second tasks/90-second worker timeout,
+cancellation, inventory backoff, admission denial and genuine failures. Four existing case
+identities now verify the updated full continuation/order contract. Workflow explicitly
+includes the new class. Domain scheduling19/retry15/Original-advance24 plus actual encrypted
+demand storage53 remain focused controls. This is not native performance or full key-blocked
+queue drainage proof. Raw observation/Original producer remain OFF.
+
+Next: reap focused41848, inspect failures without weakening expectations; browser, exact320
+focused audit, full12,748 and source/case/dependency acceptance. Prepare actual contract/
+publisher/handoff, commit/push and dispatch once. Then implement keys-only discovery/demotion
+and the existing SDK8 key signal consumer. Incoming-history locators yield all retained devices;
+they do not supply room IDs or native authority. Review exact local Original/Published metadata,
+missing/imported metadata, historical device identity and current registered source separately.
+Do not fabricate primary tasks or selected-Company/device identities. Read
+next-key-locator-ownership-review.md and next-keys-discovery-review.md.
+
+Key recovery must retain active/requested passes, make progress past unresolved metadata without
+discarding references, and receive service with full primary capacity64. Demotion removes only
+an exact provider-complete task while keeping pending refs and a keys wake atomically. SDK8
+already exports bounded stored-key hints; bind once to installed runtime, never each adoption.
+Native allocation/performance, authoritative absence, native SDK8 Apple and combined Company-
+storage/Group-native proof remain. All54 PRD groups OPEN; no Starter/live change.
+
+Phone59101 REAPED timeout at16:57:16UTC/20.02s, no install attempted. Evidence in previous
+inventory workspace/phone-connect-1657.json; retry no earlier17:28UTC. Release89 SDK6 awaits
+install. Notify first, explicit serial/install-only, never drive UI. No emulator. Preserve
+original intents, Draft66, keys/stores/SDK assets, inspector gradlew.bat and live90163c3/
+schema116.4 Group OFF. Continue long run and push every commit.
+
 
 ## Active/requested inventory accepted — continue minimal application fairness fix
 
