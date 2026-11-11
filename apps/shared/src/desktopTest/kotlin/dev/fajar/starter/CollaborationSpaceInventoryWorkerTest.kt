@@ -103,7 +103,7 @@ class CollaborationSpaceInventoryWorkerTest {
         val f = SpaceIncomingWorkerFixture(testScheduler, count = 5)
         f.sources[0] = f.sources.single().copy(inventoryGeneration = recoveryId(6005))
         f.inventoryTurn = { _, captured ->
-            assertEquals(4, f.attempted.size)
+            assertTrue(f.attempted.isEmpty())
             f.sources[0] = captured.copy(inventoryGeneration = null)
             AppResult.Success(CollaborationSpaceInventoryOutcome.Complete)
         }
@@ -111,7 +111,7 @@ class CollaborationSpaceInventoryWorkerTest {
         assertEquals((0 until 4).map { recoveryId(1000 + it) }, f.attempted)
         assertEquals(1, f.rooms.size)
         assertEquals(1, f.inventoryAttempts.size)
-        assertTrue(f.calls.lastIndexOf("complete") in 0 until f.calls.indexOf("inventory"))
+        assertTrue(f.calls.indexOf("inventory") in 0 until f.calls.indexOf("complete"))
         assertNotNull(f.wake)
     }
 

@@ -175,6 +175,12 @@ class CollaborationSpaceIncomingWorker(
         val selected = readRuntimeDemand(runtime)
         if (selected is AppResult.Failed) return failed(selected)
         val work = (selected as AppResult.Success).value
+        // Reserve recovery service before slow primary work can exhaust the shared deadline.
+        val source = work.inventoryReady.singleOrNull()
+        if (source != null) {
+            val processed = processInventory(runtime, source)
+            if (processed is AppResult.Failed) return failed(processed)
+        }
         for (task in work.turn) {
             val processed =
                 when (task) {
@@ -182,11 +188,6 @@ class CollaborationSpaceIncomingWorker(
                     is CollaborationSpaceIncomingTask.Physical ->
                         processPhysical(runtime, task.captured)
                 }
-            if (processed is AppResult.Failed) return failed(processed)
-        }
-        val source = work.inventoryReady.singleOrNull()
-        if (source != null) {
-            val processed = processInventory(runtime, source)
             if (processed is AppResult.Failed) return failed(processed)
         }
         return continueOrFinish(access, wake, runtime)

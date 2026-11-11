@@ -1,5 +1,8 @@
 # Architecture
 
+[Fair incoming turns](collaboration-space-incoming-fairness.md) use existing zero-backoff FIFO rotation and reserve inventory service.
+Keys-only recovery remains separate.
+
 [Active and requested inventory](collaboration-space-inventory-active-request.md) preserves a running cursor while retaining one later pass.
 Fair worker scheduling and keys-only demotion remain separate.
 

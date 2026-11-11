@@ -36,7 +36,12 @@ class CollaborationSpaceOriginalIncomingWorkerTest {
         assertNotNull(f.worker.wake)
         assertEquals(1, f.providerReads)
         assertEquals(1, f.worker.calls.count { it == "resume" })
-        assertTrue(f.worker.deferredCaptures.isEmpty())
+        val yielded = f.worker.deferredCaptures.single()
+        assertEquals(CollaborationSpaceIncomingPhase.Provider, yielded.phase)
+        assertEquals(f.captured.sourceId, yielded.sourceId)
+        assertNull(f.worker.deferred.single().second)
+        assertTrue(assertNotNull(f.current).position > f.captured.position)
+        assertNull(assertNotNull(f.current).retry)
         assertTrue(f.contentRequests.isEmpty())
     }
 

@@ -55,7 +55,7 @@ class CollaborationSpaceOriginalIncomingTurnTest {
     fun incompleteProviderPageFinishesOneTurnWithoutTreatingItAsMissingKeys() = runTest {
         val f = SpaceOriginalIncomingTurnFixture(testScheduler)
         f.providerMore = true
-        assertEquals(AppResult.Success(true), f.run())
+        assertEquals(AppResult.Success(false), f.run())
         assertEquals(CollaborationSpaceIncomingPhase.Provider, f.current?.phase)
         assertEquals(1, f.providerReads)
         assertTrue(f.contentRequests.isEmpty())
@@ -193,7 +193,7 @@ class CollaborationSpaceOriginalIncomingTurnTest {
         f.completeResult = false
         f.moreReferences = true
         f.retryRequired = true
-        assertEquals(AppResult.Success(true), f.run())
+        assertEquals(AppResult.Success(false), f.run())
         assertNotNull(f.current)
         assertFalse("recover" in f.calls)
         assertEquals(0, f.providerReads)

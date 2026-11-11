@@ -1,6 +1,71 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 17:21 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 17:34 UTC. This opening owns current work; older sections are historical.
+
+## Fair application turns accepted; continue Original key-history resolution
+
+Seven-file fairness change ACCEPTED:6 existing+1 new (6 Kotlin+workflow). Existing domain
+Defer already rotates an exact unfinished task with no retry when failure is null. Original
+provider/reference continuation previously returned true and bypassed it; it now returns false.
+Published continuation already followed this path. Inventory now executes once before primary
+work so slow rooms cannot consume the90-second budget first. Existing source/capacity/retry and
+10-second callback bounds remain. No new usecase/repository/dispatch transaction/collector.
+Earlier notes claiming successful Published work gains backoff were wrong; the archived
+pre-dispatch prototype was never applied/compiled and must not be revived.
+
+format1/60844 REAPED PASS37.256s; focused1/41848 REAPED PASS154.340s/209;
+browser1/74305 REAPED PASS36.559s/111. Exact320 focused accepted, no failed runs.
+full1/99143 REAPED PASS376.029s; audit38433 REAPED,12,748 accepted:
+10,392 fresh+2,356 exact unchanged controls. Prior IDs/dependency closures/source/library
+hashes and required checks verified. Frozen5,014-input manifestd22b1171791e475195fe90be50487b2decc94be91521648b54d153ecc12152e9.
+Proof APK151765036 bytes/SHAd2e5b63f6f0a3ea8efd020bb5b85a68bf2e401e37a3f1af20b1a1e1bb01796e6. No native execution implied.
+Eight new app cases cover long provider/reference work, new demand, slow callbacks/timeouts,
+cancellation, inventory retry, denial and genuine failures. Four old case IDs retain safety
+assertions under updated continuation/order semantics. CI explicitly selects the new class.
+
+Workspace .work/space-incoming-fairness-2026-11-11 owns accepted evidence. Publisher and this
+handoff HAVE EXECUTED. Commit/push, then dispatch ONCE on validation/incoming-fairness-20261111;
+expected15,028=10,726 portable+4,302 Apple. NOT dispatched yet. Active/requested inventory
+43066807577 attached, expected15,020, both jobs in progress. Locator43062334365 portable10,666
+accepted/Apple in progress. Scheduling43057055642 FULL14,849 (Apple4219 REAPED,4,249)
+accepted and public evidence updated. Retention43053179213 FULL14,719, progress43049052938
+FULL14,584, owned43044913726 FULL14,527, raw43040652714 FULL14,458, alias43037578170
+FULL14,434. Apple includes16 Swift/unsigned-host cases, not native SDK8. Application43031231253
+remains historically incomplete; never redispatch unchanged source to erase missing evidence.
+
+Next Original key-history draft:5 files,2 guarded existing+3 new, UNAPPLIED/UNTESTED.
+New typed history/result and local owning usecase resolve explicit Company+conversation/device
+locators under exact current registered Original/source. Historical device coordinates remain
+separate from both current Group and Original devices. No fabricated primary task, UC-to-UC,
+provider/key request, history write or scheduling. Missing metadata returns MetadataUnavailable,
+never empty/completed progress. The reviewed Company list contains no Matrix room/server
+identity, so it cannot provide a safe fallback. Final registration readback also fences absence.
+24 common cases cover missing/foreign metadata, old devices, queue independence, admission,
+registration/source/account changes, cancellation and one5-second deadline. Existing data DI
+and application graph assertion bind it. Read next-original-key-history-review.md.
+
+prepare/configure-next-original-key-history.py PREPARED NOT EXECUTED. Require accepted clean
+pushed source plus this stage's one hosted dispatch. Expected12,796 local/5,017 inputs;
+101 focused desktop+99 browser;15,100 hosted=10,774 portable+4,326 Apple. Continue directly
+through apply, format, freeze, checks, exact acceptance and push. Current fairness source must
+stay frozen until publication/dispatch finish; private next draft does not affect its manifest.
+
+Remaining keys work: explicit Company/Space active/requested passes, unresolved-seen state,
+progress beyond missing metadata, bounded service at full primary capacity64, and atomic exact
+provider-complete demotion plus keys wake. Never delete references or create another64-room queue.
+Bind existing SDK8 stored-key listener once to installed runtime; repeated startup reconcile
+cannot reset retry. New refs behind cursor need another pass. Native Client.rooms still allocates
+all handles before finite output; native allocation/performance, authoritative absence, native
+SDK8 Apple and combined old-Company/new-Group execution remain. Raw collector/Original producer
+OFF; all54 PRD groups OPEN. No Starter/live change.
+
+Phone80713 REAPED timeout at17:27:13UTC/20.022s, no install attempted. Evidence current
+workspace/phone-connect-1730.json (filename approximate, JSON timestamp authoritative).
+Retry no earlier17:58UTC. Release89 SDK6 still awaits install. Notify first, explicit serial/
+install-only, never drive UI. No emulator. Preserve original intents, Draft66, keys/stores/
+SDK assets, inspector gradlew.bat and live90163c3/schema116.4 Group OFF. Continue long run;
+push every commit.
+
 
 ## Application fairness applied; focused validation running
 

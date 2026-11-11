@@ -80,9 +80,9 @@ class CollaborationSpaceOriginalIncomingTurn(
             val reloaded = room(runtime, retained)
             if (reloaded is AppResult.Failed) return reloaded
             current = (reloaded as AppResult.Success).value ?: return AppResult.Success(true)
-            // Provider progress can continue in another bounded turn without a keys backoff.
+            // Yield remaining work through the existing queue owner without a retry deadline.
             if (current.captured.phase != CollaborationSpaceIncomingPhase.Pending)
-                return AppResult.Success(true)
+                return AppResult.Success(false)
         }
         return receivePending(runtime, current)
     }
@@ -117,7 +117,7 @@ class CollaborationSpaceOriginalIncomingTurn(
         val completed = completeRoom(runtime, current)
         if (completed is AppResult.Failed || (completed as AppResult.Success).value)
             return completed
-        if (completion.more) return AppResult.Success(true)
+        if (completion.more) return AppResult.Success(false)
         if (completion.retryRequired) return pending("keys_pending")
         val recovered = recoverProvider(runtime, current)
         if (recovered is AppResult.Failed || (recovered as AppResult.Success).value)

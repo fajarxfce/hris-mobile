@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "f4c0b4d27b2b950f918980f569a330a812f50ddf",
+  "sourceFiles": 5014,
+  "changedSourceFiles": 7,
+  "sourceManifestSha256": "d22b1171791e475195fe90be50487b2decc94be91521648b54d153ecc12152e9",
+  "focused": {
+    "tests": 320,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused1",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 12748,
+    "fresh": {
+      "tests": 10392,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2356
+  },
+  "fullElapsedSeconds": 376.029,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151765036,
+    "sha256": "d2e5b63f6f0a3ea8efd020bb5b85a68bf2e401e37a3f1af20b1a1e1bb01796e6"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "applicationFairnessAccepted": true,
+  "newApplicationCases": 8,
+  "existingCaseExpectationsUpdated": 4,
+  "existingZeroBackoffRotationReused": true,
+  "providerAndPendingPagesYield": true,
+  "oneInventoryBeforeFourPrimaryTasks": true,
+  "workerDeadlineSeconds": 90,
+  "inventoryDeadlineSeconds": 10,
+  "slowCallbackSecondsTested": 35,
+  "additionalUsecaseCreated": false,
+  "additionalRepositoryCreated": false,
+  "additionalDispatchTransactionCreated": false,
+  "cancellationAndRetryRetentionTested": true,
+  "fullKeyBlockedQueueLivenessProven": false,
+  "nativeSdkExecution": false,
+  "nativeAllocationBoundProven": false,
+  "keysOnlyBackpressureImplemented": false,
+  "rawCollectorEnabled": false,
+  "originalProducerEnabled": false,
+  "phoneInstalled": false,
+  "starterChanged": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true,
+  "preservedFailedRuns": []
+}
