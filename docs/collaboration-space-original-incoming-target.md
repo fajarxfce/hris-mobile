@@ -40,3 +40,9 @@ claimed by this local increment. No generic Starter code changes are required. A
 remain open; this is a completed prerequisite for the continuing incoming-sync work.
 
 [Exact validation evidence](measurements/collaboration-space-original-incoming-target-2026-11-11.json).
+
+Portable hosted control [42983683780](https://github.com/fajarxfce/hris-mobile/actions/runs/42983683780)
+on immutable source854828ffb689dcbca3645a8b4de562b79a02c6ab is accepted: 9,535 cases, including all12
+physical-worker cases. Artifact digest, ZIP CRC, prior identities and selected original cases are
+verified. Apple is still running, expected3,741 plus16 Swift checks and unsigned host. Complete hosted
+acceptance remains pending; no SDK8 Apple native execution is claimed.
