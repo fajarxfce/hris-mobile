@@ -28,10 +28,7 @@ class FinishCollaborationSpaceIncomingWork(
             admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             val loaded = demands.current(access)
             val observed = (loaded as? AppResult.Success)?.value
-            val snapshot =
-                observed
-                    ?.takeIf { it.demand.rooms.size <= 64 }
-                    ?.let { it.copy(demand = it.demand.copy(rooms = it.demand.rooms.toList())) }
+            val snapshot = observed?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
             admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             if (loaded is AppResult.Failed) return@withTimeoutOrNull loaded
             if (
@@ -42,7 +39,13 @@ class FinishCollaborationSpaceIncomingWork(
             )
                 return@withTimeoutOrNull changed()
             val demand = snapshot?.demand ?: CollaborationSpaceIncomingDemand()
-            if (demand.rooms.isNotEmpty() || demand.rescanGeneration != null || demand.scan != null)
+            if (
+                demand.rooms.isNotEmpty() ||
+                    demand.physicalRooms.isNotEmpty() ||
+                    demand.sources.any { it.inventoryGeneration != null } ||
+                    demand.rescanGeneration != null ||
+                    demand.scan != null
+            )
                 return@withTimeoutOrNull AppResult.Success(false)
             // A producer publishes a fresh wake with changed demand, making this old CAS fail.
             val saved = wakes.acknowledge(wake)

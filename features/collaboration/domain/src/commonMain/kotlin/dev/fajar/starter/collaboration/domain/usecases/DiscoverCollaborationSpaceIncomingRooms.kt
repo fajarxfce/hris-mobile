@@ -24,10 +24,7 @@ class DiscoverCollaborationSpaceIncomingRooms(
             admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             val loaded = demands.current(access)
             val observed = (loaded as? AppResult.Success)?.value
-            val snapshot =
-                observed
-                    ?.takeIf { it.demand.rooms.size <= 64 }
-                    ?.let { it.copy(demand = it.demand.copy(rooms = it.demand.rooms.toList())) }
+            val snapshot = observed?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
             admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             if (loaded is AppResult.Failed) return@withTimeoutOrNull loaded
             if (observed == null) return@withTimeoutOrNull AppResult.Success(false)
@@ -40,7 +37,7 @@ class DiscoverCollaborationSpaceIncomingRooms(
             val current = snapshot.demand
             if (current.scan == null && current.rescanGeneration == null)
                 return@withTimeoutOrNull AppResult.Success(false)
-            val limit = minOf(4, 64 - current.rooms.size)
+            val limit = minOf(4, 64 - current.rooms.size - current.physicalRooms.size)
             if (limit == 0) return@withTimeoutOrNull AppResult.Success(false)
             val received = inventory.page(access, current.scan?.cursor, limit)
             val page =
@@ -71,8 +68,7 @@ class DiscoverCollaborationSpaceIncomingRooms(
             val retained =
                 (reply as? AppResult.Success)
                     ?.value
-                    ?.takeIf { it.demand.rooms.size <= 64 }
-                    ?.let { it.copy(demand = it.demand.copy(rooms = it.demand.rooms.toList())) }
+                    ?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
             admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             if (reply is AppResult.Failed) return@withTimeoutOrNull reply
             if (

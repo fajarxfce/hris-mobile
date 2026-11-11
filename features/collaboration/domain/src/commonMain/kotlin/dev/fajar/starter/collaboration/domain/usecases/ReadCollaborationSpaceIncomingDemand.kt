@@ -24,10 +24,7 @@ class ReadCollaborationSpaceIncomingDemand(
             admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             val loaded = demands.current(access)
             val observed = (loaded as? AppResult.Success)?.value
-            val snapshot =
-                observed
-                    ?.takeIf { it.demand.rooms.size <= 64 }
-                    ?.let { it.copy(demand = it.demand.copy(rooms = it.demand.rooms.toList())) }
+            val snapshot = observed?.let(::captureCollaborationSpaceIncomingDemandSnapshot)
             admission(access).let { if (it is AppResult.Failed) return@withTimeoutOrNull it }
             if (loaded is AppResult.Failed) return@withTimeoutOrNull loaded
             if (
@@ -53,8 +50,12 @@ class ReadCollaborationSpaceIncomingDemand(
                     scanPending =
                         demand != null &&
                             (demand.rescanGeneration != null || demand.scan != null) &&
-                            demand.rooms.size < 64,
-                    roomsPending = demand?.rooms?.isNotEmpty() == true,
+                            demand.rooms.size + demand.physicalRooms.size < 64,
+                    roomsPending =
+                        demand != null &&
+                            (demand.rooms.isNotEmpty() ||
+                                demand.physicalRooms.isNotEmpty() ||
+                                demand.sources.any { it.inventoryGeneration != null }),
                 )
             )
         } ?: changed(FailureKind.Timeout)

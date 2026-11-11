@@ -1,0 +1,101 @@
+{
+  "date": "2026-11-11",
+  "mobileSourceBaseline": "6baa8acc82bcd95a22ab3bc342458292f789de99",
+  "sourceFiles": 4872,
+  "sourceManifestSha256": "ec278139e3a0e0685dd761ce0fae093305da1844c1a001562586c3d944f03351",
+  "changedSourceFiles": [
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/recovery/CollaborationSpaceIncomingDemandCodec.kt",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSpaceIncomingDemandRepository.kt",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSpaceIncomingDemandStorageContract.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceIncomingDemand.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSpaceIncomingSync.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceIncomingDemandPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceIncomingScanPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSpaceIncomingSyncPolicy.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AdvanceCollaborationSpaceIncomingProvider.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CompleteCollaborationSpaceIncomingRoom.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/DeferCollaborationSpaceIncomingRoom.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/DiscoverCollaborationSpaceIncomingRooms.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/FinishCollaborationSpaceIncomingWork.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/LoadCollaborationSpaceIncomingRoom.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationSpaceIncomingRoom.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationSpaceIncomingDemand.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RecoverCollaborationSpaceIncomingProvider.kt",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RequestCollaborationSpaceIncomingScan.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceIncomingRetentionTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceIncomingSyncPolicyTest.kt",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSpaceIncomingWakeCompletionTest.kt"
+  ],
+  "sourceIdentity": "Complete original protected SDK store SHA-256 plus exact Matrix user/device; no generated UUID alias",
+  "focused": {
+    "desktopRun": "focused5",
+    "browserRun": "browser3",
+    "counts": {
+      "tests": 552,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "desktopElapsedSeconds": 200.826,
+    "browserElapsedSeconds": 165.157,
+    "sourceFiles": 4872,
+    "sourceManifestSha256": "ec278139e3a0e0685dd761ce0fae093305da1844c1a001562586c3d944f03351",
+    "sourcesAndLibraryUnchanged": true,
+    "priorCaseIdsPreserved": true
+  },
+  "full": {
+    "validatedTests": 11061,
+    "freshCounts": {
+      "tests": 9023,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchangedTests": 2038,
+    "elapsedSeconds": 676.869,
+    "priorCaseIdsPreserved": true,
+    "retainedModuleDependencyInputsUnchanged": true,
+    "format": true,
+    "architecture": true,
+    "detekt": true,
+    "androidReleaseCompileAndLint": true,
+    "wasmCompileAndBrowserTests": true,
+    "iosMetadataCompile": true
+  },
+  "storage": {
+    "oneAtomicReplacementAndWake": true,
+    "legacySchemas": [
+      1,
+      2
+    ],
+    "newSchema": 3,
+    "maxSources": 64,
+    "maxCombinedRoomWork": 64,
+    "maxDocuments": 129,
+    "readLimitWithSentinel": 130,
+    "maxCursorUtf8Bytes": 4096,
+    "maxPartPlaintextBytes": 65536,
+    "maxPartCiphertextCharacters": 131072,
+    "maxSnapshotCiphertextCharacters": 4194304,
+    "rawCoreLimitsChanged": false,
+    "sourceAndPhysicalProgressReopen": true,
+    "cursorOnlyDoesNotCreateWake": true,
+    "missingDuplicateExtraAndSwappedPartsRejected": true,
+    "wakeCapacityRollback": true,
+    "immutableInvocationCapturePolicy": true
+  },
+  "applicationProducerIntegrated": false,
+  "physicalRoomResolverIntegrated": false,
+  "providerInventoryWorkerIntegrated": false,
+  "storedKeyConsumerIntegrated": false,
+  "appleNativeSdk8Accepted": false,
+  "phoneInstalled": false,
+  "phoneLatencyMeasured": false,
+  "groupDeployed": false,
+  "communicationsAcceptanceGroupsClosed": 0,
+  "reviewCorrections": {
+    "initialUuidSourceCandidateRejectedBeforeRelease": true,
+    "threeLongMethodsRestructuredWithoutRuleSuppression": true,
+    "failedAndSupersededEvidencePreserved": true
+  }
+}

@@ -12,6 +12,9 @@ import kotlinx.serialization.json.Json
 
 internal const val INCOMING_DEMAND_DOCUMENT = "demand"
 internal const val INCOMING_DEMAND_CHECKPOINT = "incoming-demand/v1"
+internal const val INCOMING_DEMAND_PARTS_CHECKPOINT = "incoming-demand/v3"
+// One header, at most 64 room parts and 64 source parts, plus an over-capacity sentinel.
+internal const val INCOMING_DEMAND_READ_LIMIT = 130
 
 internal fun incomingDemandScope(access: CollaborationSpaceLocalAccess): ReplicaScope {
     require(
@@ -30,7 +33,7 @@ internal fun incomingDemandPartition(access: CollaborationSpaceLocalAccess): Str
     return COLLABORATION_HISTORY_PREFIX + "space-incoming-demand/v1/" + access.spaceId
 }
 
-/** Strict, separately authenticated local scheduling facts; never stores message content. */
+/** Authenticated scheduling facts; one complete snapshot and wake share the replica transaction. */
 internal class CollaborationSpaceIncomingDemandCodec(
     private val access: CollaborationSpaceLocalAccess,
     private val cipher: ContentCipher,
@@ -38,131 +41,311 @@ internal class CollaborationSpaceIncomingDemandCodec(
 ) {
     suspend fun decode(page: ReplicaPage): CollaborationSpaceIncomingDemandSnapshot {
         val raw = requireNotNull(page.checkpoint)
-        require(raw.payload == INCOMING_DEMAND_CHECKPOINT)
-        val document = page.documents.single()
-        require(document.id == INCOMING_DEMAND_DOCUMENT && document.version == 0L)
-        require(document.sortKey == INCOMING_DEMAND_DOCUMENT && document.tags.isEmpty())
-        val payload = requireNotNull(document.payload)
+        require(raw.payload in setOf(INCOMING_DEMAND_CHECKPOINT, INCOMING_DEMAND_PARTS_CHECKPOINT))
         require(
             raw.published && raw.revision == 0L && raw.handle.scope == incomingDemandScope(access)
         )
         require(raw.handle.partition == incomingDemandPartition(access))
-        require(validCollaborationMessageId(raw.handle.generation) && payload.length in 1..131072)
-        val bytes = cipher.decrypt(key, aad(raw.handle.generation), Base64.decode(payload))
-        return try {
-            require(bytes.size in 1..65536)
-            val dto =
-                Json.decodeFromString<IncomingDemandDto>(
-                    bytes.decodeToString(throwOnInvalidSequence = true)
+        require(validCollaborationMessageId(raw.handle.generation))
+        require(page.documents.size in 1 until INCOMING_DEMAND_READ_LIMIT)
+        val documents = page.documents.toList()
+        require(documents.map { it.id }.distinct().size == documents.size)
+        require(documents.sumOf { it.payload?.length?.toLong() ?: 0L } <= 4_194_304L)
+        documents.forEach {
+            require(it.version == 0L && it.sortKey == it.id && it.tags.isEmpty())
+            require(requireNotNull(it.payload).length in 1..131072)
+        }
+        val header = documents.single { it.id == INCOMING_DEMAND_DOCUMENT }
+        val value =
+            if (raw.payload == INCOMING_DEMAND_CHECKPOINT) {
+                require(documents.size == 1)
+                val dto = decodePart<IncomingDemandDto>(raw.handle.generation, header)
+                require(dto.schema in 1..2 && dto.rooms.size <= 64)
+                require(dto.rooms.none { it.sourceId != null })
+                require(
+                    dto.schema == 2 || (dto.scan == null && dto.rooms.none { it.retry != null })
                 )
-            require(
-                dto.schema in 1..2 &&
-                    dto.rooms.size <= 64 &&
-                    (dto.schema == 2 || (dto.scan == null && dto.rooms.none { it.retry != null }))
-            )
-            val value =
                 CollaborationSpaceIncomingDemand(
                     position(dto.nextPosition),
-                    dto.rooms.map { room ->
-                        CollaborationSpaceIncomingRoomDemand(
-                            room.conversationId,
-                            room.generation,
-                            position(room.position),
-                            room.headEventId,
-                            CollaborationSpaceIncomingPhase.valueOf(room.phase),
-                            room.retry?.let { retry ->
-                                CollaborationSpaceIncomingRetry(
-                                    position(retry.attemptedAt),
-                                    position(retry.eligibleAt),
-                                    retry.failures,
-                                )
-                            },
-                        )
+                    dto.rooms.map { it.toDemand() },
+                    dto.rescanGeneration,
+                    dto.scan?.toScan(),
+                )
+            } else {
+                val dto = decodePart<IncomingDemandPartsDto>(raw.handle.generation, header)
+                require(dto.schema == 3 && dto.roomCount in 0..64)
+                require(dto.physicalCount in 0..(64 - dto.roomCount) && dto.sourceCount in 0..64)
+                val expected =
+                    listOf(INCOMING_DEMAND_DOCUMENT) +
+                        (0 until dto.roomCount).map { partId("r", it) } +
+                        (0 until dto.physicalCount).map { partId("p", it) } +
+                        (0 until dto.sourceCount).map { partId("s", it) }
+                require(documents.map { it.id }.toSet() == expected.toSet())
+                val indexed = documents.associateBy { it.id }
+                CollaborationSpaceIncomingDemand(
+                    position(dto.nextPosition),
+                    (0 until dto.roomCount).map {
+                        decodePart<IncomingRoomDemandDto>(
+                                raw.handle.generation,
+                                indexed.getValue(partId("r", it)),
+                            )
+                            .toDemand()
                     },
                     dto.rescanGeneration,
-                    dto.scan?.let { scan ->
-                        CollaborationSpaceIncomingScan(
-                            scan.generation,
-                            scan.cursor?.let { cursor ->
-                                CollaborationSpaceRoomBindingCursor(
-                                    CollaborationSpaceRoomBindingBoundary(
-                                        access.audience,
-                                        access.accountId,
-                                        access.spaceId,
-                                        cursor.generation,
-                                        position(cursor.revision),
-                                    ),
-                                    cursor.afterId,
-                                )
-                            },
-                            scan.hasNewerBindings,
-                        )
+                    dto.scan?.toScan(),
+                    (0 until dto.sourceCount).map {
+                        decodePart<IncomingSourceProgressDto>(
+                                raw.handle.generation,
+                                indexed.getValue(partId("s", it)),
+                            )
+                            .toProgress()
+                    },
+                    (0 until dto.physicalCount).map {
+                        decodePart<IncomingPhysicalRoomDto>(
+                                raw.handle.generation,
+                                indexed.getValue(partId("p", it)),
+                            )
+                            .toDemand()
                     },
                 )
-            require(validCollaborationSpaceIncomingDemand(access, value))
-            CollaborationSpaceIncomingDemandSnapshot(raw.handle.generation, value)
+            }
+        require(validCollaborationSpaceIncomingDemand(access, value))
+        return CollaborationSpaceIncomingDemandSnapshot(raw.handle.generation, value)
+    }
+
+    suspend fun encode(snapshot: CollaborationSpaceIncomingDemandSnapshot): ReplicaSnapshot {
+        require(validCollaborationMessageId(snapshot.generation))
+        val value = snapshot.demand
+        require(validCollaborationSpaceIncomingDemand(access, value))
+        val rooms = value.rooms.map { it.toDto() }
+        val scan = value.scan?.toDto()
+        if (value.sources.isEmpty() && value.physicalRooms.isEmpty()) {
+            return ReplicaSnapshot(
+                snapshot.generation,
+                INCOMING_DEMAND_CHECKPOINT,
+                listOf(
+                    encodePart(
+                        snapshot.generation,
+                        INCOMING_DEMAND_DOCUMENT,
+                        IncomingDemandDto(
+                            if (value.scan == null && value.rooms.none { it.retry != null }) 1
+                            else 2,
+                            value.nextPosition.toString(),
+                            rooms,
+                            value.rescanGeneration,
+                            scan,
+                        ),
+                    )
+                ),
+            )
+        }
+        val parts =
+            mutableListOf(
+                encodePart(
+                    snapshot.generation,
+                    INCOMING_DEMAND_DOCUMENT,
+                    IncomingDemandPartsDto(
+                        3,
+                        value.nextPosition.toString(),
+                        rooms.size,
+                        value.physicalRooms.size,
+                        value.sources.size,
+                        value.rescanGeneration,
+                        scan,
+                    ),
+                )
+            )
+        rooms.forEachIndexed { index, room ->
+            parts += encodePart(snapshot.generation, partId("r", index), room)
+        }
+        value.physicalRooms.forEachIndexed { index, room ->
+            parts +=
+                encodePart(
+                    snapshot.generation,
+                    partId("p", index),
+                    IncomingPhysicalRoomDto(
+                        room.sourceId,
+                        room.roomId,
+                        room.generation,
+                        room.position.toString(),
+                        room.headEventId,
+                        room.membership.name,
+                        room.limited,
+                        room.retry?.toDto(),
+                    ),
+                )
+        }
+        value.sources.forEachIndexed { index, progress ->
+            // Base64 bounds JSON escaping while preserving the provider's exact opaque UTF-8.
+            val bytes = progress.position.encodeToByteArray(throwOnInvalidSequence = true)
+            val position =
+                try {
+                    Base64.encode(bytes)
+                } finally {
+                    bytes.fill(0)
+                }
+            parts +=
+                encodePart(
+                    snapshot.generation,
+                    partId("s", index),
+                    IncomingSourceProgressDto(
+                        progress.source.storeId,
+                        progress.source.matrixUserId,
+                        progress.source.matrixDeviceId,
+                        position,
+                        progress.inventoryGeneration,
+                    ),
+                )
+        }
+        val result =
+            ReplicaSnapshot(
+                snapshot.generation,
+                INCOMING_DEMAND_PARTS_CHECKPOINT,
+                parts.sortedBy { it.id },
+            )
+        validateReplicaReplacement(
+            incomingDemandScope(access),
+            incomingDemandPartition(access),
+            null,
+            result,
+        )
+        return result
+    }
+
+    private suspend inline fun <reified T> decodePart(
+        generation: String,
+        document: ReplicaDocument,
+    ): T {
+        val bytes =
+            cipher.decrypt(
+                key,
+                aad(generation, document.id),
+                Base64.decode(requireNotNull(document.payload)),
+            )
+        return try {
+            require(bytes.size in 1..65536)
+            Json.decodeFromString<T>(bytes.decodeToString(throwOnInvalidSequence = true))
         } finally {
             bytes.fill(0)
         }
     }
 
-    suspend fun encode(snapshot: CollaborationSpaceIncomingDemandSnapshot): String {
-        require(validCollaborationMessageId(snapshot.generation))
-        val value = snapshot.demand
-        require(validCollaborationSpaceIncomingDemand(access, value))
-        val dto =
-            IncomingDemandDto(
-                if (value.scan == null && value.rooms.none { it.retry != null }) 1 else 2,
-                value.nextPosition.toString(),
-                value.rooms.map {
-                    IncomingRoomDemandDto(
-                        it.conversationId,
-                        it.generation,
-                        it.position.toString(),
-                        it.headEventId,
-                        it.phase.name,
-                        it.retry?.let { retry ->
-                            IncomingRetryDto(
-                                retry.attemptedAtEpochMillis.toString(),
-                                retry.eligibleAtEpochMillis.toString(),
-                                retry.failures,
-                            )
-                        },
-                    )
-                },
-                value.rescanGeneration,
-                value.scan?.let { scan ->
-                    IncomingScanDto(
-                        scan.generation,
-                        scan.cursor?.let { cursor ->
-                            val boundary = cursor.boundary
-                            IncomingScanCursorDto(
-                                boundary.generation,
-                                boundary.revision.toString(),
-                                cursor.afterId,
-                            )
-                        },
-                        scan.hasNewerBindings,
-                    )
-                },
-            )
-        val bytes = Json.encodeToString(dto).encodeToByteArray(throwOnInvalidSequence = true)
-        return try {
-            require(bytes.size in 1..65536)
-            Base64.encode(cipher.encrypt(key, aad(snapshot.generation), bytes)).also {
-                require(it.length <= 131072)
+    private suspend inline fun <reified T> encodePart(
+        generation: String,
+        id: String,
+        value: T,
+    ): ReplicaDocument {
+        val bytes = Json.encodeToString(value).encodeToByteArray(throwOnInvalidSequence = true)
+        val payload =
+            try {
+                require(bytes.size in 1..65536)
+                Base64.encode(cipher.encrypt(key, aad(generation, id), bytes)).also {
+                    require(it.length <= 131072)
+                }
+            } finally {
+                bytes.fill(0)
             }
-        } finally {
-            bytes.fill(0)
-        }
+        return ReplicaDocument(id, 0, id, payload)
     }
+
+    private fun CollaborationSpaceIncomingRoomDemand.toDto() =
+        IncomingRoomDemandDto(
+            conversationId,
+            generation,
+            position.toString(),
+            headEventId,
+            phase.name,
+            retry?.toDto(),
+            sourceId,
+        )
+
+    private fun CollaborationSpaceIncomingScan.toDto() =
+        IncomingScanDto(
+            generation,
+            cursor?.let {
+                IncomingScanCursorDto(
+                    it.boundary.generation,
+                    it.boundary.revision.toString(),
+                    it.afterId,
+                )
+            },
+            hasNewerBindings,
+        )
+
+    private fun IncomingRoomDemandDto.toDemand() =
+        CollaborationSpaceIncomingRoomDemand(
+            conversationId,
+            generation,
+            position(position),
+            headEventId,
+            CollaborationSpaceIncomingPhase.valueOf(phase),
+            retry?.toRetry(),
+            sourceId,
+        )
+
+    private fun IncomingPhysicalRoomDto.toDemand() =
+        CollaborationSpaceIncomingPhysicalRoomDemand(
+            sourceId,
+            roomId,
+            generation,
+            position(position),
+            headEventId,
+            CollaborationSpaceIncomingMembership.valueOf(membership),
+            limited,
+            retry?.toRetry(),
+        )
+
+    private fun IncomingSourceProgressDto.toProgress(): CollaborationSpaceIncomingSourceProgress {
+        require(position.length in 1..5464)
+        val bytes = Base64.decode(position)
+        val decoded =
+            try {
+                require(bytes.size in 1..4096 && Base64.encode(bytes) == position)
+                bytes.decodeToString(throwOnInvalidSequence = true)
+            } finally {
+                bytes.fill(0)
+            }
+        return CollaborationSpaceIncomingSourceProgress(
+            CollaborationSpaceIncomingSource(storeId, matrixUserId, matrixDeviceId),
+            decoded,
+            inventoryGeneration,
+        )
+    }
+
+    private fun IncomingScanDto.toScan() =
+        CollaborationSpaceIncomingScan(
+            generation,
+            cursor?.let {
+                CollaborationSpaceRoomBindingCursor(
+                    CollaborationSpaceRoomBindingBoundary(
+                        access.audience,
+                        access.accountId,
+                        access.spaceId,
+                        it.generation,
+                        position(it.revision),
+                    ),
+                    it.afterId,
+                )
+            },
+            hasNewerBindings,
+        )
+
+    private fun IncomingRetryDto.toRetry() =
+        CollaborationSpaceIncomingRetry(position(attemptedAt), position(eligibleAt), failures)
+
+    private fun CollaborationSpaceIncomingRetry.toDto() =
+        IncomingRetryDto(
+            attemptedAtEpochMillis.toString(),
+            eligibleAtEpochMillis.toString(),
+            failures,
+        )
 
     private fun position(value: String): Long {
         require(value.length in 1..16)
         return value.toLong().also { require(it.toString() == value) }
     }
 
-    private fun aad(generation: String) =
+    private fun aad(generation: String, document: String) =
         Json.encodeToString(
                 listOf(
                     "hris-collaboration-space-incoming-demand-v1",
@@ -170,11 +353,14 @@ internal class CollaborationSpaceIncomingDemandCodec(
                     access.accountId,
                     access.spaceId,
                     generation,
-                    INCOMING_DEMAND_DOCUMENT,
+                    document,
                     "0",
                 )
             )
             .encodeToByteArray()
+
+    private fun partId(prefix: String, index: Int) =
+        prefix + "-" + index.toString().padStart(2, '0')
 }
 
 @Serializable
@@ -187,6 +373,17 @@ private data class IncomingDemandDto(
 )
 
 @Serializable
+private data class IncomingDemandPartsDto(
+    val schema: Int,
+    val nextPosition: String,
+    val roomCount: Int,
+    val physicalCount: Int,
+    val sourceCount: Int,
+    val rescanGeneration: String?,
+    val scan: IncomingScanDto? = null,
+)
+
+@Serializable
 private data class IncomingRoomDemandDto(
     val conversationId: String,
     val generation: String,
@@ -194,6 +391,28 @@ private data class IncomingRoomDemandDto(
     val headEventId: String?,
     val phase: String,
     val retry: IncomingRetryDto? = null,
+    val sourceId: String? = null,
+)
+
+@Serializable
+private data class IncomingPhysicalRoomDto(
+    val sourceId: String,
+    val roomId: String,
+    val generation: String,
+    val position: String,
+    val headEventId: String?,
+    val membership: String,
+    val limited: Boolean,
+    val retry: IncomingRetryDto? = null,
+)
+
+@Serializable
+private data class IncomingSourceProgressDto(
+    val storeId: String,
+    val matrixUserId: String,
+    val matrixDeviceId: String,
+    val position: String,
+    val inventoryGeneration: String?,
 )
 
 @Serializable

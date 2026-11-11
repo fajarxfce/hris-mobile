@@ -6,16 +6,49 @@ import dev.fajar.starter.common.result.*
 private const val MAX_INCOMING_ROOMS = 64
 private const val MAX_INCOMING_POSITION = 9_007_199_254_740_991L
 
+/**
+ * Captures all bounded scheduling collections before suspension. Callers retain admission and
+ * structural validation; later mutations of repository-provided lists cannot alter this capture.
+ */
+fun captureCollaborationSpaceIncomingDemandSnapshot(
+    value: CollaborationSpaceIncomingDemandSnapshot
+): CollaborationSpaceIncomingDemandSnapshot? {
+    val demand = value.demand
+    if (
+        demand.rooms.size > MAX_INCOMING_ROOMS ||
+            demand.physicalRooms.size > MAX_INCOMING_ROOMS - demand.rooms.size ||
+            demand.sources.size > 64
+    )
+        return null
+    return value.copy(
+        demand =
+            demand.copy(
+                rooms = demand.rooms.toList(),
+                sources = demand.sources.toList(),
+                physicalRooms = demand.physicalRooms.toList(),
+            )
+    )
+}
+
 fun validCollaborationSpaceIncomingRoomDemand(room: CollaborationSpaceIncomingRoomDemand): Boolean =
     (room.retry == null || validCollaborationSpaceIncomingRetry(room.retry)) &&
+        (room.sourceId == null || validCollaborationSpaceIncomingSourceId(room.sourceId)) &&
         validCollaborationMessageId(room.conversationId) &&
         validCollaborationMessageId(room.generation) &&
         room.position in 0 until MAX_INCOMING_POSITION &&
         (room.headEventId == null || validCollaborationEventId(room.headEventId))
 
 fun validCollaborationSpaceIncomingDemand(value: CollaborationSpaceIncomingDemand): Boolean {
-    if (value.nextPosition !in 0..MAX_INCOMING_POSITION || value.rooms.size > MAX_INCOMING_ROOMS)
+    if (
+        value.nextPosition !in 0..MAX_INCOMING_POSITION ||
+            value.rooms.size > MAX_INCOMING_ROOMS ||
+            value.physicalRooms.size > MAX_INCOMING_ROOMS - value.rooms.size ||
+            value.sources.size > 64
+    )
         return false
+    if (value.sources.any { !validCollaborationSpaceIncomingSourceProgress(it) }) return false
+    val sources = value.sources.map { it.source.storeId }.toSet()
+    if (sources.size != value.sources.size) return false
     if (
         value.scan != null &&
             (value.rescanGeneration == null || !validCollaborationSpaceIncomingScan(value.scan))
@@ -25,8 +58,33 @@ fun validCollaborationSpaceIncomingDemand(value: CollaborationSpaceIncomingDeman
         return false
     if (
         value.rooms.any {
-            !validCollaborationSpaceIncomingRoomDemand(it) || it.position >= value.nextPosition
+            !validCollaborationSpaceIncomingRoomDemand(it) ||
+                it.position >= value.nextPosition ||
+                (it.sourceId != null && it.sourceId !in sources)
         }
+    )
+        return false
+    if (
+        value.physicalRooms.any {
+            !validCollaborationSpaceIncomingPhysicalRoom(it) ||
+                it.position >= value.nextPosition ||
+                it.sourceId !in sources
+        }
+    )
+        return false
+    val generations = value.rooms.map { it.generation } + value.physicalRooms.map { it.generation }
+    val positions = value.rooms.map { it.position } + value.physicalRooms.map { it.position }
+    if (
+        generations.distinct().size != generations.size ||
+            positions.distinct().size != positions.size
+    )
+        return false
+    if (
+        value.physicalRooms.map { it.sourceId to it.roomId }.distinct().size !=
+            value.physicalRooms.size ||
+            !value.physicalRooms.zipWithNext().all { (first, second) ->
+                first.position < second.position
+            }
     )
         return false
     if (
@@ -44,7 +102,12 @@ fun nextCollaborationSpaceIncomingDemand(
     change: CollaborationSpaceIncomingDemandChange,
 ): AppResult<CollaborationSpaceIncomingDemand> {
     if (!validCollaborationSpaceIncomingDemand(observed)) return invalidIncomingDemand()
-    val current = observed.copy(rooms = observed.rooms.toList())
+    val current =
+        observed.copy(
+            rooms = observed.rooms.toList(),
+            sources = observed.sources.toList(),
+            physicalRooms = observed.physicalRooms.toList(),
+        )
     val next =
         when (change) {
             is CollaborationSpaceIncomingDemandChange.Request ->
@@ -154,7 +217,7 @@ private fun requestIncomingRoom(
     )
         return AppResult.Success(current)
     if (current.rooms.any { it.generation == request.generation }) return invalidIncomingDemand()
-    if (previous == null && current.rooms.size == MAX_INCOMING_ROOMS)
+    if (previous == null && current.rooms.size + current.physicalRooms.size == MAX_INCOMING_ROOMS)
         return AppResult.Success(current.copy(rescanGeneration = request.generation))
     if (current.nextPosition == MAX_INCOMING_POSITION) return invalidIncomingDemand()
     val room =
@@ -164,6 +227,7 @@ private fun requestIncomingRoom(
             current.nextPosition,
             request.headEventId,
             CollaborationSpaceIncomingPhase.Latest,
+            sourceId = previous?.sourceId,
         )
     return AppResult.Success(
         current.copy(

@@ -18,6 +18,9 @@ remain separate work.
 [Durable incoming scheduling](collaboration-space-incoming-scheduling.md) retains scan cursor and
 room demand atomically. Domain owns bounded FIFO selection, per-room retry eligibility and exact
 empty-work acknowledgement; application task and SDK hint integration remain separate.
+[Incoming source retention](collaboration-space-incoming-retention.md) keeps original SDK source
+positions and physical room demand in that same bounded encrypted transaction. Shared snapshot
+capture preserves all retained collections across suspension; cursor-only updates leave wakes alone.
 
 [Incoming completion](collaboration-space-incoming-completion.md) requires exact retained provider
 evidence and clean source completion. Phase changes and room removal preserve the independent

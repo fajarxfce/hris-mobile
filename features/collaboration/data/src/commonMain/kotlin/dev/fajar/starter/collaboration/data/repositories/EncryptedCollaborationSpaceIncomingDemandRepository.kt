@@ -28,10 +28,10 @@ class EncryptedCollaborationSpaceIncomingDemandRepository(
         currentCoroutineContext().ensureActive()
         val raw =
             replicas
-                .observeDocument(
+                .observe(
                     incomingDemandScope(access),
                     incomingDemandPartition(access),
-                    INCOMING_DEMAND_DOCUMENT,
+                    limit = INCOMING_DEMAND_READ_LIMIT,
                 )
                 .first()
         if (raw.checkpoint == null) {
@@ -58,12 +58,24 @@ class EncryptedCollaborationSpaceIncomingDemandRepository(
         )
         require(validCollaborationSpaceIncomingDemand(access, demand))
         require(wake == null || validCollaborationMessageId(wake.generation))
-        val captured = demand.copy(rooms = demand.rooms.toList())
+        val captured =
+            demand.copy(
+                rooms = demand.rooms.toList(),
+                sources = demand.sources.toList(),
+                physicalRooms = demand.physicalRooms.toList(),
+            )
         val previous =
-            expected?.copy(demand = expected.demand.copy(rooms = expected.demand.rooms.toList()))
+            expected?.copy(
+                demand =
+                    expected.demand.copy(
+                        rooms = expected.demand.rooms.toList(),
+                        sources = expected.demand.sources.toList(),
+                        physicalRooms = expected.demand.physicalRooms.toList(),
+                    )
+            )
         val scope = incomingDemandScope(access)
         val partition = incomingDemandPartition(access)
-        val page = replicas.observeDocument(scope, partition, INCOMING_DEMAND_DOCUMENT).first()
+        val page = replicas.observe(scope, partition, limit = INCOMING_DEMAND_READ_LIMIT).first()
         val raw = page.checkpoint
         require(raw != null || page.documents.isEmpty())
         if (raw == null && previous != null) return@safeStorageCall null
@@ -71,25 +83,14 @@ class EncryptedCollaborationSpaceIncomingDemandRepository(
             val codec = CollaborationSpaceIncomingDemandCodec(access, cipher, content)
             if (raw?.let { codec.decode(page) } != previous) return@use null
             val value = CollaborationSpaceIncomingDemandSnapshot(Uuid.random().toString(), captured)
-            val payload = codec.encode(value)
+            val snapshot = codec.encode(value)
             currentCoroutineContext().ensureActive()
             if (
                 replicas.replace(
                     scope,
                     partition,
                     raw,
-                    ReplicaSnapshot(
-                        value.generation,
-                        INCOMING_DEMAND_CHECKPOINT,
-                        listOf(
-                            ReplicaDocument(
-                                INCOMING_DEMAND_DOCUMENT,
-                                0,
-                                INCOMING_DEMAND_DOCUMENT,
-                                payload,
-                            )
-                        ),
-                    ),
+                    snapshot,
                     wake?.let {
                         WorkWakeRequest(
                             CollaborationSpaceIncomingWake.WORK_KEY,

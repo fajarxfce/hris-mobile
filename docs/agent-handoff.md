@@ -1,55 +1,71 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 02:38 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 03:13 UTC. This opening section owns current work; older checkpoints below are historical.
 
-## Active durable sync retention — unvalidated
+## Incoming source retention accepted — continue with the producer
 
-The active uncommitted Mobile candidate adds bounded per-source progress and physical-room
-work to the existing demand model. One authenticated metadata part plus at most 64 combined
-logical/physical room parts and 64 source parts uses the SAME ReplicaSnapshot/replace/wake
-transaction. Reads include a 130th sentinel; missing/extra/duplicate/swapped parts fail closed.
-Legacy one-document v1/v2 still reads and writes. Opaque UTF-8 source cursors are Base64 inside
-encrypted JSON to bound escaping. No generic core/Starter limit changed.
+The21-file Mobile source/test increment is ACCEPTED and ready to commit with this handoff.
+Per-source cursor and physical/logical work share the existing exact ReplicaSnapshot/replace/wake
+transaction. Header +at most64 combined room parts +64 source parts are authenticated by exact
+account/space/generation/document ID; read130 includes an overflow sentinel. Legacy v1/v2 remain
+supported. Cursor-only replacements preserve wake state. Core/Starter limits are unchanged.
 
-The repository captures all three lists before I/O. Existing domain admission/CAS operations,
-scan capacity, startup/read and wake-completion owners preserve source/physical work. There is
-NO application producer, physical resolver, source-inventory consumer or key subscription yet.
-Keep this increment unaccepted until tests and boundary review pass; all 54 PRD groups are OPEN.
+Original SDK storeId is the full64-character lowercase SHA-256, NOT a UUID. See CollaborationSdkScope.kt;
+Space adoption preserves that original identity rather than hashing the successor logical parent.
+Source records keep Matrix user/device separately. No access tokens or generated UUID alias.
+The pure captureCollaborationSpaceIncomingDemandSnapshot policy replaces17 duplicated captures
+across10 use cases. They retain current admission, structural validation and CAS. Startup/read/scan/
+completion preserve physical work and provider inventory; completing the independent binding scan
+cannot clear provider loss. Codec room/scan DTO mappings remain in data. No ViewModel/SDK loop change.
 
-Private space-incoming-sync-retention-2026-11-11 owns base-sources, all audit scripts and evidence.
-Two expected RED regressions are archived: red1/session74967 REAPED /93.226s (premature wake ACK),
-red-data1/session99703 REAPED /108.888s (source/physical fields lost after reopen), one failure each.
-Focused1/session5867 REAPED /135.590s:241 domain pass, then codec nullable smart-cast compilation
-failed. Fixed. Focused2/session34024 REAPED /46.568s: new test's null-pair type inference failed.
-Fixed. Format1/session69500 and format2/session48861 REAPED PASS /34.555s and35.219s.
-Focused3/session72088 REAPED PASS /130.979s:275 =246 domain +29 SQLite storage cases, zero failures,
-errors/skips. Frozen candidate has21 source/test files,4,872 inputs, manifest
-5a21d58b02cd6e0f21bb0066254902cccd0c061c23638229290fdc3d0ba886dd.
-Browser1/session99932 is RUNNING on that exact source, expecting275 cases. Full required checks
-have NOT run for this candidate. Contract draft:collaboration-space-incoming-retention.md.
-No application producer, phone build, latency or PRD closure is claimed. Continue validation
-and then the admitted serial producer/physical-resolution/inventory/key owners.
+Frozen4,872-input manifest:ec278139e3a0e0685dd761ce0fae093305da1844c1a001562586c3d944f03351.
+Focused5/session2293 and browser3/session62918 REAPED PASS:276 each,552 ACCEPTED /200.826s +165.157s.
+Full2/session74580 REAPED PASS /676.869s:11,061 =9,023 fresh +2,038 exact accepted unchanged controls,
+zero failures/errors/skips. All prior case IDs and retained dependency closures verified. Audit64679
+REAPED ACCEPTED. First audit13350 omitted build-logic from its module map; corrected without source
+changes or test reruns. Format/architecture74 modules/detekt, Android host/release compile/lint,
+browser/Wasm and iOS metadata gates pass. Proof APK151,591,706bytes,
+SHA e9d8b90468890e574c7f4dec0f29ee743e832835e6bd95d2f172dccb72b06156. No new native/phone run.
 
-Source entries use original store UUID plus Matrix user/device, never credentials or a short-lived
-native session. Never evict a source with referenced work or unresolved inventory. Continue with
-an admitted serial batch producer: cursor-only responses must not wake work; cold attach, response
-gaps and capacity loss need explicit source inventory recovery while preserving old phases/backoff.
-Inventory pagination and its owned stable boundary still require implementation and tests.
+Private Mobile space-incoming-sync-retention-2026-11-11 owns frozen candidate, all runners/audits,
+1,255 baseline report archives, full2/accepted-proof.apk and next-producer-design.md. publish.py
+HAS EXECUTED; do not rerun it or overwrite the shared measurement. Public contract:
+collaboration-space-incoming-retention.md; measurement collaboration-space-incoming-retention-2026-11-11.json
+exists in both Mobile and Group. No Group product/fixture change or deployment is included.
+
+Preserved review evidence: expected RED lost-field/premature-wake failures; initial nullable
+smart-cast and test type-inference compile failures; candidate-1-uuid-invalid/ (browser1 deliberately
+stopped before completing), and candidate-2-before-capture-policy/ (552 tests before full1 found
+three LongMethod violations). Final code uses typed capture/mapping without rule suppression.
+No real source data or application producer was released under either rejected candidate.
+
+NEXT: implement admitted serial batch production and locally owned raw observation through existing
+SdkSyncLifecycle. Observation must not acquire/start/retry a client, and per-batch retention must not
+call transport/devices.status. Fence exact runtime/source across suspension, preserve old phases and
+backoff, keep cursor-only updates quiet, and confirm committed batches even if a worker advances
+room work before lost-response readback. Follow with physical-to-logical resolution, provider
+inventory and stored-key recovery. Keep active inventory boundaries separate from newer loss;
+unpublished Company originals keep a separate route from the accepted Group physical-room API.
+No producer or physical/inventory/key consumer is enabled yet. Apple execution of the NEW storage
+format remains to validate on its immutable commit. No phone latency claim, live activation or PRD
+closure: all54 groups stay OPEN. Commit/push this complete increment, then continue the integration.
 
 ## Current raw sync batches — accepted, continue with the durable owner
 
-Hosted control run42943310515 remains IN PROGRESS on immutable6baa8acc82bcd95a22ab3bc342458292f789de99,
-ref validation/raw-sync-batches-20261111. Portable is ACCEPTED:9,001 =4,253 desktop +732 Android host
-+4,016 Chromium, prior case IDs preserved. Job130270030971/artifact13822693072,3,643,965bytes,
-SHA c2fa2fa1400f9ec8ccd39ab1041e2afeb5ddc50fd422cf3d0692d286f813854c;
+Hosted control run42943310515 is COMPLETE and ACCEPTED on immutable6baa8acc82bcd95a22ab3bc342458292f789de99,
+ref validation/raw-sync-batches-20261111. 12,500 cases =9,001 portable +3,499 Apple;16 Swift push checks
+and unsigned Apple host pass. Prior case IDs, exact source, remote archive SHA-256 and ZIP CRCs verified.
+Portable job130270030971/artifact13822693072,3,643,965bytes,
+SHA c2fa2fa1400f9ec8ccd39ab1041e2afeb5ddc50fd422cf3d0692d286f813854c,
 report manifest6de40a2358339604b7f6b1dc7d455091c773b5689ba1601bb60dda3e884f65ac.
-Audit59880 REAPED PASS; first audit72594 passed artifact/test checks but could not download
-ANSI-bearing logs until gh's output flag was set for the private file. Apple is still running;
-expected3,499 cases,16 Swift push checks and unsigned host are NOT accepted yet. Do not redispatch.
-Private Mobile raw-sync-batches-2026-11-11/hosted-42943310515 owns archives, source pin and logs;
-public measurement:collaboration-raw-sync-batches-hosted-2026-11-11.json. This is control workflow
-coverage, not Apple native SDK8 acceptance or the stale SDK4 native workflow. Continue durable
-source retention while CI runs. All 54 PRD groups remain OPEN.
+Apple job130270030622/artifact13823799318,622,789bytes,
+SHA bc1e0b67b2eaba5ca46034e0aca4e1e0906f0a5e8768805d7c35c2e411190832,
+report manifesteaf723aa9910e867763b93b4942d413dde02e41dd3862fda1f567a44330f6fd4.
+Audits59880 and31349 REAPED PASS. The first portable audit72594 only failed downloading ANSI-bearing
+logs; gh's explicit output flag wrote them privately. No hosted test rerun was needed. Do not redispatch.
+Private Mobile raw-sync-batches-2026-11-11/hosted-42943310515 owns pinned source, archives and logs;
+public measurement:collaboration-raw-sync-batches-hosted-2026-11-11.json. This is raw-batch control
+coverage. Apple native SDK8 and the new source-retention candidate are separate acceptance.
 
 Eleven Mobile source/test files expose exact SDK8 response batches from the existing
 SdkSyncPump. Native positions, Joined/Left room changes, event locators, limited flags
@@ -101,9 +117,9 @@ Known separate CI follow-up: the legacy collaboration-hris.yml/check_space_queue
 still pins SDK4 and must not be claimed or dispatched as current SDK8 native acceptance.
 Current Group native controls select immutable SDK8 explicitly. Preserve old artifact hashes
 when updating the old workflow/fixture together. The accepted hosted foreground control run
-42923369580 remains SDK6 coverage; hosted raw-sync run42943310515 is pending, as recorded above.
+42923369580 remains SDK6 coverage; hosted raw-sync run42943310515 is accepted, as recorded above.
 
-Phone attempts 44309 (01:50) and 63609 (02:30) REAPED timeout 124. The existing availability question stays pending;
+Phone attempts 44309 (01:50),63609 (02:30) and13238 (03:00) REAPED timeout124. The existing availability question stays pending;
 Release 89 (SDK6) remains the latest validated phone APK, install-only. No new phone install,
 latency claim, Group migration/live activation or PRD completion is included. Continue work.
 

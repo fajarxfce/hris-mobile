@@ -9,6 +9,49 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationSpaceIncomingWakeCompletionTest {
     @Test
+    fun unresolvedPhysicalRoomsAndSourceInventoryKeepTheIncomingWake() = runTest {
+        for (inventory in listOf(false, true)) {
+            val f = idle()
+            val source =
+                CollaborationSpaceIncomingSource(
+                    "a".repeat(64),
+                    "@original:proof.invalid",
+                    "ORIGINAL",
+                )
+            val progress =
+                CollaborationSpaceIncomingSourceProgress(
+                    source,
+                    "retained-position",
+                    if (inventory) f.id(931) else null,
+                )
+            f.set(
+                CollaborationSpaceIncomingDemand(
+                    nextPosition = if (inventory) 0 else 1,
+                    sources = listOf(progress),
+                    physicalRooms =
+                        if (inventory) emptyList()
+                        else
+                            listOf(
+                                CollaborationSpaceIncomingPhysicalRoomDemand(
+                                    source.storeId,
+                                    "!unknown:proof.invalid",
+                                    f.id(932),
+                                    0,
+                                    "\$head",
+                                    CollaborationSpaceIncomingMembership.Joined,
+                                    false,
+                                )
+                            ),
+                )
+            )
+            assertEquals(AppResult.Success(false), f.finish(f.access, f.originalWake))
+            assertEquals(f.originalWake, f.request.wake)
+            assertEquals(0, f.acknowledgements)
+            assertEquals(0, f.request.writes)
+        }
+    }
+
+    @Test
     fun emptyCurrentRootDischargesOnlyItsCapturedWake() = runTest {
         val f = idle()
         assertEquals(AppResult.Success(true), f.finish(f.access, f.originalWake))

@@ -15,6 +15,7 @@ data class CollaborationSpaceIncomingRoomDemand(
     val headEventId: String?,
     val phase: CollaborationSpaceIncomingPhase,
     val retry: CollaborationSpaceIncomingRetry? = null,
+    val sourceId: String? = null,
 ) {
     override fun toString() = "CollaborationSpaceIncomingRoomDemand([redacted])"
 }
@@ -28,6 +29,8 @@ data class CollaborationSpaceIncomingDemand(
     val rooms: List<CollaborationSpaceIncomingRoomDemand> = emptyList(),
     val rescanGeneration: String? = null,
     val scan: CollaborationSpaceIncomingScan? = null,
+    val sources: List<CollaborationSpaceIncomingSourceProgress> = emptyList(),
+    val physicalRooms: List<CollaborationSpaceIncomingPhysicalRoomDemand> = emptyList(),
 ) {
     override fun toString() = "CollaborationSpaceIncomingDemand([redacted])"
 }

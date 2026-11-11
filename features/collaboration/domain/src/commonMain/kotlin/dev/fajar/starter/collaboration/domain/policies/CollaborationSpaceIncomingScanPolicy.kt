@@ -42,7 +42,7 @@ fun discoverCollaborationSpaceIncomingRooms(
     val requested = current.rescanGeneration ?: return invalidIncomingScan()
     val generation = current.scan?.generation ?: requested
     val scan = current.scan ?: CollaborationSpaceIncomingScan(generation)
-    val limit = minOf(4, 64 - current.rooms.size)
+    val limit = minOf(4, 64 - current.rooms.size - current.physicalRooms.size)
     val boundary = page.boundary
     val cursor = page.next
     if (
@@ -82,6 +82,8 @@ fun discoverCollaborationSpaceIncomingRooms(
     val newer = scan.hasNewerBindings || page.hasNewerBindings
     val next =
         current.copy(
+            sources = current.sources.toList(),
+            physicalRooms = current.physicalRooms.toList(),
             nextPosition = current.nextPosition + additions.size,
             rooms =
                 current.rooms +
