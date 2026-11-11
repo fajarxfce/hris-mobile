@@ -1,8 +1,8 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 10:38 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 10:44 UTC. This opening owns current work; older sections are historical.
 
-## Company pending limit — browser validation in progress
+## Company pending limit — full validation in progress
 
 Mobile HEAD9b366ed53256c1bad575a44ac3e39f9288220006 and Group0c9a711e are PUSHED.
 The next eight-file Company page-size increment is applied but NOT accepted or committed.
@@ -13,9 +13,9 @@ changing page sizes. A new Apple wave wrapper covers12 cases; Linux cannot claim
 
 Private .work/company-pending-limit-2026-11-11 holds baseline9b366ed5/11,887 cases, candidate snapshots,
 runners/audits, prepared publisher/contract and hosted plan/audit/dispatch. Format1/session26322 REAPED
-PASS36.597s. Focused1/session32087 REAPED PASS300.067s/136. Browser1/session77153 RUNNING, expected134.
+PASS36.597s. Focused1/session32087 REAPED PASS300.067s/136. Browser1/session77153 REAPED PASS171.871s/134; focused audit270 ACCEPTED.
 Frozen4,948-input manifest a74763b5645f6400a4a0c80e90cdecfbb270678633b884f29ab07d67f076e6c3.
-Next reap browser, accept-focused.py focused1 browser1 (270), then run.py full1 (expected11,895).
+Full1/session93941 RUNNING, expected11,895. Next reap full, run accept-full.py full1, then publish only if accepted.
 Do not edit frozen source during checks. Full audit/publisher NOT executed. Hosted NOT dispatched:
 validation/company-pending-limit-20261111 expects13,813=9,873 portable+3,940 Apple,16 Swift,unsigned host.
 Unlike prior domain-only changes, portable delta8 and Apple delta12; explicitly audit the new wave class.
@@ -30,13 +30,15 @@ again. Public measurement JSON contains artifact hashes, exact case identities a
 SDK8 native Apple runtime execution remains unproved; simulator/domain checks are separate evidence.
 
 Continue Original content acquisition and retention using the installed Group runtime and original
-Company/device. Two PRIVATE UNAPPLIED draft types in next-original-content-draft carry an Original batch
-and validate exact physical snapshots. They have no tests/acceptance. Provider references, decrypted
+Company/device. Nine PRIVATE UNAPPLIED draft sources in next-original-content-draft implement Original content acquisition,
+exact physical snapshot checks, shared outcome policy,33 common cases and DI. Expected next151 focused/149
+browser/11,961 full. prepare-next-original-content.py/configure-next-original-content.py PREPARED, NOT executed.
+No content source/test acceptance yet; next-original-content-review.md records ownership and remaining work. Provider references, decrypted
 content and committed retention remain separate. Original completion, canonical Published LEGACY aliases,
 bounded Client.rooms inventory, keys-only recovery and actual native proof precede raw activation.
 Raw collector/Original producer OFF; all54 PRD groups OPEN. No generic Starter delta. Continue long run.
 
-Phone16392 REAPED timeout124, connect started10:13:18 UTC. Next bounded retry no earlier10:44.
+Phone26946 REAPED timeout124, connect started10:44 UTC. Next bounded retry no earlier11:15.
 Release89 validated SDK6 APK remains pending install, no install-result or attempt. No emulator.
 Notify before explicit-serial install-only, never launch/drive the user's phone. Eight protected original
 intents, Draft66, keys/stores, SDK6/7/8 assets and live90163c3/schema116.4 Group-OFF remain unchanged.
