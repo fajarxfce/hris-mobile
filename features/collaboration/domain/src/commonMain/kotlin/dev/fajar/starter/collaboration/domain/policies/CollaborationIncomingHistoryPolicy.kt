@@ -145,3 +145,25 @@ private fun invalidIncomingHistory() =
         "client.collaboration_invalid_incoming_history",
         FailureKind.Unexpected,
     )
+
+/** Final retention outcome; only the owning acquisition may acknowledge storage. */
+fun collaborationIncomingHistoryOutcome(
+    plan: CollaborationIncomingHistoryPlan
+): CollaborationIncomingHistoryOutcome =
+    when (plan) {
+        is CollaborationIncomingHistoryPlan.Retain ->
+            CollaborationIncomingHistoryOutcome.Retained(
+                plan.originals.map { it.eventId },
+                plan.replacements.map { it.eventId },
+            )
+        is CollaborationIncomingHistoryPlan.AwaitDecryption ->
+            CollaborationIncomingHistoryOutcome.AwaitDecryption(plan.eventId, plan.reason)
+        is CollaborationIncomingHistoryPlan.AwaitRedaction ->
+            CollaborationIncomingHistoryOutcome.AwaitRedaction(plan.eventId)
+        is CollaborationIncomingHistoryPlan.MissingOriginal ->
+            CollaborationIncomingHistoryOutcome.MissingOriginal(plan.tombstone.eventId)
+        CollaborationIncomingHistoryPlan.Unsupported ->
+            CollaborationIncomingHistoryOutcome.Unsupported
+        is CollaborationIncomingHistoryPlan.AcquireTarget ->
+            error("Target planning must finish before retention")
+    }

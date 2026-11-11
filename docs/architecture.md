@@ -1,5 +1,8 @@
 # Architecture
 
+[Original content retention](collaboration-space-original-content.md) reads through the installed Group runtime and
+keeps physical Company/device identity. Content writes precede later reference and queue completion.
+
 [Company pending page sizes](collaboration-company-pending-limit.md) preserve finite16-row Original seeks through
 concurrent resolution and reopen. Content acknowledgement and incoming activation remain separate.
 

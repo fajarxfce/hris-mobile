@@ -1016,6 +1016,37 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun acquireSpaceOriginalEvents(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        metadata: CollaborationSpaceOriginalRoomMetadataRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        sync: CollaborationSpaceSyncRepository,
+        runtimes: CollaborationSpaceRuntimeRepository,
+        events: CollaborationSpaceEventRepository,
+        history: CollaborationHistoryRepository,
+        edits: CollaborationMessageEditRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        AcquireCollaborationSpaceOriginalEvents(
+            demands,
+            metadata,
+            registrations,
+            sync,
+            runtimes,
+            events,
+            history,
+            edits,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun acquireSpaceOriginalProviderHistory(
         demands: CollaborationSpaceIncomingDemandRepository,
         metadata: CollaborationSpaceOriginalRoomMetadataRepository,

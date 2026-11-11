@@ -160,7 +160,10 @@ class AcquireCollaborationSpaceEvents(
                     conversation.id,
                     binding.room.roomId,
                     plans.map { (id, plan) ->
-                        CollaborationIncomingHistoryResult(id, outcome(plan))
+                        CollaborationIncomingHistoryResult(
+                            id,
+                            collaborationIncomingHistoryOutcome(plan),
+                        )
                     },
                     CollaborationHistoryProviderIdentity(identity.first.companyId, identity.second),
                 )
@@ -329,25 +332,6 @@ class AcquireCollaborationSpaceEvents(
         fun failed(value: Failure) = AppResult.Failed(restriction ?: value)
     }
 }
-
-private fun outcome(plan: CollaborationIncomingHistoryPlan): CollaborationIncomingHistoryOutcome =
-    when (plan) {
-        is CollaborationIncomingHistoryPlan.Retain ->
-            CollaborationIncomingHistoryOutcome.Retained(
-                plan.originals.map { it.eventId },
-                plan.replacements.map { it.eventId },
-            )
-        is CollaborationIncomingHistoryPlan.AwaitDecryption ->
-            CollaborationIncomingHistoryOutcome.AwaitDecryption(plan.eventId, plan.reason)
-        is CollaborationIncomingHistoryPlan.AwaitRedaction ->
-            CollaborationIncomingHistoryOutcome.AwaitRedaction(plan.eventId)
-        is CollaborationIncomingHistoryPlan.MissingOriginal ->
-            CollaborationIncomingHistoryOutcome.MissingOriginal(plan.tombstone.eventId)
-        CollaborationIncomingHistoryPlan.Unsupported ->
-            CollaborationIncomingHistoryOutcome.Unsupported
-        is CollaborationIncomingHistoryPlan.AcquireTarget ->
-            error("Target planning must finish before retention")
-    }
 
 private fun incomingFailure(reason: String, kind: FailureKind = FailureKind.Conflict) =
     collaborationRecoveryFailure("client.collaboration_incoming_$reason", kind)

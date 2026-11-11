@@ -1,0 +1,78 @@
+{
+  "date": "2026-11-11",
+  "sourceBaseline": "7113b3f842d6f74d9a9c1af2eabc9b1d13362003",
+  "sourceFiles": 4953,
+  "changedSourceFiles": 9,
+  "sourceManifestSha256": "6b6471c42c067589c9fe68c492daac452f20b9a43597d50342adf516076787d8",
+  "focused": {
+    "tests": 300,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedDesktopRun": "focused1",
+  "focusedBrowserRun": "browser1",
+  "full": {
+    "validated": 11961,
+    "fresh": {
+      "tests": 9923,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "retainedUnchanged": 2038
+  },
+  "fullElapsedSeconds": 619.204,
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 151701629,
+    "sha256": "ba993bc7806ae1b7a3a6ae6d8800900de1f9e929abb29e95cfa87facb5689ff7"
+  },
+  "priorCaseIdsPreserved": true,
+  "retainedDependencyClosuresVerified": true,
+  "originalContentAcquisitionAccepted": true,
+  "existingInstalledRuntimeOnly": true,
+  "originalPhysicalCompanyDeviceRoomAndNativeVerified": true,
+  "capturedSourceRegistrationMetadataAndTaskRechecked": true,
+  "invocationDeadlineMillis": 15000,
+  "directoryDenialSurvivesFailedCleanup": true,
+  "sharedPureOutcomePolicy": true,
+  "localOriginalAliasesAvoidTargetReads": true,
+  "acquiredTargetsReadOncePerInvocation": true,
+  "identicalChangesDeduplicated": true,
+  "originalsCommitBeforeReplacements": true,
+  "originalAndReplacementWriteLimits": 16,
+  "falseOrUncertainCommitDoesNotPublishBatch": true,
+  "missingKeysRedactionsAndTargetsRemainExplicit": true,
+  "newDomainCases": 33,
+  "preservedFailedRuns": [
+    {
+      "exitCode": 1,
+      "elapsedSeconds": 36.495,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "run": "format1"
+    }
+  ],
+  "correctedBindingAssertionSyntax": true,
+  "applicationBindingVerified": true,
+  "createsSdkClient": false,
+  "readsDirectTransport": false,
+  "readsMetadataApi": false,
+  "advancesProvider": false,
+  "resolvesReferences": false,
+  "advancesPendingSeek": false,
+  "retiresIncomingTaskOrWake": false,
+  "sendsMessage": false,
+  "originalIncomingConsumerEnabled": false,
+  "rawCollectorEnabled": false,
+  "newNativeSdkExecution": false,
+  "newAppleExecutionAccepted": false,
+  "phoneInstalled": false,
+  "liveDeploymentChanged": false,
+  "all54PrdGroupsRemainOpen": true
+}
