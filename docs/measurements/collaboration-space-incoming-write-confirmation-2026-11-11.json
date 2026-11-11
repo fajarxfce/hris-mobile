@@ -47,7 +47,7 @@
   "newAppWorkerCases": 1,
   "rawCollectorEnabled": false,
   "newNativeSdkExecution": false,
-  "newAppleExecutionAccepted": false,
+  "newAppleExecutionAccepted": true,
   "phoneInstalled": false,
   "liveDeploymentChanged": false,
   "all54PrdGroupsRemainOpen": true,
@@ -86,10 +86,25 @@
       }
     },
     "apple": {
-      "status": "in_progress",
-      "expectedCases": 3675
+      "sourceCommit": "840d115247b2da417014636529040b80cca38144",
+      "runId": 42972222388,
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/42972222388",
+      "jobId": 130363099852,
+      "artifactId": 13837300361,
+      "bytes": 648512,
+      "sha256": "cfbbf284eea6395c605119123c156f4c403c78f7c4a7c27cac79c474adbc51f0",
+      "githubDigestAndZipCrcVerified": true,
+      "priorCaseIdsPreserved": true,
+      "counts": {
+        "iosSimulatorArm64Test": 3675
+      },
+      "reportManifestSha256": "575d33e3273ec9e6e7081dc09e5f383514252597cfc145f2fd3cad15d090682b",
+      "jobLogSha256": "f3b93f74a0751860ff7589d53de57c3ccbb1c75ff7b758704e688feedbb9b9ba"
     },
     "completeAcceptance": false,
-    "workflowSelectionCorrection": "Current physical metadata candidate adds the omitted 12-case physical worker class; corrected hosted execution remains pending."
+    "workflowSelectionCorrection": "Accepted Mobile 8ae3d11e includes the omitted 12-case physical worker class; immutable corrected run 42978769594 is in progress.",
+    "appleSwiftCases": 16,
+    "unsignedAppleApplicationHostAccepted": true,
+    "nativeSdk8AppleExecutionAccepted": false
   }
 }

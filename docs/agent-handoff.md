@@ -1,6 +1,36 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 07:18 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 07:36 UTC. This opening section owns current work; older checkpoints below are historical.
+
+## Active original-target foundation — validation in progress
+
+Mobile accepted source 8ae3d11e9b04d130c579614a6181c44bfcbe3b40 is pushed. New private
+.work/space-original-incoming-target-2026-11-11 owns the 4,912-input baseline, 1,292 verified XML
+archives/11,499 cases, applied draft, design review and exact runners. The earlier 16-file draft
+IS APPLIED; call sites and regressions are being completed. It is NOT accepted yet. New typed
+Published/Original(Company, conversation) room targets prevent ID-only matching. Original requires
+an installed source; encrypted v4 stores that target while v1/v2/v3 remain readable and published-only
+encoding stays unchanged. Published consumers reject Original before I/O. No original producer or
+consumer is enabled. Raw collector remains OFF. Do not activate before original metadata, Company
+history/provider/content/completion, bounded inventory, keys-only recovery and actual native proof.
+
+Added tests: 17 domain target/transition cases, four published-owner guards and eight common storage
+contracts (desktop/browser/Apple). Expected local full 11,557 cases, desktop focus620/browser553.
+Format1/session1805 is running; no acceptance, APK or installation claim. Source is unvalidated.
+The formatter and one 3GiB compiler own local heavy work; no emulator. Continue focused/browser/full
+validation, preserve every prior case ID and source/library hashes, then commit and push each increment.
+Do not stop at this checkpoint. All 54 PRD groups remain OPEN. No generic Starter delta yet.
+
+Incoming-write hosted run42972222388 finished. Apple audit34333 REAPED ACCEPTED3,675 +16 Swift
+and unsigned host; artifact13837300361 SHA cfbbf284eea6395c605119123c156f4c403c78f7c4a7c27cac79c474adbc51f0.
+The old portable job retains its documented 12-case workflow selection gap: 9,379 actual accepted
+cases, completeAcceptance=false. Corrected metadata run42978769594 is RUNNING on immutable8ae3d11e,
+ref validation/physical-metadata-20261111; do NOT redispatch. Expected9,477 portable +3,712 Apple,
+16 Swift and unsigned host. Private metadata hosted-audit.py verifies exact head, artifact and prior IDs.
+No Apple SDK8 native execution is claimed. Do not use legacy SDK4 native CI as SDK8 proof.
+
+Phone connect89904 REAPED timeout at07:06 UTC; next bounded retry no earlier07:37. Validated89 only,
+install-only with prior notification, no UI driving. No live/schema/runtime deployment changed.
 
 ## Physical metadata accepted — continue original routing
 

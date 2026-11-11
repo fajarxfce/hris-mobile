@@ -31,7 +31,7 @@ outdated Defer supersession expectation; only its expected outcome changed and a
 assertions remain. Full validation includes Android host/release compile/lint, browser/Wasm,
 iOS metadata, architecture/detekt/format and proof APK assembly/unit tests.
 
-No new native SDK execution, Apple execution, phone delivery or live activation is claimed here.
+No new native SDK execution, phone delivery or live activation is claimed here.
 Remote metadata, original typed routing, complete inventory, keys-only recovery and native proof
 remain required before raw collection is enabled. All 54 PRD groups remain open.
 
@@ -40,5 +40,7 @@ remain required before raw collection is enabled. All 54 PRD groups remain open.
 Hosted control at source `840d1152` verified 9,379 portable cases and all prior case identities.
 The exact app-test filter omitted 12 new physical-worker cases, so complete hosted acceptance
 remains open despite the successful job. The metadata candidate adds the missing class; corrected
-execution remains pending. Apple control is still running. Local full acceptance above includes
+execution is running at immutable 8ae3d11e/run42978769594. Apple control on 840d1152 now
+verifies 3,675 cases, 16 Swift push-field cases and the unsigned application host. Native SDK8
+Apple execution remains unclaimed. The portable coverage gap above remains recorded. Local full acceptance above includes
 those worker tests. See the measurement for the artifact digest and explicit coverage gap.
