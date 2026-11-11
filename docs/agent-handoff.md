@@ -1,6 +1,6 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 07:36 UTC. This opening section owns current work; older checkpoints below are historical.
+Updated 11 November 2026, 07:49 UTC. This opening section owns current work; older checkpoints below are historical.
 
 ## Active original-target foundation — validation in progress
 
@@ -15,22 +15,37 @@ consumer is enabled. Raw collector remains OFF. Do not activate before original 
 history/provider/content/completion, bounded inventory, keys-only recovery and actual native proof.
 
 Added tests: 17 domain target/transition cases, four published-owner guards and eight common storage
-contracts (desktop/browser/Apple). Expected local full 11,557 cases, desktop focus620/browser553.
-Format1/session1805 is running; no acceptance, APK or installation claim. Source is unvalidated.
-The formatter and one 3GiB compiler own local heavy work; no emulator. Continue focused/browser/full
-validation, preserve every prior case ID and source/library hashes, then commit and push each increment.
-Do not stop at this checkpoint. All 54 PRD groups remain OPEN. No generic Starter delta yet.
+contracts (desktop/browser/Apple). Focused2/session8512 REAPED PASS194.054s/620; browser1/session38334
+REAPED PASS170.42s/553; combined audit ACCEPTED1,173 with prior selected case IDs preserved.
+Current frozen4,915-input manifest:7791d5746c9121c31732a2f4f0c7b40623f729ff29f08a82c4df0da6ba5311d2.
+Full1/session69578 is RUNNING; expected11,557 cases. Do not change current source/library until reaped.
+No full acceptance, new APK or installation claim. Format1/session1805 and format2/session79222 are
+REAPED PASS. Focused1/session54234 REAPED FAIL216.183s:516 domain and69 data cases ran, one new
+reopen test used the old immutable fixture session after activating a replacement. Only that invocation
+was corrected. candidate1 and all failed evidence remain; no production fix or removed assertion.
 
-Incoming-write hosted run42972222388 finished. Apple audit34333 REAPED ACCEPTED3,675 +16 Swift
-and unsigned host; artifact13837300361 SHA cfbbf284eea6395c605119123c156f4c403c78f7c4a7c27cac79c474adbc51f0.
-The old portable job retains its documented 12-case workflow selection gap: 9,379 actual accepted
-cases, completeAcceptance=false. Corrected metadata run42978769594 is RUNNING on immutable8ae3d11e,
-ref validation/physical-metadata-20261111; do NOT redispatch. Expected9,477 portable +3,712 Apple,
-16 Swift and unsigned host. Private metadata hosted-audit.py verifies exact head, artifact and prior IDs.
-No Apple SDK8 native execution is claimed. Do not use legacy SDK4 native CI as SDK8 proof.
+Next private next-metadata-draft holds eight UNAPPLIED/UNVALIDATED files: original metadata repository/
+policy, encrypted repository/codec, 18-case common database contract and desktop/browser/Apple wrappers.
+Read next-original-metadata-review.md and next-original-consumer-review.md. The existing Company
+CollaborationHistoryTraversalRepository can be used by an owning use case; add its missing exact source
+operation rather than creating a duplicate Company repository. Its provider=null and original device
+cursor protocol differ from Space. Preserve real legacy registration Company/device, actual physical
+page owner and existing Company content; never relabel a foreign page or Group device as an original.
+Collector remains OFF. Continue original metadata/consumer/inventory/keys-only/native acceptance.
 
-Phone connect89904 REAPED timeout at07:06 UTC; next bounded retry no earlier07:37. Validated89 only,
-install-only with prior notification, no UI driving. No live/schema/runtime deployment changed.
+Incoming-write hosted42972222388 is complete: Apple3,675 +16 Swift and unsigned host accepted;
+portable9,379 remains explicitly partial due to old12-case workflow gap. Corrected metadata run42978769594
+on immutable8ae3d11e is still running Apple(expected3,712). Portable audit41728 REAPED ACCEPTED9,477
+(4,479 desktop+769 Android host+4,229 browser), including all12 physical-worker cases. Artifact13837787198
+SHA c48879f98d5e99e837a2e8c6842862832304d4f611fa85c94a1b38bc7d14cf0b. Prior IDs/digest/CRC verified.
+Do NOT redispatch either run or use legacy SDK4 native CI as SDK8 proof. New target hosted-plan/audit
+are prepared but NOT dispatched: after exact local acceptance and source commit expect13,276 total
+(9,535 portable+3,741 Apple). No Apple SDK8 native execution is claimed.
+
+Phone connect59767 REAPED timeout124 at07:37:14 UTC. Next bounded retry no earlier08:08; existing
+question remains pending. Validated release89 remains install-only, with prior notification and no UI
+driving. One3GiB compiler, no emulator. No Starter, live/schema or SDK publication changed. All54 PRD
+groups remain OPEN; continue beyond this prerequisite. Every commit must be pushed.
 
 ## Physical metadata accepted — continue original routing
 

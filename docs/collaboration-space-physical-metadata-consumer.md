@@ -48,3 +48,7 @@ native SDK/Apple execution. Original typed routing and storage, complete provide
 keys-only recovery and actual native proof remain required. All 54 PRD groups remain open.
 
 [Exact validation evidence](measurements/collaboration-space-physical-metadata-consumer-2026-11-11.json).
+
+Hosted control at immutable `8ae3d11e`/run42978769594 verifies 9,477 portable cases with all prior
+case identities and artifact digests. This includes all 12 physical-worker cases omitted by the
+previous workflow selection. Apple control remains running; native SDK8 execution is not claimed.
