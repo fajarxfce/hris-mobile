@@ -49,6 +49,13 @@ fun selectCollaborationSpaceIncomingWork(
                         demand.physicalRooms.isNotEmpty() ||
                         demand.sources.any { it.inventoryGeneration != null }),
             physicalReady = physical.filter { it.position in positions },
+            inventoryReady =
+                if (demand != null && demand.rooms.size + demand.physicalRooms.size < 64)
+                    demand.sources.filter {
+                        (source == null || it.source == source) &&
+                            eligibleCollaborationSpaceInventory(it, now)
+                    }
+                else emptyList(),
         )
     )
 }

@@ -48,6 +48,17 @@ internal class SpaceIncomingWorkerFixture(
     val physicalAttempts = mutableListOf<String>()
     val deferredPhysical = mutableListOf<CollaborationSpaceIncomingPhysicalRoomDemand>()
     var bindingFailure: Failure? = null
+    val inventoryAttempts = mutableListOf<CollaborationSpaceIncomingSourceProgress>()
+    val deferredInventories =
+        mutableListOf<Pair<CollaborationSpaceIncomingSourceProgress, Failure?>>()
+    var inventoryTurn:
+        suspend (
+            CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingSourceProgress,
+        ) -> AppResult<CollaborationSpaceInventoryOutcome> =
+        { _, _ ->
+            error("No inventory turn configured")
+        }
+
     var originalTurn:
         suspend (CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingRoomDemand) -> AppResult<
                 Boolean
@@ -178,6 +189,32 @@ internal class SpaceIncomingWorkerFixture(
                         physicalRooms.clear()
                         physicalRooms.addAll(planned.value.demand.physicalRooms)
                         AppResult.Success(planned.value.outcome)
+                    } else planned as AppResult.Failed
+                }
+            },
+            inventory = { actual, captured ->
+                check(actual == runtime)
+                inventoryAttempts += captured
+                step("inventory")
+                inventoryTurn(actual, captured)
+            },
+            deferInventory = { actual, captured, failure ->
+                check(actual == runtime)
+                step("defer-inventory")
+                if (isCollaborationSpaceIncomingQueueContention(failure))
+                    AppResult.Failed(requireNotNull(failure))
+                else {
+                    val planned =
+                        deferCollaborationSpaceInventory(
+                            work().snapshot!!.demand,
+                            captured,
+                            base.clock.now().toEpochMilliseconds(),
+                        )
+                    if (planned is AppResult.Success) {
+                        deferredInventories += captured to failure
+                        sources.clear()
+                        sources.addAll(planned.value.sources)
+                        AppResult.Success(true)
                     } else planned as AppResult.Failed
                 }
             },

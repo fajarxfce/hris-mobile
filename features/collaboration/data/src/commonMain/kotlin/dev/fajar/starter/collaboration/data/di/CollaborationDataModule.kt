@@ -808,6 +808,27 @@ class CollaborationDataModule {
             Clock.System,
         )
 
+    @Factory
+    fun deferSpaceInventory(
+        demands: CollaborationSpaceIncomingDemandRepository,
+        registrations: CollaborationSpaceRegistrationCommandRepository,
+        sync: CollaborationSpaceSyncRepository,
+        directory: CollaborationSpaceDirectoryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        DeferCollaborationSpaceInventory(
+            demands,
+            registrations,
+            sync,
+            directory,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
     @Single
     fun retainSpaceSyncBatches(
         sync: CollaborationSpaceSyncRepository,

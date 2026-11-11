@@ -1,5 +1,8 @@
 # Architecture
 
+[Serialized inventory scheduling](collaboration-space-inventory-scheduling.md) retains retry under the existing incoming worker.
+Keys-only demotion and recovery remain separate owners.
+
 [Finite inventory retention](collaboration-space-inventory-retention.md) stores ordered source coverage, physical work and wake together.
 Serialized scheduling and key backpressure remain separate.
 

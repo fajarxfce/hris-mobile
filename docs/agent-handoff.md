@@ -1,6 +1,68 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 15:57 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 16:17 UTC. This opening owns current work; older sections are historical.
+
+## Serialized inventory scheduling accepted — continue local locator discovery
+
+Sixteen-file scheduling change ACCEPTED (15 Kotlin+workflow,10 existing+6 new).
+format1/49396 PASS37.307s; focused1/25347 PASS411.545s/254;
+browser1/51149 PASS151.448s/186. Combined440 verified, all sessions REAPED.
+full1/54856 REAPED PASS578.471s; audit86295 REAPED,
+12,622 accepted: 10584 fresh+2038 exact unchanged controls.
+Prior case IDs, dependency closures, source/library hashes and required full checks verified.
+Frozen5,001-input manifestca53da7eb5ea79cbe2195652b484b41376b656c1b2a0836a59ae72b3d40b7db3.
+Proof APK151762021 bytes/SHAe15b6c6449c712ef664636f753542eed8656842924bbffa3b6ed8260f9ba7cc9. No native SDK execution implied.
+
+One existing worker/mutex/parent processes four primary FIFO tasks then at most one inventory
+page. Full64 combined capacity and future retry suppress enumeration. Domain owns eligibility
+and exact-registration/source/parent-fenced5-second deferral. One CAS/readback retains the wake
+and newest continuous position. Partial cursor is reloaded before deferral; later loss is not
+delayed. Replays cannot extend retry. CAS contention remains1 second; ordinary failures persist
+30/60/120/240/300-second backoff. Worker callback is bounded to10 seconds and joined on parent
+cancellation.11 retry-policy+6 selection+21 owner cases per desktop/browser and16 app cases pass.
+Existing encrypted47-case demand and prior worker controls retained. Workflow selects new app cases.
+
+Workspace .work/space-inventory-scheduling-2026-11-11 owns accepted evidence. Publisher and this
+writer HAVE EXECUTED. Commit/push, then dispatch hosted ONCE on validation/inventory-scheduling-20261111;
+expected14,849=10,600 portable+4,249 Apple. NOT dispatched yet. Current retention run
+43053179213 stays attached, expected14,719. Source-progress43049052938 portable10,418 accepted
+(91565 reaped), Apple pending. Owned43044913726 FULL14,527=10,380 portable+4,147 Apple accepted
+(92183 reaped). Raw43040652714 FULL14,458 and alias43037578170 FULL14,434 accepted. Apple includes
+16 Swift/unsigned-host cases, not native SDK8 Apple. Earlier application43031231253 remains incomplete.
+
+Next locator draft:11 Kotlin files,10 NEW+1 guarded app binding. UNAPPLIED/UNTESTED. Existing
+published metadata prefix paging yields finite Company/Space conversation/device locators,
+without content/key/native reads or another catalog. At most17 raw rows/16 consumed; non-incoming
+lanes may yield empty output with advancing cursor. Staging excluded; full scope/order/shape
+checked.12 mapper cases and15 actual metadata-storage cases per host drafted. Expected12,688
+local/5,011 inputs,163 focused+161 browser;14,942 hosted=10,666 portable+4,276 Apple. Metadata
+fixtures intentionally have opaque checkpoints; no content-decryption proof. Read
+next-history-locator-review.md. prepare-next-history-locators.py and configure-next-history-locators.py
+PREPARED NOT EXECUTED; require accepted clean pushed source and one hosted dispatch.
+
+Existing SDK8 ALREADY exports subscribeToRoomKeyChanges/RoomKeyChangesListener/RoomKeyChangeBatch
+via stored-key-hints.patch and verified generated bindings. Native registration/lag emits global
+reconciliation; bounded room hints include no key material. Mobile consumer is still absent.
+Bind one listener to the installed runtime lifetime, never each worker adoption. Read
+next-keys-signal-review.md. Durable active/requested keys-pass generations, targeted/global
+recovery, atomic primary demotion and typed metadata resolution still need implementation.
+Never drop unresolved refs to free slots. Authoritative absence, native room-list allocation/
+performance and combined Company-storage/Group-native proof remain. Raw observation/Original
+producer OFF; all54 PRD groups OPEN. No Starter or live change.
+
+Read next-keys-fairness-review.md before activation. Current provider Advance preserves FIFO
+position; four slow primary tasks can exhaust the worker budget before appended work. Inventory
+batch loss/work.omitted also resets generation/cursor/retry, so sustained overflow can keep
+restarting the first prefix. Active/requested inventory pass generations and fair scheduling
+need a coherent protocol/consumer change with migration and liveness tests. Current checks
+prove exact ownership/retention, not progress under continual overflow. Preserve that distinction.
+
+Phone59554 REAPED timeout at15:55:22UTC/20.02s, no install attempted. Evidence in previous
+retention workspace/phone-connect-1555.json; retry no earlier16:26UTC. Release89 SDK6 awaits
+install. Notify first, explicit serial/install-only, never drive UI. No emulator. Preserve
+original intents, Draft66, keys/stores/SDK assets, inspector gradlew.bat and live90163c3/
+schema116.4 Group OFF. Continue long run and push every commit.
+
 
 ## Serialized inventory scheduling applied; focused validation running
 

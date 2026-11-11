@@ -7,6 +7,7 @@ data class CollaborationSpaceIncomingWork(
     val scanPending: Boolean,
     val roomsPending: Boolean,
     val physicalReady: List<CollaborationSpaceIncomingPhysicalRoomDemand> = emptyList(),
+    val inventoryReady: List<CollaborationSpaceIncomingSourceProgress> = emptyList(),
 ) {
     val turn: List<CollaborationSpaceIncomingTask>
         get() =

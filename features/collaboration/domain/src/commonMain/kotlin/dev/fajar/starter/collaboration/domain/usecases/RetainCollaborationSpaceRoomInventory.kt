@@ -40,11 +40,7 @@ class RetainCollaborationSpaceRoomInventory(
             return changed(FailureKind.Validation)
         val now = clock.now().toEpochMilliseconds()
         if (now !in 0..9_007_199_254_440_991L) return changed(FailureKind.Validation)
-        if (
-            captured.inventoryRetry?.let {
-                now >= it.attemptedAtEpochMillis && now < it.eligibleAtEpochMillis
-            } == true
-        )
+        if (!eligibleCollaborationSpaceInventory(captured, now))
             return AppResult.Success(CollaborationSpaceInventoryOutcome.Deferred)
         return withTimeoutOrNull(5_000) { Acquisition(runtime, captured).run() }
             ?: changed(FailureKind.Timeout)

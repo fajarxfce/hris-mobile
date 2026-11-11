@@ -93,7 +93,7 @@ internal class SpaceRoomInventoryRetentionFixture {
                     else null
                 if (saved != null) {
                     snapshot = saved
-                    this@SpaceRoomInventoryRetentionFixture.wake = wake
+                    if (wake != null) this@SpaceRoomInventoryRetentionFixture.wake = wake
                     stage("committed")
                 }
                 return if (replyLost) AppResult.Failed(storageFailure) else AppResult.Success(saved)

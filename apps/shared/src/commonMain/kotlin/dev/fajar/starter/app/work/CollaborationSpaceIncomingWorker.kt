@@ -26,6 +26,14 @@ class CollaborationSpaceIncomingWorker(
         suspend (
             CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingPhysicalRoomDemand,
         ) -> AppResult<CollaborationSpaceIncomingBindingResolution>,
+    private val inventory:
+        suspend (
+            CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingSourceProgress,
+        ) -> AppResult<CollaborationSpaceInventoryOutcome>,
+    private val deferInventory:
+        suspend (
+            CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingSourceProgress, Failure?,
+        ) -> AppResult<Boolean>,
     private val deferPhysical:
         suspend (
             CollaborationSpaceRuntimeReady, CollaborationSpaceIncomingPhysicalRoomDemand, Failure?,
@@ -158,13 +166,16 @@ class CollaborationSpaceIncomingWorker(
         if (scanned is AppResult.Failed) return failed(scanned)
         val found = readDemand(access)
         if (found is AppResult.Failed) return failed(found)
-        if ((found as AppResult.Success).value.turn.isEmpty()) return continueOrFinish(access, wake)
+        val pending = (found as AppResult.Success).value
+        if (pending.turn.isEmpty() && pending.inventoryReady.isEmpty())
+            return continueOrFinish(access, wake)
         val adopted = adopt(original)
         if (adopted is AppResult.Failed) return failed(adopted)
         val runtime = (adopted as AppResult.Success).value
         val selected = readRuntimeDemand(runtime)
         if (selected is AppResult.Failed) return failed(selected)
-        for (task in (selected as AppResult.Success).value.turn) {
+        val work = (selected as AppResult.Success).value
+        for (task in work.turn) {
             val processed =
                 when (task) {
                     is CollaborationSpaceIncomingTask.Logical -> processRoom(runtime, task.captured)
@@ -173,7 +184,41 @@ class CollaborationSpaceIncomingWorker(
                 }
             if (processed is AppResult.Failed) return failed(processed)
         }
+        val source = work.inventoryReady.singleOrNull()
+        if (source != null) {
+            val processed = processInventory(runtime, source)
+            if (processed is AppResult.Failed) return failed(processed)
+        }
         return continueOrFinish(access, wake, runtime)
+    }
+
+    private suspend fun processInventory(
+        runtime: CollaborationSpaceRuntimeReady,
+        captured: CollaborationSpaceIncomingSourceProgress,
+    ): AppResult<Boolean> {
+        val received =
+            withTimeoutOrNull(10.seconds) { inventory(runtime, captured) }
+                ?: AppResult.Failed(pending("inventory_timeout", FailureKind.Timeout))
+        if (received is AppResult.Failed && blocked(received.failure)) return received
+        if (
+            received is AppResult.Success &&
+                received.value in
+                    setOf(
+                        CollaborationSpaceInventoryOutcome.Advanced,
+                        CollaborationSpaceInventoryOutcome.Complete,
+                        CollaborationSpaceInventoryOutcome.Obsolete,
+                        CollaborationSpaceInventoryOutcome.Deferred,
+                    )
+        )
+            return AppResult.Success(true)
+        val latest = readRuntimeDemand(runtime)
+        if (latest is AppResult.Failed) return latest
+        val current =
+            (latest as AppResult.Success).value.snapshot?.demand?.sources?.singleOrNull {
+                it.source == captured.source &&
+                    it.inventoryGeneration == captured.inventoryGeneration
+            } ?: return AppResult.Success(false)
+        return deferInventory(runtime, current, (received as? AppResult.Failed)?.failure)
     }
 
     private suspend fun processPhysical(
@@ -307,7 +352,8 @@ class CollaborationSpaceIncomingWorker(
         val loaded = if (runtime == null) readDemand(access) else readRuntimeDemand(runtime)
         if (loaded is AppResult.Failed) return failed(loaded)
         val current = (loaded as AppResult.Success).value
-        if (current.turn.isNotEmpty() || current.scanPending) return continueWork()
+        if (current.turn.isNotEmpty() || current.inventoryReady.isNotEmpty() || current.scanPending)
+            return continueWork()
         if (current.roomsPending) return SyncResult.Retry(pending("deferred"))
         val finished = finish(access, wake)
         if (finished is AppResult.Failed) return failed(finished)

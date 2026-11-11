@@ -326,6 +326,7 @@ class CollaborationBindingsTest {
                 )
                 assertNotNull(container.koin.get<ObserveCollaborationSpaceIncomingStartup>())
                 assertNotNull(container.koin.get<RetainCollaborationSpaceRoomInventory>())
+                assertNotNull(container.koin.get<DeferCollaborationSpaceInventory>())
                 assertSame(
                     container.koin.get<RetainCollaborationSpaceSyncBatches>(),
                     container.koin.get<RetainCollaborationSpaceSyncBatches>(),
