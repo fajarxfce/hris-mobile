@@ -1,13 +1,14 @@
 # Agent continuation — HRIS communications
 
-Updated 11 November 2026, 12:58 UTC. This opening owns current work; older sections are historical.
+Updated 11 November 2026, 13:10 UTC. This opening owns current work; older sections are historical.
 
-## Canonical physical routing — revised candidate under validation
+## Canonical physical routing — full validation running
 
 Current eleven-file canonical resolver source is APPLIED/FROZEN, NOT accepted/committed.
 Private .work/space-canonical-physical-binding-2026-11-11: baseline4789f959/12,127/4,967 inputs;
 current4,969 inputs, manifest4066094157be0eca6004a1b0982c977b9b2defa89dc62eb2fc0c4a598ce14c84.
-Format4/89719 REAPED PASS35.945s. Focused4/58150 RUNNING, expected220; browser205/full12,192 next.
+Format4/89719 REAPED PASS35.945s. Focused4/58150 REAPED PASS273.224s/220; browser1/12014
+REAPED PASS185.239s/205. Focused425 accepted. Full1/59803 RUNNING, expected12,192.
 Reap every process before edits; acceptance requires the final frozen source and all relevant checks.
 
 Preserve ALL three failed attempts and candidates. Focused1/64228 REAPED exit1/62.272s/ZERO tests:
@@ -30,13 +31,20 @@ metadata/37 demand/26 binding storage controls. Owner fixtures do not themselves
 
 Canonical publisher, contract, hosted plan/audit/dispatch are PREPARED NOT executed. Hosted plan expects
 14,258=10,170 portable+4,088 Apple,16 Swift/unsigned host on validation/canonical-physical-binding-20261111;
-baseline43022213294. No canonical hosted dispatch. Accepted-handoff writer still needs preparation.
+baseline43022213294. No canonical hosted dispatch. Accepted-handoff writer is PREPARED NOT executed.
 
-Next Original application turn has ONE PRIVATE INCOMPLETE UNAPPLIED/UNTESTED source. No DI, worker
-wiring or tests yet. Read next-original-application-turn-review.md. Keep the existing worker mutex,
-FIFO, parent lifetime and40s room deadline. Reload actual captured Pending work after provider commit;
-reconcile local facts then reread the finite pending page before content acquisition. Confirmed provider
-progress can continue another bounded turn; keys retries never restart provider. Do not apply partial draft.
+Next Original application turn has NINE PRIVATE UNAPPLIED/UNTESTED files and5 new inputs: typed
+turn adapter, owning DI module/inclusion, worker dispatch, app binding assertion, existing fixture
+hooks, one sequencing fixture and22 turn+8 existing-worker cases. Four existing-file hashes guarded.
+Read next-original-application-turn-review.md. Keep the existing worker mutex/FIFO/parent lifetime
+and40s room deadline. Reload actual Pending capture after provider commit, reconcile local facts,
+then reread the finite remaining page before content acquisition. Confirmed provider/seek progression
+can continue another bounded turn; keys retries never restart provider. No second scheduled task,
+client, collector or mutex. Tests cover exact capture, retained-content exclusion, lost replies,
+cancellation, parent replacement, shared mutex, timeout, current-phase deferral and independent wake.
+Prepare/configure-next-original-application-turn.py are PREPARED NOT executed. Expected4,974 inputs,
+219 focused (including app Wasm/iOS metadata compile),153 browser and12,222 full. Source/fixtures need
+review and actual compilation/testing; no acceptance claimed. Do not apply before canonical acceptance.
 Logical LEGACY alias handling, keys-only recovery, bounded Client.rooms inventory and combined old-Company
 storage/new-Group worker native proof remain required. Existing registry adoption already excludes and
 drains original borrowers. Raw collector/Original producer OFF; all54 PRD groups OPEN. No Starter delta.
