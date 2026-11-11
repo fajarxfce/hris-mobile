@@ -1,5 +1,80 @@
 # Agent continuation — HRIS communications
 
+Updated 11 November 2026, 20:24 UTC. This opening owns current work; earlier sections are historical.
+
+## Constant account/root recovery state accepted; Original historical content next
+
+Nine Kotlin files ACCEPTED (3 new,6 existing). One optional incoming-demand header record retains
+active/requested recovery generation, metadata cursor, turn revision and round/unresolved evidence.
+Later requests do not rewind progress. Turn revision prevents old capture ABA when a round returns
+to the same cursor. More finite history pages cause another round of the same generation;
+unresolved content alone completes and awaits a relevant trigger. EOF promotes the latest request.
+No fake source position. Active recovery keeps the incoming wake; completed unresolved work can
+sleep. Existing primary/source copies, final admission and wake CAS preserve independent work.
+
+Schema7 only with this record;1..6 remain readable/encodable without it. Marker/field and canonical
+counter checks, same AAD,160 ASCII cursor,65,536 plaintext bytes/part,131,072 encoded chars,
+129 parts/130 sentinel and4MiB limits retained.24 new policy cases,4 wake cases (19 total),12 DB
+cases (65 total) cover replay/rounds, capacity, actual-cipher corruption, old-header rejection,
+Original/inventory preservation, races, response loss, cancellation and reauthentication.
+
+format1/19635 REAPED PASS36.571s; focused1/97615 REAPED PASS417.541s/207;
+browser1/10736 REAPED PASS144.032s/205. Exact412 focused accepted; no failed runs.
+Full1/54403 REAPED PASS591.429s; audit48757 REAPED.13,148 accepted =11,110 fresh+2,038 exact
+unchanged controls. Prior identities/source/library/dependency closures verified.5,039 inputs;
+manifest be173a5d5f55e2dc36b4738f9a2ce10aba9c17e645338a45bff9ee6d3f0c3e02.
+Proof APK 151779674 bytes/SHA c28f84de4484cfc9d1cdbed6469bcc4f1c7ed9553c9ff6f1b2e5729433a054f6; not native execution proof.
+
+Workspace .work/account-history-recovery-2026-11-11 owns evidence. Publisher and this writer
+HAVE EXECUTED. Commit/push, then dispatch ONCE on validation/account-history-recovery-20261111;
+expected15,617=11,126 portable+4,491 Apple. NOT DISPATCHED yet. Prior43092246512 attached15,497.
+Turn43087494327 portable10,980 accepted (52855 REAPED), Apple not audited yet.
+Position43083225746 now FULL15,300=10,910 portable+4,390 Apple (57886 REAPED); public evidence
+updated. Space43077651832 FULL15,178; Fairness43069542685 FULL15,028; Original43073411916 FULL15,100.
+Historical application43031231253 remains incomplete; preserve all previous failures/provenance.
+
+Next5-file next-original-key-content-draft REVIEWED, UNAPPLIED/UNTESTED;3 new+2 guarded existing.
+The existing Original event usecase gains a typed historical overload. Private Incoming/KeyHistory
+selection shares one retention pipeline, not another usecase or a fake/nullable primary task.
+Primary API/batch, Pending phase, exact demand/source and device checks remain. Historical input
+keeps Company/conversation and old traversal device, admits the current registered native Company/
+source and validates snapshots against that CURRENT native device. A separate historical batch
+contains scoped retention outcomes, not reference/global completion. No incoming demand read for
+historical acquisition; global/primary state changes are separate from content authority.
+
+Same16-ID bound, target deduplication, Company history/edit policy, unavailable/unsupported/
+redaction handling,15-second preparation/monotonic limits, admission around I/O and restriction
+cleanup.26 new historical tests include no primary queue, old/current devices, foreign snapshots,
+source/registration/metadata/runtime/account/permission races, cancellation, failures, missing keys
+then explicit retry, originals/edits/tombstones, uncertain commits and copied input IDs. Existing33
+primary acquisition cases and related policy/graph controls remain. Constructor dependencies and
+DI are unchanged; full compilation must verify overloaded callable references.
+
+Generators executed and are STALE relative to final draft fixes: existing Redacted and Unresolved/
+CollaborationEventDecryptionFailure types, and no unnecessary third read in the explicit retry test.
+Do not rerun them. Read next-original-key-content-review.md and draft-notes. Prepare/configure-next-
+original-key-content.py PREPARED NOT EXECUTED, gated on clean pushed current source and its one
+dispatch. Next workspace original-key-content-2026-11-11 expects5,042 inputs/13,200 local;
+212 focused+210 browser;15,695 hosted=11,178 portable+4,517 Apple. Continue directly through
+apply, format, freeze, focused/browser/full, exact audit, publication and push.
+
+No key producer/listener or global consumer is enabled. Do not attach a producer before bounded
+worker service; wake retention alone can pin idle work. Space/Original-alias content routing,
+admitted reference/global advancement, primary EOF demotion plus request/wake, trigger-specific
+retry and full64-room blocked-queue liveness remain. Read next-key-request-receipt-review.md:
+global active/requested IDs are not durable per-producer acknowledgement; a separate native-
+store/registration/occurrence receipt is a candidate only. Sync nextPosition cannot be fabricated.
+Read next-room-key-listener-ownership-review.md: Encryption subscription needs bounded loss-aware
+handoff, distinct equal-payload occurrences, late acquisition ownership, cancellation and isFinished
+drain before parent/store close; no remote secret-storage probe or native transport restart.
+
+Raw collector/Original producer OFF; all54 PRD groups OPEN. No Starter/live change. Phone36615
+REAPED timeout20:02:36UTC/20.017s; no install. Retry no earlier20:34UTC. Release89 SDK6 awaits
+install; notify first, explicit serial/install-only, never drive UI. No compiler/emulator now.
+Preserve original intents/Draft66/keys/stores/SDK assets/inspector gradlew.bat and live90163c3/
+schema116.4 Group OFF. Continue long run and push every commit. Host checks are not native SDK8 Apple.
+
+
 Updated 11 November 2026, 20:04 UTC. This opening owns current work; earlier sections are historical.
 
 ## Constant recovery state applied; focused validation running

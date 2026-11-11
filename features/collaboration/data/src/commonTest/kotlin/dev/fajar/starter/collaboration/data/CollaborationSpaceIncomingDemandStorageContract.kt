@@ -12,10 +12,408 @@ import kotlin.test.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.*
 
 abstract class CollaborationSpaceIncomingDemandStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
+
+    @Test
+    fun historyRecoveryAndWakeCommitBeforeAnySourceSyncPositionExists() = withDatabase { f ->
+        val before =
+            CollaborationSpaceIncomingDemand(
+                historyRecovery = CollaborationSpaceHistoryRecovery(historyId(9200))
+            )
+        val wake = CollaborationSpaceIncomingWake(historyId(9300))
+        val initial = saved(f.demands().replace(f.local(), null, before, wake))
+        val page =
+            f.database.replicas
+                .observe(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                    limit = INCOMING_DEMAND_READ_LIMIT,
+                )
+                .first()
+        assertEquals(INCOMING_DEMAND_HISTORY_RECOVERY_CHECKPOINT, page.checkpoint?.payload)
+        assertEquals(1, page.documents.size)
+        f.reopen()
+        assertEquals(AppResult.Success(initial), f.demands().current(f.local()))
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+        assertTrue(initial.demand.sources.isEmpty())
+        assertEquals(0, initial.demand.nextPosition)
+    }
+
+    @Test
+    fun historyRecoveryDoesNotAddAPartToTheMaximumRoomAndSourceSnapshot() = withDatabase { f ->
+        val before = physicalDemand(64).copy(historyRecovery = retainedHistoryRecovery())
+        val saved = saved(f.demands().replace(f.local(), null, before))
+        val page =
+            f.database.replicas
+                .observe(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                    limit = INCOMING_DEMAND_READ_LIMIT,
+                )
+                .first()
+        assertEquals(129, page.documents.size)
+        assertEquals(130, INCOMING_DEMAND_READ_LIMIT)
+        assertEquals(INCOMING_DEMAND_HISTORY_RECOVERY_CHECKPOINT, page.checkpoint?.payload)
+        assertTrue(page.documents.all { assertNotNull(it.payload).length <= 131072 })
+        assertTrue(page.documents.sumOf { assertNotNull(it.payload).length.toLong() } <= 4_194_304L)
+        f.reopen()
+        assertEquals(AppResult.Success(saved), f.demands().current(f.local()))
+    }
+
+    @Test
+    fun historyRecoveryPreservesOriginalTargetsInventoryRequestCursorAndDelay() =
+        withDatabase { f ->
+            val before =
+                typedDemand().let { value ->
+                    value.copy(
+                        historyRecovery = retainedHistoryRecovery(),
+                        sources =
+                            value.sources.map {
+                                it.copy(
+                                    inventoryGeneration = historyId(9400),
+                                    inventoryAfterRoomId = "!before:test",
+                                    inventoryRequestedGeneration = historyId(9401),
+                                    inventoryRetry = CollaborationSpaceIncomingRetry(0, 30_000, 1),
+                                )
+                            },
+                    )
+                }
+            val saved = saved(f.demands().replace(f.local(), null, before))
+            f.reopen()
+            assertEquals(AppResult.Success(saved), f.demands().current(f.local()))
+            assertEquals("before", saved.demand.sources.single().position)
+            assertEquals(before.rooms, saved.demand.rooms)
+        }
+
+    @Test
+    fun primaryQueueUpdatesCannotBeOverwrittenByAnOldRecoverySnapshot() = withDatabase { f ->
+        val before = demand().copy(historyRecovery = retainedHistoryRecovery())
+        val initial = saved(f.demands().replace(f.local(), null, before))
+        val newer =
+            saved(
+                f.demands()
+                    .replace(
+                        f.local(),
+                        initial,
+                        demand(3).copy(historyRecovery = before.historyRecovery),
+                    )
+            )
+        val advanced =
+            value(
+                planCollaborationSpaceHistoryRecoveryAdvance(
+                    assertNotNull(before.historyRecovery),
+                    assertNotNull(before.historyRecovery),
+                    "collaboration-history/space/v1/a",
+                    false,
+                    false,
+                )
+            )
+        assertEquals(
+            AppResult.Success(null),
+            f.demands().replace(f.local(), initial, before.copy(historyRecovery = advanced)),
+        )
+        assertEquals(AppResult.Success(newer), f.demands().current(f.local()))
+    }
+
+    @Test
+    fun recoveryResponseLossKeepsTheCommittedTurnAndWakeAcrossRestart() = withDatabase { f ->
+        val before = CollaborationSpaceIncomingDemand(historyRecovery = retainedHistoryRecovery())
+        val wake = CollaborationSpaceIncomingWake(historyId(9300))
+        var attempts = 0
+        val original = f.database.replicas
+        val store =
+            object : ReplicaStore by original {
+                override suspend fun replace(
+                    scope: ReplicaScope,
+                    partition: String,
+                    expected: ReplicaCheckpoint?,
+                    snapshot: ReplicaSnapshot?,
+                    wake: WorkWakeRequest?,
+                ): Boolean {
+                    attempts++
+                    check(original.replace(scope, partition, expected, snapshot, wake))
+                    error("fixture lost committed response")
+                }
+            }
+        assertIs<AppResult.Failed>(f.demands(store).replace(f.local(), null, before, wake))
+        assertEquals(1, attempts)
+        f.reopen()
+        assertEquals(before, saved(f.demands().current(f.local())).demand)
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+    }
+
+    @Test
+    fun cancelledRecoveryCommitPropagatesAndRetainsItsAtomicWake() = withDatabase { f ->
+        val before = CollaborationSpaceIncomingDemand(historyRecovery = retainedHistoryRecovery())
+        val wake = CollaborationSpaceIncomingWake(historyId(9300))
+        var attempts = 0
+        val original = f.database.replicas
+        val store =
+            object : ReplicaStore by original {
+                override suspend fun replace(
+                    scope: ReplicaScope,
+                    partition: String,
+                    expected: ReplicaCheckpoint?,
+                    snapshot: ReplicaSnapshot?,
+                    wake: WorkWakeRequest?,
+                ): Boolean {
+                    attempts++
+                    check(original.replace(scope, partition, expected, snapshot, wake))
+                    throw CancellationException("fixture cancelled committed response")
+                }
+            }
+        assertFailsWith<CancellationException> {
+            f.demands(store).replace(f.local(), null, before, wake)
+        }
+        assertEquals(1, attempts)
+        f.reopen()
+        assertEquals(before, saved(f.demands().current(f.local())).demand)
+        assertEquals(AppResult.Success(wake), f.wakes().pending())
+    }
+
+    @Test
+    fun completedUnresolvedRecoveryReopensWithoutAnActiveRetry() = withDatabase { f ->
+        val done =
+            value(
+                planCollaborationSpaceHistoryRecoveryAdvance(
+                    CollaborationSpaceHistoryRecovery(historyId(9200)),
+                    CollaborationSpaceHistoryRecovery(historyId(9200)),
+                    null,
+                    false,
+                    true,
+                )
+            )
+        val before = CollaborationSpaceIncomingDemand(historyRecovery = done)
+        val saved = saved(f.demands().replace(f.local(), null, before))
+        f.reopen()
+        assertEquals(AppResult.Success(saved), f.demands().current(f.local()))
+        assertTrue(assertNotNull(saved.demand.historyRecovery).complete)
+        assertNull(saved.demand.historyRecovery?.retry)
+    }
+
+    @Test
+    fun removingRecoveryReturnsToTheExistingInventorySchemaWithoutChangingOtherWork() =
+        withDatabase { f ->
+            val old =
+                typedDemand().let { value ->
+                    value.copy(
+                        sources =
+                            value.sources.map {
+                                it.copy(
+                                    inventoryGeneration = historyId(9400),
+                                    inventoryRequestedGeneration = historyId(9401),
+                                )
+                            }
+                    )
+                }
+            val first =
+                saved(
+                    f.demands()
+                        .replace(
+                            f.local(),
+                            null,
+                            old.copy(historyRecovery = retainedHistoryRecovery()),
+                        )
+                )
+            val cleared = saved(f.demands().replace(f.local(), first, old))
+            assertEquals(
+                INCOMING_DEMAND_REQUESTED_INVENTORY_CHECKPOINT,
+                f.database.replicas
+                    .checkpoint(incomingDemandScope(f.local()), incomingDemandPartition(f.local()))
+                    ?.payload,
+            )
+            f.reopen()
+            assertEquals(AppResult.Success(cleared), f.demands().current(f.local()))
+        }
+
+    @Test
+    fun olderAuthenticatedHeadersCannotSmuggleHistoryRecovery() = withDatabase { f ->
+        saved(
+            f.demands()
+                .replace(
+                    f.local(),
+                    null,
+                    CollaborationSpaceIncomingDemand(historyRecovery = retainedHistoryRecovery()),
+                )
+        )
+        for ((marker, schema) in
+            listOf(
+                INCOMING_DEMAND_CHECKPOINT to 1,
+                INCOMING_DEMAND_CHECKPOINT to 2,
+                INCOMING_DEMAND_PARTS_CHECKPOINT to 3,
+                INCOMING_DEMAND_TARGETS_CHECKPOINT to 4,
+                INCOMING_DEMAND_INVENTORY_CHECKPOINT to 5,
+                INCOMING_DEMAND_REQUESTED_INVENTORY_CHECKPOINT to 6,
+            )) {
+            assertHistoryRecoveryHeaderRejected(f, marker) { fields ->
+                if (schema <= 2)
+                    JsonObject(
+                        mapOf(
+                            "schema" to JsonPrimitive(schema),
+                            "nextPosition" to JsonPrimitive("0"),
+                            "rooms" to JsonArray(emptyList()),
+                            "rescanGeneration" to JsonNull,
+                            "historyRecovery" to fields.getValue("historyRecovery"),
+                        )
+                    )
+                else JsonObject(fields + ("schema" to JsonPrimitive(schema)))
+            }
+        }
+    }
+
+    @Test
+    fun theRecoveryHeaderRequiresItsVersionAndNonNullRecoveryState() = withDatabase { f ->
+        saved(
+            f.demands()
+                .replace(
+                    f.local(),
+                    null,
+                    CollaborationSpaceIncomingDemand(historyRecovery = retainedHistoryRecovery()),
+                )
+        )
+        for (change in 0..2) {
+            assertHistoryRecoveryHeaderRejected(f, INCOMING_DEMAND_HISTORY_RECOVERY_CHECKPOINT) {
+                fields ->
+                when (change) {
+                    0 -> JsonObject(fields - "historyRecovery")
+                    1 -> JsonObject(fields + ("historyRecovery" to JsonNull))
+                    else -> JsonObject(fields + ("schema" to JsonPrimitive(6)))
+                }
+            }
+        }
+    }
+
+    @Test
+    fun authenticatedRecoveryFieldsRejectAmbiguousCursorsCountersAndCompletedState() =
+        withDatabase { f ->
+            saved(
+                f.demands()
+                    .replace(
+                        f.local(),
+                        null,
+                        CollaborationSpaceIncomingDemand(
+                            historyRecovery = retainedHistoryRecovery()
+                        ),
+                    )
+            )
+            for ((name, bad) in
+                listOf(
+                    "revision" to JsonPrimitive("02"),
+                    "revision" to JsonPrimitive("9007199254740992"),
+                    "afterPartition" to JsonPrimitive("x".repeat(161)),
+                    "afterPartition" to JsonPrimitive("bad cursor"),
+                    "requestedGeneration" to JsonPrimitive(historyId(9200)),
+                    "complete" to JsonPrimitive(true),
+                    "generation" to JsonPrimitive("bad"),
+                )) {
+                assertHistoryRecoveryHeaderRejected(
+                    f,
+                    INCOMING_DEMAND_HISTORY_RECOVERY_CHECKPOINT,
+                ) { fields ->
+                    JsonObject(
+                        fields +
+                            ("historyRecovery" to
+                                JsonObject(
+                                    fields.getValue("historyRecovery").jsonObject + (name to bad)
+                                ))
+                    )
+                }
+            }
+        }
+
+    @Test
+    fun recoveryCoordinatesRemainRootScopedAndSurviveAccountReauthentication() = withDatabase { f ->
+        val before = CollaborationSpaceIncomingDemand(historyRecovery = retainedHistoryRecovery())
+        val saved = saved(f.demands().replace(f.local(), null, before))
+        assertEquals(
+            AppResult.Success(null),
+            f.demands().current(f.local().copy(spaceId = historyId(402))),
+        )
+        val renewed = f.access.copy(sessionId = "renewed-history-owner")
+        f.reopen(renewed)
+        assertEquals(
+            AppResult.Success(saved),
+            f.demands().current(f.local().copy(sessionId = renewed.sessionId)),
+        )
+    }
+
+    private fun retainedHistoryRecovery() =
+        CollaborationSpaceHistoryRecovery(
+            historyId(9200),
+            revision = 2,
+            afterPartition = "collaboration-history/self/" + historyId(401),
+            moreHistoryPages = true,
+            unresolved = true,
+            requestedGeneration = historyId(9201),
+            retry = CollaborationSpaceIncomingRetry(1_000, 31_000, 1),
+        )
+
+    private suspend fun assertHistoryRecoveryHeaderRejected(
+        f: CollaborationHistoryFixture,
+        marker: String,
+        transform: (JsonObject) -> JsonObject,
+    ) {
+        val before = saved(f.demands().current(f.local()))
+        val page =
+            f.database.replicas
+                .observe(
+                    incomingDemandScope(f.local()),
+                    incomingDemandPartition(f.local()),
+                    limit = INCOMING_DEMAND_READ_LIMIT,
+                )
+                .first()
+        val raw = assertNotNull(page.checkpoint)
+        val header = page.documents.single { it.id == INCOMING_DEMAND_DOCUMENT }
+        val aad =
+            Json.encodeToString(
+                    listOf(
+                        "hris-collaboration-space-incoming-demand-v1",
+                        f.access.audience,
+                        f.access.accountId,
+                        f.local().spaceId,
+                        raw.handle.generation,
+                        header.id,
+                        "0",
+                    )
+                )
+                .encodeToByteArray()
+        CollaborationHistoryKeys(f.database.replicas, f.cipher, f.keys).use { key, _ ->
+            val bytes = f.cipher.decrypt(key, aad, Base64.decode(assertNotNull(header.payload)))
+            val fields =
+                try {
+                    Json.parseToJsonElement(bytes.decodeToString()).jsonObject
+                } finally {
+                    bytes.fill(0)
+                }
+            val altered = transform(fields)
+            assertNotEquals(fields, altered)
+            val payload =
+                Base64.encode(f.cipher.encrypt(key, aad, altered.toString().encodeToByteArray()))
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override fun observe(
+                        scope: ReplicaScope,
+                        partition: String,
+                        after: String?,
+                        limit: Int,
+                    ) =
+                        flowOf(
+                            page.copy(
+                                checkpoint = raw.copy(payload = marker),
+                                documents =
+                                    page.documents.map {
+                                        if (it.id == header.id) it.copy(payload = payload) else it
+                                    },
+                            )
+                        )
+                }
+            assertIs<AppResult.Failed>(f.demands(store).current(f.local()))
+        }
+        assertEquals(AppResult.Success(before), f.demands().current(f.local()))
+    }
 
     @Test
     fun requestedInventoryPassReopensWithActiveCursorRetryOriginalTargetsAndWake() =

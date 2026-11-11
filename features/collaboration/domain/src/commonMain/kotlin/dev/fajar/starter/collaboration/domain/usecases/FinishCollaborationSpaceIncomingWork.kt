@@ -40,7 +40,8 @@ class FinishCollaborationSpaceIncomingWork(
                 return@withTimeoutOrNull changed()
             val demand = snapshot?.demand ?: CollaborationSpaceIncomingDemand()
             if (
-                demand.rooms.isNotEmpty() ||
+                demand.historyRecovery?.complete == false ||
+                    demand.rooms.isNotEmpty() ||
                     demand.physicalRooms.isNotEmpty() ||
                     demand.sources.any { it.inventoryGeneration != null } ||
                     demand.rescanGeneration != null ||

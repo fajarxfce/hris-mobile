@@ -8,6 +8,75 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runTest
 
 class CollaborationSpaceIncomingWakeCompletionTest {
+
+    @Test
+    fun activeHistoryRecoveryKeepsItsWakeWithoutInventingAProviderPosition() = runTest {
+        for (delayed in listOf(false, true)) {
+            val f = idle()
+            val pass =
+                CollaborationSpaceHistoryRecovery(
+                    f.id(950),
+                    revision = 1,
+                    retry = if (delayed) CollaborationSpaceIncomingRetry(0, 30_000, 1) else null,
+                )
+            f.set(CollaborationSpaceIncomingDemand(historyRecovery = pass))
+            assertEquals(AppResult.Success(false), f.finish(f.access, f.originalWake))
+            assertEquals(f.originalWake, f.request.wake)
+            assertEquals(0, f.acknowledgements)
+            assertTrue(f.current().sources.isEmpty())
+        }
+    }
+
+    @Test
+    fun completedUnresolvedHistoryAllowsTheWorkerToSleepUntilAnotherTrigger() = runTest {
+        val f = idle()
+        val pass =
+            CollaborationSpaceHistoryRecovery(
+                f.id(950),
+                revision = 1,
+                complete = true,
+                unresolved = true,
+            )
+        f.set(CollaborationSpaceIncomingDemand(historyRecovery = pass))
+        assertEquals(AppResult.Success(true), f.finish(f.access, f.originalWake))
+        assertNull(f.request.wake)
+        assertEquals(pass, f.current().historyRecovery)
+        assertEquals(1, f.acknowledgements)
+    }
+
+    @Test
+    fun aHistoryRequestRacingIdleCompletionRetainsItsNewWake() = runTest {
+        val f = idle()
+        val pass = CollaborationSpaceHistoryRecovery(f.id(950))
+        val nextWake = CollaborationSpaceIncomingWake(f.id(951))
+        f.request.base.hooks["acknowledge"] = {
+            f.set(f.current().copy(historyRecovery = pass))
+            f.request.wake = nextWake
+        }
+        assertEquals(AppResult.Success(false), f.finish(f.access, f.originalWake))
+        assertEquals(pass, f.current().historyRecovery)
+        assertEquals(nextWake, f.request.wake)
+    }
+
+    @Test
+    fun malformedCompletedHistoryCannotDischargeTheIncomingWake() = runTest {
+        val f = idle()
+        f.set(
+            CollaborationSpaceIncomingDemand(
+                historyRecovery =
+                    CollaborationSpaceHistoryRecovery(
+                        f.id(950),
+                        revision = 1,
+                        complete = true,
+                        requestedGeneration = f.id(951),
+                    )
+            )
+        )
+        assertIs<AppResult.Failed>(f.finish(f.access, f.originalWake))
+        assertEquals(f.originalWake, f.request.wake)
+        assertEquals(0, f.acknowledgements)
+    }
+
     @Test
     fun unresolvedPhysicalRoomsAndSourceInventoryKeepTheIncomingWake() = runTest {
         for (inventory in listOf(false, true)) {

@@ -49,6 +49,7 @@ data class CollaborationSpaceIncomingDemand(
     val scan: CollaborationSpaceIncomingScan? = null,
     val sources: List<CollaborationSpaceIncomingSourceProgress> = emptyList(),
     val physicalRooms: List<CollaborationSpaceIncomingPhysicalRoomDemand> = emptyList(),
+    val historyRecovery: CollaborationSpaceHistoryRecovery? = null,
 ) {
     override fun toString() = "CollaborationSpaceIncomingDemand([redacted])"
 }

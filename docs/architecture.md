@@ -1,5 +1,8 @@
 # Architecture
 
+[Account/root recovery state](collaboration-account-history-recovery.md) retains an independent pass and wake without a fabricated sync position.
+Content owners and bounded worker service precede producer activation.
+
 [Account history discovery](collaboration-account-history-locators.md) reads bounded published metadata across actual Company/Space owners and historical devices.
 Native authority and global recovery scheduling remain separate.
 
